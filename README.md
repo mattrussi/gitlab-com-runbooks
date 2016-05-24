@@ -134,6 +134,10 @@ The aim of this project is to have a quick guide of what to do when an emergency
 * [Reload CheckMK metrics](howto/manage-checkmk.md#reload_host_metrics)
 * [Run pgbadger to analyze queries](howto/postgresql.md#run-pgbadger-in-the-primary-database-server)
 
+### Manage backups
+
+* [Handle backups and restorations](howto/backups.md)
+
 ## General guidelines in an emergency
 
 * Confirm that it is actually an emergency, challenge this: are we losing data? Is GitLab.com not working?
