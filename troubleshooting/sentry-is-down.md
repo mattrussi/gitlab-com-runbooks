@@ -2,7 +2,7 @@
 
 ## Symptoms
 
-If sentry.gitlap.com returns http 500 status code.
+If sentry.gitlab.com returns http 500 status code.
 
 ## Possible checks
 
