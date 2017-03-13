@@ -1,0 +1,9 @@
+## DB lock alerts
+ALERT PostgresTooManyRowExclusiveLocks
+  IF sum(pg_locks_count{mode="rowexclusivelock"}) > 100
+  FOR 30m
+  LABELS {severity="critical"}
+  ANNOTATIONS {
+    title="Too many row exclusive locks: {{ $value }}",
+    description="Huge amount of row exclusive locks can result in GitLab.com inavailability. Check http://performance.gitlab.net/dashboard/db/postgres-stats.",
+  }
