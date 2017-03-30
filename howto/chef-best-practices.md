@@ -7,3 +7,7 @@
 `knife (search|ssh|..) roles:my-role ...` returns all nodes which has `my-role`, directly and nestly specified.
 
  
+### Update IP of chef node
+
+Create or update file `/etc/ipaddress.txt` with IP address and run chef-client. Or you can do it `curl ifconfig.co | sudo tee /etc/ipaddress.txt` command.
+
