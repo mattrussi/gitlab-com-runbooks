@@ -24,8 +24,7 @@ Firstname 'Surname With Spaces' gitlab_email $(openssl rand -hex 20)\
 
 This is done locally by another chef admin:
 
-* run `knife actor map` to update the user list
-* run `knife group add actor admins _username_` to add the user
+* Run `knife group add user <username> admins`
 * run `knife group show admins` to check that the user is in the admin group
 
 ## Rotate chef key
