@@ -6,7 +6,7 @@
 
 ## Symptoms
 
-You're likely here because you saw a message saying "Really low disk space left on <path> on <host>: <very low number>%".
+You're likely here because you saw a message saying "Really low disk space left on _path_ on _host_: _very low number_%".
 
 Not a big deal (well, usually): a volume just got full and we need to figure out how to make some space. There are many instances where the solution is well known and it only takes a single command to fix. Keep reading.
 
