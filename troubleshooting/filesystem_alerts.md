@@ -8,27 +8,30 @@
 
 You're likely here because you saw a message saying "Really low disk space left on _path_ on _host_: _very low number_%".
 
-Not a big deal (well, usually): a volume just got full and we need to figure out how to make some space. There are many instances where the solution is well known and it only takes a single command to fix. Keep reading.
+Not a big deal (well, usually). There are two possible causes:
+1. A volume got full and we need to figure out how to make some space.
+1. A process is leaking file handlers.
+
+The latter is a little trickier. Check out [how to fix file handler leaks](#file-handler-leaks) later in this page.
+There are many instances where the solution is well known and it only takes a single command to fix. Keep reading.
 
 ## Resolution
 
 First, check out if the host you're working on is one of the following:
 
-### performance.gitlab.net
+### Well known hosts
+
+#### performance.gitlab.net
 
 This alerts triggered on `/var/lib/influxdb/data` and `influxdb` is likely to be the culprit. Apparently there is a file handler leak somewhere and this happens regularly.
 
-You easily can check by looking at `sudo lsof | grep deleted`: if you see a many deleted file handlers owned by influxdb then the following will do the trick:
-```
-sudo service influxdb restart
-```
+Take a look at [how to fix file handler leaks](#file-handler-leaks) later in this page. You can restart influxdb with `sudo service influxdb restart`.
 
-### worker*.gitlab.com
+#### worker*.gitlab.com
 
-It's probably nginx. Restarting it will free up some space:
-```
-sudo gitlab-ctl restart nginx
-```
+It's probably nginx leaking file handlers.
+
+Take a look at [how to fix file handler leaks](#file-handler-leaks) later in this page. You can restart nginx with `sudo gitlab-ctl restart nginx`.
 
 ### Anything else
 
@@ -61,3 +64,9 @@ sudo find /var/log/gitlab -mmin +10 -exec rm {} \;
 ```
 
 Finally you can try to remove cached temp files by restarting services.
+
+### File handler leaks
+
+This happens when a process deletes a file but doesn't close the file handler on it. The kernel then can't see that space as free as it's still been held by the process.
+
+You easily can check this with `sudo lsof | grep deleted`. If you see many deleted file handlers held by the same process you can fix this by restarting it.
