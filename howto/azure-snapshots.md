@@ -19,13 +19,13 @@ At 3AM UTC, the snapshot cleanup script runs. This script simply checks for reso
 Currently the restore is an ~~extremely~~ manual process. We hope to create a more
 automated way of restoring soon. The below guide assumes that you must create a
 new server and that you are not attempting to reattach to an already existing
-server. currently there is _some_ automation available, for the steps up to the
+server. Currently there is _some_ automation available, for the steps up to the
 ssh commands. To take advantage of it:
  * create new dir
- * grab backup_scripts/03-azure-snapshot.sh there
+ * put backup_scripts/03-azure-snapshot.sh there
  * make sure `az` client is working (run `az group list` for a test)
- * run `time bash 03-azure-snapshot.sh`. In 25 minutes you can proceed directly
-   to mounting the filesystem.
+ * run `time bash 03-azure-snapshot.sh`. In 25 minutes the server will be created
+   with all the disks and you could proceed directly to mounting the filesystem.
 
 1. Create an Ubuntu server in Azure (DS13-v2).
 1. Create disks from the snapshots, placing them in the same resource group as the server
