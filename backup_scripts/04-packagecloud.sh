@@ -71,7 +71,7 @@ AWS_IID="$(aws ec2 run-instances \
 	--security-group-ids "${AWS_SG}" \
 	--image-id "${AWS_AMI}" \
 	--user-data "${CUSTOM_DATA}" \
-	--block-device-mappings "DeviceName=/dev/sdf,Ebs={VolumeSize=1024,VolumeType=gp2,DeleteOnTermination=true}" \
+	--block-device-mappings "DeviceName=/dev/sdf,Ebs={VolumeSize=2048,VolumeType=gp2,DeleteOnTermination=true}" \
 	--tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=${VM_NAME}}]" \
 	--query "Instances[0].InstanceId" \
 	--output text)"
