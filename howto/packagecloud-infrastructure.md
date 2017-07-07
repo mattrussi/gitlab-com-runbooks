@@ -69,7 +69,7 @@ Semi-automated way:
 1. grab backup_scripts/04-packagecloud.sh
 1. `time bash 04-packagecloud.sh`
 1. As soon as cloud-init is done (`tail -f /var/log/cloud-init-output.log`),
-   you can proceed with configuring packagecloud\'s secrets.
+   you can proceed with configuring secrets for packagecloud.
 
 Manual way:
 
