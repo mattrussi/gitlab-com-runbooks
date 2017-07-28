@@ -76,84 +76,91 @@ For now, please follow the manual procedure below.
 ## Creating servers for testing backups
 
 The semi-automated procedure (secondary db):
- 1. `mkdir ./bad && cd ./bad`
- 1. grab backup_scripts/02-secondary-db.sh, edit variables
- 1. `time bash 02-secondary-db.sh`
- 1. continue from customizing wal-e access keys and selecting time to restore.
+1. `mkdir ./bad && cd ./bad`
+1. grab backup_scripts/02-secondary-db.sh, edit variables
+1. `time bash 02-secondary-db.sh`
+1. continue from customizing wal-e access keys and selecting time to restore.
     (Make sure the cloud-init finished: `tail -f /var/log/cloud-init-output.log`
 
 The manual procedure:
 
- 1. For testing of secondary database restore, create a server of similar size to the database you are restoring. Just use the same Ubuntu version, as they have different postgresql versions, and backup from 9.5 won't install on 9.3.
- 1. Prepare the server (common steps for both scenarios):
-   1. Install necessary software:
-```
-# install and stop postgres
-apt-get update && apt-get -y install daemontools lzop gcc make python3 virtualenvwrapper python3-dev libssl-dev postgresql gnupg-agent pinentry-curses
-service postgresql stop
+1. For testing of secondary database restore, create a server of similar size to the database you are restoring. Just use the same Ubuntu version, as they have different postgresql versions, and backup from 9.5 won't install on 9.3.
+1. Prepare the server:
+    1. Install necessary software:
 
-# Configure wal-e
-mkdir -p /opt/wal-e /etc/wal-e.d/env
-virtualenv --python=python3 /opt/wal-e
-/opt/wal-e/bin/pip3 install --upgrade pip
-/opt/wal-e/bin/pip3 install boto azure wal-e
-```
-1. `mkdir /etc/wal-e.d/env -p` and populate files `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`, `WALE_S3_PREFIX`, `WALE_GPG_KEY_ID`, `GPG_AGENT_INFO`
-    1. `WALE_GPG_KEY_ID` should be `66B9829C`.
-    1. The format of `GPG_AGENT_INFO` is `/path/to/socket:gpg-agent-pid:1`
-        * For gpg version 1.4 you can run `eval $(gpg-agent --daemon)` as the postgres user. This will add `GPG_AGENT_INFO` variable to the environment for the user. You can then populate `/etc/wal-e.d/env/GPG_AGENT_INFO` with that data.
-        * For gpg version 2.1 `gpg-agent` does not output anything. You will need to run `gpg-agent --daemon` as the postgres user and then construct the variable manually by looking for the socket path and pid.
+        ```
+        # install and stop postgres
+        apt-get update && apt-get -y install daemontools lzop gcc make python3 virtualenvwrapper python3-dev libssl-dev postgresql gnupg-agent pinentry-curses
+        service postgresql stop
+
+        # Configure wal-e
+        mkdir -p /opt/wal-e /etc/wal-e.d/env
+        virtualenv --python=python3 /opt/wal-e
+        /opt/wal-e/bin/pip3 install --upgrade pip
+        /opt/wal-e/bin/pip3 install boto azure wal-e
+        ```
+
+    1. `mkdir /etc/wal-e.d/env -p` and populate files `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`, `WALE_S3_PREFIX`, `WALE_GPG_KEY_ID`, `GPG_AGENT_INFO`
+        1. `WALE_GPG_KEY_ID` should be `66B9829C`.
+        1. The format of `GPG_AGENT_INFO` is `/path/to/socket:gpg-agent-pid:1`
+            * For gpg version 1.4 you can run `eval $(gpg-agent --daemon)` as the postgres user. This will add `GPG_AGENT_INFO` variable to the environment for the user. You can then populate `/etc/wal-e.d/env/GPG_AGENT_INFO` with that data.
+            * For gpg version 2.1 `gpg-agent` does not output anything. You will need to run `gpg-agent --daemon` as the postgres user and then construct the variable manually by looking for the socket path and pid.
 
 1. Add GPG keys as postgres user:
 
-```
-gpg --allow-secret-key-import --import /etc/wal-e.d/ops-contact+dbcrypt.key
-gpg --import-ownertrust /etc/wal-e.d/gpg_owner_trust
-```
+    ```
+    gpg --allow-secret-key-import --import /etc/wal-e.d/ops-contact+dbcrypt.key
+    gpg --import-ownertrust /etc/wal-e.d/gpg_owner_trust
+    ```
 
 1. Enable gpg-agent in gpg.conf
-```
-echo 'use-agent' > ~/.gnupg/gpg.conf
-```
+
+    ```
+    echo 'use-agent' > ~/.gnupg/gpg.conf
+    ```
 
 1. Add password and test secret keys. This should ask for a password and then create an encrypted file at `/tmp/test.gpg`.
-```
-touch /tmp/test
-gpg --encrypt -r 66B9829C /tmp/test
-```
+
+    ```
+    touch /tmp/test
+    gpg --encrypt -r 66B9829C /tmp/test
+    ```
 
 1. If you have changed to the postgres user via `su`, you will need to be sure `GPG_TTY` is exported and tty device is read/write by postgres user.
-```
-root$ chmod o+rw $(tty)
-postgres$ export GPG_TTY=$(tty)
-```
+
+    ```
+    root$ chmod o+rw $(tty)
+    postgres$ export GPG_TTY=$(tty)
+    ```
 
 1. Create restore.conf file.
-```
-# precreate recovery.conf, edit the recovery target time to your desired restore time. Ensure the time is AFTER the base backup time.
-export RESTORE_PG_VER=9.5 # 9.3 in case of 14.04
-cat > /var/lib/postgresql/${RESTORE_PG_VER}/main/recovery.conf <<RECOVERY
-restore_command = '/usr/bin/envdir /etc/wal-e.d/env /opt/wal-e/bin/wal-e wal-fetch "%f" "%p"'
-recovery_target_time = '2017-XX-YY 06:00:00'
-RECOVERY
-chown postgres:postgres /var/lib/postgresql/${RESTORE_PG_VER}/main/recovery.conf
-```
+
+    ```
+    # precreate recovery.conf, edit the recovery target time to your desired restore time. Ensure the time is AFTER the base backup time.
+    export RESTORE_PG_VER=9.5 # 9.3 in case of 14.04
+    cat > /var/lib/postgresql/${RESTORE_PG_VER}/main/recovery.conf <<RECOVERY
+    restore_command = '/usr/bin/envdir /etc/wal-e.d/env /opt/wal-e/bin/wal-e wal-fetch "%f" "%p"'
+    recovery_target_time = '2017-XX-YY 06:00:00'
+    RECOVERY
+    chown postgres:postgres /var/lib/postgresql/${RESTORE_PG_VER}/main/recovery.conf
+    ```
 
 1. Restore the base backup
-```
-/usr/bin/envdir /etc/wal-e.d/env /opt/wal-e/bin/wal-e backup-list
-/usr/bin/envdir /etc/wal-e.d/env /opt/wal-e/bin/wal-e backup-fetch /var/lib/postgresql/${RESTORE_PG_VER}/main <backup name from backup-list command>
-```
 
-To restore latest backup you can use the following:
-```
-/usr/bin/envdir /etc/wal-e.d/env /opt/wal-e/bin/wal-e backup-list 2>/dev/null | tail -1 | cut -d ' ' -f1 | xargs -n1 /usr/bin/envdir /etc/wal-e.d/env /opt/wal-e/bin/wal-e backup-fetch /var/lib/postgresql/${RESTORE_PG_VER}/main
-```
+    ```
+    /usr/bin/envdir /etc/wal-e.d/env /opt/wal-e/bin/wal-e backup-list
+    /usr/bin/envdir /etc/wal-e.d/env /opt/wal-e/bin/wal-e backup-fetch /var/lib/postgresql/${RESTORE_PG_VER}/main <backup name from backup-list command>
+    ```
+
+    To restore latest backup you can use the following:
+
+    ```
+    /usr/bin/envdir /etc/wal-e.d/env /opt/wal-e/bin/wal-e backup-list 2>/dev/null | tail -1 | cut -d ' ' -f1 | xargs -n1 /usr/bin/envdir /etc/wal-e.d/env /opt/wal-e/bin/wal-e backup-fetch /var/lib/postgresql/${RESTORE_PG_VER}/main
+    ```
 
 1. This command will output nothing if it is successful.
 
 1. Start PostgreSQL. This will begin the point-in-time recovery to the time specified in recovery.conf. You can watch the progress in the postgres log.
-
 
 [Wal-E]: https://github.com/wal-e/wal-e
 [PSQL_Archiving]: https://www.postgresql.org/docs/9.6/static/continuous-archiving.html
