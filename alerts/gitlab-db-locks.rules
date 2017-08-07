@@ -5,5 +5,5 @@ ALERT PostgresTooManyRowExclusiveLocks
   LABELS {severity="critical"}
   ANNOTATIONS {
     title="Too many row exclusive locks: {{ $value }}",
-    description="Huge amount of row exclusive locks can result in GitLab.com inavailability. Check http://performance.gitlab.net/dashboard/db/postgres-stats.",
+    description="Huge amounts of ROW EXCLUSIVE locks (used by SQL UPDATEs for example) can result in GitLab.com being unresponsive. See http://performance.gitlab.net/dashboard/db/postgres-stats for more information.",
   }
