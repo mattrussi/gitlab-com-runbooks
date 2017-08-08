@@ -18,16 +18,19 @@ df -hi
 
 ## Likely suspects
 
-1. We have `unattended-upgrades` enabled, which install the kernel updates.
 
-   But we don't automatically reboot into those, so they accumulate with
-   time. Relevant infrastructure [issue](https://gitlab.com/gitlab-com/infrastructure/issues/2435).
+#### Linux kernels and headers
 
-   Since each `linux-kernel-X` package contains ~10^3 files, and each
-   `linux-headers-X` package contains ~10^4 files, they can eat up all the
-   inodes on the `/` partition pretty quickly. Here's the one-liner template
-   for removing all the 3.X and 4.X kernels and images except running one and
-   the latest one (replace LATEST with version, say, `4.4.0-89`)
+We have `unattended-upgrades` enabled, which install the kernel updates.
+
+But we don't automatically reboot into those, so they accumulate with
+time. Relevant infrastructure [issue](https://gitlab.com/gitlab-com/infrastructure/issues/2435).
+
+Since each `linux-kernel-X` package contains ~10^3 files, and each
+`linux-headers-X` package contains ~10^4 files, they can eat up all the
+inodes on the `/` partition pretty quickly. Here's the one-liner template
+for removing all the 3.X and 4.X kernels and images except running one and
+the latest one (replace LATEST with version, say, `4.4.0-89`)
 
 ```
 dpkg -l | grep 'linux-\(headers\|image\)-[34]' | grep -v $(uname -r) | grep -v 'LATEST' | awk '{print $2}' | xargs apt-get -y purge
