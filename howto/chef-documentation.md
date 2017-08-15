@@ -18,7 +18,7 @@ Creating new cookbook consists of several steps:
       ```
       find * -type f | xargs -n1 sed -i 's/template/gitlab_newcookbook/g'
       ```
-      This will also update badges in README.md, attributes and recipes.
+      This will also update badges in README.md, attributes, and recipes.
    1. At this point, you have a fully functional initial commit with passing
       tests (see the Testing section in cookbooks README.md for details), and
       you can rewrite git commit history from template to you cookbook:
@@ -27,7 +27,7 @@ Creating new cookbook consists of several steps:
       git add -A && \
       git commit -am 'Initial commit'
       ```
-      :point_ip: the above may ask for GPG password if you sign your commits,
+      :point_up: the above may ask for GPG password if you sign your commits,
       so its separated from the branch switch below :point_down:
       ```
       git branch -D master && \
@@ -60,7 +60,7 @@ Creating new cookbook consists of several steps:
    cookbook. Since `dev.gitlab.org` is only mirror, and should never be used
    directly, the following is done only cookbook located on `gitlab.com`:
    1. Set some description in Settings -> General.
-   1. Set "Check whether author is a GitLab user" and "Prevent commiting secrets
+   1. Set "Check whether author is a GitLab user" and "Prevent committing secrets
       to Git" under Settings -> Repository. Make sure `master` branch is protected
       there too.
    1. Uncheck the "Public pipelines" under Settings -> Pipelines.
