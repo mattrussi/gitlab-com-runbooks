@@ -15,7 +15,7 @@ Creating new cookbook consists of several steps:
    1. Replace the `template` with `gitlab_newcookbook` everywhere:
       ```
       find * -type f | xargs -n1 sed -i 's/template/gitlab_newcookbook/g'
-      ls .kitchen.*.yml | xargs -n1 sed -i 's/template/gitlab_newcookbook/g'
+      ls .kitchen*yml | xargs -n1 sed -i 's/template/gitlab_newcookbook/g'
       ```
       This will also update badges in README.md, attributes, and recipes.
    1. At this point, you have a fully functional initial commit with passing
