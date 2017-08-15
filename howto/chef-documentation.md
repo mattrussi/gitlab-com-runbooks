@@ -12,11 +12,10 @@ Creating new cookbook consists of several steps:
       git clone git@gitlab.com:gitlab-cookbooks/template.git gitlab_newcookbook
       ```
       Please use the `gitlab_` prefix for new cookbooks names.
-   1. Replace the `template` with `gitlab_newcookbook` everywhere. The hidden
-      files (`.kitchen.*.yml`, `.gitlab.ci.yml` and all files in `.git`) does
-      not have `template` in them, so its safe to do just this:
+   1. Replace the `template` with `gitlab_newcookbook` everywhere:
       ```
       find * -type f | xargs -n1 sed -i 's/template/gitlab_newcookbook/g'
+      ls .kitchen.*.yml | xargs -n1 sed -i 's/template/gitlab_newcookbook/g'
       ```
       This will also update badges in README.md, attributes, and recipes.
    1. At this point, you have a fully functional initial commit with passing
