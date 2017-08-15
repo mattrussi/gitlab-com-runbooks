@@ -60,6 +60,8 @@ Creating new cookbook consists of several steps:
    cookbook. Since `dev.gitlab.org` is only mirror, and should never be used
    directly, the following is done only cookbook located on `gitlab.com`:
    1. Set some description in Settings -> General.
+   1. Check "Merge request approvals" and add `@gl-infra` group to approvers under Settings -> General.
+   1. Allow merge only with green pipelines and resolved discussions there too.
    1. Set "Check whether author is a GitLab user" and "Prevent committing secrets
       to Git" under Settings -> Repository. Make sure `master` branch is protected
       there too.
