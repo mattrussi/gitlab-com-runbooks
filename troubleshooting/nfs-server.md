@@ -1,3 +1,29 @@
+# High load on server
+
+## Symptoms
+Load spike on the NFS servers, high I/O load.
+
+## Possible checks
+
+It is possible for there to be orphan git processes that can cause heavy I/O and increase the load on the server.
+
+First check the load average and run `iotop` on the server, look for processes matching `git-receive-pack path/to/some/repo.git`.
+
+
+This will normally be a child of `gitlab-shell` with a short run-time, for example:
+```
+git      57746 57732  0 14:56 ?        00:00:00 sh -c /opt/gitlab/embedded/service/gitlab-shell/bin/gitlab-shell key-1313921
+git      57747 57746  9 14:56 ?        00:00:00 git-receive-pack /path/to/repo.git
+```
+
+There may be long running git-receive-pack processes that are orphan, you can do a basic search for orphan processes belonging to git using the following command:
+
+```
+pgrep -a -u git -P 1
+```
+
+If you see long running `git-receive-pack` orphan processes they can be killed.
+
 # NFS Server down
 
 ## First and foremost
