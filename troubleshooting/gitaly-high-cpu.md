@@ -36,7 +36,7 @@ Prioritise the termination of `git` processes in the following order:
     
 * **Long Running GC and Repack Processes**: 
   * `pgrep -f -a -u git -P 1 'gc|repack'`
-  * These are low-priority tasks but can be resource intensive. Sometimes multiple GCs and repacks can occurr for the same repo concurrently, which is a waste of resources as they will contend and only
+  * These are low-priority tasks but can be resource intensive. Sometimes multiple GCs and repacks can occur on the same repo concurrently, which is a huge waste of resources as they will contend and only
     the first to complete will persist it's results.
 
 * **Other Long Running Git Processes**:
