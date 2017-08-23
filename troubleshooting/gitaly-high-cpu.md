@@ -21,7 +21,7 @@
 ### Long running or orphan `git` processes
 
 If a user or CI is overloading an NFS server with multiple intensive concurrent git operations, 
-it's better to kill the processes than have the whole server, or even just the Gitaly process fail.
+it's better to kill the processes than have the whole server -- or even just the Gitaly process -- fail.
 
 Almost all git processes are safe to kill without the risk of corrupting the repository.
 
