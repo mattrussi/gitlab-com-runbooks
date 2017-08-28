@@ -144,7 +144,7 @@ sudo gitlab-rails runner /tmp/sq.rb kill RepositoryMirrorUpdateWorker --dry-run
 ```
 
 You can omit the `--dry-run` option if you want to kill the jobs.
-Putting script in `/tmp` is one way of making sure its readable byt `git` user
+Putting script in `/tmp` is one way of making sure its readable by `git` user
 with default umask setting. Otherwise rails console will treat the path as
 Ruby string and [most likely err](https://github.com/rails/rails/blob/v4.2.8/railties/lib/rails/commands/runner.rb#L58-L63).
 
