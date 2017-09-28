@@ -87,7 +87,7 @@ _Note: the key id is masked here, as `0000000000000000000000000000000000000000`_
 
 ### Export the Keys
 
-Once they keys have been generated, you will need to create a public key for
+Once the keys have been generated, you will need to create a public key for
 publishing, and in PackageCloud. This is completed simply via:
 
 `gpg --armor --export 0000000000000000000000000000000000000000 > package-sig.gpg`
