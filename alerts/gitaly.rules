@@ -31,7 +31,7 @@ ALERT GitalyFileServerDown
   LABELS {severity="critical", channel="gitaly"}
   ANNOTATIONS {
     title="Gitaly is down on {{ $labels.fqdn }}",
-    description="Gitaly has been marked as down for the past minute on {{$labels.instance}}. Check Gitaly logs and restart the process if neccessary",
+    description="Gitaly has been marked as down for the past minute on {{$labels.instance}}. Check Gitaly logs and restart the process if necessary",
     runbook="troubleshooting/gitaly-down.md"
   }
 
