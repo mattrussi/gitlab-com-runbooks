@@ -103,8 +103,8 @@ ALERT TooManyUsedFDs
 
 ## CI Consul+Prometheus cluster
 ALERT DegradatedCIConsulPrometheusCluster
-  IF up{fqdn=~"(prometheus|consul)-.*(nyc1|us-east1-(c|d)).*"} == 0
-  FOR 5m
+  IF up{job="node",fqdn=~"(prometheus|consul)-.*(do|gce).gitlab-runners.gitlab.net"} == 0
+  FOR 10m
   LABELS {severity="warn", channel="ci-cd"}
   ANNOTATIONS {
     title="CI Consul+Prometheus cluster is degradated, {{ $labels.instance }} is down",
