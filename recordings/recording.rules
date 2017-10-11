@@ -24,3 +24,60 @@ gitaly:grpc_server_handling_seconds:avg5m_stddev_over_time24h = stddev_over_time
 
 # process_cpu_seconds_rate
 process_cpu_seconds_total:rate1m = rate(process_cpu_seconds_total[1m])
+
+# Postgres stats
+
+# pg_stat_statements
+
+pg_stat_statements_calls:rate1m               = rate(pg_stat_statements_calls[1m])
+pg_stat_statements_time:rate1m                = rate(pg_stat_statements_time_milliseconds[1m])/1000
+pg_stat_statements_rows:rate1m                = rate(pg_stat_statements_rows[1m])
+pg_stat_statements_shared_blks_read:rate1m    = rate(pg_stat_statements_read[1m])
+pg_stat_statements_shared_blks_dirtied:rate1m = rate(pg_stat_statements_dirtied[1m])
+pg_stat_statements_shared_blks_written:rate1m = rate(pg_stat_statements_written[1m])
+pg_stat_statements_temp_blks_read:rate1m      = rate(pg_stat_statements_read[1m])
+pg_stat_statements_temp_blks_written:rate1m   = rate(pg_stat_statements_written[1m])
+
+pg_stat_statements_calls:rate24h               = rate(pg_stat_statements_calls[24h])
+pg_stat_statements_time:rate24h                = rate(pg_stat_statements_time_milliseconds[24h])/1000
+pg_stat_statements_rows:rate24h                = rate(pg_stat_statements_rows[24h])
+pg_stat_statements_shared_blks_read:rate24h    = rate(pg_stat_statements_read[24h])
+pg_stat_statements_shared_blks_dirtied:rate24h = rate(pg_stat_statements_dirtied[24h])
+pg_stat_statements_shared_blks_written:rate24h = rate(pg_stat_statements_written[24h])
+pg_stat_statements_temp_blks_read:rate24h      = rate(pg_stat_statements_read[24h])
+pg_stat_statements_temp_blks_written:rate24h   = rate(pg_stat_statements_written[24h])
+
+pg_stat_statements_time_per_call:ratio_rate24h                = pg_stat_statements_time:rate24h / pg_stat_statements_calls:rate24h
+pg_stat_statements_rows_per_call:ratio_rate24h                = pg_stat_statements_rows:rate24h / pg_stat_statements_calls:rate24h
+pg_stat_statements_shared_blks_read_per_call:ratio_rate24h    = pg_stat_statements_shared_blks_read:rate24h / pg_stat_statements_calls:rate24h
+pg_stat_statements_shared_blks_dirtied_per_call:ratio_rate24h = pg_stat_statements_shared_blks_dirtied:rate24h / pg_stat_statements_calls:rate24h
+pg_stat_statements_shared_blks_written_per_call:ratio_rate24h = pg_stat_statements_shared_blks_written:rate24h / pg_stat_statements_calls:rate24h
+pg_stat_statements_temp_blks_read_per_call:ratio_rate24h      = pg_stat_statements_temp_blks_read:rate24h / pg_stat_statements_calls:rate24h
+pg_stat_statements_temp_blks_written_per_call:ratio_rate24h   = pg_stat_statements_temp_blks_written:rate24h / pg_stat_statements_calls:rate24h
+
+# pg_stat_user_tables
+
+pg_stat_user_tables_pg_seq_scan:rate1m           = rate(pg_stat_user_tables_seq_scan[1m])
+pg_stat_user_tables_pg_seq_tup_read:rate1m       = rate(pg_stat_user_tables_seq_tup_read[1m])
+pg_stat_user_tables_pg_idx_scan:rate1m           = rate(pg_stat_user_tables_idx_scan[1m])
+pg_stat_user_tables_pg_idx_tup_fetch:rate1m      = rate(pg_stat_user_tables_idx_tup_fetch[1m])
+pg_stat_user_tables_pg_n_tup_ins:rate1m          = rate(pg_stat_user_tables_n_tup_ins[1m])
+pg_stat_user_tables_pg_n_tup_upd:rate1m          = rate(pg_stat_user_tables_n_tup_upd[1m])
+pg_stat_user_tables_pg_n_tup_del:rate1m          = rate(pg_stat_user_tables_n_tup_del[1m])
+pg_stat_user_tables_pg_n_tup_hot_upd:rate1m      = rate(pg_stat_user_tables_n_tup_hot_upd[1m])
+
+
+pg_stat_user_tables_pg_seq_scan:rate24h           = rate(pg_stat_user_tables_seq_scan[24h])
+pg_stat_user_tables_pg_seq_tup_read:rate24h       = rate(pg_stat_user_tables_seq_tup_read[24h])
+pg_stat_user_tables_pg_idx_scan:rate24h           = rate(pg_stat_user_tables_idx_scan[24h])
+pg_stat_user_tables_pg_idx_tup_fetch:rate24h      = rate(pg_stat_user_tables_idx_tup_fetch[24h])
+pg_stat_user_tables_pg_n_tup_ins:rate24h          = rate(pg_stat_user_tables_n_tup_ins[24h])
+pg_stat_user_tables_pg_n_tup_upd:rate24h          = rate(pg_stat_user_tables_n_tup_upd[24h])
+pg_stat_user_tables_pg_n_tup_del:rate24h          = rate(pg_stat_user_tables_n_tup_del[24h])
+pg_stat_user_tables_pg_n_tup_hot_upd:rate24h      = rate(pg_stat_user_tables_n_tup_hot_upd[24h])
+
+pg_total_relation_size_bytes:deriv1m = deriv(pg_total_relation_size_bytes[1m])
+
+pg_total_relation_size_bytes:deriv24h = deriv(pg_total_relation_size_bytes[24h])
+
+
