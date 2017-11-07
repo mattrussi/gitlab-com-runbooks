@@ -53,3 +53,12 @@ ALERT CPUOutlierDetectionOnPrd
   description="The CPU usage on {{ $labels.fqdn }} is outside normal values over a 1h period",
   runbook="troubleshooting"
   }
+
+ALERT HighLoad
+  IF node_load1{instance!~"db.*"} > 30
+  FOR 5m
+  LABELS { severity = "critical" }
+  ANNOTATIONS {
+    title = "Too high load for {{ $labels.fqdn }} node: {{ $value }}",
+    description = "The load for {{ $labels.fqdn }} node was very high for last 5 minutes and currently it is at level of {{ $value }}"
+  }
