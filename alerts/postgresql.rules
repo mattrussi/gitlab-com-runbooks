@@ -121,8 +121,8 @@ ALERT PostgreSQL_UnusedReplicationSlot
   }
 
 ALERT PostgreSQL_ReplicaStaleXmin
-  IF pg_replication_slots_xmin_age > 10000
-  FOR 5m
+  IF pg_replication_slots_xmin_age > 40000
+  FOR 10m
   LABELS {severity="warn", pager="pagerduty"}
   ANNOTATIONS {
     title="PostgreSQL replication slot with an stale xmin which can cause bloat on the primary",
@@ -133,10 +133,10 @@ ALERT PostgreSQL_ReplicaStaleXmin
 ## Miscellaneous Database Alerts
 
 ALERT PostgreSQL_LongLivedTransaction
-  IF pg_stat_activity_max_tx_duration > 900
+  IF pg_stat_activity_max_tx_duration > 1500
   LABELS {severity="warn"}
   ANNOTATIONS {
-    title="There's a Postgres transaction older than 30 minutes",
+    title="There's a long lived Postgres transaction",
 	description="Postgres server {{$labels.fqdn}} has a transaction in state \"{{$labels.state}}\" that started {{ $value | humanizeDuration }} ago",
     runbook="troubleshooting/postgres.md#tables-with-a-large-amount-of-dead-tuples",
   }
