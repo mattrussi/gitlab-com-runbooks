@@ -95,12 +95,12 @@ ALERT PostgreSQL_ReplicationLagBytesTooLarge
   LABELS {severity="critical", pager="pagerduty"}
   ANNOTATIONS {
     title="Postgres Replication lag is over 200MB",
-    description="Replication lag on server {{$labels.instance} is currently {{ $value | humanize1024}}B",
+    description="Replication lag on server {{$labels.instance}} is currently {{ $value | humanize1024}}B",
     runbook="troubleshooting/postgres.md#replication-is-lagging-or-has-stopped"
   }
 
 ALERT PostgreSQL_XLOGConsumptionTooHigh
-  I rate(pg_xlog_position_bytes{environment="prd"}[1m]) > 12000000 and on (instance) (pg_replication_is_replica == 0.0)
+  IF rate(pg_xlog_position_bytes{environment="prd"}[1m]) > 12000000 and on (instance) (pg_replication_is_replica == 0.0)
   FOR 5m
   LABELS {severity="critical", pager="pagerduty"}
   ANNOTATIONS {
