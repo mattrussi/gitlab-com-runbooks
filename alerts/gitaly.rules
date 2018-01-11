@@ -55,7 +55,7 @@ ALERT GitalyVersionMismatch
   LABELS {severity="critical", channel="gitaly"}
   ANNOTATIONS {
     title="Gitaly: two versions of Gitaly have been running alongside one another in production for more than 30 minutes",
-    description="During a deployment, two distinct versions of Gitaly may be running alongside one another, but this should not be the case for more than 30m. Visit https://performance.gitlab.net/dashboard/db/gitaly-version-tracker?orgId=1&var-tier=stor&var-type=gitaly&var-environment=prd for details of versions deployed across the fleet.",
+    description="During a deployment, two distinct versions of Gitaly may be running alongside one another, but this should not be the case for more than 30m. Visit https://performance.gitlab.net/dashboard/db/gitaly-version-tracker?orgId=1&var-environment=prd for details of versions deployed across the fleet.",
     runbook="troubleshooting/gitaly-version-mismatch.md"
   }
 
@@ -67,18 +67,18 @@ ALERT GitalyVersionMismatchSevere
   LABELS {severity="critical", channel="gitaly"}
   ANNOTATIONS {
     title="Gitaly: multiple versions of Gitaly are currently running in production",
-    description="Three of more versions of Gitaly are currently running alongside one another in production. This should never occur and indicates serious deployment failures. Visit https://performance.gitlab.net/dashboard/db/gitaly-version-tracker?orgId=1&var-tier=stor&var-type=gitaly&var-environment=prd for details of versions deployed across the fleet.",
+    description="Three of more versions of Gitaly are currently running alongside one another in production. This should never occur and indicates serious deployment failures. Visit https://performance.gitlab.net/dashboard/db/gitaly-version-tracker?orgId=1&var-environment=prd for details of versions deployed across the fleet.",
     runbook="troubleshooting/gitaly-version-mismatch.md"
   }
 
 ## Gitaly Method Error Rate compared with 12 hour average
 ALERT GitalyMethodErrorRateOutlier
   IF
-    gitaly:grpc_server_handled_total:error_rate1m{environment="prd", tier="stor", type="gitaly"}
+    gitaly:grpc_server_handled_total:error_rate1m{environment="prd", tier="stor", type="gitaly", job="gitaly"}
     > on (job, grpc_method, environment) group_left()
       (
       gitaly:grpc_server_handled_total:error_avg_rate12h{environment="prd", tier="stor", type="gitaly"}
-      + 2 * gitaly:grpc_server_handled_total:error_rate1m_stddev_over_time12h{environment="prd", tier="stor", type="gitaly"}
+      + 2 * gitaly:grpc_server_handled_total:error_rate1m_stddev_over_time12h{environment="prd", tier="stor", type="gitaly", job="gitaly"}
       )
   FOR 5m
   LABELS {severity="warn", channel="gitaly"}
@@ -92,10 +92,10 @@ ALERT GitalyMethodErrorRateOutlier
 ## If an endpoint suddenly becomes much slower than it's historical average, raise an alert
 ALERT GitalyLatencyOutlier
   IF
-    avg(gitaly:grpc_server_handling_seconds:avg5m{environment="prd", tier="stor", type="gitaly"}) by (grpc_method)
+    avg(gitaly:grpc_server_handling_seconds:avg5m{environment="prd", tier="stor", type="gitaly", job="gitaly"}) by (grpc_method)
     > on (grpc_method) group_left()
       (
-      avg(gitaly:grpc_server_handling_seconds:avg24h{environment="prd", tier="stor", type="gitaly"}) by (grpc_method)
+      avg(gitaly:grpc_server_handling_seconds:avg24h{environment="prd", tier="stor", type="gitaly", job="gitaly"}) by (grpc_method)
       + 2 * avg(gitaly:grpc_server_handling_seconds:avg5m_stddev_over_time24h) by (grpc_method)
       )
   FOR 5m
