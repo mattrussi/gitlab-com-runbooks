@@ -37,7 +37,7 @@ ALERT GitalyFileServerDown
 
 ## Gitaly File Server CPU Usage
 ALERT GitalyFileServerCPUUsage
-  IF avg(process_cpu_seconds_total:rate1m{environment="prd", tier="stor", type="gitaly"}) by (fqdn) / avg(instance:node_cpus:count{tier="stor", type="gitaly"}) by (fqdn) > 0.5
+  IF avg(process_cpu_seconds_total:rate1m{job="gitaly", environment="prd", tier="stor", type="gitaly"}) by (fqdn) / avg(instance:node_cpus:count{tier="stor", type="gitaly"}) by (fqdn) > 0.5
   FOR 1m
   LABELS {severity="critical", channel="gitaly"}
   ANNOTATIONS {
