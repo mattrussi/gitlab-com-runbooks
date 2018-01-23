@@ -12,3 +12,4 @@ groups:
         down
       runbook: howto/dev-environment.md
       title: dev.gitlab.org is returning errors for 2m
+      return_code: "{{ $value }}"
