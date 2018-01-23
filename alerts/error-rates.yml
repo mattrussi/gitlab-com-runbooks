@@ -10,8 +10,9 @@ groups:
       pager: pagerduty
       severity: critical
     annotations:
-      description: We are having more 5xx returns than any other reply. Web traffic
-        is being impacted and the service is probably down. Have you thought about
+      description: |
+        We are having more 5xx returns than any other reply. Web traffic is
+        being impacted and the service is probably down. Have you thought about
         turning it off and on again?
       runbook: troubleshooting/gitlab-com-is-down.md
       title: High Error Rate on Front End Web
@@ -25,8 +26,10 @@ groups:
       pager: pagerduty
       severity: critical
     annotations:
-      description: We are seeing an increase of 4xx errors on the load balancing api
-        rate limiting backend, more than 10% of http requests for at least 5 minutes.
+      description: |
+        We are seeing an increase of 4xx errors on the load balancing api rate
+        limiting backend, more than 10% of http requests for at least 5
+        minutes.
       title: High 4xx Error Rate on Front End Web on backend api_rate_limit
       error_rate: "{{ $value }}"
   - alert: High4xxRateLimit
@@ -38,7 +41,8 @@ groups:
       pager: pagerduty
       severity: critical
     annotations:
-      description: We are seeing an increase of 4xx errors on the load balancing across
+      description: |
+        We are seeing an increase of 4xx errors on the load balancing across
         all backends, more than 25% of http requests for at least 5 minutes.
       title: High 4xx Error Rate on Front End Web
       error_rate: "{{ $value }}"
