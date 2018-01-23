@@ -1,5 +1,5 @@
 groups:
-  - name: "chef-client.rules"
+- name: "chef-client.rules"
   rules:
   - alert: ChefClientErrorInPrd
     expr: chef_client_error{environment="prd"} == 1
