@@ -96,6 +96,7 @@ groups:
     expr: (probe_success{instance=~"runners-cache.*:(5000/v2|9000/minio/login)"} == 0)
     for: 5m
     labels:
+      channel: ci-cd
       severity: critical
     annotations:
       title: Runners cache service {{ $labels.instance }} on {{ $labels.fqdn }} has been down for more than 5 minutes.
@@ -108,6 +109,7 @@ groups:
     expr: up{job="runners-cache-server"} == 0
     for: 5m
     labels:
+      channel: ci-cd
       severity: critical
     annotations:
       title: Runners cache nginx service on {{ $labels.fqdn }} has been down for more than 5 minutes.
