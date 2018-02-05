@@ -10,7 +10,7 @@ groups:
       channel: ci-cd
       severity: warn
     annotations:
-      description: The number of pending builds for projects with shared runners is
+      description: Hey @cicdops! The number of pending builds for projects with shared runners is
         increasing and will be too high in 1h ({{$value}}). This may suggest problems
         with auto-scaling provider or Runner stability. You should check Runner's
         logs. Check http://performance.gitlab.net/dashboard/db/ci.
@@ -23,7 +23,7 @@ groups:
       channel: ci-cd
       severity: warn
     annotations:
-        description: Number of pending jobs for namespace {{$labels.namespace}} is too high: {{$value}}.
+        description: Hey @cicdops! Number of pending jobs for namespace {{$labels.namespace}} is too high: {{$value}}.
         Check https://performance.gitlab.net/dashboard/db/ci?panelId=33&fullscreen
       runbook: troubleshooting/ci_pending_builds.md#2-verify-graphs-and-potential-outcomes-out-of-the-graphs-as-described-in-ci-graphsci_graphsmd
       title: 'Number of pending jobs per namespace too high: {{$value}}'
@@ -35,7 +35,7 @@ groups:
       channel: ci-cd
       severity: warn
     annotations:
-        description: Number of running jobs for namespace {{$labels.namespace}} is too high: {{$value}}.
+        description: Hey @cicdops! Number of running jobs for namespace {{$labels.namespace}} is too high: {{$value}}.
         Check https://performance.gitlab.net/dashboard/db/ci?panelId=60&fullscreen
       runbook: troubleshooting/ci_pending_builds.md#2-verify-graphs-and-potential-outcomes-out-of-the-graphs-as-described-in-ci-graphsci_graphsmd
       title: 'Number of runnin jobs per namespace too high: {{$value}}'
@@ -46,7 +46,7 @@ groups:
       channel: ci-cd
       severity: warn
     annotations:
-      description: Number of builds running on shared runners for the last 5 minutes
+      description: Hey @cicdops! Number of builds running on shared runners for the last 5 minutes
         is 0. This may suggest problems with auto-scaling provider or Runner stability.
         You should check Runner's logs. Check http://performance.gitlab.net/dashboard/db/ci.
       title: 'Number of builds running on shared runners is too low: {{$value}}'
@@ -57,7 +57,7 @@ groups:
       channel: ci-cd
       severity: warn
     annotations:
-      description: This may suggest problems with our autoscaled machines fleet OR
+      description: Hey @cicdops! This may suggest problems with our autoscaled machines fleet OR
         abusive usage of Runners. Check https://performance.gitlab.net/dashboard/db/ci
         and https://log.gitlap.com/app/kibana#/dashboard/5d3921f0-79e0-11e7-a8e2-f91bfad41e34
       title: Number of jobs running on shared runners is over 300 for the last 15
@@ -70,7 +70,7 @@ groups:
       pager: ci-cd
       severity: critical
     annotations:
-      description: 'This impacts CI execution builds, consider tweeting: !tweet ''Builds
+      description: 'Hey @cicdops! This impacts CI execution builds, consider tweeting: !tweet ''Builds
         are being delayed due to our shared runners manager being non responsive.
         We are restarting it to restore the service and then investigating the root
         cause''. Hosts impacted - {{ $labels.instance }}'
@@ -84,7 +84,7 @@ groups:
       channel: ci-cd
       severity: warn
     annotations:
-      description: Machine creation rate for the last 1 minute is at least {{$value}}
+      description: Hey @cicdops! Machine creation rate for the last 1 minute is at least {{$value}}
         times greater than machines idle rate. This may by a symptom of problems with
         the auto-scaling provider. Check http://performance.gitlab.net/dashboard/db/ci.
       runbook: troubleshooting/ci_graphs.md#runners-manager-auto-scaling
@@ -97,7 +97,7 @@ groups:
     labels:
       severity: critical
     annotations:
-      description: 'This impacts CI execution builds, consider tweeting: !tweet ''CI
+      description: 'Hey @cicdops! This impacts CI execution builds, consider tweeting: !tweet ''CI
         executions are being delayed due to our runners cache being down at GitLab.com,
         we are investigating the root cause'''
       runbook: troubleshooting/runners_cache_is_down.md
@@ -109,7 +109,7 @@ groups:
     labels:
       severity: critical
     annotations:
-      description: 'This impacts CI execution builds, consider tweeting: !tweet ''CI
+      description: 'Hey @cicdops! This impacts CI execution builds, consider tweeting: !tweet ''CI
         executions are being delayed due to our runners cache being down at GitLab.com,
         we are investigating the root cause'''
       runbook: troubleshooting/runners_cache_is_down.md
@@ -122,7 +122,7 @@ groups:
       pager: ci-cd
       severity: critical
     annotations:
-      description: 'This impacts CI execution builds, consider tweeting: !tweet ''CI
+      description: 'Hey @cicdops! This impacts CI execution builds, consider tweeting: !tweet ''CI
         jobs are being delayed due to issues with Shared Runners cache server. We
         are restarting it to restore the service.''. Hosts impacted - {{ $labels.instance
         }}'
@@ -137,7 +137,7 @@ groups:
       channel: ci-cd
       severity: warn
     annotations:
-      description: '{{ $labels.instance }} is using more than 80% of available FDs
+      description: 'Hey @cicdops! {{ $labels.instance }} is using more than 80% of available FDs
         since 10 minutes. This may affect Runner''s stability. Please look at https://performance.gitlab.net/dashboard/db/ci
         for more data.'
       title: Number of used file descriptors on {{ $labels.instance }} is too high
@@ -148,7 +148,7 @@ groups:
       channel: ci-cd
       severity: warn
     annotations:
-      description: 'One or more of hosts from CI Consul+Prometheus cluster is down:
+      description: 'Hey @cicdops! One or more of hosts from CI Consul+Prometheus cluster is down:
         {{ $labels.instance }}.'
       title: CI Consul+Prometheus cluster is degradated, {{ $labels.instance }} is
         down
