@@ -152,3 +152,35 @@ groups:
       title: CI Consul+Prometheus cluster is degradated, {{ $labels.instance }} is down
       description: 'Hey @cicdops! One or more of hosts from CI Consul+Prometheus cluster is down: {{ $labels.instance }}.'
 
+  - alert: GCPQuotaHighUsage
+    expr: |
+      max(
+        gcp_exporter_region_quota_usage{project="gitlab-ci-155816"} / gcp_exporter_region_quota_limit{project="gitlab-ci-155816"} * 100
+      ) by (quota, region) > 85
+    for: 5m
+    labels:
+      channel: ci-cd
+      severity: warn
+    annotations:
+      title: GCP Quota usage of {{ $labels.quota }} is too high
+      description: |
+        Hey @cicdops! Quota usage of {{ $labels.quota }} is at the level of {{ $value }} for more than 5 minutes.
+        Quota limit breach is coming!
+        See https://performance.gitlab.net/dashboard/db/ci-autoscaling-providers
+
+  - alert: GCPQuotaCriticalUsage
+    expr: |
+      max(
+        gcp_exporter_region_quota_usage{project="gitlab-ci-155816"} / gcp_exporter_region_quota_limit{project="gitlab-ci-155816"} * 100
+      ) by (quota, region) > 95
+    for: 5m
+    labels:
+      channel: ci-cd
+      severity: critical
+    annotations:
+      title: GCP Quota usage of {{ $labels.quota }} is near limit
+      description: |
+        Hey @cicdops! Quota usage of {{ $labels.quota }} is at the level of {{ $value }} for more than 5 minutes.
+        It's less than 5% to reach quota limits!
+        See https://performance.gitlab.net/dashboard/db/ci-autoscaling-providers
+
