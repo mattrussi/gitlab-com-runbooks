@@ -27,7 +27,19 @@ groups:
         Check https://performance.gitlab.net/dashboard/db/ci?panelId=33&fullscreen
       runbook: troubleshooting/ci_pending_builds.md#2-verify-graphs-and-potential-outcomes-out-of-the-graphs-as-described-in-ci-graphsci_graphsmd
       title: 'Number of pending jobs per namespace too high: {{$value}}'
-  - alert: NoJobsOnSharedRunners
+  - alert: TooManyRunningJobsPerNamespace
+    expr: max(sum(ci_running_builds{has_minutes="yes",namespace!="",shared_runner="yes"}) by (fqdn,namespace)) by (namespace)
+      > 200
+    for: 1m
+    labels:
+      channel: ci-cd
+      severity: warn
+    annotations:
+        description: Number of running jobs for namespace {{$labels.namespace}} is too high: {{$value}}.
+        Check https://performance.gitlab.net/dashboard/db/ci?panelId=60&fullscreen
+      runbook: troubleshooting/ci_pending_builds.md#2-verify-graphs-and-potential-outcomes-out-of-the-graphs-as-described-in-ci-graphsci_graphsmd
+      title: 'Number of runnin jobs per namespace too high: {{$value}}'
+   - alert: NoJobsOnSharedRunners
     expr: sum(ci_runner_builds{job="shared-runners"}) == 0
     for: 5m
     labels:
