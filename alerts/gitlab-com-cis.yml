@@ -17,15 +17,14 @@ groups:
       title: 'The number of pending builds for projects with shared runners will be
         too high in 1h: {{$value | printf "%.2f" }}'
   - alert: TooManyPendingJobsPerNamespace
-    expr: max(ci_pending_builds{has_minutes="yes",namespace!="",shared_runners="yes"})
-      > 500
+    expr: max(ci_pending_builds{has_minutes="yes",namespace!="",shared_runners="yes"}) by (namespace) > 350
     for: 1m
     labels:
       channel: ci-cd
       severity: warn
     annotations:
-      description: Number of pending jobs per namespace for projects with shared runners
-        enabled is too high ({{$value}}). Check https://performance.gitlab.net/dashboard/db/ci?panelId=33&fullscreen
+        description: Number of pending jobs for namespace {{$labels.namespace}} is too high: {{$value}}.
+        Check https://performance.gitlab.net/dashboard/db/ci?panelId=33&fullscreen
       runbook: troubleshooting/ci_pending_builds.md#2-verify-graphs-and-potential-outcomes-out-of-the-graphs-as-described-in-ci-graphsci_graphsmd
       title: 'Number of pending jobs per namespace too high: {{$value}}'
   - alert: NoJobsOnSharedRunners
