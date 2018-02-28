@@ -8,11 +8,11 @@ IFS=$'\t\n'
 command -v az >/dev/null 2>/dev/null || { echo 'Please install az utility'; exit 1; }
 
 # Variables to change always
-RDATE='2017-09-11'		# Date of snapshot to restore
-RG_NAME='BADAug2017-f01'	# Name of the resource group
+RDATE='2018-02-03'		# Date of snapshot to restore
+RG_NAME='BADFeb2018-f09'	# Name of the resource group
 
 # Variables to change if you want test different box
-RESTORE='file-01'	# Which machine to restore (leave file-08 if you are unsure)
+RESTORE='file-09'	# Which machine to restore (leave file-08 if you are unsure)
 
 # Variables to change only if you know what you are doing
 RG_LOC='eastus2'	# Location to create restoration resource group in
@@ -75,5 +75,5 @@ seq 0 15 | xargs -n1 -P1 -I{} sh -c \
 
 echo "All done, please proceed:"
 echo ssh "${VM_USERNAME}@${VM_IP}" -i "./${RG_NAME}_rsa4096" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
-
+echo "And do 'mkdir /var/opt/gitlab && mount /dev/gitlab_vg/gitlab_var /var/opt/gitlab'"
 echo "After you are done, don't forget to remove resource group ${RG_NAME}"

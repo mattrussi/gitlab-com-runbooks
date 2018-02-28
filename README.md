@@ -20,6 +20,7 @@ The aim of this project is to have a quick guide of what to do when an emergency
 * [Sidekiq stats no longer showing](troubleshooting/sidekiq_stats_no_longer_showing.md)
 * [Sentry is down](troubleshooting/sentry-is-down.md)
 * [Gitaly error rate is too high](troubleshooting/gitaly-error-rate.md)
+* [Gitaly latency is too high](troubleshooting/gitaly-latency.md)
 
 ## Git
 
@@ -48,8 +49,11 @@ The aim of this project is to have a quick guide of what to do when an emergency
 
 ### PostgreSQL
 
+* [Postgresql](howto/postgresql.md)
 * [PgBouncer](howto/pgbouncer.md)
-* [Load Balancing](howto/load-balancing.md)
+* [PG-HA](howto/pg-ha.md)
+* [read-only Load Balancing](howto/load-balancing.md)
+* [Add a new secondary replica](howto/postgresql-replica.md)
 * [The DB replication has stopped](troubleshooting/postgresql.md)
 
 ### Redis
@@ -103,6 +107,7 @@ The aim of this project is to have a quick guide of what to do when an emergency
 ### Work with storage
 
 * [Understanding GitLab Storage Shards](howto/sharding.md)
+* [Build and Deploy New NFS Servers](howto/nfs-servers.md)
 
 ### Work with Terraform
 
@@ -172,6 +177,11 @@ The aim of this project is to have a quick guide of what to do when an emergency
 ### Other
 
 * [Setup oauth2-proxy protection for web based application](howto/setup-oauth2-proxy-protected-application.md)
+
+## Gitter
+
+* [MongoDB operations](howto/gitter/mongodb-operations.md)
+* [Renew the Gitter TLS certificate](howto/gitter/renew-certificates.md)
 
 ## Manage Package Signing Keys
 

@@ -1,9 +1,0 @@
-## KIBANA IS DOWN
-ALERT KibanaDown
-  IF (probe_success{job="elk-kibana"} == 0) or (up{job="elk-kibana"} == 0)
-  FOR 5m
-  LABELS {severity="critical"}
-  ANNOTATIONS {
-    title="Kibana is down",
-    runbook="troubleshooting/kibana_is_down.md"
-  }
