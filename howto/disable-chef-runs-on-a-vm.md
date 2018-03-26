@@ -13,6 +13,8 @@ never be stopped for more than 12 hours without a corresponding issue**
 
 ```
 sudo service chef-client stop
+# Examples: mv /etc/chef /etc/chef.disabled.because.of.pg.conf.override
+#           mv /etc/chef /etc/chef.infra-1231
 sudo mv /etc/chef /etc/chef.{reason}
 ```
 
