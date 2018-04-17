@@ -1,6 +1,16 @@
 groups:
 - name: increased-error-rates.rules
   rules:
+  - alert: IncreasedRails500Errors
+    expr: sum by (type)(rate(rails_requests_completed{type="web",status=~"5..",environment="prd"}[1m])) / sum by (type)(rate(rails_requests_completed{type="web",status=~"(2|5)..",environment="prd"}[1m])) > .01
+    for: 15s
+    labels:
+      pager: pagerduty
+      severity: critical
+    annotations:
+      description: We are seeing a high ratio of 500s to the total number of 500 and 200 status codes. It is likely that customers are impacted
+      runbook: troubleshooting/high-error-rate.md
+      title: Increased Error Rate of Rails 500 Errors
   - alert: IncreasedErrorRateHTTPSGit
     expr: sum(backend_code:haproxy_server_http_responses_total:irate1m{code="5xx",environment="prd",tier="lb",backend="https_git"}) > 20
     for: 15s
