@@ -14,6 +14,19 @@ Host *.gitlab-production.internal
         PreferredAuthentications        publickey
         IdentityFile                    /path/to/your/ssh/key
         ProxyCommand                    ssh lb-bastion.gprd.gitlab.com -W %h:%p
+
+# GCP staging bastion host
+Host lb-bastion.gstg.gitlab.com
+        User                            YOUR_SSH_USERNAME
+        IdentityFile                    /path/to/your/ssh/key
+
+# gstg boxes
+Host *.gitlab-staging-1.internal
+        User                            YOUR_SSH_USERNAME
+        PreferredAuthentications        publickey
+        IdentityFile                    /path/to/your/ssh/key
+        ProxyCommand                    ssh lb-bastion.gstg.gitlab.com -W %h:%p
+
 ```
 
 Testing (for example, if you have access to deploy node), output should be like this:
