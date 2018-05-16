@@ -72,7 +72,7 @@ There are three cookbooks that configure logging on gitlab.com
 
 * Decide whether you want a new pubsub topic (which means a new index) or use an existing one
 * If you want to use an existing index simply update one of [fluentd templates](https://gitlab.com/gitlab-cookbooks/gitlab_fluentd/tree/master/templates/default) and add a section for the new log.
-* First modify the `variables.tf` of the `gprd` and `gstg` environment so that there is a new topic and a new pubsubbeat to monitor it.
+* If youw ant to create a new index, first modify the `variables.tf` of the `gprd` and `gstg` environment so that there is a new topic and a new pubsubbeat to monitor it.
 * Add a new "name" and "machine type", see this example:
 
 ```
