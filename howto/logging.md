@@ -8,6 +8,8 @@ Centralized logging at GitLab uses a combination of FluentD, google pubsub,
 and ElasticSearch / Kibana. All logs for the production, staging, gprd and
 gstg environments are forwarded to log.gitlab.net.
 
+![Logical scheme](../img/logging-infr.png)
+
 ### What are we logging?
 
 | name | logfile  | type  | index | retention(d) |
