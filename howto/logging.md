@@ -48,16 +48,46 @@ gstg environments are forwarded to log.gitlab.net.
 They are created by https://github.com/GoogleCloudPlatform/pubsubbeat , I don't see a way we can remove them without forking the project.
 
 
-### Chef configuration
+### Configuration
+
+#### Cookbooks
 
 There are three cookbooks that configure logging on gitlab.com
 
-*
-#### Cookbooks
+* gitlab-proxy - Sets up the nginx proxy so that users can access elastic cloud via log.gitlab.net
+* gitlab_fluentd - Sets up td-agent on all nodes, forwards logs to pubsub topics.
+* gitlab-elk - Sets up the pubsub beat which reads from the topics and forwards to elastic cloud.
 
 #### Role configuration
 
-### Terraform
+* There is a [single role for all pubsub beats](https://dev.gitlab.org/cookbooks/chef-repo/blob/master/roles/gprd-infra-pubsub.json) per environment, the index is determined by the hostname which allows it to be dyamic.
+* Add the `recipe[gitlab_fluentd::<type>]"` recipe to enable the td-agent
+* The [ops proxy role](https://dev.gitlab.org/cookbooks/chef-repo/blob/master/roles/ops-infra-log-proxy.json) configures the proxy vm that is the reverse proxy for elastic cloud.
+
+
+#### Terraform
+
+
+#### Adding a new logfile
+
+* Decide whether you want a new pubsub topic (which means a new index) or use an existing one
+* If you want to use an existing index simply update one of [fluentd templates](https://gitlab.com/gitlab-cookbooks/gitlab_fluentd/tree/master/templates/default) and add a section for the new log.
+* First modify the `variables.tf` of the `gprd` and `gstg` environment so that there is a new topic and a new pubsubbeat to monitor it.
+* Add a new "name" and "machine type", see this example:
+```
+variable "pubsubbeats" {
+  type = "map"
+
+  default = {
+    "names"         = ["gitaly", "haproxy", "pages", "postgres", "production", "system", "workhorse", "geo", "sidekiq", "api"]
+    "machine_types" = ["n1-standard-8", "n1-standard-8", "n1-standard-4", "n1-standard-4", "n1-standard-8", "n1-standard-8", "n1-standard-8", "n1-standard-4", "n1-standard-8", "n1-standard-4"]
+  }
+}
+```
+* Note: try to use a small instance type and increase it if necessary.
+* Run terraform
+* If you are using a new index you will need to add a [new template to fluentd](https://gitlab.com/gitlab-cookbooks/gitlab_fluentd/tree/master/templates/default).
+* After the template is created, add the recipe to the nodes that have the logfile.
 
 ### Monitoring and Troubleshooting
 
