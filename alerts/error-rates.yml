@@ -1,8 +1,10 @@
 groups:
 - name: error-rates.rules
   rules:
+  - record: environment_type:rails_request_errors:ratio
+    expr: sum by (type,environment)(rate(rails_requests_completed{status=~"5.."}[1m])) / sum by (type,environment)(rate(rails_requests_completed{}[1m]))
   - alert: HighRailsErrorRate
-    expr: sum(rate(rails_requests_completed{type="web",status=~"5..",environment="prd"}[10m])) / sum(rate(rails_requests_completed{type="web",environment="prd"}[10m])) > .005
+    expr: environment_type:rails_request_errors:ratio{type="web",environment="prd"} * 100 > .5
     labels:
       pager: pagerduty
       severity: critical
