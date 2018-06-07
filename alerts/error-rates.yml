@@ -1,6 +1,15 @@
 groups:
 - name: error-rates.rules
   rules:
+  - alert: HighRailsErrorRate
+    expr: sum(rate(rails_requests_completed{type="web",status=~"5..",environment="prd"}[10m])) / sum(rate(rails_requests_completed{type="web",environment="prd"}[10m])) > .005
+    labels:
+      pager: pagerduty
+      severity: critical
+    annotations:
+      description: Rails is returning 5xx errors at a high rights. Web traffic is impacted and users are seeing 500 errors.
+      runbook: troubleshooting/gitlab-com-is-down.md
+      title: High Rails Error Rate on Front End Web
   - alert: HighWebErrorRate
     expr: sum(backend_code:haproxy_server_http_responses_total:irate1m{backend="web",code="5xx",environment="prd",tier="lb"})
       - sum(backend_code:haproxy_server_http_responses_total:irate1m{backend="web",code!="5xx",environment="prd",tier="lb"})
