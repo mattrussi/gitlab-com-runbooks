@@ -9,7 +9,7 @@ groups:
       pager: pagerduty
       severity: critical
     annotations:
-      description: Rails is returning 5xx errors at a high rate for {{ $labels.type }} . {{ $labels.type }} traffic is impacted and users are seeing 500 errors.
+      description: Rails is returning 5xx errors at a high rate for {{ $labels.type }} . Traffic is impacted and users are likely seeing 500 errors.
       runbook: troubleshooting/gitlab-com-is-down.md
       title: High Rails Error Rate on Front End
   - alert: HighWebErrorRate
