@@ -338,3 +338,22 @@ groups:
         overloaded database, or a performance regression introduced in a new
         release.
       title: There are too many slow SQL queries
+  - alert: PostgreSQL_too_many_sequential_reads
+    expr: >
+      (
+        postgres:pg_stat_seq_scans:rate2m
+          /
+        (quantile_over_time(0.9, postgres:pg_stat_seq_scans:rate2m[24h] offset 1h) > 0) * 100
+      ) > 300
+    for: 15m
+    labels:
+      pager: pagerduty
+      severity: warn
+      channel: database
+    annotations:
+      description: >
+        The table {{ $labels.relname }} on database {{ $labels.fqdn }} is
+        executing {{ $value | printf "%.2f" }}% of the number sequential table
+        reads, compared to the hour before. This may lead to GitLab becoming
+        less responsive.
+      title: There are too many sequential table scans
