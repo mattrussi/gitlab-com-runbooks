@@ -36,6 +36,10 @@ Replication lag is measured in bytes in the replication stream.
 
 https://performance.gitlab.net/dashboard/db/andrew-redis?panelId=13&fullscreen&orgId=1
 
+#### Redis Replication Events
+
+* Check the Redis Replication Events dashboard to see if Redis is frequently failing over. This may indicate replication issues. https://performance.gitlab.net/dashboard/db/andrew-redis?panelId=14&fullscreen&orgId=1
+
 ### Redis Sentinel
 
 Redis Sentinel provides an pointer for compatible clients to the current Redis primary. Clients will query Sentinel and then connect directly to the primary Redis (in other words, Redis sentinel does not proxy requests).
@@ -126,7 +130,7 @@ $  /opt/gitlab/embedded/bin/redis-cli -h 10.66.2.102 -p 26379 sentinel slaves gi
 * ssh into the redis host which generated the alert and check the actual replication status
 
 ```shell
-root@redis7:~# REDIS_MASTER_AUTH=$(grep ^masterauth redis.conf|cut -d\" -f2)
+root@redis7:~# REDIS_MASTER_AUTH=$(sudo grep ^masterauth /var/opt/gitlab/redis/redis.conf|cut -d\" -f2)
 root@redis7:~# /opt/gitlab/embedded/bin/redis-cli -a $REDIS_MASTER_AUTH
 127.0.0.1:6379> info replication
 # Replication
@@ -144,10 +148,26 @@ repl_backlog_histlen:1048576
 
 In this case we are missing slave3 since we have 4 slaves.
 
+### Why is Redis Failing Over?
+
+* If Redis is frequently failing over, it may be worth checking the Redis Sentinel logs (`/var/log/gitlab/sentinel/current`).
+* Possible causes include
+    * Host network connectivity
+    * Redis is being killed by the OOMKiller
+    * A very high latency command (for example `keys *` or `debug sleep 60`) is preventing Redis from processing commands
+    * Redis is unable to write the RDB snapshot, leading to the instance becoming read-only (check `/opt/gitlab/embedded/bin/redis-cli -a $REDIS_MASTER_AUTH config get dir`,  `df -h /var/opt/gitlab/redis` for space)
+
 ## Resolution
 
 * Just wait, every slave should automatically restart it's replication when it drops out
 * If it takes longer then expected check /var/log/gitlab/redis/current on the mailfunctioning slave for any indications why it won't restart replication
 
+## Helpful Resources
+
+* https://redis.io/topics/replication
+* https://redis.io/topics/sentinel
+* https://redislabs.com/blog/top-redis-headaches-for-devops-replication-buffer/
+* https://redislabs.com/blog/top-redis-headaches-for-devops-replication-timeouts/
+* https://redislabs.com/blog/top-redis-headaches-for-devops-client-buffers/
 
 
