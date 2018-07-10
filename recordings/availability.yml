@@ -17,9 +17,9 @@ groups:
   # {web, api, sidekiq, gitlab_shell} node component
   - record: gitlab:service:availability:_:node
     expr: label_replace(label_replace(avg(avg_over_time(up{tier="sv", job="node"}[1m])) by (environment, tier, type), "component", "node", "", ""), "type", "gitlab_shell", "type", "git")
-  # {web, api, sidekiq, gitlab_shell} workhorse component
-  - record: gitlab:service:availability:_:workhorse
-    expr: label_replace(label_replace(avg(avg_over_time(up{tier="sv", job=~"gitlab-workhorse.*"}[1m])) by (environment, tier, type), "component", "workhorse", "", ""), "type", "gitlab_shell", "type", "git")
+  # sidekiq, sidekiq-cluster component
+  - record: gitlab:service:availability:sidekiq:sidekiq-cluster
+    expr: label_replace(avg(avg_over_time(up{tier="sv", job="gitlab-sidekiq"}[1m])) by (environment, tier, type), "component", "sidekiq-cluster", "", "")
   # {web, api, sidekiq, gitlab_shell} , unicorn component
   - record: gitlab:service:availability:_:unicorn
     expr: label_replace(label_replace(avg(avg_over_time(up{tier="sv",job="gitlab-unicorn"}[1m])) by (environment, tier, type), "component", "unicorn", "", ""), "type", "gitlab_shell", "type", "git")
