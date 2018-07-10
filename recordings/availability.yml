@@ -1,0 +1,55 @@
+groups:
+- name: GitLab Service Availability
+  interval: 1m
+  rules:
+  # GitLab Shell Service: gitlab_shell
+  - record: gitlab:service:availability:gitlab_shell
+    expr: label_replace(avg(avg_over_time(up{tier="sv", type="git"}[1m])) by (environment, tier, type), "type", "gitlab_shell", "type", "git")
+  # Postgres Service
+  - record: gitlab:service:availability:postgres
+    expr: avg(avg_over_time(up{tier="db", type="postgres"}[1m])) by (environment, tier, type)
+  # Redis Service
+  - record: gitlab:service:availability:redis
+    expr: avg(avg_over_time(up{tier="db", type="redis"}[1m])) by (environment, tier, type)
+  # Registry Service
+  - record: gitlab:service:availability:registry
+    expr: avg(avg_over_time(up{tier="sv", type="registry"}[1m])) by (environment, tier, type)
+  # web
+  - record: gitlab:service:availability:web
+    expr: avg(avg_over_time(up{tier="sv", type="web"}[1m])) by (environment, tier, type)
+  # api
+  - record: gitlab:service:availability:api
+    expr: avg(avg_over_time(up{tier="sv", type="api"}[1m])) by (environment, tier, type)
+  # mailroom
+  - record: gitlab:service:availability:mailroom
+    expr: avg(avg_over_time(up{tier="sv", type="mailroom"}[1m])) by (environment, tier, type)
+  # pgbouncer
+  - record: gitlab:service:availability:pgbouncer
+    expr: avg(avg_over_time(up{tier="db", type="pgbouncer"}[1m])) by (environment, tier, type)
+  # gitaly
+  - record: gitlab:service:availability:gitaly
+    expr: avg(avg_over_time(up{tier="stor", type="gitaly"}[1m])) by (environment, tier, type)
+  # Pages DOES NOT CURRENTLY HAVE A WORKING AVAILABILITY METRIC as pages metrics are sent to prometheus-app
+  - record: gitlab:service:availability:pages
+    expr: avg(avg_over_time(up{tier="sv", type="pages"}[1m])) by (environment, tier, type)
+  # Sidekiq DOES NOT CURRENTLY HAVE A WORKING AVAILABILITY METRIC as `gitlab-sidekiq` job metrics are sent to prometheus-app
+  - record: gitlab:service:availability:sidekiq
+    expr: avg(avg_over_time(up{tier="sv", type="sidekiq"}[1m])) by (environment, tier, type)
+  # HAProxy
+  - record: gitlab:service:availability:haproxy
+    expr: avg(label_replace(avg_over_time(up{tier="lb"}[1m]), "type", "haproxy", "type", ".*")) by (environment, tier, type)
+  # Combined
+  - record: gitlab:service:availability
+    expr: |
+      gitlab:service:availability:gitlab_shell or
+      gitlab:service:availability:postgres or
+      gitlab:service:availability:redis or
+      gitlab:service:availability:registry or
+      gitlab:service:availability:web or
+      gitlab:service:availability:api or
+      gitlab:service:availability:mailroom or
+      gitlab:service:availability:pgbouncer or
+      gitlab:service:availability:gitaly or
+      gitlab:service:availability:pages or
+      gitlab:service:availability:sidekiq or
+      gitlab:service:availability:haproxy
