@@ -14,13 +14,13 @@ groups:
   # Registry Service
   - record: gitlab:service:availability:registry
     expr: avg(avg_over_time(up{tier="sv", type="registry"}[1m])) by (environment, tier, type)
-  # {web, api, sidekiq} node component
+  # {web, api, sidekiq, gitlab_shell} node component
   - record: gitlab:service:availability:_:node
     expr: label_replace(label_replace(avg(avg_over_time(up{tier="sv", job="node"}[1m])) by (environment, tier, type), "component", "node", "", ""), "type", "gitlab_shell", "type", "git")
-  # {web, api, sidekiq} workhorse component
+  # {web, api, sidekiq, gitlab_shell} workhorse component
   - record: gitlab:service:availability:_:workhorse
     expr: label_replace(label_replace(avg(avg_over_time(up{tier="sv", job=~"gitlab-workhorse.*"}[1m])) by (environment, tier, type), "component", "workhorse", "", ""), "type", "gitlab_shell", "type", "git")
-  # {web, api, sidekiq} , unicorn component
+  # {web, api, sidekiq, gitlab_shell} , unicorn component
   - record: gitlab:service:availability:_:unicorn
     expr: label_replace(label_replace(avg(avg_over_time(up{tier="sv",job="gitlab-unicorn"}[1m])) by (environment, tier, type), "component", "unicorn", "", ""), "type", "gitlab_shell", "type", "git")
   # mailroom
@@ -32,12 +32,9 @@ groups:
   # gitaly
   - record: gitlab:service:availability:gitaly
     expr: avg(avg_over_time(up{tier="stor", type="gitaly"}[1m])) by (environment, tier, type)
-  # Pages DOES NOT CURRENTLY HAVE A WORKING AVAILABILITY METRIC as pages metrics are sent to prometheus-app
+  # pages
   - record: gitlab:service:availability:pages
     expr: avg(avg_over_time(up{tier="sv", type="pages"}[1m])) by (environment, tier, type)
-  # Sidekiq DOES NOT CURRENTLY HAVE A WORKING AVAILABILITY METRIC as `gitlab-sidekiq` job metrics are sent to prometheus-app
-  - record: gitlab:service:availability:sidekiq
-    expr: avg(avg_over_time(up{tier="sv", type="sidekiq"}[1m])) by (environment, tier, type)
   # HAProxy
   - record: gitlab:service:availability:haproxy:server
     expr: label_replace(avg(label_replace(avg_over_time(up{tier="lb"}[1m]), "type", "haproxy", "type", ".*")) by (environment, tier, type), "component", "server", "", "")
