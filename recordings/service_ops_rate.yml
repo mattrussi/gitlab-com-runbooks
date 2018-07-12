@@ -1,4 +1,5 @@
-- name: GitLab Service ops rates
+groups:
+- name: GitLab Service operations-per-second rates
   interval: 1m
   rules:
   # Postgres Service
