@@ -31,7 +31,7 @@ groups:
       type: 'gitlab_shell'
       tier: 'sv'
     expr: >
-      sum by (enviroment) (haproxy_backend_current_session_rate{backend="registry"})
+      sum by (enviroment) (haproxy_backend_current_session_rate{backend=~"ssh|altssh"})
   # web
   - record: gitlab_service:ops_rate_per_second
     labels:
