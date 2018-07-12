@@ -49,7 +49,7 @@ groups:
     labels:
       service: 'sidekiq'
     expr: >
-      sum by (environment, tier, type) (rate(gitlab_workhorse_request_duration_seconds_sum{job=~"gitlab-workhorse-api"}[1m]))
+      sum by (environment, tier, type) (rate(gitlab_transaction_duration_seconds_count{type = "sidekiq"}[1m]))
   # mailroom
   # TODO: zero placeholder as we have no metrics for mailroom at present
   - record: gitlab_service:ops_rate_per_second
