@@ -23,7 +23,7 @@ groups:
       type: 'registry'
       tier: 'sv'
     expr: >
-      sum by (enviroment) (haproxy_backend_current_session_rate{backend="registry"})
+      sum by (environment) (haproxy_backend_current_session_rate{backend="registry"})
   # gitlab_shell
   - record: gitlab_service:ops_rate_per_second
     labels:
@@ -31,7 +31,7 @@ groups:
       type: 'gitlab_shell'
       tier: 'sv'
     expr: >
-      sum by (enviroment) (haproxy_backend_current_session_rate{backend=~"ssh|altssh"})
+      sum by (environment) (haproxy_backend_current_session_rate{backend=~"ssh|altssh"})
   # web
   - record: gitlab_service:ops_rate_per_second
     labels:
@@ -76,7 +76,7 @@ groups:
       type: 'pages'
       tier: 'sv'
     expr: >
-      sum by (enviroment) (haproxy_backend_current_session_rate{backend=~"pages_.*"})
+      sum by (environment) (haproxy_backend_current_session_rate{backend=~"pages_.*"})
   # HAProxy
   - record: gitlab_service:ops_rate_per_second
     labels:
