@@ -17,5 +17,5 @@ deploy_elastic_watcher_updates:
     - apk add --no-cache curl bash
   script:
     - elastic-watcher/update-alerts.sh
-#  only:
-#    - master
+ only:
+   - master
