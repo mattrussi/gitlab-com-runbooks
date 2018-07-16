@@ -12,6 +12,9 @@ test:
 
 deploy_elast_watcher_updates:
   stage: deploy
+  image: alpine:latest
+  before_script:
+    - apk add --no-cache curl bash
   script:
     - elastic-watcher/update-alerts.sh
 #  only:
