@@ -10,7 +10,7 @@ test:
     - /prometheus/promtool check rules recordings/*.yml
     - /prometheus/promtool check rules rules/*.yml
 
-deploy_elast_watcher_updates
+deploy_elast_watcher_updates:
   stage: deploy
   script:
     - elastic-watcher/update-alerts.sh
