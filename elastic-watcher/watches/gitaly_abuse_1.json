@@ -65,7 +65,7 @@
   },
   "condition" : {
     "script" : {
-      "inline" : "ctx.payload.aggregations.significant_repos.buckets.any(bucket -> (bucket.wall_time_ms.value / params.time_period_seconds >= params.wall_time_ms_per_second_threshold) ||  (bucket.doc_count / params.time_period_seconds >= params.invocation_rate_per_second_threshold))",
+      "inline" : "ctx.payload.aggregations.significant_repos.buckets.any(bucket -> ((bucket.wall_time_ms.value / params.time_period_seconds) >= params.wall_time_ms_per_second_threshold) ||  ((bucket.doc_count / params.time_period_seconds) >= params.invocation_rate_per_second_threshold))",
       "lang" : "painless",
       "params" : {
         "time_period_seconds" : 600,
@@ -76,7 +76,7 @@
   },
   "transform" : {
     "script" : {
-      "inline" : "['items': ctx.payload.aggregations.significant_repos.buckets.findAll(bucket -> (bucket.wall_time_ms.value / params.time_period_seconds >= params.wall_time_ms_per_second_threshold) ||  (bucket.doc_count / params.time_period_seconds >= params.invocation_rate_per_second_threshold)).collect(bucket -> ['key': bucket.key, 'count': bucket.doc_count, 'wall_time_ms_per_second': Math.round(bucket.wall_time_ms.value / params.time_period_seconds), 'invocation_rate_per_second': Math.round(bucket.doc_count / params.time_period_seconds), 'fqdn': bucket.fqdn.hits.hits[0].fields['json.fqdn.keyword'][0]])]",
+      "inline" : "['items': ctx.payload.aggregations.significant_repos.buckets.findAll(bucket -> ((bucket.wall_time_ms.value / params.time_period_seconds) >= params.wall_time_ms_per_second_threshold) ||  ((bucket.doc_count / params.time_period_seconds) >= params.invocation_rate_per_second_threshold)).collect(bucket -> ['key': bucket.key, 'count': bucket.doc_count, 'wall_time_ms_per_second': Math.round(bucket.wall_time_ms.value / params.time_period_seconds), 'invocation_rate_per_second': Math.round(bucket.doc_count / params.time_period_seconds), 'fqdn': bucket.fqdn.hits.hits[0].fields['json.fqdn.keyword'][0]])]",
       "lang" : "painless",
       "params" : {
         "time_period_seconds" : 600,
