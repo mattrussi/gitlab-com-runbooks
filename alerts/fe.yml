@@ -2,8 +2,8 @@ groups:
 - name: redundancy.rules
   rules:
 
-  - alert: LossOfRedundancy
-    expr: ((sum by (type)(up{environment=~"g?prd",tier="lb",job="node"}))/(count by (type) (up{environment=~"g?prd",tier="lb",job="node"})) * 100) < 100
+  - alert: FeLoadBalancerLossOfRedundancy
+    expr: avg(up{environment=~"g?prd", tier="lb",job="node"} * 100) by (type) < 100
     for: 5m
     labels:
       pager: pagerduty
@@ -14,8 +14,8 @@ groups:
       runbook: troubleshooting/gitlab-com-is-down.md
       title: Loss of Redundancy
 
-  - alert: NoFrontends
-    expr: (sum by (type)(up{environment=~"g?prd",tier="lb",job="node"})) == 0
+  - alert: FeLoadBalancerMissingNodes
+    expr: sum (up{environment=~"g?prd",tier="lb",job="node"}) by (type) == 0
       > 0
     labels:
       pager: pagerduty
