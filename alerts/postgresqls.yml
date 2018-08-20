@@ -2,7 +2,7 @@ groups:
 - name: postgresql.rules
   rules:
   - alert: PostgresSQL_XIDConsumptionTooLow
-    expr: rate(pg_txid_current{environment=~"g?prd"}[1m]) < 5
+    expr: rate(pg_txid_current{environment=~"gprd"}[1m]) < 5
     for: 1m
     labels:
       pager: pagerduty
@@ -14,7 +14,7 @@ groups:
       runbook: troubleshooting/postgresql.md#availability
       title: Postgres seems to be consuming transaction IDs very slowly
   - alert: PostgreSQL_XLOGConsumptionTooLow
-    expr: rate(pg_xlog_position_bytes{environment=~"g?prd"}[1m]) < 200000
+    expr: rate(pg_xlog_position_bytes{environment=~"gprd"}[1m]) < 200000
     for: 2m
     labels:
       pager: pagerduty
@@ -26,7 +26,7 @@ groups:
       runbook: troubleshooting/postgresql.md#availability
       title: Postgres seems to be consuming XLOG very slowly
   - alert: PostgreSQL_CommitRateTooLow
-    expr: rate(pg_stat_database_xact_commit{datname="gitlabhq_production",environment=~"g?prd"}[1m])
+    expr: rate(pg_stat_database_xact_commit{datname="gitlabhq_production",environment=~"gprd"}[1m])
       < 1000
     for: 5m
     labels:
@@ -52,7 +52,7 @@ groups:
         to the maximum
   - alert: PostgreSQL_RollbackRateTooHigh
     expr: rate(pg_stat_database_xact_rollback{datname="gitlabhq_production"}[5m])
-      / ON(instance, datname) rate(pg_stat_database_xact_commit{datname="gitlabhq_production",environment=~"g?prd"}[5m])
+      / ON(instance, datname) rate(pg_stat_database_xact_commit{datname="gitlabhq_production",environment=~"gprd"}[5m])
       > 0.1
     for: 5m
     labels:
@@ -64,7 +64,7 @@ groups:
       runbook: troubleshooting/postgresql.md#errors
       title: Postgres transaction rollback rate is high
   - alert: PostgreSQL_StatementTimeout_Errors
-    expr: rate(postgresql_errors_total{environment=~"g?prd", type="statement_timeout"}[5m]) > 3
+    expr: rate(postgresql_errors_total{environment=~"gprd", type="statement_timeout"}[5m]) > 3
     for: 5m
     labels:
       severity: warn
@@ -86,7 +86,7 @@ groups:
       runbook: troubleshooting/postgresql.md#errors
       title: Postgres detected deadlocks
   - alert: PostgreSQL_ReplicationStopped
-    expr: pg_stat_replication_pg_xlog_location_diff{environment=~"g?prd", job="gitlab-cluster-db"} != pg_stat_replication_pg_xlog_location_diff{environment=~"g?prd", job="gitlab-cluster-db"}
+    expr: pg_stat_replication_pg_xlog_location_diff{environment=~"gprd", job="gitlab-cluster-db"} != pg_stat_replication_pg_xlog_location_diff{environment=~"gprd", job="gitlab-cluster-db"}
     for: 5m
     labels:
       pager: pagerduty
@@ -195,16 +195,21 @@ groups:
       runbook: "troubleshooting/postgres.md#load"
       title: 'High load in database {{ $labels.fqdn }}: {{$value}}'
   - alert: PostgreSQL_TooManyDeadTuples
-    expr: pg_stat_table_n_dead_tup > 50000 unless ON(instance) (pg_replication_is_replica
-      == 1)
-    for: 1h
+    expr: >
+      (
+        (pg_stat_user_tables_n_dead_tup > 10000)
+        /
+        (pg_stat_user_tables_n_live_tup + pg_stat_user_tables_n_dead_tup > 1000)
+      ) >= 0.05
+      unless ON(instance) (pg_replication_is_replica == 1)
+    for: 30m
     labels:
       pager: pagerduty
-      severity: critical
+      severity: warn
       channel: database
     annotations:
-      description: "Too many dead tuples"
-      table: "{{$labels.table_name}}"
+      description: "The dead tuple ratio of {{$labels.relname}} is greater than 5%"
+      table: "{{$labels.relname}}"
       dead_tuples: "{{$value}}"
       runbook: "troubleshooting/postgres.md#tables-with-a-large-amount-of-dead-tuples"
       title: PostgreSQL dead tuples is too large
@@ -278,7 +283,7 @@ groups:
         which should be > 0.2'
       title: PostgreSQL Exporter not being scraped
   - alert: PostgreSQL_ExporterErrors
-    expr: pg_exporter_last_scrape_error == 1
+    expr: pg_exporter_last_scrape_error{environment=~"gprd|gstg"} == 1
     for: 1h
     labels:
       pager: pagerduty
@@ -303,7 +308,7 @@ groups:
       title: Postgres server disk utilization over 95% for over a minute. Expect
         this to cause replication lag or user visible latency
   - alert: PostgreSQL_PGBouncer_Errors
-    expr: rate(pgbouncer_errors_count{errmsg!="server conn crashed?"}[10m]) > 5
+    expr: rate(pgbouncer_errors_count{environment=~"gprd|gstg", errmsg!="server conn crashed?"}[10m]) > 5
     for: 5m
     labels:
       severity: warn
@@ -324,7 +329,7 @@ groups:
       runbook: troubleshooting/postgres.md#pgbouncer-errors
       title: PGBouncer is logging "no more connections allowed" errors
   - alert: PostgreSQL_too_many_slow_queries
-    expr: rate(pg_slow_queries{environment=~"g?prd"}[1m]) * 60 > 100
+    expr: rate(pg_slow_queries{environment=~"gprd"}[1m]) * 60 > 100
     for: 5m
     labels:
       pager: pagerduty
@@ -337,3 +342,16 @@ groups:
         overloaded database, or a performance regression introduced in a new
         release.
       title: There are too many slow SQL queries
+  - alert: PostgreSQL_SSLCompressionActive
+    expr: sum(pg_stat_ssl_compression{environment=~".*prd"}) BY (fqdn) > 0
+    for: 10m
+    labels:
+      severity: warn
+      channel: database
+    annotations:
+      description: >
+        Database {{ $labels.fqdn }} has {{ $value | printf "%.1f" }}
+        connections with SSL compression enabled. This may add significant
+        jitter in replication delay. Replicas should turn off SSL compression
+        via `sslcompression=0` in `recovery.conf`.
+      title: Clients are using SSL compression
