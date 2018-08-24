@@ -7,7 +7,7 @@
 
 ## 1. Download the profiles
 
-These commands can be executed either from the server itself or your own.
+These commands can be executed either from the server itself or your own computer.
 
 * Replace `<SERVER_IP>` with the IP for the Gitaly server you want to profile.
 * Replace `<PROM_PORT>` with the prometheus port configured for Gitaly.
