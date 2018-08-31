@@ -4,7 +4,7 @@ groups:
   - record: gitlab_com:last_wale_backup_age_in_seconds
     expr: (time() - wale_backup_last_completed_time_seconds)
   - record: gitlab_com:last_wale_basebackup_age_in_hours
-    expr: (time() - wale_basebackup_last_completed_time_seconds{}) / 3600
+    expr: (time() - wale_basebackup_last_completed_time_seconds) / 3600
   - alert: WALEBackupDelayedProd
     expr: gitlab_com:last_wale_backup_age_in_seconds{environment=~"gprd"} >= 60 * 15
     for: 5m
