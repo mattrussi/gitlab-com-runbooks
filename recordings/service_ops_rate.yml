@@ -37,13 +37,13 @@ groups:
     labels:
       service: 'web'
     expr: >
-      sum by (environment, tier, type) (rate(gitlab_workhorse_request_duration_seconds_sum{job=~"gitlab-workhorse-web"}[1m]))
+      sum by (environment, tier, type) (rate(gitlab_workhorse_http_requests_total{job="gitlab-workhorse-web"}[1m]))
   # api
   - record: gitlab_service_ops:rate
     labels:
       service: 'api'
     expr: >
-      sum by (environment, tier, type) (rate(gitlab_workhorse_request_duration_seconds_sum{job=~"gitlab-workhorse-api"}[1m]))
+      sum by (environment, tier, type) (rate(gitlab_workhorse_http_requests_total{job="gitlab-workhorse-api"}[1m]))
   # sidekiq
   - record: gitlab_service_ops:rate
     labels:
