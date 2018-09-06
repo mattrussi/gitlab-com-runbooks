@@ -27,7 +27,7 @@ groups:
     labels:
       component: 'unicorn'
     expr: >
-      avg by (environment, tier, type) (avg_over_time(up{tier="sv",job="gitlab-unicorn"}[1m])),
+      avg by (environment, tier, type) (avg_over_time(up{tier="sv",job="gitlab-unicorn"}[1m]))
   # sidekiq, sidekiq_cluster component
   - record: gitlab_availability:ratio
     labels:
