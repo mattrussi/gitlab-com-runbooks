@@ -182,6 +182,6 @@ groups:
     expr: >
       avg_over_time(gitlab_availability:ratio[1w])
   # Stddev for each service, over a week
-  - record: gitlab_availability:ratio:avg_over_time_1w
+  - record: gitlab_availability:ratio:stddev_over_time_1w
     expr: >
       stddev_over_time(gitlab_availability:ratio[1w])

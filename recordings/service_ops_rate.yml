@@ -94,6 +94,6 @@ groups:
     expr: >
       avg_over_time(gitlab_service_ops:rate[1w])
   # Stddev for each service, over a week
-  - record: gitlab_service_ops:rate:avg_over_time_1w
+  - record: gitlab_service_ops:rate:stddev_over_time_1w
     expr: >
       stddev_over_time(gitlab_service_ops:rate[1w])
