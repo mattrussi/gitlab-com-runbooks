@@ -1,0 +1,58 @@
+teams:
+- name: backend
+- name: gitaly
+- name: release
+- name: infrastructure
+- name: backend
+- name: package
+
+tiers:
+- name: sv
+- name: lb
+- name: stor
+- name: db
+
+services:
+- name: api
+  tier: sv
+  team: backend
+
+- name: web
+  tier: sv
+  team: backend
+
+- name: git
+  tier: sv
+  team: backend
+
+- name: gitaly
+  tier: stor
+  team: gitaly
+
+- name: mailroom
+  tier: sv
+  team: backend
+
+- name: pages
+  tier: sv
+  team: release
+
+- name: pgbouncer
+  tier: db
+  team: infrastructure
+
+- name: postgres
+  tier: db
+  team: infrastructure
+
+- name: redis
+  tier: db
+  team: infrastructure
+
+- name: registry
+  tier: sv
+  team: package
+
+- name: sidekiq
+  tier: sv
+  team: backend
