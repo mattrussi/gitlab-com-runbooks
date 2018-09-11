@@ -3,6 +3,7 @@
 
 * **Responsible Team**: [package](https://about.gitlab.com/handbook/engineering/dev-backend/)
 * **Slack Channel**: [#backend](https://gitlab.slack.com/archives/production/backend)
+* **Alerts**: https://alerts.gprd.gitlab.net/#/alerts?silenced=true&inhibited=true&filter=%7Btype%3D%22registry%22%2C%20tier%3D%22sv%22%7D
 * **ELK**: [`pubsub-registry-inf-gprd-*`](https://log.gitlab.net/goto/1c2fe46c1db40a7aa7d31875f3fd2ad1)
 
 ## Troubleshooting Pointers

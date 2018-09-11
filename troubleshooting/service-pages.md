@@ -3,6 +3,7 @@
 
 * **Responsible Team**: [release](https://about.gitlab.com/handbook/engineering/dev-backend/)
 * **Slack Channel**: [#g_release](https://gitlab.slack.com/archives/production/g_release)
+* **Alerts**: https://alerts.gprd.gitlab.net/#/alerts?silenced=true&inhibited=true&filter=%7Btype%3D%22pages%22%2C%20tier%3D%22sv%22%7D
 * **Grafana Folder**: https://dashboards.gitlab.net/dashboards/f/v2ZhpeSik
 * **ELK**: [`pubsub-pages-inf-gprd-*`](https://log.gitlab.net/goto/00a732029c1448a741c8730c04038fd9)
 

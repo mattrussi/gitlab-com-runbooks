@@ -3,6 +3,7 @@
 
 * **Responsible Team**: [backend](https://about.gitlab.com/handbook/engineering/dev-backend/)
 * **Slack Channel**: [#backend](https://gitlab.slack.com/archives/production/backend)
+* **Alerts**: https://alerts.gprd.gitlab.net/#/alerts?silenced=true&inhibited=true&filter=%7Btype%3D%22sidekiq%22%2C%20tier%3D%22sv%22%7D
 * **Sentry**: https://sentry.gitlap.com/gitlab/gitlabcom
 * **Grafana Folder**: https://dashboards.gitlab.net/dashboards/f/c7nMugpmz
 * **ELK**: [`pubsub-sidekiq-inf-gprd-*`](https://log.gitlab.net/goto/d7e4791e63d2a2b192514ac821c9f14f)

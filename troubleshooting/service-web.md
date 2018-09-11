@@ -3,6 +3,7 @@
 
 * **Responsible Team**: [backend](https://about.gitlab.com/handbook/engineering/dev-backend/)
 * **Slack Channel**: [#backend](https://gitlab.slack.com/archives/production/backend)
+* **Alerts**: https://alerts.gprd.gitlab.net/#/alerts?silenced=true&inhibited=true&filter=%7Btype%3D%22web%22%2C%20tier%3D%22sv%22%7D
 * **Sentry**: https://sentry.gitlap.com/gitlab/gitlabcom
 * **ELK**: [`pubsub-rails-inf-gprd-*`](https://log.gitlab.net/goto/5e1aa9dac377ff2282c70748e9278860)
 

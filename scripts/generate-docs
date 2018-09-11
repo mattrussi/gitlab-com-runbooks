@@ -43,6 +43,7 @@ def generate_header(service, team, tier)
 
 * **Responsible Team**: [<%= team["name"] %>](<%= team["url"] %>)
 * **Slack Channel**: [\#<%= team["slack_channel"] %>](https://gitlab.slack.com/archives/production/<%= team["slack_channel"] %>)
+* **Alerts**: https://alerts.gprd.gitlab.net/#/alerts?silenced=true&inhibited=true&filter=%7Btype%3D%22<%= service_name %>%22%2C%20tier%3D%22<%= service["tier"] %>%22%7D
 <% if service["sentry_slug"] -%>
 * **Sentry**: https://sentry.gitlap.com/<%= service["sentry_slug"] %>
 <% end -%>

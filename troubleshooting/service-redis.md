@@ -3,6 +3,7 @@
 
 * **Responsible Team**: [infrastructure](https://about.gitlab.com/handbook/engineering/infrastructure/)
 * **Slack Channel**: [#production](https://gitlab.slack.com/archives/production/production)
+* **Alerts**: https://alerts.gprd.gitlab.net/#/alerts?silenced=true&inhibited=true&filter=%7Btype%3D%22redis%22%2C%20tier%3D%22db%22%7D
 * **Grafana Folder**: https://dashboards.gitlab.net/dashboards/f/D5R0peIik
 * **ELK**: [`pubsub-redis-inf-gprd-*`](https://log.gitlab.net/goto/27a6bf4e347ef9da754f06eb0a54aedc)
 

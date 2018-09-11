@@ -3,6 +3,7 @@
 
 * **Responsible Team**: [gitaly](https://about.gitlab.com/handbook/engineering/dev-backend/gitaly/)
 * **Slack Channel**: [#gitaly](https://gitlab.slack.com/archives/production/gitaly)
+* **Alerts**: https://alerts.gprd.gitlab.net/#/alerts?silenced=true&inhibited=true&filter=%7Btype%3D%22gitaly%22%2C%20tier%3D%22stor%22%7D
 * **Sentry**: https://sentry.gitlap.com/gitlab/gitaly-production
 * **Grafana Folder**: https://dashboards.gitlab.net/dashboards/f/SRXyrrSmk
 * **ELK**: [`pubsub-gitaly-inf-gprd-*`](https://log.gitlab.net/goto/4f0bd7f08b264e7de970bb0cc9530f9d)
