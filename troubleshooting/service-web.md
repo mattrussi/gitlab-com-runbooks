@@ -4,7 +4,7 @@
 * **Responsible Team**: [backend](https://about.gitlab.com/handbook/engineering/dev-backend/)
 * **Slack Channel**: [#backend](https://gitlab.slack.com/archives/production/backend)
 * **General Triage Dashboard**: https://dashboards.gitlab.net/d/WOtyonOiz/general-triage-service?from=now-6h&to=now&var-prometheus_ds=Global&var-environment=gprd&var-type=web&orgId=1
-* **Alerts**: https://alerts.gprd.gitlab.net/#/alerts?silenced=true&inhibited=true&filter=%7Btype%3D%22web%22%2C%20tier%3D%22sv%22%7D
+* **Alerts**: https://alerts.gprd.gitlab.net/#/alerts?filter=%7Btype%3D%22web%22%2C%20tier%3D%22sv%22%7D
 * **Sentry**: https://sentry.gitlap.com/gitlab/gitlabcom
 * **ELK**: [`pubsub-rails-inf-gprd-*`](https://log.gitlab.net/goto/5e1aa9dac377ff2282c70748e9278860)
 
@@ -15,5 +15,9 @@
 * [postgres.md](postgres.md)
 * [recovering-from-nfs-disaster.md](recovering-from-nfs-disaster.md)
 * [sentry-is-down.md](sentry-is-down.md)
+
+## Operating Rate
+
+![](https://dashboards.gitlab.com/render/d-solo/WOtyonOiz/general-triage-service?from=now-24h&to=now&var-prometheus_ds=Global&var-environment=gprd&var-type=web&orgId=1&panelId=12&width=1200&height=600&tz=UTC&theme=light)
 
 <!-- END_MARKER -->

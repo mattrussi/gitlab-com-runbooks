@@ -34,6 +34,7 @@ services:
   elk:
     permalink: https://log.gitlab.net/goto/0238ddb1480bb4bd19c09f0467b6e684
     index: pubsub-rails-inf-gprd-*
+  label:
 
 - name: web
   tier: sv
