@@ -5,4 +5,12 @@
 * **Slack Channel**: [#g_release](https://gitlab.slack.com/archives/production/g_release)
 * **Grafana Folder**: https://dashboards.gitlab.net/dashboards/f/v2ZhpeSik
 * **ELK**: [`pubsub-pages-inf-gprd-*`](https://log.gitlab.net/goto/00a732029c1448a741c8730c04038fd9)
+
+## Troubleshooting Pointers
+
+* [chef.md](chef.md)
+* [gitaly-unusual-activity.md](gitaly-unusual-activity.md)
+* [gitlab-pages.md](gitlab-pages.md)
+* [node_memory_alerts.md](node_memory_alerts.md)
+
 <!-- END_MARKER -->

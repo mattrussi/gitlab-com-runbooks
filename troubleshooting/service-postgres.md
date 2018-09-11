@@ -5,4 +5,11 @@
 * **Slack Channel**: [#production](https://gitlab.slack.com/archives/production/production)
 * **Grafana Folder**: https://dashboards.gitlab.net/dashboards/f/jYXDze5mk
 * **ELK**: [`pubsub-postgres-inf-gprd-*`](https://log.gitlab.net/goto/d0f8993486c9007a69d85e3a08f1ea7c)
+
+## Troubleshooting Pointers
+
+* [gitlab-com-is-down.md](gitlab-com-is-down.md)
+* [load-balancer-outage.md](load-balancer-outage.md)
+* [postgres.md](postgres.md)
+
 <!-- END_MARKER -->

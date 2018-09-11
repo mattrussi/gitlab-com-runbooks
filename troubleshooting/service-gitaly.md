@@ -6,4 +6,15 @@
 * **Sentry**: https://sentry.gitlap.com/gitlab/gitaly-production
 * **Grafana Folder**: https://dashboards.gitlab.net/dashboards/f/SRXyrrSmk
 * **ELK**: [`pubsub-gitaly-inf-gprd-*`](https://log.gitlab.net/goto/4f0bd7f08b264e7de970bb0cc9530f9d)
+
+## Troubleshooting Pointers
+
+* [gitaly-down.md](gitaly-down.md)
+* [gitaly-error-rate.md](gitaly-error-rate.md)
+* [gitaly-high-cpu.md](gitaly-high-cpu.md)
+* [gitaly-latency.md](gitaly-latency.md)
+* [gitaly-pubsub.md](gitaly-pubsub.md)
+* [gitaly-unusual-activity.md](gitaly-unusual-activity.md)
+* [gitaly-version-mismatch.md](gitaly-version-mismatch.md)
+
 <!-- END_MARKER -->

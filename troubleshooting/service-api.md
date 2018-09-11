@@ -5,4 +5,16 @@
 * **Slack Channel**: [#backend](https://gitlab.slack.com/archives/production/backend)
 * **Sentry**: https://sentry.gitlap.com/gitlab/gitlabcom
 * **ELK**: [`pubsub-rails-inf-gprd-*`](https://log.gitlab.net/goto/0238ddb1480bb4bd19c09f0467b6e684)
+
+## Troubleshooting Pointers
+
+* [alertmanager-notification-failures.md](alertmanager-notification-failures.md)
+* [ci_graphs.md](ci_graphs.md)
+* [ci_introduction.md](ci_introduction.md)
+* [ci_pending_builds.md](ci_pending_builds.md)
+* [ci_runner_manager_errors.md](ci_runner_manager_errors.md)
+* [gemnasium_is_down.md](gemnasium_is_down.md)
+* [large-sidekiq-queue.md](large-sidekiq-queue.md)
+* [postgres.md](postgres.md)
+
 <!-- END_MARKER -->

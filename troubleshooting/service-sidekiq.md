@@ -6,4 +6,11 @@
 * **Sentry**: https://sentry.gitlap.com/gitlab/gitlabcom
 * **Grafana Folder**: https://dashboards.gitlab.net/dashboards/f/c7nMugpmz
 * **ELK**: [`pubsub-sidekiq-inf-gprd-*`](https://log.gitlab.net/goto/d7e4791e63d2a2b192514ac821c9f14f)
+
+## Troubleshooting Pointers
+
+* [ci_introduction.md](ci_introduction.md)
+* [large-sidekiq-queue.md](large-sidekiq-queue.md)
+* [sidekiq_stats_no_longer_showing.md](sidekiq_stats_no_longer_showing.md)
+
 <!-- END_MARKER -->

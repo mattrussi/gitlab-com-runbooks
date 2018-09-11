@@ -3,29 +3,68 @@
 require 'yaml'
 require 'erb'
 require 'ostruct'
+require 'open3'
 
 START_MARKER="<!-- MARKER: do not edit this section directly. Edit services/service-mappings.yml then run scripts/generate-docs -->"
 STOP_MARKER="<!-- END_MARKER -->"
+
+def find_troubleshooting_docs(service_name)
+  docs = []
+  troubleshooting_docs_glob = File.join(__dir__, "..", "troubleshooting", "*.md")
+  Open3.popen3("grep -li '\\b#{service_name}\\b' #{troubleshooting_docs_glob}") do |stdin, stdout, stderr, wait_thr|
+    while line = stdout.gets
+      file_name = File.basename(line.chomp)
+      docs.push(file_name) unless file_name.include? "service-"
+    end
+  end
+
+  docs
+end
+
+def replace_header(file, header)
+  lines = File.readlines(file)
+  start = lines.find_index { |line| line.chomp == START_MARKER }
+  throw "Unable to find start marker" if start.nil?
+  stop = lines.find_index { |line| line.chomp == STOP_MARKER }
+  throw "Unable to find stop marker" if stop.nil?
+
+  lines.slice! start, stop - start + 1
+  lines.insert start, header
+
+  IO.write(file, lines.join("\n"))
+end
+
 def generate_header(service, team, tier)
-  template = <<~EOF
-    #{START_MARKER}
-    #  <%= service["name"].capitalize %> Service
+  service_name = service["name"]
+  troubeshooting_docs = find_troubleshooting_docs(service_name)
+  template = <<-EOF
+#{START_MARKER}
+#  <%= service["name"].capitalize %> Service
 
-    * **Responsible Team**: [<%= team["name"] %>](<%= team["url"] %>)
-    * **Slack Channel**: [\#<%= team["slack_channel"] %>](https://gitlab.slack.com/archives/production/<%= team["slack_channel"] %>)
-    <% if service["sentry_slug"] -%>
-    * **Sentry**: https://sentry.gitlap.com/<%= service["sentry_slug"] %>
-    <% end -%>
-    <% if service["grafana_folder"] -%>
-    * **Grafana Folder**: https://dashboards.gitlab.net/dashboards/f/<%= service["grafana_folder"] %>
-    <% end -%>
-    <% if service["elk"] -%>
-    * **ELK**: [`<%= service["elk"]["index"] %>`](<%= service["elk"]["permalink"] %>)
-    <% end -%>
-    #{STOP_MARKER}
-  EOF
+* **Responsible Team**: [<%= team["name"] %>](<%= team["url"] %>)
+* **Slack Channel**: [\#<%= team["slack_channel"] %>](https://gitlab.slack.com/archives/production/<%= team["slack_channel"] %>)
+<% if service["sentry_slug"] -%>
+* **Sentry**: https://sentry.gitlap.com/<%= service["sentry_slug"] %>
+<% end -%>
+<%- if service["grafana_folder"] -%>
+* **Grafana Folder**: https://dashboards.gitlab.net/dashboards/f/<%= service["grafana_folder"] %>
+<% end -%>
+<% if service["elk"] -%>
+* **ELK**: [`<%= service["elk"]["index"] %>`](<%= service["elk"]["permalink"] %>)
+<% end -%>
+<% if troubeshooting_docs && !troubeshooting_docs.empty? -%>
 
-  ERB.new(template, 0, "<>-").result(OpenStruct.new({ team: team, service: service, tier: tier }).instance_eval { binding })
+## Troubleshooting Pointers
+
+<%- troubeshooting_docs.each do |troubeshooting_doc| -%>
+* [<%= troubeshooting_doc %>](<%= troubeshooting_doc %>)
+<%- end -%>
+
+<% end -%>
+#{STOP_MARKER}
+EOF
+
+  ERB.new(template, 0, "-").result(OpenStruct.new({ team: team, service: service, tier: tier, troubeshooting_docs: troubeshooting_docs }).instance_eval { binding })
 end
 
 def generate_docs()
@@ -44,6 +83,7 @@ def generate_docs()
     troubleshooting_doc =  File.join(__dir__, "..", "troubleshooting", "service-#{service_name}.md")
     details = generate_header(service, team, tier)
     if File.exist?(troubleshooting_doc)
+      replace_header(troubleshooting_doc, details)
     else
       File.write(troubleshooting_doc, details)
     end
@@ -59,7 +99,7 @@ end
 
 begin
   generate_docs()
-rescue StandardError => e
-  STDERR.puts "error: #{e.message}"
-  exit 1
+# rescue StandardError => e
+#   STDERR.puts "error: #{e.message}"
+#   exit 1
 end
