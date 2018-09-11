@@ -1,0 +1,8 @@
+<!-- MARKER: do not edit this section directly. Edit services/service-mappings.yml then run scripts/generate-docs -->
+#  Postgres Service
+
+* **Responsible Team**: [infrastructure](https://about.gitlab.com/handbook/engineering/infrastructure/)
+* **Slack Channel**: [#production](https://gitlab.slack.com/archives/production/production)
+* **Grafana Folder**: https://dashboards.gitlab.net/dashboards/f/jYXDze5mk
+* **ELK**: [`pubsub-postgres-inf-gprd-*`](https://log.gitlab.net/goto/d0f8993486c9007a69d85e3a08f1ea7c)
+<!-- END_MARKER -->

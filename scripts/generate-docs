@@ -4,9 +4,11 @@ require 'yaml'
 require 'erb'
 require 'ostruct'
 
+START_MARKER="<!-- MARKER: do not edit this section directly. Edit services/service-mappings.yml then run scripts/generate-docs -->"
+STOP_MARKER="<!-- END_MARKER -->"
 def generate_header(service, team, tier)
   template = <<~EOF
-    <!-- MARKER: do not edit this section directly. Edit services/service-mappings.yml then run scripts/generate-docs -->
+    #{START_MARKER}
     #  <%= service["name"].capitalize %> Service
 
     * **Responsible Team**: [<%= team["name"] %>](<%= team["url"] %>)
@@ -20,22 +22,19 @@ def generate_header(service, team, tier)
     <% if service["elk"] -%>
     * **ELK**: [`<%= service["elk"]["index"] %>`](<%= service["elk"]["permalink"] %>)
     <% end -%>
-    <!-- END_MARKER -->
+    #{STOP_MARKER}
   EOF
 
   ERB.new(template, 0, "<>-").result(OpenStruct.new({ team: team, service: service, tier: tier }).instance_eval { binding })
 end
 
-def generate_docs(service_mapping_path)
-  service_mapping_yaml = YAML.load_file(service_mapping_path)
+def generate_docs()
+  service_mapping_yaml = YAML.load_file(File.join(__dir__, "..", "services", "service-mappings.yml"))
   services = service_mapping_yaml["services"]
-
-  raise "Service mapping must contain one or more teams" unless service_mapping_yaml["teams"] && !service_mapping_yaml["teams"].empty?
-  raise "Service mapping must contain one or more tiers" unless service_mapping_yaml["tiers"] && !service_mapping_yaml["tiers"].empty?
-  raise "Service mapping must contain one or more services" unless services && !services.empty?
 
   team_map = service_mapping_yaml["teams"].inject({}) { |map, team| map[team["name"]] = team; map }
   tier_map = service_mapping_yaml["tiers"].inject({}) { |map, tier| map[tier["name"]] = tier; map }
+  service_map = service_mapping_yaml["services"].inject({}) { |map, service| map[service["name"]] = service; map }
 
   services.each do |service|
     service_name = service["name"]
@@ -43,16 +42,23 @@ def generate_docs(service_mapping_path)
     tier = tier_map[service["tier"]]
 
     troubleshooting_doc =  File.join(__dir__, "..", "troubleshooting", "service-#{service_name}.md")
+    details = generate_header(service, team, tier)
     if File.exist?(troubleshooting_doc)
-      puts generate_header(service, team, tier)
     else
-      puts generate_header(service, team, tier)
+      File.write(troubleshooting_doc, details)
+    end
+  end
+
+  Dir.glob(File.join(__dir__, "..", "troubleshooting", "service-*.md")).each do |file|
+    referred_service_name = File.basename(file, ".md").sub("service-","")
+    if !service_map[referred_service_name]
+      File.delete(file)
     end
   end
 end
 
 begin
-  generate_docs(File.join(__dir__, "..", "services", "service-mappings.yml"))
+  generate_docs()
 rescue StandardError => e
   STDERR.puts "error: #{e.message}"
   exit 1
