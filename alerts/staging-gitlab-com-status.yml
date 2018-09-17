@@ -13,7 +13,7 @@ groups:
       title: staging.GitLab.com is down for 30 minutes
   - alert: StagingGitlabComSignInDown
     expr: probe_http_status_code{instance="https://staging.gitlab.com/users/sign_in",job="blackbox"} != 200
-    for: 5m
+    for: 30m
     labels:
       pager: pagerduty
       severity: critical
