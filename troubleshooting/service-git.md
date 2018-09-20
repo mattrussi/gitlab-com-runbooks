@@ -18,6 +18,7 @@
 * [git.md](git.md)
 * [gitaly-high-cpu.md](gitaly-high-cpu.md)
 * [large-sidekiq-queue.md](large-sidekiq-queue.md)
+* [missing_repos.md](missing_repos.md)
 * [recovering-from-nfs-disaster.md](recovering-from-nfs-disaster.md)
 * [workers-high-load.md](workers-high-load.md)
 <!-- END_MARKER -->
