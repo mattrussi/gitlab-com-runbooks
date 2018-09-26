@@ -11,9 +11,9 @@
 
 ## Troubleshoot
 ### Kibana
-  - [All 5xx statuses in rails](https://log.gitlab.net/app/kibana#/discover?_g=h@506727a&_a=h@3e371b9)
-  - [All 5xx statuses by controller](https://log.gitlab.net/app/kibana#/visualize/edit/AWWoNujLXaPv1oP9gavK?_g=h@cfc15f8&_a=h@a80b883)
-  - [Check for abuse from a specific IP](https://log.gitlab.net/app/kibana#/visualize/edit/AWWoQ9z4rqveOwJaKMd9?_g=h@cfc15f8&_a=h@9dcd243)
+  - [All 5xx statuses in rails](https://log.gitlab.net/goto/1bb0fbde4bbf4d43fb8ce0b16c6bdcbf)
+  - [All 5xx statuses by controller](https://log.gitlab.net/goto/c39fa97831441eefa41fb13fd20adee3)
+  - [Check for abuse from a specific IP](https://log.gitlab.net/goto/d51a1f9ad9149f835b0c34565f5e8ff7)
 - Check the [triage overview](https://dashboards.gitlab.net/dashboard/db/triage-overview) dashboard for 5xx errors by backend.
-- Check [Sentry](https://sentry.gitlab.net/gitlab/gitlabcom/) for new 500 errors.
+- Check [Sentry](https://sentry.gitlab.net/gitlab/gitlabcom/) for new 500 errors or an uptick.
 - If the problem persists send a channel wide notification in `#development`.
