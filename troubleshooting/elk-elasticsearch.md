@@ -9,7 +9,7 @@
 You're seeing alerts like
 
 ```
-@channel Elasticsearch on log-es3.gitlap.com is down
+@channel Elasticsearch on log-es3.gitlab.net is down
 ```
 
 ## Possible checks
@@ -35,6 +35,6 @@ sudo service elasticsearch restart
 
 ## Notes
 
-* There is only `log-es(2|3|4).gitlap.com` nodes.
+* There is only `log-es(2|3|4).gitlab.net` nodes.
 
 [ELK performance dashboard]: https://dashboards.gitlab.net/dashboard/db/elk-stats?orgId=1

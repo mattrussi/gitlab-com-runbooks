@@ -4,7 +4,7 @@ Kibana service is not running.
 
 ## Possible checks
 
-1. Open log.gitlap.com and login - you can see 502 error
+1. Open https://log.gitlab.net and login - you can see 502 error
 1. SSH to the `log.gitlap.com` and if in results of `sudo service kibana status` service should be `active (running)`. Otherwise it is down.
 
 ## Fix
