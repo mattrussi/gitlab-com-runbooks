@@ -6,9 +6,9 @@ By performing these tasks we will keep the [broken window effect](https://en.wik
 
 ## Things to keep an eye on
 
-### On-call log
+### On-call issues
 
-First check [the on-call log](https://docs.google.com/document/d/1nWDqjzBwzYecn9Dcl4hy1s4MLng_uMq-8yGRMxtgK6M/edit#heading=h.nmt24c52ggf5) to familiarize yourself with what has been hapening lately, if anything is on fire it should be written down there in the **Pending actions** section
+First check [the on-call issues](https://gitlab.com/gitlab-com/infrastructure/issues?scope=all&utf8=%E2%9C%93&state=all&label_name[]=oncall) to familiarize yourself with what has been happening lately.
 
 ### Alerts
 
