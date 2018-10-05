@@ -42,7 +42,7 @@ rotations in each geographical region; we will also incorporate a rotation for t
 APAC region as we continue to grow over time.
 
 The [EMEA][pagerduty-emea] and [AMER][pagerduty-amer] schedule [each have][pagerduty-emea-shadow] a
-[shadow schedule][pagerduyt-amer-shadow] which we use for on-boarding new engineers to the on-call
+[shadow schedule][pagerduty-amer-shadow] which we use for on-boarding new engineers to the on-call
 rotations.
 
 When a new engineer joins the team and is ready to start shadowing for an on-call rotation,
