@@ -25,13 +25,6 @@ Start by checking how many alerts are in flight right now
     -   if they don't, you have more work to do.
     -   be sure to create an issue, particularly to declare toil so we can work on it and suppress it.
 
-### Nodes status
-
--   go to your chef repo and run `knife status`
--   if you see hosts that are red it means that chef hasn't been running there for a long time
--   check the on-call issues to see if they are intentionally disabled
-    -   if not, and there is no mention of any ongoing issue in slack, mention it in [#production][slack-production] and begin investigating why `chef-client` has not been running there.
-
 ### Prometheus targets down
 
 Check how many targets are not scraped at the moment. alerts are in flight right now, to do this:
