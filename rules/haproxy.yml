@@ -43,11 +43,11 @@ groups:
       pager: pagerduty
       severity: critical
     annotations:
-      description: We are having more 5xx returns than any other reply. Web traffic
-        is being impacted and the service is probably down. Have you thought about
-        turning it off and on again?
+      title: High error rate on haproxy backend
+      description: > 
+        The backend {{ $labels.backend }} is returning more than 1% errors.
+        ({{ $value | printf "%.2f" }}%).
       runbook: troubleshooting/haproxy.md
-      title: High Error Rate on Front End Web
   - alert: High4xxApiRateLimit
     expr: sum(backend_code:haproxy_server_http_responses_total:irate1m{backend="api_rate_limit",code="4xx",tier="lb"})
       / sum(backend_code:haproxy_server_http_responses_total:irate1m{tier="lb"})
