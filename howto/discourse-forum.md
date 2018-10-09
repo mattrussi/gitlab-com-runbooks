@@ -84,7 +84,8 @@ We are using the following plugins:
     ./launcher rebuild app
     ```
 
-Bear in mind that if a plugin has updated, to pull any changes, the app must be rebuilt.
+When a plugin is updated in its upstream repo, you can update it via the admin
+UI.
 
 ## Backup
 
