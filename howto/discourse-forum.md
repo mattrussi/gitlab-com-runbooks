@@ -93,12 +93,36 @@ The backup happens automatically once a day, and we keep the
 
 ## Running low on disk space
 
-Running low on disk space might affect backups among others. To clean up some space:
+Running low on disk space might affect backups among others. To clean up some
+space, run the `cleanup` command:
+
 
 ```sh
+##
+## Remove all containers that have stopped for more than 24 hours
+##
+
+cd /var/discourse
 ./launcher cleanup
+
+##
+## Cleanup OS packages
+##
+
 apt-get autoclean
 apt-get autoremove
+
+##
+## In case NGINX logs take too much space
+## See https://gitlab.com/gitlab-com/gl-infra/infrastructure/issues/2429
+##
+## This should have been fixed upstream, but in any case
+## https://github.com/discourse/discourse_docker/commit/5d256035c6c2c8685b8735141539c7e3bf835a74
+##
+
+cd /var/discourse/shared/standalone/log/var-log/nginx
+du --max-depth 1 -x -h
+rm access.log.1
+truncate -s 1 access.log
 ```
 
-The `cleanup` command removes all containers that have stopped for > 24 hours.
