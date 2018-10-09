@@ -88,7 +88,7 @@ Bear in mind that if a plugin has updated, to pull any changes, the app must be 
 
 ## Backup
 
-The backup happens automatically once a day, and we keep the
+The backup happens automatically once a day, it's stored locally, and we keep the
 [latest seven](https://forum.gitlab.com/admin/backups).
 
 ## Running low on disk space
