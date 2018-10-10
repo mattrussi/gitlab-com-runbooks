@@ -16,6 +16,11 @@ Use `sslmate help buy` for additional options if needed.
 But with the above example, this will purchase a certificate that expires after
 1 year, will auto renew itself using DNS, and is of key type `ecdsa`.
 
+We've chosen to go with `ecdsa` for it's improvements:
+* Smaller size
+* Improved speed for TLS handshaking
+* Stronger algorithm
+
 We have [Route53 integration with SSLMate](https://sslmate.com/account/integrations/add/aws)
 so the DNS authorization will be done automatically.
 
@@ -34,10 +39,10 @@ sslmate renew '<domain>'
 This will change the existing approval method to our fancy DNS integration, and
 then force a renew.  You can then download the certificate:
 ```
-sslmate download '<domain.'
+sslmate download '<domain>'
 ```
 
-Note that sslmate may complain that you won't have they key in your `${CWD}`.
+Note that sslmate may complain that you won't have the key in your `${CWD}`.
 This is fine as we should have the key on minimally on a server, but may also
 exist inside of 1Password, and even better, inside a chef vault.
 
