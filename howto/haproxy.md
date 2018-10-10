@@ -42,34 +42,34 @@ groups:
     *  delivers a 301 to https
 * `https`: port 443
     * sends to the `api` rate limited backend if the request matches `/api` (skips the rate limit if your ip is on a statically configured whitelist)
-    * sends to the `https\_git` backend if the request matches a regex that tries to determine if it looks like a git path
+    * sends to the `https_git` backend if the request matches a regex that tries to determine if it looks like a git path
     * sends to the `registry` backend if the request is registry.gitlab.com
     * sends to the `websocket` backed if it looks like a websocket request
-    * sends to the `canary\_web` backend if it looks like a canary request (cookie and `canary.\*`)
+    * sends to the `canary_web` backend if it looks like a canary request (cookie and `canary.\*`)
     * If nothing else matches requests are sent to the `web` backend.
 * `ssh`: port 22
     * sends to the `ssh` backend
-* `api\_rate\_limit`: used for the https front-end (see above)
+* `api_rate_limit`: used for the https front-end (see above)
 * `altssh`: port 443
     * sends to the `altssh` backend
-* `pages\_http`: port 80
-    * sends to the `pages\_http` backend
-* `pages\_https`: port 443 
-    * sends to the `pages\_https` backend
+* `pages_http`: port 80
+    * sends to the `pages_http` backend
+* `pages_https`: port 443 
+    * sends to the `pages_https` backend
 
 ### Backends
 
 * `api`: all of the `api-xx` nodes
-* `api\_rate\_limit`: proxy for the `api\_rate\_limit` front-end
-* `https\_git`: all of the `git-xx` nodes
+* `api_rate_limit`: proxy for the `api_rate_limit` front-end
+* `https_git`: all of the `git-xx` nodes
 * `web`: all of the `web-xx` nodes
-* `canary\_web`: all of the `web-cny-xx` nodes
+* `canary_web`: all of the `web-cny-xx` nodes
 * `registry`: all of the `registry-xx` nodes
 * `ssh`: all of the `git-xx` nodes
 * `websockets`: all of the `git-xx` nodes
 * `altssh`: all of the `git-xx` nodes
-* `pages\_http`: all of the `web-xx` nodes
-* `pages\_https`: all of the `web-xx` nodes
+* `pages_http`: all of the `web-xx` nodes
+* `pages_https`: all of the `web-xx` nodes
 
 ## Load balancing
 
