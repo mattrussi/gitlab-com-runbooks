@@ -21,7 +21,11 @@ issues.
 Start by checking how many alerts are in flight right now
 
 -   go to the [fleet overview dashboard](https://dashboards.gitlab.net/dashboard/db/fleet-overview) and check the number of Active Alerts, it should be 0. If it is not 0
-    -   go to the alerts dashboard and check what is [being triggered](https://prometheus.gitlab.com/alerts) and watch the [#alerts][slack-alerts], [#alerts-general][slack-alerts-general], and [#alerts-gstg][slack-alerts-gstg] channels for alert notifications; each alert here should point you to the right runbook to fix it.
+    -   go to the alerts dashboard and check what is being triggered
+        -   [azure][prometheus-azure]
+        -   [gprd prometheus][prometheus-gprd]
+        -   [gprd prometheus-app][prometheus-app-gprd]
+    -   watch the [#alerts][slack-alerts], [#alerts-general][slack-alerts-general], and [#alerts-gstg][slack-alerts-gstg] channels for alert notifications; each alert here should point you to the right [runbook][runbook-repo] to fix it.
     -   if they don't, you have more work to do.
     -   be sure to create an issue, particularly to declare toil so we can work on it and suppress it.
 
@@ -30,7 +34,10 @@ Start by checking how many alerts are in flight right now
 Check how many targets are not scraped at the moment. alerts are in flight right now, to do this:
 
 -   go to the [fleet overview dashboard](https://dashboards.gitlab.net/dashboard/db/fleet-overview) and check the number of Targets down. It should be 0. If it is not 0
-    -   go to the [targets down list](https://prometheus.gitlab.com/consoles/up.html) and check what is.
+    -   go to the [targets down list] and check what is.
+        -   [azure][prometheus-azure-targets-down]
+        -   [gprd prometheus][prometheus-gprd-targets-down]
+        -   [gprd prometheus-app][prometheus-app-gprd-targets-down]
     -   try to figure out why there is scraping problems and try to fix it. Note that sometimes there can be temporary scraping problems because of exporter errors.
     -   be sure to create an issue, particularly to declare toil so we can work on it and suppress it.
 
@@ -56,19 +63,28 @@ shadow schedule][pagerduty-blank-schedule] and initial [overrides][pagerduty-ove
 on-boarding new team members.
 
 
-[on-call-issues]:            https://gitlab.com/gitlab-com/infrastructure/issues?scope=all&utf8=%E2%9C%93&state=all&label_name[]=oncall
+[on-call-issues]:                   https://gitlab.com/gitlab-com/infrastructure/issues?scope=all&utf8=%E2%9C%93&state=all&label_name[]=oncall
 
-[pagerduty-add-user]:       https://support.pagerduty.com/docs/editing-schedules#section-adding-users
-[pagerduty-amer]:            https://gitlab.pagerduty.com/schedules#PKN8L5Q
-[pagerduty-amer-shadow]:     https://gitlab.pagerduty.com/schedules#P0HRY7O
-[pagerduty-blank-schedule]:  https://community.pagerduty.com/t/creating-a-blank-schedule/212
-[pagerduty-emea]:            https://gitlab.pagerduty.com/schedules#PWDTHYI
-[pagerduty-emea-shadow]:     https://gitlab.pagerduty.com/schedules#PSWRHSH
-[pagerduty-overrides]:       https://support.pagerduty.com/docs/editing-schedules#section-create-and-delete-overrides
-[pagerduty-shadow-schedule]: https://community.pagerduty.com/t/creating-a-shadow-schedule-to-onboard-new-employees/214
+[pagerduty-add-user]:               https://support.pagerduty.com/docs/editing-schedules#section-adding-users
+[pagerduty-amer]:                   https://gitlab.pagerduty.com/schedules#PKN8L5Q
+[pagerduty-amer-shadow]:            https://gitlab.pagerduty.com/schedules#P0HRY7O
+[pagerduty-blank-schedule]:         https://community.pagerduty.com/t/creating-a-blank-schedule/212
+[pagerduty-emea]:                   https://gitlab.pagerduty.com/schedules#PWDTHYI
+[pagerduty-emea-shadow]:            https://gitlab.pagerduty.com/schedules#PSWRHSH
+[pagerduty-overrides]:              https://support.pagerduty.com/docs/editing-schedules#section-create-and-delete-overrides
+[pagerduty-shadow-schedule]:        https://community.pagerduty.com/t/creating-a-shadow-schedule-to-onboard-new-employees/214
 
-[slack-alerts]:              https://gitlab.slack.com/channels/alerts
-[slack-alerts-general]:      https://gitlab.slack.com/channels/alerts-general
-[slack-alerts-gstg]:         https://gitlab.slack.com/channels/alerts-gstg
-[slack-incident-management]: https://gitlab.slack.com/channels/incident-management
-[slack-production]:          https://gitlab.slack.com/channels/production
+[prometheus-azure]:                 https://prometheus.gitlab.com/alerts
+[prometheus-azure-targets-down]:    https://prometheus.gitlab.com/consoles/up.html
+[prometheus-gprd]:                  https://prometheus.gprd.gitlab.net/alerts
+[prometheus-gprd-targets-down]:     https://prometheus.gprd.gitlab.net/consoles/up.html
+[prometheus-app-gprd]:              https://prometheus-app.gprdgitlab.net/alerts
+[prometheus-app-gprd-targets-down]: https://prometheus-app.gprd.gitlab.net/consoles/up.html
+
+[runbook-repo]:                     https://gitlab.com/gitlab-com/runbooks
+
+[slack-alerts]:                     https://gitlab.slack.com/channels/alerts
+[slack-alerts-general]:             https://gitlab.slack.com/channels/alerts-general
+[slack-alerts-gstg]:                https://gitlab.slack.com/channels/alerts-gstg
+[slack-incident-management]:        https://gitlab.slack.com/channels/incident-management
+[slack-production]:                 https://gitlab.slack.com/channels/production
