@@ -74,6 +74,14 @@ Wait for chef to converge, or force a convergence.
 Use a tool such as <https://www.sslshopper.com/ssl-checker.html> to verify that
 the certificate is live, working, and fully valid.
 
+## Monitoring
+
+We utilize prometheus blackbox to regularly check endpoints and send us alerts
+when those endpoints go down as well as validate and alert us at a threshold
+when those certificates are going to expire.
+
+* https://gitlab.com/gitlab-com/runbooks/blob/master/alerts/ssl-certificate-expirations.yml
+
 ## Notes
 
 * Certificates that were setup via DNS approval now have their renewal automated
