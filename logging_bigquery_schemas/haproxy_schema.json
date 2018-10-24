@@ -82,6 +82,16 @@
       },
       {
         "mode": "NULLABLE",
+        "name": "path",
+        "type": "STRING"
+      },
+      {
+        "mode": "NULLABLE",
+        "name": "method",
+        "type": "STRING"
+      },      
+      {
+        "mode": "NULLABLE",
         "name": "ssl_version",
         "type": "STRING"
       }
