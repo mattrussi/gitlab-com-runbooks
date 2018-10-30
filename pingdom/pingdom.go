@@ -21,18 +21,24 @@ type PingdomCheckDefaults struct {
 
 // PingdomCheck represents an individual check
 type PingdomCheck struct {
-	URL               string
-	TimeoutMS         int      `yaml:"timeout_ms"`
-	ResolutionMinutes int      `yaml:"resolution_minutes"`
-	Teams             []string `yaml:"teams"`
-	Tags              []string `yaml:"tags"`
+	URL                string
+	TimeoutMS          int      `yaml:"timeout_ms"`
+	ResolutionMinutes  int      `yaml:"resolution_minutes"`
+	Teams              []string `yaml:"teams"`
+	Tags               []string `yaml:"tags"`
+	Integrations       []string `yaml:"integrations"`
+	NotifyWhenRestored bool     `yaml:"notify_when_restored"`
 }
 
 // PingdomChecks represents the YAML config structure
 type PingdomChecks struct {
-	UniqueTag string `yaml:"unique_tag"`
-	Defaults  PingdomCheckDefaults
-	Checks    []PingdomCheck
+	UniqueTag    string `yaml:"unique_tag"`
+	Defaults     PingdomCheckDefaults
+	Integrations []struct {
+		Name string `yaml:"name"`
+		ID   int    `yaml:"id"`
+	}
+	Checks []PingdomCheck
 }
 
 func (c PingdomCheck) name() string {
@@ -64,7 +70,7 @@ func (c PingdomCheck) path() string {
 	return u.Path + u.RawQuery
 }
 
-func (c PingdomCheck) getCheck(config PingdomChecks, teamMap map[string]pingdom.TeamResponse) pingdom.Check {
+func (c PingdomCheck) getCheck(config PingdomChecks, teamMap map[string]pingdom.TeamResponse, integrationIDMap map[string]int) pingdom.Check {
 	timeoutMS := c.TimeoutMS
 	if timeoutMS == 0 {
 		timeoutMS = config.Defaults.TimeoutMS
@@ -95,6 +101,16 @@ func (c PingdomCheck) getCheck(config PingdomChecks, teamMap map[string]pingdom.
 		teamIds = append(teamIds, teamID)
 	}
 
+	integrationIDs := []int{}
+	for _, v := range c.Integrations {
+		integrationID, ok := integrationIDMap[v]
+		if !ok {
+			panic("Unable to find integration " + v)
+		}
+
+		integrationIDs = append(integrationIDs, integrationID)
+	}
+
 	tags := []string{config.UniqueTag}
 	for _, v := range c.Tags {
 		if v != "" {
@@ -111,6 +127,8 @@ func (c PingdomCheck) getCheck(config PingdomChecks, teamMap map[string]pingdom.
 		ResponseTimeThreshold: timeoutMS,
 		Tags:                  strings.Join(tags, ","),
 		TeamIds:               teamIds,
+		IntegrationIds:        integrationIDs,
+		NotifyWhenBackup:      c.NotifyWhenRestored,
 	}
 }
 
@@ -163,12 +181,18 @@ func main() {
 		configMap[v.name()] = v
 	}
 
+	integrationIdMap := make(map[string]int)
+	for _, v := range pingdomChecks.Integrations {
+		integrationIdMap[v.Name] = v.ID
+	}
+
 	client := pingdom.NewMultiUserClient(os.Getenv("PINGDOM_USERNAME"), os.Getenv("PINGDOM_PASSWORD"), os.Getenv("PINGDOM_APPKEY"), os.Getenv("PINGDOM_ACCOUNT_EMAIL"))
 
 	teams, err := client.Teams.List()
 	if err != nil {
 		panic(err)
 	}
+
 	teamMap := make(map[string]pingdom.TeamResponse)
 	for _, v := range teams {
 		teamMap[v.Name] = v
@@ -192,7 +216,7 @@ func main() {
 
 	// Do the inserts
 	for _, v := range forInsertion {
-		check, err := client.Checks.Create(v.getCheck(pingdomChecks, teamMap))
+		check, err := client.Checks.Create(v.getCheck(pingdomChecks, teamMap, integrationIdMap))
 		if err != nil {
 			panic(err)
 		}
@@ -206,7 +230,7 @@ func main() {
 			panic("Unable to lookup " + update.Name)
 		}
 
-		check, err := client.Checks.Update(update.ID, v.getCheck(pingdomChecks, teamMap))
+		check, err := client.Checks.Update(update.ID, v.getCheck(pingdomChecks, teamMap, integrationIdMap))
 		if err != nil {
 			panic(err)
 		}
