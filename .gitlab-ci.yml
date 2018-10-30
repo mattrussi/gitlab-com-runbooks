@@ -32,3 +32,6 @@ deploy_pingdom_checks:
   script:
     - cd pingdom
     - go run pingdom.go
+  only:
+    refs:
+      - master
