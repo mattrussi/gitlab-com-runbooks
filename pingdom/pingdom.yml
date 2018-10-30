@@ -9,4 +9,23 @@ checks:
       - database
     teams:
       - Infrastructure
+  - url: https://gitlab.com/gitlab-org/gitlab-ce/merge_requests/
+    timeout_ms: 5000
+    tags:
+      - gitaly
+      - database
+    teams:
+      - Infrastructure
+  - url: https://gitlab.com/gitlab-org/gitlab-ce/tree/master
+    timeout_ms: 5000
+    tags:
+      - gitaly
+    teams:
+      - Infrastructure
+  - url: https://gitlab.com/gitlab-org/gitlab-ce/issues
+    timeout_ms: 5000
+    tags:
+      - database
+    teams:
+      - Infrastructure
 
