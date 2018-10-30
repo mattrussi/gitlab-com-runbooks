@@ -1,0 +1,12 @@
+unique_tag: "pingdom-automated"
+defaults:
+  timeout_ms: 2000
+checks:
+  - url: https://gitlab.com/gitlab-org/gitlab-ce/
+    timeout_ms: 5000
+    tags:
+      - gitaly
+      - database
+    teams:
+      - Infrastructure
+
