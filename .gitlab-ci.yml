@@ -30,4 +30,5 @@ deploy_elastic_watcher_updates:
 deploy_pingdom_checks:
   image: golang:1.11
   script:
+    - cd pingdom
     - go run pingdom.go
