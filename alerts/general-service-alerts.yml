@@ -1,8 +1,8 @@
 groups:
   - name: service_availability.rules
     rules:
-      # Availability below 2 sigma
-      - alert: service_availability_out_of_bounds_lower_3sigma_5m
+      # Availability below 3 sigma
+      - alert: service_availability_out_of_bounds_lower_5m
         expr: |
           gitlab_service_availability:ratio
           <
@@ -31,8 +31,8 @@ groups:
           link1_title: "Definition"
           link1_url: "https://gitlab.com/gitlab-com/runbooks/blob/master/troubleshooting/definition-service-availability.md"
 
-      # Operation rate above 2 sigma
-      - alert: service_ops_out_of_bounds_upper_3sigma_5m
+      # Operation rate above 3 sigma
+      - alert: service_availability_out_of_bounds_lower_5m
         expr: |
           gitlab_service_ops:rate
           >
@@ -62,8 +62,8 @@ groups:
           link1_title: "Definition"
           link1_url: "https://gitlab.com/gitlab-com/runbooks/blob/master/troubleshooting/definition-service-ops-rate.md"
 
-      # Operation rate below 2 sigma
-      - alert: service_ops_out_of_bounds_lower_3sigma_5m
+      # Operation rate below 3 sigma
+      - alert: service_ops_out_of_bounds_lower_5m
         expr: |
           gitlab_service_ops:rate
           <
@@ -92,8 +92,8 @@ groups:
           link1_title: "Definition"
           link1_url: "https://gitlab.com/gitlab-com/runbooks/blob/master/troubleshooting/definition-service-ops-rate.md"
 
-      # Apdex lower than 2 sigma
-      - alert: service_apdex_out_of_bounds_lower_3sigma_5m
+      # Apdex lower than 3 sigma
+      - alert: service_ops_out_of_bounds_lower_5m
         expr: |
           gitlab_service_apdex:ratio
           <
@@ -123,8 +123,8 @@ groups:
           link1_title: "Definition"
           link1_url: "https://gitlab.com/gitlab-com/runbooks/blob/master/troubleshooting/definition-service-apdex.md"
 
-      # Error rate exceeds 2 sigma
-      - alert: service_errors_out_of_bounds_upper_3sigma_5m
+      # Error rate exceeds 3 sigma
+      - alert: service_errors_out_of_bounds_upper_5m
         expr: |
           gitlab_service_errors:rate
           >
