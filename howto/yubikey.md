@@ -4,8 +4,6 @@
 * `gpg2`
 * `yubikey-personalization`
 
-For this guide, when using linux, substitute `gpg` with `gpg2`
-
 Make sure your Yubikey is inserted - and let's get ready to have some fun!
 
 Let's set the module to behave like we want:
@@ -89,36 +87,76 @@ We'll facilitate this by creating an encrypted portable drive on a USB drive.
 For the purpose of this tutorial our USB drive will be called 'transit' and our
 encrypted volume will be called 'GitLab'.
 
-First we create an encrypted sparse bundle:
-```
-hdiutil create -fs HFS+ -layout GPTSPUD -type SPARSEBUNDLE -encryption AES-256 -volname "GitLab" -size 100m -stdinpass /Volumes/transit/gitlab.sparsebundle
-```
+### MacOS
 
-Then we mount it up:
-```
-hdiutil attach -encryption -stdinpass -mountpoint /Volumes/GitLab /Volumes/transit/gitlab.sparsebundle
-```
+1. Create an encrypted sparse bundle using MacOS' `hdiutil`:
+  ```
+  hdiutil create -fs HFS+ -layout GPTSPUD -type SPARSEBUNDLE -encryption AES-256 -volname "GitLab" -size 100m -stdinpass /Volumes/transit/gitlab.sparsebundle
+  ```
 
-Create the configuration directory where our GnuPG key rings will live:
+1. Mount it up:
+  ```
+  hdiutil attach -encryption -stdinpass -mountpoint /Volumes/GitLab /Volumes/transit/gitlab.sparsebundle
+  ```
 
-```
-mkdir /Volumes/GitLab/gpg_config
-chmod 700 /Volumes/GitLab/gpg_config
-```
+### Linux
+There are many options for Linux and an obvious option is LUKS (Linux Unified Key Setup-on-disk-format), which most Linux distributions already have installed when using full disk encryption. However, if you want the encrypted disk file to be available on other platforms such as MacOS and Windows, a better option is to use [VeraCrypt](https://veracrypt.fr). The below instructions are based on **VeraCrypt** version 1.23.
 
-Export the configuration directory for GnuPG usage:
+The actions below are similar to the activities completed above for MacOS.
 
-```
-export GNUPGHOME=/Volumes/GitLab/gpg_config
-```
+You can either perform the below actions using the **VeraCrypt** UI or by using the CLI:
 
-Setup the `gpg.conf` before we create things:
+1. Create volume file
 
-```
-echo default-preference-list SHA512 SHA384 SHA256 SHA224 AES256 AES192 AES CAMELLIA256 CAMELLIA192 CAMELLIA128 TWOFISH >> /Volumes/GitLab/gpg_config/gpg.conf
-echo cert-digest-algo SHA512 >> /Volumes/GitLab/gpg_config/gpg.conf
-echo use-agent >> /Volumes/GitLab/gpg_config/gpg.conf
-```
+  ```bash
+  mkdir $HOME/transit
+  veracrypt --text --create --encryption AES --hash SHA-512 --size 100M --volume-type normal --filesystem FAT --keyfiles "" $HOME/transit/gitlab.sparsebundle
+
+  Enter password:
+  Re-enter password:
+  Enter PIM:  [Enter]
+  Please type at least 320 randomly chosen characters and then press Enter:
+  Done: 100.000%  Speed:   31 MB/s  Left: 0 s         
+  The VeraCrypt volume has been successfully created.
+  ```
+
+1. Mount the volume
+
+  ```bash
+  [sudo] mkdir -m 755 /media/GitLab
+  veracrypt --text --keyfiles "" --protect-hidden no $HOME/transit/gitlab.sparsebundle /media/GitLab
+
+  Enter password for ...:
+  Enter PIM for ...: [Enter]
+  ```
+
+### Common Configuration for MacOS and Linux
+1. Set the mountpoint
+
+  ```bash
+  export MOUNTPOINT=[According to the OS e.g. /media]
+  ```
+
+1. Create the configuration directory where our GnuPG key rings will live:
+
+  ```
+  mkdir $MOUNTPOINT/GitLab/gpg_config
+  chmod 700 $MOUNTPOINT/GitLab/gpg_config
+  ```
+
+1. Export the configuration directory for GnuPG usage:
+
+  ```
+  export GNUPGHOME=$MOUNTPOINT/GitLab/gpg_config
+  ```
+
+1. Setup the `gpg.conf` before we create things:
+
+  ```
+  echo default-preference-list SHA512 SHA384 SHA256 SHA224 AES256 AES192 AES CAMELLIA256 CAMELLIA192 CAMELLIA128 TWOFISH > $MOUNTPOINT/GitLab/gpg_config/gpg.conf
+  echo cert-digest-algo SHA512 >> $MOUNTPOINT/GitLab/gpg_config/gpg.conf
+  echo use-agent >> $MOUNTPOINT/GitLab/gpg_config/gpg.conf
+  ```
 
 ## Master Key Creation
 
@@ -139,7 +177,7 @@ Current allowed actions: Sign Certify Encrypt
    (S) Toggle the sign capability
    (E) Toggle the encrypt capability
    (A) Toggle the authenticate capability
-   (Q) Finished 
+   (Q) Finished
 
 Your selection? s
 Your selection? e
@@ -174,10 +212,11 @@ pub   4096R/FAEFD83E 2017-08-25 [expires: 2021-08-25]
 uid                  John Rando <rando@gitlab.com>
 ```
 
-Now that we have a master key, a good practice is to generate a revocation 
+Now that we have a master key, a good practice is to generate a revocation
 certificate in the event that we lose the password or the key is compromised.
 
 **Note:** In some versions you do not see the key id in the gpg output. You can use your email here.
+**Note:** This is most likely not necessary in Linux since the revocation certificate is generated automatically as per the output line from previous command: `gpg: revocation certificate stored as '/.../GitLab/gpg_config/openpgp-revocs.d/<key_id>.rev'`
 
 ```
 > gpg --gen-revoke FAEFD83E > /Volumes/GitLab/gpg_config/FAEFD83E-revocation-certificate.asc
@@ -195,7 +234,7 @@ Enter an optional description; end it with an empty line:
 > Using revocation certificate that was generated when key FAEFD83E was
 > first created.  It is very likely that I have lost access to the
 > private key.
-> 
+>
 Reason for revocation: Key is no longer used
 Using revocation certificate that was generated when key B8EFD59D was
 first created.  It is very likely that I have lost access to the
@@ -214,7 +253,7 @@ your machine might store the data and make it available to others!
 
 ## Generating Subkeys
 We'll use subkeys that are generated on the Yubikey device itself. Keys generated
-on the Yubikey cannot be copied off, so loss or destruction of the device will 
+on the Yubikey cannot be copied off, so loss or destruction of the device will
 mean key rotation.
 
 ```
@@ -313,7 +352,7 @@ sub  4096R/DE86E396  created: 2017-08-25  expires: 2018-08-25  usage: A
 
 ## Backup and Publish your Public Key
 ```
-> gpg --armor --export FAEFD83E > /Volumes/GitLab/gpg_config/FAEFD83E.asc
+> gpg --armor --export FAEFD83E > $MOUNTPOINT/GitLab/gpg_config/FAEFD83E.asc
 ```
 
 If your gpg version does not output the key id you should use the full fingerprint instead.
@@ -322,6 +361,8 @@ If your gpg version does not output the key id you should use the full fingerpri
 ```
 
 ## Generate your SSH Public Key
+**Note:** This step should not be necessary assuming the `gpg-agent` is running and configured. See further below.
+
 ```
 > gpg --export-ssh-key FAEFD87E
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABA ... COMMENT
@@ -375,13 +416,19 @@ gpg> quit
 
 ## Ensure proper options are set in gpg-agent.conf
 
-Your `gpg-agent.conf` should look something **like** 
+Your `gpg-agent.conf` should look something **like**
 
 ```
 $ cat ~/.gnupg/gpg-agent.conf
 default-cache-ttl 600
 max-cache-ttl 7200
+
+# For MacOS
 pinentry-program /usr/local/bin/pinentry-mac
+
+# For Linux
+pinentry-program /usr/bin/pinentry
+
 enable-ssh-support
 ```
 
@@ -395,7 +442,10 @@ export SSH_AUTH_SOCK=$HOME/.gnupg/S.gpg-agent.ssh
 
 * On Linux you'll need this:
 ```
-export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+unset SSH_AGENT_PID
+if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
+  export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
+fi
 ```
 
 ## Script to Reset gpg-agent and ssh-agent
@@ -430,7 +480,7 @@ echo "All done. Now unplug / replug the NEO token."
 echo
 ```
 
-On Linux modify the `gpg-agent` with the following: `gpgconf --launch gpg-agent`
+On Linux modify the `gpg-agent --daemon` with the following: `gpg-connect-agent reloadagent /bye`
 
 ## Personal Cleanup
 * If you have anything inside of your own dot files or system configuration that
@@ -442,3 +492,4 @@ On Linux modify the `gpg-agent` with the following: `gpgconf --launch gpg-agent`
 
 ## Reference Material
 * https://github.com/drduh/YubiKey-Guide#21-install---linux
+* https://wiki.archlinux.org/index.php/GnuPG
