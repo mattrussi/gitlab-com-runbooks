@@ -376,7 +376,7 @@ you've imported.
 
 Or in a fresh terminal we can:
 ```
-> gpg --import /Volumes/GitLab/gpg_config/FAEFD83E.asc
+> gpg --import $MOUNTPOINT/GitLab/gpg_config/FAEFD83E.asc
 gpg: key FAEFD83E: public key imported
 gpg: Total number processed: 1
 gpg:               imported: 1
@@ -447,6 +447,7 @@ if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
   export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
 fi
 ```
+and source the `rc` afterwards.
 
 ## Script to Reset gpg-agent and ssh-agent
 
