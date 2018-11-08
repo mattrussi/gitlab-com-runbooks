@@ -349,6 +349,8 @@ sub  4096R/AE86E89B  created: 2017-08-25  expires: 2018-08-25  usage: E
 sub  4096R/79BF274F  created: 2017-08-25  expires: 2018-08-25  usage: S
 sub  4096R/DE86E396  created: 2017-08-25  expires: 2018-08-25  usage: A
 [ultimate] (1). John Rando <rando@gitlab.com>
+
+gpg> save
 ```
 
 ## Backup and Publish your Public Key
