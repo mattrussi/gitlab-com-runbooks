@@ -139,20 +139,20 @@ You can either perform the below actions using the **VeraCrypt** UI or by using 
 
 1. Create the configuration directory where our GnuPG key rings will live:
 
-  ```
+  ```bash
   mkdir $MOUNTPOINT/GitLab/gpg_config
   chmod 700 $MOUNTPOINT/GitLab/gpg_config
   ```
 
 1. Export the configuration directory for GnuPG usage:
 
-  ```
+  ```bash
   export GNUPGHOME=$MOUNTPOINT/GitLab/gpg_config
   ```
 
 1. Setup the `gpg.conf` before we create things:
 
-  ```
+  ```bash
   echo default-preference-list SHA512 SHA384 SHA256 SHA224 AES256 AES192 AES CAMELLIA256 CAMELLIA192 CAMELLIA128 TWOFISH > $MOUNTPOINT/GitLab/gpg_config/gpg.conf
   echo cert-digest-algo SHA512 >> $MOUNTPOINT/GitLab/gpg_config/gpg.conf
   echo use-agent >> $MOUNTPOINT/GitLab/gpg_config/gpg.conf
@@ -160,7 +160,7 @@ You can either perform the below actions using the **VeraCrypt** UI or by using 
 
 ## Master Key Creation
 
-```
+```bash
 > gpg --expert --full-generate-key
 Please select what kind of key you want:
    (1) RSA and RSA (default)
@@ -216,9 +216,10 @@ Now that we have a master key, a good practice is to generate a revocation
 certificate in the event that we lose the password or the key is compromised.
 
 **Note:** In some versions you do not see the key id in the gpg output. You can use your email here.
+
 **Note:** This is most likely not necessary in Linux since the revocation certificate is generated automatically as per the output line from previous command: `gpg: revocation certificate stored as '/.../GitLab/gpg_config/openpgp-revocs.d/<key_id>.rev'`
 
-```
+```bash
 > gpg --gen-revoke FAEFD83E > /Volumes/GitLab/gpg_config/FAEFD83E-revocation-certificate.asc
 
 Create a revocation certificate for this key? (y/N) y
@@ -256,7 +257,7 @@ We'll use subkeys that are generated on the Yubikey device itself. Keys generate
 on the Yubikey cannot be copied off, so loss or destruction of the device will
 mean key rotation.
 
-```
+```bash
 > gpg --edit-key FAEFD83E
 
 # Let's add the SIGNING subkey
@@ -351,19 +352,19 @@ sub  4096R/DE86E396  created: 2017-08-25  expires: 2018-08-25  usage: A
 ```
 
 ## Backup and Publish your Public Key
-```
+```bash
 > gpg --armor --export FAEFD83E > $MOUNTPOINT/GitLab/gpg_config/FAEFD83E.asc
 ```
 
 If your gpg version does not output the key id you should use the full fingerprint instead.
-```
+```bash
 > gpg --keyserver hkps://hkps.pool.sks-keyservers.net --send-key FAEFD83E
 ```
 
 ## Generate your SSH Public Key
 **Note:** This step should not be necessary assuming the `gpg-agent` is running and configured. See further below.
 
-```
+```bash
 > gpg --export-ssh-key FAEFD87E
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABA ... COMMENT
 ```
@@ -375,7 +376,7 @@ into your regular keychain. Set the Ownertrust to Ultimate on the public key
 you've imported.
 
 Or in a fresh terminal we can:
-```
+```bash
 > gpg --import $MOUNTPOINT/GitLab/gpg_config/FAEFD83E.asc
 gpg: key FAEFD83E: public key imported
 gpg: Total number processed: 1
@@ -418,7 +419,7 @@ gpg> quit
 
 Your `gpg-agent.conf` should look something **like**
 
-```
+```bash
 $ cat ~/.gnupg/gpg-agent.conf
 default-cache-ttl 600
 max-cache-ttl 7200
@@ -436,12 +437,12 @@ enable-ssh-support
 * Insert one of the following into your `rc` file
 
 * On OSX you'll need this:
-```
+```bash
 export SSH_AUTH_SOCK=$HOME/.gnupg/S.gpg-agent.ssh
 ```
 
 * On Linux you'll need this:
-```
+```bash
 unset SSH_AGENT_PID
 if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
   export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
@@ -454,7 +455,7 @@ and source the `rc` afterwards.
 On OSX, use this script will reset `gpg-agent` and `ssh-agent` after you make the
 above updates to `gpg-agent.conf`.
 
-```
+```bash
 #!/bin/bash
 
 echo "kill gpg-agent"
