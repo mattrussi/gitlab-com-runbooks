@@ -10,7 +10,6 @@ test:
     - find . -name \*.y*ml | xargs yaml-lint
     - /prometheus/promtool check rules alerts/*.yml
     - /prometheus/promtool check rules recordings/*.yml
-    - /prometheus/promtool check rules rules/*.yml
     - scripts/validate_kibana_urls
     - scripts/validate-alerts
 
