@@ -4,6 +4,8 @@
 * `gpg2`
 * `yubikey-personalization`
 
+For this guide, when using linux, substitute `gpg` with `gpg2`
+
 Make sure your Yubikey is inserted - and let's get ready to have some fun!
 
 Let's set the module to behave like we want:
