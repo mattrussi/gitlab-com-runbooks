@@ -1,6 +1,7 @@
 # Configuring and Using the Yubikey
 
 ## Requirements
+
 * `gpg2`
 * `yubikey-personalization`
 
@@ -9,19 +10,23 @@ For this guide, when using linux, substitute `gpg` with `gpg2`
 Make sure your Yubikey is inserted - and let's get ready to have some fun!
 
 Let's set the module to behave like we want:
-```
+
+```bash
 ykpersonalize -m86
 ```
+
 This setting lets us use the Yubikey as both a SmartCard and an OTP device
 at the same time.
 
 **Note:** The above command is not necessary on a YubiKey 5 (and won't work)
 
 ## Changing the Default PIN Entries on the Yubikey PIV Card
+
 By default the user PIN is `123456` and the ADMIN PIN is `12345678`, keep this
 in mind when changing the PINS when it asks for the current PIN
 
-```
+```bash
+
 > gpg --card-edit
 
 Application ID ...: D2760001240102000006123482780000
@@ -92,16 +97,19 @@ encrypted volume will be called 'GitLab'.
 ### MacOS
 
 1. Create an encrypted sparse bundle using MacOS' `hdiutil`:
-  ```
+
+  ```bash
   hdiutil create -fs HFS+ -layout GPTSPUD -type SPARSEBUNDLE -encryption AES-256 -volname "GitLab" -size 100m -stdinpass /Volumes/transit/gitlab.sparsebundle
   ```
 
 1. Mount it up:
-  ```
+
+  ```bash
   hdiutil attach -encryption -stdinpass -mountpoint /Volumes/GitLab /Volumes/transit/gitlab.sparsebundle
   ```
 
 ### Linux
+
 There are many options for Linux and an obvious option is LUKS (Linux Unified Key Setup-on-disk-format), which most Linux distributions already have installed when using full disk encryption. However, if you want the encrypted disk file to be available on other platforms such as MacOS and Windows, a better option is to use [VeraCrypt](https://veracrypt.fr). The below instructions are based on **VeraCrypt** version 1.23.
 
 The actions below are similar to the activities completed above for MacOS.
@@ -133,6 +141,7 @@ You can either perform the below actions using the **VeraCrypt** UI or by using 
   ```
 
 ### Common Configuration for MacOS and Linux
+
 1. Set the mountpoint
 
   ```bash
@@ -255,6 +264,7 @@ your machine might store the data and make it available to others!
 ```
 
 ## Generating Subkeys
+
 We'll use subkeys that are generated on the Yubikey device itself. Keys generated
 on the Yubikey cannot be copied off, so loss or destruction of the device will
 mean key rotation.
@@ -356,15 +366,16 @@ gpg> save
 ```
 
 ## Backup and Publish your Public Key
+
 ```bash
 > gpg --armor --export FAEFD83E > $MOUNTPOINT/gpg_config/FAEFD83E.asc
 ```
 
 If your gpg version does not output the key id you should use the full fingerprint instead.
+
 ```bash
 > gpg --keyserver hkps://hkps.pool.sks-keyservers.net --send-key FAEFD83E
 ```
-
 
 ## Import Public Key to Regular Keychain
 
@@ -373,6 +384,7 @@ into your regular keychain. Set the Ownertrust to Ultimate on the public key
 you've imported.
 
 Or in a fresh terminal we can:
+
 ```bash
 > gpg --import $MOUNTPOINT/gpg_config/FAEFD83E.asc
 gpg: key FAEFD83E: public key imported
@@ -431,20 +443,24 @@ enable-ssh-support
 ```
 
 ## Ensure your environment knows how to authenticate SSH
+
 * Insert one of the following into your `rc` file
 
 * On OSX you'll need this:
+
 ```bash
 export SSH_AUTH_SOCK=$HOME/.gnupg/S.gpg-agent.ssh
 ```
 
 * On Linux you'll need this:
+
 ```bash
 unset SSH_AGENT_PID
 if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
   export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
 fi
 ```
+
 and source the `rc` afterwards.
 
 ## Script to Reset gpg-agent and ssh-agent
@@ -491,6 +507,7 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABA ... COMMENT
 ```
 
 ## Personal Cleanup
+
 * If you have anything inside of your own dot files or system configuration that
   may startup the ssh-agent, disable it
 * If you have anything that starts up the `gpg-agent`, ensure the options reflect
@@ -499,5 +516,6 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABA ... COMMENT
   git ssh key), should work just fine, as well as a listing `ssh-add -l`
 
 ## Reference Material
+
 * https://github.com/drduh/YubiKey-Guide#21-install---linux
 * https://wiki.archlinux.org/index.php/GnuPG
