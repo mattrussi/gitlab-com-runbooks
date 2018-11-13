@@ -17,7 +17,6 @@ service: pgbouncer
 * [pgbouncer](https://log.gitlab.net/goto/00a732029c1448a741c8730c04038fd9)
 * [system](https://log.gitlab.net/goto/ae311f6f133cc1c45b62541977081043)
 
-## Troubleshooting Pointers
+{{< service pgbouncer >}}
 
-* [postgres.md]({{< relref "troubleshooting/postgres.md" >}})
 <!-- END_MARKER -->

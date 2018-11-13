@@ -21,11 +21,6 @@ service: web
 * [Unstructured Rails](https://console.cloud.google.com/logs/viewer?project=gitlab-production&interval=PT1H&resource=gce_instance&advancedFilter=jsonPayload.hostname%3A%22web%22%0Alabels.tag%3D%22unstructured.production%22&customFacets=labels.%22compute.googleapis.com%2Fresource_name%22)
 * [system](https://log.gitlab.net/goto/c93fb9b8e5df92ed79d993d3a62b5452)
 
-## Troubleshooting Pointers
+{{< service web >}}
 
-* [gemnasium_is_down.md]({{< relref "troubleshooting/gemnasium_is_down.md" >}})
-* [gitaly-latency.md]({{< relref "troubleshooting/gitaly-latency.md" >}})
-* [postgres.md]({{< relref "troubleshooting/postgres.md" >}})
-* [recovering-from-nfs-disaster.md]({{< relref "troubleshooting/recovering-from-nfs-disaster.md" >}})
-* [sentry-is-down.md]({{< relref "troubleshooting/sentry-is-down.md" >}})
 <!-- END_MARKER -->

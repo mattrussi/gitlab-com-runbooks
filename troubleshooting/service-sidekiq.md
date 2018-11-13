@@ -21,10 +21,6 @@ service: sidekiq
 * [Unstructured](https://console.cloud.google.com/logs/viewer?project=gitlab-production&interval=PT1H&resource=gce_instance&advancedFilter=jsonPayload.hostname%3A%22sidekiq%22%0Alabels.tag%3D%22unstructured.production%22&customFacets=labels.%22compute.googleapis.com%2Fresource_name%22)
 * [system](https://log.gitlab.net/goto/72d0f3fdfd8db18db9800cc04d8b6f55)
 
-## Troubleshooting Pointers
+{{< service sidekiq >}}
 
-* [ci_introduction.md]({{< relref "troubleshooting/ci_introduction.md" >}})
-* [large-sidekiq-queue.md]({{< relref "troubleshooting/large-sidekiq-queue.md" >}})
-* [sidekiq_exception_count.md]({{< relref "troubleshooting/sidekiq_exception_count.md" >}})
-* [sidekiq_stats_no_longer_showing.md]({{< relref "troubleshooting/sidekiq_stats_no_longer_showing.md" >}})
 <!-- END_MARKER -->

@@ -2,6 +2,7 @@
 title: Gitaly is down
 tags:
 - troubleshooting
+service: gitaly
 ---
 
 

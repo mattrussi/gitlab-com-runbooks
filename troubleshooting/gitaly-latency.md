@@ -2,6 +2,7 @@
 title: Gitaly latency is too high
 tags:
 - troubleshooting
+service: gitaly
 ---
 
 

@@ -18,10 +18,6 @@ service: pages
 * [haproxy](https://console.cloud.google.com/logs/viewer?project=gitlab-production&interval=PT1H&resource=gce_instance&customFacets=labels.%22compute.googleapis.com%2Fresource_name%22&advancedFilter=labels.tag%3D%22haproxy%22%0Alabels.%22compute.googleapis.com%2Fresource_name%22%3A%22fe-pages-%22)
 * [system](https://log.gitlab.net/goto/3384c89c5a828db866d2fa8ec86cd97f)
 
-## Troubleshooting Pointers
+{{< service pages >}}
 
-* [chef.md]({{< relref "troubleshooting/chef.md" >}})
-* [gitaly-unusual-activity.md]({{< relref "troubleshooting/gitaly-unusual-activity.md" >}})
-* [gitlab-pages.md]({{< relref "troubleshooting/gitlab-pages.md" >}})
-* [node_memory_alerts.md]({{< relref "troubleshooting/node_memory_alerts.md" >}})
 <!-- END_MARKER -->

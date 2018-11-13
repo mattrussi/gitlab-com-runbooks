@@ -18,15 +18,6 @@ service: gitaly
 * [Gitaly](https://log.gitlab.net/goto/4f0bd7f08b264e7de970bb0cc9530f9d)
 * [system](https://log.gitlab.net/goto/7cfb513706cffc0789ad0842674e108a)
 
-## Troubleshooting Pointers
+{{< service gitaly >}}
 
-* [gitaly-down.md]({{< relref "troubleshooting/gitaly-down.md" >}})
-* [gitaly-error-rate.md]({{< relref "troubleshooting/gitaly-error-rate.md" >}})
-* [gitaly-high-cpu.md]({{< relref "troubleshooting/gitaly-high-cpu.md" >}})
-* [gitaly-latency.md]({{< relref "troubleshooting/gitaly-latency.md" >}})
-* [gitaly-pubsub.md]({{< relref "troubleshooting/gitaly-pubsub.md" >}})
-* [gitaly-rate-limiting.md]({{< relref "troubleshooting/gitaly-rate-limiting.md" >}})
-* [gitaly-unusual-activity.md]({{< relref "troubleshooting/gitaly-unusual-activity.md" >}})
-* [gitaly-version-mismatch.md]({{< relref "troubleshooting/gitaly-version-mismatch.md" >}})
-* [workhorse-git-session-alerts.md]({{< relref "troubleshooting/workhorse-git-session-alerts.md" >}})
 <!-- END_MARKER -->

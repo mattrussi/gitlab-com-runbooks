@@ -21,14 +21,6 @@ service: api
 * [Unstructured Rails](https://console.cloud.google.com/logs/viewer?project=gitlab-production&interval=PT1H&resource=gce_instance&advancedFilter=jsonPayload.hostname%3A%22api%22%0Alabels.tag%3D%22unstructured.production%22&customFacets=labels.%22compute.googleapis.com%2Fresource_name%22)
 * [system](https://log.gitlab.net/goto/2b9679dab019791136cb8ae1535fb781)
 
-## Troubleshooting Pointers
+{{< service api >}}
 
-* [alertmanager-notification-failures.md]({{< relref "troubleshooting/alertmanager-notification-failures.md" >}})
-* [ci_graphs.md]({{< relref "troubleshooting/ci_graphs.md" >}})
-* [ci_introduction.md]({{< relref "troubleshooting/ci_introduction.md" >}})
-* [ci_pending_builds.md]({{< relref "troubleshooting/ci_pending_builds.md" >}})
-* [ci_runner_manager_errors.md]({{< relref "troubleshooting/ci_runner_manager_errors.md" >}})
-* [gemnasium_is_down.md]({{< relref "troubleshooting/gemnasium_is_down.md" >}})
-* [large-sidekiq-queue.md]({{< relref "troubleshooting/large-sidekiq-queue.md" >}})
-* [postgres.md]({{< relref "troubleshooting/postgres.md" >}})
 <!-- END_MARKER -->

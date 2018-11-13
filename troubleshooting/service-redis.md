@@ -17,13 +17,6 @@ service: redis
 * [Redis](https://log.gitlab.net/goto/27a6bf4e347ef9da754f06eb0a54aedc)
 * [system](https://log.gitlab.net/goto/e107ce00a9adede2e130d0c8ec1a2ac7)
 
-## Troubleshooting Pointers
+{{< service redis >}}
 
-* [ci_graphs.md]({{< relref "troubleshooting/ci_graphs.md" >}})
-* [ci_introduction.md]({{< relref "troubleshooting/ci_introduction.md" >}})
-* [large-pull-mirror-queue.md]({{< relref "troubleshooting/large-pull-mirror-queue.md" >}})
-* [postgres.md]({{< relref "troubleshooting/postgres.md" >}})
-* [redis_replication.md]({{< relref "troubleshooting/redis_replication.md" >}})
-* [sentry-is-down.md]({{< relref "troubleshooting/sentry-is-down.md" >}})
-* [sidekiq_stats_no_longer_showing.md]({{< relref "troubleshooting/sidekiq_stats_no_longer_showing.md" >}})
 <!-- END_MARKER -->

@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+IFS=$'\n\t'
+
+mkdir -p site
+rsync -avzh . \
+  --include 'howto/***' \
+  --include 'troubleshooting/***' \
+  --include 'incidents/***' \
+  --include 'layouts/***' \
+  --include 'config.toml' \
+  --exclude '*' \
+  site/
+mkdir -p site/themes
+test -d site/themes/hugo-theme-learn || git clone https://github.com/matcornic/hugo-theme-learn.git site/themes/hugo-theme-learn
+find site/ -name '*.md' -print0 |xargs -0 sed -i "" -Ee 's#\]\(([a-zA-Z0-9\._\-\#\/]+)\)#]({{< relref "\1" >}})#g'
+(cd site && hugo)
+rm -rf public
+mv site/public .

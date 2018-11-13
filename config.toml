@@ -5,7 +5,7 @@ theme = "hugo-theme-learn"
 staticDir = ["./img"]
 contentDir = "."
 publishDir = "public"
-enableGitInfo = true
+enableGitInfo = false
 enableRobotsTXT = true
 ignoreFiles = [
   "public/.*",

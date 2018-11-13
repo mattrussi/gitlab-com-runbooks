@@ -2,6 +2,7 @@
 title: Gitaly PubSub Rate is low
 tags:
 - troubleshooting
+service: gitaly
 ---
 
 

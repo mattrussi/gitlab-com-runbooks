@@ -17,9 +17,6 @@ service: postgres
 * [Postgres](https://log.gitlab.net/goto/d0f8993486c9007a69d85e3a08f1ea7c)
 * [system](https://log.gitlab.net/goto/3669d551a595a3a5cf1e9318b74e6c22)
 
-## Troubleshooting Pointers
+{{< service postgres >}}
 
-* [gitlab-com-is-down.md]({{< relref "troubleshooting/gitlab-com-is-down.md" >}})
-* [load-balancer-outage.md]({{< relref "troubleshooting/load-balancer-outage.md" >}})
-* [postgres.md]({{< relref "troubleshooting/postgres.md" >}})
 <!-- END_MARKER -->

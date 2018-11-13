@@ -2,6 +2,7 @@
 title: Gitaly error rate is too high
 tags:
 - troubleshooting
+service: gitaly
 ---
 
 

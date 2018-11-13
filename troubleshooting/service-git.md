@@ -21,19 +21,6 @@ service: git
 * [Unstructured Rails](https://console.cloud.google.com/logs/viewer?project=gitlab-production&interval=PT1H&resource=gce_instance&advancedFilter=jsonPayload.hostname%3A%22git%22%0Alabels.tag%3D%22unstructured.production%22&customFacets=labels.%22compute.googleapis.com%2Fresource_name%22)
 * [system](https://log.gitlab.net/goto/bd680ccb3c21567e47a821bbf52a7c09)
 
-## Troubleshooting Pointers
+{{< service git >}}
 
-* [blackbox-git-exporter.md]({{< relref "troubleshooting/blackbox-git-exporter.md" >}})
-* [ci_introduction.md]({{< relref "troubleshooting/ci_introduction.md" >}})
-* [ci_pending_builds.md]({{< relref "troubleshooting/ci_pending_builds.md" >}})
-* [git-stuck-processes.md]({{< relref "troubleshooting/git-stuck-processes.md" >}})
-* [git.md]({{< relref "troubleshooting/git.md" >}})
-* [gitaly-high-cpu.md]({{< relref "troubleshooting/gitaly-high-cpu.md" >}})
-* [gitaly-rate-limiting.md]({{< relref "troubleshooting/gitaly-rate-limiting.md" >}})
-* [haproxy.md]({{< relref "troubleshooting/haproxy.md" >}})
-* [large-sidekiq-queue.md]({{< relref "troubleshooting/large-sidekiq-queue.md" >}})
-* [missing_repos.md]({{< relref "troubleshooting/missing_repos.md" >}})
-* [recovering-from-nfs-disaster.md]({{< relref "troubleshooting/recovering-from-nfs-disaster.md" >}})
-* [workers-high-load.md]({{< relref "troubleshooting/workers-high-load.md" >}})
-* [workhorse-git-session-alerts.md]({{< relref "troubleshooting/workhorse-git-session-alerts.md" >}})
 <!-- END_MARKER -->

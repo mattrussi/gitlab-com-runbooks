@@ -2,6 +2,7 @@
 title: Gitaly CPU too high on a file server
 tags:
 - troubleshooting
+service: gitaly
 ---
 
 

@@ -15,4 +15,6 @@ service: mailroom
 
 * [system](https://log.gitlab.net/goto/0ce3bf67abafcfc0f81f3d6e7a066912)
 
+{{< service mailroom >}}
+
 <!-- END_MARKER -->

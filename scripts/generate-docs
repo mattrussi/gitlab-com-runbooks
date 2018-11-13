@@ -63,13 +63,8 @@ service: <%= service["name"] %>
 * [<%= logging_location["name"] %>](<%= logging_location["permalink"] %>)
 <%- end -%>
 
-<% if troubeshooting_docs && !troubeshooting_docs.empty? -%>
-## Troubleshooting Pointers
+{{< service <%= service["name"] %> >}}
 
-<%- troubeshooting_docs.each do |troubeshooting_doc| -%>
-* [<%= troubeshooting_doc %>]({{< relref "troubleshooting/<%= troubeshooting_doc %>" >}})
-<%- end -%>
-<% end -%>
 #{STOP_MARKER}
 EOF
 

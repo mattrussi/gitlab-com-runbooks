@@ -17,13 +17,6 @@ service: registry
 * [haproxy](https://console.cloud.google.com/logs/viewer?project=gitlab-production&interval=PT1H&resource=gce_instance&customFacets=labels.%22compute.googleapis.com%2Fresource_name%22&advancedFilter=labels.tag%3D%22haproxy%22%0Alabels.%22compute.googleapis.com%2Fresource_name%22%3A%22fe-registry-%22)
 * [system](https://log.gitlab.net/goto/b68e1a4183a652dc8d5e52a1fc2c1aba)
 
-## Troubleshooting Pointers
+{{< service registry >}}
 
-* [ci_pending_builds.md]({{< relref "troubleshooting/ci_pending_builds.md" >}})
-* [ci_too_many_connections_on_runners_cache_server.md]({{< relref "troubleshooting/ci_too_many_connections_on_runners_cache_server.md" >}})
-* [gitlab-registry.md]({{< relref "troubleshooting/gitlab-registry.md" >}})
-* [runners-cache.md]({{< relref "troubleshooting/runners-cache.md" >}})
-* [runners_cache_disk_space.md]({{< relref "troubleshooting/runners_cache_disk_space.md" >}})
-* [runners_cache_is_down.md]({{< relref "troubleshooting/runners_cache_is_down.md" >}})
-* [runners_registry_is_down.md]({{< relref "troubleshooting/runners_registry_is_down.md" >}})
 <!-- END_MARKER -->

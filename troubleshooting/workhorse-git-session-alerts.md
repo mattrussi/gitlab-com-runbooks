@@ -7,7 +7,7 @@ tags:
 
 ## Symptoms
 
-![Workhorse HTTP](/img/workhorse-git-http-session-issues.png)
+![Workhorse HTTP](../img/workhorse-git-http-session-issues.png)
 
 ## Possible checks
 
