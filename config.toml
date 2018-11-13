@@ -1,4 +1,4 @@
-baseurl = "https://gitlab-ce.gitlab.io/runbooks/"
+baseurl = "https://gitlab-com.gitlab.io/runbooks/"
 languageCode = "en-us"
 title = "Running GitLab.com"
 theme = "hugo-theme-learn"
