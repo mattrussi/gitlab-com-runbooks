@@ -365,13 +365,6 @@ If your gpg version does not output the key id you should use the full fingerpri
 > gpg --keyserver hkps://hkps.pool.sks-keyservers.net --send-key FAEFD83E
 ```
 
-## Generate your SSH Public Key
-**Note:** This step should not be necessary assuming the `gpg-agent` is running and configured. See further below.
-
-```bash
-> gpg --export-ssh-key FAEFD87E
-ssh-rsa AAAAB3NzaC1yc2EAAAADAQABA ... COMMENT
-```
 
 ## Import Public Key to Regular Keychain
 
@@ -487,6 +480,15 @@ echo
 ```
 
 On Linux modify the `gpg-agent --daemon` with the following: `gpg-connect-agent reloadagent /bye`
+
+## Optional: Generate Your SSH Public Key
+
+**Note:** This step should not be necessary assuming the `gpg-agent` is running and configured.
+
+```bash
+> gpg --export-ssh-key FAEFD87E
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABA ... COMMENT
+```
 
 ## Personal Cleanup
 * If you have anything inside of your own dot files or system configuration that
