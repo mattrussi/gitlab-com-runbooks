@@ -136,28 +136,28 @@ You can either perform the below actions using the **VeraCrypt** UI or by using 
 1. Set the mountpoint
 
   ```bash
-  export MOUNTPOINT=[According to the OS e.g. /media]
+  export MOUNTPOINT=[According to the OS e.g. /media]/GitLab
   ```
 
 1. Create the configuration directory where our GnuPG key rings will live:
 
   ```bash
-  mkdir $MOUNTPOINT/GitLab/gpg_config
-  chmod 700 $MOUNTPOINT/GitLab/gpg_config
+  mkdir $MOUNTPOINT/gpg_config
+  chmod 700 $MOUNTPOINT/gpg_config
   ```
 
 1. Export the configuration directory for GnuPG usage:
 
   ```bash
-  export GNUPGHOME=$MOUNTPOINT/GitLab/gpg_config
+  export GNUPGHOME=$MOUNTPOINT/gpg_config
   ```
 
 1. Setup the `gpg.conf` before we create things:
 
   ```bash
-  echo default-preference-list SHA512 SHA384 SHA256 SHA224 AES256 AES192 AES CAMELLIA256 CAMELLIA192 CAMELLIA128 TWOFISH > $MOUNTPOINT/GitLab/gpg_config/gpg.conf
-  echo cert-digest-algo SHA512 >> $MOUNTPOINT/GitLab/gpg_config/gpg.conf
-  echo use-agent >> $MOUNTPOINT/GitLab/gpg_config/gpg.conf
+  echo default-preference-list SHA512 SHA384 SHA256 SHA224 AES256 AES192 AES CAMELLIA256 CAMELLIA192 CAMELLIA128 TWOFISH > $MOUNTPOINT/gpg_config/gpg.conf
+  echo cert-digest-algo SHA512 >> $MOUNTPOINT/gpg_config/gpg.conf
+  echo use-agent >> $MOUNTPOINT/gpg_config/gpg.conf
   ```
 
 ## Master Key Creation
@@ -357,7 +357,7 @@ gpg> save
 
 ## Backup and Publish your Public Key
 ```bash
-> gpg --armor --export FAEFD83E > $MOUNTPOINT/GitLab/gpg_config/FAEFD83E.asc
+> gpg --armor --export FAEFD83E > $MOUNTPOINT/gpg_config/FAEFD83E.asc
 ```
 
 If your gpg version does not output the key id you should use the full fingerprint instead.
@@ -374,7 +374,7 @@ you've imported.
 
 Or in a fresh terminal we can:
 ```bash
-> gpg --import $MOUNTPOINT/GitLab/gpg_config/FAEFD83E.asc
+> gpg --import $MOUNTPOINT/gpg_config/FAEFD83E.asc
 gpg: key FAEFD83E: public key imported
 gpg: Total number processed: 1
 gpg:               imported: 1
