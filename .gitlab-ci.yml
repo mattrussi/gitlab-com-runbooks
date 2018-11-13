@@ -38,7 +38,7 @@ deploy_pingdom_checks:
     refs:
       - master
 
-generate_site:
+pages:
   image: monachus/hugo
   allow_failure: true
   script:
