@@ -1,4 +1,8 @@
-# Blocking individual IPs using Redis and Rack Attack
+---
+title: Blocking individual IPs using Redis and Rack Attack
+tags:
+- howto
+---
 
 ## First and foremost
 

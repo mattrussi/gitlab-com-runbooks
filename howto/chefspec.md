@@ -1,4 +1,9 @@
-# Chefspec
+---
+title: Chefspec
+tags:
+- howto
+---
+
 
 We use chefspec for doing TDD with Chef
 

@@ -1,4 +1,9 @@
-# monitor.gitlab.net not accessible or return 5xx errors
+---
+title: monitor.gitlab.net not accessible or return 5xx errors
+tags:
+- troubleshooting
+---
+
 
 ## Possible checks
 

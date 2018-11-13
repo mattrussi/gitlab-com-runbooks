@@ -1,4 +1,9 @@
-# Managing unicorn and sidekiq workers
+---
+title: Managing unicorn and sidekiq workers
+tags:
+- howto
+---
+
 
 ## First and foremost
 

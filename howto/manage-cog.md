@@ -1,4 +1,9 @@
-# COG
+---
+title: COG
+tags:
+- howto
+---
+
 
 [Cog](https://github.com/operable/cog/) is a chatops bot that lurks in our slack, it replies to the name of [@marvin](https://en.wikipedia.org/wiki/Marvin_\(character\))
 

@@ -1,6 +1,10 @@
+---
+title: Api Service
+tags:
+- troubleshooting
+service: api
+---
 <!-- MARKER: do not edit this section directly. Edit services/service-mappings.yml then run scripts/generate-docs -->
-#  Api Service
-
 * **Responsible Team**: [backend](https://about.gitlab.com/handbook/engineering/dev-backend/)
 * **Slack Channel**: [#backend](https://gitlab.slack.com/archives/backend)
 * **General Triage Dashboard**: https://dashboards.gitlab.net/d/WOtyonOiz/general-triage-service?from=now-6h&to=now&var-prometheus_ds=Global&var-environment=gprd&var-type=api&orgId=1
@@ -19,12 +23,12 @@
 
 ## Troubleshooting Pointers
 
-* [alertmanager-notification-failures.md](alertmanager-notification-failures.md)
-* [ci_graphs.md](ci_graphs.md)
-* [ci_introduction.md](ci_introduction.md)
-* [ci_pending_builds.md](ci_pending_builds.md)
-* [ci_runner_manager_errors.md](ci_runner_manager_errors.md)
-* [gemnasium_is_down.md](gemnasium_is_down.md)
-* [large-sidekiq-queue.md](large-sidekiq-queue.md)
-* [postgres.md](postgres.md)
+* [alertmanager-notification-failures.md]({{< relref "troubleshooting/alertmanager-notification-failures.md" >}})
+* [ci_graphs.md]({{< relref "troubleshooting/ci_graphs.md" >}})
+* [ci_introduction.md]({{< relref "troubleshooting/ci_introduction.md" >}})
+* [ci_pending_builds.md]({{< relref "troubleshooting/ci_pending_builds.md" >}})
+* [ci_runner_manager_errors.md]({{< relref "troubleshooting/ci_runner_manager_errors.md" >}})
+* [gemnasium_is_down.md]({{< relref "troubleshooting/gemnasium_is_down.md" >}})
+* [large-sidekiq-queue.md]({{< relref "troubleshooting/large-sidekiq-queue.md" >}})
+* [postgres.md]({{< relref "troubleshooting/postgres.md" >}})
 <!-- END_MARKER -->

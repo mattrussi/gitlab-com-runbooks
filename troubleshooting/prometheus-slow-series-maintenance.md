@@ -1,4 +1,9 @@
-# Prometheus Series Maintenance Stalled
+---
+title: Prometheus Series Maintenance Stalled
+tags:
+- troubleshooting
+---
+
 
 ## Symptoms
 

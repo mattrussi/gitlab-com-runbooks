@@ -1,6 +1,10 @@
+---
+title: Pages Service
+tags:
+- troubleshooting
+service: pages
+---
 <!-- MARKER: do not edit this section directly. Edit services/service-mappings.yml then run scripts/generate-docs -->
-#  Pages Service
-
 * **Responsible Team**: [release](https://about.gitlab.com/handbook/engineering/dev-backend/)
 * **Slack Channel**: [#g_release](https://gitlab.slack.com/archives/g_release)
 * **General Triage Dashboard**: https://dashboards.gitlab.net/d/WOtyonOiz/general-triage-service?from=now-6h&to=now&var-prometheus_ds=Global&var-environment=gprd&var-type=pages&orgId=1
@@ -16,8 +20,8 @@
 
 ## Troubleshooting Pointers
 
-* [chef.md](chef.md)
-* [gitaly-unusual-activity.md](gitaly-unusual-activity.md)
-* [gitlab-pages.md](gitlab-pages.md)
-* [node_memory_alerts.md](node_memory_alerts.md)
+* [chef.md]({{< relref "troubleshooting/chef.md" >}})
+* [gitaly-unusual-activity.md]({{< relref "troubleshooting/gitaly-unusual-activity.md" >}})
+* [gitlab-pages.md]({{< relref "troubleshooting/gitlab-pages.md" >}})
+* [node_memory_alerts.md]({{< relref "troubleshooting/node_memory_alerts.md" >}})
 <!-- END_MARKER -->

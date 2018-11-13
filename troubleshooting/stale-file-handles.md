@@ -1,4 +1,9 @@
-# "Stale file handle" errors on NFS mounts
+---
+title: '"Stale file handle" errors on NFS mounts'
+tags:
+- troubleshooting
+---
+
 
 ## First and foremost
 

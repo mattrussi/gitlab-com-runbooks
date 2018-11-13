@@ -1,14 +1,14 @@
-# Chef troubleshooting
-
-## First and foremost
-
-*Don't Panic*
+---
+title: Chef troubleshooting
+tags:
+- troubleshooting
+---
 
 ## Symptoms
 
 1. HAProxy is missing workers:
     ```lb7.cluster.gitlab.com HAProxy_gitlab_443/worker4.cluster.gitlab.com is UNKNOWN - Check output not found in local checks```
-    
+
 2. Nodes are missing chef roles:
     ```
     jeroen@xps15:~/src/gitlab/chef-repo$ bundle exec knife node show worker1.cluster.gitlab.com
@@ -16,9 +16,9 @@
     Environment: _default
     FQDN:        worker1.cluster.gitlab.com
     IP:          10.1.0.X
-    Run List:    
-    Roles:       
-    Recipes:     
+    Run List:
+    Roles:
+    Recipes:
     Platform:    ubuntu 16.04
     Tags:
     ```
@@ -54,5 +54,5 @@
 
     ```
     If ipaddress contains a wrong public ip update /etc/ipaddress.txt on the node and run chef-client
-    
+
     If ipaddress contains a private (local) ip make sure /etc/ipaddress.txt is set and the node has at least the chef role base-X where X is the OS type like debian etc. check chef-repo/roles/base-* for all current base roles.

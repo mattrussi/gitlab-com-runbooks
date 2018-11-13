@@ -1,4 +1,9 @@
-# CI check project namespace information
+---
+title: CI check project namespace information
+tags:
+- howto
+---
+
 
 ## Symptoms
 

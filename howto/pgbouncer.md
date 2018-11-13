@@ -1,4 +1,9 @@
-# PgBouncer
+---
+title: PgBouncer
+tags:
+- howto
+---
+
 
 PgBouncer is a connection pooler for PostgreSQL, allowing many frontend
 connections to re-use existing PostgreSQL backend connections. For example, you

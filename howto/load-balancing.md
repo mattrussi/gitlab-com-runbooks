@@ -1,4 +1,9 @@
-# Database Load Balancing
+---
+title: Database Load Balancing
+tags:
+- howto
+---
+
 
 GitLab.com uses database load balancing as supported by GitLab Enterprise
 Edition: <https://docs.gitlab.com/ee/administration/database_load_balancing.html>.

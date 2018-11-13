@@ -1,4 +1,9 @@
-## Remove VM
+---
+title: Remove VM
+tags:
+- howto
+---
+
 
 ### Checklist for removing VM from the Azure
 

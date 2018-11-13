@@ -1,4 +1,8 @@
-# Service Operation Rate
+---
+title: Service Operation Rate
+tags:
+- troubleshooting
+---
 
 The operation rate of a service is a measure of how many requests the service is having to handle per second.
 

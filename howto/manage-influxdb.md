@@ -1,4 +1,9 @@
-# InfluxDB
+---
+title: InfluxDB
+tags:
+- howto
+---
+
 
 ## Connect to the DB
 

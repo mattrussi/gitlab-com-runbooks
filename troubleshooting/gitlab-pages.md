@@ -1,4 +1,9 @@
-# GitLab Pages returning 404
+---
+title: GitLab Pages returning 404
+tags:
+- troubleshooting
+---
+
 
 ## Symptoms
 

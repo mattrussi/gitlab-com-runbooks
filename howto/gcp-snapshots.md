@@ -1,4 +1,9 @@
-# Google Cloud Snapshots
+---
+title: Google Cloud Snapshots
+tags:
+- howto
+---
+
 
 We take snapshots of each disk with the label `do_snapshots=true`.
 We use the [gitlab-production-snapshots](https://gitlab.com/gitlab-restore/gitlab-production-snapshots)

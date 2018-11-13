@@ -1,4 +1,9 @@
-### How to run commands for ES
+---
+title: How to run commands for ES
+tags:
+- howto
+---
+
 
 1. ES on `log-esX` is accessible from the logstash node (log.gitlab.net).
 1. Run Elastic API command against any of the ES instance. Since our ES instances in one cluster, you can run your query against any of the instance, result will be the same.

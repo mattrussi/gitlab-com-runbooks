@@ -1,4 +1,9 @@
-# Prometheus Indexing Backlog
+---
+title: Prometheus Indexing Backlog
+tags:
+- troubleshooting
+---
+
 
 ## Symptoms
 

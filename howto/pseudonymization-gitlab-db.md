@@ -1,4 +1,9 @@
-# Summary
+---
+title: Summary
+tags:
+- howto
+---
+
 
 [This script](https://gitlab.com/gitlab-com/gitlab-com-infrastructure/blob/master/modules/gitlab-single-azure-db/bin-files/pseudonymization.sql) can be used for [pseudonymization](https://en.wikipedia.org/wiki/Pseudonymization) of the Gitlab database.
 

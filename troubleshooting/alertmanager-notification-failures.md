@@ -1,4 +1,9 @@
-# Alertmanager Notification Failures
+---
+title: Alertmanager Notification Failures
+tags:
+- troubleshooting
+service: prometheus
+---
 
 ## Symptoms
 
@@ -29,6 +34,3 @@ curl -X POST -H 'Content-type: application/json' \
 If it receives a 404 result then the channel does not exist. See [slack docs](https://api.slack.com/changelog/2016-05-17-changes-to-errors-for-incoming-webhooks) for other possible error codes.
 
 For more information see https://api.slack.com/incoming-webhooks
-
-## Resolution
-

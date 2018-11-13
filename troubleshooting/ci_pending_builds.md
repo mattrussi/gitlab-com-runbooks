@@ -1,4 +1,9 @@
-## Large CI pending builds
+---
+title: Large CI pending builds
+tags:
+- troubleshooting
+service: ci
+---
 
 The most comment problem is that we get a report that we have a large number of CI pending builds.
 
@@ -12,7 +17,7 @@ The most comment problem is that we get a report that we have a large number of 
 ## 1. Check `CI dashboard` and verify that we have a large number of CI builds
 
 Look at the graph with number of CI builds:
-![](../img/ci/jobs_graph.png)
+![](/img/ci/jobs_graph.png)
 
 ## 2. Verify graphs and potential outcomes out of the graphs as described in (CI graphs)[ci_graphs.md],
 

@@ -1,4 +1,9 @@
-# Alerts that runners cache or registry is down
+---
+title: Alerts that runners cache or registry is down
+tags:
+- troubleshooting
+---
+
 
 ## Symptoms
 

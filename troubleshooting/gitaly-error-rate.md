@@ -1,4 +1,9 @@
-# Gitaly error rate is too high
+---
+title: Gitaly error rate is too high
+tags:
+- troubleshooting
+---
+
 
 ## First and foremost
 

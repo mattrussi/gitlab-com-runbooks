@@ -1,6 +1,10 @@
+---
+title: Postgres Service
+tags:
+- troubleshooting
+service: postgres
+---
 <!-- MARKER: do not edit this section directly. Edit services/service-mappings.yml then run scripts/generate-docs -->
-#  Postgres Service
-
 * **Responsible Team**: [infrastructure](https://about.gitlab.com/handbook/engineering/infrastructure/)
 * **Slack Channel**: [#production](https://gitlab.slack.com/archives/production)
 * **General Triage Dashboard**: https://dashboards.gitlab.net/d/WOtyonOiz/general-triage-service?from=now-6h&to=now&var-prometheus_ds=Global&var-environment=gprd&var-type=postgres&orgId=1
@@ -15,7 +19,7 @@
 
 ## Troubleshooting Pointers
 
-* [gitlab-com-is-down.md](gitlab-com-is-down.md)
-* [load-balancer-outage.md](load-balancer-outage.md)
-* [postgres.md](postgres.md)
+* [gitlab-com-is-down.md]({{< relref "troubleshooting/gitlab-com-is-down.md" >}})
+* [load-balancer-outage.md]({{< relref "troubleshooting/load-balancer-outage.md" >}})
+* [postgres.md]({{< relref "troubleshooting/postgres.md" >}})
 <!-- END_MARKER -->

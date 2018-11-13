@@ -1,3 +1,9 @@
+---
+title: Filesystem alert inodes
+tags:
+- troubleshooting
+---
+
 ## Symptoms
 
 You're likely here because you saw a message saying Free inodes on __host__ on __path__ is at __very low number__".

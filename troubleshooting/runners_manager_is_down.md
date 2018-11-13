@@ -1,4 +1,9 @@
-# Alerts that runners manager is down
+---
+title: Alerts that runners manager is down
+tags:
+- troubleshooting
+---
+
 
 ## Symptoms
 

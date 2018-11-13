@@ -1,4 +1,9 @@
-# Gitaly is down
+---
+title: Gitaly is down
+tags:
+- troubleshooting
+---
+
 
 ## First and foremost
 

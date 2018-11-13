@@ -1,4 +1,9 @@
-# Chef Guidlines 
+---
+title: Chef Guidlines
+tags:
+- howto
+---
+
 
 The purpose of this page should be to document how we at GitLab use chef, write cookbooks and configure nodes. It is a work in progress, however the points made here should be agreed upon by those who work with chef on a daily basis.
 
@@ -7,14 +12,14 @@ The purpose of this page should be to document how we at GitLab use chef, write 
 
 
 ### **Do:** simplify node run_lists
-Keep a node simple - single purpose driven role applied on a node. 
-For example, a front end web server should have a single role on it: 
+Keep a node simple - single purpose driven role applied on a node.
+For example, a front end web server should have a single role on it:
 
 ```ruby
 "run_list": [
   "role[frontend-web-server]"
 ]
-``` 
+```
 
 rather than:
 
@@ -51,13 +56,13 @@ Example:
 [Only execute on supported platforms](https://github.com/jtimberman/enforce_supported_platform-cookbook) simplifies [this](https://gitlab.com/gitlab-cookbooks/gitlab-nfs-cluster/commit/739040f16e901c66fa70ed6014768898f0b67f6a#16f5421f9f20b9e5d3af7fc7cdd6ff9b7de716cc_0_1) by making it [this](https://gitlab.com/gitlab-cookbooks/gitlab-nfs-cluster/commit/ebd432345d4356818ad4a85ac436b33c9f9c8d65#2aeda62be0e44bf1b010cc93e2e1ed1348a65b4c_4_4)
 
 ##### Custom Resources (aka LWRPs)
-Cookbooks can use [custom resources](https://docs.chef.io/custom_resources.html) to abstract the access to groups of tasks (e.g. installing, configuring, starting...) 
+Cookbooks can use [custom resources](https://docs.chef.io/custom_resources.html) to abstract the access to groups of tasks (e.g. installing, configuring, starting...)
 
 Example:
 
 [REDISIO cookbook with LWRPs](https://github.com/brianbianco/redisio#lwrp-examples)
 
-The redisio cookbook offers all the necessary LWRPs to install and configure a redis instance, but does not actually do anything itself if the default recipe is not called. 
+The redisio cookbook offers all the necessary LWRPs to install and configure a redis instance, but does not actually do anything itself if the default recipe is not called.
 
 ```ruby
 redisio_install "redis-installation" do
@@ -115,13 +120,13 @@ execute 'reload-gitlab' do
   not_if '${PROD?}'
 end
 ```
-This snippet would guard against `gitlab-ctl reconfigure` being called if the environment variable `PROD` is set. 
+This snippet would guard against `gitlab-ctl reconfigure` being called if the environment variable `PROD` is set.
 
 ### Cookbook Attributes
 Attributes are your friends:
 
 * all attributes used by a cookbook should be:
-    - nested under a common, understandable hash e.g. 
+    - nested under a common, understandable hash e.g.
 
     *sshd settings*
     ```ruby
@@ -133,7 +138,7 @@ Attributes are your friends:
     node['openssh_port']
     node['address_family']
     ```
-  - Kept in the respective cookbook. 
+  - Kept in the respective cookbook.
      Roles are the place where you can change settings, not in unrelated cookbooks. e.g. the haproxy cookbook is not the place for [openssh settings](https://gitlab.com/gitlab-cookbooks/gitlab-haproxy/commit/f8aaa5d3ec344fba38bd15948d04854317e9e3ce#20875b27e096b4a4356a90b6ae97d03a1dbf877a_35_32).
 
   - Come with sane defaults. This plays into the testability of a cookbook. Never assume that attributes will be set elsewhere: either **set defaults** or **fail**.
@@ -171,7 +176,7 @@ Furthermore you can write tests in essentially any test framework, e.g. [BATS](h
 
 `knife (search|ssh|..) roles:my-role ...` returns all nodes which has `my-role`, directly and nestly specified.
 
- 
+
 ### Update IP of chef node
 
 Create or update file `/etc/ipaddress.txt` with desired IP address (or run `curl ifconfig.co | sudo tee /etc/ipaddress.txt`) and run chef-client.

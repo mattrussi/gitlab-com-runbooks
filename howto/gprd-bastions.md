@@ -1,14 +1,28 @@
-## GPRD bastion hosts
+---
+title: GPRD bastion hosts
+tags:
+- howto
+---
 
 ##### How to start using them
 Add the following to your `~/.ssh/config` (specify your username and path to ssh private key):
 ```
-# GCP production bastion host
+---
+title: GCP production bastion host
+tags:
+- howto
+---
+
 Host lb-bastion.gprd.gitlab.com
         User                            YOUR_SSH_USERNAME
         IdentityFile                    /path/to/your/ssh/key
 
-# gprd boxes
+---
+title: gprd boxes
+tags:
+- howto
+---
+
 Host *.gitlab-production.internal
         PreferredAuthentications        publickey
         IdentityFile                    /path/to/your/ssh/key

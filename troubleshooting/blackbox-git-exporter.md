@@ -1,4 +1,9 @@
-# Blackbox git exporter is down
+---
+title: Blackbox git exporter is down
+tags:
+- troubleshooting
+service: git
+---
 
 ## First and foremost
 

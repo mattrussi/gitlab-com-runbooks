@@ -1,4 +1,9 @@
-# Errors are reported in LOG files
+---
+title: Errors are reported in LOG files
+tags:
+- troubleshooting
+---
+
 
 ## First and foremost
 

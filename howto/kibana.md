@@ -1,4 +1,9 @@
-# Log view in Kibana
+---
+title: Log view in Kibana
+tags:
+- howto
+---
+
 
 ## Kibana URL
 

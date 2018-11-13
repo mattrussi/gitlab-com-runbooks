@@ -1,4 +1,9 @@
-# Operations
+---
+title: Operations
+tags:
+- howto
+---
+
 
 ## Repmgr
 
@@ -7,7 +12,12 @@
 You should see only one master node in the output
 
 ```shell
-# gitlab-ctl repmgr cluster show
+---
+title: gitlab-ctl repmgr cluster show
+tags:
+- howto
+---
+
 Role      | Name        | Upstream    | Connection String
 ----------+-------------|-------=-----|-----------------------------------------------------------------------------------
 * master  | MASTER_FQDN |             | host=MASTER_FQDN port=5432 user=gitlab_repmgr dbname=gitlab_repmgr
@@ -141,7 +151,12 @@ Role      | Name        | Upstream    | Connection String
    (1 row)
     ```
 
-# Components
+---
+title: Components
+tags:
+- howto
+---
+
 
 See the [official documentation](https://docs.gitlab.com/ee/administration/high_availability/database.html) for details on the architecture
 

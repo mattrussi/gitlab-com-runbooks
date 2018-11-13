@@ -1,4 +1,9 @@
-# Git Stuck Processes
+---
+title: Git Stuck Processes
+tags:
+- troubleshooting
+---
+
 
 ## First and foremost
 

@@ -1,4 +1,9 @@
-# Setup oauth2-proxy protection for web based application
+---
+title: Setup oauth2-proxy protection for web based application
+tags:
+- howto
+---
+
 
 This runbook  describes how to setup new application that is protected with `oauth2-proxy` which uses
 https://dev.gitlab.org/ as access provider.

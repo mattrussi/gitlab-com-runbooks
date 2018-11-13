@@ -1,4 +1,8 @@
-# Benchmarking Database Instances
+---
+title: Benchmarking Database Instances
+tags:
+- howto
+---
 
 To properly analyze performance of a given cloud instance with Postgres, multiple benchmarking tools and approaches should be combined:
  - synthetic benchmarks for Postgres server ([pgbench](https://www.postgresql.org/docs/10/static/pgbench.html), [sysbench](https://github.com/akopytov/sysbench))
@@ -80,7 +84,7 @@ The code is the same as in step "Small-sized, mixed workload"
 
 ## Visualizing results with gnuplot
 
-In this example the benchmark results for two instances are combined in one picture: 
+In this example the benchmark results for two instances are combined in one picture:
 ```shell
 N=300
 for s in 1700 100000; do

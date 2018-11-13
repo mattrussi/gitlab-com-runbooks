@@ -1,4 +1,9 @@
-# SSL Certificate expiring or expired
+---
+title: SSL Certificate expiring or expired
+tags:
+- troubleshooting
+---
+
 
 ## First and foremost
 

@@ -1,4 +1,9 @@
-# Gitaly PubSub Rate is low
+---
+title: Gitaly PubSub Rate is low
+tags:
+- troubleshooting
+---
+
 
 ## First and foremost
 

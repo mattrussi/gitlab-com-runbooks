@@ -1,4 +1,8 @@
-# Service Availability
+---
+title: Service Availability
+tags:
+- troubleshooting
+---
 
 At GitLab, we define the availability of a service as a ratio of: `the number of instances of a service reporting as healthy` / `the expecting number if instances of that service`.
 

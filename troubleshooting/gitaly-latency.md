@@ -1,4 +1,9 @@
-# Gitaly latency is too high
+---
+title: Gitaly latency is too high
+tags:
+- troubleshooting
+---
+
 
 ## First and foremost
 

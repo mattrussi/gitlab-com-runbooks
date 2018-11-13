@@ -1,3 +1,10 @@
+---
+title: Postgres Switchover
+tags:
+- howto
+---
+
+
 > To do rolling reconfigurations of Postgres including *minor*
 > database upgrades follow this procedure:
 

@@ -1,4 +1,9 @@
-# Workers under heavy load because of being used as a CDN
+---
+title: Workers under heavy load because of being used as a CDN
+tags:
+- troubleshooting
+---
+
 
 ## First and foremost
 
@@ -7,13 +12,13 @@
 ## Symptoms
 
 * skyrocket increase of load in workers
-  * ![Sample High Load on Workers](../img/workers-high-load.png)
+  * ![Sample High Load on Workers](/img/workers-high-load.png)
 * decrease of connections
-  * ![Sample of low HTTP connections](../img/low-connections.png)
+  * ![Sample of low HTTP connections](/img/low-connections.png)
 * decrease of database load
-  * ![Sample of low database load](../img/low-database-load.png)
+  * ![Sample of low database load](/img/low-database-load.png)
 * increase of git http processes
-  * ![Sample of high count of git http processes](../img/high-http-git-processes.png)
+  * ![Sample of high count of git http processes](/img/high-http-git-processes.png)
 * Relevant Dashboard where to find all these graphs
   * http://dashboards.gitlab.net/dashboard/db/fleet-overview
 

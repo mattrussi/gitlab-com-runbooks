@@ -1,4 +1,9 @@
-# Prometheus on monitor.gitlab.net is down
+---
+title: Prometheus on monitor.gitlab.net is down
+tags:
+- troubleshooting
+---
+
 
 ## Possible checks
 

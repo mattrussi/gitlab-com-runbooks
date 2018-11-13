@@ -1,4 +1,9 @@
-# Domain Registration
+---
+title: Domain Registration
+tags:
+- howto
+---
+
 
 So you want to register a domain? This is the guide for you!
 

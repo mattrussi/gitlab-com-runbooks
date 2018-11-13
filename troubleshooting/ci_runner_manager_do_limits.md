@@ -1,4 +1,9 @@
-# CI runnner manager report a high number of errors
+---
+title: CI runnner manager report a high number of errors
+tags:
+- troubleshooting
+service: ci
+---
 
 ## Possible checks
 

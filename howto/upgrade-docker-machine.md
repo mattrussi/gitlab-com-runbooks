@@ -1,4 +1,9 @@
-# Upgrade docker-machine
+---
+title: Upgrade docker-machine
+tags:
+- howto
+---
+
 
 It sometimes becomes necessary to update docker-machine due to major changes
 in docker or its API. The main indicator thus far that this needs to be done
@@ -12,11 +17,11 @@ in the works.
 The first step is to update the attributes that control what version and checksum
 are used to download and verify the docker-machine binary. The attributes may
 be stored only in the role secrets OR the split between the role definition itself
-and `chef-vault`. Currently, `omnibus-builder-runners-manager` is using 
+and `chef-vault`. Currently, `omnibus-builder-runners-manager` is using
 only the secrets and `gitlab-shared-runners` is using both the role definition
-and secrets. 
+and secrets.
 
-To view the secrets, run the rake task to show secrets. Please replace 
+To view the secrets, run the rake task to show secrets. Please replace
 `omnibus-builder-runners-manager` in the below command with the role you are
 attempting to update.
 
@@ -25,8 +30,8 @@ $ rake show_role_secrets [omnibus-builder-runners-manager,_default]
 ```
 
 Next, we will need to actually get the information to update the attributes.
-To do so, you will need to download the appropriate docker-machine binary and verify 
-its checksum. 
+To do so, you will need to download the appropriate docker-machine binary and verify
+its checksum.
 
 ```
 $ cd /tmp
@@ -61,9 +66,9 @@ about what has changed *and* why.
 
 ### Run chef-client
 
-Now that all the changes have been done, `chef-client` will need to run in order to apply 
-these changes. Depending on urgency, you can run the client manually by logging into the 
-runners. However, `chef-client` runs automatically about ever 30 minutes, so you can also 
+Now that all the changes have been done, `chef-client` will need to run in order to apply
+these changes. Depending on urgency, you can run the client manually by logging into the
+runners. However, `chef-client` runs automatically about ever 30 minutes, so you can also
 just wait.
 
 In order to verify that the upgrad was successful, you can use the following command

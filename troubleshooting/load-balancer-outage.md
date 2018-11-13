@@ -1,4 +1,9 @@
-# Load Balancer Outage
+---
+title: Load Balancer Outage
+tags:
+- troubleshooting
+---
+
 
 We utilize Azure load balancers to deal with failover of our postgres database.
 Occasionally there will be an outage of the load balancer that will cause disruption.
@@ -29,16 +34,16 @@ As an example, you should see something like the following for each host.
 If you do NOT see this for a host or it instead times out, that host cannot reach the postgres
 server.
 
-If some of the workers CAN reach postgres but others CANNOT, this is likely a Microsoft issue. 
+If some of the workers CAN reach postgres but others CANNOT, this is likely a Microsoft issue.
 You will need to [contact Microsoft support](https://dev.gitlab.org/cookbooks/chef-repo/blob/master/doc/azure.md#creating-a-ticket-for-pro-direct-support-in-azure)
 as soon as possible. They should reply within the hour.
 
 ## Workaround for Postgres
 
-In the event of an actual load balancer outage causing postgres connectivity issues, we can 
+In the event of an actual load balancer outage causing postgres connectivity issues, we can
 work around the issue by changing the workers to connect directly to the current primary database.
 
-In chef-repo, run `bundle exec rake 'edit_role[gitlab-cluster-worker]'` and change the DB IP to 
+In chef-repo, run `bundle exec rake 'edit_role[gitlab-cluster-worker]'` and change the DB IP to
 the primary DB server's IP.
 
 Then run chef-client on all the workers:

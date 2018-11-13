@@ -1,4 +1,8 @@
-# Aptly
+---
+title: Aptly
+tags:
+- howto
+---
 
 Our aptly server is aptly.gitlab.com and is primary used to mirror ceph repository but we can use it to mirror any other repository.
 
@@ -73,21 +77,21 @@ Afer uploading your package to the Aptly server, add or replace the existing pac
 
 ```
 # If the package already exists in the repo, find the name and then remove it from the repo
-user@aptly:~$ sudo aptly repo show --with-packages gitlab-utils 
+user@aptly:~$ sudo aptly repo show --with-packages gitlab-utils
 Name: gitlab-utils
 Comment: GitLab Server Utilities
-Default Distribution: 
+Default Distribution:
 Default Component: main
 Number of packages: 1
 Packages:
   package_name_2.8.3-1_amd64
 
-user@aptly:~$ sudo aptly repo remove gitlab-utils package_name_2.8.3-1_amd64 
+user@aptly:~$ sudo aptly repo remove gitlab-utils package_name_2.8.3-1_amd64
 Loading packages...
 [-] package_name_2.8.3-1_amd64 removed
 
 # Now add the new or updated package
-user@aptly:~$ sudo aptly repo add gitlab-utils package_name_2.8.3-1_amd64.deb 
+user@aptly:~$ sudo aptly repo add gitlab-utils package_name_2.8.3-1_amd64.deb
 Loading packages...
 [+] package_name_2.8.3-1_amd64 added
 
@@ -118,7 +122,7 @@ List of snapshots:
 To get more information about snapshot, run `aptly snapshot show <name>`.
 
 # Merge your new snapshot with the snapshots that are not being updated (mirrors)
-user@aptly:~$ sudo aptly snapshot merge mirror-gitlab-utils-20161221 mirror-snapshot-20161107 gitlab-utils-stable-20161221 
+user@aptly:~$ sudo aptly snapshot merge mirror-gitlab-utils-20161221 mirror-snapshot-20161107 gitlab-utils-stable-20161221
 
 Snapshot mirror-gitlab-utils-20161221 successfully created.
 You can run 'aptly publish snapshot mirror-gitlab-utils-2016122102' to publish snapshot as Debian repository.

@@ -1,4 +1,8 @@
-# Gemnasium is down
+---
+title: Gemnasium is down
+tags:
+- troubleshooting
+---
 
 ## Case 1: the HTTP service doesn't respond (not error 500)
 
@@ -6,15 +10,15 @@
 
 - The Dependency Scanning jobs fail because they can't contact the Gemnasium API.
 - https://deps.sec.gitlab.com/ doesn't respond or fails with an error.
- 
+
 ### Pre-checks
 
-Try connecting to https://deps.sec.gitlab.com/ , a page listing packages by technologies should display. If it doesn't 
-then the service is down. 
+Try connecting to https://deps.sec.gitlab.com/ , a page listing packages by technologies should display. If it doesn't
+then the service is down.
 
 ### Resolution
- 
-- Navigate to the [GCP page for the Gemnasium web workload](https://console.cloud.google.com/kubernetes/statefulset/us-central1-b/production/default/web?project=gemnasium-production&tab=details&duration=PT1H&pod_summary_list_tablesize=20) 
+
+- Navigate to the [GCP page for the Gemnasium web workload](https://console.cloud.google.com/kubernetes/statefulset/us-central1-b/production/default/web?project=gemnasium-production&tab=details&duration=PT1H&pod_summary_list_tablesize=20)
 - Its status shouldn't be "running".
 
 If the status is not "running", the "Events" tab might list the cause of the failure.
@@ -30,7 +34,7 @@ kubectl patch statefulset web -p "{\"spec\":{\"template\":{\"metadata\":{\"label
 - The pods should restart immediately and the service should respond again on its HTTP(s) port in less than a minute.
 
 ### Post-checks
- 
+
 Browse https://deps.sec.gitlab.com/explore , the website should appear.
 
 ## Case 2 : the HTTP service returns a 5xx error (likely a database error)
@@ -39,14 +43,14 @@ Browse https://deps.sec.gitlab.com/explore , the website should appear.
 
 - The Dependency Scanning jobs fail because the Gemnasium service fails (error 500).
 - https://deps.sec.gitlab.com/explore/packages/gem/browse fails to list any packages.
- 
+
 ### Pre-checks
 
-Try connecting to https://deps.sec.gitlab.com/explore/packages/gem/browse , a page listing Gem packages by technologies 
+Try connecting to https://deps.sec.gitlab.com/explore/packages/gem/browse , a page listing Gem packages by technologies
 should display. If it doesn't then the service fails, most likely it can't contact its database server.
 
 Check the application logs to be sure:
-- Navigate to the [GCP page for the Gemnasium web workload](https://console.cloud.google.com/kubernetes/statefulset/us-central1-b/production/default/web?project=gemnasium-production&tab=details&duration=PT1H&pod_summary_list_tablesize=20) 
+- Navigate to the [GCP page for the Gemnasium web workload](https://console.cloud.google.com/kubernetes/statefulset/us-central1-b/production/default/web?project=gemnasium-production&tab=details&duration=PT1H&pod_summary_list_tablesize=20)
 - Navigate to one of its pods.
 - Navigate to the "Logs" tab, the application logs should reflect a problem with connecting to the database.
 
@@ -67,7 +71,7 @@ kubectl patch statefulset web -p "{\"spec\":{\"template\":{\"metadata\":{\"label
 ```
 
 ### Post-checks
- 
+
 - Browse https://deps.sec.gitlab.com/explore/packages/gem/browse , Gem packages should be listed.
 - Query the API:
 ```

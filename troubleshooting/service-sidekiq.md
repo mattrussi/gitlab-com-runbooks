@@ -1,6 +1,10 @@
+---
+title: Sidekiq Service
+tags:
+- troubleshooting
+service: sidekiq
+---
 <!-- MARKER: do not edit this section directly. Edit services/service-mappings.yml then run scripts/generate-docs -->
-#  Sidekiq Service
-
 * **Responsible Team**: [backend](https://about.gitlab.com/handbook/engineering/dev-backend/)
 * **Slack Channel**: [#backend](https://gitlab.slack.com/archives/backend)
 * **General Triage Dashboard**: https://dashboards.gitlab.net/d/WOtyonOiz/general-triage-service?from=now-6h&to=now&var-prometheus_ds=Global&var-environment=gprd&var-type=sidekiq&orgId=1
@@ -19,8 +23,8 @@
 
 ## Troubleshooting Pointers
 
-* [ci_introduction.md](ci_introduction.md)
-* [large-sidekiq-queue.md](large-sidekiq-queue.md)
-* [sidekiq_exception_count.md](sidekiq_exception_count.md)
-* [sidekiq_stats_no_longer_showing.md](sidekiq_stats_no_longer_showing.md)
+* [ci_introduction.md]({{< relref "troubleshooting/ci_introduction.md" >}})
+* [large-sidekiq-queue.md]({{< relref "troubleshooting/large-sidekiq-queue.md" >}})
+* [sidekiq_exception_count.md]({{< relref "troubleshooting/sidekiq_exception_count.md" >}})
+* [sidekiq_stats_no_longer_showing.md]({{< relref "troubleshooting/sidekiq_stats_no_longer_showing.md" >}})
 <!-- END_MARKER -->

@@ -1,4 +1,9 @@
-# Update GitLab Runner on runners managers
+---
+title: Update GitLab Runner on runners managers
+tags:
+- howto
+---
+
 
 This runbook describes procedure of upgrading GitLab Runner on our runner managers.
 
@@ -248,11 +253,21 @@ Runner, then you should edit a related role, and set chosen version with `overri
 If you want to upgrade all Runners of GitLab.com fleet at the same time, then you can use the following script:
 
 ```bash
-# Stop chef-client
+---
+title: Stop chef-client
+tags:
+- howto
+---
+
 knife ssh -aipaddress 'roles:gitlab-runner-base' -- sudo service chef-client stop
 knife ssh -aipaddress 'roles:gitlab-runner-base' -- systemctl is-active chef-client
 
-# Update configuration in roles definition and secrets
+---
+title: Update configuration in roles definition and secrets
+tags:
+- howto
+---
+
 git checkout master && git pull
 git checkout -b update-runners-fleet
 $EDITOR roles/gitlab-runner-base.json
@@ -269,7 +284,12 @@ If yes - hit `play` on the `apply_to_prod` job and wait until the job on Chef Se
 You can continue **after the changes are uploaded to CHef Server**.
 
 ```bash
-# Upgrade Runner's version and configuration on nodes
+---
+title: Upgrade Runner's version and configuration on nodes
+tags:
+- howto
+---
+
 knife ssh -C1 -aipaddress 'roles:gitlab-runner-builder' -- sudo /root/runner_upgrade.sh &
 knife ssh -C1 -aipaddress 'roles:gitlab-runner-gsrm' -- sudo /root/runner_upgrade.sh &
 knife ssh -C1 -aipaddress 'roles:gitlab-runner-prm' -- sudo /root/runner_upgrade.sh &

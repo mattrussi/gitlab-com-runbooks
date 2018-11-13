@@ -1,4 +1,9 @@
-# Configuring and Using the Yubikey
+---
+title: Configuring and Using the Yubikey
+tags:
+- howto
+---
+
 
 ## Requirements
 * `gpg2`
@@ -139,7 +144,7 @@ Current allowed actions: Sign Certify Encrypt
    (S) Toggle the sign capability
    (E) Toggle the encrypt capability
    (A) Toggle the authenticate capability
-   (Q) Finished 
+   (Q) Finished
 
 Your selection? s
 Your selection? e
@@ -174,7 +179,7 @@ pub   4096R/FAEFD83E 2017-08-25 [expires: 2021-08-25]
 uid                  John Rando <rando@gitlab.com>
 ```
 
-Now that we have a master key, a good practice is to generate a revocation 
+Now that we have a master key, a good practice is to generate a revocation
 certificate in the event that we lose the password or the key is compromised.
 
 **Note:** In some versions you do not see the key id in the gpg output. You can use your email here.
@@ -195,7 +200,7 @@ Enter an optional description; end it with an empty line:
 > Using revocation certificate that was generated when key FAEFD83E was
 > first created.  It is very likely that I have lost access to the
 > private key.
-> 
+>
 Reason for revocation: Key is no longer used
 Using revocation certificate that was generated when key B8EFD59D was
 first created.  It is very likely that I have lost access to the
@@ -214,7 +219,7 @@ your machine might store the data and make it available to others!
 
 ## Generating Subkeys
 We'll use subkeys that are generated on the Yubikey device itself. Keys generated
-on the Yubikey cannot be copied off, so loss or destruction of the device will 
+on the Yubikey cannot be copied off, so loss or destruction of the device will
 mean key rotation.
 
 ```
@@ -242,7 +247,7 @@ Please specify how long the key should be valid.
 Key is valid for? (0) 1y
 Key expires at Sat Aug  25 01:08:14 2018 CST
 Is this correct? (y/N) y
-Really create? (y/N) y  
+Really create? (y/N) y
 
 pub  3072R/FAEFD83E  created: 2017-08-25  expires: 2018-08-25  usage: C
                      trust: ultimate      validity: ultimate
@@ -271,7 +276,7 @@ Please specify how long the key should be valid.
 Key is valid for? (0) 1y
 Key expires at Sat Aug  25 01:10:41 2018 CST
 Is this correct? (y/N) y
-Really create? (y/N) y  
+Really create? (y/N) y
 
 pub  4096R/FAEFD83E  created: 2017-08-25  expires: 2018-08-25  usage: C
                      trust: ultimate      validity: ultimate
@@ -375,7 +380,7 @@ gpg> quit
 
 ## Ensure proper options are set in gpg-agent.conf
 
-Your `gpg-agent.conf` should look something **like** 
+Your `gpg-agent.conf` should look something **like**
 
 ```
 $ cat ~/.gnupg/gpg-agent.conf

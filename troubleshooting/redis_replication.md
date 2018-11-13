@@ -1,4 +1,9 @@
-# Redis replication is lagging or has stopped
+---
+title: Redis replication is lagging or has stopped
+tags:
+- troubleshooting
+---
+
 
 ## First and foremost
 
@@ -133,7 +138,12 @@ $  /opt/gitlab/embedded/bin/redis-cli -h 10.66.2.102 -p 26379 sentinel slaves gi
 root@redis7:~# REDIS_MASTER_AUTH=$(sudo grep ^masterauth /var/opt/gitlab/redis/redis.conf|cut -d\" -f2)
 root@redis7:~# /opt/gitlab/embedded/bin/redis-cli -a $REDIS_MASTER_AUTH
 127.0.0.1:6379> info replication
-# Replication
+---
+title: Replication
+tags:
+- troubleshooting
+---
+
 role:master
 connected_slaves:4
 slave0:ip=10.45.2.8,port=6379,state=online,offset=208856216927,lag=0

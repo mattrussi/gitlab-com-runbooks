@@ -1,4 +1,9 @@
-# Prometheus Not Ingesting
+---
+title: Prometheus Not Ingesting
+tags:
+- troubleshooting
+---
+
 
 ## Symptoms
 

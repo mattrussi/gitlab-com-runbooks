@@ -1,4 +1,9 @@
-# Pingdom
+---
+title: Pingdom
+tags:
+- howto
+---
+
 
 ## How to configure checks in Pingdom
 

@@ -1,6 +1,10 @@
+---
+title: Registry Service
+tags:
+- troubleshooting
+service: registry
+---
 <!-- MARKER: do not edit this section directly. Edit services/service-mappings.yml then run scripts/generate-docs -->
-#  Registry Service
-
 * **Responsible Team**: [package](https://about.gitlab.com/handbook/engineering/dev-backend/)
 * **Slack Channel**: [#backend](https://gitlab.slack.com/archives/backend)
 * **General Triage Dashboard**: https://dashboards.gitlab.net/d/WOtyonOiz/general-triage-service?from=now-6h&to=now&var-prometheus_ds=Global&var-environment=gprd&var-type=registry&orgId=1
@@ -15,11 +19,11 @@
 
 ## Troubleshooting Pointers
 
-* [ci_pending_builds.md](ci_pending_builds.md)
-* [ci_too_many_connections_on_runners_cache_server.md](ci_too_many_connections_on_runners_cache_server.md)
-* [gitlab-registry.md](gitlab-registry.md)
-* [runners-cache.md](runners-cache.md)
-* [runners_cache_disk_space.md](runners_cache_disk_space.md)
-* [runners_cache_is_down.md](runners_cache_is_down.md)
-* [runners_registry_is_down.md](runners_registry_is_down.md)
+* [ci_pending_builds.md]({{< relref "troubleshooting/ci_pending_builds.md" >}})
+* [ci_too_many_connections_on_runners_cache_server.md]({{< relref "troubleshooting/ci_too_many_connections_on_runners_cache_server.md" >}})
+* [gitlab-registry.md]({{< relref "troubleshooting/gitlab-registry.md" >}})
+* [runners-cache.md]({{< relref "troubleshooting/runners-cache.md" >}})
+* [runners_cache_disk_space.md]({{< relref "troubleshooting/runners_cache_disk_space.md" >}})
+* [runners_cache_is_down.md]({{< relref "troubleshooting/runners_cache_is_down.md" >}})
+* [runners_registry_is_down.md]({{< relref "troubleshooting/runners_registry_is_down.md" >}})
 <!-- END_MARKER -->

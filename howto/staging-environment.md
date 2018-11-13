@@ -1,4 +1,9 @@
-# GitLab staging environment
+---
+title: GitLab staging environment
+tags:
+- howto
+---
+
 
 The GitLab.com staging environment keeps a copy of the whole production database, ~~anonymised~~, and ~~automatically updated every weekend~~
 

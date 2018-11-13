@@ -1,3 +1,9 @@
+---
+title: Target is down
+tags:
+- troubleshooting
+---
+
 ## What to check
 
 1. Accessibility of the scraping target (exporter) from the prometheus server. It can be firewall restrictions.

@@ -1,4 +1,8 @@
-# Service Apdex
+---
+title: Service Apdex
+tags:
+- troubleshooting
+---
 
 The apdex score for a service is a measure of relative performance for a service.
 

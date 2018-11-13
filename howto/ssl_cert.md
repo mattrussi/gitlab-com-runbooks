@@ -1,4 +1,9 @@
-# SSL Certificates
+---
+title: SSL Certificates
+tags:
+- howto
+---
+
 
 We use [SSLMate] for ordering SSL certificates. Get the commandline tool via
 https://sslmate.com/help/install. If you're using Homebrew you can install it with `brew install sslmate`.
@@ -94,7 +99,7 @@ when those certificates are going to expire.
   to a certificate expiring and again at regular intervals until the cert is
   replaced or expired.
 
-* SSLMate is configured to monitor the following domains for certificates that 
+* SSLMate is configured to monitor the following domains for certificates that
   are issued outside of SSLMate control and alert Production Engineering:
   * gitlab.com
   * gitlab.org

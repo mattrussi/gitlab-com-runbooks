@@ -1,4 +1,9 @@
-# PackageCloud Infrastructure and Backups
+---
+title: PackageCloud Infrastructure and Backups
+tags:
+- howto
+---
+
 
 This document will cover how our packagecloud infrastructure works, how
 backups are taken, and how to restore said backups. `packages.gitlab.com`

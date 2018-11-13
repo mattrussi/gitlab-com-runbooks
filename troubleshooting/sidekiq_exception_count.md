@@ -1,3 +1,9 @@
+---
+title: Sidekiq Exception Count
+tags:
+- troubleshooting
+---
+
 ## Symptoms
 
 * An alert in #alerts for SidekiqExceptionCountTooHigh

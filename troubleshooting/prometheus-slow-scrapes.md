@@ -1,4 +1,9 @@
-# Prometheus Scraping Slowly
+---
+title: Prometheus Scraping Slowly
+tags:
+- troubleshooting
+---
+
 
 ## Symptoms
 

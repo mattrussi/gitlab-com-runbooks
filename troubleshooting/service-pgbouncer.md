@@ -1,6 +1,10 @@
+---
+title: Pgbouncer Service
+tags:
+- troubleshooting
+service: pgbouncer
+---
 <!-- MARKER: do not edit this section directly. Edit services/service-mappings.yml then run scripts/generate-docs -->
-#  Pgbouncer Service
-
 * **Responsible Team**: [infrastructure](https://about.gitlab.com/handbook/engineering/infrastructure/)
 * **Slack Channel**: [#production](https://gitlab.slack.com/archives/production)
 * **General Triage Dashboard**: https://dashboards.gitlab.net/d/WOtyonOiz/general-triage-service?from=now-6h&to=now&var-prometheus_ds=Global&var-environment=gprd&var-type=pgbouncer&orgId=1
@@ -15,5 +19,5 @@
 
 ## Troubleshooting Pointers
 
-* [postgres.md](postgres.md)
+* [postgres.md]({{< relref "troubleshooting/postgres.md" >}})
 <!-- END_MARKER -->

@@ -1,4 +1,9 @@
-# Internal GitLab DNS
+---
+title: Internal GitLab DNS
+tags:
+- howto
+---
+
 
 We are running internal DNS caching resolvers and query forwards for efficiency,
 security, and dynamic scaling.

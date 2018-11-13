@@ -1,4 +1,9 @@
-# PostgreSQL
+---
+title: PostgreSQL
+tags:
+- howto
+---
+
 
 ## So your Postgres server has run out of disk space....
 
@@ -24,7 +29,7 @@ or identifying the top consumer of space and cleaning it up.
 
 If there's a replication slot that has `active` false and has a
 markedly old `restart_lsn` then it may be forcing Postgres to keep
-lots of old xlog around. 
+lots of old xlog around.
 
 If the replica cannot be resurrected (or if there are other healthy
 replicas and you would rather get the primary back sooner and lose
@@ -72,7 +77,7 @@ If you see log messages like:
 ```
 
 Then the standby is lost due to the xlog on the primary being
-pruned. 
+pruned.
 
 If the standby is properly configured it should be able to retrieve
 the archived logs from blob storage. Currently this requires
@@ -123,7 +128,7 @@ telling the standby to follow that timeline.
 
 The following example says that the switch from timeline 3 (the parent
 timeline) to timeline 4 (the current timeline) occurred right at the
-start of the oldest xlog file that was retained. 
+start of the oldest xlog file that was retained.
 
 You can pick any xlog time older than the checkpoint that the
 pg_basebackup was taken from. It may be easiest to just put 0/0 in
@@ -147,7 +152,7 @@ $ cat > 00000004.history
 ```
 
 You'll probably want to do this on the *primary* and then repeat the
-`repmgr standby clone` (after clearing out the `data` directory). 
+`repmgr standby clone` (after clearing out the `data` directory).
 
 You may be able to just add it to the standby and restart however make
 sure the standby is actually still in standby mode and hasn't

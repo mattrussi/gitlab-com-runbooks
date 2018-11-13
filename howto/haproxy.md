@@ -1,4 +1,9 @@
-# HAProxy management at GitLab
+---
+title: HAProxy management at GitLab
+tags:
+- howto
+---
+
 
 ## Overview
 
@@ -13,18 +18,18 @@ groups:
 * `<env>-base-lb-fe`: HTTP/HTTPS, SSH for gitlab.com
     * frontends: `http`, `https`, `ssh`
     * backends: `api`, `https_git`, `websocket`, `canary_web`, `web`
-* `<env>-base-lb-altssh`: TCP port 443 for altssh.gitlab.com 
+* `<env>-base-lb-altssh`: TCP port 443 for altssh.gitlab.com
     * frontends: `altssh`
     * backends: `altssh`
 * `<env>-base-lb-registry`: HTTP/HTTPS for registry.gitlab.com
     * frontends: `http', `https`
     * backends: `registry`
 
-Explanation: 
-* Each `<env>-base-lb-*` above represents a Chef role since we use Chef to 
+Explanation:
+* Each `<env>-base-lb-*` above represents a Chef role since we use Chef to
 configure our nodes. Browse to `chef-repo/roles` directory and you will see them.
-* The references after the _frontends_ and _backends_ refer to _node_ concept in 
-HAProxy configuration. 
+* The references after the _frontends_ and _backends_ refer to _node_ concept in
+HAProxy configuration.
 
 ```
      client request
@@ -50,7 +55,7 @@ HAProxy configuration.
 * HAProxy frontends define how requests are forwarded to backends
 * Backends configure a list of servers for load balancing
 * The HAProxy configuration is defined in [gitlab-haproxy cookbook](https://gitlab.com/gitlab-cookbooks/gitlab-haproxy) and you can also find it in `/etc/haproxy/haproxy.cfg` on any of the haproxy nodes.
-* 
+*
 ### Frontends
 * `http`: port 80
     *  delivers a 301 to https
@@ -68,7 +73,7 @@ HAProxy configuration.
     * sends to the `altssh` backend
 * `pages_http`: port 80
     * sends to the `pages_http` backend
-* `pages_https`: port 443 
+* `pages_https`: port 443
     * sends to the `pages_https` backend
 
 ### Backends

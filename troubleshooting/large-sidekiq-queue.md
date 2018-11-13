@@ -1,4 +1,9 @@
-# Sidekiq Queue Out of Control
+---
+title: Sidekiq Queue Out of Control
+tags:
+- troubleshooting
+---
+
 
 When the filesystem or database has major issues, it is possible
 for the sidekiq queues to grow out of control. If the queues don't appear

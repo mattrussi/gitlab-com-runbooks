@@ -1,4 +1,9 @@
-# Getting setup with Google gcloud CLI
+---
+title: Getting setup with Google gcloud CLI
+tags:
+- howto
+---
+
 
 ## Install
 

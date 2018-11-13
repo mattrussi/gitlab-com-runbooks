@@ -1,4 +1,9 @@
-# Canary in GCP production and staging
+---
+title: Canary in GCP production and staging
+tags:
+- howto
+---
+
 
 ## Overview
 The canary fleet is a subset of fleet within the production and staging

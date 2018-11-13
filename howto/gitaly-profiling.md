@@ -1,4 +1,9 @@
-# Gitaly profiling
+---
+title: Gitaly profiling
+tags:
+- howto
+---
+
 
 ## First and foremost
 

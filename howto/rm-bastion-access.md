@@ -1,4 +1,9 @@
-# Set up bastions for Release managers
+---
+title: Set up bastions for Release managers
+tags:
+- howto
+---
+
 
 All SSH commands need to be proxied trough one of the bastion
 hosts. As part of the release manager onboarding, you should already
@@ -24,12 +29,22 @@ sure all commands for the staging and production environments are
 routed trough those bastions:
 
 ```
-# gstg boxes
+---
+title: gstg boxes
+tags:
+- howto
+---
+
 Host *.gitlab-staging-1.internal
   PreferredAuthentications publickey
   ProxyCommand ssh <username>@lb-bastion.gstg.gitlab.com -W %h:%p
 
-# gprd boxes
+---
+title: gprd boxes
+tags:
+- howto
+---
+
 Host *.gitlab-production.internal
   PreferredAuthentications publickey
   ProxyCommand ssh <username>@lb-bastion.gprd.gitlab.com -W %h:%p

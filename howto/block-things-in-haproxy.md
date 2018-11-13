@@ -1,4 +1,9 @@
-# Blocking and disabling things in the HAProxy load balancers
+---
+title: Blocking and disabling things in the HAProxy load balancers
+tags:
+- howto
+---
+
 
 ## First and foremost
 

@@ -1,3 +1,9 @@
+---
+title: GitLab.com WAL-E backups
+tags:
+- troubleshooting
+---
+
 ### How to check WAL-E backups are running
 
 1. Log into `db1.cluster.gitlab.com`

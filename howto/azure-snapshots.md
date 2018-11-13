@@ -1,4 +1,8 @@
-# Azure Snapshots
+---
+title: Azure Snapshots
+tags:
+- howto
+---
 
 In order to back up git/uploads/lfs/artifact files, we use Azure snapshots.
 These snapshots are created by a cron on the `azure.gitlap.com` server using a

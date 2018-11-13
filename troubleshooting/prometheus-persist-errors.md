@@ -1,4 +1,9 @@
-# Prometheus Persist Errors
+---
+title: Prometheus Persist Errors
+tags:
+- troubleshooting
+---
+
 
 ## Symptoms
 

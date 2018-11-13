@@ -1,4 +1,9 @@
-# Postgresql
+---
+title: Postgresql
+tags:
+- howto
+---
+
 
 ## Find out which table a given toast belongs to
 
@@ -82,5 +87,10 @@ See the [PostgreSQL Replica](postgresql-replica.md) document for instructions
 Before shutting down a host which is no longer required, run the following as root to remove it from the repmgr cluster
 
 ```shell
-# gitlab-ctl repmgr standby unregister
+---
+title: gitlab-ctl repmgr standby unregister
+tags:
+- howto
+---
+
 ```

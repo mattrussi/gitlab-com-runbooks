@@ -1,5 +1,8 @@
-## Disable Chef runs on a VM
-
+---
+title: Disable Chef runs on a VM
+tags:
+- howto
+---
 
 Occasionally there will be a legitimate reason to stop Chef on a Chef managed
 GitLab VM. You should follow the following steps to ensure that it both

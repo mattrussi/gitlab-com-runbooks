@@ -1,0 +1,30 @@
+baseURL = "https://runbooks.gitlab.io/"
+languageCode = "en-us"
+title = "Running GitLab.com"
+theme = "hugo-theme-learn"
+staticDir = ["./img"]
+contentDir = "."
+publishDir = "public"
+enableGitInfo = true
+enableRobotsTXT = true
+ignoreFiles = [
+  "public/.*",
+  "services/.*",
+  "monitoring/.*",
+  "backup_scripts/.*",
+  "alerts/.*",
+  "consoles/.*",
+  "themes/.*"
+]
+
+[outputs]
+home = [ "HTML", "RSS", "JSON"]
+
+[taxonomies]
+  category = "categories"
+  service = "service"
+  tag = "tags"
+
+[params]
+  # Change default color scheme with a variant one. Can be "red", "blue", "green".
+  themeVariant = "blue"

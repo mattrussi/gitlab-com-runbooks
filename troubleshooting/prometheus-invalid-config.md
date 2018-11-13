@@ -1,4 +1,9 @@
-# Prometheus Invalid Configuration File
+---
+title: Prometheus Invalid Configuration File
+tags:
+- troubleshooting
+---
+
 
 ## Symptoms
 

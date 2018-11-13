@@ -1,4 +1,9 @@
-# So you got yourself on call
+---
+title: So you got yourself on call
+tags:
+- howto
+---
+
 
 To start with the right foot let's define a set of tasks that are nice things to do before you go
 any further in your week

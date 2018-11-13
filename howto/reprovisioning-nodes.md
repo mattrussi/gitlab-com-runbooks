@@ -1,4 +1,9 @@
-# Reprovisioning nodes
+---
+title: Reprovisioning nodes
+tags:
+- howto
+---
+
 
 Reprovisioning nodes can become a bit of a headache with Chef (mostly Chef Vault to be exact), as there are some considerations that need to be made in order to be able to reprovision a node without errors.
 

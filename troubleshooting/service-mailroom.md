@@ -1,6 +1,10 @@
+---
+title: Mailroom Service
+tags:
+- troubleshooting
+service: mailroom
+---
 <!-- MARKER: do not edit this section directly. Edit services/service-mappings.yml then run scripts/generate-docs -->
-#  Mailroom Service
-
 * **Responsible Team**: [backend](https://about.gitlab.com/handbook/engineering/dev-backend/)
 * **Slack Channel**: [#backend](https://gitlab.slack.com/archives/backend)
 * **General Triage Dashboard**: https://dashboards.gitlab.net/d/WOtyonOiz/general-triage-service?from=now-6h&to=now&var-prometheus_ds=Global&var-environment=gprd&var-type=mailroom&orgId=1

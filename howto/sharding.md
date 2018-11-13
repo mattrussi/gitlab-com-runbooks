@@ -1,4 +1,9 @@
-# Managing GitLab Storage Shards
+---
+title: Managing GitLab Storage Shards
+tags:
+- howto
+---
+
 
 ## Sharding Overview
 
@@ -37,7 +42,7 @@ It is perfectly fine to copy this back into the original file name and try again
 
 ## Behind the Scenes
 
-What's happening behind the scenes when the API command is issued is a simple 
-rsync from one directory structure path to another. The rsync is limited with a 
+What's happening behind the scenes when the API command is issued is a simple
+rsync from one directory structure path to another. The rsync is limited with a
 nice command so that it performs in the background and doesn't over-consume
 resources on the API host.

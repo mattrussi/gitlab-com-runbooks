@@ -1,4 +1,8 @@
-# Alerting
+---
+title: Alerting
+tags:
+- howto
+---
 
 ## Prometheus
 

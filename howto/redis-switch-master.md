@@ -1,4 +1,9 @@
-## Redis Switch Master
+---
+title: Redis Switch Master
+tags:
+- howto
+---
+
 
 ### General overview
 

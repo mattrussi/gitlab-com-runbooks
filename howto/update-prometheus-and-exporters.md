@@ -1,15 +1,20 @@
-# Updating Prometheus and Exporters
+---
+title: Updating Prometheus and Exporters
+tags:
+- howto
+---
+
 
 As identified in [this infrastructure issue](https://gitlab.com/gitlab-com/infrastructure/issues/813),
 we have had issues in the past with unverified upgrades to Prometheus and it's exporters.
 This document will describe the process for updating them.
 
-## Process 
+## Process
 
 ### Create issue
 
 First and foremost, [create an issue](https://gitlab.com/gitlab-com/infrastructure/issues/new) about the upgrade. The subject should be the service
-you want to update and the version. 
+you want to update and the version.
 
 In the body of the issue, please use the following checklist template.
 
@@ -40,16 +45,16 @@ calidate that Prometheus is currently scraping the target. You can check this in
 
 ### Upgrade step and check
 
-In order to actually perform the upgrade, we need to tell chef what version of the exporter to 
+In order to actually perform the upgrade, we need to tell chef what version of the exporter to
 install. The exporters are installed via the [gitlab-prometheus](https://gitlab.com/gitlab-cookbooks/gitlab-prometheus/)
 cookbook. Edit the attributes file for the exporter you are upgrading to point to the new version and update
-the checksum if applicable. You'll then need to bump the version number in `metadata.rb` so that 
+the checksum if applicable. You'll then need to bump the version number in `metadata.rb` so that
 berkshelf will update it on the chef server.
 
-Create an MR as usual and assign it to someone for review. Once that person has reviewed and merged the 
+Create an MR as usual and assign it to someone for review. Once that person has reviewed and merged the
 cookbook update, the new cookbook will be uploaded automatically through a CI pipeline.
 
-Bump the cookbook version in the desired environment file (or all of them) under `chef-repo/environments/`, 
+Bump the cookbook version in the desired environment file (or all of them) under `chef-repo/environments/`,
 run `knife environment from file <path-to-modified-env-files>`, then create an MR for these changes as well.
 
 Finally, run `chef-client` on the node(s) that need the updated exporter. Then, check to make sure the exporter

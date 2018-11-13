@@ -1,4 +1,9 @@
-# Git
+---
+title: Git
+tags:
+- troubleshooting
+---
+
 
 ## Test pushing through all the git nodes
 

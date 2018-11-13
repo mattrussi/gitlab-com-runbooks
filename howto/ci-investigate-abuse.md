@@ -1,4 +1,9 @@
-# Investigating Abuse Reports
+---
+title: Investigating Abuse Reports
+tags:
+- howto
+---
+
 
 Sometimes we receive abuse reports from Digital Ocean regarding something
 our docker-machines have done. This can be the result of a malicious user

@@ -1,4 +1,9 @@
-# Git Storage Servers
+---
+title: Git Storage Servers
+tags:
+- howto
+---
+
 
 Currently, we run 24 storage servers for git repository data, with 4 of them being used for new projects.
 Once the 4 servers for new projects reach 60% capacity, we build 4 new ones and set them to be the default.
@@ -6,7 +11,7 @@ Once the 4 servers for new projects reach 60% capacity, we build 4 new ones and 
 
 ## Building
 
-In order to build a new storage server, you will add the necessary definitions to the [GitLab terraform repository](https://gitlab.com/gitlab-com/gitlab-com-infrastructure). 
+In order to build a new storage server, you will add the necessary definitions to the [GitLab terraform repository](https://gitlab.com/gitlab-com/gitlab-com-infrastructure).
 With the move to GCP, this is quite simple. All you must do is bump the number of `multizone-stor`
 servers in the variables.tf. DO NOT increase the number of `stor` servers. We should only build multi-zone servers from now on.
 

@@ -1,4 +1,9 @@
-# Management for forum.gitlab.com
+---
+title: Management for forum.gitlab.com
+tags:
+- howto
+---
+
 
 The GitLab Community forum is hosted under https://forum.gitlab.com and is
 powered by [Discourse](https://www.discourse.org).

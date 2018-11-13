@@ -1,4 +1,9 @@
-# Managing Chef
+---
+title: Managing Chef
+tags:
+- howto
+---
+
 
 ## Add a user to the chef server
 

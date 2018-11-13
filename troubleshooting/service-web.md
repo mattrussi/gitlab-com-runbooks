@@ -1,6 +1,10 @@
+---
+title: Web Service
+tags:
+- troubleshooting
+service: web
+---
 <!-- MARKER: do not edit this section directly. Edit services/service-mappings.yml then run scripts/generate-docs -->
-#  Web Service
-
 * **Responsible Team**: [backend](https://about.gitlab.com/handbook/engineering/dev-backend/)
 * **Slack Channel**: [#backend](https://gitlab.slack.com/archives/backend)
 * **General Triage Dashboard**: https://dashboards.gitlab.net/d/WOtyonOiz/general-triage-service?from=now-6h&to=now&var-prometheus_ds=Global&var-environment=gprd&var-type=web&orgId=1
@@ -19,9 +23,9 @@
 
 ## Troubleshooting Pointers
 
-* [gemnasium_is_down.md](gemnasium_is_down.md)
-* [gitaly-latency.md](gitaly-latency.md)
-* [postgres.md](postgres.md)
-* [recovering-from-nfs-disaster.md](recovering-from-nfs-disaster.md)
-* [sentry-is-down.md](sentry-is-down.md)
+* [gemnasium_is_down.md]({{< relref "troubleshooting/gemnasium_is_down.md" >}})
+* [gitaly-latency.md]({{< relref "troubleshooting/gitaly-latency.md" >}})
+* [postgres.md]({{< relref "troubleshooting/postgres.md" >}})
+* [recovering-from-nfs-disaster.md]({{< relref "troubleshooting/recovering-from-nfs-disaster.md" >}})
+* [sentry-is-down.md]({{< relref "troubleshooting/sentry-is-down.md" >}})
 <!-- END_MARKER -->

@@ -1,8 +1,13 @@
-## GitLab monitoring
+---
+title: GitLab monitoring
+tags:
+- howto
+---
+
 
 ### General overview
 
-![Logical scheme](../img/gitlab-monitoring.png)
+![Logical scheme](/img/gitlab-monitoring.png)
 
 [draw.io source](../graphs/gitlab-monitoring.xml) for later modifications.
 

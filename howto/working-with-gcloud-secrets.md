@@ -1,4 +1,9 @@
-# Working with Google Cloud secrets
+---
+title: Working with Google Cloud secrets
+tags:
+- howto
+---
+
 
 # Prechecks
 

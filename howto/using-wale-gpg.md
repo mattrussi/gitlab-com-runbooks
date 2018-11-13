@@ -1,4 +1,9 @@
-# Using Wal-E
+---
+title: Using Wal-E
+tags:
+- howto
+---
+
 
 ## Wal-E Overview
 
@@ -25,7 +30,7 @@ both backups and restores. Secondary servers do not push WAL files or base_backu
 AWS S3 replicates the data from `gitlab-dbprod-backups` (US bucket) to `gitlab-dbprod-backups-replica` (EU bucket).
 
 Our secondary databases (version, customers, sentry, etc)
-are in a bucket labeled `gitlab-secondarydb-backups`. The data is being encrypted with GPG. 
+are in a bucket labeled `gitlab-secondarydb-backups`. The data is being encrypted with GPG.
 The key can be found in the Production vault of 1Password.
 
 ### Interval and Retention
@@ -43,9 +48,19 @@ installs a cronjob to create base_backups and trim old backups. The relevant cro
 on the chef roles.
 
 ```cron
-# Chef Name: full wal-e backup
+---
+title: Chef Name: full wal-e backup
+tags:
+- howto
+---
+
 0 2 * * * PGHOST=/var/opt/gitlab/postgresql/ PATH=/opt/gitlab/embedded/bin:/opt/gitlab/embedded/sbin:$PATH /usr/bin/envdir /etc/wal-e.d/env /opt/wal-e/bin/wal-e backup-push /var/opt/gitlab/postgresql/data &> /tmp/wal-e_backup_push.log
-# Chef Name: trim wal-e backups
+---
+title: Chef Name: trim wal-e backups
+tags:
+- howto
+---
+
 0 18 * * * PATH=/opt/gitlab/embedded/bin:/opt/gitlab/embedded/sbin:$PATH /usr/bin/envdir /etc/wal-e.d/env /opt/wal-e/bin/wal-e delete --confirm retain 8 &> /tmp/wal-e_backup_delete.log
 ```
 
@@ -54,9 +69,19 @@ on the chef roles.
 Cronjobs for taking base backups are added to the postgres user via chef. They are as follows:
 
 ```cron
-# Chef Name: full wal-e backup
+---
+title: Chef Name: full wal-e backup
+tags:
+- howto
+---
+
 0 2 * * * /usr/bin/envdir /etc/wal-e.d/env /opt/wal-e/bin/wal-e --gpg-key-id 66B9829C backup-push /var/lib/postgresql/9.3/main > /tmp/wal-e_backup_push.log;
-# Chef Name: trim wal-e backups
+---
+title: Chef Name: trim wal-e backups
+tags:
+- howto
+---
+
 0 18 * * * /usr/bin/envdir /etc/wal-e.d/env /opt/wal-e/bin/wal-e delete --confirm retain 8 > /tmp/wal-e_backup_delete.log;
 ```
 

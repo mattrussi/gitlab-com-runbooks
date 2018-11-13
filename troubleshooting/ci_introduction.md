@@ -1,4 +1,9 @@
-## CI troubleshooting introduction
+---
+title: CI troubleshooting introduction
+tags:
+- troubleshooting
+service: ci
+---
 
 GitLab.com and dev.gitlab.org shared runners consists from a number of components and machines.
 

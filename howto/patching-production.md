@@ -1,4 +1,9 @@
-# Hot patching production
+---
+title: Hot patching production
+tags:
+- howto
+---
+
 
 This howto is for deploying a patch or hotpatch to the production servers
 outside the normal deploy cycle. This should only be done for critical fixes or
@@ -18,7 +23,7 @@ This is step that has to be done by the proposing team.
   * In that case remove changes to specs before generating the patch.
 * Run the command `git --no-pager diff --color=never v10.7.0-rc4-ee.. -- app lib ee/app ee/lib > path/to/patch.patch`
   * **Note**: this is an example - if you have changed non-spec files in other
-    directories, be sure to include those 
+    directories, be sure to include those
 * Clone or Update the repo [post deployment patches][pdp]
 * Create one MR for the correct version of the application following [post
   deployment patches][pdp-readme] README instructions.
@@ -51,7 +56,12 @@ Using the previous example, just use the rollback mode of [gitlab patcher][gp]
 
 
 
-# Old manual (deprecated) method
+---
+title: Old manual (deprecated) method
+tags:
+- howto
+---
+
 
 This part of the runbook is kept as a sample of the way of performing a
 hotpatch manually in case the automated tool fails.
@@ -81,29 +91,74 @@ The following can be used as a guide for applying patches to staging and product
 **Do not run the commands below unless you fully understand what they do.**
 
 ```
-# Set this to the role you are appling to
-# For example role=gitlab-base-fe-web for
-# web fleet.
+---
+title: Set this to the role you are appling to
+tags:
+- howto
+---
+
+---
+title: For example role=gitlab-base-fe-web for
+tags:
+- howto
+---
+
+---
+title: web fleet.
+tags:
+- howto
+---
+
 role=ROLE_TO_APPLY
 url=URL_OF_PATCH_FILE
 dir=DIRECTORY_FOR_PATCH
 patch="/tmp/hotpatch-$(date +'%Y-%m-%d')"
-# Download the patch file to the servers in the fleet
+---
+title: Download the patch file to the servers in the fleet
+tags:
+- howto
+---
+
 bundle exec knife ssh -C 1 -a ipaddress "roles:$role" "curl -o $patch $url"
 
-# Confirm that it has been transferred
+---
+title: Confirm that it has been transferred
+tags:
+- howto
+---
+
 bundle exec knife ssh -C 1 -a ipaddress "roles:$role" "md5sum $patch"
 
-# Dry run the patch
+---
+title: Dry run the patch
+tags:
+- howto
+---
+
 bundle exec knife ssh -C 1 -a ipaddress "roles:$role" "cd $dir && sudo patch -p1 --dry-run < $patch"
 
-# Apply the patch
+---
+title: Apply the patch
+tags:
+- howto
+---
+
 bundle exec knife ssh -C 1 -a ipaddress "roles:$role" "cd $dir && sudo patch -p1 < $patch"
 
-# Rollback the patch
+---
+title: Rollback the patch
+tags:
+- howto
+---
+
 bundle exec knife ssh -C 1 -a ipaddress "roles:$role" "cd $dir && sudo patch -R < $patch"
 
-# For updates to rails, HUP unicorn
+---
+title: For updates to rails, HUP unicorn
+tags:
+- howto
+---
+
 bundle exec knife ssh -C 1 -a ipaddress "roles:$role" "sudo gitlab-ctl hup unicorn"
 ```
 

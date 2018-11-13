@@ -1,4 +1,8 @@
-## Background
+---
+title: Background
+tags:
+- howto
+---
 
 In some cases it is necessary to grant database or rails console access
 to team members who are not in the Infrastructure Engineering team.
@@ -33,7 +37,7 @@ Team member, needing access, should:
 SRE oncall should:
 1. Assign the issue, based on priority and oncall load
 2. Follow the steps mentioned below
-3. Update the issue asking requester to confirm and close the issue   
+3. Update the issue asking requester to confirm and close the issue
 
 ## Steps
 1. If you haven't already, `git clone https://ops.gitlab.net/gitlab-cookbooks/chef-repo`
@@ -49,7 +53,7 @@ SRE oncall should:
 | ssh_keys            | SSH key(s) provided by the user in the issue OR  get it from http://gitlab.com/user.keys. This field  takes a list so a comma separated keys will also work.                                                                                             |
 | groups              | This field takes a list. Look at the "groups" listed  in above table and provide the groups separated by comma.  Example: staging access for db and rails console will be:   "groups": [    "gstg-bastion-only",     "db-console",     "rails-console" ] |
 | shell               | You can leave it as-is unless specifically requested  to change it.                                                                                                                                                                                      |
-| action              | You can leave it as-is unless specifically requested  to change it.  
+| action              | You can leave it as-is unless specifically requested  to change it.
 
 5. Send an MR for the change.
 6. Once change is merged, run: `git pull` so that your `master` branch syncs

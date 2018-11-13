@@ -1,4 +1,8 @@
-## OPS bastion hosts
+---
+title: OPS bastion hosts
+tags:
+- howto
+---
 
 ##### How to start using them
 Add the following to your `~/.ssh/config` (specify your username and path to ssh private key):

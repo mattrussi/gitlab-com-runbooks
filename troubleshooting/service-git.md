@@ -1,6 +1,10 @@
+---
+title: Git Service
+tags:
+- troubleshooting
+service: git
+---
 <!-- MARKER: do not edit this section directly. Edit services/service-mappings.yml then run scripts/generate-docs -->
-#  Git Service
-
 * **Responsible Team**: [backend](https://about.gitlab.com/handbook/engineering/dev-backend/)
 * **Slack Channel**: [#backend](https://gitlab.slack.com/archives/backend)
 * **General Triage Dashboard**: https://dashboards.gitlab.net/d/WOtyonOiz/general-triage-service?from=now-6h&to=now&var-prometheus_ds=Global&var-environment=gprd&var-type=git&orgId=1
@@ -19,17 +23,17 @@
 
 ## Troubleshooting Pointers
 
-* [blackbox-git-exporter.md](blackbox-git-exporter.md)
-* [ci_introduction.md](ci_introduction.md)
-* [ci_pending_builds.md](ci_pending_builds.md)
-* [git-stuck-processes.md](git-stuck-processes.md)
-* [git.md](git.md)
-* [gitaly-high-cpu.md](gitaly-high-cpu.md)
-* [gitaly-rate-limiting.md](gitaly-rate-limiting.md)
-* [haproxy.md](haproxy.md)
-* [large-sidekiq-queue.md](large-sidekiq-queue.md)
-* [missing_repos.md](missing_repos.md)
-* [recovering-from-nfs-disaster.md](recovering-from-nfs-disaster.md)
-* [workers-high-load.md](workers-high-load.md)
-* [workhorse-git-session-alerts.md](workhorse-git-session-alerts.md)
+* [blackbox-git-exporter.md]({{< relref "troubleshooting/blackbox-git-exporter.md" >}})
+* [ci_introduction.md]({{< relref "troubleshooting/ci_introduction.md" >}})
+* [ci_pending_builds.md]({{< relref "troubleshooting/ci_pending_builds.md" >}})
+* [git-stuck-processes.md]({{< relref "troubleshooting/git-stuck-processes.md" >}})
+* [git.md]({{< relref "troubleshooting/git.md" >}})
+* [gitaly-high-cpu.md]({{< relref "troubleshooting/gitaly-high-cpu.md" >}})
+* [gitaly-rate-limiting.md]({{< relref "troubleshooting/gitaly-rate-limiting.md" >}})
+* [haproxy.md]({{< relref "troubleshooting/haproxy.md" >}})
+* [large-sidekiq-queue.md]({{< relref "troubleshooting/large-sidekiq-queue.md" >}})
+* [missing_repos.md]({{< relref "troubleshooting/missing_repos.md" >}})
+* [recovering-from-nfs-disaster.md]({{< relref "troubleshooting/recovering-from-nfs-disaster.md" >}})
+* [workers-high-load.md]({{< relref "troubleshooting/workers-high-load.md" >}})
+* [workhorse-git-session-alerts.md]({{< relref "troubleshooting/workhorse-git-session-alerts.md" >}})
 <!-- END_MARKER -->

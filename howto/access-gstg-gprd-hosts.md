@@ -1,4 +1,9 @@
-## Accessing the gstg and gprd hosts
+---
+title: Accessing the gstg and gprd hosts
+tags:
+- howto
+---
+
 
 As we build out the new gprd and gstg environments you may need to access the
 hosts. If you need ssh access to individual vms you have come to the right

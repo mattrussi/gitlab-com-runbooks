@@ -1,4 +1,9 @@
-# Renaming Nodes
+---
+title: Renaming Nodes
+tags:
+- howto
+---
+
 
 Renaming a node after it is already in Chef is a multi-step process to ensure that Chef doesn't know about the node and the node itself doesn't have remnants of its previous Chef configuration.
 

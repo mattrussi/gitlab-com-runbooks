@@ -1,3 +1,9 @@
+---
+title: GitLab registry
+tags:
+- troubleshooting
+---
+
 ## Reason
 
 GitLab registry is not responding or returns not 200 OK statuses.

@@ -1,4 +1,8 @@
-# Blocking individual IPs and Net Blocks on HA Proxy
+---
+title: Blocking individual IPs and Net Blocks on HA Proxy
+tags:
+- howto
+---
 
 ## First and foremost
 
@@ -25,7 +29,7 @@ This will produce a listing of all of the blackhole IP addresses listed once per
 For a more concise listing you can run a command that massages the data:
 
 ```
-% knife ssh -p 2222 -a ipaddress -C 2 'roles:gitlab-base-lb-fe' 'sudo ip route show| grep blackhole' | tr -s ' ' | cut -d ' ' -f3 | sort -n | uniq -c 
+% knife ssh -p 2222 -a ipaddress -C 2 'roles:gitlab-base-lb-fe' 'sudo ip route show| grep blackhole' | tr -s ' ' | cut -d ' ' -f3 | sort -n | uniq -c
 ```
 
 This will produce a count and listing of all the IP addresses in the blackhole state on all of the HA Proxies.  The count should equal the number of HA Proxies in production.

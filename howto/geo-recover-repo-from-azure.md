@@ -1,4 +1,9 @@
-# Geo Migration
+---
+title: Geo Migration
+tags:
+- howto
+---
+
 
 ## Recovering a repo from Azure
 

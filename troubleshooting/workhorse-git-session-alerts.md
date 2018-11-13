@@ -1,8 +1,13 @@
-# Workhorse Session Alerts
+---
+title: Workhorse Session Alerts
+tags:
+- troubleshooting
+---
+
 
 ## Symptoms
 
-![Workhorse HTTP](../img/workhorse-git-http-session-issues.png)
+![Workhorse HTTP](/img/workhorse-git-http-session-issues.png)
 
 ## Possible checks
 

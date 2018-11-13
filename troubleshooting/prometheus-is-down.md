@@ -1,3 +1,9 @@
+---
+title: Prometheus is down
+tags:
+- troubleshooting
+---
+
 ## Steps to check
 
 1. Login to server - `prometheus.gitlab.com` or `prometheus-2.gitlab.com`. Check service with `sv status prometheus`. If it is `run` for more than `0s`. Then it is ok.

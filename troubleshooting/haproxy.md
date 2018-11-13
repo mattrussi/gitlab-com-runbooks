@@ -1,4 +1,9 @@
-# HAPrpoxy Alert Troubleshooting
+---
+title: HAPrpoxy Alert Troubleshooting
+tags:
+- troubleshooting
+---
+
 
 ## First and foremost
 

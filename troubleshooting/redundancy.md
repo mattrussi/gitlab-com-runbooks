@@ -1,4 +1,9 @@
-# Loss of Redundancy
+---
+title: Loss of Redundancy
+tags:
+- troubleshooting
+---
+
 
 ## First and foremost
 *Don't Panic*

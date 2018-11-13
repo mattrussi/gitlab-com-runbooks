@@ -1,4 +1,9 @@
-# Alert about SSL certificate expiration
+---
+title: Alert about SSL certificate expiration
+tags:
+- howto
+---
+
 
 ## Modify list of hosts with SSL certificate
 

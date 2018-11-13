@@ -1,4 +1,9 @@
-# Increased Error Rate
+---
+title: Increased Error Rate
+tags:
+- troubleshooting
+---
+
 
 ## First and foremost
 

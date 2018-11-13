@@ -1,4 +1,9 @@
-# Removing kernels from fleet
+---
+title: Removing kernels from fleet
+tags:
+- howto
+---
+
 
 ## First and foremost
 

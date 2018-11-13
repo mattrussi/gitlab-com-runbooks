@@ -1,4 +1,9 @@
-# How to renew the TLS certificate for `*.gitter.im`
+---
+title: How to renew the TLS certificate for `*.gitter.im`
+tags:
+- howto
+---
+
 
 There are four points where Gitter serves TLS traffic:
 

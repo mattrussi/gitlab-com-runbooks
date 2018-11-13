@@ -37,3 +37,14 @@ deploy_pingdom_checks:
   only:
     refs:
       - master
+
+generate_site:
+  image: monachus/hugo
+  allow_failure: true
+  script:
+  - mkdir -p themes
+  - git clone https://github.com/matcornic/hugo-theme-learn.git themes/hugo-theme-learn
+  - hugo
+  artifacts:
+    paths:
+    - public

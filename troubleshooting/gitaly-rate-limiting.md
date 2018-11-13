@@ -1,8 +1,13 @@
-# Gitaly Queuing
+---
+title: Gitaly Queuing
+tags:
+- troubleshooting
+---
+
 
 ## Symptoms
 
-![Gitaly Queuing Graph](../img/gitaly-queuing.png)
+![Gitaly Queuing Graph](/img/gitaly-queuing.png)
 
 * Gitaly queueing alerts
 * High (possibly extremely high) latencies on certain requests but load on Gitaly servers remains low

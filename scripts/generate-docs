@@ -23,13 +23,11 @@ end
 
 def replace_header(file, header)
   lines = File.readlines(file)
-  start = lines.find_index { |line| line.chomp == START_MARKER }
-  throw "Unable to find start marker" if start.nil?
   stop = lines.find_index { |line| line.chomp == STOP_MARKER }
   throw "Unable to find stop marker" if stop.nil?
 
-  lines.slice! start, stop - start + 1
-  lines.insert start, header
+  lines.slice! 0, stop + 1
+  lines.insert 0, header
 
   IO.write(file, lines.join("\n"))
 end
@@ -38,9 +36,13 @@ def generate_header(service, team, tier)
   service_name = service["name"]
   troubeshooting_docs = find_troubleshooting_docs(service_name)
   template = <<-EOF
+---
+title: <%= service["name"].capitalize %> Service
+tags:
+- troubleshooting
+service: <%= service["name"] %>
+---
 #{START_MARKER}
-#  <%= service["name"].capitalize %> Service
-
 * **Responsible Team**: [<%= team["name"] %>](<%= team["url"] %>)
 * **Slack Channel**: [\#<%= team["slack_channel"] %>](https://gitlab.slack.com/archives/<%= team["slack_channel"] %>)
 * **General Triage Dashboard**: https://dashboards.gitlab.net/d/WOtyonOiz/general-triage-service?from=now-6h&to=now&var-prometheus_ds=Global&var-environment=gprd&var-type=<%= service_name %>&orgId=1
@@ -65,7 +67,7 @@ def generate_header(service, team, tier)
 ## Troubleshooting Pointers
 
 <%- troubeshooting_docs.each do |troubeshooting_doc| -%>
-* [<%= troubeshooting_doc %>](<%= troubeshooting_doc %>)
+* [<%= troubeshooting_doc %>]({{< relref "troubleshooting/<%= troubeshooting_doc %>" >}})
 <%- end -%>
 <% end -%>
 #{STOP_MARKER}

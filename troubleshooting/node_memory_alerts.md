@@ -1,4 +1,9 @@
-# Node memory alerts
+---
+title: Node memory alerts
+tags:
+- troubleshooting
+---
+
 
 ## HighMemoryPressure
 

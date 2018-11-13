@@ -1,4 +1,9 @@
-# Google mtail for prometheus metrics
+---
+title: Google mtail for prometheus metrics
+tags:
+- howto
+---
+
 
 https://github.com/google/mtail
 

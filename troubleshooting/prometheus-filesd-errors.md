@@ -1,4 +1,9 @@
-# Prometheus FileSD read errors
+---
+title: Prometheus FileSD read errors
+tags:
+- troubleshooting
+---
+
 
 ## Symptoms
 

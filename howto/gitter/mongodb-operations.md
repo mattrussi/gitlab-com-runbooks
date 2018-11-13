@@ -1,4 +1,8 @@
-# How to enlarge MongoDB data volumes
+---
+title: How to enlarge MongoDB data volumes
+tags:
+- howto
+---
 
 Gitter's MongoDB data is stored on EBS volumes formatted with XFS. This combo means that we can resize a volume online, without even stopping the mongod process. This is how it's done.
 

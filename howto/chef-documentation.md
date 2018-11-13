@@ -1,4 +1,9 @@
-# Chef Tips and Tools
+---
+title: Chef Tips and Tools
+tags:
+- howto
+---
+
 
 ## Create New Cookbook
 
@@ -184,7 +189,7 @@ To apply this uploaded version to a new environment follow the steps [below](#ch
 With the advent of environment pinned versions, rolling back a cookbook is as simple as
 changing the version number back to the previous one in the respective environment file.
 
-There is no need to delete the version, we can roll forward and upload a corrected 
+There is no need to delete the version, we can roll forward and upload a corrected
 version in its place.
 
 ## Chef Environments and Cookbooks
@@ -240,10 +245,10 @@ for any omnibus deploy:
   1. upload the environment file `knife environment from file path/to/prd.json`
   1. verify changes (e.g. run `chef-client` on a server)
 
-This method does come with inherent risks: if this is done sloppily, it is possible that 
+This method does come with inherent risks: if this is done sloppily, it is possible that
 cookbook version can *fall under the table* and never be applied to an environment. We have
-need a check in place to ensure that this does not happen. (e.g. compare the latest version 
-on the chef server with the version in each environment, as well as the environments with 
+need a check in place to ensure that this does not happen. (e.g. compare the latest version
+on the chef server with the version in each environment, as well as the environments with
 each other).
 
 ## Run chef client in interactive mode

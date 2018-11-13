@@ -1,4 +1,9 @@
-# Managing pacemaker and corosync
+---
+title: Managing pacemaker and corosync
+tags:
+- howto
+---
+
 
 ## Force a failover on redis
 
@@ -19,7 +24,7 @@ Online: [ redis3.cluster.gitlab.com redis4.cluster.gitlab.com ]
 ```
 As you can see gitlab_redis is running on redis3 so login on redis4 and execute the failover command:
 ```
-redis4# /root/gitlab_redis_failover.sh 
+redis4# /root/gitlab_redis_failover.sh
 ```
 
 ## Force a failover on postgresql
@@ -41,5 +46,5 @@ Online: [ db4.cluster.gitlab.com db5.cluster.gitlab.com ]
 ```
 As you can see gitlab_pgsql is running on db4 so login on db5 and execute the failover command:
 ```
-db5# /root/gitlab_pgsql_failover.sh 
+db5# /root/gitlab_pgsql_failover.sh
 ```

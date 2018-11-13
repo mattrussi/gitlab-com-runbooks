@@ -1,4 +1,9 @@
-# Creating runners manager node
+---
+title: Creating runners manager node
+tags:
+- howto
+---
+
 
 ## Prerequisites
 
@@ -63,7 +68,7 @@ cookbook-gitlab-runner:
 
 after creating and applying role and secrets run `chef-client`.
 
-### 
+###
 
 ### Register runner
 
@@ -74,13 +79,13 @@ After runner installation run `sudo gitlab-runner register` and specify followin
 1. Name (can be default - it is hostname)
 1. Tags via comma
 
-After creating runner obtain `token` value from `[[runners]]` section in `/etc/gitlab-runner/config.toml` for the name you used during registration. After update token value in role secret and run `chef-client` again. 
+After creating runner obtain `token` value from `[[runners]]` section in `/etc/gitlab-runner/config.toml` for the name you used during registration. After update token value in role secret and run `chef-client` again.
 
 ## Troubleshooting
 
 ### Certificate error
 
-If you see errors like this 
+If you see errors like this
 ```
 ERROR: Error creating machine: Error checking the host: Error checking and/or regenerating the certs: There was an error validating certificates for host "67.205.151.216:2376": remote error: bad certificate  driver=digitalocean name=runner-ab89f037-auto-scale-1480005499-6b4ed8e5 operation=create
 ERROR: You can attempt to regenerate them using 'docker-machine regenerate-certs [name]'.  driver=digitalocean name=runner-ab89f037-auto-scale-1480005499-6b4ed8e5 operation=create

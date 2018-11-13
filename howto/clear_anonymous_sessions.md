@@ -1,4 +1,9 @@
-# Clearing sessions for anonymous users
+---
+title: Clearing sessions for anonymous users
+tags:
+- howto
+---
+
 
 The following script will clear all sessions from redis that have no
 current user attached.

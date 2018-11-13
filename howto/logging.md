@@ -1,4 +1,9 @@
-# Application logging at gitlab
+---
+title: Application logging at gitlab
+tags:
+- howto
+---
+
 
 **IMPORTANT** : Previously production logs were using the `pubsub-production-*` indices, this has change to the `pubsub-rails-*` indices. For more info see the [table](logging.md#what-are-we-logging).
 
@@ -50,18 +55,18 @@ it to search for logs over a 30day interval. It also allows you to do basic quer
 
 * [Production and GPRD in Azure and Google](https://console.cloud.google.com/logs/viewer?project=gitlab-production&organizationId=769164969568&minLogLevel=0&expandAll=false&timestamp=2018-05-24T11:23:16.494000000Z&customFacets=&limitCustomFacetWidth=true&dateRangeStart=2018-05-24T10:23:16.747Z&dateRangeEnd=2018-05-24T11:23:16.747Z&interval=PT1H&resource=gce_instance)
 * [Staging and GSTG in Azure and Google](https://console.cloud.google.com/logs/viewer?project=gitlab-staging-1&organizationId=769164969568&minLogLevel=0&expandAll=false&timestamp=2018-05-24T11:22:27.413000000Z&customFacets=&limitCustomFacetWidth=true&dateRangeStart=2018-05-24T10:22:27.667Z&dateRangeEnd=2018-05-24T11:22:27.667Z&interval=PT1H&resource=gce_instance)
- 
+
 ## Overview
 
 Centralized logging at GitLab uses a combination of StackDriver, FluentD, google pubsub,
 and ElasticSearch / Kibana. All logs for the production, staging, gprd and
 gstg environments are forwarded to log.gitlab.net.
 
-![Logical scheme](../img/logging-infr.png)
+![Logical scheme](/img/logging-infr.png)
 
 ### What are we logging?
 
-**production.log and haproxy logs are no longer being sent to elasticcloud due because it was overwhelming our cluster, currently these logs are only available in StackDriver** 
+**production.log and haproxy logs are no longer being sent to elasticcloud due because it was overwhelming our cluster, currently these logs are only available in StackDriver**
 
 **All logs listed below are also stored in stackdriver for 30 days, and object storage for a minimum of 180days**
 
@@ -123,7 +128,7 @@ They are created by https://github.com/GoogleCloudPlatform/pubsubbeat , I don't 
 
 #### What if I need to query logs older than 30 days?
 
-See [logging_gcs_archive_bigquery.md](logging_gcs_archive_bigquery.md) for 
+See [logging_gcs_archive_bigquery.md](logging_gcs_archive_bigquery.md) for
 instructions on loading logs into `BigQuery` from their GCS archive files.
 
 ### Configuration

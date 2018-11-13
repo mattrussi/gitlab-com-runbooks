@@ -1,4 +1,9 @@
-# Missing Repositories
+---
+title: Missing Repositories
+tags:
+- troubleshooting
+---
+
 
 A repository may appear missing, but it does not mean it was erased completely.
 

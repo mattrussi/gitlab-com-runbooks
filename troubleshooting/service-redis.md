@@ -1,6 +1,10 @@
+---
+title: Redis Service
+tags:
+- troubleshooting
+service: redis
+---
 <!-- MARKER: do not edit this section directly. Edit services/service-mappings.yml then run scripts/generate-docs -->
-#  Redis Service
-
 * **Responsible Team**: [infrastructure](https://about.gitlab.com/handbook/engineering/infrastructure/)
 * **Slack Channel**: [#production](https://gitlab.slack.com/archives/production)
 * **General Triage Dashboard**: https://dashboards.gitlab.net/d/WOtyonOiz/general-triage-service?from=now-6h&to=now&var-prometheus_ds=Global&var-environment=gprd&var-type=redis&orgId=1
@@ -15,11 +19,11 @@
 
 ## Troubleshooting Pointers
 
-* [ci_graphs.md](ci_graphs.md)
-* [ci_introduction.md](ci_introduction.md)
-* [large-pull-mirror-queue.md](large-pull-mirror-queue.md)
-* [postgres.md](postgres.md)
-* [redis_replication.md](redis_replication.md)
-* [sentry-is-down.md](sentry-is-down.md)
-* [sidekiq_stats_no_longer_showing.md](sidekiq_stats_no_longer_showing.md)
+* [ci_graphs.md]({{< relref "troubleshooting/ci_graphs.md" >}})
+* [ci_introduction.md]({{< relref "troubleshooting/ci_introduction.md" >}})
+* [large-pull-mirror-queue.md]({{< relref "troubleshooting/large-pull-mirror-queue.md" >}})
+* [postgres.md]({{< relref "troubleshooting/postgres.md" >}})
+* [redis_replication.md]({{< relref "troubleshooting/redis_replication.md" >}})
+* [sentry-is-down.md]({{< relref "troubleshooting/sentry-is-down.md" >}})
+* [sidekiq_stats_no_longer_showing.md]({{< relref "troubleshooting/sidekiq_stats_no_longer_showing.md" >}})
 <!-- END_MARKER -->

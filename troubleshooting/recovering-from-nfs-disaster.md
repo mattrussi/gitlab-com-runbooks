@@ -1,4 +1,9 @@
-# Recovering from NFS disaster
+---
+title: Recovering from NFS disaster
+tags:
+- troubleshooting
+---
+
 
 ## First and foremost
 

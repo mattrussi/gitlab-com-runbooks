@@ -1,4 +1,9 @@
-# Prometheus Storage Inconsistent
+---
+title: Prometheus Storage Inconsistent
+tags:
+- troubleshooting
+---
+
 
 ## Symptoms
 

@@ -1,4 +1,9 @@
-# Sentry is down and gives error 500
+---
+title: Sentry is down and gives error 500
+tags:
+- troubleshooting
+---
+
 
 ## Symptoms
 

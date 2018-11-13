@@ -1,4 +1,9 @@
-# GitLab dev environment
+---
+title: GitLab dev environment
+tags:
+- howto
+---
+
 
 We have a dev environment which is based in GitLab CE
 

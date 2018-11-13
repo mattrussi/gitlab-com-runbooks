@@ -1,4 +1,8 @@
-# Service Error Rate
+---
+title: Service Error Rate
+tags:
+- troubleshooting
+---
 
 The error rate for a service is a measure of how many errors that service is generating per second.
 

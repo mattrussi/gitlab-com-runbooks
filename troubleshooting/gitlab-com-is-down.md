@@ -1,3 +1,9 @@
+---
+title: GitLab.com is down
+tags:
+- troubleshooting
+---
+
 ## Steps to check
 
 1. Check network, try to open [GitLab.com](https://gitlab.com). If it is ok from your side, then it can be only network failure.

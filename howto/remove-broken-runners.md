@@ -1,5 +1,10 @@
 
-## Remove broken runners vms
+---
+title: Remove broken runners vms
+tags:
+- howto
+---
+
 
 Execute this command:
 

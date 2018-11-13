@@ -1,4 +1,9 @@
-# Gitaly CPU too high on a file server
+---
+title: Gitaly CPU too high on a file server
+tags:
+- troubleshooting
+---
+
 
 ## First and foremost
 
@@ -20,7 +25,7 @@
 
 ### Long running or orphan `git` processes
 
-If a user or CI is overloading an NFS server with multiple intensive concurrent git operations, 
+If a user or CI is overloading an NFS server with multiple intensive concurrent git operations,
 it's better to kill the processes than have the whole server -- or even just the Gitaly process -- fail.
 
 Almost all git processes are safe to kill without the risk of corrupting the repository.
@@ -29,17 +34,17 @@ Almost all git processes are safe to kill without the risk of corrupting the rep
 
 Prioritise the termination of `git` processes in the following order:
 
-* **Orphaned Git Processes**: `git` chains together deep process heirachies in order to perform some tasks. If the parent has died, the child may continue to run. 
+* **Orphaned Git Processes**: `git` chains together deep process heirachies in order to perform some tasks. If the parent has died, the child may continue to run.
   Gitaly uses process groups to manage these, but orphaned git child processes can always be terminated immediately.
-    * Check for git orphans: `pgrep -a -u git -P 1`. If you have `pstree` use ```for i in `pgrep -P 1 -u git git`; do pstree -l -a -p $i; done``` 
+    * Check for git orphans: `pgrep -a -u git -P 1`. If you have `pstree` use ```for i in `pgrep -P 1 -u git git`; do pstree -l -a -p $i; done```
     * When terminating orphan processes, ensure that any new orphans are also terminated by repeating the process several times.
-    
-* **Long Running GC and Repack Processes**: 
+
+* **Long Running GC and Repack Processes**:
   * `pgrep -f -a -u git -P 1 'gc|repack'`
   * These are low-priority tasks but can be resource intensive. Sometimes multiple GCs and repacks can occur on the same repo concurrently, which is a huge waste of resources as they will contend and only
     the first to complete will persist it's results.
 
 * **Other Long Running Git Processes**:
-  * ``` pgrep -u git git | xargs ps -o pcpu,pid,ppid,args,etime --sort -etime -p``` 
+  * ``` pgrep -u git git | xargs ps -o pcpu,pid,ppid,args,etime --sort -etime -p```
   * This may also help: ```ps -u git -o pcpu,pid,ppid,args,etime --sort -etime --forest```
   * Show the Gitaly process hierarchy, ordered by longest running processes first ```ps -u git -fwwwwH  --sort=-start```
