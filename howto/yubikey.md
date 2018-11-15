@@ -119,8 +119,7 @@ You can either perform the below actions using the **VeraCrypt** UI or by using 
 1. Create volume file
 
   ```bash
-  mkdir $HOME/transit
-  veracrypt --text --create --encryption AES --hash SHA-512 --size 100M --volume-type normal --filesystem FAT --keyfiles "" $HOME/transit/gitlab.sparsebundle
+  veracrypt --text --create --encryption AES --hash SHA-512 --size 100M --volume-type normal --filesystem FAT --keyfiles "" $HOME/gitlab_secrets
 
   Enter password:
   Re-enter password:
@@ -134,7 +133,7 @@ You can either perform the below actions using the **VeraCrypt** UI or by using 
 
   ```bash
   [sudo] mkdir -m 755 /media/GitLab
-  veracrypt --text --keyfiles "" --protect-hidden no $HOME/transit/gitlab.sparsebundle /media/GitLab
+  veracrypt --text --keyfiles "" --protect-hidden no $HOME/gitlab_secrets /media/GitLab
 
   Enter password for ...:
   Enter PIM for ...: [Enter]
