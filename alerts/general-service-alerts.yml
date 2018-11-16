@@ -32,7 +32,7 @@ groups:
           link1_url: "https://gitlab.com/gitlab-com/runbooks/blob/master/troubleshooting/definition-service-availability.md"
 
       # Operation rate above 3 sigma
-      - alert: service_availability_out_of_bounds_lower_5m
+      - alert: service_ops_out_of_bounds_upper_5m
         expr: |
           gitlab_service_ops:rate
           >
@@ -93,7 +93,7 @@ groups:
           link1_url: "https://gitlab.com/gitlab-com/runbooks/blob/master/troubleshooting/definition-service-ops-rate.md"
 
       # Apdex lower than 3 sigma
-      - alert: service_ops_out_of_bounds_lower_5m
+      - alert: service_apdex_out_of_bounds_lower_5m
         expr: |
           gitlab_service_apdex:ratio
           <
