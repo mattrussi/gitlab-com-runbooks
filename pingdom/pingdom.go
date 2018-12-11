@@ -180,12 +180,12 @@ func (c dryRunUpdater) insert(name string, check pingdom.Check) error {
 }
 
 func (c dryRunUpdater) update(id int, name string, check pingdom.Check) error {
-	log.Printf("dry-run: will update: %s (id %d)", name, id)
+	log.Printf("dry-run: will update: %s (%s)", name, urlForPingdomCheck(id))
 	return nil
 }
 
 func (c dryRunUpdater) delete(id int, name string) error {
-	log.Printf("dry-run: will delete: %s (id %d)", name, id)
+	log.Printf("dry-run: will delete: %s (%s)", name, urlForPingdomCheck(id))
 	return nil
 }
 
@@ -205,7 +205,7 @@ func (c executingUpdater) insert(name string, check pingdom.Check) error {
 }
 
 func (c executingUpdater) update(id int, name string, check pingdom.Check) error {
-	log.Printf("execute: updating check: %s (id %d)", name, id)
+	log.Printf("execute: updating check: %s (%s)", name, urlForPingdomCheck(id))
 
 	response, err := c.client.Checks.Update(id, check)
 	if err != nil {
@@ -216,7 +216,7 @@ func (c executingUpdater) update(id int, name string, check pingdom.Check) error
 }
 
 func (c executingUpdater) delete(id int, name string) error {
-	log.Printf("execute: deleting check: %s (id %d)", name, id)
+	log.Printf("execute: deleting check: %s (%s)", name, urlForPingdomCheck(id))
 
 	response, err := c.client.Checks.Delete(id)
 	if err != nil {
@@ -244,6 +244,10 @@ func validateCheck(check PingdomCheck) {
 	if check.ResolutionMinutes != 0 {
 		validateResolutionMinutes(check.ResolutionMinutes, check.name())
 	}
+}
+
+func urlForPingdomCheck(id int) string {
+	return fmt.Sprintf("https://my.pingdom.com/newchecks/checks#check=%d", id)
 }
 
 var (
