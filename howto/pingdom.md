@@ -3,7 +3,7 @@
 ## How to configure checks in Pingdom
 
 * Pingdom checks are configured in the `pingdom/pingdom.yml` file
-* On non-`master` branches, the `dryrun_pingdom_checks` CI job will (partially) validate the `pingdom.yml` file and will display changes that will be made via the Pingdom API.
+* On non-`master` branches, the `dryrun_pingdom_checks` CI job will (partially) validate the `pingdom.yml` file and will display changes that will be made via the Pingdom API (see [Dry-run Mode](#dry-run-mode) for details).
 * When changes to this file are merged to `master`, the `deploy_pingdom_checks` GitLab CI will execute and make the actual changes:
 * This job will perform 3 tasks:
   * It will insert any new checks that have been added to the file. These checks will be prefixed with `check:`
@@ -36,4 +36,21 @@ checks:
       - Infrastructure
     integrations:
       - pagerduty
+```
+
+## Dry-run Mode
+
+When run with the `--dry-run`, the script will execute in dry-run mode, which will display changes but without executing them against the Pingdom API.
+
+It is always safe to run.
+
+### Running Locally
+
+You can run the script locally, so long as you provide the following environment variables, which can be found in Pingdom and 1Password.
+
+```
+export PINGDOM_USERNAME="gitlab-ops+pingdom@gitlab.com"
+export PINGDOM_PASSWORD="..."
+export PINGDOM_APPKEY="..."
+export PINGDOM_ACCOUNT_EMAIL="..."
 ```
