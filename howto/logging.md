@@ -47,6 +47,10 @@ _Note: Runner logs are unstructured and mixed in with other syslog messages, str
 StackDriver receives all logs listed in the [table](logging.md#what-are-we-logging) below, it is sometimes helpful to use
 it to search for logs over a 30day interval. It also allows you to do basic queries for strings across all types and find errors.
 
+The current logs are excluded from StackDriver:
+
+ * haproxy (label.tag="haproxy") - There is sink configured to collect these logs in a BigQuery dataset: [gitlab-production:haproxy_logs](https://console.cloud.google.com/bigquery?organizationId=769164969568&project=gitlab-production&p=gitlab-production&d=haproxy_logs&page=dataset)
+ * production.unstructured
 
 * [Production and GPRD in Azure and Google](https://console.cloud.google.com/logs/viewer?project=gitlab-production&organizationId=769164969568&minLogLevel=0&expandAll=false&timestamp=2018-05-24T11:23:16.494000000Z&customFacets=&limitCustomFacetWidth=true&dateRangeStart=2018-05-24T10:23:16.747Z&dateRangeEnd=2018-05-24T11:23:16.747Z&interval=PT1H&resource=gce_instance)
 * [Staging and GSTG in Azure and Google](https://console.cloud.google.com/logs/viewer?project=gitlab-staging-1&organizationId=769164969568&minLogLevel=0&expandAll=false&timestamp=2018-05-24T11:22:27.413000000Z&customFacets=&limitCustomFacetWidth=true&dateRangeStart=2018-05-24T10:22:27.667Z&dateRangeEnd=2018-05-24T11:22:27.667Z&interval=PT1H&resource=gce_instance)
@@ -88,12 +92,14 @@ For retention in elasticcloud, see the cleanup script - https://gitlab.com/gitla
 | unicorn.current | /var/log/gitlab/unicorn/current | line regex | pubsub-unicorn-inf
 | unicorn.stderr | /var/log/gitlab/unicorn/unicorn\_stderr.log | line regex | pubsub-unicorn-inf
 | unicorn.stdout | /var/log/gitlab/unicorn/unicorn\_stdout.log | line regex | pubsub-unicorn-inf
-| unstructured.production _only in stackdriver_ | gitlab-rails/production.log | lines | pubsub-unstructured-inf
+| unstructured.production | currently excluded | gitlab-rails/production.log | lines | pubsub-unstructured-inf
 | sidekiq | /var/log/gitlab/sidekiq-cluster/current |  JSON | pubsub-sidekiq-inf
-| haproxy _only in stackdriver_ | /var/log/haproxy.log | syslog | pubsub-haproxy-inf
+| haproxy _only in bigquery_ | /var/log/haproxy.log | syslog | pubsub-haproxy-inf
 | nginx.access | /var/log/gitlab/nginx/gitlab\_access.log | nginx | pubsub-nginx-inf
 | system.auth | /var/log/auth.log | syslog | pubsub-system-inf
 | system.syslog | /var/log/syslog | syslog | pubsub-system-inf
+| history.psql | _on in stackdriver_ | /home/*-db/.psql_history  |
+| history.irb | _on in stackdriver_ | /var/log/irb_history/*.log  |
 
 
 ### FAQ
