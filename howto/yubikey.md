@@ -441,7 +441,7 @@ pinentry-program /usr/bin/pinentry
 enable-ssh-support
 ```
 
-As of December 2019, The `pinentry-mac` program that Homebrew installs is version 0.9.4. The one that gets installed with `gpg-suite` is version 1.1 and may provide better results.
+If you'd like a graphical GPG experience, installing `gpg-suite` an option, in which case your pin entry program will be located at:
 
 ```bash
 pinentry-program /usr/local/MacGPG2/libexec/pinentry-mac.app/Contents/MacOS/pinentry-mac
