@@ -76,8 +76,8 @@ gstg environments are forwarded to log.gitlab.net.
 
 For retention in elasticcloud, see the cleanup script - https://gitlab.com/gitlab-restore/esc-tools/blob/master/cleanup_indices.sh
 
-| name | logfile  | type  | index | stackdriver filter
-| -----| -------- |------ | ----- |
+| name | logfile  | type  | index | stackdriver filter |
+| -----| -------- |------ | ----- |--------------------|
 | gitaly | gitaly/current | JSON | pubsub-gitaly-inf | |
 | pages | gitlab-pages/current | JSON | pubsub-pages-inf | |
 | db.postgres | postgresql/current | line regex | pubsub-postgres-inf | |
