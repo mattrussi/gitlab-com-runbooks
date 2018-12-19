@@ -95,7 +95,7 @@ For retention in elasticcloud, see the cleanup script - https://gitlab.com/gitla
 | unicorn.current | /var/log/gitlab/unicorn/current | line regex | pubsub-unicorn-inf | |
 | unicorn.stderr | /var/log/gitlab/unicorn/unicorn\_stderr.log | line regex | pubsub-unicorn-inf | |
 | unicorn.stdout | /var/log/gitlab/unicorn/unicorn\_stdout.log | line regex | pubsub-unicorn-inf | |
-| unstructured.production | currently excluded | gitlab-rails/production.log | lines | pubsub-unstructured-inf | label.tag="unstrucctured.production" |
+| unstructured.production | gitlab-rails/production.log | lines | pubsub-unstructured-inf | label.tag="unstrucctured.production" |
 | sidekiq | /var/log/gitlab/sidekiq-cluster/current |  JSON | pubsub-sidekiq-inf | |
 | haproxy | /var/log/haproxy.log | syslog | pubsub-haproxy-inf | label.tag="haproxy" |
 | nginx.access | /var/log/gitlab/nginx/gitlab\_access.log | nginx | pubsub-nginx-inf | |
