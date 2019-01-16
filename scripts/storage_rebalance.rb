@@ -1,12 +1,12 @@
 # Execute via:
-# `sudo gitlab-rails runner /<path>/<to>/#{$0}`
+# `sudo gitlab-rails runner /<path>/<to>/#{$PROGRAM_NAME}`
 
 require 'optparse'
 
 options = {}
 
 parser = OptionParser.new do |opts|
-  opts.banner = "Usage: #{$0} [options] --current-file-server <servername> --target-file-server <servername>"
+  opts.banner = "Usage: #{$PROGRAM_NAME} [options] --current-file-server <servername> --target-file-server <servername>"
   opts.on('--current-file-server <servername>', String, 'Current file server we want to move stuff off from') do |server|
     options[:current_file_server] = server
   end
@@ -20,9 +20,7 @@ parser = OptionParser.new do |opts|
   end
 
   opts.on('-s', '--size [N]', Integer, 'Size in GB worth of repo data to move. If no size provided, only 1 repo will move') do |size|
-    if size > 1600
-      abort "Size too large"
-    end
+    abort 'Size too large' if size > 1600
     options[:size] = size
   end
 
@@ -38,9 +36,9 @@ end
 
 class MoveIt
   def initialize(current_file_server, target_file_server, move_data_amount_gb, dry_run, wait)
-    move_data_amount_gb = 0 if !move_data_amount_gb
+    move_data_amount_gb ||= 0
     dry_run = true if dry_run == nil
-    wait = 10 if !wait
+    wait ||= 10
 
     @current_fs = current_file_server
     @target_fs = target_file_server
@@ -50,12 +48,11 @@ class MoveIt
 
     puts "We're moving things from #{@current_fs} _TO_ #{@target_fs}"
     puts "We'll wait up to #{@wait_time} seconds to validate between project moves"
-
   end
 
   def move_project(input)
     if @dry
-      puts "Would move id:#{input.id}"
+      puts "Would move id:#{input}"
     else
       actually_move_it(input, @target_fs)
     end
@@ -63,7 +60,8 @@ class MoveIt
 
   def move_many_projects(min, list)
     size = 0
-    list.each do |project|
+    list.each do |item|
+      project = Project.find(item)
       puts "Project id:#{project.id} is ~#{project.statistics.repository_size / 1024 / 1024 / 1024} GB"
       size += project.statistics.repository_size
       move_project(project)
@@ -73,10 +71,10 @@ class MoveIt
 
   def validate(project, new_server)
     i = 0
-    while project.repository_storage != new_server
+    while project.repository_read_only?
       sleep 1
-      print '.'
       project.reload
+      print '.'
       i += 1
       if i == @wait_time
         puts
@@ -84,27 +82,38 @@ class MoveIt
         break
       end
     end
-    puts "Done with id:#{project.id}"
+    puts
+    if project.repository_storage != new_server
+      puts "Failed moving id:#{project.id}"
+    else
+      puts "Success moving id:#{project.id}"
+    end
   end
 
-  def actually_move_it(project, new_server)
-    puts "Scheduling move id:#{project.id} to #{new_server}"
-    project.change_repository_storage(new_server)
-    validate(project, new_server)
+  def actually_move_it(id, new_server)
+    project = Project.find(id)
+    print "Scheduling move id:#{project.id} to #{new_server}"
+    change_result = project.change_repository_storage(new_server)
+    project.save
+    if change_result == nil
+      puts "Failed scheduling id:#{project.id}"
+    else
+      validate(project, new_server)
+    end
   end
 
   def go
     # query all projects on the current file server, sort by size descending,
     # then sort by last activity date ascending
     # I want the most idle largest projects
-    projects = Project.joins(:statistics).where(repository_storage: @current_fs).order('project_statistics.repository_size DESC').order('last_activity_at ASC')
+    projects = Project.joins(:statistics).where(repository_storage: @current_fs).order('project_statistics.repository_size DESC').order('last_activity_at ASC').pluck(:id)
     pc = projects.count
 
     puts "Found #{pc} project(s) on #{@current_fs}"
 
     if @move_data.zero?
-      puts "Option --size not specified, will only move 1 project..."
-      puts "Will move id:#{projects.first.id}"
+      puts 'Option --size not specified, will only move 1 project...'
+      puts "Will move id:#{projects.first}"
       move_project(projects.first)
     else
       puts "Will move at least #{@move_data / 1024 / 1024 / 1024}GB worth of data"
@@ -115,7 +124,7 @@ end
 
 parser.parse!
 
-abort("Missing options. Use #{$0} --help to see the list of options available") if options.values.empty?
+abort("Missing options. Use #{$PROGRAM_NAME} --help to see the list of options available") if options.values.empty?
 
 require '/opt/gitlab/embedded/service/gitlab-rails/config/environment.rb'
 
