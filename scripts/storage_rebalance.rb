@@ -50,22 +50,22 @@ class MoveIt
     puts "We'll wait up to #{@wait_time} seconds to validate between project moves"
   end
 
-  def move_project(input)
+  def move_project(project)
     if @dry
-      puts "Would move id:#{input}"
+      puts "Would move id:#{project.id}"
     else
-      actually_move_it(input, @target_fs)
+      actually_move_it(project, @target_fs)
     end
   end
 
-  def move_many_projects(min, list)
+  def move_many_projects(min_size, list)
     size = 0
     list.each do |item|
       project = Project.find(item)
       puts "Project id:#{project.id} is ~#{project.statistics.repository_size / 1024 / 1024 / 1024} GB"
       size += project.statistics.repository_size
       move_project(project)
-      break if size > min
+      break if size > min_size
     end
   end
 
@@ -90,8 +90,7 @@ class MoveIt
     end
   end
 
-  def actually_move_it(id, new_server)
-    project = Project.find(id)
+  def actually_move_it(project, new_server)
     print "Scheduling move id:#{project.id} to #{new_server}"
     change_result = project.change_repository_storage(new_server)
     project.save
@@ -106,18 +105,18 @@ class MoveIt
     # query all projects on the current file server, sort by size descending,
     # then sort by last activity date ascending
     # I want the most idle largest projects
-    projects = Project.joins(:statistics).where(repository_storage: @current_fs).order('project_statistics.repository_size DESC').order('last_activity_at ASC').pluck(:id)
-    pc = projects.count
+    project_ids = Project.joins(:statistics).where(repository_storage: @current_fs).order('project_statistics.repository_size DESC').order('last_activity_at ASC').pluck(:id)
 
-    puts "Found #{pc} project(s) on #{@current_fs}"
+    puts "Found #{project_ids.count} project(s) on #{@current_fs}"
 
     if @move_data.zero?
       puts 'Option --size not specified, will only move 1 project...'
-      puts "Will move id:#{projects.first}"
-      move_project(projects.first)
+      puts "Will move id:#{project_ids.first}"
+      project = Project.find(project_ids.first)
+      move_project(project)
     else
       puts "Will move at least #{@move_data / 1024 / 1024 / 1024}GB worth of data"
-      move_many_projects(@move_data, projects)
+      move_many_projects(@move_data, project_ids)
     end
   end
 end
