@@ -13,11 +13,11 @@ options = {
 
 parser = OptionParser.new do |opts|
   opts.banner = "Usage: #{$PROGRAM_NAME} [options] --current-file-server <servername> --target-file-server <servername>"
-  opts.on('--current-file-server <servername>', String, 'Current file server we want to move stuff off from') do |server|
+  opts.on('--current-file-server SERVERNAME', String, 'Current file server we want to move stuff off from') do |server|
     options[:current_file_server] = server
   end
 
-  opts.on('--target-file-server <servername>', String, 'Server to move stuff too') do |server|
+  opts.on('--target-file-server SERVERNAME', String, 'Server to move stuff too') do |server|
     options[:target_file_server] = server
   end
 
@@ -128,6 +128,8 @@ end
 
 parser.parse!
 
-abort("Missing options. Use #{$PROGRAM_NAME} --help to see the list of options available") if options.values.empty?
+if options[:current_file_server].nil? || options[:target_file_server].nil?
+  abort("Missing arguments. Use #{$PROGRAM_NAME} --help to see the list of arguments available") 
+end
 
 MoveIt.new(options[:current_file_server], options[:target_file_server], options[:move_amount], options[:dry_run], options[:wait]).go
