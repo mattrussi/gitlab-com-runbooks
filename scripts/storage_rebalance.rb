@@ -3,7 +3,13 @@
 
 require 'optparse'
 
-options = {}
+require '/opt/gitlab/embedded/service/gitlab-rails/config/environment.rb'
+
+options = {
+  dry_run: true,
+  move_amount: 0,
+  wait: 10
+}
 
 parser = OptionParser.new do |opts|
   opts.banner = "Usage: #{$PROGRAM_NAME} [options] --current-file-server <servername> --target-file-server <servername>"
@@ -15,13 +21,13 @@ parser = OptionParser.new do |opts|
     options[:target_file_server] = server
   end
 
-  opts.on('-d', '--dry-run true', TrueClass, 'Will show you what we would be doing') do |dry|
-    options[:dry_run] = dry
+  opts.on('-d', '--dry-run true', TrueClass, 'Will show you what we would be doing') do |dry_run|
+    options[:dry_run] = dry_run
   end
 
-  opts.on('-s', '--size [N]', Integer, 'Size in GB worth of repo data to move. If no size provided, only 1 repo will move') do |size|
-    abort 'Size too large' if size > 1600
-    options[:size] = size
+  opts.on('-m', '--move-amount [N]', Integer, 'Amount in GB worth of repo data to move. If no amount provided, only 1 repo will move') do |move_amount|
+    abort 'Size too large' if move_amount > 1600
+    options[:move_amount] = move_amount
   end
 
   opts.on('-w', '--wait 10', Integer, 'Time to wait in seconds while validating the move has been completed.') do |wait|
@@ -35,41 +41,36 @@ parser = OptionParser.new do |opts|
 end
 
 class MoveIt
-  def initialize(current_file_server, target_file_server, move_data_amount_gb, dry_run, wait)
-    move_data_amount_gb ||= 0
-    dry_run = true if dry_run == nil
-    wait ||= 10
-
+  def initialize(current_file_server, target_file_server, move_amount_gb, dry_run, wait)
     @current_fs = current_file_server
     @target_fs = target_file_server
-    @move_data = move_data_amount_gb * 1024 * 1024 * 1024
-    @dry = dry_run
+    @move_amount_bytes = move_amount_gb.gigabytes
+    @dry_run = dry_run
     @wait_time = wait
 
     puts "We're moving things from #{@current_fs} _TO_ #{@target_fs}"
     puts "We'll wait up to #{@wait_time} seconds to validate between project moves"
   end
 
-  def move_project(project)
-    if @dry
-      puts "Would move id:#{project.id}"
-    else
-      actually_move_it(project, @target_fs)
-    end
+  def to_gb(input)
+    input / 1024 / 1024 / 1024
   end
 
-  def move_many_projects(min_size, list)
+  def move_many_projects(min_amount, projects_ids)
     size = 0
-    list.each do |item|
+    projects_ids.each do |item|
       project = Project.find(item)
-      puts "Project id:#{project.id} is ~#{project.statistics.repository_size / 1024 / 1024 / 1024} GB"
+      puts "Project id:#{project.id} is ~#{project.statistics.repository_size.to_gb} GB"
       size += project.statistics.repository_size
       move_project(project)
-      break if size > min_size
+      if size > min_amount
+        puts "Processed #{size.to_gb} GB of data"
+        break
+      end
     end
   end
 
-  def validate(project, new_server)
+  def validate(project)
     i = 0
     while project.repository_read_only?
       sleep 1
@@ -78,26 +79,30 @@ class MoveIt
       i += 1
       if i == @wait_time
         puts
-        puts "Gave up waiting for id:#{project.id} to move"
+        puts "\nGave up waiting for id:#{project.id} to move"
         break
       end
     end
     puts
-    if project.repository_storage != new_server
+    if project.repository_storage != @target_fs
       puts "Failed moving id:#{project.id}"
     else
       puts "Success moving id:#{project.id}"
     end
   end
 
-  def actually_move_it(project, new_server)
-    print "Scheduling move id:#{project.id} to #{new_server}"
-    change_result = project.change_repository_storage(new_server)
-    project.save
-    if change_result == nil
-      puts "Failed scheduling id:#{project.id}"
+  def move_project(project)
+    if @dry_run
+      puts "Would move id:#{project.id}"
     else
-      validate(project, new_server)
+      print "Scheduling move id:#{project.id} to #{@target_fs}"
+      change_result = project.change_repository_storage(@target_fs)
+      project.save
+      if change_result == nil
+        puts "Failed scheduling id:#{project.id}"
+      else
+        validate(project)
+      end
     end
   end
 
@@ -109,14 +114,14 @@ class MoveIt
 
     puts "Found #{project_ids.count} project(s) on #{@current_fs}"
 
-    if @move_data.zero?
-      puts 'Option --size not specified, will only move 1 project...'
+    if @move_amount_bytes.zero?
+      puts 'Option --move-amount not specified, will only move 1 project...'
       puts "Will move id:#{project_ids.first}"
       project = Project.find(project_ids.first)
       move_project(project)
     else
-      puts "Will move at least #{@move_data / 1024 / 1024 / 1024}GB worth of data"
-      move_many_projects(@move_data, project_ids)
+      puts "Will move at least #{@move_amount_bytes.to_gb}GB worth of data"
+      move_many_projects(@move_amount_bytes, project_ids)
     end
   end
 end
@@ -125,7 +130,4 @@ parser.parse!
 
 abort("Missing options. Use #{$PROGRAM_NAME} --help to see the list of options available") if options.values.empty?
 
-require '/opt/gitlab/embedded/service/gitlab-rails/config/environment.rb'
-
-foo = MoveIt.new(options[:current_file_server], options[:target_file_server], options[:size], options[:dry_run], options[:wait])
-foo.go
+MoveIt.new(options[:current_file_server], options[:target_file_server], options[:move_amount], options[:dry_run], options[:wait]).go
