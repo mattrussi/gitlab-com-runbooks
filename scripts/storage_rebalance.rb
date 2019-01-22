@@ -56,16 +56,18 @@ class MoveIt
     input / 1024 / 1024 / 1024
   end
 
-  def move_many_projects(min_amount, projects_ids)
+  def move_many_projects(min_amount)
     size = 0
-    projects_ids.each do |item|
-      project = Project.find(item)
-      puts "Project id:#{project.id} is ~#{project.statistics.repository_size.to_gb} GB"
-      size += project.statistics.repository_size
-      move_project(project)
-      if size > min_amount
-        puts "Processed #{size.to_gb} GB of data"
-        break
+    while size < min_amount
+      projects = get_projects
+      projects.each do |project|
+        puts "Project id:#{project.id} is ~#{project.statistics.repository_size.to_gb} GB"
+        size += project.statistics.repository_size
+        move_project(project)
+        if size > min_amount
+          puts "Processed #{size.to_gb} GB of data"
+          break
+        end
       end
     end
   end
@@ -106,22 +108,27 @@ class MoveIt
     end
   end
 
-  def go
+  def get_projects
     # query all projects on the current file server, sort by size descending,
     # then sort by last activity date ascending
     # I want the most idle largest projects
-    project_ids = Project.joins(:statistics).where(repository_storage: @current_fs).order('project_statistics.repository_size DESC').order('last_activity_at ASC').pluck(:id)
+    Project
+      .joins(:statistics)
+      .where(repository_storage: @current_fs)
+      .order('project_statistics.repository_size DESC')
+      .order('last_activity_at ASC')
+      .limit(10)
+  end
 
-    puts "Found #{project_ids.count} project(s) on #{@current_fs}"
-
+  def go
     if @move_amount_bytes.zero?
       puts 'Option --move-amount not specified, will only move 1 project...'
-      puts "Will move id:#{project_ids.first}"
-      project = Project.find(project_ids.first)
+      project = get_projects.first
+      puts "Will move id:#{project.id}"
       move_project(project)
     else
       puts "Will move at least #{@move_amount_bytes.to_gb}GB worth of data"
-      move_many_projects(@move_amount_bytes, project_ids)
+      move_many_projects(@move_amount_bytes)
     end
   end
 end
