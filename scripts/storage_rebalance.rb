@@ -79,13 +79,13 @@ class MoveIt
       i += 1
       if i == @wait_time
         puts
-        puts "\nGave up waiting for id:#{project.id} to move"
+        puts "\nTimed out up waiting for id:#{project.id} to move"
         break
       end
     end
     puts
     if project.repository_storage != @target_fs
-      puts "Failed moving id:#{project.id}"
+      puts "Project id:#{project.id} still reporting incorrect file server"
     else
       puts "Success moving id:#{project.id}"
     end
