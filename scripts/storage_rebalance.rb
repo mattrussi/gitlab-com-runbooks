@@ -50,6 +50,8 @@ class MoveIt
 
     puts "We're moving things from #{@current_fs} _TO_ #{@target_fs}"
     puts "We'll wait up to #{@wait_time} seconds to validate between project moves"
+
+    ActiveRecord::Base.connection.execute("SET statement_timeout='60s'")
   end
 
   def to_gb(input)
