@@ -26,7 +26,7 @@ parser = OptionParser.new do |opts|
   end
 
   opts.on('-m', '--move-amount [N]', Integer, 'Amount in GB worth of repo data to move. If no amount provided, only 1 repo will move') do |move_amount|
-    abort 'Size too large' if move_amount > 1600
+    abort 'Size too large' if move_amount > 16000
     options[:move_amount] = move_amount
   end
 
