@@ -58,11 +58,11 @@ class MoveIt
     input / 1024 / 1024 / 1024
   end
 
-  def move_many_projects(min_amount)
+  def move_many_projects(min_amount, project_ids)
     size = 0
     while size < min_amount
-      projects = get_projects
-      projects.each do |project|
+      project_ids.each do |id|
+        project = Project.find(id)
         puts "Project id:#{project.id} is ~#{project.statistics.repository_size.to_gb} GB"
         size += project.statistics.repository_size
         move_project(project)
@@ -110,7 +110,7 @@ class MoveIt
     end
   end
 
-  def get_projects
+  def get_project_ids
     # query all projects on the current file server, sort by size descending,
     # then sort by last activity date ascending
     # I want the most idle largest projects
@@ -119,18 +119,18 @@ class MoveIt
       .where(repository_storage: @current_fs)
       .order('project_statistics.repository_size DESC')
       .order('last_activity_at ASC')
-      .limit(10)
+      .pluck(:id)
   end
 
   def go
     if @move_amount_bytes.zero?
       puts 'Option --move-amount not specified, will only move 1 project...'
-      project = get_projects.first
+      project = Project.find(get_project_ids.first)
       puts "Will move id:#{project.id}"
       move_project(project)
     else
       puts "Will move at least #{@move_amount_bytes.to_gb}GB worth of data"
-      move_many_projects(@move_amount_bytes)
+      move_many_projects(@move_amount_bytes, get_project_ids)
     end
   end
 end
