@@ -22,43 +22,32 @@ The SLO uses a four week rolling window.
 
 count of git http_requests which do not have a 5xx status code divided by the count of all git http_requests
 
-user/haproxy_404 - resource.type="gce_instance" logName="projects/gitlab-production/logs/haproxy" jsonPayload.status_code="404"
+Example from prometheus:
 
-jsonPayload.backend = https_git
-jsonPayload.backend = ssh
+Error: sum(increase(haproxy_backend_http_responses_total{backend="https_git", code="5xx"}[7d]))
+Total: sum(increase(haproxy_backend_http_responses_total{backend="https_git"}[7d]))
 
-
-resource.type="gce_instance"
-resource.labels.instance_id="3507522646958089251"
-jsonPayload.backend="https_git"
-jsonPayload.status_code>500
-
-resource.type="gce_instance"
-resource.labels.instance_id="3507522646958089251"
-jsonPayload.backend="ssh"
-
-https://console.cloud.google.com/logs/viewer?
+Error is 7161 and Total is 254,490,134. So we have a 99.95% error budget of 254490134 * .0005 = 127,245 for the week and are well inside the budget.
+Each week we can update a table with our total count against budget.
 
 #### Latency
-90% of requests < 10s
-99% of requests < 10 minutes (600s)
+90% of requests < .5 second
+99% of requests < 1 second
 
 The proportion of sufficiently fast requests as measured from our load balancer metrics.
 a duration of less than or equal to 10s (p90) for all http_requests
 
-### Git over ssh
-#### Availability
-99.95% success.  The proportion of successful requests as measured from our load balancer metrics.  Any HTTP status other than 500 - 599 is considered successful.
+on https://prometheus-app.gprd.gitlab.net/graph
+gitlab_workhorse_http_request_duration_seconds_bucket
 
-count of git http_requests which do not have a 5xx status code divided by the count of all git http_requests
+histogram_quantile(0.99, sum(rate(gitlab_workhorse_http_request_duration_seconds_bucket{job="gitlab-workhorse-git"}[1h])) by (le))
+Currently this may be hard to get at a larger scale.  The example above gets a 1h p99 of:
 
-#### Latency
-90% of requests < 10s
-99% of requests < 10 minutes (600s)
-
-The proportion of sufficiently fast requests as measured from our load balancer metrics.
-a duration of less than or equal to 10s (p90) for all http_requests
-
+| p99 (s) | Date Time |
+|---------|-----------|
+| .525   | 2019-01-22T18:00Z |
+| .616   | 2019-01-15T18:00Z |
+| .668   | 2019-01-08T18:00Z |
 
 ## Rational
 Availability and Latency SLIs were based on measurements over the period from 2018-12-27 to 2019-01-27.
