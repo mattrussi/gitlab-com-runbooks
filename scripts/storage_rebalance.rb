@@ -68,6 +68,8 @@ class MoveIt
 
     res = http.request(req)
 
+    return nil if res.code != "200"
+
     jd = JSON.parse(res.body)
 
     if jd.first
