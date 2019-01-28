@@ -74,10 +74,9 @@ class MoveIt
 
     if jd.first
       return jd.first['id'] unless jd.first['id'].empty?
-      return nil
-    else
-      return nil
     end
+
+    return nil
   end
 
   def move_many_projects(min_amount, project_ids)
