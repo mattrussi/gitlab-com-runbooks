@@ -68,12 +68,13 @@ class MoveIt
 
     res = http.request(req)
 
-    return nil if res.code != "200"
+    return nil if res.code.to_i != 200
 
     jd = JSON.parse(res.body)
 
     if jd.first
-      return jd.first['id']
+      return jd.first['id'] unless jd.first['id'].empty?
+      return nil
     else
       return nil
     end
@@ -117,7 +118,7 @@ class MoveIt
   end
 
   def validate_integrity(project, commit)
-    if commit != get_commit(project.id)
+    unless commit == get_commit(project.id)
       puts "Failed validating integrity for id:#[project.id}"
     end
   end
@@ -139,7 +140,7 @@ class MoveIt
         puts "Failed scheduling id:#{project.id}"
       else
         validate(project)
-        validate_integrity(project, commit) if !commit.nil?
+        validate_integrity(project, commit) unless commit.nil?
       end
     end
   end
