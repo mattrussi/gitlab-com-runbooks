@@ -110,28 +110,17 @@ groups:
       runbook: troubleshooting/high-error-rate.md
       title: Increased Error Rate Across Fleet
   - alert: IncreasedBackendConnectionErrors
-    expr: rate(haproxy_backend_connection_errors_total[1m]) > .1
-    for: 10s
+    expr: rate(haproxy_backend_connection_errors_total[1m]) > .2
+    for: 30s
     labels:
-      severity: warn
+      pager: pagerduty
+      severity: critical
     annotations:
       description: We are seeing an increase in backend connection errors on {{$labels.fqdn}} for backend {{$labels.backend}}.
         This likely indicates that requests are being sent to servers in a backend that are unable to fulfil them which will
         result in connection errors.
       runbook: troubleshooting/haproxy.md
       title: Increased HAProxy Backend Connection Errors
-
-  - alert: IncreasedFleetBackendConnectionErrors
-    expr: (count(rate(haproxy_backend_connection_errors_total[1m]) > .1) by (backend)) / (avg(haproxy_backend_current_server) by (backend) *.2)
-    for: 10s
-    labels:
-      pager: pagerduty
-      severity: critical
-    annotations:
-      description: The fleet {{$labels.backend}} have an increase in backend connection errors.
-        This likely indicates that requests are being sent to servers and there are errors reported to users.
-      runbook: troubleshooting/haproxy.md
-      title: Increased Fleet Backend Connection Errors
 
   - alert: IncreasedServerResponseErrors
     expr: rate(haproxy_server_response_errors_total[1m]) > .5
@@ -154,9 +143,12 @@ groups:
       runbook: troubleshooting/haproxy.md
       title: Increased Server Connection Errors
 
+    # If the count of servers whom are reporting a rate of errors is greater
+    # than 10%; is greater than 33% of the amount of servers in that fleet,
+    # SCREAM at me
   - alert: IncreasedFleetConnectionErrors
-    expr: (count(rate(haproxy_server_connection_errors_total[1m]) > .1) by (backend)) / (avg(haproxy_backend_current_server) by (backend) *.2)
-    for: 10s
+    expr: (count(rate(haproxy_server_connection_errors_total[1m]) > .1) by (backend)) / (avg(haproxy_backend_current_server) by (backend) *.33)
+    for: 30s
     labels:
       pager: pagerduty
       severity: critical
