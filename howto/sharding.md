@@ -29,7 +29,8 @@ options of the `gitlab.rb` file.  The target repository that you are electing to
 specified by the numerical `project_id` number associated with it.
 
 ### Slightly Automated Method
-A script exists in this repo `scripts/storage-rebalance.rb`
+A script exists in this repo
+[`scripts/storage-rebalance.rb`](../scripts/storage-rebalance.rb)
 
 The goal of this script is to select two file servers, one of which we want to
 move data _OFF_, otherwise known as `current-file-server`, and one where we want
@@ -46,13 +47,15 @@ table and sort it by the project that was updated by data ascending.
 
 #### Pitfalls of this
 * If too many are executed at once, we'll start to drown the file server
+  * this required a `renice` of processes that were driving the IO load the last
+    time we induced a self inflicted performance issue
 * It is _STRONGLY_ encouraged to capture the output, there is literally no other
   way to know the progress of this script
 * The query will sometimes fail as it'll take too long
 
 #### Potential Outcomes
 * Success - meaning both the git repo and the wiki repo will have moved to the
-  new server, the old directories will have been renamed `<reponame>+deleted.*`
+  new server, the old directories will have been renamed `<reponame>+moved.*`
 * The repo might not move all of the data, but it's _NOT_ marked `read_only`
   * In this case, the job had detected a failure, the data can be removed from
     the `target-file-server` without harm
@@ -65,6 +68,9 @@ table and sort it by the project that was updated by data ascending.
 #### Improvements for this script/process
 * Auto log to a file without the need for `tee`
 * Dynamic wait time
+* Error handling
+  * One example, we query all projects at the start, and then query each project
+    id later, if the project doesn't exist that second time, the script bails
 * Detect job failures so we aren't waiting unnecessarily
 * https://gitlab.com/gitlab-org/gitlab-ee/issues/9563
 * https://gitlab.com/gitlab-org/gitlab-ee/issues/9534
