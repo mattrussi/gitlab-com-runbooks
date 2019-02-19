@@ -2011,7 +2011,7 @@ services:
       - https://ops.gitlab.net/gitlab-com/gl-infra/terraform-modules/google/generic-sv-with-group
       - https://gitlab.com/gitlab-cookbooks/gitlab-exporters/
       - https://ops.gitlab.net/gitlab-cookbooks/chef-repo
-    criticality:
+    criticality: 4
     slx:
     documents:
       design: |
