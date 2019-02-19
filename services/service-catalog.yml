@@ -1989,3 +1989,84 @@ services:
       sentry_slug:
     alerts:
       - alert_link:
+
+- name: StackdriverExporter
+  tier: inf
+  teams:
+    - infrastructure
+  label: Service:StackdriverExporter
+  business:
+    requirement: |
+      Stackdriver metrics should be available in Prometheus.
+    customers:
+      - Prometheus (logging infrastructure)
+    business_value: |
+      All metrics are in one place. Prometheus has access to Stackdriver metrics so we can analyse/alert/create Grafana dashboards based on events in GCP.
+    SLA:
+      availability:
+      response_time:
+  technical:
+    project:
+      - https://github.com/frodenas/stackdriver_exporter
+      - https://ops.gitlab.net/gitlab-com/gl-infra/terraform-modules/google/generic-sv-with-group
+      - https://gitlab.com/gitlab-cookbooks/gitlab-exporters/
+      - https://ops.gitlab.net/gitlab-cookbooks/chef-repo
+    criticality:
+    slx:
+    documents:
+      design: |
+        There is a VM in each environment called "sd-exporter-*". This VM is created using a generic terraform module. The VM has a chef role assigned to it which downloads and runs the stackdriver exporter. The exporter service runs on a tcp port number 9255. Prometheus is configured through a role in chef-repo to scrape port 9255 on "sd-exporter-*" VM.
+      architecture: |
+        Stackdriver is the monitoring and logging solution on GCP. There are many metrics that GCP exposes via Stackdriver out of the box, e.g. storage.googleapis.com/api/request_count (GCS bucket request count). It is also possible to extend the list of metrics by installing a GCP monitoring agent ( https://cloud.google.com/monitoring/agent/ ) or add custom metrics, e.g. using cloudprober and bash scripts. Some of the metrics cannot be generated or collected in any other way than via Stackdriver, e.g. compute.googleapis.com/firewall/dropped_packets (number of packets dropped by the GCP firewall). For more examples see metrics explorer: https://app.google.stackdriver.com/metrics-explorer and Stackdriver documentation: https://cloud.google.com/monitoring/api/metrics . Because of this, Stackdriver is a very valuable source of monitoring information. However, it does not expose an API that can be scraped by Prometheus. One way to get those metrics into Prometheus is by using an exporter: https://github.com/frodenas/stackdriver_exporter . The exporter reads metrics from Stackdriver API and makes them available for scraping by Prometheus.
+      service:
+      security:
+    dependencies:
+      - service:
+        type:
+    configurations:
+      - config_name: stackdriver exporter config
+        location: using exporter binary flags (see process list)
+      - config_name: scrape config on Prometheus
+        location: /opt/prometheus/prometheus/inventory/stackdriver.yml
+    chef_roles:
+      - dr-infra-sd-exporter
+      - gprd-infra-prometheus-server
+      - gprd-infra-sd-exporter
+      - gstg-infra-prometheus-server
+      - gstg-infra-sd-exporter
+      - ops-infra-prometheus-server
+      - ops-infra-sd-exporter
+    scalability:
+      bound:
+      scalable:
+    security:
+      security_reviewed:
+      data_classification:
+      security_incidents:
+    logging:
+      - name:
+        permalink:
+  infrastructure:
+    provider: gcp
+    architecture:
+    provisioning: terraform
+    accesses:
+      - account_name:
+        access_type:
+        reviewed:
+    servers:
+      - server_name:
+  operations:
+    maintenance:
+    runbooks:
+    playbooks:
+    issues:
+    error_budget:
+    engagement:
+      team:
+  observability:
+    monitors:
+      primary_grafana_dashboard:
+      sentry_slug:
+    alerts:
+      - alert_link:
