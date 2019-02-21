@@ -68,7 +68,7 @@ gstg environments are forwarded to log.gitlab.net.
 
 ### Stackdriver exporter
 
-There is a VM in each environment called `sd-exporter-*`. This VM is created using a generic terraform module. The VM has a chef role assigned to it which downloads and runs the stackdriver exporter. The exporter service runs on a tcp port number 9255. Prometheus is configured through a role in chef-repo to scrape port 9255 on "sd-exporter-*" VM.
+There is a VM in each environment called `sd-exporter-*`. This VM is created using a generic terraform module https://ops.gitlab.net/gitlab-com/gl-infra/terraform-modules/google/generic-sv-with-group . The VM has a chef role assigned to it which downloads and runs the stackdriver exporter https://gitlab.com/gitlab-cookbooks/gitlab-exporters/ . The exporter service runs on a tcp port number 9255. Prometheus is configured through a role in chef-repo to scrape port 9255 on "sd-exporter-*" VM.
 
 ### What are we logging?
 

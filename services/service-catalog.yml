@@ -2008,9 +2008,6 @@ services:
   technical:
     project:
       - https://github.com/frodenas/stackdriver_exporter
-      - https://ops.gitlab.net/gitlab-com/gl-infra/terraform-modules/google/generic-sv-with-group
-      - https://gitlab.com/gitlab-cookbooks/gitlab-exporters/
-      - https://ops.gitlab.net/gitlab-cookbooks/chef-repo
     criticality: 4
     slx:
     documents:
@@ -2023,16 +2020,13 @@ services:
         type:
     configurations:
       - config_name: stackdriver exporter config
-        location: using exporter binary flags (see process list)
+        location: https://gitlab.com/gitlab-cookbooks/gitlab-exporters/blob/master/attributes/stackdriver_exporter.rb#L8
       - config_name: scrape config on Prometheus
         location: /opt/prometheus/prometheus/inventory/stackdriver.yml
     chef_roles:
       - dr-infra-sd-exporter
-      - gprd-infra-prometheus-server
       - gprd-infra-sd-exporter
-      - gstg-infra-prometheus-server
       - gstg-infra-sd-exporter
-      - ops-infra-prometheus-server
       - ops-infra-sd-exporter
     scalability:
       bound:
