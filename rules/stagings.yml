@@ -6,6 +6,7 @@ groups:
       / 1000 > 0.8
     for: 5m
     labels:
+      type: postgres
       channel: production
       severity: warn
     annotations:

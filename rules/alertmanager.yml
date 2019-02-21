@@ -4,6 +4,7 @@ groups:
   - alert: AlertmanagerNotificationsFailing
     expr: rate(alertmanager_notifications_failed_total[1m]) > 0
     labels:
+      type: alertmanager
       pager: pagerduty
       service: alertmanager
       severity: critical

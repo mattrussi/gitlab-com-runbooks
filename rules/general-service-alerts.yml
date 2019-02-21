@@ -13,6 +13,7 @@ groups:
           0.75
         for: 5m
         labels:
+          type: infrateam
           rules_domain: general
           metric: gitlab_service_availability
           severity: warn
@@ -43,6 +44,7 @@ groups:
           0.5
         for: 5m
         labels:
+          type: infrateam
           rules_domain: general
           metric: gitlab_service_availability
           severity: error
@@ -81,6 +83,7 @@ groups:
           gitlab_service_ops:rate:avg_over_time_1w + 3 * gitlab_service_ops:rate:stddev_over_time_1w
         for: 5m
         labels:
+          type: infrateam
           rules_domain: general
           metric: gitlab_service_ops
           severity: warn
@@ -112,6 +115,7 @@ groups:
           gitlab_service_ops:rate:avg_over_time_1w + 4 * gitlab_service_ops:rate:stddev_over_time_1w
         for: 5m
         labels:
+          type: infrateam
           rules_domain: general
           metric: gitlab_service_ops
           severity: error
@@ -147,6 +151,7 @@ groups:
           gitlab_service_ops:rate:avg_over_time_1w - 3 * gitlab_service_ops:rate:stddev_over_time_1w
         for: 5m
         labels:
+          type: infrateam
           rules_domain: general
           metric: gitlab_service_ops
           severity: warn
@@ -177,6 +182,7 @@ groups:
           gitlab_service_ops:rate:avg_over_time_1w - 4 * gitlab_service_ops:rate:stddev_over_time_1w
         for: 5m
         labels:
+          type: infrateam
           rules_domain: general
           metric: gitlab_service_ops
           severity: error
@@ -211,6 +217,7 @@ groups:
           gitlab_service_apdex:ratio:avg_over_time_1w - 3 * gitlab_service_apdex:ratio:stddev_over_time_1w
         for: 5m
         labels:
+          type: infrateam
           rules_domain: general
           metric: gitlab_service_apdex
           severity: warn
@@ -242,6 +249,7 @@ groups:
           gitlab_service_apdex:ratio:avg_over_time_1w - 4 * gitlab_service_apdex:ratio:stddev_over_time_1w
         for: 5m
         labels:
+          type: infrateam
           rules_domain: general
           metric: gitlab_service_apdex
           severity: error
@@ -277,6 +285,7 @@ groups:
           gitlab_service_errors:rate:avg_over_time_1w + 3 * gitlab_service_errors:rate:stddev_over_time_1w
         for: 5m
         labels:
+          type: infrateam
           rules_domain: general
           metric: gitlab_service_errors
           severity: warn
@@ -307,6 +316,7 @@ groups:
           gitlab_service_errors:rate:avg_over_time_1w + 4 * gitlab_service_errors:rate:stddev_over_time_1w
         for: 5m
         labels:
+          type: infrateam
           rules_domain: general
           metric: gitlab_service_errors
           severity: error

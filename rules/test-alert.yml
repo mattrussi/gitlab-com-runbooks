@@ -5,6 +5,7 @@ groups:
     expr: (probe_success{instance="https://gitlab.com/gitlab-com/infrastructure/raw/master/alert-test"} == 0)
     for: 1m
     labels:
+      type: infrateam
       pager: pagerduty
       severity: critical
     annotations:

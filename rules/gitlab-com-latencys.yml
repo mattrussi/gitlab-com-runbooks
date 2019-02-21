@@ -6,6 +6,7 @@ groups:
       > 2000
     for: 1m
     labels:
+      type: web
       severity: warn
     annotations:
       description: This might be causing a slowdown on the site and/or affecting users.
@@ -16,6 +17,7 @@ groups:
       > 2000
     for: 5m
     labels:
+      type: web
       pager: pagerduty
       severity: critical
     annotations:
@@ -27,6 +29,7 @@ groups:
       > 1500
     for: 1m
     labels:
+      type: api
       severity: warn
     annotations:
       description: This might be causing a slowdown on the site and/or affecting users.
@@ -37,6 +40,7 @@ groups:
       > 1500
     for: 5m
     labels:
+      type: api
       pager: pagerduty
       severity: critical
     annotations:
@@ -48,6 +52,7 @@ groups:
       > 450
     for: 1m
     labels:
+      type: api
       severity: warn
     annotations:
       description: This might be causing a slowdown on the site and/or affecting users.
@@ -58,6 +63,7 @@ groups:
       > 450
     for: 5m
     labels:
+      type: api
       severity: critical
       pager: pagerduty
     annotations:

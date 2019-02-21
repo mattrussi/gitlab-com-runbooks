@@ -5,6 +5,7 @@ groups:
     expr: instance:rails_no_repository_for_path:rate1m >= 10
     for: 1m
     labels:
+      type: gitaly
       severity: critical
       pager: pagerduty
     annotations:

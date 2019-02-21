@@ -5,6 +5,7 @@ groups:
     expr: (max(git_pull_seconds{tier="blackbox",transport="https"})) > 15
     for: 15s
     labels:
+      type: git
       severity: warn
     annotations:
       description: The Prometheus git blackbox exporter is reporting that git pulls
@@ -15,6 +16,7 @@ groups:
     expr: (max(git_pull_seconds{tier="blackbox",transport="ssh"})) > 15
     for: 15s
     labels:
+      type: git
       severity: warn
     annotations:
       description: The Prometheus git blackbox exporter is reporting that git pulls
@@ -25,6 +27,7 @@ groups:
     expr: (max(git_push_seconds{tier="blackbox",transport="https"})) > 15
     for: 15s
     labels:
+      type: git
       severity: warn
     annotations:
       description: The Prometheus git blackbox exporter is reporting that git pushes
@@ -35,6 +38,7 @@ groups:
     expr: (max(git_push_seconds{tier="blackbox",transport="ssh"})) > 15
     for: 15s
     labels:
+      type: git
       severity: warn
     annotations:
       description: The Prometheus git blackbox exporter is reporting that git pushes

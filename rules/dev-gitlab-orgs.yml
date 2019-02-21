@@ -5,6 +5,7 @@ groups:
     expr: probe_http_status_code{instance="https://dev.gitlab.org", job="blackbox"} != 200
     for: 10m
     labels:
+      type: infrateam
       pager: pagerduty
       severity: critical
     annotations:

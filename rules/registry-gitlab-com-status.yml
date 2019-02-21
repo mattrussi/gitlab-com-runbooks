@@ -7,6 +7,7 @@ groups:
       != 200
     for: 5m
     labels:
+      type: registry
       pager: pagerduty
       severity: critical
     annotations:
@@ -20,6 +21,7 @@ groups:
       sum(backend_code:haproxy_server_http_responses_total:irate1m{backend="registry",code="5xx",tier="lb"}) >0
     for: 5m
     labels:
+      type: registry
       pager: pagerduty
       severity: critical
     annotations:
@@ -38,6 +40,7 @@ groups:
       > 0.75
     for: 5m
     labels:
+      type: registry
       pager: pagerduty
       severity: critical
     annotations:

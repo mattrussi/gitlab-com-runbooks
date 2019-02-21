@@ -6,6 +6,7 @@ groups:
       != 200
     for: 5m
     labels:
+      type: sentry
       severity: critical
       pager: pagerduty
     annotations:

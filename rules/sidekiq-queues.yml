@@ -5,6 +5,7 @@ groups:
     expr: max(sidekiq_queue_size{name!~"pages_domain_verification"}) by (environment) > 20000
     for: 20m
     labels:
+      type: sidekiq
       severity: warn
       channel: backend
     annotations:
@@ -16,6 +17,7 @@ groups:
     expr: max(sidekiq_queue_size{name="new_note"}) by (environment) > 5000
     for: 20m
     labels:
+      type: sidekiq
       severity: critical
       pager: pagerduty
     annotations:
@@ -27,6 +29,7 @@ groups:
     expr: max(sidekiq_queue_size) by (environment) > 50000
     for: 30m
     labels:
+      type: sidekiq
       severity: critical
       pager: pagerduty
     annotations:

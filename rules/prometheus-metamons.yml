@@ -5,6 +5,7 @@ groups:
   - alert: SnitchHeartBeat
     expr: vector(1)
     labels:
+      type: prometheus
       severity: warn
     annotations:
       description: SnitchHeartBeat
@@ -16,6 +17,7 @@ groups:
     expr: up{job=~"prometheus.*"} == 0
     for: 10m
     labels:
+      type: prometheus
       pager: pagerduty
       service: prometheus
       severity: critical
@@ -28,6 +30,7 @@ groups:
     expr: changes(process_start_time_seconds{job=~"prometheus.*"}[30m]) > 3
     for: 30m
     labels:
+      type: prometheus
       pager: pagerduty
       service: prometheus
       severity: critical
@@ -43,6 +46,7 @@ groups:
       * 100 > 5
     for: 10m
     labels:
+      type: prometheus
       service: prometheus
       severity: warn
     annotations:
@@ -54,6 +58,7 @@ groups:
     expr: prometheus_rule_evaluation_duration_seconds{quantile="0.9"} > 60
     for: 10m
     labels:
+      type: prometheus
       service: prometheus
       severity: warn
     annotations:
@@ -65,6 +70,7 @@ groups:
     expr: prometheus_notifications_queue_length > 0
     for: 10m
     labels:
+      type: prometheus
       pager: pagerduty
       service: prometheus
       severity: critical
@@ -79,6 +85,7 @@ groups:
       > 2 * 60
     for: 10m
     labels:
+      type: prometheus
       service: prometheus
       severity: warn
     annotations:
@@ -91,6 +98,7 @@ groups:
     expr: prometheus_config_last_reload_successful == 0
     for: 30m
     labels:
+      type: prometheus
       pager: pagerduty
       service: prometheus
       severity: critical
@@ -105,6 +113,7 @@ groups:
       prometheus_rule_group_interval_seconds) * 100 > 70
     for: 30m
     labels:
+      type: prometheus
       service: prometheus
       severity: warn
     annotations:
@@ -115,6 +124,7 @@ groups:
   - alert: PrometheusFailedCompactions
     expr: increase(prometheus_tsdb_compactions_failed_total[6h]) > 0
     labels:
+      type: prometheus
       service: prometheus
       severity: warn
     annotations:
@@ -124,6 +134,7 @@ groups:
   - alert: PrometheusLargeScrapes
     expr: increase(prometheus_target_scrapes_exceeded_sample_limit_total[30m]) > 60
     labels:
+      type: prometheus
       service: prometheus
       severity: warn
     annotations:
@@ -133,6 +144,7 @@ groups:
   - alert: PrometheusFailedCheckpoints
     expr: increase(prometheus_tsdb_checkpoint_creations_failed_total[5m]) > 0
     labels:
+      type: prometheus
       service: prometheus
       severity: warn
     annotations:
@@ -142,6 +154,7 @@ groups:
   - alert: PrometheusFailedDeletingCheckpoints
     expr: increase(prometheus_tsdb_checkpoint_deletions_failed_total[5m]) > 0
     labels:
+      type: prometheus
       service: prometheus
       severity: warn
     annotations:
@@ -151,6 +164,7 @@ groups:
   - alert: PrometheusWALTruncationsFailed
     expr: increase(prometheus_tsdb_wal_truncations_failed_total[5m]) > 0
     labels:
+      type: prometheus
       service: prometheus
       severity: warn
     annotations:
@@ -160,6 +174,7 @@ groups:
   - alert: PrometheusRuleEvalFailures
     expr: increase(prometheus_rule_evaluation_failures_total[5m]) > 0
     labels:
+      type: prometheus
       service: prometheus
       severity: warn
     annotations:
@@ -170,6 +185,7 @@ groups:
     expr: prometheus_sd_discovered_targets == 0
     for: 5m
     labels:
+      type: prometheus
       service: prometheus
       severity: warn
     annotations:
@@ -180,6 +196,7 @@ groups:
     expr: process_resident_memory_bytes{job="prometheus"} / on (fqdn) node_memory_MemTotal_bytes * 100 > 90
     for: 30m
     labels:
+      type: prometheus
       service: prometheus
       severity: warn
     annotations:

@@ -6,6 +6,7 @@ groups:
       predict_linear(ci_pending_builds{has_minutes="yes",shared_runners="yes"}[15m], 3600)) > 1000)
     for: 5m
     labels:
+      type: cicd
       channel: ci-cd
       severity: warn
     annotations:
@@ -20,6 +21,7 @@ groups:
     expr: max(ci_pending_builds{has_minutes="yes",namespace!="",namespace!="9970",shared_runners="yes"}) by (namespace) > 350
     for: 1m
     labels:
+      type: cicd
       channel: ci-cd
       severity: warn
     annotations:
@@ -32,6 +34,7 @@ groups:
     expr: max(sum(ci_running_builds{has_minutes="yes",namespace!="",namespace!="9970",shared_runner="yes",runner=~"40786|40788|44028|44949|380986|380987"}) by (fqdn,namespace)) by (namespace) > 350
     for: 5m
     labels:
+      type: cicd
       channel: ci-cd
       severity: warn
     annotations:
@@ -44,6 +47,7 @@ groups:
     expr: max(sum(ci_running_builds{has_minutes="yes",namespace!="",namespace!="9970",shared_runner="yes",runner=~"37397|37398|157328|157329|380989|380990"}) by (fqdn,namespace)) by (namespace) > 350
     for: 10m
     labels:
+      type: cicd
       channel: ci-cd
       severity: warn
     annotations:
@@ -56,6 +60,7 @@ groups:
     expr: sum(gitlab_runner_jobs{job="shared-runners"}) == 0
     for: 5m
     labels:
+      type: cicd
       channel: ci-cd
       severity: warn
     annotations:
@@ -68,6 +73,7 @@ groups:
     expr: (sum(gitlab_runner_jobs) by (job) / sum(gitlab_runner_concurrent) by (job)) > 0.85
     for: 5m
     labels:
+      type: cicd
       channel: ci-cd
       severity: warn
     annotations:
@@ -79,6 +85,7 @@ groups:
     expr: (sum(gitlab_runner_jobs) by (job) / sum(gitlab_runner_concurrent) by (job)) > 0.95
     for: 5m
     labels:
+      type: cicd
       channel: ci-cd
       severity: error
     annotations:
@@ -90,6 +97,7 @@ groups:
     expr: up{job=~"private-runners|shared-runners|shared-runners-gitlab-org|staging-shared-runners"} == 0
     for: 5m
     labels:
+      type: cicd
       channel: ci-cd
       severity: error
     annotations:
@@ -104,6 +112,7 @@ groups:
     expr: sum(gitlab_runner_autoscaling_machine_states{executor="docker+machine", state="creating"}) / (sum(gitlab_runner_autoscaling_machine_states{executor="docker+machine", state="idle"}) + 1) > 100
     for: 1m
     labels:
+      type: cicd
       channel: ci-cd
       severity: warn
     annotations:
@@ -117,6 +126,7 @@ groups:
     expr: (probe_success{instance=~"runners-cache.*:(5000/v2|9000/minio/login)"} == 0)
     for: 5m
     labels:
+      type: cicd
       channel: ci-cd
       severity: error
     annotations:
@@ -130,6 +140,7 @@ groups:
     expr: up{job="runners-cache-server"} == 0
     for: 5m
     labels:
+      type: cicd
       channel: ci-cd
       severity: error
     annotations:
@@ -143,6 +154,7 @@ groups:
     expr: node_netstat_Tcp_CurrEstab{fqdn=~"runners-cache-.*.gitlab.com"} > 500
     for: 20m
     labels:
+      type: cicd
       channel: ci-cd
       severity: error
     annotations:
@@ -157,6 +169,7 @@ groups:
       / process_max_fds{job=~"(omnibus-runners|private-runners|shared-runners|shared-runners-(gitlab-org|high-cpu))"} > 0.8
     for: 10m
     labels:
+      type: cicd
       channel: ci-cd
       severity: warn
     annotations:
@@ -169,6 +182,7 @@ groups:
     expr: up{job="ci-node",fqdn=~"(prometheus|consul)-.*(nyc1|us-east1-(c|d)).*"} == 0
     for: 5m
     labels:
+      type: cicd
       channel: ci-cd
       severity: warn
     annotations:
@@ -182,6 +196,7 @@ groups:
       ) by (quota, region) > 85
     for: 5m
     labels:
+      type: cicd
       channel: ci-cd
       severity: warn
     annotations:
@@ -198,6 +213,7 @@ groups:
       ) by (quota, region) > 95
     for: 5m
     labels:
+      type: cicd
       channel: ci-cd
       severity: error
     annotations:
@@ -214,6 +230,7 @@ groups:
       sum(changes(ci_repeated_commands_builds{shared_runners="yes",has_minutes="yes",status="running"}[45m])) by (namespace) == 0
     for: 45m
     labels:
+      type: cicd
       channel: ci-cd
       severity: warn
     annotations:
@@ -231,6 +248,7 @@ groups:
       ) < 0.8
     for: 5m
     labels:
+      type: cicd
       channel: ci-cd
       severity: error
     annotations:
@@ -251,6 +269,7 @@ groups:
       ) >= 30
     for: 5m
     labels:
+      type: cicd
       channel: ci-cd
       severity: error
     annotations:
@@ -264,6 +283,7 @@ groups:
     expr: (sum (rate(job_trace_archive_failed_total[5m])) by (job)) > 10
     for: 5m
     labels:
+      type: cicd
       channel: ci-cd
       severity: warn
     annotations:
@@ -277,6 +297,7 @@ groups:
     expr: (sidekiq_queue_size{environment=~"gprd",name=~"pipeline.*"} and on (fqdn) gitlab:redis_master) > 1000
     for: 5m
     labels:
+      type: cicd
       channel: ci-cd
       severity: error
     annotations:

@@ -6,6 +6,7 @@ groups:
     expr: avg(up{tier="lb",job="node"} * 100) by (type) < 80
     for: 5m
     labels:
+      type: haproxy
       pager: pagerduty
       severity: critical
     annotations:
@@ -18,6 +19,7 @@ groups:
     expr: sum (up{tier="lb",job="node"}) by (type) == 0
       > 0
     labels:
+      type: haproxy
       pager: pagerduty
       severity: critical
     annotations:

@@ -5,6 +5,7 @@ groups:
     expr: up{job="prometheus-other-instance"} == 0
     for: 5m
     labels:
+      type: prometheus
       pager: pagerduty
       severity: critical
     annotations:

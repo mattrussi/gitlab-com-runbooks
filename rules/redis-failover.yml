@@ -5,6 +5,7 @@ groups:
     expr: sum(changes(redis_connected_slaves[5m])) > 0
     for: 1m
     labels:
+      type: redis
       pager: pagerduty
       severity: critical
     annotations:

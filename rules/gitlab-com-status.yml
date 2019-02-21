@@ -5,6 +5,7 @@ groups:
     expr: probe_http_status_code{instance="https://gitlab.com",job="blackbox"} != 200
     for: 2m
     labels:
+      type: infrateam
       pager: pagerduty
       severity: critical
     annotations:
@@ -17,6 +18,7 @@ groups:
     expr: probe_http_status_code{instance="https://gitlab.com/users/sign_in",job="blackbox"} != 200
     for: 2m
     labels:
+      type: infrateam
       pager: pagerduty
       severity: critical
     annotations:
@@ -29,6 +31,7 @@ groups:
     expr: probe_http_status_code{instance="https://www.gitlab.com",job="blackbox"} != 200
     for: 2m
     labels:
+      type: infrateam
       pager: pagerduty
       severity: critical
     annotations:

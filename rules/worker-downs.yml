@@ -6,6 +6,7 @@ groups:
       WITHOUT (job) == 0
     for: 20m
     labels:
+      type: infrateam
       pager: pagerduty
       severity: critical
     annotations:

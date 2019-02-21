@@ -6,6 +6,7 @@ groups:
       * 24
     for: 30m
     labels:
+      type: haproxy
       severity: critical
       pager: pagerduty
     annotations:

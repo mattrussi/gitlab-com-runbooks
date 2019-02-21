@@ -48,6 +48,7 @@ groups:
     expr: instance:node_cpu_utilization:ratio > 0.95
     for: 2h
     labels:
+      type: infrateam
       pager: pagerduty
       severity: critical
     annotations:
@@ -116,6 +117,7 @@ groups:
     expr: predict_linear(node_filesystem_avail_bytes{fstype=~"(ext.|xfs)"}[6h], 24 * 3600) < 0
     for: 30m
     labels:
+      type: infrateam
       severity: warn
     annotations:
       title: 'Filesystem will be full SOON'
@@ -129,6 +131,7 @@ groups:
     expr: instance:node_filesystem_avail:ratio{fstype=~"(ext.|xfs)",job="node"} * 100 <= 10
     for: 15m
     labels:
+      type: infrateam
       severity: warn
     annotations:
       title: 'Less than 10% disk space left'
@@ -143,6 +146,7 @@ groups:
     expr: instance:node_filesystem_avail:ratio{fstype=~"(ext.|xfs)",job="node"} * 100 <= 1
     for: 15m
     labels:
+      type: infrateam
       pager: pagerduty
       severity: critical
     annotations:
@@ -157,6 +161,7 @@ groups:
       * 100 <= 20
     for: 15m
     labels:
+      type: infrateam
       pager: pagerduty
       severity: critical
     annotations:
@@ -177,6 +182,7 @@ groups:
     expr: changes(instance:up:count{environment=~"g?prd"}[5m]) >= 1
     for: 15m
     labels:
+      type: infrateam
       channel: production
       severity: warn
     annotations:
@@ -187,6 +193,7 @@ groups:
     expr: instance:node_memory_available:ratio * 100 < 5 and rate(node_vmstat_pgmajfault[1m]) > 1000
     for: 15m
     labels:
+      type: infrateam
       channel: production
       severity: warn
     annotations:
@@ -204,6 +211,7 @@ groups:
       ) > 1
     for: 30m
     labels:
+      type: infrateam
       severity: warn
     annotations:
       description: Kernel versions are deviating across fleet, see https://dashboards.gitlab.net/d/6xx-DC7ik/gitlab-kernel-versions for details. https://gitlab.com/gitlab-com/infrastructure/issues/4221
@@ -212,6 +220,7 @@ groups:
     expr: rate(syslog_rcu_sched_stalls_total[1m]) > 0 or rate(rcu_sched_stalls_total[1m]) > 0
     for: 10m
     labels:
+      type: infrateam
       channel: production
       severity: warn
     annotations:

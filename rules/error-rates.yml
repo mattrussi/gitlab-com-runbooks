@@ -7,6 +7,7 @@ groups:
     expr: environment_type:rails_request_errors:ratio * 100 > .5
     for: 5m
     labels:
+      type: rails
       pager: pagerduty
       severity: critical
     annotations:
@@ -17,6 +18,7 @@ groups:
     expr: environment_type:rails_request_errors:ratio * 100 > .5
     for: 30s
     labels:
+      type: rails
       severity: warn
     annotations:
       description: Rails is returning 5xx errors at a high rate for {{ $labels.type }} . Traffic is impacted and users are likely seeing 500 errors.

@@ -5,6 +5,7 @@ groups:
     expr: up{job="public-prometheus"} == 0
     for: 30s
     labels:
+      type: prometheus
       severity: critical
       pager: pagerduty
     annotations:
@@ -17,6 +18,7 @@ groups:
       == 0
     for: 30s
     labels:
+      type: prometheus
       severity: critical
       pager: pagerduty
     annotations:

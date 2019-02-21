@@ -9,6 +9,7 @@ groups:
           gitlab_component_availability:ratio
         for: 10m
         labels:
+          type: prometheus
           rules_domain: general
           severity: warn
         annotations:
@@ -30,6 +31,7 @@ groups:
           gitlab_component_ops:rate
         for: 10m
         labels:
+          type: prometheus
           rules_domain: general
           severity: warn
         annotations:
@@ -51,6 +53,7 @@ groups:
           gitlab_component_apdex:ratio
         for: 10m
         labels:
+          type: prometheus
           rules_domain: general
           severity: warn
         annotations:
@@ -72,6 +75,7 @@ groups:
           gitlab_component_errors:rate
         for: 10m
         labels:
+          type: prometheus
           rules_domain: general
           severity: warn
         annotations:

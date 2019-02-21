@@ -4,6 +4,7 @@ groups:
   - alert: RedisSwitchMaster
     expr: sum(changes(redis_sentinel_commands_total{event=~"switch-master"}[5m])) > 0
     labels:
+      type: redis
       pager: pagerduty
       severity: critical
     annotations:

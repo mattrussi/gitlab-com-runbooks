@@ -6,6 +6,7 @@ groups:
       != 200
     for: 5m
     labels:
+      type: pages
       pager: pagerduty
       severity: critical
     annotations:
@@ -17,6 +18,7 @@ groups:
     expr: (1 - avg(up{job="gitlab-pages"})) * 100 > 20
     for: 5m
     labels:
+      type: pages
       channel: alerts
       severity: warn
     annotations:
@@ -28,6 +30,7 @@ groups:
     expr: sum(rate(haproxy_server_http_responses_total{backend="pages_http",code="5xx"}[15m])) by (environment) / sum(rate(haproxy_server_http_responses_total{backend="pages_http"}[15m])) by (environment) * 100 > 1
     for: 5m
     labels:
+      type: pages
       channel: alerts
       severity: warn
     annotations:
@@ -39,6 +42,7 @@ groups:
     expr: gitlab_pages_domains_served_total / scalar(quantile(0.9, gitlab_pages_domains_served_total)) < 0.9 or gitlab_pages_domains_served_total < 1000
     for: 5m
     labels:
+      type: pages
       channel: alerts
       severity: warn
     annotations:
@@ -52,6 +56,7 @@ groups:
       != 200
     for: 1m
     labels:
+      type: pages
       pager: pagerduty
       severity: critical
     annotations:
@@ -64,6 +69,7 @@ groups:
       != 200
     for: 1m
     labels:
+      type: pages
       pager: pagerduty
       severity: critical
     annotations:

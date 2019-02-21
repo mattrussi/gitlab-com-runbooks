@@ -20,7 +20,7 @@ def validate_rule(alert_file_path, rule)
   LOGGER.warn "#{alert_file_path}: #{alert}: Rules should contain a `description` annotation" unless annotations["description"]
 
   raise StandardError, " #{alert}: rules must contain a `type` label" unless labels["type"]
-  raise StandardError, " #{alert}: rules contains an invalid `type` label: #{labels["type"]}" unless ["api", "git", "gitaly", "haproxy", "pages", "postgres", "registry", "sidekiq", "web"].include?(labels["type"])
+  raise StandardError, " #{alert}: rules contains an invalid `type` label: #{labels["type"]}" unless ["alertmanager", "api", "chef", "cicd", "deadman", "fluentd", "git", "gitaly", "haproxy", "infrateam", "mail", "pages", "postgres", "prometheus", "rails", "redis", "registry", "sentry", "sidekiq", "web", "workhorse"].include?(labels["type"])
 
   raise StandardError, " #{alert}: rules must contain a `severity` label" unless labels["severity"]
   raise StandardError, " #{alert}: rules contains an invalid `severity` label: #{labels["severity"]}" unless ["warn", "error", "critical"].include?(labels["severity"])

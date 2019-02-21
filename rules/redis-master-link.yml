@@ -5,6 +5,7 @@ groups:
     expr: redis_master_link_up == 0
     for: 1m
     labels:
+      type: redis
       pager: pagerduty
       severity: critical
     annotations:

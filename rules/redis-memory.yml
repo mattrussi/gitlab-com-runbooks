@@ -5,6 +5,7 @@ groups:
     expr: (redis_memory_used_rss_bytes / on(fqdn, tier, type, environment) node_memory_MemTotal_bytes) > 0.90
     for: 5m
     labels:
+      type: redis
       pager: pagerduty
       severity: critical
     annotations:

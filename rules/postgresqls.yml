@@ -5,6 +5,7 @@ groups:
     expr: rate(pg_txid_current[1m]) < 5
     for: 1m
     labels:
+      type: postgres
       pager: pagerduty
       severity: critical
       channel: database
@@ -17,6 +18,7 @@ groups:
     expr: rate(pg_xlog_position_bytes{type = "postgres"}[1m]) < 200000
     for: 2m
     labels:
+      type: postgres
       pager: pagerduty
       severity: critical
       channel: database
@@ -30,6 +32,7 @@ groups:
       < 1000
     for: 5m
     labels:
+      type: postgres
       pager: pagerduty
       severity: critical
       channel: database
@@ -44,6 +47,7 @@ groups:
       * 0.95
     for: 5m
     labels:
+      type: postgres
       severity: warn
       channel: database
     annotations:
@@ -56,6 +60,7 @@ groups:
       > 0.1
     for: 5m
     labels:
+      type: postgres
       severity: warn
       channel: database
     annotations:
@@ -67,6 +72,7 @@ groups:
     expr: rate(postgresql_errors_total{type="statement_timeout"}[5m]) > 3
     for: 5m
     labels:
+      type: postgres
       severity: critical
       pager: pagerduty
       channel: database
@@ -78,6 +84,7 @@ groups:
   - alert: PostgreSQL_Deadlock_Errors
     expr: rate(postgresql_errors_total{type="deadlock_detected"}[1m]) * 60 > 5
     labels:
+      type: postgres
       severity: warn
       channel: database
     annotations:
@@ -89,6 +96,7 @@ groups:
     expr: pg_stat_replication_pg_xlog_location_diff{job="gitlab-cluster-db"} != pg_stat_replication_pg_xlog_location_diff{job="gitlab-cluster-db"}
     for: 5m
     labels:
+      type: postgres
       pager: pagerduty
       severity: critical
       channel: database
@@ -100,6 +108,7 @@ groups:
     expr: (pg_replication_lag > 120) and ON(instance) (pg_replication_is_replica{type = "postgres"} == 1)
     for: 5m
     labels:
+      type: postgres
       pager: pagerduty
       severity: critical
       channel: database
@@ -112,6 +121,7 @@ groups:
     expr: (pg_replication_lag > 3600) and ON(instance) (pg_replication_is_replica{type = "postgres-archive"} == 1)
     for: 5m
     labels:
+      type: postgres
       pager: pagerduty
       severity: critical
       channel: database
@@ -124,6 +134,7 @@ groups:
     expr: (pg_replication_lag > 32400) and ON(instance) (pg_replication_is_replica{type = "postgres-delayed"} == 1)
     for: 5m
     labels:
+      type: postgres
       pager: pagerduty
       severity: critical
       channel: database
@@ -138,6 +149,7 @@ groups:
       == 1) > 1e+09
     for: 5m
     labels:
+      type: postgres
       pager: pagerduty
       severity: critical
       channel: database
@@ -150,6 +162,7 @@ groups:
     expr: rate(pg_xlog_position_bytes[2m]) > 36700160 and ON(instance) (pg_replication_is_replica == 0)
     for: 10m
     labels:
+      type: postgres
       pager: pagerduty
       severity: critical
       channel: database
@@ -163,6 +176,7 @@ groups:
     expr: pg_replication_slots_active == 0
     for: 30m
     labels:
+      type: postgres
       pager: pagerduty
       severity: critical
       channel: database
@@ -174,6 +188,7 @@ groups:
     expr: pg_replication_slots_xmin_age{slot_name =~ '^repmgr_slot_[0-9]+'} > 20000
     for: 30m
     labels:
+      type: postgres
       severity: critical
       channel: database
       pager: pagerduty
@@ -191,6 +206,7 @@ groups:
   - alert: PostgreSQL_LongLivedTransaction
     expr: pg_stat_activity_max_tx_duration > 3600
     labels:
+      type: postgres
       severity: warn
       channel: database
     annotations:
@@ -204,6 +220,7 @@ groups:
     expr: node_load1{type=~"postgres|patroni"} > 200
     for: 5m
     labels:
+      type: postgres
       pager: pagerduty
       severity: critical
       channel: database
@@ -228,6 +245,7 @@ groups:
       unless ON(instance) (pg_replication_is_replica == 1)
     for: 30m
     labels:
+      type: postgres
       pager: pagerduty
       severity: critical
       channel: database
@@ -241,6 +259,7 @@ groups:
     expr: count(pg_replication_is_replica == 0) BY (environment) != 1
     for: 1m
     labels:
+      type: postgres
       pager: pagerduty
       severity: critical
       channel: database
@@ -257,6 +276,7 @@ groups:
       BY (environment) > 1
     for: 1m
     labels:
+      type: postgres
       pager: pagerduty
       severity: critical
       channel: database
@@ -272,6 +292,7 @@ groups:
     expr: pg_up == 0
     for: 1m
     labels:
+      type: postgres
       channel: database
       pager: pagerduty
       severity: critical
@@ -285,6 +306,7 @@ groups:
   - alert: PostgreSQL_RoleChange
     expr: pg_replication_is_replica and changes(pg_replication_is_replica[1m]) > 0
     labels:
+      type: postgres
       severity: warn
       channel: database
     annotations:
@@ -295,6 +317,7 @@ groups:
     expr: '{__name__=~"pg_settings_.*"} != ON(__name__, fqdn) {__name__=~"pg_settings_([^t]|t[^r]|tr[^a]|tra[^n]|tran[^s]|trans[^a]|transa[^c]|transac[^t]|transact[^i]|transacti[^o]|transactio[^n]|transaction[^_]|transaction_[^r]|transaction_r[^e]|transaction_re[^a]|transaction_rea[^d]|transaction_read[^_]|transaction_read_[^o]|transaction_read_o[^n]|transaction_read_on[^l]|transaction_read_onl[^y]).*"}
       OFFSET 10m'
     labels:
+      type: postgres
       severity: warn
       channel: database
     annotations:
@@ -304,6 +327,7 @@ groups:
     expr: rate(pg_exporter_scrapes_total[1m]) < 1 / 60
     for: 5m
     labels:
+      type: postgres
       pager: pagerduty
       severity: critical
       channel: database
@@ -315,6 +339,7 @@ groups:
     expr: pg_exporter_last_scrape_error{environment=~"gprd|gstg"} == 1
     for: 1h
     labels:
+      type: postgres
       pager: pagerduty
       severity: critical
       channel: database
@@ -327,6 +352,7 @@ groups:
       / 10 > 97
     for: 5m
     labels:
+      type: postgres
       severity: warn
       channel: database
     annotations:
@@ -339,6 +365,7 @@ groups:
     expr: rate(pgbouncer_errors_count{environment=~"gprd|gstg", errmsg!="server conn crashed?"}[10m]) > 5
     for: 5m
     labels:
+      type: postgres
       severity: warn
       channel: database
     annotations:
@@ -349,6 +376,7 @@ groups:
   - alert: PostgreSQL_PGBouncer_maxclient_conn
     expr: rate(pgbouncer_errors_count{errmsg="no more connections allowed (max_client_conn)"}[1m]) > 0
     labels:
+      type: postgres
       pager: pagerduty
       severity: critical
       channel: database
@@ -361,6 +389,7 @@ groups:
     expr: rate(pg_slow_queries{environment=~"gprd"}[1m]) * 60 > 300
     for: 5m
     labels:
+      type: postgres
       pager: pagerduty
       severity: critical
       channel: database
@@ -375,6 +404,7 @@ groups:
     expr: sum(pg_stat_ssl_compression{environment=~".*prd"}) BY (fqdn) > 0
     for: 10m
     labels:
+      type: postgres
       severity: warn
       channel: database
     annotations:

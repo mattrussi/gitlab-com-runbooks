@@ -5,6 +5,7 @@ groups:
     expr: gitlab:redis_disconnected_slaves > 1
     for: 5m
     labels:
+      type: redis
       pager: pagerduty
       severity: critical
     annotations:

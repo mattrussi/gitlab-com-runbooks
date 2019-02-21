@@ -42,6 +42,7 @@ groups:
       gitlab_workhorse_git_http_sessions_active:total:avg_over_time_1w - 3 * gitlab_workhorse_git_http_sessions_active:total:stddev_over_time_1w
     for: 5m
     labels:
+      type: workhorse
       rules_domain: general
       metric: gitlab_workhorse_git_http_sessions_active:total
       severity: warn
@@ -65,6 +66,7 @@ groups:
       gitlab_workhorse_git_http_sessions_active:total:avg_over_time_1w - 4 * gitlab_workhorse_git_http_sessions_active:total:stddev_over_time_1w
     for: 5m
     labels:
+      type: workhorse
       rules_domain: general
       metric: gitlab_workhorse_git_http_sessions_active:total
       severity: error
@@ -88,6 +90,7 @@ groups:
       gitlab_workhorse_git_http_sessions_active:total:avg_over_time_1w - 5 * gitlab_workhorse_git_http_sessions_active:total:stddev_over_time_1w
     for: 5m
     labels:
+      type: workhorse
       rules_domain: general
       metric: gitlab_workhorse_git_http_sessions_active:total
       severity: critical
@@ -121,6 +124,7 @@ groups:
       )
     for: 5m
     labels:
+      type: workhorse
       rules_domain: general
       metric: gitlab_workhorse_git_http_sessions_active:total
       severity: warn
@@ -153,6 +157,7 @@ groups:
       )
     for: 5m
     labels:
+      type: workhorse
       rules_domain: general
       metric: gitlab_workhorse_git_http_sessions_active:total
       severity: error
@@ -185,6 +190,7 @@ groups:
       )
     for: 5m
     labels:
+      type: workhorse
       rules_domain: general
       metric: gitlab_workhorse_git_http_sessions_active:total
       severity: critical

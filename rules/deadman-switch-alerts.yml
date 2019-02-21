@@ -8,6 +8,7 @@ groups:
           unless
           deadman_15m_checkin
         labels:
+          type: deadman
           severity: warn
         annotations:
           title: "Availability data for the deadman switch of `{{ $labels.resource }}` ({{ $labels.tier }}/{{ $labels.type }}) is missing"
@@ -25,6 +26,7 @@ groups:
           unless
           deadman_30m_checkin
         labels:
+          type: deadman
           severity: warn
         annotations:
           title: "Availability data for the deadman switch of `{{ $labels.resource }}` ({{ $labels.tier }}/{{ $labels.type }}) is missing"
@@ -42,6 +44,7 @@ groups:
           unless
           deadman_6h_checkin
         labels:
+          type: deadman
           severity: warn
         annotations:
           title: "Availability data for the deadman switch of `{{ $labels.resource }}` ({{ $labels.tier }}/{{ $labels.type }}) is missing"
@@ -59,6 +62,7 @@ groups:
           unless
           deadman_1d_checkin
         labels:
+          type: deadman
           severity: warn
         annotations:
           title: "Availability data for the deadman switch of `{{ $labels.resource }}` ({{ $labels.tier }}/{{ $labels.type }}) is missing"
@@ -76,6 +80,7 @@ groups:
           unless
           deadman_1d6h_checkin
         labels:
+          type: deadman
           severity: warn
         annotations:
           title: "Availability data for the deadman switch of `{{ $labels.resource }}` ({{ $labels.tier }}/{{ $labels.type }}) is missing"
@@ -91,6 +96,7 @@ groups:
         expr: |
           max(deadman_15m_checkin) by (environment, tier, type, resource) < time() - 900
         labels:
+          type: deadman
           pager: pagerduty
           severity: critical
         annotations:
@@ -107,6 +113,7 @@ groups:
         expr: |
           max(deadman_30m_checkin) by (environment, tier, type, resource) < time() - 1800
         labels:
+          type: deadman
           pager: pagerduty
           severity: critical
         annotations:
@@ -123,6 +130,7 @@ groups:
         expr: |
           max(deadman_6h_checkin) by (environment, tier, type, resource) < time() - 21600
         labels:
+          type: deadman
           pager: pagerduty
           severity: critical
         annotations:
@@ -139,6 +147,7 @@ groups:
         expr: |
           max(deadman_1d_checkin) by (environment, tier, type, resource) < time() - 86400
         labels:
+          type: deadman
           pager: pagerduty
           severity: critical
         annotations:
@@ -155,6 +164,7 @@ groups:
         expr: |
           max(deadman_1d6h_checkin) by (environment, tier, type, resource) < time() - 108000
         labels:
+          type: deadman
           pager: pagerduty
           severity: critical
         annotations:
