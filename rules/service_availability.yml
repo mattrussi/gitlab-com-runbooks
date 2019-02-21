@@ -5,7 +5,7 @@ groups:
   # Postgres Service
   - record: gitlab_component_availability:ratio
     labels:
-      type: 'posgres'
+      type: 'postgres'
       component: 'server'
     expr: >
       avg by (environment, tier, type) (avg_over_time(up{geo_role!="secondary", job="postgres"}[1m]))
