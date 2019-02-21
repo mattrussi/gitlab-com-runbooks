@@ -2014,10 +2014,8 @@ services:
     criticality: 4
     slx:
     documents:
-      design: |
-        There is a VM in each environment called "sd-exporter-*". This VM is created using a generic terraform module. The VM has a chef role assigned to it which downloads and runs the stackdriver exporter. The exporter service runs on a tcp port number 9255. Prometheus is configured through a role in chef-repo to scrape port 9255 on "sd-exporter-*" VM.
-      architecture: |
-        Stackdriver is the monitoring and logging solution on GCP. There are many metrics that GCP exposes via Stackdriver out of the box, e.g. storage.googleapis.com/api/request_count (GCS bucket request count). It is also possible to extend the list of metrics by installing a GCP monitoring agent ( https://cloud.google.com/monitoring/agent/ ) or add custom metrics, e.g. using cloudprober and bash scripts. Some of the metrics cannot be generated or collected in any other way than via Stackdriver, e.g. compute.googleapis.com/firewall/dropped_packets (number of packets dropped by the GCP firewall). For more examples see metrics explorer: https://app.google.stackdriver.com/metrics-explorer and Stackdriver documentation: https://cloud.google.com/monitoring/api/metrics . Because of this, Stackdriver is a very valuable source of monitoring information. However, it does not expose an API that can be scraped by Prometheus. One way to get those metrics into Prometheus is by using an exporter: https://github.com/frodenas/stackdriver_exporter . The exporter reads metrics from Stackdriver API and makes them available for scraping by Prometheus.
+      design:
+      architecture: https://gitlab.com/gitlab-com/runbooks/blob/master/howto/logging.md
       service:
       security:
     dependencies:
