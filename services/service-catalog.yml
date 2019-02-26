@@ -603,6 +603,7 @@ services:
       - google-pubsub-topics
       - pubsubbeat
       - stackdriver
+      - stackdriver-exporter
     configurations:
       - config_name: td-agent/fluentd main configuration
         location: /etc/td-agent/td-agent.conf
@@ -612,6 +613,11 @@ services:
         location: https://console.cloud.google.com/cloudpubsub/topicList?project=gitlab-production
       - config_name: Stackdriver log ingestion
         location: https://console.cloud.google.com/logs/usage?project=gitlab-production
+      - config_name: stackdriver exporter config
+        location: https://gitlab.com/gitlab-cookbooks/gitlab-exporters/blob/master/attributes/stackdriver_exporter.rb#L8
+      - config_name: stackdriver scrape config on Prometheus
+        location: /opt/prometheus/prometheus/inventory/stackdriver.yml
+
     chef_roles:
       - gprd-base
       - gstg-base
@@ -621,6 +627,10 @@ services:
       - gstg-infra-pubsub
       - ops-infra-pubsub
       - dr-infra-pubsub
+      - dr-infra-sd-exporter
+      - gprd-infra-sd-exporter
+      - gstg-infra-sd-exporter
+      - ops-infra-sd-exporter
     scalability:
       note: We run fluentd for logs on each host; Google PubSub topics and stackdriver are cloud services; We can only sensibly scale out pubsubbeats.
       bound: cpu
@@ -637,7 +647,7 @@ services:
   infrastructure:
     provider: gcp
     architecture: https://gitlab.com/gitlab-com/runbooks/blob/master/howto/logging.md
-    provisioning: chef
+    provisioning: terraform
     accesses:
   operations:
     maintenance:
