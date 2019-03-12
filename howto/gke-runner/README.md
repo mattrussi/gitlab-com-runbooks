@@ -1,7 +1,14 @@
 ## Summary
 
 This directory contains the kubernetes configuration for the GKE runner cluster
-that is created by Terraform run for the gitlab-pre project.
+that is created by Terraform run for the projects that config runners on GKE.
+
+Currently this is:
+* gitlab-ops
+* gitlab-pre
+
+But these instructions can be used to configure gitlab-runner on any GKE
+cluster.
 
 Before you start, set the following two environment variables.
 For example for the preprod environment
@@ -27,7 +34,7 @@ brew install gettext
   1. Get the registration CI token on `https://$GITLAB_ENDPOINT/admin/runners`
   1. Use `kubernetes` as the executor
 1. Generate the kubectl configuration for the cluster by running the `connect to
-   cluster` option in the console UI, it will look something like
+   cluster` option in the console UI, for example in PreProd it looks like this:
    `gcloud container clusters get-credentials pre-gke-runner --zone us-east1-b --project $GITLAB_PROJECT`
 1. Retrieve the token from the [admin runner page on $GITLAB_ENDPOINT](https://$GITLAB_ENDPOINT/admin/runners)
    and set it `export RUNNER_TOKEN=<token value>` It will be substituted in the configmap
