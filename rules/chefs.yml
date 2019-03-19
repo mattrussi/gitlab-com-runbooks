@@ -20,6 +20,7 @@ groups:
       title: Chef client hasn't run for longer than expected
   - alert: ChefClientErrorCritical
     expr: count(chef_client_error == 1) / count(chef_client_error) > .25
+    for: 5m
     labels:
       severity: critical
       pager: pagerduty
