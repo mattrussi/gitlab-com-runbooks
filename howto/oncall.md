@@ -34,6 +34,10 @@ happening lately. Also, keep an eye on the [#production][slack-production] and
 [#incident-management][slack-incident-management] channels for discussion around any on-going
 issues.
 
+### Useful Dashboard to keep open
+
+- [GitLab Triage](https://dashboards.gitlab.net/d/RZmbBr7mk/gitlab-triage?orgId=1&refresh=30s)
+
 ### Alerts
 
 Start by checking how many alerts are in flight right now
