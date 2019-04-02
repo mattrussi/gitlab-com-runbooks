@@ -23,6 +23,7 @@ At the end of a shift:
 - *Remove feeds*: PM yourself in slack `/feed list`, then `/feed remove (number)` for the production and on-call feeds
 - *Turn off slack channel notifications*: Open `#production`, `#alerts`, `#alerts-general` Notification Preferences and return alerts to the desired values.
 - Comment on any open S1 incidents at: https://gitlab.com/gitlab-com/gl-infra/production/issues?scope=all&utf8=✓&state=opened&label_name%5B%5D=incident&label_name%5B%5D=S1
+- At the end of each on-call day, post a quick update in slack so the next person is aware of anything ongoing, any false alerts, or anything that needs to be handed over.
 
 ## Things to keep an eye on
 
