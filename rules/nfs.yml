@@ -1,0 +1,14 @@
+groups:
+- name: nfs.rules
+  rules:
+  - alert: StaleNFSFileHandlesTooHigh
+    expr: rate(node_nfsd_file_handles_stale_total{environment="gprd"}[1m]) > 2
+    for: 10m
+    labels:
+      severity: warn
+    annotations:
+      description: The rate of stale NFS file handles on {{ $labels.fqdn }} is high.
+       Check https://dashboards.gitlab.net/d/ZweAQrIik/global-nfs-stats?orgId=1&fullscreen&panelId=8.
+       Look for "Stale file handle" errors in Sentry (https://sentry.gitlab.net/gitlab/gitlabcom/issues)
+       and see if specific servers are affected. Rebooting those servers may help.
+      title: High rate of stale NFS file handles
