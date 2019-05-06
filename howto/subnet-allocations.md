@@ -2,8 +2,8 @@
 
 This document tracks the subnet allocation across multiple infrastructure
 projects related to GitLab.com. Any project that requires centralized monitoring
-should be configured to not overlap with the ops project so that they can be be
-peered together.
+or maintenance from ops runners should be configured to not overlap with the 
+gitlab-ops project for network peering.
 
 * This doc replaces the previous [tracking spreadsheet on google docs](https://docs.google.com/spreadsheets/d/1l-Oxx8dqHqGnrQ23iVP9XGYariFGPFDuZkqFj4KOe5A/edit#gid=0)
 * All environments listed on the [handbook environments page](https://about.gitlab.com/handbook/engineering/infrastructure/environments/) are covered here
