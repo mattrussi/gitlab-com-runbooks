@@ -73,10 +73,16 @@ local generateAnomalyPanel(
   )
   .addTarget(
     promQuery.target(
-      'avg(
-            avg_over_time((' + query + ')[$__interval:1m])
-        ) by (type)',
-      legendFormat='{{ type }} service',
+      '
+      clamp_min(
+        clamp_max(
+          avg(
+                avg_over_time((' + query + ')[$__interval:1m])
+            ) by (type),
+          ' + maxY + '),
+        ' + minY + ')
+      ',
+          legendFormat='{{ type }} service'
     )
   )
   .resetYaxes()
@@ -151,7 +157,7 @@ local activeAlertsPanel = grafana.tablePanel.new(
   );
 
 dashboard.new(
-  'Platform Metrics',
+  'Platform Triage',
   schemaVersion=16,
   tags=['general'],
   timezone='UTC',
