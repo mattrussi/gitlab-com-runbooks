@@ -398,7 +398,7 @@ gitlab-+ 109886 34.4  0.6  28888 12836 ?        Rs   Mar19 13929:17 /opt/gitlab/
 RESOURCE DESCRIPTION               SOFT  HARD UNITS
 NOFILE   max number of open files 50000 50000
 
-# sudo -u gitlab-psql psql -h /var/opt/gitlab/pgbouncer -p 6432 -d pgbouncer -U pgbouncer
+# sudo pgb-console
 
 pgbouncer=# show config;
             key            |                           value                            | changeable
