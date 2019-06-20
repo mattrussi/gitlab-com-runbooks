@@ -8,7 +8,7 @@ The [`redis_instantaneous_ops_per_sec`](https://prometheus.gprd.gitlab.net/graph
 
 ## Check the slow log
 
-The slowlog records slow Redis queries. Becuase Redis is single-threaded but the application relies on Redis throughput to be very high, latency spikes can be detrimental to the operation of the entire application.
+The slowlog records slow Redis queries. Because Redis is single-threaded but the application relies on Redis throughput to be very high, latency spikes can be detrimental to the operation of the entire application.
 
 The slowlog will record any commands that take more than 10000 microseconds to complete (or 10ms).
 
