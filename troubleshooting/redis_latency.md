@@ -4,8 +4,7 @@
 
 ## Contention
 
-The [`redis_instantaneous_ops_per_sec`](https://prometheus.gprd.gitlab.net/graph?g0.range_input=1h&g0.expr=redis_instantaneous_ops_per_sec&g0.tab=0) may indicate if Redis is experiencing a very high RPS,
-leading to queueing requests.
+The [`redis_instantaneous_ops_per_sec`](https://prometheus.gprd.gitlab.net/graph?g0.range_input=1h&g0.expr=redis_instantaneous_ops_per_sec&g0.tab=0) may indicate if Redis is experiencing a very high RPS, leading to queueing requests.
 
 ## Check the slow log
 
