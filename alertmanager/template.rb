@@ -1,7 +1,5 @@
 #!/usr/bin/env ruby
 
-# TODO: validate ruby is available on the CI image
-
 require 'erb'
 
 # TODO: add these variables inside of the ops instance
@@ -10,24 +8,41 @@ snitch_hook = ENV['AM_SNITCH_HOOK_URL']
 prod_pagerduty = ENV['AM_PAGERDUTY_PROD']
 non_prod_pagerduty = ENV['AM_PAGERDUTY_NON_PROD']
 
-alertmanager_template = File.readlines('alertmanager.yml.erb').each(&:chomp).join
+def render_for_chef
+  @template_locations = ['/opt/prometheus/alertmanager/templates/*.tmpl']
 
-renderer = ERB.new(alertmanager_template)
-File.write('chef_alertmanager.yml', renderer.result)
+  alertmanager_template = File
+                          .readlines('alertmanager.yml.erb')
+                          .each(&:chomp)
+                          .join
 
-k8s_alertmanager_template = File
-  .readlines('alertmanager.yml.erb')
-  .each(&:chomp)
-  .join('    ')
+  renderer_for_chef = ERB.new(alertmanager_template)
+  File.write('chef_alertmanager.yml', renderer_for_chef.result)
+end
 
 def k8s_template
   %{---
 
 alertmanager:
   config:
-    <%= k8s_alertmanager_template %>.
+    <%= @k8s_alertmanager_template %>
   }
 end
 
-render_k8s = ERB.new(k8s_template)
-File.write('k8s_alertmanager.yml', render_k8s.result)
+def render_for_k8s
+  alertmanager_template = File
+                              .readlines('alertmanager.yml.erb')
+                              .each(&:chomp)
+                              .join('    ')
+
+  template_locations = ['/etc/alertmanager/config/*.tmpl']
+
+  initial_renderer_for_k8s = ERB.new(alertmanager_template)
+  @k8s_alertmanager_template = initial_renderer_for_k8s.result
+
+  render_k8s = ERB.new(k8s_template)
+  File.write('k8s_alertmanager.yaml', render_k8s.result)
+end
+
+render_for_chef
+render_for_k8s

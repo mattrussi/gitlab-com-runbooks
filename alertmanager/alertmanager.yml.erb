@@ -1,5 +1,6 @@
-templates:
-- "/opt/prometheus/alertmanager/templates/*.tmpl"
+templates:<% @template_locations.each do |location| %>
+   - <%= location %>
+<% end %>
 
 route:
   repeat_interval: 8h
