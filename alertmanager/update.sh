@@ -3,9 +3,9 @@
 set -eux
 
 declare -r project='gitlab-ops'
-declare -r bucket=''
-declare -r kms_keyring=''
-declare -r kms_key=''
+declare -r bucket='gitlab-configs'
+declare -r kms_keyring='gitlab-shared-configs'
+declare -r kms_key='config'
 declare -r chef_file='chef_alertmanager.yml'
 declare -r k8s_file='k8s_alertmanager.yaml'
 
