@@ -31,9 +31,9 @@ end
 
 def render_for_k8s
   alertmanager_template = File
-                              .readlines('alertmanager.yml.erb')
-                              .each(&:chomp)
-                              .join('    ')
+                          .readlines('alertmanager.yml.erb')
+                          .each(&:chomp)
+                          .join('    ')
 
   template_locations = ['/etc/alertmanager/config/*.tmpl']
 
