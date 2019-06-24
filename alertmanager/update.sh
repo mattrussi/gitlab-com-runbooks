@@ -2,10 +2,17 @@
 
 set -eux
 
-# TODO this should live in ops probably
-# TODO need to get authentication setup somewhere
-# TODO validate gcloud tooling in the CI image
-gcloud --project gitlab-pre kms encrypt --location=global --keyring=skarbek-test --key=skarbek-test --ciphertext-file=chef_alertmanager.yml.enc --plaintext-file=chef_alertmanager.yml
-gcloud --project gitlab-pre kms encrypt --location=global --keyring=skarbek-test --key=skarbek-test --ciphertext-file=k8s_alertmanager.yml.enc --plaintext-file=k8s_alertmanager.yml
-gsutil cp alertmanager.yml.enc gs://skarbek-test/chef_alertmanager.yml.enc
-gsutil cp alertmanager.yml.enc gs://skarbek-test/k8s_alertmanager.yml.enc
+declare -r project='gitlab-ops'
+declare -r bucket=''
+declare -r kms_keyring=''
+declare -r kms_key=''
+declare -r chef_file='chef_alertmanager.yml'
+declare -r k8s_file='k8s_alertmanager.yaml'
+
+gcloud auth activate-service-account --key-file "${SERVICE_KEY}"
+gcloud config set project "${project}"
+
+gcloud --project "${project}" kms encrypt --location=global --keyring="${kms_keyring}" --key="${kms_key}" --ciphertext-file="${chef_file}".enc --plaintext-file="${chef_file}"
+gcloud --project "${project}" kms encrypt --location=global --keyring="${kms_keyring}" --key="${kms_key}" --ciphertext-file="${k8s_file}".enc --plaintext-file="${k8s_file}"
+gsutil cp alertmanager.yml.enc gs://"${bucket}"/"${chef_file}".enc
+gsutil cp alertmanager.yml.enc gs://"${bucket}"/"${k8s_file}".enc
