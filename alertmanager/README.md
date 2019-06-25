@@ -2,7 +2,7 @@
 
 Alertmanager configuration files are shared amoungst ALL alertmanagers across
 our entire environment.  In order to sync this configuration between any node
-via chef and any pod running in Kubernetes this directory holds the neccessary
+via chef and any pod running in Kubernetes, this directory holds the necessary
 template file for the configuration, and allows CI to populate any secrets.  We
 then push these files as encrypted objects to object storage.  The necessary
 chef recipe or helm managed kubernetes repo will pull down the file and populate
