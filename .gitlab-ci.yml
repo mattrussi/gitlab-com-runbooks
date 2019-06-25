@@ -15,7 +15,7 @@ update-alert-manager:
     changes:
       alertmanager/*
     variables:
-      - $CI_API_V4_URL == "https://gitlab.com/api/v4"
+      - $CI_API_V4_URL == "https://ops.gitlab.net/api/v4"
 
 test:
   stage: test
