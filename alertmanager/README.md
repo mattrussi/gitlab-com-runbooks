@@ -11,7 +11,7 @@ it into the appropriate place.
 The operation of this is forced on our ops instance where the variables for
 setting up gcloud and the secrets for the template are located: https://ops.gitlab.net/gitlab-com/runbooks/-/settings/ci_cd
 
-This is all handled within CI, view the [.gitlab-ci.yml](../.gitlab-ci.yml) to
+These jobs run in a CI pipeline, view the [.gitlab-ci.yml](../.gitlab-ci.yml) to
 determine how this is configured.
 
 This is not meant to be run locally but can be enabled to do so, simply remove
