@@ -13,7 +13,7 @@ update-alert-manager:
     - alertmanager/update.sh
   only:
     changes:
-      alertmanager/*
+      - alertmanager/*
     variables:
       - $CI_API_V4_URL == "https://ops.gitlab.net/api/v4"
 
