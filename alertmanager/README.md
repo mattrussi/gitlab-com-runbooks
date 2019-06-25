@@ -1,4 +1,23 @@
-TODO: Remove or move this information to a runbook
+## Alertmanager configuration
+
+Alertmanager configuration files are shared amoungst ALL alertmanagers across
+our entire environment.  In order to sync this configuration between any node
+via chef and any pod running in Kubernetes this directory holds the neccessary
+template file for the configuration, and allows CI to populate any secrets.  We
+then push these files as encrypted objects to object storage.  The necessary
+chef recipe or helm managed kubernetes repo will pull down the file and populate
+it into the appropriate place.
+
+The operation of this is forced on our ops instance where the variables for
+setting up gcloud and the secrets for the template are located: https://ops.gitlab.net/gitlab-com/runbooks/-/settings/ci_cd
+
+This is all handled within CI, view the [.gitlab-ci.yml](../.gitlab-ci.yml) to
+determine how this is configured.
+
+This is not meant to be run locally but can be enabled to do so, simply remove
+the lines associated with authenticating and setting up gcloud in the
+`update.sh` file.  You will need to set environment variables specified in
+`template.rb` in order to see these populate the template correctly.
 
 * Generate template file
   * `./template.rb`

@@ -2,7 +2,6 @@
 
 require 'erb'
 
-# TODO: add these variables inside of the ops instance
 slack_hook = ENV['AM_SLACK_HOOK_URL']
 snitch_hook = ENV['AM_SNITCH_HOOK_URL']
 prod_pagerduty = ENV['AM_PAGERDUTY_PROD']

@@ -9,8 +9,9 @@ stages:
 update-alert-manager:
   stage: alertmanager
   script:
-    - alertmanager/template.rb
-    - alertmanager/update.sh
+    - cd alertmanager
+    - template.rb
+    - update.sh
   only:
     changes:
       - alertmanager/*
