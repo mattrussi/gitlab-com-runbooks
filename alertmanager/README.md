@@ -8,7 +8,7 @@ then push these files as encrypted objects to object storage.  The necessary
 chef recipe or helm managed kubernetes repo will pull down the file and populate
 it into the appropriate place.
 
-The operation of this is forced on our ops instance where the variables for
+The CI jobs for this are run on ops.gitlab.net where the variables for
 setting up gcloud and the secrets for the template are located: https://ops.gitlab.net/gitlab-com/runbooks/-/settings/ci_cd
 
 These jobs run in a CI pipeline, view the [.gitlab-ci.yml](../.gitlab-ci.yml) to
