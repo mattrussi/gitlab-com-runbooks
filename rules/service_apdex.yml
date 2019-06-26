@@ -289,7 +289,7 @@ groups:
 
   # Aggregate over all components within a service using a weighted average
   # Why use the avg_over_time[1h] value for the weight? This is because
-  # if a component suddently stops working, it's RPS will drop to zero and
+  # if a component suddenly stops working, its RPS will drop to zero and
   # therefore it's weight will also drop to zero, meaning that it won't affect
   # the apdex. Using a 1h average is an attempt at resolving this, although
   # 1hr may not be enough.
