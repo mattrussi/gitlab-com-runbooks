@@ -11,39 +11,6 @@ groups:
         labels:
           rules_domain: general
           metric: gitlab_service_apdex:ratio
-          severity: s4
-          slo: 1
-          period: 5m
-          bound: lower
-        annotations:
-          description: |
-            The `{{ $labels.type }}` service (`{{ $labels.stage }}` stage) is not meeting its latency SLOs
-
-            The service is taking longer to respond to requests than usual. This could be caused by
-            user abuse, application changes in upstream services that lead to higher request rates or slower
-            requested, or slowdown in downstream services. Check operation rates in upstream and downstream
-            services, error rates and check ELK for abuse.
-          runbook: "troubleshooting/service-{{ $labels.type }}.md"
-          title: "The `{{ $labels.type }}` service (`{{ $labels.stage }}` stage) has a apdex score (latency) below SLO"
-          grafana_dashboard_id: "26q8nTzZz/service-platform-metrics"
-          grafana_panel_id: "5"
-          grafana_variables: "environment,type,stage"
-          grafana_min_zoom_hours: 6
-          link1_title: "Definition"
-          link1_url: "https://gitlab.com/gitlab-com/runbooks/blob/master/troubleshooting/definition-service-apdex.md"
-          promql_template_1: 'gitlab_service_apdex:ratio{type="$type", stage="$stage"}'
-          promql_template_2: 'gitlab_component_apdex:ratio{type="$type", stage="$stage"}'
-
-      # Error: Latency SLO not being met
-      - alert: service_apdex_slo_out_of_bounds_lower_5m
-        expr: |
-          avg(gitlab_service_apdex:ratio) by (environment, tier, type, stage)
-          < ignoring(environment, stage) group_left
-            avg(slo:min:gitlab_service_apdex:ratio) by (tier, type)
-        for: 5m
-        labels:
-          rules_domain: general
-          metric: gitlab_service_apdex:ratio
           severity: s2
           slo: 1
           period: 5m
@@ -69,37 +36,6 @@ groups:
           promql_template_2: 'gitlab_component_apdex:ratio{type="$type", stage="$stage"}'
 
       # Warn: Error ratio SLO not being met
-      - alert: service_apdex_slo_out_of_bounds_lower_5m
-        expr: |
-          avg(gitlab_service_errors:ratio) by (environment, tier, type, stage)
-          > ignoring(environment, stage) group_left
-          avg(slo:max:gitlab_service_errors:ratio) by (tier, type)
-        for: 5m
-        labels:
-          rules_domain: general
-          metric: gitlab_service_errors:ratio
-          severity: s4
-          slo: 1
-          period: 5m
-          bound: lower
-        annotations:
-          description: |
-            The `{{ $labels.type }}` service (`{{ $labels.stage }}` stage) has an error-ratio higher than SLOs
-
-            A high proportion of requests to the `{{ $labels.type }}` service are resulting in errors.
-            This ratio is higher than the defined SLO for the service.
-          runbook: "troubleshooting/service-{{ $labels.type }}.md"
-          title: "The `{{ $labels.type }}` service (`{{ $labels.stage }}` stage) has an error-ratio exceeding SLO"
-          grafana_dashboard_id: "26q8nTzZz/service-platform-metrics"
-          grafana_panel_id: "6"
-          grafana_variables: "environment,type,stage"
-          grafana_min_zoom_hours: 6
-          link1_title: "Definition"
-          link1_url: "https://gitlab.com/gitlab-com/runbooks/blob/master/troubleshooting/definition-service-error-rate.md"
-          promql_template_1: 'gitlab_service_errors:ratio{type="$type", stage="$stage"}'
-          promql_template_2: 'gitlab_component_errors:ratio{type="$type", stage="$stage"}'
-
-      # Error: Error ratio SLO not being met
       - alert: service_apdex_slo_out_of_bounds_lower_5m
         expr: |
           avg(gitlab_service_errors:ratio) by (environment, tier, type, stage)
