@@ -8,6 +8,10 @@
 
 See [redis_replication.md].
 
+## Flapping
+
+See [redis_flapping.md].
+
 
 ## Redis Process Down
 
