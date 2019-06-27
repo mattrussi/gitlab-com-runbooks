@@ -13,7 +13,7 @@ See [redis_replication.md].
 
 ### Symptoms
 
-You see alerts like `FailedToGetRedisMetrics`.
+You see alerts like `FailedToCollectRedisMetrics`.
 
 ### Possible checks
 
