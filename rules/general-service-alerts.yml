@@ -11,7 +11,7 @@ groups:
         labels:
           rules_domain: general
           metric: gitlab_service_apdex:ratio
-          severity: s4
+          severity: s2
           slo: 1
           period: 5m
           bound: lower
@@ -44,7 +44,7 @@ groups:
         labels:
           rules_domain: general
           metric: gitlab_service_apdex:ratio
-          severity: s4
+          severity: s2
           slo: 1
           period: 5m
           bound: lower
@@ -78,7 +78,7 @@ groups:
         labels:
           rules_domain: general
           metric: gitlab_service_errors:ratio
-          severity: s4
+          severity: s2
           slo: 1
           period: 5m
           bound: lower
@@ -109,7 +109,7 @@ groups:
         labels:
           rules_domain: general
           metric: gitlab_service_errors:ratio
-          severity: s4
+          severity: s2
           slo: 1
           period: 5m
           bound: lower
