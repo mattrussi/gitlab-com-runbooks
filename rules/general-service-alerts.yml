@@ -12,7 +12,7 @@ groups:
           rules_domain: general
           metric: gitlab_service_apdex:ratio
           severity: s2
-          slo: 1
+          slo_alert: yes
           period: 5m
           bound: lower
           pager: pagerduty
@@ -46,7 +46,7 @@ groups:
           rules_domain: general
           metric: gitlab_service_errors:ratio
           severity: s2
-          slo: 1
+          slo_alert: yes
           period: 5m
           bound: lower
           pager: pagerduty
