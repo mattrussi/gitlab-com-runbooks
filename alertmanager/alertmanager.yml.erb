@@ -38,12 +38,12 @@ route:
     receiver: slack_alerts_general
     continue: false
 
- - match:
-     rules_domain: general
-     pager: pagerduty
-   group_by: ['environment', 'tier', 'type', 'alertname']
-   receiver: slack_alerts_general
-   continue: true
+  - match:
+      rules_domain: general
+      pager: pagerduty
+    group_by: ['environment', 'tier', 'type', 'alertname']
+    receiver: slack_alerts_general
+    continue: true
 
   ################################################
   # Team Alerts
