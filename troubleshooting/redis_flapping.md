@@ -6,7 +6,7 @@
 
 ## Possible fixes
 
-Temporarily increase the `client-output-buffer-limit` on the new master
+Temporarily disable the `client-output-buffer-limit` on the new master
 
 ```
 REDIS_MASTER_AUTH=$(sudo grep ^masterauth /var/opt/gitlab/redis/redis.conf|cut -d\" -f2)
