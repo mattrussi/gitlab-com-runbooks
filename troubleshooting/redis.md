@@ -25,7 +25,7 @@ https://thanos-query.ops.gitlab.net/graph?g0.range_input=1w&g0.expr=redis_up%20%
 
 `gitlab-ctl status`
 
-`telnet localhost:6379`
+`telnet localhost 6379`
 
 If everything looks ok, it might be that the instance made a full resync from
 master. During that time the redis_exporter fails to collect metrics from
