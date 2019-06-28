@@ -120,8 +120,8 @@ bundle exec knife ssh 'roles:ops-infra-alerts'
 
 We have three alermanagers. Two of them are configured in HA setup (there are two instances running in a "cluster"):
 - prometheus.gitlab.com (the VM is in Azure, alertmanager is running on the same machine as Prometheus, legacy)
-- alerts-0[1,2]-inf-gprd.c.gitlab-production.internal (old, secrets in Chef Vault)
-- alerts-0[1,2]-inf-ops.c.gitlab-ops.internal (latest, secrets in GKMS)
+- alerts-0[1,2]-inf-gprd.c.gitlab-production.internal (old, secrets in Chef Vault, https://alerts.gprd.gitlab.net/)
+- alerts-0[1,2]-inf-ops.c.gitlab-ops.internal (latest, secrets in GKMS, https://alerts.ops.gitlab.net/)
 
 The cookbook that holds all the setup for the alert manager can be found in [this repo](https://gitlab.com/gitlab-cookbooks/gitlab-alertmanager)
 
