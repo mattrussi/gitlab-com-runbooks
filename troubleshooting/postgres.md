@@ -254,8 +254,8 @@ conditions which will lead to dead tuple bloat:
 
 ### Possible Checks
 
-Check on Grafana dashboards, in particular the "Postgres Tuple Stats"
-and the "Vacumming" and "Dead Tuples" tabs.
+Check on Grafana dashboards, in particular the "PostgreSQL Tuple Statistics"
+and the "Vacumming" and "Dead Tuples" tabs. Note that this is currently only visible on the internal dashboards
 
 In the "Autovacuum Per Table" chart expect `project_mirror_data` and
 `ci_runners` to be showing about 0.5 vacuums per minute and other
