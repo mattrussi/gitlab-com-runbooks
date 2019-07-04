@@ -278,7 +278,7 @@ haven't alerted yet. Run
 
 Log into the primary and check that statistics are present. If the
 below query does not yield any results for a particular table,
-consider running `ANALYZE $table` to update statistics.
+consider running `ANALYZE $table` to update statistics and try again.
 
 Example for table `ci_builds`:
 
