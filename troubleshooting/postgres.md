@@ -276,8 +276,13 @@ haven't alerted yet. Run
 
 *Check that statistics are up to date for those offenders:*
 
-Log into the primary and check that statistics are present. If the
-below query does not yield any results for a particular table,
+Log into the primary and check that statistics are present. If logging in 
+through the console server, use `(your_username)-db-primary@console...`. 
+`(your_username)-db@console...` will give you a secondary.  In case the 
+primary has changed and the console server doesn't know the new location yet, 
+it may be necessary to identify the primary and log in directly.
+
+If the below query does not yield any results for a particular table,
 consider running `ANALYZE $table` to update statistics and try again.
 
 Example for table `ci_builds`:
