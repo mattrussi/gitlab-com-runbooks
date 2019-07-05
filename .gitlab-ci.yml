@@ -18,7 +18,7 @@ stages:
     - gcloud auth activate-service-account --key-file ${SERVICE_KEY}
     - gcloud config set project ${PROJECT}
     - gcloud container cluster get-credentials ${CLUSTER} --region ${REGION}
-    - for i in $(/bin/ls _*.yml); do echo ${i}; kubectl apply -f ${i}; done
+    - for i in $(/bin/ls _*.yml); do echo ${i}; kubectl apply --namespace monitoring --filename ${i}; done
   only:
     refs:
       - master
