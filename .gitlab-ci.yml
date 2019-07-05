@@ -1,10 +1,50 @@
-image: registry.gitlab.com/gitlab-com/runbooks:3.0.0
+---
+
+image: registry.gitlab.com/gitlab-com/runbooks:3.0.1
 
 stages:
   - test
   - deploy
   - images
   - alertmanager
+  - deploy-rules-gstg
+  - deploy-rules-pre
+
+.deploy-rules:
+  stage: deploy-rules
+  script:
+    - cd rules
+    - ./template.rb
+    - gcloud auth activate-service-account --key-file ${SERVICE_KEY}
+    - gcloud config set project ${PROJECT}
+    - gcloud container cluster get-credentials ${CLUSTER} --region ${REGION}
+    - for i in $(/bin/ls _*.yml); do echo ${i}; kubectl apply -f ${i}; done
+  only:
+    refs:
+      - master
+    changes:
+      - rules/*
+    variables:
+      - $CI_API_V4_URL == "https://ops.gitlab.net/api/v4"
+
+test-rules:
+  stage: test
+  script:
+    - cd rules
+    - ./template.rb
+  only:
+    changes:
+      - rules/*
+
+deploy-rules-gstg:
+  environment: gstg
+  extends: .deploy-rules
+  stage: deploy-rules-gstg
+
+deploy-rules-pre:
+  environment: pre
+  extends: .deploy-rules
+  stage: deploy-rules-pre
 
 update-alert-manager:
   stage: alertmanager
