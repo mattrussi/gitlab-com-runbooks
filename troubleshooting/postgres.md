@@ -272,7 +272,7 @@ If the alert is for dead tuples then it will list which table has a
 high number of dead tuples however note that sometimes when one table
 has this problem there are other tables not far behind that just
 haven't alerted yet. Run
-`sort_desc(pg_stat_table_n_dead_tup{environment="gprd"})` in prometheus on the ops instance to see what the top offenders are.
+`sort_desc(pg_stat_user_tables_n_dead_tup)` [in prometheus](https://prometheus-db.gprd.gitlab.net/graph?g0.range_input=1h&g0.expr=sort_desc(pg_stat_user_tables_n_dead_tup)&g0.tab=1)  to see what the top offenders are.
 
 *Check that statistics are up to date for those offenders:*
 
