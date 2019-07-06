@@ -9,6 +9,9 @@ apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
   name: <%= @rule_name %>
+  labels:
+    app: prometheus-operator
+    release: gitlab-monitoring
 spec:
   <%= @template %>
 )
