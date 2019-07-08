@@ -8,9 +8,11 @@ here's a [recording](https://drive.google.com/file/d/1d2OnABnaMKVlBCQWj_GLpaNN4N
 
 ## Building VMs
 
-In order to build a new storage server, you will add the necessary definitions to the [GitLab terraform repository](https://gitlab.com/gitlab-com/gitlab-com-infrastructure).
-With the move to GCP, this is quite simple. All you must do is bump the number of `multizone-store`
-servers in the variables.tf. DO NOT increase the number of `stor` servers. We should only build multi-zone servers from now on.
+In order to build a new storage server, you will add the necessary definitions
+to the [GitLab terraform
+repository](https://gitlab.com/gitlab-com/gitlab-com-infrastructure). Bump the
+`node_count` parameter of the "file_zfs" module in the gprd environment. The
+value may actually be in the environment's variables file.
 
 ## Initial configuration
 
