@@ -79,7 +79,15 @@ marked the repository as writable to verify this.
    find /var/opt/gitlab/git-data/repositories/@hashed -mindepth 2 -maxdepth 3 -ctime -2 -name *+moved*.git > files_to_remove.txt
    < files_to_remove.txt xargs du -ch | tail -n1
    ```
-   - Have another SRE review the files to be removed to avoid loss of data.
+   - Do checksum comparison to make sure the repo was moved successfully
+   ```
+   # Login to a Rails console, run below commands and the make sure the checksums are same
+   new = Project.find(<id>).repository.raw
+   puts "Storages: #{Gitlab.config.repositories.storages.keys}"
+   souce_file_server = 'nfs-fileXX' # source file serverr
+   old = Gitlab::Git::Repository.new(souce_file_server, "@hashed/<rel_path_to_+moved>", "", "")
+   new.checksum == old.checksum
+   ```
    - Create GCP snapshot of disk on file-XX and include a link to the production issue in the snapshot description.
    - Take a before df to show before disk space in use `df -h /dev/sdb`
    - Remove the files `< files_to_remove.txt xargs -rn1 ionice -c 3 rm -fr`
