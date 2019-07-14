@@ -1,4 +1,4 @@
-## Building a new redis cluster and starting replication 
+## Building a new redis cluster and starting replication
 
 From time to time you may have to build (or rebuild) a redis cluster.  While the omnibus documentation (https://docs.gitlab.com/ee/administration/high_availability/redis.html) suggests it should start replicating by magic, it doesn't in our builds (reasons unclear)
 
