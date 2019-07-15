@@ -92,3 +92,14 @@ groups:
     labels:
       component: 'redis_clients'
     expr: 0.90
+
+  ## Git SSH Client Saturation
+  - record: 'slo:max:soft:gitlab_component_saturation:ratio'
+    labels:
+      component: 'git_ssh_connections'
+    expr: 0.90
+
+  - record: 'slo:max:hard:gitlab_component_saturation:ratio'
+    labels:
+      component: 'git_ssh_connections'
+    expr: 0.95

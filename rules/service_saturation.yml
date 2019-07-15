@@ -108,6 +108,27 @@ groups:
         redis_config_maxclients
       ) by (environment, tier, type, stage)
 
+  # type: git component: git_ssh_connections
+  # Records the maximum number of ssh clients that each server in the fleet can handle
+  # This value is a proxy, obtained from HAProxy
+  # The active connections can exceed the max, but this should be avoided as sshd will start randomly dropping connections
+  # VERY IMPORTANT! The saturation point (150) should match the MaxStartups value in
+  # https://gitlab.com/gitlab-cookbooks/gitlab-openssh/blob/master/attributes/sshd_git.rb#L17
+  - record: gitlab_component_saturation:ratio
+    labels:
+      tier: sv
+      type: git
+      stage: main # No canary git+ssh yet..
+      component: 'git_ssh_connections'
+    expr: >
+      max(
+        clamp_max(
+          max_over_time(haproxy_ssh_active_backend_connections{backend="ssh"}[1m]
+        )
+        / 150,
+        1)
+      ) by (environment)
+
   # Aggregate over all components within a service using max
   - record: gitlab_service_saturation:ratio
     expr: >
