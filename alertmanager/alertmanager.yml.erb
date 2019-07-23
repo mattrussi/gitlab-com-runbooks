@@ -145,14 +145,14 @@ route:
         environment: gprd
         stage: main
       continue: true
-    - receiver: slo_non_prod
-      match:
-        slo_alert: yes
-      continue: false
     - receiver: pager_alerts_channel
       match:
         slo_alert: yes
       group_by: ['environment', 'tier', 'type', 'alertname']
+      continue: false
+    - receiver: slo_non_prod
+      match:
+        slo_alert: yes
       continue: false
     - receiver: prod_pagerduty
       group_by: ['environment', 'alertname']
