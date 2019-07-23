@@ -138,16 +138,21 @@ route:
         slo_alert: yes
         environment: gprd
         stage: cny
-      continue: false
+      continue: true
     - receiver: slo_gprd_main
       match:
         slo_alert: yes
         environment: gprd
         stage: main
-      continue: false
+      continue: true
     - receiver: slo_non_prod
       match:
         slo_alert: yes
+      continue: false
+    - receiver: pager_alerts_channel
+      match:
+        slo_alert: yes
+      group_by: ['environment', 'tier', 'type', 'alertname']
       continue: false
     - receiver: prod_pagerduty
       group_by: ['environment', 'alertname']
