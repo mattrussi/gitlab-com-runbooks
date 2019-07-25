@@ -26,7 +26,7 @@ EOF
 
 gen_k8s_dashboards() {
   echo "Generating kubernetes dashboards ..."
-  jsonnet -J vendor -m "$K8S_DIR" -e '(import "kubernetes.libsonnet").grafanaDashboards' 1>/dev/null
+  (cd "$SCRIPT_DIR"; jsonnet -J vendor -m "$K8S_DIR" -e '(import "kubernetes.libsonnet").grafanaDashboards' 1>/dev/null)
 }
 
 while getopts ":Dh" o; do
