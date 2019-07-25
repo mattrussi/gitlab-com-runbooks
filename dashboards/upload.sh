@@ -50,7 +50,7 @@ if [[ -z $dry_run && -z ${GRAFANA_API_TOKEN:-} ]]; then
 fi
 
 if [[ ! -d "vendor" ]]; then
-  >&2 echo "vendor directory not founder, running bundler.sh to install dependencies..."
+  >&2 echo "vendor directory not found, running bundler.sh to install dependencies..."
   "${SCRIPT_DIR}/bundler.sh"
 fi
 
