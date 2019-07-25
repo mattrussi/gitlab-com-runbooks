@@ -5,7 +5,7 @@ set -euo pipefail
 
 IFS=$'\n\t'
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-K8S_DIR="$SCRIPT_DIR/k8s-test"
+K8S_DIR="$SCRIPT_DIR/kubernetes"
 
 usage() {
   cat <<-EOF
@@ -25,7 +25,8 @@ EOF
 }
 
 gen_k8s_dashboards() {
-  jsonnet -J vendor -m "$K8S_DIR" -e '(import "kubernetes.libsonnet").grafanaDashboards'
+  echo "Generating kubernetes dashboards ..."
+  jsonnet -J vendor -m "$K8S_DIR" -e '(import "kubernetes.libsonnet").grafanaDashboards' 1>/dev/null
 }
 
 while getopts ":Dh" o; do
@@ -68,7 +69,7 @@ find_dashboards() {
     "-o"
       "-name" '*.dashboard.json'
     "-o"
-      "-path" "*/k8s-test/*.json"
+      "-path" "$K8S_DIR/*.json"
     ")"
   )
 
