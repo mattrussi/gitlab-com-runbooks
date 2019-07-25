@@ -26,7 +26,14 @@ EOF
 
 gen_k8s_dashboards() {
   echo "Generating kubernetes dashboards ..."
-  (cd "$SCRIPT_DIR"; jsonnet -J vendor -m "$K8S_DIR" -e '(import "kubernetes.libsonnet").grafanaDashboards' 1>/dev/null)
+  cd "$SCRIPT_DIR"
+  k8s_files=$(jsonnet -J vendor -m "$K8S_DIR" -e '(import "kubernetes.libsonnet").grafanaDashboards' 2>&1)
+  # replace the UID of all generated files
+  for k8s_file in $k8s_files; do
+    echo "processing $k8s_file"
+    uid="k8s-$(basename "$k8s_file" | sed -e 's/\..*//' | sed -e 's/k8s-//')"
+    jq ".uid = \"$uid\"" "$k8s_file" | sponge "$k8s_file"
+  done
 }
 
 while getopts ":Dh" o; do
@@ -124,7 +131,6 @@ find_dashboards "$@"|while read -r line; do
     -H "Accept: application/json" \
     -H "Content-Type: application/json" \
     "https://dashboards.gitlab.net/api/folders/${folder}" | jq '.id')
-
 
   response=$(curl --silent --fail \
     -H "Authorization: Bearer $GRAFANA_API_TOKEN" \
