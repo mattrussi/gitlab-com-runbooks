@@ -5,7 +5,8 @@ set -euo pipefail
 
 IFS=$'\n\t'
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-K8S_DIR="$SCRIPT_DIR/kubernetes"
+
+cd "${SCRIPT_DIR}"
 
 usage() {
   cat <<-EOF
@@ -22,18 +23,6 @@ usage() {
     -h  help
 
 EOF
-}
-
-gen_k8s_dashboards() {
-  echo "Generating kubernetes dashboards ..."
-  cd "$SCRIPT_DIR"
-  k8s_files=$(jsonnet -J vendor -m "$K8S_DIR" -e '(import "kubernetes.libsonnet").grafanaDashboards' 2>&1)
-  # replace the UID of all generated files
-  for k8s_file in $k8s_files; do
-    echo "processing $k8s_file"
-    uid="k8s-$(basename "$k8s_file" | sed -e 's/\..*//' | sed -e 's/k8s-//')"
-    jq ".uid = \"$uid\"" "$k8s_file" | sponge "$k8s_file"
-  done
 }
 
 while getopts ":Dh" o; do
@@ -60,24 +49,25 @@ if [[ -z $dry_run && -z ${GRAFANA_API_TOKEN:-} ]]; then
     exit 1
 fi
 
-
-if [[ ! -d "${SCRIPT_DIR}/vendor" ]]; then
+if [[ ! -d "vendor" ]]; then
   >&2 echo "vendor directory not founder, running bundler.sh to install dependencies..."
   "${SCRIPT_DIR}/bundler.sh"
 fi
 
-
 find_dashboards() {
   local find_opts
   find_opts=(
-    "${SCRIPT_DIR}"
+    "."
+    # All *.jsonnet and *.json dashboards...
     "("
-      "-name" '*.dashboard.jsonnet'
+      "-name" '*.jsonnet'
     "-o"
-      "-name" '*.dashboard.json'
-    "-o"
-      "-path" "$K8S_DIR/*.json"
+      "-name" '*.json'
     ")"
+    -not -name '.*'          # Exclude dot files
+    -not -path "**/.*"       # Exclude dot dirs
+    -not -path "./vendor/*"  # Exclude vendored files
+    -mindepth 2              # Exclude files in the root folder
   )
 
   if [[ $# == 0 ]]; then
@@ -90,26 +80,15 @@ find_dashboards() {
   fi
 }
 
-# Generate k8s dashboard files
-gen_k8s_dashboards
-
 # Install jsonnet dashboards
 find_dashboards "$@"|while read -r line; do
-  relative=${line#"$SCRIPT_DIR/"}
+  relative=${line#"./"}
   folder=$(dirname "$relative")
-
   uid="${folder}-$(basename "$line"|sed -e 's/\..*//')"
-
   extension="${relative##*.}"
-  jsonnet_opts=(
-    "-J" "${SCRIPT_DIR}"
-    "-J" "${SCRIPT_DIR}/vendor"
-    "-J" "${SCRIPT_DIR}/vendor/grafonnet-lib"
-    "${line}"
-  )
 
   if [[ "$extension" == "jsonnet" ]]; then
-    dashboard=$(jsonnet "${jsonnet_opts[@]}")
+    dashboard=$(jsonnet -J . -J vendor "${line}")
   else
     dashboard=$(cat "${line}")
   fi
@@ -143,6 +122,7 @@ find_dashboards "$@"|while read -r line; do
     \"overwrite\": true
   }") || {
     echo "Unable to install $relative"
+
     exit 1
   }
 
