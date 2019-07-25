@@ -35,7 +35,7 @@ stages:
     name: registry.gitlab.com/gitlab-com/runbooks/jsonnet:latest
     entrypoint: ["/bin/sh", "-c"]
   before_script:
-    - apk add curl bash git jq alpine-sdk go
+    - apk add curl bash git jq alpine-sdk go moreutils
     - GOPATH=/usr/local go get github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb
     - dashboards/bundler.sh # Install jsonnet bundles
   only:
