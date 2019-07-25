@@ -4,6 +4,8 @@ require 'erb'
 
 slack_hook = ENV.fetch('AM_SLACK_HOOK_URL')
 snitch_hook = ENV.fetch('AM_SNITCH_HOOK_URL')
+prod_issue_webhook_url = ENV.fetch('PROD_ISSUE_WEBHOOK_URL')
+prod_issue_webhook_token = ENV.fetch('PROD_ISSUE_WEBHOOK_TOKEN')
 prod_pagerduty = ENV.fetch('AM_PAGERDUTY_PROD')
 non_prod_pagerduty = ENV.fetch('AM_PAGERDUTY_NON_PROD')
 slo_dr = ENV.fetch('AM_SLO_DR')

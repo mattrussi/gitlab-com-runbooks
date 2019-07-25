@@ -27,6 +27,15 @@ route:
     continue: false
 
   ################################################
+  # create issues in the production project using a webhook
+  ################################################
+  - match_re:
+      severity: (s1|s2)
+    group_by: ['environment', 'alertname', 'stage']
+    receiver: gl-infra_production_issue_tracker
+    continue: true
+
+  ################################################
   # General Alerts
   # Treat these specially until https://gitlab.com/gitlab-com/gl-infra/infrastructure/issues/4881 is complete
   ################################################
@@ -315,3 +324,9 @@ receivers:
   - url: "<%= snitch_hook %>"
     send_resolved: false
 
+- name: gl-infra_production_issue_tracker
+  webhook_configs:
+  - url: "<%= prod_issue_webhook_url %>"
+    send_resolved: true
+    http_config:
+      bearer_token: "<%= prod_issue_webhook_token %>"
