@@ -55,8 +55,20 @@ if [[ ! -d "${SCRIPT_DIR}/vendor" ]]; then
 fi
 
 find_dashboards() {
+  local find_opts
+  find_opts=(
+    "${SCRIPT_DIR}"
+    "("
+      "-name" '*.dashboard.jsonnet'
+    "-o"
+      "-name" '*.dashboard.json'
+    "-o"
+      "-path" "*/k8s-test/*.json"
+    ")"
+  )
+
   if [[ $# == 0 ]]; then
-    find "${SCRIPT_DIR}" '(' -name '*.dashboard.jsonnet' -o -name '*.dashboard.json' ')'
+    find "${find_opts[@]}"
   else
     for var in "$@"
     do
@@ -73,8 +85,15 @@ find_dashboards "$@"|while read -r line; do
   uid="${folder}-$(basename "$line"|sed -e 's/\..*//')"
 
   extension="${relative##*.}"
+  jsonnet_opts=(
+    "-J" "${SCRIPT_DIR}"
+    "-J" "${SCRIPT_DIR}/vendor"
+    "-J" "${SCRIPT_DIR}/vendor/grafonnet-lib"
+    "${line}"
+  )
+
   if [[ "$extension" == "jsonnet" ]]; then
-    dashboard=$(jsonnet -J "${SCRIPT_DIR}" -J "${SCRIPT_DIR}/vendor" -J "${SCRIPT_DIR}/vendor/grafonnet-lib" "${line}")
+    dashboard=$(jsonnet "${jsonnet_opts[@]}")
   else
     dashboard=$(cat "${line}")
   fi
@@ -86,8 +105,8 @@ find_dashboards "$@"|while read -r line; do
   fi
 
   if [[ -n $dry_run ]]; then
-      echo "Running in dry run mode, would create $line in folder $folder with uid $uid"
-      continue
+    echo "Running in dry run mode, would create $line in folder $folder with uid $uid"
+    continue
   fi
 
   # Note: create folders with `create-grafana-folder.sh` to configure the UID
