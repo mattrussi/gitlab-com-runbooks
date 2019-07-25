@@ -1,26 +1,32 @@
 #!/usr/bin/env bash
+# vim: ai:ts=2:sw=2:expandtab
 
 set -euo pipefail
 
 IFS=$'\n\t'
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+K8S_DIR="$SCRIPT_DIR/k8s-test"
 
 usage() {
-    cat <<-EOF
-    Usage $0 [Dh]
+  cat <<-EOF
+  Usage $0 [Dh]
 
-    DESCRIPTION
-        This script generates dashboards and uploads
-        them to dashboards.gitlab.net
+  DESCRIPTION
+    This script generates dashboards and uploads
+    them to dashboards.gitlab.net
 
-        GRAFANA_API_TOKEN must be set in the environment
+    GRAFANA_API_TOKEN must be set in the environment
 
-    FLAGS
-        -D  run in Dry-run
-        -h  help
+  FLAGS
+    -D  run in Dry-run
+    -h  help
 
-	EOF
+EOF
 }
 
+gen_k8s_dashboards() {
+  jsonnet -J vendor -m "$K8S_DIR" -e '(import "kubernetes.libsonnet").grafanaDashboards'
+}
 
 while getopts ":Dh" o; do
     case "${o}" in
@@ -38,7 +44,6 @@ done
 
 shift $((OPTIND-1))
 
-
 dry_run=${dry_run:-}
 
 if [[ -z $dry_run && -z ${GRAFANA_API_TOKEN:-} ]]; then
@@ -47,12 +52,12 @@ if [[ -z $dry_run && -z ${GRAFANA_API_TOKEN:-} ]]; then
     exit 1
 fi
 
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 if [[ ! -d "${SCRIPT_DIR}/vendor" ]]; then
   >&2 echo "vendor directory not founder, running bundler.sh to install dependencies..."
   "${SCRIPT_DIR}/bundler.sh"
 fi
+
 
 find_dashboards() {
   local find_opts
@@ -76,6 +81,9 @@ find_dashboards() {
     done
   fi
 }
+
+# Generate k8s dashboard files
+gen_k8s_dashboards
 
 # Install jsonnet dashboards
 find_dashboards "$@"|while read -r line; do
