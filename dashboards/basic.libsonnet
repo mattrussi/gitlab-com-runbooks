@@ -8,6 +8,7 @@ local seriesOverrides = import 'series_overrides.libsonnet';
 {
   queueLengthTimeseries(
     title="Timeseries",
+    description="",
     query="",
     legendFormat='',
     format='short',
@@ -16,6 +17,7 @@ local seriesOverrides = import 'series_overrides.libsonnet';
     yAxisLabel='Queue Length',
     ):: graphPanel.new(
     title,
+    description=description,
     sort="decreasing",
     linewidth=2,
     fill=0,
@@ -44,15 +46,18 @@ local seriesOverrides = import 'series_overrides.libsonnet';
     min=0,
     show=false,
   ),
+
   saturationTimeseries(
     title="Saturation",
+    description="",
     query="",
     legendFormat='',
-    yAxisLabel='Queue Length',
+    yAxisLabel='Saturation',
     interval="1m",
     intervalFactor=3,
     ):: graphPanel.new(
     title,
+    description=description,
     sort="decreasing",
     linewidth=2,
     fill=0,
@@ -82,8 +87,10 @@ local seriesOverrides = import 'series_overrides.libsonnet';
     min=0,
     show=false,
   ),
+
   latencyTimeseries(
     title="Latency",
+    description="",
     query="",
     legendFormat='',
     format="s",
@@ -92,6 +99,7 @@ local seriesOverrides = import 'series_overrides.libsonnet';
     intervalFactor=3,
     ):: graphPanel.new(
     title,
+    description=description,
     sort="decreasing",
     linewidth=2,
     fill=0,

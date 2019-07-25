@@ -26,9 +26,18 @@ dashboard.new(
 .addAnnotation(commonAnnotations.deploymentsForEnvironmentCanary)
 .addTemplate(templates.ds)
 .addTemplate(templates.environment)
+.addPanel(row.new(title="pgbouncer Connection Pooling"),
+  gridPos={
+      x: 0,
+      y: 0,
+      w: 24,
+      h: 1,
+  }
+)
 .addPanels(layout.grid([
     basic.saturationTimeseries(
-      title='Client Connection Pool Saturation per Pool',
+      title='Server Connection Pool Saturation per Pool',
+      yAxisLabel='Server Pool Utilization',
       query='
           max(
             max_over_time(pgbouncer_pools_server_active_connections{type="pgbouncer", environment="$environment", user="gitlab", database!="pgbouncer"}[$__interval]) /
@@ -75,7 +84,8 @@ dashboard.new(
       intervalFactor=5,
     ),
     basic.saturationTimeseries(
-      title='Single Core Saturation per Node',
+      title='Max Single Core Saturation per Node',
+      description="pgbouncer is single-threaded. This graph shows maximum utilization across all cores on each host. Lower is better.",
       query='
         max(1 - rate(node_cpu_seconds_total{type="pgbouncer", environment="$environment", mode="idle"}[$__interval])) by (fqdn)
       ',
@@ -92,10 +102,11 @@ dashboard.new(
       interval="30s",
       intervalFactor=1,
     ),
-  ], cols=2,rowHeight=10)
+  ], cols=2,rowHeight=10, startRow=1)
 )
 .addPanel(keyMetrics.keyServiceMetricsRow('pgbouncer', 'main'), gridPos={ x: 0, y: 1000, })
-.addPanel(nodeMetrics.nodeMetricsDetailRow('type="pgbouncer", environment="$environment"'), gridPos={ x: 0, y: 2000, })
+.addPanel(keyMetrics.keyComponentMetricsRow('pgbouncer', 'main'), gridPos={ x: 0, y: 2000, })
+.addPanel(nodeMetrics.nodeMetricsDetailRow('type="pgbouncer", environment="$environment"'), gridPos={ x: 0, y: 3000, })
 + {
   links+: platformLinks.triage,
 }
