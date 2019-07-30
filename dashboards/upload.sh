@@ -127,6 +127,7 @@ find_dashboards "$@"|while read -r line; do
     dashboard: {
       uid: $uid,
       title: "\($folder): \(.title)",
+      tags: (["managed", $folder] + .tags)
     }
   }
 ')
