@@ -12,4 +12,4 @@ groups:
           kube_replicaset_status_ready_replicas{job="kube-state-metrics"}
         for: 5m
         labels:
-          severity: s1
+          severity: s3
