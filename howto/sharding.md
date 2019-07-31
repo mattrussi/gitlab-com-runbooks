@@ -27,7 +27,7 @@ Repositories are moved by scheduling sidekiq jobs called `project_update_reposit
 
 1. Login to gitlab.com using the admin account
 2. Go to: https://gitlab.com/profile/personal_access_tokens and generate an admin API token, set expiration date at a few days, e.g. 3 days
-4. Check current shard
+3. Check current shard
   - login to the rails console: `ssh <your_username>-rails@gprd-console`
   - check current shard:
   ```rails
@@ -36,7 +36,7 @@ Repositories are moved by scheduling sidekiq jobs called `project_update_reposit
   > p.repository_storage
   > p.repository_read_only
   ```
-3. Trigger the move
+4. Trigger the move
   - ssh to the console machine: `ssh <your_username>@gprd-console`
   - start tmux
   - create and source a file with your API token:
@@ -54,7 +54,7 @@ specified by the numerical `project_id` number associated with it.
 5. Check current shard:
   - the same as steps above
   - remember to rerun the Project.find function after the move to get an object that is up to date
-4. If needed, check logs for the sidekiq job in Kibana:
+6. If needed, check logs for the sidekiq job in Kibana:
   - in Kibana Discover app, select `pubsub-sidekiq-inf-gprd` index pattern
   - search for `ProjectUpdateRepositoryStorageWorker`
 
@@ -99,8 +99,8 @@ marked the repository as writable to verify this.
    - Review any timed out transactions and restore/repair any repositories to their proper writable status.
    - Create a list of moved repositories to delete on file-XX.
    ```
-   # It looks like there is a scenario where there already are repo files named *+moved*.git so we don't want to 
-   # include them in the rebalancing. Therefore, use -ctime to filter for repo files changed within the short period of time. 
+   # It looks like there is a scenario where there already are repo files named *+moved*.git so we don't want to
+   # include them in the rebalancing. Therefore, use -ctime to filter for repo files changed within the short period of time.
    # Here, we are using -ctime as within 2 days. (Feel free to change it)
    find /var/opt/gitlab/git-data/repositories/@hashed -mindepth 2 -maxdepth 3 -ctime -2 -name *+moved*.git > files_to_remove.txt
    < files_to_remove.txt xargs du -ch | tail -n1
