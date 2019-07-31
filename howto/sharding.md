@@ -46,14 +46,12 @@ $ cat ./export_token.sh
 export PRIVATE_TOKEN=<your_api_token_here>
 $ source ./export_token.sh
   ```
-  - move the project to another gitaly shard: `curl --request PUT --header "PRIVATE-TOKEN: $PRIVATE_TOKEN" -d repository_storage=nfs-fileXX https://gitlab.com/api/v4/projects/<project_id_here>`
-  - The option of `repository_storage` is the short name configured in the `git_data_dirs`
-options of the `gitlab.rb` file.  The target repository that you are electing to move is
-specified by the numerical `project_id` number associated with it.
+  - move the project to another gitaly shard: `curl --request PUT --header "PRIVATE-TOKEN: $PRIVATE_TOKEN" -d repository_storage=nfs-fileXX https://gitlab.com/api/v4/projects/<project_to_move_id_here>`
+  - The option of `repository_storage` is the destination gitaly shard and it's a short name as configured in the `git_data_dirs` options of the `gitlab.rb` file.
 
 5. Check current shard:
   - the same as steps above
-  - remember to rerun the Project.find function after the move to get an object that is up to date
+  - remember to rerun the Project.find function after the move to get an object from Rails that is up to date
 6. If needed, check logs for the sidekiq job in Kibana:
   - in Kibana Discover app, select `pubsub-sidekiq-inf-gprd` index pattern
   - search for `ProjectUpdateRepositoryStorageWorker`
