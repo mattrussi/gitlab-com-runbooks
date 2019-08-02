@@ -92,7 +92,12 @@ loop do
         log "would move #{desc}, but this is a dry run"
       else
         log "moving #{desc}"
-        project.change_repository_storage(target_repository_store, sync: true)
+        begin
+          project.change_repository_storage(target_repository_store, sync: true)
+        rescue Gitlab::Git::CommandError => e
+          log "caught exception from project #{project.path}: #{e}"
+          project.update!(repository_read_only: false)
+        end
       end
     end
   end
