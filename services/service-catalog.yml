@@ -277,8 +277,6 @@ services:
       - name:
         permalink:
   infrastructure:
-    infra_owners:
-      - 
     provider: gcp
     architecture: https://drive.google.com/open?id=1aKSvWfsnrSo_XWm7ZVY3oHLqsd2czZcs
     provisioning: terraform
