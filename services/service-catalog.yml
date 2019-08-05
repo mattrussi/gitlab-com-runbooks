@@ -6,6 +6,7 @@ teams:
   engagement_policy: # Link to doc that talks about engagement
                      # and escalation policy
   oncall_schedule:   # Link to pagerduty oncall schedule
+  domain_experts:    # List of services/domains and who the experts are
 
 - name: distribution
   url: https://about.gitlab.com/handbook/engineering/dev-backend/distribution/
@@ -14,6 +15,7 @@ teams:
   engagement_policy: # Link to doc that talks about engagement
                      # and escalation policy
   oncall_schedule:   # Link to pagerduty oncall schedule
+  domain_experts:    # List of services/domains and who the experts are
 
 - name: geo
   url: https://about.gitlab.com/handbook/engineering/dev-backend/geo/
@@ -22,13 +24,16 @@ teams:
   engagement_policy: # Link to doc that talks about engagement
                      # and escalation policy
   oncall_schedule:   # Link to pagerduty oncall schedule
+  domain_experts:    # List of services/domains and who the experts are
 
 - name: gitaly
   url: https://about.gitlab.com/handbook/engineering/dev-backend/gitaly/
+  manager_slug: 
   slack_channel: gitaly
   slack_low_severity_alerts_channel: gitaly-alerts
   engagement_policy:
   oncall_schedule:
+  domain_experts:    # List of services/domains and who the experts are
 
 - name: gitter
   url: https://about.gitlab.com/handbook/engineering/dev-backend/gitter/
@@ -37,6 +42,7 @@ teams:
   engagement_policy: # Link to doc that talks about engagement
                      # and escalation policy
   oncall_schedule:   # Link to pagerduty oncall schedule
+  domain_experts:    # List of services/domains and who the experts are
 
 - name: manage
   url: https://about.gitlab.com/handbook/engineering/dev-backend/manage/
@@ -45,6 +51,7 @@ teams:
   engagement_policy: # Link to doc that talks about engagement
                      # and escalation policy
   oncall_schedule:   # Link to pagerduty oncall schedule
+  domain_experts:    # List of services/domains and who the experts are
 
 - name: plan
   url: https://about.gitlab.com/handbook/engineering/dev-backend/manage/
@@ -53,6 +60,7 @@ teams:
   engagement_policy: # Link to doc that talks about engagement
                      # and escalation policy
   oncall_schedule:   # Link to pagerduty oncall schedule
+  domain_experts:    # List of services/domains and who the experts are
 
 - name: release
   url: https://about.gitlab.com/handbook/engineering/dev-backend/
@@ -61,6 +69,7 @@ teams:
   engagement_policy: # Link to doc that talks about engagement
                      # and escalation policy
   oncall_schedule:   # Link to pagerduty oncall schedule
+  domain_experts:    # List of services/domains and who the experts are
 
 - name: support
   url: https://about.gitlab.com/handbook/support/
@@ -69,6 +78,7 @@ teams:
   engagement_policy: # Link to doc that talks about engagement
                      # and escalation policy
   oncall_schedule: https://gitlab.pagerduty.com/schedules#PIQ317K
+  domain_experts:    # List of services/domains and who the experts are
 
 - name: infrastructure
   url: https://about.gitlab.com/handbook/engineering/infrastructure/
@@ -77,6 +87,124 @@ teams:
   engagement_policy: # Link to doc that talks about engagement
                      # and escalation policy
   oncall_schedule: https://gitlab.pagerduty.com/schedules#P22HQSG
+  domain_experts:    # List of services/domains and who the experts are
+    - domain: Database
+      technologies:
+        - postgres
+        - kubernetes
+      infra_owner: finotto@
+      experts:
+        - Ongres
+        - ahmadsherif@
+        - abrandl@
+        - msmiley@
+    - domain: Application Caching
+      technologies:
+        - redis
+      infra_owner: ansdval@
+      experts:
+        - msmiley@
+        - andrewn@
+    - domain: .com search
+      technologies:
+        - elasticsearch
+      infra_owner: finotto@
+      experts:
+        - mwasilewski-gitlab@
+        - aamarsanaa@
+    - domain: Filesystem
+      technologies:
+        - zfs
+      infra_owner: finotto@
+      experts:
+        - T4cC0re@
+        - craigf@
+        - msmiley@
+    - domain: Logging
+      technologies:
+        - fluentd
+        - pubsubbeat
+        - stackdriver
+      infra_owner: finotto@
+      experts:
+        - andrewn@
+        - jarv@
+        - mwasilewski-gitlab@
+        - craigf@
+        - aamarsanaa@
+    - domain: Monitoring / Alerting
+      technologies:
+        - prometheus
+        - grafana
+        - pagerduty
+      infra_owner: bjk-gitlab@
+      experts:
+        - bjk-gitlab@
+        - andrewn@
+    - domain: Gitaly
+      technologies:
+        - git data nodes
+        - zfs
+      infra_owner: finotto@
+      experts:
+        - ahmadsherif@
+    - domain: Release / Testing Environments
+      technologies:
+        - kubernetes
+      infra_owner: marin@
+      experts:
+        - jarv@
+        - ahanselka@
+        - skarbek@
+    - domain: CD/CD
+      technologies:
+        - sidekiq
+        - runners
+        - kubernetes
+      infra_owner: dawsmith@
+      experts:
+        - cmcfarland@
+        - ahanselka@
+        - andrewn@
+    - domain: One-Off (Version, About, License)
+      technologies:
+        - kubernetes
+      infra_owner: dawsmith@
+      experts:
+        - ahanselka@
+        - devin@
+    - domain: IAAC / Testing Environments
+      technologies:
+        - terraform
+        - chef
+        - kubernetes
+      infra_owner: ansdval@
+      experts:
+        - craig@
+        - cmiskell@
+        - cmcfarland@
+        - devin@
+    - domain: Onboarding / Operational Processes
+      technologies:
+      infra_owner: ansdval@
+      experts:
+        - msmiley@
+        - ahanselka@
+        - aamarsanaa@
+        - ahmadsherif@
+    - domain: Core Infra
+      technologies:
+        - DNS
+        - CDN
+      infra_owner: dawsmith@
+      experts:
+    - domain: Access Requests
+      technologies:
+        - Chef
+        - OKTA
+        - IAM
+      infra_owner: dawsmith@
+      experts: 
 
 # Package team doesn't seem to exist
 - name: package
@@ -86,6 +214,7 @@ teams:
   engagement_policy: # Link to doc that talks about engagement
                      # and escalation policy
   oncall_schedule:   # Link to pagerduty oncall schedule
+  domain_experts:    # List of services/domains and who the experts are
 
 - name: verify
   url: https://about.gitlab.com/handbook/engineering/ops-backend/verify/
@@ -94,6 +223,7 @@ teams:
   engagement_policy: # Link to doc that talks about engagement
                      # and escalation policy
   oncall_schedule:   # Link to pagerduty oncall schedule
+  domain_experts:    # List of services/domains and who the experts are
 
 tiers:
 - name: sv
@@ -147,6 +277,8 @@ services:
       - name:
         permalink:
   infrastructure:
+    infra_owners:
+      - 
     provider: gcp
     architecture: https://drive.google.com/open?id=1aKSvWfsnrSo_XWm7ZVY3oHLqsd2czZcs
     provisioning: terraform

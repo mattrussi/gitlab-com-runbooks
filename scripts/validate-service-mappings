@@ -5,6 +5,7 @@ require 'yaml'
 def validate(service_catalog_path)
   service_catalog_yaml = YAML.load_file(service_catalog_path)
   services = service_catalog_yaml["services"]
+  teams = service_catalog_yaml["teams"]
 
   raise "Service catalog must contain one or more teams" unless service_catalog_yaml["teams"] && !service_catalog_yaml["teams"].empty?
   raise "Service catalog must contain one or more tiers" unless service_catalog_yaml["tiers"] && !service_catalog_yaml["tiers"].empty?
@@ -12,6 +13,35 @@ def validate(service_catalog_path)
 
   team_map = service_catalog_yaml["teams"].inject({}) { |map, team| map[team["name"]] = team; map }
   tier_map = service_catalog_yaml["tiers"].inject({}) { |map, tier| map[tier["name"]] = tier; map }
+
+  # Team level validation
+  teams.each do |team|
+    # team must have name
+    team_name = team["name"]
+    raise "'#{team_name}' | name field must be string" unless team_name.is_a? String
+
+    manager_name = team["manager_slug"]
+    raise "'#{team_name}' | manager_slug field must be string" unless manager_name.is_a? String or manager_name.nil?
+
+    domain_experts = team["domain_experts"]
+    raise "'#{team_name}' | domain_experts field must be list" unless domain_experts.is_a? Array or domain_experts.nil?
+
+    if !domain_experts.nil?
+      domain_experts.each do |domain_expert|
+        domain = domain_expert["domain"]
+        raise "'#{domain_expert}' | domain field must be string" unless domain.is_a? String
+
+        technologies = domain_expert["technologies"]
+        raise "'#{domain_expert}' | technologies field must be list" unless technologies.is_a? Array or technologies.nil?
+
+        infra_owner = domain_expert["infra_owner"]
+        raise "'#{domain_expert}' | infra_owner field must be string" unless infra_owner.is_a? String
+
+        experts = domain_expert["experts"]
+        raise "'#{domain_expert}' | experts field must be list" unless experts.is_a? Array or experts.nil?
+      end
+    end
+  end
 
   services.each do |service|
     # name
