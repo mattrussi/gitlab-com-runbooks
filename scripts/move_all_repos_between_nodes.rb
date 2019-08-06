@@ -5,8 +5,8 @@
 #
 # sudo su -
 #
-# export GITLAB_STORAGE_MIGRATION_SOURCE_REPO_STORE=nfs-fileXX
-# export GITLAB_STORAGE_MIGRATION_TARGET_REPO_STORE=nfs-fileYY
+# export GITLAB_STORAGE_MIGRATION_SOURCE_REPO_STORE=nfs-fileXX,nfs-fileYY
+# export GITLAB_STORAGE_MIGRATION_TARGET_REPO_STORE=nfs-fileZZ
 # (optional) export GITLAB_STORAGE_MIGRATION_BATCH_SIZE=N
 # (once sure) export GITLAB_STORAGE_MIGRATION_DRY_RUN=false
 #
@@ -36,7 +36,7 @@ module EE
         begin
           ::Projects::UpdateRepositoryStorageService.new(self).execute(new_repository_storage_key)
         rescue ::Projects::UpdateRepositoryStorageService::RepositoryAlreadyMoved
-          Rails.logger.info "#{self.class}: repository already moved: #{project}" # rubocop:disable Gitlab/RailsLogger
+          Rails.logger.info "#{self.class}: repository already moved: #{full_path}" # rubocop:disable Gitlab/RailsLogger
         end
       else
         run_after_commit { ProjectUpdateRepositoryStorageWorker.perform_async(id, new_repository_storage_key) }
@@ -59,11 +59,12 @@ target_repository_store = ENV.fetch('GITLAB_STORAGE_MIGRATION_TARGET_REPO_STORE'
 batch_size = Integer(ENV.fetch('GITLAB_STORAGE_MIGRATION_BATCH_SIZE', '5'))
 dry_run = ENV.fetch('GITLAB_STORAGE_MIGRATION_DRY_RUN', 'true')
 
+$stdout.sync = true
+
 def log(msg)
   puts "#{DateTime.now.iso8601} #{msg}"
 end
 
-log "will move all projects from #{source_repository_store} to #{target_repository_store}"
 
 $should_exit = false
 
@@ -75,34 +76,67 @@ end
 Signal.trap('INT') { |signo| handle_signal(signo) }
 Signal.trap('TERM') { |signo| handle_signal(signo) }
 
-loop do
-  break if $should_exit
+def move_between_shards(source, target, batch_size, dry_run)
+  log "will move all projects from #{source} to #{target}"
 
-  projects_remaining = Integer(Project.where(repository_storage: source_repository_store).count)
-  log "#{projects_remaining} projects remaining"
-  break if projects_remaining.zero?
+  exclusions = []
+  exclusions_mutex = Mutex.new
 
-  projects = Project.where(repository_storage: source_repository_store).first(batch_size)
+  loop do
+    exit if $should_exit
 
-  threads = projects.map do |project|
-    Thread.new do
-      # Use namespace_id rather than name to avoid joins.
-      desc = "#{project.path} in namespace #{project.namespace_id}"
-      if dry_run != 'false'
-        log "would move #{desc}, but this is a dry run"
-      else
-        log "moving #{desc}"
-        begin
-          project.change_repository_storage(target_repository_store, sync: true)
-        rescue Gitlab::Git::CommandError => e
-          log "caught exception from project #{project.path}: #{e}"
-          project.update!(repository_read_only: false)
-        end
+    projects_remaining = Integer(Project.where(repository_storage: source).count)
+    log "#{projects_remaining} projects remaining in shard #{source}"
+    break if projects_remaining.zero?
+
+    projects = Project.where(repository_storage: source).first(batch_size + exclusions.size)
+
+    threads = projects.reject { |p| exclusions.any?("#{p.namespace_id}/#{p.path}") }.map do |project|
+      Thread.new do
+        move_one_repo(project, target, dry_run)
+      rescue ActiveRecord::RecordInvalid => e
+        log "caught #{e} from #{project.full_path} - excluding for manual triage"
+        exclusions_mutex.synchronize { exclusions << "#{project.namespace_id}/#{project.path}" }
       end
     end
+
+    threads.each(&:join)
   end
 
-  threads.each(&:join)
+  log "finished moving projects from #{source} to #{target}"
 end
 
-log "finished moving projects from #{source_repository_store} to #{target_repository_store}"
+def move_one_repo(project, target, dry_run)
+  # Use namespace_id rather than name to avoid joins.
+  desc = "#{project.path} in namespace #{project.namespace_id}"
+
+  was_read_only = project.repository_read_only?
+  if was_read_only
+    log "#{project.path} was read only, temporarily setting read-write in order to migrate"
+    project.update!(repository_read_only: false)
+  end
+
+  if dry_run != 'false'
+    log "would move #{desc}, but this is a dry run"
+  else
+    log "moving #{desc}"
+    begin
+      project.change_repository_storage(target, sync: true)
+    rescue Gitlab::Git::CommandError => e
+      log "caught exception from project #{project.full_path}: #{e}"
+      project.update!(repository_read_only: false) unless was_read_only
+    end
+
+    if was_read_only
+      log "setting #{project.path} back to readonly"
+      project.reload
+      project.update!(repository_read_only: true)
+    end
+
+    log "finished moving #{desc}"
+  end
+end
+
+source_repository_store.split(',').each do |source|
+  move_between_shards(source, target_repository_store, batch_size, dry_run)
+end
