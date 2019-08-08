@@ -87,7 +87,7 @@ def move_between_shards(source, target, batch_size, dry_run)
 
     projects_remaining = Integer(Project.where(repository_storage: source).count)
     log "#{projects_remaining} projects remaining in shard #{source}"
-    break if projects_remaining.zero?
+    break if projects_remaining <= exclusions.size
 
     projects = Project.where(repository_storage: source).first(batch_size + exclusions.size)
 
@@ -122,6 +122,7 @@ def move_one_repo(project, target, dry_run)
     log "moving #{desc}"
     begin
       project.change_repository_storage(target, sync: true)
+      log "finished moving #{desc}"
     rescue Gitlab::Git::CommandError => e
       log "caught exception from project #{project.full_path}: #{e}"
       project.update!(repository_read_only: false) unless was_read_only
@@ -132,8 +133,6 @@ def move_one_repo(project, target, dry_run)
       project.reload
       project.update!(repository_read_only: true)
     end
-
-    log "finished moving #{desc}"
   end
 end
 
