@@ -31,24 +31,55 @@ module EE
       raise ArgumentError unless ::Gitlab.config.repositories.storages.key?(new_repository_storage_key)
 
       if sync
-        set_repository_read_only!
-
-        begin
-          ::Projects::UpdateRepositoryStorageService.new(self).execute(new_repository_storage_key)
-        rescue ::Projects::UpdateRepositoryStorageService::RepositoryAlreadyMoved
-          Rails.logger.info "#{self.class}: repository already moved: #{full_path}" # rubocop:disable Gitlab/RailsLogger
-        end
+        update!(repository_read_only: true)
+        await_git_transfer_completion
+        ProjectUpdateRepositoryStorageWorker.new.perform(id, new_repository_storage_key)
       else
         run_after_commit { ProjectUpdateRepositoryStorageWorker.perform_async(id, new_repository_storage_key) }
         self.repository_read_only = true
 
-        # In production, this change_repository_storage is only called from
-        # ee/app/services/ee/projects/update_service.rb, which will save the
-        # project later. We avoid saving the project twice.
-        # In rails consoles and admin scripts, by using the default value of
-        # skip_save (false), the project doesn't have to be saved after calling
-        # this method.
+        # We need to save the record to persist repository_read_only but in some
+        # cases, such as `Projects::UpdateService`, the save is performed later.
         save! unless skip_save
+      end
+    end
+
+    private
+
+    def await_git_transfer_completion
+      loop do
+        break unless git_transfer_in_progress?
+
+        sleep 10
+      end
+    end
+  end
+end
+
+module Projects
+  class UpdateRepositoryStorageService
+    def execute(new_repository_storage_key)
+      # Raising an exception is a little heavy handed but this behavior (doing
+      # nothing if the repo is already on the right storage) prevents data
+      # loss, so it is valuable for us to be able to observe it via the
+      # exception.
+      raise RepositoryAlreadyMoved if project.repository_storage == new_repository_storage_key
+
+      result = mirror_repository(new_repository_storage_key)
+
+      if project.wiki.repository_exists?
+        result &&= mirror_repository(new_repository_storage_key, type: Gitlab::GlRepository::WIKI)
+      end
+
+      if result
+        mark_old_paths_for_archive
+
+        project.update(repository_storage: new_repository_storage_key, repository_read_only: false)
+        project.leave_pool_repository
+        project.track_project_repository
+      else
+        project.update(repository_read_only: false)
+        false
       end
     end
   end
@@ -93,7 +124,10 @@ def move_between_shards(source, target, batch_size, dry_run)
 
     threads = projects.reject { |p| exclusions.any?("#{p.namespace_id}/#{p.path}") }.map do |project|
       Thread.new do
-        move_one_repo(project, target, dry_run)
+        unless move_one_repo(project, target, dry_run)
+          log "#{project.full_path} could not be moved - excluding for manual triage"
+          exclusions_mutex.synchronize { exclusions << "#{project.namespace_id}/#{project.path}" }
+        end
       rescue ActiveRecord::RecordInvalid => e
         log "caught #{e} from #{project.full_path} - excluding for manual triage"
         exclusions_mutex.synchronize { exclusions << "#{project.namespace_id}/#{project.path}" }
@@ -119,9 +153,11 @@ def move_one_repo(project, target, dry_run)
   if dry_run != 'false'
     log "would move #{desc}, but this is a dry run"
   else
+    can_be_moved = true
+
     log "moving #{desc}"
     begin
-      project.change_repository_storage(target, sync: true)
+      can_be_moved = project.change_repository_storage(target, sync: true)
       log "finished moving #{desc}"
     rescue Gitlab::Git::CommandError => e
       log "caught exception from project #{project.full_path}: #{e}"
@@ -133,6 +169,8 @@ def move_one_repo(project, target, dry_run)
       project.reload
       project.update!(repository_read_only: true)
     end
+
+    can_be_moved
   end
 end
 
