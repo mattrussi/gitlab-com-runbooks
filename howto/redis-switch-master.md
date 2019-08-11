@@ -15,3 +15,8 @@ MASTER_NAME is one of `gprd-redis` (main persistent cluster), `gprd-redis-cache`
 The current master can be determined with `/opt/gitlab/embedded/bin/redis-cli -p 26379 sentinel masters` on one of the sentinel nodes.  The 4th output item is the IP address of the current master node.
 
 This should have no visible negative impact on the GitLab application
+
+### Check the status (master/slave) of a redis node directly
+`REDIS_MASTER_AUTH=$(sudo grep ^masterauth /var/opt/gitlab/redis/redis.conf|cut -d\\" -f2)`
+
+`/opt/gitlab/embedded/bin/redis-cli -a $REDIS_MASTER_AUTH --csv ROLE`
