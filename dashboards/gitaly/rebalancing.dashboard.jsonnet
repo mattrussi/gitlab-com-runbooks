@@ -162,7 +162,7 @@ dashboard.new(
       legendFormat='{{ fqdn }}',
     ),
     balanceChart(
-      title='Disk Utilizaion',
+      title='Disk Space Left',
       description="Disk free space available %. Lower is better.",
       format="percentunit",
       query='
