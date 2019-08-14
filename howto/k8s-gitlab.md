@@ -4,8 +4,9 @@ The following is a high level guide on what it takes to build out the necessary
 bits for adding GKE and bringing over components of GitLab into Kubernetes.
 
 Our current application configuration components:
-* https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com
+* https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/common
 * https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/monitoring
+* https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com
 
 1. Create the cluster configuration in terraform, we'll need the following
    items:
@@ -31,6 +32,9 @@ Our current application configuration components:
       * https://ops.gitlab.net/gitlab-com/gl-infra/k8s-workloads/common/-/settings/ci_cd
     * ENV Vars:
       * `SERVICE_KEY`
+      * This key is gathered from following the prior documentation
+      * This must be added to each repo since group level variables are not a
+        feature of GitLab
 1. Create the application configurations
     * Adjust any necessary configurations or additions by following the README's
       in each of our application configuration repos.
@@ -70,6 +74,26 @@ Our current application configuration components:
     * Save and test
 1. Add the thanos side cars to our thanos-query ops instance
     * Example MR: https://ops.gitlab.net/gitlab-cookbooks/chef-repo/merge_requests/1430
+
+## Monitoring with Kubernetes
+
+### Metrics
+
+We utilize https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/monitoring to
+deploy our monitoring infrastructure inside of Kubernetes.
+
+On the outside look inward:
+* We add the prometheus endpoint to our thanos-ops query instance
+* The thanos-query running inside the cluster is added as a datasource to
+  grafana
+
+### Logging
+
+A single pubsub server is setup to monitor a Log exporter from Stackdriver.  All
+items end up in the index `pubsub-gke-inf-<ENV>*`
+
+One can refer to this document for further details
+[troubleshooting/kubernetes.md](../troubleshooting/kubernetes.md)
 
 ## Terraforming with GKE
 
