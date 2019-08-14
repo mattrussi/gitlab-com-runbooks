@@ -89,7 +89,7 @@ On the outside look inward:
 
 ### Logging
 
-A single pubsub server is setup to monitor a Log exporter from Stackdriver.  All
+A single pubsubbeat VM is setup to monitor a single pubsub that is configured to be a log sink from Stackdriver.  All
 items end up in the index `pubsub-gke-inf-<ENV>*`
 
 One can refer to this document for further details
