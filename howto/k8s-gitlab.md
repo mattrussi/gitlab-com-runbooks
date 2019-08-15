@@ -82,10 +82,11 @@ Our current application configuration components:
 We utilize https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/monitoring to
 deploy our monitoring infrastructure inside of Kubernetes.
 
-On the outside look inward:
-* We add the prometheus endpoint to our thanos-ops query instance
+Configuration outside of Kubernetes:
+* We add the prometheus endpoint to our thanos-ops query instance.  This is
+  handled via the `ops-base` chef role.
 * The thanos-query running inside the cluster is added as a datasource to
-  grafana
+  grafana.  This is currently done manually.
 
 ### Logging
 
