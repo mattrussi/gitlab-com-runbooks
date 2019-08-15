@@ -1,5 +1,5 @@
 local TRIGGER_SCHEDULE_MINS = 60;  // Run this watcher at this frequency, in minutes
-local QUERY_PERIOD_MINS = 90;
+local QUERY_PERIOD_MINS = 70;
 local OOM_ALERT_THRESHOLD = 3;
 
 local ES_QUERY = {
@@ -63,11 +63,11 @@ local painlessScript(script) = {
       request: ES_QUERY,
     },
   },
-  // condition: painlessScript(conditionScript),
-  // transform: painlessScript(transformScript),
+  condition: painlessScript(conditionScript),
+  transform: painlessScript(transformScript),
   actions: {
     "notify-slack": {
-      throttle_period: "10m",
+      throttle_period: "30m",
       slack: {
         account: "gitlab_team",
         message: {
