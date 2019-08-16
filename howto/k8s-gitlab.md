@@ -29,7 +29,7 @@ Our current application configuration components:
     * This is manual, documented here:
       https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/blob/master/README.md#service-account
     * The service account will have an authentication key file in json format
-      created, we'll need this shortly
+      created, we'll need this for the next step.
 1. Set the appropriate environment variables in the application configuration
 repos
     * Repos:
@@ -101,7 +101,8 @@ Configuration outside of Kubernetes:
 * We add the prometheus endpoint to our thanos-ops query instance.  This is
   handled via the `ops-base` chef role.
 * The thanos-query running inside the cluster is added as a datasource to
-  grafana.  This is currently done manually.
+  grafana.  This is currently done manually.  Though not required, this provides
+  a fall back in cases where `thanos-query.ops.gitlab.net` may be unhealthy.
 
 ### Logging
 
