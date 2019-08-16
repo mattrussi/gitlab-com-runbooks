@@ -73,7 +73,7 @@ deploy-rules-pre:
   extends: .deploy-rules
   stage: deploy-rules
 
-deploy-rules-pre:
+deploy-rules-production:
   environment: pre
   extends: .deploy-rules
   when: manual
