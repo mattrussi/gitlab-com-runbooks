@@ -43,7 +43,7 @@ local template = grafana.template;
     refresh='load',
     sort=1,
   ),
-  sidekiqWorker:: template.new(
+  sidekiqQueue:: template.new(
     "worker",
     "$PROMETHEUS_DS",
     'label_values(gitlab_background_worker_queue_duration_apdex:ratio{environment="$environment"}, worker)',

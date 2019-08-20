@@ -96,7 +96,7 @@ dashboard.new(
       title="Sidekiq Total Execution Time",
       description="The sum of job execution times",
       query='
-        sum(rate(sidekiq_jobs_completion_time_seconds_sum{environment="$environment"}[$__interval]))
+        sum(rate(sidekiq_jobs_completion_seconds_sum{environment="$environment"}[$__interval]))
       ',
       legendFormat='Total',
       interval="1m",
@@ -109,7 +109,7 @@ dashboard.new(
       title="Sidekiq Total Execution Time Per Priority",
       description="The sum of job execution times",
       query='
-        sum(rate(sidekiq_jobs_completion_time_seconds_sum{environment="$environment"}[$__interval])) by (priority)
+        sum(rate(sidekiq_jobs_completion_seconds_sum{environment="$environment"}[$__interval])) by (priority)
       ',
       legendFormat='{{ priority }}',
       interval="1m",
@@ -185,7 +185,7 @@ dashboard.new(
       title="Sidekiq Estimated Median Job Latency per priority",
       description="The median duration, once a job starts executing, that it runs for, by priority. Lower is better.",
       query='
-        avg(priority:sidekiq_jobs_completion_time_seconds:p50{environment="$environment"}) by (priority)
+        avg(priority:sidekiq_jobs_completion_seconds:p50{environment="$environment"}) by (priority)
       ',
       legendFormat='{{ priority }}',
       format="s",
@@ -201,7 +201,7 @@ dashboard.new(
       title="Sidekiq Estimated p95 Job Latency per priority",
       description="The 95th percentile duration, once a job starts executing, that it runs for, by priority. Lower is better.",
       query='
-        avg(priority:sidekiq_jobs_completion_time_seconds:p95{environment="$environment"}) by (priority)
+        avg(priority:sidekiq_jobs_completion_seconds:p95{environment="$environment"}) by (priority)
       ',
       legendFormat='{{ priority }}',
       format="s",

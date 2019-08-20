@@ -4,159 +4,162 @@
 // Weekly p95 job execution duration values
 // Calculated using the following ELK query: https://log.gitlab.net/goto/3bd0a288bd965a9e5ada6869740ae54c
 // Our thanos cluster is unable to handle this query, but if could it would
-// be: `histogram_quantile(0.95, sum(rate(sidekiq_jobs_completion_time_seconds_bucket{environment="gprd"}[1w])) by (le, worker, environment))`
-local P95_VALUES_FOR_WORKERS = {
-  'ExpireBuildArtifactsWorker': 2716.17,
-  'UpdateMaxSeatsUsedForGitlabComSubscriptionsWorker': 1242.25,
-  'PipelineScheduleWorker': 549.81,
-  'RemoveExpiredMembersWorker': 498.06,
-  'ImportExportProjectCleanupWorker': 448.27,
-  'GitlabUsagePingWorker': 353.07,
-  'Namespaces::PruneAggregationSchedulesWorker': 275.84,
-  'ProjectExportWorker': 242.24,
-  'Ci::ArchiveTracesCronWorker': 178.06,
-  'StuckCiJobsWorker': 174.01,
-  'InvalidGpgSignatureUpdateWorker': 125.07,
-  'ImportIssuesCsvWorker': 118.35,
-  'GroupDestroyWorker': 69.06,
-  'ClusterUpgradeAppWorker': 62.46,
-  'DeleteUserWorker': 57.31,
-  'ProjectDestroyWorker': 55.69,
-  'DeleteMergedBranchesWorker': 53.88,
-  'StoreSecurityReportsWorker': 50.57,
-  'StuckImportJobsWorker': 48.71,
-  'DeleteContainerRepositoryWorker': 48.55,
-  'ExportCsvWorker': 43.54,
-  'RepositoryForkWorker': 37.83,
-  'CleanupContainerRepositoryWorker': 34.53,
-  'PagesDomainVerificationCronWorker': 32.60,
-  'PagesWorker': 25.70,
-  'RepositoryImportWorker': 23.72,
-  'PostReceive': 23.43,
-  'RepositoryCleanupWorker': 21.85,
-  'EmailsOnPushWorker': 21.29,
-  'Gitlab::GithubImport::Stage::ImportRepositoryWorker': 20.63,
-  'RunPipelineScheduleWorker': 19.77,
-  'RepositoryArchiveCacheWorker': 19.68,
-  'RepositoryUpdateRemoteMirrorWorker': 18.70,
-  'HistoricalDataWorker': 17.37,
-  'Ci::BuildPrepareWorker': 17.21,
-  'ReactiveCachingWorker': 17.14,
-  'PagesDomainSslRenewalCronWorker': 17.08,
-  'Gitlab::GithubImport::Stage::FinishImportWorker': 16.15,
-  'RemoveUnreferencedLfsObjectsWorker': 15.90,
-  'Ci::CreateCrossProjectPipelineWorker': 15.84,
-  'DeleteStoredFilesWorker': 15.68,
-  'NewEpicWorker': 15.62,
-  'PruneWebHookLogsWorker': 15.32,
-  'TrendingProjectsWorker': 15.26,
-  'ClusterInstallAppWorker': 14.22,
-  'CreatePipelineWorker': 14.09,
-  'CreateGithubWebhookWorker': 13.75,
-  'ClusterPatchAppWorker': 12.15,
-  'CreateGpgSignatureWorker': 12.10,
-  'Clusters::Applications::UninstallWorker': 11.36,
-  'BuildQueueWorker': 9.69,
-  'ArchiveTraceWorker': 8.87,
-  'MailScheduler::NotificationServiceWorker': 8.70,
-  'IncidentManagement::ProcessAlertWorker': 8.53,
-  'MergeWorker': 8.25,
-  'RebaseWorker': 8.21,
-  'Clusters::Applications::WaitForUninstallAppWorker': 8.15,
-  'MailScheduler::IssueDueWorker': 8.08,
-  'NewMergeRequestWorker': 7.63,
-  'PipelineProcessWorker': 7.47,
-  'RemoveExpiredGroupLinksWorker': 7.04,
-  'DetectRepositoryLanguagesWorker': 6.99,
-  'Deployments::SuccessWorker': 6.85,
-  'ActiveJob::QueueAdapters::SidekiqAdapter::JobWrapper': 6.39,
-  'ClusterWaitForAppInstallationWorker': 6.38,
-  'PagesDomainRemovalCronWorker': 6.12,
-  'Gitlab::GithubImport::Stage::ImportBaseDataWorker': 6.02,
-  'EmailReceiverWorker': 5.91,
-  'NewIssueWorker': 5.85,
-  'WaitForClusterCreationWorker': 5.80,
-  'BuildFinishedWorker': 5.78,
-  'IssueDueSchedulerWorker': 5.73,
-  'Gitlab::GithubImport::Stage::ImportIssuesAndDiffNotesWorker': 5.70,
-  'ClusterProvisionWorker': 5.19,
-  'CreateNoteDiffFileWorker': 4.89,
-  'Gitlab::GithubImport::Stage::ImportPullRequestsWorker': 4.72,
-  'ElasticCommitIndexerWorker': 4.63,
-  'ClusterWaitForIngressIpAddressWorker': 4.49,
-  'PagesDomainSslRenewalWorker': 4.40,
-  'Ci::BuildScheduleWorker': 4.38,
-  'ElasticIndexerWorker': 4.30,
-  'TodosDestroyer::EntityLeaveWorker': 4.08,
-  'Gitlab::GithubImport::ImportPullRequestWorker': 3.93,
-  'Gitlab::GithubImport::Stage::ImportNotesWorker': 3.80,
-  'Deployments::FinishedWorker': 3.70,
-  'Gitlab::GithubImport::Stage::ImportLfsObjectsWorker': 3.68,
-  'BuildProcessWorker': 3.66,
-  'WebHookWorker': 3.62,
-  'GitGarbageCollectWorker': 3.14,
-  'AutoMergeProcessWorker': 3.10,
-  'StuckMergeJobsWorker': 3.08,
-  'ProjectServiceWorker': 3.07,
-  'RepositoryUpdateMirrorWorker': 3.00,
-  'UpdateProjectStatisticsWorker': 2.94,
-  'PipelineHooksWorker': 2.93,
-  'UpdateAllMirrorsWorker': 2.80,
-  'NewNoteWorker': 2.79,
-  'Geo::SidekiqCronConfigWorker': 2.71,
-  'ObjectPool::JoinWorker': 2.61,
-  'ObjectPool::CreateWorker': 2.57,
-  'Namespaces::RootStatisticsWorker': 2.51,
-  'ExpirePipelineCacheWorker': 2.40,
-  'Gitlab::GithubImport::ImportIssueWorker': 2.39,
-  'PruneOldEventsWorker': 2.22,
-  'Gitlab::GithubImport::AdvanceStageWorker': 2.10,
-  'ObjectPool::ScheduleJoinWorker': 1.99,
-  'ProcessCommitWorker': 1.96,
-  'PipelineNotificationWorker': 1.95,
-  'Gitlab::GithubImport::ImportDiffNoteWorker': 1.90,
-  'UpdateMergeRequestsWorker': 1.82,
-  'BuildHooksWorker': 1.80,
-  'DeleteDiffFilesWorker': 1.78,
-  'Gitlab::GithubImport::ImportNoteWorker': 1.78,
-  'RepositoryRemoveRemoteWorker': 1.71,
-  'Namespaces::ScheduleAggregationWorker': 1.53,
-  'PagesDomainVerificationWorker': 1.48,
-  'ProjectDailyStatisticsWorker': 1.45,
-  'ChatNotificationWorker': 1.41,
-  'AutoDevops::DisableWorker': 1.39,
-  'TodosDestroyer::PrivateFeaturesWorker': 1.31,
-  'TodosDestroyer::ConfidentialIssueWorker': 1.28,
-  'ProjectCacheWorker': 1.15,
-  'RemoteMirrorNotificationWorker': 1.14,
-  'TodosDestroyer::ProjectPrivateWorker': 1.08,
-  'StageUpdateWorker': 1.07,
-  'SyncSecurityReportsToReportApprovalRulesWorker': 1.03,
-  'IrkerWorker': 1.03,
-  'PipelineUpdateWorker': 0.91,
-  'Gitlab::GithubImport::RefreshImportJidWorker': 0.87,
-  'BuildSuccessWorker': 0.83,
-  'PipelineMetricsWorker': 0.83,
-  'GitlabShellWorker': 0.81,
-  'PseudonymizerWorker': 0.80,
-  'TodosDestroyer::GroupPrivateWorker': 0.77,
-  'RequestsProfilesWorker': 0.68,
-  'ExpireJobCacheWorker': 0.66,
-  'ProjectImportScheduleWorker': 0.61,
-  'LdapAllGroupsSyncWorker': 0.59,
-  'PipelineSuccessWorker': 0.55,
-  'ScheduleMigrateExternalDiffsWorker': 0.53,
-  'UpdateHeadPipelineForMergeRequestWorker': 0.53,
-  'Geo::ContainerRepositorySyncDispatchWorker': 0.50,
-  'LdapSyncWorker': 0.48,
-  'AuthorizedProjectsWorker': 0.32,
-  'ObjectPool::DestroyWorker': 0.14,
-  'AdminEmailWorker': 0.05
+// be: `histogram_quantile(0.99, sum(rate(sidekiq_jobs_completion_seconds_bucket{environment="gprd"}[1w])) by (le, queue, environment))`
+local P99_VALUES_FOR_QUEUES = {
+  "cronjob:expire_build_artifacts": 2723.086,
+  "import_issues_csv": 694.804,
+  "cronjob:import_export_project_cleanup": 686.253,
+  "cronjob:pipeline_schedule": 626.692,
+  "project_export": 459.545,
+  "invalid_gpg_signature_update": 385.959,
+  "repository_cleanup": 373.906,
+  "cronjob:update_max_seats_used_for_gitlab_com_subscriptions": 344.92,
+  "cronjob:gitlab_usage_ping": 339.92,
+  "delete_merged_branches": 240.083,
+  "cronjob:remove_expired_members": 234.193,
+  "repository_import": 180.9,
+  "export_csv": 174.309,
+  "cronjob:ci_archive_traces_cron": 169.422,
+  "repository_fork": 148.61,
+  "pages": 147.896,
+  "container_repository:delete_container_repository": 143.195,
+  "cronjob:stuck_ci_jobs": 121.5,
+  "group_destroy": 118.058,
+  "pipeline_default:store_security_reports": 100.996,
+  "repository_update_remote_mirror": 80.89,
+  "merge": 76.944,
+  "cronjob:stuck_import_jobs": 72.014,
+  "container_repository:cleanup_container_repository": 70.78,
+  "cronjob:namespaces_prune_aggregation_schedules": 69.766,
+  "gcp_cluster:cluster_upgrade_app": 62.337,
+  "pipeline_processing:ci_build_prepare": 60.508,
+  "gcp_cluster:cluster_patch_app": 58.283,
+  "delete_user": 55.599,
+  "reactive_caching": 54.725,
+  "rebase": 50.893,
+  "project_destroy": 42.849,
+  "cronjob:pages_domain_verification_cron": 41.732,
+  "github_importer:github_import_stage_import_repository": 40.742,
+  "pipeline_processing:build_process": 37.721,
+  "delete_stored_files": 34.515,
+  "cronjob:issue_due_scheduler": 30.865,
+  "pipeline_creation:run_pipeline_schedule": 30.777,
+  "gcp_cluster:cluster_install_app": 29.227,
+  "pipeline_processing:build_queue": 28.153,
+  "create_gpg_signature": 25.656,
+  "cronjob:repository_archive_cache": 24.858,
+  "emails_on_push": 22.227,
+  "cronjob:pages_domain_ssl_renewal_cron": 21.73,
+  "post_receive": 21.421,
+  "github_importer:github_import_stage_import_issues_and_diff_notes": 19.407,
+  "cronjob:remove_unreferenced_lfs_objects": 19.304,
+  "create_github_webhook": 18.642,
+  "github_importer:github_import_stage_import_pull_requests": 17.7,
+  "gcp_cluster:clusters_applications_uninstall": 15.801,
+  "cronjob:historical_data": 15.587,
+  "pipeline_processing:pipeline_process": 15.518,
+  "cronjob:trending_projects": 15.428,
+  "cronjob:prune_web_hook_logs": 15.219,
+  "mail_scheduler:mail_scheduler_issue_due": 15.195,
+  "new_epic": 14.525,
+  "github_importer:github_import_stage_finish_import": 13.63,
+  "pipeline_default:ci_create_cross_project_pipeline": 12.51,
+  "pipeline_creation:create_pipeline": 11.871,
+  "elastic_indexer": 11.398,
+  "github_import_advance_stage": 11.37,
+  "pipeline_background:archive_trace": 10.194,
+  "incident_management:incident_management_process_alert": 10.033,
+  "gcp_cluster:cluster_wait_for_app_installation": 9.843,
+  "repository_update_mirror": 9.813,
+  "new_merge_request": 9.528,
+  "detect_repository_languages": 8.955,
+  "deployment:deployments_success": 8.431,
+  "github_importer:github_import_stage_import_notes": 7.936,
+  "elastic_commit_indexer": 7.391,
+  "gcp_cluster:wait_for_cluster_creation": 7.325,
+  "github_importer:github_import_stage_import_base_data": 6.982,
+  "mailers": 6.93,
+  "cronjob:remove_expired_group_links": 6.905,
+  "github_importer:github_import_stage_import_lfs_objects": 6.842,
+  "email_receiver": 6.825,
+  "git_garbage_collect": 6.516,
+  "pages_domain_ssl_renewal": 6.176,
+  "gcp_cluster:clusters_applications_wait_for_uninstall_app": 6.104,
+  "mail_scheduler:mail_scheduler_notification_service": 5.792,
+  "create_note_diff_file": 5.722,
+  "gcp_cluster:cluster_provision": 5.638,
+  "cronjob:stuck_merge_jobs": 5.528,
+  "new_note": 4.871,
+  "new_issue": 4.798,
+  "web_hook": 4.209,
+  "pipeline_processing:build_finished": 4.134,
+  "pipeline_processing:ci_build_schedule": 4.1,
+  "deployment:deployments_finished": 4.039,
+  "update_merge_requests": 4.029,
+  "cronjob:geo_sidekiq_cron_config": 3.976,
+  "github_importer:github_import_import_pull_request": 3.943,
+  "todos_destroyer:todos_destroyer_entity_leave": 3.868,
+  "gcp_cluster:cluster_wait_for_ingress_ip_address": 3.467,
+  "project_service": 3.434,
+  "chat_notification": 3.341,
+  "auto_merge:auto_merge_process": 3.107,
+  "object_pool:object_pool_join": 3.09,
+  "cronjob:update_all_mirrors": 2.838,
+  "update_project_statistics": 2.697,
+  "pipeline_hooks:pipeline_hooks": 2.66,
+  "update_namespace_statistics:namespaces_root_statistics": 2.542,
+  "pipeline_cache:expire_pipeline_cache": 2.535,
+  "process_commit": 2.318,
+  "project_cache": 2.27,
+  "pages_domain_verification": 2.253,
+  "object_pool:object_pool_create": 1.962,
+  "github_importer:github_import_refresh_import_jid": 1.857,
+  "auto_devops:auto_devops_disable": 1.802,
+  "cronjob:prune_old_events": 1.729,
+  "github_importer:github_import_import_diff_note": 1.696,
+  "pipeline_default:pipeline_notification": 1.675,
+  "github_importer:github_import_import_issue": 1.666,
+  "delete_diff_files": 1.658,
+  "irker": 1.61,
+  "repository_remove_remote": 1.569,
+  "background_migration": 1.506,
+  "pipeline_background:ci_build_trace_chunk_flush": 1.506,
+  "todos_destroyer:todos_destroyer_confidential_issue": 1.487,
+  "cronjob:pages_domain_removal_cron": 1.46,
+  "update_namespace_statistics:namespaces_schedule_aggregation": 1.447,
+  "project_daily_statistics": 1.441,
+  "pipeline_hooks:build_hooks": 1.436,
+  "pipeline_default:sync_security_reports_to_report_approval_rules": 1.295,
+  "remote_mirror_notification": 1.232,
+  "github_importer:github_import_import_note": 1.064,
+  "object_pool:object_pool_schedule_join": 1.047,
+  "todos_destroyer:todos_destroyer_private_features": 1.042,
+  "todos_destroyer:todos_destroyer_project_private": 1.035,
+  "authorized_projects": 0.98,
+  "todos_destroyer:todos_destroyer_group_private": 0.96,
+  "pipeline_processing:stage_update": 0.882,
+  "gitlab_shell": 0.857,
+  "project_import_schedule": 0.832,
+  "pipeline_processing:pipeline_update": 0.763,
+  "pipeline_default:pipeline_metrics": 0.717,
+  "pipeline_cache:expire_job_cache": 0.653,
+  "cronjob:schedule_migrate_external_diffs": 0.596,
+  "pipeline_processing:build_success": 0.591,
+  "pipeline_processing:update_head_pipeline_for_merge_request": 0.565,
+  "cronjob:pseudonymizer": 0.537,
+  "cronjob:ldap_all_groups_sync": 0.529,
+  "pipeline_processing:pipeline_success": 0.377,
+  "object_pool:object_pool_destroy": 0.271,
+  "cronjob:requests_profiles": 0.235,
+  "cronjob:ldap_sync": 0.134,
+  "cronjob:admin_email": 0.113,
 };
 
 // --------------------------------------------------------
 
-// Returns the next biggest latency bucket for a given latency
+// Returns the next biggest latency bucket for a given latency.
+// These should match the values in
+// `count(sidekiq_jobs_completion_seconds_bucket{environment="gprd"}) by (le)`
 local thresholdForLatency(latency) =
   if latency < 0.1 then
     "0.1"
@@ -174,46 +177,50 @@ local thresholdForLatency(latency) =
     "10"
   else if latency < 25 then
     "25"
-  else if latency < 50 then
-    "50"
+  else if latency < 60 then
+    "60"
+  else if latency < 300 then
+    "300"
+  else if latency < 600 then
+    "600"
   else
     "+Inf";
 
-// Groups each worker by its apdex threshold
+// Groups each queue by its apdex threshold
 local latencyGroups =
-  local addWorkerToGroup(groups, worker) =
-    local threshold = thresholdForLatency(P95_VALUES_FOR_WORKERS[worker]);
+  local addQueueToGroup(groups, queue) =
+    local threshold = thresholdForLatency(P99_VALUES_FOR_QUEUES[queue]);
     groups + {
-      [threshold]+: [worker]
+      [threshold]+: [queue]
     };
 
-  std.foldl(addWorkerToGroup, std.objectFields(P95_VALUES_FOR_WORKERS), {});
+  std.foldl(addQueueToGroup, std.objectFields(P99_VALUES_FOR_QUEUES), {});
 
-// Converts an array of workers into a prometheus regular expression matcher
-local arrayToRegExp(workers) = std.join('|',workers);
+// Converts an array of queues into a prometheus regular expression matcher
+local arrayToRegExp(queues) = std.join('|', queues);
 
-// Given a threshold and list of workers, generates the appropriate prometheus Apdex expression
-local apdexScoreForWorkers(threshold,workers) =
-  'sum(rate(sidekiq_jobs_completion_time_seconds_bucket{le="' + threshold + '", worker=~"' + arrayToRegExp(workers) + '"}[1m])) by (environment, worker, stage, tier, type)
+// Given a threshold and list of queues, generates the appropriate prometheus Apdex expression
+local apdexScoreForQueues(threshold, queues) =
+  'sum(rate(sidekiq_jobs_completion_seconds_bucket{le="' + threshold + '", queue=~"' + arrayToRegExp(queues) + '"}[1m])) by (environment, queue, stage, tier, type)
    /
-   sum(rate(sidekiq_jobs_completion_time_seconds_bucket{le="+Inf", worker=~"' + arrayToRegExp(workers) + '"}[1m])) by (environment, worker, stage, tier, type) >= 0';
+   sum(rate(sidekiq_jobs_completion_seconds_bucket{le="+Inf", queue=~"' + arrayToRegExp(queues) + '"}[1m])) by (environment, queue, stage, tier, type) >= 0';
 
-local recordingRuleForThresholdAndWorkers(threshold, workers) =
+local recordingRuleForThresholdAndQueues(threshold, queues) =
   {
     record: "gitlab_background_worker_queue_duration_apdex:ratio",
     labels: {
       threshold: threshold
     },
-    expr: apdexScoreForWorkers(threshold, workers)
+    expr: apdexScoreForQueues(threshold, queues)
   };
 
 local excludeInfThreshold(threshold) = threshold != "+Inf";
 
 local rulesFile = {
   groups: [{
-    name: "sidekiq-worker-apdex-scores.rules",
+    name: "sidekiq-queue-apdex-scores.rules",
     rules: [
-      recordingRuleForThresholdAndWorkers(threshold, latencyGroups[threshold]) for threshold in std.filter(excludeInfThreshold, std.objectFields(latencyGroups))
+      recordingRuleForThresholdAndQueues(threshold, latencyGroups[threshold]) for threshold in std.filter(excludeInfThreshold, std.objectFields(latencyGroups))
     ]
   }]
 };
