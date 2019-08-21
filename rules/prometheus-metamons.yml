@@ -90,7 +90,7 @@ groups:
       title: '{{$labels.job}} is backlogging on the notifications queue'
 
   - alert: PrometheusErrorSendingAlerts
-    expr: rate(prometheus_notifications_errors_total{job="release-name-prometheus-op-prometheus",namespace="monitoring"}[5m]) / rate(prometheus_notifications_sent_total{job="release-name-prometheus-op-prometheus",namespace="monitoring"}[5m]) > 0.01
+    expr: rate(prometheus_notifications_errors_total[5m]) / rate(prometheus_notifications_sent_total[5m]) > 0.01
     for: 10m
     labels:
       service: prometheus
@@ -168,7 +168,7 @@ groups:
       title: Prometheus isn't ingesting samples
 
   - alert: PrometheusTargetScrapesDuplicate
-    expr: increase(prometheus_target_scrapes_sample_duplicate_timestamp_total{job="release-name-prometheus-op-prometheus",namespace="monitoring"}[5m]) > 0
+    expr: increase(prometheus_target_scrapes_sample_duplicate_timestamp_total[5m]) > 0
     for: 10m
     labels:
       service: prometheus
