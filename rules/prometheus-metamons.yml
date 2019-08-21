@@ -24,6 +24,20 @@ groups:
         over 10 minutes.'
       runbook: troubleshooting/prometheus-is-down.md
       title: '{{$labels.job}} is unreachable'
+
+  - alert: PrometheusNotConnectedToAlertmanagers
+    expr: prometheus_notifications_alertmanagers_discovered < 1
+    for: 10m
+    labels:
+      pager: pagerduty
+      service: prometheus
+      severity: s1
+    annotations:
+      description: '{{$labels.env}} Prometheus {{$labels.pod}} {{$labels.fqdn}}
+       is not connected to any Alertmanagers'
+      runbook: troubleshooting/prometheus-is-down.md
+      title: 'Prometheus not connected to any Alertmanagers'
+
   - alert: PrometheusManyRestarts
     expr: changes(process_start_time_seconds{job=~"prometheus.*"}[30m]) > 3
     for: 30m
@@ -74,6 +88,17 @@ groups:
         queue length: {{$value}}.'
       runbook: troubleshooting/prometheus-notifications-backlog.md
       title: '{{$labels.job}} is backlogging on the notifications queue'
+
+  - alert: PrometheusErrorSendingAlerts
+    expr: rate(prometheus_notifications_errors_total{job="release-name-prometheus-op-prometheus",namespace="monitoring"}[5m]) / rate(prometheus_notifications_sent_total{job="release-name-prometheus-op-prometheus",namespace="monitoring"}[5m]) > 0.01
+    for: 10m
+    labels:
+      service: prometheus
+      severity: s4
+    annotations:
+      description: '{{$labels.env}} Prometheus {{$labels.pod}} {{$labels.fqdn}} is having errors sending alerts to Alertmanager {{$labels.alertmanager}}'
+      title: Errors while sending alerts from Prometheus
+
   - alert: PrometheusScrapingSlowly
     expr: prometheus_target_interval_length_seconds{interval!~".*m.*",quantile="0.9"}
       > 2 * 60
@@ -121,6 +146,37 @@ groups:
       description: '{{$labels.job}} at {{$labels.instance}} has failed compactions in the last 6 hours'
       runbook: troubleshooting/prometheus-failed-compactions.md
       title: 'Prometheus has failed compactions'
+
+  - alert: PrometheusTSDBReloadsFailing
+    expr: increase(prometheus_tsdb_reloads_failures_total[2h]) > 0
+    for: 12h
+    labels:
+      service: prometheus
+      severity: s4
+    annotations:
+      description: '{{$labels.env}} Prometheus {{$labels.pod}} {{$labels.fqdn}} had {{$value | humanize}} reload failures over the last four hours.'
+      title: Prometheus has issues reloading data blocks from disk
+
+  - alert: PrometheusNotIngestingSamples
+    expr: rate(prometheus_tsdb_head_samples_appended_total[5m]) <= 0
+    for: 10m
+    labels:
+      service: prometheus
+      severity: s4
+    annotations:
+      description: '{{$labels.env}} Prometheus {{$labels.pod }} {{$labels.fqdn}} is not ingesting samples.'
+      title: Prometheus isn't ingesting samples
+
+  - alert: PrometheusTargetScrapesDuplicate
+    expr: increase(prometheus_target_scrapes_sample_duplicate_timestamp_total{job="release-name-prometheus-op-prometheus",namespace="monitoring"}[5m]) > 0
+    for: 10m
+    labels:
+      service: prometheus
+      severity: s4
+    annotations:
+      description: '{{$labels.env}} Prometheus {{$labels.pod }} {{$labels.fqdn}} has many samples rejected due to duplicate timestamps but different values'
+      title: Prometheus has many samples rejected
+
   - alert: PrometheusLargeScrapes
     expr: increase(prometheus_target_scrapes_exceeded_sample_limit_total[30m]) > 60
     labels:
