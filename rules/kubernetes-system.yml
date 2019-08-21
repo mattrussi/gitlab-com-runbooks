@@ -1,18 +1,6 @@
 groups:
   - name: kubernetes-system.rules
     rules:
-      - alert: KubeReplicasSetPodMismatch
-        annotations:
-          title: Deployment Reclicas Mismatch
-          description: Deployment {{ $labels.namespace }}/{{ $labels.replicaset }} has not matched the expected number of replicas for longer than an hour.
-          runbook: troubleshooting/kubernetes.md
-        expr: |-
-          kube_replicaset_spec_replicas{job="kube-state-metrics"}
-          !=
-          kube_replicaset_status_ready_replicas{job="kube-state-metrics"}
-        for: 5m
-        labels:
-          severity: s3
 
       - alert: KubeNodeNotReady
         annotations:
