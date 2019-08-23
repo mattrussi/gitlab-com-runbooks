@@ -153,7 +153,7 @@ groups:
     record: node:node_num_cpu:sum
   - expr: |
       1 - avg(rate(node_cpu_seconds_total{job="node-exporter",mode="idle"}[1m]))
-    record: :node_cpu_utilisation:avg1m
+    record: ':node_cpu_utilisation:avg1m'
   - expr: |
       1 - avg by (node) (
         rate(node_cpu_seconds_total{job="node-exporter",mode="idle"}[1m])
@@ -189,10 +189,10 @@ groups:
     record: ':node_memory_utilisation:'
   - expr: |
       sum(node_memory_MemFree_bytes{job="node-exporter"} + node_memory_Cached_bytes{job="node-exporter"} + node_memory_Buffers_bytes{job="node-exporter"})
-    record: :node_memory_MemFreeCachedBuffers_bytes:sum
+    record: ':node_memory_MemFreeCachedBuffers_bytes:sum'
   - expr: |
       sum(node_memory_MemTotal_bytes{job="node-exporter"})
-    record: :node_memory_MemTotal_bytes:sum
+    record: ':node_memory_MemTotal_bytes:sum'
   - expr: |
       sum by (node) (
         (node_memory_MemFree_bytes{job="node-exporter"} + node_memory_Cached_bytes{job="node-exporter"} + node_memory_Buffers_bytes{job="node-exporter"})
@@ -222,7 +222,7 @@ groups:
         (rate(node_vmstat_pgpgin{job="node-exporter"}[1m])
        + rate(node_vmstat_pgpgout{job="node-exporter"}[1m]))
       )
-    record: :node_memory_swap_io_bytes:sum_rate
+    record: ':node_memory_swap_io_bytes:sum_rate'
   - expr: |
       1 -
       sum by (node) (
@@ -250,7 +250,7 @@ groups:
     record: node:node_memory_swap_io_bytes:sum_rate
   - expr: |
       avg(irate(node_disk_io_time_seconds_total{job="node-exporter",device=~"nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+"}[1m]))
-    record: :node_disk_utilisation:avg_irate
+    record: ':node_disk_utilisation:avg_irate'
   - expr: |
       avg by (node) (
         irate(node_disk_io_time_seconds_total{job="node-exporter",device=~"nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+"}[1m])
@@ -260,7 +260,7 @@ groups:
     record: node:node_disk_utilisation:avg_irate
   - expr: |
       avg(irate(node_disk_io_time_weighted_seconds_total{job="node-exporter",device=~"nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+"}[1m]))
-    record: :node_disk_saturation:avg_irate
+    record: ':node_disk_saturation:avg_irate'
   - expr: |
       avg by (node) (
         irate(node_disk_io_time_weighted_seconds_total{job="node-exporter",device=~"nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+"}[1m])
@@ -279,7 +279,7 @@ groups:
   - expr: |
       sum(irate(node_network_receive_bytes_total{job="node-exporter",device!~"veth.+"}[1m])) +
       sum(irate(node_network_transmit_bytes_total{job="node-exporter",device!~"veth.+"}[1m]))
-    record: :node_net_utilisation:sum_irate
+    record: ':node_net_utilisation:sum_irate'
   - expr: |
       sum by (node) (
         (irate(node_network_receive_bytes_total{job="node-exporter",device!~"veth.+"}[1m]) +
@@ -291,7 +291,7 @@ groups:
   - expr: |
       sum(irate(node_network_receive_drop_total{job="node-exporter",device!~"veth.+"}[1m])) +
       sum(irate(node_network_transmit_drop_total{job="node-exporter",device!~"veth.+"}[1m]))
-    record: :node_net_saturation:sum_irate
+    record: ':node_net_saturation:sum_irate'
   - expr: |
       sum by (node) (
         (irate(node_network_receive_drop_total{job="node-exporter",device!~"veth.+"}[1m]) +
