@@ -242,17 +242,17 @@ replicating again.
 Statistics views are instance-local and not replicated, although the statistics
 themselves are replicated
 ([source](https://www.postgresql.org/message-id/CABUevEySGifJJh8c%2B4YDTyB%3Du-qUT7jA%2BYBgfgjEU_UAO2vGuw%40mail.gmail.com)).
-After a failover we sometimes receive an alert about too many dead tuples that,
+After a failover we usually receive an alert about too many dead tuples that,
 counter-intuitively, can be resolved with `ANALYZE` rather than `VACUUM`. See
 also [troubleshooting/postgres.md](../troubleshooting/postgres.md).
 
 1. Get a `gitlab-psql` shell on the new master. It's recommended to do this
    inside `tmux` or some other mechanism for not terminating the process on
    `ssh` disconnection (e.g. `nohup`).
-1. `SET statement_timeout to '3h';`. At the time of writing, a global
+1. `SET statement_timeout=0;`. At the time of writing, a global
    statement_timeout of 15s is in effect and would stop most `ANALYZE`
    operations.
-1. `ANALYZE;`
+1. `ANALYZE VERBOSE;`
 
 This may [become
 automated](https://gitlab.com/gitlab-com/gl-infra/infrastructure/issues/5841).
