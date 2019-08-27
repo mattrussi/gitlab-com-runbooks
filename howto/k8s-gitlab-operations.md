@@ -46,7 +46,7 @@ gcloud compute instances list --project "gitlab-production" | grep ^gke
   * Initiate an SSH connection to one of the production nodes
 
 ```
-gcloud beta compute --project "gitlab-production" ssh --zone us-east1-b gke-gprd-gitlab-gke-node-pool-0-ec8ba4d2-q1j9 --tunnel-through-iap
+gcloud compute --project "gitlab-production" ssh --zone us-east1-b gke-gprd-gitlab-gke-node-pool-0-ec8ba4d2-q1j9 --tunnel-through-iap
 ```
 
 ## Upgrading
