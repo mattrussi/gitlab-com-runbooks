@@ -49,7 +49,7 @@ gcloud compute instances list --project "gitlab-production" | grep ^gke
 gcloud compute --project "gitlab-production" ssh --zone us-east1-b gke-gprd-gitlab-gke-node-pool-0-ec8ba4d2-q1j9 --tunnel-through-iap
 ```
 
-## Upgrading
+## Application Upgrading
 
 * [CHART_VERSION](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/blob/dd201383641d01c5b5471012563a3079fdcdbdf1/CHART_VERSION)
   sets the version of the GitLab helm chart
