@@ -62,8 +62,47 @@
 
 1. Move all repositories in batches from the old node to the new ZFS node.
 
-    1. **This step is a work-in-progress**. See
-       scripts/move_all_repos_between_nodes.rb, but note that this has not been run
-       (outside of a dry run).
+    1. See scripts/move_all_repos_between_nodes.rb for up-to-date usage
+       instructions.
+
+    1. Assuming you have redirected output to a log file as described in the
+       comment at the top of the script: `grep 'excluding for manual triage'
+       log_file`. This will list the projects that could not move. See the below
+       section for more details on what to do here.
 
     1. Rollback: same as previous step.
+
+1. Check that there are no projects on logical shards corresponding to the
+   physical git file store:
+
+   1. In a rails console, for each logical shard:
+      `Project.where(repository_storage: 'nfs-fileXX').count`
+   1. In production, at the time of writing, a logical shard corresponds 1:1
+      with a physical server.
+
+1. Decommission the old file store node.
+
+   1. Ensure that logical shards kept on this server are not accepting new repos
+      (using the admin panel).
+   1. Having completed the previous step, you should be satisfied there are no
+      repositories stored on this server.
+   1. Using the GCP console, stop the machine.
+   1. Take a snapshot of its data disk, for safe keeping.
+   1. Delete the machine and disk.
+   1. This will create a terraform plan diff, but so will pretty much any other
+      decommissioning strategy unless the machine in question is the final
+      index, making it safe to decrement the count.
+   1. When all machines in a fleet have been decommissioned, you can then remove
+      the terraform module declaring the machines, and apply.
+
+## Projects that refuse to move
+
+At the time of writing, 2 projects (on staging) have been observed not to move,
+and the migration script logs "excluding for manual triage". This reason is that
+the repository disk path of the project doesn't actually exist. You can still
+load the project page, but an error will be shown where the file browser would
+normally be.
+
+No decision has currently been made as to what to do about these projects, but
+it might be wise to simply delete them from staging, and wait to see if the
+problem even exists in production.

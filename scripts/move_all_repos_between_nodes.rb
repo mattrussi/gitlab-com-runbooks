@@ -31,7 +31,8 @@ module EE
       raise ArgumentError unless ::Gitlab.config.repositories.storages.key?(new_repository_storage_key)
 
       if sync
-        update!(repository_read_only: true)
+        self.repository_read_only = true
+        save!(validate: false)
         await_git_transfer_completion
         ProjectUpdateRepositoryStorageWorker.new.perform(id, new_repository_storage_key)
       else
@@ -40,7 +41,7 @@ module EE
 
         # We need to save the record to persist repository_read_only but in some
         # cases, such as `Projects::UpdateService`, the save is performed later.
-        save! unless skip_save
+        save!(validate: false) unless skip_save
       end
     end
 
@@ -74,11 +75,13 @@ module Projects
       if result
         mark_old_paths_for_archive
 
-        project.update(repository_storage: new_repository_storage_key, repository_read_only: false)
+        project.assign_attributes(repository_storage: new_repository_storage_key, repository_read_only: false)
+        project.save(validate: false)
         project.leave_pool_repository
         project.track_project_repository
       else
-        project.update(repository_read_only: false)
+        project.repository_read_only = false
+        project.save(validate: false)
         false
       end
     end
@@ -128,9 +131,6 @@ def move_between_shards(source, target, batch_size, dry_run)
           log "#{project.full_path} could not be moved - excluding for manual triage"
           exclusions_mutex.synchronize { exclusions << "#{project.namespace_id}/#{project.path}" }
         end
-      rescue ActiveRecord::RecordInvalid => e
-        log "caught #{e} from #{project.full_path} - excluding for manual triage"
-        exclusions_mutex.synchronize { exclusions << "#{project.namespace_id}/#{project.path}" }
       end
     end
 
@@ -144,10 +144,11 @@ def move_one_repo(project, target, dry_run)
   # Use namespace_id rather than name to avoid joins.
   desc = "#{project.path} in namespace #{project.namespace_id}"
 
+  # TODO allow_move_read_only param on MR'ed method
   was_read_only = project.repository_read_only?
   if was_read_only
     log "#{project.path} was read only, temporarily setting read-write in order to migrate"
-    project.update!(repository_read_only: false)
+    set_read_only(project, false)
   end
 
   if dry_run != 'false'
@@ -161,17 +162,22 @@ def move_one_repo(project, target, dry_run)
       log "finished moving #{desc}"
     rescue Gitlab::Git::CommandError => e
       log "caught exception from project #{project.full_path}: #{e}"
-      project.update!(repository_read_only: false) unless was_read_only
+      set_read_only(project, false) unless was_read_only
     end
 
     if was_read_only
       log "setting #{project.path} back to readonly"
       project.reload
-      project.update!(repository_read_only: true)
+      set_read_only(project, true)
     end
 
     can_be_moved
   end
+end
+
+def set_read_only(project, read_only)
+  project.repository_read_only = read_only
+  project.save!(validate: false)
 end
 
 source_repository_store.split(',').each do |source|
