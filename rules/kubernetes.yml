@@ -6,7 +6,7 @@ groups:
         annotations:
           title: Reached maximum node count
           description: '{{ $labels.environment }} has reached maximum allowed nodes'
-          runbook: troubleshooting/kubernetes
+          runbook: troubleshooting/kubernetes.md
         expr: |-
           count(stackdriver_gce_instance_compute_googleapis_com_instance_uptime{instance_name=~"gke-.*"}) by (environment) >= 12
         for: 5m
@@ -17,7 +17,7 @@ groups:
         annotations:
           title: High node count in GKE
           description: '{{ $labels.environment }} is close to the maximum allowed nodes'
-          runbook: troubleshooting/kubernetes
+          runbook: troubleshooting/kubernetes.md
         expr: |-
           count(stackdriver_gce_instance_compute_googleapis_com_instance_uptime{instance_name=~"gke-.*"}) by (environment) > 10
         for: 30m
