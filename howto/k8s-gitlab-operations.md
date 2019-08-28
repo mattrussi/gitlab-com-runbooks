@@ -77,7 +77,7 @@ To upgrade or downgrade the versions:
 :warning: **Be careful with secrets as an invalid configuration may cause a service outage** :warning:
 
 There are three secrets for the registry service, the way they are configured in
-the cluster is described in the [HELM_READE](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/blob/dd201383641d01c5b5471012563a3079fdcdbdf1/HELM_README.md#secret-for-gcs-configuration).
+the cluster is described in the [HELM_README](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/blob/dd201383641d01c5b5471012563a3079fdcdbdf1/HELM_README.md#secret-for-gcs-configuration).
 
 * **registry-storage** - for accessing object storage, local to the registry service
   and contains the json credential for the service account. To rotate this
