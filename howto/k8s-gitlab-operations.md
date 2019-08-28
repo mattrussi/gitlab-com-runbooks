@@ -37,16 +37,14 @@ kubectl -n gitlab get hpa
   [example that deploys a change from non-production to production](https://ops.gitlab.net/gitlab-com/gl-infra/k8s-workloads/gitlab-com/pipelines/75089).
 
 - [ ] Ensure you can SSH to a production node
-  * Query the name of one of the GKE nodes
 
 ```
+# Query the name of one of the GKE nodes
 gcloud compute instances list --project "gitlab-production" | grep ^gke
-```
 
-  * Initiate an SSH connection to one of the production nodes
-
-```
+# Initiate an SSH connection to one of the production nodes
 gcloud beta compute --project "gitlab-production" ssh --zone us-east1-b gke-gprd-gitlab-gke-node-pool-0-ec8ba4d2-q1j9 --tunnel-through-iap
+
 ```
 
 ## Upgrading
@@ -121,6 +119,10 @@ It is possible to scale pods based on custom metric but this is currently not
 used in the cluster.
 
 ### Eviction
+
+_Note: Evicted Pods are not removed by Kubernetes, it's perfectly normal to see some Evicted Pods in the list_
+
+Automatic cleaning up of evicted pods is tracked in https://gitlab.com/gitlab-com/gl-infra/infrastructure/issues/7704
 
 * Configuration for eviction when pods are out of resources https://kubernetes.io/docs/tasks/administer-cluster/out-of-resource/
 
