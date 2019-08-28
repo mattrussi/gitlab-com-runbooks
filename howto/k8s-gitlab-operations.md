@@ -140,5 +140,7 @@ The memory threshold is configures in the
 [kubernetes config for Registry](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/blob/4b7ba9609f634400e500b3ac54aa51240ff85b27/gprd.yaml#L6)
 
 If a large number of pods are being evicted it's possible that increasing the
-quota will help as it will give more time for the cluster auto-scaler to add new
-nodes.
+requests will help as it will ask Kubernetes to provision new nodes if capacity
+is limited.
+
+Kubernetes Resource Management: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
