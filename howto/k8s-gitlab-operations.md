@@ -43,11 +43,10 @@ kubectl -n gitlab get hpa
 gcloud compute instances list --project "gitlab-production" | grep ^gke
 
 # Initiate an SSH connection to one of the production nodes
-gcloud beta compute --project "gitlab-production" ssh --zone us-east1-b gke-gprd-gitlab-gke-node-pool-0-ec8ba4d2-q1j9 --tunnel-through-iap
-
+gcloud compute --project "gitlab-production" ssh --zone us-east1-b gke-gprd-gitlab-gke-node-pool-0-ec8ba4d2-q1j9 --tunnel-through-iap
 ```
 
-## Upgrading
+## Application Upgrading
 
 * [CHART_VERSION](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/blob/dd201383641d01c5b5471012563a3079fdcdbdf1/CHART_VERSION)
   sets the version of the GitLab helm chart
@@ -142,5 +141,7 @@ The memory threshold is configures in the
 [kubernetes config for Registry](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/blob/4b7ba9609f634400e500b3ac54aa51240ff85b27/gprd.yaml#L6)
 
 If a large number of pods are being evicted it's possible that increasing the
-quota will help as it will give more time for the cluster auto-scaler to add new
-nodes.
+requests will help as it will ask Kubernetes to provision new nodes if capacity
+is limited.
+
+Kubernetes Resource Management: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
