@@ -11,6 +11,7 @@ groups:
           count(stackdriver_gce_instance_compute_googleapis_com_instance_uptime{instance_name=~"gke-.*"}) by (environment) >= 28
         for: 5m
         labels:
+          pager: pagerduty
           severity: s2
 
       - alert: GKENodeCountHigh
