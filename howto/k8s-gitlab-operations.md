@@ -62,7 +62,7 @@ To upgrade or downgrade the versions:
 - after approval, merge the MR to master and see that the change is applied to
   the non-production environments on [ops.gitlab.net](https://ops.gitlab.net/gitlab-com/gl-infra/k8s-workloads/gitlab-com)
 - Manually promote the pipeline to production by running the manual CI job for
-  the production deployment
+  the production deployment. Please be aware this will apply all pending changes.
 
 ## Monitoring and Troubleshooting
 
