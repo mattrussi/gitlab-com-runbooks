@@ -1,5 +1,6 @@
 groups:
 - name: osquery resource usage
+  rules:  
   - alert: OSQueryHighCPU
     expr: sum(rate(namedprocess_namegroup_cpu_seconds_total{groupname="osqueryd"}[5m])) by (fqdn) > 0.1
     for: 15m
