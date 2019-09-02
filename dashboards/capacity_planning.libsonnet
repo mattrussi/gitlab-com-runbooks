@@ -144,7 +144,7 @@ local oneMonthForecastBarGauge(serviceType, serviceStage) = baseBargauge {
               ),
               0
             )
-          )
+          ) > 0.75
         ',
         legendFormat='{{ type }} service, {{ component }} resource',
         instant=true
@@ -166,7 +166,7 @@ local oneMonthForecastBarGauge(serviceType, serviceStage) = baseBargauge {
               ),
               0
             )
-          )
+          ) > 0.75
         ',
         legendFormat='{{ type }} service, {{ component }} resource',
         instant=true
@@ -178,7 +178,7 @@ local oneMonthForecastBarGauge(serviceType, serviceStage) = baseBargauge {
     currentSaturationBarGauge(serviceType, serviceStage),
     oneMonthForecastBarGauge(serviceType, serviceStage),
     graphPanel.new(
-      'Long Resource Saturation Trends',
+      'Long-term Resource Saturation',
       description='Resource saturation levels for saturation components for this service. Lower is better.',
       sort='decreasing',
       linewidth=1,
@@ -191,21 +191,10 @@ local oneMonthForecastBarGauge(serviceType, serviceStage) = baseBargauge {
     .addTarget(
       promQuery.target(
         'clamp_min(clamp_max(
-          gitlab_component_saturation:ratio{type="' + serviceType + '", environment="$environment", stage=~"|' + serviceStage + '"}
+          max(gitlab_component_saturation:ratio{type="' + serviceType + '", environment="$environment", stage=~"|' + serviceStage + '"}) by (component)
           ,1),0)
         ',
         legendFormat='{{ component }}',
-        interval='5m',
-        intervalFactor=5
-      )
-    )
-    .addTarget(
-      promQuery.target(
-        'clamp_min(clamp_max(
-          gitlab_component_saturation:ratio:avg_over_time_1w{type="' + serviceType + '", environment="$environment", stage=~"|' + serviceStage + '"}
-          ,1),0)
-        ',
-        legendFormat='{{ component }} trend',
         interval='5m',
         intervalFactor=5
       )
@@ -226,7 +215,7 @@ local oneMonthForecastBarGauge(serviceType, serviceStage) = baseBargauge {
       seriesOverrides+: seriesOverrides.capacityThresholds + [seriesOverrides.capacityTrend],
     },
     graphPanel.new(
-      'Long-term Resource Saturation (modified) Trends',
+      'Long-term Resource Saturation (modified) Rolling 1w average trend',
       description='Percentage of time that resource is within capacity SLOs. Higher is better.',
       sort='increasing',
       linewidth=1,
@@ -236,28 +225,20 @@ local oneMonthForecastBarGauge(serviceType, serviceStage) = baseBargauge {
       legend_show=true,
       legend_hideEmpty=true,
       thresholds=[
-        thresholds.warningLevel('lt', 0.5),
-        thresholds.errorLevel('lt', 0.25),
+        thresholds.warningLevel('gt', 0.85),
+        thresholds.errorLevel('lt', 0.95),
       ]
     )
     .addTarget(
       promQuery.target(
-        'clamp_min(clamp_max(
-          gitlab_component_saturation:ratio:modified{type="' + serviceType + '", environment="$environment", stage=~"' + serviceStage + '|"}
+        'clamp_min(
+          clamp_max(
+            max(
+              gitlab_component_saturation:ratio:modified:avg_over_time_1w{type="' + serviceType + '", environment="gprd", stage=~"' + serviceStage + '|"}
+            ) by (component)
           ,1),0)
         ',
         legendFormat='{{ component }}',
-        interval='5m',
-        intervalFactor=5
-      )
-    )
-    .addTarget(
-      promQuery.target(
-        'clamp_min(clamp_max(
-          avg_over_time(gitlab_component_saturation:ratio:modified:avg_over_time_1w{type="' + serviceType + '", environment="gprd", stage=~"' + serviceStage + '|"}[$__interval])
-          ,1),0)
-        ',
-        legendFormat='{{ component }} trend',
         interval='5m',
         intervalFactor=5
       )
