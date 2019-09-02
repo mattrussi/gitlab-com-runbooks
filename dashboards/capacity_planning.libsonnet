@@ -60,7 +60,7 @@ local baseBargauge = {
           id: 4,
           operator: '',
           value: '',
-          text: 'Exceeding capacity',
+          text: 'Saturated',
           type: 2,
           from: '0.90',
           to: '1',
@@ -139,8 +139,13 @@ local oneMonthForecastBarGauge(serviceType, serviceStage) = baseBargauge {
             10,
             clamp_min(
               clamp_max(
-                gitlab_component_saturation:ratio{environment="$environment", stage="$stage"},
-                1
+                max(
+                  gitlab_component_saturation:ratio{
+                    environment="$environment",
+                    stage="$stage"
+                  }
+                ) by (type, component)
+                , 1
               ),
               0
             )
@@ -153,7 +158,7 @@ local oneMonthForecastBarGauge(serviceType, serviceStage) = baseBargauge {
   },
   oneMonthEnvironmentForecastBarGauge():: baseBargauge {
     title: 'One month resource saturation forecast',
-    description: 'Resource Saturation (modified) predictions for one month from now. Higher is better.',
+    description: 'Resource Saturation (modified) predictions for one month from now. Lower is better.',
     targets: [
       promQuery.target(
         '
@@ -161,8 +166,13 @@ local oneMonthForecastBarGauge(serviceType, serviceStage) = baseBargauge {
             10,
             clamp_min(
               clamp_max(
-                gitlab_component_saturation:ratio:modified:avg_over_time_1w{environment="$environment", stage="$stage"},
-                1
+                max(
+                  gitlab_component_saturation:ratio:modified:avg_over_time_1w:predict_linear_30d{
+                    environment="$environment",
+                    stage="$stage"
+                  }
+                ) by (type, component)
+                , 1
               ),
               0
             )
@@ -191,7 +201,13 @@ local oneMonthForecastBarGauge(serviceType, serviceStage) = baseBargauge {
     .addTarget(
       promQuery.target(
         'clamp_min(clamp_max(
-          max(gitlab_component_saturation:ratio{type="' + serviceType + '", environment="$environment", stage=~"|' + serviceStage + '"}) by (component)
+          max(
+            gitlab_component_saturation:ratio{
+              type="' + serviceType + '",
+              environment="$environment",
+              stage=~"|' + serviceStage + '"
+            }
+          ) by (component)
           ,1),0)
         ',
         legendFormat='{{ component }}',
@@ -217,7 +233,7 @@ local oneMonthForecastBarGauge(serviceType, serviceStage) = baseBargauge {
     graphPanel.new(
       'Long-term Resource Saturation (modified) Rolling 1w average trend',
       description='Percentage of time that resource is within capacity SLOs. Higher is better.',
-      sort='increasing',
+      sort='decreasing',
       linewidth=1,
       fill=0,
       datasource='$PROMETHEUS_DS',
@@ -234,7 +250,11 @@ local oneMonthForecastBarGauge(serviceType, serviceStage) = baseBargauge {
         'clamp_min(
           clamp_max(
             max(
-              gitlab_component_saturation:ratio:modified:avg_over_time_1w{type="' + serviceType + '", environment="gprd", stage=~"' + serviceStage + '|"}
+              gitlab_component_saturation:ratio:modified:avg_over_time_1w{
+                type="' + serviceType + '",
+                environment="$environment",
+                stage=~"' + serviceStage + '|"
+              }
             ) by (component)
           ,1),0)
         ',
