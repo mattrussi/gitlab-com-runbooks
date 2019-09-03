@@ -87,17 +87,18 @@ local baseBargauge = {
   },
 };
 
-
 local currentSaturationBarGauge(serviceType, serviceStage) = baseBargauge {
   title: 'Current Saturation',
-  description: 'Resource Saturation (worst likely case). Lower is better.',
+  description: 'Resource Saturation. Lower is better.',
   targets: [
     promQuery.target(
       'sort(
           clamp_min(
             clamp_max(
-              gitlab_component_saturation:ratio:avg_over_time_1w{environment="$environment", type="' + serviceType + '", stage=~"|' + serviceStage + '"}
-              + 2 * stddev_over_time(gitlab_component_saturation:ratio{environment="$environment", type="' + serviceType + '", stage=~"|' + serviceStage + '"}[1w]),
+              max(
+                gitlab_component_saturation:ratio:avg_over_time_1w{environment="$environment", type="' + serviceType + '", stage=~"|' + serviceStage + '"}
+                + 2 * gitlab_component_saturation:ratio:stddev_over_time_1w{environment="$environment", type="' + serviceType + '", stage=~"|' + serviceStage + '"}
+              ) by (component),
             1),
           0)
         )',
@@ -108,16 +109,16 @@ local currentSaturationBarGauge(serviceType, serviceStage) = baseBargauge {
 };
 
 local oneMonthForecastBarGauge(serviceType, serviceStage) = baseBargauge {
-  title: 'One Month Saturation Forecast',
-  description: 'Resource Saturation (worst likely case) predictions for one month from now. Lower is better.',
+  title: '30d Saturation Forecast (worst likely case)',
+  description: 'Resource Saturation predictions for 30d from now. Lower is better.',
   targets: [
     promQuery.target(
       'sort(
           clamp_min(
             clamp_max(
-              min(
+              max(
                 gitlab_component_saturation:ratio:predict_linear_30d{environment="$environment", type="' + serviceType + '", stage=~"|' + serviceStage + '"}
-                + 2 * stddev_over_time(gitlab_component_saturation:ratio{environment="$environment", type="' + serviceType + '", stage=~"|' + serviceStage + '"}[1w])
+                + 2 * gitlab_component_saturation:ratio:stddev_over_time_1w{environment="$environment", type="' + serviceType + '", stage=~"|' + serviceStage + '"}
               ) by (component),
             1),
           0)
@@ -130,8 +131,8 @@ local oneMonthForecastBarGauge(serviceType, serviceStage) = baseBargauge {
 
 {
   currentEnvironmentSaturationBarGauge():: baseBargauge {
-    title: 'Resources currently at risk of saturation',
-    description: 'Resource Saturation (worst likely case). Lower is better.',
+    title: 'Current Saturation',
+    description: 'Resource Saturation. Lower is better.',
     targets: [
       promQuery.target(
         '
@@ -144,10 +145,9 @@ local oneMonthForecastBarGauge(serviceType, serviceStage) = baseBargauge {
                     environment="$environment"
                   } +
                   2 *
-                  stddev_over_time(
-                    gitlab_component_saturation:ratio{
+                    gitlab_component_saturation:ratio:stddev_over_time_1w{
                       environment="$environment"
-                    }[1w]
+                    }
                   )
                 ) by (type, component)
                 , 1
@@ -162,8 +162,8 @@ local oneMonthForecastBarGauge(serviceType, serviceStage) = baseBargauge {
     ],
   },
   oneMonthEnvironmentForecastBarGauge():: baseBargauge {
-    title: 'One month resource saturation forecast',
-    description: 'Resource Saturation (worst likely case) predictions for one month from now. Lower is better.',
+    title: '30d Saturation Forecast (worst likely case)',
+    description: 'Resource Saturation predictions for 30d from now. Lower is better.',
     targets: [
       promQuery.target(
         '
@@ -176,10 +176,9 @@ local oneMonthForecastBarGauge(serviceType, serviceStage) = baseBargauge {
                     environment="$environment"
                   } +
                   2 *
-                  stddev_over_time(
-                    gitlab_component_saturation:ratio{
+                    gitlab_component_saturation:ratio:stddev_over_time_1w{
                       environment="$environment"
-                    }[1w]
+                    }
                   )
                 ) by (type, component)
                 , 1
