@@ -77,7 +77,7 @@ groups:
     labels:
       component: 'single_threaded_cpu'
     expr: >
-      max(1 - rate(node_cpu_seconds_total{type=~"pgbouncer|patroni", mode="idle"}[1m])) by (type, tier, stage, environment)
+      max(1 - rate(node_cpu_seconds_total{type=~"pgbouncer", mode="idle"}[1m])) by (type, tier, stage, environment)
 
   # type: pgbouncer, component: server_connections_pools
   - record: gitlab_component_saturation:ratio
