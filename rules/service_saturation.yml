@@ -69,15 +69,24 @@ groups:
         1
       )
 
-  # type: pgbouncer, patroni, component: single_threaded_cpu
-  # Note that since pgbouncer runs on the patroni nodes alongside postgres,
-  # for handling replica connections, we need to monitor `single_threaded_cpu`
-  # saturation here too
+  # type: pgbouncer, component: single_threaded_cpu
   - record: gitlab_component_saturation:ratio
     labels:
       component: 'single_threaded_cpu'
     expr: >
-      max(1 - rate(node_cpu_seconds_total{type=~"pgbouncer|patroni", mode="idle"}[1m])) by (type, tier, stage, environment)
+      max(1 - rate(node_cpu_seconds_total{type=~"pgbouncer", mode="idle"}[1m])) by (type, tier, stage, environment)
+
+  # type: pgbouncer (process_exporter), component: single_threaded_cpu
+  # Note that namedprocess_namegroup_cpu_seconds_total has two sub-labels (system + user)
+  # hence the sum and it's internal group-by.  We also have >1 pgbouncer instances on patroni nodes,
+  # so groupname contains the config file name, and this needs to be separate in the sum
+  # The outer group-by is for the 'max' operation, and reduces us to just a single value
+  # for this entity
+  - record: gitlab_component_saturation:ratio
+    labels:
+      component: 'single_threaded_cpu'
+    expr: >
+      max(sum(rate(namedprocess_namegroup_cpu_seconds_total{groupname=~"^pgbouncer.*"}[1m])) by (groupname, fqdn, type, tier, stage, environment)) by (type, tier, stage, environment)
 
   # type: pgbouncer, component: server_connections_pools
   - record: gitlab_component_saturation:ratio
