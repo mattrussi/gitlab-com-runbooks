@@ -1,17 +1,17 @@
-local basic = import 'basic.libsonnet';
-local capacityPlanning = import 'capacity_planning.libsonnet';
-local colors = import 'colors.libsonnet';
-local commonAnnotations = import 'common_annotations.libsonnet';
 local grafana = import 'grafonnet/grafana.libsonnet';
-local keyMetrics = import 'key_metrics.libsonnet';
-local layout = import 'layout.libsonnet';
-local nodeMetrics = import 'node_metrics.libsonnet';
-local platformLinks = import 'platform_links.libsonnet';
-local promQuery = import 'prom_query.libsonnet';
-local railsCommon = import 'rails_common_graphs.libsonnet';
 local seriesOverrides = import 'series_overrides.libsonnet';
-local serviceCatalog = import 'service_catalog.libsonnet';
+local commonAnnotations = import 'common_annotations.libsonnet';
+local promQuery = import 'prom_query.libsonnet';
 local templates = import 'templates.libsonnet';
+local colors = import 'colors.libsonnet';
+local platformLinks = import 'platform_links.libsonnet';
+local capacityPlanning = import 'capacity_planning.libsonnet';
+local layout = import 'layout.libsonnet';
+local basic = import 'basic.libsonnet';
+local railsCommon = import 'rails_common_graphs.libsonnet';
+local nodeMetrics = import 'node_metrics.libsonnet';
+local keyMetrics = import 'key_metrics.libsonnet';
+local serviceCatalog = import 'service_catalog.libsonnet';
 local dashboard = grafana.dashboard;
 local row = grafana.row;
 local template = grafana.template;
@@ -30,13 +30,12 @@ dashboard.new(
 .addTemplate(templates.ds)
 .addTemplate(templates.environment)
 .addTemplate(templates.stage)
-.addPanel(
-  row.new(title="Sidekiq Queues"),
+.addPanel(row.new(title="Sidekiq Queues"),
   gridPos={
-    x: 0,
-    y: 1,
-    w: 24,
-    h: 1,
+      x: 0,
+      y: 1,
+      w: 24,
+      h: 1,
   }
 )
 .addPanels(
@@ -81,15 +80,14 @@ dashboard.new(
       linewidth=1,
       min=0,
     ),
-  ], cols=2, rowHeight=10, startRow=1),
+  ], cols=2,rowHeight=10, startRow=1),
 )
-.addPanel(
-  row.new(title="Sidekiq Execution"),
+.addPanel(row.new(title="Sidekiq Execution"),
   gridPos={
-    x: 0,
-    y: 1000,
-    w: 24,
-    h: 1,
+      x: 0,
+      y: 1000,
+      w: 24,
+      h: 1,
   }
 )
 .addPanels(
@@ -214,16 +212,15 @@ dashboard.new(
       logBase=10,
       linewidth=1,
       min=0.01,
-    ),
-  ], cols=2, rowHeight=10, startRow=1001),
+    )
+  ], cols=2,rowHeight=10, startRow=1001),
 )
-.addPanel(
-  row.new(title="Priority Workloads"),
+.addPanel(row.new(title="Priority Workloads"),
   gridPos={
-    x: 0,
-    y: 2000,
-    w: 24,
-    h: 1,
+      x: 0,
+      y: 2000,
+      w: 24,
+      h: 1,
   }
 )
 .addPanels(
@@ -270,25 +267,27 @@ dashboard.new(
       intervalFactor=1,
       legend_show=true,
       linewidth=2
-    ),
+      ),
 
-  ], cols=2, rowHeight=10, startRow=2001)
+  ], cols=2,rowHeight=10, startRow=2001)
 )
 .addPanel(
   row.new(title="Rails Metrics", collapse=true)
-  .addPanels(railsCommon.railsPanels(serviceType="sidekiq", serviceStage="$stage", startRow=1))
+    .addPanels(railsCommon.railsPanels(serviceType="sidekiq", serviceStage="$stage", startRow=1))
   ,
   gridPos={
-    x: 0,
-    y: 3000,
-    w: 24,
-    h: 1,
+      x: 0,
+      y: 3000,
+      w: 24,
+      h: 1,
   }
 )
-.addPanel(keyMetrics.keyServiceMetricsRow('sidekiq', '$stage'), gridPos={ x: 0, y: 4000 })
-.addPanel(keyMetrics.keyComponentMetricsRow('sidekiq', '$stage'), gridPos={ x: 0, y: 5000 })
-.addPanel(nodeMetrics.nodeMetricsDetailRow('type="sidekiq", environment="$environment", stage="$stage"'), gridPos={ x: 0, y: 6000 })
-.addPanel(capacityPlanning.capacityPlanningRow('sidekiq', '$stage'), gridPos={ x: 0, y: 7000 })
+.addPanel(keyMetrics.keyServiceMetricsRow('sidekiq', '$stage'), gridPos={ x: 0, y: 4000, })
+.addPanel(keyMetrics.keyComponentMetricsRow('sidekiq', '$stage'), gridPos={ x: 0, y: 5000, })
+.addPanel(nodeMetrics.nodeMetricsDetailRow('type="sidekiq", environment="$environment", stage="$stage"'), gridPos={ x: 0, y: 6000, })
+.addPanel(capacityPlanning.capacityPlanningRow('sidekiq', '$stage'), gridPos={ x: 0, y: 7000, })
 + {
   links+: platformLinks.triage + serviceCatalog.getServiceLinks('sidekiq') + platformLinks.services,
 }
+
+

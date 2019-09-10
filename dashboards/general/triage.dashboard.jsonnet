@@ -1,12 +1,12 @@
-local capacityPlanning = import 'capacity_planning.libsonnet';
-local colors = import 'colors.libsonnet';
-local commonAnnotations = import 'common_annotations.libsonnet';
 local grafana = import 'grafonnet/grafana.libsonnet';
-local platformLinks = import 'platform_links.libsonnet';
 local promQuery = import 'prom_query.libsonnet';
-local seriesOverrides = import 'series_overrides.libsonnet';
 local templates = import 'templates.libsonnet';
+local commonAnnotations = import 'common_annotations.libsonnet';
+local seriesOverrides = import 'series_overrides.libsonnet';
 local thresholds = import 'thresholds.libsonnet';
+local colors = import 'colors.libsonnet';
+local platformLinks = import 'platform_links.libsonnet';
+local capacityPlanning = import 'capacity_planning.libsonnet';
 local dashboard = grafana.dashboard;
 local row = grafana.row;
 local template = grafana.template;
@@ -15,7 +15,7 @@ local graphPanel = grafana.graphPanel;
 local rowHeight = 8;
 local colWidth = 12;
 
-local genGridPos(x, y, h=1, w=1) = {
+local genGridPos(x,y,h=1,w=1) = {
   x: x * colWidth,
   y: y * rowHeight,
   w: w * colWidth,
@@ -26,25 +26,25 @@ local generalGraphPanel(
   title,
   description=null,
   sort="increasing",
-      ) = graphPanel.new(
-  title,
-  datasource="$PROMETHEUS_DS",
-  linewidth=2,
-  fill=0,
-  description=description,
-  decimals=2,
-  sort=sort,
-  legend_show=true,
-  legend_values=true,
-  legend_min=true,
-  legend_max=true,
-  legend_current=true,
-  legend_total=false,
-  legend_avg=true,
-  legend_alignAsTable=true,
-  legend_hideEmpty=true,
-)
-          .addSeriesOverride(seriesOverrides.sloViolation);
+) = graphPanel.new(
+    title,
+    datasource="$PROMETHEUS_DS",
+    linewidth=2,
+    fill=0,
+    description=description,
+    decimals=2,
+    sort=sort,
+    legend_show=true,
+    legend_values=true,
+    legend_min=true,
+    legend_max=true,
+    legend_current=true,
+    legend_total=false,
+    legend_avg=true,
+    legend_alignAsTable=true,
+    legend_hideEmpty=true,
+  )
+  .addSeriesOverride(seriesOverrides.sloViolation);
 
 local generateAnomalyPanel(
   title,
@@ -54,7 +54,7 @@ local generateAnomalyPanel(
   errorThreshold=8,
   warningThreshold=6,
   sort="increasing",
-      ) =
+  ) =
   graphPanel.new(
     title,
     datasource="$PROMETHEUS_DS",
@@ -110,49 +110,46 @@ local generateAnomalyPanel(
   );
 
 local activeAlertsPanel = grafana.tablePanel.new(
-  'Active Alerts',
-  datasource="$PROMETHEUS_DS",
-  styles=[
-    {
-      type: "hidden",
-      pattern: "Time",
-      alias: "Time",
+    'Active Alerts',
+    datasource="$PROMETHEUS_DS",
+    styles=[{
+      "type": "hidden",
+      "pattern": "Time",
+      "alias": "Time",
+    }, {
+      "unit": "short",
+      "type": "string",
+      "alias": "Service",
+      "decimals": 2,
+      "pattern": "type",
+      "dateFormat": "YYYY-MM-DD HH:mm:ss",
+      "mappingType": 2,
+      "link": true,
+      "linkUrl": "https://dashboards.gitlab.net/d/general-service/service-platform-metrics?orgId=1&var-type=${__cell}&var-environment=$environment",
+      "linkTooltip": "Open dashboard",
     },
     {
-      unit: "short",
-      type: "string",
-      alias: "Service",
-      decimals: 2,
-      pattern: "type",
-      dateFormat: "YYYY-MM-DD HH:mm:ss",
-      mappingType: 2,
-      link: true,
-      linkUrl: "https://dashboards.gitlab.net/d/general-service/service-platform-metrics?orgId=1&var-type=${__cell}&var-environment=$environment",
-      linkTooltip: "Open dashboard",
-    },
-    {
-      unit: "short",
-      type: "number",
-      alias: "Score",
-      decimals: 0,
-      colors: [
+      "unit": "short",
+      "type": "number",
+      "alias": "Score",
+      "decimals": 0,
+      "colors": [
         colors.warningColor,
         colors.errorColor,
-        colors.criticalColor,
+        colors.criticalColor
       ],
-      colorMode: "row",
-      pattern: "Value",
-      thresholds: [
+      "colorMode": "row",
+      "pattern": "Value",
+      "thresholds": [
         "100",
-        "10000",
+        "10000"
       ],
-      mappingType: 1,
-    },
+      "mappingType": 1
+    }
   ],
-)
-                          .addTarget(  // Alert scoring
-  promQuery.target(
-    '
+  )
+  .addTarget( // Alert scoring
+    promQuery.target('
       sort(
         sum(
           ALERTS{environment="$environment", type!="", severity="critical", alertstate="firing"} * 10000
@@ -163,10 +160,10 @@ local activeAlertsPanel = grafana.tablePanel.new(
         ) by (type)
       )
       ',
-    format="table",
-    instant=true
-  )
-);
+      format="table",
+      instant=true
+    )
+  );
 
 dashboard.new(
   'Platform Triage',
@@ -180,16 +177,15 @@ dashboard.new(
 .addTemplate(templates.ds)
 .addTemplate(templates.environment)
 .addTemplate(templates.stage)
-.addPanel(activeAlertsPanel, gridPos=genGridPos(0, 0, w=2, h=0.5))
+.addPanel(activeAlertsPanel, gridPos=genGridPos(0,0,w=2,h=0.5))
 .addPanel(
   generalGraphPanel(
     "Latency: Apdex",
     description="Apdex is a measure of requests that complete within a tolerable period of time for the service. Higher is better.",
     sort="increasing",
   )
-  .addTarget(  // Primary metric
-    promQuery.target(
-      '
+  .addTarget( // Primary metric
+    promQuery.target('
       clamp_min(
         avg(
           gitlab_service_apdex:ratio{environment="$environment", stage="$stage"}
@@ -201,9 +197,8 @@ dashboard.new(
       intervalFactor=3,
     )
   )
-  .addTarget(  // SLO Violations
-    promQuery.target(
-      '
+  .addTarget( // SLO Violations
+    promQuery.target('
       clamp_min(
         avg(
             gitlab_service_apdex:ratio{environment="$environment", stage="$stage"}
@@ -242,9 +237,9 @@ dashboard.new(
       /
       gitlab_service_apdex:ratio:stddev_over_time_1w{environment="$environment", stage="$stage"}
   ',
-    maxY=0.5,
-    minY=-12,
-    sort="increasing",
+  maxY=0.5,
+  minY=-12,
+  sort="increasing",
   )
   ,
   gridPos=genGridPos(1, 0.5)
@@ -255,9 +250,8 @@ dashboard.new(
     description="Error rates are a measure of unhandled service exceptions within a minute period. Client errors are excluded when possible. Lower is better",
     sort="decreasing",
   )
-  .addTarget(  // Primary metric
-    promQuery.target(
-      '
+  .addTarget( // Primary metric
+    promQuery.target('
       clamp_max(
         avg(
           max_over_time(
@@ -271,9 +265,8 @@ dashboard.new(
       intervalFactor=3,
     )
   )
-  .addTarget(  // SLO Violations
-    promQuery.target(
-      '
+  .addTarget( // SLO Violations
+    promQuery.target('
       clamp_max(
         avg(
           gitlab_service_errors:ratio{environment="$environment", stage="$stage"}
@@ -312,9 +305,9 @@ dashboard.new(
       /
       gitlab_service_errors:ratio:stddev_over_time_1w{environment="$environment", stage="$stage"}
   ',
-    maxY=12,
-    minY=-0.5,
-    sort="decreasing",
+  maxY=12,
+  minY=-0.5,
+  sort="decreasing",
   )
   , gridPos=genGridPos(1, 1.5)
 )
@@ -324,9 +317,8 @@ dashboard.new(
     description="The operation rate is the sum total of all requests being handle for all components within this service. Note that a single user request can lead to requests to multiple components. Higher is busier.",
     sort="decreasing",
   )
-  .addTarget(  // Primary metric
-    promQuery.target(
-      '
+  .addTarget( // Primary metric
+    promQuery.target('
       sum(
         gitlab_service_ops:rate{environment="$environment", stage="$stage"}
       ) by (type)
@@ -361,11 +353,11 @@ dashboard.new(
       /
       gitlab_service_ops:rate:stddev_over_time_1w{environment="$environment", stage="$stage"}
   ',
-    maxY=6,
-    minY=-3,
-    errorThreshold=4,
-    warningThreshold=3,
-    sort="decreasing",
+  maxY=6,
+  minY=-3,
+  errorThreshold=4,
+  warningThreshold=3,
+  sort="decreasing",
   )
   , gridPos=genGridPos(1, 2.5)
 )
@@ -374,9 +366,8 @@ dashboard.new(
     "Service Availability",
     description="Availability measures the ratio of component processes in the service that are currently healthy and able to handle requests. The closer to 100% the better."
   )
-  .addTarget(  // Primary metric
-    promQuery.target(
-      '
+  .addTarget( // Primary metric
+    promQuery.target('
       min(
         min_over_time(
           gitlab_service_availability:ratio{environment="$environment", stage="$stage"}[$__interval]
@@ -413,8 +404,8 @@ dashboard.new(
       /
       gitlab_service_availability:ratio:stddev_over_time_1w{environment="$environment", stage="$stage"}
   ',
-    maxY=0.5,
-    minY=-12
+  maxY=0.5,
+  minY=-12
   )
   , gridPos=genGridPos(1, 3.5)
 )
@@ -424,9 +415,8 @@ dashboard.new(
     description="Saturation is a measure of the most saturated component of the service. Lower is better.",
     sort="decreasing",
   )
-  .addTarget(  // Primary metric
-    promQuery.target(
-      '
+  .addTarget( // Primary metric
+    promQuery.target('
       max(
         max_over_time(
           gitlab_service_saturation:ratio{environment="$environment", stage="$stage"}[$__interval]
@@ -453,6 +443,6 @@ dashboard.new(
 )
 .addPanel(capacityPlanning.currentEnvironmentSaturationBarGauge(), gridPos=genGridPos(0, 5.5))
 .addPanel(capacityPlanning.oneMonthEnvironmentForecastBarGauge(), gridPos=genGridPos(1, 5.5))
-+ {
+ + {
   links+: platformLinks.services,
 }
