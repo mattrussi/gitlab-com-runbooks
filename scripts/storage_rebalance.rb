@@ -12,9 +12,10 @@
 #
 #    gitlab-rails runner /var/opt/gitlab/scripts/storage_rebalance.rb --verbose --dry-run=yes --wait=10800 --current-file-server=nfs-file01 --target-file-server=nfs-file09 --staging --max-failures=200 --refresh-stats
 #
-# Production example:
+# Production examples:
 #
 #    gitlab-rails runner /var/opt/gitlab/scripts/storage_rebalance.rb --verbose --dry-run=yes --wait=10800 --current-file-server=nfs-file25 --target-file-server=nfs-file36
+#    gitlab-rails runner /var/opt/gitlab/scripts/storage_rebalance.rb --verbose --dry-run=no --wait=10800 --move-amount=1000 --current-file-server=nfs-file28 --target-file-server=nfs-file38 --skip=9271929
 #
 # Verify the migration status of previously logged project migrations:
 #
@@ -22,17 +23,16 @@
 #
 # Logs may be reviewed:
 #
-#    export logd=/var/log/gitlab/storage_rebalance; for f in `ls -t ${logd}`; do ls -la ${logd}/$f && cat ${logd}/$f; done
+#    export logd=/var/log/gitlab/storage_migrations; for f in `ls -t ${logd}`; do ls -la ${logd}/$f && cat ${logd}/$f; done
 #
 
+require 'date'
 require 'fileutils'
 require 'json'
 require 'io/console'
 require 'logger'
 require 'optparse'
 require 'uri'
-
-require '/opt/gitlab/embedded/service/gitlab-rails/config/environment.rb'
 
 def initialize_log
   STDOUT.sync = true
@@ -49,9 +49,16 @@ class Object
   end
 end
 
+begin
+require '/opt/gitlab/embedded/service/gitlab-rails/config/environment.rb'
+rescue LoadError => e
+log.warn e.message
+end
+
 module Storage
 
-NodeConfiguration = ::Gitlab.config.repositories.storages
+NodeConfiguration = {}
+NodeConfiguration.merge! ::Gitlab.config.repositories.storages if defined? ::Gitlab
 
 class NoCommits < StandardError; end
 
@@ -66,6 +73,7 @@ Options = {
   timeout: 10,
   max_failures: 3,
   list: false,
+  black_list: [],
   refresh_statistics: false,
   stats: [:commit_count, :storage_size, :repository_size],
   group: nil,
@@ -78,12 +86,14 @@ def parse_args
   ARGV << '-?' if ARGV.empty?
   opt = OptionParser.new
   opt.banner = "Usage: #{$PROGRAM_NAME} [options] --current-file-server <servername> --target-file-server <servername>"
+  opt.separator ''
+  opt.separator 'Options:'
 
-  opt.on('--current-file-server=<SERVERNAME>', String, 'Source storage node server') do |server|
+  opt.on_head('--current-file-server=<SERVERNAME>', String, 'Source storage node server') do |server|
     Options[:current_file_server] = server
   end
 
-  opt.on('--target-file-server=<SERVERNAME>', String, 'Destination storage node server') do |server|
+  opt.on_head('--target-file-server=<SERVERNAME>', String, 'Destination storage node server') do |server|
     Options[:target_file_server] = server
   end
 
@@ -93,6 +103,15 @@ def parse_args
 
   opt.on('--list-nodes', 'List all known repository storage nodes') do |list_nodes|
     Options[:list_nodes] = true
+  end
+
+  opt.on('--skip=<project_id,...>', Array, 'Skip specific project(s)') do |skip|
+    Options[:black_list] ||= []
+    if skip.respond_to? :all? and skip.all? { |o| o.to_s.match(/\A[+-]?\d+?(\.\d+)?\Z/) }
+      Options[:black_list].concat skip.map(&:to_i).delete_if { |i| i <= 0 }
+    else
+      raise OptionParser::InvalidArgument.new("Argument given for --skip must be a list of one or more integers")
+    end
   end
 
   opt.on('-r', '--refresh-stats', 'Refresh all project statistics; WARNING: ignores --dry-run') do |refresh_statistics|
@@ -105,7 +124,7 @@ def parse_args
 
   opt.on('-m', '--move-amount=<N>', Integer, "Gigabytes of repo data to move; default: #{Options[:move_amount]}, or largest single repo if 0") do |move_amount|
     abort 'Size too large' if move_amount > 16_000
-    Options[:move_amount] = move_amount
+    Options[:move_amount] = (move_amount * 1024 * 1024 * 1024)  # Convert given gigabytes to bytes
   end
 
   opt.on('-w', '--wait=<N>', Integer, "Timeout in seconds for migration completion; default: #{Options[:timeout]}") do |wait|
@@ -186,6 +205,16 @@ class Rebalancer
     end
   end
 
+  def get_storage_node_hostname(storage_node_name)
+    hostname = nil
+    url = NodeConfiguration.fetch(storage_node_name, {}).fetch('gitaly_address', nil)
+    if url
+      uri = URI.parse(url)
+      hostname = uri.host
+    end
+    hostname
+  end
+
   def get_commit_id(project_id)
     endpoints = Options[:api_endpoints]
     environment = Options[:env]
@@ -230,18 +259,23 @@ class Rebalancer
 
   def validate(project)
     start = Time.now.to_i
+    i = 0
     timeout = Options[:timeout]
     while project.repository_read_only?
       sleep 1
       project.reload
       print '.'
+      i += 1
+      print "\n" if i % 80 == 0
       elapsed = Time.now.to_i - start
       if elapsed >= timeout
+        print "\n"
         log.warn ""
         log.warn "Timed out up waiting for project id: #{project.id} to move: #{elapsed} seconds"
         break
       end
     end
+    print "\n"
     if project.repository_storage == Options[:target_file_server]
       log.info "Success moving project id:#{project.id}"
     else
@@ -273,13 +307,11 @@ class Rebalancer
     commit_id = get_commit_id(project.id)
     raise NoCommits.new("Could not obtain any commits for project id #{project.id}") if commit_id.nil?
 
-    url = NodeConfiguration[project.repository_storage]['gitaly_address']
-    uri = URI.parse(url)
-    source_storage_node = uri.host
     log_artifact = {
       id: project.id,
       path: project.disk_path,
-      source: source_storage_node,
+      source: get_storage_node_hostname(project.repository_storage),
+      destination: get_storage_node_hostname(Options[:target_file_server]),
     }
 
     if Options[:dry_run]
@@ -300,6 +332,7 @@ class Rebalancer
       log.info "Validating project integrity by comparing latest commit " +
         "identifers before and after"
       if commit_id == get_commit_id(project.id)
+        log_artifact[:date] = DateTime.now.iso8601(3)
         @migration_log.info log_artifact.to_json
       else
         log.error "Failed to validate integrity of project id: #{project.id}"
@@ -351,6 +384,7 @@ class Rebalancer
     # any previous delete operations, sort by size descending,
     # then sort by last activity date ascending in order to select the
     # most idle and largest projects first.
+    project_identifiers = []
     Project.transaction do
       ActiveRecord::Base.connection.execute 'SET statement_timeout = 600000'
       clauses = {
@@ -369,8 +403,12 @@ class Rebalancer
         .order('project_statistics.repository_size DESC')
         .order('last_activity_at ASC')
       query = query.limit(limit) if limit > 0
-      query.pluck(:id)
+      project_identifiers = query.pluck(:id)
     end
+    unless Options[:black_list].empty?
+      project_identifiers = project_identifiers - Options[:black_list]
+    end
+    project_identifiers
   end
 
   def move_many_projects(min_amount, project_ids)
