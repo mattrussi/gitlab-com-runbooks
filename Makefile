@@ -4,6 +4,8 @@ JSONNET_FILES = $(shell find . -name "*.jsonnet" -type f -not -path "./dashboard
 SHELL_FMT_FLAGS := -i 2 -ci
 SHELL_FILES = $(shell find . -name "*.sh" -type f -not -path "./dashboards/vendor/*")
 
+JSONET_COMMAND = $(shell which jsonnetfmt || (which jsonnet && echo " fmt"))
+
 SHELLCHECK_FLAGS := -e SC1090,SC1091
 
 .PHONY: all
@@ -14,7 +16,7 @@ verify: verify-shellcheck verify-fmt
 
 .PHONY: verify-fmt
 verify-fmt:
-	jsonnet fmt $(JSONNET_FMT_FLAGS) --test $(JSONNET_FILES)
+	$(JSONET_COMMAND) $(JSONNET_FMT_FLAGS) --test $(JSONNET_FILES)
 	shfmt $(SHELL_FMT_FLAGS) -l -d $(SHELL_FILES)
 
 .PHONY: verify-shellcheck
@@ -26,7 +28,7 @@ fmt: jsonnet-fmt shell-fmt
 
 .PHONY: jsonnet-fmt
 jsonnet-fmt:
-	jsonnet fmt $(JSONNET_FMT_FLAGS) -i $(JSONNET_FILES)
+	$(JSONET_COMMAND) $(JSONNET_FMT_FLAGS) -i $(JSONNET_FILES)
 
 .PHONY: shell-fmt
 shell-fmt:

@@ -183,4 +183,4 @@ build_runtools_build_image:
     - cd jsonnet && docker build -t registry.gitlab.com/gitlab-com/runbooks/runtools_build-intermediate:latest . && cd ..
     - docker build -t registry.gitlab.com/gitlab-com/runbooks/runtools_build:latest images/runtools_build/
     - docker push registry.gitlab.com/gitlab-com/runbooks/runtools_build:latest
-  # when: manual
+  when: manual
