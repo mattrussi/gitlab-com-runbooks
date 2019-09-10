@@ -1,20 +1,19 @@
 local MARQUEE_CUSTOMERS_TOP_LEVEL_DOMAINS = std.extVar('marquee_customers_top_level_domains');
 
 local wildcardQuery(topLevelDomain) = {
-  wildcard: {
-    'json.uri.keyword': '/' + topLevelDomain + '/*',
-  },
-};
+    wildcard: {
+      "json.uri.keyword": "/" + topLevelDomain + "/*"
+    }
+  };
 
-local wildcardQueries() = [
-  wildcardQuery(topLevelDomain)
-  for topLevelDomain in std.split(MARQUEE_CUSTOMERS_TOP_LEVEL_DOMAINS, ',')
+local wildcardQueries() =  [
+  wildcardQuery(topLevelDomain) for topLevelDomain in std.split(MARQUEE_CUSTOMERS_TOP_LEVEL_DOMAINS, ",")
 ];
 
 local boolCanaryCustomerQuery() = {
-  minimum_should_match: 1,
-  should: wildcardQueries(),
-};
+    minimum_should_match: 1,
+    should: wildcardQueries(),
+  };
 
 local disabledIndividualWildcardQueries() = [
   wildcardQuery(topLevelDomain) +
@@ -31,8 +30,7 @@ local disabledIndividualWildcardQueries() = [
     '$state': {
       store: 'appState',
     },
-  }
-  for topLevelDomain in std.split(MARQUEE_CUSTOMERS_TOP_LEVEL_DOMAINS, ',')
+  } for topLevelDomain in std.split(MARQUEE_CUSTOMERS_TOP_LEVEL_DOMAINS, ",")
 ];
 
 {
@@ -134,7 +132,7 @@ local disabledIndividualWildcardQueries() = [
           min_doc_count: 1,
           extended_bounds: {},
         },
-      },
+      }
     ],
     listeners: {},
   },
@@ -172,7 +170,7 @@ local disabledIndividualWildcardQueries() = [
           negate: false,
           index: 'AWM6itvP1NBBQZg_ElD1',
           disabled: false,
-          alias: 'Any Canary Customer',
+          alias: "Any Canary Customer",
           type: 'custom',
           key: 'bool',
           value: std.manifestJson(boolCanaryCustomerQuery()),
