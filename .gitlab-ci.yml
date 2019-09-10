@@ -57,6 +57,21 @@ shfmt:
   script:
     - find -name "*.sh" -type f -not -path "./dashboards/vendor/*" | xargs -r shfmt -i 2 -ci -l -d
 
+jsonnetfmt:
+  stage: test
+  image:
+    name: registry.gitlab.com/gitlab-com/runbooks/jsonnet:latest
+    entrypoint: ["/bin/sh", "-c"]
+  script:
+    - |
+      IFS=$'\n';
+      for f in $(find -name "*.jsonnet" -type f -not -path "./dashboards/vendor/*"); do
+        if ! jsonnetfmt --test "$f"; then
+          echo "$f failed jsonnet format test, run \`jsonnetfmt -i $f\` to fix";
+          exit 1
+        fi
+      done
+
 test-rules:
   extends: .rules-artifacts
   stage: test
