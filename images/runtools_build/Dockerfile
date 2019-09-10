@@ -1,4 +1,4 @@
-FROM registry.gitlab.com/gitlab-com/runbooks/jsonnet-intermediate:latest
+FROM registry.gitlab.com/gitlab-com/runbooks/runtools_build-intermediate:latest
 
 COPY --from=nlknguyen/alpine-shellcheck:latest /usr/local/bin/shellcheck /usr/local/bin/shellcheck
 COPY --from=peterdavehello/shfmt:latest /bin/shfmt /usr/local/bin/shfmt

@@ -1,4 +1,4 @@
-JSONNET_FMT_FLAGS := --string-style l
+JSONNET_FMT_FLAGS := --string-style l -n 0
 JSONNET_FILES = $(shell find . -name "*.jsonnet" -type f -not -path "./dashboards/vendor/*")
 
 SHELL_FMT_FLAGS := -i 2 -ci
