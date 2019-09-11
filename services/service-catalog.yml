@@ -1252,6 +1252,9 @@ services:
       data_classification: green
       security_incidents:
     logging:
+      - name: Stackdriver Logs
+        permalink: https://console.cloud.google.com/logs/viewer?project=gitlab-production&advancedFilter=resource.type%3D%22gce_instance%22%0Alabels.tag%3D%22haproxy%22%0Alabels.%22compute.googleapis.com%2Fresource_name%22:%22fe-pages%22
+
   infrastructure:
     provider: gcp
     architecture:
