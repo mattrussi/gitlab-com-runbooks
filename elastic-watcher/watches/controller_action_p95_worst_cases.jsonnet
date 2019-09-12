@@ -77,7 +77,12 @@ local painlessFunctions = "
   }
 
   Object collectActions(def controllerBucket, def params) {
-    controllerBucket.action.buckets.findAll(actionBucket -> findAction(actionBucket, params)).collect(actionBucket -> ['action': actionBucket, 'controller':controllerBucket.key])
+    controllerBucket.action.buckets.findAll(actionBucket -> findAction(actionBucket, params)).collect(actionBucket -> [
+      'action': actionBucket,
+      'actionKey': actionBucket.key,
+      'p95latencySeconds': Math.round(actionBucket.percentile_durations.values[0].value/1000),
+      'controller':controllerBucket.key
+    ])
   }
 ";
 
@@ -105,7 +110,7 @@ local painlessScript(script) = {
 };
 
 local searchLinkTemplate() =
-  "https://log.gitlab.net/app/kibana#/discover?_g=(refreshInterval:(display:Off,pause:!f,value:0),time:(from:now-24h,mode:quick,to:now))&_a=(columns:!(json.controller,json.action,json.duration,json.path,json.status),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:AWOSvARQwig0Nc2UGcr2,key:json.controller,negate:!f,type:phrase,value:'{{controller}}'),query:(match:(json.controller:(query:'{{controller}}',type:phrase)))),('$state':(store:appState),meta:(alias:!n,disabled:!f,index:AWOSvARQwig0Nc2UGcr2,key:json.action,negate:!f,type:phrase,value:'{{action.key}}'),query:(match:(json.action:(query:'{{action.key}}',type:phrase))))),index:AWOSvARQwig0Nc2UGcr2,interval:auto,query:(match_all:()),sort:!(json.duration,desc))";
+  "https://log.gitlab.net/app/kibana#/discover?_g=(refreshInterval:(display:Off,pause:!f,value:0),time:(from:now-24h,mode:quick,to:now))&_a=(columns:!(json.controller,json.action,json.duration,json.path,json.status),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:AWOSvARQwig0Nc2UGcr2,key:json.controller,negate:!f,type:phrase,value:'{{controller}}'),query:(match:(json.controller:(query:'{{controller}}',type:phrase)))),('$state':(store:appState),meta:(alias:!n,disabled:!f,index:AWOSvARQwig0Nc2UGcr2,key:json.action,negate:!f,type:phrase,value:'{{actionKey}}'),query:(match:(json.action:(query:'{{actionKey}}',type:phrase))))),index:AWOSvARQwig0Nc2UGcr2,interval:auto,query:(match_all:()),sort:!(json.duration,desc))";
 
 {
   trigger: {
@@ -134,9 +139,9 @@ Click through to find events...",
           dynamic_attachments: {
             list_path: "ctx.payload.items",
             attachment_template: {
-              title: "{{controller}}#{{action.key}}",
+              title: "{{controller}}#{{actionKey}}",
               title_link: searchLinkTemplate(),
-              text: "p95 latency for this endpoint: {{ action.percentile_durations.values.0.value }}ms",
+              text: "p95 latency for this endpoint: {{ p95latencySeconds }}s",
             },
           },
         },
