@@ -1,7 +1,6 @@
-
 local TRIGGER_SCHEDULE_HOURS = 24;  // Run this watcher once a day
 
-local P95_THRESHOLD_MILLIS = 10000; // Minimum p95 on which to report
+local P95_THRESHOLD_MILLIS = 10000;  // Minimum p95 on which to report
 
 local query() = {
   search_type: 'query_then_fetch',
@@ -16,55 +15,55 @@ local query() = {
           range: {
             "@timestamp": {
               gte: std.format('now-%dh', TRIGGER_SCHEDULE_HOURS),
-              lte: "now"
-            }
-          }
-        }]
-      }
+              lte: "now",
+            },
+          },
+        }],
+      },
     },
     size: 0,
 
-    aggs:{
-      controller:{
-        terms:{
-          field:"json.controller.keyword",
+    aggs: {
+      controller: {
+        terms: {
+          field: "json.controller.keyword",
           size: 50,
-          order:{
-            sum_duration:"desc"
-          }
+          order: {
+            sum_duration: "desc",
+          },
         },
-        aggs:{
+        aggs: {
           sum_duration: {
             sum: {
-              field: "json.duration"
-            }
+              field: "json.duration",
+            },
           },
           action: {
             terms: {
               field: "json.action.keyword",
               size: 5,
               order: {
-                sum_duration: "desc"
-              }
+                sum_duration: "desc",
+              },
             },
-            aggs:{
+            aggs: {
               sum_duration: {
-                sum:{
-                  field: "json.duration"
-                }
+                sum: {
+                  field: "json.duration",
+                },
               },
               percentile_durations: {
-                percentiles:{
+                percentiles: {
                   field: "json.duration",
-                  percents:[95],
-                  keyed: false
-                }
-              }
-            }
-          }
-        }
-      }
-    }
+                  percents: [95],
+                  keyed: false,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
   },
 };
 
@@ -110,13 +109,13 @@ local transformScript = "
 ";
 
 local painlessScript(script) = {
-  script : {
-    inline : painlessFunctions + "\n" + script,
-    lang : "painless",
-    params : {
-      P95_THRESHOLD_MILLIS: P95_THRESHOLD_MILLIS
-    }
-  }
+  script: {
+    inline: painlessFunctions + "\n" + script,
+    lang: "painless",
+    params: {
+      P95_THRESHOLD_MILLIS: P95_THRESHOLD_MILLIS,
+    },
+  },
 };
 
 local searchLinkTemplate() =
@@ -142,7 +141,7 @@ local searchLinkTemplate() =
         message: {
           from: "ElasticCloud Watcher: worst-case p95",
           to: [
-            "#mech_symp_alerts"
+            "#mech_symp_alerts",
           ],
           text: "*Worst performing Rails controllers in the applications, by p95 latency*
 Click through to find events...",
@@ -151,11 +150,11 @@ Click through to find events...",
             attachment_template: {
               title: "{{controller}}#{{action.key}}",
               title_link: searchLinkTemplate(),
-              text: "p95 latency for this endpoint: {{ action.percentile_durations.values.0.value }}ms"
-            }
-          }
-        }
-      }
-    }
+              text: "p95 latency for this endpoint: {{ action.percentile_durations.values.0.value }}ms",
+            },
+          },
+        },
+      },
+    },
   },
 }
