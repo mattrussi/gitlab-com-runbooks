@@ -203,9 +203,7 @@ class Cleaner
     total_projects = 0
     for moved_project in moved_projects
       source = moved_project[:source]
-      unless nodes_whitelist.empty?
-        next unless nodes_whitelist.include? source
-      end
+      next unless nodes_whitelist.empty? or nodes_whitelist.include? source
       path = moved_project[:path]
       source_paths[source] ||= []
       source_paths[source] << path
