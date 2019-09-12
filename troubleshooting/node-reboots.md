@@ -19,7 +19,7 @@ some sort on the physical node, which causes the `hostError`, and normally
 shortly after this within 5 hundredths of a second, you'll see the `automaticRestart`
 
 If you don't see the above, there may not be an issue from the GCE side of
-things and at this point, you should start troubleshootin gpotential problems,
+things and at this point, you should start troubleshooting potential problems,
 such as kernel panics, user induced reboots, or instance deletions.
 
 ## Instance Deletions
