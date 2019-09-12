@@ -67,20 +67,6 @@ local query() = {
   },
 };
 
-local painlessFunctionsXXX = "
-  boolean findAction(def actionBucket, def params) {
-    actionBucket.percentile_durations.values[0].value >= P95_THRESHOLD_MILLIS
-  }
-
-  boolean findController(def controllerBucket, def params) {
-    controllerBucket.action.buckets.any(actionBucket -> findAction(actionBucket, params))
-  }
-
-  Object collectActions(def controllerBucket, def params) {
-    controllerBucket.action.buckets.findAll(actionBucket -> findAction(actionBucket, params)).collect(actionBucket -> [action: actionBucket, controller:controllerBucket.key])
-  }
-";
-
 local painlessFunctions = "
   boolean findAction(def actionBucket, def params) {
     actionBucket.percentile_durations.values[0].value >= params.P95_THRESHOLD_MILLIS
