@@ -96,7 +96,7 @@ local basic = import 'basic.libsonnet';
     ),
     basic.timeseries(
       title='gitlab-rails Process restarts',
-      description='The number of times this process, including children workers in a given period. Restarts are associated with poor client experience, so lower is better.',
+      description='The number of times this process restarted in a given period, including children workers. Restarts are associated with poor client experience, so lower is better.',
       yAxisLabel='Process restarts',
       query='
         sum(
