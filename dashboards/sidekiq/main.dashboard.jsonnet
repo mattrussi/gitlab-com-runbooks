@@ -247,5 +247,5 @@ row.new(title="Priority Workloads"),
   links+: platformLinks.triage +
     serviceCatalog.getServiceLinks('sidekiq') +
     platformLinks.services +
-    [platformLinks.dynamicLinks('Sidekiq Detail', 'type:sidekiq')]
+    [platformLinks.dynamicLinks('Sidekiq Detail', 'type:sidekiq')],
 }
