@@ -1,0 +1,16 @@
+groups:
+  - name: Cloud NAT alerts
+    rules:
+      - alert: CloudNATErrorRateTooHigh
+        expr: stackdriver_nat_gateway_logging_googleapis_com_logs_based_metrics_error_count > 0
+        for: 5m
+        labels:
+          pager: pagerduty
+          severity: s1
+        annotations:
+          title: A non-zero number of errors have been logged by Cloud NAT for some minutes
+          description: |
+            There are errors being reported by a Cloud NAT instance. This is
+            likely due to NAT port exhaustion and can be mitigated by increasing
+            the NAT IP pool size by bumping `nat_ip_count` in the cloud-nat
+            terraform module instance corresponding to this instance.
