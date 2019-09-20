@@ -1,37 +1,67 @@
-## Workstation setup for the oncall
+## Console Server setup for the oncall
 
 Configuration changes are handled through GitLab CI so most of what we do does
-not require interacting with the cluster directly. As an oncall SRE, you should
-also setup your workstation to query the kubernetes API with `kubectl`.
+not require interacting with the cluster directly. Management of our clusters is
+limited to our `console` instances.  As an oncall SRE, you should also setup
+your user on the console node to interact with the Kubernetes API.
 
-- [ ] Get the credentials for production, staging and preprod:
+:warning: Do not perform any of these actions using the `root` user, nor `sudo` :warning:
+
+Perform the below work on the appropriate `console` server
+
+* `gstg` - `console-01-sv-gstg.c.gitlab-staging-1.internal`
+* `gprd` - `console-01-sv-gprd.c.gitlab-production.internal`
+
+- [ ] Authenticate with `gcloud`
 
 ```
-gcloud container clusters get-credentials pre-gitlab-gke --region us-east1 --project gitlab-pre
+gcloud auth login
+```
+
+> If you see warnings about permissions issues related to `~/.config/gcloud/*`
+> check the permissions of this directory.  Simply change it to your user if
+> necessary: `sudo chown -R $(id) ~/.config`
+
+You'll be prompted to accept that you are using the `gcloud` on a shared
+computer and presented with a URL to continue logging in with, after which
+you'll be provided a code to pass into the command line to complete the
+process.  By default, `gcloud` will configure your user with the same project
+configuration for which that `console` server live inside.
+
+- [ ] Get the credentials for production and staging:
+
+```
 gcloud container clusters get-credentials gstg-gitlab-gke --region us-east1 --project gitlab-staging-1
 gcloud container clusters get-credentials gprd-gitlab-gke --region us-east1 --project gitlab-production
 ```
-- [ ] Install `kubectl` https://kubernetes.io/docs/tasks/tools/install-kubectl/
-- [ ] Install `helm` 2.x https://helm.sh/docs/using_helm/#install-helm
-- [ ] Install `kubectx` https://github.com/ahmetb/kubectx
-- [ ] Test to ensure you can list the installed helm charts in staging and production
+
+## Workstation setup
+
+- [ ] Clone `git@gitlab.com:gitlab-com/gl-infra/k8s-workloads/gitlab-com`
+- [ ] `cd` into the cloned repo
+- [ ] execute `./bin/k-ctl -t`
+
+This will validate you have all required components installed necessary to
+interact with this repo.  Follow the links provided to complete the necessary
+installs of missing components.  Keep in mind if you have a method of your
+choice to install some of these components, such as the executable is in your
+path, `k-ctl` doesn't care how items are installed.
+
+- [ ] Get the credentials for the pre-prod cluster:
 
 ```
-cd /path/to/gl-infra/k8s-workloads/gitlab-com
-./bin/k-ctl -e gprd list
+gcloud container clusters get-credentials pre-gitlab-gke --region us-east1 --project gitlab-pre
 ```
 
-- [ ] Switch to the production cluster kubectx
+- [ ] Validate k-ctl works as desired
 
 ```
-kubectx gke_gitlab-production_us-east1_gprd-gitlab-gke
+./bin/k-ctl -e pre list
 ```
 
-- [ ] Get the current horizontal pod autoscaler status for production
+You should see a successful output of the helm objects as well as custom
+Kubernetes objects managed by the `gitlab-com` repository.
 
-```
-kubectl -n gitlab get hpa
-```
 
 - [ ] Familiarize yourself with the deployment pipeline for Container Registry, see an
   [example that deploys a change from non-production to production](https://ops.gitlab.net/gitlab-com/gl-infra/k8s-workloads/gitlab-com/pipelines/75089).
