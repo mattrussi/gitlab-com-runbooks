@@ -25,8 +25,8 @@ gcloud auth login
 You'll be prompted to accept that you are using the `gcloud` on a shared
 computer and presented with a URL to continue logging in with, after which
 you'll be provided a code to pass into the command line to complete the
-process.  By default, `gcloud` will configure your user with the same project
-configuration for which that `console` server live inside.
+process.  By default, `gcloud` will configure your user within the same project
+configuration for which that `console` server resides.
 
 - [ ] Get the credentials for production and staging:
 
@@ -34,6 +34,11 @@ configuration for which that `console` server live inside.
 gcloud container clusters get-credentials gstg-gitlab-gke --region us-east1 --project gitlab-staging-1
 gcloud container clusters get-credentials gprd-gitlab-gke --region us-east1 --project gitlab-production
 ```
+
+This should add the appropriate context for `kubectl`, so the following should
+work and display the nodes running on the cluster:
+
+- [ ] `kubectl get nodes`
 
 ## Workstation setup
 
@@ -43,9 +48,10 @@ gcloud container clusters get-credentials gprd-gitlab-gke --region us-east1 --pr
 
 This will validate you have all required components installed necessary to
 interact with this repo.  Follow the links provided to complete the necessary
-installs of missing components.  Keep in mind if you have a method of your
-choice to install some of these components, such as the executable is in your
-path, `k-ctl` doesn't care how items are installed.
+installs of missing components.  Note that if you have a preferred method of
+installing this tools, it's perfectly fine to utilize your preferred method.
+`k-ctl` doesn't care how items are installed, only that they are accessible in
+your `$PATH`.
 
 - [ ] Get the credentials for the pre-prod cluster:
 
