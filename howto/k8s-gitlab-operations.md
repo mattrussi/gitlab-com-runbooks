@@ -1,7 +1,7 @@
 ## Console Server setup for the oncall
 
 Configuration changes are handled through GitLab CI so most of what we do does
-not require interacting with the cluster directly. Management of our clusters is
+not require interacting with the cluster directly. Management of our staging and production clusters is
 limited to our `console` instances.  As an oncall SRE, you should also setup
 your user on the console node to interact with the Kubernetes API.
 
