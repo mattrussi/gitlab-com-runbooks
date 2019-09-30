@@ -1,10 +1,10 @@
+local basic = import 'basic.libsonnet';
 local capacityPlanning = import 'capacity_planning.libsonnet';
 local colors = import 'colors.libsonnet';
 local commonAnnotations = import 'common_annotations.libsonnet';
 local grafana = import 'grafonnet/grafana.libsonnet';
 local keyMetrics = import 'key_metrics.libsonnet';
 local layout = import 'layout.libsonnet';
-local basic = import 'basic.libsonnet';
 local nodeMetrics = import 'node_metrics.libsonnet';
 local platformLinks = import 'platform_links.libsonnet';
 local promQuery = import 'prom_query.libsonnet';
