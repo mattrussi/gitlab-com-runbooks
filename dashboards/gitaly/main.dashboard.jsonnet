@@ -16,6 +16,7 @@ local row = grafana.row;
 local template = grafana.template;
 local graphPanel = grafana.graphPanel;
 local annotation = grafana.annotation;
+local serviceHealth = import 'service_health.libsonnet';
 
 local GITALY_PEAK_WRITE_THROUGHPUT_BYTES_PER_SECOND = 400 * 1024 * 1024;
 local GITALY_PEAK_READ_THROUGHPUT_BYTES_PER_SECOND = 1200 * 1024 * 1024;
@@ -56,93 +57,6 @@ local generalGraphPanel(
   .addSeriesOverride(seriesOverrides.outageSlo)
   .addSeriesOverride(seriesOverrides.slo);
 
-
-local activeAlertsPanel() = grafana.tablePanel.new(
-    'Active Alerts',
-    datasource="$PROMETHEUS_DS",
-    styles=[
-{
-      type: "hidden",
-      pattern: "Time",
-      alias: "Time",
-    },
-{
-      unit: "short",
-      type: "string",
-      alias: "Alert",
-      decimals: 2,
-      pattern: "alertname",
-      mappingType: 2,
-      link: true,
-      linkUrl: "https://alerts.${environment}.gitlab.net/#/alerts?filter=%7Balertname%3D%22${__cell}%22%2C%20env%3D%22${environment}%22%2C%20type%3D%22${type}%22%7D",
-      linkTooltip: "Open alertmanager",
-    },
-{
-      unit: "short",
-      type: "number",
-      alias: "Score",
-      decimals: 0,
-      colors: [
-        colors.warningColor,
-        colors.errorColor,
-        colors.criticalColor,
-      ],
-      colorMode: "row",
-      pattern: "Value",
-      thresholds: [
-        "2",
-        "3",
-      ],
-      mappingType: 1,
-    },
-  ],
-  )
-  .addTarget(  // Alert scoring
-    promQuery.target(
-'
-      sort(
-        max(
-        ALERTS{environment="$environment", type="gitaly", stage="$stage", severity="critical", alertstate="firing"} * 3
-        or
-        ALERTS{environment="$environment", type="gitaly", stage="$stage", severity="error", alertstate="firing"} * 2
-        or
-        ALERTS{environment="$environment", type="gitaly", stage="$stage", severity="warn", alertstate="firing"}
-        ) by (alertname, severity)
-      )
-      ',
-      format="table",
-      instant=true
-    )
-  );
-
-local latencySLOPanel() = grafana.singlestat.new(
-    '7d Latency SLO Error Budget',
-    datasource="$PROMETHEUS_DS",
-    format='percentunit',
-  )
-  .addTarget(
-    promQuery.target(
-'
-        avg(avg_over_time(slo_observation_status{slo="error_ratio", environment="$environment", type="gitaly", stage="$stage"}[7d]))
-      ',
-      instant=true
-    )
-  );
-
-local errorRateSLOPanel() = grafana.singlestat.new(
-    '7d Apdex Rate SLO Error Budget',
-    datasource="$PROMETHEUS_DS",
-    format='percentunit',
-  )
-  .addTarget(
-    promQuery.target(
-'
-        avg_over_time(slo_observation_status{slo="apdex_ratio",  environment="$environment", type="gitaly", stage="$stage"}[7d])
-      ',
-      instant=true
-    )
-  );
-
 local readThroughput() = basic.saturationTimeseries(
   title="Average Peak Read Throughput per Node",
   description='Average Peak read throughput as a ratio of specified max (over 30s) per Node, on the Gitaly disk (' + GITALY_DISK + '). Lower is better.',
@@ -178,7 +92,7 @@ local writeThroughput() = basic.saturationTimeseries(
 );
 
 dashboard.new(
-  'Service Platform Metrics',
+  'Overview',
   schemaVersion=16,
   tags=['type:gitaly'],
   timezone='utc',
@@ -190,36 +104,7 @@ dashboard.new(
 .addTemplate(templates.environment)
 .addTemplate(templates.stage)
 .addTemplate(templates.sigma)
-.addPanel(
-row.new(title="👩‍⚕️ Service Health", collapse=true)
-  .addPanel(latencySLOPanel(),
-    gridPos={
-      x: 0,
-      y: 1,
-      w: 6,
-      h: 4,
-  })
-  .addPanel(activeAlertsPanel(),
-    gridPos={
-      x: 6,
-      y: 1,
-      w: 18,
-      h: 8,
-  })
-  .addPanel(errorRateSLOPanel(),
-    gridPos={
-      x: 0,
-      y: 5,
-      w: 6,
-      h: 4,
-  }),
-  gridPos={
-      x: 0,
-      y: 0,
-      w: 24,
-      h: 1,
-  }
-)
+.addPanel(serviceHealth.row('gitaly', '$stage'), gridPos={ x: 0, y: 0 })
 .addPanel(
 row.new(title="🏅 Key Service Metrics"),
   gridPos={
