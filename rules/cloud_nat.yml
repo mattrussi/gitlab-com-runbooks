@@ -1,0 +1,14 @@
+groups:
+- name: cloud_nat.rules
+  rules:
+    - alert: CloudNAT_HighErrorCount
+      expr: stackdriver_nat_gateway_logging_googleapis_com_user_nat_errors > 1000
+      for: 5m
+      labels:
+        severity: s4
+      annotations:
+        title: High error count on NAT gateway {{$labels.gateway_name}} in env {{$labels.environment}}
+        description: >
+          There is a NAT error count of more than 1000 errors/min since more than 5m on
+          gateway {{$labels.gateway_name}} in env {{$labels.environment}}.
+          Consider rising the `nat_ports_per_vm` value in terraform.
