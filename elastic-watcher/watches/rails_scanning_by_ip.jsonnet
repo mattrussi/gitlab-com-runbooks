@@ -3,7 +3,7 @@ local TRIGGER_SCHEDULE_MINS = 5;  // Run this watcher at this frequency, in minu
 local QUERY_PERIOD_MINS = TRIGGER_SCHEDULE_MINS * 2;
 
 local IGNORE_IPS = [
-  "127.0.0.1"
+  "127.0.0.1",
 ];
 
 local params = {
