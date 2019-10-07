@@ -43,7 +43,7 @@ local query() = {
               percents: [95],
               keyed: false,
             },
-          }
+          },
         },
       },
     },
