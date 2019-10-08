@@ -2721,7 +2721,7 @@ services:
       account up to 2000 minutes, but more can be purchased by upgrading
       to a higher plan.
     SLA:
-      primary_sla_service: false # The intention is for this to be set to true once the service is responding within it's SLA: https://gitlab.com/gitlab-com/www-gitlab-com/issues/5341
+      primary_sla_service: true # The intention is for this to be set to true once the service is responding within it's SLA: https://gitlab.com/gitlab-com/www-gitlab-com/issues/5341
       availability:
       response_time: p90 of 60 second job pick up latency
   technical:
