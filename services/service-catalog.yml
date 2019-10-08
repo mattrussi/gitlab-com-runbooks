@@ -2723,7 +2723,7 @@ services:
     SLA:
       primary_sla_service: true # The intention is for this to be set to true once the service is responding within it's SLA: https://gitlab.com/gitlab-com/www-gitlab-com/issues/5341
       availability:
-      response_time: p90 of 60 second job pick up latency
+      response_time: p95 of 60 second job pick up latency
   technical:
     project:
       - https://gitlab.com/gitlab-org/gitlab-runner
