@@ -1227,7 +1227,7 @@ services:
     business_value: |
       It acts as a load-balancer in front of our pages service
     SLA:
-      primary_sla_service: true # True if this service's SLA contributed to the headline SLA metric for GitLab.com
+      primary_sla_service: false # True if this service's SLA contributed to the headline SLA metric for GitLab.com
       availability:
       response_time:
   technical:
