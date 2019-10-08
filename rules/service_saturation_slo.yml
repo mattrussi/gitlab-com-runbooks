@@ -193,3 +193,17 @@ groups:
     labels:
       component: 'active_db_connections'
     expr: '0.90'
+
+  ## type: monitoring
+  # PromQL engine
+  - record: 'slo:max:soft:gitlab_component_saturation:ratio'
+    labels:
+      type: 'monitoring'
+      component: 'queries'
+    expr: '0.80'
+
+  - record: 'slo:max:hard:gitlab_component_saturation:ratio'
+    labels:
+      type: 'monitoring'
+      component: 'queries'
+    expr: '0.90'
