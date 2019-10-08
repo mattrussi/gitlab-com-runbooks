@@ -244,9 +244,11 @@ groups:
     labels:
       component: 'queries'
     expr: > 
-      avg_over_time(prometheus_engine_queries[1m])
-      /
-      avg_over_time(prometheus_engine_queries_concurrent_max[1m])
+      max by (environment, tier, type, stage) (
+        avg_over_time(prometheus_engine_queries[1m])
+        /
+        avg_over_time(prometheus_engine_queries_concurrent_max[1m])
+      )
 
 # Unlike other service metrics, we record the stats for each component independently
 - name: GitLab Saturation Ratios Stats
