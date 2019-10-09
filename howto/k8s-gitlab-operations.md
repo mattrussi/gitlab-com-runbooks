@@ -113,7 +113,7 @@ application and mark the deployment job as failed.  Note that at this moment in
 time, the application will not be upgraded, but the master branch of the repo
 will contain the desired state that was not achievable.  One MUST address this
 immediately.  If there's a failure to deploy, perform a revert of the commit
-immediately to ensure the master branch better represents what is in production.
+immediately to ensure the master branch represents what is in production.
 Once the revert commit is in place, proceed to perform the necessary
 investigation to continue towards the desired state.
 
