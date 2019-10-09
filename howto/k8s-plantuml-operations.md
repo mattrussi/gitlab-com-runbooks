@@ -1,12 +1,15 @@
-## Workstation setup for the oncall
+# PlantUML
 
-- Follow the setup instructions [workstation setup for the oncall](https://gitlab.com/gitlab-com/runbooks/blob/master/howto/k8s-gitlab-operations.md#workstation-setup-for-the-oncall)
+https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/plantuml
+
+## Setup for the oncall
+
+- **!Important!** Before you do anything in this doc please follow the [setup instructions for the oncall](https://gitlab.com/gitlab-com/runbooks/blob/master/howto/k8s-operations.md)
 - Ensure you can query Kubernetes plantuml namespace
 
 ```
 kubectl -n plantuml get hpa
 ```
-
 - Familiarize yourself with the deployment pipeline for PlantUML on [ops.gitlab.net](https://ops.gitlab.net/gitlab-com/gl-infra/k8s-workloads/plantuml)
 
 ## Application Upgrading
@@ -55,3 +58,10 @@ Example for pre-production: https://console.cloud.google.com/net-services/cdn/li
 
 PlantUML has per environment requests and resource limits, configured in the
 [`k8s-workloads/plantuml` project](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/plantuml/blob/7850985e67984d363b31ed888674325fab84e03b/pre.yaml#L14-20)
+
+## Updating secrets
+
+PlantUML has a single secret `plantuml-cert` which is the SSL certificate for
+the L7 LB created in GCP. To update this certificate when it close to expiration
+follow the secret instructions in the project
+[README.md](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/plantuml/blob/c821508531a7610722174430eb63cfe1b9891304/README.md).
