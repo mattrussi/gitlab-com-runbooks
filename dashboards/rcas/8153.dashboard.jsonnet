@@ -207,7 +207,7 @@ dashboard.new(
       name: "Key Events",
       // To be completed...
       queries: [
-      ], // { date: "2019-08-14T08:25:00Z", text: "The patroni postgres cluster manager on the primary database instance (pg01) reports 'ERROR: get_cluster'" },
+      ],  // { date: "2019-08-14T08:25:00Z", text: "The patroni postgres cluster manager on the primary database instance (pg01) reports 'ERROR: get_cluster'" },
       showIn: 0,
       tags: [],
       type: "tags",
