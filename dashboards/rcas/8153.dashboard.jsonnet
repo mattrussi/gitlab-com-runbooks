@@ -33,6 +33,15 @@ dashboard.new(
 .addAnnotation(commonAnnotations.deploymentsForEnvironmentCanary)
 .addTemplate(templates.ds)
 .addTemplate(templates.environment)
+.addPanel(text.new(title='Intro',
+  mode='markdown',
+  content='
+# RCA dashboard for https://gitlab.com/gitlab-com/gl-infra/infrastructure/issues/8153
+
+## Production incident: https://gitlab.com/gitlab-com/gl-infra/production/issues/1245
+
+## Working doc: https://docs.google.com/document/d/1e_2FYIF7yTv90wUubgLEhVYsq03WBno1pOg6lQhPOaE/edit
+  '), gridPos={x:0,y:0,h:4,w:24})
 .addPanels(layout.grid([
 
   // ------------------------------------------------------
@@ -56,7 +65,9 @@ dashboard.new(
   text.new(title='Sidekiq pipeline latencies go up',
   mode='markdown',
   content='
-# Influx of jobs related to bad projects
+# ExpireJobCacheWorker and StageUpdateWorker jobs slowed down. Here is the rate at which these jobs were executed.
+
+## Side note: at present, we do not record the enqueue rate for Sidekiq jobs. We should as this is an important metric for understanding queueing systems.
   '),
     basic.timeseries(
       title="ExpireJobCacheWorker,StageUpdateWorker Sidekiq job rates ",
@@ -168,7 +179,7 @@ dashboard.new(
   '),
     keyMetrics.errorRatesPanel('patroni', 'main'),
 
-], cols=2, rowHeight=10, startRow=1))
+], cols=2, rowHeight=10, startRow=11))
 + {
   annotations: {
     list+: [
