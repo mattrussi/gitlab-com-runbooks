@@ -40,7 +40,7 @@ dashboard.new(
   text.new(title='CPU utilization on patroni-02, the postgres primary',
   mode='markdown',
   content='
-DETAILS GO HERE
+# This graph shows how this incident applied CPU saturation pressure to our Postgres primary database. This had a knock-on effect to the rest of the site.
   '),
   basic.saturationTimeseries(
     title="Postgres Primary Average CPU Utilization",
@@ -51,12 +51,37 @@ DETAILS GO HERE
     legendFormat='{{ fqdn }}',
   ),
 
+
+  // ------------------------------------------------------
+
+  text.new(title='P',
+  mode='markdown',
+  content='
+# Some CI pipeline worker queries slowed down, putting pressure on the Postgres primary and slowing down Sidekiq jobs that ran them
+  '),
+    basic.latencyTimeseries(
+      title="ExpireJobCacheWorker,StageUpdateWorker latency ",
+      description="p90 Processing time for ExpireJobCacheWorker,StageUpdateWorker pipeline (CI) jobs",
+      query='
+        histogram_quantile(0.9, sum(rate(sidekiq_jobs_completion_time_seconds_bucket{worker=~"ExpireJobCacheWorker|StageUpdateWorker", environment="gprd", env="gprd"}[$__interval])) by (le, worker))
+      ',
+      legendFormat='{{ worker }}',
+      format='s',
+      interval="1m",
+      linewidth=1,
+      intervalFactor=5,
+    ),
+
+
+
   // ------------------------------------------------------
 
   text.new(title='Sidekiq queue lengths',
   mode='markdown',
   content='
-DETAILS GO HERE
+# As sidekiq slowed down, thousands of duplicate jobs were queued up
+
+https://gitlab.com/gitlab-com/gl-infra/scalability/issues/42 is intended to address this issue
   '),
     basic.queueLengthTimeseries(
       title="Sidekiq Queue Lengths per Queue",
