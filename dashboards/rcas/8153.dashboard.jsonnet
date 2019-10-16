@@ -26,8 +26,8 @@ dashboard.new(
   tags=['rca'],
   timezone='utc',
   graphTooltip='shared_crosshair',
-  time_from='2019-10-13 12:00:00',
-  time_to='2019-10-14 02:00:00',
+  time_from='2019-10-13T12:00:00.000Z',
+  time_to='2019-10-14T02:00:00Z',
 )
 .addAnnotation(commonAnnotations.deploymentsForEnvironment)
 .addAnnotation(commonAnnotations.deploymentsForEnvironmentCanary)
