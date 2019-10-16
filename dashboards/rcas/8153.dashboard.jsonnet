@@ -41,7 +41,7 @@ dashboard.new(
 ## Production incident: https://gitlab.com/gitlab-com/gl-infra/production/issues/1245
 
 ## Working doc: https://docs.google.com/document/d/1e_2FYIF7yTv90wUubgLEhVYsq03WBno1pOg6lQhPOaE/edit
-  '), gridPos={x:0,y:0,h:4,w:24})
+  '), gridPos={ x: 0, y: 0, h: 4, w: 24 })
 .addPanels(layout.grid([
 
   // ------------------------------------------------------
