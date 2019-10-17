@@ -99,7 +99,7 @@ class RegistryScanner
 end
 
 if ARGV.length != 1 || !ARGV[0].include?('/manifests/')
-  puts ' Syntax: registry_scanner.rb <bad manifest URL>'
+  puts 'Syntax: registry_scanner.rb <bad manifest URL>'
   puts ''
   puts 'Example: registry_scanner.rb /v2/namespace/project/my-registry/manifests/latest'
   exit
