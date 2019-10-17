@@ -462,7 +462,7 @@ class Rebalancer
   end
 
   def move_one_project
-    project_ids = get_project_ids(limit=Options[:max_failures])
+    project_ids = get_project_ids()
     if project_ids.length == 0
       log.info "No movable projects found on #{Options[:current_file_server]}"
     end
