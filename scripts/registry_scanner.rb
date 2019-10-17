@@ -1,6 +1,6 @@
 #! /usr/bin/env ruby
 # frozen_string_literal: true
-#
+
 # This script helps identify the cause of "invalid checksum digest
 # format" and "unexpected end of JSON" error messages due to 0-byte
 # files. It assumes you have access to the gitlab-gprd-registry bucket
@@ -13,6 +13,8 @@
 # If there are any 0-byte files in the list, this script will display
 # the gsutil commands to remove them.
 class RegistryScanner
+  ZeroByteFileError = Class.new(StandardError)
+
   def initialize(path)
     parse_path(path)
   end
@@ -21,9 +23,11 @@ class RegistryScanner
     check_tag
     check_revision
     check_blob
-  rescue RuntimeError => e
+  rescue ZeroByteFileError => e
     puts e
     show_removal_instructions
+  rescue RuntimeError => e
+    puts e
   end
 
   private
@@ -87,7 +91,8 @@ class RegistryScanner
   def read_sha256(filename)
     current = `gsutil cat #{filename}`
 
-    raise "0-byte file found: #{filename}" if current.length.zero?
+    raise "Error reading: #{filename}" if $CHILD_STATUS != 0
+    raise ZeroByteFileError, "0-byte file found: #{filename}" if current.length.zero?
 
     current.gsub!(/^sha256:/, '')
   end
