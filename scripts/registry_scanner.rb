@@ -12,6 +12,9 @@
 #
 # If there are any 0-byte files in the list, this script will display
 # the gsutil commands to remove them.
+
+require 'English'
+
 class RegistryScanner
   ZeroByteFileError = Class.new(StandardError)
 
@@ -91,7 +94,7 @@ class RegistryScanner
   def read_sha256(filename)
     current = `gsutil cat #{filename}`
 
-    raise "Error reading: #{filename}" if $CHILD_STATUS != 0
+    raise "Error reading: #{filename}" unless $CHILD_STATUS.success?
     raise ZeroByteFileError, "0-byte file found: #{filename}" if current.length.zero?
 
     current.gsub!(/^sha256:/, '')
