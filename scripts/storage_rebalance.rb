@@ -10,12 +10,13 @@
 #
 # Staging example:
 #
-#    gitlab-rails runner /var/opt/gitlab/scripts/storage_rebalance.rb --verbose --dry-run=yes --wait=10800 --current-file-server=nfs-file01 --target-file-server=nfs-file09 --staging --max-failures=200 --refresh-stats
+#    gitlab-rails runner /var/opt/gitlab/scripts/storage_rebalance.rb --list-nodes
+#    gitlab-rails runner /var/opt/gitlab/scripts/storage_rebalance.rb --verbose --dry-run=yes --wait=10800 --current-file-server=nfs-file01 --target-file-server=nfs-file09 --staging --max-failures=200 --refresh-stats --rpc-timeout=10800
 #
 # Production examples:
 #
 #    gitlab-rails runner /var/opt/gitlab/scripts/storage_rebalance.rb --verbose --dry-run=yes --wait=10800 --current-file-server=nfs-file25 --target-file-server=nfs-file36
-#    gitlab-rails runner /var/opt/gitlab/scripts/storage_rebalance.rb --verbose --dry-run=no --wait=10800 --move-amount=10 --current-file-server=nfs-file27 --target-file-server=nfs-file38 --skip=9271929
+#    gitlab-rails runner /var/opt/gitlab/scripts/storage_rebalance.rb --verbose --dry-run=no --wait=10800 --move-amount=10 --current-file-server=nfs-file27 --target-file-server=nfs-file38 --skip=9271929 --rpc-timeout=10800
 #
 # Verify the migration status of previously logged project migrations:
 #
@@ -74,6 +75,7 @@ Options = {
   },
   move_amount: 0,
   timeout: 10,
+  rpc_timeout: 55,
   max_failures: 3,
   list: false,
   black_list: [],
@@ -138,6 +140,12 @@ def parse_args
     Options[:timeout] = wait
   end
 
+  opt.on('--rpc-timeout=<N>', Integer, "Timeout in seconds for RPCs; default: #{Options[:rpc_timeout]}") do |seconds|
+    Options[:rpc_timeout] = seconds
+    patch = Storage::GitalyClientRemoteServiceFetchInternalRemoteMonkeyPatch
+    Gitlab::GitalyClient::RemoteService.include(patch)
+  end
+
   opt.on('-V', '--verify-only', 'Verify that projects have successfully migrated') do |verify_only|
     Options[:verify_only] = true
   end
@@ -169,6 +177,21 @@ def parse_args
     exit
   end
   Options
+end
+
+module GitalyClientRemoteServiceFetchInternalRemoteMonkeyPatch
+  def fetch_internal_remote(repository)
+    request = Gitaly::FetchInternalRemoteRequest.new(
+      repository: @gitaly_repo,
+      remote_repository: repository.gitaly_repository
+    )
+    response = GitalyClient.call(@storage, :remote_service,
+                                 :fetch_internal_remote, request,
+                                 timeout: Storage::Options[:rpc_timeout],
+                                 remote_storage: repository.storage)
+
+    response.result
+  end
 end
 
 class Rebalancer
