@@ -160,3 +160,25 @@ groups:
       title: |
         Redis replication not working for {{ range query "gitlab:redis_disconnected_slaves > 1" }}{{ .Labels.fqdn }}{{ end }}
         Possible masters are {{ range query "gitlab:redis_master" }}{{ .Labels.fqdn }}{{ end }}.
+  - alert: RedisFragmentationHigh
+    expr: (redis_memory_used_rss_bytes / redis_memory_used_bytes) > 2
+    for: 30m
+    labels:
+      severity: s3
+    annotations:
+      description: |
+        The higher this ratio, the greater the memory fragmentation a Redis process is
+        experiencing. A ratio of 1.5 indicates excessive fragmentation, with your Redis instance
+        consuming 150% of the physical memory it requested. Ideally, the OS would allocate a
+        contiguous segment in physical memory, with a fragmentation ratio around about 1.
+
+        Restarting the Redis instance will allow will allow the operating system to recover memory
+        previously unusable due to fragmentation. In this case, an alert as a notification is
+        probably sufficient.
+
+        Once we move GitLab.com to Redis 4, a new active defragmentation feature is available to
+        automatically reduce fragmentation when it exceeds a threshold.
+      runbook: 'troubleshooting/redis.md#Fragmentation'
+      title: |
+        Redis server {{ .Labels.fqdn }} has a memory fragmentation of {{$value}} for the past 30
+        minutes
