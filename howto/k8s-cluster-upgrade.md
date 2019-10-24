@@ -46,7 +46,7 @@ monitoring the [GKE Release Notes]:
   * [ ] `kubectl version` - should indicate the server version matching the
     above
   * [ ] `gcloud container clusters list` - should indicate the new Kubernetes
-    version and note that our nodes now require an upgrade
+    version and note that the nodes now require an upgrade
 
 ### Step 3
 
