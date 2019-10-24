@@ -40,7 +40,7 @@ viewing the latest updates from the [GKE Release Notes]:
   * tf plan will indicate only _one_ change for the cluster configuration option
     `min_master_version`
 * [ ] execute a terraform apply - This is roughly a 15 minute operation, so
-  let's watch some things:
+  monitor the following:
 * [ ] watch the following from
   `console-01-sv-gprd.c.gitlab-production.internal`:
   * `watch gcloud container clusters list`
@@ -50,7 +50,7 @@ viewing the latest updates from the [GKE Release Notes]:
     * Find the ID associated with the RUNNING cluster upgrade and do this:
     * `gcloud container operations wait <operation-id> --region us-east1`
   * wait for terraform and/or the gcloud operation being watched to complete
-* [ ] validate:
+* [ ] Validate:
   * [ ] `kubectl version` - should indicate the server version matching the
     above
   * [ ] `gcloud container clusters list` - should indicate the new Kubernetes
@@ -65,7 +65,8 @@ viewing the latest updates from the [GKE Release Notes]:
     * setting `version` to that of the above
   * [ ] tf apply will perform an upgrade of the node pool
     * the upgrade will be performed 1 node at a time
-    * terraform has a hard coded timeout for 10 minutes
+    * :warning: terraform has a hard coded timeout for 10 minutes for this
+      operation, though the operation will progress forward.
   * [ ] watch the following from
     `console-01-sv-gprd.c.gitlab-production.internal`:
     * `watch gcloud container clusters list`
@@ -81,7 +82,7 @@ viewing the latest updates from the [GKE Release Notes]:
   * [ ] `kubectl get nodes` - all nodes should be running the same version as
     noted above
 
-## The Why
+## Reasons Behind Certain Changes
 
 ### Step 1
 
