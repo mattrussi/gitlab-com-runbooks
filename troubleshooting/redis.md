@@ -52,3 +52,26 @@ or
 Else check for possible issues in `/var/log/gitlab/redis/current` (e.g. resync
 from master) and see [redis_replication.md].
 
+## Fragmentation
+
+Datadog have an excellent writeup on Redis memory fragmentation here: https://www.datadoghq.com/blog/how-to-monitor-redis-performance-metrics/#metric-to-alert-on-mem-fragmentation-ratio.
+
+If Redis undergoes a large change in keys, its memory may become fragmented, meaning that it uses
+much more physical memory than the underlying storage required to hold the key-value data.
+
+In this case, it is worth considering restarting the server to reclaim the memory.
+
+```
+gitlab-ctl restart redis
+```
+
+**Note that if the server is the primary, it is better to perform a controlled failover, using
+
+```shell
+# Obtain the sentinel primary name
+$ /opt/gitlab/embedded/bin/redis-cli -p 26379 sentinel masters|head -2
+name
+the-sentinel-name
+# Force a failover using the name from above
+$ /opt/gitlab/embedded/bin/redis-cli -p 26379 SENTINEL failover the-sentinel-name
+```
