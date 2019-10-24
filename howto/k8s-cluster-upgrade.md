@@ -45,10 +45,12 @@ viewing the latest updates from the [GKE Release Notes]:
   `console-01-sv-gprd.c.gitlab-production.internal`:
   * `watch gcloud container clusters list`
   * `watch -n 5 kubectl get nodes`
-  * `watch -n 5 kubectl get pods`
-  * get the operation ID: `gcloud container operations list`
+  * `watch -n 5 kubectl get pods -o wide`
+  * Monitor the gcloud operation:
     * Find the ID associated with the RUNNING cluster upgrade and do this:
-    * `gcloud container operations wait <operation-id> --region us-east1`
+    * `op_id=$(gcloud container operations list --region us-east1 | grep RUNNING
+      | grep UPGRADE_MASTER | awk {'print $1'})`
+    * `gcloud container operations wait $op_id --region us-east1`
   * wait for terraform and/or the gcloud operation being watched to complete
 * [ ] Validate:
   * [ ] `kubectl version` - should indicate the server version matching the
@@ -71,10 +73,12 @@ viewing the latest updates from the [GKE Release Notes]:
     `console-01-sv-gprd.c.gitlab-production.internal`:
     * `watch gcloud container clusters list`
     * `watch -n 5 kubectl get nodes`
-    * `watch -n 5 kubectl get pods`
-    * get the operation ID: `gcloud container operations list`
+    * `watch -n 5 kubectl get pods -o wide`
+    * Monitor the gcloud operation:
       * Find the ID associated with the RUNNING nodes upgrade and do this:
-      * `gcloud container operations wait <operation-id> --region us-east1`
+      * `op_id=$(gcloud container operations list --region us-east1 | grep
+        RUNNING | grep UPGRADE_NODES | awk {'print $1'})`
+      * `gcloud container operations wait $op_id --region us-east1`
   * wait for terraform and/or the gcloud operation being watched to complete
 * [ ] Validate:
   * [ ] `gcloud container clusters list` - should show the running node version
