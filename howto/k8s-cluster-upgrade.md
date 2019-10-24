@@ -10,9 +10,9 @@ but this would require a lot of mangling in terraform and is therefore not
 documented.  All cluster operations should be tested using ephemeral
 environments prior to performing on production.
 
-The upgrade procedure should otherwise be considered safe and should not result in
-any downtime on any running services.  One can view available GKE versions
-monitoring the [GKE Release Notes]:
+The upgrade procedure should otherwise be considered safe and should not result
+in any downtime on any running services.  One can view available GKE versions by
+viewing the latest updates from the [GKE Release Notes]:
 
 ### Step 0
 
