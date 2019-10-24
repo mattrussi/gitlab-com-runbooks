@@ -2,7 +2,7 @@
 
 ## Procedure
 
-Each step below is a checkpoint for which an MR should exist and is a stopping
+Each step below is a checkpoint for which an Merge Request should exist and is a stopping
 point to allow one to breath before proceeding to the next step.
 
 There is no rollback procedure for the API.  Only node pools can be reversed,
@@ -16,19 +16,27 @@ viewing the latest updates from the [GKE Release Notes]:
 
 ### Step 0
 
-* Copy and paste the below steps into the Change Request
+* Copy and paste the below procedure into a Change Request
+  * https://gitlab.com/gitlab-com/gl-infra/production/issues/new?issuable_template=change_c4
+* Fill out the necessary details of the Change Request following our [Change
+  Management Guidelines]
+* Modify any `<Merge Request>` with a link to the merge request associated with
+  that step
+* Modify `<VERSION>` with the desired version we will be upgrading the GKE
+  cluster to
 
 ### Step 1
 
-* [ ] change node-pool config option `node_auto_upgrade` to `true` `<MR>`
-  * tf plan will indicate only _one_ change for that node pool
+* [ ] change node-pool config option `node_auto_upgrade` to `true` `<Merge
+  Request>`
+  * tf plan will indicate only change for the option `node_auto_upgrade`,
+    nothing else
 * [ ] execute a terraform apply
-  * only the option for `node_auto_upgrade` should change, nothing else
-  * This is very quick and can be validated via `tf plan`
+  * This is very quick change (a few seconds)
 
 ### Step 2
 
-* [ ] change `kubernetes_version` to `<VERSION>` `<MR>`
+* [ ] change `kubernetes_version` to `<VERSION>` `<Merge Request>`
   * tf plan will indicate only _one_ change for the cluster configuration option
     `min_master_version`
 * [ ] execute a terraform apply - This is roughly a 15 minute operation, so
@@ -50,7 +58,8 @@ viewing the latest updates from the [GKE Release Notes]:
 
 ### Step 3
 
-* [ ] change node-pool config option `node_auto_upgrade` to `false` `<MR>`
+* [ ] change node-pool config option `node_auto_upgrade` to `false` `<Merge
+  Request>`
   * tf plan will indicate _two_ changes for that node pool
     * setting `auto_upgrade` to `false`
     * setting `version` to that of the above
@@ -106,4 +115,5 @@ viewing the latest updates from the [GKE Release Notes]:
   timeout is a hard-coded item inside of the google provider and is therefore
   not configurable.
 
+[Change Management Guidelines]: https://about.gitlab.com/handbook/engineering/infrastructure/change-management/
 [GKE Release Notes]: https://cloud.google.com/kubernetes-engine/docs/release-notes
