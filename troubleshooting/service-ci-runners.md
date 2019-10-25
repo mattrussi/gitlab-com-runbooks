@@ -111,3 +111,5 @@ View the `.gitlab-ci.yml` file.  Does its job definition look like a miner?  Doe
 
 Contact the Abuse Team via Slack (`@abuse-team`), and ask them to run `Scrubber` for the namespace ids you identified above as abusive.
 
+Quick reference:
+* [Scrubber runbook](https://gitlab.com/gitlab-com/gl-security/abuse-team/abuse/wikis/Runbook/Mitigation-Tool-%28Scrubber%29)
