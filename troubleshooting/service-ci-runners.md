@@ -24,7 +24,7 @@ The most common known pattern of abuse is cryptocurrency mining.
 
 Because we limit wallclock minutes, not CPU minutes, miners are motivated to spawn numerous concurrent jobs, to make the most of their wallclock minutes.
 
-Miners often create numerous accounts on GitLab.com, each having its own namespace, project, and CI pipeline.  Typically these projects have nearly identical `.gitlab-ci.yml` files, with only superficial differences.  Often these files will maxmiize the parallelism, by defining many jobs that can run concurrently and possibly also specifying that each of those jobs should individually be run in parallel.
+Miners often create numerous accounts on GitLab.com, each having its own namespace, project, and CI pipeline.  Typically these projects have nearly identical `.gitlab-ci.yml` files, with only superficial differences.  Often these files will maximize parallelism, by defining many jobs that can run concurrently and possibly also specifying that each of those jobs should individually be run in parallel.
 
 #### How to identify active abusive accounts?
 
