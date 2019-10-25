@@ -43,7 +43,9 @@ To find miners running numerous concurrent jobs from one or more accounts (a.k.a
 
 These namespace ids are all that the abuse-team needs to block the accounts and cancel the running or pending jobs, so if the situation is dire, skip ahead to the "Mitigation" step.
 
-Note: Normally the namespace called "namespace" can be ignored.  It is an "everything else" bucket for the many small namespaces that did not rank in the top-N that get individually tallied.  Usually you can ignore it, but if it has an outrageously high count of jobs, that might indicate there are numerous namespaces being collectively aggressive in scheduling jobs (which would warrant further research).
+Caveats:
+* Normally the namespace called "namespace" can be ignored.  It is an "everything else" bucket for the many small namespaces that did not rank in the top-N that get individually tallied.  Usually you can ignore it, but if it has an outrageously high count of jobs, that might indicate there are numerous namespaces being collectively aggressive in scheduling jobs (which would warrant further research).
+* Namespace 9970 is the `gitlab-org` namespace and is expected to routinely have heavy CI activity.
 
 #### Investigation
 
