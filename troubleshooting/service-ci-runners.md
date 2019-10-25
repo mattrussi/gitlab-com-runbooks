@@ -2,8 +2,15 @@
 
 CI Runners are used by customers to run CI jobs for any project hosted on GitLab.com.
 
-Because this allows even free accounts to execute arbitrary code for up to 2000 wallclock minutes per month
+Because this allows even free accounts to execute arbitrary code for up to 2000 wallclock minutes per month,
 it is ripe for abuse.
+
+Quick reference links:
+* [CI dashboard](https://dashboards.gitlab.net/d/000000159/ci)
+* [CI architecture summary](https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/ci-architecture.html)
+* [CI Runner docs](https://docs.gitlab.com/runner/)
+* [CI Runner project source code, including curated links to the docs in README.md](https://gitlab.com/gitlab-org/gitlab-runner)
+* [Related runbooks](https://gitlab.com/gitlab-com/runbooks/blob/master/troubleshooting/cicd/)
 
 ## Common Alert: The `ci-runners` service (`main` stage) has a apdex score (latency) below SLO
 
@@ -13,10 +20,11 @@ this can delay the start of other jobs, possibly causing the above alert.
 We aim for pending jobs to be started promptly, so a scheduling delay can cause PagerDuty to alert the
 on-call engineer about SLO violation.
 
-The following are some known ways for this alert to be triggered.
+Quick reference:
+* [Example PagerDuty alert](https://gitlab.pagerduty.com/incidents/PVDAS6I)
+* [Apdex formula (search for `type: ci-runners`)](https://gitlab.com/gitlab-com/runbooks/blob/master/rules/service_apdex.yml)
 
-Jobs concurrently running on a runner VM compete for shared resources, slowing the execution of other jobs or delaying the
-start of pending jobs.
+The following are some known ways for this alert to be triggered.
 
 ### Abuse of resources: Cryptocurrency mining
 
