@@ -49,7 +49,24 @@ Caveats:
 
 #### Investigation
 
-To translate these namespace ids into namespace names and URLs, you can connect to any Postgres database (primary or replica) and put your namespace ids into the IN-list of the following query:
+To translate these namespace ids into namespace names and URLs, you can either (a) query the Postgres database directly or (b) query the Rails console.
+
+##### Option A: Database query
+
+Connect to any Postgres database (primary or replica) and get a `psql` prompt:
+
+```shell
+$ ssh <username>-db@gprd-console
+```
+
+or
+
+```shell
+$ ssh patroni-01-db-gprd.c.gitlab-production.internal   # Any patroni is fine, replica or primary.
+$ sudo gitlab-psql
+```
+
+Put your namespace ids into the IN-list of the following query:
 
 ```sql
 select
@@ -66,7 +83,23 @@ order by
 ;
 ```
 
-To view the namespace (and its projects), you will probably need to authenticate to GitLab.com using your admin account (e.g. "msmiley+admin@gitlab.com") rather than your normal account.
+##### Option B: Rails console query
+
+Connect to the Rails console server:
+
+```shell
+$ ssh <username>-rails@gprd-console
+```
+
+Put your namespace ids into the array at the start of this iterator expression:
+
+```ruby
+%w[6334677 6336008].each { |id| n = Namespace.find(id); puts "#{id} (#{n.name}): https://gitlab.com/#{n.path}" }
+```
+
+##### Review the namespaces via the GitLab web UI
+
+To view the namespace (and its projects), you will probably need to authenticate to GitLab.com using your admin account (e.g. "msmiley+admin@gitlab.com") rather than your normal account, since abusive projects tend to be marked as private.
 
 Often (but not always), both the namespace and the project are disposable, having minimal setup and content, apart from the `.gitlab-ci.yml` file that defines the pipeline jobs.  For reference, here is an [example namespace](https://gitlab.com/zabuzhkofaina), its one [project](https://gitlab.com/zabuzhkofaina/zabuzhkofaina), and its [`.gitlab-ci.yml` file](https://gitlab.com/zabuzhkofaina/zabuzhkofaina/blob/master/.gitlab-ci.yml).
 
