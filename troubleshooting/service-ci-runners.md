@@ -30,8 +30,8 @@ Miners often create numerous accounts on GitLab.com, each having its own namespa
 
 To find miners running numerous concurrent jobs from one or more accounts (a.k.a. namespaces), use the following dashboard panels to find any namespaces with numerous (say, 800-1000) jobs in either the `Pending` or `Running` state.  Adjust the dashboard's timespan to include at least a few hours prior to your alert about the SLO violation for jobs being promptly started.
 
-* ("CI Runners Service" -> "CI" -> "Jobs queue" -> "Running jobs on shared-runners")[https://dashboards.gitlab.net/d/000000159/ci?orgId=1&panelId=60&fullscreen&from=now-3h&to=now]
-* ("CI Runners Service" -> "CI" -> "Jobs queue" -> "Pending jobs with shared-runners enabled")[https://dashboards.gitlab.net/d/000000159/ci?orgId=1&panelId=33&fullscreen&from=now-3h&to=now]
+* ["CI Runners Service" -> "CI" -> "Jobs queue" -> "Running jobs on shared-runners"](https://dashboards.gitlab.net/d/000000159/ci?orgId=1&panelId=60&fullscreen&from=now-3h&to=now)
+* ["CI Runners Service" -> "CI" -> "Jobs queue" -> "Pending jobs with shared-runners enabled"](https://dashboards.gitlab.net/d/000000159/ci?orgId=1&panelId=33&fullscreen&from=now-3h&to=now)
 
 These namespace ids are all that the abuse-team needs to block the accounts and cancel the running or pending jobs, so if the situation is dire, skip ahead to the "Mitigation" step.
 
@@ -58,7 +58,7 @@ order by
 
 To view the namespace (and its projects), you will probably need to authenticate to GitLab.com using your admin account (e.g. "msmiley+admin@gitlab.com") rather than your normal account.
 
-Often (but not always), both the namespace and the project are disposable, having minimal setup and content, apart from the `.gitlab-ci.yml` file that defines the pipeline jobs.  For reference, here is an (example namespace)[https://gitlab.com/zabuzhkofaina], its one (project)[https://gitlab.com/zabuzhkofaina/zabuzhkofaina], and its (`.gitlab-ci.yml` file)[https://gitlab.com/zabuzhkofaina/zabuzhkofaina/blob/master/.gitlab-ci.yml].
+Often (but not always), both the namespace and the project are disposable, having minimal setup and content, apart from the `.gitlab-ci.yml` file that defines the pipeline jobs.  For reference, here is an [example namespace](https://gitlab.com/zabuzhkofaina), its one [project](https://gitlab.com/zabuzhkofaina/zabuzhkofaina), and its [`.gitlab-ci.yml` file](https://gitlab.com/zabuzhkofaina/zabuzhkofaina/blob/master/.gitlab-ci.yml).
 
 In your browser, view the namespace and its project(s).  Determine if the namespace or project looks suspicious.  Does the namespace and project have minimal setup?  Were they freshly created very recently and lack activity apart from initial setup?  Is the project empty apart from the `.gitlab-ci.yml` file that defines the pipeline jobs?
 
