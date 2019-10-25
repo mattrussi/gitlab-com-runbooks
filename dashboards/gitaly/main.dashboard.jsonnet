@@ -93,9 +93,9 @@ local writeThroughput() = basic.saturationTimeseries(
 
 local ratelimitLockPercentage() = generalGraphPanel(
     "Request % acquiring rate-limit lock within 1m, by host + method",
-    description = "Percentage of requests that acquire a Gitaly rate-limit lock within 1 minute, by host and method"
+    description="Percentage of requests that acquire a Gitaly rate-limit lock within 1 minute, by host and method"
   )
-  .addTarget(    
+  .addTarget(
     promQuery.target(
       'sum(rate(gitaly_rate_limiting_acquiring_seconds_bucket{le="60"}[$__interval])) by (environment, tier, type, stage, fqdn, grpc_method) / sum(rate(gitaly_rate_limiting_acquiring_seconds_bucket{le="+Inf"}[$__interval])) by (environment, tier, type, stage, fqdn, grpc_method)',
       interval="30s",
