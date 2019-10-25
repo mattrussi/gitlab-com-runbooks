@@ -10,7 +10,7 @@ it is ripe for abuse.
 Because ci-runner resources are limited, when a burst of numerous or expensive new jobs are created,
 this can delay the start of other jobs, possibly causing the above alert.
 
-We aim for for pending jobs to be started promptly, so a scheduling delay can cause PagerDuty to alert the
+We aim for pending jobs to be started promptly, so a scheduling delay can cause PagerDuty to alert the
 on-call engineer about SLO violation.
 
 The following are some known ways for this alert to be triggered.
