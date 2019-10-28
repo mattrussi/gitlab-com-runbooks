@@ -134,7 +134,9 @@ groups:
     expr: >
       clamp_max(
         max(
-          sum(pg_stat_activity_count{datname="gitlabhq_production", state!="idle"}) without (state)
+          sum without (state) (
+            pg_stat_activity_count{datname="gitlabhq_production", state!="idle"}
+          )
           /  on (type, tier, stage, environment, fqdn)
           pg_settings_max_connections
       ) by (type, tier, stage, environment), 1)
