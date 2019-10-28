@@ -97,7 +97,27 @@ local ratelimitLockPercentage() = generalGraphPanel(
   )
   .addTarget(
     promQuery.target(
-      'sum(rate(gitaly_rate_limiting_acquiring_seconds_bucket{le="60"}[$__interval])) by (environment, tier, type, stage, fqdn, grpc_method) / sum(rate(gitaly_rate_limiting_acquiring_seconds_bucket{le="+Inf"}[$__interval])) by (environment, tier, type, stage, fqdn, grpc_method)',
+      '
+        sum(
+          rate(
+            gitaly_rate_limiting_acquiring_seconds_bucket{
+              environment="$environment",
+              stage="$stage",
+              le="60"
+            }[$__interval]
+          )
+        ) by (environment, tier, type, stage, fqdn, grpc_method)
+        /
+        sum(
+          rate(
+            gitaly_rate_limiting_acquiring_seconds_bucket{
+              environment="$environment",
+              stage="$stage",
+              le="+Inf"
+            }[$__interval]
+          )
+        ) by (environment, tier, type, stage, fqdn, grpc_method)
+      ',
       interval="30s",
       legendFormat="{{fqdn}} - {{grpc_method}}"
     )
@@ -112,6 +132,26 @@ local ratelimitLockPercentage() = generalGraphPanel(
   .addYaxis(
     format='short',
     show=false,
+  );
+
+// This needs to be kept manually in sync with the Gitaly apdex rule, in `service_apdex.yml`
+local perNodeApdex() =
+  basic.apdexTimeseries(
+    title='Apdex score per Gitaly Node',
+    description='Apdex is a measure of requests that complete within an acceptable threshold duration. Actual threshold vary per service or endpoint. Higher is better.',
+    query='
+      (
+        sum(rate(grpc_server_handling_seconds_bucket{environment="$environment", stage="$stage",type="gitaly", tier="stor", grpc_type="unary", le="0.5", grpc_method!~"GarbageCollect|Fsck|RepackFull|RepackIncremental|CommitLanguages|CreateRepositoryFromURL|UserRebase|UserSquash|CreateFork|UserUpdateBranch|FindRemoteRepository|UserCherryPick|FetchRemote|UserRevert|FindRemoteRootRef"}[1m])) by (environment, type, tier, stage, fqdn)
+        +
+        sum(rate(grpc_server_handling_seconds_bucket{environment="$environment", stage="$stage",type="gitaly", tier="stor", grpc_type="unary", le="1", grpc_method!~"GarbageCollect|Fsck|RepackFull|RepackIncremental|CommitLanguages|CreateRepositoryFromURL|UserRebase|UserSquash|CreateFork|UserUpdateBranch|FindRemoteRepository|UserCherryPick|FetchRemote|UserRevert|FindRemoteRootRef"}[1m])) by (environment, type, tier, stage, fqdn)
+      )
+      /
+      2 / (sum(rate(grpc_server_handling_seconds_count{environment="$environment", stage="$stage",type="gitaly", tier="stor", grpc_type="unary", grpc_method!~"GarbageCollect|Fsck|RepackFull|RepackIncremental|CommitLanguages|CreateRepositoryFromURL|UserRebase|UserSquash|CreateFork|UserUpdateBranch|FindRemoteRepository|UserCherryPick|FetchRemote|UserRevert|FindRemoteRootRef"}[1m])) by (environment, type, tier, stage, fqdn))
+    ',
+    legendFormat='{{ fqdn }}',
+    interval='1m',
+    linewidth=1,
+    legend_show=false,
   );
 
 dashboard.new(
@@ -144,11 +184,10 @@ layout.grid([
     keyMetrics.serviceAvailabilityPanel('gitaly', '$stage'),
     keyMetrics.qpsPanel('gitaly', '$stage'),
     keyMetrics.saturationPanel('gitaly', '$stage'),
-    ratelimitLockPercentage(),
   ], startRow=1001)
 )
 .addPanel(
-row.new(title="Node IO"),
+row.new(title="Node Performance"),
   gridPos={
       x: 0,
       y: 2000,
@@ -158,11 +197,25 @@ row.new(title="Node IO"),
 )
 .addPanels(
 layout.grid([
+  perNodeApdex(),
   readThroughput(),
   writeThroughput(),
   ], startRow=2001)
 )
-
+.addPanel(
+row.new(title="Gitaly Rate Limiting and Abuse Detection"),
+  gridPos={
+      x: 0,
+      y: 3000,
+      w: 24,
+      h: 1,
+  }
+)
+.addPanels(
+layout.grid([
+    ratelimitLockPercentage(),
+  ], startRow=3001)
+)
 .addPanel(
 keyMetrics.keyComponentMetricsRow('gitaly', '$stage'),
   gridPos={
