@@ -154,6 +154,33 @@ local perNodeApdex() =
     legend_show=false,
   );
 
+local inflightGitalyCommandsPerNode() =
+  basic.timeseries(
+    title='Inflight Git Commands per Server',
+    description='Number of Git commands running concurrently per node. Lower is better.',
+    query='
+      avg_over_time(gitaly_commands_running{environment="$environment", stage="$stage"}[$__interval])
+    ',
+    legendFormat='{{ fqdn }}',
+    interval='1m',
+    linewidth=1,
+    legend_show=false,
+  );
+
+local gitalySpawnTimeoutsPerNode() =
+  basic.timeseries(
+    title='Gitaly Spawn Timeouts per Node',
+    description='Golang uses a global lock on process spawning. In order to control contention on this lock Gitaly uses a safety valve. If a request is unable to obtain the lock within a period, a timeout occurs. These timeouts are serious and should be addressed. Non-zero is bad.',
+    query='
+      changes(gitaly_spawn_timeouts_total{environment="$environment", stage="$stage"}[$__interval])
+    ',
+    legendFormat='{{ fqdn }}',
+    interval='1m',
+    linewidth=1,
+    legend_show=false,
+  );
+
+
 dashboard.new(
   'Overview',
   schemaVersion=16,
@@ -198,12 +225,13 @@ row.new(title="Node Performance"),
 .addPanels(
 layout.grid([
   perNodeApdex(),
+  inflightGitalyCommandsPerNode(),
   readThroughput(),
   writeThroughput(),
   ], startRow=2001)
 )
 .addPanel(
-row.new(title="Gitaly Rate Limiting and Abuse Detection"),
+row.new(title="Gitaly Safety Mechanisms"),
   gridPos={
       x: 0,
       y: 3000,
@@ -213,6 +241,7 @@ row.new(title="Gitaly Rate Limiting and Abuse Detection"),
 )
 .addPanels(
 layout.grid([
+    gitalySpawnTimeoutsPerNode(),
     ratelimitLockPercentage(),
   ], startRow=3001)
 )
