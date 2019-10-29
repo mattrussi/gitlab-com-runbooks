@@ -14,15 +14,18 @@ local graphPanel = grafana.graphPanel;
 local row = grafana.row;
 local tablePanel = grafana.tablePanel;
 
-local saturationTable(title, nodeSelector, query, saturationDays, valueColumnName) =
+local findIssuesLink = 'https://gitlab.com/dashboard/issues?scope=all&utf8=✓&state=all&label_name[]=GitLab.com%20Resource%20Saturation&search=${__cell_1}+${__cell_3}';
+
+local saturationTable(title, description, query, saturationDays, valueColumnName) =
   tablePanel.new(
     title,
+    description=description,
     datasource='$PROMETHEUS_DS',
     styles=[{
       "alias": "Satuation Resource",
       "link": true,
       "linkTargetBlank": true,
-      "linkTooltip": "",
+      "linkTooltip": "Click the link to review the past " + saturationDays + " day(s) history for this saturation point.",
       "linkUrl": "https://dashboards.gitlab.net/d/alerts-saturation_component/alerts-saturation-component-alert?var-environment=gprd&var-type=${__cell_3}&var-stage=${__cell_2}&var-component=${__cell_1}&from=now-" + saturationDays + "d&to=now",
       "mappingType": 1,
       "pattern": "component",
@@ -59,6 +62,23 @@ local saturationTable(title, nodeSelector, query, saturationDays, valueColumnNam
       "pattern": "stage",
       "type": "string",
     },
+    { // Sneaky repurposing of the Time column as a find issues link
+      "alias": "Issues",
+      "mappingType": 2,
+      "pattern": "Time",
+      "type": "string",
+      "rangeMaps": [
+        {
+          "from": "0",
+          "to": "9999999999999",
+          "text": "Find Issues"
+        }
+      ],
+      "link": true,
+      "linkTargetBlank": true,
+      "linkUrl": findIssuesLink,
+      "linkTooltip": "Click the link to find issues on GitLab.com related to this saturation point."
+    },
     {
       "alias": "",
       "mappingType": 1,
@@ -74,7 +94,9 @@ local saturationTable(title, nodeSelector, query, saturationDays, valueColumnNam
   };
 
 local currentSaturationBreaches(nodeSelector) =
-    saturationTable('Current Saturation Breaches', '', query='
+    saturationTable('Current Saturation Point Breaches',
+      description='Lists saturation points that are breaching their soft SLO thresholds at this instant',
+      query='
       max by (type, stage, component) (
         clamp_max(
           gitlab_component_saturation:ratio{
@@ -89,7 +111,9 @@ local currentSaturationBreaches(nodeSelector) =
     saturationDays=1, valueColumnName="Current %");
 
 local currentSaturationWarnings(nodeSelector) =
-    saturationTable('Current Saturation Warnings', '', query='
+    saturationTable('Current Saturation Point Warnings',
+    description='Lists resource saturation metrics that, given their current value and weekly variance, have a high probability of breaching their soft thresholds limits',
+    query='
       sort_desc(
         max by (type, stage, component) (
           clamp_max(
@@ -108,10 +132,12 @@ local currentSaturationWarnings(nodeSelector) =
         )
       )
     ',
-    saturationDays=7, valueColumnName="Worst Case Current Prediction %");
+    saturationDays=7, valueColumnName="Likely Current Worst Case %");
 
 local twoWeekSaturationWarnings(nodeSelector) =
-    saturationTable('14d Saturation Warnings Predictions', '', query='
+    saturationTable('14d Future Predicted Saturation Point Warnings (using past 1w growth, linearly interpolated forward 14d)',
+      description='Lists resource saturation metrics that, given their growth rate over the the past week, and their weekly variance, have a high probability of breaching their soft thresholds limits in the next 14d',
+      query='
       sort_desc(
         max by (type, stage, component) (
           clamp_max(
@@ -130,7 +156,7 @@ local twoWeekSaturationWarnings(nodeSelector) =
         )
       )
     ',
-    saturationDays=30, valueColumnName="Worst Case 14d Prediction %");
+    saturationDays=30, valueColumnName="Predicted Worst Case % in 14d");
 
 {
   environmentCapacityPlanningRow()::
