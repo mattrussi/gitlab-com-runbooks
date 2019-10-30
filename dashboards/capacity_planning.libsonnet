@@ -112,7 +112,7 @@ local currentSaturationBreaches(nodeSelector) =
 
 local currentSaturationWarnings(nodeSelector) =
     saturationTable('Current Saturation Point Warnings',
-    description='Lists resource saturation metrics that, given their current value and weekly variance, have a high probability of breaching their soft thresholds limits',
+    description='Lists resource saturation metrics that, given their current value and weekly variance, have a high probability of breaching their soft thresholds limits within an immediate timeframe',
     query='
       sort_desc(
         max by (type, stage, component) (
