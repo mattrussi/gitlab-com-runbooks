@@ -14,7 +14,7 @@ local graphPanel = grafana.graphPanel;
 local row = grafana.row;
 local tablePanel = grafana.tablePanel;
 
-local findIssuesLink = 'https://gitlab.com/dashboard/issues?scope=all&utf8=✓&state=all&label_name[]=GitLab.com%20Resource%20Saturation&search=${__cell_1}+${__cell_3}';
+local findIssuesLink = 'https://gitlab.com/groups/gitlab-com/gl-infra/-/issues?scope=all&utf8=%E2%9C%93&state=all&label_name[]=GitLab.com%20Resource%20Saturation&search=${__cell_1}+${__cell_3}';
 
 local saturationTable(title, description, query, saturationDays, valueColumnName) =
   tablePanel.new(
@@ -94,8 +94,8 @@ local saturationTable(title, description, query, saturationDays, valueColumnName
   };
 
 local currentSaturationBreaches(nodeSelector) =
-    saturationTable('Current Saturation Point Breaches',
-      description='Lists saturation points that are breaching their soft SLO thresholds at this instant',
+    saturationTable('Currently Saturated Resources',
+      description='Lists saturated resources that are breaching their soft SLO thresholds at this instant',
       query='
       max by (type, stage, component) (
         clamp_max(
@@ -111,8 +111,8 @@ local currentSaturationBreaches(nodeSelector) =
     saturationDays=1, valueColumnName="Current %");
 
 local currentSaturationWarnings(nodeSelector) =
-    saturationTable('Current Saturation Point Warnings',
-    description='Lists resource saturation metrics that, given their current value and weekly variance, have a high probability of breaching their soft thresholds limits within an immediate timeframe',
+    saturationTable('Resources Currently at Risk of being Saturated',
+    description='Lists saturated resources that, given their current value and weekly variance, have a high probability of breaching their soft thresholds limits within the next few hours',
     query='
       sort_desc(
         max by (type, stage, component) (
@@ -132,11 +132,11 @@ local currentSaturationWarnings(nodeSelector) =
         )
       )
     ',
-    saturationDays=7, valueColumnName="Likely Current Worst Case %");
+    saturationDays=7, valueColumnName="Worst-case Saturation Today");
 
 local twoWeekSaturationWarnings(nodeSelector) =
-    saturationTable('14d Predicted Saturation Point Warnings',
-      description='Lists resource saturation metrics that, given their growth rate over the the past week, and their weekly variance, have a high probability of breaching their soft thresholds limits in the next 14d',
+    saturationTable('Resources Forecasted to be at Risk of Saturation in 14d',
+      description='Lists saturated resources that, given their growth rate over the the past week, and their weekly variance, are likely to breach their soft thresholds limits in the next 14d',
       query='
       sort_desc(
         max by (type, stage, component) (
@@ -156,7 +156,7 @@ local twoWeekSaturationWarnings(nodeSelector) =
         )
       )
     ',
-    saturationDays=30, valueColumnName="Predicted Worst Case % in 14d");
+    saturationDays=30, valueColumnName="Worst-case Saturation 14d Forecast");
 
 {
   environmentCapacityPlanningRow()::
