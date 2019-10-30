@@ -135,7 +135,7 @@ local currentSaturationWarnings(nodeSelector) =
     saturationDays=7, valueColumnName="Likely Current Worst Case %");
 
 local twoWeekSaturationWarnings(nodeSelector) =
-    saturationTable('14d Future Predicted Saturation Point Warnings (using past 1w growth, linearly interpolated forward 14d)',
+    saturationTable('14d Predicted Saturation Point Warnings',
       description='Lists resource saturation metrics that, given their growth rate over the the past week, and their weekly variance, have a high probability of breaching their soft thresholds limits in the next 14d',
       query='
       sort_desc(
