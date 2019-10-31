@@ -49,7 +49,7 @@ Caveats:
 
 #### Investigation
 
-To translate these namespace ids into namespace names and URLs, you can either (a) query the Postgres database directly or (b) query the Rails console.
+To translate these namespace ids into namespace names and URLs, you can (a) run `/chatops run namespace <id>`, (b) query the Rails console, or (c) query the Postgres database directly.
 
 ##### Option A: Database query
 
