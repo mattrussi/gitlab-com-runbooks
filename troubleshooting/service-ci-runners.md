@@ -51,7 +51,15 @@ Caveats:
 
 To translate these namespace ids into namespace names and URLs, you can (a) run `/chatops run namespace <id>`, (b) query the Rails console, or (c) query the Postgres database directly.
 
-##### Option A: Database query
+##### Option A: ChatOps command
+
+The easiest way is to use this ChatOps command in Slack to lookup the namespace name:
+
+```
+/chatops run namespace <namespace_id>
+```
+
+##### Option B: Database query
 
 Connect to any Postgres database (primary or replica) and get a `psql` prompt:
 
@@ -83,7 +91,7 @@ order by
 ;
 ```
 
-##### Option B: Rails console query
+##### Option C: Rails console query
 
 Connect to the Rails console server:
 
