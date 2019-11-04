@@ -42,16 +42,16 @@ local saturationTable(title, description, query, saturationDays, valueColumnName
       "alias": valueColumnName,
       "colorMode": "row",
       "colors": [
-        colors.errorColor,
-        colors.errorColor,
-        colors.errorColor,
+        "#E0B400",
+        "#FA6400",
+        "#F2495C"
       ],
-      "mappingType": 1,
       "pattern": "Value",
       "thresholds": [
-        "0",
-        "100"
+        "0.9",
+        "1"
       ],
+      "mappingType": 1,
       "type": "number",
       "unit": "percentunit",
       decimals: 2,
@@ -86,7 +86,7 @@ local saturationTable(title, description, query, saturationDays, valueColumnName
       "type": "hidden"
     }],
   )
-  .addTarget(promQuery.target(query, instant=true, format="table")) + {
+  .addTarget(promQuery.target('sort_desc(' + query + ')', instant=true, format="table")) + {
     sort: {
       col: 13,
       desc: true
