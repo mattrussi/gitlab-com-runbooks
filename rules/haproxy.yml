@@ -107,7 +107,7 @@ groups:
       runbook: troubleshooting/high-error-rate.md
       title: Increased Error Rate Across Fleet
   - alert: IncreasedErrorRateOtherBackends
-    expr: sum(backend_code:haproxy_server_http_responses_total:irate1m{code="5xx",tier="lb",backend!="https_git"}) by (backend, environment) > 20
+    expr: sum(backend_code:haproxy_server_http_responses_total:irate1m{code="5xx",tier="lb",backend!="https_git"}) by (backend, environment) > 600
     for: 15s
     labels:
       pager: pagerduty
