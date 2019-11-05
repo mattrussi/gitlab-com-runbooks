@@ -38,7 +38,7 @@ curl_data_template() {
             "index.lifecycle.name": "gitlab-infra-ilm-policy",
             "index.lifecycle.rollover_alias": "pubsub-${index}-inf-${env}",
             "index.mapping.total_fields.limit": "10000",
-            "number_of_shards": 3
+            "number_of_shards": 1
     },
     "mappings": {
         "properties": {
