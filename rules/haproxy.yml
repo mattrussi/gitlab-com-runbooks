@@ -106,16 +106,6 @@ groups:
       description: We are having a high rate of 5xx on https_git backend. It's likely that customers are impacted.
       runbook: troubleshooting/high-error-rate.md
       title: Increased Error Rate Across Fleet
-  - alert: IncreasedErrorRateOtherBackends
-    expr: sum(backend_code:haproxy_server_http_responses_total:irate1m{code="5xx",tier="lb",backend!="https_git"}) by (backend, environment) > 600
-    for: 15s
-    labels:
-      pager: pagerduty
-      severity: s1
-    annotations:
-      description: We are having a high rate of 5xx across other backends (web(sockets)?/api/registry/etc, anything except https_git). It's likely that customers are impacted.
-      runbook: troubleshooting/high-error-rate.md
-      title: Increased Error Rate Across Fleet
   - alert: IncreasedBackendConnectionErrors
     expr: rate(haproxy_backend_connection_errors_total[1m]) > .1
     for: 2m
