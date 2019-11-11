@@ -112,15 +112,15 @@ find_dashboards "$@" | while read -r line; do
   }
 ')
 
-  if (echo ${body} | grep -E '%\(\w+\)' >/dev/null); then
+  if (echo "${body}" | grep -E '%\(\w+\)' >/dev/null); then
     echo "$line output contains format markers. Did you forget to use %?"
-    echo ${body} | jq '.' | grep -E -B3 -A3 --color=always '%\(\w+\)'
+    echo "${body}" | jq '.' | grep -E -B3 -A3 --color=always '%\(\w+\)'
     exit 1
   fi
 
-  if (echo ${body} | grep -E "' *\\+" >/dev/null); then
+  if (echo "${body}" | grep -E "' *\\+" >/dev/null); then
     echo "$line output contains format markers. Did you forget to use %?"
-    echo ${body} | jq '.' | grep -E -B3 -A3 --color=always "' *\\+"
+    echo "${body}" | jq '.' | grep -E -B3 -A3 --color=always "' *\\+"
     exit 1
   fi
 
