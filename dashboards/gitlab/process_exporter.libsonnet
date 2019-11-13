@@ -1,12 +1,19 @@
 local basic = import 'basic.libsonnet';
 local layout = import 'layout.libsonnet';
 
+/*
+groupname, serviceType, serviceStage
+              environment="$environment",
+              groupname="%(groupname)s",
+              type="%(serviceType)s",
+              stage="%(serviceStage)s"
+*/
+
 {
-  namedGroup(title, groupname, serviceType, serviceStage, startRow)::
+  namedGroup(title, selector, aggregator, legendFormat, startRow)::
     local formatConfig = {
-      groupname: groupname,
-      serviceType: serviceType,
-      serviceStage: serviceStage,
+      selector: selector,
+      aggregator: aggregator,
     };
 
     layout.grid([
@@ -16,14 +23,9 @@ local layout = import 'layout.libsonnet';
       query=|||
         sum(
           rate(
-            namedprocess_namegroup_cpu_seconds_total{
-              environment="$environment",
-              groupname="%(groupname)s",
-              type="%(serviceType)s",
-              stage="%(serviceStage)s"
-            }[$__interval]
+            namedprocess_namegroup_cpu_seconds_total{%(selector)s}[$__interval]
           )
-        ) without (mode)
+        ) by (%(aggregator)s)
       ||| % formatConfig,
       legendFormat='{{ fqdn }}',
       interval='1m',
@@ -37,13 +39,8 @@ local layout = import 'layout.libsonnet';
       description='Maximum number of open file descriptors per host',
       query=|||
         max(
-            namedprocess_namegroup_open_filedesc{
-              environment="$environment",
-              groupname="%(groupname)s",
-              type="%(serviceType)s",
-              stage="%(serviceStage)s"
-            }
-        ) by (fqdn)
+          namedprocess_namegroup_open_filedesc{%(selector)s}
+        ) by (%(aggregator)s)
       ||| % formatConfig,
       legendFormat='{{ fqdn }}',
       interval='1m',
@@ -56,13 +53,8 @@ local layout = import 'layout.libsonnet';
       description='Number of threads in the process group',
       query=|||
         sum(
-            namedprocess_namegroup_num_threads{
-              environment="$environment",
-              groupname="%(groupname)s",
-              type="%(serviceType)s",
-              stage="%(serviceStage)s"
-            }
-        ) by (fqdn)
+          namedprocess_namegroup_num_threads{%(selector)s}
+        ) by (%(aggregator)s)
       ||| % formatConfig,
       legendFormat='{{ fqdn }}',
       interval='1m',
@@ -75,13 +67,8 @@ local layout = import 'layout.libsonnet';
       description='Memory usage for named process group',
       query=|||
         sum(
-            namedprocess_namegroup_memory_bytes{
-              environment="$environment",
-              groupname="%(groupname)s",
-              type="%(serviceType)s",
-              stage="%(serviceStage)s"
-            }
-        ) by (fqdn)
+          namedprocess_namegroup_memory_bytes{%(selector)s}
+        ) by (%(aggregator)s)
       ||| % formatConfig,
       legendFormat='{{ fqdn }}',
       interval='1m',

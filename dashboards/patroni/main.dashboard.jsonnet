@@ -74,7 +74,13 @@ row.new(title='patroni process stats'),
   }
 )
 .addPanels(
-  processExporter.namedGroup('patroni', 'patroni', 'patroni', 'main', startRow=4001)
+  processExporter.namedGroup(
+    title='patroni',
+    selector='environment="$environment", groupname="patroni", type="patroni", stage="main"',
+    aggregator='fqdn',
+    legendFormat='{{ fqdn }}',
+    startRow=4001
+  )
 )
 .addPanel(keyMetrics.keyServiceMetricsRow('patroni', 'main'), gridPos={ x: 0, y: 5000 })
 .addPanel(keyMetrics.keyComponentMetricsRow('patroni', 'main'), gridPos={ x: 0, y: 6000 })

@@ -63,7 +63,13 @@ row.new(title='HAProxy process'),
   }
 )
 .addPanels(
-  processExporter.namedGroup('haproxy', 'haproxy', 'frontend', '$stage', startRow=2001)
+  processExporter.namedGroup(
+    title='haproxy',
+    selector='environment="$environment", groupname="haproxy", type="frontend", stage="$stage"',
+    aggregator='fqdn',
+    legendFormat='{{ fqdn }}',
+    startRow=2001
+  )
 )
 .addPanel(
 keyMetrics.keyComponentMetricsRow('frontend', '$stage'),
@@ -75,7 +81,7 @@ keyMetrics.keyComponentMetricsRow('frontend', '$stage'),
   }
 )
 .addPanel(
-nodeMetrics.nodeMetricsDetailRow('environment="$environment", stage=~"|$stage", type="frontend"'),
+nodeMetrics.nodeMetricsDetailRow('environment="$environment", type="frontend", stage=~"|$stage"'),
   gridPos={
       x: 0,
       y: 5000,
