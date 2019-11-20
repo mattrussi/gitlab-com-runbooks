@@ -9,5 +9,5 @@
           h: rowHeight,
         },
       }
-    , panels),
+                     , panels),
 }

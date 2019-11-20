@@ -34,35 +34,35 @@ local generalGraphPanel(
   description=null,
   linewidth=2,
   sort='increasing',
-) = graphPanel.new(
-    title,
-    linewidth=linewidth,
-    fill=0,
-    datasource='$PROMETHEUS_DS',
-    description=description,
-    decimals=2,
-    sort=sort,
-    legend_show=true,
-    legend_values=true,
-    legend_min=true,
-    legend_max=true,
-    legend_current=true,
-    legend_total=false,
-    legend_avg=true,
-    legend_alignAsTable=true,
-    legend_hideEmpty=true,
-  )
-  .addSeriesOverride(seriesOverrides.goldenMetric('/ service/'))
-  .addSeriesOverride(seriesOverrides.upper)
-  .addSeriesOverride(seriesOverrides.lower)
-  .addSeriesOverride(seriesOverrides.upperLegacy)
-  .addSeriesOverride(seriesOverrides.lowerLegacy)
-  .addSeriesOverride(seriesOverrides.lastWeek)
-  .addSeriesOverride(seriesOverrides.alertFiring)
-  .addSeriesOverride(seriesOverrides.alertPending)
-  .addSeriesOverride(seriesOverrides.degradationSlo)
-  .addSeriesOverride(seriesOverrides.outageSlo)
-  .addSeriesOverride(seriesOverrides.slo);
+      ) = graphPanel.new(
+  title,
+  linewidth=linewidth,
+  fill=0,
+  datasource='$PROMETHEUS_DS',
+  description=description,
+  decimals=2,
+  sort=sort,
+  legend_show=true,
+  legend_values=true,
+  legend_min=true,
+  legend_max=true,
+  legend_current=true,
+  legend_total=false,
+  legend_avg=true,
+  legend_alignAsTable=true,
+  legend_hideEmpty=true,
+)
+          .addSeriesOverride(seriesOverrides.goldenMetric('/ service/'))
+          .addSeriesOverride(seriesOverrides.upper)
+          .addSeriesOverride(seriesOverrides.lower)
+          .addSeriesOverride(seriesOverrides.upperLegacy)
+          .addSeriesOverride(seriesOverrides.lowerLegacy)
+          .addSeriesOverride(seriesOverrides.lastWeek)
+          .addSeriesOverride(seriesOverrides.alertFiring)
+          .addSeriesOverride(seriesOverrides.alertPending)
+          .addSeriesOverride(seriesOverrides.degradationSlo)
+          .addSeriesOverride(seriesOverrides.outageSlo)
+          .addSeriesOverride(seriesOverrides.slo);
 
 local readThroughput() = basic.saturationTimeseries(
   title='Average Peak Read Throughput per Node',
@@ -99,47 +99,47 @@ local writeThroughput() = basic.saturationTimeseries(
 );
 
 local ratelimitLockPercentage() = generalGraphPanel(
-    'Request % acquiring rate-limit lock within 1m, by host + method',
-    description='Percentage of requests that acquire a Gitaly rate-limit lock within 1 minute, by host and method'
+  'Request % acquiring rate-limit lock within 1m, by host + method',
+  description='Percentage of requests that acquire a Gitaly rate-limit lock within 1 minute, by host and method'
+)
+                                  .addTarget(
+  promQuery.target(
+    |||
+      sum(
+        rate(
+          gitaly_rate_limiting_acquiring_seconds_bucket{
+            environment="$environment",
+            stage="$stage",
+            le="60"
+          }[$__interval]
+        )
+      ) by (environment, tier, type, stage, fqdn, grpc_method)
+      /
+      sum(
+        rate(
+          gitaly_rate_limiting_acquiring_seconds_bucket{
+            environment="$environment",
+            stage="$stage",
+            le="+Inf"
+          }[$__interval]
+        )
+      ) by (environment, tier, type, stage, fqdn, grpc_method)
+    |||,
+    interval='30s',
+    legendFormat='{{fqdn}} - {{grpc_method}}'
   )
-  .addTarget(
-    promQuery.target(
-      |||
-        sum(
-          rate(
-            gitaly_rate_limiting_acquiring_seconds_bucket{
-              environment="$environment",
-              stage="$stage",
-              le="60"
-            }[$__interval]
-          )
-        ) by (environment, tier, type, stage, fqdn, grpc_method)
-        /
-        sum(
-          rate(
-            gitaly_rate_limiting_acquiring_seconds_bucket{
-              environment="$environment",
-              stage="$stage",
-              le="+Inf"
-            }[$__interval]
-          )
-        ) by (environment, tier, type, stage, fqdn, grpc_method)
-      |||,
-      interval='30s',
-      legendFormat='{{fqdn}} - {{grpc_method}}'
-    )
-  )
-  .resetYaxes()
-  .addYaxis(
-    format='percentunit',
-    min=0,
-    max=1,
-    label='%'
-  )
-  .addYaxis(
-    format='short',
-    show=false,
-  );
+)
+                                  .resetYaxes()
+                                  .addYaxis(
+  format='percentunit',
+  min=0,
+  max=1,
+  label='%'
+)
+                                  .addYaxis(
+  format='short',
+  show=false,
+);
 
 // This needs to be kept manually in sync with the Gitaly apdex rule, in `service_apdex.yml`
 local perNodeApdex() =
@@ -204,33 +204,33 @@ dashboard.new(
 .addPanels(keyMetrics.headlineMetricsRow('gitaly', '$stage', startRow=0))
 .addPanel(serviceHealth.row('gitaly', '$stage'), gridPos={ x: 0, y: 1000 })
 .addPanel(
-row.new(title='Node Performance'),
+  row.new(title='Node Performance'),
   gridPos={
-      x: 0,
-      y: 2000,
-      w: 24,
-      h: 1,
+    x: 0,
+    y: 2000,
+    w: 24,
+    h: 1,
   }
 )
 .addPanels(
-layout.grid([
-  perNodeApdex(),
-  inflightGitalyCommandsPerNode(),
-  readThroughput(),
-  writeThroughput(),
+  layout.grid([
+    perNodeApdex(),
+    inflightGitalyCommandsPerNode(),
+    readThroughput(),
+    writeThroughput(),
   ], startRow=2001)
 )
 .addPanel(
-row.new(title='Gitaly Safety Mechanisms'),
+  row.new(title='Gitaly Safety Mechanisms'),
   gridPos={
-      x: 0,
-      y: 3000,
-      w: 24,
-      h: 1,
+    x: 0,
+    y: 3000,
+    w: 24,
+    h: 1,
   }
 )
 .addPanels(
-layout.grid([
+  layout.grid([
     gitalySpawnTimeoutsPerNode(),
     ratelimitLockPercentage(),
   ], startRow=3001)
@@ -239,21 +239,21 @@ layout.grid([
 .addPanel(keyMetrics.keyComponentMetricsRow('gitaly', '$stage'), gridPos={ x: 0, y: 5000 })
 .addPanel(nodeMetrics.nodeMetricsDetailRow('type="gitaly", environment="$environment", stage="$stage"'), gridPos={ x: 0, y: 6000 })
 .addPanel(saturationDetail.saturationDetailPanels('gitaly', '$stage', components=[
-    'cgroup_memory',
-    'cpu',
-    'disk_space',
-    'disk_sustained_read_iops',
-    'disk_sustained_read_throughput',
-    'disk_sustained_write_iops',
-    'disk_sustained_write_throughput',
-    'memory',
-    'open_fds',
-    'single_node_cpu',
-  ]),
-  gridPos={ x: 0, y: 6000, w: 24, h: 1 })
+            'cgroup_memory',
+            'cpu',
+            'disk_space',
+            'disk_sustained_read_iops',
+            'disk_sustained_read_throughput',
+            'disk_sustained_write_iops',
+            'disk_sustained_write_throughput',
+            'memory',
+            'open_fds',
+            'single_node_cpu',
+          ]),
+          gridPos={ x: 0, y: 6000, w: 24, h: 1 })
 
 .addPanel(capacityPlanning.capacityPlanningRow('gitaly', '$stage'), gridPos={ x: 0, y: 7000 })
 + {
   links+: platformLinks.triage + serviceCatalog.getServiceLinks('gitaly') + platformLinks.services +
-  [platformLinks.dynamicLinks('Gitaly Detail', 'type:gitaly')],
+          [platformLinks.dynamicLinks('Gitaly Detail', 'type:gitaly')],
 }
