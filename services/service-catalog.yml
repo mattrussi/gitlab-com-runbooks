@@ -988,7 +988,7 @@ services:
   observability:
     monitors:
       sentry_slug: "gitlab/gitlabcom/?query=program%3A%22rails%22"
-      primary_grafana_dashboard: "OktWokpik/workhorse-overview?var-type=git"
+      primary_grafana_dashboard: "git-main/git-overview"
 
 - name: gitaly
   tier: stor
@@ -2246,7 +2246,7 @@ services:
   observability:
     monitors:
       grafana_folder: Ymoh2MEmk
-      primary_grafana_dashboard: "oBSgj8iz/application-info"
+      primary_grafana_dashboard: "registry-main/registry-overview"
 
 - name: share
   tier: stor
