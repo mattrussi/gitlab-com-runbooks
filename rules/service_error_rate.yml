@@ -42,13 +42,6 @@ groups:
         )
       )
 
-  # Registry Service
-  - record: gitlab_component_errors:rate
-    labels:
-      component: 'server'
-    expr: >
-      sum by (environment, tier, type, stage) (rate(registry_http_requests_total{code=~"5.."}[1m]))
-
   # pages - haproxy service in front of GitLab pages
   - record: gitlab_component_errors:rate
     labels:
@@ -68,21 +61,6 @@ groups:
       component: 'http'
     expr: >
       sum(rate(gitlab_pages_http_requests_total{code=~"5.*"}[1m])) by (environment, tier, type, stage)
-
-  # api/web/sidekiq/git:workhorse
-  - record: gitlab_component_errors:rate
-    labels:
-      component: 'workhorse'
-    expr: >
-      sum by (environment, tier, type, stage) (rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse-.*", code=~"^5.*"}[1m]))
-
-  # api/web/sidekiq/git:unicorn
-  - record: gitlab_component_errors:rate
-    labels:
-      # type from series: ` api/web/sidekiq/git`
-      component: 'unicorn'
-    expr: >
-      sum by (environment, tier, type, stage) (rate(http_request_duration_seconds_count{job=~"gitlab-(rails|unicorn)", status=~"^5.*"}[1m]))
 
   # sidekiq: job failure rate
   - record: gitlab_component_errors:rate
