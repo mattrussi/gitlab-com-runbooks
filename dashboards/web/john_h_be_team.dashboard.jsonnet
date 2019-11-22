@@ -3,13 +3,15 @@ local grafana = import 'grafonnet/grafana.libsonnet';
 local dashboard = grafana.dashboard;
 local influxdb = grafana.influxdb;
 local row = grafana.row;
+local thresholds = import 'thresholds.libsonnet';
 
-local requestDurationGraph(title, description, query) =
+local requestDurationGraph(title, description, query, limit=1000) =
   grafana.graphPanel.new(
     title,
     description=description,
     datasource='influxdb-01-inf-gprd',
-    format='ms'
+    format='ms',
+    thresholds=[thresholds.warningLevel('gt', limit)]
   )
   .addTarget(
     influxdb.target(
