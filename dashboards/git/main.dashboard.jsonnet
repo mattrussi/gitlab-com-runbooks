@@ -10,7 +10,7 @@ local platformLinks = import 'platform_links.libsonnet';
 local promQuery = import 'prom_query.libsonnet';
 local railsCommon = import 'rails_common_graphs.libsonnet';
 local seriesOverrides = import 'series_overrides.libsonnet';
-local serviceCatalog = import 'service_catalog.libsonnet';
+local serviceCatalogLinks = import 'service_catalog_links.libsonnet';
 local templates = import 'templates.libsonnet';
 local unicornCommon = import 'unicorn_common_graphs.libsonnet';
 local workhorseCommon = import 'workhorse_common_graphs.libsonnet';
@@ -85,5 +85,5 @@ dashboard.new(
           gridPos={ x: 0, y: 7000, w: 24, h: 1 })
 .addPanel(capacityPlanning.capacityPlanningRow('git', '$stage'), gridPos={ x: 0, y: 8000 })
 + {
-  links+: platformLinks.triage + serviceCatalog.getServiceLinks('git') + platformLinks.services,
+  links+: platformLinks.triage + serviceCatalogLinks.getServiceLinks('git') + platformLinks.services,
 }

@@ -1,6 +1,6 @@
 local grafana = import 'grafonnet/grafana.libsonnet';
 local link = grafana.link;
-local serviceCatalog = import 'service_catalog.libsonnet';
+local serviceCatalogLinks = import 'service_catalog_links.libsonnet';
 
 local GRAFANA_BASE_URL = 'https://dashboards.gitlab.net/d/';
 
@@ -33,7 +33,7 @@ local getServiceLink(serviceType) =
   if std.objectHas(USES_GENERIC_DASHBOARD, serviceType) then
     'https://dashboards.gitlab.net/d/general-service/service-platform-metrics?orgId=1&var-type=' + serviceType
   else
-    GRAFANA_BASE_URL + serviceCatalog.lookupService(serviceType).observability.monitors.primary_grafana_dashboard + '?orgId=1';
+    GRAFANA_BASE_URL + serviceCatalogLinks.lookupService(serviceType).observability.monitors.primary_grafana_dashboard + '?orgId=1';
 
 {
   triage:: [

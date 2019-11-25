@@ -4,7 +4,7 @@ local link = grafana.link;
 
 local serviceMap = {
   [x.name]: x
-  for x in serviceCatalog.services
+  for x in serviceCatalogLinks.services
 };
 
 local safeMap(fn, v) = if std.isArray(v) then std.map(fn, v) else [];
@@ -19,5 +19,5 @@ local safeMap(fn, v) = if std.isArray(v) then std.map(fn, v) else [];
     self.getRunbooksLinks(name) +
     self.getPlaybooksLinks(name),
 
-  findServices(filterFunc):: std.filter(filterFunc, serviceCatalog.services),
+  findServices(filterFunc):: std.filter(filterFunc, serviceCatalogLinks.services),
 }

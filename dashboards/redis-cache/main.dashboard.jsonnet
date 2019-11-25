@@ -10,7 +10,7 @@ local platformLinks = import 'platform_links.libsonnet';
 local promQuery = import 'prom_query.libsonnet';
 local redisCommon = import 'redis_common_graphs.libsonnet';
 local seriesOverrides = import 'series_overrides.libsonnet';
-local serviceCatalog = import 'service_catalog.libsonnet';
+local serviceCatalogLinks = import 'service_catalog.libsonnet';
 local templates = import 'templates.libsonnet';
 local dashboard = grafana.dashboard;
 local row = grafana.row;
@@ -92,5 +92,5 @@ dashboard.new(
 )
 .addPanel(capacityPlanning.capacityPlanningRow('redis-cache', 'main'), gridPos={ x: 0, y: 9000 })
 + {
-  links+: platformLinks.triage + serviceCatalog.getServiceLinks('redis-cache') + platformLinks.services,
+  links+: platformLinks.triage + serviceCatalogLinks.getServiceLinks('redis-cache') + platformLinks.services,
 }

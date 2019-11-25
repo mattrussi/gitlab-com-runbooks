@@ -2,7 +2,7 @@ local grafana = import 'grafonnet/grafana.libsonnet';
 local layout = import 'layout.libsonnet';
 local platformLinks = import 'platform_links.libsonnet';
 local promQuery = import 'prom_query.libsonnet';
-local serviceCatalog = import 'service_catalog.libsonnet';
+local serviceCatalogLinks = import 'service_catalog_links.libsonnet';
 local templates = import 'templates.libsonnet';
 local dashboard = grafana.dashboard;
 local graphPanel = grafana.graphPanel;
@@ -174,7 +174,7 @@ dashboard.new(
   ], cols=2, rowHeight=10, startRow=1000)
 )
 + {
-  links+: platformLinks.triage + serviceCatalog.getServiceLinks('gitaly') + platformLinks.services + [
+  links+: platformLinks.triage + serviceCatalogLinks.getServiceLinks('gitaly') + platformLinks.services + [
     link.dashboards('ELK: Repository Utilization Report for Gitaly Rebalancing', '', type='link', keepTime=false, targetBlank=true, url='https://log.gitlab.net/goto/34aa59a70ff732505a88bf94d6e8beb1'),
   ],
 }

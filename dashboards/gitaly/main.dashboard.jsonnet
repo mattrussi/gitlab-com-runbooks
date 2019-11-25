@@ -10,7 +10,7 @@ local platformLinks = import 'platform_links.libsonnet';
 local promQuery = import 'prom_query.libsonnet';
 local saturationDetail = import 'saturation_detail.libsonnet';
 local seriesOverrides = import 'series_overrides.libsonnet';
-local serviceCatalog = import 'service_catalog.libsonnet';
+local serviceCatalogLinks = import 'service_catalog_links.libsonnet';
 local templates = import 'templates.libsonnet';
 local dashboard = grafana.dashboard;
 local row = grafana.row;
@@ -254,6 +254,6 @@ dashboard.new(
 
 .addPanel(capacityPlanning.capacityPlanningRow('gitaly', '$stage'), gridPos={ x: 0, y: 7000 })
 + {
-  links+: platformLinks.triage + serviceCatalog.getServiceLinks('gitaly') + platformLinks.services +
+  links+: platformLinks.triage + serviceCatalogLinks.getServiceLinks('gitaly') + platformLinks.services +
           [platformLinks.dynamicLinks('Gitaly Detail', 'type:gitaly')],
 }

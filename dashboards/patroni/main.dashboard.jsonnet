@@ -10,7 +10,7 @@ local pgbouncerCommonGraphs = import 'pgbouncer_common_graphs.libsonnet';
 local platformLinks = import 'platform_links.libsonnet';
 local promQuery = import 'prom_query.libsonnet';
 local seriesOverrides = import 'series_overrides.libsonnet';
-local serviceCatalog = import 'service_catalog.libsonnet';
+local serviceCatalogLinks = import 'service_catalog_links.libsonnet';
 local templates = import 'templates.libsonnet';
 local dashboard = grafana.dashboard;
 local row = grafana.row;
@@ -95,5 +95,5 @@ dashboard.new(
 )
 .addPanel(capacityPlanning.capacityPlanningRow('patroni', 'main'), gridPos={ x: 0, y: 9000 })
 + {
-  links+: platformLinks.triage + serviceCatalog.getServiceLinks('patroni') + platformLinks.services,
+  links+: platformLinks.triage + serviceCatalogLinks.getServiceLinks('patroni') + platformLinks.services,
 }

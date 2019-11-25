@@ -7,7 +7,7 @@ local keyMetrics = import 'key_metrics.libsonnet';
 local layout = import 'layout.libsonnet';
 local nodeMetrics = import 'node_metrics.libsonnet';
 local platformLinks = import 'platform_links.libsonnet';
-local serviceCatalog = import 'service_catalog.libsonnet';
+local serviceCatalogLinks = import 'service_catalog_links.libsonnet';
 local templates = import 'templates.libsonnet';
 local dashboard = grafana.dashboard;
 local row = grafana.row;
@@ -62,5 +62,5 @@ dashboard.new(
           gridPos={ x: 0, y: 7000, w: 24, h: 1 })
 .addPanel(capacityPlanning.capacityPlanningRow('ci-runners', '$stage'), gridPos={ x: 0, y: 8000 })
 + {
-  links+: platformLinks.triage + serviceCatalog.getServiceLinks('ci-runners') + platformLinks.services,
+  links+: platformLinks.triage + serviceCatalogLinks.getServiceLinks('ci-runners') + platformLinks.services,
 }

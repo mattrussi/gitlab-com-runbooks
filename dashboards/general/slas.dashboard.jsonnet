@@ -9,7 +9,7 @@ local nodeMetrics = import 'node_metrics.libsonnet';
 local platformLinks = import 'platform_links.libsonnet';
 local promQuery = import 'prom_query.libsonnet';
 local seriesOverrides = import 'series_overrides.libsonnet';
-local serviceCatalog = import 'service_catalog.libsonnet';
+local serviceCatalogLinks = import 'service_catalog_links.libsonnet';
 local templates = import 'templates.libsonnet';
 local dashboard = grafana.dashboard;
 local row = grafana.row;
@@ -17,7 +17,7 @@ local template = grafana.template;
 local graphPanel = grafana.graphPanel;
 local annotation = grafana.annotation;
 
-local keyServices = serviceCatalog.findServices(function(service)
+local keyServices = serviceCatalogLinks.findServices(function(service)
   std.objectHas(service.business.SLA, 'primary_sla_service') &&
   service.business.SLA.primary_sla_service);
 
