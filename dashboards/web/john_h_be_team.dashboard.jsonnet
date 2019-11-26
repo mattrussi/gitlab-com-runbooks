@@ -5,7 +5,13 @@ local influxdb = grafana.influxdb;
 local row = grafana.row;
 local thresholds = import 'thresholds.libsonnet';
 
-local requestDurationGraph(title, description, query, limit=1000) =
+local requestDurationGraph(
+  title,
+  description,
+  query,
+  measurement='rails_transaction_timings_per_action',
+  limit=1000
+      ) =
   grafana.graphPanel.new(
     title,
     description=description,
@@ -17,10 +23,10 @@ local requestDurationGraph(title, description, query, limit=1000) =
     influxdb.target(
       |||
         SELECT "duration_mean"
-        FROM "downsampled"."rails_transaction_timings_per_action"
-        WHERE %(1)s AND $timeFilter
+        FROM "downsampled"."%s"
+        WHERE %s AND $timeFilter
         GROUP BY "action"
-      ||| % query,
+      ||| % [measurement, query],
       alias='$tag_action'
     )
   );
@@ -131,6 +137,30 @@ dashboard.new(
     x: 12,
     y: 1,
     w: 12,
+    h: 8,
+  }
+)
+.addPanel(
+  row.new(title='Epics API Functionality'),
+  gridPos={
+    x: 0,
+    y: 2,
+    w: 24,
+    h: 1,
+  }
+)
+.addPanel(
+  requestDurationGraph(
+    'Epics API Mean Response Duration',
+    'Mean request duration through the API for Epics',
+    measurement='grape_transaction_timings_per_action',
+    query=|||
+      "action" =~ /Grape#.*epics.*/
+    |||
+  ), gridPos={
+    x: 0,
+    y: 3,
+    w: 24,
     h: 8,
   }
 )
