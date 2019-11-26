@@ -26,7 +26,7 @@ local requestDurationGraph(title, description, query, limit=1000) =
   );
 
 dashboard.new(
-  '[TEST] John H BE Team Dashboard',
+  'John H: Plan PM/Certify BE Performance',
   schemaVersion=16,
   tags=['overview'],
   timezone='utc',
