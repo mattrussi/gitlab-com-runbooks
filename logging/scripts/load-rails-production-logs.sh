@@ -20,8 +20,9 @@ for i in '2019/10/*' '2019/11/*' '2019/09/*'; do
 done
 
 read -r -d '' query << EOF || true
-  CREATE OR REPLACE TABLE \`gitlab-production.gcp_perf_analysis.${TABLE_NAME}\` AS
-​
+  CREATE OR REPLACE TABLE \`gitlab-production.gcp_perf_analysis.${TABLE_NAME}\`
+  PARTITION BY DATE(timestamp)
+  AS
   SELECT
     PARSE_TIMESTAMP("%FT%H:%M:%E*SZ", JSON_EXTRACT_SCALAR(json, "$.timestamp")) as timestamp,
     JSON_EXTRACT_SCALAR(json, "$.jsonPayload['path']") as path,
