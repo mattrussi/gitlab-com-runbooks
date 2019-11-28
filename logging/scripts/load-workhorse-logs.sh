@@ -11,12 +11,12 @@ set -x
 function drop_pre_table() {
   bq --project "$GCP_PROJECT" \
     query \
-    --nouse_legacy_sql "DROP TABLE \`gcp_perf_analysis.${TABLE_NAME}_pre\`" || true;
+    --nouse_legacy_sql "DROP TABLE gcp_perf_analysis.${TABLE_NAME}_pre" || true
 }
 
 drop_pre_table
 
-for i in '2019/11/28/00:00:00*'; do
+for i in '2019/10/*' '2019/11/*' '2019/09/*'; do
   bq --project "$GCP_PROJECT" \
     load \
     --source_format=CSV \
@@ -30,7 +30,7 @@ for i in '2019/11/28/00:00:00*'; do
 done
 
 read -r -d '' query <<EOF || true
-  CREATE OR REPLACE TABLE \`gitlab-production.gcp_perf_analysis.${TABLE_NAME}\`
+  CREATE OR REPLACE TABLE gcp_perf_analysis.${TABLE_NAME}
   PARTITION BY DATE(timestamp)
   AS
   SELECT
@@ -40,14 +40,12 @@ read -r -d '' query <<EOF || true
     JSON_EXTRACT_SCALAR(json, "$.jsonPayload['correlation_id']") as correlation_id,
     JSON_EXTRACT_SCALAR(json, "$.jsonPayload['method']") as method,
     JSON_EXTRACT_SCALAR(json, "$.jsonPayload['remote_ip']") as remote_ip,
-    SAFE_CAST(JSON_EXTRACT_SCALAR(json, "$.jsonPayload['status']") as int64) as status,
     JSON_EXTRACT_SCALAR(json, "$.jsonPayload['uri']") as uri,
-    JSON_EXTRACT_SCALAR(json, "$.jsonPayload['written_bytes']") as written_bytes
-  FROM \`gitlab-production.gcp_perf_analysis.${TABLE_NAME}_pre\`
+    JSON_EXTRACT_SCALAR(json, "$.jsonPayload['written_bytes']") as written_bytes,
+    SAFE_CAST(JSON_EXTRACT_SCALAR(json, "$.jsonPayload['status']") as int64) as status
+  FROM gcp_perf_analysis.${TABLE_NAME}_pre
 EOF
 
 bq --project "$GCP_PROJECT" \
   query \
   --nouse_legacy_sql "$query"
-
-drop_pre_table
