@@ -9,17 +9,17 @@ TABLE_NAME=loving_thanksgiving_like_a_turkey
 for i in '2019/10/*' '2019/11/*' '2019/09/*'; do
   bq --project "$GCP_PROJECT" \
     load \
-      --source_format=CSV \
-      --field_delimiter "±" \
-      --max_bad_records 100 \
-      --noreplace \
-      --ignore_unknown_values \
-      gcp_perf_analysis.${TABLE_NAME}_pre \
-      "gs://gitlab-gprd-logging-archive/rails.production/$i" \
-      json:STRING
+    --source_format=CSV \
+    --field_delimiter "±" \
+    --max_bad_records 100 \
+    --noreplace \
+    --ignore_unknown_values \
+    gcp_perf_analysis.${TABLE_NAME}_pre \
+    "gs://gitlab-gprd-logging-archive/rails.production/$i" \
+    json:STRING
 done
 
-read -r -d '' query << EOF || true
+read -r -d '' query <<EOF || true
   CREATE OR REPLACE TABLE \`gitlab-production.gcp_perf_analysis.${TABLE_NAME}\`
   PARTITION BY DATE(timestamp)
   AS
@@ -43,5 +43,5 @@ read -r -d '' query << EOF || true
 EOF
 
 bq --project "$GCP_PROJECT" \
-    query \
-    --nouse_legacy_sql "$query"
+  query \
+  --nouse_legacy_sql "$query"
