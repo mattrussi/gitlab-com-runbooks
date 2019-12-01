@@ -35,7 +35,7 @@ The `query-thanos-infra-kpi` is written in Python and queries `https://thanos-qu
 
 1. Login to GCP and change to [`gitlab-ops` project](https://console.cloud.google.com/home/dashboard?authuser=0&project=gitlab-ops).
 2. Activate Cloud Shell 
-3. Once the cloud shelll is activated, make sure `gitlab-ops` is selected. 
+3. Once the cloud shell is activated, make sure `gitlab-ops` is selected. 
 4. Run: `gcloud auth print-identity-token` and copy the token. (This will be needed to invoke the Google Cloud function)
 5. Then run `curl` against the `query-thanos-infra-kpi` trigger endpoint and provide a `query` parameter on what it is that you would like to run. Example: 
 
