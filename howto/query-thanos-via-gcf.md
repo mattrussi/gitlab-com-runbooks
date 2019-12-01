@@ -30,12 +30,15 @@ Our resources behind `https://thanos-query.ops.gitlab.net` are protected behind 
 - Trigger Endpoint: https://us-central1-gitlab-ops.cloudfunctions.net/query-thanos-infra-kpi 
 - Parameter: `query`. Provide a query string (i.e `up&start=2019-11-20T20:10:30.781Z&end=2019-11-20T20:10:31.781Z&step=15s`)
 
+### Google Function Source Project
+- The project repo is: https://gitlab.com/gitlab-com/gl-infra/query-thanos-iap
+
 ### Instruction
 The `query-thanos-infra-kpi` is written in Python and queries `https://thanos-query.ops.gitlab.net`. It takes care of the authentication work behind the scene. All we need to do is invoke the Google Function and provide a `query` string which one would typically provide in one of the before-mentioned two ways. Steps to invoke `query-thanos-infra-kpi`:
 
 1. Login to GCP and change to [`gitlab-ops` project](https://console.cloud.google.com/home/dashboard?authuser=0&project=gitlab-ops).
 2. Activate Cloud Shell 
-3. Once the cloud shelll is activated, make sure `gitlab-ops` is selected. 
+3. Once the cloud shell is activated, make sure `gitlab-ops` is selected. 
 4. Run: `gcloud auth print-identity-token` and copy the token. (This will be needed to invoke the Google Cloud function)
 5. Then run `curl` against the `query-thanos-infra-kpi` trigger endpoint and provide a `query` parameter on what it is that you would like to run. Example: 
 
@@ -47,9 +50,3 @@ curl -X POST "https://us-central1-gitlab-ops.cloudfunctions.net/query-thanos-inf
 From here on, you can leverage the Google Function capability and do more fascinating automations such as:
 1. Run on-demand scripts from your local machine
 2. Setup a Google Cloud Scheduler job and let it trigger the `query-thanos-infra-kpi` function on certain intervals. 
-
-
-
-
-
-
