@@ -74,7 +74,7 @@ dashboard.new(
     query: |||
       grpc_server_started_total{job="gitaly", env="gprd", grpc_method="FindCommit"} - sum(grpc_server_handled_total{job="gitaly", env="gprd", grpc_method="FindCommit"}) without (grpc_code)
     |||,
-    legendFormat: '{{ fqdn }}'
+    legendFormat: '{{ fqdn }}',
   },
   {
     description: |||
@@ -86,7 +86,7 @@ dashboard.new(
     query: |||
       rate(grpc_server_started_total{job="gitaly", env="gprd", grpc_method="FindCommit"}[$__interval])
     |||,
-    legendFormat: '{{ fqdn }}'
+    legendFormat: '{{ fqdn }}',
   },
   {
     description: |||
@@ -107,7 +107,7 @@ dashboard.new(
       Gitaly Disk IO Time
     |||,
     query: |||
-     rate(node_disk_io_time_seconds_total{env="gprd", type="gitaly", device="sdb"}[$__interval])
+      rate(node_disk_io_time_seconds_total{env="gprd", type="gitaly", device="sdb"}[$__interval])
     |||,
     legendFormat: '{{ fqdn }}',
     intervalFactor: 1,
