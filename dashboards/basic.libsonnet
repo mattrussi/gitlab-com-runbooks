@@ -92,6 +92,7 @@ local tablePanel = grafana.tablePanel;
     intervalFactor=3,
     yAxisLabel='',
     sort='decreasing',
+    decimals=2,
     legend_show=true,
     legend_rightSide=false,
     linewidth=2,
@@ -103,7 +104,7 @@ local tablePanel = grafana.tablePanel;
     linewidth=linewidth,
     fill=0,
     datasource='$PROMETHEUS_DS',
-    decimals=0,
+    decimals=decimals,
     legend_rightSide=legend_rightSide,
     legend_show=legend_show,
     legend_values=true,
@@ -391,6 +392,7 @@ local tablePanel = grafana.tablePanel;
     legendFormat='{{ fqdn }}',
     receiveQuery,
     intervalFactor=3,
+    decimals=2,
     legend_show=true
   ):: graphPanel.new(
     title,
@@ -398,7 +400,7 @@ local tablePanel = grafana.tablePanel;
     fill=0,
     description=description,
     datasource='$PROMETHEUS_DS',
-    decimals=2,
+    decimals=decimals,
     sort='decreasing',
     legend_show=legend_show,
     legend_values=false,

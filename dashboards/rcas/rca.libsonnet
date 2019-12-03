@@ -34,7 +34,7 @@ local text = grafana.text;
               format='short',
               interval='1m',
               linewidth=1,
-              intervalFactor=5,
+              intervalFactor=if std.objectHas(section, 'intervalFactor') then section.intervalFactor else 5,
             );
           [
             text.new(
