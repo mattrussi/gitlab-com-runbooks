@@ -322,7 +322,7 @@ build_runtools_build_image:
     - docker push ${IMAGE}
   when: manual
 
-build_runtools_image:
+build_runbooks_image:
   stage: images
   image: docker:19.03.1-git
   services:
@@ -331,7 +331,7 @@ build_runtools_image:
     DOCKER_HOST: tcp://docker:2375
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: ""
-    IMAGE: ${CI_REGISTRY_IMAGE}/runtools:latest
+    IMAGE: ${CI_REGISTRY_IMAGE}/runbooks:latest
   script:
     - 'echo ${CI_JOB_TOKEN} | docker login --password-stdin -u $CI_REGISTRY_USER $CI_REGISTRY'
     - cd jsonnet && docker build -t ${INTERMEDIATE_IMAGE} . && cd ..
