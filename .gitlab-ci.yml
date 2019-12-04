@@ -1,6 +1,6 @@
 ---
 
-image: registry.gitlab.com/gitlab-com/runbooks:3.0.2
+image: "${CI_REGISTRY_IMAGE}:3.0.2"
 
 stages:
   - images
@@ -31,7 +31,7 @@ stages:
       - rules-k8s
 
 .dashboards:
-  image: registry.gitlab.com/gitlab-com/runbooks/runtools_build:latest
+  image: "${CI_REGISTRY_IMAGE}/runtools_build:latest"
   before_script:
     - dashboards/bundler.sh # Install jsonnet bundles
     - dashboards/generate-mixins.sh # Generate dashboards from mixins
@@ -108,7 +108,7 @@ test:
     - scripts/validate-alerts
 
 ensure_generated_content_up_to_date:
-  image: registry.gitlab.com/gitlab-com/runbooks/runtools_build:latest
+  image: "${CI_REGISTRY_IMAGE}/runtools_build:latest"
   stage: test
   script:
     - make generate
@@ -119,7 +119,7 @@ ensure_generated_content_up_to_date:
 ################################################################################
 update_elastic_log_dashboards:
   stage: deploy
-  image: registry.gitlab.com/gitlab-com/runbooks/runtools_build:latest
+  image: "${CI_REGISTRY_IMAGE}/runtools_build:latest"
   script:
   - ./elastic/managed-objects/log/dashboards/update-dashboards.sh
   only:
@@ -132,7 +132,7 @@ update_elastic_log_dashboards:
 
 update_elastic_log_index_patterns:
   stage: deploy
-  image: registry.gitlab.com/gitlab-com/runbooks/runtools_build:latest
+  image: "${CI_REGISTRY_IMAGE}/runtools_build:latest"
   script:
   - ./elastic/managed-objects/log/index-patterns/update-index-patterns.sh
   only:
@@ -145,7 +145,7 @@ update_elastic_log_index_patterns:
 
 update_elastic_log_searches:
   stage: deploy
-  image: registry.gitlab.com/gitlab-com/runbooks/runtools_build:latest
+  image: "${CI_REGISTRY_IMAGE}/runtools_build:latest"
   script:
   - ./elastic/managed-objects/log/searches/update-searches.sh
   only:
@@ -158,7 +158,7 @@ update_elastic_log_searches:
 
 update_elastic_log_watchers:
   stage: deploy
-  image: registry.gitlab.com/gitlab-com/runbooks/runtools_build:latest
+  image: "${CI_REGISTRY_IMAGE}/runtools_build:latest"
   script:
   - ./elastic/managed-objects/log/watches/update-watches.sh
   only:
@@ -171,7 +171,7 @@ update_elastic_log_watchers:
 
 update_elastic_log_visualizations:
   stage: deploy
-  image: registry.gitlab.com/gitlab-com/runbooks/runtools_build:latest
+  image: "${CI_REGISTRY_IMAGE}/runtools_build:latest"
   script:
   - ./elastic/managed-objects/log/visualizations/update-visualizations.sh
   only:
@@ -186,7 +186,7 @@ update_elastic_log_visualizations:
 ################################################################################
 update_elastic_log_gprd_ilm:
   stage: deploy
-  image: registry.gitlab.com/gitlab-com/runbooks/runtools_build:latest
+  image: "${CI_REGISTRY_IMAGE}/runtools_build:latest"
   script:
   - ./elastic/managed-objects/log_gprd/ILM/update-ilm.sh
   only:
@@ -199,7 +199,7 @@ update_elastic_log_gprd_ilm:
 
 update_elastic_log_gprd_index_templates:
   stage: deploy
-  image: registry.gitlab.com/gitlab-com/runbooks/runtools_build:latest
+  image: "${CI_REGISTRY_IMAGE}/runtools_build:latest"
   script:
   - ./elastic/managed-objects/log_gprd/index-templates/update-index-templates.sh
   only:
@@ -215,7 +215,7 @@ update_elastic_log_gprd_index_templates:
 ################################################################################
 update_elastic_nonprod-log_watchers:
   stage: deploy
-  image: registry.gitlab.com/gitlab-com/runbooks/runtools_build:latest
+  image: "${CI_REGISTRY_IMAGE}/runtools_build:latest"
   script:
   - ./elastic/managed-objects/nonprod-log/watches/update-watches.sh
   only:
@@ -228,7 +228,7 @@ update_elastic_nonprod-log_watchers:
 
 update_elastic_nonprod-log_ilm:
   stage: deploy
-  image: registry.gitlab.com/gitlab-com/runbooks/runtools_build:latest
+  image: "${CI_REGISTRY_IMAGE}/runtools_build:latest"
   script:
   - ./elastic/managed-objects/nonprod-log/ILM/update-ilm.sh
   only:
@@ -241,7 +241,7 @@ update_elastic_nonprod-log_ilm:
 
 update_elastic_nonprod-log_index_templates:
   stage: deploy
-  image: registry.gitlab.com/gitlab-com/runbooks/runtools_build:latest
+  image: "${CI_REGISTRY_IMAGE}/runtools_build:latest"
   script:
   - ./elastic/managed-objects/nonprod-log/index-templates/update-index-templates.sh
   only:
