@@ -312,15 +312,18 @@ build_runtools_build_image:
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: ""
     INTERMEDIATE_IMAGE: ${CI_REGISTRY_IMAGE}/runtools_build-intermediate:latest
-    IMAGE: ${CI_REGISTRY_IMAGE}/runtools_build:latest
+    IMAGE: ${CI_REGISTRY_IMAGE}/runtools_build
   script:
+    - export ci_image_tag=${CI_COMMIT_TAG:-$CI_COMMIT_SHORT_SHA}
     - apk add curl
     - git clone https://github.com/google/jsonnet.git
     - echo ${CI_JOB_TOKEN} | docker login --password-stdin -u $CI_REGISTRY_USER $CI_REGISTRY
     - cd jsonnet && docker build -t ${INTERMEDIATE_IMAGE} . && cd ..
-    - docker build -t ${IMAGE} --build-arg CI_REGISTRY_IMAGE=$CI_REGISTRY_IMAGE images/runtools_build/
-    - docker push ${IMAGE}
-  when: manual
+    - docker build -t ${IMAGE}:$ci_image_tag -t ${IMAGE}:latest --build-arg CI_REGISTRY_IMAGE=$CI_REGISTRY_IMAGE images/runtools_build/
+    - docker push ${IMAGE}:latest
+    - docker push ${IMAGE}:$ci_image_tag
+  only:
+    - tags
 
 build_runbooks_image:
   stage: images
@@ -335,8 +338,8 @@ build_runbooks_image:
   script:
     - export ci_image_tag=${CI_COMMIT_TAG:-$CI_COMMIT_SHORT_SHA}
     - echo ${CI_JOB_TOKEN} | docker login --password-stdin -u $CI_REGISTRY_USER $CI_REGISTRY
-    - cd jsonnet && docker build -t ${INTERMEDIATE_IMAGE} . && cd ..
     - docker build -t ${IMAGE}:$ci_image_tag -t ${IMAGE}:latest .
-    - docker push ${IMAGE}
+    - docker push ${IMAGE}:latest
+    - docker push ${IMAGE}:$ci_image_tag
   only:
     - tags
