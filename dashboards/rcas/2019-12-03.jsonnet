@@ -132,5 +132,49 @@ dashboard.new(
     legendFormat: '{{ fqdn }}',
     intervalFactor: 1,
   },
-
+  {
+    description: |||
+      ??
+    |||,
+    query: |||
+      rate(gitaly_catfile_cache_total{env="gprd", job="gitaly"}[$__interval])
+    |||,
+    intervalFactor: 1,
+  },
+  {
+    description: |||
+      ??
+    |||,
+    query: |||
+      rate(gitaly_catfile_processes_total{env="gprd", job="gitaly"}[$__interval])
+    |||,
+    intervalFactor: 1,
+  },
+  {
+    description: |||
+      ??
+    |||,
+    query: |||
+      rate(gitaly_commands_running{env="gprd", job="gitaly"}[$__interval])
+    |||,
+    intervalFactor: 1,
+  },
+  {
+    description: |||
+      # Gitaly Repack Rate
+    |||,
+    query: |||
+      sum(increase(gitaly_repack_total[$__interval])) without (bitmap)
+    |||,
+    intervalFactor: 10,
+  },
+  {
+    description: |||
+      # Gitaly Concurrency Rate Limiting Lock
+    |||,
+    query: |||
+      rate(gitaly_rate_limiting_acquiring_seconds_sum{env="gprd"}[1h])
+    |||,
+    intervalFactor: 10,
+  },
 ]))
