@@ -40,7 +40,7 @@ stages:
 
 verify:
   stage: test
-  image: registry.gitlab.com/gitlab-com/runbooks/runtools_build:latest
+  image: "${CI_REGISTRY_IMAGE}/runtools_build:latest"
   script:
     - make verify
 
