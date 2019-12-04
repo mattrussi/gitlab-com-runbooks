@@ -1,5 +1,4 @@
 ---
-
 image: "${CI_REGISTRY_IMAGE}:3.0.2"
 
 stages:
@@ -319,6 +318,6 @@ build_runtools_build_image:
     - git clone https://github.com/google/jsonnet.git
     - docker login -u "${CI_REGISTRY_USER}" -p "${CI_REGISTRY_PASSWORD}" ${CI_REGISTRY}
     - cd jsonnet && docker build -t ${INTERMEDIATE_IMAGE} . && cd ..
-    - docker build -t ${IMAGE} images/runtools_build/
+    - docker build -t ${IMAGE} --build-arg CI_REGISTRY_IMAGE=$CI_REGISTRY_IMAGE images/runtools_build/
     - docker push ${IMAGE}
   when: manual
