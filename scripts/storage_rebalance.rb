@@ -11,13 +11,14 @@
 # Staging example:
 #
 #    gitlab-rails runner /var/opt/gitlab/scripts/storage_rebalance.rb --verbose --dry-run=yes --current-file-server=nfs-file01 --target-file-server=nfs-file09 --staging --count
-#    gitlab-rails runner /var/opt/gitlab/scripts/storage_rebalance.rb --verbose --dry-run=yes --current-file-server=nfs-file01 --target-file-server=nfs-file09 --staging --max-failures=200 --validate-size --refresh-stats
+#    gitlab-rails runner /var/opt/gitlab/scripts/storage_rebalance.rb --verbose --dry-run=yes --current-file-server=nfs-file01 --target-file-server=nfs-file09 --staging --max-failures=200 --validate-checksum --validate-size --refresh-stats
+#    gitlab-rails runner /var/opt/gitlab/scripts/storage_rebalance.rb --verbose --dry-run=no --current-file-server=nfs-file01 --target-file-server=nfs-file09 --staging  --max-failures=1 --validate-checksum --validate-size --refresh-stats | tee /var/opt/gitlab/scripts/logs/nfs-file09.migration.$(date +%Y-%m-%d_%H%M).log
 #
 # Production examples:
 #
 #    gitlab-rails runner /var/opt/gitlab/scripts/storage_rebalance.rb --verbose --dry-run=yes --current-file-server=nfs-file34 --target-file-server=nfs-file40 --count
 #    gitlab-rails runner /var/opt/gitlab/scripts/storage_rebalance.rb --verbose --dry-run=yes --current-file-server=nfs-file25 --target-file-server=nfs-file36
-#    gitlab-rails runner /var/opt/gitlab/scripts/storage_rebalance.rb --verbose --dry-run=no --move-amount=10 --current-file-server=nfs-file27 --target-file-server=nfs-file38 --skip=9271929
+#    gitlab-rails runner /var/opt/gitlab/scripts/storage_rebalance.rb --verbose --dry-run=no --move-amount=10 --current-file-server=nfs-file27 --target-file-server=nfs-file38 --skip=9271929 | tee /var/opt/gitlab/scripts/logs/nfs-file38.migration.$(date +%Y-%m-%d_%H%M).log
 #
 # Verify the migration status of previously logged project migrations:
 #
@@ -322,6 +323,7 @@ class Rebalancer
   end
 
   def migrate(project)
+    log.info('='*72)
     log.info "Migrating project id: #{project.id}"
     log.info "  Size: ~#{largest_denomination(project.statistics.repository_size)}"
     log.debug "  Name: #{project.name}"
@@ -378,6 +380,7 @@ class Rebalancer
       log.info "Validating project integrity by comparing latest commit " +
         "identifers before and after"
       current_commit_id = get_commit_id(post_migration_project.id)
+      log.debug "Original commit id: #{original_commit_id}, current commit id: #{current_commit_id}"
       if original_commit_id != current_commit_id
         raise CommitsMismatch.new("Current commit id #{current_commit_id} " +
           "does not match original commit id #{original_commit_id}")
@@ -388,6 +391,7 @@ class Rebalancer
           "before and after"
         post_migration_project.repository.expire_exists_cache
         current_checksum = post_migration_project.repository.checksum
+        log.debug "Original checksum: #{original_checksum}, current checksum: #{current_checksum}"
         if original_checksum != current_checksum
           raise ChecksumsMismatch.new("Current checksum #{current_checksum} " +
             "does not match original checksum #{original_checksum}")
@@ -398,6 +402,7 @@ class Rebalancer
         log.info "Validating project integrity by comparing repository size " +
           "before and after"
         current_repository_size = post_migration_project.statistics[:repository_size]
+        log.debug "Original repository size: #{original_repository_size}, current size: #{current_repository_size}"
         if original_repository_size != current_repository_size
           raise RepositorySizesMismatch.new("Current repository size #{current_repository_size} " +
             "does not match original repository size #{original_repository_size}")
@@ -582,6 +587,7 @@ class Rebalancer
       log.info "Will move at least #{move_amount_bytes.to_gb} GB worth of data"
       move_many_projects(move_amount_bytes, get_project_ids)
     end
+    log.info('='*72)
     log.info "Finished migrating projects from #{Options[:current_file_server]} to #{Options[:target_file_server]}"
     if migration_errors.length > 0
       log.error "Encountered #{migration_errors.length} errors:"
