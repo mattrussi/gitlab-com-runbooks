@@ -197,6 +197,16 @@ groups:
   # Acceptable -> 1 seconds
   # NOTE: when adjusting this definition, update the
   # per node equivalent definition in `dashboards/gitaly/main.dashboard.jsonnet`
+  - record: instance:gitaly_grpc_seconds_apdex_bucket:rate1m
+    expr: >
+      sum without (grpc_method,grpc_service,grpc_type) (
+        rate(grpc_server_handling_seconds_bucket{type="gitaly", tier="stor", grpc_type="unary", grpc_method!~"GarbageCollect|Fsck|RepackFull|RepackIncremental|CommitLanguages|CreateRepositoryFromURL|UserRebase|UserSquash|CreateFork|UserUpdateBranch|FindRemoteRepository|UserCherryPick|FetchRemote|UserRevert|FindRemoteRootRef"}[1m])
+      )
+  - record: instance:gitaly_grpc_seconds_apdex_count:rate1m
+    expr: >
+      sum without (grpc_method,grpc_service,grpc_type) (
+        rate(grpc_server_handling_seconds_count{type="gitaly", tier="stor", grpc_type="unary", grpc_method!~"GarbageCollect|Fsck|RepackFull|RepackIncremental|CommitLanguages|CreateRepositoryFromURL|UserRebase|UserSquash|CreateFork|UserUpdateBranch|FindRemoteRepository|UserCherryPick|FetchRemote|UserRevert|FindRemoteRootRef"}[1m])
+      )
   - record: gitlab_component_apdex:ratio
     labels:
       type: gitaly
@@ -204,12 +214,20 @@ groups:
       component: 'goserver'
     expr: >
       (
-        sum(rate(grpc_server_handling_seconds_bucket{type="gitaly", tier="stor", grpc_type="unary", le="0.5", grpc_method!~"GarbageCollect|Fsck|RepackFull|RepackIncremental|CommitLanguages|CreateRepositoryFromURL|UserRebase|UserSquash|CreateFork|UserUpdateBranch|FindRemoteRepository|UserCherryPick|FetchRemote|UserRevert|FindRemoteRootRef"}[1m])) by (environment, type, tier, stage)
+        sum by (environment, type, tier, stage) (
+          instance:gitaly_grpc_seconds_apdex_bucket:rate1m{le="0.5"}
+        )
         +
-        sum(rate(grpc_server_handling_seconds_bucket{type="gitaly", tier="stor", grpc_type="unary", le="1", grpc_method!~"GarbageCollect|Fsck|RepackFull|RepackIncremental|CommitLanguages|CreateRepositoryFromURL|UserRebase|UserSquash|CreateFork|UserUpdateBranch|FindRemoteRepository|UserCherryPick|FetchRemote|UserRevert|FindRemoteRootRef"}[1m])) by (environment, type, tier, stage)
+        sum by (environment, type, tier, stage) (
+          instance:gitaly_grpc_seconds_apdex_bucket:rate1m{le="1"}
+        )
       )
       /
-      2 / (sum(rate(grpc_server_handling_seconds_count{type="gitaly", tier="stor", grpc_type="unary", grpc_method!~"GarbageCollect|Fsck|RepackFull|RepackIncremental|CommitLanguages|CreateRepositoryFromURL|UserRebase|UserSquash|CreateFork|UserUpdateBranch|FindRemoteRepository|UserCherryPick|FetchRemote|UserRevert|FindRemoteRootRef"}[1m])) by (environment, type, tier, stage))
+      2 / (
+        sum by (environment, type, tier, stage) (
+         instance:gitaly_grpc_seconds_apdex_count:rate1m
+        )
+      )
 
   - record: gitlab_component_apdex:weight:score
     labels:
@@ -217,7 +235,9 @@ groups:
       tier: stor
       component: 'goserver'
     expr: >
-      sum(rate(grpc_server_handling_seconds_count{type="gitaly", tier="stor", grpc_type="unary", grpc_method!~"GarbageCollect|Fsck|RepackFull|RepackIncremental|CommitLanguages|CreateRepositoryFromURL|UserRebase|UserSquash|CreateFork|UserUpdateBranch|FindRemoteRepository|UserCherryPick|FetchRemote|UserRevert|FindRemoteRootRef"}[1m])) by (environment, type, tier, stage)
+      sum by (environment, type, tier, stage) (
+        instance:gitaly_grpc_seconds_apdex_count:rate1m
+      )
 
   # Sidekiq jobs
   # See https://gitlab.com/gitlab-com/gl-infra/infrastructure/issues/6670 for details
