@@ -65,7 +65,7 @@ ssh <your_username>-rails@gprd-console
 p = Project.find_by_full_path('<my-namespace/my-group/my-project>')  # find by name
 p = Project.find(<project_id>) # or by project id
 p.repository_storage # check that it is the correct shard
-p.repsitory_read_only? # this should be set to false
+p.repository_read_only? # this should be set to false
 ```
 
 
