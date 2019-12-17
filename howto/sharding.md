@@ -32,10 +32,9 @@ Repositories are moved by scheduling sidekiq jobs called `project_update_reposit
 ### Manual Method
 
 1. Login to gitlab.com using the admin account
-1. Go to: https://gitlab.com/profile/personal_access_tokens and generate an admin API token, set expiration date at a few days, e.g. 3 days
-1. Take note of the project ID. You will need it to move the project via the API. You can find it in the project page, next to the project avatar and under the project name
-1. Prepare for the move.
-   read-only and then read-write when completed
+2. Go to: https://gitlab.com/profile/personal_access_tokens and generate an admin API token, set expiration date at a few days, e.g. 3 days
+3. Take note of the project ID. You will need it to move the project via the API. You can find it in the project page, next to the project avatar and under the project name
+4. Prepare for the move.
   - ssh to the console machine: `ssh <your_username>@gprd-console`
   - start tmux
   - create and source a file with your API token:
@@ -47,19 +46,22 @@ export PRIVATE_TOKEN=<your_api_token_here>
 $ source ./export_token.sh
 ```
 
-1. Trigger the move using the api.  Note that the project will automatically be set into read-only and set back to read-write after the move
-  - move the project to another gitaly shard: `curl --request PUT --header "PRIVATE-TOKEN: $PRIVATE_TOKEN" -d repository_storage=nfs-fileXX https://gitlab.com/api/v4/projects/<project_to_move_id_here>`
-  - The option of `repository_storage` is the destination gitaly shard and it's a short name as configured in the `git_data_dirs` options of the `gitlab.rb` file.
+5. Trigger the move using the api.  Note that the project will automatically be set into read-only and set back to read-write after the move
 
-1. If needed, check logs for the sidekiq job in Kibana:
+```
+curl --request PUT --header "PRIVATE-TOKEN: $PRIVATE_TOKEN" -d repository_storage=nfs-fileXX https://gitlab.com/api/v4/projects/<project_to_move_id_here>
+```
+
+_Note_: The option of `repository_storage` is the destination gitaly shard and it's a short name as configured in the `git_data_dirs` options of the `gitlab.rb` file.
+
+6. If needed, check logs for the sidekiq job in Kibana:
   - in Kibana Discover app, select `pubsub-sidekiq-inf-gprd` index pattern
   - search for `ProjectUpdateRepositoryStorageWorker`
 
-1. Optional: confirm the new location and repository in the rails console
-  - login to the rails console: `ssh <your_username>-rails@gprd-console`
-  - check current shard:
+7. Optional: confirm the new location and repository in the rails console
 
 ```ruby
+ssh <your_username>-rails@gprd-console
 p = Project.find_by_full_path('<my-namespace/my-group/my-project>')  # find by name
 p = Project.find(<project_id>) # or by project id
 p.repository_storage # check that it is the correct shard
