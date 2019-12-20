@@ -23,4 +23,5 @@
 * [large-sidekiq-queue.md](large-sidekiq-queue.md)
 * [sidekiq_error_rate_high.md](sidekiq_error_rate_high.md)
 * [sidekiq_stats_no_longer_showing.md](sidekiq_stats_no_longer_showing.md)
+* [sidekiq-latency-apdex.md](sidekiq-latency-apdex.md)
 <!-- END_MARKER -->
