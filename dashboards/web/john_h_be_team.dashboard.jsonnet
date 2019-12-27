@@ -37,7 +37,7 @@ local requestDurationGraphPrometheus(
   description,
   action,
   controller,
-  limit=1000
+  limit=1
       ) =
   grafana.graphPanel.new(
     title,
@@ -50,14 +50,15 @@ local requestDurationGraphPrometheus(
     promQuery.target(
       |||
         avg_over_time(
-          controller_action:gitlab_transaction_duration_seconds_sum:rate1m{env="gprd", controller="%s", stage="main", action="%s", type="web"}[$__interval]
+          controller_action:gitlab_transaction_duration_seconds_sum:rate1m{env="gprd", controller=~"%s", stage="main", action=~"%s", type="web"}[$__interval]
         )
         /
         avg_over_time(
-          controller_action:gitlab_transaction_duration_seconds_count:rate1m{env="gprd", controller="%s", stage="main", action="%s", type="web"}[$__interval]
+          controller_action:gitlab_transaction_duration_seconds_count:rate1m{env="gprd", controller=~"%s", stage="main", action=~"%s", type="web"}[$__interval]
         )
-      ||| % [controller, action, controller, action]
-    )
+      ||| % [controller, action, controller, action],
+      legendFormat='{{controller}}#{{action}}'
+      )
   );
 
 dashboard.new(
@@ -78,106 +79,39 @@ dashboard.new(
 )
 .addPanel(
   requestDurationGraphPrometheus(
-    'Viewing an Epic [TEST PROMETHEUS]',
-    'Mean request durations for actions involved in viewing an Epic',
-    controller='Groups::EpicsController',
-    action='show'
+    'Creating, Updating and Destroying Epics',
+    'Mean request durations for actions involved in creating, updaing and destroying Epics',
+    controller='(Groups::EpicsController|Groups::Epics::NotesController)',
+    action='(create|update|destroy|toggle_award_emoji).*'
   ), gridPos={
     x: 0,
     y: 1,
+    w: 24,
+    h: 8,
+  }
+)
+.addPanel(
+  requestDurationGraphPrometheus(
+    'Listing and Viewing Epics and Roadmaps',
+    'Mean request durations for actions involved in listing/viewing Epics and Roadmaps',
+    controller='(Groups::EpicsController|Groups::Epics::NotesController|Groups::RoadmapController)',
+    action='(show|discussions|realtime_changes|index).*'
+  ), gridPos={
+    x: 0,
+    y: 2,
     w: 12,
     h: 8,
   }
 )
 .addPanel(
-  requestDurationGraph(
-    'Viewing an Epic',
-    'Mean request durations for actions involved in viewing an Epic',
-    query=|||
-      (
-        (
-          "action" =~ /Groups::EpicsController.*/
-          AND "action" =~ /(show|discussions|realtime_changes)/
-        )
-        OR
-        (
-          "action" =~ /Groups::Epics::NotesController.*/
-          AND "action" =~ /(index\.json)/
-        )
-      )
-    |||
-  ), gridPos={
-    x: 0,
-    y: 1,
-    w: 12,
-    h: 8,
-  }
-)
-.addPanel(
-  requestDurationGraph(
-    'Interacting With an Epic',
-    'Mean request duration for actions that involve interacting with an epic; updating description, adding/editing notes, linking epics and issues',
-    query=|||
-      (
-        (
-          "action" =~ /Groups::EpicsController.*/
-          AND "action" =~ /(update|toggle_award_emoji)/
-        ) OR (
-          "action" =~ /Groups::Epics::NotesController.*/
-          AND "action" =~ /(create\.json|update\.json)/
-        ) OR (
-          "action" =~ /Groups::EpicIssuesController.*/
-          AND "action" =~ /(create\.json|update\.json|destroy\.json)/
-        ) OR (
-          "action" =~ /Groups::EpicLinksController.*/
-          AND "action" =~ /(create\.json|update\.json|destroy\.json)/
-        )
-      )
-    |||
+  requestDurationGraphPrometheus(
+    'Linking issues and epics',
+    'Mean request durations for actions involved in linking issues and epics',
+    controller='(Groups::EpicLinksController|Groups::EpicIssuesController)',
+    action='(create|destroy).*'
   ), gridPos={
     x: 12,
-    y: 1,
-    w: 12,
-    h: 8,
-  }
-)
-.addPanel(
-  requestDurationGraph(
-    'Viewing Epics list and Roadmap',
-    '',
-    query=|||
-      (
-        (
-          "action" =~ /Groups::RoadmapController.*/
-          AND "action" =~ /(show)/
-        ) OR (
-          "action" =~ /Groups::EpicsController.*/
-          AND "action" =~ /(index)/
-        )
-      )
-    |||
-  ), gridPos={
-    x: 0,
-    y: 1,
-    w: 12,
-    h: 8,
-  }
-)
-.addPanel(
-  requestDurationGraph(
-    'Creating and destroying Epics',
-    'Mean request durations for actions involved in creating and destroying an epic',
-    query=|||
-      (
-        (
-          "action" =~ /Groups::EpicsController.*/
-          AND "action" =~ /(create|destroy)/
-        )
-      )
-    |||
-  ), gridPos={
-    x: 12,
-    y: 1,
+    y: 2,
     w: 12,
     h: 8,
   }
@@ -186,7 +120,7 @@ dashboard.new(
   row.new(title='Epics API Functionality'),
   gridPos={
     x: 0,
-    y: 2,
+    y: 3,
     w: 24,
     h: 1,
   }
@@ -201,7 +135,7 @@ dashboard.new(
     |||
   ), gridPos={
     x: 0,
-    y: 3,
+    y: 4,
     w: 24,
     h: 8,
   }
