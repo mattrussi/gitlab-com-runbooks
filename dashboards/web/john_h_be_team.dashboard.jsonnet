@@ -6,32 +6,6 @@ local influxdb = grafana.influxdb;
 local row = grafana.row;
 local thresholds = import 'thresholds.libsonnet';
 
-local requestDurationGraph(
-  title,
-  description,
-  query,
-  measurement='rails_transaction_timings_per_action',
-  limit=1000
-      ) =
-  grafana.graphPanel.new(
-    title,
-    description=description,
-    datasource='influxdb-01-inf-gprd',
-    format='ms',
-    thresholds=[thresholds.warningLevel('gt', limit)]
-  )
-  .addTarget(
-    influxdb.target(
-      |||
-        SELECT "duration_mean"
-        FROM "downsampled"."%s"
-        WHERE %s AND $timeFilter
-        GROUP BY "action"
-      ||| % [measurement, query],
-      alias='$tag_action'
-    )
-  );
-
 local requestDurationGraphPrometheus(
   title,
   description,
@@ -58,7 +32,7 @@ local requestDurationGraphPrometheus(
         )
       ||| % [controller, action, controller, action],
       legendFormat='{{controller}}#{{action}}'
-      )
+    )
   );
 
 dashboard.new(
@@ -123,20 +97,5 @@ dashboard.new(
     y: 3,
     w: 24,
     h: 1,
-  }
-)
-.addPanel(
-  requestDurationGraph(
-    'Epics API Mean Response Duration',
-    'Mean request duration through the API for Epics',
-    measurement='grape_transaction_timings_per_action',
-    query=|||
-      "action" =~ /Grape#.*epics.*/
-    |||
-  ), gridPos={
-    x: 0,
-    y: 4,
-    w: 24,
-    h: 8,
   }
 )
