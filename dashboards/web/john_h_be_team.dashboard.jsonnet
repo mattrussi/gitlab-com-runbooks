@@ -1,5 +1,6 @@
 local basic = import 'basic.libsonnet';
 local grafana = import 'grafonnet/grafana.libsonnet';
+local promQuery = import 'prom_query.libsonnet';
 local dashboard = grafana.dashboard;
 local influxdb = grafana.influxdb;
 local row = grafana.row;
@@ -31,6 +32,34 @@ local requestDurationGraph(
     )
   );
 
+local requestDurationGraphPrometheus(
+  title,
+  description,
+  action,
+  controller,
+  limit=1000
+      ) =
+  grafana.graphPanel.new(
+    title,
+    description=description,
+    datasource='Global',
+    format='s',
+    thresholds=[thresholds.warningLevel('gt', limit)]
+  )
+  .addTarget(
+    promQuery.target(
+      |||
+        avg_over_time(
+          controller_action:gitlab_transaction_duration_seconds_sum:rate1m{env="gprd", controller="%s", stage="main", action="%s", type="web"}[$__interval]
+        )
+        /
+        avg_over_time(
+          controller_action:gitlab_transaction_duration_seconds_count:rate1m{env="gprd", controller="%s", stage="main", action="%s", type="web"}[$__interval]
+        )
+      ||| % [controller, action, controller, action]
+    )
+  );
+
 dashboard.new(
   'John H: Plan PM/Certify BE Performance',
   schemaVersion=16,
@@ -45,6 +74,19 @@ dashboard.new(
     y: 0,
     w: 24,
     h: 1,
+  }
+)
+.addPanel(
+  requestDurationGraphPrometheus(
+    'Viewing an Epic [TEST PROMETHEUS]',
+    'Mean request durations for actions involved in viewing an Epic',
+    controller='Groups::EpicsController',
+    action='show'
+  ), gridPos={
+    x: 0,
+    y: 1,
+    w: 12,
+    h: 8,
   }
 )
 .addPanel(
