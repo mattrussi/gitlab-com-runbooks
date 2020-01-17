@@ -1,6 +1,9 @@
 #! /usr/bin/env ruby
 # frozen_string_literal: true
-# rubocop:disable all
+
+# vi: set ft=ruby :
+
+# -*- mode: ruby -*-
 
 # Execution:
 #
@@ -14,13 +17,17 @@
 # Staging example:
 #
 #    gitlab-rails runner /var/opt/gitlab/scripts/storage_rebalance.rb --verbose --dry-run=yes --current-file-server=nfs-file01 --target-file-server=nfs-file09 --staging --count
+#    gitlab-rails runner /var/opt/gitlab/scripts/storage_rebalance.rb --verbose --dry-run=yes --current-file-server=nfs-file01 --target-file-server=nfs-file09 --staging --count
 #    gitlab-rails runner /var/opt/gitlab/scripts/storage_rebalance.rb --verbose --dry-run=yes --current-file-server=nfs-file01 --target-file-server=nfs-file09 --staging --max-failures=200 --validate-size --refresh-stats
 #
 # Production examples:
 #
-#    gitlab-rails runner /var/opt/gitlab/scripts/storage_rebalance.rb --verbose --dry-run=yes --current-file-server=nfs-file34 --target-file-server=nfs-file40 --count
+#    gitlab-rails runner /var/opt/gitlab/scripts/storage_rebalance.rb --verbose --dry-run=yes --current-file-server=nfs-file36 --target-file-server=nfs-file46 --wait=10800 --max-failures=1 --validate-size --validate-checksum --refresh-stats
+#    gitlab-rails runner /var/opt/gitlab/scripts/storage_rebalance.rb --verbose --dry-run=yes --current-file-server=nfs-file36 --target-file-server=nfs-file46 --count
 #    gitlab-rails runner /var/opt/gitlab/scripts/storage_rebalance.rb --verbose --dry-run=yes --current-file-server=nfs-file25 --target-file-server=nfs-file36
-#    gitlab-rails runner /var/opt/gitlab/scripts/storage_rebalance.rb --verbose --dry-run=no --move-amount=10 --current-file-server=nfs-file27 --target-file-server=nfs-file38 --skip=9271929
+#    gitlab-rails runner /var/opt/gitlab/scripts/storage_rebalance.rb --verbose --dry-run=yes --current-file-server=nfs-file34 --target-file-server=nfs-file42 --project=13007013 | tee /var/opt/gitlab/scripts/logs/nfs-file42.migration.$(date +%Y-%m-%d_%H%M).log
+#    gitlab-rails runner /var/opt/gitlab/scripts/storage_rebalance.rb --verbose --dry-run=yes --current-file-server=nfs-file34 --target-file-server=nfs-file42 | tee /var/opt/gitlab/scripts/logs/nfs-file42.migration.$(date +%Y-%m-%d_%H%M).log
+#    gitlab-rails runner /var/opt/gitlab/scripts/storage_rebalance.rb --verbose --dry-run=no --move-amount=10 --current-file-server=nfs-file27 --target-file-server=nfs-file38 --skip=9271929 | tee /var/opt/gitlab/scripts/logs/nfs-file38.migration.$(date +%Y-%m-%d_%H%M).log
 #
 # Verify the migration status of previously logged project migrations:
 #
@@ -31,6 +38,7 @@
 #    export logd=/var/log/gitlab/storage_migrations; for f in `ls -t ${logd}`; do ls -la ${logd}/$f && cat ${logd}/$f; done
 #
 
+require 'csv'
 require 'date'
 require 'fileutils'
 require 'json'
@@ -39,11 +47,20 @@ require 'logger'
 require 'optparse'
 require 'uri'
 
+begin
+  require '/opt/gitlab/embedded/service/gitlab-rails/config/environment.rb'
+rescue LoadError => e
+  warn e.message
+end
+
+LOG_TIMESTAMP_FORMAT = '%Y-%m-%d %H:%M:%S'
+
 def initialize_log
   STDOUT.sync = true
   log = Logger.new(STDOUT, level: Logger::INFO)
   log.formatter = proc do |level, t, name, msg|
-    format("%s %-5s %s\n", t.strftime('%Y-%m-%d %H:%M:%S'), level, msg)
+    fields = { timestamp: t.strftime(LOG_TIMESTAMP_FORMAT), level: level, msg: msg }
+    format("%<timestamp>s %-5<level>s %<msg>s\n", **fields)
   end
   log
 end
@@ -52,12 +69,6 @@ class Object
   def log
     @log ||= initialize_log
   end
-end
-
-begin
-  require '/opt/gitlab/embedded/service/gitlab-rails/config/environment.rb'
-rescue LoadError => e
-  log.warn e.message
 end
 
 module Storage
@@ -85,13 +96,16 @@ module Storage
     clauses: {
       delete_error: nil,
       pending_delete: false,
-      project_statistics: { commit_count: 1..Float::INFINITY },
-      mirror: false
+      project_statistics: {commit_count: 1..Float::INFINITY},
+      mirror: false,
     },
+    count: false,
+    print_largest: false,
     verify_only: false,
     validate_checksum: false,
     validate_size: false,
     list_nodes: false,
+    projects: [],
     black_list: [],
     refresh_statistics: false,
     include_mirrors: false,
@@ -99,14 +113,15 @@ module Storage
     group: nil,
     env: :production,
     logdir_path: '/var/log/gitlab/storage_migrations',
-    migration_logfile_name: 'migrated_projects_%{date}.log'
+    migration_logfile_name: 'migrated_projects_%{date}.log',
   }.freeze
 
   def resembles_integer?(s)
-    !s.to_s.match(/\A\d+\Z/).nil?
+    s.to_s.match? /\A\d+\Z/
   end
 
   def parse_args
+    Options[:projects].concat CSV.new(ARGF).to_a if (!STDIN.tty?) && (!STDIN.closed?)
     ARGV << '-?' if ARGV.empty?
     opt = OptionParser.new
     opt.banner = "Usage: #{$PROGRAM_NAME} [options] --current-file-server <servername> --target-file-server <servername>"
@@ -129,6 +144,36 @@ module Storage
       Options[:list_nodes] = true
     end
 
+    opt.on('--projects=<project_id,...>', Array, 'Select specific projects to migrate') do |project_identifiers|
+      Options[:projects] ||= []
+      if project_identifiers.respond_to?(:all?) && project_identifiers.all? { |s| resembles_integer? s }
+        Options[:projects].concat project_identifiers.map(&:to_i).delete_if { |i| i <= 0 }
+      else
+        raise OptionParser::InvalidArgument.new("Argument given for --projects must be a list of one or more integers")
+      end
+    end
+
+    opt.on('--csv=<file_path>', 'Absolute path to CSV file enumerating projects ids') do |file_path|
+      unless File.exist? file_path
+        message = "Argument given for --csv must be an absolute path to an existing file"
+        raise OptionParser::InvalidArgument.new(message)
+      end
+
+      Options[:projects] ||= []
+      begin
+        project_identifiers = IO.readlines(file_path, chomp: true)
+        if project_identifiers.respond_to?(:all?) && project_identifiers.all? { |s| resembles_integer? s }
+          Options[:projects].concat project_identifiers.map(&:to_i).delete_if { |i| i <= 0 }
+        else
+          message = "Argument given for --csv must be an absolute path to a file containing a " \
+            "list of one or more integers"
+          raise OptionParser::InvalidArgument.new(message)
+        end
+      rescue StandardError => e
+        abort e.message
+      end
+    end
+
     opt.on('--skip=<project_id,...>', Array, 'Skip specific project(s)') do |project_identifiers|
       Options[:black_list] ||= []
       if project_identifiers.respond_to?(:all?) && project_identifiers.all? { |s| resembles_integer? s }
@@ -144,6 +189,10 @@ module Storage
 
     opt.on('-N', '--count', 'How many projects are on current file server') do |count|
       Options[:count] = true
+    end
+
+    opt.on('-L', '--print-largest', 'Find the largest project repository on current file server') do |print_largest|
+      Options[:print_largest] = true
     end
 
     opt.on('-m', '--move-amount=<N>', Integer, "Gigabytes of repo data to move; default: #{Options[:move_amount]}, or largest single repo if 0") do |move_amount|
@@ -193,14 +242,31 @@ module Storage
     begin
       args = opt.order!(ARGV) {}
       opt.parse!(args)
-    rescue OptionParser::InvalidOption => e
+    rescue OptionParser::InvalidArgument, OptionParser::InvalidOption,
+           OptionParser::NeedlessArgument => e
+      puts e.message
       puts opt
       exit
+    rescue OptionParser::AmbiguousOption => e
+      abort e.message
     end
     Options
   end
 
+  def largest_denomination(bytes)
+    if bytes.to_gb > 0
+      "#{bytes.to_gb} GB"
+    elsif bytes.to_mb > 0
+      "#{bytes.to_mb} MB"
+    elsif bytes.to_kb > 0
+      "#{bytes.to_kb} KB"
+    else
+      "#{bytes} Bytes"
+    end
+  end
+
   class Rebalancer
+    MIGRATION_TIMESTAMP_FORMAT = '%Y-%m-%d_%H%M%S'
     include ::Storage
     def initialize
       log.level = Options[:log_level]
@@ -214,7 +280,8 @@ module Storage
     end
 
     def configure_project_migration_logging
-      logfile_name = format(Options[:migration_logfile_name], date: Time.now.strftime('%Y-%m-%d_%H%M%S'))
+      fields = { date: Time.now.strftime(MIGRATION_TIMESTAMP_FORMAT) }
+      logfile_name = format(Options[:migration_logfile_name], **fields)
       logdir_path = Options[:logdir_path]
       FileUtils.mkdir_p logdir_path
       logfile_path = File.join(logdir_path, logfile_name)
@@ -229,18 +296,6 @@ module Storage
 
     def migration_errors
       @errors ||= []
-    end
-
-    def largest_denomination(bytes)
-      if bytes.to_gb > 0
-        "#{bytes.to_gb} GB"
-      elsif bytes.to_mb > 0
-        "#{bytes.to_mb} MB"
-      elsif bytes.to_kb > 0
-        "#{bytes.to_kb} KB"
-      else
-        "#{bytes} Bytes"
-      end
     end
 
     def get_storage_node_hostname(storage_node_name)
@@ -322,6 +377,7 @@ module Storage
     end
 
     def migrate(project)
+      log.info('='*72)
       log.info "Migrating project id: #{project.id}"
       log.info "  Size: ~#{largest_denomination(project.statistics.repository_size)}"
       log.debug "  Name: #{project.name}"
@@ -378,6 +434,8 @@ module Storage
         log.info "Validating project integrity by comparing latest commit " \
           "identifers before and after"
         current_commit_id = get_commit_id(post_migration_project.id)
+        log.debug "Original commit id: #{original_commit_id}, current commit id: " \
+          "#{current_commit_id}"
         if original_commit_id != current_commit_id
           raise CommitsMismatch, "Current commit id #{current_commit_id} " \
             "does not match original commit id #{original_commit_id}"
@@ -388,6 +446,8 @@ module Storage
             "before and after"
           post_migration_project.repository.expire_exists_cache
           current_checksum = post_migration_project.repository.checksum
+          log.debug "Original checksum: #{original_checksum}, current checksum: " \
+            "#{current_checksum}"
           if original_checksum != current_checksum
             raise ChecksumsMismatch, "Current checksum #{current_checksum} " \
               "does not match original checksum #{original_checksum}"
@@ -398,6 +458,8 @@ module Storage
           log.info "Validating project integrity by comparing repository size " \
             "before and after"
           current_repository_size = post_migration_project.statistics[:repository_size]
+          log.debug "Original repository size: #{original_repository_size}, current size: " \
+            "#{current_repository_size}"
           if original_repository_size != current_repository_size
             raise RepositorySizesMismatch, "Current repository size #{current_repository_size} " \
               "does not match original repository size #{original_repository_size}"
@@ -413,78 +475,67 @@ module Storage
       end
     end
 
+    def get_namespace(group)
+      namespace_id = Namespace.find_by(path: group)
+      raise "No such namespace" if namespace_id.nil?
+      namespace_id
+    rescue StandardError => e
+      log.fatal "Error finding given group name '#{group}': #{e.message}"
+      abort
+    end
+
+    def namespace_filter(clauses, group)
+      return clauses if group.nil? || group.empty?
+
+      log.info "Filtering projects by group: #{group}"
+      clauses.merge(namespace_id: get_namespace(group))
+    end
+
+    def with_timeout(interval_in_seconds)
+      ActiveRecord::Base.connection.execute "SET statement_timeout = #{interval_in_seconds}"
+      yield
+    end
+
     def self.count
-      current_file_server = Options[:current_file_server]
-      group = Options[:group]
-      namespace_id = nil
-      if group && !group.empty?
-        namespace_id = begin
-                         Namespace.find_by(path: group)
-                       rescue StandardError
-                         nil
-                       end
-        log.error "Group name '#{group}' not found" if namespace_id.nil?
-        abort
-      end
+      clauses = namespace_filter(Options[:clauses].dup, Options[:group])
+      clauses.merge!(repository_storage: Options[:current_file_server])
+      clauses.delete(:mirror) if Options[:include_mirrors]
+      query = Project.joins(:statistics).where(**clauses)
       Project.transaction do
-        ActiveRecord::Base.connection.execute 'SET statement_timeout = 600000'
-        clauses = Options[:clauses].dup
-        clauses.merge!(repository_storage: current_file_server)
-        if namespace_id
-          log.info "Filtering projects by group: #{group}"
-          clauses.merge!(namespace_id: namespace_id)
-        end
-        clauses.delete(:mirror) if Options[:include_mirrors]
-        Project.joins(:statistics).where(**clauses).size
+        with_timeout(600000) { query.size }
       end
     end
 
-    def get_project_ids(limit = 0)
-      current_file_server = Options[:current_file_server]
-      group = Options[:group]
-      namespace_id = nil
-      if group && !group.empty?
-        Group.find_by_full_path('gitlab-org')
-        namespace_id = begin
-                         Namespace.find_by(path: group)
-                       rescue StandardError
-                         nil
-                       end
-        if namespace_id.nil?
-          log.error "Group name '#{group}' not found"
-          abort
-        end
+    def get_project_ids(limit=0, project_ids=[])
+      clauses = namespace_filter(Options[:clauses].dup, Options[:group])
+      clauses.merge!(repository_storage: Options[:current_file_server])
+      unless project_ids.empty?
+        # The user specified one or more project identifiers;
+        # So don't filter out mirrors
+        clauses.delete(:mirror)
+        clauses.merge!(id: project_ids)
       end
+      clauses.delete(:mirror) if Options[:include_mirrors]
       # Query all projects on the current file server that have not failed
       # any previous delete operations, sort by size descending,
       # then sort by last activity date ascending in order to select the
       # most idle and largest projects first.
-      project_identifiers = []
-      Project.transaction do
-        ActiveRecord::Base.connection.execute 'SET statement_timeout = 600000'
-        clauses = Options[:clauses].dup
-        clauses.merge!(repository_storage: current_file_server)
-        if namespace_id
-          log.info "Filtering projects by group: #{group}"
-          clauses.merge!(namespace_id: namespace_id)
-        end
-        clauses.delete(:mirror) if Options[:include_mirrors]
-        query = Project.joins(:statistics)
-          .where(**clauses)
-          .order('project_statistics.repository_size DESC')
-          .order('last_activity_at ASC')
-        query = query.limit(limit) if limit > 0
-        project_identifiers = query.pluck(:id)
+      query = Project.joins(:statistics).
+        where(**clauses).
+        order('project_statistics.repository_size DESC').
+        order('last_activity_at ASC')
+      query = query.limit(limit) if limit > 0
+      project_identifiers = Project.transaction do
+        with_timeout(600000) { query.pluck(:id) }
       end
       black_list = Options[:black_list]
-      unless black_list.empty?
-        log.debug "Skipping projects: #{black_list}"
-        project_identifiers -= black_list
-      end
-      project_identifiers
+      return project_identifiers if black_list.empty?
+
+      log.debug "Skipping projects: #{black_list}"
+      project_identifiers - black_list
     end
 
-    def move_many_projects(min_amount, project_ids)
+    def move_projects(project_ids, min_amount=Options[:move_amount])
       total = 0
       project_ids.each do |project_id|
         project = Project.find_by(id: project_id)
@@ -525,7 +576,7 @@ module Storage
           log.error "Failed too many times"
           break
         end
-        break if total > min_amount
+        break if min_amount > 0 && total > min_amount
       end
       total = largest_denomination(total)
       if Options[:dry_run]
@@ -535,66 +586,48 @@ module Storage
       end
     end
 
-    def move_one_project
-      project_ids = get_project_ids(limit = Options[:max_failures])
-      log.info "No movable projects found on #{Options[:current_file_server]}" if project_ids.empty?
-      project_ids.each do |project_id|
-        project = Project.find_by(id: project_id)
-        begin
-          migrate(project)
-          break
-        rescue NoCommits => e
-          migration_errors << { project_id: project_id, message: e.message }
-          log.error "Error: #{e}"
-          log.warn "Skipping migration"
-        rescue CommitsMismatch => e
-          migration_errors << { project_id: project_id, message: e.message }
-          log.error "Failed to validate integrity of project id: #{project.id}"
-          log.error "Error: #{e}"
-          log.warn "Skipping migration"
-        rescue ChecksumsMismatch => e
-          migration_errors << { project_id: project_id, message: e.message }
-          log.error "Failed to validate integrity of project id: #{project.id}"
-          log.error "Error: #{e}"
-          log.warn "Skipping migration"
-        rescue RepositorySizesMismatch => e
-          migration_errors << { project_id: project_id, message: e.message }
-          log.error "Failed to validate integrity of project id: #{project.id}"
-          log.error "Error: #{e}"
-          log.warn "Skipping migration"
-        rescue MigrationTimeout => e
-          migration_errors << { project_id: project_id, message: e.message }
-          log.error "Timed out migrating project id: #{project.id}"
-          log.error "Error: #{e}"
-          log.warn "Skipping migration"
-        rescue StandardError => e
-          migration_errors << { project_id: project_id, message: e.message }
-          log.error "Unexpected error migrating project id: #{project.id}: #{e}"
-          e.backtrace.each { |t| log.error t }
-          log.warn "Skipping migration"
-        end
-        log.error "Failed too many times" if migration_errors.length >= Options[:max_failures]
-      end
+    def print_largest_project
+      project_id = get_project_ids(limit=1).first
+      project = Project.find_by(id: project_id)
+      log.info "Largest project on #{Options[:current_file_server]}: #{project.id}"
+      log.info "  Name: #{project.name}"
+      log.info "  Size: ~#{largest_denomination(project.statistics.repository_size)}"
+    rescue StandardError => e
+      log.fatal "Failed to get largest project: #{e.message}"
+      abort
     end
 
     def rebalance
+      project_identifiers = Options[:projects]
+      log.debug "Projects to migrate: #{project_identifiers}"
       move_amount_bytes = Options[:move_amount]
-      if move_amount_bytes.zero?
+      if !project_identifiers.empty?
+        project_identifiers = get_project_ids(
+          limit=project_identifiers.length,
+          project_ids=project_identifiers)
+        abort 'No valid project identifiers were given' if project_identifiers.empty?
+      elsif move_amount_bytes.zero?
         log.info 'Option --move-amount not specified, will only move 1 project...'
-        move_one_project
+        project_identifiers = [ get_project_ids(limit=1) ]
       else
         log.info "Will move at least #{move_amount_bytes.to_gb} GB worth of data"
-        move_many_projects(move_amount_bytes, get_project_ids)
+        project_identifiers = get_project_ids()
       end
-      log.info "Finished migrating projects from #{Options[:current_file_server]} to #{Options[:target_file_server]}"
-      if !migration_errors.empty?
+    
+      move_projects(project_identifiers)
+
+      log.info('='*72)
+      log.info "Finished migrating projects from #{Options[:current_file_server]} to " \
+        "#{Options[:target_file_server]}"
+      if migration_errors.length > 0
         log.error "Encountered #{migration_errors.length} errors:"
         log.error JSON.pretty_generate(migration_errors)
       else
         log.info "No errors encountered during migration"
       end
     end
-  end # class Rebalancer
+  end
+  # class Rebalancer
 
   class Verifier
     include ::Storage
@@ -623,8 +656,7 @@ module Storage
       moved_projects = get_migrated_project_logs(log_file_paths)
 
       project_identifiers = moved_projects.map { |project| project[:id] }
-      projects = Project.find(project_identifiers)
-      projects.each do |project|
+      Project.find(project_identifiers).each do |project|
         if project.repository_read_only?
           log.info "The repository for project id #{project.id} is still marked read-only on storage node #{project.repository_storage}"
         else
@@ -645,10 +677,15 @@ module Storage
     $stdout.ioflush
   end
 
+  def gitaly_address(storage_node_name)
+    NodeConfiguration.fetch(storage_node_name, {}).fetch('gitaly_address', nil)
+  end
+
   def main
     args = parse_args
     log.level = args[:log_level]
-    log.debug "[Dry-run] This is only a dry-run -- operations will be logged but not executed" if args[:dry_run]
+    log.debug "[Dry-run] This is only a dry-run -- write operations will be logged but not " \
+      "executed" if args[:dry_run]
 
     source_storage_node = args[:current_file_server]
     destination_storage_node = args[:target_file_server]
@@ -669,8 +706,21 @@ module Storage
       log.info "Movable projects stored on #{source_storage_node}: #{Rebalancer.count}"
       exit
     end
-    abort "Missing arguments. Use #{$PROGRAM_NAME} --help to see the list of arguments available" if source_storage_node.nil? || destination_storage_node.nil?
-    abort "Given destination file storage node must not have the same gitaly address as the source" if NodeConfiguration[source_storage_node]['gitaly_address'] == NodeConfiguration[destination_storage_node]['gitaly_address']
+    if source_storage_node.nil? || destination_storage_node.nil?
+      abort "Missing arguments. Use #{$PROGRAM_NAME} --help to see the list of arguments available"
+    end
+    if gitaly_address(source_storage_node).nil? || gitaly_address(destination_storage_node).nil?
+      abort "Missing gitlab-rails configuration"
+    end
+    if gitaly_address(source_storage_node) == gitaly_address(destination_storage_node)
+      abort "Given destination file storage node must not have the same gitaly address as the source"
+    end
+
+    rebalancer = Rebalancer.new
+    if source_storage_node && args[:print_largest]
+      rebalancer.print_largest_project
+      exit
+    end
 
     private_token = ENV.fetch('PRIVATE_TOKEN', nil)
     if private_token.nil? || private_token.empty?
@@ -678,14 +728,13 @@ module Storage
       private_token = password_prompt
       abort "Cannot proceed without a private API token." if private_token.empty?
     end
-    Options.store(:private_token, private_token)
 
-    rebalancer = Rebalancer.new
+    Options.store(:private_token, private_token)
     rebalancer.rebalance
-  rescue SystemExit => e
-    exit 0
+  rescue SystemExit
+    exit
   rescue Interrupt => e
-    $stdout.write "\r\nInterrupted\n"
+    $stdout.write "\r\n#{e.class}\n"
     $stdout.flush
     $stdin.echo = true
     exit 0
