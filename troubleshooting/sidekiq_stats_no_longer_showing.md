@@ -95,3 +95,12 @@ is configured to scrape both roles of `gitlab-cluster-redis-master` and `gitlab-
 ```
 sudo chef-client
 ```
+
+## Kubernetes Sidekiq Exporter
+
+* Validate that the exporter in Kubernetes is working as desired
+  * Use `port-forwarding`: `kubectl port-forward
+    svc/gitlab-monitoring-promethe-prometheus -n monitoring 9090:9090`
+  * Navigate to `localhost:9000`
+  * In the Menu, select Status>Targets
+  * Validate the target `monitoring/sidekiq` is configured and in state `UP`

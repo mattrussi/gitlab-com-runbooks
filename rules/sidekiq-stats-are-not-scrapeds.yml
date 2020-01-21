@@ -9,3 +9,14 @@ groups:
     annotations:
       runbook: troubleshooting/sidekiq_stats_no_longer_showing.md
       title: Sidekiq stats failed to be scraped for the last minute
+
+- name: sidekiq-not-scraped.rules
+  rules:
+    - alert: SidekiqNotScrapedOnK8s
+      expr: up{job="monitoring/sidekiq"}==0
+      for: 1m
+      labels:
+        severity: s4
+      annotations:
+        runbook: troubleshooting/sidekiq_stats_no_longer_showing.md
+        title: Sidekiq stats failed to be scraped for the last minute
