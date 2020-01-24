@@ -36,7 +36,7 @@ performed**
 /pd-db We are initiating a rollback of GitLab.com, for more information see <Issue or doc link>
 ```
 - [ ] The DBRE should review
-  [the db considerations for rollback](https://gitlab.com/gitlab-org/release/docs/blob/master/general/deploy/gitlab-com-deployer.md#creating-a-new-deployment-for-rolling-back-gitlab#rollback-considerations-for-database-migrations)
+  [the db considerations for rollback](https://gitlab.com/gitlab-org/release/docs/blob/master/general/deploy/gitlab-com-deployer.md#rollback-considerations-for-database-migrations)
   If the oncall DBRE is unavailable or unable to review the database impact of rollback, ensure that
   the IMOC has signed off on the rollback.
 - [ ] Work with the delivery team to initiate the rollback using GitLab Chatops.
