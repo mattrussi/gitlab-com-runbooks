@@ -10,15 +10,3 @@ groups:
       description: Sidekiq jobs are taking more than 10 minutes to be picked up. Users may be seeing delays in background processing. Check https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?orgId=1&fullscreen&panelId=5.
       runbook: troubleshooting/large-sidekiq-queue.md
       title: 'Sidekiq scheduling latency too high: {{$value}} s'
-
-- name: sidekiq-project-queue-latency.rules
-  rules:
-  - alert: SidekiqProjectQueueSchedulingLatencyTooHigh
-    expr: (max(sidekiq_queue_latency{name = "project_export"}) by (fqdn) and on (fqdn) (redis_connected_slaves != 0)) > 1200
-    for: 15m
-    labels:
-      severity: s3
-    annotations:
-      description: Sidekiq project_export jobs are taking more than 20 minutes to be picked up. Users may be seeing delays in background processing. Check https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?orgId=1&fullscreen&panelId=5.
-      runbook: troubleshooting/large-sidekiq-queue.md
-      title: 'Sidekiq project_export scheduling latency too high: {{$value}} s'
