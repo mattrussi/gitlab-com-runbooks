@@ -81,7 +81,7 @@ get_ipython().run_cell_magic('bigquery', 'workhorse_healthcheck_durations_per_mi
         SELECT TIMESTAMP_TRUNC(a.timestamp, minute) as date_min,
             {host_selection} hosttype,
             count(*) count,
-            APPROX_QUANTILES(duration_ms, 10) percentiles
+            APPROX_QUANTILES(CAST(duration_ms as float64), 10) percentiles
         FROM gcp_perf_analysis.workhorse_puma2020 a
         WHERE uri IN ('/-/liveness', '/-/readiness')
         GROUP BY 1,2
@@ -112,30 +112,7 @@ get_ipython().run_cell_magic('bigquery', 'workhorse_healthcheck_durations_overal
         SELECT
             {host_selection} hosttype,
             count(*) count,
-            APPROX_QUANTILES(duration_ms, 10) percentiles
-        FROM gcp_perf_analysis.workhorse_puma2020 a
-        WHERE hostname like 'web-%'
-        AND uri IN ('/-/liveness', '/-/readiness')
-        GROUP BY 1
-        ORDER BY 1
-    )
-  '''.format(host_selection=host_selection))
-workhorse_healthcheck_durations_overall
-
-
-# %%
-get_ipython().run_cell_magic('bigquery', 'workhorse_healthcheck_durations_overall', '''
-    SELECT hosttype,
-        count,
-        cast(percentiles[offset(5)] as FLOAT64) p50_duration_ms,
-        cast(percentiles[offset(6)] as FLOAT64) p60_duration_ms,
-        cast(percentiles[offset(7)] as FLOAT64) p70_duration_ms,
-        cast(percentiles[offset(9)] as FLOAT64) p90_duration_ms,
-    FROM (
-        SELECT
-            {host_selection} hosttype,
-            count(*) count,
-            APPROX_QUANTILES(duration_ms, 10) percentiles
+            APPROX_QUANTILES(CAST(duration_ms as float64), 10) percentiles
         FROM gcp_perf_analysis.workhorse_puma2020 a
         WHERE uri IN ('/-/liveness', '/-/readiness')
         GROUP BY 1
@@ -152,12 +129,12 @@ get_ipython().run_cell_magic('bigquery', 'workhorse_trace_durations_overall', ''
         cast(percentiles[offset(5)] as FLOAT64) p50_duration_ms,
         cast(percentiles[offset(6)] as FLOAT64) p60_duration_ms,
         cast(percentiles[offset(7)] as FLOAT64) p70_duration_ms,
-        cast(percentiles[offset(9)] as FLOAT64) p90_duration_ms,
+        cast(percentiles[offset(9)] as FLOAT64) p90_duration_ms
     FROM (
         SELECT
             {host_selection} hosttype,
             count(*) count,
-            APPROX_QUANTILES(duration_ms, 10 IGNORE NULLS) percentiles
+            APPROX_QUANTILES(CAST(duration_ms as float64), 10 IGNORE NULLS) percentiles
         FROM gcp_perf_analysis.workhorse_puma2020 a
         WHERE uri like '/api/v4/jobs/%/trace'
         GROUP BY 1
@@ -165,5 +142,30 @@ get_ipython().run_cell_magic('bigquery', 'workhorse_trace_durations_overall', ''
     )
   '''.format(host_selection=host_selection))
 workhorse_trace_durations_overall
+
+# %%
+get_ipython().run_cell_magic('bigquery', 'workhorse_trace_latencies', '''
+    SELECT
+         {host_selection} hosttype,
+        TRUNC(CAST(duration_ms as float64), -2) latency_bucket,
+        count(*) latency_bucket_count
+    FROM gcp_perf_analysis.workhorse_puma2020 a
+    WHERE CAST(duration_ms as float64) < 30000
+      AND ({host_selection}) <> 'other'
+    GROUP BY 1,2
+    ORDER BY 2, 1
+  '''.format(host_selection=host_selection))
+
+# %%
+
+alt.Chart(workhorse_trace_latencies).mark_line().encode(
+    y=alt.Y('latency_bucket_count',
+        scale=alt.Scale(type="log", base=10)
+    ),
+    x=alt.X('latency_bucket'),
+    color=alt.Color('hosttype:N', scale=alt.Scale(scheme='category20c')),
+).properties(
+    width=1024, height=768
+)
 
 # %%
