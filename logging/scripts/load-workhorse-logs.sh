@@ -4,7 +4,7 @@ set -euo pipefail
 IFS=$'\n\t'
 
 GCP_PROJECT=gitlab-production
-TABLE_NAME=workhorse_thanksgiving
+TABLE_NAME=workhorse_puma2020
 
 set -x
 
@@ -16,7 +16,7 @@ function drop_pre_table() {
 
 drop_pre_table
 
-for i in '2019/11/28/00:00:00*'; do
+for i in '2020/01/29/00:00:00*'; do
   bq --project "$GCP_PROJECT" \
     load \
     --source_format=CSV \
