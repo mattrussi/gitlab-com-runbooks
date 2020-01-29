@@ -11,7 +11,7 @@ set -x
 function drop_pre_table() {
   bq --project "$GCP_PROJECT" \
     query \
-    --nouse_legacy_sql "DROP TABLE \`gcp_perf_analysis.${TABLE_NAME}_pre\`" || true;
+    --nouse_legacy_sql "DROP TABLE \`gcp_perf_analysis.${TABLE_NAME}_pre\`" || true
 }
 
 drop_pre_table
