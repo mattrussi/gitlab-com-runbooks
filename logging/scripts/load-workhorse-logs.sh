@@ -16,13 +16,13 @@ function drop_pre_table() {
 
 drop_pre_table
 
-for i in '2020/01/29/00:00:00*'; do
+for i in '2020/01/29/*'; do
   bq --project "$GCP_PROJECT" \
     load \
     --source_format=CSV \
     --field_delimiter "±" \
     --max_bad_records 100 \
-    --noreplace \
+    --replace \
     --ignore_unknown_values \
     gcp_perf_analysis.${TABLE_NAME}_pre \
     "gs://gitlab-gprd-logging-archive/workhorse/$i" \

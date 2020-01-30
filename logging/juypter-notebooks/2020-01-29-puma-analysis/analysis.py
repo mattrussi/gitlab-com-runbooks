@@ -150,8 +150,9 @@ get_ipython().run_cell_magic('bigquery', 'workhorse_trace_latencies', '''
         TRUNC(CAST(duration_ms as float64), -2) latency_bucket,
         count(*) latency_bucket_count
     FROM gcp_perf_analysis.workhorse_puma2020 a
-    WHERE CAST(duration_ms as float64) < 30000
+    WHERE CAST(duration_ms as float64) < 60000
       AND ({host_selection}) <> 'other'
+      AND NOT uri IN ('/-/liveness', '/-/readiness')
     GROUP BY 1,2
     ORDER BY 2, 1
   '''.format(host_selection=host_selection))
@@ -159,6 +160,31 @@ get_ipython().run_cell_magic('bigquery', 'workhorse_trace_latencies', '''
 # %%
 
 alt.Chart(workhorse_trace_latencies).mark_line().encode(
+    y=alt.Y('latency_bucket_count',
+        scale=alt.Scale(type="log", base=10)
+    ),
+    x=alt.X('latency_bucket'),
+    color=alt.Color('hosttype:N', scale=alt.Scale(scheme='category20c')),
+).properties(
+    width=1024, height=768
+)
+# %%
+get_ipython().run_cell_magic('bigquery', 'workhorse_trace_jwt', '''
+    SELECT
+         {host_selection} hosttype,
+        TRUNC(CAST(duration_ms as float64), 0) latency_bucket,
+        count(*) latency_bucket_count
+    FROM gcp_perf_analysis.workhorse_puma2020 a
+    WHERE CAST(duration_ms as float64) < 1010
+      AND ({host_selection}) <> 'other'
+      AND NOT uri IN ('/-/liveness', '/-/readiness')
+    GROUP BY 1,2
+    ORDER BY 2, 1
+  '''.format(host_selection=host_selection))
+
+# %%
+
+alt.Chart(workhorse_trace_jwt).mark_line().encode(
     y=alt.Y('latency_bucket_count',
         scale=alt.Scale(type="log", base=10)
     ),
