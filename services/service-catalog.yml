@@ -204,7 +204,7 @@ services:
   teams:
     - infrastructure-observability
   infra_owner: infrastructure-observability
-  label: Service:AlertManager
+  label: Service::AlertManager
   business:
     requirement: We use Prometheus for our monitoring solution. Alerting with Prometheus is separated into two parts. Alerting rules in Prometheus servers send alerts to an Alertmanager. The Alertmanager then manages those alerts, including silencing, inhibition, aggregation and sending out notifications via, in our case, PagerDuty and Slack.
     customers:
@@ -274,7 +274,7 @@ services:
     - manage
     - plan
   infra_owner: infrastructure-webapp
-  label: Service:API
+  label: Service::API
   business:
     requirement: |
       API is required to allow developing tools (i.e. bots) that makes use of GitLab.com data,
@@ -363,7 +363,7 @@ services:
   teams:
     - infrastructure-observability
   infra_owner: infrastructure-observability
-  label: Service:Blackbox
+  label: Service::Blackbox
   business:
     requirement: |
       We need a service that's capabale of pinging multiple endpoints over different protocols
@@ -429,7 +429,7 @@ services:
     - infrastructure-webapp
     - infrastructure-caches-ci-queues
   infra_owner: infrastructure-coreinfra
-  label: Service:Console
+  label: Service::Console
   business:
     requirement: |
       - Restricted access to the primary DB console
@@ -508,7 +508,7 @@ services:
   teams:
     - infrastructure-coreinfra
   infra_owner: infrastructure-coreinfra
-  label: Service:Consul
+  label: Service::Consul
   business:
     requirement: |
       In order to correctly point pgbouncer to a DB master after a failover occurs, we needed
@@ -578,7 +578,7 @@ services:
   teams:
     - verify # The service is maintained by Matija Čupić who is part of the Verify team
   infra_owner: infrastructure-businessops
-  label: Service:Contributors
+  label: Service::Contributors
   business:
     requirement: It allows giving credits to GitLab CE contributors.
     customers:
@@ -637,7 +637,7 @@ services:
   teams:
     - infrastructure-observability
   infra_owner: infrastructure-observability
-  label: Service:ELK
+  label: Service::ELK
   business:
     requirement: |
       Managing an Elasticsearch cluster in-house turned out to be not an easy undertaking,
@@ -857,7 +857,7 @@ services:
     - manage
     - plan
   infra_owner: infrastructure-webapp
-  label: Service:Web
+  label: Service::Web
   business:
     requirement: |
       Web is required as the main destination of GitLab.com, through which users collaborate
@@ -938,7 +938,7 @@ services:
     - infrastructure-webapp
     - infrastructure-git
   infra_owner: infrastructure-coreinfra
-  label: Service:HAProxy
+  label: Service::HAProxy
   business:
     requirement: |
       Load balancers offered by cloud providers has limited configurations and doesn't
@@ -1013,7 +1013,7 @@ services:
     - manage
     - plan
   infra_owner: infrastructure-git
-  label: Service:Git
+  label: Service::Git
   business:
     requirement: |
       Serves git operation requests over SSH and HTTP. The specific git operations handled are git-upload-pack (pushing), git-receive-pack (pulling), git-upload-archive (creating an archive of a tree), and git-lfs-authenticate (LFS authentication). git-upload-pack is also used in git-ls-remote.
@@ -1097,7 +1097,7 @@ services:
     - gitaly
     - infrastructure-git
   infra_owner: infrastructure-git
-  label: Service:Gitaly
+  label: Service::Gitaly
   business:
     requirement: |
       It is needed to eliminate the latencies of doing git operations
@@ -1251,7 +1251,7 @@ services:
   teams:
     - gitaly
   infra_owner: reliability-engineering-dev--ops
-  label: Service:Praefect
+  label: Service::Praefect
   business:
     requirement: |
       Enable HA in Gitaly through replication
@@ -1323,7 +1323,7 @@ services:
     - manage
     - plan
   infra_owner: infrastructure-coreinfra
-  label: Service:Mailroom
+  label: Service::Mailroom
   business:
     requirement: It is needed to allow responding to issues/MR through email replies.
     customers:
@@ -1382,7 +1382,7 @@ services:
   teams:
     - infrastructure-webapp
   infra_owner: infrastructure-webapp
-  label: Service:Pages
+  label: Service::Pages
   business:
     requirement: |
       HAProxy load balancer service in front of the web-pages service running GitLab pages
@@ -1442,7 +1442,7 @@ services:
     - infrastructure-webapp
     - infrastructure-caches-ci-queues
   infra_owner: infrastructure-webapp
-  label: Service:Pages
+  label: Service::Pages
   business:
     requirement: |
       It allows publishing static web sites in a few minutes, with the ability to set
@@ -1511,7 +1511,7 @@ services:
     - infrastructure-webapp
     - infrastructure-database
   infra_owner: infrastructure-database
-  label: Service:pgbouncer
+  label: Service::Pgbouncer
   business:
     requirement:  We use PgBouncer as the connection pooler for PostgreSQL
     customers:
@@ -1582,7 +1582,7 @@ services:
   teams:
     - infrastructure-database
   infra_owner: infrastructure-database
-  label: Service:Postgres
+  label: Service::Postgres
   business:
     requirement:  We use Postgres as our backend database.
     customers:
@@ -1670,7 +1670,7 @@ services:
   teams:
     - infrastructure-database
   infra_owner: infrastructure-database
-  label: Service:PostgresArchive
+  label: Service::Postgres
   business:
     requirement: |
       It is required to continuously recover from the WAL archive
@@ -1759,7 +1759,7 @@ services:
   teams:
     - infrastructure-database
   infra_owner: infrastructure-database
-  label: Service:PostgresDelayed
+  label: Service::Postgres
   business:
     requirement: |
       It is required to be able to restore DB records that was deleted
@@ -1843,7 +1843,7 @@ services:
     - infrastructure-database
     - infrastructure-observability
   infra_owner: infrastructure-observability
-  label: Service:PsqlTimings
+  label: Service::Postgres
   business:
     requirement: |
       It is needed to store profiles of GitLab Rails RSpec test suites as executed in our CI pipelines,
@@ -1909,7 +1909,7 @@ services:
   teams:
     - infrastructure-observability
   infra_owner: infrastructure-observability
-  label: Service:Prometheus
+  label: Service::Prometheus
   business:
     requirement: |
       It is needed to collect, store and view metrics exposed by
@@ -2001,7 +2001,7 @@ services:
     - infrastructure-caches-ci-queues
     - infrastructure-webapp
   infra_owner: infrastructure-caches-ci-queues
-  label: Service:Redis
+  label: Service::Redis
   business:
     requirement: |
       Redis is packaged to provide a place to store session data and temporary cache information
@@ -2069,7 +2069,7 @@ services:
   teams:
     - infrastructure-caches-ci-queues
   infra_owner: infrastructure-caches-ci-queues
-  label: Service:RedisCache
+  label: Service::Redis
   business:
     requirement: |
       Redis-Cache is used to cache things like function calls, return values...etc in our Rails appl for performance and optimization purpose. Instead of using the Rails' built-in caching infrastructure, we use annotation decorations to do caching in Redis-Cache.
@@ -2133,7 +2133,7 @@ services:
   teams:
     - infrastructure-caches-ci-queues
   infra_owner: infrastructure-caches-ci-queues
-  label: Service:RedisCacheSentinel
+  label: Service::Redis
   business:
     requirement: |
       Redis Sentinel provides High Availability (HA) to Redis. In addition, Sentinel monitors Redis nodes, initiates automatical failover and service discovery.
@@ -2197,7 +2197,7 @@ services:
   teams:
     - infrastructure-caches-ci-queues
   infra_owner: infrastructure-caches-ci-queues
-  label: Service:RedisSidekiq
+  label: Service::Redis
   business:
     requirement: |
       Redis-Sidekiq is used as a fast persistent key-value store for Sidekiq to store job information (queued, scheduled, and results)
@@ -2262,7 +2262,7 @@ services:
     - package
     - infrastructure-caches-ci-queues
   infra_owner: infrastructure-caches-ci-queues
-  label: Service:Registry
+  label: Service::Registry
   business:
     requirement: |
       It is needed to have a Docker Container Registry integrated into GitLab
@@ -2403,7 +2403,7 @@ services:
     - manage
     - plan
   infra_owner: infrastructure-caches-ci-queues
-  label: Service:Sidekiq
+  label: Service::Sidekiq
   business:
     requirement: |
       It is required as some actions takes considerable amount of time
@@ -2488,7 +2488,7 @@ services:
     - verify
     - infrastructure-caches-ci-queues
   infra_owner: infrastructure-caches-ci-queues
-  label: Service:Runner
+  label: Service::CI Runners
   business:
     requirement: |
       It is required to run CI jobs that process ChatOps commands.
@@ -2558,7 +2558,7 @@ services:
   teams:
     - infrastructure-businessops
   infra_owner: infrastructure-businessops
-  label: Service:License
+  label: Service::License
   business:
     requirement: |
       GitLab employees need an interface to manage existing licenses and create custom new ones.
@@ -2628,7 +2628,7 @@ services:
   teams:
     - infrastructure-businessops
   infra_owner: infrastructure-businessops
-  label: Service:Version
+  label: Service::Version
   business:
     requirement: |
       We want to communicate to our users whether they are running a secure version or a vulnerable version. The original announcement link https://about.gitlab.com/2015/05/07/version-check/ talks about how this exactly works.
@@ -2789,7 +2789,7 @@ services:
   teams:
     - infrastructure-caches-ci-queues
   infra_owner: infrastructure-caches-ci-queues
-  label: Service:CI Runner
+  label: Service::CI Runners
   business:
     requirement: |
       Runners to service CI jobs for any project on GitLab.com.
@@ -2870,7 +2870,7 @@ services:
   teams:
     - infrastructure-observability
   infra_owner: infrastructure-observability
-  label: Service:Stackdriver
+  label: Service::Stackdriver
   business:
     requirement: |
       Stackdriver is the sink for all of our logs across all environments, it's capabale
