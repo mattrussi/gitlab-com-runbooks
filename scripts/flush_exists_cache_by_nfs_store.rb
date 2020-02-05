@@ -1,3 +1,4 @@
+# rubocop:disable all
 STORAGE = 'nfs-file02' # Change this to the right storage
 
 # First expire all projects with no subgroups

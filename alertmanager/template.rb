@@ -1,5 +1,8 @@
 #!/usr/bin/env ruby
 
+# frozen_string_literal: true
+# rubocop:disable all
+
 require 'erb'
 
 slack_hook = ENV.fetch('AM_SLACK_HOOK_URL')

@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
-
+# frozen_string_literal: true
+# rubocop:disable all
 require 'yaml'
 
 def validate(service_catalog_path)
@@ -27,7 +28,7 @@ def validate(service_catalog_path)
     service_teams = service["teams"]
     raise "'#{service_name}' | teams field must be list" unless service_teams.is_a? Array
 
-    service_teams.each do |team| 
+    service_teams.each do |team|
       raise "'#{service_name}' | unknown team: '#{team}''" unless team_map[team]
     end
 
@@ -57,7 +58,7 @@ def validate(service_catalog_path)
     # response_time
     response_time = service["business"]["SLA"]["response_time"]
     raise "'#{service_name}' | response_time field must be string" unless response_time.is_a? String or response_time.nil?
-    
+
     # Technical
     # =========
 

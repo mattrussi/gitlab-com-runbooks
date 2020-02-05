@@ -1,4 +1,8 @@
 #!/usr/bin/env ruby
+
+# frozen_string_literal: true
+# rubocop:disable all
+
 #
 # A sidekick for Sidekiq
 #
