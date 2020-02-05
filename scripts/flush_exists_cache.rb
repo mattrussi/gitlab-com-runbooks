@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+# frozen_string_literal: true
+# rubocop:disable all
+
 removed = 0
 
 Gitlab::Redis::Cache.with do |redis|

@@ -1,5 +1,6 @@
 #! /usr/bin/env ruby
 # frozen_string_literal: true
+# rubocop:disable all
 
 # This script helps identify the cause of "invalid checksum digest
 # format" and "unexpected end of JSON" error messages due to 0-byte
