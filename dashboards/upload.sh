@@ -81,12 +81,11 @@ find_dashboards() {
   fi
 }
 
-# Install jsonnet dashboards
-find_dashboards "$@" | while read -r line; do
-  relative=${line#"./"}
-  folder=${GRAFANA_FOLDER:-$(dirname "$relative")}
-  uid="${folder}-$(basename "$line" | sed -e 's/\..*//')"
-  extension="${relative##*.}"
+generate_dashboard() {
+  local filename=$1
+  local folder=${GRAFANA_FOLDER:-$(dirname "$filename")}
+  local uid="${folder}-$(basename "$line" | sed -e 's/\..*//')"
+  local extension="${filename##*.}"
 
   if [[ "$extension" == "jsonnet" ]]; then
     dashboard=$(jsonnet_compile "${line}")
@@ -127,9 +126,24 @@ find_dashboards "$@" | while read -r line; do
     echo "${body}" | jq '.' | grep -E -B3 -A3 --color=always "' *\\+"
     exit 1
   fi
+}
+
+die() {
+  echo "$@"
+  exit 1
+}
+
+# Install jsonnet dashboards
+find_dashboards "$@" | while read -r line; do
+  relative=${line#"./"}
+  body=$(generate_dashboard "${relative}")
+
+  if [[ -z "${body}" ]]; then
+    die "${relative} rendering failed"
+  fi
 
   if [[ -n $dry_run ]]; then
-    echo "Running in dry run mode, would create $line in folder $folder with uid $uid"
+    echo "Running in dry run mode, would create $line"
     continue
   fi
 
