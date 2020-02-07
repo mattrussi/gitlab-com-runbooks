@@ -16,7 +16,7 @@ function drop_pre_table() {
 
 drop_pre_table
 
-for i in '2020/01/29/*'; do
+for i in '2020/02/04/15:*'; do
   bq --project "$GCP_PROJECT" \
     load \
     --source_format=CSV \
