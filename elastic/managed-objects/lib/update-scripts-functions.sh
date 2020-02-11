@@ -3,6 +3,16 @@
 set -euo pipefail
 IFS=$'\n\t'
 
+function es_watch_api_path() {
+  if [[ $# -eq 1 || "$1" == '-5' ]]; then
+    # ES 5 watch API path.
+    echo '_xpack/watcher/watch'
+  else
+    # Default: ES 7 watch API path.
+    echo '_watcher/watch'
+  fi
+}
+
 function es_client() {
   url=$1
   shift
@@ -52,28 +62,48 @@ function get_json_and_jsonnet() {
   declare -p json_array >"${array_file_path}"
 }
 
+function es_upload_json_files() {
+  if [[ $# -le 2 ]]; then
+    echo "usage: ${FUNCNAME-${0}} <api path> <list of json or jsonnet files>"
+    return 0
+  fi
+  local api_path="$1"
+  shift 1
+
+  local base_name extension file
+  for file in "$@"; do
+    base_name="$(basename "${file}")"
+    extension="${file##*.}"
+    echo ""
+    echo "${base_name}"
+
+    case "${extension}" in
+      json)
+        name="${base_name%.json}"
+        json_data="@${file}"
+        ;;
+      jsonnet)
+        name="${base_name%.jsonnet}"
+        json_data="$(execute_jsonnet "${i}" | jq -c '.')" # Compile jsonnet and compact with jq
+        ;;
+      *)
+        echo "ERROR: Invalid extension (${extension}) on file ${file}"
+        return 1
+        ;;
+    esac
+    es_client "${api_path}/${name}?pretty=true" -X PUT --data-binary "${json_data}"
+  done
+}
+
 # ES5
 ################################################################################
 
 function ES5_watches_upload_json() {
-  for i in "${SCRIPT_DIR}"/*.json; do
-    base_name=$(basename "$i")
-    echo ""
-    echo "$base_name"
-    name=${base_name%.json}
-    es_client "_xpack/watcher/watch/${name}?pretty=true" -X PUT --data-binary "@${i}"
-  done
+  es_upload_json_files "$(es_watch_api_path -5)" "${SCRIPT_DIR}"/*.json
 }
 
 function ES5_watches_exec_jsonnet_and_upload_json() {
-  for i in "${SCRIPT_DIR}"/*.jsonnet; do
-    base_name=$(basename "$i")
-    echo ""
-    echo "$base_name"
-    name=${base_name%.jsonnet}
-    watch_json="$(execute_jsonnet "${i}" | jq -c '.')" # Compile jsonnet and compact with jq
-    es_client "_xpack/watcher/watch/${name}?pretty=true" -X PUT --data-binary "${watch_json}"
-  done
+  es_upload_json_files "$(es_watch_api_path -5)" "${SCRIPT_DIR}"/*.jsonnet
 }
 
 # ES7
@@ -81,13 +111,7 @@ function ES5_watches_exec_jsonnet_and_upload_json() {
 function ES7_put_json() {
   # args:
   # $1 URL to use when uploading
-  for i in "${SCRIPT_DIR}"/*.json; do
-    base_name=$(basename "$i")
-    echo ""
-    echo "$base_name"
-    name=${base_name%.json}
-    es_client "$1${name}" -X PUT --data-binary "@${i}"
-  done
+  es_upload_json_files "$1" "${SCRIPT_DIR}"/*.json
 }
 
 function kibana_post_json() {
@@ -113,26 +137,13 @@ function kibana_put_json() {
     kibana_client "$1${name}" -X PUT --data-binary "@${i}"
   done
 }
+
 function ES7_watches_exec_jsonnet_and_upload_json() {
-  for i in "${SCRIPT_DIR}"/*.jsonnet; do
-    base_name=$(basename "$i")
-    echo ""
-    echo "$base_name"
-    name=${base_name%.jsonnet}
-    watch_json="$(execute_jsonnet "${i}" | jq -c '.')" # Compile jsonnet and compact with jq
-    es_client "_watcher/watch/${name}" -X PUT --data-binary "${watch_json}"
-  done
+  es_upload_json_files "$(es_watch_api_path)" "${SCRIPT_DIR}"/*.jsonnet
 }
 
 function ES7_ILM_exec_jsonnet_and_upload_json() {
-  for i in "${SCRIPT_DIR}"/*.jsonnet; do
-    base_name=$(basename "$i")
-    echo ""
-    echo "$base_name"
-    name=${base_name%.jsonnet}
-    json="$(execute_jsonnet "${i}" | jq -c '.')" # Compile jsonnet and compact with jq
-    es_client "_ilm/policy/${name}" -X PUT --data-binary "${json}"
-  done
+  es_upload_json_files '_ilm/policy' "${SCRIPT_DIR}"/*.jsonnet
 }
 
 function ES7_index-template_exec_jsonnet_and_upload_json() {
