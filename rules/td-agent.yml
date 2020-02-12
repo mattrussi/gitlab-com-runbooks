@@ -1,0 +1,18 @@
+groups:
+- name: td-agent.rules
+  rules:
+  - alert: TDAgentStackDriverDroppedLoggedMessages
+    expr: |
+      sum by (instance) (
+        rate(td_agent_dropped_log_messages_total[5m])
+      ) > 100
+    for: 5m
+    labels:
+      pager: pagerduty
+      severity: s2
+    annotations:
+      description: >
+        Log messages are being dropped on {{ $labels.instance }}. This is likely
+        due to Stackdriver API limits, see the runbook for troubleshooting.
+      runbook: troubleshooting/td-agent-dropped-messages.md
+      title: Td-agent dropped messages

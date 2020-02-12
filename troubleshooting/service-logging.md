@@ -24,5 +24,6 @@
 * [postgres.md](postgres.md)
 * [pubsub-queing.md](pubsub-queing.md)
 * [ssh-maxstartups-breach.md](ssh-maxstartups-breach.md)
+* [td-agent-dropped-messages.md](td-agent-dropped-messages.md)
 * [version-gitlab-com.md](version-gitlab-com.md)
 <!-- END_MARKER -->

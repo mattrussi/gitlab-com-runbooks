@@ -19,5 +19,6 @@
 * [node-reboots.md](node-reboots.md)
 * [pgbouncer.md](pgbouncer.md)
 * [pubsub-queing.md](pubsub-queing.md)
+* [td-agent-dropped-messages.md](td-agent-dropped-messages.md)
 * [version-gitlab-com.md](version-gitlab-com.md)
 <!-- END_MARKER -->

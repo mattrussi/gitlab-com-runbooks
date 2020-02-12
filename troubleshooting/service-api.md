@@ -31,4 +31,5 @@
 * [pgbouncer.md](pgbouncer.md)
 * [postgres.md](postgres.md)
 * [ssh-maxstartups-breach.md](ssh-maxstartups-breach.md)
+* [td-agent-dropped-messages.md](td-agent-dropped-messages.md)
 <!-- END_MARKER -->
