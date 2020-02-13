@@ -5,7 +5,7 @@ groups:
     expr: |
       sum by (instance) (
         rate(td_agent_dropped_log_messages_total[5m])
-      ) > 100
+      ) > 10
     for: 5m
     labels:
       pager: pagerduty
