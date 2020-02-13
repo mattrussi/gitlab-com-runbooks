@@ -13,7 +13,7 @@ api limits. This could be for the following reasons:
 1. The rate of log messages have increased dramatically, this could either be
    that we are hitting the maximum number of write requests per project of 60000
    or the size of a single request which cannot exceed 10MB.
-2. An individual log message is too long, there is a 256K limit for a single log
+2. An individual log message is too long, there is a 256KB limit for a single log
    line.
 
 ### API limit for sending logs
