@@ -8,8 +8,8 @@ groups:
       ) > 10
     for: 5m
     labels:
-      pager: pagerduty
-      severity: s2
+      pager: issue
+      severity: s3
     annotations:
       description: >
         Log messages are being dropped on {{ $labels.instance }}. This is likely
