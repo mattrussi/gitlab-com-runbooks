@@ -8,7 +8,7 @@ groups:
       ) > 10
     for: 5m
     labels:
-      pager: issue
+      channel: production
       severity: s3
     annotations:
       description: >
