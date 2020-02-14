@@ -1,0 +1,90 @@
+{
+  "trigger": {
+    "schedule": {
+      "interval": "5m"
+    }
+  },
+  "input": {
+    "search": {
+      "request": {
+        "search_type": "query_then_fetch",
+        "indices": [
+          "pubsub-rails-inf-gprd-*"
+        ],
+        "types": [],
+        "body": {
+          "query": {
+            "bool": {
+              "must": [
+                {
+                  "match_phrase": {
+                    "json.params.value": "\"access_level=>admin\""
+                  }
+                },
+                {
+                  "match": {
+                    "json.method": "POST PATCH"
+                  }
+                },
+                {
+                  "match_phrase": {
+                    "json.status": "302"
+                  }
+                },
+                {
+                  "range": {
+                    "@timestamp": {
+                      "from": "now-5m",
+                      "to": "now"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "condition": {
+    "compare": {
+      "ctx.payload.hits.total": {
+        "gt": 0
+      }
+    }
+  },
+  "actions": {
+    "process-alert": {
+      "webhook": {
+        "scheme": "https",
+        "host": "us-central1-delke-prd.cloudfunctions.net",
+        "port": 443,
+        "method": "post",
+        "path": "/delke-prd-slack-notification",
+        "params": {
+          "action": "alert"
+        },
+        "headers": {
+          "content-type": "application/json",
+          "accept": "application/json,*/*"
+        },
+        "body": "{{#toJson}}ctx{{/toJson}}"
+      }
+    }
+  },
+  "metadata": {
+    "output": {
+      "instance": "InfraELK",
+      "provisioner": "{{json.username}}",
+      "httpMethod": "{{json.method}}",
+      "account": "{{json.location}}"
+    },
+    "info": {
+      "name": "gitlab-com.new-admin-account.json",
+      "description": "A new admin account has been created or a user upgraded on GitLab.com",
+      "definition": "https://gitlab.com/gitlab-com/gl-security/secops/detection/delke/blob/master/alerts/gitlab-com/gitlab-com.new-admin-account.json",
+      "istest": true
+    }
+  }
+}
+
