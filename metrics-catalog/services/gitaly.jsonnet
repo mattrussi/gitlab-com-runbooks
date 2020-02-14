@@ -33,7 +33,7 @@ local gitalyHelpers = import './lib/gitaly-helpers.libsonnet';
       errorRate: combined([
         rateMetric(
           counter='gitaly_service_client_requests_total',
-          selector='job="gitaly", grpc_code!~"^(OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded)$"'
+          selector='job="gitaly", grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded|InvalidArgument"'
         ),
         rateMetric(
           counter='gitaly_service_client_requests_total',
@@ -63,9 +63,8 @@ local gitalyHelpers = import './lib/gitaly-helpers.libsonnet';
 
       errorRate: rateMetric(
         counter='grpc_client_handled_total',
-        selector='job="gitaly", grpc_code!~"^(OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition)$"'
+        selector='job="gitaly", grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|InvalidArgument", grpc_method!~"AddRemote|UpdateRemoteMirror|FetchRemote"'
       ),
-
       significantLabels: ['fqdn'],
     },
   },
