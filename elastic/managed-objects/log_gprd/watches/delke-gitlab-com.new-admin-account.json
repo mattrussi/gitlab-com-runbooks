@@ -83,7 +83,7 @@
       "name": "gitlab-com.new-admin-account.json",
       "description": "A new admin account has been created or a user upgraded on GitLab.com",
       "definition": "https://gitlab.com/gitlab-com/gl-security/secops/detection/delke/blob/master/alerts/gitlab-com/gitlab-com.new-admin-account.json",
-      "istest": true
+      "istest": false
     }
   }
 }
