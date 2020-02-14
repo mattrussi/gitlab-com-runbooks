@@ -1,0 +1,83 @@
+{
+  "trigger": {
+    "schedule": {
+      "interval": "5m"
+    }
+  },
+  "input": {
+    "search": {
+      "request": {
+        "search_type": "query_then_fetch",
+        "indices": [
+          "pubsub-rails-inf-gprd-*"
+        ],
+        "types": [],
+        "body": {
+          "query": {
+            "bool": {
+              "must": [
+                {
+                  "match_phrase": {
+                    "json.path": "/api/v4/projects/15424719/variables"
+                  }
+                },
+                {
+                  "match_phrase": {
+                    "json.status": "200"
+                  }
+                },
+                {
+                  "range": {
+                    "@timestamp": {
+                      "from": "now-5m",
+                      "to": "now"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "condition": {
+    "compare": {
+      "ctx.payload.hits.total": {
+        "gt": 0
+      }
+    }
+  },
+  "actions": {
+    "process-alert": {
+      "webhook": {
+        "scheme": "https",
+        "host": "us-central1-delke-prd.cloudfunctions.net",
+        "port": 443,
+        "method": "post",
+        "path": "/delke-prd-slack-notification",
+        "params": {
+          "action": "alert"
+        },
+        "headers": {
+          "content-type": "application/json",
+          "accept": "application/json,*/*"
+        },
+        "body": "{{#toJson}}ctx{{/toJson}}"
+      }
+    }
+  },
+  "metadata": {
+    "output": {
+      "actor": "{{json.username}}",
+      "path": "{{json.path}}",
+      "timestamp": "{{json.time}}"
+    },
+    "info": {
+      "name": "delke-gitlab-com.employment-automation-ci-cd-settings-accessed-api.json",
+      "description": "The employment automation project CI/CD variables have been accessed via the API",
+      "definition": "https://gitlab.com/gitlab-com/runbooks/-/tree/master/elastic/managed-objects/log_gprd/watches/delke-gitlab-com.employment-automation-ci-cd-settings-accessed-api.json",
+      "istest": false
+    }
+  }
+}
