@@ -6,6 +6,96 @@ groups:
   rules:
   - record: gitlab_component_ops:rate_1h
     labels:
+      component: auto_devops_completed_pipelines
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (environment, stage) (
+        rate(auto_devops_pipelines_completed_total{}[1h])
+      )
+  - record: gitlab_component_ops:rate
+    labels:
+      component: auto_devops_completed_pipelines
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (environment, stage) (
+        rate(auto_devops_pipelines_completed_total{}[1m])
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: auto_devops_completed_pipelines
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (environment, stage) (
+        rate(auto_devops_pipelines_completed_total{}[30m])
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: auto_devops_completed_pipelines
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (environment, stage) (
+        rate(auto_devops_pipelines_completed_total{}[5m])
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: auto_devops_completed_pipelines
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (environment, stage) (
+        rate(auto_devops_pipelines_completed_total{}[6h])
+      )
+  - record: gitlab_component_errors:rate_1h
+    labels:
+      component: auto_devops_completed_pipelines
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (environment, stage) (
+        rate(auto_devops_pipelines_completed_total{status=~"failed"}[1h])
+      )
+  - record: gitlab_component_errors:rate
+    labels:
+      component: auto_devops_completed_pipelines
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (environment, stage) (
+        rate(auto_devops_pipelines_completed_total{status=~"failed"}[1m])
+      )
+  - record: gitlab_component_errors:rate_30m
+    labels:
+      component: auto_devops_completed_pipelines
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (environment, stage) (
+        rate(auto_devops_pipelines_completed_total{status=~"failed"}[30m])
+      )
+  - record: gitlab_component_errors:rate_5m
+    labels:
+      component: auto_devops_completed_pipelines
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (environment, stage) (
+        rate(auto_devops_pipelines_completed_total{status=~"failed"}[5m])
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: auto_devops_completed_pipelines
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (environment, stage) (
+        rate(auto_devops_pipelines_completed_total{status=~"failed"}[6h])
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
       component: polling
       tier: runners
       type: ci-runners
