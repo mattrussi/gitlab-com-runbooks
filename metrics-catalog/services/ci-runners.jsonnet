@@ -63,6 +63,18 @@ local rateMetric = metricsCatalog.rateMetric;
         selector='job="shared-runners", failure_reason="runner_system_failure"'
       ),
     },
+
+    auto_devops_completed_pipelines: {
+      requestRate: rateMetric(
+        counter='auto_devops_pipelines_completed_total',
+        selector=''
+      ),
+
+      errorRate: rateMetric(
+        counter='auto_devops_pipelines_completed_total',
+        selector='status=~"failed"'
+      ),
+    },
   },
 
   saturationTypes: [
