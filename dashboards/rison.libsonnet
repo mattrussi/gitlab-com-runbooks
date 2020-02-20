@@ -42,5 +42,12 @@ local encodeUnknown(object) =
     std.assertEqual('', 'Unknown type');
 
 {
+  // Encode a JSON object in RISON format.
+  // More details of the RISON serialization format can be found at https://rison.io/
+  // and more helpful details are available at https://github.com/Nanonid/rison.
+  //
+  // Note that this rison encoder does not currently generate the smallest rison
+  // encoding possible, but it is sufficient for our purposes. As an example,
+  // strings and keys are unnecessarily wrapped in single quotes
   encode(object):: encodeUnknown(object),
 }

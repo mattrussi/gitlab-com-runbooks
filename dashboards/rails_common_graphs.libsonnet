@@ -9,16 +9,20 @@ local layout = import 'layout.libsonnet';
       serviceStage: serviceStage,
     };
 
+    local elasticFilters = [
+      elasticsearchLinks.matchFilter('json.type.keyword', serviceType),
+      elasticsearchLinks.matchFilter('json.stage.keyword', serviceStage),
+    ];
+
     local elasticRailsDataLink = {
-      url:
-        elasticsearchLinks.buildElasticDiscoverSearchQueryURL(
-          'rails',
-          [
-            elasticsearchLinks.matchFilter('json.type.keyword', serviceType),
-            elasticsearchLinks.matchFilter('json.stage.keyword', serviceStage),
-          ]
-        ),
+      url: elasticsearchLinks.buildElasticDiscoverSearchQueryURL('rails', elasticFilters),
       title: 'ElasticSearch: rails logs',
+      targetBlank: true,
+    };
+
+    local elasticRailsVisDataLink = {
+      url: elasticsearchLinks.buildElasticLineVizURL('rails', elasticFilters),
+      title: 'ElasticSearch: workhorse visualization',
       targetBlank: true,
     };
 
@@ -44,7 +48,8 @@ local layout = import 'layout.libsonnet';
         intervalFactor=1,
         logBase=10
       )
-      .addDataLink(elasticRailsDataLink),
+      .addDataLink(elasticRailsDataLink)
+      .addDataLink(elasticRailsVisDataLink),
       basic.timeseries(
         title='Rails Total Time',
         description='Seconds of Rails processing, per second',
@@ -62,7 +67,8 @@ local layout = import 'layout.libsonnet';
         format='s',
         legend_show=true,
       )
-      .addDataLink(elasticRailsDataLink),
+      .addDataLink(elasticRailsDataLink)
+      .addDataLink(elasticRailsVisDataLink),
       basic.timeseries(
         title='Rails Queue Time',
         description='Time spend waiting for a rails worker',
@@ -83,7 +89,8 @@ local layout = import 'layout.libsonnet';
         format='s',
         legend_show=true,
       )
-      .addDataLink(elasticRailsDataLink),
+      .addDataLink(elasticRailsDataLink)
+      .addDataLink(elasticRailsVisDataLink),
       basic.timeseries(
         title='Total SQL Time',
         description='Total seconds spent doing SQL processing, per second',
@@ -101,7 +108,8 @@ local layout = import 'layout.libsonnet';
         intervalFactor=5,
         legend_show=true,
       )
-      .addDataLink(elasticRailsDataLink),
+      .addDataLink(elasticRailsDataLink)
+      .addDataLink(elasticRailsVisDataLink),
       basic.timeseries(
         title='Cache Operations',
         description='Cache Operations per Second',
@@ -120,7 +128,8 @@ local layout = import 'layout.libsonnet';
         intervalFactor=10,  // High interval as we don't have a recording rule yet
         legend_show=true,
       )
-      .addDataLink(elasticRailsDataLink),
+      .addDataLink(elasticRailsDataLink)
+      .addDataLink(elasticRailsVisDataLink),
       basic.timeseries(
         title='gitlab-rails Process restarts',
         description='The number of times this process restarted in a given period, including children workers. Restarts are associated with poor client experience, so lower is better.',
@@ -141,7 +150,8 @@ local layout = import 'layout.libsonnet';
         interval='1m',
         intervalFactor=2,
       )
-      .addDataLink(elasticRailsDataLink),
+      .addDataLink(elasticRailsDataLink)
+      .addDataLink(elasticRailsVisDataLink),
       basic.queueLengthTimeseries(
         title='Database load balancer: average secondary connections per client',
         description='This graph shows the average number of secondary database connections\n        per process. A value of zero indicates that the secondary replicas are unreachable.',
@@ -160,7 +170,8 @@ local layout = import 'layout.libsonnet';
         interval='1m',
         intervalFactor=2,
       )
-      .addDataLink(elasticRailsDataLink),
+      .addDataLink(elasticRailsDataLink)
+      .addDataLink(elasticRailsVisDataLink),
     ], cols=2, rowHeight=10, startRow=startRow),
 
 }
