@@ -12,17 +12,20 @@ local row = grafana.row;
       serviceType: serviceType,
       serviceStage: serviceStage,
     };
+    local elasticFilters = [
+      elasticsearchLinks.matchFilter('json.type.keyword', serviceType),
+      elasticsearchLinks.matchFilter('json.stage.keyword', serviceStage),
+    ];
 
     local elasticWorkhorseDataLink = {
-      url:
-        elasticsearchLinks.buildElasticDiscoverSearchQueryURL(
-          'workhorse',
-          [
-            elasticsearchLinks.matchFilter('json.type.keyword', serviceType),
-            elasticsearchLinks.matchFilter('json.stage.keyword', serviceStage),
-          ]
-        ),
+      url: elasticsearchLinks.buildElasticDiscoverSearchQueryURL('workhorse', elasticFilters),
       title: 'ElasticSearch: workhorse logs',
+      targetBlank: true,
+    };
+
+    local elasticWorkhorseVisDataLink = {
+      url: elasticsearchLinks.buildElasticLineVizURL('workhorse', elasticFilters),
+      title: 'ElasticSearch: workhorse visualization',
       targetBlank: true,
     };
 
@@ -48,7 +51,8 @@ local row = grafana.row;
         intervalFactor=1,
         logBase=10
       )
-      .addDataLink(elasticWorkhorseDataLink),
+      .addDataLink(elasticWorkhorseDataLink)
+      .addDataLink(elasticWorkhorseVisDataLink),
       basic.latencyTimeseries(
         title='p90 Latency Estimate per Route',
         description='90th percentile Latency. Lower is better',
@@ -72,7 +76,8 @@ local row = grafana.row;
         intervalFactor=1,
         logBase=10
       )
-      .addDataLink(elasticWorkhorseDataLink),
+      .addDataLink(elasticWorkhorseDataLink)
+      .addDataLink(elasticWorkhorseVisDataLink),
       basic.latencyTimeseries(
         title='p50 Latency Estimate per Route',
         description='Median Latency. Lower is better',
@@ -96,7 +101,8 @@ local row = grafana.row;
         intervalFactor=1,
         logBase=10
       )
-      .addDataLink(elasticWorkhorseDataLink),
+      .addDataLink(elasticWorkhorseDataLink)
+      .addDataLink(elasticWorkhorseVisDataLink),
       basic.timeseries(
         title='Total Requests',
         description='Total Requests',
@@ -113,7 +119,8 @@ local row = grafana.row;
         interval='1m',
         intervalFactor=1,
       )
-      .addDataLink(elasticWorkhorseDataLink),
+      .addDataLink(elasticWorkhorseDataLink)
+      .addDataLink(elasticWorkhorseVisDataLink),
       basic.timeseries(
         title='Requests by Status Class',
         description='Requests by Status Class',
@@ -134,7 +141,8 @@ local row = grafana.row;
         interval='1m',
         intervalFactor=1,
       )
-      .addDataLink(elasticWorkhorseDataLink),
+      .addDataLink(elasticWorkhorseDataLink)
+      .addDataLink(elasticWorkhorseVisDataLink),
       basic.timeseries(
         title='Requests by Status Code',
         description='Requests by Status Code',
@@ -152,7 +160,8 @@ local row = grafana.row;
         intervalFactor=1,
         legend_show=false,
       )
-      .addDataLink(elasticWorkhorseDataLink),
+      .addDataLink(elasticWorkhorseDataLink)
+      .addDataLink(elasticWorkhorseVisDataLink),
       basic.timeseries(
         title='Requests by Route',
         description='Requests by Route',
@@ -173,7 +182,8 @@ local row = grafana.row;
         interval='1m',
         intervalFactor=1,
       )
-      .addDataLink(elasticWorkhorseDataLink),
+      .addDataLink(elasticWorkhorseDataLink)
+      .addDataLink(elasticWorkhorseVisDataLink),
     ], cols=2, rowHeight=10, startRow=startRow),
 
 }
