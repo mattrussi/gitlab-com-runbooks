@@ -27,7 +27,6 @@ This ensures that `$HOME/bin` is in your path and sets `$HELM_HOME`
 ```
 export PATH="$HOME/bin:$PATH"
 export HELM_HOME="$HOME/helm"
-alias k=kubectl
 ```
 
 ## Install k-ctl dependencies
