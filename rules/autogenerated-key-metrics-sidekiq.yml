@@ -12,13 +12,13 @@ groups:
     expr: |
       (
         sum by (environment, stage) (
-          rate(sidekiq_jobs_completion_seconds_bucket{latency_sensitive="yes", le="10"}[1m])
+          rate(sidekiq_jobs_completion_seconds_bucket{urgency="high", le="10"}[1m])
         )
       )
       /
       (
         sum by (environment, stage) (
-          rate(sidekiq_jobs_completion_seconds_bucket{latency_sensitive="yes", le="+Inf"}[1m])
+          rate(sidekiq_jobs_completion_seconds_bucket{urgency="high", le="+Inf"}[1m])
         ) > 0
       )
   - record: gitlab_component_apdex:weight:score
@@ -28,7 +28,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (environment, stage) (
-        rate(sidekiq_jobs_completion_seconds_bucket{latency_sensitive="yes", le="+Inf"}[1m])
+        rate(sidekiq_jobs_completion_seconds_bucket{urgency="high", le="+Inf"}[1m])
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -37,7 +37,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (environment, stage) (
-        rate(sidekiq_jobs_completion_seconds_bucket{latency_sensitive="yes",le="+Inf"}[1h])
+        rate(sidekiq_jobs_completion_seconds_bucket{urgency="high",le="+Inf"}[1h])
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -46,7 +46,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (environment, stage) (
-        rate(sidekiq_jobs_completion_seconds_bucket{latency_sensitive="yes",le="+Inf"}[1m])
+        rate(sidekiq_jobs_completion_seconds_bucket{urgency="high",le="+Inf"}[1m])
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -55,7 +55,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (environment, stage) (
-        rate(sidekiq_jobs_completion_seconds_bucket{latency_sensitive="yes",le="+Inf"}[30m])
+        rate(sidekiq_jobs_completion_seconds_bucket{urgency="high",le="+Inf"}[30m])
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -64,7 +64,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (environment, stage) (
-        rate(sidekiq_jobs_completion_seconds_bucket{latency_sensitive="yes",le="+Inf"}[5m])
+        rate(sidekiq_jobs_completion_seconds_bucket{urgency="high",le="+Inf"}[5m])
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -73,7 +73,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (environment, stage) (
-        rate(sidekiq_jobs_completion_seconds_bucket{latency_sensitive="yes",le="+Inf"}[6h])
+        rate(sidekiq_jobs_completion_seconds_bucket{urgency="high",le="+Inf"}[6h])
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -82,7 +82,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (environment, stage) (
-        rate(sidekiq_jobs_failed_total{latency_sensitive="yes"}[1h])
+        rate(sidekiq_jobs_failed_total{urgency="high"}[1h])
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -91,7 +91,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (environment, stage) (
-        rate(sidekiq_jobs_failed_total{latency_sensitive="yes"}[1m])
+        rate(sidekiq_jobs_failed_total{urgency="high"}[1m])
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -100,7 +100,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (environment, stage) (
-        rate(sidekiq_jobs_failed_total{latency_sensitive="yes"}[30m])
+        rate(sidekiq_jobs_failed_total{urgency="high"}[30m])
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -109,7 +109,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (environment, stage) (
-        rate(sidekiq_jobs_failed_total{latency_sensitive="yes"}[5m])
+        rate(sidekiq_jobs_failed_total{urgency="high"}[5m])
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -118,7 +118,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (environment, stage) (
-        rate(sidekiq_jobs_failed_total{latency_sensitive="yes"}[6h])
+        rate(sidekiq_jobs_failed_total{urgency="high"}[6h])
       )
   - record: gitlab_component_apdex:ratio
     labels:
@@ -128,13 +128,13 @@ groups:
     expr: |
       (
         sum by (environment, stage) (
-          rate(sidekiq_jobs_queue_duration_seconds_bucket{latency_sensitive="yes", le="10"}[1m])
+          rate(sidekiq_jobs_queue_duration_seconds_bucket{urgency="high", le="10"}[1m])
         )
       )
       /
       (
         sum by (environment, stage) (
-          rate(sidekiq_jobs_queue_duration_seconds_bucket{latency_sensitive="yes", le="+Inf"}[1m])
+          rate(sidekiq_jobs_queue_duration_seconds_bucket{urgency="high", le="+Inf"}[1m])
         ) > 0
       )
   - record: gitlab_component_apdex:weight:score
@@ -144,7 +144,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (environment, stage) (
-        rate(sidekiq_jobs_queue_duration_seconds_bucket{latency_sensitive="yes", le="+Inf"}[1m])
+        rate(sidekiq_jobs_queue_duration_seconds_bucket{urgency="high", le="+Inf"}[1m])
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -153,7 +153,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (environment, stage) (
-        rate(sidekiq_enqueued_jobs_total{latency_sensitive="yes"}[1h])
+        rate(sidekiq_enqueued_jobs_total{urgency="high"}[1h])
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -162,7 +162,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (environment, stage) (
-        rate(sidekiq_enqueued_jobs_total{latency_sensitive="yes"}[1m])
+        rate(sidekiq_enqueued_jobs_total{urgency="high"}[1m])
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -171,7 +171,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (environment, stage) (
-        rate(sidekiq_enqueued_jobs_total{latency_sensitive="yes"}[30m])
+        rate(sidekiq_enqueued_jobs_total{urgency="high"}[30m])
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -180,7 +180,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (environment, stage) (
-        rate(sidekiq_enqueued_jobs_total{latency_sensitive="yes"}[5m])
+        rate(sidekiq_enqueued_jobs_total{urgency="high"}[5m])
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -189,7 +189,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (environment, stage) (
-        rate(sidekiq_enqueued_jobs_total{latency_sensitive="yes"}[6h])
+        rate(sidekiq_enqueued_jobs_total{urgency="high"}[6h])
       )
   - record: gitlab_component_apdex:ratio
     labels:
@@ -199,13 +199,13 @@ groups:
     expr: |
       (
         sum by (environment, stage) (
-          rate(sidekiq_jobs_completion_seconds_bucket{latency_sensitive="no", le="300"}[1m])
+          rate(sidekiq_jobs_completion_seconds_bucket{urgency!="high", le="300"}[1m])
         )
       )
       /
       (
         sum by (environment, stage) (
-          rate(sidekiq_jobs_completion_seconds_bucket{latency_sensitive="no", le="+Inf"}[1m])
+          rate(sidekiq_jobs_completion_seconds_bucket{urgency!="high", le="+Inf"}[1m])
         ) > 0
       )
   - record: gitlab_component_apdex:weight:score
@@ -215,7 +215,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (environment, stage) (
-        rate(sidekiq_jobs_completion_seconds_bucket{latency_sensitive="no", le="+Inf"}[1m])
+        rate(sidekiq_jobs_completion_seconds_bucket{urgency!="high", le="+Inf"}[1m])
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -224,7 +224,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (environment, stage) (
-        rate(sidekiq_jobs_completion_seconds_bucket{latency_sensitive="no",le="+Inf"}[1h])
+        rate(sidekiq_jobs_completion_seconds_bucket{urgency!="high",le="+Inf"}[1h])
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -233,7 +233,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (environment, stage) (
-        rate(sidekiq_jobs_completion_seconds_bucket{latency_sensitive="no",le="+Inf"}[1m])
+        rate(sidekiq_jobs_completion_seconds_bucket{urgency!="high",le="+Inf"}[1m])
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -242,7 +242,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (environment, stage) (
-        rate(sidekiq_jobs_completion_seconds_bucket{latency_sensitive="no",le="+Inf"}[30m])
+        rate(sidekiq_jobs_completion_seconds_bucket{urgency!="high",le="+Inf"}[30m])
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -251,7 +251,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (environment, stage) (
-        rate(sidekiq_jobs_completion_seconds_bucket{latency_sensitive="no",le="+Inf"}[5m])
+        rate(sidekiq_jobs_completion_seconds_bucket{urgency!="high",le="+Inf"}[5m])
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -260,7 +260,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (environment, stage) (
-        rate(sidekiq_jobs_completion_seconds_bucket{latency_sensitive="no",le="+Inf"}[6h])
+        rate(sidekiq_jobs_completion_seconds_bucket{urgency!="high",le="+Inf"}[6h])
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -269,7 +269,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (environment, stage) (
-        rate(sidekiq_jobs_failed_total{latency_sensitive="no"}[1h])
+        rate(sidekiq_jobs_failed_total{urgency!="high"}[1h])
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -278,7 +278,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (environment, stage) (
-        rate(sidekiq_jobs_failed_total{latency_sensitive="no"}[1m])
+        rate(sidekiq_jobs_failed_total{urgency!="high"}[1m])
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -287,7 +287,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (environment, stage) (
-        rate(sidekiq_jobs_failed_total{latency_sensitive="no"}[30m])
+        rate(sidekiq_jobs_failed_total{urgency!="high"}[30m])
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -296,7 +296,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (environment, stage) (
-        rate(sidekiq_jobs_failed_total{latency_sensitive="no"}[5m])
+        rate(sidekiq_jobs_failed_total{urgency!="high"}[5m])
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -305,7 +305,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (environment, stage) (
-        rate(sidekiq_jobs_failed_total{latency_sensitive="no"}[6h])
+        rate(sidekiq_jobs_failed_total{urgency!="high"}[6h])
       )
   - record: gitlab_component_apdex:ratio
     labels:
@@ -315,13 +315,13 @@ groups:
     expr: |
       (
         sum by (environment, stage) (
-          rate(sidekiq_jobs_queue_duration_seconds_bucket{latency_sensitive="no", le="60"}[1m])
+          rate(sidekiq_jobs_queue_duration_seconds_bucket{urgency!="high", le="60"}[1m])
         )
       )
       /
       (
         sum by (environment, stage) (
-          rate(sidekiq_jobs_queue_duration_seconds_bucket{latency_sensitive="no", le="+Inf"}[1m])
+          rate(sidekiq_jobs_queue_duration_seconds_bucket{urgency!="high", le="+Inf"}[1m])
         ) > 0
       )
   - record: gitlab_component_apdex:weight:score
@@ -331,7 +331,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (environment, stage) (
-        rate(sidekiq_jobs_queue_duration_seconds_bucket{latency_sensitive="no", le="+Inf"}[1m])
+        rate(sidekiq_jobs_queue_duration_seconds_bucket{urgency!="high", le="+Inf"}[1m])
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -340,7 +340,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (environment, stage) (
-        rate(sidekiq_enqueued_jobs_total{latency_sensitive="no"}[1h])
+        rate(sidekiq_enqueued_jobs_total{urgency!="high"}[1h])
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -349,7 +349,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (environment, stage) (
-        rate(sidekiq_enqueued_jobs_total{latency_sensitive="no"}[1m])
+        rate(sidekiq_enqueued_jobs_total{urgency!="high"}[1m])
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -358,7 +358,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (environment, stage) (
-        rate(sidekiq_enqueued_jobs_total{latency_sensitive="no"}[30m])
+        rate(sidekiq_enqueued_jobs_total{urgency!="high"}[30m])
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -367,7 +367,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (environment, stage) (
-        rate(sidekiq_enqueued_jobs_total{latency_sensitive="no"}[5m])
+        rate(sidekiq_enqueued_jobs_total{urgency!="high"}[5m])
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -376,7 +376,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (environment, stage) (
-        rate(sidekiq_enqueued_jobs_total{latency_sensitive="no"}[6h])
+        rate(sidekiq_enqueued_jobs_total{urgency!="high"}[6h])
       )
   - record: gitlab_component_apdex:ratio
     labels:

@@ -24,18 +24,18 @@ local sidekiqHelpers = import './lib/sidekiq-helpers.libsonnet';
     latency_sensitive_job_execution: {
       apdex: histogramApdex(
         histogram='sidekiq_jobs_completion_seconds_bucket',
-        selector='latency_sensitive="yes"',
+        selector='urgency="high"',
         satisfiedThreshold=sidekiqHelpers.slos.urgent.executionDurationSeconds,
       ),
 
       requestRate: rateMetric(
         counter='sidekiq_jobs_completion_seconds_bucket',
-        selector='latency_sensitive="yes",le="+Inf"'
+        selector='urgency="high",le="+Inf"'
       ),
 
       errorRate: rateMetric(
         counter='sidekiq_jobs_failed_total',
-        selector='latency_sensitive="yes"'
+        selector='urgency="high"'
       ),
 
       significantLabels: ['priority'],
@@ -44,13 +44,13 @@ local sidekiqHelpers = import './lib/sidekiq-helpers.libsonnet';
     latency_sensitive_job_queueing: {
       apdex: histogramApdex(
         histogram='sidekiq_jobs_queue_duration_seconds_bucket',
-        selector='latency_sensitive="yes"',
+        selector='urgency="high"',
         satisfiedThreshold=sidekiqHelpers.slos.urgent.queueingDurationSeconds,
       ),
 
       requestRate: rateMetric(
         counter='sidekiq_enqueued_jobs_total',
-        selector='latency_sensitive="yes"'
+        selector='urgency="high"'
       ),
 
       significantLabels: ['priority'],
@@ -59,18 +59,18 @@ local sidekiqHelpers = import './lib/sidekiq-helpers.libsonnet';
     non_latency_sensitive_job_execution: {
       apdex: histogramApdex(
         histogram='sidekiq_jobs_completion_seconds_bucket',
-        selector='latency_sensitive="no"',
+        selector='urgency!="high"',
         satisfiedThreshold=sidekiqHelpers.slos.nonUrgent.executionDurationSeconds,
       ),
 
       requestRate: rateMetric(
         counter='sidekiq_jobs_completion_seconds_bucket',
-        selector='latency_sensitive="no",le="+Inf"'
+        selector='urgency!="high",le="+Inf"'
       ),
 
       errorRate: rateMetric(
         counter='sidekiq_jobs_failed_total',
-        selector='latency_sensitive="no"'
+        selector='urgency!="high"'
       ),
 
       significantLabels: ['priority'],
@@ -79,13 +79,13 @@ local sidekiqHelpers = import './lib/sidekiq-helpers.libsonnet';
     non_latency_sensitive_job_queueing: {
       apdex: histogramApdex(
         histogram='sidekiq_jobs_queue_duration_seconds_bucket',
-        selector='latency_sensitive="no"',
+        selector='urgency!="high"',
         satisfiedThreshold=sidekiqHelpers.slos.nonUrgent.queueingDurationSeconds,
       ),
 
       requestRate: rateMetric(
         counter='sidekiq_enqueued_jobs_total',
-        selector='latency_sensitive="no"'
+        selector='urgency!="high"'
       ),
 
       significantLabels: ['priority'],
