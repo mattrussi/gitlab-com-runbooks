@@ -1,5 +1,18 @@
 local selectors = import './selectors.libsonnet';
 
+// Pre-recording rules to make dashboards and apdex faster.
+local generateHistogramBucketRatesQuery(histogramApdex, aggregationLabels, additionalSelectors, duration) =
+  local selector = selectors.join([histogramApdex.selector, additionalSelectors]);
+  |||
+    sum without (fqdn,instance) (
+      rate(%(histogram)s{%(selector)s}[%(duration)s])
+    )
+  ||| % {
+    aggregationLabels: aggregationLabels,
+    selector: selector,
+    duration: duration,
+  };
+
 local chomp(str) = std.rstripChars(str, '\n');
 local removeBlankLines(str) = std.strReplace(str, '\n\n', '\n');
 
@@ -117,6 +130,10 @@ local generateApdexComponentQuery(histogramApdex, aggregationLabels, additionalS
     selector: selector,
     satisfiedThreshold: satisfiedThreshold,
     toleratedThreshold: toleratedThreshold,
+    bucketQuery(aggregationLabels, selector, rangeInterval)::
+      local s = self;
+      generateHistogramBucketRatesQuery(s, aggregationLabels, selector, rangeInterval),
+
     apdexQuery(aggregationLabels, selector, rangeInterval)::
       local s = self;
       generateApdexScoreQuery(s, aggregationLabels, selector, rangeInterval),

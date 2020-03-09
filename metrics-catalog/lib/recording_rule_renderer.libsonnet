@@ -70,6 +70,14 @@ local generateApdexRules(aggregationLabels, componentDefinition, recordingRuleSt
     local rangeIntervals = std.filter(function(rangeInterval) std.objectHas(recordingRuleNames[rangeInterval], 'apdexRatio'), std.objectFields(recordingRuleNames));
 
     [
+      recordingRules.bucket(
+        name=recordingRuleNames[rangeInterval].apdexRatio,
+        labels=recordingRuleStaticLabels,
+        expr=componentDefinition.apdex.bucketQuery(aggregationLabels, selector='', rangeInterval=rangeInterval)
+      )
+      for rangeInterval in rangeIntervals
+    ] +
+    [
       recordingRules.apdex(
         name=recordingRuleNames[rangeInterval].apdexRatio,
         labels=recordingRuleStaticLabels,
