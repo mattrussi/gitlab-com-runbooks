@@ -29,7 +29,7 @@ groups:
           title: HPA unable to scale up
           description: '{{$labels.hpa}} has hit the maximum number of desired Pods'
           runbook: troubleshooting/kubernetes.md#hpascalecapability
-        expr: kube_hpa_status_desired_replicas >= kube_hpa_spec_max_replicas
+        expr: kube_hpa_status_desired_replicas > kube_hpa_spec_max_replicas
         for: 30m
         labels:
           pager: pagerduty
