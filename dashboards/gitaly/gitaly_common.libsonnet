@@ -3,15 +3,12 @@ local grafana = import 'grafonnet/grafana.libsonnet';
 local promQuery = import 'prom_query.libsonnet';
 local seriesOverrides = import 'series_overrides.libsonnet';
 local graphPanel = grafana.graphPanel;
-local magicNumbers = (import 'magic_numbers.libsonnet').magicNumbers;
 
 local GITALY_DISK = 'sdb';
 
 local selector = 'environment="$environment", fqdn="$fqdn"';
 
 local gitalyConfig = {
-  GITALY_PEAK_WRITE_THROUGHPUT_BYTES_PER_SECOND: magicNumbers.gitaly_disk_sustained_write_throughput_bytes_maximum_magic_number,
-  GITALY_PEAK_READ_THROUGHPUT_BYTES_PER_SECOND: magicNumbers.gitaly_disk_sustained_read_throughput_bytes_maximum_magic_number,
   GITALY_DISK: GITALY_DISK,
 };
 
@@ -52,7 +49,11 @@ local readThroughput(selector) = basic.saturationTimeseries(
   query=|||
     avg_over_time(
       max_over_time(
-        rate(node_disk_read_bytes_total{%(selector)s, device="%(GITALY_DISK)s"}[30s]) / (%(GITALY_PEAK_READ_THROUGHPUT_BYTES_PER_SECOND)s)[5m:30s]
+        (
+          rate(node_disk_read_bytes_total{%(selector)s, device="%(GITALY_DISK)s"}[30s])
+            /
+          node_disk_max_read_bytes_seconds{%(selector)s, device="%(GITALY_DISK)s"}
+        )[5m:30s]
       )[$__interval:1m]
     )
   ||| % (gitalyConfig { selector: selector }),
@@ -70,8 +71,12 @@ local writeThroughput(selector) =
     query=|||
       avg_over_time(
         max_over_time(
-          rate(node_disk_written_bytes_total{%(selector)s, device="%(GITALY_DISK)s"}[30s]) / (%(GITALY_PEAK_WRITE_THROUGHPUT_BYTES_PER_SECOND)s)[5m:30s]
-       )[$__interval:1m]
+          (
+            rate(node_disk_written_bytes_total{%(selector)s, device="%(GITALY_DISK)s"}[30s])
+              /
+            node_disk_max_write_bytes_seconds{%(selector)s, device="%(GITALY_DISK)s"}
+          )[5m:30s]
+        )[$__interval:1m]
       )
     ||| % (gitalyConfig { selector: selector }),
     legendFormat='{{ fqdn }}',

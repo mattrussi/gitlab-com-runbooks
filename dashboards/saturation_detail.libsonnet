@@ -12,7 +12,6 @@ local template = grafana.template;
 local graphPanel = grafana.graphPanel;
 local annotation = grafana.annotation;
 local layout = import 'layout.libsonnet';
-local magicNumbers = import 'magic_numbers.libsonnet';
 local text = grafana.text;
 
 local DETAILS = {
@@ -158,12 +157,10 @@ local DETAILS = {
       Disk sustained read IOPS saturation per node.
     |||,
     query: |||
-      rate(node_disk_reads_completed_total{type="gitaly", device="sdb", %(selector)s}[$__interval]) / (%(gitaly_disk_sustained_read_iops_maximum_magic_number)d)
-      or
-      rate(node_disk_reads_completed_total{type="nfs", device="sdb", %(selector)s}[$__interval]) / (%(nfs_disk_sustained_read_iops_maximum_magic_number)d)
-      or
-      rate(node_disk_reads_completed_total{type="patroni", device="sdb", %(selector)s}[$__interval]) / (%(patroni_disk_sustained_read_iops_maximum_magic_number)d)
-    |||,  // Note, this rate is specific to the specific nodes, hence the hardcoded type here
+      rate(node_disk_reads_completed_total{device="sdb", %(selector)s}[$__interval])
+        /
+      node_disk_max_read_iops{device="sdb", %(selector)s}
+    |||,
     legendFormat: '{{ fqdn }}',
   },
 
@@ -173,12 +170,10 @@ local DETAILS = {
       Disk sustained read throughput saturation per node.
     |||,
     query: |||
-      rate(node_disk_read_bytes_total{type="gitaly", device="sdb", %(selector)s}[$__interval]) / (%(gitaly_disk_sustained_read_throughput_bytes_maximum_magic_number)d)
-      or
-      rate(node_disk_read_bytes_total{type="nfs", device="sdb", %(selector)s}[$__interval]) / (%(nfs_disk_sustained_read_throughput_bytes_maximum_magic_number)d)
-      or
-      rate(node_disk_read_bytes_total{type="patroni", device="sdb", %(selector)s}[$__interval]) / (%(patroni_disk_sustained_read_throughput_bytes_maximum_magic_number)d)
-    |||,  // Note, this rate is specific to the specific nodes, hence the hardcoded type here
+      rate(node_disk_read_bytes_total{device="sdb", %(selector)s}[$__interval])
+        /
+      node_disk_max_read_bytes_seconds{device="sdb", %(selector)s}
+    |||,
     legendFormat: '{{ fqdn }}',
   },
 
@@ -227,12 +222,10 @@ local DETAILS = {
       https://cloud.google.com/compute/docs/disks/performance.
     |||,
     query: |||
-      rate(node_disk_writes_completed_total{type="gitaly", device="sdb", %(selector)s}[$__interval]) / (%(gitaly_disk_sustained_write_iops_maximum_magic_number)d)
-      or
-      rate(node_disk_writes_completed_total{type="nfs", device="sdb", %(selector)s}[$__interval]) / (%(nfs_disk_sustained_write_iops_maximum_magic_number)d)
-      or
-      rate(node_disk_writes_completed_total{type="patroni", device="sdb", %(selector)s}[$__interval]) / (%(patroni_disk_sustained_write_iops_maximum_magic_number)d)
-    |||,  // Note, this rate is specific to the specific nodes, hence the hardcoded type here
+      rate(node_disk_writes_completed_total{device="sdb", %(selector)s}[$__interval])
+        /
+      node_disk_max_write_iops{device="sdb", %(selector)s}
+    |||,
     legendFormat: '{{ fqdn }}',
   },
 
@@ -249,12 +242,10 @@ local DETAILS = {
       https://cloud.google.com/compute/docs/disks/performance.
     |||,
     query: |||
-      rate(node_disk_written_bytes_total{type="gitaly", device="sdb", %(selector)s}[$__interval]) / (%(gitaly_disk_sustained_write_throughput_bytes_maximum_magic_number)d)
-      or
-      rate(node_disk_written_bytes_total{type="nfs", device="sdb", %(selector)s}[$__interval]) / (%(nfs_disk_sustained_write_throughput_bytes_maximum_magic_number)d)
-      or
-      rate(node_disk_written_bytes_total{type="patroni", device="sdb", %(selector)s}[$__interval]) / (%(patroni_disk_sustained_write_throughput_bytes_maximum_magic_number)d)
-    |||,  // Note, this rate is specific to the specific nodes, hence the hardcoded type here
+      rate(node_disk_written_bytes_total{device="sdb", %(selector)s}[$__interval])
+        /
+      node_disk_max_write_bytes_seconds{device="sdb", %(selector)s}
+    |||,
     legendFormat: '{{ fqdn }}',
   },
 
@@ -565,7 +556,7 @@ local DETAILS = {
     local formatConfig = {
       component: component,
       query: query,
-    } + magicNumbers.magicNumbers;
+    };
     graphPanel.new(
       title,
       description,
@@ -631,7 +622,7 @@ local DETAILS = {
     local formatConfig = {
       component: component,
       selector: selector,
-    } + magicNumbers.magicNumbers;
+    };
     local componentDetails = DETAILS[component];
     local query = componentDetails.query % formatConfig;
 
