@@ -18,6 +18,7 @@
     - [Triggering indexing](#triggering-indexing)
         - [Impact on gitlab](#impact-on-gitlab)
         - [Impact on Elastic cluster](#impact-on-elastic-cluster)
+    - [Re-indexing the ES index to another cluster](#reindexing-the-es-index-to-another-cluster)
 - [Concepts](#concepts)
     - [ES integration docs & video](#es-integration-docs-&-video)
     - [Indexer](#indexer)
@@ -134,6 +135,10 @@ Gitaly impact -> should be controlled with sidekiq concurency
 ### Impact on Elastic cluster ###
 
 Estimate number of requests -> measure impact on Elastic
+
+## Reindexing the ES index to another cluster ##
+
+See [Reindexing everything steps](global-search/reindexing-everything.md)
 
 # Concepts
 
