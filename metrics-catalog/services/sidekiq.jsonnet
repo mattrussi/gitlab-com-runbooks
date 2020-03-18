@@ -24,7 +24,7 @@ local sidekiqHelpers = import './lib/sidekiq-helpers.libsonnet';
     high_urgency_job_execution: {
       apdex: histogramApdex(
         histogram='sidekiq_jobs_completion_seconds_bucket',
-        selector='urgency="high"',
+        selector='urgency="higher"',
         satisfiedThreshold=sidekiqHelpers.slos.urgent.executionDurationSeconds,
       ),
 
