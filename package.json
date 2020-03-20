@@ -1,0 +1,21 @@
+{
+  "name": "gitlab-com-engineering",
+  "version": "1.0.0",
+  "description": "GitLab.com Engineering Static Site",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@vuepress/plugin-blog": "^1.9.2",
+    "mermaid": "^8.4.5",
+    "vuepress": "^1.2.0",
+    "vuepress-bar": "^0.2.3"
+  },
+  "scripts": {
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs"
+  },
+  "dependencies": {
+    "markdown-it-mermaid": "^0.2.5",
+    "markdown-it-task-lists": "^2.1.1"
+  }
+}
