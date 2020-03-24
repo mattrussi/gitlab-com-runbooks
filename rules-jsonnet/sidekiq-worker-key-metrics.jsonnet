@@ -88,6 +88,8 @@ local sidekiqSLOAlert(alertname, expr, grafanaPanelId, metricName, alertDescript
       grafana_variables: 'environment,stage,queue',
       grafana_min_zoom_hours: '6',
       promql_template_1: '%s{environment="$environment", type="$type", stage="$stage", component="$component"}' % [metricName],
+      link1_title: 'Search Issues for this Queue', // Slackline link
+      link1_url: 'https://gitlab.com/groups/gitlab-com/gl-infra/-/issues?label_name[]=Service%3A%3ASidekiq&search={{ $labels.queue }}'
     },
   };
 
@@ -221,6 +223,8 @@ local generateAlerts() =
         grafana_variables: 'environment,stage,queue',
         grafana_min_zoom_hours: '6',
         promql_template_1: 'sidekiq_enqueued_jobs_total{environment="$environment", type="$type", stage="$stage", component="$component"}',
+        link1_title: 'Search Issues for this Queue', // Slackline link
+        link1_url: 'https://gitlab.com/groups/gitlab-com/gl-infra/-/issues?label_name[]=Service%3A%3ASidekiq&search={{ $labels.queue }}'
       },
     },
   ];
