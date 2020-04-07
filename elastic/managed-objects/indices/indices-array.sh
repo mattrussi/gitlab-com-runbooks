@@ -19,6 +19,7 @@ export indices=(
   rails
   redis
   registry
+  release
   runner
   shell
   sidekiq
