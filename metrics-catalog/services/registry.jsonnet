@@ -6,8 +6,12 @@ local rateMetric = metricsCatalog.rateMetric;
   type: 'registry',
   tier: 'sv',
   monitoringThresholds: {
-    apdexRatio: 0.9,
-    errorRatio: 0.005,
+    apdexRatio: 0.995,
+    errorRatio: 0.001,
+  },
+  eventBasedSLOTargets: {
+    apdexScore: 0.995,
+    errorRatio: 0.999,
   },
   serviceDependencies: {
     api: true,
