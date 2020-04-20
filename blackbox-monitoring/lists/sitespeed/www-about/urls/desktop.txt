@@ -1,0 +1,4 @@
+https://about.gitlab.com/
+https://about.gitlab.com/company/team/
+https://about.gitlab.com/handbook/
+https://about.gitlab.com/stages-devops-lifecycle/
