@@ -110,21 +110,13 @@ local generalGraphPanel(title, description=null, linewidth=2, sort='increasing',
     )
     .addTarget(  // Primary metric
       promQuery.target(
-        |||
-          min(
-            min_over_time(
-              gitlab_component_apdex:ratio{environment="$environment", type="%(serviceType)s", stage="%(serviceStage)s", component="%(component)s"}[$__interval]
-            )
-          ) by (component)
-        ||| % formatConfig,
+        sliPromQL.apdex.singleComponentApdexQuery('$environment', serviceType, serviceStage, component, '$__interval'),
         legendFormat='{{ component }} apdex',
       )
     )
     .addTarget(  // Min apdex score SLO for gitlab_service_errors:ratio metric
       promQuery.target(
-        |||
-          avg(slo:min:gitlab_service_apdex:ratio{environment="$environment", type="%(serviceType)s", stage="%(serviceStage)s"}) or avg(slo:min:gitlab_service_apdex:ratio{type="%(serviceType)s"})
-        ||| % formatConfig,
+        sliPromQL.apdex.serviceApdexDegradationSLOQuery('$environment', serviceType, serviceStage),
         interval='5m',
         legendFormat='SLO',
       ),
@@ -155,21 +147,13 @@ local generalGraphPanel(title, description=null, linewidth=2, sort='increasing',
     )
     .addTarget(  // Primary metric
       promQuery.target(
-        |||
-          min(
-            min_over_time(
-              gitlab_component_apdex:ratio{environment="$environment", type="%(serviceType)s", stage="%(serviceStage)s"}[$__interval]
-            )
-          ) by (component)
-        ||| % formatConfig,
+        sliPromQL.apdex.componentApdexQuery('$environment', serviceType, serviceStage, '$__interval'),
         legendFormat='{{ component }} component',
       )
     )
     .addTarget(  // Min apdex score SLO for gitlab_service_errors:ratio metric
       promQuery.target(
-        |||
-          avg(slo:min:gitlab_service_apdex:ratio{environment="$environment", type="%(serviceType)s", stage="%(serviceStage)s"}) or avg(slo:min:gitlab_service_apdex:ratio{type="%(serviceType)s"})
-        ||| % formatConfig,
+        sliPromQL.apdex.serviceApdexDegradationSLOQuery('$environment', serviceType, serviceStage),
         interval='5m',
         legendFormat='SLO',
       ),
