@@ -1,0 +1,21 @@
+#!/usr/bin/env sh
+
+set -exuo
+
+#######################
+# .gitlab-ci.yml jobs #
+#######################
+
+make verify
+
+bundle exec ./bin/create_kubernetes_rules.rb --create --validate
+
+bundle exec rubocop
+
+bundle exec rspec
+
+#make test
+docker run --name runbooks_make-test -v /home/mwasilewski-gitlab/workspace/com/gitlab-com/runbooks/:/tmp/runbooks registry.gitlab.com/gitlab-com/runbooks /bin/sh -c "cd /tmp/runbooks && make test" && docker rm runbooks_make-test
+
+#make generate
+docker run --name runbooks_make-generate -v /home/mwasilewski-gitlab/workspace/com/gitlab-com/runbooks/:/tmp/runbooks registry.gitlab.com/gitlab-com/runbooks/runtools_build:latest "cd /tmp/runbooks && make generate && git diff --exit-code || (echo 'Please run make generate' && exit 1)" && docker rm runbooks_make-generate
