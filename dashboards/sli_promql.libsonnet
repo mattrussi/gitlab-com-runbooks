@@ -55,17 +55,17 @@
         range: range,
       },
 
-      componentApdexQuery(environment, type, stage, range)::
-        |||
-          min by (component) (min_over_time(gitlab_component_apdex:ratio{environment="%(environment)s", type="%(type)s", stage="%(stage)s", monitor="", env="%(environment)s"}[%(range)s]))
-          or
-          min by (component) (gitlab_component_apdex:ratio{environment="%(environment)s", type="%(type)s", stage="%(stage)s", monitor!=""})
-        ||| % {
-          environment: environment,
-          type: type,
-          stage: stage,
-          range: range,
-        },
+    componentApdexQuery(environment, type, stage, range)::
+      |||
+        min by (component) (min_over_time(gitlab_component_apdex:ratio{environment="%(environment)s", type="%(type)s", stage="%(stage)s", monitor="", env="%(environment)s"}[%(range)s]))
+        or
+        min by (component) (gitlab_component_apdex:ratio{environment="%(environment)s", type="%(type)s", stage="%(stage)s", monitor!=""})
+      ||| % {
+        environment: environment,
+        type: type,
+        stage: stage,
+        range: range,
+      },
   },
 
   opsRate:: {
