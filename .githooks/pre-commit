@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-set -exuo
+set -euo pipefail
 
 #######################
 # .gitlab-ci.yml jobs #
