@@ -909,6 +909,7 @@ module Storage
       command = format(options[:project_selector_command], **fields)
       command = command.concat(" --staging") if options[:env] == :staging
       command = command.concat(" --limit=#{options[:limit]}") if options[:limit].positive?
+      command = command.concat(" --skip=#{options[:excluded_projects].join(',')}") unless options[:excluded_projects].empty?
       result = execute_remote_command(hostname, command)
       return [] if result.nil? || result.empty?
 
@@ -970,7 +971,7 @@ module Storage
         options[:limit] = 1
         log.info 'Option --move-amount not specified, will only move 1 project...'
       else
-        log.info "Will move at least #{move_amount_bytes.to_filesize} worth of data"
+        log.info "Will move at least #{to_filesize(move_amount_bytes)} worth of data"
       end
 
       total_bytes_moved = move_projects
