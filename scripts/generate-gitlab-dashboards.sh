@@ -13,8 +13,9 @@ ruby -rjson -ryaml -e "puts YAML.load(ARGF.read).to_json" "${SCRIPT_DIR}/../serv
 output_dashboard_files="$(jsonnet -J "${SCRIPT_DIR}/../services" --string --multi "${SCRIPT_DIR}/../.gitlab/dashboards" "${SCRIPT_DIR}/../metrics-catalog/gitlab-dashboards.jsonnet")"
 output_triage_files="$(jsonnet -J "${SCRIPT_DIR}/../services" --string --multi "${SCRIPT_DIR}/../.gitlab/dashboards" "${SCRIPT_DIR}/../metrics-catalog/gitlab-triage-dashboards.jsonnet")"
 output_sla_file="$(jsonnet -J "${SCRIPT_DIR}/../services" --string --multi "${SCRIPT_DIR}/../.gitlab/dashboards" "${SCRIPT_DIR}/../metrics-catalog/gitlab-slas-dashboard.jsonnet")"
+output_marquee_customer_file="$(jsonnet --string --multi "${SCRIPT_DIR}/../.gitlab/dashboards" "${SCRIPT_DIR}/../metrics-catalog/gitlab-marquee-customer-dashboard.jsonnet")"
 
-if [[ -z "${output_dashboard_files}" ]] && [[ -z "${output_triage_files}" ]] && [[ -z "${output_sla_file}" ]]; then
+if [[ -z "${output_dashboard_files}" ]] && [[ -z "${output_triage_files}" ]] && [[ -z "${output_sla_file}" ]] && [[ -z "${output_marquee_customer_file}" ]]; then
   echo "No output files"
   exit 1
 fi
@@ -47,6 +48,18 @@ for i in ${output_triage_files}; do
 done
 
 for i in ${output_sla_file}; do
+  mv "${i}" "${i}.tmp"
+
+  (
+    echo "$warning"
+    "${SCRIPT_DIR}"/fix-prom-rules.rb "${i}.tmp"
+  ) >"${i}"
+
+  rm "${i}.tmp"
+  echo "${i}"
+done
+
+for i in ${output_marquee_customer_file}; do
   mv "${i}" "${i}.tmp"
 
   (
