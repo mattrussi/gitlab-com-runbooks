@@ -10,7 +10,8 @@ panel_groups:
     - id: single-stat-weighted-availability
       label: Weighted Availability Score - GitLab.com
       query: >-
-        avg(clamp_max(avg_over_time(sla:gitlab:ratio{environment="$environment", stage="main", monitor=~"global|"}[$(range)s]),1))
+        avg(clamp_max(avg_over_time(sla:gitlab:ratio{env=~"ops|gprd", environment="$environment", stage="main",
+        monitor=~"global|"}[$(range)s]),1))
       unit: "%"
     type: single-stat
   - title: Overall SLA over time period - gitlab.com
@@ -18,7 +19,8 @@ panel_groups:
     - id: line-chart-overall-sla-time-period
       label: gitlab.com SLA
       query_range: >-
-        avg(clamp_max(avg_over_time(sla:gitlab:ratio{environment="$environment", stage="main", monitor=~"global|"}[1d]),1))
+        avg(clamp_max(avg_over_time(sla:gitlab:ratio{env=~"ops|gprd", environment="$environment", stage="main",
+        monitor=~"global|"}[1d]),1))
       step: 86400
       unit: "%"
     type: line-chart
@@ -32,7 +34,8 @@ panel_groups:
     metrics:
     - id: single-stat-sla-trend-api
       label: Primary Services Average Availability for Period - api
-      query: avg(avg_over_time(slo_observation_status{environment="gprd", stage="main", type="api"}[7d]))
+      query: >-
+        avg(avg_over_time(slo_observation_status{env=~"ops|gprd", environment="gprd", stage="main", type="api"}[7d]))
       unit: "%"
     type: single-stat
   - title: Primary Services Average Availability for Period - ci-runners
@@ -40,7 +43,8 @@ panel_groups:
     metrics:
     - id: single-stat-sla-trend-ci-runners
       label: Primary Services Average Availability for Period - ci-runners
-      query: avg(avg_over_time(slo_observation_status{environment="gprd", stage="main", type="ci-runners"}[7d]))
+      query: >-
+        avg(avg_over_time(slo_observation_status{env=~"ops|gprd", environment="gprd", stage="main", type="ci-runners"}[7d]))
       unit: "%"
     type: single-stat
   - title: Primary Services Average Availability for Period - git
@@ -48,7 +52,8 @@ panel_groups:
     metrics:
     - id: single-stat-sla-trend-git
       label: Primary Services Average Availability for Period - git
-      query: avg(avg_over_time(slo_observation_status{environment="gprd", stage="main", type="git"}[7d]))
+      query: >-
+        avg(avg_over_time(slo_observation_status{env=~"ops|gprd", environment="gprd", stage="main", type="git"}[7d]))
       unit: "%"
     type: single-stat
   - title: Primary Services Average Availability for Period - registry
@@ -56,7 +61,8 @@ panel_groups:
     metrics:
     - id: single-stat-sla-trend-registry
       label: Primary Services Average Availability for Period - registry
-      query: avg(avg_over_time(slo_observation_status{environment="gprd", stage="main", type="registry"}[7d]))
+      query: >-
+        avg(avg_over_time(slo_observation_status{env=~"ops|gprd", environment="gprd", stage="main", type="registry"}[7d]))
       unit: "%"
     type: single-stat
   - title: Primary Services Average Availability for Period - sidekiq
@@ -64,7 +70,8 @@ panel_groups:
     metrics:
     - id: single-stat-sla-trend-sidekiq
       label: Primary Services Average Availability for Period - sidekiq
-      query: avg(avg_over_time(slo_observation_status{environment="gprd", stage="main", type="sidekiq"}[7d]))
+      query: >-
+        avg(avg_over_time(slo_observation_status{env=~"ops|gprd", environment="gprd", stage="main", type="sidekiq"}[7d]))
       unit: "%"
     type: single-stat
   - title: Primary Services Average Availability for Period - web
@@ -72,7 +79,8 @@ panel_groups:
     metrics:
     - id: single-stat-sla-trend-web
       label: Primary Services Average Availability for Period - web
-      query: avg(avg_over_time(slo_observation_status{environment="gprd", stage="main", type="web"}[7d]))
+      query: >-
+        avg(avg_over_time(slo_observation_status{env=~"ops|gprd", environment="gprd", stage="main", type="web"}[7d]))
       unit: "%"
     type: single-stat
   - title: SLA Trends - Primary Services
@@ -80,8 +88,8 @@ panel_groups:
     - id: line-chart-sla-trends-primary-services
       label: "{{type}}"
       query_range: >-
-        clamp_min(clamp_max(avg(avg_over_time(slo_observation_status{environment="gprd", stage="main",
-        type=~"api|ci-runners|git|registry|sidekiq|web"}[1d])) by (type),1),0)
+        clamp_min(clamp_max(avg(avg_over_time(slo_observation_status{env=~"ops|gprd", environment="gprd",
+        stage="main", type=~"api|ci-runners|git|registry|sidekiq|web"}[1d])) by (type),1),0)
       step: 86400
       unit: "%"
     type: line-chart

@@ -23,7 +23,7 @@ local slaDashboard =
             metrics: [
               {
                 id: 'single-stat-weighted-availability',
-                query: 'avg(clamp_max(avg_over_time(sla:gitlab:ratio{environment="$environment", stage="main", monitor=~"global|"}[$(range)s]),1))' % {
+                query: 'avg(clamp_max(avg_over_time(sla:gitlab:ratio{env=~"ops|gprd", environment="$environment", stage="main", monitor=~"global|"}[$(range)s]),1))' % {
                   range: range,
                 },
                 unit: '%',
@@ -41,7 +41,7 @@ local slaDashboard =
             metrics: [
               {
                 id: 'line-chart-overall-sla-time-period',
-                query_range: 'avg(clamp_max(avg_over_time(sla:gitlab:ratio{environment="$environment", stage="main", monitor=~"global|"}[1d]),1))',
+                query_range: 'avg(clamp_max(avg_over_time(sla:gitlab:ratio{env=~"ops|gprd", environment="$environment", stage="main", monitor=~"global|"}[1d]),1))',
                 unit: '%',
                 label: 'gitlab.com SLA',
                 step: 86400,
@@ -52,49 +52,50 @@ local slaDashboard =
       },
       {
         group: 'SLA Trends - Per primary service',
-        panels: [
-                  {
-                    title: 'Primary Services Average Availability for Period - %(type)s' % { type: type },
-                    type: 'single-stat',
-                    max_value: 1,
-                    metrics: [
-                      {
-                        id: 'single-stat-sla-trend-%(type)s' % {
-                          type: type,
-                        },
-                        query: 'avg(avg_over_time(slo_observation_status{environment="gprd", stage="main", type="%(type)s"}[%(range)s]))' % {
-                          type: type,
-                          range: range,
-                        },
-                        unit: '%',
-                        label: 'Primary Services Average Availability for Period - %(type)s' % { type: type },
-                      },
-                    ],
-                  }
-                  for type in keyServiceNames
-                ]
-                +
-                [
-                  {
-                    title: 'SLA Trends - Primary Services',
-                    type: 'line-chart',
-                    y_axis: {
-                      name: 'SLA',
-                      format: 'percent',
-                    },
-                    metrics: [
-                      {
-                        id: 'line-chart-sla-trends-primary-services',
-                        query_range: 'clamp_min(clamp_max(avg(avg_over_time(slo_observation_status{environment="gprd", stage="main", type=~"%(keyServiceRegExp)s"}[1d])) by (type),1),0)' % {
-                          keyServiceRegExp: keyServiceRegExp,
-                        },
-                        unit: '%',
-                        label: '{{type}}',
-                        step: 86400,
-                      },
-                    ],
+        panels:
+          [
+            {
+              title: 'Primary Services Average Availability for Period - %(type)s' % { type: type },
+              type: 'single-stat',
+              max_value: 1,
+              metrics: [
+                {
+                  id: 'single-stat-sla-trend-%(type)s' % {
+                    type: type,
                   },
-                ],
+                  query: 'avg(avg_over_time(slo_observation_status{env=~"ops|gprd", environment="gprd", stage="main", type="%(type)s"}[%(range)s]))' % {
+                    type: type,
+                    range: range,
+                  },
+                  unit: '%',
+                  label: 'Primary Services Average Availability for Period - %(type)s' % { type: type },
+                },
+              ],
+            }
+            for type in keyServiceNames
+          ]
+          +
+          [
+            {
+              title: 'SLA Trends - Primary Services',
+              type: 'line-chart',
+              y_axis: {
+                name: 'SLA',
+                format: 'percent',
+              },
+              metrics: [
+                {
+                  id: 'line-chart-sla-trends-primary-services',
+                  query_range: 'clamp_min(clamp_max(avg(avg_over_time(slo_observation_status{env=~"ops|gprd", environment="gprd", stage="main", type=~"%(keyServiceRegExp)s"}[1d])) by (type),1),0)' % {
+                    keyServiceRegExp: keyServiceRegExp,
+                  },
+                  unit: '%',
+                  label: '{{type}}',
+                  step: 86400,
+                },
+              ],
+            },
+          ],
       },
     ],
   };

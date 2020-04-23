@@ -79,7 +79,7 @@ basic.dashboard(
       avg(
         clamp_max(
           avg_over_time(
-            sla:gitlab:ratio{environment="$environment", stage="main", monitor=~"global|"}[$__range]
+            sla:gitlab:ratio{env=~"ops|$environment", environment="$environment", stage="main", monitor=~"global|"}[$__range]
           ),
           1
         )
@@ -120,7 +120,7 @@ basic.dashboard(
         avg(
           clamp_max(
             avg_over_time(
-              sla:gitlab:ratio{environment="$environment", stage="main", monitor=~"global|"}[$__interval]
+              sla:gitlab:ratio{env=~"ops|$environment", environment="$environment", stage="main", monitor=~"global|"}[$__interval]
             ),
             1
           )
@@ -153,7 +153,7 @@ basic.dashboard(
       query=|||
         avg(
           clamp_max(
-            avg_over_time(slo_observation_status{environment="$environment", stage="main", type=~"%(keyServiceRegExp)s"}[$__range]),
+            avg_over_time(slo_observation_status{env=~"ops|$environment", environment="$environment", stage="main", type=~"%(keyServiceRegExp)s"}[$__range]),
             1
           )
         ) by (type)
@@ -173,7 +173,7 @@ basic.dashboard(
       // https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/9689
       query=|||
         avg(
-          avg_over_time(slo_observation_status{environment="$environment", stage="main", type=~"%(keyServiceRegExp)s"}[$__interval])
+          avg_over_time(slo_observation_status{env=~"ops|$environment", environment="$environment", stage="main", type=~"%(keyServiceRegExp)s"}[$__interval])
         ) by (type)
       ||| % { keyServiceRegExp: keyServiceRegExp },
       legendFormat='{{ type }}',
