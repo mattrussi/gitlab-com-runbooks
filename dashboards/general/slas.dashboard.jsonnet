@@ -75,6 +75,7 @@ basic.dashboard(
     title='Weighted Availability Score - GitLab.com',
     // NB: this query takes into account values recorded in Prometheus prior to
     // https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/9689
+    // Better fix proposed in https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/326
     query=|||
       avg(
         clamp_max(
@@ -116,6 +117,7 @@ basic.dashboard(
 
       // NB: this query takes into account values recorded in Prometheus prior to
       // https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/9689
+      // Better fix proposed in https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/326
       query=|||
         avg(
           clamp_max(
@@ -150,6 +152,7 @@ basic.dashboard(
       title='Primary Services Average Availability for Period',
       // NB: this query takes into account values recorded in Prometheus prior to
       // https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/9689
+      // Better fix proposed in https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/326
       query=|||
         avg(
           clamp_max(
@@ -171,6 +174,7 @@ basic.dashboard(
       yAxisLabel='SLA',
       // NB: this query takes into account values recorded in Prometheus prior to
       // https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/9689
+      // Better fix proposed in https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/326
       query=|||
         avg(
           avg_over_time(slo_observation_status{env=~"ops|$environment", environment="$environment", stage="main", type=~"%(keyServiceRegExp)s"}[$__interval])
