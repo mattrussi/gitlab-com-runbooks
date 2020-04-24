@@ -127,7 +127,7 @@ groups:
     for: 5m
     labels:
       pager: pagerduty
-      severity: s1
+      severity: s3
       channel: database
       alert_type: cause
     annotations:
