@@ -4,11 +4,11 @@ dashboard: general SLAs
 panel_groups:
 - group: Headline
   panels:
-  - title: Weighted Availability Score - GitLab.com
+  - title: Weighted Availability Score - GitLab.com, 7 days
     max_value: 1
     metrics:
     - id: single-stat-weighted-availability
-      label: Weighted Availability Score - GitLab.com
+      label: Weighted Availability Score - GitLab.com, 7 days
       query: >-
         avg(clamp_max(avg_over_time(sla:gitlab:ratio{env=~"ops|gprd", environment="$environment", stage="main",
         monitor=~"global|"}[$(range)s]),1))
@@ -29,56 +29,56 @@ panel_groups:
       format: percent
 - group: SLA Trends - Per primary service
   panels:
-  - title: Primary Services Average Availability for Period - api
+  - title: Primary Services Average Availability for Period - api, 7 days
     max_value: 1
     metrics:
     - id: single-stat-sla-trend-api
-      label: Primary Services Average Availability for Period - api
+      label: Primary Services Average Availability for Period - api, 7 days
       query: >-
         avg(avg_over_time(slo_observation_status{env=~"ops|gprd", environment="gprd", stage="main", type="api"}[7d]))
       unit: "%"
     type: single-stat
-  - title: Primary Services Average Availability for Period - ci-runners
+  - title: Primary Services Average Availability for Period - ci-runners, 7 days
     max_value: 1
     metrics:
     - id: single-stat-sla-trend-ci-runners
-      label: Primary Services Average Availability for Period - ci-runners
+      label: Primary Services Average Availability for Period - ci-runners, 7 days
       query: >-
         avg(avg_over_time(slo_observation_status{env=~"ops|gprd", environment="gprd", stage="main", type="ci-runners"}[7d]))
       unit: "%"
     type: single-stat
-  - title: Primary Services Average Availability for Period - git
+  - title: Primary Services Average Availability for Period - git, 7 days
     max_value: 1
     metrics:
     - id: single-stat-sla-trend-git
-      label: Primary Services Average Availability for Period - git
+      label: Primary Services Average Availability for Period - git, 7 days
       query: >-
         avg(avg_over_time(slo_observation_status{env=~"ops|gprd", environment="gprd", stage="main", type="git"}[7d]))
       unit: "%"
     type: single-stat
-  - title: Primary Services Average Availability for Period - registry
+  - title: Primary Services Average Availability for Period - registry, 7 days
     max_value: 1
     metrics:
     - id: single-stat-sla-trend-registry
-      label: Primary Services Average Availability for Period - registry
+      label: Primary Services Average Availability for Period - registry, 7 days
       query: >-
         avg(avg_over_time(slo_observation_status{env=~"ops|gprd", environment="gprd", stage="main", type="registry"}[7d]))
       unit: "%"
     type: single-stat
-  - title: Primary Services Average Availability for Period - sidekiq
+  - title: Primary Services Average Availability for Period - sidekiq, 7 days
     max_value: 1
     metrics:
     - id: single-stat-sla-trend-sidekiq
-      label: Primary Services Average Availability for Period - sidekiq
+      label: Primary Services Average Availability for Period - sidekiq, 7 days
       query: >-
         avg(avg_over_time(slo_observation_status{env=~"ops|gprd", environment="gprd", stage="main", type="sidekiq"}[7d]))
       unit: "%"
     type: single-stat
-  - title: Primary Services Average Availability for Period - web
+  - title: Primary Services Average Availability for Period - web, 7 days
     max_value: 1
     metrics:
     - id: single-stat-sla-trend-web
-      label: Primary Services Average Availability for Period - web
+      label: Primary Services Average Availability for Period - web, 7 days
       query: >-
         avg(avg_over_time(slo_observation_status{env=~"ops|gprd", environment="gprd", stage="main", type="web"}[7d]))
       unit: "%"

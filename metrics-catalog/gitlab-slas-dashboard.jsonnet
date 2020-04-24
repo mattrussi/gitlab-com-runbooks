@@ -17,7 +17,7 @@ local slaDashboard =
         group: 'Headline',
         panels: [
           {
-            title: 'Weighted Availability Score - GitLab.com',
+            title: 'Weighted Availability Score - GitLab.com, 7 days',
             type: 'single-stat',
             max_value: 1,
             metrics: [
@@ -27,7 +27,7 @@ local slaDashboard =
                   range: range,
                 },
                 unit: '%',
-                label: 'Weighted Availability Score - GitLab.com',
+                label: 'Weighted Availability Score - GitLab.com, 7 days',
               },
             ],
           },
@@ -55,7 +55,7 @@ local slaDashboard =
         panels:
           [
             {
-              title: 'Primary Services Average Availability for Period - %(type)s' % { type: type },
+              title: 'Primary Services Average Availability for Period - %(type)s, 7 days' % { type: type },
               type: 'single-stat',
               max_value: 1,
               metrics: [
@@ -68,7 +68,7 @@ local slaDashboard =
                     range: range,
                   },
                   unit: '%',
-                  label: 'Primary Services Average Availability for Period - %(type)s' % { type: type },
+                  label: 'Primary Services Average Availability for Period - %(type)s, 7 days' % { type: type },
                 },
               ],
             }
