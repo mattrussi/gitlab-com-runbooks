@@ -194,7 +194,6 @@ groups:
     labels:
       severity: s3
       channel: database
-      pager: pagerduty
       alert_type: cause
     annotations:
       title: |
