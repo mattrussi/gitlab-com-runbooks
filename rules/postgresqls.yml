@@ -192,7 +192,7 @@ groups:
     expr: pg_replication_slots_xmin_age{slot_name=~"^patroni_[0-9]+.*"} > 20000
     for: 45m
     labels:
-      severity: s1
+      severity: s3
       channel: database
       pager: pagerduty
       alert_type: cause
