@@ -91,6 +91,41 @@ local sidekiqHelpers = import './lib/sidekiq-helpers.libsonnet';
       significantLabels: ['priority'],
     },
 
+    no_urgency_job_execution: {
+      apdex: histogramApdex(
+        histogram='sidekiq_jobs_completion_seconds_bucket',
+        selector='urgency=""',
+        satisfiedThreshold=sidekiqHelpers.slos.lowUrgency.executionDurationSeconds,
+      ),
+
+      requestRate: rateMetric(
+        counter='sidekiq_jobs_completion_seconds_bucket',
+        selector='urgency="",le="+Inf"'
+      ),
+
+      errorRate: rateMetric(
+        counter='sidekiq_jobs_failed_total',
+        selector='urgency=""'
+      ),
+
+      significantLabels: ['priority'],
+    },
+
+    no_urgency_job_queueing: {
+      apdex: histogramApdex(
+        histogram='sidekiq_jobs_queue_duration_seconds_bucket',
+        selector='urgency=""',
+        satisfiedThreshold=sidekiqHelpers.slos.lowUrgency.queueingDurationSeconds,
+      ),
+
+      requestRate: rateMetric(
+        counter='sidekiq_enqueued_jobs_total',
+        selector='urgency=""'
+      ),
+
+      significantLabels: ['priority'],
+    },
+
     throttled_job_execution: {
       apdex: histogramApdex(
         histogram='sidekiq_jobs_completion_seconds_bucket',

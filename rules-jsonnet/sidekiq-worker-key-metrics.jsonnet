@@ -48,8 +48,12 @@ local generateRulesForBurnRate(rangeInterval) =
     sidekiqMetricsCatalog.components.low_urgency_job_queueing,
     sidekiqMetricsCatalog.components.low_urgency_job_execution,
     rangeInterval
-  )
-  +
+  ) +
+  generateRulesForComponentForBurnRate(
+    sidekiqMetricsCatalog.components.no_urgency_job_queueing,
+    sidekiqMetricsCatalog.components.no_urgency_job_execution,
+    rangeInterval
+  ) +
   generateRulesForComponentForBurnRate(
     null,
     sidekiqMetricsCatalog.components.throttled_job_execution,

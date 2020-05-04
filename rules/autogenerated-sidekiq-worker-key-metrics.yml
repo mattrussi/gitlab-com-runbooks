@@ -76,6 +76,42 @@ groups:
       sum by (environment, tier, type, stage, shard, priority, queue, feature_category, urgency) (
         rate(sidekiq_jobs_failed_total{urgency="low"}[5m])
       )
+  - record: gitlab_background_jobs:queue:apdex:ratio_5m
+    expr: |
+      (
+        sum by (environment, tier, type, stage, shard, priority, queue, feature_category, urgency) (
+          rate(sidekiq_jobs_queue_duration_seconds_bucket{urgency="", le="60"}[5m])
+        )
+      )
+      /
+      (
+        sum by (environment, tier, type, stage, shard, priority, queue, feature_category, urgency) (
+          rate(sidekiq_jobs_queue_duration_seconds_bucket{urgency="", le="+Inf"}[5m])
+        ) > 0
+      )
+  - record: gitlab_background_jobs:execution:apdex:ratio_5m
+    expr: |
+      (
+        sum by (environment, tier, type, stage, shard, priority, queue, feature_category, urgency) (
+          rate(sidekiq_jobs_completion_seconds_bucket{urgency="", le="300"}[5m])
+        )
+      )
+      /
+      (
+        sum by (environment, tier, type, stage, shard, priority, queue, feature_category, urgency) (
+          rate(sidekiq_jobs_completion_seconds_bucket{urgency="", le="+Inf"}[5m])
+        ) > 0
+      )
+  - record: gitlab_background_jobs:execution:ops:rate_5m
+    expr: |
+      sum by (environment, tier, type, stage, shard, priority, queue, feature_category, urgency) (
+        rate(sidekiq_jobs_completion_seconds_bucket{urgency="",le="+Inf"}[5m])
+      )
+  - record: gitlab_background_jobs:execution:error:rate_5m
+    expr: |
+      sum by (environment, tier, type, stage, shard, priority, queue, feature_category, urgency) (
+        rate(sidekiq_jobs_failed_total{urgency=""}[5m])
+      )
   - record: gitlab_background_jobs:execution:apdex:ratio_5m
     expr: |
       (
@@ -170,6 +206,42 @@ groups:
     expr: |
       sum by (environment, tier, type, stage, shard, priority, queue, feature_category, urgency) (
         rate(sidekiq_jobs_failed_total{urgency="low"}[30m])
+      )
+  - record: gitlab_background_jobs:queue:apdex:ratio_30m
+    expr: |
+      (
+        sum by (environment, tier, type, stage, shard, priority, queue, feature_category, urgency) (
+          rate(sidekiq_jobs_queue_duration_seconds_bucket{urgency="", le="60"}[30m])
+        )
+      )
+      /
+      (
+        sum by (environment, tier, type, stage, shard, priority, queue, feature_category, urgency) (
+          rate(sidekiq_jobs_queue_duration_seconds_bucket{urgency="", le="+Inf"}[30m])
+        ) > 0
+      )
+  - record: gitlab_background_jobs:execution:apdex:ratio_30m
+    expr: |
+      (
+        sum by (environment, tier, type, stage, shard, priority, queue, feature_category, urgency) (
+          rate(sidekiq_jobs_completion_seconds_bucket{urgency="", le="300"}[30m])
+        )
+      )
+      /
+      (
+        sum by (environment, tier, type, stage, shard, priority, queue, feature_category, urgency) (
+          rate(sidekiq_jobs_completion_seconds_bucket{urgency="", le="+Inf"}[30m])
+        ) > 0
+      )
+  - record: gitlab_background_jobs:execution:ops:rate_30m
+    expr: |
+      sum by (environment, tier, type, stage, shard, priority, queue, feature_category, urgency) (
+        rate(sidekiq_jobs_completion_seconds_bucket{urgency="",le="+Inf"}[30m])
+      )
+  - record: gitlab_background_jobs:execution:error:rate_30m
+    expr: |
+      sum by (environment, tier, type, stage, shard, priority, queue, feature_category, urgency) (
+        rate(sidekiq_jobs_failed_total{urgency=""}[30m])
       )
   - record: gitlab_background_jobs:execution:apdex:ratio_30m
     expr: |
@@ -266,6 +338,42 @@ groups:
       sum by (environment, tier, type, stage, shard, priority, queue, feature_category, urgency) (
         rate(sidekiq_jobs_failed_total{urgency="low"}[1h])
       )
+  - record: gitlab_background_jobs:queue:apdex:ratio_1h
+    expr: |
+      (
+        sum by (environment, tier, type, stage, shard, priority, queue, feature_category, urgency) (
+          rate(sidekiq_jobs_queue_duration_seconds_bucket{urgency="", le="60"}[1h])
+        )
+      )
+      /
+      (
+        sum by (environment, tier, type, stage, shard, priority, queue, feature_category, urgency) (
+          rate(sidekiq_jobs_queue_duration_seconds_bucket{urgency="", le="+Inf"}[1h])
+        ) > 0
+      )
+  - record: gitlab_background_jobs:execution:apdex:ratio_1h
+    expr: |
+      (
+        sum by (environment, tier, type, stage, shard, priority, queue, feature_category, urgency) (
+          rate(sidekiq_jobs_completion_seconds_bucket{urgency="", le="300"}[1h])
+        )
+      )
+      /
+      (
+        sum by (environment, tier, type, stage, shard, priority, queue, feature_category, urgency) (
+          rate(sidekiq_jobs_completion_seconds_bucket{urgency="", le="+Inf"}[1h])
+        ) > 0
+      )
+  - record: gitlab_background_jobs:execution:ops:rate_1h
+    expr: |
+      sum by (environment, tier, type, stage, shard, priority, queue, feature_category, urgency) (
+        rate(sidekiq_jobs_completion_seconds_bucket{urgency="",le="+Inf"}[1h])
+      )
+  - record: gitlab_background_jobs:execution:error:rate_1h
+    expr: |
+      sum by (environment, tier, type, stage, shard, priority, queue, feature_category, urgency) (
+        rate(sidekiq_jobs_failed_total{urgency=""}[1h])
+      )
   - record: gitlab_background_jobs:execution:apdex:ratio_1h
     expr: |
       (
@@ -360,6 +468,42 @@ groups:
     expr: |
       sum by (environment, tier, type, stage, shard, priority, queue, feature_category, urgency) (
         rate(sidekiq_jobs_failed_total{urgency="low"}[6h])
+      )
+  - record: gitlab_background_jobs:queue:apdex:ratio_6h
+    expr: |
+      (
+        sum by (environment, tier, type, stage, shard, priority, queue, feature_category, urgency) (
+          rate(sidekiq_jobs_queue_duration_seconds_bucket{urgency="", le="60"}[6h])
+        )
+      )
+      /
+      (
+        sum by (environment, tier, type, stage, shard, priority, queue, feature_category, urgency) (
+          rate(sidekiq_jobs_queue_duration_seconds_bucket{urgency="", le="+Inf"}[6h])
+        ) > 0
+      )
+  - record: gitlab_background_jobs:execution:apdex:ratio_6h
+    expr: |
+      (
+        sum by (environment, tier, type, stage, shard, priority, queue, feature_category, urgency) (
+          rate(sidekiq_jobs_completion_seconds_bucket{urgency="", le="300"}[6h])
+        )
+      )
+      /
+      (
+        sum by (environment, tier, type, stage, shard, priority, queue, feature_category, urgency) (
+          rate(sidekiq_jobs_completion_seconds_bucket{urgency="", le="+Inf"}[6h])
+        ) > 0
+      )
+  - record: gitlab_background_jobs:execution:ops:rate_6h
+    expr: |
+      sum by (environment, tier, type, stage, shard, priority, queue, feature_category, urgency) (
+        rate(sidekiq_jobs_completion_seconds_bucket{urgency="",le="+Inf"}[6h])
+      )
+  - record: gitlab_background_jobs:execution:error:rate_6h
+    expr: |
+      sum by (environment, tier, type, stage, shard, priority, queue, feature_category, urgency) (
+        rate(sidekiq_jobs_failed_total{urgency=""}[6h])
       )
   - record: gitlab_background_jobs:execution:apdex:ratio_6h
     expr: |
