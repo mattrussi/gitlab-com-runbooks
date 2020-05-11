@@ -6,6 +6,8 @@ local seriesOverrides = import 'series_overrides.libsonnet';
 local serviceCatalog = import 'service_catalog.libsonnet';
 local row = grafana.row;
 local thresholds = import 'thresholds.libsonnet';
+local slas = import './lib/slas.libsonnet';
+local promQuery = import 'prom_query.libsonnet';
 
 // These charts have a very high interval factor, to create a wide trend line
 local INTERVAL_FACTOR = 50;
@@ -49,11 +51,6 @@ local thresholdsValues = {
   ],
 };
 
-local keyServices = serviceCatalog.findServices(function(service)
-  std.objectHas(service.business.SLA, 'overall_sla_weighting') && service.business.SLA.overall_sla_weighting > 0);
-
-local keyServiceRegExp = std.join('|', std.map(function(service) service.name, keyServices));
-
 basic.dashboard(
   'SLAs',
   tags=['general', 'slas', 'service-levels'],
@@ -62,7 +59,7 @@ basic.dashboard(
   time_to='now/d',
 )
 .addPanel(
-  row.new(title='Headline'),
+  row.new(title='External SLA'),
   gridPos={
     x: 0,
     y: 0,
@@ -72,26 +69,43 @@ basic.dashboard(
 )
 .addPanel(
   basic.slaStats(
-    title='Weighted Availability Score - GitLab.com',
-    // NB: this query takes into account values recorded in Prometheus prior to
-    // https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/9689
-    // Better fix proposed in https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/326
-    query=|||
-      avg(
-        clamp_max(
-          avg_over_time(
-            sla:gitlab:ratio{env=~"ops|$environment", environment="$environment", stage="main", monitor=~"global|"}[$__range]
-          ),
-          1
-        )
-      )
-    |||,
+    title='External SLA for GitLab.com',
+    query=slas.external.getAggregatedVisualizationQuery(environment='$environment', interval='$__range'),
   ),
   gridPos={ x: 0, y: 0, w: 8, h: 8 },
 )
 .addPanel(
   grafana.text.new(
-    title='GitLab SLA Dashboard Explainer',
+    title='External SLA Dashboard Explainer',
+    mode='markdown',
+    content=|||
+      This dashboard measures our availability according to external third-party internal tools.
+
+      A set of pingdom checks are performed against GitLab.com. These values are used to calculate an
+      overall availability for the platform.
+    |||
+  ),
+  gridPos={ x: 8, y: 0, w: 16, h: 8 },
+)
+.addPanel(
+  row.new(title='Internal Monitoring SLA'),
+  gridPos={
+    x: 0,
+    y: 100,
+    w: 24,
+    h: 1,
+  }
+)
+.addPanel(
+  basic.slaStats(
+    title='Internal Monitoring SLA',
+    query=slas.internal.getAggregatedVisualizationQuery(environment='$environment', interval='$__range'),
+  ),
+  gridPos={ x: 0, y: 100, w: 8, h: 8 },
+)
+.addPanel(
+  grafana.text.new(
+    title='Internal Monitoring SLA Dashboard Explainer',
     mode='markdown',
     content=|||
       This dashboard shows the SLA trends for each of the _primary_ services in the GitLab fleet ("primary" services are those which are directly user-facing).
@@ -106,7 +120,7 @@ basic.dashboard(
       _To see instanteous SLI values for these services, visit the [`general-public-splashscreen`](d/general-public-splashscreen) dashboard._
     |||
   ),
-  gridPos={ x: 8, y: 0, w: 16, h: 8 },
+  gridPos={ x: 8, y: 100, w: 16, h: 8 },
 )
 .addPanels(
   layout.grid([
@@ -114,31 +128,27 @@ basic.dashboard(
       title='Overall SLA over time period - gitlab.com',
       description='Rolling average SLO adherence across all primary services. Higher is better.',
       yAxisLabel='SLA',
-
-      // NB: this query takes into account values recorded in Prometheus prior to
-      // https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/9689
-      // Better fix proposed in https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/326
-      query=|||
-        avg(
-          clamp_max(
-            avg_over_time(
-              sla:gitlab:ratio{env=~"ops|$environment", environment="$environment", stage="main", monitor=~"global|"}[$__interval]
-            ),
-            1
-          )
-        )
-      |||,
-      legendFormat='gitlab.com SLA',
+      query=slas.internal.getAggregatedVisualizationQuery(environment='$environment', interval='$__interval'),
+      legendFormat='Internal SLA',
       interval=INTERVAL,
       intervalFactor=INTERVAL_FACTOR,
       points=true,
     )
-    .addSeriesOverride(seriesOverrides.goldenMetric('gitlab.com SLA'))
+    .addTarget(
+      promQuery.target(
+        slas.external.getAggregatedVisualizationQuery(environment='$environment', interval='$__interval'),
+        legendFormat='External SLA',
+        interval=INTERVAL,
+        intervalFactor=INTERVAL_FACTOR,
+      )
+    )
+    .addSeriesOverride(seriesOverrides.goldenMetric('Internal SLA'))
+    .addSeriesOverride(seriesOverrides.goldenMetric('External SLA', { color: 'lightblue' },))
     + timeRegions + thresholdsValues,
   ], cols=1, rowHeight=10, startRow=1001)
 )
 .addPanel(
-  row.new(title='SLA Trends - Per Primary Service'),
+  row.new(title='Internal Availability - Primary Services'),
   gridPos={
     x: 0,
     y: 2000,
@@ -149,18 +159,8 @@ basic.dashboard(
 .addPanels(
   layout.grid([
     basic.slaStats(
-      title='Primary Services Average Availability for Period',
-      // NB: this query takes into account values recorded in Prometheus prior to
-      // https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/9689
-      // Better fix proposed in https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/326
-      query=|||
-        avg(
-          clamp_max(
-            avg_over_time(slo_observation_status{env=~"ops|$environment", environment="$environment", stage="main", type=~"%(keyServiceRegExp)s"}[$__range]),
-            1
-          )
-        ) by (type)
-      ||| % { keyServiceRegExp: keyServiceRegExp },
+      title='Internal Availability - Primary Services',
+      query=slas.internal.getVisualizationQueryPerService(environment='$environment', interval='$__range'),
       legendFormat='{{ type }}',
       links=overviewDashboardLinks,
     ),
@@ -169,17 +169,10 @@ basic.dashboard(
 .addPanels(
   layout.grid([
     basic.slaTimeseries(
-      title='SLA Trends - Primary Services',
+      title='Internal Availability Trends - Primary Services',
       description='Rolling average SLO adherence for primary services. Higher is better.',
       yAxisLabel='SLA',
-      // NB: this query takes into account values recorded in Prometheus prior to
-      // https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/9689
-      // Better fix proposed in https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/326
-      query=|||
-        avg(
-          avg_over_time(slo_observation_status{env=~"ops|$environment", environment="$environment", stage="main", type=~"%(keyServiceRegExp)s"}[$__interval])
-        ) by (type)
-      ||| % { keyServiceRegExp: keyServiceRegExp },
+      query=slas.internal.getVisualizationQueryPerService(environment='$environment', interval='$__interval'),
       legendFormat='{{ type }}',
       interval=INTERVAL,
       intervalFactor=INTERVAL_FACTOR,

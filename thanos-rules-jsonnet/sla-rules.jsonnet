@@ -1,3 +1,4 @@
+local slas = import './lib/slas.libsonnet';
 local serviceCatalog = import 'service_catalog.libsonnet';
 
 local keyServices = serviceCatalog.findServices(function(service)
@@ -9,24 +10,13 @@ local keyServiceWeights = std.foldl(
   }, keyServices, {}
 );
 
-local getScoreQuery(weights) =
+local getWeightedQuery(template) =
   local items = [
-    'min without(slo) (avg_over_time(slo_observation_status{type="%(type)s", monitor="global"}[5m])) * %(weight)d' % {
+    template % {
       type: type,
       weight: keyServiceWeights[type],
     }
-    for type in std.objectFields(weights)
-  ];
-
-  std.join('\n  or\n  ', items);
-
-local getWeightQuery(weights) =
-  local items = [
-    'max without(slo) (clamp_max(clamp_min(slo_observation_status{type="%(type)s", monitor="global"}, 1), 1)) * %(weight)d' % {
-      type: type,
-      weight: keyServiceWeights[type],
-    }
-    for type in std.objectFields(weights)
+    for type in std.objectFields(keyServiceWeights)
   ];
 
   std.join('\n  or\n  ', items);
@@ -36,27 +26,9 @@ local rules = {
     name: 'SLA weight calculations',
     partial_response_strategy: 'warn',
     interval: '1m',
-    rules: [{
-      // TODO: these are kept for backwards compatability for now
-      record: 'sla:gitlab:score',
-      expr: |||
-        sum by (environment, env, stage) (
-          %s
-        )
-      ||| % [getScoreQuery(keyServiceWeights)],
-    }, {
-      // TODO: these are kept for backwards compatibility for now
-      // See https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/309
-      record: 'sla:gitlab:weights',
-      expr: |||
-        sum by (environment, env, stage) (
-          %s
-        )
-      ||| % [getWeightQuery(keyServiceWeights)],
-    }, {
-      record: 'sla:gitlab:ratio',
-      expr: 'sla:gitlab:score{monitor="global"} / sla:gitlab:weights{monitor="global"}',
-    }],
+    rules:
+      slas.internal.getRecordingRules() +
+      slas.external.getRecordingRules(),
   }],
 };
 
