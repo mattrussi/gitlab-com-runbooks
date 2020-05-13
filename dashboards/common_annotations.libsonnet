@@ -26,4 +26,12 @@ local annotation = grafana.annotation;
       builtIn=1,
       iconColor='#CA95E5',
     ),
+  userAnnotations::
+    annotation.datasource(
+      'user-annotations',
+      '-- Grafana --',
+      tags=['user-annotation', '${environment}'],
+      builtIn=1,
+      iconColor='#CA95E5',
+    ),
 }
