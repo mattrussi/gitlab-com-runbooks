@@ -22,7 +22,7 @@ While rare, these errors can happen when the tool accesses an unexpectedly non-e
 
 Also rare, these errors indicate an error while authorizing against Firestore, generally due to clock drift. An [issue](https://gitlab.com/gitlab-com/gl-infra/cirepom/-/issues/22) is already opened to handle this exception gracefully.
 
-![NoMethodError](img/pipeline_failures__Signet_AuthorizationError.png)
+![SigNet__AuthorizationError](img/pipeline_failures__Signet_AuthorizationError.png)
 
 #### ACTIONS
 
