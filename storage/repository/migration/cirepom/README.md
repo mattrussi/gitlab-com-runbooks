@@ -7,9 +7,9 @@
 
 ##### Pipeline Failures
 
-**CIrepoM Bot** pipeline failures fatal conditions that CIrepoM was unabled to handle and generally represent bugs in the tool. 
+**CIrepoM Bot** pipeline failures occur when fatal conditions that CIrepoM is unable to handle csuse pipelines to fail. They generally represent bugs in the tool. 
 
-Runbook: [Pipeline Failures](pipeline_failures.md)
+* Runbook: [Pipeline Failures](pipeline_failures.md)
 
 
 
