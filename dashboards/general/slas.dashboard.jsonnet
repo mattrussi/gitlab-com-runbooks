@@ -23,7 +23,7 @@ basic.dashboard(
     title='Notice',
     mode='markdown',
     content=|||
-      This dashboard has been replaced. Please visit [`general-public-splashscreen`](d/general-public-splashscreen) to see the new location of this dashboard.
+      This dashboard has been replaced. Please visit [`https://gitlab.com/gitlab-com/dashboards-gitlab-com/-/environments/1790496/metrics?dashboard=.gitlab%2Fdashboards%2Fsla-dashboard.yml`](https://gitlab.com/gitlab-com/dashboards-gitlab-com/-/environments/1790496/metrics?dashboard=.gitlab%2Fdashboards%2Fsla-dashboard.yml) to see the new location of this dashboard.
     |||
   ),
   gridPos={ x: 8, y: 0, w: 16, h: 8 },
