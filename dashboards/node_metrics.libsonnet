@@ -77,7 +77,7 @@ local thresholds = import 'thresholds.libsonnet';
       .addTarget(
         promQuery.target(
           |||
-            sum(rate(node_network_transmit_bytes_total{%(nodeSelector)s}[$__interval])) by (fqdn)
+            sum(rate(node_network_transmit_bytes_total{%(nodeSelector)s}[$__interval])) by (fqdn) * 8
           ||| % formatConfig,
           legendFormat='send {{ fqdn }}',
           intervalFactor=5,
@@ -86,7 +86,7 @@ local thresholds = import 'thresholds.libsonnet';
       .addTarget(
         promQuery.target(
           |||
-            sum(rate(node_network_receive_bytes_total{%(nodeSelector)s}[$__interval])) by (fqdn)
+            sum(rate(node_network_receive_bytes_total{%(nodeSelector)s}[$__interval])) by (fqdn) * 8
           ||| % formatConfig,
           legendFormat='receive {{ fqdn }}',
           intervalFactor=5,
@@ -94,7 +94,7 @@ local thresholds = import 'thresholds.libsonnet';
       )
       .resetYaxes()
       .addYaxis(
-        format='Bps',
+        format='bps',
         label='Network utilization',
       )
       .addYaxis(
