@@ -16,14 +16,6 @@ local rateMetric = metricsCatalog.rateMetric;
   },
   components: {
     zone_gitlab_com: {
-      staticLabels: {
-        // The gprd Cloudflare exporter scrapes all zones. We must override the
-        // environment label to re-map zones to environments.
-        // Of course this is a no-op for gprd, but it's harmless and consistency
-        // is nice.
-        environment: 'gprd',
-      },
-
       requestRate: rateMetric(
         counter='cloudflare_zones_http_responses_total',
         selector='zone="gitlab.com"'
@@ -38,14 +30,6 @@ local rateMetric = metricsCatalog.rateMetric;
     },
     // The "gitlab.net" zone
     zone_gitlab_net: {
-      staticLabels: {
-        // The gprd Cloudflare exporter scrapes all zones. We must override the
-        // environment label to re-map zones to environments.
-        // Of course this is a no-op for gprd, but it's harmless and consistency
-        // is nice.
-        environment: 'gprd',
-      },
-
       requestRate: rateMetric(
         counter='cloudflare_zones_http_responses_total',
         selector='zone="gitlab.net"'
@@ -61,12 +45,6 @@ local rateMetric = metricsCatalog.rateMetric;
 
     // The "staging.gitlab.com" zone
     zone_staging_gitlab_com: {
-      staticLabels: {
-        // The gprd Cloudflare exporter scrapes all zones. We must override the
-        // environment label to re-map zones to environments.
-        environment: 'gstg',
-      },
-
       requestRate: rateMetric(
         counter='cloudflare_zones_http_responses_total',
         selector='zone="staging.gitlab.com"'
