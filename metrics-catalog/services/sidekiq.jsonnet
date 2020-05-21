@@ -1,6 +1,7 @@
 local metricsCatalog = import '../lib/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
+local combined = metricsCatalog.combined;
 local sidekiqHelpers = import './lib/sidekiq-helpers.libsonnet';
 
 {
@@ -21,6 +22,48 @@ local sidekiqHelpers = import './lib/sidekiq-helpers.libsonnet';
     praefect: true,
   },
   components: {
+    shard_urgent_other: {
+      apdex: combined([
+        histogramApdex(
+          histogram='sidekiq_jobs_completion_seconds_bucket',
+          selector='urgency="high", shard="urgent-other"',
+          satisfiedThreshold=sidekiqHelpers.slos.urgent.executionDurationSeconds,
+        ),
+        histogramApdex(
+          histogram='sidekiq_jobs_queue_duration_seconds_bucket',
+          selector='urgency="high", shard="urgent-other"',
+          satisfiedThreshold=sidekiqHelpers.slos.urgent.queueingDurationSeconds,
+        ),
+        histogramApdex(
+          histogram='sidekiq_jobs_completion_seconds_bucket',
+          selector='urgency="low", shard="urgent-other"',
+          satisfiedThreshold=sidekiqHelpers.slos.lowUrgency.executionDurationSeconds,
+        ),
+        histogramApdex(
+          histogram='sidekiq_jobs_queue_duration_seconds_bucket',
+          selector='urgency="low", shard="urgent-other"',
+          satisfiedThreshold=sidekiqHelpers.slos.lowUrgency.queueingDurationSeconds,
+        ),
+        histogramApdex(
+          histogram='sidekiq_jobs_completion_seconds_bucket',
+          selector='urgency="throttled", shard="urgent-other"',
+          satisfiedThreshold=sidekiqHelpers.slos.throttled.executionDurationSeconds,
+        )
+      ]),
+
+      requestRate: rateMetric(
+        counter='sidekiq_jobs_completion_seconds_bucket',
+          selector='shard="urgent_other"',
+      ),
+
+      errorRate: rateMetric(
+        counter='sidekiq_jobs_failed_total',
+        selector='urgency="high"'
+      ),
+
+      significantLabels: ['fqdn'],
+    },
+
     high_urgency_job_execution: {
       apdex: histogramApdex(
         histogram='sidekiq_jobs_completion_seconds_bucket',

@@ -77,7 +77,7 @@ local generateRecordingRulesForComponent(ruleSet, serviceDefinition, componentNa
     apdexWeight=null,
     requestRate=null,
     errorRate=null,
-    aggregationLabels
+    aggregationLabels=null,
   )::
     {
       burnRate: burnRate,
