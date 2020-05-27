@@ -6,13 +6,9 @@
     ecs: {
       properties: {
         version: {
-          type: 'text',
-          fields: {
-            keyword: {
-              type: 'keyword',
-              ignore_above: 256,
-            },
-          },
+          type: 'keyword',
+          ignore_above: 256,
+          store: true,
         },
       },
     },
@@ -46,33 +42,21 @@
               type: 'long',
             },
             type: {
-              type: 'text',
-              fields: {
-                keyword: {
-                  type: 'keyword',
-                  ignore_above: 256,
-                },
-              },
+              type: 'keyword',
+              ignore_above: 256,
+              store: true,
             },
           },
         },
         action: {
-          type: 'text',
-          fields: {
-            keyword: {
-              type: 'keyword',
-              ignore_above: 256,
-            },
-          },
+          type: 'keyword',
+          ignore_above: 256,
+          store: true,
         },
         add: {
-          type: 'text',
-          fields: {
-            keyword: {
-              type: 'keyword',
-              ignore_above: 256,
-            },
-          },
+          type: 'keyword',
+          ignore_above: 256,
+          store: true,
         },
         allowed: {
           type: 'boolean',
@@ -90,31 +74,19 @@
           type: 'long',
         },
         app_name: {
-          type: 'text',
-          fields: {
-            keyword: {
-              type: 'keyword',
-              ignore_above: 256,
-            },
-          },
+          type: 'keyword',
+          ignore_above: 256,
+          store: true,
         },
         application: {
-          type: 'text',
-          fields: {
-            keyword: {
-              type: 'keyword',
-              ignore_above: 256,
-            },
-          },
+          type: 'keyword',
+          ignore_above: 256,
+          store: true,
         },
         as: {
-          type: 'text',
-          fields: {
-            keyword: {
-              type: 'keyword',
-              ignore_above: 256,
-            },
-          },
+          type: 'keyword',
+          ignore_above: 256,
+          store: true,
         },
         author_id: {
           type: 'float',
@@ -129,58 +101,34 @@
           },
         },
         authorized_actions: {
-          type: 'text',
-          fields: {
-            keyword: {
-              type: 'keyword',
-              ignore_above: 256,
-            },
-          },
+          type: 'keyword',
+          ignore_above: 256,
+          store: true,
         },
         cf_ray: {
-          type: 'text',
-          fields: {
-            keyword: {
-              type: 'keyword',
-              ignore_above: 256,
-            },
-          },
+          type: 'keyword',
+          ignore_above: 256,
+          store: true,
         },
         cf_request_id: {
-          type: 'text',
-          fields: {
-            keyword: {
-              type: 'keyword',
-              ignore_above: 256,
-            },
-          },
+          type: 'keyword',
+          ignore_above: 256,
+          store: true,
         },
         change: {
-          type: 'text',
-          fields: {
-            keyword: {
-              type: 'keyword',
-              ignore_above: 256,
-            },
-          },
+          type: 'keyword',
+          ignore_above: 256,
+          store: true,
         },
         class: {
-          type: 'text',
-          fields: {
-            keyword: {
-              type: 'keyword',
-              ignore_above: 256,
-            },
-          },
+          type: 'keyword',
+          ignore_above: 256,
+          store: true,
         },
         class_name: {
-          type: 'text',
-          fields: {
-            keyword: {
-              type: 'keyword',
-              ignore_above: 256,
-            },
-          },
+          type: 'keyword',
+          ignore_above: 256,
+          store: true,
         },
         client_url: {
           type: 'text',
@@ -201,22 +149,14 @@
           type: 'long',
         },
         controller: {
-          type: 'text',
-          fields: {
-            keyword: {
-              type: 'keyword',
-              ignore_above: 256,
-            },
-          },
+          type: 'keyword',
+          ignore_above: 256,
+          store: true,
         },
         correlation_id: {
-          type: 'text',
-          fields: {
-            keyword: {
-              type: 'keyword',
-              ignore_above: 256,
-            },
-          },
+          type: 'keyword',
+          ignore_above: 256,
+          store: true,
         },
         count: {
           type: 'long',
@@ -273,31 +213,19 @@
           },
         },
         entity_type: {
-          type: 'text',
-          fields: {
-            keyword: {
-              type: 'keyword',
-              ignore_above: 256,
-            },
-          },
+          type: 'keyword',
+          ignore_above: 256,
+          store: true,
         },
         env: {
-          type: 'text',
-          fields: {
-            keyword: {
-              type: 'keyword',
-              ignore_above: 256,
-            },
-          },
+          type: 'keyword',
+          ignore_above: 256,
+          store: true,
         },
         environment: {
-          type: 'text',
-          fields: {
-            keyword: {
-              type: 'keyword',
-              ignore_above: 256,
-            },
-          },
+          type: 'keyword',
+          ignore_above: 256,
+          store: true,
         },
         'error': {
           properties: {
@@ -311,13 +239,9 @@
               },
             },
             exception_class: {
-              type: 'text',
-              fields: {
-                keyword: {
-                  type: 'keyword',
-                  ignore_above: 256,
-                },
-              },
+              type: 'keyword',
+              ignore_above: 256,
+              store: true,
             },
             exception_message: {
               type: 'text',
@@ -331,22 +255,14 @@
           },
         },
         etag_route: {
-          type: 'text',
-          fields: {
-            keyword: {
-              type: 'keyword',
-              ignore_above: 256,
-            },
-          },
+          type: 'keyword',
+          ignore_above: 256,
+          store: true,
         },
         event: {
-          type: 'text',
-          fields: {
-            keyword: {
-              type: 'keyword',
-              ignore_above: 256,
-            },
-          },
+          type: 'keyword',
+          ignore_above: 256,
+          store: true,
         },
         exception: {
           properties: {
@@ -360,13 +276,9 @@
               },
             },
             class: {
-              type: 'text',
-              fields: {
-                keyword: {
-                  type: 'keyword',
-                  ignore_above: 256,
-                },
-              },
+              type: 'keyword',
+              ignore_above: 256,
+              store: true,
             },
             message: {
               type: 'text',
@@ -394,13 +306,9 @@
               type: 'long',
             },
             app_name: {
-              type: 'text',
-              fields: {
-                keyword: {
-                  type: 'keyword',
-                  ignore_above: 256,
-                },
-              },
+              type: 'keyword',
+              ignore_above: 256,
+              store: true,
             },
             bridge_id: {
               type: 'float',
@@ -418,13 +326,9 @@
               },
             },
             class: {
-              type: 'text',
-              fields: {
-                keyword: {
-                  type: 'keyword',
-                  ignore_above: 256,
-                },
-              },
+              type: 'keyword',
+              ignore_above: 256,
+              store: true,
             },
             cluster_id: {
               type: 'long',
@@ -484,22 +388,14 @@
               type: 'long',
             },
             import_jid: {
-              type: 'text',
-              fields: {
-                keyword: {
-                  type: 'keyword',
-                  ignore_above: 256,
-                },
-              },
+              type: 'keyword',
+              ignore_above: 256,
+              store: true,
             },
             importer: {
-              type: 'text',
-              fields: {
-                keyword: {
-                  type: 'keyword',
-                  ignore_above: 256,
-                },
-              },
+              type: 'keyword',
+              ignore_above: 256,
+              store: true,
             },
             issue_url: {
               type: 'text',
@@ -577,13 +473,9 @@
               type: 'float',
             },
             plan: {
-              type: 'text',
-              fields: {
-                keyword: {
-                  type: 'keyword',
-                  ignore_above: 256,
-                },
-              },
+              type: 'keyword',
+              ignore_above: 256,
+              store: true,
             },
             preloaded: {
               type: 'text',
@@ -626,13 +518,9 @@
               type: 'long',
             },
             relation_key: {
-              type: 'text',
-              fields: {
-                keyword: {
-                  type: 'keyword',
-                  ignore_above: 256,
-                },
-              },
+              type: 'keyword',
+              ignore_above: 256,
+              store: true,
             },
             request: {
               type: 'text',
@@ -659,22 +547,14 @@
               type: 'boolean',
             },
             service: {
-              type: 'text',
-              fields: {
-                keyword: {
-                  type: 'keyword',
-                  ignore_above: 256,
-                },
-              },
+              type: 'keyword',
+              ignore_above: 256,
+              store: true,
             },
             sha: {
-              type: 'text',
-              fields: {
-                keyword: {
-                  type: 'keyword',
-                  ignore_above: 256,
-                },
-              },
+              type: 'keyword',
+              ignore_above: 256,
+              store: true,
             },
             sidekiq: {
               properties: {
@@ -685,22 +565,14 @@
                   type: 'long',
                 },
                 class: {
-                  type: 'text',
-                  fields: {
-                    keyword: {
-                      type: 'keyword',
-                      ignore_above: 256,
-                    },
-                  },
+                  type: 'keyword',
+                  ignore_above: 256,
+                  store: true,
                 },
                 correlation_id: {
-                  type: 'text',
-                  fields: {
-                    keyword: {
-                      type: 'keyword',
-                      ignore_above: 256,
-                    },
-                  },
+                  type: 'keyword',
+                  ignore_above: 256,
+                  store: true,
                 },
                 created_at: {
                   type: 'float',
@@ -718,13 +590,9 @@
                   },
                 },
                 error_class: {
-                  type: 'text',
-                  fields: {
-                    keyword: {
-                      type: 'keyword',
-                      ignore_above: 256,
-                    },
-                  },
+                  type: 'keyword',
+                  ignore_above: 256,
+                  store: true,
                 },
                 error_message: {
                   type: 'text',
@@ -742,13 +610,9 @@
                   type: 'long',
                 },
                 jid: {
-                  type: 'text',
-                  fields: {
-                    keyword: {
-                      type: 'keyword',
-                      ignore_above: 256,
-                    },
-                  },
+                  type: 'keyword',
+                  ignore_above: 256,
+                  store: true,
                 },
                 memory_killer_max_memory_growth_kb: {
                   type: 'long',
@@ -759,13 +623,9 @@
                 meta: {
                   properties: {
                     caller_id: {
-                      type: 'text',
-                      fields: {
-                        keyword: {
-                          type: 'keyword',
-                          ignore_above: 256,
-                        },
-                      },
+                      type: 'keyword',
+                      ignore_above: 256,
+                      store: true,
                     },
                     project: {
                       type: 'text',
@@ -777,51 +637,30 @@
                       },
                     },
                     related_class: {
-                      type: 'text',
-                      fields: {
-                        keyword: {
-                          type: 'keyword',
-                          ignore_above: 256,
-                        },
-                      },
+                      type: 'keyword',
+                      ignore_above: 256,
+                      store: true,
                     },
                     root_namespace: {
-                      type: 'text',
-                      fields: {
-                        keyword: {
-                          type: 'keyword',
-                          ignore_above: 256,
-                        },
-                      },
+                      type: 'keyword',
+                      ignore_above: 256,
+                      store: true,
                     },
                     user: {
-                      type: 'text',
-                      fields: {
-                        keyword: {
-                          type: 'keyword',
-                          ignore_above: 256,
-                        },
-                      },
+                      type: 'keyword',
+                      ignore_above: 256,
                     },
                   },
                 },
                 queue: {
-                  type: 'text',
-                  fields: {
-                    keyword: {
-                      type: 'keyword',
-                      ignore_above: 256,
-                    },
-                  },
+                  type: 'keyword',
+                  ignore_above: 256,
+                  store: true,
                 },
                 queue_namespace: {
-                  type: 'text',
-                  fields: {
-                    keyword: {
-                      type: 'keyword',
-                      ignore_above: 256,
-                    },
-                  },
+                  type: 'keyword',
+                  ignore_above: 256,
+                  store: true,
                 },
                 retried_at: {
                   type: 'float',
@@ -838,22 +677,14 @@
               },
             },
             source: {
-              type: 'text',
-              fields: {
-                keyword: {
-                  type: 'keyword',
-                  ignore_above: 256,
-                },
-              },
+              type: 'keyword',
+              ignore_above: 256,
+              store: true,
             },
             stage: {
-              type: 'text',
-              fields: {
-                keyword: {
-                  type: 'keyword',
-                  ignore_above: 256,
-                },
-              },
+              type: 'keyword',
+              ignore_above: 256,
+              store: true,
             },
             storage: {
               type: 'text',
@@ -868,44 +699,28 @@
               type: 'float',
             },
             trace: {
-              type: 'text',
-              fields: {
-                keyword: {
-                  type: 'keyword',
-                  ignore_above: 256,
-                },
-              },
+              type: 'keyword',
+              ignore_above: 256,
+              store: true,
             },
             type: {
-              type: 'text',
-              fields: {
-                keyword: {
-                  type: 'keyword',
-                  ignore_above: 256,
-                },
-              },
+              type: 'keyword',
+              ignore_above: 256,
+              store: true,
             },
           },
         },
         filtered: {
           properties: {
             ability: {
-              type: 'text',
-              fields: {
-                keyword: {
-                  type: 'keyword',
-                  ignore_above: 256,
-                },
-              },
+              type: 'keyword',
+              ignore_above: 256,
+              store: true,
             },
             class_name: {
-              type: 'text',
-              fields: {
-                keyword: {
-                  type: 'keyword',
-                  ignore_above: 256,
-                },
-              },
+              type: 'keyword',
+              ignore_above: 256,
+              store: true,
             },
             id: {
               type: 'float',
@@ -913,13 +728,9 @@
           },
         },
         format: {
-          type: 'text',
-          fields: {
-            keyword: {
-              type: 'keyword',
-              ignore_above: 256,
-            },
-          },
+          type: 'keyword',
+          ignore_above: 256,
+          store: true,
         },
         fqdn: {
           type: 'text',
@@ -961,13 +772,9 @@
           type: 'float',
         },
         group_name: {
-          type: 'text',
-          fields: {
-            keyword: {
-              type: 'keyword',
-              ignore_above: 256,
-            },
-          },
+          type: 'keyword',
+          ignore_above: 256,
+          store: true,
         },
         host: {
           type: 'text',
@@ -997,13 +804,9 @@
           type: 'long',
         },
         integration: {
-          type: 'text',
-          fields: {
-            keyword: {
-              type: 'keyword',
-              ignore_above: 256,
-            },
-          },
+          type: 'keyword',
+          ignore_above: 256,
+          store: true,
         },
         ip_address: {
           type: 'text',
@@ -1092,51 +895,30 @@
               },
             },
             root_namespace: {
-              type: 'text',
-              fields: {
-                keyword: {
-                  type: 'keyword',
-                  ignore_above: 256,
-                },
-              },
+              type: 'keyword',
+              ignore_above: 256,
+              store: true,
             },
             subscription_plan: {
-              type: 'text',
-              fields: {
-                keyword: {
-                  type: 'keyword',
-                  ignore_above: 256,
-                },
-              },
+              type: 'keyword',
+              ignore_above: 256,
+              store: true,
             },
             user: {
-              type: 'text',
-              fields: {
-                keyword: {
-                  type: 'keyword',
-                  ignore_above: 256,
-                },
-              },
+              type: 'keyword',
+              ignore_above: 256,
             },
           },
         },
         method: {
-          type: 'text',
-          fields: {
-            keyword: {
-              type: 'keyword',
-              ignore_above: 256,
-            },
-          },
+          type: 'keyword',
+          ignore_above: 256,
+          store: true,
         },
         namespace: {
-          type: 'text',
-          fields: {
-            keyword: {
-              type: 'keyword',
-              ignore_above: 256,
-            },
-          },
+          type: 'keyword',
+          ignore_above: 256,
+          store: true,
         },
         next_execution: {
           type: 'long',
@@ -1153,13 +935,9 @@
         params: {
           properties: {
             key: {
-              type: 'text',
-              fields: {
-                keyword: {
-                  type: 'keyword',
-                  ignore_above: 256,
-                },
-              },
+              type: 'keyword',
+              ignore_above: 256,
+              store: true,
             },
             value: {
               type: 'text',
@@ -1197,13 +975,9 @@
           },
         },
         push_access_levels: {
-          type: 'text',
-          fields: {
-            keyword: {
-              type: 'keyword',
-              ignore_above: 256,
-            },
-          },
+          type: 'keyword',
+          ignore_above: 256,
+          store: true,
         },
         query: {
           type: 'text',
@@ -1248,31 +1022,19 @@
           },
         },
         remove: {
-          type: 'text',
-          fields: {
-            keyword: {
-              type: 'keyword',
-              ignore_above: 256,
-            },
-          },
+          type: 'keyword',
+          ignore_above: 256,
+          store: true,
         },
         request_method: {
-          type: 'text',
-          fields: {
-            keyword: {
-              type: 'keyword',
-              ignore_above: 256,
-            },
-          },
+          type: 'keyword',
+          ignore_above: 256,
+          store: true,
         },
         requested_actions: {
-          type: 'text',
-          fields: {
-            keyword: {
-              type: 'keyword',
-              ignore_above: 256,
-            },
-          },
+          type: 'keyword',
+          ignore_above: 256,
+          store: true,
         },
         requested_project_path: {
           type: 'text',
@@ -1300,58 +1062,34 @@
           type: 'boolean',
         },
         scope_type: {
-          type: 'text',
-          fields: {
-            keyword: {
-              type: 'keyword',
-              ignore_above: 256,
-            },
-          },
+          type: 'keyword',
+          ignore_above: 256,
+          store: true,
         },
         service: {
-          type: 'text',
-          fields: {
-            keyword: {
-              type: 'keyword',
-              ignore_above: 256,
-            },
-          },
+          type: 'keyword',
+          ignore_above: 256,
+          store: true,
         },
         service_class: {
-          type: 'text',
-          fields: {
-            keyword: {
-              type: 'keyword',
-              ignore_above: 256,
-            },
-          },
+          type: 'keyword',
+          ignore_above: 256,
+          store: true,
         },
         severity: {
-          type: 'text',
-          fields: {
-            keyword: {
-              type: 'keyword',
-              ignore_above: 256,
-            },
-          },
+          type: 'keyword',
+          ignore_above: 256,
+          store: true,
         },
         shard: {
-          type: 'text',
-          fields: {
-            keyword: {
-              type: 'keyword',
-              ignore_above: 256,
-            },
-          },
+          type: 'keyword',
+          ignore_above: 256,
+          store: true,
         },
         stage: {
-          type: 'text',
-          fields: {
-            keyword: {
-              type: 'keyword',
-              ignore_above: 256,
-            },
-          },
+          type: 'keyword',
+          ignore_above: 256,
+          store: true,
         },
         standalone_pr_comments: {
           type: 'long',
@@ -1374,22 +1112,14 @@
         tags: {
           properties: {
             correlation_id: {
-              type: 'text',
-              fields: {
-                keyword: {
-                  type: 'keyword',
-                  ignore_above: 256,
-                },
-              },
+              type: 'keyword',
+              ignore_above: 256,
+              store: true,
             },
             locale: {
-              type: 'text',
-              fields: {
-                keyword: {
-                  type: 'keyword',
-                  ignore_above: 256,
-                },
-              },
+              type: 'keyword',
+              ignore_above: 256,
+              store: true,
             },
           },
         },
@@ -1412,22 +1142,14 @@
           },
         },
         target_type: {
-          type: 'text',
-          fields: {
-            keyword: {
-              type: 'keyword',
-              ignore_above: 256,
-            },
-          },
+          type: 'keyword',
+          ignore_above: 256,
+          store: true,
         },
         tier: {
-          type: 'text',
-          fields: {
-            keyword: {
-              type: 'keyword',
-              ignore_above: 256,
-            },
-          },
+          type: 'keyword',
+          ignore_above: 256,
+          store: true,
         },
         time: {
           type: 'date',
@@ -1451,13 +1173,9 @@
           },
         },
         type: {
-          type: 'text',
-          fields: {
-            keyword: {
-              type: 'keyword',
-              ignore_above: 256,
-            },
-          },
+          type: 'keyword',
+          ignore_above: 256,
+          store: true,
         },
         ua: {
           type: 'text',
@@ -1478,13 +1196,9 @@
           },
         },
         update: {
-          type: 'text',
-          fields: {
-            keyword: {
-              type: 'keyword',
-              ignore_above: 256,
-            },
-          },
+          type: 'keyword',
+          ignore_above: 256,
+          store: true,
         },
         user: {
           properties: {
@@ -1510,13 +1224,9 @@
               },
             },
             username: {
-              type: 'text',
-              fields: {
-                keyword: {
-                  type: 'keyword',
-                  ignore_above: 256,
-                },
-              },
+              type: 'keyword',
+              ignore_above: 256,
+              store: true,
             },
           },
         },
@@ -1524,13 +1234,9 @@
           type: 'long',
         },
         username: {
-          type: 'text',
-          fields: {
-            keyword: {
-              type: 'keyword',
-              ignore_above: 256,
-            },
-          },
+          type: 'keyword',
+          ignore_above: 256,
+          store: true,
         },
         variables: {
           type: 'text',
@@ -1545,24 +1251,15 @@
           type: 'float',
         },
         with: {
-          type: 'text',
-          fields: {
-            keyword: {
-              type: 'keyword',
-              ignore_above: 256,
-            },
-          },
-        },
-      },
-    },
-    message_id: {
-      type: 'text',
-      fields: {
-        keyword: {
           type: 'keyword',
           ignore_above: 256,
         },
       },
+    },
+    message_id: {
+      type: 'keyword',
+      ignore_above: 256,
+      store: true,
     },
     publish_time: {
       type: 'date',
