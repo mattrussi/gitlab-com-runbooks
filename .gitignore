@@ -6,4 +6,4 @@ alertmanager/chef_alertmanager.*
 alertmanager/k8s_alertmanager.*
 .env.sh
 /services/service_catalog.json
-/vendor
+/vendoraa
