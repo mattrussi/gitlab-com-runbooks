@@ -1,0 +1,59 @@
+groups:
+- name: GitLab Label Policy
+  interval: 1m
+  rules:
+  - alert: MissingServiceLabels
+    expr: count by (job) (up{environment=""})
+    for: 5m
+    labels:
+      service: alertmanager
+      severity: s3
+      alert_type: symptom
+    annotations:
+      title: Job is missing service labels
+      runbook: docs/monitoring/gitlab-service-labels.md
+      description: The job {{ $labels.job }} is missing the environment service label.
+  - alert: MissingServiceLabels
+    expr: count by (job) (up{shard=""})
+    for: 5m
+    labels:
+      service: alertmanager
+      severity: s3
+      alert_type: symptom
+    annotations:
+      title: Job is missing service labels
+      runbook: docs/monitoring/gitlab-service-labels.md
+      description: The job {{ $labels.job }} is missing the shard service label.
+  - alert: MissingServiceLabels
+    expr: count by (job) (up{stage=""})
+    for: 5m
+    labels:
+      service: alertmanager
+      severity: s3
+      alert_type: symptom
+    annotations:
+      title: Job is missing service labels
+      runbook: docs/monitoring/gitlab-service-labels.md
+      description: The job {{ $labels.job }} is missing the stage service label.
+  - alert: MissingServiceLabels
+    expr: count by (job) (up{tier=""})
+    for: 5m
+    labels:
+      service: alertmanager
+      severity: s3
+      alert_type: symptom
+    annotations:
+      title: Job is missing service labels
+      runbook: docs/monitoring/gitlab-service-labels.md
+      description: The job {{ $labels.job }} is missing the tier service label.
+  - alert: MissingServiceLabels
+    expr: count by (job) (up{type=""})
+    for: 1m
+    labels:
+      service: alertmanager
+      severity: s3
+      alert_type: symptom
+    annotations:
+      title: Job is missing service labels
+      runbook: docs/monitoring/gitlab-service-labels.md
+      description: The job {{ $labels.job }} is missing the type service label.
