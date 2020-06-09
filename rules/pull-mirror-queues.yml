@@ -6,7 +6,7 @@ groups:
       avg(
         gitlab_database_rows{query_name="mirrors_ready_to_sync"}
       ) > 10000
-    for: 15m
+    for: 30m
     labels:
       severity: s1
       channel: backend
