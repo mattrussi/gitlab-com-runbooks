@@ -20,6 +20,10 @@ local sidekiqHelpers = import './lib/sidekiq-helpers.libsonnet';
     nfs: true,
     praefect: true,
   },
+  provisioning: {
+    kubernetes: true,
+    vms: true,
+  },
   components: {
     high_urgency_job_execution: {
       apdex: histogramApdex(
@@ -120,16 +124,4 @@ local sidekiqHelpers = import './lib/sidekiq-helpers.libsonnet';
       significantLabels: ['shard'],
     },
   },
-
-  saturationTypes: [
-    'cpu',
-    'disk_space',
-    'memory',
-    'open_fds',
-    'sidekiq_workers',
-    'single_node_cpu',
-    'single_node_puma_workers',
-    'single_node_unicorn_workers',
-    'workers',
-  ],
 }

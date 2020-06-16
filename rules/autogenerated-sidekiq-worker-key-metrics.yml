@@ -514,6 +514,9 @@ groups:
 
         Currently the metric value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-queue-detail/sidekiq-queue-detail
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/sidekiq-queue-detail/sidekiq-queue-detail?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}&var-queue={{ $labels.queue }}
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '13'
       grafana_variables: environment,stage,queue
@@ -557,6 +560,9 @@ groups:
 
         Currently the metric value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-queue-detail/sidekiq-queue-detail
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/sidekiq-queue-detail/sidekiq-queue-detail?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}&var-queue={{ $labels.queue }}
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '12'
       grafana_variables: environment,stage,queue
@@ -600,8 +606,11 @@ groups:
 
         Currently the metric value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-queue-detail/sidekiq-queue-detail
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/sidekiq-queue-detail/sidekiq-queue-detail?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}&var-queue={{ $labels.queue }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '10'
+      grafana_panel_id: '11'
       grafana_variables: environment,stage,queue
       promql_template_1: >-
         gitlab_background_jobs:queue:apdex:ratio_1h{environment="$environment", type="$type", stage="$stage",

@@ -15,12 +15,14 @@
 
 ## Troubleshooting Pointers
 
+* [../cloudflare/README.md](../cloudflare/README.md)
 * [../elastic/README.md](../elastic/README.md)
 * [../elastic/elastic-cloud.md](../elastic/elastic-cloud.md)
 * [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
 * [../elastic/kibana.md](../elastic/kibana.md)
 * [../frontend/ssh-maxstartups-breach.md](../frontend/ssh-maxstartups-breach.md)
 * [../git/purge-git-data.md](../git/purge-git-data.md)
+* [../license/license-gitlab-com.md](../license/license-gitlab-com.md)
 * [README.md](README.md)
 * [logging_gcs_archive_bigquery.md](logging_gcs_archive_bigquery.md)
 * [../pages/gitlab-pages.md](../pages/gitlab-pages.md)
@@ -29,7 +31,7 @@
 * [../patroni/gitlab-com-wale-backups.md](../patroni/gitlab-com-wale-backups.md)
 * [../patroni/postgres.md](../patroni/postgres.md)
 * [../patroni/using-wale-gpg.md](../patroni/using-wale-gpg.md)
-* [../pgbouncer/pgbouncer.md](../pgbouncer/pgbouncer.md)
+* [../pgbouncer/pgbouncer-saturation.md](../pgbouncer/pgbouncer-saturation.md)
 * [../pubsub/pubsub-queing.md](../pubsub/pubsub-queing.md)
 * [../uncategorized/access-azure-test-subscription.md](../uncategorized/access-azure-test-subscription.md)
 * [../uncategorized/access-gcp-hosts.md](../uncategorized/access-gcp-hosts.md)

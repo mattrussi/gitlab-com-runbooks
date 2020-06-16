@@ -47,9 +47,27 @@ TODO: link here design docs once they are ready
 
 # How-to guides #
 
+## Upgrade checklist
+
+This is an early-stage placeholder for tasks required for an Elasticsearch upgrade.
+
+Pre-flight:
+
+* TBD
+
+Upgrade:
+
+* TBD
+
+After the upgrade:
+
+* [ ] Update `managed-objects/$env/apm-*_template.json` to point to new APM version.
+
 ## Performing operations on the Elastic cluster ##
 
-One time Elastic operations should be documented as `api_call` s in this repo. Everything else, for example cluster config, index templates, should be managed using CI (with the exception of dashboards and visualizations created in Kibana by users).
+One time Elastic operations should be documented as `api_calls` in this repo. Everything else, for example cluster config, index templates, should be managed using CI (with the exception of dashboards and visualizations created in Kibana by users).
+
+The convention used in most scripts in `api_calls` is to provide cluster connection details using an env var called `ES7_URL_WITH_CREDS`. It has a format of: `https://<es_username>:<password>@<cluster_url>:<es_port>` . The secret that this env var should contain can be found in 1password.
 
 ## Estimating Log Volume and Cluster Size
 
@@ -96,6 +114,15 @@ The results as of 16-01-2020 are analyzed in
 As of 17-01-2020 we are using ca. **4TiB elastic storage per day** (only pubsub topics, excluding
 nginx). That means for a **7 day retention** we consume around 28TiB storage. Adding
 nginx logs would increase that by 0.6TiB/day (15%), haproxy logs by 2.5TiB/day (63%).
+
+## Analyzing index mappings
+
+At the moment of writing, we utilize static mappings defined in this repository. Here are a few ideas for analysis of those mappings:
+```bash
+$ jsonnet elastic/managed-objects/lib/index_mappings/rails.jsonnet | jq -r 'leaf_paths|join(".")' | grep -E '\.type$' | wc -l
+$ jsonnet elastic/managed-objects/lib/index_mappings/rails.jsonnet | jq -r 'leaf_paths|join(".")' | grep -E '\.type$' | head
+$ jsonnet elastic/managed-objects/lib/index_mappings/rails.jsonnet | jq -r 'leaf_paths|join(";")' | grep -E ';type$' | awk '{ print $1, 1 }' | inferno-flamegraph > mapping_rails.svg
+```
 
 # Concepts #
 

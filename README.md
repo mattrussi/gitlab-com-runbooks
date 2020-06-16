@@ -485,8 +485,25 @@ legacy_version_file = yes
 
 ### Go, Jsonnet
 
-The single-source-of-truth for tool versions for Go and Jsonnet versions is in the `.tool-versions` file.
-Please keep this file up-to-date, whether or not you choose to use `adsf` locally.
+We use `.tool-versions` to record the version of go-jsonnet that should be used
+for local development. The `asdf` version manager is used by some team members
+to automatically switch versions based on the contents of this file. It should
+be kept up to date. `images/runtools_build/Dockerfile` contains the version of
+go-jsonnet we use in CI. This should be kept in sync with `.tool-versions`, and
+a (non-gating) CI job enforces this.
+
+To install [go-jsonnet](https://github.com/google/go-jsonnet), you have a few
+options.
+
+You could follow that project's README to install manually;
+
+Or via homebrew:
+
+```
+brew install go-jsonnet
+```
+Or use [an asdf
+plugin](https://gitlab.com/craigfurman/asdf-go-jsonnet).
 
 ### Ruby
 
@@ -519,7 +536,7 @@ Please see the [contribution guidelines](CONTRIBUTING.md)
 [prometheus-azure-targets-down]:    https://prometheus.gitlab.com/consoles/up.html
 [prometheus-gprd]:                  https://prometheus.gprd.gitlab.net/alerts
 [prometheus-gprd-targets-down]:     https://prometheus.gprd.gitlab.net/consoles/up.html
-[prometheus-app-gprd]:              https://prometheus-app.gprdgitlab.net/alerts
+[prometheus-app-gprd]:              https://prometheus-app.gprd.gitlab.net/alerts
 [prometheus-app-gprd-targets-down]: https://prometheus-app.gprd.gitlab.net/consoles/up.html
 
 [runbook-repo]:                     https://gitlab.com/gitlab-com/runbooks

@@ -8,10 +8,10 @@ local gitalyHelpers = import './lib/gitaly-helpers.libsonnet';
   tier: 'stor',
   monitoringThresholds: {
     apdexRatio: 0.995,
-    errorRatio: 0.001,
+    errorRatio: 0.0005,
   },
   eventBasedSLOTargets: {
-    errorRatio: 0.999,  // 99.9% of Praefect requests should succeed, over multiple window periods
+    errorRatio: 0.9995,  // 99.95% of Praefect requests should succeed, over multiple window periods
   },
   serviceDependencies: {
     gitaly: true,
@@ -38,18 +38,4 @@ local gitalyHelpers = import './lib/gitaly-helpers.libsonnet';
       significantLabels: ['fqdn'],
     },
   },
-
-  saturationTypes: [
-    'cgroup_memory',
-    'cpu',
-    'disk_space',
-    'disk_sustained_read_iops',
-    'disk_sustained_read_throughput',
-    'disk_sustained_write_iops',
-    'disk_sustained_write_throughput',
-    'memory',
-    'open_fds',
-    'single_node_cpu',
-    'go_memory',
-  ],
 }

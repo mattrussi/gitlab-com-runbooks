@@ -30,8 +30,8 @@ local optimalMargin = 0.10;
 local selector = 'type="sidekiq", environment="$environment", stage="$stage", shard=~"$shard"';
 
 local queueDetailDataLink = {
-  url: '/d/sidekiq-queue-detail?${__url_time_range}&${__all_variables}&var-queue=${__field.labels.queue}',
-  title: 'Queue Detail: ${__field.labels.queue}',
+  url: '/d/sidekiq-queue-detail?${__url_time_range}&${__all_variables}&var-queue=${__field.label.queue}',
+  title: 'Queue Detail: ${__field.label.queue}',
 };
 
 local rowGrid(rowTitle, panels, startRow) =
@@ -322,8 +322,7 @@ basic.dashboard(
 )
 .addPanel(
   row.new(title='Rails Metrics', collapse=true)
-  .addPanels(railsCommon.railsPanels(serviceType='sidekiq', serviceStage='$stage', startRow=1))
-  ,
+  .addPanels(railsCommon.railsPanels(serviceType='sidekiq', serviceStage='$stage', startRow=1)),
   gridPos={
     x: 0,
     y: 3000,
@@ -341,8 +340,6 @@ basic.dashboard(
     'sidekiq_workers',
     'single_node_cpu',
     'single_node_puma_workers',
-    'single_node_unicorn_workers',
-    'workers',
   ]),
   gridPos={ x: 0, y: 5000, w: 24, h: 1 }
 )

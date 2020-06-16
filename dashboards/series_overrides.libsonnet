@@ -4,7 +4,6 @@ local capacityComponentColors = {
   redis_clients: '#73BF69',
   single_node_cpu: '#FADE2A',
   single_threaded_cpu: '#F2495C',
-  workers: '#5794F2',
   pgbouncer_async_pool: '#FA9830',
   cpu: '#B877D9',
   disk_space: '#37852E',
@@ -87,6 +86,7 @@ local capacityComponentColors = {
   },
   goldenMetric(alias, overrides={}):: self {
     alias: alias,
+    zindex: 3,
     color: '#E7D551',  // "Brilliant gold"
   } + overrides,
   slo:: {
@@ -197,4 +197,12 @@ local capacityComponentColors = {
     nullPointMode: 'connected',
     zindex: -2,
   },
+  averageCaseSeries(alias, overrides={}):: {
+    alias: alias,
+    linewidth: 1,
+    dashLength: 1,
+    spaceLength: 1,
+    zindex: -3,
+    color: '#5794F2',
+  } + overrides,
 }

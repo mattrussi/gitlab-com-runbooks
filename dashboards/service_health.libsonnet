@@ -1,15 +1,19 @@
 local colors = import 'colors.libsonnet';
 local grafana = import 'grafonnet/grafana.libsonnet';
+local selectors = import 'lib/selectors.libsonnet';
 local promQuery = import 'prom_query.libsonnet';
+
 local row = grafana.row;
 
-local activeAlertsPanel(serviceType, serviceStage) =
+local defaultEnvironmentSelector = { environment: '$environment' };
+
+local activeAlertsPanel(selector, title='Active Alerts') =
   local formatConfig = {
-    serviceType: serviceType,
-    serviceStage: serviceStage,
+    selector: selector,
   };
+
   grafana.tablePanel.new(
-    'Active Alerts',
+    title,
     datasource='$PROMETHEUS_DS',
     styles=[
       {
@@ -25,7 +29,7 @@ local activeAlertsPanel(serviceType, serviceStage) =
         pattern: 'alertname',
         mappingType: 2,
         link: true,
-        linkUrl: 'https://alerts.${environment}.gitlab.net/#/alerts?filter=%7Balertname%3D%22${__cell}%22%2C%20env%3D%22${environment}%22%2C%20type%3D%22' + serviceType + '%22%7D',
+        linkUrl: 'https://alerts.${environment}.gitlab.net/#/alerts?filter=%7Balertname%3D%22${__cell}%22%2C%20env%3D%22${environment}%22%7D',
         linkTooltip: 'Open alertmanager',
       },
       {
@@ -53,14 +57,14 @@ local activeAlertsPanel(serviceType, serviceStage) =
       |||
         sort(
           max(
-          ALERTS{environment="$environment", type="%(serviceType)s", stage=~"|%(serviceStage)s", severity="s1", alertstate="firing"} * 4
-          or
-          ALERTS{environment="$environment", type="%(serviceType)s", stage=~"|%(serviceStage)s", severity="s2", alertstate="firing"} * 3
-          or
-          ALERTS{environment="$environment", type="%(serviceType)s", stage=~"|%(serviceStage)s", severity="s3", alertstate="firing"} * 2
-          or
-          ALERTS{environment="$environment", type="%(serviceType)s", alertstate="firing"}
-          ) by (alertname, severity)
+            ALERTS{%(selector)s, severity="s1", alertstate="firing"} * 4
+            or
+            ALERTS{%(selector)s, severity="s2", alertstate="firing"} * 3
+            or
+            ALERTS{%(selector)s, severity="s3", alertstate="firing"} * 2
+            or
+            ALERTS{%(selector)s, alertstate="firing"}
+          ) by (environment, alertname, severity)
         )
       ||| % formatConfig,
       format='table',
@@ -68,10 +72,9 @@ local activeAlertsPanel(serviceType, serviceStage) =
     )
   );
 
-local latencySLOPanel(serviceType, serviceStage) =
+local latencySLOPanel(selector) =
   local formatConfig = {
-    serviceType: serviceType,
-    serviceStage: serviceStage,
+    selector: selector,
   };
 
   grafana.singlestat.new(
@@ -83,16 +86,15 @@ local latencySLOPanel(serviceType, serviceStage) =
   .addTarget(
     promQuery.target(
       |||
-        avg(avg_over_time(slo_observation_status{slo="apdex_ratio", environment="$environment", type="%(serviceType)s", stage="%(serviceStage)s"}[7d]))
+        avg(avg_over_time(slo_observation_status{slo="apdex_ratio", %(selector)s}[7d]))
       ||| % formatConfig,
       instant=true
     )
   );
 
-local errorRateSLOPanel(serviceType, serviceStage) =
+local errorRateSLOPanel(selector) =
   local formatConfig = {
-    serviceType: serviceType,
-    serviceStage: serviceStage,
+    selector: selector,
   };
 
   grafana.singlestat.new(
@@ -104,7 +106,7 @@ local errorRateSLOPanel(serviceType, serviceStage) =
   .addTarget(
     promQuery.target(
       |||
-        avg_over_time(slo_observation_status{slo="error_ratio", environment="$environment", type="%(serviceType)s", stage="%(serviceStage)s"}[7d])
+        avg_over_time(slo_observation_status{slo="error_ratio", %(selector)s}[7d])
       ||| % formatConfig,
       instant=true
     )
@@ -112,10 +114,22 @@ local errorRateSLOPanel(serviceType, serviceStage) =
 
 
 {
-  row(serviceType, serviceStage)::
+  activeAlertsPanel(selector, title='Active Alerts'):: activeAlertsPanel(selector, title=title),
+
+  row(serviceType, serviceStage, environmentSelectorHash=defaultEnvironmentSelector)::
+    local healthSelector = selectors.serializeHash(environmentSelectorHash {
+      type: serviceType,
+      stage: serviceStage,
+    });
+
+    local alertsSelector = selectors.serializeHash(environmentSelectorHash {
+      type: serviceType,
+      stage: { re: '|' + serviceStage },
+    });
+
     row.new(title='👩‍⚕️ Service Health', collapse=true)
     .addPanel(
-      latencySLOPanel(serviceType, serviceStage),
+      latencySLOPanel(healthSelector),
       gridPos={
         x: 0,
         y: 1,
@@ -124,7 +138,7 @@ local errorRateSLOPanel(serviceType, serviceStage) =
       }
     )
     .addPanel(
-      activeAlertsPanel(serviceType, serviceStage),
+      activeAlertsPanel(alertsSelector),
       gridPos={
         x: 6,
         y: 1,
@@ -133,7 +147,7 @@ local errorRateSLOPanel(serviceType, serviceStage) =
       }
     )
     .addPanel(
-      errorRateSLOPanel(serviceType, serviceStage),
+      errorRateSLOPanel(healthSelector),
       gridPos={
         x: 0,
         y: 5,

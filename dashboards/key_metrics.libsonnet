@@ -12,6 +12,9 @@ local row = grafana.row;
 local template = grafana.template;
 local graphPanel = grafana.graphPanel;
 local annotation = grafana.annotation;
+local selectors = import 'lib/selectors.libsonnet';
+
+local defaultEnvironmentSelector = { environment: '$environment' };
 
 local generalGraphPanel(title, description=null, linewidth=2, sort='increasing', legend_show=true) =
   graphPanel.new(
@@ -32,25 +35,22 @@ local generalGraphPanel(title, description=null, linewidth=2, sort='increasing',
     legend_alignAsTable=true,
     legend_hideEmpty=true,
   )
-  .addSeriesOverride(seriesOverrides.goldenMetric('/ service/'))
   .addSeriesOverride(seriesOverrides.upper)
   .addSeriesOverride(seriesOverrides.lower)
   .addSeriesOverride(seriesOverrides.lastWeek)
-  .addSeriesOverride(seriesOverrides.alertFiring)
-  .addSeriesOverride(seriesOverrides.alertPending)
   .addSeriesOverride(seriesOverrides.degradationSlo)
   .addSeriesOverride(seriesOverrides.outageSlo)
   .addSeriesOverride(seriesOverrides.slo);
-
 
 {
   apdexPanel(
     serviceType,
     serviceStage,
+    environmentSelectorHash=defaultEnvironmentSelector,
     compact=false,
     description='Apdex is a measure of requests that complete within a tolerable period of time for the service. Higher is better.'
   )::
-    local selectorHash = { environment: '$environment', type: serviceType, stage: serviceStage };
+    local selectorHash = environmentSelectorHash { type: serviceType, stage: serviceStage };
 
     generalGraphPanel(
       'Latency: Apdex',
@@ -59,22 +59,28 @@ local generalGraphPanel(title, description=null, linewidth=2, sort='increasing',
       legend_show=!compact,
       linewidth=if compact then 1 else 2,
     )
-    .addTarget(  // Primary metric
+    .addTarget(  // Primary metric (worst case)
       promQuery.target(
-        sliPromQL.apdex.serviceApdexQuery(selectorHash, '$__interval'),
+        sliPromQL.apdex.serviceApdexQuery(selectorHash, '$__interval', worstCase=true),
         legendFormat='{{ type }} service',
+      )
+    )
+    .addTarget(  // Primary metric (avg case)
+      promQuery.target(
+        sliPromQL.apdex.serviceApdexQuery(selectorHash, '$__interval', worstCase=false),
+        legendFormat='{{ type }} service (avg)',
       )
     )
     .addTarget(  // Min apdex score SLO for gitlab_service_errors:ratio metric
       promQuery.target(
-        sliPromQL.apdex.serviceApdexDegradationSLOQuery('$environment', serviceType, serviceStage),
+        sliPromQL.apdex.serviceApdexDegradationSLOQuery(environmentSelectorHash, serviceType, serviceStage),
         interval='5m',
         legendFormat='Degradation SLO',
       ),
     )
     .addTarget(  // Double apdex SLO is Outage-level SLO
       promQuery.target(
-        sliPromQL.apdex.serviceApdexOutageSLOQuery('$environment', serviceType, serviceStage),
+        sliPromQL.apdex.serviceApdexOutageSLOQuery(environmentSelectorHash, serviceType, serviceStage),
         interval='5m',
         legendFormat='Outage SLO',
       ),
@@ -96,15 +102,22 @@ local generalGraphPanel(title, description=null, linewidth=2, sort='increasing',
       max=1,
       min=0,
       show=false,
-    ),
+    )
+    .addSeriesOverride(seriesOverrides.goldenMetric('/ service$/'))
+    .addSeriesOverride(seriesOverrides.averageCaseSeries('/ service \\(avg\\)$/', { fillBelowTo: serviceType + ' service' })),
 
-  singleComponentApdexPanel(serviceType, serviceStage, component)::
+  singleComponentApdexPanel(
+    serviceType,
+    serviceStage,
+    component,
+    environmentSelectorHash=defaultEnvironmentSelector,
+  )::
     local formatConfig = {
       serviceType: serviceType,
       serviceStage: serviceStage,
       component: component,
     };
-    local selectorHash = { environment: '$environment', type: serviceType, stage: serviceStage, component: component };
+    local selectorHash = environmentSelectorHash { type: serviceType, stage: serviceStage, component: component };
 
     generalGraphPanel(
       '%(component)s Apdex' % formatConfig,
@@ -121,7 +134,7 @@ local generalGraphPanel(title, description=null, linewidth=2, sort='increasing',
       // TODO: Replace with component-level MWMBR-error rate thresholds once
       // we're fully migrated to those
       promQuery.target(
-        sliPromQL.apdex.serviceApdexDegradationSLOQuery('$environment', serviceType, serviceStage),
+        sliPromQL.apdex.serviceApdexDegradationSLOQuery(environmentSelectorHash, serviceType, serviceStage),
         interval='5m',
         legendFormat='SLO',
       ),
@@ -139,12 +152,16 @@ local generalGraphPanel(title, description=null, linewidth=2, sort='increasing',
       show=false,
     ),
 
-  componentApdexPanel(serviceType, serviceStage)::
+  componentApdexPanel(
+    serviceType,
+    serviceStage,
+    environmentSelectorHash=defaultEnvironmentSelector,
+  )::
     local formatConfig = {
       serviceType: serviceType,
       serviceStage: serviceStage,
     };
-    local selectorHash = { environment: '$environment', type: serviceType, stage: serviceStage };
+    local selectorHash = environmentSelectorHash { type: serviceType, stage: serviceStage };
 
     generalGraphPanel(
       'Component Latency: Apdex',
@@ -160,7 +177,7 @@ local generalGraphPanel(title, description=null, linewidth=2, sort='increasing',
     )
     .addTarget(  // Min apdex score SLO for gitlab_service_errors:ratio metric
       promQuery.target(
-        sliPromQL.errorRate.serviceErrorRateDegradationSLOQuery('$environment', serviceType, serviceStage),
+        sliPromQL.errorRate.serviceErrorRateDegradationSLOQuery(environmentSelectorHash, serviceType, serviceStage),
         interval='5m',
         legendFormat='SLO',
       ),
@@ -178,8 +195,14 @@ local generalGraphPanel(title, description=null, linewidth=2, sort='increasing',
       show=false,
     ),
 
-  errorRatesPanel(serviceType, serviceStage, compact=false, includeLastWeek=true)::
-    local selectorHash = { environment: '$environment', type: serviceType, stage: serviceStage };
+  errorRatesPanel(
+    serviceType,
+    serviceStage,
+    environmentSelectorHash=defaultEnvironmentSelector,
+    compact=false,
+    includeLastWeek=true
+  )::
+    local selectorHash = environmentSelectorHash { type: serviceType, stage: serviceStage };
 
     generalGraphPanel(
       'Error Ratios',
@@ -188,22 +211,28 @@ local generalGraphPanel(title, description=null, linewidth=2, sort='increasing',
       legend_show=!compact,
       linewidth=if compact then 1 else 2,
     )
-    .addTarget(  // Primary metric
+    .addTarget(  // Primary metric (max)
       promQuery.target(
-        sliPromQL.errorRate.serviceErrorRateQuery(selectorHash, '$__interval'),
+        sliPromQL.errorRate.serviceErrorRateQuery(selectorHash, '$__interval', worstCase=true),
         legendFormat='{{ type }} service',
+      )
+    )
+    .addTarget(  // Primary metric (avg)
+      promQuery.target(
+        sliPromQL.errorRate.serviceErrorRateQuery(selectorHash, '$__interval', worstCase=false),
+        legendFormat='{{ type }} service (avg)',
       )
     )
     .addTarget(  // Maximum error rate SLO for gitlab_service_errors:ratio metric
       promQuery.target(
-        sliPromQL.errorRate.serviceErrorRateDegradationSLOQuery('$environment', serviceType, serviceStage),
+        sliPromQL.errorRate.serviceErrorRateDegradationSLOQuery(environmentSelectorHash, serviceType, serviceStage),
         interval='5m',
         legendFormat='Degradation SLO',
       ),
     )
     .addTarget(  // Outage level SLO
       promQuery.target(
-        sliPromQL.errorRate.serviceErrorRateOutageSLOQuery('$environment', serviceType, serviceStage),
+        sliPromQL.errorRate.serviceErrorRateOutageSLOQuery(environmentSelectorHash, serviceType, serviceStage),
         interval='5m',
         legendFormat='Outage SLO',
       ),
@@ -227,15 +256,22 @@ local generalGraphPanel(title, description=null, linewidth=2, sort='increasing',
       max=1,
       min=0,
       show=false,
-    ),
+    )
+    .addSeriesOverride(seriesOverrides.goldenMetric('/ service$/', { fillBelowTo: serviceType + ' service (avg)' }))
+    .addSeriesOverride(seriesOverrides.averageCaseSeries('/ service \\(avg\\)$/', { fillGradient: 10 })),
 
-  singleComponentErrorRates(serviceType, serviceStage, componentName)::
+  singleComponentErrorRates(
+    serviceType,
+    serviceStage,
+    componentName,
+    environmentSelectorHash=defaultEnvironmentSelector,
+  )::
     local formatConfig = {
       serviceType: serviceType,
       serviceStage: serviceStage,
       component: componentName,
     };
-    local selectorHash = { environment: '$environment', type: serviceType, stage: serviceStage, component: componentName };
+    local selectorHash = environmentSelectorHash { type: serviceType, stage: serviceStage, component: componentName };
 
     generalGraphPanel(
       '%(component)s Component Error Rates' % formatConfig,
@@ -251,14 +287,14 @@ local generalGraphPanel(title, description=null, linewidth=2, sort='increasing',
     )
     .addTarget(  // Maximum error rate SLO for gitlab_service_errors:ratio metric
       promQuery.target(
-        sliPromQL.errorRate.serviceErrorRateDegradationSLOQuery('$environment', serviceType, serviceStage),
+        sliPromQL.errorRate.serviceErrorRateDegradationSLOQuery(environmentSelectorHash, serviceType, serviceStage),
         interval='5m',
         legendFormat='Degradation SLO',
       ),
     )
     .addTarget(  // Outage level SLO
       promQuery.target(
-        sliPromQL.errorRate.serviceErrorRateOutageSLOQuery('$environment', serviceType, serviceStage),
+        sliPromQL.errorRate.serviceErrorRateOutageSLOQuery(environmentSelectorHash, serviceType, serviceStage),
         interval='5m',
         legendFormat='Outage SLO',
       ),
@@ -276,10 +312,17 @@ local generalGraphPanel(title, description=null, linewidth=2, sort='increasing',
       show=false,
     ),
 
-  componentErrorRates(serviceType, serviceStage)::
+  componentErrorRates(
+    serviceType,
+    serviceStage,
+    environmentSelectorHash=defaultEnvironmentSelector,
+  )::
+    local selectorHash = environmentSelectorHash { type: serviceType, stage: serviceStage };
+
     local formatConfig = {
       serviceType: serviceType,
       serviceStage: serviceStage,
+      selector: selectors.serializeHash(environmentSelectorHash { type: serviceType, stage: serviceStage }),
     };
     generalGraphPanel(
       'Component Error Rates - modified scale: (1 + n) log10',
@@ -295,7 +338,7 @@ local generalGraphPanel(title, description=null, linewidth=2, sort='increasing',
             60 *
             max(
               max_over_time(
-                gitlab_component_errors:rate{environment="$environment", type="%(serviceType)s", stage="%(serviceStage)s"}[$__interval]
+                gitlab_component_errors:rate{%(selector)s}[$__interval]
               )
             ) by (component)
           )
@@ -316,8 +359,13 @@ local generalGraphPanel(title, description=null, linewidth=2, sort='increasing',
       show=false,
     ),
 
-  qpsPanel(serviceType, serviceStage, compact=false)::
-    local selectorHash = { environment: '$environment', type: serviceType, stage: serviceStage };
+  qpsPanel(
+    serviceType,
+    serviceStage,
+    compact=false,
+    environmentSelectorHash=defaultEnvironmentSelector,
+  )::
+    local selectorHash = environmentSelectorHash { type: serviceType, stage: serviceStage };
 
     generalGraphPanel(
       'RPS - Service Requests per Second',
@@ -361,15 +409,21 @@ local generalGraphPanel(title, description=null, linewidth=2, sort='increasing',
       max=1,
       min=0,
       show=false,
-    ),
+    )
+    .addSeriesOverride(seriesOverrides.goldenMetric('/ service$/')),
 
-  singleComponentQPSPanel(serviceType, serviceStage, componentName)::
+  singleComponentQPSPanel(
+    serviceType,
+    serviceStage,
+    componentName,
+    environmentSelectorHash=defaultEnvironmentSelector,
+  )::
     local formatConfig = {
       serviceType: serviceType,
       serviceStage: serviceStage,
       component: componentName,
     };
-    local selectorHash = { environment: '$environment', type: serviceType, stage: serviceStage, component: componentName };
+    local selectorHash = environmentSelectorHash { type: serviceType, stage: serviceStage, component: componentName };
 
     generalGraphPanel(
       '%(component)s Component RPS - Requests per Second' % formatConfig,
@@ -395,13 +449,16 @@ local generalGraphPanel(title, description=null, linewidth=2, sort='increasing',
       show=false,
     ),
 
-
-  componentQpsPanel(serviceType, serviceStage)::
+  componentQpsPanel(
+    serviceType,
+    serviceStage,
+    environmentSelectorHash=defaultEnvironmentSelector,
+  )::
     local formatConfig = {
       serviceType: serviceType,
       serviceStage: serviceStage,
     };
-    local selectorHash = { environment: '$environment', type: serviceType, stage: serviceStage };
+    local selectorHash = environmentSelectorHash { type: serviceType, stage: serviceStage };
 
     generalGraphPanel(
       'Component RPS - Requests per Second',
@@ -427,13 +484,26 @@ local generalGraphPanel(title, description=null, linewidth=2, sort='increasing',
       show=false,
     ),
 
-  saturationPanel(serviceType, serviceStage, compact=false)::
-    self.componentSaturationPanel(serviceType, serviceStage, compact),
+  saturationPanel(
+    serviceType,
+    serviceStage,
+    compact=false,
+    environmentSelectorHash=defaultEnvironmentSelector,
+  )::
+    self.componentSaturationPanel(serviceType, serviceStage, compact, environmentSelectorHash=environmentSelectorHash),
 
-  componentSaturationPanel(serviceType, serviceStage, compact=false)::
+  componentSaturationPanel(
+    serviceType,
+    serviceStage,
+    compact=false,
+    environmentSelectorHash=defaultEnvironmentSelector,
+  )::
+
+    local selectorHash = environmentSelectorHash { type: serviceType, stage: serviceStage };
     local formatConfig = {
       serviceType: serviceType,
       serviceStage: serviceStage,
+      selector: selectors.serializeHash(selectorHash),
     };
     generalGraphPanel(
       'Saturation',
@@ -447,7 +517,7 @@ local generalGraphPanel(title, description=null, linewidth=2, sort='increasing',
         |||
           max(
             max_over_time(
-              gitlab_component_saturation:ratio{environment="$environment", type="%(serviceType)s", stage="%(serviceStage)s"}[$__interval]
+              gitlab_component_saturation:ratio{%(selector)s}[$__interval]
             )
           ) by (component)
         ||| % formatConfig,
@@ -466,37 +536,48 @@ local generalGraphPanel(title, description=null, linewidth=2, sort='increasing',
       min=0,
       show=false,
     ),
+
   headlineMetricsRow(
     serviceType,
     serviceStage,
     startRow,
-    rowTitle='🌡️ Service Level Indicators (𝙎𝙇𝙄𝙨)'
+    rowTitle='🌡️ Service Level Indicators (𝙎𝙇𝙄𝙨)',
+    environmentSelectorHash=defaultEnvironmentSelector,
   )::
     layout.grid([
       row.new(title=rowTitle, collapse=false),
     ], cols=1, rowHeight=1, startRow=startRow)
     +
     layout.grid([
-      self.apdexPanel(serviceType, serviceStage, compact=true),
-      self.errorRatesPanel(serviceType, serviceStage, compact=true),
-      self.qpsPanel(serviceType, serviceStage, compact=true),
-      self.saturationPanel(serviceType, serviceStage, compact=true),
+      self.apdexPanel(serviceType, serviceStage, compact=true, environmentSelectorHash=environmentSelectorHash),
+      self.errorRatesPanel(serviceType, serviceStage, compact=true, environmentSelectorHash=environmentSelectorHash),
+      self.qpsPanel(serviceType, serviceStage, compact=true, environmentSelectorHash=environmentSelectorHash),
+      self.saturationPanel(serviceType, serviceStage, compact=true, environmentSelectorHash=environmentSelectorHash),
     ], cols=4, rowHeight=5, startRow=startRow + 1),
 
-  keyServiceMetricsRow(serviceType, serviceStage)::
+  keyServiceMetricsRow(
+    serviceType,
+    serviceStage,
+    environmentSelectorHash=defaultEnvironmentSelector,
+  )::
     row.new(title='🏅 Key Service Metrics', collapse=true)
     .addPanels(layout.grid([
-      self.apdexPanel(serviceType, serviceStage),
-      self.errorRatesPanel(serviceType, serviceStage),
-      self.qpsPanel(serviceType, serviceStage),
-      self.saturationPanel(serviceType, serviceStage),
+      self.apdexPanel(serviceType, serviceStage, environmentSelectorHash=environmentSelectorHash),
+      self.errorRatesPanel(serviceType, serviceStage, environmentSelectorHash=environmentSelectorHash),
+      self.qpsPanel(serviceType, serviceStage, environmentSelectorHash=environmentSelectorHash),
+      self.saturationPanel(serviceType, serviceStage, environmentSelectorHash=environmentSelectorHash),
     ])),
-  keyComponentMetricsRow(serviceType, serviceStage)::
+
+  keyComponentMetricsRow(
+    serviceType,
+    serviceStage,
+    environmentSelectorHash=defaultEnvironmentSelector,
+  )::
     row.new(title='🔩 Service Component Metrics', collapse=true)
     .addPanels(layout.grid([
-      self.componentApdexPanel(serviceType, serviceStage),
-      self.componentErrorRates(serviceType, serviceStage),
-      self.componentQpsPanel(serviceType, serviceStage),
-      self.componentSaturationPanel(serviceType, serviceStage),
+      self.componentApdexPanel(serviceType, serviceStage, environmentSelectorHash=environmentSelectorHash),
+      self.componentErrorRates(serviceType, serviceStage, environmentSelectorHash=environmentSelectorHash),
+      self.componentQpsPanel(serviceType, serviceStage, environmentSelectorHash=environmentSelectorHash),
+      self.componentSaturationPanel(serviceType, serviceStage, environmentSelectorHash=environmentSelectorHash),
     ])),
 }

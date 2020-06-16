@@ -27,6 +27,7 @@ workflow:
     - gcloud auth activate-service-account --key-file ${SERVICE_KEY}
     - gcloud config set project ${PROJECT}
     - gcloud container clusters get-credentials ${CLUSTER} --region ${REGION}
+    - ./bin/delete_orphan_kubenetes_rules.sh # Delete ophaned PrometheusRules
     - kubectl apply --namespace monitoring --filename ${CI_PROJECT_DIR}/rules-k8s/
   only:
     refs:
@@ -230,7 +231,7 @@ update_elastic_log_gprd_index_templates:
     changes:
       - elastic/managed-objects/log_gprd/index-templates/*
       - elastic/managed-objects/lib/log_gprd_index_template.libsonnet
-      - elastic/managed-objects/lib/mappings.libsonnet
+      - elastic/managed-objects/lib/index_mappings/*.libsonnet
     variables:
       - $ES_LOG_GPRD_URL
 
@@ -286,7 +287,7 @@ update_elastic_nonprod-log_index_templates:
     changes:
       - elastic/managed-objects/nonprod-log/index-templates/*
       - elastic/managed-objects/lib/nonprod-log_index_template.libsonnet
-      - elastic/managed-objects/lib/mappings.libsonnet
+      - elastic/managed-objects/lib/index_mappings/*.libsonnet
     variables:
       - $ES_NONPROD_URL
 
@@ -417,7 +418,7 @@ deploy_pingdom_checks:
       - $CI_PROJECT_URL =~ /^https:\/\/gitlab\.com\/.*/
 
 check_alerts:
-  image: golang:1.12
+  image: golang:1.14
   script:
     - cd alerts-checker
     - go run alerts-checker.go ../rules $THANOS_URL $IGNORED_ALERTS
@@ -436,6 +437,7 @@ deploy_dashboards:
   stage: deploy
   script:
     - dashboards/upload.sh
+    - dashboards/delete-orphaned-dashboards.sh
   only:
     refs:
       - master
@@ -449,14 +451,11 @@ build_runtools_build_image:
     DOCKER_HOST: tcp://docker:2375
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: ""
-    INTERMEDIATE_IMAGE: ${CI_REGISTRY_IMAGE}/runtools_build-intermediate:latest
     IMAGE: ${CI_REGISTRY_IMAGE}/runtools_build
   script:
     - export ci_image_tag=${CI_COMMIT_TAG:-$CI_COMMIT_SHORT_SHA}
     - apk add curl
-    - git clone --branch "v$(grep ^jsonnet .tool-versions|awk '{ print $2 }')" https://github.com/google/jsonnet.git
     - echo ${CI_JOB_TOKEN} | docker login --password-stdin -u $CI_REGISTRY_USER $CI_REGISTRY
-    - cd jsonnet && docker build -t ${INTERMEDIATE_IMAGE} . && cd ..
     - docker build -t ${IMAGE}:$ci_image_tag -t ${IMAGE}:latest --build-arg CI_REGISTRY_IMAGE=$CI_REGISTRY_IMAGE images/runtools_build/
     - docker push ${IMAGE}:latest
     - docker push ${IMAGE}:$ci_image_tag
@@ -506,3 +505,12 @@ verify_alertmanager_parity:
   image: registry.gitlab.com/gitlab-com/runbooks/runtools_build:latest
   script:
     - alertmanager/verify-alertmanager-parity.sh
+
+assert_consistent_tool_versions:
+  stage: test
+  image: "${CI_REGISTRY_IMAGE}/runtools_build:latest"
+  script: "./bin/assert-tool-versions.sh"
+  # CI image-building flow is decoupled from use of that image. As long as we
+  # keep referencing `runtools_build:latest`, updating a pinned version would
+  # have to be done across 2 MRs, which is painful.
+  allow_failure: true

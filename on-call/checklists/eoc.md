@@ -15,7 +15,9 @@ Here is a suggested checklist of things to do at the start of an on-call shift:
 - *Join alert channels*: If not already a member, `/join` `#alerts`, `#alerts-general`, `#alerts-prod-abuse`, `#tenable-notifications`, `#marquee_account_alrts`
 - *Turn on slack channel notifications*: Open `#production` and `#incident-management` Notification Preferences (and optionally #infrastructure-lounge). Set Desktop and Mobile to `All new messages`
 - *Turn on slack alert notifications*: Open `#alerts` and `#alerts-general`, Notification Preferences. Set Desktop only to `All new messages`
-- At the start of each on-call day, read all S1 incidents at: https://gitlab.com/gitlab-com/gl-infra/production/issues?scope=all&utf8=✓&state=opened&label_name%5B%5D=incident&label_name%5B%5D=S1
+- At the start of each on-call day, read the on-call handover issue that has
+  been assigned to you by the previous EOC, and familiarize yourself with any
+  ongoing incidents.
 
 At the end of a shift:
 
@@ -99,7 +101,7 @@ on-boarding new team members.
 [prometheus-azure-targets-down]:    https://prometheus.gitlab.com/consoles/up.html
 [prometheus-gprd]:                  https://prometheus.gprd.gitlab.net/alerts
 [prometheus-gprd-targets-down]:     https://prometheus.gprd.gitlab.net/consoles/up.html
-[prometheus-app-gprd]:              https://prometheus-app.gprdgitlab.net/alerts
+[prometheus-app-gprd]:              https://prometheus-app.gprd.gitlab.net/alerts
 [prometheus-app-gprd-targets-down]: https://prometheus-app.gprd.gitlab.net/consoles/up.html
 
 [runbook-repo]:                     https://gitlab.com/gitlab-com/runbooks
