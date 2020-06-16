@@ -52,7 +52,7 @@ serviceDashboard.overview('redis', 'db')
       'sentinel',
       {
         environment: '$environment',
-        groupname: { re: 'redis-sentinel.*' },
+        groupname: 'redis-sentinel',
         type: 'redis',
         stage: '$stage',
       },

@@ -43,7 +43,7 @@ serviceDashboard.overview('redis-sidekiq', 'db')
       'sentinel',
       {
         environment: '$environment',
-        groupname: { re: 'redis-sentinel.*' },
+        groupname: 'redis-sentinel',
         type: 'redis-sidekiq',
         stage: '$stage',
       },
