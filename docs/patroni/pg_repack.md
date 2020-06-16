@@ -2,6 +2,9 @@
 
 [gitlab-pgrepack](https://gitlab.com/gitlab-com/gl-infra/gitlab-pgrepack.git) is a helper tool for running pg_repack in Gitlab eenvironments.
 
+## Why pgRepack?
+Most solutions to deal with bloat (vacuum, reindex, vacuum full, cluster) are blocking actions. PgRepack provides a solution with minimal locking activity.
+
 ## Prerequisites
 
 - Request an auth token for Grafana annotations and modify `auth_key` accordingly.
@@ -139,6 +142,88 @@ pre_alter || echo -e "$_DATETIME\tAn error ocurren when ALTER SYSTEM ran" >> $_L
 post_alter || echo -e "$_DATETIME\tThere was an error restoring the original values" >> $_LOGFILE
 
 echo -e "$_DATETIME\tEnd script" >> $_LOGFILE
+```
+
+
+
+
+## Monitoring
+
+### Locking
+
+Be sure that pg_repack process is not blocked (vacuum and indexing can block pg_repack). You can use [this query](put.url.here.when.locking.runbook.have.being.merged) to do that.
+
+By defaulf, pg_repack will try to cancel conflicting backends. If you dont want this, you may want to use the `--no-kill-backend` flag for pg_repack
+
+### Activity
+Most of the activity of pg_repack is to build the temporary table that will, eventually, replace the original:
+
+```
+-[ RECORD 1 ]----+----------------------------------------------------------------------------
+datid            | 241498
+datname          | pgrepack_test
+pid              | 24505
+usesysid         | 10
+usename          | postgres
+application_name | pg_repack
+client_addr      | 127.0.0.1
+client_hostname  | 
+client_port      | 54102
+backend_start    | 2020-06-16 11:24:34.604791-03
+xact_start       | 2020-06-16 11:25:35.270385-03
+query_start      | 2020-06-16 11:25:35.27519-03
+state_change     | 2020-06-16 11:25:35.275191-03
+wait_event_type  | 
+wait_event       | 
+state            | active
+backend_xid      | 2481299
+backend_xmin     | 2481299
+query            | INSERT INTO repack.table_241537 SELECT id,"time",data FROM ONLY public.test
+backend_type     | client backend
+```
+
+## Clean up activity
+Under some circunstances (i.e. if your session crushes), pg_repack may not have been shutdown cleanly. If pg_repack is not longer running, you may need to make some actions to anually cleanup some things.
+
+1.Check for trigger (ussually called "repack_trigger") over the table/s you were woking:
+
+```
+pgrepack_test=# \d test
+                                      Table "public.test"
+ Column |            Type             | Collation | Nullable |             Default              
+--------+-----------------------------+-----------+----------+----------------------------------
+ id     | integer                     |           | not null | nextval('test_id_seq'::regclass)
+ time   | timestamp without time zone |           |          | 
+ data   | text                        |           |          | 
+Indexes:
+    "test_pkey" PRIMARY KEY, btree (id)
+Triggers firing always:
+    repack_trigger AFTER INSERT OR DELETE OR UPDATE ON test FOR EACH ROW EXECUTE PROCEDURE repack.repack_trigger('INSERT INTO repack.log_241537(pk, row) VALUES( CASE WHEN $1 IS NULL THEN NULL ELSE (ROW($1.id)::repack.pk_241537) END, $2)')
+```
+
+If thats the case, you can drop that trigger manually with:
+```sql
+drop trigger repack_trigger ON test ;
+```
+
+1. You might also need to manually cleanup a TABLE that pg_repack creates. First check for existence:
+
+```
+
+pgrepack_test=# \dt repack.
+           List of relations
+ Schema |    Name    | Type  |  Owner   
+--------+------------+-------+----------
+ repack | log_241537 | table | postgres
+(1 row)
+
+```
+
+
+Then drop it with:
+
+```sql
+drop table repack.log_241537;
 ```
 
 
