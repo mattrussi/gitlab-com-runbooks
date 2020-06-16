@@ -1,3 +1,21 @@
+## This repo is a working copy from the GibLab one located in gitlab-com/runbooks
+We cannot just make a MR over their repo. For that, you have to:
+- Be sure that your local copy is in sync (git pull!)
+- Push your branch "locally" into this very repo
+- Go to https://gitlab.com/ongresportal/gitlab/runbooks/ and press "New" -> "Merge request"
+- Select source and target branch. Check that "source" references a branch in our "local" repo, and "Target" points to _gitlab-com/ runbooks_, like in
+![MR](img/creating-a-mr.png)
+
+Then, press "Compare branches and continue" 
+
+Next, provide an appropiate description for your MR and press "Submit merge request"
+![](img/mr-description.png)
+
+Finally, take note of your new MR, update the corresponding issues to let everybody knows that you have made a MR, and you should be done.
+
+
+===============================
+
 # Gitlab On-call Run Books
 
 This project provides a guidance for Infrastructure Reliability Engineers and Managers who are starting an on-call shift or responding to an incident. If you haven't yet, review the [Incident Management](https://about.gitlab.com/handbook/engineering/infrastructure/incident-management/index.html) page in the handbook before reading on.
