@@ -1,7 +1,8 @@
 # pgbadger Runbook
 
 ## Intro
-pgbadger is a free  tool that can help to generate a fast interactive HTML report from PostgreSQL's logs, it is very useful when you want to analyze logs with a lot of info. 
+[pgbadger](https://github.com/darold/pgbadger) is a free  tool that can help to generate a fast interactive HTML report from PostgreSQL's logs, it is very useful when you want to analyze logs with a lot of info. 
+The report that pgdagger is about queries (it is always logged when the query time is greater than [log_min_duration_statement](https://postgresqlco.nf/en/doc/param/log_min_duration_statement/) parameter ), connections, vacuum, lock,  errors and others stuff
 
 
 ## Use in GitLab
@@ -37,6 +38,13 @@ The GitLab postgreSQL's log are located in /var/log/gitlab/postgresql
 #copy log files from DB server
 scp -F ~/.ssh/ssh-file patroni-N-db-gprd.c.gitlab-production.internal:/var/log/gitlab/postgresql/postgresql.cs* .
 
+###If not have permission with your user, can copy to your home and then copy scp command or can streaming via `ssh`:
+
+# zip files (zcat)
+ ssh -F ~/.ssh/ssh-file patroni-N-db-gprd.c.gitlab-production.internal "sudo zcat /var/log/gitlab/postgresql/postgresql.csv.3.gz" > postgresql.csv.3
+ # plain files (cat)
+ ssh -F ~/.ssh/ssh-file patroni-N-db-gprd.c.gitlab-production.internal "sudo cat /var/log/gitlab/postgresql/postgresql.csv" > postgresql.csv
+
 # analyzing 1 log file, but you can analyze more passing the names at the end
 pgbadger --format csv --prefix '%m [%p, %x]: [%l-1] user=%u,db=%d,app=%a,client=%h' -o log_report.html --csv-separator ',' postgresql.csv.1
 
@@ -57,6 +65,9 @@ The output report will be in html file named `log_report.html`
   
 ![most_freq_queries](img/most_freq_queries.png)
 
+If make Click the button `Details ` will see more info about this query related with count and duration
+
+![detail_query](img/detail_query.png)
 
  ### Queries
  The Queries tab show the statistical information about queries found in the logs, see the sections called:
