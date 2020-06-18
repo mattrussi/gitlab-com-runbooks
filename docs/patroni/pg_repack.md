@@ -1,9 +1,11 @@
 # Pg_repack using gitlab-pgrepack
 
-[gitlab-pgrepack](https://gitlab.com/gitlab-com/gl-infra/gitlab-pgrepack.git) is a helper tool for running pg_repack in Gitlab eenvironments.
+[gitlab-pgrepack](https://gitlab.com/gitlab-com/gl-infra/gitlab-pgrepack.git) is a helper tool for running pg_repack in Gitlab environments. It is open source and works on top of the [pg_repack PostgreSQL](https://github.com/reorg/pg_repack) extension.
 
 ## Why pgRepack?
-Most solutions to deal with bloat (vacuum, reindex, vacuum full, cluster) are blocking actions. PgRepack provides a solution with minimal locking activity.
+Bloat can be seen as the "remains" of UPDATE and DELETE activity. When a row is updated, postgreSQL uses temporary extra "rows" to do this job. After transaction finish, that temporary row/s are what a so call "dead rows". VACUUM can be used to clean those dead rows.
+
+VACUUM uses locks for doing their job, and it can interfere with regular database activity. Pg_repack uses a model that requires minimal locks, suitable for database with high and concurrent activity.
 
 ## Prerequisites
 
