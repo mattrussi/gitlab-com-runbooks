@@ -24,6 +24,9 @@
 
 ## Troubleshooting Pointers
 
+* [../cloudflare/README.md](../cloudflare/README.md)
+* [../cloudflare/managing-traffic.md](../cloudflare/managing-traffic.md)
+* [../cloudflare/troubleshooting.md](../cloudflare/troubleshooting.md)
 * [../elastic/elastic-cloud.md](../elastic/elastic-cloud.md)
 * [../elastic/kibana.md](../elastic/kibana.md)
 * [../forum/discourse-forum.md](../forum/discourse-forum.md)
@@ -40,8 +43,9 @@
 * [../nfs/recovering-from-nfs-disaster.md](../nfs/recovering-from-nfs-disaster.md)
 * [../patroni/gitlab-com-wale-backups.md](../patroni/gitlab-com-wale-backups.md)
 * [../patroni/postgres.md](../patroni/postgres.md)
+* [../pgbouncer/README.md](../pgbouncer/README.md)
 * [../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md](../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md)
-* [../pgbouncer/pgbouncer.md](../pgbouncer/pgbouncer.md)
+* [../pgbouncer/pgbouncer-saturation.md](../pgbouncer/pgbouncer-saturation.md)
 * [../uncategorized/blocked-user-logins.md](../uncategorized/blocked-user-logins.md)
 * [../uncategorized/chef-documentation.md](../uncategorized/chef-documentation.md)
 * [../uncategorized/chef-guidelines.md](../uncategorized/chef-guidelines.md)
@@ -51,6 +55,4 @@
 * [../uncategorized/gemnasium_is_down.md](../uncategorized/gemnasium_is_down.md)
 * [../uncategorized/manage-workers.md](../uncategorized/manage-workers.md)
 * [../uncategorized/setup-oauth2-proxy-protected-application.md](../uncategorized/setup-oauth2-proxy-protected-application.md)
-* [../waf/cloudflare-managing-traffic.md](../waf/cloudflare-managing-traffic.md)
-* [../waf/cloudflare.md](../waf/cloudflare.md)
 <!-- END_MARKER -->

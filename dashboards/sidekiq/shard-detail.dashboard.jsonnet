@@ -30,8 +30,8 @@ local optimalMargin = 0.10;
 local selector = 'type="sidekiq", environment="$environment", stage="$stage", shard=~"$shard"';
 
 local queueDetailDataLink = {
-  url: '/d/sidekiq-queue-detail?${__url_time_range}&${__all_variables}&var-queue=${__field.labels.queue}',
-  title: 'Queue Detail: ${__field.labels.queue}',
+  url: '/d/sidekiq-queue-detail?${__url_time_range}&${__all_variables}&var-queue=${__field.label.queue}',
+  title: 'Queue Detail: ${__field.label.queue}',
 };
 
 local rowGrid(rowTitle, panels, startRow) =
@@ -337,7 +337,7 @@ basic.dashboard(
     'disk_space',
     'memory',
     'open_fds',
-    'sidekiq_workers',
+    'sidekiq_shard_workers',
     'single_node_cpu',
     'single_node_puma_workers',
   ]),

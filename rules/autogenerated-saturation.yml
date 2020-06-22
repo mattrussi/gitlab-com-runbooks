@@ -77,9 +77,9 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            rate(node_disk_reads_completed_total{environment!="", type!="", type!~"waf|bastion|deploy-node"}[20m])
+            rate(node_disk_reads_completed_total{device!="sda", environment!="", type=~"patroni|gitaly|nfs"}[20m])
             /
-            node_disk_max_read_iops{environment!="", type!="", type!~"waf|bastion|deploy-node"}
+            node_disk_max_read_iops{device!="sda", environment!="", type=~"patroni|gitaly|nfs"}
             ,
             1)
         ,
@@ -92,9 +92,9 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            rate(node_disk_read_bytes_total{environment!="", type!="", type!~"waf|bastion|deploy-node"}[20m])
+            rate(node_disk_read_bytes_total{device!="sda", environment!="", type=~"patroni|gitaly|nfs"}[20m])
             /
-            node_disk_max_read_bytes_seconds{environment!="", type!="", type!~"waf|bastion|deploy-node"}
+            node_disk_max_read_bytes_seconds{device!="sda", environment!="", type=~"patroni|gitaly|nfs"}
             ,
             1)
         ,
@@ -107,9 +107,9 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            rate(node_disk_writes_completed_total{environment!="", type!="", type!~"waf|bastion|deploy-node"}[20m])
+            rate(node_disk_writes_completed_total{device!="sda", environment!="", type=~"patroni|gitaly|nfs"}[20m])
             /
-            node_disk_max_write_iops{environment!="", type!="", type!~"waf|bastion|deploy-node"}
+            node_disk_max_write_iops{device!="sda", environment!="", type=~"patroni|gitaly|nfs"}
             ,
             1)
         ,
@@ -122,9 +122,9 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            rate(node_disk_written_bytes_total{environment!="", type!="", type!~"waf|bastion|deploy-node"}[20m])
+            rate(node_disk_written_bytes_total{device!="sda", environment!="", type=~"patroni|gitaly|nfs"}[20m])
             /
-            node_disk_max_write_bytes_seconds{environment!="", type!="", type!~"waf|bastion|deploy-node"}
+            node_disk_max_write_bytes_seconds{device!="sda", environment!="", type=~"patroni|gitaly|nfs"}
             ,
             1)
         ,
@@ -186,7 +186,7 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            avg_over_time(elasticsearch_os_cpu_percent{environment!="", type=~"logging|search"}[1m]) / 100
+            avg_over_time(elasticsearch_os_cpu_percent{environment!="", type=~"logging|search"}[5m]) / 100
             ,
             1)
         ,
@@ -221,9 +221,9 @@ groups:
         clamp_min(
           clamp_max(
             (
-              elasticsearch_thread_pool_active_count{exported_type!="snapshot", environment!="", type=~"logging|search"}
+              avg_over_time(elasticsearch_thread_pool_active_count{exported_type!="snapshot", environment!="", type=~"logging|search"}[5m])
               /
-              (elasticsearch_thread_pool_threads_count{exported_type!="snapshot", environment!="", type=~"logging|search"} > 0)
+              (avg_over_time(elasticsearch_thread_pool_threads_count{exported_type!="snapshot", environment!="", type=~"logging|search"}[5m]) > 0)
             )
             ,
             1)
@@ -293,14 +293,14 @@ groups:
         clamp_min(
           clamp_max(
             (
-              pgbouncer_pools_server_active_connections{user="gitlab", database="gitlabhq_production_sidekiq", environment!="", type=~"pgbouncer|patroni"} +
-              pgbouncer_pools_server_testing_connections{user="gitlab", database="gitlabhq_production_sidekiq", environment!="", type=~"pgbouncer|patroni"} +
-              pgbouncer_pools_server_used_connections{user="gitlab", database="gitlabhq_production_sidekiq", environment!="", type=~"pgbouncer|patroni"} +
-              pgbouncer_pools_server_login_connections{user="gitlab", database="gitlabhq_production_sidekiq", environment!="", type=~"pgbouncer|patroni"}
+              avg_over_time(pgbouncer_pools_server_active_connections{user="gitlab", database="gitlabhq_production_sidekiq", environment!="", type=~"pgbouncer|patroni"}[5m]) +
+              avg_over_time(pgbouncer_pools_server_testing_connections{user="gitlab", database="gitlabhq_production_sidekiq", environment!="", type=~"pgbouncer|patroni"}[5m]) +
+              avg_over_time(pgbouncer_pools_server_used_connections{user="gitlab", database="gitlabhq_production_sidekiq", environment!="", type=~"pgbouncer|patroni"}[5m]) +
+              avg_over_time(pgbouncer_pools_server_login_connections{user="gitlab", database="gitlabhq_production_sidekiq", environment!="", type=~"pgbouncer|patroni"}[5m])
             )
             / on(environment, tier, type, stage, fqdn, instance) group_left()
             sum by (environment, tier, type, stage, fqdn, instance) (
-              pgbouncer_databases_pool_size{name="gitlabhq_production_sidekiq", environment!="", type=~"pgbouncer|patroni"}
+              avg_over_time(pgbouncer_databases_pool_size{name="gitlabhq_production_sidekiq", environment!="", type=~"pgbouncer|patroni"}[5m])
             )
             ,
             1)
@@ -332,14 +332,14 @@ groups:
         clamp_min(
           clamp_max(
             (
-              pgbouncer_pools_server_active_connections{user="gitlab", database="gitlabhq_production", environment!="", type=~"pgbouncer|patroni"} +
-              pgbouncer_pools_server_testing_connections{user="gitlab", database="gitlabhq_production", environment!="", type=~"pgbouncer|patroni"} +
-              pgbouncer_pools_server_used_connections{user="gitlab", database="gitlabhq_production", environment!="", type=~"pgbouncer|patroni"} +
-              pgbouncer_pools_server_login_connections{user="gitlab", database="gitlabhq_production", environment!="", type=~"pgbouncer|patroni"}
+              avg_over_time(pgbouncer_pools_server_active_connections{user="gitlab", database="gitlabhq_production", environment!="", type=~"pgbouncer|patroni"}[5m]) +
+              avg_over_time(pgbouncer_pools_server_testing_connections{user="gitlab", database="gitlabhq_production", environment!="", type=~"pgbouncer|patroni"}[5m]) +
+              avg_over_time(pgbouncer_pools_server_used_connections{user="gitlab", database="gitlabhq_production", environment!="", type=~"pgbouncer|patroni"}[5m]) +
+              avg_over_time(pgbouncer_pools_server_login_connections{user="gitlab", database="gitlabhq_production", environment!="", type=~"pgbouncer|patroni"}[5m])
             )
             / on(environment, tier, type, stage, fqdn, instance) group_left()
             sum by (environment, tier, type, stage, fqdn, instance) (
-              pgbouncer_databases_pool_size{name="gitlabhq_production", environment!="", type=~"pgbouncer|patroni"}
+              avg_over_time(pgbouncer_databases_pool_size{name="gitlabhq_production", environment!="", type=~"pgbouncer|patroni"}[5m])
             )
             ,
             1)
@@ -356,12 +356,9 @@ groups:
       max by(environment) (
         clamp_min(
           clamp_max(
-            label_replace(
-              sum without(executor_stage, exported_stage, state) (max_over_time(gitlab_runner_jobs{job="private-runners"}[1m]))
-              /
-              gitlab_runner_limit{job="private-runners"} > 0,
-              "environment", "gprd", "environment", ""
-            )
+            sum without(executor_stage, exported_stage, state) (max_over_time(gitlab_runner_jobs{job="private-runners"}[1m]))
+            /
+            gitlab_runner_limit{job="private-runners"} > 0
             ,
             1)
         ,
@@ -424,6 +421,42 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
+      component: redis_primary_cpu
+    expr: |
+      max by(environment, tier, type, stage) (
+        clamp_min(
+          clamp_max(
+            (
+              rate(redis_cpu_user_seconds_total{environment!="", type=~"redis|redis-sidekiq|redis-cache"}[1m])
+              +
+              rate(redis_cpu_sys_seconds_total{environment!="", type=~"redis|redis-sidekiq|redis-cache"}[1m])
+            )
+            and on (instance) redis_instance_info{role="master"}
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
+      component: redis_secondary_cpu
+    expr: |
+      max by(environment, tier, type, stage) (
+        clamp_min(
+          clamp_max(
+            (
+              rate(redis_cpu_user_seconds_total{environment!="", type=~"redis|redis-sidekiq|redis-cache"}[1m])
+              +
+              rate(redis_cpu_sys_seconds_total{environment!="", type=~"redis|redis-sidekiq|redis-cache"}[1m])
+            )
+            and on (instance) redis_instance_info{role!="master"}
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
       component: shard_cpu
     expr: |
       max by(environment, tier, type, stage) (
@@ -447,12 +480,9 @@ groups:
       max by(environment) (
         clamp_min(
           clamp_max(
-            label_replace(
-              sum without(executor_stage, exported_stage, state) (max_over_time(gitlab_runner_jobs{job="shared-runners"}[1m]))
-              /
-              gitlab_runner_limit{job="shared-runners"} > 0,
-              "environment", "gprd", "environment", ""
-            )
+            sum without(executor_stage, exported_stage, state) (max_over_time(gitlab_runner_jobs{job="shared-runners"}[1m]))
+            /
+            gitlab_runner_limit{job="shared-runners"} > 0
             ,
             1)
         ,
@@ -465,12 +495,9 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            label_replace(
-              sum without(executor_stage, exported_stage, state) (max_over_time(gitlab_runner_jobs{job="shared-runners-gitlab-org"}[1m]))
-              /
-              gitlab_runner_limit{job="shared-runners-gitlab-org"} > 0,
-              "environment", "gprd", "environment", ""
-            )
+            sum without(executor_stage, exported_stage, state) (max_over_time(gitlab_runner_jobs{job="shared-runners-gitlab-org"}[1m]))
+            /
+            gitlab_runner_limit{job="shared-runners-gitlab-org"} > 0
             ,
             1)
         ,
@@ -478,14 +505,18 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
-      component: sidekiq_workers
+      component: sidekiq_shard_workers
     expr: |
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            sum by (environment, tier, type, stage, fqdn, instance, pod) (sidekiq_running_jobs{shard!~"export|elasticsearch|memory-bound", environment!="", type="sidekiq"})
+            sum by (environment, tier, type, stage, shard) (
+              avg_over_time(sidekiq_running_jobs{shard!~"export|elasticsearch|memory-bound", environment!="", type="sidekiq"}[5m])
+            )
             /
-            sum by (environment, tier, type, stage, fqdn, instance, pod) (sidekiq_concurrency{shard!~"export|elasticsearch|memory-bound", environment!="", type="sidekiq"})
+            sum by (environment, tier, type, stage, shard) (
+              avg_over_time(sidekiq_concurrency{shard!~"export|elasticsearch|memory-bound", environment!="", type="sidekiq"}[5m])
+            )
             ,
             1)
         ,
@@ -514,19 +545,6 @@ groups:
             sum by(environment, tier, type, stage, fqdn) (avg_over_time(puma_active_connections{environment!="", type=~"web|api|git|sidekiq"}[1m]))
             /
             sum by(environment, tier, type, stage, fqdn) (puma_max_threads{pid="puma_master", environment!="", type=~"web|api|git|sidekiq"})
-            ,
-            1)
-        ,
-        0)
-      )
-  - record: gitlab_component_saturation:ratio
-    labels:
-      component: single_threaded_cpu
-    expr: |
-      max by(environment, tier, type, stage) (
-        clamp_min(
-          clamp_max(
-            instance:redis_cpu_usage:rate1m{environment!="", type=~"redis|redis-sidekiq|redis-cache"}
             ,
             1)
         ,
@@ -678,7 +696,7 @@ groups:
   - record: slo:max:hard:gitlab_component_saturation:ratio
     labels:
       component: pgbouncer_async_pool
-    expr: '0.98'
+    expr: '0.95'
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: pgbouncer_single_core
@@ -729,59 +747,67 @@ groups:
     expr: '0.75'
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
-      component: shard_cpu
-    expr: '0.85'
-  - record: slo:max:hard:gitlab_component_saturation:ratio
-    labels:
-      component: shard_cpu
-    expr: '0.95'
-  - record: slo:max:soft:gitlab_component_saturation:ratio
-    labels:
-      component: shared_runners
-    expr: '0.9'
-  - record: slo:max:hard:gitlab_component_saturation:ratio
-    labels:
-      component: shared_runners
-    expr: '0.95'
-  - record: slo:max:soft:gitlab_component_saturation:ratio
-    labels:
-      component: shared_runners_gitlab
-    expr: '0.9'
-  - record: slo:max:hard:gitlab_component_saturation:ratio
-    labels:
-      component: shared_runners_gitlab
-    expr: '0.95'
-  - record: slo:max:soft:gitlab_component_saturation:ratio
-    labels:
-      component: sidekiq_workers
-    expr: '0.9'
-  - record: slo:max:hard:gitlab_component_saturation:ratio
-    labels:
-      component: sidekiq_workers
-    expr: '0.95'
-  - record: slo:max:soft:gitlab_component_saturation:ratio
-    labels:
-      component: single_node_cpu
-    expr: '0.9'
-  - record: slo:max:hard:gitlab_component_saturation:ratio
-    labels:
-      component: single_node_cpu
-    expr: '0.95'
-  - record: slo:max:soft:gitlab_component_saturation:ratio
-    labels:
-      component: single_node_puma_workers
-    expr: '0.85'
-  - record: slo:max:hard:gitlab_component_saturation:ratio
-    labels:
-      component: single_node_puma_workers
-    expr: '0.9'
-  - record: slo:max:soft:gitlab_component_saturation:ratio
-    labels:
-      component: single_threaded_cpu
+      component: redis_primary_cpu
     expr: '0.7'
   - record: slo:max:hard:gitlab_component_saturation:ratio
     labels:
-      component: single_threaded_cpu
+      component: redis_primary_cpu
+    expr: '0.9'
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: redis_secondary_cpu
+    expr: '0.85'
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: redis_secondary_cpu
+    expr: '0.95'
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: shard_cpu
+    expr: '0.85'
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: shard_cpu
+    expr: '0.95'
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: shared_runners
+    expr: '0.9'
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: shared_runners
+    expr: '0.95'
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: shared_runners_gitlab
+    expr: '0.9'
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: shared_runners_gitlab
+    expr: '0.95'
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: sidekiq_shard_workers
+    expr: '0.85'
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: sidekiq_shard_workers
+    expr: '0.9'
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: single_node_cpu
+    expr: '0.9'
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: single_node_cpu
+    expr: '0.95'
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: single_node_puma_workers
+    expr: '0.85'
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: single_node_puma_workers
     expr: '0.9'
 - name: GitLab Saturation Alerts
   interval: 1m
@@ -885,7 +911,7 @@ groups:
       metric: gitlab_component_saturation:ratio
       period: 5m
       rules_domain: general
-      severity: s3
+      severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="cgroup_memory"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="cgroup_memory"}
@@ -973,9 +999,10 @@ groups:
       bound: upper
       burn_rate_period: 1m
       metric: gitlab_component_saturation:ratio
+      pager: pagerduty
       period: 5m
       rules_domain: general
-      severity: s3
+      severity: s2
     expr: |
       gitlab_component_saturation:ratio{component="disk_space"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="disk_space"}
@@ -1003,9 +1030,9 @@ groups:
         max by(environment, tier, type, stage, fqdn, device) (
           clamp_min(
             clamp_max(
-              rate(node_disk_reads_completed_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[20m])
+              rate(node_disk_reads_completed_total{device!="sda", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[20m])
               /
-              node_disk_max_read_iops{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              node_disk_max_read_iops{device!="sda", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
               ,
               1)
           ,
@@ -1048,9 +1075,9 @@ groups:
         max by(environment, tier, type, stage, fqdn, device) (
           clamp_min(
             clamp_max(
-              rate(node_disk_read_bytes_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[20m])
+              rate(node_disk_read_bytes_total{device!="sda", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[20m])
               /
-              node_disk_max_read_bytes_seconds{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              node_disk_max_read_bytes_seconds{device!="sda", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
               ,
               1)
           ,
@@ -1100,9 +1127,9 @@ groups:
         max by(environment, tier, type, stage, fqdn, device) (
           clamp_min(
             clamp_max(
-              rate(node_disk_writes_completed_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[20m])
+              rate(node_disk_writes_completed_total{device!="sda", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[20m])
               /
-              node_disk_max_write_iops{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              node_disk_max_write_iops{device!="sda", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
               ,
               1)
           ,
@@ -1152,9 +1179,9 @@ groups:
         max by(environment, tier, type, stage, fqdn, device) (
           clamp_min(
             clamp_max(
-              rate(node_disk_written_bytes_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[20m])
+              rate(node_disk_written_bytes_total{device!="sda", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[20m])
               /
-              node_disk_max_write_bytes_seconds{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              node_disk_max_write_bytes_seconds{device!="sda", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
               ,
               1)
           ,
@@ -1216,7 +1243,7 @@ groups:
       metric: gitlab_component_saturation:ratio
       period: 5m
       rules_domain: general
-      severity: s3
+      severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="elastic_cpu"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="elastic_cpu"}
@@ -1308,7 +1335,7 @@ groups:
       metric: gitlab_component_saturation:ratio
       period: 5m
       rules_domain: general
-      severity: s3
+      severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="elastic_jvm_heap_memory"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="elastic_jvm_heap_memory"}
@@ -1338,7 +1365,7 @@ groups:
         max by(environment, tier, type, stage, name) (
           clamp_min(
             clamp_max(
-              avg_over_time(elasticsearch_os_cpu_percent{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[1m]) / 100
+              avg_over_time(elasticsearch_os_cpu_percent{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m]) / 100
               ,
               1)
           ,
@@ -1349,11 +1376,11 @@ groups:
       alert_trigger_duration: 5m
       alert_type: cause
       bound: upper
-      burn_rate_period: 1m
+      burn_rate_period: 5m
       metric: gitlab_component_saturation:ratio
       period: 5m
       rules_domain: general
-      severity: s3
+      severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="elastic_single_node_cpu"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="elastic_single_node_cpu"}
@@ -1403,7 +1430,7 @@ groups:
       metric: gitlab_component_saturation:ratio
       period: 5m
       rules_domain: general
-      severity: s3
+      severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="elastic_single_node_disk_space"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="elastic_single_node_disk_space"}
@@ -1434,9 +1461,9 @@ groups:
           clamp_min(
             clamp_max(
               (
-                elasticsearch_thread_pool_active_count{exported_type!="snapshot", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+                avg_over_time(elasticsearch_thread_pool_active_count{exported_type!="snapshot", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
                 /
-                (elasticsearch_thread_pool_threads_count{exported_type!="snapshot", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} > 0)
+                (avg_over_time(elasticsearch_thread_pool_threads_count{exported_type!="snapshot", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m]) > 0)
               )
               ,
               1)
@@ -1448,11 +1475,11 @@ groups:
       alert_trigger_duration: 5m
       alert_type: cause
       bound: upper
-      burn_rate_period: 1m
+      burn_rate_period: 5m
       metric: gitlab_component_saturation:ratio
       period: 5m
       rules_domain: general
-      severity: s3
+      severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="elastic_thread_pools"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="elastic_thread_pools"}
@@ -1502,7 +1529,7 @@ groups:
       metric: gitlab_component_saturation:ratio
       period: 5m
       rules_domain: general
-      severity: s3
+      severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="go_memory"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="go_memory"}
@@ -1544,7 +1571,7 @@ groups:
       metric: gitlab_component_saturation:ratio
       period: 5m
       rules_domain: general
-      severity: s3
+      severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="memory"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="memory"}
@@ -1599,14 +1626,15 @@ groups:
       bound: upper
       burn_rate_period: 1m
       metric: gitlab_component_saturation:ratio
+      pager: pagerduty
       period: 5m
       rules_domain: general
-      severity: s3
+      severity: s2
     expr: |
       gitlab_component_saturation:ratio{component="open_fds"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="open_fds"}
   - alert: component_saturation_slo_out_of_bounds
-    for: 5m
+    for: 10m
     annotations:
       title: >-
         The Postgres Async (Sidekiq) Connection Pool Saturation per Node resource of the {{ $labels.type
@@ -1633,14 +1661,14 @@ groups:
           clamp_min(
             clamp_max(
               (
-                pgbouncer_pools_server_active_connections{user="gitlab", database="gitlabhq_production_sidekiq", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} +
-                pgbouncer_pools_server_testing_connections{user="gitlab", database="gitlabhq_production_sidekiq", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} +
-                pgbouncer_pools_server_used_connections{user="gitlab", database="gitlabhq_production_sidekiq", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} +
-                pgbouncer_pools_server_login_connections{user="gitlab", database="gitlabhq_production_sidekiq", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+                avg_over_time(pgbouncer_pools_server_active_connections{user="gitlab", database="gitlabhq_production_sidekiq", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m]) +
+                avg_over_time(pgbouncer_pools_server_testing_connections{user="gitlab", database="gitlabhq_production_sidekiq", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m]) +
+                avg_over_time(pgbouncer_pools_server_used_connections{user="gitlab", database="gitlabhq_production_sidekiq", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m]) +
+                avg_over_time(pgbouncer_pools_server_login_connections{user="gitlab", database="gitlabhq_production_sidekiq", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
               )
               / on(environment, tier, type, stage, fqdn, instance) group_left()
               sum by (environment, tier, type, stage, fqdn, instance) (
-                pgbouncer_databases_pool_size{name="gitlabhq_production_sidekiq", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+                avg_over_time(pgbouncer_databases_pool_size{name="gitlabhq_production_sidekiq", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
               )
               ,
               1)
@@ -1649,14 +1677,14 @@ groups:
         )
       runbook: docs/{{ $labels.type }}/service-{{ $labels.type }}.md
     labels:
-      alert_trigger_duration: 5m
+      alert_trigger_duration: 10m
       alert_type: cause
       bound: upper
-      burn_rate_period: 1m
+      burn_rate_period: 5m
       metric: gitlab_component_saturation:ratio
-      period: 5m
+      period: 10m
       rules_domain: general
-      severity: s3
+      severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="pgbouncer_async_pool"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="pgbouncer_async_pool"}
@@ -1703,14 +1731,15 @@ groups:
       bound: upper
       burn_rate_period: 1m
       metric: gitlab_component_saturation:ratio
+      pager: pagerduty
       period: 5m
       rules_domain: general
-      severity: s3
+      severity: s2
     expr: |
       gitlab_component_saturation:ratio{component="pgbouncer_single_core"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="pgbouncer_single_core"}
   - alert: component_saturation_slo_out_of_bounds
-    for: 5m
+    for: 10m
     annotations:
       title: >-
         The Postgres Sync (Web/API) Connection Pool Saturation per Node resource of the {{ $labels.type
@@ -1738,14 +1767,14 @@ groups:
           clamp_min(
             clamp_max(
               (
-                pgbouncer_pools_server_active_connections{user="gitlab", database="gitlabhq_production", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} +
-                pgbouncer_pools_server_testing_connections{user="gitlab", database="gitlabhq_production", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} +
-                pgbouncer_pools_server_used_connections{user="gitlab", database="gitlabhq_production", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} +
-                pgbouncer_pools_server_login_connections{user="gitlab", database="gitlabhq_production", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+                avg_over_time(pgbouncer_pools_server_active_connections{user="gitlab", database="gitlabhq_production", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m]) +
+                avg_over_time(pgbouncer_pools_server_testing_connections{user="gitlab", database="gitlabhq_production", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m]) +
+                avg_over_time(pgbouncer_pools_server_used_connections{user="gitlab", database="gitlabhq_production", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m]) +
+                avg_over_time(pgbouncer_pools_server_login_connections{user="gitlab", database="gitlabhq_production", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
               )
               / on(environment, tier, type, stage, fqdn, instance) group_left()
               sum by (environment, tier, type, stage, fqdn, instance) (
-                pgbouncer_databases_pool_size{name="gitlabhq_production", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+                avg_over_time(pgbouncer_databases_pool_size{name="gitlabhq_production", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
               )
               ,
               1)
@@ -1754,12 +1783,12 @@ groups:
         )
       runbook: docs/{{ $labels.type }}/service-{{ $labels.type }}.md
     labels:
-      alert_trigger_duration: 5m
+      alert_trigger_duration: 10m
       alert_type: cause
       bound: upper
-      burn_rate_period: 1m
+      burn_rate_period: 5m
       metric: gitlab_component_saturation:ratio
-      period: 5m
+      period: 10m
       rules_domain: general
       severity: s3
     expr: |
@@ -1793,12 +1822,9 @@ groups:
         max by(environment, instance) (
           clamp_min(
             clamp_max(
-              label_replace(
-                sum without(executor_stage, exported_stage, state) (max_over_time(gitlab_runner_jobs{job="private-runners"}[1m]))
-                /
-                gitlab_runner_limit{job="private-runners"} > 0,
-                "environment", "gprd", "environment", ""
-              )
+              sum without(executor_stage, exported_stage, state) (max_over_time(gitlab_runner_jobs{job="private-runners"}[1m]))
+              /
+              gitlab_runner_limit{job="private-runners"} > 0
               ,
               1)
           ,
@@ -1813,7 +1839,7 @@ groups:
       metric: gitlab_component_saturation:ratio
       period: 5m
       rules_domain: general
-      severity: s3
+      severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="private_runners"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="private_runners"}
@@ -1867,7 +1893,7 @@ groups:
       metric: gitlab_component_saturation:ratio
       period: 15m
       rules_domain: general
-      severity: s3
+      severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="rails_db_connection_pool"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="rails_db_connection_pool"}
@@ -1970,12 +1996,116 @@ groups:
       bound: upper
       burn_rate_period: 1m
       metric: gitlab_component_saturation:ratio
+      pager: pagerduty
       period: 5m
       rules_domain: general
-      severity: s3
+      severity: s2
     expr: |
       gitlab_component_saturation:ratio{component="redis_memory"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="redis_memory"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: >-
+        The Redis Primary CPU Saturation per Node resource of the {{ $labels.type }} service ({{ $labels.stage
+        }} stage), component has a saturation exceeding SLO and is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Redis Primary CPU Saturation per Node resource:
+        -------------------------------------------
+        Redis Primary CPU Saturation per Node.
+
+        Redis is single-threaded. A single Redis server is only able to scale as far as a single CPU on a single host.
+        When the primary Redis service is saturated, major slowdowns should be expected across the application, so avoid if at all
+        possible.
+      grafana_dashboard_id: alerts-sat_redis_primary_cpu
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/alerts-sat_redis_primary_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '2'
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, fqdn) (
+          clamp_min(
+            clamp_max(
+              (
+                rate(redis_cpu_user_seconds_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[1m])
+                +
+                rate(redis_cpu_sys_seconds_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[1m])
+              )
+              and on (instance) redis_instance_info{role="master"}
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/service-{{ $labels.type }}.md
+    labels:
+      alert_trigger_duration: 5m
+      alert_type: cause
+      bound: upper
+      burn_rate_period: 1m
+      metric: gitlab_component_saturation:ratio
+      pager: pagerduty
+      period: 5m
+      rules_domain: general
+      severity: s1
+    expr: |
+      gitlab_component_saturation:ratio{component="redis_primary_cpu"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="redis_primary_cpu"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: >-
+        The Redis Secondary CPU Saturation per Node resource of the {{ $labels.type }} service ({{ $labels.stage
+        }} stage), component has a saturation exceeding SLO and is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Redis Secondary CPU Saturation per Node resource:
+        -------------------------------------------
+        Redis Secondary CPU Saturation per Node.
+
+        Redis is single-threaded. A single Redis server is only able to scale as far as a single CPU on a single host.
+        CPU saturation on a secondary is not as serious as critical as saturation on a primary, but could lead to
+        replication delays.
+      grafana_dashboard_id: alerts-sat_redis_secondary_cpu
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/alerts-sat_redis_secondary_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '2'
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, fqdn) (
+          clamp_min(
+            clamp_max(
+              (
+                rate(redis_cpu_user_seconds_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[1m])
+                +
+                rate(redis_cpu_sys_seconds_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[1m])
+              )
+              and on (instance) redis_instance_info{role!="master"}
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/service-{{ $labels.type }}.md
+    labels:
+      alert_trigger_duration: 5m
+      alert_type: cause
+      bound: upper
+      burn_rate_period: 1m
+      metric: gitlab_component_saturation:ratio
+      period: 5m
+      rules_domain: general
+      severity: s4
+    expr: |
+      gitlab_component_saturation:ratio{component="redis_secondary_cpu"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="redis_secondary_cpu"}
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
@@ -2050,12 +2180,9 @@ groups:
         max by(environment, instance) (
           clamp_min(
             clamp_max(
-              label_replace(
-                sum without(executor_stage, exported_stage, state) (max_over_time(gitlab_runner_jobs{job="shared-runners"}[1m]))
-                /
-                gitlab_runner_limit{job="shared-runners"} > 0,
-                "environment", "gprd", "environment", ""
-              )
+              sum without(executor_stage, exported_stage, state) (max_over_time(gitlab_runner_jobs{job="shared-runners"}[1m]))
+              /
+              gitlab_runner_limit{job="shared-runners"} > 0
               ,
               1)
           ,
@@ -2070,7 +2197,7 @@ groups:
       metric: gitlab_component_saturation:ratio
       period: 5m
       rules_domain: general
-      severity: s3
+      severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="shared_runners"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="shared_runners"}
@@ -2102,12 +2229,9 @@ groups:
         max by(environment, tier, type, stage, instance) (
           clamp_min(
             clamp_max(
-              label_replace(
-                sum without(executor_stage, exported_stage, state) (max_over_time(gitlab_runner_jobs{job="shared-runners-gitlab-org"}[1m]))
-                /
-                gitlab_runner_limit{job="shared-runners-gitlab-org"} > 0,
-                "environment", "gprd", "environment", ""
-              )
+              sum without(executor_stage, exported_stage, state) (max_over_time(gitlab_runner_jobs{job="shared-runners-gitlab-org"}[1m]))
+              /
+              gitlab_runner_limit{job="shared-runners-gitlab-org"} > 0
               ,
               1)
           ,
@@ -2122,41 +2246,45 @@ groups:
       metric: gitlab_component_saturation:ratio
       period: 5m
       rules_domain: general
-      severity: s3
+      severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="shared_runners_gitlab"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="shared_runners_gitlab"}
   - alert: component_saturation_slo_out_of_bounds
-    for: 15m
+    for: 10m
     annotations:
       title: >-
-        The Sidekiq Worker Saturation per Node resource of the {{ $labels.type }} service ({{ $labels.stage
+        The Sidekiq Worker Saturation per shard resource of the {{ $labels.type }} service ({{ $labels.stage
         }} stage), component has a saturation exceeding SLO and is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
-        Details of the Sidekiq Worker Saturation per Node resource:
+        Details of the Sidekiq Worker Saturation per shard resource:
         -------------------------------------------
-        Sidekiq worker saturation per node.
+        Sidekiq worker saturation per shard.
 
         This metric represents the percentage of available threads*workers that are utilized actively processing jobs.
 
         When this metric is saturated, new Sidekiq jobs will queue. Depending on whether or not the jobs are latency sensitive,
         this could impact user experience.
-      grafana_dashboard_id: alerts-sat_sidekiq_workers
+      grafana_dashboard_id: alerts-sat_sidekiq_shard_workers
       grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/alerts-sat_sidekiq_workers?from=now-6h/m&to=now-1m/m&var-environment={{
+        https://dashboards.gitlab.net/d/alerts-sat_sidekiq_shard_workers?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '2'
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, fqdn, instance, pod) (
+        max by(environment, tier, type, stage, shard) (
           clamp_min(
             clamp_max(
-              sum by (environment, tier, type, stage, fqdn, instance, pod) (sidekiq_running_jobs{shard!~"export|elasticsearch|memory-bound", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"})
+              sum by (environment, tier, type, stage, shard) (
+                avg_over_time(sidekiq_running_jobs{shard!~"export|elasticsearch|memory-bound", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
+              )
               /
-              sum by (environment, tier, type, stage, fqdn, instance, pod) (sidekiq_concurrency{shard!~"export|elasticsearch|memory-bound", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"})
+              sum by (environment, tier, type, stage, shard) (
+                avg_over_time(sidekiq_concurrency{shard!~"export|elasticsearch|memory-bound", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
+              )
               ,
               1)
           ,
@@ -2164,17 +2292,17 @@ groups:
         )
       runbook: docs/{{ $labels.type }}/service-{{ $labels.type }}.md
     labels:
-      alert_trigger_duration: 15m
+      alert_trigger_duration: 10m
       alert_type: cause
       bound: upper
-      burn_rate_period: 1m
+      burn_rate_period: 5m
       metric: gitlab_component_saturation:ratio
-      period: 15m
+      period: 10m
       rules_domain: general
-      severity: s3
+      severity: s4
     expr: |
-      gitlab_component_saturation:ratio{component="sidekiq_workers"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="sidekiq_workers"}
+      gitlab_component_saturation:ratio{component="sidekiq_shard_workers"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="sidekiq_shard_workers"}
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
@@ -2216,7 +2344,7 @@ groups:
       metric: gitlab_component_saturation:ratio
       period: 5m
       rules_domain: general
-      severity: s3
+      severity: s4
     expr: |
       gitlab_component_saturation:ratio{component="single_node_cpu"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="single_node_cpu"}
@@ -2231,9 +2359,9 @@ groups:
 
         Details of the Puma Worker Saturation per Node resource:
         -------------------------------------------
-        Puma worker saturation per node.
+        Puma thread utilization per node.
 
-        Each concurrent HTTP request being handled in the application needs a dedicated puma worker. When this resource is saturated,
+        Puma uses a fixed size thread pool to handle HTTP requests. This metric shows how many threads are busy handling requests. When this resource is saturated,
         we will see puma queuing taking place. Leading to slowdowns across the application.
 
         Puma saturation is usually caused by latency problems in downstream services: usually Gitaly or Postgres, but possibly also Redis.
@@ -2264,55 +2392,10 @@ groups:
       bound: upper
       burn_rate_period: 1m
       metric: gitlab_component_saturation:ratio
+      pager: pagerduty
       period: 5m
       rules_domain: general
-      severity: s3
+      severity: s2
     expr: |
       gitlab_component_saturation:ratio{component="single_node_puma_workers"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="single_node_puma_workers"}
-  - alert: component_saturation_slo_out_of_bounds
-    for: 5m
-    annotations:
-      title: >-
-        The Redis CPU Saturation per Node resource of the {{ $labels.type }} service ({{ $labels.stage
-        }} stage), component has a saturation exceeding SLO and is close to its capacity limit.
-      description: |
-        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
-
-        Details of the Redis CPU Saturation per Node resource:
-        -------------------------------------------
-        Redis CPU per node.
-
-        Redis is single-threaded. A single Redis server is only able to scale as far as a single CPU on a single host.
-        When this resource is saturated, major slowdowns should be expected across the application, so avoid if at all
-        possible.
-      grafana_dashboard_id: alerts-sat_single_threaded_cpu
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/alerts-sat_single_threaded_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2'
-      grafana_variables: environment,type,stage
-      promql_query: |
-        max by(environment, tier, type, stage, fqdn) (
-          clamp_min(
-            clamp_max(
-              instance:redis_cpu_usage:rate1m{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
-              ,
-              1)
-          ,
-          0)
-        )
-      runbook: docs/{{ $labels.type }}/service-{{ $labels.type }}.md
-    labels:
-      alert_trigger_duration: 5m
-      alert_type: cause
-      bound: upper
-      burn_rate_period: 1m
-      metric: gitlab_component_saturation:ratio
-      period: 5m
-      rules_domain: general
-      severity: s3
-    expr: |
-      gitlab_component_saturation:ratio{component="single_threaded_cpu"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="single_threaded_cpu"}

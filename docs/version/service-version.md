@@ -13,6 +13,7 @@
 
 ## Troubleshooting Pointers
 
+* [../cloudflare/managing-traffic.md](../cloudflare/managing-traffic.md)
 * [../elastic/README.md](../elastic/README.md)
 * [../elastic/elastic-cloud.md](../elastic/elastic-cloud.md)
 * [../gitaly/gitaly-error-rate.md](../gitaly/gitaly-error-rate.md)
@@ -21,6 +22,7 @@
 * [../logging/logging_gcs_archive_bigquery.md](../logging/logging_gcs_archive_bigquery.md)
 * [../monitoring/filesystem_alerts_inodes.md](../monitoring/filesystem_alerts_inodes.md)
 * [../monitoring/update-prometheus-and-exporters.md](../monitoring/update-prometheus-and-exporters.md)
+* [../packaging/manage-package-signing-keys.md](../packaging/manage-package-signing-keys.md)
 * [../patroni/patroni-management.md](../patroni/patroni-management.md)
 * [../patroni/using-wale-gpg.md](../patroni/using-wale-gpg.md)
 * [../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md](../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md)
@@ -39,7 +41,6 @@
 * [../uncategorized/k8s-plantuml-operations.md](../uncategorized/k8s-plantuml-operations.md)
 * [../uncategorized/manage-chef.md](../uncategorized/manage-chef.md)
 * [../uncategorized/manage-pacemaker.md](../uncategorized/manage-pacemaker.md)
-* [../uncategorized/manage-package-signing-keys.md](../uncategorized/manage-package-signing-keys.md)
 * [../uncategorized/manage-workers.md](../uncategorized/manage-workers.md)
 * [../uncategorized/mtail.md](../uncategorized/mtail.md)
 * [../uncategorized/omnibus-package-updates.md](../uncategorized/omnibus-package-updates.md)
@@ -51,6 +52,5 @@
 * [../uncategorized/yubikey.md](../uncategorized/yubikey.md)
 * [gitaly-version-mismatch.md](gitaly-version-mismatch.md)
 * [version-gitlab-com.md](version-gitlab-com.md)
-* [../waf/cloudflare-managing-traffic.md](../waf/cloudflare-managing-traffic.md)
 * [../web/static-repository-objects-caching.md](../web/static-repository-objects-caching.md)
 <!-- END_MARKER -->
