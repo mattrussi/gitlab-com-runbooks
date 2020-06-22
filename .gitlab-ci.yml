@@ -27,6 +27,7 @@ workflow:
     - gcloud auth activate-service-account --key-file ${SERVICE_KEY}
     - gcloud config set project ${PROJECT}
     - gcloud container clusters get-credentials ${CLUSTER} --region ${REGION}
+    - ./bin/delete_orphan_kubenetes_rules.sh # Delete ophaned PrometheusRules
     - kubectl apply --namespace monitoring --filename ${CI_PROJECT_DIR}/rules-k8s/
   only:
     refs:
@@ -230,7 +231,7 @@ update_elastic_log_gprd_index_templates:
     changes:
       - elastic/managed-objects/log_gprd/index-templates/*
       - elastic/managed-objects/lib/log_gprd_index_template.libsonnet
-      - elastic/managed-objects/lib/mappings.libsonnet
+      - elastic/managed-objects/lib/index_mappings/*.libsonnet
     variables:
       - $ES_LOG_GPRD_URL
 
@@ -286,7 +287,7 @@ update_elastic_nonprod-log_index_templates:
     changes:
       - elastic/managed-objects/nonprod-log/index-templates/*
       - elastic/managed-objects/lib/nonprod-log_index_template.libsonnet
-      - elastic/managed-objects/lib/mappings.libsonnet
+      - elastic/managed-objects/lib/index_mappings/*.libsonnet
     variables:
       - $ES_NONPROD_URL
 
@@ -417,7 +418,7 @@ deploy_pingdom_checks:
       - $CI_PROJECT_URL =~ /^https:\/\/gitlab\.com\/.*/
 
 check_alerts:
-  image: golang:1.12
+  image: golang:1.14
   script:
     - cd alerts-checker
     - go run alerts-checker.go ../rules $THANOS_URL $IGNORED_ALERTS
@@ -436,6 +437,7 @@ deploy_dashboards:
   stage: deploy
   script:
     - dashboards/upload.sh
+    - dashboards/delete-orphaned-dashboards.sh
   only:
     refs:
       - master

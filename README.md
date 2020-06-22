@@ -99,7 +99,7 @@ Whoever is in that role can help you get other people to help with whatever is n
 
 Roles for an incident can be found in the [incident management section of the handbook](https://about.gitlab.com/handbook/engineering/infrastructure/incident-management/)
 
-If you need to start an incident, you can post in the [`#incident-management` channel](https://gitlab.slack.com/archives/CB7P5CJS1) using the `/incident report` command - a bot will make and issue/google doc and zoom link for you.
+If you need to declare an incident, [follow these instructions located in the handbook](https://about.gitlab.com/handbook/engineering/infrastructure/incident-management/#reporting-an-incident).
 
 ## Communication Tools
 
@@ -554,7 +554,7 @@ Please see the [contribution guidelines](CONTRIBUTING.md)
 [prometheus-azure-targets-down]:    https://prometheus.gitlab.com/consoles/up.html
 [prometheus-gprd]:                  https://prometheus.gprd.gitlab.net/alerts
 [prometheus-gprd-targets-down]:     https://prometheus.gprd.gitlab.net/consoles/up.html
-[prometheus-app-gprd]:              https://prometheus-app.gprdgitlab.net/alerts
+[prometheus-app-gprd]:              https://prometheus-app.gprd.gitlab.net/alerts
 [prometheus-app-gprd-targets-down]: https://prometheus-app.gprd.gitlab.net/consoles/up.html
 
 [runbook-repo]:                     https://gitlab.com/gitlab-com/runbooks

@@ -11,8 +11,7 @@ groups:
       type: ci-runners
     expr: |
       sum by (environment, stage) (
-        rate(gitlab_workhorse_http_requests_total{route="^/api/v4/jobs/request\\z"
-      }[1m])
+        rate(gitlab_workhorse_http_requests_total{route="^/api/v4/jobs/request\\z"}[1m])
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -21,59 +20,48 @@ groups:
       type: ci-runners
     expr: |
       sum by (environment, stage) (
-        rate(gitlab_workhorse_http_requests_total{code=~"5..", route="^/api/v4/jobs/request\\z"
-      }[1m])
+        rate(gitlab_workhorse_http_requests_total{code=~"5..", route="^/api/v4/jobs/request\\z"}[1m])
       )
   - record: gitlab_component_apdex:ratio
     labels:
       component: shared_runner_queues
-      environment: gprd
-      stage: main
       tier: runners
       type: ci-runners
     expr: |
-      (
-        sum by () (
-          rate(job_queue_duration_seconds_bucket{shared_runner="true", jobs_running_for_project=~"^(0|1|2|3|4)$", le="60"}[1m])
-        )
+      sum by (environment, stage) (
+        rate(job_queue_duration_seconds_bucket{shared_runner="true", jobs_running_for_project=~"^(0|1|2|3|4)$", le="60"}[1m])
       )
       /
       (
-        sum by () (
+        sum by (environment, stage) (
           rate(job_queue_duration_seconds_bucket{shared_runner="true", jobs_running_for_project=~"^(0|1|2|3|4)$", le="+Inf"}[1m])
         ) > 0
       )
   - record: gitlab_component_apdex:weight:score
     labels:
       component: shared_runner_queues
-      environment: gprd
-      stage: main
       tier: runners
       type: ci-runners
     expr: |
-      sum by () (
+      sum by (environment, stage) (
         rate(job_queue_duration_seconds_bucket{shared_runner="true", jobs_running_for_project=~"^(0|1|2|3|4)$", le="+Inf"}[1m])
       )
   - record: gitlab_component_ops:rate
     labels:
       component: shared_runner_queues
-      environment: gprd
-      stage: main
       tier: runners
       type: ci-runners
     expr: |
-      sum by () (
+      sum by (environment, stage) (
         rate(gitlab_runner_jobs_total{job="shared-runners"}[1m])
       )
   - record: gitlab_component_errors:rate
     labels:
       component: shared_runner_queues
-      environment: gprd
-      stage: main
       tier: runners
       type: ci-runners
     expr: |
-      sum by () (
+      sum by (environment, stage) (
         rate(gitlab_runner_failed_jobs_total{job="shared-runners", failure_reason="runner_system_failure"}[1m])
       )
   - record: gitlab_component_ops:rate
@@ -101,8 +89,7 @@ groups:
       type: ci-runners
     expr: |
       sum by (environment, stage) (
-        rate(gitlab_workhorse_http_requests_total{route="^/api/v4/jobs/request\\z"
-      }[5m])
+        rate(gitlab_workhorse_http_requests_total{route="^/api/v4/jobs/request\\z"}[5m])
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -111,59 +98,48 @@ groups:
       type: ci-runners
     expr: |
       sum by (environment, stage) (
-        rate(gitlab_workhorse_http_requests_total{code=~"5..", route="^/api/v4/jobs/request\\z"
-      }[5m])
+        rate(gitlab_workhorse_http_requests_total{code=~"5..", route="^/api/v4/jobs/request\\z"}[5m])
       )
   - record: gitlab_component_apdex:ratio_5m
     labels:
       component: shared_runner_queues
-      environment: gprd
-      stage: main
       tier: runners
       type: ci-runners
     expr: |
-      (
-        sum by () (
-          rate(job_queue_duration_seconds_bucket{shared_runner="true", jobs_running_for_project=~"^(0|1|2|3|4)$", le="60"}[5m])
-        )
+      sum by (environment, stage) (
+        rate(job_queue_duration_seconds_bucket{shared_runner="true", jobs_running_for_project=~"^(0|1|2|3|4)$", le="60"}[5m])
       )
       /
       (
-        sum by () (
+        sum by (environment, stage) (
           rate(job_queue_duration_seconds_bucket{shared_runner="true", jobs_running_for_project=~"^(0|1|2|3|4)$", le="+Inf"}[5m])
         ) > 0
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
       component: shared_runner_queues
-      environment: gprd
-      stage: main
       tier: runners
       type: ci-runners
     expr: |
-      sum by () (
+      sum by (environment, stage) (
         rate(job_queue_duration_seconds_bucket{shared_runner="true", jobs_running_for_project=~"^(0|1|2|3|4)$", le="+Inf"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
     labels:
       component: shared_runner_queues
-      environment: gprd
-      stage: main
       tier: runners
       type: ci-runners
     expr: |
-      sum by () (
+      sum by (environment, stage) (
         rate(gitlab_runner_jobs_total{job="shared-runners"}[5m])
       )
   - record: gitlab_component_errors:rate_5m
     labels:
       component: shared_runner_queues
-      environment: gprd
-      stage: main
       tier: runners
       type: ci-runners
     expr: |
-      sum by () (
+      sum by (environment, stage) (
         rate(gitlab_runner_failed_jobs_total{job="shared-runners", failure_reason="runner_system_failure"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
@@ -191,8 +167,7 @@ groups:
       type: ci-runners
     expr: |
       sum by (environment, stage) (
-        rate(gitlab_workhorse_http_requests_total{route="^/api/v4/jobs/request\\z"
-      }[30m])
+        rate(gitlab_workhorse_http_requests_total{route="^/api/v4/jobs/request\\z"}[30m])
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -201,59 +176,48 @@ groups:
       type: ci-runners
     expr: |
       sum by (environment, stage) (
-        rate(gitlab_workhorse_http_requests_total{code=~"5..", route="^/api/v4/jobs/request\\z"
-      }[30m])
+        rate(gitlab_workhorse_http_requests_total{code=~"5..", route="^/api/v4/jobs/request\\z"}[30m])
       )
   - record: gitlab_component_apdex:ratio_30m
     labels:
       component: shared_runner_queues
-      environment: gprd
-      stage: main
       tier: runners
       type: ci-runners
     expr: |
-      (
-        sum by () (
-          rate(job_queue_duration_seconds_bucket{shared_runner="true", jobs_running_for_project=~"^(0|1|2|3|4)$", le="60"}[30m])
-        )
+      sum by (environment, stage) (
+        rate(job_queue_duration_seconds_bucket{shared_runner="true", jobs_running_for_project=~"^(0|1|2|3|4)$", le="60"}[30m])
       )
       /
       (
-        sum by () (
+        sum by (environment, stage) (
           rate(job_queue_duration_seconds_bucket{shared_runner="true", jobs_running_for_project=~"^(0|1|2|3|4)$", le="+Inf"}[30m])
         ) > 0
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
       component: shared_runner_queues
-      environment: gprd
-      stage: main
       tier: runners
       type: ci-runners
     expr: |
-      sum by () (
+      sum by (environment, stage) (
         rate(job_queue_duration_seconds_bucket{shared_runner="true", jobs_running_for_project=~"^(0|1|2|3|4)$", le="+Inf"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
     labels:
       component: shared_runner_queues
-      environment: gprd
-      stage: main
       tier: runners
       type: ci-runners
     expr: |
-      sum by () (
+      sum by (environment, stage) (
         rate(gitlab_runner_jobs_total{job="shared-runners"}[30m])
       )
   - record: gitlab_component_errors:rate_30m
     labels:
       component: shared_runner_queues
-      environment: gprd
-      stage: main
       tier: runners
       type: ci-runners
     expr: |
-      sum by () (
+      sum by (environment, stage) (
         rate(gitlab_runner_failed_jobs_total{job="shared-runners", failure_reason="runner_system_failure"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
@@ -281,8 +245,7 @@ groups:
       type: ci-runners
     expr: |
       sum by (environment, stage) (
-        rate(gitlab_workhorse_http_requests_total{route="^/api/v4/jobs/request\\z"
-      }[1h])
+        rate(gitlab_workhorse_http_requests_total{route="^/api/v4/jobs/request\\z"}[1h])
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -291,59 +254,48 @@ groups:
       type: ci-runners
     expr: |
       sum by (environment, stage) (
-        rate(gitlab_workhorse_http_requests_total{code=~"5..", route="^/api/v4/jobs/request\\z"
-      }[1h])
+        rate(gitlab_workhorse_http_requests_total{code=~"5..", route="^/api/v4/jobs/request\\z"}[1h])
       )
   - record: gitlab_component_apdex:ratio_1h
     labels:
       component: shared_runner_queues
-      environment: gprd
-      stage: main
       tier: runners
       type: ci-runners
     expr: |
-      (
-        sum by () (
-          rate(job_queue_duration_seconds_bucket{shared_runner="true", jobs_running_for_project=~"^(0|1|2|3|4)$", le="60"}[1h])
-        )
+      sum by (environment, stage) (
+        rate(job_queue_duration_seconds_bucket{shared_runner="true", jobs_running_for_project=~"^(0|1|2|3|4)$", le="60"}[1h])
       )
       /
       (
-        sum by () (
+        sum by (environment, stage) (
           rate(job_queue_duration_seconds_bucket{shared_runner="true", jobs_running_for_project=~"^(0|1|2|3|4)$", le="+Inf"}[1h])
         ) > 0
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
       component: shared_runner_queues
-      environment: gprd
-      stage: main
       tier: runners
       type: ci-runners
     expr: |
-      sum by () (
+      sum by (environment, stage) (
         rate(job_queue_duration_seconds_bucket{shared_runner="true", jobs_running_for_project=~"^(0|1|2|3|4)$", le="+Inf"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
     labels:
       component: shared_runner_queues
-      environment: gprd
-      stage: main
       tier: runners
       type: ci-runners
     expr: |
-      sum by () (
+      sum by (environment, stage) (
         rate(gitlab_runner_jobs_total{job="shared-runners"}[1h])
       )
   - record: gitlab_component_errors:rate_1h
     labels:
       component: shared_runner_queues
-      environment: gprd
-      stage: main
       tier: runners
       type: ci-runners
     expr: |
-      sum by () (
+      sum by (environment, stage) (
         rate(gitlab_runner_failed_jobs_total{job="shared-runners", failure_reason="runner_system_failure"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
@@ -371,8 +323,7 @@ groups:
       type: ci-runners
     expr: |
       sum by (environment, stage) (
-        rate(gitlab_workhorse_http_requests_total{route="^/api/v4/jobs/request\\z"
-      }[6h])
+        rate(gitlab_workhorse_http_requests_total{route="^/api/v4/jobs/request\\z"}[6h])
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -381,59 +332,48 @@ groups:
       type: ci-runners
     expr: |
       sum by (environment, stage) (
-        rate(gitlab_workhorse_http_requests_total{code=~"5..", route="^/api/v4/jobs/request\\z"
-      }[6h])
+        rate(gitlab_workhorse_http_requests_total{code=~"5..", route="^/api/v4/jobs/request\\z"}[6h])
       )
   - record: gitlab_component_apdex:ratio_6h
     labels:
       component: shared_runner_queues
-      environment: gprd
-      stage: main
       tier: runners
       type: ci-runners
     expr: |
-      (
-        sum by () (
-          rate(job_queue_duration_seconds_bucket{shared_runner="true", jobs_running_for_project=~"^(0|1|2|3|4)$", le="60"}[6h])
-        )
+      sum by (environment, stage) (
+        rate(job_queue_duration_seconds_bucket{shared_runner="true", jobs_running_for_project=~"^(0|1|2|3|4)$", le="60"}[6h])
       )
       /
       (
-        sum by () (
+        sum by (environment, stage) (
           rate(job_queue_duration_seconds_bucket{shared_runner="true", jobs_running_for_project=~"^(0|1|2|3|4)$", le="+Inf"}[6h])
         ) > 0
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
       component: shared_runner_queues
-      environment: gprd
-      stage: main
       tier: runners
       type: ci-runners
     expr: |
-      sum by () (
+      sum by (environment, stage) (
         rate(job_queue_duration_seconds_bucket{shared_runner="true", jobs_running_for_project=~"^(0|1|2|3|4)$", le="+Inf"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
     labels:
       component: shared_runner_queues
-      environment: gprd
-      stage: main
       tier: runners
       type: ci-runners
     expr: |
-      sum by () (
+      sum by (environment, stage) (
         rate(gitlab_runner_jobs_total{job="shared-runners"}[6h])
       )
   - record: gitlab_component_errors:rate_6h
     labels:
       component: shared_runner_queues
-      environment: gprd
-      stage: main
       tier: runners
       type: ci-runners
     expr: |
-      sum by () (
+      sum by (environment, stage) (
         rate(gitlab_runner_failed_jobs_total{job="shared-runners", failure_reason="runner_system_failure"}[6h])
       )
   - record: gitlab_component_ops:rate_6h

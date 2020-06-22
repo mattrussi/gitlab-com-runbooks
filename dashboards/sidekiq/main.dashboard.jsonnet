@@ -9,8 +9,8 @@ local sidekiq = import 'sidekiq.libsonnet';
 local serviceDashboard = import 'service_dashboard.libsonnet';
 
 local shardDetailDataLink = {
-  url: '/d/sidekiq-shard-detail?${__url_time_range}&${__all_variables}&var-shard=${__field.labels.shard}&var-shard=${__field.labels.shard}',
-  title: 'Shard Detail: ${__field.labels.shard}',
+  url: '/d/sidekiq-shard-detail?${__url_time_range}&${__all_variables}&var-shard=${__field.label.shard}&var-shard=${__field.label.shard}',
+  title: 'Shard Detail: ${__field.label.shard}',
 };
 
 serviceDashboard.overview('sidekiq', 'sv')
@@ -70,6 +70,19 @@ serviceDashboard.overview('sidekiq', 'sv')
       description='The number of records waiting to be synced to Elasticsearch for Global Search. These are picked up in batches every minute. Lower is better but the batching every minute means it will not usually stay at 0. Steady growth over a sustained period of time indicates that ElasticIndexBulkCronWorker is not keeping up.',
       query=|||
         max_over_time(global_search_bulk_cron_queue_size{environment="$environment"}[$__interval])
+      |||,
+      legendFormat='Length',
+      format='short',
+      interval='1m',
+      linewidth=1,
+      intervalFactor=3,
+      yAxisLabel='Queue Length',
+    ),
+    basic.queueLengthTimeseries(
+      title='Global search initial indexing queue length',
+      description='The number of records waiting to be synced to Elasticsearch for Global Search during initial project backfill. These jobs are created when projects are imported or when Elasticsearch is enabled for a group in order to backfill all project data to the index. These are picked up in batches every minute. Lower is better but the batching every minute means it will not usually stay at 0. Sudden spikes are expected if a large group is enabled for Elasticsearch but sustained steady growth over a long period of time may indicate that ElasticIndexInitialBulkCronWorker is not keeping up.',
+      query=|||
+        max_over_time(global_search_bulk_cron_initial_queue_size{environment="$environment"}[$__interval])
       |||,
       legendFormat='Length',
       format='short',
