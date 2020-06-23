@@ -29,7 +29,6 @@
 * [../pages/gitlab-pages.md](../pages/gitlab-pages.md)
 * [../pages/pages-letsencrypt.md](../pages/pages-letsencrypt.md)
 * [../patroni/geo-patroni-cluster.md](../patroni/geo-patroni-cluster.md)
-* [../patroni/gitlab-com-wale-backups.md](../patroni/gitlab-com-wale-backups.md)
 * [../patroni/postgres-checkup.md](../patroni/postgres-checkup.md)
 * [../patroni/postgres.md](../patroni/postgres.md)
 * [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)

@@ -24,11 +24,8 @@
 * [../monitoring/update-prometheus-and-exporters.md](../monitoring/update-prometheus-and-exporters.md)
 * [../packaging/manage-package-signing-keys.md](../packaging/manage-package-signing-keys.md)
 * [../patroni/patroni-management.md](../patroni/patroni-management.md)
-<<<<<<< docs/version/service-version.md
-* [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
-=======
 * [../patroni/postgres-checkup.md](../patroni/postgres-checkup.md)
->>>>>>> docs/version/service-version.md
+* [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
 * [../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md](../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md)
 * [../runner/update-gitlab-runner-on-managers.md](../runner/update-gitlab-runner-on-managers.md)
 * [../uncategorized/about-gitlab-com.md](../uncategorized/about-gitlab-com.md)
