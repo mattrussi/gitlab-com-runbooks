@@ -19,6 +19,7 @@
 * [geo-patroni-cluster.md](geo-patroni-cluster.md)
 * [patroni-management.md](patroni-management.md)
 * [pg-ha.md](pg-ha.md)
+* [postgres-checkup.md](postgres-checkup.md)
 * [postgres.md](postgres.md)
 * [postgresql-backups-wale-walg.md](postgresql-backups-wale-walg.md)
 * [postgresql-disk-space.md](postgresql-disk-space.md)
@@ -26,5 +27,6 @@
 * [postgresql.md](postgresql.md)
 * [rotating-rails-postgresql-password.md](rotating-rails-postgresql-password.md)
 * [../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md](../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md)
+* [../pgbouncer/pgbouncer-add-instance.md](../pgbouncer/pgbouncer-add-instance.md)
 * [../pgbouncer/pgbouncer-connections.md](../pgbouncer/pgbouncer-connections.md)
 <!-- END_MARKER -->

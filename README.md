@@ -81,7 +81,7 @@ Whoever is in that role can help you get other people to help with whatever is n
 
 Roles for an incident can be found in the [incident management section of the handbook](https://about.gitlab.com/handbook/engineering/infrastructure/incident-management/)
 
-If you need to start an incident, you can post in the [`#incident-management` channel](https://gitlab.slack.com/archives/CB7P5CJS1) using the `/incident report` command - a bot will make and issue/google doc and zoom link for you.
+If you need to declare an incident, [follow these instructions located in the handbook](https://about.gitlab.com/handbook/engineering/infrastructure/incident-management/#reporting-an-incident).
 
 ## Communication Tools
 
@@ -180,7 +180,7 @@ During an incident there are at least 2 roles, and one more optional
 
 ### PostgreSQL
 
-* [Postgresql](docs/patroni/postgres.md)
+* [PostgreSQL](docs/patroni/postgres.md)
 * [more postgresql](docs/patroni/postgresql.md)
 * [PgBouncer](docs/pgbouncer/pgbouncer-1.md)
 * [PostgreSQL High Availability & Failovers](docs/patroni/pg-ha.md)
@@ -190,6 +190,7 @@ During an incident there are at least 2 roles, and one more optional
 * [Database backups](docs/patroni/postgresql-backups-wale-walg.md)
 * [Database backups restore testing](docs/patroni/postgresql-backups-wale-walg.md#database-backups-restore-testing)
 * [Rebuild a corrupt index](docs/patroni/postgresql.md#rebuild-a-corrupt-index)
+* [Checking PostgreSQL health with postgres-checkup](docs/patroni/postgres-checkup)
 
 ### Frontend Services
 

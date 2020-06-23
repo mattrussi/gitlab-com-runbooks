@@ -14,6 +14,26 @@ local row = grafana.row;
 local graphPanel = grafana.graphPanel;
 local row = grafana.row;
 local tablePanel = grafana.tablePanel;
+local selectors = import './lib/selectors.libsonnet';
+local saturationResources = import 'saturation-resources.libsonnet';
+
+local wrapSaturationQueryWithAlertDashboardJoin(query) =
+  local saturationTypeDefinitions = saturationResources.mapResources(
+    function(component, definition) 'absent(fake_dne{component="%s", alert_dashboard="%s", severity="%s"})' % [component, definition.grafana_dashboard_uid, definition.severity]
+  );
+
+  |||
+    (
+      %(query)s
+    )
+    * on(component) group_left(alert_dashboard, severity)
+    (
+      %(saturationTypeDefinitions)s
+    )
+  ||| % {
+    query: query,
+    saturationTypeDefinitions: std.join('\nor\n', saturationTypeDefinitions),
+  };
 
 local findIssuesLink = issueSearch.buildInfraIssueSearch(
   labels=['GitLab.com Resource Saturation'],
@@ -28,12 +48,24 @@ local saturationTable(title, description, query, saturationDays, valueColumnName
     styles=[
       {
         alias: 'Satuation Resource',
+        mappingType: 1,
+        pattern: 'component',
+        type: 'string',
+      },
+      {
+        alias: 'Dashboard',
         link: true,
         linkTargetBlank: true,
         linkTooltip: 'Click the link to review the past %d day(s) history for this saturation point.' % [saturationDays],
-        linkUrl: 'https://dashboards.gitlab.net/d/alerts-saturation_component/alerts-saturation-component-alert?var-environment=gprd&var-type=${__cell_3}&var-stage=${__cell_2}&var-component=${__cell_1}&from=now-' + saturationDays + 'd/d&to=now/h',
+        linkUrl: '/d/alerts-${__cell}?var-environment=gprd&var-type=${__cell_5}&var-stage=${__cell_4}&from=now-' + saturationDays + 'd/d&to=now/h',
         mappingType: 1,
-        pattern: 'component',
+        pattern: 'alert_dashboard',
+        type: 'string',
+      },
+      {
+        alias: 'Severity',
+        mappingType: 1,
+        pattern: 'severity',
         type: 'string',
       },
       {
@@ -103,7 +135,7 @@ local currentSaturationBreaches(nodeSelector) =
   saturationTable(
     'Currently Saturated Resources',
     description='Lists saturated resources that are breaching their soft SLO thresholds at this instant',
-    query=|||
+    query=wrapSaturationQueryWithAlertDashboardJoin(|||
       max by (type, stage, component) (
         clamp_max(
           gitlab_component_saturation:ratio{environment="$environment", %(nodeSelector)s}
@@ -111,7 +143,7 @@ local currentSaturationBreaches(nodeSelector) =
           1
         ) >= on(component, monitor, env, cluster) group_left slo:max:soft:gitlab_component_saturation:ratio
       )
-    ||| % { nodeSelector: nodeSelector },
+    ||| % { nodeSelector: nodeSelector }),
     saturationDays=1,
     valueColumnName='Current %'
   );
@@ -120,7 +152,7 @@ local currentSaturationWarnings(nodeSelector) =
   saturationTable(
     'Resources Currently at Risk of being Saturated',
     description='Lists saturated resources that, given their current value and weekly variance, have a high probability of breaching their soft thresholds limits within the next few hours',
-    query=|||
+    query=wrapSaturationQueryWithAlertDashboardJoin(|||
       sort_desc(
         max by (type, stage, component) (
           clamp_max(
@@ -138,7 +170,7 @@ local currentSaturationWarnings(nodeSelector) =
           >= on(component, monitor, env, cluster) group_left slo:max:soft:gitlab_component_saturation:ratio
         )
       )
-    ||| % { nodeSelector: nodeSelector },
+    ||| % { nodeSelector: nodeSelector }),
     saturationDays=7,
     valueColumnName='Worst-case Saturation Today'
   );
@@ -147,7 +179,7 @@ local twoWeekSaturationWarnings(nodeSelector) =
   saturationTable(
     'Resources Forecasted to be at Risk of Saturation in 14d',
     description='Lists saturated resources that, given their growth rate over the the past week, and their weekly variance, are likely to breach their soft thresholds limits in the next 14d',
-    query=|||
+    query=wrapSaturationQueryWithAlertDashboardJoin(|||
       sort_desc(
         max by (type, stage, component) (
           clamp_max(
@@ -165,18 +197,18 @@ local twoWeekSaturationWarnings(nodeSelector) =
           >= on(component, monitor, env, cluster) group_left slo:max:soft:gitlab_component_saturation:ratio
         )
       )
-    ||| % { nodeSelector: nodeSelector },
+    ||| % { nodeSelector: nodeSelector }),
     saturationDays=30,
     valueColumnName='Worst-case Saturation 14d Forecast'
   );
 
 {
-  environmentCapacityPlanningRow()::
+  environmentCapacityPlanningRow(selector)::
     row.new(title='📆 Capacity Planning', collapse=true)
-    .addPanels(self.environmentCapacityPlanningPanels()),
+    .addPanels(self.environmentCapacityPlanningPanels(selector)),
 
-  environmentCapacityPlanningPanels(startRow=1)::
-    local nodeSelector = 'type!="", component!=""';
+  environmentCapacityPlanningPanels(selector, startRow=1)::
+    local nodeSelector = selectors.join([selector, 'type!=""']);
 
     layout.grid([
       currentSaturationBreaches(nodeSelector),

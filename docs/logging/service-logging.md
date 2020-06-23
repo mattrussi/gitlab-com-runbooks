@@ -16,6 +16,7 @@
 ## Troubleshooting Pointers
 
 * [../cloudflare/README.md](../cloudflare/README.md)
+* [../cloudflare/logging.md](../cloudflare/logging.md)
 * [../elastic/README.md](../elastic/README.md)
 * [../elastic/elastic-cloud.md](../elastic/elastic-cloud.md)
 * [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
@@ -28,6 +29,8 @@
 * [../pages/gitlab-pages.md](../pages/gitlab-pages.md)
 * [../pages/pages-letsencrypt.md](../pages/pages-letsencrypt.md)
 * [../patroni/geo-patroni-cluster.md](../patroni/geo-patroni-cluster.md)
+* [../patroni/gitlab-com-wale-backups.md](../patroni/gitlab-com-wale-backups.md)
+* [../patroni/postgres-checkup.md](../patroni/postgres-checkup.md)
 * [../patroni/postgres.md](../patroni/postgres.md)
 * [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
 * [../pgbouncer/pgbouncer-saturation.md](../pgbouncer/pgbouncer-saturation.md)

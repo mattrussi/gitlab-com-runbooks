@@ -22,8 +22,13 @@
 * [../logging/logging_gcs_archive_bigquery.md](../logging/logging_gcs_archive_bigquery.md)
 * [../monitoring/filesystem_alerts_inodes.md](../monitoring/filesystem_alerts_inodes.md)
 * [../monitoring/update-prometheus-and-exporters.md](../monitoring/update-prometheus-and-exporters.md)
+* [../packaging/manage-package-signing-keys.md](../packaging/manage-package-signing-keys.md)
 * [../patroni/patroni-management.md](../patroni/patroni-management.md)
+<<<<<<< docs/version/service-version.md
 * [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
+=======
+* [../patroni/postgres-checkup.md](../patroni/postgres-checkup.md)
+>>>>>>> docs/version/service-version.md
 * [../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md](../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md)
 * [../runner/update-gitlab-runner-on-managers.md](../runner/update-gitlab-runner-on-managers.md)
 * [../uncategorized/about-gitlab-com.md](../uncategorized/about-gitlab-com.md)
@@ -40,7 +45,6 @@
 * [../uncategorized/k8s-plantuml-operations.md](../uncategorized/k8s-plantuml-operations.md)
 * [../uncategorized/manage-chef.md](../uncategorized/manage-chef.md)
 * [../uncategorized/manage-pacemaker.md](../uncategorized/manage-pacemaker.md)
-* [../uncategorized/manage-package-signing-keys.md](../uncategorized/manage-package-signing-keys.md)
 * [../uncategorized/manage-workers.md](../uncategorized/manage-workers.md)
 * [../uncategorized/mtail.md](../uncategorized/mtail.md)
 * [../uncategorized/omnibus-package-updates.md](../uncategorized/omnibus-package-updates.md)
