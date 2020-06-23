@@ -32,4 +32,4 @@ groups:
       description: walg basebackup syncs to GCS might be not working. Please follow the runbook
         to review the problem.
       runbook: docs/patroni/postgresql-backups-wale-walg.md
-      title:
+      title: Last successful walg basebackup was seen {{ .Value }} hours ago.
