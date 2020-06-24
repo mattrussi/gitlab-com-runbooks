@@ -27,12 +27,22 @@
 # sudo gitlab-rails runner /var/opt/gitlab/scripts/storage_audit.rb --dry-run=yes
 # sudo gitlab-rails runner /var/opt/gitlab/scripts/storage_audit.rb --dry-run=no
 #
-# Example results:
+# Example execution output:
 #
 # root@file-01-stor-gstg.c.gitlab-staging-1.internal:~# gitlab-rails runner /var/opt/gitlab/scripts/storage_audit.rb --dry-run=no
 # 2020-06-22 03:16:56 INFO  Found 2337568 known git repositories on nfs-file01
 # 2020-06-22 03:16:56 INFO  Auditing git repository projects
 # 2020-06-22 03:21:55 INFO  2337568 of 2337568; 100.00%; found 697 repos on wrong shard
+#
+# Example results:
+#
+# root@file-01-stor-gstg.c.gitlab-staging-1.internal:~# ls -t /var/opt/gitlab/scripts/leftovers.d | head -n1 | xargs -I %file% cat /var/opt/gitlab/scripts/leftovers.d/%file% | jq
+# {
+#   "id": 4083812,
+#   "disk_path": "@hashed/7e/d2/7ed247aa06d753bee85899c80ba91bfc09af7d4d35cec4186b5ee84cbd23e2d6",
+#   "repository_storage": "nfs-file21"
+# }
+# [...]
 
 require 'fileutils'
 require 'json'
