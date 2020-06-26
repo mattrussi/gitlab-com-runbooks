@@ -1,10 +1,50 @@
 ## About Locking
-Locks are the way PostgreSQL ensure transactional data consistency, specially when concurrent transactions aims to write the same data.
-PostgreSQL implements several kinds of locks, and even SELECT statements implements a kind of lock. Some locks conflicts with others, as can be seen in this table (taked from https://www.postgresql.org/docs/11/explicit-locking.html):
-![Screenshot_2020-06-09_16-23-33](img/postgresql-locks.png)
 
+A `lock` in PostgreSQL is a feature that allows transactions to _hold_ something. Usually, that _something_ is a table, an index, or a portion (row/s) of these.
+
+Locks are the way PostgreSQL ensure transactional data consistency, and this is specially handy when concurrent transactions tries to write the same data.
+
+PostgreSQL implements several kinds and layers of locks, and even SELECT statements implements a kind of lock. Locks will execute concurrently, except when one lock conflicts with another.
+
+Below is a comparison of the most commonly used SQL commands that can run concurrently with each other on the same table:
+
+| Runs concurrently with | SELECT | INSERT UPDATE DELETE    | CREATE INDEX (CONC) VACUUM ANALYZE	| CREATE INDEX	| CREATE TRIGGER | ALTER TABLE DROP TABLE TRUNCATE VACUUM (FULL)|
+| --- | --- | --- | --- | --- | --- | --- | 
+|SELECT| :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:| 
+| INSERT UPDATE DELETE | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: | :x: | :x:|
+| CREATE INDEX (CONC) VACUUM ANALYZE | :heavy_check_mark: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
+|CREATE INDEX | :heavy_check_mark: | :x: | :x: | :heavy_check_mark: | :x: | :x: |
+|CREATE TRIGGER | :heavy_check_mark: | :x: | :x: | :x: | :x: | :x: |
+ALTER TABLE DROP TABLE TRUNCATE VACUUM (FULL) | :x:    | :x: | :x: | :x: | :x: | :x: |
+
+And here is a list of locks each statement implements at table and row level:
+
+`SELECT`: ACCESS SHARE LOCK
+
+`INSERT` `UPDATE` `DELETE`: ROW EXCLUSIVE LOCK
+
+`VACUUM`, `ANALYZE`, `CREATE INDEX (conc)`: SHARE UPDATE EXCLUSIVE LOCK
+
+`CREATE INDEX`: SHARE LOCK
+
+`CREATE TRIGGER`, `ALTER TABLE`: SHARE ROW EXCLUSIVE LOCK
+
+`VACUUM FULL`, `REINDEX`, `TRUNCATE`: ACCESS EXCLUSIVE LOCK
+
+
+
+More information in the [Official docs](https://www.postgresql.org/docs/11/explicit-locking.html)
+
+==================
 
 ### How to see locking and locked activity
+
+When troubleshooting blocked queries, two internal sources of information comes in handy:
+
+The [pg_stat_activity view](https://www.postgresql.org/docs/11/monitoring-stats.html#PG-STAT-ACTIVITY-VIEW), wich gives information about current activity, where is connected from, wich query is executing, and the
+
+[pg_locks system catalog](https://www.postgresql.org/docs/11/view-pg-locks.html), that provides information current locking activity, wich pid it belongs to, if the lock where granted (or is waiting), and so on.
+
 
 For demostration porpouses, we will create an artificial lock using the [LOCK](https://www.postgresql.org/docs/11/sql-lock.html) command:
 
@@ -25,7 +65,7 @@ locktest=# select count(*) from mytable;
 
 ```
 
-That SELECT will wait until LOCK is released.  OK, how can we tell what is blocking what? We can use this snippet posted by Nikolay Samokhvalov:
+That SELECT will wait until LOCK is released.  OK, how can we tell what is blocking what? We can use this snippet posted by Nikolay Samokhvalov, that combines the information from `pg_stat_activity` and `pg_locks`:
 
 ```sql
 with recursive l as (
@@ -95,100 +135,47 @@ Here, the _root_ of the blocking chain can be identified with a 0 (zero) in the 
 
 In practice, you will probably add a `\watch 2` in _gitlab-psql_ session, for automatically repeat and refresh the screen.
 
+
+
+
+
+## How to cancel (or terminate) a blocking query
+
 If you decided to cancel the blocking query, you only need to take that from the `pid` column and execute a 
-```
-select pg_cancel_backend(pid);
-```
-
-
-### How to see current activity 
-
-The main source of information is the [pg_stat_activity](https://www.postgresql.org/docs/11/monitoring-stats.html#PG-STAT-ACTIVITY-VIEW) system view. It contains a lot of information about what is going on the database. The most commonly used columns are:
-- application_name: It helps to identify wich application is executing the current query
-- query_start: shows the start of query execution. Used with now() can provide the "age" of this query.
-- state: Probably the most common column for filtering and grouping. Most common values are "active" and "idle .*"
-- wait_event_type and wait_event: Work together to provide information about the event this backed is waiting to happen (if any). `Lock` event type refers to _heavyweight_ locks, and have to put attention on that.
-- query: It contains the query being executed (or the last query executed, depending on the `state` column
-- client_addr: Contains the client ip address (in the leader, this points to the corresponding pgBouncer node)
-
-When troubleshouting, is usually used with grouping:
-
-### See total amount of connections
 ```sql
-select count(*) from pg_stat_activity;
+select pg_cancel_backend(<pid>);
 ```
+or
 
-### Summary of states:
-```
-select state, count(*) from pg_stat_activity group by 1;
-```
-
-### Top 5 oldest *active* queries
 ```sql
-select application_name, query, now() - query_start as query_age from pg_stat_activity where state='active' order by 3 desc limit 5
+select pg_terminate_backend(<pid>);
 ```
 
-### pgBouncer workload (leader only)
+Both functions will return `true` or `false`, meaning that operation was succesfully achieved (or not).
 
-Shows the distribution of incoming connections (mostly corresponding to the pgBouncer instances)
-```sql
-select client_addr, count(*) from pg_stat_activity where state='active' group by 1 order by 2 desc;
-```
+The difference between each of those, is that `pg_cancel_backend()` sends a SIGINT (terminates gracefully), and `pg_terminate_backend()` sends a SIGTERM signal (terminate immediately). Since terminating any process with SIGINT can lead to undesired results, you should always try `pg_cancel_backend()` first.
 
-### Database load distribution (by query)
-This query is an attempt to "generalize" the contents of `pg_stat_activity.query`, when you want to see how often a query is being executed, without taking care of query parameters:
-```sql
-select regexp_replace(regexp_replace( regexp_replace(query,'\m[0-9]+\M','?','g')  , E'''[^'']+''', '?', 'g'), '\/\*.*\*\/', '') query, count(*) from pg_stat_activity 
-group by 1 
-order by 2 desc 
-limit 5;
-```
+
+## How to check if queries are waiting for aquire locks from the logs
+If [log_lock_waits](https://postgresqlco.nf/en/doc/param/log_lock_waits/11/) is `on`, then every attempt to acquire a lock that has been waiting for more than [deadlock_timeout](https://postgresqlco.nf/en/doc/param/log_lock_waits/11/), a line will be printed to the logfile, siliar to:
 
 ```
-                                  query                                    | count 
-----------------------------------------------------------------------------+-------
-                                                                            |     9
- SELECT username, password FROM public.pg_shadow_lookup($?)                 |     6
- SELECT "projects".* FROM "projects" WHERE "projects"."id" = ? LIMIT ?      |     4
- SELECT "licenses".* FROM "licenses" ORDER BY "licenses"."id" DESC LIMIT ?  |     4
- SELECT ?                                                                   |     4
-(5 rows)
-```
-
-### Using `pg_stat_statements` as source of information
-
-Watching the outputs of `pg_stat_statements` can be helpful. Query body is shown in their "generalized" form (without providing information about query parameters). Depending on how you want to focus your investigation, the following pg_stat_statements columns can be used for sorting (usually in reverse order):
-- calls
-- total_time
-- mean_time
-- rows
-
-For example:
-```
-  userid  | dbid  |       queryid        |                                                   query                                                   | calls  |    total_time    | min_time |  max_time  |    mean_time     |   stddev_time    |   rows    | shared_blks_hit | shared_blks_read | shared_blks_dirtied | shared_blks_written | local_blks_hit | local_blks_read | local_blks_dirtied | local_blks_written | temp_blks_read | temp_blks_written | blk_read_time | blk_write_time 
-----------+-------+----------------------+-----------------------------------------------------------------------------------------------------------+--------+------------------+----------+------------+------------------+------------------+-----------+-----------------+------------------+---------------------+---------------------+----------------+-----------------+--------------------+--------------------+----------------+-------------------+---------------+----------------
- 10128445 | 16401 | -4640720344831838877 | SELECT                                                                                                   +| 378232 |  8340272.0189682 | 0.791101 | 238.126078 | 22.0506779409677 | 4.05893322336724 | 921635401 |          378312 |                2 |                   0 |                   0 |              0 |               0 |                  0 |                  0 |              0 |                 0 |      0.927883 |              0
-          |       |                      |   pg_get_userbyid(userid) as user,                                                                       +|        |                  |          |            |                  |                  |           |                 |                  |                     |                     |                |                 |                    |                    |                |                   |               | 
-          |       |                      |   pg_database.datname,                                                                                   +|        |                  |          |            |                  |                  |           |                 |                  |                     |                     |                |                 |                    |                    |                |                   |               | 
-          |       |                      |   pg_stat_statements.queryid,                                                                            +|        |                  |          |            |                  |                  |           |                 |                  |                     |                     |                |                 |                    |                    |                |                   |               | 
-          |       |                      |   pg_stat_statements.calls,                                                                              +|        |                  |          |            |                  |                  |           |                 |                  |                     |                     |                |                 |                    |                    |                |                   |               | 
-          |       |                      |   pg_stat_statements.total_time / $1 as seconds_total,                                                   +|        |                  |          |            |                  |                  |           |                 |                  |                     |                     |                |                 |                    |                    |                |                   |               | 
-          |       |                      |   pg_stat_statements.rows,                                                                               +|        |                  |          |            |                  |                  |           |                 |                  |                     |                     |                |                 |                    |                    |                |                   |               | 
-          |       |                      |   pg_stat_statements.blk_read_time / $2 as block_read_seconds_total,                                     +|        |                  |          |            |                  |                  |           |                 |                  |                     |                     |                |                 |                    |                    |                |                   |               | 
-          |       |                      |   pg_stat_statements.blk_write_time / $3 as block_write_seconds_total                                    +|        |                  |          |            |                  |                  |           |                 |                  |                     |                     |                |                 |                    |                    |                |                   |               | 
-          |       |                      |   FROM pg_stat_statements                                                                                +|        |                  |          |            |                  |                  |           |                 |                  |                     |                     |                |                 |                    |                    |                |                   |               | 
-          |       |                      |   JOIN pg_database                                                                                       +|        |                  |          |            |                  |                  |           |                 |                  |                     |                     |                |                 |                    |                    |                |                   |               | 
-          |       |                      |     ON pg_database.oid = pg_stat_statements.dbid                                                         +|        |                  |          |            |                  |                  |           |                 |                  |                     |                     |                |                 |                    |                    |                |                   |               | 
-          |       |                      |   WHERE                                                                                                  +|        |                  |          |            |                  |                  |           |                 |                  |                     |                     |                |                 |                    |                    |                |                   |               | 
-          |       |                      |     total_time > (                                                                                       +|        |                  |          |            |                  |                  |           |                 |                  |                     |                     |                |                 |                    |                    |                |                   |               | 
-          |       |                      |       SELECT percentile_cont($4)                                                                         +|        |                  |          |            |                  |                  |           |                 |                  |                     |                     |                |                 |                    |                    |                |                   |               | 
-          |       |                      |         WITHIN GROUP (ORDER BY total_time)                                                               +|        |                  |          |            |                  |                  |           |                 |                  |                     |                     |                |                 |                    |                    |                |                   |               | 
-          |       |                      |         FROM pg_stat_statements                                                                          +|        |                  |          |            |                  |                  |           |                 |                  |                     |                     |                |                 |                    |                    |                |                   |               | 
-          |       |                      |     )                                                                                                     |        |                  |          |            |                  |                  |           |                 |                  |                     |                     |                |                 |                    |                    |                |                   |               | 
- 10128445 | 16401 | -1004725917023005319 | SELECT schemaname, relname, indexrelname, idx_blks_read, idx_blks_hit FROM pg_statio_user_indexes         | 378232 | 2832661.87916903 | 4.741719 | 103.380503 | 7.48921793811456 |  3.3779636580883 | 526069140 |      1629724978 |                0 |                   0 |                   0 |              0 |               0 |                  0 |                  0 |              0 |                 0 |             0 |              0
- 10128445 | 16401 | -4108283070886158626 | SELECT schemaname, relname, indexrelname, idx_scan, idx_tup_read, idx_tup_fetch FROM pg_stat_user_indexes | 378232 | 3436938.81703791 | 4.647864 |  81.757696 |  9.0868536163995 | 4.81649904068585 | 526069140 |      1629724877 |              104 |                   0 |                   0 |              0 |               0 |                  0 |                  0 |              0 |                 0 |     10.335521 |              0
-(3 rows)
+2020-06-26 06:42:37.472 GMT,"gitlab","gitlabhq_production",63330,"10.217.8.4:44814",5ef59793.f762,3,"UPDATE waiting",2020-06-26 06:37:07 GMT,190/102729680,3682318105,LOG,00000,"process 63330 still waiting for ShareLock on transaction 3682318234 after 500
+0.126 ms","Process holding the lock: 63387. Wait queue: 41595, 58665, 61792, 63327.",,,,"while rechecking updated tuple (2895868,
+6) in relation ""issues""","UPDATE ""issues"" SET ""updated_at"" = '2020-06-26 06:42:31.953247' WHERE ""issues"".""id"" = xxx /*application:sidekiq,correlation_id:xxgG5,jid:26a93d414e53a50996fa909b,job_class:ProcessCommitWorker*/",,,"sidekiq 5
+.2.7 queues:pipeline_...ate_highest_role [1 of 5 busy]"
 
 ```
 
-__Note: pg_stat_statements information is most useful for troubleshooting when the age of his content is fresh enough. As there is not easy way to say when this statistics have been reset, you may want to use the `pg_stat_statements_reset()` function to do so (you have to reset every hosts separately!)__
+depending of the sql being executed.
+
+Similary, locks that took more than to be acquired will also log a message:
+
+```
+2020-06-26 07:06:02.604 GMT,"gitlab","gitlabhq_production",92156,"10.217.4.2:49126",5ef59e29.167fc,4,"UPDATE waiting",2020-06-26 07:05:13 GMT,174/111649671,3683276022,LOG,00000,"process 92156 acquired ExclusiveLock on tuple (25979017,1) of relation 33614 of database 16401 after 7463.314 ms",,,,,,"UPDATE ""notes"" SET ...",,,"puma: cluster worker 0: 25811 [gitlab-puma-worker] - 10.220.8.1"
+```
+
+That can be tracked down to see if we are queries that waits for too long.
+
+## Deadlocks
+A deadlock is a situation where two (or more) processes conflicts on their use of resources, each one needing to lock to resource being already locked by the other one, hence blocking each other. PostgreSQL comes with an deadlock detection routine that will kill one of the process involved, allowing the other(s) to proceed.
