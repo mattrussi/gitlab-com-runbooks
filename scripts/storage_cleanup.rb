@@ -249,7 +249,7 @@ end
 # Remote command methods
 module RemoteCommands
   def ssh_command(hostname, remote_command)
-    debug_command "ssh #{hostname} '#{remote_command}'"
+    debug_command "ssh #{hostname} -- #{remote_command}"
   end
 
   def scan_for_moved_projects(hostname)
@@ -286,21 +286,23 @@ module RemoteCommands
     project_directory_names = paths.collect { |path| "\"#{File.basename(path)}*\"" }
     query = project_directory_names.join(' -o -name ')
     remote_command = "sudo find #{@options[:hashed_storage_root]} \
--type d -mindepth 2 -maxdepth 3 \\( -name #{query} \\)"
+-type d -mindepth 2 -maxdepth 3 -name #{query}"
     `#{ssh_command(hostname, remote_command)}`.strip.split "\n"
   end
 
   def estimate_reclaimed_disk_space(hostname, paths)
     remote_command = 'sudo du -s ' + paths.join(' ')
-    results = `#{ssh_command(hostname, remote_command)}`.strip.split "\n"
+    results = `#{ssh_command(hostname, remote_command)}`.strip.split("\n")
     results.reduce(0) do |sum, line|
       sum + (line.match(/(\d+)\s+/) { |m| m.captures.first.to_i * 1024 } || 0)
     end
   end
 
   def delete_projects_from_storage_node(hostname, paths)
+    return if paths.empty?
+
     remote_command = 'sudo rm -rf ' + paths.join(' ')
-    command = "ssh #{hostname} '#{remote_command}'"
+    command = "ssh #{hostname} -- #{remote_command}"
     if @options[:dry_run]
       log.info "[Dry-run] Would have run command: #{command}"
       log.info '[Dry-run] Instead will estimate only'
@@ -309,7 +311,7 @@ module RemoteCommands
     end
 
     print_reclaimed(hostname) do
-      debug_lines `#{debug_command(command)}`.strip.split("\n")
+      debug_lines `#{ssh_command(hostname, remote_command)}`.strip.split("\n")
     end
   end
 end
@@ -363,10 +365,12 @@ module Storage
   end
 
   def print_estimate(hostname, paths)
-    estimate = estimate_reclaimed_disk_space(hostname, paths)
-    percentage = percentage_of_total_disk_space(estimate, disk_space(hostname, :total))
-    log.info "Estimated reclaimed disk space: #{human_friendly_filesize(estimate)} \
-(#{percentage}% of total)"
+    estimated_reclaimed = estimate_reclaimed_disk_space(hostname, paths)
+    percentage = percentage_of_total_disk_space(estimated_reclaimed, disk_space(hostname, :total))
+    log.info format(
+      'Estimated reclaimed disk space: %<filesize>s (%<percentage>s%% of total)',
+      filesize: human_friendly_filesize(estimated_reclaimed),
+      percentage: percentage)
   end
 
   def print_reclaimed(hostname)
@@ -374,9 +378,11 @@ module Storage
     yield
     reclaimed = used_initial - disk_space(hostname, :used)
     percentage = percentage_of_total_disk_space(reclaimed, disk_space(hostname, :total))
-    log.info "Initial used disk space: #{human_friendly_filesize(used_initial)}"
-    log.info "Reclaimed disk space: #{human_friendly_filesize(reclaimed)} \
-(#{percentage}% of total)"
+    log.info format('Initial used disk space: %s', human_friendly_filesize(used_initial))
+    log.info format(
+      'Reclaimed disk space: %<filesize>s (%<percentage>s%% of total)',
+      filesize: human_friendly_filesize(reclaimed),
+      percentage: percentage)
   end
 end
 
