@@ -17,4 +17,8 @@ assert_version__go-jsonnet() {
   jsonnet --version | grep -E "^Jsonnet commandline interpreter v${1}$"
 }
 
+assert_version__golang() {
+  go version | grep -E "go${1}"
+}
+
 main
