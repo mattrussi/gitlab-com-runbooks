@@ -48,12 +48,13 @@ local generalGraphPanel(title, description=null, linewidth=2, sort='increasing',
     serviceStage,
     environmentSelectorHash=defaultEnvironmentSelector,
     compact=false,
+    title='Latency: Apdex',
     description='Apdex is a measure of requests that complete within a tolerable period of time for the service. Higher is better.'
   )::
     local selectorHash = environmentSelectorHash { type: serviceType, stage: serviceStage };
 
     generalGraphPanel(
-      'Latency: Apdex',
+      title=title,
       description=description,
       sort=0,
       legend_show=!compact,
@@ -200,12 +201,13 @@ local generalGraphPanel(title, description=null, linewidth=2, sort='increasing',
     serviceStage,
     environmentSelectorHash=defaultEnvironmentSelector,
     compact=false,
-    includeLastWeek=true
+    includeLastWeek=true,
+    title='Error Ratios',
   )::
     local selectorHash = environmentSelectorHash { type: serviceType, stage: serviceStage };
 
     generalGraphPanel(
-      'Error Ratios',
+      title=title,
       description='Error rates are a measure of unhandled service exceptions within a minute period. Client errors are excluded when possible. Lower is better',
       sort=0,
       legend_show=!compact,
@@ -364,11 +366,12 @@ local generalGraphPanel(title, description=null, linewidth=2, sort='increasing',
     serviceStage,
     compact=false,
     environmentSelectorHash=defaultEnvironmentSelector,
+    title='RPS - Service Requests per Second',
   )::
     local selectorHash = environmentSelectorHash { type: serviceType, stage: serviceStage };
 
     generalGraphPanel(
-      'RPS - Service Requests per Second',
+      title=title,
       description='The operation rate is the sum total of all requests being handle for all components within this service. Note that a single user request can lead to requests to multiple components. Higher is busier.',
       sort=0,
       legend_show=!compact,
@@ -497,6 +500,7 @@ local generalGraphPanel(title, description=null, linewidth=2, sort='increasing',
     serviceStage,
     compact=false,
     environmentSelectorHash=defaultEnvironmentSelector,
+    title='Saturation',
   )::
 
     local selectorHash = environmentSelectorHash { type: serviceType, stage: serviceStage };
@@ -506,7 +510,7 @@ local generalGraphPanel(title, description=null, linewidth=2, sort='increasing',
       selector: selectors.serializeHash(selectorHash),
     };
     generalGraphPanel(
-      'Saturation',
+      title=title,
       description='Saturation is a measure of what ratio of a finite resource is currently being utilized. Lower is better.',
       sort='decreasing',
       legend_show=!compact,

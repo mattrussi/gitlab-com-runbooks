@@ -17,6 +17,4 @@ basic.dashboard(
   includeStandardEnvironmentAnnotations=false,
 )
 .addPanels(capacityPlanning.environmentCapacityPlanningPanels(''))
-+ {
-  links+: platformLinks.services,
-}
+.trailer()
