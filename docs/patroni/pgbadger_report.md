@@ -127,3 +127,25 @@ The connections tab shows the graphs about connection information found in the l
   *  Most Frequent Errors/Events
   
 ![most_freq_error](img/most_freq_error.png)
+
+
+## Creating a partial report
+The postgreSQL logfile can grow very large. If you need a report for a portion of what is in the logfile, you can use the `--begin` and `--end` to define an specific timeframe:
+
+``` pgbadger --prefix '%m [%p, %x]: [%l-1] user=%u,db=%d,app=%a,client=%h' --begin="2020-06-30 13:00:00" --end="2020-06-30 15:00:00"  -o report.html postgresql.csv ```
+
+_Dont forget to add the seconds, or you will get an error_
+
+
+## Creating incremental (daily and weekly) reports
+
+PgBadger can create incrememental reports. When using the `-I` option, report destination must be a directory (`-O` option). PgBadger will automatically create an index for you to browse the daily reports. It will also cleanup "old" reports by specifying the `--retention <weeks>` option:
+
+
+``` mkdir -p /var/www/pgbadger-reports && pgbadger -I -O /var/www/pgbadger-reports/ --retention 4 --prefix '%m [%p, %x]: [%l-1] user=%u,db=%d,app=%a,client=%h' postgresql.csv ```
+
+This will create an browseable index:
+![](img/pgbadger-index.png)
+
+
+So the next executions (with a new logfile) will update the index, and you will be able to pick any day, or check the weekly report on mondays.
