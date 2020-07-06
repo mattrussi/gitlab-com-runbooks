@@ -67,5 +67,15 @@ And if you found an specific `pid` that is using many IO%, you can execute `sudo
 
 
 
+### Check for differences in the graphs (same metric, different host)
+Load among RO patroni hosts is evenly distributed, so in average, you might expect every metric be similar for every patroni node in the RO ring. When that is not the case, it ussually means that there is some unknown problem with that particular instance, like:
+- one patroni instance with much higher replication lag than the rest
+- much higher IO usage / io wait than the rest
+
+In general, when those differences are not easy to explain, its because on some issue with GCP, and in most cases that instance/disk must be replaced.
+
+
+
+
 
 
