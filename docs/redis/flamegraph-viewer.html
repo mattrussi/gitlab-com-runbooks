@@ -1,0 +1,105 @@
+<head>
+<title>Redis Flamegraph Viewer</title>
+<script>
+
+var oneHourMS = 60 * 60 * 1000;
+function zeroPadNum(num) {
+  if(num < 10) {
+    return "0"+num;
+  }
+  return num;
+}
+
+function formatDate(d) {
+  return ""+d.getUTCFullYear() +
+    zeroPadNum((d.getUTCMonth()+1)) +
+    zeroPadNum(d.getUTCDate()) +
+    "T"+
+    zeroPadNum(d.getUTCHours()) +
+    zeroPadNum(d.getUTCMinutes()) +
+    zeroPadNum(d.getUTCSeconds())
+}
+
+// What time of the hour the trace is collected at; this is the default value from the cookbook (randomly chosen)
+var minutes_start_time = "22";
+var seconds_start_time = "37";
+var current_date = new Date(Date.now());
+
+if(current_date.getMinutes() < minutes_start_time ||
+  current_date.getMinutes == minutes_start_time && current_date.getSeconds() < seconds_start_time) {
+  // The latest available output is from the previous hour;
+  current_date = new Date(current_date.getTime() - oneHourMS);
+}
+current_date.setUTCMinutes(minutes_start_time);
+current_date.setUTCSeconds(seconds_start_time);
+
+function updateImageURL() {
+  document.getElementById("loading-spinner").style = "visibility:visible";
+  var env = document.getElementById("env").value; 
+  var server_name = "redis" + 
+    document.getElementById("server-type").value + "-" +
+    document.getElementById("server-num").value +
+    "-db-" + env;
+
+  var current_filename = server_name + "." + formatDate(current_date) + ".svg";
+  svg_url = "https://storage.cloud.google.com/gitlab-" +
+    env +
+    "-redis-analysis/cpu_profiles/" +
+    current_filename
+
+  document.getElementById("svg").src = svg_url;
+  document.getElementById("filename").innerText = current_filename;
+
+  document.getElementById("scrub-forward").disabled = (current_date > (Date.now() - oneHourMS));
+}
+
+function scrub(direction) {
+  var new_date = current_date.getTime() + (direction * oneHourMS);
+  current_date.setTime(new_date);
+  updateImageURL();
+}
+
+function scrubBack() {
+  scrub(-1);
+}
+
+function scrubForward() {
+  scrub(1);
+}
+
+function imageLoaded() {
+  document.getElementById("loading-spinner").style = "visibility:collapse";
+}
+
+function imageNotFound() {
+  document.getElementById("loading-spinner").style = "visibility:collapse";
+}
+
+</script>
+</head>
+<body>
+<select id="env" onchange="updateImageURL()">
+  <option value="gprd">gprd</option>
+  <option value="gstg" selected>gstg</option>
+</select>
+<select id="server-type" onchange="updateImageURL()">
+  <option value="" selected>Persistent/Shared-State</option>
+  <option value="-cache">Cache</option>
+  <option value="-sidekiq">Sidekiq</option>
+</select>
+<select id="server-num" onchange="updateImageURL()">
+  <option value="01" selected>01</option>
+  <option value="02">02</option>
+  <option value="03">03</option>
+</select>
+<br>
+<input type="button" value="<" onclick="scrubBack()">
+<input type="button" value=">" onclick="scrubForward()" id="scrub-forward">
+<img id="loading-spinner" src="spinner.gif" style="visibility:collapse">
+<br>
+<div id="filename"></div>
+<img id="svg" onload="imageLoaded()" onerror="imageNotFound()">
+<script>
+  updateImageURL();
+</script>
+</body>
