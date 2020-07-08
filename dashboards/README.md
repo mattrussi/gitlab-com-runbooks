@@ -33,7 +33,7 @@ Example, the Container Registry is of service type `registry`.  Therefore,
 * You can create dashboards in this folder using the Grafana Web UI
 * Alternatively, you can test your Grafonnet changes here using the following method:
   1. Clone git@gitlab.com:gitlab-com/runbooks.git and test your changes locally
-  1. In the 1password Team Vault, lookup the API key stored in `dashboards.gitlab.net Grafana Playground API Key`
+  1. Create an [Access Request](https://about.gitlab.com/handbook/business-ops/employee-enablement/it-ops-team/access-requests/#single-person-access-request) to gain acess to the `dashboards.gitlab.net Grafana Playground API Key`
   1. Edit the `dashboards/.env.sh` file and add the following content: `export GRAFANA_API_TOKEN=<1PASSWORD API KEY VALUE>`
   1. In your shell, in the `dashboards` directory, run `. .env.sh`
   1. To upload your dashboard, run `./test-dashboard.sh dashboard-folder-path/file.dashboard.jsonnet`. It will upload the file and return a link to your dashboard.
