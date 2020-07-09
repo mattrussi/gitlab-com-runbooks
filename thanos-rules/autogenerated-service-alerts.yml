@@ -197,8 +197,9 @@ groups:
       threshold_sigma: '3'
     expr: |
       (
-          (
-            (gitlab_service_ops:rate{monitor="global"} -  gitlab_service_ops:rate:prediction{monitor="global"}) /
+        (
+          (gitlab_service_ops:rate{monitor="global"} - gitlab_service_ops:rate:prediction{monitor="global"})
+          /
           gitlab_service_ops:rate:stddev_over_time_1w{monitor="global"}
         )
         >
@@ -234,15 +235,16 @@ groups:
       period: 5m
       rules_domain: general
       severity: s4
-      threshold_sigma: '3'
+      threshold_sigma: "-2"
     expr: |
       (
-          (
-            (gitlab_service_ops:rate{monitor="global"} -  gitlab_service_ops:rate:prediction{monitor="global"}) /
-          gitlab_service_ops:rate:stddev_over_time_1w{monitor="global"}
+        (
+          (gitlab_service_ops:rate{monitor="global", stage!="cny"} - gitlab_service_ops:rate:prediction{monitor="global", stage!="cny"})
+          /
+          gitlab_service_ops:rate:stddev_over_time_1w{monitor="global", stage!="cny"}
         )
         <
-        -3
+        -2
       )
       unless on(tier, type)
       gitlab_service:mapping:disable_ops_rate_prediction

@@ -1,5 +1,10 @@
 local alerts = import 'lib/alerts.libsonnet';
 
+// Anomaly detection from service RPS based on guassian
+//
+local rpsAnomalyDetectionZScoreUpperBound = 3;
+local rpsAnomalyDetectionZScoreLowerBound = -2;
+
 local rules = [
   // ------------------------------------------------------------------------------
   // Latency alerts
@@ -207,21 +212,24 @@ local rules = [
   // ------------------------------------
   // Upper bound thresholds exceeded
   // ------------------------------------
-  // Warn: Operation rate above 2 sigma
   {
+    local formatConfig = {
+      rpsAnomalyDetectionZScoreUpperBound: rpsAnomalyDetectionZScoreUpperBound
+    },
     alert: 'service_ops_out_of_bounds_upper_5m',
     expr: |||
       (
-          (
-            (gitlab_service_ops:rate{monitor="global"} -  gitlab_service_ops:rate:prediction{monitor="global"}) /
+        (
+          (gitlab_service_ops:rate{monitor="global"} - gitlab_service_ops:rate:prediction{monitor="global"})
+          /
           gitlab_service_ops:rate:stddev_over_time_1w{monitor="global"}
         )
         >
-        3
+        %(rpsAnomalyDetectionZScoreUpperBound)g
       )
       unless on(tier, type)
       gitlab_service:mapping:disable_ops_rate_prediction
-    |||,
+    ||| % formatConfig,
     'for': '5m',
     labels: {
       rules_domain: 'general',
@@ -229,7 +237,7 @@ local rules = [
       severity: 's4',
       period: '5m',
       bound: 'upper',
-      threshold_sigma: '3',
+      threshold_sigma: '%(rpsAnomalyDetectionZScoreUpperBound)g' % formatConfig,
       alert_type: 'cause',
     },
     annotations: {
@@ -252,21 +260,25 @@ local rules = [
   // ------------------------------------
   // Lower bound thresholds exceeded
   // ------------------------------------
-  // Warn: Operation rate below 2 sigma
+  // Excludes canary stage, avoiding alerting on cny draining events
   {
+    local formatConfig = {
+      rpsAnomalyDetectionZScoreLowerBound: rpsAnomalyDetectionZScoreLowerBound
+    },
     alert: 'service_ops_out_of_bounds_lower_5m',
     expr: |||
       (
-          (
-            (gitlab_service_ops:rate{monitor="global"} -  gitlab_service_ops:rate:prediction{monitor="global"}) /
-          gitlab_service_ops:rate:stddev_over_time_1w{monitor="global"}
+        (
+          (gitlab_service_ops:rate{monitor="global", stage!="cny"} - gitlab_service_ops:rate:prediction{monitor="global", stage!="cny"})
+          /
+          gitlab_service_ops:rate:stddev_over_time_1w{monitor="global", stage!="cny"}
         )
         <
-        -3
+        %(rpsAnomalyDetectionZScoreLowerBound)g
       )
       unless on(tier, type)
       gitlab_service:mapping:disable_ops_rate_prediction
-    |||,
+    ||| % formatConfig,
     'for': '5m',
     labels: {
       rules_domain: 'general',
@@ -274,7 +286,7 @@ local rules = [
       severity: 's4',
       period: '5m',
       bound: 'lower',
-      threshold_sigma: '3',
+      threshold_sigma: '%(rpsAnomalyDetectionZScoreLowerBound)g' % formatConfig,
       alert_type: 'cause',
     },
     annotations: {
