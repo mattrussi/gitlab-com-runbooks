@@ -1,6 +1,6 @@
 ## Troubleshooting database (postgres/pgbouncer) degradation
 
-Database performance degradation may be due to several reasons. This is an asorted compilation of checks you can try to point too the degradation origin.
+Database performance degradation may be due to several reasons. To search for de root cause, you can start digging by checking existing metrics.
 
 
 ### Check CPU utilization
@@ -9,7 +9,7 @@ You can use [this metric](https://prometheus.gprd.gitlab.net/graph?g0.range_inpu
 
 Check if values are getting close to `1`
 
-You can also take a look on [this graph](https://dashboards.gitlab.com/d/000000144/postgresql-overview?orgId=1&from=1594050133725&to=1594060933725&var-prometheus=Global&var-environment=gprd&var-type=patroni&viewPanel=9) - part of the [Patroni Overview](https://dashboards.gitlab.com/d/000000144/postgresql-overview?orgId=1) panel - to check the host load too.
+You can also take a look on [this graph](https://dashboards.gitlab.com/d/000000144/postgresql-overview?orgId=1&from=1594050133725&to=1594060933725&var-prometheus=Global&var-environment=gprd&var-type=patroni&viewPanel=9) - part of the [Patroni Overview](https://dashboards.gitlab.com/d/000000144/postgresql-overview?orgId=1) panel - to check the host load.
 ![](img/patroni-load.png)
 
 
@@ -114,9 +114,14 @@ In general, when those differences are not easy to explain, its because on some 
 
 ### Check for slow queries
 
-[This board](https://dashboards.gitlab.com/d/000000278/postgresql-slow-queries?orgId=1&refresh=1m) contains information about how many queries took more than 5 seconds, and includes the same value from 7 days before, so you can easily compare both.
+[This board](https://dashboards.gitlab.com/d/000000278/postgresql-slow-queries?orgId=1&refresh=1m) contains information about how many queries took more than 5 seconds.
+![](img/patroni-slow-queries.png)
 
-Check [this board](https://dashboards.gitlab.com/d/000000153/postgresql-queries?orgId=1&refresh=1m&from=now-3h&to=now&var-environment=gprd&var-type=patroni&var-fqdn=patroni-01-db-gprd.c.gitlab-production.internal&var-prometheus=Global) to check for an increasing rate of slow queries (`Slow queries` graph). You can also check for blocked queries (`Blocked Queries` graph). For troubleshooting blocked queries, see [this runbook](postgresql-locking.md)
+Check the [PostgreSQL queries](https://dashboards.gitlab.com/d/000000153/postgresql-queries?orgId=1&refresh=1m&from=now-3h&to=now&var-environment=gprd&var-type=patroni&var-fqdn=patroni-01-db-gprd.c.gitlab-production.internal&var-prometheus=Global) board to check for an increasing rate of slow queries (`Slow queries` graph). You can also check for blocked queries (`Blocked Queries` graph). 
+
+![](img/patroni-postgresql-queries.png)
+
+For troubleshooting blocked queries, see [this runbook](postgresql-locking.md)
 
 
 ### Checkpoint activity
@@ -135,7 +140,11 @@ Too much concurrent activity can affect performance. Refer to [this runbook](pos
 ### Checks for pgBouncer
 
 #### Waiting clients
-The [PgBouncer Overview](https://dashboards.gitlab.com/d/PwlB97Jmk/pgbouncer-overview?orgId=1&from=now-3h&to=now) shows pgBouncer related information. When troubleshooting, check that:
+The [PgBouncer Overview](https://dashboards.gitlab.com/d/PwlB97Jmk/pgbouncer-overview?orgId=1&from=now-3h&to=now) shows pgBouncer related information. 
+
+![](img/pgbouncer-overview.png)
+
+When troubleshooting, check that:
 - if `Waiting Client Connections per Pool` is  consistenly high, it may be related to slow queries taking most available connections in the pool, so others have to wait. Refer to [this runbook](postgresql-query-load-evaluation.md) to evaluate server activity.
 
 - if `Connection Saturation per Pool` is consistenly close to 100%, probably the database is not able to keep up the requests. Refer to [this runbook](postgresql-query-load-evaluation.md) to evaluate server activity.
