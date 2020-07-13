@@ -31,6 +31,8 @@ Disk saturation can cause severe service degradation. Check the [PostgreSQL Over
 - Disk IO utilization `sdb`
 - Retransmit rate (outbound only), resending possibly lost packets
 
+The `sdb` device is the most important to monitor, because it contains the $PGDATA space.
+
 If you need to go deeper, you can log in into the desired instance and use the `iotop` to find out wich process is using most IO:
 ```sudo iotop -P -a ```
 
