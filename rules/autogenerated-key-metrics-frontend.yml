@@ -292,7 +292,7 @@ groups:
         rate(haproxy_ssh_requests_terminated_total{type="frontend", cause=~"K|S|s|P|I|D"}[5m])
       )
 - name: 'Component-Level SLIs: frontend - 30m burn-rate'
-  interval: 2m
+  interval: 5m
   rules:
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -576,7 +576,7 @@ groups:
         rate(haproxy_ssh_requests_terminated_total{type="frontend", cause=~"K|S|s|P|I|D"}[1h])
       )
 - name: 'Component-Level SLIs: frontend - 6h burn-rate'
-  interval: 2m
+  interval: 5m
   rules:
   - record: gitlab_component_apdex:weight:score_6h
     labels:

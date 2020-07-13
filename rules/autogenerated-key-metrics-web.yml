@@ -208,7 +208,7 @@ groups:
         rate(gitlab_workhorse_http_requests_total{job="gitlab-workhorse-web", type="web", code=~"^5.*", route!="^/-/health$", route!="^/-/(readiness|liveness)$"}[5m])
       )
 - name: 'Component-Level SLIs: web - 30m burn-rate'
-  interval: 2m
+  interval: 5m
   rules:
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -410,7 +410,7 @@ groups:
         rate(gitlab_workhorse_http_requests_total{job="gitlab-workhorse-web", type="web", code=~"^5.*", route!="^/-/health$", route!="^/-/(readiness|liveness)$"}[1h])
       )
 - name: 'Component-Level SLIs: web - 6h burn-rate'
-  interval: 2m
+  interval: 5m
   rules:
   - record: gitlab_component_apdex:weight:score_6h
     labels:

@@ -164,7 +164,7 @@ groups:
         rate(job_trace_archive_failed_total{}[5m])
       )
 - name: 'Component-Level SLIs: ci-runners - 30m burn-rate'
-  interval: 2m
+  interval: 5m
   rules:
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -324,7 +324,7 @@ groups:
         rate(job_trace_archive_failed_total{}[1h])
       )
 - name: 'Component-Level SLIs: ci-runners - 6h burn-rate'
-  interval: 2m
+  interval: 5m
   rules:
   - record: gitlab_component_ops:rate_6h
     labels:

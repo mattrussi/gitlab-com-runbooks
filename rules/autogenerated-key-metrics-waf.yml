@@ -80,7 +80,7 @@ groups:
         rate(cloudflare_zones_http_responses_total{zone=~"gitlab.com|staging.gitlab.com", edge_response_status=~"5.."}[5m])
       )
 - name: 'Component-Level SLIs: waf - 30m burn-rate'
-  interval: 2m
+  interval: 5m
   rules:
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -158,7 +158,7 @@ groups:
         rate(cloudflare_zones_http_responses_total{zone=~"gitlab.com|staging.gitlab.com", edge_response_status=~"5.."}[1h])
       )
 - name: 'Component-Level SLIs: waf - 6h burn-rate'
-  interval: 2m
+  interval: 5m
   rules:
   - record: gitlab_component_ops:rate_6h
     labels:

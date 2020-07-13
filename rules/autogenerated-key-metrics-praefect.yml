@@ -132,7 +132,7 @@ groups:
         rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition)$",job="praefect"}[5m])
       )
 - name: 'Component-Level SLIs: praefect - 30m burn-rate'
-  interval: 2m
+  interval: 5m
   rules:
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -258,7 +258,7 @@ groups:
         rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition)$",job="praefect"}[1h])
       )
 - name: 'Component-Level SLIs: praefect - 6h burn-rate'
-  interval: 2m
+  interval: 5m
   rules:
   - record: gitlab_component_apdex:weight:score_6h
     labels:

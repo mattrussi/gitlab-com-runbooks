@@ -452,7 +452,7 @@ groups:
         rate(grpc_server_handled_total{environment=~"gprd|ops|ci-prd",grpc_code!="OK",grpc_service="thanos.Store",grpc_type="unary",job="thanos",type="monitoring"}[5m])
       )
 - name: 'Component-Level SLIs: monitoring - 30m burn-rate'
-  interval: 2m
+  interval: 5m
   rules:
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -896,7 +896,7 @@ groups:
         rate(grpc_server_handled_total{environment=~"gprd|ops|ci-prd",grpc_code!="OK",grpc_service="thanos.Store",grpc_type="unary",job="thanos",type="monitoring"}[1h])
       )
 - name: 'Component-Level SLIs: monitoring - 6h burn-rate'
-  interval: 2m
+  interval: 5m
   rules:
   - record: gitlab_component_ops:rate_6h
     labels:

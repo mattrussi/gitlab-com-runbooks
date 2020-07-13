@@ -115,7 +115,7 @@ local ruleSetIterator(ruleSets) = {
       {
         local burnRate = '30m',
         burnRate: burnRate,
-        evaluationInterval: '2m',  // 30m burn rate is part of slow burn rule, evaluate every 2 minutes
+        evaluationInterval: '5m',  // 30m burn rate is part of slow burn rule, evaluate every 5 minutes
         rules: ruleSetIterator([
           // 30m burn rate intermediate recording rules. This should always be first
           sliRecordingRulesSet(burnRate),
@@ -173,7 +173,7 @@ local ruleSetIterator(ruleSets) = {
       {
         local burnRate = '6h',
         burnRate: burnRate,
-        evaluationInterval: '2m',  // 6h burn rate is part of slow burn rule, evaluate every 2 minutes
+        evaluationInterval: '5m',  // 6h burn rate is part of slow burn rule, evaluate every 5 minutes
         rules: ruleSetIterator([
           // 6h burn rate intermediate recording rules. This should always be first
           sliRecordingRulesSet(burnRate),

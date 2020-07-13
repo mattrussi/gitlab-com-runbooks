@@ -948,7 +948,7 @@ groups:
       /
       gitlab_background_jobs:execution:ops:rate_5m
 - name: 'Component-Level SLIs: sidekiq - 30m burn-rate'
-  interval: 2m
+  interval: 5m
   rules:
   - record: sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m
     expr: |
@@ -1860,7 +1860,7 @@ groups:
       /
       gitlab_background_jobs:execution:ops:rate_1h
 - name: 'Component-Level SLIs: sidekiq - 6h burn-rate'
-  interval: 2m
+  interval: 5m
   rules:
   - record: sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate6h
     expr: |

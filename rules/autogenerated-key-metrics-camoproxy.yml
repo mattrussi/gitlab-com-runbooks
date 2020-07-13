@@ -108,7 +108,7 @@ groups:
         rate(camo_proxy_reponses_failed_total{}[5m])
       )
 - name: 'Component-Level SLIs: camoproxy - 30m burn-rate'
-  interval: 2m
+  interval: 5m
   rules:
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -212,7 +212,7 @@ groups:
         rate(camo_proxy_reponses_failed_total{}[1h])
       )
 - name: 'Component-Level SLIs: camoproxy - 6h burn-rate'
-  interval: 2m
+  interval: 5m
   rules:
   - record: gitlab_component_apdex:weight:score_6h
     labels:

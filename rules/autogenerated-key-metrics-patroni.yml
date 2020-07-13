@@ -168,7 +168,7 @@ groups:
         rate(pg_stat_database_xact_rollback{type="patroni", tier="db"}[5m])
       )
 - name: 'Component-Level SLIs: patroni - 30m burn-rate'
-  interval: 2m
+  interval: 5m
   rules:
   - record: sli_aggregations:gitlab_sql_duration_seconds_bucket_rate30m
     expr: |
@@ -332,7 +332,7 @@ groups:
         rate(pg_stat_database_xact_rollback{type="patroni", tier="db"}[1h])
       )
 - name: 'Component-Level SLIs: patroni - 6h burn-rate'
-  interval: 2m
+  interval: 5m
   rules:
   - record: sli_aggregations:gitlab_sql_duration_seconds_bucket_rate6h
     expr: |
