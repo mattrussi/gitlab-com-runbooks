@@ -9,9 +9,15 @@
         [{
           record: 'gitlab_component_errors:ratio%(suffix)s' % format,
           expr: |||
-            gitlab_component_errors:rate%(suffix)s{monitor!="global"}
-            /
-            gitlab_component_ops:rate%(suffix)s{monitor!="global"}
+            (
+              gitlab_component_errors:rate%(suffix)s{monitor!="global"}
+              /
+              (gitlab_component_ops:rate%(suffix)s{monitor!="global"} > 0)
+            )
+            or
+            (
+              clamp_max(gitlab_component_ops:rate%(suffix)s{monitor!="global"}, 0)
+            )
           ||| % format,
         }],
     },
