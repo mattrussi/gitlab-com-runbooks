@@ -18,6 +18,7 @@
 * [../frontend/gitlab-com-is-down.md](../frontend/gitlab-com-is-down.md)
 * [../logging/README.md](../logging/README.md)
 * [../patroni/patroni-management.md](../patroni/patroni-management.md)
+* [../patroni/performance-degradation-troubleshooting.md](../patroni/performance-degradation-troubleshooting.md)
 * [../patroni/pg-ha.md](../patroni/pg-ha.md)
 * [../patroni/postgres.md](../patroni/postgres.md)
 * [../patroni/postgresql-query-load-evaluation.md](../patroni/postgresql-query-load-evaluation.md)
