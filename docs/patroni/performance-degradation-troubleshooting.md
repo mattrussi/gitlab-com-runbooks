@@ -17,6 +17,10 @@ You can also take a look on [this graph](https://dashboards.gitlab.com/d/0000001
 Check [this graph](https://dashboards.gitlab.com/d/000000144/postgresql-overview?orgId=1&from=now-3h&to=now&var-prometheus=Global&var-environment=gprd&var-type=patroni&viewPanel=12) for an overview of memory utilization:
 ![](img/patroni-memory.png)
 
+### Check for Context Switches anomalies
+A context switch is the process of storing the state of a process or thread, so that it can be restored and resume execution at a later point. It can be seen as a measure of total througput of the system. Check the [CS metric](https://prometheus.gprd.gitlab.net/graph?g0.range_input=12h&g0.expr=rate(node_context_switches_total%7Btype%3D%22patroni%22%7D%5B5m%5D)&g0.tab=0) for spikes or low peaks.
+
+![](img/patroni-cs.png)
 
 ### Check for Buffer cache utilization
 Specially after a failover, a DB repair (indexing, repacking), the cache access pattern can change. With a "cold" cache, query performance may suffer. Check [this graph](https://prometheus-db.gprd.gitlab.net/new/graph?g0.expr=(pg_stat_database_blks_hit%7Benvironment%3D%22gprd%22%2Cdatname%3D%22gitlabhq_production%22%2C%20%7D%20%2F%20(%20pg_stat_database_blks_hit%7Benvironment%3D%22gprd%22%2Cdatname%3D%22gitlabhq_production%22%2C%20%7D%20%2B%20pg_stat_database_blks_read%7Benvironment%3D%22gprd%22%2Cdatname%3D%22gitlabhq_production%22%7D))%20*%20100&g0.tab=0&g0.stacked=0&g0.range_input=2h) to verify the cache hit/read percentaje. Under normal conditions, it should be close to 99%.
@@ -101,6 +105,19 @@ sda               0.00     0.00    0.00    0.00     0.00     0.00     0.00     0
 sdb               0.00   133.00  903.00 1647.00  8180.00 22492.00    24.06     1.21    0.68    0.54    0.76   0.11  27.20
 ```
 
+
+### Check for network anomalies
+Correct network traffic is critical in any cloud enviroment. Check the [Network utilization](https://prometheus.gprd.gitlab.net/new/graph?g0.expr=sum(rate(node_network_receive_bytes_total%7Btype%3D%22patroni%22%7D%5B5m%5D))%20by%20(instance)&g0.tab=0&g0.stacked=0&g0.range_input=2h&g1.expr=sum(rate(node_network_transmit_bytes_total%7Btype%3D%22patroni%22%7D%5B5m%5D))%20by%20(instance)&g1.tab=0&g1.stacked=0&g1.range_input=2h&g2.expr=rate(node_netstat_Tcp_RetransSegs%7Btype%3D%22patroni%22%7D%5B5m%5D)&g2.tab=0&g2.stacked=0&g2.range_input=2h) graph to check the network of patroni hosts. 
+This panel includes (for patroni hosts):
+- Incoming traffic
+- Outbound traffic
+- Retransmition rate (high rate of retransmitions could be paired with higher IO utilization)
+
+![](img/patroni-network-in.png)
+
+![](img/patroni-network-out.png)
+
+![](img/patroni-network-retransmit.png)
 
 ### Check for differences in the graphs (same metric, different host)
 Load among RO patroni hosts is evenly distributed, so in average, you might expect every metric be similar for every patroni node in the RO ring. When that is not the case, it ussually means that there is some unknown problem with that particular instance, like:
