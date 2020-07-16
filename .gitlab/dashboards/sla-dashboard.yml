@@ -11,7 +11,7 @@ panel_groups:
       label: Weighted Availability Score - GitLab.com
       query: >-
         avg(clamp_max(avg_over_time(sla:gitlab:ratio{env=~"ops|gprd", environment="gprd", stage="main",
-        monitor=~"global|"}[7d]),1))
+        monitor=~"global|"}[{{__range}}]),1))
       unit: "%"
     type: single-stat
   - title: Overall SLA over time period - gitlab.com
@@ -35,7 +35,7 @@ panel_groups:
     - id: single-stat-sla-trend-api
       label: Primary Services Average Availability for Period - api
       query: >-
-        avg(avg_over_time(slo_observation_status{env=~"ops|gprd", environment="gprd", stage="main", type="api"}[7d]))
+        avg(avg_over_time(slo_observation_status{env=~"ops|gprd", environment="gprd", stage="main", type="api"}[{{__range}}]))
       unit: "%"
     type: single-stat
   - title: Primary Services Average Availability for Period - git
@@ -44,7 +44,7 @@ panel_groups:
     - id: single-stat-sla-trend-git
       label: Primary Services Average Availability for Period - git
       query: >-
-        avg(avg_over_time(slo_observation_status{env=~"ops|gprd", environment="gprd", stage="main", type="git"}[7d]))
+        avg(avg_over_time(slo_observation_status{env=~"ops|gprd", environment="gprd", stage="main", type="git"}[{{__range}}]))
       unit: "%"
     type: single-stat
   - title: Primary Services Average Availability for Period - registry
@@ -53,7 +53,7 @@ panel_groups:
     - id: single-stat-sla-trend-registry
       label: Primary Services Average Availability for Period - registry
       query: >-
-        avg(avg_over_time(slo_observation_status{env=~"ops|gprd", environment="gprd", stage="main", type="registry"}[7d]))
+        avg(avg_over_time(slo_observation_status{env=~"ops|gprd", environment="gprd", stage="main", type="registry"}[{{__range}}]))
       unit: "%"
     type: single-stat
   - title: Primary Services Average Availability for Period - web
@@ -62,7 +62,7 @@ panel_groups:
     - id: single-stat-sla-trend-web
       label: Primary Services Average Availability for Period - web
       query: >-
-        avg(avg_over_time(slo_observation_status{env=~"ops|gprd", environment="gprd", stage="main", type="web"}[7d]))
+        avg(avg_over_time(slo_observation_status{env=~"ops|gprd", environment="gprd", stage="main", type="web"}[{{__range}}]))
       unit: "%"
     type: single-stat
   - title: SLA Trends - Primary Services
