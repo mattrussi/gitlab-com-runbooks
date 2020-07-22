@@ -994,6 +994,7 @@ groups:
 
         If this resource is becoming saturated, this may indicate traffic spikes to Gitaly, abuse or possibly resource leaks in
         the application. Gitaly or other git processes may be killed by the OOM killer when this resource is saturated.
+      alert_source: Users/andrewn/code/gitlab/runbooks/metrics-catalog/lib/resource-saturation-point.libsonnet
       grafana_dashboard_id: alerts-sat_cgroup_memory
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/alerts-sat_cgroup_memory?from=now-6h/m&to=now-1m/m&var-environment={{
@@ -1044,6 +1045,7 @@ groups:
         This resource measures average CPU utilization across an all cores in a service fleet.
         If it is becoming saturated, it may indicate that the fleet needs
         horizontal or vertical scaling.
+      alert_source: Users/andrewn/code/gitlab/runbooks/metrics-catalog/lib/resource-saturation-point.libsonnet
       grafana_dashboard_id: alerts-sat_cpu
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/alerts-sat_cpu?from=now-6h/m&to=now-1m/m&var-environment={{ $labels.environment
@@ -1093,6 +1095,7 @@ groups:
         If this is too high, its possible that a directory is filling up with
         files. Consider logging in an checking temp directories for large numbers
         of files
+      alert_source: Users/andrewn/code/gitlab/runbooks/metrics-catalog/lib/resource-saturation-point.libsonnet
       grafana_dashboard_id: alerts-sat_disk_inodes
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/alerts-sat_disk_inodes?from=now-6h/m&to=now-1m/m&var-environment={{
@@ -1141,6 +1144,7 @@ groups:
         Details of the Disk Space Utilization per Device per Node resource:
         -------------------------------------------
         Disk space utilization per device per node.
+      alert_source: Users/andrewn/code/gitlab/runbooks/metrics-catalog/lib/resource-saturation-point.libsonnet
       grafana_dashboard_id: alerts-sat_disk_space
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/alerts-sat_disk_space?from=now-6h/m&to=now-1m/m&var-environment={{
@@ -1187,6 +1191,7 @@ groups:
         Details of the Disk Sustained Read IOPS Utilization per Node resource:
         -------------------------------------------
         Disk sustained read IOPS utilization per node.
+      alert_source: Users/andrewn/code/gitlab/runbooks/metrics-catalog/lib/resource-saturation-point.libsonnet
       grafana_dashboard_id: alerts-sat_disk_sus_read_iops
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/alerts-sat_disk_sus_read_iops?from=now-6h/m&to=now-1m/m&var-environment={{
@@ -1232,6 +1237,7 @@ groups:
         Details of the Disk Sustained Read Throughput Utilization per Node resource:
         -------------------------------------------
         Disk sustained read throughput utilization per node.
+      alert_source: Users/andrewn/code/gitlab/runbooks/metrics-catalog/lib/resource-saturation-point.libsonnet
       grafana_dashboard_id: alerts-sat_disk_sus_read_throughput
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/alerts-sat_disk_sus_read_throughput?from=now-6h/m&to=now-1m/m&var-environment={{
@@ -1284,6 +1290,7 @@ groups:
 
         More information can be found at
         https://cloud.google.com/compute/docs/disks/performance.
+      alert_source: Users/andrewn/code/gitlab/runbooks/metrics-catalog/lib/resource-saturation-point.libsonnet
       grafana_dashboard_id: alerts-sat_disk_sus_write_iops
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/alerts-sat_disk_sus_write_iops?from=now-6h/m&to=now-1m/m&var-environment={{
@@ -1336,6 +1343,7 @@ groups:
 
         More information can be found at
         https://cloud.google.com/compute/docs/disks/performance.
+      alert_source: Users/andrewn/code/gitlab/runbooks/metrics-catalog/lib/resource-saturation-point.libsonnet
       grafana_dashboard_id: alerts-sat_disk_sus_write_throughput
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/alerts-sat_disk_sus_write_throughput?from=now-6h/m&to=now-1m/m&var-environment={{
@@ -1383,6 +1391,7 @@ groups:
 
         This resource measures all CPU across a fleet. If it is becoming saturated, it may indicate that the fleet needs horizontal or
         vertical scaling. The metrics are coming from elasticsearch_exporter.
+      alert_source: Users/andrewn/code/gitlab/runbooks/metrics-catalog/lib/resource-saturation-point.libsonnet
       grafana_dashboard_id: alerts-sat_elastic_cpu
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/alerts-sat_elastic_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
@@ -1427,6 +1436,7 @@ groups:
         Details of the Disk Utilization Overall resource:
         -------------------------------------------
         Disk utilization per device per node.
+      alert_source: Users/andrewn/code/gitlab/runbooks/metrics-catalog/lib/resource-saturation-point.libsonnet
       grafana_dashboard_id: alerts-sat_elastic_disk_space
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/alerts-sat_elastic_disk_space?from=now-6h/m&to=now-1m/m&var-environment={{
@@ -1475,6 +1485,7 @@ groups:
         Details of the JVM Heap Utilization per Node resource:
         -------------------------------------------
         JVM heap memory utilization per node.
+      alert_source: Users/andrewn/code/gitlab/runbooks/metrics-catalog/lib/resource-saturation-point.libsonnet
       grafana_dashboard_id: alerts-sat_elastic_jvm_heap_memory
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/alerts-sat_elastic_jvm_heap_memory?from=now-6h/m&to=now-1m/m&var-environment={{
@@ -1522,6 +1533,7 @@ groups:
 
         This resource measures all CPU across a fleet. If it is becoming saturated, it may indicate that the fleet needs horizontal or
         vertical scaling. The metrics are coming from elasticsearch_exporter.
+      alert_source: Users/andrewn/code/gitlab/runbooks/metrics-catalog/lib/resource-saturation-point.libsonnet
       grafana_dashboard_id: alerts-sat_elastic_single_node_cpu
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/alerts-sat_elastic_single_node_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
@@ -1564,6 +1576,7 @@ groups:
         Details of the Disk Utilization per Device per Node resource:
         -------------------------------------------
         Disk utilization per device per node.
+      alert_source: Users/andrewn/code/gitlab/runbooks/metrics-catalog/lib/resource-saturation-point.libsonnet
       grafana_dashboard_id: alerts-sat_elastic_node_disk_space
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/alerts-sat_elastic_node_disk_space?from=now-6h/m&to=now-1m/m&var-environment={{
@@ -1617,6 +1630,7 @@ groups:
 
         Descriptions of the threadpool types can be found at
         https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-threadpool.html.
+      alert_source: Users/andrewn/code/gitlab/runbooks/metrics-catalog/lib/resource-saturation-point.libsonnet
       grafana_dashboard_id: alerts-sat_elastic_thread_pools
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/alerts-sat_elastic_thread_pools?from=now-6h/m&to=now-1m/m&var-environment={{
@@ -1665,6 +1679,7 @@ groups:
         Go's memory allocation strategy can make it look like a Go process is saturating memory when measured using RSS, when in fact
         the process is not at risk of memory saturation. For this reason, we measure Go processes using the `go_memstat_alloc_bytes`
         metric instead of RSS.
+      alert_source: Users/andrewn/code/gitlab/runbooks/metrics-catalog/lib/resource-saturation-point.libsonnet
       grafana_dashboard_id: alerts-sat_go_memory
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/alerts-sat_go_memory?from=now-6h/m&to=now-1m/m&var-environment={{
@@ -1715,6 +1730,7 @@ groups:
         This measures the HPA that manages our Deployments. If we are running low on
         ability to scale up by hitting our maximum HPA Pod allowance, we will have
         fully saturated this service.
+      alert_source: Users/andrewn/code/gitlab/runbooks/metrics-catalog/lib/resource-saturation-point.libsonnet
       grafana_dashboard_id: alerts-sat_kube_hpa_instances
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/alerts-sat_kube_hpa_instances?from=now-6h/m&to=now-1m/m&var-environment={{
@@ -1767,6 +1783,7 @@ groups:
         Details of the Kube Persistent Volume Claim inode Utilisation resource:
         -------------------------------------------
         disk space utilization on persistent volume claims.
+      alert_source: Users/andrewn/code/gitlab/runbooks/metrics-catalog/lib/resource-saturation-point.libsonnet
       grafana_dashboard_id: alerts-sat_kube_pvc_disk_space
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/alerts-sat_kube_pvc_disk_space?from=now-6h/m&to=now-1m/m&var-environment={{
@@ -1813,6 +1830,7 @@ groups:
         Details of the Kube Persistent Volume Claim inode Utilisation resource:
         -------------------------------------------
         inode utilization on persistent volume claims.
+      alert_source: Users/andrewn/code/gitlab/runbooks/metrics-catalog/lib/resource-saturation-point.libsonnet
       grafana_dashboard_id: alerts-sat_kube_pvc_inodes
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/alerts-sat_kube_pvc_inodes?from=now-6h/m&to=now-1m/m&var-environment={{
@@ -1858,6 +1876,7 @@ groups:
         Details of the Memory Utilization per Node resource:
         -------------------------------------------
         Memory utilization per device per node.
+      alert_source: Users/andrewn/code/gitlab/runbooks/metrics-catalog/lib/resource-saturation-point.libsonnet
       grafana_dashboard_id: alerts-sat_memory
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/alerts-sat_memory?from=now-6h/m&to=now-1m/m&var-environment={{
@@ -1905,6 +1924,7 @@ groups:
         Saturation on file descriptor limits may indicate a resource-descriptor leak in the application.
 
         As a temporary fix, you may want to consider restarting the affected process.
+      alert_source: Users/andrewn/code/gitlab/runbooks/metrics-catalog/lib/resource-saturation-point.libsonnet
       grafana_dashboard_id: alerts-sat_open_fds
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/alerts-sat_open_fds?from=now-6h/m&to=now-1m/m&var-environment={{
@@ -1961,6 +1981,7 @@ groups:
 
         Postgres is configured to use a maximum number of connections.
         When this resource is saturated, connections may queue.
+      alert_source: Users/andrewn/code/gitlab/runbooks/metrics-catalog/lib/resource-saturation-point.libsonnet
       grafana_dashboard_id: alerts-sat_active_db_connections_primary
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/alerts-sat_active_db_connections_primary?from=now-6h/m&to=now-1m/m&var-environment={{
@@ -2011,6 +2032,7 @@ groups:
 
         Postgres is configured to use a maximum number of connections.
         When this resource is saturated, connections may queue.
+      alert_source: Users/andrewn/code/gitlab/runbooks/metrics-catalog/lib/resource-saturation-point.libsonnet
       grafana_dashboard_id: alerts-sat_active_db_connections_replica
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/alerts-sat_active_db_connections_replica?from=now-6h/m&to=now-1m/m&var-environment={{
@@ -2061,6 +2083,7 @@ groups:
 
         Sidekiq maintains it's own pgbouncer connection pool. When this resource is saturated,
         database operations may queue, leading to additional latency in background processing.
+      alert_source: Users/andrewn/code/gitlab/runbooks/metrics-catalog/lib/resource-saturation-point.libsonnet
       grafana_dashboard_id: alerts-sat_pgbouncer_async_pool_primary
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/alerts-sat_pgbouncer_async_pool_primary?from=now-6h/m&to=now-1m/m&var-environment={{
@@ -2115,6 +2138,7 @@ groups:
 
         PGBouncer is a single threaded application. Under high volumes this resource may become saturated,
         and additional pgbouncer nodes may need to be provisioned.
+      alert_source: Users/andrewn/code/gitlab/runbooks/metrics-catalog/lib/resource-saturation-point.libsonnet
       grafana_dashboard_id: alerts-sat_pgbouncer_single_core
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/alerts-sat_pgbouncer_single_core?from=now-6h/m&to=now-1m/m&var-environment={{
@@ -2168,6 +2192,7 @@ groups:
 
         When this resource is saturated, web/api database operations may queue, leading to unicorn/puma
         saturation and 503 errors in the web.
+      alert_source: Users/andrewn/code/gitlab/runbooks/metrics-catalog/lib/resource-saturation-point.libsonnet
       grafana_dashboard_id: alerts-sat_pgbouncer_sync_pool_primary
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/alerts-sat_pgbouncer_sync_pool_primary?from=now-6h/m&to=now-1m/m&var-environment={{
@@ -2225,6 +2250,7 @@ groups:
 
         When this resource is saturated, web/api database operations may queue, leading to unicorn/puma
         saturation and 503 errors in the web.
+      alert_source: Users/andrewn/code/gitlab/runbooks/metrics-catalog/lib/resource-saturation-point.libsonnet
       grafana_dashboard_id: alerts-sat_pgbouncer_sync_pool_replica
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/alerts-sat_pgbouncer_sync_pool_replica?from=now-6h/m&to=now-1m/m&var-environment={{
@@ -2281,6 +2307,7 @@ groups:
 
         When this metric is saturated, new CI jobs will queue. When this occurs we should consider adding more runner managers,
         or scaling the runner managers vertically and increasing their maximum runner capacity.
+      alert_source: Users/andrewn/code/gitlab/runbooks/metrics-catalog/lib/resource-saturation-point.libsonnet
       grafana_dashboard_id: alerts-sat_private_runners
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/alerts-sat_private_runners?from=now-6h/m&to=now-1m/m&var-environment={{
@@ -2331,6 +2358,7 @@ groups:
         If this resource is saturated, it may indicate that our connection
         pools are not correctly sized, perhaps because an unexpected
         application thread is using a database connection.
+      alert_source: Users/andrewn/code/gitlab/runbooks/metrics-catalog/lib/resource-saturation-point.libsonnet
       grafana_dashboard_id: alerts-sat_rails_db_connection_pool
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/alerts-sat_rails_db_connection_pool?from=now-6h/m&to=now-1m/m&var-environment={{
@@ -2384,6 +2412,7 @@ groups:
         new clients may fail to connect.
 
         More details at https://redis.io/topics/clients#maximum-number-of-clients
+      alert_source: Users/andrewn/code/gitlab/runbooks/metrics-catalog/lib/resource-saturation-point.libsonnet
       grafana_dashboard_id: alerts-sat_redis_clients
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/alerts-sat_redis_clients?from=now-6h/m&to=now-1m/m&var-environment={{
@@ -2434,6 +2463,7 @@ groups:
 
         For caches, consider lowering the `maxmemory` setting in Redis. For non-caching Redis instances,
         this has been caused in the past by credential stuffing, leading to large numbers of web sessions.
+      alert_source: Users/andrewn/code/gitlab/runbooks/metrics-catalog/lib/resource-saturation-point.libsonnet
       grafana_dashboard_id: alerts-sat_redis_memory
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/alerts-sat_redis_memory?from=now-6h/m&to=now-1m/m&var-environment={{
@@ -2489,6 +2519,7 @@ groups:
         Redis is single-threaded. A single Redis server is only able to scale as far as a single CPU on a single host.
         When the primary Redis service is saturated, major slowdowns should be expected across the application, so avoid if at all
         possible.
+      alert_source: Users/andrewn/code/gitlab/runbooks/metrics-catalog/lib/resource-saturation-point.libsonnet
       grafana_dashboard_id: alerts-sat_redis_primary_cpu
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/alerts-sat_redis_primary_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
@@ -2541,6 +2572,7 @@ groups:
         Redis is single-threaded. A single Redis server is only able to scale as far as a single CPU on a single host.
         CPU saturation on a secondary is not as serious as critical as saturation on a primary, but could lead to
         replication delays.
+      alert_source: Users/andrewn/code/gitlab/runbooks/metrics-catalog/lib/resource-saturation-point.libsonnet
       grafana_dashboard_id: alerts-sat_redis_secondary_cpu
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/alerts-sat_redis_secondary_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
@@ -2590,6 +2622,7 @@ groups:
         This resource measures average CPU utilization across an all cores in a shard of a
         service fleet. If it is becoming saturated, it may indicate that the
         shard needs horizontal or vertical scaling.
+      alert_source: Users/andrewn/code/gitlab/runbooks/metrics-catalog/lib/resource-saturation-point.libsonnet
       grafana_dashboard_id: alerts-sat_shard_cpu
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/alerts-sat_shard_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
@@ -2639,6 +2672,7 @@ groups:
 
         When this metric is saturated, new CI jobs will queue. When this occurs we should consider adding more runner managers,
         or scaling the runner managers vertically and increasing their maximum runner capacity.
+      alert_source: Users/andrewn/code/gitlab/runbooks/metrics-catalog/lib/resource-saturation-point.libsonnet
       grafana_dashboard_id: alerts-sat_shared_runners
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/alerts-sat_shared_runners?from=now-6h/m&to=now-1m/m&var-environment={{
@@ -2688,6 +2722,7 @@ groups:
 
         When this metric is saturated, new CI jobs will queue. When this occurs we should consider adding more runner managers,
         or scaling the runner managers vertically and increasing their maximum runner capacity.
+      alert_source: Users/andrewn/code/gitlab/runbooks/metrics-catalog/lib/resource-saturation-point.libsonnet
       grafana_dashboard_id: alerts-sat_shared_runners_gitlab
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/alerts-sat_shared_runners_gitlab?from=now-6h/m&to=now-1m/m&var-environment={{
@@ -2737,6 +2772,7 @@ groups:
 
         When this metric is saturated, new Sidekiq jobs will queue. Depending on whether or not the jobs are latency sensitive,
         this could impact user experience.
+      alert_source: Users/andrewn/code/gitlab/runbooks/metrics-catalog/lib/resource-saturation-point.libsonnet
       grafana_dashboard_id: alerts-sat_sidekiq_shard_workers
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/alerts-sat_sidekiq_shard_workers?from=now-6h/m&to=now-1m/m&var-environment={{
@@ -2788,6 +2824,7 @@ groups:
 
         If average CPU is satured, it may indicate that a fleet is in need to horizontal or vertical scaling. It may also indicate
         imbalances in load in a fleet.
+      alert_source: Users/andrewn/code/gitlab/runbooks/metrics-catalog/lib/resource-saturation-point.libsonnet
       grafana_dashboard_id: alerts-sat_single_node_cpu
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/alerts-sat_single_node_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
@@ -2836,6 +2873,7 @@ groups:
 
         Puma saturation is usually caused by latency problems in downstream services: usually Gitaly or Postgres, but possibly also Redis.
         Puma saturation can also be caused by traffic spikes.
+      alert_source: Users/andrewn/code/gitlab/runbooks/metrics-catalog/lib/resource-saturation-point.libsonnet
       grafana_dashboard_id: alerts-sat_single_node_puma_workers
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/alerts-sat_single_node_puma_workers?from=now-6h/m&to=now-1m/m&var-environment={{

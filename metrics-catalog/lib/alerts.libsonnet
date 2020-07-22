@@ -21,18 +21,24 @@ local ensureObjectHasStringValues(hash) =
   );
 
 {
-  processAlertRule(alertRule)::
-    local annotations = alertRule.annotations +
-                        if std.objectHas(alertRule.annotations, 'grafana_dashboard_id') then
-                          {
-                            grafana_dashboard_link: getGrafanaLink(alertRule.annotations),
-                          }
-                        else
-                          {};
+  from(alertFile):: {
+    local alertFileStripped = std.lstripChars(alertFile, "./"),
 
-    // The Prometheus Operator doesn't like label values that are not strings
-    alertRule {
-      annotations: ensureObjectHasStringValues(annotations),
-      labels: ensureObjectHasStringValues(alertRule.labels),
-    },
+    processAlertRule(alertRule)::
+      local annotations = alertRule.annotations +
+                          if std.objectHas(alertRule.annotations, 'grafana_dashboard_id') then
+                            {
+                              grafana_dashboard_link: getGrafanaLink(alertRule.annotations),
+                            }
+                          else
+                            {};
+
+      // The Prometheus Operator doesn't like label values that are not strings
+      alertRule {
+        annotations: ensureObjectHasStringValues(annotations {
+          alert_source: alertFileStripped
+        }),
+        labels: ensureObjectHasStringValues(alertRule.labels),
+      },
+  },
 }

@@ -1,4 +1,4 @@
-local alerts = import 'lib/alerts.libsonnet';
+local alerts = (import 'lib/alerts.libsonnet').from(std.thisFile);
 local stableIds = import 'lib/stable-ids.libsonnet';
 
 local rules = [
