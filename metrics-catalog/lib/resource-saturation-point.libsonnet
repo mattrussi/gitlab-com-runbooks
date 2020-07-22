@@ -1,5 +1,5 @@
 local selectors = import './selectors.libsonnet';
-local alerts = import 'alerts.libsonnet';
+local alerts = (import 'alerts.libsonnet').from(std.thisFile);
 local stableIds = import 'lib/stable-ids.libsonnet';
 local strings = import 'strings.libsonnet';
 

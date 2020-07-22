@@ -1,4 +1,4 @@
-local alerts = import 'lib/alerts.libsonnet';
+local alerts = (import 'lib/alerts.libsonnet').from(std.thisFile);
 local multiburnFactors = import 'lib/multiburn_factors.libsonnet';
 local stableIds = import 'lib/stable-ids.libsonnet';
 
