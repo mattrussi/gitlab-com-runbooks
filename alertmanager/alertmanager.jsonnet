@@ -184,6 +184,7 @@ local routingTree = Route(
   continue=null,
   repeat_interval='8h',
   receiver='prod_alerts_slack_channel',
+  group_by=defaultGroupBy,
   routes=
     [
       /* SnitchRoutes do not continue */
