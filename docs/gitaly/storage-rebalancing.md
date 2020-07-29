@@ -47,8 +47,8 @@ system to another.
 
 1. Login to gitlab.com using an admin account.
 1. Navigate to https://gitlab.com/profile/personal_access_tokens and generate a private token.
-  - Enable the scope for `api`.
-  - Set an expiration date three or four days from now.
+   - Enable the scope for `api`.
+   - Set an expiration date three or four days from now.
 1. Take note of the project ID. You will need it to move the project via the API. You can find it in the project page, next to the project avatar and under the project name.
 1. Export your admin auth token as an environmdent variable in your shell session.
    ```bash
@@ -60,8 +60,8 @@ system to another.
    export destination_storage_name='nfs-fileYY'
    export move_id=$(curl --silent --show-error --request POST "https://gitlab.com/api/v4/projects/${project_id}/repository_storage_moves" --data "{\"destination_storage_name\": \"${destination_storage_name}\"}" --header "Private-Token: ${GITLAB_GPRD_ADMIN_API_PRIVATE_TOKEN}" --header 'Content-Type: application/json')
    ```
-  - _Note_: The parameter of `destination_storage_name` is the name of the destination gitaly shard as configured in the `git_data_dirs` options of the `gitlab.rb` file.
-  - _Note_: The project will automatically be set into read-only and set back to read-write after the move.
+   - _Note_: The parameter of `destination_storage_name` is the name of the destination gitaly shard as configured in the `git_data_dirs` options of the `gitlab.rb` file.
+   - _Note_: The project will automatically be set into read-only and set back to read-write after the move.
 1. To observe the status of the repository replication, use a get:
    ```bash
    curl --silent --show-error "https://gitlab.com/api/v4/projects/${project_id}/repository_storage_moves/${move_id}" --header "Private-Token: ${GITLAB_GPRD_ADMIN_API_PRIVATE_TOKEN}" --header 'Content-Type: application/json'
@@ -88,8 +88,11 @@ gigabytes replicated has reached the given amount.
 
 #### How to use it
 
-1. Clone this repository: `git clone git@gitlab.com:gitlab-com/runbooks.git`
-1. Change directory into the cloned runbooks project repository: `cd runbooks`
+1. Clone the runbooks repository and change directory into it:
+   ```bash
+   git clone git@gitlab.com:gitlab-com/runbooks.git
+   cd runbooks
+   ```
 1. Install any necessary rubies and dependencies:
    ```bash
    rbenv install $(rbenv local)
@@ -101,12 +104,18 @@ the token as an environment variable in your shell session:
    ```bash
    export GITLAB_GPRD_ADMIN_API_PRIVATE_TOKEN=CHANGEME
    ```
-1. Invoke the script using the `--help` flag for usage details: `bundle exec scripts/storage_rebalance.rb --help`
-1. [Create a new production change issue using the `storage_rebalancing` template](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/new?issuable_template=storage_rebalance) and follow the instructions in the issue description.
-1. Invoke a dry run and record the output in the re-balancing issue.
+1. Invoke the script using the `--help` flag for usage details:
    ```bash
-   bundle exec scripts/storage_rebalance.rb nfs-fileXX nfs-fileYY --move-amount=1000 --dry-run=yes | tee scripts/logs/nfs-fileXX.migration.$(date --utc +%Y-%m-%d_%H:%M).log
+   bundle exec scripts/storage_rebalance.rb --help
    ```
+1. [Create a new production change issue using the `storage_rebalancing` template](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/new?issuable_template=storage_rebalance) and follow the instructions in the issue description.
+1. Invoke a dry run and record the output in the re-balancing issue:
+   ```bash
+   export source_shard_name='nfs-fileXX'
+   export destination_shard_name='nfs-fileYY'
+   bundle exec scripts/storage_rebalance.rb ${source_shard_name} ${destination_shard_name} --move-amount=1000 --dry-run=yes | tee scripts/logs/${source_shard_name}.migration.$(date --utc +%Y-%m-%d_%H:%M).log
+   ```
+1. Confirm there are no relevant errors.
 1. Invoke the same command except with the `--dry-run=no` argument.
 
 **Note:** Repository replication errors are recorded, and their log artifacts may be reviewed:
