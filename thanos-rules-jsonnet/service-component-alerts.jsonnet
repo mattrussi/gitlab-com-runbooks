@@ -48,9 +48,9 @@ local rules = {
               )
             )
           )
-          and ignoring(monitor)
+          and on(env, environment, tier, type, stage, component)
           (
-            gitlab_component_ops:rate_1h >= %(minimumOperationRateForMonitoring)g
+            sum by(env, environment, tier, type, stage, component) (gitlab_component_ops:rate_1h{monitor!="global"}) >= %(minimumOperationRateForMonitoring)g
           )
         ||| % formatConfig,
         'for': '2m',
@@ -116,9 +116,9 @@ local rules = {
             )
           )
         )
-        and ignoring(monitor)
+        and on(env, environment, tier, type, stage, component)
         (
-          gitlab_component_ops:rate_1h >= %(minimumOperationRateForMonitoring)g
+          sum by(env, environment, tier, type, stage, component) (gitlab_component_ops:rate_1h{monitor!="global"}) >= %(minimumOperationRateForMonitoring)g
         )
       ||| % formatConfig,
       'for': '2m',

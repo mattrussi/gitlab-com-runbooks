@@ -63,9 +63,9 @@ groups:
           )
         )
       )
-      and ignoring(monitor)
+      and on(env, environment, tier, type, stage, component)
       (
-        gitlab_component_ops:rate_1h >= 1
+        sum by(env, environment, tier, type, stage, component) (gitlab_component_ops:rate_1h{monitor!="global"}) >= 1
       )
   - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
     for: 2m
@@ -138,7 +138,7 @@ groups:
           )
         )
       )
-      and ignoring(monitor)
+      and on(env, environment, tier, type, stage, component)
       (
-        gitlab_component_ops:rate_1h >= 1
+        sum by(env, environment, tier, type, stage, component) (gitlab_component_ops:rate_1h{monitor!="global"}) >= 1
       )
