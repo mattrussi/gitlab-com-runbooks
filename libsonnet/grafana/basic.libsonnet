@@ -12,6 +12,7 @@ local timepickerlib = import 'github.com/grafana/grafonnet-lib/grafonnet/timepic
 local templates = import 'grafana/templates.libsonnet';
 local commonAnnotations = import 'grafana/common_annotations.libsonnet';
 local stableIds = import 'stable-ids/stable-ids.libsonnet';
+local colors = import 'colors/colors.libsonnet';
 
 local applyStableIdsToPanel(panel) =
   if std.objectHasAll(panel, 'applyPanelId') then
@@ -51,33 +52,34 @@ local panelOverrides(stableId) = {
 
 local getDefaultAvailabilityColorScale(invertColors) =
   local tf = if invertColors then function(value) 1 - value else function(value) value;
+  local grad = colors.linearGradient(colors.RED, colors.GREEN, 7);
   local scale = [
       {
-        color: 'red',
+        color: grad[0].toHex(),
         value: tf(0),
       },
       {
-        color: 'light-red',
+        color: grad[1].toHex(),
         value: tf(0.95),
       },
       {
-        color: 'orange',
+        color: grad[2].toHex(),
         value: tf(0.99),
       },
       {
-        color: 'light-orange',
+        color: grad[3].toHex(),
         value: tf(0.995),
       },
       {
-        color: 'yellow',
+        color: grad[4].toHex(),
         value: tf(0.9994),
       },
       {
-        color: 'light-yellow',
+        color: grad[5].toHex(),
         value: tf(0.9995),
       },
       {
-        color: 'green',
+        color: grad[6].toHex(),
         value: tf(0.9998),
       },
     ];
