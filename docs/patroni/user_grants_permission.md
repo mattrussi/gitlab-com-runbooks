@@ -144,6 +144,7 @@ select grantor,grantee,table_schema||'.'||table_name as table, string_agg(privil
  gitlab           | readonly_roles | public.alert_management_alert_user_mentions            | SELECT      | NO
  gitlab           | readonly_roles | public.alert_management_alerts                         | SELECT      | NO
 ...
+```
 
 ## Permissions and User Defined Functions
 If a non-privleged user needs to execute a function that access privileged data, the `SECURITY DEFINER` clause can be used when creating a funcion:
