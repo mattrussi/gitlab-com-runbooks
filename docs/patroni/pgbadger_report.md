@@ -1,5 +1,10 @@
 # pgbadger Runbook
 
+<<<<<<< HEAD
+=======
+Here the link to the video of the [runbook simulation](https://youtu.be/yUwaWMUJyS4).
+
+>>>>>>> 92075026c4a206bf585c9b662de841e3f6babb50
 ## Intro
 [pgbadger](https://github.com/darold/pgbadger) is a free  tool that can help to generate a fast interactive HTML report from PostgreSQL's logs, it is very useful when you want to analyze logs with a lot of info. 
 The report from pgbadger is about queries (it is always logged when the query time is greater than [log_min_duration_statement](https://postgresqlco.nf/en/doc/param/log_min_duration_statement/) parameter ), connections, vacuum, lock,  errors and others stuff
@@ -126,6 +131,7 @@ The connections tab shows the graphs about connection information found in the l
  The events tab show the anything information no show in another tabs, see the section called:
   *  Most Frequent Errors/Events
   
+<<<<<<< HEAD
 ![most_freq_error](img/most_freq_error.png)
 
 
@@ -149,3 +155,6 @@ This will create an browseable index:
 
 
 So the next executions (with a new logfile) will update the index, and you will be able to pick any day, or check the weekly report on mondays.
+=======
+![most_freq_error](img/most_freq_error.png)
+>>>>>>> 92075026c4a206bf585c9b662de841e3f6babb50

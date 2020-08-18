@@ -1,19 +1,17 @@
-local metricsCatalog = import '../lib/metrics.libsonnet';
+local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local derivMetric = metricsCatalog.derivMetric;
 local customQuery = metricsCatalog.customQuery;
 
-{
+metricsCatalog.serviceDefinition({
   type: 'search',
   tier: 'inf',
-  slos: {
-    /*
-    TODO: enable SLOs
-    apdexRatio: 0.95,
-    errorRatio: 0.005,
-    */
-  },
+  /*
+   * Until this service starts getting more predictable traffic volumes
+   * disable anomaly detection for RPS
+   */
+  disableOpsRatePrediction: true,
   components: {
     elasticsearch_searching: {
       requestRate: derivMetric(
@@ -35,4 +33,4 @@ local customQuery = metricsCatalog.customQuery;
       significantLabels: ['name'],
     },
   },
-}
+})

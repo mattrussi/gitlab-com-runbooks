@@ -48,7 +48,8 @@ on-boarding new team member
 ## Checklists
 
 - [Engineer on Call (EOC)](on-call/checklists/eoc.md)
-- [Incident Manager on Call (IMOC)](on-call/checklists/imoc.md)
+- [Incident Manager on Call (IMOC)](https://about.gitlab.com/handbook/engineering/infrastructure/incident-management/#incident-manager-on-call-imoc-responsibilities)
+- [Communications Manager on Call (CMOC)](https://about.gitlab.com/handbook/engineering/infrastructure/incident-management/#communications-manager-on-call-cmoc-responsibilities)
 
 To start with the right foot let's define a set of tasks that are nice things to do before you go any further in your week
 
@@ -69,12 +70,12 @@ issues.
 
 Start by checking how many alerts are in flight right now
 
--   go to the [fleet overview dashboard](https://dashboards.gitlab.net/dashboard/db/fleet-overview) and check the number of Active Alerts, it should be 0. If it is not 0
+-   go to the [fleet overview dashboard](https://dashboards.gitlab.net/d/RZmbBr7mk/gitlab-triage) and check the number of Active Alerts, it should be 0. If it is not 0
     -   go to the alerts dashboard and check what is being triggered
         -   [azure][prometheus-azure]
         -   [gprd prometheus][prometheus-gprd]
         -   [gprd prometheus-app][prometheus-app-gprd]
-    -   watch the [#alerts][slack-alerts], [#alerts-general][slack-alerts-general], and [#alerts-gstg][slack-alerts-gstg] channels for alert notifications; each alert here should point you to the right [runbook][runbook-repo] to fix it.
+    -   watch the [#alerts][slack-alerts] and [#feed_alerts-general][slack-alerts-general] channels for alert notifications; each alert here should point you to the right [runbook][runbook-repo] to fix it.
     -   if they don't, you have more work to do.
     -   be sure to create an issue, particularly to declare toil so we can work on it and suppress it.
 
@@ -82,7 +83,7 @@ Start by checking how many alerts are in flight right now
 
 Check how many targets are not scraped at the moment. alerts are in flight right now, to do this:
 
--   go to the [fleet overview dashboard](https://dashboards.gitlab.net/dashboard/db/fleet-overview) and check the number of Targets down. It should be 0. If it is not 0
+-   go to the [fleet overview dashboard](https://dashboards.gitlab.net/d/RZmbBr7mk/gitlab-triage) and check the number of Targets down. It should be 0. If it is not 0
     -   go to the [targets down list] and check what is.
         -   [azure][prometheus-azure-targets-down]
         -   [gprd prometheus][prometheus-gprd-targets-down]
@@ -115,39 +116,10 @@ Remember to close out the incident when the issue is resolved.  Also, when possi
 
 # Production Incidents
 
+## [Reporting and incident](https://about.gitlab.com/handbook/engineering/infrastructure/incident-management/#reporting-an-incident)
+
 ## Roles
-
-During an incident there are at least 2 roles, and one more optional
-
-* Production engineers will
-  * Open a war room on Zoom immediately to have high a bandwidth communication channel.
-  * Create a [Google Doc](https://docs.google.com) to gather the timeline of events.
-  * Publish this document using the _File_, _Publish to web..._ function.
-  * Make this document GitLab editable by clicking on the `Share` icon and selecting _Advanced_, _Change_, then _On - GitLab_.
-  * Tweet `GitLab.com is having a major outage, we're working on resolving it in a Google Doc LINK` with a link to this document to make the community aware.
-  * Redact the names to remove the blame. Only use team-member-1, -2, -3, etc.
-  * Document partial findings or guessing as we learn.
-  * Write a post mortem issue when the incident is solved, and label it with `outage`
-
-* The point person will
-  * Handle updating the @gitlabstatus account explaining what is going on in a simple yet reassuring way.
-  * Synchronize efforts across the production engineering team
-  * Pull other people in when consultation is needed.
-  * Declare a major outage when we are meeting the definition.
-  * Post `@channel, we have a major outage and need help creating a live streaming war room, refer to [runbooks-production-incident]` into the #general slack channel.
-  * Post `@channel, we have a major outage and need help reviewing public documents` into the #marketing slack channel.
-  * Post `@channel, we have a major outage and are working to solve it, you can find the public doc <here>` into the #devrel slack channel.
-  * Move the war room to a paid account so the meeting is not time limited.
-  * Coordinate with the security team and the communications manager and use the [breach notification policy](https://about.gitlab.com/security/#data-breach-notification-policy) to determine if a breach of user data has occurred and notify any affected users.
-
-* The communications manager will
-  * Setup a not time limited Zoom war room and provide it to the point person to move all the production engineers there.
-  * Setup Youtube Live Streaming int the war room following [this Zoom guide](https://support.zoom.us/hc/en-us/articles/115000350446-Streaming-a-Webinar-on-YouTube-Live) (for this you will need to have access to the GitLab Youtube account, ask someone from People Ops to grant you so)
-
-* The Marketing representative will
-  * Review the Google Doc to provide proper context when needed.
-  * Include a note about how is this outage impacting customers in the document.
-  * Decide how to handle further communications when the outage is already handled.
+During an incident, we have [roles defined in the handbook](https://about.gitlab.com/handbook/engineering/infrastructure/incident-management/#roles-and-responsibilities)
 
 ## General guidelines for production incidents.
 
@@ -155,59 +127,28 @@ During an incident there are at least 2 roles, and one more optional
 	* Are we losing data?
 	* Is GitLab.com not working or offline?
 	* Has the incident affected users for greater than 1 hour?
-* [Tweet](docs/uncategorized/tweeting-guidelines.md) in a reassuring but informative way to let the people know what's going on
-* Join the `#production` channel
-* Define a _point person_ or _incident owner_, this is the person that will gather all the data and coordinate the efforts.
-* For emergency incidents define [Roles](https://gitlab.com/gitlab-com/runbooks/blob/master/howto/manage-production-incidents.md)
-	* Point person
-        * in the `#production` channel: "@here I'm taking point" and pin the message for the duration of the emergency.
-	* Communications manager
-	* Marketing representative.
-	* Start a war room using zoom
-	* Share the link in the #production channel
-	* Stream the zoom call live.  [Streaming a Webinar on YouTube Live – Zoom Help Center](https://support.zoom.us/hc/en-us/articles/115000350446-Streaming-a-Webinar-on-YouTube-Live)
-* For non-emergency incidents.
-	* Establish who is the point person on the incident.
-	    * in the `#production` channel: "@here I'm taking point" and pin the message for the duration of the incident.
-	* Start a war room using zoom if it will save time
-	* Share the link in the #production channel
-* Organize:
-  * If intervention is required (i.e. a non self-healing service)
-  * Create a Google Doc to gather the timeline of events.
-  * Publish this document using the File, Publish to web... function.
-  * Make this document GitLab editable by clicking on the Share icon and selecting Advanced, Change, then On - GitLab.
+* Join the `#incident management` channel
 * If the _point person_ needs someone to do something, give a direct command: _@someone: please run `this` command_
 * Be sure to be in sync - if you are going to reboot a service, say so: _I'm bouncing server X_
 * If you have conflicting information, **stop and think**, bounce ideas, escalate
 * Gather information when the incident is done - logs, samples of graphs, whatever could help figuring out what happened
-* Update the [Production Oncall Log](https://docs.google.com/document/d/1nWDqjzBwzYecn9Dcl4hy1s4MLng_uMq-8yGRMxtgK6M/edit#heading=h.nmt24c52ggf5)
-* If we lack monitoring or alerting Open an issue and label as `monitoring`, even if you close issue immediately. See [handbook](https://about.gitlab.com/handbook/infrastructure/)
-* Keep in mind [GitLab's data breach notification policy](https://about.gitlab.com/security/#data-breach-notification-policy) and work with the security team to determine if a user data breach has occurred and if notification needs to be provided.
-* Once the incident is resolved, [Tweet](docs/uncategorized/tweeting-guidelines.md)  an update and let users know the issue is resolved.
+* use `/security` if you have any security concerns and need to pull in the Security Incident Response team
 
-# References
-
-## Communication Guidelines
-* [When the lead is away](docs/uncategorized/lead-away.md)
-* [Tweeting Guidelines](docs/uncategorized/tweeting-guidelines.md)
-* [Production Incident Communication Strategy](howto/manage-production-incidents.md)
-* [Database Incidents](incidents/database.md)
-
-## CRITICAL
-* Spend one minute and create issue for outage, don't forget about `outage` label as specified in [handbook](https://about.gitlab.com/handbook/engineering/infrastructure/).
 
 ### PostgreSQL
 
-* [Postgresql](docs/patroni/postgres.md)
+* [PostgreSQL](docs/patroni/postgres.md)
 * [more postgresql](docs/patroni/postgresql.md)
 * [PgBouncer](docs/pgbouncer/pgbouncer-1.md)
 * [PostgreSQL High Availability & Failovers](docs/patroni/pg-ha.md)
 * [PostgreSQL switchover](howto/postgresql-switchover.md)
 * [Read-only Load Balancing](docs/ci-runners/load-balancing.md)
 * [Add a new secondary replica](docs/patroni/postgresql-replica.md)
-* [Database backups](docs/patroni/using-wale-gpg.md)
-* [Database backups restore testing](https://gitlab.com/gitlab-restore/postgres-01.db.prd.gitlab.com/)
+* [Database backups](docs/patroni/postgresql-backups-wale-walg.md)
+* [Database backups restore testing](docs/patroni/postgresql-backups-wale-walg.md#database-backups-restore-testing)
 * [Rebuild a corrupt index](docs/patroni/postgresql.md#rebuild-a-corrupt-index)
+* [Checking PostgreSQL health with postgres-checkup](docs/patroni/postgres-checkup.md)
+* [Reducing table and index bloat using pg_repack](docs/patroni/pg_repack.md)
 
 ### Frontend Services
 
@@ -323,7 +264,7 @@ During an incident there are at least 2 roles, and one more optional
 ### Restore Backups
 
 * [Deleted Project Restoration](docs/uncategorized/deleted-project-restore.md)
-* [Database Backups and Recovery using WAL-E / WAL-G](docs/patroni/using-wale-gpg.md)
+* [PostgreSQL Backups: WAL-E, WAL-G](docs/patroni/postgresql-backups-wale-walg.md)
 * [Work with Azure Snapshots](docs/uncategorized/azure-snapshots.md)
 * [Work with GCP Snapshots](docs/uncategorized/gcp-snapshots.md)
 * [PackageCloud Infrastructure And Recovery](docs/uncategorized/packagecloud-infrastructure.md)
@@ -494,19 +435,43 @@ git commit --allow-empty -m '[BREAKING CHANGE|feat|fix]: <changelog summary mess
 
 This project has adopted [`adsf version-manager`](https://github.com/asdf-vm/asdf) for tool versioning.
 
+Installation instructions for `asdf` can be found at https://asdf-vm.com/#/core-manage-asdf-vm?id=install.
+
 For compatibility, please configure the following line in `~/.asdfrc`
 
 ```
 legacy_version_file = yes
 ```
 
+### Required tooling
+
+Our `asdf` toolset uses the following plugins:
+
+* `golang`: `asdf plugin add golang`
+* `ruby`: `asdf plugin add ruby`
+* `go-jsonnet`: `asdf plugin add go-jsonnet https://gitlab.com/craigfurman/asdf-go-jsonnet`.
+* `jsonnet-bundler`: `asdf plugin add jsonnet-bundler https://github.com/trotttrotttrott/asdf-jsonnet-bundler.git`.
+
+Once you have installed these plugins, run the following command to install the required versions.
+
+```console
+$ asdf install
+go-jsonnet 0.16.0 is already installed
+golang 1.14 is already installed
+ruby 2.6.5 is already installed
+$ # Confirm everything is working with....
+$ asdf current
+go-jsonnet     0.16.0   (set by ~/runbooks/.tool-versions)
+golang         1.14     (set by ~/runbooks/.tool-versions)
+ruby           2.6.5    (set by ~/runbooks/.ruby-version)
+```
 
 ### Go, Jsonnet
 
 We use `.tool-versions` to record the version of go-jsonnet that should be used
 for local development. The `asdf` version manager is used by some team members
 to automatically switch versions based on the contents of this file. It should
-be kept up to date. `images/runtools_build/Dockerfile` contains the version of
+be kept up to date. The top-level `Dockerfile` contains the version of
 go-jsonnet we use in CI. This should be kept in sync with `.tool-versions`, and
 a (non-gating) CI job enforces this.
 
@@ -520,8 +485,7 @@ Or via homebrew:
 ```
 brew install go-jsonnet
 ```
-Or use [an asdf
-plugin](https://gitlab.com/craigfurman/asdf-go-jsonnet).
+Or use [an asdf plugin](https://gitlab.com/craigfurman/asdf-go-jsonnet).
 
 ### Ruby
 

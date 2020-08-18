@@ -1,25 +1,42 @@
-## Alertmanager configuration
+# Alertmanager configuration
 
-Alertmanager configuration files are shared amongst ALL alertmanagers across
-all environments.  In order to sync this configuration between any node
-via chef and any pod running in Kubernetes, this directory holds the necessary
-template file for the configuration, and allows CI to populate any secrets.  We
-then push these files as encrypted objects to object storage.  The necessary
-chef recipe or helm managed kubernetes repo will pull down the file and populate
-it into the appropriate place.
+We manage our Alertmanager configuration here using jsonnet. The resultant
+Kubernetes secret object is uploaded, and is consumed by
+[the Prometheus operator deployment](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/30-gitlab-monitoring).
 
-The CI jobs for this are run on ops.gitlab.net where the variables for
-setting up gcloud and the secrets for the template are located: https://ops.gitlab.net/gitlab-com/runbooks/-/settings/ci_cd
+The CI jobs for this are run on ops.gitlab.net where the variables are configured.
+See: https://ops.gitlab.net/gitlab-com/runbooks/-/settings/ci_cd
+
+## Variables
+
+### `ALERTMANAGER_SECRETS_FILE`
+
+Type: File
+
+Value: A jsonnet file, based on the dummy-secrets.jsonnet template.
+
+### `SERVICE_KEY`
+
+Type: File
+
+Value: A GCP service key json file.
+
+## CI Jobs
 
 These jobs run in a CI pipeline, view the [.gitlab-ci.yml](../.gitlab-ci.yml) to
 determine how this is configured.
 
-This is not meant to be run locally but can be enabled to do so, simply remove
-the lines associated with authenticating and setting up gcloud in the
-`update.sh` file.  You will need to set environment variables specified in
-`template.rb` in order to see these populate the template correctly.
+To run a manual deploy, you will need a local secrets file with the filename
+exported in the `ALERTMANAGER_SECRETS_FILE` variable.
 
-* Generate template file
-  * `./template.rb`
-* Encrypt template file
-  * `./update.sh`
+Then remove the lines associated with authenticating and setting up gcloud in the
+`update.sh` file.
+
+* Generate the `alertmanager.yml` file.
+  * `./generate.sh`
+* Validate the `alertmanager.yml` looks reaosnable.
+* The contents of this file are visible as a base64 encoded secret, in the
+  manifest k8s_alertmanager_secret.yaml.
+* When this secret is uploaded to a namespace containing a prometheus operator
+  and an Alertmanager CRD (which these days is only the ops GKE cluster's
+  monitoring namespace), Alertmanager's config will automatically be updated.

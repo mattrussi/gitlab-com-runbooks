@@ -1,32 +1,33 @@
-local colors = import 'colors.libsonnet';
-local commonAnnotations = import 'common_annotations.libsonnet';
-local grafana = import 'grafonnet/grafana.libsonnet';
-local layout = import 'layout.libsonnet';
+local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
+local basic = import 'grafana/basic.libsonnet';
+local colors = import 'grafana/colors.libsonnet';
+local commonAnnotations = import 'grafana/common_annotations.libsonnet';
+local layout = import 'grafana/layout.libsonnet';
+local promQuery = import 'grafana/prom_query.libsonnet';
+local seriesOverrides = import 'grafana/series_overrides.libsonnet';
+local templates = import 'grafana/templates.libsonnet';
 local platformLinks = import 'platform_links.libsonnet';
-local promQuery = import 'prom_query.libsonnet';
-local seriesOverrides = import 'series_overrides.libsonnet';
-local templates = import 'templates.libsonnet';
 local dashboard = grafana.dashboard;
 local row = grafana.row;
 local template = grafana.template;
-local graphPanel = grafana.graphPanel;
 local annotation = grafana.annotation;
-local layout = import 'layout.libsonnet';
+local layout = import 'grafana/layout.libsonnet';
 local text = grafana.text;
 local issueSearch = import 'issue_search.libsonnet';
 local saturationResources = import './saturation-resources.libsonnet';
+local selectors = import 'promql/selectors.libsonnet';
 
 {
   saturationPanel(title, description, component, linewidth=1, query=null, legendFormat=null, selector=null)::
     local formatConfig = {
       component: component,
       query: query,
-      selector: selector,
+      selector: selectors.serializeHash(selector),
     };
 
-    local panel = graphPanel.new(
-      title,
-      description,
+    local panel = basic.graphPanel(
+      title=title,
+      description=description,
       sort='decreasing',
       linewidth=linewidth,
       fill=0,
@@ -41,6 +42,7 @@ local saturationResources = import './saturation-resources.libsonnet';
       legend_avg=true,
       legend_alignAsTable=true,
       legend_hideEmpty=true,
+      stableId='saturation-' + component,
     );
 
     local p2 = if query != null then
@@ -75,6 +77,22 @@ local saturationResources = import './saturation-resources.libsonnet';
         legendFormat='aggregated {{ component }}',
       )
     )
+    .addTarget(  // 95th quantile for week
+      promQuery.target(
+        |||
+          gitlab_component_saturation:ratio_quantile95_1w{%(selector)s, component="%(component)s"}
+        ||| % formatConfig,
+        legendFormat='95th quantile for week {{ component }}',
+      )
+    )
+    .addTarget(  // 99th quantile for week
+      promQuery.target(
+        |||
+          gitlab_component_saturation:ratio_quantile99_1w{%(selector)s, component="%(component)s"}
+        ||| % formatConfig,
+        legendFormat='99th quantile for week {{ component }}',
+      )
+    )
     .addTarget(  // Soft SLO
       promQuery.target(
         |||
@@ -105,15 +123,37 @@ local saturationResources = import './saturation-resources.libsonnet';
     )
     .addSeriesOverride(seriesOverrides.softSlo)
     .addSeriesOverride(seriesOverrides.hardSlo)
-    .addSeriesOverride(seriesOverrides.goldenMetric('/aggregated /', { linewidth: 2 },)),
+    .addSeriesOverride(seriesOverrides.goldenMetric('/aggregated /', { linewidth: 2 },))
+    .addSeriesOverride({
+      alias: '/^95th quantile for week/',
+      color: '#37872D',
+      dashes: true,
+      legend: true,
+      lines: true,
+      linewidth: 1,
+      dashLength: 4,
+      spaceLength: 10,
+      nullPointMode: 'connected',
+      zindex: -2,
 
-  componentSaturationPanel(component, selector)::
-    local formatConfig = {
-      component: component,
-      selector: selector,
-    };
+    })
+    .addSeriesOverride({
+      alias: '/^99th quantile for week/',
+      color: '#56A64B',
+      dashes: true,
+      legend: true,
+      lines: true,
+      linewidth: 2,
+      dashLength: 4,
+      spaceLength: 4,
+      nullPointMode: 'connected',
+      zindex: -2,
+    }),
+
+
+  componentSaturationPanel(component, selectorHash)::
     local componentDetails = saturationResources[component];
-    local query = componentDetails.getQuery(selector, componentDetails.getBurnRatePeriod(), maxAggregationLabels=componentDetails.resourceLabels);
+    local query = componentDetails.getQuery(selectorHash, componentDetails.getBurnRatePeriod(), maxAggregationLabels=componentDetails.resourceLabels);
 
     self.saturationPanel(
       '%s component saturation: %s' % [component, componentDetails.title],
@@ -122,13 +162,13 @@ local saturationResources = import './saturation-resources.libsonnet';
       linewidth=1,
       query=query,
       legendFormat=componentDetails.getLegendFormat(),
-      selector=selector
+      selector=selectorHash,
     ),
 
-  saturationDetailPanels(selector, components)::
+  saturationDetailPanels(selectorHash, components)::
     row.new(title='🌡 Saturation Details', collapse=true)
     .addPanels(layout.grid([
-      self.componentSaturationPanel(component, selector)
+      self.componentSaturationPanel(component, selectorHash)
       for component in components
     ])),
 

@@ -1,144 +1,39 @@
-local metricsCatalog = import './lib/metrics.libsonnet';
-local histogramApdex = metricsCatalog.histogramApdex;
-local rateMetric = metricsCatalog.rateMetric;
-local sidekiqHelpers = import './services/lib/sidekiq-helpers.libsonnet';
-local combined = metricsCatalog.combined;
-local sidekiqMetricsCatalog = import './services/sidekiq.jsonnet';
 local IGNORED_GPRD_QUEUES = import './temp-ignored-gprd-queue-list.libsonnet';
-local multiburnFactors = import 'lib/multiburn_factors.libsonnet';
-local aggregationLabels = 'environment, tier, type, stage, shard, queue, feature_category, urgency';
-local alerts = import 'lib/alerts.libsonnet';
+local alerts = import 'alerts/alerts.libsonnet';
+local multiburnFactors = import 'mwmbr/multiburn_factors.libsonnet';
+local stableIds = import 'stable-ids/stable-ids.libsonnet';
 
 // For the first iteration, all sidekiq workers will have the samne
 // error budget. In future, we may introduce a criticality attribute to
 // allow jobs to have different error budgets based on criticality
 local monthlyErrorBudget = (1 - 0.99);  // 99% of sidekiq executions should succeed
 
-// For now, only include jobs that run 0.6 times per second, or 4 times a minute
+// For now, only include jobs that run 0.1 times per second, or 6 times a minute
 // in the monitoring. This is to avoid low-volume, noisy alerts
-local minimumOperationRateForMonitoring = 4 / 60;
+local minimumOperationRateForMonitoring = 6 / 60;
 
-// This is used to calculate the queue apdex across all queues
-local combinedQueueApdex = combined([
-  histogramApdex(
-    histogram='sidekiq_jobs_queue_duration_seconds_bucket',
-    selector='urgency="high"',
-    satisfiedThreshold=sidekiqHelpers.slos.urgent.queueingDurationSeconds,
-  ),
-  histogramApdex(
-    histogram='sidekiq_jobs_queue_duration_seconds_bucket',
-    selector='urgency="low"',
-    satisfiedThreshold=sidekiqHelpers.slos.lowUrgency.queueingDurationSeconds,
-  ),
-]);
-
-local combinedExecutionApdex = combined([
-  histogramApdex(
-    histogram='sidekiq_jobs_completion_seconds_bucket',
-    selector='urgency="high"',
-    satisfiedThreshold=sidekiqHelpers.slos.urgent.executionDurationSeconds,
-  ),
-  histogramApdex(
-    histogram='sidekiq_jobs_completion_seconds_bucket',
-    selector='urgency="low"',
-    satisfiedThreshold=sidekiqHelpers.slos.lowUrgency.executionDurationSeconds,
-  ),
-  histogramApdex(
-    histogram='sidekiq_jobs_completion_seconds_bucket',
-    selector='urgency="throttled"',
-    satisfiedThreshold=sidekiqHelpers.slos.throttled.executionDurationSeconds,
-  ),
-]);
-
-local requestRate = rateMetric(
-  counter='sidekiq_jobs_completion_seconds_bucket',
-  selector='le="+Inf"',
-);
-
-local errorRate = rateMetric(
-  counter='sidekiq_jobs_failed_total',
-  selector=''
-);
-
-// Record queue apdex, execution apdex, error rates, QPS metrics
-// for each worker, similar to how we record these for each
-// service
-local generateRulesForComponentForBurnRate(rangeInterval) =
-  [
-    {  // Key metric: Queueing apdex (ratio)
-      record: 'gitlab_background_jobs:queue:apdex:ratio_%s' % [rangeInterval],
-      expr: combinedQueueApdex.apdexQuery(aggregationLabels, '', rangeInterval),
-    },
-    {  // Key metric: Queueing apdex (weight score)
-      record: 'gitlab_background_jobs:queue:apdex:weight:score_%s' % [rangeInterval],
-      expr: combinedQueueApdex.apdexWeightQuery(aggregationLabels, '', rangeInterval),
-    },
-    {  // Key metric: Execution apdex (ratio)
-      record: 'gitlab_background_jobs:execution:apdex:ratio_%s' % [rangeInterval],
-      expr: combinedExecutionApdex.apdexQuery(aggregationLabels, '', rangeInterval),
-    },
-    {  // Key metric: Execution apdex (weight score)
-      record: 'gitlab_background_jobs:execution:apdex:weight:score_%s' % [rangeInterval],
-      expr: combinedExecutionApdex.apdexWeightQuery(aggregationLabels, '', rangeInterval),
-    },
-    {  // Key metric: QPS
-      record: 'gitlab_background_jobs:execution:ops:rate_%s' % [rangeInterval],
-      expr: requestRate.aggregatedRateQuery(aggregationLabels, '', rangeInterval),
-    },
-    {  // Key metric: Errors per Second
-      record: 'gitlab_background_jobs:execution:error:rate_%s' % [rangeInterval],
-      expr: errorRate.aggregatedRateQuery(aggregationLabels, '', rangeInterval),
-    },
-  ];
-
-
-// Generates four key metrics for each urgency, for each burn rate
-local generateKeyMetricRules() =
-  std.flattenArrays([
-    generateRulesForComponentForBurnRate(rangeInterval)
-    for rangeInterval in multiburnFactors.allWindowIntervals
-  ]);
-
-// Recording rules for error ratios at different burn rates
-local generateRatioRules() =
-  [{
-    record: 'gitlab_background_jobs:execution:error:ratio_%s' % [rangeInterval],
-    expr: |||
-      gitlab_background_jobs:execution:error:rate_%(rangeInterval)s
-      /
-      gitlab_background_jobs:execution:ops:rate_%(rangeInterval)s
-    ||| % { rangeInterval: rangeInterval },
-  } for rangeInterval in multiburnFactors.allWindowIntervals];
-
-local sidekiqSLOAlert(alertname, expr, grafanaPanelId, metricName, alertDescription) =
-  alerts.processAlertRule({
+local sidekiqSLOAlert(alertname, expr, grafanaPanelStableId, metricName, alertDescription, metricDescription) =
+  {
     alert: alertname,
     expr: expr,
     'for': '2m',
     labels: {
       alert_type: 'symptom',
       rules_domain: 'general',
-      metric: metricName,
       severity: 's4',
       slo_alert: 'yes',
-      experimental: 'yes',
-      period: '2m',
     },
     annotations: {
       title: 'The `{{ $labels.queue }}` queue, `{{ $labels.stage }}` stage, has %s' % [alertDescription],
-      description: |||
-        The `{{ $labels.queue }}` queue, `{{ $labels.stage }}` stage, has %s.
-
-        Currently the metric value is {{ $value | humanizePercentage }}.
-      ||| % [alertDescription],
+      description: 'Currently the %s is {{ $value | humanizePercentage }}.' % [metricDescription],
       runbook: 'docs/sidekiq/service-sidekiq.md',
       grafana_dashboard_id: 'sidekiq-queue-detail/sidekiq-queue-detail',
-      grafana_panel_id: std.toString(grafanaPanelId),
+      grafana_panel_id: stableIds.hashStableId(grafanaPanelStableId),
       grafana_variables: 'environment,stage,queue',
       grafana_min_zoom_hours: '6',
       promql_template_1: '%s{environment="$environment", type="$type", stage="$stage", component="$component"}' % [metricName],
     },
-  });
+  };
 
 // generateAlerts configures the alerting rules for sidekiq jobs
 // For the first iteration, things are fairly basic:
@@ -173,9 +68,10 @@ local generateAlerts() =
           gitlab_background_jobs:execution:ops:rate_6h > %(minimumOperationRateForMonitoring)g
         )
       ||| % formatConfig,
-      grafanaPanelId=13,
+      grafanaPanelStableId='error-ratio',
       metricName='gitlab_background_jobs:execution:error:ratio_1h',
-      alertDescription='an error rate outside of SLO'
+      alertDescription='an error rate outside of SLO',
+      metricDescription='error rate'
     ),
     sidekiqSLOAlert(
       alertname='sidekiq_background_job_execution_apdex_ratio_burn_rate_slo_out_of_bounds',
@@ -198,9 +94,10 @@ local generateAlerts() =
           gitlab_background_jobs:execution:ops:rate_6h > %(minimumOperationRateForMonitoring)g
         )
       ||| % formatConfig,
-      grafanaPanelId=12,
+      grafanaPanelStableId='execution-apdex',
       metricName='gitlab_background_jobs:execution:apdex:ratio_1h',
-      alertDescription='a execution latency outside of SLO'
+      alertDescription='a execution latency outside of SLO',
+      metricDescription='apdex score',
     ),
     sidekiqSLOAlert(
       alertname='sidekiq_background_job_queue_apdex_ratio_burn_rate_slo_out_of_bounds',
@@ -223,59 +120,15 @@ local generateAlerts() =
           gitlab_background_jobs:execution:ops:rate_6h > %(minimumOperationRateForMonitoring)g
         )
       ||| % formatConfig,
-      grafanaPanelId=11,
+      grafanaPanelStableId='queue-apdex',
       metricName='gitlab_background_jobs:queue:apdex:ratio_1h',
-      alertDescription='a queue latency outside of SLO'
+      alertDescription='a queue latency outside of SLO',
+      metricDescription='apdex score',
     ),
-    {
-      alert: 'sidekiq_throttled_jobs_enqueued_without_dequeuing',
-      expr: |||
-        (
-          sum by (environment, queue, feature_category) (rate(sidekiq_enqueued_jobs_total{urgency="throttled"}[10m] offset 10m)) > 0
-        )
-        unless
-        (
-          sum by (environment, queue, feature_category) (rate(sidekiq_jobs_completion_seconds_count{urgency="throttled"}[20m])) > 0
-          or
-          sum by (environment, queue, feature_category) (rate(sidekiq_jobs_failed_total{urgency="throttled"}[20m])) > 0
-          or
-          sum by (environment, queue, feature_category) (rate(sidekiq_jobs_retried_total{urgency="throttled"}[20m])) > 0
-          or
-          sum by (environment, queue, feature_category) (avg_over_time(sidekiq_running_jobs{urgency="throttled"}[20m])) > 0
-        )
-      |||,
-      'for': '2m',
-      labels: {
-        type: 'sidekiq',  // Hardcoded because `sidekiq_enqueued_jobs_total` `type` label depends on the sidekiq client `type`
-        tier: 'sv',  // Hardcoded becayse `sidekiq_enqueued_jobs_total` `tier` label depends on the sidekiq client `tier`
-        stage: 'main',
-        alert_type: 'cause',
-        rules_domain: 'general',
-        metric: 'sidekiq_enqueued_jobs_total',
-        severity: 's4',
-        period: '2m',
-      },
-      annotations: {
-        title: 'Sidekiq jobs are being enqueued without being dequeued',
-        description: |||
-          The `{{ $labels.queue }}` queue appears to have jobs being enqueued without
-          those jobs being executed.
-
-          This could be the result of a Sidekiq server configuration issue, where
-          no Sidekiq servers are configured to dequeue the specific queue.
-        |||,
-        runbook: 'docs/sidekiq/service-sidekiq.md',
-        grafana_dashboard_id: 'sidekiq-queue-detail/sidekiq-queue-detail',
-        grafana_panel_id: '15',
-        grafana_variables: 'environment,stage,queue',
-        grafana_min_zoom_hours: '6',
-        promql_template_1: 'sidekiq_enqueued_jobs_total{environment="$environment", type="$type", stage="$stage", component="$component"}',
-      },
-    },
     {
       alert: 'ignored_sidekiq_queues_receiving_work',
       expr: |||
-        sum by (environment, queue, feature_category) (rate(sidekiq_enqueued_jobs_total{environment="gprd", queue=~"%s"}[5m])) > 0
+        sum by (environment, queue, feature_category) (gitlab_background_jobs:queue:ops:rate_5m{environment="gprd", queue=~"%s"}) > 0
       ||| % [std.join('|', IGNORED_GPRD_QUEUES)],
       'for': '2m',
       labels: {
@@ -284,10 +137,8 @@ local generateAlerts() =
         stage: 'main',
         alert_type: 'cause',
         rules_domain: 'general',
-        metric: 'sidekiq_enqueued_jobs_total',
         severity: 's1',
         pager: 'pagerduty',
-        period: '2m',
       },
       annotations: {
         title: 'Sidekiq jobs are being enqueued to an ignored queue that will never be dequeued',
@@ -314,7 +165,7 @@ local generateAlerts() =
         |||,
         runbook: 'docs/sidekiq/service-sidekiq.md',
         grafana_dashboard_id: 'sidekiq-queue-detail/sidekiq-queue-detail',
-        grafana_panel_id: '15',
+        grafana_panel_id: stableIds.hashStableId('queue-length'),
         grafana_variables: 'environment,stage,queue',
         grafana_min_zoom_hours: '6',
         promql_template_1: 'sidekiq_enqueued_jobs_total{environment="$environment", queue="$queue"}',
@@ -324,12 +175,10 @@ local generateAlerts() =
 
 local rules = {
   groups: [{
-    name: 'Sidekiq Queue Key Indicators',
+    name: 'Sidekiq Per Worker Alerting',
     interval: '1m',
     rules:
-      generateKeyMetricRules() +
-      generateRatioRules() +
-      generateAlerts(),
+      std.map(alerts.processAlertRule, generateAlerts())
   }],
 };
 

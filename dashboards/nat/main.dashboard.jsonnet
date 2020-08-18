@@ -1,10 +1,10 @@
-local grafana = import 'grafonnet/grafana.libsonnet';
+local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 
-local basic = import 'basic.libsonnet';
-local layout = import 'layout.libsonnet';
+local basic = import 'grafana/basic.libsonnet';
+local layout = import 'grafana/layout.libsonnet';
 local panels = import 'panels.libsonnet';
-local promQuery = import 'prom_query.libsonnet';
-local templates = import 'templates.libsonnet';
+local promQuery = import 'grafana/prom_query.libsonnet';
+local templates = import 'grafana/templates.libsonnet';
 
 local gatewayNameTemplate = grafana.template.new(
   'gateway',
@@ -43,6 +43,17 @@ local errorsPanel =
     ),
   );
 
+local errorsPerHostPanel =
+  panels.generalGraphPanel('Cloud NAT errors per host', legend_show=true)
+  .addTarget(
+    promQuery.target(
+      |||
+        stackdriver_nat_gateway_logging_googleapis_com_user_nat_errors_by_vm{environment="$environment"}
+      |||,
+      legendFormat='errors'
+    ),
+  );
+
 basic.dashboard(
   'Cloud NAT',
   tags=['general'],
@@ -51,4 +62,5 @@ basic.dashboard(
 .addTemplate(gatewayNameTemplate)
 .addPanels(layout.grid([
   errorsPanel,
+  errorsPerHostPanel,
 ], cols=1, rowHeight=10))

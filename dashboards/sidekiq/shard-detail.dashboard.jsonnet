@@ -1,17 +1,17 @@
-local basic = import 'basic.libsonnet';
+local basic = import 'grafana/basic.libsonnet';
 local capacityPlanning = import 'capacity_planning.libsonnet';
-local colors = import 'colors.libsonnet';
-local commonAnnotations = import 'common_annotations.libsonnet';
-local grafana = import 'grafonnet/grafana.libsonnet';
+local colors = import 'grafana/colors.libsonnet';
+local commonAnnotations = import 'grafana/common_annotations.libsonnet';
+local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local keyMetrics = import 'key_metrics.libsonnet';
-local layout = import 'layout.libsonnet';
+local layout = import 'grafana/layout.libsonnet';
 local nodeMetrics = import 'node_metrics.libsonnet';
 local platformLinks = import 'platform_links.libsonnet';
-local promQuery = import 'prom_query.libsonnet';
+local promQuery = import 'grafana/prom_query.libsonnet';
 local railsCommon = import 'rails_common_graphs.libsonnet';
-local seriesOverrides = import 'series_overrides.libsonnet';
+local seriesOverrides = import 'grafana/series_overrides.libsonnet';
 local serviceCatalog = import 'service_catalog.libsonnet';
-local templates = import 'templates.libsonnet';
+local templates = import 'grafana/templates.libsonnet';
 local dashboard = grafana.dashboard;
 local row = grafana.row;
 local template = grafana.template;
@@ -20,14 +20,16 @@ local annotation = grafana.annotation;
 local sidekiq = import 'sidekiq.libsonnet';
 local saturationDetail = import 'saturation_detail.libsonnet';
 local thresholds = import 'thresholds.libsonnet';
-local promQuery = import 'prom_query.libsonnet';
+local promQuery = import 'grafana/prom_query.libsonnet';
 local link = grafana.link;
-local elasticsearchLinks = import 'elasticsearch_links.libsonnet';
+local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libsonnet';
+local selectors = import 'promql/selectors.libsonnet';
 
 local optimalUtilization = 0.33;
 local optimalMargin = 0.10;
 
-local selector = 'type="sidekiq", environment="$environment", stage="$stage", shard=~"$shard"';
+local selectorHash = { type: 'sidekiq', environment: '$environment', stage: '$stage', shard: { re: '$shard' } };
+local selector = selectors.serializeHash(selectorHash);
 
 local queueDetailDataLink = {
   url: '/d/sidekiq-queue-detail?${__url_time_range}&${__all_variables}&var-queue=${__field.label.queue}',
@@ -143,7 +145,6 @@ basic.dashboard(
     ),
   ], startRow=101)
   +
-
   rowGrid('Queue Time - time spend queueing', [
     queueTimeLatencyTimeseries(
       title='Sidekiq Estimated p95 Job Queue Time for $shard shard',
@@ -332,7 +333,7 @@ basic.dashboard(
 )
 .addPanel(nodeMetrics.nodeMetricsDetailRow(selector), gridPos={ x: 0, y: 4000 })
 .addPanel(
-  saturationDetail.saturationDetailPanels(selector, components=[
+  saturationDetail.saturationDetailPanels(selectorHash, components=[
     'cpu',
     'disk_space',
     'memory',

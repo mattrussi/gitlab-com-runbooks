@@ -1,5 +1,5 @@
-local basic = import 'basic.libsonnet';
-local layout = import 'layout.libsonnet';
+local basic = import 'grafana/basic.libsonnet';
+local layout = import 'grafana/layout.libsonnet';
 
 basic.dashboard(
   'Bitbucket Importer',
@@ -9,19 +9,19 @@ basic.dashboard(
   layout.grid([
     basic.singlestat(
       title='Total Imported Projects',
-      query='sum(increase(bitbucket_importer_imported_projects{env="$environment"}[$__interval]))',
+      query='sum(increase(bitbucket_importer_imported_projects_total{env="$environment"}[$__interval]))',
       format='locale',
       valueName='total'
     ),
     basic.singlestat(
-      title='Total Imported Pull Requests',
-      query='sum(increase(bitbucket_importer_imported_pull_requests{env="$environment"}[$__interval]))',
+      title='Total Imported Merge (Pull) Requests',
+      query='sum(increase(bitbucket_importer_imported_merge_requests_total{env="$environment"}[$__interval]))',
       format='locale',
       valueName='total'
     ),
     basic.singlestat(
       title='Total Imported Issues',
-      query='sum(increase(bitbucket_importer_imported_issues{env="$environment"}[$__interval]))',
+      query='sum(increase(bitbucket_importer_imported_issues_total{env="$environment"}[$__interval]))',
       format='locale',
       valueName='total'
     ),
@@ -31,19 +31,19 @@ basic.dashboard(
   layout.grid([
     basic.timeseries(
       title='Imported Projects Per Hour',
-      query='sum(rate(bitbucket_importer_imported_projects{env="$environment"}[$__interval])) * 3600',
+      query='sum(rate(bitbucket_importer_imported_projects_total{env="$environment"}[$__interval])) * 3600',
       legendFormat='Amount',
       interval='1h'
     ),
     basic.timeseries(
-      title='Imported Pull Requests Per Hour',
-      query='sum(rate(bitbucket_importer_imported_pull_requests{env="$environment"}[$__interval])) * 3600',
+      title='Imported Merge (Pull) Requests Per Hour',
+      query='sum(rate(bitbucket_importer_imported_merge_requests_total{env="$environment"}[$__interval])) * 3600',
       legendFormat='Amount',
       interval='1h'
     ),
     basic.timeseries(
       title='Imported Issues Per Hour',
-      query='sum(rate(bitbucket_importer_imported_issues{env="$environment"}[$__interval])) * 3600',
+      query='sum(rate(bitbucket_importer_imported_issues_total{env="$environment"}[$__interval])) * 3600',
       legendFormat='Amount',
       interval='1h'
     ),

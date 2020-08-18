@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "dependencies": [
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/grafana/grafonnet-lib.git",
+          "subdir": "grafonnet"
+        }
+      },
+      "version": "0cfef6b1e666316d40a255c93e1d98d2a2610009",
+      "sum": "BVozpBqmTw67JSEDX9DRLEzCLMt0+aQjDBKGaTLS+Bc="
+    },
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/grafana/jsonnet-libs.git",
+          "subdir": "grafana-builder"
+        }
+      },
+      "version": "c6590ac36d31656af61130be9a1b2b1fd2027373",
+      "sum": "R5WJe6wW0R9vMpOAHaGFwcK8q4NmGZ0aLhdZGKDHeMU="
+    },
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/jsonnet-libs/xtd.git",
+          "subdir": ""
+        }
+      },
+      "version": "0569792a0eab892b5b329502cc7b30880703e942",
+      "sum": "G7ySCrldI7p6mu0f6XbpSlIf/6/P+cKv4Rhe7/OT9QQ="
+    },
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/kubernetes-monitoring/kubernetes-mixin.git",
+          "subdir": ""
+        }
+      },
+      "version": "b1005adad5940eee9366272ab4c85cf077e547c2",
+      "sum": "FVMHGdPPdJ3OYoR2b2ZjqQq/cxmS7/Y5dYkA9oYQ3Vg="
+    },
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/yugui/jsonnetunit.git",
+          "subdir": "jsonnetunit"
+        }
+      },
+      "version": "6927c58cae7624a00f368b977ccc477d4f74071f",
+      "sum": "9FFqqln65hooRF0l6rjICDtnTxUlmDj34+sKMh4sjPI="
+    }
+  ],
+  "legacyImports": false
+}

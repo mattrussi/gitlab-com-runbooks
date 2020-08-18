@@ -1,17 +1,18 @@
-local basic = import 'basic.libsonnet';
-local grafana = import 'grafonnet/grafana.libsonnet';
+local basic = import 'grafana/basic.libsonnet';
+local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local keyMetrics = import 'key_metrics.libsonnet';
-local layout = import 'layout.libsonnet';
+local layout = import 'grafana/layout.libsonnet';
 local metricsCatalog = import 'metrics-catalog.libsonnet';
 local thresholds = import 'thresholds.libsonnet';
 local row = grafana.row;
-local selectors = import './lib/selectors.libsonnet';
+local selectors = import 'promql/selectors.libsonnet';
+local statusDescription = import 'status_description.libsonnet';
 
 local defaultEnvironmentSelector = { environment: '$environment' };
 
 local getLatencyPercentileForService(service) =
-  if std.objectHas(service, 'monitoringThresholds') && std.objectHas(service.monitoringThresholds, 'apdexRatio') then
-    service.monitoringThresholds.apdexRatio
+  if std.objectHas(service, 'contractualThresholds') && std.objectHas(service.contractualThresholds, 'apdexRatio') then
+    service.contractualThresholds.apdexRatio
   else
     0.95;
 
@@ -22,30 +23,72 @@ local componentOverviewMatrixRow(
   component,
   startRow,
   environmentSelectorHash,
+  includeNodeLevelMonitoring=false
       ) =
-  layout.grid(
-    std.prune([
+  local componentSelectorHash = environmentSelectorHash { type: serviceType, stage: serviceStage, component: componentName };
+  local columns =
+    (
       // Component apdex
-      if std.objectHas(component, 'apdex') then
-        keyMetrics.singleComponentApdexPanel(serviceType, serviceStage, componentName, environmentSelectorHash)
+      if component.hasApdex() then
+        [[
+          keyMetrics.singleComponentApdexPanel(serviceType, serviceStage, componentName, environmentSelectorHash),
+          statusDescription.componentApdexStatusDescriptionPanel(componentSelectorHash),
+        ]]
       else
-        null,
-
+        []
+    )
+    +
+    (
       // Error rate
-      if std.objectHas(component, 'errorRate') then
-        keyMetrics.singleComponentErrorRates(serviceType, serviceStage, componentName, environmentSelectorHash)
+      if component.hasErrorRate() then
+        [[
+          keyMetrics.singleComponentErrorRates(serviceType, serviceStage, componentName, environmentSelectorHash),
+          statusDescription.componentErrorRateStatusDescriptionPanel(componentSelectorHash),
+        ]]
       else
-        null,
+        []
+    )
+    +
+    (
+      // Component request rate (mandatory, but not all are aggregatable)
+      if component.hasAggregatableRequestRate() then
+        [[
+          keyMetrics.singleComponentQPSPanel(serviceType, serviceStage, componentName, environmentSelectorHash),
+        ]]
+      else
+        []
+    );
 
-      // Component request rate
-      if std.objectHas(component, 'requestRate') && std.objectHasAll(component.requestRate, 'aggregatedRateQuery') then
-        keyMetrics.singleComponentQPSPanel(serviceType, serviceStage, componentName, environmentSelectorHash)
-      else
-        null,
-    ]),
-    cols=3,
-    startRow=startRow,
-    rowHeight=7
+  layout.splitColumnGrid(columns, [7, 1], startRow=startRow) +
+  (
+    if includeNodeLevelMonitoring then
+      layout.singleRow(
+        (
+          if component.hasApdex() then
+            [
+              keyMetrics.singleComponentNodeApdexPanel(serviceType, serviceStage, componentName, environmentSelectorHash)
+            ]
+          else []
+        )
+        +
+        (
+          if component.hasErrorRate() then
+            [
+              keyMetrics.singleComponentNodeErrorRates(serviceType, serviceStage, componentName, environmentSelectorHash),
+            ]
+          else []
+        )
+        +
+        (
+          if component.hasAggregatableRequestRate() then
+            [
+              keyMetrics.singleComponentNodeQPSPanel(serviceType, serviceStage, componentName, environmentSelectorHash),
+            ]
+          else []
+        ),
+        rowHeight=5, startRow=startRow+8
+      )
+    else []
   );
 
 {
@@ -63,7 +106,7 @@ local componentOverviewMatrixRow(
     local service = metricsCatalog.getService(serviceType);
     local component = service.components[componentName];
     local percentile = getLatencyPercentileForService(service);
-    local formatConfig = { percentile_humanized: 'p' + (percentile * 100), componentName: componentName };
+    local formatConfig = { percentile_humanized: 'p%g' % [percentile * 100], componentName: componentName };
 
     basic.latencyTimeseries(
       title=(if title == null then 'Estimated %(percentile_humanized)s latency for %(componentName)s' + componentName else title) % formatConfig,
@@ -138,6 +181,7 @@ local componentOverviewMatrixRow(
     serviceStage,
     startRow,
     environmentSelectorHash=defaultEnvironmentSelector,
+    includeNodeLevelMonitoring=false,
   )::
     local service = metricsCatalog.getService(serviceType);
     [
@@ -145,14 +189,18 @@ local componentOverviewMatrixRow(
     ] +
     std.prune(
       std.flattenArrays(
-        std.mapWithIndex(function(i, c) componentOverviewMatrixRow(
-          serviceType,
-          serviceStage,
-          c,
-          service.components[c],
-          startRow=startRow + 1 + i,
-          environmentSelectorHash=environmentSelectorHash
-        ), std.objectFields(service.components))
+        std.mapWithIndex(
+          function(i, componentName)
+            componentOverviewMatrixRow(
+              serviceType,
+              serviceStage,
+              componentName,
+              service.components[componentName],
+              startRow=startRow + 1 + i * 10,
+              environmentSelectorHash=environmentSelectorHash,
+              includeNodeLevelMonitoring=includeNodeLevelMonitoring
+            ), std.objectFields(service.components)
+        )
       )
     ),
 
@@ -166,9 +214,9 @@ local componentOverviewMatrixRow(
     local service = metricsCatalog.getService(serviceType);
     local component = service.components[componentName];
     local colCount =
-      (if std.objectHas(component, 'apdex') then 1 else 0) +
-      (if std.objectHas(component, 'requestRate') && std.objectHasAll(component.requestRate, 'aggregatedRateQuery') then 1 else 0) +
-      (if std.objectHas(component, 'errorRate') then 1 else 0);
+      (if component.hasApdex() then 1 else 0) +
+      (if component.hasAggregatableRequestRate() then 1 else 0) +
+      (if component.hasErrorRate() then 1 else 0);
 
     local staticLabelNames = if std.objectHas(component, 'staticLabels') then std.objectFields(component.staticLabels) else [];
 
@@ -178,7 +226,6 @@ local componentOverviewMatrixRow(
     local filteredSelectorHash = selectors.without(selectorHash, [
       'type',
     ] + staticLabelNames);
-    local selector = selectors.serializeHash(filteredSelectorHash);
 
     row.new(title='🔬 %(componentName)s Component Detail' % { componentName: componentName }, collapse=true)
     .addPanels(
@@ -188,12 +235,12 @@ local componentOverviewMatrixRow(
             std.map(
               function(aggregationSet)
                 [
-                  if std.objectHas(component, 'apdex') then
+                  if component.hasApdex() then
                     self.componentLatencyPanel(
                       title='Estimated %(percentile_humanized)s ' + componentName + ' Latency - ' + aggregationSet.title,
                       serviceType=serviceType,
                       componentName=componentName,
-                      selector=selector,
+                      selector=filteredSelectorHash,
                       legendFormat='%(percentile_humanized)s ' + aggregationSet.legendFormat,
                       aggregationLabels=aggregationSet.aggregationLabels,
                       min=minLatency,
@@ -201,24 +248,24 @@ local componentOverviewMatrixRow(
                   else
                     null,
 
-                  if std.objectHas(component, 'errorRate') then
+                  if component.hasErrorRate() then
                     self.componentErrorsPanel(
                       title=componentName + ' Errors - ' + aggregationSet.title,
                       serviceType=serviceType,
                       componentName=componentName,
                       legendFormat=aggregationSet.legendFormat,
                       aggregationLabels=aggregationSet.aggregationLabels,
-                      selector=selector,
+                      selector=filteredSelectorHash,
                     )
                   else
                     null,
 
-                  if std.objectHas(component, 'requestRate') && std.objectHasAll(component.requestRate, 'aggregatedRateQuery') then
+                  if component.hasAggregatableRequestRate() then
                     self.componentRPSPanel(
                       title=componentName + ' RPS - ' + aggregationSet.title,
                       serviceType=serviceType,
                       componentName=componentName,
-                      selector=selector,
+                      selector=filteredSelectorHash,
                       legendFormat=aggregationSet.legendFormat,
                       aggregationLabels=aggregationSet.aggregationLabels
                     )
@@ -237,15 +284,18 @@ local componentOverviewMatrixRow(
     local service = metricsCatalog.getService(serviceType);
 
     layout.grid(
-      std.mapWithIndex(function(i, componentName)
-                         local component = service.components[componentName];
-                         local aggregationSets = [
-                                                   { title: 'Overall', aggregationLabels: '', legendFormat: 'overall' },
-                                                 ] +
-                                                 std.map(function(c) { title: 'per ' + c, aggregationLabels: c, legendFormat: '{{' + c + '}}' }, component.significantLabels);
+      std.mapWithIndex(
+        function(i, componentName)
+          local component = service.components[componentName];
+          local aggregationSets =
+            [
+              { title: 'Overall', aggregationLabels: '', legendFormat: 'overall' },
+            ] +
+            std.map(function(c) { title: 'per ' + c, aggregationLabels: c, legendFormat: '{{' + c + '}}' }, component.significantLabels);
 
-                         s.componentDetailMatrix(serviceType, componentName, selectorHash, aggregationSets),
-                       std.objectFields(service.components))
+          s.componentDetailMatrix(serviceType, componentName, selectorHash, aggregationSets),
+        std.objectFields(service.components)
+      )
       , cols=1, startRow=startRow
     ),
 }

@@ -15,115 +15,166 @@ groups:
       tier: sv
       type: api
     expr: '0.005000'
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      tier: sv
+      type: api
+    expr: '0.995000'
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       tier: sv
       type: api
     expr: '0.001000'
+  - record: slo:min:deployment:gitlab_service_apdex:ratio
+    labels:
+      tier: sv
+      type: api
+    expr: '0.995000'
+  - record: slo:max:deployment:gitlab_service_errors:ratio
+    labels:
+      tier: sv
+      type: api
+    expr: '0.001000'
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      tier: sv
+      type: camoproxy
+    expr: '0.999000'
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      tier: sv
+      type: camoproxy
+    expr: '0.001000'
   - record: slo:min:gitlab_service_apdex:ratio
     labels:
-      alert_trigger_duration: long
       tier: runners
       type: ci-runners
-    expr: '0.800000'
+    expr: '0.950000'
   - record: slo:max:gitlab_service_errors:ratio
     labels:
-      alert_trigger_duration: long
       tier: runners
       type: ci-runners
-    expr: '0.200000'
+    expr: '0.050000'
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      tier: runners
+      type: ci-runners
+    expr: '0.970000'
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       tier: runners
       type: ci-runners
     expr: '0.005000'
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      tier: lb
+      type: frontend
+    expr: '0.999000'
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      tier: lb
+      type: frontend
+    expr: '0.000100'
   - record: slo:min:gitlab_service_apdex:ratio
     labels:
-      tier: lb
-      type: frontend
-    expr: '0.900000'
+      tier: sv
+      type: git
+    expr: '0.950000'
   - record: slo:max:gitlab_service_errors:ratio
     labels:
-      tier: lb
-      type: frontend
+      tier: sv
+      type: git
+    expr: '0.005000'
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      tier: sv
+      type: git
+    expr: '0.999500'
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      tier: sv
+      type: git
     expr: '0.000500'
-  - record: slo:min:gitlab_service_apdex:ratio
+  - record: slo:min:deployment:gitlab_service_apdex:ratio
     labels:
       tier: sv
       type: git
-    expr: '0.950000'
-  - record: slo:max:gitlab_service_errors:ratio
+    expr: '0.999500'
+  - record: slo:max:deployment:gitlab_service_errors:ratio
     labels:
       tier: sv
       type: git
-    expr: '0.005000'
-  - record: slo:max:events:gitlab_service_errors:ratio
+    expr: '0.000500'
+  - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
-      tier: sv
-      type: git
-    expr: '0.005000'
-  - record: slo:min:gitlab_service_apdex:ratio
-    labels:
-      alert_trigger_duration: long
       tier: stor
       type: gitaly
-    expr: '0.950000'
-  - record: slo:max:gitlab_service_errors:ratio
-    labels:
-      alert_trigger_duration: long
-      tier: stor
-      type: gitaly
-    expr: '0.001000'
+    expr: '0.999000'
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       tier: stor
       type: gitaly
+    expr: '0.000500'
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      tier: inf
+      type: monitoring
+    expr: '0.999000'
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      tier: inf
+      type: monitoring
     expr: '0.001000'
-  - record: slo:max:gitlab_service_errors:ratio
+  - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       tier: stor
       type: nfs
     expr: '0.000100'
   - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      tier: stor
-      type: nfs
-    expr: '0.000100'
-  - record: slo:max:gitlab_service_errors:ratio
     labels:
       tier: lb
       type: pages
-    expr: '0.005000'
-  - record: slo:min:gitlab_service_apdex:ratio
+    expr: '0.000100'
+  - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       tier: db
       type: patroni
-    expr: '0.950000'
-  - record: slo:max:gitlab_service_errors:ratio
+    expr: '0.995000'
+  - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       tier: db
       type: patroni
-    expr: '0.005000'
-  - record: slo:min:gitlab_service_apdex:ratio
+    expr: '0.000500'
+  - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       tier: stor
       type: praefect
     expr: '0.995000'
-  - record: slo:max:gitlab_service_errors:ratio
+  - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       tier: stor
       type: praefect
     expr: '0.000500'
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
-      tier: stor
-      type: praefect
-    expr: '0.000500'
-  - record: slo:min:gitlab_service_apdex:ratio
+      tier: db
+      type: redis
+    expr: '0.001000'
+  - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       tier: db
       type: redis-cache
-    expr: '0.950000'
+    expr: '0.999500'
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      tier: db
+      type: redis-cache
+    expr: '0.001000'
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      tier: db
+      type: redis-sidekiq
+    expr: '0.001000'
   - record: slo:min:gitlab_service_apdex:ratio
     labels:
       tier: sv
@@ -134,21 +185,36 @@ groups:
       tier: sv
       type: registry
     expr: '0.005000'
-  - record: slo:min:gitlab_service_apdex:ratio
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      tier: sv
+      type: registry
+    expr: '0.995000'
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      tier: sv
+      type: registry
+    expr: '0.000100'
+  - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       tier: sv
       type: sidekiq
-    expr: '0.950000'
-  - record: slo:max:gitlab_service_errors:ratio
+    expr: '0.995000'
+  - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       tier: sv
       type: sidekiq
-    expr: '0.050000'
-  - record: slo:max:gitlab_service_errors:ratio
+    expr: '0.005000'
+  - record: slo:min:deployment:gitlab_service_apdex:ratio
     labels:
-      tier: lb
-      type: waf
-    expr: '0.001000'
+      tier: sv
+      type: sidekiq
+    expr: '0.995000'
+  - record: slo:max:deployment:gitlab_service_errors:ratio
+    labels:
+      tier: sv
+      type: sidekiq
+    expr: '0.005000'
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       tier: lb
@@ -158,12 +224,22 @@ groups:
     labels:
       tier: sv
       type: web-pages
-    expr: '0.900000'
+    expr: '0.950000'
   - record: slo:max:gitlab_service_errors:ratio
     labels:
       tier: sv
       type: web-pages
-    expr: '0.005000'
+    expr: '0.050000'
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      tier: sv
+      type: web-pages
+    expr: '0.995000'
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      tier: sv
+      type: web-pages
+    expr: '0.000100'
   - record: slo:min:gitlab_service_apdex:ratio
     labels:
       tier: sv
@@ -184,8 +260,28 @@ groups:
       tier: sv
       type: web
     expr: '0.000100'
+  - record: slo:min:deployment:gitlab_service_apdex:ratio
+    labels:
+      tier: sv
+      type: web
+    expr: '0.999000'
+  - record: slo:max:deployment:gitlab_service_errors:ratio
+    labels:
+      tier: sv
+      type: web
+    expr: '0.000100'
   - record: gitlab_service:mapping:disable_ops_rate_prediction
     labels:
       tier: inf
       type: monitoring
+    expr: '1'
+  - record: gitlab_service:mapping:disable_ops_rate_prediction
+    labels:
+      tier: lb
+      type: pages
+    expr: '1'
+  - record: gitlab_service:mapping:disable_ops_rate_prediction
+    labels:
+      tier: inf
+      type: search
     expr: '1'

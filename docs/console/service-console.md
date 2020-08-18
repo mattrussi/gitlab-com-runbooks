@@ -1,12 +1,6 @@
 <!-- MARKER: do not edit this section directly. Edit services/service-catalog.yml then run scripts/generate-docs -->
 #  Console Service
-
-* **Responsible Teams**:
-  * [infrastructure-coreinfra](https://about.gitlab.com/handbook/engineering/infrastructure/team/reliability/). **Slack Channel**: [#production](https://gitlab.slack.com/archives/production)
-  * [infrastructure-webapp](https://about.gitlab.com/handbook/engineering/infrastructure/team/reliability/). **Slack Channel**: [#production](https://gitlab.slack.com/archives/production)
-  * [infrastructure-caches-ci-queues](https://about.gitlab.com/handbook/engineering/infrastructure/team/reliability/). **Slack Channel**: [#production](https://gitlab.slack.com/archives/production)
-* **General Triage Dashboard**: https://dashboards.gitlab.net/d/26q8nTzZz/service-platform-metrics?from=now-6h&to=now&var-prometheus_ds=Global&var-environment=gprd&var-type=console&orgId=1
-* **Alerts**: https://alerts.gprd.gitlab.net/#/alerts?filter=%7Btype%3D%22console%22%2C%20tier%3D%22sv%22%7D
+* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22console%22%2C%20tier%3D%22sv%22%7D
 * **Label**: gitlab-com/gl-infra/production~"Service:Console"
 
 ## Logging
@@ -33,28 +27,31 @@
 * [../license/license-gitlab-com.md](../license/license-gitlab-com.md)
 * [../logging/README.md](../logging/README.md)
 * [../logging/logging_gcs_archive_bigquery.md](../logging/logging_gcs_archive_bigquery.md)
+* [../monitoring/alertmanager-notification-failures.md](../monitoring/alertmanager-notification-failures.md)
 * [../monitoring/alerts_gke.md](../monitoring/alerts_gke.md)
 * [../monitoring/filesystem_alerts.md](../monitoring/filesystem_alerts.md)
 * [../monitoring/sentry-is-down.md](../monitoring/sentry-is-down.md)
 * [../pages/pages-letsencrypt.md](../pages/pages-letsencrypt.md)
-* [../patroni/gitlab-com-wale-backups.md](../patroni/gitlab-com-wale-backups.md)
 * [../patroni/patroni-management.md](../patroni/patroni-management.md)
 * [../patroni/pg-ha.md](../patroni/pg-ha.md)
-* [../patroni/postgres-backup-verification-failures.md](../patroni/postgres-backup-verification-failures.md)
 * [../patroni/postgres.md](../patroni/postgres.md)
+* [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
 * [../patroni/rotating-rails-postgresql-password.md](../patroni/rotating-rails-postgresql-password.md)
-* [../patroni/using-wale-gpg.md](../patroni/using-wale-gpg.md)
+* [../patroni/scale-down-patroni.md](../patroni/scale-down-patroni.md)
 * [../pgbouncer/README.md](../pgbouncer/README.md)
 * [../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md](../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md)
 * [../pgbouncer/pgbouncer-add-instance.md](../pgbouncer/pgbouncer-add-instance.md)
 * [../pgbouncer/pgbouncer-connections.md](../pgbouncer/pgbouncer-connections.md)
+* [../pgbouncer/pgbouncer-remove-instance.md](../pgbouncer/pgbouncer-remove-instance.md)
 * [../pgbouncer/pgbouncer-saturation.md](../pgbouncer/pgbouncer-saturation.md)
+* [../postgres-dr-delayed/postgres-dr-replicas.md](../postgres-dr-delayed/postgres-dr-replicas.md)
 * [../praefect/praefect-database.md](../praefect/praefect-database.md)
 * [../redis/clear_anonymous_sessions.md](../redis/clear_anonymous_sessions.md)
 * [../redis/redis.md](../redis/redis.md)
 * [../registry/gitlab-registry.md](../registry/gitlab-registry.md)
 * [../sidekiq/large-sidekiq-queue.md](../sidekiq/large-sidekiq-queue.md)
 * [../sidekiq/sidekiq-inspection.md](../sidekiq/sidekiq-inspection.md)
+* [../sidekiq/sidekiq-survival-guide-for-sres.md](../sidekiq/sidekiq-survival-guide-for-sres.md)
 * [../sidekiq/sidekiq_error_rate_high.md](../sidekiq/sidekiq_error_rate_high.md)
 * [../sidekiq/sidekiq_stats_no_longer_showing.md](../sidekiq/sidekiq_stats_no_longer_showing.md)
 * [../sidekiq/silent-project-exports.md](../sidekiq/silent-project-exports.md)
@@ -75,6 +72,7 @@
 * [../uncategorized/kubernetes.md](../uncategorized/kubernetes.md)
 * [../uncategorized/manage-cog.md](../uncategorized/manage-cog.md)
 * [../uncategorized/missing_repos.md](../uncategorized/missing_repos.md)
+* [../uncategorized/project-export.md](../uncategorized/project-export.md)
 * [../uncategorized/reindex-package-in-packagecloud.md](../uncategorized/reindex-package-in-packagecloud.md)
 * [../uncategorized/shared-configurations.md](../uncategorized/shared-configurations.md)
 * [../uncategorized/staging-environment.md](../uncategorized/staging-environment.md)

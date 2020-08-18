@@ -1,10 +1,6 @@
 <!-- MARKER: do not edit this section directly. Edit services/service-catalog.yml then run scripts/generate-docs -->
 #  Logging Service
-
-* **Responsible Teams**:
-  * [infrastructure-observability](https://about.gitlab.com/handbook/engineering/infrastructure/team/reliability/). **Slack Channel**: [#observability](https://gitlab.slack.com/archives/observability)
-* **General Triage Dashboard**: https://dashboards.gitlab.net/d/26q8nTzZz/service-platform-metrics?from=now-6h&to=now&var-prometheus_ds=Global&var-environment=gprd&var-type=logging&orgId=1
-* **Alerts**: https://alerts.gprd.gitlab.net/#/alerts?filter=%7Btype%3D%22logging%22%2C%20tier%3D%22inf%22%7D
+* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22logging%22%2C%20tier%3D%22inf%22%7D
 * **Label**: gitlab-com/gl-infra/production~"Service:Logging"
 
 ## Logging
@@ -28,12 +24,12 @@
 * [logging_gcs_archive_bigquery.md](logging_gcs_archive_bigquery.md)
 * [../pages/gitlab-pages.md](../pages/gitlab-pages.md)
 * [../pages/pages-letsencrypt.md](../pages/pages-letsencrypt.md)
-* [../patroni/geo-patroni-cluster.md](../patroni/geo-patroni-cluster.md)
-* [../patroni/gitlab-com-wale-backups.md](../patroni/gitlab-com-wale-backups.md)
+* [../patroni/postgres-checkup.md](../patroni/postgres-checkup.md)
 * [../patroni/postgres.md](../patroni/postgres.md)
-* [../patroni/using-wale-gpg.md](../patroni/using-wale-gpg.md)
+* [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
 * [../pgbouncer/pgbouncer-saturation.md](../pgbouncer/pgbouncer-saturation.md)
 * [../pubsub/pubsub-queing.md](../pubsub/pubsub-queing.md)
+* [../release.gitlab.net/README.md](../release.gitlab.net/README.md)
 * [../uncategorized/access-azure-test-subscription.md](../uncategorized/access-azure-test-subscription.md)
 * [../uncategorized/access-gcp-hosts.md](../uncategorized/access-gcp-hosts.md)
 * [../uncategorized/camoproxy.md](../uncategorized/camoproxy.md)

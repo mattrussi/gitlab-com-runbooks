@@ -1,14 +1,11 @@
-local metricsCatalog = import '../lib/metrics.libsonnet';
+local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 
-{
+metricsCatalog.serviceDefinition({
   type: 'nfs',
   tier: 'stor',
   monitoringThresholds: {
-    errorRatio: 0.0001,
-  },
-  eventBasedSLOTargets: {
     errorRatio: 0.9999,  // 99.99% of nfs requests should succeed, over multiple window periods
   },
   components: {
@@ -26,4 +23,4 @@ local rateMetric = metricsCatalog.rateMetric;
       significantLabels: ['fqdn'],
     },
   },
-}
+})

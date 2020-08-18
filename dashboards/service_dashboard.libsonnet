@@ -1,16 +1,16 @@
-local basic = import 'basic.libsonnet';
+local basic = import 'grafana/basic.libsonnet';
 local capacityPlanning = import 'capacity_planning.libsonnet';
-local colors = import 'colors.libsonnet';
-local commonAnnotations = import 'common_annotations.libsonnet';
-local grafana = import 'grafonnet/grafana.libsonnet';
+local colors = import 'grafana/colors.libsonnet';
+local commonAnnotations = import 'grafana/common_annotations.libsonnet';
+local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local keyMetrics = import 'key_metrics.libsonnet';
-local layout = import 'layout.libsonnet';
+local layout = import 'grafana/layout.libsonnet';
 local nodeMetrics = import 'node_metrics.libsonnet';
 local platformLinks = import 'platform_links.libsonnet';
-local promQuery = import 'prom_query.libsonnet';
-local seriesOverrides = import 'series_overrides.libsonnet';
+local promQuery = import 'grafana/prom_query.libsonnet';
+local seriesOverrides = import 'grafana/series_overrides.libsonnet';
 local serviceCatalog = import 'service_catalog.libsonnet';
-local templates = import 'templates.libsonnet';
+local templates = import 'grafana/templates.libsonnet';
 local dashboard = grafana.dashboard;
 local row = grafana.row;
 local template = grafana.template;
@@ -20,15 +20,16 @@ local serviceHealth = import 'service_health.libsonnet';
 local saturationDetail = import 'saturation_detail.libsonnet';
 local metricsCatalog = import 'metrics-catalog.libsonnet';
 local metricsCatalogDashboards = import 'metrics_catalog_dashboards.libsonnet';
-local selectors = import './lib/selectors.libsonnet';
+local selectors = import 'promql/selectors.libsonnet';
 local systemDiagramPanel = import 'system_diagram_panel.libsonnet';
 local kubeEmbeddedDashboards = import 'kubernetes_embedded_dashboards.libsonnet';
+local statusDescription = import 'status_description.libsonnet';
 
 local defaultEnvironmentSelector = { environment: '$environment' };
 
 local listComponentThresholds(service) =
   std.prune([
-    if std.objectHas(service.components[componentName], 'apdex') then
+    if service.components[componentName].hasApdex() then
       ' * %s: %s' % [componentName, service.components[componentName].apdex.describe()]
     else
       null
@@ -54,19 +55,50 @@ local headlineMetricsRow(
   local hasApdex = metricsCatalogServiceInfo.hasApdex();
   local hasErrorRate = metricsCatalogServiceInfo.hasErrorRate();
   local hasRequestRate = metricsCatalogServiceInfo.hasRequestRate();
+  local serviceSelector = environmentSelectorHash { type: serviceType, stage: serviceStage };
 
-  local cells = std.prune([
-    if hasApdex then keyMetrics.apdexPanel(serviceType, serviceStage, compact=true, environmentSelectorHash=environmentSelectorHash, description=getApdexDescription(metricsCatalogServiceInfo)) else null,
-    if hasErrorRate then keyMetrics.errorRatesPanel(serviceType, serviceStage, compact=true, environmentSelectorHash=environmentSelectorHash) else null,
-    if hasRequestRate then keyMetrics.qpsPanel(serviceType, serviceStage, compact=true, environmentSelectorHash=environmentSelectorHash) else null,
-    if showSaturationCell then keyMetrics.saturationPanel(serviceType, serviceStage, compact=true, environmentSelectorHash=saturationEnvironmentSelectorHash) else null,
-  ]);
+  local columns =
+    (
+      if hasApdex then
+        [[
+          keyMetrics.apdexPanel(serviceType, serviceStage, compact=true, environmentSelectorHash=environmentSelectorHash, description=getApdexDescription(metricsCatalogServiceInfo)),
+          statusDescription.serviceApdexStatusDescriptionPanel(serviceSelector),
+        ]]
+      else
+        []
+    )
+    +
+    (
+      if hasErrorRate then
+        [[
+          keyMetrics.errorRatesPanel(serviceType, serviceStage, compact=true, environmentSelectorHash=environmentSelectorHash),
+          statusDescription.serviceErrorStatusDescriptionPanel(serviceSelector),
+        ]]
+      else
+        []
+    )
+    +
+    (
+      if hasRequestRate then
+        [[
+          keyMetrics.qpsPanel(serviceType, serviceStage, compact=true, environmentSelectorHash=environmentSelectorHash),
+        ]]
+      else
+        []
+    )
+    +
+    (
+      if showSaturationCell then
+        [[
+          keyMetrics.saturationPanel(serviceType, serviceStage, compact=true, environmentSelectorHash=saturationEnvironmentSelectorHash),
+        ]]
+      else
+        []
+    );
 
-  layout.grid([
-    row.new(title='🌡️ Service Level Indicators (𝙎𝙇𝙄𝙨)', collapse=false),
-  ], cols=1, rowHeight=1, startRow=startRow)
+  layout.grid([row.new(title='🌡️ Service Level Indicators (𝙎𝙇𝙄𝙨)', collapse=false)], cols=1, rowHeight=1, startRow=startRow)
   +
-  layout.grid(cells, cols=std.length(cells), rowHeight=5, startRow=startRow + 1);
+  layout.splitColumnGrid(columns, [5, 1], startRow=startRow + 1);
 
 local overviewDashboard(
   type,
@@ -107,6 +139,7 @@ local overviewDashboard(
         stage,
         startRow=20,
         environmentSelectorHash=environmentSelectorHash,
+        includeNodeLevelMonitoring=metricsCatalogServiceInfo.nodeLevelMonitoring,
       )
     )
     .addPanels(
@@ -128,7 +161,7 @@ local overviewDashboard(
     .addPanels(
       if metricsCatalogServiceInfo.getProvisioning().kubernetes == true then
         // TODO: fix nasty regexp: requires https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10249
-        local kubeSelectorHash = { environment: '$environment', pod_name: { re: 'gitlab-%s.*' % [type] } };
+        local kubeSelectorHash = { environment: '$environment', pod: { re: 'gitlab-%s.*' % [type] } };
         [
           row.new(title='☸️ Kubernetes Overview', collapse=true)
           .addPanels(kubeEmbeddedDashboards.kubernetesOverview(kubeSelectorHash, startRow=1)) +
@@ -139,7 +172,8 @@ local overviewDashboard(
     .addPanels(
       if std.length(saturationComponents) > 0 then
         [
-          local saturationSelector = selectors.serializeHash(saturationEnvironmentSelectorHash { type: type, stage: '$stage' });
+          // saturationSelector is env + type + stage
+          local saturationSelector = saturationEnvironmentSelectorHash { type: type, stage: stage };
           saturationDetail.saturationDetailPanels(saturationSelector, components=saturationComponents)
           { gridPos: { x: 0, y: 500, w: 24, h: 1 } },
         ]

@@ -1,24 +1,16 @@
-local metricsCatalog = import '../lib/metrics.libsonnet';
+local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 
-{
+metricsCatalog.serviceDefinition({
   type: 'ci-runners',
   tier: 'runners',
-  /*
-   * As per https://gitlab.com/gitlab-com/www-gitlab-com/issues/5341, the goal is for 95%
-   * of ci-runner jobs to start within 60s.
-   *
-   * Initially, until we can make improvements, this is wishful thinking, so we'll only
-   * alert when the p50 exceeds 60s. As the service improves, we can improve the target,
-   * but setting this to p95 initially will just generate a lot of unhelpful alerts.
-   */
-  monitoringThresholds: {
-    apdexRatio: 0.80,
-    errorRatio: 0.2,
-    alertTriggerDuration: 'long',
+  contractualThresholds: {
+    apdexRatio: 0.95,
+    errorRatio: 0.05,
   },
-  eventBasedSLOTargets: {
+  monitoringThresholds: {
+    apdexScore: 0.97,
     errorRatio: 0.995,  // 99.5% of ci-runner requests should succeed, over multiple window periods
   },
   serviceDependencies: {
@@ -76,4 +68,4 @@ local rateMetric = metricsCatalog.rateMetric;
       ),
     },
   },
-}
+})

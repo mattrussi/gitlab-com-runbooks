@@ -1,10 +1,6 @@
 <!-- MARKER: do not edit this section directly. Edit services/service-catalog.yml then run scripts/generate-docs -->
 #  Search Service
-
-* **Responsible Teams**:
-  * [infrastructure-observability](https://about.gitlab.com/handbook/engineering/infrastructure/team/reliability/). **Slack Channel**: [#observability](https://gitlab.slack.com/archives/observability)
-* **General Triage Dashboard**: https://dashboards.gitlab.net/d/26q8nTzZz/service-platform-metrics?from=now-6h&to=now&var-prometheus_ds=Global&var-environment=gprd&var-type=search&orgId=1
-* **Alerts**: https://alerts.gprd.gitlab.net/#/alerts?filter=%7Btype%3D%22search%22%2C%20tier%3D%22inf%22%7D
+* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22search%22%2C%20tier%3D%22inf%22%7D
 * **Label**: gitlab-com/gl-infra/production~"Service:Elasticsearch"
 
 ## Logging
@@ -19,12 +15,13 @@
 * [../gitaly/find-project-from-hashed-storage.md](../gitaly/find-project-from-hashed-storage.md)
 * [../gitaly/gitaly-permission-denied.md](../gitaly/gitaly-permission-denied.md)
 * [../gitaly/gitaly-unusual-activity.md](../gitaly/gitaly-unusual-activity.md)
-* [../gitaly/storage-rebalancing.md](../gitaly/storage-rebalancing.md)
 * [../logging/README.md](../logging/README.md)
 * [../pages/gitlab-pages.md](../pages/gitlab-pages.md)
+* [../patroni/postgresql-role-credential-rotation.md](../patroni/postgresql-role-credential-rotation.md)
 * [../praefect/praefect-error-rate.md](../praefect/praefect-error-rate.md)
 * [../runner/ci-runner-timeouts.md](../runner/ci-runner-timeouts.md)
 * [../runner/update-gitlab-runner-on-managers.md](../runner/update-gitlab-runner-on-managers.md)
+* [../sidekiq/sidekiq-survival-guide-for-sres.md](../sidekiq/sidekiq-survival-guide-for-sres.md)
 * [../sidekiq/sidekiq_error_rate_high.md](../sidekiq/sidekiq_error_rate_high.md)
 * [../uncategorized/camoproxy.md](../uncategorized/camoproxy.md)
 * [../uncategorized/chef-documentation.md](../uncategorized/chef-documentation.md)

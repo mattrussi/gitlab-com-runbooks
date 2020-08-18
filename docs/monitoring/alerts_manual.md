@@ -52,7 +52,7 @@ end
 
 ## Prometheus
 
-Generally speaking alerts are triggered by prometheus, and then grouped by label, prioritized and deduped by the alert manager.
+Generally speaking alerts are triggered by Prometheus, and then grouped by label, prioritized and deduped by the Alertmanager.
 
 Currently most alerts are being grouped by environment and alert name. These alerts are then shipped to the alert manager which applies a template to them to ship them to slack or pagerduty, depending on the `pager` label.
 
@@ -112,15 +112,7 @@ Alerts raised by Prometheus, as defined by alert rules, are sent to alertmanager
 ## How to add new alerts (alert rules in Prometheus config)
 
 Create a new yml file under `/rules` in this repo, and submit a MR. Once the MR has been approved &
-merged, trigger a chef converge on the `[gstg|gprd|ops]-infra-alerts` roles.
-
-From local clone of `dev.gitlab.org:chef-repo`
-
-```
-bundle exec knife ssh 'roles:gstg-infra-alerts'
-bundle exec knife ssh 'roles:gprd-infra-alerts'
-bundle exec knife ssh 'roles:ops-infra-alerts'
-```
+merged it will automatically converge in Chef and be pushed to Kubernetes.
 
 In order to get rules deployed into Kubernetes, follow the above and watch the
 CI/CD pipeline on the ops instance.  The `./bin/create_kubernetes_rules` script
@@ -133,23 +125,15 @@ https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#p
 
 ~~We have 3 of those, 1 and 2 are internal to GitLab.com, 3 is used for the public monitor.gitlab.net site.~~ this is outdated, see monitoring overview for more info
 
-### Alert Manager
+### Alertmanager
 
-We have three alermanagers. Two of them are configured in HA setup (there are two instances running in a "cluster"):
-- prometheus.gitlab.com (the VM is in Azure, alertmanager is running on the same machine as Prometheus, legacy)
-- alerts-0[1,2]-inf-gprd.c.gitlab-production.internal (old, secrets in Chef Vault, https://alerts.gprd.gitlab.net/)
-- alerts-0[1,2]-inf-ops.c.gitlab-ops.internal (latest, secrets in GKMS, https://alerts.ops.gitlab.net/)
+We have one alermanager cluster. It is operated via [helmfiles](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/) and runs in the `ops` GKE cluster.
 
-The cookbook that holds all the setup for the alert manager can be found in [this repo](https://gitlab.com/gitlab-cookbooks/gitlab-alertmanager)
+It is accessed via Google IAP on [https://alerts.gitlab.net](https://alerts.gitlab.net)
 
-The alertmanager specific configuration where the routing are defined can be found in [this file](https://gitlab.com/gitlab-cookbooks/gitlab-alertmanager/blob/master/templates/default/alertmanager.yml.erb).
+The alertmanager-specific configuration where routing and recievers are defined can be found in [the runbooks](https://gitlab.com/gitlab-com/runbooks/tree/master/alertmanager).
 
-The alerting templates (which are built using go's text/template engine) can be found in [this folder](https://gitlab.com/gitlab-cookbooks/gitlab-alertmanager/blob/master/files/default/alertmanager/templates/gitlab.tmpl).
-
-Our new GKE alertmanager that alerts for Kubernetes based infrastructure is not
-easily accessible for adding silences or viewing. Until this is resolved,
-[temporary access can be had via a tunnel](alerts_gke.md).
-
+The alerting templates (which are built using go's text/template engine) can be found in [the helmfiles](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/gitlab-monitoring).
 
 ## Silencing
 
@@ -160,7 +144,7 @@ Silencing alerts is helpful to reduce the broken window effect, critical alarms 
 be actionable and if they aren't we should ideally change the alert or if it something temporary
 silence them.
 
-* Go to https://alerts.(gprd|gstg|ops).gitlab.net/#/silences and select "New Silence"
+* Go to https://alerts.gitlab.net/#/silences and select "New Silence"
 * Add matchers for the conditions to target the specific alert, for example:
 
 ```

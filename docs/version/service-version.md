@@ -1,10 +1,6 @@
 <!-- MARKER: do not edit this section directly. Edit services/service-catalog.yml then run scripts/generate-docs -->
 #  Version Service
-
-* **Responsible Teams**:
-  * [infrastructure-businessops](https://about.gitlab.com/handbook/engineering/infrastructure/team/reliability/). **Slack Channel**: [#production](https://gitlab.slack.com/archives/production)
-* **General Triage Dashboard**: https://dashboards.gitlab.net/d/26q8nTzZz/service-platform-metrics?from=now-6h&to=now&var-prometheus_ds=Global&var-environment=gprd&var-type=version&orgId=1
-* **Alerts**: https://alerts.gprd.gitlab.net/#/alerts?filter=%7Btype%3D%22version%22%2C%20tier%3D%22sv%22%7D
+* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22version%22%2C%20tier%3D%22sv%22%7D
 * **Label**: gitlab-com/gl-infra/production~"Service:Version"
 
 ## Logging
@@ -14,7 +10,7 @@
 ## Troubleshooting Pointers
 
 * [../cloudflare/managing-traffic.md](../cloudflare/managing-traffic.md)
-* [../elastic/README.md](../elastic/README.md)
+* [../cloudflare/services-locations.md](../cloudflare/services-locations.md)
 * [../elastic/elastic-cloud.md](../elastic/elastic-cloud.md)
 * [../gitaly/gitaly-error-rate.md](../gitaly/gitaly-error-rate.md)
 * [../gitaly/storage-sharding.md](../gitaly/storage-sharding.md)
@@ -23,9 +19,14 @@
 * [../monitoring/filesystem_alerts_inodes.md](../monitoring/filesystem_alerts_inodes.md)
 * [../monitoring/update-prometheus-and-exporters.md](../monitoring/update-prometheus-and-exporters.md)
 * [../packaging/manage-package-signing-keys.md](../packaging/manage-package-signing-keys.md)
+* [../patroni/geo-patroni-cluster.md](../patroni/geo-patroni-cluster.md)
 * [../patroni/patroni-management.md](../patroni/patroni-management.md)
-* [../patroni/using-wale-gpg.md](../patroni/using-wale-gpg.md)
+* [../patroni/postgres-checkup.md](../patroni/postgres-checkup.md)
+* [../patroni/postgres_exporter.md](../patroni/postgres_exporter.md)
+* [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
 * [../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md](../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md)
+* [../postgres-dr-delayed/postgres-dr-replicas.md](../postgres-dr-delayed/postgres-dr-replicas.md)
+* [../release.gitlab.net/README.md](../release.gitlab.net/README.md)
 * [../runner/update-gitlab-runner-on-managers.md](../runner/update-gitlab-runner-on-managers.md)
 * [../uncategorized/about-gitlab-com.md](../uncategorized/about-gitlab-com.md)
 * [../uncategorized/aptly.md](../uncategorized/aptly.md)
@@ -44,6 +45,7 @@
 * [../uncategorized/manage-workers.md](../uncategorized/manage-workers.md)
 * [../uncategorized/mtail.md](../uncategorized/mtail.md)
 * [../uncategorized/omnibus-package-updates.md](../uncategorized/omnibus-package-updates.md)
+* [../uncategorized/project-export.md](../uncategorized/project-export.md)
 * [../uncategorized/remove-kernels.md](../uncategorized/remove-kernels.md)
 * [../uncategorized/tweeting-guidelines.md](../uncategorized/tweeting-guidelines.md)
 * [../uncategorized/upgrade-camoproxy.md](../uncategorized/upgrade-camoproxy.md)

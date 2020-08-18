@@ -1,38 +1,126 @@
-local resourceSaturationPoint = (import './lib/resource-saturation-point.libsonnet').resourceSaturationPoint;
+local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
+local sidekiqHelpers = import './services/lib/sidekiq-helpers.libsonnet';
 
-// throttledSidekiqShards is an array of Sidekiq `shard` labels for shards
-// that are configured to run `urgency=throttled` jobs. Queues running on these
-// shards will be saturated by-design, as we throttle jobs to protect backend
-// resources.
-//
-// For this reason, we don't alert on sidekiq saturation on these nodes
-local throttledSidekiqShards = [
-  'export',
-  'elasticsearch',
-  'memory-bound'
-];
+local resourceSaturationPoint =  metricsCatalog.resourceSaturationPoint;
 
 // Disk utilisation metrics are currently reporting incorrectly for
 // HDD volumes, see https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10248
 // as such, we only record this utilisation metric on IO subset of the fleet for now.
 local diskPerformanceSensitiveServices = ['patroni', 'gitaly', 'nfs'];
 
-{
-  active_db_connections: resourceSaturationPoint({
-    title: 'Active DB Connection Saturation',
+local pgbouncerAsyncPool(serviceType, role) =
+  resourceSaturationPoint({
+    title: 'Postgres Async (Sidekiq) %s Connection Pool Utilization per Node' % [role],
+    severity: 's4',
+    horizontallyScalable: role == 'replica', // Replicas can be scaled horizontally, primary cannot
+    appliesTo: [serviceType],
+    description: |||
+      pgbouncer async connection pool utilization per database node, for %(role)s database connections.
+
+      Sidekiq maintains it's own pgbouncer connection pool. When this resource is saturated,
+      database operations may queue, leading to additional latency in background processing.
+    ||| % { role: role },
+    grafana_dashboard_uid: 'sat_pgbouncer_async_pool_' + role,
+    resourceLabels: ['fqdn', 'instance'],
+    burnRatePeriod: '5m',
+    query: |||
+      (
+        avg_over_time(pgbouncer_pools_server_active_connections{user="gitlab", database="gitlabhq_production_sidekiq", %(selector)s}[%(rangeInterval)s]) +
+        avg_over_time(pgbouncer_pools_server_testing_connections{user="gitlab", database="gitlabhq_production_sidekiq", %(selector)s}[%(rangeInterval)s]) +
+        avg_over_time(pgbouncer_pools_server_used_connections{user="gitlab", database="gitlabhq_production_sidekiq", %(selector)s}[%(rangeInterval)s]) +
+        avg_over_time(pgbouncer_pools_server_login_connections{user="gitlab", database="gitlabhq_production_sidekiq", %(selector)s}[%(rangeInterval)s])
+      )
+      / on(%(aggregationLabels)s) group_left()
+      sum by (%(aggregationLabels)s) (
+        avg_over_time(pgbouncer_databases_pool_size{name="gitlabhq_production_sidekiq", %(selector)s}[%(rangeInterval)s])
+      )
+    |||,
+    slos: {
+      soft: 0.90,
+      hard: 0.95,
+      alertTriggerDuration: '10m',
+    },
+  });
+
+local pgbouncerSyncPool(serviceType, role) =
+  resourceSaturationPoint({
+    title: 'Postgres Sync (Web/API/Git) %s Connection Pool Utilization per Node' % [role],
     severity: 's3',
+    horizontallyScalable: role == 'replica', // Replicas can be scaled horizontally, primary cannot
+    appliesTo: [serviceType],
+    description: |||
+      pgbouncer sync connection pool Saturation per database node, for %(role)s database connections.
+
+      Web/api/git applications use a separate connection pool to sidekiq.
+
+      When this resource is saturated, web/api database operations may queue, leading to unicorn/puma
+      saturation and 503 errors in the web.
+    ||| % { role: role },
+    grafana_dashboard_uid: 'sat_pgbouncer_sync_pool_' + role,
+    resourceLabels: ['fqdn', 'instance'],
+    burnRatePeriod: '5m',
+    query: |||
+      (
+        avg_over_time(pgbouncer_pools_server_active_connections{user="gitlab", database="gitlabhq_production", %(selector)s}[%(rangeInterval)s]) +
+        avg_over_time(pgbouncer_pools_server_testing_connections{user="gitlab", database="gitlabhq_production", %(selector)s}[%(rangeInterval)s]) +
+        avg_over_time(pgbouncer_pools_server_used_connections{user="gitlab", database="gitlabhq_production", %(selector)s}[%(rangeInterval)s]) +
+        avg_over_time(pgbouncer_pools_server_login_connections{user="gitlab", database="gitlabhq_production", %(selector)s}[%(rangeInterval)s])
+      )
+      / on(%(aggregationLabels)s) group_left()
+      sum by (%(aggregationLabels)s) (
+        avg_over_time(pgbouncer_databases_pool_size{name="gitlabhq_production", %(selector)s}[%(rangeInterval)s])
+      )
+    |||,
+    slos: {
+      soft: 0.85,
+      hard: 0.95,
+      alertTriggerDuration: '10m',
+    },
+  });
+
+{
+  pg_active_db_connections_primary: resourceSaturationPoint({
+    title: 'Active Primary DB Connection Utilization',
+    severity: 's3',
+    horizontallyScalable: false, // Connections to the primary are not horizontally scalable
     appliesTo: ['patroni'],
     description: |||
-      Active db connection saturation per node.
+      Active db connection utilization on the primary node.
 
-      Postgres is configured to use a maximum number of connections. When this resource is saturated,
-      connections may queue.
+      Postgres is configured to use a maximum number of connections.
+      When this resource is saturated, connections may queue.
     |||,
-    grafana_dashboard_uid: 'sat_active_db_connections',
+    grafana_dashboard_uid: 'sat_active_db_connections_primary',
     resourceLabels: ['fqdn'],
     query: |||
       sum without (state) (
-        pg_stat_activity_count{datname="gitlabhq_production", state!="idle", %(selector)s}
+        pg_stat_activity_count{datname="gitlabhq_production", state!="idle", %(selector)s} unless on(instance) (pg_replication_is_replica == 1)
+      )
+      / on (%(aggregationLabels)s)
+      pg_settings_max_connections{%(selector)s}
+    |||,
+    slos: {
+      soft: 0.70,
+      hard: 0.80,
+    },
+  }),
+
+  pg_active_db_connections_replica: resourceSaturationPoint({
+    title: 'Active Secondary DB Connection Utilization',
+    severity: 's3',
+    horizontallyScalable: true, // Connections to the replicas are horizontally scalable
+    appliesTo: ['patroni'],
+    description: |||
+      Active db connection utilization per replica node
+
+      Postgres is configured to use a maximum number of connections.
+      When this resource is saturated, connections may queue.
+    |||,
+    grafana_dashboard_uid: 'sat_active_db_connections_replica',
+    resourceLabels: ['fqdn'],
+    query: |||
+      sum without (state) (
+        pg_stat_activity_count{datname="gitlabhq_production", state!="idle", %(selector)s} and on(instance) (pg_replication_is_replica == 1)
       )
       / on (%(aggregationLabels)s)
       pg_settings_max_connections{%(selector)s}
@@ -44,8 +132,9 @@ local diskPerformanceSensitiveServices = ['patroni', 'gitaly', 'nfs'];
   }),
 
   rails_db_connection_pool: resourceSaturationPoint({
-    title: 'Rails DB Connection Pool Saturation',
+    title: 'Rails DB Connection Pool Utilization',
     severity: 's4',
+    horizontallyScalable: true, // Add more replicas for achieve greater scalability
     appliesTo: ['web', 'api', 'git', 'sidekiq'],
     description: |||
       Rails uses connection pools for its database connections. As each
@@ -57,7 +146,7 @@ local diskPerformanceSensitiveServices = ['patroni', 'gitaly', 'nfs'];
       application thread is using a database connection.
     |||,
     grafana_dashboard_uid: 'sat_rails_db_connection_pool',
-    resourceLabels: ['fqdn', 'host', 'port'],
+    resourceLabels: ['instance', 'host', 'port'],
     burnRatePeriod: '5m',
     query: |||
       (
@@ -76,11 +165,12 @@ local diskPerformanceSensitiveServices = ['patroni', 'gitaly', 'nfs'];
   }),
 
   cgroup_memory: resourceSaturationPoint({
-    title: 'Cgroup Memory Saturation per Node',
+    title: 'Cgroup Memory Utilization per Node',
     severity: 's4',
+    horizontallyScalable: true,
     appliesTo: ['gitaly', 'praefect'],
     description: |||
-      Cgroup memory saturation per node.
+      Cgroup memory utilization per node.
 
       Some services, notably Gitaly, are configured to run within a cgroup with a memory limit lower than the
       memory limit for the node. This ensures that a traffic spike to Gitaly does not affect other services on the node.
@@ -106,11 +196,12 @@ local diskPerformanceSensitiveServices = ['patroni', 'gitaly', 'nfs'];
   }),
 
   cpu: resourceSaturationPoint({
-    title: 'Average Service CPU',
+    title: 'Average Service CPU Utilization',
     severity: 's3',
+    horizontallyScalable: true,
     appliesTo: { allExcept: ['waf', 'console-node', 'deploy-node'] },
     description: |||
-      This resource measures average CPU across an all cores in a service fleet.
+      This resource measures average CPU utilization across an all cores in a service fleet.
       If it is becoming saturated, it may indicate that the fleet needs
       horizontal or vertical scaling.
     |||,
@@ -129,11 +220,12 @@ local diskPerformanceSensitiveServices = ['patroni', 'gitaly', 'nfs'];
   }),
 
   shard_cpu: resourceSaturationPoint({
-    title: 'Average CPU per Shard',
+    title: 'Average CPU Utilization per Shard',
     severity: 's3',
+    horizontallyScalable: true,
     appliesTo: { allExcept: ['waf', 'console-node', 'deploy-node'], default: 'sidekiq' },
     description: |||
-      This resource measures average CPU across an all cores in a shard of a
+      This resource measures average CPU utilization across an all cores in a shard of a
       service fleet. If it is becoming saturated, it may indicate that the
       shard needs horizontal or vertical scaling.
     |||,
@@ -152,11 +244,12 @@ local diskPerformanceSensitiveServices = ['patroni', 'gitaly', 'nfs'];
   }),
 
   disk_space: resourceSaturationPoint({
-    title: 'Disk Utilization per Device per Node',
+    title: 'Disk Space Utilization per Device per Node',
     severity: 's2',
+    horizontallyScalable: true,
     appliesTo: { allExcept: ['waf', 'bastion'], default: 'gitaly' },
     description: |||
-      Disk utilization per device per node.
+      Disk space utilization per device per node.
     |||,
     grafana_dashboard_uid: 'sat_disk_space',
     resourceLabels: ['fqdn', 'device'],
@@ -171,12 +264,41 @@ local diskPerformanceSensitiveServices = ['patroni', 'gitaly', 'nfs'];
     },
   }),
 
+  disk_inodes: resourceSaturationPoint({
+    title: 'Disk inode Utilization per Device per Node',
+    severity: 's2',
+    horizontallyScalable: true,
+    appliesTo: { allExcept: ['waf', 'bastion'], default: 'gitaly' },
+    description: |||
+      Disk inode utilization per device per node.
+
+      If this is too high, its possible that a directory is filling up with
+      files. Consider logging in an checking temp directories for large numbers
+      of files
+    |||,
+    grafana_dashboard_uid: 'sat_disk_inodes',
+    resourceLabels: ['fqdn', 'device'],
+    query: |||
+      1 - (
+        node_filesystem_files_free{fstype=~"(ext.|xfs)", %(selector)s}
+        /
+        node_filesystem_files{fstype=~"(ext.|xfs)", %(selector)s}
+      )
+    |||,
+    slos: {
+      soft: 0.75,
+      hard: 0.80,
+      alertTriggerDuration: '15m',
+    },
+  }),
+
   disk_sustained_read_iops: resourceSaturationPoint({
-    title: 'Disk Sustained Read IOPS Saturation per Node',
+    title: 'Disk Sustained Read IOPS Utilization per Node',
     severity: 's3',
+    horizontallyScalable: true,
     appliesTo: diskPerformanceSensitiveServices,
     description: |||
-      Disk sustained read IOPS saturation per node.
+      Disk sustained read IOPS utilization per node.
     |||,
     grafana_dashboard_uid: 'sat_disk_sus_read_iops',
     resourceLabels: ['fqdn', 'device'],
@@ -194,11 +316,12 @@ local diskPerformanceSensitiveServices = ['patroni', 'gitaly', 'nfs'];
   }),
 
   disk_sustained_read_throughput: resourceSaturationPoint({
-    title: 'Disk Sustained Read Throughput Saturation per Node',
+    title: 'Disk Sustained Read Throughput Utilization per Node',
     severity: 's3',
+    horizontallyScalable: true,
     appliesTo: diskPerformanceSensitiveServices,
     description: |||
-      Disk sustained read throughput saturation per node.
+      Disk sustained read throughput utilization per node.
     |||,
     grafana_dashboard_uid: 'sat_disk_sus_read_throughput',
     resourceLabels: ['fqdn', 'device'],
@@ -216,8 +339,9 @@ local diskPerformanceSensitiveServices = ['patroni', 'gitaly', 'nfs'];
   }),
 
   disk_sustained_write_iops: resourceSaturationPoint({
-    title: 'Disk Sustained Write IOPS Saturation per Node',
+    title: 'Disk Sustained Write IOPS Utilization per Node',
     severity: 's3',
+    horizontallyScalable: true,
     appliesTo: diskPerformanceSensitiveServices,
     description: |||
       Gitaly runs on Google Cloud's Persistent Disk product. This has a published sustained
@@ -245,8 +369,9 @@ local diskPerformanceSensitiveServices = ['patroni', 'gitaly', 'nfs'];
   }),
 
   disk_sustained_write_throughput: resourceSaturationPoint({
-    title: 'Disk Sustained Write Throughput Saturation per Node',
+    title: 'Disk Sustained Write Throughput Utilization per Node',
     severity: 's3',
+    horizontallyScalable: true,
     appliesTo: diskPerformanceSensitiveServices,
     description: |||
       Gitaly runs on Google Cloud's Persistent Disk product. This has a published sustained
@@ -274,11 +399,12 @@ local diskPerformanceSensitiveServices = ['patroni', 'gitaly', 'nfs'];
   }),
 
   elastic_cpu: resourceSaturationPoint({
-    title: 'Average CPU Saturation per Node',
+    title: 'Average CPU Utilization per Node',
     severity: 's4',
+    horizontallyScalable: true,
     appliesTo: ['logging', 'search'],
     description: |||
-      Average CPU per Node.
+      Average CPU utilization per Node.
 
       This resource measures all CPU across a fleet. If it is becoming saturated, it may indicate that the fleet needs horizontal or
       vertical scaling. The metrics are coming from elasticsearch_exporter.
@@ -287,7 +413,7 @@ local diskPerformanceSensitiveServices = ['patroni', 'gitaly', 'nfs'];
     resourceLabels: [],
     query: |||
       avg by (%(aggregationLabels)s) (
-        avg_over_time(elasticsearch_os_cpu_percent{%(selector)s}[%(rangeInterval)s]) / 100
+        avg_over_time(elasticsearch_process_cpu_percent{%(selector)s}[%(rangeInterval)s]) / 100
       )
     |||,
     slos: {
@@ -299,6 +425,7 @@ local diskPerformanceSensitiveServices = ['patroni', 'gitaly', 'nfs'];
   elastic_disk_space: resourceSaturationPoint({
     title: 'Disk Utilization Overall',
     severity: 's3',
+    horizontallyScalable: true,
     appliesTo: ['logging', 'search'],
     description: |||
       Disk utilization per device per node.
@@ -323,6 +450,7 @@ local diskPerformanceSensitiveServices = ['patroni', 'gitaly', 'nfs'];
   elastic_jvm_heap_memory: resourceSaturationPoint({
     title: 'JVM Heap Utilization per Node',
     severity: 's4',
+    horizontallyScalable: true,
     appliesTo: ['logging', 'search'],
     description: |||
       JVM heap memory utilization per node.
@@ -341,8 +469,9 @@ local diskPerformanceSensitiveServices = ['patroni', 'gitaly', 'nfs'];
   }),
 
   elastic_single_node_cpu: resourceSaturationPoint({
-    title: 'Average CPU Saturation per Node',
+    title: 'Average CPU Utilization per Node',
     severity: 's4',
+    horizontallyScalable: true,
     appliesTo: ['logging', 'search'],
     description: |||
       Average CPU per Node.
@@ -354,7 +483,7 @@ local diskPerformanceSensitiveServices = ['patroni', 'gitaly', 'nfs'];
     resourceLabels: ['name'],
     burnRatePeriod: '5m',
     query: |||
-      avg_over_time(elasticsearch_os_cpu_percent{%(selector)s}[%(rangeInterval)s]) / 100
+      avg_over_time(elasticsearch_process_cpu_percent{%(selector)s}[%(rangeInterval)s]) / 100
     |||,
     slos: {
       soft: 0.80,
@@ -365,6 +494,7 @@ local diskPerformanceSensitiveServices = ['patroni', 'gitaly', 'nfs'];
   elastic_single_node_disk_space: resourceSaturationPoint({
     title: 'Disk Utilization per Device per Node',
     severity: 's4',
+    horizontallyScalable: true,
     appliesTo: ['logging', 'search'],
     description: |||
       Disk utilization per device per node.
@@ -391,9 +521,10 @@ local diskPerformanceSensitiveServices = ['patroni', 'gitaly', 'nfs'];
   elastic_thread_pools: resourceSaturationPoint({
     title: 'Thread pool utilization',
     severity: 's4',
+    horizontallyScalable: true,
     appliesTo: ['logging', 'search'],
     description: |||
-      Saturation of each thread pool on each node.
+      Utilization of each thread pool on each node.
 
       Descriptions of the threadpool types can be found at
       https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-threadpool.html.
@@ -415,8 +546,9 @@ local diskPerformanceSensitiveServices = ['patroni', 'gitaly', 'nfs'];
   }),
 
   go_memory: resourceSaturationPoint({
-    title: 'Go Memory Saturation per Node',
+    title: 'Go Memory Utilization per Node',
     severity: 's4',
+    horizontallyScalable: true,
     appliesTo: ['gitaly', 'web-pages', 'monitoring', 'web', 'praefect', 'registry', 'api'],
     description: |||
       Go's memory allocation strategy can make it look like a Go process is saturating memory when measured using RSS, when in fact
@@ -443,6 +575,7 @@ local diskPerformanceSensitiveServices = ['patroni', 'gitaly', 'nfs'];
   memory: resourceSaturationPoint({
     title: 'Memory Utilization per Node',
     severity: 's4',
+    horizontallyScalable: true,
     appliesTo: { allExcept: ['waf', 'monitoring'] },
     description: |||
       Memory utilization per device per node.
@@ -459,11 +592,12 @@ local diskPerformanceSensitiveServices = ['patroni', 'gitaly', 'nfs'];
   }),
 
   open_fds: resourceSaturationPoint({
-    title: 'Open file descriptor saturation per instance',
+    title: 'Open file descriptor utilization per instance',
     severity: 's2',
+    horizontallyScalable: true,
     appliesTo: { allExcept: ['waf'] },
     description: |||
-      Open file descriptor saturation per instance.
+      Open file descriptor utilization per instance.
 
       Saturation on file descriptor limits may indicate a resource-descriptor leak in the application.
 
@@ -490,44 +624,21 @@ local diskPerformanceSensitiveServices = ['patroni', 'gitaly', 'nfs'];
     },
   }),
 
-  pgbouncer_async_pool: resourceSaturationPoint({
-    title: 'Postgres Async (Sidekiq) Connection Pool Saturation per Node',
-    severity: 's4',
-    appliesTo: ['pgbouncer', 'patroni'],
-    description: |||
-      Postgres connection pool saturation per database node.
+  pgbouncer_async_primary_pool: pgbouncerAsyncPool('pgbouncer', 'primary'),
 
-      Sidekiq maintains it's own pgbouncer connection pool. When this resource is saturated, database operations may
-      queue, leading to additional latency in background processing.
-    |||,
-    grafana_dashboard_uid: 'sat_pgbouncer_async_pool',
-    resourceLabels: ['fqdn', 'instance'],
-    burnRatePeriod: '5m',
-    query: |||
-      (
-        avg_over_time(pgbouncer_pools_server_active_connections{user="gitlab", database="gitlabhq_production_sidekiq", %(selector)s}[%(rangeInterval)s]) +
-        avg_over_time(pgbouncer_pools_server_testing_connections{user="gitlab", database="gitlabhq_production_sidekiq", %(selector)s}[%(rangeInterval)s]) +
-        avg_over_time(pgbouncer_pools_server_used_connections{user="gitlab", database="gitlabhq_production_sidekiq", %(selector)s}[%(rangeInterval)s]) +
-        avg_over_time(pgbouncer_pools_server_login_connections{user="gitlab", database="gitlabhq_production_sidekiq", %(selector)s}[%(rangeInterval)s])
-      )
-      / on(%(aggregationLabels)s) group_left()
-      sum by (%(aggregationLabels)s) (
-        avg_over_time(pgbouncer_databases_pool_size{name="gitlabhq_production_sidekiq", %(selector)s}[%(rangeInterval)s])
-      )
-    |||,
-    slos: {
-      soft: 0.90,
-      hard: 0.95,
-      alertTriggerDuration: '10m',
-    },
-  }),
+  // Note that this pool is currently not used, but may be added in the medium
+  // term
+  // pgbouncer_async_replica_pool: pgbouncerAsyncPool('patroni', 'replica'),
+  pgbouncer_sync_primary_pool: pgbouncerSyncPool('pgbouncer', 'primary'),
+  pgbouncer_sync_replica_pool: pgbouncerSyncPool('patroni', 'replica'),
 
   pgbouncer_single_core: resourceSaturationPoint({
     title: 'PGBouncer Single Core per Node',
     severity: 's2',
+    horizontallyScalable: true, // Add more pgbouncer processes (for patroni) or nodes (for pgbouncer)
     appliesTo: ['pgbouncer', 'patroni'],
     description: |||
-      PGBouncer single core saturation per node.
+      PGBouncer single core CPU utilization per node.
 
       PGBouncer is a single threaded application. Under high volumes this resource may become saturated,
       and additional pgbouncer nodes may need to be provisioned.
@@ -547,49 +658,17 @@ local diskPerformanceSensitiveServices = ['patroni', 'gitaly', 'nfs'];
     },
   }),
 
-  pgbouncer_sync_pool: resourceSaturationPoint({
-    title: 'Postgres Sync (Web/API) Connection Pool Saturation per Node',
-    severity: 's3',
-    appliesTo: ['pgbouncer', 'patroni'],
-    description: |||
-      Postgres sync connection pool saturation per database node.
-
-      Web/api/git applications use a separate connection pool to sidekiq.
-
-      When this resource is saturated, web/api database operations may queue, leading to unicorn/puma saturation and 503 errors in the web.
-    |||,
-    grafana_dashboard_uid: 'sat_pgbouncer_sync_pool',
-    resourceLabels: ['fqdn', 'instance'],
-    burnRatePeriod: '5m',
-    query: |||
-      (
-        avg_over_time(pgbouncer_pools_server_active_connections{user="gitlab", database="gitlabhq_production", %(selector)s}[%(rangeInterval)s]) +
-        avg_over_time(pgbouncer_pools_server_testing_connections{user="gitlab", database="gitlabhq_production", %(selector)s}[%(rangeInterval)s]) +
-        avg_over_time(pgbouncer_pools_server_used_connections{user="gitlab", database="gitlabhq_production", %(selector)s}[%(rangeInterval)s]) +
-        avg_over_time(pgbouncer_pools_server_login_connections{user="gitlab", database="gitlabhq_production", %(selector)s}[%(rangeInterval)s])
-      )
-      / on(%(aggregationLabels)s) group_left()
-      sum by (%(aggregationLabels)s) (
-        avg_over_time(pgbouncer_databases_pool_size{name="gitlabhq_production", %(selector)s}[%(rangeInterval)s])
-      )
-    |||,
-    slos: {
-      soft: 0.85,
-      hard: 0.95,
-      alertTriggerDuration: '10m',
-    },
-  }),
-
   private_runners: resourceSaturationPoint({
-    title: 'Private Runners Saturation',
+    title: 'Private Runners utilization',
     severity: 's4',
+    horizontallyScalable: true,
     appliesTo: ['ci-runners'],
     description: |||
-      Private runners saturation per instance.
+      Private runners utilization per instance.
 
       Each runner manager has a maximum number of runners that it can coordinate at any single moment.
 
-      When this metric is exceeded, new CI jobs will queue. When this occurs we should consider adding more runner managers,
+      When this metric is saturated, new CI jobs will queue. When this occurs we should consider adding more runner managers,
       or scaling the runner managers vertically and increasing their maximum runner capacity.
     |||,
     grafana_dashboard_uid: 'sat_private_runners',
@@ -611,11 +690,12 @@ local diskPerformanceSensitiveServices = ['patroni', 'gitaly', 'nfs'];
   }),
 
   redis_clients: resourceSaturationPoint({
-    title: 'Redis Client Saturation per Node',
+    title: 'Redis Client Utilization per Node',
     severity: 's3',
+    horizontallyScalable: false,
     appliesTo: ['redis', 'redis-sidekiq', 'redis-cache'],
     description: |||
-      Redis client saturation per node.
+      Redis client utilization per node.
 
       A redis server has a maximum number of clients that can connect. When this resource is saturated,
       new clients may fail to connect.
@@ -636,11 +716,12 @@ local diskPerformanceSensitiveServices = ['patroni', 'gitaly', 'nfs'];
   }),
 
   redis_memory: resourceSaturationPoint({
-    title: 'Redis Memory Saturation per Node',
+    title: 'Redis Memory Utilization per Node',
     severity: 's2',
+    horizontallyScalable: false,
     appliesTo: ['redis', 'redis-sidekiq', 'redis-cache'],
     description: |||
-      Redis memory saturation per node.
+      Redis memory utilization per node.
 
       As Redis memory saturates node memory, the likelyhood of OOM kills, possibly to the Redis process,
       become more likely.
@@ -668,15 +749,16 @@ local diskPerformanceSensitiveServices = ['patroni', 'gitaly', 'nfs'];
   }),
 
   shared_runners: resourceSaturationPoint({
-    title: 'Shared Runner Saturation',
+    title: 'Shared Runner utilization',
     severity: 's4',
+    horizontallyScalable: true,
     appliesTo: ['ci-runners'],
     description: |||
-      Shared runner saturation per instance.
+      Shared runner utilization per instance.
 
       Each runner manager has a maximum number of runners that it can coordinate at any single moment.
 
-      When this metric is exceeded, new CI jobs will queue. When this occurs we should consider adding more runner managers,
+      When this metric is saturated, new CI jobs will queue. When this occurs we should consider adding more runner managers,
       or scaling the runner managers vertically and increasing their maximum runner capacity.
     |||,
     grafana_dashboard_uid: 'sat_shared_runners',
@@ -698,15 +780,16 @@ local diskPerformanceSensitiveServices = ['patroni', 'gitaly', 'nfs'];
   }),
 
   shared_runners_gitlab: resourceSaturationPoint({
-    title: 'Shared Runner GitLab Saturation',
+    title: 'Shared Runner GitLab Utilization',
     severity: 's4',
+    horizontallyScalable: true,
     appliesTo: ['ci-runners'],
     description: |||
-      Shared runners saturation per instance.
+      Shared runners utilization per instance.
 
       Each runner manager has a maximum number of runners that it can coordinate at any single moment.
 
-      When this metric is exceeded, new CI jobs will queue. When this occurs we should consider adding more runner managers,
+      When this metric is saturated, new CI jobs will queue. When this occurs we should consider adding more runner managers,
       or scaling the runner managers vertically and increasing their maximum runner capacity.
     |||,
     grafana_dashboard_uid: 'sat_shared_runners_gitlab',
@@ -726,13 +809,14 @@ local diskPerformanceSensitiveServices = ['patroni', 'gitaly', 'nfs'];
   }),
 
   sidekiq_shard_workers: resourceSaturationPoint({
-    title: 'Sidekiq Worker Saturation per shard',
+    title: 'Sidekiq Worker Utilization per shard',
     severity: 's4',
+    horizontallyScalable: true,
     appliesTo: ['sidekiq'],
     description: |||
-      Sidekiq worker saturation per shard.
+      Sidekiq worker utilization per shard.
 
-      This metric represents the percentage of available threads*workers that are utilized actively processing jobs.
+      This metric represents the percentage of available threads*workers that are actively processing jobs.
 
       When this metric is saturated, new Sidekiq jobs will queue. Depending on whether or not the jobs are latency sensitive,
       this could impact user experience.
@@ -750,7 +834,7 @@ local diskPerformanceSensitiveServices = ['patroni', 'gitaly', 'nfs'];
       )
     |||,
     queryFormatConfig: {
-      throttledSidekiqShardsRegexp: std.join('|', throttledSidekiqShards)
+      throttledSidekiqShardsRegexp: std.join('|', sidekiqHelpers.shards.listFiltered(function(shard) shard.urgency == 'throttled')),
     },
     slos: {
       soft: 0.85,
@@ -760,11 +844,12 @@ local diskPerformanceSensitiveServices = ['patroni', 'gitaly', 'nfs'];
   }),
 
   single_node_cpu: resourceSaturationPoint({
-    title: 'Average CPU Saturation per Node',
+    title: 'Average CPU Utilization per Node',
     severity: 's4',
+    horizontallyScalable: true,
     appliesTo: { allExcept: ['waf', 'console-node', 'deploy-node'] },
     description: |||
-      Average CPU per Node.
+      Average CPU utilization per Node.
 
       If average CPU is satured, it may indicate that a fleet is in need to horizontal or vertical scaling. It may also indicate
       imbalances in load in a fleet.
@@ -778,12 +863,14 @@ local diskPerformanceSensitiveServices = ['patroni', 'gitaly', 'nfs'];
     slos: {
       soft: 0.90,
       hard: 0.95,
+      alertTriggerDuration: '10m',
     },
   }),
 
   single_node_puma_workers: resourceSaturationPoint({
     title: 'Puma Worker Saturation per Node',
     severity: 's2',
+    horizontallyScalable: true,
     appliesTo: ['web', 'api', 'git', 'sidekiq'],
     description: |||
       Puma thread utilization per node.
@@ -808,11 +895,12 @@ local diskPerformanceSensitiveServices = ['patroni', 'gitaly', 'nfs'];
   }),
 
   redis_primary_cpu: resourceSaturationPoint({
-    title: 'Redis Primary CPU Saturation per Node',
+    title: 'Redis Primary CPU Utilization per Node',
     severity: 's1',
+    horizontallyScalable: false,
     appliesTo: ['redis', 'redis-sidekiq', 'redis-cache'],
     description: |||
-      Redis Primary CPU Saturation per Node.
+      Redis Primary CPU Utilization per Node.
 
       Redis is single-threaded. A single Redis server is only able to scale as far as a single CPU on a single host.
       When the primary Redis service is saturated, major slowdowns should be expected across the application, so avoid if at all
@@ -836,11 +924,12 @@ local diskPerformanceSensitiveServices = ['patroni', 'gitaly', 'nfs'];
   }),
 
   redis_secondary_cpu: resourceSaturationPoint({
-    title: 'Redis Secondary CPU Saturation per Node',
+    title: 'Redis Secondary CPU Utilization per Node',
     severity: 's4',
+    horizontallyScalable: true,
     appliesTo: ['redis', 'redis-sidekiq', 'redis-cache'],
     description: |||
-      Redis Secondary CPU Saturation per Node.
+      Redis Secondary CPU Utilization per Node.
 
       Redis is single-threaded. A single Redis server is only able to scale as far as a single CPU on a single host.
       CPU saturation on a secondary is not as serious as critical as saturation on a primary, but could lead to
@@ -863,12 +952,38 @@ local diskPerformanceSensitiveServices = ['patroni', 'gitaly', 'nfs'];
     },
   }),
 
+  # conntrack saturation may have been the cause of
+  # https://gitlab.com/gitlab-com/gl-infra/production/-/issues/2381
+  # see https://gitlab.com/gitlab-com/gl-infra/production/-/issues/2381#note_376917724
+  # for more details
+  nf_conntrack_entries: resourceSaturationPoint({
+    title: 'conntrack Entries per Node',
+    severity: 's3',
+    horizontallyScalable: true,
+    appliesTo: { allExcept: ['waf'] },
+    description: |||
+      Netfilter connection tracking table utilization per node.
+
+      When saturated, new connection attempts (incoming SYN packets) are dropped with no reply, leaving clients to slowly retry (and typically fail again) over the next several seconds.  When packets are being dropped due to this condition, kernel will log the event as: "nf_conntrack: table full, dropping packet".
+    |||,
+    grafana_dashboard_uid: 'sat_conntrack',
+    resourceLabels: ['fqdn', 'instance'], // Use both labels until https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10299 arrives
+    query: |||
+      max_over_time(node_nf_conntrack_entries{%(selector)s}[%(rangeInterval)s])
+      /
+      node_nf_conntrack_entries_limit{%(selector)s}
+    |||,
+    slos: {
+      soft: 0.95,
+      hard: 0.98,
+    },
+  }),
 
   // TODO: figure out how k8s management falls into out environment/tier/type/stage/shard labelling
   // taxonomy. These saturation metrics rely on this in order to work
   // See https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10249 for more details
   // pod_count: resourceSaturationPoint({
-  //   title: 'Pod Count Saturation',
+  //   title: 'Pod Count Utilization',
   //   description: |||
   //     This measures the HPA that manages our Deployments. If we are running low on
   //     ability to scale up by hitting our maximum HPA Pod allowance, we will have
@@ -886,6 +1001,139 @@ local diskPerformanceSensitiveServices = ['patroni', 'gitaly', 'nfs'];
   //     hard: 0.90,
   //   },
   // }),
+
+  // TODO: figure out how k8s management falls into out environment/tier/type/stage/shard labelling
+  // taxonomy. These saturation metrics rely on this in order to work
+  // See https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10249 for more details
+  kube_hpa_instances: resourceSaturationPoint({
+    title: 'HPA Instances',
+    severity: 's2',
+    horizontallyScalable: true,
+    appliesTo: ['kube'],
+    description: |||
+      This measures the HPA that manages our Deployments. If we are running low on
+      ability to scale up by hitting our maximum HPA Pod allowance, we will have
+      fully saturated this service.
+    |||,
+    runbook: 'docs/uncategorized/kubernetes.md#hpascalecapability',
+    grafana_dashboard_uid: 'sat_kube_hpa_instances',
+    resourceLabels: ['hpa'],
+    // TODO: keep these resources with the services they're managing, once https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10249 is resolved
+    // do not apply static labels
+    staticLabels: {
+      type: 'kube',
+      tier: 'inf',
+      stage: 'main',
+    },
+    // TODO: remove label-replace ugliness once https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10249 is resolved
+    // TODO: add %(selector)s once https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10249 is resolved
+    query: |||
+      label_replace(
+        label_replace(
+          kube_hpa_status_desired_replicas{%(selector)s, hpa!~"gitlab-sidekiq-(%(ignored_sidekiq_shards)s)-v1"}
+          /
+          kube_hpa_spec_max_replicas,
+          "stage", "cny", "hpa", "gitlab-cny-.*"
+        ),
+        "type", "$1", "hpa", "gitlab-(?:cny-)?(\\w+)"
+      )
+    |||,
+    queryFormatConfig: {
+      // Ignore non-autoscaled shards and throttled shards
+      ignored_sidekiq_shards: std.join('|', sidekiqHelpers.shards.listFiltered(function(shard) !shard.autoScaling || shard.urgency == 'throttled')),
+    },
+    slos: {
+      soft: 0.95,
+      hard: 0.90,
+      alertTriggerDuration: '25m',
+    },
+  }),
+
+  kube_persistent_volume_claim_inodes: resourceSaturationPoint({
+    title: 'Kube Persistent Volume Claim inode Utilisation',
+    severity: 's2',
+    horizontallyScalable: true,
+    appliesTo: ['kube'],
+    description: |||
+      inode utilization on persistent volume claims.
+    |||,
+    runbook: 'docs/uncategorized/kubernetes.md',
+    grafana_dashboard_uid: 'sat_kube_pvc_inodes',
+    resourceLabels: ['persistentvolumeclaim'],
+    // TODO: keep these resources with the services they're managing, once https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10249 is resolved
+    // do not apply static labels
+    staticLabels: {
+      type: 'kube',
+      tier: 'inf',
+      stage: 'main',
+    },
+    query: |||
+      kubelet_volume_stats_inodes_used
+      /
+      kubelet_volume_stats_inodes
+    |||,
+    slos: {
+      soft: 0.85,
+      hard: 0.90,
+    },
+  }),
+
+  kube_persistent_volume_claim_disk_space: resourceSaturationPoint({
+    title: 'Kube Persistent Volume Claim inode Utilisation',
+    severity: 's2',
+    horizontallyScalable: true,
+    appliesTo: ['kube'],
+    description: |||
+      disk space utilization on persistent volume claims.
+    |||,
+    runbook: 'docs/uncategorized/kubernetes.md',
+    grafana_dashboard_uid: 'sat_kube_pvc_disk_space',
+    resourceLabels: ['persistentvolumeclaim'],
+    // TODO: keep these resources with the services they're managing, once https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10249 is resolved
+    // do not apply static labels
+    staticLabels: {
+      type: 'kube',
+      tier: 'inf',
+      stage: 'main',
+    },
+    query: |||
+      kubelet_volume_stats_used_bytes
+      /
+      kubelet_volume_stats_capacity_bytes
+    |||,
+    slos: {
+      soft: 0.85,
+      hard: 0.90,
+    },
+  }),
+
+  praefect_cloudsql_cpu: resourceSaturationPoint({
+    title: 'Average CPU Utilization',
+    severity: 's4',
+    horizontallyScalable: true,
+    appliesTo: ['monitoring'],
+    description: |||
+      Average CPU utilization.
+
+      See https://cloud.google.com/monitoring/api/metrics_gcp#gcp-cloudsql for
+      more details
+    |||,
+    grafana_dashboard_uid: 'sat_praefect_cloudsql_cpu',
+    resourceLabels: ['database_id'],
+    burnRatePeriod: '5m',
+    staticLabels: {
+      type: 'praefect',
+      tier: 'stor',
+      stage: 'main',
+    },
+    query: |||
+      avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_cpu_utilization{database_id=~".+:praefect-db.+", %(selector)s}[%(rangeInterval)s])
+    |||,
+    slos: {
+      soft: 0.80,
+      hard: 0.90,
+    },
+  }),
 
   // Add some helpers. Note that these use :: to "hide" then:
   listApplicableServicesFor(type)::

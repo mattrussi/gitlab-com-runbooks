@@ -1,49 +1,45 @@
-local metricsCatalog = import '../lib/metrics.libsonnet';
-local histogramApdex = metricsCatalog.histogramApdex;
+local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local rateMetric = metricsCatalog.rateMetric;
 local customApdex = metricsCatalog.customApdex;
 local combined = metricsCatalog.combined;
 local gitalyHelpers = import './lib/gitaly-helpers.libsonnet';
 
-{
+metricsCatalog.serviceDefinition({
   type: 'gitaly',
   tier: 'stor',
   // Since each Gitaly node is a SPOF for a subset of repositories, we need to ensure that
   // we have node-level monitoring on these hosts
   nodeLevelMonitoring: true,
   monitoringThresholds: {
-    apdexRatio: 0.95,
-    errorRatio: 0.001,
-    alertTriggerDuration: 'long',
-  },
-  eventBasedSLOTargets: {
-    errorRatio: 0.999,  // 99.9% of Gitaly requests should succeed, over multiple window periods
+    apdexScore: 0.999,
+    errorRatio: 0.9995,
   },
   serviceDependencies: {
     gitaly: true,
   },
   components: {
     goserver: {
-      apdex: histogramApdex(
-        histogram='grpc_server_handling_seconds_bucket',
-        selector='job="gitaly", grpc_type="unary", grpc_method!~"%(gitalyApdexIgnoredMethodsRegexp)s"' % { gitalyApdexIgnoredMethodsRegexp: gitalyHelpers.gitalyApdexIgnoredMethodsRegexp },
-        satisfiedThreshold=0.5,
-        toleratedThreshold=1
-      ),
+      local baseSelector = { job: 'gitaly' },
+      apdex: gitalyHelpers.grpcServiceApdex(baseSelector),
 
       requestRate: rateMetric(
         counter='gitaly_service_client_requests_total',
-        selector='job="gitaly"'
+        selector=baseSelector
       ),
 
       errorRate: combined([
         rateMetric(
           counter='gitaly_service_client_requests_total',
-          selector='job="gitaly", grpc_code!~"^(OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded)$"'
+          selector=baseSelector {
+            grpc_code: { nre: 'OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded' },
+          }
         ),
         rateMetric(
           counter='gitaly_service_client_requests_total',
-          selector='job="gitaly", grpc_code="DeadlineExceeded", deadline_type!="limited"'
+          selector=baseSelector {
+            grpc_code: 'DeadlineExceeded',
+            deadline_type: { ne: 'limited' },
+          }
         ),
       ]),
 
@@ -51,33 +47,36 @@ local gitalyHelpers = import './lib/gitaly-helpers.libsonnet';
     },
 
     gitalyruby: {
+      local baseSelector = { job: 'gitaly' },
+
       // Uses the goservers histogram, but only selects client unary calls: this is an effective proxy
       // go gitaly-ruby client call times
       apdex: customApdex(
         rateQueryTemplate=|||
           rate(grpc_server_handling_seconds_bucket{%(selector)s}[%(rangeInterval)s]) and on(grpc_service,grpc_method) grpc_client_handled_total{job="gitaly"}
         |||,
-        selector='job="gitaly",grpc_type="unary"',
+        selector=baseSelector {
+          grpc_type: 'unary',
+          grpc_service: { ne: 'gitaly.OperationService' },
+          grpc_method: { nre: gitalyHelpers.gitalyApdexIgnoredMethodsRegexp },
+        },
         satisfiedThreshold=10,
         toleratedThreshold=30
       ),
 
-      /*
-      TODO: Uncomment these lines once Gitaly Ruby observability issues are solved.
-      See https://gitlab.com/gitlab-org/gitaly/issues/2467
       requestRate: rateMetric(
         counter='grpc_client_handled_total',
-        selector='job="gitaly"'
+        selector=baseSelector
       ),
 
       errorRate: rateMetric(
         counter='grpc_client_handled_total',
-        selector='job="gitaly", grpc_code!~"^(OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition)$"'
+        selector=baseSelector {
+          grpc_code: { nre: 'OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded' },
+        }
       ),
-      */
 
       significantLabels: ['fqdn'],
     },
   },
-
-}
+})

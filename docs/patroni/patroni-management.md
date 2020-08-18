@@ -1,6 +1,17 @@
 # Patroni
 
+## About
+
+Here the link to the video of the [runbook simulation](https://youtu.be/QZO7ba_8_CA).
+
+[Patroni](https://github.com/zalando/patroni) is an open source project for providing automatic HA solution for PostgreSQL databases. It also has centralized configuration managment capabilities and it fully integrated with [Consul](https://www.consul.io/) to provide _consensus_, and dns services. Each patroni instance have a `consul` agent, who act as a proxy for the GitLab Consul fleet.
+
+Patroni binaries runs in the same host as the PostgreSQL database. In a sense, Patroni can be seen as a way of manage a PostgreSQL instance. Configuration and general operations of PostgreSQL instances is now achieved by using the corresponding Patroni command to do so.
+
+
 ## Scaling the cluster up
+
+Here the link to the video of the [runbook simulation](https://youtu.be/smTxWP9q3EQ).
 
 1. Increase the node count of `patroni` in [terraform][environment-variables].
 1. Apply the terraform and wait for chef to converge.
@@ -9,10 +20,12 @@
    cluster member.
 1. `systemctl enable patroni && systemctl start patroni` (for some reason we do
    not automate this yet, but this operation is rare).
-1. Follow the patroni logs. A pg_basebackup will take several hours, after which
+1. Follow the patroni logs. Current implementation for bootstraping new nodes implies taking a `pg_basebackup` from the leader. This will take several hours, after which
    point streaming replication will begin. Silence alerts as necessary.
 
 ## Scaling the cluster down
+
+Here the link to the video of the [runbook simulation](https://youtu.be/smTxWP9q3EQ).
 
 1. Using this method, we can only delete the highest index of patroni. Make sure
    it isn't the primary!
@@ -21,11 +34,33 @@
    cluster down: follow the [replica maintenance](#replica-maintenance)
    instructions.
 1. Decrease the node count of `patroni` in [terraform][environment-variables].
-   Carefully read the plan and apply the terraform.
+   Review the terraform plan carefully, and then apply it.
 
-### Checking status
 
-`patroni` service is managed with systemd, so you can check the service status with `systemctl status patroni` and logs with `journalctl -u patroni` (it should be enabled and running).
+
+## Patroni basics
+
+### Patroni configuration file
+Is located at `/var/opt/gitlab/patroni/patroni.yml`. It contains all the directives to configure patroni and PostgreSQL instance too. It is divided in sections, and the main ones are:
+- `scope`: Cluster name
+- `name`: Name of this instance
+- `consul`: Location of the consul agent (usually localhost)
+- `bootstrap`: Directives for configure and deploy new instances
+- `postgresql`: General configuration settings for PostgreSQL 
+
+### Checking service status
+
+### Patroni configuration file
+Is located at `/var/opt/gitlab/patroni/patroni.yml`. It contains all the directives to configure patroni and PostgreSQL instances. It's divided in sections, the main ones being:
+- `scope`: Cluster name
+- `name`: Name of this instance
+- `consul`: Location of the consul agent (usually localhost)
+- `bootstrap`: Directives to configure and deploy new instances
+- `postgresql`: General configuration settings for PostgreSQL 
+
+### Checking service status
+
+The `patroni` service is managed with systemd, so you can check the service status with `systemctl status patroni` and logs with `journalctl -u patroni` (it should be enabled and running).
 
 Run `gitlab-patronictl list` to check the state of the patroni cluster, you should see the new node join the cluster and go through the following states:
 - creating replica
@@ -37,26 +72,123 @@ the node will also be added to the consul DNS entry, you can verify that with:
 $ dig @127.0.0.1 -p8600 +short replica.patroni.service.consul.
 ```
 
-At the moment of writing the database is 4TB big and it takes ~3h for a new node to catch up.
+At the moment of writing the database is ~7TB big and it takes ~4h for a new node to catch up.
 
 ## Cluster information
 
-Run `gitlab-patronictl list` on any Patroni member to list all the cluster members and their statuses.
+Run `gitlab-patronictl list` on any Patroni member to list all the cluster members and their statuses. There can be only a single `Leader` for the cluster.
+
+A leader change is an important event. When unexpected, this leader change is call a `FailOver`. Under controled circumstances (i.e. when upgrading), this is call a `SwitchOver`, and Patroni has a special command for doing this.
 
 ```
 patroni-01-db-gstg $ gitlab-patronictl list
-
-+---------------+------------------------------------------------+---------------+--------+---------+-----------+
-|    Cluster    |                     Member                     |      Host     |  Role  |  State  | Lag in MB |
-+---------------+------------------------------------------------+---------------+--------+---------+-----------+
-| pg-ha-cluster | patroni-01-db-gstg.c.gitlab-staging-1.internal | 10.224.29.101 | Leader | running |         0 |
-| pg-ha-cluster | patroni-02-db-gstg.c.gitlab-staging-1.internal | 10.224.29.102 |        | running |         0 |
-| pg-ha-cluster | patroni-03-db-gstg.c.gitlab-staging-1.internal | 10.224.29.103 |        | running |         0 |
-| pg-ha-cluster | patroni-04-db-gstg.c.gitlab-staging-1.internal | 10.224.29.104 |        | running |         0 |
-| pg-ha-cluster | patroni-05-db-gstg.c.gitlab-staging-1.internal | 10.224.29.105 |        | running |         0 |
-| pg-ha-cluster | patroni-06-db-gstg.c.gitlab-staging-1.internal | 10.224.29.106 |        | running |         0 |
-+---------------+------------------------------------------------+---------------+--------+---------+-----------+
++-----------------+------------------------------------------------+---------------+--------+---------+----+-----------+
+|     Cluster     |                     Member                     |      Host     |  Role  |  State  | TL | Lag in MB |
++-----------------+------------------------------------------------+---------------+--------+---------+----+-----------+
+| pg11-ha-cluster | patroni-01-db-gstg.c.gitlab-staging-1.internal | 10.224.29.101 |        | running |  8 |           |
+| pg11-ha-cluster | patroni-02-db-gstg.c.gitlab-staging-1.internal | 10.224.29.102 |        | running |  8 |           |
+| pg11-ha-cluster | patroni-04-db-gstg.c.gitlab-staging-1.internal | 10.224.29.104 | Leader | running |  8 |         0 |
+| pg11-ha-cluster | patroni-05-db-gstg.c.gitlab-staging-1.internal | 10.224.29.105 |        | running |  8 |         0 |
+| pg11-ha-cluster | patroni-06-db-gstg.c.gitlab-staging-1.internal | 10.224.29.106 |        | running |  8 |         0 |
++-----------------+------------------------------------------------+---------------+--------+---------+----+-----------+
 ```
+
+You may want to use it in conjunction with `watch`, to automatically refresh the command each 30 seconds or so:
+
++-----------------+------------------------------------------------+---------------+--------+---------+----+-----------+
+|     Cluster     |                     Member                     |      Host     |  Role  |  State  | TL | Lag in MB |
++-----------------+------------------------------------------------+---------------+--------+---------+----+-----------+
+| pg11-ha-cluster | patroni-01-db-gstg.c.gitlab-staging-1.internal | 10.224.29.101 |        | running |  8 |           |
+| pg11-ha-cluster | patroni-02-db-gstg.c.gitlab-staging-1.internal | 10.224.29.102 |        | running |  8 |           |
+| pg11-ha-cluster | patroni-04-db-gstg.c.gitlab-staging-1.internal | 10.224.29.104 | Leader | running |  8 |         0 |
+| pg11-ha-cluster | patroni-05-db-gstg.c.gitlab-staging-1.internal | 10.224.29.105 |        | running |  8 |         0 |
+| pg11-ha-cluster | patroni-06-db-gstg.c.gitlab-staging-1.internal | 10.224.29.106 |        | running |  8 |         0 |
++-----------------+------------------------------------------------+---------------+--------+---------+----+-----------+
+
+```
+
+You may want to use it in conjunction with `watch`, to automatically refresh the command each 30 seconds or so:
+
+```
+watch -n 30 'gitlab-patronictl list'
+```
+
+
+Under certain circumnstances, you may see an extra column labeled `Pending restart`, and look like this:
+
+```
++-----------------+-----------------------------------------------+--------------+--------+---------+---+-----------+----------------+
+|     Cluster     |                     Member                    |      Host    |  Role  |  State  | TL| Lag in MB | Pending restart|
++-----------------+-----------------------------------------------+--------------+--------+---------+---+-----------+----------------+
+| pg11-ha-cluster | patroni-01-db-gstg.c.gitlab-staging-1.internal| 10.224.29.101|        | running |  8|           |                |
+| pg11-ha-cluster | patroni-02-db-gstg.c.gitlab-staging-1.internal| 10.224.29.102|        | running |  8|           |        *       |
+| pg11-ha-cluster | patroni-04-db-gstg.c.gitlab-staging-1.internal| 10.224.29.104| Leader | running |  8|         0 |        *       |
+| pg11-ha-cluster | patroni-05-db-gstg.c.gitlab-staging-1.internal| 10.224.29.105|        | running |  8|         0 |                |
+| pg11-ha-cluster | patroni-06-db-gstg.c.gitlab-staging-1.internal| 10.224.29.106|        | running |  8|         0 |                |
++-----------------+-----------------------------------------------+--------------+--------+---------+---+-----------+----------------+
+
+
+```
+watch -n 30 'gitlab-patronictl list'
+```
+
+
+Under certain circumnstances, you may see an extra column labeled `Pending restart`, which looks like this:
+
+```
++-----------------+-----------------------------------------------+--------------+--------+---------+---+-----------+----------------+
+|     Cluster     |                     Member                    |      Host    |  Role  |  State  | TL| Lag in MB | Pending restart|
++-----------------+-----------------------------------------------+--------------+--------+---------+---+-----------+----------------+
+| pg11-ha-cluster | patroni-01-db-gstg.c.gitlab-staging-1.internal| 10.224.29.101|        | running |  8|           |                |
+| pg11-ha-cluster | patroni-02-db-gstg.c.gitlab-staging-1.internal| 10.224.29.102|        | running |  8|           |        *       |
+| pg11-ha-cluster | patroni-04-db-gstg.c.gitlab-staging-1.internal| 10.224.29.104| Leader | running |  8|         0 |        *       |
+| pg11-ha-cluster | patroni-05-db-gstg.c.gitlab-staging-1.internal| 10.224.29.105|        | running |  8|         0 |                |
+| pg11-ha-cluster | patroni-06-db-gstg.c.gitlab-staging-1.internal| 10.224.29.106|        | running |  8|         0 |                |
++-----------------+-----------------------------------------------+--------------+--------+---------+---+-----------+----------------+
+
+
+```
+
+In the previous example, members `patroni-02-db-gstg.c.gitlab-staging-1.internal` and `patroni-03-db-gstg.c.gitlab-staging-1.internal` are waiting for a restart in order to apply some configuration changes.
+
+If you need to know what those _Pending restart_ settings are, execute the following in the instance you need to verify:
+
+```sh
+sudo gitlab-psql -c "select name, setting,  short_desc, sourcefile, sourceline  from pg_settings where pending_restart"
+
+```
+
+And a possible result:
+```
+      name       | setting |                     short_desc                     |               sourcefile                | sourceline 
+-----------------+---------+----------------------------------------------------+-----------------------------------------+------------
+ max_connections | 500     | Sets the maximum number of concurrent connections. | /etc/postgresql/11/main/postgresql.conf |         64
+
+```
+
+### Restarting a node
+To force the restart of a specific member you can execute (on any node)
+`sudo gitlab-patronictl restart pg11-ha-cluster <member>`
+
+In the example above, members `patroni-02-db-gstg.c.gitlab-staging-1.internal` and `patroni-03-db-gstg.c.gitlab-staging-1.internal` are waiting for a restart in order to apply some configuration changes.
+
+If you need to know wich those _Pending restart_ settings are, just need to execute
+
+```sh
+sudo gitlab-psql -c "select name, setting,  short_desc, sourcefile, sourceline  from pg_settings where pending_restart"
+
+```
+
+And a possible result:
+```
+      name       | setting |                     short_desc                     |               sourcefile                | sourceline 
+-----------------+---------+----------------------------------------------------+-----------------------------------------+------------
+ max_connections | 500     | Sets the maximum number of concurrent connections. | /etc/postgresql/11/main/postgresql.conf |         64
+
+```
+
+### Restarting a node
+`sudo gitlab-patronictl restart pg11-ha-cluster <member>`
 
 ## Bootstrapping modes
 
@@ -79,7 +211,7 @@ node['gitlab-patroni']['patroni']['config']['bootstrap']['dcs']['standby_cluster
 }
 ```
 
-You'd need an extra setup on the remote master side:
+You'd need some extra setup on the remote master side:
 
 1. Create a replication user with a username/password matching the ones you have in `node['gitlab-patroni']['patroni']['users']['replication']`
     * `CREATE USER "gitlab-replicator" LOGIN REPLICATION PASSWORD 'hunter1';`
@@ -116,7 +248,7 @@ While nothing prevents you from specifying them under `node['gitlab-patroni']['p
 thinking that the cluster needs a restart (you may see a "Pending Restart" column when running `gitlab-patronictl list`).
 
 When parameters are updated in Chef and propagated across the cluster, Patroni updates `postgresql.conf` then signals PostgreSQL to reload the configuration.
-A restart may still be needed for some parameters, which you can see hints of in the logs, so you may need to run `gitlab-patronictl restart pg-ha-cluster MEMBER_NAME`.
+A restart may still be needed for some parameters, which you can see hints of in the logs, so you may need to run `gitlab-patronictl restart pg11-ha-cluster MEMBER_NAME`.
 
 ## Pausing Patroni
 
@@ -132,6 +264,10 @@ Quoting [Patroni docs][pause-docs]:
 Pausing the cluster disables automatic failover. This is desirable when doing tasks such as upgrading Consul,
 or during a maintenance of the whole Patroni cluster.
 
+Note that disabling automatic failover can have undesirable side-effects, for example, if the primary PostgreSQL went down
+for any reason while Patroni is paused, there will be no primary for the clients to write to, effectively resulting in 500
+errors for the end-user, so plan ahead carefully.
+
 It is important to disable `chef-client` before pausing the cluster,
 otherwise a regular `chef-client` can revert the pause status.
 
@@ -139,7 +275,7 @@ To pause the cluster, run the following commands:
 
 ```
 workstation        $ knife ssh roles:<env>-base-db-patroni 'sudo chef-client-disable "Database maintenance issue prod#xyz"'
-patroni-01-db-gstg $ sudo gitlab-patronictl pause --wait pg-ha-cluster
+patroni-01-db-gstg $ sudo gitlab-patronictl pause --wait pg11-ha-cluster
 ```
 
 You can verify the result of pausing the cluster by running:
@@ -151,7 +287,7 @@ patroni-01-db-gstg $ sudo gitlab-patronictl list | grep 'Maintenance mode'
 Run these commands to unpause/resume the cluster:
 
 ```
-patroni-01-db-gstg $ sudo gitlab-patronictl resume --wait pg-ha-cluster
+patroni-01-db-gstg $ sudo gitlab-patronictl resume --wait pg11-ha-cluster
 workstation        $ knife ssh roles:<env>-base-db-patroni 'sudo chef-client-enable'
 ```
 
@@ -162,7 +298,7 @@ to check if Postgres postmaster didn't start when the system clock was skewed
 for any reason:
 
 ```
-patroni-01-db-gstg # postmaster=/var/opt/gitlab/postgresql/data/postmaster.pid;\
+patroni-01-db-gstg # postmaster=/var/opt/gitlab/postgresql/data11/postmaster.pid;\
   postpid=$(cat $postmaster | head -1);\
   posttime=$(cat $postmaster | tail -n +3 | head -1);\
   btime=$(cat /proc/stat | grep btime | cut -d' ' -f2);\
@@ -185,7 +321,7 @@ section above) may be employed to restart Patroni without disturbing PostgreSQL,
 it's not recommended to go this route as converging Chef can undo the pausing action,
 which can introduce unintended results.
 
-Instead, we recommend, one at a time, putting replicas into maintenance
+Instead, we recommend, one at a time, putting replicas into maintenance mode
 (see relevant section below), upgrading Patroni through Chef, then putting replicas
 out of maintenance. For the primary, we initiate a switchover to one of the upgraded
 replicas then we upgraded it once it's been demoted.
@@ -208,7 +344,7 @@ $ OPS_API_TOKEN=secure-token MIGRATION_ENV=gprd-or-gstg ansible-playbook -i prod
 ## Replica Maintenance
 
 If clients are connecting to replicas by means of [service
-discovery][service-discovery] (as opposed to hard-coded list of hosts), you can
+discovery][service-discovery] (as opposed to hard-coded list of hosts), you can temporarly
 remove a replica from the list of hosts used by the clients by tagging it as not
 suitable for failing over (`nofailover: true`) and load balancing (`noloadbalance: true`).
 
@@ -236,15 +372,14 @@ suitable for failing over (`nofailover: true`) and load balancing (`noloadbalanc
    command to track number of client connections:
 
    ```
-   while true; do sudo pgb-console -c 'SHOW CLIENTS;' | grep gitlabhq_production | cut -d '|' -f 2 | awk '{$1=$1};1' | grep -v gitlab-monitor | wc -l; sleep 5; done
+   while true; do for c in /usr/local/bin/pgb-console*; do sudo $c -c 'SHOW CLIENTS;';  done  | grep gitlabhq_production | cut -d '|' -f 2 | awk '{$1=$1};1' | grep -v gitlab-monitor | wc -l; sleep 5; done
    ```
 
    Note: Usually there are three pgbouncer instances running
-   on a single replica, so make sure they are all drained. Replace `pgb-console` above
-   with `pgb-console-1` and `pgb-console-2`.
+   on a single replica.
 
 You can see an example of taking a node out of service [in this
-issue](https://gitlab.com/gitlab-com/gl-infra/production/issues/1061).
+issue](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/2195).
 
 ### Permanently marking a replica as in maintenance
 
@@ -308,7 +443,7 @@ Wait until all client connections are drained from the replica (it depends on th
 use this command to track number of client connections:
 
 ```
-patroni-01-db-gstg $ while true; do sudo pgb-console -c 'SHOW CLIENTS;' | grep gitlabhq_production | cut -d '|' -f 2 | awk '{$1=$1};1' | grep -v gitlab-monitor | wc -l; sleep 5; done
+patroni-01-db-gstg $ while true; do for c in /usr/local/bin/pgb-console*; do sudo $c -c 'SHOW CLIENTS;';  done  | grep gitlabhq_production | cut -d '|' -f 2 | awk '{$1=$1};1' | grep -v gitlab-monitor | wc -l; sleep 5; done
 ```
 
 After you're done with the maintenance, disable Consul service maintenance and verify it:
@@ -331,7 +466,7 @@ and entering values when prompted.
 
 ### Problems with replication after failover
 
-Sometimes, after a failover, the old primary's timeline will have continued and
+Sometimes, after a failover, the old primary's [timeline](https://www.postgresql.org/docs/11/continuous-archiving.html#BACKUP-TIMELINES) will have continued and
 diverged from the new primary's timeline. Patroni will automatically attempt to
 `pg_rewind` the timeline of the old primary to a point at which it can begin
 replicating from the new primary, becoming healthy again. We have occasionally
@@ -341,7 +476,7 @@ If for whatever reason you can't get the node to a healthy state and don't mind
 waiting several hours, you can reinitialise the node:
 
 ```
-root@pg$ gitlab-patronictl reinit pg-ha-cluster patroni-XX-db-gprd.c.gitlab-production.internal
+root@pg$ gitlab-patronictl reinit pg11-ha-cluster patroni-XX-db-gprd.c.gitlab-production.internal
 ```
 
 This command can be run from any member of the patroni cluster. It wipes the
@@ -415,8 +550,8 @@ to destroy and re-create the node.
 
 ```
 chef-repo $ knife ssh roles:gstg-base-db-patroni 'sudo systemctl stop patroni'
-chef-repo $ knife ssh roles:gstg-base-db-patroni 'sudo rm -rf /var/opt/gitlab/postgresql/data' # TAKE CARE!
-chef-repo $ knife ssh roles:gstg-base-db-patroni 'consul kv delete -recurse service/pg-ha-cluster'
+chef-repo $ knife ssh roles:gstg-base-db-patroni 'sudo rm -rf /var/opt/gitlab/postgresql/data11' # TAKE CARE!
+chef-repo $ knife ssh roles:gstg-base-db-patroni 'consul kv delete -recurse service/pg11-ha-cluster'
 chef-repo $ knife ssh roles:gstg-base-db-patroni 'sudo systemctl start patroni'
 ```
 
@@ -429,3 +564,23 @@ by running `sudo chef-client` across the cluster.
 [patroni-is-postmaster]: https://github.com/zalando/patroni/blob/13c88e8b7a27b68e5c554d83d14e5cf640871ccc/patroni/postmaster.py#L55-L58
 [upgrade-patroni-ansible]: https://gitlab.com/gitlab-com/gl-infra/ansible-migrations/blob/master/production-1172
 [chef-repo]: https://ops.gitlab.net/gitlab-cookbooks/chef-repo/
+
+
+## Auditing patroni 
+
+Patroni holds a log file under `/var/log/gitlab/patroni/patroni.log` where patroni activity and messages can be found:
+```
+gerardoherzig@patroni-03-db-gstg.c.gitlab-staging-1.internal:~$ sudo tail /var/log/gitlab/patroni/patroni.log
+2020-06-26_19:08:55 patroni-03-db-gstg patroni[14726]:  2020-06-26 19:08:55,397 INFO: no action.  i am a secondary and i am following a leader
+2020-06-26_19:09:05 patroni-03-db-gstg patroni[14726]:  2020-06-26 19:09:05,278 INFO: Lock owner: patroni-04-db-gstg.c.gitlab-staging-1.internal; I am patroni-03-db-gstg.c.gitlab-staging-1.internal
+2020-06-26_19:09:05 patroni-03-db-gstg patroni[14726]:  2020-06-26 19:09:05,278 INFO: does not have lock
+2020-06-26_19:09:05 patroni-03-db-gstg patroni[14726]:  2020-06-26 19:09:05,288 INFO: no action.  i am a secondary and i am following a leader
+2020-06-26_19:09:15 patroni-03-db-gstg patroni[14726]:  2020-06-26 19:09:15,279 INFO: Lock owner: patroni-04-db-gstg.c.gitlab-staging-1.internal; I am patroni-03-db-gstg.c.gitlab-staging-1.internal
+2020-06-26_19:09:15 patroni-03-db-gstg patroni[14726]:  2020-06-26 19:09:15,279 INFO: does not have lock
+2020-06-26_19:09:15 patroni-03-db-gstg patroni[14726]:  2020-06-26 19:09:15,290 INFO: no action.  i am a secondary and i am following a leader
+2020-06-26_19:09:25 patroni-03-db-gstg patroni[14726]:  2020-06-26 19:09:25,394 INFO: Lock owner: patroni-04-db-gstg.c.gitlab-staging-1.internal; I am patroni-03-db-gstg.c.gitlab-staging-1.internal
+2020-06-26_19:09:25 patroni-03-db-gstg patroni[14726]:  2020-06-26 19:09:25,394 INFO: does not have lock
+2020-06-26_19:09:25 patroni-03-db-gstg patroni[14726]:  2020-06-26 19:09:25,405 INFO: no action.  i am a secondary and i am following a leader
+```
+
+This is mainly useful when investigating an event like an unexpected leader change (failover)

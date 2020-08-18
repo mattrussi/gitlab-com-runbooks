@@ -1,17 +1,17 @@
-local basic = import 'basic.libsonnet';
+local basic = import 'grafana/basic.libsonnet';
 local capacityPlanning = import 'capacity_planning.libsonnet';
-local colors = import 'colors.libsonnet';
-local commonAnnotations = import 'common_annotations.libsonnet';
-local grafana = import 'grafonnet/grafana.libsonnet';
+local colors = import 'grafana/colors.libsonnet';
+local commonAnnotations = import 'grafana/common_annotations.libsonnet';
+local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local keyMetrics = import 'key_metrics.libsonnet';
-local layout = import 'layout.libsonnet';
+local layout = import 'grafana/layout.libsonnet';
 local nodeMetrics = import 'node_metrics.libsonnet';
 local platformLinks = import 'platform_links.libsonnet';
-local promQuery = import 'prom_query.libsonnet';
+local promQuery = import 'grafana/prom_query.libsonnet';
 local railsCommon = import 'rails_common_graphs.libsonnet';
-local seriesOverrides = import 'series_overrides.libsonnet';
+local seriesOverrides = import 'grafana/series_overrides.libsonnet';
 local serviceCatalog = import 'service_catalog.libsonnet';
-local templates = import 'templates.libsonnet';
+local templates = import 'grafana/templates.libsonnet';
 local workhorseCommon = import 'workhorse_common_graphs.libsonnet';
 local dashboard = grafana.dashboard;
 local row = grafana.row;
@@ -24,6 +24,46 @@ local text = grafana.text;
 basic.dashboard(
   'GitLab Dashboards',
   tags=['general']
+)
+.addPanel(
+  text.new(
+    mode='markdown',
+    content=|||
+      # GitLab Public Dashboards
+
+      Welcome to the GitLab public dashboard. GitLab [values transparency](https://about.gitlab.com/handbook/values/#transparency),
+      so we maintain a public copy of our internal dashboards.
+
+      Due to privacy reasons and more strict query limitations not all dashboards may work correctly.
+    |||
+  ),
+  gridPos={
+    x: 0,
+    y: 0,
+    w: 12,
+    h: 5,
+  }
+)
+.addPanel(
+  text.new(
+    mode='markdown',
+    content=|||
+      # Useful Links
+
+      * **[Platform Triage Dashboard](/d/general-triage/general-platform-triage?orgId=1)** technical overview for all services.
+      * **[Capacity Planning Dashboard](/d/general-capacity-planning/general-capacity-planning?orgId=1)** resources currently saturated, or at risk of becoming saturated.
+      * **[Service SLA Dashboard](/d/general-slas/general-slas?orgId=1)** service SLA tracking.
+      * **[Source repository for these dashboards](https://gitlab.com/gitlab-com/runbooks/tree/master/dashboards)** - interested in how we use [grafonnet-lib](https://github.com/grafana/grafonnet-lib)
+        to build our dashboards?
+
+    |||
+  ),
+  gridPos={
+    x: 12,
+    y: 0,
+    w: 12,
+    h: 5,
+  }
 )
 .addPanel(
   row.new(title='FRONTEND SERVICES'),
@@ -62,47 +102,5 @@ basic.dashboard(
     y: 2000,
     w: 24,
     h: 1,
-  }
-)
-.addPanel(
-  text.new(
-    title='Welcome',
-    mode='markdown',
-    content=|||
-      # GitLab Public Dashboards
-
-      Welcome to the GitLab public dashboard. GitLab [values transparency](https://about.gitlab.com/handbook/values/#transparency),
-      so we maintain a public copy of our internal dashboards.
-
-      Due to privacy reasons and more strict query limitations not all dashboards may work correctly.
-    |||
-  ),
-  gridPos={
-    x: 0,
-    y: 2001,
-    w: 18,
-    h: 12,
-  }
-)
-.addPanel(
-  text.new(
-    title='Welcome',
-    mode='markdown',
-    content=|||
-      # Useful Links
-
-      * **[Platform Triage Dashboard](/d/general-triage/general-platform-triage?orgId=1)** technical overview for all services.
-      * **[Capacity Planning Dashboard](/d/general-capacity-planning/general-capacity-planning?orgId=1)** resources currently saturated, or at risk of becoming saturated.
-      * **[Service SLA Dashboard](/d/general-slas/general-slas?orgId=1)** service SLA tracking.
-      * **[Source repository for these dashboards](https://gitlab.com/gitlab-com/runbooks/tree/master/dashboards)** - interested in how we use [grafonnet-lib](https://github.com/grafana/grafonnet-lib)
-        to build our dashboards?
-
-    |||
-  ),
-  gridPos={
-    x: 18,
-    y: 2001,
-    w: 6,
-    h: 12,
   }
 )

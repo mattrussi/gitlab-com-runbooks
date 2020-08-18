@@ -1,15 +1,16 @@
-local alerts = import 'lib/alerts.libsonnet';
+local alerts = import 'alerts/alerts.libsonnet';
+local stableIds = import 'stable-ids/stable-ids.libsonnet';
 
 local rules = [
-  # ------------------------------------------------------------------------------
-  # Latency alerts
-  # ------------------------------------------------------------------------------
+  // ------------------------------------------------------------------------------
+  // Latency alerts
+  // ------------------------------------------------------------------------------
 
-  # Warn: Latency SLO not being met, default alert_trigger_duration (short, 5m)
-  # Note: we ignore `cny` stage for this alert, since if both cny and main stage are firing, we
-  # only care about the main stage alert Alternatively, we have the bad canary alerts
-  # specifically for canary stage
-  # DEPRECATED in favour of multiwindow, multiburn-rate alerts
+  // Warn: Latency SLO not being met, default alert_trigger_duration (short, 5m)
+  // Note: we ignore `cny` stage for this alert, since if both cny and main stage are firing, we
+  // only care about the main stage alert Alternatively, we have the bad canary alerts
+  // specifically for canary stage
+  // DEPRECATED in favour of multiwindow, multiburn-rate alerts
   {
     alert: 'service_apdex_slo_out_of_bounds_lower_5m',
     expr: |||
@@ -26,11 +27,8 @@ local rules = [
     'for': '5m',
     labels: {
       rules_domain: 'general',
-      metric: 'gitlab_service_apdex:ratio',
       severity: 's2',
       slo_alert: 'yes',
-      period: '5m',
-      bound: 'lower',
       pager: 'pagerduty',
       alert_type: 'symptom',
       deprecated: 'yes',
@@ -43,7 +41,7 @@ local rules = [
       runbook: 'docs/{{ $labels.type }}/service-{{ $labels.type }}.md',
       title: 'The `{{ $labels.type }}` service (`{{ $labels.stage }}` stage) has a apdex score (latency) below SLO',
       grafana_dashboard_id: 'general-service/service-platform-metrics',
-      grafana_panel_id: '7',
+      grafana_panel_id: stableIds.hashStableId('apdex-ratio'),
       grafana_variables: 'environment,type,stage',
       grafana_min_zoom_hours: '6',
       link1_title: 'Definition',
@@ -53,11 +51,11 @@ local rules = [
     },
   },
 
-  # Warn: Latency SLO not being met, long alert_trigger_duration (15m)
-  # Note: we ignore `cny` stage for this alert, since if both cny and main stage are firing, we
-  # only care about the main stage alert Alternatively, we have the bad canary alerts
-  # specifically for canary stage
-  # DEPRECATED in favour of multiwindow, multiburn-rate alerts
+  // Warn: Latency SLO not being met, long alert_trigger_duration (15m)
+  // Note: we ignore `cny` stage for this alert, since if both cny and main stage are firing, we
+  // only care about the main stage alert Alternatively, we have the bad canary alerts
+  // specifically for canary stage
+  // DEPRECATED in favour of multiwindow, multiburn-rate alerts
   {
     alert: 'service_apdex_slo_out_of_bounds_lower_15m',
     expr: |||
@@ -74,11 +72,8 @@ local rules = [
     'for': '15m',
     labels: {
       rules_domain: 'general',
-      metric: 'gitlab_service_apdex:ratio',
       severity: 's2',
       slo_alert: 'yes',
-      period: '15m',
-      bound: 'lower',
       pager: 'pagerduty',
       alert_type: 'symptom',
       deprecated: 'yes',
@@ -91,7 +86,7 @@ local rules = [
       runbook: 'docs/{{ $labels.type }}/service-{{ $labels.type }}.md',
       title: 'The `{{ $labels.type }}` service (`{{ $labels.stage }}` stage) has a apdex score (latency) below SLO',
       grafana_dashboard_id: 'general-service/service-platform-metrics',
-      grafana_panel_id: '7',
+      grafana_panel_id: stableIds.hashStableId('apdex-ratio'),
       grafana_variables: 'environment,type,stage',
       grafana_min_zoom_hours: '6',
       link1_title: 'Definition',
@@ -101,15 +96,15 @@ local rules = [
     },
   },
 
-  # ------------------------------------------------------------------------------
-  # Error Rate alerts
-  # ------------------------------------------------------------------------------
+  // ------------------------------------------------------------------------------
+  // Error Rate alerts
+  // ------------------------------------------------------------------------------
 
-  # Warn: Error ratio SLO not being met, default alert_trigger_duration (short, 5m)
-  # Note: we ignore `cny` stage for this alert, since if both cny and main stage are firing, we
-  # only care about the main stage alert Alternatively, we have the bad canary alerts
-  # specifically for canary stage
-  # DEPRECATED in favour of multiwindow, multiburn-rate alerts
+  // Warn: Error ratio SLO not being met, default alert_trigger_duration (short, 5m)
+  // Note: we ignore `cny` stage for this alert, since if both cny and main stage are firing, we
+  // only care about the main stage alert Alternatively, we have the bad canary alerts
+  // specifically for canary stage
+  // DEPRECATED in favour of multiwindow, multiburn-rate alerts
   {
     alert: 'service_error_ratio_slo_out_of_bounds_upper_5m',
     expr: |||
@@ -126,11 +121,8 @@ local rules = [
     'for': '5m',
     labels: {
       rules_domain: 'general',
-      metric: 'gitlab_service_errors:ratio',
       severity: 's2',
       slo_alert: 'yes',
-      period: '5m',
-      bound: 'upper',
       alert_type: 'symptom',
       pager: 'pagerduty',
       deprecated: 'yes',
@@ -143,7 +135,7 @@ local rules = [
       runbook: 'docs/{{ $labels.type }}/service-{{ $labels.type }}.md',
       title: 'The `{{ $labels.type }}` service (`{{ $labels.stage }}` stage) has an error-ratio exceeding SLO',
       grafana_dashboard_id: 'general-service/service-platform-metrics',
-      grafana_panel_id: '8',
+      grafana_panel_id: stableIds.hashStableId('error-ratio'),
       grafana_variables: 'environment,type,stage',
       grafana_min_zoom_hours: '6',
       link1_title: 'Definition',
@@ -153,11 +145,11 @@ local rules = [
     },
   },
 
-  # Warn: Error ratio SLO not being met, long alert_trigger_duration (15m)
-  # Note: we ignore `cny` stage for this alert, since if both cny and main stage are firing, we
-  # only care about the main stage alert Alternatively, we have the bad canary alerts
-  # specifically for canary stage
-  # DEPRECATED in favour of multiwindow, multiburn-rate alerts
+  // Warn: Error ratio SLO not being met, long alert_trigger_duration (15m)
+  // Note: we ignore `cny` stage for this alert, since if both cny and main stage are firing, we
+  // only care about the main stage alert Alternatively, we have the bad canary alerts
+  // specifically for canary stage
+  // DEPRECATED in favour of multiwindow, multiburn-rate alerts
   {
     alert: 'service_error_ratio_slo_out_of_bounds_upper_15m',
     expr: |||
@@ -174,11 +166,8 @@ local rules = [
     'for': '15m',
     labels: {
       rules_domain: 'general',
-      metric: 'gitlab_service_errors:ratio',
       severity: 's2',
       slo_alert: 'yes',
-      period: '15m',
-      bound: 'upper',
       alert_type: 'symptom',
       pager: 'pagerduty',
       deprecated: 'yes',
@@ -191,7 +180,7 @@ local rules = [
       runbook: 'docs/{{ $labels.type }}/service-{{ $labels.type }}.md',
       title: 'The `{{ $labels.type }}` service (`{{ $labels.stage }}` stage) has an error-ratio exceeding SLO',
       grafana_dashboard_id: 'general-service/service-platform-metrics',
-      grafana_panel_id: '8',
+      grafana_panel_id: stableIds.hashStableId('error-ratio'),
       grafana_variables: 'environment,type,stage',
       grafana_min_zoom_hours: '6',
       link1_title: 'Definition',
@@ -201,59 +190,13 @@ local rules = [
     },
   },
 
-  # ------------------------------------------------------------------------------
-  # Multiwindow/Multiburn Error Rate Monitoring for COMPONENTS.
-  # ------------------------------------------------------------------------------
-  # The error rate SLO target for a component is not being met.
-  {
-    alert: 'component_error_ratio_burn_rate_slo_out_of_bounds_upper',
-    expr: |||
-      (
-          gitlab_component_errors:ratio_1h{monitor="global"} > on(tier, type) group_left() (14.4*(avg(slo:max:events:gitlab_service_errors:ratio{monitor="global"}) by (tier, type)))
-      and
-        gitlab_component_errors:ratio_5m{monitor="global"} > on(tier, type) group_left()  (14.4*(avg(slo:max:events:gitlab_service_errors:ratio{monitor="global"}) by (tier, type)))
-      )
-      or
-      (
-          gitlab_component_errors:ratio_6h{monitor="global"} > on(tier, type) group_left() (6*(avg(slo:max:events:gitlab_service_errors:ratio{monitor="global"}) by (tier, type)))
-      and
-        gitlab_component_errors:ratio_30m{monitor="global"} > on(tier, type) group_left() (6*(avg(slo:max:events:gitlab_service_errors:ratio{monitor="global"}) by (tier, type)))
-      )
-    |||,
-    'for': '2m',
-    labels: {
-      rules_domain: 'general',
-      metric: 'gitlab_component_errors:ratio_1h',
-      severity: 's2',
-      slo_alert: 'yes',
-      period: '2m',
-      bound: 'upper',
-      alert_type: 'symptom',
-      pager: 'pagerduty',
-    },
-    annotations: {
-      title: 'The `{{ $labels.type }}` service, `{{ $labels.component }}` component, `{{ $labels.stage }}` stage, has an error burn-rate exceeding SLO',
-      description: |||
-        The `{{ $labels.type }}` service, `{{ $labels.component }}` component, `{{ $labels.stage }}` stage has an error burn-rate outside of SLO
-        The error-burn rate for this service is outside of SLO over multiple windows. Currently the error-rate is {{ $value | humanizePercentage }}%.
-      |||,
-      runbook: 'docs/{{ $labels.type }}/service-{{ $labels.type }}.md',
-      grafana_dashboard_id: 'alerts-component_multiburn_error/alerts-component-multi-window-multi-burn-rate-out-of-slo',
-      grafana_panel_id: '4',
-      grafana_variables: 'environment,type,stage,component',
-      grafana_min_zoom_hours: '6',
-      link1_title: 'Definition',
-      link1_url: 'https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-error-rate.md',
-      promql_template_1: 'gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}',
-    },
-  },
-  ################################################
-  # Operation Rate: how many operations is this service handling per second?
-  ################################################
-  # ------------------------------------
-  # Upper bound thresholds exceeded
-  # ------------------------------------
-  # Warn: Operation rate above 2 sigma
+  //###############################################
+  // Operation Rate: how many operations is this service handling per second?
+  //###############################################
+  // ------------------------------------
+  // Upper bound thresholds exceeded
+  // ------------------------------------
+  // Warn: Operation rate above 2 sigma
   {
     alert: 'service_ops_out_of_bounds_upper_5m',
     expr: |||
@@ -271,11 +214,7 @@ local rules = [
     'for': '5m',
     labels: {
       rules_domain: 'general',
-      metric: 'gitlab_service_ops:rate',
       severity: 's4',
-      period: '5m',
-      bound: 'upper',
-      threshold_sigma: '3',
       alert_type: 'cause',
     },
     annotations: {
@@ -286,7 +225,7 @@ local rules = [
       runbook: 'docs/{{ $labels.type }}/service-{{ $labels.type }}.md',
       title: 'Anomaly detection: The `{{ $labels.type }}` service (`{{ $labels.stage }}` stage) is receiving more requests than normal',
       grafana_dashboard_id: 'general-service/service-platform-metrics',
-      grafana_panel_id: '9',
+      grafana_panel_id: stableIds.hashStableId('request-rate'),
       grafana_variables: 'environment,type,stage',
       grafana_min_zoom_hours: '12',
       link1_title: 'Definition',
@@ -295,10 +234,10 @@ local rules = [
       promql_template_2: 'gitlab_component_ops:rate{environment="$environment", type="$type", stage="$stage"}',
     },
   },
-  # ------------------------------------
-  # Lower bound thresholds exceeded
-  # ------------------------------------
-  # Warn: Operation rate below 2 sigma
+  // ------------------------------------
+  // Lower bound thresholds exceeded
+  // ------------------------------------
+  // Warn: Operation rate below 2 sigma
   {
     alert: 'service_ops_out_of_bounds_lower_5m',
     expr: |||
@@ -316,11 +255,7 @@ local rules = [
     'for': '5m',
     labels: {
       rules_domain: 'general',
-      metric: 'gitlab_service_ops:rate',
       severity: 's4',
-      period: '5m',
-      bound: 'lower',
-      threshold_sigma: '3',
       alert_type: 'cause',
     },
     annotations: {
@@ -331,7 +266,7 @@ local rules = [
       runbook: 'docs/{{ $labels.type }}/service-{{ $labels.type }}.md',
       title: 'Anomaly detection: The `{{ $labels.type }}` service (`{{ $labels.stage }}` stage) is receiving fewer requests than normal',
       grafana_dashboard_id: 'general-service/service-platform-metrics',
-      grafana_panel_id: '9',
+      grafana_panel_id: stableIds.hashStableId('request-rate'),
       grafana_variables: 'environment,type,stage',
       grafana_min_zoom_hours: '12',
       link1_title: 'Definition',
@@ -341,18 +276,18 @@ local rules = [
     },
   },
 
-  ################################################
-  # Bad canary: we are experiencing errors or latency issues in
-  # canary, but not in production. This probably indicates that
-  # we have a dud canary
-  #
-  # When traffic volume to the canary is below 1% of the
-  # traffic to the main production stage, the bad-canary
-  # alerts will not fire. This avoids low-traffic
-  # random noise alerts.
-  #
-  ################################################
-  # DEPRECATED in favour of multiwindow, multiburn-rate alerts
+  //###############################################
+  // Bad canary: we are experiencing errors or latency issues in
+  // canary, but not in production. This probably indicates that
+  // we have a dud canary
+  //
+  // When traffic volume to the canary is below 1% of the
+  // traffic to the main production stage, the bad-canary
+  // alerts will not fire. This avoids low-traffic
+  // random noise alerts.
+  //
+  //###############################################
+  // DEPRECATED in favour of multiwindow, multiburn-rate alerts
   {
     alert: 'service_cny_apdex_slo_out_of_bounds_lower_5m',
     expr: |||
@@ -388,11 +323,8 @@ local rules = [
     labels: {
       rules_domain: 'general',
       canary_warning: 'yes',
-      metric: 'gitlab_service_apdex:ratio',
       severity: 's2',
       slo_alert: 'yes',
-      period: '5m',
-      bound: 'lower',
       pager: 'pagerduty',
       alert_type: 'symptom',
       deprecated: 'yes',
@@ -407,7 +339,7 @@ local rules = [
       runbook: 'docs/{{ $labels.type }}/service-{{ $labels.type }}.md',
       title: 'Bad canary? The `cny` stage of  the `{{ $labels.type }}` service has a apdex score (latency) below SLO, but the main stage does not.',
       grafana_dashboard_id: 'general-service-stages/general-service-platform-metrics-stages',
-      grafana_panel_id: '2',
+      grafana_panel_id: stableIds.hashStableId('apdex-ratio'),
       grafana_variables: 'environment,type',
       grafana_min_zoom_hours: '6',
       link1_title: 'Definition',
@@ -451,11 +383,8 @@ local rules = [
     labels: {
       rules_domain: 'general',
       canary_warning: 'yes',
-      metric: 'gitlab_service_errors:ratio',
       severity: 's2',
       slo_alert: 'yes',
-      period: '5m',
-      bound: 'upper',
       pager: 'pagerduty',
       alert_type: 'symptom',
       deprecated: 'yes',
@@ -469,7 +398,7 @@ local rules = [
       runbook: 'docs/{{ $labels.type }}/service-{{ $labels.type }}.md',
       title: 'Bad canary? The `cny` stage of  the `{{ $labels.type }}` service has an error-ratio exceeding SLO, but the main stage does not.',
       grafana_dashboard_id: 'general-service-stages/general-service-platform-metrics-stages',
-      grafana_panel_id: '3',
+      grafana_panel_id: stableIds.hashStableId('error-ratio'),
       grafana_variables: 'environment,type',
       grafana_min_zoom_hours: '6',
       link1_title: 'Definition',
@@ -487,7 +416,7 @@ local rules = [
       {
         name: 'slo_alerts.rules',
         partial_response_strategy: 'warn',
-        rules: [alerts.processAlertRule(r) for r in rules]
+        rules: [alerts.processAlertRule(r) for r in rules],
       },
     ],
   }),

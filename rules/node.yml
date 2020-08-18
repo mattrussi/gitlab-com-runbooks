@@ -58,8 +58,6 @@ groups:
       severity: s1
       alert_type: cause
     annotations:
-      description: CPU use percent is extremely high on {{ if $labels.fqdn }}{{ $labels.fqdn
-        }}{{ else }}{{ $labels.instance }}{{ end }} for the past 2 hours.
       runbook: docs/uncategorized/node_cpu.md
       title: CPU use percent is extremely high on {{ if $labels.fqdn }}{{ $labels.fqdn
         }}{{ else }}{{ $labels.instance }}{{ end }} for the past 2 hours.
@@ -150,52 +148,6 @@ groups:
       instance: '{{ $labels.instance }}'
       device: '{{ $labels.device }}'
       mountpoint: '{{ $labels.mountpoint }}'
-  - alert: LowDiskSpace
-    expr: instance:node_filesystem_avail:ratio{fstype=~"(ext.|xfs|zfs)",job="node"} * 100 <= 10
-    for: 10m
-    labels:
-      severity: s3
-      alert_type: cause
-    annotations:
-      title: 'Less than 10% disk space left'
-      description: >
-        Consider sshing into the instance and removing old logs, clean
-        temp files, or remove old apt packages with `apt-get autoremove`
-      runbook: docs/monitoring/filesystem_alerts.md
-      value: '{{ $value | humanize }}%'
-      device: '{{ $labels.device }}%'
-      mount_point: '{{ $labels.mountpoint }}%'
-  - alert: ExtremelyLowDiskSpace
-    expr: instance:node_filesystem_avail:ratio{fstype=~"(ext.|xfs|zfs)",job="node"} * 100 <= 5
-    for: 5m
-    labels:
-      pager: pagerduty
-      severity: s2
-      alert_type: cause
-    annotations:
-      title: '5% disk space left'
-      description: "There's only 5% disk space left"
-      runbook: docs/monitoring/filesystem_alerts.md
-      value: '{{ $value | humanize }}%'
-      device: '{{ $labels.device }}%'
-      mount_point: '{{ $labels.mountpoint }}%'
-  - alert: HighInodeUsage
-    expr: node_filesystem_files_free{fstype=~"(ext.|xfs)",job="node"} / node_filesystem_files{fstype=~"(ext.|xfs)",job="node"}
-      * 100 <= 20
-    for: 15m
-    labels:
-      pager: pagerduty
-      severity: s1
-      alert_type: cause
-    annotations:
-      title: "High number of inode usage"
-      description: >
-        "Consider ssh'ing into the instance and removing files or clean
-        temp files"
-      runbook: docs/monitoring/filesystem_alerts_inodes.md
-      value: '{{ $value | printf "%.2f" }}%'
-      device: '{{ $labels.device }}%'
-      mount_point: '{{ $labels.mountpoint }}%'
 
 - name: Misc rules
   rules:
@@ -205,7 +157,6 @@ groups:
     expr: changes(instance:up:count{environment=~"g?prd"}[5m]) >= 1
     for: 15m
     labels:
-      channel: production
       severity: s4
       alert_type: cause
     annotations:
@@ -216,7 +167,6 @@ groups:
     expr: instance:node_memory_available:ratio * 100 < 5 and rate(node_vmstat_pgmajfault[1m]) > 1000
     for: 15m
     labels:
-      channel: production
       severity: s4
       alert_type: cause
     annotations:
@@ -229,7 +179,6 @@ groups:
     expr: rate(syslog_rcu_sched_stalls_total[1m]) > 0 or rate(rcu_sched_stalls_total[1m]) > 0
     for: 10m
     labels:
-      channel: production
       severity: s4
       alert_type: cause
     annotations:

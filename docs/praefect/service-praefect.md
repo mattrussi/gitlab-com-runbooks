@@ -1,10 +1,7 @@
 <!-- MARKER: do not edit this section directly. Edit services/service-catalog.yml then run scripts/generate-docs -->
 #  Praefect Service
-
-* **Responsible Teams**:
-  * [gitaly](https://about.gitlab.com/handbook/engineering/dev-backend/gitaly/). **Slack Channel**: [#gitaly](https://gitlab.slack.com/archives/gitaly)
-* **General Triage Dashboard**: https://dashboards.gitlab.net/d/26q8nTzZz/service-platform-metrics?from=now-6h&to=now&var-prometheus_ds=Global&var-environment=gprd&var-type=praefect&orgId=1
-* **Alerts**: https://alerts.gprd.gitlab.net/#/alerts?filter=%7Btype%3D%22praefect%22%2C%20tier%3D%22stor%22%7D
+* [Service Overview](https://dashboards.gitlab.net/d/praefect-main/praefect-overview)
+* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22praefect%22%2C%20tier%3D%22stor%22%7D
 * **Label**: gitlab-com/gl-infra/production~"Service:Praefect"
 
 ## Logging
@@ -17,7 +14,9 @@
 * [praefect-database.md](praefect-database.md)
 * [praefect-error-rate.md](praefect-error-rate.md)
 * [praefect-file-storages.md](praefect-file-storages.md)
+* [praefect-replication.md](praefect-replication.md)
 * [praefect-startup.md](praefect-startup.md)
+* [../version/gitaly-version-mismatch.md](../version/gitaly-version-mismatch.md)
 <!-- END_MARKER -->
 
 ## How To...

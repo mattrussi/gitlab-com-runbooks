@@ -1,10 +1,10 @@
-local grafana = import 'grafonnet/grafana.libsonnet';
+local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local dashboard = grafana.dashboard;
 
-local commonAnnotations = import 'common_annotations.libsonnet';
-local templates = import 'templates.libsonnet';
-local layout = import 'layout.libsonnet';
-local basic = import 'basic.libsonnet';
+local commonAnnotations = import 'grafana/common_annotations.libsonnet';
+local templates = import 'grafana/templates.libsonnet';
+local layout = import 'grafana/layout.libsonnet';
+local basic = import 'grafana/basic.libsonnet';
 local heatmapPanel = grafana.heatmapPanel;
 local row = grafana.row;
 local text = grafana.text;
@@ -28,8 +28,8 @@ basic.dashboard(
     basic.timeseries(
       title='Error messages',
       description='Stackdriver Errors',
-      query='sum(stackdriver_gke_container_logging_googleapis_com_log_entry_count{severity="ERROR", cluster_name="$cluster", namespace_id="plantuml"}) by (container_name) / 60',
-      legendFormat='{{ container_name }}',
+      query='sum(stackdriver_gke_container_logging_googleapis_com_log_entry_count{severity="ERROR", cluster_name="$cluster", namespace_id="plantuml"}) by (container) / 60',
+      legendFormat='{{ container }}',
       format='ops',
       interval='1m',
       intervalFactor=2,
@@ -40,8 +40,8 @@ basic.dashboard(
     basic.timeseries(
       title='Info messages',
       description='Stackdriver Errors',
-      query='sum(stackdriver_gke_container_logging_googleapis_com_log_entry_count{severity="INFO", cluster_name="$cluster", namespace_id="plantuml"}) by (container_name) / 60',
-      legendFormat='{{ container_name }}',
+      query='sum(stackdriver_gke_container_logging_googleapis_com_log_entry_count{severity="INFO", cluster_name="$cluster", namespace_id="plantuml"}) by (container) / 60',
+      legendFormat='{{ container }}',
       format='ops',
       interval='1m',
       intervalFactor=2,

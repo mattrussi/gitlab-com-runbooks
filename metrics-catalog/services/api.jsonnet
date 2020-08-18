@@ -1,16 +1,25 @@
-local metricsCatalog = import '../lib/metrics.libsonnet';
+local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 
-{
+metricsCatalog.serviceDefinition({
   type: 'api',
   tier: 'sv',
-  monitoringThresholds: {
+  contractualThresholds: {
     apdexRatio: 0.9,
     errorRatio: 0.005,
   },
-  eventBasedSLOTargets: {
-    errorRatio: 0.999,  // 99.9% of API requests should succeed, over multiple window periods
+  monitoringThresholds: {
+    apdexScore: 0.995,
+    errorRatio: 0.999,
+  },
+  // Deployment thresholds are optional, and when they are specified, they are
+  // measured against the same multi-burn-rates as the monitoring indicators.
+  // When a service is in violation, deployments may be blocked or may be rolled
+  // back.
+  deploymentThresholds: {
+    apdexScore: 0.995,
+    errorRatio: 0.999,
   },
   serviceDependencies: {
     gitaly: true,
@@ -47,24 +56,25 @@ local rateMetric = metricsCatalog.rateMetric;
     },
 
     puma: {
+      local baseSelector = { job: 'gitlab-rails', type: 'api' },
       apdex: histogramApdex(
         histogram='http_request_duration_seconds_bucket',
-        selector='job="gitlab-rails", type="api"',
+        selector=baseSelector,
         satisfiedThreshold=1,
         toleratedThreshold=10
       ),
 
       requestRate: rateMetric(
         counter='http_request_duration_seconds_count',
-        selector='job="gitlab-rails", type="api"'
+        selector=baseSelector
       ),
 
       errorRate: rateMetric(
         counter='http_request_duration_seconds_count',
-        selector='job="gitlab-rails", type="api", status=~"5.."'
+        selector=baseSelector { status: { re: '5..' } }
       ),
 
       significantLabels: ['fqdn'],
     },
   },
-}
+})

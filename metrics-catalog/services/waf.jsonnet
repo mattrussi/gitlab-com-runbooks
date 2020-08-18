@@ -1,14 +1,11 @@
-local metricsCatalog = import '../lib/metrics.libsonnet';
+local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 
-{
+metricsCatalog.serviceDefinition({
   type: 'waf',
   tier: 'lb',
   monitoringThresholds: {
-    errorRatio: 0.001,
-  },
-  eventBasedSLOTargets: {
     errorRatio: 0.999,
   },
   serviceDependencies: {
@@ -47,4 +44,4 @@ local rateMetric = metricsCatalog.rateMetric;
       significantLabels: [],
     },
   },
-}
+})

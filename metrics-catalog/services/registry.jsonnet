@@ -1,13 +1,17 @@
-local metricsCatalog = import '../lib/metrics.libsonnet';
+local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 
-{
+metricsCatalog.serviceDefinition({
   type: 'registry',
   tier: 'sv',
-  monitoringThresholds: {
+  contractualThresholds: {
     apdexRatio: 0.9,
     errorRatio: 0.005,
+  },
+  monitoringThresholds: {
+    apdexScore: 0.995,
+    errorRatio: 0.9999,
   },
   serviceDependencies: {
     api: true,
@@ -89,4 +93,4 @@ local rateMetric = metricsCatalog.rateMetric;
       significantLabels: ['action'],
     },
   },
-}
+})

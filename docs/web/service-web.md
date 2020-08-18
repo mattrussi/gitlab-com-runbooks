@@ -1,16 +1,7 @@
 <!-- MARKER: do not edit this section directly. Edit services/service-catalog.yml then run scripts/generate-docs -->
 #  Web Service
-
-* **Responsible Teams**:
-  * [create](https://about.gitlab.com/handbook/engineering/dev-backend/create/). **Slack Channel**: [#g_create](https://gitlab.slack.com/archives/g_create)
-  * [distribution](https://about.gitlab.com/handbook/engineering/dev-backend/distribution/). **Slack Channel**: [#distribution](https://gitlab.slack.com/archives/distribution)
-  * [geo](https://about.gitlab.com/handbook/engineering/dev-backend/geo/). **Slack Channel**: [#g_geo](https://gitlab.slack.com/archives/g_geo)
-  * [gitaly](https://about.gitlab.com/handbook/engineering/dev-backend/gitaly/). **Slack Channel**: [#gitaly](https://gitlab.slack.com/archives/gitaly)
-  * [gitter](https://about.gitlab.com/handbook/engineering/dev-backend/gitter/). **Slack Channel**: [#g_gitaly](https://gitlab.slack.com/archives/g_gitaly)
-  * [manage](https://about.gitlab.com/handbook/engineering/dev-backend/manage/). **Slack Channel**: [#g_manage](https://gitlab.slack.com/archives/g_manage)
-  * [plan](https://about.gitlab.com/handbook/engineering/dev-backend/manage/). **Slack Channel**: [#g_plan](https://gitlab.slack.com/archives/g_plan)
-* **General Triage Dashboard**: https://dashboards.gitlab.net/d/26q8nTzZz/service-platform-metrics?from=now-6h&to=now&var-prometheus_ds=Global&var-environment=gprd&var-type=web&orgId=1
-* **Alerts**: https://alerts.gprd.gitlab.net/#/alerts?filter=%7Btype%3D%22web%22%2C%20tier%3D%22sv%22%7D
+* [Service Overview](https://dashboards.gitlab.net/d/web-main/web-overview?)
+* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22web%22%2C%20tier%3D%22sv%22%7D
 * **Label**: gitlab-com/gl-infra/production~"Service:Web"
 
 ## Logging
@@ -26,6 +17,7 @@
 
 * [../cloudflare/README.md](../cloudflare/README.md)
 * [../cloudflare/managing-traffic.md](../cloudflare/managing-traffic.md)
+* [../cloudflare/services-locations.md](../cloudflare/services-locations.md)
 * [../cloudflare/troubleshooting.md](../cloudflare/troubleshooting.md)
 * [../elastic/elastic-cloud.md](../elastic/elastic-cloud.md)
 * [../elastic/kibana.md](../elastic/kibana.md)
@@ -39,13 +31,16 @@
 * [../gitaly/gitaly-token-rotation.md](../gitaly/gitaly-token-rotation.md)
 * [../gitaly/gitaly-unusual-activity.md](../gitaly/gitaly-unusual-activity.md)
 * [../gitaly/storage-servers.md](../gitaly/storage-servers.md)
+* [../monitoring/alertmanager-notification-failures.md](../monitoring/alertmanager-notification-failures.md)
 * [../monitoring/sentry-is-down.md](../monitoring/sentry-is-down.md)
 * [../nfs/recovering-from-nfs-disaster.md](../nfs/recovering-from-nfs-disaster.md)
-* [../patroni/gitlab-com-wale-backups.md](../patroni/gitlab-com-wale-backups.md)
 * [../patroni/postgres.md](../patroni/postgres.md)
+* [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
 * [../pgbouncer/README.md](../pgbouncer/README.md)
 * [../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md](../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md)
+* [../pgbouncer/pgbouncer-connections.md](../pgbouncer/pgbouncer-connections.md)
 * [../pgbouncer/pgbouncer-saturation.md](../pgbouncer/pgbouncer-saturation.md)
+* [../sidekiq/sidekiq-survival-guide-for-sres.md](../sidekiq/sidekiq-survival-guide-for-sres.md)
 * [../uncategorized/blocked-user-logins.md](../uncategorized/blocked-user-logins.md)
 * [../uncategorized/chef-documentation.md](../uncategorized/chef-documentation.md)
 * [../uncategorized/chef-guidelines.md](../uncategorized/chef-guidelines.md)
@@ -54,5 +49,6 @@
 * [../uncategorized/domain-registration.md](../uncategorized/domain-registration.md)
 * [../uncategorized/gemnasium_is_down.md](../uncategorized/gemnasium_is_down.md)
 * [../uncategorized/manage-workers.md](../uncategorized/manage-workers.md)
+* [../uncategorized/project-export.md](../uncategorized/project-export.md)
 * [../uncategorized/setup-oauth2-proxy-protected-application.md](../uncategorized/setup-oauth2-proxy-protected-application.md)
 <!-- END_MARKER -->

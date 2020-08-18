@@ -1,16 +1,7 @@
 <!-- MARKER: do not edit this section directly. Edit services/service-catalog.yml then run scripts/generate-docs -->
 #  Api Service
-
-* **Responsible Teams**:
-  * [create](https://about.gitlab.com/handbook/engineering/dev-backend/create/). **Slack Channel**: [#g_create](https://gitlab.slack.com/archives/g_create)
-  * [distribution](https://about.gitlab.com/handbook/engineering/dev-backend/distribution/). **Slack Channel**: [#distribution](https://gitlab.slack.com/archives/distribution)
-  * [geo](https://about.gitlab.com/handbook/engineering/dev-backend/geo/). **Slack Channel**: [#g_geo](https://gitlab.slack.com/archives/g_geo)
-  * [gitaly](https://about.gitlab.com/handbook/engineering/dev-backend/gitaly/). **Slack Channel**: [#gitaly](https://gitlab.slack.com/archives/gitaly)
-  * [gitter](https://about.gitlab.com/handbook/engineering/dev-backend/gitter/). **Slack Channel**: [#g_gitaly](https://gitlab.slack.com/archives/g_gitaly)
-  * [manage](https://about.gitlab.com/handbook/engineering/dev-backend/manage/). **Slack Channel**: [#g_manage](https://gitlab.slack.com/archives/g_manage)
-  * [plan](https://about.gitlab.com/handbook/engineering/dev-backend/manage/). **Slack Channel**: [#g_plan](https://gitlab.slack.com/archives/g_plan)
-* **General Triage Dashboard**: https://dashboards.gitlab.net/d/26q8nTzZz/service-platform-metrics?from=now-6h&to=now&var-prometheus_ds=Global&var-environment=gprd&var-type=api&orgId=1
-* **Alerts**: https://alerts.gprd.gitlab.net/#/alerts?filter=%7Btype%3D%22api%22%2C%20tier%3D%22sv%22%7D
+* [Service Overview](https://dashboards.gitlab.net/d/api-main/api-overview)
+* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22api%22%2C%20tier%3D%22sv%22%7D
 * **Label**: gitlab-com/gl-infra/production~"Service:API"
 
 ## Logging
@@ -29,6 +20,7 @@
 * [../ci-runners/tracing-app-db-queries.md](../ci-runners/tracing-app-db-queries.md)
 * [../cloudflare/logging.md](../cloudflare/logging.md)
 * [../cloudflare/managing-traffic.md](../cloudflare/managing-traffic.md)
+* [../cloudflare/services-locations.md](../cloudflare/services-locations.md)
 * [../cloudflare/terraform.md](../cloudflare/terraform.md)
 * [../customers.gitlab.com/api-key-rotation.md](../customers.gitlab.com/api-key-rotation.md)
 * [../elastic/README.md](../elastic/README.md)
@@ -44,12 +36,16 @@
 * [../logging/README.md](../logging/README.md)
 * [../monitoring/alertmanager-notification-failures.md](../monitoring/alertmanager-notification-failures.md)
 * [../monitoring/alerts_manual.md](../monitoring/alerts_manual.md)
+* [../patroni/geo-patroni-cluster.md](../patroni/geo-patroni-cluster.md)
 * [../patroni/patroni-management.md](../patroni/patroni-management.md)
+* [../patroni/pg_repack.md](../patroni/pg_repack.md)
 * [../patroni/postgres.md](../patroni/postgres.md)
 * [../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md](../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md)
+* [../pgbouncer/pgbouncer-connections.md](../pgbouncer/pgbouncer-connections.md)
 * [../pgbouncer/pgbouncer-saturation.md](../pgbouncer/pgbouncer-saturation.md)
 * [../runner/ci-runner-timeouts.md](../runner/ci-runner-timeouts.md)
 * [../sidekiq/large-sidekiq-queue.md](../sidekiq/large-sidekiq-queue.md)
+* [../sidekiq/sidekiq-survival-guide-for-sres.md](../sidekiq/sidekiq-survival-guide-for-sres.md)
 * [../uncategorized/blocked-user-logins.md](../uncategorized/blocked-user-logins.md)
 * [../uncategorized/chef-documentation.md](../uncategorized/chef-documentation.md)
 * [../uncategorized/gemnasium_is_down.md](../uncategorized/gemnasium_is_down.md)

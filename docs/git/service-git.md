@@ -1,16 +1,7 @@
 <!-- MARKER: do not edit this section directly. Edit services/service-catalog.yml then run scripts/generate-docs -->
 #  Git Service
-
-* **Responsible Teams**:
-  * [create](https://about.gitlab.com/handbook/engineering/dev-backend/create/). **Slack Channel**: [#g_create](https://gitlab.slack.com/archives/g_create)
-  * [distribution](https://about.gitlab.com/handbook/engineering/dev-backend/distribution/). **Slack Channel**: [#distribution](https://gitlab.slack.com/archives/distribution)
-  * [geo](https://about.gitlab.com/handbook/engineering/dev-backend/geo/). **Slack Channel**: [#g_geo](https://gitlab.slack.com/archives/g_geo)
-  * [gitaly](https://about.gitlab.com/handbook/engineering/dev-backend/gitaly/). **Slack Channel**: [#gitaly](https://gitlab.slack.com/archives/gitaly)
-  * [gitter](https://about.gitlab.com/handbook/engineering/dev-backend/gitter/). **Slack Channel**: [#g_gitaly](https://gitlab.slack.com/archives/g_gitaly)
-  * [manage](https://about.gitlab.com/handbook/engineering/dev-backend/manage/). **Slack Channel**: [#g_manage](https://gitlab.slack.com/archives/g_manage)
-  * [plan](https://about.gitlab.com/handbook/engineering/dev-backend/manage/). **Slack Channel**: [#g_plan](https://gitlab.slack.com/archives/g_plan)
-* **General Triage Dashboard**: https://dashboards.gitlab.net/d/26q8nTzZz/service-platform-metrics?from=now-6h&to=now&var-prometheus_ds=Global&var-environment=gprd&var-type=git&orgId=1
-* **Alerts**: https://alerts.gprd.gitlab.net/#/alerts?filter=%7Btype%3D%22git%22%2C%20tier%3D%22sv%22%7D
+* [Service Overview](https://dashboards.gitlab.net/d/git-main/git-overview)
+* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22git%22%2C%20tier%3D%22sv%22%7D
 * **Label**: gitlab-com/gl-infra/production~"Service:Git"
 
 ## Logging
@@ -52,8 +43,12 @@
 * [../monitoring/alerts_manual.md](../monitoring/alerts_manual.md)
 * [../monitoring/monitoring-overview.md](../monitoring/monitoring-overview.md)
 * [../nfs/recovering-from-nfs-disaster.md](../nfs/recovering-from-nfs-disaster.md)
+* [../patroni/geo-patroni-cluster.md](../patroni/geo-patroni-cluster.md)
 * [../patroni/patroni-management.md](../patroni/patroni-management.md)
+* [../patroni/pg_repack.md](../patroni/pg_repack.md)
+* [../pgbouncer/pgbouncer-connections.md](../pgbouncer/pgbouncer-connections.md)
 * [../praefect/praefect-bypass.md](../praefect/praefect-bypass.md)
+* [../praefect/praefect-replication.md](../praefect/praefect-replication.md)
 * [../runner/update-gitlab-runner-on-managers.md](../runner/update-gitlab-runner-on-managers.md)
 * [../sidekiq/large-sidekiq-queue.md](../sidekiq/large-sidekiq-queue.md)
 * [../sidekiq/silent-project-exports.md](../sidekiq/silent-project-exports.md)
@@ -72,4 +67,5 @@
 * [../uncategorized/upload-file-to-gcs-using-signed-url.md](../uncategorized/upload-file-to-gcs-using-signed-url.md)
 * [../uncategorized/workers-high-load.md](../uncategorized/workers-high-load.md)
 * [../uncategorized/yubikey.md](../uncategorized/yubikey.md)
+* [../version/gitaly-version-mismatch.md](../version/gitaly-version-mismatch.md)
 <!-- END_MARKER -->

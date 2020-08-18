@@ -1,14 +1,20 @@
-local metricsCatalog = import '../lib/metrics.libsonnet';
+local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local combined = metricsCatalog.combined;
 
-{
+metricsCatalog.serviceDefinition({
   type: 'pages',
   tier: 'lb',
   monitoringThresholds: {
-    errorRatio: 0.005,
+    errorRatio: 0.9999,
   },
+  /*
+   * No need to have operation rate alerting for both pages and web-pages
+   * so disabling it for this service, and keeping the anomaly detection
+   * at the web-pages level
+   */
+  disableOpsRatePrediction: true,
   components: {
     loadbalancer: {
       staticLabels: {
@@ -34,4 +40,4 @@ local combined = metricsCatalog.combined;
       significantLabels: [],
     },
   },
-}
+})

@@ -19,11 +19,16 @@ groups:
       sum without (grpc_code, grpc_method, grpc_service, grpc_type) (
         rate(grpc_server_handled_total{job="gitaly",grpc_code!="OK"}[1m])
       )
+
+  # Deprecated in favour of component/node aggregated SLO monitoring
+  # for the gitaly service
+  # Remove this alert after 15 August 2020
+  # See https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10934
   - alert: GitalyInstanceErrorRateTooHigh
     expr: gitaly:grpc_server_handled_total:instance_error_rate1m > 5
     for: 5m
     labels:
-      channel: g_create_gitaly
+      team: gitaly
       pager: pagerduty
       severity: s1
       alert_type: cause
@@ -96,7 +101,7 @@ groups:
     expr: up{job="gitaly",tier="stor",type="gitaly"} == 0
     for: 1m
     labels:
-      channel: g_create_gitaly
+      team: gitaly
       pager: pagerduty
       severity: s1
       alert_type: cause
@@ -114,7 +119,7 @@ groups:
       ) > 1
     for: 60m
     labels:
-      channel: g_create_gitaly
+      team: gitaly
       pager: pagerduty
       severity: s1
       alert_type: cause
@@ -130,7 +135,7 @@ groups:
     expr: sum(gitaly_grpc:grpc_server_handled_total:rate1m{grpc_code="PermissionDenied"}) > 10
     for: 10s
     labels:
-      channel: g_create_gitaly
+      team: gitaly
       pager: pagerduty
       severity: s1
       alert_type: cause
@@ -152,7 +157,7 @@ groups:
       ) > 2
     for: 5m
     labels:
-      channel: g_create_gitaly
+      team: gitaly
       severity: s4
       alert_type: cause
     annotations:

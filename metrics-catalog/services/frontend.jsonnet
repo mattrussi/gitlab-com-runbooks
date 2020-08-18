@@ -1,13 +1,13 @@
-local metricsCatalog = import '../lib/metrics.libsonnet';
+local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 
-{
+metricsCatalog.serviceDefinition({
   type: 'frontend',
   tier: 'lb',
   monitoringThresholds: {
-    apdexRatio: 0.9,
-    errorRatio: 0.0005,
+    apdexScore: 0.999,
+    errorRatio: 0.9999,
   },
   serviceDependencies: {
     web: true,
@@ -29,12 +29,12 @@ local rateMetric = metricsCatalog.rateMetric;
 
       requestRate: rateMetric(
         counter='haproxy_backend_http_responses_total',
-        selector='type="frontend", backend!~"canary_.*"'
+        selector='type="frontend", backend!~"canary_.*", backend_name!="api_rate_limit"'
       ),
 
       errorRate: rateMetric(
         counter='haproxy_backend_response_errors_total',
-        selector='type="frontend", backend!~"canary_.*"'
+        selector='type="frontend", backend!~"canary_.*", backend_name!="api_rate_limit"'
       ),
 
       significantLabels: ['fqdn'],
@@ -105,4 +105,4 @@ local rateMetric = metricsCatalog.rateMetric;
       significantLabels: ['fqdn'],
     },
   },
-}
+})

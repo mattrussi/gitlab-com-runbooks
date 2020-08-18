@@ -1,10 +1,10 @@
-local grafana = import 'grafonnet/grafana.libsonnet';
+local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local dashboard = grafana.dashboard;
 
-local commonAnnotations = import 'common_annotations.libsonnet';
-local templates = import 'templates.libsonnet';
-local layout = import 'layout.libsonnet';
-local basic = import 'basic.libsonnet';
+local commonAnnotations = import 'grafana/common_annotations.libsonnet';
+local templates = import 'grafana/templates.libsonnet';
+local layout = import 'grafana/layout.libsonnet';
+local basic = import 'grafana/basic.libsonnet';
 local keyMetrics = import 'key_metrics.libsonnet';
 local serviceCatalog = import 'service_catalog.libsonnet';
 local row = grafana.row;
@@ -73,7 +73,7 @@ basic.dashboard(
     description: |||
       # pgbouncer Sync (web/api) pool Saturation
     |||,
-    panel: saturationDetail.componentSaturationPanel('pgbouncer_sync_pool', 'environment="$environment", type="pgbouncer", stage="main"'),
+    panel: saturationDetail.componentSaturationPanel('pgbouncer_sync_primary_pool', 'environment="$environment", type="pgbouncer", stage="main"'),
   },
   {
     description: |||

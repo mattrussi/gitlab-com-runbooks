@@ -1,20 +1,17 @@
-local metricsCatalog = import '../lib/metrics.libsonnet';
+local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 
-local formatConfig = {
-  productionEnvironmentsSelector: 'environment=~"gprd|ops|ci-prd"',
+local productionEnvironmentsSelector = {
+  environment: { re: 'gprd|ops|ci-prd' },
 };
 
-{
+metricsCatalog.serviceDefinition({
   type: 'monitoring',
   tier: 'inf',
   monitoringThresholds: {
-    /*
-    TODO: enable SLOs for monitoring service
-    apdexRatio: 0.95,
-    errorRatio: 0.005,
-    */
+    apdexScore: 0.999,
+    errorRatio: 0.999,
   },
   /*
    * Our anomaly detection uses normal distributions and the monitoring service
@@ -24,114 +21,205 @@ local formatConfig = {
   disableOpsRatePrediction: true,
   components: {
     thanos_query: {
+      local thanosQuerySelector = productionEnvironmentsSelector {
+        job: 'thanos',
+        type: 'monitoring',
+      },
       staticLabels: {
         environment: 'ops',
       },
 
       apdex: histogramApdex(
         histogram='http_request_duration_seconds_bucket',
-        selector='job="thanos", type="monitoring", %(productionEnvironmentsSelector)s' % formatConfig,
+        selector=thanosQuerySelector,
         satisfiedThreshold=1,
         toleratedThreshold=6
       ),
 
       requestRate: rateMetric(
         counter='http_requests_total',
-        selector='job="thanos", type="monitoring", %(productionEnvironmentsSelector)s' % formatConfig
+        selector=thanosQuerySelector
       ),
 
       errorRate: rateMetric(
         counter='http_requests_total',
-        selector='job="thanos", type="monitoring", code=~"^5.*", %(productionEnvironmentsSelector)s' % formatConfig
+        selector=thanosQuerySelector { code: { re: '^5.*' } }
       ),
 
       significantLabels: ['fqdn'],
     },
 
     thanos_store: {
+      local thanosStoreSelector = productionEnvironmentsSelector {
+        job: 'thanos',
+        type: 'monitoring',
+        grpc_service: 'thanos.Store',
+        grpc_type: 'unary',
+      },
+
       staticLabels: {
         environment: 'ops',
       },
 
       apdex: histogramApdex(
         histogram='grpc_server_handling_seconds_bucket',
-        selector='job="thanos", type="monitoring", grpc_service="thanos.Store", grpc_type="unary", %(productionEnvironmentsSelector)s' % formatConfig,
+        selector=thanosStoreSelector,
         satisfiedThreshold=1,
         toleratedThreshold=3
       ),
 
       requestRate: rateMetric(
         counter='grpc_server_handled_total',
-        selector='job="thanos", type="monitoring", grpc_service="thanos.Store", %(productionEnvironmentsSelector)s' % formatConfig
+        selector=thanosStoreSelector
       ),
 
       errorRate: rateMetric(
         counter='grpc_server_handled_total',
-        selector='job="thanos", type="monitoring", grpc_service="thanos.Store", grpc_code!="OK", %(productionEnvironmentsSelector)s' % formatConfig
+        selector=thanosStoreSelector { grpc_code: { ne: 'OK' } }
       ),
 
       significantLabels: ['fqdn'],
     },
 
     thanos_compactor: {
+      local thanosCompactorSelector = productionEnvironmentsSelector {
+        job: 'thanos',
+        type: 'monitoring',
+      },
+
       staticLabels: {
         environment: 'ops',
       },
 
       requestRate: rateMetric(
         counter='thanos_compact_group_compactions_total',
-        selector='job="thanos", type="monitoring", %(productionEnvironmentsSelector)s' % formatConfig
+        selector=thanosCompactorSelector
       ),
 
       errorRate: rateMetric(
         counter='thanos_compact_group_compactions_failures_total',
-        selector='job="thanos", type="monitoring", %(productionEnvironmentsSelector)s' % formatConfig
+        selector=thanosCompactorSelector
+      ),
+
+      significantLabels: ['fqdn'],
+    },
+
+    // Prometheus Alert Manager Sender operations
+    prometheus_alert_sender: {
+      local prometheusAlertsSelector = productionEnvironmentsSelector {
+        job: 'prometheus',
+        type: 'monitoring',
+      },
+
+      staticLabels: {
+        environment: 'ops',
+      },
+
+      requestRate: rateMetric(
+        counter='prometheus_notifications_sent_total',
+        selector=prometheusAlertsSelector
+      ),
+
+      errorRate: rateMetric(
+        counter='prometheus_notifications_errors_total',
+        selector=prometheusAlertsSelector
+      ),
+
+      significantLabels: ['fqdn', 'alertmanager'],
+    },
+
+    thanos_rule_alert_sender: {
+      local thanosRuleAlertsSelector = productionEnvironmentsSelector {
+        job: 'thanos',
+        type: 'monitoring',
+      },
+
+      staticLabels: {
+        environment: 'ops',
+      },
+
+      requestRate: rateMetric(
+        counter='thanos_alert_sender_alerts_sent_total',
+        selector=thanosRuleAlertsSelector
+      ),
+
+      errorRate: rateMetric(
+        counter='thanos_alert_sender_errors_total',
+        selector=thanosRuleAlertsSelector
       ),
 
       significantLabels: ['fqdn'],
     },
 
     grafana: {
+      local grafanaSelector = productionEnvironmentsSelector {
+        job: 'grafana',
+      },
+
       staticLabels: {
         environment: 'ops',
       },
 
       requestRate: rateMetric(
         counter='http_request_total',
-        selector='job="grafana", %(productionEnvironmentsSelector)s' % formatConfig
+        selector=grafanaSelector
       ),
 
       errorRate: rateMetric(
         counter='http_request_total',
-        selector='job="grafana", statuscode=~"^5.*", %(productionEnvironmentsSelector)s' % formatConfig
+        selector=grafanaSelector { statuscode: { re: '^5.*' } }
       ),
 
       significantLabels: ['fqdn'],
     },
 
     prometheus: {
+      local prometheusSelector = productionEnvironmentsSelector {
+        job: 'prometheus',
+        type: 'monitoring',
+      },
+
       staticLabels: {
         environment: 'ops',
       },
 
       apdex: histogramApdex(
         histogram='prometheus_http_request_duration_seconds_bucket',
-        selector='job="prometheus", type="monitoring", %(productionEnvironmentsSelector)s' % formatConfig,
-        satisfiedThreshold=0.4,
-        toleratedThreshold=0.1
+        selector=prometheusSelector,
+        satisfiedThreshold=1,
+        toleratedThreshold=3
       ),
 
       requestRate: rateMetric(
         counter='prometheus_http_requests_total',
-        selector='job="prometheus", type="monitoring", %(productionEnvironmentsSelector)s' % formatConfig
+        selector=prometheusSelector
       ),
 
       errorRate: rateMetric(
         counter='prometheus_http_requests_total',
-        selector='job="prometheus", type="monitoring", code=~"^5.*", %(productionEnvironmentsSelector)s' % formatConfig
+        selector=prometheusSelector { code: { re: '^5.*' } }
+      ),
+
+      significantLabels: ['fqdn', 'handler'],
+    },
+
+
+    // This component represents rule evaluations in
+    // Prometheus and Thanos ruler
+    rule_evaluation: {
+      local selector = productionEnvironmentsSelector { type: 'monitoring' },
+
+      requestRate: rateMetric(
+        counter='prometheus_rule_evaluations_total',
+        selector=selector
+      ),
+
+      errorRate: rateMetric(
+        counter='prometheus_rule_evaluation_failures_total',
+        selector=selector
       ),
 
       significantLabels: ['fqdn'],
     },
   },
-}
+})

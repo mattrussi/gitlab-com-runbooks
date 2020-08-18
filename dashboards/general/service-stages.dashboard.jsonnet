@@ -1,18 +1,21 @@
-local colors = import 'colors.libsonnet';
-local commonAnnotations = import 'common_annotations.libsonnet';
-local grafana = import 'grafonnet/grafana.libsonnet';
-local promQuery = import 'prom_query.libsonnet';
-local seriesOverrides = import 'series_overrides.libsonnet';
-local templates = import 'templates.libsonnet';
+local colors = import 'grafana/colors.libsonnet';
+local commonAnnotations = import 'grafana/common_annotations.libsonnet';
+local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
+local promQuery = import 'grafana/prom_query.libsonnet';
+local seriesOverrides = import 'grafana/series_overrides.libsonnet';
+local templates = import 'grafana/templates.libsonnet';
 local dashboard = grafana.dashboard;
 local row = grafana.row;
 local template = grafana.template;
-local graphPanel = grafana.graphPanel;
 local annotation = grafana.annotation;
-local basic = import 'basic.libsonnet';
+local basic = import 'grafana/basic.libsonnet';
 
-local generalGraphPanel(title, description=null) =
-  graphPanel.new(
+local generalGraphPanel(
+  title,
+  description=null,
+  stableId=null,
+      ) =
+  basic.graphPanel(
     title,
     linewidth=1,
     fill=0,
@@ -28,6 +31,7 @@ local generalGraphPanel(title, description=null) =
     legend_avg=true,
     legend_alignAsTable=true,
     legend_hideEmpty=true,
+    stableId=stableId,
   )
   .addSeriesOverride(seriesOverrides.slo);
 
@@ -35,6 +39,7 @@ local apdexPanel() =
   generalGraphPanel(
     'Latency: Apdex',
     description='Apdex is a measure of requests that complete within a tolerable period of time for the service. Higher is better.',
+    stableId='apdex-ratio',
   )
   .addSeriesOverride(seriesOverrides.mainStage)
   .addSeriesOverride(seriesOverrides.cnyStage)
@@ -43,7 +48,7 @@ local apdexPanel() =
       |||
         min(
           min_over_time(
-            gitlab_service_apdex:ratio{environment="$environment", type="$type", stage!=""}[$__interval]
+            gitlab_service_apdex:ratio_5m{environment="$environment", type="$type", stage!=""}[$__interval]
           )
         ) by (stage)
       |||,
@@ -76,7 +81,8 @@ local apdexPanel() =
 local errorRatesPanel() =
   generalGraphPanel(
     'Error Ratios',
-    description='Error rates are a measure of unhandled service exceptions within a minute period. Client errors are excluded when possible. Lower is better'
+    description='Error rates are a measure of unhandled service exceptions within a minute period. Client errors are excluded when possible. Lower is better',
+    stableId='error-ratio',
   )
   .addSeriesOverride(seriesOverrides.mainStage)
   .addSeriesOverride(seriesOverrides.cnyStage)
@@ -85,7 +91,7 @@ local errorRatesPanel() =
       |||
         max(
           max_over_time(
-            gitlab_service_errors:ratio{environment="$environment", type="$type", stage!=""}[$__interval]
+            gitlab_service_errors:ratio_5m{environment="$environment", type="$type", stage!=""}[$__interval]
           )
         ) by (stage)
       |||,
@@ -118,7 +124,8 @@ local errorRatesPanel() =
 local qpsPanel() =
   generalGraphPanel(
     'RPS - Service Requests per Second',
-    description='The operation rate is the sum total of all requests being handle for all components within this service. Note that a single user request can lead to requests to multiple components. Higher is busier.'
+    description='The operation rate is the sum total of all requests being handle for all components within this service. Note that a single user request can lead to requests to multiple components. Higher is busier.',
+    stableId='request-rate',
   )
   .addSeriesOverride(seriesOverrides.mainStage)
   .addSeriesOverride(seriesOverrides.cnyStage)

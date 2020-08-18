@@ -1,10 +1,10 @@
-local metricsCatalog = import '../lib/metrics.libsonnet';
+local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local derivMetric = metricsCatalog.derivMetric;
 local customQuery = metricsCatalog.customQuery;
 
-{
+metricsCatalog.serviceDefinition({
   type: 'logging',
   tier: 'inf',
   slos: {
@@ -49,4 +49,4 @@ local customQuery = metricsCatalog.customQuery;
       significantLabels: ['log', 'severity'],
     },
   },
-}
+})

@@ -1,19 +1,19 @@
-local basic = import 'basic.libsonnet';
-local commonAnnotations = import 'common_annotations.libsonnet';
-local grafana = import 'grafonnet/grafana.libsonnet';
-local layout = import 'layout.libsonnet';
+local basic = import 'grafana/basic.libsonnet';
+local commonAnnotations = import 'grafana/common_annotations.libsonnet';
+local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
+local layout = import 'grafana/layout.libsonnet';
 local platformLinks = import 'platform_links.libsonnet';
-local templates = import 'templates.libsonnet';
+local templates = import 'grafana/templates.libsonnet';
 local dashboard = grafana.dashboard;
 local link = grafana.link;
 local template = grafana.template;
 local annotation = grafana.annotation;
 local serviceCatalog = import 'service_catalog.libsonnet';
-local promQuery = import 'prom_query.libsonnet';
+local promQuery = import 'grafana/prom_query.libsonnet';
 local sidekiqHelpers = import 'services/lib/sidekiq-helpers.libsonnet';
-local seriesOverrides = import 'series_overrides.libsonnet';
+local seriesOverrides = import 'grafana/series_overrides.libsonnet';
 local row = grafana.row;
-local elasticsearchLinks = import 'elasticsearch_links.libsonnet';
+local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libsonnet';
 local issueSearch = import 'issue_search.libsonnet';
 
 local selector = 'environment="$environment", type="sidekiq", stage="$stage", queue=~"$queue"';
@@ -36,23 +36,34 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
     rangeInterval: rangeInterval,
   };
 
-local counterQuery(bucketMetric, selector, aggregator, rangeInterval, deltaFunction='rate') =
+local recordingRuleLatencyHistogramQuery(percentile, recordingRule, selector, aggregator) =
+  local aggregatorWithLe = joinSelectors([aggregator] + ['le']);
+  |||
+    histogram_quantile(%(percentile)g, sum by (%(aggregatorWithLe)s) (
+      %(recordingRule)s{%(selector)s}
+    ))
+  ||| % {
+    percentile: percentile,
+    aggregatorWithLe: aggregatorWithLe,
+    selector: selector,
+    recordingRule: recordingRule,
+  };
+
+local recordingRuleRateQuery(recordingRule, selector, aggregator) =
   |||
     sum by (%(aggregator)s) (
-      %(deltaFunction)s(%(bucketMetric)s{%(selector)s}[%(rangeInterval)s])
+      %(recordingRule)s{%(selector)s}
     )
   ||| % {
     aggregator: aggregator,
     selector: selector,
-    bucketMetric: bucketMetric,
-    rangeInterval: rangeInterval,
-    deltaFunction: deltaFunction,
+    recordingRule: recordingRule,
   };
 
 local queuelatencyTimeseries(title, aggregators, legendFormat) =
   basic.latencyTimeseries(
     title=title,
-    query=latencyHistogramQuery(0.95, 'sidekiq_jobs_queue_duration_seconds_bucket', selector, aggregators, '$__interval'),
+    query=recordingRuleLatencyHistogramQuery(0.95, 'sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m', selector, aggregators),
     legendFormat=legendFormat,
   );
 
@@ -60,28 +71,28 @@ local queuelatencyTimeseries(title, aggregators, legendFormat) =
 local latencyTimeseries(title, aggregators, legendFormat) =
   basic.latencyTimeseries(
     title=title,
-    query=latencyHistogramQuery(0.95, 'sidekiq_jobs_completion_seconds_bucket', selector, aggregators, '$__interval'),
+    query=recordingRuleLatencyHistogramQuery(0.95, 'sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m', selector, aggregators),
     legendFormat=legendFormat,
   );
 
 local enqueueCountTimeseries(title, aggregators, legendFormat) =
   basic.timeseries(
     title=title,
-    query=counterQuery('sidekiq_enqueued_jobs_total', 'environment="$environment", queue=~"$queue"', aggregators, '$__interval', deltaFunction='increase'),
+    query=recordingRuleRateQuery('gitlab_background_jobs:queue:ops:rate_5m', 'environment="$environment", queue=~"$queue"', aggregators),
     legendFormat=legendFormat,
   );
 
 local rpsTimeseries(title, aggregators, legendFormat) =
   basic.timeseries(
     title=title,
-    query=counterQuery('sidekiq_jobs_completion_seconds_count', selector, aggregators, '$__interval'),
+    query=recordingRuleRateQuery('gitlab_background_jobs:execution:ops:rate_5m', 'environment="$environment", queue=~"$queue"', aggregators),
     legendFormat=legendFormat,
   );
 
 local errorRateTimeseries(title, aggregators, legendFormat) =
   basic.timeseries(
     title=title,
-    query=counterQuery('sidekiq_jobs_failed_total', selector, aggregators, '$__interval', deltaFunction='increase'),
+    query=recordingRuleRateQuery('gitlab_background_jobs:execution:error:rate_5m', 'environment="$environment", queue=~"$queue"', aggregators),
     legendFormat=legendFormat,
   );
 
@@ -95,49 +106,6 @@ local multiQuantileTimeseries(title, bucketMetric, aggregators) =
   );
 
   basic.multiTimeseries(title=title, decimals=2, queries=queries, yAxisLabel='Duration', format='s');
-
-local statPanel(
-  title,
-  panelTitle,
-  color,
-  query,
-  legendFormat,
-      ) =
-  {
-    links: [],
-    options: {
-      graphMode: 'none',
-      colorMode: 'background',
-      justifyMode: 'auto',
-      fieldOptions: {
-        values: false,
-        calcs: [
-          'lastNotNull',
-        ],
-        defaults: {
-          thresholds: {
-            mode: 'absolute',
-            steps: [
-              {
-                color: color,
-                value: null,
-              },
-            ],
-          },
-          mappings: [],
-          title: title,
-          unit: 's',
-          decimals: 0,
-        },
-        overrides: [],
-      },
-      orientation: 'vertical',
-    },
-    pluginVersion: '6.6.1',
-    targets: [promQuery.target(query, legendFormat=legendFormat, instant=true)],
-    title: panelTitle,
-    type: 'stat',
-  };
 
 local elasticFilters = [
   elasticsearchLinks.matchFilter('json.queue.keyword', '$queue'),
@@ -225,7 +193,7 @@ basic.dashboard(
       links: [],
     }]
   ] + [
-    statPanel(
+    basic.statPanel(
       'Max Queuing Duration SLO',
       'Max Queuing Duration SLO',
       'light-red',
@@ -240,8 +208,9 @@ basic.dashboard(
         urgentSLO: sidekiqHelpers.slos.urgent.queueingDurationSeconds,
       },
       '{{ queue }}',
+      unit='s',
     ),
-    statPanel(
+    basic.statPanel(
       'Max Execution Duration SLO',
       'Max Execution Duration SLO',
       'red',
@@ -257,8 +226,9 @@ basic.dashboard(
         urgentSLO: sidekiqHelpers.slos.urgent.executionDurationSeconds,
       },
       '{{ queue }}',
+      unit='s',
     ),
-    statPanel(
+    basic.statPanel(
       'Time until backlog is cleared',
       'Backlog',
       'blue',
@@ -268,6 +238,7 @@ basic.dashboard(
         (-deriv(sidekiq_queue_size{environment="$environment", name=~"$queue"}[5m]) and on(fqdn) (redis_connected_slaves != 0) > 0)
       |||,
       '{{ name }}',
+      unit='s',
     ),
   ], cols=8, rowHeight=4)
   +
@@ -275,10 +246,19 @@ basic.dashboard(
   +
   layout.grid([
     basic.apdexTimeseries(
+      stableId='queue-apdex',
       title='Queue Apdex',
       description='Queue apdex monitors the percentage of jobs that are dequeued within their queue threshold. Higher is better. Different jobs have different thresholds.',
       query=|||
-        gitlab_background_jobs:queue:apdex:ratio_5m{environment="$environment", queue=~"$queue"}
+        sum by (queue) (
+          (gitlab_background_jobs:queue:apdex:ratio_5m{environment="$environment", queue=~"$queue"} >= 0)
+          *
+          (gitlab_background_jobs:queue:apdex:weight:score_5m{environment="$environment", queue=~"$queue"} >= 0)
+        )
+        /
+        sum by (queue) (
+          (gitlab_background_jobs:queue:apdex:weight:score_5m{environment="$environment", queue=~"$queue"})
+        )
       |||,
       yAxisLabel='% Jobs within Max Queuing Duration SLO',
       legendFormat='{{ queue }} queue apdex',
@@ -292,10 +272,19 @@ basic.dashboard(
       targetBlank: true,
     }),
     basic.apdexTimeseries(
+      stableId='execution-apdex',
       title='Execution Apdex',
       description='Execution apdex monitors the percentage of jobs that run within their execution (run-time) threshold. Higher is better. Different jobs have different thresholds.',
       query=|||
-        gitlab_background_jobs:execution:apdex:ratio_5m{environment="$environment", queue=~"$queue"}
+        sum by (queue) (
+          (gitlab_background_jobs:execution:apdex:ratio_5m{environment="$environment", queue=~"$queue"} >= 0)
+          *
+          (gitlab_background_jobs:execution:apdex:weight:score_5m{environment="$environment", queue=~"$queue"} >= 0)
+        )
+        /
+        sum by (queue) (
+          (gitlab_background_jobs:execution:apdex:weight:score_5m{environment="$environment", queue=~"$queue"})
+        )
       |||,
       yAxisLabel='% Jobs within Max Execution Duration SLO',
       legendFormat='{{ queue }} execution apdex',
@@ -310,10 +299,11 @@ basic.dashboard(
     }),
 
     basic.timeseries(
+      stableId='request-rate',
       title='Execution Rate (RPS)',
       description='Jobs executed per second',
       query=|||
-        gitlab_background_jobs:execution:ops:rate_5m{environment="$environment", queue=~"$queue"}
+        sum by (queue) (gitlab_background_jobs:execution:ops:rate_5m{environment="$environment", queue=~"$queue"})
       |||,
       legendFormat='{{ queue }} rps',
       format='ops',
@@ -328,10 +318,17 @@ basic.dashboard(
     }),
 
     basic.percentageTimeseries(
-      'Error Ratio',
+      stableId='error-ratio',
+      title='Error Ratio',
       description='Percentage of jobs that fail with an error. Lower is better.',
       query=|||
-        gitlab_background_jobs:execution:error:ratio_5m{environment="$environment", queue=~"$queue"}
+        sum by (queue) (
+          (gitlab_background_jobs:execution:error:rate_5m{environment="$environment", queue=~"$queue"} >= 0)
+        )
+        /
+        sum by (queue) (
+          (gitlab_background_jobs:execution:ops:rate_5m{environment="$environment", queue=~"$queue"} >= 0)
+        )
       |||,
       legendFormat='{{ queue }} error ratio',
       yAxisLabel='Error Percentage',
@@ -347,10 +344,11 @@ basic.dashboard(
     }),
   ], cols=4, rowHeight=8, startRow=101)
   +
-  rowGrid('Enqueuing (number of jobs enqueued)', [
+  rowGrid('Enqueuing (rate of jobs enqueuing)', [
     enqueueCountTimeseries('Jobs Enqueued', aggregators='queue', legendFormat='{{ queue }}'),
     enqueueCountTimeseries('Jobs Enqueued per Service', aggregators='type, queue', legendFormat='{{ queue }} - {{ type }}'),
     basic.queueLengthTimeseries(
+      stableId='queue-length',
       title='Queue length',
       description='The number of unstarted jobs in a queue',
       query=|||
@@ -392,13 +390,15 @@ basic.dashboard(
       multiQuantileTimeseries('CPU Time', bucketMetric='sidekiq_jobs_cpu_seconds_bucket', aggregators='queue'),
       multiQuantileTimeseries('Gitaly Time', bucketMetric='sidekiq_jobs_gitaly_seconds_bucket', aggregators='queue'),
       multiQuantileTimeseries('Database Time', bucketMetric='sidekiq_jobs_db_seconds_bucket', aggregators='queue'),
-    ], cols=3, startRow=702)
+    ], cols=3, startRow=702
+  )
   +
   layout.grid(
     [
       multiQuantileTimeseries('Redis Time', bucketMetric='sidekiq_redis_requests_duration_seconds_bucket', aggregators='queue'),
       multiQuantileTimeseries('Elasticsearch Time', bucketMetric='sidekiq_elasticsearch_requests_duration_seconds_bucket', aggregators='queue'),
-    ], cols=3, startRow=703)
+    ], cols=3, startRow=703
+  )
 )
 .trailer()
 + {

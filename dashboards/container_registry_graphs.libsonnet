@@ -1,19 +1,19 @@
-local basic = import 'basic.libsonnet';
-local colors = import 'colors.libsonnet';
-local layout = import 'layout.libsonnet';
+local basic = import 'grafana/basic.libsonnet';
+local colors = import 'grafana/colors.libsonnet';
+local layout = import 'grafana/layout.libsonnet';
 
 {
   data(startRow)::
     layout.grid([
       basic.timeseries(
         title='HTTP Requests',
-        query='sum(irate(registry_http_requests_total{cluster="$cluster", namespace="$namespace"}[1m])) by (handler, code)',
-        legendFormat='{{ handler }}: {{ code }}',
+        query='sum(irate(registry_http_requests_total{cluster="$cluster", namespace="$namespace"}[1m])) by (method, handler, code)',
+        legendFormat='{{ method }} {{ handler }}: {{ code }}',
       ),
       basic.timeseries(
         title='In-Flight HTTP Requests',
-        query='sum(irate(registry_http_in_flight_requests{cluster="$cluster", namespace="$namespace"}[1m])) by (handler, code)',
-        legendFormat='{{ handler }}',
+        query='sum(irate(registry_http_in_flight_requests{cluster="$cluster", namespace="$namespace"}[1m])) by (method, handler, code)',
+        legendFormat='{{ method }} {{ handler }}',
       ),
       basic.timeseries(
         title='Registry Action Latency',
