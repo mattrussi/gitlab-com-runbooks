@@ -174,7 +174,7 @@ GRANT SELECT ON some_table to PUBLIC;
 
 ```
 
-```
+
 
 ## Revoke permission
 To revoke access privileges from roles/users, you must use the command [`REVOKE`](https://www.postgresql.org/docs/11/sql-revoke.html)
