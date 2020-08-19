@@ -4,12 +4,12 @@
 ## Intro
 PostgreSQL uses the concept of [roles](https://www.postgresql.org/docs/11/user-manag.html) to manage database access. The roles are global objects which means that a role doesn't belong to a specific database but all of them and can access all databases if given the appropriate permissions.
 
-The term of `roles` encapsulates the concepts of groups and users at the same time:
+The term of `roles` encapsulates the concepts of groups and users at the same time. In practice, what differences a more abstract "role" with a "user" is the set of `attributes` it has. In this example, `LOGIN` and `NOLOGIN` are attributes a role can have.
 
  * user: can login
  * group: can't login
 
-In practice, what differences a more abstract "role" with a "user" is the set of `attributes` it has. In this example, `LOGIN` and `NOLOGIN` are attributes a role can have.
+
 
 
 In the following sections, we will see  some common activities to manage roles and user in PostgreSQL
