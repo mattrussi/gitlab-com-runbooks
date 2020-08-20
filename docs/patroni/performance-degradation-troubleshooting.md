@@ -7,7 +7,7 @@ Database performance degradation may be due to several reasons. To search for de
 You can use [this metric](https://prometheus.gprd.gitlab.net/graph?g0.range_input=1h&g0.expr=instance%3Anode_cpu_utilization%3Aratio%7Benvironment%3D%22gprd%22%2C%20type%3D%22patroni%22%7D%20*%20100&g0.tab=0&g1.range_input=1h&g1.expr=instance_cpu%3Anode_cpu_seconds_not_idle%3Arate1m&g1.tab=0) to check CPU utilization over the patroni hosts:
 ![](img/patroni-cpu-usage.png)
 
-Check if values are getting close to `1`
+Check if values are getting close to `100`
 
 You can also take a look on [this graph](https://dashboards.gitlab.com/d/000000144/postgresql-overview?orgId=1&from=1594050133725&to=1594060933725&var-prometheus=Global&var-environment=gprd&var-type=patroni&viewPanel=9) - part of the [Patroni Overview](https://dashboards.gitlab.com/d/000000144/postgresql-overview?orgId=1) panel - to check the host load.
 ![](img/patroni-load.png)
