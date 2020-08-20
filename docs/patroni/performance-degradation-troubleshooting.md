@@ -71,7 +71,7 @@ And if you found an specific `pid` that is using many IO%, you can execute `sudo
  
 ```
 
-Disk saturation may also be investigated using _iotop_ tool:
+Disk saturation may also be investigated using _iostat_ tool:
 
 ```
 # iostat -x 1 3
