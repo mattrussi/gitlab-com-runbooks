@@ -13,7 +13,6 @@
 * [../ci-runners/README.md](../ci-runners/README.md)
 * [../ci-runners/ci-investigate-abuse.md](../ci-runners/ci-investigate-abuse.md)
 * [../ci-runners/create-runners-manager-node.md](../ci-runners/create-runners-manager-node.md)
-* [../ci-runners/debug-transient-runner-vm.md](../ci-runners/debug-transient-runner-vm.md)
 * [../ci-runners/remove-broken-runners.md](../ci-runners/remove-broken-runners.md)
 * [../ci-runners/runners_cache_disk_space.md](../ci-runners/runners_cache_disk_space.md)
 * [../ci-runners/runners_manager_is_down.md](../ci-runners/runners_manager_is_down.md)
