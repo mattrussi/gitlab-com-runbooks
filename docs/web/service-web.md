@@ -15,6 +15,7 @@
 
 ## Troubleshooting Pointers
 
+* [../ci-runners/debug-transient-runner-vm.md](../ci-runners/debug-transient-runner-vm.md)
 * [../cloudflare/README.md](../cloudflare/README.md)
 * [../cloudflare/managing-traffic.md](../cloudflare/managing-traffic.md)
 * [../cloudflare/services-locations.md](../cloudflare/services-locations.md)
