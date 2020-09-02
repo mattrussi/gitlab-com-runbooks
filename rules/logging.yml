@@ -63,3 +63,18 @@ groups:
           This will lead to Elastic lagging behind with the log data.
         runbook: docs/logging/troubleshooting/README.md
         title: PubSub queuing high
+
+    - alert: LoggingKibanaUnavailable
+      expr: |
+        sum by (response_code_class) (
+          stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{env="ops",backend_name="ops-prod-proxy-us-east1-c",response_code_class="500"}
+        ) > 0
+      for: 5m
+      labels:
+        severity: s4
+        alert_type: symptom
+      annotations:
+        description: >
+          log.gprd.gitlab.net is responding with 5xx errors. These errors are observed at the GCP load balancer layer that is in front of the proxy machine. This means that the problem could be with GCP load balancer, proxy machine, Kibana, Elastic or any other component involved.
+        runbook: docs/logging/troubleshooting/README.md
+        title: log.gprd.gitlab.net is responding with 5xx errors
