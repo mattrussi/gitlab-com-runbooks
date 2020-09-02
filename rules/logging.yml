@@ -75,6 +75,6 @@ groups:
         alert_type: symptom
       annotations:
         description: >
-          log.gprd.gitlab.net is responding with 5xx errors. These errors are observed at the GCP load balancer layer that is in front of the proxy machine. This means that the problem could be with GCP load balancer, proxy machine, Kibana, Elastic or any other component involved.
+          These errors are observed at the GCP load balancer layer that is in front of the proxy machine. This means that the problem could be with GCP load balancer, proxy machine, Kibana, Elastic or any other component involved.
         runbook: docs/logging/troubleshooting/README.md
         title: log.gprd.gitlab.net is responding with 5xx errors
