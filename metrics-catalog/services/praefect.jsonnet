@@ -32,7 +32,7 @@ metricsCatalog.serviceDefinition({
         }
       ),
 
-      significantLabels: ['fqdn'],
+      significantLabels: ['fqdn', 'grpc_method'],
 
       toolingLinks: [
         toolingLinks.continuousProfiler(service='praefect'),
