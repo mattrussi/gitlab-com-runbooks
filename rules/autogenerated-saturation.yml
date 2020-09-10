@@ -515,6 +515,54 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
+      component: pg_primary_context_switches
+    expr: |
+      max by(environment, tier, type, stage) (
+        clamp_min(
+          clamp_max(
+            (
+              (
+                rate(node_context_switches_total{environment!="",type="patroni"}[5m])
+                / on (fqdn)
+                count by (fqdn)
+                  node_cpu_seconds_total{mode="idle", environment!="",type="patroni"}
+                )
+              )
+              /
+              5000
+            )
+            and on (fqdn) (pg_replication_is_replica == 0)
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
+      component: pg_replica_context_switches
+    expr: |
+      max by(environment, tier, type, stage) (
+        clamp_min(
+          clamp_max(
+            (
+              (
+                rate(node_context_switches_total{environment!="",type="patroni"}[5m])
+                / on (fqdn)
+                count by (fqdn)
+                  node_cpu_seconds_total{mode="idle", environment!="",type="patroni"}
+                )
+              )
+              /
+              5000
+            )
+            and on (fqdn) (pg_replication_is_replica == 0)
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
       component: pgbouncer_async_primary_pool
     expr: |
       max by(environment, tier, type, stage) (
@@ -1100,6 +1148,22 @@ groups:
     expr: '0.75'
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
+      component: pg_primary_context_switches
+    expr: '0.6'
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: pg_primary_context_switches
+    expr: '0.75'
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: pg_replica_context_switches
+    expr: '0.6'
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: pg_replica_context_switches
+    expr: '0.75'
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
       component: pgbouncer_async_primary_pool
     expr: '0.9'
   - record: slo:max:hard:gitlab_component_saturation:ratio
@@ -1428,6 +1492,18 @@ groups:
       component: pg_int4_id
       horiz_scaling: 'no'
       severity: s1
+    expr: '1'
+  - record: gitlab_component_saturation_info
+    labels:
+      component: pg_primary_context_switches
+      horiz_scaling: 'no'
+      severity: s2
+    expr: '1'
+  - record: gitlab_component_saturation_info
+    labels:
+      component: pg_replica_context_switches
+      horiz_scaling: 'yes'
+      severity: s2
     expr: '1'
   - record: gitlab_component_saturation_info
     labels:
@@ -2789,6 +2865,114 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="pg_int4_id"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="pg_int4_id"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: >-
+        The Postgres primary instance context switches resource of the {{ $labels.type }} service ({{
+        $labels.stage }} stage), component has a saturation exceeding SLO and is close to its capacity
+        limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Postgres primary instance context switches resource:
+
+        Context switches per core per second on the postgres primary instance.
+
+        This measures the number of linux context switches per core against a hypothetical estimated limit.
+
+        When approaching this limit, the overhead of context switching may make the server unresponsive to queries. The `node_schedstat_waiting_seconds_total` may indicate that the processes are spending a great deal of time waiting to be scheduled for execution on a core.
+      grafana_dashboard_id: alerts-sat_pg_primary_context_switches
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/alerts-sat_pg_primary_context_switches?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '4212540839'
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage) (
+          clamp_min(
+            clamp_max(
+              (
+                (
+                  rate(node_context_switches_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
+                  / on (fqdn)
+                  count by (fqdn)
+                    node_cpu_seconds_total{mode="idle", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+                  )
+                )
+                /
+                5000
+              )
+              and on (fqdn) (pg_replication_is_replica == 0)
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+    expr: |
+      gitlab_component_saturation:ratio{component="pg_primary_context_switches"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="pg_primary_context_switches"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: >-
+        The Postgres replica instance context switches resource of the {{ $labels.type }} service ({{
+        $labels.stage }} stage), component has a saturation exceeding SLO and is close to its capacity
+        limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Postgres replica instance context switches resource:
+
+        Context switches per core per second on the postgres replica instances.
+
+        This measures the number of linux context switches per core against a hypothetical estimated limit.
+
+        When approaching this limit, the overhead of context switching may make the server unresponsive to queries. The `node_schedstat_waiting_seconds_total` may indicate that the processes are spending a great deal of time waiting to be scheduled for execution on a core.
+      grafana_dashboard_id: alerts-sat_pg_replica_context_switches
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/alerts-sat_pg_replica_context_switches?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '1621665383'
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage) (
+          clamp_min(
+            clamp_max(
+              (
+                (
+                  rate(node_context_switches_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
+                  / on (fqdn)
+                  count by (fqdn)
+                    node_cpu_seconds_total{mode="idle", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+                  )
+                )
+                /
+                5000
+              )
+              and on (fqdn) (pg_replication_is_replica == 0)
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+    expr: |
+      gitlab_component_saturation:ratio{component="pg_replica_context_switches"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="pg_replica_context_switches"}
   - alert: component_saturation_slo_out_of_bounds
     for: 10m
     annotations:

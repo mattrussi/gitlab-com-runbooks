@@ -899,6 +899,84 @@ local pgbouncerSyncPool(serviceType, role) =
     },
   }),
 
+  pg_primary_context_switches: resourceSaturationPoint({
+    title: 'Postgres primary instance context switches',
+    severity: 's2',
+    horizontallyScalable: false,  // Primary postgres instance cannot be scaled horizontally
+    appliesTo: ['patroni'],
+    description: |||
+      Context switches per core per second on the postgres primary instance.
+
+      This measures the number of linux context switches per core against a hypothetical estimated limit.
+
+      When approaching this limit, the overhead of context switching may make the server unresponsive to queries. The `node_schedstat_waiting_seconds_total` may indicate
+      that the processes are spending a great deal of time waiting to be scheduled for execution on a core.
+    |||,
+    grafana_dashboard_uid: 'sat_pg_primary_context_switches',
+    resourceLabels: [],
+    burnRatePeriod: '5m',
+    queryFormatConfig: {
+      estimatedMaximumContextSwitchesPerCore: 5000,
+    },
+    query: |||
+      (
+        (
+          rate(node_context_switches_total{%(selector)s}[%(rangeInterval)s])
+          / on (fqdn)
+          count by (fqdn)
+            node_cpu_seconds_total{mode="idle", %(selector)s}
+          )
+        )
+        /
+        %(estimatedMaximumContextSwitchesPerCore)g
+      )
+      and on (fqdn) (pg_replication_is_replica == 0)
+    |||,
+    slos: {
+      soft: 0.60,
+      hard: 0.75,
+    },
+  }),
+
+  pg_replica_context_switches: resourceSaturationPoint({
+    title: 'Postgres replica instance context switches',
+    severity: 's2',
+    horizontallyScalable: true,  // Primary replica instances can be scaled horizontally
+    appliesTo: ['patroni'],
+    description: |||
+      Context switches per core per second on the postgres replica instances.
+
+      This measures the number of linux context switches per core against a hypothetical estimated limit.
+
+      When approaching this limit, the overhead of context switching may make the server unresponsive to queries. The `node_schedstat_waiting_seconds_total` may indicate
+      that the processes are spending a great deal of time waiting to be scheduled for execution on a core.
+    |||,
+    grafana_dashboard_uid: 'sat_pg_replica_context_switches',
+    resourceLabels: [],
+    burnRatePeriod: '5m',
+    queryFormatConfig: {
+      estimatedMaximumContextSwitchesPerCore: 5000,
+    },
+    query: |||
+      (
+        (
+          rate(node_context_switches_total{%(selector)s}[%(rangeInterval)s])
+          / on (fqdn)
+          count by (fqdn)
+            node_cpu_seconds_total{mode="idle", %(selector)s}
+          )
+        )
+        /
+        %(estimatedMaximumContextSwitchesPerCore)g
+      )
+      and on (fqdn) (pg_replication_is_replica == 0)
+    |||,
+    slos: {
+      soft: 0.60,
+      hard: 0.75,
+    },
+  }),
+
   redis_clients: resourceSaturationPoint({
     title: 'Redis Client Utilization per Node',
     severity: 's3',
