@@ -36,7 +36,7 @@ local requestDurationGraphPrometheus(
   );
 
 dashboard.new(
-  'John H: Plan PM/Certify BE Performance',
+  'Plan Portfolio Management/Certify Backend Performance',
   schemaVersion=16,
   tags=['overview'],
   timezone='utc',
