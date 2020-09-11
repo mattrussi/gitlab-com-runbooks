@@ -1,6 +1,6 @@
-local basic = import 'basic.libsonnet';
-local grafana = import 'grafonnet/grafana.libsonnet';
-local promQuery = import 'prom_query.libsonnet';
+local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
+local basic = import 'grafana/basic.libsonnet';
+local promQuery = import 'grafana/prom_query.libsonnet';
 local dashboard = grafana.dashboard;
 local influxdb = grafana.influxdb;
 local row = grafana.row;
