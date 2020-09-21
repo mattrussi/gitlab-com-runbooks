@@ -27,6 +27,11 @@
 # sudo gitlab-rails runner /var/opt/gitlab/scripts/storage_audit.rb --dry-run=yes
 # sudo gitlab-rails runner /var/opt/gitlab/scripts/storage_audit.rb --dry-run=no
 #
+# Note that invocation with --rescan will cause the --dry-run option to be
+# ignored for a single read-only `find` operation on the resident system:
+#
+# sudo gitlab-rails runner /var/opt/gitlab/scripts/storage_audit.rb --dry-run=yes --rescan
+#
 # Example results:
 #
 # root@file-01-stor-gstg.c.gitlab-staging-1.internal:~# gitlab-rails runner /var/opt/gitlab/scripts/storage_audit.rb --dry-run=no
@@ -199,7 +204,7 @@ module Storage
       end
 
       def define_rescan_option
-        @parser.on('--rescan', 'Re-scan the repository storage inventory') do
+        @parser.on('--rescan', 'Re-scan the repository storage inventory (ignores --dry-run)') do
           @options[:rescan] = true
         end
       end
@@ -300,7 +305,7 @@ module Storage
       hashed_storage_root_path = File.join(options[:repositories_root_dir_path], options[:hashed_storage_dir_name])
       command = format(options[:inventory_find_command], path: hashed_storage_root_path)
       repositories = []
-      if options[:dry_run]
+      if options[:dry_run] && !options[:rescan]
         log.info "[Dry-run] Would have executed command: #{command}"
       else
         log.info "Executing command: #{command}"
