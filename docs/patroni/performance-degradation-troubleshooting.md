@@ -1,6 +1,6 @@
 ## Troubleshooting database (postgres/pgbouncer) degradation
 
-Database performance degradation may be due to several reasons. To search for de root cause, you can start digging by checking existing metrics.
+Database performance degradation may be due to several reasons. To search for the root cause, you can start digging by checking existing metrics.
 
 
 ### Check CPU utilization
