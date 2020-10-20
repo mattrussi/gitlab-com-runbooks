@@ -14,6 +14,11 @@
 
 ## Troubleshooting Pointers
 
+* [../chef/chef-documentation.md](../chef/chef-documentation.md)
+* [../chef/chef-process-overview.md](../chef/chef-process-overview.md)
+* [../chef/chef-vault.md](../chef/chef-vault.md)
+* [../chef/gkms-chef-secrets.md](../chef/gkms-chef-secrets.md)
+* [../chef/manage-chef.md](../chef/manage-chef.md)
 * [../cloudflare/oncall.md](../cloudflare/oncall.md)
 * [../customers.gitlab.com/api-key-rotation.md](../customers.gitlab.com/api-key-rotation.md)
 * [../elastic/elastic-cloud.md](../elastic/elastic-cloud.md)
@@ -29,11 +34,6 @@
 * [../uncategorized/about-gitlab-com.md](../uncategorized/about-gitlab-com.md)
 * [../uncategorized/aptly.md](../uncategorized/aptly.md)
 * [../uncategorized/camoproxy.md](../uncategorized/camoproxy.md)
-* [../uncategorized/chef-documentation.md](../uncategorized/chef-documentation.md)
-* [../uncategorized/chef-process-overview.md](../uncategorized/chef-process-overview.md)
-* [../uncategorized/chef-vault.md](../uncategorized/chef-vault.md)
-* [../uncategorized/gkms-chef-secrets.md](../uncategorized/gkms-chef-secrets.md)
-* [../uncategorized/manage-chef.md](../uncategorized/manage-chef.md)
 * [../uncategorized/packagecloud-infrastructure.md](../uncategorized/packagecloud-infrastructure.md)
 * [../uncategorized/rename-nodes.md](../uncategorized/rename-nodes.md)
 * [../uncategorized/reprovisioning-nodes.md](../uncategorized/reprovisioning-nodes.md)

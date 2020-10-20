@@ -20,6 +20,7 @@
 
 ## Troubleshooting Pointers
 
+* [../chef/chef-documentation.md](../chef/chef-documentation.md)
 * [../ci-runners/create-runners-manager-node.md](../ci-runners/create-runners-manager-node.md)
 * [../ci-runners/pipeline-deletion.md](../ci-runners/pipeline-deletion.md)
 * [../ci-runners/tracing-app-db-queries.md](../ci-runners/tracing-app-db-queries.md)
@@ -53,7 +54,6 @@
 * [../sidekiq/sidekiq-survival-guide-for-sres.md](../sidekiq/sidekiq-survival-guide-for-sres.md)
 * [../uncategorized/apdex-alerts-guide.md](../uncategorized/apdex-alerts-guide.md)
 * [../uncategorized/blocked-user-logins.md](../uncategorized/blocked-user-logins.md)
-* [../uncategorized/chef-documentation.md](../uncategorized/chef-documentation.md)
 * [../uncategorized/gemnasium_is_down.md](../uncategorized/gemnasium_is_down.md)
 * [../uncategorized/k8s-cluster-upgrade.md](../uncategorized/k8s-cluster-upgrade.md)
 * [../uncategorized/k8s-gitlab.md](../uncategorized/k8s-gitlab.md)

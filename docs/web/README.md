@@ -20,6 +20,9 @@
 
 ## Troubleshooting Pointers
 
+* [../chef/chef-documentation.md](../chef/chef-documentation.md)
+* [../chef/chef-guidelines.md](../chef/chef-guidelines.md)
+* [../chef/debug-failed-chef-provisioning.md](../chef/debug-failed-chef-provisioning.md)
 * [../ci-runners/service-ci-runners.md](../ci-runners/service-ci-runners.md)
 * [../cloudflare/managing-traffic.md](../cloudflare/managing-traffic.md)
 * [../cloudflare/oncall.md](../cloudflare/oncall.md)
@@ -50,9 +53,6 @@
 * [../sidekiq/sidekiq-survival-guide-for-sres.md](../sidekiq/sidekiq-survival-guide-for-sres.md)
 * [../uncategorized/apdex-alerts-guide.md](../uncategorized/apdex-alerts-guide.md)
 * [../uncategorized/blocked-user-logins.md](../uncategorized/blocked-user-logins.md)
-* [../uncategorized/chef-documentation.md](../uncategorized/chef-documentation.md)
-* [../uncategorized/chef-guidelines.md](../uncategorized/chef-guidelines.md)
-* [../uncategorized/debug-failed-chef-provisioning.md](../uncategorized/debug-failed-chef-provisioning.md)
 * [../uncategorized/definition-service-error-rate.md](../uncategorized/definition-service-error-rate.md)
 * [../uncategorized/definition-service-ops-rate.md](../uncategorized/definition-service-ops-rate.md)
 * [../uncategorized/deploycmd.md](../uncategorized/deploycmd.md)

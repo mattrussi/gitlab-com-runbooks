@@ -14,6 +14,8 @@
 
 ## Troubleshooting Pointers
 
+* [../chef/chef-vault.md](../chef/chef-vault.md)
+* [../chef/chef.md](../chef/chef.md)
 * [../cloudflare/managing-traffic.md](../cloudflare/managing-traffic.md)
 * [../frontend/ban-netblocks-on-haproxy.md](../frontend/ban-netblocks-on-haproxy.md)
 * [../frontend/haproxy.md](../frontend/haproxy.md)
@@ -23,8 +25,6 @@
 * [gitlab-pages.md](gitlab-pages.md)
 * [pages-letsencrypt.md](pages-letsencrypt.md)
 * [../patroni/pg_repack.md](../patroni/pg_repack.md)
-* [../uncategorized/chef-vault.md](../uncategorized/chef-vault.md)
-* [../uncategorized/chef.md](../uncategorized/chef.md)
 * [../uncategorized/deploycmd.md](../uncategorized/deploycmd.md)
 <!-- END_MARKER -->
 

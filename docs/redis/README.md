@@ -16,6 +16,7 @@
 
 ## Troubleshooting Pointers
 
+* [../chef/chef-guidelines.md](../chef/chef-guidelines.md)
 * [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
 * [../monitoring/sentry-is-down.md](../monitoring/sentry-is-down.md)
 * [../patroni/rotating-rails-postgresql-password.md](../patroni/rotating-rails-postgresql-password.md)
@@ -27,7 +28,6 @@
 * [../sidekiq/sidekiq-inspection.md](../sidekiq/sidekiq-inspection.md)
 * [../sidekiq/sidekiq-survival-guide-for-sres.md](../sidekiq/sidekiq-survival-guide-for-sres.md)
 * [../sidekiq/sidekiq_stats_no_longer_showing.md](../sidekiq/sidekiq_stats_no_longer_showing.md)
-* [../uncategorized/chef-guidelines.md](../uncategorized/chef-guidelines.md)
 * [../uncategorized/definition-service-apdex.md](../uncategorized/definition-service-apdex.md)
 * [../uncategorized/deleted-project-restore.md](../uncategorized/deleted-project-restore.md)
 * [../uncategorized/manage-pacemaker.md](../uncategorized/manage-pacemaker.md)

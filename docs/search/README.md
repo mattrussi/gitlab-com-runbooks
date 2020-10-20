@@ -14,6 +14,10 @@
 
 ## Troubleshooting Pointers
 
+* [../chef/chef-documentation.md](../chef/chef-documentation.md)
+* [../chef/chef-guidelines.md](../chef/chef-guidelines.md)
+* [../chef/chef.md](../chef/chef.md)
+* [../chef/manage-chef.md](../chef/manage-chef.md)
 * [../ci-runners/ci-investigate-abuse.md](../ci-runners/ci-investigate-abuse.md)
 * [../ci-runners/service-ci-runners.md](../ci-runners/service-ci-runners.md)
 * [../cloudflare/logging.md](../cloudflare/logging.md)
@@ -30,14 +34,10 @@
 * [../sidekiq/sidekiq-survival-guide-for-sres.md](../sidekiq/sidekiq-survival-guide-for-sres.md)
 * [../sidekiq/sidekiq_error_rate_high.md](../sidekiq/sidekiq_error_rate_high.md)
 * [../uncategorized/camoproxy.md](../uncategorized/camoproxy.md)
-* [../uncategorized/chef-documentation.md](../uncategorized/chef-documentation.md)
-* [../uncategorized/chef-guidelines.md](../uncategorized/chef-guidelines.md)
-* [../uncategorized/chef.md](../uncategorized/chef.md)
 * [../uncategorized/domain-registration.md](../uncategorized/domain-registration.md)
 * [../uncategorized/gcp-project.md](../uncategorized/gcp-project.md)
 * [../uncategorized/gcp-snapshots.md](../uncategorized/gcp-snapshots.md)
 * [../uncategorized/kubernetes.md](../uncategorized/kubernetes.md)
-* [../uncategorized/manage-chef.md](../uncategorized/manage-chef.md)
 * [../uncategorized/node-reboots.md](../uncategorized/node-reboots.md)
 * [../uncategorized/uploads.md](../uncategorized/uploads.md)
 <!-- END_MARKER -->
