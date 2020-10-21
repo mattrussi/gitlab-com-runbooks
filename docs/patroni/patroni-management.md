@@ -584,3 +584,71 @@ gerardoherzig@patroni-03-db-gstg.c.gitlab-staging-1.internal:~$ sudo tail /var/l
 ```
 
 This is mainly useful when investigating an event like an unexpected leader change (failover)
+
+### Querying the Consul KV
+
+Under certain circumstances, for example if you are creating a chef recipe, an ansible role or a shell script to automate some task using patroni, you can query the consul database and check the status of patroni in a programatic way using `curl`. It also can be used as the basements for exporting metrics / monitoring. For example:
+
+- Check if the current host is the leader:
+```sh
+ curl -s http://localhost:8009/patroni | jq '.role == "master"'
+true
+```
+
+- Check the current timeline (useful to monitoring):
+```sh
+curl -s http://localhost:8009/patroni | jq '.timeline'
+10
+```
+
+- Show local configuration:
+```sh
+sudo gitlab-patronictl show-config
+loop_wait: 10
+maximum_lag_on_failover: 1048576
+postgresql:
+  parameters:
+    checkpoint_timeout: 10min
+    hot_standby: 'on'
+    max_connections: 500
+    max_locks_per_transaction: 128
+    max_replication_slots: 32
+    max_wal_senders: 32
+    max_wal_size: 8GB
+    wal_keep_segments: 512
+    wal_level: logical
+  use_pg_rewind: true
+  use_slots: true
+retry_timeout: 40
+ttl: 90
+```
+
+The API allows some parameters to be changed too. In this example we change the value of `wal_keep_segments` parameter to `520`:
+
+```
+curl -s -XPATCH -d '{"postgresql":{"parameters":{"wal_keep_segments": 520}}}' http://localhost:8009/config | jq .
+{
+  "maximum_lag_on_failover": 1048576,
+  "retry_timeout": 40,
+  "loop_wait": 10,
+  "postgresql": {
+    "use_pg_rewind": true,
+    "parameters": {
+      "checkpoint_timeout": "10min",
+      "hot_standby": "on",
+      "wal_level": "logical",
+      "max_wal_senders": 32,
+      "wal_keep_segments": 520,
+      "max_connections": 500,
+      "max_locks_per_transaction": 128,
+      "max_replication_slots": 32,
+      "max_wal_size": "8GB"
+    },
+    "use_slots": true
+  },
+  "ttl": 90
+}
+```
+
+
+For more information about using the Patroni API, you can check the [Patroni Oficial Documentation](https://patroni.readthedocs.io/en/release-1.6.0/dynamic_configuration.html#rest-api)
