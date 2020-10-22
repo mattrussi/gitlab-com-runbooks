@@ -39,6 +39,7 @@ local rules = {
           rules_domain: 'general',
           severity: 's2',
           pager: 'pagerduty',
+          page: 'true',
           slo_alert: 'yes',
         },
         annotations: {
@@ -77,6 +78,7 @@ local rules = {
         slo_alert: 'yes',
         alert_type: 'symptom',
         pager: 'pagerduty',
+        page: 'true',
       },
       annotations: {
         title: 'The `{{ $labels.type }}` service, `{{ $labels.component }}` component, `{{ $labels.stage }}` stage, has an error burn-rate exceeding SLO',

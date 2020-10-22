@@ -69,6 +69,7 @@ class Validator
       validation_error("rules contains an invalid `pager` label: #{labels['pager']}") unless %w[pagerduty issue].include?(labels["pager"])
       validation_error("only severity s1 and s2 errors should page") unless (labels["severity"] == "s1") || (labels["severity"] == "s2")
       validation_error("'pager: issue' alerts need a project label") if (labels["pager"] == "issue") && labels["project"].nil?
+      validation_error("'pager: pagerduty' alerts need `page: true` while we transition the routing tree") if labels["pager"] == "pagerduty" && labels["page"] != "true"
     elsif (labels["severity"] == "s1") || (labels["severity"] == "s2")
       validation_error("s1 and s2 alerts must be configured to send to pagerduty")
     end

@@ -30,6 +30,7 @@ groups:
     labels:
       alert_type: symptom
       deprecated: 'yes'
+      page: 'true'
       pager: pagerduty
       rules_domain: general
       severity: s2
@@ -70,6 +71,7 @@ groups:
     labels:
       alert_type: symptom
       deprecated: 'yes'
+      page: 'true'
       pager: pagerduty
       rules_domain: general
       severity: s2
@@ -109,6 +111,7 @@ groups:
     labels:
       alert_type: symptom
       deprecated: 'yes'
+      page: 'true'
       pager: pagerduty
       rules_domain: general
       severity: s2
@@ -148,6 +151,7 @@ groups:
     labels:
       alert_type: symptom
       deprecated: 'yes'
+      page: 'true'
       pager: pagerduty
       rules_domain: general
       severity: s2
@@ -270,6 +274,7 @@ groups:
       alert_type: symptom
       canary_warning: 'yes'
       deprecated: 'yes'
+      page: 'true'
       pager: pagerduty
       rules_domain: general
       severity: s2
@@ -331,6 +336,7 @@ groups:
       alert_type: symptom
       canary_warning: 'yes'
       deprecated: 'yes'
+      page: 'true'
       pager: pagerduty
       rules_domain: general
       severity: s2

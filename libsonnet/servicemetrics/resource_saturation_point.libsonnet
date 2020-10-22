@@ -179,7 +179,7 @@ local resourceSaturationPoint = function(options)
       local severityLabels =
         { severity: definition.severity } +
         if definition.severity == 's1' || definition.severity == 's2' then
-          { pager: 'pagerduty' }
+          { pager: 'pagerduty', page: 'true' }
         else
           {};
 

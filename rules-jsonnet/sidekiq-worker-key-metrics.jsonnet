@@ -139,6 +139,7 @@ local generateAlerts() =
         rules_domain: 'general',
         severity: 's1',
         pager: 'pagerduty',
+        page: 'true',
       },
       annotations: {
         title: 'Sidekiq jobs are being enqueued to an ignored queue that will never be dequeued',

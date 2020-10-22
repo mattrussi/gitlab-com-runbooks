@@ -16,6 +16,7 @@ groups:
     for: 5m
     labels:
       pager: pagerduty
+      page: 'true'
       severity: s1
       alert_type: cause
     annotations:
@@ -37,6 +38,7 @@ groups:
     for: 5m
     labels:
       pager: pagerduty
+      page: 'true'
       severity: s1
       alert_type: cause
     annotations:
@@ -60,6 +62,7 @@ groups:
       severity: s1
       alert_type: cause
       pager: pagerduty
+      page: 'true'
     annotations:
       description: This might be causing a slowdown on the site and/or affecting users.
         Please check the Triage Dashboard in Grafana.

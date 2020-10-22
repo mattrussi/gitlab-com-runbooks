@@ -30,6 +30,7 @@ groups:
     labels:
       team: gitaly
       pager: pagerduty
+      page: 'true'
       severity: s1
       alert_type: cause
     annotations:
@@ -103,6 +104,7 @@ groups:
     labels:
       team: gitaly
       pager: pagerduty
+      page: 'true'
       severity: s1
       alert_type: cause
     annotations:
@@ -121,6 +123,7 @@ groups:
     labels:
       team: gitaly
       pager: pagerduty
+      page: 'true'
       severity: s1
       alert_type: cause
     annotations:
@@ -137,6 +140,7 @@ groups:
     labels:
       team: gitaly
       pager: pagerduty
+      page: 'true'
       severity: s1
       alert_type: cause
     annotations:

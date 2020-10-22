@@ -14,6 +14,7 @@ groups:
     for: 5m
     labels:
       pager: pagerduty
+      page: 'true'
       severity: s1
       alert_type: symptom
     annotations:
@@ -26,6 +27,7 @@ groups:
     for: 5m
     labels:
       pager: pagerduty
+      page: 'true'
       severity: s1
       alert_type: symptom
     annotations:

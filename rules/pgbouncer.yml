@@ -7,6 +7,7 @@ groups:
     labels:
       severity: s1
       pager: pagerduty
+      page: 'true'
       alert_type: cause
     annotations:
       title: 'Sidekiq is using most of its PgBouncer connections: {{$value}}'

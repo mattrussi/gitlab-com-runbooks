@@ -25,6 +25,7 @@ groups:
     labels:
       severity: s1
       pager: pagerduty
+      page: 'true'
       alert_type: cause
     annotations:
       description: There have been over 100 {{ $labels.name }} Sidekiq jobs queued for the last 20 minutes.
@@ -42,6 +43,7 @@ groups:
     labels:
       severity: s1
       pager: pagerduty
+      page: 'true'
       alert_type: cause
     annotations:
       description: There have been over 50k {{ $labels.name }} Sidekiq jobs queued for the last 30 minutes.

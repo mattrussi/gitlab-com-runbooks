@@ -41,6 +41,7 @@ groups:
     labels:
       severity: s1
       pager: pagerduty
+      page: 'true'
       alert_type: cause
     annotations:
       description: >

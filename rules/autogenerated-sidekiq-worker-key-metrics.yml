@@ -149,6 +149,7 @@ groups:
       runbook: docs/sidekiq/README.md
     labels:
       alert_type: cause
+      page: 'true'
       pager: pagerduty
       rules_domain: general
       severity: s1

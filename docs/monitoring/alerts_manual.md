@@ -85,7 +85,8 @@ groups:
 * labels: any alert that triggers will include all the labels that come from the prometheus metric, here we can add more labels to manage the alert behavior. We could, for example add more labels like this:
   * channel: which channel the alert should go to, in slack format, for ex: `#production`
   * severity: `critical` for it to be red, `warn` for it to be only a warning (orange)
-  * pager: if `pagerduty` then the alert will be also sent to pagerduty to the production on-call
+  * page: if `true` then the alert will be also sent to pagerduty to the production on-call
+  * DEPRECATED: pager: if `pagerduty` then the alert will be also sent to pagerduty to the production on-call
 	* environment: this one generally comes with the metric, we can override it to send to different channels (stg, pre, or geo)
 * annotations: there are 2 annotations that will be always used: title and descriptions. These should be static (they can't have any variable in them) more on this later on. Additionally we can define as many other annotations as we want, more on this later.
 

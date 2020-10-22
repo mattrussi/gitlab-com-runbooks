@@ -9,6 +9,7 @@ groups:
     for: 20m
     labels:
       pager: pagerduty
+      page: 'true'
       service: alertmanager
       severity: s1
       alert_type: cause

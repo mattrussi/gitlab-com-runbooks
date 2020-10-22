@@ -18,6 +18,7 @@ groups:
     for: 125m
     labels:
       pager: pagerduty
+      page: 'true'
       severity: s1
       alert_type: cause
     annotations:
@@ -32,6 +33,7 @@ groups:
     for: 5m
     labels:
       pager: pagerduty
+      page: 'true'
       severity: s1
       alert_type: cause
     annotations:
@@ -71,6 +73,7 @@ groups:
     labels:
       severity: s1
       pager: pagerduty
+      page: 'true'
       alert_type: cause
     annotations:
       descrition: Database {{$labels.fqdn}} has {{ $value | printf "%.1f" }} statement
@@ -92,6 +95,7 @@ groups:
     for: 5m
     labels:
       pager: pagerduty
+      page: 'true'
       severity: s1
       alert_type: cause
     annotations:
@@ -115,6 +119,7 @@ groups:
     for: 5m
     labels:
       pager: pagerduty
+      page: 'true'
       severity: s1
       alert_type: cause
     annotations:
@@ -127,6 +132,7 @@ groups:
     for: 5m
     labels:
       pager: pagerduty
+      page: 'true'
       severity: s1
       alert_type: cause
     annotations:
@@ -151,6 +157,7 @@ groups:
     for: 30m
     labels:
       pager: pagerduty
+      page: 'true'
       severity: s1
       alert_type: cause
     annotations:
@@ -190,6 +197,7 @@ groups:
     for: 5m
     labels:
       pager: pagerduty
+      page: 'true'
       severity: s1
       alert_type: cause
     annotations:
@@ -214,6 +222,7 @@ groups:
     for: 30m
     labels:
       pager: pagerduty
+      page: 'true'
       severity: s1
       alert_type: cause
     annotations:
@@ -227,6 +236,7 @@ groups:
     for: 1m
     labels:
       pager: pagerduty
+      page: 'true'
       severity: s1
       alert_type: cause
     annotations:
@@ -243,6 +253,7 @@ groups:
     for: 1m
     labels:
       pager: pagerduty
+      page: 'true'
       severity: s1
       alert_type: cause
     annotations:
@@ -258,6 +269,7 @@ groups:
     for: 1m
     labels:
       pager: pagerduty
+      page: 'true'
       severity: s1
       alert_type: cause
     annotations:
@@ -297,6 +309,7 @@ groups:
     for: 5m
     labels:
       pager: pagerduty
+      page: 'true'
       severity: s1
       alert_type: cause
     annotations:
@@ -308,6 +321,7 @@ groups:
     for: 1h
     labels:
       pager: pagerduty
+      page: 'true'
       severity: s1
       alert_type: cause
     annotations:
@@ -330,6 +344,7 @@ groups:
     expr: rate(pgbouncer_errors_count{errmsg="no more connections allowed (max_client_conn)"}[1m]) > 0
     labels:
       pager: pagerduty
+      page: 'true'
       severity: s1
       alert_type: cause
     annotations:
@@ -342,6 +357,7 @@ groups:
     for: 5m
     labels:
       pager: pagerduty
+      page: 'true'
       severity: s1
       alert_type: cause
     annotations:

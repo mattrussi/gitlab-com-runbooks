@@ -7,6 +7,7 @@ groups:
     for: 5m
     labels:
       pager: pagerduty
+      page: 'true'
       severity: s1
       alert_type: cause
     annotations:
@@ -21,6 +22,7 @@ groups:
       > 0
     labels:
       pager: pagerduty
+      page: 'true'
       severity: s1
       alert_type: cause
     annotations:

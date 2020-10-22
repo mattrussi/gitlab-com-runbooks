@@ -27,6 +27,7 @@ groups:
       runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: symptom
+      page: 'true'
       pager: pagerduty
       rules_domain: general
       severity: s2
@@ -107,6 +108,7 @@ groups:
       runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: symptom
+      page: 'true'
       pager: pagerduty
       rules_domain: general
       severity: s2
