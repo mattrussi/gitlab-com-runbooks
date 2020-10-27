@@ -26,6 +26,7 @@
 * [gitlab-com-walg-backups.md](gitlab-com-walg-backups.md)
 * [log_analysis.md](log_analysis.md)
 * [patroni-management.md](patroni-management.md)
+* [performance-degradation-troubleshooting.md](performance-degradation-troubleshooting.md)
 * [pg-ha.md](pg-ha.md)
 * [pg_repack.md](pg_repack.md)
 * [pgbadger_report.md](pgbadger_report.md)
