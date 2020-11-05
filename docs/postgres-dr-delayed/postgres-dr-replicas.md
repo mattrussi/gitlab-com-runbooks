@@ -118,12 +118,6 @@ wal-g. Retrieving the base-backup will take several hours (1.5 - 2 TiB/h -> ~3.5
 then fetching and replaying the necessary WAL files since the base-backup also can
 take a few hours, depending on how much time passed since the last base-backup.
 
-IMPORTANT NOTE: If you're doing this because of a failover in the primary DB, there
-is *NO* point doing so until there is a new basebackup from the new primary; before that
-you'll just restore then re-run the WALs to the failover point at which time the replay
-will fail again in exactly the same manner.  The primary base backups occur at/around midnight UTC,
-and (currently) take about 9 hrs (mileage-may-vary)
-
 * make a backup copy of `recovery.conf`:
   * `cp -a /var/opt/gitlab/postgresql/data/recovery.conf $HOME/`
 * `chef-client-disable <comment or link to issue>`
@@ -134,17 +128,10 @@ and (currently) take about 9 hrs (mileage-may-vary)
   * `cd /tmp/; sudo -u gitlab-psql /usr/bin/envdir /etc/wal-g.d/env /opt/wal-g/bin/wal-g backup-fetch /var/opt/gitlab/postgresql/data/ $BASE`
 * copy back the recovery.conf file, make sure it is looking like [above](#pre-requisites)
   * `cp -a $HOME/recovery.conf /var/opt/gitlab/postgresql/data/`
-* run `gitlab-ctl reconfigure`; this will generate a new postgresql.conf, but will
-  probably then fail trying to connect to the newly started up (but still not recovered)
-  DB, to create users (or some such).
-  [This is fine](https://i.kym-cdn.com/photos/images/newsfeed/000/962/640/658.png)
-* chef should have started postgresql, but check with `gitlab-ctl status postgresql`, and
-  if necessary, `gitlab-ctl start postgresql`
+* run `gitlab-ctl reconfigure` to create a proper postgresql.conf, check it
+* make sure postgresql is started: `gitlab-ctl start postgresql`
 * check logs in `/var/log/gitlab/postgresql/current` - postgres should be in
   startup first and then start replaying WAL files all the time
-* Once postgres is accepting connections again (many hours, but before it gets fully
-  up to date, based on some internal determination by postgres), run `gitlab-ctl reconfigure`
-  again to ensure it completes any configuration, and will be clean in future.
 * `chef-client-enable`
 
 #### Restoring with a disk-snapshot
