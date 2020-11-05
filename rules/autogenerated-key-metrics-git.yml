@@ -190,7 +190,7 @@ groups:
       type: git
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_workhorse_http_request_duration_seconds_bucket{job="gitlab-workhorse-git",le="10",route="^/api/",type="git"}[1m])
+        rate(gitlab_workhorse_http_request_duration_seconds_bucket{job="gitlab-workhorse-git",le="1",route="^/api/",type="git"}[1m])
       )
       /
       (
@@ -405,7 +405,7 @@ groups:
       type: git
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_workhorse_http_request_duration_seconds_bucket{job="gitlab-workhorse-git",le="10",route="^/api/",type="git"}[5m])
+        rate(gitlab_workhorse_http_request_duration_seconds_bucket{job="gitlab-workhorse-git",le="1",route="^/api/",type="git"}[5m])
       )
       /
       (
@@ -616,7 +616,7 @@ groups:
       type: git
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_workhorse_http_request_duration_seconds_bucket{job="gitlab-workhorse-git",le="10",route="^/api/",type="git"}[30m])
+        rate(gitlab_workhorse_http_request_duration_seconds_bucket{job="gitlab-workhorse-git",le="1",route="^/api/",type="git"}[30m])
       )
       / on(environment,stage) group_left()
       (
@@ -829,7 +829,7 @@ groups:
       type: git
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_workhorse_http_request_duration_seconds_bucket{job="gitlab-workhorse-git",le="10",route="^/api/",type="git"}[1h])
+        rate(gitlab_workhorse_http_request_duration_seconds_bucket{job="gitlab-workhorse-git",le="1",route="^/api/",type="git"}[1h])
       )
       /
       (
@@ -1040,7 +1040,7 @@ groups:
       type: git
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_workhorse_http_request_duration_seconds_bucket{job="gitlab-workhorse-git",le="10",route="^/api/",type="git"}[6h])
+        rate(gitlab_workhorse_http_request_duration_seconds_bucket{job="gitlab-workhorse-git",le="1",route="^/api/",type="git"}[6h])
       )
       / on(environment,stage) group_left()
       (

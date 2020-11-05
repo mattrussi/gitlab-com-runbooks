@@ -117,9 +117,8 @@ metricsCatalog.serviceDefinition({
       apdex: histogramApdex(
         histogram='gitlab_workhorse_http_request_duration_seconds_bucket',
         selector=baseSelector,
-        // Note: 10s is far too slow for an auth request. This threshold should be much lower
-        // TODO: reduce this threshold to 1s
-        satisfiedThreshold=10
+        // Note: 1s is too slow for an auth request. This threshold should be lower
+        satisfiedThreshold=1
       ),
 
       requestRate: rateMetric(
