@@ -6,6 +6,7 @@ export indices=(
   camoproxy
   chef
   consul
+  fluentd
   gitaly
   gke
   gke-audit
