@@ -95,7 +95,7 @@ metricsCatalog.serviceDefinition({
         selector=baseSelector { status: { re: '5..' } }
       ),
 
-      significantLabels: ['fqdn'],
+      significantLabels: ['fqdn', 'method', 'feature_category'],
 
       toolingLinks: [
         // Improve sentry link once https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/532 arrives

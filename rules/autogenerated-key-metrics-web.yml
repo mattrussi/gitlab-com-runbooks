@@ -4,6 +4,61 @@ groups:
 - name: 'Component-Level SLIs: web - 1m burn-rate'
   interval: 1m
   rules:
+  - record: sli_aggregations:http_requests_total_rate1m
+    expr: |
+      sum by (code,environment,feature_category,fqdn,job,method,shard,stage,status,tier,type) (
+        rate(http_requests_total[1m])
+      )
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: imagescaler
+      tier: sv
+      type: web
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job="gitlab-workhorse-web", type="web", le="+Inf"}[1m])
+      )
+  - record: gitlab_component_apdex:ratio
+    labels:
+      component: imagescaler
+      tier: sv
+      type: web
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job="gitlab-workhorse-web", type="web", le="0.2"}[1m])
+        )
+        +
+        sum by (environment,stage) (
+          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job="gitlab-workhorse-web", type="web", le="0.8"}[1m])
+        )
+      )
+      /
+      2
+      /
+      (
+        sum by (environment,stage) (
+          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job="gitlab-workhorse-web", type="web", le="+Inf"}[1m])
+        ) > 0
+      )
+  - record: gitlab_component_ops:rate
+    labels:
+      component: imagescaler
+      tier: sv
+      type: web
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_workhorse_image_resize_requests_total{job="gitlab-workhorse-web", type="web"}[1m])
+      )
+  - record: gitlab_component_errors:rate
+    labels:
+      component: imagescaler
+      tier: sv
+      type: web
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_workhorse_image_resize_requests_total{job="gitlab-workhorse-web", type="web", status!="success"}[1m])
+      )
   - record: gitlab_component_ops:rate
     labels:
       component: loadbalancer
@@ -83,7 +138,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(http_requests_total{job="gitlab-rails",type="web"}[1m])
+        sli_aggregations:http_requests_total_rate1m{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -92,7 +147,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(http_requests_total{job="gitlab-rails",status=~"5..",type="web"}[1m])
+        sli_aggregations:http_requests_total_rate1m{job="gitlab-rails",status=~"5..",type="web"}
       )
   - record: gitlab_component_apdex:weight:score
     labels:
@@ -147,6 +202,61 @@ groups:
 - name: 'Component-Level SLIs: web - 5m burn-rate'
   interval: 1m
   rules:
+  - record: sli_aggregations:http_requests_total_rate5m
+    expr: |
+      sum by (code,environment,feature_category,fqdn,job,method,shard,stage,status,tier,type) (
+        rate(http_requests_total[5m])
+      )
+  - record: gitlab_component_apdex:weight:score_5m
+    labels:
+      component: imagescaler
+      tier: sv
+      type: web
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job="gitlab-workhorse-web", type="web", le="+Inf"}[5m])
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: imagescaler
+      tier: sv
+      type: web
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job="gitlab-workhorse-web", type="web", le="0.2"}[5m])
+        )
+        +
+        sum by (environment,stage) (
+          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job="gitlab-workhorse-web", type="web", le="0.8"}[5m])
+        )
+      )
+      /
+      2
+      /
+      (
+        sum by (environment,stage) (
+          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job="gitlab-workhorse-web", type="web", le="+Inf"}[5m])
+        ) > 0
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: imagescaler
+      tier: sv
+      type: web
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_workhorse_image_resize_requests_total{job="gitlab-workhorse-web", type="web"}[5m])
+      )
+  - record: gitlab_component_errors:rate_5m
+    labels:
+      component: imagescaler
+      tier: sv
+      type: web
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_workhorse_image_resize_requests_total{job="gitlab-workhorse-web", type="web", status!="success"}[5m])
+      )
   - record: gitlab_component_ops:rate_5m
     labels:
       component: loadbalancer
@@ -226,7 +336,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(http_requests_total{job="gitlab-rails",type="web"}[5m])
+        sli_aggregations:http_requests_total_rate5m{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -235,7 +345,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(http_requests_total{job="gitlab-rails",status=~"5..",type="web"}[5m])
+        sli_aggregations:http_requests_total_rate5m{job="gitlab-rails",status=~"5..",type="web"}
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -290,6 +400,59 @@ groups:
 - name: 'Component-Level SLIs: web - 30m burn-rate'
   interval: 2m
   rules:
+  - record: sli_aggregations:http_requests_total_rate30m
+    expr: |
+      sum by (code,environment,feature_category,fqdn,job,method,shard,stage,status,tier,type) (
+        rate(http_requests_total[30m])
+      )
+  - record: gitlab_component_apdex:weight:score_30m
+    labels:
+      component: imagescaler
+      tier: sv
+      type: web
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job="gitlab-workhorse-web", type="web", le="+Inf"}[30m])
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: imagescaler
+      tier: sv
+      type: web
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job="gitlab-workhorse-web", type="web", le="0.2"}[30m])
+        )
+        +
+        sum by (environment,stage) (
+          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job="gitlab-workhorse-web", type="web", le="0.8"}[30m])
+        )
+      )
+      /
+      2
+      / on(environment,stage) group_left()
+      (
+        gitlab_component_apdex:weight:score_30m{component="imagescaler",tier="sv",type="web"} > 0
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: imagescaler
+      tier: sv
+      type: web
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_workhorse_image_resize_requests_total{job="gitlab-workhorse-web", type="web"}[30m])
+      )
+  - record: gitlab_component_errors:rate_30m
+    labels:
+      component: imagescaler
+      tier: sv
+      type: web
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_workhorse_image_resize_requests_total{job="gitlab-workhorse-web", type="web", status!="success"}[30m])
+      )
   - record: gitlab_component_ops:rate_30m
     labels:
       component: loadbalancer
@@ -367,7 +530,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(http_requests_total{job="gitlab-rails",type="web"}[30m])
+        sli_aggregations:http_requests_total_rate30m{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -376,7 +539,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(http_requests_total{job="gitlab-rails",status=~"5..",type="web"}[30m])
+        sli_aggregations:http_requests_total_rate30m{job="gitlab-rails",status=~"5..",type="web"}
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -429,6 +592,61 @@ groups:
 - name: 'Component-Level SLIs: web - 1h burn-rate'
   interval: 1m
   rules:
+  - record: sli_aggregations:http_requests_total_rate1h
+    expr: |
+      sum by (code,environment,feature_category,fqdn,job,method,shard,stage,status,tier,type) (
+        rate(http_requests_total[1h])
+      )
+  - record: gitlab_component_apdex:weight:score_1h
+    labels:
+      component: imagescaler
+      tier: sv
+      type: web
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job="gitlab-workhorse-web", type="web", le="+Inf"}[1h])
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: imagescaler
+      tier: sv
+      type: web
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job="gitlab-workhorse-web", type="web", le="0.2"}[1h])
+        )
+        +
+        sum by (environment,stage) (
+          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job="gitlab-workhorse-web", type="web", le="0.8"}[1h])
+        )
+      )
+      /
+      2
+      /
+      (
+        sum by (environment,stage) (
+          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job="gitlab-workhorse-web", type="web", le="+Inf"}[1h])
+        ) > 0
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: imagescaler
+      tier: sv
+      type: web
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_workhorse_image_resize_requests_total{job="gitlab-workhorse-web", type="web"}[1h])
+      )
+  - record: gitlab_component_errors:rate_1h
+    labels:
+      component: imagescaler
+      tier: sv
+      type: web
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_workhorse_image_resize_requests_total{job="gitlab-workhorse-web", type="web", status!="success"}[1h])
+      )
   - record: gitlab_component_ops:rate_1h
     labels:
       component: loadbalancer
@@ -508,7 +726,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(http_requests_total{job="gitlab-rails",type="web"}[1h])
+        sli_aggregations:http_requests_total_rate1h{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -517,7 +735,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(http_requests_total{job="gitlab-rails",status=~"5..",type="web"}[1h])
+        sli_aggregations:http_requests_total_rate1h{job="gitlab-rails",status=~"5..",type="web"}
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -572,6 +790,59 @@ groups:
 - name: 'Component-Level SLIs: web - 6h burn-rate'
   interval: 2m
   rules:
+  - record: sli_aggregations:http_requests_total_rate6h
+    expr: |
+      sum by (code,environment,feature_category,fqdn,job,method,shard,stage,status,tier,type) (
+        rate(http_requests_total[6h])
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: imagescaler
+      tier: sv
+      type: web
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job="gitlab-workhorse-web", type="web", le="+Inf"}[6h])
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: imagescaler
+      tier: sv
+      type: web
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job="gitlab-workhorse-web", type="web", le="0.2"}[6h])
+        )
+        +
+        sum by (environment,stage) (
+          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job="gitlab-workhorse-web", type="web", le="0.8"}[6h])
+        )
+      )
+      /
+      2
+      / on(environment,stage) group_left()
+      (
+        gitlab_component_apdex:weight:score_6h{component="imagescaler",tier="sv",type="web"} > 0
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: imagescaler
+      tier: sv
+      type: web
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_workhorse_image_resize_requests_total{job="gitlab-workhorse-web", type="web"}[6h])
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: imagescaler
+      tier: sv
+      type: web
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_workhorse_image_resize_requests_total{job="gitlab-workhorse-web", type="web", status!="success"}[6h])
+      )
   - record: gitlab_component_ops:rate_6h
     labels:
       component: loadbalancer
@@ -649,7 +920,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(http_requests_total{job="gitlab-rails",type="web"}[6h])
+        sli_aggregations:http_requests_total_rate6h{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -658,7 +929,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(http_requests_total{job="gitlab-rails",status=~"5..",type="web"}[6h])
+        sli_aggregations:http_requests_total_rate6h{job="gitlab-rails",status=~"5..",type="web"}
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
@@ -711,6 +982,13 @@ groups:
 - name: 'Component mapping: web'
   interval: 1m
   rules:
+  - record: gitlab_component_service:mapping
+    labels:
+      aggregate_rps: 'yes'
+      component: imagescaler
+      tier: sv
+      type: web
+    expr: '1'
   - record: gitlab_component_service:mapping
     labels:
       aggregate_rps: 'no'

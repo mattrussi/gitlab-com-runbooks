@@ -32,6 +32,9 @@ metricsCatalog.serviceDefinition({
     pgbouncer: true,
     praefect: true,
   },
+  recordingRuleMetrics: [
+    'http_requests_total',
+  ],
   components: {
     loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
       stageMappings={
@@ -71,6 +74,27 @@ metricsCatalog.serviceDefinition({
       ],
     },
 
+    imagescaler: {
+      apdex: histogramApdex(
+        histogram='gitlab_workhorse_image_resize_duration_seconds_bucket',
+        selector='job="gitlab-workhorse-web", type="web"',
+        satisfiedThreshold=0.2,
+        toleratedThreshold=0.8
+      ),
+
+      requestRate: rateMetric(
+        counter='gitlab_workhorse_image_resize_requests_total',
+        selector='job="gitlab-workhorse-web", type="web"'
+      ),
+
+      errorRate: rateMetric(
+        counter='gitlab_workhorse_image_resize_requests_total',
+        selector='job="gitlab-workhorse-web", type="web", status!="success"'
+      ),
+
+      significantLabels: ['fqdn'],
+    },
+
     puma: {
       local baseSelector = { job: 'gitlab-rails', type: 'web' },
       apdex: histogramApdex(
@@ -90,7 +114,7 @@ metricsCatalog.serviceDefinition({
         selector=baseSelector { status: { re: '5..' } }
       ),
 
-      significantLabels: ['fqdn', 'method'],
+      significantLabels: ['fqdn', 'method', 'feature_category'],
 
       toolingLinks: [
         // Improve sentry link once https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/532 arrives

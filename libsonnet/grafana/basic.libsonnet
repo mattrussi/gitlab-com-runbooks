@@ -12,6 +12,7 @@ local timepickerlib = import 'github.com/grafana/grafonnet-lib/grafonnet/timepic
 local templates = import 'grafana/templates.libsonnet';
 local commonAnnotations = import 'grafana/common_annotations.libsonnet';
 local stableIds = import 'stable-ids/stable-ids.libsonnet';
+local selectors = import 'promql/selectors.libsonnet';
 
 local applyStableIdsToPanel(panel) =
   if std.objectHasAll(panel, 'applyPanelId') then
@@ -83,6 +84,19 @@ local getDefaultAvailabilityColorScale(invertColors, factor) =
   ];
 
   std.sort(scale, function(i) if i.value == null then 0 else i.value);
+
+local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rangeInterval) =
+  |||
+    histogram_quantile(%(percentile)g, sum by (%(aggregator)s, le) (
+      rate(%(bucketMetric)s{%(selector)s}[%(rangeInterval)s])
+    ))
+  ||| % {
+    percentile: percentile,
+    aggregator: aggregator,
+    selector: selectors.serializeHash(selector),
+    bucketMetric: bucketMetric,
+    rangeInterval: rangeInterval,
+  };
 
 {
   dashboard(
@@ -684,6 +698,24 @@ local getDefaultAvailabilityColorScale(invertColors, factor) =
       min=0,
       show=false,
     ),
+
+  multiQuantileTimeseries(
+    title='Quantile latencies',
+    selector='',
+    legendFormat='latency',
+    bucketMetric='',
+    aggregators='',
+    percentiles=[50, 90, 95, 99],
+  )::
+    local queries = std.map(
+      function(p) {
+        query: latencyHistogramQuery(p / 100, bucketMetric, selector, aggregators, '$__interval'),
+        legendFormat: '%s p%s' % [legendFormat, p],
+      },
+      percentiles
+    );
+
+    self.multiTimeseries(title=title, decimals=2, queries=queries, yAxisLabel='Duration', format='s'),
 
   networkTrafficGraph(
     title='Node Network Utilization',

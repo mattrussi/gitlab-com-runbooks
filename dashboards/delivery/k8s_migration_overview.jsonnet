@@ -17,6 +17,7 @@ local services = [
   'sidekiq-database-throttled',
   'sidekiq-gitaly-throttled',
   'sidekiq-urgent-cpu-bound',
+  'webservice',
 ];
 
 local generalGraphPanel(
@@ -62,7 +63,7 @@ local serviceRow(service) =
     )
     .addTarget(
       promQuery.target(
-        'sum(kube_replicaset_spec_replicas{replicaset=~"^gitlab-%(service)s.*", cluster="$environment-gitlab-gke"})' % { service: service },
+        'sum(kube_replicaset_spec_replicas{replicaset=~"^gitlab-%(service)s.*", cluster=~"${environment}.*"})' % { service: service },
       )
     )
     .resetYaxes()

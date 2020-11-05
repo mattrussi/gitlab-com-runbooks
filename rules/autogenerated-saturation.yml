@@ -703,6 +703,21 @@ groups:
         ,
         0)
       )
+  - record: gitlab_component_saturation:ratio
+    labels:
+      component: workhorse_image_scaling
+    expr: |
+      max by(environment, tier, type, stage) (
+        clamp_min(
+          clamp_max(
+            avg_over_time(gitlab_workhorse_image_resize_processes{environment!="",type="web"}[5m])
+              /
+            gitlab_workhorse_image_resize_max_processes{environment!="",type="web"}
+            ,
+            1)
+        ,
+        0)
+      )
 - name: GitLab Component Saturation Max SLOs
   interval: 5m
   rules:
@@ -1026,6 +1041,14 @@ groups:
     labels:
       component: single_node_puma_workers
     expr: '0.9'
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: workhorse_image_scaling
+    expr: '0.9'
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: workhorse_image_scaling
+    expr: '0.95'
 - name: GitLab Component Saturation Metadata
   interval: 5m
   rules:
@@ -1268,6 +1291,12 @@ groups:
       component: single_node_puma_workers
       horiz_scaling: 'yes'
       severity: s2
+    expr: '1'
+  - record: gitlab_component_saturation_info
+    labels:
+      component: workhorse_image_scaling
+      horiz_scaling: 'yes'
+      severity: s4
     expr: '1'
 - name: GitLab Component Saturation Statistics
   interval: 5m
@@ -3031,3 +3060,45 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="single_node_puma_workers"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="single_node_puma_workers"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 15m
+    annotations:
+      title: >-
+        The Workhorse Image Scaler Exhaustion per Node resource of the {{ $labels.type }} service ({{
+        $labels.stage }} stage), component has a saturation exceeding SLO and is close to its capacity
+        limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Workhorse Image Scaler Exhaustion per Node resource:
+
+        Workhorse can scale images on-the-fly as requested. Since the actual work will be performed by dedicated processes, we currently define a hard cap for how many such requests are allowed to be in the system concurrently.
+
+        If this resource is fully saturated, Workhorse will start ignoring image scaling requests and serve the original image instead, which will ensure continued operation, but comes at the cost of additional client latency and GCS egress traffic.
+      grafana_dashboard_id: alerts-sat_wh_image_scaling
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/alerts-sat_wh_image_scaling?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '92168'
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, fqdn) (
+          clamp_min(
+            clamp_max(
+              avg_over_time(gitlab_workhorse_image_resize_processes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
+                /
+              gitlab_workhorse_image_resize_max_processes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+    expr: |
+      gitlab_component_saturation:ratio{component="workhorse_image_scaling"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="workhorse_image_scaling"}
