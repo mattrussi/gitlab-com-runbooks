@@ -8,8 +8,10 @@ local templates = import 'grafana/templates.libsonnet';
 local graphPanel = grafana.graphPanel;
 
 local services = [
+  'gitlab-shell',
   'registry',
   'mailroom',
+  'sidekiq-catchall',
   'sidekiq-memory-bound',
   'sidekiq-elasticsearch',
   'sidekiq-low-urgency-cpu-bound',
