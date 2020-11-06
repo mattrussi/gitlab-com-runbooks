@@ -9,9 +9,13 @@
 // TODO: initial spike only contains a small subset of metrics
 // to ensure that this approach will work
 local cadvisorMetrics = [
-  'container_memory_usage_bytes',
+  'container_cpu_usage_seconds_total',
   'container_memory_cache',
   'container_memory_swap',
+  'container_memory_usage_bytes',
+  'container_memory_working_set_bytes',
+  'container_spec_cpu_period',
+  'container_spec_cpu_quota',
   'container_spec_memory_limit_bytes',
 ];
 
