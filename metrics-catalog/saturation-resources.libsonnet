@@ -3,6 +3,8 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 
 local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
 
+local kubeProvisionedServices = ['git', 'mailroom', 'registry', 'sidekiq'];
+
 // Disk utilisation metrics are currently reporting incorrectly for
 // HDD volumes, see https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10248
 // as such, we only record this utilisation metric on IO subset of the fleet for now.
@@ -1170,6 +1172,59 @@ local pgbouncerSyncPool(serviceType, role) =
     slos: {
       soft: 0.80,
       hard: 0.90,
+    },
+  }),
+
+  kube_container_memory: resourceSaturationPoint({
+    title: 'Kube Container Memory Utilization',
+    severity: 's4',
+    horizontallyScalable: true,
+    appliesTo: kubeProvisionedServices,
+    description: |||
+      Records the total memory utilization for containers for this service, as a percentage of
+      the memory limit as configured through Kubernetes.
+    |||,
+    grafana_dashboard_uid: 'sat_kube_container_memory',
+    resourceLabels: ['pod', 'container'],
+    // burnRatePeriod: '5m',
+    query: |||
+      container_memory_working_set_bytes:labeled{container!="", container!="POD", %(selector)s}
+      /
+      (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", %(selector)s} > 0)
+    |||,
+    slos: {
+      soft: 0.90,
+      hard: 0.99,
+      alertTriggerDuration: '15m',
+    },
+  }),
+
+  kube_container_cpu: resourceSaturationPoint({
+    title: 'Kube Container CPU Utilization',
+    severity: 's4',
+    horizontallyScalable: true,
+    appliesTo: kubeProvisionedServices,
+    description: |||
+      Kubernetes containers are allocated a share of CPU. When this is exhausted, the container may be thottled.
+    |||,
+    grafana_dashboard_uid: 'sat_kube_container_cpu',
+    resourceLabels: ['pod', 'container'],
+    burnRatePeriod: '5m',
+    query: |||
+      sum by (%(aggregationLabels)s) (
+        rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", %(selector)s}[%(rangeInterval)s])
+      )
+      /
+      sum by(%(aggregationLabels)s) (
+        container_spec_cpu_quota:labeled{container!="", container!="POD", %(selector)s}
+        /
+        container_spec_cpu_period:labeled{container!="", container!="POD", %(selector)s}
+      )
+    |||,
+    slos: {
+      soft: 0.90,
+      hard: 0.99,
+      alertTriggerDuration: '15m',
     },
   }),
 
