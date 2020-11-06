@@ -10,7 +10,7 @@ local row = grafana.row;
 local basic = import 'grafana/basic.libsonnet';
 
 basic.dashboard(
-  'Pod Info',
+  'GitLab Shell - Pod Info',
   tags=['git', 'shell'],
 )
 .addTemplate(templates.gkeCluster)
