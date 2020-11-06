@@ -232,6 +232,11 @@ groups:
     expr: '0.005000'
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      tier: inf
+      type: tracing
+    expr: '0.001000'
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
       tier: lb
       type: waf
     expr: '0.001000'

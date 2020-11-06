@@ -22,6 +22,7 @@
   import 'registry.jsonnet',
   import 'search.jsonnet',
   import 'sidekiq.jsonnet',
+  import 'tracing.jsonnet',
   import 'waf.jsonnet',
   import 'web-pages.jsonnet',
   import 'web.jsonnet',
