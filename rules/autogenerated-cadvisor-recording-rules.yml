@@ -4,14 +4,14 @@ groups:
 - name: kube-cadvisor-recording-rules
   interval: 1m
   rules:
-  - record: container_memory_usage_bytes:labelled
+  - record: container_cpu_usage_seconds_total:labelled
     expr: |
       min without(label_queue_pod_name, label_stage, label_type)
       (
         label_replace(
           label_replace(
             label_replace(
-              container_memory_usage_bytes{ }
+              container_cpu_usage_seconds_total{ }
               *
               on(pod, cluster) group_left(label_type, label_stage, label_queue_pod_name)
               kube_pod_labels{
@@ -52,6 +52,86 @@ groups:
           label_replace(
             label_replace(
               container_memory_swap{ }
+              *
+              on(pod, cluster) group_left(label_type, label_stage, label_queue_pod_name)
+              kube_pod_labels{
+                label_type!=""
+              },
+              "shard", "$1", "label_queue_pod_name", "(.*)"
+            ),
+            "stage", "$1", "label_stage", "(.*)"
+          ),
+          "type", "$1", "label_type", "(.*)"
+        )
+      )
+  - record: container_memory_usage_bytes:labelled
+    expr: |
+      min without(label_queue_pod_name, label_stage, label_type)
+      (
+        label_replace(
+          label_replace(
+            label_replace(
+              container_memory_usage_bytes{ }
+              *
+              on(pod, cluster) group_left(label_type, label_stage, label_queue_pod_name)
+              kube_pod_labels{
+                label_type!=""
+              },
+              "shard", "$1", "label_queue_pod_name", "(.*)"
+            ),
+            "stage", "$1", "label_stage", "(.*)"
+          ),
+          "type", "$1", "label_type", "(.*)"
+        )
+      )
+  - record: container_memory_working_set_bytes:labelled
+    expr: |
+      min without(label_queue_pod_name, label_stage, label_type)
+      (
+        label_replace(
+          label_replace(
+            label_replace(
+              container_memory_working_set_bytes{ }
+              *
+              on(pod, cluster) group_left(label_type, label_stage, label_queue_pod_name)
+              kube_pod_labels{
+                label_type!=""
+              },
+              "shard", "$1", "label_queue_pod_name", "(.*)"
+            ),
+            "stage", "$1", "label_stage", "(.*)"
+          ),
+          "type", "$1", "label_type", "(.*)"
+        )
+      )
+  - record: container_spec_cpu_period:labelled
+    expr: |
+      min without(label_queue_pod_name, label_stage, label_type)
+      (
+        label_replace(
+          label_replace(
+            label_replace(
+              container_spec_cpu_period{ }
+              *
+              on(pod, cluster) group_left(label_type, label_stage, label_queue_pod_name)
+              kube_pod_labels{
+                label_type!=""
+              },
+              "shard", "$1", "label_queue_pod_name", "(.*)"
+            ),
+            "stage", "$1", "label_stage", "(.*)"
+          ),
+          "type", "$1", "label_type", "(.*)"
+        )
+      )
+  - record: container_spec_cpu_quota:labelled
+    expr: |
+      min without(label_queue_pod_name, label_stage, label_type)
+      (
+        label_replace(
+          label_replace(
+            label_replace(
+              container_spec_cpu_quota{ }
               *
               on(pod, cluster) group_left(label_type, label_stage, label_queue_pod_name)
               kube_pod_labels{
