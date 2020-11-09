@@ -4,19 +4,19 @@ groups:
 - name: kube-cadvisor-recording-rules
   interval: 1m
   rules:
-  - record: container_cpu_usage_seconds_total:labelled
+  - record: container_cpu_cfs_periods_total:labeled
     expr: |
       min without(label_queue_pod_name, label_stage, label_type)
       (
         label_replace(
           label_replace(
             label_replace(
-              container_cpu_usage_seconds_total{ }
+              container_cpu_cfs_periods_total{metrics_path="/metrics/cadvisor"}
               *
               on(pod, cluster) group_left(label_type, label_stage, label_queue_pod_name)
-              kube_pod_labels{
+              topk by (pod, cluster, label_type, label_stage, label_queue_pod_name) (1, kube_pod_labels{
                 label_type!=""
-              },
+              }),
               "shard", "$1", "label_queue_pod_name", "(.*)"
             ),
             "stage", "$1", "label_stage", "(.*)"
@@ -24,19 +24,19 @@ groups:
           "type", "$1", "label_type", "(.*)"
         )
       )
-  - record: container_memory_cache:labelled
+  - record: container_cpu_cfs_throttled_periods_total:labeled
     expr: |
       min without(label_queue_pod_name, label_stage, label_type)
       (
         label_replace(
           label_replace(
             label_replace(
-              container_memory_cache{ }
+              container_cpu_cfs_throttled_periods_total{metrics_path="/metrics/cadvisor"}
               *
               on(pod, cluster) group_left(label_type, label_stage, label_queue_pod_name)
-              kube_pod_labels{
+              topk by (pod, cluster, label_type, label_stage, label_queue_pod_name) (1, kube_pod_labels{
                 label_type!=""
-              },
+              }),
               "shard", "$1", "label_queue_pod_name", "(.*)"
             ),
             "stage", "$1", "label_stage", "(.*)"
@@ -44,19 +44,19 @@ groups:
           "type", "$1", "label_type", "(.*)"
         )
       )
-  - record: container_memory_swap:labelled
+  - record: container_cpu_usage_seconds_total:labeled
     expr: |
       min without(label_queue_pod_name, label_stage, label_type)
       (
         label_replace(
           label_replace(
             label_replace(
-              container_memory_swap{ }
+              container_cpu_usage_seconds_total{metrics_path="/metrics/cadvisor"}
               *
               on(pod, cluster) group_left(label_type, label_stage, label_queue_pod_name)
-              kube_pod_labels{
+              topk by (pod, cluster, label_type, label_stage, label_queue_pod_name) (1, kube_pod_labels{
                 label_type!=""
-              },
+              }),
               "shard", "$1", "label_queue_pod_name", "(.*)"
             ),
             "stage", "$1", "label_stage", "(.*)"
@@ -64,19 +64,19 @@ groups:
           "type", "$1", "label_type", "(.*)"
         )
       )
-  - record: container_memory_usage_bytes:labelled
+  - record: container_memory_cache:labeled
     expr: |
       min without(label_queue_pod_name, label_stage, label_type)
       (
         label_replace(
           label_replace(
             label_replace(
-              container_memory_usage_bytes{ }
+              container_memory_cache{metrics_path="/metrics/cadvisor"}
               *
               on(pod, cluster) group_left(label_type, label_stage, label_queue_pod_name)
-              kube_pod_labels{
+              topk by (pod, cluster, label_type, label_stage, label_queue_pod_name) (1, kube_pod_labels{
                 label_type!=""
-              },
+              }),
               "shard", "$1", "label_queue_pod_name", "(.*)"
             ),
             "stage", "$1", "label_stage", "(.*)"
@@ -84,19 +84,19 @@ groups:
           "type", "$1", "label_type", "(.*)"
         )
       )
-  - record: container_memory_working_set_bytes:labelled
+  - record: container_memory_swap:labeled
     expr: |
       min without(label_queue_pod_name, label_stage, label_type)
       (
         label_replace(
           label_replace(
             label_replace(
-              container_memory_working_set_bytes{ }
+              container_memory_swap{metrics_path="/metrics/cadvisor"}
               *
               on(pod, cluster) group_left(label_type, label_stage, label_queue_pod_name)
-              kube_pod_labels{
+              topk by (pod, cluster, label_type, label_stage, label_queue_pod_name) (1, kube_pod_labels{
                 label_type!=""
-              },
+              }),
               "shard", "$1", "label_queue_pod_name", "(.*)"
             ),
             "stage", "$1", "label_stage", "(.*)"
@@ -104,19 +104,19 @@ groups:
           "type", "$1", "label_type", "(.*)"
         )
       )
-  - record: container_spec_cpu_period:labelled
+  - record: container_memory_usage_bytes:labeled
     expr: |
       min without(label_queue_pod_name, label_stage, label_type)
       (
         label_replace(
           label_replace(
             label_replace(
-              container_spec_cpu_period{ }
+              container_memory_usage_bytes{metrics_path="/metrics/cadvisor"}
               *
               on(pod, cluster) group_left(label_type, label_stage, label_queue_pod_name)
-              kube_pod_labels{
+              topk by (pod, cluster, label_type, label_stage, label_queue_pod_name) (1, kube_pod_labels{
                 label_type!=""
-              },
+              }),
               "shard", "$1", "label_queue_pod_name", "(.*)"
             ),
             "stage", "$1", "label_stage", "(.*)"
@@ -124,19 +124,19 @@ groups:
           "type", "$1", "label_type", "(.*)"
         )
       )
-  - record: container_spec_cpu_quota:labelled
+  - record: container_memory_working_set_bytes:labeled
     expr: |
       min without(label_queue_pod_name, label_stage, label_type)
       (
         label_replace(
           label_replace(
             label_replace(
-              container_spec_cpu_quota{ }
+              container_memory_working_set_bytes{metrics_path="/metrics/cadvisor"}
               *
               on(pod, cluster) group_left(label_type, label_stage, label_queue_pod_name)
-              kube_pod_labels{
+              topk by (pod, cluster, label_type, label_stage, label_queue_pod_name) (1, kube_pod_labels{
                 label_type!=""
-              },
+              }),
               "shard", "$1", "label_queue_pod_name", "(.*)"
             ),
             "stage", "$1", "label_stage", "(.*)"
@@ -144,19 +144,59 @@ groups:
           "type", "$1", "label_type", "(.*)"
         )
       )
-  - record: container_spec_memory_limit_bytes:labelled
+  - record: container_spec_cpu_period:labeled
     expr: |
       min without(label_queue_pod_name, label_stage, label_type)
       (
         label_replace(
           label_replace(
             label_replace(
-              container_spec_memory_limit_bytes{ }
+              container_spec_cpu_period{metrics_path="/metrics/cadvisor"}
               *
               on(pod, cluster) group_left(label_type, label_stage, label_queue_pod_name)
-              kube_pod_labels{
+              topk by (pod, cluster, label_type, label_stage, label_queue_pod_name) (1, kube_pod_labels{
                 label_type!=""
-              },
+              }),
+              "shard", "$1", "label_queue_pod_name", "(.*)"
+            ),
+            "stage", "$1", "label_stage", "(.*)"
+          ),
+          "type", "$1", "label_type", "(.*)"
+        )
+      )
+  - record: container_spec_cpu_quota:labeled
+    expr: |
+      min without(label_queue_pod_name, label_stage, label_type)
+      (
+        label_replace(
+          label_replace(
+            label_replace(
+              container_spec_cpu_quota{metrics_path="/metrics/cadvisor"}
+              *
+              on(pod, cluster) group_left(label_type, label_stage, label_queue_pod_name)
+              topk by (pod, cluster, label_type, label_stage, label_queue_pod_name) (1, kube_pod_labels{
+                label_type!=""
+              }),
+              "shard", "$1", "label_queue_pod_name", "(.*)"
+            ),
+            "stage", "$1", "label_stage", "(.*)"
+          ),
+          "type", "$1", "label_type", "(.*)"
+        )
+      )
+  - record: container_spec_memory_limit_bytes:labeled
+    expr: |
+      min without(label_queue_pod_name, label_stage, label_type)
+      (
+        label_replace(
+          label_replace(
+            label_replace(
+              container_spec_memory_limit_bytes{metrics_path="/metrics/cadvisor"}
+              *
+              on(pod, cluster) group_left(label_type, label_stage, label_queue_pod_name)
+              topk by (pod, cluster, label_type, label_stage, label_queue_pod_name) (1, kube_pod_labels{
+                label_type!=""
+              }),
               "shard", "$1", "label_queue_pod_name", "(.*)"
             ),
             "stage", "$1", "label_stage", "(.*)"
