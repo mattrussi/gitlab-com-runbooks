@@ -9,6 +9,8 @@
 // TODO: initial spike only contains a small subset of metrics
 // to ensure that this approach will work
 local cadvisorMetrics = [
+  'container_cpu_cfs_periods_total',
+  'container_cpu_cfs_throttled_periods_total',
   'container_cpu_usage_seconds_total',
   'container_memory_cache',
   'container_memory_swap',
@@ -19,6 +21,8 @@ local cadvisorMetrics = [
   'container_spec_memory_limit_bytes',
 ];
 
+// We filter to include only metrics_path="/metrics/cadvisor" series
+// and exclude metrics_path="/metrics/resource/v1alpha1" etc
 local cadvisorWithLabelNamesExpression(metricName) =
   |||
     min without(label_queue_pod_name, label_stage, label_type)
@@ -26,12 +30,12 @@ local cadvisorWithLabelNamesExpression(metricName) =
       label_replace(
         label_replace(
           label_replace(
-            %(metricName)s{ }
+            %(metricName)s{metrics_path="/metrics/cadvisor"}
             *
             on(pod, cluster) group_left(label_type, label_stage, label_queue_pod_name)
-            kube_pod_labels{
+            topk by (pod, cluster, label_type, label_stage, label_queue_pod_name) (1, kube_pod_labels{
               label_type!=""
-            },
+            }),
             "shard", "$1", "label_queue_pod_name", "(.*)"
           ),
           "stage", "$1", "label_stage", "(.*)"
@@ -45,7 +49,7 @@ local cadvisorWithLabelNamesExpression(metricName) =
 
 local recordingRuleFor(metricName) =
   {
-    record: metricName + ':labelled',
+    record: metricName + ':labeled',
     expr: cadvisorWithLabelNamesExpression(metricName),
   };
 
