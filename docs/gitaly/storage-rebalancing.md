@@ -43,7 +43,7 @@ Over time, a couple of methods have been developed for accomplishing the
 re-location of a project repository from one gitaly storage shard node file
 system to another.
 
-### Manual method
+### Single repo manual selection
 
 1. Login to gitlab.com using an admin account.
 1. Navigate to https://gitlab.com/profile/personal_access_tokens and generate a private token.
@@ -56,23 +56,13 @@ system to another.
    ```
 1. Trigger the move using the API.  For example:
    ```bash
-   export project_id=12345678
-   export destination_storage_name='nfs-fileYY'
-   export move_id=$(curl --silent --show-error --request POST "https://gitlab.com/api/v4/projects/${project_id}/repository_storage_moves" --data "{\"destination_storage_name\": \"${destination_storage_name}\"}" --header "Private-Token: ${GITLAB_GPRD_ADMIN_API_PRIVATE_TOKEN}" --header 'Content-Type: application/json')
+   ./scripts/storage_repository_move.sh 'path/to/project' 'nfs-fileYY'
    ```
-  - _Note_: The parameter of `destination_storage_name` is the name of the destination gitaly shard as configured in the `git_data_dirs` options of the `gitlab.rb` file.
+  - _Note_: The parameter of `nfs-fileYY` is the name of the destination gitaly shard as configured in the `git_data_dirs` options of the `gitlab.rb` file.
   - _Note_: The project will automatically be set into read-only and set back to read-write after the move.
-1. To observe the status of the repository replication, use a get:
-   ```bash
-   curl --silent --show-error "https://gitlab.com/api/v4/projects/${project_id}/repository_storage_moves/${move_id}" --header "Private-Token: ${GITLAB_GPRD_ADMIN_API_PRIVATE_TOKEN}" --header 'Content-Type: application/json'
-   ```
 1. If needed, check logs for the sidekiq job in Kibana: https://log.gprd.gitlab.net/goto/35c31768d3be0137be06e562422ffba0
-1. Optionally confirm the new location:
-   ```bash
-   curl --silent --show-error "https://gitlab.com/api/v4/projects/${project_id}" --header "Private-Token: ${GITLAB_GPRD_ADMIN_API_PRIVATE_TOKEN}" | jq -r '.repository_storage'
-   ```
 
-### Slightly automated method
+### Slightly automated selection
 
 A script exists in this repo:
 [`scripts/storage_rebalance.rb`](../../scripts/storage_rebalance.rb)
