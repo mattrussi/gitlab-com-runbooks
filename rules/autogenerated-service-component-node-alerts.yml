@@ -82,7 +82,7 @@ groups:
       )
       and
       (
-        gitlab_component_node_ops:rate_1h{} >= 1
+        gitlab_component_node_ops:rate_1h{} >= 10
       )
   - alert: ServiceSLOErrorViolationSingleNode
     for: 10m
@@ -158,5 +158,5 @@ groups:
       )
       and
       (
-        gitlab_component_node_ops:rate_1h{} >= 1
+        gitlab_component_node_ops:rate_1h{} >= 10
       )
