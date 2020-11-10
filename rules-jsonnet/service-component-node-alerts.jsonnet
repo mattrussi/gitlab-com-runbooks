@@ -5,7 +5,7 @@ local stableIds = import 'stable-ids/stable-ids.libsonnet';
 
 // For now, only include components that run at least once a second
 // in the monitoring. This is to avoid low-volume, noisy alerts
-local minimumOperationRateForMonitoring = 1/* rps */;
+local minimumOperationRateForMonitoring = 10/* rps */;
 
 // Most MWMBR alerts use a 2m period
 // Initially for this alert, use a long period to ensure that
