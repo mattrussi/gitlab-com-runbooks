@@ -31,8 +31,9 @@ groups:
       runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: symptom
+      pager: pagerduty
       rules_domain: general
-      severity: s4
+      severity: s2
       slo_alert: 'yes'
     expr: |
       (
@@ -111,8 +112,9 @@ groups:
       runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: symptom
+      pager: pagerduty
       rules_domain: general
-      severity: s4
+      severity: s2
       slo_alert: 'yes'
     expr: |
       (
