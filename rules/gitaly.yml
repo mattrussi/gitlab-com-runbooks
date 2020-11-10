@@ -29,8 +29,7 @@ groups:
     for: 5m
     labels:
       team: gitaly
-      pager: pagerduty
-      severity: s1
+      severity: s4
       alert_type: cause
     annotations:
       description: Gitaly error rate for the last 5 minutes is over 5 on {{$labels.instance}}.
