@@ -123,6 +123,7 @@ metricsCatalog.serviceDefinition({
 
       toolingLinks: [
         toolingLinks.sentry(slug='gitlab/gitlabcom-gitaly-ruby'),
+        toolingLinks.kibana(title='Gitaly Ruby', index='gitaly', tag='gitaly.ruby'),
       ],
     },
   },
