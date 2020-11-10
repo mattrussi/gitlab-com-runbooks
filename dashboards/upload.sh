@@ -100,6 +100,9 @@ function generate_dashboard_requests() {
 if [[ -n $dry_run ]]; then
   generate_dashboard_requests "$@"
 else
+  tmpfile=$(mktemp)
+  trap 'rm -rf "${tmpfile}"' EXIT
+
   generate_dashboard_requests "$@" | while IFS= read -r request; do
     # Use http1.1 and gzip compression to workaround unexplainable random errors that
     # occur when uploading some dashboards
@@ -107,5 +110,13 @@ else
 
     url=$(echo "${response}" | jq -r '.url')
     echo "Installed https://dashboards.gitlab.net${url}"
+    echo "${url}" >>"${tmpfile}"
   done
+
+  duplicates=$(sort "${tmpfile}" | uniq -d)
+  if [[ -n $duplicates ]]; then
+    echo "Duplicate dashboard URLs were uploaded! Check these URLs:"
+    echo "${duplicates}"
+    exit 1
+  fi
 fi
