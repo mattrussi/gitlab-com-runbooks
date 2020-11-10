@@ -40,8 +40,8 @@ local rules = {
         labels: {
           alert_type: 'symptom',
           rules_domain: 'general',
-          severity: 's4',
-          // pager: 'pagerduty',
+          severity: 's2',
+          pager: 'pagerduty',
           slo_alert: 'yes',
         },
         annotations: {
@@ -83,10 +83,10 @@ local rules = {
       'for': alertWaitPeriod,
       labels: {
         rules_domain: 'general',
-        severity: 's4',
+        severity: 's2',
         slo_alert: 'yes',
         alert_type: 'symptom',
-        // pager: 'pagerduty',
+        pager: 'pagerduty',
       },
       annotations: {
         title: 'Node `{{ $labels.fqdn }}`, `{{ $labels.component }}` component is violating its error SLO',
