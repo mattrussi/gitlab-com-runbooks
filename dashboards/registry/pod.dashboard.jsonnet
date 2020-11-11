@@ -1,5 +1,5 @@
-local commonAnnotations = import 'grafana/common_annotations.libsonnet';
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
+local commonAnnotations = import 'grafana/common_annotations.libsonnet';
 local k8sPodsCommon = import 'kubernetes_pods_common.libsonnet';
 local template = grafana.template;
 local templates = import 'grafana/templates.libsonnet';
@@ -12,13 +12,14 @@ basic.dashboard(
   tags=['container registry', 'docker', 'registry'],
 )
 .addTemplate(templates.gkeCluster)
+.addTemplate(templates.stage)
 .addTemplate(templates.namespaceGitlab)
 .addTemplate(templates.Node)
 .addTemplate(
   template.custom(
     'Deployment',
-    'gitlab-registry,',
-    'gitlab-registry',
+    'gitlab-(cny-)?registry,',
+    'gitlab-(cny-)?registry',
     hide='variable',
   )
 )

@@ -5,7 +5,7 @@ local stableIds = import 'stable-ids/stable-ids.libsonnet';
 
 // For now, only include components that run at least once a second
 // in the monitoring. This is to avoid low-volume, noisy alerts
-local minimumOperationRateForMonitoring = 1/* rps */;
+local minimumOperationRateForMonitoring = 10/* rps */;
 
 // Most MWMBR alerts use a 2m period
 // Initially for this alert, use a long period to ensure that
@@ -29,9 +29,9 @@ local rules = {
           metric5m='gitlab_component_node_apdex:ratio_5m',
           metric30m='gitlab_component_node_apdex:ratio_30m',
           metric6h='gitlab_component_node_apdex:ratio_6h',
-          metricSelectorHash={ },
+          metricSelectorHash={},
           sloMetric='slo:min:events:gitlab_component_node_apdex:ratio',
-          sloMetricSelectorHash={ },
+          sloMetricSelectorHash={},
           sloMetricAggregationLabels=['type', 'tier'],
           operationRateMetric='gitlab_component_node_ops:rate_1h',
           minimumOperationRateForMonitoring=minimumOperationRateForMonitoring
@@ -40,8 +40,8 @@ local rules = {
         labels: {
           alert_type: 'symptom',
           rules_domain: 'general',
-          severity: 's4',
-          // pager: 'pagerduty',
+          severity: 's2',
+          pager: 'pagerduty',
           slo_alert: 'yes',
         },
         annotations: {
@@ -58,7 +58,7 @@ local rules = {
           ||| % {
             alertWaitPeriod: alertWaitPeriod,
           },
-          runbook: 'docs/{{ $labels.type }}/service-{{ $labels.type }}.md',
+          runbook: 'docs/{{ $labels.type }}/README.md',
           grafana_dashboard_id: 'alerts-component_node_multiburn_apdex/alerts-component-node-multi-window-multi-burn-rate-apdex-out-of-slo',
           grafana_panel_id: stableIds.hashStableId('multiwindow-multiburnrate'),
           grafana_variables: 'environment,type,stage,component,fqdn',
@@ -83,10 +83,10 @@ local rules = {
       'for': alertWaitPeriod,
       labels: {
         rules_domain: 'general',
-        severity: 's4',
+        severity: 's2',
         slo_alert: 'yes',
         alert_type: 'symptom',
-        // pager: 'pagerduty',
+        pager: 'pagerduty',
       },
       annotations: {
         title: 'Node `{{ $labels.fqdn }}`, `{{ $labels.component }}` component is violating its error SLO',
@@ -102,7 +102,7 @@ local rules = {
         ||| % {
           alertWaitPeriod: alertWaitPeriod,
         },
-        runbook: 'docs/{{ $labels.type }}/service-{{ $labels.type }}.md',
+        runbook: 'docs/{{ $labels.type }}/README.md',
         grafana_dashboard_id: 'alerts-component_node_multiburn_error/alerts-component-node-multi-window-multi-burn-rate-error-rate-out-of-slo',
         grafana_panel_id: stableIds.hashStableId('multiwindow-multiburnrate'),
         grafana_variables: 'environment,type,stage,component,fqdn',

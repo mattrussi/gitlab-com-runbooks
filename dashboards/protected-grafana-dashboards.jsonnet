@@ -57,7 +57,7 @@ local union(sets) = std.foldl(function(memo, a) std.setUnion(std.set(a), memo), 
         'mnbqU9Smz',
         // T4cC0re: "I would like to keep" https://gitlab.com/gitlab-com/runbooks/-/merge_requests/2345#note_358837191
         'FvOt_fNZk',
-        // joshlambert: "performance dashboards": 
+        // joshlambert: "performance dashboards":
         'performance-manage',
         'performance-create',
         'performance-plan',
@@ -118,10 +118,11 @@ local union(sets) = std.foldl(function(memo, a) std.setUnion(std.set(a), memo), 
     'infrafin',
     'Gitaly Service',
     'GitLab-Rails Service',
+    'Frontend Performance',  // for Tim Zallmann's performance dashboards
     'Kubernetes',
     'Operations',
     'Cloudflare',
     'PostgreSQL',
-    'Product'
+    'Product',
   ],
 }

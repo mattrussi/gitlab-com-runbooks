@@ -1,9 +1,9 @@
+local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local commonAnnotations = import 'grafana/common_annotations.libsonnet';
-local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
-local platformLinks = import 'platform_links.libsonnet';
 local templates = import 'grafana/templates.libsonnet';
+local platformLinks = import 'platform_links.libsonnet';
 local dashboard = grafana.dashboard;
 local link = grafana.link;
 local template = grafana.template;
@@ -15,37 +15,24 @@ local seriesOverrides = import 'grafana/series_overrides.libsonnet';
 local row = grafana.row;
 local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libsonnet';
 local issueSearch = import 'issue_search.libsonnet';
+local selectors = import 'promql/selectors.libsonnet';
 
-local selector = 'environment="$environment", type="sidekiq", stage="$stage", queue=~"$queue"';
-
-local joinSelectors(selectors) =
-  local nonEmptySelectors = std.filter(function(x) std.length(x) > 0, selectors);
-  std.join(', ', nonEmptySelectors);
-
-local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rangeInterval) =
-  local aggregatorWithLe = joinSelectors([aggregator] + ['le']);
-  |||
-    histogram_quantile(%(percentile)g, sum by (%(aggregatorWithLe)s) (
-      rate(%(bucketMetric)s{%(selector)s}[%(rangeInterval)s])
-    ))
-  ||| % {
-    percentile: percentile,
-    aggregatorWithLe: aggregatorWithLe,
-    selector: selector,
-    bucketMetric: bucketMetric,
-    rangeInterval: rangeInterval,
-  };
+local selector = {
+  environment: '$environment',
+  type: 'sidekiq',
+  stage: '$stage',
+  queue: { re: '$queue' },
+};
 
 local recordingRuleLatencyHistogramQuery(percentile, recordingRule, selector, aggregator) =
-  local aggregatorWithLe = joinSelectors([aggregator] + ['le']);
   |||
-    histogram_quantile(%(percentile)g, sum by (%(aggregatorWithLe)s) (
+    histogram_quantile(%(percentile)g, sum by (%(aggregator)s, le) (
       %(recordingRule)s{%(selector)s}
     ))
   ||| % {
     percentile: percentile,
-    aggregatorWithLe: aggregatorWithLe,
-    selector: selector,
+    aggregator: aggregator,
+    selector: selectors.serializeHash(selector),
     recordingRule: recordingRule,
   };
 
@@ -56,7 +43,7 @@ local recordingRuleRateQuery(recordingRule, selector, aggregator) =
     )
   ||| % {
     aggregator: aggregator,
-    selector: selector,
+    selector: selectors.serializeHash(selector),
     recordingRule: recordingRule,
   };
 
@@ -96,24 +83,11 @@ local errorRateTimeseries(title, aggregators, legendFormat) =
     legendFormat=legendFormat,
   );
 
-local multiQuantileTimeseries(title, bucketMetric, aggregators) =
-  local queries = std.map(
-    function(p) {
-      query: latencyHistogramQuery(p / 100, bucketMetric, selector, aggregators, '$__interval'),
-      legendFormat: '{{ queue }} p%s' % [p],
-    },
-    [50, 90, 95, 99]
-  );
-
-  basic.multiTimeseries(title=title, decimals=2, queries=queries, yAxisLabel='Duration', format='s');
-
-local elasticFilters = [
-  elasticsearchLinks.matchFilter('json.queue.keyword', '$queue'),
-  elasticsearchLinks.matchFilter('json.stage.keyword', '$stage'),
-];
+local elasticFilters = [elasticsearchLinks.matchFilter('json.stage.keyword', '$stage')];
+local elasticQueries = ['json.queue.keyword:${queue:lucene}'];
 
 local elasticsearchLogSearchDataLink = {
-  url: elasticsearchLinks.buildElasticDiscoverSearchQueryURL('sidekiq', elasticFilters),
+  url: elasticsearchLinks.buildElasticDiscoverSearchQueryURL('sidekiq', elasticFilters, elasticQueries),
   title: 'ElasticSearch: Sidekiq logs',
   targetBlank: true,
 };
@@ -267,7 +241,7 @@ basic.dashboard(
     .addSeriesOverride(seriesOverrides.goldenMetric('/.* queue apdex$/'))
     .addDataLink(elasticsearchLogSearchDataLink)
     .addDataLink({
-      url: elasticsearchLinks.buildElasticLinePercentileVizURL('sidekiq', elasticFilters, 'json.scheduling_latency_s'),
+      url: elasticsearchLinks.buildElasticLinePercentileVizURL('sidekiq', elasticFilters, elasticQueries, 'json.scheduling_latency_s'),
       title: 'ElasticSearch: queue latency visualization',
       targetBlank: true,
     }),
@@ -293,7 +267,7 @@ basic.dashboard(
     .addSeriesOverride(seriesOverrides.goldenMetric('/.* execution apdex$/'))
     .addDataLink(elasticsearchLogSearchDataLink)
     .addDataLink({
-      url: elasticsearchLinks.buildElasticLinePercentileVizURL('sidekiq', elasticFilters, 'json.duration_s'),
+      url: elasticsearchLinks.buildElasticLinePercentileVizURL('sidekiq', elasticFilters, elasticQueries, 'json.duration_s'),
       title: 'ElasticSearch: execution latency visualization',
       targetBlank: true,
     }),
@@ -312,7 +286,7 @@ basic.dashboard(
     .addSeriesOverride(seriesOverrides.goldenMetric('/.* rps$/'))
     .addDataLink(elasticsearchLogSearchDataLink)
     .addDataLink({
-      url: elasticsearchLinks.buildElasticLineCountVizURL('sidekiq', elasticFilters),
+      url: elasticsearchLinks.buildElasticLineCountVizURL('sidekiq', elasticFilters, elasticQueries),
       title: 'ElasticSearch: RPS visualization',
       targetBlank: true,
     }),
@@ -338,7 +312,11 @@ basic.dashboard(
     .addSeriesOverride(seriesOverrides.goldenMetric('/.* error ratio$/'))
     .addDataLink(elasticsearchLogSearchDataLink)
     .addDataLink({
-      url: elasticsearchLinks.buildElasticLineCountVizURL('sidekiq', elasticFilters + [elasticsearchLinks.matchFilter('json.job_status', 'fail')]),
+      url: elasticsearchLinks.buildElasticLineCountVizURL(
+        'sidekiq',
+        elasticFilters + [elasticsearchLinks.matchFilter('json.job_status', 'fail')],
+        elasticQueries
+      ),
       title: 'ElasticSearch: errors visualization',
       targetBlank: true,
     }),
@@ -387,16 +365,16 @@ basic.dashboard(
   ] +
   layout.grid(
     [
-      multiQuantileTimeseries('CPU Time', bucketMetric='sidekiq_jobs_cpu_seconds_bucket', aggregators='queue'),
-      multiQuantileTimeseries('Gitaly Time', bucketMetric='sidekiq_jobs_gitaly_seconds_bucket', aggregators='queue'),
-      multiQuantileTimeseries('Database Time', bucketMetric='sidekiq_jobs_db_seconds_bucket', aggregators='queue'),
+      basic.multiQuantileTimeseries('CPU Time', selector, '{{ queue }}', bucketMetric='sidekiq_jobs_cpu_seconds_bucket', aggregators='queue'),
+      basic.multiQuantileTimeseries('Gitaly Time', selector, '{{ queue }}', bucketMetric='sidekiq_jobs_gitaly_seconds_bucket', aggregators='queue'),
+      basic.multiQuantileTimeseries('Database Time', selector, '{{ queue }}', bucketMetric='sidekiq_jobs_db_seconds_bucket', aggregators='queue'),
     ], cols=3, startRow=702
   )
   +
   layout.grid(
     [
-      multiQuantileTimeseries('Redis Time', bucketMetric='sidekiq_redis_requests_duration_seconds_bucket', aggregators='queue'),
-      multiQuantileTimeseries('Elasticsearch Time', bucketMetric='sidekiq_elasticsearch_requests_duration_seconds_bucket', aggregators='queue'),
+      basic.multiQuantileTimeseries('Redis Time', selector, '{{ queue }}', bucketMetric='sidekiq_redis_requests_duration_seconds_bucket', aggregators='queue'),
+      basic.multiQuantileTimeseries('Elasticsearch Time', selector, '{{ queue }}', bucketMetric='sidekiq_elasticsearch_requests_duration_seconds_bucket', aggregators='queue'),
     ], cols=3, startRow=703
   )
 )

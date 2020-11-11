@@ -29,8 +29,7 @@ groups:
     for: 5m
     labels:
       team: gitaly
-      pager: pagerduty
-      severity: s1
+      severity: s4
       alert_type: cause
     annotations:
       description: Gitaly error rate for the last 5 minutes is over 5 on {{$labels.instance}}.
@@ -143,4 +142,20 @@ groups:
       description: Gitaly authention failing, authentication tokens might be misconfigured, or severe clockdrift is occurring.
       runbook: docs/gitaly/gitaly-permission-denied.md
       title: 'Gitaly: Auth-tokens are invalid, failing RPCs'
+
+  - alert: LowCountOfActiveGitalyShards
+    expr: sum by (env) (gitaly_shard_weight_total > bool 0) < 10
+    for: 1h
+    labels:
+      team: sre_datastores
+      severity: s2
+      alert_type: cause
+      pager: pagerduty
+      type: gitaly
+    annotations:
+      title: Number of active Gitaly shards is low
+      description: >
+        There are less than 10 Gitaly shards that actively receive new project, this could cause them to fill up quickly and put more
+        stress on them. Consider adding a new Gitaly shard
+        https://gitlab.com/gitlab-com/gl-infra/production/-/issues/new?issuable_template=storage_shard_creation
 

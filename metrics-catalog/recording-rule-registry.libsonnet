@@ -1,10 +1,28 @@
-local aggregations = import 'promql/aggregations.libsonnet';
-local selectors = import 'promql/selectors.libsonnet';
+//
+// Recording Rule Registry
+//
+// This library deals with resolving expressions that can use recording rules.
+// Given a PromQL expression, and the recording rule registry (from `metric-label-registry.libsonnet`)
+// It will convert the expression into an equivalent expression that uses a recording rule,
+// if possible.
+//
 local metricsLabelRegistry = import 'metric-label-registry.libsonnet';
 local metricsCatalog = import 'metrics-catalog.libsonnet';
+local aggregations = import 'promql/aggregations.libsonnet';
+local selectors = import 'promql/selectors.libsonnet';
 
 local standardEnvironmentLabels = std.set(['environment', 'type', 'tier', 'stage', 'shard']);
 
+/**
+ * This defines a list of labels which, if used in an expression, but
+ * are not used in the recording rule definition, can be safely ignored.
+ *
+ * This is useful when labels are applied after the recording rule is evaluated.
+ * Examples could be prometheus instance-wide labels or labels applied in thanos
+ */
+local ignoredRecordingRuleResolutionLabels = std.set(['env', 'monitor']);
+
+// TODO: move this to configuration
 local burnRates = std.set(['1m', '5m', '30m', '1h', '6h']);
 
 // Collect recordingRuleMetrics for all services
@@ -25,9 +43,11 @@ local supportsLabelsAndSelector(metricName, requiredAggregationLabels, selector)
   if std.setMember(metricName, metricsWithRecordingRules) then
     if std.type(selector) == 'object' then
       local allRequiredLabels = std.set(requiredAggregationLabels + selectors.getLabels(selector));
+      local allRequiredLabelsExcludingIgnored = std.setDiff(allRequiredLabels, ignoredRecordingRuleResolutionLabels);
+
       local recordingRuleLabels = metricsLabelRegistry.lookupLabelsForMetricName(metricName);
 
-      local allRequiredLabelsMinusStandards = std.setDiff(allRequiredLabels, standardEnvironmentLabels);
+      local allRequiredLabelsMinusStandards = std.setDiff(allRequiredLabelsExcludingIgnored, standardEnvironmentLabels);
 
       local missingLabels = std.setDiff(allRequiredLabelsMinusStandards, recordingRuleLabels);
 

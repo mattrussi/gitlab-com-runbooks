@@ -78,12 +78,18 @@ matching embedded postgresql version.
 Make sure wal-g is working and able to find the latest base backups:
 
 ```
-cd /tmp/; sudo -u gitlab-psql /usr/bin/envdir /etc/wal-g.d/env /opt/wal-g/bin/wal-g backup-list
+cd /tmp/; sudo -u gitlab-psql /usr/bin/envdir /etc/wal-g.d/env /opt/wal-g/bin/wal-g backup-list | sort
 name                                   last_modified        wal_segment_backup_start
 base_000000020000492A000000E2_00036848 2020-06-04T13:49:56Z 000000020000492A000000E2
 base_000000020000493E0000006D_00000040 2020-06-05T07:42:27Z 000000020000493E0000006D
 ...
 ```
+
+*IMPORTANT*: You need to make sure to manually find the lates backup in the list
+above and note down the name (bas_...). The modification date is bogus as the
+policy moving files to nearline storage is updating the modify date, so you
+could end up restoring from a backup from 2 weeks ago by accident. Sort the list
+by name to be safe!
 
 The `/var/opt/gitlab/postgresql/data/recovery.conf` file is not managed by
 configuration management nor backed up by WAL-G and needs to be setup manually.
@@ -112,20 +118,34 @@ wal-g. Retrieving the base-backup will take several hours (1.5 - 2 TiB/h -> ~3.5
 then fetching and replaying the necessary WAL files since the base-backup also can
 take a few hours, depending on how much time passed since the last base-backup.
 
+IMPORTANT NOTE: If you're doing this because of a failover in the primary DB, there
+is *NO* point doing so until there is a new basebackup from the new primary; before that
+you'll just restore then re-run the WALs to the failover point at which time the replay
+will fail again in exactly the same manner.  The primary base backups occur at/around midnight UTC,
+and (currently) take about 9 hrs (mileage-may-vary)
+
 * make a backup copy of `recovery.conf`:
   * `cp -a /var/opt/gitlab/postgresql/data/recovery.conf $HOME/`
-* `system-ctl stop chef-client`
+* `chef-client-disable <comment or link to issue>`
 * `gitlab-ctl stop postgresql`
 * Clean up the current PGDATA: `rm -rf /var/opt/gitlab/postgresql/data/*`
 * Run backup-fetch __in a tmux__ as it will take hours:
-  * `cd /tmp/; sudo -u gitlab-psql /usr/bin/envdir /etc/wal-g.d/env /opt/wal-g/bin/wal-g backup-fetch /var/opt/gitlab/postgresql/data/ LATEST`
+  * `BASE=<base_000... from backup-list above>`
+  * `cd /tmp/; sudo -u gitlab-psql /usr/bin/envdir /etc/wal-g.d/env /opt/wal-g/bin/wal-g backup-fetch /var/opt/gitlab/postgresql/data/ $BASE`
 * copy back the recovery.conf file, make sure it is looking like [above](#pre-requisites)
   * `cp -a $HOME/recovery.conf /var/opt/gitlab/postgresql/data/`
-* run `gitlab-ctl reconfigure` to create a proper postgresql.conf, check it
-* make sure postgresql is started: `gitlab-ctl start postgresql`
-* check logs in `/var/opt/gitlab/postgresql/current` - postgres should be in
+* run `gitlab-ctl reconfigure`; this will generate a new postgresql.conf, but will
+  probably then fail trying to connect to the newly started up (but still not recovered)
+  DB, to create users (or some such).
+  [This is fine](https://i.kym-cdn.com/photos/images/newsfeed/000/962/640/658.png)
+* chef should have started postgresql, but check with `gitlab-ctl status postgresql`, and
+  if necessary, `gitlab-ctl start postgresql`
+* check logs in `/var/log/gitlab/postgresql/current` - postgres should be in
   startup first and then start replaying WAL files all the time
-* `system-ctl start chef-client`
+* Once postgres is accepting connections again (many hours, but before it gets fully
+  up to date, based on some internal determination by postgres), run `gitlab-ctl reconfigure`
+  again to ensure it completes any configuration, and will be clean in future.
+* `chef-client-enable`
 
 #### Restoring with a disk-snapshot
 

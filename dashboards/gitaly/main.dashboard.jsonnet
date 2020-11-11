@@ -1,33 +1,74 @@
-local basic = import 'grafana/basic.libsonnet';
-local capacityPlanning = import 'capacity_planning.libsonnet';
-local colors = import 'grafana/colors.libsonnet';
-local commonAnnotations = import 'grafana/common_annotations.libsonnet';
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
-local keyMetrics = import 'key_metrics.libsonnet';
+local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
-local nodeMetrics = import 'node_metrics.libsonnet';
-local platformLinks = import 'platform_links.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
-local saturationDetail = import 'saturation_detail.libsonnet';
-local seriesOverrides = import 'grafana/series_overrides.libsonnet';
-local serviceCatalog = import 'service_catalog.libsonnet';
-local templates = import 'grafana/templates.libsonnet';
-local dashboard = grafana.dashboard;
 local row = grafana.row;
-local template = grafana.template;
-local graphPanel = grafana.graphPanel;
-local annotation = grafana.annotation;
-local serviceHealth = import 'service_health.libsonnet';
-local metricsCatalogDashboards = import 'metrics_catalog_dashboards.libsonnet';
-local gitalyCommon = import 'gitaly/gitaly_common.libsonnet';
 local serviceDashboard = import 'service_dashboard.libsonnet';
-local processExporter = import 'process_exporter.libsonnet';
+local colors = import 'grafana/colors.libsonnet';
+local metricsCatalog = import 'metrics-catalog.libsonnet';
+local multiburnFactors = import 'mwmbr/multiburn_factors.libsonnet';
 
 local selector = 'environment="$environment", type="gitaly", stage="$stage"';
 
+local gitalyServiceInfo = metricsCatalog.getService('gitaly');
+
+local hostChart(
+  title,
+  query,
+  valueColumnTitle,
+  thresholds,
+  thresholdColors,
+  sortDescending
+      ) =
+  grafana.tablePanel.new(
+    title,
+    datasource='$PROMETHEUS_DS',
+    styles=[
+      {
+        type: 'hidden',
+        pattern: 'Time',
+        alias: 'Time',
+      },
+      {
+        unit: 'short',
+        type: 'string',
+        alias: 'fqdn',
+        decimals: 2,
+        pattern: 'fqdn',
+        mappingType: 2,
+        link: true,
+        linkUrl: '/d/gitaly-host-detail/gitaly-host-detail?orgId=1&var-environment=$environment&var-stage=$stage&var-fqdn=${__cell}',
+        linkTooltip: 'Click to navigate to Gitaly Host Detail Dashboard',
+      },
+      {
+        unit: 'percentunit',
+        type: 'number',
+        alias: valueColumnTitle,
+        decimals: 2,
+        colors: thresholdColors,
+        colorMode: 'row',
+        pattern: 'Value',
+        thresholds: thresholds,
+        mappingType: 1,
+      },
+    ],
+  )
+  .addTarget(
+    promQuery.target(
+      query,
+      format='table',
+      instant=true
+    )
+  ) + {
+    sort: {
+      col: null,
+      desc: sortDescending,
+    },
+  };
+
 serviceDashboard.overview('gitaly', 'stor')
 .addPanel(
-  row.new(title='Node Performance'),
+  row.new(title='Node Investigation'),
   gridPos={
     x: 0,
     y: 2000,
@@ -37,12 +78,53 @@ serviceDashboard.overview('gitaly', 'stor')
 )
 .addPanels(
   layout.grid([
-    gitalyCommon.perNodeApdex(selector),
-    gitalyCommon.inflightGitalyCommandsPerNode(selector),
-  ], startRow=2001)
+    hostChart(
+      title='Worst Performing Gitaly Nodes by Apdex Score SLI',
+      query=|||
+        bottomk(8,
+          avg by (fqdn) (
+            gitlab_service_node_apdex:ratio_5m{environment="$environment", type="gitaly", stage="$stage"}
+          )
+        )
+      |||,
+      valueColumnTitle='Apdex Score',
+      thresholds=[
+        multiburnFactors.apdexRatioThreshold1h(gitalyServiceInfo.monitoringThresholds.apdexScore),
+        multiburnFactors.apdexRatioThreshold6h(gitalyServiceInfo.monitoringThresholds.apdexScore),
+      ],
+      thresholdColors=[
+        colors.criticalColor,
+        colors.errorColor,
+        colors.black,
+      ],
+      sortDescending=true
+    ),
+    hostChart(
+      title='Worst Performing Gitaly Nodes by Error Rate SLI',
+      query=|||
+        topk(8,
+          avg by (fqdn) (
+            gitlab_service_node_errors:ratio_5m{environment="$environment", type="gitaly", stage="$stage"}
+          )
+        )
+      |||,
+      valueColumnTitle='Error Rate',
+      thresholds=[
+        multiburnFactors.errorRatioThreshold6h(gitalyServiceInfo.monitoringThresholds.errorRatio),
+        multiburnFactors.errorRatioThreshold1h(gitalyServiceInfo.monitoringThresholds.errorRatio),
+      ],
+      thresholdColors=[
+        colors.black,
+        colors.errorColor,
+        colors.criticalColor,
+      ],
+      sortDescending=false
+    ),
+
+  ], startRow=2001, cols=2)
 )
 .addPanel(
-  row.new(title='Gitaly Safety Mechanisms'),
+  row.new(title='Blackbox exporter metrics'),
   gridPos={
     x: 0,
     y: 3000,
@@ -52,30 +134,58 @@ serviceDashboard.overview('gitaly', 'stor')
 )
 .addPanels(
   layout.grid([
-    gitalyCommon.gitalySpawnTimeoutsPerNode(selector),
-    gitalyCommon.ratelimitLockPercentage(selector),
+    basic.timeseries(
+      title='Gitaly first packet to total request time ratio (GET)',
+      query=|||
+        gitaly_blackbox_git_http_get_first_packet_seconds{%(selector)s}
+        /
+        gitaly_blackbox_git_http_get_total_time_seconds{%(selector)s}
+      ||| % { selector: selector },
+      legendFormat='{{ probe }}',
+      interval='1m',
+      linewidth=1,
+    ),
+    basic.timeseries(
+      title='Gitaly first packet to total request time ratio',
+      query=|||
+        (
+          gitaly_blackbox_git_http_post_first_pack_packet_seconds{%(selector)s}
+          +
+          gitaly_blackbox_git_http_get_first_packet_seconds{%(selector)s}
+        )
+        /
+        (
+          gitaly_blackbox_git_http_post_total_time_seconds{%(selector)s}
+          +
+          gitaly_blackbox_git_http_get_total_time_seconds{%(selector)s}
+        )
+      ||| % { selector: selector },
+      legendFormat='{{ probe }}',
+      interval='1m',
+      linewidth=1,
+    ),
+    basic.timeseries(
+      title='Gitaly wanted refs to total request time ratio',
+      query=|||
+        gitaly_blackbox_git_http_wanted_refs{%(selector)s}
+        /
+        gitaly_blackbox_git_http_get_total_time_seconds{%(selector)s}
+      ||| % { selector: selector },
+      legendFormat='{{ probe }}',
+      interval='1m',
+      linewidth=1,
+    ),
+    basic.timeseries(
+      title='Gitaly request total time to request total size ratio (POST)',
+      query=|||
+        gitaly_blackbox_git_http_post_total_time_seconds{%(selector)s}
+        /
+        gitaly_blackbox_git_http_post_pack_bytes{%(selector)s}
+      ||| % { selector: selector },
+      legendFormat='{{ probe }}',
+      interval='1m',
+      linewidth=1,
+    ),
   ], startRow=3001)
-)
-.addPanel(
-  row.new(title='git process activity'),
-  gridPos={
-    x: 0,
-    y: 4000,
-    w: 24,
-    h: 1,
-  }
-)
-.addPanels(
-  processExporter.namedGroup(
-    'git processes',
-    {
-      groupname: { re: 'git.*' },
-      environment: '$environment',
-      type: 'gitaly',
-      stage: '$stage',
-    },
-    aggregationLabels=['groupname'],
-    startRow=4001
-  )
 )
 .overviewTrailer()

@@ -31,7 +31,7 @@ groups:
         clamp_min(
           clamp_max(
             1 - avg by (environment, tier, type, stage) (
-              rate(node_cpu_seconds_total{mode="idle", environment!="",type!="",type!~"waf|console-node|deploy-node"}[5m])
+              rate(node_cpu_seconds_total{mode="idle", environment!="",type!="",type!~"waf|console-node|deploy-node|security"}[5m])
             )
             ,
             1)
@@ -251,6 +251,42 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
+      component: kube_container_cpu
+    expr: |
+      max by(environment, tier, type, stage) (
+        clamp_min(
+          clamp_max(
+            sum by (environment, tier, type, stage, pod, container) (
+              rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", environment!="",type=~"git|mailroom|registry|sidekiq"}[5m])
+            )
+            /
+            sum by(environment, tier, type, stage, pod, container) (
+              container_spec_cpu_quota:labeled{container!="", container!="POD", environment!="",type=~"git|mailroom|registry|sidekiq"}
+              /
+              container_spec_cpu_period:labeled{container!="", container!="POD", environment!="",type=~"git|mailroom|registry|sidekiq"}
+            )
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
+      component: kube_container_memory
+    expr: |
+      max by(environment, tier, type, stage) (
+        clamp_min(
+          clamp_max(
+            container_memory_working_set_bytes:labeled{container!="", container!="POD", environment!="",type=~"git|mailroom|registry|sidekiq"}
+            /
+            (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", environment!="",type=~"git|mailroom|registry|sidekiq"} > 0)
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
       component: kube_hpa_instances
       stage: main
       tier: inf
@@ -425,7 +461,7 @@ groups:
           clamp_max(
             sum without(cpu, mode) (
               rate(
-                namedprocess_namegroup_cpu_seconds_total{groupname=~"pgbouncer.*", environment!="",type=~"pgbouncer|patroni"}[1m]
+                namedprocess_namegroup_cpu_seconds_total{groupname=~"pgbouncer.*", environment!="",type=~"pgbouncer|patroni"}[5m]
               )
             )
             ,
@@ -503,9 +539,11 @@ groups:
       max by(environment) (
         clamp_min(
           clamp_max(
-            sum without(executor_stage, exported_stage, state) (max_over_time(gitlab_runner_jobs{job="private-runners"}[1m]))
+            sum without(executor_stage, exported_stage, state) (
+              max_over_time(gitlab_runner_jobs{job="runners-manager",shard="private"}[1m])
+            )
             /
-            gitlab_runner_limit{job="private-runners"} > 0
+            gitlab_runner_limit{job="runners-manager",shard="private"} > 0
             ,
             1)
         ,
@@ -610,7 +648,7 @@ groups:
         clamp_min(
           clamp_max(
             1 - avg by (environment, tier, type, stage, shard) (
-              rate(node_cpu_seconds_total{mode="idle", environment!="",type!="",type!~"waf|console-node|deploy-node"}[5m])
+              rate(node_cpu_seconds_total{mode="idle", environment!="",type!="",type!~"waf|console-node|deploy-node|security"}[5m])
             )
             ,
             1)
@@ -627,9 +665,11 @@ groups:
       max by(environment) (
         clamp_min(
           clamp_max(
-            sum without(executor_stage, exported_stage, state) (max_over_time(gitlab_runner_jobs{job="shared-runners"}[1m]))
+            sum without(executor_stage, exported_stage, state) (
+              max_over_time(gitlab_runner_jobs{job="runners-manager",shard="shared"}[1m])
+            )
             /
-            gitlab_runner_limit{job="shared-runners"} > 0
+            gitlab_runner_limit{job="runners-manager",shard="shared"} > 0
             ,
             1)
         ,
@@ -642,9 +682,11 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            sum without(executor_stage, exported_stage, state) (max_over_time(gitlab_runner_jobs{job="shared-runners-gitlab-org"}[1m]))
+            sum without(executor_stage, exported_stage, state) (
+              max_over_time(gitlab_runner_jobs{job="runners-manager",shard="shared-gitlab-org"}[1m])
+            )
             /
-            gitlab_runner_limit{job="shared-runners-gitlab-org"} > 0
+            gitlab_runner_limit{job="runners-manager",shard="shared-gitlab-org"} > 0
             ,
             1)
         ,
@@ -676,7 +718,7 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{mode="idle", environment!="",type!="",type!~"waf|console-node|deploy-node"}[5m]))
+            avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{mode="idle", environment!="",type!="",type!~"waf|console-node|deploy-node|security"}[5m]))
             ,
             1)
         ,
@@ -692,6 +734,21 @@ groups:
             sum by(environment, tier, type, stage, fqdn) (avg_over_time(puma_active_connections{environment!="",type=~"web|api|git|sidekiq"}[1m]))
             /
             sum by(environment, tier, type, stage, fqdn) (puma_max_threads{pid="puma_master", environment!="",type=~"web|api|git|sidekiq"})
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
+      component: workhorse_image_scaling
+    expr: |
+      max by(environment, tier, type, stage) (
+        clamp_min(
+          clamp_max(
+            avg_over_time(gitlab_workhorse_image_resize_processes{environment!="",type="web"}[5m])
+              /
+            gitlab_workhorse_image_resize_max_processes{environment!="",type="web"}
             ,
             1)
         ,
@@ -820,6 +877,22 @@ groups:
     labels:
       component: go_memory
     expr: '0.98'
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: kube_container_cpu
+    expr: '0.9'
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: kube_container_cpu
+    expr: '0.99'
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: kube_container_memory
+    expr: '0.9'
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: kube_container_memory
+    expr: '0.99'
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: kube_hpa_instances
@@ -1020,6 +1093,14 @@ groups:
     labels:
       component: single_node_puma_workers
     expr: '0.9'
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: workhorse_image_scaling
+    expr: '0.9'
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: workhorse_image_scaling
+    expr: '0.95'
 - name: GitLab Component Saturation Metadata
   interval: 5m
   rules:
@@ -1110,6 +1191,18 @@ groups:
   - record: gitlab_component_saturation_info
     labels:
       component: go_memory
+      horiz_scaling: 'yes'
+      severity: s4
+    expr: '1'
+  - record: gitlab_component_saturation_info
+    labels:
+      component: kube_container_cpu
+      horiz_scaling: 'yes'
+      severity: s4
+    expr: '1'
+  - record: gitlab_component_saturation_info
+    labels:
+      component: kube_container_memory
       horiz_scaling: 'yes'
       severity: s4
     expr: '1'
@@ -1263,13 +1356,25 @@ groups:
       horiz_scaling: 'yes'
       severity: s2
     expr: '1'
-- name: GitLab Component Saturation 1w Quantiles
+  - record: gitlab_component_saturation_info
+    labels:
+      component: workhorse_image_scaling
+      horiz_scaling: 'yes'
+      severity: s4
+    expr: '1'
+- name: GitLab Component Saturation Statistics
   interval: 5m
   rules:
   - record: gitlab_component_saturation:ratio_quantile95_1w
     expr: quantile_over_time(0.95, gitlab_component_saturation:ratio[1w])
   - record: gitlab_component_saturation:ratio_quantile99_1w
     expr: quantile_over_time(0.99, gitlab_component_saturation:ratio[1w])
+  - record: gitlab_component_saturation:ratio_quantile95_1h
+    expr: quantile_over_time(0.95, gitlab_component_saturation:ratio[1h])
+  - record: gitlab_component_saturation:ratio_quantile99_1h
+    expr: quantile_over_time(0.99, gitlab_component_saturation:ratio[1h])
+  - record: gitlab_component_saturation:ratio_avg_1h
+    expr: avg_over_time(gitlab_component_saturation:ratio[1h])
 - name: GitLab Saturation Alerts
   interval: 1m
   rules:
@@ -1312,7 +1417,7 @@ groups:
           ,
           0)
         )
-      runbook: docs/{{ $labels.type }}/service-{{ $labels.type }}.md
+      runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: cause
       rules_domain: general
@@ -1351,7 +1456,7 @@ groups:
           ,
           0)
         )
-      runbook: docs/{{ $labels.type }}/service-{{ $labels.type }}.md
+      runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: cause
       rules_domain: general
@@ -1395,7 +1500,7 @@ groups:
           ,
           0)
         )
-      runbook: docs/{{ $labels.type }}/service-{{ $labels.type }}.md
+      runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: cause
       pager: pagerduty
@@ -1436,7 +1541,7 @@ groups:
           ,
           0)
         )
-      runbook: docs/{{ $labels.type }}/service-{{ $labels.type }}.md
+      runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: cause
       pager: pagerduty
@@ -1477,7 +1582,7 @@ groups:
           ,
           0)
         )
-      runbook: docs/{{ $labels.type }}/service-{{ $labels.type }}.md
+      runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: cause
       rules_domain: general
@@ -1517,7 +1622,7 @@ groups:
           ,
           0)
         )
-      runbook: docs/{{ $labels.type }}/service-{{ $labels.type }}.md
+      runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: cause
       rules_domain: general
@@ -1561,7 +1666,7 @@ groups:
           ,
           0)
         )
-      runbook: docs/{{ $labels.type }}/service-{{ $labels.type }}.md
+      runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: cause
       rules_domain: general
@@ -1605,7 +1710,7 @@ groups:
           ,
           0)
         )
-      runbook: docs/{{ $labels.type }}/service-{{ $labels.type }}.md
+      runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: cause
       rules_domain: general
@@ -1646,7 +1751,7 @@ groups:
           ,
           0)
         )
-      runbook: docs/{{ $labels.type }}/service-{{ $labels.type }}.md
+      runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: cause
       rules_domain: general
@@ -1689,7 +1794,7 @@ groups:
           ,
           0)
         )
-      runbook: docs/{{ $labels.type }}/service-{{ $labels.type }}.md
+      runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: cause
       rules_domain: general
@@ -1728,7 +1833,7 @@ groups:
           ,
           0)
         )
-      runbook: docs/{{ $labels.type }}/service-{{ $labels.type }}.md
+      runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: cause
       rules_domain: general
@@ -1767,7 +1872,7 @@ groups:
           ,
           0)
         )
-      runbook: docs/{{ $labels.type }}/service-{{ $labels.type }}.md
+      runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: cause
       rules_domain: general
@@ -1812,7 +1917,7 @@ groups:
           ,
           0)
         )
-      runbook: docs/{{ $labels.type }}/service-{{ $labels.type }}.md
+      runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: cause
       rules_domain: general
@@ -1855,7 +1960,7 @@ groups:
           ,
           0)
         )
-      runbook: docs/{{ $labels.type }}/service-{{ $labels.type }}.md
+      runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: cause
       rules_domain: general
@@ -1898,7 +2003,7 @@ groups:
           ,
           0)
         )
-      runbook: docs/{{ $labels.type }}/service-{{ $labels.type }}.md
+      runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: cause
       rules_domain: general
@@ -1906,6 +2011,90 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="go_memory"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="go_memory"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 15m
+    annotations:
+      title: >-
+        The Kube Container CPU Utilization resource of the {{ $labels.type }} service ({{ $labels.stage
+        }} stage), component has a saturation exceeding SLO and is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Kube Container CPU Utilization resource:
+
+        Kubernetes containers are allocated a share of CPU. When this is exhausted, the container may be thottled.
+      grafana_dashboard_id: alerts-sat_kube_container_cpu
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/alerts-sat_kube_container_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '23368'
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, pod, container) (
+          clamp_min(
+            clamp_max(
+              sum by (environment, tier, type, stage, pod, container) (
+                rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
+              )
+              /
+              sum by(environment, tier, type, stage, pod, container) (
+                container_spec_cpu_quota:labeled{container!="", container!="POD", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+                /
+                container_spec_cpu_period:labeled{container!="", container!="POD", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+    expr: |
+      gitlab_component_saturation:ratio{component="kube_container_cpu"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_cpu"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 15m
+    annotations:
+      title: >-
+        The Kube Container Memory Utilization resource of the {{ $labels.type }} service ({{ $labels.stage
+        }} stage), component has a saturation exceeding SLO and is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Kube Container Memory Utilization resource:
+
+        Records the total memory utilization for containers for this service, as a percentage of the memory limit as configured through Kubernetes.
+      grafana_dashboard_id: alerts-sat_kube_container_memory
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/alerts-sat_kube_container_memory?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '13064'
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, pod, container) (
+          clamp_min(
+            clamp_max(
+              container_memory_working_set_bytes:labeled{container!="", container!="POD", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              /
+              (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} > 0)
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+    expr: |
+      gitlab_component_saturation:ratio{component="kube_container_memory"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_memory"}
   - alert: component_saturation_slo_out_of_bounds
     for: 25m
     annotations:
@@ -1943,7 +2132,7 @@ groups:
           ,
           0)
         )
-      runbook: docs/{{ $labels.type }}/service-{{ $labels.type }}.md
+      runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: cause
       pager: pagerduty
@@ -1984,7 +2173,7 @@ groups:
           ,
           0)
         )
-      runbook: docs/{{ $labels.type }}/service-{{ $labels.type }}.md
+      runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: cause
       pager: pagerduty
@@ -2025,7 +2214,7 @@ groups:
           ,
           0)
         )
-      runbook: docs/{{ $labels.type }}/service-{{ $labels.type }}.md
+      runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: cause
       pager: pagerduty
@@ -2063,7 +2252,7 @@ groups:
           ,
           0)
         )
-      runbook: docs/{{ $labels.type }}/service-{{ $labels.type }}.md
+      runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: cause
       rules_domain: general
@@ -2104,7 +2293,7 @@ groups:
           ,
           0)
         )
-      runbook: docs/{{ $labels.type }}/service-{{ $labels.type }}.md
+      runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: cause
       rules_domain: general
@@ -2156,7 +2345,7 @@ groups:
           ,
           0)
         )
-      runbook: docs/{{ $labels.type }}/service-{{ $labels.type }}.md
+      runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: cause
       pager: pagerduty
@@ -2200,7 +2389,7 @@ groups:
           ,
           0)
         )
-      runbook: docs/{{ $labels.type }}/service-{{ $labels.type }}.md
+      runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: cause
       rules_domain: general
@@ -2244,7 +2433,7 @@ groups:
           ,
           0)
         )
-      runbook: docs/{{ $labels.type }}/service-{{ $labels.type }}.md
+      runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: cause
       rules_domain: general
@@ -2293,7 +2482,7 @@ groups:
           ,
           0)
         )
-      runbook: docs/{{ $labels.type }}/service-{{ $labels.type }}.md
+      runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: cause
       rules_domain: general
@@ -2328,7 +2517,7 @@ groups:
             clamp_max(
               sum without(cpu, mode) (
                 rate(
-                  namedprocess_namegroup_cpu_seconds_total{groupname=~"pgbouncer.*", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[1m]
+                  namedprocess_namegroup_cpu_seconds_total{groupname=~"pgbouncer.*", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m]
                 )
               )
               ,
@@ -2336,7 +2525,7 @@ groups:
           ,
           0)
         )
-      runbook: docs/{{ $labels.type }}/service-{{ $labels.type }}.md
+      runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: cause
       pager: pagerduty
@@ -2388,7 +2577,7 @@ groups:
           ,
           0)
         )
-      runbook: docs/{{ $labels.type }}/service-{{ $labels.type }}.md
+      runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: cause
       rules_domain: general
@@ -2439,7 +2628,7 @@ groups:
           ,
           0)
         )
-      runbook: docs/{{ $labels.type }}/service-{{ $labels.type }}.md
+      runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: cause
       rules_domain: general
@@ -2478,7 +2667,7 @@ groups:
           ,
           0)
         )
-      runbook: docs/{{ $labels.type }}/service-{{ $labels.type }}.md
+      runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: cause
       rules_domain: general
@@ -2513,15 +2702,17 @@ groups:
         max by(environment, instance) (
           clamp_min(
             clamp_max(
-              sum without(executor_stage, exported_stage, state) (max_over_time(gitlab_runner_jobs{job="private-runners"}[1m]))
+              sum without(executor_stage, exported_stage, state) (
+                max_over_time(gitlab_runner_jobs{job="runners-manager",shard="private"}[1m])
+              )
               /
-              gitlab_runner_limit{job="private-runners"} > 0
+              gitlab_runner_limit{job="runners-manager",shard="private"} > 0
               ,
               1)
           ,
           0)
         )
-      runbook: docs/{{ $labels.type }}/service-{{ $labels.type }}.md
+      runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: cause
       rules_domain: general
@@ -2541,6 +2732,8 @@ groups:
         Details of the Rails DB Connection Pool Utilization resource:
 
         Rails uses connection pools for its database connections. As each node may have multiple connection pools, this is by node and by database host.
+
+        Read more about this resource in our [documentation](https://docs.gitlab.com/ee/development/database/client_side_connection_pool.html#client-side-connection-pool).
 
         If this resource is saturated, it may indicate that our connection pools are not correctly sized, perhaps because an unexpected application thread is using a database connection.
       grafana_dashboard_id: alerts-sat_rails_db_connection_pool
@@ -2566,7 +2759,7 @@ groups:
           ,
           0)
         )
-      runbook: docs/{{ $labels.type }}/service-{{ $labels.type }}.md
+      runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: cause
       rules_domain: general
@@ -2609,7 +2802,7 @@ groups:
           ,
           0)
         )
-      runbook: docs/{{ $labels.type }}/service-{{ $labels.type }}.md
+      runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: cause
       rules_domain: general
@@ -2658,7 +2851,7 @@ groups:
           ,
           0)
         )
-      runbook: docs/{{ $labels.type }}/service-{{ $labels.type }}.md
+      runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: cause
       pager: pagerduty
@@ -2703,7 +2896,7 @@ groups:
           ,
           0)
         )
-      runbook: docs/{{ $labels.type }}/service-{{ $labels.type }}.md
+      runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: cause
       pager: pagerduty
@@ -2748,7 +2941,7 @@ groups:
           ,
           0)
         )
-      runbook: docs/{{ $labels.type }}/service-{{ $labels.type }}.md
+      runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: cause
       rules_domain: general
@@ -2787,7 +2980,7 @@ groups:
           ,
           0)
         )
-      runbook: docs/{{ $labels.type }}/service-{{ $labels.type }}.md
+      runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: cause
       rules_domain: general
@@ -2822,15 +3015,17 @@ groups:
         max by(environment, instance) (
           clamp_min(
             clamp_max(
-              sum without(executor_stage, exported_stage, state) (max_over_time(gitlab_runner_jobs{job="shared-runners"}[1m]))
+              sum without(executor_stage, exported_stage, state) (
+                max_over_time(gitlab_runner_jobs{job="runners-manager",shard="shared"}[1m])
+              )
               /
-              gitlab_runner_limit{job="shared-runners"} > 0
+              gitlab_runner_limit{job="runners-manager",shard="shared"} > 0
               ,
               1)
           ,
           0)
         )
-      runbook: docs/{{ $labels.type }}/service-{{ $labels.type }}.md
+      runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: cause
       rules_domain: general
@@ -2865,15 +3060,17 @@ groups:
         max by(environment, tier, type, stage, instance) (
           clamp_min(
             clamp_max(
-              sum without(executor_stage, exported_stage, state) (max_over_time(gitlab_runner_jobs{job="shared-runners-gitlab-org"}[1m]))
+              sum without(executor_stage, exported_stage, state) (
+                max_over_time(gitlab_runner_jobs{job="runners-manager",shard="shared-gitlab-org"}[1m])
+              )
               /
-              gitlab_runner_limit{job="shared-runners-gitlab-org"} > 0
+              gitlab_runner_limit{job="runners-manager",shard="shared-gitlab-org"} > 0
               ,
               1)
           ,
           0)
         )
-      runbook: docs/{{ $labels.type }}/service-{{ $labels.type }}.md
+      runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: cause
       rules_domain: general
@@ -2920,7 +3117,7 @@ groups:
           ,
           0)
         )
-      runbook: docs/{{ $labels.type }}/service-{{ $labels.type }}.md
+      runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: cause
       rules_domain: general
@@ -2959,7 +3156,7 @@ groups:
           ,
           0)
         )
-      runbook: docs/{{ $labels.type }}/service-{{ $labels.type }}.md
+      runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: cause
       rules_domain: general
@@ -3002,7 +3199,7 @@ groups:
           ,
           0)
         )
-      runbook: docs/{{ $labels.type }}/service-{{ $labels.type }}.md
+      runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: cause
       pager: pagerduty
@@ -3011,3 +3208,45 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="single_node_puma_workers"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="single_node_puma_workers"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 15m
+    annotations:
+      title: >-
+        The Workhorse Image Scaler Exhaustion per Node resource of the {{ $labels.type }} service ({{
+        $labels.stage }} stage), component has a saturation exceeding SLO and is close to its capacity
+        limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Workhorse Image Scaler Exhaustion per Node resource:
+
+        Workhorse can scale images on-the-fly as requested. Since the actual work will be performed by dedicated processes, we currently define a hard cap for how many such requests are allowed to be in the system concurrently.
+
+        If this resource is fully saturated, Workhorse will start ignoring image scaling requests and serve the original image instead, which will ensure continued operation, but comes at the cost of additional client latency and GCS egress traffic.
+      grafana_dashboard_id: alerts-sat_wh_image_scaling
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/alerts-sat_wh_image_scaling?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '92168'
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, fqdn) (
+          clamp_min(
+            clamp_max(
+              avg_over_time(gitlab_workhorse_image_resize_processes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
+                /
+              gitlab_workhorse_image_resize_max_processes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+    expr: |
+      gitlab_component_saturation:ratio{component="workhorse_image_scaling"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="workhorse_image_scaling"}

@@ -1,6 +1,6 @@
-local selectors = import 'promql/selectors.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
+local selectors = import 'promql/selectors.libsonnet';
 
 {
   namedGroup(title, selectorHash, aggregationLabels=['fqdn'], startRow=1)::
@@ -35,6 +35,20 @@ local layout = import 'grafana/layout.libsonnet';
         query=|||
           max by(%(aggregationLabels)s) (
               namedprocess_namegroup_open_filedesc{%(selector)s}
+          )
+        ||| % formatConfig,
+        legendFormat=legendFormat,
+        interval='1m',
+        intervalFactor=1,
+        legend_show=false,
+        linewidth=1
+      ),
+      basic.timeseries(
+        title=title + ': Number of Processes',
+        description='Number of processes in the process group',
+        query=|||
+          sum by(%(aggregationLabels)s) (
+            avg_over_time(namedprocess_namegroup_num_procs{%(selector)s}[$__interval])
           )
         ||| % formatConfig,
         legendFormat=legendFormat,

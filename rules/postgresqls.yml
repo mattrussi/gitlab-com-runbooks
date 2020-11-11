@@ -14,8 +14,8 @@ groups:
   - alert: PostgreSQL_WALEReplicationStopped
     expr: rate(pg_xlog_position_bytes{type=~"postgres-(archive|delayed)"}[1m]) == 0
     # Given that long running queries can't temporarily halt replication,
-    # we're setting the "for" value to the value of statement_timeout.
-    for: 15m
+    # we're setting the "for" value to the value of statement_timeout + a small margin
+    for: 125m
     labels:
       pager: pagerduty
       severity: s1
@@ -27,7 +27,7 @@ groups:
       runbook: docs/patroni/postgres.md#replication-is-lagging-or-has-stopped
       title: WAL-E replication has stopped
   - alert: PostgreSQL_CommitRateTooLow
-    expr: rate(pg_stat_database_xact_commit{datname="gitlabhq_production", type =~"postgres|patroni", environment!="gstg"}[1m])
+    expr: rate(pg_stat_database_xact_commit{datname="gitlabhq_production", type =~"postgres|patroni", environment!="gstg", shard="default"}[1m])
       < 1000
     for: 5m
     labels:
@@ -223,20 +223,20 @@ groups:
       runbook: "docs/patroni/postgres.md#tables-with-a-large-amount-of-dead-tuples"
       title: PostgreSQL dead tuples is too large
   - alert: PostgreSQL_SplitBrain
-    expr: count(pg_replication_is_replica == 0) BY (environment) != 1
+    expr: count(pg_replication_is_replica == 0) BY (environment,type) > 1
     for: 1m
     labels:
       pager: pagerduty
       severity: s1
       alert_type: cause
     annotations:
-      description: 'The following {{$value}} databases are in read-write
+      description: 'The following {{$value}} {{$labels.type}} databases are in read-write
       (primary) mode: {{range query
-        "pg_replication_is_replica{environment=''$labels.environment''} ==
+        "pg_replication_is_replica{environment=''$labels.environment'',type=''$labels.type''} ==
         0.0"}} {{.labels.fqdn}} {{end}}'
       runbook: "docs/patroni/patroni-management.md"
       title: "Split Brain: too many postgres databases in environment {{$labels.environment}}
-        in read-write (primary) mode"
+        of type {{$labels.type}} in read-write (primary) mode"
   - alert: PostgreSQL_SplitBrain_Replicas
     expr: count(count(pg_stat_wal_receiver_status{type=~"postgres|patroni"} >= 0) BY (environment, upstream_host))
       BY (environment) > 1

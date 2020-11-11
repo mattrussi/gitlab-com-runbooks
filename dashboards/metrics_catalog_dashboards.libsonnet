@@ -1,14 +1,15 @@
-local basic = import 'grafana/basic.libsonnet';
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
-local keyMetrics = import 'key_metrics.libsonnet';
+local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
+local keyMetrics = import 'key_metrics.libsonnet';
 local metricsCatalog = import 'metrics-catalog.libsonnet';
 local thresholds = import 'thresholds.libsonnet';
 local row = grafana.row;
 local selectors = import 'promql/selectors.libsonnet';
 local statusDescription = import 'status_description.libsonnet';
+local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
-local defaultEnvironmentSelector = { environment: '$environment' };
+local defaultEnvironmentSelector = { environment: '$environment', env: '$environment' };
 
 local getLatencyPercentileForService(service) =
   if std.objectHas(service, 'contractualThresholds') && std.objectHas(service.contractualThresholds, 'apdexRatio') then
@@ -22,8 +23,7 @@ local componentOverviewMatrixRow(
   componentName,
   component,
   startRow,
-  environmentSelectorHash,
-  includeNodeLevelMonitoring=false
+  environmentSelectorHash
       ) =
   local componentSelectorHash = environmentSelectorHash { type: serviceType, stage: serviceStage, component: componentName };
   local columns =
@@ -57,38 +57,90 @@ local componentOverviewMatrixRow(
         ]]
       else
         []
+    )
+    +
+    (
+      if component.hasToolingLinks() then
+        // We pass the selector hash to the tooling links they may
+        // be used to customize the links
+        local toolingOptions = { prometheusSelectorHash: componentSelectorHash };
+
+        [[
+          grafana.text.new(
+            title='Tooling Links',
+            mode='markdown',
+            content=|||
+              ### Observability Tools
+
+              %(links)s
+            ||| % {
+              links: toolingLinks.generateMarkdown(component.getToolingLinks(), toolingOptions),
+            },
+          ),
+        ]]
+      else
+        []
     );
 
-  layout.splitColumnGrid(columns, [7, 1], startRow=startRow) +
-  (
-    if includeNodeLevelMonitoring then
-      layout.singleRow(
-        (
-          if component.hasApdex() then
-            [
-              keyMetrics.singleComponentNodeApdexPanel(serviceType, serviceStage, componentName, environmentSelectorHash)
-            ]
-          else []
-        )
-        +
-        (
-          if component.hasErrorRate() then
-            [
-              keyMetrics.singleComponentNodeErrorRates(serviceType, serviceStage, componentName, environmentSelectorHash),
-            ]
-          else []
-        )
-        +
-        (
-          if component.hasAggregatableRequestRate() then
-            [
-              keyMetrics.singleComponentNodeQPSPanel(serviceType, serviceStage, componentName, environmentSelectorHash),
-            ]
-          else []
-        ),
-        rowHeight=5, startRow=startRow+8
-      )
-    else []
+  layout.splitColumnGrid(columns, [7, 1], startRow=startRow);
+
+local componentNodeOverviewMatrixRow(
+  serviceType,
+  component,
+  selectorHash,
+  startRow,
+  environmentSelectorHash
+      ) =
+  layout.singleRow(
+    (
+      if component.hasApdex() then
+        [
+          keyMetrics.singleComponentNodeApdexPanel(serviceType, component.name, selectorHash, environmentSelectorHash),
+        ]
+      else []
+    )
+    +
+    (
+      if component.hasErrorRate() then
+        [
+          keyMetrics.singleComponentNodeErrorRates(serviceType, component.name, selectorHash, environmentSelectorHash),
+        ]
+      else []
+    )
+    +
+    (
+      if component.hasAggregatableRequestRate() then
+        [
+          keyMetrics.singleComponentNodeQPSPanel(serviceType, component.name, selectorHash, environmentSelectorHash),
+        ]
+      else []
+    )
+    +
+    (
+      if component.hasToolingLinks() then
+        // We pass the selector hash to the tooling links they may
+        // be used to customize the links
+        local toolingOptions = { prometheusSelectorHash: selectorHash };
+
+        [
+          grafana.text.new(
+            title='Tooling Links',
+            mode='markdown',
+            content=|||
+              ### Observability Tools
+
+              Note: some links may not have specific node-level filters applied.
+
+              %(links)s
+            ||| % {
+              links: toolingLinks.generateMarkdown(component.getToolingLinks(), toolingOptions),
+            },
+          ),
+        ]
+      else
+        []
+    ),
+    startRow=startRow + 8
   );
 
 {
@@ -166,7 +218,7 @@ local componentOverviewMatrixRow(
 
     basic.timeseries(
       title=if title == null then 'Errors for ' + componentName else title,
-      query=component.errorRate.aggregatedIncreaseQuery(
+      query=component.errorRate.aggregatedRateQuery(
         aggregationLabels=aggregationLabels,
         selector=selector,
         rangeInterval='$__interval',
@@ -181,7 +233,6 @@ local componentOverviewMatrixRow(
     serviceStage,
     startRow,
     environmentSelectorHash=defaultEnvironmentSelector,
-    includeNodeLevelMonitoring=false,
   )::
     local service = metricsCatalog.getService(serviceType);
     [
@@ -198,7 +249,35 @@ local componentOverviewMatrixRow(
               service.components[componentName],
               startRow=startRow + 1 + i * 10,
               environmentSelectorHash=environmentSelectorHash,
-              includeNodeLevelMonitoring=includeNodeLevelMonitoring
+            ), std.objectFields(service.components)
+        )
+      )
+    ),
+
+  // Generates a grid of dashboards for a given service
+  // using the provided selectorHash (used to select fqdns)
+  //
+  // environmentSelectorHash is used for environment-specific selectors, specifically the SLOs
+  componentNodeOverviewMatrix(
+    serviceType,
+    selectorHash,
+    startRow,
+    environmentSelectorHash=defaultEnvironmentSelector,
+  )::
+    local service = metricsCatalog.getService(serviceType);
+    [
+      row.new(title='🔬 Component/Node Level Indicators', collapse=false) { gridPos: { x: 0, y: startRow, w: 24, h: 1 } },
+    ] +
+    std.prune(
+      std.flattenArrays(
+        std.mapWithIndex(
+          function(i, componentName)
+            componentNodeOverviewMatrixRow(
+              serviceType=serviceType,
+              component=service.components[componentName],
+              selectorHash=selectorHash { component: componentName },
+              startRow=startRow + 1 + i * 10,
+              environmentSelectorHash=environmentSelectorHash,
             ), std.objectFields(service.components)
         )
       )
@@ -282,19 +361,20 @@ local componentOverviewMatrixRow(
   autoDetailRows(serviceType, selectorHash, startRow)::
     local s = self;
     local service = metricsCatalog.getService(serviceType);
+    local components = service.getComponentsList();
+    local componentsFiltered = std.filter(function(c) c.supportsDetails(), components);
 
     layout.grid(
       std.mapWithIndex(
-        function(i, componentName)
-          local component = service.components[componentName];
+        function(i, component)
           local aggregationSets =
             [
               { title: 'Overall', aggregationLabels: '', legendFormat: 'overall' },
             ] +
             std.map(function(c) { title: 'per ' + c, aggregationLabels: c, legendFormat: '{{' + c + '}}' }, component.significantLabels);
 
-          s.componentDetailMatrix(serviceType, componentName, selectorHash, aggregationSets),
-        std.objectFields(service.components)
+          s.componentDetailMatrix(serviceType, component.name, selectorHash, aggregationSets),
+        componentsFiltered
       )
       , cols=1, startRow=startRow
     ),

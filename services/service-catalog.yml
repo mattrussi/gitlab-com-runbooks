@@ -119,6 +119,12 @@ teams:
 - name: gitlab-pages
   slack_alerts_channel: gitlab-pages
 
+- name: data-analytics
+  url: https://about.gitlab.com/handbook/business-ops/data-team/platform/
+  slack_channel: data-engineering
+  slack_alerts_channel: data-prom-alerts
+  oncall_schedule: https://about.gitlab.com/handbook/business-ops/data-team/how-we-work/duties/
+
 tiers:
 - name: sv
 - name: lb
@@ -160,11 +166,11 @@ services:
     project:
       - https://gitlab.com/gitlab-org/gitlab-ce
       - https://gitlab.com/gitlab-org/gitlab-ee
-    criticality: 1
     slx:
     documents:
       design:
       architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#service-architecture
+      readiness_review:
       service:
         - https://docs.gitlab.com/ce/api/
         - https://docs.gitlab.com/ee/api/
@@ -244,11 +250,11 @@ services:
   technical:
     project:
       - https://gitlab.com/gitlab-cookbooks/gitlab-exporters
-    criticality: 3
     slx:
     documents:
       design:
       architecture:
+      readiness_review:
       service:
         - https://github.com/prometheus/blackbox_exporter/blob/master/README.md
       security:
@@ -306,11 +312,11 @@ services:
     project:
       - https://github.com/cactus/go-camo
       - https://gitlab.com/gitlab-cookbooks/gitlab-camoproxy
-    criticality: 1
     slx:
     documents:
       design:
       architecture:
+      readiness_review:
       service:
       security:
     dependencies:
@@ -370,11 +376,11 @@ services:
   technical:
     project:
       - https://gitlab.com/gitlab-cookbooks/gitlab_users
-    criticality: 4
     slx:
     documents:
       design:
       architecture:
+      readiness_review:
       service:
       security:
     dependencies:
@@ -447,11 +453,11 @@ services:
   technical:
     project:
       - https://github.com/hashicorp/consul
-    criticality: 3
     slx:
     documents:
       design:
       architecture: https://www.consul.io/docs/internals/architecture.html
+      readiness_review:
       service:
         - https://github.com/hashicorp/consul/blob/master/README.md
       security: https://www.consul.io/docs/internals/security.html
@@ -510,11 +516,11 @@ services:
   technical:
     project:
       - https://gitlab.com/gitlab-com/gitlab-contributors
-    criticality: 4
     slx:
     documents:
       design: https://github.com/rails/rails-contributors/blob/master/doc/design.md
       architecture:
+      readiness_review:
       service:
         - https://gitlab.com/gitlab-com/gitlab-contributors/blob/master/README.md
       security:
@@ -571,11 +577,11 @@ services:
       response_time:
   technical:
     project:
-    criticality: 4
     slx:
     documents:
       design:
       architecture:
+      readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/issues/8
       service:
         - https://github.com/discourse/discourse_docker
       security:
@@ -630,11 +636,11 @@ services:
       response_time: "Elastic Support SLA: L1 - 4 business hours, L2 - 1 business day, L3 - 2 business days"
   technical:
     project:
-    criticality: 2
     slx:
     documents:
       design: https://gitlab.com/gitlab-com/www-gitlab-com/-/merge_requests/23545
       architecture: https://gitlab.com/gitlab-com/runbooks/raw/master/img/logging-infr.png
+      readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/blob/master/es-logging-cluster/index.md
       service:
         - https://gitlab.com/gitlab-com/runbooks/blob/master/howto/logging.md
         - https://gitlab.com/gitlab-com/gl-infra/readiness/-/blob/master/es-logging-cluster/index.md
@@ -725,11 +731,11 @@ services:
       response_time:
   technical:
     project:
-    criticality: 2
     slx:
     documents:
       design:
       architecture:
+      readiness_review:
       service: []
       security:
     dependencies:
@@ -793,11 +799,11 @@ services:
     project:
       - https://gitlab.com/gitlab-org/gitlab-ce
       - https://gitlab.com/gitlab-org/gitlab-ee
-    criticality: 1
     slx:
     documents:
       design:
       architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#service-architecture
+      readiness_review:
       service:
         - https://docs.gitlab.com/ce/
         - https://docs.gitlab.com/ee/
@@ -848,7 +854,7 @@ services:
   observability:
     monitors:
       sentry_slug: "gitlab/gitlabcom/?query=program%3A%22rails%22"
-      primary_grafana_dashboard: "web-main/web-overview?"
+      primary_grafana_dashboard: "web-main/web-overview"
       gitlab_dashboard: https://ops.gitlab.net/gitlab-com/metrics-dogfooding/-/environments/266/metrics?dashboard=.gitlab%2Fdashboards%2Fkey_service_web.yml&duration_seconds=10800
 
 - name: frontend
@@ -872,11 +878,11 @@ services:
   technical:
     project:
       - https://gitlab.com/gitlab-cookbooks/gitlab-haproxy
-    criticality: 1
     slx:
     documents:
       design:
       architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#infra-current-archi-diagram
+      readiness_review:
       service:
         - https://cbonte.github.io/haproxy-dconv/1.7/intro.html
       security:
@@ -948,10 +954,10 @@ services:
     project:
       - https://gitlab.com/gitlab-org/gitlab-shell # SSH
       - https://gitlab.com/gitlab-org/gitlab-workhorse # HTTP
-    criticality: 3
     documents:
       design:
       architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#infra-current-archi-diagram
+      readiness_review:
       service:
         - https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#service-architecture
       security:
@@ -1033,11 +1039,11 @@ services:
   technical:
     project:
       - https://gitlab.com/gitlab-org/gitaly
-    criticality: 2
     slx:
     documents:
       design: https://gitlab.com/gitlab-org/gitaly/blob/master/doc/DESIGN.md
       architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#service-architecture
+      readiness_review:
       service:
         - https://gitlab.com/gitlab-org/gitaly/blob/master/README.md
       security:
@@ -1119,11 +1125,11 @@ services:
   technical:
     project:
       - https://github.com/influxdata/influxdb
-    criticality: 3
     slx:
     documents:
       design:
       architecture:
+      readiness_review:
       service:
         - https://github.com/influxdata/influxdb/blob/master/README.md
       security: https://docs.influxdata.com/influxdb/v1.7/administration/security/
@@ -1183,11 +1189,11 @@ services:
   technical:
     project:
       - https://gitlab.com/gitlab-org/gitaly
-    criticality: 2
     slx:
     documents:
       design: https://gitlab.com/gitlab-org/gitaly/blob/master/doc/design_ha.md
       architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#service-architecture
+      readiness_review:
       service:
         - https://gitlab.com/gitlab-org/gitaly/blob/master/README.md
       security:
@@ -1255,11 +1261,11 @@ services:
   technical:
     project:
       - https://github.com/tpitale/mail_room
-    criticality: 3
     slx:
     documents:
       design:
       architecture:
+      readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/blob/master/mailroom/overview.md
       service:
         - https://github.com/tpitale/mail_room/blob/master/README.md
       security:
@@ -1316,11 +1322,11 @@ services:
       response_time:
   technical:
     project:
-    criticality: 3
     slx:
     documents:
       design:
       architecture:
+      readiness_review:
       service:
       security:
     dependencies:
@@ -1338,7 +1344,6 @@ services:
     logging:
       - name: Stackdriver Logs
         permalink: https://console.cloud.google.com/logs/viewer?project=gitlab-production&advancedFilter=resource.type%3D%22gce_instance%22%0Alabels.tag%3D%22haproxy%22%0Alabels.%22compute.googleapis.com%2Fresource_name%22:%22fe-pages%22
-
   infrastructure:
     provider: gcp
     architecture:
@@ -1378,11 +1383,11 @@ services:
   technical:
     project:
       - https://gitlab.com/gitlab-org/gitlab-pages
-    criticality: 3
     slx:
     documents:
       design:
       architecture:
+      readiness_review:
       service:
         - https://gitlab.com/gitlab-org/gitlab-pages/blob/master/README.md
       security:
@@ -1442,11 +1447,11 @@ services:
   technical:
     project:
       - https://github.com/pgbouncer/pgbouncer
-    criticality:  1
     slx:
     documents:
       design:
       architecture:  https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#database-architecture
+      readiness_review:
       service:
         - https://pgbouncer.github.io/features.html
       security:
@@ -1516,11 +1521,11 @@ services:
   technical:
     project:
       - https://github.com/postgres/postgres
-    criticality:       1
     slx:
     documents:
       design:
       architecture:  https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#database-architecture
+      readiness_review:
       service:
         - https://www.postgresql.org/docs/9.6/index.html
       security: https://www.postgresql.org/support/security/
@@ -1608,11 +1613,11 @@ services:
   technical:
     project:
       - https://github.com/postgres/postgres
-    criticality: 3
     slx:
     documents:
       design:
       architecture:  https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#database-architecture
+      readiness_review:
       service:
         - https://www.postgresql.org/docs/9.6/index.html
       security: https://www.postgresql.org/support/security/
@@ -1692,11 +1697,11 @@ services:
   technical:
     project:
       - https://github.com/postgres/postgres
-    criticality: 3
     slx:
     documents:
       design:
       architecture:  https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#database-architecture
+      readiness_review:
       service:
         - https://www.postgresql.org/docs/9.6/index.html
       security: https://www.postgresql.org/support/security/
@@ -1772,11 +1777,11 @@ services:
       response_time:
   technical:
     project:
-    criticality: 4
     slx:
     documents:
       design:
       architecture:
+      readiness_review:
       service:
         - https://gitlab.com/gitlab-org/gitlab-ce/blob/master/config/initializers/rspec_profiling.rb
         - https://github.com/foraker/rspec_profiling
@@ -1838,11 +1843,11 @@ services:
   technical:
     project:
       - https://github.com/prometheus/prometheus
-    criticality: 3
     slx:
     documents:
       design:
       architecture: https://github.com/prometheus/prometheus/blob/7632e976c0617f6206565541c6d91c02c6e12ed5/README.md#architecture-overview
+      readiness_review:
       service:
         - https://github.com/prometheus/prometheus/blob/7632e976c0617f6206565541c6d91c02c6e12ed5/README.md
       security:
@@ -1924,11 +1929,11 @@ services:
   technical:
     project:
       - https://github.com/antirez/redis/
-    criticality: 1
     slx:
     documents:
       design:
       architecture:
+      readiness_review:
       service:
         - https://redis.io/documentation
         - https://docs.gitlab.com/omnibus/settings/redis.html
@@ -1964,7 +1969,7 @@ services:
   operations:
     maintenance:
     runbooks:
-      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/redis/service-redis.md
+      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/redis/README.md
     playbooks:
       - https://gitlab.com/gitlab-com/runbooks/blob/master/howto/redis-new-cluster-replication.md
     error_budget:
@@ -1991,11 +1996,11 @@ services:
   technical:
     project:
       - https://github.com/antirez/redis/
-    criticality: 1
     slx:
     documents:
       design:
       architecture:
+      readiness_review:
       service:
         - https://redis.io/documentation
         - https://docs.gitlab.com/omnibus/settings/redis.html
@@ -2030,7 +2035,7 @@ services:
     maintenance:
     runbooks:
     playbooks:
-      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/redis/service-redis.md
+      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/redis/README.md
     error_budget:
   observability:
     monitors:
@@ -2047,18 +2052,18 @@ services:
     customers:
       - GitLab.com customers
     business_value: |
-      Redis is a criticality 1 service for us. Therefore, the business value Sentinel provides is huge in the sense that not only does it ensure we have resilient service but also saves us a lot of work and resources (such as monitoring, automatical failover and discovery).
+      Redis is a critical service for us. Therefore, the business value Sentinel provides is huge in the sense that not only does it ensure we have resilient service but also saves us a lot of work and resources (such as monitoring, automatical failover and discovery).
     SLA:
       availability:
       response_time:
   technical:
     project:
       - https://github.com/antirez/redis/
-    criticality: 1
     slx:
     documents:
       design:
       architecture:
+      readiness_review:
       service:
         - https://redis.io/topics/sentinel
         - https://docs.gitlab.com/omnibus/settings/redis.html#redis-sentinel
@@ -2093,7 +2098,7 @@ services:
     maintenance:
     runbooks:
     playbooks:
-      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/redis/service-redis.md
+      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/redis/README.md
     error_budget:
   observability:
     monitors:
@@ -2117,11 +2122,11 @@ services:
   technical:
     project:
       - https://github.com/antirez/redis/
-    criticality: 1
     slx:
     documents:
       design:
       architecture:
+      readiness_review:
       service:
         - https://redis.io/documentation
         - https://docs.gitlab.com/omnibus/settings/redis.html
@@ -2156,7 +2161,7 @@ services:
     maintenance:
     runbooks:
     playbooks:
-      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/redis/service-redis.md
+      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/redis/README.md
     error_budget:
   observability:
     monitors:
@@ -2185,11 +2190,11 @@ services:
   technical:
     project:
       - https://github.com/docker/distribution
-    criticality: 2
     slx:
     documents:
       design:
       architecture:
+      readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/blob/master/registry-gke/overview.md
       service:
         - https://github.com/docker/distribution/blob/364d2e4a5bed94e9393dd88232ea3be29ca8f27a/README.md
       security:
@@ -2257,11 +2262,11 @@ services:
       response_time:
   technical:
     project:
-    criticality: 1
     slx:
     documents:
       design:
       architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#storage-architecture
+      readiness_review:
       service:
       security:
     dependencies:
@@ -2329,11 +2334,11 @@ services:
     project:
       - https://gitlab.com/gitlab-org/gitlab-ce
       - https://gitlab.com/gitlab-org/gitlab-ee
-    criticality: 3
     slx:
     documents:
       design:
       architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#service-architecture
+      readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/blob/master/sidekiq/index.md
       service:
         - https://github.com/mperham/sidekiq/blob/master/README.md
       security:
@@ -2410,11 +2415,11 @@ services:
     project:
       - https://gitlab.com/gitlab-org/gitlab-runner
       - https://gitlab.com/gitlab-com/chatops
-    criticality: 3
     slx:
     documents:
       design:
       architecture:
+      readiness_review:
       service:
         - https://gitlab.com/gitlab-org/gitlab-runner/blob/master/README.md
       security: https://gitlab.com/gitlab-org/gitlab-runner/blob/master/docs/security/index.md
@@ -2476,11 +2481,11 @@ services:
   technical:
     project:
       - https://gitlab.com/gitlab-com/license-gitlab-com
-    criticality: 3
     slx:
     documents:
       design:
       architecture:
+      readiness_review:
       service:
         - https://gitlab.com/gitlab-com/license-gitlab-com/blob/master/README.md
       security:
@@ -2545,11 +2550,11 @@ services:
   technical:
     project:
       - https://gitlab.com/gitlab-com/version-gitlab-com
-    criticality: 4
     slx:
     documents:
       design:
       architecture:
+      readiness_review:
       service:
         - https://gitlab.com/gitlab-com/version-gitlab-com/blob/master/README.md
       security:
@@ -2621,13 +2626,13 @@ services:
       - https://gitlab.com/gitlab-com/runbooks/tree/master/rules/pubsub.yml
       - https://gitlab.com/gitlab-com/runbooks/tree/master/rules/gitaly.yml
       - https://gitlab.com/gitlab-com/runbooks/blob/master/howto/logging.md
-    criticality: 3
     slx:
     documents:
       design: |
         Services publish their logs to corresponding PubSub topics using fluentd. There is a separate VM for each topic in each environment. Each VM runs a Pubsubbeat process which is subscribed to a topic and uploads messages it receives to ELK.
       architecture: |
         Pub/Sub is a messaging service available on GCP which is similar to RabbitMQ or Kafka. It can be used for many things such as event-driven programming or managing distributed systems. We use it for forwarding logs to ELK. Different components and systems publish their logs to a Pub/Sub topic using fluentd. Pubsubbeat (Elastic Beat capable of subscribing to Pub/Sub topics) forwards them to ELK. For more information about how Pub/Sub is used for collecting logs see: https://gitlab.com/gitlab-com/runbooks/blob/master/howto/logging.md
+      readiness_review:
       service:
       security:
     dependencies:
@@ -2707,11 +2712,11 @@ services:
   technical:
     project:
       - https://gitlab.com/gitlab-org/gitlab-runner
-    criticality: 2
     slx:
     documents:
       design:
       architecture:
+      readiness_review:
       service:
         - https://gitlab.com/gitlab-org/gitlab-runner/blob/master/README.md
       security: https://gitlab.com/gitlab-org/gitlab-runner/blob/master/docs/security/index.md
@@ -2754,7 +2759,7 @@ services:
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/ci-runners/cicd/ci_pending_builds.md
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/ci-runners/cicd/ci_too_many_archiving_trace_failures.md
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/ci-runners/cicd/ci_workhorse-queuing.md
-      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/ci-runners/service-ci-runners.md
+      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/ci-runners/README.md
     playbooks:
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/ci-runners/create-runners-manager-node.md
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/runner/update-gitlab-runner-on-managers.md
@@ -2786,11 +2791,11 @@ services:
       response_time:
   technical:
     project:
-    criticality: 3
     slx:
     documents:
       design:
       architecture:
+      readiness_review:
       service:
       security:
     dependencies:
@@ -2844,11 +2849,11 @@ services:
       response_time:
   technical:
     project:
-    criticality: 3
     slx:
     documents:
       design:
       architecture:
+      readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/tree/master/cloudflare
       service:
       security:
     dependencies:
@@ -2881,4 +2886,60 @@ services:
   observability:
     monitors:
       primary_grafana_dashboard: "waf-main"
+      sentry_slug:
+
+- name: vault
+  tier: inf
+  friendly_name: Infrastructure Vault
+  infra_owner: sre_coreinfra
+  label: Service:Vault
+  business:
+    requirement: |
+      Provide a centralised storage of secrets for Gitlab.com infrastructure
+    customers:
+      - Gitlab Infrastructure and Development Teams
+    business_value: |
+      Allow the Gitlab Infrastructure and Development teams to have a central
+      system to be the authoriative source of secrets for use within Gitlab.com
+    SLA:
+      availability:
+      response_time:
+  technical:
+    project:
+    slx:
+    documents:
+      design:
+      architecture:
+      service:
+      security:
+    dependencies:
+    configurations:
+    chef_roles:
+    scalability:
+      bound:
+      scalable:
+    security:
+      security_reviewed:
+      data_classification:
+      security_incidents:
+    logging:
+      - name:
+        permalink:
+  infrastructure:
+    provider: gcp
+    architecture: gke
+    provisioning: kubernetes
+    accesses:
+      - account_name:
+        access_type:
+        reviewed:
+  operations:
+    maintenance:
+    runbooks:
+      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/vault/vault.md
+    playbooks:
+    error_budget:
+  observability:
+    monitors:
+      primary_grafana_dashboard:
       sentry_slug:

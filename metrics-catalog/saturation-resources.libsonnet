@@ -1,7 +1,9 @@
-local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local sidekiqHelpers = import './services/lib/sidekiq-helpers.libsonnet';
+local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 
-local resourceSaturationPoint =  metricsCatalog.resourceSaturationPoint;
+local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
+
+local kubeProvisionedServices = ['git', 'mailroom', 'registry', 'sidekiq'];
 
 // Disk utilisation metrics are currently reporting incorrectly for
 // HDD volumes, see https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10248
@@ -12,7 +14,7 @@ local pgbouncerAsyncPool(serviceType, role) =
   resourceSaturationPoint({
     title: 'Postgres Async (Sidekiq) %s Connection Pool Utilization per Node' % [role],
     severity: 's4',
-    horizontallyScalable: role == 'replica', // Replicas can be scaled horizontally, primary cannot
+    horizontallyScalable: role == 'replica',  // Replicas can be scaled horizontally, primary cannot
     appliesTo: [serviceType],
     description: |||
       pgbouncer async connection pool utilization per database node, for %(role)s database connections.
@@ -46,7 +48,7 @@ local pgbouncerSyncPool(serviceType, role) =
   resourceSaturationPoint({
     title: 'Postgres Sync (Web/API/Git) %s Connection Pool Utilization per Node' % [role],
     severity: 's3',
-    horizontallyScalable: role == 'replica', // Replicas can be scaled horizontally, primary cannot
+    horizontallyScalable: role == 'replica',  // Replicas can be scaled horizontally, primary cannot
     appliesTo: [serviceType],
     description: |||
       pgbouncer sync connection pool Saturation per database node, for %(role)s database connections.
@@ -82,7 +84,7 @@ local pgbouncerSyncPool(serviceType, role) =
   pg_active_db_connections_primary: resourceSaturationPoint({
     title: 'Active Primary DB Connection Utilization',
     severity: 's3',
-    horizontallyScalable: false, // Connections to the primary are not horizontally scalable
+    horizontallyScalable: false,  // Connections to the primary are not horizontally scalable
     appliesTo: ['patroni'],
     description: |||
       Active db connection utilization on the primary node.
@@ -108,7 +110,7 @@ local pgbouncerSyncPool(serviceType, role) =
   pg_active_db_connections_replica: resourceSaturationPoint({
     title: 'Active Secondary DB Connection Utilization',
     severity: 's3',
-    horizontallyScalable: true, // Connections to the replicas are horizontally scalable
+    horizontallyScalable: true,  // Connections to the replicas are horizontally scalable
     appliesTo: ['patroni'],
     description: |||
       Active db connection utilization per replica node
@@ -134,12 +136,14 @@ local pgbouncerSyncPool(serviceType, role) =
   rails_db_connection_pool: resourceSaturationPoint({
     title: 'Rails DB Connection Pool Utilization',
     severity: 's4',
-    horizontallyScalable: true, // Add more replicas for achieve greater scalability
+    horizontallyScalable: true,  // Add more replicas for achieve greater scalability
     appliesTo: ['web', 'api', 'git', 'sidekiq'],
     description: |||
       Rails uses connection pools for its database connections. As each
       node may have multiple connection pools, this is by node and by
       database host.
+
+      Read more about this resource in our [documentation](https://docs.gitlab.com/ee/development/database/client_side_connection_pool.html#client-side-connection-pool).
 
       If this resource is saturated, it may indicate that our connection
       pools are not correctly sized, perhaps because an unexpected
@@ -199,7 +203,7 @@ local pgbouncerSyncPool(serviceType, role) =
     title: 'Average Service CPU Utilization',
     severity: 's3',
     horizontallyScalable: true,
-    appliesTo: { allExcept: ['waf', 'console-node', 'deploy-node'] },
+    appliesTo: { allExcept: ['waf', 'console-node', 'deploy-node', 'security' /* ops-only security scanning service */] },
     description: |||
       This resource measures average CPU utilization across an all cores in a service fleet.
       If it is becoming saturated, it may indicate that the fleet needs
@@ -223,7 +227,7 @@ local pgbouncerSyncPool(serviceType, role) =
     title: 'Average CPU Utilization per Shard',
     severity: 's3',
     horizontallyScalable: true,
-    appliesTo: { allExcept: ['waf', 'console-node', 'deploy-node'], default: 'sidekiq' },
+    appliesTo: { allExcept: ['waf', 'console-node', 'deploy-node', 'security' /* ops-only security scanning service */], default: 'sidekiq' },
     description: |||
       This resource measures average CPU utilization across an all cores in a shard of a
       service fleet. If it is becoming saturated, it may indicate that the
@@ -624,6 +628,35 @@ local pgbouncerSyncPool(serviceType, role) =
     },
   }),
 
+  workhorse_image_scaling: resourceSaturationPoint({
+    title: 'Workhorse Image Scaler Exhaustion per Node',
+    severity: 's4',
+    horizontallyScalable: true,  // Add more replicas for achieve greater scalability
+    appliesTo: ['web'],
+    description: |||
+      Workhorse can scale images on-the-fly as requested. Since the actual work will be
+      performed by dedicated processes, we currently define a hard cap for how many
+      such requests are allowed to be in the system concurrently.
+
+      If this resource is fully saturated, Workhorse will start ignoring image scaling
+      requests and serve the original image instead, which will ensure continued operation,
+      but comes at the cost of additional client latency and GCS egress traffic.
+    |||,
+    grafana_dashboard_uid: 'sat_wh_image_scaling',
+    resourceLabels: ['fqdn'],
+    burnRatePeriod: '5m',
+    query: |||
+      avg_over_time(gitlab_workhorse_image_resize_processes{%(selector)s}[%(rangeInterval)s])
+        /
+      gitlab_workhorse_image_resize_max_processes{%(selector)s}
+    |||,
+    slos: {
+      soft: 0.90,
+      hard: 0.95,
+      alertTriggerDuration: '15m',
+    },
+  }),
+
   pgbouncer_async_primary_pool: pgbouncerAsyncPool('pgbouncer', 'primary'),
 
   // Note that this pool is currently not used, but may be added in the medium
@@ -635,7 +668,7 @@ local pgbouncerSyncPool(serviceType, role) =
   pgbouncer_single_core: resourceSaturationPoint({
     title: 'PGBouncer Single Core per Node',
     severity: 's2',
-    horizontallyScalable: true, // Add more pgbouncer processes (for patroni) or nodes (for pgbouncer)
+    horizontallyScalable: true,  // Add more pgbouncer processes (for patroni) or nodes (for pgbouncer)
     appliesTo: ['pgbouncer', 'patroni'],
     description: |||
       PGBouncer single core CPU utilization per node.
@@ -645,10 +678,11 @@ local pgbouncerSyncPool(serviceType, role) =
     |||,
     grafana_dashboard_uid: 'sat_pgbouncer_single_core',
     resourceLabels: ['fqdn', 'groupname'],
+    burnRatePeriod: '5m',
     query: |||
       sum without(cpu, mode) (
         rate(
-          namedprocess_namegroup_cpu_seconds_total{groupname=~"pgbouncer.*", %(selector)s}[1m]
+          namedprocess_namegroup_cpu_seconds_total{groupname=~"pgbouncer.*", %(selector)s}[%(rangeInterval)s]
         )
       )
     |||,
@@ -679,9 +713,11 @@ local pgbouncerSyncPool(serviceType, role) =
       stage: 'main',
     },
     query: |||
-      sum without(executor_stage, exported_stage, state) (max_over_time(gitlab_runner_jobs{job="private-runners"}[%(rangeInterval)s]))
+      sum without(executor_stage, exported_stage, state) (
+        max_over_time(gitlab_runner_jobs{job="runners-manager",shard="private"}[%(rangeInterval)s])
+      )
       /
-      gitlab_runner_limit{job="private-runners"} > 0
+      gitlab_runner_limit{job="runners-manager",shard="private"} > 0
     |||,
     slos: {
       soft: 0.85,
@@ -769,9 +805,11 @@ local pgbouncerSyncPool(serviceType, role) =
       stage: 'main',
     },
     query: |||
-      sum without(executor_stage, exported_stage, state) (max_over_time(gitlab_runner_jobs{job="shared-runners"}[%(rangeInterval)s]))
+      sum without(executor_stage, exported_stage, state) (
+        max_over_time(gitlab_runner_jobs{job="runners-manager",shard="shared"}[%(rangeInterval)s])
+      )
       /
-      gitlab_runner_limit{job="shared-runners"} > 0
+      gitlab_runner_limit{job="runners-manager",shard="shared"} > 0
     |||,
     slos: {
       soft: 0.90,
@@ -798,9 +836,11 @@ local pgbouncerSyncPool(serviceType, role) =
     // https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/8456
     // is completed
     query: |||
-      sum without(executor_stage, exported_stage, state) (max_over_time(gitlab_runner_jobs{job="shared-runners-gitlab-org"}[%(rangeInterval)s]))
+      sum without(executor_stage, exported_stage, state) (
+        max_over_time(gitlab_runner_jobs{job="runners-manager",shard="shared-gitlab-org"}[%(rangeInterval)s])
+      )
       /
-      gitlab_runner_limit{job="shared-runners-gitlab-org"} > 0
+      gitlab_runner_limit{job="runners-manager",shard="shared-gitlab-org"} > 0
     |||,
     slos: {
       soft: 0.90,
@@ -847,7 +887,7 @@ local pgbouncerSyncPool(serviceType, role) =
     title: 'Average CPU Utilization per Node',
     severity: 's4',
     horizontallyScalable: true,
-    appliesTo: { allExcept: ['waf', 'console-node', 'deploy-node'] },
+    appliesTo: { allExcept: ['waf', 'console-node', 'deploy-node', 'security' /* ops-only security scanning service */] },
     description: |||
       Average CPU utilization per Node.
 
@@ -952,10 +992,10 @@ local pgbouncerSyncPool(serviceType, role) =
     },
   }),
 
-  # conntrack saturation may have been the cause of
-  # https://gitlab.com/gitlab-com/gl-infra/production/-/issues/2381
-  # see https://gitlab.com/gitlab-com/gl-infra/production/-/issues/2381#note_376917724
-  # for more details
+  // conntrack saturation may have been the cause of
+  // https://gitlab.com/gitlab-com/gl-infra/production/-/issues/2381
+  // see https://gitlab.com/gitlab-com/gl-infra/production/-/issues/2381#note_376917724
+  // for more details
   nf_conntrack_entries: resourceSaturationPoint({
     title: 'conntrack Entries per Node',
     severity: 's3',
@@ -967,7 +1007,7 @@ local pgbouncerSyncPool(serviceType, role) =
       When saturated, new connection attempts (incoming SYN packets) are dropped with no reply, leaving clients to slowly retry (and typically fail again) over the next several seconds.  When packets are being dropped due to this condition, kernel will log the event as: "nf_conntrack: table full, dropping packet".
     |||,
     grafana_dashboard_uid: 'sat_conntrack',
-    resourceLabels: ['fqdn', 'instance'], // Use both labels until https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10299 arrives
+    resourceLabels: ['fqdn', 'instance'],  // Use both labels until https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10299 arrives
     query: |||
       max_over_time(node_nf_conntrack_entries{%(selector)s}[%(rangeInterval)s])
       /
@@ -1135,7 +1175,65 @@ local pgbouncerSyncPool(serviceType, role) =
     },
   }),
 
+  kube_container_memory: resourceSaturationPoint({
+    title: 'Kube Container Memory Utilization',
+    severity: 's4',
+    horizontallyScalable: true,
+    appliesTo: kubeProvisionedServices,
+    description: |||
+      Records the total memory utilization for containers for this service, as a percentage of
+      the memory limit as configured through Kubernetes.
+    |||,
+    grafana_dashboard_uid: 'sat_kube_container_memory',
+    resourceLabels: ['pod', 'container'],
+    // burnRatePeriod: '5m',
+    query: |||
+      container_memory_working_set_bytes:labeled{container!="", container!="POD", %(selector)s}
+      /
+      (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", %(selector)s} > 0)
+    |||,
+    slos: {
+      soft: 0.90,
+      hard: 0.99,
+      alertTriggerDuration: '15m',
+    },
+  }),
+
+  kube_container_cpu: resourceSaturationPoint({
+    title: 'Kube Container CPU Utilization',
+    severity: 's4',
+    horizontallyScalable: true,
+    appliesTo: kubeProvisionedServices,
+    description: |||
+      Kubernetes containers are allocated a share of CPU. When this is exhausted, the container may be thottled.
+    |||,
+    grafana_dashboard_uid: 'sat_kube_container_cpu',
+    resourceLabels: ['pod', 'container'],
+    burnRatePeriod: '5m',
+    query: |||
+      sum by (%(aggregationLabels)s) (
+        rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", %(selector)s}[%(rangeInterval)s])
+      )
+      /
+      sum by(%(aggregationLabels)s) (
+        container_spec_cpu_quota:labeled{container!="", container!="POD", %(selector)s}
+        /
+        container_spec_cpu_period:labeled{container!="", container!="POD", %(selector)s}
+      )
+    |||,
+    slos: {
+      soft: 0.90,
+      hard: 0.99,
+      alertTriggerDuration: '15m',
+    },
+  }),
+
   // Add some helpers. Note that these use :: to "hide" then:
+
+  /**
+   * Given a service (identified by `type`) returns a list of resources that
+   * are monitored for that type
+   */
   listApplicableServicesFor(type)::
     std.filter(function(k) self[k].appliesToService(type), std.objectFields(self)),
 

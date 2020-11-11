@@ -2,6 +2,8 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local combined = metricsCatalog.combined;
+local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
+local haproxyComponents = import './lib/haproxy_components.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'web-pages',
@@ -12,32 +14,24 @@ metricsCatalog.serviceDefinition({
   },
   monitoringThresholds: {
     apdexScore: 0.995,
-    errorRatio: 0.9999,
+    errorRatio: 0.9995,
   },
   components: {
-    loadbalancer: {
-      staticLabels: {
-        stage: 'main',
+    loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
+      stageMappings={
+        main: { backends: ['pages_http'], toolingLinks: [] },
+        // TODO: cny stage for pages?
       },
+      selector={ type: 'pages' },
+    ),
 
-      requestRate: rateMetric(
-        counter='haproxy_server_sessions_total',
-        selector='type="pages", backend=~"pages_https|pages_http"'
-      ),
-
-      errorRate: combined([
-        rateMetric(
-          counter='haproxy_backend_http_responses_total',
-          selector='type="pages",job="haproxy",code="5xx"'
-        ),
-        rateMetric(
-          counter='haproxy_server_connection_errors_total',
-          selector='type="pages", job="haproxy"'
-        ),
-      ]),
-
-      significantLabels: [],
-    },
+    loadbalancer_https: haproxyComponents.haproxyL4LoadBalancer(
+      stageMappings={
+        main: { backends: ['pages_https'], toolingLinks: [] },
+        // TODO: cny stage for pages?
+      },
+      selector={ type: 'pages' },
+    ),
 
     server: {
       // 1 second satisfactory, 10 second tolerable thresholds are
@@ -61,6 +55,12 @@ metricsCatalog.serviceDefinition({
       ),
 
       significantLabels: ['fqdn'],
+
+      toolingLinks: [
+        toolingLinks.continuousProfiler(service='gitlab-pages'),
+        toolingLinks.sentry(slug='gitlab/gitlab-pages'),
+        toolingLinks.kibana(title='GitLab Pages', index='pages'),
+      ],
     },
   },
 })

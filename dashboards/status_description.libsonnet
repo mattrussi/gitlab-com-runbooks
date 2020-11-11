@@ -1,6 +1,6 @@
+local promQuery = import 'grafana/prom_query.libsonnet';
 local multiburnFactors = import 'mwmbr/multiburn_factors.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
-local promQuery = import 'grafana/prom_query.libsonnet';
 
 local descriptionMappings = [
   /* 0 */
@@ -114,7 +114,7 @@ local apdexStatusQuery(selectorHash, type, prefix) =
       )
     )
   ||| % ({
-           selector: selectors.serializeHash(selectorHash),
+           selector: selectors.serializeHash(selectorHash { monitor: 'global' }),
            slaSelector: selectors.serializeHash({ monitor: 'global', type: type }),
            prefix: prefix,
          } + multiburnFactors);
@@ -148,7 +148,7 @@ local errorRateStatusQuery(selectorHash, type, prefix) =
       )
     )
   ||| % ({
-           selector: selectors.serializeHash(selectorHash),
+           selector: selectors.serializeHash(selectorHash { monitor: 'global' }),
            slaSelector: selectors.serializeHash({ monitor: 'global', type: type }),
            prefix: prefix,
          } + multiburnFactors);
