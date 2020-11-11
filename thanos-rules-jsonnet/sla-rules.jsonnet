@@ -1,5 +1,5 @@
-local serviceCatalog = import 'service_catalog.libsonnet';
 local metricsConfig = import 'metrics-config.libsonnet';
+local serviceCatalog = import 'service_catalog.libsonnet';
 
 local keyServices = serviceCatalog.findServices(function(service)
   std.objectHas(service.business.SLA, 'overall_sla_weighting') && service.business.SLA.overall_sla_weighting > 0);
@@ -23,7 +23,7 @@ local getScoreQuery(weights) =
 
 local getWeightQuery(weights) =
   local items = [
-    'max without(slo) (clamp_max(clamp_min(slo_observation_status{type="%(type)s", monitor="global"}, 1), 1)) * %(weight)d' % {
+    'max without(slo) (clamp_max(clamp_min(avg_over_time(slo_observation_status{type="%(type)s", monitor="global"}[5m]), 1), 1)) * %(weight)d' % {
       type: type,
       weight: keyServiceWeights[type],
     }
@@ -56,7 +56,20 @@ local rules = {
       ||| % [getWeightQuery(keyServiceWeights)],
     }, {
       record: 'sla:gitlab:ratio',
-      expr: 'sla:gitlab:score{monitor="global"} / sla:gitlab:weights{monitor="global"}',
+      labels: {
+        sla_type: 'weighted_v1.1',
+      },
+      // Adding a clamp here is a safety precaution. In normal circumstances this should
+      // never exceed one. However in incidents such as show,
+      // https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/11457
+      // there are failure modes where this may occur.
+      // Having the clamp_max guard clause can help contain the blast radius.
+      expr: |||
+        clamp_max(
+          sla:gitlab:score{monitor="global"} / sla:gitlab:weights{monitor="global"},
+          1
+        )
+      |||,
     }],
   }, {
     name: 'SLA target',
@@ -65,7 +78,7 @@ local rules = {
     rules: [{
       record: 'sla:gitlab:target',
       expr: '%g' % [metricsConfig.slaTarget],
-    }]
+    }],
   }],
 };
 

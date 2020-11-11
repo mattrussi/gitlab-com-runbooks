@@ -4,6 +4,24 @@ groups:
 - name: 'Component-Level SLIs: praefect - 1m burn-rate'
   interval: 1m
   rules:
+  - record: gitlab_component_ops:rate
+    labels:
+      component: praefect_cloudsql
+      tier: stor
+      type: praefect
+    expr: |
+      sum by (environment,stage) (
+        avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database="praefect_production",job="stackdriver"}[1m])
+      )
+  - record: gitlab_component_errors:rate
+    labels:
+      component: praefect_cloudsql
+      tier: stor
+      type: praefect
+    expr: |
+      sum by (environment,stage) (
+        avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database="praefect_production",job="stackdriver",transaction_type="rollback"}[1m])
+      )
   - record: gitlab_component_apdex:weight:score
     labels:
       component: proxy
@@ -11,9 +29,7 @@ groups:
       type: praefect
     expr: |
       sum by (environment,stage) (
-        label_replace(rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="praefect",le="+Inf"}[1m]), "_c", "0", "", "")
-        or
-        label_replace(rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.OperationService",grpc_type="unary",job="praefect",le="+Inf"}[1m]), "_c", "1", "", "")
+        rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_type="unary",job="praefect",le="+Inf"}[1m])
       )
   - record: gitlab_component_apdex:ratio
     labels:
@@ -21,31 +37,21 @@ groups:
       tier: stor
       type: praefect
     expr: |
-      sum by (environment,stage) (
-        label_replace((
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="praefect",le="0.5"}[1m])
-          + ignoring(le)
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="praefect",le="1"}[1m])
+      (
+        sum by (environment,stage) (
+          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_type="unary",job="praefect",le="0.5"}[1m])
         )
-        /
-        2
-        , "_c", "0", "", "")
-        or
-        label_replace((
-          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.OperationService",grpc_type="unary",job="praefect",le="10"}[1m])
-          + ignoring(le)
-          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.OperationService",grpc_type="unary",job="praefect",le="30"}[1m])
+        +
+        sum by (environment,stage) (
+          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_type="unary",job="praefect",le="1"}[1m])
         )
-        /
-        2
-        , "_c", "1", "", "")
       )
+      /
+      2
       /
       (
         sum by (environment,stage) (
-          label_replace(rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="praefect",le="+Inf"}[1m]), "_c", "0", "", "")
-          or
-          label_replace(rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.OperationService",grpc_type="unary",job="praefect",le="+Inf"}[1m]), "_c", "1", "", "")
+          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_type="unary",job="praefect",le="+Inf"}[1m])
         ) > 0
       )
   - record: gitlab_component_ops:rate
@@ -64,7 +70,7 @@ groups:
       type: praefect
     expr: |
       sum by (environment,stage) (
-        rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition)$",job="praefect"}[1m])
+        rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|Canceled)$",job="praefect"}[1m])
       )
   - record: gitlab_component_apdex:weight:score
     labels:
@@ -102,6 +108,24 @@ groups:
 - name: 'Component-Level SLIs: praefect - 5m burn-rate'
   interval: 1m
   rules:
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: praefect_cloudsql
+      tier: stor
+      type: praefect
+    expr: |
+      sum by (environment,stage) (
+        avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database="praefect_production",job="stackdriver"}[5m])
+      )
+  - record: gitlab_component_errors:rate_5m
+    labels:
+      component: praefect_cloudsql
+      tier: stor
+      type: praefect
+    expr: |
+      sum by (environment,stage) (
+        avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database="praefect_production",job="stackdriver",transaction_type="rollback"}[5m])
+      )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
       component: proxy
@@ -109,9 +133,7 @@ groups:
       type: praefect
     expr: |
       sum by (environment,stage) (
-        label_replace(rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="praefect",le="+Inf"}[5m]), "_c", "0", "", "")
-        or
-        label_replace(rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.OperationService",grpc_type="unary",job="praefect",le="+Inf"}[5m]), "_c", "1", "", "")
+        rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_type="unary",job="praefect",le="+Inf"}[5m])
       )
   - record: gitlab_component_apdex:ratio_5m
     labels:
@@ -119,31 +141,21 @@ groups:
       tier: stor
       type: praefect
     expr: |
-      sum by (environment,stage) (
-        label_replace((
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="praefect",le="0.5"}[5m])
-          + ignoring(le)
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="praefect",le="1"}[5m])
+      (
+        sum by (environment,stage) (
+          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_type="unary",job="praefect",le="0.5"}[5m])
         )
-        /
-        2
-        , "_c", "0", "", "")
-        or
-        label_replace((
-          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.OperationService",grpc_type="unary",job="praefect",le="10"}[5m])
-          + ignoring(le)
-          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.OperationService",grpc_type="unary",job="praefect",le="30"}[5m])
+        +
+        sum by (environment,stage) (
+          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_type="unary",job="praefect",le="1"}[5m])
         )
-        /
-        2
-        , "_c", "1", "", "")
       )
+      /
+      2
       /
       (
         sum by (environment,stage) (
-          label_replace(rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="praefect",le="+Inf"}[5m]), "_c", "0", "", "")
-          or
-          label_replace(rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.OperationService",grpc_type="unary",job="praefect",le="+Inf"}[5m]), "_c", "1", "", "")
+          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_type="unary",job="praefect",le="+Inf"}[5m])
         ) > 0
       )
   - record: gitlab_component_ops:rate_5m
@@ -162,7 +174,7 @@ groups:
       type: praefect
     expr: |
       sum by (environment,stage) (
-        rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition)$",job="praefect"}[5m])
+        rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|Canceled)$",job="praefect"}[5m])
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -200,6 +212,24 @@ groups:
 - name: 'Component-Level SLIs: praefect - 30m burn-rate'
   interval: 2m
   rules:
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: praefect_cloudsql
+      tier: stor
+      type: praefect
+    expr: |
+      sum by (environment,stage) (
+        avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database="praefect_production",job="stackdriver"}[30m])
+      )
+  - record: gitlab_component_errors:rate_30m
+    labels:
+      component: praefect_cloudsql
+      tier: stor
+      type: praefect
+    expr: |
+      sum by (environment,stage) (
+        avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database="praefect_production",job="stackdriver",transaction_type="rollback"}[30m])
+      )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
       component: proxy
@@ -207,9 +237,7 @@ groups:
       type: praefect
     expr: |
       sum by (environment,stage) (
-        label_replace(rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="praefect",le="+Inf"}[30m]), "_c", "0", "", "")
-        or
-        label_replace(rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.OperationService",grpc_type="unary",job="praefect",le="+Inf"}[30m]), "_c", "1", "", "")
+        rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_type="unary",job="praefect",le="+Inf"}[30m])
       )
   - record: gitlab_component_apdex:ratio_30m
     labels:
@@ -217,25 +245,17 @@ groups:
       tier: stor
       type: praefect
     expr: |
-      sum by (environment,stage) (
-        label_replace((
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="praefect",le="0.5"}[30m])
-          + ignoring(le)
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="praefect",le="1"}[30m])
+      (
+        sum by (environment,stage) (
+          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_type="unary",job="praefect",le="0.5"}[30m])
         )
-        /
-        2
-        , "_c", "0", "", "")
-        or
-        label_replace((
-          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.OperationService",grpc_type="unary",job="praefect",le="10"}[30m])
-          + ignoring(le)
-          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.OperationService",grpc_type="unary",job="praefect",le="30"}[30m])
+        +
+        sum by (environment,stage) (
+          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_type="unary",job="praefect",le="1"}[30m])
         )
-        /
-        2
-        , "_c", "1", "", "")
       )
+      /
+      2
       / on(environment,stage) group_left()
       (
         gitlab_component_apdex:weight:score_30m{component="proxy",tier="stor",type="praefect"} > 0
@@ -256,7 +276,7 @@ groups:
       type: praefect
     expr: |
       sum by (environment,stage) (
-        rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition)$",job="praefect"}[30m])
+        rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|Canceled)$",job="praefect"}[30m])
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -292,6 +312,24 @@ groups:
 - name: 'Component-Level SLIs: praefect - 1h burn-rate'
   interval: 1m
   rules:
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: praefect_cloudsql
+      tier: stor
+      type: praefect
+    expr: |
+      sum by (environment,stage) (
+        avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database="praefect_production",job="stackdriver"}[1h])
+      )
+  - record: gitlab_component_errors:rate_1h
+    labels:
+      component: praefect_cloudsql
+      tier: stor
+      type: praefect
+    expr: |
+      sum by (environment,stage) (
+        avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database="praefect_production",job="stackdriver",transaction_type="rollback"}[1h])
+      )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
       component: proxy
@@ -299,9 +337,7 @@ groups:
       type: praefect
     expr: |
       sum by (environment,stage) (
-        label_replace(rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="praefect",le="+Inf"}[1h]), "_c", "0", "", "")
-        or
-        label_replace(rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.OperationService",grpc_type="unary",job="praefect",le="+Inf"}[1h]), "_c", "1", "", "")
+        rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_type="unary",job="praefect",le="+Inf"}[1h])
       )
   - record: gitlab_component_apdex:ratio_1h
     labels:
@@ -309,31 +345,21 @@ groups:
       tier: stor
       type: praefect
     expr: |
-      sum by (environment,stage) (
-        label_replace((
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="praefect",le="0.5"}[1h])
-          + ignoring(le)
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="praefect",le="1"}[1h])
+      (
+        sum by (environment,stage) (
+          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_type="unary",job="praefect",le="0.5"}[1h])
         )
-        /
-        2
-        , "_c", "0", "", "")
-        or
-        label_replace((
-          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.OperationService",grpc_type="unary",job="praefect",le="10"}[1h])
-          + ignoring(le)
-          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.OperationService",grpc_type="unary",job="praefect",le="30"}[1h])
+        +
+        sum by (environment,stage) (
+          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_type="unary",job="praefect",le="1"}[1h])
         )
-        /
-        2
-        , "_c", "1", "", "")
       )
+      /
+      2
       /
       (
         sum by (environment,stage) (
-          label_replace(rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="praefect",le="+Inf"}[1h]), "_c", "0", "", "")
-          or
-          label_replace(rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.OperationService",grpc_type="unary",job="praefect",le="+Inf"}[1h]), "_c", "1", "", "")
+          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_type="unary",job="praefect",le="+Inf"}[1h])
         ) > 0
       )
   - record: gitlab_component_ops:rate_1h
@@ -352,7 +378,7 @@ groups:
       type: praefect
     expr: |
       sum by (environment,stage) (
-        rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition)$",job="praefect"}[1h])
+        rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|Canceled)$",job="praefect"}[1h])
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -390,6 +416,24 @@ groups:
 - name: 'Component-Level SLIs: praefect - 6h burn-rate'
   interval: 2m
   rules:
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: praefect_cloudsql
+      tier: stor
+      type: praefect
+    expr: |
+      sum by (environment,stage) (
+        avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database="praefect_production",job="stackdriver"}[6h])
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: praefect_cloudsql
+      tier: stor
+      type: praefect
+    expr: |
+      sum by (environment,stage) (
+        avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database="praefect_production",job="stackdriver",transaction_type="rollback"}[6h])
+      )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
       component: proxy
@@ -397,9 +441,7 @@ groups:
       type: praefect
     expr: |
       sum by (environment,stage) (
-        label_replace(rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="praefect",le="+Inf"}[6h]), "_c", "0", "", "")
-        or
-        label_replace(rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.OperationService",grpc_type="unary",job="praefect",le="+Inf"}[6h]), "_c", "1", "", "")
+        rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_type="unary",job="praefect",le="+Inf"}[6h])
       )
   - record: gitlab_component_apdex:ratio_6h
     labels:
@@ -407,25 +449,17 @@ groups:
       tier: stor
       type: praefect
     expr: |
-      sum by (environment,stage) (
-        label_replace((
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="praefect",le="0.5"}[6h])
-          + ignoring(le)
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="praefect",le="1"}[6h])
+      (
+        sum by (environment,stage) (
+          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_type="unary",job="praefect",le="0.5"}[6h])
         )
-        /
-        2
-        , "_c", "0", "", "")
-        or
-        label_replace((
-          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.OperationService",grpc_type="unary",job="praefect",le="10"}[6h])
-          + ignoring(le)
-          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.OperationService",grpc_type="unary",job="praefect",le="30"}[6h])
+        +
+        sum by (environment,stage) (
+          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_type="unary",job="praefect",le="1"}[6h])
         )
-        /
-        2
-        , "_c", "1", "", "")
       )
+      /
+      2
       / on(environment,stage) group_left()
       (
         gitlab_component_apdex:weight:score_6h{component="proxy",tier="stor",type="praefect"} > 0
@@ -446,7 +480,7 @@ groups:
       type: praefect
     expr: |
       sum by (environment,stage) (
-        rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition)$",job="praefect"}[6h])
+        rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|Canceled)$",job="praefect"}[6h])
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
@@ -482,6 +516,13 @@ groups:
 - name: 'Component mapping: praefect'
   interval: 1m
   rules:
+  - record: gitlab_component_service:mapping
+    labels:
+      aggregate_rps: 'no'
+      component: praefect_cloudsql
+      tier: stor
+      type: praefect
+    expr: '1'
   - record: gitlab_component_service:mapping
     labels:
       aggregate_rps: 'yes'

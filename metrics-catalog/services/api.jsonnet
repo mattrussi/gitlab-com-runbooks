@@ -1,6 +1,8 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
+local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
+local haproxyComponents = import './lib/haproxy_components.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'api',
@@ -31,6 +33,19 @@ metricsCatalog.serviceDefinition({
     praefect: true,
   },
   components: {
+    loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
+      stageMappings={
+        main: {
+          backends: ['api', 'api_rate_limit'],
+          toolingLinks: [
+            toolingLinks.bigquery(title='Main-stage: top paths for 5xx errors', savedQuery='805818759045:342973e81d4a481d8055b43564d09728'),
+          ],
+        },
+        cny: { backends: ['canary_api'], toolingLinks: [] },
+      },
+      selector={ type: 'frontend' },
+    ),
+
     workhorse: {
       apdex: histogramApdex(
         histogram='gitlab_workhorse_http_request_duration_seconds_bucket',
@@ -53,6 +68,12 @@ metricsCatalog.serviceDefinition({
       ),
 
       significantLabels: ['fqdn'],
+
+      toolingLinks: [
+        toolingLinks.continuousProfiler(service='workhorse-api'),
+        toolingLinks.sentry(slug='gitlab/gitlab-workhorse-gitlabcom'),
+        toolingLinks.kibana(title='Workhorse', index='workhorse', type='api', slowRequestSeconds=10),
+      ],
     },
 
     puma: {
@@ -65,16 +86,22 @@ metricsCatalog.serviceDefinition({
       ),
 
       requestRate: rateMetric(
-        counter='http_request_duration_seconds_count',
-        selector=baseSelector
+        counter='http_requests_total',
+        selector=baseSelector,
       ),
 
       errorRate: rateMetric(
-        counter='http_request_duration_seconds_count',
+        counter='http_requests_total',
         selector=baseSelector { status: { re: '5..' } }
       ),
 
-      significantLabels: ['fqdn'],
+      significantLabels: ['fqdn', 'method', 'feature_category'],
+
+      toolingLinks: [
+        // Improve sentry link once https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/532 arrives
+        toolingLinks.sentry(slug='gitlab/gitlabcom'),
+        toolingLinks.kibana(title='Rails', index='rails_api', type='api', slowRequestSeconds=10),
+      ],
     },
   },
 })

@@ -1,6 +1,8 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
+local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
+local haproxyComponents = import './lib/haproxy_components.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'web',
@@ -30,7 +32,18 @@ metricsCatalog.serviceDefinition({
     pgbouncer: true,
     praefect: true,
   },
+  recordingRuleMetrics: [
+    'http_requests_total',
+  ],
   components: {
+    loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
+      stageMappings={
+        main: { backends: ['web'], toolingLinks: [] },  // What to do with `429_slow_down`?
+        cny: { backends: ['canary_web'], toolingLinks: [] },
+      },
+      selector={ type: 'frontend' },
+    ),
+
     workhorse: {
       apdex: histogramApdex(
         histogram='gitlab_workhorse_http_request_duration_seconds_bucket',
@@ -53,6 +66,33 @@ metricsCatalog.serviceDefinition({
       ),
 
       significantLabels: ['fqdn', 'route'],
+
+      toolingLinks: [
+        toolingLinks.continuousProfiler(service='workhorse-web'),
+        toolingLinks.sentry(slug='gitlab/gitlab-workhorse-gitlabcom'),
+        toolingLinks.kibana(title='Workhorse', index='workhorse', type='web', slowRequestSeconds=10),
+      ],
+    },
+
+    imagescaler: {
+      apdex: histogramApdex(
+        histogram='gitlab_workhorse_image_resize_duration_seconds_bucket',
+        selector='job="gitlab-workhorse-web", type="web"',
+        satisfiedThreshold=0.2,
+        toleratedThreshold=0.8
+      ),
+
+      requestRate: rateMetric(
+        counter='gitlab_workhorse_image_resize_requests_total',
+        selector='job="gitlab-workhorse-web", type="web"'
+      ),
+
+      errorRate: rateMetric(
+        counter='gitlab_workhorse_image_resize_requests_total',
+        selector='job="gitlab-workhorse-web", type="web", status!="success"'
+      ),
+
+      significantLabels: ['fqdn'],
     },
 
     puma: {
@@ -65,16 +105,22 @@ metricsCatalog.serviceDefinition({
       ),
 
       requestRate: rateMetric(
-        counter='http_request_duration_seconds_count',
+        counter='http_requests_total',
         selector=baseSelector,
       ),
 
       errorRate: rateMetric(
-        counter='http_request_duration_seconds_count',
+        counter='http_requests_total',
         selector=baseSelector { status: { re: '5..' } }
       ),
 
-      significantLabels: ['fqdn', 'method'],
+      significantLabels: ['fqdn', 'method', 'feature_category'],
+
+      toolingLinks: [
+        // Improve sentry link once https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/532 arrives
+        toolingLinks.sentry(slug='gitlab/gitlabcom'),
+        toolingLinks.kibana(title='Rails', index='rails', type='web', slowRequestSeconds=10),
+      ],
     },
   },
 })

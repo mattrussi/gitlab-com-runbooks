@@ -26,7 +26,7 @@ local sidekiqSLOAlert(alertname, expr, grafanaPanelStableId, metricName, alertDe
     annotations: {
       title: 'The `{{ $labels.queue }}` queue, `{{ $labels.stage }}` stage, has %s' % [alertDescription],
       description: 'Currently the %s is {{ $value | humanizePercentage }}.' % [metricDescription],
-      runbook: 'docs/sidekiq/service-sidekiq.md',
+      runbook: 'docs/sidekiq/README.md',
       grafana_dashboard_id: 'sidekiq-queue-detail/sidekiq-queue-detail',
       grafana_panel_id: stableIds.hashStableId(grafanaPanelStableId),
       grafana_variables: 'environment,stage,queue',
@@ -163,7 +163,7 @@ local generateAlerts() =
 
           Also, review https://ops.gitlab.net/gitlab-cookbooks/chef-repo/-/merge_requests/2948
         |||,
-        runbook: 'docs/sidekiq/service-sidekiq.md',
+        runbook: 'docs/sidekiq/README.md',
         grafana_dashboard_id: 'sidekiq-queue-detail/sidekiq-queue-detail',
         grafana_panel_id: stableIds.hashStableId('queue-length'),
         grafana_variables: 'environment,stage,queue',
@@ -178,7 +178,7 @@ local rules = {
     name: 'Sidekiq Per Worker Alerting',
     interval: '1m',
     rules:
-      std.map(alerts.processAlertRule, generateAlerts())
+      std.map(alerts.processAlertRule, generateAlerts()),
   }],
 };
 

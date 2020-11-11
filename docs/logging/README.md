@@ -1,204 +1,273 @@
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+<!-- MARKER: do not edit this section directly. Edit services/service-catalog.yml then run scripts/generate-docs -->
 
-- [Quick start](#quick-start)
-    - [URLs](#urls)
-    - [Retention](#retention)
-    - [What are we logging?](#what-are-we-logging)
-    - [Historical notes](#historical-notes)
-- [How-to guides](#how-to-guides)
-    - [Searching logs](#searching-logs)
-        - [Searching in Elastic](#searching-in-elastic)
-            - [production (gitlab.com)](#production-gitlabcom)
-            - [dev (dev.gitlab.org), staging (staging.gitlab.com), dr, ops (ops.gitlab.com), preprod (pre.gitlab.com)](#dev-devgitlaborg-staging-staginggitlabcom-dr-ops-opsgitlabcom-preprod-pregitlabcom)
-        - [Searching in StackDriver](#searching-in-stackdriver)
-        - [Searching in object storage (GCS)](#searching-in-object-storage-gcs)
-- [Concepts](#concepts)
-    - [Logging infrastructure overview](#logging-infrastructure-overview)
-    - [Fluentd](#fluentd)
-    - [StackDriver](#stackdriver)
-    - [Cloud Pub/Sub](#cloud-pubsub)
-    - [Pubsubbeat VMs](#pubsubbeat-vms)
-    - [Elastic](#elastic)
-    - [Index Lifecycle Management (ILM)](#index-lifecycle-management-ilm)
-    - [Monitoring](#monitoring)
-    - [BigQuery](#bigquery)
-    - [GCS (long-term storage)](#gcs-long-term-storage)
-- [FAQ](#faq)
-    - [Why are we using StackDriver and GCS in addition to ElasticSearch?](#why-are-we-using-stackdriver-and-gcs-in-addition-to-elasticsearch)
-    - [Why are we using pubsub queues instead of sending logs from fluentd directly to Elastic?](#why-are-we-using-pubsub-queues-instead-of-sending-logs-from-fluentd-directly-to-elastic)
-    - [How do I find the right logs for my service?](#how-do-i-find-the-right-logs-for-my-service)
-    - [A user sees an error on GitLab.com, how do I find logs for that user?](#a-user-sees-an-error-on-gitlabcom-how-do-i-find-logs-for-that-user)
-    - [Why do we have these annoying json. prefixes?](#why-do-we-have-these-annoying-json-prefixes)
-    - [What if I need to query logs older than the ones present in Elastic?](#what-if-i-need-to-query-logs-older-than-the-ones-present-in-elastic)
-    - [What if I need to query logs older than 30 days?](#what-if-i-need-to-query-logs-older-than-30-days)
-- [Configuration](#configuration)
-    - [Cookbooks](#cookbooks)
-    - [logs parsers](#logs-parsers)
-        - [Elastic mappings](#elastic-mappings)
-    - [Role configuration](#role-configuration)
-    - [Terraform](#terraform)
-    - [Adding a new logfile](#adding-a-new-logfile)
+**Table of Contents**
 
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+[[_TOC_]]
+
+#  Logging Service
+* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22logging%22%2C%20tier%3D%22inf%22%7D
+* **Label**: gitlab-com/gl-infra/production~"Service:Logging"
+
+## Logging
+
+* [Kibana](https://log.gprd.gitlab.net/app/kibana)
+* [Stackdriver](https://console.cloud.google.com/logs/viewer?project=gitlab-production)
+* [elastic stack monitoring](https://00a4ef3362214c44a044feaa539b4686.us-central1.gcp.cloud.es.io:9243/app/monitoring#/home?_g=(cluster_uuid:RM2uqM76TnWT3JL5n5NzCw))
+
+## Troubleshooting Pointers
+
+* [../cloudflare/logging.md](../cloudflare/logging.md)
+* [../elastic/elastic-cloud.md](../elastic/elastic-cloud.md)
+* [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
+* [../elastic/kibana.md](../elastic/kibana.md)
+* [../frontend/ssh-maxstartups-breach.md](../frontend/ssh-maxstartups-breach.md)
+* [../git/purge-git-data.md](../git/purge-git-data.md)
+* [../license/license-gitlab-com.md](../license/license-gitlab-com.md)
+* [logging_gcs_archive_bigquery.md](logging_gcs_archive_bigquery.md)
+* [../pages/gitlab-pages.md](../pages/gitlab-pages.md)
+* [../pages/pages-letsencrypt.md](../pages/pages-letsencrypt.md)
+* [../patroni/log_analysis.md](../patroni/log_analysis.md)
+* [../patroni/postgres-checkup.md](../patroni/postgres-checkup.md)
+* [../patroni/postgres.md](../patroni/postgres.md)
+* [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
+* [../pgbouncer/pgbouncer-saturation.md](../pgbouncer/pgbouncer-saturation.md)
+* [../pubsub/pubsub-queing.md](../pubsub/pubsub-queing.md)
+* [../uncategorized/access-azure-test-subscription.md](../uncategorized/access-azure-test-subscription.md)
+* [../uncategorized/access-gcp-hosts.md](../uncategorized/access-gcp-hosts.md)
+* [../uncategorized/camoproxy.md](../uncategorized/camoproxy.md)
+* [../uncategorized/k8s-oncall-setup.md](../uncategorized/k8s-oncall-setup.md)
+* [../uncategorized/kubernetes.md](../uncategorized/kubernetes.md)
+* [../uncategorized/upgrade-docker-machine.md](../uncategorized/upgrade-docker-machine.md)
+* [../version/version-gitlab-com.md](../version/version-gitlab-com.md)
+* [../web/static-repository-objects-caching.md](../web/static-repository-objects-caching.md)
+<!-- END_MARKER -->
 
 
-# Quick start #
 
-## URLs ##
+<!-- ## Summary -->
+
+## Quick start
+
+### URLs
 
 Logging clusters:
 - **https://log.gprd.gitlab.net**
 - **https://nonprod-log.gitlab.net**
 
-StackDriver:
-- **https://console.cloud.google.com/logs?organizationId=769164969568&project=gitlab-staging-1** (select "GCE VM instance" from the dropdown menu of resources -> select "All instance_id" -> select "All logs"/logs from a component you're interested in from the dropdown menu of log sources)
+Operations (formerly Stackdriver, we are currently not indexing any logs, it's used only for cold storage):
+- https://console.cloud.google.com/logs/query
 
 BigQuery:
 - **[BigQuery](./logging_gcs_archive_bigquery.md)**
 
-## Retention
+### Retention
 
-See [ESC-tools clean up script](https://ops.gitlab.net/gitlab-com/gl-infra/gitlab-restore/esc-tools/blob/master/cleanup_indices.sh) for up to date retention time.
+#### ES
 
-| Index                        | Production (gprd) | Staging (gstg) |
-|------------------------------|------------|---------|
-| pubsub-application-inf       | 10 days    | 1 day   |
-| pubsub-gitaly-inf            | 7 days     | 1 day   |
-| pubsub-haproxy-inf           | 2 days     | 1 day   |
-| pubsub-pages-inf             | 10 days    | 1 day   |
-| pubsub-postgres-inf          | 6 days     | 1 day   |
-| pubsub-rails-inf             | 7 days     | 1 day   |
-| pubsub-shell-inf             | 7 days     | 1 day   |
-| pubsub-sidekiq-inf           | 7 days     | 1 day   |
-| pubsub-system-inf            | 3 days     | 1 day   |
-| pubsub-unicorn-inf           | 10 days    | 1 day   |
-| pubsub-unstructured-inf      | 3 days     | 1 day   |
-| pubsub-workhorse-inf         | 3 days     | 1 day   |
-| pubsub-consul-inf            | 6 days     | 1 day   |
-| default for everything else  | 1 day      | 1 day   |
-
-Logs indexed by Stackdriver are stored for 30 days
-
-All logs processed by StackDriver (even if excluded from indexing) are archived to object storage (GCS). Retention in GCS is currently configured for 365 days. For more details see [gcs section below](#gcs-long-term-storage).
-
-## What are we logging? ##
+For up to date retention period see details of the ILM policy assigned to the index. See also:
+- https://gitlab.com/gitlab-com/runbooks/-/tree/master/elastic/managed-objects/log_gprd/ILM
+- https://gitlab.com/gitlab-com/runbooks/-/blob/master/elastic/managed-objects/log_gprd/ILM/gitlab-infra-high-ilm-policy.jsonnet
 
 
-| name | logfile  | type  | index | stackdriver filter |
-| -----| -------- |------ | ----- |--------------------|
-| gitaly | gitaly/current | JSON | pubsub-gitaly-inf | |
-| pages | gitlab-pages/current | JSON | pubsub-pages-inf | |
-| db.postgres | postgresql/current | line regex | pubsub-postgres-inf | |
-| db.pgbouncer | gitlab/pgbouncer/current | line regex | pubsub-postgres-inf | |
-| workhorse | gitlab/gitlab-workhorse/current | JSON | pubsub-workhorse-inf | |
-| rails.api | gitlab-rails/api\_json.log | JSON | pubsub-rails-inf | |
-| rails.application | gitlab-rails/application.log | JSON | pubsub-application-inf | |
-| rails.audit | gitlab-rails/audit_json.log | JSON | pubsub-rails-inf | |
-| rails.auth | gitlab-rails/auth.log | JSON | pubsub-rails-inf | |
-| rails.database_load_balancing | gitlab-rails/database_load_balancing.log | JSON | pubsub-rails-inf | |
-| rails.geo | gitlab-rails/geo.log | JSON | pubsub-rails-inf | |
-| rails.git | gitlab-rails/git_json.log | JSON | pubsub-rails-inf | |
-| rails.importer | gitlab-rails/importer.log | JSON | pubsub-rails-inf | |
-| rails.exporter | gitlab-rails/exporter.log | JSON | pubsub-rails-inf | |
-| rails.service_measurement | gitlab-rails/service_measurement.log | JSON | pubsub-rails-inf | |
-| rails.integrations | gitlab-rails/integrations\_json.log | JSON | pubsub-rails-inf | |
-| rails.kubernetes | gitlab-rails/kubernetes.log | JSON | pubsub-rails-inf | |
-| rails.exceptions | /var/log/gitlab/gitlab-rails/exceptions_json.log | JSON | pubsub-rails-inf | |
-| rails.production | gitlab-rails/production\_json.log | JSON | pubsub-rails-inf | |
-| shell | gitlab-shell/gitlab-shell.log | JSON | pubsub-shell-inf | |
-| unicorn.current | /var/log/gitlab/unicorn/current | line regex | pubsub-unicorn-inf | |
-| unicorn.stderr | /var/log/gitlab/unicorn/unicorn\_stderr.log | line regex | pubsub-unicorn-inf | |
-| unicorn.stdout | /var/log/gitlab/unicorn/unicorn\_stdout.log | line regex | pubsub-unicorn-inf | |
-| unstructured.production | gitlab-rails/production.log | lines | pubsub-unstructured-inf | label.tag="unstrucctured.production" |
-| sidekiq | /var/log/gitlab/sidekiq-cluster/current |  JSON | pubsub-sidekiq-inf | |
-| haproxy | /var/log/haproxy.log | syslog | pubsub-haproxy-inf | label.tag="haproxy" |
-| nginx.access | /var/log/gitlab/nginx/gitlab\_access.log | nginx | pubsub-nginx-inf | |
-| registry | n/a | mix (lines/json) | pubsub-gke-inf | |
-| system.auth | /var/log/auth.log | syslog | pubsub-system-inf | |
-| system.syslog | /var/log/syslog | syslog | pubsub-system-inf | |
-| rails.graphql | /var/log/gitlab/gitlab-rails/graphql_json.log | JSON | pubsub-rails-inf ||
-| rails.mail_room | /var/log/gitlab/mailroom/mail_room_json.log | JSON | pubsub-rails-inf ||
-| history.psql | /home/*-db/.psql_history  | | |
-| history.irb | /var/log/irb_history/*.log  | | |
+| Index                   | Production (gprd) | Staging (gstg) |
+|-------------------------|-------------------|----------------|
+| pubsub-application-inf  | 7 days            | 6 days         |
+| pubsub-gitaly-inf       | 7 days            | 6 days         |
+| pubsub-haproxy-inf      | 7 days            | 6 days         |
+| pubsub-pages-inf        | 7 days            | 6 days         |
+| pubsub-postgres-inf     | 7 days            | 6 days         |
+| pubsub-rails-inf        | 7 days            | 6 days         |
+| pubsub-shell-inf        | 7 days            | 6 days         |
+| pubsub-sidekiq-inf      | 7 days            | 6 days         |
+| pubsub-system-inf       | 7 days            | 6 days         |
+| pubsub-unicorn-inf      | 7 days            | 6 days         |
+| pubsub-unstructured-inf | 7 days            | 6 days         |
+| pubsub-workhorse-inf    | 7 days            | 6 days         |
+| pubsub-consul-inf       | 7 days            | 6 days         |
+
+#### Operations (StackDriver)
+
+We are not indexing any application logs. We are only using Operations for the sinks that are saving logs to cold storage.
+
+#### GCS
+
+All logs received by Stackdriver (even if excluded from indexing) are archived to object storage (GCS). Retention in GCS is currently configured for 365 days. For more details see [gcs section below](#gcs-long-term-storage).
+
+### What are we logging?
+
+For up to date config see:
+- https://gitlab.com/gitlab-cookbooks/gitlab_fluentd/
+- https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/fluentd-elasticsearch
+
+There are many entries missing from this list:
+
+| name                          | logfile                                          | type             | index                   |
+| -----                         | --------                                         | ------           | -----                   |
+| gitaly                        | gitaly/current                                   | JSON             | pubsub-gitaly-inf       |
+| pages                         | gitlab-pages/current                             | JSON             | pubsub-pages-inf        |
+| db.postgres                   | postgresql/current                               | line regex       | pubsub-postgres-inf     |
+| db.pgbouncer                  | gitlab/pgbouncer/current                         | line regex       | pubsub-postgres-inf     |
+| workhorse                     | gitlab/gitlab-workhorse/current                  | JSON             | pubsub-workhorse-inf    |
+| rails.api                     | gitlab-rails/api\_json.log                       | JSON             | pubsub-rails-inf        |
+| rails.application             | gitlab-rails/application.log                     | JSON             | pubsub-application-inf  |
+| rails.audit                   | gitlab-rails/audit_json.log                      | JSON             | pubsub-rails-inf        |
+| rails.auth                    | gitlab-rails/auth.log                            | JSON             | pubsub-rails-inf        |
+| rails.database_load_balancing | gitlab-rails/database_load_balancing.log         | JSON             | pubsub-rails-inf        |
+| rails.geo                     | gitlab-rails/geo.log                             | JSON             | pubsub-rails-inf        |
+| rails.git                     | gitlab-rails/git_json.log                        | JSON             | pubsub-rails-inf        |
+| rails.importer                | gitlab-rails/importer.log                        | JSON             | pubsub-rails-inf        |
+| rails.exporter                | gitlab-rails/exporter.log                        | JSON             | pubsub-rails-inf        |
+| rails.service_measurement     | gitlab-rails/service_measurement.log             | JSON             | pubsub-rails-inf        |
+| rails.integrations            | gitlab-rails/integrations\_json.log              | JSON             | pubsub-rails-inf        |
+| rails.kubernetes              | gitlab-rails/kubernetes.log                      | JSON             | pubsub-rails-inf        |
+| rails.exceptions              | /var/log/gitlab/gitlab-rails/exceptions_json.log | JSON             | pubsub-rails-inf        |
+| rails.production              | gitlab-rails/production\_json.log                | JSON             | pubsub-rails-inf        |
+| shell                         | gitlab-shell/gitlab-shell.log                    | JSON             | pubsub-shell-inf        |
+| unicorn.current               | /var/log/gitlab/unicorn/current                  | line regex       | pubsub-unicorn-inf      |
+| unicorn.stderr                | /var/log/gitlab/unicorn/unicorn\_stderr.log      | line regex       | pubsub-unicorn-inf      |
+| unicorn.stdout                | /var/log/gitlab/unicorn/unicorn\_stdout.log      | line regex       | pubsub-unicorn-inf      |
+| unstructured.production       | gitlab-rails/production.log                      | lines            | pubsub-unstructured-inf |
+| sidekiq                       | /var/log/gitlab/sidekiq-cluster/current          | JSON             | pubsub-sidekiq-inf      |
+| haproxy                       | /var/log/haproxy.log                             | syslog           | pubsub-haproxy-inf      |
+| nginx.access                  | /var/log/gitlab/nginx/gitlab\_access.log         | nginx            | pubsub-nginx-inf        |
+| registry                      | n/a                                              | mix (lines/json) | pubsub-gke-inf          |
+| system.auth                   | /var/log/auth.log                                | syslog           | pubsub-system-inf       |
+| system.syslog                 | /var/log/syslog                                  | syslog           | pubsub-system-inf       |
+| rails.graphql                 | /var/log/gitlab/gitlab-rails/graphql_json.log    | JSON             | pubsub-rails-inf        |
+| rails.mail_room               | /var/log/gitlab/mailroom/mail_room_json.log      | JSON             | pubsub-rails-inf        |
+| history.psql                  | /home/*-db/.psql_history                         |                  |                         |
+| history.irb                   | /var/log/irb_history/*.log                       |                  |                         |
 
 
-## Historical notes ##
+## How-to guides
 
-Logs from all environments used to be available at https://log.gitlab.net/ .
+### Searching logs
 
-Previously production logs were using the `pubsub-production-*` pattern, this has changed to `pubsub-rails-inf-gprd-*`. For more info see the [table](#what-are-we-logging).
+#### Searching in Elastic
 
-production.log, haproxy logs and nginx logs are no longer being sent to elasticcloud because it was overwhelming our cluster, currently these logs are only available in StackDriver.
-
-Runner logs used to be unstructured and mixed in with other syslog messages, structured logging was tracked with https://gitlab.com/gitlab-org/gitlab-runner/issues/3336 . Runner logs now have a dedicated index.
-
-Design document for migration to ES7: https://about.gitlab.com/handbook/engineering/infrastructure/design/logging-upgrade/
-
-# How-to guides
-
-## Searching logs
-
-### Searching in Elastic
-
-#### production (gitlab.com) ####
+##### production (gitlab.com) ####
 
 1. Go to https://log.gprd.gitlab.net/
 1. in Kibana, in Discover application, select the relevant index pattern, e.g. `pubsub-rails-inf-gprd-*`
 
-#### dev (dev.gitlab.org), staging (staging.gitlab.com), dr, ops (ops.gitlab.com), preprod (pre.gitlab.com) ####
+##### dev (dev.gitlab.org), staging (staging.gitlab.com), ops (ops.gitlab.com), preprod (pre.gitlab.com)
 
 1. Go to https://nonprod-log.gitlab.net/
-1. select the relevant index pattern, e.g. `pubsub-rails-inf-gstg-*` or `pubsub-rails-inf-ops-*`
+1. select the relevant index pattern, e.g. `pubsub-rails-inf-gstg-*`
 1. (optional) filter on the environment, e.g. `json.environment=gstg` or `json.environment=dev`
 
 Note:
 - logs from dev are sent to staging indices
 - almost no logs are forwarded from preprod
 
-### Searching in StackDriver ###
+#### Searching in Operations (Stackdriver)
 
-### Searching in object storage (GCS) ###
+It is not possible to search for application logs using Operations (Stackdriver). You can still search for other logs, for example GCP authentication logs.
+
+#### Searching in object storage (GCS)
 
 [using BigQuery tutorial](./logging_gcs_archive_bigquery.md)
 
-# Concepts #
+### Adding a new logfile
 
-## Logging infrastructure overview ##
+* Decide whether you want to use an existing ES index or create a new one (which will also require making some changes using Terraform). Some hints about how to decide:
+    * You won't need a dedicated index if the amount of logs is small
+    * It makes sense to use an existing index if the log file "conceptually" belongs to an existing log stream (for example it used be part of rails logs and it's simply going to be separated into a dedicate file)
+    * If the log structure is significantly different (log entries contain completely different fields from already existing logs), you'll want to use a dedicated index. Otherwise the ES cluster might refuse to process your logs due to mapping conflicts or too many field mappings set in an index.
+
+#### Adding a logfile and using an existing ES index
+
+* Adding a logfile and using an existing ES index:
+    * GCE VMs infrastructure:
+        * Update one of the [fluentd templates](https://gitlab.com/gitlab-cookbooks/gitlab_fluentd/tree/master/templates/default) and add a section for the new log file. Remember to bump the cookbook version in `metadata.rb`
+        * follow the chef roll out process
+    * kubernetes infrastructure:
+        * Update config of the Gitlab managed Fluentd DaemonSet here: https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/fluentd-elasticsearch
+
+#### Adding a logfile and creating a dedicated index for it
+
+* Adding a logfile and creating a dedicated index for it
+    * Configure Elastic
+        * Add your index to the list of objects managed in the git repo, for example: https://gitlab.com/gitlab-com/runbooks/merge_requests/1736 and wait for the CI job to update ES config.
+        * Initialize the alias and create the first index using an api call. You can do it in Kibana UI with:
+        ```
+        PUT /pubsub-<index_name>-inf-<env_name>-000001
+        {
+            "aliases":
+                {
+                    "pubsub-<index_name>-inf-<env_name>":
+                        {
+                            "is_write_index": true
+                        }
+                }
+
+        }
+        ```
+        or using a script documented here: https://gitlab.com/gitlab-com/runbooks/blob/master/elastic/api_calls/single/initialize-alias-create-index.sh
+        * Make sure that all three exist in the relevant cluster: alias, index template, first index and that the index has an ILM policy assigned to it.
+        * Index patterns in Kibana can only be created once there are documents in indices.
+    * Create a PubSub topic
+        * Add your topic to the list of pubsubbeat topics in `variables.tf` file of the environment where you want to make the change, e.g. for gstg: https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/blob/master/environments/gstg/variables.tf .
+    * Create a beat that will forward logs from PubSub to ES (this step should only be performed after the topic was created)
+        * Add a beat for your topic to the list of beats in the relevant environment: https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/pubsubbeat
+    * For log files on the GCE VMs infrastructure
+        * Add a new recipe in the `gitlab_fluentd` cookbook for your log file, for example: https://gitlab.com/gitlab-cookbooks/gitlab_fluentd/merge_requests/99/diffs
+        * Edit the relevant roles in the chef repo to apply the new recipe to VMs managed with that role, for example: https://ops.gitlab.net/gitlab-cookbooks/chef-repo/merge_requests/2367/diffs
+        * follow the chef roll out process
+    * For log files in GKE
+        * Update config of the Gitlab managed Fluentd DaemonSet here: https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/fluentd-elasticsearch
+
+
+<!-- ## Architecture -->
+
+## Concepts
+
+### Roadmap
+
+Roadmap:
+  - https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10095
+  - https://docs.google.com/document/d/1EK3QUuC0JrN5ndXdz1McEwKirD_jfA7bk0siTgHXwI4/edit#
+
+### Logging infrastructure overview ##
 
 ![Overview](./img/logging.png)
 
-## Fluentd
+### Fluentd
 
-Files containing logs are parsed by Fluentd (td-agent). Fluentd runs directly on a number of different VMs across our fleet or as a [daemonset](https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/) inside kubernetes. Fluentd running on VMs is configured to send logs to two destinations: [Stackdriver](https://cloud.google.com/stackdriver/docs/) and [Cloud Pub/Sub](https://cloud.google.com/pubsub/docs/). Fluentd running as a daemonset, sends logs only to Stackdriver.
+We are using Fluentd (td-agent) for parsing log files and forwarding log messages to different destinations. There are at least three (3) different types of Fluentd processes involved: Gitlab managed Fluentd on GCE VMs, Gitlab managed Fluentd DaemonSet in GKE, GCP managed Fluentd DaemonSet in GKE.
 
-## StackDriver ##
+Fluentd running on VMs is configured to send logs to two destinations: [Operations](https://cloud.google.com/stackdriver/docs/)(formerly Stackdriver) and [Cloud Pub/Sub](https://cloud.google.com/pubsub/docs/). Here's the [fluentd config](https://gitlab.com/gitlab-cookbooks/gitlab_fluentd/) for running on GCE VMs.
 
-All logs reaching Stackdriver are saved to GCS using an export sink where they are stored long-term (e.g. 6 months) for compliance reasons and can be read using BigQuery. Kubernetes logs are also forwarded from Stackdriver to Pub/Sub (that's because Fluentd in kubernetes is not forwarding logs to Pub/Sub).
+Gitlab managed Fluentd in kubernetes (running as a daemonset) sends logs only to ElasticStack (this will likely change in the future, see: https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/11655 and: https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10095). Its config can be found [here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/fluentd-elasticsearch). For the helm chart, we are actually using [a Gitlab fork](https://gitlab.com/gitlab-org/charts/fluentd-elasticsearch/) of a [project on github](https://github.com/kiwigrid/helm-charts/tree/master/charts/fluentd-elasticsearch)
 
-All logs listed in the [table](#what-are-we-logging) are processed by StackDriver, but most are excluded from indexing due to costs. It is sometimes helpful to use it to search for logs over a 30 day interval for the included logs. It also allows you to do basic queries for strings across all types and find errors.
+GCP managed Fluentd running as a daemonset in GKE, sends logs only to Operations. At the moment of writing, its config was not altered.
 
-The current exclusions for StackDriver can be found in [terraform variables.tf](https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/blob/master/environments/gprd/variables.tf),
+### Operations (Stackdriver)
+
+All logs reaching Operations are saved to GCS using an export sink where they are stored long-term (e.g. 6 months) for compliance reasons and can be read using BigQuery.
+
+We are using log exclusions to prevent application logs from being indexed: https://cloud.google.com/logging/docs/exclusions At the moment of writing, we are not indexing any of the application logs. The current exclusions for Operations (Stackdriver) can be found in [terraform variables.tf](https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/blob/master/environments/gprd/variables.tf),
 search for `sd_log_filters`.
 
-Logs sent to StackDriver are sent to "GCE VM instance" resource logs.
+### Cloud Pub/Sub
 
-## Cloud Pub/Sub
-
-Logs from different components have designated topics in Pub/Sub and each topic has a corresponding subscription. There is a subscriber for each subscription. At the moment of writing we are using pubsubbeat to subscribe to Pub/Sub subscriptions and forward logs to an Elastic cluster.
+Logs from different components have designated topics in Pub/Sub and each topic has corresponding subscriptions. There is a subscriber for each subscription. At the moment of writing we are using pubsubbeat to subscribe to Pub/Sub subscriptions and forward logs to an ElasticStack cluster.
 
 Cloud PubSub [quotas and limits](https://cloud.google.com/pubsub/quotas). Note: there's a 10MB/s per StreamingPull limit
 
+PubSub topics are managed using Terraform (search for pubsub [here](https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/blob/master/environments/gprd/main.tf))
+
 Examples of alternatives to Cloud Pub/Sub include: Kafka
 
-## Pubsubbeat VMs
+### Pubsubbeat
 
-Pubsubbeat runs on dedicated VMs. The binary pulls logs from a subscription in Pub/Sub and uploads them to Elastic using the [bulk API](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html). The default configuration of Pubsubbeat is to create templates and field mappings in indices. However, we are instead relying on the dynamic mappings created by the Elastic cluster.
+Pubsubbeat is a tool that uses the ES Beat framework: https://www.elastic.co/beats/ and Google PubSub client library: https://pkg.go.dev/cloud.google.com/go/pubsub . The project is maintained by Gitlab and can be found here: https://gitlab.com/gitlab-org/pubsubbeat/ . The binary pulls logs from a subscription in Pub/Sub and uploads them to Elastic using the [bulk API](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html). The default configuration of Pubsubbeat is to create templates and field mappings in indices. We are not utilizing this feature and instead are precreating index templates to match our needs. A lot of the ES config is version controlled in our runbooks repo: https://gitlab.com/gitlab-com/runbooks/-/tree/master/elastic and applied using CI jobs. Many, but not all mappings are set statically [here](https://gitlab.com/gitlab-com/runbooks/-/tree/master/elastic/managed-objects/lib/index_mappings).
+
+We deploy pubsubbeat to GKE using helm. For more details see config [here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/pubsubbeat). Permissions are given to k8s service accounts using [Workload Identity](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity) using terraform (search for pusbubbeat [here](https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/blob/master/environments/gprd/main.tf))
 
 Examples of alternatives to Pubsubbeat include: Filebeat, Fluentd, Logstash.
 
-## Elastic
+### Elastic
 
 Aliases are referenced by Pubsubbeat when uploading logs to Elastic. When logs reach the Elastic cluster, they are indexed into documents by a worker, the alias name is resolved to an index name and the documents are saved in the index. There should only ever be one active index per alias and the alias should be pointing to that index.
 
@@ -206,7 +275,7 @@ Logs (documents) can be viewed in Kibana using index patterns, i.e. when you ope
 
 More documentation on Elastic can be found here: [elastic/doc/](./elastic/doc/)
 
-## Index Lifecycle Management (ILM)
+### Index Lifecycle Management (ILM)
 
 Indices can be managed in different ways e.g. custom scripts, Curator, Index Lifecycle Management (ILM) plugin. ILM meets a lot of our requirements so that's what we're using for logs sent to ES7 clusters.
 
@@ -264,21 +333,22 @@ See also:
 - https://www.elastic.co/blog/implementing-hot-warm-cold-in-elasticsearch-with-index-lifecycle-management
 - https://www.elastic.co/guide/en/elasticsearch/reference/current/index-lifecycle-management.html
 
-## Monitoring
+### Monitoring
 
-For monitoring Elastic clusters see: [elastic/doc/README.md#monitoring](./elastic/doc/README.md#monitoring)
-Our Elastic clusters have monitoring enabled and the monitoring metrics are forwarded to a separate monitoring cluster.
+Our Elastic clusters have xpack monitoring enabled in Elastic Cloud and the monitoring metrics are forwarded to a separate monitoring cluster (called `monitoring-es7`).
 
 There is a VM in each environment called `sd-exporter-*`. This VM is created using a generic terraform module https://ops.gitlab.net/gitlab-com/gl-infra/terraform-modules/google/generic-sv-with-group . The VM has a chef role assigned to it which downloads and runs the stackdriver exporter https://gitlab.com/gitlab-cookbooks/gitlab-exporters/ . The exporter service runs on a tcp port number 9255. Prometheus is configured through a role in chef-repo to scrape port 9255 on `sd-exporter-*` VMs. Metrics scraped this way are the basis for Prometheus pubsub alerts.
 
-## BigQuery ##
+For the monitoring of pubsubbeats in GKE, we use a ServiceMonitor object to tell Prometheus to scrape the endpoints exposed by the pubsubbeat pod. The pod exposes two endpoints: `beat-metrics` and `mtail-metrics`. These are exposed by sidecars, a [beat-exporter](https://github.com/trustpilot/beat-exporter) process and an [mtail](https://github.com/google/mtail) process.
+
+### BigQuery
 
 BigQuery can be used to search logs that are in cold storage (GCS).
 
 The `haproxy` logs are also configured to be forwarded to a BigQuery dataset using
 a StackDriver sink: [gitlab-production:haproxy_logs](https://console.cloud.google.com/bigquery?organizationId=769164969568&project=gitlab-production&p=gitlab-production&d=haproxy_logs&page=dataset)
 
-## GCS (long-term storage) ##
+### GCS (long-term storage)
 
 Logs from the export sink are saved to a GCS bucket which we manage with Terraform: https://ops.gitlab.net/gitlab-com/gl-infra/terraform-modules/google/storage-buckets/blob/master/main.tf#L1
 
@@ -286,24 +356,90 @@ We configure this bucket with GCP lifecycle rules: https://ops.gitlab.net/gitlab
 
 These rules are parameterized and are configured with defaults which are set in the module: https://ops.gitlab.net/gitlab-com/gl-infra/terraform-modules/google/storage-buckets/blob/master/variables.tf#L150
 
-# FAQ #
+### es-diagnostics
 
-## Why are we using StackDriver and GCS in addition to ElasticSearch? ##
+We created cronjobs that dump diagnostic information from ES clusters.
 
-We are sending logs to Stackdriver and GCS in addition to elasticsearch for
+Script repo: https://gitlab.com/gitlab-com/gl-infra/es-diagnostics/
+
+Deployment: https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/es-diagnostics
+
+### Historical notes
+
+haproxy logs and nginx logs are not sent to ElasticStack because it was overwhelming our cluster. Currently, these logs are only available through BigQuery.
+
+Design document for migration to ES7: https://about.gitlab.com/handbook/engineering/infrastructure/design/logging-upgrade/
+
+<!-- ## Performance -->
+
+<!-- ## Scalability -->
+
+<!-- ## Availability -->
+
+<!-- ## Durability -->
+
+<!-- ## Security/Compliance -->
+
+<!-- ## Monitoring/Alerting -->
+
+<!-- ## Links to further Documentation -->
+
+## Configuration
+
+### Chef
+
+#### Cookbooks
+
+There are three cookbooks that configure logging on gitlab.com
+
+* gitlab-proxy - Sets up the nginx proxy so that users can access elastic cloud via log.gprd.gitlab.net, to be deprecated: https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/9145 and https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/331
+* gitlab_fluentd - Sets up td-agent on all nodes, forwards logs to pubsub topics.
+* gitlab-elk (deprecated) - Sets up the pubsub beat which reads from the topics and forwards to elastic cloud.
+
+#### Role configuration
+
+* Add `recipe[gitlab_fluentd::<type>]` to the corresponding role to enable td-agent for the template
+* The [ops proxy role](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/blob/master/roles/ops-infra-proxy.json) configures the proxy vm that is the reverse proxy for elastic cloud.
+
+### Terraform
+
+- (deprecated) pubsubbeat module: https://gitlab.com/gitlab-com/gl-infra/terraform-modules/google/pubsubbeat
+- pubsub topics are managed using a pubsub module: https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/tree/master/modules/pubsub
+- Workload Identity config: search for pubsubbeats in https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/blob/master/environments/gstg/main.tf
+- Stackdriver log exclusions: https://ops.gitlab.net/gitlab-com/gl-infra/terraform-modules/google/stackdriver
+- es-diagnostics storage bucket and permissions
+
+Pub/Sub Subscriptions should be automatically created by the pubsubbeat service
+on each pubsub host. If subscriptions get misconfigured (e.g. topics appear
+as `_deleted-topic_`) you can delete them and restart the pubsubbeat services to
+re-create them. This will be deprecated soon: https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/8339
+
+### runbooks repo
+
+There's a number of things configured using CI jobs in the runbooks repo, in `runbooks/elastic/`, for example:
+- index templates
+- static mappings for indices
+
+## FAQ
+
+### Why are we using Operations and GCS in addition to ElasticSearch?
+
+We are sending logs to Operations and GCS in addition to elasticsearch for
 longer retention and to preserve logs in object storage for 365 days.
 
-## Why are we using pubsub queues instead of sending logs from fluentd directly to Elastic? ##
+### Why are we using pubsub queues instead of sending logs from fluentd directly to Elastic?
 
 We use it for two reasons. Firstly, to handle situations when our log sources emit more logs than Elasticsearch can ingest at real time. In this scenario, pubsub serves the role of a buffer.
 
 Secondly, we were overloading Elastic Cloud with the number of connections. Having only a few pubsubbeats helps to reduce the overhead of a separate connection for each fluentd instance.
 
-## How do I find the right logs for my service? ##
+See also: [message queueing discussion in roadmap](https://docs.google.com/document/d/1EK3QUuC0JrN5ndXdz1McEwKirD_jfA7bk0siTgHXwI4/edit#heading=h.ymuyhym25zqn)
+
+### How do I find the right logs for my service?
 
 See [Quick start](./README.md#what-are-we-logging)
 
-## A user sees an error on GitLab.com, how do I find logs for that user? ##
+### A user sees an error on GitLab.com, how do I find logs for that user?
 
 * Select the `pubsub-rails-inf-gprd-*` index pattern in Kibana
 * Search for `+json.username: <user>`
@@ -312,76 +448,13 @@ If the request has `json.correlation_id` field set, you can use that id for chec
 
 see also: [searching logs](./README.md#searching-logs)
 
-## Why do we have these annoying json. prefixes? ##
+### Why do we have these annoying json. prefixes?
 
 They are created by https://github.com/GoogleCloudPlatform/pubsubbeat , I don't see a way we can remove them without forking the project.
 
-## What if I need to query logs older than the ones present in Elastic? ##
+### What if I need to query logs older than the ones present in Elastic?
 
-StackDriver can be used for searching logs from the last 30 days and BigQuery for older ones, stored in GCS.
-
-## What if I need to query logs older than 30 days? ##
+At the moment, the only other way to access logs is using BigQuery.
 
 See [logging_gcs_archive_bigquery.md](logging_gcs_archive_bigquery.md) for
 instructions on loading logs into `BigQuery` from their GCS archive files.
-
-# Configuration #
-
-## Cookbooks ##
-
-There are three cookbooks that configure logging on gitlab.com
-
-* gitlab-proxy - Sets up the nginx proxy so that users can access elastic cloud via log.gprd.gitlab.net
-* gitlab_fluentd - Sets up td-agent on all nodes, forwards logs to pubsub topics.
-* gitlab-elk - Sets up the pubsub beat which reads from the topics and forwards to elastic cloud.
-
-## logs parsers ##
-
-### Elastic mappings ###
-
-We are utilizing dynamic mappings in Elastic for majority of field mappings. In selected few cases where the mappings need to be adjusted we use mappings added to index templates.
-
-In the past, we used static mappings in logsearch and dynamic mappings generated by pubsubbeat.
-
-## Role configuration ##
-
-* There is a [single role for all pubsub beats](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/blob/master/roles/gprd-infra-pubsub.json) per environment, the index is determined by the hostname which allows it to be dyamic.
-* Add `recipe[gitlab_fluentd::<type>]` to the corresponding role to enable td-agent for the template
-* The [ops proxy role](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/blob/master/roles/ops-infra-proxy.json) configures the proxy vm that is the reverse proxy for elastic cloud.
-
-
-## Terraform ##
-
-Pub/Sub Topics are managed by terraform (specifically,
-[the pubsubbeat module](https://gitlab.com/gitlab-com/gl-infra/terraform-modules/google/pubsubbeat)).
-
-Pub/Sub Subscriptions should be automatically created by the pubsubbeat service
-on each pubsub host. If subscriptions get misconfigured (e.g. topics appear
-as `_deleted-topic_`) you can delete them and restart the pubsubbeat services to
-re-create them.
-
-## Adding a new logfile ##
-
-* Decide whether you want to use an existing ES index or create a new one (which will also require making some changes using Terraform). Some hints about how to decide:
-    * You won't need a dedicated index if the amount of logs is small (at the moment of writing, the overhead related to operating a separate index is quite significant)
-    * It makes sense to use an existing index if the log file "conceptually" belongs to an existing log stream (for example it used be part of rails logs and it's simply going to be separated into a dedicate file)
-
-* Adding a logfile and using an existing ES index
-    * Update one of the [fluentd templates](https://gitlab.com/gitlab-cookbooks/gitlab_fluentd/tree/master/templates/default) and add a section for the new log file. Remember to bump the cookbook version in `metadata.rb`
-    * follow the chef roll out process
-* Adding a logfile and creating a dedicated index for it
-    * Add your index to the list of objects managed in the git repo, for example: https://gitlab.com/gitlab-com/runbooks/merge_requests/1736 . This will ensure that any changes to config will be applied to your new index and that in case of a disaster recovery the index will be recreated.
-    * Seed Elastic:
-        * Get credetials for the relevant ES cluster from 1password and source them in bash. You can find the name of the env var that you should use in the script that you'll run in the next step.
-        * Run the script updating index templates, for example for the nonprod cluster: https://gitlab.com/gitlab-com/runbooks/blob/master/elastic/managed-objects/nonprod-log/index-templates/update-index-templates.sh
-        * Initialize the alias and create the first index using an api call documented here: https://gitlab.com/gitlab-com/runbooks/blob/master/elastic/api_calls/single/initialize-alias-create-index.sh
-        * Make sure that all three exist in the relevant cluster: alias, index template, first index and that the index has an ILM policy assigned to it.
-        * Create a json file with an index-pattern similar to this one: https://gitlab.com/gitlab-com/runbooks/tree/master/elastic/managed-objects/nonprod-log/index-patterns/pubsub-api-inf-dr.json and using the json file create the index pattern in Kibana using a POST request
-        * The ES cluster is now ready to start receiving new logs.
-    * Terraform changes
-        * Modify the `variables.tf` file of the environment where you want to make the change, e.g. https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/merge_requests/1249/diffs . This will create a dedicated pubsub topic and a pubsubbeat VM. The VM will be configured with the relevant Chef role which will start a pubsubbeat process. The pubsubbeat process will be configured with the topic name and will automatically create a subscription to the topic. It is also configured not to create templates and indices (we do that over the api so that we have control over things like mappings and index settings).
-        * Follow our usual process for applying Terraform changes
-    * Chef changes
-        * Add a new recipe in the `gitlab_fluentd` cookbook for your log file, for example: https://gitlab.com/gitlab-cookbooks/gitlab_fluentd/merge_requests/99/diffs
-        * Edit the relevant roles in the chef repo to apply the new recipe to VMs managed with that role, for example: https://ops.gitlab.net/gitlab-cookbooks/chef-repo/merge_requests/2367/diffs
-        * follow the chef roll out process

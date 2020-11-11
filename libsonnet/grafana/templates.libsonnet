@@ -19,10 +19,13 @@ local template = grafana.template;
       refresh='load',
     ),
   namespaceGitlab::
-    template.custom(
+    template.new(
       'namespace',
-      'gitlab,',
-      'gitlab',
+      '$PROMETHEUS_DS',
+      'label_values(registry_build_info{stage="$stage"}, namespace)',
+      current='gitlab',
+      refresh='load',
+      sort=1,
       hide='variable',
     ),
   ds::
@@ -122,10 +125,50 @@ local template = grafana.template;
       refresh='load',
       sort=1,
     ),
+  railsController(default)::
+    template.new(
+      'controller',
+      '$PROMETHEUS_DS',
+      'label_values(controller_action:gitlab_transaction_duration_seconds_count:rate1m{environment="$environment", type="$type"}, controller)',
+      current=default,
+      refresh='load',
+      sort=1,
+    ),
+  railsControllerAction(default)::
+    template.new(
+      'action',
+      '$PROMETHEUS_DS',
+      'label_values(controller_action:gitlab_transaction_duration_seconds_count:rate1m{environment="$environment", type="$type", controller="$controller"}, action)',
+      current=default,
+      refresh='load',
+      sort=1,
+      multi=true,
+      includeAll=true,
+    ),
+  constant(name, value)::
+    {
+      current: {
+        text: value,
+        value: value,
+      },
+      label: null,
+      name: name,
+      options: [
+        {
+          selected: true,
+          text: value,
+          value: value,
+        },
+      ],
+      query: value,
+      skipUrlSync: true,
+      type: 'constant',
+    },
   fqdn(
     query,
     current='',
-    multi=false)::
+    multi=false
+  )::
     template.new(
       'fqdn',
       '$PROMETHEUS_DS',

@@ -1,16 +1,16 @@
-local basic = import 'grafana/basic.libsonnet';
 local capacityPlanning = import 'capacity_planning.libsonnet';
+local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
+local basic = import 'grafana/basic.libsonnet';
 local colors = import 'grafana/colors.libsonnet';
 local commonAnnotations = import 'grafana/common_annotations.libsonnet';
-local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
-local keyMetrics = import 'key_metrics.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
-local nodeMetrics = import 'node_metrics.libsonnet';
-local platformLinks = import 'platform_links.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
 local seriesOverrides = import 'grafana/series_overrides.libsonnet';
-local serviceCatalog = import 'service_catalog.libsonnet';
 local templates = import 'grafana/templates.libsonnet';
+local keyMetrics = import 'key_metrics.libsonnet';
+local nodeMetrics = import 'node_metrics.libsonnet';
+local platformLinks = import 'platform_links.libsonnet';
+local serviceCatalog = import 'service_catalog.libsonnet';
 local dashboard = grafana.dashboard;
 local row = grafana.row;
 local template = grafana.template;
@@ -25,7 +25,7 @@ local systemDiagramPanel = import 'system_diagram_panel.libsonnet';
 local kubeEmbeddedDashboards = import 'kubernetes_embedded_dashboards.libsonnet';
 local statusDescription = import 'status_description.libsonnet';
 
-local defaultEnvironmentSelector = { environment: '$environment' };
+local defaultEnvironmentSelector = { environment: '$environment', env: '$environment' };
 
 local listComponentThresholds(service) =
   std.prune([
@@ -139,7 +139,6 @@ local overviewDashboard(
         stage,
         startRow=20,
         environmentSelectorHash=environmentSelectorHash,
-        includeNodeLevelMonitoring=metricsCatalogServiceInfo.nodeLevelMonitoring,
       )
     )
     .addPanels(

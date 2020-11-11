@@ -1,5 +1,5 @@
-local commonAnnotations = import 'grafana/common_annotations.libsonnet';
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
+local commonAnnotations = import 'grafana/common_annotations.libsonnet';
 local k8sPodsCommon = import 'kubernetes_pods_common.libsonnet';
 local platformLinks = import 'platform_links.libsonnet';
 local serviceCatalog = import 'service_catalog.libsonnet';
@@ -14,13 +14,14 @@ basic.dashboard(
   tags=['git'],
 )
 .addTemplate(templates.gkeCluster)
+.addTemplate(templates.stage)
 .addTemplate(templates.namespaceGitlab)
 .addTemplate(templates.Node)
 .addTemplate(
   template.custom(
-    'Deployment',
-    'gitlab-webservice,',
-    'gitlab-webservice',
+    name='Deployment',
+    query='gitlab-(cny-)?webservice,',
+    current='gitlab-(cny-)?webservice',
     hide='variable',
   )
 )
@@ -83,5 +84,5 @@ basic.dashboard(
 + {
   links+: platformLinks.triage +
           serviceCatalog.getServiceLinks('git') +
-          platformLinks.services
+          platformLinks.services,
 }

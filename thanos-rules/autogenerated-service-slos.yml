@@ -44,7 +44,7 @@ groups:
     labels:
       tier: sv
       type: camoproxy
-    expr: '0.001000'
+    expr: '0.005000'
   - record: slo:min:gitlab_service_apdex:ratio
     labels:
       tier: runners
@@ -115,6 +115,11 @@ groups:
       tier: stor
       type: gitaly
     expr: '0.000500'
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      tier: inf
+      type: logging
+    expr: '0.001000'
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       tier: inf
@@ -189,12 +194,22 @@ groups:
     labels:
       tier: sv
       type: registry
-    expr: '0.995000'
+    expr: '0.997000'
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       tier: sv
       type: registry
     expr: '0.000100'
+  - record: slo:min:deployment:gitlab_service_apdex:ratio
+    labels:
+      tier: sv
+      type: registry
+    expr: '0.992900'
+  - record: slo:max:deployment:gitlab_service_errors:ratio
+    labels:
+      tier: sv
+      type: registry
+    expr: '0.030000'
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       tier: sv
@@ -239,7 +254,7 @@ groups:
     labels:
       tier: sv
       type: web-pages
-    expr: '0.000100'
+    expr: '0.000500'
   - record: slo:min:gitlab_service_apdex:ratio
     labels:
       tier: sv

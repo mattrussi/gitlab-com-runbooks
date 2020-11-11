@@ -1,7 +1,7 @@
-local basic = import 'grafana/basic.libsonnet';
-local commonAnnotations = import 'grafana/common_annotations.libsonnet';
 local common = import 'container_common_graphs.libsonnet';
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
+local basic = import 'grafana/basic.libsonnet';
+local commonAnnotations = import 'grafana/common_annotations.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local template = grafana.template;
 local templates = import 'grafana/templates.libsonnet';
@@ -13,6 +13,7 @@ basic.dashboard(
   tags=['mailroom'],
 )
 .addTemplate(templates.gkeCluster)
+.addTemplate(templates.stage)
 .addTemplate(templates.namespaceGitlab)
 .addTemplate(
   template.custom(

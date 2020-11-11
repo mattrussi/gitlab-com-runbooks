@@ -4,6 +4,46 @@ groups:
 - name: 'Component-Level SLIs: api - 1m burn-rate'
   interval: 1m
   rules:
+  - record: gitlab_component_ops:rate
+    labels:
+      component: loadbalancer
+      stage: cny
+      tier: sv
+      type: api
+    expr: |
+      sum by (environment) (
+        rate(haproxy_backend_http_responses_total{backend="canary_api",type="frontend"}[1m])
+      )
+  - record: gitlab_component_ops:rate
+    labels:
+      component: loadbalancer
+      stage: main
+      tier: sv
+      type: api
+    expr: |
+      sum by (environment) (
+        rate(haproxy_backend_http_responses_total{backend=~"api|api_rate_limit",type="frontend"}[1m])
+      )
+  - record: gitlab_component_errors:rate
+    labels:
+      component: loadbalancer
+      stage: cny
+      tier: sv
+      type: api
+    expr: |
+      sum by (environment) (
+        rate(haproxy_backend_http_responses_total{backend="canary_api",code="5xx",type="frontend"}[1m])
+      )
+  - record: gitlab_component_errors:rate
+    labels:
+      component: loadbalancer
+      stage: main
+      tier: sv
+      type: api
+    expr: |
+      sum by (environment) (
+        rate(haproxy_backend_http_responses_total{backend=~"api|api_rate_limit",code="5xx",type="frontend"}[1m])
+      )
   - record: gitlab_component_apdex:weight:score
     labels:
       component: puma
@@ -43,7 +83,7 @@ groups:
       type: api
     expr: |
       sum by (environment,stage) (
-        rate(http_request_duration_seconds_count{job="gitlab-rails",type="api"}[1m])
+        sli_aggregations:http_requests_total_rate1m{job="gitlab-rails",type="api"}
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -52,7 +92,7 @@ groups:
       type: api
     expr: |
       sum by (environment,stage) (
-        rate(http_request_duration_seconds_count{job="gitlab-rails",status=~"5..",type="api"}[1m])
+        sli_aggregations:http_requests_total_rate1m{job="gitlab-rails",status=~"5..",type="api"}
       )
   - record: gitlab_component_apdex:weight:score
     labels:
@@ -107,6 +147,46 @@ groups:
 - name: 'Component-Level SLIs: api - 5m burn-rate'
   interval: 1m
   rules:
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: loadbalancer
+      stage: cny
+      tier: sv
+      type: api
+    expr: |
+      sum by (environment) (
+        rate(haproxy_backend_http_responses_total{backend="canary_api",type="frontend"}[5m])
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: loadbalancer
+      stage: main
+      tier: sv
+      type: api
+    expr: |
+      sum by (environment) (
+        rate(haproxy_backend_http_responses_total{backend=~"api|api_rate_limit",type="frontend"}[5m])
+      )
+  - record: gitlab_component_errors:rate_5m
+    labels:
+      component: loadbalancer
+      stage: cny
+      tier: sv
+      type: api
+    expr: |
+      sum by (environment) (
+        rate(haproxy_backend_http_responses_total{backend="canary_api",code="5xx",type="frontend"}[5m])
+      )
+  - record: gitlab_component_errors:rate_5m
+    labels:
+      component: loadbalancer
+      stage: main
+      tier: sv
+      type: api
+    expr: |
+      sum by (environment) (
+        rate(haproxy_backend_http_responses_total{backend=~"api|api_rate_limit",code="5xx",type="frontend"}[5m])
+      )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
       component: puma
@@ -146,7 +226,7 @@ groups:
       type: api
     expr: |
       sum by (environment,stage) (
-        rate(http_request_duration_seconds_count{job="gitlab-rails",type="api"}[5m])
+        sli_aggregations:http_requests_total_rate5m{job="gitlab-rails",type="api"}
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -155,7 +235,7 @@ groups:
       type: api
     expr: |
       sum by (environment,stage) (
-        rate(http_request_duration_seconds_count{job="gitlab-rails",status=~"5..",type="api"}[5m])
+        sli_aggregations:http_requests_total_rate5m{job="gitlab-rails",status=~"5..",type="api"}
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -210,6 +290,46 @@ groups:
 - name: 'Component-Level SLIs: api - 30m burn-rate'
   interval: 2m
   rules:
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: loadbalancer
+      stage: cny
+      tier: sv
+      type: api
+    expr: |
+      sum by (environment) (
+        rate(haproxy_backend_http_responses_total{backend="canary_api",type="frontend"}[30m])
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: loadbalancer
+      stage: main
+      tier: sv
+      type: api
+    expr: |
+      sum by (environment) (
+        rate(haproxy_backend_http_responses_total{backend=~"api|api_rate_limit",type="frontend"}[30m])
+      )
+  - record: gitlab_component_errors:rate_30m
+    labels:
+      component: loadbalancer
+      stage: cny
+      tier: sv
+      type: api
+    expr: |
+      sum by (environment) (
+        rate(haproxy_backend_http_responses_total{backend="canary_api",code="5xx",type="frontend"}[30m])
+      )
+  - record: gitlab_component_errors:rate_30m
+    labels:
+      component: loadbalancer
+      stage: main
+      tier: sv
+      type: api
+    expr: |
+      sum by (environment) (
+        rate(haproxy_backend_http_responses_total{backend=~"api|api_rate_limit",code="5xx",type="frontend"}[30m])
+      )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
       component: puma
@@ -247,7 +367,7 @@ groups:
       type: api
     expr: |
       sum by (environment,stage) (
-        rate(http_request_duration_seconds_count{job="gitlab-rails",type="api"}[30m])
+        sli_aggregations:http_requests_total_rate30m{job="gitlab-rails",type="api"}
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -256,7 +376,7 @@ groups:
       type: api
     expr: |
       sum by (environment,stage) (
-        rate(http_request_duration_seconds_count{job="gitlab-rails",status=~"5..",type="api"}[30m])
+        sli_aggregations:http_requests_total_rate30m{job="gitlab-rails",status=~"5..",type="api"}
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -309,6 +429,46 @@ groups:
 - name: 'Component-Level SLIs: api - 1h burn-rate'
   interval: 1m
   rules:
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: loadbalancer
+      stage: cny
+      tier: sv
+      type: api
+    expr: |
+      sum by (environment) (
+        rate(haproxy_backend_http_responses_total{backend="canary_api",type="frontend"}[1h])
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: loadbalancer
+      stage: main
+      tier: sv
+      type: api
+    expr: |
+      sum by (environment) (
+        rate(haproxy_backend_http_responses_total{backend=~"api|api_rate_limit",type="frontend"}[1h])
+      )
+  - record: gitlab_component_errors:rate_1h
+    labels:
+      component: loadbalancer
+      stage: cny
+      tier: sv
+      type: api
+    expr: |
+      sum by (environment) (
+        rate(haproxy_backend_http_responses_total{backend="canary_api",code="5xx",type="frontend"}[1h])
+      )
+  - record: gitlab_component_errors:rate_1h
+    labels:
+      component: loadbalancer
+      stage: main
+      tier: sv
+      type: api
+    expr: |
+      sum by (environment) (
+        rate(haproxy_backend_http_responses_total{backend=~"api|api_rate_limit",code="5xx",type="frontend"}[1h])
+      )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
       component: puma
@@ -348,7 +508,7 @@ groups:
       type: api
     expr: |
       sum by (environment,stage) (
-        rate(http_request_duration_seconds_count{job="gitlab-rails",type="api"}[1h])
+        sli_aggregations:http_requests_total_rate1h{job="gitlab-rails",type="api"}
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -357,7 +517,7 @@ groups:
       type: api
     expr: |
       sum by (environment,stage) (
-        rate(http_request_duration_seconds_count{job="gitlab-rails",status=~"5..",type="api"}[1h])
+        sli_aggregations:http_requests_total_rate1h{job="gitlab-rails",status=~"5..",type="api"}
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -412,6 +572,46 @@ groups:
 - name: 'Component-Level SLIs: api - 6h burn-rate'
   interval: 2m
   rules:
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: loadbalancer
+      stage: cny
+      tier: sv
+      type: api
+    expr: |
+      sum by (environment) (
+        rate(haproxy_backend_http_responses_total{backend="canary_api",type="frontend"}[6h])
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: loadbalancer
+      stage: main
+      tier: sv
+      type: api
+    expr: |
+      sum by (environment) (
+        rate(haproxy_backend_http_responses_total{backend=~"api|api_rate_limit",type="frontend"}[6h])
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: loadbalancer
+      stage: cny
+      tier: sv
+      type: api
+    expr: |
+      sum by (environment) (
+        rate(haproxy_backend_http_responses_total{backend="canary_api",code="5xx",type="frontend"}[6h])
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: loadbalancer
+      stage: main
+      tier: sv
+      type: api
+    expr: |
+      sum by (environment) (
+        rate(haproxy_backend_http_responses_total{backend=~"api|api_rate_limit",code="5xx",type="frontend"}[6h])
+      )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
       component: puma
@@ -449,7 +649,7 @@ groups:
       type: api
     expr: |
       sum by (environment,stage) (
-        rate(http_request_duration_seconds_count{job="gitlab-rails",type="api"}[6h])
+        sli_aggregations:http_requests_total_rate6h{job="gitlab-rails",type="api"}
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -458,7 +658,7 @@ groups:
       type: api
     expr: |
       sum by (environment,stage) (
-        rate(http_request_duration_seconds_count{job="gitlab-rails",status=~"5..",type="api"}[6h])
+        sli_aggregations:http_requests_total_rate6h{job="gitlab-rails",status=~"5..",type="api"}
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
@@ -511,6 +711,13 @@ groups:
 - name: 'Component mapping: api'
   interval: 1m
   rules:
+  - record: gitlab_component_service:mapping
+    labels:
+      aggregate_rps: 'no'
+      component: loadbalancer
+      tier: sv
+      type: api
+    expr: '1'
   - record: gitlab_component_service:mapping
     labels:
       aggregate_rps: 'yes'

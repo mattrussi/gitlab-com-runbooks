@@ -163,20 +163,19 @@ To upgrade runners on managers you need to:
     For example, to shutdown chef-client on private-runners-manager-X.gitlab.com, you can execute:
 
     ```bash
-    $ knife ssh -afqdn 'roles:gitlab-runner-prm' -- sudo service chef-client stop
+    $ knife ssh -afqdn 'roles:gitlab-runner-prm' -- 'sudo -i /root/runner_upgrade.sh stop_chef'
     ```
 
     To be sure that chef-cilent process is terminated you can execute:
 
-    ```bash
-    $ knife ssh -afqdn 'roles:gitlab-runner-prm' -- 'service chef-client status; ps aux | grep chef'
-    ```
-
-    or, since we're using systemd on all Runner machines:
 
     ```bash
     $ knife ssh -afqdn 'roles:gitlab-runner-prm' -- systemctl is-active chef-client
     ```
+
+    Running `/root/runner_upgrade.sh stop_chef` will stop the service and any altering that monitors
+    if `chef-client` is not running, whilst leaving a note about the deploy. This will prevent
+    anyone from re-enabling the service because of some alerts during deployments of the runner.
 
 1. **Update chef role (or roles)**
 
@@ -262,7 +261,7 @@ If you want to upgrade all Runners of GitLab.com fleet at the same time, then yo
 
 ```bash
 # Stop chef-client
-knife ssh -afqdn 'roles:gitlab-runner-base' -- sudo service chef-client stop
+knife ssh -afqdn 'roles:gitlab-runner-base' -- 'sudo -i /root/runner_upgrade.sh stop_chef'
 knife ssh -afqdn 'roles:gitlab-runner-base' -- systemctl is-active chef-client
 
 # Update configuration in roles definition and secrets
