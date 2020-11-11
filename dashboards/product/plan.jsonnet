@@ -38,13 +38,13 @@ basic.dashboard(
     startRow=1001,
   ),
 ).addPanel(
-  row.new(title='Portfolio Management'), gridPos={ x: 0, y: 2000, w: 24, h: 1 }
+  row.new(title='Product Planning'), gridPos={ x: 0, y: 2000, w: 24, h: 1 }
 ).addPanels(
   layout.grid(
     [
-      productCommon.pageDetail('Epics - Detail', 'PortfolioManagement_Epics', 'https://gitlab.com/groups/gitlab-org/-/epics/3003'),
-      productCommon.pageDetail('Roadmap - Small', 'PortfolioManagement_Roadmaps_Small', 'https://gitlab.com/groups/gitlab-com/support/-/roadmap'),
-      productCommon.pageDetail('Roadmap - Large', 'PortfolioManagement_Roadmaps_Large', 'https://gitlab.com/groups/gitlab-org/-/roadmap'),
+      productCommon.pageDetail('Epics - Detail', 'ProductPlanning_Epic_Detail', 'https://gitlab.com/groups/gitlab-org/-/epics/3003'),
+      productCommon.pageDetail('Roadmap - Small', 'ProductPlanning_Roadmaps_Small', 'https://gitlab.com/groups/gitlab-com/support/-/roadmap'),
+      productCommon.pageDetail('Roadmap - Large', 'ProductPlanning_Roadmaps_Large', 'https://gitlab.com/groups/gitlab-org/-/roadmap'),
     ],
     startRow=2001,
   ),
