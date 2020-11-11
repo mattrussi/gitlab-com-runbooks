@@ -48,8 +48,8 @@ groups:
     annotations:
       description: Check SSL for specified nodes and consider reissuing certificate.
       runbook: docs/frontend/ssl_cert.md
-      title: SSL certificate for {{ $labels.instance }} expires in {{ $value | humanizeDuration
-        }}
+      expires: In {{ $value | humanizeDuration }}
+      title: SSL certificate for {{ $labels.instance }} expires soon
 # Customized blackbox probe alerts.
 - name: Blackbox staging.gitlab.com
   rules:
