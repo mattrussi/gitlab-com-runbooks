@@ -16,21 +16,28 @@ local cadvisorMetrics = [
   'container_memory_swap',
   'container_memory_usage_bytes',
   'container_memory_working_set_bytes',
+  'container_network_receive_bytes_total',
+  'container_network_transmit_bytes_total',
   'container_spec_cpu_period',
   'container_spec_cpu_quota',
   'container_spec_memory_limit_bytes',
 ];
 
-// We filter to include only metrics_path="/metrics/cadvisor" series
-// and exclude metrics_path="/metrics/resource/v1alpha1" etc
-local cadvisorWithLabelNamesExpression(metricName) =
+local kubePodContainerMetrics = [
+  'kube_pod_container_resource_limits_cpu_cores',
+  'kube_pod_container_resource_limits_memory_bytes',
+  'kube_pod_container_resource_requests_cpu_cores',
+  'kube_pod_container_resource_requests_memory_bytes',
+];
+
+local podLabelJoinExpression(expression) =
   |||
     min without(label_queue_pod_name, label_stage, label_type)
     (
       label_replace(
         label_replace(
           label_replace(
-            %(metricName)s{metrics_path="/metrics/cadvisor"}
+            %(expression)s
             *
             on(pod, cluster) group_left(label_type, label_stage, label_queue_pod_name)
             topk by (pod, cluster, label_type, label_stage, label_queue_pod_name) (1, kube_pod_labels{
@@ -44,13 +51,20 @@ local cadvisorWithLabelNamesExpression(metricName) =
       )
     )
   ||| % {
-    metricName: metricName,
+    expression: expression,
   };
 
-local recordingRuleFor(metricName) =
+// We filter to include only metrics_path="/metrics/cadvisor" series
+// and exclude metrics_path="/metrics/resource/v1alpha1" etc
+local cadvisorWithLabelNamesExpression(metricName) =
+  podLabelJoinExpression('%(metricName)s{metrics_path="/metrics/cadvisor"}' % {
+    metricName: metricName,
+  });
+
+local recordingRuleFor(metricName, expression) =
   {
     record: metricName + ':labeled',
-    expr: cadvisorWithLabelNamesExpression(metricName),
+    expr: expression,
   };
 
 local rules = {
@@ -58,8 +72,13 @@ local rules = {
     name: 'kube-cadvisor-recording-rules',
     interval: '1m',
     rules: [
-      recordingRuleFor(metricName)
+      /* container_* recording rules */
+      recordingRuleFor(metricName, cadvisorWithLabelNamesExpression(metricName))
       for metricName in cadvisorMetrics
+    ] + [
+      /* kube_pod_container_* recording rules */
+      recordingRuleFor(metricName, podLabelJoinExpression(metricName))
+      for metricName in kubePodContainerMetrics
     ],
   }],
 };
