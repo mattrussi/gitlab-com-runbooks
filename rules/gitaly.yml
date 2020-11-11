@@ -144,22 +144,3 @@ groups:
       runbook: docs/gitaly/gitaly-permission-denied.md
       title: 'Gitaly: Auth-tokens are invalid, failing RPCs'
 
-
-- name: Misc Gitaly Alerts
-  rules:
-  - alert: GitalyNewVersionDeployed
-    expr: |
-      sum by (version) (
-        gitlab_build_info{job="gitaly",type="gitaly"})
-          unless (
-            sum by (version) (gitlab_build_info{job="gitaly",type="gitaly"} offset 1h
-          )
-      ) > 2
-    for: 5m
-    labels:
-      severity: s4
-      alert_type: cause
-    annotations:
-      title: New Gitaly version is being deployed
-      description: >
-        Gitaly version {{ $labels.version }} is being deployed to {{ $labels.environment }} (stage {{ $labels.stage }}).
