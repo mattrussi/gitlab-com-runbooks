@@ -23,7 +23,7 @@ local setting(index, env) = if std.member(HIGH_THROUHGPUT, index) then {
         after: '30s',
       },
     },
-    refresh_interval: '10s',
+    refresh_interval: '30s',
   },
   number_of_shards: 8,
   // number_of_replicas: 1,
