@@ -135,7 +135,7 @@ During an incident, we have [roles defined in the handbook](https://about.gitlab
 ### Frontend Services
 
 * [GitLab Pages returns 404](docs/pages/gitlab-pages.md)
-* [HAProxy is missing workers](docs/uncategorized/chef.md)
+* [HAProxy is missing workers](docs/config_management/chef-troubleshooting.md)
 * [Worker's root filesystem is running out of space](docs/monitoring/filesystem_alerts.md)
 * [Azure Load Balancers Misbehave](docs/frontend/load-balancer-outage.md)
 * [GitLab registry is down](docs/registry/gitlab-registry.md)
@@ -191,7 +191,7 @@ During an incident, we have [roles defined in the handbook](https://about.gitlab
 
 ### Chef/Knife
 
-* [General Troubleshooting](docs/uncategorized/chef.md)
+* [General Troubleshooting](docs/config_management/chef-troubleshooting.md)
 * [Error executing action `create` on resource 'directory[/some/path]'](docs/uncategorized/stale-file-handles.md)
 
 ### Certificates
