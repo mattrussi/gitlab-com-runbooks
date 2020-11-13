@@ -15,6 +15,8 @@
 ## Troubleshooting Pointers
 
 * [../cloudflare/oncall.md](../cloudflare/oncall.md)
+* [../config_management/chef-vault.md](../config_management/chef-vault.md)
+* [../config_management/chef-workflow.md](../config_management/chef-workflow.md)
 * [../customers.gitlab.com/api-key-rotation.md](../customers.gitlab.com/api-key-rotation.md)
 * [../elastic/elastic-cloud.md](../elastic/elastic-cloud.md)
 * [../frontend/haproxy.md](../frontend/haproxy.md)
@@ -29,9 +31,7 @@
 * [../uncategorized/about-gitlab-com.md](../uncategorized/about-gitlab-com.md)
 * [../uncategorized/aptly.md](../uncategorized/aptly.md)
 * [../uncategorized/camoproxy.md](../uncategorized/camoproxy.md)
-* [../uncategorized/chef-documentation.md](../uncategorized/chef-documentation.md)
 * [../uncategorized/chef-process-overview.md](../uncategorized/chef-process-overview.md)
-* [../uncategorized/chef-vault.md](../uncategorized/chef-vault.md)
 * [../uncategorized/gkms-chef-secrets.md](../uncategorized/gkms-chef-secrets.md)
 * [../uncategorized/manage-chef.md](../uncategorized/manage-chef.md)
 * [../uncategorized/packagecloud-infrastructure.md](../uncategorized/packagecloud-infrastructure.md)

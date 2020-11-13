@@ -15,6 +15,8 @@
 ## Troubleshooting Pointers
 
 * [../cloudflare/managing-traffic.md](../cloudflare/managing-traffic.md)
+* [../config_management/chef-troubleshooting.md](../config_management/chef-troubleshooting.md)
+* [../config_management/chef-vault.md](../config_management/chef-vault.md)
 * [../frontend/ban-netblocks-on-haproxy.md](../frontend/ban-netblocks-on-haproxy.md)
 * [../frontend/haproxy.md](../frontend/haproxy.md)
 * [../gitaly/git-high-cpu-and-memory-usage.md](../gitaly/git-high-cpu-and-memory-usage.md)
@@ -23,8 +25,6 @@
 * [gitlab-pages.md](gitlab-pages.md)
 * [pages-letsencrypt.md](pages-letsencrypt.md)
 * [../patroni/pg_repack.md](../patroni/pg_repack.md)
-* [../uncategorized/chef-vault.md](../uncategorized/chef-vault.md)
-* [../uncategorized/chef.md](../uncategorized/chef.md)
 * [../uncategorized/deploycmd.md](../uncategorized/deploycmd.md)
 <!-- END_MARKER -->
 
