@@ -12,7 +12,7 @@ local basic = import 'grafana/basic.libsonnet';
 local saturationResources = import './saturation-resources.libsonnet';
 local serviceHealth = import './service_health.libsonnet';
 
-local selector = { environment: '$environment', env: '$environment', type: '$type', stage: '$stage' };
+local selector = { env: '$environment', type: '$type', stage: '$stage' };
 
 {
   saturationDashboard(
