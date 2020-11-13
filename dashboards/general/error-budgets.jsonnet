@@ -36,6 +36,44 @@ local styles = [
   },
 ];
 
+local pumaByFeatureCategoryForService(type, startRow) =
+  [row.new(title=type) { gridPos: { x: 0, y: startRow, w: 24, h: 1 } }] +
+  layout.grid([
+    grafana.text.new(
+      title='Error Rate by Feature Category Help',
+      mode='markdown',
+      content=|||
+        This table shows the error ratios for all endpoints on the %(type)s service, aggregated up to the feature category level.
+
+        This is a percentage of requests in each feature category that complete successfully.
+      ||| % { type: type }
+    ),
+  ], cols=1, rowHeight=3, startRow=startRow)
+  +
+  layout.grid([
+    basic.table(
+      title='Error Rate by Feature Category',
+      query=|||
+        sort(
+          clamp_max(
+            sum by (feature_category) (
+              avg_over_time(sli_aggregations:http_requests_total_rate6h{env="$environment", environment="$environment", type="%(type)s", job="gitlab-rails", status=~"5.."}[$__range])
+            )
+            /
+              (
+              sum by(feature_category) (
+                avg_over_time(sli_aggregations:http_requests_total_rate6h{env="$environment", environment="$environment", type="%(type)s", job="gitlab-rails"}[$__range])
+              ) > 0
+            ),
+            1
+          )
+        )
+      ||| % { type: std.asciiLower(type) },
+      styles=styles
+    ),
+  ], cols=1, rowHeight=12, startRow=startRow + 100);
+
+
 basic.dashboard(
   'Feature Category Detail - Error Budgets',
   tags=['feature_category'],
@@ -43,6 +81,7 @@ basic.dashboard(
   time_to='now/m',
 )
 .addPanels(
+  [row.new(title='Sidekiq') { gridPos: { x: 0, y: 1, w: 24, h: 1 } }] +
   layout.grid([
     grafana.text.new(
       title='Apdex by Feature Category Help',
@@ -258,6 +297,12 @@ basic.dashboard(
     },
 
   ], cols=1, rowHeight=12, startRow=500)
+  +
+  pumaByFeatureCategoryForService('API', 600)
+  +
+  pumaByFeatureCategoryForService('Git', 900)
+  +
+  pumaByFeatureCategoryForService('Web', 1200)
 )
 + {
   links+: platformLinks.services + platformLinks.triage,
