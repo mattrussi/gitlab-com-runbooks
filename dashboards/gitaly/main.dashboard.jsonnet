@@ -66,7 +66,7 @@ local hostChart(
     },
   };
 
-serviceDashboard.overview('gitaly', 'stor')
+serviceDashboard.overview('gitaly')
 .addPanel(
   row.new(title='Node Investigation'),
   gridPos={

@@ -5,7 +5,7 @@ local row = grafana.row;
 local serviceDashboard = import 'service_dashboard.libsonnet';
 local processExporter = import 'process_exporter.libsonnet';
 
-serviceDashboard.overview('web', 'sv')
+serviceDashboard.overview('web')
 .addPanel(
   row.new(title='Workhorse'),
   gridPos={

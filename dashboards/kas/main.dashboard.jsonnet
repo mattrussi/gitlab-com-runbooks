@@ -4,7 +4,7 @@ local serviceDashboard = import 'service_dashboard.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 
-serviceDashboard.overview('kas', 'sv')
+serviceDashboard.overview('kas')
 .addPanel(
   row.new(title='Kubernetes Agent'),
   gridPos={

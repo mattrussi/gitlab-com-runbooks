@@ -1,4 +1,4 @@
 local serviceDashboard = import 'service_dashboard.libsonnet';
 
-serviceDashboard.overview('search', 'inf')
+serviceDashboard.overview('search')
 .overviewTrailer()

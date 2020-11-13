@@ -153,7 +153,7 @@ basic.dashboard(
         ## FAQ
 
         * Why is the fleet node bandwidth so symetrical? Shouldn't we be sending more than we receive?
-          * Most of our traffic is proxied to the storage tier, or to object storage.
+          * Most of our traffic is proxied to storage services, or to object storage.
         * Do clients download direct from object storage?
           * It depends. 
             * registry: all image pulls are direct from object storage 

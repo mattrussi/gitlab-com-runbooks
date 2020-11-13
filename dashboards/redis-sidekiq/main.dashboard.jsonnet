@@ -4,7 +4,7 @@ local row = grafana.row;
 local serviceDashboard = import 'service_dashboard.libsonnet';
 local processExporter = import 'process_exporter.libsonnet';
 
-serviceDashboard.overview('redis-sidekiq', 'db')
+serviceDashboard.overview('redis-sidekiq')
 .addPanels(redisCommon.clientPanels(serviceType='redis-sidekiq', startRow=1001))
 .addPanel(
   row.new(title='Workload'),

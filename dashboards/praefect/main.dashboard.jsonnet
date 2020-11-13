@@ -1,4 +1,4 @@
 local serviceDashboard = import 'service_dashboard.libsonnet';
 
-serviceDashboard.overview('praefect', 'stor')
+serviceDashboard.overview('praefect')
 .overviewTrailer()

@@ -254,9 +254,9 @@ local thresholds = import 'thresholds.libsonnet';
           description='Loadavg (%(duration)d minute) per core, below 1 is better.' % formatConfigWithDuration,
           query=
           |||
-            avg by (environment, type, tier, stage, fqdn) (node_load%(duration)d{%(nodeSelector)s})
+            avg by (environment, type, stage, fqdn) (node_load%(duration)d{%(nodeSelector)s})
             /
-            count by (environment, type, tier, stage, fqdn) (node_cpu_seconds_total{mode="idle", %(nodeSelector)s})
+            count by (environment, type, stage, fqdn) (node_cpu_seconds_total{mode="idle", %(nodeSelector)s})
           ||| % formatConfigWithDuration,
           legendFormat='{{ fqdn }}',
           interval='1m',

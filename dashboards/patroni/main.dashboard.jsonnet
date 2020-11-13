@@ -7,7 +7,7 @@ local row = grafana.row;
 local processExporter = import 'process_exporter.libsonnet';
 local serviceDashboard = import 'service_dashboard.libsonnet';
 
-serviceDashboard.overview('patroni', 'db', stage='main')
+serviceDashboard.overview('patroni')
 .addPanel(
   row.new(title='pgbouncer Workload', collapse=false),
   gridPos={

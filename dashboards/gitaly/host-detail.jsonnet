@@ -28,7 +28,7 @@ local ratelimitLockPercentage(selector) =
             le="60"
           }[$__interval]
         )
-      ) by (environment, tier, type, stage, fqdn, grpc_method)
+      ) by (environment, type, stage, fqdn, grpc_method)
       /
       sum(
         rate(
@@ -37,7 +37,7 @@ local ratelimitLockPercentage(selector) =
             le="+Inf"
           }[$__interval]
         )
-      ) by (environment, tier, type, stage, fqdn, grpc_method)
+      ) by (environment, type, stage, fqdn, grpc_method)
     ||| % { selector: selector },
     legendFormat='{{fqdn}} - {{grpc_method}}'
   );
