@@ -25,7 +25,7 @@ local systemDiagramPanel = import 'system_diagram_panel.libsonnet';
 local kubeEmbeddedDashboards = import 'kubernetes_embedded_dashboards.libsonnet';
 local statusDescription = import 'status_description.libsonnet';
 
-local defaultEnvironmentSelector = { environment: '$environment', env: '$environment' };
+local defaultEnvironmentSelector = { env: '$environment' };
 
 local listComponentThresholds(service) =
   std.prune([
@@ -160,7 +160,7 @@ local overviewDashboard(
     .addPanels(
       if metricsCatalogServiceInfo.getProvisioning().kubernetes == true then
         // TODO: fix nasty regexp: requires https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10249
-        local kubeSelectorHash = { environment: '$environment', pod: { re: 'gitlab-%s.*' % [type] } };
+        local kubeSelectorHash = { env: '$environment', pod: { re: 'gitlab-%s.*' % [type] } };
         [
           row.new(title='☸️ Kubernetes Overview', collapse=true)
           .addPanels(kubeEmbeddedDashboards.kubernetesOverview(kubeSelectorHash, startRow=1)) +

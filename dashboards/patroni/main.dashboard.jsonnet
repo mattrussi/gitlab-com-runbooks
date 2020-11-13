@@ -52,7 +52,7 @@ serviceDashboard.overview('patroni', 'db', stage='main')
   processExporter.namedGroup(
     'patroni',
     {
-      environment: '$environment',
+      env: '$environment',
       groupname: 'patroni',
       type: 'patroni',
       stage: 'main',

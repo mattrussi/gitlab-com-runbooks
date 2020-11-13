@@ -34,7 +34,7 @@ local layout = import 'grafana/layout.libsonnet';
         query=|||
           histogram_quantile(0.90,
             sum(job_environment:gitlab_transaction_duration_seconds_bucket:rate5m{
-              environment="$environment",
+              env="$environment",
               type="%(serviceType)s",
               stage="%(serviceStage)s"
             }) by (le, job)
@@ -56,7 +56,7 @@ local layout = import 'grafana/layout.libsonnet';
         query=|||
           sum(
             job_environment:gitlab_transaction_duration_seconds_sum:rate1m{
-              environment="$environment",
+              env="$environment",
               type="%(serviceType)s",
               stage="%(serviceStage)s"}
           ) by (job)
@@ -76,7 +76,7 @@ local layout = import 'grafana/layout.libsonnet';
           sum(
             rate(
               gitlab_transaction_rails_queue_duration_total{
-                environment="$environment",
+                env="$environment",
                 type="%(serviceType)s",
                 stage="%(serviceStage)s"}
                 [$__interval]
@@ -97,7 +97,7 @@ local layout = import 'grafana/layout.libsonnet';
         query=|||
           sum(
             job_environment:gitlab_sql_duration_seconds_bucket:rate1m{
-              environment="$environment",
+              env="$environment",
               type="%(serviceType)s",
               stage="%(serviceStage)s"}
           ) by (job)
@@ -117,7 +117,7 @@ local layout = import 'grafana/layout.libsonnet';
           sum(
             rate(
               gitlab_cache_operations_total{
-                environment="$environment",
+                env="$environment",
                 type="%(serviceType)s",
                 stage="%(serviceStage)s"}[$__interval]
             )
@@ -138,7 +138,7 @@ local layout = import 'grafana/layout.libsonnet';
           sum(
             changes(
               ruby_process_start_time_seconds{
-                environment="$environment",
+                env="$environment",
                 type="%(serviceType)s",
                 stage="%(serviceStage)s",
                 job="gitlab-rails"
@@ -160,7 +160,7 @@ local layout = import 'grafana/layout.libsonnet';
           avg(
             avg_over_time(
               db_load_balancing_hosts{
-                environment="$environment",
+                env="$environment",
                 type="%(serviceType)s",
                 stage="%(serviceStage)s"}[$__interval]
             )

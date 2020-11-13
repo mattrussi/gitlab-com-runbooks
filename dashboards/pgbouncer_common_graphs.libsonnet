@@ -50,7 +50,7 @@ local saturationQuery(aggregationLabels, nodeSelector, poolSelector) =
         title='Queries Pooled per Node',
         description='Total number of SQL queries pooled - stats_total_query_count',
         query=|||
-          sum(rate(pgbouncer_stats_queries_pooled_total{type="%(serviceType)s", environment="$environment"}[$__interval])) by (fqdn)
+          sum(rate(pgbouncer_stats_queries_pooled_total{type="%(serviceType)s", env="$environment"}[$__interval])) by (fqdn)
         ||| % formatConfig,
         legendFormat='{{ fqdn }}',
         format='ops',
@@ -64,7 +64,7 @@ local saturationQuery(aggregationLabels, nodeSelector, poolSelector) =
         title='Total Time in Queries per Node',
         description='Total number of seconds spent by pgbouncer when actively connected to PostgreSQL, executing queries - stats.total_query_time',
         query=|||
-          sum(rate(pgbouncer_stats_queries_duration_seconds{type="%(serviceType)s", environment="$environment"}[$__interval])) by (fqdn)
+          sum(rate(pgbouncer_stats_queries_duration_seconds{type="%(serviceType)s", env="$environment"}[$__interval])) by (fqdn)
         ||| % formatConfig,
         legendFormat='{{ fqdn }}',
         format='ops',
@@ -78,7 +78,7 @@ local saturationQuery(aggregationLabels, nodeSelector, poolSelector) =
         title='SQL Transactions Pooled per Node',
         description='Total number of SQL transactions pooled - stats.total_xact_count',
         query=|||
-          sum(rate(pgbouncer_stats_sql_transactions_pooled_total{type="%(serviceType)s", environment="$environment"}[$__interval])) by (fqdn)
+          sum(rate(pgbouncer_stats_sql_transactions_pooled_total{type="%(serviceType)s", env="$environment"}[$__interval])) by (fqdn)
         ||| % formatConfig,
         legendFormat='{{ fqdn }}',
         format='ops',
@@ -92,7 +92,7 @@ local saturationQuery(aggregationLabels, nodeSelector, poolSelector) =
         title='Time in Transaction per Server',
         description='Total number of seconds spent by pgbouncer when connected to PostgreSQL in a transaction, either idle in transaction or executing queries - stats.total_xact_time',
         query=|||
-          sum(rate(pgbouncer_stats_server_in_transaction_seconds{type="%(serviceType)s", environment="$environment"}[$__interval])) by (fqdn)
+          sum(rate(pgbouncer_stats_server_in_transaction_seconds{type="%(serviceType)s", env="$environment"}[$__interval])) by (fqdn)
         ||| % formatConfig,
         legendFormat='{{ fqdn }}',
         format='s',
@@ -114,7 +114,7 @@ local saturationQuery(aggregationLabels, nodeSelector, poolSelector) =
         description='Total volume in bytes of network traffic sent by pgbouncer, shown as bytes - stats.total_sent',
         query=
         |||
-          sum(rate(pgbouncer_stats_sent_bytes_total{type="%(serviceType)s", environment="$environment"}[$__interval])) by (fqdn)
+          sum(rate(pgbouncer_stats_sent_bytes_total{type="%(serviceType)s", env="$environment"}[$__interval])) by (fqdn)
         ||| % formatConfig,
         legendFormat='{{ fqdn }}',
         format='Bps',
@@ -129,7 +129,7 @@ local saturationQuery(aggregationLabels, nodeSelector, poolSelector) =
         description='Total volume in bytes of network traffic received by pgbouncer, shown as bytes - stats.total_received',
         query=
         |||
-          sum(rate(pgbouncer_stats_received_bytes_total{type="%(serviceType)s", environment="$environment"}[$__interval])) by (fqdn)
+          sum(rate(pgbouncer_stats_received_bytes_total{type="%(serviceType)s", env="$environment"}[$__interval])) by (fqdn)
         ||| % formatConfig,
         legendFormat='{{ fqdn }}',
         format='Bps',
@@ -142,7 +142,7 @@ local saturationQuery(aggregationLabels, nodeSelector, poolSelector) =
 
     ], cols=2, rowHeight=10, startRow=startRow),
   connectionPoolingPanels(serviceType, startRow)::
-    local nodeSelector = 'type="%(serviceType)s", environment="$environment"' % { serviceType: serviceType };
+    local nodeSelector = 'type="%(serviceType)s", env="$environment"' % { serviceType: serviceType };
     local poolSelector = '%(nodeSelector)s, user="gitlab", database!="pgbouncer"' % { nodeSelector: nodeSelector };
 
     local formatConfig = {

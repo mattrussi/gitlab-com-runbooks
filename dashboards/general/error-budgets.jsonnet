@@ -117,14 +117,14 @@ basic.dashboard(
         sort_desc(
           clamp_max(
             sum by (feature_category) (
-              avg_over_time(gitlab_background_jobs:execution:apdex:ratio_6h{environment="$environment", env="$environment"}[$__range])
+              avg_over_time(gitlab_background_jobs:execution:apdex:ratio_6h{env="$environment", env="$environment"}[$__range])
               *
-              avg_over_time(gitlab_background_jobs:execution:ops:rate_6h{environment="$environment", env="$environment"}[$__range])
+              avg_over_time(gitlab_background_jobs:execution:ops:rate_6h{env="$environment", env="$environment"}[$__range])
             )
             /
               (
               sum by(feature_category) (
-                avg_over_time(gitlab_background_jobs:execution:ops:rate_6h{environment="$environment", env="$environment"}[$__range])
+                avg_over_time(gitlab_background_jobs:execution:ops:rate_6h{env="$environment", env="$environment"}[$__range])
               )
             ) > 0,
             1
@@ -139,12 +139,12 @@ basic.dashboard(
         sort(
           clamp_max(
             sum by (feature_category) (
-              avg_over_time(gitlab_background_jobs:execution:error:rate_6h{environment="$environment", env="$environment"}[$__range])
+              avg_over_time(gitlab_background_jobs:execution:error:rate_6h{env="$environment", env="$environment"}[$__range])
             )
             /
               (
               sum by(feature_category) (
-                avg_over_time(gitlab_background_jobs:execution:ops:rate_6h{environment="$environment", env="$environment"}[$__range])
+                avg_over_time(gitlab_background_jobs:execution:ops:rate_6h{env="$environment", env="$environment"}[$__range])
               ) > 0
             ),
             1
@@ -187,14 +187,14 @@ basic.dashboard(
         sort_desc(
           clamp_max(
             sum by (queue, feature_category) (
-              avg_over_time(gitlab_background_jobs:execution:apdex:ratio_6h{environment="$environment", env="$environment"}[$__range])
+              avg_over_time(gitlab_background_jobs:execution:apdex:ratio_6h{env="$environment", env="$environment"}[$__range])
               *
-              avg_over_time(gitlab_background_jobs:execution:ops:rate_6h{environment="$environment", env="$environment"}[$__range])
+              avg_over_time(gitlab_background_jobs:execution:ops:rate_6h{env="$environment", env="$environment"}[$__range])
             )
             /
               (
               sum by(queue, feature_category) (
-                avg_over_time(gitlab_background_jobs:execution:ops:rate_6h{environment="$environment", env="$environment"}[$__range])
+                avg_over_time(gitlab_background_jobs:execution:ops:rate_6h{env="$environment", env="$environment"}[$__range])
               )
             ) > 0,
             1
@@ -209,12 +209,12 @@ basic.dashboard(
         sort(
           clamp_max(
             sum by (queue, feature_category) (
-              avg_over_time(gitlab_background_jobs:execution:error:rate_6h{environment="$environment", env="$environment"}[$__range])
+              avg_over_time(gitlab_background_jobs:execution:error:rate_6h{env="$environment", env="$environment"}[$__range])
             )
             /
             (
               sum by(queue, feature_category) (
-                avg_over_time(gitlab_background_jobs:execution:ops:rate_6h{environment="$environment", env="$environment"}[$__range])
+                avg_over_time(gitlab_background_jobs:execution:ops:rate_6h{env="$environment", env="$environment"}[$__range])
               )
             ) > 0,
             1
@@ -259,20 +259,20 @@ basic.dashboard(
           topk(8,
             sum without(attribution) (
               label_replace(
-                (1 - avg_over_time(gitlab_background_jobs:execution:apdex:ratio_6h{environment="$environment", env="$environment"}[$__range]))
+                (1 - avg_over_time(gitlab_background_jobs:execution:apdex:ratio_6h{env="$environment", env="$environment"}[$__range]))
                 *
-                avg_over_time(gitlab_background_jobs:execution:apdex:weight:score_6h{environment="$environment", env="$environment"}[$__range])
+                avg_over_time(gitlab_background_jobs:execution:apdex:weight:score_6h{env="$environment", env="$environment"}[$__range])
                 / on() group_left()
-                sum(avg_over_time(gitlab_background_jobs:execution:apdex:weight:score_6h{environment="$environment", env="$environment"}[$__range])),
+                sum(avg_over_time(gitlab_background_jobs:execution:apdex:weight:score_6h{env="$environment", env="$environment"}[$__range])),
                 "attribution", "execution", "", ""
               )
               or
               label_replace(
-                (1 - avg_over_time(gitlab_background_jobs:queue:apdex:ratio_6h{environment="$environment", env="$environment"}[$__range]))
+                (1 - avg_over_time(gitlab_background_jobs:queue:apdex:ratio_6h{env="$environment", env="$environment"}[$__range]))
                 *
-                avg_over_time(gitlab_background_jobs:queue:apdex:weight:score_6h{environment="$environment", env="$environment"}[$__range])
+                avg_over_time(gitlab_background_jobs:queue:apdex:weight:score_6h{env="$environment", env="$environment"}[$__range])
                 / on() group_left()
-                sum(avg_over_time(gitlab_background_jobs:queue:apdex:weight:score_6h{environment="$environment", env="$environment"}[$__range])),
+                sum(avg_over_time(gitlab_background_jobs:queue:apdex:weight:score_6h{env="$environment", env="$environment"}[$__range])),
                 "attribution", "queue", "", ""
               )
               or

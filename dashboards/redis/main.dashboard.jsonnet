@@ -51,7 +51,7 @@ serviceDashboard.overview('redis', 'db')
     processExporter.namedGroup(
       'sentinel',
       {
-        environment: '$environment',
+        env: '$environment',
         groupname: { re: 'redis-sentinel.*' },
         type: 'redis',
         stage: '$stage',

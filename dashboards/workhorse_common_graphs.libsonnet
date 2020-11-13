@@ -38,7 +38,7 @@ local row = grafana.row;
             0.5,
             sum(
               job:gitlab_workhorse_http_request_duration_seconds_bucket:rate1m{
-                environment="$environment",
+                env="$environment",
                 type="%(serviceType)s",
                 stage="%(serviceStage)s"}
             ) by (le))
@@ -62,7 +62,7 @@ local row = grafana.row;
               0.9,
               sum(
                 job:gitlab_workhorse_http_request_duration_seconds_bucket:rate1m{
-                  environment="$environment",
+                  env="$environment",
                   type="%(serviceType)s",
                   stage="%(serviceStage)s"}
               ) by (route, le)),
@@ -87,7 +87,7 @@ local row = grafana.row;
               0.5,
               sum(
                 job:gitlab_workhorse_http_request_duration_seconds_bucket:rate1m{
-                  environment="$environment",
+                  env="$environment",
                   type="%(serviceType)s",
                   stage="%(serviceStage)s"}
               ) by (route, le)),
@@ -109,7 +109,7 @@ local row = grafana.row;
         query=|||
           sum(
             job:gitlab_workhorse_http_request_duration_seconds_bucket:rate1m{
-                environment="$environment",
+                env="$environment",
                 type="%(serviceType)s",
                 stage="%(serviceStage)s",
                 le="+Inf"}
@@ -129,7 +129,7 @@ local row = grafana.row;
             label_replace(
               sum(
                 job:gitlab_workhorse_http_request_duration_seconds_bucket:rate1m{
-                    environment="$environment",
+                    env="$environment",
                     type="%(serviceType)s",
                     stage="%(serviceStage)s",
                     le="+Inf"}
@@ -149,7 +149,7 @@ local row = grafana.row;
         query=|||
           sum(
             job:gitlab_workhorse_http_request_duration_seconds_bucket:rate1m{
-                environment="$environment",
+                env="$environment",
                 type="%(serviceType)s",
                 stage="%(serviceStage)s",
                 le="+Inf"}
@@ -170,7 +170,7 @@ local row = grafana.row;
             label_replace(
               sum(
                 job:gitlab_workhorse_http_request_duration_seconds_bucket:rate1m{
-                    environment="$environment",
+                    env="$environment",
                     type="%(serviceType)s",
                     stage="%(serviceStage)s",
                     le="+Inf"}

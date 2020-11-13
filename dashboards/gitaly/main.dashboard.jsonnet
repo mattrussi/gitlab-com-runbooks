@@ -8,7 +8,7 @@ local colors = import 'grafana/colors.libsonnet';
 local metricsCatalog = import 'metrics-catalog.libsonnet';
 local multiburnFactors = import 'mwmbr/multiburn_factors.libsonnet';
 
-local selector = 'environment="$environment", type="gitaly", stage="$stage"';
+local selector = 'env="$environment", type="gitaly", stage="$stage"';
 
 local gitalyServiceInfo = metricsCatalog.getService('gitaly');
 
@@ -83,7 +83,7 @@ serviceDashboard.overview('gitaly', 'stor')
       query=|||
         bottomk(8,
           avg by (fqdn) (
-            gitlab_service_node_apdex:ratio_5m{environment="$environment", type="gitaly", stage="$stage"}
+            gitlab_service_node_apdex:ratio_5m{env="$environment", type="gitaly", stage="$stage"}
           )
         )
       |||,
@@ -104,7 +104,7 @@ serviceDashboard.overview('gitaly', 'stor')
       query=|||
         topk(8,
           avg by (fqdn) (
-            gitlab_service_node_errors:ratio_5m{environment="$environment", type="gitaly", stage="$stage"}
+            gitlab_service_node_errors:ratio_5m{env="$environment", type="gitaly", stage="$stage"}
           )
         )
       |||,

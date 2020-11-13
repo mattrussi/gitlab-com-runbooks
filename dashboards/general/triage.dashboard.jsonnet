@@ -149,13 +149,13 @@ local activeAlertsPanel =
       |||
         sort(
           sum(
-            ALERTS{environment="$environment", type!="", severity="s1", alertstate="firing"} * 1000000
+            ALERTS{env="$environment", type!="", severity="s1", alertstate="firing"} * 1000000
             or
-            ALERTS{environment="$environment", type!="", severity="s2", alertstate="firing"} * 10000
+            ALERTS{env="$environment", type!="", severity="s2", alertstate="firing"} * 10000
             or
-            ALERTS{environment="$environment", type!="", severity="s3", alertstate="firing"} * 100
+            ALERTS{env="$environment", type!="", severity="s3", alertstate="firing"} * 100
             or
-            ALERTS{environment="$environment", type!="", severity="s4", alertstate="firing"}
+            ALERTS{env="$environment", type!="", severity="s4", alertstate="firing"}
           ) by (type)
         )
       |||,
@@ -178,7 +178,7 @@ basic.dashboard(
   )
   .addTarget(  // Primary metric
     promQuery.target(
-      sliPromQL.apdex.serviceApdexQuery({ environment: '$environment', stage: '$stage' }, range='$__interval'),
+      sliPromQL.apdex.serviceApdexQuery({ env: '$environment', stage: '$stage' }, range='$__interval'),
       legendFormat='{{ type }} service',
       intervalFactor=3,
     )
@@ -205,7 +205,7 @@ basic.dashboard(
   )
   .addTarget(  // Primary metric
     promQuery.target(
-      sliPromQL.errorRate.serviceErrorRateQuery({ environment: '$environment', stage: '$stage' }, range='$__interval', clampMax=0.15),
+      sliPromQL.errorRate.serviceErrorRateQuery({ env: '$environment', stage: '$stage' }, range='$__interval', clampMax=0.15),
       legendFormat='{{ type }} service',
       intervalFactor=3,
     )
@@ -232,7 +232,7 @@ basic.dashboard(
   )
   .addTarget(  // Primary metric
     promQuery.target(
-      sliPromQL.opsRate.serviceOpsRateQuery({ environment: '$environment', stage: '$stage' }, range='$__interval'),
+      sliPromQL.opsRate.serviceOpsRateQuery({ env: '$environment', stage: '$stage' }, range='$__interval'),
       legendFormat='{{ type }} service',
       intervalFactor=3,
     )
@@ -256,12 +256,12 @@ basic.dashboard(
     'Anomaly detection: Requests per second',
     |||
       (
-        gitlab_service_ops:rate{environment="$environment", stage="$stage"}
+        gitlab_service_ops:rate{env="$environment", stage="$stage"}
         -
-        gitlab_service_ops:rate:prediction{environment="$environment", stage="$stage"}
+        gitlab_service_ops:rate:prediction{env="$environment", stage="$stage"}
       )
       /
-      gitlab_service_ops:rate:stddev_over_time_1w{environment="$environment", stage="$stage"}
+      gitlab_service_ops:rate:stddev_over_time_1w{env="$environment", stage="$stage"}
     |||,
     maxY=6,
     minY=-3,
@@ -283,7 +283,7 @@ basic.dashboard(
       |||
         max(
           max_over_time(
-            gitlab_component_saturation:ratio{environment="$environment", stage="$stage"}[$__interval]
+            gitlab_component_saturation:ratio{env="$environment", stage="$stage"}[$__interval]
           )
         ) by (type)
       |||,

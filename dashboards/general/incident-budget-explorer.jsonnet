@@ -55,8 +55,7 @@ local keyServiceSorter(service) =
 // This is encoded in the `defaultSelector`
 local serviceAvailabilityQuery(selectorHash, metricName, rangeInterval) =
   local defaultSelector = {
-    env: { re: 'ops|$environment' },
-    environment: '$environment',
+    env: '$environment',
     stage: '$stage',
     monitor: { re: 'global|' },
   };

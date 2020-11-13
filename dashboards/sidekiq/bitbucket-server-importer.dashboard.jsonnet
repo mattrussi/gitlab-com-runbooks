@@ -60,7 +60,7 @@ basic.dashboard(
             histogram_quantile(0.50,
               sum(
                 rate(bitbucket_server_importer_total_duration_seconds_bucket{
-                  environment="$environment"
+                  env="$environment"
                 }[$__interval])
               ) by (le, environment))
           |||,
@@ -71,7 +71,7 @@ basic.dashboard(
             histogram_quantile(0.90,
               sum(
                 rate(bitbucket_server_importer_total_duration_seconds_bucket{
-                  environment="$environment"
+                  env="$environment"
                 }[$__interval])
               ) by (le, environment))
           |||,
@@ -82,7 +82,7 @@ basic.dashboard(
             histogram_quantile(0.95,
               sum(
                 rate(bitbucket_server_importer_total_duration_seconds_bucket{
-                  environment="$environment"
+                  env="$environment"
                 }[$__interval])
               ) by (le, environment))
           |||,
@@ -93,7 +93,7 @@ basic.dashboard(
             histogram_quantile(0.99,
               sum(
                 rate(bitbucket_server_importer_total_duration_seconds_bucket{
-                  environment="$environment"
+                  env="$environment"
                 }[$__interval])
               ) by (le, environment))
           |||,

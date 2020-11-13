@@ -55,8 +55,7 @@ local keyServiceSorter(service) =
 
 local systemWeightQueryTerm(service, selectorHash, rangeInterval) =
   local defaultSelector = {
-    env: { re: 'ops|$environment' },
-    environment: '$environment',
+    env: '$environment',
     stage: 'main',
     monitor: { re: 'global|' },
     type: service.name,
@@ -109,8 +108,7 @@ local systemAvailabilityQuery(selectorHash, rangeInterval) =
 // This is encoded in the `defaultSelector`
 local serviceAvailabilityQuery(selectorHash, metricName, rangeInterval) =
   local defaultSelector = {
-    env: { re: 'ops|$environment' },
-    environment: '$environment',
+    env: '$environment',
     stage: 'main',
     monitor: { re: 'global|' },
   };
@@ -134,8 +132,7 @@ local serviceAvailabilityQuery(selectorHash, metricName, rangeInterval) =
 // This is encoded in the `defaultSelector`
 local serviceAvailabilityMillisecondsQuery(selectorHash, metricName) =
   local defaultSelector = {
-    env: { re: 'ops|$environment' },
-    environment: '$environment',
+    env: '$environment',
     stage: 'main',
     monitor: { re: 'global|' },
   };

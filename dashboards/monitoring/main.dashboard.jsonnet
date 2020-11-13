@@ -13,8 +13,8 @@ local thresholds = import 'thresholds.libsonnet';
 serviceDashboard.overview(
   'monitoring',
   'inf',
-  environmentSelectorHash={ environment: 'ops', env: 'ops', type: 'monitoring', stage: '$stage' },
-  saturationEnvironmentSelectorHash={ environment: { re: 'ops|gprd|ci-prd' }, type: 'monitoring', stage: '$stage' }
+  environmentSelectorHash={ env: 'ops', type: 'monitoring', stage: '$stage' },
+  saturationEnvironmentSelectorHash={ env: { re: 'ops|gprd|ci-prd' }, type: 'monitoring', stage: '$stage' }
 )
 .addPanel(
   row.new(title='Grafana Latencies'),
@@ -31,7 +31,7 @@ serviceDashboard.overview(
     legend_show=false,
     format='ms',
     query=|||
-      grafana_api_dataproxy_request_all_milliseconds{environment="ops", quantile="0.5"}
+      grafana_api_dataproxy_request_all_milliseconds{env="ops", quantile="0.5"}
     |||,
     legendFormat='p50 {{ fqdn }}',
     intervalFactor=2,
@@ -41,7 +41,7 @@ serviceDashboard.overview(
   .addTarget(
     promQuery.target(
       |||
-        grafana_api_dataproxy_request_all_milliseconds{environment="ops", quantile="0.9"}
+        grafana_api_dataproxy_request_all_milliseconds{env="ops", quantile="0.9"}
       |||,
       legendFormat='p90 {{ fqdn }}',
       intervalFactor=2,
@@ -50,7 +50,7 @@ serviceDashboard.overview(
   .addTarget(
     promQuery.target(
       |||
-        grafana_api_dataproxy_request_all_milliseconds{environment="ops", quantile="0.99"}
+        grafana_api_dataproxy_request_all_milliseconds{env="ops", quantile="0.99"}
       |||,
       legendFormat='p99 {{ fqdn }}',
       intervalFactor=2,

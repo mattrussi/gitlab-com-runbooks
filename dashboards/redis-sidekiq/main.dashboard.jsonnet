@@ -42,7 +42,7 @@ serviceDashboard.overview('redis-sidekiq', 'db')
     processExporter.namedGroup(
       'sentinel',
       {
-        environment: '$environment',
+        env: '$environment',
         groupname: { re: 'redis-sentinel.*' },
         type: 'redis-sidekiq',
         stage: '$stage',

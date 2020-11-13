@@ -39,7 +39,7 @@ basic.dashboard(
   basic.saturationTimeseries(
     title='Postgres Primary Average CPU Utilization',
     query=|||
-      avg(instance:node_cpu_utilization:ratio{fqdn="patroni-02-db-gprd.c.gitlab-production.internal", environment="gprd"}) by (fqdn)
+      avg(instance:node_cpu_utilization:ratio{fqdn="patroni-02-db-gprd.c.gitlab-production.internal", env="gprd"}) by (fqdn)
     |||,
     legendFormat='{{ fqdn }}',
   ),
@@ -59,7 +59,7 @@ basic.dashboard(
     title='ExpireJobCacheWorker,StageUpdateWorker Sidekiq job rates ',
     description='Sidekiq ExpireJobCacheWorker,StageUpdateWorker pipeline (CI) jobs starting per second',
     query=|||
-      sum(rate(sidekiq_jobs_completion_seconds_count{queue=~"pipeline_cache:expire_job_cache|pipeline_processing:stage_update", environment="gprd", env="gprd"}[$__interval])) by (queue)
+      sum(rate(sidekiq_jobs_completion_seconds_count{queue=~"pipeline_cache:expire_job_cache|pipeline_processing:stage_update", env="gprd", env="gprd"}[$__interval])) by (queue)
     |||,
     legendFormat='{{ queue }}',
     format='short',
@@ -82,7 +82,7 @@ basic.dashboard(
     title='ExpireJobCacheWorker,StageUpdateWorker latency ',
     description='p90 Processing time for ExpireJobCacheWorker,StageUpdateWorker pipeline (CI) jobs',
     query=|||
-      histogram_quantile(0.9, sum(rate(sidekiq_jobs_completion_seconds_bucket{queue=~"pipeline_cache:expire_job_cache|pipeline_processing:stage_update", environment="gprd", env="gprd"}[$__interval])) by (le, queue))
+      histogram_quantile(0.9, sum(rate(sidekiq_jobs_completion_seconds_bucket{queue=~"pipeline_cache:expire_job_cache|pipeline_processing:stage_update", env="gprd", env="gprd"}[$__interval])) by (le, queue))
     |||,
     legendFormat='{{ queue }}',
     format='s',
@@ -106,7 +106,7 @@ basic.dashboard(
     title='Sidekiq Queue Lengths per Queue',
     description='The number of jobs queued up to be executed. Lower is better',
     query=|||
-      max_over_time(sidekiq_queue_size{environment="gprd"}[$__interval]) and on(fqdn) (redis_connected_slaves != 0)
+      max_over_time(sidekiq_queue_size{env="gprd"}[$__interval]) and on(fqdn) (redis_connected_slaves != 0)
     |||,
     legendFormat='{{ name }}',
     format='short',
@@ -131,7 +131,7 @@ basic.dashboard(
     title='Sidekiq Queue Lengths per Queue',
     description='The number of jobs queued up to be executed. Lower is better',
     query=|||
-      sum(rate(job_queue_duration_seconds_sum{shared_runner="true", environment="gprd"}[$__interval]))
+      sum(rate(job_queue_duration_seconds_sum{shared_runner="true", env="gprd"}[$__interval]))
     |||,
     legendFormat='{{ name }}',
     format='s',

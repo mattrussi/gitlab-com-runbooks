@@ -5,7 +5,7 @@ local selectors = import 'promql/selectors.libsonnet';
 
 local row = grafana.row;
 
-local defaultEnvironmentSelector = { environment: '$environment' };
+local defaultEnvironmentSelector = { env: '$environment' };
 
 local activeAlertsPanel(selector, title='Active Alerts') =
   local formatConfig = {

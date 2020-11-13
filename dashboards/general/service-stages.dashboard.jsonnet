@@ -48,7 +48,7 @@ local apdexPanel() =
       |||
         min(
           min_over_time(
-            gitlab_service_apdex:ratio_5m{environment="$environment", type="$type", stage!=""}[$__interval]
+            gitlab_service_apdex:ratio_5m{env="$environment", type="$type", stage!=""}[$__interval]
           )
         ) by (stage)
       |||,
@@ -59,7 +59,7 @@ local apdexPanel() =
   .addTarget(  // Min apdex score SLO for gitlab_service_errors:ratio metric
     promQuery.target(
       |||
-        avg(slo:min:gitlab_service_apdex:ratio{environment="$environment", type="$type"}) or avg(slo:min:gitlab_service_apdex:ratio{type="$type"})
+        avg(slo:min:gitlab_service_apdex:ratio{env="$environment", type="$type"}) or avg(slo:min:gitlab_service_apdex:ratio{type="$type"})
       |||,
       interval='5m',
       legendFormat='SLO',
@@ -91,7 +91,7 @@ local errorRatesPanel() =
       |||
         max(
           max_over_time(
-            gitlab_service_errors:ratio_5m{environment="$environment", type="$type", stage!=""}[$__interval]
+            gitlab_service_errors:ratio_5m{env="$environment", type="$type", stage!=""}[$__interval]
           )
         ) by (stage)
       |||,
@@ -102,7 +102,7 @@ local errorRatesPanel() =
   .addTarget(  // Maximum error rate SLO for gitlab_service_errors:ratio metric
     promQuery.target(
       |||
-        avg(slo:max:gitlab_service_errors:ratio{environment="$environment", type="$type"}) or avg(slo:max:gitlab_service_errors:ratio{type="$type"})
+        avg(slo:max:gitlab_service_errors:ratio{env="$environment", type="$type"}) or avg(slo:max:gitlab_service_errors:ratio{type="$type"})
       |||,
       interval='5m',
       legendFormat='SLO',
@@ -134,7 +134,7 @@ local qpsPanel() =
       |||
         max(
           avg_over_time(
-            gitlab_service_ops:rate{environment="$environment", type="$type", stage!=""}[$__interval]
+            gitlab_service_ops:rate{env="$environment", type="$type", stage!=""}[$__interval]
           )
         ) by (stage)
       |||,

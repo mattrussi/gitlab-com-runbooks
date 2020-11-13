@@ -24,7 +24,7 @@ serviceDashboard.overview('git', 'sv')
       basic.timeseries(
         title='Workhorse Git HTTP Sessions',
         query=|||
-          gitlab_workhorse_git_http_sessions_active:total{environment="$environment",stage="$stage",type="git"}
+          gitlab_workhorse_git_http_sessions_active:total{env="$environment",stage="$stage",type="git"}
         |||,
         legendFormat='Sessions',
         stableId='workhorse-sessions',
@@ -49,7 +49,7 @@ serviceDashboard.overview('git', 'sv')
     processExporter.namedGroup(
       'sshd',
       {
-        environment: '$environment',
+        env: '$environment',
         groupname: 'sshd',
         type: 'git',
         stage: '$stage',

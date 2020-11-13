@@ -10,7 +10,7 @@ local graphPanel = grafana.graphPanel;
 local annotation = grafana.annotation;
 local serviceDashboard = import 'service_dashboard.libsonnet';
 
-local selector = 'environment="$environment", type="api", stage="$stage"';
+local selector = 'env="$environment", type="api", stage="$stage"';
 
 serviceDashboard.overview('api', 'sv')
 .addPanel(

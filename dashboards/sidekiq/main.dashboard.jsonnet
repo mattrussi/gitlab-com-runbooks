@@ -29,7 +29,7 @@ serviceDashboard.overview('sidekiq', 'sv')
       title='Sidekiq Aggregated Queue Length',
       description='The total number of jobs in the system queued up to be executed. Lower is better.',
       query=|||
-        sum(sidekiq_queue_size{environment="$environment"} and on(fqdn) (redis_connected_slaves != 0))
+        sum(sidekiq_queue_size{env="$environment"} and on(fqdn) (redis_connected_slaves != 0))
       |||,
       legendFormat='Total Jobs',
       format='short',
@@ -41,7 +41,7 @@ serviceDashboard.overview('sidekiq', 'sv')
       title='Sidekiq Queue Lengths per Queue',
       description='The number of jobs queued up to be executed. Lower is better',
       query=|||
-        max_over_time(sidekiq_queue_size{environment="$environment"}[$__interval]) and on(fqdn) (redis_connected_slaves != 0)
+        max_over_time(sidekiq_queue_size{env="$environment"}[$__interval]) and on(fqdn) (redis_connected_slaves != 0)
       |||,
       legendFormat='{{ name }}',
       format='short',
@@ -54,7 +54,7 @@ serviceDashboard.overview('sidekiq', 'sv')
       title='Sidekiq Queuing Latency per Job',
       description='The amount of time a job has to wait before it starts being executed. Lower is better.',
       query=|||
-        avg_over_time(sidekiq_queue_latency{environment="$environment"}[$__interval]) and on (fqdn) (redis_connected_slaves != 0)
+        avg_over_time(sidekiq_queue_latency{env="$environment"}[$__interval]) and on (fqdn) (redis_connected_slaves != 0)
       |||,
       legendFormat='{{ name }}',
       format='s',
@@ -77,19 +77,19 @@ serviceDashboard.overview('sidekiq', 'sv')
         queries=[
           {
             query: |||
-              quantile(0.10, global_search_bulk_cron_queue_size{environment="$environment"})
+              quantile(0.10, global_search_bulk_cron_queue_size{env="$environment"})
             |||,
             legendFormat: 'p10',
           },
           {
             query: |||
-              quantile(0.50, global_search_bulk_cron_queue_size{environment="$environment"})
+              quantile(0.50, global_search_bulk_cron_queue_size{env="$environment"})
             |||,
             legendFormat: 'p50',
           },
           {
             query: |||
-              quantile(0.90, global_search_bulk_cron_queue_size{environment="$environment"})
+              quantile(0.90, global_search_bulk_cron_queue_size{env="$environment"})
             |||,
             legendFormat: 'p90',
           },
@@ -106,19 +106,19 @@ serviceDashboard.overview('sidekiq', 'sv')
         queries=[
           {
             query: |||
-              quantile(0.10, global_search_bulk_cron_initial_queue_size{environment="$environment"})
+              quantile(0.10, global_search_bulk_cron_initial_queue_size{env="$environment"})
             |||,
             legendFormat: 'p10',
           },
           {
             query: |||
-              quantile(0.50, global_search_bulk_cron_initial_queue_size{environment="$environment"})
+              quantile(0.50, global_search_bulk_cron_initial_queue_size{env="$environment"})
             |||,
             legendFormat: 'p50',
           },
           {
             query: |||
-              quantile(0.90, global_search_bulk_cron_initial_queue_size{environment="$environment"})
+              quantile(0.90, global_search_bulk_cron_initial_queue_size{env="$environment"})
             |||,
             legendFormat: 'p90',
           },
@@ -135,19 +135,19 @@ serviceDashboard.overview('sidekiq', 'sv')
         queries=[
           {
             query: |||
-              quantile(0.10, global_search_awaiting_indexing_queue_size{environment="$environment"})
+              quantile(0.10, global_search_awaiting_indexing_queue_size{env="$environment"})
             |||,
             legendFormat: 'p10',
           },
           {
             query: |||
-              quantile(0.50, global_search_awaiting_indexing_queue_size{environment="$environment"})
+              quantile(0.50, global_search_awaiting_indexing_queue_size{env="$environment"})
             |||,
             legendFormat: 'p50',
           },
           {
             query: |||
-              quantile(0.90, global_search_awaiting_indexing_queue_size{environment="$environment"})
+              quantile(0.90, global_search_awaiting_indexing_queue_size{env="$environment"})
             |||,
             legendFormat: 'p90',
           },
@@ -182,7 +182,7 @@ serviceDashboard.overview('sidekiq', 'sv')
       title='Sidekiq Total Execution Time',
       description='The sum of job execution times',
       query=|||
-        sum(rate(sidekiq_jobs_completion_seconds_sum{environment="$environment"}[$__interval]))
+        sum(rate(sidekiq_jobs_completion_seconds_sum{env="$environment"}[$__interval]))
       |||,
       legendFormat='Total',
       interval='1m',
@@ -195,7 +195,7 @@ serviceDashboard.overview('sidekiq', 'sv')
       title='Sidekiq Total Execution Time Per Shard',
       description='The sum of job execution times',
       query=|||
-        sum(rate(sidekiq_jobs_completion_seconds_sum{environment="$environment"}[$__interval])) by (shard)
+        sum(rate(sidekiq_jobs_completion_seconds_sum{env="$environment"}[$__interval])) by (shard)
       |||,
       legendFormat='{{ shard }}',
       interval='1m',
@@ -210,7 +210,7 @@ serviceDashboard.overview('sidekiq', 'sv')
       title='Sidekiq Aggregated Throughput',
       description='The total number of jobs being completed',
       query=|||
-        sum(queue:sidekiq_jobs_completion:rate1m{environment="$environment"})
+        sum(queue:sidekiq_jobs_completion:rate1m{env="$environment"})
       |||,
       legendFormat='Total',
       interval='1m',
@@ -222,7 +222,7 @@ serviceDashboard.overview('sidekiq', 'sv')
       title='Sidekiq Throughput per Shard',
       description='The total number of jobs being completed per shard',
       query=|||
-        sum(queue:sidekiq_jobs_completion:rate1m{environment="$environment"}) by (shard)
+        sum(queue:sidekiq_jobs_completion:rate1m{env="$environment"}) by (shard)
       |||,
       legendFormat='{{ shard }}',
       interval='1m',
@@ -236,7 +236,7 @@ serviceDashboard.overview('sidekiq', 'sv')
       title='Sidekiq Throughput per Job',
       description='The total number of jobs being completed per shard',
       query=|||
-        sum(queue:sidekiq_jobs_completion:rate1m{environment="$environment"}) by (queue)
+        sum(queue:sidekiq_jobs_completion:rate1m{env="$environment"}) by (queue)
       |||,
       legendFormat='{{ queue }}',
       interval='1m',
@@ -249,7 +249,7 @@ serviceDashboard.overview('sidekiq', 'sv')
       title='Sidekiq Aggregated Inflight Operations',
       description='The total number of jobs being executed at a single moment',
       query=|||
-        sum(sidekiq_running_jobs{environment="$environment"})
+        sum(sidekiq_running_jobs{env="$environment"})
       |||,
       legendFormat='Total',
       interval='1m',
@@ -260,7 +260,7 @@ serviceDashboard.overview('sidekiq', 'sv')
       title='Sidekiq Inflight Operations by Shard',
       description='The total number of jobs being executed at a single moment, for each queue',
       query=|||
-        sum(sidekiq_running_jobs{environment="$environment"}) by (shard)
+        sum(sidekiq_running_jobs{env="$environment"}) by (shard)
       |||,
       legendFormat='{{ shard }}',
       interval='1m',
@@ -276,7 +276,7 @@ serviceDashboard.overview('sidekiq', 'sv')
         histogram_quantile(0.50,
           sum by (shard, le) (
             rate(sidekiq_jobs_completion_seconds_bucket{
-              environment="$environment",
+              env="$environment",
             }[$__interval])
           )
         )
@@ -299,7 +299,7 @@ serviceDashboard.overview('sidekiq', 'sv')
         histogram_quantile(0.95,
           sum by (shard, le) (
             rate(sidekiq_jobs_completion_seconds_bucket{
-              environment="$environment",
+              env="$environment",
             }[$__interval])
           )
         )
@@ -326,7 +326,7 @@ serviceDashboard.overview('sidekiq', 'sv')
     h: 1,
   }
 )
-.addPanels(sidekiq.shardWorkloads('type="sidekiq", environment="$environment", stage="$stage"', startRow=3001, datalink=shardDetailDataLink))
+.addPanels(sidekiq.shardWorkloads('type="sidekiq", env="$environment", stage="$stage"', startRow=3001, datalink=shardDetailDataLink))
 .addPanel(
   row.new(title='Rails Metrics', collapse=true)
   .addPanels(railsCommon.railsPanels(serviceType='sidekiq', serviceStage='$stage', startRow=1)),

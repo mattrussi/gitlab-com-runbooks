@@ -22,7 +22,7 @@ local serviceHealth = import 'service_health.libsonnet';
 local saturationDetail = import 'saturation_detail.libsonnet';
 local serviceDashboard = import 'service_dashboard.libsonnet';
 
-local selector = 'environment="$environment", type="web", stage="$stage"';
+local selector = 'env="$environment", type="web", stage="$stage"';
 
 serviceDashboard.overview('web', 'sv')
 .addPanel(

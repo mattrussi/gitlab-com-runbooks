@@ -9,7 +9,7 @@ local panels = import 'panels.libsonnet';
 local gatewayNameTemplate = grafana.template.new(
   'gateway',
   '$PROMETHEUS_DS',
-  'label_values(stackdriver_nat_gateway_logging_googleapis_com_user_nat_translations{environment="$environment"}, gateway_name)',
+  'label_values(stackdriver_nat_gateway_logging_googleapis_com_user_nat_translations{env="$environment"}, gateway_name)',
   current='gitlab-gke',
   refresh='load',
   sort=1,
@@ -29,7 +29,7 @@ local errorsPanel =
   .addTarget(
     promQuery.target(
       |||
-        stackdriver_nat_gateway_logging_googleapis_com_user_nat_errors{environment="$environment"}
+        stackdriver_nat_gateway_logging_googleapis_com_user_nat_errors{env="$environment"}
       |||,
       legendFormat='errors'
     ),
@@ -37,7 +37,7 @@ local errorsPanel =
   .addTarget(
     promQuery.target(
       |||
-        stackdriver_nat_gateway_logging_googleapis_com_user_nat_translations{environment="$environment"}
+        stackdriver_nat_gateway_logging_googleapis_com_user_nat_translations{env="$environment"}
       |||,
       legendFormat='translations'
     ),
@@ -48,7 +48,7 @@ local errorsPerHostPanel =
   .addTarget(
     promQuery.target(
       |||
-        stackdriver_nat_gateway_logging_googleapis_com_user_nat_errors_by_vm{environment="$environment"}
+        stackdriver_nat_gateway_logging_googleapis_com_user_nat_errors_by_vm{env="$environment"}
       |||,
       legendFormat='errors'
     ),

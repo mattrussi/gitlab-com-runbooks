@@ -54,45 +54,45 @@ basic.dashboard(
       format='short',
       query=|||
         sort_desc(
-          max(rate(node_disk_read_bytes_total{environment="gprd", type="gitaly", device="sdb"}[6h])) by (fqdn)
+          max(rate(node_disk_read_bytes_total{env="gprd", type="gitaly", device="sdb"}[6h])) by (fqdn)
           / ignoring(fqdn) group_left
-          sum(rate(node_disk_read_bytes_total{environment="gprd", type="gitaly", device="sdb"}[6h]))
+          sum(rate(node_disk_read_bytes_total{env="gprd", type="gitaly", device="sdb"}[6h]))
 
           +
 
-          max(rate(node_disk_written_bytes_total{environment="gprd", type="gitaly", device="sdb"}[6h])) by (fqdn)
+          max(rate(node_disk_written_bytes_total{env="gprd", type="gitaly", device="sdb"}[6h])) by (fqdn)
           / ignoring(fqdn) group_left
-          sum(rate(node_disk_written_bytes_total{environment="gprd", type="gitaly", device="sdb"}[6h]))
+          sum(rate(node_disk_written_bytes_total{env="gprd", type="gitaly", device="sdb"}[6h]))
 
           +
 
-          max(rate(node_disk_reads_completed_total{environment="gprd", type="gitaly", device="sdb"}[6h])) by (fqdn)
+          max(rate(node_disk_reads_completed_total{env="gprd", type="gitaly", device="sdb"}[6h])) by (fqdn)
           / ignoring(fqdn) group_left
-          sum(max(rate(node_disk_reads_completed_total{environment="gprd", type="gitaly", device="sdb"}[6h])) by (fqdn))
+          sum(max(rate(node_disk_reads_completed_total{env="gprd", type="gitaly", device="sdb"}[6h])) by (fqdn))
 
           +
 
-          max(rate(node_disk_writes_completed_total{environment="gprd", type="gitaly", device="sdb"}[6h])) by (fqdn)
+          max(rate(node_disk_writes_completed_total{env="gprd", type="gitaly", device="sdb"}[6h])) by (fqdn)
           / ignoring(fqdn) group_left
-          sum(max(rate(node_disk_writes_completed_total{environment="gprd", type="gitaly", device="sdb"}[6h])) by (fqdn))
+          sum(max(rate(node_disk_writes_completed_total{env="gprd", type="gitaly", device="sdb"}[6h])) by (fqdn))
 
           +
 
-          sum(rate(grpc_client_started_total{environment="gprd", type="gitaly"}[6h])) by (fqdn)
+          sum(rate(grpc_client_started_total{env="gprd", type="gitaly"}[6h])) by (fqdn)
           / ignoring(fqdn) group_left
-          sum(rate(grpc_client_started_total{environment="gprd", type="gitaly"}[6h]))
+          sum(rate(grpc_client_started_total{env="gprd", type="gitaly"}[6h]))
 
           +
 
-          sum(rate(grpc_client_started_total{environment="gprd", type="gitaly"}[6h])) by (fqdn)
+          sum(rate(grpc_client_started_total{env="gprd", type="gitaly"}[6h])) by (fqdn)
           / ignoring(fqdn) group_left
-          sum(rate(grpc_client_started_total{environment="gprd", type="gitaly"}[6h]))
+          sum(rate(grpc_client_started_total{env="gprd", type="gitaly"}[6h]))
 
           +
 
-          avg(instance:node_filesystem_avail:ratio{environment="gprd", type="gitaly",device="/dev/sdb"}) by (fqdn)
+          avg(instance:node_filesystem_avail:ratio{env="gprd", type="gitaly",device="/dev/sdb"}) by (fqdn)
           / ignoring(fqdn) group_left
-          sum(avg(instance:node_filesystem_avail:ratio{environment="gprd", type="gitaly",device="/dev/sdb"}) by (fqdn))
+          sum(avg(instance:node_filesystem_avail:ratio{env="gprd", type="gitaly",device="/dev/sdb"}) by (fqdn))
         )
       |||,
       legendFormat='{{ fqdn }}',
@@ -106,7 +106,7 @@ basic.dashboard(
       description='Average read throughput. Lower is better.',
       format='Bps',
       query=|||
-        sort_desc(max(rate(node_disk_read_bytes_total{environment="$environment", type="gitaly", device="sdb"}[$__range])) by (fqdn))
+        sort_desc(max(rate(node_disk_read_bytes_total{env="$environment", type="gitaly", device="sdb"}[$__range])) by (fqdn))
       |||,
       legendFormat='{{ fqdn }}',
     ),
@@ -115,7 +115,7 @@ basic.dashboard(
       description='Average write throughput. Lower is better.',
       format='Bps',
       query=|||
-        sort_desc(max(rate(node_disk_written_bytes_total{environment="$environment", type="gitaly", device="sdb"}[$__range])) by (fqdn))
+        sort_desc(max(rate(node_disk_written_bytes_total{env="$environment", type="gitaly", device="sdb"}[$__range])) by (fqdn))
       |||,
       legendFormat='{{ fqdn }}',
     ),
@@ -124,7 +124,7 @@ basic.dashboard(
       description='Average write throughput. Lower is better.',
       format='ops',
       query=|||
-        sort_desc(max(rate(node_disk_reads_completed_total{environment="$environment", type="gitaly", device="sdb"}[$__range])) by (fqdn))
+        sort_desc(max(rate(node_disk_reads_completed_total{env="$environment", type="gitaly", device="sdb"}[$__range])) by (fqdn))
       |||,
       legendFormat='{{ fqdn }}',
     ),
@@ -133,7 +133,7 @@ basic.dashboard(
       description='Average write throughput. Lower is better.',
       format='ops',
       query=|||
-        sort_desc(max(rate(node_disk_writes_completed_total{environment="$environment", type="gitaly", device="sdb"}[$__range])) by (fqdn))
+        sort_desc(max(rate(node_disk_writes_completed_total{env="$environment", type="gitaly", device="sdb"}[$__range])) by (fqdn))
       |||,
       legendFormat='{{ fqdn }}',
     ),
@@ -142,7 +142,7 @@ basic.dashboard(
       description='Average seconds of Gitaly utilization per server per second. Lower is better.',
       format='s',
       query=|||
-        sort_desc(sum(rate(grpc_server_handling_seconds_sum{environment="$environment", type="gitaly"}[$__range])) by (fqdn))
+        sort_desc(sum(rate(grpc_server_handling_seconds_sum{env="$environment", type="gitaly"}[$__range])) by (fqdn))
       |||,
       legendFormat='{{ fqdn }}',
     ),
@@ -151,7 +151,7 @@ basic.dashboard(
       description='Average number of Gitaly Ruby Requests/second. Lower is better.',
       format='ops',
       query=|||
-        sort_desc(sum(rate(grpc_client_started_total{environment="$environment", type="gitaly"}[$__range])) by (fqdn))
+        sort_desc(sum(rate(grpc_client_started_total{env="$environment", type="gitaly"}[$__range])) by (fqdn))
       |||,
       legendFormat='{{ fqdn }}',
     ),
@@ -161,7 +161,7 @@ basic.dashboard(
       format='percentunit',
       query=|||
         sort_desc(
-          instance:node_filesystem_avail:ratio{environment="$environment", type="gitaly",device="/dev/sdb"}
+          instance:node_filesystem_avail:ratio{env="$environment", type="gitaly",device="/dev/sdb"}
         )
       |||,
       legendFormat='{{ fqdn }}',

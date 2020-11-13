@@ -29,7 +29,7 @@ local elasticsearchLogSearchDataLink(type) = {
 {
   dashboard(type, defaultController, defaultAction)::
     local selector = {
-      environment: '$environment',
+      env: '$environment',
       type: type,
       stage: '$stage',
       controller: '$controller',

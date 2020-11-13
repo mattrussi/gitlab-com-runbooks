@@ -37,7 +37,7 @@ basic.dashboard(
   basic.saturationTimeseries(
     title='Single core saturation on the redis-cache fleet',
     query=|||
-      max(1 - rate(node_cpu_seconds_total{environment="$environment", type="redis-cache", mode="idle", fqdn=~"redis-cache-\\d\\d.*"}[$__interval]))
+      max(1 - rate(node_cpu_seconds_total{env="$environment", type="redis-cache", mode="idle", fqdn=~"redis-cache-\\d\\d.*"}[$__interval]))
     |||,
     legendFormat='Max Single Core Saturation',
   )
@@ -55,10 +55,10 @@ basic.dashboard(
   basic.networkTrafficGraph(
     title='Single core saturation on the redis-cache fleet',
     sendQuery=|||
-      sum(rate(redis_net_output_bytes_total{environment="$environment", type="redis-cache"}[$__interval]))
+      sum(rate(redis_net_output_bytes_total{env="$environment", type="redis-cache"}[$__interval]))
     |||,
     receiveQuery=|||
-      sum(rate(redis_net_input_bytes_total{environment="$environment", type="redis-cache"}[$__interval]))
+      sum(rate(redis_net_input_bytes_total{env="$environment", type="redis-cache"}[$__interval]))
     |||,
     intervalFactor=2
   ),
@@ -75,11 +75,11 @@ basic.dashboard(
     query=|||
       max(
         (
-          rate(redis_cpu_user_seconds_total{environment="gprd", type="redis-cache"}[$__interval]) + rate(redis_cpu_sys_seconds_total{environment="gprd", type="redis-cache"}[$__interval])
+          rate(redis_cpu_user_seconds_total{env="gprd", type="redis-cache"}[$__interval]) + rate(redis_cpu_sys_seconds_total{env="gprd", type="redis-cache"}[$__interval])
         )
         or
         (
-          rate(redis_used_cpu_user{environment="gprd", type="redis-cache"}[$__interval]) + rate(redis_used_cpu_sys{environment="gprd", type="redis-cache"}[$__interval])
+          rate(redis_used_cpu_user{env="gprd", type="redis-cache"}[$__interval]) + rate(redis_used_cpu_sys{env="gprd", type="redis-cache"}[$__interval])
         )
       )
     |||,

@@ -15,7 +15,7 @@ serviceDashboard.overview('nfs', 'stor')
       title='Total NFS read throughput per service-shard',
       description='The total number of jobs in the system queued up to be executed. Lower is better.',
       query=|||
-        sum by (type, shard, export) (rate(node_mountstats_nfs_total_read_bytes_total{environment="$environment"}[$__interval]))
+        sum by (type, shard, export) (rate(node_mountstats_nfs_total_read_bytes_total{env="$environment"}[$__interval]))
       |||,
       legendFormat='{{ type }} {{ shard }} shard - {{ export }}',
       format='bytes',
@@ -25,7 +25,7 @@ serviceDashboard.overview('nfs', 'stor')
       title='Total NFS writes throughput per service-shard',
       description='The total number of jobs in the system queued up to be executed. Lower is better.',
       query=|||
-        sum by (type, shard, export) (rate(node_mountstats_nfs_total_write_bytes_total{environment="$environment"}[$__interval]))
+        sum by (type, shard, export) (rate(node_mountstats_nfs_total_write_bytes_total{env="$environment"}[$__interval]))
       |||,
       legendFormat='{{ type }} {{ shard }} shard - {{ export }}',
       format='bytes',

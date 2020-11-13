@@ -146,7 +146,7 @@ local errorDiagram(services) =
     graphId='diagram_errors',
     thresholds='0,0.001',
     target=promQuery.target(
-      sliPromQL.errorRate.serviceErrorRateQuery({ environment: '$environment', stage: '$stage' }, range='$__range'),
+      sliPromQL.errorRate.serviceErrorRateQuery({ env: '$environment', stage: '$stage' }, range='$__range'),
       legendFormat='{{ type }}',
       instant=true
     )
@@ -164,7 +164,7 @@ local apdexDiagram(services) =
     graphId='diagram_apdex',
     thresholds='0.99,0.995,0.999',
     target=promQuery.target(
-      sliPromQL.apdex.serviceApdexQuery({ environment: '$environment', stage: '$stage' }, range='$__range'),
+      sliPromQL.apdex.serviceApdexQuery({ env: '$environment', stage: '$stage' }, range='$__range'),
       legendFormat='{{ type }}',
       instant=true
     )

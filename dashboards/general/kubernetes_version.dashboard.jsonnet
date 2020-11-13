@@ -28,7 +28,7 @@ local masterVersionTablePanel =
   .addTarget(  // Master Version
     promQuery.target(
       |||
-        max (kubernetes_build_info{environment="$environment", job="apiserver"}) by (node, gitVersion)
+        max (kubernetes_build_info{env="$environment", job="apiserver"}) by (node, gitVersion)
       |||,
       format='table',
       instant=true
@@ -43,7 +43,7 @@ local masterVersionPanel =
   .addTarget(  // Master Version over time
     promQuery.target(
       |||
-        count (kubernetes_build_info{environment="$environment", job="apiserver"}) by (gitVersion)
+        count (kubernetes_build_info{env="$environment", job="apiserver"}) by (gitVersion)
       |||,
     )
   );
@@ -68,7 +68,7 @@ local nodeVersionsTablePanel =
   .addTarget(  // Node Versions
     promQuery.target(
       |||
-        max(kube_node_info{environment="$environment"}) by (cluster, node, kernel_version, kubelet_version, kubeproxy_version)
+        max(kube_node_info{env="$environment"}) by (cluster, node, kernel_version, kubelet_version, kubeproxy_version)
       |||,
       format='table',
       instant=true
@@ -83,7 +83,7 @@ local nodeVersionsPanel =
   .addTarget(  // Node Versions over time
     promQuery.target(
       |||
-        count (kube_node_info{environment="$environment"}) by (cluster, node, kubelet_version)
+        count (kube_node_info{env="$environment"}) by (cluster, node, kubelet_version)
       |||,
     )
   );

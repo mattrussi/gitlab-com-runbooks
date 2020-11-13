@@ -18,7 +18,7 @@ local issueSearch = import 'issue_search.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 
 local selector = {
-  environment: '$environment',
+  env: '$environment',
   type: 'sidekiq',
   stage: '$stage',
   queue: { re: '$queue' },
@@ -65,21 +65,21 @@ local latencyTimeseries(title, aggregators, legendFormat) =
 local enqueueCountTimeseries(title, aggregators, legendFormat) =
   basic.timeseries(
     title=title,
-    query=recordingRuleRateQuery('gitlab_background_jobs:queue:ops:rate_5m', 'environment="$environment", queue=~"$queue"', aggregators),
+    query=recordingRuleRateQuery('gitlab_background_jobs:queue:ops:rate_5m', 'env="$environment", queue=~"$queue"', aggregators),
     legendFormat=legendFormat,
   );
 
 local rpsTimeseries(title, aggregators, legendFormat) =
   basic.timeseries(
     title=title,
-    query=recordingRuleRateQuery('gitlab_background_jobs:execution:ops:rate_5m', 'environment="$environment", queue=~"$queue"', aggregators),
+    query=recordingRuleRateQuery('gitlab_background_jobs:execution:ops:rate_5m', 'env="$environment", queue=~"$queue"', aggregators),
     legendFormat=legendFormat,
   );
 
 local errorRateTimeseries(title, aggregators, legendFormat) =
   basic.timeseries(
     title=title,
-    query=recordingRuleRateQuery('gitlab_background_jobs:execution:error:rate_5m', 'environment="$environment", queue=~"$queue"', aggregators),
+    query=recordingRuleRateQuery('gitlab_background_jobs:execution:error:rate_5m', 'env="$environment", queue=~"$queue"', aggregators),
     legendFormat=legendFormat,
   );
 
@@ -106,7 +106,7 @@ basic.dashboard(
 .addTemplate(template.new(
   'queue',
   '$PROMETHEUS_DS',
-  'label_values(sidekiq_jobs_completion_seconds_count{environment="$environment", type="sidekiq"}, queue)',
+  'label_values(sidekiq_jobs_completion_seconds_count{env="$environment", type="sidekiq"}, queue)',
   current='post_receive',
   refresh='load',
   sort=1,
@@ -119,7 +119,7 @@ basic.dashboard(
     basic.labelStat(
       query=|||
         label_replace(
-          topk by (queue) (1, sum(rate(sidekiq_running_jobs{environment="$environment", type="sidekiq", stage="$stage", queue=~"$queue"}[$__range])) by (queue, %(label)s)),
+          topk by (queue) (1, sum(rate(sidekiq_running_jobs{env="$environment", type="sidekiq", stage="$stage", queue=~"$queue"}[$__range])) by (queue, %(label)s)),
           "%(label)s", "%(default)s", "%(label)s", ""
         )
       ||| % {
@@ -172,11 +172,11 @@ basic.dashboard(
       'Max Queuing Duration SLO',
       'light-red',
       |||
-        vector(NaN) and on () sidekiq_running_jobs{environment="$environment", type="sidekiq", stage="$stage", queue=~"$queue", urgency="throttled"}
+        vector(NaN) and on () sidekiq_running_jobs{env="$environment", type="sidekiq", stage="$stage", queue=~"$queue", urgency="throttled"}
         or
-        vector(%(lowUrgencySLO)f) and on () sidekiq_running_jobs{environment="$environment", type="sidekiq", stage="$stage", queue=~"$queue", urgency="low"}
+        vector(%(lowUrgencySLO)f) and on () sidekiq_running_jobs{env="$environment", type="sidekiq", stage="$stage", queue=~"$queue", urgency="low"}
         or
-        vector(%(urgentSLO)f) and on () sidekiq_running_jobs{environment="$environment", type="sidekiq", stage="$stage", queue=~"$queue", urgency="high"}
+        vector(%(urgentSLO)f) and on () sidekiq_running_jobs{env="$environment", type="sidekiq", stage="$stage", queue=~"$queue", urgency="high"}
       ||| % {
         lowUrgencySLO: sidekiqHelpers.slos.lowUrgency.queueingDurationSeconds,
         urgentSLO: sidekiqHelpers.slos.urgent.queueingDurationSeconds,
@@ -189,11 +189,11 @@ basic.dashboard(
       'Max Execution Duration SLO',
       'red',
       |||
-        vector(%(throttledSLO)f) and on () sidekiq_running_jobs{environment="$environment", type="sidekiq", stage="$stage", queue=~"$queue", urgency="throttled"}
+        vector(%(throttledSLO)f) and on () sidekiq_running_jobs{env="$environment", type="sidekiq", stage="$stage", queue=~"$queue", urgency="throttled"}
         or
-        vector(%(lowUrgencySLO)f) and on () sidekiq_running_jobs{environment="$environment", type="sidekiq", stage="$stage", queue=~"$queue", urgency="low"}
+        vector(%(lowUrgencySLO)f) and on () sidekiq_running_jobs{env="$environment", type="sidekiq", stage="$stage", queue=~"$queue", urgency="low"}
         or
-        vector(%(urgentSLO)f) and on () sidekiq_running_jobs{environment="$environment", type="sidekiq", stage="$stage", queue=~"$queue", urgency="high"}
+        vector(%(urgentSLO)f) and on () sidekiq_running_jobs{env="$environment", type="sidekiq", stage="$stage", queue=~"$queue", urgency="high"}
       ||| % {
         throttledSLO: sidekiqHelpers.slos.throttled.executionDurationSeconds,
         lowUrgencySLO: sidekiqHelpers.slos.lowUrgency.executionDurationSeconds,
@@ -207,9 +207,9 @@ basic.dashboard(
       'Backlog',
       'blue',
       |||
-        ((sidekiq_queue_size{environment="$environment", name=~"$queue"} and on(fqdn) (redis_connected_slaves != 0)) > 10)
+        ((sidekiq_queue_size{env="$environment", name=~"$queue"} and on(fqdn) (redis_connected_slaves != 0)) > 10)
         /
-        (-deriv(sidekiq_queue_size{environment="$environment", name=~"$queue"}[5m]) and on(fqdn) (redis_connected_slaves != 0) > 0)
+        (-deriv(sidekiq_queue_size{env="$environment", name=~"$queue"}[5m]) and on(fqdn) (redis_connected_slaves != 0) > 0)
       |||,
       '{{ name }}',
       unit='s',
@@ -225,13 +225,13 @@ basic.dashboard(
       description='Queue apdex monitors the percentage of jobs that are dequeued within their queue threshold. Higher is better. Different jobs have different thresholds.',
       query=|||
         sum by (queue) (
-          (gitlab_background_jobs:queue:apdex:ratio_5m{environment="$environment", queue=~"$queue"} >= 0)
+          (gitlab_background_jobs:queue:apdex:ratio_5m{env="$environment", queue=~"$queue"} >= 0)
           *
-          (gitlab_background_jobs:queue:apdex:weight:score_5m{environment="$environment", queue=~"$queue"} >= 0)
+          (gitlab_background_jobs:queue:apdex:weight:score_5m{env="$environment", queue=~"$queue"} >= 0)
         )
         /
         sum by (queue) (
-          (gitlab_background_jobs:queue:apdex:weight:score_5m{environment="$environment", queue=~"$queue"})
+          (gitlab_background_jobs:queue:apdex:weight:score_5m{env="$environment", queue=~"$queue"})
         )
       |||,
       yAxisLabel='% Jobs within Max Queuing Duration SLO',
@@ -251,13 +251,13 @@ basic.dashboard(
       description='Execution apdex monitors the percentage of jobs that run within their execution (run-time) threshold. Higher is better. Different jobs have different thresholds.',
       query=|||
         sum by (queue) (
-          (gitlab_background_jobs:execution:apdex:ratio_5m{environment="$environment", queue=~"$queue"} >= 0)
+          (gitlab_background_jobs:execution:apdex:ratio_5m{env="$environment", queue=~"$queue"} >= 0)
           *
-          (gitlab_background_jobs:execution:apdex:weight:score_5m{environment="$environment", queue=~"$queue"} >= 0)
+          (gitlab_background_jobs:execution:apdex:weight:score_5m{env="$environment", queue=~"$queue"} >= 0)
         )
         /
         sum by (queue) (
-          (gitlab_background_jobs:execution:apdex:weight:score_5m{environment="$environment", queue=~"$queue"})
+          (gitlab_background_jobs:execution:apdex:weight:score_5m{env="$environment", queue=~"$queue"})
         )
       |||,
       yAxisLabel='% Jobs within Max Execution Duration SLO',
@@ -277,7 +277,7 @@ basic.dashboard(
       title='Execution Rate (RPS)',
       description='Jobs executed per second',
       query=|||
-        sum by (queue) (gitlab_background_jobs:execution:ops:rate_5m{environment="$environment", queue=~"$queue"})
+        sum by (queue) (gitlab_background_jobs:execution:ops:rate_5m{env="$environment", queue=~"$queue"})
       |||,
       legendFormat='{{ queue }} rps',
       format='ops',
@@ -297,11 +297,11 @@ basic.dashboard(
       description='Percentage of jobs that fail with an error. Lower is better.',
       query=|||
         sum by (queue) (
-          (gitlab_background_jobs:execution:error:rate_5m{environment="$environment", queue=~"$queue"} >= 0)
+          (gitlab_background_jobs:execution:error:rate_5m{env="$environment", queue=~"$queue"} >= 0)
         )
         /
         sum by (queue) (
-          (gitlab_background_jobs:execution:ops:rate_5m{environment="$environment", queue=~"$queue"} >= 0)
+          (gitlab_background_jobs:execution:ops:rate_5m{env="$environment", queue=~"$queue"} >= 0)
         )
       |||,
       legendFormat='{{ queue }} error ratio',
@@ -330,7 +330,7 @@ basic.dashboard(
       title='Queue length',
       description='The number of unstarted jobs in a queue',
       query=|||
-        max by (name) (max_over_time(sidekiq_queue_size{environment="$environment", name=~"$queue"}[$__interval]) and on(fqdn) (redis_connected_slaves != 0))
+        max by (name) (max_over_time(sidekiq_queue_size{env="$environment", name=~"$queue"}[$__interval]) and on(fqdn) (redis_connected_slaves != 0))
       |||,
       legendFormat='{{ name }}',
       format='short',

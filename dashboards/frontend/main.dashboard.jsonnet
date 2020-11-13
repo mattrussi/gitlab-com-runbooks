@@ -17,7 +17,7 @@ serviceDashboard.overview('frontend', 'lb')
   processExporter.namedGroup(
     'haproxy',
     {
-      environment: '$environment',
+      env: '$environment',
       groupname: 'haproxy',
       type: 'frontend',
       stage: '$stage',

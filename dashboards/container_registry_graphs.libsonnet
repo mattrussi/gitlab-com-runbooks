@@ -27,7 +27,7 @@ local layout = import 'grafana/layout.libsonnet';
       ),
       basic.singlestat(
         title='Cache Hit %',
-        query='sum(rate(registry_storage_cache_total{cluster="$cluster", environment="$environment", namespace="$namespace",exported_type="Hit"}[$__interval])) / sum(rate(registry_storage_cache_total{environment="$environment",exported_type="Request"}[$__interval]))',
+        query='sum(rate(registry_storage_cache_total{cluster="$cluster", env="$environment", namespace="$namespace",exported_type="Hit"}[$__interval])) / sum(rate(registry_storage_cache_total{env="$environment",exported_type="Request"}[$__interval]))',
         colors=[
           colors.criticalColor,
           colors.errorColor,

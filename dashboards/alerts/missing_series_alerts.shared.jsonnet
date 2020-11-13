@@ -14,7 +14,7 @@ local missingSeriesDashboard(title, metric, basicPanelType='percentageTimeseries
     basic[basicPanelType](
       title=title,
       query=|||
-        %(metric)s{environment="$environment", type="$type", stage="$stage", component="$component", monitor!="global"}
+        %(metric)s{env="$environment", type="$type", stage="$stage", component="$component", monitor!="global"}
       ||| % {
         metric: metric,
       },

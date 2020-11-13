@@ -66,7 +66,7 @@ basic.dashboard(
     basic.timeseries(
       title='HTTP Requests CACHE HIT',
       description='HTTP Requests',
-      query='sum(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cache_result!="MISS", environment="$environment", forwarding_rule_name=~".*plantuml.*"}) by (response_code) / 60',
+      query='sum(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cache_result!="MISS", env="$environment", forwarding_rule_name=~".*plantuml.*"}) by (response_code) / 60',
       legendFormat='{{ response_code }}',
       format='ops',
       interval='1m',
@@ -78,7 +78,7 @@ basic.dashboard(
     basic.timeseries(
       title='HTTP Requests bytes CACHE HIT',
       description='HTTP Requests',
-      query='sum(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_backend_request_bytes_count{cache_result!="MISS", environment="$environment", forwarding_rule_name=~".*plantuml.*"}) by (response_code)',
+      query='sum(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_backend_request_bytes_count{cache_result!="MISS", env="$environment", forwarding_rule_name=~".*plantuml.*"}) by (response_code)',
       legendFormat='{{ response_code }}',
       format='bytes',
       interval='1m',
@@ -90,7 +90,7 @@ basic.dashboard(
     basic.timeseries(
       title='HTTP Requests CACHE MISS',
       description='HTTP Requests',
-      query='sum(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cache_result="MISS", environment="$environment", forwarding_rule_name=~".*plantuml.*"}) by (response_code) / 60',
+      query='sum(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cache_result="MISS", env="$environment", forwarding_rule_name=~".*plantuml.*"}) by (response_code) / 60',
       legendFormat='{{ response_code }}',
       format='ops',
       interval='1m',
@@ -102,7 +102,7 @@ basic.dashboard(
     basic.timeseries(
       title='HTTP Requests bytes CACHE MISS',
       description='HTTP Requests',
-      query='sum(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_backend_request_bytes_count{cache_result="MISS", environment="$environment", forwarding_rule_name=~".*plantuml.*"}) by (response_code)',
+      query='sum(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_backend_request_bytes_count{cache_result="MISS", env="$environment", forwarding_rule_name=~".*plantuml.*"}) by (response_code)',
       legendFormat='{{ response_code }}',
       format='bytes',
       interval='1m',
@@ -128,7 +128,7 @@ basic.dashboard(
     basic.timeseries(
       title='90th Percentile Latency CACHE MISS',
       description='90th Percentile Latency CACHE MISS',
-      query='histogram_quantile(0.9,rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_backend_latencies_bucket{cache_result="MISS", environment="$environment", forwarding_rule_name=~".*plantuml.*"}[10m]))',
+      query='histogram_quantile(0.9,rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_backend_latencies_bucket{cache_result="MISS", env="$environment", forwarding_rule_name=~".*plantuml.*"}[10m]))',
       legendFormat='{{ response_code }}',
       format='ms',
       interval='1m',
@@ -140,7 +140,7 @@ basic.dashboard(
     basic.timeseries(
       title='60th Percentile Latency CACHE MISS',
       description='60th Percentile Latency CACHE MISS',
-      query='histogram_quantile(0.6,rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_backend_latencies_bucket{cache_result="MISS", environment="$environment", forwarding_rule_name=~".*plantuml.*"}[10m]))',
+      query='histogram_quantile(0.6,rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_backend_latencies_bucket{cache_result="MISS", env="$environment", forwarding_rule_name=~".*plantuml.*"}[10m]))',
       legendFormat='{{ response_code }}',
       format='ms',
       interval='1m',
@@ -152,7 +152,7 @@ basic.dashboard(
     basic.timeseries(
       title='90th Percentile Latency CACHE HIT',
       description='90th Percentile Latency CACHE MISS',
-      query='histogram_quantile(0.9,rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_backend_latencies_bucket{cache_result="HIT", environment="$environment", forwarding_rule_name=~".*plantuml.*"}[10m]))',
+      query='histogram_quantile(0.9,rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_backend_latencies_bucket{cache_result="HIT", env="$environment", forwarding_rule_name=~".*plantuml.*"}[10m]))',
       legendFormat='{{ response_code }}',
       format='ms',
       interval='1m',
@@ -164,7 +164,7 @@ basic.dashboard(
     basic.timeseries(
       title='60th Percentile Latency CACHE HIT',
       description='60th Percentile Latency CACHE MISS',
-      query='histogram_quantile(0.6,rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_backend_latencies_bucket{cache_result="HIT", environment="$environment", forwarding_rule_name=~".*plantuml.*"}[10m]))',
+      query='histogram_quantile(0.6,rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_backend_latencies_bucket{cache_result="HIT", env="$environment", forwarding_rule_name=~".*plantuml.*"}[10m]))',
       legendFormat='{{ response_code }}',
       format='ms',
       interval='1m',

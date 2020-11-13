@@ -65,7 +65,7 @@ serviceDashboard.overview('pgbouncer', 'db', stage='main')
       description='Total async pool utilisation by job.',
       query=
       |||
-        sum by (controller, stage) (rate(gitlab_transaction_duration_seconds_sum{environment="$environment", env="$environment", monitor="app", type="sidekiq"}[$__interval]))
+        sum by (controller, stage) (rate(gitlab_transaction_duration_seconds_sum{env="$environment", env="$environment", monitor="app", type="sidekiq"}[$__interval]))
       |||,
       legendFormat='{{ controller }} - {{ stage }} stage',
       format='s',
@@ -81,12 +81,12 @@ serviceDashboard.overview('pgbouncer', 'db', stage='main')
       query=
       |||
         sum by (controller, stage) (
-          rate(gitlab_transaction_duration_seconds_sum{environment="$environment", env="$environment", monitor="app", type!="sidekiq", controller!="Grape"}[$__interval])
+          rate(gitlab_transaction_duration_seconds_sum{env="$environment", env="$environment", monitor="app", type!="sidekiq", controller!="Grape"}[$__interval])
         )
         or
         label_replace(
           sum by (action, stage) (
-            rate(gitlab_transaction_duration_seconds_sum{environment="$environment", env="$environment", monitor="app", type!="sidekiq", controller="Grape"}[$__interval])
+            rate(gitlab_transaction_duration_seconds_sum{env="$environment", env="$environment", monitor="app", type!="sidekiq", controller="Grape"}[$__interval])
           ),
           "controller", "$1", "action", "(.*)"
         )

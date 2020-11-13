@@ -34,7 +34,7 @@ local combinations(shortMetric, shortDuration, longMetric, longDuration, selecto
   local longQuery = if nonGlobalFallback then
     |||
       %(longMetric)s{%(globalSelector)s}
-      or on(env, environment, tier, type, stage, component)
+      or on(env, tier, type, stage, component)
       %(longMetric)s{%(nonGlobalSelector)s}
     ||| % formatConfig
   else
@@ -47,7 +47,7 @@ local combinations(shortMetric, shortDuration, longMetric, longDuration, selecto
   local shortQuery = if nonGlobalFallback then
     |||
       %(shortMetric)s{%(globalSelector)s}
-      or on(env, environment, tier, type, stage, component)
+      or on(env, tier, type, stage, component)
       %(shortMetric)s{%(nonGlobalSelector)s}
     ||| % formatConfig
   else
@@ -194,7 +194,7 @@ local multiburnRateAlertsDashboard(
     dashboardInitial;
 
   local dashboardWithNodeTemplate = if nodeLevel then
-    dashboardWithComponentTemplate.addTemplate(templates.fqdn('gitlab_component_node_ops:rate_5m{component="$component",environment="$environment",stage="$stage",type="$type"}', '', multi=false))
+    dashboardWithComponentTemplate.addTemplate(templates.fqdn('gitlab_component_node_ops:rate_5m{component="$component",env="$environment",stage="$stage",type="$type"}', '', multi=false))
   else
     dashboardWithComponentTemplate;
 
@@ -283,9 +283,9 @@ local multiburnRateAlertsDashboard(
     links+: platformLinks.triage,
   };
 
-local componentSelectorHash = { environment: '$environment', env: '$environment', type: '$type', stage: '$stage', component: '$component' };
-local componentNodeSelectorHash = { environment: '$environment', monitor: { ne: 'global' }, type: '$type', stage: '$stage', component: '$component', fqdn: '$fqdn' };
-local serviceSelectorHash = { environment: '$environment', env: '$environment', type: '$type', stage: '$stage', monitor: 'global' };
+local componentSelectorHash = { env: '$environment', type: '$type', stage: '$stage', component: '$component' };
+local componentNodeSelectorHash = { env: '$environment', monitor: { ne: 'global' }, type: '$type', stage: '$stage', component: '$component', fqdn: '$fqdn' };
+local serviceSelectorHash = { env: '$environment', type: '$type', stage: '$stage', monitor: 'global' };
 local apdexSLOMetric = 'slo:min:events:gitlab_service_apdex:ratio';
 local errorSLOMetric = 'slo:max:events:gitlab_service_errors:ratio';
 

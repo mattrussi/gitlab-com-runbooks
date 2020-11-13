@@ -48,7 +48,7 @@ basic.dashboard(
     basic.timeseries(
       title='Unread Emails',
       description='Number of unread messages',
-      query='max(imap_nb_unread_messages_in_mailbox{environment=~"$environment"})',
+      query='max(imap_nb_unread_messages_in_mailbox{env=~"$environment"})',
       interval='1m',
       intervalFactor=2,
       legendFormat='Count',

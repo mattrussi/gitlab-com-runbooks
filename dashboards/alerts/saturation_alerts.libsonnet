@@ -35,7 +35,7 @@ local selector = { env: '$environment', type: '$type', stage: '$stage' };
       template.new(
         'type',
         '$PROMETHEUS_DS',
-        'label_values(gitlab_service_ops:rate{environment="$environment"}, type)',
+        'label_values(gitlab_service_ops:rate{env="$environment"}, type)',
         current=defaultType,
         refresh='load',
         sort=1,
@@ -44,7 +44,7 @@ local selector = { env: '$environment', type: '$type', stage: '$stage' };
     .addTemplate(templates.stage)
     .addPanel(panel, gridPos={ x: 0, y: 0, h: 20, w: 18 })
     .addPanel(helpPanel, gridPos={ x: 18, y: 0, h: 14, w: 6 })
-    .addPanel(serviceHealth.activeAlertsPanel('alert_type="symptom", type="${type}", environment="$environment"', title='Potentially User Impacting Alerts'), gridPos={ x: 18, y: 14, h: 6, w: 6 })
+    .addPanel(serviceHealth.activeAlertsPanel('alert_type="symptom", type="${type}", env="$environment"', title='Potentially User Impacting Alerts'), gridPos={ x: 18, y: 14, h: 6, w: 6 })
     + {
       links+: platformLinks.parameterizedServiceLink +
               platformLinks.services +

@@ -138,7 +138,7 @@ local currentSaturationBreaches(nodeSelector) =
     query=wrapSaturationQueryWithAlertDashboardJoin(|||
       max by (type, stage, component) (
         clamp_max(
-          gitlab_component_saturation:ratio{environment="$environment", %(nodeSelector)s}
+          gitlab_component_saturation:ratio{env="$environment", %(nodeSelector)s}
           ,
           1
         ) >= on(component, monitor, env, cluster) group_left slo:max:soft:gitlab_component_saturation:ratio
@@ -157,12 +157,12 @@ local currentSaturationWarnings(nodeSelector) =
         max by (type, stage, component) (
           clamp_max(
             gitlab_component_saturation:ratio:avg_over_time_1w{
-              environment="$environment",
+              env="$environment",
               %(nodeSelector)s
             } +
             2 *
               gitlab_component_saturation:ratio:stddev_over_time_1w{
-                environment="$environment",
+                env="$environment",
                 %(nodeSelector)s
               }
             , 1
@@ -184,12 +184,12 @@ local twoWeekSaturationWarnings(nodeSelector) =
         max by (type, stage, component) (
           clamp_max(
             gitlab_component_saturation:ratio:predict_linear_2w{
-              environment="$environment",
+              env="$environment",
               %(nodeSelector)s
             } +
             2 *
               gitlab_component_saturation:ratio:stddev_over_time_1w{
-                environment="$environment",
+                env="$environment",
                 %(nodeSelector)s
               }
           , 1
@@ -244,7 +244,7 @@ local twoWeekSaturationWarnings(nodeSelector) =
                   max(
                     gitlab_component_saturation:ratio{
                       type="%(serviceType)s",
-                      environment="$environment",
+                      env="$environment",
                       stage=~"|%(serviceStage)s"
                     }
                   ) by (component)
@@ -294,7 +294,7 @@ local twoWeekSaturationWarnings(nodeSelector) =
                     max(
                       gitlab_component_saturation:ratio:avg_over_time_1w{
                         type="%(serviceType)s",
-                        environment="$environment",
+                        env="$environment",
                         stage=~"%(serviceStage)s|"
                       }
                     ) by (component)

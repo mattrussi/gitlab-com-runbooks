@@ -33,7 +33,7 @@ basic.dashboard(
     title='Gitaly Node CPU',
     description='',
     query=|||
-      avg(instance_cpu:node_cpu_seconds_not_idle:rate1m{type="gitaly", environment="gprd"}) by (fqdn)
+      avg(instance_cpu:node_cpu_seconds_not_idle:rate1m{type="gitaly", env="gprd"}) by (fqdn)
     |||,
     legendFormat='{{ fqdn }}',
     yAxisLabel='CPU',
@@ -58,9 +58,9 @@ basic.dashboard(
     title='FindAllTags Response Size',
     description='',
     query=|||
-      grpc_server_msg_sent_total{grpc_method="FindAllTags", environment="gprd"}
+      grpc_server_msg_sent_total{grpc_method="FindAllTags", env="gprd"}
       /
-      grpc_server_started_total{grpc_method="FindAllTags", environment="gprd"}
+      grpc_server_started_total{grpc_method="FindAllTags", env="gprd"}
     |||,
     legendFormat='{{ fqdn }}',
     yAxisLabel='Average messages per FindAllTags request',
@@ -85,7 +85,7 @@ basic.dashboard(
     title='Queue Length',
     description='',
     query=|||
-      sidekiq_queue_size{environment="gprd", name=~"web_hook|project_service|post_receive", type="redis-sidekiq"} and on(fqdn) (redis_connected_slaves != 0)
+      sidekiq_queue_size{env="gprd", name=~"web_hook|project_service|post_receive", type="redis-sidekiq"} and on(fqdn) (redis_connected_slaves != 0)
     |||,
     legendFormat='{{ name }}',
     yAxisLabel='Queue Length',
@@ -109,7 +109,7 @@ basic.dashboard(
     title='Processing Time',
     description='',
     query=|||
-      sum(rate(sidekiq_jobs_completion_seconds_sum{environment="gprd", queue=~"web_hook|project_service|post_receive"}[1m])) by (queue)
+      sum(rate(sidekiq_jobs_completion_seconds_sum{env="gprd", queue=~"web_hook|project_service|post_receive"}[1m])) by (queue)
     |||,
     legendFormat='{{ queue }}',
     yAxisLabel='Total Processing Time',
@@ -132,7 +132,7 @@ basic.dashboard(
     title='p80 Latency for PostReceive jobs',
     description='',
     query=|||
-      histogram_quantile(0.8, sum(rate(sidekiq_jobs_completion_seconds_bucket{environment="gprd", queue="post_receive"}[$__interval])) by (le, environment, stage, tier, type, queue))
+      histogram_quantile(0.8, sum(rate(sidekiq_jobs_completion_seconds_bucket{env="gprd", queue="post_receive"}[$__interval])) by (le, environment, stage, tier, type, queue))
     |||,
     legendFormat='{{ queue }}',
     yAxisLabel='PostReceive latency',

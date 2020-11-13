@@ -34,7 +34,7 @@ basic.dashboard(
       Lower is better.
     |||,
     query: |||
-      sum(rate(gitlab_workhorse_http_requests_total{code=~"503|502", environment="gprd", env="gprd"}[2h]))
+      sum(rate(gitlab_workhorse_http_requests_total{code=~"503|502", env="gprd", env="gprd"}[2h]))
     |||,
   },
   {
@@ -73,7 +73,7 @@ basic.dashboard(
     description: |||
       # pgbouncer Sync (web/api) pool Saturation
     |||,
-    panel: saturationDetail.componentSaturationPanel('pgbouncer_sync_primary_pool', 'environment="$environment", type="pgbouncer", stage="main"'),
+    panel: saturationDetail.componentSaturationPanel('pgbouncer_sync_primary_pool', 'env="$environment", type="pgbouncer", stage="main"'),
   },
   {
     description: |||

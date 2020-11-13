@@ -16,7 +16,7 @@ local annotation = grafana.annotation;
 local basic = import 'grafana/basic.libsonnet';
 local statusDescription = import 'status_description.libsonnet';
 
-local selector = { environment: '$environment', stage: '$stage', type: '$type' };
+local selector = { env: '$environment', stage: '$stage', type: '$type' };
 
 local generalGraphPanel(title, description=null, linewidth=2, sort='increasing') =
   graphPanel.new(
@@ -90,7 +90,7 @@ basic.dashboard(
   }
 )
 .addPanel(
-  nodeMetrics.nodeMetricsDetailRow('environment="$environment", stage=~"|$stage", type="$type"'),
+  nodeMetrics.nodeMetricsDetailRow('env="$environment", stage=~"|$stage", type="$type"'),
   gridPos={
     x: 0,
     y: 5000,

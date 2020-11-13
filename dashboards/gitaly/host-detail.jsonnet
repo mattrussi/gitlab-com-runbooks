@@ -26,7 +26,7 @@ local ratelimitLockPercentage(selector) =
             le="60"
           }[$__interval]
         )
-      ) by (environment, tier, type, stage, fqdn, grpc_method)
+      ) by (env, tier, type, stage, fqdn, grpc_method)
       /
       sum(
         rate(
@@ -35,7 +35,7 @@ local ratelimitLockPercentage(selector) =
             le="+Inf"
           }[$__interval]
         )
-      ) by (environment, tier, type, stage, fqdn, grpc_method)
+      ) by (env, tier, type, stage, fqdn, grpc_method)
     ||| % { selector: selector },
     legendFormat='{{fqdn}} - {{grpc_method}}'
   );
@@ -68,7 +68,6 @@ local gitalySpawnTimeoutsPerNode(selector) =
 
 
 local environmentSelectorHash = {
-  environment: '$environment',
   env: '$environment',
 };
 
@@ -123,7 +122,7 @@ basic.dashboard(
   'Host Detail',
   tags=['type:gitaly'],
 )
-.addTemplate(templates.fqdn(query='gitlab_version_info{type="gitaly", component="gitaly", environment="$environment"}', current='file-01-stor-gprd.c.gitlab-production.internal'))
+.addTemplate(templates.fqdn(query='gitlab_version_info{type="gitaly", component="gitaly", env="$environment"}', current='file-01-stor-gprd.c.gitlab-production.internal'))
 .addPanels(
   headlineRow(startRow=100)
 )
