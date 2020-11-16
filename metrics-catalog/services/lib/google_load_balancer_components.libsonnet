@@ -10,7 +10,7 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
   googleLoadBalancer(loadBalancerName, projectId)::
     local baseSelector = { target_proxy_name: loadBalancerName, project_id: projectId };
 
-    metricsCatalog.componentDefinition({
+    metricsCatalog.serviceLevelIndicatorDefinition({
       requestRate: rateMetric(
         counter='stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count',
         selector=baseSelector

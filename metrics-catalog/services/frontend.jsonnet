@@ -16,7 +16,7 @@ metricsCatalog.serviceDefinition({
     git: true,
     registry: true,
   },
-  components: {
+  serviceLevelIndicators: {
     mainHttpServices: {
       staticLabels: {
         stage: 'main',

@@ -15,7 +15,7 @@ metricsCatalog.serviceDefinition({
   serviceDependencies: {
     gitaly: true,
   },
-  components: {
+  serviceLevelIndicators: {
     proxy: {
       local baseSelector = { job: 'praefect' },
       apdex: gitalyHelpers.grpcServiceApdex(baseSelector),

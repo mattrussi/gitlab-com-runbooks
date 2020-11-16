@@ -12,7 +12,7 @@ metricsCatalog.serviceDefinition({
    * disable anomaly detection for RPS
    */
   disableOpsRatePrediction: true,
-  components: {
+  serviceLevelIndicators: {
     elasticsearch_searching: {
       requestRate: derivMetric(
         counter='elasticsearch_indices_search_query_total',

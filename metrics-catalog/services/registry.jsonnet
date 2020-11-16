@@ -30,7 +30,7 @@ metricsCatalog.serviceDefinition({
     kubernetes: true,
     vms: true,  // registry haproxy frontend still runs on vms
   },
-  components: {
+  serviceLevelIndicators: {
     loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
       stageMappings={
         main: { backends: ['registry'], toolingLinks: [] },

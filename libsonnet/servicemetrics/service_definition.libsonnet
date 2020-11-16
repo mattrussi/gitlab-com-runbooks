@@ -1,4 +1,4 @@
-local componentDefinition = import 'component_definition.libsonnet';
+local serviceLevelIndicatorDefinition = import 'service_level_indicator_definition.libsonnet';
 
 // For now we assume that services are provisioned on vms and not kubernetes
 local provisioningDefaults = { vms: true, kubernetes: false };
@@ -8,22 +8,22 @@ local serviceDefaults = {
   nodeLevelMonitoring: false,  // By default we do not use node-level monitoring
 };
 
-// Convience method, will wrap a raw definition in a componentDefinition if needed
+// Convience method, will wrap a raw definition in a serviceLevelIndicatorDefinition if needed
 local prepareComponent(definition) =
-  if std.objectHasAll(definition, 'initComponentWithName') then
+  if std.objectHasAll(definition, 'initServiceLevelIndicatorWithName') then
     // Already prepared
     definition
   else
     // Wrap class as a component definition
-    componentDefinition.componentDefinition(definition);
+    serviceLevelIndicatorDefinition.serviceLevelIndicatorDefinition(definition);
 
 local validateAndApplyServiceDefaults(service) =
   local serviceWithProvisioningDefaults = ({ provisioning: provisioningDefaults } + service);
 
   serviceDefaults + serviceWithProvisioningDefaults {
-    components: {
-      [componentName]: prepareComponent(service.components[componentName]).initComponentWithName(componentName)
-      for componentName in std.objectFields(service.components)
+    serviceLevelIndicators: {
+      [sliName]: prepareComponent(service.serviceLevelIndicators[sliName]).initServiceLevelIndicatorWithName(sliName)
+      for sliName in std.objectFields(service.serviceLevelIndicators)
     },
   };
 
@@ -32,8 +32,8 @@ local serviceDefinition(service) =
   local private = {
     serviceHasComponentWith(keymetricName)::
       std.foldl(
-        function(memo, componentName) memo || std.objectHas(service.components[componentName], keymetricName),
-        std.objectFields(service.components),
+        function(memo, sliName) memo || std.objectHas(service.serviceLevelIndicators[sliName], keymetricName),
+        std.objectFields(service.serviceLevelIndicators),
         false
       ),
   };
@@ -46,11 +46,11 @@ local serviceDefinition(service) =
     getProvisioning()::
       service.provisioning,
 
-    // Returns an array of components for this service
+    // Returns an array of serviceLevelIndicators for this service
     getComponentsList()::
       [
-        service.components[componentName]
-        for componentName in std.objectFields(service.components)
+        service.serviceLevelIndicators[sliName]
+        for sliName in std.objectFields(service.serviceLevelIndicators)
       ],
   };
 
