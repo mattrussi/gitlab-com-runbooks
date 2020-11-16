@@ -16,7 +16,7 @@ metricsCatalog.serviceDefinition({
     apdexScore: 0.995,
     errorRatio: 0.9995,
   },
-  components: {
+  serviceLevelIndicators: {
     loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
       stageMappings={
         main: { backends: ['pages_http'], toolingLinks: [] },

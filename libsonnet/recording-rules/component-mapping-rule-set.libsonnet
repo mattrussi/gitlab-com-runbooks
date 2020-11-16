@@ -10,7 +10,7 @@
       generateRecordingRulesForService(serviceDefinition)::
         [
           {
-            local component = serviceDefinition.components[componentName],
+            local component = serviceDefinition.serviceLevelIndicators[sliName],
             local aggregateRequestRate = if component.aggregateRequestRate then 'yes' else 'no',
 
             record: 'gitlab_component_service:mapping',
@@ -18,11 +18,11 @@
               type: serviceDefinition.type,
               tier: serviceDefinition.tier,
               aggregate_rps: aggregateRequestRate,
-              component: componentName,
+              component: sliName,  // Use component for compatability here
             },
             expr: '1',
           }
-          for componentName in std.objectFields(serviceDefinition.components)
+          for sliName in std.objectFields(serviceDefinition.serviceLevelIndicators)
         ],
 
     },

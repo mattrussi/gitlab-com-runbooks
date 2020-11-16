@@ -27,34 +27,34 @@ local applySignificantLabels(metricNamesAndLabels, significantLabels) =
     {}
   );
 
-local collectMetricsAndLabelsForKeyMetric(component, keyMetricAttribute, significantLabels) =
-  // Check the component supports the key metric
-  if std.objectHas(component, keyMetricAttribute) then
-    local keyMetric = component[keyMetricAttribute];
+local collectMetricsAndLabelsForKeyMetric(sli, keyMetricAttribute, significantLabels) =
+  // Check the sli supports the key metric `keyMetricAttribute`
+  if std.objectHas(sli, keyMetricAttribute) then
+    local keyMetric = sli[keyMetricAttribute];
 
     // Does the key metric support reflection?
     if std.objectHasAll(keyMetric, 'supportsReflection') then
-      local reflection = component[keyMetricAttribute].supportsReflection();
+      local reflection = sli[keyMetricAttribute].supportsReflection();
       applySignificantLabels(reflection.getMetricNamesAndLabels(), significantLabels)
     else
       {}
   else
     {};
 
-// Return a hash of { metric: set(labels) } for a component
-local collectMetricsAndLabelsForComponent(component) =
-  local significantLabels = std.set(component.significantLabels);
+// Return a hash of { metric: set(labels) } for an SLI
+local collectMetricsAndLabelsForSLI(sli) =
+  local significantLabels = std.set(sli.significantLabels);
 
   mergeFoldl(function(keyMetricAttribute)
-               collectMetricsAndLabelsForKeyMetric(component, keyMetricAttribute, significantLabels),
+               collectMetricsAndLabelsForKeyMetric(sli, keyMetricAttribute, significantLabels),
              ['apdex', 'requestRate', 'errorRate']);
 
 // Return a hash of { metric: set(labels) } for a service
 local collectMetricsAndLabelsForService(service) =
-  local foldFunc = function(memo, componentName)
-    local component = service.components[componentName];
-    merge(memo, collectMetricsAndLabelsForComponent(component));
-  std.foldl(foldFunc, std.objectFields(service.components), {});
+  local foldFunc = function(memo, sliName)
+    local sli = service.serviceLevelIndicators[sliName];
+    merge(memo, collectMetricsAndLabelsForSLI(sli));
+  std.foldl(foldFunc, std.objectFields(service.serviceLevelIndicators), {});
 
 // Return a hash of metrics and dimensions, for use in composing recording rules
 local collectMetricsAndLabels() =

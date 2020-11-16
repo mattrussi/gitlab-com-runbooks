@@ -36,7 +36,7 @@ metricsCatalog.serviceDefinition({
   serviceDependencies: {
     gitaly: true,
   },
-  components: {
+  serviceLevelIndicators: {
     goserver: {
       local baseSelector = {
         job: 'gitaly',

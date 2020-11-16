@@ -36,7 +36,7 @@ metricsCatalog.serviceDefinition({
   recordingRuleMetrics: [
     'http_requests_total',
   ],
-  components: {
+  serviceLevelIndicators: {
     loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
       stageMappings={
         main: { backends: ['web'], toolingLinks: [] },  // What to do with `429_slow_down`?

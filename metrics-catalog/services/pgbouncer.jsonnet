@@ -10,7 +10,7 @@ metricsCatalog.serviceDefinition({
   serviceDependencies: {
     patroni: true,
   },
-  components: {
+  serviceLevelIndicators: {
     service: {
       // The same query, with different labels is also used on the patroni nodes pgbouncer instances
       requestRate: combined([

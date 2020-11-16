@@ -17,7 +17,7 @@ metricsCatalog.serviceDefinition({
   serviceDependencies: {
     api: true,
   },
-  components: {
+  serviceLevelIndicators: {
     polling: {
       requestRate: rateMetric(
         counter='gitlab_workhorse_http_requests_total',

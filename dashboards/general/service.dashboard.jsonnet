@@ -62,7 +62,6 @@ basic.dashboard(
     statusDescription.serviceErrorStatusDescriptionPanel(selector),
   ], startRow=0, rowHeight=4)
 )
-.addPanel(serviceHealth.row('$type', '$stage'), gridPos={ x: 0, y: 1000 })
 .addPanel(
   row.new(title='🏅 Key Service Metrics'),
   gridPos={
@@ -74,20 +73,11 @@ basic.dashboard(
 )
 .addPanels(
   layout.grid([
-    keyMetrics.apdexPanel('$type', '$stage', stableId='apdex-ratio'),
-    keyMetrics.errorRatesPanel('$type', '$stage', stableId='error-ratio'),
-    keyMetrics.qpsPanel('$type', '$stage', stableId='request-rate'),
-    keyMetrics.saturationPanel('$type', '$stage'),
+    keyMetrics.serviceApdexPanel('$type', '$stage', stableId='apdex-ratio'),
+    keyMetrics.serviceErrorRatePanel('$type', '$stage', stableId='error-ratio'),
+    keyMetrics.serviceOperationRatePanel('$type', '$stage', stableId='request-rate'),
+    keyMetrics.utilizationRatesPanel('$type', '$stage'),
   ], startRow=3001)
-)
-.addPanel(
-  keyMetrics.keyComponentMetricsRow('$type', '$stage'),
-  gridPos={
-    x: 0,
-    y: 4000,
-    w: 24,
-    h: 1,
-  }
 )
 .addPanel(
   nodeMetrics.nodeMetricsDetailRow('environment="$environment", stage=~"|$stage", type="$type"'),

@@ -7,14 +7,14 @@ local promQuery = import 'grafana/prom_query.libsonnet';
 local seriesOverrides = import 'grafana/series_overrides.libsonnet';
 local templates = import 'grafana/templates.libsonnet';
 local platformLinks = import 'platform_links.libsonnet';
+local selectors = import 'promql/selectors.libsonnet';
 local sliPromQL = import 'sli_promql.libsonnet';
+local statusDescription = import 'status_description.libsonnet';
 local dashboard = grafana.dashboard;
 local row = grafana.row;
 local template = grafana.template;
 local graphPanel = grafana.graphPanel;
 local annotation = grafana.annotation;
-local selectors = import 'promql/selectors.libsonnet';
-local statusDescription = import 'status_description.libsonnet';
 
 local defaultEnvironmentSelector = { environment: '$environment', env: '$environment' };
 
@@ -72,14 +72,14 @@ local genericApdexPanel(
     promQuery.target(
       sliPromQL.apdex.serviceApdexDegradationSLOQuery(environmentSelectorHash, serviceType),
       interval='5m',
-      legendFormat='6h Degradation SLO',
+      legendFormat='6h Degradation SLO (5% of monthly error budget)',
     ),
   )
   .addTarget(  // Double apdex SLO is Outage-level SLO
     promQuery.target(
       sliPromQL.apdex.serviceApdexOutageSLOQuery(environmentSelectorHash, serviceType),
       interval='5m',
-      legendFormat='1h Outage SLO',
+      legendFormat='1h Outage SLO (2% of monthly error budget)',
     ),
   )
   .resetYaxes()
@@ -126,14 +126,14 @@ local genericErrorPanel(
     promQuery.target(
       sliPromQL.errorRate.serviceErrorRateDegradationSLOQuery(environmentSelectorHash, serviceType),
       interval='5m',
-      legendFormat='6h Degradation SLO',
+      legendFormat='6h Degradation SLO (5% of monthly error budget)',
     ),
   )
   .addTarget(  // Outage level SLO
     promQuery.target(
       sliPromQL.errorRate.serviceErrorRateOutageSLOQuery(environmentSelectorHash, serviceType),
       interval='5m',
-      legendFormat='1h Outage SLO',
+      legendFormat='1h Outage SLO (2% of monthly error budget)',
     ),
   )
   .resetYaxes()
@@ -149,7 +149,7 @@ local genericErrorPanel(
     show=false,
   );
 
-local genericQPSPanel(
+local genericOperationRatePanel(
   title,
   description='The operation rate is the sum total of all requests being handle for all components within this service. Note that a single user request can lead to requests to multiple components. Higher is busier.',
   compact=false,
@@ -190,7 +190,10 @@ local genericQPSPanel(
   );
 
 {
-  apdexPanel(
+  /**
+   * Displays an aggregated apdex score timeseries for a service
+   */
+  serviceApdexPanel(
     serviceType,
     serviceStage,
     environmentSelectorHash=defaultEnvironmentSelector,
@@ -198,7 +201,6 @@ local genericQPSPanel(
     description='Apdex is a measure of requests that complete within a tolerable period of time for the service. Higher is better.',
     stableId=null,
     sort='increasing',
-
   )::
     local selectorHash = environmentSelectorHash { type: serviceType, stage: serviceStage };
 
@@ -232,49 +234,52 @@ local genericQPSPanel(
       targetBlank: true,
     }),
 
-  singleComponentApdexPanel(
+  /**
+   * Displays an apdex score timeseries for a single SLI for a single service
+   */
+  sliApdexPanel(
     serviceType,
     serviceStage,
-    component,
+    sliName,
     environmentSelectorHash=defaultEnvironmentSelector,
   )::
     local formatConfig = {
       serviceType: serviceType,
-      component: component,
+      sliName: sliName,
     };
-    local selectorHash = environmentSelectorHash { type: serviceType, stage: serviceStage, component: component };
+    local selectorHash = environmentSelectorHash { type: serviceType, stage: serviceStage, component: sliName };
 
     genericApdexPanel(
-      '%(component)s Apdex' % formatConfig,
-      primaryQueryExpr=sliPromQL.apdex.componentApdexQuery(selectorHash, '$__interval'),
+      '%(sliName)s Apdex' % formatConfig,
+      primaryQueryExpr=sliPromQL.apdex.sliApdexQuery(selectorHash, '$__interval'),
       legendFormat='{{ component }} apdex',
       environmentSelectorHash=environmentSelectorHash,
       serviceType=serviceType,
     )
     .addSeriesOverride(seriesOverrides.goldenMetric('/.* apdex$/'))
     .addDataLink({
-      url: '/d/alerts-component_multiburn_apdex?${__url_time_range}&${__all_variables}&var-type=%(type)s&var-component=%(component)s' % {
-        type: serviceType,
-        component: component,
-      },
-      title: 'Component Apdex Multi-Burn Analysis',
+      url: '/d/alerts-component_multiburn_apdex?${__url_time_range}&${__all_variables}&var-type=%(serviceType)s&var-component=%(sliName)s' % formatConfig,
+      title: 'SLI Apdex Multi-Burn Analysis',
       targetBlank: true,
     }),
 
-  singleComponentNodeApdexPanel(
+  /**
+   * Apdex score timeseries for a single SLI on a single node
+   */
+  sliNodeApdexPanel(
     serviceType,
-    component,
+    sliName,
     selectorHash,
     environmentSelectorHash=defaultEnvironmentSelector,
   )::
     local formatConfig = {
       serviceType: serviceType,
-      component: component,
+      sliName: sliName,
     };
 
     genericApdexPanel(
-      '🖥 Per-Node %(component)s Apdex' % formatConfig,
-      primaryQueryExpr=sliPromQL.apdex.componentNodeApdexQuery(selectorHash, '$__interval'),
+      '🖥 Per-Node %(sliName)s Apdex' % formatConfig,
+      primaryQueryExpr=sliPromQL.apdex.sliNodeApdexQuery(selectorHash, '$__interval'),
       legendFormat='{{ fqdn }} {{ component }} apdex',
       environmentSelectorHash=environmentSelectorHash,
       serviceType=serviceType,
@@ -283,29 +288,13 @@ local genericQPSPanel(
       linewidth=1,
     )
     .addDataLink({
-      url: '/d/alerts-component_node_multiburn_apdex?${__url_time_range}&${__all_variables}&var-type=%(type)s&var-fqdn=${__series.labels.fqdn}' % { type: serviceType },
+      url: '/d/alerts-component_node_multiburn_apdex?${__url_time_range}&${__all_variables}&var-type=%(serviceType)s&var-fqdn=${__series.labels.fqdn}' % formatConfig,
       title: 'Component/Node Apdex Multi-Burn Analysis',
       targetBlank: true,
     }),
 
-  componentApdexPanel(
-    serviceType,
-    serviceStage,
-    environmentSelectorHash=defaultEnvironmentSelector,
-  )::
-    local selectorHash = environmentSelectorHash { type: serviceType, stage: serviceStage };
-
-    genericApdexPanel(
-      'Component Latency: Apdex',
-      linewidth=1,
-      primaryQueryExpr=sliPromQL.apdex.componentApdexQuery(selectorHash, '$__interval'),
-      legendFormat='{{ component }} component',
-      environmentSelectorHash=environmentSelectorHash,
-      serviceType=serviceType,
-    ),
-
   /**
-   * Returns a graph for a node-level aggregated apdex score
+   * Apdex score timeseries for all SLIs aggregated on a node
    */
   serviceNodeApdexPanel(
     serviceType,
@@ -320,7 +309,10 @@ local genericQPSPanel(
       serviceType=serviceType,
     ),
 
-  errorRatesPanel(
+  /**
+   * Aggregated error ratio timeseries for a service
+   */
+  serviceErrorRatePanel(
     serviceType,
     serviceStage,
     environmentSelectorHash=defaultEnvironmentSelector,
@@ -329,6 +321,9 @@ local genericQPSPanel(
     stableId=null,
   )::
     local selectorHash = environmentSelectorHash { type: serviceType, stage: serviceStage };
+    local formatConfig = {
+      serviceType: serviceType,
+    };
 
     genericErrorPanel(
       'Error Ratios',
@@ -356,116 +351,72 @@ local genericQPSPanel(
     .addSeriesOverride(seriesOverrides.goldenMetric('/ service$/', { fillBelowTo: serviceType + ' service (avg)' }))
     .addSeriesOverride(seriesOverrides.averageCaseSeries('/ service \\(avg\\)$/', { fillGradient: 10 }))
     .addDataLink({
-      url: '/d/alerts-service_multiburn_error?${__url_time_range}&${__all_variables}&var-type=%(type)s' % { type: serviceType },
+      url: '/d/alerts-service_multiburn_error?${__url_time_range}&${__all_variables}&var-type=%(serviceType)s' % formatConfig,
       title: 'Service Error-Rate Multi-Burn Analysis',
       targetBlank: true,
     }),
 
-  singleComponentErrorRates(
+  /**
+   * Error ratio timeseries panel for a single SLI for a single service
+   */
+  sliErrorRatePanel(
     serviceType,
     serviceStage,
-    componentName,
+    sliName,
     environmentSelectorHash=defaultEnvironmentSelector,
   )::
     local formatConfig = {
       serviceType: serviceType,
-      component: componentName,
+      sliName: sliName,
     };
-    local selectorHash = environmentSelectorHash { type: serviceType, stage: serviceStage, component: componentName };
+    local selectorHash = environmentSelectorHash { type: serviceType, stage: serviceStage, component: sliName };
 
     genericErrorPanel(
-      '%(component)s Component Error Rates' % formatConfig,
+      '%(sliName)s SLI Error-Rate' % formatConfig,
       linewidth=1,
-      primaryQueryExpr=sliPromQL.errorRate.componentErrorRateQuery(selectorHash),
+      primaryQueryExpr=sliPromQL.errorRate.sliErrorRateQuery(selectorHash),
       legendFormat='{{ component }} error rate',
       environmentSelectorHash=environmentSelectorHash,
       serviceType=serviceType,
     )
     .addSeriesOverride(seriesOverrides.goldenMetric('/.* error rate$/'))
     .addDataLink({
-      url: '/d/alerts-component_multiburn_error?${__url_time_range}&${__all_variables}&var-type=%(type)s&var-component=%(component)s' % {
-        type: serviceType,
-        component: componentName,
-      },
-      title: 'Component Error-Rate Multi-Burn Analysis',
+      url: '/d/alerts-component_multiburn_error?${__url_time_range}&${__all_variables}&var-type=%(serviceType)s&var-component=%(sliName)s' % formatConfig,
+      title: 'SLI Error-Rate Multi-Burn Analysis',
       targetBlank: true,
     }),
 
-  singleComponentNodeErrorRates(
+  /**
+   * Timeseries for a single SLI on a single node for a single service
+   */
+  sliNodeErrorRateQuery(
     serviceType,
-    componentName,
+    sliName,
     selectorHash,
     environmentSelectorHash=defaultEnvironmentSelector,
   )::
     local formatConfig = {
       serviceType: serviceType,
-      component: componentName,
+      sliName: sliName,
     };
 
     genericErrorPanel(
-      '🖥 Per-Node %(component)s Component Error Rates' % formatConfig,
+      '🖥 Per-Node %(sliName)s SLI Error Rates' % formatConfig,
       linewidth=1,
       legend_show=false,
-      primaryQueryExpr=sliPromQL.errorRate.componentNodeErrorRateQuery(selectorHash),
+      primaryQueryExpr=sliPromQL.errorRate.sliNodeErrorRateQuery(selectorHash),
       legendFormat='{{ fqdn }} {{ component }} error rate',
       environmentSelectorHash=environmentSelectorHash,
       serviceType=serviceType,
     )
     .addDataLink({
-      url: '/d/alerts-component_node_multiburn_error?${__url_time_range}&${__all_variables}&var-type=%(type)s&var-fqdn=${__series.labels.fqdn}' % { type: serviceType },
-      title: 'Component/Node Error Multi-Burn Analysis',
+      url: '/d/alerts-component_node_multiburn_error?${__url_time_range}&${__all_variables}&var-type=%(serviceType)s&var-fqdn=${__series.labels.fqdn}' % formatConfig,
+      title: 'Per-Node SLI Error-Rate Multi-Burn Analysis',
       targetBlank: true,
     }),
 
-  componentErrorRates(
-    serviceType,
-    serviceStage,
-    environmentSelectorHash=defaultEnvironmentSelector,
-  )::
-    local selectorHash = environmentSelectorHash { type: serviceType, stage: serviceStage };
-
-    local formatConfig = {
-      serviceType: serviceType,
-      serviceStage: serviceStage,
-      selector: selectors.serializeHash(environmentSelectorHash { type: serviceType, stage: serviceStage }),
-    };
-    generalGraphPanel(
-      'Component Error Rates - modified scale: (1 + n) log10',
-      description='Error rates are a measure of unhandled service exceptions per second. Client errors are excluded when possible. Lower is better',
-      linewidth=1,
-      sort='decreasing',
-    )
-    .addTarget(  // Primary metric
-      promQuery.target(
-        |||
-          1 +
-          (
-            60 *
-            max(
-              max_over_time(
-                gitlab_component_errors:rate{%(selector)s}[$__interval]
-              )
-            ) by (component)
-          )
-        ||| % formatConfig,
-        legendFormat='{{ component }} component',
-      )
-    )
-    .resetYaxes()
-    .addYaxis(
-      format='short',
-      label='Errors per Minute',
-      logBase=10,
-    )
-    .addYaxis(
-      format='short',
-      max=1,
-      min=0,
-      show=false,
-    ),
-
   /**
-   * Returns a graph for a node-level error ratios
+   * Returns a timeseries for a node-level error ratios, aggregated over all SLIs
    */
   serviceNodeErrorRatePanel(
     serviceType,
@@ -480,8 +431,10 @@ local genericQPSPanel(
       serviceType=serviceType,
     ),
 
-
-  qpsPanel(
+  /**
+   * Timeseries aggregated operation rate across all SLIs in a service
+   */
+  serviceOperationRatePanel(
     serviceType,
     serviceStage,
     compact=false,
@@ -490,7 +443,7 @@ local genericQPSPanel(
   )::
     local selectorHash = environmentSelectorHash { type: serviceType, stage: serviceStage };
 
-    genericQPSPanel(
+    genericOperationRatePanel(
       'RPS - Service Requests per Second',
       compact=compact,
       stableId=stableId,
@@ -519,21 +472,24 @@ local genericQPSPanel(
     )
     .addSeriesOverride(seriesOverrides.goldenMetric('/ service$/')),
 
-  singleComponentQPSPanel(
+  /**
+   * Timeseries for the operation rate of a single SLI in a service
+   */
+  sliOpsRatePanel(
     serviceType,
     serviceStage,
-    componentName,
+    sliName,
     environmentSelectorHash=defaultEnvironmentSelector,
   )::
     local formatConfig = {
       serviceType: serviceType,
-      component: componentName,
+      sliName: sliName,
     };
-    local selectorHash = environmentSelectorHash { type: serviceType, stage: serviceStage, component: componentName };
+    local selectorHash = environmentSelectorHash { type: serviceType, stage: serviceStage, component: sliName };
 
-    genericQPSPanel(
-      '%(component)s Component RPS - Requests per Second' % formatConfig,
-      primaryQueryExpr=sliPromQL.opsRate.componentOpsRateQuery(selectorHash, '$__interval'),
+    genericOperationRatePanel(
+      '%(sliName)s SLI RPS - Requests per Second' % formatConfig,
+      primaryQueryExpr=sliPromQL.opsRate.sliOpsRateQuery(selectorHash, '$__interval'),
       legendFormat='{{ component }} RPS',
       environmentSelectorHash=environmentSelectorHash,
       serviceType=serviceType,
@@ -541,48 +497,35 @@ local genericQPSPanel(
     )
     .addSeriesOverride(seriesOverrides.goldenMetric('/.* RPS$/')),
 
-  singleComponentNodeQPSPanel(
+  /**
+   * Timeseries for a single SLI on a single node for a single service
+   */
+  sliNodeOperationRatePanel(
     serviceType,
-    componentName,
+    sliName,
     selectorHash,
     environmentSelectorHash=defaultEnvironmentSelector,
   )::
     local formatConfig = {
       serviceType: serviceType,
-      component: componentName,
+      sliName: sliName,
     };
 
-    genericQPSPanel(
-      '🖥 Per-Node %(component)s Component RPS - Requests per Second' % formatConfig,
-      primaryQueryExpr=sliPromQL.opsRate.componentNodeOpsRateQuery(selectorHash, '$__interval'),
+    genericOperationRatePanel(
+      '🖥 Per-Node %(sliName)s SLI RPS - Requests per Second' % formatConfig,
+      primaryQueryExpr=sliPromQL.opsRate.sliNodeOpsRateQuery(selectorHash, '$__interval'),
       legendFormat='{{ fqdn }} {{ component }} RPS',
       environmentSelectorHash=environmentSelectorHash,
       serviceType=serviceType,
       linewidth=1,
     ),
 
-  componentQpsPanel(
-    serviceType,
-    serviceStage,
-    environmentSelectorHash=defaultEnvironmentSelector,
-  )::
-    local selectorHash = environmentSelectorHash { type: serviceType, stage: serviceStage };
-
-    genericQPSPanel(
-      'Component RPS - Requests per Second',
-      primaryQueryExpr=sliPromQL.opsRate.componentOpsRateQuery(selectorHash, '$__interval'),
-      legendFormat='{{ component }} component',
-      environmentSelectorHash=environmentSelectorHash,
-      serviceType=serviceType,
-      linewidth=1,
-    ),
-
-  serviceNodeQpsPanel(
+  serviceNodeOperationRatePanel(
     serviceType,
     selectorHash,
     environmentSelectorHash=defaultEnvironmentSelector,
   )::
-    genericQPSPanel(
+    genericOperationRatePanel(
       'Node RPS - Requests per Second',
       primaryQueryExpr=sliPromQL.opsRate.serviceNodeOpsRateQuery(selectorHash, '$__interval'),
       legendFormat='{{ fqdn }}',
@@ -590,15 +533,10 @@ local genericQPSPanel(
       serviceType=serviceType,
     ),
 
-  saturationPanel(
-    serviceType,
-    serviceStage,
-    compact=false,
-    environmentSelectorHash=defaultEnvironmentSelector,
-  )::
-    self.componentSaturationPanel(serviceType, serviceStage, compact, environmentSelectorHash=environmentSelectorHash),
-
-  componentSaturationPanel(
+  /**
+   * Return utilization rates panel for a service
+   */
+  utilizationRatesPanel(
     serviceType,
     serviceStage,
     compact=false,
@@ -643,11 +581,14 @@ local genericQPSPanel(
       show=false,
     ),
 
+  /**
+   * Returns a row with key metrics for service
+   */
   headlineMetricsRow(
     serviceType,
     serviceStage,
     startRow,
-    rowTitle='🌡️ Service Level Indicators (𝙎𝙇𝙄𝙨)',
+    rowTitle='🌡️ Aggregated Service Level Indicators (𝙎𝙇𝙄𝙨)',
     environmentSelectorHash=defaultEnvironmentSelector,
   )::
     layout.grid([
@@ -656,44 +597,18 @@ local genericQPSPanel(
     +
     layout.splitColumnGrid([
       [
-        self.apdexPanel(serviceType, serviceStage, compact=true, environmentSelectorHash=environmentSelectorHash),
+        self.serviceApdexPanel(serviceType, serviceStage, compact=true, environmentSelectorHash=environmentSelectorHash),
         statusDescription.serviceApdexStatusDescriptionPanel(environmentSelectorHash { type: serviceType, stage: serviceStage }),
       ],
       [
-        self.errorRatesPanel(serviceType, serviceStage, compact=true, environmentSelectorHash=environmentSelectorHash),
+        self.serviceErrorRatePanel(serviceType, serviceStage, compact=true, environmentSelectorHash=environmentSelectorHash),
         statusDescription.serviceErrorStatusDescriptionPanel(environmentSelectorHash { type: serviceType, stage: serviceStage }),
       ],
       [
-        self.qpsPanel(serviceType, serviceStage, compact=true, environmentSelectorHash=environmentSelectorHash),
+        self.serviceOperationRatePanel(serviceType, serviceStage, compact=true, environmentSelectorHash=environmentSelectorHash),
       ],
       [
-        self.saturationPanel(serviceType, serviceStage, compact=true, environmentSelectorHash=environmentSelectorHash),
+        self.utilizationRatesPanel(serviceType, serviceStage, compact=true, environmentSelectorHash=environmentSelectorHash),
       ],
     ], [4, 1], startRow=startRow + 1),
-
-  keyServiceMetricsRow(
-    serviceType,
-    serviceStage,
-    environmentSelectorHash=defaultEnvironmentSelector,
-  )::
-    row.new(title='🏅 Key Service Metrics', collapse=true)
-    .addPanels(layout.grid([
-      self.apdexPanel(serviceType, serviceStage, environmentSelectorHash=environmentSelectorHash),
-      self.errorRatesPanel(serviceType, serviceStage, environmentSelectorHash=environmentSelectorHash),
-      self.qpsPanel(serviceType, serviceStage, environmentSelectorHash=environmentSelectorHash),
-      self.saturationPanel(serviceType, serviceStage, environmentSelectorHash=environmentSelectorHash),
-    ])),
-
-  keyComponentMetricsRow(
-    serviceType,
-    serviceStage,
-    environmentSelectorHash=defaultEnvironmentSelector,
-  )::
-    row.new(title='🔩 Service Component Metrics', collapse=true)
-    .addPanels(layout.grid([
-      self.componentApdexPanel(serviceType, serviceStage, environmentSelectorHash=environmentSelectorHash),
-      self.componentErrorRates(serviceType, serviceStage, environmentSelectorHash=environmentSelectorHash),
-      self.componentQpsPanel(serviceType, serviceStage, environmentSelectorHash=environmentSelectorHash),
-      self.componentSaturationPanel(serviceType, serviceStage, environmentSelectorHash=environmentSelectorHash),
-    ])),
 }

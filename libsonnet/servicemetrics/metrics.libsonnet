@@ -10,9 +10,8 @@
 
   // Service definition
   serviceDefinition:: (import './service_definition.libsonnet').serviceDefinition,
-  componentDefinition:: (import './component_definition.libsonnet').componentDefinition,
-
-  combinedComponentDefinition:: (import './combined_component_definition.libsonnet').combinedComponentDefinition,
+  serviceLevelIndicatorDefinition:: (import './service_level_indicator_definition.libsonnet').serviceLevelIndicatorDefinition,
+  combinedServiceLevelIndicatorDefinition:: (import './combined_service_level_indicator_definition.libsonnet').combinedServiceLevelIndicatorDefinition,
 
   // Resource Saturation & Utilization definition
   resourceSaturationPoint: (import './resource_saturation_point.libsonnet').resourceSaturationPoint,

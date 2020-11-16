@@ -10,7 +10,7 @@ local singleHTTPComponent(stage, selector, definition) =
     backend: if std.length(backends) == 1 then backends[0] else { re: std.join('|', backends) },
   };
 
-  metricsCatalog.componentDefinition({
+  metricsCatalog.serviceLevelIndicatorDefinition({
     staticLabels: {
       stage: stage,
     },
@@ -39,7 +39,7 @@ local singleL4Component(stage, selector, definition) =
     backend: if std.length(backends) == 1 then backends[0] else { re: std.join('|', backends) },
   };
 
-  metricsCatalog.componentDefinition({
+  metricsCatalog.serviceLevelIndicatorDefinition({
     staticLabels: {
       stage: stage,
     },
@@ -61,7 +61,7 @@ local singleL4Component(stage, selector, definition) =
 
 local combinedBackendCurry(generator) =
   function(stageMappings, selector)
-    metricsCatalog.combinedComponentDefinition(
+    metricsCatalog.combinedServiceLevelIndicatorDefinition(
       components=[
         generator(stage=stage, selector=selector, definition=stageMappings[stage])
         for stage in std.objectFields(stageMappings)

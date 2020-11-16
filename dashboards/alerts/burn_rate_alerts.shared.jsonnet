@@ -167,7 +167,7 @@ local multiburnRateAlertsDashboard(
   title,
   oneHourBurnRateCombinations,
   sixHourBurnRateCombinations,
-  componentLevel,
+  serviceAggregated,
   selectorHash,
   statusDescriptionPanel,
   nodeLevel=false,
@@ -188,7 +188,7 @@ local multiburnRateAlertsDashboard(
       )
     );
 
-  local dashboardWithComponentTemplate = if componentLevel then
+  local dashboardWithComponentTemplate = if !serviceAggregated then
     dashboardInitial.addTemplate(templates.component)
   else
     dashboardInitial;
@@ -314,8 +314,8 @@ local errorSLOMetric = 'slo:max:events:gitlab_service_errors:ratio';
       sloMetric=apdexSLOMetric,
       nonGlobalFallback=true,
     ),
-    componentLevel=true,
-    statusDescriptionPanel=statusDescription.componentApdexStatusDescriptionPanel(componentSelectorHash),
+    serviceAggregated=false,
+    statusDescriptionPanel=statusDescription.sliApdexStatusDescriptionPanel(componentSelectorHash),
     slaQuery='avg(slo:min:events:gitlab_service_apdex:ratio{type="$type"}) by (type)',
   ),
 
@@ -343,8 +343,8 @@ local errorSLOMetric = 'slo:max:events:gitlab_service_errors:ratio';
       sloMetric=errorSLOMetric,
       nonGlobalFallback=false,
     ),
-    componentLevel=true,
-    statusDescriptionPanel=statusDescription.componentErrorRateStatusDescriptionPanel(componentSelectorHash),
+    serviceAggregated=false,
+    statusDescriptionPanel=statusDescription.sliErrorRateStatusDescriptionPanel(componentSelectorHash),
     slaQuery='1 - avg(slo:max:events:gitlab_service_errors:ratio{type="$type"}) by (type)',
   ),
 
@@ -374,9 +374,9 @@ local errorSLOMetric = 'slo:max:events:gitlab_service_errors:ratio';
       nonGlobalFallback=true,
       thanosEvaluated=false,
     ),
-    componentLevel=true,
+    serviceAggregated=false,
     nodeLevel=true,
-    statusDescriptionPanel=statusDescription.componentNodeApdexStatusDescriptionPanel(componentNodeSelectorHash),
+    statusDescriptionPanel=statusDescription.sliNodeApdexStatusDescriptionPanel(componentNodeSelectorHash),
     slaQuery='avg(slo:min:events:gitlab_service_apdex:ratio{type="$type"}) by (type)',
   ),
 
@@ -407,9 +407,9 @@ local errorSLOMetric = 'slo:max:events:gitlab_service_errors:ratio';
       nonGlobalFallback=false,
       thanosEvaluated=false,
     ),
-    componentLevel=true,
+    serviceAggregated=false,
     nodeLevel=true,
-    statusDescriptionPanel=statusDescription.componentNodeErrorRateStatusDescriptionPanel(componentNodeSelectorHash),
+    statusDescriptionPanel=statusDescription.sliNodeErrorRateStatusDescriptionPanel(componentNodeSelectorHash),
     slaQuery='1 - avg(slo:max:events:gitlab_service_errors:ratio{type="$type"}) by (type)',
   ),
 
@@ -437,7 +437,7 @@ local errorSLOMetric = 'slo:max:events:gitlab_service_errors:ratio';
       sloMetric=apdexSLOMetric,
       nonGlobalFallback=false,
     ),
-    componentLevel=false,
+    serviceAggregated=true,
     statusDescriptionPanel=statusDescription.serviceApdexStatusDescriptionPanel(serviceSelectorHash),
     slaQuery='avg(slo:min:events:gitlab_service_apdex:ratio{type="$type"}) by (type)',
   ),
@@ -465,7 +465,7 @@ local errorSLOMetric = 'slo:max:events:gitlab_service_errors:ratio';
       sloMetric=errorSLOMetric,
       nonGlobalFallback=false,
     ),
-    componentLevel=false,
+    serviceAggregated=true,
     statusDescriptionPanel=statusDescription.serviceErrorStatusDescriptionPanel(serviceSelectorHash),
     slaQuery='1 - avg(slo:max:events:gitlab_service_errors:ratio{type="$type"}) by (type)',
   ),
