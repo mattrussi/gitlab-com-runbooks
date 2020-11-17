@@ -45,7 +45,7 @@ local pumaByFeatureCategoryForService(type, startRow) =
       content=|||
         This table shows the error ratios for all endpoints on the %(type)s service, aggregated up to the feature category level.
 
-        This is a percentage of requests in each feature category that complete successfully.
+        This is a percentage of requests in each feature category that fail.
       ||| % { type: type }
     ),
   ], cols=1, rowHeight=3, startRow=startRow)
@@ -54,20 +54,11 @@ local pumaByFeatureCategoryForService(type, startRow) =
     basic.table(
       title='Error Rate by Feature Category',
       query=|||
-        sort(
-          clamp_max(
-            sum by (feature_category) (
-              avg_over_time(sli_aggregations:http_requests_total_rate6h{env="$environment", environment="$environment", type="%(type)s", job="gitlab-rails", status=~"5.."}[$__range])
-            )
-            /
-              (
-              sum by(feature_category) (
-                avg_over_time(sli_aggregations:http_requests_total_rate6h{env="$environment", environment="$environment", type="%(type)s", job="gitlab-rails"}[$__range])
-              ) > 0
-            ),
-            1
-          )
-        )
+        sort(clamp_max(
+          sum by (feature_category) (
+            avg_over_time(gitlab:component:feature_category:execution:error:ratio_6h{environment="$environment", env="$environment", component="puma", type="%(type)s"}[$__range])
+          ), 1
+        ))
       ||| % { type: std.asciiLower(type) },
       styles=styles
     ),
