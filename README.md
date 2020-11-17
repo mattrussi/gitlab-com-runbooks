@@ -207,7 +207,7 @@ During an incident, we have [roles defined in the handbook](https://about.gitlab
 * [Alert for SSL certificate expiration](docs/uncategorized/alert-for-ssl-certificate-expiration.md)
 * [Working with Grafana](monitoring/grafana.md)
 * [Working with Prometheus](monitoring/prometheus.md)
-* [Upgrade Prometheus and exporters](docs/monitoring/update-prometheus-and-exporters.md)
+* [Upgrade Prometheus and exporters](docs/monitoring/upgrades.md)
 * [Use mtail to capture metrics from logs](docs/uncategorized/mtail.md)
 
 ### CI
