@@ -125,6 +125,13 @@ teams:
   slack_alerts_channel: data-prom-alerts
   oncall_schedule: https://about.gitlab.com/handbook/business-ops/data-team/how-we-work/duties/
 
+- name: scalability
+  slack_alerts_channel: g_scalability
+
+# Workhorse is a virtual team
+- name: workhorse
+  slack_alerts_channel: workhorse
+
 tiers:
 - name: sv
 - name: lb

@@ -17,6 +17,14 @@ metricsCatalog.serviceDefinition({
   disableOpsRatePrediction: true,
   serviceLevelIndicators: {
     loadbalancer: {
+      featureCategory: 'pages',
+      description: |||
+        This SLI models requests passing through the loadbalancer in front of the pages service.
+        5xx requests for unencrypted HTTP traffic, and connection errors (not 5xx requests) for
+        HTTPS traffic are considered to be errors. The loadbalancer is unable to determine the
+        status code of HTTPS traffic as it passes through the loadbalancer encrypted.
+      |||,
+
       staticLabels: {
         stage: 'main',
       },
