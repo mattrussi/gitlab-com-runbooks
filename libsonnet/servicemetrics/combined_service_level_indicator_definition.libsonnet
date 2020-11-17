@@ -14,6 +14,9 @@ local combined = metricsCatalog.combined;
 // is specifically useful for loadbalancers
 local combinedServiceLevelIndicatorDefinition(
   components,
+  featureCategory,
+  description,
+  teams=[],
   aggregateRequestRate=false,
   staticLabels={}
       ) =
@@ -24,6 +27,10 @@ local combinedServiceLevelIndicatorDefinition(
 
       {
         name: componentName,
+        featureCategory: featureCategory,
+        description: description,
+        teams: teams,
+
         aggregateRequestRate: aggregateRequestRate,
 
         // Returns true if this component allows detailed breakdowns

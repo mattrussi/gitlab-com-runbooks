@@ -38,6 +38,14 @@ metricsCatalog.serviceDefinition({
   },
   serviceLevelIndicators: {
     goserver: {
+      featureCategory: 'gitaly',
+      teams: ['sre_datastores'],
+      description: |||
+        This SLI monitors all Gitaly GRPC requests in aggregate, excluding the OperationService.
+        GRPC failures which are considered to be the "server's fault" are counted as errors.
+        The apdex score is based on a subset of GRPC methods which are expected to be fast.
+      |||,
+
       local baseSelector = {
         job: 'gitaly',
         grpc_service: { ne: 'gitaly.OperationService' },
@@ -65,6 +73,14 @@ metricsCatalog.serviceDefinition({
     // Since it can also fail in other ways (due to upstream issues on hooks)
     // its useful to treat these methods as a separate component
     goserver_op_service: {
+      featureCategory: 'gitaly',
+      teams: ['sre_datastores'],
+      description: |||
+        This SLI monitors requests to Gitaly's OperationService, via its GRPC endpoint.
+        OperationService methods are generally expected to be slower than other Gitaly endpoints
+        and this is reflected in the SLI.
+      |||,
+
       local baseSelector = { job: 'gitaly', grpc_service: 'gitaly.OperationService' },
       apdex: histogramApdex(
         histogram='grpc_server_handling_seconds_bucket',
@@ -90,6 +106,13 @@ metricsCatalog.serviceDefinition({
     },
 
     gitalyruby: {
+      featureCategory: 'gitaly',
+      teams: ['sre_datastores'],
+      description: |||
+        This SLI monitors requests to Gitaly's Ruby sidecar, known as Gitaly-Ruby. All requests made to
+        Gitaly-Ruby are monitored in aggregate, via its GRPC interface.
+      |||,
+
       local baseSelector = { job: 'gitaly' },
 
       // Uses the goservers histogram, but only selects client unary calls: this is an effective proxy
