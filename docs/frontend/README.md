@@ -15,6 +15,7 @@
 
 ## Troubleshooting Pointers
 
+* [../config_management/chef-guidelines.md](../config_management/chef-guidelines.md)
 * [haproxy.md](haproxy.md)
 * [../git/deploy-gitlab-rb-change.md](../git/deploy-gitlab-rb-change.md)
 * [../git/gitlab-hosted-codesandbox.md](../git/gitlab-hosted-codesandbox.md)
@@ -23,7 +24,6 @@
 * [../monitoring/sentry-is-down.md](../monitoring/sentry-is-down.md)
 * [../registry/gitlab-registry.md](../registry/gitlab-registry.md)
 * [../uncategorized/alert-for-ssl-certificate-expiration.md](../uncategorized/alert-for-ssl-certificate-expiration.md)
-* [../uncategorized/chef-guidelines.md](../uncategorized/chef-guidelines.md)
 * [../uncategorized/manage-workers.md](../uncategorized/manage-workers.md)
 <!-- END_MARKER -->
 
