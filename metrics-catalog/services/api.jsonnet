@@ -107,6 +107,6 @@ metricsCatalog.serviceDefinition({
   },
   extraRecordingRulesPerBurnRate: [
     // Adds per-feature-category plus error rates across multiple burn rates
-    perFeatureCategoryRecordingRules({ type: 'web' }),
+    perFeatureCategoryRecordingRules({ type: 'api' }),
   ],
 })
