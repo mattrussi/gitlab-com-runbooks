@@ -2,11 +2,6 @@
 local secrets = std.extVar('secrets_file');
 local serviceCatalog = import 'service_catalog.libsonnet';
 
-// GitLab Issue Alert Delivery is disabled while we
-// investigate issues not being created
-// https://gitlab.com/gitlab-com/gl-infra/production/-/issues/2451#note_385151530
-local deliveryGitLabIssueAlertsExclusivelyToIssues = false;
-
 // Where the alertmanager templates are deployed.
 local templateDir = '/etc/alertmanager/config';
 
@@ -197,15 +192,14 @@ local routingTree = Route(
     for channel in secrets.snitchChannels
   ] +
   [
-    /* pager=issue alerts do not continue */
+    /* issue alerts do continue */
     Route(
       receiver='issue:' + issueChannel.name,
       match={
-        pager: 'issue',
         env: 'gprd',
-        project: issueChannel.name,
+        incident_project: issueChannel.name,
       },
-      continue=!deliveryGitLabIssueAlertsExclusivelyToIssues,
+      continue=true,
       group_wait='10m',
       group_interval='1h',
       repeat_interval='3d',

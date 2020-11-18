@@ -120,10 +120,9 @@ generateTests([
     ],
   },
   {
-    name: 'pager=issue, gstg environment',
+    name: 'issue alert, gstg environment',
     labels: {
-      pager: 'issue',
-      project: 'gitlab.com/gitlab-com/gl-infra/infrastructure',
+      incident_project: 'gitlab.com/gitlab-com/gl-infra/infrastructure',
       env: 'gstg',
     },
     receivers: [
@@ -131,25 +130,33 @@ generateTests([
     ],
   },
   {
-    name: 'pager=issue, gprd environment',
+    name: 'issue alert, gprd environment',
     labels: {
-      pager: 'issue',
-      project: 'gitlab.com/gitlab-com/gl-infra/infrastructure',
+      incident_project: 'gitlab.com/gitlab-com/gl-infra/infrastructure',
       env: 'gprd',
     },
     receivers: [
       'issue:gitlab.com/gitlab-com/gl-infra/infrastructure',
       'prod_alerts_slack_channel',
-      // Remove the slack destination once deliveryGitLabIssueAlertsExclusivelyToIssues is reenabled
-      // after https://gitlab.com/gitlab-com/gl-infra/production/-/issues/2451#note_385151530 is
-      // fixed
     ],
   },
   {
-    name: 'pager=issue, unknown project',
+    name: 'paging issue alert, gprd environment',
     labels: {
-      pager: 'issue',
-      project: 'nothing',
+      pager: 'pagerduty',
+      incident_project: 'gitlab.com/gitlab-com/gl-infra/production',
+      env: 'gprd',
+    },
+    receivers: [
+      'issue:gitlab.com/gitlab-com/gl-infra/production',
+      'prod_pagerduty',
+      'production_slack_channel',
+    ],
+  },
+  {
+    name: 'issue alert, unknown project',
+    labels: {
+      incident_project: 'nothing',
       env: 'gprd',
     },
     receivers: [
