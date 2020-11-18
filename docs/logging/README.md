@@ -31,6 +31,7 @@
 * [../patroni/postgres.md](../patroni/postgres.md)
 * [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
 * [../pgbouncer/pgbouncer-saturation.md](../pgbouncer/pgbouncer-saturation.md)
+* [../pgbouncer/service-pgbouncer.md](../pgbouncer/service-pgbouncer.md)
 * [../pubsub/pubsub-queing.md](../pubsub/pubsub-queing.md)
 * [../uncategorized/access-azure-test-subscription.md](../uncategorized/access-azure-test-subscription.md)
 * [../uncategorized/access-gcp-hosts.md](../uncategorized/access-gcp-hosts.md)

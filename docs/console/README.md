@@ -38,6 +38,7 @@
 * [../monitoring/sentry-is-down.md](../monitoring/sentry-is-down.md)
 * [../pages/pages-letsencrypt.md](../pages/pages-letsencrypt.md)
 * [../patroni/patroni-management.md](../patroni/patroni-management.md)
+* [../patroni/performance-degradation-troubleshooting.md](../patroni/performance-degradation-troubleshooting.md)
 * [../patroni/pg-ha.md](../patroni/pg-ha.md)
 * [../patroni/postgres.md](../patroni/postgres.md)
 * [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)

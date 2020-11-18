@@ -26,6 +26,7 @@
 * [gitlab-com-walg-backups.md](gitlab-com-walg-backups.md)
 * [log_analysis.md](log_analysis.md)
 * [patroni-management.md](patroni-management.md)
+* [performance-degradation-troubleshooting.md](performance-degradation-troubleshooting.md)
 * [pg-ha.md](pg-ha.md)
 * [pg_repack.md](pg_repack.md)
 * [pgbadger_report.md](pgbadger_report.md)
@@ -46,6 +47,7 @@
 * [../pgbouncer/pgbouncer-add-instance.md](../pgbouncer/pgbouncer-add-instance.md)
 * [../pgbouncer/pgbouncer-connections.md](../pgbouncer/pgbouncer-connections.md)
 * [../pgbouncer/pgbouncer-remove-instance.md](../pgbouncer/pgbouncer-remove-instance.md)
+* [../pgbouncer/service-pgbouncer.md](../pgbouncer/service-pgbouncer.md)
 * [../postgres-dr-delayed/postgres-dr-replicas.md](../postgres-dr-delayed/postgres-dr-replicas.md)
 <!-- END_MARKER -->
 
