@@ -186,7 +186,8 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
     thresholds=[],
     points=false,
     pointradius=5,
-    stableId=null
+    stableId=null,
+    stack=false,
   )::
     graphPanel.new(
       title=title,
@@ -209,6 +210,7 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
       thresholds=thresholds,
       points=points,
       pointradius=pointradius,
+      stack=stack,
     ) + panelOverrides(stableId),
 
   heatmap(
@@ -447,12 +449,14 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
     interval='1m',
     intervalFactor=3,
     linewidth=2,
+    fill=0,
     legend_show=true,
     min=null,
     max=null,
     decimals=0,
     thresholds=null,
     stableId=null,
+    stack=false
   )::
     local formatConfig = {
       query: query,
@@ -462,7 +466,7 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
       description=description,
       sort='decreasing',
       linewidth=linewidth,
-      fill=0,
+      fill=fill,
       datasource='$PROMETHEUS_DS',
       decimals=decimals,
       legend_show=legend_show,
@@ -476,6 +480,7 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
       legend_hideEmpty=true,
       thresholds=thresholds,
       stableId=stableId,
+      stack=stack,
     )
     .addTarget(
       promQuery.target(
