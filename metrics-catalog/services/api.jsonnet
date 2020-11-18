@@ -68,7 +68,7 @@ metricsCatalog.serviceDefinition({
         selector='job="gitlab-workhorse-api", type="api", code=~"^5.*", route!="^/-/health$", route!="^/-/(readiness|liveness)$"'
       ),
 
-      significantLabels: ['fqdn'],
+      significantLabels: ['method', 'route'],
 
       toolingLinks: [
         toolingLinks.continuousProfiler(service='workhorse-api'),
