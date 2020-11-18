@@ -5,7 +5,7 @@ groups:
     expr: >
       histogram_quantile(
         0.5,
-        sum without (fqdn, instance, queue) (
+        sum without (fqdn,instance,node,pod, queue) (
           rate(sidekiq_jobs_completion_seconds_bucket[1m])
         )
       )
@@ -13,7 +13,7 @@ groups:
     expr: >
       histogram_quantile(
         0.95,
-        sum without (fqdn, instance, queue) (
+        sum without (fqdn,instance,node,pod, queue) (
           rate(sidekiq_jobs_completion_seconds_bucket[1m])
         )
       )
@@ -21,7 +21,7 @@ groups:
     expr: >
       histogram_quantile(
         0.99,
-        sum without (fqdn, instance, queue) (
+        sum without (fqdn,instance,node,pod, queue) (
           rate(sidekiq_jobs_completion_seconds_bucket[1m])
         )
       )
@@ -29,7 +29,7 @@ groups:
     expr: >
       histogram_quantile(
         0.50,
-        sum without (fqdn, instance, shard) (
+        sum without (fqdn,instance,node,pod, shard) (
           rate(sidekiq_jobs_completion_seconds_bucket[1m])
         )
       )
@@ -37,7 +37,7 @@ groups:
     expr: >
       histogram_quantile(
         0.95,
-        sum without (fqdn, instance, shard) (
+        sum without (fqdn,instance,node,pod, shard) (
           rate(sidekiq_jobs_completion_seconds_bucket[1m])
         )
       )
@@ -45,17 +45,17 @@ groups:
     expr: >
       histogram_quantile(
         0.99,
-        sum without (fqdn, instance, shard) (
+        sum without (fqdn,instance,node,pod, shard) (
           rate(sidekiq_jobs_completion_seconds_bucket[1m])
         )
       )
   - record: queue:sidekiq_jobs_completion:rate1m
     expr: >
-      sum without (fqdn, instance) (
+      sum without (fqdn,instance,node,pod) (
         rate(sidekiq_jobs_completion_seconds_count[1m])
       )
   - record: queue:sidekiq_jobs_failed:rate1m
     expr: >
-      sum without (fqdn, instance, shard) (
+      sum without (fqdn,instance,node,pod, shard) (
         rate(sidekiq_jobs_failed_total[1m])
       )
