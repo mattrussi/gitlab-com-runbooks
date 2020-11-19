@@ -3,6 +3,10 @@ local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
+/**
+ * Deprecated. These haproxy backends have moved inline with the upstream services
+ * as SLIs in the upstream services.
+ */
 metricsCatalog.serviceDefinition({
   type: 'frontend',
   tier: 'lb',

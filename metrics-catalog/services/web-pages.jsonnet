@@ -18,6 +18,7 @@ metricsCatalog.serviceDefinition({
   },
   serviceLevelIndicators: {
     loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
+      featureCategory='pages',
       stageMappings={
         main: { backends: ['pages_http'], toolingLinks: [] },
         // TODO: cny stage for pages?
@@ -26,6 +27,7 @@ metricsCatalog.serviceDefinition({
     ),
 
     loadbalancer_https: haproxyComponents.haproxyL4LoadBalancer(
+      featureCategory='pages',
       stageMappings={
         main: { backends: ['pages_https'], toolingLinks: [] },
         // TODO: cny stage for pages?
@@ -34,6 +36,10 @@ metricsCatalog.serviceDefinition({
     ),
 
     server: {
+      featureCategory: 'pages',
+      description: |||
+        Aggregation of most web requests into the GitLab Pages process.
+      |||,
       // 1 second satisfactory, 10 second tolerable thresholds are
       // very poor for what is essentially a static site server
       // we should investigate the poor performance

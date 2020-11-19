@@ -32,6 +32,7 @@ metricsCatalog.serviceDefinition({
   },
   serviceLevelIndicators: {
     loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
+      featureCategory='container_registry',
       stageMappings={
         main: { backends: ['registry'], toolingLinks: [] },
         cny: { backends: ['canary_registry'], toolingLinks: [] },
@@ -40,6 +41,10 @@ metricsCatalog.serviceDefinition({
     ),
 
     server: {
+      featureCategory: 'container_registry',
+      description: |||
+        Aggregation of all registry requests for registry.gitlab.com.
+      |||,
       apdex: histogramApdex(
         histogram='registry_http_request_duration_seconds_bucket',
         selector='type="registry"',
@@ -68,6 +73,11 @@ metricsCatalog.serviceDefinition({
     },
 
     storage: {
+      featureCategory: 'container_registry',
+      description: |||
+        Aggregation of all container registry GCS storage operations.
+      |||,
+
       apdex: histogramApdex(
         histogram='registry_storage_action_seconds_bucket',
         selector='',
