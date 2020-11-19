@@ -142,7 +142,7 @@ metricsCatalog.serviceDefinition({
         }
       ),
 
-      significantLabels: ['fqdn'],
+      significantLabels: ['fqdn', 'grpc_method'],
 
       toolingLinks: [
         toolingLinks.sentry(slug='gitlab/gitlabcom-gitaly-ruby'),
