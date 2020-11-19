@@ -178,9 +178,18 @@ metricsCatalog.serviceDefinition({
         tier: 'sv',
         stage: 'main',
       },
-
       // Unfortunately we don't have a better way of measuring this at present,
       // so we rely on HAProxy metrics
+
+      // Warning: this relies on HAProxy logs, via collected via mtail
+      // Warning 2: these metrics do not split canary from non-canary at present
+      apdex: histogramApdex(
+        histogram='haproxy_ssh_request_duration_seconds_bucket',
+        selector={},
+        satisfiedThreshold=16,
+        toleratedThreshold=32
+      ),
+
       requestRate: customRateQuery(|||
         sum by (environment) (haproxy_backend_current_session_rate{backend=~"ssh|altssh"})
       |||),
