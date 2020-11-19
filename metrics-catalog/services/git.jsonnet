@@ -34,7 +34,7 @@ metricsCatalog.serviceDefinition({
     pgbouncer: true,
     praefect: true,
   },
-  components: {
+  serviceLevelIndicators: {
     loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
       stageMappings={
         main: { backends: ['https_git', 'websockets'], toolingLinks: [

@@ -33,7 +33,7 @@ metricsCatalog.serviceDefinition({
     pgbouncer: true,
     praefect: true,
   },
-  components: {
+  serviceLevelIndicators: {
     loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
       stageMappings={
         main: {

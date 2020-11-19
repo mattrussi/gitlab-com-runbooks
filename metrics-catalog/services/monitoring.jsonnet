@@ -21,7 +21,7 @@ metricsCatalog.serviceDefinition({
    * disable ops-rate anomaly detection on this service.
    */
   disableOpsRatePrediction: true,
-  components: {
+  serviceLevelIndicators: {
     thanos_query: {
       local thanosQuerySelector = productionEnvironmentsSelector {
         job: 'thanos',

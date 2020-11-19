@@ -1,5 +1,8 @@
+// WARNING
+// This is probably not what you want. Avoid combining multiple signals into
+// a single SLI unless you are sure you know what you are doing
+
 local metricsCatalog = import './metrics.libsonnet';
-local componentDefinition = import 'component_definition.libsonnet';
 local rateMetric = metricsCatalog.rateMetric;
 local combined = metricsCatalog.combined;
 
@@ -9,15 +12,15 @@ local combined = metricsCatalog.combined;
 //
 // This allows different components to be specific for different stages (for example). This
 // is specifically useful for loadbalancers
-local combinedComponentDefinition(
+local combinedServiceLevelIndicatorDefinition(
   components,
   aggregateRequestRate=false,
   staticLabels={}
       ) =
   {
-    initComponentWithName(componentName)::
+    initServiceLevelIndicatorWithName(componentName)::
       // TODO: validate that all staticLabels are unique
-      local componentsInitialised = std.map(function(c) c.initComponentWithName(componentName), components);
+      local componentsInitialised = std.map(function(c) c.initServiceLevelIndicatorWithName(componentName), components);
 
       {
         name: componentName,
@@ -61,5 +64,5 @@ local combinedComponentDefinition(
   };
 
 {
-  combinedComponentDefinition:: combinedComponentDefinition,
+  combinedServiceLevelIndicatorDefinition:: combinedServiceLevelIndicatorDefinition,
 }

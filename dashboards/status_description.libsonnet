@@ -206,7 +206,7 @@ local statusDescriptionPanel(legendFormat, query) =
   };
 
 {
-  componentApdexStatusDescriptionPanel(selectorHash)::
+  sliApdexStatusDescriptionPanel(selectorHash)::
     local query = apdexStatusQuery(selectorHash, selectorHash.type, 'gitlab_component_apdex');
     statusDescriptionPanel(legendFormat=selectorHash.component + ' | Latency/Apdex', query=query),
 
@@ -214,7 +214,7 @@ local statusDescriptionPanel(legendFormat, query) =
     local query = apdexStatusQuery(selectorHash, selectorHash.type, 'gitlab_service_apdex');
     statusDescriptionPanel(legendFormat=selectorHash.type + ' | Latency/Apdex', query=query),
 
-  componentErrorRateStatusDescriptionPanel(selectorHash)::
+  sliErrorRateStatusDescriptionPanel(selectorHash)::
     local query = errorRateStatusQuery(selectorHash, selectorHash.type, 'gitlab_component_errors');
     statusDescriptionPanel(legendFormat=selectorHash.component + ' | Errors', query=query),
 
@@ -222,11 +222,11 @@ local statusDescriptionPanel(legendFormat, query) =
     local query = errorRateStatusQuery(selectorHash, selectorHash.type, 'gitlab_service_errors');
     statusDescriptionPanel(legendFormat=selectorHash.type + ' | Errors', query=query),
 
-  componentNodeApdexStatusDescriptionPanel(selectorHash)::
+  sliNodeApdexStatusDescriptionPanel(selectorHash)::
     local query = apdexStatusQuery(selectorHash, selectorHash.type, 'gitlab_component_node_apdex');
     statusDescriptionPanel(legendFormat=selectorHash.component + '/' + selectorHash.fqdn + ' | Latency/Apdex', query=query),
 
-  componentNodeErrorRateStatusDescriptionPanel(selectorHash)::
+  sliNodeErrorRateStatusDescriptionPanel(selectorHash)::
     local query = errorRateStatusQuery(selectorHash, selectorHash.type, 'gitlab_component_node_errors');
     statusDescriptionPanel(legendFormat=selectorHash.component + '/' + selectorHash.fqdn + ' | Errors', query=query),
 
