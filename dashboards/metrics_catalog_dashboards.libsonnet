@@ -1,12 +1,14 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
+local seriesOverrides = import 'grafana/series_overrides.libsonnet';
 local keyMetrics = import 'key_metrics.libsonnet';
 local metricsCatalog = import 'metrics-catalog.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local statusDescription = import 'status_description.libsonnet';
 local thresholds = import 'thresholds.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
+
 local row = grafana.row;
 local defaultEnvironmentSelector = { environment: '$environment', env: '$environment' };
 
@@ -247,7 +249,8 @@ local sliNodeOverviewMatrixRow(
       ),
       legendFormat=legendFormat % { sliName: sliName },
       intervalFactor=intervalFactor,
-      yAxisLabel='Errors'
+      yAxisLabel='Errors',
+      decimals=2,
     ),
 
   // Generates a grid/matrix of SLI data for the given service/stage
@@ -314,10 +317,6 @@ local sliNodeOverviewMatrixRow(
   )::
     local service = metricsCatalog.getService(serviceType);
     local sli = service.serviceLevelIndicators[sliName];
-    local colCount =
-      (if sli.hasApdex() then 1 else 0) +
-      (if sli.hasAggregatableRequestRate() then 1 else 0) +
-      (if sli.hasErrorRate() then 1 else 0);
 
     local staticLabelNames = if std.objectHas(sli, 'staticLabels') then std.objectFields(sli.staticLabels) else [];
 
@@ -330,11 +329,11 @@ local sliNodeOverviewMatrixRow(
 
     row.new(title='🔬 %(sliName)s Service Level Indicator Detail' % { sliName: sliName }, collapse=true)
     .addPanels(
-      layout.grid(
-        std.prune(
-          std.flattenArrays(
-            std.map(
-              function(aggregationSet)
+      std.flattenArrays(
+        std.mapWithIndex(
+          function(index, aggregationSet)
+            layout.singleRow(
+              std.prune(
                 [
                   if sli.hasApdex() then
                     self.sliLatencyPanel(
@@ -346,6 +345,26 @@ local sliNodeOverviewMatrixRow(
                       aggregationLabels=aggregationSet.aggregationLabels,
                       min=minLatency,
                     )
+                  else
+                    null,
+
+                  if aggregationSet.aggregationLabels != '' && sli.hasApdex() && std.objectHasAll(sli.apdex, 'apdexAttribution') then
+                    basic.percentageTimeseries(
+                      title='Apdex attribution for ' + sliName + ' Latency - ' + aggregationSet.title,
+                      description='Attributes apdex downscoring',
+                      query=sli.apdex.apdexAttribution(
+                        aggregationLabel=aggregationSet.aggregationLabels,
+                        selector=filteredSelectorHash,
+                        rangeInterval='$__interval',
+                      ),
+                      legendFormat=aggregationSet.legendFormat % { sliName: sliName },
+                      intervalFactor=3,
+                      decimals=2,
+                      linewidth=1,
+                      fill=4,
+                      stack=true,
+                    )
+                    .addSeriesOverride(seriesOverrides.negativeY)
                   else
                     null,
 
@@ -372,11 +391,12 @@ local sliNodeOverviewMatrixRow(
                     )
                   else
                     null,
-                ],
-              aggregationSets
-            )
-          )
-        ), cols=if colCount == 1 then 2 else colCount
+                ]
+              ),
+              startRow=index * 10
+            ),
+          aggregationSets
+        )
       )
     ),
 

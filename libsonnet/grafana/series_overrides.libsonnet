@@ -205,4 +205,8 @@ local capacityComponentColors = {
     zindex: -3,
     color: '#5794F2',
   } + overrides,
+  negativeY:: {
+    alias: '/.*/',
+    transform: 'negative-Y',
+  },
 }
