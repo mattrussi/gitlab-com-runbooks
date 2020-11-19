@@ -52,6 +52,12 @@ metricsCatalog.serviceDefinition({
   serviceLevelIndicators: {
     ['shard_' + std.strReplace(shard.name, '-', '_')]: {
       local shardSelector = { shard: shard.name },
+
+      featureCategory: 'not_owned',
+      teams: ['scalability'],
+      description: |||
+        Aggregation of all jobs for the %(shard)s Sidekiq shard.
+      ||| % shardSelector,
       apdex: combined(
         (
           if shard.urgency == null || shard.urgency == 'high' then

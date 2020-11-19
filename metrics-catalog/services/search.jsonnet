@@ -13,7 +13,13 @@ metricsCatalog.serviceDefinition({
    */
   disableOpsRatePrediction: true,
   serviceLevelIndicators: {
+
     elasticsearch_searching: {
+      featureCategory: 'global_search',
+      description: |||
+        Aggregation of all search queries on GitLab.com, as measured from ElasticSearch.
+      |||,
+
       requestRate: derivMetric(
         counter='elasticsearch_indices_search_query_total',
         selector='type="search"',
@@ -24,6 +30,11 @@ metricsCatalog.serviceDefinition({
     },
 
     elasticsearch_indexing: {
+      featureCategory: 'global_search',
+      description: |||
+        Aggregation of all document indexing requests on GitLab.com, as measured from ElasticSearch.
+      |||,
+
       requestRate: derivMetric(
         counter='elasticsearch_indices_indexing_index_total',
         selector='type="search"',

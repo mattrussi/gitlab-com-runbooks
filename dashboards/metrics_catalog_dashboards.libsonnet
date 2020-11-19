@@ -16,6 +16,39 @@ local getLatencyPercentileForService(service) =
   else
     0.95;
 
+local getMarkdownDetailsForSLI(sli, sliSelectorHash) =
+  local items = std.prune([
+    (
+      if sli.description != '' then
+        |||
+          ### Description
+
+          %(description)s
+        ||| % {
+          description: sli.description,
+        }
+      else
+        null
+    ),
+    (
+      if sli.hasToolingLinks() then
+        // We pass the selector hash to the tooling links they may
+        // be used to customize the links
+        local toolingOptions = { prometheusSelectorHash: sliSelectorHash };
+        |||
+          ### Observability Tools
+
+          %(links)s
+        ||| % {
+          links: toolingLinks.generateMarkdown(sli.getToolingLinks(), toolingOptions),
+        }
+      else
+        null
+    ),
+  ]);
+
+  std.join('\n\n', items);
+
 local sliOverviewMatrixRow(
   serviceType,
   serviceStage,
@@ -58,22 +91,13 @@ local sliOverviewMatrixRow(
     )
     +
     (
-      if sli.hasToolingLinks() then
-        // We pass the selector hash to the tooling links they may
-        // be used to customize the links
-        local toolingOptions = { prometheusSelectorHash: sliSelectorHash };
-
+      local markdown = getMarkdownDetailsForSLI(sli, sliSelectorHash);
+      if markdown != '' then
         [[
           grafana.text.new(
-            title='Tooling Links',
+            title='Details',
             mode='markdown',
-            content=|||
-              ### Observability Tools
-
-              %(links)s
-            ||| % {
-              links: toolingLinks.generateMarkdown(sli.getToolingLinks(), toolingOptions),
-            },
+            content=markdown,
           ),
         ]]
       else

@@ -38,6 +38,8 @@ metricsCatalog.serviceDefinition({
   ],
   serviceLevelIndicators: {
     loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
+      featureCategory='not_owned',
+      teams=['sre_coreinfra'],
       stageMappings={
         main: { backends: ['web'], toolingLinks: [] },  // What to do with `429_slow_down`?
         cny: { backends: ['canary_web'], toolingLinks: [] },
@@ -46,6 +48,14 @@ metricsCatalog.serviceDefinition({
     ),
 
     workhorse: {
+      featureCategory: 'not_owned',
+      teams: ['sre_coreinfra', 'workhorse'],
+      description: |||
+        Aggregation of most web requests that pass through workhorse, monitored via the HTTP interface.
+        Excludes health, readiness and liveness requests. Some known slow requests, such as HTTP uploads,
+        are excluded from the apdex score.
+      |||,
+
       apdex: histogramApdex(
         histogram='gitlab_workhorse_http_request_duration_seconds_bucket',
         // Note, using `|||` avoids having to double-escape the backslashes in the selector query
@@ -76,6 +86,12 @@ metricsCatalog.serviceDefinition({
     },
 
     imagescaler: {
+      featureCategory: 'memory',
+      description: |||
+        The imagescaler rescales images before sending them to clients. This allows faster transmission of
+        images and faster rendering of web pages.
+      |||,
+
       apdex: histogramApdex(
         histogram='gitlab_workhorse_image_resize_duration_seconds_bucket',
         selector='job="gitlab-workhorse-web", type="web"',
@@ -99,6 +115,13 @@ metricsCatalog.serviceDefinition({
     },
 
     puma: {
+      featureCategory: 'not_owned',
+      teams: ['sre_coreinfra'],
+      description: |||
+        Aggregation of most web requests that pass through the puma to the GitLab rails monolith.
+        Healthchecks are excluded.
+      |||,
+
       local baseSelector = { job: 'gitlab-rails', type: 'web' },
       apdex: histogramApdex(
         histogram='http_request_duration_seconds_bucket',

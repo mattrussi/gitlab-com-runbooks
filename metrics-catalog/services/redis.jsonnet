@@ -11,6 +11,12 @@ metricsCatalog.serviceDefinition({
   },
   serviceLevelIndicators: {
     rails_redis_client: {
+      featureCategory: 'not_owned',
+      teams: ['sre_observability'],
+      description: |||
+        Aggregation of all Redis operations issued from the Rails codebase.
+      |||,
+
       staticLabels: {
         tier: 'db',
         stage: 'main',
@@ -36,6 +42,12 @@ metricsCatalog.serviceDefinition({
     },
 
     primary_server: {
+      featureCategory: 'not_owned',
+      teams: ['sre_observability'],
+      description: |||
+        Operations on the Redis primary for GitLab's persistent Redis instance.
+      |||,
+
       requestRate: rateMetric(
         counter='redis_commands_processed_total',
         selector='type="redis"',
@@ -50,6 +62,12 @@ metricsCatalog.serviceDefinition({
     },
 
     secondary_servers: {
+      featureCategory: 'not_owned',
+      teams: ['sre_observability'],
+      description: |||
+        Operations on the Redis secondaries for GitLab's persistent Redis instance.
+      |||,
+
       requestRate: rateMetric(
         counter='redis_commands_processed_total',
         selector='type="redis"',
