@@ -31,6 +31,7 @@
 * [pgbadger_report.md](pgbadger_report.md)
 * [postgres-backups-verification-failures.md](postgres-backups-verification-failures.md)
 * [postgres-checkup.md](postgres-checkup.md)
+* [postgres-data-corruption.md](postgres-data-corruption.md)
 * [postgres.md](postgres.md)
 * [postgresql-backups-wale-walg.md](postgresql-backups-wale-walg.md)
 * [postgresql-disk-space.md](postgresql-disk-space.md)
