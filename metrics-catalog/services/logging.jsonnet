@@ -12,7 +12,7 @@ metricsCatalog.serviceDefinition({
     // apdexScore: 0.999,
     errorRatio: 0.999,
   },
-  components: {
+  serviceLevelIndicators: {
     elasticsearch_searching: {
       requestRate: derivMetric(
         counter='elasticsearch_indices_search_query_total',

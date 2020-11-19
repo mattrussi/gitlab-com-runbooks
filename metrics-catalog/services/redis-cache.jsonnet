@@ -10,7 +10,7 @@ metricsCatalog.serviceDefinition({
     apdexScore: 0.9995,
     errorRatio: 0.999,
   },
-  components: {
+  serviceLevelIndicators: {
     rails_redis_client: {
       staticLabels: {
         tier: 'db',

@@ -18,7 +18,7 @@ metricsCatalog.serviceDefinition({
   recordingRuleMetrics: [
     'gitlab_sql_duration_seconds_bucket',
   ],
-  components: {
+  serviceLevelIndicators: {
     // We don't have latency histograms for patroni but for now we will
     // use the rails controller SQL latencies as an indirect proxy.
     rails_sql: {

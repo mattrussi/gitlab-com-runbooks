@@ -15,7 +15,7 @@ metricsCatalog.serviceDefinition({
     kubernetes: false,
     vms: false,
   },
-  components: {
+  serviceLevelIndicators: {
     gitlab_zone: {
       requestRate: rateMetric(
         counter='cloudflare_zones_http_responses_total',

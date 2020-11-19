@@ -9,7 +9,7 @@ metricsCatalog.serviceDefinition({
   monitoringThresholds: {
     errorRatio: 0.999,
   },
-  components: {
+  serviceLevelIndicators: {
     rails_redis_client: {
       staticLabels: {
         tier: 'db',

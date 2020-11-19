@@ -15,7 +15,7 @@ metricsCatalog.serviceDefinition({
    * at the web-pages level
    */
   disableOpsRatePrediction: true,
-  components: {
+  serviceLevelIndicators: {
     loadbalancer: {
       staticLabels: {
         stage: 'main',

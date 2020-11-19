@@ -14,7 +14,7 @@ metricsCatalog.serviceDefinition({
   serviceDependencies: {
     // If Camoproxy has any dependencies, we should add them here
   },
-  components: {
+  serviceLevelIndicators: {
     loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
       stageMappings={
         main: { backends: ['camoproxy'], toolingLinks: [] },
