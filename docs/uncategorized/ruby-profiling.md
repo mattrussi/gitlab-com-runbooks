@@ -136,3 +136,45 @@ sudo rbspy record -p $(pgrep -n -f 'puma:') --duration 30
 ```
 
 This will write a flamegraph to `~/.cache/rbspy`. You can then `scp` it to your local machine for your viewing pleasure.
+
+## `jeprof`
+
+Since we are using the `jemalloc` allocator, we can use its profiling
+capabilities. This can be done by configuring the `MALLOC_CONF` environment
+variable.
+
+This profiler is a sampling profiler that grabs a stack every 512 allocated
+bytes. It also tracks when those sampled allocations are freed. Over time, that
+can give an idea of where long-lived allocations are originating from.
+
+A sample configuration:
+
+```
+MALLOC_CONF='prof:true,prof_prefix:/tmp/jeprof.out,lg_prof_interval:30'
+```
+
+This will enable profiling, write dumps to `/tmp`, and write out one dump every 2^30 bytes = ~every 1GB allocated.
+
+To process the profile, you can use `jeprof`:
+
+```
+/opt/gitlab/embedded/bin/jeprof /opt/gitlab/embedded/bin/ruby /tmp/jeprof.out.9854.44.i44.heap
+```
+
+This can be used to get top allocation sites, dump out callgrind or svg
+profiles.
+
+In order to get a flamegraph, you can apply [this
+patch](https://github.com/jemalloc/jemalloc/pull/1984) to `jeprof`.
+
+Flamegraphs can then be generated via:
+
+```
+jeprof /opt/gitlab/embedded/bin/ruby /tmp/jeprof.out.9854.44.i44.heap --collapse | flamegraph.pl --minwidth 3 > flamegraph.svg
+```
+
+And for a reverse flamegraph:
+
+```
+jeprof /opt/gitlab/embedded/bin/ruby /tmp/jeprof.out.9854.44.i44.heap --collapse | flamegraph.pl --reverse --invert --minwidth 3 > flamegraph.reverse.svg
+```
