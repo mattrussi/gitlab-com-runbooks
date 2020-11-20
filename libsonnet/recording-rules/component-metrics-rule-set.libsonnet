@@ -98,7 +98,7 @@ local generateRecordingRulesForComponent(burnRate, recordingRuleNames, serviceDe
             aggregationLabels=aggregationLabels,
             substituteWeightWithRecordingRule=substituteWeightWithRecordingRule
           ),
-          serviceDefinition.getComponentsList()
+          serviceDefinition.listServiceLevelIndicators()
         ),
     },
 

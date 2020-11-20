@@ -45,7 +45,7 @@ local genericApdexPanel(
   title,
   description='Apdex is a measure of requests that complete within a tolerable period of time for the service. Higher is better.',
   compact=false,
-  stableId=null,
+  stableId,
   primaryQueryExpr,
   legendFormat,
   linewidth=null,
@@ -99,7 +99,7 @@ local genericErrorPanel(
   title,
   description='Error rates are a measure of unhandled service exceptions per second. Client errors are excluded when possible. Lower is better',
   compact=false,
-  stableId=null,
+  stableId,
   primaryQueryExpr,
   legendFormat,
   linewidth=null,
@@ -255,6 +255,7 @@ local genericOperationRatePanel(
       legendFormat='{{ component }} apdex',
       environmentSelectorHash=environmentSelectorHash,
       serviceType=serviceType,
+      stableId='sli-%(sliName)s-apdex' % formatConfig,
     )
     .addSeriesOverride(seriesOverrides.goldenMetric('/.* apdex$/'))
     .addDataLink({
@@ -286,6 +287,7 @@ local genericOperationRatePanel(
       sort='increasing',
       legend_show=false,
       linewidth=1,
+      stableId='node-sli-%(sliName)s-apdex' % formatConfig,
     )
     .addDataLink({
       url: '/d/alerts-component_node_multiburn_apdex?${__url_time_range}&${__all_variables}&var-type=%(serviceType)s&var-fqdn=${__series.labels.fqdn}' % formatConfig,
@@ -373,6 +375,7 @@ local genericOperationRatePanel(
 
     genericErrorPanel(
       '%(sliName)s SLI Error-Rate' % formatConfig,
+      stableId='sli-%(sliName)s-error-rate' % formatConfig,
       linewidth=1,
       primaryQueryExpr=sliPromQL.errorRate.sliErrorRateQuery(selectorHash),
       legendFormat='{{ component }} error rate',

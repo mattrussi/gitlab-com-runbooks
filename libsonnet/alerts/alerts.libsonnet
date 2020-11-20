@@ -51,4 +51,8 @@ local unwrapNewlinesOnAnnotations(hash) =
       annotations: ensureObjectHasStringValues(unwrapNewlinesOnAnnotations(annotations)),
       labels: ensureObjectHasStringValues(alertRule.labels),
     },
+
+  // Utility for processing lots of rules in an array
+  processAlertRules(alertRules)::
+    std.map(self.processAlertRule, alertRules),
 }

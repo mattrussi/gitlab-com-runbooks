@@ -3,7 +3,26 @@ local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 
-local errorRateTerm(
+
+local errorRateTermWithFixedThreshold(
+  metric,
+  metricSelectorHash,
+  comparator,
+  burnrate,
+  thresholdSLOValue
+      ) =  // For an error rate, this is usually close to 0
+  |||
+    %(metric)s{%(metricSelector)s}
+    %(comparator)s (%(burnrate)g * %(thresholdSLOValue)f)
+  ||| % {
+    metric: metric,
+    burnrate: burnrate,
+    metricSelector: selectors.serializeHash(metricSelectorHash),
+    thresholdSLOValue: thresholdSLOValue,
+    comparator: comparator,
+  };
+
+local errorRateTermWithMetricSLO(
   metric,
   metricSelectorHash,
   comparator,
@@ -30,7 +49,26 @@ local errorRateTerm(
     comparator: comparator,
   };
 
-local apdexRateTerm(
+local apdexRateTermWithFixedThreshold(
+  metric,
+  metricSelectorHash,
+  comparator,
+  burnrate,
+  thresholdSLOValue
+      ) =  // For an apdex this is usually close to 1
+  |||
+    %(metric)s{%(metricSelector)s}
+    %(comparator)s (1 - %(burnrate)g * %(inverseThresholdSLOValue)f)
+  ||| % {
+    metric: metric,
+    burnrate: burnrate,
+    metricSelector: selectors.serializeHash(metricSelectorHash),
+    comparator: comparator,
+    inverseThresholdSLOValue: 1 - thresholdSLOValue,
+  };
+
+
+local apdexRateTermWithMetricSLO(
   metric,
   metricSelectorHash,
   comparator,
@@ -108,24 +146,34 @@ local operationRateFilter(
     metric30m,  // 30m burn rate metric
     metric6h,  // 6h burn rate metric
     metricSelectorHash,  // Selectors for the error rate metrics
-    sloMetric,  // SLO metric name
-    sloMetricSelectorHash,  // Selectors for the slo metric
-    sloMetricAggregationLabels,  // Labels to join the SLO metric to the error rate metrics with
+    sloMetric=null,  // SLO metric name
+    sloMetricSelectorHash=null,  // Selectors for the slo metric
+    sloMetricAggregationLabels=null,  // Labels to join the SLO metric to the error rate metrics with
     operationRateMetric=null,  // Optional: operation rate metric for minimum operation rate clause
     operationRateAggregationLabels=null,  // Labels to aggregate the operation rate on, if any
     operationRateSelectorHash=null,  // Selector for the operation rate metric
     minimumOperationRateForMonitoring=null,  // minium operation rate vaue (in request-per-second)
+    thresholdSLOValue=null,  // Error budget float value (between 0 and 1)
   )::
     local term(metric, burnrate) =
-      errorRateTerm(
-        metric=metric,
-        metricSelectorHash=metricSelectorHash,
-        comparator='>',
-        burnrate=burnrate,
-        sloMetric=sloMetric,
-        sloMetricSelectorHash=sloMetricSelectorHash,
-        sloMetricAggregationLabels=sloMetricAggregationLabels,
-      );
+      if sloMetric != null then
+        errorRateTermWithMetricSLO(
+          metric=metric,
+          metricSelectorHash=metricSelectorHash,
+          comparator='>',
+          burnrate=burnrate,
+          sloMetric=sloMetric,
+          sloMetricSelectorHash=sloMetricSelectorHash,
+          sloMetricAggregationLabels=sloMetricAggregationLabels,
+        )
+      else
+        errorRateTermWithFixedThreshold(
+          metric=metric,
+          metricSelectorHash=metricSelectorHash,
+          comparator='>',
+          burnrate=burnrate,
+          thresholdSLOValue=thresholdSLOValue
+        );
 
     local term_1h = term(metric1h, multiburn_factors.burnrate_1h);
     local term_5m = term(metric5m, multiburn_factors.burnrate_1h);
@@ -170,24 +218,34 @@ local operationRateFilter(
     metric30m,  // 30m burn rate metric
     metric6h,  // 6h burn rate metric
     metricSelectorHash,  // Selectors for the error rate metrics
-    sloMetric,  // SLO metric name
-    sloMetricSelectorHash,  // Selectors for the slo metric
-    sloMetricAggregationLabels,  // Labels to join the SLO metric to the error rate metrics with
+    sloMetric=null,  // SLO metric name
+    sloMetricSelectorHash=null,  // Selectors for the slo metric
+    sloMetricAggregationLabels=null,  // Labels to join the SLO metric to the error rate metrics with
     operationRateMetric=null,  // Optional: operation rate metric for minimum operation rate clause
     operationRateAggregationLabels=null,  // Labels to aggregate the operation rate on, if any
     operationRateSelectorHash=null,  // Selector for the operation rate metric
     minimumOperationRateForMonitoring=null,  // minium operation rate vaue (in request-per-second)
+    thresholdSLOValue=null  // Error budget float value (between 0 and 1)
   )::
     local term(metric, burnrate) =
-      apdexRateTerm(
-        metric=metric,
-        metricSelectorHash=metricSelectorHash,
-        comparator='<',
-        burnrate=burnrate,
-        sloMetric=sloMetric,
-        sloMetricSelectorHash=sloMetricSelectorHash,
-        sloMetricAggregationLabels=sloMetricAggregationLabels,
-      );
+      if sloMetric != null then
+        apdexRateTermWithMetricSLO(
+          metric=metric,
+          metricSelectorHash=metricSelectorHash,
+          comparator='<',
+          burnrate=burnrate,
+          sloMetric=sloMetric,
+          sloMetricSelectorHash=sloMetricSelectorHash,
+          sloMetricAggregationLabels=sloMetricAggregationLabels,
+        )
+      else
+        apdexRateTermWithFixedThreshold(
+          metric=metric,
+          metricSelectorHash=metricSelectorHash,
+          comparator='<',
+          burnrate=burnrate,
+          thresholdSLOValue=thresholdSLOValue,
+        );
 
     local term_1h = term(metric1h, multiburn_factors.burnrate_1h);
     local term_5m = term(metric5m, multiburn_factors.burnrate_1h);
@@ -236,7 +294,7 @@ local operationRateFilter(
     sloMetricAggregationLabels,  // Labels to join the SLO metric to the error rate metrics with
   )::
     local term(metric, burnrate) =
-      errorRateTerm(
+      errorRateTermWithMetricSLO(
         metric=metric,
         metricSelectorHash=metricSelectorHash,
         comparator='> bool',
@@ -294,7 +352,7 @@ local operationRateFilter(
     sloMetricAggregationLabels,  // Labels to join the SLO metric to the error rate metrics with
   )::
     local term(metric, burnrate) =
-      apdexRateTerm(
+      apdexRateTermWithMetricSLO(
         metric=metric,
         metricSelectorHash=metricSelectorHash,
         comparator='< bool',
