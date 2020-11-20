@@ -17,6 +17,7 @@
 * [../ci-runners/ci-investigate-abuse.md](../ci-runners/ci-investigate-abuse.md)
 * [../ci-runners/service-ci-runners.md](../ci-runners/service-ci-runners.md)
 * [../cloudflare/logging.md](../cloudflare/logging.md)
+* [../cloudflare/troubleshooting.md](../cloudflare/troubleshooting.md)
 * [../config_management/chef-guidelines.md](../config_management/chef-guidelines.md)
 * [../config_management/chef-troubleshooting.md](../config_management/chef-troubleshooting.md)
 * [../config_management/chef-workflow.md](../config_management/chef-workflow.md)

@@ -17,6 +17,7 @@
 ## Troubleshooting Pointers
 
 * [../cloudflare/logging.md](../cloudflare/logging.md)
+* [../cloudflare/managing-traffic.md](../cloudflare/managing-traffic.md)
 * [../elastic/elastic-cloud.md](../elastic/elastic-cloud.md)
 * [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
 * [../elastic/kibana.md](../elastic/kibana.md)
