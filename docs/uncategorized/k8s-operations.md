@@ -4,7 +4,7 @@ https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com
 
 ## Setup for the oncall
 
-**!Important!** Before you do anything in this doc please follow the [setup instructions for the oncall](https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/k8s-operations.md)
+**!Important!** Before you do anything in this doc please follow the [setup instructions for the oncall](https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/k8s-oncall-setup.md).
 
 ## Application Upgrading
 
