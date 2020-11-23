@@ -56,6 +56,7 @@
     feature_categories: [
       'epics',
       'roadmaps',
+      'design_management',
     ],
   },
   certify: {
@@ -82,25 +83,6 @@
       'editor_extension',
     ],
   },
-  knowledge: {
-    name: 'Knowledge',
-    stage: 'create',
-    feature_categories: [
-      'design_management',
-      'design_system',
-      'wiki',
-    ],
-  },
-  static_site_editor: {
-    name: 'Static Site Editor',
-    stage: 'create',
-    feature_categories: [
-      'static_site_editor',
-      'gitlab_handbook',
-      'gitlab_docs',
-      'navigation',
-    ],
-  },
   editor: {
     name: 'Editor',
     stage: 'create',
@@ -108,6 +90,10 @@
       'web_ide',
       'snippets',
       'live_preview',
+      'wiki',
+      'static_site_editor',
+      'gitlab_docs',
+      'navigation',
     ],
   },
   gitaly: {
@@ -292,22 +278,30 @@
   activation: {
     name: 'Activation',
     stage: 'growth',
-    feature_categories: null,
+    feature_categories: [
+
+    ],
   },
   conversion: {
     name: 'Conversion',
     stage: 'growth',
-    feature_categories: null,
+    feature_categories: [
+
+    ],
   },
   expansion: {
     name: 'Expansion',
     stage: 'growth',
-    feature_categories: null,
+    feature_categories: [
+
+    ],
   },
   adoption: {
     name: 'Adoption',
     stage: 'growth',
-    feature_categories: null,
+    feature_categories: [
+
+    ],
   },
   product_analytics: {
     name: 'Product Analytics',
