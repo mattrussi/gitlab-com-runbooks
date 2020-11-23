@@ -403,7 +403,7 @@ local sliNodeOverviewMatrixRow(
   autoDetailRows(serviceType, selectorHash, startRow)::
     local s = self;
     local service = metricsCatalog.getService(serviceType);
-    local serviceLevelIndicators = service.getComponentsList();
+    local serviceLevelIndicators = service.listServiceLevelIndicators();
     local serviceLevelIndicatorsFiltered = std.filter(function(c) c.supportsDetails(), serviceLevelIndicators);
 
     layout.grid(

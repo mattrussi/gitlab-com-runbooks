@@ -416,7 +416,7 @@ local rules = [
       {
         name: 'slo_alerts.rules',
         partial_response_strategy: 'warn',
-        rules: [alerts.processAlertRule(r) for r in rules],
+        rules: alerts.processAlertRules(rules),
       },
     ],
   }),

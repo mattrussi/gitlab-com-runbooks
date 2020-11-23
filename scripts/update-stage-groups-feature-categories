@@ -18,7 +18,7 @@ stages_yml['stages'].each do |stage, stage_info|
     resulting_group_info[group] = {
       name: group_info['name'],
       stage: stage,
-      feature_categories: group_info['categories']
+      feature_categories: group_info['categories'] || []
     }
   end
 end

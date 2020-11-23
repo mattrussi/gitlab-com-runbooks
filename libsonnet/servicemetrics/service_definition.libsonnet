@@ -47,7 +47,7 @@ local serviceDefinition(service) =
       service.provisioning,
 
     // Returns an array of serviceLevelIndicators for this service
-    getComponentsList()::
+    listServiceLevelIndicators()::
       [
         service.serviceLevelIndicators[sliName]
         for sliName in std.objectFields(service.serviceLevelIndicators)

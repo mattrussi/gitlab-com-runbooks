@@ -91,8 +91,7 @@ local rules = {
     name: 'Sidekiq Aggregated Thanos Alerts',
     partial_response_strategy: 'warn',
     interval: '1m',
-    rules:
-      std.map(alerts.processAlertRule, sidekiqThanosAlerts),
+    rules: alerts.processAlertRules(sidekiqThanosAlerts),
   }],
 };
 
