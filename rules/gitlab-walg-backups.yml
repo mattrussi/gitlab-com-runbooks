@@ -4,9 +4,27 @@ groups:
   - record: gitlab_com:last_walg_backup_age_in_seconds
     expr: min(time() - walg_backup_last_completed_time_seconds) by (environment,type)
   - record: gitlab_com:last_walg_basebackup_age_in_hours
-    expr: min(time() - walg_basebackup_last_completed_time_seconds) by (environment,type) / 3600
+    expr: |
+      min without (fqdn,instance) (
+        time()
+        -
+        (
+          gitlab_job_start_timestamp_seconds{resource="walg-basebackup"} > 0
+        )
+      )
+      /
+      3600
   - record: gitlab_com:last_walg_successful_basebackup_age_in_hours
-    expr: min(time()-push_time_seconds{job='walg-basebackup',status="1"}) by (environment,type) / 3600
+    expr: |
+      min without (fqdn,instance) (
+        time()
+        -
+        (
+          gitlab_job_success_timestamp_seconds{resource="walg-basebackup"} > 0
+        )
+      )
+      /
+      3600
   - record: gitlab_com:last_walg_failed_basebackup_age_in_hours
     expr: min(time()-push_time_seconds{job='walg-basebackup',status="-1"}) by (environment,type) / 3600
   - alert: walgBackupDelayed
@@ -33,3 +51,15 @@ groups:
         to review the problem.
       runbook: docs/patroni/postgresql-backups-wale-walg.md
       title: Last successful WAL-G basebackup was seen {{ .Value | humanizeDuration }} ago for env {{ $labels.environment }}.
+  - alert: WALGBaseBackupFailed
+    expr: gitlab_job_failed{resource="walg-basebackup"} == 1
+    for: 5m
+    labels:
+      pager: pagerduty
+      severity: s1
+      alert_type: cause
+    annotations:
+      title: GitLab Job has failed
+      description: >
+        The GitLab job "{{ $labels.job}}" resource "{{ $labels.resource }}" has failed.
+      runbook: docs/uncategorized/job_completion.md
