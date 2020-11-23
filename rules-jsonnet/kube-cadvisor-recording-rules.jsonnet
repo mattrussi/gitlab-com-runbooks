@@ -32,22 +32,25 @@ local kubePodContainerMetrics = [
 
 local podLabelJoinExpression(expression) =
   |||
-    min without(label_queue_pod_name, label_stage, label_type)
+    min without(label_queue_pod_name, label_stage, label_type, label_deployment)
     (
       label_replace(
         label_replace(
           label_replace(
-            %(expression)s
-            *
-            on(pod, cluster) group_left(label_type, label_stage, label_queue_pod_name)
-            topk by (pod, cluster, label_type, label_stage, label_queue_pod_name) (1, kube_pod_labels{
-              label_type!=""
-            }),
-            "shard", "$1", "label_queue_pod_name", "(.*)"
+            label_replace(
+              %(expression)s
+              *
+              on(pod, cluster) group_left(label_type, label_stage, label_queue_pod_name, label_deployment)
+              topk by (pod, cluster, label_type, label_stage, label_queue_pod_name, label_deployment) (1, kube_pod_labels{
+                label_type!=""
+              }),
+              "shard", "$1", "label_queue_pod_name", "(.*)"
+            ),
+            "stage", "$1", "label_stage", "(.*)"
           ),
-          "stage", "$1", "label_stage", "(.*)"
+          "type", "$1", "label_type", "(.*)"
         ),
-        "type", "$1", "label_type", "(.*)"
+        "deployment", "$1", "label_deployment", "(.*)"
       )
     )
   ||| % {
