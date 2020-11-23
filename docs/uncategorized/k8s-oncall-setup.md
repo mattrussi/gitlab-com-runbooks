@@ -172,3 +172,18 @@ vi releases/gitlab/values/pre.yaml.gotmpl
 # Make a change
 ./bin/k-ctl -e pre -D apply
 ```
+
+## Getting or setting HAProxy state for the zonal clusters
+
+It's possible to drain and stop connections to an entire zonal cluster.
+This should be only done in extreme circumstances where you want to stop traffic to an entire availability zone.
+
+* [ ] Get the server state for the production `us-east1-b` zone
+
+_Use the `bin/get-server-state` script in [chef-repo](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/)_
+
+```
+./bin/get-server-state gprd gke-us-east1-b
+```
+
+`./bin/set-server-state` is used to set the state, just like any other server in an HAProxy backend
