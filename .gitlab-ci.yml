@@ -12,6 +12,16 @@ default:
   tags:
     - gitlab-org
 
+.default-job-rules:
+  rules:
+    # by default, don't create a job when triggered with `CHECK_STAGE_GROUPS` set
+    # in this case we'll only want to run the `check-stage-groups` job.
+    - if: '$CHECK_STAGE_GROUPS == "1"'
+      when: never
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+      when: never
+    - when: always
+
 workflow:
   rules:
     # For merge requests, create a pipeline.
@@ -20,6 +30,8 @@ workflow:
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
     # For tags, create a pipeline.
     - if: '$CI_COMMIT_TAG'
+    # When triggered from another pipeline, create a pipeline
+    - if: '$CI_PIPELINE_SOURCE == "pipeline"'
 
 .deploy-rules:
   extends: .rules-artifacts
@@ -61,21 +73,20 @@ workflow:
     - schedules
 
 verify:
+  extends: .default-job-rules
   stage: test
   script:
     - make verify
-  except:
-    - schedules
 
 test-rules:
-  extends: .rules-artifacts
+  extends:
+    - .rules-artifacts
+    - .default-job-rules
   stage: test
   script:
     - gem install bundler --no-document
     - bundle install --with=test
     - bundle exec ./bin/create_kubernetes_rules.rb --create --validate
-  except:
-    - schedules
 
 danger:
   stage: test
@@ -90,22 +101,20 @@ danger:
       - merge_requests
 
 rubocop:
+  extends: .default-job-rules
   stage: test
   script:
     - gem install bundler --no-document
     - bundle install --with=test
     - bundle exec rubocop
-  except:
-    - schedules
 
 rspec:
+  extends: .default-job-rules
   stage: test
   script:
     - gem install bundler --no-document
     - bundle install --with=test
     - bundle exec rspec
-  except:
-    - schedules
 
 deploy-rules-gstg:
   environment: gstg
@@ -211,19 +220,17 @@ update-alertmanager:
     REGION: us-east1
 
 test:
+  extends: .default-job-rules
   stage: test
   script:
     - make test
-  except:
-    - schedules
 
 ensure_generated_content_up_to_date:
+  extends: .default-job-rules
   stage: test
   script:
     - make generate
     - git diff --exit-code || (echo "Please run 'make generate'" && exit 1)
-  except:
-    - schedules
 
 # log.gprd.gitlab.net
 ################################################################################
@@ -604,3 +611,13 @@ alertmanager_test:
       - tags
   except:
     - schedules
+
+check-stage-groups:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: manual
+    - if: '$CHECK_STAGE_GROUPS == "1"'
+      when: always
+  stage: test
+  script:
+    - scripts/update-stage-groups-feature-categories

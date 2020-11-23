@@ -37,3 +37,5 @@ end
 # The generated JSON doesn't look right in jsonnet, so running our fmt cleans it
 # up
 `make jsonnet-fmt JSONNET_FILES=#{mapping_path}`
+
+exec("git diff --exit-code -- #{mapping_path}") if ENV['CI']
