@@ -309,6 +309,7 @@ local genericOperationRatePanel(
       legendFormat='{{ fqdn }}',
       environmentSelectorHash=environmentSelectorHash,
       serviceType=serviceType,
+      stableId='node-latency-%(serviceType)s-apdex' % { serviceType: serviceType },
     ),
 
   /**
@@ -405,6 +406,7 @@ local genericOperationRatePanel(
 
     genericErrorPanel(
       '🖥 Per-Node %(sliName)s SLI Error Rates' % formatConfig,
+      stableId='sli-%(sliName)s-per-node-error-rate' % formatConfig,
       linewidth=1,
       legend_show=false,
       primaryQueryExpr=sliPromQL.errorRate.sliNodeErrorRateQuery(selectorHash),
@@ -432,6 +434,7 @@ local genericOperationRatePanel(
       legendFormat='{{ fqdn }} error rate',
       environmentSelectorHash=environmentSelectorHash,
       serviceType=serviceType,
+      stableId='node-%(serviceType)s-error-ratio' % { serviceType: serviceType },
     ),
 
   /**
