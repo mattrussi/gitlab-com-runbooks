@@ -65,9 +65,9 @@ serviceDashboard.overview('pgbouncer', 'db', stage='main')
       description='Total async pool utilisation by job.',
       query=
       |||
-        sum by (controller, stage) (rate(gitlab_transaction_duration_seconds_sum{environment="$environment", env="$environment", monitor="app", type="sidekiq"}[$__interval]))
+        sum by (worker, stage) (rate(sidekiq_jobs_completion_seconds_sum{environment="$environment", env="$environment", monitor="app"}[$__interval]))
       |||,
-      legendFormat='{{ controller }} - {{ stage }} stage',
+      legendFormat='{{ worker }} - {{ stage }} stage',
       format='s',
       yAxisLabel='"Usage client transaction time/sec',
       interval='1m',
