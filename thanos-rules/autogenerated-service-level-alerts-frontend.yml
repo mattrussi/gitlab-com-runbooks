@@ -5,7 +5,7 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
-  - alert: component_apdex_ratio_burn_rate_slo_out_of_bounds_lower
+  - alert: FrontendServiceCnyHttpServicesApdexSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -60,7 +60,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="cnyHttpServices",monitor="global",type="frontend"}) >= 1
       )
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: FrontendServiceCnyHttpServicesErrorSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -118,7 +118,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="cnyHttpServices",monitor="global",type="frontend"}) >= 1
       )
-  - alert: component_apdex_ratio_burn_rate_slo_out_of_bounds_lower
+  - alert: FrontendServiceMainHttpServicesApdexSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -173,7 +173,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="mainHttpServices",monitor="global",type="frontend"}) >= 1
       )
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: FrontendServiceMainHttpServicesErrorSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -231,7 +231,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="mainHttpServices",monitor="global",type="frontend"}) >= 1
       )
-  - alert: component_apdex_ratio_burn_rate_slo_out_of_bounds_lower
+  - alert: FrontendServiceSshServicesApdexSLOViolation
     for: 2m
     annotations:
       title: The sshServices SLI of the frontend service (`{{ $labels.stage }}` stage) has an apdex violating
@@ -285,7 +285,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="sshServices",monitor="global",type="frontend"}) >= 1
       )
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: FrontendServiceSshServicesErrorSLOViolation
     for: 2m
     annotations:
       title: >-

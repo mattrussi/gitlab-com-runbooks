@@ -5,7 +5,7 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: NfsServiceNfsServiceErrorSLOViolation
     for: 2m
     annotations:
       title: The nfs_service SLI of the nfs service (`{{ $labels.stage }}` stage) has an error rate violating

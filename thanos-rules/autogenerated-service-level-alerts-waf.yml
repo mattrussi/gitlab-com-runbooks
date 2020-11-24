@@ -5,7 +5,7 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: WafServiceGitlabNetZoneErrorSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -65,7 +65,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="gitlab_net_zone",monitor="global",type="waf"}) >= 1
       )
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: WafServiceGitlabZoneErrorSLOViolation
     for: 2m
     annotations:
       title: The gitlab_zone SLI of the waf service (`{{ $labels.stage }}` stage) has an error rate violating

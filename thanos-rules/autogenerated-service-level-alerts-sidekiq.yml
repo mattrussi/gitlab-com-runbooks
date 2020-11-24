@@ -5,7 +5,7 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
-  - alert: component_apdex_ratio_burn_rate_slo_out_of_bounds_lower
+  - alert: SidekiqServiceShardCatchallApdexSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -60,7 +60,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_catchall",monitor="global",type="sidekiq"}) >= 1
       )
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: SidekiqServiceShardCatchallErrorSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -118,7 +118,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_catchall",monitor="global",type="sidekiq"}) >= 1
       )
-  - alert: component_apdex_ratio_burn_rate_slo_out_of_bounds_lower
+  - alert: SidekiqServiceShardCatchnfsApdexSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -173,7 +173,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_catchnfs",monitor="global",type="sidekiq"}) >= 1
       )
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: SidekiqServiceShardCatchnfsErrorSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -231,7 +231,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_catchnfs",monitor="global",type="sidekiq"}) >= 1
       )
-  - alert: component_apdex_ratio_burn_rate_slo_out_of_bounds_lower
+  - alert: SidekiqServiceShardDatabaseThrottledApdexSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -286,7 +286,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_database_throttled",monitor="global",type="sidekiq"}) >= 1
       )
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: SidekiqServiceShardDatabaseThrottledErrorSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -344,7 +344,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_database_throttled",monitor="global",type="sidekiq"}) >= 1
       )
-  - alert: component_apdex_ratio_burn_rate_slo_out_of_bounds_lower
+  - alert: SidekiqServiceShardElasticsearchApdexSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -399,7 +399,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_elasticsearch",monitor="global",type="sidekiq"}) >= 1
       )
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: SidekiqServiceShardElasticsearchErrorSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -457,7 +457,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_elasticsearch",monitor="global",type="sidekiq"}) >= 1
       )
-  - alert: component_apdex_ratio_burn_rate_slo_out_of_bounds_lower
+  - alert: SidekiqServiceShardGitalyThrottledApdexSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -512,7 +512,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_gitaly_throttled",monitor="global",type="sidekiq"}) >= 1
       )
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: SidekiqServiceShardGitalyThrottledErrorSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -570,7 +570,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_gitaly_throttled",monitor="global",type="sidekiq"}) >= 1
       )
-  - alert: component_apdex_ratio_burn_rate_slo_out_of_bounds_lower
+  - alert: SidekiqServiceShardLowUrgencyCpuBoundApdexSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -625,7 +625,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_low_urgency_cpu_bound",monitor="global",type="sidekiq"}) >= 1
       )
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: SidekiqServiceShardLowUrgencyCpuBoundErrorSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -683,7 +683,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_low_urgency_cpu_bound",monitor="global",type="sidekiq"}) >= 1
       )
-  - alert: component_apdex_ratio_burn_rate_slo_out_of_bounds_lower
+  - alert: SidekiqServiceShardMemoryBoundApdexSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -738,7 +738,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_memory_bound",monitor="global",type="sidekiq"}) >= 1
       )
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: SidekiqServiceShardMemoryBoundErrorSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -796,7 +796,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_memory_bound",monitor="global",type="sidekiq"}) >= 1
       )
-  - alert: component_apdex_ratio_burn_rate_slo_out_of_bounds_lower
+  - alert: SidekiqServiceShardUrgentCpuBoundApdexSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -851,7 +851,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_urgent_cpu_bound",monitor="global",type="sidekiq"}) >= 1
       )
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: SidekiqServiceShardUrgentCpuBoundErrorSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -909,7 +909,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_urgent_cpu_bound",monitor="global",type="sidekiq"}) >= 1
       )
-  - alert: component_apdex_ratio_burn_rate_slo_out_of_bounds_lower
+  - alert: SidekiqServiceShardUrgentOtherApdexSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -964,7 +964,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_urgent_other",monitor="global",type="sidekiq"}) >= 1
       )
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: SidekiqServiceShardUrgentOtherErrorSLOViolation
     for: 2m
     annotations:
       title: >-

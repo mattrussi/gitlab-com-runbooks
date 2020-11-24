@@ -63,4 +63,41 @@ test.suite({
       This is a second paragraph.
     |||,
   },
+  testCapitalizeFirstLetterEmpty: {
+    actual: strings.capitalizeFirstLetter(''),
+    expect: '',
+  },
+  testCapitalizeFirstLetterHello: {
+    actual: strings.capitalizeFirstLetter('hello'),
+    expect: 'Hello',
+  },
+  testCapitalizeFirstLetterHelloAlreadyCaps: {
+    actual: strings.capitalizeFirstLetter('Hello'),
+    expect: 'Hello',
+  },
+  testCapitalizeFirstLetterSpace: {
+    actual: strings.capitalizeFirstLetter(' '),
+    expect: ' ',
+  },
+  testSplitOnCharsSingleChar: {
+    actual: strings.splitOnChars('hello-there', '-'),
+    expect: ['hello', 'there'],
+  },
+  testSplitOnCharsMultipleChar: {
+    actual: strings.splitOnChars('hello-there+world', '-+'),
+    expect: ['hello', 'there', 'world'],
+  },
+  testSplitOnCharsPrune: {
+    actual: strings.splitOnChars('hello-+world', '-+'),
+    expect: ['hello', 'world'],
+  },
+  testSplitOnEmptyString: {
+    actual: strings.splitOnChars('', '-+'),
+    expect: [],
+  },
+  testSplitOnSplittersOnly: {
+    actual: strings.splitOnChars('+-++-', '-+'),
+    expect: [],
+  },
+
 })
