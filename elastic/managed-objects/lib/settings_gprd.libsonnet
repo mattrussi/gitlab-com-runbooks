@@ -23,7 +23,7 @@ local setting(index, env) = if std.member(HIGH_THROUHGPUT, index) then {
         after: '30s',
       },
     },
-    refresh_interval: '20s',  // see: https://gitlab.com/gitlab-com/gl-infra/production/-/issues/3006#note_445081437
+    refresh_interval: '30s',  // see: https://gitlab.com/gitlab-com/gl-infra/production/-/issues/3006#note_445081437
   },
   number_of_shards: 5,
   // number_of_replicas: 1,
@@ -47,7 +47,7 @@ else if std.member(MEDIUM_THROUGHPUT, index) then {
         after: '30s',
       },
     },
-    refresh_interval: '20s',
+    refresh_interval: '30s',
   },
   number_of_shards: 3,
   // number_of_replicas: 1,
@@ -65,7 +65,7 @@ else if std.member(MEDIUM_THROUGHPUT, index) then {
         after: '30s',
       },
     },
-    refresh_interval: '20s',
+    refresh_interval: '30s',
   },
   // number_of_shards: 1,
   // number_of_replicas: 1,
