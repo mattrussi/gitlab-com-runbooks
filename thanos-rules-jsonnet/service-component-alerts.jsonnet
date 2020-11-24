@@ -21,6 +21,24 @@ local labelsForFeatureCategory(featureCategory) =
     product_stage_group: std.asciiLower(stages.findStageGroupNameForFeatureCategory(featureCategory)),
   };
 
+local toCamelCase(str) =
+  std.join(
+    '',
+    std.map(
+      strings.capitalizeFirstLetter,
+      strings.splitOnChars(str, '-_')
+    )
+  );
+
+// Generates an alert name
+local nameSLOViolationAlert(serviceType, sliName, violationType) =
+  '%(serviceType)sService%(sliName)s%(violationType)sSLOViolation' % {
+    serviceType: toCamelCase(serviceType),
+    sliName: toCamelCase(sliName),
+    violationType: violationType,
+  };
+
+
 // For now, this is a bit of a hack, relying on a convention that service overview
 // dashboards will match this URL
 local dashboardForService(service) =
@@ -37,11 +55,8 @@ local apdexAlertForSLI(service, sli) =
     serviceType: service.type,
   };
 
-
   [{
-    // TODO: Rename component_apdex_ratio_burn_rate_slo_out_of_bounds_lower,
-    // giving it a better name specific to the failing SLI
-    alert: 'component_apdex_ratio_burn_rate_slo_out_of_bounds_lower',
+    alert: nameSLOViolationAlert(service.type, sli.name, 'Apdex'),
     expr: multiburnExpression.multiburnRateApdexExpression(
       metric1h='gitlab_component_apdex:ratio_1h',
       metric5m='gitlab_component_apdex:ratio_5m',
@@ -88,9 +103,7 @@ local errorRateAlertForSLI(service, sli) =
   };
 
   [{
-    // TODO: Rename component_error_ratio_burn_rate_slo_out_of_bounds_upper,
-    // giving it a better name specific to the failing SLI
-    alert: 'component_error_ratio_burn_rate_slo_out_of_bounds_upper',
+    alert: nameSLOViolationAlert(service.type, sli.name, 'Error'),
     expr: multiburnExpression.multiburnRateErrorExpression(
       metric1h='gitlab_component_errors:ratio_1h',
       metric5m='gitlab_component_errors:ratio_5m',

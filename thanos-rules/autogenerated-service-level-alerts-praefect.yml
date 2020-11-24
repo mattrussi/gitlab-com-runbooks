@@ -5,7 +5,7 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: PraefectServicePraefectCloudsqlErrorSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -63,7 +63,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="praefect_cloudsql",monitor="global",type="praefect"}) >= 1
       )
-  - alert: component_apdex_ratio_burn_rate_slo_out_of_bounds_lower
+  - alert: PraefectServiceProxyApdexSLOViolation
     for: 2m
     annotations:
       title: The proxy SLI of the praefect service (`{{ $labels.stage }}` stage) has an apdex violating
@@ -117,7 +117,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="proxy",monitor="global",type="praefect"}) >= 1
       )
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: PraefectServiceProxyErrorSLOViolation
     for: 2m
     annotations:
       title: The proxy SLI of the praefect service (`{{ $labels.stage }}` stage) has an error rate violating
@@ -174,7 +174,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="proxy",monitor="global",type="praefect"}) >= 1
       )
-  - alert: component_apdex_ratio_burn_rate_slo_out_of_bounds_lower
+  - alert: PraefectServiceReplicatorQueueApdexSLOViolation
     for: 2m
     annotations:
       title: >-

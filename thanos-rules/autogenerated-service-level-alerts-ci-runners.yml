@@ -5,7 +5,7 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: CiRunnersServicePollingErrorSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -63,7 +63,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="polling",monitor="global",type="ci-runners"}) >= 1
       )
-  - alert: component_apdex_ratio_burn_rate_slo_out_of_bounds_lower
+  - alert: CiRunnersServiceSharedRunnerQueuesApdexSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -118,7 +118,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shared_runner_queues",monitor="global",type="ci-runners"}) >= 1
       )
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: CiRunnersServiceSharedRunnerQueuesErrorSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -176,7 +176,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shared_runner_queues",monitor="global",type="ci-runners"}) >= 1
       )
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: CiRunnersServiceTraceArchivingCiJobsErrorSLOViolation
     for: 2m
     annotations:
       title: >-
