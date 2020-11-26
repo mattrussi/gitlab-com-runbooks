@@ -3,17 +3,23 @@
 _Note: Before starting an on-call shift, be sure you follow these setup
 instructions_
 
-## Install helm and plugins locally
+## Install tools
 
-There are two projects for deploying helm to the pre/gtsg/gprd Kubernetes clusters:
+There are three projects for deploying workloads to the pre/gtsg/gprd Kubernetes clusters:
 
 * https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com
 * https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles
+* https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/common
+   * A dependency of the helmfile repositories above.
+* https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments
 
-In both of these projects there is a `.tool-versions` file that should be used with `asdf` to install the correct versions of helm and helmfile.
+In both of these projects there is a `.tool-versions` file that can be used with `asdf` to install the correct versions of tools.
 
-- [ ] Install helm and helmfile
+- [ ] Install tools from all of these projects
 - [ ] Install helm plugins by running the script https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/common/-/blob/master/bin/install-helm-plugins.sh
+   - You'll want to run this with the version of helm used by gitlab-com /
+     gitlab-helmfiles "active". If you're using asdf, you can achieve this by
+     running the script from inside one of the helmfile repos.
 
 ## Kubernetes API Access
 
@@ -81,6 +87,10 @@ There are two mechanisms you can use to access these clusters via ssh tunnel.
 
 #### Using `sshuttle`
 
+You might want to use [`kubectx`](https://github.com/ahmetb/kubectx) to smooth
+the process of switching kubernetes contexts and namespaces.
+
+
 - [ ] Get the credentials for the zonal clusters
 
 ```
@@ -95,25 +105,25 @@ gcloud container clusters get-credentials gprd-us-east1-d --region us-east1-d --
 - [ ] Create sshuttle wrappers for initiating tunneled connections
 
 ```
-# kubectx gke_gitlab-production_us-east1-b_gprd-us-east1-b
+# kubectl config use-context gke_gitlab-production_us-east1-b_gprd-us-east1-b
 sshuttle -r console-01-sv-gprd.c.gitlab-production.internal '35.185.25.234/32'
 
-# kubectx gke_gitlab-production_us-east1-c_gprd-us-east1-c
+# kubectl config use-context gke_gitlab-production_us-east1-c_gprd-us-east1-c
 sshuttle -r console-01-sv-gprd.c.gitlab-production.internal '34.75.253.130/32'
 
-# kubectx gke_gitlab-production_us-east1-d_gprd-us-east1-d
+# kubectl config use-context gke_gitlab-production_us-east1-d_gprd-us-east1-d
 sshuttle -r console-01-sv-gprd.c.gitlab-production.internal '34.73.149.139/32'
 
-# kubectx gke_gitlab-staging-1_us-east1-b_gstg-us-east1-b
+# kubectl config use-context gke_gitlab-staging-1_us-east1-b_gstg-us-east1-b
 sshuttle -r console-01-sv-gstg.c.gitlab-staging-1.internal '34.74.13.203/32'
 
-# kubectx gke_gitlab-staging-1_us-east1-c_gstg-us-east1-c
+# kubectl config use-context gke_gitlab-staging-1_us-east1-c_gstg-us-east1-c
 sshuttle -r console-01-sv-gstg.c.gitlab-staging-1.internal '35.237.127.243/32'
 
-# kubectx gke_gitlab-staging-1_us-east1-d_gstg-us-east1-d
+# kubectl config use-context gke_gitlab-staging-1_us-east1-d_gstg-us-east1-d
 sshuttle -r console-01-sv-gstg.c.gitlab-staging-1.internal '35.229.107.91/32'
 
-# kubectx gke_gitlab-staging-1_us-east1_gstg-gitlab-gke
+# kubectl config use-context gke_gitlab-staging-1_us-east1_gstg-gitlab-gke
 sshuttle -r console-01-sv-gstg.c.gitlab-staging-1.internal '34.73.144.43/32'
 ```
 
@@ -124,7 +134,7 @@ sshuttle -r console-01-sv-gstg.c.gitlab-staging-1.internal '34.73.144.43/32'
 kubectl get pods -n gitlab
 ```
 
-**Note**: Optionally you rename your context to something less unwiedly: `kubectl config rename-context gke_gitlab-production_us-east1_gprd-gitlab-gke gprd`
+**Note**: Optionally you rename your context to something less unwieldy: `kubectl config rename-context gke_gitlab-production_us-east1_gprd-gitlab-gke gprd`
 
 #### Using ssh socks proxy
 
@@ -157,7 +167,7 @@ kubectl config use-context gke_gitlab-staging-1_us-east1-d_gstg-us-east1-d
 kubectl get pods -n gitlab
 ```
 
-### SSH Access to pods
+### Getting a shell in a pod
 
 * [ ] Initiate an SSH connection to one of the production nodes, this requires a fairly recent version of gsuite
 
@@ -178,6 +188,11 @@ docker exec -u root -it <container> /bin/bash
 gcloud compute --project "gitlab-production" ssh <node name>
 toolbox
 ```
+
+#### With ssh tunnels
+
+If you're using ssh tunnels, you can use `kubectl exec` from your workstation.
+
 ## Workstation setup for k-ctl
 
 * [ ] Get the credentials for the pre-prod cluster:
@@ -201,6 +216,14 @@ export REGION=us-east1
 ```
 
 You should see a successful output of the helm objects as well as custom Kubernetes objects managed by the `gitlab-com` repository.
+
+Note that if you've renamed your kube contexts to something less unwieldy, you
+can make the wrapper use your current context:
+
+```
+kubectl config use-context pre
+FORCE_KUBE_CONTEXT=1 ./bin/k-ctl -e pre list
+```
 
 * [ ] Make a change to the preprod configuration and execute a dry-run
 ```
