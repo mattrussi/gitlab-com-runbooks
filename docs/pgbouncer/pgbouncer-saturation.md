@@ -39,8 +39,8 @@
   * Download `sq.rb` and run it to log all Sidekiq jobs and their arguments:
 
     ```sh
-    curl -o /tmp/sq.rb https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/db_scripts/sq.rb
-    sudo gitlab-rails runner /tmp/sq.rb > /tmp/sidekiq-jobs.txt
+    curl -o /tmp/sq.rb https://gitlab.com/gitlab-com/runbooks/-/raw/master/docs/uncategorized/db_scripts/sq.rb
+    sudo gitlab-rails runner /tmp/sq.rb --job-type='*' show > /tmp/sidekiq-jobs.txt
     ```
 
   * Look inside the file for the Sidekiq queue breakdown. For example, you might see something like:
