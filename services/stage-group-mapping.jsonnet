@@ -157,8 +157,8 @@
       'helm_chart_registry',
       'dependency_proxy',
       'dependency_firewall',
-      'jupyter_notebooks',
       'git_lfs',
+      'release_evidence',
     ],
   },
   static_analysis: {
