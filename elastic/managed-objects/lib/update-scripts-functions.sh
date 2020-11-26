@@ -114,14 +114,19 @@ function kibana_put_json() {
   done
 }
 function ES7_watches_exec_jsonnet_and_upload_json() {
-  for i in "${SCRIPT_DIR}"/*.jsonnet; do
-    base_name=$(basename "$i")
-    echo ""
-    echo "$base_name"
-    name=${base_name%.jsonnet}
-    watch_json="$(execute_jsonnet "${i}" | jq -c '.')" # Compile jsonnet and compact with jq
-    es_client "_watcher/watch/${name}" -X PUT --data-binary "${watch_json}"
-  done
+  files=$(find "${SCRIPT_DIR}" -type f -name '*.jsonnet')
+  if [ -n "$files" ]; then
+    for i in $files; do
+      base_name=$(basename "$i")
+      echo ""
+      echo "$base_name"
+      name=${base_name%.jsonnet}
+      watch_json="$(execute_jsonnet "${i}" | jq -c '.')" # Compile jsonnet and compact with jq
+      es_client "_watcher/watch/${name}" -X PUT --data-binary "${watch_json}"
+    done
+  else
+    echo "No watch definitions found. Not uploading anything to the cluster."
+  fi
 }
 
 function ES7_ILM_exec_jsonnet_and_upload_json() {
