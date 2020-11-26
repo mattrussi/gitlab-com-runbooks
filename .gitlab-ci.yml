@@ -34,23 +34,23 @@ workflow:
     - if: '$CI_PIPELINE_SOURCE == "pipeline"'
 
 .deploy-rules:
-  extends:
-    - .rules-artifacts
-    - .default-job-rules
+  extends: .rules-artifacts
   stage: deploy-rules
-  rules:
-    # Only run deploy rules from ops
-    - if: '$CI_API_V4_URL != "https://ops.gitlab.net/api/v4"'
-      when: never
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
   script:
     - gcloud auth activate-service-account --key-file ${SERVICE_KEY}
     - gcloud config set project ${PROJECT}
     - gcloud container clusters get-credentials ${CLUSTER} --region ${REGION}
     - ./bin/delete_orphan_kubenetes_rules.sh # Delete ophaned PrometheusRules
     - kubectl apply --namespace monitoring --filename ${CI_PROJECT_DIR}/rules-k8s/
+  only:
+    refs:
+      - master
+    variables:
+      - $CI_API_V4_URL == "https://ops.gitlab.net/api/v4"
   tags:
     - release
+  except:
+    - schedules
 
 .rules-artifacts:
   artifacts:
@@ -59,16 +59,18 @@ workflow:
       - rules-k8s
 
 .dashboards:
-  extends: .default-job-rules
-  rules:
-    - if: '$CI_PROJECT_URL !~ /^https:\/\/gitlab\.com\/.*/'
-      when: never
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-    - if: '$CI_COMMIT_TAG'
   before_script:
     - ./scripts/bundler.sh # Install jsonnet bundles
     - dashboards/generate-mixins.sh # Generate dashboards from mixins
+  only:
+    variables:
+      - $CI_PROJECT_URL =~ /^https:\/\/gitlab\.com\/.*/
+    refs:
+      - master
+      - merge_requests
+      - tags
+  except:
+    - schedules
 
 verify:
   extends: .default-job-rules
@@ -233,55 +235,74 @@ ensure_generated_content_up_to_date:
 # log.gprd.gitlab.net
 ################################################################################
 update_elastic_log_gprd_ilm:
-  extends: .default-job-rules
-  rules:
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_LOG_GPRD_URL'
-      changes:
-        - elastic/managed-objects/log_gprd/ILM/*
   stage: deploy
   script:
   - ./elastic/managed-objects/log_gprd/ILM/update-ilm.sh
+  only:
+    refs:
+      - master
+    changes:
+      - elastic/managed-objects/log_gprd/ILM/*
+    variables:
+      - $ES_LOG_GPRD_URL
+  except:
+    - schedules
 
 update_elastic_log_gprd_watches:
-  extends: .default-job-rules
-  rules:
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_LOG_GPRD_URL'
-      changes:
-        - elastic/managed-objects/log_gprd/watches/*
   stage: deploy
   script:
   - ./elastic/managed-objects/log_gprd/watches/update-watches.sh
+  only:
+    refs:
+      - master
+    changes:
+      - elastic/managed-objects/log_gprd/watches/*
+    variables:
+      - $ES_LOG_GPRD_URL
+  except:
+    - schedules
 
 update_elastic_log_gprd_index_templates:
   stage: deploy
-  extends: .default-job-rules
-  rules:
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_LOG_GPRD_URL'
-      changes:
-        - elastic/managed-objects/log_gprd/index-templates/*
-        - elastic/managed-objects/lib/log_gprd_index_template.libsonnet
-        - elastic/managed-objects/lib/index_mappings/*.jsonnet
-        - elastic/managed-objects/lib/settings_gprd.libsonnet
-        - elastic/managed-objects/indices/indices-array.sh
   script:
   - ./elastic/managed-objects/log_gprd/index-templates/update-index-templates.sh
+  only:
+    refs:
+      - master
+    changes:
+      - elastic/managed-objects/log_gprd/index-templates/*
+      - elastic/managed-objects/lib/log_gprd_index_template.libsonnet
+      - elastic/managed-objects/lib/index_mappings/*.jsonnet
+      - elastic/managed-objects/lib/settings_gprd.libsonnet
+      - elastic/managed-objects/indices/indices-array.sh
+    variables:
+      - $ES_LOG_GPRD_URL
+  except:
+    - schedules
 
 update_elastic_log_gprd_cluster_settings:
   stage: deploy
-  extends: .default-job-rules
-  rules:
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_LOG_GPRD_URL'
-      changes:
-        - elastic/managed-objects/log_gprd/cluster-settings/*
   script:
   - ./elastic/managed-objects/log_gprd/cluster-settings/update-cluster-settings.sh
+  only:
+    refs:
+      - master
+    changes:
+      - elastic/managed-objects/log_gprd/cluster-settings/*
+    variables:
+      - $ES_LOG_GPRD_URL
+  except:
+    - schedules
 
 update_elastic_log_gprd_hot_index_shards_per_node:
   stage: scheduled
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "schedule" && $JOB_SCHEDULE_ELASTIC_PROD'
   script:
   - ./elastic/scheduled/hot_index_shards_per_node.sh
+  only:
+    refs:
+      - schedules
+    variables:
+      - $JOB_SCHEDULE_ELASTIC_PROD
   variables:
     ELASTICSEARCH_URL: $ES_LOG_GPRD_URL
 
@@ -289,54 +310,73 @@ update_elastic_log_gprd_hot_index_shards_per_node:
 ################################################################################
 update_elastic_nonprod-log_watches:
   stage: deploy
-  extends: .default-job-rules
-  rules:
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_NONPROD_URL'
-      changes:
-        - elastic/managed-objects/nonprod-log/watches/*
   script:
   - ./elastic/managed-objects/nonprod-log/watches/update-watches.sh
+  only:
+    refs:
+      - master
+    changes:
+      - elastic/managed-objects/nonprod-log/watches/*
+    variables:
+      - $ES_NONPROD_URL
+  except:
+    - schedules
 
 update_elastic_nonprod-log_ilm:
   stage: deploy
-  extends: .default-job-rules
-  rules:
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_NONPROD_URL'
-      changes:
-        - elastic/managed-objects/nonprod-log/ILM/*
   script:
   - ./elastic/managed-objects/nonprod-log/ILM/update-ilm.sh
+  only:
+    refs:
+      - master
+    changes:
+      - elastic/managed-objects/nonprod-log/ILM/*
+    variables:
+      - $ES_NONPROD_URL
+  except:
+    - schedules
 
 update_elastic_nonprod-log_index_templates:
   stage: deploy
-  extends: .default-job-rules
-  rules:
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_NONPROD_URL'
-      changes:
-        - elastic/managed-objects/nonprod-log/index-templates/*
-        - elastic/managed-objects/lib/nonprod-log_index_template.libsonnet
-        - elastic/managed-objects/lib/index_mappings/*.jsonnet
-        - elastic/managed-objects/lib/settings_nonprod.libsonnet
-        - elastic/managed-objects/indices/indices-array.sh
   script:
   - ./elastic/managed-objects/nonprod-log/index-templates/update-index-templates.sh
+  only:
+    refs:
+      - master
+    changes:
+      - elastic/managed-objects/nonprod-log/index-templates/*
+      - elastic/managed-objects/lib/nonprod-log_index_template.libsonnet
+      - elastic/managed-objects/lib/index_mappings/*.jsonnet
+      - elastic/managed-objects/lib/settings_nonprod.libsonnet
+      - elastic/managed-objects/indices/indices-array.sh
+    variables:
+      - $ES_NONPROD_URL
+  except:
+    - schedules
 
 update_elastic_nonprod-log_cluster_settings:
   stage: deploy
-  extends: .default-job-rules
-  rules:
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_NONPROD_URL'
-      changes:
-        - elastic/managed-objects/nonprod-log/cluster-settings/*
   script:
   - ./elastic/managed-objects/nonprod-log/cluster-settings/update-cluster-settings.sh
+  only:
+    refs:
+      - master
+    changes:
+      - elastic/managed-objects/nonprod-log/cluster-settings/*
+    variables:
+      - $ES_NONPROD_URL
+  except:
+    - schedules
 
 update_elastic_nonprod-log_hot_index_shards_per_node:
   stage: scheduled
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "schedule" && $JOB_SCHEDULE_ELASTIC_NONPROD'
   script:
   - ./elastic/scheduled/hot_index_shards_per_node.sh
+  only:
+    refs:
+      - schedules
+    variables:
+      - $JOB_SCHEDULE_ELASTIC_NONPROD
   variables:
     ELASTICSEARCH_URL: $ES_NONPROD_URL
 
@@ -344,66 +384,90 @@ update_elastic_nonprod-log_hot_index_shards_per_node:
 ################################################################################
 update_elastic_security_dev_ilm:
   stage: deploy
-  extends: .default-job-rules
-  rules:
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_SECURITY_DEV_URL'
-      changes:
-        - elastic/managed-objects/security_dev/ILM/*
   script:
   - ./elastic/managed-objects/security_dev/ILM/update-ilm.sh
+  only:
+    refs:
+      - master
+    changes:
+      - elastic/managed-objects/security_dev/ILM/*
+    variables:
+      - $ES_SECURITY_DEV_URL
+  except:
+    - schedules
 
 update_elastic_security_dev_watches:
   stage: deploy
-  extends: .default-job-rules
-  rules:
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_SECURITY_DEV_URL'
-      changes:
-        - elastic/managed-objects/security_dev/watches/*
   script:
   - ./elastic/managed-objects/security_dev/watches/update-watches.sh
+  only:
+    refs:
+      - master
+    changes:
+      - elastic/managed-objects/security_dev/watches/*
+    variables:
+      - $ES_SECURITY_DEV_URL
+  except:
+    - schedules
 
 update_elastic_security_dev_index_templates:
   stage: deploy
-  extends: .default-job-rules
-  rules:
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_SECURITY_DEV_URL'
-      changes:
-        - elastic/managed-objects/security_dev/index-templates/*
   script:
   - ./elastic/managed-objects/security_dev/index-templates/update-index-templates.sh
+  only:
+    refs:
+      - master
+    changes:
+      - elastic/managed-objects/security_dev/index-templates/*
+    variables:
+      - $ES_SECURITY_DEV_URL
+  except:
+    - schedules
 
 update_elastic_security_dev_cluster_settings:
   stage: deploy
-  extends: .default-job-rules
-  rules:
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_SECURITY_DEV_URL'
-      changes:
-        - elastic/managed-objects/security_dev/cluster-settings/*
   script:
   - ./elastic/managed-objects/security_dev/cluster-settings/update-cluster-settings.sh
+  only:
+    refs:
+      - master
+    changes:
+      - elastic/managed-objects/security_dev/cluster-settings/*
+    variables:
+      - $ES_SECURITY_DEV_URL
+  except:
+    - schedules
 
 # monitoring-es7
 ################################################################################
 
 update_elastic_monitoring-es7_cluster_settings:
   stage: deploy
-  extends: .default-job-rules
-  rules:
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_MONITORING_ES7_URL'
-      changes:
-        - elastic/managed-objects/monitoring-es7/cluster-settings/*
   script:
   - ./elastic/managed-objects/monitoring-es7/cluster-settings/update-cluster-settings.sh
+  only:
+    refs:
+      - master
+    changes:
+      - elastic/managed-objects/monitoring-es7/cluster-settings/*
+    variables:
+      - $ES_MONITORING_ES7_URL
+  except:
+    - schedules
 
 update_elastic_monitoring-es7_ilm:
   stage: deploy
-  extends: .default-job-rules
-  rules:
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_MONITORING_ES7_URL'
-      changes:
-      - elastic/managed-objects/monitoring-es7/ILM/*
   script:
   - ./elastic/managed-objects/monitoring-es7/ILM/update-ilm.sh
+  only:
+    refs:
+      - master
+    changes:
+      - elastic/managed-objects/monitoring-es7/ILM/*
+    variables:
+      - $ES_MONITORING_ES7_URL
+  except:
+    - schedules
 
 ################################################################################
 
@@ -463,13 +527,13 @@ test_dashboards:
 
 deploy_dashboards:
   extends: .dashboards
-  rules:
-    - if: '$CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH'
-      when: never
   stage: deploy
   script:
     - dashboards/upload.sh
     - dashboards/delete-orphaned-dashboards.sh
+  only:
+    refs:
+      - master
 
 .docker_image_template:
   image: docker:stable
@@ -524,24 +588,23 @@ publish:
       # will be created on gitlab.com, mirrored to ops,
       # and the image will be built in both locations
       - $CI_API_V4_URL == "https://ops.gitlab.net/api/v4"
-      # Don't run when the pipeline was triggered by another pipeline
-      - $CI_PIPELINE_SOURCE == "pipeline"
     refs:
       - tags
       - schedules
 
 alertmanager_test:
   stage: test
-  extends: .default-job-rules
-  rules:
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
-    - if: '$CI_COMMIT_TAG'
-    # only run for merge request changing alertmanager files
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      changes:
-        - alertmanager/*
   script:
     - make test-alertmanager
+  only:
+    changes:
+      - alertmanager/*
+    refs:
+      - master
+      - merge_requests
+      - tags
+  except:
+    - schedules
 
 check-stage-groups:
   rules:
