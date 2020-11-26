@@ -185,7 +185,7 @@ module Runbooks
       end
 
       def selected?(job, query)
-        job.klass == query[:worker_name] || job.args.first == query[:job_type]
+        job.klass == query[:worker_name] || job.args.first == query[:job_type] || query[:job_type] == '*'
       end
 
       def for_each_job(query = {})
