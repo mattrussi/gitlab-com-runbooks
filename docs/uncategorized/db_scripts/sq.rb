@@ -308,7 +308,7 @@ module Runbooks
       end
 
       def show_sidekiq_data
-        return if options.command != 'show' || !options.command.empty?
+        return if options.command != 'show' || options.command.empty?
 
         queue_data, job_data = load_sidekiq_queue_data(job_type: options.job_type)
         log.info '-----------'
