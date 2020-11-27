@@ -8,8 +8,14 @@ metricsCatalog.serviceDefinition({
   monitoringThresholds: {
     errorRatio: 0.9999,  // 99.99% of nfs requests should succeed, over multiple window periods
   },
-  components: {
+  serviceLevelIndicators: {
     nfs_service: {
+      featureCategory: 'not_owned',
+      teams: ['sre_coreinfra'],
+      description: |||
+        Monitors NFS RPC calls in aggregate.
+      |||,
+
       requestRate: rateMetric(
         counter='node_nfsd_server_rpcs_total',
         selector='type="nfs"'

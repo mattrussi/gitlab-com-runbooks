@@ -12,8 +12,14 @@ metricsCatalog.serviceDefinition({
     // apdexScore: 0.999,
     errorRatio: 0.999,
   },
-  components: {
+  serviceLevelIndicators: {
     elasticsearch_searching: {
+      featureCategory: 'not_owned',
+      teams: ['sre_observability'],
+      description: |||
+        This SLI monitors searches issued to GitLab's logging ELK instance.
+      |||,
+
       requestRate: derivMetric(
         counter='elasticsearch_indices_search_query_total',
         selector='type="logging"',
@@ -24,6 +30,12 @@ metricsCatalog.serviceDefinition({
     },
 
     elasticsearch_indexing: {
+      featureCategory: 'not_owned',
+      teams: ['sre_observability'],
+      description: |||
+        This SLI monitors log index operations to GitLab's logging ELK instance.
+      |||,
+
       requestRate: derivMetric(
         counter='elasticsearch_indices_indexing_index_total',
         selector='type="logging"',
@@ -43,6 +55,12 @@ metricsCatalog.serviceDefinition({
     // Stackdriver component represents log messages
     // ingested in Google Stackdrive Logging in GCP
     stackdriver: {
+      featureCategory: 'not_owned',
+      teams: ['sre_observability'],
+      description: |||
+        This SLI monitors the total number of logs sent to GCP StackDriver logging.
+      |||,
+
       staticLabels: {
         stage: 'main',
       },
@@ -57,6 +75,12 @@ metricsCatalog.serviceDefinition({
     // This component tracks fluentd log output
     // across the entire fleet
     fluentd_log_output: {
+      featureCategory: 'not_owned',
+      teams: ['sre_observability'],
+      description: |||
+        This SLI monitors fluentd log output and the number of output errors in fluentd.
+      |||,
+
       staticLabels: {
         stage: 'main',
       },

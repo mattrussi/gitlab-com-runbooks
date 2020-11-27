@@ -57,7 +57,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_workhorse_image_resize_requests_total{job="gitlab-workhorse-web", type="web", status!="success"}[1m])
+        rate(gitlab_workhorse_image_resize_requests_total{job="gitlab-workhorse-web", type="web", status!="success", status!="unknown", status!="success-client-cache"}[1m])
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -199,6 +199,25 @@ groups:
       sum by (environment,stage) (
         rate(gitlab_workhorse_http_requests_total{job="gitlab-workhorse-web", type="web", code=~"^5.*", route!="^/-/health$", route!="^/-/(readiness|liveness)$"}[1m])
       )
+  - record: gitlab:component:feature_category:execution:ops:rate_1m
+    labels:
+      component: puma
+    expr: |
+      sum by (environment,tier,type,stage,feature_category) (
+        sli_aggregations:http_requests_total_rate1m{job="gitlab-rails",type="web"}
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_1m
+    labels:
+      component: puma
+    expr: |
+      sum by (environment,tier,type,stage,feature_category) (
+        sli_aggregations:http_requests_total_rate1m{job="gitlab-rails",status=~"5..",type="web"}
+      )
+  - record: gitlab:component:feature_category:execution:error:ratio_1m
+    expr: |
+      gitlab:component:feature_category:execution:error:rate_1m
+      /
+      gitlab:component:feature_category:execution:ops:rate_1m > 0
 - name: 'Component-Level SLIs: web - 5m burn-rate'
   interval: 1m
   rules:
@@ -255,7 +274,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_workhorse_image_resize_requests_total{job="gitlab-workhorse-web", type="web", status!="success"}[5m])
+        rate(gitlab_workhorse_image_resize_requests_total{job="gitlab-workhorse-web", type="web", status!="success", status!="unknown", status!="success-client-cache"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -397,6 +416,25 @@ groups:
       sum by (environment,stage) (
         rate(gitlab_workhorse_http_requests_total{job="gitlab-workhorse-web", type="web", code=~"^5.*", route!="^/-/health$", route!="^/-/(readiness|liveness)$"}[5m])
       )
+  - record: gitlab:component:feature_category:execution:ops:rate_5m
+    labels:
+      component: puma
+    expr: |
+      sum by (environment,tier,type,stage,feature_category) (
+        sli_aggregations:http_requests_total_rate5m{job="gitlab-rails",type="web"}
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_5m
+    labels:
+      component: puma
+    expr: |
+      sum by (environment,tier,type,stage,feature_category) (
+        sli_aggregations:http_requests_total_rate5m{job="gitlab-rails",status=~"5..",type="web"}
+      )
+  - record: gitlab:component:feature_category:execution:error:ratio_5m
+    expr: |
+      gitlab:component:feature_category:execution:error:rate_5m
+      /
+      gitlab:component:feature_category:execution:ops:rate_5m > 0
 - name: 'Component-Level SLIs: web - 30m burn-rate'
   interval: 2m
   rules:
@@ -451,7 +489,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_workhorse_image_resize_requests_total{job="gitlab-workhorse-web", type="web", status!="success"}[30m])
+        rate(gitlab_workhorse_image_resize_requests_total{job="gitlab-workhorse-web", type="web", status!="success", status!="unknown", status!="success-client-cache"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -589,6 +627,25 @@ groups:
       sum by (environment,stage) (
         rate(gitlab_workhorse_http_requests_total{job="gitlab-workhorse-web", type="web", code=~"^5.*", route!="^/-/health$", route!="^/-/(readiness|liveness)$"}[30m])
       )
+  - record: gitlab:component:feature_category:execution:ops:rate_30m
+    labels:
+      component: puma
+    expr: |
+      sum by (environment,tier,type,stage,feature_category) (
+        sli_aggregations:http_requests_total_rate30m{job="gitlab-rails",type="web"}
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_30m
+    labels:
+      component: puma
+    expr: |
+      sum by (environment,tier,type,stage,feature_category) (
+        sli_aggregations:http_requests_total_rate30m{job="gitlab-rails",status=~"5..",type="web"}
+      )
+  - record: gitlab:component:feature_category:execution:error:ratio_30m
+    expr: |
+      gitlab:component:feature_category:execution:error:rate_30m
+      /
+      gitlab:component:feature_category:execution:ops:rate_30m > 0
 - name: 'Component-Level SLIs: web - 1h burn-rate'
   interval: 1m
   rules:
@@ -645,7 +702,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_workhorse_image_resize_requests_total{job="gitlab-workhorse-web", type="web", status!="success"}[1h])
+        rate(gitlab_workhorse_image_resize_requests_total{job="gitlab-workhorse-web", type="web", status!="success", status!="unknown", status!="success-client-cache"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -787,6 +844,25 @@ groups:
       sum by (environment,stage) (
         rate(gitlab_workhorse_http_requests_total{job="gitlab-workhorse-web", type="web", code=~"^5.*", route!="^/-/health$", route!="^/-/(readiness|liveness)$"}[1h])
       )
+  - record: gitlab:component:feature_category:execution:ops:rate_1h
+    labels:
+      component: puma
+    expr: |
+      sum by (environment,tier,type,stage,feature_category) (
+        sli_aggregations:http_requests_total_rate1h{job="gitlab-rails",type="web"}
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_1h
+    labels:
+      component: puma
+    expr: |
+      sum by (environment,tier,type,stage,feature_category) (
+        sli_aggregations:http_requests_total_rate1h{job="gitlab-rails",status=~"5..",type="web"}
+      )
+  - record: gitlab:component:feature_category:execution:error:ratio_1h
+    expr: |
+      gitlab:component:feature_category:execution:error:rate_1h
+      /
+      gitlab:component:feature_category:execution:ops:rate_1h > 0
 - name: 'Component-Level SLIs: web - 6h burn-rate'
   interval: 2m
   rules:
@@ -841,7 +917,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_workhorse_image_resize_requests_total{job="gitlab-workhorse-web", type="web", status!="success"}[6h])
+        rate(gitlab_workhorse_image_resize_requests_total{job="gitlab-workhorse-web", type="web", status!="success", status!="unknown", status!="success-client-cache"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -979,6 +1055,25 @@ groups:
       sum by (environment,stage) (
         rate(gitlab_workhorse_http_requests_total{job="gitlab-workhorse-web", type="web", code=~"^5.*", route!="^/-/health$", route!="^/-/(readiness|liveness)$"}[6h])
       )
+  - record: gitlab:component:feature_category:execution:ops:rate_6h
+    labels:
+      component: puma
+    expr: |
+      sum by (environment,tier,type,stage,feature_category) (
+        sli_aggregations:http_requests_total_rate6h{job="gitlab-rails",type="web"}
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_6h
+    labels:
+      component: puma
+    expr: |
+      sum by (environment,tier,type,stage,feature_category) (
+        sli_aggregations:http_requests_total_rate6h{job="gitlab-rails",status=~"5..",type="web"}
+      )
+  - record: gitlab:component:feature_category:execution:error:ratio_6h
+    expr: |
+      gitlab:component:feature_category:execution:error:rate_6h
+      /
+      gitlab:component:feature_category:execution:ops:rate_6h > 0
 - name: 'Component mapping: web'
   interval: 1m
   rules:

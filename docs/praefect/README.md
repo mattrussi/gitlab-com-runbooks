@@ -33,7 +33,16 @@
 
 <!-- ## Summary -->
 
-<!-- ## Architecture -->
+## Architecture
+
+### File storage locations
+
+Praefect itself is a transparent proxy with no local storage. 
+
+The praefect nodes that run praefect are named in the format praefect-XX-stor-ENV.
+
+The file storage nodes that contain the data praefect reads is a normal gitaly node
+and named in the format file-praefect-XX-stor-ENV. The server numbers correspond to the praefect node that uses it.
 
 <!-- ## Performance -->
 

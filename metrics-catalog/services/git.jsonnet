@@ -4,6 +4,7 @@ local rateMetric = metricsCatalog.rateMetric;
 local customRateQuery = metricsCatalog.customRateQuery;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local haproxyComponents = import './lib/haproxy_components.libsonnet';
+local perFeatureCategoryRecordingRules = (import './lib/puma-per-feature-category-recording-rules.libsonnet').perFeatureCategoryRecordingRules;
 
 metricsCatalog.serviceDefinition({
   type: 'git',
@@ -33,8 +34,10 @@ metricsCatalog.serviceDefinition({
     pgbouncer: true,
     praefect: true,
   },
-  components: {
+  serviceLevelIndicators: {
     loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
+      featureCategory='not_owned',
+      teams=['sre_datastores'],
       stageMappings={
         main: { backends: ['https_git', 'websockets'], toolingLinks: [
           toolingLinks.bigquery(title='Top http clients by number of requests, main stage, 10m', savedQuery='805818759045:704c6bdf00a743d195d344306bf207ee'),
@@ -47,6 +50,8 @@ metricsCatalog.serviceDefinition({
     ),
 
     loadbalancer_ssh: haproxyComponents.haproxyL4LoadBalancer(
+      featureCategory='not_owned',
+      teams=['sre_datastores'],
       stageMappings={
         main: {
           backends: ['ssh', 'altssh'],
@@ -60,6 +65,14 @@ metricsCatalog.serviceDefinition({
     ),
 
     workhorse: {
+      featureCategory: 'not_owned',
+      teams: ['sre_datastores', 'workhorse'],
+      description: |||
+        Monitors the Workhorse instance running in the Git fleet, via the HTTP interface. This SLI
+        excludes API requests, which have their own SLI with tigher latency thresholds.
+        Websocket connections are excluded from the apdex score.
+      |||,
+
       local baseSelector = {
         job: 'gitlab-workhorse-git',
         type: 'git',
@@ -108,6 +121,14 @@ metricsCatalog.serviceDefinition({
      * that other Git/Workhorse traffic
      */
     workhorse_auth_api: {
+      featureCategory: 'not_owned',
+      teams: ['sre_datastores', 'workhorse'],
+      description: |||
+        Monitors Workhorse API endpoints, running in the Git fleet, via the HTTP interface.
+        Workhorse API requests have much tigher latency requirements, as these requests originate in GitLab-Shell
+        and are on the critical path for authentication of Git SSH commands.
+      |||,
+
       local baseSelector = {
         job: 'gitlab-workhorse-git',
         type: 'git',
@@ -117,9 +138,8 @@ metricsCatalog.serviceDefinition({
       apdex: histogramApdex(
         histogram='gitlab_workhorse_http_request_duration_seconds_bucket',
         selector=baseSelector,
-        // Note: 10s is far too slow for an auth request. This threshold should be much lower
-        // TODO: reduce this threshold to 1s
-        satisfiedThreshold=10
+        // Note: 1s is too slow for an auth request. This threshold should be lower
+        satisfiedThreshold=1
       ),
 
       requestRate: rateMetric(
@@ -146,6 +166,12 @@ metricsCatalog.serviceDefinition({
 
 
     puma: {
+      featureCategory: 'not_owned',
+      teams: ['sre_datastores'],
+      description: |||
+        Monitors Rails endpoints, running in the Git fleet, via the HTTP interface.
+      |||,
+
       local baseSelector = { job: 'gitlab-rails', type: 'git' },
       apdex: histogramApdex(
         histogram='http_request_duration_seconds_bucket',
@@ -174,6 +200,12 @@ metricsCatalog.serviceDefinition({
     },
 
     gitlab_shell: {
+      featureCategory: 'not_owned',
+      teams: ['sre_datastores'],
+      description: |||
+        We monitor GitLab shell, using HAProxy SSH connection information.
+      |||,
+
       staticLabels: {
         tier: 'sv',
         stage: 'main',
@@ -192,4 +224,8 @@ metricsCatalog.serviceDefinition({
       ],
     },
   },
+  extraRecordingRulesPerBurnRate: [
+    // Adds per-feature-category plus error rates across multiple burn rates
+    perFeatureCategoryRecordingRules({ type: 'git' }),
+  ],
 })

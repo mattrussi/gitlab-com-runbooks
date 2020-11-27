@@ -102,7 +102,7 @@ local capacityComponentColors = {
     zindex: -2,
   },
   degradationSlo:: {
-    alias: '6h Degradation SLO',
+    alias: '6h Degradation SLO (5% of monthly error budget)',
     color: '#FF4500',  // "Orange red"
     dashes: true,
     legend: true,
@@ -114,7 +114,7 @@ local capacityComponentColors = {
     zindex: -2,
   },
   outageSlo:: {
-    alias: '1h Outage SLO',
+    alias: '1h Outage SLO (2% of monthly error budget)',
     color: '#F2495C',  // "Red"
     dashes: true,
     legend: true,
@@ -205,4 +205,8 @@ local capacityComponentColors = {
     zindex: -3,
     color: '#5794F2',
   } + overrides,
+  negativeY:: {
+    alias: '/.*/',
+    transform: 'negative-Y',
+  },
 }

@@ -19,6 +19,7 @@
 * [../frontend/gitlab-com-is-down.md](../frontend/gitlab-com-is-down.md)
 * [../patroni/log_analysis.md](../patroni/log_analysis.md)
 * [../patroni/patroni-management.md](../patroni/patroni-management.md)
+* [../patroni/performance-degradation-troubleshooting.md](../patroni/performance-degradation-troubleshooting.md)
 * [../patroni/pg-ha.md](../patroni/pg-ha.md)
 * [../patroni/pg_repack.md](../patroni/pg_repack.md)
 * [../patroni/postgres.md](../patroni/postgres.md)
@@ -31,6 +32,7 @@
 * [pgbouncer-connections.md](pgbouncer-connections.md)
 * [pgbouncer-remove-instance.md](pgbouncer-remove-instance.md)
 * [pgbouncer-saturation.md](pgbouncer-saturation.md)
+* [service-pgbouncer.md](service-pgbouncer.md)
 * [../sidekiq/large-pull-mirror-queue.md](../sidekiq/large-pull-mirror-queue.md)
 <!-- END_MARKER -->
 

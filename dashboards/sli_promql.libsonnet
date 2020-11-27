@@ -63,7 +63,7 @@ local formatConfigForSelectorHash(selectorHash) =
 
     // Fallback to non-aggregated, non-global query for backwards
     // compatability, remove after 1 Jan 2021
-    componentApdexQuery(selectorHash, range)::
+    sliApdexQuery(selectorHash, range)::
       |||
         avg_over_time(gitlab_component_apdex:ratio_5m{%(globalSelector)s}[%(range)s])
         or on(component, type)
@@ -80,7 +80,7 @@ local formatConfigForSelectorHash(selectorHash) =
         )
       ||| % formatConfigForSelectorHash(selectorHash) { range: range },
 
-    componentNodeApdexQuery(selectorHash, range)::
+    sliNodeApdexQuery(selectorHash, range)::
       |||
         gitlab_component_node_apdex:ratio_5m{%(selector)s}
       ||| % formatConfigForSelectorHash(selectorHash) { range: range },
@@ -130,7 +130,7 @@ local formatConfigForSelectorHash(selectorHash) =
         )
       ||| % formatConfigForSelectorHash(selectorHash) { sigma: sigma },
 
-    componentOpsRateQuery(selectorHash, range)::
+    sliOpsRateQuery(selectorHash, range)::
       |||
         sum(
           avg_over_time(
@@ -139,7 +139,7 @@ local formatConfigForSelectorHash(selectorHash) =
         ) by (component)
       ||| % formatConfigForSelectorHash(selectorHash) { range: range },
 
-    componentNodeOpsRateQuery(selectorHash, range)::
+    sliNodeOpsRateQuery(selectorHash, range)::
       |||
         gitlab_component_node_ops:rate_5m{%(selector)s}
       ||| % formatConfigForSelectorHash(selectorHash) { range: range },
@@ -201,7 +201,7 @@ local formatConfigForSelectorHash(selectorHash) =
         max by (type) (gitlab_service_errors:ratio_5m{%(globalSelector)s} offset %(offset)s)
       ||| % formatConfigForSelectorHash(selectorHash) { offset: offset },
 
-    componentErrorRateQuery(selectorHash)::
+    sliErrorRateQuery(selectorHash)::
       |||
         sum(
           gitlab_component_errors:rate_5m{%(selector)s}
@@ -212,7 +212,7 @@ local formatConfigForSelectorHash(selectorHash) =
         ) by (component)
       ||| % formatConfigForSelectorHash(selectorHash) {},
 
-    componentNodeErrorRateQuery(selectorHash)::
+    sliNodeErrorRateQuery(selectorHash)::
       |||
         gitlab_component_node_errors:ratio_5m{%(selector)s}
       ||| % formatConfigForSelectorHash(selectorHash) {},
@@ -225,6 +225,4 @@ local formatConfigForSelectorHash(selectorHash) =
         gitlab_service_node_errors:ratio_5m{%(globalSelector)s}
       ||| % formatConfigForSelectorHash(selectorHash) {},
   },
-
-
 }

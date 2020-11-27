@@ -15,8 +15,18 @@ metricsCatalog.serviceDefinition({
     kubernetes: false,
     vms: false,
   },
-  components: {
+  serviceLevelIndicators: {
     gitlab_zone: {
+      featureCategory: 'not_owned',
+      teams: ['sre_coreinfra'],
+      description: |||
+        Aggregation of all public traffic for GitLab.com passing through the WAF.
+
+        Errors on this SLI may indicate that the WAF has detected
+        malicious traffic and is blocking it. It may also indicate
+        serious upstream failures on GitLab.com.
+      |||,
+
       requestRate: rateMetric(
         counter='cloudflare_zones_http_responses_total',
         selector='zone=~"gitlab.com|staging.gitlab.com"'
@@ -31,6 +41,15 @@ metricsCatalog.serviceDefinition({
     },
     // The "gitlab.net" zone
     gitlab_net_zone: {
+      featureCategory: 'not_owned',
+      teams: ['sre_coreinfra'],
+      description: |||
+        Aggregation of all GitLab.net (non-pulic) traffic passing through the WAF.
+
+        Errors on this SLI may indicate that the WAF has detected
+        malicious traffic and is blocking it.
+      |||,
+
       requestRate: rateMetric(
         counter='cloudflare_zones_http_responses_total',
         selector='zone="gitlab.net"'

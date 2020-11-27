@@ -73,8 +73,13 @@ involve the use of `helm` or `k-ctl` MUST be done via the repo and CI/CD.
 
 The zonal clusters must be accessed through the console servers, but they are best accessed using an ssh tunnel. We will access the clusters this way until this issues in the [access epic](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/337) are completed.
 
-[`sshuttle`](https://github.com/sshuttle/sshuttle) automates the process of setting up an ssh tunnel _and_ modifying your local route table to forward traffic to the configured CIDR.
+There are two mechanisms you can use to access these clusters via ssh tunnel.
 
+* [`sshuttle`](https://github.com/sshuttle/sshuttle) automates the process of setting up an ssh tunnel _and_ modifying your local route table to forward traffic to the configured CIDR.
+
+* Using a standard ssh socks proxy listening locally to forward requests over the ssh tunnel to their destination
+
+#### Using `sshuttle`
 
 - [ ] Get the credentials for the zonal clusters
 
@@ -120,6 +125,37 @@ kubectl get pods -n gitlab
 ```
 
 **Note**: Optionally you rename your context to something less unwiedly: `kubectl config rename-context gke_gitlab-production_us-east1_gprd-gitlab-gke gprd`
+
+#### Using ssh socks proxy
+
+- [ ] Get credentials for the zonal clusters
+
+```
+cloud container clusters get-credentials gstg-us-east1-b --region us-east1-b --project gitlab-staging-1
+gcloud container clusters get-credentials gstg-us-east1-c --region us-east1-c --project gitlab-staging-1
+gcloud container clusters get-credentials gstg-us-east1-d --region us-east1-d --project gitlab-staging-1
+gcloud container clusters get-credentials gprd-us-east1-b --region us-east1-b --project gitlab-production
+gcloud container clusters get-credentials gprd-us-east1-c --region us-east1-c --project gitlab-production
+gcloud container clusters get-credentials gprd-us-east1-d --region us-east1-d --project gitlab-production
+```
+
+- [ ] SSH to a console node depending on the environment and setup a socks proxy
+
+```
+# for staging
+ssh -N -D1881 console-01-sv-gstg.c.gitlab-staging-1.internal
+
+# for production
+ssh -N -D1881 console-01-sv-gprd.c.gitlab-production.internal
+```
+
+- [ ] In another window, export the `HTTP_PROXY` environment variable and test connection
+
+```
+export HTTP_PROXY=socks5://localhost:1881
+kubectl config use-context gke_gitlab-staging-1_us-east1-d_gstg-us-east1-d
+kubectl get pods -n gitlab
+```
 
 ### SSH Access to pods
 
@@ -172,3 +208,18 @@ vi releases/gitlab/values/pre.yaml.gotmpl
 # Make a change
 ./bin/k-ctl -e pre -D apply
 ```
+
+## Getting or setting HAProxy state for the zonal clusters
+
+It's possible to drain and stop connections to an entire zonal cluster.
+This should be only done in extreme circumstances where you want to stop traffic to an entire availability zone.
+
+* [ ] Get the server state for the production `us-east1-b` zone
+
+_Use the `bin/get-server-state` script in [chef-repo](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/)_
+
+```
+./bin/get-server-state gprd gke-us-east1-b
+```
+
+`./bin/set-server-state` is used to set the state, just like any other server in an HAProxy backend

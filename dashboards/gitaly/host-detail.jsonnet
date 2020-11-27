@@ -110,7 +110,7 @@ local headlineRow(startRow=1) =
     )
     +
     [
-      keyMetrics.serviceNodeQpsPanel(
+      keyMetrics.serviceNodeOperationRatePanel(
         serviceType='gitaly',
         selectorHash=serviceSelector,
         environmentSelectorHash=environmentSelectorHash,
@@ -128,7 +128,7 @@ basic.dashboard(
   headlineRow(startRow=100)
 )
 .addPanels(
-  metricsCatalogDashboards.componentNodeOverviewMatrix(
+  metricsCatalogDashboards.sliNodeOverviewMatrix(
     serviceType='gitaly',
     selectorHash=environmentSelectorHash { fqdn: '$fqdn' },
     startRow=200,
@@ -182,7 +182,7 @@ basic.dashboard(
   gridPos={ x: 0, y: 6000, w: 24, h: 1 }
 )
 .addPanel(
-  metricsCatalogDashboards.componentDetailMatrix(
+  metricsCatalogDashboards.sliDetailMatrix(
     'gitaly',
     'goserver',
     selectorHash,
@@ -192,7 +192,7 @@ basic.dashboard(
   ), gridPos={ x: 0, y: 7000 }
 )
 .addPanel(
-  metricsCatalogDashboards.componentDetailMatrix(
+  metricsCatalogDashboards.sliDetailMatrix(
     'gitaly',
     'gitalyruby',
     selectorHash,

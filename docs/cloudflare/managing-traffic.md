@@ -2,18 +2,35 @@
 
 ## General
 
- - **Temporary rules are subject to automatic expiration!** See `Automated expiry on temporary rules` down below.
+ - **Temporary rules are subject to automatic expiration!** See [Automated expiration of temporary rules](#automated-expiration-of-temporary-rules) .
  - GitLab Pages and the GitLab registry are not yet fronted by Cloudflare, so these blocks would not affect them.
  - Automation mentioned in this documentation is *partially* created. (https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/9711#note_323835098)
-   - Automated expiry is working
+   - Automated expiration is implemented as part of the [Cloudflare Audit Log](https://ops.gitlab.net/gitlab-com/gl-infra/cloudflare-audit-log) , further [described below](#automated-rule-and-issue-maintenance)
    - Chatops tooling to create a rule is not implemented
- - Blocks should not be a permanent solution. IP addresses get rotated on an ISP level, so we should strive to block them only as long as required to mitigate an attack or block abusive behaviour.
+ - IP Blocks should not be a permanent solution. IP addresses get rotated on an ISP level, so we should strive to block them only as long as required to mitigate an attack or block abusive behaviour.
 
 ## The goal of the [Firewall issue tracker](https://gitlab.com/gitlab-com/gl-infra/cloudflare-firewall)
 
  - Provide a searchable database of current and previous blocks and allowlists.
  - Provide a quick overview of what is currently allowlisted or blocklisted and why.
  - Reduce noise in the infrastructure and production trackers by separating it out.
+
+## Automated Rule and Issue Maintenance
+
+The goal of the [Cloudflare Audit Log](https://ops.gitlab.net/gitlab-com/gl-infra/cloudflare-audit-log)
+is to run periodically to check the Cloudflare configuration against a `known good` version and
+verify the current firewall rules. This is necessary due to various defeciences
+in how the Cloudflare API handles priority which cause conflicts with how the
+terraform provider manages its state.
+
+The Cloudflare Audit Log is responsible for:
+
+* Verifying the [description format](#description-format-of-cloudflare-rules) of the current rules
+  and logging errors for invalid formats or missing issues.
+* Inspecting the rules and adding any missing `rule-filter:` or `bypass:` actions to the corresponding issue.
+* Evaluate temporary rules for automated expiration following the description of [automated expiration of temporary rules](#automated-expiration-of-temporary-rules).
+
+For a complete flow chart of the processing see [cloudflare-audit-log-rule-processing.md](cloudflare-audit-log-rule-processing.md)
 
 ## How do I Enable "I'm Under Attack Mode" in Cloudflare once I determine we are under a large scale attack?
 
@@ -112,7 +129,7 @@ Each issue should be labeled with with either of these labels:
       - `bypass-action:zoneLockdown`: The rule associated to the issue bypasses a Zone Lockdown
       - `bypass-action:securityLevel`: The rule associated to the issue bypasses Security Level (IP Reputation)
   - `firewall-action::expired`: The rule associated to the issue has expired
-    - Applied by automation once all of these conditions are met
+    - Applied by automation for `temporary` rules as described in [automated expiration of temporary rules](#automated-expiration-of-temporary-rules)
       - The minimum block time of 48h has passed
       - Metrics indicate, the rule has had little to no traffic in the last 12h
         - Little to no traffic = less than 7200 requests (10 requests/minute over 12h)
@@ -145,21 +162,29 @@ The longevity of a rule is to be indicated by either of these labels:
   - `rule-duration::long-term`: The rule is intended to stay active for a long time. Examples include allowlisting Customers or blocking repeated offenders.
   - `rule-duration::temporary`: The rule is intended to be short-lived. Its lifetime will in most cases be determined by automation.
 
+Add labels for the Cloudflare zones that the rule should be present in. This can be used
+to specify rules for creation in staging prior to production, or production only
+rules to respond to incidents.
+
+  - `zone:gitlab-com`
+  - `zone:staging-gitlab-com`
+  - `zone:gitlab-net`
+
 ### Description format of Cloudflare rules
 
 In order for automation to do its job, it is required to have a standardized format it can parse. This format is a compromise between machine readability and human readability.
 
 ```
-#<firewall issue id>|<rfc-3339 date of rule creation>|<temporary[=<validity>]|long-term>[|<description>]
+#<firewall issue id>|<rfc-3339 date of rule creation>|temporary[=<minimum in hours>[,<maximum in hours>]]|long-term[|<description>]
 ```
 
  - The firewall issue ID should be used to link any relevant production incidents or other issues to it.
  - The RFC3339 date can be retrieved via the GNU date util `date --rfc-3339=seconds --utc`. It should be UTC.
  - The longevity of a rule is to be indicated by either `temporary` or `long-term`.
-   - `temporary` rules are subject for processing **and automatic expiration** by automation.
-   - If required a different minimum validity can be set and a maximum time can be specified. The default minimum is 24 hours.
-   - This is done by suffixing `=<minimum validity in hours>[,<maximum validity in hours>]`
-   - To specify a maximum validity without overriding the minimum, set the minimum to 0.
+   - `temporary` rules are processed and **expired** by [automation](#automated-rule-and-issue-maintenance).
+   - See [automated expiration of temporary rules](#automated-expiration-of-temporary-rules) for a
+     complete description of how "minimum time in hours" and "maximum time in hours" are
+     applied.
  - A description may be provided to add further detail, but may be omitted.
 
 Examples:
@@ -186,7 +211,7 @@ Context on what the rule does should be added via labels as discussed above. For
 
 Depending on the lifetime of the rule the process is different:
 
-`temporary`: Create the rule using the Cloudflare UI at https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/gitlab.com/firewall/firewall-rules keeping in mind the layout of the rule description. For further detail refer to the [Cloudflare documentation on managing rules.](https://developers.cloudflare.com/firewall/cf-dashboard/create-edit-delete-rules/)
+`temporary`: Create the rule using the [Cloudflare UI](https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/gitlab.com/firewall/firewall-rules) keeping in mind the layout of the rule description. For further detail refer to the [Cloudflare documentation on managing rules.](https://developers.cloudflare.com/firewall/cf-dashboard/create-edit-delete-rules/).
 
 `long-term`: Create the rule in Terraform. For customer allowlists, follow the [instructions of the terraform module](https://ops.gitlab.net/gitlab-com/gl-infra/terraform-modules/cf_whitelists#whitelist-configuration). In other cases, refer to the [documentation of the Terraform provider.](https://www.terraform.io/docs/providers/cloudflare/r/firewall_rule.html)
   - When using the terraform module, please apply the labels `bypass-action:waf` and `bypass-action:rateLimit` for customers and all `bypass-action` labels for internal bypasses.
@@ -195,25 +220,35 @@ After the rule creation, comment the rule ID on the issue, as well as tagging th
 
 ### Sunsetting a rule
 
-#### Automated expiry on temporary rules
+#### Automated expiration of temporary rules
 
-The intent of this supplemental automation is to have a "set it and forget it" mentality when in comes to temporary rules. It will ensure, that constrains set upon creation are met and that the rule will be removed once traffic allows.
+The intent of the supplemental automation is to enable a "set it and forget it"
+mentality when in comes to temporary rules. It will ensure that constraints
+set upon creation are met and that the rule will be removed once traffic
+allows.
 
-##### Keeping up-2-date
+Every time the Audit logs runs, it will fetch a list of active rules from
+Cloudflare and parse them according to the format above.
 
-Every time the Audit logs runs, it will fetch a list of active rules from Cloudflare and parse them according to the format above. A `temporary` rule will be processed as following:
+Each `temporary` rule is processed and expired under the following conditions
+based on its configured minimum and maximum:
 
-If the minimum rule lifetime time of 48h (or the configured value) has passed its first job is to check, if the traffic processed by the rule is at 0 requests for the last 24h.   
-If that is the case, the rule is removed and the associated issue is labeled with `firewall-action::expired` and closed.
-If that is not the case, the rule will be left in-place and checked again on the next run.
+A maximum time is optional. If a `maximum` lifetime has been specified and
+the maximum lifetime has expired, then the rule is considered `expired`.
+Note: No check based on processed requests is applied if a maximum lifetime
+is specified.
 
-When a maximum lifetime was specified and that has passed, the rule will be regarded as expired regardless of traffic state.
+A minimum time can be optionally specified. 48 hours is used as the minimum if it is
+omitted or 0. If the minimum lifetime has expired, then the automation checks
+the rule metrics for the previous 24h. If 0 requests have been processed by
+the rule in the last 24h, then the rule is `expired`.
 
-`long-term` rules will not be auto-expired, but are subject to processing and require, that a valid issue exists.
+For any rule that is automatically `expired`:
 
-If a rule was manually modified, for example to include a user-agent after the fact, any new applicable `rule-filter` or `bypass-action` labels will be applied.
+* The rule is removed from Cloudflare.
+* The issue is labelled `firewall-action::expired` and closed.
 
-Any rule which is not parsable, will be logged as an error.
+For a complete flow chart of the processing see [cloudflare-audit-log-rule-processing.md](cloudflare-audit-log-rule-processing.md)
 
 #### Manually removing a role
 

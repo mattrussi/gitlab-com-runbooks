@@ -10,8 +10,14 @@ metricsCatalog.serviceDefinition({
     apdexScore: 0.9995,
     errorRatio: 0.999,
   },
-  components: {
+  serviceLevelIndicators: {
     rails_redis_client: {
+      featureCategory: 'not_owned',
+      teams: ['sre_observability'],
+      description: |||
+        Aggregation of all Redis Cache operations issued from the Rails codebase.
+      |||,
+
       staticLabels: {
         tier: 'db',
         stage: 'main',
@@ -37,6 +43,12 @@ metricsCatalog.serviceDefinition({
     },
 
     primary_server: {
+      featureCategory: 'not_owned',
+      teams: ['sre_observability'],
+      description: |||
+        Operations on the Redis primary for GitLab's caching Redis instance.
+      |||,
+
       requestRate: rateMetric(
         counter='redis_commands_processed_total',
         selector='type="redis-cache"',
@@ -51,6 +63,12 @@ metricsCatalog.serviceDefinition({
     },
 
     secondary_servers: {
+      featureCategory: 'not_owned',
+      teams: ['sre_observability'],
+      description: |||
+        Operations on the Redis secondaries for GitLab's caching Redis instance.
+      |||,
+
       requestRate: rateMetric(
         counter='redis_commands_processed_total',
         selector='type="redis-cache"',
@@ -65,6 +83,12 @@ metricsCatalog.serviceDefinition({
     // This is useful since it's not easy for us to directly calculate an apdex from the Redis metrics
     // directly
     rails_cache: {
+      featureCategory: 'not_owned',
+      teams: ['sre_observability'],
+      description: |||
+        Rails ActiveSupport Cache operations against the Redis Cache
+      |||,
+
       staticLabels: {
         // Redis only has a main stage, but since we take this metric from other services
         // which do have a `stage`, we should not aggregate on it

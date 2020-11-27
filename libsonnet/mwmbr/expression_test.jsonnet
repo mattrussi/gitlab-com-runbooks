@@ -118,6 +118,48 @@ test.suite({
     |||,
   },
 
+
+  testErrorBurnWithThreshold: {
+    actual: expression.multiburnRateErrorExpression(
+      metric1h='error:rate_1h',
+      metric5m='error:rate_5m',
+      metric30m='error:rate_30m',
+      metric6h='error:rate_6h',
+      metricSelectorHash={ type: 'web' },
+      operationRateMetric='operation:rate_1h',
+      operationRateSelectorHash={ type: 'web' },
+      minimumOperationRateForMonitoring=1,
+      thresholdSLOValue=0.01,
+    ),
+    expect: |||
+      (
+        (
+          error:rate_1h{type="web"}
+          > (14.4 * 0.010000)
+        )
+        and
+        (
+          error:rate_5m{type="web"}
+          > (14.4 * 0.010000)
+        )
+        or
+        (
+          error:rate_6h{type="web"}
+          > (6 * 0.010000)
+        )
+        and
+        (
+          error:rate_30m{type="web"}
+          > (6 * 0.010000)
+        )
+      )
+      and
+      (
+        operation:rate_1h{type="web"} >= 1
+      )
+    |||,
+  },
+
   testApdexBurnWithoutMinimumRate: {
     actual: expression.multiburnRateApdexExpression(
       metric1h='apdex:rate_1h',
@@ -172,6 +214,38 @@ test.suite({
             6 * (1 - avg by (type,tier) (sla:apdex:rate{monitor="global"}))
           )
         )
+      )
+    |||,
+  },
+
+  testApdexBurnWithThreshold: {
+    actual: expression.multiburnRateApdexExpression(
+      metric1h='apdex:rate_1h',
+      metric5m='apdex:rate_5m',
+      metric30m='apdex:rate_30m',
+      metric6h='apdex:rate_6h',
+      metricSelectorHash={ type: 'web' },
+      thresholdSLOValue=0.9995,
+    ),
+    expect: |||
+      (
+        apdex:rate_1h{type="web"}
+        < (1 - 14.4 * 0.000500)
+      )
+      and
+      (
+        apdex:rate_5m{type="web"}
+        < (1 - 14.4 * 0.000500)
+      )
+      or
+      (
+        apdex:rate_6h{type="web"}
+        < (1 - 6 * 0.000500)
+      )
+      and
+      (
+        apdex:rate_30m{type="web"}
+        < (1 - 6 * 0.000500)
       )
     |||,
   },

@@ -36,6 +36,35 @@ local styles = [
   },
 ];
 
+local pumaByFeatureCategoryForService(type, startRow) =
+  [row.new(title=type) { gridPos: { x: 0, y: startRow, w: 24, h: 1 } }] +
+  layout.grid([
+    grafana.text.new(
+      title='Error Rate by Feature Category Help',
+      mode='markdown',
+      content=|||
+        This table shows the error ratios for all endpoints on the %(type)s service, aggregated up to the feature category level.
+
+        This is a percentage of requests in each feature category that fail.
+      ||| % { type: type }
+    ),
+  ], cols=1, rowHeight=3, startRow=startRow)
+  +
+  layout.grid([
+    basic.table(
+      title='Error Rate by Feature Category',
+      query=|||
+        sort(clamp_max(
+          sum by (feature_category) (
+            avg_over_time(gitlab:component:feature_category:execution:error:ratio_6h{environment="$environment", env="$environment", component="puma", type="%(type)s"}[$__range])
+          ), 1
+        ))
+      ||| % { type: std.asciiLower(type) },
+      styles=styles
+    ),
+  ], cols=1, rowHeight=12, startRow=startRow + 100);
+
+
 basic.dashboard(
   'Feature Category Detail - Error Budgets',
   tags=['feature_category'],
@@ -43,6 +72,7 @@ basic.dashboard(
   time_to='now/m',
 )
 .addPanels(
+  [row.new(title='Sidekiq') { gridPos: { x: 0, y: 1, w: 24, h: 1 } }] +
   layout.grid([
     grafana.text.new(
       title='Apdex by Feature Category Help',
@@ -258,6 +288,12 @@ basic.dashboard(
     },
 
   ], cols=1, rowHeight=12, startRow=500)
+  +
+  pumaByFeatureCategoryForService('API', 600)
+  +
+  pumaByFeatureCategoryForService('Git', 900)
+  +
+  pumaByFeatureCategoryForService('Web', 1200)
 )
 + {
   links+: platformLinks.services + platformLinks.triage,
