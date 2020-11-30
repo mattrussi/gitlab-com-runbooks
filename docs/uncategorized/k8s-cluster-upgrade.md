@@ -1,5 +1,38 @@
 # GKE Cluster Upgrade Procedure
 
+Almost all of our GKE clusters are now set to automatically upgrade. They are all
+using the [Regular release channel](https://cloud.google.com/kubernetes-engine/docs/concepts/release-channels)
+and have specific times they will upgrade themselves, as documented [here](https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/1137#note_433946309).
+
+We have a cloud function called [gke-notifications](https://gitlab.com/gitlab-com/gl-infra/gke-notifications/)
+which will add annotations to Grafana every time a GKE auto upgrade takes place.
+
+Our production clusters are currently the only clusters which need to be upgraded manually.
+
+## Notes about upgrades across major versions
+You can look at the release notes for the regular release channel [here](https://cloud.google.com/kubernetes-engine/docs/release-notes-regular)
+This is important to follow as when all releases of a specific minor version (e.g. 1.16) are removed
+from a channel, the clusters will be automatically upgraded to the next minor release (e.g. 1.17)
+during the next maintenance period. This is typically noted in the release notes with a note similar to
+
+> Auto-upgrading control planes upgrade from versions 1.16 and 1.17 to version 1.17.9-gke.1504 during this release.
+
+## Things to take note of when expecting a minor version upgrade
+First thing to do is check the Kubernetes release notes for the version in question
+[here](https://github.com/kubernetes/kubernetes/tree/master/CHANGELOG). In particular
+you should read carefully everything under the following sections
+
+* Known Issues
+* Urgent Upgrade Notes
+* Deprecations and Removals
+* Metrics Changes
+
+Look for anything that might impact APIs, services, or metrics we currently consume.
+
+After a minor upgrade has taken place on a cluster, you should look at all the dashboards
+in https://dashboards.gitlab.net that have the Kubernetes tag and check they still work
+in the upgraded environment (e.g. no missing metrics)
+
 ## Procedure
 
 Each step below is a checkpoint for which an Merge Request should exist and is a
