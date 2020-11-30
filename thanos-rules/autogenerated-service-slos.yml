@@ -160,11 +160,6 @@ groups:
       tier: stor
       type: praefect
     expr: '0.000500'
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      tier: db
-      type: redis
-    expr: '0.001000'
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       tier: db
@@ -179,6 +174,11 @@ groups:
     labels:
       tier: db
       type: redis-sidekiq
+    expr: '0.001000'
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      tier: db
+      type: redis
     expr: '0.001000'
   - record: slo:min:gitlab_service_apdex:ratio
     labels:
@@ -285,6 +285,16 @@ groups:
       tier: sv
       type: web
     expr: '0.000100'
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      tier: sv
+      type: woodhouse
+    expr: '0.999000'
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      tier: sv
+      type: woodhouse
+    expr: '0.001000'
   - record: gitlab_service:mapping:disable_ops_rate_prediction
     labels:
       tier: inf
