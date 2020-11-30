@@ -458,6 +458,7 @@ deploy_pingdom_checks:
       - $CI_PROJECT_URL =~ /^https:\/\/gitlab\.com\/.*/
   except:
     - schedules
+    - pipelines
 
 check_alerts:
   image: golang:1.14
