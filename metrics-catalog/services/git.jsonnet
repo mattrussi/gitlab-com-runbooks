@@ -34,6 +34,23 @@ metricsCatalog.serviceDefinition({
     pgbouncer: true,
     praefect: true,
   },
+  provisioning: {
+    vms: true,
+    kubernetes: true,
+  },
+  kubeDeployments: {
+    'gitlab-shell': {
+      containers: [
+        'gitlab-shell',
+      ],
+    },
+    'git-https': {
+      containers: [
+        'gitlab-workhorse',
+        'webservice',
+      ],
+    },
+  },
   serviceLevelIndicators: {
     loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
       featureCategory='not_owned',

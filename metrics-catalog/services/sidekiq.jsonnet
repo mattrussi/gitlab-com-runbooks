@@ -49,6 +49,19 @@ metricsCatalog.serviceDefinition({
     'sidekiq_jobs_queue_duration_seconds_bucket',
     'sidekiq_jobs_failed_total',
   ],
+  kubeDeployments: std.foldl(
+    function(memo, shard)
+      memo {
+        // Deployment tags follow the convention sidekiq-catchall etc
+        ['sidekiq-' + shard.name]: {
+          containers: [
+            'sidekiq',
+          ],
+        },
+      },
+    sidekiqHelpers.shards.listAll(),
+    {},
+  ),
   serviceLevelIndicators: {
     ['shard_' + std.strReplace(shard.name, '-', '_')]: {
       local shardSelector = { shard: shard.name },
