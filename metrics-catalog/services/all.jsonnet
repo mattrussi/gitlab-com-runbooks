@@ -10,6 +10,7 @@
   import 'git.jsonnet',
   import 'gitaly.jsonnet',
   import 'logging.jsonnet',
+  import 'mailroom.jsonnet',
   import 'monitoring.jsonnet',
   import 'nfs.jsonnet',
   import 'pages.jsonnet',

@@ -1,14 +1,14 @@
 local capacityPlanning = import 'capacity_planning.libsonnet';
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
-local colors = import 'grafana/colors.libsonnet';
+local colorScheme = import 'grafana/color_scheme.libsonnet';
 local commonAnnotations = import 'grafana/common_annotations.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
 local seriesOverrides = import 'grafana/series_overrides.libsonnet';
 local templates = import 'grafana/templates.libsonnet';
 local keyMetrics = import 'key_metrics.libsonnet';
-local kubeEmbeddedDashboards = import 'kubernetes_embedded_dashboards.libsonnet';
+local kubeServiceDashboards = import 'kube_service_dashboards.libsonnet';
 local metricsCatalog = import 'metrics-catalog.libsonnet';
 local metricsCatalogDashboards = import 'metrics_catalog_dashboards.libsonnet';
 local nodeMetrics = import 'node_metrics.libsonnet';
@@ -157,11 +157,10 @@ local overviewDashboard(
     )
     .addPanels(
       if metricsCatalogServiceInfo.getProvisioning().kubernetes == true then
-        // TODO: fix nasty regexp: requires https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10249
-        local kubeSelectorHash = { environment: '$environment', pod: { re: 'gitlab-%s.*' % [type] } };
+        local kubeSelectorHash = { environment: '$environment', env: '$environment', stage: '$stage' };
         [
           row.new(title='☸️ Kubernetes Overview', collapse=true)
-          .addPanels(kubeEmbeddedDashboards.kubernetesOverview(kubeSelectorHash, startRow=1)) +
+          .addPanels(kubeServiceDashboards.deploymentOverview(type, kubeSelectorHash, startRow=1)) +
           { gridPos: { x: 0, y: 400, w: 24, h: 1 } },
         ]
       else [],
@@ -203,6 +202,7 @@ local overviewDashboard(
           platformLinks.services +
           [
             platformLinks.dynamicLinks(type + ' Detail', 'type:' + type),
+            platformLinks.kubenetesDetail(type),
           ],
       },
   };

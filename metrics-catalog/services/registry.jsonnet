@@ -30,6 +30,13 @@ metricsCatalog.serviceDefinition({
     kubernetes: true,
     vms: true,  // registry haproxy frontend still runs on vms
   },
+  kubeDeployments: {
+    registry: {
+      containers: [
+        'registry',
+      ],
+    },
+  },
   serviceLevelIndicators: {
     loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
       featureCategory='container_registry',

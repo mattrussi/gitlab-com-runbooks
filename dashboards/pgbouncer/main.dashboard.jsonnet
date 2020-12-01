@@ -1,7 +1,6 @@
 local capacityPlanning = import 'capacity_planning.libsonnet';
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
-local colors = import 'grafana/colors.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
 local seriesOverrides = import 'grafana/series_overrides.libsonnet';

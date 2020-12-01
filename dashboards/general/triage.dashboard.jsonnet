@@ -1,6 +1,6 @@
 local capacityPlanning = import 'capacity_planning.libsonnet';
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
-local colors = import 'grafana/colors.libsonnet';
+local colorScheme = import 'grafana/color_scheme.libsonnet';
 local commonAnnotations = import 'grafana/common_annotations.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
 local seriesOverrides = import 'grafana/series_overrides.libsonnet';
@@ -130,9 +130,9 @@ local activeAlertsPanel =
         alias: 'Score',
         decimals: 0,
         colors: [
-          colors.warningColor,
-          colors.errorColor,
-          colors.criticalColor,
+          colorScheme.warningColor,
+          colorScheme.errorColor,
+          colorScheme.criticalColor,
         ],
         colorMode: 'row',
         pattern: 'Value',

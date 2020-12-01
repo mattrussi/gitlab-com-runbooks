@@ -1,5 +1,5 @@
 local basic = import 'grafana/basic.libsonnet';
-local colors = import 'grafana/colors.libsonnet';
+local colorScheme = import 'grafana/color_scheme.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 
 {
@@ -29,9 +29,9 @@ local layout = import 'grafana/layout.libsonnet';
         title='Cache Hit %',
         query='sum(rate(registry_storage_cache_total{cluster="$cluster", environment="$environment", namespace="$namespace",exported_type="Hit"}[$__interval])) / sum(rate(registry_storage_cache_total{environment="$environment",exported_type="Request"}[$__interval]))',
         colors=[
-          colors.criticalColor,
-          colors.errorColor,
-          colors.normalRangeColor,
+          colorScheme.criticalColor,
+          colorScheme.errorColor,
+          colorScheme.normalRangeColor,
         ],
         gaugeMaxValue=1,
         gaugeShow=true,
