@@ -4,7 +4,7 @@ local layout = import 'grafana/layout.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
 local row = grafana.row;
 local serviceDashboard = import 'service_dashboard.libsonnet';
-local colors = import 'grafana/colors.libsonnet';
+local colorScheme = import 'grafana/color_scheme.libsonnet';
 local metricsCatalog = import 'metrics-catalog.libsonnet';
 local multiburnFactors = import 'mwmbr/multiburn_factors.libsonnet';
 
@@ -93,9 +93,9 @@ serviceDashboard.overview('gitaly', 'stor')
         multiburnFactors.apdexRatioThreshold6h(gitalyServiceInfo.monitoringThresholds.apdexScore),
       ],
       thresholdColors=[
-        colors.criticalColor,
-        colors.errorColor,
-        colors.black,
+        colorScheme.criticalColor,
+        colorScheme.errorColor,
+        'black',
       ],
       sortDescending=true
     ),
@@ -114,9 +114,9 @@ serviceDashboard.overview('gitaly', 'stor')
         multiburnFactors.errorRatioThreshold1h(gitalyServiceInfo.monitoringThresholds.errorRatio),
       ],
       thresholdColors=[
-        colors.black,
-        colors.errorColor,
-        colors.criticalColor,
+        'black',
+        colorScheme.errorColor,
+        colorScheme.criticalColor,
       ],
       sortDescending=false
     ),
