@@ -13,6 +13,8 @@ local generateDropOffsets(cellHeights, rowOffsets) =
 
 
 {
+  // Returns a grid layout with `cols` columns
+  // panels should be an array of panels
   grid(panels, cols=2, rowHeight=10, startRow=0)::
     std.mapWithIndex(
       function(index, panel)
@@ -31,6 +33,29 @@ local generateDropOffsets(cellHeights, rowOffsets) =
   singleRow(panels, rowHeight=10, startRow=0)::
     local cols = std.length(panels);
     self.grid(panels, cols=cols, rowHeight=rowHeight, startRow=startRow),
+
+  // Rows -> array of arrays. Each outer array is a row.
+  rows(rowsOfPanels, rowHeight=10, startRow=0)::
+    std.flattenArrays(
+      std.mapWithIndex(
+        function(index, panels)
+          if std.isArray(panels) then
+            self.singleRow(panels, rowHeight=rowHeight, startRow=index * rowHeight + startRow)
+          else
+            local panel = panels;
+            [
+              panel {
+                gridPos: {
+                  x: 0,
+                  y: index * rowHeight + startRow,
+                  w: 24,
+                  h: rowHeight,
+                },
+              },
+            ],
+        rowsOfPanels
+      )
+    ),
 
   columnGrid(rowsOfPanels, columnWidths, rowHeight=10, startRow=0)::
     local columnOffsets = generateColumnOffsets(columnWidths);
