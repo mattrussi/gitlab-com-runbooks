@@ -1,12 +1,26 @@
 groups:
-- name: alertmanager.rules
+- name: Alertmanager
   rules:
   - alert: AlertmanagerNotificationsFailing
     expr: >
       sum by (integration) (
-        rate(alertmanager_notifications_failed_total[2m])
+        increase(alertmanager_notifications_failed_total[1h])
+      ) > 2
+    labels:
+      pager: pagerduty
+      service: alertmanager
+      severity: s1
+      alert_type: cause
+    annotations:
+      title: Alertmanager is failing sending notifications
+      runbook: docs/monitoring/alertmanager-notification-failures.md
+      description: Alertmanager is seeing errors for the {{$labels.integration}} integration.
+  - alert: AlertmanagerNotificationsFailing
+    expr: >
+      sum by (integration) (
+        increase(alertmanager_notifications_failed_total[1h])
       ) > 0
-    for: 20m
+    for: 3h
     labels:
       pager: pagerduty
       service: alertmanager
