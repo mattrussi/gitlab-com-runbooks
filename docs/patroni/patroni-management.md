@@ -493,15 +493,13 @@ Postgres ANALYZE runs sequential, but we can run vacuumdb, a wrapper around the 
 ```bash
 --analyze-only that only calculate statistics for use by the optimizer without vacuum.
 
---analyze-in-stages that will try to create some statistics as fast as possible, to make the database usable, and then produce full statistics in the subsequent stages.
-
 --jobs=N will execute the analyze commands in parallel by running N jobs commands simultaneously.
 ```
 
 The full command is:
 
 ```bash
-vacuumdb --analyze-only --analyze-in-stages --jobs=N
+vacuumdb --analyze-only --jobs=N
 ```
 
 ### Diverged timeline WAL segments in GCS after failover
