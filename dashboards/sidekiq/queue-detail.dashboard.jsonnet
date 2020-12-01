@@ -92,12 +92,6 @@ local elasticsearchLogSearchDataLink = {
   targetBlank: true,
 };
 
-local rowGrid(rowTitle, panels, startRow) =
-  [
-    row.new(title=rowTitle) { gridPos: { x: 0, y: startRow, w: 24, h: 1 } },
-  ] +
-  layout.grid(panels, cols=std.length(panels), startRow=startRow + 1);
-
 basic.dashboard(
   'Queue Detail',
   tags=['type:sidekiq', 'detail'],
@@ -322,7 +316,7 @@ basic.dashboard(
     }),
   ], cols=4, rowHeight=8, startRow=101)
   +
-  rowGrid('Enqueuing (rate of jobs enqueuing)', [
+  layout.rowGrid('Enqueuing (rate of jobs enqueuing)', [
     enqueueCountTimeseries('Jobs Enqueued', aggregators='queue', legendFormat='{{ queue }}'),
     enqueueCountTimeseries('Jobs Enqueued per Service', aggregators='type, queue', legendFormat='{{ queue }} - {{ type }}'),
     basic.queueLengthTimeseries(
@@ -340,22 +334,22 @@ basic.dashboard(
     ),
   ], startRow=201)
   +
-  rowGrid('Queue Latency (the amount of time spent queueing)', [
+  layout.rowGrid('Queue Latency (the amount of time spent queueing)', [
     queuelatencyTimeseries('Queue Time', aggregators='queue', legendFormat='p95 {{ queue }}'),
     queuelatencyTimeseries('Queue Time per Node', aggregators='fqdn, queue', legendFormat='p95 {{ queue }} - {{ fqdn }}'),
   ], startRow=301)
   +
-  rowGrid('Execution Latency (the amount of time the job takes to execution after dequeue)', [
+  layout.rowGrid('Execution Latency (the amount of time the job takes to execution after dequeue)', [
     latencyTimeseries('Execution Time', aggregators='queue', legendFormat='p95 {{ queue }}'),
     latencyTimeseries('Execution Time per Node', aggregators='fqdn, queue', legendFormat='p95 {{ queue }} - {{ fqdn }}'),
   ], startRow=401)
   +
-  rowGrid('Execution RPS (the rate at which jobs are completed after dequeue)', [
+  layout.rowGrid('Execution RPS (the rate at which jobs are completed after dequeue)', [
     rpsTimeseries('RPS', aggregators='queue', legendFormat='{{ queue }}'),
     rpsTimeseries('RPS per Node', aggregators='fqdn, queue', legendFormat='{{ queue }} - {{ fqdn }}'),
   ], startRow=501)
   +
-  rowGrid('Error Rate (the rate at which jobs fail)', [
+  layout.rowGrid('Error Rate (the rate at which jobs fail)', [
     errorRateTimeseries('Errors', aggregators='queue', legendFormat='{{ queue }}'),
     errorRateTimeseries('Errors per Node', aggregators='fqdn, queue', legendFormat='{{ queue }} - {{ fqdn }}'),
   ], startRow=601)

@@ -7,12 +7,6 @@ local selectors = import 'promql/selectors.libsonnet';
 
 local row = grafana.row;
 
-local rowGrid(rowTitle, panels, startRow) =
-  [
-    row.new(title=rowTitle) { gridPos: { x: 0, y: startRow, w: 24, h: 1 } },
-  ] +
-  layout.grid(panels, cols=std.length(panels), startRow=startRow + 1);
-
 local elasticsearchLogSearchDataLink(type) = {
   url: elasticsearchLinks.buildElasticDiscoverSearchQueryURL(
     'rails',
@@ -78,7 +72,7 @@ local elasticsearchLogSearchDataLink(type) = {
         ).addDataLink(elasticsearchLogSearchDataLink(type)),
       ])
       +
-      rowGrid('SQL', [
+      layout.rowGrid('SQL', [
         basic.timeseries(
           stableId='sql-requests-per-controller-request',
           title='SQL Requests per Controller Request',
@@ -119,7 +113,7 @@ local elasticsearchLogSearchDataLink(type) = {
         ),
       ], startRow=201)
       +
-      rowGrid('Cache', [
+      layout.rowGrid('Cache', [
         basic.timeseries(
           stableId='cache-operations',
           title='Cache Operations',
@@ -132,7 +126,7 @@ local elasticsearchLogSearchDataLink(type) = {
         ),
       ], startRow=301)
       +
-      rowGrid('Elasticsearch', [
+      layout.rowGrid('Elasticsearch', [
         basic.multiQuantileTimeseries('Elasticsearch Time', selector, '{{ action }}', bucketMetric='http_elasticsearch_requests_duration_seconds_bucket', aggregators='controller, action'),
       ], startRow=401)
       +
