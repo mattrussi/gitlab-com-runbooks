@@ -1,3 +1,5 @@
+local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
+
 local generateColumnOffsets(columnWidths) =
   std.foldl(function(columnOffsets, width) columnOffsets + [width + columnOffsets[std.length(columnOffsets) - 1]], columnWidths, [0]);
 
@@ -33,6 +35,12 @@ local generateDropOffsets(cellHeights, rowOffsets) =
   singleRow(panels, rowHeight=10, startRow=0)::
     local cols = std.length(panels);
     self.grid(panels, cols=cols, rowHeight=rowHeight, startRow=startRow),
+
+  // Layout all panels in a single row, with a title row
+  rowGrid(rowTitle, panels, startRow)::
+    [
+      grafana.row.new(title=rowTitle) { gridPos: { x: 0, y: startRow, w: 24, h: 1 } },
+    ] + self.singleRow(panels, startRow=(startRow + 1)),
 
   // Rows -> array of arrays. Each outer array is a row.
   rows(rowsOfPanels, rowHeight=10, startRow=0)::
