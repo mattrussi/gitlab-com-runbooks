@@ -1911,7 +1911,7 @@ services:
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/monitoring/prometheus-slow-series-maintenance.md
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/gitaly/prometheus-storage-inconsistent.md
     playbooks:
-      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/monitoring/update-prometheus-and-exporters.md
+      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/monitoring/upgrades.md
     error_budget:  https://docs.google.com/spreadsheets/d/1wkK2n5EAvoVXwQZrVoCDsvkYTb1BftL56EzsFW_IA-w/edit
   observability:
     monitors:
