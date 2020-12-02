@@ -5,7 +5,7 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: ApiServiceLoadbalancerErrorSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -63,7 +63,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="loadbalancer",monitor="global",type="api"}) >= 1
       )
-  - alert: component_apdex_ratio_burn_rate_slo_out_of_bounds_lower
+  - alert: ApiServicePumaApdexSLOViolation
     for: 2m
     annotations:
       title: The puma SLI of the api service (`{{ $labels.stage }}` stage) has an apdex violating SLO
@@ -116,7 +116,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="puma",monitor="global",type="api"}) >= 1
       )
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: ApiServicePumaErrorSLOViolation
     for: 2m
     annotations:
       title: The puma SLI of the api service (`{{ $labels.stage }}` stage) has an error rate violating
@@ -173,7 +173,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="puma",monitor="global",type="api"}) >= 1
       )
-  - alert: component_apdex_ratio_burn_rate_slo_out_of_bounds_lower
+  - alert: ApiServiceWorkhorseApdexSLOViolation
     for: 2m
     annotations:
       title: The workhorse SLI of the api service (`{{ $labels.stage }}` stage) has an apdex violating
@@ -227,7 +227,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="workhorse",monitor="global",type="api"}) >= 1
       )
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: ApiServiceWorkhorseErrorSLOViolation
     for: 2m
     annotations:
       title: The workhorse SLI of the api service (`{{ $labels.stage }}` stage) has an error rate violating

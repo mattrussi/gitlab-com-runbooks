@@ -5,7 +5,7 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
-  - alert: component_apdex_ratio_burn_rate_slo_out_of_bounds_lower
+  - alert: RedisCacheServiceRailsCacheApdexSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -60,7 +60,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="rails_cache",monitor="global",type="redis-cache"}) >= 1
       )
-  - alert: component_apdex_ratio_burn_rate_slo_out_of_bounds_lower
+  - alert: RedisCacheServiceRailsRedisClientApdexSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -115,7 +115,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="rails_redis_client",monitor="global",type="redis-cache"}) >= 1
       )
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: RedisCacheServiceRailsRedisClientErrorSLOViolation
     for: 2m
     annotations:
       title: >-

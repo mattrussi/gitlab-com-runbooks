@@ -5,7 +5,7 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
-  - alert: component_apdex_ratio_burn_rate_slo_out_of_bounds_lower
+  - alert: PatroniServiceRailsSqlApdexSLOViolation
     for: 2m
     annotations:
       title: The rails_sql SLI of the patroni service (`{{ $labels.stage }}` stage) has an apdex violating
@@ -59,7 +59,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="rails_sql",monitor="global",type="patroni"}) >= 1
       )
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: PatroniServiceServiceErrorSLOViolation
     for: 2m
     annotations:
       title: The service SLI of the patroni service (`{{ $labels.stage }}` stage) has an error rate violating

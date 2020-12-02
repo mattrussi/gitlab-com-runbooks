@@ -5,7 +5,7 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: CamoproxyServiceLoadbalancerErrorSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -63,7 +63,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="loadbalancer",monitor="global",type="camoproxy"}) >= 1
       )
-  - alert: component_apdex_ratio_burn_rate_slo_out_of_bounds_lower
+  - alert: CamoproxyServiceServerApdexSLOViolation
     for: 2m
     annotations:
       title: The server SLI of the camoproxy service (`{{ $labels.stage }}` stage) has an apdex violating
@@ -117,7 +117,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="server",monitor="global",type="camoproxy"}) >= 1
       )
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: CamoproxyServiceServerErrorSLOViolation
     for: 2m
     annotations:
       title: >-
