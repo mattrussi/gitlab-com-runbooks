@@ -41,7 +41,7 @@ local formatConfigForSelectorHash(selectorHash) =
      */
     serviceApdexDegradationSLOQuery(environmentSelectorHash, type)::
       |||
-        (1 - %(burnrate_6h)g * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{type="%(type)s", monitor="global"})))
+        (1 - %(burnrate_6h)g * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{monitor="global",type="%(type)s"})))
       ||| % {
         type: type,
         burnrate_6h: multiburnFactors.burnrate_6h,
@@ -50,7 +50,7 @@ local formatConfigForSelectorHash(selectorHash) =
     // TODO: remove deprecated slo:max:gitlab_service_errors:ratio value after 2021-01-01
     serviceApdexOutageSLOQuery(environmentSelectorHash, type)::
       |||
-        (1 - %(burnrate_1h)g * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{type="%(type)s"})))
+        (1 - %(burnrate_1h)g * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{monitor="global",type="%(type)s"})))
       ||| % {
         type: type,
         burnrate_1h: multiburnFactors.burnrate_1h,
@@ -181,7 +181,7 @@ local formatConfigForSelectorHash(selectorHash) =
     // TODO: remove deprecated slo:max:gitlab_service_errors:ratio value after 2021-01-01
     serviceErrorRateDegradationSLOQuery(environmentSelectorHash, type)::
       |||
-        (%(burnrate_6h)g * avg(slo:max:events:gitlab_service_errors:ratio{type="%(type)s", monitor="global"}))
+        (%(burnrate_6h)g * avg(slo:max:events:gitlab_service_errors:ratio{monitor="global",type="%(type)s"}))
       ||| % {
         type: type,
         burnrate_6h: multiburnFactors.burnrate_6h,
@@ -190,7 +190,7 @@ local formatConfigForSelectorHash(selectorHash) =
     // TODO: remove deprecated slo:max:gitlab_service_errors:ratio value after 2021-01-01
     serviceErrorRateOutageSLOQuery(environmentSelectorHash, type)::
       |||
-        (%(burnrate_1h)g * avg(slo:max:events:gitlab_service_errors:ratio{type="%(type)s", monitor="global"}))
+        (%(burnrate_1h)g * avg(slo:max:events:gitlab_service_errors:ratio{monitor="global",type="%(type)s"}))
       ||| % {
         type: type,
         burnrate_1h: multiburnFactors.burnrate_1h,
