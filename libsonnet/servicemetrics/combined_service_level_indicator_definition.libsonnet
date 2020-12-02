@@ -16,7 +16,7 @@ local combinedServiceLevelIndicatorDefinition(
   components,
   featureCategory,
   description,
-  teams=[],
+  team=null,
   aggregateRequestRate=false,
   staticLabels={}
       ) =
@@ -29,7 +29,7 @@ local combinedServiceLevelIndicatorDefinition(
         name: componentName,
         featureCategory: featureCategory,
         description: description,
-        teams: teams,
+        team: team,
 
         aggregateRequestRate: aggregateRequestRate,
 

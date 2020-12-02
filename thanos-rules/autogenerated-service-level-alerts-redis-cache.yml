@@ -28,6 +28,7 @@ groups:
     labels:
       alert_type: symptom
       feature_category: not_owned
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
       pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
@@ -83,6 +84,7 @@ groups:
     labels:
       alert_type: symptom
       feature_category: not_owned
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
       pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
@@ -141,6 +143,7 @@ groups:
     labels:
       alert_type: symptom
       feature_category: not_owned
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
       pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned

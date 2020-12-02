@@ -4,7 +4,7 @@ local selectors = import 'promql/selectors.libsonnet';
 // Please consult the README.md file for details of team and feature_category
 local serviceLevelIndicatorDefaults = {
   featureCategory: 'not_owned',
-  teams: [],
+  team: null,
   description: '',
   staticLabels: {},  // by default, no static labels
   aggregateRequestRate: true,  // by default, requestRate is aggregated up to the service level
