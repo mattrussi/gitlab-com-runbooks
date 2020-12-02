@@ -12,7 +12,7 @@ metricsCatalog.serviceDefinition({
   serviceLevelIndicators: {
     http: {
       feature_category: 'not_owned',
-      teams: ['sre_observability'],
+      team: 'sre_observability',
       description: |||
         HTTP requests handled by woodhouse.
       |||,
@@ -41,7 +41,7 @@ metricsCatalog.serviceDefinition({
     },
     async_jobs: {
       feature_category: 'not_owned',
-      teams: ['sre_observability'],
+      team: 'sre_observability',
       description: |||
         Async jobs performed by woodhouse.
       |||,

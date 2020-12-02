@@ -69,10 +69,10 @@ local singleL4Component(stage, selector, definition) =
   });
 
 local combinedBackendCurry(generator, defaultSLIDescription) =
-  function(stageMappings, selector, featureCategory, teams=[], description=defaultSLIDescription)
+  function(stageMappings, selector, featureCategory, team=null, description=defaultSLIDescription)
     metricsCatalog.combinedServiceLevelIndicatorDefinition(
       featureCategory=featureCategory,
-      teams=teams,
+      team=team,
       description=description,
       components=[
         generator(stage=stage, selector=selector, definition=stageMappings[stage])
