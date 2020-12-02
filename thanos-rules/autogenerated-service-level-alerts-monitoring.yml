@@ -5,7 +5,7 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: MonitoringServiceGrafanaErrorSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -63,7 +63,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="grafana",monitor="global",type="monitoring"}) >= 1
       )
-  - alert: component_apdex_ratio_burn_rate_slo_out_of_bounds_lower
+  - alert: MonitoringServicePrometheusApdexSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -118,7 +118,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="prometheus",monitor="global",type="monitoring"}) >= 1
       )
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: MonitoringServicePrometheusErrorSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -176,7 +176,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="prometheus",monitor="global",type="monitoring"}) >= 1
       )
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: MonitoringServicePrometheusAlertSenderErrorSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -234,7 +234,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="prometheus_alert_sender",monitor="global",type="monitoring"}) >= 1
       )
-  - alert: component_apdex_ratio_burn_rate_slo_out_of_bounds_lower
+  - alert: MonitoringServicePublicDashboardsThanosQueryApdexSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -289,7 +289,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="public_dashboards_thanos_query",monitor="global",type="monitoring"}) >= 1
       )
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: MonitoringServicePublicDashboardsThanosQueryErrorSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -347,7 +347,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="public_dashboards_thanos_query",monitor="global",type="monitoring"}) >= 1
       )
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: MonitoringServicePublicGrafanaGooglelbErrorSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -405,7 +405,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="public_grafana_googlelb",monitor="global",type="monitoring"}) >= 1
       )
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: MonitoringServiceRuleEvaluationErrorSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -463,7 +463,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="rule_evaluation",monitor="global",type="monitoring"}) >= 1
       )
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: MonitoringServiceThanosCompactorErrorSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -521,7 +521,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="thanos_compactor",monitor="global",type="monitoring"}) >= 1
       )
-  - alert: component_apdex_ratio_burn_rate_slo_out_of_bounds_lower
+  - alert: MonitoringServiceThanosQueryApdexSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -576,7 +576,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="thanos_query",monitor="global",type="monitoring"}) >= 1
       )
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: MonitoringServiceThanosQueryErrorSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -634,7 +634,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="thanos_query",monitor="global",type="monitoring"}) >= 1
       )
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: MonitoringServiceThanosRuleAlertSenderErrorSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -692,7 +692,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="thanos_rule_alert_sender",monitor="global",type="monitoring"}) >= 1
       )
-  - alert: component_apdex_ratio_burn_rate_slo_out_of_bounds_lower
+  - alert: MonitoringServiceThanosStoreApdexSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -747,7 +747,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="thanos_store",monitor="global",type="monitoring"}) >= 1
       )
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: MonitoringServiceThanosStoreErrorSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -805,7 +805,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="thanos_store",monitor="global",type="monitoring"}) >= 1
       )
-  - alert: component_apdex_ratio_burn_rate_slo_out_of_bounds_lower
+  - alert: MonitoringServiceTricksterApdexSLOViolation
     for: 2m
     annotations:
       title: The trickster SLI of the monitoring service (`{{ $labels.stage }}` stage) has an apdex violating
@@ -859,7 +859,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="trickster",monitor="global",type="monitoring"}) >= 1
       )
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: MonitoringServiceTricksterErrorSLOViolation
     for: 2m
     annotations:
       title: >-

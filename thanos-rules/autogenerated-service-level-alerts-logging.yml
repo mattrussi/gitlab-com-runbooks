@@ -5,7 +5,7 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: LoggingServiceFluentdLogOutputErrorSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -63,7 +63,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="fluentd_log_output",monitor="global",type="logging"}) >= 1
       )
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: LoggingServiceKibanaGooglelbErrorSLOViolation
     for: 2m
     annotations:
       title: >-
