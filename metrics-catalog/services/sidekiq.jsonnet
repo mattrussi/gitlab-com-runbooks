@@ -67,7 +67,7 @@ metricsCatalog.serviceDefinition({
       local shardSelector = { shard: shard.name },
 
       featureCategory: 'not_owned',
-      teams: ['scalability'],
+      team: 'scalability',
       description: |||
         Aggregation of all jobs for the %(shard)s Sidekiq shard.
       ||| % shardSelector,

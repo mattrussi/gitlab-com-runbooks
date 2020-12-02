@@ -23,7 +23,7 @@ metricsCatalog.serviceDefinition({
     // use the rails controller SQL latencies as an indirect proxy.
     rails_sql: {
       featureCategory: 'not_owned',
-      teams: ['sre_datastores'],
+      team: 'sre_datastores',
       description: |||
         Represents all SQL transactions issued through ActiveRecord from the Rails monolith. Durations
         can be impacted by various conditions other than Patroni, including client pool saturation, pgbouncer saturation,
@@ -51,7 +51,7 @@ metricsCatalog.serviceDefinition({
 
     service: {
       featureCategory: 'not_owned',
-      teams: ['sre_datastores'],
+      team: 'sre_datastores',
       description: |||
         Represents all SQL transactions issued to primary and secondary instances, in aggregate.
         Errors represent transaction rollbacks.
@@ -83,7 +83,7 @@ metricsCatalog.serviceDefinition({
     // Records the operations rate for the pgbouncer instances running on the patroni nodes
     pgbouncer: {
       featureCategory: 'not_owned',
-      teams: ['sre_datastores'],
+      team: 'sre_datastores',
       description: |||
         All transactions destined for the Postgres secondary instances are routed through the pgbouncer instances
         running on the patroni nodes themselves. This SLI models those transactions in aggregate.

@@ -39,7 +39,7 @@ metricsCatalog.serviceDefinition({
   serviceLevelIndicators: {
     goserver: {
       featureCategory: 'gitaly',
-      teams: ['sre_datastores'],
+      team: 'sre_datastores',
       description: |||
         This SLI monitors all Gitaly GRPC requests in aggregate, excluding the OperationService.
         GRPC failures which are considered to be the "server's fault" are counted as errors.
@@ -74,7 +74,7 @@ metricsCatalog.serviceDefinition({
     // its useful to treat these methods as a separate component
     goserver_op_service: {
       featureCategory: 'gitaly',
-      teams: ['sre_datastores'],
+      team: 'sre_datastores',
       description: |||
         This SLI monitors requests to Gitaly's OperationService, via its GRPC endpoint.
         OperationService methods are generally expected to be slower than other Gitaly endpoints
@@ -107,7 +107,7 @@ metricsCatalog.serviceDefinition({
 
     gitalyruby: {
       featureCategory: 'gitaly',
-      teams: ['sre_datastores'],
+      team: 'sre_datastores',
       description: |||
         This SLI monitors requests to Gitaly's Ruby sidecar, known as Gitaly-Ruby. All requests made to
         Gitaly-Ruby are monitored in aggregate, via its GRPC interface.
