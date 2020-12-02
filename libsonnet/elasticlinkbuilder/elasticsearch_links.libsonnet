@@ -1,6 +1,5 @@
 local rison = import 'rison.libsonnet';
 
-
 // Builds an ElasticSearch match filter clause
 local matchFilter(field, value) =
   {
@@ -12,6 +11,16 @@ local matchFilter(field, value) =
         },
       },
 
+    },
+  };
+
+local matchInFilter(field, possibleValues) =
+  {
+    query: {
+      bool: {
+        should: [{ match_phrase: { [field]: possibleValue } } for possibleValue in possibleValues],
+        minimum_should_match: 1,
+      },
     },
   };
 
@@ -41,6 +50,12 @@ local mustNot(filter) =
       negate: true,
     },
   };
+
+local matcher(fieldName, matchInfo) =
+  if std.isString(matchInfo) then
+    matchFilter(fieldName, matchInfo)
+  else if std.isArray(matchInfo) then
+    matchInFilter(fieldName, matchInfo);
 
 local statusCode(field) =
   [rangeFilter(field, gteValue=500, lteValue=null)];
@@ -489,6 +504,7 @@ local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latency
   indexCatalog[index].kibanaEndpoint + '#/visualize/create?type=line&indexPattern=' + indexCatalog[index].indexId + '&_a=' + rison.encode(applicationState) + '&_g=(time:(from:now-1h,to:now))';
 
 {
+  matcher:: matcher,
   matchFilter:: matchFilter,
   rangeFilter:: rangeFilter,
 
