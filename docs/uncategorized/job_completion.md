@@ -13,7 +13,7 @@ Creating a new job completion metric is the same process as checking-in/updating
 Three metrics are required:
 
 | Metric                                  | Description  |
-| --------------------------------------- |  |
+| --------------------------------------- | ------------ |
 | `gitlab_job_max_age_seconds`            | This is the allowed age before the alert should fire, in seconds. |
 | `gitlab_job_start_timestamp_seconds`    | This is the unix time in seconds when the job starts.  |
 | `gitlab_job_success_timestamp_seconds`  | This is the unix time in seconds when the job completes succesfully. It should be set to 0 at job start. |
