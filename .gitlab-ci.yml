@@ -235,8 +235,7 @@ ensure_generated_content_up_to_date:
   extends: .default-job-rules
   stage: test
   script:
-    - make generate
-    - git diff --exit-code || (echo "Please run 'make generate'" && exit 1)
+    - make ensure-generated-content-up-to-date
 
 # log.gprd.gitlab.net
 ################################################################################
