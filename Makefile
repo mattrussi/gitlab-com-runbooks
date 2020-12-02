@@ -91,3 +91,10 @@ test-jsonnet:
 .PHONY: jsonnet-bundle
 jsonnet-bundle:
 	./scripts/bundler.sh
+
+# Checks the `make generate` doesn't modify any files, or create any new files
+.PHONY: ensure-generated-content-up-to-date
+ensure-generated-content-up-to-date: generate
+	(git diff --exit-code && \
+		[[ "$$(git ls-files -o --directory --exclude-standard | sed q | wc -l)" == "0" ]]) || \
+	(echo "Please run 'make generate'" && exit 1)
