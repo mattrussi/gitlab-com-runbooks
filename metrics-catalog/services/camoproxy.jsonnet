@@ -25,7 +25,7 @@ metricsCatalog.serviceDefinition({
 
     server: {
       featureCategory: 'not_owned',
-      teams: ['sre_coreinfra'],
+      team: 'sre_coreinfra',
       description: |||
         This SLI monitors the camoproxy server via its HTTP interface.
         5xx responses are considered to be failures. Note that this SLI

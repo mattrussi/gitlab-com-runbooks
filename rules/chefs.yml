@@ -26,9 +26,8 @@ groups:
     expr: time() - chef_client_last_run_timestamp_seconds > 3 * 86400
     for: 1h
     labels:
-      severity: s2
-      pager: issue
-      project: gitlab.com/gitlab-com/gl-infra/infrastructure
+      severity: s3
+      incident_project: gitlab.com/gitlab-com/gl-infra/infrastructure
       alert_type: cause
     annotations:
       description: Last Chef run for {{ $labels.fqdn }} was over {{ $value | humanizeDuration }} ago

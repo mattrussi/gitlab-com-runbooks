@@ -2,6 +2,7 @@ local alerts = import 'alerts/alerts.libsonnet';
 local metricsCatalog = import 'metrics-catalog.libsonnet';
 local multiburnExpression = import 'mwmbr/expression.libsonnet';
 local multiburnFactors = import 'mwmbr/multiburn_factors.libsonnet';
+local serviceCatalog = import 'service_catalog.libsonnet';
 local stableIds = import 'stable-ids/stable-ids.libsonnet';
 local stages = import 'stages.libsonnet';
 local strings = import 'utils/strings.libsonnet';
@@ -14,12 +15,22 @@ local formatConfig = multiburnFactors {
   minimumOperationRateForMonitoring: minimumOperationRateForMonitoring,
 };
 
-local labelsForFeatureCategory(featureCategory) =
-  {
-    feature_category: std.asciiLower(featureCategory),
-    product_stage: std.asciiLower(stages.findStageNameForFeatureCategory(featureCategory)),
-    product_stage_group: std.asciiLower(stages.findStageGroupNameForFeatureCategory(featureCategory)),
+local labelsForSLI(sli) =
+  local labels = {
+    feature_category: std.asciiLower(sli.featureCategory),
+    product_stage: std.asciiLower(stages.findStageNameForFeatureCategory(sli.featureCategory)),
+    product_stage_group: std.asciiLower(stages.findStageGroupNameForFeatureCategory(sli.featureCategory)),
   };
+  if sli.team != null then
+    local team = serviceCatalog.getTeam(sli.team);
+    if std.objectHas(team, 'issue_tracker') then
+      labels {
+        incident_project: team.issue_tracker,
+      }
+    else
+      labels
+  else
+    labels;
 
 local toCamelCase(str) =
   std.join(
@@ -70,7 +81,7 @@ local apdexAlertForSLI(service, sli) =
       thresholdSLOValue=apdexScoreSLO
     ),
     'for': '2m',
-    labels: labelsForFeatureCategory(sli.featureCategory) {
+    labels: labelsForSLI(sli) {
       alert_type: 'symptom',
       rules_domain: 'general',
       severity: 's2',
@@ -117,7 +128,7 @@ local errorRateAlertForSLI(service, sli) =
       thresholdSLOValue=1 - errorRateSLO,
     ),
     'for': '2m',
-    labels: labelsForFeatureCategory(sli.featureCategory) {
+    labels: labelsForSLI(sli) {
       rules_domain: 'general',
       severity: 's2',
       slo_alert: 'yes',
