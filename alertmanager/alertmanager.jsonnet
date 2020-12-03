@@ -5,13 +5,14 @@ local serviceCatalog = import 'service_catalog.libsonnet';
 // Where the alertmanager templates are deployed.
 local templateDir = '/etc/alertmanager/config';
 
+local slackChannelDefaults = { includeActions: false };
 //
 // Receiver helpers and definitions.
 local slackChannels = [
   // Generic channels.
   { name: 'prod_alerts_slack_channel', channel: 'alerts' },
   { name: 'production_slack_channel', channel: 'production' },
-  { name: 'nonprod_alerts_slack_channel', channel: 'alerts-nonprod' },
+  { name: 'nonprod_alerts_slack_channel', channel: 'alerts-nonprod', includeActions: true },
 ];
 
 local SnitchReceiver(channel) =
@@ -63,20 +64,49 @@ local PagerDutyReceiver(channel) = {
   ],
 };
 
-local SlackReceiver(channel) = {
-  name: channel.name,
-  slack_configs: [
-    {
-      channel: '#' + channel.channel,
-      color: '{{ template "slack.color" . }}',
-      icon_emoji: '{{ template "slack.icon" . }}',
-      send_resolved: true,
-      text: '{{ template "slack.text" . }}',
-      title: '{{ template "slack.title" . }}',
-      title_link: '{{ template "slack.link" . }}',
-    },
-  ],
-};
+local SlackReceiver(channel) =
+  local channelWithDefaults = slackChannelDefaults + channel;
+  {
+    name: channelWithDefaults.name,
+    slack_configs: [
+      {
+        channel: '#' + channelWithDefaults.channel,
+        color: '{{ template "slack.color" . }}',
+        icon_emoji: '{{ template "slack.icon" . }}',
+        send_resolved: true,
+        text: '{{ template "slack.text" . }}',
+        title: '{{ template "slack.title" . }}',
+        title_link: '{{ template "slack.link" . }}',
+        [if channelWithDefaults.includeActions then 'actions']: [
+
+          {  // runbook
+            type: 'button',
+            text: 'Runbook :green_book:',
+            url: |||
+              {{-  if ne (index .Alerts 0).Annotations.link "" -}}
+                {{- (index .Alerts 0).Annotations.link -}}
+              {{- else if ne (index .Alerts 0).Annotations.runbook "" -}}
+                https://ops.gitlab.net/gitlab-com/runbooks/blob/master/{{ (index .Alerts 0).Annotations.runbook -}}
+              {{- else -}}
+                https://ops.gitlab.net/gitlab-com/runbooks/blob/master/docs/uncategorized/alerts-should-have-runbook-annotations.md
+              {{- end -}}
+            |||,
+          },
+          {  // Grafana link
+            type: 'button',
+            text: 'Dashboard :grafana:',
+            url: |||
+              {{-  if ne (index .Alerts 0).Annotations.grafana_dashboard_link "" -}}
+                {{- (index .Alerts 0).Annotations.grafana_dashboard_link -}}
+              {{- else -}}
+                https://dashboards.gitlab.net/
+              {{- end -}}
+            |||,
+          },
+        ],
+      },
+    ],
+  };
 
 local WebhookReceiver(channel) = {
   name: channel.name,
