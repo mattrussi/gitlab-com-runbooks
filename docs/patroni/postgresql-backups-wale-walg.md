@@ -49,7 +49,7 @@ WAL-G has 5 main commands:
 | `backup-list`   | Get the list of full backups currently stored in the archive   | Manually | It is helpful to see if there are "gaps" (missing full backups).<br/> Also, based on displayed LSNs, we can calculate the amount of WALs generated per day.<br/> Notice, there is no "wal-list" – this command would print too much information so it would be hard to use it, so neither WAL-E nor WAL-G implement it. |
 | `backup-push`   | Create a full backup: archive PostgreSQL data directory fully   | Manually or automatically | Daily execution is configured in a cron record (see `crontab -l` under `gitlab-psql`, it has an entry running the script `/opt/wal-g/bin/backup.sh`, writing logs to `/var/log/wal-g/wal-g_backup_push.log[.1]`).<br/> At the moment, it is executed daily (at 00:00 UTC) on one of the secondaries (chosen using a lock in Consul), using WAL-G.<br/>  This operation is very IO-intensive, the expected speed: ~0.5-1 TiB/h for WAL-G, 1-2 TiB/h for WAL-G.<br/>    |
 | `wal-push`   | Archive WALs. Each WAL is 16 MiB by default    | Automatically (`archive_command`) | This command is usually used in `archive_command` (PostgreSQL configuration parameter) and automatically executed<br/>  by PostgreSQL on the primary node. As of June 2020, ~1.5-2 TiB of WAL files is archived each working day<br/>  (less on holidays and weekends).  |
-| <nobr>`backup-fetch`</nobr>   | Restore PostgreSQL data directory from a full backup  | Manually | Is it to executed manually a fresh restore from backups is needed. Also used in "gitlab-restore" for daily verification of backups<br/> (see https://ops.gitlab.net/gitlab-com/gl-infra/gitlab-restore/postgres-gprd/-/blob/master/bootstrap.sh).   |
+| <nobr>`backup-fetch`</nobr>   | Restore PostgreSQL data directory from a full backup  | Manually | It is to be executed manually a fresh restore from backups is needed. Also used in "gitlab-restore" for daily verification of backups<br/> (see https://ops.gitlab.net/gitlab-com/gl-infra/gitlab-restore/postgres-gprd/-/blob/master/bootstrap.sh).   |
 | `wal-fetch`   | Get a WAL from the archive   | Automatically<br/> (`restore_command`; not used on `patroni-XX` nodes) | It is to be used in `restore_command` (see `recovery.conf` in the case of PostgreSQL 11 or older, and `postgresql.conf` for PostgreSQL 12+).<br/>  Postgres automatically uses it to fetch and replay a stream of WALs on replicas.<br/>  As of June 2020, `restore_command` is NOT configured on production and staging instances – we use only streaming replication there. However, in the future, it may change.<br/>  Two "special" replicas, "archive" and "delayed", do not use streaming replication – instead, they rely on fetching WALs from the archive, therefore, they have `wal-fetch` present in `restore_command`. |
 
 ## Backing Our Data Up
@@ -350,7 +350,7 @@ $ tail -n 100 /var/log/gitlab/postgresql/postgresql.log
 ```
 
 For each successful `wal-push` upload there should be two log entries in the
-postgres logs, one for starting the upload and one for successfull completion.
+postgres logs, one for starting the upload and one for successful completion.
 They will look similar to this:
 
 ```
@@ -372,7 +372,7 @@ files will be kept on the server until the disk is running full!
 
 #### WAL-E `wal-push` process stuck ####
 
-If you're not seeing logs for successfull `wal-push` uploads (e.g. nothing
+If you're not seeing logs for successful `wal-push` uploads (e.g. nothing
 writes to the log file or there are only entries with `state=begin` but not with
 `state=complete`) then there's something wrong with WAL-E.
 
