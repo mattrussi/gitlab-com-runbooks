@@ -3,7 +3,7 @@ local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 
 metricsCatalog.serviceDefinition({
-  type: 'tracing',
+  type: 'jaeger',
   tier: 'inf',
   monitoringThresholds: {
     // apdexScore: 0.999,
