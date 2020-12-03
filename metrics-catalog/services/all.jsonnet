@@ -9,6 +9,7 @@
   import 'frontend.jsonnet',
   import 'git.jsonnet',
   import 'gitaly.jsonnet',
+  import 'jaeger.jsonnet',
   import 'logging.jsonnet',
   import 'mailroom.jsonnet',
   import 'monitoring.jsonnet',
