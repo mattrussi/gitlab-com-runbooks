@@ -1,6 +1,6 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
-local colors = import 'grafana/colors.libsonnet';
+local colorScheme = import 'grafana/color_scheme.libsonnet';
 local commonAnnotations = import 'grafana/common_annotations.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
@@ -79,9 +79,9 @@ local saturationTable(title, description, query, saturationDays, valueColumnName
         alias: valueColumnName,
         colorMode: 'row',
         colors: [
-          colors.errorColor,
-          colors.errorColor,
-          colors.errorColor,
+          colorScheme.errorColor,
+          colorScheme.errorColor,
+          colorScheme.errorColor,
         ],
         mappingType: 1,
         pattern: 'Value',

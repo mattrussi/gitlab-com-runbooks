@@ -273,7 +273,7 @@ groups:
 - name: Thanos Compact Metamon
   rules:
   - alert: ThanosCompactHalted
-    expr: thanos_compactor_halted == 1
+    expr: thanos_compact_halted == 1 or thanos_compactor_halted == 1
     for: 5m
     labels:
       severity: s4

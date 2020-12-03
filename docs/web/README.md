@@ -25,6 +25,8 @@
 * [../cloudflare/oncall.md](../cloudflare/oncall.md)
 * [../cloudflare/services-locations.md](../cloudflare/services-locations.md)
 * [../cloudflare/troubleshooting.md](../cloudflare/troubleshooting.md)
+* [../config_management/chef-guidelines.md](../config_management/chef-guidelines.md)
+* [../config_management/chef-workflow.md](../config_management/chef-workflow.md)
 * [../elastic/elastic-cloud.md](../elastic/elastic-cloud.md)
 * [../elastic/kibana.md](../elastic/kibana.md)
 * [../forum/discourse-forum.md](../forum/discourse-forum.md)
@@ -50,8 +52,6 @@
 * [../sidekiq/sidekiq-survival-guide-for-sres.md](../sidekiq/sidekiq-survival-guide-for-sres.md)
 * [../uncategorized/apdex-alerts-guide.md](../uncategorized/apdex-alerts-guide.md)
 * [../uncategorized/blocked-user-logins.md](../uncategorized/blocked-user-logins.md)
-* [../uncategorized/chef-documentation.md](../uncategorized/chef-documentation.md)
-* [../uncategorized/chef-guidelines.md](../uncategorized/chef-guidelines.md)
 * [../uncategorized/debug-failed-chef-provisioning.md](../uncategorized/debug-failed-chef-provisioning.md)
 * [../uncategorized/definition-service-error-rate.md](../uncategorized/definition-service-error-rate.md)
 * [../uncategorized/definition-service-ops-rate.md](../uncategorized/definition-service-ops-rate.md)
@@ -62,7 +62,7 @@
 * [../uncategorized/project-export.md](../uncategorized/project-export.md)
 * [../uncategorized/ruby-profiling.md](../uncategorized/ruby-profiling.md)
 * [../uncategorized/setup-oauth2-proxy-protected-application.md](../uncategorized/setup-oauth2-proxy-protected-application.md)
-* [workhorse-image-scaler-alerts.md](workhorse-image-scaler-alerts.md)
+* [workhorse-image-scaler.md](workhorse-image-scaler.md)
 <!-- END_MARKER -->
 
 

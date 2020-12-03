@@ -483,6 +483,25 @@ This command can be run from any member of the patroni cluster. It wipes the
 data directory, takes a pg_basebackup from the new primary, and begins
 replicating again.
 
+### Problems with Performance after failover or switchover
+
+When a switchover or failover happens the new leader will always be out of date with analytics
+and as result, we will have queries performing poorly.
+Therefore, the next step is to update these analytics to optimize the execution query plan by running an ANALYZE.
+Postgres ANALYZE runs sequential, but we can run vacuumdb, a wrapper around the SQL command VACUUM, and can run in parallel, with options:
+
+```bash
+--analyze-only that only calculate statistics for use by the optimizer without vacuum.
+
+--jobs=N will execute the analyze commands in parallel by running N jobs commands simultaneously.
+```
+
+The full command is:
+
+```bash
+vacuumdb --analyze-only --jobs=N
+```
+
 ### Diverged timeline WAL segments in GCS after failover
 
 Our primary Postgres node is configured to archive WAL segments to GCS. These

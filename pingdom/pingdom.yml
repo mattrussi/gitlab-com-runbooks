@@ -266,8 +266,6 @@ checks:
     - forum-gitlab
     teams:
     - Infrastructure
-    integrations:
-    - pagerduty
 
   - url: https://deps.sec.gitlab.com/api/ping
     timeout_ms: 30000

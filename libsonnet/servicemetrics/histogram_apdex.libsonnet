@@ -111,6 +111,28 @@ local generatePercentileLatencyQuery(histogram, percentile, aggregationLabels, a
     aggregatedRateQuery: strings.indent(strings.chomp(aggregatedRateQuery), 2),
   };
 
+
+local generateApdexAttributionQuery(histogram, selector, rangeInterval, aggregationLabel) =
+  |||
+    (
+      %(splitTotalQuery)s
+      -
+      (
+        %(numeratorQuery)s
+      )
+    )
+    / ignoring(%(aggregationLabel)s) group_left()
+    (
+      %(aggregatedTotalQuery)s
+    )
+
+  ||| % {
+    splitTotalQuery: generateApdexComponentRateQuery(histogram, selector, rangeInterval, { le: '+Inf' }, aggregationFunction='sum', aggregationLabels=[aggregationLabel]),
+    numeratorQuery: generateApdexNumeratorQuery(histogram, selector, rangeInterval, aggregationFunction='sum', aggregationLabels=[aggregationLabel], ignoreLe=false),
+    aggregationLabel: aggregationLabel,
+    aggregatedTotalQuery: generateApdexComponentRateQuery(histogram, selector, rangeInterval, { le: '+Inf' }, aggregationFunction='sum', aggregationLabels=[]),
+  };
+
 {
   histogramApdex(
     histogram,
@@ -160,6 +182,9 @@ local generatePercentileLatencyQuery(histogram, percentile, aggregationLabels, a
     // used for combinations
     apdexDenominator(selector, rangeInterval)::
       generateApdexComponentRateQuery(self, selector, rangeInterval, { le: '+Inf' }, aggregationFunction=null, aggregationLabels=[]),
+
+    apdexAttribution(aggregationLabel, selector, rangeInterval)::
+      generateApdexAttributionQuery(self, selector, rangeInterval, aggregationLabel=aggregationLabel),
 
     // Only support reflection on hash selectors
     [if std.isObject(selector) then 'supportsReflection']():: {

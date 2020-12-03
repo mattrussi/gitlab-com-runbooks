@@ -15,8 +15,15 @@ metricsCatalog.serviceDefinition({
   serviceDependencies: {
     gitaly: true,
   },
-  components: {
+  serviceLevelIndicators: {
     proxy: {
+      featureCategory: 'gitaly',
+      team: 'sre_datastores',
+      description: |||
+        All Gitaly operations pass through the Praefect proxy on the way to a Gitaly instance. This SLI monitors
+        those operations in aggregate.
+      |||,
+
       local baseSelector = { job: 'praefect' },
       apdex: gitalyHelpers.grpcServiceApdex(baseSelector),
 
@@ -47,6 +54,12 @@ metricsCatalog.serviceDefinition({
     // * https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/11027
     // * https://gitlab.com/gitlab-org/gitaly/-/issues/2915
     replicator_queue: {
+      featureCategory: 'gitaly',
+      team: 'sre_datastores',
+      description: |||
+        Praefect replication operations. Latency represents the queuing delay before replication is carried out.
+      |||,
+
       local baseSelector = { job: 'praefect' },
       apdex: histogramApdex(
         histogram='gitaly_praefect_replication_delay_bucket',
@@ -63,6 +76,12 @@ metricsCatalog.serviceDefinition({
     },
 
     praefect_cloudsql: {
+      featureCategory: 'gitaly',
+      team: 'sre_datastores',
+      description: |||
+        Praefect uses a GCP CloudSQL instance. This SLI represents SQL transactions to that service.
+      |||,
+
       local baseSelector = { job: 'stackdriver', database: 'praefect_production' },
 
       staticLabels: {

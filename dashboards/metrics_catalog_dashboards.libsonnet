@@ -1,14 +1,15 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
+local seriesOverrides = import 'grafana/series_overrides.libsonnet';
 local keyMetrics = import 'key_metrics.libsonnet';
 local metricsCatalog = import 'metrics-catalog.libsonnet';
-local thresholds = import 'thresholds.libsonnet';
-local row = grafana.row;
 local selectors = import 'promql/selectors.libsonnet';
 local statusDescription = import 'status_description.libsonnet';
+local thresholds = import 'thresholds.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
+local row = grafana.row;
 local defaultEnvironmentSelector = { environment: '$environment', env: '$environment' };
 
 local getLatencyPercentileForService(service) =
@@ -17,65 +18,88 @@ local getLatencyPercentileForService(service) =
   else
     0.95;
 
-local componentOverviewMatrixRow(
+local getMarkdownDetailsForSLI(sli, sliSelectorHash) =
+  local items = std.prune([
+    (
+      if sli.description != '' then
+        |||
+          ### Description
+
+          %(description)s
+        ||| % {
+          description: sli.description,
+        }
+      else
+        null
+    ),
+    (
+      if sli.hasToolingLinks() then
+        // We pass the selector hash to the tooling links they may
+        // be used to customize the links
+        local toolingOptions = { prometheusSelectorHash: sliSelectorHash };
+        |||
+          ### Observability Tools
+
+          %(links)s
+        ||| % {
+          links: toolingLinks.generateMarkdown(sli.getToolingLinks(), toolingOptions),
+        }
+      else
+        null
+    ),
+  ]);
+
+  std.join('\n\n', items);
+
+local sliOverviewMatrixRow(
   serviceType,
   serviceStage,
-  componentName,
-  component,
+  sli,
   startRow,
   environmentSelectorHash
       ) =
-  local componentSelectorHash = environmentSelectorHash { type: serviceType, stage: serviceStage, component: componentName };
+  local sliSelectorHash = environmentSelectorHash { type: serviceType, stage: serviceStage, component: sli.name };
   local columns =
     (
-      // Component apdex
-      if component.hasApdex() then
+      // SLI Component apdex
+      if sli.hasApdex() then
         [[
-          keyMetrics.singleComponentApdexPanel(serviceType, serviceStage, componentName, environmentSelectorHash),
-          statusDescription.componentApdexStatusDescriptionPanel(componentSelectorHash),
+          keyMetrics.sliApdexPanel(serviceType, serviceStage, sli.name, environmentSelectorHash),
+          statusDescription.sliApdexStatusDescriptionPanel(sliSelectorHash),
         ]]
       else
         []
     )
     +
     (
-      // Error rate
-      if component.hasErrorRate() then
+      // SLI Error rate
+      if sli.hasErrorRate() then
         [[
-          keyMetrics.singleComponentErrorRates(serviceType, serviceStage, componentName, environmentSelectorHash),
-          statusDescription.componentErrorRateStatusDescriptionPanel(componentSelectorHash),
+          keyMetrics.sliErrorRatePanel(serviceType, serviceStage, sli.name, environmentSelectorHash),
+          statusDescription.sliErrorRateStatusDescriptionPanel(sliSelectorHash),
         ]]
       else
         []
     )
     +
     (
-      // Component request rate (mandatory, but not all are aggregatable)
-      if component.hasAggregatableRequestRate() then
+      // SLI request rate (mandatory, but not all are aggregatable)
+      if sli.hasAggregatableRequestRate() then
         [[
-          keyMetrics.singleComponentQPSPanel(serviceType, serviceStage, componentName, environmentSelectorHash),
+          keyMetrics.sliOpsRatePanel(serviceType, serviceStage, sli.name, environmentSelectorHash),
         ]]
       else
         []
     )
     +
     (
-      if component.hasToolingLinks() then
-        // We pass the selector hash to the tooling links they may
-        // be used to customize the links
-        local toolingOptions = { prometheusSelectorHash: componentSelectorHash };
-
+      local markdown = getMarkdownDetailsForSLI(sli, sliSelectorHash);
+      if markdown != '' then
         [[
           grafana.text.new(
-            title='Tooling Links',
+            title='Details',
             mode='markdown',
-            content=|||
-              ### Observability Tools
-
-              %(links)s
-            ||| % {
-              links: toolingLinks.generateMarkdown(component.getToolingLinks(), toolingOptions),
-            },
+            content=markdown,
           ),
         ]]
       else
@@ -84,40 +108,40 @@ local componentOverviewMatrixRow(
 
   layout.splitColumnGrid(columns, [7, 1], startRow=startRow);
 
-local componentNodeOverviewMatrixRow(
+local sliNodeOverviewMatrixRow(
   serviceType,
-  component,
+  sli,
   selectorHash,
   startRow,
   environmentSelectorHash
       ) =
   layout.singleRow(
     (
-      if component.hasApdex() then
+      if sli.hasApdex() then
         [
-          keyMetrics.singleComponentNodeApdexPanel(serviceType, component.name, selectorHash, environmentSelectorHash),
+          keyMetrics.sliNodeApdexPanel(serviceType, sli.name, selectorHash, environmentSelectorHash),
         ]
       else []
     )
     +
     (
-      if component.hasErrorRate() then
+      if sli.hasErrorRate() then
         [
-          keyMetrics.singleComponentNodeErrorRates(serviceType, component.name, selectorHash, environmentSelectorHash),
+          keyMetrics.sliNodeErrorRateQuery(serviceType, sli.name, selectorHash, environmentSelectorHash),
         ]
       else []
     )
     +
     (
-      if component.hasAggregatableRequestRate() then
+      if sli.hasAggregatableRequestRate() then
         [
-          keyMetrics.singleComponentNodeQPSPanel(serviceType, component.name, selectorHash, environmentSelectorHash),
+          keyMetrics.sliNodeOperationRatePanel(serviceType, sli.name, selectorHash, environmentSelectorHash),
         ]
       else []
     )
     +
     (
-      if component.hasToolingLinks() then
+      if sli.hasToolingLinks() then
         // We pass the selector hash to the tooling links they may
         // be used to customize the links
         local toolingOptions = { prometheusSelectorHash: selectorHash };
@@ -133,7 +157,7 @@ local componentNodeOverviewMatrixRow(
 
               %(links)s
             ||| % {
-              links: toolingLinks.generateMarkdown(component.getToolingLinks(), toolingOptions),
+              links: toolingLinks.generateMarkdown(sli.getToolingLinks(), toolingOptions),
             },
           ),
         ]
@@ -144,25 +168,25 @@ local componentNodeOverviewMatrixRow(
   );
 
 {
-  componentLatencyPanel(
+  sliLatencyPanel(
     title=null,
     serviceType=null,
-    componentName=null,
+    sliName=null,
     selector=null,
     aggregationLabels='',
     logBase=10,
-    legendFormat='%(percentile_humanized)s %(componentName)s',
+    legendFormat='%(percentile_humanized)s %(sliName)s',
     min=0.01,
     intervalFactor=2,
   )::
     local service = metricsCatalog.getService(serviceType);
-    local component = service.components[componentName];
+    local sli = service.serviceLevelIndicators[sliName];
     local percentile = getLatencyPercentileForService(service);
-    local formatConfig = { percentile_humanized: 'p%g' % [percentile * 100], componentName: componentName };
+    local formatConfig = { percentile_humanized: 'p%g' % [percentile * 100], sliName: sliName };
 
     basic.latencyTimeseries(
-      title=(if title == null then 'Estimated %(percentile_humanized)s latency for %(componentName)s' + componentName else title) % formatConfig,
-      query=component.apdex.percentileLatencyQuery(
+      title=(if title == null then 'Estimated %(percentile_humanized)s latency for %(sliName)s' + sliName else title) % formatConfig,
+      query=sli.apdex.percentileLatencyQuery(
         percentile=percentile,
         aggregationLabels=aggregationLabels,
         selector=selector,
@@ -174,61 +198,63 @@ local componentNodeOverviewMatrixRow(
       intervalFactor=intervalFactor,
     ) + {
       thresholds: [
-        thresholds.errorLevel('gt', component.apdex.toleratedThreshold),
-        thresholds.warningLevel('gt', component.apdex.satisfiedThreshold),
+        thresholds.errorLevel('gt', sli.apdex.toleratedThreshold),
+        thresholds.warningLevel('gt', sli.apdex.satisfiedThreshold),
       ],
     },
 
-  componentRPSPanel(
+  sliOpsRatePanel(
     title=null,
     serviceType=null,
-    componentName=null,
+    sliName=null,
     selector=null,
     aggregationLabels='',
-    legendFormat='%(componentName)s errors',
+    legendFormat='%(sliName)s errors',
     intervalFactor=2,
   )::
     local service = metricsCatalog.getService(serviceType);
-    local component = service.components[componentName];
+    local sli = service.serviceLevelIndicators[sliName];
 
     basic.timeseries(
-      title=if title == null then 'RPS for ' + componentName else title,
-      query=component.requestRate.aggregatedRateQuery(
+      title=if title == null then 'RPS for ' + sliName else title,
+      query=sli.requestRate.aggregatedRateQuery(
         aggregationLabels=aggregationLabels,
         selector=selector,
         rangeInterval='$__interval',
       ),
-      legendFormat=legendFormat % { componentName: componentName },
+      legendFormat=legendFormat % { sliName: sliName },
       intervalFactor=intervalFactor,
       yAxisLabel='Requests per Second'
     ),
 
 
-  componentErrorsPanel(
+  sliErrorRatePanel(
     title=null,
     serviceType=null,
-    componentName=null,
+    sliName=null,
     selector=null,
     aggregationLabels='',
-    legendFormat='%(componentName)s errors',
+    legendFormat='%(sliName)s errors',
     intervalFactor=2,
   )::
     local service = metricsCatalog.getService(serviceType);
-    local component = service.components[componentName];
+    local sli = service.serviceLevelIndicators[sliName];
 
     basic.timeseries(
-      title=if title == null then 'Errors for ' + componentName else title,
-      query=component.errorRate.aggregatedRateQuery(
+      title=if title == null then 'Errors for ' + sliName else title,
+      query=sli.errorRate.aggregatedRateQuery(
         aggregationLabels=aggregationLabels,
         selector=selector,
         rangeInterval='$__interval',
       ),
-      legendFormat=legendFormat % { componentName: componentName },
+      legendFormat=legendFormat % { sliName: sliName },
       intervalFactor=intervalFactor,
-      yAxisLabel='Errors'
+      yAxisLabel='Errors',
+      decimals=2,
     ),
 
-  componentOverviewMatrix(
+  // Generates a grid/matrix of SLI data for the given service/stage
+  sliMatrixForService(
     serviceType,
     serviceStage,
     startRow,
@@ -236,20 +262,19 @@ local componentNodeOverviewMatrixRow(
   )::
     local service = metricsCatalog.getService(serviceType);
     [
-      row.new(title='🔬 Component Level Indicators', collapse=false) { gridPos: { x: 0, y: startRow, w: 24, h: 1 } },
+      row.new(title='🔬 Service Level Indicators', collapse=false) { gridPos: { x: 0, y: startRow, w: 24, h: 1 } },
     ] +
     std.prune(
       std.flattenArrays(
         std.mapWithIndex(
-          function(i, componentName)
-            componentOverviewMatrixRow(
+          function(i, sliName)
+            sliOverviewMatrixRow(
               serviceType,
               serviceStage,
-              componentName,
-              service.components[componentName],
+              service.serviceLevelIndicators[sliName],
               startRow=startRow + 1 + i * 10,
               environmentSelectorHash=environmentSelectorHash,
-            ), std.objectFields(service.components)
+            ), std.objectFields(service.serviceLevelIndicators)
         )
       )
     ),
@@ -258,7 +283,7 @@ local componentNodeOverviewMatrixRow(
   // using the provided selectorHash (used to select fqdns)
   //
   // environmentSelectorHash is used for environment-specific selectors, specifically the SLOs
-  componentNodeOverviewMatrix(
+  sliNodeOverviewMatrix(
     serviceType,
     selectorHash,
     startRow,
@@ -266,38 +291,34 @@ local componentNodeOverviewMatrixRow(
   )::
     local service = metricsCatalog.getService(serviceType);
     [
-      row.new(title='🔬 Component/Node Level Indicators', collapse=false) { gridPos: { x: 0, y: startRow, w: 24, h: 1 } },
+      row.new(title='🔬 SLI/Node Level Indicators', collapse=false) { gridPos: { x: 0, y: startRow, w: 24, h: 1 } },
     ] +
     std.prune(
       std.flattenArrays(
         std.mapWithIndex(
-          function(i, componentName)
-            componentNodeOverviewMatrixRow(
+          function(i, sliName)
+            sliNodeOverviewMatrixRow(
               serviceType=serviceType,
-              component=service.components[componentName],
-              selectorHash=selectorHash { component: componentName },
+              sli=service.serviceLevelIndicators[sliName],
+              selectorHash=selectorHash { component: sliName },
               startRow=startRow + 1 + i * 10,
               environmentSelectorHash=environmentSelectorHash,
-            ), std.objectFields(service.components)
+            ), std.objectFields(service.serviceLevelIndicators)
         )
       )
     ),
 
-  componentDetailMatrix(
+  sliDetailMatrix(
     serviceType,
-    componentName,
+    sliName,
     selectorHash,
     aggregationSets,
     minLatency=0.01
   )::
     local service = metricsCatalog.getService(serviceType);
-    local component = service.components[componentName];
-    local colCount =
-      (if component.hasApdex() then 1 else 0) +
-      (if component.hasAggregatableRequestRate() then 1 else 0) +
-      (if component.hasErrorRate() then 1 else 0);
+    local sli = service.serviceLevelIndicators[sliName];
 
-    local staticLabelNames = if std.objectHas(component, 'staticLabels') then std.objectFields(component.staticLabels) else [];
+    local staticLabelNames = if std.objectHas(sli, 'staticLabels') then std.objectFields(sli.staticLabels) else [];
 
     // Note that we always want to ignore `type` filters, since the metricsCatalog selectors will
     // already have correctly filtered labels to ensure the right values, and if we inject the type
@@ -306,19 +327,19 @@ local componentNodeOverviewMatrixRow(
       'type',
     ] + staticLabelNames);
 
-    row.new(title='🔬 %(componentName)s Component Detail' % { componentName: componentName }, collapse=true)
+    row.new(title='🔬 %(sliName)s Service Level Indicator Detail' % { sliName: sliName }, collapse=true)
     .addPanels(
-      layout.grid(
-        std.prune(
-          std.flattenArrays(
-            std.map(
-              function(aggregationSet)
+      std.flattenArrays(
+        std.mapWithIndex(
+          function(index, aggregationSet)
+            layout.singleRow(
+              std.prune(
                 [
-                  if component.hasApdex() then
-                    self.componentLatencyPanel(
-                      title='Estimated %(percentile_humanized)s ' + componentName + ' Latency - ' + aggregationSet.title,
+                  if sli.hasApdex() then
+                    self.sliLatencyPanel(
+                      title='Estimated %(percentile_humanized)s ' + sliName + ' Latency - ' + aggregationSet.title,
                       serviceType=serviceType,
-                      componentName=componentName,
+                      sliName=sliName,
                       selector=filteredSelectorHash,
                       legendFormat='%(percentile_humanized)s ' + aggregationSet.legendFormat,
                       aggregationLabels=aggregationSet.aggregationLabels,
@@ -327,11 +348,31 @@ local componentNodeOverviewMatrixRow(
                   else
                     null,
 
-                  if component.hasErrorRate() then
-                    self.componentErrorsPanel(
-                      title=componentName + ' Errors - ' + aggregationSet.title,
+                  if aggregationSet.aggregationLabels != '' && sli.hasApdex() && std.objectHasAll(sli.apdex, 'apdexAttribution') then
+                    basic.percentageTimeseries(
+                      title='Apdex attribution for ' + sliName + ' Latency - ' + aggregationSet.title,
+                      description='Attributes apdex downscoring',
+                      query=sli.apdex.apdexAttribution(
+                        aggregationLabel=aggregationSet.aggregationLabels,
+                        selector=filteredSelectorHash,
+                        rangeInterval='$__interval',
+                      ),
+                      legendFormat=aggregationSet.legendFormat % { sliName: sliName },
+                      intervalFactor=3,
+                      decimals=2,
+                      linewidth=1,
+                      fill=4,
+                      stack=true,
+                    )
+                    .addSeriesOverride(seriesOverrides.negativeY)
+                  else
+                    null,
+
+                  if sli.hasErrorRate() then
+                    self.sliErrorRatePanel(
+                      title=sliName + ' Errors - ' + aggregationSet.title,
                       serviceType=serviceType,
-                      componentName=componentName,
+                      sliName=sliName,
                       legendFormat=aggregationSet.legendFormat,
                       aggregationLabels=aggregationSet.aggregationLabels,
                       selector=filteredSelectorHash,
@@ -339,42 +380,43 @@ local componentNodeOverviewMatrixRow(
                   else
                     null,
 
-                  if component.hasAggregatableRequestRate() then
-                    self.componentRPSPanel(
-                      title=componentName + ' RPS - ' + aggregationSet.title,
+                  if sli.hasAggregatableRequestRate() then
+                    self.sliOpsRatePanel(
+                      title=sliName + ' RPS - ' + aggregationSet.title,
                       serviceType=serviceType,
-                      componentName=componentName,
+                      sliName=sliName,
                       selector=filteredSelectorHash,
                       legendFormat=aggregationSet.legendFormat,
                       aggregationLabels=aggregationSet.aggregationLabels
                     )
                   else
                     null,
-                ],
-              aggregationSets
-            )
-          )
-        ), cols=if colCount == 1 then 2 else colCount
+                ]
+              ),
+              startRow=index * 10
+            ),
+          aggregationSets
+        )
       )
     ),
 
   autoDetailRows(serviceType, selectorHash, startRow)::
     local s = self;
     local service = metricsCatalog.getService(serviceType);
-    local components = service.getComponentsList();
-    local componentsFiltered = std.filter(function(c) c.supportsDetails(), components);
+    local serviceLevelIndicators = service.listServiceLevelIndicators();
+    local serviceLevelIndicatorsFiltered = std.filter(function(c) c.supportsDetails(), serviceLevelIndicators);
 
     layout.grid(
       std.mapWithIndex(
-        function(i, component)
+        function(i, sli)
           local aggregationSets =
             [
               { title: 'Overall', aggregationLabels: '', legendFormat: 'overall' },
             ] +
-            std.map(function(c) { title: 'per ' + c, aggregationLabels: c, legendFormat: '{{' + c + '}}' }, component.significantLabels);
+            std.map(function(c) { title: 'per ' + c, aggregationLabels: c, legendFormat: '{{' + c + '}}' }, sli.significantLabels);
 
-          s.componentDetailMatrix(serviceType, component.name, selectorHash, aggregationSets),
-        componentsFiltered
+          s.sliDetailMatrix(serviceType, sli.name, selectorHash, aggregationSets),
+        serviceLevelIndicatorsFiltered
       )
       , cols=1, startRow=startRow
     ),

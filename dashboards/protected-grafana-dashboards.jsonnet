@@ -66,6 +66,8 @@ local union(sets) = std.foldl(function(memo, a) std.setUnion(std.set(a), memo), 
         'performance-release',
         'performance-secure',
         'performance-package',
+        // Brendan O'Leary/Andrew Newdigate: Vanity metrics dashboard
+        'vanity-metrics',
       ],
 
       // bjk's dashboards
@@ -118,7 +120,7 @@ local union(sets) = std.foldl(function(memo, a) std.setUnion(std.set(a), memo), 
     'infrafin',
     'Gitaly Service',
     'GitLab-Rails Service',
-    'Frontend Performance',  // for Tim Zallmann's performance dashboards
+    'End-User Performance',  // for Tim Zallmann's performance dashboards
     'Kubernetes',
     'Operations',
     'Cloudflare',

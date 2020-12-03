@@ -35,17 +35,17 @@ groups:
   # CPU summaries
   - record: job:node_cpu_utilization:min_ratio
     expr: >
-      min without (fqdn, instance) (
+      min without (fqdn,instance,node,pod) (
         instance:node_cpu_utilization:ratio
       )
   - record: job:node_cpu_utilization:avg_ratio
     expr: >
-      avg without (fqdn, instance) (
+      avg without (fqdn,instance,node,pod) (
         instance:node_cpu_utilization:ratio
       )
   - record: job:node_cpu_utilization:max_ratio
     expr: >
-      max without (fqdn, instance) (
+      max without (fqdn,instance,node,pod) (
         instance:node_cpu_utilization:ratio
       )
 

@@ -2,7 +2,7 @@
 VERIFY_PATH_SELECTOR := \( -not \( -path "*/vendor/*" -o -path "*/.*/*" \) -o -path "*/.gitlab/*" \)
 
 JSONNET_FMT_FLAGS := --string-style s -n 2
-JSONNET_FILES = $(shell find . \( -name "*.jsonnet" -o -name "*.libsonnet" \)  -type f $(VERIFY_PATH_SELECTOR) )
+JSONNET_FILES ?= $(shell find . \( -name "*.jsonnet" -o -name "*.libsonnet" \)  -type f $(VERIFY_PATH_SELECTOR) )
 
 SHELL_FMT_FLAGS := -i 2 -ci
 SHELL_FILES = $(shell find . -type f \( -perm -u=x -o -name "*.sh" \) $(VERIFY_PATH_SELECTOR) -print0|xargs -0 file -n |grep 'Bourne-Again'|cut -d: -f1)
@@ -91,3 +91,10 @@ test-jsonnet:
 .PHONY: jsonnet-bundle
 jsonnet-bundle:
 	./scripts/bundler.sh
+
+# Checks the `make generate` doesn't modify any files, or create any new files
+.PHONY: ensure-generated-content-up-to-date
+ensure-generated-content-up-to-date: generate
+	(git diff --exit-code && \
+		[[ "$$(git ls-files -o --directory --exclude-standard | sed q | wc -l)" == "0" ]]) || \
+	(echo "Please run 'make generate'" && exit 1)

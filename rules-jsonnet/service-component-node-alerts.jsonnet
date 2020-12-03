@@ -5,7 +5,7 @@ local stableIds = import 'stable-ids/stable-ids.libsonnet';
 
 // For now, only include components that run at least once a second
 // in the monitoring. This is to avoid low-volume, noisy alerts
-local minimumOperationRateForMonitoring = 1/* rps */;
+local minimumOperationRateForMonitoring = 10/* rps */;
 
 // Most MWMBR alerts use a 2m period
 // Initially for this alert, use a long period to ensure that
@@ -40,8 +40,8 @@ local rules = {
         labels: {
           alert_type: 'symptom',
           rules_domain: 'general',
-          severity: 's4',
-          // pager: 'pagerduty',
+          severity: 's2',
+          pager: 'pagerduty',
           slo_alert: 'yes',
         },
         annotations: {
@@ -83,10 +83,10 @@ local rules = {
       'for': alertWaitPeriod,
       labels: {
         rules_domain: 'general',
-        severity: 's4',
+        severity: 's2',
         slo_alert: 'yes',
         alert_type: 'symptom',
-        // pager: 'pagerduty',
+        pager: 'pagerduty',
       },
       annotations: {
         title: 'Node `{{ $labels.fqdn }}`, `{{ $labels.component }}` component is violating its error SLO',

@@ -4,7 +4,7 @@ groups:
   rules:
   - record: code_method:gitlab_workhorse_http_requests_total:rate1m
     expr: >
-      sum without (fqdn,instance) (
+      sum without (fqdn,instance,node,pod) (
         rate(gitlab_workhorse_http_requests_total[1m])
       )
   - record: job:gitlab_workhorse_http_requests_total:rate1m
@@ -89,66 +89,51 @@ groups:
       promql_template_1: 'gitlab_workhorse_git_http_sessions_active:total{environment="$environment", stage="$stage"}'
       promql_template_2: 'avg_over_time(gitlab_workhorse_git_http_sessions_active{environment="$environment", type="git", tier="sv", stage="$stage"}[1m])'
 
-  # too many image scaler processes are being triggered
-  - alert: gitlab_workhorse_image_scaler_max_procs_exceeded_5m
-    expr: rate(gitlab_workhorse_image_resize_concurrency_limit_exceeds_total[5m]) > 0
-    for: 5m
-    labels:
-      rules_domain: general
-      severity: s4
-      alert_type: cause
-    annotations:
-      title: Too many image scaler processes are being requested to run
-      description: >
-        The number of image scaling requests is tripping the threshold for the maximum number of
-        of concurrent scaler processes available to service those requests.
-      runbook: docs/web/workhorse-image-scaler-alerts.md
-
 - name: Workhorse Histograms
   interval: 1m
   rules:
   - record: job:gitlab_workhorse_http_time_to_write_header_seconds_count:rate1m
     expr: >
-      sum without (fqdn,instance) (
+      sum without (fqdn,instance,node,pod) (
         rate(gitlab_workhorse_http_time_to_write_header_seconds_count[1m])
       )
   - record: job:gitlab_workhorse_http_time_to_write_header_seconds_sum:rate1m
     expr: >
-      sum without (fqdn,instance) (
+      sum without (fqdn,instance,node,pod) (
         rate(gitlab_workhorse_http_time_to_write_header_seconds_sum[1m])
       )
   - record: job:gitlab_workhorse_http_time_to_write_header_seconds_bucket:rate1m
     expr: >
-      sum without (fqdn,instance) (
+      sum without (fqdn,instance,node,pod) (
         rate(gitlab_workhorse_http_time_to_write_header_seconds_bucket[1m])
       )
   - record: job:gitlab_workhorse_http_request_size_bytes_count:rate1m
     expr: >
-      sum without (fqdn,instance) (
+      sum without (fqdn,instance,node,pod) (
         rate(gitlab_workhorse_http_request_size_bytes_count[1m])
       )
   - record: job:gitlab_workhorse_http_request_size_bytes_sum:rate1m
     expr: >
-      sum without (fqdn,instance) (
+      sum without (fqdn,instance,node,pod) (
         rate(gitlab_workhorse_http_request_size_bytes_sum[1m])
       )
   - record: job:gitlab_workhorse_http_request_size_bytes_bucket:rate1m
     expr: >
-      sum without (fqdn,instance) (
+      sum without (fqdn,instance,node,pod) (
         rate(gitlab_workhorse_http_request_size_bytes_bucket[1m])
       )
   - record: job:gitlab_workhorse_http_request_duration_seconds_count:rate1m
     expr: >
-      sum without (fqdn,instance) (
+      sum without (fqdn,instance,node,pod) (
         rate(gitlab_workhorse_http_request_duration_seconds_count[1m])
       )
   - record: job:gitlab_workhorse_http_request_duration_seconds_sum:rate1m
     expr: >
-      sum without (fqdn,instance) (
+      sum without (fqdn,instance,node,pod) (
         rate(gitlab_workhorse_http_request_duration_seconds_sum[1m])
       )
   - record: job:gitlab_workhorse_http_request_duration_seconds_bucket:rate1m
     expr: >
-      sum without (fqdn,instance) (
+      sum without (fqdn,instance,node,pod) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket[1m])
       )

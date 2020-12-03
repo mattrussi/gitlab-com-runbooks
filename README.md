@@ -135,7 +135,7 @@ During an incident, we have [roles defined in the handbook](https://about.gitlab
 ### Frontend Services
 
 * [GitLab Pages returns 404](docs/pages/gitlab-pages.md)
-* [HAProxy is missing workers](docs/uncategorized/chef.md)
+* [HAProxy is missing workers](docs/config_management/chef-troubleshooting.md)
 * [Worker's root filesystem is running out of space](docs/monitoring/filesystem_alerts.md)
 * [Azure Load Balancers Misbehave](docs/frontend/load-balancer-outage.md)
 * [GitLab registry is down](docs/registry/gitlab-registry.md)
@@ -191,7 +191,7 @@ During an incident, we have [roles defined in the handbook](https://about.gitlab
 
 ### Chef/Knife
 
-* [General Troubleshooting](docs/uncategorized/chef.md)
+* [General Troubleshooting](docs/config_management/chef-troubleshooting.md)
 * [Error executing action `create` on resource 'directory[/some/path]'](docs/uncategorized/stale-file-handles.md)
 
 ### Certificates
@@ -207,7 +207,7 @@ During an incident, we have [roles defined in the handbook](https://about.gitlab
 * [Alert for SSL certificate expiration](docs/uncategorized/alert-for-ssl-certificate-expiration.md)
 * [Working with Grafana](monitoring/grafana.md)
 * [Working with Prometheus](monitoring/prometheus.md)
-* [Upgrade Prometheus and exporters](docs/monitoring/update-prometheus-and-exporters.md)
+* [Upgrade Prometheus and exporters](docs/monitoring/upgrades.md)
 * [Use mtail to capture metrics from logs](docs/uncategorized/mtail.md)
 
 ### CI

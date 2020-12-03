@@ -18,6 +18,7 @@
 * [../cloudflare/managing-traffic.md](../cloudflare/managing-traffic.md)
 * [../cloudflare/oncall.md](../cloudflare/oncall.md)
 * [../cloudflare/terraform.md](../cloudflare/terraform.md)
+* [../cloudflare/troubleshooting.md](../cloudflare/troubleshooting.md)
 <!-- END_MARKER -->
 
 
