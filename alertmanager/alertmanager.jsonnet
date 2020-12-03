@@ -5,14 +5,15 @@ local serviceCatalog = import 'service_catalog.libsonnet';
 // Where the alertmanager templates are deployed.
 local templateDir = '/etc/alertmanager/config';
 
-local slackChannelDefaults = { includeActions: false };
+local slackChannelDefaults = {};
+
 //
 // Receiver helpers and definitions.
 local slackChannels = [
   // Generic channels.
   { name: 'prod_alerts_slack_channel', channel: 'alerts' },
   { name: 'production_slack_channel', channel: 'production' },
-  { name: 'nonprod_alerts_slack_channel', channel: 'alerts-nonprod', includeActions: true },
+  { name: 'nonprod_alerts_slack_channel', channel: 'alerts-nonprod' },
 ];
 
 local SnitchReceiver(channel) =
@@ -77,8 +78,7 @@ local SlackReceiver(channel) =
         text: '{{ template "slack.text" . }}',
         title: '{{ template "slack.title" . }}',
         title_link: '{{ template "slack.link" . }}',
-        [if channelWithDefaults.includeActions then 'actions']: [
-
+        actions: [
           {  // runbook
             type: 'button',
             text: 'Runbook :green_book:',
@@ -98,6 +98,8 @@ local SlackReceiver(channel) =
             url: |||
               {{-  if ne (index .Alerts 0).Annotations.grafana_dashboard_link "" -}}
                 {{- (index .Alerts 0).Annotations.grafana_dashboard_link -}}
+              {{- else if ne .CommonLabels.type "" -}}
+                https://dashboards.gitlab.net/d/{{.CommonLabels.type}}-main?{{ if ne .CommonLabels.stage "" }}var-stage={{.CommonLabels.stage}}{{ end }}
               {{- else -}}
                 https://dashboards.gitlab.net/
               {{- end -}}
