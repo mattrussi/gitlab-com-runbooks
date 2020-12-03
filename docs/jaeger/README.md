@@ -54,7 +54,7 @@ The configuration we are running consists of:
 * Query: Running in Kubernetes, this component queries Elasticsearch and
   provides the user-facing UI for Jaeger.
 * Elasticsearch: This is the storage backend for the Jaeger system. We run a
-  dedicated Elasticsearch cluster.
+  dedicated Elasticsearch cluster for Jaeger in production.
 
 We deploy these components to Kubernetes via
 [the Jaeger Operator](https://www.jaegertracing.io/docs/latest/operator/).
