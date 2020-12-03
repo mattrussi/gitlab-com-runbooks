@@ -9,7 +9,7 @@ metricsCatalog.serviceDefinition({
     // apdexScore: 0.999,
     errorRatio: 0.999,
   },
-  components: {
+  serviceLevelIndicators: {
     jaeger_agent: {
       apdex: histogramApdex(
         histogram='jaeger_rpc_request_latency_bucket',
