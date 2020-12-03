@@ -66,9 +66,9 @@ local combinations(shortMetric, shortDuration, longMetric, longDuration, selecto
     {
       legendFormat: '%(longDuration)s apdex burn threshold' % formatConfig,
       query: if apdexInverted then
-        '(1 - (%(longBurnFactor)g * (1 - avg(%(sloMetric)s{type="$type"})))) unless (vector($proposed_slo) > 0) ' % formatConfig
+        '(1 - (%(longBurnFactor)g * (1 - avg(%(sloMetric)s{monitor="global", type="$type"})))) unless (vector($proposed_slo) > 0) ' % formatConfig
       else
-        '(%(longBurnFactor)g * avg(%(sloMetric)s{type="$type"})) unless (vector($proposed_slo) > 0)' % formatConfig,
+        '(%(longBurnFactor)g * avg(%(sloMetric)s{monitor="global", type="$type"})) unless (vector($proposed_slo) > 0)' % formatConfig,
     },
     {
       legendFormat: 'Proposed SLO @ %(longDuration)s burn' % formatConfig,
@@ -285,8 +285,8 @@ local multiburnRateAlertsDashboard(
 local componentSelectorHash = { environment: '$environment', env: '$environment', type: '$type', stage: '$stage', component: '$component' };
 local componentNodeSelectorHash = { environment: '$environment', monitor: { ne: 'global' }, type: '$type', stage: '$stage', component: '$component', fqdn: '$fqdn' };
 local serviceSelectorHash = { environment: '$environment', env: '$environment', type: '$type', stage: '$stage', monitor: 'global' };
-local apdexSLOMetric = 'slo:min:events:gitlab_service_apdex:ratio{monitor="global"}';
-local errorSLOMetric = 'slo:max:events:gitlab_service_errors:ratio{monitor="global"}';
+local apdexSLOMetric = 'slo:min:events:gitlab_service_apdex:ratio';
+local errorSLOMetric = 'slo:max:events:gitlab_service_errors:ratio';
 
 {
   // Apdex, for components
