@@ -65,6 +65,13 @@ local PagerDutyReceiver(channel) = {
   ],
 };
 
+local slackActionButton(text, url) =
+  {
+    type: 'button',
+    text: text,
+    url: std.stripChars(url, ' \n'),
+  };
+
 local SlackReceiver(channel) =
   local channelWithDefaults = slackChannelDefaults + channel;
   {
@@ -79,10 +86,9 @@ local SlackReceiver(channel) =
         title: '{{ template "slack.title" . }}',
         title_link: '{{ template "slack.link" . }}',
         actions: [
-          {  // runbook
-            type: 'button',
-            text: 'Runbook :green_book:',
-            url: |||
+          slackActionButton(  // runbook
+            text='Runbook :green_book:',
+            url=|||
               {{-  if ne (index .Alerts 0).Annotations.link "" -}}
                 {{- (index .Alerts 0).Annotations.link -}}
               {{- else if ne (index .Alerts 0).Annotations.runbook "" -}}
@@ -90,12 +96,11 @@ local SlackReceiver(channel) =
               {{- else -}}
                 https://ops.gitlab.net/gitlab-com/runbooks/blob/master/docs/uncategorized/alerts-should-have-runbook-annotations.md
               {{- end -}}
-            |||,
-          },
-          {  // Grafana link
-            type: 'button',
-            text: 'Dashboard :grafana:',
-            url: |||
+            |||
+          ),
+          slackActionButton(  // Grafana link
+            text='Dashboard :grafana:',
+            url=|||
               {{-  if ne (index .Alerts 0).Annotations.grafana_dashboard_link "" -}}
                 {{- (index .Alerts 0).Annotations.grafana_dashboard_link -}}
               {{- else if ne .CommonLabels.type "" -}}
@@ -103,8 +108,20 @@ local SlackReceiver(channel) =
               {{- else -}}
                 https://dashboards.gitlab.net/
               {{- end -}}
+            |||
+          ),
+          slackActionButton(  // Silence button
+            text='Create Silence :shushing_face:',
+            url=|||
+              https://alerts.gitlab.net/#/silences/new?filter=%7B
+              {{- range .CommonLabels.SortedPairs -}}
+                  {{- if ne .Name "alertname" -}}
+                      {{- .Name }}%3D%22{{- reReplaceAll " +" "%20" .Value -}}%22%2C%20
+                  {{- end -}}
+              {{- end -}}
+              alertname%3D%22{{ reReplaceAll " +" "%20" .CommonLabels.alertname }}%22%7D
             |||,
-          },
+          ),
         ],
       },
     ],
