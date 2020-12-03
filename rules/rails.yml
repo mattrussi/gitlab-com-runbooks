@@ -230,8 +230,6 @@ groups:
   - record: controller_action:gitlab_transaction_duration_seconds_bucket:rate5m
     expr: sum without (fqdn,instance,node,pod) (rate(gitlab_transaction_duration_seconds_bucket{type="git"}[5m]))
   - record: controller_action:gitlab_transaction_duration_seconds_bucket:rate5m
-    expr: sum without (fqdn,instance,node,pod) (rate(gitlab_transaction_duration_seconds_bucket{type="sidekiq"}[5m]))
-  - record: controller_action:gitlab_transaction_duration_seconds_bucket:rate5m
     expr: sum without (fqdn,instance,node,pod) (rate(gitlab_transaction_duration_seconds_bucket{type="web"}[5m]))
 
   - record: controller_action:gitlab_transaction_latency_seconds:rate5m
@@ -336,8 +334,6 @@ groups:
     expr: sum(rate(gitlab_sql_duration_seconds_bucket{type="api"}[5m])) without (fqdn,instance,node,pod)
   - record: controller_action:gitlab_sql_duration_seconds_bucket:rate5m
     expr: sum(rate(gitlab_sql_duration_seconds_bucket{type="git"}[5m])) without (fqdn,instance,node,pod)
-  - record: controller_action:gitlab_sql_duration_seconds_bucket:rate5m
-    expr: sum(rate(gitlab_sql_duration_seconds_bucket{type="sidekiq"}[5m])) without (fqdn,instance,node,pod)
   - record: controller_action:gitlab_sql_duration_seconds_bucket:rate5m
     expr: sum(rate(gitlab_sql_duration_seconds_bucket{type="web"}[5m])) without (fqdn,instance,node,pod)
 
