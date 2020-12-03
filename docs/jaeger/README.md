@@ -38,7 +38,7 @@ This allows engineers to understand the full end-to-end flow.
 
 ## Architecture
 
-The architecture of Jaeger is documented in [the Jaeger docs](https://www.jaegertracing.io/docs/1.21/architecture/).
+The architecture of Jaeger is documented in [the Jaeger docs](https://www.jaegertracing.io/docs/latest/architecture/).
 
 The configuration we are running consists of:
 
