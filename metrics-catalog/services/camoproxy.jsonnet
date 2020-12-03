@@ -14,8 +14,9 @@ metricsCatalog.serviceDefinition({
   serviceDependencies: {
     // If Camoproxy has any dependencies, we should add them here
   },
-  components: {
+  serviceLevelIndicators: {
     loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
+      featureCategory='not_owned',
       stageMappings={
         main: { backends: ['camoproxy'], toolingLinks: [] },
       },
@@ -23,6 +24,16 @@ metricsCatalog.serviceDefinition({
     ),
 
     server: {
+      featureCategory: 'not_owned',
+      team: 'sre_coreinfra',
+      description: |||
+        This SLI monitors the camoproxy server via its HTTP interface.
+        5xx responses are considered to be failures. Note that this SLI
+        is highly dependent on upstream proxy targets, not under the control
+        of GitLab. We are unable to distinguish problems in the proxy from
+        upstream problems. This should be taken into account for this SLI.
+      |||,
+
       apdex: histogramApdex(
         histogram='camo_response_duration_seconds_bucket',
         satisfiedThreshold=5,

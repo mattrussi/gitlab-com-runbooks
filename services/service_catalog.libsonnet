@@ -20,6 +20,11 @@ local safeMap(fn, v) = if std.isArray(v) then std.map(fn, v) else [];
   getTeams()::
     serviceCatalog.teams,
 
+  getTeam(teamName)::
+    local team = std.filter(function(team) team.name == teamName, self.getTeams());
+    assert std.length(team) == 1;
+    team[0],
+
   findServices(filterFunc)::
     std.filter(filterFunc, serviceCatalog.services),
 }

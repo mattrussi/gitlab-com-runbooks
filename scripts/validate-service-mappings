@@ -39,14 +39,11 @@ def validate(service_catalog_path)
     raise "'#{service_name}' | tier field must be string" unless service_tier.is_a? String
     raise "unknown tier '#{service['tier']}''" unless tier_map[service["tier"]]
 
-    # teams (non-mandatory)
-    service_teams = service["teams"]
-    if service_teams
-      raise "'#{service_name}' | teams field must be list" unless service_teams.is_a? Array
-
-      service_teams.each do |team|
-        raise "'#{service_name}' | unknown team: '#{team}''" unless team_map[team]
-      end
+    # team (non-mandatory)
+    service_team = service["team"]
+    if service_team
+      raise "'#{service_name}' | team field must be string" unless service_teams.is_a? String
+      raise "'#{service_name}' | unknown team: '#{service_team}''" unless team_map[service_team]
     end
 
     # friendly_name

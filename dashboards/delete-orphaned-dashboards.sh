@@ -6,6 +6,8 @@ set -euo pipefail
 IFS=$'\n\t'
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+RULES_JSONNET_FILE=protected-grafana-dashboards.jsonnet
+
 cd "${SCRIPT_DIR}"
 
 source "grafana-tools.lib.sh"
@@ -53,7 +55,7 @@ if [[ -z ${GRAFANA_API_TOKEN:-} ]]; then
 fi
 
 find_orphaned_dashboards() {
-  call_grafana_api 'https://dashboards.gitlab.net/api/search?limit=5000&type=dash-db' | jq --argjson protected "$(jsonnet protected-grafana-dashboards.jsonnet)" -cM '
+  call_grafana_api 'https://dashboards.gitlab.net/api/search?limit=5000&type=dash-db' | jq --argjson protected "$(jsonnet "$RULES_JSONNET_FILE")" -cM '
     .[] |
     . as $i |
     select([$protected.dashboardUids[] | contains($i.uid)] | any | not) |
@@ -81,7 +83,7 @@ find_orphaned_dashboards() {
 
 find_empty_folders() {
   nonEmptyFolders=$(call_grafana_api "https://dashboards.gitlab.net/api/search?limit=5000&type=dash-db" | jq -cM '[ .[] | select(.folderId != null) | .folderUid ] | unique')
-  call_grafana_api 'https://dashboards.gitlab.net/api/search?limit=5000&type=dash-folder' | jq --argjson nonEmptyFolders "$nonEmptyFolders" --argjson protected "$(jsonnet protected-grafana-dashboards.jsonnet)" -cMr '
+  call_grafana_api 'https://dashboards.gitlab.net/api/search?limit=5000&type=dash-folder' | jq --argjson nonEmptyFolders "$nonEmptyFolders" --argjson protected "$(jsonnet "$RULES_JSONNET_FILE")" -cMr '
     (
       [
         .[] |

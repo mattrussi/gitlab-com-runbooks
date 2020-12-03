@@ -9,6 +9,7 @@ teams:
 - name: sre_observability
   url: https://about.gitlab.com/handbook/engineering/infrastructure/team/reliability/#observability
   slack_channel: sre_observability
+  issue_tracker: gitlab.com/gitlab-com/gl-infra/production
   engagement_policy:
   oncall_schedule: https://gitlab.pagerduty.com/schedules#P22HQSG
 
@@ -124,6 +125,13 @@ teams:
   slack_channel: data-engineering
   slack_alerts_channel: data-prom-alerts
   oncall_schedule: https://about.gitlab.com/handbook/business-ops/data-team/how-we-work/duties/
+
+- name: scalability
+  slack_alerts_channel: g_scalability
+
+# Workhorse is a virtual team
+- name: workhorse
+  slack_alerts_channel: workhorse
 
 tiers:
 - name: sv
@@ -1904,7 +1912,7 @@ services:
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/monitoring/prometheus-slow-series-maintenance.md
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/gitaly/prometheus-storage-inconsistent.md
     playbooks:
-      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/monitoring/update-prometheus-and-exporters.md
+      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/monitoring/upgrades.md
     error_budget:  https://docs.google.com/spreadsheets/d/1wkK2n5EAvoVXwQZrVoCDsvkYTb1BftL56EzsFW_IA-w/edit
   observability:
     monitors:

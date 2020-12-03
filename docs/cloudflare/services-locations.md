@@ -8,7 +8,7 @@ This is a table of various services we run and what they run behind.
 | staging.gitlab.com   | static assets      | Fastly                           |
 | GitLab.com           | GitLab Web/API/SSH | Cloudflare                       |
 | GitLab.com           | static assets      | Fastly                           |
-| ops.GitLab.com       |                    | Cloudflare                       |
+| ops.GitLab.net       |                    | Cloudflare                       |
 | customers.gitlab.com |                    | direct to Azure                  |
 | license.gitlab.com   |                    | direct to Google                 |
 | version.gitlab.com   |                    | direct to Google                 |

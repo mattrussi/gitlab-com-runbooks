@@ -31,8 +31,9 @@ groups:
       runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: symptom
+      pager: pagerduty
       rules_domain: general
-      severity: s4
+      severity: s2
       slo_alert: 'yes'
     expr: |
       (
@@ -82,7 +83,7 @@ groups:
       )
       and
       (
-        gitlab_component_node_ops:rate_1h{} >= 1
+        gitlab_component_node_ops:rate_1h{} >= 10
       )
   - alert: ServiceSLOErrorViolationSingleNode
     for: 10m
@@ -111,8 +112,9 @@ groups:
       runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: symptom
+      pager: pagerduty
       rules_domain: general
-      severity: s4
+      severity: s2
       slo_alert: 'yes'
     expr: |
       (
@@ -158,5 +160,5 @@ groups:
       )
       and
       (
-        gitlab_component_node_ops:rate_1h{} >= 1
+        gitlab_component_node_ops:rate_1h{} >= 10
       )

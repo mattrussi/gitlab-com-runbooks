@@ -1,7 +1,6 @@
 local capacityPlanning = import 'capacity_planning.libsonnet';
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
-local colors = import 'grafana/colors.libsonnet';
 local commonAnnotations = import 'grafana/common_annotations.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
@@ -35,12 +34,6 @@ local queueDetailDataLink = {
   url: '/d/sidekiq-queue-detail?${__url_time_range}&${__all_variables}&var-queue=${__field.label.queue}',
   title: 'Queue Detail: ${__field.label.queue}',
 };
-
-local rowGrid(rowTitle, panels, startRow) =
-  [
-    row.new(title=rowTitle) { gridPos: { x: 0, y: startRow, w: 24, h: 1 } },
-  ] +
-  layout.grid(panels, cols=std.length(panels), startRow=startRow + 1);
 
 local queueTimeLatencyTimeseries(title, aggregator) =
   basic.latencyTimeseries(
@@ -91,7 +84,7 @@ basic.dashboard(
   allValues='.*',
 ))
 .addPanels(
-  rowGrid('Queue Lengths - number of jobs queued', [
+  layout.rowGrid('Queue Lengths - number of jobs queued', [
     basic.queueLengthTimeseries(
       title='Queue Lengths',
       description='The number of unstarted jobs in queues serviced by this shard',
@@ -145,7 +138,7 @@ basic.dashboard(
     ),
   ], startRow=101)
   +
-  rowGrid('Queue Time - time spend queueing', [
+  layout.rowGrid('Queue Time - time spend queueing', [
     queueTimeLatencyTimeseries(
       title='Sidekiq Estimated p95 Job Queue Time for $shard shard',
       aggregator='shard'
@@ -157,7 +150,7 @@ basic.dashboard(
     .addDataLink(queueDetailDataLink),
   ], startRow=201)
   +
-  rowGrid('Inflight Jobs - jobs currently running', [
+  layout.rowGrid('Inflight Jobs - jobs currently running', [
     inflightJobsTimeseries(
       title='Sidekiq Inflight Jobs for $shard shard',
       aggregator='shard'
@@ -169,7 +162,7 @@ basic.dashboard(
     .addDataLink(queueDetailDataLink),
   ], startRow=301)
   +
-  rowGrid('Individual Execution Time - time taken for individual jobs to complete', [
+  layout.rowGrid('Individual Execution Time - time taken for individual jobs to complete', [
     basic.multiTimeseries(
       title='Sidekiq Estimated Median Job Latency for $shard shard',
       description='The median duration, once a job starts executing, that it runs for, by shard. Lower is better.',
@@ -232,7 +225,7 @@ basic.dashboard(
     ),
   ], startRow=401)
   +
-  rowGrid('Total Execution Time - total time consumed processing jobs', [
+  layout.rowGrid('Total Execution Time - total time consumed processing jobs', [
     basic.timeseries(
       title='Sidekiq Total Execution Time for $shard Shard',
       description='The sum of job execution times',
@@ -248,7 +241,7 @@ basic.dashboard(
     ),
   ], startRow=501)
   +
-  rowGrid('Throughput - rate at which jobs complete', [
+  layout.rowGrid('Throughput - rate at which jobs complete', [
     basic.timeseries(
       title='Sidekiq Aggregated Throughput for $shard Shard',
       description='The total number of jobs being completed',
@@ -277,7 +270,7 @@ basic.dashboard(
     .addDataLink(queueDetailDataLink),
   ], startRow=601)
   +
-  rowGrid('Utilization - saturation of workers in this fleet', [
+  layout.rowGrid('Utilization - saturation of workers in this fleet', [
     basic.percentageTimeseries(
       'Shard Utilization',
       description='How heavily utilized is this shard? Ideally this should be around 33% plus minus 10%. If outside this range for long periods, consider scaling fleet appropriately.',

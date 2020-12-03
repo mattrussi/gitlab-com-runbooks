@@ -9,7 +9,9 @@ Cloudflare provides a web application firewall (WAF), domain name system
 
 ## [On-Call Reference](oncall.md)
 
-## [Workflow](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10993)
+## [False Positive Triage Process](troubleshooting.md#false-positive-triage-process)
+
+## [Change Workflow](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10993)
 
 ## When to use a Page Rule vs WAF Rules vs [cf_allowlists]
 

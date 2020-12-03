@@ -1,5 +1,4 @@
 local basic = import 'grafana/basic.libsonnet';
-local colors = import 'grafana/colors.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 
 {

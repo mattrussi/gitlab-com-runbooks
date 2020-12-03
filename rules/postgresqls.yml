@@ -66,7 +66,7 @@ groups:
       runbook: docs/patroni/postgres.md#errors
       title: Postgres transaction rollback rate is high
   - alert: PostgreSQL_StatementTimeout_Errors
-    expr: rate(postgresql_errors_total{type="statement_timeout"}[5m]) > 3
+    expr: rate(postgresql_errors_total{error="statement_timeout"}[5m]) > 3
     for: 5m
     labels:
       severity: s1
@@ -78,7 +78,7 @@ groups:
       runbook: docs/patroni/postgres.md#errors
       title: Postgres transactions showing high rate of statement timeouts
   - alert: PostgreSQL_Deadlock_Errors
-    expr: rate(postgresql_errors_total{type="deadlock_detected"}[1m]) * 60 > 5
+    expr: rate(postgresql_errors_total{error="deadlock_detected"}[1m]) * 60 > 5
     labels:
       severity: s4
       alert_type: cause
@@ -87,6 +87,17 @@ groups:
         errors per minute
       runbook: docs/patroni/postgres.md#errors
       title: Postgres detected deadlocks
+  - alert: PostgreSQL_InvalidPage_Errors
+    expr: rate(postgresql_errors_total{error="invalid_page"}[1m]) > 0
+    labels:
+      severity: s1
+      pager: pagerduty
+      alert_type: cause
+    annotations:
+      descrition: Database {{$labels.fqdn}} has {{ $value | printf "%.1f" }}
+        invalid page errors
+      runbook: docs/patroni/postgres-data-corruption.md
+      title: Postgres checksum verification failed
   - alert: PostgreSQL_ReplicationLagTooLarge
     expr: (pg_replication_lag > 180) and ON(instance) (pg_replication_is_replica{type =~"postgres|patroni"} == 1)
     for: 5m

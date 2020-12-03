@@ -1,41 +1,42 @@
 local capacityPlanning = import 'capacity_planning.libsonnet';
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
-local colors = import 'grafana/colors.libsonnet';
+local colorScheme = import 'grafana/color_scheme.libsonnet';
 local commonAnnotations = import 'grafana/common_annotations.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
 local seriesOverrides = import 'grafana/series_overrides.libsonnet';
 local templates = import 'grafana/templates.libsonnet';
 local keyMetrics = import 'key_metrics.libsonnet';
+local kubeServiceDashboards = import 'kube_service_dashboards.libsonnet';
+local metricsCatalog = import 'metrics-catalog.libsonnet';
+local metricsCatalogDashboards = import 'metrics_catalog_dashboards.libsonnet';
 local nodeMetrics = import 'node_metrics.libsonnet';
 local platformLinks = import 'platform_links.libsonnet';
+local selectors = import 'promql/selectors.libsonnet';
+local saturationDetail = import 'saturation_detail.libsonnet';
 local serviceCatalog = import 'service_catalog.libsonnet';
+local statusDescription = import 'status_description.libsonnet';
+local systemDiagramPanel = import 'system_diagram_panel.libsonnet';
 local dashboard = grafana.dashboard;
 local row = grafana.row;
 local template = grafana.template;
 local graphPanel = grafana.graphPanel;
 local annotation = grafana.annotation;
-local serviceHealth = import 'service_health.libsonnet';
-local saturationDetail = import 'saturation_detail.libsonnet';
-local metricsCatalog = import 'metrics-catalog.libsonnet';
-local metricsCatalogDashboards = import 'metrics_catalog_dashboards.libsonnet';
-local selectors = import 'promql/selectors.libsonnet';
-local systemDiagramPanel = import 'system_diagram_panel.libsonnet';
-local kubeEmbeddedDashboards = import 'kubernetes_embedded_dashboards.libsonnet';
-local statusDescription = import 'status_description.libsonnet';
+
 
 local defaultEnvironmentSelector = { environment: '$environment', env: '$environment' };
 
 local listComponentThresholds(service) =
   std.prune([
-    if service.components[componentName].hasApdex() then
-      ' * %s: %s' % [componentName, service.components[componentName].apdex.describe()]
+    if service.serviceLevelIndicators[sliName].hasApdex() then
+      ' * %s: %s' % [sliName, service.serviceLevelIndicators[sliName].apdex.describe()]
     else
       null
-    for componentName in std.objectFields(service.components)
+    for sliName in std.objectFields(service.serviceLevelIndicators)
   ]);
 
+// This will build a description of the thresholds used in an apdex
 local getApdexDescription(metricsCatalogServiceInfo) =
   std.join('  \n', [
     '_Apdex is a measure of requests that complete within a tolerable period of time for the service. Higher is better._\n',
@@ -61,7 +62,7 @@ local headlineMetricsRow(
     (
       if hasApdex then
         [[
-          keyMetrics.apdexPanel(serviceType, serviceStage, compact=true, environmentSelectorHash=environmentSelectorHash, description=getApdexDescription(metricsCatalogServiceInfo)),
+          keyMetrics.serviceApdexPanel(serviceType, serviceStage, compact=true, environmentSelectorHash=environmentSelectorHash, description=getApdexDescription(metricsCatalogServiceInfo)),
           statusDescription.serviceApdexStatusDescriptionPanel(serviceSelector),
         ]]
       else
@@ -71,7 +72,7 @@ local headlineMetricsRow(
     (
       if hasErrorRate then
         [[
-          keyMetrics.errorRatesPanel(serviceType, serviceStage, compact=true, environmentSelectorHash=environmentSelectorHash),
+          keyMetrics.serviceErrorRatePanel(serviceType, serviceStage, compact=true, environmentSelectorHash=environmentSelectorHash),
           statusDescription.serviceErrorStatusDescriptionPanel(serviceSelector),
         ]]
       else
@@ -81,7 +82,7 @@ local headlineMetricsRow(
     (
       if hasRequestRate then
         [[
-          keyMetrics.qpsPanel(serviceType, serviceStage, compact=true, environmentSelectorHash=environmentSelectorHash),
+          keyMetrics.serviceOperationRatePanel(serviceType, serviceStage, compact=true, environmentSelectorHash=environmentSelectorHash),
         ]]
       else
         []
@@ -90,13 +91,13 @@ local headlineMetricsRow(
     (
       if showSaturationCell then
         [[
-          keyMetrics.saturationPanel(serviceType, serviceStage, compact=true, environmentSelectorHash=saturationEnvironmentSelectorHash),
+          keyMetrics.utilizationRatesPanel(serviceType, serviceStage, compact=true, environmentSelectorHash=saturationEnvironmentSelectorHash),
         ]]
       else
         []
     );
 
-  layout.grid([row.new(title='🌡️ Service Level Indicators (𝙎𝙇𝙄𝙨)', collapse=false)], cols=1, rowHeight=1, startRow=startRow)
+  layout.grid([row.new(title='🌡️ Aggregated Service Level Indicators (𝙎𝙇𝙄𝙨)', collapse=false)], cols=1, rowHeight=1, startRow=startRow)
   +
   layout.splitColumnGrid(columns, [5, 1], startRow=startRow + 1);
 
@@ -130,11 +131,8 @@ local overviewDashboard(
         showSaturationCell=std.length(saturationComponents) > 0
       )
     )
-    .addPanels([
-      serviceHealth.row(type, stage, environmentSelectorHash) { gridPos: { x: 0, y: 10 } },
-    ])
     .addPanels(
-      metricsCatalogDashboards.componentOverviewMatrix(
+      metricsCatalogDashboards.sliMatrixForService(
         type,
         stage,
         startRow=20,
@@ -159,11 +157,10 @@ local overviewDashboard(
     )
     .addPanels(
       if metricsCatalogServiceInfo.getProvisioning().kubernetes == true then
-        // TODO: fix nasty regexp: requires https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10249
-        local kubeSelectorHash = { environment: '$environment', pod: { re: 'gitlab-%s.*' % [type] } };
+        local kubeSelectorHash = { environment: '$environment', env: '$environment', stage: '$stage' };
         [
           row.new(title='☸️ Kubernetes Overview', collapse=true)
-          .addPanels(kubeEmbeddedDashboards.kubernetesOverview(kubeSelectorHash, startRow=1)) +
+          .addPanels(kubeServiceDashboards.deploymentOverview(type, kubeSelectorHash, startRow=1)) +
           { gridPos: { x: 0, y: 400, w: 24, h: 1 } },
         ]
       else [],
@@ -205,6 +202,7 @@ local overviewDashboard(
           platformLinks.services +
           [
             platformLinks.dynamicLinks(type + ' Detail', 'type:' + type),
+            platformLinks.kubenetesDetail(type),
           ],
       },
   };
