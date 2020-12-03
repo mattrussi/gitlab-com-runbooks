@@ -16,6 +16,10 @@ Majority of our Kubernetes configuration is managed using these projects:
    * A dependency of the helmfile repositories above.
 * https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments
 
+:warning: CI jobs are executed on the ops instance. :warning:
+
+:warning: Deployer makes changes to the cluster config outside of git, but using pipelines in these projects. This means that the state of the cluster is often not reflected in the projects linked above. However, it usually should be possible to trace down the CI job that applied the change. :warning:
+
 They include CI jobs that apply the relevant config to the right cluster. Most of what we do does not require interacting with clusters directly, but instead making changes to code in these projects.
 
 # Kubernetes API Access
