@@ -57,7 +57,7 @@ The configuration we are running consists of:
   dedicated Elasticsearch cluster.
 
 We deploy these components to Kubernetes via
-[the Jaeger Operator](https://www.jaegertracing.io/docs/1.21/operator/).
+[the Jaeger Operator](https://www.jaegertracing.io/docs/latest/operator/).
 
 The primary tuning parameter in distributed tracing systems is sampling rate.
 
