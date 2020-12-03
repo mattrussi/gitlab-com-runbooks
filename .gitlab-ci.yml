@@ -1,4 +1,5 @@
 stages:
+  - notify
   - images
   - test
   - deploy
@@ -77,6 +78,15 @@ workflow:
   before_script:
     - ./scripts/bundler.sh # Install jsonnet bundles
     - dashboards/generate-mixins.sh # Generate dashboards from mixins
+
+notify_mirror_source:
+  stage: notify
+  image: registry.gitlab.com/gitlab-com/gl-infra/woodhouse:latest
+  script: woodhouse gitlab notify-mirrored-mr
+  variables:
+    GITLAB_API_TOKEN: $GL_TOKEN
+  rules:
+    - if: '$CI_API_V4_URL == "https://ops.gitlab.net/api/v4"'
 
 verify:
   extends: .default-job-rules
