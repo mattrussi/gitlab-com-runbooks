@@ -118,6 +118,11 @@ groups:
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       tier: inf
+      type: jaeger
+    expr: '0.001000'
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      tier: inf
       type: logging
     expr: '0.001000'
   - record: slo:min:events:gitlab_service_apdex:ratio
@@ -230,11 +235,6 @@ groups:
       tier: sv
       type: sidekiq
     expr: '0.005000'
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      tier: inf
-      type: tracing
-    expr: '0.001000'
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       tier: lb
