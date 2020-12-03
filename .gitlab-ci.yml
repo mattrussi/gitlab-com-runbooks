@@ -443,6 +443,8 @@ deploy_dashboards:
     # This will override all the rules from .dashboards, we only want to run this on master
     - *avoid-stage-group-check-rule
     - *avoid-schedule-rule
+    - if: '$CI_PROJECT_URL !~ /^https:\/\/gitlab\.com\/.*/'
+      when: never
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
   stage: deploy
   script:
