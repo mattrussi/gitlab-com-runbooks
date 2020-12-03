@@ -95,6 +95,42 @@ Refer to existing Kubernetes documentation for reference and further details:
 * https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
 * https://github.com/kubernetes/community/blob/master/contributors/design-proposals/autoscaling/horizontal-pod-autoscaler.md
 
+## Deployment lifecycle
+
+Kubernetes keeps replicasets objects for a limited number of revisions of deployments. Kubernetes events are not created for a replicaset creation/deletion. Only for pods creation/deletion within a replicaset. Similarly, there are no events created for changes to Deployments.
+
+The most complete source of information about changes in kubernetes clusters is the audit log that in GKE is enabled by default. To access audit log, go to Logs Explorer (Stackdriver) in the relevant project in the GCP console.
+
+### diff between deployment versions
+
+An example of how you can get a diff between different deployment versions using rollout history (revisions have to exist in the cluster)
+```
+$ kubectl -n gitlab rollout history deployment/gitlab-gitlab-shell  # get all deployment revisions
+$ kubectl -n gitlab rollout history deployment/gitlab-gitlab-shell --revision 22 > ~/deployment_rev22  # get deployment yaml at rev 22
+$ kubectl -n gitlab rollout history deployment/gitlab-gitlab-shell --revision 21 > ~/deployment_rev21  # get deployment yaml at rev 21
+```
+
+You can also find the diff in the body of the patch request sent to the apiserver. These are logged in the audit logs. You can find these events with this search:
+```
+protoPayload.methodName="io.k8s.apps.v1.deployments.patch"
+```
+
+### timestamp of a change to Deployment
+
+Check our deployment pipelines on the ops instance, in the projects holding kubernetes config.
+
+If the ReplicaSet objects still exist, you can look at their creation timestamp in their definition.
+
+Audit log also contains a lot of useful information. For example, deployment patching events (e.g. on image update):
+```
+protoPayload.methodName="io.k8s.apps.v1.deployments.patch"
+```
+
+Replicaset creation (e.g. on image update):
+```
+protoPayload.methodName="io.k8s.apps.v1.replicasets.create"
+```
+
 ## Attaching to a running container
 
 ### Using Docker
