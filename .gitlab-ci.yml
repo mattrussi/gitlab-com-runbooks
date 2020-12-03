@@ -3,8 +3,6 @@ stages:
   - images
   - test
   - deploy
-  - alertmanager
-  - deploy-rules
   - deploy-rules-production
   - scheduled
 
@@ -45,7 +43,7 @@ workflow:
 
 .deploy-rules:
   extends: .rules-artifacts
-  stage: deploy-rules
+  stage: deploy
   rules:
     - *avoid-stage-group-check-rule
     - *avoid-schedule-rule
@@ -134,7 +132,6 @@ rspec:
 deploy-rules-gstg:
   environment: gstg
   extends: .deploy-rules
-  stage: deploy-rules
   variables:
     CLUSTER: gstg-gitlab-gke
     REGION: us-east1
@@ -142,7 +139,6 @@ deploy-rules-gstg:
 deploy-rules-gstg-us-east1-b:
   environment: gstg-us-east1-b
   extends: .deploy-rules
-  stage: deploy-rules
   variables:
     CLUSTER: gstg-us-east1-b
     REGION: us-east1-b
@@ -150,7 +146,6 @@ deploy-rules-gstg-us-east1-b:
 deploy-rules-gstg-us-east1-c:
   environment: gstg-us-east1-c
   extends: .deploy-rules
-  stage: deploy-rules
   variables:
     CLUSTER: gstg-us-east1-c
     REGION: us-east1-c
@@ -158,7 +153,6 @@ deploy-rules-gstg-us-east1-c:
 deploy-rules-gstg-us-east1-d:
   environment: gstg-us-east1-d
   extends: .deploy-rules
-  stage: deploy-rules
   variables:
     CLUSTER: gstg-us-east1-d
     REGION: us-east1-d
@@ -167,7 +161,6 @@ deploy-rules-gstg-us-east1-d:
 deploy-rules-pre:
   environment: pre
   extends: .deploy-rules
-  stage: deploy-rules
   variables:
     CLUSTER: pre-gitlab-gke
     REGION: us-east1
@@ -175,7 +168,6 @@ deploy-rules-pre:
 deploy-rules-ops:
   environment: ops
   extends: .deploy-rules
-  stage: deploy-rules
   variables:
     CLUSTER: ops-gitlab-gke
     REGION: us-east1
@@ -213,7 +205,7 @@ deploy-rules-gprd-us-east1-d:
     REGION: us-east1-d
 
 update-alertmanager:
-  stage: alertmanager
+  stage: deploy
   environment: ops
   tags:
     - release
@@ -224,8 +216,6 @@ update-alertmanager:
   only:
     refs:
       - master
-    changes:
-      - alertmanager/*
     variables:
       - $CI_API_V4_URL == "https://ops.gitlab.net/api/v4"
   except:
