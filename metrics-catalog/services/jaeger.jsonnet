@@ -25,7 +25,7 @@ metricsCatalog.serviceDefinition({
       errorRate: rateMetric(
         counter='jaeger_rpc_http_requests_total',
         selector={
-          selector='type="jaeger"',
+          type: 'jaeger',
           status_code: { re: '4xx|5xx' },
         }
       ),
