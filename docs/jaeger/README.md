@@ -90,6 +90,10 @@ backend as needed.
 We target a retention window of 7 days, and will adjust sample rate in
 accordance with our budget in order to achieve this window.
 
+Additionally, the collector service is backed by a Kubernetes Horizontal Pod
+Autoscaler (HPA), allowing it to respond to increased demand by increasing
+capacity.
+
 ## Availability
 
 Jaeger stores data on a best-effort basis. Data remains in memory in the
@@ -130,8 +134,8 @@ SRE on-call is alerted on SLO violations.
 
 ## Links to further Documentation
 
-* [Jaeger](https://www.jaegertracing.io/docs/1.21/)
-* [Jaeger Operator](https://www.jaegertracing.io/docs/1.21/operator/)
+* [Jaeger](https://www.jaegertracing.io/docs/latest/)
+* [Jaeger Operator](https://www.jaegertracing.io/docs/latest/operator/)
 * [Dapper, a Large-Scale Distributed Systems Tracing Infrastructure](https://research.google/pubs/pub36356/)
 * [OpenTracing](https://opentracing.io/)
 * [OpenTelemetry](https://opentelemetry.io/)
