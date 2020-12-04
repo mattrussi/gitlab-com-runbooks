@@ -110,7 +110,7 @@ durable and available for querying.
 
 Fine-grained traces are a vector for data leaks. We sanitize all emitted spans
 in an effort to remove PII. This includes removing parameters from Redis and
-SQL queries.
+SQL queries. This redaction logic lives in labkit.
 
 Data in Jaeger is not archived and expires once the retention window has passed.
 
