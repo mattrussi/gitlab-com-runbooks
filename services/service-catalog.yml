@@ -2974,11 +2974,11 @@ services:
     slx:
     documents:
       design:
-      architecture: https://www.jaegertracing.io/docs/1.21/architecture/
+      architecture: https://www.jaegertracing.io/docs/latest/architecture/
       readiness_review: TBD
       service:
-        - https://www.jaegertracing.io/docs/1.21/
-      security: https://www.jaegertracing.io/docs/1.21/security/
+        - https://www.jaegertracing.io/docs/latest/
+      security: https://www.jaegertracing.io/docs/latest/security/
     dependencies:
     configurations:
       - config_name: Tanka deployment
@@ -2997,7 +2997,7 @@ services:
         permalink: TBD
   infrastructure:
     provider: gcp
-    architecture: https://www.jaegertracing.io/docs/1.21/architecture/
+    architecture: https://www.jaegertracing.io/docs/latest/architecture/
     provisioning: tanka
     accesses:
       - account_name:
