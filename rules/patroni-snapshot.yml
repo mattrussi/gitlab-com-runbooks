@@ -23,3 +23,14 @@ groups:
       description: GCS disk snapshot has not ran successfully on {{ $labels.fqdn }}. Please follow the runbook to review the problem.
       runbook: docs/patroni/gcs-snapshots.md
       title: Last Patroni GCS snapshot did not run successfully
+  - alert: PatroniGCSSnapshotFailed
+    expr: gitlab_job_failed{resource="patroni-gcs-snapshot"} == 1
+    for: 5m
+    labels:
+      pager: pagerduty
+      severity: s1
+      alert_type: cause
+    annotations:
+      description: GCS disk snapshot failed on {{ $labels.fqdn }}. Please follow the runbook to review the problem.
+      runbook: docs/patroni/gcs-snapshots.md
+      title: Last Patroni GCS snapshot did not run successfully
