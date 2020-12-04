@@ -9,7 +9,7 @@ metricsCatalog.serviceDefinition({
   tier: 'sv',
   monitoringThresholds: {
     apdexScore: 0.999,
-    errorRatio: 0.995,
+    errorRatio: 0.99,
   },
   serviceDependencies: {
     // If Camoproxy has any dependencies, we should add them here
@@ -17,6 +17,7 @@ metricsCatalog.serviceDefinition({
   serviceLevelIndicators: {
     loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
       featureCategory='not_owned',
+      team='sre_coreinfra',
       stageMappings={
         main: { backends: ['camoproxy'], toolingLinks: [] },
       },
