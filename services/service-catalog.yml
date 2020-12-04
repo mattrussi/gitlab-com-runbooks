@@ -2951,3 +2951,64 @@ services:
     monitors:
       primary_grafana_dashboard:
       sentry_slug:
+
+- name: jaeger
+  tier: inf
+  friendly_name: Jaeger
+  infra_owner: sre_observability
+  label: Service:Jaeger
+  business:
+    requirement: |
+      Jaeger is a distributed tracing system that allows us to understand interactions between components and diagnose performance issues.
+    customers:
+      - Engineering dept
+    business_value: |
+      In order to meet our SLOs, we need the ability to understand system behaviour and sources of latency.
+    SLA:
+      availability:
+      response_time:
+  technical:
+    project:
+      - https://www.jaegertracing.io/
+      - https://github.com/jaegertracing/jaeger
+      - https://github.com/jaegertracing/jaeger-operator
+    slx:
+    documents:
+      design:
+      architecture: https://www.jaegertracing.io/docs/latest/architecture/
+      readiness_review: TBD
+      service:
+        - https://www.jaegertracing.io/docs/latest/
+      security: https://www.jaegertracing.io/docs/latest/security/
+    dependencies:
+    configurations:
+      - config_name: Tanka deployment
+        location: https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments/-/tree/master/environments/jaeger
+    chef_roles:
+      - gitlab-jaeger::agent
+    scalability:
+      bound: cpu
+      scalable: horizontal
+    security:
+      security_reviewed:
+      data_classification:
+      security_incidents:
+    logging:
+      - name: Jaeger
+        permalink: TBD
+  infrastructure:
+    provider: gcp
+    architecture: https://www.jaegertracing.io/docs/latest/architecture/
+    provisioning: tanka
+    accesses:
+      - account_name:
+        access_type:
+        reviewed:
+  operations:
+    maintenance:
+    runbooks:
+    playbooks:
+    error_budget:
+  observability:
+    monitors:
+      primary_grafana_dashboard:
