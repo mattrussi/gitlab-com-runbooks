@@ -132,6 +132,9 @@ We actively monitor the key components of Jaeger:
 
 SRE on-call is alerted on SLO violations.
 
+See also: [the Jaeger grafana
+dashboard](https://dashboards.gitlab.net/d/jaeger-main/jaeger-overview).
+
 ## Links to further Documentation
 
 * [Jaeger](https://www.jaegertracing.io/docs/latest/)
