@@ -15,3 +15,13 @@ DB console: `ruby bin\prod_access_report.rb -a db-console`
 
 ### GCP access to gitlab-production
 
+
+
+### Production Server list (Server lists for Bastions, Production Servers, Database servers)
+
+Clone down chef repo and:
+Find the right roles for the 3 above categories.
+Run the commands:
+- $ knife search node role:gprd-base-bastion -i
+- $ knife search node roles:gprd-base -i
+- $ knife search node 'roles:gprd-base-db-postgres OR roles:gprd-base-db-patroni' -i
