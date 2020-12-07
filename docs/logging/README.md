@@ -234,6 +234,8 @@ Roadmap:
 
 ![Overview](./img/logging.png)
 
+<!-- generated from ./img/logging.drawio -->
+
 ### Fluentd
 
 We are using Fluentd (td-agent) for parsing log files and forwarding log messages to different destinations. There are at least three (3) different types of Fluentd processes involved: Gitlab managed Fluentd on GCE VMs, Gitlab managed Fluentd DaemonSet in GKE, GCP managed Fluentd DaemonSet in GKE.

@@ -33,6 +33,10 @@
 
 <!-- ## Architecture -->
 
+![Overview](./img/gitlab-pages.png)
+
+<!-- generated from ./img/gitlab-pages.drawio , see https://app.diagrams.net -->
+
 <!-- ## Performance -->
 
 <!-- ## Scalability -->
