@@ -5,6 +5,7 @@
 [[_TOC_]]
 
 #  Jaeger Service
+* [Service Overview](https://dashboards.gitlab.net/d/jaeger-main/jaeger-overview)
 * **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22jaeger%22%2C%20tier%3D%22inf%22%7D
 * **Label**: gitlab-com/gl-infra/production~"Service:Jaeger"
 
@@ -131,6 +132,9 @@ We actively monitor the key components of Jaeger:
 * Elasticsearch
 
 SRE on-call is alerted on SLO violations.
+
+See also: [the Jaeger grafana
+dashboard](https://dashboards.gitlab.net/d/jaeger-main/jaeger-overview).
 
 ## Links to further Documentation
 

@@ -3011,4 +3011,4 @@ services:
     error_budget:
   observability:
     monitors:
-      primary_grafana_dashboard:
+      primary_grafana_dashboard: "jaeger-main/jaeger-overview"
