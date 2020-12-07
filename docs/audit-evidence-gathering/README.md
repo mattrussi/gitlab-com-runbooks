@@ -17,7 +17,7 @@ DB console: `ruby bin\prod_access_report.rb -a db-console`
 
 
 
-### Production Server list (Server lists for Bastions, Production Servers, Database servers)
+### Production Server list (Server lists for bastions, production servers, database servers)
 
 Clone down chef repo and:
 Find the right roles for the 3 above categories.
