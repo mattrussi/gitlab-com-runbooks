@@ -352,6 +352,17 @@ basic.dashboard(
   layout.rowGrid('Error Rate (the rate at which jobs fail)', [
     errorRateTimeseries('Errors', aggregators='queue', legendFormat='{{ queue }}'),
     errorRateTimeseries('Errors per Node', aggregators='fqdn, queue', legendFormat='{{ queue }} - {{ fqdn }}'),
+    basic.timeseries(
+      title='Dead Jobs',
+      query=|||
+        sum by (queue) (
+          increase(sidekiq_jobs_dead_total{%(selector)s}[5m])
+        )
+      ||| % {
+        selector: selectors.serializeHash(selector),
+      },
+      legendFormat='{{ queue }}',
+    ),
   ], startRow=601)
   +
   [
