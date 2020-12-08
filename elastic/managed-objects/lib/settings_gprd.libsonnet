@@ -22,6 +22,23 @@ local setting(index, env) = if std.member(HIGH_THROUHGPUT, index) then {
       idle: {
         after: '30s',
       },
+      slowlog: {
+        threshold: {
+          query: {
+            warn: '30s',
+            info: '30s',
+            debug: '30s',
+            trace: '30s',
+          },
+          fetch: {
+            warn: '30s',
+            info: '30s',
+            debug: '30s',
+            trace: '30s',
+          },
+        },
+        level: 'info',
+      },
     },
     refresh_interval: '20s',  // see: https://gitlab.com/gitlab-com/gl-infra/production/-/issues/3006#note_445081437
   },
@@ -46,6 +63,23 @@ else if std.member(MEDIUM_THROUGHPUT, index) then {
       idle: {
         after: '30s',
       },
+      slowlog: {
+        threshold: {
+          query: {
+            warn: '30s',
+            info: '30s',
+            debug: '30s',
+            trace: '30s',
+          },
+          fetch: {
+            warn: '30s',
+            info: '30s',
+            debug: '30s',
+            trace: '30s',
+          },
+        },
+        level: 'info',
+      },
     },
     refresh_interval: '20s',
   },
@@ -63,6 +97,23 @@ else if std.member(MEDIUM_THROUGHPUT, index) then {
     search: {
       idle: {
         after: '30s',
+      },
+      slowlog: {
+        threshold: {
+          query: {
+            warn: '30s',
+            info: '30s',
+            debug: '30s',
+            trace: '30s',
+          },
+          fetch: {
+            warn: '30s',
+            info: '30s',
+            debug: '30s',
+            trace: '30s',
+          },
+        },
+        level: 'info',
       },
     },
     refresh_interval: '20s',
