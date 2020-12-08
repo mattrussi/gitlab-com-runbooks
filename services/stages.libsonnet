@@ -38,6 +38,12 @@ local findStageGroupNameForFeatureCategory(featureCategory) =
 local findStageNameForFeatureCategory(featureCategory) =
   findStageGroupForFeatureCategory(featureCategory).stage;
 
+local stageGroup(groupName) =
+  stageGroupMapping[groupName];
+
+local categoriesForStageGroup(groupName) =
+  stageGroup(groupName).feature_categories;
+
 {
   /**
    * Given a feature category, returns the appropriate stage group
@@ -56,4 +62,15 @@ local findStageNameForFeatureCategory(featureCategory) =
    */
   findStageNameForFeatureCategory:: findStageNameForFeatureCategory,
 
+  /**
+   * Given a stage-group name will return an array of feature categories
+   * Will result in an error if an unknown group name is passed
+   */
+  categoriesForStageGroup(groupName):: categoriesForStageGroup(groupName),
+
+  /**
+   * Given a stage-group name will return the stage group object
+   * Will result in an error if an unknown group name is passed
+   */
+  stageGroup(groupName):: stageGroup(groupName),
 }

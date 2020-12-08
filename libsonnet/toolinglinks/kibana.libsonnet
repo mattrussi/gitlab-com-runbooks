@@ -38,7 +38,7 @@ local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libson
         )
         +
         [
-          elasticsearchLinks.matchFilter(k, matches[k])
+          elasticsearchLinks.matcher(k, matches[k])
           for k in std.objectFields(matches)
         ]
         +
