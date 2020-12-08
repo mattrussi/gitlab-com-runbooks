@@ -1,23 +1,7 @@
-local capacityPlanning = import 'capacity_planning.libsonnet';
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
-local commonAnnotations = import 'grafana/common_annotations.libsonnet';
-local layout = import 'grafana/layout.libsonnet';
-local promQuery = import 'grafana/prom_query.libsonnet';
-local seriesOverrides = import 'grafana/series_overrides.libsonnet';
-local templates = import 'grafana/templates.libsonnet';
 local keyMetrics = import 'key_metrics.libsonnet';
-local nodeMetrics = import 'node_metrics.libsonnet';
-local platformLinks = import 'platform_links.libsonnet';
-local railsCommon = import 'rails_common_graphs.libsonnet';
-local serviceCatalog = import 'service_catalog.libsonnet';
-local workhorseCommon = import 'workhorse_common_graphs.libsonnet';
-local dashboard = grafana.dashboard;
 local row = grafana.row;
-local template = grafana.template;
-local graphPanel = grafana.graphPanel;
-local annotation = grafana.annotation;
-local serviceHealth = import 'service_health.libsonnet';
 local text = grafana.text;
 
 basic.dashboard(
@@ -33,14 +17,17 @@ basic.dashboard(
       Welcome to the GitLab public dashboard. GitLab [values transparency](https://about.gitlab.com/handbook/values/#transparency),
       so we maintain a public copy of our internal dashboards.
 
-      Due to privacy reasons and more strict query limitations not all dashboards may work correctly.
+      Our dashboards are managed using Grafonnet, and the source is [publicly available on GitLab.com](https://gitlab.com/gitlab-com/runbooks/tree/master/dashboards).
+
+      For security reasons, and owing to an TOS violation in which an anonymous user downloaded 8GB/day of metric data for several weeks through our public Grafana instance, we now require all users to log into `dashboards.gitlab.com` with a GitLab.com login.
+      Note that in order to protect personally identifiable information (PII), and due to stricter query limitations and timeouts on this public instance, not all dashboards will work correctly.
     |||
   ),
   gridPos={
     x: 0,
     y: 0,
     w: 12,
-    h: 5,
+    h: 6,
   }
 )
 .addPanel(
@@ -61,7 +48,7 @@ basic.dashboard(
     x: 12,
     y: 0,
     w: 12,
-    h: 5,
+    h: 6,
   }
 )
 .addPanel(
@@ -94,12 +81,4 @@ basic.dashboard(
 .addPanels(keyMetrics.headlineMetricsRow('git', 'main', startRow=1300, rowTitle='Git: git ssh and https traffic'))
 .addPanels(keyMetrics.headlineMetricsRow('ci-runners', 'main', startRow=1400, rowTitle='CI Runners'))
 .addPanels(keyMetrics.headlineMetricsRow('registry', 'main', startRow=1500, rowTitle='Container Registry'))
-.addPanel(
-  row.new(title='Welcome'),
-  gridPos={
-    x: 0,
-    y: 2000,
-    w: 24,
-    h: 1,
-  }
-)
+.trailer()
