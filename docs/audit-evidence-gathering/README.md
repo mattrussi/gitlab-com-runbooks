@@ -14,8 +14,9 @@ Rails console: `ruby bin\prod_access_report.rb -a rails-console`
 DB console: `ruby bin\prod_access_report.rb -a db-console`
 
 ### GCP access to gitlab-production
-
-
+from the command line with gcloud installed:
+1. `gcloud beta identity groups memberships list --group-email="gcp-ops-sg@gitlab.com" |grep id|sed 's/id://g'`
+2. `gcloud beta identity groups memberships list --group-email="gcp-owners-sg@gitlab.com" |grep id|sed 's/id://g'` 
 
 ### Production Server list (Server lists for Bastions, Production Servers, Database servers)
 
