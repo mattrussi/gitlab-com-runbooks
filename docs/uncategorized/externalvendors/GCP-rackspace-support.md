@@ -14,7 +14,7 @@ Updated 2020-12-07
 ## Contacts
 
 Google:
-* See the [readme in the vendor tracker](https://gitlab.com/gitlab-com/gl-infra/google-gitlab-tracker)
+* See the [readme in the vendor tracker](https://gitlab.com/gitlab-com/gl-infra/google-gitlab-tracker). The project is private due to confidential interactions with the vendor.
 
 Rackspace:
 * Ben Garza is our TAM - reports to Sergio Gonzalez as support leader.
