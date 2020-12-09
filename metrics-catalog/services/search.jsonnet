@@ -15,6 +15,7 @@ metricsCatalog.serviceDefinition({
   serviceLevelIndicators: {
 
     elasticsearch_searching: {
+      userImpacting: false,  // Consider updating once more widely rolled out
       featureCategory: 'global_search',
       description: |||
         Aggregation of all search queries on GitLab.com, as measured from ElasticSearch.
@@ -30,6 +31,7 @@ metricsCatalog.serviceDefinition({
     },
 
     elasticsearch_indexing: {
+      userImpacting: false,  // Consider updating once more widely rolled out
       featureCategory: 'global_search',
       description: |||
         Aggregation of all document indexing requests on GitLab.com, as measured from ElasticSearch.

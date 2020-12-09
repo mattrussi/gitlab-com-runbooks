@@ -12,7 +12,7 @@ local defaultL4SLIDescription = |||
   with upstream TCP connection failures being treated as service-level failures.
 |||;
 
-local singleHTTPComponent(stage, selector, definition) =
+local singleHTTPComponent(stage, selector, definition, userImpacting) =
   local backends = definition.backends;
   local toolingLinks = definition.toolingLinks;
   local baseSelector = selector {
@@ -20,6 +20,8 @@ local singleHTTPComponent(stage, selector, definition) =
   };
 
   metricsCatalog.serviceLevelIndicatorDefinition({
+    userImpacting: userImpacting,
+
     staticLabels: {
       stage: stage,
     },
@@ -40,7 +42,7 @@ local singleHTTPComponent(stage, selector, definition) =
   });
 
 // This is for opaque HTTPS-to-HTTPS or SSH proxying, specifically for pages/git etc
-local singleL4Component(stage, selector, definition) =
+local singleL4Component(stage, selector, definition, userImpacting) =
   local backends = definition.backends;
   local toolingLinks = definition.toolingLinks;
 
@@ -49,6 +51,7 @@ local singleL4Component(stage, selector, definition) =
   };
 
   metricsCatalog.serviceLevelIndicatorDefinition({
+    userImpacting: userImpacting,
     staticLabels: {
       stage: stage,
     },
@@ -69,13 +72,14 @@ local singleL4Component(stage, selector, definition) =
   });
 
 local combinedBackendCurry(generator, defaultSLIDescription) =
-  function(stageMappings, selector, featureCategory, team=null, description=defaultSLIDescription)
+  function(userImpacting, stageMappings, selector, featureCategory, team=null, description=defaultSLIDescription)
     metricsCatalog.combinedServiceLevelIndicatorDefinition(
+      userImpacting=userImpacting,
       featureCategory=featureCategory,
       team=team,
       description=description,
       components=[
-        generator(stage=stage, selector=selector, definition=stageMappings[stage])
+        generator(stage=stage, selector=selector, definition=stageMappings[stage], userImpacting=userImpacting)
         for stage in std.objectFields(stageMappings)
       ],
       // Don't double-up RPS by including loadbalancer again

@@ -38,6 +38,7 @@ metricsCatalog.serviceDefinition({
   ],
   serviceLevelIndicators: {
     loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
+      userImpacting=true,
       featureCategory='not_owned',
       team='sre_coreinfra',
       stageMappings={
@@ -48,6 +49,7 @@ metricsCatalog.serviceDefinition({
     ),
 
     workhorse: {
+      userImpacting: true,
       featureCategory: 'not_owned',
       team: 'workhorse',
       description: |||
@@ -86,6 +88,7 @@ metricsCatalog.serviceDefinition({
     },
 
     imagescaler: {
+      userImpacting: false,
       featureCategory: 'memory',
       description: |||
         The imagescaler rescales images before sending them to clients. This allows faster transmission of
@@ -115,6 +118,7 @@ metricsCatalog.serviceDefinition({
     },
 
     puma: {
+      userImpacting: true,
       featureCategory: 'not_owned',
       team: 'sre_coreinfra',
       description: |||

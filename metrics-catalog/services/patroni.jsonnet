@@ -22,6 +22,7 @@ metricsCatalog.serviceDefinition({
     // We don't have latency histograms for patroni but for now we will
     // use the rails controller SQL latencies as an indirect proxy.
     rails_sql: {
+      userImpacting: true,
       featureCategory: 'not_owned',
       team: 'sre_datastores',
       description: |||
@@ -50,6 +51,7 @@ metricsCatalog.serviceDefinition({
     },
 
     service: {
+      userImpacting: true,
       featureCategory: 'not_owned',
       team: 'sre_datastores',
       description: |||
@@ -82,6 +84,7 @@ metricsCatalog.serviceDefinition({
 
     // Records the operations rate for the pgbouncer instances running on the patroni nodes
     pgbouncer: {
+      userImpacting: true,
       featureCategory: 'not_owned',
       team: 'sre_datastores',
       description: |||

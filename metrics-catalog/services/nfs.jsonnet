@@ -10,6 +10,7 @@ metricsCatalog.serviceDefinition({
   },
   serviceLevelIndicators: {
     nfs_service: {
+      userImpacting: true,
       featureCategory: 'not_owned',
       team: 'sre_coreinfra',
       description: |||

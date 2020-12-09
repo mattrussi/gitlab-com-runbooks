@@ -18,6 +18,7 @@ metricsCatalog.serviceDefinition({
   },
   serviceLevelIndicators: {
     loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
+      userImpacting=true,
       featureCategory='pages',
       stageMappings={
         main: { backends: ['pages_http'], toolingLinks: [] },
@@ -27,6 +28,7 @@ metricsCatalog.serviceDefinition({
     ),
 
     loadbalancer_https: haproxyComponents.haproxyL4LoadBalancer(
+      userImpacting=true,
       featureCategory='pages',
       stageMappings={
         main: { backends: ['pages_https'], toolingLinks: [] },
@@ -36,6 +38,7 @@ metricsCatalog.serviceDefinition({
     ),
 
     server: {
+      userImpacting: true,
       featureCategory: 'pages',
       description: |||
         Aggregation of most web requests into the GitLab Pages process.

@@ -23,6 +23,7 @@ metricsCatalog.serviceDefinition({
   disableOpsRatePrediction: true,
   serviceLevelIndicators: {
     thanos_query: {
+      userImpacting: false,
       featureCategory: 'not_owned',
       team: 'sre_observability',
       description: |||
@@ -64,6 +65,7 @@ metricsCatalog.serviceDefinition({
     },
 
     public_dashboards_thanos_query: {
+      userImpacting: false,
       featureCategory: 'not_owned',
       team: 'sre_observability',
       description: |||
@@ -106,6 +108,7 @@ metricsCatalog.serviceDefinition({
     },
 
     thanos_store: {
+      userImpacting: false,
       featureCategory: 'not_owned',
       team: 'sre_observability',
       description: |||
@@ -151,6 +154,7 @@ metricsCatalog.serviceDefinition({
     },
 
     thanos_compactor: {
+      userImpacting: false,
       featureCategory: 'not_owned',
       team: 'sre_observability',
       description: |||
@@ -188,6 +192,7 @@ metricsCatalog.serviceDefinition({
 
     // Prometheus Alert Manager Sender operations
     prometheus_alert_sender: {
+      userImpacting: true,
       featureCategory: 'not_owned',
       team: 'sre_observability',
       description: |||
@@ -218,6 +223,7 @@ metricsCatalog.serviceDefinition({
     },
 
     thanos_rule_alert_sender: {
+      userImpacting: true,
       featureCategory: 'not_owned',
       team: 'sre_observability',
       description: |||
@@ -253,6 +259,7 @@ metricsCatalog.serviceDefinition({
     },
 
     grafana: {
+      userImpacting: true,
       featureCategory: 'not_owned',
       team: 'sre_observability',
       description: |||
@@ -291,11 +298,13 @@ metricsCatalog.serviceDefinition({
     // This component represents the Google Load Balancer in front
     // of the public Grafana instance at dashboards.gitlab.com
     public_grafana_googlelb: googleLoadBalancerComponents.googleLoadBalancer(
+      userImpacting=false,
       loadBalancerName='ops-dashboards-com',
       projectId='gitlab-ops',
     ),
 
     prometheus: {
+      userImpacting: true,
       featureCategory: 'not_owned',
       team: 'sre_observability',
       description: |||
@@ -340,6 +349,7 @@ metricsCatalog.serviceDefinition({
     // This component represents rule evaluations in
     // Prometheus and thanos ruler
     rule_evaluation: {
+      userImpacting: true,
       featureCategory: 'not_owned',
       team: 'sre_observability',
       description: |||
@@ -365,6 +375,7 @@ metricsCatalog.serviceDefinition({
     // Trickster is a prometheus caching layer that serves requests to our
     // public Grafana instance
     trickster: {
+      userImpacting: false,
       featureCategory: 'not_owned',
       team: 'sre_observability',
       description: |||

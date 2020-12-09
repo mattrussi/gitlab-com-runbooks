@@ -53,6 +53,7 @@ metricsCatalog.serviceDefinition({
   },
   serviceLevelIndicators: {
     loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
+      userImpacting=true,
       featureCategory='not_owned',
       team='sre_datastores',
       stageMappings={
@@ -67,6 +68,7 @@ metricsCatalog.serviceDefinition({
     ),
 
     loadbalancer_ssh: haproxyComponents.haproxyL4LoadBalancer(
+      userImpacting=true,
       featureCategory='not_owned',
       team='sre_datastores',
       stageMappings={
@@ -82,6 +84,7 @@ metricsCatalog.serviceDefinition({
     ),
 
     workhorse: {
+      userImpacting: true,
       featureCategory: 'not_owned',
       team: 'workhorse',
       description: |||
@@ -138,6 +141,7 @@ metricsCatalog.serviceDefinition({
      * that other Git/Workhorse traffic
      */
     workhorse_auth_api: {
+      userImpacting: true,
       featureCategory: 'not_owned',
       team: 'workhorse',
       description: |||
@@ -183,6 +187,7 @@ metricsCatalog.serviceDefinition({
 
 
     puma: {
+      userImpacting: true,
       featureCategory: 'not_owned',
       team: 'sre_datastores',
       description: |||
@@ -217,6 +222,7 @@ metricsCatalog.serviceDefinition({
     },
 
     gitlab_shell: {
+      userImpacting: true,
       featureCategory: 'not_owned',
       team: 'sre_datastores',
       description: |||

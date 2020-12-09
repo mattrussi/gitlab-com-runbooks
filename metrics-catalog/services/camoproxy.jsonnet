@@ -16,6 +16,7 @@ metricsCatalog.serviceDefinition({
   },
   serviceLevelIndicators: {
     loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
+      userImpacting=true,
       featureCategory='not_owned',
       team='sre_coreinfra',
       stageMappings={
@@ -25,6 +26,7 @@ metricsCatalog.serviceDefinition({
     ),
 
     server: {
+      userImpacting: true,
       featureCategory: 'not_owned',
       team: 'sre_coreinfra',
       description: |||
