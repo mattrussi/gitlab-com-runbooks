@@ -17,6 +17,7 @@ metricsCatalog.serviceDefinition({
   },
   serviceLevelIndicators: {
     gitlab_zone: {
+      userImpacting: false,  // Low until CF exporter metric quality increases https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10294
       featureCategory: 'not_owned',
       team: 'sre_coreinfra',
       description: |||
@@ -41,6 +42,7 @@ metricsCatalog.serviceDefinition({
     },
     // The "gitlab.net" zone
     gitlab_net_zone: {
+      userImpacting: false,  // Low until CF exporter metric quality increases https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10294
       featureCategory: 'not_owned',
       team: 'sre_coreinfra',
       description: |||

@@ -14,7 +14,7 @@ local validateHasField(object, field, message) =
   if std.objectHas(object, field) then
     object
   else
-    std.assertEqual(object, { __assert: message });
+    std.assertEqual(true, { __assert: message });
 
 local validateAndApplySLIDefaults(sliName, component) =
   // All components must have a requestRate measurement, since
@@ -24,6 +24,8 @@ local validateAndApplySLIDefaults(sliName, component) =
   validateHasField(component, 'requestRate', '%s component requires a requestRate measurement' % [sliName])
   +
   validateHasField(component, 'significantLabels', '%s component requires a significantLabels attribute' % [sliName])
+  +
+  validateHasField(component, 'userImpacting', '%s component requires a userImpacting attribute' % [sliName])
   {
     name: sliName,
   };

@@ -17,6 +17,7 @@ metricsCatalog.serviceDefinition({
   disableOpsRatePrediction: true,
   serviceLevelIndicators: {
     loadbalancer: {
+      userImpacting: false,  // This HAProxy backend is also monitored in `web-pages`, so make it non userImpacting
       featureCategory: 'pages',
       description: |||
         This SLI models requests passing through the loadbalancer in front of the pages service.

@@ -39,6 +39,7 @@ metricsCatalog.serviceDefinition({
   },
   serviceLevelIndicators: {
     loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
+      userImpacting=true,
       featureCategory='container_registry',
       stageMappings={
         main: { backends: ['registry'], toolingLinks: [] },
@@ -48,6 +49,7 @@ metricsCatalog.serviceDefinition({
     ),
 
     server: {
+      userImpacting: true,
       featureCategory: 'container_registry',
       description: |||
         Aggregation of all registry requests for registry.gitlab.com.
@@ -80,6 +82,7 @@ metricsCatalog.serviceDefinition({
     },
 
     storage: {
+      userImpacting: true,
       featureCategory: 'container_registry',
       description: |||
         Aggregation of all container registry GCS storage operations.

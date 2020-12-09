@@ -71,10 +71,7 @@ local sidekiqThanosAlerts = [
     },
     annotations: {
       title: 'A Sidekiq queue is no longer being processed.',
-      description: |||
-        Sidekiq queue {{ $labels.queue }} in shard {{ $labels.shard }} is no
-        longer being processed.
-      |||,
+      description: 'Sidekiq queue {{ $labels.queue }} in shard {{ $labels.shard }} is no longer being processed.',
       runbook: 'docs/sidekiq/sidekiq-queue-not-being-processed.md',
       grafana_dashboard_id: 'sidekiq-queue-detail/sidekiq-queue-detail',
       grafana_panel_id: stableIds.hashStableId('request-rate'),
