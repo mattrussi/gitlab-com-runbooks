@@ -6,6 +6,7 @@ groups:
     for: 5h
     labels:
       severity: s4
+      incident_project: gitlab.com/gitlab-com/gl-infra/infrastructure
       alert_type: cause
     annotations:
       description: Check failed chef executions on host {{ $labels.fqdn }}
