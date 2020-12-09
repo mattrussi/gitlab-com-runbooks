@@ -12,6 +12,7 @@ metricsCatalog.serviceDefinition({
   },
   serviceLevelIndicators: {
     service: {
+      userImpacting: true,
       featureCategory: 'not_owned',
       team: 'sre_datastores',
       description: |||

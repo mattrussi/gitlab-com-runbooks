@@ -14,6 +14,7 @@ metricsCatalog.serviceDefinition({
   },
   serviceLevelIndicators: {
     elasticsearch_searching: {
+      userImpacting: false,
       featureCategory: 'not_owned',
       team: 'sre_observability',
       description: |||
@@ -30,6 +31,7 @@ metricsCatalog.serviceDefinition({
     },
 
     elasticsearch_indexing: {
+      userImpacting: false,
       featureCategory: 'not_owned',
       team: 'sre_observability',
       description: |||
@@ -48,6 +50,7 @@ metricsCatalog.serviceDefinition({
     // This component represents the Google Load Balancer in front
     // of logs.gitlab.net instance
     kibana_googlelb: googleLoadBalancerComponents.googleLoadBalancer(
+      userImpacting=false,
       loadBalancerName='ops-prod-proxy',
       projectId='gitlab-ops',
     ),
@@ -55,6 +58,7 @@ metricsCatalog.serviceDefinition({
     // Stackdriver component represents log messages
     // ingested in Google Stackdrive Logging in GCP
     stackdriver: {
+      userImpacting: false,
       featureCategory: 'not_owned',
       team: 'sre_observability',
       description: |||
@@ -75,6 +79,7 @@ metricsCatalog.serviceDefinition({
     // This component tracks fluentd log output
     // across the entire fleet
     fluentd_log_output: {
+      userImpacting: false,
       featureCategory: 'not_owned',
       team: 'sre_observability',
       description: |||

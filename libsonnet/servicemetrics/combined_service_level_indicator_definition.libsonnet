@@ -13,6 +13,7 @@ local combined = metricsCatalog.combined;
 // This allows different components to be specific for different stages (for example). This
 // is specifically useful for loadbalancers
 local combinedServiceLevelIndicatorDefinition(
+  userImpacting,
   components,
   featureCategory,
   description,
@@ -27,6 +28,7 @@ local combinedServiceLevelIndicatorDefinition(
 
       {
         name: componentName,
+        userImpacting: userImpacting,
         featureCategory: featureCategory,
         description: description,
         team: team,

@@ -22,6 +22,7 @@ metricsCatalog.serviceDefinition({
   },
   serviceLevelIndicators: {
     mainHttpServices: {
+      userImpacting: false,  // HAproxy backends are monitored alongside their respective services, so here we keep as not user impacting
       staticLabels: {
         stage: 'main',
       },
@@ -50,6 +51,7 @@ metricsCatalog.serviceDefinition({
     },
 
     cnyHttpServices: {
+      userImpacting: false,  // HAproxy backends are monitored alongside their respective services, so here we keep as not user impacting
       staticLabels: {
         stage: 'cny',
       },
@@ -78,6 +80,7 @@ metricsCatalog.serviceDefinition({
     },
 
     sshServices: {
+      userImpacting: false,  // HAproxy backends are monitored alongside their respective services, so here we keep as not user impacting
       apdex: histogramApdex(
         histogram='haproxy_ssh_request_duration_seconds_bucket',
         selector='type="frontend"',

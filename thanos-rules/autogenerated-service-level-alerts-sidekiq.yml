@@ -34,6 +34,7 @@ groups:
       rules_domain: general
       severity: s2
       slo_alert: 'yes'
+      user_impacting: 'yes'
     expr: |
       (
         (
@@ -92,6 +93,7 @@ groups:
       rules_domain: general
       severity: s2
       slo_alert: 'yes'
+      user_impacting: 'yes'
     expr: |
       (
         (
@@ -147,6 +149,7 @@ groups:
       rules_domain: general
       severity: s2
       slo_alert: 'yes'
+      user_impacting: 'yes'
     expr: |
       (
         (
@@ -205,6 +208,7 @@ groups:
       rules_domain: general
       severity: s2
       slo_alert: 'yes'
+      user_impacting: 'yes'
     expr: |
       (
         (
@@ -260,6 +264,7 @@ groups:
       rules_domain: general
       severity: s2
       slo_alert: 'yes'
+      user_impacting: 'no'
     expr: |
       (
         (
@@ -318,6 +323,7 @@ groups:
       rules_domain: general
       severity: s2
       slo_alert: 'yes'
+      user_impacting: 'no'
     expr: |
       (
         (
@@ -373,6 +379,7 @@ groups:
       rules_domain: general
       severity: s2
       slo_alert: 'yes'
+      user_impacting: 'no'
     expr: |
       (
         (
@@ -431,6 +438,7 @@ groups:
       rules_domain: general
       severity: s2
       slo_alert: 'yes'
+      user_impacting: 'no'
     expr: |
       (
         (
@@ -486,6 +494,7 @@ groups:
       rules_domain: general
       severity: s2
       slo_alert: 'yes'
+      user_impacting: 'no'
     expr: |
       (
         (
@@ -544,6 +553,7 @@ groups:
       rules_domain: general
       severity: s2
       slo_alert: 'yes'
+      user_impacting: 'no'
     expr: |
       (
         (
@@ -599,6 +609,7 @@ groups:
       rules_domain: general
       severity: s2
       slo_alert: 'yes'
+      user_impacting: 'yes'
     expr: |
       (
         (
@@ -657,6 +668,7 @@ groups:
       rules_domain: general
       severity: s2
       slo_alert: 'yes'
+      user_impacting: 'yes'
     expr: |
       (
         (
@@ -712,6 +724,7 @@ groups:
       rules_domain: general
       severity: s2
       slo_alert: 'yes'
+      user_impacting: 'yes'
     expr: |
       (
         (
@@ -770,6 +783,7 @@ groups:
       rules_domain: general
       severity: s2
       slo_alert: 'yes'
+      user_impacting: 'yes'
     expr: |
       (
         (
@@ -825,6 +839,7 @@ groups:
       rules_domain: general
       severity: s2
       slo_alert: 'yes'
+      user_impacting: 'yes'
     expr: |
       (
         (
@@ -883,6 +898,7 @@ groups:
       rules_domain: general
       severity: s2
       slo_alert: 'yes'
+      user_impacting: 'yes'
     expr: |
       (
         (
@@ -938,6 +954,7 @@ groups:
       rules_domain: general
       severity: s2
       slo_alert: 'yes'
+      user_impacting: 'yes'
     expr: |
       (
         (
@@ -996,6 +1013,7 @@ groups:
       rules_domain: general
       severity: s2
       slo_alert: 'yes'
+      user_impacting: 'yes'
     expr: |
       (
         (
