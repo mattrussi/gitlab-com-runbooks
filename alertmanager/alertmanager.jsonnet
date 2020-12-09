@@ -41,7 +41,7 @@ local webhookChannels =
   [
     {
       name: 'issue:' + s.name,
-      url: 'https://' + s.name + '/prometheus/alerts/notify.json',
+      url: 'https://' + s.name + '/alerts/notify.json',
       sendResolved: true,
       httpConfig: {
         bearer_token: s.token,
