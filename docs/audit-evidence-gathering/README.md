@@ -12,7 +12,7 @@
 #### Gathering the list of people with production access
 
 clone down [chef repo](https://ops.gitlab.net/gitlab-cookbooks/chef-repo)
-Rails console: `ruby bin\prod_access_report.rb -a rails-console`
+Rails console: `ruby bin/prod_access_report.rb -a rails-console`
 DB console: `ruby bin/prod_access_report.rb -a db-console`
 
 ### GCP access to gitlab-production
