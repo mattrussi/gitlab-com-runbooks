@@ -11,6 +11,7 @@ metricsCatalog.serviceDefinition({
   },
   serviceLevelIndicators: {
     http: {
+      userImpacting: false,
       feature_category: 'not_owned',
       team: 'sre_observability',
       description: |||
@@ -39,7 +40,9 @@ metricsCatalog.serviceDefinition({
 
       toolingLinks: [],  // TODO
     },
+
     async_jobs: {
+      userImpacting: false,
       feature_category: 'not_owned',
       team: 'sre_observability',
       description: |||

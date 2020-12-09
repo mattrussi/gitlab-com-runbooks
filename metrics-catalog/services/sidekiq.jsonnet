@@ -66,6 +66,7 @@ metricsCatalog.serviceDefinition({
     ['shard_' + std.strReplace(shard.name, '-', '_')]: {
       local shardSelector = { shard: shard.name },
 
+      userImpacting: shard.userImpacting,
       featureCategory: 'not_owned',
       team: 'scalability',
       description: |||

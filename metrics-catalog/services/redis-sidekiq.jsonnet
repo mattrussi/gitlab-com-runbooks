@@ -11,6 +11,7 @@ metricsCatalog.serviceDefinition({
   },
   serviceLevelIndicators: {
     rails_redis_client: {
+      userImpacting: true,
       featureCategory: 'not_owned',
       team: 'sre_observability',
       description: |||
@@ -42,6 +43,7 @@ metricsCatalog.serviceDefinition({
     },
 
     primary_server: {
+      userImpacting: true,
       featureCategory: 'not_owned',
       team: 'sre_observability',
       description: |||
@@ -61,6 +63,7 @@ metricsCatalog.serviceDefinition({
       ],
     },
     secondary_servers: {
+      userImpacting: true,  // userImpacting for data redundancy reasons
       featureCategory: 'not_owned',
       team: 'sre_observability',
       description: |||

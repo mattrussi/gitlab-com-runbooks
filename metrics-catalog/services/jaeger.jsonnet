@@ -11,6 +11,7 @@ metricsCatalog.serviceDefinition({
   },
   serviceLevelIndicators: {
     jaeger_agent: {
+      userImpacting: false,
       requestRate: rateMetric(
         counter='jaeger_agent_reporter_spans_submitted_total',
         selector='type="jaeger"',
@@ -25,6 +26,7 @@ metricsCatalog.serviceDefinition({
     },
 
     jaeger_collector: {
+      userImpacting: false,
       apdex: histogramApdex(
         histogram='jaeger_collector_save_latency_bucket',
         selector='type="jaeger"',
@@ -45,6 +47,7 @@ metricsCatalog.serviceDefinition({
     },
 
     jaeger_query: {
+      userImpacting: false,
       apdex: histogramApdex(
         histogram='jaeger_query_latency_bucket',
         selector='type="jaeger"',

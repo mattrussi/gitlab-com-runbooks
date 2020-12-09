@@ -38,6 +38,7 @@ metricsCatalog.serviceDefinition({
   },
   serviceLevelIndicators: {
     goserver: {
+      userImpacting: true,
       featureCategory: 'gitaly',
       team: 'sre_datastores',
       description: |||
@@ -73,6 +74,7 @@ metricsCatalog.serviceDefinition({
     // Since it can also fail in other ways (due to upstream issues on hooks)
     // its useful to treat these methods as a separate component
     goserver_op_service: {
+      userImpacting: true,
       featureCategory: 'gitaly',
       team: 'sre_datastores',
       description: |||
@@ -106,6 +108,7 @@ metricsCatalog.serviceDefinition({
     },
 
     gitalyruby: {
+      userImpacting: true,
       featureCategory: 'gitaly',
       team: 'sre_datastores',
       description: |||

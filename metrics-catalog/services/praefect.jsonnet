@@ -17,6 +17,7 @@ metricsCatalog.serviceDefinition({
   },
   serviceLevelIndicators: {
     proxy: {
+      userImpacting: true,
       featureCategory: 'gitaly',
       team: 'sre_datastores',
       description: |||
@@ -54,6 +55,7 @@ metricsCatalog.serviceDefinition({
     // * https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/11027
     // * https://gitlab.com/gitlab-org/gitaly/-/issues/2915
     replicator_queue: {
+      userImpacting: false,
       featureCategory: 'gitaly',
       team: 'sre_datastores',
       description: |||
@@ -76,6 +78,7 @@ metricsCatalog.serviceDefinition({
     },
 
     praefect_cloudsql: {
+      userImpacting: true,
       featureCategory: 'gitaly',
       team: 'sre_datastores',
       description: |||

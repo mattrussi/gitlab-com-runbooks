@@ -19,6 +19,7 @@ metricsCatalog.serviceDefinition({
   },
   serviceLevelIndicators: {
     polling: {
+      userImpacting: true,
       featureCategory: 'runner',
       team: 'sre_coreinfra',
       description: |||
@@ -53,6 +54,7 @@ metricsCatalog.serviceDefinition({
     },
 
     shared_runner_queues: {
+      userImpacting: true,
       featureCategory: 'runner',
       team: 'sre_coreinfra',
       description: |||
@@ -97,6 +99,7 @@ metricsCatalog.serviceDefinition({
     // Instead, track this as a component of the CI service
     // https://gitlab.com/gitlab-org/gitlab/blob/master/app/services/ci/archive_trace_service.rb
     trace_archiving_ci_jobs: {
+      userImpacting: true,
       featureCategory: 'continuous_integration',
       team: 'sre_coreinfra',
       description: |||

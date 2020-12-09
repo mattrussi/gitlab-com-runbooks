@@ -17,6 +17,7 @@ local formatConfig = multiburnFactors {
 
 local labelsForSLI(sli) =
   local labels = {
+    user_impacting: if sli.userImpacting then 'yes' else 'no',
     feature_category: std.asciiLower(sli.featureCategory),
     product_stage: std.asciiLower(stages.findStageNameForFeatureCategory(sli.featureCategory)),
     product_stage_group: std.asciiLower(stages.findStageGroupNameForFeatureCategory(sli.featureCategory)),
