@@ -22,7 +22,7 @@ from the command line with gcloud installed:
 
 ### Production Server list (Server lists for Bastions, Production Servers, Database servers)
 
-Clone down chef repo and:
+Clone down [chef repo](https://ops.gitlab.net/gitlab-cookbooks/chef-repo) and:
 Find the right roles for the 3 above categories.
 Run the commands:
 - $ knife search node role:gprd-base-bastion -i
