@@ -6,7 +6,6 @@ groups:
       sum by (integration) (
         rate(alertmanager_notifications_failed_total[2m])
       ) > 0
-    for: 20m
     labels:
       pager: pagerduty
       service: alertmanager
