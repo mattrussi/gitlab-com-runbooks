@@ -20,7 +20,7 @@ from the command line with gcloud installed:
 1. `gcloud beta identity groups memberships list --group-email="gcp-ops-sg@gitlab.com" |grep id|sed 's/id://g'`
 2. `gcloud beta identity groups memberships list --group-email="gcp-owners-sg@gitlab.com" |grep id|sed 's/id://g'` 
 
-### Production Server list (Server lists for Bastions, Production Servers, Database servers)
+### Production Server list (Server lists for bastions, production servers, database servers)
 
 Clone down [chef repo](https://ops.gitlab.net/gitlab-cookbooks/chef-repo) and:
 Find the right roles for the 3 above categories.
