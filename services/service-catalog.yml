@@ -2972,6 +2972,7 @@ services:
       - https://www.jaegertracing.io/
       - https://github.com/jaegertracing/jaeger
       - https://github.com/jaegertracing/jaeger-operator
+      - https://docs.gitlab.com/ee/development/distributed_tracing.html
     slx:
     documents:
       design:
@@ -2981,6 +2982,7 @@ services:
         - https://www.jaegertracing.io/docs/latest/
       security: https://www.jaegertracing.io/docs/latest/security/
     dependencies:
+      - service: elasticsearch
     configurations:
       - config_name: Tanka deployment
         location: https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments/-/tree/master/environments/jaeger
@@ -3012,6 +3014,7 @@ services:
   observability:
     monitors:
       primary_grafana_dashboard: "jaeger-main/jaeger-overview"
+
 - name: woodhouse
   tier: sv
   friendly_name: Woodhouse
