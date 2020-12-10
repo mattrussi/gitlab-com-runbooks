@@ -115,6 +115,7 @@ module Storage
         limit: -1,
         use_tty_display_settings: false,
         projects: [],
+        custom_attributes: {},
         excluded_projects: [],
         logdir_path: File.expand_path(File.join(__dir__, 'storage_migrations')),
         migration_logfile_name: 'migrated_projects_%{date}.log',
@@ -471,6 +472,7 @@ module Storage
         define_projects_option
         define_json_option
         define_csv_option
+        define_custom_attributes_option
         define_move_amount_option
         define_skip_option
         define_per_page_option
@@ -555,6 +557,19 @@ module Storage
             project
           end
           @options[:projects].concat(projects)
+        end
+      end
+
+      def define_custom_attributes_option
+        description = 'Select projects to migrate by admin custom attributes'
+        @parser.on('--custom-attrs=<key=value>', description) do |key_val|
+          key, val = key_val.split('=')
+          if key == '' || val.nil?
+            message = 'Argument given for --custom-attrs must be in the format of key=value'
+            raise OptionParser::InvalidArgument, message
+          end
+
+          @options[:custom_attributes][key] = val
         end
       end
 
@@ -892,8 +907,11 @@ module Storage
       project
     end
 
-    # Execute remote script to fetch largest projects
     def fetch_largest_projects(next_page = false)
+      # A nil entry in @pagination_indices means we have reached the end,
+      # we need to return or we would be stuck in an infinite requests loop.
+      return [] if @pagination_indices.key?(__method__) && @pagination_indices[__method__].nil?
+
       source_shard = options[:source_shard]
       url = get_api_url(:projects_api_uri)
       parameters = {
@@ -902,6 +920,11 @@ module Storage
         repository_storage: source_shard,
         per_page: options[:projects_per_page]
       }
+
+      @options[:custom_attributes].each do |key, val|
+        parameters["custom_attributes[#{key}]"] = val
+      end
+
       parameters['page'] = @pagination_indices[__method__] if @pagination_indices.include?(__method__)
       projects, error, status, headers = gitlab_api_client.get(url, parameters: parameters)
       raise error unless error.nil?
