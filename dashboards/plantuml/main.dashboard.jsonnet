@@ -1,24 +1,20 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
-local dashboard = grafana.dashboard;
-
-local commonAnnotations = import 'grafana/common_annotations.libsonnet';
-local templates = import 'grafana/templates.libsonnet';
-local layout = import 'grafana/layout.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
+local commonAnnotations = import 'grafana/common_annotations.libsonnet';
+local layout = import 'grafana/layout.libsonnet';
+local templates = import 'grafana/templates.libsonnet';
+local serviceDashboard = import 'service_dashboard.libsonnet';
+
 local heatmapPanel = grafana.heatmapPanel;
 local row = grafana.row;
 local text = grafana.text;
 
-basic.dashboard(
-  'Overview',
-  tags=['plantuml', 'overview'],
-)
-.addTemplate(templates.gkeCluster)
+serviceDashboard.overview('plantuml', 'sv')
 .addPanel(
   row.new(title='Stackdriver Logs'),
   gridPos={
     x: 0,
-    y: 0,
+    y: 1000,
     w: 24,
     h: 1,
   }
@@ -28,7 +24,7 @@ basic.dashboard(
     basic.timeseries(
       title='Error messages',
       description='Stackdriver Errors',
-      query='sum(stackdriver_gke_container_logging_googleapis_com_log_entry_count{severity="ERROR", cluster_name="$cluster", namespace_id="plantuml"}) by (container) / 60',
+      query='sum(stackdriver_gke_container_logging_googleapis_com_log_entry_count{severity="ERROR", namespace_id="plantuml"}) by (cluster, container) / 60',
       legendFormat='{{ container }}',
       format='ops',
       interval='1m',
@@ -40,7 +36,7 @@ basic.dashboard(
     basic.timeseries(
       title='Info messages',
       description='Stackdriver Errors',
-      query='sum(stackdriver_gke_container_logging_googleapis_com_log_entry_count{severity="INFO", cluster_name="$cluster", namespace_id="plantuml"}) by (container) / 60',
+      query='sum(stackdriver_gke_container_logging_googleapis_com_log_entry_count{severity="INFO", namespace_id="plantuml"}) by (cluster, container) / 60',
       legendFormat='{{ container }}',
       format='ops',
       interval='1m',
@@ -50,13 +46,13 @@ basic.dashboard(
       linewidth=2
     ),
 
-  ], cols=2, rowHeight=10, startRow=1)
+  ], cols=2, rowHeight=10, startRow=1001)
 )
 .addPanel(
   row.new(title='Stackdriver LoadBalancer'),
   gridPos={
     x: 0,
-    y: 1000,
+    y: 2000,
     w: 24,
     h: 1,
   }
@@ -111,14 +107,14 @@ basic.dashboard(
       legend_show=true,
       linewidth=2
     ),
-  ], cols=2, rowHeight=10, startRow=1001)
+  ], cols=2, rowHeight=10, startRow=2001)
 )
 
 .addPanel(
   row.new(title='Stackdriver LoadBalancer Latencies'),
   gridPos={
     x: 0,
-    y: 2000,
+    y: 3000,
     w: 24,
     h: 1,
   }
@@ -173,5 +169,6 @@ basic.dashboard(
       legend_show=true,
       linewidth=2
     ),
-  ], cols=2, rowHeight=10, startRow=2001)
+  ], cols=2, rowHeight=10, startRow=3001)
 )
+.overviewTrailer()

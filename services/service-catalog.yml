@@ -1596,6 +1596,62 @@ services:
       grafana_folder: RNfEDpLmz
       primary_grafana_dashboard: "patroni-main/patroni-overview"
 
+- name: plantuml
+  tier: sv
+  friendly_name: PlantUML
+  infra_owner: sre_coreinfra
+  label: Service:PlantUML
+  business:
+    requirement: PlantUML is used to render UML diagrams in the GitLab application
+    customers:
+      - GitLab.com customers
+    SLA:
+      availability:    # Availability SLA promised to customers
+      response_time:   # Response time for inquiries or issues
+                       # relating this service
+    business_value: PlantUML is used to render unified modeling language (UML) diagrams.
+  technical:
+    project:
+      - https://plantuml.com/
+    slx:
+    documents:
+      design:
+      architecture:  https://docs.gitlab.com/ee/administration/integration/plantuml.html
+      readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/blob/master/plantuml/overview.md
+      service:
+      security: https://www.postgresql.org/support/security/
+    dependencies:
+    components:
+    configurations:
+    chef_roles:
+    scalability:
+      bound:
+      scalable:
+    security:
+      security_reviewed:
+      data_classification:
+      security_incidents:
+    logging:
+      - name: Access Logs
+        permalink: 'https://console.cloud.google.com/logs/query;query=resource.labels.target_proxy_name%3D%22k8s-tps-plantuml-plantuml--58df01f69d082883%22%0Aresource.type%3D%22http_load_balancer%22;timeRange=PT30M?project=gitlab-production'
+  infrastructure:
+    provider: gcp
+    architecture:
+    provisioning:
+    accesses:
+      - account_name:
+        access_type:
+        reviewed:
+  operations:
+    maintenance:
+    runbooks: []
+    playbooks: []
+    error_budget:
+  observability:
+    monitors:
+      grafana_folder: plantuml
+      primary_grafana_dashboard: "plantuml-main/plantuml-overview"
+
 - name: postgres-archive
   tier: db
   friendly_name: Postgres DR Archive
