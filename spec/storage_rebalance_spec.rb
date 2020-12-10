@@ -171,6 +171,33 @@ describe ::Storage::Rebalancer do
         # it 'selects the projects from the configured console node'
       end
       # context 'when the projects are not given'
+
+      context 'when the destination shard is not given' do
+        let(:test_node_02) { nil }
+
+        it 'lets the application select the destination shard' do
+          expect(subject.log).to receive(:info)
+            .with('Option --move-amount not specified, will only move 1 project...')
+          expect(subject.log).to receive(:info).with('Fetching largest projects')
+          expect(subject.log).to receive(:info).with("Filtering #{test_migration_failures.length} " \
+            "known failed project repositories")
+          expect(subject.log).to receive(:info).with(::Storage::RebalanceScript::SEPARATOR)
+          expect(subject.log).to receive(:info).with("Scheduling repository replication to " \
+            "application-selected shard for project id: #{test_project_id}")
+          expect(subject.log).to receive(:info).with("  Project path: #{test_project_path_with_namespace}")
+          expect(subject.log).to receive(:info).with("  Current shard name: #{test_node_01}")
+          expect(subject.log).to receive(:info).with("  Disk path: #{test_project_disk_path}")
+          expect(subject.log).to receive(:info).with("  Repository size: 1.0 GB")
+          expect(subject.log).to receive(:info).with("[Dry-run] Would have scheduled repository " \
+            "replication for project id: #{test_project_id}")
+          expect(subject.log).to receive(:info).with(::Storage::RebalanceScript::SEPARATOR)
+          expect(subject.log).to receive(:info).with('[Dry-run] Would have processed 1.0 GB of data')
+          expect(subject.log).to receive(:info).with('Done')
+          expect(subject.rebalance).to be_nil
+        end
+        # let 'lets the application select the destination shard'
+      end
+      # context 'when the destination shard is not given'
     end
     # context 'when the --dry-run option is true'
 
@@ -251,6 +278,45 @@ describe ::Storage::Rebalancer do
         # it 'selects the projects from the configured console node'
       end
       # context 'when the projects are not given'
+
+      context 'when the destination shard is not given' do
+        let(:test_node_02) { nil }
+
+        it 'lets the application select the destination shard' do
+          allow(subject).to receive(:create_repository_storage_move).and_return(test_move)
+          allow(subject).to receive(:fetch_repository_storage_move).and_return(test_move)
+
+          expect(subject.log).to receive(:info)
+            .with('Option --move-amount not specified, will only move 1 project...')
+          expect(subject.log).to receive(:info).with('Fetching largest projects')
+          expect(subject.log).to receive(:info).with("Filtering #{test_migration_failures.length} " \
+            "known failed project repositories")
+          expect(subject.log).to receive(:info).with(::Storage::RebalanceScript::SEPARATOR)
+          expect(subject.log).to receive(:info).with("Scheduling repository replication to " \
+            "application-selected shard for project id: #{test_project_id}")
+          expect(subject.log).to receive(:info).with("  Project path: #{test_project_path_with_namespace}")
+          expect(subject.log).to receive(:info).with("  Current shard name: #{test_node_01}")
+          expect(subject.log).to receive(:info).with("  Disk path: #{test_project_disk_path}")
+          expect(subject.log).to receive(:info).with("  Repository size: 1.0 GB")
+          expect(subject).to receive(:create_repository_storage_move).with(test_project, test_node_02).and_return(test_move)
+          expect(subject).to receive(:loop_with_progress_until).and_yield.and_yield
+          expect(subject).to receive(:fetch_project).and_return(test_full_project)
+          allow(subject).to receive(:fetch_repository_storage_moves).and_return(test_moves)
+          allow(subject).to receive(:fetch_repository_storage_moves).and_return(test_moves)
+          expect(subject.log).to receive(:info).with("Success moving project id: #{test_project_id}")
+          expect(subject).to receive(:fetch_project).and_return(test_updated_full_project)
+          expect(test_migration_logger).to receive(:info).with(test_artifact.to_json)
+          expect(subject.log).to receive(:info).with("Migrated project id: #{test_project_id}")
+          expect(subject.log).to receive(:info).with(::Storage::RebalanceScript::SEPARATOR)
+          expect(subject.log).to receive(:info).with('Done')
+          expect(subject.log).to receive(:info).with('Processed 1.0 GB of data')
+          expect(subject.log).to receive(:info).with("Finished migrating projects from #{test_node_01} to different shards")
+          expect(subject.log).to receive(:info).with('No errors encountered during migration')
+          expect(subject.rebalance).to be_nil
+        end
+        # let 'lets the application select the destination shard'
+      end
+      # context 'when the destination shard is not given'
     end
     # context 'when the --dry-run option is false'
   end
