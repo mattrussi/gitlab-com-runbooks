@@ -6,6 +6,9 @@ stages:
   - deploy-rules-production
   - scheduled
 
+variables:
+  BUNDLER_VERSION: 2.1.4
+
 default:
   image: "${CI_REGISTRY_IMAGE}:latest"
   tags:
@@ -97,14 +100,14 @@ test-rules:
     - .default-job-rules
   stage: test
   script:
-    - gem install bundler --no-document
+    - gem install bundler --no-document -v $BUNDLER_VERSION
     - bundle install --with=test
     - bundle exec ./bin/create_kubernetes_rules.rb --create --validate
 
 danger:
   stage: test
   script:
-    - gem install bundler --no-document
+    - gem install bundler --no-document -v $BUNDLER_VERSION
     - bundle install --with=test
     - bundle exec danger --fail-on-errors=true --verbose
   only:
@@ -117,7 +120,7 @@ rubocop:
   extends: .default-job-rules
   stage: test
   script:
-    - gem install bundler --no-document
+    - gem install bundler --no-document -v $BUNDLER_VERSION
     - bundle install --with=test
     - bundle exec rubocop
 
@@ -125,7 +128,7 @@ rspec:
   extends: .default-job-rules
   stage: test
   script:
-    - gem install bundler --no-document
+    - gem install bundler --no-document -v $BUNDLER_VERSION
     - bundle install --with=test
     - bundle exec rspec
 
