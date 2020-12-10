@@ -76,12 +76,14 @@ local dashboard(groupKey) =
   .addPanels(
     layout.rowGrid('Rails request rates', [
       railsRequestRate('web'),
+      railsRequestRate('api'),
+      railsRequestRate('git'),
       grafana.text.new(
         title='Extra links',
         mode='markdown',
         content=toolingLinks.generateMarkdown([
           toolingLinks.kibana(
-            title='Rails logs',
+            title='Kibana Rails',
             index='rails',
             matches={
               'json.meta.feature_category': featureCategories,
@@ -94,12 +96,27 @@ local dashboard(groupKey) =
   .addPanels(
     layout.rowGrid('Rails error rates', [
       railsErrorRate('web'),
+      railsErrorRate('api'),
+      railsErrorRate('git'),
     ], startRow=301),
   )
   .addPanels(
     layout.rowGrid('Sidekiq jobs', [
       sidekiqJobRate('sidekiq_jobs_completion_seconds_count', 'Completion rate'),
       sidekiqJobRate('sidekiq_jobs_failed_total', 'Error rate'),
+      grafana.text.new(
+        title='Extra links',
+        mode='markdown',
+        content=toolingLinks.generateMarkdown([
+          toolingLinks.kibana(
+            title='Kibana Sidekiq',
+            index='sidekiq',
+            matches={
+              'json.meta.feature_category': featureCategories,
+            },
+          ),
+        ], { prometheusSelectorHash: {} })
+      ),
     ], startRow=401)
   ) {
     stageGroupDashboardTrailer()::
