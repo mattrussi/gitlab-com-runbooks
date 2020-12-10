@@ -109,17 +109,9 @@ groups:
       tier: sv
       type: registry
     expr: |
-      (
-        sum by (environment,stage) (
-          rate(registry_storage_action_seconds_bucket{le="1"}[1m])
-        )
-        +
-        sum by (environment,stage) (
-          rate(registry_storage_action_seconds_bucket{le="2.5"}[1m])
-        )
+      sum by (environment,stage) (
+        rate(registry_storage_action_seconds_bucket{le="1"}[1m])
       )
-      /
-      2
       /
       (
         sum by (environment,stage) (
@@ -243,17 +235,9 @@ groups:
       tier: sv
       type: registry
     expr: |
-      (
-        sum by (environment,stage) (
-          rate(registry_storage_action_seconds_bucket{le="1"}[5m])
-        )
-        +
-        sum by (environment,stage) (
-          rate(registry_storage_action_seconds_bucket{le="2.5"}[5m])
-        )
+      sum by (environment,stage) (
+        rate(registry_storage_action_seconds_bucket{le="1"}[5m])
       )
-      /
-      2
       /
       (
         sum by (environment,stage) (
@@ -375,17 +359,9 @@ groups:
       tier: sv
       type: registry
     expr: |
-      (
-        sum by (environment,stage) (
-          rate(registry_storage_action_seconds_bucket{le="1"}[30m])
-        )
-        +
-        sum by (environment,stage) (
-          rate(registry_storage_action_seconds_bucket{le="2.5"}[30m])
-        )
+      sum by (environment,stage) (
+        rate(registry_storage_action_seconds_bucket{le="1"}[30m])
       )
-      /
-      2
       / on(environment,stage) group_left()
       (
         gitlab_component_apdex:weight:score_30m{component="storage",tier="sv",type="registry"} > 0
@@ -507,17 +483,9 @@ groups:
       tier: sv
       type: registry
     expr: |
-      (
-        sum by (environment,stage) (
-          rate(registry_storage_action_seconds_bucket{le="1"}[1h])
-        )
-        +
-        sum by (environment,stage) (
-          rate(registry_storage_action_seconds_bucket{le="2.5"}[1h])
-        )
+      sum by (environment,stage) (
+        rate(registry_storage_action_seconds_bucket{le="1"}[1h])
       )
-      /
-      2
       /
       (
         sum by (environment,stage) (
@@ -639,17 +607,9 @@ groups:
       tier: sv
       type: registry
     expr: |
-      (
-        sum by (environment,stage) (
-          rate(registry_storage_action_seconds_bucket{le="1"}[6h])
-        )
-        +
-        sum by (environment,stage) (
-          rate(registry_storage_action_seconds_bucket{le="2.5"}[6h])
-        )
+      sum by (environment,stage) (
+        rate(registry_storage_action_seconds_bucket{le="1"}[6h])
       )
-      /
-      2
       / on(environment,stage) group_left()
       (
         gitlab_component_apdex:weight:score_6h{component="storage",tier="sv",type="registry"} > 0
