@@ -91,8 +91,7 @@ metricsCatalog.serviceDefinition({
       apdex: histogramApdex(
         histogram='registry_storage_action_seconds_bucket',
         selector='',
-        satisfiedThreshold=1,
-        toleratedThreshold=2.5
+        satisfiedThreshold=1
       ),
 
       requestRate: rateMetric(
