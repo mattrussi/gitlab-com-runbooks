@@ -589,6 +589,13 @@
                 },
               },
             },
+            params: {
+              properties: {
+                project_id: {
+                  type: 'long',
+                },
+              },
+            },
             parent: {
               type: 'text',
               fields: {
@@ -631,9 +638,7 @@
               },
             },
             project_id: {
-              type: 'keyword',
-              ignore_above: 256,
-              store: true,
+              type: 'long',
             },
             project_ids: {
               type: 'keyword',
@@ -1158,6 +1163,13 @@
                 },
               },
             },
+            search: {
+              properties: {
+                project_id: {
+                  type: 'long',
+                },
+              },
+            },
             subscription_plan: {
               type: 'text',
               fields: {
@@ -1240,9 +1252,7 @@
           },
         },
         project_id: {
-          type: 'keyword',
-          ignore_above: 256,
-          store: true,
+          type: 'long',
         },
         project_ids: {
           type: 'keyword',
