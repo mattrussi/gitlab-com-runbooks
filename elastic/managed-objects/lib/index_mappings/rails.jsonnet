@@ -592,7 +592,13 @@
             params: {
               properties: {
                 project_id: {
-                  type: 'long',
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
                 },
               },
             },
@@ -638,7 +644,13 @@
               },
             },
             project_id: {
-              type: 'long',
+              type: 'text',
+              fields: {
+                keyword: {
+                  type: 'keyword',
+                  ignore_above: 256,
+                },
+              },
             },
             project_ids: {
               type: 'keyword',
@@ -1166,7 +1178,13 @@
             search: {
               properties: {
                 project_id: {
-                  type: 'long',
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
                 },
               },
             },
@@ -1252,7 +1270,13 @@
           },
         },
         project_id: {
-          type: 'long',
+          type: 'text',
+          fields: {
+            keyword: {
+              type: 'keyword',
+              ignore_above: 256,
+            },
+          },
         },
         project_ids: {
           type: 'keyword',
