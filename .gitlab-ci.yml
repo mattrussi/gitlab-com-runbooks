@@ -59,7 +59,7 @@ workflow:
     - ./bin/delete_orphan_kubenetes_rules.sh # Delete ophaned PrometheusRules
     - kubectl apply --namespace monitoring --filename ${CI_PROJECT_DIR}/rules-k8s/
   tags:
-    - release
+    - k8s-workloads
 
 .rules-artifacts:
   artifacts:
@@ -211,7 +211,7 @@ update-alertmanager:
   stage: deploy
   environment: ops
   tags:
-    - release
+    - k8s-workloads
   script:
     - make test-alertmanager
     - cd alertmanager
@@ -429,7 +429,7 @@ check_alerts:
     variables:
       - $PERFORM_ALERTS_CHECK
   tags:
-    - release
+    - k8s-workloads
   except:
     - schedules
 
