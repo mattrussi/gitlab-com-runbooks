@@ -30,7 +30,7 @@ We use private GKE clusters, with the control plane only accessible from within 
 - from "console servers"
 - using tunnels that go through "console servers"
 
-## Accessing the regional clusters (console servers setup)
+## Accessing clusters via console servers
 
 :warning: Do not perform any of these actions using the `root` user, nor `sudo` :warning:
 
@@ -184,9 +184,12 @@ $ kubectl config use-context gke_gitlab-staging-1_us-east1-d_gstg-us-east1-d
 $ kubectl get pods -n gitlab
 ```
 
-### GUI console
+### GUI consoles and metrics
 
-For either tunneling mechanism above, one excellent option for a graphical view into the clusters that works with both is the [Lens IDE](https://k8slens.dev/)
+When troubleshooting issues, it can often be helpful to have a graphical overview of resources within the cluster, and basic metric data.
+For more detailed and expansive metric data, we have a number of [dashboards within Grafana](https://dashboards.gitlab.net/dashboards/f/kubernetes/kubernetes).
+For either tunneling mechanism above, one excellent option for a local graphical view into the clusters that works with both is the [Lens IDE](https://k8slens.dev/).
+Alternatively, the [GKE console](https://console.cloud.google.com/kubernetes) provides access to much of the same information via a web browser, as well.
 
 # Shell access to nodes and pods
 
