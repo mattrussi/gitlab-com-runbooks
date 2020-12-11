@@ -75,9 +75,9 @@ of troubleshooting a misbehaving cluster or application.  Any changes that
 involve the use of `helm` or `k-ctl` MUST be done via the repo and CI/CD.
 :warning:**
 
-## Accessing the zonal clusters (workstation set up for tunneling) ##
+## Accessing clusters locally (workstation set up for tunneling) ##
 
-The zonal clusters must be accessed through the console servers, but they are best accessed using an ssh tunnel. We will access the clusters this way until this issues in the [access epic](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/337) are completed.
+GKE clusters must be accessed through the console servers, but they are best accessed using an ssh tunnel. We will access the clusters this way until this issues in the [access epic](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/337) are completed.
 
 There are two mechanisms you can use to access these clusters via ssh tunnel.
 
@@ -92,15 +92,21 @@ the process of switching kubernetes contexts and namespaces.
 
 Perform the below on your workstation:
 
-- [ ] Get the credentials for the zonal clusters
+- [ ] Get the credentials for the clusters
 
 ```bash
+# Staging zonal cluster
 $ gcloud container clusters get-credentials gstg-us-east1-b --region us-east1-b --project gitlab-staging-1
 $ gcloud container clusters get-credentials gstg-us-east1-c --region us-east1-c --project gitlab-staging-1
 $ gcloud container clusters get-credentials gstg-us-east1-d --region us-east1-d --project gitlab-staging-1
+
+# Production zonal cluster
 $ gcloud container clusters get-credentials gprd-us-east1-b --region us-east1-b --project gitlab-production
 $ gcloud container clusters get-credentials gprd-us-east1-c --region us-east1-c --project gitlab-production
 $ gcloud container clusters get-credentials gprd-us-east1-d --region us-east1-d --project gitlab-production
+
+# Production regional cluster
+$ gcloud container clusters get-credentials gprd-gitlab-gke --region us-east1 --project gitlab-production
 ```
 
 - [ ] Create sshuttle wrappers for initiating tunneled connections
@@ -126,6 +132,9 @@ $ sshuttle -r console-01-sv-gstg.c.gitlab-staging-1.internal '35.229.107.91/32'
 
 # kubectl config use-context gke_gitlab-staging-1_us-east1_gstg-gitlab-gke
 $ sshuttle -r console-01-sv-gstg.c.gitlab-staging-1.internal '34.73.144.43/32'
+
+# kubectl config use-context gke_gitlab-production_us-east1_gprd-gitlab-gke
+$ sshuttle -r console-01-sv-gprd.c.gitlab-production.internal '35.185.25.234/32'
 ```
 
 - [ ] Ensure you can list pods in one of the regions
@@ -140,15 +149,21 @@ $ kubectl get pods -n gitlab
 
 ### Using ssh socks proxy ###
 
-- [ ] Get credentials for the zonal clusters
+- [ ] Get credentials for the clusters
 
 ```bash
+# Staging zonal clusters
 $ gcloud container clusters get-credentials gstg-us-east1-b --region us-east1-b --project gitlab-staging-1
 $ gcloud container clusters get-credentials gstg-us-east1-c --region us-east1-c --project gitlab-staging-1
 $ gcloud container clusters get-credentials gstg-us-east1-d --region us-east1-d --project gitlab-staging-1
+
+# Production zonal clusters
 $ gcloud container clusters get-credentials gprd-us-east1-b --region us-east1-b --project gitlab-production
 $ gcloud container clusters get-credentials gprd-us-east1-c --region us-east1-c --project gitlab-production
 $ gcloud container clusters get-credentials gprd-us-east1-d --region us-east1-d --project gitlab-production
+
+# Production regional cluster
+$ gcloud container clusters get-credentials gprd-gitlab-gke --region us-east1 --project gitlab-production
 ```
 
 - [ ] SSH to a console node depending on the environment and setup a socks proxy
@@ -168,6 +183,10 @@ $ export HTTP_PROXY=socks5://localhost:1881
 $ kubectl config use-context gke_gitlab-staging-1_us-east1-d_gstg-us-east1-d
 $ kubectl get pods -n gitlab
 ```
+
+### GUI console
+
+For either tunneling mechanism above, one excellent option for a graphical view into the clusters that works with both is the [Lens IDE](https://k8slens.dev/)
 
 # Shell access to nodes and pods
 
