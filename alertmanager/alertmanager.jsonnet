@@ -245,7 +245,7 @@ local routingTree = Route(
     Route(
       receiver='issue:' + issueChannel.name,
       match={
-        env: 'gprd',
+        env: env,
         incident_project: issueChannel.name,
       },
       continue=true,
@@ -254,6 +254,7 @@ local routingTree = Route(
       repeat_interval='3d',
     )
     for issueChannel in secrets.issueChannels
+    for env in ['gprd', 'ops']
   ] + [
     /* pager=pagerduty alerts do continue */
     RouteCase(

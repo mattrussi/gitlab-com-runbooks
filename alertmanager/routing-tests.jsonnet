@@ -141,6 +141,17 @@ generateTests([
     ],
   },
   {
+    name: 'issue alert, ops environment',
+    labels: {
+      incident_project: 'gitlab.com/gitlab-com/gl-infra/infrastructure',
+      env: 'ops',
+    },
+    receivers: [
+      'issue:gitlab.com/gitlab-com/gl-infra/infrastructure',
+      'prod_alerts_slack_channel',
+    ],
+  },
+  {
     name: 'paging issue alert, gprd environment',
     labels: {
       pager: 'pagerduty',
