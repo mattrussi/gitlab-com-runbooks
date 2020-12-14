@@ -19,7 +19,8 @@ local combinedServiceLevelIndicatorDefinition(
   description,
   team=null,
   aggregateRequestRate=false,
-  staticLabels={}
+  staticLabels={},
+  ignoreTrafficCessation=false,
       ) =
   {
     initServiceLevelIndicatorWithName(componentName)::
@@ -32,6 +33,7 @@ local combinedServiceLevelIndicatorDefinition(
         featureCategory: featureCategory,
         description: description,
         team: team,
+        ignoreTrafficCessation: ignoreTrafficCessation,
 
         aggregateRequestRate: aggregateRequestRate,
 

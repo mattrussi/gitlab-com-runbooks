@@ -10,15 +10,15 @@
 //
 // To avoid even more complication, this list should remain the SSOT for the runbooks project if at all possible!
 local shards = {
-  'database-throttled': { urgency: 'throttled', gkeDeployment: 'gitlab-sidekiq-database-throttled-v1', userImpacting: false },
-  'gitaly-throttled': { urgency: 'throttled', gkeDeployment: 'gitlab-sidekiq-gitaly-throttled-v1', userImpacting: false },
-  'low-urgency-cpu-bound': { urgency: 'low', gkeDeployment: 'gitlab-sidekiq-low-urgency-cpu-bound-v1', userImpacting: true },
-  'memory-bound': { urgency: 'throttled', gkeDeployment: 'gitlab-sidekiq-memory-bound-v1', userImpacting: true },
-  'urgent-cpu-bound': { urgency: 'high', gkeDeployment: 'gitlab-sidekiq-urgent-cpu-bound-v1', userImpacting: true },
-  'urgent-other': { urgency: 'high', autoScaling: false, gkeDeployment: 'gitlab-sidekiq-urgent-other-v1', userImpacting: true },
-  catchall: { urgency: null, userImpacting: true /* no urgency attribute since multiple values are supported */ },
-  catchnfs: { urgency: null, userImpacting: true /* no urgency attribute since multiple values are supported */ },
-  elasticsearch: { urgency: 'throttled', gkeDeployment: 'gitlab-sidekiq-elasticsearch-v1', userImpacting: false },
+  'database-throttled': { urgency: 'throttled', gkeDeployment: 'gitlab-sidekiq-database-throttled-v1', userImpacting: false, ignoreTrafficCessation: true },
+  'gitaly-throttled': { urgency: 'throttled', gkeDeployment: 'gitlab-sidekiq-gitaly-throttled-v1', userImpacting: false, ignoreTrafficCessation: true },
+  'low-urgency-cpu-bound': { urgency: 'low', gkeDeployment: 'gitlab-sidekiq-low-urgency-cpu-bound-v1', userImpacting: true, ignoreTrafficCessation: false },
+  'memory-bound': { urgency: 'throttled', gkeDeployment: 'gitlab-sidekiq-memory-bound-v1', userImpacting: true, ignoreTrafficCessation: false },
+  'urgent-cpu-bound': { urgency: 'high', gkeDeployment: 'gitlab-sidekiq-urgent-cpu-bound-v1', userImpacting: true, ignoreTrafficCessation: false },
+  'urgent-other': { urgency: 'high', autoScaling: false, gkeDeployment: 'gitlab-sidekiq-urgent-other-v1', userImpacting: true, ignoreTrafficCessation: false },
+  catchall: { urgency: null, userImpacting: true, ignoreTrafficCessation: false /* no urgency attribute since multiple values are supported */ },
+  catchnfs: { urgency: null, userImpacting: true, ignoreTrafficCessation: true /* no urgency attribute since multiple values are supported */ },
+  elasticsearch: { urgency: 'throttled', gkeDeployment: 'gitlab-sidekiq-elasticsearch-v1', userImpacting: false, ignoreTrafficCessation: true },
 };
 
 // These values are used in several places, so best to DRY them up
