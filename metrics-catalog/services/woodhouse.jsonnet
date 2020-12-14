@@ -14,6 +14,8 @@ metricsCatalog.serviceDefinition({
       userImpacting: false,
       feature_category: 'not_owned',
       team: 'sre_observability',
+      ignoreTrafficCessation: true,
+
       description: |||
         HTTP requests handled by woodhouse.
       |||,
@@ -45,6 +47,8 @@ metricsCatalog.serviceDefinition({
       userImpacting: false,
       feature_category: 'not_owned',
       team: 'sre_observability',
+      ignoreTrafficCessation: true,
+
       description: |||
         Async jobs performed by woodhouse.
       |||,
