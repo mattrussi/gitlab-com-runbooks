@@ -15,10 +15,19 @@ local stableIds = import 'stable-ids/stable-ids.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 
 local applyStableIdsToPanel(panel) =
-  if std.objectHasAll(panel, 'applyPanelId') then
-    panel.applyPanelId()
+  local recursivelyApplied = if std.objectHas(panel, 'panels') then
+    panel {
+      panels: std.map(function(panel) applyStableIdsToPanel(panel), panel.panels),
+    }
   else
     panel;
+
+  if std.objectHasAll(recursivelyApplied, 'stableId') then
+    recursivelyApplied {
+      id: stableIds.hashStableId(recursivelyApplied.stableId),
+    }
+  else
+    recursivelyApplied;
 
 local applyStableIdsToRow(row) =
   row {
@@ -31,24 +40,23 @@ local applyStableIdsToDashboard(dashboard) =
     panels: std.map(function(panel) applyStableIdsToPanel(panel), dashboard.panels),
   };
 
-local panelOverrides(stableId) = {
-  stableId:: stableId,
-  addDataLink(datalink):: self + {
-    options+: {
-      dataLinks+: [datalink],
+local panelOverrides(stableId) =
+  {
+    addDataLink(datalink):: self + {
+      options+: {
+        dataLinks+: [datalink],
+      },
     },
-  },
-  applyPanelId()::
-    local stableId = self.stableId;
-    local panelId = self.id;
-
-    self {
-      id: if stableId != null then
-        stableIds.hashStableId(stableId)
-      else
-        panelId,
-    },
-};
+  }
+  +
+  (
+    if stableId == null then
+      {}
+    else
+      {
+        stableId: stableId,
+      }
+  );
 
 local getDefaultAvailabilityColorScale(invertColors, factor) =
   local tf = if invertColors then function(value) (1 - value) * factor else function(value) value;
