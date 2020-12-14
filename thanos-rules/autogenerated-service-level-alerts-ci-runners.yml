@@ -64,6 +64,77 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="polling",monitor="global",type="ci-runners"}) >= 1
       )
+  - alert: CiRunnersServicePollingTrafficCessation
+    for: 5m
+    annotations:
+      title: >-
+        The polling SLI of the ci-runners service (`{{ $labels.stage }}` stage) has not received any traffic
+        in the past 30 minutes
+      description: |
+        This SLI monitors job polling operations from runners, via the workhorse HTTP interface. 5xx responses are considered to be failures.
+
+        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+      grafana_dashboard_id: ci-runners-main/ci-runners-overview
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '64840'
+      grafana_variables: environment,stage
+      link1_title: Definition
+      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
+      promql_template_1: >-
+        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      experimental: 'true'
+      feature_category: runner
+      product_stage: verify
+      product_stage_group: runner
+      severity: s3
+      slo_alert: 'no'
+      user_impacting: 'yes'
+    expr: >
+      gitlab_component_ops:rate_30m{type="ci-runners", component="polling", stage="main", monitor="global"}
+      == 0
+  - alert: CiRunnersServicePollingTrafficAbsent
+    for: 30m
+    annotations:
+      title: >-
+        The polling SLI of the ci-runners service (`{{ $labels.stage }}` stage) has not reported any traffic
+        in the past 30 minutes
+      description: |
+        This SLI monitors job polling operations from runners, via the workhorse HTTP interface. 5xx responses are considered to be failures.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: ci-runners-main/ci-runners-overview
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '64840'
+      grafana_variables: environment,stage
+      link1_title: Definition
+      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
+      promql_template_1: >-
+        gitlab_component_ops:rate_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      experimental: 'true'
+      feature_category: runner
+      product_stage: verify
+      product_stage_group: runner
+      severity: s3
+      slo_alert: 'no'
+      user_impacting: 'yes'
+    expr: |
+      gitlab_component_ops:rate_5m{type="ci-runners", component="polling", stage="main", monitor="global"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{type="ci-runners", component="polling", stage="main", monitor="global"}
   - alert: CiRunnersServiceSharedRunnerQueuesApdexSLOViolation
     for: 2m
     annotations:
@@ -179,6 +250,77 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shared_runner_queues",monitor="global",type="ci-runners"}) >= 1
       )
+  - alert: CiRunnersServiceSharedRunnerQueuesTrafficCessation
+    for: 5m
+    annotations:
+      title: >-
+        The shared_runner_queues SLI of the ci-runners service (`{{ $labels.stage }}` stage) has not received
+        any traffic in the past 30 minutes
+      description: |
+        This SLI monitors the shared runner queues on GitLab.com. Each job is an operation. Apdex uses queueing latencies for jobs which are considered to be fair-usage (less than 5 concurrently running jobs). Jobs marked as failing with runner system failures are considered to be in error.
+
+        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+      grafana_dashboard_id: ci-runners-main/ci-runners-overview
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '49864'
+      grafana_variables: environment,stage
+      link1_title: Definition
+      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
+      promql_template_1: >-
+        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      experimental: 'true'
+      feature_category: runner
+      product_stage: verify
+      product_stage_group: runner
+      severity: s3
+      slo_alert: 'no'
+      user_impacting: 'yes'
+    expr: >
+      gitlab_component_ops:rate_30m{type="ci-runners", component="shared_runner_queues", stage="main",
+      monitor="global"} == 0
+  - alert: CiRunnersServiceSharedRunnerQueuesTrafficAbsent
+    for: 30m
+    annotations:
+      title: >-
+        The shared_runner_queues SLI of the ci-runners service (`{{ $labels.stage }}` stage) has not reported
+        any traffic in the past 30 minutes
+      description: |
+        This SLI monitors the shared runner queues on GitLab.com. Each job is an operation. Apdex uses queueing latencies for jobs which are considered to be fair-usage (less than 5 concurrently running jobs). Jobs marked as failing with runner system failures are considered to be in error.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: ci-runners-main/ci-runners-overview
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '49864'
+      grafana_variables: environment,stage
+      link1_title: Definition
+      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
+      promql_template_1: >-
+        gitlab_component_ops:rate_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      experimental: 'true'
+      feature_category: runner
+      product_stage: verify
+      product_stage_group: runner
+      severity: s3
+      slo_alert: 'no'
+      user_impacting: 'yes'
+    expr: |
+      gitlab_component_ops:rate_5m{type="ci-runners", component="shared_runner_queues", stage="main", monitor="global"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{type="ci-runners", component="shared_runner_queues", stage="main", monitor="global"}
   - alert: CiRunnersServiceTraceArchivingCiJobsErrorSLOViolation
     for: 2m
     annotations:
@@ -238,3 +380,74 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="trace_archiving_ci_jobs",monitor="global",type="ci-runners"}) >= 1
       )
+  - alert: CiRunnersServiceTraceArchivingCiJobsTrafficCessation
+    for: 5m
+    annotations:
+      title: >-
+        The trace_archiving_ci_jobs SLI of the ci-runners service (`{{ $labels.stage }}` stage) has not
+        received any traffic in the past 30 minutes
+      description: |
+        This SLI monitors CI job archiving, via Sidekiq jobs.
+
+        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+      grafana_dashboard_id: ci-runners-main/ci-runners-overview
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '77160'
+      grafana_variables: environment,stage
+      link1_title: Definition
+      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
+      promql_template_1: >-
+        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      experimental: 'true'
+      feature_category: continuous_integration
+      product_stage: verify
+      product_stage_group: continuous integration
+      severity: s3
+      slo_alert: 'no'
+      user_impacting: 'yes'
+    expr: >
+      gitlab_component_ops:rate_30m{type="ci-runners", component="trace_archiving_ci_jobs", stage="main",
+      monitor="global"} == 0
+  - alert: CiRunnersServiceTraceArchivingCiJobsTrafficAbsent
+    for: 30m
+    annotations:
+      title: >-
+        The trace_archiving_ci_jobs SLI of the ci-runners service (`{{ $labels.stage }}` stage) has not
+        reported any traffic in the past 30 minutes
+      description: |
+        This SLI monitors CI job archiving, via Sidekiq jobs.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: ci-runners-main/ci-runners-overview
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '77160'
+      grafana_variables: environment,stage
+      link1_title: Definition
+      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
+      promql_template_1: >-
+        gitlab_component_ops:rate_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      experimental: 'true'
+      feature_category: continuous_integration
+      product_stage: verify
+      product_stage_group: continuous integration
+      severity: s3
+      slo_alert: 'no'
+      user_impacting: 'yes'
+    expr: |
+      gitlab_component_ops:rate_5m{type="ci-runners", component="trace_archiving_ci_jobs", stage="main", monitor="global"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{type="ci-runners", component="trace_archiving_ci_jobs", stage="main", monitor="global"}

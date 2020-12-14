@@ -8,6 +8,7 @@ local serviceLevelIndicatorDefaults = {
   description: '',
   staticLabels: {},  // by default, no static labels
   aggregateRequestRate: true,  // by default, requestRate is aggregated up to the service level
+  ignoreTrafficCessation: false,  // Override to true to disable alerting when SLI is zero or absent
 };
 
 local validateHasField(object, field, message) =
