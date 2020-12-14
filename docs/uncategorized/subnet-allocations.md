@@ -49,4 +49,4 @@ gitlab-ops project for network peering.
 | `10.252.0.0`    | `10.252.255.255`   | `10.252.0.0/16`  | gitlab-restore   | **Restore GCP**
 | `10.253.0.0`    | `10.253.255.255`   | `10.253.0.0/16`  | N/A              | **Ops GCP US-Central1**
 | `10.254.0.0`    | `10.254.255.255`   | `10.254.0.0/16`  | N/A              | Legacy Azure
-| `10.255.0.0`    | `10.255.255.255`   | `10.255.0.0/16`  | N/A              | AVAILABLE GCP
+| `10.255.0.0`    | `10.255.255.255`   | `10.255.0.0/16`  | db-benchmarking  | **DB Benchmarking GCP**
