@@ -24,7 +24,7 @@ local generalGraphPanel(
   linewidth=2,
   sort='increasing',
   legend_show=true,
-  stableId=null
+  stableId
       ) =
   basic.graphPanel(
     title,
@@ -153,7 +153,7 @@ local genericOperationRatePanel(
   title,
   description='The operation rate is the sum total of all requests being handle for all components within this service. Note that a single user request can lead to requests to multiple components. Higher is busier.',
   compact=false,
-  stableId=null,
+  stableId,
   primaryQueryExpr,
   legendFormat,
   linewidth=null,
@@ -199,16 +199,16 @@ local genericOperationRatePanel(
     environmentSelectorHash=defaultEnvironmentSelector,
     compact=false,
     description='Apdex is a measure of requests that complete within a tolerable period of time for the service. Higher is better.',
-    stableId=null,
     sort='increasing',
   )::
     local selectorHash = environmentSelectorHash { type: serviceType, stage: serviceStage };
+    local formatConfig = { serviceType: serviceType };
 
     genericApdexPanel(
       'Latency: Apdex',
       description=description,
       compact=compact,
-      stableId=stableId,
+      stableId='service-%(serviceType)s-apdex' % formatConfig,
       primaryQueryExpr=sliPromQL.apdex.serviceApdexQuery(selectorHash, '$__interval', worstCase=true),
       legendFormat='{{ type }} service',
       environmentSelectorHash=environmentSelectorHash,
@@ -321,7 +321,6 @@ local genericOperationRatePanel(
     environmentSelectorHash=defaultEnvironmentSelector,
     compact=false,
     includeLastWeek=true,
-    stableId=null,
   )::
     local selectorHash = environmentSelectorHash { type: serviceType, stage: serviceStage };
     local formatConfig = {
@@ -331,7 +330,7 @@ local genericOperationRatePanel(
     genericErrorPanel(
       'Error Ratios',
       compact=compact,
-      stableId=stableId,
+      stableId='service-%(serviceType)s-error-rate' % formatConfig,
       primaryQueryExpr=sliPromQL.errorRate.serviceErrorRateQuery(selectorHash, '$__interval', worstCase=true),
       legendFormat='{{ type }} service',
       environmentSelectorHash=environmentSelectorHash,
@@ -445,15 +444,14 @@ local genericOperationRatePanel(
     serviceStage,
     compact=false,
     environmentSelectorHash=defaultEnvironmentSelector,
-    stableId=null,
   )::
     local selectorHash = environmentSelectorHash { type: serviceType, stage: serviceStage };
 
     genericOperationRatePanel(
       'RPS - Service Requests per Second',
       compact=compact,
-      stableId=stableId,
       primaryQueryExpr=sliPromQL.opsRate.serviceOpsRateQuery(selectorHash, '$__interval'),
+      stableId='service-%(serviceType)s-ops-rate' % { serviceType: serviceType },
       legendFormat='{{ type }} service',
       environmentSelectorHash=environmentSelectorHash,
       serviceType=serviceType,
@@ -496,6 +494,7 @@ local genericOperationRatePanel(
     genericOperationRatePanel(
       '%(sliName)s SLI RPS - Requests per Second' % formatConfig,
       primaryQueryExpr=sliPromQL.opsRate.sliOpsRateQuery(selectorHash, '$__interval'),
+      stableId='sli-%(sliName)s-ops-rate' % formatConfig,
       legendFormat='{{ component }} RPS',
       environmentSelectorHash=environmentSelectorHash,
       serviceType=serviceType,
@@ -520,6 +519,7 @@ local genericOperationRatePanel(
     genericOperationRatePanel(
       '🖥 Per-Node %(sliName)s SLI RPS - Requests per Second' % formatConfig,
       primaryQueryExpr=sliPromQL.opsRate.sliNodeOpsRateQuery(selectorHash, '$__interval'),
+      stableId='node-sli-%(sliName)s-ops-rate' % formatConfig,
       legendFormat='{{ fqdn }} {{ component }} RPS',
       environmentSelectorHash=environmentSelectorHash,
       serviceType=serviceType,
@@ -531,9 +531,13 @@ local genericOperationRatePanel(
     selectorHash,
     environmentSelectorHash=defaultEnvironmentSelector,
   )::
+    local formatConfig = {
+      serviceType: serviceType,
+    };
     genericOperationRatePanel(
       'Node RPS - Requests per Second',
       primaryQueryExpr=sliPromQL.opsRate.serviceNodeOpsRateQuery(selectorHash, '$__interval'),
+      stableId='service-node-%(serviceType)s-ops-rate' % formatConfig,
       legendFormat='{{ fqdn }}',
       environmentSelectorHash=environmentSelectorHash,
       serviceType=serviceType,
@@ -561,6 +565,7 @@ local genericOperationRatePanel(
       sort='decreasing',
       legend_show=!compact,
       linewidth=if compact then 1 else 2,
+      stableId='service-utilization'
     )
     .addTarget(  // Primary metric
       promQuery.target(

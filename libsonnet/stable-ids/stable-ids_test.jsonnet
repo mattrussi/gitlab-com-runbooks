@@ -4,4 +4,5 @@ local stableIds = import 'stable-ids.libsonnet';
 test.suite({
   testBlank: { actual: stableIds.hashStableId(''), expect: 100552 },
   testHello: { actual: stableIds.hashStableId('hello'), expect: 21512 },
+  testWithDashes: { actual: stableIds.hashStableId('collapsed-panel'), expect: 99240 },
 })

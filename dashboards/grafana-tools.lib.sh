@@ -124,5 +124,8 @@ prepare_dashboard_requests() {
 }
 
 function jsonnet_compile() {
-  jsonnet -J . -J ../libsonnet -J ../metrics-catalog/ -J ../vendor -J ../services --ext-str "dashboardPath=${1}" "$@"
+  jsonnet -J . -J ../libsonnet -J ../metrics-catalog/ -J ../vendor -J ../services --ext-str "dashboardPath=${1}" "$@" || {
+    echo >&2 "Failed to compile:" "$@"
+    return 1
+  }
 }
