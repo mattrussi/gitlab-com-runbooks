@@ -467,7 +467,8 @@ Or via homebrew:
 ```
 brew install go-jsonnet
 ```
-Or use [an asdf plugin](https://gitlab.com/craigfurman/asdf-go-jsonnet).
+Or if you're using `asdf`, you can use [an asdf
+plugin](https://gitlab.com/craigfurman/asdf-go-jsonnet).
 
 ### Ruby
 
