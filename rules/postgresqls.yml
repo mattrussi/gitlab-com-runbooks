@@ -11,7 +11,7 @@ groups:
         pg_xlog_position_bytes and pg_replication_is_replica == 1
       )
 
-  - alert: PostgreSQL_WALEReplicationStopped
+  - alert: PostgreSQL_WALGReplicationStopped
     expr: rate(pg_xlog_position_bytes{type=~"postgres-(archive|delayed)"}[1m]) == 0
     # Given that long running queries can't temporarily halt replication,
     # we're setting the "for" value to the value of statement_timeout + a small margin
@@ -21,11 +21,11 @@ groups:
       severity: s1
       alert_type: cause
     annotations:
-      description: WAL-E replication seems to be stopped on {{$labels.instance}}.
+      description: WAL-G replication seems to be stopped on {{$labels.instance}}.
         Check if PostgreSQL isn't stuck on restoring a WAL segment or if it's capabale
         of downloading WAL segments.
       runbook: docs/patroni/postgres.md#replication-is-lagging-or-has-stopped
-      title: WAL-E replication has stopped
+      title: WAL-G replication has stopped
   - alert: PostgreSQL_CommitRateTooLow
     expr: rate(pg_stat_database_xact_commit{datname="gitlabhq_production", type =~"postgres|patroni", environment!="gstg", shard="default"}[1m])
       < 1000
