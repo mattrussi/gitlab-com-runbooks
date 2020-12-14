@@ -52,6 +52,7 @@ local singleL4Component(stage, selector, definition, userImpacting) =
 
   metricsCatalog.serviceLevelIndicatorDefinition({
     userImpacting: userImpacting,
+    ignoreTrafficCessation: true,  // Only monitor this at the combined level
     staticLabels: {
       stage: stage,
     },
@@ -71,13 +72,14 @@ local singleL4Component(stage, selector, definition, userImpacting) =
     toolingLinks: toolingLinks,
   });
 
-local combinedBackendCurry(generator, defaultSLIDescription) =
+local combinedBackendCurry(generator, defaultSLIDescription, ignoreTrafficCessation) =
   function(userImpacting, stageMappings, selector, featureCategory, team=null, description=defaultSLIDescription)
     metricsCatalog.combinedServiceLevelIndicatorDefinition(
       userImpacting=userImpacting,
       featureCategory=featureCategory,
       team=team,
       description=description,
+      ignoreTrafficCessation=ignoreTrafficCessation,
       components=[
         generator(stage=stage, selector=selector, definition=stageMappings[stage], userImpacting=userImpacting)
         for stage in std.objectFields(stageMappings)
@@ -94,7 +96,7 @@ local combinedBackendCurry(generator, defaultSLIDescription) =
   //   main: { backends: ["backend_1", "backend_2"], toolingLinks: [...] },
   //   cny: { backends: ["backend_3", "backend_4"], toolingLinks: [...] },
   // },
-  haproxyHTTPLoadBalancer:: combinedBackendCurry(singleHTTPComponent, defaultSLIDescription=defaultHTTPSLIDescription),
+  haproxyHTTPLoadBalancer:: combinedBackendCurry(singleHTTPComponent, defaultSLIDescription=defaultHTTPSLIDescription, ignoreTrafficCessation=false),
 
   // This returns a combined component mapping, one for each stage (main, cny etc)
   // The mapping is as follows:
@@ -102,5 +104,5 @@ local combinedBackendCurry(generator, defaultSLIDescription) =
   //   main: { backends: ["backend_1", "backend_2"], toolingLinks: [...] },
   //   cny: { backends: ["backend_3", "backend_4"], toolingLinks: [...] },
   // },
-  haproxyL4LoadBalancer:: combinedBackendCurry(singleL4Component, defaultSLIDescription=defaultL4SLIDescription),
+  haproxyL4LoadBalancer:: combinedBackendCurry(singleL4Component, defaultSLIDescription=defaultL4SLIDescription, ignoreTrafficCessation=false),
 }
