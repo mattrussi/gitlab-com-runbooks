@@ -3,6 +3,6 @@
 # asdf plugin add golang
 # etc etc...
 
-go-jsonnet 0.16.0
-golang 1.14.4
+go-jsonnet 0.17.0
+golang 1.15.6
 jsonnet-bundler 0.4.0
