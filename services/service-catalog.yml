@@ -1566,9 +1566,9 @@ services:
       - name: system
         permalink: https://log.gprd.gitlab.net/goto/3669d551a595a3a5cf1e9318b74e6c22
   infrastructure:
-    provider:  gcp
-    architecture:  https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#database-architecture
-    provisioning:  terraform
+    provider: gcp
+    architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#database-architecture
+    provisioning: terraform
     accesses:
       - account_name:
         access_type:
@@ -1577,8 +1577,7 @@ services:
     maintenance:
     runbooks:
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/patroni/postgres.md
-      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/patroni/gitlab-com-wale-backups.md
-      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/patroni/gitlab-com-walg-backups.md
+      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/patroni/postgresql-backups-wale-walg.md
     playbooks:
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/patroni/patroni-management.md
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/patroni/postgresql.md
@@ -1587,8 +1586,7 @@ services:
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/patroni/postgresql-rebuild-trigram-indexes.md
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/patroni/postgresql-replica.md
       - https://gitlab.com/gitlab-com/runbooks/blob/master/howto/postgresql-switchover.md
-
-    error_budget:  https://docs.google.com/spreadsheets/d/1wkK2n5EAvoVXwQZrVoCDsvkYTb1BftL56EzsFW_IA-w/edit
+    error_budget: https://docs.google.com/spreadsheets/d/1wkK2n5EAvoVXwQZrVoCDsvkYTb1BftL56EzsFW_IA-w/edit
   observability:
     monitors:
       grafana_folder: RNfEDpLmz
@@ -1666,8 +1664,7 @@ services:
     maintenance:
     runbooks:
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/patroni/postgres.md
-      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/patroni/gitlab-com-wale-backups.md
-      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/patroni/gitlab-com-walg-backups.md
+      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/patroni/postgresql-backups-wale-walg.md
     playbooks:
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/patroni/patroni-management.md
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/patroni/postgresql.md
@@ -1748,8 +1745,7 @@ services:
     maintenance:
     runbooks:
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/patroni/postgres.md
-      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/patroni/gitlab-com-wale-backups.md
-      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/patroni/gitlab-com-walg-backups.md
+      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/patroni/postgresql-backups-wale-walg.md
     playbooks:
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/patroni/patroni-management.md
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/patroni/postgresql.md

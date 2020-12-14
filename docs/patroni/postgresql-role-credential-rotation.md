@@ -102,7 +102,6 @@ To update the credentials for *only* the `gitlab-superuser` user in the PostgreS
       ```
 1. [ ] Create (but DO NOT yet merge) a chef MR to change the username defined in `patroni.yml` for the `gitlab-superuser` user role to the name of the new temporary user in the `gitlab-cookbooks/chef-repo/roles/${GITLAB_ENVIRONMENT}-base-db-patroni.json` file, by committing changes to:
    - [ ] Set the `default_attributes.gitlab-patroni.patroni.users.superuser.username` field to the name of the new temporary user, and also...
-   - [ ] Set the `default_attributes.gitlab_wale.backup_user` field to the name of the new temporary user, and also...
    - [ ] Set the `default_attributes.gitlab_walg.backup_user` field to the name of the new temporary user.
 1. [ ] Add a link to the MR here: [For example: Configure the staging patroni fleet to use a temporary role with a time-stamped username](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/-/merge_requests/3253)
 1. [ ] Block/disable the chef-client service on all patroni hosts with an explanation that includes a link to the issue created to track this work:
@@ -127,9 +126,10 @@ To update the credentials for *only* the `gitlab-superuser` user in the PostgreS
    ```bash
    bundle exec knife ssh --concurrency 1 "fqdn:patroni-*-db-${GITLAB_ENVIRONMENT}*" 'sudo chef-client'
    ```
-1. [ ] Verify and record in a comment that WAL-E replication push operations are still running successfully:
+1. [ ] Verify and record in a comment that WAL-G replication push operations are still running successfully:
    ```bash
-   bundle exec knife ssh "fqdn:${leader_patroni_node}" 'sudo journalctl --full --no-pager | grep --ignore-case --after-context=3 wal-e | grep --invert-match audit | tail --lines=6'
+   bundle exec knife ssh "fqdn:${leader_patroni_node}" 'sudo tail --lines=6
+   /var/log/wal-g/wal-g.log'
    ```
 1. [ ] Verify and record in a comment that WAL-G backup write operations are still running successfully:
    ```bash
@@ -184,9 +184,9 @@ Now that the original superuser role is not being used by the patroni cluster or
    ```bash
    bundle exec knife ssh --concurrency 1 "fqdn:patroni-*-db-${GITLAB_ENVIRONMENT}*" 'sudo chef-client'
    ```
-1. [ ] Verify and record in a comment that WAL-E replication push operations are still running successfully:
+1. [ ] Verify and record in a comment that WAL-G replication push operations are still running successfully:
    ```bash
-   bundle exec knife ssh "fqdn:${leader_patroni_node}" 'sudo journalctl --full --no-pager | grep --ignore-case --after-context=3 wal-e | grep --invert-match audit | tail --lines=6'
+   bundle exec knife ssh "fqdn:${leader_patroni_node}" 'sudo tail --lines=6 /var/log/wal-g/wal-g.log'
    ```
 1. [ ] Verify and record in a comment that WAL-G backup write operations are still running successfully:
    ```bash
