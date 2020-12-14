@@ -61,6 +61,8 @@ metricsCatalog.serviceDefinition({
       userImpacting: false,
       featureCategory: 'not_owned',
       team: 'sre_observability',
+      ignoreTrafficCessation: true,
+
       description: |||
         This SLI monitors the total number of logs sent to GCP StackDriver logging.
       |||,

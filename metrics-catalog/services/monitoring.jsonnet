@@ -68,6 +68,8 @@ metricsCatalog.serviceDefinition({
       userImpacting: false,
       featureCategory: 'not_owned',
       team: 'sre_observability',
+      ignoreTrafficCessation: true,
+
       description: |||
         Thanos query gathers the data needed to evaluate Prometheus queries from multiple underlying prometheus and thanos instances.
         This SLI monitors the Thanos query HTTP interface for GitLab's public Thanos instance, which is used by the public Grafana
@@ -157,6 +159,8 @@ metricsCatalog.serviceDefinition({
       userImpacting: false,
       featureCategory: 'not_owned',
       team: 'sre_observability',
+      ignoreTrafficCessation: true,
+
       description: |||
         Thanos compactor is responsible for compaction of Prometheus series data into blocks, which are stored in GCS buckets.
         It also handles downsampling. This SLI monitors compaction operations and compaction failures.
@@ -378,6 +382,8 @@ metricsCatalog.serviceDefinition({
       userImpacting: false,
       featureCategory: 'not_owned',
       team: 'sre_observability',
+      ignoreTrafficCessation: true,
+
       description: |||
         This SLI monitors the Trickster HTTP interface.
       |||,
