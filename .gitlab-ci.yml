@@ -8,6 +8,7 @@ stages:
 
 variables:
   BUNDLER_VERSION: 2.1.4
+  GOLANG_IMAGE: golang:1.15
 
 default:
   image: "${CI_REGISTRY_IMAGE}:latest"
@@ -386,7 +387,7 @@ update_elastic_monitoring-es7_ilm:
 
 dryrun_pingdom_checks:
   stage: test
-  image: golang:1.11
+  image: $GOLANG_IMAGE
   script:
     - cd pingdom
     - go run pingdom.go --dry-run
@@ -402,7 +403,7 @@ dryrun_pingdom_checks:
 
 deploy_pingdom_checks:
   stage: deploy
-  image: golang:1.11
+  image: $GOLANG_IMAGE
   script:
     - cd pingdom
     - go run pingdom.go
@@ -416,7 +417,7 @@ deploy_pingdom_checks:
     - pipelines
 
 check_alerts:
-  image: golang:1.14
+  image: $GOLANG_IMAGE
   script:
     - cd alerts-checker
     # TODO use go modules rather than fetching HEAD

@@ -1,6 +1,6 @@
 FROM golang:alpine AS go-jsonnet
 
-ENV JSONNET_VERSION 0.16.0
+ENV JSONNET_VERSION 0.17.0
 ENV JB_VERSION 0.4.0
 
 RUN apk add --no-cache bash git && \
