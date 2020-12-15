@@ -305,6 +305,21 @@ groups:
       tier: sv
       type: woodhouse
     expr: '0.001000'
+  - record: gitlab_service:mapping:disable_ops_rate_prediction
+    labels:
+      tier: inf
+      type: monitoring
+    expr: '1'
+  - record: gitlab_service:mapping:disable_ops_rate_prediction
+    labels:
+      tier: lb
+      type: pages
+    expr: '1'
+  - record: gitlab_service:mapping:disable_ops_rate_prediction
+    labels:
+      tier: inf
+      type: search
+    expr: '1'
   - record: gitlab_component_service:mapping
     labels:
       component: loadbalancer
@@ -599,11 +614,6 @@ groups:
       tier: inf
       type: monitoring
     expr: '1'
-  - record: gitlab_service:mapping:disable_ops_rate_prediction
-    labels:
-      tier: inf
-      type: monitoring
-    expr: '1'
   - record: gitlab_component_service:mapping
     labels:
       component: nfs_service
@@ -615,11 +625,6 @@ groups:
     labels:
       component: loadbalancer
       service_aggregation: 'yes'
-      tier: lb
-      type: pages
-    expr: '1'
-  - record: gitlab_service:mapping:disable_ops_rate_prediction
-    labels:
       tier: lb
       type: pages
     expr: '1'
@@ -781,11 +786,6 @@ groups:
     labels:
       component: elasticsearch_searching
       service_aggregation: 'yes'
-      tier: inf
-      type: search
-    expr: '1'
-  - record: gitlab_service:mapping:disable_ops_rate_prediction
-    labels:
       tier: inf
       type: search
     expr: '1'

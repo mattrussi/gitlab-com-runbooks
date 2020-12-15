@@ -50,7 +50,7 @@ local generateComponentNodeSLORules(serviceDefinition) =
   //
   // Another advantage of keeping this separate is that we could, in future adjust this
   // value independently of main service SLA if necessary.
-  componentNodeSLORuleSet()::
+  componentNodeSLORuleSetGenerator()::
     {
       // Generates the recording rules given a service definition
       generateRecordingRulesForService(serviceDefinition)::

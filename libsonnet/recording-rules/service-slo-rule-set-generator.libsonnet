@@ -107,11 +107,11 @@ local generateServiceSLORules(serviceDefinition) =
   ]);
 
 {
-  // serviceSLORuleSet generates static recording rules for recording the current
+  // serviceSLORuleSetGenerator generates static recording rules for recording the current
   // SLO for each service in the metrics catalog.
   // These values are static, but can change over time.
   // They are used for alerting, visualisation and calculating availability.
-  serviceSLORuleSet()::
+  serviceSLORuleSetGenerator()::
     {
       // Generates the recording rules given a service definition
       generateRecordingRulesForService(serviceDefinition)::
