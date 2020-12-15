@@ -5,4 +5,4 @@
 
 go-jsonnet 0.17.0
 golang 1.15.6
-jsonnet-bundler 0.4.0
+jb 0.4.0
