@@ -72,9 +72,9 @@ basic.dashboard(
 )
 .addPanels(
   layout.grid([
-    keyMetrics.serviceApdexPanel('$type', '$stage', stableId='apdex-ratio'),
-    keyMetrics.serviceErrorRatePanel('$type', '$stage', stableId='error-ratio'),
-    keyMetrics.serviceOperationRatePanel('$type', '$stage', stableId='request-rate'),
+    keyMetrics.serviceApdexPanel('$type', '$stage'),
+    keyMetrics.serviceErrorRatePanel('$type', '$stage'),
+    keyMetrics.serviceOperationRatePanel('$type', '$stage'),
     keyMetrics.utilizationRatesPanel('$type', '$stage'),
   ], startRow=3001)
 )
