@@ -862,6 +862,7 @@ module Storage
       @migration_errors = []
       log.level = @options[:log_level]
       @pagination_indices = {}
+      @hard_coded_projects = true unless @options[:projects].empty?
     end
 
     def log_migration(project)
@@ -1137,7 +1138,10 @@ module Storage
 
     def get_projects
       projects = options.fetch(:projects, []).map { |project| fetch_project(project[:id]) }
+
       if projects.empty?
+        return [] if @hard_coded_projects
+
         exclude_known_failures unless options[:retry_known_failures]
         next_page = false
         # This loop is only here to ensure that if projects are excluded
@@ -1159,7 +1163,10 @@ module Storage
           # get the next page.
           next_page = true
         end
+      else
+        options[:projects].clear
       end
+
       projects = projects[0...options[:limit]] if options[:limit].positive?
       projects
     end
