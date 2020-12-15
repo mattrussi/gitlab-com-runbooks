@@ -28,7 +28,7 @@ propagation time.
 3. Click on Register in the upper right corner and type in the domain you wish to register and choose "register".
 4. Click the "add to cart" button next to the domains in question.
 5. Click the cart button in the upper right.
-6. Use the default ownership info.
+6. Ensure both the "Invoice Order To" and "Product Owner" are both set to the GitLab Inc. organization.
 7. Review the shopping cart info and accept the terms of the registration.
 8. Choose to pay with the GitLab AMEX card.
 9. Create the domain in Route53 DNS and set the nameservers to the assigned Route53 servers.
