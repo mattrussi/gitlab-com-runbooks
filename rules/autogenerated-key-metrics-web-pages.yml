@@ -70,11 +70,9 @@ groups:
       )
       /
       2
-      /
+      / on(environment,stage) group_left()
       (
-        sum by (environment,stage) (
-          rate(gitlab_pages_http_request_duration_seconds_bucket{type="web-pages", le="+Inf"}[1m])
-        ) > 0
+        gitlab_component_apdex:weight:score{component="server",tier="sv",type="web-pages"} > 0
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -163,11 +161,9 @@ groups:
       )
       /
       2
-      /
+      / on(environment,stage) group_left()
       (
-        sum by (environment,stage) (
-          rate(gitlab_pages_http_request_duration_seconds_bucket{type="web-pages", le="+Inf"}[5m])
-        ) > 0
+        gitlab_component_apdex:weight:score_5m{component="server",tier="sv",type="web-pages"} > 0
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -347,11 +343,9 @@ groups:
       )
       /
       2
-      /
+      / on(environment,stage) group_left()
       (
-        sum by (environment,stage) (
-          rate(gitlab_pages_http_request_duration_seconds_bucket{type="web-pages", le="+Inf"}[1h])
-        ) > 0
+        gitlab_component_apdex:weight:score_1h{component="server",tier="sv",type="web-pages"} > 0
       )
   - record: gitlab_component_ops:rate_1h
     labels:
