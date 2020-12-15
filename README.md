@@ -432,7 +432,7 @@ Our `asdf` toolset uses the following plugins:
 * `golang`: `asdf plugin add golang`
 * `ruby`: `asdf plugin add ruby`
 * `go-jsonnet`: `asdf plugin add go-jsonnet`.
-* `jsonnet-bundler`: `asdf plugin add jsonnet-bundler https://github.com/trotttrotttrott/asdf-jsonnet-bundler.git`.
+* `jsonnet-bundler`: `asdf plugin add jb`.
 
 Once you have installed these plugins, run the following command to install the required versions.
 
