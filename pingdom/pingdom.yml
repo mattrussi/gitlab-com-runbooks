@@ -277,3 +277,27 @@ checks:
     - Infrastructure
     integrations:
     - pagerduty
+
+#######################################
+# People Group Engineering Projects
+#######################################
+  - url: https://comp-calculator.gitlab.net/users/sign_in
+    timeout_ms: 30000
+    resolution_minutes: 5
+    notify_when_restored: true
+    tags:
+    - people-engineering
+
+  - url: https://nominatorbot.gitlab.net/health
+    timeout_ms: 30000
+    resolution_minutes: 5
+    notify_when_restored: true
+    tags:
+    - people-engineering
+
+  - url: https://assessment.gitlab.net/about
+    timeout_ms: 30000
+    resolution_minutes: 5
+    notify_when_restored: true
+    tags:
+    - people-engineering
