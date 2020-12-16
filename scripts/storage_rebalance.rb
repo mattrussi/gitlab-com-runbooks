@@ -862,7 +862,7 @@ module Storage
       @migration_errors = []
       log.level = @options[:log_level]
       @pagination_indices = {}
-      @hard_coded_projects = true unless @options[:projects].empty?
+      @hard_coded_projects = @options[:projects].any?
     end
 
     def log_migration(project)
