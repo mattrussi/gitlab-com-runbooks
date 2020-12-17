@@ -35,11 +35,9 @@ groups:
       )
       /
       2
-      /
+      / on(environment,stage) group_left()
       (
-        sum by (environment,stage) (
-          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job="gitlab-workhorse-web", type="web", le="+Inf"}[1m])
-        ) > 0
+        gitlab_component_apdex:weight:score{component="imagescaler",tier="sv",type="web"} > 0
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -125,11 +123,9 @@ groups:
       )
       /
       2
-      /
+      / on(environment,stage) group_left()
       (
-        sum by (environment,stage) (
-          rate(http_request_duration_seconds_bucket{job="gitlab-rails",le="+Inf",type="web"}[1m])
-        ) > 0
+        gitlab_component_apdex:weight:score{component="puma",tier="sv",type="web"} > 0
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -175,11 +171,9 @@ groups:
       )
       /
       2
-      /
+      / on(environment,stage) group_left()
       (
-        sum by (environment,stage) (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{job="gitlab-workhorse-web", route!="^/([^/]+/){1,}[^/]+/uploads\\z", route!="^/-/health$", route!="^/-/(readiness|liveness)$", le="+Inf"}[1m])
-        ) > 0
+        gitlab_component_apdex:weight:score{component="workhorse",tier="sv",type="web"} > 0
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -252,11 +246,9 @@ groups:
       )
       /
       2
-      /
+      / on(environment,stage) group_left()
       (
-        sum by (environment,stage) (
-          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job="gitlab-workhorse-web", type="web", le="+Inf"}[5m])
-        ) > 0
+        gitlab_component_apdex:weight:score_5m{component="imagescaler",tier="sv",type="web"} > 0
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -342,11 +334,9 @@ groups:
       )
       /
       2
-      /
+      / on(environment,stage) group_left()
       (
-        sum by (environment,stage) (
-          rate(http_request_duration_seconds_bucket{job="gitlab-rails",le="+Inf",type="web"}[5m])
-        ) > 0
+        gitlab_component_apdex:weight:score_5m{component="puma",tier="sv",type="web"} > 0
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -392,11 +382,9 @@ groups:
       )
       /
       2
-      /
+      / on(environment,stage) group_left()
       (
-        sum by (environment,stage) (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{job="gitlab-workhorse-web", route!="^/([^/]+/){1,}[^/]+/uploads\\z", route!="^/-/health$", route!="^/-/(readiness|liveness)$", le="+Inf"}[5m])
-        ) > 0
+        gitlab_component_apdex:weight:score_5m{component="workhorse",tier="sv",type="web"} > 0
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -680,11 +668,9 @@ groups:
       )
       /
       2
-      /
+      / on(environment,stage) group_left()
       (
-        sum by (environment,stage) (
-          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job="gitlab-workhorse-web", type="web", le="+Inf"}[1h])
-        ) > 0
+        gitlab_component_apdex:weight:score_1h{component="imagescaler",tier="sv",type="web"} > 0
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -770,11 +756,9 @@ groups:
       )
       /
       2
-      /
+      / on(environment,stage) group_left()
       (
-        sum by (environment,stage) (
-          rate(http_request_duration_seconds_bucket{job="gitlab-rails",le="+Inf",type="web"}[1h])
-        ) > 0
+        gitlab_component_apdex:weight:score_1h{component="puma",tier="sv",type="web"} > 0
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -820,11 +804,9 @@ groups:
       )
       /
       2
-      /
+      / on(environment,stage) group_left()
       (
-        sum by (environment,stage) (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{job="gitlab-workhorse-web", route!="^/([^/]+/){1,}[^/]+/uploads\\z", route!="^/-/health$", route!="^/-/(readiness|liveness)$", le="+Inf"}[1h])
-        ) > 0
+        gitlab_component_apdex:weight:score_1h{component="workhorse",tier="sv",type="web"} > 0
       )
   - record: gitlab_component_ops:rate_1h
     labels:

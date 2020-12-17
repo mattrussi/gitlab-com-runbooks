@@ -53,7 +53,7 @@ local ruleSetIterator(ruleSets) = {
             requestRate='gitlab_component_ops:rate',
             errorRate='gitlab_component_errors:rate',
             aggregationLabels=COMPONENT_LEVEL_AGGREGATION_LABELS,
-            substituteWeightWithRecordingRule=false,  // Initially only use this for slow burns
+            substituteWeightWithRecordingRule=substituteWeightWithRecordingRule,
           ),
           recordingRules.extraRecordingRuleSet(burnRate),
         ]),
@@ -76,7 +76,7 @@ local ruleSetIterator(ruleSets) = {
             requestRate='gitlab_component_ops:rate_5m',
             errorRate='gitlab_component_errors:rate_5m',
             aggregationLabels=COMPONENT_LEVEL_AGGREGATION_LABELS,
-            substituteWeightWithRecordingRule=false,  // Initially only use this for slow burns
+            substituteWeightWithRecordingRule=substituteWeightWithRecordingRule,
           ),
           recordingRules.extraRecordingRuleSet(burnRate),
         ]),
@@ -137,7 +137,7 @@ local ruleSetIterator(ruleSets) = {
             requestRate='gitlab_component_ops:rate_1h',
             errorRate='gitlab_component_errors:rate_1h',
             aggregationLabels=COMPONENT_LEVEL_AGGREGATION_LABELS,
-            substituteWeightWithRecordingRule=false,  // Initially only use this for slow burns
+            substituteWeightWithRecordingRule=substituteWeightWithRecordingRule,
           ),
           recordingRules.extraRecordingRuleSet(burnRate),
         ]),
