@@ -1095,8 +1095,6 @@ module Storage
 
     def move_project(project)
       project_id = project[:id]
-      project_info = fetch_project(project_id)
-      project.update(project_info)
 
       schedule_repository_replication(project)
     rescue NoCommits => e

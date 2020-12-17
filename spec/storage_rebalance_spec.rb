@@ -227,7 +227,6 @@ describe ::Storage::Rebalancer do
         expect(subject.log).to receive(:info).with("  Disk path: #{test_project_disk_path}")
         expect(subject.log).to receive(:info).with("  Repository size: 1.0 GB")
         expect(subject).to receive(:loop_with_progress_until).and_yield.and_yield
-        expect(subject).to receive(:fetch_project).and_return(test_full_project)
         expect(subject).to receive(:fetch_project).and_return(test_updated_full_project)
         expect(subject).to receive(:fetch_repository_storage_moves).and_return(test_moves)
         expect(subject.log).to receive(:info).with("Success moving project id: #{test_project_id}")
@@ -261,7 +260,6 @@ describe ::Storage::Rebalancer do
           expect(subject.log).to receive(:info).with("  Repository size: 1.0 GB")
           expect(subject).to receive(:create_repository_storage_move).with(test_project, test_node_02).and_return(test_move)
           expect(subject).to receive(:loop_with_progress_until).and_yield.and_yield
-          expect(subject).to receive(:fetch_project).and_return(test_full_project)
           allow(subject).to receive(:fetch_repository_storage_moves).and_return(test_moves)
           allow(subject).to receive(:fetch_repository_storage_moves).and_return(test_moves)
           expect(subject.log).to receive(:info).with("Success moving project id: #{test_project_id}")
@@ -300,7 +298,6 @@ describe ::Storage::Rebalancer do
           expect(subject.log).to receive(:info).with("  Repository size: 1.0 GB")
           expect(subject).to receive(:create_repository_storage_move).with(test_project, test_node_02).and_return(test_move)
           expect(subject).to receive(:loop_with_progress_until).and_yield.and_yield
-          expect(subject).to receive(:fetch_project).and_return(test_full_project)
           allow(subject).to receive(:fetch_repository_storage_moves).and_return(test_moves)
           allow(subject).to receive(:fetch_repository_storage_moves).and_return(test_moves)
           expect(subject.log).to receive(:info).with("Success moving project id: #{test_project_id}")
