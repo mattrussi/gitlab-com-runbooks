@@ -117,6 +117,8 @@ module Storage
         projects: [],
         custom_attributes: {},
         excluded_projects: [],
+        firehose_mode: false,
+        max_concurrency: 600,
         logdir_path: File.expand_path(File.join(__dir__, 'storage_migrations')),
         migration_logfile_name: 'migrated_projects_%{date}.log',
         migration_error_logfile_prefix: 'failed_projects_',
@@ -482,6 +484,7 @@ module Storage
         define_limit_option
         define_tty_option
         define_env_option
+        define_firehose_option
         define_verbose_option
         define_tail
       end
@@ -653,6 +656,17 @@ module Storage
         end
       end
 
+      def define_firehose_option
+        @parser.on('--firehose', 'Schedule as much project as possible, do not wait for results') do
+          @options[:firehose_mode] = true
+        end
+
+        description = "Maximum concurrent requests; default: #{@options[:max_concurrency]}"
+        @parser.on('--max-concurrency=<n>', Integer, description) do |max_concurrency|
+          @options[:max_concurrency] = max_concurrency
+        end
+      end
+
       def define_verbose_option
         @parser.on('-v', '--verbose', 'Increase logging verbosity') do
           @options[:log_level] -= 1
@@ -716,6 +730,7 @@ module Storage
       @options = options
       log.level = @options[:log_level]
       @required_headers = {}
+      @threads = []
     end
 
     def get(url, opts = {})
@@ -730,6 +745,21 @@ module Storage
 
     def put(url, opts = {})
       request(Net::HTTP::Put, url, opts)
+    end
+
+    def async
+      thr = Thread.new do
+        yield self
+      end
+
+      @threads << thr
+      wait_for_queued_threads if @threads.count >= options[:max_concurrency]
+    end
+
+    def finish
+      while @threads.any?
+        wait_for_queued_threads
+      end
     end
 
     private
@@ -749,14 +779,14 @@ module Storage
     def invoke(client, request, opts = {})
       body = opts[:body]
       request.body = body.respond_to?(:bytesize) ? body : body.to_json unless body.nil?
-      debug_request(request)
+      debug_request(request) unless options[:firehose_mode]
 
       response = DEFAULT_RESPONSE
       result = {}
       error = nil
       status = response.code
       begin
-        response, status = execute(client, request)
+        response, status = execute_with_retries(client, request)
       rescue Errno::ECONNREFUSED => e
         log.error e.to_s
         error = e
@@ -812,9 +842,36 @@ module Storage
     end
     # rubocop: enable Metrics/AbcSize
 
+    def execute_with_retries(client, request)
+      retries = 0
+      wait_interval = 10
+
+      begin
+        response, code = execute(client, request)
+      rescue RateLimitReached => e
+        response = e.response
+
+        if retries >= 3
+          log.debug "Request retried #{retries} times without succeeding, bailing out ..."
+          return [response, response.code.to_i]
+        end
+
+        wait_interval *= 2
+
+        log.debug "Rate limit reached, sleeping for #{wait_interval}"
+        sleep wait_interval
+
+        retries += 1
+        retry
+      end
+    end
+
     def execute(client, request)
       response = client.request(request)
-      log.debug "Response status code: #{response.code}"
+      log.debug "Response status code: #{request.path} #{response.code}"
+
+      raise RateLimitReached.new(response) if response.code.to_i == 429
+
       response.value
       [response, response.code.to_i]
     end
@@ -845,6 +902,19 @@ module Storage
         error = e
       end
       [result, error]
+    end
+
+    def wait_for_queued_threads
+      @threads.each(&:join)
+      @threads.clear
+    end
+
+    class RateLimitReached < StandardError
+      attr_reader :response
+
+      def initialize(response)
+        @response = response
+      end
     end
   end
 end
@@ -948,8 +1018,6 @@ module Storage
 
       raise "Invalid response status code: #{status}" unless [200].include?(status)
 
-      raise "Unexpected response: #{projects}" if projects.nil? || projects.empty?
-
       projects.each { |project| symbolize_keys_deep!(project) }
       projects
     end
@@ -988,6 +1056,10 @@ module Storage
 
       body = {}
       body[:destination_storage_name] = destination unless destination.nil?
+
+      if options[:firehose_mode]
+        return gitlab_api_client.async { |client| client.post(url, body: body) }
+      end
 
       move, error, status, _headers = gitlab_api_client.post(
         url, body: body)
@@ -1063,7 +1135,12 @@ module Storage
     # rubocop: disable Metrics/AbcSize
     def schedule_repository_replication(project)
       verify_source(project)
-      if repository_replication_already_in_progress?(project)
+
+      # In firehose mode, every request counts since we respect the API rate limit. Doing
+      # a check for every project means we can only schedule half of the available limit per minute.
+      # In any case, the application guards against scheduling an in-progress project, so we should
+      # be good any way.
+      if !options[:firehose_mode] && repository_replication_already_in_progress?(project)
         log.warn "Repository replication for project id #{project[:id]} already in progress; skipping"
         return
       end
@@ -1071,15 +1148,17 @@ module Storage
       destination = options[:destination_shard] || project[:destination_repository_storage]
       destination_name = destination.nil? ? 'application-selected shard' : destination
 
-      log_separator
-      log.info "Scheduling repository replication to #{destination_name} for project id: #{project[:id]}"
-      log.info "  Project path: #{project[:path_with_namespace]}"
-      log.info "  Current shard name: #{project[:repository_storage]}"
-      log.info "  Disk path: #{project[:disk_path]}" if project.include?(:disk_path)
-      if project.include?(:statistics)
-        log.info "  Repository size: #{to_filesize(project[:statistics][:repository_size])}"
-      elsif project.include?(:size)
-        log.info "  Repository size: #{project[:size]}"
+      unless options[:firehose_mode]
+        log_separator
+        log.info "Scheduling repository replication to #{destination_name} for project id: #{project[:id]}"
+        log.info "  Project path: #{project[:path_with_namespace]}"
+        log.info "  Current shard name: #{project[:repository_storage]}"
+        log.info "  Disk path: #{project[:disk_path]}" if project.include?(:disk_path)
+        if project.include?(:statistics)
+          log.info "  Repository size: #{to_filesize(project[:statistics][:repository_size])}"
+        elsif project.include?(:size)
+          log.info "  Repository size: #{project[:size]}"
+        end
       end
 
       if options[:dry_run]
@@ -1089,6 +1168,8 @@ module Storage
 
       old_repository_shard = project[:repository_storage]
       repository_storage_move = create_repository_storage_move(project, destination)
+      return if options[:firehose_mode]
+
       wait_for_repository_storage_move(project, repository_storage_move)
       post_migration_project = project.merge(fetch_project(project[:id]))
       new_repository_shard = post_migration_project[:repository_storage]
@@ -1219,6 +1300,9 @@ module Storage
         break if limit.positive? && moved_projects_count >= limit
         break if min_amount.positive? && total_bytes_moved > min_amount
       end
+
+      gitlab_api_client.finish
+
       total_bytes_moved
     end
 
