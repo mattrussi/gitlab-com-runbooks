@@ -78,7 +78,7 @@ local indexCatalog = {
   // Improve these logs when https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/11221 is addressed
   camoproxy: indexDefaults {
     timestamp: '@timestamp',
-    indexId: 'AWz5hIoSGphUgZwzAG7q',
+    indexPatternId: 'AWz5hIoSGphUgZwzAG7q',
     defaultColumns: ['json.hostname', 'json.camoproxy_message', 'json.camoproxy_err'],
     defaultSeriesSplitField: 'json.hostname.keyword',
     failureFilter: [existsFilter('json.camoproxy_err')],
@@ -88,7 +88,7 @@ local indexCatalog = {
 
   gitaly: indexDefaults {
     timestamp: 'json.time',
-    indexId: 'AW5F1OHTiGcMMNRn84Di',
+    indexPatternId: 'AW5F1OHTiGcMMNRn84Di',
     defaultColumns: ['json.hostname', 'json.grpc.method', 'json.grpc.request.glProjectPath', 'json.grpc.code', 'json.grpc.time_ms'],
     defaultSeriesSplitField: 'json.grpc.method.keyword',
     failureFilter: [mustNot(matchFilter('json.grpc.code', 'OK')), existsFilter('json.grpc.code')],
@@ -101,7 +101,7 @@ local indexCatalog = {
 
   monitoring_ops: indexDefaults {
     timestamp: '@timestamp',
-    indexId: 'pubsub-monitoring-inf-ops',
+    indexPatternId: 'pubsub-monitoring-inf-ops',
     defaultColumns: ['json.hostname', 'json.msg', 'json.level'],
     defaultSeriesSplitField: 'json.hostname.keyword',
     failureFilter: [matchFilter('json.level', 'error')],
@@ -110,7 +110,7 @@ local indexCatalog = {
 
   monitoring_gprd: indexDefaults {
     timestamp: '@timestamp',
-    indexId: 'AW5ZoH2ddtvLTaJbch2P',
+    indexPatternId: 'AW5ZoH2ddtvLTaJbch2P',
     defaultColumns: ['json.hostname', 'json.msg', 'json.level'],
     defaultSeriesSplitField: 'json.hostname.keyword',
     failureFilter: [matchFilter('json.level', 'error')],
@@ -118,7 +118,7 @@ local indexCatalog = {
 
   pages: indexDefaults {
     timestamp: 'json.time',
-    indexId: 'AWRaEscWMdvjVyaYlI-L',
+    indexPatternId: 'AWRaEscWMdvjVyaYlI-L',
     defaultColumns: ['json.hostname', 'json.pages_domain', 'json.host', 'json.pages_host', 'json.path', 'json.remote_ip', 'json.duration_ms'],
     defaultSeriesSplitField: 'json.pages_host.keyword',
     failureFilter: statusCode('json.status'),
@@ -128,7 +128,7 @@ local indexCatalog = {
 
   postgres: indexDefaults {
     timestamp: '@timestamp',
-    indexId: '97f04200-024b-11eb-81e5-155ba78758d4',
+    indexPatternId: '97f04200-024b-11eb-81e5-155ba78758d4',
     defaultColumns: ['json.hostname', 'json.application_name', 'json.error_severity', 'json.message', 'json.session_start_time', 'json.sql_state_code', 'json.duration_ms'],
     defaultSeriesSplitField: 'json.sql_state_code',
     failureFilter: [mustNot(matchFilter('json.sql_state_code', '00000')), existsFilter('json.sql_state_code')],  // SQL Codes reference: https://www.postgresql.org/docs/9.4/errcodes-appendix.html
@@ -138,14 +138,14 @@ local indexCatalog = {
 
   postgres_pgbouncer: indexDefaults {
     timestamp: 'json.time',
-    indexId: '97f04200-024b-11eb-81e5-155ba78758d4',
+    indexPatternId: '97f04200-024b-11eb-81e5-155ba78758d4',
     defaultColumns: ['json.hostname', 'json.pg_message'],
     defaultSeriesSplitField: 'json.hostname.keyword',
   },
 
   praefect: indexDefaults {
     timestamp: 'json.time',
-    indexId: 'AW98WAQvqthdGjPJ8jTY',
+    indexPatternId: 'AW98WAQvqthdGjPJ8jTY',
     defaultColumns: ['json.hostname', 'json.virtual_storage', 'json.grpc.method', 'json.relative_path', 'json.grpc.code', 'json.grpc.time_ms'],
     defaultSeriesSplitField: 'json.grpc.method.keyword',
     failureFilter: [mustNot(matchFilter('json.grpc.code', 'OK')), existsFilter('json.grpc.code')],
@@ -155,7 +155,7 @@ local indexCatalog = {
 
   rails: indexDefaults {
     timestamp: 'json.time',
-    indexId: 'AW5F1e45qthdGjPJueGO',
+    indexPatternId: 'AW5F1e45qthdGjPJueGO',
     defaultColumns: ['json.method', 'json.status', 'json.controller', 'json.action', 'json.path', 'json.duration_s'],
     defaultSeriesSplitField: 'json.controller.keyword',
     failureFilter: statusCode('json.status'),
@@ -165,7 +165,7 @@ local indexCatalog = {
 
   rails_api: indexDefaults {
     timestamp: 'json.time',
-    indexId: 'AW5F1e45qthdGjPJueGO',
+    indexPatternId: 'AW5F1e45qthdGjPJueGO',
     defaultColumns: ['json.method', 'json.status', 'json.route', 'json.path', 'json.duration_s'],
     defaultSeriesSplitField: 'json.route.keyword',
     failureFilter: statusCode('json.status'),
@@ -175,7 +175,7 @@ local indexCatalog = {
 
   redis: indexDefaults {
     timestamp: 'json.time',
-    indexId: 'AWSQX_Vf93rHTYrsexmk',
+    indexPatternId: 'AWSQX_Vf93rHTYrsexmk',
     defaultColumns: ['json.hostname', 'json.redis_message'],
     defaultSeriesSplitField: 'json.hostname.keyword',
     defaultLatencyField: 'json.exec_time',  // Note: this is only useful in the context of slowlogs
@@ -184,7 +184,7 @@ local indexCatalog = {
 
   registry: indexDefaults {
     timestamp: 'json.time',
-    indexId: '97ce8e90-63ad-11ea-8617-2347010d3aab',
+    indexPatternId: '97ce8e90-63ad-11ea-8617-2347010d3aab',
     defaultColumns: ['json.http.request.uri', 'json.http.response.duration', 'json.err.code', 'json.msg', 'json.http.response.status', 'json.http.request.remoteaddr', 'json.http.request.method'],
     defaultSeriesSplitField: 'json.http.request.uri.keyword',
     failureFilter: statusCode('json.http.response.status'),
@@ -195,7 +195,7 @@ local indexCatalog = {
 
   runners: indexDefaults {
     timestamp: '@timestamp',
-    indexId: 'AWgzayS3ENm-ja4G1a8d',
+    indexPatternId: 'AWgzayS3ENm-ja4G1a8d',
     defaultColumns: ['json.operation', 'json.job', 'json.operation', 'json.repo_url', 'json.project', 'json.msg'],
     defaultSeriesSplitField: 'json.repo_url.keyword',
     failureFilter: [matchFilter('json.msg', 'failed')],
@@ -205,7 +205,7 @@ local indexCatalog = {
 
   shell: indexDefaults {
     timestamp: 'json.time',
-    indexId: 'AWORyp9K1NBBQZg_dXA9',
+    indexPatternId: 'AWORyp9K1NBBQZg_dXA9',
     defaultColumns: ['json.command', 'json.msg', 'json.level', 'json.gl_project_path', 'json.error'],
     defaultSeriesSplitField: 'json.gl_project_path.keyword',
     failureFilter: [matchFilter('json.level', 'error')],
@@ -213,7 +213,7 @@ local indexCatalog = {
 
   sidekiq: indexDefaults {
     timestamp: 'json.time',
-    indexId: 'AWNABDRwNDuQHTm2tH6l',
+    indexPatternId: 'AWNABDRwNDuQHTm2tH6l',
     defaultColumns: ['json.class', 'json.queue', 'json.meta.project', 'json.job_status', 'json.scheduling_latency_s', 'json.duration_s'],
     defaultSeriesSplitField: 'json.meta.project.keyword',
     failureFilter: [matchFilter('json.job_status', 'fail')],
@@ -223,7 +223,7 @@ local indexCatalog = {
 
   workhorse: indexDefaults {
     timestamp: 'json.time',
-    indexId: 'a4f5b470-edde-11ea-81e5-155ba78758d4',
+    indexPatternId: 'a4f5b470-edde-11ea-81e5-155ba78758d4',
     defaultColumns: ['json.method', 'json.remote_ip', 'json.status', 'json.uri', 'json.duration_ms'],
     defaultSeriesSplitField: 'json.remote_ip.keyword',
     failureFilter: statusCode('json.status'),
@@ -236,7 +236,7 @@ local buildElasticDiscoverSearchQueryURL(index, filters, luceneQueries=[]) =
   local applicationState = {
     columns: indexCatalog[index].defaultColumns,
     filters: filters,
-    index: indexCatalog[index].indexId,
+    index: indexCatalog[index].indexPatternId,
     query: {
       language: 'kuery',
       query: std.join(' AND ', luceneQueries),
@@ -311,7 +311,7 @@ local buildElasticLineCountVizURL(index, filters, luceneQueries=[], splitSeries=
     },
   };
 
-  indexCatalog[index].kibanaEndpoint + '#/visualize/create?type=line&indexPattern=' + indexCatalog[index].indexId + '&_a=' + rison.encode(applicationState) + '&_g=(time:(from:now-1h,to:now))';
+  indexCatalog[index].kibanaEndpoint + '#/visualize/create?type=line&indexPatternId=' + indexCatalog[index].indexPatternId + '&_a=' + rison.encode(applicationState) + '&_g=(time:(from:now-1h,to:now))';
 
 local buildElasticLineTotalDurationVizURL(index, filters, luceneQueries=[], latencyField, splitSeries=false) =
   local ic = indexCatalog[index];
@@ -400,7 +400,7 @@ local buildElasticLineTotalDurationVizURL(index, filters, luceneQueries=[], late
     },
   };
 
-  indexCatalog[index].kibanaEndpoint + '#/visualize/create?type=line&indexPattern=' + indexCatalog[index].indexId + '&_a=' + rison.encode(applicationState) + '&_g=(time:(from:now-1h,to:now))';
+  indexCatalog[index].kibanaEndpoint + '#/visualize/create?type=line&indexPatternId=' + indexCatalog[index].indexPatternId + '&_a=' + rison.encode(applicationState) + '&_g=(time:(from:now-1h,to:now))';
 
 local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latencyField, splitSeries=false) =
   local ic = indexCatalog[index];
@@ -502,7 +502,7 @@ local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latency
     },
   };
 
-  indexCatalog[index].kibanaEndpoint + '#/visualize/create?type=line&indexPattern=' + indexCatalog[index].indexId + '&_a=' + rison.encode(applicationState) + '&_g=(time:(from:now-1h,to:now))';
+  indexCatalog[index].kibanaEndpoint + '#/visualize/create?type=line&indexPatternId=' + indexCatalog[index].indexPatternId + '&_a=' + rison.encode(applicationState) + '&_g=(time:(from:now-1h,to:now))';
 
 {
   matcher:: matcher,
