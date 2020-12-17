@@ -128,16 +128,17 @@ local indexCatalog = {
 
   postgres: indexDefaults {
     timestamp: '@timestamp',
-    indexId: 'AWM6iZV51NBBQZg_DR-U',
+    indexId: '97f04200-024b-11eb-81e5-155ba78758d4',
     defaultColumns: ['json.hostname', 'json.application_name', 'json.error_severity', 'json.message', 'json.session_start_time', 'json.sql_state_code', 'json.duration_ms'],
-    defaultSeriesSplitField: 'json.hostname.keyword',
+    defaultSeriesSplitField: 'json.sql_state_code',
+    failureFilter: [mustNot(matchFilter('json.sql_state_code', '00000')), existsFilter('json.sql_state_code')],  // SQL Codes reference: https://www.postgresql.org/docs/9.4/errcodes-appendix.html
     defaultLatencyField: 'json.duration_ms',  // Only makes sense in the context of slowlog entries
     latencyFieldUnitMultiplier: 1000,
   },
 
   postgres_pgbouncer: indexDefaults {
     timestamp: 'json.time',
-    indexId: 'AWM6iZV51NBBQZg_DR-U',
+    indexId: '97f04200-024b-11eb-81e5-155ba78758d4',
     defaultColumns: ['json.hostname', 'json.pg_message'],
     defaultSeriesSplitField: 'json.hostname.keyword',
   },
