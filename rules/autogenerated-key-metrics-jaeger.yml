@@ -40,11 +40,9 @@ groups:
       sum by (environment,stage) (
         rate(jaeger_collector_save_latency_bucket{type="jaeger", le="10"}[1m])
       )
-      /
+      / on(environment,stage) group_left()
       (
-        sum by (environment,stage) (
-          rate(jaeger_collector_save_latency_bucket{type="jaeger", le="+Inf"}[1m])
-        ) > 0
+        gitlab_component_apdex:weight:score{component="jaeger_collector",tier="inf",type="jaeger"} > 0
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -82,11 +80,9 @@ groups:
       sum by (environment,stage) (
         rate(jaeger_query_latency_bucket{type="jaeger", le="10"}[1m])
       )
-      /
+      / on(environment,stage) group_left()
       (
-        sum by (environment,stage) (
-          rate(jaeger_query_latency_bucket{type="jaeger", le="+Inf"}[1m])
-        ) > 0
+        gitlab_component_apdex:weight:score{component="jaeger_query",tier="inf",type="jaeger"} > 0
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -145,11 +141,9 @@ groups:
       sum by (environment,stage) (
         rate(jaeger_collector_save_latency_bucket{type="jaeger", le="10"}[5m])
       )
-      /
+      / on(environment,stage) group_left()
       (
-        sum by (environment,stage) (
-          rate(jaeger_collector_save_latency_bucket{type="jaeger", le="+Inf"}[5m])
-        ) > 0
+        gitlab_component_apdex:weight:score_5m{component="jaeger_collector",tier="inf",type="jaeger"} > 0
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -187,11 +181,9 @@ groups:
       sum by (environment,stage) (
         rate(jaeger_query_latency_bucket{type="jaeger", le="10"}[5m])
       )
-      /
+      / on(environment,stage) group_left()
       (
-        sum by (environment,stage) (
-          rate(jaeger_query_latency_bucket{type="jaeger", le="+Inf"}[5m])
-        ) > 0
+        gitlab_component_apdex:weight:score_5m{component="jaeger_query",tier="inf",type="jaeger"} > 0
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -351,11 +343,9 @@ groups:
       sum by (environment,stage) (
         rate(jaeger_collector_save_latency_bucket{type="jaeger", le="10"}[1h])
       )
-      /
+      / on(environment,stage) group_left()
       (
-        sum by (environment,stage) (
-          rate(jaeger_collector_save_latency_bucket{type="jaeger", le="+Inf"}[1h])
-        ) > 0
+        gitlab_component_apdex:weight:score_1h{component="jaeger_collector",tier="inf",type="jaeger"} > 0
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -393,11 +383,9 @@ groups:
       sum by (environment,stage) (
         rate(jaeger_query_latency_bucket{type="jaeger", le="10"}[1h])
       )
-      /
+      / on(environment,stage) group_left()
       (
-        sum by (environment,stage) (
-          rate(jaeger_query_latency_bucket{type="jaeger", le="+Inf"}[1h])
-        ) > 0
+        gitlab_component_apdex:weight:score_1h{component="jaeger_query",tier="inf",type="jaeger"} > 0
       )
   - record: gitlab_component_ops:rate_1h
     labels:
