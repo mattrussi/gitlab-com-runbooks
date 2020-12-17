@@ -86,7 +86,7 @@ metricsCatalog.serviceDefinition({
         },
       ),
 
-      significantLabels: [],
+      significantLabels: ['jobs_running_for_project'],
 
       toolingLinks: [
         toolingLinks.kibana(title='CI Runners', index='runners', slowRequestSeconds=60),
