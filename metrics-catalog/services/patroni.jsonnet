@@ -50,29 +50,67 @@ metricsCatalog.serviceDefinition({
       significantLabels: [],
     },
 
-    service: {
+    transactions_primary: {
       userImpacting: true,
       featureCategory: 'not_owned',
       team: 'sre_datastores',
       description: |||
-        Represents all SQL transactions issued to primary and secondary instances, in aggregate.
+        Represents all SQL transactions issued to the primary Postgres instance.
         Errors represent transaction rollbacks.
       |||,
 
       requestRate: combined([
         rateMetric(
           counter='pg_stat_database_xact_commit',
-          selector='type="patroni", tier="db"'
+          selector='type="patroni", tier="db"',
+          instanceFilter='(pg_replication_is_replica == 0)'
         ),
         rateMetric(
           counter='pg_stat_database_xact_rollback',
-          selector='type="patroni", tier="db"'
+          selector='type="patroni", tier="db"',
+          instanceFilter='(pg_replication_is_replica == 0)'
         ),
       ]),
 
       errorRate: rateMetric(
         counter='pg_stat_database_xact_rollback',
-        selector='type="patroni", tier="db"'
+        selector='type="patroni", tier="db"',
+        instanceFilter='(pg_replication_is_replica == 0)'
+      ),
+
+      significantLabels: ['fqdn'],
+
+      toolingLinks: [
+        toolingLinks.kibana(title='Postgres', index='postgres', type='patroni', tag='postgres.postgres_csv'),
+      ],
+    },
+
+    transactions_replica: {
+      userImpacting: true,
+      featureCategory: 'not_owned',
+      team: 'sre_datastores',
+      description: |||
+        Represents all SQL transactions issued to replica Postgres instances, in aggregate.
+        Errors represent transaction rollbacks.
+      |||,
+
+      requestRate: combined([
+        rateMetric(
+          counter='pg_stat_database_xact_commit',
+          selector='type="patroni", tier="db"',
+          instanceFilter='(pg_replication_is_replica == 1)'
+        ),
+        rateMetric(
+          counter='pg_stat_database_xact_rollback',
+          selector='type="patroni", tier="db"',
+          instanceFilter='(pg_replication_is_replica == 1)'
+        ),
+      ]),
+
+      errorRate: rateMetric(
+        counter='pg_stat_database_xact_rollback',
+        selector='type="patroni", tier="db"',
+        instanceFilter='(pg_replication_is_replica == 1)'
       ),
 
       significantLabels: ['fqdn'],
