@@ -9,7 +9,7 @@ metricsCatalog.serviceDefinition({
   tier: 'db',
   monitoringThresholds: {
     apdexScore: 0.995,
-    errorRatio: 0.9995,
+    errorRatio: 0.999,
   },
   // Use recordingRuleMetrics to specify a set of metrics with known high
   // cardinality. The metrics catalog will generate recording rules with

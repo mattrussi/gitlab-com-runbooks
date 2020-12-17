@@ -239,22 +239,22 @@ groups:
       (
         (
           gitlab_component_errors:ratio_1h{component="transactions_primary",monitor="global",type="patroni"}
-          > (14.4 * 0.000500)
+          > (14.4 * 0.001000)
         )
         and
         (
           gitlab_component_errors:ratio_5m{component="transactions_primary",monitor="global",type="patroni"}
-          > (14.4 * 0.000500)
+          > (14.4 * 0.001000)
         )
         or
         (
           gitlab_component_errors:ratio_6h{component="transactions_primary",monitor="global",type="patroni"}
-          > (6 * 0.000500)
+          > (6 * 0.001000)
         )
         and
         (
           gitlab_component_errors:ratio_30m{component="transactions_primary",monitor="global",type="patroni"}
-          > (6 * 0.000500)
+          > (6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -369,22 +369,22 @@ groups:
       (
         (
           gitlab_component_errors:ratio_1h{component="transactions_replica",monitor="global",type="patroni"}
-          > (14.4 * 0.000500)
+          > (14.4 * 0.001000)
         )
         and
         (
           gitlab_component_errors:ratio_5m{component="transactions_replica",monitor="global",type="patroni"}
-          > (14.4 * 0.000500)
+          > (14.4 * 0.001000)
         )
         or
         (
           gitlab_component_errors:ratio_6h{component="transactions_replica",monitor="global",type="patroni"}
-          > (6 * 0.000500)
+          > (6 * 0.001000)
         )
         and
         (
           gitlab_component_errors:ratio_30m{component="transactions_replica",monitor="global",type="patroni"}
-          > (6 * 0.000500)
+          > (6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
