@@ -540,5 +540,6 @@ check-stage-groups:
       allow_failure: true
   stage: test
   script:
-    - scripts/update-stage-groups-feature-categories
+    - scripts/update_stage_groups_feature_categories.rb
+    - scripts/update_stage_groups_dashboards.rb
     - git diff --exit-code

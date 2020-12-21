@@ -16,4 +16,5 @@ group :development, :test do
   gem 'gitlab-styles', '~> 3.1', require: false
   gem 'danger-gitlab'
   gem 'bigdecimal'
+  gem 'webmock'
 end
