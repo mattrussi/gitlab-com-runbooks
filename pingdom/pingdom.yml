@@ -266,6 +266,7 @@ checks:
     - forum-gitlab
     teams:
     - Infrastructure
+    - Community Relations
 
   - url: https://deps.sec.gitlab.com/api/ping
     timeout_ms: 30000
