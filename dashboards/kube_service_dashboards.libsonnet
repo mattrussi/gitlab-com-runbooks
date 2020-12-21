@@ -195,7 +195,7 @@ local deploymentOverview(type, selector, startRow=1) =
   // Add links to direct users to kubernetes specific dashboards
   local links = [{
     title: '☸️ %s Kubernetes Deployment Detail' % [type],
-    url: '/d/%s-/git-kube-deployments?${__url_time_range}&${__all_variables}' % [type],
+    url: '/d/%s-kube-deployments?${__url_time_range}&${__all_variables}' % [type],
   }, {
     title: '☸️ %s Kubernetes Container Detail' % [type],
     url: '/d/%s-kube-containers?${__url_time_range}&${__all_variables}' % [type],
