@@ -5,120 +5,164 @@ local layout = import 'grafana/layout.libsonnet';
 local metrics = import 'servicemetrics/metrics.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
-local dashboard(groupKey) =
+// Request rates and error rates for api and git are not included right now
+// because requests to Grape endpoints are lacking the feature category label.
+// These can be added using these methods after https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/709
+// has been resolved.
+local railsRequestRate(type, featureCategories, featureCategoriesSelector) =
+  basic.timeseries(
+    title='Request rate per action %(type)s' % { type: type },
+    query=|||
+      sum by (controller, action) (
+      rate(gitlab_transaction_duration_seconds_count{
+      env='$environment',
+      environment='$environment',
+      feature_category=~'(%(featureCategories)s)',
+      type='%(type)s'
+      }[$__interval])
+      )
+    ||| % {
+      type: type,
+      featureCategories: featureCategoriesSelector,
+    }
+  );
+
+local railsErrorRate(type, featureCategories, featureCategoriesSelector) =
+  basic.timeseries(
+    title='Error rate %(type)s' % { type: type },
+    query=|||
+      sum by (component) (
+        gitlab:component:feature_category:execution:error:rate_1m{
+          env='$environment',
+          environment='$environment',
+          feature_category=~'(%(featureCategories)s)',
+          type='%(type)s'
+        }
+      )
+    ||| % {
+      type: type,
+      featureCategories: featureCategoriesSelector,
+    }
+  );
+
+local sidekiqJobRate(counter, title, featureCategoriesSelector) =
+  basic.timeseries(
+    title=title,
+    query=|||
+      sum by (worker) (
+        rate(%(counter)s{
+          env='$environment',
+          environment='$environment',
+          feature_category=~'(%(featureCategories)s)'
+        }[$__interval])
+      )
+    ||| % {
+      counter: counter,
+      featureCategories: featureCategoriesSelector,
+    }
+  );
+
+local validComponents = std.set(['web', 'api', 'git', 'sidekiq']);
+local dashboard(groupKey, components=validComponents) =
+  assert std.type(components) == 'array' : 'Invalid components argument type';
+  assert std.length(components) != 0 : 'There must be at least one component';
+
+  local setComponents = std.set(components);
+  local invalidComponents = std.setDiff(setComponents, validComponents);
+  assert std.length(invalidComponents) == 0 :
+         'Invalid components: ' + std.join(', ', invalidComponents);
+
   local group = stages.stageGroup(groupKey);
   local featureCategories = stages.categoriesForStageGroup(groupKey);
   local featureCategoriesSelector = std.join('|', featureCategories);
 
-  local sidekiqJobRate(counter, title) =
-    basic.timeseries(
-      title=title,
-      query=|||
-        sum by (worker) (
-          rate(%(counter)s{
-            env='$environment',
-            environment='$environment',
-            feature_category=~'(%(featureCategories)s)'
-          }[$__interval])
+  local dashboard =
+    basic
+    .dashboard(
+      std.format('Group dashboard: %s (%s)', [group.stage, group.name]),
+      tags=['feature_category'],
+      time_from='now-6h/m',
+      time_to='now/m'
+    )
+    .addPanels(
+      local requestRateComponents = std.setInter(std.set(['web', 'api', 'git']), setComponents);
+      if std.length(requestRateComponents) != 0 then
+        layout.rowGrid(
+          'Rails request rates',
+          [
+            railsRequestRate(component, featureCategories, featureCategoriesSelector)
+            for component in requestRateComponents
+          ] +
+          [
+            grafana.text.new(
+              title='Extra links',
+              mode='markdown',
+              content=toolingLinks.generateMarkdown([
+                toolingLinks.kibana(
+                  title='Kibana Rails',
+                  index='rails',
+                  matches={
+                    'json.meta.feature_category': featureCategories,
+                  },
+                ),
+              ], { prometheusSelectorHash: {} })
+            ),
+          ],
+          startRow=201
         )
-      ||| % {
-        counter: counter,
-        featureCategories: featureCategoriesSelector,
-      }
-    );
-  // Request rates and error rates for api and git are not included right now
-  // because requests to Grape endpoints are lacking the feature category label.
-  // These can be added using these methods after https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/709
-  // has been resolved.
-  local railsRequestRate(type) =
-    basic.timeseries(
-      title='Request rate per action %(type)s' % { type: type },
-      query=|||
-        sum by (controller, action) (
-        rate(gitlab_transaction_duration_seconds_count{
-        env='$environment',
-        environment='$environment',
-        feature_category=~'(%(featureCategories)s)',
-        type='%(type)s'
-        }[$__interval])
+      else
+        []
+    )
+    .addPanels(
+      local errorRateComponents = std.setInter(std.set(['web', 'api', 'git']), setComponents);
+      if std.length(errorRateComponents) != 0 then
+        layout.rowGrid(
+          'Rails error rates',
+          [
+            railsErrorRate(component, featureCategories, featureCategoriesSelector)
+            for component in errorRateComponents
+          ],
+          startRow=301
         )
-      ||| % {
-        type: type,
-        featureCategories: featureCategoriesSelector,
-      }
+      else
+        []
+    )
+    .addPanels(
+      if std.member(setComponents, 'sidekiq') then
+        layout.rowGrid(
+          'Sidekiq jobs',
+          [
+            sidekiqJobRate(
+              'sidekiq_jobs_completion_seconds_count',
+              'Completion rate',
+              featureCategoriesSelector
+            ),
+            sidekiqJobRate(
+              'sidekiq_jobs_failed_total',
+              'Error rate',
+              featureCategoriesSelector
+            ),
+            grafana.text.new(
+              title='Extra links',
+              mode='markdown',
+              content=toolingLinks.generateMarkdown([
+                toolingLinks.kibana(
+                  title='Kibana Sidekiq',
+                  index='sidekiq',
+                  matches={
+                    'json.meta.feature_category': featureCategories,
+                  },
+                ),
+              ], { prometheusSelectorHash: {} })
+            ),
+          ],
+          startRow=401
+        )
+      else
+        []
     );
 
-  local railsErrorRate(type) =
-    basic.timeseries(
-      title='Error rate %(type)s' % { type: type },
-      query=|||
-        sum by (component) (
-          gitlab:component:feature_category:execution:error:rate_1m{
-            env='$environment',
-            environment='$environment',
-            feature_category=~'(%(featureCategories)s)',
-            type='%(type)s'
-          }
-        )
-      ||| % {
-        type: type,
-        featureCategories: featureCategoriesSelector,
-      }
-    );
-
-  basic
-  .dashboard(
-    std.format('Group dashboard: %s (%s)', [group.stage, group.name]),
-    tags=['feature_category'],
-    time_from='now-6h/m',
-    time_to='now/m'
-  )
-  .addPanels(
-    layout.rowGrid('Rails request rates', [
-      railsRequestRate('web'),
-      railsRequestRate('api'),
-      railsRequestRate('git'),
-      grafana.text.new(
-        title='Extra links',
-        mode='markdown',
-        content=toolingLinks.generateMarkdown([
-          toolingLinks.kibana(
-            title='Kibana Rails',
-            index='rails',
-            matches={
-              'json.meta.feature_category': featureCategories,
-            },
-          ),
-        ], { prometheusSelectorHash: {} })
-      ),
-    ], startRow=201),
-  )
-  .addPanels(
-    layout.rowGrid('Rails error rates', [
-      railsErrorRate('web'),
-      railsErrorRate('api'),
-      railsErrorRate('git'),
-    ], startRow=301),
-  )
-  .addPanels(
-    layout.rowGrid('Sidekiq jobs', [
-      sidekiqJobRate('sidekiq_jobs_completion_seconds_count', 'Completion rate'),
-      sidekiqJobRate('sidekiq_jobs_failed_total', 'Error rate'),
-      grafana.text.new(
-        title='Extra links',
-        mode='markdown',
-        content=toolingLinks.generateMarkdown([
-          toolingLinks.kibana(
-            title='Kibana Sidekiq',
-            index='sidekiq',
-            matches={
-              'json.meta.feature_category': featureCategories,
-            },
-          ),
-        ], { prometheusSelectorHash: {} })
-      ),
-    ], startRow=401)
-  ) {
+  dashboard {
     stageGroupDashboardTrailer()::
       // Add any additional trailing panels here
       self.trailer(),
