@@ -5,10 +5,6 @@ local layout = import 'grafana/layout.libsonnet';
 local metrics = import 'servicemetrics/metrics.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
-// Request rates and error rates for api and git are not included right now
-// because requests to Grape endpoints are lacking the feature category label.
-// These can be added using these methods after https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/709
-// has been resolved.
 local railsRequestRate(type, featureCategories, featureCategoriesSelector) =
   basic.timeseries(
     title='Request rate per action %(type)s' % { type: type },
