@@ -134,12 +134,12 @@ local dashboard(groupKey, components=validComponents) =
           [
             sidekiqJobRate(
               'sidekiq_jobs_completion_seconds_count',
-              'Completion rate',
+              'Sidekiq Completion rate',
               featureCategoriesSelector
             ),
             sidekiqJobRate(
               'sidekiq_jobs_failed_total',
-              'Error rate',
+              'Sidekiq Error rate',
               featureCategoriesSelector
             ),
             grafana.text.new(

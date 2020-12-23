@@ -18,8 +18,8 @@ test.suite({
         'Error rate git',
         'Error rate web',
         'Sidekiq jobs',
-        'Completion rate',
-        'Error rate',
+        'Sidekiq Completion rate',
+        'Sidekiq Error rate',
         'Extra links',
         'Source',
       ],
@@ -61,8 +61,8 @@ test.suite({
       std.type(results.panels) == 'array' &&
       [panel.title for panel in results.panels] == [
         'Sidekiq jobs',
-        'Completion rate',
-        'Error rate',
+        'Sidekiq Completion rate',
+        'Sidekiq Error rate',
         'Extra links',
         'Source',
       ],
