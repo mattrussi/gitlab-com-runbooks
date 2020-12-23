@@ -12,7 +12,7 @@ local slackChannelDefaults = {};
 local slackChannels = [
   // Generic channels.
   { name: 'prod_alerts_slack_channel', channel: 'alerts' },
-  { name: 'production_slack_channel', channel: 'production', send_resolved: false },
+  { name: 'production_slack_channel', channel: 'production', sendResolved: false },
   { name: 'nonprod_alerts_slack_channel', channel: 'alerts-nonprod' },
 ];
 
