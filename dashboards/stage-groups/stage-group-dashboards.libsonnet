@@ -7,7 +7,9 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
 local railsRequestRate(type, featureCategories, featureCategoriesSelector) =
   basic.timeseries(
-    title='Request rate per action %(type)s' % { type: type },
+    title='%(type)s Request Rate' % { type: std.asciiUpper(type) },
+    yAxisLabel='Requests per Second',
+    legendFormat=if type == 'api' then '{{action}}' else '{{controller}}#{{action}}',
     decimals=2,
     query=|||
       sum by (controller, action) (
@@ -26,8 +28,10 @@ local railsRequestRate(type, featureCategories, featureCategoriesSelector) =
 
 local railsErrorRate(type, featureCategories, featureCategoriesSelector) =
   basic.timeseries(
-    title='Error rate %(type)s' % { type: type },
+    title='%(type)s Error Rate' % { type: std.asciiUpper(type) },
     decimals=2,
+    legendFormat=if type == 'api' then '{{action}}' else '{{controller}}#{{action}}',
+    yAxisLabel='Requests per Second',
     query=|||
       sum by (component) (
         gitlab:component:feature_category:execution:error:rate_1m{
@@ -43,10 +47,13 @@ local railsErrorRate(type, featureCategories, featureCategoriesSelector) =
     }
   );
 
-local sidekiqJobRate(counter, title, featureCategoriesSelector) =
+local sidekiqJobRate(counter, title, description, featureCategoriesSelector) =
   basic.timeseries(
     title=title,
+    description=description,
     decimals=2,
+    yAxisLabel='Jobs per Second',
+    legendFormat='{{worker]}}',
     query=|||
       sum by (worker) (
         rate(%(counter)s{
@@ -87,7 +94,7 @@ local dashboard(groupKey, components=validComponents) =
       local requestRateComponents = std.setInter(std.set(['web', 'api', 'git']), setComponents);
       if std.length(requestRateComponents) != 0 then
         layout.rowGrid(
-          'Rails request rates',
+          'Rails Request Rates',
           [
             railsRequestRate(component, featureCategories, featureCategoriesSelector)
             for component in requestRateComponents
@@ -116,7 +123,7 @@ local dashboard(groupKey, components=validComponents) =
       local errorRateComponents = std.setInter(std.set(['web', 'api', 'git']), setComponents);
       if std.length(errorRateComponents) != 0 then
         layout.rowGrid(
-          'Rails error rates',
+          'Rails Error Rates',
           [
             railsErrorRate(component, featureCategories, featureCategoriesSelector)
             for component in errorRateComponents
@@ -129,16 +136,18 @@ local dashboard(groupKey, components=validComponents) =
     .addPanels(
       if std.member(setComponents, 'sidekiq') then
         layout.rowGrid(
-          'Sidekiq jobs',
+          'Sidekiq',
           [
             sidekiqJobRate(
               'sidekiq_jobs_completion_seconds_count',
-              'Sidekiq Completion rate',
+              'Sidekiq Completion Rate',
+              'The rate (Jobs per Second) at which jobs are completed after dequeue',
               featureCategoriesSelector
             ),
             sidekiqJobRate(
               'sidekiq_jobs_failed_total',
-              'Sidekiq Error rate',
+              'Sidekiq Error Rate',
+              'The rate (Jobs per Second) at which jobs fail after dequeue',
               featureCategoriesSelector
             ),
             grafana.text.new(

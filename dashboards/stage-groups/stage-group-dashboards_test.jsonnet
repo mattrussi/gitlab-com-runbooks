@@ -8,18 +8,18 @@ test.suite({
       results.title == 'Group dashboard: enablement (Geo)' &&
       std.type(results.panels) == 'array' &&
       [panel.title for panel in results.panels] == [
-        'Rails request rates',
-        'Request rate per action api',
-        'Request rate per action git',
-        'Request rate per action web',
+        'Rails Request Rates',
+        'API Request Rate',
+        'GIT Request Rate',
+        'WEB Request Rate',
         'Extra links',
-        'Rails error rates',
-        'Error rate api',
-        'Error rate git',
-        'Error rate web',
-        'Sidekiq jobs',
-        'Sidekiq Completion rate',
-        'Sidekiq Error rate',
+        'Rails Error Rates',
+        'API Error Rate',
+        'GIT Error Rate',
+        'WEB Error Rate',
+        'Sidekiq',
+        'Sidekiq Completion Rate',
+        'Sidekiq Error Rate',
         'Extra links',
         'Source',
       ],
@@ -30,11 +30,11 @@ test.suite({
       results.title == 'Group dashboard: enablement (Geo)' &&
       std.type(results.panels) == 'array' &&
       [panel.title for panel in results.panels] == [
-        'Rails request rates',
-        'Request rate per action web',
+        'Rails Request Rates',
+        'WEB Request Rate',
         'Extra links',
-        'Rails error rates',
-        'Error rate web',
+        'Rails Error Rates',
+        'WEB Error Rate',
         'Source',
       ],
   },
@@ -44,13 +44,13 @@ test.suite({
       results.title == 'Group dashboard: enablement (Geo)' &&
       std.type(results.panels) == 'array' &&
       [panel.title for panel in results.panels] == [
-        'Rails request rates',
-        'Request rate per action api',
-        'Request rate per action web',
+        'Rails Request Rates',
+        'API Request Rate',
+        'WEB Request Rate',
         'Extra links',
-        'Rails error rates',
-        'Error rate api',
-        'Error rate web',
+        'Rails Error Rates',
+        'API Error Rate',
+        'WEB Error Rate',
         'Source',
       ],
   },
@@ -60,9 +60,9 @@ test.suite({
       results.title == 'Group dashboard: enablement (Geo)' &&
       std.type(results.panels) == 'array' &&
       [panel.title for panel in results.panels] == [
-        'Sidekiq jobs',
-        'Sidekiq Completion rate',
-        'Sidekiq Error rate',
+        'Sidekiq',
+        'Sidekiq Completion Rate',
+        'Sidekiq Error Rate',
         'Extra links',
         'Source',
       ],
