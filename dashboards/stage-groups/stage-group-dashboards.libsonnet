@@ -8,6 +8,7 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local railsRequestRate(type, featureCategories, featureCategoriesSelector) =
   basic.timeseries(
     title='Request rate per action %(type)s' % { type: type },
+    decimals=2,
     query=|||
       sum by (controller, action) (
       rate(gitlab_transaction_duration_seconds_count{
@@ -26,6 +27,7 @@ local railsRequestRate(type, featureCategories, featureCategoriesSelector) =
 local railsErrorRate(type, featureCategories, featureCategoriesSelector) =
   basic.timeseries(
     title='Error rate %(type)s' % { type: type },
+    decimals=2,
     query=|||
       sum by (component) (
         gitlab:component:feature_category:execution:error:rate_1m{
@@ -44,6 +46,7 @@ local railsErrorRate(type, featureCategories, featureCategoriesSelector) =
 local sidekiqJobRate(counter, title, featureCategoriesSelector) =
   basic.timeseries(
     title=title,
+    decimals=2,
     query=|||
       sum by (worker) (
         rate(%(counter)s{
