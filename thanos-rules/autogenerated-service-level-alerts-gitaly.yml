@@ -97,22 +97,22 @@ groups:
       (
         (
           gitlab_component_errors:ratio_1h{component="gitalyruby",monitor="global",type="gitaly"}
-          > (14.4 * 0.000500)
+          > (14.4 * 0.001000)
         )
         and
         (
           gitlab_component_errors:ratio_5m{component="gitalyruby",monitor="global",type="gitaly"}
-          > (14.4 * 0.000500)
+          > (14.4 * 0.001000)
         )
         or
         (
           gitlab_component_errors:ratio_6h{component="gitalyruby",monitor="global",type="gitaly"}
-          > (6 * 0.000500)
+          > (6 * 0.001000)
         )
         and
         (
           gitlab_component_errors:ratio_30m{component="gitalyruby",monitor="global",type="gitaly"}
-          > (6 * 0.000500)
+          > (6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -281,22 +281,22 @@ groups:
       (
         (
           gitlab_component_errors:ratio_1h{component="goserver",monitor="global",type="gitaly"}
-          > (14.4 * 0.000500)
+          > (14.4 * 0.001000)
         )
         and
         (
           gitlab_component_errors:ratio_5m{component="goserver",monitor="global",type="gitaly"}
-          > (14.4 * 0.000500)
+          > (14.4 * 0.001000)
         )
         or
         (
           gitlab_component_errors:ratio_6h{component="goserver",monitor="global",type="gitaly"}
-          > (6 * 0.000500)
+          > (6 * 0.001000)
         )
         and
         (
           gitlab_component_errors:ratio_30m{component="goserver",monitor="global",type="gitaly"}
-          > (6 * 0.000500)
+          > (6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -467,22 +467,22 @@ groups:
       (
         (
           gitlab_component_errors:ratio_1h{component="goserver_op_service",monitor="global",type="gitaly"}
-          > (14.4 * 0.000500)
+          > (14.4 * 0.001000)
         )
         and
         (
           gitlab_component_errors:ratio_5m{component="goserver_op_service",monitor="global",type="gitaly"}
-          > (14.4 * 0.000500)
+          > (14.4 * 0.001000)
         )
         or
         (
           gitlab_component_errors:ratio_6h{component="goserver_op_service",monitor="global",type="gitaly"}
-          > (6 * 0.000500)
+          > (6 * 0.001000)
         )
         and
         (
           gitlab_component_errors:ratio_30m{component="goserver_op_service",monitor="global",type="gitaly"}
-          > (6 * 0.000500)
+          > (6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)

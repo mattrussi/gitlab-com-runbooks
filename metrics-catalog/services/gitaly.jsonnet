@@ -31,7 +31,7 @@ metricsCatalog.serviceDefinition({
   nodeLevelMonitoring: true,
   monitoringThresholds: {
     apdexScore: 0.999,
-    errorRatio: 0.9995,
+    errorRatio: 0.999,
   },
   serviceDependencies: {
     gitaly: true,
