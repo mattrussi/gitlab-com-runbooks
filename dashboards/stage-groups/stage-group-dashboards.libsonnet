@@ -68,7 +68,9 @@ local sidekiqJobRate(counter, title, description, featureCategoriesSelector) =
     }
   );
 
-local validComponents = std.set(['web', 'api', 'git', 'sidekiq']);
+local requestComponents = std.set(['web', 'api', 'git']);
+local backgroundComponents = std.set(['sidekiq']);
+local validComponents = std.setUnion(requestComponents, backgroundComponents);
 local dashboard(groupKey, components=validComponents) =
   assert std.type(components) == 'array' : 'Invalid components argument type';
   assert std.length(components) != 0 : 'There must be at least one component';
@@ -91,7 +93,7 @@ local dashboard(groupKey, components=validComponents) =
       time_to='now/m'
     )
     .addPanels(
-      local requestRateComponents = std.setInter(std.set(['web', 'api', 'git']), setComponents);
+      local requestRateComponents = std.setInter(requestComponents, setComponents);
       if std.length(requestRateComponents) != 0 then
         layout.rowGrid(
           'Rails Request Rates',
@@ -120,7 +122,7 @@ local dashboard(groupKey, components=validComponents) =
         []
     )
     .addPanels(
-      local errorRateComponents = std.setInter(std.set(['web', 'api', 'git']), setComponents);
+      local errorRateComponents = std.setInter(requestComponents, setComponents);
       if std.length(errorRateComponents) != 0 then
         layout.rowGrid(
           'Rails Error Rates',
