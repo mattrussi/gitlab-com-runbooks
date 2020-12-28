@@ -13,12 +13,12 @@ local railsRequestRate(type, featureCategories, featureCategoriesSelector) =
     decimals=2,
     query=|||
       sum by (controller, action) (
-      rate(gitlab_transaction_duration_seconds_count{
-      env='$environment',
-      environment='$environment',
-      feature_category=~'(%(featureCategories)s)',
-      type='%(type)s'
-      }[$__interval])
+        rate(gitlab_transaction_duration_seconds_count{
+          env='$environment',
+          environment='$environment',
+          feature_category=~'(%(featureCategories)s)',
+          type='%(type)s'
+        }[$__interval])
       )
     ||| % {
       type: type,
