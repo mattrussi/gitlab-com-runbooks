@@ -15,6 +15,8 @@ Graphs of the Cloudflare rules can be found in dashboards at the [Cloudflare tra
 We have legacy rate limiting in HAProxy using stick tables for IP per connection and request.  
 In the long run, these will be replaced by either rate limits in GitLab (below) or Cloudflare.
 
+See related docs in [../frontend](../frontend/) for other information on blocking and haproxy config.
+
 Graphs for HAProxy can be found at the [HAProxy page](https://dashboards.gitlab.net/d/ZOOh_aNik/haproxy?orgId=1&refresh=5m) and you can look for 429 rates to get an idea on what is being rate limited at this level, though note that some may also be coming from the application.
 
 #### Application
