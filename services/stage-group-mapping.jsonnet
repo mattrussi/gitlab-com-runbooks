@@ -245,7 +245,6 @@
       'logging',
       'synthetic_monitoring',
       'self_monitoring',
-      'product_analytics',
     ],
   },
   container_security: {
@@ -267,10 +266,17 @@
     ],
   },
   provision: {
-    name: 'Provision',
+    name: 'License',
     stage: 'fulfillment',
     feature_categories: [
       'provision',
+    ],
+  },
+  subscription: {
+    name: 'Utilization',
+    stage: 'fulfillment',
+    feature_categories: [
+
     ],
   },
   activation: {
@@ -305,8 +311,9 @@
     name: 'Product Intelligence',
     stage: 'growth',
     feature_categories: [
-      'collection',
-      'analysis',
+      'product_analytics',
+      'usage_ping',
+      'privacy_control_center',
     ],
   },
   distribution: {
