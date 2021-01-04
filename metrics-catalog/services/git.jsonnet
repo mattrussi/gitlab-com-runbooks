@@ -38,13 +38,15 @@ metricsCatalog.serviceDefinition({
     vms: true,
     kubernetes: true,
   },
-  kubeDeployments: {
+  kubeResources: {
     'gitlab-shell': {
+      kind: 'Deployment',
       containers: [
         'gitlab-shell',
       ],
     },
     'git-https': {
+      kind: 'Deployment',
       containers: [
         'gitlab-workhorse',
         'webservice',

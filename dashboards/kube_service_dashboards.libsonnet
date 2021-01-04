@@ -86,7 +86,7 @@ local panelsForDeployment(serviceType, deployment, selectorHash) =
 
 local dashboardsForService(type) =
   local serviceInfo = metricsCatalog.getService(type);
-  local deployments = std.objectFields(serviceInfo.kubeDeployments);
+  local deployments = std.objectFields(serviceInfo.kubeResources);
   local selector = {
     env: '$environment',
     environment: '$environment',
@@ -148,7 +148,7 @@ local dashboardsForService(type) =
                      legendFormat='%s Container Memory' % [container],
                    ),
                   ],
-                serviceInfo.kubeDeployments[deployment].containers
+                serviceInfo.kubeResources[deployment].containers
               ),
             deployments
           ),
@@ -190,7 +190,7 @@ local dashboardsForService(type) =
 
 local deploymentOverview(type, selector, startRow=1) =
   local serviceInfo = metricsCatalog.getService(type);
-  local deployments = std.objectFields(serviceInfo.kubeDeployments);
+  local deployments = std.objectFields(serviceInfo.kubeResources);
 
   // Add links to direct users to kubernetes specific dashboards
   local links = [{

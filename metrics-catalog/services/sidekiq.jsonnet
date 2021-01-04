@@ -49,11 +49,12 @@ metricsCatalog.serviceDefinition({
     'sidekiq_jobs_queue_duration_seconds_bucket',
     'sidekiq_jobs_failed_total',
   ],
-  kubeDeployments: std.foldl(
+  kubeResources: std.foldl(
     function(memo, shard)
       memo {
         // Deployment tags follow the convention sidekiq-catchall etc
         ['sidekiq-' + shard.name]: {
+          kind: 'Deployment',
           containers: [
             'sidekiq',
           ],

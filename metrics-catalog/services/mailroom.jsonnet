@@ -16,8 +16,9 @@ metricsCatalog.serviceDefinition({
     kubernetes: true,
     vms: false,
   },
-  kubeDeployments: {
+  kubeResources: {
     mailroom: {
+      kind: 'Deployment',
       containers: [
         'mailroom',
       ],

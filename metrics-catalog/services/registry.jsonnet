@@ -30,8 +30,9 @@ metricsCatalog.serviceDefinition({
     kubernetes: true,
     vms: true,  // registry haproxy frontend still runs on vms
   },
-  kubeDeployments: {
+  kubeResources: {
     registry: {
+      kind: 'Deployment',
       containers: [
         'registry',
       ],
