@@ -2,5 +2,5 @@
 // Please feel free to customize this file.
 local stageGroupDashboards = import './stage-group-dashboards.libsonnet';
 
-stageGroupDashboards.dashboard('moble_devops')
+stageGroupDashboards.dashboard('moble_devops', displayEmptyGuidance=true)
 .stageGroupDashboardTrailer()
