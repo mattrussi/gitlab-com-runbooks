@@ -12,7 +12,7 @@ local slackChannelDefaults = {};
 local slackChannels = [
   // Generic channels.
   { name: 'prod_alerts_slack_channel', channel: 'alerts' },
-  { name: 'production_slack_channel', channel: 'production' },
+  { name: 'production_slack_channel', channel: 'production', sendResolved: false },
   { name: 'nonprod_alerts_slack_channel', channel: 'alerts-nonprod' },
 ];
 
@@ -81,7 +81,7 @@ local SlackReceiver(channel) =
         channel: '#' + channelWithDefaults.channel,
         color: '{{ template "slack.color" . }}',
         icon_emoji: '{{ template "slack.icon" . }}',
-        send_resolved: true,
+        send_resolved: if std.objectHas(channel, 'sendResolved') then channel.sendResolved else true,
         text: '{{ template "slack.text" . }}',
         title: '{{ template "slack.title" . }}',
         title_link: '{{ template "slack.link" . }}',
