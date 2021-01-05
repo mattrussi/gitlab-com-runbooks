@@ -71,7 +71,7 @@ local sidekiqJobRate(counter, title, description, featureCategoriesSelector) =
 local requestComponents = std.set(['web', 'api', 'git']);
 local backgroundComponents = std.set(['sidekiq']);
 local validComponents = std.setUnion(requestComponents, backgroundComponents);
-local dashboard(groupKey, components=validComponents) =
+local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false) =
   assert std.type(components) == 'array' : 'Invalid components argument type';
   assert std.length(components) != 0 : 'There must be at least one component';
 
@@ -91,6 +91,30 @@ local dashboard(groupKey, components=validComponents) =
       tags=['feature_category'],
       time_from='now-6h/m',
       time_to='now/m'
+    )
+    .addPanels(
+      if displayEmptyGuidance then
+        layout.rowGrid(
+          'Introduction',
+          [
+            grafana.text.new(
+              title='Introduction',
+              mode='markdown',
+              content=|||
+                You may see there are some empty panels in this dashboard. The metrics in each dashboard are filtered and accumulated based on the GitLab [product categories](https://about.gitlab.com/handbook/product/categories/) and [feature categories](https://docs.gitlab.com/ee/development/feature_categorization/index.html).
+                - If your stage group hasn't declared a feature category, please follow the feature category guideline.
+                - If your stage group doesn't use a particular component, you can always [customize this dashboard](https://docs.gitlab.com/ee/development/stage_group_dashboards.html#how-to-customize-the-dashboard) to exclude irrelevant panels.
+
+                For more information, please visit [Dashboards for stage groups](https://docs.gitlab.com/ee/development/stage_group_dashboards.html) or watch [Guide to getting started with dashboards for stage groups](https://youtu.be/xB3gHlKCZpQ).
+
+                The dashboards for stage groups are at a very early stage. All contributions are welcome. If you have any questions or suggestions, please submit an issue in the [Scalability Team issues tracker](https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/new).
+              |||,
+            ),
+          ],
+          startRow=0
+        )
+      else
+        []
     )
     .addPanels(
       local requestRateComponents = std.setInter(requestComponents, setComponents);
