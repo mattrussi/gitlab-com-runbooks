@@ -32,7 +32,17 @@ metricsCatalog.serviceDefinition({
       |||,
 
       local thanosQuerySelector = productionEnvironmentsSelector {
-        job: 'thanos',
+        // The job regex was written while we were transitioning from a thanos
+        // stack deployed in GCE to a new one deployed in GKE. job=thanos
+        // covers all thanos components, but the metrics this filter is used for
+        // are unambiguous because only the query component exposes them - in
+        // the old stack.
+        // In the new stack, we include the query frontend component, which we'd
+        // prefer to measure from.
+        // The generated rules always retain the "stage" label, which is used to
+        // distinguish between the 2 stacks, so the metrics are never blended:
+        // each job name is only present in one stack.
+        job: { re: 'thanos|thanos-query-frontend' },
         type: 'monitoring',
         shard: 'default',
       },
@@ -119,7 +129,10 @@ metricsCatalog.serviceDefinition({
       |||,
 
       local thanosStoreSelector = productionEnvironmentsSelector {
-        job: 'thanos',
+        // Similar to the query selector above, we must pull data from jobs
+        // corresponding to the old and new thanos stacks, which are mutually
+        // exclusive by stage.
+        job: { re: 'thanos|thanos-store-[0-9]+' },
         type: 'monitoring',
         grpc_service: 'thanos.Store',
         grpc_type: 'unary',
