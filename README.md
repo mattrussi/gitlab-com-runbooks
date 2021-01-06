@@ -282,7 +282,7 @@ During an incident, we have [roles defined in the handbook](https://about.gitlab
 * [CI project namespace check](docs/ci-runners/ci-project-namespace-check.md)
 
 ### Work with Infrastructure Providers (VMs)
-* [Getting Support w/ RackSpace for GCP/GKE](howto/GCP-rackspace-support.md)
+* [Getting Support from GCP](docs/uncategorized/externalvendors/GCP-rackspace-support.md)
 * [Create a DO VM for a Service Engineer](docs/uncategorized/create-do-vm-for-service-engineer.md)
 * [Create VMs in Azure, add disks, etc](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/blob/master/doc/azure.md#managing-vms-in-azure)
 * [Bootstrap a new VM](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/blob/master/doc/new-vps.md)
