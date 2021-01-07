@@ -1,5 +1,9 @@
 local rison = import 'rison.libsonnet';
 
+local grafanaTimeFrom = '${__from:date:iso}';
+local grafanaTimeTo = '${__to:date:iso}';
+local grafanaTimeRange = "&_g=(time:(from:'" + grafanaTimeFrom + "',to:'" + grafanaTimeTo + "'))";
+
 // Builds an ElasticSearch match filter clause
 local matchFilter(field, value) =
   {
@@ -178,7 +182,7 @@ local indexCatalog = {
     indexPattern: 'AWSQX_Vf93rHTYrsexmk',
     defaultColumns: ['json.hostname', 'json.redis_message'],
     defaultSeriesSplitField: 'json.hostname.keyword',
-    defaultLatencyField: 'json.exec_time',  // Note: this is only useful in the context of slowlogs
+    defaultLatencyField: 'json.exec_time_s',  // Note: this is only useful in the context of slowlogs
     latencyFieldUnitMultiplier: 1000000,  // Redis uses us
   },
 
@@ -243,7 +247,7 @@ local buildElasticDiscoverSearchQueryURL(index, filters, luceneQueries=[]) =
     },
   };
 
-  indexCatalog[index].kibanaEndpoint + '#/discover?_a=' + rison.encode(applicationState) + '&_g=(time:(from:now-1h,to:now))';
+  indexCatalog[index].kibanaEndpoint + '#/discover?_a=' + rison.encode(applicationState) + grafanaTimeRange;
 
 local buildElasticLineCountVizURL(index, filters, luceneQueries=[], splitSeries=false) =
   local ic = indexCatalog[index];
@@ -268,8 +272,8 @@ local buildElasticLineCountVizURL(index, filters, luceneQueries=[], splitSeries=
           min_doc_count: 1,
           scaleMetricValues: false,
           timeRange: {
-            from: 'now-1h',
-            to: 'now',
+            from: grafanaTimeFrom,
+            to: grafanaTimeTo,
           },
           useNormalizedEsInterval: true,
         },
@@ -311,7 +315,7 @@ local buildElasticLineCountVizURL(index, filters, luceneQueries=[], splitSeries=
     },
   };
 
-  indexCatalog[index].kibanaEndpoint + '#/visualize/create?type=line&indexPattern=' + indexCatalog[index].indexPattern + '&_a=' + rison.encode(applicationState) + '&_g=(time:(from:now-1h,to:now))';
+  indexCatalog[index].kibanaEndpoint + '#/visualize/create?type=line&indexPattern=' + indexCatalog[index].indexPattern + '&_a=' + rison.encode(applicationState) + grafanaTimeRange;
 
 local buildElasticLineTotalDurationVizURL(index, filters, luceneQueries=[], latencyField, splitSeries=false) =
   local ic = indexCatalog[index];
@@ -338,8 +342,8 @@ local buildElasticLineTotalDurationVizURL(index, filters, luceneQueries=[], late
           min_doc_count: 1,
           scaleMetricValues: false,
           timeRange: {
-            from: 'now-1h',
-            to: 'now',
+            from: grafanaTimeFrom,
+            to: grafanaTimeTo,
           },
           useNormalizedEsInterval: true,
         },
@@ -400,7 +404,7 @@ local buildElasticLineTotalDurationVizURL(index, filters, luceneQueries=[], late
     },
   };
 
-  indexCatalog[index].kibanaEndpoint + '#/visualize/create?type=line&indexPattern=' + indexCatalog[index].indexPattern + '&_a=' + rison.encode(applicationState) + '&_g=(time:(from:now-1h,to:now))';
+  indexCatalog[index].kibanaEndpoint + '#/visualize/create?type=line&indexPattern=' + indexCatalog[index].indexPattern + '&_a=' + rison.encode(applicationState) + grafanaTimeRange;
 
 local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latencyField, splitSeries=false) =
   local ic = indexCatalog[index];
@@ -430,8 +434,8 @@ local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latency
           min_doc_count: 1,
           scaleMetricValues: false,
           timeRange: {
-            from: 'now-1h',
-            to: 'now',
+            from: grafanaTimeFrom,
+            to: grafanaTimeTo,
           },
           useNormalizedEsInterval: true,
         },
@@ -502,7 +506,7 @@ local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latency
     },
   };
 
-  indexCatalog[index].kibanaEndpoint + '#/visualize/create?type=line&indexPattern=' + indexCatalog[index].indexPattern + '&_a=' + rison.encode(applicationState) + '&_g=(time:(from:now-1h,to:now))';
+  indexCatalog[index].kibanaEndpoint + '#/visualize/create?type=line&indexPattern=' + indexCatalog[index].indexPattern + '&_a=' + rison.encode(applicationState) + grafanaTimeRange;
 
 {
   matcher:: matcher,
