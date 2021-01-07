@@ -182,7 +182,7 @@ local indexCatalog = {
     indexPattern: 'AWSQX_Vf93rHTYrsexmk',
     defaultColumns: ['json.hostname', 'json.redis_message'],
     defaultSeriesSplitField: 'json.hostname.keyword',
-    defaultLatencyField: 'json.exec_time',  // Note: this is only useful in the context of slowlogs
+    defaultLatencyField: 'json.exec_time_s',  // Note: this is only useful in the context of slowlogs
     latencyFieldUnitMultiplier: 1000000,  // Redis uses us
   },
 
