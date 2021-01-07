@@ -138,6 +138,240 @@ groups:
       gitlab_component_ops:rate_5m{type="monitoring", component="grafana", stage="main", monitor="global"} offset 1h
       unless
       gitlab_component_ops:rate_5m{type="monitoring", component="grafana", stage="main", monitor="global"}
+  - alert: MonitoringServiceMemcachedThanosQfeLabelsApdexSLOViolation
+    for: 2m
+    annotations:
+      title: >-
+        The memcached_thanos_qfe_labels SLI of the monitoring service (`{{ $labels.stage }}` stage) has
+        an apdex violating SLO
+      description: |
+        Various memcached instances support our thanos infrastructure, for the store and query-frontend components.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: monitoring-main/monitoring-overview
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '33320'
+      grafana_variables: environment,stage
+      promql_template_1: >-
+        gitlab_component_apdex:ratio_1h{environment="$environment", type="$type", stage="$stage", component="$component"}
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: symptom
+      feature_category: not_owned
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      slo_alert: 'yes'
+      user_impacting: 'no'
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_1h{component="memcached_thanos_qfe_labels",monitor="global",type="monitoring"}
+          < (1 - 14.4 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_5m{component="memcached_thanos_qfe_labels",monitor="global",type="monitoring"}
+          < (1 - 14.4 * 0.001000)
+        )
+        or
+        (
+          gitlab_component_apdex:ratio_6h{component="memcached_thanos_qfe_labels",monitor="global",type="monitoring"}
+          < (1 - 6 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_30m{component="memcached_thanos_qfe_labels",monitor="global",type="monitoring"}
+          < (1 - 6 * 0.001000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="memcached_thanos_qfe_labels",monitor="global",type="monitoring"}) >= 1
+      )
+  - alert: MonitoringServiceMemcachedThanosQfeLabelsErrorSLOViolation
+    for: 2m
+    annotations:
+      title: >-
+        The memcached_thanos_qfe_labels SLI of the monitoring service (`{{ $labels.stage }}` stage) has
+        an error rate violating SLO
+      description: |
+        Various memcached instances support our thanos infrastructure, for the store and query-frontend components.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: monitoring-main/monitoring-overview
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '96360'
+      grafana_variables: environment,stage
+      link1_title: Definition
+      link1_url: >-
+        https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-error-rate.md
+      promql_template_1: >-
+        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: symptom
+      feature_category: not_owned
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      slo_alert: 'yes'
+      user_impacting: 'no'
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_1h{component="memcached_thanos_qfe_labels",monitor="global",type="monitoring"}
+          > (14.4 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_5m{component="memcached_thanos_qfe_labels",monitor="global",type="monitoring"}
+          > (14.4 * 0.001000)
+        )
+        or
+        (
+          gitlab_component_errors:ratio_6h{component="memcached_thanos_qfe_labels",monitor="global",type="monitoring"}
+          > (6 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_30m{component="memcached_thanos_qfe_labels",monitor="global",type="monitoring"}
+          > (6 * 0.001000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="memcached_thanos_qfe_labels",monitor="global",type="monitoring"}) >= 1
+      )
+  - alert: MonitoringServiceMemcachedThanosQfeQueryRangeApdexSLOViolation
+    for: 2m
+    annotations:
+      title: >-
+        The memcached_thanos_qfe_query_range SLI of the monitoring service (`{{ $labels.stage }}` stage)
+        has an apdex violating SLO
+      description: |
+        Various memcached instances support our thanos infrastructure, for the store and query-frontend components.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: monitoring-main/monitoring-overview
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '36488'
+      grafana_variables: environment,stage
+      promql_template_1: >-
+        gitlab_component_apdex:ratio_1h{environment="$environment", type="$type", stage="$stage", component="$component"}
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: symptom
+      feature_category: not_owned
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      slo_alert: 'yes'
+      user_impacting: 'no'
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_1h{component="memcached_thanos_qfe_query_range",monitor="global",type="monitoring"}
+          < (1 - 14.4 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_5m{component="memcached_thanos_qfe_query_range",monitor="global",type="monitoring"}
+          < (1 - 14.4 * 0.001000)
+        )
+        or
+        (
+          gitlab_component_apdex:ratio_6h{component="memcached_thanos_qfe_query_range",monitor="global",type="monitoring"}
+          < (1 - 6 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_30m{component="memcached_thanos_qfe_query_range",monitor="global",type="monitoring"}
+          < (1 - 6 * 0.001000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="memcached_thanos_qfe_query_range",monitor="global",type="monitoring"}) >= 1
+      )
+  - alert: MonitoringServiceMemcachedThanosQfeQueryRangeErrorSLOViolation
+    for: 2m
+    annotations:
+      title: >-
+        The memcached_thanos_qfe_query_range SLI of the monitoring service (`{{ $labels.stage }}` stage)
+        has an error rate violating SLO
+      description: |
+        Various memcached instances support our thanos infrastructure, for the store and query-frontend components.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: monitoring-main/monitoring-overview
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '59688'
+      grafana_variables: environment,stage
+      link1_title: Definition
+      link1_url: >-
+        https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-error-rate.md
+      promql_template_1: >-
+        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: symptom
+      feature_category: not_owned
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      slo_alert: 'yes'
+      user_impacting: 'no'
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_1h{component="memcached_thanos_qfe_query_range",monitor="global",type="monitoring"}
+          > (14.4 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_5m{component="memcached_thanos_qfe_query_range",monitor="global",type="monitoring"}
+          > (14.4 * 0.001000)
+        )
+        or
+        (
+          gitlab_component_errors:ratio_6h{component="memcached_thanos_qfe_query_range",monitor="global",type="monitoring"}
+          > (6 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_30m{component="memcached_thanos_qfe_query_range",monitor="global",type="monitoring"}
+          > (6 * 0.001000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="memcached_thanos_qfe_query_range",monitor="global",type="monitoring"}) >= 1
+      )
   - alert: MonitoringServicePrometheusApdexSLOViolation
     for: 2m
     annotations:
