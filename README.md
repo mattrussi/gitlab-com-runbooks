@@ -145,8 +145,7 @@ During an incident, we have [roles defined in the handbook](https://about.gitlab
 
 ### Supporting Services
 
-* [Redis replication has stopped](troubleshooting/redis_replication.md)
-* [Redis replication setup](howto/redis-new-cluster-replication.md)
+* [Redis](docs/redis/redis.md)
 * [Sentry is down](docs/monitoring/sentry-is-down.md)
 
 ### Gitaly
