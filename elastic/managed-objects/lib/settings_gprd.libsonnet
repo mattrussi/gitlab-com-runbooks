@@ -83,7 +83,7 @@ else if std.member(MEDIUM_THROUGHPUT, index) then {
     },
     refresh_interval: '20s',
   },
-  number_of_shards: 4,
+  number_of_shards: 3,
   // number_of_replicas: 1,
 } else {
   index: {
