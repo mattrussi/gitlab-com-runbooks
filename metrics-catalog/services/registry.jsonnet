@@ -71,8 +71,8 @@ metricsCatalog.serviceDefinition({
         counter='registry_http_requests_total',
         selector='type="registry", code=~"5.."'
       ),
-
-      significantLabels: ['handler'],
+      // TODO: remove `handler` once registry v2.13.0-gitlab is deployed (see https://gitlab.com/gitlab-com/runbooks/-/merge_requests/3094)
+      significantLabels: ['handler', 'route'],
 
       toolingLinks: [
         toolingLinks.gkeDeployment('gitlab-registry', type='registry', containerName='registry'),
