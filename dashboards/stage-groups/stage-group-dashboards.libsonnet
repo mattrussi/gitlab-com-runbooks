@@ -60,7 +60,7 @@ local railsErrorRate(type, featureCategories, featureCategoriesSelector) =
   basic.timeseries(
     title='%(type)s Error Rate' % { type: std.asciiUpper(type) },
     decimals=2,
-    legendFormat=if type == 'api' then '{{action}}' else '{{controller}}#{{action}}',
+    legendFormat='%s error rate' % type,
     yAxisLabel='Requests per Second',
     query=|||
       sum by (component) (
@@ -191,7 +191,7 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
     .addPanels(
       if std.length(enabledRequestComponents) != 0 then
         layout.rowGrid(
-          'Rails Error Rates',
+          'Rails Error Rates (accumulated by components)',
           [
             railsErrorRate(component, featureCategories, featureCategoriesSelector)
             for component in enabledRequestComponents
