@@ -128,13 +128,13 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
       if std.length(enabledRequestComponents) != 0 then
         controllerFilter(featureCategoriesSelector)
       else
-        null
+        {}
     )
     .addTemplate(
       if std.length(enabledRequestComponents) != 0 then
         actionFilter(featureCategoriesSelector)
       else
-        null
+        {}
     )
     .addPanels(
       if displayEmptyGuidance then

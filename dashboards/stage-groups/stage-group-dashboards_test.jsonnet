@@ -22,6 +22,12 @@ test.suite({
         'Sidekiq Error Rate',
         'Extra links',
         'Source',
+      ] &&
+      [template.name for template in results.templating.list] == [
+        'PROMETHEUS_DS',
+        'environment',
+        'controller',
+        'action',
       ],
   },
   testDisplayEmptyGuidance: {
@@ -46,6 +52,12 @@ test.suite({
         'Sidekiq Error Rate',
         'Extra links',
         'Source',
+      ] &&
+      [template.name for template in results.templating.list] == [
+        'PROMETHEUS_DS',
+        'environment',
+        'controller',
+        'action',
       ],
   },
   testWeb: {
@@ -60,6 +72,12 @@ test.suite({
         'Rails Error Rates (accumulated by components)',
         'WEB Error Rate',
         'Source',
+      ] &&
+      [template.name for template in results.templating.list] == [
+        'PROMETHEUS_DS',
+        'environment',
+        'controller',
+        'action',
       ],
   },
   testApiWeb: {
@@ -76,6 +94,12 @@ test.suite({
         'API Error Rate',
         'WEB Error Rate',
         'Source',
+      ] &&
+      [template.name for template in results.templating.list] == [
+        'PROMETHEUS_DS',
+        'environment',
+        'controller',
+        'action',
       ],
   },
   testSidekiq: {
@@ -89,6 +113,10 @@ test.suite({
         'Sidekiq Error Rate',
         'Extra links',
         'Source',
+      ] &&
+      [template.name for template in results.templating.list if template != {}] == [
+        'PROMETHEUS_DS',
+        'environment',
       ],
   },
 })
