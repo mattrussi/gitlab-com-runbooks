@@ -98,7 +98,7 @@ groups:
       type: gitaly
     expr: |
       sum by (environment,stage) (
-        label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded",grpc_service!="gitaly.OperationService",job="gitaly"}[1m]), "_c", "0", "", "")
+        label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded|Canceled",grpc_service!="gitaly.OperationService",job="gitaly"}[1m]), "_c", "0", "", "")
         or
         label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",grpc_service!="gitaly.OperationService",job="gitaly"}[1m]), "_c", "1", "", "")
       )
@@ -148,7 +148,7 @@ groups:
       type: gitaly
     expr: |
       sum by (environment,stage) (
-        label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded",grpc_service="gitaly.OperationService",job="gitaly"}[1m]), "_c", "0", "", "")
+        label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded|Canceled",grpc_service="gitaly.OperationService",job="gitaly"}[1m]), "_c", "0", "", "")
         or
         label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",grpc_service="gitaly.OperationService",job="gitaly"}[1m]), "_c", "1", "", "")
       )
@@ -249,7 +249,7 @@ groups:
       type: gitaly
     expr: |
       sum by (environment,stage) (
-        label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded",grpc_service!="gitaly.OperationService",job="gitaly"}[5m]), "_c", "0", "", "")
+        label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded|Canceled",grpc_service!="gitaly.OperationService",job="gitaly"}[5m]), "_c", "0", "", "")
         or
         label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",grpc_service!="gitaly.OperationService",job="gitaly"}[5m]), "_c", "1", "", "")
       )
@@ -299,7 +299,7 @@ groups:
       type: gitaly
     expr: |
       sum by (environment,stage) (
-        label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded",grpc_service="gitaly.OperationService",job="gitaly"}[5m]), "_c", "0", "", "")
+        label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded|Canceled",grpc_service="gitaly.OperationService",job="gitaly"}[5m]), "_c", "0", "", "")
         or
         label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",grpc_service="gitaly.OperationService",job="gitaly"}[5m]), "_c", "1", "", "")
       )
@@ -401,7 +401,7 @@ groups:
       type: gitaly
     expr: |
       sum by (environment,stage,shard,fqdn) (
-        label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded",grpc_service!="gitaly.OperationService",job="gitaly"}[5m]), "_c", "0", "", "")
+        label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded|Canceled",grpc_service!="gitaly.OperationService",job="gitaly"}[5m]), "_c", "0", "", "")
         or
         label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",grpc_service!="gitaly.OperationService",job="gitaly"}[5m]), "_c", "1", "", "")
       )
@@ -453,7 +453,7 @@ groups:
       type: gitaly
     expr: |
       sum by (environment,stage,shard,fqdn) (
-        label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded",grpc_service="gitaly.OperationService",job="gitaly"}[5m]), "_c", "0", "", "")
+        label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded|Canceled",grpc_service="gitaly.OperationService",job="gitaly"}[5m]), "_c", "0", "", "")
         or
         label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",grpc_service="gitaly.OperationService",job="gitaly"}[5m]), "_c", "1", "", "")
       )
@@ -554,7 +554,7 @@ groups:
       type: gitaly
     expr: |
       sum by (environment,stage) (
-        label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded",grpc_service!="gitaly.OperationService",job="gitaly"}[30m]), "_c", "0", "", "")
+        label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded|Canceled",grpc_service!="gitaly.OperationService",job="gitaly"}[30m]), "_c", "0", "", "")
         or
         label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",grpc_service!="gitaly.OperationService",job="gitaly"}[30m]), "_c", "1", "", "")
       )
@@ -604,7 +604,7 @@ groups:
       type: gitaly
     expr: |
       sum by (environment,stage) (
-        label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded",grpc_service="gitaly.OperationService",job="gitaly"}[30m]), "_c", "0", "", "")
+        label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded|Canceled",grpc_service="gitaly.OperationService",job="gitaly"}[30m]), "_c", "0", "", "")
         or
         label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",grpc_service="gitaly.OperationService",job="gitaly"}[30m]), "_c", "1", "", "")
       )
@@ -642,7 +642,7 @@ groups:
       type: gitaly
     expr: |
       sum by (environment,stage,shard,fqdn) (
-        label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded",grpc_service!="gitaly.OperationService",job="gitaly"}[30m]), "_c", "0", "", "")
+        label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded|Canceled",grpc_service!="gitaly.OperationService",job="gitaly"}[30m]), "_c", "0", "", "")
         or
         label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",grpc_service!="gitaly.OperationService",job="gitaly"}[30m]), "_c", "1", "", "")
       )
@@ -662,7 +662,7 @@ groups:
       type: gitaly
     expr: |
       sum by (environment,stage,shard,fqdn) (
-        label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded",grpc_service="gitaly.OperationService",job="gitaly"}[30m]), "_c", "0", "", "")
+        label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded|Canceled",grpc_service="gitaly.OperationService",job="gitaly"}[30m]), "_c", "0", "", "")
         or
         label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",grpc_service="gitaly.OperationService",job="gitaly"}[30m]), "_c", "1", "", "")
       )
@@ -763,7 +763,7 @@ groups:
       type: gitaly
     expr: |
       sum by (environment,stage) (
-        label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded",grpc_service!="gitaly.OperationService",job="gitaly"}[1h]), "_c", "0", "", "")
+        label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded|Canceled",grpc_service!="gitaly.OperationService",job="gitaly"}[1h]), "_c", "0", "", "")
         or
         label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",grpc_service!="gitaly.OperationService",job="gitaly"}[1h]), "_c", "1", "", "")
       )
@@ -813,7 +813,7 @@ groups:
       type: gitaly
     expr: |
       sum by (environment,stage) (
-        label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded",grpc_service="gitaly.OperationService",job="gitaly"}[1h]), "_c", "0", "", "")
+        label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded|Canceled",grpc_service="gitaly.OperationService",job="gitaly"}[1h]), "_c", "0", "", "")
         or
         label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",grpc_service="gitaly.OperationService",job="gitaly"}[1h]), "_c", "1", "", "")
       )
@@ -915,7 +915,7 @@ groups:
       type: gitaly
     expr: |
       sum by (environment,stage,shard,fqdn) (
-        label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded",grpc_service!="gitaly.OperationService",job="gitaly"}[1h]), "_c", "0", "", "")
+        label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded|Canceled",grpc_service!="gitaly.OperationService",job="gitaly"}[1h]), "_c", "0", "", "")
         or
         label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",grpc_service!="gitaly.OperationService",job="gitaly"}[1h]), "_c", "1", "", "")
       )
@@ -967,7 +967,7 @@ groups:
       type: gitaly
     expr: |
       sum by (environment,stage,shard,fqdn) (
-        label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded",grpc_service="gitaly.OperationService",job="gitaly"}[1h]), "_c", "0", "", "")
+        label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded|Canceled",grpc_service="gitaly.OperationService",job="gitaly"}[1h]), "_c", "0", "", "")
         or
         label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",grpc_service="gitaly.OperationService",job="gitaly"}[1h]), "_c", "1", "", "")
       )
@@ -1068,7 +1068,7 @@ groups:
       type: gitaly
     expr: |
       sum by (environment,stage) (
-        label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded",grpc_service!="gitaly.OperationService",job="gitaly"}[6h]), "_c", "0", "", "")
+        label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded|Canceled",grpc_service!="gitaly.OperationService",job="gitaly"}[6h]), "_c", "0", "", "")
         or
         label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",grpc_service!="gitaly.OperationService",job="gitaly"}[6h]), "_c", "1", "", "")
       )
@@ -1118,7 +1118,7 @@ groups:
       type: gitaly
     expr: |
       sum by (environment,stage) (
-        label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded",grpc_service="gitaly.OperationService",job="gitaly"}[6h]), "_c", "0", "", "")
+        label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded|Canceled",grpc_service="gitaly.OperationService",job="gitaly"}[6h]), "_c", "0", "", "")
         or
         label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",grpc_service="gitaly.OperationService",job="gitaly"}[6h]), "_c", "1", "", "")
       )
@@ -1156,7 +1156,7 @@ groups:
       type: gitaly
     expr: |
       sum by (environment,stage,shard,fqdn) (
-        label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded",grpc_service!="gitaly.OperationService",job="gitaly"}[6h]), "_c", "0", "", "")
+        label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded|Canceled",grpc_service!="gitaly.OperationService",job="gitaly"}[6h]), "_c", "0", "", "")
         or
         label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",grpc_service!="gitaly.OperationService",job="gitaly"}[6h]), "_c", "1", "", "")
       )
@@ -1176,7 +1176,7 @@ groups:
       type: gitaly
     expr: |
       sum by (environment,stage,shard,fqdn) (
-        label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded",grpc_service="gitaly.OperationService",job="gitaly"}[6h]), "_c", "0", "", "")
+        label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded|Canceled",grpc_service="gitaly.OperationService",job="gitaly"}[6h]), "_c", "0", "", "")
         or
         label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",grpc_service="gitaly.OperationService",job="gitaly"}[6h]), "_c", "1", "", "")
       )
@@ -1213,4 +1213,4 @@ groups:
     labels:
       tier: stor
       type: gitaly
-    expr: '0.001000'
+    expr: '0.000500'
