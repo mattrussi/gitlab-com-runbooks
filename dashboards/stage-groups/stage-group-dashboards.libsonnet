@@ -10,7 +10,7 @@ local controllerFilter(featureCategoriesSelector) =
   template.new(
     'controller',
     '$PROMETHEUS_DS',
-    "label_values(controller_action:gitlab_transaction_duration_seconds_count:rate1m{environment='$environment', feature_category=~'(%s)', }, controller)" % featureCategoriesSelector,
+    "label_values(controller_action:gitlab_transaction_duration_seconds_count:rate1m{environment='$environment', feature_category=~'(%s)'}, controller)" % featureCategoriesSelector,
     current=null,
     refresh='load',
     sort=1,
@@ -23,7 +23,7 @@ local actionFilter(featureCategoriesSelector) =
   template.new(
     'action',
     '$PROMETHEUS_DS',
-    "label_values(controller_action:gitlab_transaction_duration_seconds_count:rate1m{environment='$environment', controller=~'$controller', feature_category=~'(%s)', }, action)" % featureCategoriesSelector,
+    "label_values(controller_action:gitlab_transaction_duration_seconds_count:rate1m{environment='$environment', controller=~'$controller', feature_category=~'(%s)'}, action)" % featureCategoriesSelector,
     current=null,
     refresh='load',
     sort=1,
