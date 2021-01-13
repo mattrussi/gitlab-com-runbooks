@@ -7,6 +7,11 @@ Cloudflare provides a web application firewall (WAF), domain name system
 - staging.gitlab.com
 - gitlab.net
 
+---
+
+- [Cloudflare Statuspage](https://www.cloudflarestatus.com/)
+- [Run a traceroute from the Cloudflare network](https://ops.gitlab.net/gitlab-com/gl-infra/cloudflare-traceroute)
+
 ## [On-Call Reference](oncall.md)
 
 ## [False Positive Triage Process](troubleshooting.md#false-positive-triage-process)

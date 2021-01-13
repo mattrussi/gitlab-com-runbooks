@@ -1,6 +1,7 @@
 # Cloudflare for the on-call
 
-[Cloudflare Status](https://www.cloudflarestatus.com/)
+- [Cloudflare Status](https://www.cloudflarestatus.com/)
+- [Run a traceroute from the Cloudflare network](https://ops.gitlab.net/gitlab-com/gl-infra/cloudflare-traceroute)
 
 ## Using Cloudflare to look for problems
 
