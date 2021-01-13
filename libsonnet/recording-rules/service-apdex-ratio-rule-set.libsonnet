@@ -15,7 +15,9 @@
           expr: |||
             sum by (env, environment, tier, type, stage) (
               (
-                (gitlab_component_apdex:ratio%(suffix)s{monitor!="global"} >= 0) * (gitlab_component_apdex:weight:score%(weightScoreSuffix)s{monitor!="global"} >= 0)
+                (gitlab_component_apdex:ratio%(suffix)s{monitor!="global"} >= 0)
+                *
+                (gitlab_component_apdex:weight:score%(weightScoreSuffix)s{monitor!="global"} >= 0)
               )
               and on (env, tier, type, component)
               gitlab_component_service:mapping{monitor!="global"}
