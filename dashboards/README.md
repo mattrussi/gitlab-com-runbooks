@@ -62,6 +62,10 @@ The file should end with `.shared.jsonnet` and the format of the file should be 
 }
 ```
 
+## Backups
+
+Dashboards that are not version-controlled in this repo are periodically purged from grafana. In order to recover a deleted dashboard (and commit it into this repo), you can look at the archive in [grafana-dashboards](https://gitlab.com/gitlab-org/grafana-dashboards).
+
 # The `jsonnet` docker image
 
 * Google does not maintain official docker images for jsonnet.
