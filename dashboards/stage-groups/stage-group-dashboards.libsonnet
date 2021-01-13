@@ -123,17 +123,11 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
       time_from='now-6h/m',
       time_to='now/m'
     )
-    .addTemplate(
+    .addTemplates(
       if std.length(enabledRequestComponents) != 0 then
-        controllerFilter(featureCategoriesSelector)
+        [controllerFilter(featureCategoriesSelector), actionFilter(featureCategoriesSelector)]
       else
-        {}
-    )
-    .addTemplate(
-      if std.length(enabledRequestComponents) != 0 then
-        actionFilter(featureCategoriesSelector)
-      else
-        {}
+        []
     )
     .addPanels(
       if displayEmptyGuidance then
