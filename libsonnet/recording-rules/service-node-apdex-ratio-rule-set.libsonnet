@@ -4,12 +4,11 @@
   // at a service level.
   //
   // Note: Only gitaly currently uses nodeLevelMonitoring.
-  serviceNodeApdexRatioRuleSet(suffix, weightScoreSuffix)::
+  serviceNodeApdexRatioRuleSet(suffix)::
     {
       generateRecordingRules()::
         local format = {
           suffix: suffix,
-          weightScoreSuffix: weightScoreSuffix,
         };
 
         [{
@@ -19,16 +18,12 @@
               (
                 (gitlab_component_node_apdex:ratio%(suffix)s{monitor!="global"} >= 0)
                 *
-                (gitlab_component_node_apdex:weight:score%(weightScoreSuffix)s{monitor!="global"} >= 0)
+                (gitlab_component_node_apdex:weight:score%(suffix)s{monitor!="global"} >= 0)
               )
-              and on (env, tier, type, component)
-              gitlab_component_service:mapping{monitor!="global"}
             )
             /
             sum by (env, environment, tier, type, stage, shard, fqdn) (
-              (gitlab_component_node_apdex:weight:score%(weightScoreSuffix)s{monitor!="global"} >= 0)
-              and on (env, tier, type, component)
-              gitlab_component_service:mapping{monitor!="global"}
+              (gitlab_component_node_apdex:weight:score%(suffix)s{monitor!="global"} >= 0)
             )
           ||| % format,
         }],

@@ -255,7 +255,7 @@ local ruleSetIterator(ruleSets) = {
           // 1m burn rates use 5m weight scores
           // All other burn rates use the same burn rate as the ratio
           recordingRules.serviceErrorRatioRuleSet(suffix=suffix),
-          recordingRules.serviceApdexRatioRuleSet(suffix=suffix, weightScoreSuffix=(if suffix == '' then '_5m' else suffix)),
+          recordingRules.serviceApdexRatioRuleSet(suffix=suffix),
         ],
       MULTI_BURN_RATE_SUFFIXES
     )),
@@ -265,10 +265,10 @@ local ruleSetIterator(ruleSets) = {
     serviceNodeAggregation: ruleSetIterator([
       // We are only recording node-level apdex scores for 1m and 5m burn rates for now
       recordingRules.serviceNodeErrorRatioRuleSet(suffix=''),
-      recordingRules.serviceNodeApdexRatioRuleSet(suffix='', weightScoreSuffix='_5m'),
+      recordingRules.serviceNodeApdexRatioRuleSet(suffix=''),
 
       recordingRules.serviceNodeErrorRatioRuleSet(suffix='_5m'),
-      recordingRules.serviceNodeApdexRatioRuleSet(suffix='_5m', weightScoreSuffix='_5m'),
+      recordingRules.serviceNodeApdexRatioRuleSet(suffix='_5m'),
 
       recordingRules.serviceNodeErrorRatioRuleSet(suffix='_30m'),
       recordingRules.serviceNodeErrorRatioRuleSet(suffix='_1h'),
