@@ -69,6 +69,38 @@ metricsCatalog.serviceDefinition({
       ],
     },
 
+    goserver_fetches: {
+      userImpacting: true,
+      featureCategory: 'gitaly',
+      team: 'sre_datastores',
+      description: |||
+        This SLI monitors Gitaly fetch and clone requests.
+        GRPC failures which are considered to be the "server's fault" are counted as errors.
+      |||,
+
+      local baseSelector = {
+        job: 'gitaly',
+        grpc_service: { ne: 'gitaly.OperationService' },
+        grpc_method: 'PostUploadPack',
+      },
+      apdex: gitalyHelpers.grpcServiceApdex(baseSelector, 1, 10),
+
+      requestRate: rateMetric(
+        counter='gitaly_service_client_requests_total',
+        selector=baseSelector
+      ),
+
+      errorRate: gitalyGRPCErrorRate(baseSelector),
+
+      significantLabels: ['fqdn'],
+
+      toolingLinks: [
+        toolingLinks.continuousProfiler(service='gitaly'),
+        toolingLinks.sentry(slug='gitlab/gitaly-production'),
+        toolingLinks.kibana(title='Gitaly', index='gitaly', slowRequestSeconds=1),
+      ],
+    },
+
     // Gitaly's OperationService communicates with external hooks
     // and therefore has different latency characteristics
     // Since it can also fail in other ways (due to upstream issues on hooks)

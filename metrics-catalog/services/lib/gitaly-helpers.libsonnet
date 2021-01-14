@@ -18,6 +18,7 @@ local gitalyApdexIgnoredMethods = std.set([
   'ReplicateRepository',
   'FetchIntoObjectPool',
   'FetchSourceBranch',
+  'PostUploadPack',
 
   // Excluding Hook RPCs, as these are dependent on the internal Rails API.
   // Almost all time is spend there, once it's slow of failing it's usually not
@@ -39,14 +40,14 @@ local gitalyApdexIgnoredMethodsRegexp = std.join('|', gitalyApdexIgnoredMethods)
   // GRPC service. Since this is an SLI only, not all operations are included,
   // only unary ones, and even then known slow operations are excluded from
   // the apdex calculation
-  grpcServiceApdex(baseSelector)::
+  grpcServiceApdex(selector, satisfiedThreshold=0.5, toleratedThreshold=1)::
     histogramApdex(
       histogram='grpc_server_handling_seconds_bucket',
-      selector=baseSelector {
+      selector={
         grpc_type: 'unary',
         grpc_method: { nre: gitalyApdexIgnoredMethodsRegexp },
-      },
-      satisfiedThreshold=0.5,
-      toleratedThreshold=1
+      } + selector,
+      satisfiedThreshold=satisfiedThreshold,
+      toleratedThreshold=toleratedThreshold,
     ),
 }
