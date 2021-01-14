@@ -1,9 +1,36 @@
 local stages = import '../../services/stages.libsonnet';
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
+local template = grafana.template;
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local metrics = import 'servicemetrics/metrics.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
+
+local controllerFilter(featureCategoriesSelector) =
+  template.new(
+    'controller',
+    '$PROMETHEUS_DS',
+    "label_values(controller_action:gitlab_transaction_duration_seconds_count:rate1m{environment='$environment', feature_category=~'(%s)'}, controller)" % featureCategoriesSelector,
+    current=null,
+    refresh='load',
+    sort=1,
+    includeAll=true,
+    allValues='.*',
+    multi=true,
+  );
+
+local actionFilter(featureCategoriesSelector) =
+  template.new(
+    'action',
+    '$PROMETHEUS_DS',
+    "label_values(controller_action:gitlab_transaction_duration_seconds_count:rate1m{environment='$environment', controller=~'$controller', feature_category=~'(%s)'}, action)" % featureCategoriesSelector,
+    current=null,
+    refresh='load',
+    sort=1,
+    multi=true,
+    includeAll=true,
+    allValues='.*'
+  );
 
 local railsRequestRate(type, featureCategories, featureCategoriesSelector) =
   basic.timeseries(
@@ -17,7 +44,9 @@ local railsRequestRate(type, featureCategories, featureCategoriesSelector) =
           env='$environment',
           environment='$environment',
           feature_category=~'(%(featureCategories)s)',
-          type='%(type)s'
+          type='%(type)s',
+          controller=~'$controller',
+          action=~'$action'
         }[$__interval])
       )
     ||| % {
@@ -30,7 +59,7 @@ local railsErrorRate(type, featureCategories, featureCategoriesSelector) =
   basic.timeseries(
     title='%(type)s Error Rate' % { type: std.asciiUpper(type) },
     decimals=2,
-    legendFormat=if type == 'api' then '{{action}}' else '{{controller}}#{{action}}',
+    legendFormat='%s error rate' % type,
     yAxisLabel='Requests per Second',
     query=|||
       sum by (component) (
@@ -84,6 +113,8 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
   local featureCategories = stages.categoriesForStageGroup(groupKey);
   local featureCategoriesSelector = std.join('|', featureCategories);
 
+  local enabledRequestComponents = std.setInter(requestComponents, setComponents);
+
   local dashboard =
     basic
     .dashboard(
@@ -91,6 +122,12 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
       tags=['feature_category'],
       time_from='now-6h/m',
       time_to='now/m'
+    )
+    .addTemplates(
+      if std.length(enabledRequestComponents) != 0 then
+        [controllerFilter(featureCategoriesSelector), actionFilter(featureCategoriesSelector)]
+      else
+        []
     )
     .addPanels(
       if displayEmptyGuidance then
@@ -117,13 +154,12 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
         []
     )
     .addPanels(
-      local requestRateComponents = std.setInter(requestComponents, setComponents);
-      if std.length(requestRateComponents) != 0 then
+      if std.length(enabledRequestComponents) != 0 then
         layout.rowGrid(
           'Rails Request Rates',
           [
             railsRequestRate(component, featureCategories, featureCategoriesSelector)
-            for component in requestRateComponents
+            for component in enabledRequestComponents
           ] +
           [
             grafana.text.new(
@@ -146,13 +182,12 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
         []
     )
     .addPanels(
-      local errorRateComponents = std.setInter(requestComponents, setComponents);
-      if std.length(errorRateComponents) != 0 then
+      if std.length(enabledRequestComponents) != 0 then
         layout.rowGrid(
-          'Rails Error Rates',
+          'Rails Error Rates (accumulated by components)',
           [
             railsErrorRate(component, featureCategories, featureCategoriesSelector)
-            for component in errorRateComponents
+            for component in enabledRequestComponents
           ],
           startRow=301
         )
