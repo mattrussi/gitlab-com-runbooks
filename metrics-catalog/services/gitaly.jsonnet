@@ -6,6 +6,37 @@ local gitalyHelpers = import './lib/gitaly-helpers.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 
+// This is a list of unary GRPC methods that should not be included in measuring the apdex score
+// for the Gitaly service, since they're called from background jobs and the latency
+// does not reflect the overall latency of the Gitaly server
+local gitalyApdexIgnoredMethods = std.set([
+  'CalculateChecksum',
+  'CommitLanguages',
+  'CreateFork',
+  'CreateRepositoryFromURL',
+  'FetchInternalRemote',
+  'FetchRemote',
+  'FindRemoteRepository',
+  'FindRemoteRootRef',
+  'Fsck',
+  'GarbageCollect',
+  'RepackFull',
+  'RepackIncremental',
+  'ReplicateRepository',
+  'FetchIntoObjectPool',
+  'FetchSourceBranch',
+  'OptimizeRepository',
+
+  // Excluding Hook RPCs, as these are dependent on the internal Rails API.
+  // Almost all time is spend there, once it's slow of failing it's usually not
+  // a Gitaly alert that should fire.
+  'PreReceiveHook',
+  'PostReceiveHook',
+  'UpdateHook',
+]);
+
+local gitalyApdexIgnoredMethodsRegexp = std.join('|', gitalyApdexIgnoredMethods);
+
 local gitalyGRPCErrorRate(baseSelector) =
   combined([
     rateMetric(
@@ -51,7 +82,11 @@ metricsCatalog.serviceDefinition({
         job: 'gitaly',
         grpc_service: { ne: 'gitaly.OperationService' },
       },
-      apdex: gitalyHelpers.grpcServiceApdex(baseSelector),
+      local baseSelectorApdex = baseSelector {
+        grpc_method: { nre: gitalyApdexIgnoredMethodsRegexp },
+      },
+
+      apdex: gitalyHelpers.grpcServiceApdex(baseSelectorApdex),
 
       requestRate: rateMetric(
         counter='gitaly_service_client_requests_total',
@@ -128,7 +163,7 @@ metricsCatalog.serviceDefinition({
           grpc_type: 'unary',
           grpc_service: { ne: 'gitaly.OperationService' },
           grpc_method: {
-            nre: gitalyHelpers.gitalyApdexIgnoredMethodsRegexp +
+            nre: gitalyApdexIgnoredMethodsRegexp +
                  '|GetLFSPointers|GetAllLFSPointers',  // Ignored because of https://gitlab.com/gitlab-org/gitaly/-/issues/3441
           },
         },

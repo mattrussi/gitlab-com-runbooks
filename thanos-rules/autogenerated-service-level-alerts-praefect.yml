@@ -166,7 +166,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_type="unary",job="praefect",stage="{{ $labels.stage }}"}[5m])
+            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",grpc_type="unary",job="praefect",stage="{{ $labels.stage }}"}[5m])
           )
         )
       runbook: docs/praefect/README.md
