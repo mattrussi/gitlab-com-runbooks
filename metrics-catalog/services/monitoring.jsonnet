@@ -21,6 +21,48 @@ metricsCatalog.serviceDefinition({
    * disable ops-rate anomaly detection on this service.
    */
   disableOpsRatePrediction: true,
+  provisioning: {
+    kubernetes: true,
+    vms: true,
+  },
+  kubeResources: {
+    'thanos-query-frontend': {
+      kind: 'Deployment',
+      containers: [
+        'thanos-query-frontend',
+      ],
+    },
+    'thanos-store': {
+      kind: 'StatefulSet',
+      containers: [
+        'thanos-store',
+      ],
+    },
+    'memcached-thanos-qfe-query-range': {
+      kind: 'StatefulSet',
+      containers: [
+        'memcached',
+      ],
+    },
+    'memcached-thanos-qfe-labels': {
+      kind: 'StatefulSet',
+      containers: [
+        'memcached',
+      ],
+    },
+    'memcached-thanos-bucket-cache': {
+      kind: 'StatefulSet',
+      containers: [
+        'memcached',
+      ],
+    },
+    'memcached-thanos-index-cache': {
+      kind: 'StatefulSet',
+      containers: [
+        'memcached',
+      ],
+    },
+  },
   serviceLevelIndicators: {
     thanos_query: {
       userImpacting: false,
