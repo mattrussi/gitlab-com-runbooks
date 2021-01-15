@@ -1,5 +1,7 @@
 # Thanos Compact
 
+[[_TOC_]]
+
 Thanos compact failures are almost always discoverable in the logs.
 
 In GCE: `journalctl -eu thanos-compact`
@@ -12,6 +14,7 @@ close attention to the alert's metadata to determine where to look.
 
 * OOMs, check for crashes in the logs or non-zero `node_vmstat_oom_kill` .
 * Storage, Large compactions may trigger a full filesystem. Restart of `thanos-compact` will clear the compaction cache.
+* Halted compaction (ThanosCompactHalted alerts). See various scenarios below.
 
 ### Overlapping TSDB blocks
 
@@ -109,3 +112,58 @@ Validate that the alert has resolved. thanos-compact should be able to process
 the section it was previously failing on - but it's possible that there are more
 duplicates ahead, which will cause the alert to re-fire. Pay attention to
 [`thanos_compactor_halted`](https://thanos-query.ops.gitlab.net/graph?g0.range_input=12h&g0.max_source_resolution=0s&g0.expr=thanos_compactor_halted%7Benv%3D%22gprd%22%7D&g0.tab=0).
+
+### Compacted indexes too large
+
+Thanos / Prometheus has a maximum index size of 64GB. As thanos compacts
+segments together, it tries to avoid creating new indexes larger than this size,
+by skipping compaction of such blocks. Sometimes, this doesn't work
+(https://github.com/thanos-io/thanos/issues/3724).
+
+#### Symptoms
+
+- Thanos compaction halted (`thanos_compact_halted == 1`).
+- `level: error` messages in the logs, with content "compact blocks... exceeding max size of 64GiB"
+
+At the time compaction halted, you should see a message of the form:
+
+```
+{"caller":"compact.go:428","err":"compaction: group 300000@4648145191823988568: compact blocks
+[
+/opt/prometheus/thanos/compact-data/compact/300000@4648145191823988568/01EJQ1JVX2RYAVAVBC1CJCESJD
+/opt/prometheus/thanos/compact-data/compact/300000@4648145191823988568/01EJR6MVVKPKQ781VFYKHSH5Z0
+/opt/prometheus/thanos/compact-data/compact/300000@4648145191823988568/01EJXNXJ9NRKESZ7GQT6JXZNNW
+/opt/prometheus/thanos/compact-data/compact/300000@4648145191823988568/01EK36WZ2W5HJKXC1D7S8HFY4H
+/opt/prometheus/thanos/compact-data/compact/300000@4648145191823988568/01ERY52QYS0TXXSRAP14N6NJH5
+]:
+\"/opt/prometheus/thanos/compact-data/compact/300000@4648145191823988568/01EVVZNNZ7KJ53PDN96EVQEA6A.tmp-for-creation/index\" exceeding max size of 64GiB",
+"level":"error","msg":"critical error detected; halting","ts":"2021-01-13T02:00:08.556808522Z"}
+```
+
+#### Resolution
+
+Use thanos tools from a shell in the compactor's environment to mark these
+blocks for skipping. In our GCE infrastructure, this looks like:
+
+```
+export GOOGLE_APPLICATION_CREDENTIALS=/opt/prometheus/thanos/gcs-creds.json
+block_list='01EJQ1JVX2RYAVAVBC1CJCESJD 01EJR6MVVKPKQ781VFYKHSH5Z0 01EJXNXJ9NRKESZ7GQT6JXZNNW 01EK36WZ2W5HJKXC1D7S8HFY4H 01ERY52QYS0TXXSRAP14N6NJH5'
+for id in ${block_list} ; do
+  /opt/prometheus/thanos/thanos tools bucket mark \
+    --objstore.config-file=/opt/prometheus/thanos/objstore.yml \
+    --marker=no-compact-mark.json \
+    --details='ISSUE LINK HERE' \
+    --id="${id}"
+done
+```
+
+We will need a similar process in place when we move thanos-compact to
+Kubernetes. In principle you can do this with local thanos binary against the
+bucket from your workstation, but `kubectl exec` will likely be the preferred
+procedure.
+
+Restart thanos-compact.
+
+#### Example incidents
+
+- https://gitlab.com/gitlab-com/gl-infra/production/-/issues/3308
