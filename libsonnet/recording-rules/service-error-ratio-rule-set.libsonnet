@@ -11,14 +11,14 @@
         [{
           record: 'gitlab_service_errors:rate%(suffix)s' % format,
           expr: |||
-            sum by (environment,env,tier,type,stage) (
+            sum by (env,environment,tier,type,stage) (
               gitlab_component_errors:rate%(suffix)s{monitor!="global"} >= 0
             )
           ||| % format,
         }, {
           record: 'gitlab_service_ops:rate%(suffix)s' % format,
           expr: |||
-            sum by (environment,env,tier,type,stage) (
+            sum by (env,environment,tier,type,stage) (
               gitlab_component_ops:rate%(suffix)s{monitor!="global"} >= 0
             )
           ||| % format,
