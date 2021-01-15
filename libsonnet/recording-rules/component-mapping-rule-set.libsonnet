@@ -11,13 +11,13 @@
         [
           {
             local component = serviceDefinition.serviceLevelIndicators[sliName],
-            local aggregateRequestRate = if component.aggregateRequestRate then 'yes' else 'no',
+            local serviceAggregation = if component.serviceAggregation then 'yes' else 'no',
 
             record: 'gitlab_component_service:mapping',
             labels: {
               type: serviceDefinition.type,
               tier: serviceDefinition.tier,
-              aggregate_rps: aggregateRequestRate,
+              service_aggregation: serviceAggregation,
               component: sliName,  // Use component for compatability here
             },
             expr: '1',

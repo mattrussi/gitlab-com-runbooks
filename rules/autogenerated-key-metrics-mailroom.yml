@@ -121,8 +121,8 @@ groups:
   rules:
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: emailsProcessed
+      service_aggregation: 'yes'
       tier: sv
       type: mailroom
     expr: '1'

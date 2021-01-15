@@ -511,29 +511,29 @@ groups:
   rules:
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: pgbouncer
+      service_aggregation: 'yes'
       tier: db
       type: patroni
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: rails_sql
+      service_aggregation: 'yes'
       tier: db
       type: patroni
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: transactions_primary
+      service_aggregation: 'yes'
       tier: db
       type: patroni
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: transactions_replica
+      service_aggregation: 'yes'
       tier: db
       type: patroni
     expr: '1'

@@ -1146,43 +1146,43 @@ groups:
   rules:
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: gitlab_shell
+      service_aggregation: 'yes'
       tier: sv
       type: git
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'no'
       component: loadbalancer
+      service_aggregation: 'no'
       tier: sv
       type: git
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'no'
       component: loadbalancer_ssh
+      service_aggregation: 'no'
       tier: sv
       type: git
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: puma
+      service_aggregation: 'yes'
       tier: sv
       type: git
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: workhorse
+      service_aggregation: 'yes'
       tier: sv
       type: git
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: workhorse_auth_api
+      service_aggregation: 'yes'
       tier: sv
       type: git
     expr: '1'

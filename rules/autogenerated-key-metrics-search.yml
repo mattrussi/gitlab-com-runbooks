@@ -111,15 +111,15 @@ groups:
   rules:
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: elasticsearch_indexing
+      service_aggregation: 'yes'
       tier: inf
       type: search
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: elasticsearch_searching
+      service_aggregation: 'yes'
       tier: inf
       type: search
     expr: '1'

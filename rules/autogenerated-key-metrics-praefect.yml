@@ -506,22 +506,22 @@ groups:
   rules:
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'no'
       component: praefect_cloudsql
+      service_aggregation: 'no'
       tier: stor
       type: praefect
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: proxy
+      service_aggregation: 'yes'
       tier: stor
       type: praefect
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: replicator_queue
+      service_aggregation: 'yes'
       tier: stor
       type: praefect
     expr: '1'

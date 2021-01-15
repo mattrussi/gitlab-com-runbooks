@@ -1185,22 +1185,22 @@ groups:
   rules:
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: gitalyruby
+      service_aggregation: 'yes'
       tier: stor
       type: gitaly
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: goserver
+      service_aggregation: 'yes'
       tier: stor
       type: gitaly
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: goserver_op_service
+      service_aggregation: 'yes'
       tier: stor
       type: gitaly
     expr: '1'

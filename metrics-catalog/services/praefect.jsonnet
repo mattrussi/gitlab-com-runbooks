@@ -105,7 +105,7 @@ metricsCatalog.serviceDefinition({
       ),
 
       significantLabels: [],
-      aggregateRequestRate: false,  // Don't include cloudsql in the aggregated RPS for the service
+      serviceAggregation: false,  // Don't include cloudsql in the aggregated RPS for the service
       toolingLinks: [
         toolingLinks.cloudSQL('praefect-db-9dfb'),
       ],

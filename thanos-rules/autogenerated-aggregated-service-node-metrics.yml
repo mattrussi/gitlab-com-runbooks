@@ -8,12 +8,12 @@ groups:
   - record: gitlab_service_node_errors:rate
     expr: |
       sum by (env,environment,tier,type,stage,shard,fqdn) (
-        gitlab_component_node_errors:rate{monitor!="global"} >= 0
+        gitlab_component_node_errors:rate{monitor!="global"} >= 0 and on(component, type) (gitlab_component_service:mapping{monitor="global", service_aggregation="yes"})
       )
   - record: gitlab_service_node_ops:rate
     expr: |
       sum by (env,environment,tier,type,stage,shard,fqdn) (
-        gitlab_component_node_ops:rate{monitor!="global"} >= 0 and on(component, type) (gitlab_component_service:mapping{monitor="global", aggregate_rps="yes"})
+        gitlab_component_node_ops:rate{monitor!="global"} >= 0 and on(component, type) (gitlab_component_service:mapping{monitor="global", service_aggregation="yes"})
       )
   - record: gitlab_service_node_errors:ratio
     expr: |
@@ -36,12 +36,12 @@ groups:
   - record: gitlab_service_node_errors:rate_5m
     expr: |
       sum by (env,environment,tier,type,stage,shard,fqdn) (
-        gitlab_component_node_errors:rate_5m{monitor!="global"} >= 0
+        gitlab_component_node_errors:rate_5m{monitor!="global"} >= 0 and on(component, type) (gitlab_component_service:mapping{monitor="global", service_aggregation="yes"})
       )
   - record: gitlab_service_node_ops:rate_5m
     expr: |
       sum by (env,environment,tier,type,stage,shard,fqdn) (
-        gitlab_component_node_ops:rate_5m{monitor!="global"} >= 0 and on(component, type) (gitlab_component_service:mapping{monitor="global", aggregate_rps="yes"})
+        gitlab_component_node_ops:rate_5m{monitor!="global"} >= 0 and on(component, type) (gitlab_component_service:mapping{monitor="global", service_aggregation="yes"})
       )
   - record: gitlab_service_node_errors:ratio_5m
     expr: |
@@ -64,12 +64,12 @@ groups:
   - record: gitlab_service_node_errors:rate_30m
     expr: |
       sum by (env,environment,tier,type,stage,shard,fqdn) (
-        gitlab_component_node_errors:rate_30m{monitor!="global"} >= 0
+        gitlab_component_node_errors:rate_30m{monitor!="global"} >= 0 and on(component, type) (gitlab_component_service:mapping{monitor="global", service_aggregation="yes"})
       )
   - record: gitlab_service_node_ops:rate_30m
     expr: |
       sum by (env,environment,tier,type,stage,shard,fqdn) (
-        gitlab_component_node_ops:rate_30m{monitor!="global"} >= 0 and on(component, type) (gitlab_component_service:mapping{monitor="global", aggregate_rps="yes"})
+        gitlab_component_node_ops:rate_30m{monitor!="global"} >= 0 and on(component, type) (gitlab_component_service:mapping{monitor="global", service_aggregation="yes"})
       )
   - record: gitlab_service_node_errors:ratio_30m
     expr: |
@@ -79,12 +79,12 @@ groups:
   - record: gitlab_service_node_errors:rate_1h
     expr: |
       sum by (env,environment,tier,type,stage,shard,fqdn) (
-        gitlab_component_node_errors:rate_1h{monitor!="global"} >= 0
+        gitlab_component_node_errors:rate_1h{monitor!="global"} >= 0 and on(component, type) (gitlab_component_service:mapping{monitor="global", service_aggregation="yes"})
       )
   - record: gitlab_service_node_ops:rate_1h
     expr: |
       sum by (env,environment,tier,type,stage,shard,fqdn) (
-        gitlab_component_node_ops:rate_1h{monitor!="global"} >= 0 and on(component, type) (gitlab_component_service:mapping{monitor="global", aggregate_rps="yes"})
+        gitlab_component_node_ops:rate_1h{monitor!="global"} >= 0 and on(component, type) (gitlab_component_service:mapping{monitor="global", service_aggregation="yes"})
       )
   - record: gitlab_service_node_errors:ratio_1h
     expr: |
@@ -94,12 +94,12 @@ groups:
   - record: gitlab_service_node_errors:rate_6h
     expr: |
       sum by (env,environment,tier,type,stage,shard,fqdn) (
-        gitlab_component_node_errors:rate_6h{monitor!="global"} >= 0
+        gitlab_component_node_errors:rate_6h{monitor!="global"} >= 0 and on(component, type) (gitlab_component_service:mapping{monitor="global", service_aggregation="yes"})
       )
   - record: gitlab_service_node_ops:rate_6h
     expr: |
       sum by (env,environment,tier,type,stage,shard,fqdn) (
-        gitlab_component_node_ops:rate_6h{monitor!="global"} >= 0 and on(component, type) (gitlab_component_service:mapping{monitor="global", aggregate_rps="yes"})
+        gitlab_component_node_ops:rate_6h{monitor!="global"} >= 0 and on(component, type) (gitlab_component_service:mapping{monitor="global", service_aggregation="yes"})
       )
   - record: gitlab_service_node_errors:ratio_6h
     expr: |

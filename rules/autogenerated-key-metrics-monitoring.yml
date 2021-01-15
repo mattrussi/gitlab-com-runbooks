@@ -2221,92 +2221,92 @@ groups:
   rules:
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: grafana
+      service_aggregation: 'yes'
       tier: inf
       type: monitoring
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: memcached_thanos_qfe_labels
+      service_aggregation: 'yes'
       tier: inf
       type: monitoring
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: memcached_thanos_qfe_query_range
+      service_aggregation: 'yes'
       tier: inf
       type: monitoring
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: prometheus
+      service_aggregation: 'yes'
       tier: inf
       type: monitoring
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: prometheus_alert_sender
+      service_aggregation: 'yes'
       tier: inf
       type: monitoring
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: public_dashboards_thanos_query
+      service_aggregation: 'yes'
       tier: inf
       type: monitoring
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: public_grafana_googlelb
+      service_aggregation: 'yes'
       tier: inf
       type: monitoring
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: rule_evaluation
+      service_aggregation: 'yes'
       tier: inf
       type: monitoring
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: thanos_compactor
+      service_aggregation: 'yes'
       tier: inf
       type: monitoring
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: thanos_query
+      service_aggregation: 'yes'
       tier: inf
       type: monitoring
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: thanos_rule_alert_sender
+      service_aggregation: 'yes'
       tier: inf
       type: monitoring
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: thanos_store
+      service_aggregation: 'yes'
       tier: inf
       type: monitoring
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: trickster
+      service_aggregation: 'yes'
       tier: inf
       type: monitoring
     expr: '1'

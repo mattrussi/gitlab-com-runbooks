@@ -76,8 +76,8 @@ groups:
   rules:
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: service
+      service_aggregation: 'yes'
       tier: db
       type: pgbouncer
     expr: '1'
