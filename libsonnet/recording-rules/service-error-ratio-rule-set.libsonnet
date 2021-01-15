@@ -19,7 +19,7 @@
           record: 'gitlab_service_ops:rate%(suffix)s' % format,
           expr: |||
             sum by (environment,env,tier,type,stage) (
-              gitlab_component_ops:rate%(suffix)s{monitor!="global"} > 0
+              gitlab_component_ops:rate%(suffix)s{monitor!="global"} >= 0
             )
           ||| % format,
         }, {
