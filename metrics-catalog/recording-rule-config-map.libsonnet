@@ -185,14 +185,6 @@ local ruleSetIterator(ruleSets) = {
       },
     ],
 
-    componentErrorRatios: ruleSetIterator(std.flatMap(
-      function(suffix)
-        [
-          recordingRules.componentNodeErrorRatioRuleSet(suffix=suffix),
-        ],
-      std.filter(function(f) f != '', MULTI_BURN_RATE_SUFFIXES)  // Exclude 1m burns
-    )),
-
     // Component mappings are static recording rules which help
     // determine whether a component is being monitored. This helps
     // prevent spurious alerts when a component is decommissioned.
@@ -246,14 +238,26 @@ local ruleSetIterator(ruleSets) = {
       MULTI_BURN_RATE_SUFFIXES
     )),
 
+    // Note: no 30m or 6h apdex for node aggregations
+    componentNodeAggregation: ruleSetIterator([
+      recordingRules.componentNodeErrorRatioRuleSet(suffix='_5m'),
+      recordingRules.componentNodeApdexRatioRuleSet(suffix='_5m'),
+
+      recordingRules.componentNodeErrorRatioRuleSet(suffix='_30m'),
+      // No apdex at 30m
+
+      recordingRules.componentNodeErrorRatioRuleSet(suffix='_1h'),
+      recordingRules.componentNodeApdexRatioRuleSet(suffix='_1h'),
+
+      recordingRules.componentNodeErrorRatioRuleSet(suffix='_6h'),
+      // No apdex at 6h
+    ]),
 
     // This rolls the component-level error ratios up to the service-level,
     // as a Thanos aggregation
     serviceAggregation: ruleSetIterator(std.flatMap(
       function(suffix)
         [
-          // 1m burn rates use 5m weight scores
-          // All other burn rates use the same burn rate as the ratio
           recordingRules.serviceErrorRatioRuleSet(suffix=suffix),
           recordingRules.serviceApdexRatioRuleSet(suffix=suffix),
         ],
@@ -262,17 +266,19 @@ local ruleSetIterator(ruleSets) = {
 
     // This rolls the component-level error ratios up to the service-level,
     // as a Thanos aggregation
+    // Note: no 30m or 6h apdex for node aggregations
     serviceNodeAggregation: ruleSetIterator([
-      // We are only recording node-level apdex scores for 1m and 5m burn rates for now
-      recordingRules.serviceNodeErrorRatioRuleSet(suffix=''),
-      recordingRules.serviceNodeApdexRatioRuleSet(suffix=''),
-
       recordingRules.serviceNodeErrorRatioRuleSet(suffix='_5m'),
       recordingRules.serviceNodeApdexRatioRuleSet(suffix='_5m'),
 
       recordingRules.serviceNodeErrorRatioRuleSet(suffix='_30m'),
+      // No apdex at 30m
+
       recordingRules.serviceNodeErrorRatioRuleSet(suffix='_1h'),
+      recordingRules.serviceNodeApdexRatioRuleSet(suffix='_1h'),
+
       recordingRules.serviceNodeErrorRatioRuleSet(suffix='_6h'),
+      // No apdex at 6h
     ]),
 
     // Component and service mappings are static recording rules which

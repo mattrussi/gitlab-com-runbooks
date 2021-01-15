@@ -15,14 +15,14 @@
           record: 'gitlab_service_node_errors:rate%(suffix)s' % format,
           expr: |||
             sum by (env,environment,tier,type,stage,shard,fqdn) (
-              gitlab_component_node_errors:rate%(suffix)s{monitor!="global"} >= 0 and on(component, type) (gitlab_component_service:mapping{monitor="global", service_aggregation="yes"})
+              gitlab_component_node_errors:rate%(suffix)s{monitor="global"} >= 0 and on(component, type) (gitlab_component_service:mapping{monitor="global", service_aggregation="yes"})
             )
           ||| % format,
         }, {
           record: 'gitlab_service_node_ops:rate%(suffix)s' % format,
           expr: |||
             sum by (env,environment,tier,type,stage,shard,fqdn) (
-              gitlab_component_node_ops:rate%(suffix)s{monitor!="global"} >= 0 and on(component, type) (gitlab_component_service:mapping{monitor="global", service_aggregation="yes"})
+              gitlab_component_node_ops:rate%(suffix)s{monitor="global"} >= 0 and on(component, type) (gitlab_component_service:mapping{monitor="global", service_aggregation="yes"})
             )
           ||| % format,
         }, {

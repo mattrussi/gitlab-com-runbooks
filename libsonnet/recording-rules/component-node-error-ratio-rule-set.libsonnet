@@ -12,15 +12,25 @@
         };
 
         [{
-          record: 'gitlab_component_node_errors:ratio%(suffix)s' % format,
+          record: 'gitlab_component_node_errors:rate%(suffix)s' % format,
           expr: |||
-            sum by (environment,tier,type,stage,shard,fqdn,component) (
+            sum by (env,environment,tier,type,stage,shard,fqdn,component) (
               gitlab_component_node_errors:rate%(suffix)s{monitor!="global"} >= 0
             )
-            /
-            sum by (environment,tier,type,stage,shard,fqdn,component) (
+          ||| % format,
+        }, {
+          record: 'gitlab_component_node_ops:rate%(suffix)s' % format,
+          expr: |||
+            sum by (env,environment,tier,type,stage,shard,fqdn,component) (
               gitlab_component_node_ops:rate%(suffix)s{monitor!="global"} >= 0
             )
+          ||| % format,
+        }, {
+          record: 'gitlab_component_node_errors:ratio%(suffix)s' % format,
+          expr: |||
+            gitlab_component_node_errors:rate%(suffix)s{monitor="global"}
+            /
+            gitlab_component_node_ops:rate%(suffix)s{monitor="global"}
           ||| % format,
         }],
     },
