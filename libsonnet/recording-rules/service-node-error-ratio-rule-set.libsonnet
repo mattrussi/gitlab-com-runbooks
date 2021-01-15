@@ -14,14 +14,14 @@
         [{
           record: 'gitlab_service_node_errors:rate%(suffix)s' % format,
           expr: |||
-            sum by (environment, env, tier, type, stage, shard, fqdn) (
+            sum by (env,environment,tier,type,stage,shard,fqdn) (
               gitlab_component_node_errors:rate%(suffix)s{monitor!="global"} >= 0
             )
           ||| % format,
         }, {
           record: 'gitlab_service_node_ops:rate%(suffix)s' % format,
           expr: |||
-            sum by (environment, env, tier, type, stage, shard, fqdn) (
+            sum by (env,environment,tier,type,stage,shard,fqdn) (
               gitlab_component_node_ops:rate%(suffix)s{monitor!="global"} > 0
             )
           ||| % format,
