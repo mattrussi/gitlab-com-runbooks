@@ -223,7 +223,7 @@ local cachesPerAction(type, featureCategories, featureCategoriesSelector) =
     legendFormat='{{operation}} - ' + actionLegend(type),
     yAxisLabel='Operations',
     description=|||
-      Average total numbe of caching operations (Read & Write) per action.
+      Average total number of caching operations (Read & Write) per action.
     |||,
     query=|||
       sum without (fqdn, instance) (
