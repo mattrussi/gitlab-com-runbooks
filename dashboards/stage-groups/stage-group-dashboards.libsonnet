@@ -337,56 +337,52 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
     )
     .addPanels(
       if std.length(enabledRequestComponents) != 0 then
-        layout.rowGrid(
+        layout.rowGridCollapsed(
           'SQL Queries Per Action',
           [
             sqlQueriesPerAction(component, featureCategories, featureCategoriesSelector)
             for component in enabledRequestComponents
           ],
-          startRow=401,
-          collapse=true
+          startRow=401
         )
       else
         []
     )
     .addPanels(
       if std.length(enabledRequestComponents) != 0 then
-        layout.rowGrid(
+        layout.rowGridCollapsed(
           'SQL Latency Per Action',
           [
             sqlLatenciesPerAction(component, featureCategories, featureCategoriesSelector)
             for component in enabledRequestComponents
           ],
-          startRow=501,
-          collapse=true
+          startRow=501
         )
       else
         []
     )
     .addPanels(
       if std.length(enabledRequestComponents) != 0 then
-        layout.rowGrid(
+        layout.rowGridCollapsed(
           'SQL Latency Per Query',
           [
             sqlLatenciesPerQuery(component, featureCategories, featureCategoriesSelector)
             for component in enabledRequestComponents
           ],
-          startRow=601,
-          collapse=true
+          startRow=601
         )
       else
         []
     )
     .addPanels(
       if std.length(enabledRequestComponents) != 0 then
-        layout.rowGrid(
+        layout.rowGridCollapsed(
           'Caches per Action',
           [
             cachesPerAction(component, featureCategories, featureCategoriesSelector)
             for component in enabledRequestComponents
           ],
-          startRow=701,
-          collapse=true
+          startRow=701
         )
       else
         []

@@ -37,10 +37,20 @@ local generateDropOffsets(cellHeights, rowOffsets) =
     self.grid(panels, cols=cols, rowHeight=rowHeight, startRow=startRow),
 
   // Layout all panels in a single row, with a title row
-  rowGrid(rowTitle, panels, startRow, collapse=false)::
+  rowGrid(rowTitle, panels, startRow)::
     [
-      grafana.row.new(title=rowTitle, collapse=collapse) { gridPos: { x: 0, y: startRow, w: 24, h: 1 } },
+      grafana.row.new(title=rowTitle) { gridPos: { x: 0, y: startRow, w: 24, h: 1 } },
     ] + self.singleRow(panels, startRow=(startRow + 1)),
+
+  // rowGrid method adds the panels as consecutive panels. It makes collapse
+  // option doesn't work on child panels of a row. A panel should be a child of
+  // a row.
+  // TODO: Unify rowGridCollapsed and rowGrid
+  rowGridCollapsed(rowTitle, panels, startRow)::
+    [
+      local row = grafana.row.new(title=rowTitle, collapse=true) { gridPos: { x: 0, y: startRow, w: 24, h: 1 } };
+      row.addPanels(self.singleRow(panels, startRow=(startRow + 1))),
+    ],
 
   // Rows -> array of arrays. Each outer array is a row.
   rows(rowsOfPanels, rowHeight=10, startRow=0)::
