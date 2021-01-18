@@ -65,4 +65,13 @@ local layout = import 'grafana/layout.libsonnet';
       query='rate(registry_http_request_duration_seconds_bucket{route="/v2/{name}/blobs/uploads/", cluster="$cluster", namespace="$namespace"}[10m])',
     ),
   ], cols=3, rowHeight=10, startRow=startRow),
+
+  version(startRow)::
+    layout.grid([
+      basic.timeseries(
+        title='Version',
+        query='count(gitlab_build_info{app="registry", cluster="$cluster", namespace="$namespace"}) by (version)',
+        legendFormat='{{ version }}',
+      ),
+    ], cols=2, rowHeight=5, startRow=startRow),
 }

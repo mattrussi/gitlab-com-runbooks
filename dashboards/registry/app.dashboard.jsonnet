@@ -25,7 +25,7 @@ basic.dashboard(
 )
 .addPanel(
 
-  row.new(title='Stackdriver Metrics'),
+  row.new(title='Build Info'),
   gridPos={
     x: 0,
     y: 0,
@@ -33,10 +33,10 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(common.logMessages(startRow=1))
+.addPanels(crCommon.version(startRow=1))
 .addPanel(
 
-  row.new(title='General Counters'),
+  row.new(title='Stackdriver Metrics'),
   gridPos={
     x: 0,
     y: 1000,
@@ -44,10 +44,10 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(common.generalCounters(startRow=1001))
+.addPanels(common.logMessages(startRow=1001))
 .addPanel(
 
-  row.new(title='Data'),
+  row.new(title='General Counters'),
   gridPos={
     x: 0,
     y: 2000,
@@ -55,10 +55,10 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(crCommon.data(startRow=2001))
+.addPanels(common.generalCounters(startRow=2001))
 .addPanel(
 
-  row.new(title='Handler Latencies'),
+  row.new(title='Data'),
   gridPos={
     x: 0,
     y: 3000,
@@ -66,4 +66,15 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(crCommon.latencies(startRow=3001))
+.addPanels(crCommon.data(startRow=3001))
+.addPanel(
+
+  row.new(title='Handler Latencies'),
+  gridPos={
+    x: 0,
+    y: 4000,
+    w: 24,
+    h: 1,
+  }
+)
+.addPanels(crCommon.latencies(startRow=4001))
