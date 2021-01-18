@@ -198,7 +198,7 @@ local ruleSetIterator(ruleSets) = {
     // prevent spurious alerts when a component is decommissioned.
     componentMapping: ruleSetIterator([
       recordingRules.componentMappingRuleSet(),
-      recordingRules.componentNodeSLORuleSet(),
+      recordingRules.componentNodeSLORuleSet(),  // TODO: Remove this as deprecated
     ]),
 
     recordingRuleGroupsForService(serviceDefinition)::
@@ -275,13 +275,12 @@ local ruleSetIterator(ruleSets) = {
       recordingRules.serviceNodeErrorRatioRuleSet(suffix='_6h'),
     ]),
 
-    // Component mappings are static recording rules which help
-    // determine whether a component is being monitored. This helps
-    // prevent spurious alerts when a component is decommissioned.
+    // Component and service mappings are static recording rules which
+    // provide metadata to the prometheus queries, alerts and visualization tools.
     serviceMapping: ruleSetIterator([
+      recordingRules.componentMappingRuleSet(),
       recordingRules.serviceMappingRuleSet(),
     ]),
-
 
     deploymentHealth: ruleSetIterator([
       recordingRules.deploymentHealthRuleSet(),
