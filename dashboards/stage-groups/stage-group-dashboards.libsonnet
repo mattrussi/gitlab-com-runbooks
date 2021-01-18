@@ -172,6 +172,72 @@ local sqlLatenciesPerAction(type, featureCategories, featureCategoriesSelector) 
     }
   );
 
+local sqlLatenciesPerQuery(type, featureCategories, featureCategoriesSelector) =
+  basic.timeseries(
+    title='%(type)s SQL Latency per Query' % { type: std.asciiUpper(type) },
+    decimals=2,
+    legendFormat=actionLegend(type),
+    format='s',
+    description=|||
+      Average latency of individual SQL queries
+    |||,
+    query=|||
+      sum without (fqdn,instance) (
+        rate(
+          gitlab_sql_duration_seconds_sum{
+            action=~"$action",
+            controller=~"$controller",
+            environment="$environment",
+            feature_category=~'(%(featureCategories)s)',
+            type='%(type)s'
+          }[$__interval]
+        )
+      )
+      /
+      sum without (fqdn,instance) (
+        rate(
+          gitlab_sql_duration_seconds_count{
+            action=~"$action",
+            controller=~"$controller",
+            environment="$environment",
+            feature_category=~'(%(featureCategories)s)',
+            type='%(type)s'
+          }[$__interval]
+        )
+      )
+    ||| % {
+      type: type,
+      featureCategories: featureCategoriesSelector,
+    }
+  );
+
+local cachesPerAction(type, featureCategories, featureCategoriesSelector) =
+  basic.timeseries(
+    title='%(type)s Caches per Action' % { type: std.asciiUpper(type) },
+    decimals=2,
+    legendFormat='{{operation}} - ' + actionLegend(type),
+    yAxisLabel='Operations',
+    description=|||
+      Average total numbe of caching operations (Read & Write) per action.
+    |||,
+    query=|||
+      sum without (fqdn, instance) (
+        rate(
+          gitlab_cache_operations_total{
+            action=~"$action",
+            controller=~"$controller",
+            environment="$environment",
+            feature_category=~'(%(featureCategories)s)',
+            type='%(type)s'
+          }[$__interval]
+        )
+      )
+    ||| % {
+      type: type,
+      featureCategories: featureCategoriesSelector,
+    }
+  );
+
 local requestComponents = std.set(['web', 'api', 'git']);
 local backgroundComponents = std.set(['sidekiq']);
 local validComponents = std.setUnion(requestComponents, backgroundComponents);
@@ -296,6 +362,32 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
         []
     )
     .addPanels(
+      if std.length(enabledRequestComponents) != 0 then
+        layout.rowGrid(
+          'SQL Latency Per Query',
+          [
+            sqlLatenciesPerQuery(component, featureCategories, featureCategoriesSelector)
+            for component in enabledRequestComponents
+          ],
+          startRow=601
+        )
+      else
+        []
+    )
+    .addPanels(
+      if std.length(enabledRequestComponents) != 0 then
+        layout.rowGrid(
+          'Caches per Action',
+          [
+            cachesPerAction(component, featureCategories, featureCategoriesSelector)
+            for component in enabledRequestComponents
+          ],
+          startRow=701
+        )
+      else
+        []
+    )
+    .addPanels(
       if std.member(setComponents, 'sidekiq') then
         layout.rowGrid(
           'Sidekiq',
@@ -326,7 +418,7 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
               ], { prometheusSelectorHash: {} })
             ),
           ],
-          startRow=401
+          startRow=801
         )
       else
         []
