@@ -79,23 +79,29 @@ local railsErrorRate(type, featureCategories, featureCategoriesSelector) =
     }
   );
 
-local sidekiqJobRate(counter, title, description, featureCategoriesSelector) =
+// TODO: controller_action:gitlab_transaction_duration_seconds:p95 captures the
+// data from both main and cny stages. This metric is accumulated by action and
+// controller from all stages. Shouldn't there be a filter for stage?
+local railsP95RequestLatency(type, featureCategories, featureCategoriesSelector) =
   basic.timeseries(
-    title=title,
-    description=description,
+    title='%(type)s 95th Percentile Request Latency' % { type: std.asciiUpper(type) },
     decimals=2,
-    yAxisLabel='Jobs per Second',
-    legendFormat='{{worker]}}',
+    format='s',
+    legendFormat=actionLegend(type),
     query=|||
-      sum by (worker) (
-        rate(%(counter)s{
-          env='$environment',
-          environment='$environment',
-          feature_category=~'(%(featureCategories)s)'
-        }[$__interval])
+      avg by (action, controller) (
+        avg_over_time(
+          controller_action:gitlab_transaction_duration_seconds:p95{
+            action=~"$action",
+            controller=~"$controller",
+            environment="$environment",
+            feature_category=~'(%(featureCategories)s)',
+            type='%(type)s'
+          }[$__interval]
+        )
       )
     ||| % {
-      counter: counter,
+      type: type,
       featureCategories: featureCategoriesSelector,
     }
   );
@@ -238,6 +244,28 @@ local cachesPerAction(type, featureCategories, featureCategoriesSelector) =
     }
   );
 
+local sidekiqJobRate(counter, title, description, featureCategoriesSelector) =
+  basic.timeseries(
+    title=title,
+    description=description,
+    decimals=2,
+    yAxisLabel='Jobs per Second',
+    legendFormat='{{worker]}}',
+    query=|||
+      sum by (worker) (
+        rate(%(counter)s{
+          env='$environment',
+          environment='$environment',
+          feature_category=~'(%(featureCategories)s)'
+        }[$__interval])
+      )
+    ||| % {
+      counter: counter,
+      featureCategories: featureCategoriesSelector,
+    }
+  );
+
+
 local requestComponents = std.set(['web', 'api', 'git']);
 local backgroundComponents = std.set(['sidekiq']);
 local validComponents = std.setUnion(requestComponents, backgroundComponents);
@@ -337,13 +365,26 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
     )
     .addPanels(
       if std.length(enabledRequestComponents) != 0 then
+        layout.rowGrid(
+          'Rails p95 Request Latency',
+          [
+            railsP95RequestLatency(component, featureCategories, featureCategoriesSelector)
+            for component in enabledRequestComponents
+          ],
+          startRow=401
+        )
+      else
+        []
+    )
+    .addPanels(
+      if std.length(enabledRequestComponents) != 0 then
         layout.rowGridCollapsed(
           'SQL Queries Per Action',
           [
             sqlQueriesPerAction(component, featureCategories, featureCategoriesSelector)
             for component in enabledRequestComponents
           ],
-          startRow=401
+          startRow=501
         )
       else
         []
@@ -356,7 +397,7 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
             sqlLatenciesPerAction(component, featureCategories, featureCategoriesSelector)
             for component in enabledRequestComponents
           ],
-          startRow=501
+          startRow=601
         )
       else
         []
@@ -369,7 +410,7 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
             sqlLatenciesPerQuery(component, featureCategories, featureCategoriesSelector)
             for component in enabledRequestComponents
           ],
-          startRow=601
+          startRow=701
         )
       else
         []
@@ -382,7 +423,7 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
             cachesPerAction(component, featureCategories, featureCategoriesSelector)
             for component in enabledRequestComponents
           ],
-          startRow=701
+          startRow=801
         )
       else
         []
