@@ -1,0 +1,22 @@
+groups:
+######################
+# Aggregation Stage
+######################
+
+- name: GitLab Service Errors-per-Second Rates
+  partial_response_strategy: "warn"
+  interval: 1m
+  rules:
+  # Aggregate over all components within a service
+  - record: gitlab_service_errors:rate
+    expr: >
+      sum by (env, environment, tier, type, stage) (
+        gitlab_component_errors:rate{monitor!="global"} >= 0
+      )
+
+  # Aggregate over all components within a service, for a node
+  - record: gitlab_service_node_errors:rate
+    expr: >
+      sum by (env, environment, tier, type, stage, shard, fqdn) (
+        gitlab_component_node_errors:rate{monitor!="global"} >= 0
+      )

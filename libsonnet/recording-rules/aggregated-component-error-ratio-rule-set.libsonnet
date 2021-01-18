@@ -9,15 +9,15 @@
         [{
           record: 'gitlab_component_errors:rate%(suffix)s' % format,
           expr: |||
-            sum by (env,environment,tier,type,stage,component) (
-              gitlab_component_errors:rate%(suffix)s{monitor!="global"} >= 0
+            sum by (env, environment, tier, type, stage, component) (
+              gitlab_component_errors:rate%(suffix)s{monitor!="global"}
             )
           ||| % format,
         }, {
           record: 'gitlab_component_ops:rate%(suffix)s' % format,
           expr: |||
-            sum by (env,environment,tier,type,stage,component) (
-              gitlab_component_ops:rate%(suffix)s{monitor!="global"} >= 0
+            sum by (env, environment, tier, type, stage, component) (
+                gitlab_component_ops:rate%(suffix)s{monitor!="global"}
             )
           ||| % format,
         }, {

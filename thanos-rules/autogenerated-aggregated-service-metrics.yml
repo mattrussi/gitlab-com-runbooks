@@ -5,24 +5,14 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
-  - record: gitlab_service_errors:rate
-    expr: |
-      sum by (env,environment,tier,type,stage) (
-        gitlab_component_errors:rate{monitor!="global"} >= 0
-      )
-  - record: gitlab_service_ops:rate
-    expr: |
-      sum by (env,environment,tier,type,stage) (
-        gitlab_component_ops:rate{monitor!="global"} >= 0
-      )
   - record: gitlab_service_errors:ratio
     expr: |
-      gitlab_service_errors:rate{monitor="global"}
+      sum by (environment, env, tier, type, stage) (gitlab_component_errors:rate{monitor!="global"} >= 0)
       /
-      gitlab_service_ops:rate{monitor="global"}
+      sum by (environment, env, tier, type, stage) (gitlab_component_ops:rate{monitor!="global"} > 0)
   - record: gitlab_service_apdex:ratio
     expr: |
-      sum by (env,environment,tier,type,stage) (
+      sum by (env, environment, tier, type, stage) (
         (
           (gitlab_component_apdex:ratio{monitor!="global"} >= 0)
           *
@@ -30,27 +20,17 @@ groups:
         )
       )
       /
-      sum by (env,environment,tier,type,stage) (
+      sum by (env, environment, tier, type, stage) (
         (gitlab_component_apdex:weight:score{monitor!="global"} >= 0)
-      )
-  - record: gitlab_service_errors:rate_5m
-    expr: |
-      sum by (env,environment,tier,type,stage) (
-        gitlab_component_errors:rate_5m{monitor!="global"} >= 0
-      )
-  - record: gitlab_service_ops:rate_5m
-    expr: |
-      sum by (env,environment,tier,type,stage) (
-        gitlab_component_ops:rate_5m{monitor!="global"} >= 0
       )
   - record: gitlab_service_errors:ratio_5m
     expr: |
-      gitlab_service_errors:rate_5m{monitor="global"}
+      sum by (environment, env, tier, type, stage) (gitlab_component_errors:rate_5m{monitor!="global"} >= 0)
       /
-      gitlab_service_ops:rate_5m{monitor="global"}
+      sum by (environment, env, tier, type, stage) (gitlab_component_ops:rate_5m{monitor!="global"} > 0)
   - record: gitlab_service_apdex:ratio_5m
     expr: |
-      sum by (env,environment,tier,type,stage) (
+      sum by (env, environment, tier, type, stage) (
         (
           (gitlab_component_apdex:ratio_5m{monitor!="global"} >= 0)
           *
@@ -58,27 +38,17 @@ groups:
         )
       )
       /
-      sum by (env,environment,tier,type,stage) (
+      sum by (env, environment, tier, type, stage) (
         (gitlab_component_apdex:weight:score_5m{monitor!="global"} >= 0)
-      )
-  - record: gitlab_service_errors:rate_30m
-    expr: |
-      sum by (env,environment,tier,type,stage) (
-        gitlab_component_errors:rate_30m{monitor!="global"} >= 0
-      )
-  - record: gitlab_service_ops:rate_30m
-    expr: |
-      sum by (env,environment,tier,type,stage) (
-        gitlab_component_ops:rate_30m{monitor!="global"} >= 0
       )
   - record: gitlab_service_errors:ratio_30m
     expr: |
-      gitlab_service_errors:rate_30m{monitor="global"}
+      sum by (environment, env, tier, type, stage) (gitlab_component_errors:rate_30m{monitor!="global"} >= 0)
       /
-      gitlab_service_ops:rate_30m{monitor="global"}
+      sum by (environment, env, tier, type, stage) (gitlab_component_ops:rate_30m{monitor!="global"} > 0)
   - record: gitlab_service_apdex:ratio_30m
     expr: |
-      sum by (env,environment,tier,type,stage) (
+      sum by (env, environment, tier, type, stage) (
         (
           (gitlab_component_apdex:ratio_30m{monitor!="global"} >= 0)
           *
@@ -86,27 +56,17 @@ groups:
         )
       )
       /
-      sum by (env,environment,tier,type,stage) (
+      sum by (env, environment, tier, type, stage) (
         (gitlab_component_apdex:weight:score_30m{monitor!="global"} >= 0)
-      )
-  - record: gitlab_service_errors:rate_1h
-    expr: |
-      sum by (env,environment,tier,type,stage) (
-        gitlab_component_errors:rate_1h{monitor!="global"} >= 0
-      )
-  - record: gitlab_service_ops:rate_1h
-    expr: |
-      sum by (env,environment,tier,type,stage) (
-        gitlab_component_ops:rate_1h{monitor!="global"} >= 0
       )
   - record: gitlab_service_errors:ratio_1h
     expr: |
-      gitlab_service_errors:rate_1h{monitor="global"}
+      sum by (environment, env, tier, type, stage) (gitlab_component_errors:rate_1h{monitor!="global"} >= 0)
       /
-      gitlab_service_ops:rate_1h{monitor="global"}
+      sum by (environment, env, tier, type, stage) (gitlab_component_ops:rate_1h{monitor!="global"} > 0)
   - record: gitlab_service_apdex:ratio_1h
     expr: |
-      sum by (env,environment,tier,type,stage) (
+      sum by (env, environment, tier, type, stage) (
         (
           (gitlab_component_apdex:ratio_1h{monitor!="global"} >= 0)
           *
@@ -114,27 +74,17 @@ groups:
         )
       )
       /
-      sum by (env,environment,tier,type,stage) (
+      sum by (env, environment, tier, type, stage) (
         (gitlab_component_apdex:weight:score_1h{monitor!="global"} >= 0)
-      )
-  - record: gitlab_service_errors:rate_6h
-    expr: |
-      sum by (env,environment,tier,type,stage) (
-        gitlab_component_errors:rate_6h{monitor!="global"} >= 0
-      )
-  - record: gitlab_service_ops:rate_6h
-    expr: |
-      sum by (env,environment,tier,type,stage) (
-        gitlab_component_ops:rate_6h{monitor!="global"} >= 0
       )
   - record: gitlab_service_errors:ratio_6h
     expr: |
-      gitlab_service_errors:rate_6h{monitor="global"}
+      sum by (environment, env, tier, type, stage) (gitlab_component_errors:rate_6h{monitor!="global"} >= 0)
       /
-      gitlab_service_ops:rate_6h{monitor="global"}
+      sum by (environment, env, tier, type, stage) (gitlab_component_ops:rate_6h{monitor!="global"} > 0)
   - record: gitlab_service_apdex:ratio_6h
     expr: |
-      sum by (env,environment,tier,type,stage) (
+      sum by (env, environment, tier, type, stage) (
         (
           (gitlab_component_apdex:ratio_6h{monitor!="global"} >= 0)
           *
@@ -142,6 +92,6 @@ groups:
         )
       )
       /
-      sum by (env,environment,tier,type,stage) (
+      sum by (env, environment, tier, type, stage) (
         (gitlab_component_apdex:weight:score_6h{monitor!="global"} >= 0)
       )

@@ -14,7 +14,7 @@
         [{
           record: 'gitlab_service_node_apdex:ratio%(suffix)s' % format,
           expr: |||
-            sum by (env,environment,tier,type,stage,shard,fqdn) (
+            sum by (env, environment, tier, type, stage, shard, fqdn) (
               (
                 (gitlab_component_node_apdex:ratio%(suffix)s{monitor!="global"} >= 0)
                 *
@@ -22,7 +22,7 @@
               )
             )
             /
-            sum by (env,environment,tier,type,stage,shard,fqdn) (
+            sum by (env, environment, tier, type, stage, shard, fqdn) (
               (gitlab_component_node_apdex:weight:score%(suffix)s{monitor!="global"} >= 0)
             )
           ||| % format,
