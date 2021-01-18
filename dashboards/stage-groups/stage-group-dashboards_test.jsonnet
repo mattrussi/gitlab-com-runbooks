@@ -17,6 +17,10 @@ test.suite({
         'API Error Rate',
         'GIT Error Rate',
         'WEB Error Rate',
+        'SQL Queries Per Action',
+        'SQL Latency Per Action',
+        'SQL Latency Per Query',
+        'Caches per Action',
         'Sidekiq',
         'Sidekiq Completion Rate',
         'Sidekiq Error Rate',
@@ -47,6 +51,10 @@ test.suite({
         'API Error Rate',
         'GIT Error Rate',
         'WEB Error Rate',
+        'SQL Queries Per Action',
+        'SQL Latency Per Action',
+        'SQL Latency Per Query',
+        'Caches per Action',
         'Sidekiq',
         'Sidekiq Completion Rate',
         'Sidekiq Error Rate',
@@ -71,6 +79,10 @@ test.suite({
         'Extra links',
         'Rails Error Rates (accumulated by components)',
         'WEB Error Rate',
+        'SQL Queries Per Action',
+        'SQL Latency Per Action',
+        'SQL Latency Per Query',
+        'Caches per Action',
         'Source',
       ] &&
       [template.name for template in results.templating.list] == [
@@ -93,6 +105,10 @@ test.suite({
         'Rails Error Rates (accumulated by components)',
         'API Error Rate',
         'WEB Error Rate',
+        'SQL Queries Per Action',
+        'SQL Latency Per Action',
+        'SQL Latency Per Query',
+        'Caches per Action',
         'Source',
       ] &&
       [template.name for template in results.templating.list] == [
