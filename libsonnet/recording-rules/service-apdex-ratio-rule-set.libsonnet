@@ -12,7 +12,7 @@
         [{
           record: 'gitlab_service_apdex:ratio%(suffix)s' % format,
           expr: |||
-            sum by (env,environment,tier,type,stage) (
+            sum by (env, environment, tier, type, stage) (
               (
                 (gitlab_component_apdex:ratio%(suffix)s{monitor!="global"} >= 0)
                 *
@@ -20,7 +20,7 @@
               )
             )
             /
-            sum by (env,environment,tier,type,stage) (
+            sum by (env, environment, tier, type, stage) (
               (gitlab_component_apdex:weight:score%(suffix)s{monitor!="global"} >= 0)
             )
           ||| % format,
