@@ -6,6 +6,7 @@ groups:
     expr: vector(1)
     labels:
       severity: s4
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
       alert_type: heartbeat
     annotations:
       runbook: docs/monitoring/prometheus-snitch.md
@@ -62,6 +63,7 @@ groups:
     for: 10m
     labels:
       severity: s4
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
       alert_type: cause
     annotations:
       description: '{{$labels.job}} at {{$labels.instance}} {{$labels.pod}} has {{$value}}% of DNS-SD
@@ -73,6 +75,7 @@ groups:
     for: 10m
     labels:
       severity: s4
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
       alert_type: cause
     annotations:
       description: '{{$labels.job}} at {{$labels.instance}} {{$labels.pod}} has a 90th percentile
@@ -100,6 +103,7 @@ groups:
     for: 10m
     labels:
       severity: s4
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
       alert_type: cause
     annotations:
       description: '{{$labels.job}} at {{$labels.instance}} {{$labels.pod}} has a 90th percentile
@@ -126,6 +130,7 @@ groups:
     for: 30m
     labels:
       severity: s4
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
       alert_type: cause
     annotations:
       description: '{{$labels.job}} at {{$labels.instance}} {{$labels.pod}} rule group {{$labels.rule_group}}
@@ -136,6 +141,7 @@ groups:
     expr: increase(prometheus_tsdb_compactions_failed_total[6h]) > 0
     labels:
       severity: s4
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
       alert_type: cause
     annotations:
       description: '{{$labels.job}} at {{$labels.instance}} {{$labels.pod}} has failed compactions in the last 6 hours'
@@ -147,6 +153,7 @@ groups:
     for: 12h
     labels:
       severity: s4
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
       alert_type: cause
     annotations:
       description: 'Prometheus {{$labels.pod}} {{$labels.fqdn}} had {{$value | humanize}} reload failures over the last four hours.'
@@ -157,6 +164,7 @@ groups:
     for: 10m
     labels:
       severity: s4
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
       alert_type: cause
     annotations:
       description: 'Prometheus {{$labels.pod }} {{$labels.fqdn}} is not ingesting samples.'
@@ -167,6 +175,7 @@ groups:
     for: 10m
     labels:
       severity: s4
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
       alert_type: cause
     annotations:
       description: 'Prometheus {{$labels.pod }} {{$labels.fqdn}} has many samples rejected due to duplicate timestamps but different values'
@@ -176,6 +185,7 @@ groups:
     expr: increase(prometheus_target_scrapes_exceeded_sample_limit_total[30m]) > 60
     labels:
       severity: s4
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
       alert_type: cause
     annotations:
       description: '{{$labels.job}} at {{$labels.instance}} {{$labels.pod}} has many scrapes that exceed the sample limit'
@@ -185,6 +195,7 @@ groups:
     expr: increase(prometheus_tsdb_checkpoint_creations_failed_total[5m]) > 0
     labels:
       severity: s4
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
       alert_type: cause
     annotations:
       description: '{{$labels.job}} at {{$labels.instance}} {{$labels.pod}} has failed to create checkpoints.'
@@ -194,6 +205,7 @@ groups:
     expr: increase(prometheus_tsdb_checkpoint_deletions_failed_total[5m]) > 0
     labels:
       severity: s4
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
       alert_type: cause
     annotations:
       description: '{{$labels.job}} at {{$labels.instance}} {{$labels.pod}} has failed to delete checkpoints.'
@@ -203,6 +215,7 @@ groups:
     expr: increase(prometheus_tsdb_wal_truncations_failed_total[5m]) > 0
     labels:
       severity: s4
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
       alert_type: cause
     annotations:
       description: '{{$labels.job}} at {{$labels.instance}} {{$labels.pod}} has failed to wal truncations.'
@@ -216,6 +229,7 @@ groups:
     for: 10m
     labels:
       severity: s3
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
       alert_type: cause
     annotations:
       description: 'The {{$labels.rule_group}} rule group has failing rule evaluations.'
@@ -226,6 +240,7 @@ groups:
     for: 5m
     labels:
       severity: s4
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
       alert_type: cause
     annotations:
       description: '{{$labels.config}} at {{$labels.instance}} {{$labels.pod}} has no targets in service discovery.'
@@ -236,6 +251,7 @@ groups:
     for: 30m
     labels:
       severity: s4
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
       alert_type: cause
     annotations:
       description: 'Prometheus at {{$labels.instance}} {{$labels.pod}} has very high ({{$value}}%) system memory utilization.'
@@ -245,6 +261,7 @@ groups:
     expr: increase(prometheus_tsdb_wal_corruptions_total[5m]) > 0
     labels:
       severity: s4
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
       alert_type: cause
     annotations:
       description: 'Prometheus at {{$labels.instance}} {{$labels.pod}} has {{$value}} WAL Corruptions.'
@@ -264,6 +281,7 @@ groups:
     for: 15m
     labels:
       severity: s4
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
       alert_type: cause
     annotations:
       title: Thanos has failing storage operations
@@ -277,6 +295,7 @@ groups:
     for: 5m
     labels:
       severity: s4
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
       alert_type: cause
     annotations:
       title: Thanos compaction halted
@@ -293,6 +312,7 @@ groups:
     for: 15m
     labels:
       severity: s4
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
       alert_type: cause
     annotations:
       title: Thanos Compact is failing to execute compactions
@@ -303,6 +323,7 @@ groups:
     expr: rate(prometheus_tsdb_compactions_failed_total[5m]) > 0
     labels:
       severity: s4
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
       alert_type: cause
     annotations:
       title: Thanos compaction is failing
@@ -312,6 +333,7 @@ groups:
     expr: (time() - (thanos_objstore_bucket_last_successful_upload_time > 0)) > 86400
     labels:
       severity: s4
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
       alert_type: cause
     annotations:
       title: Thanos compaction has not run in 24 hours.
@@ -325,6 +347,7 @@ groups:
     for: 5m
     labels:
       severity: s4
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
       alert_type: cause
     annotations:
       title: Thanos Rule is failing to queue alerts
@@ -335,6 +358,7 @@ groups:
     for: 5m
     labels:
       severity: s4
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
       alert_type: cause
     annotations:
       title: Thanos Rule is failing to send alerts
@@ -352,6 +376,7 @@ groups:
     for: 5m
     labels:
       severity: s4
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
       alert_type: cause
     annotations:
       title: Thanos Rule is failing to evaluate rules
@@ -362,6 +387,7 @@ groups:
     for: 15m
     labels:
       severity: s4
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
       alert_type: cause
     annotations:
       title: Thanos Rule has high number of evaluation warnings
@@ -378,6 +404,7 @@ groups:
     for: 5m
     labels:
       severity: s4
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
       alert_type: cause
     annotations:
       title: Thanos Rule has high evaluation latency
@@ -389,6 +416,7 @@ groups:
     for: 5m
     labels:
       severity: s4
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
       alert_type: cause
     annotations:
       title: Thanos Rule has not been able to reload its configuration
@@ -405,6 +433,7 @@ groups:
     for: 15m
     labels:
       severity: s4
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
       alert_type: cause
     annotations:
       title: Thanos Rule has failing DNS queries
@@ -422,6 +451,7 @@ groups:
     for: 15m
     labels:
       severity: s4
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
       alert_type: cause
     annotations:
       title: Thanos Rule has failing DNS queries
@@ -437,6 +467,7 @@ groups:
   #   for: 5m
   #   labels:
   #     severity: s4
+  #     incident_project: gitlab.com/gitlab-com/gl-infra/production
   #     alert_type: cause
   #   annotations:
   #     title: Thanos Rule is not evalutiang rules.
@@ -450,6 +481,7 @@ groups:
       sum by (instance) (thanos_rule_loaded_rules) > 0
     labels:
       severity: s4
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
       alert_type: cause
     annotations:
       title: Thanos Rule is not evaluating rules
@@ -469,6 +501,7 @@ groups:
     for: 10m
     labels:
       severity: s4
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
       alert_type: cause
     annotations:
       title: Thanos Store has high latency
@@ -485,6 +518,7 @@ groups:
     for: 10m
     labels:
       severity: s4
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
       alert_type: cause
     annotations:
       title: Thanos Store Bucket has high latency
