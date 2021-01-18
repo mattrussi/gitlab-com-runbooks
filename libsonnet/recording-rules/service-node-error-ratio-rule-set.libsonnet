@@ -12,11 +12,27 @@
         };
 
         [{
+          record: 'gitlab_service_node_errors:rate%(suffix)s' % format,
+          expr: |||
+            sum by (env,environment,tier,type,stage,shard,fqdn) (
+              gitlab_component_node_errors:rate%(suffix)s{monitor!="global"} >= 0
+            )
+          ||| % format,
+        }, {
+          record: 'gitlab_service_node_ops:rate%(suffix)s' % format,
+          expr: |||
+            sum by (env,environment,tier,type,stage,shard,fqdn) (
+              gitlab_component_node_ops:rate%(suffix)s{monitor!="global"} >= 0
+            )
+          ||| % format,
+        }, {
+          // Uses the `monitor=global` globally aggregated values from the previous two
+          // recording rules to calculate a ratio
           record: 'gitlab_service_node_errors:ratio%(suffix)s' % format,
           expr: |||
-            sum by (environment, env, tier, type, stage, shard, fqdn) (gitlab_component_node_errors:rate%(suffix)s{monitor!="global"} >= 0)
+            gitlab_service_node_errors:rate%(suffix)s{monitor="global"}
             /
-            sum by (environment, env, tier, type, stage, shard, fqdn) (gitlab_component_node_ops:rate%(suffix)s{monitor!="global"} > 0)
+            gitlab_service_node_ops:rate%(suffix)s{monitor="global"}
           ||| % format,
         }],
     },
