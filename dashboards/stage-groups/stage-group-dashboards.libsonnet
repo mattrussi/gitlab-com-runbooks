@@ -137,6 +137,41 @@ local sqlQueriesPerAction(type, featureCategories, featureCategoriesSelector) =
     }
   );
 
+local sqlLatenciesPerAction(type, featureCategories, featureCategoriesSelector) =
+  basic.timeseries(
+    title='%(type)s SQL Latency per Action' % { type: std.asciiUpper(type) },
+    decimals=2,
+    format='s',
+    legendFormat=actionLegend(type),
+    description=|||
+      Average sum of all SQL query latency accumulated by a controller action.
+    |||,
+    query=|||
+      avg_over_time(
+        controller_action:gitlab_sql_duration_seconds_sum:rate1m{
+          action=~"$action",
+          controller=~"$controller",
+          environment="$environment",
+          feature_category=~'(%(featureCategories)s)',
+          type='%(type)s'
+        }[$__interval]
+      )
+      /
+      avg_over_time(
+        controller_action:gitlab_transaction_duration_seconds_count:rate1m{
+          action=~"$action",
+          controller=~"$controller",
+          environment="$environment",
+          feature_category=~'(%(featureCategories)s)',
+          type='%(type)s'
+        }[$__interval]
+      )
+    ||| % {
+      type: type,
+      featureCategories: featureCategoriesSelector,
+    }
+  );
+
 local requestComponents = std.set(['web', 'api', 'git']);
 local backgroundComponents = std.set(['sidekiq']);
 local validComponents = std.setUnion(requestComponents, backgroundComponents);
@@ -243,6 +278,19 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
             for component in enabledRequestComponents
           ],
           startRow=401
+        )
+      else
+        []
+    )
+    .addPanels(
+      if std.length(enabledRequestComponents) != 0 then
+        layout.rowGrid(
+          'SQL Latency Per Action',
+          [
+            sqlLatenciesPerAction(component, featureCategories, featureCategoriesSelector)
+            for component in enabledRequestComponents
+          ],
+          startRow=501
         )
       else
         []
