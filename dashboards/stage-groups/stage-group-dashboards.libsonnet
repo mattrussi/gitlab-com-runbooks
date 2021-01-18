@@ -346,11 +346,7 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
           ],
           startRow=201
         )
-      else
-        []
-    )
-    .addPanels(
-      if std.length(enabledRequestComponents) != 0 then
+        +
         layout.rowGrid(
           'Rails 95th Percentile Request Latency',
           [
@@ -359,11 +355,7 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
           ],
           startRow=301
         )
-      else
-        []
-    )
-    .addPanels(
-      if std.length(enabledRequestComponents) != 0 then
+        +
         layout.rowGrid(
           'Rails Error Rates (accumulated by components)',
           [
@@ -372,11 +364,7 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
           ],
           startRow=401
         )
-      else
-        []
-    )
-    .addPanels(
-      if std.length(enabledRequestComponents) != 0 then
+        +
         layout.rowGridCollapsed(
           'SQL Queries Per Action',
           [
@@ -385,11 +373,7 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
           ],
           startRow=501
         )
-      else
-        []
-    )
-    .addPanels(
-      if std.length(enabledRequestComponents) != 0 then
+        +
         layout.rowGridCollapsed(
           'SQL Latency Per Action',
           [
@@ -398,11 +382,7 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
           ],
           startRow=601
         )
-      else
-        []
-    )
-    .addPanels(
-      if std.length(enabledRequestComponents) != 0 then
+        +
         layout.rowGridCollapsed(
           'SQL Latency Per Query',
           [
@@ -411,11 +391,7 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
           ],
           startRow=701
         )
-      else
-        []
-    )
-    .addPanels(
-      if std.length(enabledRequestComponents) != 0 then
+        +
         layout.rowGridCollapsed(
           'Caches per Action',
           [
