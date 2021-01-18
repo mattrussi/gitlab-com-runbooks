@@ -6,6 +6,9 @@ local layout = import 'grafana/layout.libsonnet';
 local metrics = import 'servicemetrics/metrics.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
+local actionLegend(type) =
+  if type == 'api' then '{{action}}' else '{{controller}}#{{action}}';
+
 local controllerFilter(featureCategoriesSelector) =
   template.new(
     'controller',
@@ -36,7 +39,7 @@ local railsRequestRate(type, featureCategories, featureCategoriesSelector) =
   basic.timeseries(
     title='%(type)s Request Rate' % { type: std.asciiUpper(type) },
     yAxisLabel='Requests per Second',
-    legendFormat=if type == 'api' then '{{action}}' else '{{controller}}#{{action}}',
+    legendFormat=actionLegend(type),
     decimals=2,
     query=|||
       sum by (controller, action) (
@@ -93,6 +96,43 @@ local sidekiqJobRate(counter, title, description, featureCategoriesSelector) =
       )
     ||| % {
       counter: counter,
+      featureCategories: featureCategoriesSelector,
+    }
+  );
+
+local sqlQueriesPerAction(type, featureCategories, featureCategoriesSelector) =
+  basic.timeseries(
+    title='%(type)s SQL Queries per Action' % { type: std.asciiUpper(type) },
+    decimals=2,
+    yAxisLabel='Queries',
+    legendFormat=actionLegend(type),
+    description=|||
+      Average amount of SQL queries performed by a controller action.
+    |||,
+    query=|||
+      sum without (fqdn,instance) (
+        rate(
+          gitlab_sql_duration_seconds_count{
+            action=~"$action",
+            controller=~"$controller",
+            environment="$environment",
+            feature_category=~'(%(featureCategories)s)',
+            type='%(type)s'
+          }[$__interval]
+        )
+      )
+      /
+      avg_over_time(
+        controller_action:gitlab_transaction_duration_seconds_count:rate1m{
+          action=~"$action",
+          controller=~"$controller",
+          environment="$environment",
+          feature_category=~'(%(featureCategories)s)',
+          type='%(type)s'
+        }[$__interval]
+      )
+    ||| % {
+      type: type,
       featureCategories: featureCategoriesSelector,
     }
   );
@@ -190,6 +230,19 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
             for component in enabledRequestComponents
           ],
           startRow=301
+        )
+      else
+        []
+    )
+    .addPanels(
+      if std.length(enabledRequestComponents) != 0 then
+        layout.rowGrid(
+          'SQL Queries Per Action',
+          [
+            sqlQueriesPerAction(component, featureCategories, featureCategoriesSelector)
+            for component in enabledRequestComponents
+          ],
+          startRow=401
         )
       else
         []
