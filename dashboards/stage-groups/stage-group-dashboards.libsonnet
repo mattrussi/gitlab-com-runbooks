@@ -5,6 +5,7 @@ local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local metrics = import 'servicemetrics/metrics.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
+local platformLinks = import 'platform_links.libsonnet';
 
 local actionLegend(type) =
   if type == 'api' then '{{action}}' else '{{controller}}#{{action}}';
@@ -467,6 +468,12 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
     stageGroupDashboardTrailer()::
       // Add any additional trailing panels here
       self.trailer(),
+    links+:
+      [
+        platformLinks.dynamicLinks('API Detail', 'type:api'),
+        platformLinks.dynamicLinks('Web Detail', 'type:web'),
+        platformLinks.dynamicLinks('Git Detail', 'type:git'),
+      ],
   };
 
 {
