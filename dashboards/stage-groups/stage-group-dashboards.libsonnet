@@ -89,16 +89,14 @@ local railsP95RequestLatency(type, featureCategories, featureCategoriesSelector)
     format='s',
     legendFormat=actionLegend(type),
     query=|||
-      avg by (action, controller) (
-        avg_over_time(
-          controller_action:gitlab_transaction_duration_seconds:p95{
-            action=~"$action",
-            controller=~"$controller",
-            environment="$environment",
-            feature_category=~'(%(featureCategories)s)',
-            type='%(type)s'
-          }[$__interval]
-        )
+      avg_over_time(
+        controller_action:gitlab_transaction_duration_seconds:p95{
+          action=~"$action",
+          controller=~"$controller",
+          environment="$environment",
+          feature_category=~'(%(featureCategories)s)',
+          type='%(type)s'
+        }[$__interval]
       )
     ||| % {
       type: type,
@@ -353,9 +351,9 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
     .addPanels(
       if std.length(enabledRequestComponents) != 0 then
         layout.rowGrid(
-          'Rails Error Rates (accumulated by components)',
+          'Rails p95 Request Latency',
           [
-            railsErrorRate(component, featureCategories, featureCategoriesSelector)
+            railsP95RequestLatency(component, featureCategories, featureCategoriesSelector)
             for component in enabledRequestComponents
           ],
           startRow=301
@@ -366,9 +364,9 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
     .addPanels(
       if std.length(enabledRequestComponents) != 0 then
         layout.rowGrid(
-          'Rails p95 Request Latency',
+          'Rails Error Rates (accumulated by components)',
           [
-            railsP95RequestLatency(component, featureCategories, featureCategoriesSelector)
+            railsErrorRate(component, featureCategories, featureCategoriesSelector)
             for component in enabledRequestComponents
           ],
           startRow=401
