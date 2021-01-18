@@ -37,9 +37,9 @@ local generateDropOffsets(cellHeights, rowOffsets) =
     self.grid(panels, cols=cols, rowHeight=rowHeight, startRow=startRow),
 
   // Layout all panels in a single row, with a title row
-  rowGrid(rowTitle, panels, startRow)::
+  rowGrid(rowTitle, panels, startRow, collapse=false)::
     [
-      grafana.row.new(title=rowTitle) { gridPos: { x: 0, y: startRow, w: 24, h: 1 } },
+      grafana.row.new(title=rowTitle, collapse=collapse) { gridPos: { x: 0, y: startRow, w: 24, h: 1 } },
     ] + self.singleRow(panels, startRow=(startRow + 1)),
 
   // Rows -> array of arrays. Each outer array is a row.

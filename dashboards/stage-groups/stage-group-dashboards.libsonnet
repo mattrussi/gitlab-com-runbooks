@@ -343,7 +343,8 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
             sqlQueriesPerAction(component, featureCategories, featureCategoriesSelector)
             for component in enabledRequestComponents
           ],
-          startRow=401
+          startRow=401,
+          collapse=true
         )
       else
         []
@@ -356,7 +357,8 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
             sqlLatenciesPerAction(component, featureCategories, featureCategoriesSelector)
             for component in enabledRequestComponents
           ],
-          startRow=501
+          startRow=501,
+          collapse=true
         )
       else
         []
@@ -369,7 +371,8 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
             sqlLatenciesPerQuery(component, featureCategories, featureCategoriesSelector)
             for component in enabledRequestComponents
           ],
-          startRow=601
+          startRow=601,
+          collapse=true
         )
       else
         []
@@ -382,7 +385,8 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
             cachesPerAction(component, featureCategories, featureCategoriesSelector)
             for component in enabledRequestComponents
           ],
-          startRow=701
+          startRow=701,
+          collapse=true
         )
       else
         []
