@@ -5,7 +5,7 @@ local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local metrics = import 'servicemetrics/metrics.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
-local platformLinks = import 'platform_links.libsonnet';
+local platformLinks = import '../platform_links.libsonnet';
 
 local actionLegend(type) =
   if type == 'api' then '{{action}}' else '{{controller}}#{{action}}';
@@ -352,7 +352,7 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
     .addPanels(
       if std.length(enabledRequestComponents) != 0 then
         layout.rowGrid(
-          'Rails p95 Request Latency',
+          'Rails 95th Percentile Request Latency',
           [
             railsP95RequestLatency(component, featureCategories, featureCategoriesSelector)
             for component in enabledRequestComponents
