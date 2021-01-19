@@ -20,7 +20,7 @@ groups:
       avg_over_time(gitlab_service_errors:ratio{monitor="global"}[1m])
       <= bool on(tier, type) group_left
       slo:max:gitlab_service_errors:ratio{monitor="global"}
-  - record: 'gitlab_slo:last_incident_timestamp'
+  - record: 'gitlab_slo:last_violation_timestamp'
     expr: |
       (
         # If the series has been consistently available for 15m, with no downtime, then record the start of this timeframe (15*60 seconds ago)
@@ -32,7 +32,7 @@ groups:
       or # Otherwise, use the previous value, if the series still exists
       (
         # give us the most recent value, allowing for gaps (due to prometheus availability of up to 15m)
-        max_over_time(gitlab_slo:last_incident_timestamp[15m])
+        max_over_time(gitlab_slo:last_violation_timestamp[15m])
         and
         # But only continue to propagate series if there are values within the last 15m (garbage collection)
         avg_over_time(slo_observation_status[15m])
