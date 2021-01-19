@@ -101,7 +101,7 @@ metricsCatalog.serviceDefinition({
       ),
 
       significantLabels: ['tag', 'type'],
-      aggregateRequestRate: false,
+      serviceAggregation: false,
     },
   },
 })

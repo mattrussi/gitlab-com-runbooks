@@ -307,295 +307,295 @@ groups:
     expr: '0.001000'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'no'
       component: loadbalancer
+      service_aggregation: 'no'
       tier: sv
       type: api
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: puma
+      service_aggregation: 'yes'
       tier: sv
       type: api
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: workhorse
+      service_aggregation: 'yes'
       tier: sv
       type: api
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'no'
       component: loadbalancer
+      service_aggregation: 'no'
       tier: sv
       type: camoproxy
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: server
+      service_aggregation: 'yes'
       tier: sv
       type: camoproxy
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: polling
+      service_aggregation: 'yes'
       tier: runners
       type: ci-runners
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: shared_runner_queues
+      service_aggregation: 'yes'
       tier: runners
       type: ci-runners
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: trace_archiving_ci_jobs
+      service_aggregation: 'yes'
       tier: runners
       type: ci-runners
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: cnyHttpServices
+      service_aggregation: 'yes'
       tier: lb
       type: frontend
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: mainHttpServices
+      service_aggregation: 'yes'
       tier: lb
       type: frontend
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: sshServices
+      service_aggregation: 'yes'
       tier: lb
       type: frontend
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: gitlab_shell
+      service_aggregation: 'yes'
       tier: sv
       type: git
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'no'
       component: loadbalancer
+      service_aggregation: 'no'
       tier: sv
       type: git
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'no'
       component: loadbalancer_ssh
+      service_aggregation: 'no'
       tier: sv
       type: git
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: puma
+      service_aggregation: 'yes'
       tier: sv
       type: git
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: workhorse
+      service_aggregation: 'yes'
       tier: sv
       type: git
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: workhorse_auth_api
+      service_aggregation: 'yes'
       tier: sv
       type: git
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: gitalyruby
+      service_aggregation: 'yes'
       tier: stor
       type: gitaly
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: goserver
+      service_aggregation: 'yes'
       tier: stor
       type: gitaly
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: goserver_op_service
+      service_aggregation: 'yes'
       tier: stor
       type: gitaly
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: jaeger_agent
+      service_aggregation: 'yes'
       tier: inf
       type: jaeger
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: jaeger_collector
+      service_aggregation: 'yes'
       tier: inf
       type: jaeger
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: jaeger_query
+      service_aggregation: 'yes'
       tier: inf
       type: jaeger
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: elasticsearch_indexing
+      service_aggregation: 'yes'
       tier: inf
       type: logging
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: elasticsearch_searching
+      service_aggregation: 'yes'
       tier: inf
       type: logging
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'no'
       component: fluentd_log_output
+      service_aggregation: 'no'
       tier: inf
       type: logging
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: kibana_googlelb
+      service_aggregation: 'yes'
       tier: inf
       type: logging
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: stackdriver
+      service_aggregation: 'yes'
       tier: inf
       type: logging
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: emailsProcessed
+      service_aggregation: 'yes'
       tier: sv
       type: mailroom
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: grafana
+      service_aggregation: 'yes'
       tier: inf
       type: monitoring
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: memcached_thanos_qfe_labels
+      service_aggregation: 'yes'
       tier: inf
       type: monitoring
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: memcached_thanos_qfe_query_range
+      service_aggregation: 'yes'
       tier: inf
       type: monitoring
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: prometheus
+      service_aggregation: 'yes'
       tier: inf
       type: monitoring
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: prometheus_alert_sender
+      service_aggregation: 'yes'
       tier: inf
       type: monitoring
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: public_dashboards_thanos_query
+      service_aggregation: 'yes'
       tier: inf
       type: monitoring
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: public_grafana_googlelb
+      service_aggregation: 'yes'
       tier: inf
       type: monitoring
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: rule_evaluation
+      service_aggregation: 'yes'
       tier: inf
       type: monitoring
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: thanos_compactor
+      service_aggregation: 'yes'
       tier: inf
       type: monitoring
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: thanos_query
+      service_aggregation: 'yes'
       tier: inf
       type: monitoring
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: thanos_rule_alert_sender
+      service_aggregation: 'yes'
       tier: inf
       type: monitoring
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: thanos_store
+      service_aggregation: 'yes'
       tier: inf
       type: monitoring
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: trickster
+      service_aggregation: 'yes'
       tier: inf
       type: monitoring
     expr: '1'
@@ -606,15 +606,15 @@ groups:
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: nfs_service
+      service_aggregation: 'yes'
       tier: stor
       type: nfs
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: loadbalancer
+      service_aggregation: 'yes'
       tier: lb
       type: pages
     expr: '1'
@@ -625,162 +625,162 @@ groups:
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: pgbouncer
+      service_aggregation: 'yes'
       tier: db
       type: patroni
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: rails_sql
+      service_aggregation: 'yes'
       tier: db
       type: patroni
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: transactions_primary
+      service_aggregation: 'yes'
       tier: db
       type: patroni
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: transactions_replica
+      service_aggregation: 'yes'
       tier: db
       type: patroni
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: service
+      service_aggregation: 'yes'
       tier: db
       type: pgbouncer
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'no'
       component: praefect_cloudsql
+      service_aggregation: 'no'
       tier: stor
       type: praefect
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: proxy
+      service_aggregation: 'yes'
       tier: stor
       type: praefect
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: replicator_queue
+      service_aggregation: 'yes'
       tier: stor
       type: praefect
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: primary_server
+      service_aggregation: 'yes'
       tier: db
       type: redis-cache
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: rails_cache
+      service_aggregation: 'yes'
       tier: db
       type: redis-cache
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: rails_redis_client
+      service_aggregation: 'yes'
       tier: db
       type: redis-cache
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'no'
       component: secondary_servers
+      service_aggregation: 'no'
       tier: db
       type: redis-cache
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: primary_server
+      service_aggregation: 'yes'
       tier: db
       type: redis-sidekiq
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: rails_redis_client
+      service_aggregation: 'yes'
       tier: db
       type: redis-sidekiq
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'no'
       component: secondary_servers
+      service_aggregation: 'no'
       tier: db
       type: redis-sidekiq
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: primary_server
+      service_aggregation: 'yes'
       tier: db
       type: redis
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: rails_redis_client
+      service_aggregation: 'yes'
       tier: db
       type: redis
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'no'
       component: secondary_servers
+      service_aggregation: 'no'
       tier: db
       type: redis
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'no'
       component: loadbalancer
+      service_aggregation: 'no'
       tier: sv
       type: registry
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: server
+      service_aggregation: 'yes'
       tier: sv
       type: registry
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: storage
+      service_aggregation: 'yes'
       tier: sv
       type: registry
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: elasticsearch_indexing
+      service_aggregation: 'yes'
       tier: inf
       type: search
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: elasticsearch_searching
+      service_aggregation: 'yes'
       tier: inf
       type: search
     expr: '1'
@@ -791,141 +791,141 @@ groups:
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: shard_catchall
+      service_aggregation: 'yes'
       tier: sv
       type: sidekiq
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: shard_catchnfs
+      service_aggregation: 'yes'
       tier: sv
       type: sidekiq
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: shard_database_throttled
+      service_aggregation: 'yes'
       tier: sv
       type: sidekiq
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: shard_elasticsearch
+      service_aggregation: 'yes'
       tier: sv
       type: sidekiq
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: shard_gitaly_throttled
+      service_aggregation: 'yes'
       tier: sv
       type: sidekiq
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: shard_low_urgency_cpu_bound
+      service_aggregation: 'yes'
       tier: sv
       type: sidekiq
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: shard_memory_bound
+      service_aggregation: 'yes'
       tier: sv
       type: sidekiq
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: shard_urgent_cpu_bound
+      service_aggregation: 'yes'
       tier: sv
       type: sidekiq
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: shard_urgent_other
+      service_aggregation: 'yes'
       tier: sv
       type: sidekiq
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: gitlab_net_zone
+      service_aggregation: 'yes'
       tier: lb
       type: waf
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: gitlab_zone
+      service_aggregation: 'yes'
       tier: lb
       type: waf
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'no'
       component: loadbalancer
+      service_aggregation: 'no'
       tier: sv
       type: web-pages
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'no'
       component: loadbalancer_https
+      service_aggregation: 'no'
       tier: sv
       type: web-pages
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: server
+      service_aggregation: 'yes'
       tier: sv
       type: web-pages
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: imagescaler
+      service_aggregation: 'yes'
       tier: sv
       type: web
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'no'
       component: loadbalancer
+      service_aggregation: 'no'
       tier: sv
       type: web
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: puma
+      service_aggregation: 'yes'
       tier: sv
       type: web
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: workhorse
+      service_aggregation: 'yes'
       tier: sv
       type: web
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: async_jobs
+      service_aggregation: 'yes'
       tier: sv
       type: woodhouse
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: http
+      service_aggregation: 'yes'
       tier: sv
       type: woodhouse
     expr: '1'

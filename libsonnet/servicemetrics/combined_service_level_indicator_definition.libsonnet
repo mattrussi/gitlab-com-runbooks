@@ -18,7 +18,7 @@ local combinedServiceLevelIndicatorDefinition(
   featureCategory,
   description,
   team=null,
-  aggregateRequestRate=false,
+  serviceAggregation=false,
   staticLabels={},
   ignoreTrafficCessation=false,
       ) =
@@ -35,7 +35,7 @@ local combinedServiceLevelIndicatorDefinition(
         team: team,
         ignoreTrafficCessation: ignoreTrafficCessation,
 
-        aggregateRequestRate: aggregateRequestRate,
+        serviceAggregation: serviceAggregation,
 
         // Returns true if this component allows detailed breakdowns
         // this is not the case for combined component definitions

@@ -421,15 +421,15 @@ groups:
   rules:
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: async_jobs
+      service_aggregation: 'yes'
       tier: sv
       type: woodhouse
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: http
+      service_aggregation: 'yes'
       tier: sv
       type: woodhouse
     expr: '1'
