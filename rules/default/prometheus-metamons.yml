@@ -6,7 +6,6 @@ groups:
     expr: vector(1)
     labels:
       severity: s4
-      incident_project: gitlab.com/gitlab-com/gl-infra/production
       alert_type: heartbeat
     annotations:
       runbook: docs/monitoring/prometheus-snitch.md
