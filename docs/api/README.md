@@ -39,6 +39,7 @@
 * [../gitaly/gitaly-token-rotation.md](../gitaly/gitaly-token-rotation.md)
 * [../gitaly/storage-rebalancing.md](../gitaly/storage-rebalancing.md)
 * [../gitaly/storage-servers.md](../gitaly/storage-servers.md)
+* [../kubernetes-agent/kubernetes-agent-basic-troubleshooting.md](../kubernetes-agent/kubernetes-agent-basic-troubleshooting.md)
 * [../monitoring/alertmanager-notification-failures.md](../monitoring/alertmanager-notification-failures.md)
 * [../monitoring/alerts_manual.md](../monitoring/alerts_manual.md)
 * [../patroni/geo-patroni-cluster.md](../patroni/geo-patroni-cluster.md)

@@ -29,6 +29,7 @@
 * [../gitaly/gitaly-down.md](../gitaly/gitaly-down.md)
 * [../gitaly/gitaly-token-rotation.md](../gitaly/gitaly-token-rotation.md)
 * [../gitaly/storage-rebalancing.md](../gitaly/storage-rebalancing.md)
+* [../kubernetes-agent/kubernetes-agent-basic-troubleshooting.md](../kubernetes-agent/kubernetes-agent-basic-troubleshooting.md)
 * [../license/license-gitlab-com.md](../license/license-gitlab-com.md)
 * [../logging/logging_gcs_archive_bigquery.md](../logging/logging_gcs_archive_bigquery.md)
 * [../monitoring/alertmanager-notification-failures.md](../monitoring/alertmanager-notification-failures.md)
