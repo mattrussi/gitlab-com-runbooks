@@ -34,6 +34,7 @@ test.suite({
       [template.name for template in results.templating.list] == [
         'PROMETHEUS_DS',
         'environment',
+        'stage',
         'controller',
         'action',
       ],
@@ -72,6 +73,7 @@ test.suite({
       [template.name for template in results.templating.list] == [
         'PROMETHEUS_DS',
         'environment',
+        'stage',
         'controller',
         'action',
       ],
@@ -98,6 +100,7 @@ test.suite({
       [template.name for template in results.templating.list] == [
         'PROMETHEUS_DS',
         'environment',
+        'stage',
         'controller',
         'action',
       ],
@@ -127,6 +130,7 @@ test.suite({
       [template.name for template in results.templating.list] == [
         'PROMETHEUS_DS',
         'environment',
+        'stage',
         'controller',
         'action',
       ],
@@ -146,6 +150,7 @@ test.suite({
       [template.name for template in results.templating.list if template != {}] == [
         'PROMETHEUS_DS',
         'environment',
+        'stage',
       ],
   },
 })
