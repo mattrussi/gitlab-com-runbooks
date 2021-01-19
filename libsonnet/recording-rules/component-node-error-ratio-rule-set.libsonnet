@@ -14,9 +14,13 @@
         [{
           record: 'gitlab_component_node_errors:ratio%(suffix)s' % format,
           expr: |||
-            sum by (environment, tier, type, stage, shard, fqdn, component) (gitlab_component_node_errors:rate%(suffix)s{monitor!="global"} >= 0)
+            sum by (environment,tier,type,stage,shard,fqdn,component) (
+              gitlab_component_node_errors:rate%(suffix)s{monitor!="global"} >= 0
+            )
             /
-            sum by (environment, tier, type, stage, shard, fqdn, component) (gitlab_component_node_ops:rate%(suffix)s{monitor!="global"} > 0)
+            sum by (environment,tier,type,stage,shard,fqdn,component) (
+              gitlab_component_node_ops:rate%(suffix)s{monitor!="global"} >= 0
+            )
           ||| % format,
         }],
     },
