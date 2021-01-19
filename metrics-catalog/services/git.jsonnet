@@ -34,10 +34,30 @@ metricsCatalog.serviceDefinition({
     pgbouncer: true,
     praefect: true,
   },
+  provisioning: {
+    vms: true,
+    kubernetes: true,
+  },
+  kubeResources: {
+    'gitlab-shell': {
+      kind: 'Deployment',
+      containers: [
+        'gitlab-shell',
+      ],
+    },
+    'git-https': {
+      kind: 'Deployment',
+      containers: [
+        'gitlab-workhorse',
+        'webservice',
+      ],
+    },
+  },
   serviceLevelIndicators: {
     loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
+      userImpacting=true,
       featureCategory='not_owned',
-      teams=['sre_datastores'],
+      team='sre_datastores',
       stageMappings={
         main: { backends: ['https_git', 'websockets'], toolingLinks: [
           toolingLinks.bigquery(title='Top http clients by number of requests, main stage, 10m', savedQuery='805818759045:704c6bdf00a743d195d344306bf207ee'),
@@ -50,8 +70,9 @@ metricsCatalog.serviceDefinition({
     ),
 
     loadbalancer_ssh: haproxyComponents.haproxyL4LoadBalancer(
+      userImpacting=true,
       featureCategory='not_owned',
-      teams=['sre_datastores'],
+      team='sre_datastores',
       stageMappings={
         main: {
           backends: ['ssh', 'altssh'],
@@ -65,8 +86,9 @@ metricsCatalog.serviceDefinition({
     ),
 
     workhorse: {
+      userImpacting: true,
       featureCategory: 'not_owned',
-      teams: ['sre_datastores', 'workhorse'],
+      team: 'workhorse',
       description: |||
         Monitors the Workhorse instance running in the Git fleet, via the HTTP interface. This SLI
         excludes API requests, which have their own SLI with tigher latency thresholds.
@@ -121,8 +143,9 @@ metricsCatalog.serviceDefinition({
      * that other Git/Workhorse traffic
      */
     workhorse_auth_api: {
+      userImpacting: true,
       featureCategory: 'not_owned',
-      teams: ['sre_datastores', 'workhorse'],
+      team: 'workhorse',
       description: |||
         Monitors Workhorse API endpoints, running in the Git fleet, via the HTTP interface.
         Workhorse API requests have much tigher latency requirements, as these requests originate in GitLab-Shell
@@ -166,8 +189,9 @@ metricsCatalog.serviceDefinition({
 
 
     puma: {
+      userImpacting: true,
       featureCategory: 'not_owned',
-      teams: ['sre_datastores'],
+      team: 'sre_datastores',
       description: |||
         Monitors Rails endpoints, running in the Git fleet, via the HTTP interface.
       |||,
@@ -200,8 +224,9 @@ metricsCatalog.serviceDefinition({
     },
 
     gitlab_shell: {
+      userImpacting: true,
       featureCategory: 'not_owned',
-      teams: ['sre_datastores'],
+      team: 'sre_datastores',
       description: |||
         We monitor GitLab shell, using HAProxy SSH connection information.
       |||,

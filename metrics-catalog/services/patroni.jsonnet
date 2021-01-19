@@ -9,7 +9,7 @@ metricsCatalog.serviceDefinition({
   tier: 'db',
   monitoringThresholds: {
     apdexScore: 0.995,
-    errorRatio: 0.9995,
+    errorRatio: 0.999,
   },
   // Use recordingRuleMetrics to specify a set of metrics with known high
   // cardinality. The metrics catalog will generate recording rules with
@@ -22,8 +22,9 @@ metricsCatalog.serviceDefinition({
     // We don't have latency histograms for patroni but for now we will
     // use the rails controller SQL latencies as an indirect proxy.
     rails_sql: {
+      userImpacting: true,
       featureCategory: 'not_owned',
-      teams: ['sre_datastores'],
+      team: 'sre_datastores',
       description: |||
         Represents all SQL transactions issued through ActiveRecord from the Rails monolith. Durations
         can be impacted by various conditions other than Patroni, including client pool saturation, pgbouncer saturation,
@@ -49,28 +50,67 @@ metricsCatalog.serviceDefinition({
       significantLabels: [],
     },
 
-    service: {
+    transactions_primary: {
+      userImpacting: true,
       featureCategory: 'not_owned',
-      teams: ['sre_datastores'],
+      team: 'sre_datastores',
       description: |||
-        Represents all SQL transactions issued to primary and secondary instances, in aggregate.
+        Represents all SQL transactions issued to the primary Postgres instance.
         Errors represent transaction rollbacks.
       |||,
 
       requestRate: combined([
         rateMetric(
           counter='pg_stat_database_xact_commit',
-          selector='type="patroni", tier="db"'
+          selector='type="patroni", tier="db"',
+          instanceFilter='(pg_replication_is_replica == 0)'
         ),
         rateMetric(
           counter='pg_stat_database_xact_rollback',
-          selector='type="patroni", tier="db"'
+          selector='type="patroni", tier="db"',
+          instanceFilter='(pg_replication_is_replica == 0)'
         ),
       ]),
 
       errorRate: rateMetric(
         counter='pg_stat_database_xact_rollback',
-        selector='type="patroni", tier="db"'
+        selector='type="patroni", tier="db"',
+        instanceFilter='(pg_replication_is_replica == 0)'
+      ),
+
+      significantLabels: ['fqdn'],
+
+      toolingLinks: [
+        toolingLinks.kibana(title='Postgres', index='postgres', type='patroni', tag='postgres.postgres_csv'),
+      ],
+    },
+
+    transactions_replica: {
+      userImpacting: true,
+      featureCategory: 'not_owned',
+      team: 'sre_datastores',
+      description: |||
+        Represents all SQL transactions issued to replica Postgres instances, in aggregate.
+        Errors represent transaction rollbacks.
+      |||,
+
+      requestRate: combined([
+        rateMetric(
+          counter='pg_stat_database_xact_commit',
+          selector='type="patroni", tier="db"',
+          instanceFilter='(pg_replication_is_replica == 1)'
+        ),
+        rateMetric(
+          counter='pg_stat_database_xact_rollback',
+          selector='type="patroni", tier="db"',
+          instanceFilter='(pg_replication_is_replica == 1)'
+        ),
+      ]),
+
+      errorRate: rateMetric(
+        counter='pg_stat_database_xact_rollback',
+        selector='type="patroni", tier="db"',
+        instanceFilter='(pg_replication_is_replica == 1)'
       ),
 
       significantLabels: ['fqdn'],
@@ -82,8 +122,9 @@ metricsCatalog.serviceDefinition({
 
     // Records the operations rate for the pgbouncer instances running on the patroni nodes
     pgbouncer: {
+      userImpacting: true,
       featureCategory: 'not_owned',
-      teams: ['sre_datastores'],
+      team: 'sre_datastores',
       description: |||
         All transactions destined for the Postgres secondary instances are routed through the pgbouncer instances
         running on the patroni nodes themselves. This SLI models those transactions in aggregate.

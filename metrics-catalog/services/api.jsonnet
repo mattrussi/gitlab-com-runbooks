@@ -35,8 +35,9 @@ metricsCatalog.serviceDefinition({
   },
   serviceLevelIndicators: {
     loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
+      userImpacting=true,
       featureCategory='not_owned',
-      teams=['sre_coreinfra'],
+      team='sre_coreinfra',
       stageMappings={
         main: {
           backends: ['api', 'api_rate_limit'],
@@ -50,8 +51,9 @@ metricsCatalog.serviceDefinition({
     ),
 
     workhorse: {
+      userImpacting: true,
       featureCategory: 'not_owned',
-      teams: ['sre_coreinfra', 'workhorse'],
+      team: 'workhorse',
       description: |||
         Aggregation of most web requests that pass through workhorse, monitored via the HTTP interface.
         Excludes health, readiness and liveness requests. Some known slow requests, such as HTTP uploads,
@@ -88,8 +90,9 @@ metricsCatalog.serviceDefinition({
     },
 
     puma: {
+      userImpacting: true,
       featureCategory: 'not_owned',
-      teams: ['sre_coreinfra'],
+      team: 'sre_coreinfra',
       description: |||
         This SLI monitors API traffic in aggregate, in the GitLab rails monolith, via its
         HTTP interface. 5xx responses are treated as failures.

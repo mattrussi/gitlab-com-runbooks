@@ -1,6 +1,5 @@
 local capacityPlanning = import 'capacity_planning.libsonnet';
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
-local colors = import 'grafana/colors.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local seriesOverrides = import 'grafana/series_overrides.libsonnet';
 local templates = import 'grafana/templates.libsonnet';
@@ -73,9 +72,9 @@ basic.dashboard(
 )
 .addPanels(
   layout.grid([
-    keyMetrics.serviceApdexPanel('$type', '$stage', stableId='apdex-ratio'),
-    keyMetrics.serviceErrorRatePanel('$type', '$stage', stableId='error-ratio'),
-    keyMetrics.serviceOperationRatePanel('$type', '$stage', stableId='request-rate'),
+    keyMetrics.serviceApdexPanel('$type', '$stage'),
+    keyMetrics.serviceErrorRatePanel('$type', '$stage'),
+    keyMetrics.serviceOperationRatePanel('$type', '$stage'),
     keyMetrics.utilizationRatesPanel('$type', '$stage'),
   ], startRow=3001)
 )

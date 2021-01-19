@@ -6,6 +6,7 @@ local serviceDefaults = {
   autogenerateRecordingRules: true,
   disableOpsRatePrediction: false,
   nodeLevelMonitoring: false,  // By default we do not use node-level monitoring
+  kubeResources: {},
 };
 
 // Convience method, will wrap a raw definition in a serviceLevelIndicatorDefinition if needed
@@ -18,14 +19,19 @@ local prepareComponent(definition) =
     serviceLevelIndicatorDefinition.serviceLevelIndicatorDefinition(definition);
 
 local validateAndApplyServiceDefaults(service) =
-  local serviceWithProvisioningDefaults = ({ provisioning: provisioningDefaults } + service);
+  local serviceWithProvisioningDefaults = serviceDefaults + ({ provisioning: provisioningDefaults } + service);
 
-  serviceDefaults + serviceWithProvisioningDefaults {
-    serviceLevelIndicators: {
-      [sliName]: prepareComponent(service.serviceLevelIndicators[sliName]).initServiceLevelIndicatorWithName(sliName)
-      for sliName in std.objectFields(service.serviceLevelIndicators)
-    },
-  };
+  // If this service is provisioned on kubernetes we should include a kubernetes deployment map
+  if serviceWithProvisioningDefaults.provisioning.kubernetes == (serviceWithProvisioningDefaults.kubeResources != {}) then
+    serviceWithProvisioningDefaults {
+      serviceLevelIndicators: {
+        [sliName]: prepareComponent(service.serviceLevelIndicators[sliName]).initServiceLevelIndicatorWithName(sliName)
+        for sliName in std.objectFields(service.serviceLevelIndicators)
+      },
+    }
+  else
+    // Service definition has a mismatch between provisioning.kubernetes and kubeResources
+    std.assertEqual(false, { __message__: 'Mismatching kubernetes config' });
 
 local serviceDefinition(service) =
   // Private functions

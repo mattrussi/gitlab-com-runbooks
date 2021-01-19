@@ -1,4 +1,4 @@
-# GitLab Job Completeion
+# GitLab Job Completion
 
 ## Purpose and implementation
 
@@ -6,14 +6,14 @@ The main purpose of a job completion metric is to observe if a given task or act
 
 This is implementated via Prometheus Pushgateway. To register and check-in a successful execution the cron/pipeline publish the required metrics to a Pushgateway. See below for details. Should the time difference be greater than the defined time it would trigger the alert.
 
-## Creatin and updating a new job metric
+## Creating and updating a new job metric
 
 Creating a new job completion metric is the same process as checking-in/updating. This is driven by convention over configuration. It is enough to publish a metric with an arbitrary `resource` label, specifying the resource that the alert reports on. This could be a URL to a repository and the job name in case of a scheduled pipeline, but must not include data, that changes between invocations (e.g. pipeline or job IDs). In addition to that the `type` and `tier` labels are required, as per all our alerts. These should correspond with the type and tier of the underlying service, that the deadman switch is monitoring.
 
 Three metrics are required:
 
 | Metric                                  | Description  |
-| --------------------------------------- |  |
+| --------------------------------------- | ------------ |
 | `gitlab_job_max_age_seconds`            | This is the allowed age before the alert should fire, in seconds. |
 | `gitlab_job_start_timestamp_seconds`    | This is the unix time in seconds when the job starts.  |
 | `gitlab_job_success_timestamp_seconds`  | This is the unix time in seconds when the job completes succesfully. It should be set to 0 at job start. |

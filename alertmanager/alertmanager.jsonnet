@@ -2,20 +2,17 @@
 local secrets = std.extVar('secrets_file');
 local serviceCatalog = import 'service_catalog.libsonnet';
 
-// GitLab Issue Alert Delivery is disabled while we
-// investigate issues not being created
-// https://gitlab.com/gitlab-com/gl-infra/production/-/issues/2451#note_385151530
-local deliveryGitLabIssueAlertsExclusivelyToIssues = false;
-
 // Where the alertmanager templates are deployed.
 local templateDir = '/etc/alertmanager/config';
+
+local slackChannelDefaults = {};
 
 //
 // Receiver helpers and definitions.
 local slackChannels = [
   // Generic channels.
   { name: 'prod_alerts_slack_channel', channel: 'alerts' },
-  { name: 'production_slack_channel', channel: 'production' },
+  { name: 'production_slack_channel', channel: 'production', sendResolved: false },
   { name: 'nonprod_alerts_slack_channel', channel: 'alerts-nonprod' },
 ];
 
@@ -44,7 +41,7 @@ local webhookChannels =
   [
     {
       name: 'issue:' + s.name,
-      url: 'https://' + s.name + '/prometheus/alerts/notify.json',
+      url: 'https://' + s.name + '/alerts/notify.json',
       sendResolved: true,
       httpConfig: {
         bearer_token: s.token,
@@ -68,20 +65,67 @@ local PagerDutyReceiver(channel) = {
   ],
 };
 
-local SlackReceiver(channel) = {
-  name: channel.name,
-  slack_configs: [
-    {
-      channel: '#' + channel.channel,
-      color: '{{ template "slack.color" . }}',
-      icon_emoji: '{{ template "slack.icon" . }}',
-      send_resolved: true,
-      text: '{{ template "slack.text" . }}',
-      title: '{{ template "slack.title" . }}',
-      title_link: '{{ template "slack.link" . }}',
-    },
-  ],
-};
+local slackActionButton(text, url) =
+  {
+    type: 'button',
+    text: text,
+    url: std.stripChars(url, ' \n'),
+  };
+
+local SlackReceiver(channel) =
+  local channelWithDefaults = slackChannelDefaults + channel;
+  {
+    name: channelWithDefaults.name,
+    slack_configs: [
+      {
+        channel: '#' + channelWithDefaults.channel,
+        color: '{{ template "slack.color" . }}',
+        icon_emoji: '{{ template "slack.icon" . }}',
+        send_resolved: if std.objectHas(channel, 'sendResolved') then channel.sendResolved else true,
+        text: '{{ template "slack.text" . }}',
+        title: '{{ template "slack.title" . }}',
+        title_link: '{{ template "slack.link" . }}',
+        actions: [
+          slackActionButton(  // runbook
+            text='Runbook :green_book:',
+            url=|||
+              {{-  if ne (index .Alerts 0).Annotations.link "" -}}
+                {{- (index .Alerts 0).Annotations.link -}}
+              {{- else if ne (index .Alerts 0).Annotations.runbook "" -}}
+                https://ops.gitlab.net/gitlab-com/runbooks/blob/master/{{ (index .Alerts 0).Annotations.runbook -}}
+              {{- else -}}
+                https://ops.gitlab.net/gitlab-com/runbooks/blob/master/docs/uncategorized/alerts-should-have-runbook-annotations.md
+              {{- end -}}
+            |||
+          ),
+          slackActionButton(  // Grafana link
+            text='Dashboard :grafana:',
+            url=|||
+              {{-  if ne (index .Alerts 0).Annotations.grafana_dashboard_link "" -}}
+                {{- (index .Alerts 0).Annotations.grafana_dashboard_link -}}
+              {{- else if ne .CommonLabels.type "" -}}
+                https://dashboards.gitlab.net/d/{{.CommonLabels.type}}-main?{{ if ne .CommonLabels.stage "" }}var-stage={{.CommonLabels.stage}}{{ end }}
+              {{- else -}}
+                https://dashboards.gitlab.net/
+              {{- end -}}
+            |||
+          ),
+          slackActionButton(  // Silence button
+            text='Create Silence :shushing_face:',
+            url=|||
+              https://alerts.gitlab.net/#/silences/new?filter=%7B
+              {{- range .CommonLabels.SortedPairs -}}
+                  {{- if ne .Name "alertname" -}}
+                      {{- .Name }}%3D%22{{- reReplaceAll " +" "%20" .Value -}}%22%2C%20
+                  {{- end -}}
+              {{- end -}}
+              alertname%3D%22{{ reReplaceAll " +" "%20" .CommonLabels.alertname }}%22%7D
+            |||,
+          ),
+        ],
+      },
+    ],
+  };
 
 local WebhookReceiver(channel) = {
   name: channel.name,
@@ -197,20 +241,20 @@ local routingTree = Route(
     for channel in secrets.snitchChannels
   ] +
   [
-    /* pager=issue alerts do not continue */
+    /* issue alerts do continue */
     Route(
       receiver='issue:' + issueChannel.name,
       match={
-        pager: 'issue',
-        env: 'gprd',
-        project: issueChannel.name,
+        env: env,
+        incident_project: issueChannel.name,
       },
-      continue=!deliveryGitLabIssueAlertsExclusivelyToIssues,
+      continue=true,
       group_wait='10m',
       group_interval='1h',
       repeat_interval='3d',
     )
     for issueChannel in secrets.issueChannels
+    for env in ['gprd', 'ops']
   ] + [
     /* pager=pagerduty alerts do continue */
     RouteCase(

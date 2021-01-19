@@ -2,24 +2,54 @@ local alerts = import 'alerts/alerts.libsonnet';
 local metricsCatalog = import 'metrics-catalog.libsonnet';
 local multiburnExpression = import 'mwmbr/expression.libsonnet';
 local multiburnFactors = import 'mwmbr/multiburn_factors.libsonnet';
+local serviceCatalog = import 'service_catalog.libsonnet';
 local stableIds = import 'stable-ids/stable-ids.libsonnet';
 local stages = import 'stages.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 
 // For now, only include components that run at least once a second
 // in the monitoring. This is to avoid low-volume, noisy alerts
-local minimumOperationRateForMonitoring = 1/* rps */;
+local minimumOperationRateForMonitoring = 1; /* rps */
 
 local formatConfig = multiburnFactors {
   minimumOperationRateForMonitoring: minimumOperationRateForMonitoring,
 };
 
-local labelsForFeatureCategory(featureCategory) =
-  {
-    feature_category: std.asciiLower(featureCategory),
-    product_stage: std.asciiLower(stages.findStageNameForFeatureCategory(featureCategory)),
-    product_stage_group: std.asciiLower(stages.findStageGroupNameForFeatureCategory(featureCategory)),
+local labelsForSLI(sli) =
+  local labels = {
+    user_impacting: if sli.userImpacting then 'yes' else 'no',
+    feature_category: std.asciiLower(sli.featureCategory),
+    product_stage: std.asciiLower(stages.findStageNameForFeatureCategory(sli.featureCategory)),
+    product_stage_group: std.asciiLower(stages.findStageGroupNameForFeatureCategory(sli.featureCategory)),
   };
+  if sli.team != null then
+    local team = serviceCatalog.getTeam(sli.team);
+    if std.objectHas(team, 'issue_tracker') then
+      labels {
+        incident_project: team.issue_tracker,
+      }
+    else
+      labels
+  else
+    labels;
+
+local toCamelCase(str) =
+  std.join(
+    '',
+    std.map(
+      strings.capitalizeFirstLetter,
+      strings.splitOnChars(str, '-_')
+    )
+  );
+
+// Generates an alert name
+local nameSLOViolationAlert(serviceType, sliName, violationType) =
+  '%(serviceType)sService%(sliName)s%(violationType)s' % {
+    serviceType: toCamelCase(serviceType),
+    sliName: toCamelCase(sliName),
+    violationType: violationType,
+  };
+
 
 // For now, this is a bit of a hack, relying on a convention that service overview
 // dashboards will match this URL
@@ -37,11 +67,8 @@ local apdexAlertForSLI(service, sli) =
     serviceType: service.type,
   };
 
-
   [{
-    // TODO: Rename component_apdex_ratio_burn_rate_slo_out_of_bounds_lower,
-    // giving it a better name specific to the failing SLI
-    alert: 'component_apdex_ratio_burn_rate_slo_out_of_bounds_lower',
+    alert: nameSLOViolationAlert(service.type, sli.name, 'ApdexSLOViolation'),
     expr: multiburnExpression.multiburnRateApdexExpression(
       metric1h='gitlab_component_apdex:ratio_1h',
       metric5m='gitlab_component_apdex:ratio_5m',
@@ -55,7 +82,7 @@ local apdexAlertForSLI(service, sli) =
       thresholdSLOValue=apdexScoreSLO
     ),
     'for': '2m',
-    labels: labelsForFeatureCategory(sli.featureCategory) {
+    labels: labelsForSLI(sli) {
       alert_type: 'symptom',
       rules_domain: 'general',
       severity: 's2',
@@ -88,9 +115,7 @@ local errorRateAlertForSLI(service, sli) =
   };
 
   [{
-    // TODO: Rename component_error_ratio_burn_rate_slo_out_of_bounds_upper,
-    // giving it a better name specific to the failing SLI
-    alert: 'component_error_ratio_burn_rate_slo_out_of_bounds_upper',
+    alert: nameSLOViolationAlert(service.type, sli.name, 'ErrorSLOViolation'),
     expr: multiburnExpression.multiburnRateErrorExpression(
       metric1h='gitlab_component_errors:ratio_1h',
       metric5m='gitlab_component_errors:ratio_5m',
@@ -104,7 +129,7 @@ local errorRateAlertForSLI(service, sli) =
       thresholdSLOValue=1 - errorRateSLO,
     ),
     'for': '2m',
-    labels: labelsForFeatureCategory(sli.featureCategory) {
+    labels: labelsForSLI(sli) {
       rules_domain: 'general',
       severity: 's2',
       slo_alert: 'yes',
@@ -129,6 +154,80 @@ local errorRateAlertForSLI(service, sli) =
     },
   }];
 
+local trafficCessationAlert(service, sli) =
+  local formatConfig = {
+    sliName: sli.name,
+    sliDescription: strings.chomp(sli.description),
+    serviceType: service.type,
+  };
+
+  [
+    {
+      alert: nameSLOViolationAlert(service.type, sli.name, 'TrafficCessation'),
+      expr: |||
+        gitlab_component_ops:rate_30m{type="%(serviceType)s", component="%(sliName)s", stage="main", monitor="global"} == 0
+      ||| % formatConfig,
+      'for': '5m',
+      labels: labelsForSLI(sli) {
+        experimental: true,
+        severity: 's3',
+        slo_alert: 'no',
+        alert_type: 'cause',
+        // pager: 'pagerduty', // TODO: send to pagerduty
+      },
+      annotations: {
+        title: 'The %(sliName)s SLI of the %(serviceType)s service (`{{ $labels.stage }}` stage) has not received any traffic in the past 30 minutes' % formatConfig,
+        description: |||
+          %(sliDescription)s
+
+          This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        ||| % formatConfig,
+        runbook: 'docs/{{ $labels.type }}/README.md',
+        grafana_dashboard_id: dashboardForService(service),
+        grafana_panel_id: stableIds.hashStableId('sli-%(sliName)s-ops-rate' % formatConfig),
+        grafana_variables: 'environment,stage',
+        grafana_min_zoom_hours: '6',
+        link1_title: 'Definition',
+        link1_url: 'https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md',
+        promql_template_1: 'gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}',
+      },
+    },
+    {
+      alert: nameSLOViolationAlert(service.type, sli.name, 'TrafficAbsent'),
+      expr: |||
+        gitlab_component_ops:rate_5m{type="%(serviceType)s", component="%(sliName)s", stage="main", monitor="global"} offset 1h
+        unless
+        gitlab_component_ops:rate_5m{type="%(serviceType)s", component="%(sliName)s", stage="main", monitor="global"}
+      ||| % formatConfig,
+      'for': '30m',
+      labels: labelsForSLI(sli) {
+        experimental: true,
+        severity: 's3',
+        slo_alert: 'no',
+        alert_type: 'cause',
+        // pager: 'pagerduty', // TODO: send to pagerduty
+      },
+      annotations: {
+        title: 'The %(sliName)s SLI of the %(serviceType)s service (`{{ $labels.stage }}` stage) has not reported any traffic in the past 30 minutes' % formatConfig,
+        description: |||
+          %(sliDescription)s
+
+          This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+          This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+        ||| % formatConfig,
+        runbook: 'docs/{{ $labels.type }}/README.md',
+        grafana_dashboard_id: dashboardForService(service),
+        grafana_panel_id: stableIds.hashStableId('sli-%(sliName)s-ops-rate' % formatConfig),
+        grafana_variables: 'environment,stage',
+        grafana_min_zoom_hours: '6',
+        link1_title: 'Definition',
+        link1_url: 'https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md',
+        promql_template_1: 'gitlab_component_ops:rate_5m{environment="$environment", type="$type", stage="$stage", component="$component"}',
+      },
+    },
+  ];
+
 local alertsForService(service) =
   local slis = service.listServiceLevelIndicators();
   local hasMonitoringThresholds = std.objectHas(service, 'monitoringThresholds');
@@ -147,6 +246,13 @@ local alertsForService(service) =
       (
         if hasErrorRateSLO && sli.hasErrorRate() then
           errorRateAlertForSLI(service, sli)
+        else
+          []
+      )
+      +
+      (
+        if !sli.ignoreTrafficCessation then  // Alert on a zero RPS operation rate for this SLI
+          trafficCessationAlert(service, sli)
         else
           []
       ),
@@ -174,7 +280,7 @@ local servicesWithSLIAlerts = std.filter(
     // Returns true if any of the SLIs have an apdex or an error rate
     std.foldl(
       function(hasAlerts, sli)
-        hasAlerts || (hasApdexSLO && sli.hasApdex()) || (hasErrorRateSLO && sli.hasErrorRate()),
+        hasAlerts || (hasApdexSLO && sli.hasApdex()) || (hasErrorRateSLO && sli.hasErrorRate()) || !sli.ignoreTrafficCessation,
       slis,
       false
     )

@@ -12,8 +12,9 @@ metricsCatalog.serviceDefinition({
   },
   serviceLevelIndicators: {
     service: {
+      userImpacting: true,
       featureCategory: 'not_owned',
-      teams: ['sre_datastores'],
+      team: 'sre_datastores',
       description: |||
         All transactions destined for the Postgres primary instance are routed through the pgbouncer service.
         This SLI models those transactions in aggregate.

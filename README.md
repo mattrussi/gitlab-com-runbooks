@@ -145,8 +145,7 @@ During an incident, we have [roles defined in the handbook](https://about.gitlab
 
 ### Supporting Services
 
-* [Redis replication has stopped](troubleshooting/redis_replication.md)
-* [Redis replication setup](howto/redis-new-cluster-replication.md)
+* [Redis](docs/redis/redis.md)
 * [Sentry is down](docs/monitoring/sentry-is-down.md)
 
 ### Gitaly
@@ -207,7 +206,7 @@ During an incident, we have [roles defined in the handbook](https://about.gitlab
 * [Alert for SSL certificate expiration](docs/uncategorized/alert-for-ssl-certificate-expiration.md)
 * [Working with Grafana](monitoring/grafana.md)
 * [Working with Prometheus](monitoring/prometheus.md)
-* [Upgrade Prometheus and exporters](docs/monitoring/update-prometheus-and-exporters.md)
+* [Upgrade Prometheus and exporters](docs/monitoring/upgrades.md)
 * [Use mtail to capture metrics from logs](docs/uncategorized/mtail.md)
 
 ### CI
@@ -282,7 +281,7 @@ During an incident, we have [roles defined in the handbook](https://about.gitlab
 * [CI project namespace check](docs/ci-runners/ci-project-namespace-check.md)
 
 ### Work with Infrastructure Providers (VMs)
-* [Getting Support w/ RackSpace for GCP/GKE](howto/GCP-rackspace-support.md)
+* [Getting Support from GCP](docs/uncategorized/externalvendors/GCP-rackspace-support.md)
 * [Create a DO VM for a Service Engineer](docs/uncategorized/create-do-vm-for-service-engineer.md)
 * [Create VMs in Azure, add disks, etc](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/blob/master/doc/azure.md#managing-vms-in-azure)
 * [Bootstrap a new VM](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/blob/master/doc/new-vps.md)
@@ -431,8 +430,8 @@ Our `asdf` toolset uses the following plugins:
 
 * `golang`: `asdf plugin add golang`
 * `ruby`: `asdf plugin add ruby`
-* `go-jsonnet`: `asdf plugin add go-jsonnet https://gitlab.com/craigfurman/asdf-go-jsonnet`.
-* `jsonnet-bundler`: `asdf plugin add jsonnet-bundler https://github.com/trotttrotttrott/asdf-jsonnet-bundler.git`.
+* `go-jsonnet`: `asdf plugin add go-jsonnet`.
+* `jsonnet-bundler`: `asdf plugin add jb`.
 
 Once you have installed these plugins, run the following command to install the required versions.
 
@@ -467,7 +466,8 @@ Or via homebrew:
 ```
 brew install go-jsonnet
 ```
-Or use [an asdf plugin](https://gitlab.com/craigfurman/asdf-go-jsonnet).
+Or if you're using `asdf`, you can use [an asdf
+plugin](https://gitlab.com/craigfurman/asdf-go-jsonnet).
 
 ### Ruby
 

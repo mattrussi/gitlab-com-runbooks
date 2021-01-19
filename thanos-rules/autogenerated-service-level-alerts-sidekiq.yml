@@ -5,7 +5,7 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
-  - alert: component_apdex_ratio_burn_rate_slo_out_of_bounds_lower
+  - alert: SidekiqServiceShardCatchallApdexSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -34,6 +34,7 @@ groups:
       rules_domain: general
       severity: s2
       slo_alert: 'yes'
+      user_impacting: 'yes'
     expr: |
       (
         (
@@ -60,7 +61,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_catchall",monitor="global",type="sidekiq"}) >= 1
       )
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: SidekiqServiceShardCatchallErrorSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -92,6 +93,7 @@ groups:
       rules_domain: general
       severity: s2
       slo_alert: 'yes'
+      user_impacting: 'yes'
     expr: |
       (
         (
@@ -118,7 +120,78 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_catchall",monitor="global",type="sidekiq"}) >= 1
       )
-  - alert: component_apdex_ratio_burn_rate_slo_out_of_bounds_lower
+  - alert: SidekiqServiceShardCatchallTrafficCessation
+    for: 5m
+    annotations:
+      title: >-
+        The shard_catchall SLI of the sidekiq service (`{{ $labels.stage }}` stage) has not received any
+        traffic in the past 30 minutes
+      description: |
+        Aggregation of all jobs for the catchall Sidekiq shard.
+
+        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '53896'
+      grafana_variables: environment,stage
+      link1_title: Definition
+      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
+      promql_template_1: >-
+        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      experimental: 'true'
+      feature_category: not_owned
+      product_stage: not_owned
+      product_stage_group: not_owned
+      severity: s3
+      slo_alert: 'no'
+      user_impacting: 'yes'
+    expr: >
+      gitlab_component_ops:rate_30m{type="sidekiq", component="shard_catchall", stage="main", monitor="global"}
+      == 0
+  - alert: SidekiqServiceShardCatchallTrafficAbsent
+    for: 30m
+    annotations:
+      title: >-
+        The shard_catchall SLI of the sidekiq service (`{{ $labels.stage }}` stage) has not reported any
+        traffic in the past 30 minutes
+      description: |
+        Aggregation of all jobs for the catchall Sidekiq shard.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '53896'
+      grafana_variables: environment,stage
+      link1_title: Definition
+      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
+      promql_template_1: >-
+        gitlab_component_ops:rate_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      experimental: 'true'
+      feature_category: not_owned
+      product_stage: not_owned
+      product_stage_group: not_owned
+      severity: s3
+      slo_alert: 'no'
+      user_impacting: 'yes'
+    expr: |
+      gitlab_component_ops:rate_5m{type="sidekiq", component="shard_catchall", stage="main", monitor="global"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{type="sidekiq", component="shard_catchall", stage="main", monitor="global"}
+  - alert: SidekiqServiceShardCatchnfsApdexSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -147,6 +220,7 @@ groups:
       rules_domain: general
       severity: s2
       slo_alert: 'yes'
+      user_impacting: 'yes'
     expr: |
       (
         (
@@ -173,7 +247,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_catchnfs",monitor="global",type="sidekiq"}) >= 1
       )
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: SidekiqServiceShardCatchnfsErrorSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -205,6 +279,7 @@ groups:
       rules_domain: general
       severity: s2
       slo_alert: 'yes'
+      user_impacting: 'yes'
     expr: |
       (
         (
@@ -231,7 +306,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_catchnfs",monitor="global",type="sidekiq"}) >= 1
       )
-  - alert: component_apdex_ratio_burn_rate_slo_out_of_bounds_lower
+  - alert: SidekiqServiceShardDatabaseThrottledApdexSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -260,6 +335,7 @@ groups:
       rules_domain: general
       severity: s2
       slo_alert: 'yes'
+      user_impacting: 'no'
     expr: |
       (
         (
@@ -286,7 +362,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_database_throttled",monitor="global",type="sidekiq"}) >= 1
       )
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: SidekiqServiceShardDatabaseThrottledErrorSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -318,6 +394,7 @@ groups:
       rules_domain: general
       severity: s2
       slo_alert: 'yes'
+      user_impacting: 'no'
     expr: |
       (
         (
@@ -344,7 +421,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_database_throttled",monitor="global",type="sidekiq"}) >= 1
       )
-  - alert: component_apdex_ratio_burn_rate_slo_out_of_bounds_lower
+  - alert: SidekiqServiceShardElasticsearchApdexSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -373,6 +450,7 @@ groups:
       rules_domain: general
       severity: s2
       slo_alert: 'yes'
+      user_impacting: 'no'
     expr: |
       (
         (
@@ -399,7 +477,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_elasticsearch",monitor="global",type="sidekiq"}) >= 1
       )
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: SidekiqServiceShardElasticsearchErrorSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -431,6 +509,7 @@ groups:
       rules_domain: general
       severity: s2
       slo_alert: 'yes'
+      user_impacting: 'no'
     expr: |
       (
         (
@@ -457,7 +536,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_elasticsearch",monitor="global",type="sidekiq"}) >= 1
       )
-  - alert: component_apdex_ratio_burn_rate_slo_out_of_bounds_lower
+  - alert: SidekiqServiceShardGitalyThrottledApdexSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -486,6 +565,7 @@ groups:
       rules_domain: general
       severity: s2
       slo_alert: 'yes'
+      user_impacting: 'no'
     expr: |
       (
         (
@@ -512,7 +592,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_gitaly_throttled",monitor="global",type="sidekiq"}) >= 1
       )
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: SidekiqServiceShardGitalyThrottledErrorSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -544,6 +624,7 @@ groups:
       rules_domain: general
       severity: s2
       slo_alert: 'yes'
+      user_impacting: 'no'
     expr: |
       (
         (
@@ -570,7 +651,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_gitaly_throttled",monitor="global",type="sidekiq"}) >= 1
       )
-  - alert: component_apdex_ratio_burn_rate_slo_out_of_bounds_lower
+  - alert: SidekiqServiceShardLowUrgencyCpuBoundApdexSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -599,6 +680,7 @@ groups:
       rules_domain: general
       severity: s2
       slo_alert: 'yes'
+      user_impacting: 'yes'
     expr: |
       (
         (
@@ -625,7 +707,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_low_urgency_cpu_bound",monitor="global",type="sidekiq"}) >= 1
       )
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: SidekiqServiceShardLowUrgencyCpuBoundErrorSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -657,6 +739,7 @@ groups:
       rules_domain: general
       severity: s2
       slo_alert: 'yes'
+      user_impacting: 'yes'
     expr: |
       (
         (
@@ -683,7 +766,78 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_low_urgency_cpu_bound",monitor="global",type="sidekiq"}) >= 1
       )
-  - alert: component_apdex_ratio_burn_rate_slo_out_of_bounds_lower
+  - alert: SidekiqServiceShardLowUrgencyCpuBoundTrafficCessation
+    for: 5m
+    annotations:
+      title: >-
+        The shard_low_urgency_cpu_bound SLI of the sidekiq service (`{{ $labels.stage }}` stage) has not
+        received any traffic in the past 30 minutes
+      description: |
+        Aggregation of all jobs for the low-urgency-cpu-bound Sidekiq shard.
+
+        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '83976'
+      grafana_variables: environment,stage
+      link1_title: Definition
+      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
+      promql_template_1: >-
+        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      experimental: 'true'
+      feature_category: not_owned
+      product_stage: not_owned
+      product_stage_group: not_owned
+      severity: s3
+      slo_alert: 'no'
+      user_impacting: 'yes'
+    expr: >
+      gitlab_component_ops:rate_30m{type="sidekiq", component="shard_low_urgency_cpu_bound", stage="main",
+      monitor="global"} == 0
+  - alert: SidekiqServiceShardLowUrgencyCpuBoundTrafficAbsent
+    for: 30m
+    annotations:
+      title: >-
+        The shard_low_urgency_cpu_bound SLI of the sidekiq service (`{{ $labels.stage }}` stage) has not
+        reported any traffic in the past 30 minutes
+      description: |
+        Aggregation of all jobs for the low-urgency-cpu-bound Sidekiq shard.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '83976'
+      grafana_variables: environment,stage
+      link1_title: Definition
+      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
+      promql_template_1: >-
+        gitlab_component_ops:rate_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      experimental: 'true'
+      feature_category: not_owned
+      product_stage: not_owned
+      product_stage_group: not_owned
+      severity: s3
+      slo_alert: 'no'
+      user_impacting: 'yes'
+    expr: |
+      gitlab_component_ops:rate_5m{type="sidekiq", component="shard_low_urgency_cpu_bound", stage="main", monitor="global"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{type="sidekiq", component="shard_low_urgency_cpu_bound", stage="main", monitor="global"}
+  - alert: SidekiqServiceShardMemoryBoundApdexSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -712,6 +866,7 @@ groups:
       rules_domain: general
       severity: s2
       slo_alert: 'yes'
+      user_impacting: 'yes'
     expr: |
       (
         (
@@ -738,7 +893,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_memory_bound",monitor="global",type="sidekiq"}) >= 1
       )
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: SidekiqServiceShardMemoryBoundErrorSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -770,6 +925,7 @@ groups:
       rules_domain: general
       severity: s2
       slo_alert: 'yes'
+      user_impacting: 'yes'
     expr: |
       (
         (
@@ -796,7 +952,78 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_memory_bound",monitor="global",type="sidekiq"}) >= 1
       )
-  - alert: component_apdex_ratio_burn_rate_slo_out_of_bounds_lower
+  - alert: SidekiqServiceShardMemoryBoundTrafficCessation
+    for: 5m
+    annotations:
+      title: >-
+        The shard_memory_bound SLI of the sidekiq service (`{{ $labels.stage }}` stage) has not received
+        any traffic in the past 30 minutes
+      description: |
+        Aggregation of all jobs for the memory-bound Sidekiq shard.
+
+        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '68264'
+      grafana_variables: environment,stage
+      link1_title: Definition
+      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
+      promql_template_1: >-
+        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      experimental: 'true'
+      feature_category: not_owned
+      product_stage: not_owned
+      product_stage_group: not_owned
+      severity: s3
+      slo_alert: 'no'
+      user_impacting: 'yes'
+    expr: >
+      gitlab_component_ops:rate_30m{type="sidekiq", component="shard_memory_bound", stage="main", monitor="global"}
+      == 0
+  - alert: SidekiqServiceShardMemoryBoundTrafficAbsent
+    for: 30m
+    annotations:
+      title: >-
+        The shard_memory_bound SLI of the sidekiq service (`{{ $labels.stage }}` stage) has not reported
+        any traffic in the past 30 minutes
+      description: |
+        Aggregation of all jobs for the memory-bound Sidekiq shard.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '68264'
+      grafana_variables: environment,stage
+      link1_title: Definition
+      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
+      promql_template_1: >-
+        gitlab_component_ops:rate_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      experimental: 'true'
+      feature_category: not_owned
+      product_stage: not_owned
+      product_stage_group: not_owned
+      severity: s3
+      slo_alert: 'no'
+      user_impacting: 'yes'
+    expr: |
+      gitlab_component_ops:rate_5m{type="sidekiq", component="shard_memory_bound", stage="main", monitor="global"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{type="sidekiq", component="shard_memory_bound", stage="main", monitor="global"}
+  - alert: SidekiqServiceShardUrgentCpuBoundApdexSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -825,6 +1052,7 @@ groups:
       rules_domain: general
       severity: s2
       slo_alert: 'yes'
+      user_impacting: 'yes'
     expr: |
       (
         (
@@ -851,7 +1079,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_urgent_cpu_bound",monitor="global",type="sidekiq"}) >= 1
       )
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: SidekiqServiceShardUrgentCpuBoundErrorSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -883,6 +1111,7 @@ groups:
       rules_domain: general
       severity: s2
       slo_alert: 'yes'
+      user_impacting: 'yes'
     expr: |
       (
         (
@@ -909,7 +1138,78 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_urgent_cpu_bound",monitor="global",type="sidekiq"}) >= 1
       )
-  - alert: component_apdex_ratio_burn_rate_slo_out_of_bounds_lower
+  - alert: SidekiqServiceShardUrgentCpuBoundTrafficCessation
+    for: 5m
+    annotations:
+      title: >-
+        The shard_urgent_cpu_bound SLI of the sidekiq service (`{{ $labels.stage }}` stage) has not received
+        any traffic in the past 30 minutes
+      description: |
+        Aggregation of all jobs for the urgent-cpu-bound Sidekiq shard.
+
+        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '8744'
+      grafana_variables: environment,stage
+      link1_title: Definition
+      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
+      promql_template_1: >-
+        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      experimental: 'true'
+      feature_category: not_owned
+      product_stage: not_owned
+      product_stage_group: not_owned
+      severity: s3
+      slo_alert: 'no'
+      user_impacting: 'yes'
+    expr: >
+      gitlab_component_ops:rate_30m{type="sidekiq", component="shard_urgent_cpu_bound", stage="main",
+      monitor="global"} == 0
+  - alert: SidekiqServiceShardUrgentCpuBoundTrafficAbsent
+    for: 30m
+    annotations:
+      title: >-
+        The shard_urgent_cpu_bound SLI of the sidekiq service (`{{ $labels.stage }}` stage) has not reported
+        any traffic in the past 30 minutes
+      description: |
+        Aggregation of all jobs for the urgent-cpu-bound Sidekiq shard.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '8744'
+      grafana_variables: environment,stage
+      link1_title: Definition
+      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
+      promql_template_1: >-
+        gitlab_component_ops:rate_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      experimental: 'true'
+      feature_category: not_owned
+      product_stage: not_owned
+      product_stage_group: not_owned
+      severity: s3
+      slo_alert: 'no'
+      user_impacting: 'yes'
+    expr: |
+      gitlab_component_ops:rate_5m{type="sidekiq", component="shard_urgent_cpu_bound", stage="main", monitor="global"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{type="sidekiq", component="shard_urgent_cpu_bound", stage="main", monitor="global"}
+  - alert: SidekiqServiceShardUrgentOtherApdexSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -938,6 +1238,7 @@ groups:
       rules_domain: general
       severity: s2
       slo_alert: 'yes'
+      user_impacting: 'yes'
     expr: |
       (
         (
@@ -964,7 +1265,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_urgent_other",monitor="global",type="sidekiq"}) >= 1
       )
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: SidekiqServiceShardUrgentOtherErrorSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -996,6 +1297,7 @@ groups:
       rules_domain: general
       severity: s2
       slo_alert: 'yes'
+      user_impacting: 'yes'
     expr: |
       (
         (
@@ -1022,3 +1324,74 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_urgent_other",monitor="global",type="sidekiq"}) >= 1
       )
+  - alert: SidekiqServiceShardUrgentOtherTrafficCessation
+    for: 5m
+    annotations:
+      title: >-
+        The shard_urgent_other SLI of the sidekiq service (`{{ $labels.stage }}` stage) has not received
+        any traffic in the past 30 minutes
+      description: |
+        Aggregation of all jobs for the urgent-other Sidekiq shard.
+
+        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '70856'
+      grafana_variables: environment,stage
+      link1_title: Definition
+      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
+      promql_template_1: >-
+        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      experimental: 'true'
+      feature_category: not_owned
+      product_stage: not_owned
+      product_stage_group: not_owned
+      severity: s3
+      slo_alert: 'no'
+      user_impacting: 'yes'
+    expr: >
+      gitlab_component_ops:rate_30m{type="sidekiq", component="shard_urgent_other", stage="main", monitor="global"}
+      == 0
+  - alert: SidekiqServiceShardUrgentOtherTrafficAbsent
+    for: 30m
+    annotations:
+      title: >-
+        The shard_urgent_other SLI of the sidekiq service (`{{ $labels.stage }}` stage) has not reported
+        any traffic in the past 30 minutes
+      description: |
+        Aggregation of all jobs for the urgent-other Sidekiq shard.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '70856'
+      grafana_variables: environment,stage
+      link1_title: Definition
+      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
+      promql_template_1: >-
+        gitlab_component_ops:rate_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      experimental: 'true'
+      feature_category: not_owned
+      product_stage: not_owned
+      product_stage_group: not_owned
+      severity: s3
+      slo_alert: 'no'
+      user_impacting: 'yes'
+    expr: |
+      gitlab_component_ops:rate_5m{type="sidekiq", component="shard_urgent_other", stage="main", monitor="global"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{type="sidekiq", component="shard_urgent_other", stage="main", monitor="global"}

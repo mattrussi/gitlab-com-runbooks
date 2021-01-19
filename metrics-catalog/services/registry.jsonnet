@@ -30,8 +30,17 @@ metricsCatalog.serviceDefinition({
     kubernetes: true,
     vms: true,  // registry haproxy frontend still runs on vms
   },
+  kubeResources: {
+    registry: {
+      kind: 'Deployment',
+      containers: [
+        'registry',
+      ],
+    },
+  },
   serviceLevelIndicators: {
     loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
+      userImpacting=true,
       featureCategory='container_registry',
       stageMappings={
         main: { backends: ['registry'], toolingLinks: [] },
@@ -41,6 +50,7 @@ metricsCatalog.serviceDefinition({
     ),
 
     server: {
+      userImpacting: true,
       featureCategory: 'container_registry',
       description: |||
         Aggregation of all registry requests for registry.gitlab.com.
@@ -61,18 +71,17 @@ metricsCatalog.serviceDefinition({
         counter='registry_http_requests_total',
         selector='type="registry", code=~"5.."'
       ),
-
-      significantLabels: ['handler'],
+      significantLabels: ['route'],
 
       toolingLinks: [
         toolingLinks.gkeDeployment('gitlab-registry', type='registry', containerName='registry'),
-        // Add slowRequestSeconds=10 once https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/11136 is fixed
-        toolingLinks.kibana(title='Registry', index='registry', type='registry'),
+        toolingLinks.kibana(title='Registry', index='registry', type='registry', slowRequestSeconds=10),
         toolingLinks.continuousProfiler(service='gitlab-registry'),
       ],
     },
 
     storage: {
+      userImpacting: true,
       featureCategory: 'container_registry',
       description: |||
         Aggregation of all container registry GCS storage operations.
@@ -81,8 +90,7 @@ metricsCatalog.serviceDefinition({
       apdex: histogramApdex(
         histogram='registry_storage_action_seconds_bucket',
         selector='',
-        satisfiedThreshold=1,
-        toleratedThreshold=2.5
+        satisfiedThreshold=1
       ),
 
       requestRate: rateMetric(

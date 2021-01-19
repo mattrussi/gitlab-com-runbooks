@@ -1,5 +1,7 @@
 module gitlab.com/gitlab-com/runbooks/pingdom
 
+go 1.15
+
 require (
 	github.com/russellcardullo/go-pingdom v0.0.0-20190223184354-017c8281f6d1
 	github.com/stretchr/objx v0.2.0 // indirect

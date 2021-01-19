@@ -115,6 +115,7 @@ module Storage
         limit: -1,
         use_tty_display_settings: false,
         projects: [],
+        custom_attributes: {},
         excluded_projects: [],
         logdir_path: File.expand_path(File.join(__dir__, 'storage_migrations')),
         migration_logfile_name: 'migrated_projects_%{date}.log',
@@ -463,7 +464,7 @@ module Storage
       end
 
       def define_options
-        @parser.banner = "Usage: #{$PROGRAM_NAME} [options] <source_shard> <destination_shard>"
+        @parser.banner = "Usage: #{$PROGRAM_NAME} [options] <source_shard> [destination_shard]"
         @parser.separator ''
         @parser.separator 'Options:'
         define_head
@@ -471,6 +472,7 @@ module Storage
         define_projects_option
         define_json_option
         define_csv_option
+        define_custom_attributes_option
         define_move_amount_option
         define_skip_option
         define_per_page_option
@@ -490,7 +492,7 @@ module Storage
           @options[:source_shard] = server
         end
         description = 'Name of the destination gitaly storage shard server'
-        @parser.on_head('<destination_shard>', description) do |server|
+        @parser.on_head('[destination_shard]', description) do |server|
           @options[:destination_shard] = server
         end
       end
@@ -555,6 +557,19 @@ module Storage
             project
           end
           @options[:projects].concat(projects)
+        end
+      end
+
+      def define_custom_attributes_option
+        description = 'Select projects to migrate by admin custom attributes'
+        @parser.on('--custom-attrs=<key=value>', description) do |key_val|
+          key, val = key_val.split('=')
+          if key == '' || val.nil?
+            message = 'Argument given for --custom-attrs must be in the format of key=value'
+            raise OptionParser::InvalidArgument, message
+          end
+
+          @options[:custom_attributes][key] = val
         end
       end
 
@@ -847,23 +862,31 @@ module Storage
       @migration_errors = []
       log.level = @options[:log_level]
       @pagination_indices = {}
+      @hard_coded_projects = @options[:projects].any?
     end
 
     def log_migration(project)
       log_artifact = {
         id: project[:id],
         path: project[:disk_path],
-        source: project[:repository_storage],
-        destination: options[:destination_shard],
+        source: options[:source_shard],
+        destination: project[:repository_storage],
         date: DateTime.now.iso8601(ISO8601_FRACTIONAL_SECONDS_LENGTH)
       }
       migration_log.info log_artifact.to_json
     end
 
     def log_migration_error(project, error)
+      destination_shard = if options[:destination_shard].nil?
+                            moves = fetch_repository_storage_moves(project)
+                            (moves[0] || {})[:destination_storage_name]
+                          else
+                            options[:destination_shard]
+                          end
+
       log_artifact = error.merge(
         source: project[:repository_storage],
-        destination: options[:destination_shard],
+        destination: destination_shard,
         date: DateTime.now.iso8601(ISO8601_FRACTIONAL_SECONDS_LENGTH)
       )
       migration_error_log.error log_artifact.to_json
@@ -885,8 +908,11 @@ module Storage
       project
     end
 
-    # Execute remote script to fetch largest projects
     def fetch_largest_projects(next_page = false)
+      # A nil entry in @pagination_indices means we have reached the end,
+      # we need to return or we would be stuck in an infinite requests loop.
+      return [] if @pagination_indices.key?(__method__) && @pagination_indices[__method__].nil?
+
       source_shard = options[:source_shard]
       url = get_api_url(:projects_api_uri)
       parameters = {
@@ -895,6 +921,11 @@ module Storage
         repository_storage: source_shard,
         per_page: options[:projects_per_page]
       }
+
+      @options[:custom_attributes].each do |key, val|
+        parameters["custom_attributes[#{key}]"] = val
+      end
+
       parameters['page'] = @pagination_indices[__method__] if @pagination_indices.include?(__method__)
       projects, error, status, headers = gitlab_api_client.get(url, parameters: parameters)
       raise error unless error.nil?
@@ -940,8 +971,12 @@ module Storage
 
     def create_repository_storage_move(project, destination)
       url = format(get_api_url(:projects_repository_storage_moves_api_uri), project_id: project[:id])
+
+      body = {}
+      body[:destination_storage_name] = destination unless destination.nil?
+
       move, error, status, _headers = gitlab_api_client.post(
-        url, body: { destination_storage_name: destination })
+        url, body: body)
       raise error unless error.nil?
 
       raise "Invalid response status code: #{status}" unless [200, 201].include?(status)
@@ -994,8 +1029,8 @@ module Storage
       end
       return if options[:dry_run]
 
-      log.info "Finished migrating projects from #{options[:source_shard]} to " \
-        "#{options[:destination_shard]}"
+      destination = options[:destination_shard].nil? ? 'different shards' : options[:destination_shard]
+      log.info "Finished migrating projects from #{options[:source_shard]} to #{destination}"
       if migration_errors.empty?
         log.info "No errors encountered during migration"
       else
@@ -1020,8 +1055,10 @@ module Storage
       end
 
       destination = options[:destination_shard] || project[:destination_repository_storage]
+      destination_name = destination.nil? ? 'application-selected shard' : destination
+
       log_separator
-      log.info "Scheduling repository replication to #{destination} for project id: #{project[:id]}"
+      log.info "Scheduling repository replication to #{destination_name} for project id: #{project[:id]}"
       log.info "  Project path: #{project[:path_with_namespace]}"
       log.info "  Current shard name: #{project[:repository_storage]}"
       log.info "  Disk path: #{project[:disk_path]}" if project.include?(:disk_path)
@@ -1036,10 +1073,12 @@ module Storage
         return
       end
 
+      old_repository_shard = project[:repository_storage]
       repository_storage_move = create_repository_storage_move(project, destination)
       wait_for_repository_storage_move(project, repository_storage_move)
       post_migration_project = project.merge(fetch_project(project[:id]))
-      if post_migration_project[:repository_storage] == destination
+      new_repository_shard = post_migration_project[:repository_storage]
+      if (!destination.nil? && new_repository_shard == destination) || (new_repository_shard != old_repository_shard)
         log.info "Success moving project id: #{project[:id]}"
       else
         raise MigrationTimeout, "Timed out waiting for migration of " \
@@ -1048,16 +1087,14 @@ module Storage
 
       log.info "Migrated project id: #{post_migration_project[:id]}"
       log.debug "  Project path: #{post_migration_project[:path_with_namespace]}"
-      log.debug "  Current shard name: #{post_migration_project[:repository_storage]}"
+      log.debug "  Current shard name: #{new_repository_shard}"
       log.debug "  Disk path: #{post_migration_project[:disk_path]}" if post_migration_project.include?(:disk_path)
-      log_migration(project)
+      log_migration(post_migration_project)
     end
     # rubocop: enable Metrics/AbcSize
 
     def move_project(project)
       project_id = project[:id]
-      project_info = fetch_project(project_id)
-      project.update(project_info)
 
       schedule_repository_replication(project)
     rescue NoCommits => e
@@ -1099,7 +1136,10 @@ module Storage
 
     def get_projects
       projects = options.fetch(:projects, []).map { |project| fetch_project(project[:id]) }
+
       if projects.empty?
+        return [] if @hard_coded_projects
+
         exclude_known_failures unless options[:retry_known_failures]
         next_page = false
         # This loop is only here to ensure that if projects are excluded
@@ -1121,7 +1161,10 @@ module Storage
           # get the next page.
           next_page = true
         end
+      else
+        options[:projects].clear
       end
+
       projects = projects[0...options[:limit]] if options[:limit].positive?
       projects
     end
@@ -1200,7 +1243,7 @@ module Storage
 
       unless all_projects_specify_destination?(args[:projects])
         source_shard = demand(args, :source_shard, true)
-        destination_shard = demand(args, :destination_shard, true)
+        destination_shard = args[:destination_shard]
         raise UserError, 'Destination and source gitaly shard may not be the same' if source_shard == destination_shard
       end
 

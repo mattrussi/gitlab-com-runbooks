@@ -1,5 +1,8 @@
 local rison = import 'rison.libsonnet';
 
+local grafanaTimeFrom = '${__from:date:iso}';
+local grafanaTimeTo = '${__to:date:iso}';
+local grafanaTimeRange = "&_g=(time:(from:'" + grafanaTimeFrom + "',to:'" + grafanaTimeTo + "'))";
 
 // Builds an ElasticSearch match filter clause
 local matchFilter(field, value) =
@@ -12,6 +15,16 @@ local matchFilter(field, value) =
         },
       },
 
+    },
+  };
+
+local matchInFilter(field, possibleValues) =
+  {
+    query: {
+      bool: {
+        should: [{ match_phrase: { [field]: possibleValue } } for possibleValue in possibleValues],
+        minimum_should_match: 1,
+      },
     },
   };
 
@@ -42,6 +55,12 @@ local mustNot(filter) =
     },
   };
 
+local matcher(fieldName, matchInfo) =
+  if std.isString(matchInfo) then
+    matchFilter(fieldName, matchInfo)
+  else if std.isArray(matchInfo) then
+    matchInFilter(fieldName, matchInfo);
+
 local statusCode(field) =
   [rangeFilter(field, gteValue=500, lteValue=null)];
 
@@ -63,7 +82,7 @@ local indexCatalog = {
   // Improve these logs when https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/11221 is addressed
   camoproxy: indexDefaults {
     timestamp: '@timestamp',
-    indexId: 'AWz5hIoSGphUgZwzAG7q',
+    indexPattern: 'AWz5hIoSGphUgZwzAG7q',
     defaultColumns: ['json.hostname', 'json.camoproxy_message', 'json.camoproxy_err'],
     defaultSeriesSplitField: 'json.hostname.keyword',
     failureFilter: [existsFilter('json.camoproxy_err')],
@@ -73,7 +92,7 @@ local indexCatalog = {
 
   gitaly: indexDefaults {
     timestamp: 'json.time',
-    indexId: 'AW5F1OHTiGcMMNRn84Di',
+    indexPattern: 'AW5F1OHTiGcMMNRn84Di',
     defaultColumns: ['json.hostname', 'json.grpc.method', 'json.grpc.request.glProjectPath', 'json.grpc.code', 'json.grpc.time_ms'],
     defaultSeriesSplitField: 'json.grpc.method.keyword',
     failureFilter: [mustNot(matchFilter('json.grpc.code', 'OK')), existsFilter('json.grpc.code')],
@@ -86,7 +105,7 @@ local indexCatalog = {
 
   monitoring_ops: indexDefaults {
     timestamp: '@timestamp',
-    indexId: 'pubsub-monitoring-inf-ops',
+    indexPattern: 'pubsub-monitoring-inf-ops',
     defaultColumns: ['json.hostname', 'json.msg', 'json.level'],
     defaultSeriesSplitField: 'json.hostname.keyword',
     failureFilter: [matchFilter('json.level', 'error')],
@@ -95,7 +114,7 @@ local indexCatalog = {
 
   monitoring_gprd: indexDefaults {
     timestamp: '@timestamp',
-    indexId: 'AW5ZoH2ddtvLTaJbch2P',
+    indexPattern: 'AW5ZoH2ddtvLTaJbch2P',
     defaultColumns: ['json.hostname', 'json.msg', 'json.level'],
     defaultSeriesSplitField: 'json.hostname.keyword',
     failureFilter: [matchFilter('json.level', 'error')],
@@ -103,7 +122,7 @@ local indexCatalog = {
 
   pages: indexDefaults {
     timestamp: 'json.time',
-    indexId: 'AWRaEscWMdvjVyaYlI-L',
+    indexPattern: 'AWRaEscWMdvjVyaYlI-L',
     defaultColumns: ['json.hostname', 'json.pages_domain', 'json.host', 'json.pages_host', 'json.path', 'json.remote_ip', 'json.duration_ms'],
     defaultSeriesSplitField: 'json.pages_host.keyword',
     failureFilter: statusCode('json.status'),
@@ -113,23 +132,24 @@ local indexCatalog = {
 
   postgres: indexDefaults {
     timestamp: '@timestamp',
-    indexId: 'AWM6iZV51NBBQZg_DR-U',
+    indexPattern: '97f04200-024b-11eb-81e5-155ba78758d4',
     defaultColumns: ['json.hostname', 'json.application_name', 'json.error_severity', 'json.message', 'json.session_start_time', 'json.sql_state_code', 'json.duration_ms'],
-    defaultSeriesSplitField: 'json.hostname.keyword',
+    defaultSeriesSplitField: 'json.sql_state_code',
+    failureFilter: [mustNot(matchFilter('json.sql_state_code', '00000')), existsFilter('json.sql_state_code')],  // SQL Codes reference: https://www.postgresql.org/docs/9.4/errcodes-appendix.html
     defaultLatencyField: 'json.duration_ms',  // Only makes sense in the context of slowlog entries
     latencyFieldUnitMultiplier: 1000,
   },
 
   postgres_pgbouncer: indexDefaults {
     timestamp: 'json.time',
-    indexId: 'AWM6iZV51NBBQZg_DR-U',
+    indexPattern: '97f04200-024b-11eb-81e5-155ba78758d4',
     defaultColumns: ['json.hostname', 'json.pg_message'],
     defaultSeriesSplitField: 'json.hostname.keyword',
   },
 
   praefect: indexDefaults {
     timestamp: 'json.time',
-    indexId: 'AW98WAQvqthdGjPJ8jTY',
+    indexPattern: 'AW98WAQvqthdGjPJ8jTY',
     defaultColumns: ['json.hostname', 'json.virtual_storage', 'json.grpc.method', 'json.relative_path', 'json.grpc.code', 'json.grpc.time_ms'],
     defaultSeriesSplitField: 'json.grpc.method.keyword',
     failureFilter: [mustNot(matchFilter('json.grpc.code', 'OK')), existsFilter('json.grpc.code')],
@@ -139,7 +159,7 @@ local indexCatalog = {
 
   rails: indexDefaults {
     timestamp: 'json.time',
-    indexId: 'AW5F1e45qthdGjPJueGO',
+    indexPattern: 'AW5F1e45qthdGjPJueGO',
     defaultColumns: ['json.method', 'json.status', 'json.controller', 'json.action', 'json.path', 'json.duration_s'],
     defaultSeriesSplitField: 'json.controller.keyword',
     failureFilter: statusCode('json.status'),
@@ -149,7 +169,7 @@ local indexCatalog = {
 
   rails_api: indexDefaults {
     timestamp: 'json.time',
-    indexId: 'AW5F1e45qthdGjPJueGO',
+    indexPattern: 'AW5F1e45qthdGjPJueGO',
     defaultColumns: ['json.method', 'json.status', 'json.route', 'json.path', 'json.duration_s'],
     defaultSeriesSplitField: 'json.route.keyword',
     failureFilter: statusCode('json.status'),
@@ -159,27 +179,26 @@ local indexCatalog = {
 
   redis: indexDefaults {
     timestamp: 'json.time',
-    indexId: 'AWSQX_Vf93rHTYrsexmk',
+    indexPattern: 'AWSQX_Vf93rHTYrsexmk',
     defaultColumns: ['json.hostname', 'json.redis_message'],
     defaultSeriesSplitField: 'json.hostname.keyword',
-    defaultLatencyField: 'json.exec_time',  // Note: this is only useful in the context of slowlogs
+    defaultLatencyField: 'json.exec_time_s',  // Note: this is only useful in the context of slowlogs
     latencyFieldUnitMultiplier: 1000000,  // Redis uses us
   },
 
   registry: indexDefaults {
     timestamp: 'json.time',
-    indexId: '97ce8e90-63ad-11ea-8617-2347010d3aab',
-    defaultColumns: ['json.http.request.uri', 'json.http.response.duration', 'json.err.code', 'json.msg', 'json.http.response.status', 'json.http.request.remoteaddr', 'json.http.request.method'],
-    defaultSeriesSplitField: 'json.http.request.uri.keyword',
-    failureFilter: statusCode('json.http.response.status'),
-    // Requires https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/11136
-    // defaultLatencyField: 'json.duration_s',
-    // latencyFieldUnitMultiplier: 1,
+    indexPattern: '97ce8e90-63ad-11ea-8617-2347010d3aab',
+    defaultColumns: ['json.remote_ip', 'json.duration_ms', 'json.code', 'json.msg', 'json.status', 'json.error', 'json.method', 'json.uri'],
+    defaultSeriesSplitField: 'json.remote_ip',
+    failureFilter: statusCode('json.status'),
+    defaultLatencyField: 'json.duration_ms',
+    latencyFieldUnitMultiplier: 1000,
   },
 
   runners: indexDefaults {
     timestamp: '@timestamp',
-    indexId: 'AWgzayS3ENm-ja4G1a8d',
+    indexPattern: 'AWgzayS3ENm-ja4G1a8d',
     defaultColumns: ['json.operation', 'json.job', 'json.operation', 'json.repo_url', 'json.project', 'json.msg'],
     defaultSeriesSplitField: 'json.repo_url.keyword',
     failureFilter: [matchFilter('json.msg', 'failed')],
@@ -189,7 +208,7 @@ local indexCatalog = {
 
   shell: indexDefaults {
     timestamp: 'json.time',
-    indexId: 'AWORyp9K1NBBQZg_dXA9',
+    indexPattern: 'AWORyp9K1NBBQZg_dXA9',
     defaultColumns: ['json.command', 'json.msg', 'json.level', 'json.gl_project_path', 'json.error'],
     defaultSeriesSplitField: 'json.gl_project_path.keyword',
     failureFilter: [matchFilter('json.level', 'error')],
@@ -197,7 +216,7 @@ local indexCatalog = {
 
   sidekiq: indexDefaults {
     timestamp: 'json.time',
-    indexId: 'AWNABDRwNDuQHTm2tH6l',
+    indexPattern: 'AWNABDRwNDuQHTm2tH6l',
     defaultColumns: ['json.class', 'json.queue', 'json.meta.project', 'json.job_status', 'json.scheduling_latency_s', 'json.duration_s'],
     defaultSeriesSplitField: 'json.meta.project.keyword',
     failureFilter: [matchFilter('json.job_status', 'fail')],
@@ -207,7 +226,7 @@ local indexCatalog = {
 
   workhorse: indexDefaults {
     timestamp: 'json.time',
-    indexId: 'a4f5b470-edde-11ea-81e5-155ba78758d4',
+    indexPattern: 'a4f5b470-edde-11ea-81e5-155ba78758d4',
     defaultColumns: ['json.method', 'json.remote_ip', 'json.status', 'json.uri', 'json.duration_ms'],
     defaultSeriesSplitField: 'json.remote_ip.keyword',
     failureFilter: statusCode('json.status'),
@@ -220,14 +239,14 @@ local buildElasticDiscoverSearchQueryURL(index, filters, luceneQueries=[]) =
   local applicationState = {
     columns: indexCatalog[index].defaultColumns,
     filters: filters,
-    index: indexCatalog[index].indexId,
+    index: indexCatalog[index].indexPattern,
     query: {
       language: 'kuery',
       query: std.join(' AND ', luceneQueries),
     },
   };
 
-  indexCatalog[index].kibanaEndpoint + '#/discover?_a=' + rison.encode(applicationState) + '&_g=(time:(from:now-1h,to:now))';
+  indexCatalog[index].kibanaEndpoint + '#/discover?_a=' + rison.encode(applicationState) + grafanaTimeRange;
 
 local buildElasticLineCountVizURL(index, filters, luceneQueries=[], splitSeries=false) =
   local ic = indexCatalog[index];
@@ -252,8 +271,8 @@ local buildElasticLineCountVizURL(index, filters, luceneQueries=[], splitSeries=
           min_doc_count: 1,
           scaleMetricValues: false,
           timeRange: {
-            from: 'now-1h',
-            to: 'now',
+            from: grafanaTimeFrom,
+            to: grafanaTimeTo,
           },
           useNormalizedEsInterval: true,
         },
@@ -295,7 +314,7 @@ local buildElasticLineCountVizURL(index, filters, luceneQueries=[], splitSeries=
     },
   };
 
-  indexCatalog[index].kibanaEndpoint + '#/visualize/create?type=line&indexPattern=' + indexCatalog[index].indexId + '&_a=' + rison.encode(applicationState) + '&_g=(time:(from:now-1h,to:now))';
+  indexCatalog[index].kibanaEndpoint + '#/visualize/create?type=line&indexPattern=' + indexCatalog[index].indexPattern + '&_a=' + rison.encode(applicationState) + grafanaTimeRange;
 
 local buildElasticLineTotalDurationVizURL(index, filters, luceneQueries=[], latencyField, splitSeries=false) =
   local ic = indexCatalog[index];
@@ -322,8 +341,8 @@ local buildElasticLineTotalDurationVizURL(index, filters, luceneQueries=[], late
           min_doc_count: 1,
           scaleMetricValues: false,
           timeRange: {
-            from: 'now-1h',
-            to: 'now',
+            from: grafanaTimeFrom,
+            to: grafanaTimeTo,
           },
           useNormalizedEsInterval: true,
         },
@@ -384,7 +403,7 @@ local buildElasticLineTotalDurationVizURL(index, filters, luceneQueries=[], late
     },
   };
 
-  indexCatalog[index].kibanaEndpoint + '#/visualize/create?type=line&indexPattern=' + indexCatalog[index].indexId + '&_a=' + rison.encode(applicationState) + '&_g=(time:(from:now-1h,to:now))';
+  indexCatalog[index].kibanaEndpoint + '#/visualize/create?type=line&indexPattern=' + indexCatalog[index].indexPattern + '&_a=' + rison.encode(applicationState) + grafanaTimeRange;
 
 local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latencyField, splitSeries=false) =
   local ic = indexCatalog[index];
@@ -414,8 +433,8 @@ local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latency
           min_doc_count: 1,
           scaleMetricValues: false,
           timeRange: {
-            from: 'now-1h',
-            to: 'now',
+            from: grafanaTimeFrom,
+            to: grafanaTimeTo,
           },
           useNormalizedEsInterval: true,
         },
@@ -486,9 +505,10 @@ local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latency
     },
   };
 
-  indexCatalog[index].kibanaEndpoint + '#/visualize/create?type=line&indexPattern=' + indexCatalog[index].indexId + '&_a=' + rison.encode(applicationState) + '&_g=(time:(from:now-1h,to:now))';
+  indexCatalog[index].kibanaEndpoint + '#/visualize/create?type=line&indexPattern=' + indexCatalog[index].indexPattern + '&_a=' + rison.encode(applicationState) + grafanaTimeRange;
 
 {
+  matcher:: matcher,
   matchFilter:: matchFilter,
   rangeFilter:: rangeFilter,
 

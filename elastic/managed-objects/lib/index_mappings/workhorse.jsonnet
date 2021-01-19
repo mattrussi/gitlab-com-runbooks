@@ -3,6 +3,19 @@
     '@timestamp': {
       type: 'date',
     },
+    docker: {
+      properties: {
+        container_id: {
+          type: 'text',
+          fields: {
+            keyword: {
+              type: 'keyword',
+              ignore_above: 256,
+            },
+          },
+        },
+      },
+    },
     ecs: {
       properties: {
         version: {
@@ -69,6 +82,9 @@
         },
         duration_ms: {
           type: 'long',
+        },
+        duration_s: {
+          type: 'float',
         },
         encoding: {
           type: 'text',
@@ -150,6 +166,49 @@
               ignore_above: 256,
             },
           },
+        },
+        imageresizer: {
+          properties: {
+            content_type: {
+              type: 'text',
+              fields: {
+                keyword: {
+                  type: 'keyword',
+                  ignore_above: 256,
+                },
+              },
+            },
+            original_filesize: {
+              type: 'long',
+            },
+            status: {
+              type: 'text',
+              fields: {
+                keyword: {
+                  type: 'keyword',
+                  ignore_above: 256,
+                },
+              },
+            },
+            target_width: {
+              type: 'text',
+              fields: {
+                keyword: {
+                  type: 'keyword',
+                  ignore_above: 256,
+                },
+              },
+            },
+          },
+        },
+        is_local: {
+          type: 'boolean',
+        },
+        is_multipart: {
+          type: 'boolean',
+        },
+        is_remote: {
+          type: 'boolean',
         },
         level: {
           type: 'text',
@@ -261,6 +320,15 @@
         },
         status: {
           type: 'long',
+        },
+        subsystem: {
+          type: 'text',
+          fields: {
+            keyword: {
+              type: 'keyword',
+              ignore_above: 256,
+            },
+          },
         },
         system: {
           type: 'text',

@@ -35,7 +35,22 @@ local getServiceLink(serviceType) =
       type='dashboards',
     ),
   ],
+  backToOverview(type)::
+    link.dashboards('🔙 Back to ' + type + ' service', '', type='link', keepTime=true, url=getServiceLink(type)),
 
+  kubenetesDetail(type)::
+    link.dashboards(
+      title='☸️ %s Kubernetes Detail' % [type],
+      tags=[
+        'managed',
+        'type:' + type,
+        'kube detail',
+      ],
+      asDropdown=true,
+      includeVars=true,
+      keepTime=true,
+      type='dashboards',
+    ),
   parameterizedServiceLink: [
     link.dashboards('$type service', '', type='link', keepTime=true, url='https://dashboards.gitlab.net/d/general-service/service-platform-metrics?orgId=1&var-type=$type'),
   ],

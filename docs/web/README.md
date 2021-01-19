@@ -58,11 +58,12 @@
 * [../uncategorized/deploycmd.md](../uncategorized/deploycmd.md)
 * [../uncategorized/domain-registration.md](../uncategorized/domain-registration.md)
 * [../uncategorized/gemnasium_is_down.md](../uncategorized/gemnasium_is_down.md)
+* [../uncategorized/k8s-oncall-setup.md](../uncategorized/k8s-oncall-setup.md)
 * [../uncategorized/manage-workers.md](../uncategorized/manage-workers.md)
 * [../uncategorized/project-export.md](../uncategorized/project-export.md)
 * [../uncategorized/ruby-profiling.md](../uncategorized/ruby-profiling.md)
 * [../uncategorized/setup-oauth2-proxy-protected-application.md](../uncategorized/setup-oauth2-proxy-protected-application.md)
-* [workhorse-image-scaler-alerts.md](workhorse-image-scaler-alerts.md)
+* [workhorse-image-scaler.md](workhorse-image-scaler.md)
 <!-- END_MARKER -->
 
 

@@ -9,6 +9,7 @@ teams:
 - name: sre_observability
   url: https://about.gitlab.com/handbook/engineering/infrastructure/team/reliability/#observability
   slack_channel: sre_observability
+  issue_tracker: gitlab.com/gitlab-com/gl-infra/production
   engagement_policy:
   oncall_schedule: https://gitlab.pagerduty.com/schedules#P22HQSG
 
@@ -1306,7 +1307,7 @@ services:
     error_budget: https://docs.google.com/spreadsheets/d/1wkK2n5EAvoVXwQZrVoCDsvkYTb1BftL56EzsFW_IA-w/edit
   observability:
     monitors:
-      primary_grafana_dashboard: https://dashboards.gitlab.net/d/mailroom-app/mailroom-application-info
+      primary_grafana_dashboard: https://dashboards.gitlab.net/d/mailroom-main/mailroom-overview
       sentry_slug:
 
 - name: pages
@@ -1565,9 +1566,9 @@ services:
       - name: system
         permalink: https://log.gprd.gitlab.net/goto/3669d551a595a3a5cf1e9318b74e6c22
   infrastructure:
-    provider:  gcp
-    architecture:  https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#database-architecture
-    provisioning:  terraform
+    provider: gcp
+    architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#database-architecture
+    provisioning: terraform
     accesses:
       - account_name:
         access_type:
@@ -1576,8 +1577,7 @@ services:
     maintenance:
     runbooks:
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/patroni/postgres.md
-      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/patroni/gitlab-com-wale-backups.md
-      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/patroni/gitlab-com-walg-backups.md
+      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/patroni/postgresql-backups-wale-walg.md
     playbooks:
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/patroni/patroni-management.md
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/patroni/postgresql.md
@@ -1586,8 +1586,7 @@ services:
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/patroni/postgresql-rebuild-trigram-indexes.md
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/patroni/postgresql-replica.md
       - https://gitlab.com/gitlab-com/runbooks/blob/master/howto/postgresql-switchover.md
-
-    error_budget:  https://docs.google.com/spreadsheets/d/1wkK2n5EAvoVXwQZrVoCDsvkYTb1BftL56EzsFW_IA-w/edit
+    error_budget: https://docs.google.com/spreadsheets/d/1wkK2n5EAvoVXwQZrVoCDsvkYTb1BftL56EzsFW_IA-w/edit
   observability:
     monitors:
       grafana_folder: RNfEDpLmz
@@ -1665,8 +1664,7 @@ services:
     maintenance:
     runbooks:
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/patroni/postgres.md
-      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/patroni/gitlab-com-wale-backups.md
-      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/patroni/gitlab-com-walg-backups.md
+      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/patroni/postgresql-backups-wale-walg.md
     playbooks:
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/patroni/patroni-management.md
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/patroni/postgresql.md
@@ -1747,8 +1745,7 @@ services:
     maintenance:
     runbooks:
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/patroni/postgres.md
-      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/patroni/gitlab-com-wale-backups.md
-      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/patroni/gitlab-com-walg-backups.md
+      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/patroni/postgresql-backups-wale-walg.md
     playbooks:
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/patroni/patroni-management.md
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/patroni/postgresql.md
@@ -1911,7 +1908,7 @@ services:
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/monitoring/prometheus-slow-series-maintenance.md
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/gitaly/prometheus-storage-inconsistent.md
     playbooks:
-      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/monitoring/update-prometheus-and-exporters.md
+      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/monitoring/upgrades.md
     error_budget:  https://docs.google.com/spreadsheets/d/1wkK2n5EAvoVXwQZrVoCDsvkYTb1BftL56EzsFW_IA-w/edit
   observability:
     monitors:
@@ -2950,3 +2947,124 @@ services:
     monitors:
       primary_grafana_dashboard:
       sentry_slug:
+
+- name: jaeger
+  tier: inf
+  friendly_name: Jaeger
+  infra_owner: sre_observability
+  label: Service:Jaeger
+  business:
+    requirement: |
+      Jaeger is a distributed tracing system that allows us to understand interactions between components and diagnose performance issues.
+    customers:
+      - Engineering dept
+    business_value: |
+      In order to meet our SLOs, we need the ability to understand system behaviour and sources of latency.
+    SLA:
+      availability:
+      response_time:
+  technical:
+    project:
+      - https://www.jaegertracing.io/
+      - https://github.com/jaegertracing/jaeger
+      - https://github.com/jaegertracing/jaeger-operator
+      - https://docs.gitlab.com/ee/development/distributed_tracing.html
+    slx:
+    documents:
+      design:
+      architecture: https://www.jaegertracing.io/docs/latest/architecture/
+      readiness_review: TBD
+      service:
+        - https://www.jaegertracing.io/docs/latest/
+      security: https://www.jaegertracing.io/docs/latest/security/
+    dependencies:
+      - service: elasticsearch
+    configurations:
+      - config_name: Tanka deployment
+        location: https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments/-/tree/master/environments/jaeger
+    chef_roles:
+      - gitlab-jaeger::agent
+    scalability:
+      bound: cpu
+      scalable: horizontal
+    security:
+      security_reviewed:
+      data_classification:
+      security_incidents:
+    logging:
+      - name: Jaeger
+        permalink: TBD
+  infrastructure:
+    provider: gcp
+    architecture: https://www.jaegertracing.io/docs/latest/architecture/
+    provisioning: tanka
+    accesses:
+      - account_name:
+        access_type:
+        reviewed:
+  operations:
+    maintenance:
+    runbooks:
+    playbooks:
+    error_budget:
+  observability:
+    monitors:
+      primary_grafana_dashboard: "jaeger-main/jaeger-overview"
+
+- name: woodhouse
+  tier: sv
+  friendly_name: Woodhouse
+  infra_owner: sre_observability
+  label: Service:Woodhouse
+  business:
+    requirement: |
+      Woodhouse is a monorepo for SRE and incident tooling.
+    customers:
+      - Infrastructure dept
+    business_value: |
+      Woodhouse is a monorepo for SRE and incident tooling.
+    SLA:
+      availability:
+      response_time:
+  technical:
+    project:
+      - https://gitlab.com/gitlab-com/gl-infra/woodhouse
+    slx:
+    documents:
+      design:
+      architecture:
+      readiness_review:
+      service:
+        -
+      security:
+    dependencies:
+    configurations:
+      - config_name: Tanka deployment
+        location: https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments/-/tree/master/environments/woodhouse
+    chef_roles: []
+    scalability:
+      bound: cpu
+      scalable: horizontal
+    security:
+      security_reviewed:
+      data_classification:
+      security_incidents:
+    logging:
+      - name: Woodhouse
+        permalink: https://console.cloud.google.com/logs/viewer?project=gitlab-ops&minLogLevel=0&expandAll=false
+  infrastructure:
+    provider: gcp
+    architecture:
+    provisioning: tanka
+    accesses:
+      - account_name:
+        access_type:
+        reviewed:
+  operations:
+    maintenance:
+    runbooks:
+    playbooks:
+    error_budget:
+  observability:
+    monitors:
+      primary_grafana_dashboard: "woodhouse/woodhouse-overview"

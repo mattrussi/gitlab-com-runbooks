@@ -9,14 +9,16 @@ metricsCatalog.serviceDefinition({
   tier: 'sv',
   monitoringThresholds: {
     apdexScore: 0.999,
-    errorRatio: 0.995,
+    errorRatio: 0.99,
   },
   serviceDependencies: {
     // If Camoproxy has any dependencies, we should add them here
   },
   serviceLevelIndicators: {
     loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
+      userImpacting=true,
       featureCategory='not_owned',
+      team='sre_coreinfra',
       stageMappings={
         main: { backends: ['camoproxy'], toolingLinks: [] },
       },
@@ -24,8 +26,9 @@ metricsCatalog.serviceDefinition({
     ),
 
     server: {
+      userImpacting: true,
       featureCategory: 'not_owned',
-      teams: ['sre_coreinfra'],
+      team: 'sre_coreinfra',
       description: |||
         This SLI monitors the camoproxy server via its HTTP interface.
         5xx responses are considered to be failures. Note that this SLI

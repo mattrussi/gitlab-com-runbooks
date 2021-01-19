@@ -50,7 +50,7 @@ groups:
       description: WAL-G backup-push creating full backups and archiving them to GCS might be not working. Please follow the runbook
         to review the problem.
       runbook: docs/patroni/postgresql-backups-wale-walg.md
-      title: Last successful WAL-G basebackup was seen {{ .Value | humanizeDuration }} ago for env {{ $labels.environment }}.
+      title: Last successful WAL-G basebackup was seen {{ $value }} hours ago for env {{ $labels.environment }}.
   - alert: WALGBaseBackupFailed
     expr: gitlab_job_failed{resource="walg-basebackup"} == 1
     for: 5m

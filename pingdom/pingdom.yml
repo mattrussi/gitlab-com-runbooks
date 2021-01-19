@@ -266,8 +266,7 @@ checks:
     - forum-gitlab
     teams:
     - Infrastructure
-    integrations:
-    - pagerduty
+    - Community Relations
 
   - url: https://deps.sec.gitlab.com/api/ping
     timeout_ms: 30000
@@ -279,3 +278,33 @@ checks:
     - Infrastructure
     integrations:
     - pagerduty
+
+#######################################
+# People Group Engineering Projects
+#######################################
+  - url: https://comp-calculator.gitlab.net/users/sign_in
+    timeout_ms: 30000
+    resolution_minutes: 5
+    notify_when_restored: true
+    tags:
+    - people-engineering
+    teams:
+    - People Group Engineering
+
+  - url: https://nominatorbot.gitlab.net/health
+    timeout_ms: 30000
+    resolution_minutes: 5
+    notify_when_restored: true
+    tags:
+    - people-engineering
+    teams:
+    - People Group Engineering
+
+  - url: https://assessment.gitlab.net/about
+    timeout_ms: 30000
+    resolution_minutes: 5
+    notify_when_restored: true
+    tags:
+    - people-engineering
+    teams:
+    - People Group Engineering

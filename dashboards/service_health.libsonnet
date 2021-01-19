@@ -1,5 +1,5 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
-local colors = import 'grafana/colors.libsonnet';
+local colorScheme = import 'grafana/color_scheme.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 
@@ -38,9 +38,9 @@ local activeAlertsPanel(selector, title='Active Alerts') =
         alias: 'Score',
         decimals: 0,
         colors: [
-          colors.warningColor,
-          colors.errorColor,
-          colors.criticalColor,
+          colorScheme.warningColor,
+          colorScheme.errorColor,
+          colorScheme.criticalColor,
         ],
         colorMode: 'row',
         pattern: 'Value',

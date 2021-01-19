@@ -10,8 +10,9 @@ metricsCatalog.serviceDefinition({
   },
   serviceLevelIndicators: {
     nfs_service: {
+      userImpacting: true,
       featureCategory: 'not_owned',
-      teams: ['sre_coreinfra'],
+      team: 'sre_coreinfra',
       description: |||
         Monitors NFS RPC calls in aggregate.
       |||,

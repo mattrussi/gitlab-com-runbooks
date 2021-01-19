@@ -19,8 +19,9 @@ metricsCatalog.serviceDefinition({
   },
   serviceLevelIndicators: {
     polling: {
+      userImpacting: true,
       featureCategory: 'runner',
-      teams: ['sre_coreinfra'],
+      team: 'sre_coreinfra',
       description: |||
         This SLI monitors job polling operations from runners, via the workhorse HTTP interface.
         5xx responses are considered to be failures.
@@ -53,8 +54,9 @@ metricsCatalog.serviceDefinition({
     },
 
     shared_runner_queues: {
+      userImpacting: true,
       featureCategory: 'runner',
-      teams: ['sre_coreinfra'],
+      team: 'sre_coreinfra',
       description: |||
         This SLI monitors the shared runner queues on GitLab.com. Each job is an operation.
         Apdex uses queueing latencies for jobs which are considered to be fair-usage (less than 5 concurrently running jobs).
@@ -84,7 +86,7 @@ metricsCatalog.serviceDefinition({
         },
       ),
 
-      significantLabels: [],
+      significantLabels: ['jobs_running_for_project'],
 
       toolingLinks: [
         toolingLinks.kibana(title='CI Runners', index='runners', slowRequestSeconds=60),
@@ -97,8 +99,9 @@ metricsCatalog.serviceDefinition({
     // Instead, track this as a component of the CI service
     // https://gitlab.com/gitlab-org/gitlab/blob/master/app/services/ci/archive_trace_service.rb
     trace_archiving_ci_jobs: {
+      userImpacting: true,
       featureCategory: 'continuous_integration',
-      teams: ['sre_coreinfra'],
+      team: 'sre_coreinfra',
       description: |||
         This SLI monitors CI job archiving, via Sidekiq jobs.
       |||,

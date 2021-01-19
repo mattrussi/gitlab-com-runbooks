@@ -31,7 +31,7 @@ groups:
       severity: s2
       alert_type: cause
       pager: pagerduty
-      project: gitlab.com/gitlab-com/gl-infra/infrastructure
+      incident_project: gitlab.com/gitlab-com/gl-infra/infrastructure
     annotations:
       description: Check SSL for specified nodes and consider reissuing certificate.
       runbook: docs/frontend/ssl_cert.md
@@ -41,10 +41,9 @@ groups:
     expr: probe_ssl_earliest_cert_expiry - time() < 14 * 86400
     for: 30m
     labels:
-      severity: s2
+      severity: s3
       alert_type: cause
-      pager: issue
-      project: gitlab.com/gitlab-com/gl-infra/production
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
     annotations:
       description: Check SSL for specified nodes and consider reissuing certificate.
       runbook: docs/frontend/ssl_cert.md

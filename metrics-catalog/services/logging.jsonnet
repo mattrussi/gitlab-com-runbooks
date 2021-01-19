@@ -14,8 +14,9 @@ metricsCatalog.serviceDefinition({
   },
   serviceLevelIndicators: {
     elasticsearch_searching: {
+      userImpacting: false,
       featureCategory: 'not_owned',
-      teams: ['sre_observability'],
+      team: 'sre_observability',
       description: |||
         This SLI monitors searches issued to GitLab's logging ELK instance.
       |||,
@@ -30,8 +31,9 @@ metricsCatalog.serviceDefinition({
     },
 
     elasticsearch_indexing: {
+      userImpacting: false,
       featureCategory: 'not_owned',
-      teams: ['sre_observability'],
+      team: 'sre_observability',
       description: |||
         This SLI monitors log index operations to GitLab's logging ELK instance.
       |||,
@@ -48,6 +50,7 @@ metricsCatalog.serviceDefinition({
     // This component represents the Google Load Balancer in front
     // of logs.gitlab.net instance
     kibana_googlelb: googleLoadBalancerComponents.googleLoadBalancer(
+      userImpacting=false,
       loadBalancerName='ops-prod-proxy',
       projectId='gitlab-ops',
     ),
@@ -55,8 +58,11 @@ metricsCatalog.serviceDefinition({
     // Stackdriver component represents log messages
     // ingested in Google Stackdrive Logging in GCP
     stackdriver: {
+      userImpacting: false,
       featureCategory: 'not_owned',
-      teams: ['sre_observability'],
+      team: 'sre_observability',
+      ignoreTrafficCessation: true,
+
       description: |||
         This SLI monitors the total number of logs sent to GCP StackDriver logging.
       |||,
@@ -75,8 +81,9 @@ metricsCatalog.serviceDefinition({
     // This component tracks fluentd log output
     // across the entire fleet
     fluentd_log_output: {
+      userImpacting: false,
       featureCategory: 'not_owned',
-      teams: ['sre_observability'],
+      team: 'sre_observability',
       description: |||
         This SLI monitors fluentd log output and the number of output errors in fluentd.
       |||,

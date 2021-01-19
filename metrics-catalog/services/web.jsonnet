@@ -38,8 +38,9 @@ metricsCatalog.serviceDefinition({
   ],
   serviceLevelIndicators: {
     loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
+      userImpacting=true,
       featureCategory='not_owned',
-      teams=['sre_coreinfra'],
+      team='sre_coreinfra',
       stageMappings={
         main: { backends: ['web'], toolingLinks: [] },  // What to do with `429_slow_down`?
         cny: { backends: ['canary_web'], toolingLinks: [] },
@@ -48,8 +49,9 @@ metricsCatalog.serviceDefinition({
     ),
 
     workhorse: {
+      userImpacting: true,
       featureCategory: 'not_owned',
-      teams: ['sre_coreinfra', 'workhorse'],
+      team: 'workhorse',
       description: |||
         Aggregation of most web requests that pass through workhorse, monitored via the HTTP interface.
         Excludes health, readiness and liveness requests. Some known slow requests, such as HTTP uploads,
@@ -86,6 +88,7 @@ metricsCatalog.serviceDefinition({
     },
 
     imagescaler: {
+      userImpacting: false,
       featureCategory: 'memory',
       description: |||
         The imagescaler rescales images before sending them to clients. This allows faster transmission of
@@ -115,8 +118,9 @@ metricsCatalog.serviceDefinition({
     },
 
     puma: {
+      userImpacting: true,
       featureCategory: 'not_owned',
-      teams: ['sre_coreinfra'],
+      team: 'sre_coreinfra',
       description: |||
         Aggregation of most web requests that pass through the puma to the GitLab rails monolith.
         Healthchecks are excluded.

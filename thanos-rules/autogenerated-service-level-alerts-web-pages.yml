@@ -5,7 +5,7 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: WebPagesServiceLoadbalancerErrorSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -37,6 +37,7 @@ groups:
       rules_domain: general
       severity: s2
       slo_alert: 'yes'
+      user_impacting: 'yes'
     expr: |
       (
         (
@@ -63,7 +64,78 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="loadbalancer",monitor="global",type="web-pages"}) >= 1
       )
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: WebPagesServiceLoadbalancerTrafficCessation
+    for: 5m
+    annotations:
+      title: >-
+        The loadbalancer SLI of the web-pages service (`{{ $labels.stage }}` stage) has not received any
+        traffic in the past 30 minutes
+      description: |
+        Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
+
+        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+      grafana_dashboard_id: web-pages-main/web-pages-overview
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '86440'
+      grafana_variables: environment,stage
+      link1_title: Definition
+      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
+      promql_template_1: >-
+        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      experimental: 'true'
+      feature_category: pages
+      product_stage: release
+      product_stage_group: release
+      severity: s3
+      slo_alert: 'no'
+      user_impacting: 'yes'
+    expr: >
+      gitlab_component_ops:rate_30m{type="web-pages", component="loadbalancer", stage="main", monitor="global"}
+      == 0
+  - alert: WebPagesServiceLoadbalancerTrafficAbsent
+    for: 30m
+    annotations:
+      title: >-
+        The loadbalancer SLI of the web-pages service (`{{ $labels.stage }}` stage) has not reported any
+        traffic in the past 30 minutes
+      description: |
+        Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: web-pages-main/web-pages-overview
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '86440'
+      grafana_variables: environment,stage
+      link1_title: Definition
+      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
+      promql_template_1: >-
+        gitlab_component_ops:rate_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      experimental: 'true'
+      feature_category: pages
+      product_stage: release
+      product_stage_group: release
+      severity: s3
+      slo_alert: 'no'
+      user_impacting: 'yes'
+    expr: |
+      gitlab_component_ops:rate_5m{type="web-pages", component="loadbalancer", stage="main", monitor="global"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{type="web-pages", component="loadbalancer", stage="main", monitor="global"}
+  - alert: WebPagesServiceLoadbalancerHttpsErrorSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -95,6 +167,7 @@ groups:
       rules_domain: general
       severity: s2
       slo_alert: 'yes'
+      user_impacting: 'yes'
     expr: |
       (
         (
@@ -121,7 +194,78 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="loadbalancer_https",monitor="global",type="web-pages"}) >= 1
       )
-  - alert: component_apdex_ratio_burn_rate_slo_out_of_bounds_lower
+  - alert: WebPagesServiceLoadbalancerHttpsTrafficCessation
+    for: 5m
+    annotations:
+      title: >-
+        The loadbalancer_https SLI of the web-pages service (`{{ $labels.stage }}` stage) has not received
+        any traffic in the past 30 minutes
+      description: |
+        Measures aggregated L4 traffic through the HAProxy. Traffic is measured in TCP connections, with upstream TCP connection failures being treated as service-level failures.
+
+        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+      grafana_dashboard_id: web-pages-main/web-pages-overview
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '68488'
+      grafana_variables: environment,stage
+      link1_title: Definition
+      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
+      promql_template_1: >-
+        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      experimental: 'true'
+      feature_category: pages
+      product_stage: release
+      product_stage_group: release
+      severity: s3
+      slo_alert: 'no'
+      user_impacting: 'yes'
+    expr: >
+      gitlab_component_ops:rate_30m{type="web-pages", component="loadbalancer_https", stage="main", monitor="global"}
+      == 0
+  - alert: WebPagesServiceLoadbalancerHttpsTrafficAbsent
+    for: 30m
+    annotations:
+      title: >-
+        The loadbalancer_https SLI of the web-pages service (`{{ $labels.stage }}` stage) has not reported
+        any traffic in the past 30 minutes
+      description: |
+        Measures aggregated L4 traffic through the HAProxy. Traffic is measured in TCP connections, with upstream TCP connection failures being treated as service-level failures.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: web-pages-main/web-pages-overview
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '68488'
+      grafana_variables: environment,stage
+      link1_title: Definition
+      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
+      promql_template_1: >-
+        gitlab_component_ops:rate_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      experimental: 'true'
+      feature_category: pages
+      product_stage: release
+      product_stage_group: release
+      severity: s3
+      slo_alert: 'no'
+      user_impacting: 'yes'
+    expr: |
+      gitlab_component_ops:rate_5m{type="web-pages", component="loadbalancer_https", stage="main", monitor="global"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{type="web-pages", component="loadbalancer_https", stage="main", monitor="global"}
+  - alert: WebPagesServiceServerApdexSLOViolation
     for: 2m
     annotations:
       title: The server SLI of the web-pages service (`{{ $labels.stage }}` stage) has an apdex violating
@@ -149,6 +293,7 @@ groups:
       rules_domain: general
       severity: s2
       slo_alert: 'yes'
+      user_impacting: 'yes'
     expr: |
       (
         (
@@ -175,7 +320,7 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="server",monitor="global",type="web-pages"}) >= 1
       )
-  - alert: component_error_ratio_burn_rate_slo_out_of_bounds_upper
+  - alert: WebPagesServiceServerErrorSLOViolation
     for: 2m
     annotations:
       title: >-
@@ -207,6 +352,7 @@ groups:
       rules_domain: general
       severity: s2
       slo_alert: 'yes'
+      user_impacting: 'yes'
     expr: |
       (
         (
@@ -233,3 +379,74 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="server",monitor="global",type="web-pages"}) >= 1
       )
+  - alert: WebPagesServiceServerTrafficCessation
+    for: 5m
+    annotations:
+      title: >-
+        The server SLI of the web-pages service (`{{ $labels.stage }}` stage) has not received any traffic
+        in the past 30 minutes
+      description: |
+        Aggregation of most web requests into the GitLab Pages process.
+
+        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+      grafana_dashboard_id: web-pages-main/web-pages-overview
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '97416'
+      grafana_variables: environment,stage
+      link1_title: Definition
+      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
+      promql_template_1: >-
+        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      experimental: 'true'
+      feature_category: pages
+      product_stage: release
+      product_stage_group: release
+      severity: s3
+      slo_alert: 'no'
+      user_impacting: 'yes'
+    expr: >
+      gitlab_component_ops:rate_30m{type="web-pages", component="server", stage="main", monitor="global"}
+      == 0
+  - alert: WebPagesServiceServerTrafficAbsent
+    for: 30m
+    annotations:
+      title: >-
+        The server SLI of the web-pages service (`{{ $labels.stage }}` stage) has not reported any traffic
+        in the past 30 minutes
+      description: |
+        Aggregation of most web requests into the GitLab Pages process.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: web-pages-main/web-pages-overview
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '97416'
+      grafana_variables: environment,stage
+      link1_title: Definition
+      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
+      promql_template_1: >-
+        gitlab_component_ops:rate_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      experimental: 'true'
+      feature_category: pages
+      product_stage: release
+      product_stage_group: release
+      severity: s3
+      slo_alert: 'no'
+      user_impacting: 'yes'
+    expr: |
+      gitlab_component_ops:rate_5m{type="web-pages", component="server", stage="main", monitor="global"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{type="web-pages", component="server", stage="main", monitor="global"}
