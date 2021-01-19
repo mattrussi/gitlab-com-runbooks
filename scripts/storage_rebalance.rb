@@ -983,7 +983,6 @@ module Storage
       source_shard = options[:source_shard]
       url = get_api_url(:projects_api_uri)
       parameters = {
-        order_by: 'repository_size',
         statistics: true,
         repository_storage: source_shard,
         per_page: options[:projects_per_page],
