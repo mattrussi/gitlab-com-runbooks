@@ -56,7 +56,7 @@ stageGroupDashboards.dashboard('continuous_integration')
       title='Rate of corrupted build logs detected',
       description='The total rate of corrupted build logs detected.',
       query=|||
-        sum(increase(gitlab_ci_trace_operations_total{operation="corrupted", environment="$environment"}[$__interval])) by (operation)
+        sum(rate(gitlab_ci_trace_operations_total{operation="corrupted", environment="$environment"}[$__interval])) by (operation)
       |||,
       legendFormat='{{ operation }} build logs',
       yAxisLabel='Rate per second',
