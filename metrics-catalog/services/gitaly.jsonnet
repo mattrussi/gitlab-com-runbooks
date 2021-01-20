@@ -11,7 +11,7 @@ local gitalyGRPCErrorRate(baseSelector) =
     rateMetric(
       counter='gitaly_service_client_requests_total',
       selector=baseSelector {
-        grpc_code: { nre: 'OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded' },
+        grpc_code: { nre: 'OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded|Canceled' },
       }
     ),
     rateMetric(
@@ -31,7 +31,7 @@ metricsCatalog.serviceDefinition({
   nodeLevelMonitoring: true,
   monitoringThresholds: {
     apdexScore: 0.999,
-    errorRatio: 0.999,
+    errorRatio: 0.9995,
   },
   serviceDependencies: {
     gitaly: true,
