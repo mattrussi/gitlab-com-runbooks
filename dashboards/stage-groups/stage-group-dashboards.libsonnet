@@ -48,7 +48,6 @@ local railsRequestRate(type, featureCategories, featureCategoriesSelector) =
         rate(gitlab_transaction_duration_seconds_count{
           env='$environment',
           environment='$environment',
-          stage="$stage",
           feature_category=~'(%(featureCategories)s)',
           type='%(type)s',
           controller=~'$controller',
@@ -72,7 +71,6 @@ local railsErrorRate(type, featureCategories, featureCategoriesSelector) =
         gitlab:component:feature_category:execution:error:rate_1m{
           env='$environment',
           environment='$environment',
-          stage="$stage",
           feature_category=~'(%(featureCategories)s)',
           type='%(type)s'
         }
@@ -95,7 +93,6 @@ local railsP95RequestLatency(type, featureCategories, featureCategoriesSelector)
           action=~"$action",
           controller=~"$controller",
           environment="$environment",
-          stage="$stage",
           feature_category=~'(%(featureCategories)s)',
           type='%(type)s'
         }[$__interval]
@@ -122,7 +119,6 @@ local sqlQueriesPerAction(type, featureCategories, featureCategoriesSelector) =
             action=~"$action",
             controller=~"$controller",
             environment="$environment",
-            stage="$stage",
             feature_category=~'(%(featureCategories)s)',
             type='%(type)s'
           }[$__interval]
@@ -134,7 +130,6 @@ local sqlQueriesPerAction(type, featureCategories, featureCategoriesSelector) =
           action=~"$action",
           controller=~"$controller",
           environment="$environment",
-          stage="$stage",
           feature_category=~'(%(featureCategories)s)',
           type='%(type)s'
         }[$__interval]
@@ -160,7 +155,6 @@ local sqlLatenciesPerAction(type, featureCategories, featureCategoriesSelector) 
           action=~"$action",
           controller=~"$controller",
           environment="$environment",
-          stage="$stage",
           feature_category=~'(%(featureCategories)s)',
           type='%(type)s'
         }[$__interval]
@@ -171,7 +165,6 @@ local sqlLatenciesPerAction(type, featureCategories, featureCategoriesSelector) 
           action=~"$action",
           controller=~"$controller",
           environment="$environment",
-          stage="$stage",
           feature_category=~'(%(featureCategories)s)',
           type='%(type)s'
         }[$__interval]
@@ -198,7 +191,6 @@ local sqlLatenciesPerQuery(type, featureCategories, featureCategoriesSelector) =
             action=~"$action",
             controller=~"$controller",
             environment="$environment",
-            stage="$stage",
             feature_category=~'(%(featureCategories)s)',
             type='%(type)s'
           }[$__interval]
@@ -211,7 +203,6 @@ local sqlLatenciesPerQuery(type, featureCategories, featureCategoriesSelector) =
             action=~"$action",
             controller=~"$controller",
             environment="$environment",
-            stage="$stage",
             feature_category=~'(%(featureCategories)s)',
             type='%(type)s'
           }[$__interval]
@@ -239,7 +230,6 @@ local cachesPerAction(type, featureCategories, featureCategoriesSelector) =
             action=~"$action",
             controller=~"$controller",
             environment="$environment",
-            stage="$stage",
             feature_category=~'(%(featureCategories)s)',
             type='%(type)s'
           }[$__interval]
@@ -263,7 +253,6 @@ local sidekiqJobRate(counter, title, description, featureCategoriesSelector) =
         rate(%(counter)s{
           env='$environment',
           environment='$environment',
-          stage="$stage",
           feature_category=~'(%(featureCategories)s)'
         }[$__interval])
       )
@@ -300,7 +289,6 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
       time_from='now-6h/m',
       time_to='now/m'
     )
-    .addTemplate(prebuiltTemplates.stage)
     .addTemplates(
       if std.length(enabledRequestComponents) != 0 then
         [controllerFilter(featureCategoriesSelector), actionFilter(featureCategoriesSelector)]
