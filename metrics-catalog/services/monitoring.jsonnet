@@ -174,7 +174,7 @@ metricsCatalog.serviceDefinition({
         // Similar to the query selector above, we must pull data from jobs
         // corresponding to the old and new thanos stacks, which are mutually
         // exclusive by stage.
-        job: { re: 'thanos|thanos-store-[0-9]+' },
+        job: { re: 'thanos|thanos-store(-[0-9]+)?' },
         type: 'monitoring',
         grpc_service: 'thanos.Store',
         grpc_type: 'unary',
