@@ -22,6 +22,15 @@ stageGroupDashboards.dashboard('continuous_integration')
         `corrupted`) means by looking at the definition of these metrics in
         [gitlab/trace/metrics.rb][metrics-definition] file.
 
+        The key metric here is `corrupted` build logs detected. This should be
+        0, anything more than zero indicates problems.
+
+        Rate of `streamed` events should correspond with `PATCH /api/jobs/:id/trace`
+        requests.
+
+        It is expected to see some `invalid` build logs on these graphs. A significant
+        increase over time might indicate a problem with the correctness of build logs.
+
         [metrics-definition]: https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/trace/metrics.rb#L9
       |||
     ),
