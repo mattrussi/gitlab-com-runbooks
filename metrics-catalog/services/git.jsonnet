@@ -96,7 +96,7 @@ metricsCatalog.serviceDefinition({
       |||,
 
       local baseSelector = {
-        job: 'gitlab-workhorse',
+        job: 'gitlab-workhorse-git',
         type: 'git',
         route: [{ ne: '^/-/health$' }, { ne: '^/-/(readiness|liveness)$' }, { ne: '^/api/' }],
       },
@@ -153,7 +153,7 @@ metricsCatalog.serviceDefinition({
       |||,
 
       local baseSelector = {
-        job: 'gitlab-workhorse',
+        job: 'gitlab-workhorse-git',
         type: 'git',
         route: '^/api/',
       },
