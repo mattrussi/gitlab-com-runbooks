@@ -16,26 +16,37 @@ Using this consistent schema makes URLs consistent, etc.
 Example, the Container Registry is of service type `registry`.  Therefore,
 `dashboards/registry/<somedashboard>.dashboard.libsonnet`
 
-# Local Development
+# Extending Grafana dashboards
 
-Follow the guidelines for setting up  your development environment with `asdf` and required plugins as per the guidelines in the [root README.MD](https://gitlab.com/gitlab-com/runbooks/-/blob/master/README.md#developing-in-this-repo) for this repository.
+In order to extend Grafana dashboard you don't need to run Grafana locally. The most common scheme for extending dashboards is updating their definitions in your local repository and pushing changes to a testing playground on `dashboards.gitlab.net`.
+
+An alternative way to check simple changes, that does not require installing dependencies on your local machine, is using a Grafana Playground folder. All users with viewer access to dashboards.gitlab.net, (ie, all GitLab team members), have full permission to edit all dashboards in the [Playground Grafana folder](https://dashboards.gitlab.net/dashboards/f/playground-FOR-TESTING-ONLY/playground-for-testing-purposes-only). You can create dashboards in this folder using the Grafana Web UI.
+
+If you, however, need to extend or modify an existing dashboard and create a merge request to persist these modification, you need be able to quickly create a snapshot of a new version of a dashboard to validate your changes. In order to do that you first need to install dependencies required by the [test-dashboard.sh](test-dashboard.sh) script. You will also need to obtain an API token for Grafana from 1Password.
+
+## Install dependencies
+
+Follow the guidelines for setting up your development environment with `asdf` and required plugins as per the guidelines in the [root README.MD](https://gitlab.com/gitlab-com/runbooks/-/blob/master/README.md#developing-in-this-repo) for this repository.
 
 * Ensure that you install `asdf` and plugins for `go-jsonnet` and `jsonnet-bundler`.
-* Update vendor dependencies
-  * `jb install`
+* Update vendor dependencies with `jb install`.
 
-# Testing Your Changes
+## Obtain the Grafana Playground API Key
 
-* All users with viewer access to dashboards.gitlab.net, (ie, all GitLab team members), have full permission to edit all dashboards in the Playground Grafana folder: https://dashboards.gitlab.net/dashboards/f/playground-FOR-TESTING-ONLY/playground-for-testing-purposes-only
-* You can create dashboards in this folder using the Grafana Web UI
-* Alternatively, you can test your Grafonnet changes here using the following method:
-  1. Clone git@gitlab.com:gitlab-com/runbooks.git and test your changes locally
-  1. In the 1password Team Vault, lookup the API key stored in `dashboards.gitlab.net Grafana Playground API Key`
-  1. Edit the `dashboards/.env.sh` file and add the following content: `export GRAFANA_API_TOKEN=<1PASSWORD API KEY VALUE>`
-  1. In your shell, in the `dashboards` directory, run `. .env.sh`
-  1. To upload your dashboard, run `./test-dashboard.sh dashboard-folder-path/file.dashboard.jsonnet`. It will upload the file and return a link to your dashboard.
-  1. `./test-dashboard.sh -D $dashboard_path` will echo the dashboard JSON for pasting into Grafana.
-* **Note that the playground is transient. By default, they will be deleted after 24 hours. Do not include links to playground dashboards in the handbook or other permanent content. **
+1. In the 1password Team Vault, lookup the API key stored in `dashboards.gitlab.net Grafana Playground API Key`
+1. Edit the `dashboards/.env.sh` file and add the following content: `export GRAFANA_API_TOKEN=<1PASSWORD API KEY VALUE>`
+1. In your shell, in the `dashboards` directory, run `source .env.sh` to load it.
+
+## Modify a dashboard
+
+In order to modify a dashboard you will need to write code using [Grafonnet library](https://grafana.github.io/grafonnet-lib/) built on top of [Jsonnet](https://jsonnet.org/) syntax. In most cases you will also need to specify a PromQL query to source the data from Prometheus. You can experiment with PromQL using our [Thanos instance](https://thanos-query.ops.gitlab.net/) or [Grafana playground for Prometheus](https://dashboards.gitlab.net/explore).
+
+## Create a new snapshot of the modified dashboard
+
+1. To upload your dashboard, run `./test-dashboard.sh dashboard-folder-path/file.dashboard.jsonnet`. It will upload the file and return a link to your dashboard.
+1. `./test-dashboard.sh -D $dashboard_path` will echo the dashboard JSON for pasting into Grafana.
+
+**Note that the playground and the snapshots are transient. By default, the snapshots will be deleted after 24 hours and the links will expire. Do not include links to playground dashboards in the handbook or other permanent content.**
 
 # Editing Files
 
