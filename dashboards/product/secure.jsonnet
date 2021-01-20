@@ -31,6 +31,7 @@ basic.dashboard(
       productCommon.pageDetail('Merge Request', 'Secure_Merge_Request', 'https://gitlab.com/gitlab-examples/security/security-reports/-/merge_requests/39'),
       productCommon.pageDetail('Instance Security Dashboard', 'Secure_Instance_Security_Dashboard', 'https://gitlab.com/-/security/dashboard'),
       productCommon.pageDetail('Instance Vulnerability Report', 'Secure_Instance_Vulnerability_Report', 'https://gitlab.com/-/security/vulnerabilities'),
+      productCommon.pageDetail('Instance Vulnerability Report', 'Secure_Instance_Dashboard_Settings', ' https://gitlab.com/-/security/dashboard/settings'),
       productCommon.pageDetail('Group Security Dashboard', 'Secure_Group_Security_Dashboard', 'https://gitlab.com/groups/gitlab-examples/security/-/security/dashboard'),
       productCommon.pageDetail('Group Vulnerability Report', 'Secure_Group_Vulnerability_Report', 'https://gitlab.com/groups/gitlab-examples/security/-/security/vulnerabilities'),
       productCommon.pageDetail('Project Security Dashboard', 'Secure_Project_Security_Dashboard', 'https://gitlab.com/gitlab-examples/security/simply-simple-notes/-/security/dashboard'),
