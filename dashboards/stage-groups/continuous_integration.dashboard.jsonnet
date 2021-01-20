@@ -12,9 +12,31 @@ stageGroupDashboards.dashboard('continuous_integration')
 )
 .addPanels(
   layout.grid([
+    grafana.text.new(
+      title='Understanding metrics for CI/CD build logs',
+      mode='markdown',
+      content=|||
+        These panels show basic metrics for CI/CD build logs.
+
+        You can read more about what each individual operation (like `streamed`,
+        `corrupted`) means by looking at the definition of these metrics in
+        [gitlab/trace/metrics.rb][metrics-definition] file.
+
+        [metrics-definition]: https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/trace/metrics.rb#L9
+      |||
+    ),
+    basic.timeseries(
+      title='Rate of build logs streamed events',
+      description='The total rate of partial build logs received by GitLab',
+      query=|||
+        sum(rate(gitlab_ci_trace_operations_total{operation="streamed", environment="$environment"}[$__interval])) by (operation)
+      |||,
+      legendFormat='build logs {{ operation }} by runners',
+      yAxisLabel='Rate per second',
+    ),
     basic.timeseries(
       title='Rate of invalid build logs detected',
-      description='The total increase in invalid build logs detected (including mutated ones).',
+      description='The total rate of invalid build logs detected (including mutated ones).',
       query=|||
         sum(rate(gitlab_ci_trace_operations_total{operation="invalid", environment="$environment"}[$__interval])) by (operation)
       |||,
@@ -23,7 +45,7 @@ stageGroupDashboards.dashboard('continuous_integration')
     ),
     basic.timeseries(
       title='Rate of corrupted build logs detected',
-      description='The total increase in corrupted build logs detected.',
+      description='The total rate of corrupted build logs detected.',
       query=|||
         sum(increase(gitlab_ci_trace_operations_total{operation="corrupted", environment="$environment"}[$__interval])) by (operation)
       |||,
