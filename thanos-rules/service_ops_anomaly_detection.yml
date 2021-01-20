@@ -1,31 +1,4 @@
 groups:
-######################
-# Aggregation Stage
-######################
-
-- name: GitLab Service Operations-per-Second Aggregated Rates
-  partial_response_strategy: "warn"
-  interval: 1m
-  rules:
-  # Aggregate over all components within a service
-  - record: gitlab_service_ops:rate
-    expr: >
-      sum by (env, environment, tier, type, stage) (
-        gitlab_component_ops:rate{monitor!="global"} >= 0 and on(component, type, environment) (gitlab_component_service:mapping{monitor!="global", aggregate_rps="yes"})
-      )
-  - record: gitlab_service_ops:rate_5m
-    expr: >
-      sum by (env, environment, tier, type, stage) (
-        gitlab_component_ops:rate_5m{monitor!="global"} >= 0 and on(component, type, environment) (gitlab_component_service:mapping{monitor!="global", aggregate_rps="yes"})
-      )
-
-  # Aggregate over all components within a service, for a node
-  - record: gitlab_service_node_ops:rate
-    expr: >
-      sum by (env, environment, tier, type, stage, shard, fqdn) (
-        gitlab_component_node_ops:rate{monitor!="global"} >= 0
-      )
-
 #
 # Anomaly Detection recording rules for operation-rate
 #
@@ -38,14 +11,14 @@ groups:
     expr: >
       avg_over_time(gitlab_service_ops:rate{monitor="global"}[1w])
       unless on(tier, type)
-      gitlab_service:mapping:disable_ops_rate_prediction
+      gitlab_service:mapping:disable_ops_rate_prediction{monitor="global"}
 
   # Stddev for each service, over a week
   - record: gitlab_service_ops:rate:stddev_over_time_1w
     expr: >
       stddev_over_time(gitlab_service_ops:rate{monitor="global"}[1w])
       unless on(tier, type)
-      gitlab_service:mapping:disable_ops_rate_prediction
+      gitlab_service:mapping:disable_ops_rate_prediction{monitor="global"}
 
 - name: GitLab Service Ops Rate Weekly Periodic Values
   partial_response_strategy: "warn"

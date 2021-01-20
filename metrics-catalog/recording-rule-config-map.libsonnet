@@ -198,7 +198,7 @@ local ruleSetIterator(ruleSets) = {
     // prevent spurious alerts when a component is decommissioned.
     componentMapping: ruleSetIterator([
       recordingRules.componentMappingRuleSet(),
-      recordingRules.componentNodeSLORuleSet(),
+      recordingRules.componentNodeSLORuleSet(),  // TODO: Remove this as deprecated
     ]),
 
     recordingRuleGroupsForService(serviceDefinition)::
@@ -234,63 +234,53 @@ local ruleSetIterator(ruleSets) = {
       recordingRules.serviceSLORuleSet(),
     ]),
 
-    // Component-level apdex ratios, aggregated at the Thanos level, to
+    // Component-level error ratios, aggregated at the Thanos level, to
     // prevent split-brain aggregation prometheus issues and
     // spurious alerts.
-    aggregatedComponentApdexRatios: ruleSetIterator(std.flatMap(
+    componentAggregation: ruleSetIterator(std.flatMap(
       function(suffix)
         [
+          recordingRules.aggregatedComponentErrorRatioRuleSet(suffix=suffix),
           recordingRules.aggregatedComponentApdexRatioRuleSet(suffix=suffix),
         ],
       MULTI_BURN_RATE_SUFFIXES
     )),
 
-    // Component-level error ratios, aggregated at the Thanos level, to
-    // prevent split-brain aggregation prometheus issues and
-    // spurious alerts.
-    aggregatedComponentErrorRatios: ruleSetIterator(std.flatMap(
-      function(suffix)
-        [
-          recordingRules.aggregatedComponentErrorRatioRuleSet(suffix=suffix),
-        ],
-      MULTI_BURN_RATE_SUFFIXES
-    )),
 
     // This rolls the component-level error ratios up to the service-level,
     // as a Thanos aggregation
-    serviceErrorRatios: ruleSetIterator(std.flatMap(
-      function(suffix)
-        [
-          recordingRules.serviceErrorRatioRuleSet(suffix=suffix),
-          recordingRules.serviceNodeErrorRatioRuleSet(suffix=suffix),
-        ],
-      MULTI_BURN_RATE_SUFFIXES
-    )),
-
-
-    // This rolls the component-level error ratios up to the service-level,
-    // as a Thanos aggregation
-    serviceApdexRatios: ruleSetIterator(std.flatMap(
+    serviceAggregation: ruleSetIterator(std.flatMap(
       function(suffix)
         [
           // 1m burn rates use 5m weight scores
           // All other burn rates use the same burn rate as the ratio
-          recordingRules.serviceApdexRatioRuleSet(suffix=suffix, weightScoreSuffix=(if suffix == '' then '_5m' else suffix)),
+          recordingRules.serviceErrorRatioRuleSet(suffix=suffix),
+          recordingRules.serviceApdexRatioRuleSet(suffix=suffix),
         ],
       MULTI_BURN_RATE_SUFFIXES
-    ) + [
+    )),
+
+    // This rolls the component-level error ratios up to the service-level,
+    // as a Thanos aggregation
+    serviceNodeAggregation: ruleSetIterator([
       // We are only recording node-level apdex scores for 1m and 5m burn rates for now
-      recordingRules.serviceNodeApdexRatioRuleSet(suffix='', weightScoreSuffix='_5m'),
-      recordingRules.serviceNodeApdexRatioRuleSet(suffix='_5m', weightScoreSuffix='_5m'),
+      recordingRules.serviceNodeErrorRatioRuleSet(suffix=''),
+      recordingRules.serviceNodeApdexRatioRuleSet(suffix=''),
+
+      recordingRules.serviceNodeErrorRatioRuleSet(suffix='_5m'),
+      recordingRules.serviceNodeApdexRatioRuleSet(suffix='_5m'),
+
+      recordingRules.serviceNodeErrorRatioRuleSet(suffix='_30m'),
+      recordingRules.serviceNodeErrorRatioRuleSet(suffix='_1h'),
+      recordingRules.serviceNodeErrorRatioRuleSet(suffix='_6h'),
     ]),
 
-    // Component mappings are static recording rules which help
-    // determine whether a component is being monitored. This helps
-    // prevent spurious alerts when a component is decommissioned.
+    // Component and service mappings are static recording rules which
+    // provide metadata to the prometheus queries, alerts and visualization tools.
     serviceMapping: ruleSetIterator([
+      recordingRules.componentMappingRuleSet(),
       recordingRules.serviceMappingRuleSet(),
     ]),
-
 
     deploymentHealth: ruleSetIterator([
       recordingRules.deploymentHealthRuleSet(),

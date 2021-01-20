@@ -23,6 +23,7 @@
 * [../gitaly/gitaly-unusual-activity.md](../gitaly/gitaly-unusual-activity.md)
 * [../monitoring/node_memory_alerts.md](../monitoring/node_memory_alerts.md)
 * [gitlab-pages.md](gitlab-pages.md)
+* [pages-domain-lookup.md](pages-domain-lookup.md)
 * [pages-letsencrypt.md](pages-letsencrypt.md)
 * [../patroni/pg_repack.md](../patroni/pg_repack.md)
 * [../uncategorized/deploycmd.md](../uncategorized/deploycmd.md)

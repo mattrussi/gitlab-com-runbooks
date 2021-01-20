@@ -13,28 +13,6 @@ groups:
       grafana_dashboard_id: "000000231/chef-client"
       runbook: docs/config_management/chef-troubleshooting.md
       title: Chef client failed for more than 5hs
-  - alert: ChefClientStale
-    expr: time() - chef_client_last_run_timestamp_seconds > 5 * 3600
-    labels:
-      severity: s4
-      alert_type: cause
-    annotations:
-      description: Last Chef run for {{ $labels.fqdn }} was over {{ $value | humanizeDuration }} ago
-      grafana_dashboard_id: "000000231/chef-client"
-      runbook: docs/config_management/chef-troubleshooting.md
-      title: Chef client hasn't run for longer than expected
-  - alert: ChefClientStale
-    expr: time() - chef_client_last_run_timestamp_seconds > 3 * 86400
-    for: 1h
-    labels:
-      severity: s3
-      incident_project: gitlab.com/gitlab-com/gl-infra/infrastructure
-      alert_type: cause
-    annotations:
-      description: Last Chef run for {{ $labels.fqdn }} was over {{ $value | humanizeDuration }} ago
-      grafana_dashboard_id: "000000231/chef-client"
-      runbook: docs/config_management/chef-troubleshooting.md
-      title: Chef client hasn't run for longer than expected
   - alert: ChefClientErrorCritical
     expr: avg(chef_client_error) by (type) * 100 > 10
     for: 1h
@@ -49,3 +27,25 @@ groups:
       grafana_dashboard_id: "000000231/chef-client"
       runbook: docs/config_management/chef-troubleshooting.md
       title: Chef client failures have reached critical levels
+  - alert: ChefClientStale
+    expr: (time() - chef_client_last_run_timestamp_seconds > 5 * 3600) and on (instance) (chef_client_enabled == 1)
+    labels:
+      severity: s4
+      alert_type: cause
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
+    annotations:
+      description: Last Chef run for {{ $labels.fqdn }} was over {{ $value | humanizeDuration }} ago
+      grafana_dashboard_id: "000000231/chef-client"
+      runbook: docs/config_management/chef-troubleshooting.md
+      title: Chef client hasn't run for longer than expected
+  - alert: ChefClientDisabled
+    expr: chef_client_enabled == 0
+    for: 24h
+    labels:
+      severity: s4
+      alert_type: cause
+    annotations:
+      description: Last Chef run for {{ $labels.fqdn }} was over {{ $value | humanizeDuration }} ago
+      grafana_dashboard_id: "000000231/chef-client"
+      runbook: docs/config_management/chef-troubleshooting.md
+      title: Chef client has been disabled for a long time.

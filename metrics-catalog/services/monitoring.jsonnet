@@ -21,6 +21,48 @@ metricsCatalog.serviceDefinition({
    * disable ops-rate anomaly detection on this service.
    */
   disableOpsRatePrediction: true,
+  provisioning: {
+    kubernetes: true,
+    vms: true,
+  },
+  kubeResources: {
+    'thanos-query-frontend': {
+      kind: 'Deployment',
+      containers: [
+        'thanos-query-frontend',
+      ],
+    },
+    'thanos-store': {
+      kind: 'StatefulSet',
+      containers: [
+        'thanos-store',
+      ],
+    },
+    'memcached-thanos-qfe-query-range': {
+      kind: 'StatefulSet',
+      containers: [
+        'memcached',
+      ],
+    },
+    'memcached-thanos-qfe-labels': {
+      kind: 'StatefulSet',
+      containers: [
+        'memcached',
+      ],
+    },
+    'memcached-thanos-bucket-cache': {
+      kind: 'StatefulSet',
+      containers: [
+        'memcached',
+      ],
+    },
+    'memcached-thanos-index-cache': {
+      kind: 'StatefulSet',
+      containers: [
+        'memcached',
+      ],
+    },
+  },
   serviceLevelIndicators: {
     thanos_query: {
       userImpacting: false,
@@ -422,5 +464,48 @@ metricsCatalog.serviceDefinition({
 
       significantLabels: ['fqdn'],
     },
+
+    local thanosMemcachedSLI(job) = {
+      local selector = {
+        job: job,
+        type: 'monitoring',
+      },
+
+      userImpacting: false,
+      featureCategory: 'not_owned',
+      team: 'sre_observability',
+      ignoreTrafficCessation: true,
+
+      description: |||
+        Various memcached instances support our thanos infrastructure, for the
+        store and query-frontend components.
+      |||,
+
+      apdex: histogramApdex(
+        histogram='thanos_memcached_operation_duration_seconds_bucket',
+        satisfiedThreshold=1,
+        selector=selector,
+      ),
+
+      requestRate: rateMetric(
+        counter='memcached_commands_total',
+        selector=selector,
+      ),
+
+      errorRate: rateMetric(
+        counter='thanos_memcached_operation_failures_total',
+        selector=selector,
+      ),
+
+      significantLabels: ['fqdn'],
+    },
+
+    // We can add thanos-store memcached jobs here if we end up choosing to use
+    // memcached for store.
+    memcached_thanos_qfe_query_range: thanosMemcachedSLI('memcached-thanos-qfe-query-range-metrics'),
+    // Note that this label cache will not be deployed and metrics will be empty
+    // until this TODO is resolved:
+    // https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments/blob/master/environments/thanos/ops/main.jsonnet#L49
+    memcached_thanos_qfe_labels: thanosMemcachedSLI('memcached-thanos-qfe-labels-metrics'),
   },
 })

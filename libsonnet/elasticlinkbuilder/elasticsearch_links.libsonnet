@@ -189,12 +189,11 @@ local indexCatalog = {
   registry: indexDefaults {
     timestamp: 'json.time',
     indexPattern: '97ce8e90-63ad-11ea-8617-2347010d3aab',
-    defaultColumns: ['json.http.request.uri', 'json.http.response.duration', 'json.err.code', 'json.msg', 'json.http.response.status', 'json.http.request.remoteaddr', 'json.http.request.method'],
-    defaultSeriesSplitField: 'json.http.request.uri.keyword',
-    failureFilter: statusCode('json.http.response.status'),
-    // Requires https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/11136
-    // defaultLatencyField: 'json.duration_s',
-    // latencyFieldUnitMultiplier: 1,
+    defaultColumns: ['json.remote_ip', 'json.duration_ms', 'json.code', 'json.msg', 'json.status', 'json.error', 'json.method', 'json.uri'],
+    defaultSeriesSplitField: 'json.remote_ip',
+    failureFilter: statusCode('json.status'),
+    defaultLatencyField: 'json.duration_ms',
+    latencyFieldUnitMultiplier: 1000,
   },
 
   runners: indexDefaults {

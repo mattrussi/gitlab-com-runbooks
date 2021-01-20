@@ -200,7 +200,7 @@ groups:
         3
       )
       unless on(tier, type)
-      gitlab_service:mapping:disable_ops_rate_prediction
+      gitlab_service:mapping:disable_ops_rate_prediction{monitor="global"}
   - alert: service_ops_out_of_bounds_lower_5m
     for: 5m
     annotations:
@@ -239,7 +239,7 @@ groups:
         -3
       )
       unless on(tier, type)
-      gitlab_service:mapping:disable_ops_rate_prediction
+      gitlab_service:mapping:disable_ops_rate_prediction{monitor="global"}
   - alert: service_cny_apdex_slo_out_of_bounds_lower_5m
     for: 5m
     annotations:

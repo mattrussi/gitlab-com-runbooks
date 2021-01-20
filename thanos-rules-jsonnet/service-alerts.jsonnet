@@ -209,7 +209,7 @@ local rules = [
         3
       )
       unless on(tier, type)
-      gitlab_service:mapping:disable_ops_rate_prediction
+      gitlab_service:mapping:disable_ops_rate_prediction{monitor="global"}
     |||,
     'for': '5m',
     labels: {
@@ -250,7 +250,7 @@ local rules = [
         -3
       )
       unless on(tier, type)
-      gitlab_service:mapping:disable_ops_rate_prediction
+      gitlab_service:mapping:disable_ops_rate_prediction{monitor="global"}
     |||,
     'for': '5m',
     labels: {

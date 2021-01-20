@@ -85,7 +85,7 @@ local combinedBackendCurry(generator, defaultSLIDescription, ignoreTrafficCessat
         for stage in std.objectFields(stageMappings)
       ],
       // Don't double-up RPS by including loadbalancer again
-      aggregateRequestRate=false,
+      serviceAggregation=false,
     );
 
 

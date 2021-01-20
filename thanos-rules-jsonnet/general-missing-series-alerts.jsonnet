@@ -21,8 +21,8 @@ local rules = [
           gitlab_component_ops:rate{monitor!="global"} >= 0
         )
       )
-      and on (env, environment, tier, type, component)
-      gitlab_component_service:mapping{monitor!="global"}
+      and on (type, component)
+      gitlab_component_service:mapping{monitor="global"}
     |||,
     'for': '1h',
     labels: labels,
@@ -52,8 +52,8 @@ local rules = [
           gitlab_component_apdex:ratio{monitor!="global"}
         )
       )
-      and on (env, environment, tier, type, component)
-      gitlab_component_service:mapping{monitor!="global"}
+      and on (type, component)
+      gitlab_component_service:mapping{monitor="global"}
     |||,
     'for': '1h',
     labels: labels,
@@ -86,8 +86,8 @@ local rules = [
           gitlab_component_errors:rate{monitor!="global", stage!="cny"}
         )
       )
-      and on (env, environment, tier, type, component)
-      gitlab_component_service:mapping{monitor!="global"}
+      and on (type, component)
+      gitlab_component_service:mapping{monitor="global"}
     |||,
     'for': '2h',
     labels: labels,
