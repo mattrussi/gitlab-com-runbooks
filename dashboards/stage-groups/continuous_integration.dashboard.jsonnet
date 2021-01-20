@@ -26,7 +26,7 @@ stageGroupDashboards.dashboard('continuous_integration')
         0, anything more than zero indicates problems.
 
         Rate of `streamed` events should correspond with `PATCH /api/jobs/:id/trace`
-        requests.
+        requests rate.
 
         It is expected to see some `invalid` build logs on these graphs. A significant
         increase over time might indicate a problem with the correctness of build logs.
@@ -35,8 +35,8 @@ stageGroupDashboards.dashboard('continuous_integration')
       |||
     ),
     basic.timeseries(
-      title='Rate of build logs streamed events',
-      description='The total rate of partial build logs received by GitLab',
+      title='Rate of build logs streamed',
+      description='The total rate of partial build logs received by that were sent by runners.',
       query=|||
         sum(rate(gitlab_ci_trace_operations_total{operation="streamed", environment="$environment"}[$__interval])) by (operation)
       |||,
@@ -71,8 +71,8 @@ stageGroupDashboards.dashboard('continuous_integration')
       yAxisLabel='Rate per second',
     ),
     basic.timeseries(
-      title='Build logs being sent from the runners',
-      description='Byterate of build logs being sent from the runners.',
+      title='Throughput of build logs processing',
+      description='Rate of build logs received from the runners in bytes.',
       query=|||
         sum(rate(gitlab_ci_trace_bytes_total{environment="$environment"}[$__interval]))
       |||,
