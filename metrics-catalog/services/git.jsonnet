@@ -6,6 +6,8 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local haproxyComponents = import './lib/haproxy_components.libsonnet';
 local perFeatureCategoryRecordingRules = (import './lib/puma-per-feature-category-recording-rules.libsonnet').perFeatureCategoryRecordingRules;
 
+local gitWorkhorseJobNameSelector = { job: { re: 'gitlab-workhorse|gitlab-workhorse-git' } };
+
 metricsCatalog.serviceDefinition({
   type: 'git',
   tier: 'sv',
@@ -95,8 +97,7 @@ metricsCatalog.serviceDefinition({
         Websocket connections are excluded from the apdex score.
       |||,
 
-      local baseSelector = {
-        job: 'gitlab-workhorse',
+      local baseSelector = gitWorkhorseJobNameSelector {
         type: 'git',
         route: [{ ne: '^/-/health$' }, { ne: '^/-/(readiness|liveness)$' }, { ne: '^/api/' }],
       },
@@ -152,8 +153,7 @@ metricsCatalog.serviceDefinition({
         and are on the critical path for authentication of Git SSH commands.
       |||,
 
-      local baseSelector = {
-        job: 'gitlab-workhorse',
+      local baseSelector = gitWorkhorseJobNameSelector {
         type: 'git',
         route: '^/api/',
       },
