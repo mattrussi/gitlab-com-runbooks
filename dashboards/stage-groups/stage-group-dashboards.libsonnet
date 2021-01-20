@@ -375,7 +375,7 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
           startRow=401
         )
         +
-        layout.rowGridCollapsed(
+        layout.rowGrid(
           'SQL Queries Per Action',
           [
             sqlQueriesPerAction(component, featureCategories, featureCategoriesSelector)
@@ -384,7 +384,7 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
           startRow=501
         )
         +
-        layout.rowGridCollapsed(
+        layout.rowGrid(
           'SQL Latency Per Action',
           [
             sqlLatenciesPerAction(component, featureCategories, featureCategoriesSelector)
@@ -393,7 +393,7 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
           startRow=601
         )
         +
-        layout.rowGridCollapsed(
+        layout.rowGrid(
           'SQL Latency Per Query',
           [
             sqlLatenciesPerQuery(component, featureCategories, featureCategoriesSelector)
@@ -402,7 +402,7 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
           startRow=701
         )
         +
-        layout.rowGridCollapsed(
+        layout.rowGrid(
           'Caches per Action',
           [
             cachesPerAction(component, featureCategories, featureCategoriesSelector)
@@ -444,7 +444,7 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
               ], { prometheusSelectorHash: {} })
             ),
           ],
-          startRow=801
+          startRow=901
         )
       else
         []
