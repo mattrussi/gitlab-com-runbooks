@@ -13,22 +13,22 @@ stageGroupDashboards.dashboard('continuous_integration')
 .addPanels(
   layout.grid([
     basic.timeseries(
-      title='Increase in invalid build logs detected',
+      title='Rate of invalid build logs detected',
       description='The total increase in invalid build logs detected (including mutated ones).',
       query=|||
-        sum(increase(gitlab_ci_trace_operations_total{operation=~"invalid", environment="$environment"}[$__interval])) by (operation)
+        sum(rate(gitlab_ci_trace_operations_total{operation="invalid", environment="$environment"}[$__interval])) by (operation)
       |||,
       legendFormat='{{ operation }} build logs',
-      yAxisLabel='Increase',
+      yAxisLabel='Rate per second',
     ),
     basic.timeseries(
-      title='Increase in corrupted build logs detected',
+      title='Rate of corrupted build logs detected',
       description='The total increase in corrupted build logs detected.',
       query=|||
-        sum(increase(gitlab_ci_trace_operations_total{operation=~"corrupted", environment="$environment"}[$__interval])) by (operation)
+        sum(increase(gitlab_ci_trace_operations_total{operation="corrupted", environment="$environment"}[$__interval])) by (operation)
       |||,
       legendFormat='{{ operation }} build logs',
-      yAxisLabel='Increase',
+      yAxisLabel='Rate per second',
     ),
     basic.timeseries(
       title='All metrics for build logs',
