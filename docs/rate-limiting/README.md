@@ -9,6 +9,17 @@ discussion and context; if you are looking for some more formulaic options for r
 incidents, these are at the end, but deliberately so because very little about making changes has an automatic simple
 answer.  Please consider strongly reading the relevant context before using those simpler sections.
 
+## What are the current rate-limits?
+
+Not the actual numbers, but links to where to find the current active values:
+1. CloudFlare: https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/gitlab.com/firewall/tools
+   * Source at https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/blob/master/environments/gprd/cloudflare-waf.tf
+1. HAProxy: Basic per-IP API rate-limit: `knife node show fe-01-lb-gprd.c.gitlab-production.internal -a gitlab-haproxy.frontend.api.rate_limit_http_rate_per_minute`
+   * There are exceptions, but this is the key one.
+1. RackAttack: https://gitlab.com/admin/application_settings/network (admin access only)
+   * In `User and IP Rate Limits`, and also `Protected Paths`
+   * Published (manually) at https://docs.gitlab.com/ee/user/gitlab_com/#gitlabcom-specific-rate-limits
+
 ## 3 layers of Rate Limiting:
 
 ### CloudFlare
@@ -158,7 +169,7 @@ an internal use of RackAttack for [rate-limiting git auth failures](https://docs
 and can generally be ignored.  As for all Rails logs, the `json.meta.user` field is set if the request was authenticated
 and is missing if it was anonymous.  The
 [Rack Attack](https://log.gprd.gitlab.net/app/discover#/view/78d62060-560b-11eb-ad2c-31b27cd4579b?_g=%28filters%3A!%28%29%2CrefreshInterval%3A%28pause%3A!t%2Cvalue%3A0%29%2Ctime%3A%28from%3Anow-1d%2Cto%3Anow%29%29)
-saved search in Kibana may be a useful starting point for analysis.  
+saved search in Kibana may be a useful starting point for analysis.
 
 The 'period' of these rate limits is 1 minute (60 seconds), and this should almost never be changed (as for haproxy).
 Some clients assume 60 seconds, and again it keeps things fairly easy to reason about.  This number should *never* be
@@ -265,3 +276,5 @@ https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/blob/master/enviro
       infrastructure up sufficiently to support it.  Consider database, gitaly, and redis, as well as front-end compute.
     * If it is agreed to proceed, raise a production change issue, linked to the earlier discussion issue, to execute the
       change.
+    * Ensure https://gitlab.com/gitlab-org/gitlab/-/tree/master/doc/user/gitlab_com/#gitlabcom-specific-rate-limits is
+      updated to match the new values
