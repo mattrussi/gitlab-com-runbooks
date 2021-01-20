@@ -283,7 +283,8 @@ local multiburnRateAlertsDashboard(
   };
 
 local componentSelectorHash = { environment: '$environment', env: '$environment', type: '$type', stage: '$stage', component: '$component' };
-local componentNodeSelectorHash = { environment: '$environment', monitor: { ne: 'global' }, type: '$type', stage: '$stage', component: '$component', fqdn: '$fqdn' };
+// TODO: add routing for `monitor="global"` sometime after May 2021
+local componentNodeSelectorHash = { environment: '$environment', /* monitor: 'global' */ type: '$type', stage: '$stage', component: '$component', fqdn: '$fqdn' };
 local serviceSelectorHash = { environment: '$environment', env: '$environment', type: '$type', stage: '$stage', monitor: 'global' };
 local apdexSLOMetric = 'slo:min:events:gitlab_service_apdex:ratio';
 local errorSLOMetric = 'slo:max:events:gitlab_service_errors:ratio';
