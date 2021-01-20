@@ -10,6 +10,14 @@ local strings = import 'utils/strings.libsonnet';
 // For now, only include components that run at least once a second
 // in the monitoring. This is to avoid low-volume, noisy alerts
 local minimumOperationRateForMonitoring = 1; /* rps */
+local minimumOperationRateForNodeMonitoring = 10; /* rps */
+
+// Most MWMBR alerts use a 2m period
+// Initially for this alert, use a long period to ensure that
+// it's not too noisy.
+// Consider bringing this down to 2m after 1 Sep 2020
+local nodeAlertWaitPeriod = '10m';
+
 
 local formatConfig = multiburnFactors {
   minimumOperationRateForMonitoring: minimumOperationRateForMonitoring,
@@ -103,7 +111,52 @@ local apdexAlertForSLI(service, sli) =
       grafana_min_zoom_hours: '6',
       promql_template_1: 'gitlab_component_apdex:ratio_1h{environment="$environment", type="$type", stage="$stage", component="$component"}',
     },
-  }];
+  }]
+  +
+  (
+    if service.nodeLevelMonitoring then
+      [{
+        alert: nameSLOViolationAlert(service.type, sli.name, 'ApdexSLOViolationSingleNode'),
+        expr: multiburnExpression.multiburnRateApdexExpression(
+          metric1h='gitlab_component_node_apdex:ratio_1h',
+          metric5m='gitlab_component_node_apdex:ratio_5m',
+          metric30m='gitlab_component_node_apdex:ratio_30m',
+          metric6h='gitlab_component_node_apdex:ratio_6h',
+          metricSelectorHash={ monitor: 'global', type: service.type, component: sli.name },
+          operationRateMetric='gitlab_component_node_ops:rate_1h',
+          operationRateAggregationLabels=['env', 'environment', 'tier', 'type', 'stage', 'component'],
+          operationRateSelectorHash={ monitor: 'global', type: service.type, component: sli.name },
+          minimumOperationRateForMonitoring=minimumOperationRateForNodeMonitoring,
+          thresholdSLOValue=apdexScoreSLO
+        ),
+        'for': nodeAlertWaitPeriod,
+        labels: labelsForSLI(sli) {
+          alert_type: 'symptom',
+          rules_domain: 'general',
+          severity: 's2',
+          pager: 'pagerduty',
+          slo_alert: 'yes',
+        },
+        annotations: {
+          title: 'The %(sliName)s SLI of the %(serviceType)s service on node `{{ $labels.fqdn }}` has an apdex violating SLO' % formatConfig,
+          description: |||
+            %(sliDescription)s
+
+            Since the %(serviceType)s service is not fully redundant, SLI violations on a single node may represent a user-impacting service degradation.
+
+            Currently the apdex value for {{ $labels.fqdn }} is {{ $value | humanizePercentage }}.
+          ||| % formatConfig,
+          runbook: 'docs/{{ $labels.type }}/README.md',
+          grafana_dashboard_id: 'alerts-component_node_multiburn_apdex/alerts-component-node-multi-window-multi-burn-rate-apdex-out-of-slo',
+          grafana_panel_id: stableIds.hashStableId('multiwindow-multiburnrate'),
+          grafana_variables: 'environment,type,stage,component,fqdn',
+          grafana_min_zoom_hours: '6',
+          promql_template_1: 'gitlab_component_node_apdex:ratio_1h{environment="$environment", type="$type", stage="$stage", component="$component", fqdn="$fqdn"}',
+        },
+      }]
+    else
+      []
+  );
 
 // Generates an error rate alert for an SLI
 local errorRateAlertForSLI(service, sli) =
@@ -152,7 +205,52 @@ local errorRateAlertForSLI(service, sli) =
       link1_url: 'https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-error-rate.md',
       promql_template_1: 'gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}',
     },
-  }];
+  }]
+  +
+  (
+    if service.nodeLevelMonitoring then
+      [{
+        alert: nameSLOViolationAlert(service.type, sli.name, 'ErrorSLOViolationSingleNode'),
+        expr: multiburnExpression.multiburnRateErrorExpression(
+          metric1h='gitlab_component_node_errors:ratio_1h',
+          metric5m='gitlab_component_node_errors:ratio_5m',
+          metric30m='gitlab_component_node_errors:ratio_30m',
+          metric6h='gitlab_component_node_errors:ratio_6h',
+          metricSelectorHash={ monitor: 'global', type: service.type, component: sli.name },
+          operationRateMetric='gitlab_component_node_ops:rate_1h',
+          operationRateAggregationLabels=['env', 'environment', 'tier', 'type', 'stage', 'component'],
+          operationRateSelectorHash={ monitor: 'global', type: service.type, component: sli.name },
+          minimumOperationRateForMonitoring=minimumOperationRateForNodeMonitoring,
+          thresholdSLOValue=1 - errorRateSLO,
+        ),
+        'for': nodeAlertWaitPeriod,
+        labels: labelsForSLI(sli) {
+          rules_domain: 'general',
+          severity: 's2',
+          slo_alert: 'yes',
+          alert_type: 'symptom',
+          pager: 'pagerduty',
+        },
+        annotations: {
+          title: 'The %(sliName)s SLI of the %(serviceType)s service on node `{{ $labels.fqdn }}` has an error rate violating SLO' % formatConfig,
+          description: |||
+            %(sliDescription)s
+
+            Since the %(serviceType)s service is not fully redundant, SLI violations on a single node may represent a user-impacting service degradation.
+
+            Currently the apdex value for {{ $labels.fqdn }} is {{ $value | humanizePercentage }}.
+          ||| % formatConfig,
+          runbook: 'docs/{{ $labels.type }}/README.md',
+          grafana_dashboard_id: 'alerts-component_node_multiburn_error/alerts-component-node-multi-window-multi-burn-rate-error-rate-out-of-slo',
+          grafana_panel_id: stableIds.hashStableId('multiwindow-multiburnrate'),
+          grafana_variables: 'environment,type,stage,component,fqdn',
+          grafana_min_zoom_hours: '6',
+          promql_template_1: 'gitlab_component_node_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component", fqdn="$fqdn"}',
+        },
+      }]
+    else
+      []
+  );
 
 local trafficCessationAlert(service, sli) =
   local formatConfig = {
