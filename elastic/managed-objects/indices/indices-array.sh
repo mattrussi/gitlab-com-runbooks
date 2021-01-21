@@ -12,6 +12,7 @@ export indices=(
   gke-audit
   gke-systemd
   jaeger
+  kas
   mailroom
   monitoring
   pages
