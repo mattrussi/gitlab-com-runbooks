@@ -27,5 +27,6 @@
   import 'waf.jsonnet',
   import 'web-pages.jsonnet',
   import 'web.jsonnet',
+  import 'websockets.jsonnet',
   import 'woodhouse.jsonnet',
 ]

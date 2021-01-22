@@ -295,6 +295,11 @@ groups:
       tier: sv
       type: web
     expr: '0.000100'
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      tier: sv
+      type: websockets
+    expr: '0.000500'
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       tier: sv
@@ -914,6 +919,27 @@ groups:
       service_aggregation: 'yes'
       tier: sv
       type: web
+    expr: '1'
+  - record: gitlab_component_service:mapping
+    labels:
+      component: loadbalancer
+      service_aggregation: 'no'
+      tier: sv
+      type: websockets
+    expr: '1'
+  - record: gitlab_component_service:mapping
+    labels:
+      component: puma
+      service_aggregation: 'yes'
+      tier: sv
+      type: websockets
+    expr: '1'
+  - record: gitlab_component_service:mapping
+    labels:
+      component: workhorse
+      service_aggregation: 'yes'
+      tier: sv
+      type: websockets
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:

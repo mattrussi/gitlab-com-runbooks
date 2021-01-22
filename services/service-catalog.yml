@@ -3131,3 +3131,63 @@ services:
   observability:
     monitors:
       primary_grafana_dashboard: "kas/kas"
+- name: websockets
+  tier: sv
+  friendly_name: Websockets
+  infra_owner: sre_coreinfra
+  label: Service:Websockets
+  business:
+    requirement: |
+      TBD
+    customers:
+      - GitLab.com customers
+    business_value: |
+      Websockets enables realtime updates for the interactive terminal
+      and ActionCable feature.
+    SLA:
+      availability:
+      response_time:
+  technical:
+    project:
+      - https://gitlab.com/gitlab-org/gitlab
+      - https://gitlab.com/gitlab-org/gitlab-workhorse
+    slx:
+    documents:
+      design:
+      architecture: TBD
+      readiness_review: TBD
+      service:
+        - TBD
+      security:
+    dependencies:
+    configurations:
+      - config_name: Webosckets
+        location: https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com
+    chef_roles: []
+    scalability:
+      bound: cpu
+      scalable: horizontal
+    security:
+      security_reviewed:
+      data_classification:
+      security_incidents:
+    logging:
+      - name: websockets
+        permalink: TBD
+  infrastructure:
+    provider: gcp
+    architecture:
+    provisioning: helm
+    accesses:
+      - account_name:
+        access_type:
+        reviewed:
+  operations:
+    maintenance:
+    runbooks:
+    - TBD
+    playbooks:
+    error_budget:
+  observability:
+    monitors:
+      primary_grafana_dashboard: "websockets/websockets"
