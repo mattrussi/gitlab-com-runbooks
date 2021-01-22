@@ -3142,13 +3142,15 @@ services:
     customers:
       - GitLab.com customers
     business_value: |
-      TBD
+      Websockets enables realtime updates for the interactive terminal
+      and ActionCable feature.
     SLA:
       availability:
       response_time:
   technical:
     project:
-      - TBD
+      - https://gitlab.com/gitlab-org/gitlab
+      - https://gitlab.com/gitlab-org/gitlab-workhorse
     slx:
     documents:
       design:
