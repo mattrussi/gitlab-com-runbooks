@@ -1,10 +1,15 @@
 local stages = import '../../services/stages.libsonnet';
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local template = grafana.template;
+local prebuiltTemplates = import 'grafana/templates.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local metrics = import 'servicemetrics/metrics.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
+local platformLinks = import '../platform_links.libsonnet';
+
+local actionLegend(type) =
+  if type == 'api' then '{{action}}' else '{{controller}}#{{action}}';
 
 local controllerFilter(featureCategoriesSelector) =
   template.new(
@@ -36,7 +41,7 @@ local railsRequestRate(type, featureCategories, featureCategoriesSelector) =
   basic.timeseries(
     title='%(type)s Request Rate' % { type: std.asciiUpper(type) },
     yAxisLabel='Requests per Second',
-    legendFormat=if type == 'api' then '{{action}}' else '{{controller}}#{{action}}',
+    legendFormat=actionLegend(type),
     decimals=2,
     query=|||
       sum by (controller, action) (
@@ -76,6 +81,166 @@ local railsErrorRate(type, featureCategories, featureCategoriesSelector) =
     }
   );
 
+local railsP95RequestLatency(type, featureCategories, featureCategoriesSelector) =
+  basic.timeseries(
+    title='%(type)s 95th Percentile Request Latency' % { type: std.asciiUpper(type) },
+    decimals=2,
+    format='s',
+    legendFormat=actionLegend(type),
+    query=|||
+      avg_over_time(
+        controller_action:gitlab_transaction_duration_seconds:p95{
+          action=~"$action",
+          controller=~"$controller",
+          environment="$environment",
+          feature_category=~'(%(featureCategories)s)',
+          type='%(type)s'
+        }[$__interval]
+      )
+    ||| % {
+      type: type,
+      featureCategories: featureCategoriesSelector,
+    }
+  );
+
+local sqlQueriesPerAction(type, featureCategories, featureCategoriesSelector) =
+  basic.timeseries(
+    title='%(type)s SQL Queries per Action' % { type: std.asciiUpper(type) },
+    decimals=2,
+    yAxisLabel='Queries',
+    legendFormat=actionLegend(type),
+    description=|||
+      Average amount of SQL queries performed by a controller action.
+    |||,
+    query=|||
+      sum without (fqdn,instance) (
+        rate(
+          gitlab_sql_duration_seconds_count{
+            action=~"$action",
+            controller=~"$controller",
+            environment="$environment",
+            feature_category=~'(%(featureCategories)s)',
+            type='%(type)s'
+          }[$__interval]
+        )
+      )
+      /
+      avg_over_time(
+        controller_action:gitlab_transaction_duration_seconds_count:rate1m{
+          action=~"$action",
+          controller=~"$controller",
+          environment="$environment",
+          feature_category=~'(%(featureCategories)s)',
+          type='%(type)s'
+        }[$__interval]
+      )
+    ||| % {
+      type: type,
+      featureCategories: featureCategoriesSelector,
+    }
+  );
+
+local sqlLatenciesPerAction(type, featureCategories, featureCategoriesSelector) =
+  basic.timeseries(
+    title='%(type)s SQL Latency per Action' % { type: std.asciiUpper(type) },
+    decimals=2,
+    format='s',
+    legendFormat=actionLegend(type),
+    description=|||
+      Average sum of all SQL query latency accumulated by a controller action.
+    |||,
+    query=|||
+      avg_over_time(
+        controller_action:gitlab_sql_duration_seconds_sum:rate1m{
+          action=~"$action",
+          controller=~"$controller",
+          environment="$environment",
+          feature_category=~'(%(featureCategories)s)',
+          type='%(type)s'
+        }[$__interval]
+      )
+      /
+      avg_over_time(
+        controller_action:gitlab_transaction_duration_seconds_count:rate1m{
+          action=~"$action",
+          controller=~"$controller",
+          environment="$environment",
+          feature_category=~'(%(featureCategories)s)',
+          type='%(type)s'
+        }[$__interval]
+      )
+    ||| % {
+      type: type,
+      featureCategories: featureCategoriesSelector,
+    }
+  );
+
+local sqlLatenciesPerQuery(type, featureCategories, featureCategoriesSelector) =
+  basic.timeseries(
+    title='%(type)s SQL Latency per Query' % { type: std.asciiUpper(type) },
+    decimals=2,
+    legendFormat=actionLegend(type),
+    format='s',
+    description=|||
+      Average latency of individual SQL queries
+    |||,
+    query=|||
+      sum without (fqdn,instance) (
+        rate(
+          gitlab_sql_duration_seconds_sum{
+            action=~"$action",
+            controller=~"$controller",
+            environment="$environment",
+            feature_category=~'(%(featureCategories)s)',
+            type='%(type)s'
+          }[$__interval]
+        )
+      )
+      /
+      sum without (fqdn,instance) (
+        rate(
+          gitlab_sql_duration_seconds_count{
+            action=~"$action",
+            controller=~"$controller",
+            environment="$environment",
+            feature_category=~'(%(featureCategories)s)',
+            type='%(type)s'
+          }[$__interval]
+        )
+      )
+    ||| % {
+      type: type,
+      featureCategories: featureCategoriesSelector,
+    }
+  );
+
+local cachesPerAction(type, featureCategories, featureCategoriesSelector) =
+  basic.timeseries(
+    title='%(type)s Caches per Action' % { type: std.asciiUpper(type) },
+    decimals=2,
+    legendFormat='{{operation}} - ' + actionLegend(type),
+    yAxisLabel='Operations',
+    description=|||
+      Average total number of caching operations (Read & Write) per action.
+    |||,
+    query=|||
+      sum without (fqdn, instance) (
+        rate(
+          gitlab_cache_operations_total{
+            action=~"$action",
+            controller=~"$controller",
+            environment="$environment",
+            feature_category=~'(%(featureCategories)s)',
+            type='%(type)s'
+          }[$__interval]
+        )
+      )
+    ||| % {
+      type: type,
+      featureCategories: featureCategoriesSelector,
+    }
+  );
+
 local sidekiqJobRate(counter, title, description, featureCategoriesSelector) =
   basic.timeseries(
     title=title,
@@ -96,6 +261,7 @@ local sidekiqJobRate(counter, title, description, featureCategoriesSelector) =
       featureCategories: featureCategoriesSelector,
     }
   );
+
 
 local requestComponents = std.set(['web', 'api', 'git']);
 local backgroundComponents = std.set(['sidekiq']);
@@ -178,18 +344,59 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
           ],
           startRow=201
         )
-      else
-        []
-    )
-    .addPanels(
-      if std.length(enabledRequestComponents) != 0 then
+        +
+        layout.rowGrid(
+          'Rails 95th Percentile Request Latency',
+          [
+            railsP95RequestLatency(component, featureCategories, featureCategoriesSelector)
+            for component in enabledRequestComponents
+          ],
+          startRow=301
+        )
+        +
         layout.rowGrid(
           'Rails Error Rates (accumulated by components)',
           [
             railsErrorRate(component, featureCategories, featureCategoriesSelector)
             for component in enabledRequestComponents
           ],
-          startRow=301
+          startRow=401
+        )
+        +
+        layout.rowGrid(
+          'SQL Queries Per Action',
+          [
+            sqlQueriesPerAction(component, featureCategories, featureCategoriesSelector)
+            for component in enabledRequestComponents
+          ],
+          startRow=501
+        )
+        +
+        layout.rowGrid(
+          'SQL Latency Per Action',
+          [
+            sqlLatenciesPerAction(component, featureCategories, featureCategoriesSelector)
+            for component in enabledRequestComponents
+          ],
+          startRow=601
+        )
+        +
+        layout.rowGrid(
+          'SQL Latency Per Query',
+          [
+            sqlLatenciesPerQuery(component, featureCategories, featureCategoriesSelector)
+            for component in enabledRequestComponents
+          ],
+          startRow=701
+        )
+        +
+        layout.rowGrid(
+          'Caches per Action',
+          [
+            cachesPerAction(component, featureCategories, featureCategoriesSelector)
+            for component in enabledRequestComponents
+          ],
+          startRow=801
         )
       else
         []
@@ -225,7 +432,7 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
               ], { prometheusSelectorHash: {} })
             ),
           ],
-          startRow=401
+          startRow=901
         )
       else
         []
@@ -235,6 +442,12 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
     stageGroupDashboardTrailer()::
       // Add any additional trailing panels here
       self.trailer(),
+    links+:
+      [
+        platformLinks.dynamicLinks('API Detail', 'type:api'),
+        platformLinks.dynamicLinks('Web Detail', 'type:web'),
+        platformLinks.dynamicLinks('Git Detail', 'type:git'),
+      ],
   };
 
 {
