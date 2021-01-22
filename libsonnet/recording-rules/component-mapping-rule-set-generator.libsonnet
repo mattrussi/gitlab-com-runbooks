@@ -4,7 +4,7 @@
   // a component is still being monitored (and should therefore be alerted on)
   //
   // One recording rule is created per component
-  componentMappingRuleSet()::
+  componentMappingRuleSetGenerator()::
     {
       // Generates the recording rules given a service definition
       generateRecordingRulesForService(serviceDefinition)::

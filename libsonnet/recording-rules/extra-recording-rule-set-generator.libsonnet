@@ -1,9 +1,9 @@
 {
-  // The extraRecordingRuleSet rule set will generate recording rules specified in the
+  // The extraRecordingRuleSetGenerator rule set will generate recording rules specified in the
   // extraRecordingRulesPerBurnRate attribute on a service definition.
   // This can be useful when recording rules rely on other recording rules
   // and we want to avoid evaluation occurring out-of-phase
-  extraRecordingRuleSet(burnRate)::
+  extraRecordingRuleSetGenerator(burnRate)::
     {
       // Generates the recording rules given a service definition
       generateRecordingRulesForService(serviceDefinition)::

@@ -68,20 +68,16 @@ local generateRecordingRulesForComponent(burnRate, recordingRuleNames, serviceDe
 {
   // This component metrics ruleset applies the key metrics recording rules for
   // each component in the metrics catalog
-  componentMetricsRuleSet(
+  componentMetricsRuleSetGenerator(
     burnRate,
-    apdexRatio=null,
-    apdexWeight=null,
-    requestRate=null,
-    errorRate=null,
-    aggregationLabels=[],
+    aggregationSet,
     substituteWeightWithRecordingRule=false,
   )::
     local recordingRuleNames = {
-      apdexRatio: apdexRatio,
-      apdexWeight: apdexWeight,
-      requestRate: requestRate,
-      errorRate: errorRate,
+      apdexRatio: aggregationSet.getApdexRatioMetricForBurnRate(burnRate),
+      apdexWeight: aggregationSet.getApdexWeightMetricForBurnRate(burnRate),
+      requestRate: aggregationSet.getOpsRateMetricForBurnRate(burnRate),
+      errorRate: aggregationSet.getErrorRateMetricForBurnRate(burnRate),
     };
 
     {
@@ -95,7 +91,7 @@ local generateRecordingRulesForComponent(burnRate, recordingRuleNames, serviceDe
             recordingRuleNames=recordingRuleNames,
             serviceDefinition=serviceDefinition,
             sliDefinition=sliDefinition,
-            aggregationLabels=aggregationLabels,
+            aggregationLabels=aggregationSet.labels,
             substituteWeightWithRecordingRule=substituteWeightWithRecordingRule
           ),
           serviceDefinition.listServiceLevelIndicators()

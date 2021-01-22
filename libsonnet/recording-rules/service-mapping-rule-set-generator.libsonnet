@@ -1,7 +1,7 @@
 {
   // The Servuce Mapping ruleset is used to generate a series of
   // static recording rules which are used in alert evaluation
-  serviceMappingRuleSet()::
+  serviceMappingRuleSetGenerator()::
     {
       // Generates the recording rules given a service definition
       generateRecordingRulesForService(serviceDefinition)::

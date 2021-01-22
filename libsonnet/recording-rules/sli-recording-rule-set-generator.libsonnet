@@ -11,7 +11,7 @@ local generateRecordingRulesForMetric(recordingRuleMetric, burnRate, recordingRu
   // This generates recording rules for metrics with high-cardinality
   // that are specified in the service catalog under the
   // `recordingRuleMetrics` attribute.
-  sliRecordingRulesSet(
+  sliRecordingRulesSetGenerator(
     burnRate,
     recordingRuleRegistry,
   )::
