@@ -9,20 +9,7 @@ local perFeatureCategoryRecordingRules = (import './lib/puma-per-feature-categor
 metricsCatalog.serviceDefinition({
   type: 'websockets',
   tier: 'sv',
-  contractualThresholds: {
-    apdexRatio: 0.95,
-    errorRatio: 0.005,
-  },
   monitoringThresholds: {
-    apdexScore: 0.9995,
-    errorRatio: 0.9995,
-  },
-  // Deployment thresholds are optional, and when they are specified, they are
-  // measured against the same multi-burn-rates as the monitoring indicators.
-  // When a service is in violation, deployments may be blocked or may be rolled
-  // back.
-  deploymentThresholds: {
-    apdexScore: 0.9995,
     errorRatio: 0.9995,
   },
   serviceDependencies: {
@@ -35,7 +22,6 @@ metricsCatalog.serviceDefinition({
     praefect: true,
   },
   provisioning: {
-    vms: true,
     kubernetes: true,
   },
   kubeResources: {
@@ -53,12 +39,8 @@ metricsCatalog.serviceDefinition({
       featureCategory='not_owned',
       team='sre_datastores',
       stageMappings={
-        main: { backends: ['websockets'], toolingLinks: [
-          toolingLinks.bigquery(title='Top http clients by number of requests, main stage, 10m', savedQuery='805818759045:704c6bdf00a743d195d344306bf207ee'),
-        ] },
-        cny: { backends: ['canary_websockets'], toolingLinks: [
-          toolingLinks.bigquery(title='Top http clients by number of requests, cny stage, 10m', savedQuery='805818759045:dea839bd669e41b5bc264c510294bb9f'),
-        ] },  // What happens to cny websocket traffic?
+        main: { backends: ['websockets'], toolingLinks: [] },
+        cny: { backends: ['canary_websockets'], toolingLinks: [] },
       },
       selector={ type: 'frontend' },
     ),
@@ -68,9 +50,9 @@ metricsCatalog.serviceDefinition({
       featureCategory: 'not_owned',
       team: 'workhorse',
       description: |||
-        Monitors the Workhorse instance running in the Git fleet, via the HTTP interface. This SLI
-        excludes API requests, which have their own SLI with tigher latency thresholds.
-        Websocket connections are excluded from the apdex score.
+        Monitors the Workhorse instance running in the Websockets fleet, via the HTTP interface.
+        This only covers the initial protocal upgrade requests to `/-/cable`.
+        https://gitlab.com/gitlab-org/gitlab/-/issues/296845 tracks making these metrics more useful for Websockets.
       |||,
 
       local baseSelector = {
@@ -81,15 +63,6 @@ metricsCatalog.serviceDefinition({
 
       apdex: histogramApdex(
         histogram='gitlab_workhorse_http_request_duration_seconds_bucket',
-        selector=baseSelector {
-          route+: [{
-            ne: '^/([^/]+/){1,}[^/]+/-/jobs/[0-9]+/terminal.ws\\\\z',
-          }, {
-            ne: '^/([^/]+/){1,}[^/]+/-/environments/[0-9]+/terminal.ws\\\\z',
-          }, {
-            ne: '^/-/cable\\\\z',  // Exclude Websocket connections from apdex score
-          }],
-        },
         satisfiedThreshold=30,
         toleratedThreshold=60
       ),
@@ -109,62 +82,11 @@ metricsCatalog.serviceDefinition({
       significantLabels: ['fqdn', 'route'],
 
       toolingLinks: [
-        toolingLinks.continuousProfiler(service='workhorse-git'),
+        toolingLinks.continuousProfiler(service='workhorse-websockets'),
         toolingLinks.sentry(slug='gitlab/gitlab-workhorse-gitlabcom'),
         toolingLinks.kibana(title='Workhorse', index='workhorse', type='websockets', slowRequestSeconds=10),
       ],
     },
-
-    /**
-     * The API route on Workhorse is used exclusively for auth requests from
-     * GitLab shell. As such, it has much more performant latency requirements
-     * that other Git/Workhorse traffic
-     */
-    workhorse_auth_api: {
-      userImpacting: true,
-      featureCategory: 'not_owned',
-      team: 'workhorse',
-      description: |||
-        Monitors Workhorse API endpoints, running in the Git fleet, via the HTTP interface.
-        Workhorse API requests have much tigher latency requirements, as these requests originate in GitLab-Shell
-        and are on the critical path for authentication of Git SSH commands.
-      |||,
-
-      local baseSelector = {
-        job: 'gitlab-workhorse-git',
-        type: 'websockets',
-        route: '^/api/',
-      },
-
-      apdex: histogramApdex(
-        histogram='gitlab_workhorse_http_request_duration_seconds_bucket',
-        selector=baseSelector,
-        // Note: 1s is too slow for an auth request. This threshold should be lower
-        satisfiedThreshold=1
-      ),
-
-      requestRate: rateMetric(
-        counter='gitlab_workhorse_http_requests_total',
-        selector=baseSelector
-      ),
-
-      errorRate: rateMetric(
-        counter='gitlab_workhorse_http_requests_total',
-        selector=baseSelector {
-          code: { re: '^5.*' },
-        }
-      ),
-
-      significantLabels: ['fqdn'],
-
-      toolingLinks: [
-        toolingLinks.continuousProfiler(service='workhorse-git'),
-        toolingLinks.sentry(slug='gitlab/gitlab-workhorse-gitlabcom'),
-        // TODO: filter kibana query on route once https://gitlab.com/gitlab-org/gitlab-workhorse/-/merge_requests/624 arrives
-        toolingLinks.kibana(title='Workhorse', index='workhorse', type='websockets', slowRequestSeconds=10),
-      ],
-    },
-
 
     puma: {
       userImpacting: true,
@@ -175,13 +97,6 @@ metricsCatalog.serviceDefinition({
       |||,
 
       local baseSelector = { job: 'gitlab-rails', type: 'websockets' },
-      apdex: histogramApdex(
-        histogram='http_request_duration_seconds_bucket',
-        selector=baseSelector,
-        satisfiedThreshold=1,
-        toleratedThreshold=10
-      ),
-
       requestRate: rateMetric(
         counter='http_requests_total',
         selector=baseSelector,
