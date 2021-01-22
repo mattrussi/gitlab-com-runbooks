@@ -15,7 +15,7 @@ groups:
         https://dashboards.gitlab.net/d/sidekiq-queue-detail/sidekiq-queue-detail?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}&var-queue={{ $labels.queue }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '98088'
+      grafana_panel_id: '2383655193'
       grafana_variables: environment,stage,queue
       promql_template_1: >-
         gitlab_background_jobs:execution:error:ratio_1h{environment="$environment", type="$type", stage="$stage",
@@ -55,7 +55,7 @@ groups:
         https://dashboards.gitlab.net/d/sidekiq-queue-detail/sidekiq-queue-detail?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}&var-queue={{ $labels.queue }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '43432'
+      grafana_panel_id: '2504679775'
       grafana_variables: environment,stage,queue
       promql_template_1: >-
         gitlab_background_jobs:execution:apdex:ratio_1h{environment="$environment", type="$type", stage="$stage",
@@ -95,7 +95,7 @@ groups:
         https://dashboards.gitlab.net/d/sidekiq-queue-detail/sidekiq-queue-detail?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}&var-queue={{ $labels.queue }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '28392'
+      grafana_panel_id: '750569445'
       grafana_variables: environment,stage,queue
       promql_template_1: >-
         gitlab_background_jobs:queue:apdex:ratio_1h{environment="$environment", type="$type", stage="$stage",
@@ -143,7 +143,7 @@ groups:
         https://dashboards.gitlab.net/d/sidekiq-queue-detail/sidekiq-queue-detail?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}&var-queue={{ $labels.queue }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '80616'
+      grafana_panel_id: '922970012'
       grafana_variables: environment,stage,queue
       promql_template_1: sidekiq_enqueued_jobs_total{environment="$environment", queue="$queue"}
       runbook: docs/sidekiq/README.md

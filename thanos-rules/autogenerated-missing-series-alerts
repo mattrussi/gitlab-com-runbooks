@@ -20,7 +20,7 @@ groups:
           $labels.environment }}&var-type={{ $labels.type }}&var-component={{ $labels.component }}&var-stage={{
           $labels.stage }}
         grafana_min_zoom_hours: '24'
-        grafana_panel_id: '41384'
+        grafana_panel_id: '803754892'
         grafana_variables: environment,type,component,stage
       labels:
         alert_type: cause
@@ -54,7 +54,7 @@ groups:
           $labels.environment }}&var-type={{ $labels.type }}&var-component={{ $labels.component }}&var-stage={{
           $labels.stage }}
         grafana_min_zoom_hours: '24'
-        grafana_panel_id: '41384'
+        grafana_panel_id: '803754892'
         grafana_variables: environment,type,component,stage
       labels:
         alert_type: cause
@@ -88,7 +88,7 @@ groups:
           $labels.environment }}&var-type={{ $labels.type }}&var-component={{ $labels.component }}&var-stage={{
           $labels.stage }}
         grafana_min_zoom_hours: '24'
-        grafana_panel_id: '41384'
+        grafana_panel_id: '803754892'
         grafana_variables: environment,type,component,stage
       labels:
         alert_type: cause

@@ -19,7 +19,7 @@ groups:
         https://dashboards.gitlab.net/d/woodhouse-main/woodhouse-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '7080'
+      grafana_panel_id: '839701162'
       grafana_variables: environment,stage
       promql_template_1: >-
         gitlab_component_apdex:ratio_1h{environment="$environment", type="$type", stage="$stage", component="$component"}
@@ -76,7 +76,7 @@ groups:
         https://dashboards.gitlab.net/d/woodhouse-main/woodhouse-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '99784'
+      grafana_panel_id: '648994915'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: >-
@@ -135,7 +135,7 @@ groups:
         https://dashboards.gitlab.net/d/woodhouse-main/woodhouse-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '7112'
+      grafana_panel_id: '308155966'
       grafana_variables: environment,stage
       promql_template_1: >-
         gitlab_component_apdex:ratio_1h{environment="$environment", type="$type", stage="$stage", component="$component"}
@@ -191,7 +191,7 @@ groups:
         https://dashboards.gitlab.net/d/woodhouse-main/woodhouse-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '34376'
+      grafana_panel_id: '1863342341'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: >-

@@ -20,7 +20,7 @@ groups:
         https://dashboards.gitlab.net/d/jaeger-main/jaeger-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '67272'
+      grafana_panel_id: '2702062960'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: >-
@@ -79,7 +79,7 @@ groups:
         https://dashboards.gitlab.net/d/jaeger-main/jaeger-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '15176'
+      grafana_panel_id: '2482124620'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
@@ -115,7 +115,7 @@ groups:
         https://dashboards.gitlab.net/d/jaeger-main/jaeger-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '15176'
+      grafana_panel_id: '2482124620'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
@@ -150,7 +150,7 @@ groups:
         https://dashboards.gitlab.net/d/jaeger-main/jaeger-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '56648'
+      grafana_panel_id: '868709862'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: >-
@@ -209,7 +209,7 @@ groups:
         https://dashboards.gitlab.net/d/jaeger-main/jaeger-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '90344'
+      grafana_panel_id: '3936255088'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
@@ -245,7 +245,7 @@ groups:
         https://dashboards.gitlab.net/d/jaeger-main/jaeger-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '90344'
+      grafana_panel_id: '3936255088'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
@@ -280,7 +280,7 @@ groups:
         https://dashboards.gitlab.net/d/jaeger-main/jaeger-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '90024'
+      grafana_panel_id: '1085205452'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: >-
@@ -339,7 +339,7 @@ groups:
         https://dashboards.gitlab.net/d/jaeger-main/jaeger-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '67752'
+      grafana_panel_id: '4040310493'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
@@ -375,7 +375,7 @@ groups:
         https://dashboards.gitlab.net/d/jaeger-main/jaeger-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '67752'
+      grafana_panel_id: '4040310493'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md

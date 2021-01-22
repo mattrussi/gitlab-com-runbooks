@@ -19,7 +19,7 @@ groups:
         https://dashboards.gitlab.net/d/nfs-main/nfs-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '67752'
+      grafana_panel_id: '3676765036'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: >-
@@ -78,7 +78,7 @@ groups:
         https://dashboards.gitlab.net/d/nfs-main/nfs-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '69608'
+      grafana_panel_id: '1521181020'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
@@ -114,7 +114,7 @@ groups:
         https://dashboards.gitlab.net/d/nfs-main/nfs-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '69608'
+      grafana_panel_id: '1521181020'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md

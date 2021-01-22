@@ -20,7 +20,7 @@ groups:
         https://dashboards.gitlab.net/d/praefect-main/praefect-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '31912'
+      grafana_panel_id: '2268999573'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: >-
@@ -79,7 +79,7 @@ groups:
         https://dashboards.gitlab.net/d/praefect-main/praefect-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '35816'
+      grafana_panel_id: '2954321776'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
@@ -115,7 +115,7 @@ groups:
         https://dashboards.gitlab.net/d/praefect-main/praefect-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '35816'
+      grafana_panel_id: '2954321776'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
@@ -149,7 +149,7 @@ groups:
         https://dashboards.gitlab.net/d/praefect-main/praefect-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '42440'
+      grafana_panel_id: '2100325234'
       grafana_variables: environment,stage
       promql_template_1: >-
         gitlab_component_apdex:ratio_1h{environment="$environment", type="$type", stage="$stage", component="$component"}
@@ -204,7 +204,7 @@ groups:
         https://dashboards.gitlab.net/d/praefect-main/praefect-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '54760'
+      grafana_panel_id: '1178914866'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: >-
@@ -263,7 +263,7 @@ groups:
         https://dashboards.gitlab.net/d/praefect-main/praefect-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '68872'
+      grafana_panel_id: '2797965992'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
@@ -299,7 +299,7 @@ groups:
         https://dashboards.gitlab.net/d/praefect-main/praefect-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '68872'
+      grafana_panel_id: '2797965992'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
@@ -334,7 +334,7 @@ groups:
         https://dashboards.gitlab.net/d/praefect-main/praefect-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '8136'
+      grafana_panel_id: '374957850'
       grafana_variables: environment,stage
       promql_template_1: >-
         gitlab_component_apdex:ratio_1h{environment="$environment", type="$type", stage="$stage", component="$component"}
@@ -390,7 +390,7 @@ groups:
         https://dashboards.gitlab.net/d/praefect-main/praefect-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '26920'
+      grafana_panel_id: '1815534001'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
@@ -426,7 +426,7 @@ groups:
         https://dashboards.gitlab.net/d/praefect-main/praefect-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '26920'
+      grafana_panel_id: '1815534001'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
