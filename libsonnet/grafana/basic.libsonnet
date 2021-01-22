@@ -40,6 +40,50 @@ local applyStableIdsToDashboard(dashboard) =
     panels: std.map(function(panel) applyStableIdsToPanel(panel), dashboard.panels),
   };
 
+// Lists all panels under a panel
+local panelsForPanel(panel) =
+  local childPanels = if std.objectHas(panel, 'panels') then
+    std.flatMap(function(panel) panelsForPanel(panel), panel.panels)
+  else
+    [];
+  [panel] + childPanels;
+
+// Lists all panels under a row
+local panelsForRow(row) =
+  std.flatMap(function(panel) panelsForPanel(panel), row.panels);
+
+// Validates that each panel has a unique ID, otherwise Grafana does odd things
+local validateUniqueIdsForDashboard(dashboard) =
+  local rowPanels = std.flatMap(panelsForRow, dashboard.rows);
+  local directPanels = std.flatMap(panelsForPanel, dashboard.panels);
+  local allPanels = rowPanels + directPanels;
+  local uniquePanelIds = std.foldl(
+    function(memo, panel)
+      local panelIdStr = '' + panel.id;
+      if std.objectHas(memo, panelIdStr) then
+        /**
+         * If you find yourself here, the reason is that validation of your dashboard failed
+         * due to duplicate IDs. The most likely reason for this is because
+         * the `stableId` string for two panels hashed to the same value.
+         */
+        local assertFormatConfig = {
+          panelId: panelIdStr,
+          otherPanelTitle: memo[panelIdStr],
+          panelTitle: panel.title,
+        };
+        std.assertEqual('', { __assert__: 'Duplicated panel ID `%(panelId)s`. This will lead to layout problems in Grafana. Titles of panels with duplicate titles are `%(otherPanelTitle)s` and `%(panelTitle)s`' % assertFormatConfig })
+      else
+        memo { [panelIdStr]: panel.title },
+    allPanels,
+    {}
+  );
+
+  // Force jsonnet to walk all panels
+  if uniquePanelIds != null then
+    dashboard
+  else
+    dashboard;
+
 local panelOverrides(stableId) =
   {
     addDataLink(datalink):: self + {
@@ -170,7 +214,8 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
           }
         );
 
-        applyStableIdsToDashboard(dashboardWithTrailerPanel),
+        local dashboardWithStableIdsApplied = applyStableIdsToDashboard(dashboardWithTrailerPanel);
+        validateUniqueIdsForDashboard(dashboardWithStableIdsApplied),
     },
 
   graphPanel(

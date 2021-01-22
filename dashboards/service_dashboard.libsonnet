@@ -52,6 +52,7 @@ local headlineMetricsRow(
   environmentSelectorHash,
   saturationEnvironmentSelectorHash,
   showSaturationCell,
+  stableIdPrefix='',
       ) =
   local hasApdex = metricsCatalogServiceInfo.hasApdex();
   local hasErrorRate = metricsCatalogServiceInfo.hasErrorRate();
@@ -62,7 +63,7 @@ local headlineMetricsRow(
     (
       if hasApdex then
         [[
-          keyMetrics.serviceApdexPanel(serviceType, serviceStage, compact=true, environmentSelectorHash=environmentSelectorHash, description=getApdexDescription(metricsCatalogServiceInfo)),
+          keyMetrics.serviceApdexPanel(serviceType, serviceStage, compact=true, environmentSelectorHash=environmentSelectorHash, description=getApdexDescription(metricsCatalogServiceInfo), stableIdPrefix=stableIdPrefix),
           statusDescription.serviceApdexStatusDescriptionPanel(serviceSelector),
         ]]
       else
@@ -72,7 +73,7 @@ local headlineMetricsRow(
     (
       if hasErrorRate then
         [[
-          keyMetrics.serviceErrorRatePanel(serviceType, serviceStage, compact=true, environmentSelectorHash=environmentSelectorHash),
+          keyMetrics.serviceErrorRatePanel(serviceType, serviceStage, compact=true, environmentSelectorHash=environmentSelectorHash, stableIdPrefix=stableIdPrefix),
           statusDescription.serviceErrorStatusDescriptionPanel(serviceSelector),
         ]]
       else
@@ -82,7 +83,7 @@ local headlineMetricsRow(
     (
       if hasRequestRate then
         [[
-          keyMetrics.serviceOperationRatePanel(serviceType, serviceStage, compact=true, environmentSelectorHash=environmentSelectorHash),
+          keyMetrics.serviceOperationRatePanel(serviceType, serviceStage, compact=true, environmentSelectorHash=environmentSelectorHash, stableIdPrefix=stableIdPrefix),
         ]]
       else
         []
@@ -91,7 +92,7 @@ local headlineMetricsRow(
     (
       if showSaturationCell then
         [[
-          keyMetrics.utilizationRatesPanel(serviceType, serviceStage, compact=true, environmentSelectorHash=saturationEnvironmentSelectorHash),
+          keyMetrics.utilizationRatesPanel(serviceType, serviceStage, compact=true, environmentSelectorHash=saturationEnvironmentSelectorHash, stableIdPrefix=stableIdPrefix),
         ]]
       else
         []

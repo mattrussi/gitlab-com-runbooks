@@ -76,9 +76,9 @@ basic.dashboard(
     h: 2,
   }
 )
-.addPanels(keyMetrics.headlineMetricsRow('web', 'main', startRow=1100, rowTitle='Web Frontend: gitlab.com web traffic'))
-.addPanels(keyMetrics.headlineMetricsRow('api', 'main', startRow=1200, rowTitle='API: gitlab.com/api traffic'))
-.addPanels(keyMetrics.headlineMetricsRow('git', 'main', startRow=1300, rowTitle='Git: git ssh and https traffic'))
-.addPanels(keyMetrics.headlineMetricsRow('ci-runners', 'main', startRow=1400, rowTitle='CI Runners'))
-.addPanels(keyMetrics.headlineMetricsRow('registry', 'main', startRow=1500, rowTitle='Container Registry'))
+.addPanels(keyMetrics.headlineMetricsRow('web', 'main', startRow=1100, rowTitle='Web Frontend: gitlab.com web traffic', stableIdPrefix='web'))
+.addPanels(keyMetrics.headlineMetricsRow('api', 'main', startRow=1200, rowTitle='API: gitlab.com/api traffic', stableIdPrefix='api'))
+.addPanels(keyMetrics.headlineMetricsRow('git', 'main', startRow=1300, rowTitle='Git: git ssh and https traffic', stableIdPrefix='git'))
+.addPanels(keyMetrics.headlineMetricsRow('ci-runners', 'main', startRow=1400, rowTitle='CI Runners', stableIdPrefix='ci-runners'))
+.addPanels(keyMetrics.headlineMetricsRow('registry', 'main', startRow=1500, rowTitle='Container Registry', stableIdPrefix='registry'))
 .trailer()

@@ -20,7 +20,7 @@ groups:
         https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '53096'
+      grafana_panel_id: '4125397901'
       grafana_variables: environment,stage
       promql_template_1: >-
         gitlab_component_apdex:ratio_1h{environment="$environment", type="$type", stage="$stage", component="$component"}
@@ -76,7 +76,7 @@ groups:
         https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '46536'
+      grafana_panel_id: '532783926'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: >-
@@ -135,7 +135,7 @@ groups:
         https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '53896'
+      grafana_panel_id: '2518816313'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
@@ -171,7 +171,7 @@ groups:
         https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '53896'
+      grafana_panel_id: '2518816313'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
@@ -206,7 +206,7 @@ groups:
         https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '90248'
+      grafana_panel_id: '811922316'
       grafana_variables: environment,stage
       promql_template_1: >-
         gitlab_component_apdex:ratio_1h{environment="$environment", type="$type", stage="$stage", component="$component"}
@@ -262,7 +262,7 @@ groups:
         https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '40712'
+      grafana_panel_id: '2072523708'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: >-
@@ -321,7 +321,7 @@ groups:
         https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '26920'
+      grafana_panel_id: '564185305'
       grafana_variables: environment,stage
       promql_template_1: >-
         gitlab_component_apdex:ratio_1h{environment="$environment", type="$type", stage="$stage", component="$component"}
@@ -377,7 +377,7 @@ groups:
         https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '7976'
+      grafana_panel_id: '1659464052'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: >-
@@ -436,7 +436,7 @@ groups:
         https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '66696'
+      grafana_panel_id: '2299339214'
       grafana_variables: environment,stage
       promql_template_1: >-
         gitlab_component_apdex:ratio_1h{environment="$environment", type="$type", stage="$stage", component="$component"}
@@ -492,7 +492,7 @@ groups:
         https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '84904'
+      grafana_panel_id: '389908901'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: >-
@@ -551,7 +551,7 @@ groups:
         https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '15336'
+      grafana_panel_id: '1517683275'
       grafana_variables: environment,stage
       promql_template_1: >-
         gitlab_component_apdex:ratio_1h{environment="$environment", type="$type", stage="$stage", component="$component"}
@@ -607,7 +607,7 @@ groups:
         https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '8616'
+      grafana_panel_id: '4031214920'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: >-
@@ -666,7 +666,7 @@ groups:
         https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '49992'
+      grafana_panel_id: '1949742512'
       grafana_variables: environment,stage
       promql_template_1: >-
         gitlab_component_apdex:ratio_1h{environment="$environment", type="$type", stage="$stage", component="$component"}
@@ -722,7 +722,7 @@ groups:
         https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '85960'
+      grafana_panel_id: '230682702'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: >-
@@ -781,7 +781,7 @@ groups:
         https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '83976'
+      grafana_panel_id: '3240333014'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
@@ -817,7 +817,7 @@ groups:
         https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '83976'
+      grafana_panel_id: '3240333014'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
@@ -852,7 +852,7 @@ groups:
         https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '68040'
+      grafana_panel_id: '546338609'
       grafana_variables: environment,stage
       promql_template_1: >-
         gitlab_component_apdex:ratio_1h{environment="$environment", type="$type", stage="$stage", component="$component"}
@@ -908,7 +908,7 @@ groups:
         https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '19368'
+      grafana_panel_id: '2190820353'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: >-
@@ -967,7 +967,7 @@ groups:
         https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '68264'
+      grafana_panel_id: '1943089289'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
@@ -1003,7 +1003,7 @@ groups:
         https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '68264'
+      grafana_panel_id: '1943089289'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
@@ -1038,7 +1038,7 @@ groups:
         https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '17416'
+      grafana_panel_id: '627077500'
       grafana_variables: environment,stage
       promql_template_1: >-
         gitlab_component_apdex:ratio_1h{environment="$environment", type="$type", stage="$stage", component="$component"}
@@ -1094,7 +1094,7 @@ groups:
         https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '17928'
+      grafana_panel_id: '953665318'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: >-
@@ -1153,7 +1153,7 @@ groups:
         https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '8744'
+      grafana_panel_id: '659062113'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
@@ -1189,7 +1189,7 @@ groups:
         https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '8744'
+      grafana_panel_id: '659062113'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
@@ -1224,7 +1224,7 @@ groups:
         https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '9576'
+      grafana_panel_id: '203761782'
       grafana_variables: environment,stage
       promql_template_1: >-
         gitlab_component_apdex:ratio_1h{environment="$environment", type="$type", stage="$stage", component="$component"}
@@ -1280,7 +1280,7 @@ groups:
         https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '18344'
+      grafana_panel_id: '2399846707'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: >-
@@ -1339,7 +1339,7 @@ groups:
         https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '70856'
+      grafana_panel_id: '907052725'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
@@ -1375,7 +1375,7 @@ groups:
         https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '70856'
+      grafana_panel_id: '907052725'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md

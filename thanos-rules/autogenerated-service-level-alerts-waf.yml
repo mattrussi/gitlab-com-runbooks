@@ -22,7 +22,7 @@ groups:
         https://dashboards.gitlab.net/d/waf-main/waf-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '57032'
+      grafana_panel_id: '147205219'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: >-
@@ -83,7 +83,7 @@ groups:
         https://dashboards.gitlab.net/d/waf-main/waf-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '48296'
+      grafana_panel_id: '3342493164'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
@@ -121,7 +121,7 @@ groups:
         https://dashboards.gitlab.net/d/waf-main/waf-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '48296'
+      grafana_panel_id: '3342493164'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
@@ -157,7 +157,7 @@ groups:
         https://dashboards.gitlab.net/d/waf-main/waf-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '40616'
+      grafana_panel_id: '3034106336'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: >-
@@ -218,7 +218,7 @@ groups:
         https://dashboards.gitlab.net/d/waf-main/waf-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '10088'
+      grafana_panel_id: '443878888'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
@@ -256,7 +256,7 @@ groups:
         https://dashboards.gitlab.net/d/waf-main/waf-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '10088'
+      grafana_panel_id: '443878888'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md

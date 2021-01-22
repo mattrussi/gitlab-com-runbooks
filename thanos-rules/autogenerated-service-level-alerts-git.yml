@@ -20,7 +20,7 @@ groups:
         https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '100424'
+      grafana_panel_id: '424944884'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
@@ -56,7 +56,7 @@ groups:
         https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '100424'
+      grafana_panel_id: '424944884'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
@@ -91,7 +91,7 @@ groups:
         https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '51400'
+      grafana_panel_id: '3255520955'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: >-
@@ -150,7 +150,7 @@ groups:
         https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '86440'
+      grafana_panel_id: '138982496'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
@@ -186,7 +186,7 @@ groups:
         https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '86440'
+      grafana_panel_id: '138982496'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
@@ -221,7 +221,7 @@ groups:
         https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '84296'
+      grafana_panel_id: '2063210499'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: >-
@@ -280,7 +280,7 @@ groups:
         https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '56680'
+      grafana_panel_id: '3437608064'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
@@ -316,7 +316,7 @@ groups:
         https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '56680'
+      grafana_panel_id: '3437608064'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
@@ -349,7 +349,7 @@ groups:
         https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '97192'
+      grafana_panel_id: '561966508'
       grafana_variables: environment,stage
       promql_template_1: >-
         gitlab_component_apdex:ratio_1h{environment="$environment", type="$type", stage="$stage", component="$component"}
@@ -404,7 +404,7 @@ groups:
         https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '11560'
+      grafana_panel_id: '2425637513'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: >-
@@ -463,7 +463,7 @@ groups:
         https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '74472'
+      grafana_panel_id: '110019945'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
@@ -500,7 +500,7 @@ groups:
         https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '74472'
+      grafana_panel_id: '110019945'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
@@ -534,7 +534,7 @@ groups:
         https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '25160'
+      grafana_panel_id: '2586818196'
       grafana_variables: environment,stage
       promql_template_1: >-
         gitlab_component_apdex:ratio_1h{environment="$environment", type="$type", stage="$stage", component="$component"}
@@ -589,7 +589,7 @@ groups:
         https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '48008'
+      grafana_panel_id: '2047984749'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: >-
@@ -648,7 +648,7 @@ groups:
         https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '20840'
+      grafana_panel_id: '831392945'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
@@ -684,7 +684,7 @@ groups:
         https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '20840'
+      grafana_panel_id: '831392945'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
@@ -719,7 +719,7 @@ groups:
         https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '83880'
+      grafana_panel_id: '3139093701'
       grafana_variables: environment,stage
       promql_template_1: >-
         gitlab_component_apdex:ratio_1h{environment="$environment", type="$type", stage="$stage", component="$component"}
@@ -775,7 +775,7 @@ groups:
         https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '11336'
+      grafana_panel_id: '2715630864'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: >-
@@ -834,7 +834,7 @@ groups:
         https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '92392'
+      grafana_panel_id: '1588439617'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
@@ -870,7 +870,7 @@ groups:
         https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '92392'
+      grafana_panel_id: '1588439617'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md

@@ -20,7 +20,7 @@ groups:
         https://dashboards.gitlab.net/d/mailroom-main/mailroom-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '96392'
+      grafana_panel_id: '225761444'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: >-
@@ -79,7 +79,7 @@ groups:
         https://dashboards.gitlab.net/d/mailroom-main/mailroom-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '93352'
+      grafana_panel_id: '1411619640'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
@@ -115,7 +115,7 @@ groups:
         https://dashboards.gitlab.net/d/mailroom-main/mailroom-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '93352'
+      grafana_panel_id: '1411619640'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md

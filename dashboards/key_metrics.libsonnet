@@ -200,15 +200,16 @@ local genericOperationRatePanel(
     compact=false,
     description='Apdex is a measure of requests that complete within a tolerable period of time for the service. Higher is better.',
     sort='increasing',
+    stableIdPrefix='',
   )::
     local selectorHash = environmentSelectorHash { type: serviceType, stage: serviceStage };
-    local formatConfig = { serviceType: serviceType };
+    local formatConfig = { stableIdPrefix: stableIdPrefix, serviceType: serviceType };
 
     genericApdexPanel(
       'Latency: Apdex',
       description=description,
       compact=compact,
-      stableId='service-%(serviceType)s-apdex' % formatConfig,
+      stableId='%(stableIdPrefix)sservice-%(serviceType)s-apdex' % formatConfig,
       primaryQueryExpr=sliPromQL.apdex.serviceApdexQuery(selectorHash, '$__interval', worstCase=true),
       legendFormat='{{ type }} service',
       environmentSelectorHash=environmentSelectorHash,
@@ -321,16 +322,18 @@ local genericOperationRatePanel(
     environmentSelectorHash=defaultEnvironmentSelector,
     compact=false,
     includeLastWeek=true,
+    stableIdPrefix='',
   )::
     local selectorHash = environmentSelectorHash { type: serviceType, stage: serviceStage };
     local formatConfig = {
+      stableIdPrefix: stableIdPrefix,
       serviceType: serviceType,
     };
 
     genericErrorPanel(
       'Error Ratios',
       compact=compact,
-      stableId='service-%(serviceType)s-error-rate' % formatConfig,
+      stableId='%(stableIdPrefix)sservice-%(serviceType)s-error-rate' % formatConfig,
       primaryQueryExpr=sliPromQL.errorRate.serviceErrorRateQuery(selectorHash, '$__interval', worstCase=true),
       legendFormat='{{ type }} service',
       environmentSelectorHash=environmentSelectorHash,
@@ -444,14 +447,15 @@ local genericOperationRatePanel(
     serviceStage,
     compact=false,
     environmentSelectorHash=defaultEnvironmentSelector,
+    stableIdPrefix='',
   )::
     local selectorHash = environmentSelectorHash { type: serviceType, stage: serviceStage };
-
+    local formatConfig = { stableIdPrefix: stableIdPrefix, serviceType: serviceType };
     genericOperationRatePanel(
       'RPS - Service Requests per Second',
       compact=compact,
       primaryQueryExpr=sliPromQL.opsRate.serviceOpsRateQuery(selectorHash, '$__interval'),
-      stableId='service-%(serviceType)s-ops-rate' % { serviceType: serviceType },
+      stableId='%(stableIdPrefix)sservice-%(serviceType)s-ops-rate' % formatConfig,
       legendFormat='{{ type }} service',
       environmentSelectorHash=environmentSelectorHash,
       serviceType=serviceType,
@@ -551,6 +555,7 @@ local genericOperationRatePanel(
     serviceStage,
     compact=false,
     environmentSelectorHash=defaultEnvironmentSelector,
+    stableIdPrefix='',
   )::
 
     local selectorHash = environmentSelectorHash { type: serviceType, stage: serviceStage };
@@ -558,6 +563,7 @@ local genericOperationRatePanel(
       serviceType: serviceType,
       serviceStage: serviceStage,
       selector: selectors.serializeHash(selectorHash),
+      stableIdPrefix: stableIdPrefix,
     };
     generalGraphPanel(
       'Saturation',
@@ -565,7 +571,7 @@ local genericOperationRatePanel(
       sort='decreasing',
       legend_show=!compact,
       linewidth=if compact then 1 else 2,
-      stableId='service-utilization'
+      stableId='%(stableIdPrefix)sservice-utilization' % formatConfig
     )
     .addTarget(  // Primary metric
       promQuery.target(
@@ -601,6 +607,7 @@ local genericOperationRatePanel(
     startRow,
     rowTitle='🌡️ Aggregated Service Level Indicators (𝙎𝙇𝙄𝙨)',
     environmentSelectorHash=defaultEnvironmentSelector,
+    stableIdPrefix='',
   )::
     layout.grid([
       row.new(title=rowTitle, collapse=false),
@@ -608,18 +615,18 @@ local genericOperationRatePanel(
     +
     layout.splitColumnGrid([
       [
-        self.serviceApdexPanel(serviceType, serviceStage, compact=true, environmentSelectorHash=environmentSelectorHash),
+        self.serviceApdexPanel(serviceType, serviceStage, compact=true, environmentSelectorHash=environmentSelectorHash, stableIdPrefix=stableIdPrefix),
         statusDescription.serviceApdexStatusDescriptionPanel(environmentSelectorHash { type: serviceType, stage: serviceStage }),
       ],
       [
-        self.serviceErrorRatePanel(serviceType, serviceStage, compact=true, environmentSelectorHash=environmentSelectorHash),
+        self.serviceErrorRatePanel(serviceType, serviceStage, compact=true, environmentSelectorHash=environmentSelectorHash, stableIdPrefix=stableIdPrefix),
         statusDescription.serviceErrorStatusDescriptionPanel(environmentSelectorHash { type: serviceType, stage: serviceStage }),
       ],
       [
-        self.serviceOperationRatePanel(serviceType, serviceStage, compact=true, environmentSelectorHash=environmentSelectorHash),
+        self.serviceOperationRatePanel(serviceType, serviceStage, compact=true, environmentSelectorHash=environmentSelectorHash, stableIdPrefix=stableIdPrefix),
       ],
       [
-        self.utilizationRatesPanel(serviceType, serviceStage, compact=true, environmentSelectorHash=environmentSelectorHash),
+        self.utilizationRatesPanel(serviceType, serviceStage, compact=true, environmentSelectorHash=environmentSelectorHash, stableIdPrefix=stableIdPrefix),
       ],
     ], [4, 1], startRow=startRow + 1),
 }

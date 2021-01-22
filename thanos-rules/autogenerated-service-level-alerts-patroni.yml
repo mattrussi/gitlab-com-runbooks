@@ -20,7 +20,7 @@ groups:
         https://dashboards.gitlab.net/d/patroni-main/patroni-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '96488'
+      grafana_panel_id: '2579921767'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
@@ -56,7 +56,7 @@ groups:
         https://dashboards.gitlab.net/d/patroni-main/patroni-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '96488'
+      grafana_panel_id: '2579921767'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
@@ -90,7 +90,7 @@ groups:
         https://dashboards.gitlab.net/d/patroni-main/patroni-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '49960'
+      grafana_panel_id: '2459326260'
       grafana_variables: environment,stage
       promql_template_1: >-
         gitlab_component_apdex:ratio_1h{environment="$environment", type="$type", stage="$stage", component="$component"}
@@ -146,7 +146,7 @@ groups:
         https://dashboards.gitlab.net/d/patroni-main/patroni-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '9096'
+      grafana_panel_id: '3345453447'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
@@ -182,7 +182,7 @@ groups:
         https://dashboards.gitlab.net/d/patroni-main/patroni-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '9096'
+      grafana_panel_id: '3345453447'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
@@ -217,7 +217,7 @@ groups:
         https://dashboards.gitlab.net/d/patroni-main/patroni-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '33480'
+      grafana_panel_id: '2278903563'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: >-
@@ -276,7 +276,7 @@ groups:
         https://dashboards.gitlab.net/d/patroni-main/patroni-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '62504'
+      grafana_panel_id: '3407402624'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
@@ -312,7 +312,7 @@ groups:
         https://dashboards.gitlab.net/d/patroni-main/patroni-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '62504'
+      grafana_panel_id: '3407402624'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
@@ -347,7 +347,7 @@ groups:
         https://dashboards.gitlab.net/d/patroni-main/patroni-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '49480'
+      grafana_panel_id: '438786388'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: >-
@@ -406,7 +406,7 @@ groups:
         https://dashboards.gitlab.net/d/patroni-main/patroni-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '40648'
+      grafana_panel_id: '1864411224'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
@@ -442,7 +442,7 @@ groups:
         https://dashboards.gitlab.net/d/patroni-main/patroni-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '40648'
+      grafana_panel_id: '1864411224'
       grafana_variables: environment,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
