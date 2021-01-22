@@ -98,6 +98,42 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
   }),
 
   /**
+   * regionalSLIs consumes promSourceSLIs and is the primary
+   * aggregation used for alerting, monitoring, visualizations, etc.
+   */
+  regionalSLIs:: aggregationSets.AggregationSet({
+    name: 'Regional SLI Metrics',
+    selector: { monitor: 'global' },  // Thanos Ruler
+    labels: ['env', 'environment', 'tier', 'type', 'stage', 'region', 'component'],
+    burnRates: {
+      '5m': {
+        apdexRatio: 'gitlab_regional_sli_apdex:ratio_5m',
+        opsRate: 'gitlab_regional_sli_ops:rate_5m',
+        errorRate: 'gitlab_regional_sli_errors:rate_5m',
+        errorRatio: 'gitlab_regional_sli_errors:ratio_5m',
+      },
+      '30m': {
+        apdexRatio: 'gitlab_regional_sli_apdex:ratio_30m',
+        opsRate: 'gitlab_regional_sli_ops:rate_30m',
+        errorRate: 'gitlab_regional_sli_errors:rate_30m',
+        errorRatio: 'gitlab_regional_sli_errors:ratio_30m',
+      },
+      '1h': {
+        apdexRatio: 'gitlab_regional_sli_apdex:ratio_1h',
+        opsRate: 'gitlab_regional_sli_ops:rate_1h',
+        errorRate: 'gitlab_regional_sli_errors:rate_1h',
+        errorRatio: 'gitlab_regional_sli_errors:ratio_1h',
+      },
+      '6h': {
+        apdexRatio: 'gitlab_regional_sli_apdex:ratio_6h',
+        opsRate: 'gitlab_regional_sli_ops:rate_6h',
+        errorRate: 'gitlab_regional_sli_errors:rate_6h',
+        errorRatio: 'gitlab_regional_sli_errors:ratio_6h',
+      },
+    },
+  }),
+
+  /**
    * promSourceNodeAggregatedSLIs is an source recording rule representing
    * the "start" of the aggregation pipeline for per-node aggregations,
    * used by Gitaly.

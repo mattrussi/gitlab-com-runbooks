@@ -72,4 +72,20 @@ local outputPromYaml(groups) =
         ),
       }]
     ),
+
+  /**
+   * Regional SLIS
+   */
+  'aggregated-sli-regional-metrics.yml':
+    outputPromYaml(
+      [{
+        name: aggregationSets.regionalSLIs.name,
+        interval: '1m',
+        partial_response_strategy: 'warn',
+        rules: aggregationSetTransformer.generateRecordingRules(
+          sourceAggregationSet=aggregationSets.promSourceSLIs,
+          targetAggregationSet=aggregationSets.regionalSLIs
+        ),
+      }]
+    ),
 }
