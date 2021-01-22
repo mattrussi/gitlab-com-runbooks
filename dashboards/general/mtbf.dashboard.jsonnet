@@ -53,6 +53,27 @@ local serviceRow(service) =
 
 local primaryServiceRows = std.map(serviceRow, generalServicesDashboard.sortedKeyServices);
 
+local rollupDisclaimer() =
+  grafana.text.new(
+    title='Disclaimer',
+    mode='markdown',
+    content=|||
+      ### Disclaimer
+
+      This rolls up the Mean Time Between Failures from all primary services into
+      an overall number. This means this shows the mean time between any failure across
+      all of these primary services.
+
+      A failure in this context does not mean an outage on GitLab.com. A failure is
+      any moment in time where a service does not meet SLO for error rates or apdex.
+      Most often these failures won't be noticed by all users.
+
+      Read more about MTBF as a PI in [the handbook][mtbf-pi].
+
+      [mtbf-pi]: https://about.gitlab.com/handbook/engineering/infrastructure/performance-indicators/#mean-time-between-failure-mtbf
+    |||
+  );
+
 basic.dashboard(
   'Mean Time Between Failure',
   time_from='now-7d',
@@ -70,8 +91,11 @@ basic.dashboard(
   }
 ).addPanels(
   layout.columnGrid(
-    [serviceColumns(title='GitLab.com')],
-    [8, 16],
+    [
+      serviceColumns(title='GitLab.com') +
+      [rollupDisclaimer()],
+    ],
+    [8, 12, 4],
     rowHeight=10,
     startRow=1101,
   ),
