@@ -62,36 +62,6 @@ groups:
       sum by (environment,stage) (
         sli_aggregations:http_requests_total_rate1m{job="gitlab-rails",status=~"5..",type="websockets"}
       )
-  - record: gitlab_component_apdex:weight:score
-    labels:
-      component: workhorse
-      tier: sv
-      type: websockets
-    expr: |
-      sum by (environment,stage) (
-        rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="+Inf"}[1m])
-      )
-  - record: gitlab_component_apdex:ratio
-    labels:
-      component: workhorse
-      tier: sv
-      type: websockets
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="30"}[1m])
-        )
-        +
-        sum by (environment,stage) (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="60"}[1m])
-        )
-      )
-      /
-      2
-      / on(environment,stage) group_left()
-      (
-        gitlab_component_apdex:weight:score{component="workhorse",tier="sv",type="websockets"} > 0
-      )
   - record: gitlab_component_ops:rate
     labels:
       component: workhorse
@@ -189,36 +159,6 @@ groups:
     expr: |
       sum by (environment,stage) (
         sli_aggregations:http_requests_total_rate5m{job="gitlab-rails",status=~"5..",type="websockets"}
-      )
-  - record: gitlab_component_apdex:weight:score_5m
-    labels:
-      component: workhorse
-      tier: sv
-      type: websockets
-    expr: |
-      sum by (environment,stage) (
-        rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="+Inf"}[5m])
-      )
-  - record: gitlab_component_apdex:ratio_5m
-    labels:
-      component: workhorse
-      tier: sv
-      type: websockets
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="30"}[5m])
-        )
-        +
-        sum by (environment,stage) (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="60"}[5m])
-        )
-      )
-      /
-      2
-      / on(environment,stage) group_left()
-      (
-        gitlab_component_apdex:weight:score_5m{component="workhorse",tier="sv",type="websockets"} > 0
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -318,36 +258,6 @@ groups:
       sum by (environment,stage) (
         sli_aggregations:http_requests_total_rate30m{job="gitlab-rails",status=~"5..",type="websockets"}
       )
-  - record: gitlab_component_apdex:weight:score_30m
-    labels:
-      component: workhorse
-      tier: sv
-      type: websockets
-    expr: |
-      sum by (environment,stage) (
-        rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="+Inf"}[30m])
-      )
-  - record: gitlab_component_apdex:ratio_30m
-    labels:
-      component: workhorse
-      tier: sv
-      type: websockets
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="30"}[30m])
-        )
-        +
-        sum by (environment,stage) (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="60"}[30m])
-        )
-      )
-      /
-      2
-      / on(environment,stage) group_left()
-      (
-        gitlab_component_apdex:weight:score_30m{component="workhorse",tier="sv",type="websockets"} > 0
-      )
   - record: gitlab_component_ops:rate_30m
     labels:
       component: workhorse
@@ -446,36 +356,6 @@ groups:
       sum by (environment,stage) (
         sli_aggregations:http_requests_total_rate1h{job="gitlab-rails",status=~"5..",type="websockets"}
       )
-  - record: gitlab_component_apdex:weight:score_1h
-    labels:
-      component: workhorse
-      tier: sv
-      type: websockets
-    expr: |
-      sum by (environment,stage) (
-        rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="+Inf"}[1h])
-      )
-  - record: gitlab_component_apdex:ratio_1h
-    labels:
-      component: workhorse
-      tier: sv
-      type: websockets
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="30"}[1h])
-        )
-        +
-        sum by (environment,stage) (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="60"}[1h])
-        )
-      )
-      /
-      2
-      / on(environment,stage) group_left()
-      (
-        gitlab_component_apdex:weight:score_1h{component="workhorse",tier="sv",type="websockets"} > 0
-      )
   - record: gitlab_component_ops:rate_1h
     labels:
       component: workhorse
@@ -573,36 +453,6 @@ groups:
     expr: |
       sum by (environment,stage) (
         sli_aggregations:http_requests_total_rate6h{job="gitlab-rails",status=~"5..",type="websockets"}
-      )
-  - record: gitlab_component_apdex:weight:score_6h
-    labels:
-      component: workhorse
-      tier: sv
-      type: websockets
-    expr: |
-      sum by (environment,stage) (
-        rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="+Inf"}[6h])
-      )
-  - record: gitlab_component_apdex:ratio_6h
-    labels:
-      component: workhorse
-      tier: sv
-      type: websockets
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="30"}[6h])
-        )
-        +
-        sum by (environment,stage) (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="60"}[6h])
-        )
-      )
-      /
-      2
-      / on(environment,stage) group_left()
-      (
-        gitlab_component_apdex:weight:score_6h{component="workhorse",tier="sv",type="websockets"} > 0
       )
   - record: gitlab_component_ops:rate_6h
     labels:
