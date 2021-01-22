@@ -62,12 +62,6 @@ metricsCatalog.serviceDefinition({
         route: [{ ne: '^/-/health$' }, { ne: '^/-/(readiness|liveness)$' }, { ne: '^/api/' }],
       },
 
-      apdex: histogramApdex(
-        histogram='gitlab_workhorse_http_request_duration_seconds_bucket',
-        satisfiedThreshold=30,
-        toleratedThreshold=60
-      ),
-
       requestRate: rateMetric(
         counter='gitlab_workhorse_http_requests_total',
         selector=baseSelector
