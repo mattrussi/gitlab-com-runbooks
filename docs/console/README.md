@@ -69,6 +69,7 @@
 * [../uncategorized/deleted-project-restore.md](../uncategorized/deleted-project-restore.md)
 * [../uncategorized/domain-registration.md](../uncategorized/domain-registration.md)
 * [../uncategorized/gcloud-cli.md](../uncategorized/gcloud-cli.md)
+* [../uncategorized/gcp-network-intelligence.md](../uncategorized/gcp-network-intelligence.md)
 * [../uncategorized/gemnasium_is_down.md](../uncategorized/gemnasium_is_down.md)
 * [../uncategorized/geo-recover-repo-from-azure.md](../uncategorized/geo-recover-repo-from-azure.md)
 * [../uncategorized/granting-rails-or-db-access.md](../uncategorized/granting-rails-or-db-access.md)
