@@ -2,34 +2,24 @@
 This runbook adds a standard checklist for reviewers and approvers of changes - recommended steps to follow to produce an effective review of the change.
 
 ### Review workflow
-- If it is not a Database-related change:
-  1. SRE peer Review.
-	 1. (coming)
-  1. Manager/Director Review and approval.
-	 1. General questions:
-	    1. Is the change linked to an Issue included in a team iteration?
-		1. Are the change execution steps detailed enough?
-		1. Is the **Criticality** appropriate? See [Change Criticalities](https://about.gitlab.com/handbook/engineering/infrastructure/change-management/#criticality-1)
-		1. Is the time chosen for the change appropriate?
-		1. Will the change be monitored End to End? Will it happen during the week or weekend?
-		1. Has the change been tested in staging, its rollback documented and tested in staging?
-		1. Is the Post-change checks section filled in?
-		1. Has an SRE reviewed/approved the change steps?
-		1. Have there been any issue changes (description) since then? If so, start over.
-- if it is a Database-related change:
-  1. SRE peer Review.
-  	 1. (coming)
-  1. DBRE Review.
-     1. Has an SRE reviewed/approved the change steps?
-	 1. Have there been any issue changes (description) since then? If so, start over.
-  1. Manager/Director Review and approval
-	 1. General questions:
-	 	1. Is the change linked to an Issue included in a team iteration?
-	 	1. Are the change execution steps detailed enough?
-		1. Is the **Criticality** appropriate? See [Change Criticalities](https://about.gitlab.com/handbook/engineering/infrastructure/change-management/#criticality-1)
-		1. Is the time chosen for the change appropriate?
-		1. Will the change be monitored End to End? Will it happen during the week or weekend?
-		1. Has the change been tested in staging, its rollback documented and tested in staging?
-		1. Is the Post-change checks section filled in?
-		1. Has an SRE reviewed/approved the change steps?
-		1. Have there been any issue changes (description) since then? If so, start over.
+STEP 1: SRE peer Review.
+   1. (steps coming)
+
+**If a Database-related change:**
+
+---
+STEP 2: DBRE Review.
+   1. Has an SRE reviewed/approved the change steps?
+      - Have there been any issue changes since then? Check the issue description. If so, start over.
+---
+STEP 3: Reliability Manager/Director review and approval. General questions:
+   1. Is the change **linked to an Issue** included in a team iteration?
+   1. Are the change execution steps detailed enough?
+   1. Is the **Criticality** appropriate? See [Change Criticalities](https://about.gitlab.com/handbook/engineering/infrastructure/change-management/#criticality-1)
+   1. Is the **time** chosen for the change appropriate?
+   1. Will the change be **monitored** End to End? Will it happen during the week or weekend?
+   1. Has the change been **tested in staging**, its rollback documented and **tested in staging**?
+   1. Is the **Post-change** checks section filled in?
+   1. Have an SRE (and DBRE for DB-related changes) reviewed and approved the change steps?
+      - Have there been any issue changes since then? Check the issue description. If so, start over.
+	  
