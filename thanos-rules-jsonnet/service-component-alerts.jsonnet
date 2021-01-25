@@ -1,3 +1,4 @@
+local aggregationSets = import 'aggregation-sets.libsonnet';
 local alerts = import 'alerts/alerts.libsonnet';
 local metricsCatalog = import 'metrics-catalog.libsonnet';
 local multiburnExpression = import 'mwmbr/expression.libsonnet';
@@ -78,14 +79,8 @@ local apdexAlertForSLI(service, sli) =
   [{
     alert: nameSLOViolationAlert(service.type, sli.name, 'ApdexSLOViolation'),
     expr: multiburnExpression.multiburnRateApdexExpression(
-      metric1h='gitlab_component_apdex:ratio_1h',
-      metric5m='gitlab_component_apdex:ratio_5m',
-      metric30m='gitlab_component_apdex:ratio_30m',
-      metric6h='gitlab_component_apdex:ratio_6h',
-      metricSelectorHash={ monitor: 'global', type: service.type, component: sli.name },
-      operationRateMetric='gitlab_component_ops:rate_1h',
-      operationRateAggregationLabels=['env', 'environment', 'tier', 'type', 'stage', 'component'],
-      operationRateSelectorHash={ monitor: 'global', type: service.type, component: sli.name },
+      aggregationSet=aggregationSets.globalSLIs,
+      metricSelectorHash={ type: service.type, component: sli.name },
       minimumOperationRateForMonitoring=minimumOperationRateForMonitoring,
       thresholdSLOValue=apdexScoreSLO
     ),
@@ -118,14 +113,8 @@ local apdexAlertForSLI(service, sli) =
       [{
         alert: nameSLOViolationAlert(service.type, sli.name, 'ApdexSLOViolationSingleNode'),
         expr: multiburnExpression.multiburnRateApdexExpression(
-          metric1h='gitlab_component_node_apdex:ratio_1h',
-          metric5m='gitlab_component_node_apdex:ratio_5m',
-          metric30m='gitlab_component_node_apdex:ratio_30m',
-          metric6h='gitlab_component_node_apdex:ratio_6h',
-          metricSelectorHash={ monitor: 'global', type: service.type, component: sli.name },
-          operationRateMetric='gitlab_component_node_ops:rate_1h',
-          operationRateAggregationLabels=['env', 'environment', 'tier', 'type', 'stage', 'shard', 'fqdn', 'component'],
-          operationRateSelectorHash={ monitor: 'global', type: service.type, component: sli.name },
+          aggregationSet=aggregationSets.globalNodeSLIs,
+          metricSelectorHash={ type: service.type, component: sli.name },
           minimumOperationRateForMonitoring=minimumOperationRateForNodeMonitoring,
           thresholdSLOValue=apdexScoreSLO
         ),
@@ -170,14 +159,8 @@ local errorRateAlertForSLI(service, sli) =
   [{
     alert: nameSLOViolationAlert(service.type, sli.name, 'ErrorSLOViolation'),
     expr: multiburnExpression.multiburnRateErrorExpression(
-      metric1h='gitlab_component_errors:ratio_1h',
-      metric5m='gitlab_component_errors:ratio_5m',
-      metric30m='gitlab_component_errors:ratio_30m',
-      metric6h='gitlab_component_errors:ratio_6h',
-      metricSelectorHash={ monitor: 'global', type: service.type, component: sli.name },
-      operationRateMetric='gitlab_component_ops:rate_1h',
-      operationRateAggregationLabels=['env', 'environment', 'tier', 'type', 'stage', 'component'],
-      operationRateSelectorHash={ monitor: 'global', type: service.type, component: sli.name },
+      aggregationSet=aggregationSets.globalSLIs,
+      metricSelectorHash={ type: service.type, component: sli.name },
       minimumOperationRateForMonitoring=minimumOperationRateForMonitoring,
       thresholdSLOValue=1 - errorRateSLO,
     ),
@@ -212,14 +195,8 @@ local errorRateAlertForSLI(service, sli) =
       [{
         alert: nameSLOViolationAlert(service.type, sli.name, 'ErrorSLOViolationSingleNode'),
         expr: multiburnExpression.multiburnRateErrorExpression(
-          metric1h='gitlab_component_node_errors:ratio_1h',
-          metric5m='gitlab_component_node_errors:ratio_5m',
-          metric30m='gitlab_component_node_errors:ratio_30m',
-          metric6h='gitlab_component_node_errors:ratio_6h',
-          metricSelectorHash={ monitor: 'global', type: service.type, component: sli.name },
-          operationRateMetric='gitlab_component_node_ops:rate_1h',
-          operationRateAggregationLabels=['env', 'environment', 'tier', 'type', 'stage', 'shard', 'fqdn', 'component'],
-          operationRateSelectorHash={ monitor: 'global', type: service.type, component: sli.name },
+          aggregationSet=aggregationSets.globalNodeSLIs,
+          metricSelectorHash={ type: service.type, component: sli.name },
           minimumOperationRateForMonitoring=minimumOperationRateForNodeMonitoring,
           thresholdSLOValue=1 - errorRateSLO,
         ),
