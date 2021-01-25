@@ -159,8 +159,8 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
         errorRatio: 'gitlab_component_node_errors:ratio_5m',
       },
       '30m': {
-        // 30m node-level metrics, (no apdex)
-        // TODO: add apdex
+        apdexRatio: 'gitlab_component_node_apdex:ratio_30m',
+        apdexWeight: 'gitlab_component_node_apdex:weight:score_30m',
         opsRate: 'gitlab_component_node_ops:rate_30m',
         errorRate: 'gitlab_component_node_errors:rate_30m',
         errorRatio: 'gitlab_component_node_errors:ratio_30m',
@@ -173,8 +173,8 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
         errorRatio: 'gitlab_component_node_errors:ratio_1h',
       },
       '6h': {
-        // 6h node-level metrics (no apdex)
-        // TODO: add apdex
+        apdexRatio: 'gitlab_component_node_apdex:ratio_6h',
+        apdexWeight: 'gitlab_component_node_apdex:weight:score_6h',
         opsRate: 'gitlab_component_node_ops:rate_6h',
         errorRate: 'gitlab_component_node_errors:rate_6h',
         errorRatio: 'gitlab_component_node_errors:ratio_6h',
@@ -199,8 +199,8 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
         errorRatio: 'gitlab_component_node_errors:ratio_5m',
       },
       '30m': {
-        // 30m node-level metrics, (no apdex)
-        // TODO: add apdex
+        apdexRatio: 'gitlab_component_node_apdex:ratio_30m',
+        apdexWeight: 'gitlab_component_node_apdex:weight:score_30m',  // Required for further aggregation into serviceNodeAggregatedSLIs
         opsRate: 'gitlab_component_node_ops:rate_30m',
         errorRate: 'gitlab_component_node_errors:rate_30m',
         errorRatio: 'gitlab_component_node_errors:ratio_30m',
@@ -213,8 +213,8 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
         errorRatio: 'gitlab_component_node_errors:ratio_1h',
       },
       '6h': {
-        // 6h node-level metrics (no apdex)
-        // TODO: add apdex
+        apdexRatio: 'gitlab_component_node_apdex:ratio_6h',
+        apdexWeight: 'gitlab_component_node_apdex:weight:score_6h',  // Required for further aggregation into serviceNodeAggregatedSLIs
         opsRate: 'gitlab_component_node_ops:rate_6h',
         errorRate: 'gitlab_component_node_errors:rate_6h',
         errorRatio: 'gitlab_component_node_errors:ratio_6h',
@@ -288,6 +288,7 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
         errorRatio: 'gitlab_service_node_errors:ratio_5m',
       },
       '30m': {
+        apdexRatio: 'gitlab_service_node_apdex:ratio_30m',
         opsRate: 'gitlab_service_node_ops:rate_30m',
         errorRate: 'gitlab_service_node_errors:rate_30m',
         errorRatio: 'gitlab_service_node_errors:ratio_30m',
@@ -299,6 +300,7 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
         errorRatio: 'gitlab_service_node_errors:ratio_1h',
       },
       '6h': {
+        apdexRatio: 'gitlab_service_node_apdex:ratio_6h',
         opsRate: 'gitlab_service_node_ops:rate_6h',
         errorRate: 'gitlab_service_node_errors:rate_6h',
         errorRatio: 'gitlab_service_node_errors:ratio_6h',
