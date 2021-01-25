@@ -46,8 +46,8 @@ local railsRequestRate(type, featureCategories, featureCategoriesSelector) =
     query=|||
       sum by (controller, action) (
         rate(gitlab_transaction_duration_seconds_count{
-          env='$environment',
           environment='$environment',
+          stage='$stage',
           feature_category=~'(%(featureCategories)s)',
           type='%(type)s',
           controller=~'$controller',
@@ -69,8 +69,8 @@ local railsErrorRate(type, featureCategories, featureCategoriesSelector) =
     query=|||
       sum by (component) (
         gitlab:component:feature_category:execution:error:rate_1m{
-          env='$environment',
           environment='$environment',
+          stage='$stage',
           feature_category=~'(%(featureCategories)s)',
           type='%(type)s'
         }
@@ -90,9 +90,10 @@ local railsP95RequestLatency(type, featureCategories, featureCategoriesSelector)
     query=|||
       avg_over_time(
         controller_action:gitlab_transaction_duration_seconds:p95{
+          environment="$environment",
+          stage='$stage',
           action=~"$action",
           controller=~"$controller",
-          environment="$environment",
           feature_category=~'(%(featureCategories)s)',
           type='%(type)s'
         }[$__interval]
@@ -116,9 +117,10 @@ local sqlQueriesPerAction(type, featureCategories, featureCategoriesSelector) =
       sum without (fqdn,instance) (
         rate(
           gitlab_sql_duration_seconds_count{
+            environment="$environment",
+            stage='$stage',
             action=~"$action",
             controller=~"$controller",
-            environment="$environment",
             feature_category=~'(%(featureCategories)s)',
             type='%(type)s'
           }[$__interval]
@@ -127,9 +129,10 @@ local sqlQueriesPerAction(type, featureCategories, featureCategoriesSelector) =
       /
       avg_over_time(
         controller_action:gitlab_transaction_duration_seconds_count:rate1m{
+          environment="$environment",
+          stage='$stage',
           action=~"$action",
           controller=~"$controller",
-          environment="$environment",
           feature_category=~'(%(featureCategories)s)',
           type='%(type)s'
         }[$__interval]
@@ -152,9 +155,10 @@ local sqlLatenciesPerAction(type, featureCategories, featureCategoriesSelector) 
     query=|||
       avg_over_time(
         controller_action:gitlab_sql_duration_seconds_sum:rate1m{
+          environment="$environment",
+          stage='$stage',
           action=~"$action",
           controller=~"$controller",
-          environment="$environment",
           feature_category=~'(%(featureCategories)s)',
           type='%(type)s'
         }[$__interval]
@@ -162,9 +166,10 @@ local sqlLatenciesPerAction(type, featureCategories, featureCategoriesSelector) 
       /
       avg_over_time(
         controller_action:gitlab_transaction_duration_seconds_count:rate1m{
+          environment="$environment",
+          stage='$stage',
           action=~"$action",
           controller=~"$controller",
-          environment="$environment",
           feature_category=~'(%(featureCategories)s)',
           type='%(type)s'
         }[$__interval]
@@ -188,9 +193,10 @@ local sqlLatenciesPerQuery(type, featureCategories, featureCategoriesSelector) =
       sum without (fqdn,instance) (
         rate(
           gitlab_sql_duration_seconds_sum{
+            environment="$environment",
+            stage='$stage',
             action=~"$action",
             controller=~"$controller",
-            environment="$environment",
             feature_category=~'(%(featureCategories)s)',
             type='%(type)s'
           }[$__interval]
@@ -200,9 +206,10 @@ local sqlLatenciesPerQuery(type, featureCategories, featureCategoriesSelector) =
       sum without (fqdn,instance) (
         rate(
           gitlab_sql_duration_seconds_count{
+            environment="$environment",
+            stage='$stage',
             action=~"$action",
             controller=~"$controller",
-            environment="$environment",
             feature_category=~'(%(featureCategories)s)',
             type='%(type)s'
           }[$__interval]
@@ -227,9 +234,10 @@ local cachesPerAction(type, featureCategories, featureCategoriesSelector) =
       sum without (fqdn, instance) (
         rate(
           gitlab_cache_operations_total{
+            environment="$environment",
+            stage='$stage',
             action=~"$action",
             controller=~"$controller",
-            environment="$environment",
             feature_category=~'(%(featureCategories)s)',
             type='%(type)s'
           }[$__interval]
@@ -251,8 +259,8 @@ local sidekiqJobRate(counter, title, description, featureCategoriesSelector) =
     query=|||
       sum by (worker) (
         rate(%(counter)s{
-          env='$environment',
-          environment='$environment',
+          environment="$environment",
+          stage='$stage',
           feature_category=~'(%(featureCategories)s)'
         }[$__interval])
       )
@@ -289,6 +297,7 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
       time_from='now-6h/m',
       time_to='now/m'
     )
+    .addTemplate(prebuiltTemplates.stage)
     .addTemplates(
       if std.length(enabledRequestComponents) != 0 then
         [controllerFilter(featureCategoriesSelector), actionFilter(featureCategoriesSelector)]

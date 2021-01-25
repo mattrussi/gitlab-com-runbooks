@@ -38,7 +38,15 @@ stageGroupDashboards.dashboard('continuous_integration')
       title='Rate of build logs streamed',
       description='The total rate of partial build logs received by that were sent by runners.',
       query=|||
-        sum(rate(gitlab_ci_trace_operations_total{operation="streamed", environment="$environment"}[$__interval])) by (operation)
+        sum(
+          rate(
+            gitlab_ci_trace_operations_total{
+              environment="$environment",
+              stage="$stage",
+              operation="streamed",
+            }[$__interval]
+          )
+        ) by (operation)
       |||,
       legendFormat='build logs {{ operation }} by runners',
       yAxisLabel='Rate per second',
@@ -47,7 +55,15 @@ stageGroupDashboards.dashboard('continuous_integration')
       title='Rate of invalid build logs detected',
       description='The total rate of invalid build logs detected (including mutated ones).',
       query=|||
-        sum(rate(gitlab_ci_trace_operations_total{operation="invalid", environment="$environment"}[$__interval])) by (operation)
+        sum(
+          rate(
+            gitlab_ci_trace_operations_total{
+              environment="$environment",
+              stage="$stage",
+              operation="invalid"
+            }[$__interval]
+          )
+        ) by (operation)
       |||,
       legendFormat='{{ operation }} build logs',
       yAxisLabel='Rate per second',
@@ -56,7 +72,15 @@ stageGroupDashboards.dashboard('continuous_integration')
       title='Rate of corrupted build logs detected',
       description='The total rate of corrupted build logs detected.',
       query=|||
-        sum(rate(gitlab_ci_trace_operations_total{operation="corrupted", environment="$environment"}[$__interval])) by (operation)
+        sum(
+          rate(
+            gitlab_ci_trace_operations_total{
+              environment="$environment",
+              stage="$stage",
+              operation="corrupted",
+            }[$__interval]
+          )
+        ) by (operation)
       |||,
       legendFormat='{{ operation }} build logs',
       yAxisLabel='Rate per second',
@@ -65,7 +89,14 @@ stageGroupDashboards.dashboard('continuous_integration')
       title='All metrics for build logs',
       description='The rate of different operations happening related to build logs.',
       query=|||
-        sum(rate(gitlab_ci_trace_operations_total{environment="$environment"}[$__interval])) by (operation)
+        sum(
+          rate(
+            gitlab_ci_trace_operations_total{
+              environment="$environment",
+              stage="$stage"
+            }[$__interval]
+          )
+        ) by (operation)
       |||,
       legendFormat='{{ operation }} operation',
       yAxisLabel='Rate per second',
@@ -74,7 +105,14 @@ stageGroupDashboards.dashboard('continuous_integration')
       title='Throughput of build logs processing',
       description='Rate of build logs received from the runners in bytes.',
       query=|||
-        sum(rate(gitlab_ci_trace_bytes_total{environment="$environment"}[$__interval]))
+        sum(
+          rate(
+            gitlab_ci_trace_bytes_total{
+              environment="$environment",
+              stage="$stage"
+            }[$__interval]
+          )
+        )
       |||,
       format='Bps',
       legendFormat='build logs received',
