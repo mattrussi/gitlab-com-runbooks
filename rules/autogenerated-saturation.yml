@@ -731,9 +731,9 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            sum by(environment, tier, type, stage, fqdn) (avg_over_time(puma_active_connections{environment!="",type=~"web|api|git|sidekiq"}[1m]))
+            sum by(environment, tier, type, stage, fqdn) (avg_over_time(instance:puma_active_connections:sum{environment!="",type=~"web|api|git|sidekiq"}[1m]))
             /
-            sum by(environment, tier, type, stage, fqdn) (puma_max_threads{pid="puma_master", environment!="",type=~"web|api|git|sidekiq"})
+            sum by(environment, tier, type, stage, fqdn) (instance:puma_max_threads:sum{environment!="",type=~"web|api|git|sidekiq"})
             ,
             1)
         ,
@@ -2550,7 +2550,7 @@ groups:
 
         Web/api/git applications use a separate connection pool to sidekiq.
 
-        When this resource is saturated, web/api database operations may queue, leading to unicorn/puma saturation and 503 errors in the web.
+        When this resource is saturated, web/api database operations may queue, leading to rails worker saturation and 503 errors in the web.
       grafana_dashboard_id: alerts-sat_pgbouncer_sync_pool_primary
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/alerts-sat_pgbouncer_sync_pool_primary?from=now-6h/m&to=now-1m/m&var-environment={{
@@ -2601,7 +2601,7 @@ groups:
 
         Web/api/git applications use a separate connection pool to sidekiq.
 
-        When this resource is saturated, web/api database operations may queue, leading to unicorn/puma saturation and 503 errors in the web.
+        When this resource is saturated, web/api database operations may queue, leading to rails worker saturation and 503 errors in the web.
       grafana_dashboard_id: alerts-sat_pgbouncer_sync_pool_replica
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/alerts-sat_pgbouncer_sync_pool_replica?from=now-6h/m&to=now-1m/m&var-environment={{
@@ -3191,9 +3191,9 @@ groups:
         max by(environment, tier, type, stage, fqdn) (
           clamp_min(
             clamp_max(
-              sum by(environment, tier, type, stage, fqdn) (avg_over_time(puma_active_connections{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[1m]))
+              sum by(environment, tier, type, stage, fqdn) (avg_over_time(instance:puma_active_connections:sum{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[1m]))
               /
-              sum by(environment, tier, type, stage, fqdn) (puma_max_threads{pid="puma_master", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"})
+              sum by(environment, tier, type, stage, fqdn) (instance:puma_max_threads:sum{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"})
               ,
               1)
           ,
