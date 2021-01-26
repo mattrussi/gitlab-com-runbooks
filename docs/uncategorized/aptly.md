@@ -18,7 +18,7 @@ user@aptly:~$ sudo su - aptly
 aptly@aptly:~$ aptly repo show --with-packages gitlab-utils
 Name: gitlab-utils
 Comment: GitLab Server Utilities
-Default Distribution: 
+Default Distribution:
 Default Component: main
 Number of packages: 1
 Packages:
@@ -46,34 +46,12 @@ Snapshot gitlab-utils-stable-20161221 successfully created.
 You can run 'aptly publish snapshot gitlab-utils-stable-20161221' to publish snapshot as Debian repository.
 ```
 
-### Find the latest published snapshot and merge it with the new snapshot
-Aptly can only publish one snapshot, so all snapshots to be published must be merged into one.
-
-```
-user@aptly:~$ sudo su - aptly
-# Find the currently published snapshot
-aptly@aptly:~$ aptly snapshot list
-List of snapshots:
- * [mirror-snapshot-20161107]: Snapshot from mirror [mirror]: https://download.example.com/debian/ xenial
- * [mirror-gitlab-utils-20161221]: Merged from sources: 'mirror-snapshot-20161107', 'gitlab-utils-stable-20161107'
- * [gitlab-utils-stable-20161107]: Snapshot from local repo [gitlab-utils]: GitLab Server Utilities
- * [gitlab-utils-stable-20161221]: Snapshot from local repo [gitlab-utils]: GitLab Server Utilities
-
-To get more information about snapshot, run `aptly snapshot show <name>`.
-
-# Merge your new snapshot with the snapshots that are not being updated (mirrors)
-aptly@aptly:~$ aptly snapshot merge mirror-gitlab-utils-20161221 mirror-snapshot-20161107 gitlab-utils-stable-20161221
-
-Snapshot mirror-gitlab-utils-20161221 successfully created.
-You can run 'aptly publish snapshot mirror-gitlab-utils-2016122102' to publish snapshot as Debian repository.
-```
-
 ### Switch the published snapshots
 Now we must replace the currently published snapshot with the newly created snapshot
 
 ```
 user@aptly:~$ sudo su - aptly
-aptly@aptly:~$ aptly publish switch xenial mirror-gitlab-utils-20161221
+aptly@aptly:~$ aptly publish switch xenial gitlab-utils-stable-20161221
 Loading packages...
 Generating metadata files and linking package files...
 Finalizing metadata files...
