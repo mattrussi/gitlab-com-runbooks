@@ -36,6 +36,7 @@ local genericApdexPanel(
   serviceType,
   sort='increasing',
   legend_show=null,
+  expectMultipleSeries=false,
       ) =
   generalGraphPanel(
     title,
@@ -85,13 +86,12 @@ local apdexPanel(
   selectorHash,
   description=null,
   stableId,
-  goldenMetric=null,
   legendFormat=null,
   compact=false,
   sort='increasing',
   includeLastWeek=true,
+  expectMultipleSeries=false
       ) =
-  local goldenMetricOrLegendFormat = if goldenMetric != null then goldenMetric else legendFormat;
   local selectorHashWithExtras = selectorHash + aggregationSet.selector { type: serviceType };
 
   local panel = genericApdexPanel(
@@ -100,23 +100,24 @@ local apdexPanel(
     compact=compact,
     stableId=stableId,
     primaryQueryExpr=sliPromQL.apdexQuery(aggregationSet, null, selectorHashWithExtras, '$__interval', worstCase=true),
-    legendFormat=goldenMetricOrLegendFormat,
+    legendFormat=legendFormat,
     serviceType=serviceType,
+    linewidth=if expectMultipleSeries then 1 else 2
   );
 
-  local panelWithAverage = if goldenMetric != null then
+  local panelWithAverage = if !expectMultipleSeries then
     panel.addTarget(  // Primary metric (avg case)
       promQuery.target(
         sliPromQL.apdexQuery(aggregationSet, null, selectorHashWithExtras, '$__interval', worstCase=false),
-        legendFormat=goldenMetric + ' avg',
+        legendFormat=legendFormat + ' avg',
       )
     )
-    .addSeriesOverride(seriesOverrides.goldenMetric(goldenMetric))
-    .addSeriesOverride(seriesOverrides.averageCaseSeries(goldenMetric + ' avg', { fillBelowTo: goldenMetric }))
+    .addSeriesOverride(seriesOverrides.goldenMetric(legendFormat))
+    .addSeriesOverride(seriesOverrides.averageCaseSeries(legendFormat + ' avg', { fillBelowTo: legendFormat }))
   else
     panel;
 
-  local panelWithLastWeek = if includeLastWeek then
+  local panelWithLastWeek = if !expectMultipleSeries && includeLastWeek then
     panelWithAverage.addTarget(  // Last week
       promQuery.target(
         sliPromQL.apdexQuery(aggregationSet, null, selectorHashWithExtras, range=null, offset='1w'),

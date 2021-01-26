@@ -67,12 +67,11 @@ local errorRatioPanel(
   serviceType,
   selectorHash,
   stableId,
-  goldenMetric=null,
   legendFormat=null,
   compact=false,
-  includeLastWeek=true
+  includeLastWeek=true,
+  expectMultipleSeries=false
       ) =
-  local goldenMetricOrLegendFormat = if goldenMetric != null then goldenMetric else legendFormat;
   local selectorHashWithExtras = selectorHash + aggregationSet.selector { type: serviceType };
 
   local panel =
@@ -81,24 +80,24 @@ local errorRatioPanel(
       compact=compact,
       stableId=stableId,
       primaryQueryExpr=sliPromQL.errorRatioQuery(aggregationSet, null, selectorHashWithExtras, '$__interval', worstCase=true),
-      legendFormat=goldenMetricOrLegendFormat,
+      legendFormat=legendFormat,
       serviceType=serviceType,
-      linewidth=if goldenMetric != null then 2 else 1
+      linewidth=if expectMultipleSeries then 1 else 2
     );
 
-  local panelWithAverage = if goldenMetric != null then
+  local panelWithAverage = if !expectMultipleSeries then
     panel.addTarget(  // Primary metric (avg case)
       promQuery.target(
         sliPromQL.errorRatioQuery(aggregationSet, null, selectorHashWithExtras, '$__interval', worstCase=false),
-        legendFormat=goldenMetric + ' avg',
+        legendFormat=legendFormat + ' avg',
       )
     )
-    .addSeriesOverride(seriesOverrides.goldenMetric(goldenMetric, { fillBelowTo: goldenMetric + ' avg' }))
-    .addSeriesOverride(seriesOverrides.averageCaseSeries(goldenMetric + ' avg', { fillGradient: 10 }))
+    .addSeriesOverride(seriesOverrides.goldenMetric(legendFormat, { fillBelowTo: legendFormat + ' avg' }))
+    .addSeriesOverride(seriesOverrides.averageCaseSeries(legendFormat + ' avg', { fillGradient: 10 }))
   else
     panel;
 
-  local panelWithLastWeek = if includeLastWeek then
+  local panelWithLastWeek = if !expectMultipleSeries && includeLastWeek then
     panelWithAverage.addTarget(  // Last week
       promQuery.target(
         sliPromQL.errorRatioQuery(aggregationSet, null, selectorHashWithExtras, null, offset='1w'),

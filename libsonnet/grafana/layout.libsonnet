@@ -101,31 +101,34 @@ local generateDropOffsets(cellHeights, rowOffsets) =
       std.flattenArrays(
         std.mapWithIndex(
           function(colIndex, columnOfPanels)
-            std.mapWithIndex(
-              function(cellIndex, cell)
-                if cell == null then
-                  null
-                else
-                  local lastRowInColumn = cellIndex == (std.length(columnOfPanels) - 1);
-
-                  // The height of the last cell will extend to the bottom
-                  local height = if !lastRowInColumn then
-                    cellHeights[cellIndex]
+            if std.isArray(columnOfPanels) then
+              std.mapWithIndex(
+                function(cellIndex, cell)
+                  if cell == null then
+                    null
                   else
-                    dropOffsets[cellIndex];
+                    local lastRowInColumn = cellIndex == (std.length(columnOfPanels) - 1);
 
-                  local gridPos = {
-                    x: colWidth * colIndex,
-                    y: rowOffsets[cellIndex] + startRow,
-                    w: colWidth,
-                    h: height,
-                  };
+                    // The height of the last cell will extend to the bottom
+                    local height = if !lastRowInColumn then
+                      cellHeights[cellIndex]
+                    else
+                      dropOffsets[cellIndex];
 
-                  cell {
-                    gridPos: gridPos,
-                  },
-              columnOfPanels
-            ),
+                    local gridPos = {
+                      x: colWidth * colIndex,
+                      y: rowOffsets[cellIndex] + startRow,
+                      w: colWidth,
+                      h: height,
+                    };
+
+                    cell {
+                      gridPos: gridPos,
+                    },
+                columnOfPanels
+              )
+            else
+              std.assertEqual('', { __assert__: 'splitColumnGrid: column %d contains a %s. It should contain an columnar array of panels' % [colIndex, std.type(columnOfPanels)] }),
           columnsOfPanels
         )
       )

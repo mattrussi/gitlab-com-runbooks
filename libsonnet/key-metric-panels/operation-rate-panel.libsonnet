@@ -40,13 +40,12 @@ local operationRatePanel(
   aggregationSet,
   selectorHash,
   stableId,
-  goldenMetric=null,
   legendFormat=null,
   compact=false,
   includePredictions=false,
-  includeLastWeek=true
+  includeLastWeek=true,
+  expectMultipleSeries=false,
       ) =
-  local goldenMetricOrLegendFormat = if goldenMetric != null then goldenMetric else legendFormat;
   local selectorHashWithExtras = selectorHash + aggregationSet.selector;
 
   local panel =
@@ -54,20 +53,21 @@ local operationRatePanel(
       title,
       compact=compact,
       stableId=stableId,
+      linewidth=if expectMultipleSeries then 1 else 2
     )
     .addTarget(  // Primary metric
       promQuery.target(
         sliPromQL.opsRateQuery(aggregationSet, selectorHashWithExtras, range='$__interval'),
-        legendFormat=goldenMetricOrLegendFormat,
+        legendFormat=legendFormat,
       )
     );
 
-  local panelWithSeriesOverrides = if goldenMetric != null then
-    panel.addSeriesOverride(seriesOverrides.goldenMetric(goldenMetric))
+  local panelWithSeriesOverrides = if !expectMultipleSeries then
+    panel.addSeriesOverride(seriesOverrides.goldenMetric(legendFormat))
   else
     panel;
 
-  local panelWithLastWeek = if includeLastWeek then
+  local panelWithLastWeek = if !expectMultipleSeries && includeLastWeek then
     panelWithSeriesOverrides
     .addTarget(  // Last week
       promQuery.target(
@@ -79,7 +79,7 @@ local operationRatePanel(
   else
     panelWithSeriesOverrides;
 
-  local panelWithPredictions = if includePredictions then
+  local panelWithPredictions = if !expectMultipleSeries && includePredictions then
     panelWithLastWeek
     .addTarget(
       promQuery.target(
