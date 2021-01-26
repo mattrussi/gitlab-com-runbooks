@@ -130,6 +130,62 @@ local elasticsearchLogSearchDataLink(type) = {
         basic.multiQuantileTimeseries('Elasticsearch Time', selector, '{{ action }}', bucketMetric='http_elasticsearch_requests_duration_seconds_bucket', aggregators='controller, action'),
       ], startRow=401)
       +
+      layout.rowGrid('External HTTP', [
+        basic.timeseries(
+          stableId='external-http',
+          title='External HTTP calls',
+          query=|||
+            sum by (controller, action, code) (
+            rate(gitlab_external_http_total{%(selector)s}[$__interval])
+            )
+          ||| % { selector: selectorString },
+          legendFormat='{{ action }} - {{ code }}',
+          format='ops',
+        ),
+        basic.multiTimeseries(
+          stableId='external-http-latency',
+          title='External HTTP Latency per call',
+          queries=[{
+            query: |||
+              histogram_quantile(
+                0.5,
+                sum(
+                  rate(
+                    gitlab_external_http_duration_seconds_bucket{%s}[5m]
+                  )
+                ) by (action, le)
+              )
+            ||| % selectorString,
+            legendFormat: '{{ action }} - p50',
+          }, {
+            query: |||
+              histogram_quantile(
+                0.9,
+                sum(
+                  rate(
+                    gitlab_external_http_duration_seconds_bucket{%s}[5m]
+                  )
+                ) by (action, le)
+              )
+            ||| % selectorString,
+            legendFormat: '{{ action }} - p90',
+          }, {
+            query: |||
+              histogram_quantile(
+                0.99,
+                sum(
+                  rate(
+                    gitlab_external_http_duration_seconds_bucket{%s}[5m]
+                  )
+                ) by (action, le)
+              )
+            ||| % selectorString,
+            legendFormat: '{{ action }} - p99',
+          }],
+          format='s',
+        ),
+      ], startRow=501)
+      +
       layout.grid([])
     )
     .trailer(),
