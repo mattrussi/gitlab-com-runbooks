@@ -1,20 +1,14 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
-local commonAnnotations = import 'grafana/common_annotations.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
-local seriesOverrides = import 'grafana/series_overrides.libsonnet';
 local templates = import 'grafana/templates.libsonnet';
 local platformLinks = import 'platform_links.libsonnet';
-local dashboard = grafana.dashboard;
-local row = grafana.row;
 local template = grafana.template;
-local graphPanel = grafana.graphPanel;
-local annotation = grafana.annotation;
-local seriesOverrides = import 'grafana/series_overrides.libsonnet';
 local multiburnFactors = import 'mwmbr/multiburn_factors.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
-local statusDescription = import 'status_description.libsonnet';
+local statusDescription = import 'key-metric-panels/status_description.libsonnet';
+local aggregationSets = import './aggregation-sets.libsonnet';
 
 local combinations(shortMetric, shortDuration, longMetric, longDuration, selectorHash, apdexInverted, thresholdSLOMetricName, nonGlobalFallback, thanosEvaluated=true) =
   local formatConfig = {
@@ -315,7 +309,7 @@ local errorSLOMetric = 'slo:max:events:gitlab_service_errors:ratio';
       nonGlobalFallback=true,
     ),
     serviceAggregated=false,
-    statusDescriptionPanel=statusDescription.sliApdexStatusDescriptionPanel(componentSelectorHash),
+    statusDescriptionPanel=statusDescription.apdexStatusDescriptionPanel('$component', componentSelectorHash, aggregationSet=aggregationSets.globalSLIs),
     slaQuery='avg(slo:min:events:gitlab_service_apdex:ratio{monitor="global",type="$type"}) by (type)',
   ),
 
@@ -344,7 +338,7 @@ local errorSLOMetric = 'slo:max:events:gitlab_service_errors:ratio';
       nonGlobalFallback=false,
     ),
     serviceAggregated=false,
-    statusDescriptionPanel=statusDescription.sliErrorRateStatusDescriptionPanel(componentSelectorHash),
+    statusDescriptionPanel=statusDescription.errorRateStatusDescriptionPanel('$component', componentSelectorHash, aggregationSet=aggregationSets.globalSLIs),
     slaQuery='1 - avg(slo:max:events:gitlab_service_errors:ratio{monitor="global",type="$type"}) by (type)',
   ),
 
@@ -376,7 +370,7 @@ local errorSLOMetric = 'slo:max:events:gitlab_service_errors:ratio';
     ),
     serviceAggregated=false,
     nodeLevel=true,
-    statusDescriptionPanel=statusDescription.sliNodeApdexStatusDescriptionPanel(componentNodeSelectorHash),
+    statusDescriptionPanel=statusDescription.apdexStatusDescriptionPanel('$component', componentSelectorHash, aggregationSet=aggregationSets.globalNodeSLIs),
     slaQuery='avg(slo:min:events:gitlab_service_apdex:ratio{monitor="global",type="$type"}) by (type)',
   ),
 
@@ -409,7 +403,7 @@ local errorSLOMetric = 'slo:max:events:gitlab_service_errors:ratio';
     ),
     serviceAggregated=false,
     nodeLevel=true,
-    statusDescriptionPanel=statusDescription.sliNodeErrorRateStatusDescriptionPanel(componentNodeSelectorHash),
+    statusDescriptionPanel=statusDescription.errorRateStatusDescriptionPanel('$component', componentNodeSelectorHash, aggregationSet=aggregationSets.globalNodeSLIs),
     slaQuery='1 - avg(slo:max:events:gitlab_service_errors:ratio{monitor="global",type="$type"}) by (type)',
   ),
 
@@ -438,7 +432,7 @@ local errorSLOMetric = 'slo:max:events:gitlab_service_errors:ratio';
       nonGlobalFallback=false,
     ),
     serviceAggregated=true,
-    statusDescriptionPanel=statusDescription.serviceApdexStatusDescriptionPanel(serviceSelectorHash),
+    statusDescriptionPanel=statusDescription.apdexStatusDescriptionPanel('$type', serviceSelectorHash, aggregationSet=aggregationSets.serviceAggregatedSLIs),
     slaQuery='avg(slo:min:events:gitlab_service_apdex:ratio{monitor="global",type="$type"}) by (type)',
   ),
 
@@ -466,7 +460,7 @@ local errorSLOMetric = 'slo:max:events:gitlab_service_errors:ratio';
       nonGlobalFallback=false,
     ),
     serviceAggregated=true,
-    statusDescriptionPanel=statusDescription.serviceErrorStatusDescriptionPanel(serviceSelectorHash),
+    statusDescriptionPanel=statusDescription.errorRateStatusDescriptionPanel('$type', serviceSelectorHash, aggregationSet=aggregationSets.serviceAggregatedSLIs),
     slaQuery='1 - avg(slo:max:events:gitlab_service_errors:ratio{monitor="global",type="$type"}) by (type)',
   ),
 }

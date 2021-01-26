@@ -13,6 +13,7 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
    * not globally across all shards.
    */
   promSourceSLIs:: aggregationSets.AggregationSet({
+    id: 'source_sli',
     name: 'Prometheus Source SLI Metrics',
     selector: { monitor: { ne: 'global' } },  // Not Thanos Ruler
     labels: ['environment', 'tier', 'type', 'stage'],
@@ -60,6 +61,7 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
    * aggregation used for alerting, monitoring, visualizations, etc.
    */
   globalSLIs:: aggregationSets.AggregationSet({
+    id: 'component',
     name: 'Global SLI Metrics',
     selector: { monitor: 'global' },  // Thanos Ruler
     labels: ['env', 'environment', 'tier', 'type', 'stage', 'component'],
@@ -102,6 +104,7 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
    * aggregation used for alerting, monitoring, visualizations, etc.
    */
   regionalSLIs:: aggregationSets.AggregationSet({
+    id: 'regional_component',
     name: 'Regional SLI Metrics',
     selector: { monitor: 'global' },  // Thanos Ruler
     labels: ['env', 'environment', 'tier', 'type', 'stage', 'region', 'component'],
@@ -147,6 +150,7 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
    * not globally across all shards.
    */
   promSourceNodeAggregatedSLIs:: aggregationSets.AggregationSet({
+    id: 'source_node',
     name: 'Prometheus Source Node-Aggregated SLI Metrics',
     selector: { monitor: { ne: 'global' } },  // Not Thanos Ruler
     labels: ['environment', 'tier', 'type', 'stage', 'shard', 'fqdn', 'component'],
@@ -187,6 +191,7 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
    * used for per-node monitoring, alerting, visualzation for Gitaly.
    */
   globalNodeSLIs:: aggregationSets.AggregationSet({
+    id: 'component_node',
     name: 'Global Node-Aggregated SLI Metrics',
     selector: { monitor: 'global' },  // Thanos Ruler
     labels: ['env', 'environment', 'tier', 'type', 'stage', 'shard', 'fqdn', 'component'],
@@ -230,6 +235,7 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
    * alerting.
    */
   serviceAggregatedSLIs:: aggregationSets.AggregationSet({
+    id: 'service',
     name: 'Global Service-Aggregated Metrics',
     selector: { monitor: 'global' },  // Thanos Ruler
     labels: ['env', 'environment', 'tier', 'type', 'stage'],
@@ -276,6 +282,7 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
    * at a later stage.
    */
   serviceNodeAggregatedSLIs:: aggregationSets.AggregationSet({
+    id: 'service_node',
     name: 'Global Service-Node-Aggregated Metrics',
     selector: { monitor: 'global' },  // Thanos Ruler
     labels: ['env', 'environment', 'tier', 'type', 'stage', 'shard', 'fqdn'],

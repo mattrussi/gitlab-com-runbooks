@@ -4,7 +4,6 @@ local template = grafana.template;
 local prebuiltTemplates = import 'grafana/templates.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
-local metrics = import 'servicemetrics/metrics.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local platformLinks = import '../platform_links.libsonnet';
 

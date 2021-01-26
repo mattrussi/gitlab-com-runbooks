@@ -2,15 +2,13 @@ local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libso
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local seriesOverrides = import 'grafana/series_overrides.libsonnet';
-local keyMetrics = import 'key_metrics.libsonnet';
+local singleMetricRow = import 'key-metric-panels/single-metric-row.libsonnet';
 local metricsCatalog = import 'metrics-catalog.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
-local statusDescription = import 'status_description.libsonnet';
 local thresholds = import 'thresholds.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
 local row = grafana.row;
-local defaultEnvironmentSelector = { environment: '$environment', env: '$environment' };
 
 local getLatencyPercentileForService(service) =
   if std.objectHas(service, 'contractualThresholds') && std.objectHas(service.contractualThresholds, 'apdexRatio') then
@@ -53,47 +51,30 @@ local getMarkdownDetailsForSLI(sli, sliSelectorHash) =
 
 local sliOverviewMatrixRow(
   serviceType,
-  serviceStage,
   sli,
   startRow,
-  environmentSelectorHash
+  selectorHash,
+  aggregationSet
       ) =
-  local sliSelectorHash = environmentSelectorHash { type: serviceType, stage: serviceStage, component: sli.name };
+  local selectorHashWithExtras = selectorHash { type: serviceType, component: sli.name };
+  local formatConfig = { serviceType: serviceType, sliName: sli.name };
+
   local columns =
-    (
-      // SLI Component apdex
-      if sli.hasApdex() then
-        [[
-          keyMetrics.sliApdexPanel(serviceType, serviceStage, sli.name, environmentSelectorHash),
-          statusDescription.sliApdexStatusDescriptionPanel(sliSelectorHash),
-        ]]
-      else
-        []
+    singleMetricRow.row(
+      serviceType=serviceType,
+      aggregationSet=aggregationSet,
+      selectorHash=selectorHashWithExtras,
+      titlePrefix='%(sliName)s SLI' % formatConfig,
+      stableIdPrefix='sli-%(sliName)s' % formatConfig,
+      legendFormatPrefix=sli.name,
+      showApdex=sli.hasApdex(),
+      showErrorRatio=sli.hasErrorRate(),
+      showOpsRate=true,
+      includePredictions=false
     )
     +
     (
-      // SLI Error rate
-      if sli.hasErrorRate() then
-        [[
-          keyMetrics.sliErrorRatePanel(serviceType, serviceStage, sli.name, environmentSelectorHash),
-          statusDescription.sliErrorRateStatusDescriptionPanel(sliSelectorHash),
-        ]]
-      else
-        []
-    )
-    +
-    (
-      // SLI request rate (mandatory, but not all are aggregatable)
-      if sli.hasAggregatableRequestRate() then
-        [[
-          keyMetrics.sliOpsRatePanel(serviceType, serviceStage, sli.name, environmentSelectorHash),
-        ]]
-      else
-        []
-    )
-    +
-    (
-      local markdown = getMarkdownDetailsForSLI(sli, sliSelectorHash);
+      local markdown = getMarkdownDetailsForSLI(sli, selectorHashWithExtras);
       if markdown != '' then
         [[
           grafana.text.new(
@@ -108,201 +89,112 @@ local sliOverviewMatrixRow(
 
   layout.splitColumnGrid(columns, [7, 1], startRow=startRow);
 
-local sliNodeOverviewMatrixRow(
-  serviceType,
-  sli,
-  selectorHash,
-  startRow,
-  environmentSelectorHash
+local sliDetailLatencyPanel(
+  title=null,
+  serviceType=null,
+  sliName=null,
+  selector=null,
+  aggregationLabels='',
+  logBase=10,
+  legendFormat='%(percentile_humanized)s %(sliName)s',
+  min=0.01,
+  intervalFactor=2,
       ) =
-  layout.singleRow(
-    (
-      if sli.hasApdex() then
-        [
-          keyMetrics.sliNodeApdexPanel(serviceType, sli.name, selectorHash, environmentSelectorHash),
-        ]
-      else []
-    )
-    +
-    (
-      if sli.hasErrorRate() then
-        [
-          keyMetrics.sliNodeErrorRateQuery(serviceType, sli.name, selectorHash, environmentSelectorHash),
-        ]
-      else []
-    )
-    +
-    (
-      if sli.hasAggregatableRequestRate() then
-        [
-          keyMetrics.sliNodeOperationRatePanel(serviceType, sli.name, selectorHash, environmentSelectorHash),
-        ]
-      else []
-    )
-    +
-    (
-      if sli.hasToolingLinks() then
-        // We pass the selector hash to the tooling links they may
-        // be used to customize the links
-        local toolingOptions = { prometheusSelectorHash: selectorHash };
+  local service = metricsCatalog.getService(serviceType);
+  local sli = service.serviceLevelIndicators[sliName];
+  local percentile = getLatencyPercentileForService(service);
+  local formatConfig = { percentile_humanized: 'p%g' % [percentile * 100], sliName: sliName };
 
-        [
-          grafana.text.new(
-            title='Tooling Links',
-            mode='markdown',
-            content=|||
-              ### Observability Tools
-
-              Note: some links may not have specific node-level filters applied.
-
-              %(links)s
-            ||| % {
-              links: toolingLinks.generateMarkdown(sli.getToolingLinks(), toolingOptions),
-            },
-          ),
-        ]
-      else
-        []
+  basic.latencyTimeseries(
+    title=(if title == null then 'Estimated %(percentile_humanized)s latency for %(sliName)s' + sliName else title) % formatConfig,
+    query=sli.apdex.percentileLatencyQuery(
+      percentile=percentile,
+      aggregationLabels=aggregationLabels,
+      selector=selector,
+      rangeInterval='$__interval',
     ),
-    startRow=startRow + 8
+    logBase=logBase,
+    legendFormat=legendFormat % formatConfig,
+    min=min,
+    intervalFactor=intervalFactor,
+  ) + {
+    thresholds: [
+      thresholds.errorLevel('gt', sli.apdex.toleratedThreshold),
+      thresholds.warningLevel('gt', sli.apdex.satisfiedThreshold),
+    ],
+  };
+
+local sliDetailOpsRatePanel(
+  title=null,
+  serviceType=null,
+  sliName=null,
+  selector=null,
+  aggregationLabels='',
+  legendFormat='%(sliName)s errors',
+  intervalFactor=2,
+      ) =
+  local service = metricsCatalog.getService(serviceType);
+  local sli = service.serviceLevelIndicators[sliName];
+
+  basic.timeseries(
+    title=if title == null then 'RPS for ' + sliName else title,
+    query=sli.requestRate.aggregatedRateQuery(
+      aggregationLabels=aggregationLabels,
+      selector=selector,
+      rangeInterval='$__interval',
+    ),
+    legendFormat=legendFormat % { sliName: sliName },
+    intervalFactor=intervalFactor,
+    yAxisLabel='Requests per Second'
   );
 
+local sliDetailErrorRatePanel(
+  title=null,
+  serviceType=null,
+  sliName=null,
+  selector=null,
+  aggregationLabels='',
+  legendFormat='%(sliName)s errors',
+  intervalFactor=2,
+      ) =
+  local service = metricsCatalog.getService(serviceType);
+  local sli = service.serviceLevelIndicators[sliName];
+
+  basic.timeseries(
+    title=if title == null then 'Errors for ' + sliName else title,
+    query=sli.errorRate.aggregatedRateQuery(
+      aggregationLabels=aggregationLabels,
+      selector=selector,
+      rangeInterval='$__interval',
+    ),
+    legendFormat=legendFormat % { sliName: sliName },
+    intervalFactor=intervalFactor,
+    yAxisLabel='Errors',
+    decimals=2,
+  );
 {
-  sliLatencyPanel(
-    title=null,
-    serviceType=null,
-    sliName=null,
-    selector=null,
-    aggregationLabels='',
-    logBase=10,
-    legendFormat='%(percentile_humanized)s %(sliName)s',
-    min=0.01,
-    intervalFactor=2,
-  )::
-    local service = metricsCatalog.getService(serviceType);
-    local sli = service.serviceLevelIndicators[sliName];
-    local percentile = getLatencyPercentileForService(service);
-    local formatConfig = { percentile_humanized: 'p%g' % [percentile * 100], sliName: sliName };
-
-    basic.latencyTimeseries(
-      title=(if title == null then 'Estimated %(percentile_humanized)s latency for %(sliName)s' + sliName else title) % formatConfig,
-      query=sli.apdex.percentileLatencyQuery(
-        percentile=percentile,
-        aggregationLabels=aggregationLabels,
-        selector=selector,
-        rangeInterval='$__interval',
-      ),
-      logBase=logBase,
-      legendFormat=legendFormat % formatConfig,
-      min=min,
-      intervalFactor=intervalFactor,
-    ) + {
-      thresholds: [
-        thresholds.errorLevel('gt', sli.apdex.toleratedThreshold),
-        thresholds.warningLevel('gt', sli.apdex.satisfiedThreshold),
-      ],
-    },
-
-  sliOpsRatePanel(
-    title=null,
-    serviceType=null,
-    sliName=null,
-    selector=null,
-    aggregationLabels='',
-    legendFormat='%(sliName)s errors',
-    intervalFactor=2,
-  )::
-    local service = metricsCatalog.getService(serviceType);
-    local sli = service.serviceLevelIndicators[sliName];
-
-    basic.timeseries(
-      title=if title == null then 'RPS for ' + sliName else title,
-      query=sli.requestRate.aggregatedRateQuery(
-        aggregationLabels=aggregationLabels,
-        selector=selector,
-        rangeInterval='$__interval',
-      ),
-      legendFormat=legendFormat % { sliName: sliName },
-      intervalFactor=intervalFactor,
-      yAxisLabel='Requests per Second'
-    ),
-
-
-  sliErrorRatePanel(
-    title=null,
-    serviceType=null,
-    sliName=null,
-    selector=null,
-    aggregationLabels='',
-    legendFormat='%(sliName)s errors',
-    intervalFactor=2,
-  )::
-    local service = metricsCatalog.getService(serviceType);
-    local sli = service.serviceLevelIndicators[sliName];
-
-    basic.timeseries(
-      title=if title == null then 'Errors for ' + sliName else title,
-      query=sli.errorRate.aggregatedRateQuery(
-        aggregationLabels=aggregationLabels,
-        selector=selector,
-        rangeInterval='$__interval',
-      ),
-      legendFormat=legendFormat % { sliName: sliName },
-      intervalFactor=intervalFactor,
-      yAxisLabel='Errors',
-      decimals=2,
-    ),
-
   // Generates a grid/matrix of SLI data for the given service/stage
   sliMatrixForService(
+    title,
     serviceType,
-    serviceStage,
+    aggregationSet,
     startRow,
-    environmentSelectorHash=defaultEnvironmentSelector,
+    selectorHash
   )::
     local service = metricsCatalog.getService(serviceType);
     [
-      row.new(title='🔬 Service Level Indicators', collapse=false) { gridPos: { x: 0, y: startRow, w: 24, h: 1 } },
+      row.new(title=title, collapse=false) { gridPos: { x: 0, y: startRow, w: 24, h: 1 } },
     ] +
     std.prune(
       std.flattenArrays(
         std.mapWithIndex(
           function(i, sliName)
             sliOverviewMatrixRow(
-              serviceType,
-              serviceStage,
-              service.serviceLevelIndicators[sliName],
-              startRow=startRow + 1 + i * 10,
-              environmentSelectorHash=environmentSelectorHash,
-            ), std.objectFields(service.serviceLevelIndicators)
-        )
-      )
-    ),
-
-  // Generates a grid of dashboards for a given service
-  // using the provided selectorHash (used to select fqdns)
-  //
-  // environmentSelectorHash is used for environment-specific selectors, specifically the SLOs
-  sliNodeOverviewMatrix(
-    serviceType,
-    selectorHash,
-    startRow,
-    environmentSelectorHash=defaultEnvironmentSelector,
-  )::
-    local service = metricsCatalog.getService(serviceType);
-    [
-      row.new(title='🔬 SLI/Node Level Indicators', collapse=false) { gridPos: { x: 0, y: startRow, w: 24, h: 1 } },
-    ] +
-    std.prune(
-      std.flattenArrays(
-        std.mapWithIndex(
-          function(i, sliName)
-            sliNodeOverviewMatrixRow(
               serviceType=serviceType,
+              aggregationSet=aggregationSet,
               sli=service.serviceLevelIndicators[sliName],
-              selectorHash=selectorHash { component: sliName },
+              selectorHash=selectorHash { type: serviceType, component: sliName },
               startRow=startRow + 1 + i * 10,
-              environmentSelectorHash=environmentSelectorHash,
             ), std.objectFields(service.serviceLevelIndicators)
         )
       )
@@ -336,7 +228,7 @@ local sliNodeOverviewMatrixRow(
               std.prune(
                 [
                   if sli.hasApdex() then
-                    self.sliLatencyPanel(
+                    sliDetailLatencyPanel(
                       title='Estimated %(percentile_humanized)s ' + sliName + ' Latency - ' + aggregationSet.title,
                       serviceType=serviceType,
                       sliName=sliName,
@@ -369,7 +261,7 @@ local sliNodeOverviewMatrixRow(
                     null,
 
                   if sli.hasErrorRate() then
-                    self.sliErrorRatePanel(
+                    sliDetailErrorRatePanel(
                       title=sliName + ' Errors - ' + aggregationSet.title,
                       serviceType=serviceType,
                       sliName=sliName,
@@ -381,7 +273,7 @@ local sliNodeOverviewMatrixRow(
                     null,
 
                   if sli.hasAggregatableRequestRate() then
-                    self.sliOpsRatePanel(
+                    sliDetailOpsRatePanel(
                       title=sliName + ' RPS - ' + aggregationSet.title,
                       serviceType=serviceType,
                       sliName=sliName,

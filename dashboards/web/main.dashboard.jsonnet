@@ -1,27 +1,8 @@
-local capacityPlanning = import 'capacity_planning.libsonnet';
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
-local basic = import 'grafana/basic.libsonnet';
-local commonAnnotations = import 'grafana/common_annotations.libsonnet';
-local layout = import 'grafana/layout.libsonnet';
-local promQuery = import 'grafana/prom_query.libsonnet';
-local seriesOverrides = import 'grafana/series_overrides.libsonnet';
-local templates = import 'grafana/templates.libsonnet';
-local keyMetrics = import 'key_metrics.libsonnet';
-local nodeMetrics = import 'node_metrics.libsonnet';
-local platformLinks = import 'platform_links.libsonnet';
 local railsCommon = import 'rails_common_graphs.libsonnet';
-local serviceCatalog = import 'service_catalog.libsonnet';
 local workhorseCommon = import 'workhorse_common_graphs.libsonnet';
-local dashboard = grafana.dashboard;
 local row = grafana.row;
-local template = grafana.template;
-local graphPanel = grafana.graphPanel;
-local annotation = grafana.annotation;
-local serviceHealth = import 'service_health.libsonnet';
-local saturationDetail = import 'saturation_detail.libsonnet';
 local serviceDashboard = import 'service_dashboard.libsonnet';
-
-local selector = 'environment="$environment", type="web", stage="$stage"';
 
 serviceDashboard.overview('web', 'sv')
 .addPanel(
