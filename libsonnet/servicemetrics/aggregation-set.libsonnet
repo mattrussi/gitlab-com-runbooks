@@ -34,36 +34,42 @@ local definitionDefaults = {
   AggregationSet(definition)::
     local definitionWithDefaults = definitionDefaults + definition;
 
-    local getMetricNameForBurnRate(burnRate, metricName) =
+    local getMetricNameForBurnRate(burnRate, metricName, required) =
+      local nullOrFail() =
+        if required then
+          std.assertEqual('', { __assert__: "'%s' metric for '%s' burn rate required, but not configured in aggregation set '%s'." % [metricName, burnRate, definitionWithDefaults.name] })
+        else
+          null;
+
       if std.objectHas(definitionWithDefaults.burnRates, burnRate) then
         local burnDef = definitionWithDefaults.burnRates[burnRate];
         if std.objectHas(burnDef, metricName) then
           burnDef[metricName]
         else
-          null
+          nullOrFail()
       else
-        null;
+        nullOrFail();
 
     definitionWithDefaults {
-      // Returns the apdexRatio metric name or null
-      getApdexRatioMetricForBurnRate(burnRate)::
-        getMetricNameForBurnRate(burnRate, 'apdexRatio'),
+      // Returns the apdexRatio metric name, null if not required, or fails if missing and required
+      getApdexRatioMetricForBurnRate(burnRate, required=false)::
+        getMetricNameForBurnRate(burnRate, 'apdexRatio', required),
 
-      // Returns the apdexRatio metric name or null
-      getApdexWeightMetricForBurnRate(burnRate)::
-        getMetricNameForBurnRate(burnRate, 'apdexWeight'),
+      // Returns the apdexRatio metric name, null if not required, or fails if missing and required
+      getApdexWeightMetricForBurnRate(burnRate, required=false)::
+        getMetricNameForBurnRate(burnRate, 'apdexWeight', required),
 
-      // Returns the opsRate metric name or null
-      getOpsRateMetricForBurnRate(burnRate)::
-        getMetricNameForBurnRate(burnRate, 'opsRate'),
+      // Returns the opsRate metric name, null if not required, or fails if missing and required
+      getOpsRateMetricForBurnRate(burnRate, required=false)::
+        getMetricNameForBurnRate(burnRate, 'opsRate', required),
 
-      // Returns the errorRate metric name or null
-      getErrorRateMetricForBurnRate(burnRate)::
-        getMetricNameForBurnRate(burnRate, 'errorRate'),
+      // Returns the errorRate metric name, null if not required, or fails if missing and required
+      getErrorRateMetricForBurnRate(burnRate, required=false)::
+        getMetricNameForBurnRate(burnRate, 'errorRate', required),
 
-      // Returns the errorRatio metric name or null
-      getErrorRatioMetricForBurnRate(burnRate)::
-        getMetricNameForBurnRate(burnRate, 'errorRatio'),
+      // Returns the errorRatio metric name, null if not required, or fails if missing and required
+      getErrorRatioMetricForBurnRate(burnRate, required=false)::
+        getMetricNameForBurnRate(burnRate, 'errorRatio', required),
 
       // Returns a set of burn rates for the aggregation set,
       // ordered by duration ascending

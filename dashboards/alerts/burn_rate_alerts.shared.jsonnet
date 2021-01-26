@@ -16,7 +16,7 @@ local multiburnFactors = import 'mwmbr/multiburn_factors.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local statusDescription = import 'status_description.libsonnet';
 
-local combinations(shortMetric, shortDuration, longMetric, longDuration, selectorHash, apdexInverted, sloMetric, nonGlobalFallback, thanosEvaluated=true) =
+local combinations(shortMetric, shortDuration, longMetric, longDuration, selectorHash, apdexInverted, thresholdSLOMetricName, nonGlobalFallback, thanosEvaluated=true) =
   local formatConfig = {
     shortMetric: shortMetric,
     shortDuration: shortDuration,
@@ -25,7 +25,7 @@ local combinations(shortMetric, shortDuration, longMetric, longDuration, selecto
     longBurnFactor: multiburnFactors['burnrate_' + longDuration],
     globalSelector: selectors.serializeHash(selectorHash + (if thanosEvaluated then { monitor: 'global' } else {})),
     nonGlobalSelector: selectors.serializeHash(selectorHash + (if thanosEvaluated then { monitor: { ne: 'global' } } else {})),
-    sloMetric: sloMetric,
+    thresholdSLOMetricName: thresholdSLOMetricName,
   };
 
   // For backwards compatability, fall-back to non global
@@ -66,9 +66,9 @@ local combinations(shortMetric, shortDuration, longMetric, longDuration, selecto
     {
       legendFormat: '%(longDuration)s apdex burn threshold' % formatConfig,
       query: if apdexInverted then
-        '(1 - (%(longBurnFactor)g * (1 - avg(%(sloMetric)s{monitor="global", type="$type"})))) unless (vector($proposed_slo) > 0) ' % formatConfig
+        '(1 - (%(longBurnFactor)g * (1 - avg(%(thresholdSLOMetricName)s{monitor="global", type="$type"})))) unless (vector($proposed_slo) > 0) ' % formatConfig
       else
-        '(%(longBurnFactor)g * avg(%(sloMetric)s{monitor="global", type="$type"})) unless (vector($proposed_slo) > 0)' % formatConfig,
+        '(%(longBurnFactor)g * avg(%(thresholdSLOMetricName)s{monitor="global", type="$type"})) unless (vector($proposed_slo) > 0)' % formatConfig,
     },
     {
       legendFormat: 'Proposed SLO @ %(longDuration)s burn' % formatConfig,
@@ -301,7 +301,7 @@ local errorSLOMetric = 'slo:max:events:gitlab_service_errors:ratio';
       longDuration='1h',
       selectorHash=componentSelectorHash,
       apdexInverted=true,
-      sloMetric=apdexSLOMetric,
+      thresholdSLOMetricName=apdexSLOMetric,
       nonGlobalFallback=true,
     ),
     sixHourBurnRateCombinations=combinations(
@@ -311,7 +311,7 @@ local errorSLOMetric = 'slo:max:events:gitlab_service_errors:ratio';
       longDuration='6h',
       selectorHash=componentSelectorHash,
       apdexInverted=true,
-      sloMetric=apdexSLOMetric,
+      thresholdSLOMetricName=apdexSLOMetric,
       nonGlobalFallback=true,
     ),
     serviceAggregated=false,
@@ -330,7 +330,7 @@ local errorSLOMetric = 'slo:max:events:gitlab_service_errors:ratio';
       longDuration='1h',
       selectorHash=componentSelectorHash,
       apdexInverted=false,
-      sloMetric=errorSLOMetric,
+      thresholdSLOMetricName=errorSLOMetric,
       nonGlobalFallback=false,
     ),
     sixHourBurnRateCombinations=combinations(
@@ -340,7 +340,7 @@ local errorSLOMetric = 'slo:max:events:gitlab_service_errors:ratio';
       longDuration='6h',
       selectorHash=componentSelectorHash,
       apdexInverted=false,
-      sloMetric=errorSLOMetric,
+      thresholdSLOMetricName=errorSLOMetric,
       nonGlobalFallback=false,
     ),
     serviceAggregated=false,
@@ -359,7 +359,7 @@ local errorSLOMetric = 'slo:max:events:gitlab_service_errors:ratio';
       longDuration='1h',
       selectorHash=componentNodeSelectorHash,
       apdexInverted=true,
-      sloMetric=apdexSLOMetric,
+      thresholdSLOMetricName=apdexSLOMetric,
       nonGlobalFallback=true,
       thanosEvaluated=false,
     ),
@@ -370,7 +370,7 @@ local errorSLOMetric = 'slo:max:events:gitlab_service_errors:ratio';
       longDuration='6h',
       selectorHash=componentNodeSelectorHash,
       apdexInverted=true,
-      sloMetric=apdexSLOMetric,
+      thresholdSLOMetricName=apdexSLOMetric,
       nonGlobalFallback=true,
       thanosEvaluated=false,
     ),
@@ -392,7 +392,7 @@ local errorSLOMetric = 'slo:max:events:gitlab_service_errors:ratio';
       longDuration='1h',
       selectorHash=componentNodeSelectorHash,
       apdexInverted=false,
-      sloMetric=errorSLOMetric,
+      thresholdSLOMetricName=errorSLOMetric,
       nonGlobalFallback=false,
       thanosEvaluated=false,
     ),
@@ -403,7 +403,7 @@ local errorSLOMetric = 'slo:max:events:gitlab_service_errors:ratio';
       longDuration='6h',
       selectorHash=componentNodeSelectorHash,
       apdexInverted=false,
-      sloMetric=errorSLOMetric,
+      thresholdSLOMetricName=errorSLOMetric,
       nonGlobalFallback=false,
       thanosEvaluated=false,
     ),
@@ -424,7 +424,7 @@ local errorSLOMetric = 'slo:max:events:gitlab_service_errors:ratio';
       longDuration='1h',
       selectorHash=serviceSelectorHash,
       apdexInverted=true,
-      sloMetric=apdexSLOMetric,
+      thresholdSLOMetricName=apdexSLOMetric,
       nonGlobalFallback=false,
     ),
     sixHourBurnRateCombinations=combinations(
@@ -434,7 +434,7 @@ local errorSLOMetric = 'slo:max:events:gitlab_service_errors:ratio';
       longDuration='6h',
       selectorHash=serviceSelectorHash,
       apdexInverted=true,
-      sloMetric=apdexSLOMetric,
+      thresholdSLOMetricName=apdexSLOMetric,
       nonGlobalFallback=false,
     ),
     serviceAggregated=true,
@@ -452,7 +452,7 @@ local errorSLOMetric = 'slo:max:events:gitlab_service_errors:ratio';
       longDuration='1h',
       selectorHash=serviceSelectorHash,
       apdexInverted=false,
-      sloMetric=errorSLOMetric,
+      thresholdSLOMetricName=errorSLOMetric,
       nonGlobalFallback=false,
     ),
     sixHourBurnRateCombinations=combinations(
@@ -462,7 +462,7 @@ local errorSLOMetric = 'slo:max:events:gitlab_service_errors:ratio';
       longDuration='6h',
       selectorHash=serviceSelectorHash,
       apdexInverted=false,
-      sloMetric=errorSLOMetric,
+      thresholdSLOMetricName=errorSLOMetric,
       nonGlobalFallback=false,
     ),
     serviceAggregated=true,
