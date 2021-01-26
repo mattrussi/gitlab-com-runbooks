@@ -66,7 +66,7 @@ metricsCatalog.serviceDefinition({
         ] },
         cny: { backends: ['canary_https_git'], toolingLinks: [
           toolingLinks.bigquery(title='Top http clients by number of requests, cny stage, 10m', savedQuery='805818759045:dea839bd669e41b5bc264c510294bb9f'),
-        ] },  // What happens to cny websocket traffic?
+        ] },
       },
       selector={ type: 'frontend' },
     ),
@@ -94,7 +94,6 @@ metricsCatalog.serviceDefinition({
       description: |||
         Monitors the Workhorse instance running in the Git fleet, via the HTTP interface. This SLI
         excludes API requests, which have their own SLI with tigher latency thresholds.
-        Websocket connections are excluded from the apdex score.
       |||,
 
       local baseSelector = gitWorkhorseJobNameSelector {
@@ -104,15 +103,7 @@ metricsCatalog.serviceDefinition({
 
       apdex: histogramApdex(
         histogram='gitlab_workhorse_http_request_duration_seconds_bucket',
-        selector=baseSelector {
-          route+: [{
-            ne: '^/([^/]+/){1,}[^/]+/-/jobs/[0-9]+/terminal.ws\\\\z',
-          }, {
-            ne: '^/([^/]+/){1,}[^/]+/-/environments/[0-9]+/terminal.ws\\\\z',
-          }, {
-            ne: '^/-/cable\\\\z',  // Exclude Websocket connections from apdex score
-          }],
-        },
+        selector=baseSelector,
         satisfiedThreshold=30,
         toleratedThreshold=60
       ),
