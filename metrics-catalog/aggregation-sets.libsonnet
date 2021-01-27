@@ -274,7 +274,6 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
     serviceLevelAggregation: true,
   }),
 
-
   /**
    * serviceNodeAggregatedSLIs consumes globalNodeSLIs and aggregates
    * all the SLIs in a service up to the service level for each node.
@@ -311,6 +310,44 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
         opsRate: 'gitlab_service_node_ops:rate_6h',
         errorRate: 'gitlab_service_node_errors:rate_6h',
         errorRatio: 'gitlab_service_node_errors:ratio_6h',
+      },
+    },
+    serviceLevelAggregation: true,
+  }),
+
+  /**
+   * Regional SLIs, aggregated to the service level
+   */
+  serviceRegionalAggregatedSLIs:: aggregationSets.AggregationSet({
+    id: 'service_regional',
+    name: 'Global Service-Regional-Aggregated Metrics',
+    selector: { monitor: 'global' },  // Thanos Ruler
+    labels: ['env', 'environment', 'tier', 'type', 'stage', 'region'],
+    burnRates: {
+      // No 1m burn rate
+      '5m': {
+        apdexRatio: 'gitlab_service_regional_apdex:ratio_5m',
+        opsRate: 'gitlab_service_regional_ops:rate_5m',
+        errorRate: 'gitlab_service_regional_errors:rate_5m',
+        errorRatio: 'gitlab_service_regional_errors:ratio_5m',
+      },
+      '30m': {
+        apdexRatio: 'gitlab_service_regional_apdex:ratio_30m',
+        opsRate: 'gitlab_service_regional_ops:rate_30m',
+        errorRate: 'gitlab_service_regional_errors:rate_30m',
+        errorRatio: 'gitlab_service_regional_errors:ratio_30m',
+      },
+      '1h': {
+        apdexRatio: 'gitlab_service_regional_apdex:ratio_1h',
+        opsRate: 'gitlab_service_regional_ops:rate_1h',
+        errorRate: 'gitlab_service_regional_errors:rate_1h',
+        errorRatio: 'gitlab_service_regional_errors:ratio_1h',
+      },
+      '6h': {
+        apdexRatio: 'gitlab_service_regional_apdex:ratio_6h',
+        opsRate: 'gitlab_service_regional_ops:rate_6h',
+        errorRate: 'gitlab_service_regional_errors:rate_6h',
+        errorRatio: 'gitlab_service_regional_errors:ratio_6h',
       },
     },
     serviceLevelAggregation: true,
