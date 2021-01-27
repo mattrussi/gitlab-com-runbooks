@@ -1,19 +1,23 @@
 FROM golang:alpine AS go-jsonnet
 
-ENV JSONNET_VERSION 0.17.0
+ENV JSONNET_VERSION v0.17.0
+# Waiting for https://github.com/google/go-jsonnet/issues/483 to get into a release
+ENV JSONNET_LINTER_VERSION 31d71aaccda6d98135ecc02acae823ef6e78270c
 ENV JB_VERSION 0.4.0
 
 RUN apk add --no-cache bash git && \
-    mkdir -p /build/bin && \
-    cd /build && \
-    go mod init local/build && \
-    go get -d github.com/google/go-jsonnet/cmd/jsonnet@v$JSONNET_VERSION && \
-    go build -o /build/bin/jsonnet github.com/google/go-jsonnet/cmd/jsonnet && \
-    go get -d github.com/google/go-jsonnet/cmd/jsonnetfmt@v$JSONNET_VERSION && \
-    go build -o /build/bin/jsonnetfmt github.com/google/go-jsonnet/cmd/jsonnetfmt && \
-    go get -d github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb@v$JB_VERSION && \
-    go build -o /build/bin/jb github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb && \
-    rm -rf /tmp/* /var/tmp/* /var/cache/apk/*
+  mkdir -p /build/bin && \
+  cd /build && \
+  go mod init local/build && \
+  go get -d github.com/google/go-jsonnet/cmd/jsonnet@$JSONNET_VERSION && \
+  go build -o /build/bin/jsonnet github.com/google/go-jsonnet/cmd/jsonnet && \
+  go get -d github.com/google/go-jsonnet/cmd/jsonnetfmt@$JSONNET_VERSION && \
+  go build -o /build/bin/jsonnetfmt github.com/google/go-jsonnet/cmd/jsonnetfmt && \
+  go get -d github.com/google/go-jsonnet/cmd/jsonnet-lint@$JSONNET_LINTER_VERSION && \
+  go build -o /build/bin/jsonnet-lint github.com/google/go-jsonnet/cmd/jsonnet-lint && \
+  go get -d github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb@v$JB_VERSION && \
+  go build -o /build/bin/jb github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb && \
+  rm -rf /tmp/* /var/tmp/* /var/cache/apk/*
 
 FROM google/cloud-sdk:alpine
 
@@ -41,10 +45,11 @@ COPY --from=peterdavehello/shfmt:latest /bin/shfmt /usr/local/bin/shfmt
 
 COPY --from=go-jsonnet /build/bin/jsonnet /bin/jsonnet
 COPY --from=go-jsonnet /build/bin/jsonnetfmt /bin/jsonnetfmt
+COPY --from=go-jsonnet /build/bin/jsonnet-lint /bin/jsonnet-lint
 COPY --from=go-jsonnet /build/bin/jb /bin/jb
 
 RUN gem install --no-document json && \
-    gem install --no-document yaml-lint && \
-    rm -rf /tmp/* /var/tmp/* /var/cache/apk/*
+  gem install --no-document yaml-lint && \
+  rm -rf /tmp/* /var/tmp/* /var/cache/apk/*
 
 ENTRYPOINT ["/bin/sh", "-c"]
