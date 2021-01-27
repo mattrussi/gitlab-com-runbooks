@@ -55,7 +55,7 @@ local pgbouncerSyncPool(serviceType, role) =
 
       Web/api/git applications use a separate connection pool to sidekiq.
 
-      When this resource is saturated, web/api database operations may queue, leading to unicorn/puma
+      When this resource is saturated, web/api database operations may queue, leading to rails worker
       saturation and 503 errors in the web.
     ||| % { role: role },
     grafana_dashboard_uid: 'sat_pgbouncer_sync_pool_' + role,
@@ -924,9 +924,9 @@ local pgbouncerSyncPool(serviceType, role) =
     grafana_dashboard_uid: 'sat_single_node_puma_workers',
     resourceLabels: ['fqdn'],
     query: |||
-      sum by(%(aggregationLabels)s) (avg_over_time(puma_active_connections{%(selector)s}[%(rangeInterval)s]))
+      sum by(%(aggregationLabels)s) (avg_over_time(instance:puma_active_connections:sum{%(selector)s}[%(rangeInterval)s]))
       /
-      sum by(%(aggregationLabels)s) (puma_max_threads{pid="puma_master", %(selector)s})
+      sum by(%(aggregationLabels)s) (instance:puma_max_threads:sum{%(selector)s})
     |||,
     slos: {
       soft: 0.85,

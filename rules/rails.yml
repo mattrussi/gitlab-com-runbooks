@@ -106,59 +106,15 @@ groups:
       sum without (pid,worker) (
         puma_active_connections
       )
-  - record: job:puma_active_connections:sum
-    expr: >
-      sum without (fqdn,instance,node,pod) (
-        instance:puma_active_connections:sum
-      )
   - record: instance:puma_queued_connections:sum
     expr: >
       sum without (pid,worker) (
         puma_queued_connections
       )
-  - record: job:puma_queued_connections:sum
+  - record: instance:puma_max_threads:sum
     expr: >
-      sum without (fqdn,instance,node,pod) (
-        instance:puma_queued_connections:sum
-      )
-
-- name: Unicorn Connections
-  interval: 15s
-  rules:
-  - record: job:unicorn_active_connections:sum
-    expr: >
-      sum without (fqdn,instance,node,pod) (
-        unicorn_active_connections
-      )
-  - record: job:unicorn_queued_connections:sum
-    expr: >
-      sum without (fqdn,instance,node,pod) (
-        unicorn_queued_connections
-      )
-
-- name: Unicorn Worker Churn
-  interval: 1m
-  rules:
-  - record: job:unicorn_exceeds_memory_limit_total:rate1m
-    expr: >
-      sum without (fqdn,instance,node,pod) (
-        rate(unicorn_exceeds_memory_limit_total[1m])
-      )
-  - record: job:unicorn_killer_terminations_total:rate1m
-    expr: >
-      sum without (fqdn,instance,node,pod) (
-        rate(unicorn_killer_terminations_total[1m])
-      )
-  - record: job:unicorn_pid_timeouts_total:rate1m
-    expr: >
-      sum without (fqdn,instance,node,pod) (
-        rate(unicorn_pid_timeouts_total[1m])
-      )
-
-  - record: job:unicorn_process_reaped_total:rate1m
-    expr: >
-      sum without (fqdn,instance,node,pod) (
-        rate(unicorn_process_reaped_total[1m])
+      sum without (pid,worker) (
+        puma_max_threads{pid="puma_master"}
       )
 
 - name: Rails Transactions 1m
