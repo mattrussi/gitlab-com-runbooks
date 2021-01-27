@@ -2,10 +2,6 @@
 // This is probably not what you want. Avoid combining multiple signals into
 // a single SLI unless you are sure you know what you are doing
 
-local metricsCatalog = import './metrics.libsonnet';
-local rateMetric = metricsCatalog.rateMetric;
-local combined = metricsCatalog.combined;
-
 // Combined component definitions are a specialisation of the service-component.
 // They allow multiple components to be combined under a single name, but with different
 // static labels.

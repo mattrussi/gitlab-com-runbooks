@@ -6,9 +6,6 @@ local outputPromYaml(groups) =
     groups: groups,
   });
 
-// Select all services with `autogenerateRecordingRules` (default on)
-local selectedServices = std.filter(function(service) service.autogenerateRecordingRules, services);
-
 /**
  * The source SLI recording rules are each kept in their own files, generated from this
  */

@@ -1,6 +1,5 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local rateMetric = metricsCatalog.rateMetric;
-local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
 local defaultHTTPSLIDescription = |||
   Measures aggregated HTTP request traffic through the HAProxy.

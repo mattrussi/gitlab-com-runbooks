@@ -20,7 +20,6 @@ local generateRecordingRulesForMetric(recordingRuleMetric, burnRate, recordingRu
 
       // Generates the recording rules given a service definition
       generateRecordingRulesForService(serviceDefinition)::
-        local components = serviceDefinition.components;
         if std.objectHas(serviceDefinition, 'recordingRuleMetrics') then
           [
             generateRecordingRulesForMetric(recordingRuleMetric, burnRate, recordingRuleRegistry)

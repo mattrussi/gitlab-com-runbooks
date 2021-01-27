@@ -16,7 +16,7 @@ local generateMarkdown(toolingLinks, options={}) =
   local optionsWithDefaults = {
     prometheusSelectorHash: {},
   } + options;
-  std.join('', std.flatMap(function(toolingLinkDefinition) generateMarkdownLink(toolingLinkDefinition, options), toolingLinks));
+  std.join('', std.flatMap(function(toolingLinkDefinition) generateMarkdownLink(toolingLinkDefinition, optionsWithDefaults), toolingLinks));
 
 {
   cloudSQL: (import './cloud_sql.libsonnet').cloudSQL,

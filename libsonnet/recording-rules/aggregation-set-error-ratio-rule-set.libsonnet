@@ -1,4 +1,3 @@
-local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 
 {

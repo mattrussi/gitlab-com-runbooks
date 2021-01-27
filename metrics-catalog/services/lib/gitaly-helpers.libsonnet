@@ -1,6 +1,5 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
-local combined = metricsCatalog.combined;
 
 local gitalyApdexIgnoredMethods = std.set([
   'CalculateChecksum',
