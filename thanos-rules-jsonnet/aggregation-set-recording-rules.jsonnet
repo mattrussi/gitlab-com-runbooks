@@ -88,4 +88,20 @@ local outputPromYaml(groups) =
         ),
       }]
     ),
+
+  /**
+   * Regional SLIs, aggregated to the service level
+   */
+  'aggregated-service-regional-metrics.yml':
+    outputPromYaml(
+      [{
+        name: aggregationSets.serviceNodeAggregatedSLIs.name,
+        interval: '1m',
+        partial_response_strategy: 'warn',
+        rules: aggregationSetTransformer.generateRecordingRules(
+          sourceAggregationSet=aggregationSets.promSourceSLIs,
+          targetAggregationSet=aggregationSets.serviceRegionalAggregatedSLIs
+        ),
+      }]
+    ),
 }
