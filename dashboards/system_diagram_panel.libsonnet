@@ -1,10 +1,11 @@
+local aggregationSets = import './aggregation-sets.libsonnet';
 local dependencies = import './dependencies.libsonnet';
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
+local layout = import 'grafana/layout.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
+local sliPromQL = import 'key-metric-panels/sli_promql.libsonnet';
 local metricsCatalog = import 'metrics-catalog.libsonnet';
 local row = grafana.row;
-local layout = import 'grafana/layout.libsonnet';
-local sliPromQL = import 'sli_promql.libsonnet';
 
 local MERMAID_DIAGRAM_TEMPLATE =
   |||
@@ -146,7 +147,7 @@ local errorDiagram(services) =
     graphId='diagram_errors',
     thresholds='0,0.001',
     target=promQuery.target(
-      sliPromQL.errorRate.serviceErrorRateQuery({ environment: '$environment', stage: '$stage' }, range='$__range'),
+      sliPromQL.errorRatioQuery(aggregationSets.serviceAggregatedSLIs, null, selectorHash={ environment: '$environment', stage: '$stage' }, range='$__range'),
       legendFormat='{{ type }}',
       instant=true
     )
@@ -164,7 +165,7 @@ local apdexDiagram(services) =
     graphId='diagram_apdex',
     thresholds='0.99,0.995,0.999',
     target=promQuery.target(
-      sliPromQL.apdex.serviceApdexQuery({ environment: '$environment', stage: '$stage' }, range='$__range'),
+      sliPromQL.apdexQuery(aggregationSets.serviceAggregatedSLIs, null, { environment: '$environment', stage: '$stage' }, range='$__range'),
       legendFormat='{{ type }}',
       instant=true
     )

@@ -7,13 +7,11 @@ local platformLinks = import 'platform_links.libsonnet';
 local row = grafana.row;
 local selectors = import 'promql/selectors.libsonnet';
 local seriesOverrides = import 'grafana/series_overrides.libsonnet';
-local serviceCatalog = import 'service_catalog.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 local thresholds = import 'thresholds.libsonnet';
 local generalServicesDashboard = import 'general-services-dashboard.libsonnet';
 
 // These charts have a very high interval factor, to create a wide trend line
-local INTERVAL_FACTOR = 50;
 local INTERVAL = '1d';
 
 local overviewDashboardLinks(type) =

@@ -2,17 +2,19 @@ local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libso
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local templates = import 'grafana/templates.libsonnet';
-local keyMetrics = import 'key_metrics.libsonnet';
 local nodeMetrics = import 'node_metrics.libsonnet';
 local platformLinks = import 'platform_links.libsonnet';
 local saturationDetail = import 'saturation_detail.libsonnet';
 local serviceCatalog = import 'service_catalog.libsonnet';
-local dashboard = grafana.dashboard;
 local row = grafana.row;
 local metricsCatalogDashboards = import 'metrics_catalog_dashboards.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local processExporter = import 'process_exporter.libsonnet';
 local metricsCatalog = import 'metrics-catalog.libsonnet';
+local aggregationSets = import './aggregation-sets.libsonnet';
+local singleMetricRow = import 'key-metric-panels/single-metric-row.libsonnet';
+
+local serviceType = 'gitaly';
 
 local ratelimitLockPercentage(selector) =
   basic.percentageTimeseries(
@@ -66,58 +68,32 @@ local gitalySpawnTimeoutsPerNode(selector) =
     legend_show=false,
   );
 
-
-local environmentSelectorHash = {
+local selectorHash = {
   environment: '$environment',
   env: '$environment',
-};
-
-local selectorHash = {
+  type: 'gitaly',
   fqdn: { re: '$fqdn' },
 };
-
-local selector = selectors.serializeHash(selectorHash);
+local selectorSerialized = selectors.serializeHash(selectorHash);
 
 local headlineRow(startRow=1) =
   local metricsCatalogServiceInfo = metricsCatalog.getService('gitaly');
-  local serviceSelector = environmentSelectorHash { type: 'gitaly', fqdn: { re: '$fqdn' } };
+  local formatConfig = { serviceType: serviceType };
+  local selectorHashWithExtras = selectorHash { type: serviceType };
 
-  local cells =
-    (
-      if metricsCatalogServiceInfo.hasApdex() then
-        [
-          keyMetrics.serviceNodeApdexPanel(
-            serviceType='gitaly',
-            selectorHash=serviceSelector,
-            environmentSelectorHash=environmentSelectorHash,
-          ),
-        ]
-      else
-        []
-    )
-    +
-    (
-      if metricsCatalogServiceInfo.hasErrorRate() then
-        [
-          keyMetrics.serviceNodeErrorRatePanel(
-            serviceType='gitaly',
-            selectorHash=serviceSelector,
-            environmentSelectorHash=environmentSelectorHash,
-          ),
-        ]
-      else
-        []
-    )
-    +
-    [
-      keyMetrics.serviceNodeOperationRatePanel(
-        serviceType='gitaly',
-        selectorHash=serviceSelector,
-        environmentSelectorHash=environmentSelectorHash,
-      ),
-    ];
-
-  layout.singleRow(cells, startRow=startRow);
+  local columns =
+    singleMetricRow.row(
+      serviceType='gitaly',
+      aggregationSet=aggregationSets.serviceNodeAggregatedSLIs,
+      selectorHash=selectorHashWithExtras,
+      titlePrefix='Gitaly Per-Node Service Aggregated SLIs',
+      stableIdPrefix='node-latency-%(serviceType)s' % formatConfig,
+      legendFormatPrefix='',
+      showApdex=metricsCatalogServiceInfo.hasApdex(),
+      showErrorRatio=metricsCatalogServiceInfo.hasErrorRate(),
+      showOpsRate=true,
+    );
+  layout.splitColumnGrid(columns, [7, 1], startRow=startRow);
 
 basic.dashboard(
   'Host Detail',
@@ -128,11 +104,12 @@ basic.dashboard(
   headlineRow(startRow=100)
 )
 .addPanels(
-  metricsCatalogDashboards.sliNodeOverviewMatrix(
+  metricsCatalogDashboards.sliMatrixForService(
+    title='🔬 Node SLIs',
+    aggregationSet=aggregationSets.globalNodeSLIs,
     serviceType='gitaly',
-    selectorHash=environmentSelectorHash { fqdn: '$fqdn' },
-    startRow=200,
-    environmentSelectorHash=environmentSelectorHash,
+    selectorHash=selectorHash,
+    startRow=200
   )
 )
 .addPanel(
@@ -146,7 +123,7 @@ basic.dashboard(
 )
 .addPanels(
   layout.grid([
-    inflightGitalyCommandsPerNode(selector),
+    inflightGitalyCommandsPerNode(selectorSerialized),
   ], startRow=2001)
 )
 .addPanel(
@@ -160,11 +137,11 @@ basic.dashboard(
 )
 .addPanels(
   layout.grid([
-    gitalySpawnTimeoutsPerNode(selector),
-    ratelimitLockPercentage(selector),
+    gitalySpawnTimeoutsPerNode(selectorSerialized),
+    ratelimitLockPercentage(selectorSerialized),
   ], startRow=3001)
 )
-.addPanel(nodeMetrics.nodeMetricsDetailRow(selector), gridPos={ x: 0, y: 6000 })
+.addPanel(nodeMetrics.nodeMetricsDetailRow(selectorHash), gridPos={ x: 0, y: 6000 })
 .addPanel(
   saturationDetail.saturationDetailPanels(selectorHash, components=[
     'cgroup_memory',

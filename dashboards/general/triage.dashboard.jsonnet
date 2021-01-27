@@ -1,18 +1,16 @@
+local aggregationSets = import './aggregation-sets.libsonnet';
 local capacityPlanning = import 'capacity_planning.libsonnet';
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local colorScheme = import 'grafana/color_scheme.libsonnet';
-local commonAnnotations = import 'grafana/common_annotations.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
 local seriesOverrides = import 'grafana/series_overrides.libsonnet';
 local templates = import 'grafana/templates.libsonnet';
 local platformLinks = import 'platform_links.libsonnet';
+local selectors = import 'promql/selectors.libsonnet';
 local thresholds = import 'thresholds.libsonnet';
-local dashboard = grafana.dashboard;
-local row = grafana.row;
-local template = grafana.template;
 local graphPanel = grafana.graphPanel;
 local basic = import 'grafana/basic.libsonnet';
-local sliPromQL = import 'sli_promql.libsonnet';
+local sliPromQL = import 'key-metric-panels/sli_promql.libsonnet';
 
 local rowHeight = 8;
 local colWidth = 12;
@@ -23,6 +21,8 @@ local genGridPos(x, y, h=1, w=1) = {
   w: w * colWidth,
   h: h * rowHeight,
 };
+
+local selector = { env: '$environment', environment: '$environment', stage: '$stage' };
 
 local generalGraphPanel(title, description=null, sort='increasing') =
   graphPanel.new(
@@ -178,7 +178,7 @@ basic.dashboard(
   )
   .addTarget(  // Primary metric
     promQuery.target(
-      sliPromQL.apdex.serviceApdexQuery({ environment: '$environment', stage: '$stage' }, range='$__interval'),
+      sliPromQL.apdexQuery(aggregationSets.serviceAggregatedSLIs, null, selector, range='$__interval'),
       legendFormat='{{ type }} service',
       intervalFactor=3,
     )
@@ -205,7 +205,7 @@ basic.dashboard(
   )
   .addTarget(  // Primary metric
     promQuery.target(
-      sliPromQL.errorRate.serviceErrorRateQuery({ environment: '$environment', stage: '$stage' }, range='$__interval', clampMax=0.15),
+      sliPromQL.errorRatioQuery(aggregationSets.serviceAggregatedSLIs, null, selectorHash=selector, range='$__interval', clampMax=0.15),
       legendFormat='{{ type }} service',
       intervalFactor=3,
     )
@@ -232,7 +232,7 @@ basic.dashboard(
   )
   .addTarget(  // Primary metric
     promQuery.target(
-      sliPromQL.opsRate.serviceOpsRateQuery({ environment: '$environment', stage: '$stage' }, range='$__interval'),
+      sliPromQL.opsRateQuery(aggregationSets.serviceAggregatedSLIs, selector, range='$__interval'),
       legendFormat='{{ type }} service',
       intervalFactor=3,
     )
@@ -256,13 +256,15 @@ basic.dashboard(
     'Anomaly detection: Requests per second',
     |||
       (
-        gitlab_service_ops:rate{environment="$environment", stage="$stage"}
+        gitlab_service_ops:rate{%(selector)s}
         -
-        gitlab_service_ops:rate:prediction{environment="$environment", stage="$stage"}
+        gitlab_service_ops:rate:prediction{%(selector)s}
       )
       /
-      gitlab_service_ops:rate:stddev_over_time_1w{environment="$environment", stage="$stage"}
-    |||,
+      gitlab_service_ops:rate:stddev_over_time_1w{%(selector)s}
+    ||| % {
+      selector: selectors.serializeHash(selector),
+    },
     maxY=6,
     minY=-3,
     errorThreshold=4,

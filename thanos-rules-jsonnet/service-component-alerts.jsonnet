@@ -2,7 +2,6 @@ local aggregationSets = import 'aggregation-sets.libsonnet';
 local alerts = import 'alerts/alerts.libsonnet';
 local metricsCatalog = import 'metrics-catalog.libsonnet';
 local multiburnExpression = import 'mwmbr/expression.libsonnet';
-local multiburnFactors = import 'mwmbr/multiburn_factors.libsonnet';
 local serviceCatalog = import 'service_catalog.libsonnet';
 local stableIds = import 'stable-ids/stable-ids.libsonnet';
 local stages = import 'stages.libsonnet';
@@ -18,11 +17,6 @@ local minimumOperationRateForNodeMonitoring = 10; /* rps */
 // it's not too noisy.
 // Consider bringing this down to 2m after 1 Sep 2020
 local nodeAlertWaitPeriod = '10m';
-
-
-local formatConfig = multiburnFactors {
-  minimumOperationRateForMonitoring: minimumOperationRateForMonitoring,
-};
 
 local labelsForSLI(sli) =
   local labels = {
@@ -343,23 +337,6 @@ local groupsForService(service) = {
     rules: alertsForService(service),
   }],
 };
-
-// Not all services have alertable SLIs, filter the list
-local servicesWithSLIAlerts = std.filter(
-  function(service)
-    local slis = service.listServiceLevelIndicators();
-    local hasMonitoringThresholds = std.objectHas(service, 'monitoringThresholds');
-    local hasApdexSLO = hasMonitoringThresholds && std.objectHas(service.monitoringThresholds, 'apdexScore');
-    local hasErrorRateSLO = hasMonitoringThresholds && std.objectHas(service.monitoringThresholds, 'errorRatio');
-
-    // Returns true if any of the SLIs have an apdex or an error rate
-    std.foldl(
-      function(hasAlerts, sli)
-        hasAlerts || (hasApdexSLO && sli.hasApdex()) || (hasErrorRateSLO && sli.hasErrorRate()) || !sli.ignoreTrafficCessation,
-      slis,
-      false
-    )
-);
 
 std.foldl(
   function(docs, service)
