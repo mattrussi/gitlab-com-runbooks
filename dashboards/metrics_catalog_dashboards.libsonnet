@@ -54,10 +54,16 @@ local sliOverviewMatrixRow(
   sli,
   startRow,
   selectorHash,
-  aggregationSet
+  aggregationSet,
+  legendFormatPrefix,
+  expectMultipleSeries
       ) =
   local selectorHashWithExtras = selectorHash { type: serviceType, component: sli.name };
-  local formatConfig = { serviceType: serviceType, sliName: sli.name };
+  local formatConfig = {
+    serviceType: serviceType,
+    sliName: sli.name,
+    legendFormatPrefix: if legendFormatPrefix != '' then legendFormatPrefix else sli.name,
+  };
 
   local columns =
     singleMetricRow.row(
@@ -66,7 +72,8 @@ local sliOverviewMatrixRow(
       selectorHash=selectorHashWithExtras,
       titlePrefix='%(sliName)s SLI' % formatConfig,
       stableIdPrefix='sli-%(sliName)s' % formatConfig,
-      legendFormatPrefix=sli.name,
+      legendFormatPrefix='%(legendFormatPrefix)s' % formatConfig,
+      expectMultipleSeries=expectMultipleSeries,
       showApdex=sli.hasApdex(),
       showErrorRatio=sli.hasErrorRate(),
       showOpsRate=true,
@@ -179,7 +186,9 @@ local sliDetailErrorRatePanel(
     serviceType,
     aggregationSet,
     startRow,
-    selectorHash
+    selectorHash,
+    legendFormatPrefix='',
+    expectMultipleSeries=false
   )::
     local service = metricsCatalog.getService(serviceType);
     [
@@ -195,6 +204,8 @@ local sliDetailErrorRatePanel(
               sli=service.serviceLevelIndicators[sliName],
               selectorHash=selectorHash { type: serviceType, component: sliName },
               startRow=startRow + 1 + i * 10,
+              legendFormatPrefix=legendFormatPrefix,
+              expectMultipleSeries=expectMultipleSeries,
             ), std.objectFields(service.serviceLevelIndicators)
         )
       )

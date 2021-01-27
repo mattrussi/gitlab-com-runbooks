@@ -27,7 +27,8 @@ local row(
   apdexDescription=null,
   showErrorRatio,
   showOpsRate,
-  includePredictions=false
+  includePredictions=false,
+  expectMultipleSeries=false
       ) =
   local selectorHashWithExtras = selectorHash { type: serviceType };
   local formatConfig = {
@@ -41,23 +42,32 @@ local row(
   (
     // SLI Component apdex
     if showApdex then
-      [[
-        apdexPanel.panel(
-          title='%(titlePrefix)s Apdex' % formatConfig,
-          aggregationSet=aggregationSet,
-          serviceType=serviceType,
-          selectorHash=selectorHashWithExtras,
-          stableId='%(stableIdPrefix)s-apdex' % formatConfig,
-          goldenMetric='%(legendFormatPrefix)s apdex' % formatConfig,
-          description=apdexDescription
-        )
-        .addDataLink({
-          url: '/d/alerts-%(aggregationId)s_multiburn_apdex?${__url_time_range}&${__all_variables}&%(grafanaURLPairs)s' % formatConfig {},
-          title: '%(titlePrefix)s Apdex SLO Analysis' % formatConfig,
-          targetBlank: true,
-        }),
-        statusDescription.apdexStatusDescriptionPanel(titlePrefix, selectorHashWithExtras, aggregationSet=aggregationSet),
-      ]]
+      [
+        [
+          apdexPanel.panel(
+            title='%(titlePrefix)s Apdex' % formatConfig,
+            aggregationSet=aggregationSet,
+            serviceType=serviceType,
+            selectorHash=selectorHashWithExtras,
+            stableId='%(stableIdPrefix)s-apdex' % formatConfig,
+            legendFormat='%(legendFormatPrefix)s apdex' % formatConfig,
+            description=apdexDescription,
+            expectMultipleSeries=expectMultipleSeries,
+          )
+          .addDataLink({
+            url: '/d/alerts-%(aggregationId)s_multiburn_apdex?${__url_time_range}&${__all_variables}&%(grafanaURLPairs)s' % formatConfig {},
+            title: '%(titlePrefix)s Apdex SLO Analysis' % formatConfig,
+            targetBlank: true,
+          }),
+        ]
+        +
+        (
+          if expectMultipleSeries then
+            []
+          else
+            [statusDescription.apdexStatusDescriptionPanel(titlePrefix, selectorHashWithExtras, aggregationSet=aggregationSet)]
+        ),
+      ]
     else
       []
   )
@@ -65,22 +75,31 @@ local row(
   (
     // SLI Error rate
     if showErrorRatio then
-      [[
-        errorRatioPanel.panel(
-          '%(titlePrefix)s Error Ratio' % formatConfig,
-          aggregationSet=aggregationSet,
-          serviceType=serviceType,
-          selectorHash=selectorHashWithExtras,
-          stableId='%(stableIdPrefix)s-error-rate' % formatConfig,
-          goldenMetric='%(legendFormatPrefix)s error ratio' % formatConfig,
-        )
-        .addDataLink({
-          url: '/d/alerts-%(aggregationId)s_multiburn_error?${__url_time_range}&${__all_variables}&%(grafanaURLPairs)s' % formatConfig,
-          title: '%(titlePrefix)s Error-Rate SLO Analysis' % formatConfig,
-          targetBlank: true,
-        }),
-        statusDescription.errorRateStatusDescriptionPanel(titlePrefix, selectorHashWithExtras, aggregationSet=aggregationSet),
-      ]]
+      [
+        [
+          errorRatioPanel.panel(
+            '%(titlePrefix)s Error Ratio' % formatConfig,
+            aggregationSet=aggregationSet,
+            serviceType=serviceType,
+            selectorHash=selectorHashWithExtras,
+            stableId='%(stableIdPrefix)s-error-rate' % formatConfig,
+            legendFormat='%(legendFormatPrefix)s error ratio' % formatConfig,
+            expectMultipleSeries=expectMultipleSeries,
+          )
+          .addDataLink({
+            url: '/d/alerts-%(aggregationId)s_multiburn_error?${__url_time_range}&${__all_variables}&%(grafanaURLPairs)s' % formatConfig,
+            title: '%(titlePrefix)s Error-Rate SLO Analysis' % formatConfig,
+            targetBlank: true,
+          }),
+        ]
+        +
+        (
+          if expectMultipleSeries then
+            []
+          else
+            [statusDescription.errorRateStatusDescriptionPanel(titlePrefix, selectorHashWithExtras, aggregationSet=aggregationSet)]
+        ),
+      ]
     else
       []
   )
@@ -94,7 +113,8 @@ local row(
           aggregationSet=aggregationSet,
           selectorHash=selectorHashWithExtras,
           stableId='%(stableIdPrefix)s-ops-rate' % formatConfig,
-          goldenMetric='%(legendFormatPrefix)s RPS' % formatConfig,
+          legendFormat='%(legendFormatPrefix)s RPS' % formatConfig,
+          expectMultipleSeries=expectMultipleSeries,
           includePredictions=false,
           includeLastWeek=true
         ),
