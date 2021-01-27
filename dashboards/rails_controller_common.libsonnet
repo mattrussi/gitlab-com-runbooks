@@ -202,7 +202,9 @@ local elasticsearchExternalHTTPLink(type) = function(options)
         grafana.text.new(
           title='Extra links',
           mode='markdown',
-          content=toolingLinks.generateMarkdown([
+          content=|||
+            The metrics displayed in this row indicate all the network requests made inside a Rails process via the HTTP protocol. The requests may be triggered by Gitlab::HTTP utility inside the application code base or by any 3rd-party gems. We don't differentiate the destinations. So, the metrics include both internal/external dependencies.
+          ||| + toolingLinks.generateMarkdown([
             elasticsearchExternalHTTPLink(type),
           ])
         ),
