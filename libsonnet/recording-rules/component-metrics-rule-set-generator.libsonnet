@@ -83,8 +83,6 @@ local generateRecordingRulesForComponent(burnRate, recordingRuleNames, serviceDe
     {
       // Generates the recording rules given a service definition
       generateRecordingRulesForService(serviceDefinition)::
-        local components = serviceDefinition.components;
-
         std.flatMap(
           function(sliDefinition) generateRecordingRulesForComponent(
             burnRate=burnRate,

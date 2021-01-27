@@ -1,4 +1,3 @@
-local all = import './services/all.jsonnet';
 local metricsCatalog = import 'metrics-catalog.libsonnet';
 
 local listDownstreamServicesRecursive(service, foundServices) =
