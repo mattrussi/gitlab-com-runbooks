@@ -510,6 +510,7 @@ local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latency
 {
   matcher:: matcher,
   matchFilter:: matchFilter,
+  existsFilter:: existsFilter,
   rangeFilter:: rangeFilter,
 
   // Given an index, and a set of filters, returns a URL to a Kibana discover module/search
