@@ -1,7 +1,7 @@
 local durationParser = import 'utils/duration-parser.libsonnet';
 
 local definitionDefaults = {
-  serviceLevelAggregation: false,
+  aggregationFilter: null,
 };
 
 /**
