@@ -103,6 +103,16 @@ local indexCatalog = {
     latencyFieldUnitMultiplier: 1000,
   },
 
+  kas: indexDefaults {
+    timestamp: 'json.time',
+    indexPattern: 'Z6Sm12wVS0OfhHdrJ9kfeQ',
+    defaultColumns: ['json.msg', 'json.project_id', 'json.commit_id', 'json.number_of_files', 'json.grpc.time_ms'],
+    defaultSeriesSplitField: 'json.grpc.method.keyword',
+    failureFilter: [existsFilter('json.error')],
+    //defaultLatencyField: '',
+    //latencyFieldUnitMultiplier: 1000,
+  },
+
   monitoring_ops: indexDefaults {
     timestamp: '@timestamp',
     indexPattern: 'pubsub-monitoring-inf-ops',

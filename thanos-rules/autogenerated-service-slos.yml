@@ -122,6 +122,11 @@ groups:
     expr: '0.001000'
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      tier: sv
+      type: kubernetes-agent
+    expr: '0.050000'
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
       tier: inf
       type: logging
     expr: '0.001000'
@@ -518,6 +523,14 @@ groups:
       service_aggregation: 'yes'
       tier: inf
       type: jaeger
+    expr: '1'
+  - record: gitlab_component_service:mapping
+    labels:
+      component: grpc_requests
+      regional_aggregation: 'no'
+      service_aggregation: 'yes'
+      tier: sv
+      type: kubernetes-agent
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
