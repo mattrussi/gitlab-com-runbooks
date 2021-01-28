@@ -3,7 +3,7 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 
 local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
 
-local kubeProvisionedServices = ['git', 'mailroom', 'registry', 'sidekiq'];
+local kubeProvisionedServices = ['git', 'mailroom', 'registry', 'sidekiq', 'websockets'];
 
 // Disk utilisation metrics are currently reporting incorrectly for
 // HDD volumes, see https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10248
@@ -137,7 +137,7 @@ local pgbouncerSyncPool(serviceType, role) =
     title: 'Rails DB Connection Pool Utilization',
     severity: 's4',
     horizontallyScalable: true,  // Add more replicas for achieve greater scalability
-    appliesTo: ['web', 'api', 'git', 'sidekiq'],
+    appliesTo: ['web', 'api', 'git', 'sidekiq', 'websockets'],
     description: |||
       Rails uses connection pools for its database connections. As each
       node may have multiple connection pools, this is by node and by
@@ -911,7 +911,7 @@ local pgbouncerSyncPool(serviceType, role) =
     title: 'Puma Worker Saturation per Node',
     severity: 's2',
     horizontallyScalable: true,
-    appliesTo: ['web', 'api', 'git', 'sidekiq'],
+    appliesTo: ['web', 'api', 'git', 'sidekiq', 'websockets'],
     description: |||
       Puma thread utilization per node.
 
