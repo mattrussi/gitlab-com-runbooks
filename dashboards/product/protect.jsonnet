@@ -8,7 +8,7 @@ local annotation = grafana.annotation;
 local productCommon = import 'product_common.libsonnet';
 
 basic.dashboard(
-  title='Performance - Defend',
+  title='Performance - Protect',
   time_from='now-30d',
   tags=['product performance'],
 ).addLink(
@@ -21,14 +21,14 @@ basic.dashboard(
   grafana.text.new(
     title='Overview',
     mode='markdown',
-    content='### Synthetic tests of GitLab.com pages for the Defend group.\n\nFor more information, please see: https://about.gitlab.com/handbook/product/product-processes/#page-load-performance-metrics\n\n\n\n',
+    content='### Synthetic tests of GitLab.com pages for the Protect group.\n\nFor more information, please see: https://about.gitlab.com/handbook/product/product-processes/#page-load-performance-metrics\n\n\n\n',
   ), gridPos={ h: 3, w: 24, x: 0, y: 0 }
 ).addPanel(
-  row.new(title='Defend'), gridPos={ x: 0, y: 1000, w: 24, h: 1 }
+  row.new(title='Protect'), gridPos={ x: 0, y: 1000, w: 24, h: 1 }
 ).addPanels(
   layout.grid(
     [
-      productCommon.pageDetail('Threat Monitoring', 'Defend_Threat_Monitoring', 'https://gitlab.com/gitlab-org/defend/demos/network-policy-demo/-/threat_monitoring'),
+      productCommon.pageDetail('Threat Monitoring', 'Protect_Threat_Monitoring', 'https://gitlab.com/gitlab-org/defend/demos/network-policy-demo/-/threat_monitoring'),
     ],
     startRow=1001,
   ),
