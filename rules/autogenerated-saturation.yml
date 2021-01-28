@@ -642,6 +642,19 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
+      component: ruby_thread_contention
+    expr: |
+      max by(environment, tier, type, stage) (
+        clamp_min(
+          clamp_max(
+            rate(ruby_process_cpu_seconds_total{environment!="",type=~"web|sidekiq|api|git|websockets"}[10m])
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
       component: shard_cpu
     expr: |
       max by(environment, tier, type, stage) (
@@ -1047,6 +1060,14 @@ groups:
     expr: '0.95'
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
+      component: ruby_thread_contention
+    expr: '0.7'
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: ruby_thread_contention
+    expr: '0.75'
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
       component: shard_cpu
     expr: '0.85'
   - record: slo:max:hard:gitlab_component_saturation:ratio
@@ -1319,6 +1340,12 @@ groups:
       component: redis_secondary_cpu
       horiz_scaling: 'yes'
       severity: s4
+    expr: '1'
+  - record: gitlab_component_saturation_info
+    labels:
+      component: ruby_thread_contention
+      horiz_scaling: 'yes'
+      severity: s3
     expr: '1'
   - record: gitlab_component_saturation_info
     labels:
@@ -2949,6 +2976,47 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="redis_secondary_cpu"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="redis_secondary_cpu"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: >-
+        The Ruby Thread Contention resource of the {{ $labels.type }} service ({{ $labels.stage }} stage),
+        component has a saturation exceeding SLO and is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Ruby Thread Contention resource:
+
+        Ruby (technically Ruby MRI), like some other scripting languages, uses a Global VM lock (GVL) also known as a Global Interpreter Lock (GIL) to ensure that multiple threads can execute safely. Ruby code is only allowed to execute in one thread in a process at a time. When calling out to c extensions, the thread can cede the lock to other thread while it continues to execute.
+
+        This means that when CPU-bound workloads run in a multithreaded environment such as Puma or Sidekiq, contention with other Ruby worker threads running in the same process can occur, effectively slowing thoses threads down as they await GVL entry.
+
+        Often the best fix for this situation is to add more workers by scaling up the fleet.
+      grafana_dashboard_id: alerts-sat_ruby_thread_contention
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/alerts-sat_ruby_thread_contention?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '2359646072'
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, fqdn, pod) (
+          clamp_min(
+            clamp_max(
+              rate(ruby_process_cpu_seconds_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[10m])
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s3
+    expr: |
+      gitlab_component_saturation:ratio{component="ruby_thread_contention"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="ruby_thread_contention"}
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
