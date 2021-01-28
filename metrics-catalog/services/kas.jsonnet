@@ -3,7 +3,7 @@ local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
 metricsCatalog.serviceDefinition({
-  type: 'kubernetes-agent',
+  type: 'kas',
   tier: 'sv',
   // contractualThresholds: {
   //   apdexRatio: 0.95,
@@ -21,7 +21,7 @@ metricsCatalog.serviceDefinition({
     vms: false,
   },
   kubeResources: {
-    'kubernetes-agent': {
+    kas: {
       kind: 'Deployment',
       containers: [
         'kas',
@@ -52,7 +52,7 @@ metricsCatalog.serviceDefinition({
       significantLabels: [],
       toolingLinks: [
         toolingLinks.sentry(slug='gitlab/kas'),
-        toolingLinks.kibana(title='KAS', index='kas', type='kas'),
+        toolingLinks.kibana(title='Kubernetes Agent Server', index='kas', type='kas'),
       ],
     },
   },

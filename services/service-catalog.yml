@@ -3069,9 +3069,9 @@ services:
     monitors:
       primary_grafana_dashboard: "woodhouse/woodhouse-overview"
 
-- name: kubernetes-agent
+- name: kas
   tier: sv
-  friendly_name: kas
+  friendly_name: Kubernetes Agent
   infra_owner: sre_coreinfra
   label: Service:kas
   business:

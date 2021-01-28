@@ -4,9 +4,9 @@
 
 [[_TOC_]]
 
-#  Kubernetes-agent Service
+#  Kas Service
 * [Service Overview](https://dashboards.gitlab.net/d/kas/kas)
-* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22kubernetes-agent%22%2C%20tier%3D%22sv%22%7D
+* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22kas%22%2C%20tier%3D%22sv%22%7D
 * **Label**: gitlab-com/gl-infra/production~"Service:kas"
 
 ## Logging
