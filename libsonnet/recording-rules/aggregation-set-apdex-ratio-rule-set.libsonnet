@@ -11,7 +11,8 @@ local selectors = import 'promql/selectors.libsonnet';
     local sourceApdexWeightMetric = sourceAggregationSet.getApdexWeightMetricForBurnRate(burnRate);
 
     local targetAggregationLabels = aggregations.serialize(targetAggregationSet.labels);
-
+    local aggregationFilter = targetAggregationSet.aggregationFilter;
+    local sourceSelector = selectors.serializeHash(sourceAggregationSet.selector);
 
     local formatConfig = {
       targetApdexRatioMetric: targetApdexRatioMetric,
@@ -19,7 +20,18 @@ local selectors = import 'promql/selectors.libsonnet';
       sourceApdexRatioMetric: sourceApdexRatioMetric,
       sourceApdexWeightMetric: sourceApdexWeightMetric,
       targetAggregationLabels: targetAggregationLabels,
-      sourceSelector: selectors.serializeHash(sourceAggregationSet.selector),
+      sourceSelector: sourceSelector,
+      aggregationFilterExpr:
+        // For service level aggregations, we need to filter out any SLIs which we don't want to include
+        // in the service level aggregation.
+        // These are defined in the SLI with `aggregateToService:false`
+        if aggregationFilter != null then
+          ' and on(component, type) (gitlab_component_service:mapping{monitor="global", %(aggregationFilter)s_aggregation="yes"})' % {
+            sourceSelector: sourceSelector,
+            aggregationFilter: aggregationFilter,
+          }
+        else
+          '',
     };
 
     (
@@ -33,7 +45,7 @@ local selectors = import 'promql/selectors.libsonnet';
             record: targetApdexWeightMetric,
             expr: |||
               sum by (%(targetAggregationLabels)s) (
-                (%(sourceApdexWeightMetric)s{%(sourceSelector)s} >= 0)
+                (%(sourceApdexWeightMetric)s{%(sourceSelector)s} >= 0)%(aggregationFilterExpr)s
               )
             ||| % formatConfig,
           }]
@@ -54,12 +66,12 @@ local selectors = import 'promql/selectors.libsonnet';
                 (
                   (%(sourceApdexRatioMetric)s{%(sourceSelector)s} >= 0)
                   *
-                  (%(sourceApdexWeightMetric)s{%(sourceSelector)s} >= 0)
+                  (%(sourceApdexWeightMetric)s{%(sourceSelector)s} >= 0)%(aggregationFilterExpr)s
                 )
               )
               /
               sum by (%(targetAggregationLabels)s) (
-                (%(sourceApdexWeightMetric)s{%(sourceSelector)s} >= 0)
+                (%(sourceApdexWeightMetric)s{%(sourceSelector)s} >= 0)%(aggregationFilterExpr)s
               )
             ||| % formatConfig,
           }]

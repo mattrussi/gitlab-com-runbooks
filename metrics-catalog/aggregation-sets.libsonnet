@@ -271,7 +271,8 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
         errorRatio: 'gitlab_service_errors:ratio_6h',
       },
     },
-    serviceLevelAggregation: true,
+    // Only include components (SLIs) with service_aggregation="yes"
+    aggregationFilter: 'service',
   }),
 
   /**
@@ -312,7 +313,8 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
         errorRatio: 'gitlab_service_node_errors:ratio_6h',
       },
     },
-    serviceLevelAggregation: true,
+    // Only include components (SLIs) with service_aggregation="yes"
+    aggregationFilter: 'service',
   }),
 
   /**
@@ -350,7 +352,8 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
         errorRatio: 'gitlab_service_regional_errors:ratio_6h',
       },
     },
-    serviceLevelAggregation: true,
+    // Only include components (SLIs) with service_aggregation="yes"
+    aggregationFilter: 'service',
   }),
 
 }
