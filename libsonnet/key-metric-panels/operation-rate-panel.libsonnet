@@ -83,13 +83,13 @@ local operationRatePanel(
     panelWithLastWeek
     .addTarget(
       promQuery.target(
-        sliPromQL.opsRate.serviceOpsRatePrediction(selectorHashWithExtras, 2),
+        sliPromQL.opsRate.serviceOpsRatePrediction(selectorHashWithExtras, 1),
         legendFormat='upper normal',
       ),
     )
     .addTarget(
       promQuery.target(
-        sliPromQL.opsRate.serviceOpsRatePrediction(selectorHashWithExtras, -2),
+        sliPromQL.opsRate.serviceOpsRatePrediction(selectorHashWithExtras, -1),
         legendFormat='lower normal',
       ),
     )
