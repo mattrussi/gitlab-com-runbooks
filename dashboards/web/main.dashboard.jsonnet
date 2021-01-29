@@ -70,5 +70,4 @@ serviceDashboard.overview('web', 'sv')
     h: 1,
   },
 )
-
 .overviewTrailer()

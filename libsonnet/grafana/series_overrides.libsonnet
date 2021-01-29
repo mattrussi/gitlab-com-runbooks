@@ -64,10 +64,10 @@ local capacityComponentColors = {
   lastWeek:: {
     alias: 'last week',
     dashes: true,
-    dashLength: 2,
+    dashLength: 4,
     spaceLength: 2,
     fill: 0,
-    color: '#dddddd40',
+    color: '#dddddd80',
     legend: true,
     lines: true,
     linewidth: 1,

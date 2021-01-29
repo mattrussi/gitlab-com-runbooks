@@ -4,7 +4,7 @@ local selectors = import 'promql/selectors.libsonnet';
 
 local globalSelector = { monitor: 'global' };
 
-local apdexQuery(aggregationSet, aggregationLabels, selectorHash, range=null, worstCase=true, offset=null) =
+local apdexQuery(aggregationSet, aggregationLabels, selectorHash, range=null, worstCase=true, offset=null, clampToExpression=null) =
   local metric = aggregationSet.getApdexRatioMetricForBurnRate('5m');
   local selector = selectors.merge(aggregationSet.selector, selectorHash);
 
@@ -20,21 +20,32 @@ local apdexQuery(aggregationSet, aggregationLabels, selectorHash, range=null, wo
     offsetExpression: offsetExpression,
   };
 
-  if range == null then
-    |||
-      %(metric)s{%(selector)s}%(offsetExpression)s
-    ||| % formatConfig
-  else if aggregationLabels != null then
-    |||
-      %(aggregation) by (aggregationLabels) (%(rangeVectorFunction)s(%(metric)s{%(selector)s}[%(range)s]%(offsetExpression)s))
-    ||| % formatConfig {
-      aggregationLabels: aggregations.serialize(aggregationLabels),
-      aggregation: aggregation,
-    }
+  local inner =
+    if range == null then
+      |||
+        %(metric)s{%(selector)s}%(offsetExpression)s
+      ||| % formatConfig
+    else if aggregationLabels != null then
+      |||
+        %(aggregation) by (aggregationLabels) (%(rangeVectorFunction)s(%(metric)s{%(selector)s}[%(range)s]%(offsetExpression)s))
+      ||| % formatConfig {
+        aggregationLabels: aggregations.serialize(aggregationLabels),
+        aggregation: aggregation,
+      }
+    else
+      |||
+        %(rangeVectorFunction)s(%(metric)s{%(selector)s}[%(range)s]%(offsetExpression)s)
+      ||| % formatConfig;
+
+  if clampToExpression == null then
+    inner
   else
     |||
-      %(rangeVectorFunction)s(%(metric)s{%(selector)s}[%(range)s]%(offsetExpression)s)
-    ||| % formatConfig;
+      clamp_min(
+        %s,
+        scalar(min(%s))
+      )
+    ||| % [inner, clampToExpression];
 
 local opsRateQuery(aggregationSet, selectorHash, range=null, offset=null) =
   local metric = aggregationSet.getOpsRateMetricForBurnRate('5m');
@@ -58,7 +69,7 @@ local opsRateQuery(aggregationSet, selectorHash, range=null, offset=null) =
       avg_over_time(%(metric)s{%(selector)s}[%(range)s]%(offsetExpression)s)
     ||| % formatConfig;
 
-local errorRatioQuery(aggregationSet, aggregationLabels, selectorHash, range=null, clampMax=1.0, worstCase=true, offset=null) =
+local errorRatioQuery(aggregationSet, aggregationLabels, selectorHash, range=null, clampMax=1.0, worstCase=true, offset=null, clampToExpression=null) =
   local metric = aggregationSet.getErrorRatioMetricForBurnRate('5m');
   local selector = selectors.merge(aggregationSet.selector, selectorHash);
 
@@ -90,12 +101,18 @@ local errorRatioQuery(aggregationSet, aggregationLabels, selectorHash, range=nul
       %(rangeVectorFunction)s(%(metric)s{%(selector)s}[%(range)s]%(offsetExpression)s)
     ||| % formatConfig;
 
+  local clampMaxExpressionWithDefault =
+    if clampToExpression == null then
+      '' + clampMax
+    else
+      'scalar(max(%s))' % [clampToExpression];
+
   |||
     clamp_max(
       %s,
-      %g
+      %s
     )
-  ||| % [expr, clampMax];
+  ||| % [expr, clampMaxExpressionWithDefault];
 
 {
   apdexQuery:: apdexQuery,

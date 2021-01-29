@@ -120,7 +120,14 @@ local apdexPanel(
   local panelWithLastWeek = if !expectMultipleSeries && includeLastWeek then
     panelWithAverage.addTarget(  // Last week
       promQuery.target(
-        sliPromQL.apdexQuery(aggregationSet, null, selectorHashWithExtras, range=null, offset='1w'),
+        sliPromQL.apdexQuery(
+          aggregationSet,
+          null,
+          selectorHashWithExtras,
+          range=null,
+          offset='1w',
+          clampToExpression=sliPromQL.apdex.serviceApdexOutageSLOQuery(serviceType)
+        ),
         legendFormat='last week',
       )
     )

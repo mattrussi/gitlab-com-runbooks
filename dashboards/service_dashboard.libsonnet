@@ -59,7 +59,8 @@ local headlineMetricsRow(
     showErrorRatio=hasErrorRate,
     showOpsRate=hasRequestRate,
     showSaturationCell=showSaturationCell,
-    rowHeight=6
+    compact=true,
+    rowHeight=8
   );
 
 local overviewDashboard(
