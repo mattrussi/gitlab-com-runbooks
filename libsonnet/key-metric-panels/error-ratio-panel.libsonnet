@@ -100,7 +100,14 @@ local errorRatioPanel(
   local panelWithLastWeek = if !expectMultipleSeries && includeLastWeek then
     panelWithAverage.addTarget(  // Last week
       promQuery.target(
-        sliPromQL.errorRatioQuery(aggregationSet, null, selectorHashWithExtras, null, offset='1w'),
+        sliPromQL.errorRatioQuery(
+          aggregationSet,
+          null,
+          selectorHashWithExtras,
+          null,
+          offset='1w',
+          clampToExpression=sliPromQL.errorRate.serviceErrorRateOutageSLOQuery(serviceType)
+        ),
         legendFormat='last week',
       )
     )

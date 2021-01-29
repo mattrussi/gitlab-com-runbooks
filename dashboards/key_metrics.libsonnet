@@ -20,7 +20,8 @@ local row = grafana.row;
     showErrorRatio=true,
     showOpsRate=true,
     showSaturationCell=true,
-    rowHeight=5,
+    compact=false,
+    rowHeight=7,
   )::
     local selectorHashWithExtras = selectorHash { type: serviceType };
     local formatConfig = { serviceType: serviceType, stableIdPrefix: stableIdPrefix };
@@ -36,7 +37,8 @@ local row = grafana.row;
         apdexDescription=null,
         showErrorRatio=showErrorRatio,
         showOpsRate=showOpsRate,
-        includePredictions=true
+        includePredictions=true,
+        compact=compact,
       )
       +
       (
@@ -45,7 +47,7 @@ local row = grafana.row;
             utilizationRatesPanel.panel(
               serviceType,
               selectorHash=selectorHashWithExtras,
-              compact=true,
+              compact=compact,
               stableId='%(stableIdPrefix)sservice-utilization' % formatConfig
             ),
           ]]

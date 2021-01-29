@@ -28,7 +28,8 @@ local row(
   showErrorRatio,
   showOpsRate,
   includePredictions=false,
-  expectMultipleSeries=false
+  expectMultipleSeries=false,
+  compact=false,
       ) =
   local selectorHashWithExtras = selectorHash { type: serviceType };
   local formatConfig = {
@@ -53,6 +54,7 @@ local row(
             legendFormat='%(legendFormatPrefix)s apdex' % formatConfig,
             description=apdexDescription,
             expectMultipleSeries=expectMultipleSeries,
+            compact=compact,
           )
           .addDataLink({
             url: '/d/alerts-%(aggregationId)s_multiburn_apdex?${__url_time_range}&${__all_variables}&%(grafanaURLPairs)s' % formatConfig {},
@@ -85,6 +87,7 @@ local row(
             stableId='%(stableIdPrefix)s-error-rate' % formatConfig,
             legendFormat='%(legendFormatPrefix)s error ratio' % formatConfig,
             expectMultipleSeries=expectMultipleSeries,
+            compact=compact,
           )
           .addDataLink({
             url: '/d/alerts-%(aggregationId)s_multiburn_error?${__url_time_range}&${__all_variables}&%(grafanaURLPairs)s' % formatConfig,
@@ -116,7 +119,8 @@ local row(
           legendFormat='%(legendFormatPrefix)s RPS' % formatConfig,
           expectMultipleSeries=expectMultipleSeries,
           includePredictions=false,
-          includeLastWeek=true
+          includeLastWeek=true,
+          compact=compact,
         ),
       ]]
     else
