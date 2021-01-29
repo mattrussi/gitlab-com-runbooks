@@ -325,3 +325,12 @@ haproxy   2002      20 /usr/sbin/haproxy -Ws -f /etc/haproxy/haproxy.cfg -p /run
 ```
 # kill -TERM 1827
 ```
+
+# Server Down
+
+HAProxy will mark a server for a backend down if it is unreachble or has a failing health check.
+
+* From a HAProxy node, you can ping and/or curl the backend server and health check.
+* From the server, check the logs of the process.
+
+For Rails/Puma, database connection problems can cause HUP to fail and Puma will need a full restart with `gitlab-ctl restart puma`.
