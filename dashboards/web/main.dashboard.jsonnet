@@ -3,6 +3,7 @@ local railsCommon = import 'rails_common_graphs.libsonnet';
 local workhorseCommon = import 'workhorse_common_graphs.libsonnet';
 local row = grafana.row;
 local serviceDashboard = import 'service_dashboard.libsonnet';
+local processExporter = import 'process_exporter.libsonnet';
 
 serviceDashboard.overview('web', 'sv')
 .addPanel(
@@ -25,4 +26,49 @@ serviceDashboard.overview('web', 'sv')
   }
 )
 .addPanels(railsCommon.railsPanels(serviceType='web', serviceStage='$stage', startRow=3001))
+.addPanel(
+  row.new(title='puma parent processes', collapse=true)
+  .addPanels(
+    processExporter.namedGroup(
+      'puma_parent',
+      {
+        environment: '$environment',
+        env: '$environment',
+        groupname: 'puma_parent',
+        type: 'web',
+        stage: '$stage',
+      },
+      startRow=1
+    )
+  ),
+  gridPos={
+    x: 0,
+    y: 4000,
+    w: 24,
+    h: 1,
+  },
+)
+.addPanel(
+  row.new(title='puma worker processes', collapse=true)
+  .addPanels(
+    processExporter.namedGroup(
+      'puma_worker',
+      {
+        environment: '$environment',
+        env: '$environment',
+        groupname: 'puma_worker',
+        type: 'web',
+        stage: '$stage',
+      },
+      startRow=1
+    )
+  ),
+  gridPos={
+    x: 0,
+    y: 5000,
+    w: 24,
+    h: 1,
+  },
+)
+
 .overviewTrailer()
