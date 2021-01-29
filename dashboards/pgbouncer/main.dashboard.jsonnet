@@ -27,7 +27,7 @@ serviceDashboard.overview('pgbouncer', 'db', stage='main')
     h: 1,
   }
 )
-.addPanels(pgbouncerCommonGraphs.workloadStats('patroni', startRow=2000))
+.addPanels(pgbouncerCommonGraphs.workloadStats('pgbouncer', startRow=2000))
 .addPanel(
   row.new(title='pgbouncer Connection Pooling'),
   gridPos={
