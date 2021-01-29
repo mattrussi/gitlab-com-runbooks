@@ -118,7 +118,7 @@ local row(
           stableId='%(stableIdPrefix)s-ops-rate' % formatConfig,
           legendFormat='%(legendFormatPrefix)s RPS' % formatConfig,
           expectMultipleSeries=expectMultipleSeries,
-          includePredictions=false,
+          includePredictions=includePredictions,
           includeLastWeek=true,
           compact=compact,
         ),
