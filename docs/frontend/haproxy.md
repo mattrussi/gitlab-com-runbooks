@@ -182,6 +182,15 @@ The `set-server-state` script allows you change the server state so that it can
 start draining connections or not take any if there is a situation where you do
 not want _any_ traffic going to a server.
 
+Note, this will trigger the [`HAProxyServerDown`](#server-down) alert. Before you drain a node, add [a new silence](https://alerts.gitlab.net/#/silences/new).
+
+Example Matchers:
+
+* Name: `alertname`, Value: `HAProxyServerDown`
+* Name: `server`, Value: `git-01-sv-gstg`
+
+Be sure to put a link to an issue in the alert silence comment.
+
 ```
 Sets server state on frontend lbs
 ./bin/set-server-state {gprd,gstg} <ready|drain|maint> [filter]
@@ -329,6 +338,8 @@ haproxy   2002      20 /usr/sbin/haproxy -Ws -f /etc/haproxy/haproxy.cfg -p /run
 # Server Down
 
 HAProxy will mark a server for a backend down if it is unreachble or has a failing health check.
+
+It will also be marked down if the node has been drained with [`set-server-state`](#set-server-state).
 
 * From a HAProxy node, you can ping and/or curl the backend server and health check.
 * From the server, check the logs of the process.
