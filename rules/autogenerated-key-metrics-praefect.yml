@@ -507,6 +507,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: praefect_cloudsql
+      regional_aggregation: 'no'
       service_aggregation: 'no'
       tier: stor
       type: praefect
@@ -514,6 +515,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: proxy
+      regional_aggregation: 'no'
       service_aggregation: 'yes'
       tier: stor
       type: praefect
@@ -521,6 +523,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: replicator_queue
+      regional_aggregation: 'no'
       service_aggregation: 'yes'
       tier: stor
       type: praefect

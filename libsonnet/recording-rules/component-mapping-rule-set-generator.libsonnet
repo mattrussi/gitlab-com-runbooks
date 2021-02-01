@@ -10,14 +10,16 @@
       generateRecordingRulesForService(serviceDefinition)::
         [
           {
-            local component = serviceDefinition.serviceLevelIndicators[sliName],
-            local serviceAggregation = if component.serviceAggregation then 'yes' else 'no',
+            local sli = serviceDefinition.serviceLevelIndicators[sliName],
+            local serviceAggregation = if sli.serviceAggregation then 'yes' else 'no',
+            local regionAggregation = if sli.regional then 'yes' else 'no',
 
             record: 'gitlab_component_service:mapping',
             labels: {
               type: serviceDefinition.type,
               tier: serviceDefinition.tier,
               service_aggregation: serviceAggregation,
+              regional_aggregation: regionAggregation,
               component: sliName,  // Use component for compatability here
             },
             expr: '1',

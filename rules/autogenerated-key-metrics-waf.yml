@@ -202,6 +202,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: gitlab_net_zone
+      regional_aggregation: 'no'
       service_aggregation: 'yes'
       tier: lb
       type: waf
@@ -209,6 +210,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: gitlab_zone
+      regional_aggregation: 'no'
       service_aggregation: 'yes'
       tier: lb
       type: waf

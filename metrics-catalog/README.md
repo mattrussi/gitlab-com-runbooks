@@ -39,6 +39,7 @@ metricsCatalog.serviceDefinition({
     gitaly: true,
     praefect: true,
   },
+  regional: true,           // If the service is spread over multiple regions and should be monitored as such
   serviceLevelIndicators: { // A map of SLIs for this service. The name is defined by the key
     workhorse: {            // Defines a service called `workhorse`
       // Each component must have a `requestRate` metric and optionally can have

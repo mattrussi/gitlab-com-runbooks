@@ -617,6 +617,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: loadbalancer
+      regional_aggregation: 'no'
       service_aggregation: 'no'
       tier: sv
       type: registry
@@ -624,6 +625,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: server
+      regional_aggregation: 'yes'
       service_aggregation: 'yes'
       tier: sv
       type: registry
@@ -631,6 +633,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: storage
+      regional_aggregation: 'yes'
       service_aggregation: 'yes'
       tier: sv
       type: registry

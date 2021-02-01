@@ -112,6 +112,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: elasticsearch_indexing
+      regional_aggregation: 'no'
       service_aggregation: 'yes'
       tier: inf
       type: search
@@ -119,6 +120,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: elasticsearch_searching
+      regional_aggregation: 'no'
       service_aggregation: 'yes'
       tier: inf
       type: search

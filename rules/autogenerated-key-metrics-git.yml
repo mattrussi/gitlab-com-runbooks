@@ -1147,6 +1147,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: gitlab_shell
+      regional_aggregation: 'yes'
       service_aggregation: 'yes'
       tier: sv
       type: git
@@ -1154,6 +1155,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: loadbalancer
+      regional_aggregation: 'no'
       service_aggregation: 'no'
       tier: sv
       type: git
@@ -1161,6 +1163,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: loadbalancer_ssh
+      regional_aggregation: 'no'
       service_aggregation: 'no'
       tier: sv
       type: git
@@ -1168,6 +1171,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: puma
+      regional_aggregation: 'yes'
       service_aggregation: 'yes'
       tier: sv
       type: git
@@ -1175,6 +1179,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: workhorse
+      regional_aggregation: 'yes'
       service_aggregation: 'yes'
       tier: sv
       type: git
@@ -1182,6 +1187,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: workhorse_auth_api
+      regional_aggregation: 'yes'
       service_aggregation: 'yes'
       tier: sv
       type: git

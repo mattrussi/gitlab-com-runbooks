@@ -30,6 +30,8 @@ metricsCatalog.serviceDefinition({
     kubernetes: true,
     vms: true,  // registry haproxy frontend still runs on vms
   },
+  // Git service is spread across multiple regions, monitor it as such
+  regional: true,
   kubeResources: {
     registry: {
       kind: 'Deployment',
@@ -47,6 +49,7 @@ metricsCatalog.serviceDefinition({
         cny: { backends: ['canary_registry'], toolingLinks: [] },
       },
       selector={ type: 'registry' },
+      regional=false
     ),
 
     server: {

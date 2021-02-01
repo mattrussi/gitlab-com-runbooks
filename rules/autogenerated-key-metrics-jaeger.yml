@@ -512,6 +512,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: jaeger_agent
+      regional_aggregation: 'no'
       service_aggregation: 'yes'
       tier: inf
       type: jaeger
@@ -519,6 +520,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: jaeger_collector
+      regional_aggregation: 'no'
       service_aggregation: 'yes'
       tier: inf
       type: jaeger
@@ -526,6 +528,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: jaeger_query
+      regional_aggregation: 'no'
       service_aggregation: 'yes'
       tier: inf
       type: jaeger

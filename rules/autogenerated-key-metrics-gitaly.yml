@@ -1378,6 +1378,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: gitalyruby
+      regional_aggregation: 'no'
       service_aggregation: 'yes'
       tier: stor
       type: gitaly
@@ -1385,6 +1386,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: goserver
+      regional_aggregation: 'no'
       service_aggregation: 'yes'
       tier: stor
       type: gitaly
@@ -1392,6 +1394,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: goserver_op_service
+      regional_aggregation: 'no'
       service_aggregation: 'yes'
       tier: stor
       type: gitaly

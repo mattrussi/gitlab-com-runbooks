@@ -40,6 +40,8 @@ metricsCatalog.serviceDefinition({
     vms: true,
     kubernetes: true,
   },
+  // Git service is spread across multiple regions, monitor it as such
+  regional: true,
   kubeResources: {
     'gitlab-shell': {
       kind: 'Deployment',
@@ -69,6 +71,8 @@ metricsCatalog.serviceDefinition({
         ] },  // What happens to cny websocket traffic?
       },
       selector={ type: 'frontend' },
+      // Load balancer is single region
+      regional=false
     ),
 
     loadbalancer_ssh: haproxyComponents.haproxyL4LoadBalancer(
@@ -85,6 +89,8 @@ metricsCatalog.serviceDefinition({
         // No canary SSH for now
       },
       selector={ type: 'frontend' },
+      // Load balancer is single region
+      regional=false
     ),
 
     workhorse: {
