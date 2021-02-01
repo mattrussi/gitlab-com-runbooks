@@ -71,7 +71,7 @@ metricsCatalog.serviceDefinition({
         counter='registry_http_requests_total',
         selector='type="registry", code=~"5.."'
       ),
-      significantLabels: ['route'],
+      significantLabels: ['route', 'method'],
 
       toolingLinks: [
         toolingLinks.gkeDeployment('gitlab-registry', type='registry', containerName='registry'),
