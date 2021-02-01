@@ -134,6 +134,8 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
         errorRatio: 'gitlab_regional_sli_errors:ratio_6h',
       },
     },
+    // Only include components (SLIs) with regional_aggregation="yes"
+    aggregationFilter: 'regional',
   }),
 
   /**
@@ -352,8 +354,8 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
         errorRatio: 'gitlab_service_regional_errors:ratio_6h',
       },
     },
-    // Only include components (SLIs) with service_aggregation="yes"
-    aggregationFilter: 'service',
+    // Only include components (SLIs) with regional_aggregation="yes"
+    aggregationFilter: 'regional',
   }),
 
 }

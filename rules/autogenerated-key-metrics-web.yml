@@ -1062,6 +1062,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: imagescaler
+      regional_aggregation: 'no'
       service_aggregation: 'yes'
       tier: sv
       type: web
@@ -1069,6 +1070,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: loadbalancer
+      regional_aggregation: 'no'
       service_aggregation: 'no'
       tier: sv
       type: web
@@ -1076,6 +1078,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: puma
+      regional_aggregation: 'no'
       service_aggregation: 'yes'
       tier: sv
       type: web
@@ -1083,6 +1086,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: workhorse
+      regional_aggregation: 'no'
       service_aggregation: 'yes'
       tier: sv
       type: web

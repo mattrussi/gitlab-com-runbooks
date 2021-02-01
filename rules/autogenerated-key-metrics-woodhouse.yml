@@ -422,6 +422,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: async_jobs
+      regional_aggregation: 'no'
       service_aggregation: 'yes'
       tier: sv
       type: woodhouse
@@ -429,6 +430,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: http
+      regional_aggregation: 'no'
       service_aggregation: 'yes'
       tier: sv
       type: woodhouse

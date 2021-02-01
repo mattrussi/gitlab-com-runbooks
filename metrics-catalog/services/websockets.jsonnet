@@ -23,6 +23,7 @@ metricsCatalog.serviceDefinition({
     vms: false,
     kubernetes: true,
   },
+  regional: true,
   kubeResources: {
     websockets: {
       kind: 'Deployment',
@@ -42,6 +43,7 @@ metricsCatalog.serviceDefinition({
         cny: { backends: ['canary_websockets'], toolingLinks: [] },
       },
       selector={ type: 'frontend' },
+      regional=false,
     ),
 
     workhorse: {

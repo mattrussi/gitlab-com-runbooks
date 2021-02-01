@@ -17,11 +17,12 @@ local combinedServiceLevelIndicatorDefinition(
   serviceAggregation=false,
   staticLabels={},
   ignoreTrafficCessation=false,
+  regional=null,
       ) =
   {
-    initServiceLevelIndicatorWithName(componentName)::
+    initServiceLevelIndicatorWithName(componentName, inheritedDefaults)::
       // TODO: validate that all staticLabels are unique
-      local componentsInitialised = std.map(function(c) c.initServiceLevelIndicatorWithName(componentName), components);
+      local componentsInitialised = std.map(function(c) c.initServiceLevelIndicatorWithName(componentName, inheritedDefaults), components);
 
       {
         name: componentName,
@@ -30,6 +31,7 @@ local combinedServiceLevelIndicatorDefinition(
         description: description,
         team: team,
         ignoreTrafficCessation: ignoreTrafficCessation,
+        regional: if regional != null then regional else inheritedDefaults.regional,
 
         serviceAggregation: serviceAggregation,
 

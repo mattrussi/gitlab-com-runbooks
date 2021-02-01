@@ -17,11 +17,13 @@ local validateHasField(object, field, message) =
   else
     std.assertEqual(true, { __assert: message });
 
-local validateAndApplySLIDefaults(sliName, component) =
-  // All components must have a requestRate measurement, since
-  // we filter out low-RPS alerts for apdex monitoring and require the RPS for error ratios
+local validateAndApplySLIDefaults(sliName, component, inheritedDefaults) =
+  inheritedDefaults
+  +
   serviceLevelIndicatorDefaults
   +
+  // All components must have a requestRate measurement, since
+  // we filter out low-RPS alerts for apdex monitoring and require the RPS for error ratios
   validateHasField(component, 'requestRate', '%s component requires a requestRate measurement' % [sliName])
   +
   validateHasField(component, 'significantLabels', '%s component requires a significantLabels attribute' % [sliName])
@@ -134,7 +136,7 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
 {
   serviceLevelIndicatorDefinition(serviceLevelIndicator)::
     {
-      initServiceLevelIndicatorWithName(sliName)::
-        serviceLevelIndicatorDefinition(sliName, validateAndApplySLIDefaults(sliName, serviceLevelIndicator)),
+      initServiceLevelIndicatorWithName(sliName, inheritedDefaults)::
+        serviceLevelIndicatorDefinition(sliName, validateAndApplySLIDefaults(sliName, serviceLevelIndicator, inheritedDefaults)),
     },
 }
