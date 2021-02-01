@@ -265,18 +265,18 @@
       'purchase',
     ],
   },
-  provision: {
+  license: {
     name: 'License',
     stage: 'fulfillment',
     feature_categories: [
-      'provision',
+      'license',
     ],
   },
-  subscription: {
+  utilization: {
     name: 'Utilization',
     stage: 'fulfillment',
     feature_categories: [
-
+      'utilization',
     ],
   },
   activation: {
