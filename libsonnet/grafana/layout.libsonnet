@@ -92,8 +92,26 @@ local generateDropOffsets(cellHeights, rowOffsets) =
 
   // Each column contains an array of cells, stacked vertically
   // the heights of each cell are defined by cellHeights
-  splitColumnGrid(columnsOfPanels, cellHeights, startRow)::
-    local colWidth = std.floor(24 / std.length(columnsOfPanels));
+  splitColumnGrid(columnsOfPanels, cellHeights, startRow, columnWidths=null)::
+    local getXOffsetForColumn =
+      if columnWidths == null then
+        local colWidth = std.floor(24 / std.length(columnsOfPanels));
+        function(colIndex) colWidth * colIndex
+      else
+        function(colIndex)
+          std.foldr(
+            function(memo, width) memo + width,
+            columnWidths[0:colIndex:1],
+            0
+          );
+
+    local getWidthForColumn =
+      if columnWidths == null then
+        local colWidth = std.floor(24 / std.length(columnsOfPanels));
+        function(colIndex) colWidth
+      else
+        function(colIndex) columnWidths[colIndex];
+
     local rowOffsets = generateRowOffsets(cellHeights);
     local dropOffsets = generateDropOffsets(cellHeights, rowOffsets);
 
@@ -116,9 +134,9 @@ local generateDropOffsets(cellHeights, rowOffsets) =
                       dropOffsets[cellIndex];
 
                     local gridPos = {
-                      x: colWidth * colIndex,
+                      x: getXOffsetForColumn(colIndex),
                       y: rowOffsets[cellIndex] + startRow,
-                      w: colWidth,
+                      w: getWidthForColumn(colIndex),
                       h: height,
                     };
 

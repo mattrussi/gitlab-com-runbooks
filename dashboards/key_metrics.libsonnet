@@ -5,6 +5,58 @@ local singleMetricRow = import 'key-metric-panels/single-metric-row.libsonnet';
 local utilizationRatesPanel = import 'key-metric-panels/utilization-rates-panel.libsonnet';
 local row = grafana.row;
 
+local managedDashboardsForService(serviceType) =
+  {
+    type: 'dashlist',
+    gridPos: {
+      x: 17,
+      y: 0,
+      w: 7,
+      h: 3,
+    },
+    pluginVersion: '7.2.0',
+    limit: 10,
+    tags: [
+      'managed',
+      'type:' + serviceType,
+    ],
+    search: true,
+    query: '',
+    title: '',
+    timeFrom: null,
+    timeShift: null,
+    recent: false,
+    starred: false,
+    headings: false,
+    description: '',
+    datasource: null,
+  };
+
+local countTrue(bool) = if bool then 1 else 0;
+
+local getColumnWidths(
+  showApdex=showApdex,
+  showErrorRatio=showErrorRatio,
+  showOpsRate=showOpsRate,
+  showSaturationCell=showSaturationCell,
+  showDashboardListPanel=showDashboardListPanel
+      ) =
+  local dashboardPanelWidth = 3;
+  local width = 24 - (if showDashboardListPanel then dashboardPanelWidth else 0);
+  local mainPanelCount = countTrue(showApdex) + countTrue(showErrorRatio) + countTrue(showOpsRate) + countTrue(showSaturationCell);
+
+  local gap = width % mainPanelCount;
+  local unfilledWidth = std.floor(width / mainPanelCount);
+
+  local c(bool, priority) =
+    if bool then
+      local extra = if gap > priority then 1 else 0;
+      [unfilledWidth + extra]
+    else
+      [];
+
+  c(showApdex, 2) + c(showErrorRatio, 3) + c(showOpsRate, 1) + c(showSaturationCell, 0) + if showDashboardListPanel then [dashboardPanelWidth] else [0];
+
 {
   /**
    * Returns a row with key metrics for service
@@ -22,6 +74,7 @@ local row = grafana.row;
     showSaturationCell=true,
     compact=false,
     rowHeight=7,
+    showDashboardListPanel=false,
   )::
     local selectorHashWithExtras = selectorHash { type: serviceType };
     local formatConfig = { serviceType: serviceType, stableIdPrefix: stableIdPrefix };
@@ -53,11 +106,33 @@ local row = grafana.row;
           ]]
         else
           []
+      )
+      +
+      (
+        if showDashboardListPanel then
+          [[
+            managedDashboardsForService(serviceType),
+          ]]
+        else
+          []
       );
 
-    layout.grid([
-      row.new(title=rowTitle, collapse=false),
-    ], cols=1, rowHeight=1, startRow=startRow)
+    local columnWidths = getColumnWidths(
+      showApdex=showApdex,
+      showErrorRatio=showErrorRatio,
+      showOpsRate=showOpsRate,
+      showSaturationCell=showSaturationCell,
+      showDashboardListPanel=showDashboardListPanel
+    );
+
+    (
+      if rowTitle != null then
+        layout.grid([
+          row.new(title=rowTitle, collapse=false),
+        ], cols=1, rowHeight=1, startRow=startRow)
+      else
+        []
+    )
     +
-    layout.splitColumnGrid(columns, [rowHeight - 1, 1], startRow=startRow + 1),
+    layout.splitColumnGrid(columns, [rowHeight - 1, 1], startRow=startRow + 1, columnWidths=columnWidths),
 }
