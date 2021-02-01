@@ -16,7 +16,7 @@ local shards = {
   'memory-bound': { urgency: 'throttled', gkeDeployment: 'gitlab-sidekiq-memory-bound-v1', userImpacting: true, ignoreTrafficCessation: false },
   'urgent-cpu-bound': { urgency: 'high', gkeDeployment: 'gitlab-sidekiq-urgent-cpu-bound-v1', userImpacting: true, ignoreTrafficCessation: false },
   'urgent-other': { urgency: 'high', autoScaling: false, gkeDeployment: 'gitlab-sidekiq-urgent-other-v1', userImpacting: true, ignoreTrafficCessation: false },
-  catchall: { urgency: null, userImpacting: true, ignoreTrafficCessation: false /* no urgency attribute since multiple values are supported */ },
+  catchall: { urgency: null, gkeDeployment: 'gitlab-sidekiq-catchall-v1', userImpacting: true, ignoreTrafficCessation: false /* no urgency attribute since multiple values are supported */ },
   catchnfs: { urgency: null, userImpacting: true, ignoreTrafficCessation: true /* no urgency attribute since multiple values are supported */ },
   elasticsearch: { urgency: 'throttled', gkeDeployment: 'gitlab-sidekiq-elasticsearch-v1', userImpacting: false, ignoreTrafficCessation: true },
 };
