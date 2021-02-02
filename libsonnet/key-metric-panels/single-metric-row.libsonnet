@@ -57,7 +57,7 @@ local row(
             compact=compact,
           )
           .addDataLink({
-            url: '/d/alerts-%(aggregationId)s_multiburn_apdex?${__url_time_range}&${__all_variables}&%(grafanaURLPairs)s' % formatConfig {},
+            url: '/d/alerts-%(aggregationId)s_slo_apdex?${__url_time_range}&${__all_variables}&%(grafanaURLPairs)s' % formatConfig {},
             title: '%(titlePrefix)s Apdex SLO Analysis' % formatConfig,
             targetBlank: true,
           }),
@@ -90,7 +90,7 @@ local row(
             compact=compact,
           )
           .addDataLink({
-            url: '/d/alerts-%(aggregationId)s_multiburn_error?${__url_time_range}&${__all_variables}&%(grafanaURLPairs)s' % formatConfig,
+            url: '/d/alerts-%(aggregationId)s_slo_error?${__url_time_range}&${__all_variables}&%(grafanaURLPairs)s' % formatConfig,
             title: '%(titlePrefix)s Error-Rate SLO Analysis' % formatConfig,
             targetBlank: true,
           }),

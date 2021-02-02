@@ -67,8 +67,9 @@ local generateApdexWeightQuery(c, aggregationLabels, selector, rangeInterval) =
   aggregations.aggregateOverQuery('sum', aggregationLabels, orJoin(apdexWeightQueries));
 
 local generateApdexPercentileLatencyQuery(c, percentile, aggregationLabels, selector, rangeInterval) =
-  local rateQueries = std.map(function(i) i.apdexNumerator(selector, rangeInterval), c.metrics);
-  local aggregatedRateQueries = aggregations.aggregateOverQuery('sum', aggregationLabels, orJoin(rateQueries));
+  local rateQueries = std.map(function(i) i.apdexNumerator(selector, rangeInterval, histogramRates=true), c.metrics);
+  local aggregationLabelsWithLe = aggregationLabels + ['le'];
+  local aggregatedRateQueries = aggregations.aggregateOverQuery('sum', aggregationLabelsWithLe, orJoin(rateQueries));
 
   |||
     histogram_quantile(

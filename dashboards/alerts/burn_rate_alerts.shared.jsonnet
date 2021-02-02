@@ -1,3 +1,4 @@
+local aggregationSets = import 'aggregation-sets.libsonnet';
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
@@ -10,42 +11,68 @@ local selectors = import 'promql/selectors.libsonnet';
 local statusDescription = import 'key-metric-panels/status_description.libsonnet';
 local aggregationSets = import './aggregation-sets.libsonnet';
 
-local combinations(shortMetric, shortDuration, longMetric, longDuration, selectorHash, apdexInverted, thresholdSLOMetricName, nonGlobalFallback, thanosEvaluated=true) =
+local apdexSLOMetric = 'slo:min:events:gitlab_service_apdex:ratio';
+local errorSLOMetric = 'slo:max:events:gitlab_service_errors:ratio';
+
+local errorBurnRatePair(aggregationSet, shortDuration, longDuration, selectorHash) =
   local formatConfig = {
-    shortMetric: shortMetric,
+    shortMetric: aggregationSet.getErrorRatioMetricForBurnRate(shortDuration, required=true),
     shortDuration: shortDuration,
-    longMetric: longMetric,
+    longMetric: aggregationSet.getErrorRatioMetricForBurnRate(longDuration, required=true),
     longDuration: longDuration,
     longBurnFactor: multiburnFactors['burnrate_' + longDuration],
-    globalSelector: selectors.serializeHash(selectorHash + (if thanosEvaluated then { monitor: 'global' } else {})),
-    nonGlobalSelector: selectors.serializeHash(selectorHash + (if thanosEvaluated then { monitor: { ne: 'global' } } else {})),
-    thresholdSLOMetricName: thresholdSLOMetricName,
+    selector: selectors.serializeHash(selectorHash + aggregationSet.selector),
+    thresholdSLOMetricName: errorSLOMetric,
   };
 
-  // For backwards compatability, fall-back to non global
-  // metric. Remove after 1 Jan 2021
-  local longQuery = if nonGlobalFallback then
+  local longQuery =
     |||
-      %(longMetric)s{%(globalSelector)s}
-      or on(env, environment, tier, type, stage, component)
-      %(longMetric)s{%(nonGlobalSelector)s}
-    ||| % formatConfig
-  else
-    |||
-      %(longMetric)s{%(globalSelector)s}
+      %(longMetric)s{%(selector)s}
     ||| % formatConfig;
 
-  // For backwards compatability, fall-back to non global
-  // metric. Remove after 1 Jan 2021
-  local shortQuery = if nonGlobalFallback then
+  local shortQuery =
     |||
-      %(shortMetric)s{%(globalSelector)s}
-      or on(env, environment, tier, type, stage, component)
-      %(shortMetric)s{%(nonGlobalSelector)s}
-    ||| % formatConfig
-  else
+      %(shortMetric)s{%(selector)s}
+    ||| % formatConfig;
+
+  [
+    {
+      legendFormat: '%(longDuration)s error burn rate' % formatConfig,
+      query: longQuery,
+    },
+    {
+      legendFormat: '%(shortDuration)s error burn rate' % formatConfig,
+      query: shortQuery,
+    },
+    {
+      legendFormat: '%(longDuration)s error burn threshold' % formatConfig,
+      query: '(%(longBurnFactor)g * avg(%(thresholdSLOMetricName)s{monitor="global", type="$type"})) unless (vector($proposed_slo) > 0)' % formatConfig,
+    },
+    {
+      legendFormat: 'Proposed SLO @ %(longDuration)s burn' % formatConfig,
+      query: '%(longBurnFactor)g * (1 - $proposed_slo)' % formatConfig,
+    },
+  ];
+
+local apdexBurnRatePair(aggregationSet, shortDuration, longDuration, selectorHash) =
+  local formatConfig = {
+    shortMetric: aggregationSet.getApdexRatioMetricForBurnRate(shortDuration, required=true),
+    shortDuration: shortDuration,
+    longMetric: aggregationSet.getApdexRatioMetricForBurnRate(longDuration, required=true),
+    longDuration: longDuration,
+    longBurnFactor: multiburnFactors['burnrate_' + longDuration],
+    selector: selectors.serializeHash(selectorHash + aggregationSet.selector),
+    thresholdSLOMetricName: apdexSLOMetric,
+  };
+
+  local longQuery =
     |||
-      %(shortMetric)s{%(globalSelector)s}
+      %(longMetric)s{%(selector)s}
+    ||| % formatConfig;
+
+  local shortQuery =
+    |||
+      %(shortMetric)s{%(selector)s}
     ||| % formatConfig;
 
   [
@@ -59,17 +86,11 @@ local combinations(shortMetric, shortDuration, longMetric, longDuration, selecto
     },
     {
       legendFormat: '%(longDuration)s apdex burn threshold' % formatConfig,
-      query: if apdexInverted then
-        '(1 - (%(longBurnFactor)g * (1 - avg(%(thresholdSLOMetricName)s{monitor="global", type="$type"})))) unless (vector($proposed_slo) > 0) ' % formatConfig
-      else
-        '(%(longBurnFactor)g * avg(%(thresholdSLOMetricName)s{monitor="global", type="$type"})) unless (vector($proposed_slo) > 0)' % formatConfig,
+      query: '(1 - (%(longBurnFactor)g * (1 - avg(%(thresholdSLOMetricName)s{monitor="global", type="$type"})))) unless (vector($proposed_slo) > 0) ' % formatConfig,
     },
     {
       legendFormat: 'Proposed SLO @ %(longDuration)s burn' % formatConfig,
-      query: if apdexInverted then
-        '1 - (%(longBurnFactor)g * (1 - $proposed_slo))' % formatConfig
-      else
-        '%(longBurnFactor)g * (1 - $proposed_slo)' % formatConfig,
+      query: '1 - (%(longBurnFactor)g * (1 - $proposed_slo))' % formatConfig,
     },
   ];
 
@@ -155,47 +176,98 @@ local burnRatePanelWithHelp(
     ),
   ];
 
+local ignoredTemplateLabels = std.set(['env', 'tier']);
+
+local generateTemplatesAndSelectorHash(sliType, aggregationSet, dashboard) =
+  local metric = if sliType == 'error' then
+    aggregationSet.getErrorRatioMetricForBurnRate('1h')
+  else
+    aggregationSet.getApdexRatioMetricForBurnRate('1h');
+
+  std.foldl(
+    function(memo, label)
+      if std.member(ignoredTemplateLabels, label) then
+        memo
+      else
+        local dashboard = memo.dashboard;
+        local selectorHash = memo.selectorHash;
+
+        local formatConfig = {
+          metric: metric,
+          label: label,
+          selector: selectors.serializeHash(selectorHash),
+        };
+
+        local t = template.new(
+          label,
+          '$PROMETHEUS_DS',
+          'label_values(%(metric)s{%(selector)s}, %(label)s)' % formatConfig,
+          refresh='time',
+          sort=1,
+        );
+        { dashboard: dashboard.addTemplate(t), selectorHash: selectorHash { [label]: '$' + label } },
+    aggregationSet.labels,
+    { dashboard: dashboard, selectorHash: aggregationSet.selector }
+  );
 
 local multiburnRateAlertsDashboard(
-  title,
-  oneHourBurnRateCombinations,
-  sixHourBurnRateCombinations,
-  serviceAggregated,
-  selectorHash,
-  statusDescriptionPanel,
-  nodeLevel=false,
-  slaQuery=null,
+  sliType,
+  aggregationSet,
       ) =
+
+  local title =
+    if sliType == 'apdex' then
+      aggregationSet.name + ' Apdex SLO Analysis'
+    else
+      aggregationSet.name + ' Error SLO Analysis';
+
   local dashboardInitial =
     basic.dashboard(
       title,
       tags=['alert-target', 'general'],
-    )
-    .addTemplate(templates.type)
-    .addTemplate(templates.stage)
-    .addTemplate(
-      template.custom(
-        'proposed_slo',
-        'NaN,0.9,0.95,0.99,0.995,0.999,0.9995,0.9999',
-        'NaN',
-      )
     );
 
-  local dashboardWithComponentTemplate = if !serviceAggregated then
-    dashboardInitial.addTemplate(templates.component)
-  else
-    dashboardInitial;
+  local dashboardAndSelector =
+    generateTemplatesAndSelectorHash(sliType, aggregationSet, dashboardInitial);
 
-  local dashboardWithNodeTemplate = if nodeLevel then
-    dashboardWithComponentTemplate.addTemplate(templates.fqdn('gitlab_component_node_ops:rate_5m{component="$component",environment="$environment",stage="$stage",type="$type"}', '', multi=false))
-  else
-    dashboardWithComponentTemplate;
+  local dashboardWithTemplates = dashboardAndSelector.dashboard.addTemplate(
+    template.custom(
+      'proposed_slo',
+      'NaN,0.9,0.95,0.99,0.995,0.999,0.9995,0.9999',
+      'NaN',
+    )
+  );
 
-  dashboardWithNodeTemplate.addPanels(
+  local selectorHash = dashboardAndSelector.selectorHash;
+
+  local slaQuery =
+    if sliType == 'apdex' then
+      'avg(slo:min:events:gitlab_service_apdex:ratio{monitor="global",type="$type"}) by (type)'
+    else
+      'avg(slo:min:events:gitlab_service_apdex:ratio{monitor="global",type="$type"}) by (type)';
+
+  local pairFunction = if sliType == 'apdex' then apdexBurnRatePair else errorBurnRatePair;
+
+  local oneHourBurnRateCombinations = pairFunction(
+    aggregationSet=aggregationSet,
+    shortDuration='5m',
+    longDuration='1h',
+    selectorHash=selectorHash
+  );
+
+  local sixHourBurnRateCombinations = pairFunction(
+    aggregationSet=aggregationSet,
+    shortDuration='30m',
+    longDuration='6h',
+    selectorHash=selectorHash
+  );
+
+  local statusDescriptionPanel = statusDescription.apdexStatusDescriptionPanel('SLO Analysis', selectorHash, aggregationSet=aggregationSet);
+
+  dashboardWithTemplates.addPanels(
     layout.columnGrid([
-      (if statusDescriptionPanel != null then [statusDescriptionPanel] else [])
-      +
       [
+        statusDescriptionPanel,
         basic.slaStats(
           title='',
           description='Availability',
@@ -276,191 +348,25 @@ local multiburnRateAlertsDashboard(
     links+: platformLinks.triage,
   };
 
-local componentSelectorHash = { environment: '$environment', env: '$environment', type: '$type', stage: '$stage', component: '$component' };
-// TODO: add routing for `monitor="global"` sometime after May 2021
-local componentNodeSelectorHash = { environment: '$environment', /* monitor: 'global' */ type: '$type', stage: '$stage', component: '$component', fqdn: '$fqdn' };
-local serviceSelectorHash = { environment: '$environment', env: '$environment', type: '$type', stage: '$stage', monitor: 'global' };
-local apdexSLOMetric = 'slo:min:events:gitlab_service_apdex:ratio';
-local errorSLOMetric = 'slo:max:events:gitlab_service_errors:ratio';
+local aggregationSetsForSLOAnalysisDashboards =
+  std.filter(
+    function(aggregationSet)
+      !aggregationSet.intermediateSource,
+    std.objectValues(aggregationSets)
+  );
 
-{
-  // Apdex, for components
-  component_multiburn_apdex: multiburnRateAlertsDashboard(
-    title='Component Multi-window Multi-burn-rate Apdex Out of SLO',
-    selectorHash=componentSelectorHash,
-    oneHourBurnRateCombinations=combinations(
-      shortMetric='gitlab_component_apdex:ratio_5m',
-      shortDuration='5m',
-      longMetric='gitlab_component_apdex:ratio_1h',
-      longDuration='1h',
-      selectorHash=componentSelectorHash,
-      apdexInverted=true,
-      thresholdSLOMetricName=apdexSLOMetric,
-      nonGlobalFallback=true,
-    ),
-    sixHourBurnRateCombinations=combinations(
-      shortMetric='gitlab_component_apdex:ratio_30m',
-      shortDuration='30m',
-      longMetric='gitlab_component_apdex:ratio_6h',
-      longDuration='6h',
-      selectorHash=componentSelectorHash,
-      apdexInverted=true,
-      thresholdSLOMetricName=apdexSLOMetric,
-      nonGlobalFallback=true,
-    ),
-    serviceAggregated=false,
-    statusDescriptionPanel=statusDescription.apdexStatusDescriptionPanel('$component', componentSelectorHash, aggregationSet=aggregationSets.globalSLIs),
-    slaQuery='avg(slo:min:events:gitlab_service_apdex:ratio{monitor="global",type="$type"}) by (type)',
-  ),
-
-  // Error Rates, for components
-  component_multiburn_error: multiburnRateAlertsDashboard(
-    title='Component Multi-window Multi-burn-rate Error Rate Out of SLO',
-    selectorHash=componentSelectorHash,
-    oneHourBurnRateCombinations=combinations(
-      shortMetric='gitlab_component_errors:ratio_5m',
-      shortDuration='5m',
-      longMetric='gitlab_component_errors:ratio_1h',
-      longDuration='1h',
-      selectorHash=componentSelectorHash,
-      apdexInverted=false,
-      thresholdSLOMetricName=errorSLOMetric,
-      nonGlobalFallback=false,
-    ),
-    sixHourBurnRateCombinations=combinations(
-      shortMetric='gitlab_component_errors:ratio_30m',
-      shortDuration='30m',
-      longMetric='gitlab_component_errors:ratio_6h',
-      longDuration='6h',
-      selectorHash=componentSelectorHash,
-      apdexInverted=false,
-      thresholdSLOMetricName=errorSLOMetric,
-      nonGlobalFallback=false,
-    ),
-    serviceAggregated=false,
-    statusDescriptionPanel=statusDescription.errorRateStatusDescriptionPanel('$component', componentSelectorHash, aggregationSet=aggregationSets.globalSLIs),
-    slaQuery='1 - avg(slo:max:events:gitlab_service_errors:ratio{monitor="global",type="$type"}) by (type)',
-  ),
-
-  // Apdex, for components on single nodes (currently only Gitaly)
-  component_node_multiburn_apdex: multiburnRateAlertsDashboard(
-    title='Component/Node Multi-window Multi-burn-rate Apdex Out of SLO',
-    selectorHash=componentNodeSelectorHash,
-    oneHourBurnRateCombinations=combinations(
-      shortMetric='gitlab_component_node_apdex:ratio_5m',
-      shortDuration='5m',
-      longMetric='gitlab_component_node_apdex:ratio_1h',
-      longDuration='1h',
-      selectorHash=componentNodeSelectorHash,
-      apdexInverted=true,
-      thresholdSLOMetricName=apdexSLOMetric,
-      nonGlobalFallback=true,
-      thanosEvaluated=false,
-    ),
-    sixHourBurnRateCombinations=combinations(
-      shortMetric='gitlab_component_node_apdex:ratio_30m',
-      shortDuration='30m',
-      longMetric='gitlab_component_node_apdex:ratio_6h',
-      longDuration='6h',
-      selectorHash=componentNodeSelectorHash,
-      apdexInverted=true,
-      thresholdSLOMetricName=apdexSLOMetric,
-      nonGlobalFallback=true,
-      thanosEvaluated=false,
-    ),
-    serviceAggregated=false,
-    nodeLevel=true,
-    statusDescriptionPanel=statusDescription.apdexStatusDescriptionPanel('$component', componentSelectorHash, aggregationSet=aggregationSets.globalNodeSLIs),
-    slaQuery='avg(slo:min:events:gitlab_service_apdex:ratio{monitor="global",type="$type"}) by (type)',
-  ),
-
-
-  // Error Rates, for components on single nodes (currently only Gitaly)
-  component_node_multiburn_error: multiburnRateAlertsDashboard(
-    title='Component/Node Multi-window Multi-burn-rate Error Rate Out of SLO',
-    selectorHash=componentNodeSelectorHash,
-    oneHourBurnRateCombinations=combinations(
-      shortMetric='gitlab_component_node_errors:ratio_5m',
-      shortDuration='5m',
-      longMetric='gitlab_component_node_errors:ratio_1h',
-      longDuration='1h',
-      selectorHash=componentNodeSelectorHash,
-      apdexInverted=false,
-      thresholdSLOMetricName=errorSLOMetric,
-      nonGlobalFallback=false,
-      thanosEvaluated=false,
-    ),
-    sixHourBurnRateCombinations=combinations(
-      shortMetric='gitlab_component_node_errors:ratio_30m',
-      shortDuration='30m',
-      longMetric='gitlab_component_node_errors:ratio_6h',
-      longDuration='6h',
-      selectorHash=componentNodeSelectorHash,
-      apdexInverted=false,
-      thresholdSLOMetricName=errorSLOMetric,
-      nonGlobalFallback=false,
-      thanosEvaluated=false,
-    ),
-    serviceAggregated=false,
-    nodeLevel=true,
-    statusDescriptionPanel=statusDescription.errorRateStatusDescriptionPanel('$component', componentNodeSelectorHash, aggregationSet=aggregationSets.globalNodeSLIs),
-    slaQuery='1 - avg(slo:max:events:gitlab_service_errors:ratio{monitor="global",type="$type"}) by (type)',
-  ),
-
-  // Apdex, for services
-  service_multiburn_apdex: multiburnRateAlertsDashboard(
-    title='Service Multi-window Multi-burn-rate Apdex Out of SLO',
-    selectorHash=serviceSelectorHash,
-    oneHourBurnRateCombinations=combinations(
-      shortMetric='gitlab_service_apdex:ratio_5m',
-      shortDuration='5m',
-      longMetric='gitlab_service_apdex:ratio_1h',
-      longDuration='1h',
-      selectorHash=serviceSelectorHash,
-      apdexInverted=true,
-      thresholdSLOMetricName=apdexSLOMetric,
-      nonGlobalFallback=false,
-    ),
-    sixHourBurnRateCombinations=combinations(
-      shortMetric='gitlab_service_apdex:ratio_30m',
-      shortDuration='30m',
-      longMetric='gitlab_service_apdex:ratio_6h',
-      longDuration='6h',
-      selectorHash=serviceSelectorHash,
-      apdexInverted=true,
-      thresholdSLOMetricName=apdexSLOMetric,
-      nonGlobalFallback=false,
-    ),
-    serviceAggregated=true,
-    statusDescriptionPanel=statusDescription.apdexStatusDescriptionPanel('$type', serviceSelectorHash, aggregationSet=aggregationSets.serviceAggregatedSLIs),
-    slaQuery='avg(slo:min:events:gitlab_service_apdex:ratio{monitor="global",type="$type"}) by (type)',
-  ),
-
-  service_multiburn_error: multiburnRateAlertsDashboard(
-    title='Service Multi-window Multi-burn-rate Error Rate Out of SLO',
-    selectorHash=serviceSelectorHash,
-    oneHourBurnRateCombinations=combinations(
-      shortMetric='gitlab_service_errors:ratio_5m',
-      shortDuration='5m',
-      longMetric='gitlab_service_errors:ratio_1h',
-      longDuration='1h',
-      selectorHash=serviceSelectorHash,
-      apdexInverted=false,
-      thresholdSLOMetricName=errorSLOMetric,
-      nonGlobalFallback=false,
-    ),
-    sixHourBurnRateCombinations=combinations(
-      shortMetric='gitlab_service_errors:ratio_30m',
-      shortDuration='30m',
-      longMetric='gitlab_service_errors:ratio_6h',
-      longDuration='6h',
-      selectorHash=serviceSelectorHash,
-      apdexInverted=false,
-      thresholdSLOMetricName=errorSLOMetric,
-      nonGlobalFallback=false,
-    ),
-    serviceAggregated=true,
-    statusDescriptionPanel=statusDescription.errorRateStatusDescriptionPanel('$type', serviceSelectorHash, aggregationSet=aggregationSets.serviceAggregatedSLIs),
-    slaQuery='1 - avg(slo:max:events:gitlab_service_errors:ratio{monitor="global",type="$type"}) by (type)',
-  ),
-}
+std.foldl(
+  function(memo, aggregationSet)
+    memo {
+      [aggregationSet.id + '_slo_apdex']: multiburnRateAlertsDashboard(
+        sliType='apdex',
+        aggregationSet=aggregationSet,
+      ),
+      [aggregationSet.id + '_slo_error']: multiburnRateAlertsDashboard(
+        sliType='error',
+        aggregationSet=aggregationSet,
+      ),
+    },
+  aggregationSetsForSLOAnalysisDashboards,
+  {}
+)
