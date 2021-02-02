@@ -11,7 +11,7 @@ local safeMap(fn, v) = if std.isArray(v) then std.map(fn, v) else [];
 
 {
   lookupService(name)::
-    serviceMap[name],
+    if std.objectHas(serviceMap, name) then serviceMap[name],
   getLoggingLinks(name)::
     safeMap(function(log) link.dashboards('Logs: ' + log.name + ' (servcat)', '', type='link', keepTime=false, targetBlank=true, url=log.permalink), serviceMap[name].technical.logging),
   getServiceLinks(name)::
