@@ -31,7 +31,10 @@ The optimal procedure is getting the database in a backed-up state, using the co
 Here are the steps to take following the best practices and allowing us to safely conduct a manual snapshot, on a host without production traffic:
 
 - Start a session with a pg_start_backup, that will start the backup mode: 
-  - Execute the following command in `gitlab-psql`: 'SELECT pg_start_backup('Manual GCS snapshot', TRUE, FALSE);'
+  - Execute the following command in `gitlab-psql`:
+    ```sql
+    SELECT pg_start_backup('Manual GCS snapshot', TRUE, FALSE);
+    ```
 
 - In a second session on this host execute the GCS snapshot:
   - gcloud compute disks snapshot ${disk} --description "manual GCS snapshot $(date +%Y-%m-%dT%H:%M:%S%z)" --snapshot-names=${disk}-manual-snapshot --zone=${zone}
@@ -39,7 +42,10 @@ Here are the steps to take following the best practices and allowing us to safel
   - zone example= `us-east1-c`
   
 - Stop the backup command, in the same session you started the backup mode:
-  - Execute the following command  `gitlab-psql`: 'SELECT pg_stop_backup(FALSE, FALSE);'
+  - Execute the following command  `gitlab-psql`:
+    ```sql
+    SELECT pg_stop_backup(FALSE, FALSE);
+    ```
 
 ## Troubleshooting
 
