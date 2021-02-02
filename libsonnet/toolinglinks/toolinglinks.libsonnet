@@ -1,6 +1,4 @@
-local generateMarkdownLink(toolingLinkDefinition, options) =
-  local toolingLinks = toolingLinkDefinition(options);
-
+local generateMarkdownLinks(toolingLinks) =
   [
     |||
       * [%(title)s](%(url)s)
@@ -12,11 +10,14 @@ local generateMarkdownLink(toolingLinkDefinition, options) =
     for tl in toolingLinks
   ];
 
-local generateMarkdown(toolingLinks, options={}) =
+local renderLinks(toolingLinks, options={}) =
   local optionsWithDefaults = {
     prometheusSelectorHash: {},
   } + options;
-  std.join('', std.flatMap(function(toolingLinkDefinition) generateMarkdownLink(toolingLinkDefinition, optionsWithDefaults), toolingLinks));
+  std.flatMap(function(toolingLinkDefinition) toolingLinkDefinition(optionsWithDefaults), toolingLinks);
+
+local generateMarkdown(toolingLinks, options={}) =
+  std.join('', generateMarkdownLinks(renderLinks(toolingLinks, options)));
 
 {
   cloudSQL: (import './cloud_sql.libsonnet').cloudSQL,
@@ -29,4 +30,5 @@ local generateMarkdown(toolingLinks, options={}) =
   gkeDeployment:: (import './gke_deployment.libsonnet').gkeDeployment,
   googleLoadBalancer: (import './google_load_balancer.libsonnet').googleLoadBalancer,
   generateMarkdown:: generateMarkdown,
+  renderLinks:: renderLinks,
 }

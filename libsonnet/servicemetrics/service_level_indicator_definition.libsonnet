@@ -1,4 +1,5 @@
 local selectors = import 'promql/selectors.libsonnet';
+local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
 // For now we assume that services are provisioned on vms and not kubernetes
 // Please consult the README.md file for details of team and feature_category
@@ -57,6 +58,9 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
         self.toolingLinks
       else
         [],
+
+    renderToolingLinks()::
+      toolingLinks.renderLinks(self.getToolingLinks()),
 
     // Generate recording rules for apdex weight
     generateApdexWeightRecordingRules(burnRate, recordingRuleName, aggregationLabels, recordingRuleStaticLabels)::

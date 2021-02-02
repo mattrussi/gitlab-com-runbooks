@@ -2,6 +2,8 @@
 // This is probably not what you want. Avoid combining multiple signals into
 // a single SLI unless you are sure you know what you are doing
 
+local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
+
 // Combined component definitions are a specialisation of the service-component.
 // They allow multiple components to be combined under a single name, but with different
 // static labels.
@@ -49,6 +51,9 @@ local combinedServiceLevelIndicatorDefinition(
 
         getToolingLinks()::
           std.flatMap(function(c) c.getToolingLinks(), componentsInitialised),
+
+        renderToolingLinks()::
+          toolingLinks.renderLinks(self.getToolingLinks()),
 
         // Generate recording rules for apdex weight
         generateApdexWeightRecordingRules(burnRate, recordingRuleName, aggregationLabels, recordingRuleStaticLabels)::

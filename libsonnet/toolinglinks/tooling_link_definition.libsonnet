@@ -1,5 +1,5 @@
 {
   // We will likely extend this in future
   toolingLinkDefinition(definition)::
-    definition,
+    { tool:: null, type:: null } + definition,
 }
