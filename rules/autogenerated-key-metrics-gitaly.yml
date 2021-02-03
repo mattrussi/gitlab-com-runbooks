@@ -50,7 +50,7 @@ groups:
       type: gitaly
     expr: |
       sum by (environment,stage) (
-        rate(grpc_client_handled_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded",job="gitaly"}[1m])
+        rate(grpc_client_handled_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded",grpc_method!~"UpdateRemoteMirror|AddRemote",job="gitaly"}[1m])
       )
   - record: gitlab_component_apdex:weight:score
     labels:
@@ -201,7 +201,7 @@ groups:
       type: gitaly
     expr: |
       sum by (environment,stage) (
-        rate(grpc_client_handled_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded",job="gitaly"}[5m])
+        rate(grpc_client_handled_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded",grpc_method!~"UpdateRemoteMirror|AddRemote",job="gitaly"}[5m])
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -351,7 +351,7 @@ groups:
       type: gitaly
     expr: |
       sum by (environment,stage,shard,fqdn) (
-        rate(grpc_client_handled_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded",job="gitaly"}[5m])
+        rate(grpc_client_handled_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded",grpc_method!~"UpdateRemoteMirror|AddRemote",job="gitaly"}[5m])
       )
   - record: gitlab_component_node_apdex:weight:score_5m
     labels:
@@ -506,7 +506,7 @@ groups:
       type: gitaly
     expr: |
       sum by (environment,stage) (
-        rate(grpc_client_handled_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded",job="gitaly"}[30m])
+        rate(grpc_client_handled_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded",grpc_method!~"UpdateRemoteMirror|AddRemote",job="gitaly"}[30m])
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -656,7 +656,7 @@ groups:
       type: gitaly
     expr: |
       sum by (environment,stage,shard,fqdn) (
-        rate(grpc_client_handled_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded",job="gitaly"}[30m])
+        rate(grpc_client_handled_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded",grpc_method!~"UpdateRemoteMirror|AddRemote",job="gitaly"}[30m])
       )
   - record: gitlab_component_node_apdex:weight:score_30m
     labels:
@@ -811,7 +811,7 @@ groups:
       type: gitaly
     expr: |
       sum by (environment,stage) (
-        rate(grpc_client_handled_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded",job="gitaly"}[1h])
+        rate(grpc_client_handled_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded",grpc_method!~"UpdateRemoteMirror|AddRemote",job="gitaly"}[1h])
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -961,7 +961,7 @@ groups:
       type: gitaly
     expr: |
       sum by (environment,stage,shard,fqdn) (
-        rate(grpc_client_handled_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded",job="gitaly"}[1h])
+        rate(grpc_client_handled_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded",grpc_method!~"UpdateRemoteMirror|AddRemote",job="gitaly"}[1h])
       )
   - record: gitlab_component_node_apdex:weight:score_1h
     labels:
@@ -1116,7 +1116,7 @@ groups:
       type: gitaly
     expr: |
       sum by (environment,stage) (
-        rate(grpc_client_handled_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded",job="gitaly"}[6h])
+        rate(grpc_client_handled_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded",grpc_method!~"UpdateRemoteMirror|AddRemote",job="gitaly"}[6h])
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
@@ -1266,7 +1266,7 @@ groups:
       type: gitaly
     expr: |
       sum by (environment,stage,shard,fqdn) (
-        rate(grpc_client_handled_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded",job="gitaly"}[6h])
+        rate(grpc_client_handled_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded",grpc_method!~"UpdateRemoteMirror|AddRemote",job="gitaly"}[6h])
       )
   - record: gitlab_component_node_apdex:weight:score_6h
     labels:

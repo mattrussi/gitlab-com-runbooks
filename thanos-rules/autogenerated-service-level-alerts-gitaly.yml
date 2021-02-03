@@ -152,7 +152,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(grpc_client_handled_total{environment="{{ $labels.environment }}",grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded",job="gitaly",stage="{{ $labels.stage }}"}[5m])
+          rate(grpc_client_handled_total{environment="{{ $labels.environment }}",grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded",grpc_method!~"UpdateRemoteMirror|AddRemote",job="gitaly",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/gitaly/README.md
     labels:
@@ -215,7 +215,7 @@ groups:
       grafana_variables: environment,type,stage,shard,fqdn,component
       promql_template_1: |
         sum by (env,environment,tier,stage,shard,fqdn) (
-          rate(grpc_client_handled_total{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m])
+          rate(grpc_client_handled_total{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded",grpc_method!~"UpdateRemoteMirror|AddRemote",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/gitaly/README.md
     labels:
