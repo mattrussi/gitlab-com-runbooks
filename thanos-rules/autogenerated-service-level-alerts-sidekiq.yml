@@ -18,14 +18,33 @@ groups:
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
+        $labels.component }}
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '4125397901'
-      grafana_variables: environment,stage
-      promql_template_1: >-
-        gitlab_component_apdex:ratio_1h{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="catchall",stage="{{ $labels.stage }}",urgency="high"}
+            or
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="catchall",stage="{{ $labels.stage }}",urgency="high"}
+            or
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="catchall",stage="{{ $labels.stage }}",urgency="low"}
+            or
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="catchall",stage="{{ $labels.stage }}",urgency="low"}
+            or
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="catchall",stage="{{ $labels.stage }}",urgency="throttled"}
+            or
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="catchall",stage="{{ $labels.stage }}",urgency=""}
+            or
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="catchall",stage="{{ $labels.stage }}",urgency=""}
+          )
+        )
+      runbook: docs/sidekiq/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -33,6 +52,7 @@ groups:
       product_stage_group: not_owned
       rules_domain: general
       severity: s2
+      sli_type: apdex
       slo_alert: 'yes'
       user_impacting: 'yes'
     expr: |
@@ -78,13 +98,13 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '532783926'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: >-
-        https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-error-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{environment="{{ $labels.environment }}",shard="catchall",stage="{{ $labels.stage }}"}
+        )
+      runbook: docs/sidekiq/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -92,6 +112,7 @@ groups:
       product_stage_group: not_owned
       rules_domain: general
       severity: s2
+      sli_type: error
       slo_alert: 'yes'
       user_impacting: 'yes'
     expr: |
@@ -137,18 +158,20 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '2518816313'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",le="+Inf",shard="catchall",stage="{{ $labels.stage }}"}
+        )
+      runbook: docs/sidekiq/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: >
@@ -173,18 +196,20 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '2518816313'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_ops:rate_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",le="+Inf",shard="catchall",stage="{{ $labels.stage }}"}
+        )
+      runbook: docs/sidekiq/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: |
@@ -204,14 +229,33 @@ groups:
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
+        $labels.component }}
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '811922316'
-      grafana_variables: environment,stage
-      promql_template_1: >-
-        gitlab_component_apdex:ratio_1h{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="catchnfs",stage="{{ $labels.stage }}",urgency="high"}
+            or
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="catchnfs",stage="{{ $labels.stage }}",urgency="high"}
+            or
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="catchnfs",stage="{{ $labels.stage }}",urgency="low"}
+            or
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="catchnfs",stage="{{ $labels.stage }}",urgency="low"}
+            or
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="catchnfs",stage="{{ $labels.stage }}",urgency="throttled"}
+            or
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="catchnfs",stage="{{ $labels.stage }}",urgency=""}
+            or
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="catchnfs",stage="{{ $labels.stage }}",urgency=""}
+          )
+        )
+      runbook: docs/sidekiq/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -219,6 +263,7 @@ groups:
       product_stage_group: not_owned
       rules_domain: general
       severity: s2
+      sli_type: apdex
       slo_alert: 'yes'
       user_impacting: 'yes'
     expr: |
@@ -264,13 +309,13 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '2072523708'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: >-
-        https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-error-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{environment="{{ $labels.environment }}",shard="catchnfs",stage="{{ $labels.stage }}"}
+        )
+      runbook: docs/sidekiq/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -278,6 +323,7 @@ groups:
       product_stage_group: not_owned
       rules_domain: general
       severity: s2
+      sli_type: error
       slo_alert: 'yes'
       user_impacting: 'yes'
     expr: |
@@ -319,14 +365,21 @@ groups:
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
+        $labels.component }}
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '564185305'
-      grafana_variables: environment,stage
-      promql_template_1: >-
-        gitlab_component_apdex:ratio_1h{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="database-throttled",stage="{{ $labels.stage }}",urgency="throttled"}
+          )
+        )
+      runbook: docs/sidekiq/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -334,6 +387,7 @@ groups:
       product_stage_group: not_owned
       rules_domain: general
       severity: s2
+      sli_type: apdex
       slo_alert: 'yes'
       user_impacting: 'no'
     expr: |
@@ -379,13 +433,13 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '1659464052'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: >-
-        https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-error-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{environment="{{ $labels.environment }}",shard="database-throttled",stage="{{ $labels.stage }}"}
+        )
+      runbook: docs/sidekiq/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -393,6 +447,7 @@ groups:
       product_stage_group: not_owned
       rules_domain: general
       severity: s2
+      sli_type: error
       slo_alert: 'yes'
       user_impacting: 'no'
     expr: |
@@ -434,14 +489,21 @@ groups:
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
+        $labels.component }}
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '2299339214'
-      grafana_variables: environment,stage
-      promql_template_1: >-
-        gitlab_component_apdex:ratio_1h{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="elasticsearch",stage="{{ $labels.stage }}",urgency="throttled"}
+          )
+        )
+      runbook: docs/sidekiq/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -449,6 +511,7 @@ groups:
       product_stage_group: not_owned
       rules_domain: general
       severity: s2
+      sli_type: apdex
       slo_alert: 'yes'
       user_impacting: 'no'
     expr: |
@@ -494,13 +557,13 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '389908901'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: >-
-        https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-error-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{environment="{{ $labels.environment }}",shard="elasticsearch",stage="{{ $labels.stage }}"}
+        )
+      runbook: docs/sidekiq/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -508,6 +571,7 @@ groups:
       product_stage_group: not_owned
       rules_domain: general
       severity: s2
+      sli_type: error
       slo_alert: 'yes'
       user_impacting: 'no'
     expr: |
@@ -549,14 +613,21 @@ groups:
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
+        $labels.component }}
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '1517683275'
-      grafana_variables: environment,stage
-      promql_template_1: >-
-        gitlab_component_apdex:ratio_1h{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="gitaly-throttled",stage="{{ $labels.stage }}",urgency="throttled"}
+          )
+        )
+      runbook: docs/sidekiq/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -564,6 +635,7 @@ groups:
       product_stage_group: not_owned
       rules_domain: general
       severity: s2
+      sli_type: apdex
       slo_alert: 'yes'
       user_impacting: 'no'
     expr: |
@@ -609,13 +681,13 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '4031214920'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: >-
-        https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-error-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{environment="{{ $labels.environment }}",shard="gitaly-throttled",stage="{{ $labels.stage }}"}
+        )
+      runbook: docs/sidekiq/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -623,6 +695,7 @@ groups:
       product_stage_group: not_owned
       rules_domain: general
       severity: s2
+      sli_type: error
       slo_alert: 'yes'
       user_impacting: 'no'
     expr: |
@@ -664,14 +737,23 @@ groups:
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
+        $labels.component }}
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '1949742512'
-      grafana_variables: environment,stage
-      promql_template_1: >-
-        gitlab_component_apdex:ratio_1h{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="low-urgency-cpu-bound",stage="{{ $labels.stage }}",urgency="low"}
+            or
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="low-urgency-cpu-bound",stage="{{ $labels.stage }}",urgency="low"}
+          )
+        )
+      runbook: docs/sidekiq/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -679,6 +761,7 @@ groups:
       product_stage_group: not_owned
       rules_domain: general
       severity: s2
+      sli_type: apdex
       slo_alert: 'yes'
       user_impacting: 'yes'
     expr: |
@@ -724,13 +807,13 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '230682702'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: >-
-        https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-error-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{environment="{{ $labels.environment }}",shard="low-urgency-cpu-bound",stage="{{ $labels.stage }}"}
+        )
+      runbook: docs/sidekiq/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -738,6 +821,7 @@ groups:
       product_stage_group: not_owned
       rules_domain: general
       severity: s2
+      sli_type: error
       slo_alert: 'yes'
       user_impacting: 'yes'
     expr: |
@@ -783,18 +867,20 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '3240333014'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",le="+Inf",shard="low-urgency-cpu-bound",stage="{{ $labels.stage }}"}
+        )
+      runbook: docs/sidekiq/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: >
@@ -819,18 +905,20 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '3240333014'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_ops:rate_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",le="+Inf",shard="low-urgency-cpu-bound",stage="{{ $labels.stage }}"}
+        )
+      runbook: docs/sidekiq/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: |
@@ -850,14 +938,21 @@ groups:
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
+        $labels.component }}
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '546338609'
-      grafana_variables: environment,stage
-      promql_template_1: >-
-        gitlab_component_apdex:ratio_1h{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="memory-bound",stage="{{ $labels.stage }}",urgency="throttled"}
+          )
+        )
+      runbook: docs/sidekiq/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -865,6 +960,7 @@ groups:
       product_stage_group: not_owned
       rules_domain: general
       severity: s2
+      sli_type: apdex
       slo_alert: 'yes'
       user_impacting: 'yes'
     expr: |
@@ -910,13 +1006,13 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '2190820353'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: >-
-        https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-error-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{environment="{{ $labels.environment }}",shard="memory-bound",stage="{{ $labels.stage }}"}
+        )
+      runbook: docs/sidekiq/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -924,6 +1020,7 @@ groups:
       product_stage_group: not_owned
       rules_domain: general
       severity: s2
+      sli_type: error
       slo_alert: 'yes'
       user_impacting: 'yes'
     expr: |
@@ -969,18 +1066,20 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '1943089289'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",le="+Inf",shard="memory-bound",stage="{{ $labels.stage }}"}
+        )
+      runbook: docs/sidekiq/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: >
@@ -1005,18 +1104,20 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '1943089289'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_ops:rate_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",le="+Inf",shard="memory-bound",stage="{{ $labels.stage }}"}
+        )
+      runbook: docs/sidekiq/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: |
@@ -1036,14 +1137,23 @@ groups:
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
+        $labels.component }}
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '627077500'
-      grafana_variables: environment,stage
-      promql_template_1: >-
-        gitlab_component_apdex:ratio_1h{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-cpu-bound",stage="{{ $labels.stage }}",urgency="high"}
+            or
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-cpu-bound",stage="{{ $labels.stage }}",urgency="high"}
+          )
+        )
+      runbook: docs/sidekiq/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -1051,6 +1161,7 @@ groups:
       product_stage_group: not_owned
       rules_domain: general
       severity: s2
+      sli_type: apdex
       slo_alert: 'yes'
       user_impacting: 'yes'
     expr: |
@@ -1096,13 +1207,13 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '953665318'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: >-
-        https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-error-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{environment="{{ $labels.environment }}",shard="urgent-cpu-bound",stage="{{ $labels.stage }}"}
+        )
+      runbook: docs/sidekiq/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -1110,6 +1221,7 @@ groups:
       product_stage_group: not_owned
       rules_domain: general
       severity: s2
+      sli_type: error
       slo_alert: 'yes'
       user_impacting: 'yes'
     expr: |
@@ -1155,18 +1267,20 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '659062113'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",le="+Inf",shard="urgent-cpu-bound",stage="{{ $labels.stage }}"}
+        )
+      runbook: docs/sidekiq/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: >
@@ -1191,18 +1305,20 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '659062113'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_ops:rate_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",le="+Inf",shard="urgent-cpu-bound",stage="{{ $labels.stage }}"}
+        )
+      runbook: docs/sidekiq/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: |
@@ -1222,14 +1338,23 @@ groups:
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
+        $labels.component }}
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '203761782'
-      grafana_variables: environment,stage
-      promql_template_1: >-
-        gitlab_component_apdex:ratio_1h{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-other",stage="{{ $labels.stage }}",urgency="high"}
+            or
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-other",stage="{{ $labels.stage }}",urgency="high"}
+          )
+        )
+      runbook: docs/sidekiq/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -1237,6 +1362,7 @@ groups:
       product_stage_group: not_owned
       rules_domain: general
       severity: s2
+      sli_type: apdex
       slo_alert: 'yes'
       user_impacting: 'yes'
     expr: |
@@ -1282,13 +1408,13 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '2399846707'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: >-
-        https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-error-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{environment="{{ $labels.environment }}",shard="urgent-other",stage="{{ $labels.stage }}"}
+        )
+      runbook: docs/sidekiq/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -1296,6 +1422,7 @@ groups:
       product_stage_group: not_owned
       rules_domain: general
       severity: s2
+      sli_type: error
       slo_alert: 'yes'
       user_impacting: 'yes'
     expr: |
@@ -1341,18 +1468,20 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '907052725'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",le="+Inf",shard="urgent-other",stage="{{ $labels.stage }}"}
+        )
+      runbook: docs/sidekiq/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: >
@@ -1377,18 +1506,20 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '907052725'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_ops:rate_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",le="+Inf",shard="urgent-other",stage="{{ $labels.stage }}"}
+        )
+      runbook: docs/sidekiq/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: |

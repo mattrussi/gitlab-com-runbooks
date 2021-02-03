@@ -17,14 +17,21 @@ groups:
       grafana_dashboard_id: gitaly-main/gitaly-overview
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
+        $labels.component }}
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '4223379407'
-      grafana_variables: environment,stage
-      promql_template_1: >-
-        gitlab_component_apdex:ratio_1h{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]) and on(grpc_service,grpc_method) grpc_client_handled_total{job="gitaly"}
+          )
+        )
+      runbook: docs/gitaly/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
@@ -32,6 +39,7 @@ groups:
       product_stage_group: gitaly
       rules_domain: general
       severity: s2
+      sli_type: apdex
       slo_alert: 'yes'
       user_impacting: 'yes'
     expr: |
@@ -71,20 +79,24 @@ groups:
         Since the gitaly service is not fully redundant, SLI violations on a single node may represent a user-impacting service degradation.
 
         Currently the apdex value for {{ $labels.fqdn }} is {{ $value | humanizePercentage }}.
-      grafana_dashboard_id: >-
-        alerts-component_node_multiburn_apdex/alerts-component-node-multi-window-multi-burn-rate-apdex-out-of-slo
+      grafana_dashboard_id: alerts-component_node_slo_apdex
       grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/alerts-component_node_multiburn_apdex/alerts-component-node-multi-window-multi-burn-rate-apdex-out-of-slo?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
-        $labels.component }}&var-fqdn={{ $labels.fqdn }}
+        https://dashboards.gitlab.net/d/alerts-component_node_slo_apdex?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-shard={{
+        $labels.shard }}&var-fqdn={{ $labels.fqdn }}&var-component={{ $labels.component }}
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '965700560'
-      grafana_variables: environment,type,stage,component,fqdn
-      promql_template_1: >-
-        gitlab_component_node_apdex:ratio_1h{environment="$environment", type="$type", stage="$stage",
-        component="$component", fqdn="$fqdn"}
-      runbook: docs/{{ $labels.type }}/README.md
+      grafana_variables: environment,type,stage,shard,fqdn,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,shard,fqdn,le) (
+            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m]) and on(grpc_service,grpc_method) grpc_client_handled_total{job="gitaly"}
+          )
+        )
+      runbook: docs/gitaly/README.md
     labels:
+      aggregation: component_node
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
@@ -92,6 +104,7 @@ groups:
       product_stage_group: gitaly
       rules_domain: general
       severity: s2
+      sli_type: apdex
       slo_alert: 'yes'
       user_impacting: 'yes'
     expr: |
@@ -118,7 +131,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,shard,fqdn,component)
       (
-        sum by(env,environment,tier,type,stage,shard,fqdn,component) (gitlab_component_node_ops:rate_1h{component="gitalyruby",monitor="global",type="gitaly"}) >= 10
+        sum by(env,environment,tier,type,stage,shard,fqdn,component) (gitlab_component_node_ops:rate_1h{component="gitalyruby",monitor="global",type="gitaly"}) >= 1
       )
   - alert: GitalyServiceGitalyrubyErrorSLOViolation
     for: 2m
@@ -137,13 +150,13 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '29379121'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: >-
-        https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-error-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(grpc_client_handled_total{environment="{{ $labels.environment }}",grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded",job="gitaly",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/gitaly/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
@@ -151,6 +164,7 @@ groups:
       product_stage_group: gitaly
       rules_domain: general
       severity: s2
+      sli_type: error
       slo_alert: 'yes'
       user_impacting: 'yes'
     expr: |
@@ -191,20 +205,21 @@ groups:
         Since the gitaly service is not fully redundant, SLI violations on a single node may represent a user-impacting service degradation.
 
         Currently the apdex value for {{ $labels.fqdn }} is {{ $value | humanizePercentage }}.
-      grafana_dashboard_id: >-
-        alerts-component_node_multiburn_error/alerts-component-node-multi-window-multi-burn-rate-error-rate-out-of-slo
+      grafana_dashboard_id: alerts-component_node_slo_error
       grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/alerts-component_node_multiburn_error/alerts-component-node-multi-window-multi-burn-rate-error-rate-out-of-slo?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
-        $labels.component }}&var-fqdn={{ $labels.fqdn }}
+        https://dashboards.gitlab.net/d/alerts-component_node_slo_error?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-shard={{
+        $labels.shard }}&var-fqdn={{ $labels.fqdn }}&var-component={{ $labels.component }}
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '965700560'
-      grafana_variables: environment,type,stage,component,fqdn
-      promql_template_1: >-
-        gitlab_component_node_errors:ratio_5m{environment="$environment", type="$type", stage="$stage",
-        component="$component", fqdn="$fqdn"}
-      runbook: docs/{{ $labels.type }}/README.md
+      grafana_variables: environment,type,stage,shard,fqdn,component
+      promql_template_1: |
+        sum by (env,environment,tier,stage,shard,fqdn) (
+          rate(grpc_client_handled_total{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/gitaly/README.md
     labels:
+      aggregation: component_node
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
@@ -212,6 +227,7 @@ groups:
       product_stage_group: gitaly
       rules_domain: general
       severity: s2
+      sli_type: error
       slo_alert: 'yes'
       user_impacting: 'yes'
     expr: |
@@ -238,7 +254,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,shard,fqdn,component)
       (
-        sum by(env,environment,tier,type,stage,shard,fqdn,component) (gitlab_component_node_ops:rate_1h{component="gitalyruby",monitor="global",type="gitaly"}) >= 10
+        sum by(env,environment,tier,type,stage,shard,fqdn,component) (gitlab_component_node_ops:rate_1h{component="gitalyruby",monitor="global",type="gitaly"}) >= 1
       )
   - alert: GitalyServiceGitalyrubyTrafficCessation
     for: 5m
@@ -257,18 +273,20 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '2219036706'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(grpc_client_handled_total{environment="{{ $labels.environment }}",job="gitaly",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/gitaly/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: gitaly
       product_stage: create
       product_stage_group: gitaly
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: >
@@ -293,18 +311,20 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '2219036706'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_ops:rate_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(grpc_client_handled_total{environment="{{ $labels.environment }}",job="gitaly",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/gitaly/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: gitaly
       product_stage: create
       product_stage_group: gitaly
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: |
@@ -323,14 +343,21 @@ groups:
       grafana_dashboard_id: gitaly-main/gitaly-overview
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
+        $labels.component }}
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '877804374'
-      grafana_variables: environment,stage
-      promql_template_1: >-
-        gitlab_component_apdex:ratio_1h{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",stage="{{ $labels.stage }}"}[5m])
+          )
+        )
+      runbook: docs/gitaly/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
@@ -338,6 +365,7 @@ groups:
       product_stage_group: gitaly
       rules_domain: general
       severity: s2
+      sli_type: apdex
       slo_alert: 'yes'
       user_impacting: 'yes'
     expr: |
@@ -377,20 +405,24 @@ groups:
         Since the gitaly service is not fully redundant, SLI violations on a single node may represent a user-impacting service degradation.
 
         Currently the apdex value for {{ $labels.fqdn }} is {{ $value | humanizePercentage }}.
-      grafana_dashboard_id: >-
-        alerts-component_node_multiburn_apdex/alerts-component-node-multi-window-multi-burn-rate-apdex-out-of-slo
+      grafana_dashboard_id: alerts-component_node_slo_apdex
       grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/alerts-component_node_multiburn_apdex/alerts-component-node-multi-window-multi-burn-rate-apdex-out-of-slo?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
-        $labels.component }}&var-fqdn={{ $labels.fqdn }}
+        https://dashboards.gitlab.net/d/alerts-component_node_slo_apdex?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-shard={{
+        $labels.shard }}&var-fqdn={{ $labels.fqdn }}&var-component={{ $labels.component }}
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '965700560'
-      grafana_variables: environment,type,stage,component,fqdn
-      promql_template_1: >-
-        gitlab_component_node_apdex:ratio_1h{environment="$environment", type="$type", stage="$stage",
-        component="$component", fqdn="$fqdn"}
-      runbook: docs/{{ $labels.type }}/README.md
+      grafana_variables: environment,type,stage,shard,fqdn,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,shard,fqdn,le) (
+            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m])
+          )
+        )
+      runbook: docs/gitaly/README.md
     labels:
+      aggregation: component_node
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
@@ -398,6 +430,7 @@ groups:
       product_stage_group: gitaly
       rules_domain: general
       severity: s2
+      sli_type: apdex
       slo_alert: 'yes'
       user_impacting: 'yes'
     expr: |
@@ -424,7 +457,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,shard,fqdn,component)
       (
-        sum by(env,environment,tier,type,stage,shard,fqdn,component) (gitlab_component_node_ops:rate_1h{component="goserver",monitor="global",type="gitaly"}) >= 10
+        sum by(env,environment,tier,type,stage,shard,fqdn,component) (gitlab_component_node_ops:rate_1h{component="goserver",monitor="global",type="gitaly"}) >= 1
       )
   - alert: GitalyServiceGoserverErrorSLOViolation
     for: 2m
@@ -442,13 +475,15 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '594670537'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: >-
-        https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-error-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded|Canceled",grpc_service!="gitaly.OperationService",job="gitaly",stage="{{ $labels.stage }}"}[5m]), "_c", "0", "", "")
+          or
+          label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",environment="{{ $labels.environment }}",grpc_code="DeadlineExceeded",grpc_service!="gitaly.OperationService",job="gitaly",stage="{{ $labels.stage }}"}[5m]), "_c", "1", "", "")
+        )
+      runbook: docs/gitaly/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
@@ -456,6 +491,7 @@ groups:
       product_stage_group: gitaly
       rules_domain: general
       severity: s2
+      sli_type: error
       slo_alert: 'yes'
       user_impacting: 'yes'
     expr: |
@@ -495,20 +531,23 @@ groups:
         Since the gitaly service is not fully redundant, SLI violations on a single node may represent a user-impacting service degradation.
 
         Currently the apdex value for {{ $labels.fqdn }} is {{ $value | humanizePercentage }}.
-      grafana_dashboard_id: >-
-        alerts-component_node_multiburn_error/alerts-component-node-multi-window-multi-burn-rate-error-rate-out-of-slo
+      grafana_dashboard_id: alerts-component_node_slo_error
       grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/alerts-component_node_multiburn_error/alerts-component-node-multi-window-multi-burn-rate-error-rate-out-of-slo?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
-        $labels.component }}&var-fqdn={{ $labels.fqdn }}
+        https://dashboards.gitlab.net/d/alerts-component_node_slo_error?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-shard={{
+        $labels.shard }}&var-fqdn={{ $labels.fqdn }}&var-component={{ $labels.component }}
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '965700560'
-      grafana_variables: environment,type,stage,component,fqdn
-      promql_template_1: >-
-        gitlab_component_node_errors:ratio_5m{environment="$environment", type="$type", stage="$stage",
-        component="$component", fqdn="$fqdn"}
-      runbook: docs/{{ $labels.type }}/README.md
+      grafana_variables: environment,type,stage,shard,fqdn,component
+      promql_template_1: |
+        sum by (env,environment,tier,stage,shard,fqdn) (
+          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded|Canceled",grpc_service!="gitaly.OperationService",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m]), "_c", "0", "", "")
+          or
+          label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_code="DeadlineExceeded",grpc_service!="gitaly.OperationService",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m]), "_c", "1", "", "")
+        )
+      runbook: docs/gitaly/README.md
     labels:
+      aggregation: component_node
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
@@ -516,6 +555,7 @@ groups:
       product_stage_group: gitaly
       rules_domain: general
       severity: s2
+      sli_type: error
       slo_alert: 'yes'
       user_impacting: 'yes'
     expr: |
@@ -542,7 +582,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,shard,fqdn,component)
       (
-        sum by(env,environment,tier,type,stage,shard,fqdn,component) (gitlab_component_node_ops:rate_1h{component="goserver",monitor="global",type="gitaly"}) >= 10
+        sum by(env,environment,tier,type,stage,shard,fqdn,component) (gitlab_component_node_ops:rate_1h{component="goserver",monitor="global",type="gitaly"}) >= 1
       )
   - alert: GitalyServiceGoserverTrafficCessation
     for: 5m
@@ -561,18 +601,20 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '1687078843'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",grpc_service!="gitaly.OperationService",job="gitaly",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/gitaly/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: gitaly
       product_stage: create
       product_stage_group: gitaly
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: >
@@ -597,18 +639,20 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '1687078843'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_ops:rate_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",grpc_service!="gitaly.OperationService",job="gitaly",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/gitaly/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: gitaly
       product_stage: create
       product_stage_group: gitaly
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: |
@@ -628,14 +672,21 @@ groups:
       grafana_dashboard_id: gitaly-main/gitaly-overview
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
+        $labels.component }}
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '3220316186'
-      grafana_variables: environment,stage
-      promql_template_1: >-
-        gitlab_component_apdex:ratio_1h{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",stage="{{ $labels.stage }}"}[5m])
+          )
+        )
+      runbook: docs/gitaly/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
@@ -643,6 +694,7 @@ groups:
       product_stage_group: gitaly
       rules_domain: general
       severity: s2
+      sli_type: apdex
       slo_alert: 'yes'
       user_impacting: 'yes'
     expr: |
@@ -683,20 +735,24 @@ groups:
         Since the gitaly service is not fully redundant, SLI violations on a single node may represent a user-impacting service degradation.
 
         Currently the apdex value for {{ $labels.fqdn }} is {{ $value | humanizePercentage }}.
-      grafana_dashboard_id: >-
-        alerts-component_node_multiburn_apdex/alerts-component-node-multi-window-multi-burn-rate-apdex-out-of-slo
+      grafana_dashboard_id: alerts-component_node_slo_apdex
       grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/alerts-component_node_multiburn_apdex/alerts-component-node-multi-window-multi-burn-rate-apdex-out-of-slo?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
-        $labels.component }}&var-fqdn={{ $labels.fqdn }}
+        https://dashboards.gitlab.net/d/alerts-component_node_slo_apdex?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-shard={{
+        $labels.shard }}&var-fqdn={{ $labels.fqdn }}&var-component={{ $labels.component }}
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '965700560'
-      grafana_variables: environment,type,stage,component,fqdn
-      promql_template_1: >-
-        gitlab_component_node_apdex:ratio_1h{environment="$environment", type="$type", stage="$stage",
-        component="$component", fqdn="$fqdn"}
-      runbook: docs/{{ $labels.type }}/README.md
+      grafana_variables: environment,type,stage,shard,fqdn,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,shard,fqdn,le) (
+            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m])
+          )
+        )
+      runbook: docs/gitaly/README.md
     labels:
+      aggregation: component_node
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
@@ -704,6 +760,7 @@ groups:
       product_stage_group: gitaly
       rules_domain: general
       severity: s2
+      sli_type: apdex
       slo_alert: 'yes'
       user_impacting: 'yes'
     expr: |
@@ -730,7 +787,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,shard,fqdn,component)
       (
-        sum by(env,environment,tier,type,stage,shard,fqdn,component) (gitlab_component_node_ops:rate_1h{component="goserver_op_service",monitor="global",type="gitaly"}) >= 10
+        sum by(env,environment,tier,type,stage,shard,fqdn,component) (gitlab_component_node_ops:rate_1h{component="goserver_op_service",monitor="global",type="gitaly"}) >= 1
       )
   - alert: GitalyServiceGoserverOpServiceErrorSLOViolation
     for: 2m
@@ -749,13 +806,15 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '1534403952'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: >-
-        https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-error-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded|Canceled",grpc_service="gitaly.OperationService",job="gitaly",stage="{{ $labels.stage }}"}[5m]), "_c", "0", "", "")
+          or
+          label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",environment="{{ $labels.environment }}",grpc_code="DeadlineExceeded",grpc_service="gitaly.OperationService",job="gitaly",stage="{{ $labels.stage }}"}[5m]), "_c", "1", "", "")
+        )
+      runbook: docs/gitaly/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
@@ -763,6 +822,7 @@ groups:
       product_stage_group: gitaly
       rules_domain: general
       severity: s2
+      sli_type: error
       slo_alert: 'yes'
       user_impacting: 'yes'
     expr: |
@@ -803,20 +863,23 @@ groups:
         Since the gitaly service is not fully redundant, SLI violations on a single node may represent a user-impacting service degradation.
 
         Currently the apdex value for {{ $labels.fqdn }} is {{ $value | humanizePercentage }}.
-      grafana_dashboard_id: >-
-        alerts-component_node_multiburn_error/alerts-component-node-multi-window-multi-burn-rate-error-rate-out-of-slo
+      grafana_dashboard_id: alerts-component_node_slo_error
       grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/alerts-component_node_multiburn_error/alerts-component-node-multi-window-multi-burn-rate-error-rate-out-of-slo?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
-        $labels.component }}&var-fqdn={{ $labels.fqdn }}
+        https://dashboards.gitlab.net/d/alerts-component_node_slo_error?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-shard={{
+        $labels.shard }}&var-fqdn={{ $labels.fqdn }}&var-component={{ $labels.component }}
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '965700560'
-      grafana_variables: environment,type,stage,component,fqdn
-      promql_template_1: >-
-        gitlab_component_node_errors:ratio_5m{environment="$environment", type="$type", stage="$stage",
-        component="$component", fqdn="$fqdn"}
-      runbook: docs/{{ $labels.type }}/README.md
+      grafana_variables: environment,type,stage,shard,fqdn,component
+      promql_template_1: |
+        sum by (env,environment,tier,stage,shard,fqdn) (
+          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded|Canceled",grpc_service="gitaly.OperationService",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m]), "_c", "0", "", "")
+          or
+          label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_code="DeadlineExceeded",grpc_service="gitaly.OperationService",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m]), "_c", "1", "", "")
+        )
+      runbook: docs/gitaly/README.md
     labels:
+      aggregation: component_node
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
@@ -824,6 +887,7 @@ groups:
       product_stage_group: gitaly
       rules_domain: general
       severity: s2
+      sli_type: error
       slo_alert: 'yes'
       user_impacting: 'yes'
     expr: |
@@ -850,7 +914,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,shard,fqdn,component)
       (
-        sum by(env,environment,tier,type,stage,shard,fqdn,component) (gitlab_component_node_ops:rate_1h{component="goserver_op_service",monitor="global",type="gitaly"}) >= 10
+        sum by(env,environment,tier,type,stage,shard,fqdn,component) (gitlab_component_node_ops:rate_1h{component="goserver_op_service",monitor="global",type="gitaly"}) >= 1
       )
   - alert: GitalyServiceGoserverOpServiceTrafficCessation
     for: 5m
@@ -869,18 +933,20 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '1897473754'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",grpc_service="gitaly.OperationService",job="gitaly",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/gitaly/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: gitaly
       product_stage: create
       product_stage_group: gitaly
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: >
@@ -905,18 +971,20 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '1897473754'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_ops:rate_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",grpc_service="gitaly.OperationService",job="gitaly",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/gitaly/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: gitaly
       product_stage: create
       product_stage_group: gitaly
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: |
