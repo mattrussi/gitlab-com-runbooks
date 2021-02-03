@@ -370,13 +370,15 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
     decimals=0,
     thresholds=[],
     stableId=null,
+    fill=0,
+    stack=false,
   )::
     local panel = self.graphPanel(
       title,
       description=description,
       sort=sort,
       linewidth=linewidth,
-      fill=0,
+      fill=fill,
       datasource='$PROMETHEUS_DS',
       decimals=decimals,
       legend_rightSide=legend_rightSide,
@@ -390,7 +392,8 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
       legend_alignAsTable=true,
       legend_hideEmpty=true,
       thresholds=thresholds,
-      stableId=stableId
+      stableId=stableId,
+      stack=stack,
     );
 
     local addPanelTarget(panel, query) =
@@ -428,6 +431,8 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
     max=null,
     thresholds=[],
     stableId=null,
+    fill=0,
+    stack=false,
   )::
     self.multiTimeseries(
       queries=[{ query: query, legendFormat: legendFormat }],
@@ -445,6 +450,8 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
       decimals=decimals,
       thresholds=thresholds,
       stableId=stableId,
+      fill=fill,
+      stack=stack,
     ),
 
   queueLengthTimeseries(
