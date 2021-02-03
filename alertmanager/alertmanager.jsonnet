@@ -122,16 +122,6 @@ local SlackReceiver(channel) =
               alertname%3D%22{{ reReplaceAll " +" "%20" .CommonLabels.alertname }}%22%7D
             |||,
           ),
-          slackActionButton(
-            text='Prometheus :prometheus:',
-            url=|||
-              {{-  if ne (index .Alerts 0).Annotations.promql_template_1 "" -}}
-                https://thanos-query.ops.gitlab.net/graph?g0.range_input=1h&g0.max_source_resolution=5m&g0.tab=0&g0.expr={{- (index .Alerts 0).Annotations.promql_template_1 | urlquery -}}
-              {{- else -}}
-                {{ - with index .Alerts 0 }}{{ reReplaceAll "g0.tab=1" "g0.tab=0" .GeneratorURL }}{{ end -}}
-              {{- end -}}
-            |||,
-          ),
         ],
       },
     ],
