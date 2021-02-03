@@ -141,6 +141,7 @@ metricsCatalog.serviceDefinition({
       errorRate: rateMetric(
         counter='grpc_client_handled_total',
         selector=baseSelector {
+          grpc_method: { nre: 'UpdateRemoteMirror|AddRemote' },  // Ignore these calls until https://gitlab.com/gitlab-org/gitlab/-/issues/300884 is fixed
           grpc_code: { nre: 'OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded' },
         }
       ),
