@@ -12,9 +12,10 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
    * only represents the view from a single prometheus instance,
    * not globally across all shards.
    */
-  promSourceSLIs:: aggregationSets.AggregationSet({
+  promSourceSLIs: aggregationSets.AggregationSet({
     id: 'source_sli',
     name: 'Prometheus Source SLI Metrics',
+    intermediateSource: true,  // Not intended for consumption in dashboards or alerts
     selector: { monitor: { ne: 'global' } },  // Not Thanos Ruler
     labels: ['environment', 'tier', 'type', 'stage'],
     burnRates: {
@@ -60,9 +61,10 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
    * globalSLIs consumes promSourceSLIs and is the primary
    * aggregation used for alerting, monitoring, visualizations, etc.
    */
-  globalSLIs:: aggregationSets.AggregationSet({
+  globalSLIs: aggregationSets.AggregationSet({
     id: 'component',
     name: 'Global SLI Metrics',
+    intermediateSource: false,  // Used in dashboards and alerts
     selector: { monitor: 'global' },  // Thanos Ruler
     labels: ['env', 'environment', 'tier', 'type', 'stage', 'component'],
     burnRates: {
@@ -103,9 +105,10 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
    * regionalSLIs consumes promSourceSLIs and is the primary
    * aggregation used for alerting, monitoring, visualizations, etc.
    */
-  regionalSLIs:: aggregationSets.AggregationSet({
+  regionalSLIs: aggregationSets.AggregationSet({
     id: 'regional_component',
     name: 'Regional SLI Metrics',
+    intermediateSource: false,  // Used in dashboards and alerts
     selector: { monitor: 'global' },  // Thanos Ruler
     labels: ['env', 'environment', 'tier', 'type', 'stage', 'region', 'component'],
     burnRates: {
@@ -151,9 +154,10 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
    * only represents the view from a single prometheus instance,
    * not globally across all shards.
    */
-  promSourceNodeAggregatedSLIs:: aggregationSets.AggregationSet({
+  promSourceNodeAggregatedSLIs: aggregationSets.AggregationSet({
     id: 'source_node',
     name: 'Prometheus Source Node-Aggregated SLI Metrics',
+    intermediateSource: true,  // Not intended for consumption in dashboards or alerts
     selector: { monitor: { ne: 'global' } },  // Not Thanos Ruler
     labels: ['environment', 'tier', 'type', 'stage', 'shard', 'fqdn', 'component'],
     burnRates: {
@@ -192,9 +196,10 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
    * globalNodeSLIs consumes promSourceSLIs and is
    * used for per-node monitoring, alerting, visualzation for Gitaly.
    */
-  globalNodeSLIs:: aggregationSets.AggregationSet({
+  globalNodeSLIs: aggregationSets.AggregationSet({
     id: 'component_node',
     name: 'Global Node-Aggregated SLI Metrics',
+    intermediateSource: false,  // Used in dashboards and alerts
     selector: { monitor: 'global' },  // Thanos Ruler
     labels: ['env', 'environment', 'tier', 'type', 'stage', 'shard', 'fqdn', 'component'],
     burnRates: {
@@ -236,9 +241,10 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
    * summary overview of the service. Not used heavily for
    * alerting.
    */
-  serviceAggregatedSLIs:: aggregationSets.AggregationSet({
+  serviceAggregatedSLIs: aggregationSets.AggregationSet({
     id: 'service',
     name: 'Global Service-Aggregated Metrics',
+    intermediateSource: false,  // Used in dashboards and alerts
     selector: { monitor: 'global' },  // Thanos Ruler
     labels: ['env', 'environment', 'tier', 'type', 'stage'],
     burnRates: {
@@ -283,9 +289,10 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
    * This is not particularly useful and should probably be reconsidered
    * at a later stage.
    */
-  serviceNodeAggregatedSLIs:: aggregationSets.AggregationSet({
+  serviceNodeAggregatedSLIs: aggregationSets.AggregationSet({
     id: 'service_node',
     name: 'Global Service-Node-Aggregated Metrics',
+    intermediateSource: false,  // Used in dashboards and alerts
     selector: { monitor: 'global' },  // Thanos Ruler
     labels: ['env', 'environment', 'tier', 'type', 'stage', 'shard', 'fqdn'],
     burnRates: {
@@ -322,9 +329,10 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
   /**
    * Regional SLIs, aggregated to the service level
    */
-  serviceRegionalAggregatedSLIs:: aggregationSets.AggregationSet({
+  serviceRegionalAggregatedSLIs: aggregationSets.AggregationSet({
     id: 'service_regional',
     name: 'Global Service-Regional-Aggregated Metrics',
+    intermediateSource: false,  // Used in dashboards and alerts
     selector: { monitor: 'global' },  // Thanos Ruler
     labels: ['env', 'environment', 'tier', 'type', 'stage', 'region'],
     burnRates: {

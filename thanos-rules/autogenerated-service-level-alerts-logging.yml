@@ -22,19 +22,21 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '1156496897'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          clamp_min(deriv(elasticsearch_indices_indexing_index_total{type="logging", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]), 0)
+        )
+      runbook: docs/logging/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       incident_project: gitlab.com/gitlab-com/gl-infra/production
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'no'
     expr: >
@@ -59,19 +61,21 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '1156496897'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_ops:rate_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          clamp_min(deriv(elasticsearch_indices_indexing_index_total{type="logging", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]), 0)
+        )
+      runbook: docs/logging/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       incident_project: gitlab.com/gitlab-com/gl-infra/production
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'no'
     expr: |
@@ -95,19 +99,21 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '1015871477'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          clamp_min(deriv(elasticsearch_indices_search_query_total{type="logging", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]), 0)
+        )
+      runbook: docs/logging/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       incident_project: gitlab.com/gitlab-com/gl-infra/production
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'no'
     expr: >
@@ -132,19 +138,21 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '1015871477'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_ops:rate_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          clamp_min(deriv(elasticsearch_indices_search_query_total{type="logging", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]), 0)
+        )
+      runbook: docs/logging/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       incident_project: gitlab.com/gitlab-com/gl-infra/production
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'no'
     expr: |
@@ -168,13 +176,13 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '3405007546'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: >-
-        https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-error-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(fluentd_output_status_num_errors{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/logging/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: not_owned
       incident_project: gitlab.com/gitlab-com/gl-infra/production
@@ -183,6 +191,7 @@ groups:
       product_stage_group: not_owned
       rules_domain: general
       severity: s2
+      sli_type: error
       slo_alert: 'yes'
       user_impacting: 'no'
     expr: |
@@ -228,19 +237,21 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '3827296992'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(fluentd_output_status_write_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/logging/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       incident_project: gitlab.com/gitlab-com/gl-infra/production
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'no'
     expr: >
@@ -265,19 +276,21 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '3827296992'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_ops:rate_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(fluentd_output_status_write_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/logging/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       incident_project: gitlab.com/gitlab-com/gl-infra/production
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'no'
     expr: |
@@ -301,13 +314,13 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '1918266605'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: >-
-        https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-error-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id="gitlab-ops",response_code_class="500",stage="{{ $labels.stage }}",target_proxy_name="ops-prod-proxy"}[5m])
+        )
+      runbook: docs/logging/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -315,6 +328,7 @@ groups:
       product_stage_group: not_owned
       rules_domain: general
       severity: s2
+      sli_type: error
       slo_alert: 'yes'
       user_impacting: 'no'
     expr: |
@@ -360,18 +374,20 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '2363504950'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id="gitlab-ops",stage="{{ $labels.stage }}",target_proxy_name="ops-prod-proxy"}[5m])
+        )
+      runbook: docs/logging/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'no'
     expr: >
@@ -396,18 +412,20 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '2363504950'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_ops:rate_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id="gitlab-ops",stage="{{ $labels.stage }}",target_proxy_name="ops-prod-proxy"}[5m])
+        )
+      runbook: docs/logging/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'no'
     expr: |

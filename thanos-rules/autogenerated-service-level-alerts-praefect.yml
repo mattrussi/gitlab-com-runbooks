@@ -22,13 +22,13 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '2268999573'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: >-
-        https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-error-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database="praefect_production",environment="{{ $labels.environment }}",job="stackdriver",stage="{{ $labels.stage }}",transaction_type="rollback"}[5m])
+        )
+      runbook: docs/praefect/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
@@ -36,6 +36,7 @@ groups:
       product_stage_group: gitaly
       rules_domain: general
       severity: s2
+      sli_type: error
       slo_alert: 'yes'
       user_impacting: 'yes'
     expr: |
@@ -81,18 +82,20 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '2954321776'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database="praefect_production",environment="{{ $labels.environment }}",job="stackdriver",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/praefect/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: gitaly
       product_stage: create
       product_stage_group: gitaly
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: >
@@ -117,18 +120,20 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '2954321776'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_ops:rate_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database="praefect_production",environment="{{ $labels.environment }}",job="stackdriver",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/praefect/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: gitaly
       product_stage: create
       product_stage_group: gitaly
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: |
@@ -147,14 +152,21 @@ groups:
       grafana_dashboard_id: praefect-main/praefect-overview
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/praefect-main/praefect-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
+        $labels.component }}
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '2100325234'
-      grafana_variables: environment,stage
-      promql_template_1: >-
-        gitlab_component_apdex:ratio_1h{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_type="unary",job="praefect",stage="{{ $labels.stage }}"}[5m])
+          )
+        )
+      runbook: docs/praefect/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
@@ -162,6 +174,7 @@ groups:
       product_stage_group: gitaly
       rules_domain: general
       severity: s2
+      sli_type: apdex
       slo_alert: 'yes'
       user_impacting: 'yes'
     expr: |
@@ -206,13 +219,13 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '1178914866'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: >-
-        https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-error-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",grpc_code!~"^(OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|Canceled)$",job="praefect",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/praefect/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
@@ -220,6 +233,7 @@ groups:
       product_stage_group: gitaly
       rules_domain: general
       severity: s2
+      sli_type: error
       slo_alert: 'yes'
       user_impacting: 'yes'
     expr: |
@@ -265,18 +279,20 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '2797965992'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",job="praefect",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/praefect/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: gitaly
       product_stage: create
       product_stage_group: gitaly
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: >
@@ -301,18 +317,20 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '2797965992'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_ops:rate_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",job="praefect",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/praefect/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: gitaly
       product_stage: create
       product_stage_group: gitaly
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: |
@@ -332,14 +350,21 @@ groups:
       grafana_dashboard_id: praefect-main/praefect-overview
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/praefect-main/praefect-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
+        $labels.component }}
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '374957850'
-      grafana_variables: environment,stage
-      promql_template_1: >-
-        gitlab_component_apdex:ratio_1h{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(gitaly_praefect_replication_delay_bucket{environment="{{ $labels.environment }}",job="praefect",stage="{{ $labels.stage }}"}[5m])
+          )
+        )
+      runbook: docs/praefect/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
@@ -347,6 +372,7 @@ groups:
       product_stage_group: gitaly
       rules_domain: general
       severity: s2
+      sli_type: apdex
       slo_alert: 'yes'
       user_impacting: 'no'
     expr: |
@@ -392,18 +418,20 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '1815534001'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(gitaly_praefect_replication_delay_bucket{environment="{{ $labels.environment }}",job="praefect",le="+Inf",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/praefect/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: gitaly
       product_stage: create
       product_stage_group: gitaly
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'no'
     expr: >
@@ -428,18 +456,20 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '1815534001'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_ops:rate_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(gitaly_praefect_replication_delay_bucket{environment="{{ $labels.environment }}",job="praefect",le="+Inf",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/praefect/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: gitaly
       product_stage: create
       product_stage_group: gitaly
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'no'
     expr: |

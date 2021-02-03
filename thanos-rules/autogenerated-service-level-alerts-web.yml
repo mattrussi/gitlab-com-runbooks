@@ -17,14 +17,21 @@ groups:
       grafana_dashboard_id: web-main/web-overview
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
+        $labels.component }}
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '2653912995'
-      grafana_variables: environment,stage
-      promql_template_1: >-
-        gitlab_component_apdex:ratio_1h{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job="gitlab-workhorse-web", type="web", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          )
+        )
+      runbook: docs/web/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: memory
       pager: pagerduty
@@ -32,6 +39,7 @@ groups:
       product_stage_group: memory
       rules_domain: general
       severity: s2
+      sli_type: apdex
       slo_alert: 'yes'
       user_impacting: 'no'
     expr: |
@@ -76,13 +84,13 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '1116436449'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: >-
-        https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-error-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(gitlab_workhorse_image_resize_requests_total{job="gitlab-workhorse-web", type="web", status!="success", status!="unknown", status!="success-client-cache", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/web/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: memory
       pager: pagerduty
@@ -90,6 +98,7 @@ groups:
       product_stage_group: memory
       rules_domain: general
       severity: s2
+      sli_type: error
       slo_alert: 'yes'
       user_impacting: 'no'
     expr: |
@@ -135,18 +144,20 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '2371921356'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(gitlab_workhorse_image_resize_requests_total{job="gitlab-workhorse-web", type="web", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/web/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: memory
       product_stage: enablement
       product_stage_group: memory
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'no'
     expr: >
@@ -171,18 +182,20 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '2371921356'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_ops:rate_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(gitlab_workhorse_image_resize_requests_total{job="gitlab-workhorse-web", type="web", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/web/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: memory
       product_stage: enablement
       product_stage_group: memory
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'no'
     expr: |
@@ -206,13 +219,9 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '3255520955'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: >-
-        https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-error-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      runbook: docs/web/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -220,6 +229,7 @@ groups:
       product_stage_group: not_owned
       rules_domain: general
       severity: s2
+      sli_type: error
       slo_alert: 'yes'
       user_impacting: 'yes'
     expr: |
@@ -265,18 +275,16 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '138982496'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      runbook: docs/web/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: >
@@ -301,18 +309,16 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '138982496'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_ops:rate_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      runbook: docs/web/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: |
@@ -330,14 +336,21 @@ groups:
       grafana_dashboard_id: web-main/web-overview
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
+        $labels.component }}
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '561966508'
-      grafana_variables: environment,stage
-      promql_template_1: >-
-        gitlab_component_apdex:ratio_1h{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="web"}[5m])
+          )
+        )
+      runbook: docs/web/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -345,6 +358,7 @@ groups:
       product_stage_group: not_owned
       rules_domain: general
       severity: s2
+      sli_type: apdex
       slo_alert: 'yes'
       user_impacting: 'yes'
     expr: |
@@ -389,13 +403,13 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '2425637513'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: >-
-        https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-error-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:http_requests_total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",status=~"5..",type="web"}
+        )
+      runbook: docs/web/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -403,6 +417,7 @@ groups:
       product_stage_group: not_owned
       rules_domain: general
       severity: s2
+      sli_type: error
       slo_alert: 'yes'
       user_impacting: 'yes'
     expr: |
@@ -448,18 +463,20 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '110019945'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:http_requests_total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="web"}
+        )
+      runbook: docs/web/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: 'gitlab_component_ops:rate_30m{type="web", component="puma", stage="main", monitor="global"}
@@ -485,18 +502,20 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '110019945'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_ops:rate_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:http_requests_total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="web"}
+        )
+      runbook: docs/web/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: |
@@ -515,14 +534,21 @@ groups:
       grafana_dashboard_id: web-main/web-overview
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
+        $labels.component }}
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '2586818196'
-      grafana_variables: environment,stage
-      promql_template_1: >-
-        gitlab_component_apdex:ratio_1h{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{job="gitlab-workhorse-web", route!="^/([^/]+/){1,}[^/]+/uploads\\z", route!="^/-/health$", route!="^/-/(readiness|liveness)$", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          )
+        )
+      runbook: docs/web/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -530,6 +556,7 @@ groups:
       product_stage_group: not_owned
       rules_domain: general
       severity: s2
+      sli_type: apdex
       slo_alert: 'yes'
       user_impacting: 'yes'
     expr: |
@@ -574,13 +601,13 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '2047984749'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: >-
-        https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-error-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(gitlab_workhorse_http_requests_total{job="gitlab-workhorse-web", type="web", code=~"^5.*", route!="^/-/health$", route!="^/-/(readiness|liveness)$", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/web/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -588,6 +615,7 @@ groups:
       product_stage_group: not_owned
       rules_domain: general
       severity: s2
+      sli_type: error
       slo_alert: 'yes'
       user_impacting: 'yes'
     expr: |
@@ -633,18 +661,20 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '831392945'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(gitlab_workhorse_http_requests_total{job="gitlab-workhorse-web", type="web", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/web/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: >
@@ -669,18 +699,20 @@ groups:
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '831392945'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_ops:rate_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(gitlab_workhorse_http_requests_total{job="gitlab-workhorse-web", type="web", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/web/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: |
