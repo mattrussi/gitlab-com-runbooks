@@ -151,7 +151,7 @@ groups:
     annotations:
       title: GCP Quota usage may exceed capacity
       description: >
-        Quota usage of { $labels.quota }} in {{ $labels.region }} is going to exceed capacity soon.
+        Quota usage of {{ $labels.quota }} in {{ $labels.region }} is going to exceed capacity soon.
         Quota limit breach is coming!
         See https://dashboards.gitlab.net/dashboard/db/ci-autoscaling-providers
 
