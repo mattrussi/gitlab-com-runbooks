@@ -33,10 +33,10 @@ groups:
     labels:
       aggregation: component
       alert_type: symptom
-      feature_category: memory
+      feature_category: users
       pager: pagerduty
-      product_stage: enablement
-      product_stage_group: memory
+      product_stage: manage
+      product_stage_group: access
       rules_domain: general
       severity: s2
       sli_type: apdex
@@ -92,10 +92,10 @@ groups:
     labels:
       aggregation: component
       alert_type: symptom
-      feature_category: memory
+      feature_category: users
       pager: pagerduty
-      product_stage: enablement
-      product_stage_group: memory
+      product_stage: manage
+      product_stage_group: access
       rules_domain: general
       severity: s2
       sli_type: error
@@ -152,9 +152,9 @@ groups:
     labels:
       aggregation: component
       alert_type: cause
-      feature_category: memory
-      product_stage: enablement
-      product_stage_group: memory
+      feature_category: users
+      product_stage: manage
+      product_stage_group: access
       rules_domain: general
       severity: s3
       sli_type: ops
@@ -190,9 +190,9 @@ groups:
     labels:
       aggregation: component
       alert_type: cause
-      feature_category: memory
-      product_stage: enablement
-      product_stage_group: memory
+      feature_category: users
+      product_stage: manage
+      product_stage_group: access
       rules_domain: general
       severity: s3
       sli_type: ops
