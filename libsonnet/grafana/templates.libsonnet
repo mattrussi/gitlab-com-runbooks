@@ -33,7 +33,7 @@ local template = grafana.template;
       'PROMETHEUS_DS',
       'prometheus',
       'Prometheus',
-      regex='/(.*-gprd|Global|gprd-.*)/',
+      regex='/(.*-gprd|Frank|Global|gprd-.*)/',
     ),
   environment::
     template.new(
