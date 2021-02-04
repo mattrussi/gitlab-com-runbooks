@@ -1,4 +1,4 @@
-local toolingLinkDefinition = (import './tooling_link_definition.libsonnet').toolingLinkDefinition;
+local toolingLinkDefinition = (import './tooling_link_definition.libsonnet').toolingLinkDefinition({ tool:: 'google_load_balancer' });
 local stackdriverLogs = import './stackdriver_logs.libsonnet';
 
 {
