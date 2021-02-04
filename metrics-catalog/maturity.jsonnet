@@ -47,12 +47,7 @@ local levels = [
         name: 'Structured logs available in Kibana',
         evidence: function(service)
           std.flatMap(
-            function(component)
-              if component.hasToolingLinks() then
-                std.filter(function(link) std.endsWith(link.title, 'logs'),
-                           std.flatMap(function(f) f({ prometheusSelectorHash: {} }), component.getToolingLinks()))
-              else
-                [],
+            function(component) std.filter(function(link) link.type == 'log', component.renderToolingLinks()),
             values(service.serviceLevelIndicators)
           ),
       },
