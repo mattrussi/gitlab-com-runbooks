@@ -13,7 +13,7 @@ metricsCatalog.serviceDefinition({
     errorRatio: 0.005,
   },
   monitoringThresholds: {
-    apdexScore: 0.999,
+    apdexScore: 0.998,
     errorRatio: 0.9999,
   },
   // Deployment thresholds are optional, and when they are specified, they are
@@ -21,7 +21,7 @@ metricsCatalog.serviceDefinition({
   // When a service is in violation, deployments may be blocked or may be rolled
   // back.
   deploymentThresholds: {
-    apdexScore: 0.999,
+    apdexScore: 0.998,
     errorRatio: 0.9999,
   },
   serviceDependencies: {
