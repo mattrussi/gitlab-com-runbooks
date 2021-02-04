@@ -107,11 +107,9 @@ metricsCatalog.serviceDefinition({
         selector='job="gitlab-workhorse-web", type="web"'
       ),
 
-      // TODO: remove status!="unknown" from this selector after 1 December 2020
-      // See https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/11903 for details
       errorRate: rateMetric(
         counter='gitlab_workhorse_image_resize_requests_total',
-        selector='job="gitlab-workhorse-web", type="web", status!="success", status!="unknown", status!="success-client-cache"'
+        selector='job="gitlab-workhorse-web", type="web", status="request-failed"'
       ),
 
       significantLabels: ['fqdn'],
