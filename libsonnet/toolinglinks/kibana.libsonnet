@@ -1,7 +1,5 @@
-local baseToolingLinkDefinition = (import './tooling_link_definition.libsonnet').toolingLinkDefinition;
+local toolingLinkDefinition = (import './tooling_link_definition.libsonnet').toolingLinkDefinition({ tool:: 'kibana', type:: 'log' });
 local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libsonnet';
-
-local toolingLinkDefinition = function(definition, type='log') definition { tool:: 'kibana', type:: type };
 
 {
   kibana(
@@ -80,7 +78,8 @@ local toolingLinkDefinition = function(definition, type='log') definition { tool
         toolingLinkDefinition({
           title: '📈 Kibana: ' + title + ' requests',
           url: elasticsearchLinks.buildElasticLineCountVizURL(index, filters),
-        }, type='chart'),
+          type:: 'chart',
+        }),
 
       ]
       +
@@ -90,7 +89,8 @@ local toolingLinkDefinition = function(definition, type='log') definition { tool
             toolingLinkDefinition({
               title: '📈 Kibana: ' + title + ' failed requests',
               url: elasticsearchLinks.buildElasticLineFailureCountVizURL(index, filters),
-            }, type='chart'),
+              type:: 'chart',
+            }),
           ]
         else
           []
@@ -102,19 +102,23 @@ local toolingLinkDefinition = function(definition, type='log') definition { tool
             toolingLinkDefinition({
               title: '📈 Kibana: ' + title + ' sum latency aggregated',
               url: elasticsearchLinks.buildElasticLineTotalDurationVizURL(index, filters, splitSeries=true),
-            }, type='chart'),
+              type:: 'chart',
+            }),
             toolingLinkDefinition({
               title: '📈 Kibana: ' + title + ' sum latency aggregated (split)',
               url: elasticsearchLinks.buildElasticLineTotalDurationVizURL(index, filters, splitSeries=true),
-            }, type='chart'),
+              type:: 'chart',
+            }),
             toolingLinkDefinition({
               title: '📈 Kibana: ' + title + ' percentile latency aggregated',
               url: elasticsearchLinks.buildElasticLinePercentileVizURL(index, filters, splitSeries=false),
-            }, type='chart'),
+              type:: 'chart',
+            }),
             toolingLinkDefinition({
               title: '📈 Kibana: ' + title + ' percentile latency aggregated (split)',
               url: elasticsearchLinks.buildElasticLinePercentileVizURL(index, filters, splitSeries=true),
-            }, type='chart'),
+              type:: 'chart',
+            }),
           ]
         else
           []

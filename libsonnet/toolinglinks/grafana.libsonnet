@@ -1,4 +1,4 @@
-local toolingLinkDefinition = (import './tooling_link_definition.libsonnet').toolingLinkDefinition;
+local toolingLinkDefinition = (import './tooling_link_definition.libsonnet').toolingLinkDefinition({ tool:: 'grafana', type:: 'dashboard' });
 
 {
   grafana(title, dashboardUid, vars={})::

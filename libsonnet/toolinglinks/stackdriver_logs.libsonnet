@@ -1,4 +1,4 @@
-local toolingLinkDefinition = (import './tooling_link_definition.libsonnet').toolingLinkDefinition;
+local toolingLinkDefinition = (import './tooling_link_definition.libsonnet').toolingLinkDefinition({ tool:: 'stackdriver', type:: 'log' });
 local url = import 'github.com/jsonnet-libs/xtd/url.libsonnet';
 
 local serializeQueryHashValue(value) =

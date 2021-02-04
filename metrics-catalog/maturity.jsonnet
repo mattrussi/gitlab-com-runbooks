@@ -47,7 +47,8 @@ local levels = [
         name: 'Structured logs available in Kibana',
         evidence: function(service)
           std.flatMap(
-            function(component) std.filter(function(link) link.type == 'log', component.renderToolingLinks()),
+            function(component) std.filter(function(link) link.tool == 'kibana' && link.type == 'log',
+                                           component.renderToolingLinks()),
             values(service.serviceLevelIndicators)
           ),
       },

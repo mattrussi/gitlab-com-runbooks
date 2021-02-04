@@ -1,6 +1,6 @@
 local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
-local toolingLinkDefinition = (import 'toolinglinks/tooling_link_definition.libsonnet').toolingLinkDefinition;
+local toolingLinkDefinition = (import 'toolinglinks/tooling_link_definition.libsonnet').toolingLinkDefinition();
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
