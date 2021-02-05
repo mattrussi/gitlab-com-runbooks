@@ -10,6 +10,7 @@
   import 'git.jsonnet',
   import 'gitaly.jsonnet',
   import 'jaeger.jsonnet',
+  import 'kubernetes-agent.jsonnet',
   import 'logging.jsonnet',
   import 'mailroom.jsonnet',
   import 'monitoring.jsonnet',
