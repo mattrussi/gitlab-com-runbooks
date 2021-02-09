@@ -86,7 +86,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(gitlab_workhorse_image_resize_requests_total{job="gitlab-workhorse-web", type="web", status!="success", status!="unknown", status!="success-client-cache", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(gitlab_workhorse_image_resize_requests_total{job="gitlab-workhorse-web", type="web", status="request-failed", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/web/README.md
     labels:

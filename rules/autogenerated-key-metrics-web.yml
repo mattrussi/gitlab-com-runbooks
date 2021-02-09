@@ -55,7 +55,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_workhorse_image_resize_requests_total{job="gitlab-workhorse-web", type="web", status!="success", status!="unknown", status!="success-client-cache"}[1m])
+        rate(gitlab_workhorse_image_resize_requests_total{job="gitlab-workhorse-web", type="web", status="request-failed"}[1m])
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -266,7 +266,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_workhorse_image_resize_requests_total{job="gitlab-workhorse-web", type="web", status!="success", status!="unknown", status!="success-client-cache"}[5m])
+        rate(gitlab_workhorse_image_resize_requests_total{job="gitlab-workhorse-web", type="web", status="request-failed"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -477,7 +477,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_workhorse_image_resize_requests_total{job="gitlab-workhorse-web", type="web", status!="success", status!="unknown", status!="success-client-cache"}[30m])
+        rate(gitlab_workhorse_image_resize_requests_total{job="gitlab-workhorse-web", type="web", status="request-failed"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -688,7 +688,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_workhorse_image_resize_requests_total{job="gitlab-workhorse-web", type="web", status!="success", status!="unknown", status!="success-client-cache"}[1h])
+        rate(gitlab_workhorse_image_resize_requests_total{job="gitlab-workhorse-web", type="web", status="request-failed"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -899,7 +899,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_workhorse_image_resize_requests_total{job="gitlab-workhorse-web", type="web", status!="success", status!="unknown", status!="success-client-cache"}[6h])
+        rate(gitlab_workhorse_image_resize_requests_total{job="gitlab-workhorse-web", type="web", status="request-failed"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
     labels:
