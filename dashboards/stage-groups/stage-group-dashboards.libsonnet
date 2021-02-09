@@ -300,7 +300,6 @@ local backgroundComponents = std.set(['sidekiq']);
 local validComponents = std.setUnion(requestComponents, backgroundComponents);
 local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false) =
   assert std.type(components) == 'array' : 'Invalid components argument type';
-  assert std.length(components) != 0 : 'There must be at least one component';
 
   local setComponents = std.set(components);
   local invalidComponents = std.setDiff(setComponents, validComponents);
