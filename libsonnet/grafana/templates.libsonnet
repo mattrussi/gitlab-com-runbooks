@@ -22,7 +22,7 @@ local template = grafana.template;
     template.new(
       'namespace',
       '$PROMETHEUS_DS',
-      'label_values(registry_build_info{stage="$stage"}, namespace)',
+      'label_values(kube_pod_container_info{environment="$environment"}, namespace)',
       current='gitlab',
       refresh='load',
       sort=1,
