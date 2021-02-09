@@ -11,7 +11,7 @@
 
 ## Logging
 
-* [kas](TBD)
+* [kas](https://log.gprd.gitlab.net/goto/0f6064d1900494870a10af9310d6ece0)
 
 ## Troubleshooting Pointers
 
@@ -79,3 +79,5 @@ Please see https://gitlab.com/gitlab-com/gl-security/appsec/appsec-reviews/-/iss
 # Monitoring/Alerting
 
 # Links to further Documentation
+
+- [Kubernetes Agent Readiness Review](https://gitlab.com/gitlab-com/gl-infra/readiness/-/blob/master/kubernetes-agent/index.md) 

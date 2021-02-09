@@ -3113,7 +3113,7 @@ services:
       security_incidents:
     logging:
       - name: kas
-        permalink: TBD
+        permalink: https://log.gprd.gitlab.net/goto/0f6064d1900494870a10af9310d6ece0
   infrastructure:
     provider: gcp
     architecture:
