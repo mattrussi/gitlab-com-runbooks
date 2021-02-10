@@ -16,6 +16,7 @@
 ## Troubleshooting Pointers
 
 * [kubernetes-agent-basic-troubleshooting.md](kubernetes-agent-basic-troubleshooting.md)
+* [kubernetes-agent-block-ips.md](kubernetes-agent-block-ips.md)
 <!-- END_MARKER -->
 
 # Summary
@@ -74,7 +75,11 @@ Kas itself is stateless, all information it needs is stored in either Gitaly or 
 
 # Security/Compliance
 
-Please see https://gitlab.com/gitlab-com/gl-security/appsec/appsec-reviews/-/issues/30
+An initial security review was done at https://gitlab.com/gitlab-com/gl-security/appsec/appsec-reviews/-/issues/30 and the summary is as follows
+
+1. The team audited the `gitlab-agent` codebase from the `kas` part of the source code. They also audited the `agentk` to local cluster communication, and `agentk` to `kas` communication.
+1. The team noted "The data flow within kas makes a good impression with respect to security practices. The only information which comes from the agent is the agent token. All other information is pulled from the GitLab API. This helps a lot to avoid logic errors and bypasses based on input from the agent. "
+1. While currently every agent uses a generated token to authenticate itself to Gitlab, further expansion is needed on the authentication and authorization model of `kas` in order to better control which agent has access to which repositories (inside the users permissions structure). This is being tracked in https://gitlab.com/gitlab-org/gitlab/-/issues/220912
 
 # Monitoring/Alerting
 
