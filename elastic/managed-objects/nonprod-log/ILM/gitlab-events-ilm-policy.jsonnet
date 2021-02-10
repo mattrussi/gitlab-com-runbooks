@@ -2,7 +2,7 @@
   policy: {
     phases: {
       delete: {
-        min_age: '120d',
+        min_age: '360d',
         actions: {
           delete: {},
         },
