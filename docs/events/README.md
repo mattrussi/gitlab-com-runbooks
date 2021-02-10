@@ -33,10 +33,6 @@ The following fields are recommended:
 * `diff_url`: optional HTTP link, if a list of changes are available.
 * `source`: optional source, may be a URL to a pipeline or job or free-form text
 
-When using values from CI, use the CI variable name as the field name.
-For example `CI_JOB_URL`, `CI_PIPELINE_URL`
-
-
 ```
 curl -X PUT  https://event-user:$ES_EVENT_PASS@$ES_NONPROD_HOST:9243/events-gprd/_doc/1" -H 'Content-Type: application/json' -d' { "time": "$(date -u +%FT%T.%3NZ)", "type": "configuration", "message": "Test event", "env": "gprd", "username": "$GITLAB_USER_LOGIN", "source": "$CI_JOB_URL" }'
 ```
