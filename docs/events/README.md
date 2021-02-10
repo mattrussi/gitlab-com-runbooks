@@ -18,11 +18,12 @@ The following fields are recommended:
 
 | name      | type | required |
 | ---       | ---  | --- |
-| `diff`    | string | no |
+| `time`    | string | yes |
 | `type`    | string | yes |
 | `message` | string | yes |
 | `env`     | string | yes |
 | `user`    | string | yes |
+| `diff`    | string | no |
 
 * `message`: Free-form text describing the event
 * `diff`: HTTP link, if a list of changes are available.
@@ -35,5 +36,5 @@ For example `CI_JOB_URL`, `CI_PIPELINE_URL`
 
 
 ```
-curl -X PUT  https://event-user:$ES_EVENT_PASS@$ES_NONPROD_HOST:9243/events-gprd-$(date +%Y.%m.%d)/_doc/1" -H 'Content-Type: application/json' -d' { "type": "configuration", "message": "Test event", "env": "gprd", "user": "$GITLAB_USER_ID" }'
+curl -X PUT  https://event-user:$ES_EVENT_PASS@$ES_NONPROD_HOST:9243/events-gprd/_doc/1" -H 'Content-Type: application/json' -d' { "time": "$(date -u +%FT%T.%3NZ)", "type": "configuration", "message": "Test event", "env": "gprd", "user": "$GITLAB_USER_ID" }'
 ```
