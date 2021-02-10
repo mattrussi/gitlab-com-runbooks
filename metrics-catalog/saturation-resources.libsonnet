@@ -3,7 +3,7 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 
 local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
 
-local kubeProvisionedServices = ['git', 'mailroom', 'registry', 'sidekiq', 'websockets'];
+local kubeProvisionedServices = ['git', 'mailroom', 'registry', 'sidekiq', 'websockets', 'kas'];
 
 // Disk utilisation metrics are currently reporting incorrectly for
 // HDD volumes, see https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10248
