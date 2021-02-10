@@ -123,7 +123,7 @@ groups:
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       tier: sv
-      type: kubernetes-agent
+      type: kas
     expr: '0.050000'
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
@@ -530,7 +530,7 @@ groups:
       regional_aggregation: 'no'
       service_aggregation: 'yes'
       tier: sv
-      type: kubernetes-agent
+      type: kas
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
