@@ -37,6 +37,7 @@ When this flag is disabled, `kas` will see 404s when accessing the internal API.
 There might be a delay when `kas` sees 404s depending on cache configurations.
 The `agentk` clients will receive no indication that the flag is disabled.
 
+NOTE: As this will cause `kas` to silently fail to connect to the Gitlab API, the end result for users will be that they will see their `agentk` clients fail to do anything silently, while the `kas` containers on our side will throw errors. This could become a cause for confusion for users, so we must ensure we only disable this in the most dire of circumstances, and communicate to users that agents will by non-functional while disabled.
 # Architecture
 
 ## Dependencies
