@@ -5,7 +5,7 @@
    "settings": {
       "index": {
          "lifecycle": {
-            "name": "events-gstg-ilm-policy"
+            "name": "gitlab-events-ilm-policy"
          }
       },
       "number_of_shards": 1
