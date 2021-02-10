@@ -22,19 +22,21 @@ The following fields are recommended:
 | `type`    | string | yes |
 | `message` | string | yes |
 | `env`     | string | yes |
-| `user`    | string | yes |
-| `diff`    | string | no |
+| `username`    | string | yes |
+| `source`  | string | no |
+| `diff_url`    | string | no |
 
 * `message`: Free-form text describing the event
-* `diff`: HTTP link, if a list of changes are available.
 * `env`: One of `gprd`, `gprd-cny`, `gstg`
-* `user`: If unknown use `uknown` as the value.
+* `username`: GitLab username if available, if unknown use `unknown` as the value.
 * `type`: The type of event, for example: `deployment`, `configuration`, `alert`, etc.
+* `diff_url`: optional HTTP link, if a list of changes are available.
+* `source`: optional source, may be a URL to a pipeline or job or free-form text
 
 When using values from CI, use the CI variable name as the field name.
 For example `CI_JOB_URL`, `CI_PIPELINE_URL`
 
 
 ```
-curl -X PUT  https://event-user:$ES_EVENT_PASS@$ES_NONPROD_HOST:9243/events-gprd/_doc/1" -H 'Content-Type: application/json' -d' { "time": "$(date -u +%FT%T.%3NZ)", "type": "configuration", "message": "Test event", "env": "gprd", "user": "$GITLAB_USER_ID" }'
+curl -X PUT  https://event-user:$ES_EVENT_PASS@$ES_NONPROD_HOST:9243/events-gprd/_doc/1" -H 'Content-Type: application/json' -d' { "time": "$(date -u +%FT%T.%3NZ)", "type": "configuration", "message": "Test event", "env": "gprd", "username": "$GITLAB_USER_LOGIN", "source": "$CI_JOB_URL" }'
 ```
