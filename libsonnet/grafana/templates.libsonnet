@@ -26,7 +26,6 @@ local template = grafana.template;
       current='gitlab',
       refresh='load',
       sort=1,
-      hide='variable',
     ),
   ds::
     template.datasource(
