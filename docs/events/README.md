@@ -7,14 +7,13 @@ These indexes are both configured in the non-prod ElasticSearch cluster nonprod-
 
 ### CI Variables
 
-There is a dedicated user in the nonprod cluster for sending events in the 1Password production vault named "User for sending infra events to ElasticSearch".
+There is a dedicated user `events` in the nonprod cluster for sending events in the 1Password production vault named "User for sending infra events to ElasticSearch".
 
-In CI, use the variable named `$ES_EVENT_PASS` and `$ES_NONPROD_HOST` for sending events with `curl`.
+In CI, use the variable named `$ES_NONPROD_EVENTS_URL` for sending events with `curl`.
 
-### How to send an event
+### Fields for events
 
-Sending event is purposely kept as simple as possible, because we send events from multiple projects, mostly from CI pipelines.
-The following fields are recommended:
+The following fields are recommended for events:
 
 | name      | type | required |
 | ---       | ---  | --- |
@@ -33,6 +32,51 @@ The following fields are recommended:
 * `diff_url`: optional HTTP link, if a list of changes are available.
 * `source`: optional source, may be a URL to a pipeline or job or free-form text
 
+### Sending events from CI
+
+The following snippet can be used to create shell function that will send events from CI
+
+```yaml
+.sendEvent:
+  - &sendEvent
+    |
+      sendEvent() {
+        command -v curl >/dev/null 2>&1 || \
+          { echo >&2 "sending events requires curl but it's not installed."; exit 1; }
+        MSG="$1"
+        TYPE="${2:-configuration}"
+        ENV="${3:-gprd}"
+        TS=$(date -u +%s000)
+        USERNAME="${GITLAB_USER_LOGIN:-unknown}"
+        SOURCE="${CI_JOB_URL:-unknown}"
+        DATA="
+          {
+            \"time\": \"$TS\",
+            \"type\": \"$TYPE\",
+            \"message\": \"$MSG\",
+            \"env\": \"$ENV\",
+            \"username\": \"$USERNAME\",
+            \"source\": \"$SOURCE\"
+          }
+        "
+        echo "Sending event: \"$MSG\""
+        curl -s -X POST "$ES_NONPROD_EVENTS_URL/events-$ENV/_doc" -H 'Content-Type: application/json' -d "$DATA" > /dev/null
+      }
 ```
-curl -X PUT  https://event-user:$ES_EVENT_PASS@$ES_NONPROD_HOST:9243/events-gprd/_doc/1" -H 'Content-Type: application/json' -d' { "time": "$(date -u +%FT%T.%3NZ)", "type": "configuration", "message": "Test event", "env": "gprd", "username": "$GITLAB_USER_LOGIN", "source": "$CI_JOB_URL" }'
+
+Then in a new or existing `before_script` section:
+
+```yaml
+before_script:
+  - *sendEvent
+```
+
+And call the shell function from the `script:` section:
+
+```yaml
+script:
+  - ...
+  - sendEvent "Starting an event"
+  - ...
+  - sendEvent "Finishing an event"
 ```
