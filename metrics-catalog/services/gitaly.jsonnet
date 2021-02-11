@@ -127,7 +127,10 @@ metricsCatalog.serviceDefinition({
         selector=baseSelector {
           grpc_type: 'unary',
           grpc_service: { ne: 'gitaly.OperationService' },
-          grpc_method: { nre: gitalyHelpers.gitalyApdexIgnoredMethodsRegexp },
+          grpc_method: {
+            nre: gitalyHelpers.gitalyApdexIgnoredMethodsRegexp +
+                 '|GetLFSPointers|GetAllLFSPointers',  // Ignored because of https://gitlab.com/gitlab-org/gitaly/-/issues/3441
+          },
         },
         satisfiedThreshold=10,
         toleratedThreshold=30
