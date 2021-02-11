@@ -2,6 +2,9 @@
 
 Infrastructure events are log messages that helpful for [incident management](https://about.gitlab.com/handbook/engineering/infrastructure/incident-management/) to help answer the question **what changes happened leading up to the event?**
 
+We collect events from all infrastructure and deployment pipelines for the staging (`gstg`) and production (`gprd`) environments.
+Other environments like `pre`, `release`, etc. are not included because they are not part of incident management.
+
 There are two ElasticSearch indexes that are used for events, `events-gstg` and `events-gprd`.
 These indexes are both configured in the non-prod ElasticSearch cluster nonprod-log.gitlab.net so that we are not tied to the availability of the production for event records.
 
@@ -15,18 +18,20 @@ In CI, use the variable named `$ES_NONPROD_EVENTS_URL` for sending events with `
 
 The following fields are recommended for events:
 
-| name      | type | required |
-| ---       | ---  | --- |
-| `time`    | string | yes |
-| `type`    | string | yes |
-| `message` | string | yes |
-| `env`     | string | yes |
-| `username`    | string | yes |
-| `source`  | string | no |
-| `diff_url`    | string | no |
+| name       | type | required |
+| ---        | ---  | --- |
+| `time`     | string | yes |
+| `type`     | string | yes |
+| `message`  | string | yes |
+| `env`      | string | yes |
+| `stage`    | string | yes |
+| `username` | string | yes |
+| `source`   | string | no |
+| `diff_url` | string | no |
 
 * `message`: Free-form text describing the event
-* `env`: One of `gprd`, `gprd-cny`, `gstg`
+* `env`: Either `gprd` or `gstg.
+* `stage`: Either `main` or `cny`
 * `username`: GitLab username if available, if unknown use `unknown` as the value.
 * `type`: The type of event, for example: `deployment`, `configuration`, `alert`, etc.
 * `diff_url`: optional HTTP link, if a list of changes are available.
