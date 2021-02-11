@@ -33,6 +33,20 @@ metricsCatalog.serviceDefinition({
     pgbouncer: true,
     praefect: true,
   },
+  provisioning: {
+    vms: true,
+    kubernetes: true,
+  },
+  regional: true,
+  kubeResources: {
+    api: {
+      kind: 'Deployment',
+      containers: [
+        'gitlab-workhorse',
+        'webservice',
+      ],
+    },
+  },
   serviceLevelIndicators: {
     loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
       userImpacting=true,
@@ -48,6 +62,7 @@ metricsCatalog.serviceDefinition({
         cny: { backends: ['canary_api'], toolingLinks: [] },
       },
       selector={ type: 'frontend' },
+      regional=false,
     ),
 
     workhorse: {

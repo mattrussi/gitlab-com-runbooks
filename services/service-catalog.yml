@@ -221,8 +221,8 @@ services:
         permalink: https://log.gprd.gitlab.net/goto/2b9679dab019791136cb8ae1535fb781
   infrastructure:
     provider: gcp
-    architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#service-architecture
-    provisioning: terraform
+    architecture: gke
+    provisioning: kubernetes
     accesses:
       - account_name:
         access_type:
