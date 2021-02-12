@@ -24,7 +24,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",grpc_code!="OK",job="gitlab-kas",stage="{{ $labels.stage }}"}[5m])
+          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",grpc_code!="OK",grpc_method="GetConfiguration",job="gitlab-kas",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/kas/README.md
     labels:
@@ -43,22 +43,22 @@ groups:
       (
         (
           gitlab_component_errors:ratio_1h{component="grpc_requests",monitor="global",type="kas"}
-          > (14.4 * 0.050000)
+          > (14.4 * 0.010000)
         )
         and
         (
           gitlab_component_errors:ratio_5m{component="grpc_requests",monitor="global",type="kas"}
-          > (14.4 * 0.050000)
+          > (14.4 * 0.010000)
         )
         or
         (
           gitlab_component_errors:ratio_6h{component="grpc_requests",monitor="global",type="kas"}
-          > (6 * 0.050000)
+          > (6 * 0.010000)
         )
         and
         (
           gitlab_component_errors:ratio_30m{component="grpc_requests",monitor="global",type="kas"}
-          > (6 * 0.050000)
+          > (6 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)

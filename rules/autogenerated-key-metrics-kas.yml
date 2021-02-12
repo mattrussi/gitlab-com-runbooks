@@ -20,7 +20,7 @@ groups:
       type: kas
     expr: |
       sum by (environment,stage) (
-        rate(grpc_server_handled_total{grpc_code!="OK",job="gitlab-kas"}[1m])
+        rate(grpc_server_handled_total{grpc_code!="OK",grpc_method="GetConfiguration",job="gitlab-kas"}[1m])
       )
 - name: 'Component-Level SLIs: kas - 5m burn-rate'
   interval: 1m
@@ -41,7 +41,7 @@ groups:
       type: kas
     expr: |
       sum by (environment,stage) (
-        rate(grpc_server_handled_total{grpc_code!="OK",job="gitlab-kas"}[5m])
+        rate(grpc_server_handled_total{grpc_code!="OK",grpc_method="GetConfiguration",job="gitlab-kas"}[5m])
       )
 - name: 'Component-Level SLIs: kas - 30m burn-rate'
   interval: 2m
@@ -62,7 +62,7 @@ groups:
       type: kas
     expr: |
       sum by (environment,stage) (
-        rate(grpc_server_handled_total{grpc_code!="OK",job="gitlab-kas"}[30m])
+        rate(grpc_server_handled_total{grpc_code!="OK",grpc_method="GetConfiguration",job="gitlab-kas"}[30m])
       )
 - name: 'Component-Level SLIs: kas - 1h burn-rate'
   interval: 1m
@@ -83,7 +83,7 @@ groups:
       type: kas
     expr: |
       sum by (environment,stage) (
-        rate(grpc_server_handled_total{grpc_code!="OK",job="gitlab-kas"}[1h])
+        rate(grpc_server_handled_total{grpc_code!="OK",grpc_method="GetConfiguration",job="gitlab-kas"}[1h])
       )
 - name: 'Component-Level SLIs: kas - 6h burn-rate'
   interval: 2m
@@ -104,7 +104,7 @@ groups:
       type: kas
     expr: |
       sum by (environment,stage) (
-        rate(grpc_server_handled_total{grpc_code!="OK",job="gitlab-kas"}[6h])
+        rate(grpc_server_handled_total{grpc_code!="OK",grpc_method="GetConfiguration",job="gitlab-kas"}[6h])
       )
 - name: 'Component mapping: kas'
   interval: 1m

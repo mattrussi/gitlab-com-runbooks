@@ -124,7 +124,7 @@ groups:
     labels:
       tier: sv
       type: kas
-    expr: '0.050000'
+    expr: '0.010000'
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       tier: inf
