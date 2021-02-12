@@ -1,0 +1,161 @@
+groups:
+- name: Gitaly grpc handled
+  interval: 1m
+  rules:
+  - record: gitaly_grpc:grpc_server_handled_total:rate1m
+    expr: >
+      sum without (fqdn,instance) (
+        rate(grpc_server_handled_total{job="gitaly"}[1m])
+      )
+  - record: gitaly:grpc_server_handled_total:rate1m
+    expr: >
+      sum without (grpc_code) (
+        gitaly_grpc:grpc_server_handled_total:rate1m
+      )
+  - record: gitaly:grpc_server_handled_total:error_rate1m
+    expr: gitaly_grpc:grpc_server_handled_total:rate1m{grpc_code!="OK",grpc_code!="Canceled",grpc_code!="NotFound"}
+  - record: gitaly:grpc_server_handled_total:instance_error_rate1m
+    expr: >
+      sum without (grpc_code, grpc_method, grpc_service, grpc_type) (
+        rate(grpc_server_handled_total{job="gitaly",grpc_code!="OK"}[1m])
+      )
+
+  # Deprecated in favour of component/node aggregated SLO monitoring
+  # for the gitaly service
+  # Remove this alert after 15 August 2020
+  # See https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10934
+  - alert: GitalyInstanceErrorRateTooHigh
+    expr: gitaly:grpc_server_handled_total:instance_error_rate1m > 5
+    for: 5m
+    labels:
+      team: gitaly
+      severity: s4
+      alert_type: cause
+    annotations:
+      description: Gitaly error rate for the last 5 minutes is over 5 on {{$labels.instance}}.
+        Check Gitaly logs and consider disabling it on that host.
+      runbook: docs/gitaly/gitaly-error-rate.md
+      title: 'Gitaly error rate is too high: {{$value | printf "%.2f" }}'
+
+- name: Gitaly grpc server handling buckets
+  interval: 1m
+  rules:
+  - record: gitaly_instance:grpc_server_handling_seconds_bucket:rate1m
+    expr: >
+      sum without (grpc_service, grpc_type) (
+        rate(grpc_server_handling_seconds_bucket{job="gitaly"}[1m])
+      )
+  - record: gitaly:grpc_server_handling_seconds_bucket:rate1m
+    expr: >
+      sum without (fqdn, instance) (
+        gitaly_instance:grpc_server_handling_seconds_bucket:rate1m
+      )
+  - record: gitaly:grpc_server_handling_seconds:p95
+    expr: >
+      histogram_quantile(0.95,
+        sum without (grpc_method) (
+          gitaly_instance:grpc_server_handling_seconds_bucket:rate1m
+        )
+      )
+  - record: gitaly:grpc_server_handling_seconds:p50
+    expr: >
+      histogram_quantile(0.5,
+        sum without (grpc_method) (
+          gitaly_instance:grpc_server_handling_seconds_bucket:rate1m
+        )
+      )
+
+- name: Gitaly grpc server handled
+  rules:
+  - record: gitaly_instance_grpc_method_code:grpc_server_handled_total:irate1m
+    expr: >
+      sum without (fqdn, instance, grpc_service, grpc_type) (
+        irate(grpc_server_handled_total{job="gitaly"}[1m])
+      )
+
+- name: Gitaly grpc misc
+  interval: 1m
+  rules:
+  - record: gitaly:grpc_server_handling_seconds:avg5m
+    expr: >
+       avg without (fqdn, instance, grpc_service, grpc_type) (
+         rate(grpc_server_handling_seconds_sum{job="gitaly"}[5m])
+           /
+         rate(grpc_server_handling_seconds_count{job="gitaly"}[5m]) > 0
+       )
+  - record: instance:gitaly_grpc_errors_total:rate1m
+    expr: >
+      sum without (grpc_method, grpc_type, grpc_service, grpc_code) (
+        rate(grpc_server_handled_total{job="gitaly",grpc_code!="OK"}[1m])
+      )
+
+- name: Gitaly rate limiting
+  rules:
+  - record: gitaly:gitaly_rate_limiting_queued:grpc_method
+    expr: sum(gitaly_rate_limiting_queued) by (environment, grpc_method, job)
+
+- name: Gitaly misc alerts
+  rules:
+  - alert: GitalyFileServerDown
+    expr: up{job="gitaly",tier="stor",type="gitaly"} == 0
+    for: 1m
+    labels:
+      team: gitaly
+      pager: pagerduty
+      severity: s1
+      alert_type: cause
+    annotations:
+      description: Gitaly has been marked as down for the past minute on {{$labels.instance}}.
+        Check Gitaly logs and restart the process if necessary
+      runbook: docs/gitaly/gitaly-down.md
+      title: Gitaly is down on {{ $labels.fqdn }}
+  - alert: GitalyVersionMismatch
+    expr: >
+      count by (environment, stage) (
+        count by (environment, stage, version) (
+          gitlab_build_info{tier="stor",type="gitaly"}
+        )
+      ) > 1
+    for: 60m
+    labels:
+      team: gitaly
+      pager: pagerduty
+      severity: s1
+      alert_type: cause
+    annotations:
+      description: Two or more different version of Gitaly are running in stage {{ $labels.stage }}
+        During a deployment, two distinct versions of Gitaly may be running
+        alongside one another, but this should not be the case for more than 60m.
+        Visit https://dashboards.gitlab.net/dashboard/db/gitaly-version-tracker?orgId=1
+        for details of versions deployed across the fleet.
+      runbook: docs/version/gitaly-version-mismatch.md
+      title: 'Multiple versions of Gitaly have been running alongside one another'
+  - alert: GitalyPermissionDenied
+    expr: sum(gitaly_grpc:grpc_server_handled_total:rate1m{grpc_code="PermissionDenied"}) > 10
+    for: 10s
+    labels:
+      team: gitaly
+      pager: pagerduty
+      severity: s1
+      alert_type: cause
+    annotations:
+      description: Gitaly authention failing, authentication tokens might be misconfigured, or severe clockdrift is occurring.
+      runbook: docs/gitaly/gitaly-permission-denied.md
+      title: 'Gitaly: Auth-tokens are invalid, failing RPCs'
+
+  - alert: LowCountOfActiveGitalyShards
+    expr: sum by (env) (gitaly_shard_weight_total > bool 0) < 10
+    for: 1h
+    labels:
+      team: sre_datastores
+      severity: s2
+      alert_type: cause
+      pager: pagerduty
+      type: gitaly
+    annotations:
+      title: Number of active Gitaly shards is low
+      description: >
+        There are less than 10 Gitaly shards that actively receive new project, this could cause them to fill up quickly and put more
+        stress on them. Consider adding a new Gitaly shard
+        https://gitlab.com/gitlab-com/gl-infra/production/-/issues/new?issuable_template=storage_shard_creation
+
