@@ -63,7 +63,7 @@ local railsVersion(environment) =
     |||
       label_replace(
         topk(1, count(
-          gitlab_version_info{environment="%(env)s", stage="%(stage)s", component="gitlab-rails", tier="sv"}
+          gitlab_version_info{environment="%(env)s", stage="%(stage)s", component="gitlab-rails"}
         ) by (version)),
         "version", "$1",
         "version", "^([A-Fa-f0-9]{11}).*$"
@@ -78,7 +78,7 @@ local packageVersion(environment) =
   prometheus.target(
     |||
       topk(1, count(
-        omnibus_build_info{environment="%(env)s", stage="%(stage)s", tier="sv"}
+        omnibus_build_info{environment="%(env)s", stage="%(stage)s"}
       ) by (version))
     ||| % { env: environment.role, stage: environment.stage },
     instant=true,

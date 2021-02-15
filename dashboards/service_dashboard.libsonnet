@@ -65,7 +65,6 @@ local headlineMetricsRow(
 
 local overviewDashboard(
   type,
-  tier,
   stage,
   environmentSelectorHash,
   saturationEnvironmentSelectorHash
@@ -78,7 +77,7 @@ local overviewDashboard(
   local dashboard =
     basic.dashboard(
       'Overview',
-      tags=['type:' + type, 'tier:' + tier, type, 'service overview'],
+      tags=['type:' + type, type, 'service overview'],
       includeEnvironmentTemplate=environmentSelectorHash == defaultEnvironmentSelector,
     )
     .addPanels(
@@ -170,14 +169,12 @@ local overviewDashboard(
 {
   overview(
     type,
-    tier,
     stage='$stage',
     environmentSelectorHash=defaultEnvironmentSelector,
     saturationEnvironmentSelectorHash=defaultEnvironmentSelector
   )::
     overviewDashboard(
       type,
-      tier,
       stage,
       environmentSelectorHash=environmentSelectorHash,
       saturationEnvironmentSelectorHash=saturationEnvironmentSelectorHash

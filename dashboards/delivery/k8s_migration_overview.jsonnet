@@ -259,14 +259,14 @@ basic.dashboard(
       statPanel(
         'Available cores',
         description='Total number of cores',
-        query='sum(instance:node_cpus:count{env="$environment", tier="sv",type!~"web-pages|praefect|camoproxy"})',
+        query='sum(instance:node_cpus:count{env="$environment",type!~"web-pages|praefect|camoproxy"})',
       ),
     ],
     // CPU utilization
     [
       basic.singlestat(
         title='CPU utilization',
-        query='avg(instance:node_cpu_utilization:ratio{tier="sv",type!~"web-pages|praefect|camoproxy"})',
+        query='avg(instance:node_cpu_utilization:ratio{type!~"web-pages|praefect|camoproxy"})',
         gaugeMaxValue=1,
         gaugeShow=true,
       ),
@@ -276,7 +276,7 @@ basic.dashboard(
       statPanel(
         'Available Memory',
         description='Total memory',
-        query='sum(node_memory_MemTotal_bytes{tier="sv",type!~"web-pages|praefect|camoproxy", env="$environment"})',
+        query='sum(node_memory_MemTotal_bytes{type!~"web-pages|praefect|camoproxy", env="$environment"})',
         unit='bytes',
       ),
     ],
@@ -284,7 +284,7 @@ basic.dashboard(
     [
       basic.singlestat(
         title='Avg Memory Utilization',
-        query='avg(instance:node_memory_utilization:ratio{tier="sv",type!~"web-pages|praefect|camoproxy", env="$environment"})',
+        query='avg(instance:node_memory_utilization:ratio{type!~"web-pages|praefect|camoproxy", env="$environment"})',
         gaugeMaxValue=1,
         gaugeShow=true,
       ),

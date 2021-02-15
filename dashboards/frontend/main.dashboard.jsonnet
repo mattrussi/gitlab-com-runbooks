@@ -3,7 +3,7 @@ local serviceDashboard = import 'service_dashboard.libsonnet';
 local row = grafana.row;
 local processExporter = import 'process_exporter.libsonnet';
 
-serviceDashboard.overview('frontend', 'lb')
+serviceDashboard.overview('frontend')
 .addPanel(
   row.new(title='HAProxy process'),
   gridPos={

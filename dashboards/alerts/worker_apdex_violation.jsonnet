@@ -18,7 +18,7 @@ local sidekiqQueueLatency() =
     title='Queue Latency',
     description='${percentile}th percentile queue latency. Lower is better.',
     query=|||
-      histogram_quantile($percentile/100, sum(rate(sidekiq_jobs_completion_seconds_bucket{environment="$environment", queue="$queue"}[$__interval])) by (le, environment, stage, tier, type, queue))
+      histogram_quantile($percentile/100, sum(rate(sidekiq_jobs_completion_seconds_bucket{environment="$environment", queue="$queue"}[$__interval])) by (le, environment, stage, type, queue))
     |||,
     legendFormat='{{ queue }}'
   )

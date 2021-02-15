@@ -4,7 +4,7 @@ local serviceDashboard = import 'service_dashboard.libsonnet';
 local row = grafana.row;
 local basic = import 'grafana/basic.libsonnet';
 
-serviceDashboard.overview('mailroom', 'sv')
+serviceDashboard.overview('mailroom')
 .addPanel(
   row.new(title='Mailroom Metrics'),
   gridPos={ x: 0, y: 1000, w: 24, h: 1 }

@@ -12,7 +12,6 @@ local thresholds = import 'thresholds.libsonnet';
 
 serviceDashboard.overview(
   'monitoring',
-  'inf',
   environmentSelectorHash={ environment: 'ops', env: 'ops', type: 'monitoring', stage: '$stage' },
   saturationEnvironmentSelectorHash={ environment: { re: 'ops|gprd|ci-prd' }, type: 'monitoring', stage: '$stage' }
 )
