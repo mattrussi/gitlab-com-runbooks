@@ -36,6 +36,7 @@
 * [storage-rebalancing.md](storage-rebalancing.md)
 * [storage-servers.md](storage-servers.md)
 * [storage-sharding.md](storage-sharding.md)
+* [../kas/kubernetes-agent-disable-integrations.md](../kas/kubernetes-agent-disable-integrations.md)
 * [../monitoring/apdex-alerts-guide.md](../monitoring/apdex-alerts-guide.md)
 * [../monitoring/definition-service-apdex.md](../monitoring/definition-service-apdex.md)
 * [../praefect/praefect-bypass.md](../praefect/praefect-bypass.md)

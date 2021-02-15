@@ -3032,8 +3032,13 @@ services:
         - https://docs.gitlab.com/ee/user/clusters/agent/
       security:
     dependencies:
+          - service: api
+          - service: gitaly
+          - service: redis
     configurations:
-      - config_name: K8s deployment repo
+      - config_name: config.yaml
+        location: https://gitlab.com/gitlab-org/charts/gitlab/-/blob/master/charts/gitlab/charts/kas/templates/configmap.yaml
+      - config_name: helm
         location: https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com
     chef_roles: []
     scalability:
@@ -3045,7 +3050,7 @@ services:
       security_incidents:
     logging:
       - name: kas
-        permalink: https://log.gprd.gitlab.net/goto/0f6064d1900494870a10af9310d6ece0
+        permalink: https://log.gprd.gitlab.net/goto/b8204a41999cc1a136fa12c885ce8d22
   infrastructure:
     provider: gcp
     architecture:

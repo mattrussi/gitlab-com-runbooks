@@ -18,7 +18,7 @@ Log onto a console server and get access to the cluster [as documented here](../
 
 ## Tail the logs
 
-As Kas is a standard pod in our Gitlab helm chart, logs are being sent to Kibana/elasticsearch at TBD
+As Kas is a standard pod in our Gitlab helm chart, logs are being sent to Kibana/elasticsearch at https://log.gprd.gitlab.net/goto/b8204a41999cc1a136fa12c885ce8d22
 
 If you need to get the logs from Kubernetes directly, you can do so by logging onto a console server and get access to the cluster [as documented here](../../uncategorized/k8s-oncall-setup.md) and run the following command
 
