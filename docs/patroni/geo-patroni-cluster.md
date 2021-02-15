@@ -113,8 +113,8 @@ replication (see recovery.conf). As of writing,
   recovery is working.
 * Once the replication lag is near zero, the geo postgres should switch to using
   streaming replication rather than archive recovery. You can check this is
-  working by `sudo gitlab-psql -c "select * from pg_stat_replication;"`.  You
-  should see `state = 'streaming'`.
+  working by `sudo gitlab-psql -c "select * from pg_stat_wal_receiver;"`.  You
+  should see status as `'streaming'`.
 * Setup foreign tables and log cursor (see [handbook](https://docs.gitlab.com/ee/administration/geo/replication/troubleshooting.html#resetting-geo-secondary-node-replication))
   * `gitlab-rake geo:db:setup`
   * `gitlab-rake gitlab:geo:check`
