@@ -50,7 +50,6 @@ local generateErrorRateRules(burnRate, recordingRuleNames, aggregationLabels, sl
 // Generates the recording rules given a component definition
 local generateRecordingRulesForComponent(burnRate, recordingRuleNames, serviceDefinition, sliDefinition, aggregationLabels, substituteWeightWithRecordingRule) =
   local recordingRuleStaticLabels = {
-    tier: serviceDefinition.tier,
     type: serviceDefinition.type,
     component: sliDefinition.name,
   };

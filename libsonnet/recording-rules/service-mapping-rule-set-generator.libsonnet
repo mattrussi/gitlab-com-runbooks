@@ -15,7 +15,6 @@
                 record: 'gitlab_service:mapping:disable_ops_rate_prediction',
                 labels: {
                   type: serviceDefinition.type,
-                  tier: serviceDefinition.tier,
                 },
                 expr: '1',
               },

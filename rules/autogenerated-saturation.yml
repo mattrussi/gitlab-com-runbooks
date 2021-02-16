@@ -8,7 +8,7 @@ groups:
     labels:
       component: cgroup_memory
     expr: |
-      max by(environment, tier, type, stage) (
+      max by(environment, type, stage) (
         clamp_min(
           clamp_max(
             (
@@ -27,10 +27,10 @@ groups:
     labels:
       component: cpu
     expr: |
-      max by(environment, tier, type, stage) (
+      max by(environment, type, stage) (
         clamp_min(
           clamp_max(
-            1 - avg by (environment, tier, type, stage) (
+            1 - avg by (environment, type, stage) (
               rate(node_cpu_seconds_total{mode="idle", environment!="",type!="",type!~"waf|console-node|deploy-node|security"}[5m])
             )
             ,
@@ -42,7 +42,7 @@ groups:
     labels:
       component: disk_inodes
     expr: |
-      max by(environment, tier, type, stage) (
+      max by(environment, type, stage) (
         clamp_min(
           clamp_max(
             1 - (
@@ -59,7 +59,7 @@ groups:
     labels:
       component: disk_space
     expr: |
-      max by(environment, tier, type, stage) (
+      max by(environment, type, stage) (
         clamp_min(
           clamp_max(
             (
@@ -74,7 +74,7 @@ groups:
     labels:
       component: disk_sustained_read_iops
     expr: |
-      max by(environment, tier, type, stage) (
+      max by(environment, type, stage) (
         clamp_min(
           clamp_max(
             rate(node_disk_reads_completed_total{device!="sda", environment!="",type=~"patroni|gitaly|nfs"}[20m])
@@ -89,7 +89,7 @@ groups:
     labels:
       component: disk_sustained_read_throughput
     expr: |
-      max by(environment, tier, type, stage) (
+      max by(environment, type, stage) (
         clamp_min(
           clamp_max(
             rate(node_disk_read_bytes_total{device!="sda", environment!="",type=~"patroni|gitaly|nfs"}[20m])
@@ -104,7 +104,7 @@ groups:
     labels:
       component: disk_sustained_write_iops
     expr: |
-      max by(environment, tier, type, stage) (
+      max by(environment, type, stage) (
         clamp_min(
           clamp_max(
             rate(node_disk_writes_completed_total{device!="sda", environment!="",type=~"patroni|gitaly|nfs"}[20m])
@@ -119,7 +119,7 @@ groups:
     labels:
       component: disk_sustained_write_throughput
     expr: |
-      max by(environment, tier, type, stage) (
+      max by(environment, type, stage) (
         clamp_min(
           clamp_max(
             rate(node_disk_written_bytes_total{device!="sda", environment!="",type=~"patroni|gitaly|nfs"}[20m])
@@ -134,10 +134,10 @@ groups:
     labels:
       component: elastic_cpu
     expr: |
-      max by(environment, tier, type, stage) (
+      max by(environment, type, stage) (
         clamp_min(
           clamp_max(
-            avg by (environment, tier, type, stage) (
+            avg by (environment, type, stage) (
               avg_over_time(elasticsearch_process_cpu_percent{environment!="",type=~"logging|search"}[1m]) / 100
             )
             ,
@@ -149,14 +149,14 @@ groups:
     labels:
       component: elastic_disk_space
     expr: |
-      max by(environment, tier, type, stage) (
+      max by(environment, type, stage) (
         clamp_min(
           clamp_max(
-            sum by (environment, tier, type, stage) (
+            sum by (environment, type, stage) (
               (elasticsearch_filesystem_data_size_bytes{environment!="",type=~"logging|search"} - elasticsearch_filesystem_data_free_bytes{environment!="",type=~"logging|search"})
             )
             /
-            sum by (environment, tier, type, stage) (
+            sum by (environment, type, stage) (
               elasticsearch_filesystem_data_size_bytes{environment!="",type=~"logging|search"}
             )
             ,
@@ -168,7 +168,7 @@ groups:
     labels:
       component: elastic_jvm_heap_memory
     expr: |
-      max by(environment, tier, type, stage) (
+      max by(environment, type, stage) (
         clamp_min(
           clamp_max(
             elasticsearch_jvm_memory_used_bytes{area="heap", environment!="",type=~"logging|search"}
@@ -183,7 +183,7 @@ groups:
     labels:
       component: elastic_single_node_cpu
     expr: |
-      max by(environment, tier, type, stage) (
+      max by(environment, type, stage) (
         clamp_min(
           clamp_max(
             avg_over_time(elasticsearch_process_cpu_percent{environment!="",type=~"logging|search"}[5m]) / 100
@@ -196,7 +196,7 @@ groups:
     labels:
       component: elastic_single_node_disk_space
     expr: |
-      max by(environment, tier, type, stage) (
+      max by(environment, type, stage) (
         clamp_min(
           clamp_max(
             (
@@ -217,7 +217,7 @@ groups:
     labels:
       component: elastic_thread_pools
     expr: |
-      max by(environment, tier, type, stage) (
+      max by(environment, type, stage) (
         clamp_min(
           clamp_max(
             (
@@ -234,14 +234,14 @@ groups:
     labels:
       component: go_memory
     expr: |
-      max by(environment, tier, type, stage) (
+      max by(environment, type, stage) (
         clamp_min(
           clamp_max(
-            sum by (environment, tier, type, stage, fqdn) (
+            sum by (environment, type, stage, fqdn) (
               go_memstats_alloc_bytes{environment!="",type=~"gitaly|web-pages|monitoring|web|praefect|registry|api"}
             )
             /
-            sum by (environment, tier, type, stage, fqdn) (
+            sum by (environment, type, stage, fqdn) (
               node_memory_MemTotal_bytes{environment!="",type=~"gitaly|web-pages|monitoring|web|praefect|registry|api"}
             )
             ,
@@ -253,14 +253,14 @@ groups:
     labels:
       component: kube_container_cpu
     expr: |
-      max by(environment, tier, type, stage) (
+      max by(environment, type, stage) (
         clamp_min(
           clamp_max(
-            sum by (environment, tier, type, stage, pod, container) (
+            sum by (environment, type, stage, pod, container) (
               rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", environment!="",type=~"git|mailroom|registry|sidekiq|websockets|kas"}[5m])
             )
             /
-            sum by(environment, tier, type, stage, pod, container) (
+            sum by(environment, type, stage, pod, container) (
               container_spec_cpu_quota:labeled{container!="", container!="POD", environment!="",type=~"git|mailroom|registry|sidekiq|websockets|kas"}
               /
               container_spec_cpu_period:labeled{container!="", container!="POD", environment!="",type=~"git|mailroom|registry|sidekiq|websockets|kas"}
@@ -274,7 +274,7 @@ groups:
     labels:
       component: kube_container_memory
     expr: |
-      max by(environment, tier, type, stage) (
+      max by(environment, type, stage) (
         clamp_min(
           clamp_max(
             container_memory_working_set_bytes:labeled{container!="", container!="POD", environment!="",type=~"git|mailroom|registry|sidekiq|websockets|kas"}
@@ -349,7 +349,7 @@ groups:
     labels:
       component: memory
     expr: |
-      max by(environment, tier, type, stage) (
+      max by(environment, type, stage) (
         clamp_min(
           clamp_max(
             instance:node_memory_utilization:ratio{environment!="",type!="",type!~"waf|monitoring"}
@@ -362,7 +362,7 @@ groups:
     labels:
       component: nf_conntrack_entries
     expr: |
-      max by(environment, tier, type, stage) (
+      max by(environment, type, stage) (
         clamp_min(
           clamp_max(
             max_over_time(node_nf_conntrack_entries{environment!="",type!="",type!~"waf"}[1m])
@@ -377,7 +377,7 @@ groups:
     labels:
       component: open_fds
     expr: |
-      max by(environment, tier, type, stage) (
+      max by(environment, type, stage) (
         clamp_min(
           clamp_max(
             (
@@ -400,13 +400,13 @@ groups:
     labels:
       component: pg_active_db_connections_primary
     expr: |
-      max by(environment, tier, type, stage) (
+      max by(environment, type, stage) (
         clamp_min(
           clamp_max(
             sum without (state) (
               pg_stat_activity_count{datname="gitlabhq_production", state!="idle", environment!="",type="patroni"} unless on(instance) (pg_replication_is_replica == 1)
             )
-            / on (environment, tier, type, stage, fqdn)
+            / on (environment, type, stage, fqdn)
             pg_settings_max_connections{environment!="",type="patroni"}
             ,
             1)
@@ -417,13 +417,13 @@ groups:
     labels:
       component: pg_active_db_connections_replica
     expr: |
-      max by(environment, tier, type, stage) (
+      max by(environment, type, stage) (
         clamp_min(
           clamp_max(
             sum without (state) (
               pg_stat_activity_count{datname="gitlabhq_production", state!="idle", environment!="",type="patroni"} and on(instance) (pg_replication_is_replica == 1)
             )
-            / on (environment, tier, type, stage, fqdn)
+            / on (environment, type, stage, fqdn)
             pg_settings_max_connections{environment!="",type="patroni"}
             ,
             1)
@@ -434,7 +434,7 @@ groups:
     labels:
       component: pgbouncer_async_primary_pool
     expr: |
-      max by(environment, tier, type, stage) (
+      max by(environment, type, stage) (
         clamp_min(
           clamp_max(
             (
@@ -443,8 +443,8 @@ groups:
               avg_over_time(pgbouncer_pools_server_used_connections{user="gitlab", database="gitlabhq_production_sidekiq", environment!="",type="pgbouncer"}[5m]) +
               avg_over_time(pgbouncer_pools_server_login_connections{user="gitlab", database="gitlabhq_production_sidekiq", environment!="",type="pgbouncer"}[5m])
             )
-            / on(environment, tier, type, stage, fqdn, instance) group_left()
-            sum by (environment, tier, type, stage, fqdn, instance) (
+            / on(environment, type, stage, fqdn, instance) group_left()
+            sum by (environment, type, stage, fqdn, instance) (
               avg_over_time(pgbouncer_databases_pool_size{name="gitlabhq_production_sidekiq", environment!="",type="pgbouncer"}[5m])
             )
             ,
@@ -456,7 +456,7 @@ groups:
     labels:
       component: pgbouncer_single_core
     expr: |
-      max by(environment, tier, type, stage) (
+      max by(environment, type, stage) (
         clamp_min(
           clamp_max(
             sum without(cpu, mode) (
@@ -473,7 +473,7 @@ groups:
     labels:
       component: pgbouncer_sync_primary_pool
     expr: |
-      max by(environment, tier, type, stage) (
+      max by(environment, type, stage) (
         clamp_min(
           clamp_max(
             (
@@ -482,8 +482,8 @@ groups:
               avg_over_time(pgbouncer_pools_server_used_connections{user="gitlab", database="gitlabhq_production", environment!="",type="pgbouncer"}[5m]) +
               avg_over_time(pgbouncer_pools_server_login_connections{user="gitlab", database="gitlabhq_production", environment!="",type="pgbouncer"}[5m])
             )
-            / on(environment, tier, type, stage, fqdn, instance) group_left()
-            sum by (environment, tier, type, stage, fqdn, instance) (
+            / on(environment, type, stage, fqdn, instance) group_left()
+            sum by (environment, type, stage, fqdn, instance) (
               avg_over_time(pgbouncer_databases_pool_size{name="gitlabhq_production", environment!="",type="pgbouncer"}[5m])
             )
             ,
@@ -495,7 +495,7 @@ groups:
     labels:
       component: pgbouncer_sync_replica_pool
     expr: |
-      max by(environment, tier, type, stage) (
+      max by(environment, type, stage) (
         clamp_min(
           clamp_max(
             (
@@ -504,8 +504,8 @@ groups:
               avg_over_time(pgbouncer_pools_server_used_connections{user="gitlab", database="gitlabhq_production", environment!="",type="patroni"}[5m]) +
               avg_over_time(pgbouncer_pools_server_login_connections{user="gitlab", database="gitlabhq_production", environment!="",type="patroni"}[5m])
             )
-            / on(environment, tier, type, stage, fqdn, instance) group_left()
-            sum by (environment, tier, type, stage, fqdn, instance) (
+            / on(environment, type, stage, fqdn, instance) group_left()
+            sum by (environment, type, stage, fqdn, instance) (
               avg_over_time(pgbouncer_databases_pool_size{name="gitlabhq_production", environment!="",type="patroni"}[5m])
             )
             ,
@@ -553,7 +553,7 @@ groups:
     labels:
       component: rails_db_connection_pool
     expr: |
-      max by(environment, tier, type, stage) (
+      max by(environment, type, stage) (
         clamp_min(
           clamp_max(
             (
@@ -572,7 +572,7 @@ groups:
     labels:
       component: redis_clients
     expr: |
-      max by(environment, tier, type, stage) (
+      max by(environment, type, stage) (
         clamp_min(
           clamp_max(
             max_over_time(redis_connected_clients{environment!="",type=~"redis|redis-sidekiq|redis-cache"}[1m])
@@ -587,16 +587,16 @@ groups:
     labels:
       component: redis_memory
     expr: |
-      max by(environment, tier, type, stage) (
+      max by(environment, type, stage) (
         clamp_min(
           clamp_max(
-            max by (environment, tier, type, stage, fqdn) (
+            max by (environment, type, stage, fqdn) (
               label_replace(redis_memory_used_rss_bytes{environment!="",type=~"redis|redis-sidekiq|redis-cache"}, "memtype", "rss","","")
               or
               label_replace(redis_memory_used_bytes{environment!="",type=~"redis|redis-sidekiq|redis-cache"}, "memtype", "used","","")
             )
             /
-            avg by (environment, tier, type, stage, fqdn) (
+            avg by (environment, type, stage, fqdn) (
               node_memory_MemTotal_bytes{environment!="",type=~"redis|redis-sidekiq|redis-cache"}
             )
             ,
@@ -608,7 +608,7 @@ groups:
     labels:
       component: redis_primary_cpu
     expr: |
-      max by(environment, tier, type, stage) (
+      max by(environment, type, stage) (
         clamp_min(
           clamp_max(
             (
@@ -626,7 +626,7 @@ groups:
     labels:
       component: redis_secondary_cpu
     expr: |
-      max by(environment, tier, type, stage) (
+      max by(environment, type, stage) (
         clamp_min(
           clamp_max(
             (
@@ -644,7 +644,7 @@ groups:
     labels:
       component: ruby_thread_contention
     expr: |
-      max by(environment, tier, type, stage) (
+      max by(environment, type, stage) (
         clamp_min(
           clamp_max(
             rate(ruby_process_cpu_seconds_total{environment!="",type=~"web|sidekiq|api|git|websockets"}[10m])
@@ -657,10 +657,10 @@ groups:
     labels:
       component: shard_cpu
     expr: |
-      max by(environment, tier, type, stage) (
+      max by(environment, type, stage) (
         clamp_min(
           clamp_max(
-            1 - avg by (environment, tier, type, stage, shard) (
+            1 - avg by (environment, type, stage, shard) (
               rate(node_cpu_seconds_total{mode="idle", environment!="",type!="",type!~"waf|console-node|deploy-node|security"}[5m])
             )
             ,
@@ -692,7 +692,7 @@ groups:
     labels:
       component: shared_runners_gitlab
     expr: |
-      max by(environment, tier, type, stage) (
+      max by(environment, type, stage) (
         clamp_min(
           clamp_max(
             sum without(executor_stage, exported_stage, state) (
@@ -709,14 +709,14 @@ groups:
     labels:
       component: sidekiq_shard_workers
     expr: |
-      max by(environment, tier, type, stage) (
+      max by(environment, type, stage) (
         clamp_min(
           clamp_max(
-            sum by (environment, tier, type, stage, shard) (
+            sum by (environment, type, stage, shard) (
               avg_over_time(sidekiq_running_jobs{shard!~"database-throttled|elasticsearch|gitaly-throttled|memory-bound", environment!="",type="sidekiq"}[5m])
             )
             /
-            sum by (environment, tier, type, stage, shard) (
+            sum by (environment, type, stage, shard) (
               avg_over_time(sidekiq_concurrency{shard!~"database-throttled|elasticsearch|gitaly-throttled|memory-bound", environment!="",type="sidekiq"}[5m])
             )
             ,
@@ -728,7 +728,7 @@ groups:
     labels:
       component: single_node_cpu
     expr: |
-      max by(environment, tier, type, stage) (
+      max by(environment, type, stage) (
         clamp_min(
           clamp_max(
             avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{mode="idle", environment!="",type!="",type!~"waf|console-node|deploy-node|security"}[5m]))
@@ -741,12 +741,12 @@ groups:
     labels:
       component: single_node_puma_workers
     expr: |
-      max by(environment, tier, type, stage) (
+      max by(environment, type, stage) (
         clamp_min(
           clamp_max(
-            sum by(environment, tier, type, stage, fqdn) (avg_over_time(instance:puma_active_connections:sum{environment!="",type=~"web|api|git|sidekiq|websockets"}[1m]))
+            sum by(environment, type, stage, fqdn) (avg_over_time(instance:puma_active_connections:sum{environment!="",type=~"web|api|git|sidekiq|websockets"}[1m]))
             /
-            sum by(environment, tier, type, stage, fqdn) (instance:puma_max_threads:sum{environment!="",type=~"web|api|git|sidekiq|websockets"})
+            sum by(environment, type, stage, fqdn) (instance:puma_max_threads:sum{environment!="",type=~"web|api|git|sidekiq|websockets"})
             ,
             1)
         ,
@@ -756,7 +756,7 @@ groups:
     labels:
       component: workhorse_image_scaling
     expr: |
-      max by(environment, tier, type, stage) (
+      max by(environment, type, stage) (
         clamp_min(
           clamp_max(
             avg_over_time(gitlab_workhorse_image_resize_processes{environment!="",type="web"}[5m])
@@ -1429,7 +1429,7 @@ groups:
       grafana_panel_id: '2265664609'
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, fqdn) (
+        max by(environment, type, stage, fqdn) (
           clamp_min(
             clamp_max(
               (
@@ -1472,10 +1472,10 @@ groups:
       grafana_panel_id: '1465724101'
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage) (
+        max by(environment, type, stage) (
           clamp_min(
             clamp_max(
-              1 - avg by (environment, tier, type, stage) (
+              1 - avg by (environment, type, stage) (
                 rate(node_cpu_seconds_total{mode="idle", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
               )
               ,
@@ -1514,7 +1514,7 @@ groups:
       grafana_panel_id: '39965907'
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, fqdn, device) (
+        max by(environment, type, stage, fqdn, device) (
           clamp_min(
             clamp_max(
               1 - (
@@ -1557,7 +1557,7 @@ groups:
       grafana_panel_id: '2661375984'
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, fqdn, device) (
+        max by(environment, type, stage, fqdn, device) (
           clamp_min(
             clamp_max(
               (
@@ -1598,7 +1598,7 @@ groups:
       grafana_panel_id: '3942129027'
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, fqdn, device) (
+        max by(environment, type, stage, fqdn, device) (
           clamp_min(
             clamp_max(
               rate(node_disk_reads_completed_total{device!="sda", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[20m])
@@ -1638,7 +1638,7 @@ groups:
       grafana_panel_id: '3120931940'
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, fqdn, device) (
+        max by(environment, type, stage, fqdn, device) (
           clamp_min(
             clamp_max(
               rate(node_disk_read_bytes_total{device!="sda", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[20m])
@@ -1682,7 +1682,7 @@ groups:
       grafana_panel_id: '1520756669'
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, fqdn, device) (
+        max by(environment, type, stage, fqdn, device) (
           clamp_min(
             clamp_max(
               rate(node_disk_writes_completed_total{device!="sda", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[20m])
@@ -1726,7 +1726,7 @@ groups:
       grafana_panel_id: '374696527'
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, fqdn, device) (
+        max by(environment, type, stage, fqdn, device) (
           clamp_min(
             clamp_max(
               rate(node_disk_written_bytes_total{device!="sda", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[20m])
@@ -1767,10 +1767,10 @@ groups:
       grafana_panel_id: '804418020'
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage) (
+        max by(environment, type, stage) (
           clamp_min(
             clamp_max(
-              avg by (environment, tier, type, stage) (
+              avg by (environment, type, stage) (
                 avg_over_time(elasticsearch_process_cpu_percent{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[1m]) / 100
               )
               ,
@@ -1806,14 +1806,14 @@ groups:
       grafana_panel_id: '2419103084'
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage) (
+        max by(environment, type, stage) (
           clamp_min(
             clamp_max(
-              sum by (environment, tier, type, stage) (
+              sum by (environment, type, stage) (
                 (elasticsearch_filesystem_data_size_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} - elasticsearch_filesystem_data_free_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"})
               )
               /
-              sum by (environment, tier, type, stage) (
+              sum by (environment, type, stage) (
                 elasticsearch_filesystem_data_size_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
               )
               ,
@@ -1849,7 +1849,7 @@ groups:
       grafana_panel_id: '2329310959'
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, name) (
+        max by(environment, type, stage, name) (
           clamp_min(
             clamp_max(
               elasticsearch_jvm_memory_used_bytes{area="heap", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
@@ -1890,7 +1890,7 @@ groups:
       grafana_panel_id: '2230690360'
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, name) (
+        max by(environment, type, stage, name) (
           clamp_min(
             clamp_max(
               avg_over_time(elasticsearch_process_cpu_percent{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m]) / 100
@@ -1927,7 +1927,7 @@ groups:
       grafana_panel_id: '658552830'
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, name) (
+        max by(environment, type, stage, name) (
           clamp_min(
             clamp_max(
               (
@@ -1974,7 +1974,7 @@ groups:
       grafana_panel_id: '525964640'
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, name, exported_type) (
+        max by(environment, type, stage, name, exported_type) (
           clamp_min(
             clamp_max(
               (
@@ -2015,14 +2015,14 @@ groups:
       grafana_panel_id: '3631721613'
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, fqdn) (
+        max by(environment, type, stage, fqdn) (
           clamp_min(
             clamp_max(
-              sum by (environment, tier, type, stage, fqdn) (
+              sum by (environment, type, stage, fqdn) (
                 go_memstats_alloc_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
               )
               /
-              sum by (environment, tier, type, stage, fqdn) (
+              sum by (environment, type, stage, fqdn) (
                 node_memory_MemTotal_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
               )
               ,
@@ -2058,14 +2058,14 @@ groups:
       grafana_panel_id: '2713861591'
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, pod, container) (
+        max by(environment, type, stage, pod, container) (
           clamp_min(
             clamp_max(
-              sum by (environment, tier, type, stage, pod, container) (
+              sum by (environment, type, stage, pod, container) (
                 rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
               )
               /
-              sum by(environment, tier, type, stage, pod, container) (
+              sum by(environment, type, stage, pod, container) (
                 container_spec_cpu_quota:labeled{container!="", container!="POD", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
                 /
                 container_spec_cpu_period:labeled{container!="", container!="POD", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
@@ -2103,7 +2103,7 @@ groups:
       grafana_panel_id: '172578411'
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, pod, container) (
+        max by(environment, type, stage, pod, container) (
           clamp_min(
             clamp_max(
               container_memory_working_set_bytes:labeled{container!="", container!="POD", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
@@ -2270,7 +2270,7 @@ groups:
       grafana_panel_id: '1955556769'
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, fqdn) (
+        max by(environment, type, stage, fqdn) (
           clamp_min(
             clamp_max(
               instance:node_memory_utilization:ratio{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
@@ -2309,7 +2309,7 @@ groups:
       grafana_panel_id: '503581002'
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, fqdn, instance) (
+        max by(environment, type, stage, fqdn, instance) (
           clamp_min(
             clamp_max(
               max_over_time(node_nf_conntrack_entries{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[1m])
@@ -2353,7 +2353,7 @@ groups:
       grafana_panel_id: '1001792825'
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, job, instance) (
+        max by(environment, type, stage, job, instance) (
           clamp_min(
             clamp_max(
               (
@@ -2403,13 +2403,13 @@ groups:
       grafana_panel_id: '1954311497'
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, fqdn) (
+        max by(environment, type, stage, fqdn) (
           clamp_min(
             clamp_max(
               sum without (state) (
                 pg_stat_activity_count{datname="gitlabhq_production", state!="idle", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} unless on(instance) (pg_replication_is_replica == 1)
               )
-              / on (environment, tier, type, stage, fqdn)
+              / on (environment, type, stage, fqdn)
               pg_settings_max_connections{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
               ,
               1)
@@ -2447,13 +2447,13 @@ groups:
       grafana_panel_id: '3266646533'
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, fqdn) (
+        max by(environment, type, stage, fqdn) (
           clamp_min(
             clamp_max(
               sum without (state) (
                 pg_stat_activity_count{datname="gitlabhq_production", state!="idle", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} and on(instance) (pg_replication_is_replica == 1)
               )
-              / on (environment, tier, type, stage, fqdn)
+              / on (environment, type, stage, fqdn)
               pg_settings_max_connections{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
               ,
               1)
@@ -2491,7 +2491,7 @@ groups:
       grafana_panel_id: '1228921753'
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, fqdn, instance) (
+        max by(environment, type, stage, fqdn, instance) (
           clamp_min(
             clamp_max(
               (
@@ -2500,8 +2500,8 @@ groups:
                 avg_over_time(pgbouncer_pools_server_used_connections{user="gitlab", database="gitlabhq_production_sidekiq", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m]) +
                 avg_over_time(pgbouncer_pools_server_login_connections{user="gitlab", database="gitlabhq_production_sidekiq", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
               )
-              / on(environment, tier, type, stage, fqdn, instance) group_left()
-              sum by (environment, tier, type, stage, fqdn, instance) (
+              / on(environment, type, stage, fqdn, instance) group_left()
+              sum by (environment, type, stage, fqdn, instance) (
                 avg_over_time(pgbouncer_databases_pool_size{name="gitlabhq_production_sidekiq", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
               )
               ,
@@ -2539,7 +2539,7 @@ groups:
       grafana_panel_id: '1214397558'
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, fqdn, groupname) (
+        max by(environment, type, stage, fqdn, groupname) (
           clamp_min(
             clamp_max(
               sum without(cpu, mode) (
@@ -2586,7 +2586,7 @@ groups:
       grafana_panel_id: '4055772849'
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, fqdn, instance) (
+        max by(environment, type, stage, fqdn, instance) (
           clamp_min(
             clamp_max(
               (
@@ -2595,8 +2595,8 @@ groups:
                 avg_over_time(pgbouncer_pools_server_used_connections{user="gitlab", database="gitlabhq_production", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m]) +
                 avg_over_time(pgbouncer_pools_server_login_connections{user="gitlab", database="gitlabhq_production", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
               )
-              / on(environment, tier, type, stage, fqdn, instance) group_left()
-              sum by (environment, tier, type, stage, fqdn, instance) (
+              / on(environment, type, stage, fqdn, instance) group_left()
+              sum by (environment, type, stage, fqdn, instance) (
                 avg_over_time(pgbouncer_databases_pool_size{name="gitlabhq_production", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
               )
               ,
@@ -2637,7 +2637,7 @@ groups:
       grafana_panel_id: '2061891964'
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, fqdn, instance) (
+        max by(environment, type, stage, fqdn, instance) (
           clamp_min(
             clamp_max(
               (
@@ -2646,8 +2646,8 @@ groups:
                 avg_over_time(pgbouncer_pools_server_used_connections{user="gitlab", database="gitlabhq_production", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m]) +
                 avg_over_time(pgbouncer_pools_server_login_connections{user="gitlab", database="gitlabhq_production", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
               )
-              / on(environment, tier, type, stage, fqdn, instance) group_left()
-              sum by (environment, tier, type, stage, fqdn, instance) (
+              / on(environment, type, stage, fqdn, instance) group_left()
+              sum by (environment, type, stage, fqdn, instance) (
                 avg_over_time(pgbouncer_databases_pool_size{name="gitlabhq_production", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
               )
               ,
@@ -2771,7 +2771,7 @@ groups:
       grafana_panel_id: '391047339'
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, instance, host, port) (
+        max by(environment, type, stage, instance, host, port) (
           clamp_min(
             clamp_max(
               (
@@ -2818,7 +2818,7 @@ groups:
       grafana_panel_id: '127397613'
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, fqdn) (
+        max by(environment, type, stage, fqdn) (
           clamp_min(
             clamp_max(
               max_over_time(redis_connected_clients{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[1m])
@@ -2861,16 +2861,16 @@ groups:
       grafana_panel_id: '1855027052'
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, fqdn) (
+        max by(environment, type, stage, fqdn) (
           clamp_min(
             clamp_max(
-              max by (environment, tier, type, stage, fqdn) (
+              max by (environment, type, stage, fqdn) (
                 label_replace(redis_memory_used_rss_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}, "memtype", "rss","","")
                 or
                 label_replace(redis_memory_used_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}, "memtype", "used","","")
               )
               /
-              avg by (environment, tier, type, stage, fqdn) (
+              avg by (environment, type, stage, fqdn) (
                 node_memory_MemTotal_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
               )
               ,
@@ -2909,7 +2909,7 @@ groups:
       grafana_panel_id: '4143300761'
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, fqdn) (
+        max by(environment, type, stage, fqdn) (
           clamp_min(
             clamp_max(
               (
@@ -2954,7 +2954,7 @@ groups:
       grafana_panel_id: '577905942'
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, fqdn) (
+        max by(environment, type, stage, fqdn) (
           clamp_min(
             clamp_max(
               (
@@ -3000,7 +3000,7 @@ groups:
       grafana_panel_id: '2359646072'
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, fqdn, pod) (
+        max by(environment, type, stage, fqdn, pod) (
           clamp_min(
             clamp_max(
               rate(ruby_process_cpu_seconds_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[10m])
@@ -3037,10 +3037,10 @@ groups:
       grafana_panel_id: '1472933476'
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, shard) (
+        max by(environment, type, stage, shard) (
           clamp_min(
             clamp_max(
-              1 - avg by (environment, tier, type, stage, shard) (
+              1 - avg by (environment, type, stage, shard) (
                 rate(node_cpu_seconds_total{mode="idle", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
               )
               ,
@@ -3125,7 +3125,7 @@ groups:
       grafana_panel_id: '3295582630'
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, instance) (
+        max by(environment, type, stage, instance) (
           clamp_min(
             clamp_max(
               sum without(executor_stage, exported_stage, state) (
@@ -3170,14 +3170,14 @@ groups:
       grafana_panel_id: '836813313'
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, shard) (
+        max by(environment, type, stage, shard) (
           clamp_min(
             clamp_max(
-              sum by (environment, tier, type, stage, shard) (
+              sum by (environment, type, stage, shard) (
                 avg_over_time(sidekiq_running_jobs{shard!~"database-throttled|elasticsearch|gitaly-throttled|memory-bound", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
               )
               /
-              sum by (environment, tier, type, stage, shard) (
+              sum by (environment, type, stage, shard) (
                 avg_over_time(sidekiq_concurrency{shard!~"database-throttled|elasticsearch|gitaly-throttled|memory-bound", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
               )
               ,
@@ -3215,7 +3215,7 @@ groups:
       grafana_panel_id: '3372411356'
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, fqdn) (
+        max by(environment, type, stage, fqdn) (
           clamp_min(
             clamp_max(
               avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{mode="idle", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m]))
@@ -3256,12 +3256,12 @@ groups:
       grafana_panel_id: '2677029523'
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, fqdn) (
+        max by(environment, type, stage, fqdn) (
           clamp_min(
             clamp_max(
-              sum by(environment, tier, type, stage, fqdn) (avg_over_time(instance:puma_active_connections:sum{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[1m]))
+              sum by(environment, type, stage, fqdn) (avg_over_time(instance:puma_active_connections:sum{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[1m]))
               /
-              sum by(environment, tier, type, stage, fqdn) (instance:puma_max_threads:sum{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"})
+              sum by(environment, type, stage, fqdn) (instance:puma_max_threads:sum{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"})
               ,
               1)
           ,
@@ -3299,7 +3299,7 @@ groups:
       grafana_panel_id: '3379320113'
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, fqdn) (
+        max by(environment, type, stage, fqdn) (
           clamp_min(
             clamp_max(
               avg_over_time(gitlab_workhorse_image_resize_processes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])

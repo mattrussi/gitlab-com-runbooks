@@ -17,7 +17,6 @@
             record: 'gitlab_component_service:mapping',
             labels: {
               type: serviceDefinition.type,
-              tier: serviceDefinition.tier,
               service_aggregation: serviceAggregation,
               regional_aggregation: regionAggregation,
               component: sliName,  // Use component for compatability here

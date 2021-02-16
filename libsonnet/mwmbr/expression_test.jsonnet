@@ -5,7 +5,7 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
 local testAggregationSet = aggregationSets.AggregationSet({
   name: 'Test',
   selector: { monitor: 'global' },  // Not Thanos Ruler
-  labels: ['environment', 'tier', 'type', 'stage'],
+  labels: ['environment', 'type', 'stage'],
   burnRates: {
     '5m': {
       apdexRatio: 'apdex:ratio_5m',
@@ -45,45 +45,45 @@ test.suite({
       aggregationSet=testAggregationSet,
       metricSelectorHash={ type: 'web' },
       thresholdSLOMetricName='sla:error:rate',
-      thresholdSLOMetricAggregationLabels=['type', 'tier'],
+      thresholdSLOMetricAggregationLabels=['type'],
     ),
     expect: |||
       (
         error:ratio_1h{monitor="global",type="web"}
-        > on(type,tier) group_left()
+        > on(type) group_left()
         (
           14.4 * (
-            avg by (type,tier) (sla:error:rate{monitor="global"})
+            avg by (type) (sla:error:rate{monitor="global"})
           )
         )
       )
       and
       (
         error:ratio_5m{monitor="global",type="web"}
-        > on(type,tier) group_left()
+        > on(type) group_left()
         (
           14.4 * (
-            avg by (type,tier) (sla:error:rate{monitor="global"})
+            avg by (type) (sla:error:rate{monitor="global"})
           )
         )
       )
       or
       (
         error:ratio_6h{monitor="global",type="web"}
-        > on(type,tier) group_left()
+        > on(type) group_left()
         (
           6 * (
-            avg by (type,tier) (sla:error:rate{monitor="global"})
+            avg by (type) (sla:error:rate{monitor="global"})
           )
         )
       )
       and
       (
         error:ratio_30m{monitor="global",type="web"}
-        > on(type,tier) group_left()
+        > on(type) group_left()
         (
           6 * (
-            avg by (type,tier) (sla:error:rate{monitor="global"})
+            avg by (type) (sla:error:rate{monitor="global"})
           )
         )
       )
@@ -95,54 +95,54 @@ test.suite({
       aggregationSet=testAggregationSet,
       metricSelectorHash={ type: 'web' },
       thresholdSLOMetricName='sla:error:rate',
-      thresholdSLOMetricAggregationLabels=['type', 'tier'],
+      thresholdSLOMetricAggregationLabels=['type'],
       minimumOperationRateForMonitoring=1,
     ),
     expect: |||
       (
         (
           error:ratio_1h{monitor="global",type="web"}
-          > on(type,tier) group_left()
+          > on(type) group_left()
           (
             14.4 * (
-              avg by (type,tier) (sla:error:rate{monitor="global"})
+              avg by (type) (sla:error:rate{monitor="global"})
             )
           )
         )
         and
         (
           error:ratio_5m{monitor="global",type="web"}
-          > on(type,tier) group_left()
+          > on(type) group_left()
           (
             14.4 * (
-              avg by (type,tier) (sla:error:rate{monitor="global"})
+              avg by (type) (sla:error:rate{monitor="global"})
             )
           )
         )
         or
         (
           error:ratio_6h{monitor="global",type="web"}
-          > on(type,tier) group_left()
+          > on(type) group_left()
           (
             6 * (
-              avg by (type,tier) (sla:error:rate{monitor="global"})
+              avg by (type) (sla:error:rate{monitor="global"})
             )
           )
         )
         and
         (
           error:ratio_30m{monitor="global",type="web"}
-          > on(type,tier) group_left()
+          > on(type) group_left()
           (
             6 * (
-              avg by (type,tier) (sla:error:rate{monitor="global"})
+              avg by (type) (sla:error:rate{monitor="global"})
             )
           )
         )
       )
-      and on(environment,tier,type,stage)
+      and on(environment,type,stage)
       (
-        sum by(environment,tier,type,stage) (operation:rate_1h{monitor="global",type="web"}) >= 1
+        sum by(environment,type,stage) (operation:rate_1h{monitor="global",type="web"}) >= 1
       )
     |||,
   },
@@ -177,9 +177,9 @@ test.suite({
           > (6 * 0.010000)
         )
       )
-      and on(environment,tier,type,stage)
+      and on(environment,type,stage)
       (
-        sum by(environment,tier,type,stage) (operation:rate_1h{monitor="global",type="web"}) >= 1
+        sum by(environment,type,stage) (operation:rate_1h{monitor="global",type="web"}) >= 1
       )
     |||,
   },
@@ -189,49 +189,49 @@ test.suite({
       aggregationSet=testAggregationSet,
       metricSelectorHash={ type: 'web' },
       thresholdSLOMetricName='sla:apdex:rate',
-      thresholdSLOMetricAggregationLabels=['type', 'tier'],
+      thresholdSLOMetricAggregationLabels=['type'],
     ),
     expect: |||
       (
         apdex:ratio_1h{monitor="global",type="web"}
-        < on(type,tier) group_left()
+        < on(type) group_left()
         (
           1 -
           (
-            14.4 * (1 - avg by (type,tier) (sla:apdex:rate{monitor="global"}))
+            14.4 * (1 - avg by (type) (sla:apdex:rate{monitor="global"}))
           )
         )
       )
       and
       (
         apdex:ratio_5m{monitor="global",type="web"}
-        < on(type,tier) group_left()
+        < on(type) group_left()
         (
           1 -
           (
-            14.4 * (1 - avg by (type,tier) (sla:apdex:rate{monitor="global"}))
+            14.4 * (1 - avg by (type) (sla:apdex:rate{monitor="global"}))
           )
         )
       )
       or
       (
         apdex:ratio_6h{monitor="global",type="web"}
-        < on(type,tier) group_left()
+        < on(type) group_left()
         (
           1 -
           (
-            6 * (1 - avg by (type,tier) (sla:apdex:rate{monitor="global"}))
+            6 * (1 - avg by (type) (sla:apdex:rate{monitor="global"}))
           )
         )
       )
       and
       (
         apdex:ratio_30m{monitor="global",type="web"}
-        < on(type,tier) group_left()
+        < on(type) group_left()
         (
           1 -
           (
-            6 * (1 - avg by (type,tier) (sla:apdex:rate{monitor="global"}))
+            6 * (1 - avg by (type) (sla:apdex:rate{monitor="global"}))
           )
         )
       )
@@ -272,58 +272,58 @@ test.suite({
       aggregationSet=testAggregationSet,
       metricSelectorHash={ type: 'web' },
       thresholdSLOMetricName='sla:apdex:rate',
-      thresholdSLOMetricAggregationLabels=['type', 'tier'],
+      thresholdSLOMetricAggregationLabels=['type'],
       minimumOperationRateForMonitoring=1,
     ),
     expect: |||
       (
         (
           apdex:ratio_1h{monitor="global",type="web"}
-          < on(type,tier) group_left()
+          < on(type) group_left()
           (
             1 -
             (
-              14.4 * (1 - avg by (type,tier) (sla:apdex:rate{monitor="global"}))
+              14.4 * (1 - avg by (type) (sla:apdex:rate{monitor="global"}))
             )
           )
         )
         and
         (
           apdex:ratio_5m{monitor="global",type="web"}
-          < on(type,tier) group_left()
+          < on(type) group_left()
           (
             1 -
             (
-              14.4 * (1 - avg by (type,tier) (sla:apdex:rate{monitor="global"}))
+              14.4 * (1 - avg by (type) (sla:apdex:rate{monitor="global"}))
             )
           )
         )
         or
         (
           apdex:ratio_6h{monitor="global",type="web"}
-          < on(type,tier) group_left()
+          < on(type) group_left()
           (
             1 -
             (
-              6 * (1 - avg by (type,tier) (sla:apdex:rate{monitor="global"}))
+              6 * (1 - avg by (type) (sla:apdex:rate{monitor="global"}))
             )
           )
         )
         and
         (
           apdex:ratio_30m{monitor="global",type="web"}
-          < on(type,tier) group_left()
+          < on(type) group_left()
           (
             1 -
             (
-              6 * (1 - avg by (type,tier) (sla:apdex:rate{monitor="global"}))
+              6 * (1 - avg by (type) (sla:apdex:rate{monitor="global"}))
             )
           )
         )
       )
-      and on(environment,tier,type,stage)
+      and on(environment,type,stage)
       (
-        sum by(environment,tier,type,stage) (operation:rate_1h{monitor="global",type="web"}) >= 1
+        sum by(environment,type,stage) (operation:rate_1h{monitor="global",type="web"}) >= 1
       )
     |||,
   },
@@ -333,58 +333,58 @@ test.suite({
       aggregationSet=testAggregationSet,
       metricSelectorHash={ type: 'web' },
       thresholdSLOMetricName='sla:apdex:rate',
-      thresholdSLOMetricAggregationLabels=['type', 'tier'],
+      thresholdSLOMetricAggregationLabels=['type'],
       minimumOperationRateForMonitoring=1
     ),
     expect: |||
       (
         (
           apdex:ratio_1h{monitor="global",type="web"}
-          < on(type,tier) group_left()
+          < on(type) group_left()
           (
             1 -
             (
-              14.4 * (1 - avg by (type,tier) (sla:apdex:rate{monitor="global"}))
+              14.4 * (1 - avg by (type) (sla:apdex:rate{monitor="global"}))
             )
           )
         )
         and
         (
           apdex:ratio_5m{monitor="global",type="web"}
-          < on(type,tier) group_left()
+          < on(type) group_left()
           (
             1 -
             (
-              14.4 * (1 - avg by (type,tier) (sla:apdex:rate{monitor="global"}))
+              14.4 * (1 - avg by (type) (sla:apdex:rate{monitor="global"}))
             )
           )
         )
         or
         (
           apdex:ratio_6h{monitor="global",type="web"}
-          < on(type,tier) group_left()
+          < on(type) group_left()
           (
             1 -
             (
-              6 * (1 - avg by (type,tier) (sla:apdex:rate{monitor="global"}))
+              6 * (1 - avg by (type) (sla:apdex:rate{monitor="global"}))
             )
           )
         )
         and
         (
           apdex:ratio_30m{monitor="global",type="web"}
-          < on(type,tier) group_left()
+          < on(type) group_left()
           (
             1 -
             (
-              6 * (1 - avg by (type,tier) (sla:apdex:rate{monitor="global"}))
+              6 * (1 - avg by (type) (sla:apdex:rate{monitor="global"}))
             )
           )
         )
       )
-      and on(environment,tier,type,stage)
+      and on(environment,type,stage)
       (
-        sum by(environment,tier,type,stage) (operation:rate_1h{monitor="global",type="web"}) >= 1
+        sum by(environment,type,stage) (operation:rate_1h{monitor="global",type="web"}) >= 1
       )
     |||,
   },

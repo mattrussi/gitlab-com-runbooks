@@ -53,7 +53,6 @@ local generateServiceSLORules(serviceDefinition) =
 
   local labels = {
     type: serviceDefinition.type,
-    tier: serviceDefinition.tier,
   };
 
   local labelsWithTriggerDurations = labels + triggerDurationLabels;

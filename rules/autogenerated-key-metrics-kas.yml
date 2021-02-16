@@ -7,19 +7,17 @@ groups:
   - record: gitlab_component_ops:rate
     labels:
       component: grpc_requests
-      tier: sv
       type: kas
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         rate(grpc_server_handled_total{job="gitlab-kas"}[1m])
       )
   - record: gitlab_component_errors:rate
     labels:
       component: grpc_requests
-      tier: sv
       type: kas
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         rate(grpc_server_handled_total{grpc_code!="OK",job="gitlab-kas"}[1m])
       )
 - name: 'Component-Level SLIs: kas - 5m burn-rate'
@@ -28,19 +26,17 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: grpc_requests
-      tier: sv
       type: kas
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         rate(grpc_server_handled_total{job="gitlab-kas"}[5m])
       )
   - record: gitlab_component_errors:rate_5m
     labels:
       component: grpc_requests
-      tier: sv
       type: kas
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         rate(grpc_server_handled_total{grpc_code!="OK",job="gitlab-kas"}[5m])
       )
 - name: 'Component-Level SLIs: kas - 30m burn-rate'
@@ -49,19 +45,17 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: grpc_requests
-      tier: sv
       type: kas
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         rate(grpc_server_handled_total{job="gitlab-kas"}[30m])
       )
   - record: gitlab_component_errors:rate_30m
     labels:
       component: grpc_requests
-      tier: sv
       type: kas
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         rate(grpc_server_handled_total{grpc_code!="OK",job="gitlab-kas"}[30m])
       )
 - name: 'Component-Level SLIs: kas - 1h burn-rate'
@@ -70,19 +64,17 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: grpc_requests
-      tier: sv
       type: kas
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         rate(grpc_server_handled_total{job="gitlab-kas"}[1h])
       )
   - record: gitlab_component_errors:rate_1h
     labels:
       component: grpc_requests
-      tier: sv
       type: kas
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         rate(grpc_server_handled_total{grpc_code!="OK",job="gitlab-kas"}[1h])
       )
 - name: 'Component-Level SLIs: kas - 6h burn-rate'
@@ -91,19 +83,17 @@ groups:
   - record: gitlab_component_ops:rate_6h
     labels:
       component: grpc_requests
-      tier: sv
       type: kas
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         rate(grpc_server_handled_total{job="gitlab-kas"}[6h])
       )
   - record: gitlab_component_errors:rate_6h
     labels:
       component: grpc_requests
-      tier: sv
       type: kas
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         rate(grpc_server_handled_total{grpc_code!="OK",job="gitlab-kas"}[6h])
       )
 - name: 'Component mapping: kas'
@@ -114,6 +104,5 @@ groups:
       component: grpc_requests
       regional_aggregation: 'no'
       service_aggregation: 'yes'
-      tier: sv
       type: kas
     expr: '1'

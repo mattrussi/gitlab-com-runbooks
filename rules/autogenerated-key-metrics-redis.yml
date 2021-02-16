@@ -7,10 +7,9 @@ groups:
   - record: gitlab_component_ops:rate
     labels:
       component: primary_server
-      tier: db
       type: redis
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         rate(redis_commands_processed_total{type="redis"}[1m]) and on (instance) redis_instance_info{role="master"}
       )
   - record: gitlab_component_apdex:weight:score
@@ -68,10 +67,9 @@ groups:
   - record: gitlab_component_ops:rate
     labels:
       component: secondary_servers
-      tier: db
       type: redis
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         rate(redis_commands_processed_total{type="redis"}[1m]) and on (instance) redis_instance_info{role="slave"}
       )
 - name: 'Component-Level SLIs: redis - 5m burn-rate'
@@ -80,10 +78,9 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: primary_server
-      tier: db
       type: redis
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         rate(redis_commands_processed_total{type="redis"}[5m]) and on (instance) redis_instance_info{role="master"}
       )
   - record: gitlab_component_apdex:weight:score_5m
@@ -141,10 +138,9 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: secondary_servers
-      tier: db
       type: redis
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         rate(redis_commands_processed_total{type="redis"}[5m]) and on (instance) redis_instance_info{role="slave"}
       )
 - name: 'Component-Level SLIs: redis - 30m burn-rate'
@@ -153,10 +149,9 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: primary_server
-      tier: db
       type: redis
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         rate(redis_commands_processed_total{type="redis"}[30m]) and on (instance) redis_instance_info{role="master"}
       )
   - record: gitlab_component_apdex:weight:score_30m
@@ -214,10 +209,9 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: secondary_servers
-      tier: db
       type: redis
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         rate(redis_commands_processed_total{type="redis"}[30m]) and on (instance) redis_instance_info{role="slave"}
       )
 - name: 'Component-Level SLIs: redis - 1h burn-rate'
@@ -226,10 +220,9 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: primary_server
-      tier: db
       type: redis
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         rate(redis_commands_processed_total{type="redis"}[1h]) and on (instance) redis_instance_info{role="master"}
       )
   - record: gitlab_component_apdex:weight:score_1h
@@ -287,10 +280,9 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: secondary_servers
-      tier: db
       type: redis
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         rate(redis_commands_processed_total{type="redis"}[1h]) and on (instance) redis_instance_info{role="slave"}
       )
 - name: 'Component-Level SLIs: redis - 6h burn-rate'
@@ -299,10 +291,9 @@ groups:
   - record: gitlab_component_ops:rate_6h
     labels:
       component: primary_server
-      tier: db
       type: redis
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         rate(redis_commands_processed_total{type="redis"}[6h]) and on (instance) redis_instance_info{role="master"}
       )
   - record: gitlab_component_apdex:weight:score_6h
@@ -360,10 +351,9 @@ groups:
   - record: gitlab_component_ops:rate_6h
     labels:
       component: secondary_servers
-      tier: db
       type: redis
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         rate(redis_commands_processed_total{type="redis"}[6h]) and on (instance) redis_instance_info{role="slave"}
       )
 - name: 'Component mapping: redis'
@@ -374,7 +364,6 @@ groups:
       component: primary_server
       regional_aggregation: 'no'
       service_aggregation: 'yes'
-      tier: db
       type: redis
     expr: '1'
   - record: gitlab_component_service:mapping
@@ -382,7 +371,6 @@ groups:
       component: rails_redis_client
       regional_aggregation: 'no'
       service_aggregation: 'yes'
-      tier: db
       type: redis
     expr: '1'
   - record: gitlab_component_service:mapping
@@ -390,6 +378,5 @@ groups:
       component: secondary_servers
       regional_aggregation: 'no'
       service_aggregation: 'no'
-      tier: db
       type: redis
     expr: '1'

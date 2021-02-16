@@ -10,40 +10,40 @@ groups:
       clamp_max(
         (
           gitlab_service_errors:ratio_1h{monitor="global"}
-          > bool on(type,tier) group_left()
+          > bool on(type) group_left()
           (
             14.4 * (
-              avg by (type,tier) (slo:max:deployment:gitlab_service_errors:ratio{monitor="global"})
+              avg by (type) (slo:max:deployment:gitlab_service_errors:ratio{monitor="global"})
             )
           )
         )
         *
         (
           gitlab_service_errors:ratio_5m{monitor="global"}
-          > bool on(type,tier) group_left()
+          > bool on(type) group_left()
           (
             14.4 * (
-              avg by (type,tier) (slo:max:deployment:gitlab_service_errors:ratio{monitor="global"})
+              avg by (type) (slo:max:deployment:gitlab_service_errors:ratio{monitor="global"})
             )
           )
         )
         +
         (
           gitlab_service_errors:ratio_6h{monitor="global"}
-          > bool on(type,tier) group_left()
+          > bool on(type) group_left()
           (
             6 * (
-              avg by (type,tier) (slo:max:deployment:gitlab_service_errors:ratio{monitor="global"})
+              avg by (type) (slo:max:deployment:gitlab_service_errors:ratio{monitor="global"})
             )
           )
         )
         *
         (
           gitlab_service_errors:ratio_30m{monitor="global"}
-          > bool on(type,tier) group_left()
+          > bool on(type) group_left()
           (
             6 * (
-              avg by (type,tier) (slo:max:deployment:gitlab_service_errors:ratio{monitor="global"})
+              avg by (type) (slo:max:deployment:gitlab_service_errors:ratio{monitor="global"})
             )
           )
         ),
@@ -54,44 +54,44 @@ groups:
       clamp_max(
         (
           gitlab_service_apdex:ratio_1h{monitor="global"}
-          < bool on(type,tier) group_left()
+          < bool on(type) group_left()
           (
             1 -
             (
-              14.4 * (1 - avg by (type,tier) (slo:min:deployment:gitlab_service_apdex:ratio{monitor="global"}))
+              14.4 * (1 - avg by (type) (slo:min:deployment:gitlab_service_apdex:ratio{monitor="global"}))
             )
           )
         )
         *
         (
           gitlab_service_apdex:ratio_5m{monitor="global"}
-          < bool on(type,tier) group_left()
+          < bool on(type) group_left()
           (
             1 -
             (
-              14.4 * (1 - avg by (type,tier) (slo:min:deployment:gitlab_service_apdex:ratio{monitor="global"}))
+              14.4 * (1 - avg by (type) (slo:min:deployment:gitlab_service_apdex:ratio{monitor="global"}))
             )
           )
         )
         +
         (
           gitlab_service_apdex:ratio_6h{monitor="global"}
-          < bool on(type,tier) group_left()
+          < bool on(type) group_left()
           (
             1 -
             (
-              6 * (1 - avg by (type,tier) (slo:min:deployment:gitlab_service_apdex:ratio{monitor="global"}))
+              6 * (1 - avg by (type) (slo:min:deployment:gitlab_service_apdex:ratio{monitor="global"}))
             )
           )
         )
         *
         (
           gitlab_service_apdex:ratio_30m{monitor="global"}
-          < bool on(type,tier) group_left()
+          < bool on(type) group_left()
           (
             1 -
             (
-              6 * (1 - avg by (type,tier) (slo:min:deployment:gitlab_service_apdex:ratio{monitor="global"}))
+              6 * (1 - avg by (type) (slo:min:deployment:gitlab_service_apdex:ratio{monitor="global"}))
             )
           )
         ),

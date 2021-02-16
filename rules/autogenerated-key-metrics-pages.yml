@@ -8,20 +8,18 @@ groups:
     labels:
       component: loadbalancer
       stage: main
-      tier: lb
       type: pages
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(haproxy_server_sessions_total{type="pages", backend=~"pages_https|pages_http"}[1m])
       )
   - record: gitlab_component_errors:rate
     labels:
       component: loadbalancer
       stage: main
-      tier: lb
       type: pages
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         label_replace(rate(haproxy_backend_http_responses_total{type="pages",job="haproxy",code="5xx"}[1m]), "_c", "0", "", "")
         or
         label_replace(rate(haproxy_server_connection_errors_total{type="pages", job="haproxy"}[1m]), "_c", "1", "", "")
@@ -33,20 +31,18 @@ groups:
     labels:
       component: loadbalancer
       stage: main
-      tier: lb
       type: pages
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(haproxy_server_sessions_total{type="pages", backend=~"pages_https|pages_http"}[5m])
       )
   - record: gitlab_component_errors:rate_5m
     labels:
       component: loadbalancer
       stage: main
-      tier: lb
       type: pages
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         label_replace(rate(haproxy_backend_http_responses_total{type="pages",job="haproxy",code="5xx"}[5m]), "_c", "0", "", "")
         or
         label_replace(rate(haproxy_server_connection_errors_total{type="pages", job="haproxy"}[5m]), "_c", "1", "", "")
@@ -58,20 +54,18 @@ groups:
     labels:
       component: loadbalancer
       stage: main
-      tier: lb
       type: pages
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(haproxy_server_sessions_total{type="pages", backend=~"pages_https|pages_http"}[30m])
       )
   - record: gitlab_component_errors:rate_30m
     labels:
       component: loadbalancer
       stage: main
-      tier: lb
       type: pages
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         label_replace(rate(haproxy_backend_http_responses_total{type="pages",job="haproxy",code="5xx"}[30m]), "_c", "0", "", "")
         or
         label_replace(rate(haproxy_server_connection_errors_total{type="pages", job="haproxy"}[30m]), "_c", "1", "", "")
@@ -83,20 +77,18 @@ groups:
     labels:
       component: loadbalancer
       stage: main
-      tier: lb
       type: pages
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(haproxy_server_sessions_total{type="pages", backend=~"pages_https|pages_http"}[1h])
       )
   - record: gitlab_component_errors:rate_1h
     labels:
       component: loadbalancer
       stage: main
-      tier: lb
       type: pages
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         label_replace(rate(haproxy_backend_http_responses_total{type="pages",job="haproxy",code="5xx"}[1h]), "_c", "0", "", "")
         or
         label_replace(rate(haproxy_server_connection_errors_total{type="pages", job="haproxy"}[1h]), "_c", "1", "", "")
@@ -108,20 +100,18 @@ groups:
     labels:
       component: loadbalancer
       stage: main
-      tier: lb
       type: pages
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(haproxy_server_sessions_total{type="pages", backend=~"pages_https|pages_http"}[6h])
       )
   - record: gitlab_component_errors:rate_6h
     labels:
       component: loadbalancer
       stage: main
-      tier: lb
       type: pages
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         label_replace(rate(haproxy_backend_http_responses_total{type="pages",job="haproxy",code="5xx"}[6h]), "_c", "0", "", "")
         or
         label_replace(rate(haproxy_server_connection_errors_total{type="pages", job="haproxy"}[6h]), "_c", "1", "", "")
@@ -134,6 +124,5 @@ groups:
       component: loadbalancer
       regional_aggregation: 'no'
       service_aggregation: 'yes'
-      tier: lb
       type: pages
     expr: '1'

@@ -13,7 +13,7 @@ local definitionDefaults = {
  *    selector: { monitor: { ne: 'global' } },  // Not Thanos Ruler
  *
  *    // The labels to aggregate over, common to all recording rules in
- *    labels: ['environment', 'tier', 'type', 'stage'],
+ *    labels: ['environment', 'type', 'stage'],
  *
  *    // burnRates is a map of burnRates at which the recording rule will be evaluated
  *    burnRates: {

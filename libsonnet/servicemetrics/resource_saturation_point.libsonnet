@@ -6,7 +6,7 @@ local strings = import 'utils/strings.libsonnet';
 // The severity labels that we allow on resources
 local severities = std.set(['s1', 's2', 's3', 's4']);
 
-local environmentLabels = ['environment', 'tier', 'type', 'stage'];
+local environmentLabels = ['environment', 'type', 'stage'];
 
 local getAllowedServiceApplicator(allowedList) =
   local allowedSet = std.set(allowedList);

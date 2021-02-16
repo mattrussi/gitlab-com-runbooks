@@ -8,136 +8,124 @@ groups:
     labels:
       component: cnyHttpServices
       stage: cny
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name=~"canary_.*", le="+Inf"}[1m])
       )
   - record: gitlab_component_apdex:ratio
     labels:
       component: cnyHttpServices
       stage: cny
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name=~"canary_.*", le="5"}[1m])
       )
-      / on(environment) group_left()
+      / on(environment,tier) group_left()
       (
-        gitlab_component_apdex:weight:score{component="cnyHttpServices",stage="cny",tier="lb",type="frontend"} > 0
+        gitlab_component_apdex:weight:score{component="cnyHttpServices",stage="cny",type="frontend"} > 0
       )
   - record: gitlab_component_ops:rate
     labels:
       component: cnyHttpServices
       stage: cny
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(haproxy_backend_http_responses_total{type="frontend", backend=~"canary_.*"}[1m])
       )
   - record: gitlab_component_errors:rate
     labels:
       component: cnyHttpServices
       stage: cny
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(haproxy_backend_response_errors_total{type="frontend", backend=~"canary_.*"}[1m])
       )
   - record: gitlab_component_apdex:weight:score
     labels:
       component: mainHttpServices
       stage: main
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name!~"canary_.*", backend_name!="api_rate_limit", backend_name!="websockets", le="+Inf"}[1m])
       )
   - record: gitlab_component_apdex:ratio
     labels:
       component: mainHttpServices
       stage: main
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name!~"canary_.*", backend_name!="api_rate_limit", backend_name!="websockets", le="5"}[1m])
       )
-      / on(environment) group_left()
+      / on(environment,tier) group_left()
       (
-        gitlab_component_apdex:weight:score{component="mainHttpServices",stage="main",tier="lb",type="frontend"} > 0
+        gitlab_component_apdex:weight:score{component="mainHttpServices",stage="main",type="frontend"} > 0
       )
   - record: gitlab_component_ops:rate
     labels:
       component: mainHttpServices
       stage: main
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(haproxy_backend_http_responses_total{type="frontend", backend!~"canary_.*", backend_name!="api_rate_limit"}[1m])
       )
   - record: gitlab_component_errors:rate
     labels:
       component: mainHttpServices
       stage: main
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(haproxy_backend_response_errors_total{type="frontend", backend!~"canary_.*", backend_name!="api_rate_limit"}[1m])
       )
   - record: gitlab_component_apdex:weight:score
     labels:
       component: sshServices
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         rate(haproxy_ssh_request_duration_seconds_bucket{type="frontend", le="+Inf"}[1m])
       )
   - record: gitlab_component_apdex:ratio
     labels:
       component: sshServices
-      tier: lb
       type: frontend
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (environment,tier,stage) (
           rate(haproxy_ssh_request_duration_seconds_bucket{type="frontend", le="16"}[1m])
         )
         +
-        sum by (environment,stage) (
+        sum by (environment,tier,stage) (
           rate(haproxy_ssh_request_duration_seconds_bucket{type="frontend", le="32"}[1m])
         )
       )
       /
       2
-      / on(environment,stage) group_left()
+      / on(environment,tier,stage) group_left()
       (
-        gitlab_component_apdex:weight:score{component="sshServices",tier="lb",type="frontend"} > 0
+        gitlab_component_apdex:weight:score{component="sshServices",type="frontend"} > 0
       )
   - record: gitlab_component_ops:rate
     labels:
       component: sshServices
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         rate(haproxy_ssh_requests_total{type="frontend"}[1m])
       )
   - record: gitlab_component_errors:rate
     labels:
       component: sshServices
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         rate(haproxy_ssh_requests_terminated_total{type="frontend", cause=~"K|S|s|P|I|D"}[1m])
       )
 - name: 'Component-Level SLIs: frontend - 5m burn-rate'
@@ -147,136 +135,124 @@ groups:
     labels:
       component: cnyHttpServices
       stage: cny
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name=~"canary_.*", le="+Inf"}[5m])
       )
   - record: gitlab_component_apdex:ratio_5m
     labels:
       component: cnyHttpServices
       stage: cny
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name=~"canary_.*", le="5"}[5m])
       )
-      / on(environment) group_left()
+      / on(environment,tier) group_left()
       (
-        gitlab_component_apdex:weight:score_5m{component="cnyHttpServices",stage="cny",tier="lb",type="frontend"} > 0
+        gitlab_component_apdex:weight:score_5m{component="cnyHttpServices",stage="cny",type="frontend"} > 0
       )
   - record: gitlab_component_ops:rate_5m
     labels:
       component: cnyHttpServices
       stage: cny
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(haproxy_backend_http_responses_total{type="frontend", backend=~"canary_.*"}[5m])
       )
   - record: gitlab_component_errors:rate_5m
     labels:
       component: cnyHttpServices
       stage: cny
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(haproxy_backend_response_errors_total{type="frontend", backend=~"canary_.*"}[5m])
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
       component: mainHttpServices
       stage: main
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name!~"canary_.*", backend_name!="api_rate_limit", backend_name!="websockets", le="+Inf"}[5m])
       )
   - record: gitlab_component_apdex:ratio_5m
     labels:
       component: mainHttpServices
       stage: main
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name!~"canary_.*", backend_name!="api_rate_limit", backend_name!="websockets", le="5"}[5m])
       )
-      / on(environment) group_left()
+      / on(environment,tier) group_left()
       (
-        gitlab_component_apdex:weight:score_5m{component="mainHttpServices",stage="main",tier="lb",type="frontend"} > 0
+        gitlab_component_apdex:weight:score_5m{component="mainHttpServices",stage="main",type="frontend"} > 0
       )
   - record: gitlab_component_ops:rate_5m
     labels:
       component: mainHttpServices
       stage: main
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(haproxy_backend_http_responses_total{type="frontend", backend!~"canary_.*", backend_name!="api_rate_limit"}[5m])
       )
   - record: gitlab_component_errors:rate_5m
     labels:
       component: mainHttpServices
       stage: main
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(haproxy_backend_response_errors_total{type="frontend", backend!~"canary_.*", backend_name!="api_rate_limit"}[5m])
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
       component: sshServices
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         rate(haproxy_ssh_request_duration_seconds_bucket{type="frontend", le="+Inf"}[5m])
       )
   - record: gitlab_component_apdex:ratio_5m
     labels:
       component: sshServices
-      tier: lb
       type: frontend
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (environment,tier,stage) (
           rate(haproxy_ssh_request_duration_seconds_bucket{type="frontend", le="16"}[5m])
         )
         +
-        sum by (environment,stage) (
+        sum by (environment,tier,stage) (
           rate(haproxy_ssh_request_duration_seconds_bucket{type="frontend", le="32"}[5m])
         )
       )
       /
       2
-      / on(environment,stage) group_left()
+      / on(environment,tier,stage) group_left()
       (
-        gitlab_component_apdex:weight:score_5m{component="sshServices",tier="lb",type="frontend"} > 0
+        gitlab_component_apdex:weight:score_5m{component="sshServices",type="frontend"} > 0
       )
   - record: gitlab_component_ops:rate_5m
     labels:
       component: sshServices
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         rate(haproxy_ssh_requests_total{type="frontend"}[5m])
       )
   - record: gitlab_component_errors:rate_5m
     labels:
       component: sshServices
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         rate(haproxy_ssh_requests_terminated_total{type="frontend", cause=~"K|S|s|P|I|D"}[5m])
       )
 - name: 'Component-Level SLIs: frontend - 30m burn-rate'
@@ -286,136 +262,124 @@ groups:
     labels:
       component: cnyHttpServices
       stage: cny
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name=~"canary_.*", le="+Inf"}[30m])
       )
   - record: gitlab_component_apdex:ratio_30m
     labels:
       component: cnyHttpServices
       stage: cny
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name=~"canary_.*", le="5"}[30m])
       )
-      / on(environment) group_left()
+      / on(environment,tier) group_left()
       (
-        gitlab_component_apdex:weight:score_30m{component="cnyHttpServices",stage="cny",tier="lb",type="frontend"} > 0
+        gitlab_component_apdex:weight:score_30m{component="cnyHttpServices",stage="cny",type="frontend"} > 0
       )
   - record: gitlab_component_ops:rate_30m
     labels:
       component: cnyHttpServices
       stage: cny
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(haproxy_backend_http_responses_total{type="frontend", backend=~"canary_.*"}[30m])
       )
   - record: gitlab_component_errors:rate_30m
     labels:
       component: cnyHttpServices
       stage: cny
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(haproxy_backend_response_errors_total{type="frontend", backend=~"canary_.*"}[30m])
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
       component: mainHttpServices
       stage: main
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name!~"canary_.*", backend_name!="api_rate_limit", backend_name!="websockets", le="+Inf"}[30m])
       )
   - record: gitlab_component_apdex:ratio_30m
     labels:
       component: mainHttpServices
       stage: main
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name!~"canary_.*", backend_name!="api_rate_limit", backend_name!="websockets", le="5"}[30m])
       )
-      / on(environment) group_left()
+      / on(environment,tier) group_left()
       (
-        gitlab_component_apdex:weight:score_30m{component="mainHttpServices",stage="main",tier="lb",type="frontend"} > 0
+        gitlab_component_apdex:weight:score_30m{component="mainHttpServices",stage="main",type="frontend"} > 0
       )
   - record: gitlab_component_ops:rate_30m
     labels:
       component: mainHttpServices
       stage: main
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(haproxy_backend_http_responses_total{type="frontend", backend!~"canary_.*", backend_name!="api_rate_limit"}[30m])
       )
   - record: gitlab_component_errors:rate_30m
     labels:
       component: mainHttpServices
       stage: main
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(haproxy_backend_response_errors_total{type="frontend", backend!~"canary_.*", backend_name!="api_rate_limit"}[30m])
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
       component: sshServices
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         rate(haproxy_ssh_request_duration_seconds_bucket{type="frontend", le="+Inf"}[30m])
       )
   - record: gitlab_component_apdex:ratio_30m
     labels:
       component: sshServices
-      tier: lb
       type: frontend
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (environment,tier,stage) (
           rate(haproxy_ssh_request_duration_seconds_bucket{type="frontend", le="16"}[30m])
         )
         +
-        sum by (environment,stage) (
+        sum by (environment,tier,stage) (
           rate(haproxy_ssh_request_duration_seconds_bucket{type="frontend", le="32"}[30m])
         )
       )
       /
       2
-      / on(environment,stage) group_left()
+      / on(environment,tier,stage) group_left()
       (
-        gitlab_component_apdex:weight:score_30m{component="sshServices",tier="lb",type="frontend"} > 0
+        gitlab_component_apdex:weight:score_30m{component="sshServices",type="frontend"} > 0
       )
   - record: gitlab_component_ops:rate_30m
     labels:
       component: sshServices
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         rate(haproxy_ssh_requests_total{type="frontend"}[30m])
       )
   - record: gitlab_component_errors:rate_30m
     labels:
       component: sshServices
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         rate(haproxy_ssh_requests_terminated_total{type="frontend", cause=~"K|S|s|P|I|D"}[30m])
       )
 - name: 'Component-Level SLIs: frontend - 1h burn-rate'
@@ -425,136 +389,124 @@ groups:
     labels:
       component: cnyHttpServices
       stage: cny
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name=~"canary_.*", le="+Inf"}[1h])
       )
   - record: gitlab_component_apdex:ratio_1h
     labels:
       component: cnyHttpServices
       stage: cny
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name=~"canary_.*", le="5"}[1h])
       )
-      / on(environment) group_left()
+      / on(environment,tier) group_left()
       (
-        gitlab_component_apdex:weight:score_1h{component="cnyHttpServices",stage="cny",tier="lb",type="frontend"} > 0
+        gitlab_component_apdex:weight:score_1h{component="cnyHttpServices",stage="cny",type="frontend"} > 0
       )
   - record: gitlab_component_ops:rate_1h
     labels:
       component: cnyHttpServices
       stage: cny
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(haproxy_backend_http_responses_total{type="frontend", backend=~"canary_.*"}[1h])
       )
   - record: gitlab_component_errors:rate_1h
     labels:
       component: cnyHttpServices
       stage: cny
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(haproxy_backend_response_errors_total{type="frontend", backend=~"canary_.*"}[1h])
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
       component: mainHttpServices
       stage: main
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name!~"canary_.*", backend_name!="api_rate_limit", backend_name!="websockets", le="+Inf"}[1h])
       )
   - record: gitlab_component_apdex:ratio_1h
     labels:
       component: mainHttpServices
       stage: main
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name!~"canary_.*", backend_name!="api_rate_limit", backend_name!="websockets", le="5"}[1h])
       )
-      / on(environment) group_left()
+      / on(environment,tier) group_left()
       (
-        gitlab_component_apdex:weight:score_1h{component="mainHttpServices",stage="main",tier="lb",type="frontend"} > 0
+        gitlab_component_apdex:weight:score_1h{component="mainHttpServices",stage="main",type="frontend"} > 0
       )
   - record: gitlab_component_ops:rate_1h
     labels:
       component: mainHttpServices
       stage: main
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(haproxy_backend_http_responses_total{type="frontend", backend!~"canary_.*", backend_name!="api_rate_limit"}[1h])
       )
   - record: gitlab_component_errors:rate_1h
     labels:
       component: mainHttpServices
       stage: main
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(haproxy_backend_response_errors_total{type="frontend", backend!~"canary_.*", backend_name!="api_rate_limit"}[1h])
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
       component: sshServices
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         rate(haproxy_ssh_request_duration_seconds_bucket{type="frontend", le="+Inf"}[1h])
       )
   - record: gitlab_component_apdex:ratio_1h
     labels:
       component: sshServices
-      tier: lb
       type: frontend
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (environment,tier,stage) (
           rate(haproxy_ssh_request_duration_seconds_bucket{type="frontend", le="16"}[1h])
         )
         +
-        sum by (environment,stage) (
+        sum by (environment,tier,stage) (
           rate(haproxy_ssh_request_duration_seconds_bucket{type="frontend", le="32"}[1h])
         )
       )
       /
       2
-      / on(environment,stage) group_left()
+      / on(environment,tier,stage) group_left()
       (
-        gitlab_component_apdex:weight:score_1h{component="sshServices",tier="lb",type="frontend"} > 0
+        gitlab_component_apdex:weight:score_1h{component="sshServices",type="frontend"} > 0
       )
   - record: gitlab_component_ops:rate_1h
     labels:
       component: sshServices
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         rate(haproxy_ssh_requests_total{type="frontend"}[1h])
       )
   - record: gitlab_component_errors:rate_1h
     labels:
       component: sshServices
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         rate(haproxy_ssh_requests_terminated_total{type="frontend", cause=~"K|S|s|P|I|D"}[1h])
       )
 - name: 'Component-Level SLIs: frontend - 6h burn-rate'
@@ -564,136 +516,124 @@ groups:
     labels:
       component: cnyHttpServices
       stage: cny
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name=~"canary_.*", le="+Inf"}[6h])
       )
   - record: gitlab_component_apdex:ratio_6h
     labels:
       component: cnyHttpServices
       stage: cny
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name=~"canary_.*", le="5"}[6h])
       )
-      / on(environment) group_left()
+      / on(environment,tier) group_left()
       (
-        gitlab_component_apdex:weight:score_6h{component="cnyHttpServices",stage="cny",tier="lb",type="frontend"} > 0
+        gitlab_component_apdex:weight:score_6h{component="cnyHttpServices",stage="cny",type="frontend"} > 0
       )
   - record: gitlab_component_ops:rate_6h
     labels:
       component: cnyHttpServices
       stage: cny
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(haproxy_backend_http_responses_total{type="frontend", backend=~"canary_.*"}[6h])
       )
   - record: gitlab_component_errors:rate_6h
     labels:
       component: cnyHttpServices
       stage: cny
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(haproxy_backend_response_errors_total{type="frontend", backend=~"canary_.*"}[6h])
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
       component: mainHttpServices
       stage: main
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name!~"canary_.*", backend_name!="api_rate_limit", backend_name!="websockets", le="+Inf"}[6h])
       )
   - record: gitlab_component_apdex:ratio_6h
     labels:
       component: mainHttpServices
       stage: main
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name!~"canary_.*", backend_name!="api_rate_limit", backend_name!="websockets", le="5"}[6h])
       )
-      / on(environment) group_left()
+      / on(environment,tier) group_left()
       (
-        gitlab_component_apdex:weight:score_6h{component="mainHttpServices",stage="main",tier="lb",type="frontend"} > 0
+        gitlab_component_apdex:weight:score_6h{component="mainHttpServices",stage="main",type="frontend"} > 0
       )
   - record: gitlab_component_ops:rate_6h
     labels:
       component: mainHttpServices
       stage: main
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(haproxy_backend_http_responses_total{type="frontend", backend!~"canary_.*", backend_name!="api_rate_limit"}[6h])
       )
   - record: gitlab_component_errors:rate_6h
     labels:
       component: mainHttpServices
       stage: main
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(haproxy_backend_response_errors_total{type="frontend", backend!~"canary_.*", backend_name!="api_rate_limit"}[6h])
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
       component: sshServices
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         rate(haproxy_ssh_request_duration_seconds_bucket{type="frontend", le="+Inf"}[6h])
       )
   - record: gitlab_component_apdex:ratio_6h
     labels:
       component: sshServices
-      tier: lb
       type: frontend
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (environment,tier,stage) (
           rate(haproxy_ssh_request_duration_seconds_bucket{type="frontend", le="16"}[6h])
         )
         +
-        sum by (environment,stage) (
+        sum by (environment,tier,stage) (
           rate(haproxy_ssh_request_duration_seconds_bucket{type="frontend", le="32"}[6h])
         )
       )
       /
       2
-      / on(environment,stage) group_left()
+      / on(environment,tier,stage) group_left()
       (
-        gitlab_component_apdex:weight:score_6h{component="sshServices",tier="lb",type="frontend"} > 0
+        gitlab_component_apdex:weight:score_6h{component="sshServices",type="frontend"} > 0
       )
   - record: gitlab_component_ops:rate_6h
     labels:
       component: sshServices
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         rate(haproxy_ssh_requests_total{type="frontend"}[6h])
       )
   - record: gitlab_component_errors:rate_6h
     labels:
       component: sshServices
-      tier: lb
       type: frontend
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         rate(haproxy_ssh_requests_terminated_total{type="frontend", cause=~"K|S|s|P|I|D"}[6h])
       )
 - name: 'Component mapping: frontend'
@@ -704,7 +644,6 @@ groups:
       component: cnyHttpServices
       regional_aggregation: 'no'
       service_aggregation: 'yes'
-      tier: lb
       type: frontend
     expr: '1'
   - record: gitlab_component_service:mapping
@@ -712,7 +651,6 @@ groups:
       component: mainHttpServices
       regional_aggregation: 'no'
       service_aggregation: 'yes'
-      tier: lb
       type: frontend
     expr: '1'
   - record: gitlab_component_service:mapping
@@ -720,6 +658,5 @@ groups:
       component: sshServices
       regional_aggregation: 'no'
       service_aggregation: 'yes'
-      tier: lb
       type: frontend
     expr: '1'

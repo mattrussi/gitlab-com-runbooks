@@ -7,67 +7,60 @@ groups:
   - record: gitlab_component_ops:rate
     labels:
       component: elasticsearch_indexing
-      tier: inf
       type: logging
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         clamp_min(deriv(elasticsearch_indices_indexing_index_total{type="logging"}[1m]), 0)
       )
   - record: gitlab_component_ops:rate
     labels:
       component: elasticsearch_searching
-      tier: inf
       type: logging
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         clamp_min(deriv(elasticsearch_indices_search_query_total{type="logging"}[1m]), 0)
       )
   - record: gitlab_component_ops:rate
     labels:
       component: fluentd_log_output
       stage: main
-      tier: inf
       type: logging
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(fluentd_output_status_write_count{}[1m])
       )
   - record: gitlab_component_errors:rate
     labels:
       component: fluentd_log_output
       stage: main
-      tier: inf
       type: logging
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(fluentd_output_status_num_errors{}[1m])
       )
   - record: gitlab_component_ops:rate
     labels:
       component: kibana_googlelb
-      tier: inf
       type: logging
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",target_proxy_name="ops-prod-proxy"}[1m])
       )
   - record: gitlab_component_errors:rate
     labels:
       component: kibana_googlelb
-      tier: inf
       type: logging
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",target_proxy_name="ops-prod-proxy"}[1m])
       )
   - record: gitlab_component_ops:rate
     labels:
       component: stackdriver
       stage: main
-      tier: inf
       type: logging
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(stackdriver_gce_instance_logging_googleapis_com_log_entry_count{}[1m])
       )
 - name: 'Component-Level SLIs: logging - 5m burn-rate'
@@ -76,67 +69,60 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: elasticsearch_indexing
-      tier: inf
       type: logging
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         clamp_min(deriv(elasticsearch_indices_indexing_index_total{type="logging"}[5m]), 0)
       )
   - record: gitlab_component_ops:rate_5m
     labels:
       component: elasticsearch_searching
-      tier: inf
       type: logging
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         clamp_min(deriv(elasticsearch_indices_search_query_total{type="logging"}[5m]), 0)
       )
   - record: gitlab_component_ops:rate_5m
     labels:
       component: fluentd_log_output
       stage: main
-      tier: inf
       type: logging
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(fluentd_output_status_write_count{}[5m])
       )
   - record: gitlab_component_errors:rate_5m
     labels:
       component: fluentd_log_output
       stage: main
-      tier: inf
       type: logging
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(fluentd_output_status_num_errors{}[5m])
       )
   - record: gitlab_component_ops:rate_5m
     labels:
       component: kibana_googlelb
-      tier: inf
       type: logging
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",target_proxy_name="ops-prod-proxy"}[5m])
       )
   - record: gitlab_component_errors:rate_5m
     labels:
       component: kibana_googlelb
-      tier: inf
       type: logging
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",target_proxy_name="ops-prod-proxy"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
     labels:
       component: stackdriver
       stage: main
-      tier: inf
       type: logging
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(stackdriver_gce_instance_logging_googleapis_com_log_entry_count{}[5m])
       )
 - name: 'Component-Level SLIs: logging - 30m burn-rate'
@@ -145,67 +131,60 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: elasticsearch_indexing
-      tier: inf
       type: logging
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         clamp_min(deriv(elasticsearch_indices_indexing_index_total{type="logging"}[30m]), 0)
       )
   - record: gitlab_component_ops:rate_30m
     labels:
       component: elasticsearch_searching
-      tier: inf
       type: logging
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         clamp_min(deriv(elasticsearch_indices_search_query_total{type="logging"}[30m]), 0)
       )
   - record: gitlab_component_ops:rate_30m
     labels:
       component: fluentd_log_output
       stage: main
-      tier: inf
       type: logging
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(fluentd_output_status_write_count{}[30m])
       )
   - record: gitlab_component_errors:rate_30m
     labels:
       component: fluentd_log_output
       stage: main
-      tier: inf
       type: logging
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(fluentd_output_status_num_errors{}[30m])
       )
   - record: gitlab_component_ops:rate_30m
     labels:
       component: kibana_googlelb
-      tier: inf
       type: logging
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",target_proxy_name="ops-prod-proxy"}[30m])
       )
   - record: gitlab_component_errors:rate_30m
     labels:
       component: kibana_googlelb
-      tier: inf
       type: logging
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",target_proxy_name="ops-prod-proxy"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
     labels:
       component: stackdriver
       stage: main
-      tier: inf
       type: logging
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(stackdriver_gce_instance_logging_googleapis_com_log_entry_count{}[30m])
       )
 - name: 'Component-Level SLIs: logging - 1h burn-rate'
@@ -214,67 +193,60 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: elasticsearch_indexing
-      tier: inf
       type: logging
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         clamp_min(deriv(elasticsearch_indices_indexing_index_total{type="logging"}[1h]), 0)
       )
   - record: gitlab_component_ops:rate_1h
     labels:
       component: elasticsearch_searching
-      tier: inf
       type: logging
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         clamp_min(deriv(elasticsearch_indices_search_query_total{type="logging"}[1h]), 0)
       )
   - record: gitlab_component_ops:rate_1h
     labels:
       component: fluentd_log_output
       stage: main
-      tier: inf
       type: logging
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(fluentd_output_status_write_count{}[1h])
       )
   - record: gitlab_component_errors:rate_1h
     labels:
       component: fluentd_log_output
       stage: main
-      tier: inf
       type: logging
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(fluentd_output_status_num_errors{}[1h])
       )
   - record: gitlab_component_ops:rate_1h
     labels:
       component: kibana_googlelb
-      tier: inf
       type: logging
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",target_proxy_name="ops-prod-proxy"}[1h])
       )
   - record: gitlab_component_errors:rate_1h
     labels:
       component: kibana_googlelb
-      tier: inf
       type: logging
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",target_proxy_name="ops-prod-proxy"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
     labels:
       component: stackdriver
       stage: main
-      tier: inf
       type: logging
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(stackdriver_gce_instance_logging_googleapis_com_log_entry_count{}[1h])
       )
 - name: 'Component-Level SLIs: logging - 6h burn-rate'
@@ -283,67 +255,60 @@ groups:
   - record: gitlab_component_ops:rate_6h
     labels:
       component: elasticsearch_indexing
-      tier: inf
       type: logging
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         clamp_min(deriv(elasticsearch_indices_indexing_index_total{type="logging"}[6h]), 0)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
       component: elasticsearch_searching
-      tier: inf
       type: logging
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         clamp_min(deriv(elasticsearch_indices_search_query_total{type="logging"}[6h]), 0)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
       component: fluentd_log_output
       stage: main
-      tier: inf
       type: logging
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(fluentd_output_status_write_count{}[6h])
       )
   - record: gitlab_component_errors:rate_6h
     labels:
       component: fluentd_log_output
       stage: main
-      tier: inf
       type: logging
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(fluentd_output_status_num_errors{}[6h])
       )
   - record: gitlab_component_ops:rate_6h
     labels:
       component: kibana_googlelb
-      tier: inf
       type: logging
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",target_proxy_name="ops-prod-proxy"}[6h])
       )
   - record: gitlab_component_errors:rate_6h
     labels:
       component: kibana_googlelb
-      tier: inf
       type: logging
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,tier,stage) (
         rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",target_proxy_name="ops-prod-proxy"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
     labels:
       component: stackdriver
       stage: main
-      tier: inf
       type: logging
     expr: |
-      sum by (environment) (
+      sum by (environment,tier) (
         rate(stackdriver_gce_instance_logging_googleapis_com_log_entry_count{}[6h])
       )
 - name: 'Component mapping: logging'
@@ -354,7 +319,6 @@ groups:
       component: elasticsearch_indexing
       regional_aggregation: 'no'
       service_aggregation: 'yes'
-      tier: inf
       type: logging
     expr: '1'
   - record: gitlab_component_service:mapping
@@ -362,7 +326,6 @@ groups:
       component: elasticsearch_searching
       regional_aggregation: 'no'
       service_aggregation: 'yes'
-      tier: inf
       type: logging
     expr: '1'
   - record: gitlab_component_service:mapping
@@ -370,7 +333,6 @@ groups:
       component: fluentd_log_output
       regional_aggregation: 'no'
       service_aggregation: 'no'
-      tier: inf
       type: logging
     expr: '1'
   - record: gitlab_component_service:mapping
@@ -378,7 +340,6 @@ groups:
       component: kibana_googlelb
       regional_aggregation: 'no'
       service_aggregation: 'yes'
-      tier: inf
       type: logging
     expr: '1'
   - record: gitlab_component_service:mapping
@@ -386,6 +347,5 @@ groups:
       component: stackdriver
       regional_aggregation: 'no'
       service_aggregation: 'yes'
-      tier: inf
       type: logging
     expr: '1'

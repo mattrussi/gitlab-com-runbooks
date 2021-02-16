@@ -9,7 +9,7 @@ local mwmbrExpression = import 'mwmbr/expression.libsonnet';
         aggregationSet=aggregationSets.serviceAggregatedSLIs,
         metricSelectorHash={},
         thresholdSLOMetricName='slo:max:deployment:gitlab_service_errors:ratio',
-        thresholdSLOMetricAggregationLabels=['type', 'tier'],
+        thresholdSLOMetricAggregationLabels=['type'],
       ),
     }, {
       record: 'gitlab_deployment_health:service:apdex',
@@ -17,7 +17,7 @@ local mwmbrExpression = import 'mwmbr/expression.libsonnet';
         aggregationSet=aggregationSets.serviceAggregatedSLIs,
         metricSelectorHash={},
         thresholdSLOMetricName='slo:min:deployment:gitlab_service_apdex:ratio',
-        thresholdSLOMetricAggregationLabels=['type', 'tier'],
+        thresholdSLOMetricAggregationLabels=['type'],
       ),
     }, {
       record: 'gitlab_deployment_health:service',

@@ -18,7 +18,6 @@ local generateComponentNodeSLORules(serviceDefinition) =
   if hasMonitoringThresholds && serviceDefinition.nodeLevelMonitoring then
     local labels = {
       type: serviceDefinition.type,
-      tier: serviceDefinition.tier,
     };
 
     std.prune([
