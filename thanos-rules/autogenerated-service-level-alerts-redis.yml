@@ -20,21 +20,23 @@ groups:
         https://dashboards.gitlab.net/d/redis-main/redis-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '81384'
+      grafana_panel_id: '175328272'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(redis_commands_processed_total{type="redis", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]) and on (instance) redis_instance_info{role="master"}
+        )
+      runbook: docs/redis/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       incident_project: gitlab.com/gitlab-com/gl-infra/production
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: >
@@ -57,27 +59,94 @@ groups:
         https://dashboards.gitlab.net/d/redis-main/redis-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '81384'
+      grafana_panel_id: '175328272'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_ops:rate_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(redis_commands_processed_total{type="redis", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]) and on (instance) redis_instance_info{role="master"}
+        )
+      runbook: docs/redis/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       incident_project: gitlab.com/gitlab-com/gl-infra/production
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: |
       gitlab_component_ops:rate_5m{type="redis", component="primary_server", stage="main", monitor="global"} offset 1h
       unless
       gitlab_component_ops:rate_5m{type="redis", component="primary_server", stage="main", monitor="global"}
+  - alert: RedisServiceRailsRedisClientApdexSLOViolation
+    for: 2m
+    annotations:
+      title: >-
+        The rails_redis_client SLI of the redis service (`{{ $labels.stage }}` stage) has an apdex violating
+        SLO
+      description: |
+        Aggregation of all Redis operations issued from the Rails codebase.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: redis-main/redis-overview
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/redis-main/redis-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
+        $labels.component }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '2248986914'
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(gitlab_redis_client_requests_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",storage="shared_state"}[5m])
+          )
+        )
+      runbook: docs/redis/README.md
+    labels:
+      aggregation: component
+      alert_type: symptom
+      feature_category: not_owned
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: 'yes'
+      user_impacting: 'yes'
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_1h{component="rails_redis_client",monitor="global",type="redis"}
+          < (1 - 14.4 * 0.000100)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_5m{component="rails_redis_client",monitor="global",type="redis"}
+          < (1 - 14.4 * 0.000100)
+        )
+        or
+        (
+          gitlab_component_apdex:ratio_6h{component="rails_redis_client",monitor="global",type="redis"}
+          < (1 - 6 * 0.000100)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_30m{component="rails_redis_client",monitor="global",type="redis"}
+          < (1 - 6 * 0.000100)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="rails_redis_client",monitor="global",type="redis"}) >= 1
+      )
   - alert: RedisServiceRailsRedisClientErrorSLOViolation
     for: 2m
     annotations:
@@ -93,15 +162,15 @@ groups:
         https://dashboards.gitlab.net/d/redis-main/redis-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '74792'
+      grafana_panel_id: '487497488'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: >-
-        https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-error-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(gitlab_redis_client_exceptions_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",storage="shared_state"}[5m])
+        )
+      runbook: docs/redis/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: not_owned
       incident_project: gitlab.com/gitlab-com/gl-infra/production
@@ -110,6 +179,7 @@ groups:
       product_stage_group: not_owned
       rules_domain: general
       severity: s2
+      sli_type: error
       slo_alert: 'yes'
       user_impacting: 'yes'
     expr: |
@@ -153,21 +223,23 @@ groups:
         https://dashboards.gitlab.net/d/redis-main/redis-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '32072'
+      grafana_panel_id: '3147312091'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(gitlab_redis_client_requests_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",storage="shared_state"}[5m])
+        )
+      runbook: docs/redis/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       incident_project: gitlab.com/gitlab-com/gl-infra/production
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: >
@@ -190,21 +262,23 @@ groups:
         https://dashboards.gitlab.net/d/redis-main/redis-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '32072'
+      grafana_panel_id: '3147312091'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_ops:rate_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(gitlab_redis_client_requests_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",storage="shared_state"}[5m])
+        )
+      runbook: docs/redis/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       incident_project: gitlab.com/gitlab-com/gl-infra/production
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: |
@@ -226,21 +300,23 @@ groups:
         https://dashboards.gitlab.net/d/redis-main/redis-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '76200'
+      grafana_panel_id: '3020974736'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(redis_commands_processed_total{type="redis", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]) and on (instance) redis_instance_info{role="slave"}
+        )
+      runbook: docs/redis/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       incident_project: gitlab.com/gitlab-com/gl-infra/production
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: >
@@ -263,21 +339,23 @@ groups:
         https://dashboards.gitlab.net/d/redis-main/redis-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '76200'
+      grafana_panel_id: '3020974736'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_ops:rate_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(redis_commands_processed_total{type="redis", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]) and on (instance) redis_instance_info{role="slave"}
+        )
+      runbook: docs/redis/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       incident_project: gitlab.com/gitlab-com/gl-infra/production
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: |

@@ -84,6 +84,155 @@ local panelsForDeployment(serviceType, deployment, selectorHash) =
     ),
   ];
 
+local rowsForContainer(container, type, deployment) =
+  local formatConfig = { container: container, type: type, deployment: deployment };
+  [
+    /* First row */
+    [
+      quantilePanel.timeseries(
+        title='%(container)s container/%(deployment)s deployment - CPU' % formatConfig,
+        query=|||
+          rate(
+            container_cpu_usage_seconds_total:labeled{
+              type="%(type)s",
+              env="$environment",
+              environment="$environment",
+              stage="$stage",
+              container="%(container)s",
+              deployment="%(deployment)s"
+             }[$__rate_interval]
+           )
+        ||| % formatConfig,
+        format='percentunit',
+        linewidth=1,
+        legendFormat='%s Container CPU' % [container],
+      ),
+      quantilePanel.timeseries(
+        title='%(container)s container/%(deployment)s deployment - Memory' % formatConfig,
+        query=|||
+          container_memory_working_set_bytes:labeled{
+            type="%(type)s",
+            env="$environment",
+            environment="$environment",
+            stage="$stage",
+            container="%(container)s",
+            deployment="%(deployment)s"
+           }
+        ||| % formatConfig,
+        format='bytes',
+        linewidth=1,
+        legendFormat='%s Container Memory' % [container],
+      ),
+    ],
+    /* Second row */
+    [
+      basic.timeseries(
+        title='%(container)s container/%(deployment)s deployment - Container Waiting Reasons' % formatConfig,
+        description='Why are containers waiting?',
+        query=|||
+          sum by (reason) (max_over_time(kube_pod_container_status_waiting_reason:labeled{
+            env="$environment",
+            type="%(type)s",
+            stage="$stage",
+            container="%(container)s",
+            deployment="%(deployment)s"
+          }[10m]))
+        ||| % formatConfig,
+        legendFormat='{{ reason }}',
+        format='short',
+        interval='1m',
+        intervalFactor=3,
+        yAxisLabel='Containers Terminated',
+        sort='decreasing',
+        legend_show=true,
+        legend_rightSide=false,
+        linewidth=0,
+        fill=6,
+        stack=true,
+        decimals=0,
+        stableId='container-terminations-%(container)s-%(deployment)s' % formatConfig,
+      )
+      .addSeriesOverride({
+        alias: 'CrashLoopBackOff',
+        color: 'purple',
+      })
+      .addSeriesOverride({
+        alias: 'CreateContainerConfigError',
+        color: 'yellow',
+      })
+      .addSeriesOverride({
+        alias: 'CreateContainerError',
+        color: 'orange',
+      })
+      .addSeriesOverride({
+        alias: 'ErrImagePull',
+        color: 'red',
+      })
+      .addSeriesOverride({
+        alias: 'ImagePullBackOff',
+        color: '#FA6400',  // dark orange
+      })
+      .addSeriesOverride({
+        alias: 'InvalidImageName',
+        color: '#C4162A',  // dark red
+      })
+      .addSeriesOverride({
+        alias: 'ContainerCreating',
+        color: 'blue',
+      }),
+      basic.timeseries(
+        title='%(container)s container/%(deployment)s deployment - Container Terminations' % formatConfig,
+        description='Why are containers terminating?',
+        query=|||
+          sum by (reason) (max_over_time(kube_pod_container_status_terminated_reason:labeled{
+            env="$environment",
+            type="%(type)s",
+            stage="$stage",
+            container="%(container)s",
+            deployment="%(deployment)s"
+          }[10m]))
+        ||| % formatConfig,
+        legendFormat='{{ reason }}',
+        format='short',
+        interval='1m',
+        intervalFactor=3,
+        yAxisLabel='Containers Terminated',
+        sort='decreasing',
+        legend_show=true,
+        legend_rightSide=false,
+        linewidth=0,
+        fill=6,
+        stack=true,
+        decimals=0,
+        stableId='container-waiting-%(container)s-%(deployment)s' % formatConfig,
+      )
+      .addSeriesOverride({
+        alias: 'Completed',
+        color: 'blue',
+      })
+      .addSeriesOverride({
+        alias: 'ContainerCannotRun',
+        color: 'yellow',
+      })
+      .addSeriesOverride({
+        alias: 'DeadlineExceeded',
+        color: 'orange',
+      })
+      .addSeriesOverride({
+        alias: 'Error',
+        color: 'red',
+      })
+      .addSeriesOverride({
+        alias: 'Evicted',
+        color: '#FA6400',  // dark orange
+      })
+      .addSeriesOverride({
+        alias: 'OOMKilled',
+        color: '#C4162A',  // dark red
+      }),
+    ],
+  ];
+
 local dashboardsForService(type) =
   local serviceInfo = metricsCatalog.getService(type);
   local deployments = std.objectFields(serviceInfo.kubeResources);
@@ -109,45 +258,8 @@ local dashboardsForService(type) =
                 row.new(title='%s deployment' % [deployment]),
               ]
               +
-              std.map(
-                function(container)
-                  local formatConfig = { container: container, type: type, deployment: deployment };
-                  [/* row */
-                   quantilePanel.timeseries(
-                     title=container + ' container CPU',
-                     query=|||
-                       rate(
-                         container_cpu_usage_seconds_total:labeled{
-                           type="%(type)s",
-                           env="$environment",
-                           environment="$environment",
-                           stage="$stage",
-                           container="%(container)s",
-                           deployment="%(deployment)s"
-                          }[$__rate_interval]
-                        )
-                     ||| % formatConfig,
-                     format='percentunit',
-                     linewidth=1,
-                     legendFormat='%s Container CPU' % [container],
-                   ),
-                   quantilePanel.timeseries(
-                     title=container + ' container Memory',
-                     query=|||
-                       container_memory_working_set_bytes:labeled{
-                         type="%(type)s",
-                         env="$environment",
-                         environment="$environment",
-                         stage="$stage",
-                         container="%(container)s",
-                         deployment="%(deployment)s"
-                        }
-                     ||| % formatConfig,
-                     format='bytes',
-                     linewidth=1,
-                     legendFormat='%s Container Memory' % [container],
-                   ),
-                  ],
+              std.flatMap(
+                function(container) rowsForContainer(container, type, deployment),
                 serviceInfo.kubeResources[deployment].containers
               ),
             deployments

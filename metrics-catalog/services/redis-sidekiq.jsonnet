@@ -7,6 +7,7 @@ metricsCatalog.serviceDefinition({
   type: 'redis-sidekiq',
   tier: 'db',
   monitoringThresholds: {
+    apdexScore: 0.9999,
     errorRatio: 0.999,
   },
   serviceLevelIndicators: {
@@ -15,7 +16,13 @@ metricsCatalog.serviceDefinition({
       featureCategory: 'not_owned',
       team: 'sre_observability',
       description: |||
-        Aggregation of all Redis operations issued from the Rails codebase.
+        Aggregation of all Redis operations issued to the Redis Sidekiq service from the Rails codebase.
+
+        If this SLI is experiencing a degradation, it may be caused by saturation in the Redis Sidekiq instance caused by
+        high traffic volumes from Sidekiq clients (Rails or other sidekiq jobs), or very large messages being delivered
+        via Sidekiq.
+
+        Reviewing Sidekiq job logs may help the investigation.
       |||,
 
       staticLabels: {
@@ -77,7 +84,7 @@ metricsCatalog.serviceDefinition({
       ),
 
       significantLabels: ['fqdn'],
-      aggregateRequestRate: false,
+      serviceAggregation: false,
     },
   },
 })

@@ -1,61 +1,8 @@
 groups:
 - name: sidekiq.rules
   rules:
-  - record: shard:sidekiq_jobs_completion_seconds:p50
-    expr: >
-      histogram_quantile(
-        0.5,
-        sum without (fqdn,instance,node,pod, queue) (
-          rate(sidekiq_jobs_completion_seconds_bucket[1m])
-        )
-      )
-  - record: shard:sidekiq_jobs_completion_seconds:p95
-    expr: >
-      histogram_quantile(
-        0.95,
-        sum without (fqdn,instance,node,pod, queue) (
-          rate(sidekiq_jobs_completion_seconds_bucket[1m])
-        )
-      )
-  - record: shard:sidekiq_jobs_completion_seconds:p99
-    expr: >
-      histogram_quantile(
-        0.99,
-        sum without (fqdn,instance,node,pod, queue) (
-          rate(sidekiq_jobs_completion_seconds_bucket[1m])
-        )
-      )
-  - record: queue:sidekiq_jobs_completion_seconds:p50
-    expr: >
-      histogram_quantile(
-        0.50,
-        sum without (fqdn,instance,node,pod, shard) (
-          rate(sidekiq_jobs_completion_seconds_bucket[1m])
-        )
-      )
-  - record: queue:sidekiq_jobs_completion_seconds:p95
-    expr: >
-      histogram_quantile(
-        0.95,
-        sum without (fqdn,instance,node,pod, shard) (
-          rate(sidekiq_jobs_completion_seconds_bucket[1m])
-        )
-      )
-  - record: queue:sidekiq_jobs_completion_seconds:p99
-    expr: >
-      histogram_quantile(
-        0.99,
-        sum without (fqdn,instance,node,pod, shard) (
-          rate(sidekiq_jobs_completion_seconds_bucket[1m])
-        )
-      )
   - record: queue:sidekiq_jobs_completion:rate1m
     expr: >
       sum without (fqdn,instance,node,pod) (
         rate(sidekiq_jobs_completion_seconds_count[1m])
-      )
-  - record: queue:sidekiq_jobs_failed:rate1m
-    expr: >
-      sum without (fqdn,instance,node,pod, shard) (
-        rate(sidekiq_jobs_failed_total[1m])
       )

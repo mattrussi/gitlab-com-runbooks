@@ -7,6 +7,7 @@ local serviceDefaults = {
   disableOpsRatePrediction: false,
   nodeLevelMonitoring: false,  // By default we do not use node-level monitoring
   kubeResources: {},
+  regional: false,  // By default we don't support regional monitoring for services
 };
 
 // Convience method, will wrap a raw definition in a serviceLevelIndicatorDefinition if needed
@@ -20,12 +21,13 @@ local prepareComponent(definition) =
 
 local validateAndApplyServiceDefaults(service) =
   local serviceWithProvisioningDefaults = serviceDefaults + ({ provisioning: provisioningDefaults } + service);
+  local sliInheritedDefaults = { regional: serviceWithProvisioningDefaults.regional };
 
   // If this service is provisioned on kubernetes we should include a kubernetes deployment map
   if serviceWithProvisioningDefaults.provisioning.kubernetes == (serviceWithProvisioningDefaults.kubeResources != {}) then
     serviceWithProvisioningDefaults {
       serviceLevelIndicators: {
-        [sliName]: prepareComponent(service.serviceLevelIndicators[sliName]).initServiceLevelIndicatorWithName(sliName)
+        [sliName]: prepareComponent(service.serviceLevelIndicators[sliName]).initServiceLevelIndicatorWithName(sliName, sliInheritedDefaults)
         for sliName in std.objectFields(service.serviceLevelIndicators)
       },
     }

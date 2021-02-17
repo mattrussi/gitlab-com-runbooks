@@ -1,11 +1,7 @@
+local aggregationSets = import './aggregation-sets.libsonnet';
 local capacityPlanning = import 'capacity_planning.libsonnet';
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
-local colorScheme = import 'grafana/color_scheme.libsonnet';
-local commonAnnotations = import 'grafana/common_annotations.libsonnet';
-local layout = import 'grafana/layout.libsonnet';
-local promQuery = import 'grafana/prom_query.libsonnet';
-local seriesOverrides = import 'grafana/series_overrides.libsonnet';
 local templates = import 'grafana/templates.libsonnet';
 local keyMetrics = import 'key_metrics.libsonnet';
 local kubeServiceDashboards = import 'kube_service_dashboards.libsonnet';
@@ -16,13 +12,8 @@ local platformLinks = import 'platform_links.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local saturationDetail = import 'saturation_detail.libsonnet';
 local serviceCatalog = import 'service_catalog.libsonnet';
-local statusDescription = import 'status_description.libsonnet';
 local systemDiagramPanel = import 'system_diagram_panel.libsonnet';
-local dashboard = grafana.dashboard;
 local row = grafana.row;
-local template = grafana.template;
-local graphPanel = grafana.graphPanel;
-local annotation = grafana.annotation;
 
 
 local defaultEnvironmentSelector = { environment: '$environment', env: '$environment' };
@@ -46,97 +37,65 @@ local getApdexDescription(metricsCatalogServiceInfo) =
 
 local headlineMetricsRow(
   serviceType,
-  serviceStage,
   startRow,
   metricsCatalogServiceInfo,
-  environmentSelectorHash,
-  saturationEnvironmentSelectorHash,
+  selectorHash,
   showSaturationCell,
+  stableIdPrefix='',
       ) =
   local hasApdex = metricsCatalogServiceInfo.hasApdex();
   local hasErrorRate = metricsCatalogServiceInfo.hasErrorRate();
   local hasRequestRate = metricsCatalogServiceInfo.hasRequestRate();
-  local serviceSelector = environmentSelectorHash { type: serviceType, stage: serviceStage };
+  local selectorHashWithExtras = selectorHash { type: serviceType };
 
-  local columns =
-    (
-      if hasApdex then
-        [[
-          keyMetrics.serviceApdexPanel(serviceType, serviceStage, compact=true, environmentSelectorHash=environmentSelectorHash, description=getApdexDescription(metricsCatalogServiceInfo)),
-          statusDescription.serviceApdexStatusDescriptionPanel(serviceSelector),
-        ]]
-      else
-        []
-    )
-    +
-    (
-      if hasErrorRate then
-        [[
-          keyMetrics.serviceErrorRatePanel(serviceType, serviceStage, compact=true, environmentSelectorHash=environmentSelectorHash),
-          statusDescription.serviceErrorStatusDescriptionPanel(serviceSelector),
-        ]]
-      else
-        []
-    )
-    +
-    (
-      if hasRequestRate then
-        [[
-          keyMetrics.serviceOperationRatePanel(serviceType, serviceStage, compact=true, environmentSelectorHash=environmentSelectorHash),
-        ]]
-      else
-        []
-    )
-    +
-    (
-      if showSaturationCell then
-        [[
-          keyMetrics.utilizationRatesPanel(serviceType, serviceStage, compact=true, environmentSelectorHash=saturationEnvironmentSelectorHash),
-        ]]
-      else
-        []
-    );
-
-  layout.grid([row.new(title='🌡️ Aggregated Service Level Indicators (𝙎𝙇𝙄𝙨)', collapse=false)], cols=1, rowHeight=1, startRow=startRow)
-  +
-  layout.splitColumnGrid(columns, [5, 1], startRow=startRow + 1);
+  keyMetrics.headlineMetricsRow(
+    serviceType=serviceType,
+    startRow=startRow,
+    rowTitle='🌡️ Aggregated Service Level Indicators (𝙎𝙇𝙄𝙨)',
+    selectorHash=selectorHashWithExtras,
+    stableIdPrefix=stableIdPrefix,
+    showApdex=hasApdex,
+    apdexDescription=getApdexDescription(metricsCatalogServiceInfo),
+    showErrorRatio=hasErrorRate,
+    showOpsRate=hasRequestRate,
+    showSaturationCell=showSaturationCell,
+    compact=true,
+    rowHeight=8
+  );
 
 local overviewDashboard(
   type,
-  tier,
   stage,
   environmentSelectorHash,
   saturationEnvironmentSelectorHash
       ) =
   local selectorHash = environmentSelectorHash { type: type, stage: stage };
   local selector = selectors.serializeHash(selectorHash);
-  local catalogServiceInfo = serviceCatalog.lookupService(type);
   local metricsCatalogServiceInfo = metricsCatalog.getService(type);
   local saturationComponents = metricsCatalogServiceInfo.applicableSaturationTypes();
 
   local dashboard =
     basic.dashboard(
       'Overview',
-      tags=['type:' + type, 'tier:' + tier, type, 'service overview'],
+      tags=['type:' + type, type, 'service overview'],
       includeEnvironmentTemplate=environmentSelectorHash == defaultEnvironmentSelector,
     )
     .addPanels(
       headlineMetricsRow(
         type,
-        stage,
         startRow=0,
         metricsCatalogServiceInfo=metricsCatalogServiceInfo,
-        environmentSelectorHash=environmentSelectorHash,
-        saturationEnvironmentSelectorHash=saturationEnvironmentSelectorHash,
+        selectorHash=selectorHash,
         showSaturationCell=std.length(saturationComponents) > 0
       )
     )
     .addPanels(
       metricsCatalogDashboards.sliMatrixForService(
-        type,
-        stage,
+        title='🔬 Service Level Indicators',
+        serviceType=type,
+        aggregationSet=aggregationSets.globalSLIs,
         startRow=20,
-        environmentSelectorHash=environmentSelectorHash,
+        selectorHash=selectorHash
       )
     )
     .addPanels(
@@ -182,7 +141,6 @@ local overviewDashboard(
   dashboardWithStage.addTemplate(templates.sigma)
   {
     overviewTrailer()::
-      local s = self;
       self
       .addPanels(
         if std.length(saturationComponents) > 0 then
@@ -211,14 +169,12 @@ local overviewDashboard(
 {
   overview(
     type,
-    tier,
     stage='$stage',
     environmentSelectorHash=defaultEnvironmentSelector,
     saturationEnvironmentSelectorHash=defaultEnvironmentSelector
   )::
     overviewDashboard(
       type,
-      tier,
       stage,
       environmentSelectorHash=environmentSelectorHash,
       saturationEnvironmentSelectorHash=saturationEnvironmentSelectorHash

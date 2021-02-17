@@ -2,9 +2,7 @@
 // This is probably not what you want. Avoid combining multiple signals into
 // a single SLI unless you are sure you know what you are doing
 
-local metricsCatalog = import './metrics.libsonnet';
-local rateMetric = metricsCatalog.rateMetric;
-local combined = metricsCatalog.combined;
+local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
 // Combined component definitions are a specialisation of the service-component.
 // They allow multiple components to be combined under a single name, but with different
@@ -18,14 +16,15 @@ local combinedServiceLevelIndicatorDefinition(
   featureCategory,
   description,
   team=null,
-  aggregateRequestRate=false,
+  serviceAggregation=false,
   staticLabels={},
   ignoreTrafficCessation=false,
+  regional=null,
       ) =
   {
-    initServiceLevelIndicatorWithName(componentName)::
+    initServiceLevelIndicatorWithName(componentName, inheritedDefaults)::
       // TODO: validate that all staticLabels are unique
-      local componentsInitialised = std.map(function(c) c.initServiceLevelIndicatorWithName(componentName), components);
+      local componentsInitialised = std.map(function(c) c.initServiceLevelIndicatorWithName(componentName, inheritedDefaults), components);
 
       {
         name: componentName,
@@ -34,8 +33,9 @@ local combinedServiceLevelIndicatorDefinition(
         description: description,
         team: team,
         ignoreTrafficCessation: ignoreTrafficCessation,
+        regional: if regional != null then regional else inheritedDefaults.regional,
 
-        aggregateRequestRate: aggregateRequestRate,
+        serviceAggregation: serviceAggregation,
 
         // Returns true if this component allows detailed breakdowns
         // this is not the case for combined component definitions
@@ -51,6 +51,9 @@ local combinedServiceLevelIndicatorDefinition(
 
         getToolingLinks()::
           std.flatMap(function(c) c.getToolingLinks(), componentsInitialised),
+
+        renderToolingLinks()::
+          toolingLinks.renderLinks(self.getToolingLinks()),
 
         // Generate recording rules for apdex weight
         generateApdexWeightRecordingRules(burnRate, recordingRuleName, aggregationLabels, recordingRuleStaticLabels)::

@@ -133,37 +133,39 @@ groups:
       title: CI Prometheus server {{ $labels.instance }} is down
       description: 'One or more of CI Prometheus servers is down: {{ $labels.instance }}.'
 
-  - alert: CICDGCPQuotaHighUsage
+  - record: quota_region:quota_usage:ratio
     expr: |
-      max(
-        gcp_exporter_region_quota_usage{project="gitlab-ci-155816"} / gcp_exporter_region_quota_limit{project="gitlab-ci-155816"} * 100
-      ) by (quota, region) > 85
+      max by (quota, region) (
+        gcp_exporter_region_quota_usage{project="gitlab-ci-155816"}
+        /
+        gcp_exporter_region_quota_limit{project="gitlab-ci-155816"}
+      )
+
+  - alert: CICDGCPQuotaExceedingSoon
+    expr: predict_linear(quota_region:quota_usage:ratio[6h], 3600) >= 1.0
     for: 5m
     labels:
       team: verify
       severity: s4
       alert_type: cause
     annotations:
-      title: GCP Quota usage of {{ $labels.quota }} is too high
+      title: GCP Quota usage may exceed capacity
       description: >
-        Quota usage of {{ $labels.quota }} is at the level of {{ $value }} for more than 5 minutes.
+        Quota usage of {{ $labels.quota }} in {{ $labels.region }} is going to exceed capacity soon.
         Quota limit breach is coming!
         See https://dashboards.gitlab.net/dashboard/db/ci-autoscaling-providers
 
   - alert: CICDGCPQuotaCriticalUsage
-    expr: |
-      max(
-        gcp_exporter_region_quota_usage{project="gitlab-ci-155816"} / gcp_exporter_region_quota_limit{project="gitlab-ci-155816"} * 100
-      ) by (quota, region) > 95
+    expr: quota_region:quota_usage:ratio * 100 > 95
     for: 5m
     labels:
       team: verify
       severity: s3
       alert_type: cause
     annotations:
-      title: GCP Quota usage of {{ $labels.quota }} is near limit
+      title: GCP Quota usage of is near limit
       description: >
-        Quota usage of {{ $labels.quota }} is at the level of {{ $value }} for more than 5 minutes.
+        Quota usage of {{ $labels.quota }} in {{ $labels.region }} is at the level of {{ $value }} for more than 5 minutes.
         It's less than 5% to reach quota limits!
         See https://dashboards.gitlab.net/dashboard/db/ci-autoscaling-providers
 

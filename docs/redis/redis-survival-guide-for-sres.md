@@ -308,3 +308,29 @@ set of GCP read access with your GCP credentials set up, i.e. if you can do `gsu
 and it shows the files, then the reporting tool should Just Work™.
 
 Reference: https://gitlab.com/gitlab-com/gl-infra/redis_bigkeys
+
+#### Running on demand
+
+The automated job above actually collects two views, the output of redis-cli with `--bigkeys` and the output with `--memkeys`.
+
+`--bigkeys` looks at data in terms of the number of 'entries' in a key, e.g. for lists/sets/hashes, how many entries in those
+structures.  It is a view of the *complexity* of the data which affects the performance of redis in reading and manipulating
+the data structures, but not the total memory in use.
+
+To get that, you use `--memkeys`, which uses the [MEMORY USAGE](https://redis.io/commands/memory-usage) command to find out
+exactly how much data is in use by each key.  However there is a catch: `MEMORY USAGE` has an optional `SAMPLES` argument, that
+defaults to 5.  For each data-structure key (list/set/hash etc), it samples that many entries and assumes the average of that sample
+is the average of the total entries under that key.  This can be very wrong if the size distribution is heavily skewed and
+the sample count is low.  You can provide an alternative sample count with `--memkeys-samples`, and I would generally recommend you do
+so, specifically setting it to `-1` which forces all entries to be sampled (i.e. a fully accurate count, *not* a statistical sampling).
+
+You might think you should use the value 0, but the CLI tool uses that internally to mean 'use the default', and -1 works around that.
+
+Also, you might think that this would significantly increase the runtime, but in practice at Gitlab.com scale in early 2021, it adds
+less than 10% runtime to the memkeys invocation
+
+Here's how to run them directly:
+
+```REDISCLI_AUTH=$(sudo grep ^masterauth /var/opt/gitlab/redis/redis.conf|cut -d\" -f2) /opt/gitlab/embedded/bin/redis-cli --bigkeys```
+
+```REDISCLI_AUTH=$(sudo grep ^masterauth /var/opt/gitlab/redis/redis.conf|cut -d\" -f2) /opt/gitlab/embedded/bin/redis-cli --memkeys --memkeys-samples -1```

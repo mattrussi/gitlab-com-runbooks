@@ -701,22 +701,25 @@ groups:
   rules:
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: cnyHttpServices
+      regional_aggregation: 'no'
+      service_aggregation: 'yes'
       tier: lb
       type: frontend
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: mainHttpServices
+      regional_aggregation: 'no'
+      service_aggregation: 'yes'
       tier: lb
       type: frontend
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: sshServices
+      regional_aggregation: 'no'
+      service_aggregation: 'yes'
       tier: lb
       type: frontend
     expr: '1'

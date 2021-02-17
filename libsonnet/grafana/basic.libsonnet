@@ -3,7 +3,6 @@ local promQuery = import 'grafana/prom_query.libsonnet';
 local graphPanel = grafana.graphPanel;
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local heatmapPanel = grafana.heatmapPanel;
-local row = grafana.row;
 local text = grafana.text;
 local seriesOverrides = import 'grafana/series_overrides.libsonnet';
 local singlestatPanel = grafana.singlestat;
@@ -39,6 +38,50 @@ local applyStableIdsToDashboard(dashboard) =
     rows: std.map(function(row) applyStableIdsToRow(row), dashboard.rows),
     panels: std.map(function(panel) applyStableIdsToPanel(panel), dashboard.panels),
   };
+
+// Lists all panels under a panel
+local panelsForPanel(panel) =
+  local childPanels = if std.objectHas(panel, 'panels') then
+    std.flatMap(function(panel) panelsForPanel(panel), panel.panels)
+  else
+    [];
+  [panel] + childPanels;
+
+// Lists all panels under a row
+local panelsForRow(row) =
+  std.flatMap(function(panel) panelsForPanel(panel), row.panels);
+
+// Validates that each panel has a unique ID, otherwise Grafana does odd things
+local validateUniqueIdsForDashboard(dashboard) =
+  local rowPanels = std.flatMap(panelsForRow, dashboard.rows);
+  local directPanels = std.flatMap(panelsForPanel, dashboard.panels);
+  local allPanels = rowPanels + directPanels;
+  local uniquePanelIds = std.foldl(
+    function(memo, panel)
+      local panelIdStr = '' + panel.id;
+      if std.objectHas(memo, panelIdStr) then
+        /**
+         * If you find yourself here, the reason is that validation of your dashboard failed
+         * due to duplicate IDs. The most likely reason for this is because
+         * the `stableId` string for two panels hashed to the same value.
+         */
+        local assertFormatConfig = {
+          panelId: panelIdStr,
+          otherPanelTitle: memo[panelIdStr],
+          panelTitle: panel.title,
+        };
+        std.assertEqual('', { __assert__: 'Duplicated panel ID `%(panelId)s`. This will lead to layout problems in Grafana. Titles of panels with duplicate titles are `%(otherPanelTitle)s` and `%(panelTitle)s`' % assertFormatConfig })
+      else
+        memo { [panelIdStr]: panel.title },
+    allPanels,
+    {}
+  );
+
+  // Force jsonnet to walk all panels
+  if uniquePanelIds != null then
+    dashboard
+  else
+    dashboard;
 
 local panelOverrides(stableId) =
   {
@@ -170,7 +213,8 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
           }
         );
 
-        applyStableIdsToDashboard(dashboardWithTrailerPanel),
+        local dashboardWithStableIdsApplied = applyStableIdsToDashboard(dashboardWithTrailerPanel);
+        validateUniqueIdsForDashboard(dashboardWithStableIdsApplied),
     },
 
   graphPanel(
@@ -326,13 +370,15 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
     decimals=0,
     thresholds=[],
     stableId=null,
+    fill=0,
+    stack=false,
   )::
     local panel = self.graphPanel(
       title,
       description=description,
       sort=sort,
       linewidth=linewidth,
-      fill=0,
+      fill=fill,
       datasource='$PROMETHEUS_DS',
       decimals=decimals,
       legend_rightSide=legend_rightSide,
@@ -346,7 +392,8 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
       legend_alignAsTable=true,
       legend_hideEmpty=true,
       thresholds=thresholds,
-      stableId=stableId
+      stableId=stableId,
+      stack=stack,
     );
 
     local addPanelTarget(panel, query) =
@@ -384,6 +431,8 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
     max=null,
     thresholds=[],
     stableId=null,
+    fill=0,
+    stack=false,
   )::
     self.multiTimeseries(
       queries=[{ query: query, legendFormat: legendFormat }],
@@ -401,6 +450,8 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
       decimals=decimals,
       thresholds=thresholds,
       stableId=stableId,
+      fill=fill,
+      stack=stack,
     ),
 
   queueLengthTimeseries(

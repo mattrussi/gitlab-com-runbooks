@@ -511,22 +511,25 @@ groups:
   rules:
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: jaeger_agent
+      regional_aggregation: 'no'
+      service_aggregation: 'yes'
       tier: inf
       type: jaeger
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: jaeger_collector
+      regional_aggregation: 'no'
+      service_aggregation: 'yes'
       tier: inf
       type: jaeger
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: jaeger_query
+      regional_aggregation: 'no'
+      service_aggregation: 'yes'
       tier: inf
       type: jaeger
     expr: '1'

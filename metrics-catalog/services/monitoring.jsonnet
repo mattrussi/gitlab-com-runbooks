@@ -4,10 +4,6 @@ local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local googleLoadBalancerComponents = import './lib/google_load_balancer_components.libsonnet';
 
-local productionEnvironmentsSelector = {
-  environment: { re: 'gprd|ops|ci-prd' },
-};
-
 metricsCatalog.serviceDefinition({
   type: 'monitoring',
   tier: 'inf',
@@ -73,7 +69,7 @@ metricsCatalog.serviceDefinition({
         This SLI monitors the Thanos query HTTP interface. 5xx responses are considered failures.
       |||,
 
-      local thanosQuerySelector = productionEnvironmentsSelector {
+      local thanosQuerySelector = {
         // The job regex was written while we were transitioning from a thanos
         // stack deployed in GCE to a new one deployed in GKE. job=thanos
         // covers all thanos components, but the metrics this filter is used for
@@ -87,9 +83,6 @@ metricsCatalog.serviceDefinition({
         job: { re: 'thanos|thanos-query-frontend' },
         type: 'monitoring',
         shard: 'default',
-      },
-      staticLabels: {
-        environment: 'ops',
       },
 
       apdex: histogramApdex(
@@ -128,13 +121,10 @@ metricsCatalog.serviceDefinition({
         instance. 5xx responses are considered failures.
       |||,
 
-      local thanosQuerySelector = productionEnvironmentsSelector {
+      local thanosQuerySelector = {
         job: 'thanos',
         type: 'monitoring',
         shard: 'public-dashboards',
-      },
-      staticLabels: {
-        environment: 'ops',
       },
 
       apdex: histogramApdex(
@@ -170,18 +160,14 @@ metricsCatalog.serviceDefinition({
         GCS buckets. This SLI monitors the Thanos StoreAPI GRPC endpoint. GRPC error responses are considered to be service-level failures.
       |||,
 
-      local thanosStoreSelector = productionEnvironmentsSelector {
+      local thanosStoreSelector = {
         // Similar to the query selector above, we must pull data from jobs
         // corresponding to the old and new thanos stacks, which are mutually
         // exclusive by stage.
-        job: { re: 'thanos|thanos-store-[0-9]+' },
+        job: { re: 'thanos|thanos-store(-[0-9]+)?' },
         type: 'monitoring',
         grpc_service: 'thanos.Store',
         grpc_type: 'unary',
-      },
-
-      staticLabels: {
-        environment: 'ops',
       },
 
       apdex: histogramApdex(
@@ -221,13 +207,9 @@ metricsCatalog.serviceDefinition({
         It also handles downsampling. This SLI monitors compaction operations and compaction failures.
       |||,
 
-      local thanosCompactorSelector = productionEnvironmentsSelector {
+      local thanosCompactorSelector = {
         job: 'thanos',
         type: 'monitoring',
-      },
-
-      staticLabels: {
-        environment: 'ops',
       },
 
       requestRate: rateMetric(
@@ -259,13 +241,9 @@ metricsCatalog.serviceDefinition({
         Alert delivery failure is considered a service-level failure.
       |||,
 
-      local prometheusAlertsSelector = productionEnvironmentsSelector {
+      local prometheusAlertsSelector = {
         job: 'prometheus',
         type: 'monitoring',
-      },
-
-      staticLabels: {
-        environment: 'ops',
       },
 
       requestRate: rateMetric(
@@ -290,13 +268,9 @@ metricsCatalog.serviceDefinition({
         Alert delivery failure is considered a service-level failure.
       |||,
 
-      local thanosRuleAlertsSelector = productionEnvironmentsSelector {
+      local thanosRuleAlertsSelector = {
         job: 'thanos',
         type: 'monitoring',
-      },
-
-      staticLabels: {
-        environment: 'ops',
       },
 
       requestRate: rateMetric(
@@ -326,12 +300,8 @@ metricsCatalog.serviceDefinition({
         5xx responses are considered errors.
       |||,
 
-      local grafanaSelector = productionEnvironmentsSelector {
+      local grafanaSelector = {
         job: 'grafana',
-      },
-
-      staticLabels: {
-        environment: 'ops',
       },
 
       requestRate: rateMetric(
@@ -371,13 +341,9 @@ metricsCatalog.serviceDefinition({
         5xx responses are considered errors.
       |||,
 
-      local prometheusSelector = productionEnvironmentsSelector {
-        job: 'prometheus',
+      local prometheusSelector = {
+        job: { re: 'prometheus.*', ne: 'prometheus-metamon' },
         type: 'monitoring',
-      },
-
-      staticLabels: {
-        environment: 'ops',
       },
 
       apdex: histogramApdex(
@@ -416,7 +382,7 @@ metricsCatalog.serviceDefinition({
         service failures.
       |||,
 
-      local selector = productionEnvironmentsSelector { type: 'monitoring' },
+      local selector = { type: 'monitoring' },
 
       requestRate: rateMetric(
         counter='prometheus_rule_evaluations_total',
@@ -442,10 +408,6 @@ metricsCatalog.serviceDefinition({
       description: |||
         This SLI monitors the Trickster HTTP interface.
       |||,
-
-      staticLabels: {
-        environment: 'ops',
-      },
 
       apdex: histogramApdex(
         histogram='trickster_frontend_requests_duration_seconds_bucket',

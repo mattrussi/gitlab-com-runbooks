@@ -192,11 +192,11 @@ In more detail:
   * Typically only one git repo is involved, so a single Gitaly node will be affected by the increasing CPU usage.
 * [Gitaly overview - section Node Metrics - panel Node Memory](https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview?viewPanel=50)
   * Typically only one git repo is involved, so a single Gitaly node will be affected by the increasing memory usage.
-* [Host Stats](https://dashboards.gitlab.net/d/bd2Kl9Imk/host-stats-old-prometheus?var-node=file-31-stor-gprd.c.gitlab-production.internal)
+* [Host Stats](https://dashboards.gitlab.net/d/bd2Kl9Imk/host-stat?var-env=gprd&var-node=file-31-stor-gprd.c.gitlab-production.internal)
   * Select the affected Gitaly node from the `Host` dropdown.
   * The panels related to CPU and memory usage will show clear patterns of increased usage.
-    * [CPU usage](https://dashboards.gitlab.net/d/bd2Kl9Imk/host-stats-old-prometheus?viewPanel=8&var-node=file-31-stor-gprd.c.gitlab-production.internal) rises steadily, potentially reaching 100%.  User-mode CPU time is the main mode that increases.
-    * [Memory usage](https://dashboards.gitlab.net/d/bd2Kl9Imk/host-stats-old-prometheus?viewPanel=39&var-node=file-31-stor-gprd.c.gitlab-production.internal) steadily transitions from mostly `Cached` (file-backed pages) to mostly `AnonPages` (anonymous non-file-backed pages, typically processes' heap space).
+    * [CPU usage](https://dashboards.gitlab.net/d/bd2Kl9Imk/host-stats?viewPanel=8&var-env=gprd&var-node=file-31-stor-gprd.c.gitlab-production.internal) rises steadily, potentially reaching 100%.  User-mode CPU time is the main mode that increases.
+    * [Memory usage](https://dashboards.gitlab.net/d/bd2Kl9Imk/host-stats?viewPanel=39&var-env=gprd&var-node=file-31-stor-gprd.c.gitlab-production.internal) steadily transitions from mostly `Cached` (file-backed pages) to mostly `AnonPages` (anonymous non-file-backed pages, typically processes' heap space).
 
 ### Kibana visualizations
 
@@ -280,7 +280,7 @@ In this case, the CPU and memory sections are the most relevant.
 Disk throughput may also increase as a side-effect of the filesystem cache being depleted by the increase in anonymous memory usage
 by the `git pack-objects` processes.
 
-[Dashboard link](https://dashboards.gitlab.net/d/bd2Kl9Imk/host-stats-old-prometheus?orgId=1&var-environment=gprd&var-node=file-31-stor-gprd.c.gitlab-production.internal&var-promethus=prometheus-01-inf-gprd&from=1599013800000&to=1599019200000)
+[Dashboard link](https://dashboards.gitlab.net/d/bd2Kl9Imk/host-stats?orgId=1&var-env=gprd&var-node=file-31-stor-gprd.c.gitlab-production.internal&var-promethus=prometheus-01-inf-gprd&from=1599013800000&to=1599019200000)
 
 ![dashboard-host-stats-cpu-and-memory](img/dashboard-host-stats-cpu-and-memory.png)
 

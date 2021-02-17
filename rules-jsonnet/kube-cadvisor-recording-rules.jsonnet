@@ -9,6 +9,7 @@
 // TODO: initial spike only contains a small subset of metrics
 // to ensure that this approach will work
 local cadvisorMetrics = [
+  'container_start_time_seconds',
   'container_cpu_cfs_periods_total',
   'container_cpu_cfs_throttled_periods_total',
   'container_cpu_usage_seconds_total',
@@ -24,10 +25,21 @@ local cadvisorMetrics = [
 ];
 
 local kubePodContainerMetrics = [
+  'kube_pod_container_status_running',
   'kube_pod_container_resource_limits_cpu_cores',
   'kube_pod_container_resource_limits_memory_bytes',
   'kube_pod_container_resource_requests_cpu_cores',
   'kube_pod_container_resource_requests_memory_bytes',
+
+  // Kube pod status metrics, useful for measuring pod lifecycles
+  'kube_pod_container_status_last_terminated_reason',
+  'kube_pod_container_status_ready',
+  'kube_pod_container_status_restarts_total',
+  'kube_pod_container_status_running',
+  'kube_pod_container_status_terminated',
+  'kube_pod_container_status_terminated_reason',
+  'kube_pod_container_status_waiting',
+  'kube_pod_container_status_waiting_reason',
 ];
 
 local podLabelJoinExpression(expression) =

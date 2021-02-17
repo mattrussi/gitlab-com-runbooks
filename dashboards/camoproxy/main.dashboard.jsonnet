@@ -40,7 +40,7 @@ local eventPanel() =
   );
 
 
-serviceDashboard.overview('camoproxy', 'sv')
+serviceDashboard.overview('camoproxy')
 .addPanel(row.new(title='Proxy'), gridPos={ x: 0, y: 1000, w: 24, h: 1 })
 .addPanels(layout.grid([
   trafficPanel(),

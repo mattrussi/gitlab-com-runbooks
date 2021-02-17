@@ -361,15 +361,17 @@ groups:
   rules:
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'no'
       component: loadbalancer
+      regional_aggregation: 'no'
+      service_aggregation: 'no'
       tier: sv
       type: camoproxy
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: server
+      regional_aggregation: 'no'
+      service_aggregation: 'yes'
       tier: sv
       type: camoproxy
     expr: '1'

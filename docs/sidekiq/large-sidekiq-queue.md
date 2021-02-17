@@ -201,10 +201,9 @@ $ curl --request DELETE --header "Private-Token: $GITLAB_API_TOKEN_ADMIN" https:
 Will delete all jobs from `post_receive` triggered by a user with
 username `reprazent` for the project `gitlab-org/gitlab`.
 
-This API endpoint is bound by the HTTP request time limit, so it will
-delete as many jobs as it can before terminating. If the `completed` key
-in the response is `false`, then the whole queue was not processed, so
-we can try again with the same command to remove further jobs.
+Check the output of each call:
+1. It will report how many jobs were deleted.  0 may mean your conditions (queue, user, project etc) do not match anything.
+1. This API endpoint is bound by the HTTP request time limit, so it will delete as many jobs as it can before terminating. If the `completed` key in the response is `false`, then the whole queue was not processed, so we can try again with the same command to remove further jobs.
 
 ## Killing running sidekiq jobs (specific type, specific user)
 

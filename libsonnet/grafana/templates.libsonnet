@@ -22,18 +22,17 @@ local template = grafana.template;
     template.new(
       'namespace',
       '$PROMETHEUS_DS',
-      'label_values(registry_build_info{stage="$stage"}, namespace)',
+      'label_values(kube_pod_container_info{environment="$environment"}, namespace)',
       current='gitlab',
       refresh='load',
       sort=1,
-      hide='variable',
     ),
   ds::
     template.datasource(
       'PROMETHEUS_DS',
       'prometheus',
-      'Prometheus',
-      regex='/(.*-gprd|Global|gprd-.*)/',
+      'Global',
+      regex='/(.*-gprd|Frank|Global|gprd-.*)/',
     ),
   environment::
     template.new(

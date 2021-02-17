@@ -131,8 +131,9 @@ groups:
   rules:
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: loadbalancer
+      regional_aggregation: 'no'
+      service_aggregation: 'yes'
       tier: lb
       type: pages
     expr: '1'

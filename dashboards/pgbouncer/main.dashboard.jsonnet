@@ -17,7 +17,7 @@ local graphPanel = grafana.graphPanel;
 local annotation = grafana.annotation;
 local serviceDashboard = import 'service_dashboard.libsonnet';
 
-serviceDashboard.overview('pgbouncer', 'db', stage='main')
+serviceDashboard.overview('pgbouncer', 'main')
 .addPanel(
   row.new(title='pgbouncer Workload'),
   gridPos={
@@ -27,7 +27,7 @@ serviceDashboard.overview('pgbouncer', 'db', stage='main')
     h: 1,
   }
 )
-.addPanels(pgbouncerCommonGraphs.workloadStats('patroni', startRow=2000))
+.addPanels(pgbouncerCommonGraphs.workloadStats('pgbouncer', startRow=2000))
 .addPanel(
   row.new(title='pgbouncer Connection Pooling'),
   gridPos={

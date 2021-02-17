@@ -1,4 +1,5 @@
 local selectors = import 'promql/selectors.libsonnet';
+local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
 // For now we assume that services are provisioned on vms and not kubernetes
 // Please consult the README.md file for details of team and feature_category
@@ -7,7 +8,7 @@ local serviceLevelIndicatorDefaults = {
   team: null,
   description: '',
   staticLabels: {},  // by default, no static labels
-  aggregateRequestRate: true,  // by default, requestRate is aggregated up to the service level
+  serviceAggregation: true,  // by default, requestRate is aggregated up to the service level
   ignoreTrafficCessation: false,  // Override to true to disable alerting when SLI is zero or absent
 };
 
@@ -17,11 +18,13 @@ local validateHasField(object, field, message) =
   else
     std.assertEqual(true, { __assert: message });
 
-local validateAndApplySLIDefaults(sliName, component) =
-  // All components must have a requestRate measurement, since
-  // we filter out low-RPS alerts for apdex monitoring and require the RPS for error ratios
+local validateAndApplySLIDefaults(sliName, component, inheritedDefaults) =
+  inheritedDefaults
+  +
   serviceLevelIndicatorDefaults
   +
+  // All components must have a requestRate measurement, since
+  // we filter out low-RPS alerts for apdex monitoring and require the RPS for error ratios
   validateHasField(component, 'requestRate', '%s component requires a requestRate measurement' % [sliName])
   +
   validateHasField(component, 'significantLabels', '%s component requires a significantLabels attribute' % [sliName])
@@ -55,6 +58,9 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
         self.toolingLinks
       else
         [],
+
+    renderToolingLinks()::
+      toolingLinks.renderLinks(self.getToolingLinks()),
 
     // Generate recording rules for apdex weight
     generateApdexWeightRecordingRules(burnRate, recordingRuleName, aggregationLabels, recordingRuleStaticLabels)::
@@ -134,7 +140,7 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
 {
   serviceLevelIndicatorDefinition(serviceLevelIndicator)::
     {
-      initServiceLevelIndicatorWithName(sliName)::
-        serviceLevelIndicatorDefinition(sliName, validateAndApplySLIDefaults(sliName, serviceLevelIndicator)),
+      initServiceLevelIndicatorWithName(sliName, inheritedDefaults)::
+        serviceLevelIndicatorDefinition(sliName, validateAndApplySLIDefaults(sliName, serviceLevelIndicator, inheritedDefaults)),
     },
 }

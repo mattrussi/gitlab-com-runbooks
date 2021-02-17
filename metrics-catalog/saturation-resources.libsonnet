@@ -3,7 +3,7 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 
 local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
 
-local kubeProvisionedServices = ['git', 'mailroom', 'registry', 'sidekiq'];
+local kubeProvisionedServices = ['git', 'mailroom', 'registry', 'sidekiq', 'websockets', 'kas'];
 
 // Disk utilisation metrics are currently reporting incorrectly for
 // HDD volumes, see https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10248
@@ -55,7 +55,7 @@ local pgbouncerSyncPool(serviceType, role) =
 
       Web/api/git applications use a separate connection pool to sidekiq.
 
-      When this resource is saturated, web/api database operations may queue, leading to unicorn/puma
+      When this resource is saturated, web/api database operations may queue, leading to rails worker
       saturation and 503 errors in the web.
     ||| % { role: role },
     grafana_dashboard_uid: 'sat_pgbouncer_sync_pool_' + role,
@@ -137,7 +137,7 @@ local pgbouncerSyncPool(serviceType, role) =
     title: 'Rails DB Connection Pool Utilization',
     severity: 's4',
     horizontallyScalable: true,  // Add more replicas for achieve greater scalability
-    appliesTo: ['web', 'api', 'git', 'sidekiq'],
+    appliesTo: ['web', 'api', 'git', 'sidekiq', 'websockets'],
     description: |||
       Rails uses connection pools for its database connections. As each
       node may have multiple connection pools, this is by node and by
@@ -628,6 +628,35 @@ local pgbouncerSyncPool(serviceType, role) =
     },
   }),
 
+  ruby_thread_contention: resourceSaturationPoint({
+    title: 'Ruby Thread Contention',
+    severity: 's3',
+    horizontallyScalable: true,  // Add more replicas for achieve greater scalability
+    appliesTo: ['web', 'sidekiq', 'api', 'git', 'websockets'],
+    description: |||
+      Ruby (technically Ruby MRI), like some other scripting languages, uses a Global VM lock (GVL) also known as a
+      Global Interpreter Lock (GIL) to ensure that multiple threads can execute safely. Ruby code is only allowed to
+      execute in one thread in a process at a time. When calling out to c extensions, the thread can cede the lock to
+      other thread while it continues to execute.
+
+      This means that when CPU-bound workloads run in a multithreaded environment such as Puma or Sidekiq, contention
+      with other Ruby worker threads running in the same process can occur, effectively slowing thoses threads down as
+      they await GVL entry.
+
+      Often the best fix for this situation is to add more workers by scaling up the fleet.
+    |||,
+    grafana_dashboard_uid: 'sat_ruby_thread_contention',
+    resourceLabels: ['fqdn', 'pod'],  // We need both because `instance` is still an unreadable IP :|
+    burnRatePeriod: '10m',
+    query: |||
+      rate(ruby_process_cpu_seconds_total{%(selector)s}[%(rangeInterval)s])
+    |||,
+    slos: {
+      soft: 0.70,
+      hard: 0.75,
+    },
+  }),
+
   workhorse_image_scaling: resourceSaturationPoint({
     title: 'Workhorse Image Scaler Exhaustion per Node',
     severity: 's4',
@@ -911,7 +940,7 @@ local pgbouncerSyncPool(serviceType, role) =
     title: 'Puma Worker Saturation per Node',
     severity: 's2',
     horizontallyScalable: true,
-    appliesTo: ['web', 'api', 'git', 'sidekiq'],
+    appliesTo: ['web', 'api', 'git', 'sidekiq', 'websockets'],
     description: |||
       Puma thread utilization per node.
 
@@ -924,9 +953,9 @@ local pgbouncerSyncPool(serviceType, role) =
     grafana_dashboard_uid: 'sat_single_node_puma_workers',
     resourceLabels: ['fqdn'],
     query: |||
-      sum by(%(aggregationLabels)s) (avg_over_time(puma_active_connections{%(selector)s}[%(rangeInterval)s]))
+      sum by(%(aggregationLabels)s) (avg_over_time(instance:puma_active_connections:sum{%(selector)s}[%(rangeInterval)s]))
       /
-      sum by(%(aggregationLabels)s) (puma_max_threads{pid="puma_master", %(selector)s})
+      sum by(%(aggregationLabels)s) (instance:puma_max_threads:sum{%(selector)s})
     |||,
     slos: {
       soft: 0.85,

@@ -172,7 +172,7 @@ local saturationQuery(aggregationLabels, nodeSelector, poolSelector) =
         description='Shows connection saturation per pgbouncer pool. Lower is better.',
         yAxisLabel='Server Pool Utilization',
         query=saturationQuery(
-          aggregationLabels=['database', 'env', 'environment', 'shard', 'stage', 'tier', 'type'],
+          aggregationLabels=['database', 'env', 'environment', 'shard', 'stage', 'type'],
           nodeSelector=nodeSelector,
           poolSelector=poolSelector,
         ),
@@ -185,7 +185,7 @@ local saturationQuery(aggregationLabels, nodeSelector, poolSelector) =
         description='Shows connection saturation per pgbouncer pool, per pgbouncer node. Lower is better.',
         yAxisLabel='Server Pool Utilization',
         query=saturationQuery(
-          aggregationLabels=['database', 'env', 'environment', 'fqdn', 'job', 'shard', 'stage', 'tier', 'type'],
+          aggregationLabels=['database', 'env', 'environment', 'fqdn', 'job', 'shard', 'stage', 'type'],
           nodeSelector=nodeSelector,
           poolSelector=poolSelector,
         ),
@@ -263,7 +263,7 @@ local saturationQuery(aggregationLabels, nodeSelector, poolSelector) =
             rate(
               namedprocess_namegroup_cpu_seconds_total{groupname=~"pgbouncer.*", %(nodeSelector)s}[5m]
             )
-          ) by (groupname, fqdn, type, tier, stage, environment)
+          ) by (groupname, fqdn, type, stage, environment)
         ||| % formatConfig,
         legendFormat='{{ groupname }} {{ fqdn }}',
         interval='30s',

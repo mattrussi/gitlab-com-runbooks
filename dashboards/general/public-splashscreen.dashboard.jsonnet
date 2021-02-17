@@ -4,6 +4,8 @@ local keyMetrics = import 'key_metrics.libsonnet';
 local row = grafana.row;
 local text = grafana.text;
 
+local selector = { stage: 'main', env: '$environment', environment: '$environment' };
+
 basic.dashboard(
   'GitLab Dashboards',
   tags=['general']
@@ -76,9 +78,9 @@ basic.dashboard(
     h: 2,
   }
 )
-.addPanels(keyMetrics.headlineMetricsRow('web', 'main', startRow=1100, rowTitle='Web Frontend: gitlab.com web traffic'))
-.addPanels(keyMetrics.headlineMetricsRow('api', 'main', startRow=1200, rowTitle='API: gitlab.com/api traffic'))
-.addPanels(keyMetrics.headlineMetricsRow('git', 'main', startRow=1300, rowTitle='Git: git ssh and https traffic'))
-.addPanels(keyMetrics.headlineMetricsRow('ci-runners', 'main', startRow=1400, rowTitle='CI Runners'))
-.addPanels(keyMetrics.headlineMetricsRow('registry', 'main', startRow=1500, rowTitle='Container Registry'))
+.addPanels(keyMetrics.headlineMetricsRow('web', startRow=1100, rowTitle='Web traffic: gitlab.com', selectorHash=selector, stableIdPrefix='web', showDashboardListPanel=true))
+.addPanels(keyMetrics.headlineMetricsRow('api', startRow=1200, rowTitle='API: gitlab.com/api traffic', selectorHash=selector, stableIdPrefix='api', showDashboardListPanel=true))
+.addPanels(keyMetrics.headlineMetricsRow('git', startRow=1300, rowTitle='Git: git ssh and https traffic', selectorHash=selector, stableIdPrefix='git', showDashboardListPanel=true))
+.addPanels(keyMetrics.headlineMetricsRow('ci-runners', startRow=1400, rowTitle='CI Runners', selectorHash=selector, stableIdPrefix='ci-runners', showDashboardListPanel=true))
+.addPanels(keyMetrics.headlineMetricsRow('registry', startRow=1500, rowTitle='Container Registry', selectorHash=selector, stableIdPrefix='registry', showDashboardListPanel=true))
 .trailer()

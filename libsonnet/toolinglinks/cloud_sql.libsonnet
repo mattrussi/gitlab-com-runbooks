@@ -1,4 +1,4 @@
-local toolingLinkDefinition = (import './tooling_link_definition.libsonnet').toolingLinkDefinition;
+local toolingLinkDefinition = (import './tooling_link_definition.libsonnet').toolingLinkDefinition({ tool:: 'cloud_sql' });
 local stackdriverLogs = import './stackdriver_logs.libsonnet';
 
 {

@@ -20,20 +20,22 @@ groups:
         https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '100424'
+      grafana_panel_id: '424944884'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sum by (environment) (haproxy_backend_current_session_rate{backend=~"ssh|altssh"})
+        )
+      runbook: docs/git/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: >
@@ -56,20 +58,22 @@ groups:
         https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '100424'
+      grafana_panel_id: '424944884'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_ops:rate_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sum by (environment) (haproxy_backend_current_session_rate{backend=~"ssh|altssh"})
+        )
+      runbook: docs/git/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: |
@@ -91,15 +95,11 @@ groups:
         https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '51400'
+      grafana_panel_id: '3255520955'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: >-
-        https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-error-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      runbook: docs/git/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -107,6 +107,7 @@ groups:
       product_stage_group: not_owned
       rules_domain: general
       severity: s2
+      sli_type: error
       slo_alert: 'yes'
       user_impacting: 'yes'
     expr: |
@@ -150,20 +151,18 @@ groups:
         https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '86440'
+      grafana_panel_id: '138982496'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      runbook: docs/git/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: >
@@ -186,20 +185,18 @@ groups:
         https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '86440'
+      grafana_panel_id: '138982496'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_ops:rate_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      runbook: docs/git/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: |
@@ -221,15 +218,11 @@ groups:
         https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '84296'
+      grafana_panel_id: '2063210499'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: >-
-        https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-error-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      runbook: docs/git/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -237,6 +230,7 @@ groups:
       product_stage_group: not_owned
       rules_domain: general
       severity: s2
+      sli_type: error
       slo_alert: 'yes'
       user_impacting: 'yes'
     expr: |
@@ -280,20 +274,18 @@ groups:
         https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '56680'
+      grafana_panel_id: '3437608064'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      runbook: docs/git/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: >
@@ -316,20 +308,18 @@ groups:
         https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '56680'
+      grafana_panel_id: '3437608064'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_ops:rate_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      runbook: docs/git/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: |
@@ -347,14 +337,21 @@ groups:
       grafana_dashboard_id: git-main/git-overview
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
+        $labels.component }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '97192'
-      grafana_variables: environment,stage
-      promql_template_1: >-
-        gitlab_component_apdex:ratio_1h{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      grafana_panel_id: '561966508'
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="git"}[5m])
+          )
+        )
+      runbook: docs/git/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -362,6 +359,7 @@ groups:
       product_stage_group: not_owned
       rules_domain: general
       severity: s2
+      sli_type: apdex
       slo_alert: 'yes'
       user_impacting: 'yes'
     expr: |
@@ -390,6 +388,68 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="puma",monitor="global",type="git"}) >= 1
       )
+  - alert: GitServicePumaApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The puma SLI of the git service in region `{{ $labels.region }}` has an apdex violating SLO
+      description: |
+        Monitors Rails endpoints, running in the Git fleet, via the HTTP interface.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: alerts-regional_component_slo_apdex
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/alerts-regional_component_slo_apdex?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-region={{
+        $labels.region }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '965700560'
+      grafana_variables: environment,type,stage,region,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,region,le) (
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="git"}[5m])
+          )
+        )
+      runbook: docs/git/README.md
+    labels:
+      aggregation: regional_component
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: 'yes'
+      user_impacting: 'yes'
+    expr: |
+      (
+        (
+          gitlab_regional_sli_apdex:ratio_1h{component="puma",monitor="global",type="git"}
+          < (1 - 14.4 * 0.000500)
+        )
+        and
+        (
+          gitlab_regional_sli_apdex:ratio_5m{component="puma",monitor="global",type="git"}
+          < (1 - 14.4 * 0.000500)
+        )
+        or
+        (
+          gitlab_regional_sli_apdex:ratio_6h{component="puma",monitor="global",type="git"}
+          < (1 - 6 * 0.000500)
+        )
+        and
+        (
+          gitlab_regional_sli_apdex:ratio_30m{component="puma",monitor="global",type="git"}
+          < (1 - 6 * 0.000500)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="puma",monitor="global",type="git"}) >= 1
+      )
   - alert: GitServicePumaErrorSLOViolation
     for: 2m
     annotations:
@@ -404,15 +464,15 @@ groups:
         https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '11560'
+      grafana_panel_id: '2425637513'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: >-
-        https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-error-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:http_requests_total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",status=~"5..",type="git"}
+        )
+      runbook: docs/git/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -420,6 +480,7 @@ groups:
       product_stage_group: not_owned
       rules_domain: general
       severity: s2
+      sli_type: error
       slo_alert: 'yes'
       user_impacting: 'yes'
     expr: |
@@ -448,6 +509,68 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="puma",monitor="global",type="git"}) >= 1
       )
+  - alert: GitServicePumaErrorSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The puma SLI of the git service in region `{{ $labels.region }}` has an error rate violating
+        SLO
+      description: |
+        Monitors Rails endpoints, running in the Git fleet, via the HTTP interface.
+
+        Since the git service is not fully redundant, SLI violations on a single node may represent a user-impacting service degradation.
+
+        Currently the apdex value for {{ $labels.region }} is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: alerts-regional_component_slo_error
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/alerts-regional_component_slo_error?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-region={{
+        $labels.region }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '965700560'
+      grafana_variables: environment,type,stage,region,component
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region) (
+          rate(http_requests_total{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status=~"5..",type="git"}[5m])
+        )
+      runbook: docs/git/README.md
+    labels:
+      aggregation: regional_component
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: 'yes'
+      user_impacting: 'yes'
+    expr: |
+      (
+        (
+          gitlab_regional_sli_errors:ratio_1h{component="puma",monitor="global",type="git"}
+          > (14.4 * 0.000500)
+        )
+        and
+        (
+          gitlab_regional_sli_errors:ratio_5m{component="puma",monitor="global",type="git"}
+          > (14.4 * 0.000500)
+        )
+        or
+        (
+          gitlab_regional_sli_errors:ratio_6h{component="puma",monitor="global",type="git"}
+          > (6 * 0.000500)
+        )
+        and
+        (
+          gitlab_regional_sli_errors:ratio_30m{component="puma",monitor="global",type="git"}
+          > (6 * 0.000500)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="puma",monitor="global",type="git"}) >= 1
+      )
   - alert: GitServicePumaTrafficCessation
     for: 5m
     annotations:
@@ -463,20 +586,22 @@ groups:
         https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '74472'
+      grafana_panel_id: '110019945'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:http_requests_total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="git"}
+        )
+      runbook: docs/git/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: 'gitlab_component_ops:rate_30m{type="git", component="puma", stage="main", monitor="global"}
@@ -500,20 +625,22 @@ groups:
         https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '74472'
+      grafana_panel_id: '110019945'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_ops:rate_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:http_requests_total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="git"}
+        )
+      runbook: docs/git/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: |
@@ -532,14 +659,21 @@ groups:
       grafana_dashboard_id: git-main/git-overview
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
+        $labels.component }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '25160'
-      grafana_variables: environment,stage
-      promql_template_1: >-
-        gitlab_component_apdex:ratio_1h{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      grafana_panel_id: '2586818196'
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-git",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="^/([^/]+/){1,}[^/]+/-/jobs/[0-9]+/terminal.ws\\z",route!="^/([^/]+/){1,}[^/]+/-/environments/[0-9]+/terminal.ws\\z",route!="^/-/cable\\z",stage="{{ $labels.stage }}",type="git"}[5m])
+          )
+        )
+      runbook: docs/git/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -547,6 +681,7 @@ groups:
       product_stage_group: not_owned
       rules_domain: general
       severity: s2
+      sli_type: apdex
       slo_alert: 'yes'
       user_impacting: 'yes'
     expr: |
@@ -575,6 +710,69 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="workhorse",monitor="global",type="git"}) >= 1
       )
+  - alert: GitServiceWorkhorseApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The workhorse SLI of the git service in region `{{ $labels.region }}` has an apdex violating
+        SLO
+      description: |
+        Monitors the Workhorse instance running in the Git fleet, via the HTTP interface. This SLI excludes API requests, which have their own SLI with tigher latency thresholds. Websocket connections are excluded from the apdex score.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: alerts-regional_component_slo_apdex
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/alerts-regional_component_slo_apdex?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-region={{
+        $labels.region }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '965700560'
+      grafana_variables: environment,type,stage,region,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,region,le) (
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-git",region="{{ $labels.region }}",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="^/([^/]+/){1,}[^/]+/-/jobs/[0-9]+/terminal.ws\\z",route!="^/([^/]+/){1,}[^/]+/-/environments/[0-9]+/terminal.ws\\z",route!="^/-/cable\\z",stage="{{ $labels.stage }}",type="git"}[5m])
+          )
+        )
+      runbook: docs/git/README.md
+    labels:
+      aggregation: regional_component
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: 'yes'
+      user_impacting: 'yes'
+    expr: |
+      (
+        (
+          gitlab_regional_sli_apdex:ratio_1h{component="workhorse",monitor="global",type="git"}
+          < (1 - 14.4 * 0.000500)
+        )
+        and
+        (
+          gitlab_regional_sli_apdex:ratio_5m{component="workhorse",monitor="global",type="git"}
+          < (1 - 14.4 * 0.000500)
+        )
+        or
+        (
+          gitlab_regional_sli_apdex:ratio_6h{component="workhorse",monitor="global",type="git"}
+          < (1 - 6 * 0.000500)
+        )
+        and
+        (
+          gitlab_regional_sli_apdex:ratio_30m{component="workhorse",monitor="global",type="git"}
+          < (1 - 6 * 0.000500)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="workhorse",monitor="global",type="git"}) >= 1
+      )
   - alert: GitServiceWorkhorseErrorSLOViolation
     for: 2m
     annotations:
@@ -589,15 +787,15 @@ groups:
         https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '48008'
+      grafana_panel_id: '2047984749'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: >-
-        https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-error-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-git",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",stage="{{ $labels.stage }}",type="git"}[5m])
+        )
+      runbook: docs/git/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -605,6 +803,7 @@ groups:
       product_stage_group: not_owned
       rules_domain: general
       severity: s2
+      sli_type: error
       slo_alert: 'yes'
       user_impacting: 'yes'
     expr: |
@@ -633,6 +832,69 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="workhorse",monitor="global",type="git"}) >= 1
       )
+  - alert: GitServiceWorkhorseErrorSLOViolationRegional
+    for: 2m
+    annotations:
+      title: >-
+        The workhorse SLI of the git service in region `{{ $labels.region }}` has an error rate violating
+        SLO
+      description: |
+        Monitors the Workhorse instance running in the Git fleet, via the HTTP interface. This SLI excludes API requests, which have their own SLI with tigher latency thresholds. Websocket connections are excluded from the apdex score.
+
+        Since the git service is not fully redundant, SLI violations on a single node may represent a user-impacting service degradation.
+
+        Currently the apdex value for {{ $labels.region }} is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: alerts-regional_component_slo_error
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/alerts-regional_component_slo_error?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-region={{
+        $labels.region }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '965700560'
+      grafana_variables: environment,type,stage,region,component
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region) (
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-git",region="{{ $labels.region }}",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",stage="{{ $labels.stage }}",type="git"}[5m])
+        )
+      runbook: docs/git/README.md
+    labels:
+      aggregation: regional_component
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: 'yes'
+      user_impacting: 'yes'
+    expr: |
+      (
+        (
+          gitlab_regional_sli_errors:ratio_1h{component="workhorse",monitor="global",type="git"}
+          > (14.4 * 0.000500)
+        )
+        and
+        (
+          gitlab_regional_sli_errors:ratio_5m{component="workhorse",monitor="global",type="git"}
+          > (14.4 * 0.000500)
+        )
+        or
+        (
+          gitlab_regional_sli_errors:ratio_6h{component="workhorse",monitor="global",type="git"}
+          > (6 * 0.000500)
+        )
+        and
+        (
+          gitlab_regional_sli_errors:ratio_30m{component="workhorse",monitor="global",type="git"}
+          > (6 * 0.000500)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="workhorse",monitor="global",type="git"}) >= 1
+      )
   - alert: GitServiceWorkhorseTrafficCessation
     for: 5m
     annotations:
@@ -648,20 +910,22 @@ groups:
         https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '20840'
+      grafana_panel_id: '831392945'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(gitlab_workhorse_http_requests_total{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-git",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",stage="{{ $labels.stage }}",type="git"}[5m])
+        )
+      runbook: docs/git/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: >
@@ -684,20 +948,22 @@ groups:
         https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '20840'
+      grafana_panel_id: '831392945'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_ops:rate_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(gitlab_workhorse_http_requests_total{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-git",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",stage="{{ $labels.stage }}",type="git"}[5m])
+        )
+      runbook: docs/git/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: |
@@ -717,14 +983,21 @@ groups:
       grafana_dashboard_id: git-main/git-overview
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
+        $labels.component }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '83880'
-      grafana_variables: environment,stage
-      promql_template_1: >-
-        gitlab_component_apdex:ratio_1h{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      grafana_panel_id: '3139093701'
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-git",route="^/api/",stage="{{ $labels.stage }}",type="git"}[5m])
+          )
+        )
+      runbook: docs/git/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -732,6 +1005,7 @@ groups:
       product_stage_group: not_owned
       rules_domain: general
       severity: s2
+      sli_type: apdex
       slo_alert: 'yes'
       user_impacting: 'yes'
     expr: |
@@ -760,6 +1034,70 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="workhorse_auth_api",monitor="global",type="git"}) >= 1
       )
+  - alert: GitServiceWorkhorseAuthApiApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: >-
+        The workhorse_auth_api SLI of the git service in region `{{ $labels.region }}` has an apdex violating
+        SLO
+      description: |
+        Monitors Workhorse API endpoints, running in the Git fleet, via the HTTP interface. Workhorse API requests have much tigher latency requirements, as these requests originate in GitLab-Shell and are on the critical path for authentication of Git SSH commands.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: alerts-regional_component_slo_apdex
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/alerts-regional_component_slo_apdex?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-region={{
+        $labels.region }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '965700560'
+      grafana_variables: environment,type,stage,region,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,region,le) (
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-git",region="{{ $labels.region }}",route="^/api/",stage="{{ $labels.stage }}",type="git"}[5m])
+          )
+        )
+      runbook: docs/git/README.md
+    labels:
+      aggregation: regional_component
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: 'yes'
+      user_impacting: 'yes'
+    expr: |
+      (
+        (
+          gitlab_regional_sli_apdex:ratio_1h{component="workhorse_auth_api",monitor="global",type="git"}
+          < (1 - 14.4 * 0.000500)
+        )
+        and
+        (
+          gitlab_regional_sli_apdex:ratio_5m{component="workhorse_auth_api",monitor="global",type="git"}
+          < (1 - 14.4 * 0.000500)
+        )
+        or
+        (
+          gitlab_regional_sli_apdex:ratio_6h{component="workhorse_auth_api",monitor="global",type="git"}
+          < (1 - 6 * 0.000500)
+        )
+        and
+        (
+          gitlab_regional_sli_apdex:ratio_30m{component="workhorse_auth_api",monitor="global",type="git"}
+          < (1 - 6 * 0.000500)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="workhorse_auth_api",monitor="global",type="git"}) >= 1
+      )
   - alert: GitServiceWorkhorseAuthApiErrorSLOViolation
     for: 2m
     annotations:
@@ -775,15 +1113,15 @@ groups:
         https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '11336'
+      grafana_panel_id: '2715630864'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: >-
-        https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-error-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-git",route="^/api/",stage="{{ $labels.stage }}",type="git"}[5m])
+        )
+      runbook: docs/git/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -791,6 +1129,7 @@ groups:
       product_stage_group: not_owned
       rules_domain: general
       severity: s2
+      sli_type: error
       slo_alert: 'yes'
       user_impacting: 'yes'
     expr: |
@@ -819,6 +1158,69 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="workhorse_auth_api",monitor="global",type="git"}) >= 1
       )
+  - alert: GitServiceWorkhorseAuthApiErrorSLOViolationRegional
+    for: 2m
+    annotations:
+      title: >-
+        The workhorse_auth_api SLI of the git service in region `{{ $labels.region }}` has an error rate
+        violating SLO
+      description: |
+        Monitors Workhorse API endpoints, running in the Git fleet, via the HTTP interface. Workhorse API requests have much tigher latency requirements, as these requests originate in GitLab-Shell and are on the critical path for authentication of Git SSH commands.
+
+        Since the git service is not fully redundant, SLI violations on a single node may represent a user-impacting service degradation.
+
+        Currently the apdex value for {{ $labels.region }} is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: alerts-regional_component_slo_error
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/alerts-regional_component_slo_error?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-region={{
+        $labels.region }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '965700560'
+      grafana_variables: environment,type,stage,region,component
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region) (
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-git",region="{{ $labels.region }}",route="^/api/",stage="{{ $labels.stage }}",type="git"}[5m])
+        )
+      runbook: docs/git/README.md
+    labels:
+      aggregation: regional_component
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: 'yes'
+      user_impacting: 'yes'
+    expr: |
+      (
+        (
+          gitlab_regional_sli_errors:ratio_1h{component="workhorse_auth_api",monitor="global",type="git"}
+          > (14.4 * 0.000500)
+        )
+        and
+        (
+          gitlab_regional_sli_errors:ratio_5m{component="workhorse_auth_api",monitor="global",type="git"}
+          > (14.4 * 0.000500)
+        )
+        or
+        (
+          gitlab_regional_sli_errors:ratio_6h{component="workhorse_auth_api",monitor="global",type="git"}
+          > (6 * 0.000500)
+        )
+        and
+        (
+          gitlab_regional_sli_errors:ratio_30m{component="workhorse_auth_api",monitor="global",type="git"}
+          > (6 * 0.000500)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="workhorse_auth_api",monitor="global",type="git"}) >= 1
+      )
   - alert: GitServiceWorkhorseAuthApiTrafficCessation
     for: 5m
     annotations:
@@ -834,20 +1236,22 @@ groups:
         https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '92392'
+      grafana_panel_id: '1588439617'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(gitlab_workhorse_http_requests_total{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-git",route="^/api/",stage="{{ $labels.stage }}",type="git"}[5m])
+        )
+      runbook: docs/git/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: >
@@ -870,20 +1274,22 @@ groups:
         https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '92392'
+      grafana_panel_id: '1588439617'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_ops:rate_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(gitlab_workhorse_http_requests_total{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-git",route="^/api/",stage="{{ $labels.stage }}",type="git"}[5m])
+        )
+      runbook: docs/git/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: |

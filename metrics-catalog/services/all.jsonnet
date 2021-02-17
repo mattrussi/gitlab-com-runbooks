@@ -10,6 +10,7 @@
   import 'git.jsonnet',
   import 'gitaly.jsonnet',
   import 'jaeger.jsonnet',
+  import 'kas.jsonnet',
   import 'logging.jsonnet',
   import 'mailroom.jsonnet',
   import 'monitoring.jsonnet',
@@ -27,5 +28,6 @@
   import 'waf.jsonnet',
   import 'web-pages.jsonnet',
   import 'web.jsonnet',
+  import 'websockets.jsonnet',
   import 'woodhouse.jsonnet',
 ]

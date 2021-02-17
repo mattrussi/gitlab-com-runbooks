@@ -257,13 +257,13 @@ groups:
         clamp_min(
           clamp_max(
             sum by (environment, tier, type, stage, pod, container) (
-              rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", environment!="",type=~"git|mailroom|registry|sidekiq"}[5m])
+              rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", environment!="",type=~"git|mailroom|registry|sidekiq|websockets|kas"}[5m])
             )
             /
             sum by(environment, tier, type, stage, pod, container) (
-              container_spec_cpu_quota:labeled{container!="", container!="POD", environment!="",type=~"git|mailroom|registry|sidekiq"}
+              container_spec_cpu_quota:labeled{container!="", container!="POD", environment!="",type=~"git|mailroom|registry|sidekiq|websockets|kas"}
               /
-              container_spec_cpu_period:labeled{container!="", container!="POD", environment!="",type=~"git|mailroom|registry|sidekiq"}
+              container_spec_cpu_period:labeled{container!="", container!="POD", environment!="",type=~"git|mailroom|registry|sidekiq|websockets|kas"}
             )
             ,
             1)
@@ -277,9 +277,9 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            container_memory_working_set_bytes:labeled{container!="", container!="POD", environment!="",type=~"git|mailroom|registry|sidekiq"}
+            container_memory_working_set_bytes:labeled{container!="", container!="POD", environment!="",type=~"git|mailroom|registry|sidekiq|websockets|kas"}
             /
-            (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", environment!="",type=~"git|mailroom|registry|sidekiq"} > 0)
+            (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", environment!="",type=~"git|mailroom|registry|sidekiq|websockets|kas"} > 0)
             ,
             1)
         ,
@@ -557,12 +557,12 @@ groups:
         clamp_min(
           clamp_max(
             (
-              avg_over_time(gitlab_database_connection_pool_busy{class="ActiveRecord::Base", environment!="",type=~"web|api|git|sidekiq"}[5m])
+              avg_over_time(gitlab_database_connection_pool_busy{class="ActiveRecord::Base", environment!="",type=~"web|api|git|sidekiq|websockets"}[5m])
               +
-              avg_over_time(gitlab_database_connection_pool_dead{class="ActiveRecord::Base", environment!="",type=~"web|api|git|sidekiq"}[5m])
+              avg_over_time(gitlab_database_connection_pool_dead{class="ActiveRecord::Base", environment!="",type=~"web|api|git|sidekiq|websockets"}[5m])
             )
             /
-            gitlab_database_connection_pool_size{class="ActiveRecord::Base", environment!="",type=~"web|api|git|sidekiq"}
+            gitlab_database_connection_pool_size{class="ActiveRecord::Base", environment!="",type=~"web|api|git|sidekiq|websockets"}
             ,
             1)
         ,
@@ -635,6 +635,19 @@ groups:
               rate(redis_cpu_sys_seconds_total{environment!="",type=~"redis|redis-sidekiq|redis-cache"}[1m])
             )
             and on (instance) redis_instance_info{role!="master"}
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
+      component: ruby_thread_contention
+    expr: |
+      max by(environment, tier, type, stage) (
+        clamp_min(
+          clamp_max(
+            rate(ruby_process_cpu_seconds_total{environment!="",type=~"web|sidekiq|api|git|websockets"}[10m])
             ,
             1)
         ,
@@ -731,9 +744,9 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            sum by(environment, tier, type, stage, fqdn) (avg_over_time(puma_active_connections{environment!="",type=~"web|api|git|sidekiq"}[1m]))
+            sum by(environment, tier, type, stage, fqdn) (avg_over_time(instance:puma_active_connections:sum{environment!="",type=~"web|api|git|sidekiq|websockets"}[1m]))
             /
-            sum by(environment, tier, type, stage, fqdn) (puma_max_threads{pid="puma_master", environment!="",type=~"web|api|git|sidekiq"})
+            sum by(environment, tier, type, stage, fqdn) (instance:puma_max_threads:sum{environment!="",type=~"web|api|git|sidekiq|websockets"})
             ,
             1)
         ,
@@ -1047,6 +1060,14 @@ groups:
     expr: '0.95'
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
+      component: ruby_thread_contention
+    expr: '0.7'
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: ruby_thread_contention
+    expr: '0.75'
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
       component: shard_cpu
     expr: '0.85'
   - record: slo:max:hard:gitlab_component_saturation:ratio
@@ -1322,6 +1343,12 @@ groups:
     expr: '1'
   - record: gitlab_component_saturation_info
     labels:
+      component: ruby_thread_contention
+      horiz_scaling: 'yes'
+      severity: s3
+    expr: '1'
+  - record: gitlab_component_saturation_info
+    labels:
       component: shard_cpu
       horiz_scaling: 'yes'
       severity: s3
@@ -1399,7 +1426,7 @@ groups:
         https://dashboards.gitlab.net/d/alerts-sat_cgroup_memory?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '96168'
+      grafana_panel_id: '2265664609'
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, tier, type, stage, fqdn) (
@@ -1442,7 +1469,7 @@ groups:
         https://dashboards.gitlab.net/d/alerts-sat_cpu?from=now-6h/m&to=now-1m/m&var-environment={{ $labels.environment
         }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '90152'
+      grafana_panel_id: '1465724101'
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, tier, type, stage) (
@@ -1484,7 +1511,7 @@ groups:
         https://dashboards.gitlab.net/d/alerts-sat_disk_inodes?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '24424'
+      grafana_panel_id: '39965907'
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, tier, type, stage, fqdn, device) (
@@ -1527,7 +1554,7 @@ groups:
         https://dashboards.gitlab.net/d/alerts-sat_disk_space?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2632'
+      grafana_panel_id: '2661375984'
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, tier, type, stage, fqdn, device) (
@@ -1568,7 +1595,7 @@ groups:
         https://dashboards.gitlab.net/d/alerts-sat_disk_sus_read_iops?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '69768'
+      grafana_panel_id: '3942129027'
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, tier, type, stage, fqdn, device) (
@@ -1608,7 +1635,7 @@ groups:
         https://dashboards.gitlab.net/d/alerts-sat_disk_sus_read_throughput?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '66056'
+      grafana_panel_id: '3120931940'
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, tier, type, stage, fqdn, device) (
@@ -1652,7 +1679,7 @@ groups:
         https://dashboards.gitlab.net/d/alerts-sat_disk_sus_write_iops?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '15048'
+      grafana_panel_id: '1520756669'
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, tier, type, stage, fqdn, device) (
@@ -1696,7 +1723,7 @@ groups:
         https://dashboards.gitlab.net/d/alerts-sat_disk_sus_write_throughput?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '16648'
+      grafana_panel_id: '374696527'
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, tier, type, stage, fqdn, device) (
@@ -1737,7 +1764,7 @@ groups:
         https://dashboards.gitlab.net/d/alerts-sat_elastic_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '4200'
+      grafana_panel_id: '804418020'
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, tier, type, stage) (
@@ -1776,7 +1803,7 @@ groups:
         https://dashboards.gitlab.net/d/alerts-sat_elastic_disk_space?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '18024'
+      grafana_panel_id: '2419103084'
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, tier, type, stage) (
@@ -1819,7 +1846,7 @@ groups:
         https://dashboards.gitlab.net/d/alerts-sat_elastic_jvm_heap_memory?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '18568'
+      grafana_panel_id: '2329310959'
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, tier, type, stage, name) (
@@ -1860,7 +1887,7 @@ groups:
         https://dashboards.gitlab.net/d/alerts-sat_elastic_single_node_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '31080'
+      grafana_panel_id: '2230690360'
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, tier, type, stage, name) (
@@ -1897,7 +1924,7 @@ groups:
         https://dashboards.gitlab.net/d/alerts-sat_elastic_node_disk_space?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '58504'
+      grafana_panel_id: '658552830'
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, tier, type, stage, name) (
@@ -1944,7 +1971,7 @@ groups:
         https://dashboards.gitlab.net/d/alerts-sat_elastic_thread_pools?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2728'
+      grafana_panel_id: '525964640'
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, tier, type, stage, name, exported_type) (
@@ -1985,7 +2012,7 @@ groups:
         https://dashboards.gitlab.net/d/alerts-sat_go_memory?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '45864'
+      grafana_panel_id: '3631721613'
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, tier, type, stage, fqdn) (
@@ -2028,7 +2055,7 @@ groups:
         https://dashboards.gitlab.net/d/alerts-sat_kube_container_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '23368'
+      grafana_panel_id: '2713861591'
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, tier, type, stage, pod, container) (
@@ -2073,7 +2100,7 @@ groups:
         https://dashboards.gitlab.net/d/alerts-sat_kube_container_memory?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '13064'
+      grafana_panel_id: '172578411'
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, tier, type, stage, pod, container) (
@@ -2112,7 +2139,7 @@ groups:
         https://dashboards.gitlab.net/d/alerts-sat_kube_hpa_instances?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '7528'
+      grafana_panel_id: '780915474'
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, hpa) (
@@ -2159,7 +2186,7 @@ groups:
         https://dashboards.gitlab.net/d/alerts-sat_kube_pvc_disk_space?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '15240'
+      grafana_panel_id: '4167694322'
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, persistentvolumeclaim) (
@@ -2200,7 +2227,7 @@ groups:
         https://dashboards.gitlab.net/d/alerts-sat_kube_pvc_inodes?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '6952'
+      grafana_panel_id: '3153876074'
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, persistentvolumeclaim) (
@@ -2240,7 +2267,7 @@ groups:
         https://dashboards.gitlab.net/d/alerts-sat_memory?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '42024'
+      grafana_panel_id: '1955556769'
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, tier, type, stage, fqdn) (
@@ -2279,7 +2306,7 @@ groups:
         https://dashboards.gitlab.net/d/alerts-sat_conntrack?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2856'
+      grafana_panel_id: '503581002'
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, tier, type, stage, fqdn, instance) (
@@ -2323,7 +2350,7 @@ groups:
         https://dashboards.gitlab.net/d/alerts-sat_open_fds?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '54344'
+      grafana_panel_id: '1001792825'
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, tier, type, stage, job, instance) (
@@ -2373,7 +2400,7 @@ groups:
         https://dashboards.gitlab.net/d/alerts-sat_active_db_connections_primary?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '62920'
+      grafana_panel_id: '1954311497'
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, tier, type, stage, fqdn) (
@@ -2417,7 +2444,7 @@ groups:
         https://dashboards.gitlab.net/d/alerts-sat_active_db_connections_replica?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '93992'
+      grafana_panel_id: '3266646533'
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, tier, type, stage, fqdn) (
@@ -2461,7 +2488,7 @@ groups:
         https://dashboards.gitlab.net/d/alerts-sat_pgbouncer_async_pool_primary?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '50632'
+      grafana_panel_id: '1228921753'
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, tier, type, stage, fqdn, instance) (
@@ -2509,7 +2536,7 @@ groups:
         https://dashboards.gitlab.net/d/alerts-sat_pgbouncer_single_core?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '98120'
+      grafana_panel_id: '1214397558'
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, tier, type, stage, fqdn, groupname) (
@@ -2550,13 +2577,13 @@ groups:
 
         Web/api/git applications use a separate connection pool to sidekiq.
 
-        When this resource is saturated, web/api database operations may queue, leading to unicorn/puma saturation and 503 errors in the web.
+        When this resource is saturated, web/api database operations may queue, leading to rails worker saturation and 503 errors in the web.
       grafana_dashboard_id: alerts-sat_pgbouncer_sync_pool_primary
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/alerts-sat_pgbouncer_sync_pool_primary?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '56488'
+      grafana_panel_id: '4055772849'
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, tier, type, stage, fqdn, instance) (
@@ -2601,13 +2628,13 @@ groups:
 
         Web/api/git applications use a separate connection pool to sidekiq.
 
-        When this resource is saturated, web/api database operations may queue, leading to unicorn/puma saturation and 503 errors in the web.
+        When this resource is saturated, web/api database operations may queue, leading to rails worker saturation and 503 errors in the web.
       grafana_dashboard_id: alerts-sat_pgbouncer_sync_pool_replica
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/alerts-sat_pgbouncer_sync_pool_replica?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '22312'
+      grafana_panel_id: '2061891964'
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, tier, type, stage, fqdn, instance) (
@@ -2655,7 +2682,7 @@ groups:
         https://dashboards.gitlab.net/d/alerts-sat_praefect_cloudsql_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '51848'
+      grafana_panel_id: '3679713436'
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, database_id) (
@@ -2696,7 +2723,7 @@ groups:
         https://dashboards.gitlab.net/d/alerts-sat_private_runners?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '12488'
+      grafana_panel_id: '204635596'
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, instance) (
@@ -2741,7 +2768,7 @@ groups:
         https://dashboards.gitlab.net/d/alerts-sat_rails_db_connection_pool?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2952'
+      grafana_panel_id: '391047339'
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, tier, type, stage, instance, host, port) (
@@ -2788,7 +2815,7 @@ groups:
         https://dashboards.gitlab.net/d/alerts-sat_redis_clients?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '29992'
+      grafana_panel_id: '127397613'
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, tier, type, stage, fqdn) (
@@ -2831,7 +2858,7 @@ groups:
         https://dashboards.gitlab.net/d/alerts-sat_redis_memory?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '25192'
+      grafana_panel_id: '1855027052'
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, tier, type, stage, fqdn) (
@@ -2879,7 +2906,7 @@ groups:
         https://dashboards.gitlab.net/d/alerts-sat_redis_primary_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2056'
+      grafana_panel_id: '4143300761'
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, tier, type, stage, fqdn) (
@@ -2924,7 +2951,7 @@ groups:
         https://dashboards.gitlab.net/d/alerts-sat_redis_secondary_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '20520'
+      grafana_panel_id: '577905942'
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, tier, type, stage, fqdn) (
@@ -2953,6 +2980,47 @@ groups:
     for: 5m
     annotations:
       title: >-
+        The Ruby Thread Contention resource of the {{ $labels.type }} service ({{ $labels.stage }} stage),
+        component has a saturation exceeding SLO and is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Ruby Thread Contention resource:
+
+        Ruby (technically Ruby MRI), like some other scripting languages, uses a Global VM lock (GVL) also known as a Global Interpreter Lock (GIL) to ensure that multiple threads can execute safely. Ruby code is only allowed to execute in one thread in a process at a time. When calling out to c extensions, the thread can cede the lock to other thread while it continues to execute.
+
+        This means that when CPU-bound workloads run in a multithreaded environment such as Puma or Sidekiq, contention with other Ruby worker threads running in the same process can occur, effectively slowing thoses threads down as they await GVL entry.
+
+        Often the best fix for this situation is to add more workers by scaling up the fleet.
+      grafana_dashboard_id: alerts-sat_ruby_thread_contention
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/alerts-sat_ruby_thread_contention?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '2359646072'
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, fqdn, pod) (
+          clamp_min(
+            clamp_max(
+              rate(ruby_process_cpu_seconds_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[10m])
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s3
+    expr: |
+      gitlab_component_saturation:ratio{component="ruby_thread_contention"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="ruby_thread_contention"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: >-
         The Average CPU Utilization per Shard resource of the {{ $labels.type }} service ({{ $labels.stage
         }} stage), component has a saturation exceeding SLO and is close to its capacity limit.
       description: |
@@ -2966,7 +3034,7 @@ groups:
         https://dashboards.gitlab.net/d/alerts-sat_shard_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '69096'
+      grafana_panel_id: '1472933476'
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, tier, type, stage, shard) (
@@ -3009,7 +3077,7 @@ groups:
         https://dashboards.gitlab.net/d/alerts-sat_shared_runners?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '25128'
+      grafana_panel_id: '2853615952'
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, instance) (
@@ -3054,7 +3122,7 @@ groups:
         https://dashboards.gitlab.net/d/alerts-sat_shared_runners_gitlab?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '75400'
+      grafana_panel_id: '3295582630'
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, tier, type, stage, instance) (
@@ -3099,7 +3167,7 @@ groups:
         https://dashboards.gitlab.net/d/alerts-sat_sidekiq_shard_workers?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '10536'
+      grafana_panel_id: '836813313'
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, tier, type, stage, shard) (
@@ -3144,7 +3212,7 @@ groups:
         https://dashboards.gitlab.net/d/alerts-sat_single_node_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '57960'
+      grafana_panel_id: '3372411356'
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, tier, type, stage, fqdn) (
@@ -3185,15 +3253,15 @@ groups:
         https://dashboards.gitlab.net/d/alerts-sat_single_node_puma_workers?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '71272'
+      grafana_panel_id: '2677029523'
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, tier, type, stage, fqdn) (
           clamp_min(
             clamp_max(
-              sum by(environment, tier, type, stage, fqdn) (avg_over_time(puma_active_connections{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[1m]))
+              sum by(environment, tier, type, stage, fqdn) (avg_over_time(instance:puma_active_connections:sum{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[1m]))
               /
-              sum by(environment, tier, type, stage, fqdn) (puma_max_threads{pid="puma_master", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"})
+              sum by(environment, tier, type, stage, fqdn) (instance:puma_max_threads:sum{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"})
               ,
               1)
           ,
@@ -3228,7 +3296,7 @@ groups:
         https://dashboards.gitlab.net/d/alerts-sat_wh_image_scaling?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '92168'
+      grafana_panel_id: '3379320113'
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, tier, type, stage, fqdn) (

@@ -12,7 +12,7 @@ local shardDetailDataLink = {
   title: 'Shard Detail: ${__field.label.shard}',
 };
 
-serviceDashboard.overview('sidekiq', 'sv')
+serviceDashboard.overview('sidekiq')
 .addPanel(
   row.new(title='Sidekiq Queues'),
   gridPos={

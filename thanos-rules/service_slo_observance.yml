@@ -20,3 +20,37 @@ groups:
       avg_over_time(gitlab_service_errors:ratio{monitor="global"}[1m])
       <= bool on(tier, type) group_left
       slo:max:gitlab_service_errors:ratio{monitor="global"}
+  - record: 'gitlab_slo:last_violation_leading_timestamp'
+    expr: |
+      (
+        # If the series has been down for 1 minute record the start of that timestamp (60 seconds ago)
+        timestamp(avg_over_time(slo_observation_status[1m]) < 1) - 60
+        # only if the service was up for at least 15 minutes before that
+        and
+        avg_over_time(slo_observation_status[15m] offset 1m) == 1
+      )
+      or # Otherwise, use the previous value, if the series still exists
+      (
+        # give us the most recent value, allowing for gaps (due to prometheus availability of up to 15m)
+        max_over_time(gitlab_slo:last_violation_leading_timestamp[15m])
+        and
+        # But only continue to propagate series if there are values within the last 15m (garbage collection)
+        avg_over_time(slo_observation_status[15m])
+      )
+  - record: 'gitlab_slo:last_violation_trailing_timestamp'
+    expr: |
+      (
+        # If the series has been consistently available for 15m, with no downtime, then record the start of this timeframe (15*60 seconds ago)
+        timestamp(avg_over_time(slo_observation_status[15m]) == 1) - (15 * 60)
+        # as long as there was some downtime immediately before that
+        and
+        avg_over_time(slo_observation_status[16m]) < 1
+      )
+      or # Otherwise, use the previous value, if the series still exists
+      (
+        # give us the most recent value, allowing for gaps (due to prometheus availability of up to 15m)
+        max_over_time(gitlab_slo:last_violation_trailing_timestamp[15m])
+        and
+        # But only continue to propagate series if there are values within the last 15m (garbage collection)
+        avg_over_time(slo_observation_status[15m])
+      )

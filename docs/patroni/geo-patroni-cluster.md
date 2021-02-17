@@ -1,5 +1,7 @@
 # Geo Patroni Cluster Management
 
+[[_TOC_]]
+
 ## Setup replication for a single node
 
 These directions are for setting up archive recovery in geo environments
@@ -12,23 +14,24 @@ lost replication for too long and the necessary WAL files are not on the node we
 are replicating from anymore or if we need to upgrade postgres to a newer major
 version.
 
-In staging we are using wal-g to retrieve the initial base-backup and WAL files
+We are using wal-g to retrieve the initial base-backup and WAL files
 from GCS and then Postgres is automatically switching over to streaming
 replication (see recovery.conf). As of writing,
 `geo-secondary-01-sv-gstg.c.gitlab-staging-1.internal` is streaming from
 `patroni-05-db-gstg.c.gitlab-staging-1.internal`.
 
-* `systemctl stop chef-client`
+* `chef-client-disable <issue-link>`
 * `gitlab-ctl stop`
+* `gitlab-ctl start geo-postgresql`  (needed for the next step)
 * `gitlab-rake geo:db:drop`
 * make backup of PGDATA conf files (wal-g will not copy them from the streaming
   replica and recovery.conf is setup manually):
-  * `mkdir /var/opt/gitlab/postgresql/data.bak/; cp -a /var/opt/gitlab/postgresql/data/*.conf /var/opt/gitlab/postgresql/data.bak/`
-* make sure postgresql.conf matches primary config (`max_connections` needs to be the same)
+  * `mkdir -p /var/opt/gitlab/postgresql/data.bak; cp -a /var/opt/gitlab/postgresql/data/*.conf /var/opt/gitlab/postgresql/data.bak`
+* make sure postgresql.conf matches primary config for `max_connections`
 * Find the most recent db backup in GCS:
 
   ```
-  cd /tmp/; sudo -u gitlab-psql envdir /etc/wal-g.d/env /opt/wal-g/bin/wal-g backup-list
+  cd /tmp/; sudo -u gitlab-psql envdir /etc/wal-g.d/env /opt/wal-g/bin/wal-g backup-list | sort
   name                          last_modified        wal_segment_backup_start
   base_0000000900004B95000000FC 2020-07-07T14:51:36Z 0000000900004B95000000FC
   base_0000000900004B96000000DB 2020-07-07T16:43:26Z 0000000900004B96000000DB
@@ -37,28 +40,31 @@ replication (see recovery.conf). As of writing,
   The first column, "name", is what you'll want to copy for later.
 
   Take the newest backup, but make sure that the name really contains the
-  highest segment number - the modification date might not be reliable in case
-  there are GCS life cycle policies involved. The older the backup we take, the
-  more WAL files need to be replayed later.
+  highest segment number (sort should ensure that) - the modification date might
+  not be reliable in case there are GCS life cycle policies involved. The older
+  the backup we take, the more WAL files need to be replayed later.
 
 * `rm -rf /var/opt/gitlab/postgresql/data/*`
 * move old data away:
 
   ```
+  rm -rf /var/opt/gitlab/git-data/repositories.old
   mv /var/opt/gitlab/git-data/repositories /var/opt/gitlab/git-data/repositories.old
   mkdir -p /var/opt/gitlab/git-data/repositories
   chown git:git /var/opt/gitlab/git-data/repositories
 
+  rm -rf /var/opt/gitlab/gitlab-rails/shared.old
   mv /var/opt/gitlab/gitlab-rails/shared /var/opt/gitlab/gitlab-rails/shared.old
   mkdir -p /var/opt/gitlab/gitlab-rails/shared
   chown git:gitlab-www /var/opt/gitlab/gitlab-rails/shared
 
+  rm -rf /var/opt/gitlab/gitlab-rails/uploads.old
   mv /var/opt/gitlab/gitlab-rails/uploads /var/opt/gitlab/gitlab-rails/uploads.old
   mkdir -p /var/opt/gitlab/gitlab-rails/uploads
   chown git /var/opt/gitlab/gitlab-rails/uploads
   ```
 
-* Only in case you want to upgrade the major postgres version or gitlab-ee:
+* **Only** in case you want to upgrade the major postgres version or gitlab-ee:
   * Re-Install gitlab-ee manually: `dpkg -r gitlab-ee && apt-get -y install gitlab-ee=13.2....`
     * take the same version as found in staging; run `dpkg -l gitlab-ee` on
     `api-01-sv-gstg.c.gitlab-staging-1.internal` to find the right version
@@ -67,7 +73,7 @@ replication (see recovery.conf). As of writing,
   * Clean up current PGDATA again: `rm -rf /var/opt/gitlab/postgresql/data/*`
 * In a tmux: 
   * `cd /tmp; sudo -u gitlab-psql PGHOST=/var/opt/gitlab/postgresql /usr/bin/envdir /etc/wal-g.d/env /opt/wal-g/bin/wal-g backup-fetch /var/opt/gitlab/postgresql/data base_00000...`
-    * take the backup name found above; this might take 20m or so to finish
+    * **take the backup name found above**; this might take 20m or so to finish
 * restore recovery.conf: `cp -a /var/opt/gitlab/postgresql/data.bak/recovery.conf /var/opt/gitlab/postgresql/data/`
   * it should look like this:
 
@@ -88,7 +94,7 @@ replication (see recovery.conf). As of writing,
 
    The password can be obtained from the recovery.conf file on this replica.
 
-   `chown` it to `gitlab-psql:gitlab-psql` and `chmod` it to `600`.
+   `chown` it to `gitlab-psql:gitlab-psql` and `chmod` it to `600` (if needed).
 
 * `gitlab-ctl reconfigure`
   * This will cause postgres to start at some point, and you will see the
@@ -100,24 +106,23 @@ replication (see recovery.conf). As of writing,
 * Read `/var/log/gitlab/postgresql/current` and check for errors.
 * `gitlab-ctl start`
 * `curl localhost:9187/metrics`. If it hangs, `sv restart postgres_exporter`
-* `systemctl start chef-client`
+* `chef-client-enable`
 * Check the [replication
   lag](https://thanos-query.ops.gitlab.net/graph?g0.range_input=2h&g0.max_source_resolution=0s&g0.expr=pg_replication_lag%7Benv%3D%22gstg%22%2Cfqdn%3D%22geo-secondary-01-sv-gstg.c.gitlab-staging-1.internal%22%7D&g0.tab=0)
   for this node. As long as it is generally decreasing over time, archive
   recovery is working.
 * Once the replication lag is near zero, the geo postgres should switch to using
   streaming replication rather than archive recovery. You can check this is
-  working by `sudo gitlab-psql -c "select * from pg_stat_replication;"`.  You
-  should see `state = 'streaming'`.
+  working by `sudo gitlab-psql -c "select * from pg_stat_wal_receiver;"`.  You
+  should see status as `'streaming'`.
 * Setup foreign tables and log cursor (see [handbook](https://docs.gitlab.com/ee/administration/geo/replication/troubleshooting.html#resetting-geo-secondary-node-replication))
-  * `sudo gitlab-rake geo:db:setup`
-  * `sudo gitlab-rake gitlab:geo:check`
-  * `sudo gitlab-rake geo:status`
-  * `sudo gitlab-rake geo:db:refresh_foreign_tables`
-  * `sudo gitlab-ctl hup puma`
-  * `sudo gitlab-ctl restart sidekiq`
-  * `sudo gitlab-ctl restart geo-logcursor`
-* Check https://staging.gitlab.com/admin/geo/nodes for status
+  * `gitlab-rake geo:db:setup`
+  * `gitlab-rake gitlab:geo:check`
+  * `gitlab-rake geo:status`
+  * `gitlab-ctl hup puma`
+  * `gitlab-ctl restart sidekiq`
+  * `gitlab-ctl restart geo-logcursor`
+* Check https://staging.gitlab.com/admin/geo/nodes and https://geo.staging.gitlab.com/admin/geo/nodes for status
 
 ## Setup replication for a patroni-managed cluster
 
@@ -153,7 +158,7 @@ the entire cluster following below steps:
    because production backup is breaking.
 
     ```sh
-    /usr/bin/envdir /etc/wal-g.d/env /opt/wal-g/bin/wal-g backup-list
+    /usr/bin/envdir /etc/wal-g.d/env /opt/wal-g/bin/wal-g backup-list | sort
 
     name	last_modified	expanded_size_bytes	wal_segment_backup_start	wal_segment_offset_backup_start	wal_segment_backup_stop	wal_segment_offset_backup_stop
     base_000000140001047600000023_02614680	2019-06-15 04:27:42.235000+00:00		000000140001047600000023	02614680

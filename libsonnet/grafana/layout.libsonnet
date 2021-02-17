@@ -37,6 +37,9 @@ local generateDropOffsets(cellHeights, rowOffsets) =
     self.grid(panels, cols=cols, rowHeight=rowHeight, startRow=startRow),
 
   // Layout all panels in a single row, with a title row
+  // rowGrid method adds the panels as consecutive panels. It makes collapse
+  // option doesn't work on child panels of a row. A panel should be a child of
+  // a row.
   rowGrid(rowTitle, panels, startRow)::
     [
       grafana.row.new(title=rowTitle) { gridPos: { x: 0, y: startRow, w: 24, h: 1 } },
@@ -89,8 +92,26 @@ local generateDropOffsets(cellHeights, rowOffsets) =
 
   // Each column contains an array of cells, stacked vertically
   // the heights of each cell are defined by cellHeights
-  splitColumnGrid(columnsOfPanels, cellHeights, startRow)::
-    local colWidth = std.floor(24 / std.length(columnsOfPanels));
+  splitColumnGrid(columnsOfPanels, cellHeights, startRow, columnWidths=null)::
+    local getXOffsetForColumn =
+      if columnWidths == null then
+        local colWidth = std.floor(24 / std.length(columnsOfPanels));
+        function(colIndex) colWidth * colIndex
+      else
+        function(colIndex)
+          std.foldr(
+            function(memo, width) memo + width,
+            columnWidths[0:colIndex:1],
+            0
+          );
+
+    local getWidthForColumn =
+      if columnWidths == null then
+        local colWidth = std.floor(24 / std.length(columnsOfPanels));
+        function(colIndex) colWidth
+      else
+        function(colIndex) columnWidths[colIndex];
+
     local rowOffsets = generateRowOffsets(cellHeights);
     local dropOffsets = generateDropOffsets(cellHeights, rowOffsets);
 
@@ -98,31 +119,34 @@ local generateDropOffsets(cellHeights, rowOffsets) =
       std.flattenArrays(
         std.mapWithIndex(
           function(colIndex, columnOfPanels)
-            std.mapWithIndex(
-              function(cellIndex, cell)
-                if cell == null then
-                  null
-                else
-                  local lastRowInColumn = cellIndex == (std.length(columnOfPanels) - 1);
-
-                  // The height of the last cell will extend to the bottom
-                  local height = if !lastRowInColumn then
-                    cellHeights[cellIndex]
+            if std.isArray(columnOfPanels) then
+              std.mapWithIndex(
+                function(cellIndex, cell)
+                  if cell == null then
+                    null
                   else
-                    dropOffsets[cellIndex];
+                    local lastRowInColumn = cellIndex == (std.length(columnOfPanels) - 1);
 
-                  local gridPos = {
-                    x: colWidth * colIndex,
-                    y: rowOffsets[cellIndex] + startRow,
-                    w: colWidth,
-                    h: height,
-                  };
+                    // The height of the last cell will extend to the bottom
+                    local height = if !lastRowInColumn then
+                      cellHeights[cellIndex]
+                    else
+                      dropOffsets[cellIndex];
 
-                  cell {
-                    gridPos: gridPos,
-                  },
-              columnOfPanels
-            ),
+                    local gridPos = {
+                      x: getXOffsetForColumn(colIndex),
+                      y: rowOffsets[cellIndex] + startRow,
+                      w: getWidthForColumn(colIndex),
+                      h: height,
+                    };
+
+                    cell {
+                      gridPos: gridPos,
+                    },
+                columnOfPanels
+              )
+            else
+              std.assertEqual('', { __assert__: 'splitColumnGrid: column %d contains a %s. It should contain an columnar array of panels' % [colIndex, std.type(columnOfPanels)] }),
           columnsOfPanels
         )
       )

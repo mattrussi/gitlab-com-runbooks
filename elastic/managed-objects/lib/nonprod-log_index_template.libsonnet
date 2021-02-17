@@ -3,6 +3,7 @@ local mappings = {
   consul: import './index_mappings/consul.jsonnet',
   gitaly: import './index_mappings/gitaly.jsonnet',
   gke: import './index_mappings/gke.jsonnet',
+  kas: import './index_mappings/kas.jsonnet',
   mailroom: import './index_mappings/mailroom.jsonnet',
   monitoring: import './index_mappings/monitoring.jsonnet',
   pages: import './index_mappings/pages.jsonnet',

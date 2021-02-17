@@ -424,7 +424,19 @@ For compatibility, please configure the following line in `~/.asdfrc`
 legacy_version_file = yes
 ```
 
-### Required tooling
+### Dependencies and required tooling
+
+Following tools and libraries are required to develop dashboards locally:
+
+* Go programming langugage
+* Ruby programming language
+* `go-jsonnet` - Jsonnet implementation written in Go
+* `jsonnet-bunder` - package manager for Jsonnet
+* `jq` - command line JSON processor
+
+You can install most of them using `asdf` tool.
+
+### Manage your dependencies using `asdf`
 
 Our `asdf` toolset uses the following plugins:
 
@@ -433,7 +445,8 @@ Our `asdf` toolset uses the following plugins:
 * `go-jsonnet`: `asdf plugin add go-jsonnet`.
 * `jsonnet-bundler`: `asdf plugin add jb`.
 
-Once you have installed these plugins, run the following command to install the required versions.
+Once you have installed these plugins, run the following command to install the
+required versions.
 
 ```console
 $ asdf install
@@ -446,6 +459,9 @@ go-jsonnet     0.16.0   (set by ~/runbooks/.tool-versions)
 golang         1.14     (set by ~/runbooks/.tool-versions)
 ruby           2.6.5    (set by ~/runbooks/.ruby-version)
 ```
+
+You don't need to use `asdf`, but in such case you will need install all
+dependencies manually and track their versions.
 
 ### Go, Jsonnet
 

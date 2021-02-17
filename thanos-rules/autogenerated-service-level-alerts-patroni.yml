@@ -20,20 +20,24 @@ groups:
         https://dashboards.gitlab.net/d/patroni-main/patroni-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '96488'
+      grafana_panel_id: '2579921767'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          label_replace(rate(pgbouncer_stats_sql_transactions_pooled_total{type="patroni", tier="db", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]), "_c", "0", "", "")
+          or
+          label_replace(rate(pgbouncer_stats_queries_pooled_total{type="patroni", tier="db", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]), "_c", "1", "", "")
+        )
+      runbook: docs/patroni/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: >
@@ -56,20 +60,24 @@ groups:
         https://dashboards.gitlab.net/d/patroni-main/patroni-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '96488'
+      grafana_panel_id: '2579921767'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_ops:rate_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          label_replace(rate(pgbouncer_stats_sql_transactions_pooled_total{type="patroni", tier="db", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]), "_c", "0", "", "")
+          or
+          label_replace(rate(pgbouncer_stats_queries_pooled_total{type="patroni", tier="db", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]), "_c", "1", "", "")
+        )
+      runbook: docs/patroni/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: |
@@ -88,14 +96,21 @@ groups:
       grafana_dashboard_id: patroni-main/patroni-overview
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/patroni-main/patroni-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
+        $labels.component }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '49960'
-      grafana_variables: environment,stage
-      promql_template_1: >-
-        gitlab_component_apdex:ratio_1h{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      grafana_panel_id: '2459326260'
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            sli_aggregations:gitlab_sql_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}
+          )
+        )
+      runbook: docs/patroni/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -103,6 +118,7 @@ groups:
       product_stage_group: not_owned
       rules_domain: general
       severity: s2
+      sli_type: apdex
       slo_alert: 'yes'
       user_impacting: 'yes'
     expr: |
@@ -146,20 +162,22 @@ groups:
         https://dashboards.gitlab.net/d/patroni-main/patroni-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '9096'
+      grafana_panel_id: '3345453447'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:gitlab_sql_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",le="+Inf",stage="{{ $labels.stage }}"}
+        )
+      runbook: docs/patroni/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: >
@@ -182,20 +200,22 @@ groups:
         https://dashboards.gitlab.net/d/patroni-main/patroni-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '9096'
+      grafana_panel_id: '3345453447'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_ops:rate_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:gitlab_sql_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",le="+Inf",stage="{{ $labels.stage }}"}
+        )
+      runbook: docs/patroni/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: |
@@ -217,15 +237,15 @@ groups:
         https://dashboards.gitlab.net/d/patroni-main/patroni-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '33480'
+      grafana_panel_id: '2278903563'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: >-
-        https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-error-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(pg_stat_database_xact_rollback{type="patroni", tier="db", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]) and on (instance) (pg_replication_is_replica == 0)
+        )
+      runbook: docs/patroni/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -233,6 +253,7 @@ groups:
       product_stage_group: not_owned
       rules_domain: general
       severity: s2
+      sli_type: error
       slo_alert: 'yes'
       user_impacting: 'yes'
     expr: |
@@ -276,20 +297,24 @@ groups:
         https://dashboards.gitlab.net/d/patroni-main/patroni-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '62504'
+      grafana_panel_id: '3407402624'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          label_replace(rate(pg_stat_database_xact_commit{type="patroni", tier="db", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]) and on (instance) (pg_replication_is_replica == 0), "_c", "0", "", "")
+          or
+          label_replace(rate(pg_stat_database_xact_rollback{type="patroni", tier="db", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]) and on (instance) (pg_replication_is_replica == 0), "_c", "1", "", "")
+        )
+      runbook: docs/patroni/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: >
@@ -312,20 +337,24 @@ groups:
         https://dashboards.gitlab.net/d/patroni-main/patroni-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '62504'
+      grafana_panel_id: '3407402624'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_ops:rate_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          label_replace(rate(pg_stat_database_xact_commit{type="patroni", tier="db", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]) and on (instance) (pg_replication_is_replica == 0), "_c", "0", "", "")
+          or
+          label_replace(rate(pg_stat_database_xact_rollback{type="patroni", tier="db", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]) and on (instance) (pg_replication_is_replica == 0), "_c", "1", "", "")
+        )
+      runbook: docs/patroni/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: |
@@ -347,15 +376,15 @@ groups:
         https://dashboards.gitlab.net/d/patroni-main/patroni-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '49480'
+      grafana_panel_id: '438786388'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: >-
-        https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-error-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(pg_stat_database_xact_rollback{type="patroni", tier="db", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]) and on (instance) (pg_replication_is_replica == 1)
+        )
+      runbook: docs/patroni/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -363,6 +392,7 @@ groups:
       product_stage_group: not_owned
       rules_domain: general
       severity: s2
+      sli_type: error
       slo_alert: 'yes'
       user_impacting: 'yes'
     expr: |
@@ -406,20 +436,24 @@ groups:
         https://dashboards.gitlab.net/d/patroni-main/patroni-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '40648'
+      grafana_panel_id: '1864411224'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          label_replace(rate(pg_stat_database_xact_commit{type="patroni", tier="db", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]) and on (instance) (pg_replication_is_replica == 1), "_c", "0", "", "")
+          or
+          label_replace(rate(pg_stat_database_xact_rollback{type="patroni", tier="db", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]) and on (instance) (pg_replication_is_replica == 1), "_c", "1", "", "")
+        )
+      runbook: docs/patroni/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: >
@@ -442,20 +476,24 @@ groups:
         https://dashboards.gitlab.net/d/patroni-main/patroni-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '40648'
+      grafana_panel_id: '1864411224'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
-      promql_template_1: >-
-        gitlab_component_ops:rate_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          label_replace(rate(pg_stat_database_xact_commit{type="patroni", tier="db", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]) and on (instance) (pg_replication_is_replica == 1), "_c", "0", "", "")
+          or
+          label_replace(rate(pg_stat_database_xact_rollback{type="patroni", tier="db", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]) and on (instance) (pg_replication_is_replica == 1), "_c", "1", "", "")
+        )
+      runbook: docs/patroni/README.md
     labels:
+      aggregation: component
       alert_type: cause
-      experimental: 'true'
       feature_category: not_owned
       product_stage: not_owned
       product_stage_group: not_owned
+      rules_domain: general
       severity: s3
+      sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
     expr: |

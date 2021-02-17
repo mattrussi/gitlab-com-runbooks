@@ -103,6 +103,16 @@ local indexCatalog = {
     latencyFieldUnitMultiplier: 1000,
   },
 
+  kas: indexDefaults {
+    timestamp: 'json.time',
+    indexPattern: 'cbc471e0-603e-11eb-97f3-f3d390ced411',
+    defaultColumns: ['json.msg', 'json.project_id', 'json.commit_id', 'json.number_of_files', 'json.grpc.time_ms'],
+    defaultSeriesSplitField: 'json.grpc.method.keyword',
+    failureFilter: [existsFilter('json.error')],
+    //defaultLatencyField: '',
+    //latencyFieldUnitMultiplier: 1000,
+  },
+
   monitoring_ops: indexDefaults {
     timestamp: '@timestamp',
     indexPattern: 'pubsub-monitoring-inf-ops',
@@ -510,6 +520,7 @@ local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latency
 {
   matcher:: matcher,
   matchFilter:: matchFilter,
+  existsFilter:: existsFilter,
   rangeFilter:: rangeFilter,
 
   // Given an index, and a set of filters, returns a URL to a Kibana discover module/search

@@ -11,7 +11,7 @@ local serviceDashboard = import 'service_dashboard.libsonnet';
 
 local selector = 'environment="$environment", type="api", stage="$stage"';
 
-serviceDashboard.overview('api', 'sv')
+serviceDashboard.overview('api')
 .addPanel(
   row.new(title='Workhorse'),
   gridPos={

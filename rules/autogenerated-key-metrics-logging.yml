@@ -351,36 +351,41 @@ groups:
   rules:
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: elasticsearch_indexing
+      regional_aggregation: 'no'
+      service_aggregation: 'yes'
       tier: inf
       type: logging
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: elasticsearch_searching
+      regional_aggregation: 'no'
+      service_aggregation: 'yes'
       tier: inf
       type: logging
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'no'
       component: fluentd_log_output
+      regional_aggregation: 'no'
+      service_aggregation: 'no'
       tier: inf
       type: logging
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: kibana_googlelb
+      regional_aggregation: 'no'
+      service_aggregation: 'yes'
       tier: inf
       type: logging
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: stackdriver
+      regional_aggregation: 'no'
+      service_aggregation: 'yes'
       tier: inf
       type: logging
     expr: '1'

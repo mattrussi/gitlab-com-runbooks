@@ -26,10 +26,10 @@ local testStableIdDashboard =
 test.suite({
   testStableIds: {
     actual: testStableIdDashboard,
-    expectThat: function(dashboard) dashboard.panels[0].id == 39560,  // stableId for test-graph-panel
+    expectThat: function(dashboard) dashboard.panels[0].id == 162106516,  // stableId for test-graph-panel
   },
   testNestedStableIds: {
     actual: testStableIdDashboard,
-    expectThat: function(dashboard) dashboard.panels[1].panels[0].id == 99240,  // stableId for collapsed-panel
+    expectThat: function(dashboard) dashboard.panels[1].panels[0].id == 3457099265,  // stableId for collapsed-panel
   },
 })

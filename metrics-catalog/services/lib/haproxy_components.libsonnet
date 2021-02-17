@@ -1,6 +1,5 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local rateMetric = metricsCatalog.rateMetric;
-local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
 local defaultHTTPSLIDescription = |||
   Measures aggregated HTTP request traffic through the HAProxy.
@@ -73,7 +72,7 @@ local singleL4Component(stage, selector, definition, userImpacting) =
   });
 
 local combinedBackendCurry(generator, defaultSLIDescription, ignoreTrafficCessation) =
-  function(userImpacting, stageMappings, selector, featureCategory, team=null, description=defaultSLIDescription)
+  function(userImpacting, stageMappings, selector, featureCategory, team=null, description=defaultSLIDescription, regional=null)
     metricsCatalog.combinedServiceLevelIndicatorDefinition(
       userImpacting=userImpacting,
       featureCategory=featureCategory,
@@ -85,7 +84,8 @@ local combinedBackendCurry(generator, defaultSLIDescription, ignoreTrafficCessat
         for stage in std.objectFields(stageMappings)
       ],
       // Don't double-up RPS by including loadbalancer again
-      aggregateRequestRate=false,
+      serviceAggregation=false,
+      regional=regional
     );
 
 

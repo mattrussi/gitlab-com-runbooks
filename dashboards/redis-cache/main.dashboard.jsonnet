@@ -4,7 +4,7 @@ local row = grafana.row;
 local serviceDashboard = import 'service_dashboard.libsonnet';
 local processExporter = import 'process_exporter.libsonnet';
 
-serviceDashboard.overview('redis-cache', 'db')
+serviceDashboard.overview('redis-cache')
 .addPanel(
   row.new(title='Clients'),
   gridPos={

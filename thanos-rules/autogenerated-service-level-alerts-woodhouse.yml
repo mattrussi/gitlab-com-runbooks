@@ -17,14 +17,21 @@ groups:
       grafana_dashboard_id: woodhouse-main/woodhouse-overview
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/woodhouse-main/woodhouse-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
+        $labels.component }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '7080'
-      grafana_variables: environment,stage
-      promql_template_1: >-
-        gitlab_component_apdex:ratio_1h{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      grafana_panel_id: '839701162'
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(woodhouse_async_job_duration_seconds_bucket{environment="{{ $labels.environment }}",job="woodhouse",stage="{{ $labels.stage }}"}[5m])
+          )
+        )
+      runbook: docs/woodhouse/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: not_owned
       incident_project: gitlab.com/gitlab-com/gl-infra/production
@@ -33,6 +40,7 @@ groups:
       product_stage_group: not_owned
       rules_domain: general
       severity: s2
+      sli_type: apdex
       slo_alert: 'yes'
       user_impacting: 'no'
     expr: |
@@ -76,15 +84,15 @@ groups:
         https://dashboards.gitlab.net/d/woodhouse-main/woodhouse-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '99784'
+      grafana_panel_id: '648994915'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: >-
-        https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-error-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(woodhouse_async_jobs_total{environment="{{ $labels.environment }}",job="woodhouse",stage="{{ $labels.stage }}",status="error"}[5m])
+        )
+      runbook: docs/woodhouse/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: not_owned
       incident_project: gitlab.com/gitlab-com/gl-infra/production
@@ -93,6 +101,7 @@ groups:
       product_stage_group: not_owned
       rules_domain: general
       severity: s2
+      sli_type: error
       slo_alert: 'yes'
       user_impacting: 'no'
     expr: |
@@ -133,14 +142,21 @@ groups:
       grafana_dashboard_id: woodhouse-main/woodhouse-overview
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/woodhouse-main/woodhouse-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
+        $labels.component }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '7112'
-      grafana_variables: environment,stage
-      promql_template_1: >-
-        gitlab_component_apdex:ratio_1h{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      grafana_panel_id: '308155966'
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(woodhouse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job="woodhouse",route!="/ready",stage="{{ $labels.stage }}"}[5m])
+          )
+        )
+      runbook: docs/woodhouse/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: not_owned
       incident_project: gitlab.com/gitlab-com/gl-infra/production
@@ -149,6 +165,7 @@ groups:
       product_stage_group: not_owned
       rules_domain: general
       severity: s2
+      sli_type: apdex
       slo_alert: 'yes'
       user_impacting: 'no'
     expr: |
@@ -191,15 +208,15 @@ groups:
         https://dashboards.gitlab.net/d/woodhouse-main/woodhouse-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '34376'
+      grafana_panel_id: '1863342341'
       grafana_variables: environment,stage
-      link1_title: Definition
-      link1_url: >-
-        https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-error-rate.md
-      promql_template_1: >-
-        gitlab_component_errors:ratio_5m{environment="$environment", type="$type", stage="$stage", component="$component"}
-      runbook: docs/{{ $labels.type }}/README.md
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(woodhouse_http_requests_errors_total{environment="{{ $labels.environment }}",job="woodhouse",route!="/ready",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/woodhouse/README.md
     labels:
+      aggregation: component
       alert_type: symptom
       feature_category: not_owned
       incident_project: gitlab.com/gitlab-com/gl-infra/production
@@ -208,6 +225,7 @@ groups:
       product_stage_group: not_owned
       rules_domain: general
       severity: s2
+      sli_type: error
       slo_alert: 'yes'
       user_impacting: 'no'
     expr: |

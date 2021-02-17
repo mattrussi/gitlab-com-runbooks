@@ -6,6 +6,8 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local haproxyComponents = import './lib/haproxy_components.libsonnet';
 local perFeatureCategoryRecordingRules = (import './lib/puma-per-feature-category-recording-rules.libsonnet').perFeatureCategoryRecordingRules;
 
+local gitWorkhorseJobNameSelector = { job: { re: 'gitlab-workhorse|gitlab-workhorse-git' } };
+
 metricsCatalog.serviceDefinition({
   type: 'git',
   tier: 'sv',
@@ -17,13 +19,15 @@ metricsCatalog.serviceDefinition({
     apdexScore: 0.9995,
     errorRatio: 0.9995,
   },
-  // Deployment thresholds are optional, and when they are specified, they are
-  // measured against the same multi-burn-rates as the monitoring indicators.
-  // When a service is in violation, deployments may be blocked or may be rolled
-  // back.
-  deploymentThresholds: {
-    apdexScore: 0.9995,
-    errorRatio: 0.9995,
+  otherThresholds: {
+    // Deployment thresholds are optional, and when they are specified, they are
+    // measured against the same multi-burn-rates as the monitoring indicators.
+    // When a service is in violation, deployments may be blocked or may be rolled
+    // back.
+    deployment: {
+      apdexScore: 0.9995,
+      errorRatio: 0.9995,
+    },
   },
   serviceDependencies: {
     gitaly: true,
@@ -38,6 +42,8 @@ metricsCatalog.serviceDefinition({
     vms: true,
     kubernetes: true,
   },
+  // Git service is spread across multiple regions, monitor it as such
+  regional: true,
   kubeResources: {
     'gitlab-shell': {
       kind: 'Deployment',
@@ -59,7 +65,7 @@ metricsCatalog.serviceDefinition({
       featureCategory='not_owned',
       team='sre_datastores',
       stageMappings={
-        main: { backends: ['https_git', 'websockets'], toolingLinks: [
+        main: { backends: ['https_git'], toolingLinks: [
           toolingLinks.bigquery(title='Top http clients by number of requests, main stage, 10m', savedQuery='805818759045:704c6bdf00a743d195d344306bf207ee'),
         ] },
         cny: { backends: ['canary_https_git'], toolingLinks: [
@@ -67,6 +73,8 @@ metricsCatalog.serviceDefinition({
         ] },  // What happens to cny websocket traffic?
       },
       selector={ type: 'frontend' },
+      // Load balancer is single region
+      regional=false
     ),
 
     loadbalancer_ssh: haproxyComponents.haproxyL4LoadBalancer(
@@ -83,6 +91,8 @@ metricsCatalog.serviceDefinition({
         // No canary SSH for now
       },
       selector={ type: 'frontend' },
+      // Load balancer is single region
+      regional=false
     ),
 
     workhorse: {
@@ -95,8 +105,7 @@ metricsCatalog.serviceDefinition({
         Websocket connections are excluded from the apdex score.
       |||,
 
-      local baseSelector = {
-        job: 'gitlab-workhorse-git',
+      local baseSelector = gitWorkhorseJobNameSelector {
         type: 'git',
         route: [{ ne: '^/-/health$' }, { ne: '^/-/(readiness|liveness)$' }, { ne: '^/api/' }],
       },
@@ -152,8 +161,7 @@ metricsCatalog.serviceDefinition({
         and are on the critical path for authentication of Git SSH commands.
       |||,
 
-      local baseSelector = {
-        job: 'gitlab-workhorse-git',
+      local baseSelector = gitWorkhorseJobNameSelector {
         type: 'git',
         route: '^/api/',
       },

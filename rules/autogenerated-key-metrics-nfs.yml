@@ -111,8 +111,9 @@ groups:
   rules:
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: nfs_service
+      regional_aggregation: 'no'
+      service_aggregation: 'yes'
       tier: stor
       type: nfs
     expr: '1'

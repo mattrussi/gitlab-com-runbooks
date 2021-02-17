@@ -11,7 +11,7 @@ local gitalyGRPCErrorRate(baseSelector) =
     rateMetric(
       counter='gitaly_service_client_requests_total',
       selector=baseSelector {
-        grpc_code: { nre: 'OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded' },
+        grpc_code: { nre: 'OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded|Canceled' },
       }
     ),
     rateMetric(
@@ -31,7 +31,7 @@ metricsCatalog.serviceDefinition({
   nodeLevelMonitoring: true,
   monitoringThresholds: {
     apdexScore: 0.999,
-    errorRatio: 0.999,
+    errorRatio: 0.9995,
   },
   serviceDependencies: {
     gitaly: true,
@@ -127,7 +127,10 @@ metricsCatalog.serviceDefinition({
         selector=baseSelector {
           grpc_type: 'unary',
           grpc_service: { ne: 'gitaly.OperationService' },
-          grpc_method: { nre: gitalyHelpers.gitalyApdexIgnoredMethodsRegexp },
+          grpc_method: {
+            nre: gitalyHelpers.gitalyApdexIgnoredMethodsRegexp +
+                 '|GetLFSPointers|GetAllLFSPointers',  // Ignored because of https://gitlab.com/gitlab-org/gitaly/-/issues/3441
+          },
         },
         satisfiedThreshold=10,
         toleratedThreshold=30
@@ -141,6 +144,7 @@ metricsCatalog.serviceDefinition({
       errorRate: rateMetric(
         counter='grpc_client_handled_total',
         selector=baseSelector {
+          grpc_method: { nre: 'UpdateRemoteMirror|AddRemote' },  // Ignore these calls until https://gitlab.com/gitlab-org/gitlab/-/issues/300884 is fixed
           grpc_code: { nre: 'OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded' },
         }
       ),

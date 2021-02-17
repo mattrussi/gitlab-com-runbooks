@@ -221,8 +221,8 @@ services:
         permalink: https://log.gprd.gitlab.net/goto/2b9679dab019791136cb8ae1535fb781
   infrastructure:
     provider: gcp
-    architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#service-architecture
-    provisioning: terraform
+    architecture: gke
+    provisioning: kubernetes
     accesses:
       - account_name:
         access_type:
@@ -3068,3 +3068,126 @@ services:
   observability:
     monitors:
       primary_grafana_dashboard: "woodhouse/woodhouse-overview"
+
+- name: kas
+  tier: sv
+  friendly_name: Kubernetes Agent
+  infra_owner: sre_coreinfra
+  label: Service:kas
+  business:
+    requirement: |
+      KAS is the Gitlab.com server side component responsible for
+      handling incoming connections from agentk running in client
+      Kubernetes infrastructure.
+    customers:
+      - GitLab.com customers
+    business_value: |
+      Kas enables the Gitlab.com Kubernetes integration functionality
+      in environments where client Kubernetes clusters are not exposed
+      to the internet.
+    SLA:
+      availability:
+      response_time:
+  technical:
+    project:
+      - https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent
+    slx:
+    documents:
+      design:
+      architecture: https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent/-/blob/master/doc/architecture.md#high-level-architecture
+      readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/tree/master/kubernetes-agent
+      service:
+        - https://docs.gitlab.com/ee/user/clusters/agent/
+      security:
+    dependencies:
+    configurations:
+      - config_name: K8s deployment repo
+        location: https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com
+    chef_roles: []
+    scalability:
+      bound: cpu
+      scalable: horizontal
+    security:
+      security_reviewed:
+      data_classification:
+      security_incidents:
+    logging:
+      - name: kas
+        permalink: https://log.gprd.gitlab.net/goto/0f6064d1900494870a10af9310d6ece0
+  infrastructure:
+    provider: gcp
+    architecture:
+    provisioning: helm
+    accesses:
+      - account_name:
+        access_type:
+        reviewed:
+  operations:
+    maintenance:
+    runbooks:
+    - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/kas/README.md
+    playbooks:
+    error_budget:
+  observability:
+    monitors:
+      primary_grafana_dashboard: "kas/kas"
+- name: websockets
+  tier: sv
+  friendly_name: Websockets
+  infra_owner: sre_coreinfra
+  label: Service:Websockets
+  business:
+    requirement: |
+      TBD
+    customers:
+      - GitLab.com customers
+    business_value: |
+      Websockets enables realtime updates for the interactive terminal
+      and ActionCable feature.
+    SLA:
+      availability:
+      response_time:
+  technical:
+    project:
+      - https://gitlab.com/gitlab-org/gitlab
+      - https://gitlab.com/gitlab-org/gitlab-workhorse
+    slx:
+    documents:
+      design:
+      architecture: TBD
+      readiness_review: TBD
+      service:
+        - TBD
+      security:
+    dependencies:
+    configurations:
+      - config_name: Webosckets
+        location: https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com
+    chef_roles: []
+    scalability:
+      bound: cpu
+      scalable: horizontal
+    security:
+      security_reviewed:
+      data_classification:
+      security_incidents:
+    logging:
+      - name: websockets
+        permalink: TBD
+  infrastructure:
+    provider: gcp
+    architecture:
+    provisioning: helm
+    accesses:
+      - account_name:
+        access_type:
+        reviewed:
+  operations:
+    maintenance:
+    runbooks:
+    - TBD
+    playbooks:
+    error_budget:
+  observability:
+    monitors:
+      primary_grafana_dashboard: "websockets/websockets"

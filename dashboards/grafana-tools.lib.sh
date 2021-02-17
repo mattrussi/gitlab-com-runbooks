@@ -129,3 +129,29 @@ function jsonnet_compile() {
     return 1
   }
 }
+
+# Returns a list of dashboard files
+find_dashboards() {
+  local find_opts
+  find_opts=(
+    "."
+    # All *.jsonnet and *.json dashboards...
+    "("
+    "-name" '*.jsonnet'
+    "-o"
+    "-name" '*.json'
+    ")"
+    -not -name '.*'         # Exclude dot files
+    -not -path "**/.*"      # Exclude dot dirs
+    -not -path "./vendor/*" # Exclude vendored files
+    -mindepth 2             # Exclude files in the root folder
+  )
+
+  if [[ $# == 0 ]]; then
+    find "${find_opts[@]}"
+  else
+    for var in "$@"; do
+      echo "${var}"
+    done
+  fi
+}

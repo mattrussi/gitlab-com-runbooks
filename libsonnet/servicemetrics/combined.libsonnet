@@ -1,5 +1,4 @@
 local aggregations = import 'promql/aggregations.libsonnet';
-local selectors = import 'promql/selectors.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 
 // Merge two hashes of the form { key: set },
@@ -68,9 +67,9 @@ local generateApdexWeightQuery(c, aggregationLabels, selector, rangeInterval) =
   aggregations.aggregateOverQuery('sum', aggregationLabels, orJoin(apdexWeightQueries));
 
 local generateApdexPercentileLatencyQuery(c, percentile, aggregationLabels, selector, rangeInterval) =
-  local aggregationLabelsWithLe = aggregations.join([aggregationLabels, 'le']);
-  local rateQueries = std.map(function(i) i.apdexNumerator(selector, rangeInterval), c.metrics);
-  local aggregatedRateQueries = aggregations.aggregateOverQuery('sum', aggregationLabels, orJoin(rateQueries));
+  local rateQueries = std.map(function(i) i.apdexNumerator(selector, rangeInterval, histogramRates=true), c.metrics);
+  local aggregationLabelsWithLe = aggregationLabels + ['le'];
+  local aggregatedRateQueries = aggregations.aggregateOverQuery('sum', aggregationLabelsWithLe, orJoin(rateQueries));
 
   |||
     histogram_quantile(

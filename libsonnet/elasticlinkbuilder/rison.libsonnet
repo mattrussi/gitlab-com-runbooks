@@ -4,9 +4,6 @@ local charIsSafe(char) =
 local stringIsSafe(string) =
   std.foldl(function(memo, char) memo && charIsSafe(char), std.stringChars(string), true);
 
-local encodeSpaces(string) =
-  std.strReplace(string, ' ', '+');
-
 // TODO: handle encoding of "'" chars better
 local encodeString(string) =
   if string == '' then

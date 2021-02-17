@@ -451,6 +451,7 @@ deploy_dashboards:
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
   stage: deploy
   script:
+    - dashboards/ensure-grafana-folders.sh
     - dashboards/upload.sh
     - dashboards/delete-orphaned-dashboards.sh
 

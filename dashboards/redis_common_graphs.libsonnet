@@ -247,7 +247,7 @@ local seriesOverrides = import 'grafana/series_overrides.libsonnet';
                            label_replace(redis_memory_used_rss_bytes{environment="$environment", type="%(serviceType)s"}, "memtype", "rss","","")
                            or
                            label_replace(redis_memory_used_bytes{environment="$environment", type="%(serviceType)s"}, "memtype", "used","","")
-                         ) by (type, tier, stage, environment, fqdn)
+                         ) by (type, stage, environment, fqdn)
                          / on(fqdn) group_left
                          node_memory_MemTotal_bytes{environment="$environment", type="%(serviceType)s"}
                        ||| % formatConfig,

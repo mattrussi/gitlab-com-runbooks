@@ -7,7 +7,7 @@ local serviceDashboard = import 'service_dashboard.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 
-serviceDashboard.overview('git', 'sv')
+serviceDashboard.overview('git')
 .addPanel(
   row.new(title='Workhorse'),
   gridPos={

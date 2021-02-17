@@ -13,16 +13,18 @@ metricsCatalog.serviceDefinition({
     errorRatio: 0.005,
   },
   monitoringThresholds: {
-    apdexScore: 0.999,
+    apdexScore: 0.998,
     errorRatio: 0.9999,
   },
-  // Deployment thresholds are optional, and when they are specified, they are
-  // measured against the same multi-burn-rates as the monitoring indicators.
-  // When a service is in violation, deployments may be blocked or may be rolled
-  // back.
-  deploymentThresholds: {
-    apdexScore: 0.999,
-    errorRatio: 0.9999,
+  otherThresholds: {
+    // Deployment thresholds are optional, and when they are specified, they are
+    // measured against the same multi-burn-rates as the monitoring indicators.
+    // When a service is in violation, deployments may be blocked or may be rolled
+    // back.
+    deployment: {
+      apdexScore: 0.998,
+      errorRatio: 0.9999,
+    },
   },
   serviceDependencies: {
     gitaly: true,
@@ -60,10 +62,22 @@ metricsCatalog.serviceDefinition({
 
       apdex: histogramApdex(
         histogram='gitlab_workhorse_http_request_duration_seconds_bucket',
-        // Note, using `|||` avoids having to double-escape the backslashes in the selector query
-        selector=|||
-          job="gitlab-workhorse-web", route!="^/([^/]+/){1,}[^/]+/uploads\\z", route!="^/-/health$", route!="^/-/(readiness|liveness)$"
-        |||,
+        selector={
+          job: 'gitlab-workhorse-web',
+          route: {
+            ne: [
+              '^/([^/]+/){1,}[^/]+/uploads\\\\z',
+              '^/-/health$',
+              '^/-/(readiness|liveness)$',
+              // Technically none of these git endpoints should end up in cny, but sometimes they do,
+              // so exclude them from apdex
+              '^/([^/]+/){1,}[^/]+\\\\.git/git-receive-pack\\\\z',
+              '^/([^/]+/){1,}[^/]+\\\\.git/git-upload-pack\\\\z',
+              '^/([^/]+/){1,}[^/]+\\\\.git/info/refs\\\\z',
+              '^/([^/]+/){1,}[^/]+\\\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\\\z',
+            ],
+          },
+        },
         satisfiedThreshold=1,
         toleratedThreshold=10
       ),
@@ -89,7 +103,7 @@ metricsCatalog.serviceDefinition({
 
     imagescaler: {
       userImpacting: false,
-      featureCategory: 'memory',
+      featureCategory: 'users',
       description: |||
         The imagescaler rescales images before sending them to clients. This allows faster transmission of
         images and faster rendering of web pages.
@@ -107,11 +121,9 @@ metricsCatalog.serviceDefinition({
         selector='job="gitlab-workhorse-web", type="web"'
       ),
 
-      // TODO: remove status!="unknown" from this selector after 1 December 2020
-      // See https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/11903 for details
       errorRate: rateMetric(
         counter='gitlab_workhorse_image_resize_requests_total',
-        selector='job="gitlab-workhorse-web", type="web", status!="success", status!="unknown", status!="success-client-cache"'
+        selector='job="gitlab-workhorse-web", type="web", status="request-failed"'
       ),
 
       significantLabels: ['fqdn'],

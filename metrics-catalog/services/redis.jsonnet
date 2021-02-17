@@ -7,6 +7,7 @@ metricsCatalog.serviceDefinition({
   type: 'redis',
   tier: 'db',
   monitoringThresholds: {
+    apdexScore: 0.9999,
     errorRatio: 0.999,
   },
   serviceLevelIndicators: {
@@ -78,7 +79,7 @@ metricsCatalog.serviceDefinition({
       ),
 
       significantLabels: ['fqdn'],
-      aggregateRequestRate: false,
+      serviceAggregation: false,
     },
   },
 })

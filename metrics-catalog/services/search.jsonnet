@@ -1,8 +1,5 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
-local histogramApdex = metricsCatalog.histogramApdex;
-local rateMetric = metricsCatalog.rateMetric;
 local derivMetric = metricsCatalog.derivMetric;
-local customQuery = metricsCatalog.customQuery;
 
 metricsCatalog.serviceDefinition({
   type: 'search',

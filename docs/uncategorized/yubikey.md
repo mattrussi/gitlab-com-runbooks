@@ -4,7 +4,7 @@
 
 * `gpg2`
 * `yubikey-personalization` for Yubikey 4
-* `ykman` for Yubikey 5 (on macOS that's `brew install ykman`, on Linux the pkg name is `yubikey-manager`. ykman manual can be found [here](https://support.yubico.com/support/solutions/articles/15000012643-yubikey-manager-cli-ykman-user-manual))
+* `ykman` for Yubikey 5 and greater (on macOS that's `brew install ykman`, on Linux the pkg name is `yubikey-manager`. ykman manual can be found [online](https://support.yubico.com/hc/en-us/articles/360016614940-YubiKey-Manager-CLI-ykman-User-Manual))
 * `scdaemon`
 
 For this guide, when using linux, substitute `gpg` with `gpg2`
@@ -52,6 +52,9 @@ General key info..: [none]
 
 gpg/card> admin
 Admin commands are allowed
+
+# Enable Key Derived Format for secure PIN entry
+gpg/card> kdf-setup
 
 # Change the PIN and Admin PINs
 gpg/card> passwd

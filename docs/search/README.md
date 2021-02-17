@@ -37,6 +37,7 @@
 * [../sidekiq/sidekiq_error_rate_high.md](../sidekiq/sidekiq_error_rate_high.md)
 * [../uncategorized/camoproxy.md](../uncategorized/camoproxy.md)
 * [../uncategorized/domain-registration.md](../uncategorized/domain-registration.md)
+* [../uncategorized/gcp-network-intelligence.md](../uncategorized/gcp-network-intelligence.md)
 * [../uncategorized/gcp-project.md](../uncategorized/gcp-project.md)
 * [../uncategorized/gcp-snapshots.md](../uncategorized/gcp-snapshots.md)
 * [../uncategorized/k8s-operations.md](../uncategorized/k8s-operations.md)

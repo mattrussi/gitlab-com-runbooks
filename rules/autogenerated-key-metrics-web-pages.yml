@@ -461,22 +461,25 @@ groups:
   rules:
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'no'
       component: loadbalancer
+      regional_aggregation: 'no'
+      service_aggregation: 'no'
       tier: sv
       type: web-pages
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'no'
       component: loadbalancer_https
+      regional_aggregation: 'no'
+      service_aggregation: 'no'
       tier: sv
       type: web-pages
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      aggregate_rps: 'yes'
       component: server
+      regional_aggregation: 'no'
+      service_aggregation: 'yes'
       tier: sv
       type: web-pages
     expr: '1'

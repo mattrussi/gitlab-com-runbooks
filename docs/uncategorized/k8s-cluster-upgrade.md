@@ -9,7 +9,22 @@ which will add annotations to Grafana every time a GKE auto upgrade takes place.
 
 Our production clusters are currently the only clusters which need to be upgraded manually.
 
-## Notes about upgrades across major versions
+## Rollback Procedure (or lack thereof)
+
+:warning: Please make sure to read and understand the following :warning:
+
+Due the nature of GKE upgrades, there is unfortunately no ability for us to
+rollback. For zonal cluster upgrades if something goes wrong we have the ability
+for specific services to stop sending traffic to that entire gke cluster by draining
+the affected service backends from haproxy.
+
+If we do ever hit issues which would warrant a rollback, the first step is to
+reach out to Google support with a sev 1 issue to attempt to recover the cluster.
+In the case of entire catastrophic failure, we can destroy the cluster and
+recreate it using terraform (and bootstrap it following instructions at
+https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/uncategorized/k8s-new-cluster.md
+
+## Notes about forced upgrades across minor versions
 You can look at the release notes for the regular release channel [here](https://cloud.google.com/kubernetes-engine/docs/release-notes-regular)
 This is important to follow as when all releases of a specific minor version (e.g. 1.16) are removed
 from a channel, the clusters will be automatically upgraded to the next minor release (e.g. 1.17)
@@ -35,14 +50,24 @@ in the upgraded environment (e.g. no missing metrics)
 
 ## Procedure
 
-Each step below is a checkpoint for which an Merge Request should exist and is a
-stopping point to allow one to breath before proceeding to the next step.
+The following is the procedure to undertake for the GKE cluster in question, and
+includes the steps for upgrading both the masters and the individual node pools.
+It is safe to use as a basis for the steps in the change request, but might need
+to be altered to suit the environment (e.g. steps duplicated for each node pool)
 
-### Step 0
+### Step 0.1
+
+The first step is to determine what version of Kubernetes you wish to upgrade
+your cluster to. To do so, find the highest patch version of the minor release
+your upgrading to, inside the `REGULAR` release channel
+
+```
+gcloud --project gitlab-pre container get-server-config --region us-east1 --format json | jq '.channels[] | select(.channel == "REGULAR")'
+```
 
 * Copy and paste the below procedure into a Change Request (summary through
   rollback procedure)
-  * https://gitlab.com/gitlab-com/gl-infra/production/issues/new?issuable_template=change_c4
+  * https://gitlab.com/gitlab-com/gl-infra/production/-/issues/new?issuable_template=change_management
 * Fill out the necessary details of the Change Request following our [Change
   Management Guidelines]
 * Modify any `<Merge Request>` with a link to the merge request associated with
@@ -50,118 +75,92 @@ stopping point to allow one to breath before proceeding to the next step.
 * Modify `<VERSION>` with the desired version we will be upgrading the GKE
   cluster to
 
+### Step 0.2
+
+* Copy and paste the below sections into a new change request at
+  * https://gitlab.com/gitlab-com/gl-infra/production/-/issues/new?issuable_template=change_management
+* Fill out the necessary details of the Change Request following our [Change
+  Management Guidelines]
+* Modify any references to `<CLUSTER>` with the name of the cluster you upgrading
+* Modify any `<Merge Request>` with a link to the merge request associated with
+  that step
+* Modify `<VERSION>` with the desired version we will be upgrading the GKE
+  cluster to
+* Note for zonal clusters you will need to replace all references to `--region us-east1`
+  with `--zone us-east1-b` (if for example, upgrading the zonal cluster in `us-east1-b`)
+
 ### Summary
 
-To upgrade our GKE Cluster to `<VERSION>`
+To upgrade our GKE Cluster `<CLUSTER>` to `<VERSION>`.
 
-### Step 1
+Part of `<INSERT LINK TO GKE Upgrade Issue>`
 
-* [ ] change node-pool config option `node_auto_upgrade` to `true` `<Merge
-  Request>`
-  * tf plan will indicate only change for the option `node_auto_upgrade`,
-    nothing else
-* [ ] execute a terraform apply
-  * This is very quick change (a few seconds)
+### Step 1: Upgrade masters
 
-### Step 2
+* [ ] Use the gcloud cli to upgrade the Kubernetes masters only. They
+must be done before any of the node pools are done.
 
-* [ ] change `kubernetes_version` to `<VERSION>` `<Merge Request>`
-  * tf plan will indicate only _one_ change for the cluster configuration option
-    `min_master_version`
-* [ ] execute a terraform apply - This is roughly a 20 minute operation, so
-  monitor the following:
-* [ ] watch the following from
-  `console-01-sv-gprd.c.gitlab-production.internal`:
-  * `watch gcloud container clusters list`
-  * `watch -n 5 kubectl get nodes`
-  * `watch -n 5 kubectl get pods -o wide`
-  * Monitor the gcloud operation:
-    * Find the ID associated with the RUNNING cluster upgrade and do this:
-    * `op_id=$(gcloud container operations list --region us-east1 | grep RUNNING
-      | grep UPGRADE_MASTER | awk {'print $1'})`
-    * `gcloud container operations wait $op_id --region us-east1`
-  * wait for terraform and/or the gcloud operation being watched to complete
-* [ ] Validate:
-  * [ ] `kubectl version` - should indicate the server version matching the
-    above
-  * [ ] `gcloud container clusters list` - should indicate the new Kubernetes
-    version and note that the nodes now require an upgrade
+```
+gcloud --project <PROJECT> container clusters upgrade <CLUSTER> --cluster-version=<VERSION> --master --region us-east1
+```
 
-### Step 3
+This operation can take up to 40 minutes or so. Once it has been done, you can
+confirm the new version is running on the masters by pointing your `kubectl` to
+the cluster and running
 
-* [ ] change node-pool config option `node_auto_upgrade` to `false` `<Merge
-  Request>`
-  * tf plan will indicate _two_ changes for that node pool
-    * setting `auto_upgrade` to `false`
-    * setting `version` to that of the above
-* [ ] tf apply will perform an upgrade of the node pool
-  * the upgrade will be performed 1 node at a time, and 1 node pool at a time
-  * :warning: terraform has a hard coded timeout for 10 minutes for this
-    operation, though the operation will progress forward.  Note that if a tf
-    apply timesout, and we've not reached all node pools, another `apply` must
-    be run.
-  * [ ] This is a lengthy operation (5 minutes per node) , so watch the
-    following from `console-01-sv-gprd.c.gitlab-production.internal`:
-    * `watch gcloud container clusters list`
-    * `watch -n 5 kubectl get nodes`
-    * `watch -n 5 kubectl get pods -o wide`
-    * Monitor the gcloud operation:
-      * Find the ID associated with the RUNNING nodes upgrade and do this:
-      * `op_id=$(gcloud container operations list --region us-east1 | grep
-        RUNNING | grep UPGRADE_NODES | awk {'print $1'})`
-      * `gcloud container operations wait $op_id --region us-east1`
-  * wait for terraform and/or the gcloud operation being watched to complete
-* [ ] Validate:
-  * [ ] `gcloud container clusters list` - should show the running node version
-    matches above
-  * [ ] `kubectl get nodes` - all nodes should be running the same version as
-    noted above
+```
+kubectl version
+```
 
-### Rollback Procedure
+Specifically looking for `Server Version`. Remember to be connected to the target cluster.  Instructions for this are [here](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/uncategorized/k8s-oncall-setup.md#accessing-clusters-via-console-servers)
 
-There is no rollback procedure for the API.  Only node pools can be reversed,
-but this would require a lot of mangling in terraform and is therefore not
-documented.  All cluster operations should be tested using ephemeral
-environments prior to performing on production.
+### Step 2: Determine Node Pools to Upgrade
 
-The upgrade procedure should otherwise be considered safe and should not result
-in any downtime on any running services.  One can view available GKE versions by
-viewing the latest updates from the [GKE Release Notes]:
+* [ ] First list all the node pools of the cluster
 
+```
+gcloud --project <PROJECT> container node-pools list --cluster <CLUSTER> --region us-east1
+```
 
-## Reasons Behind Certain Changes
+And make a note of the names of all the node pools. Each node pool will need
+it's own step documented as below
 
-### Step 1
+### Step 3: Upgrade Node Pool <NODE POOL NAME>
+* [ ] Upgrade the node pool by running the following command
 
-* `node_auto_upgrade` set to `true` - this prevents the nodes from being
-  upgraded at the same time the API nodes are upgraded.  Simply a safety measure
-  and ensure that we are in as much control as possible and that any change to
-  the API can be detected prior to upgrading nodes in case of issues.
+```
+gcloud --project <PROJECT> container clusters upgrade <CLUSTER> --cluster-version=<VERSION> --node-pool <NODE POOL NAME> --region us-east1
+```
 
-### Step 2
+Note this operation can take multiple hours for a node pool, depending on the
+size and workloads running on it.
 
-* `kubernetes-version` set to `<VERSION>` - This performs the upgrade of the API
-  nodes.
+To confirm the node pool has been upgraded, use `gcloud` to list all the node
+pools and look at the `NODE_VERSION` column and confirm the version is correct.
 
-### Step 3
+```
+gcloud --project <PROJECT> container node-pools list --cluster <CLUSTER> --region us-east1
+```
 
-* `node_auto_upgrade` set to `false` - this seems awkward considering we just
-  set it to `true` earlier, but this is when terraform will trigger GKE to
-  perform the node upgrade.  Our module uses fancy replaces that will configure
-  the auto_upgrade option to false, as well as setting the Kubernetes version
-  appropriately.
+### Step 4: Update terraform references to new minimum version
 
-### Overall
+Now that the cluster and node pools have been upgraded, we need to do an update
+in terraform to set the minimum Kubernetes version for that cluster via our
+gke modules `kubernetes_version` parameter. This ensures that should the cluster
+need to be rebuilt for any reason, it will be be built running the version
+that we have upgraded to at minimum.
 
-* Watching changes from the console server - in specific environments, we
-  restrict the ability to reach the API nodes.  Our console servers will retain
-  said access.
-* Note that `tf apply` during a node upgrade may abort due to a timeout.  At
-  this point, continue watching all of the items listed, more specifically, the
-  `gcloud container operations wait` command.  When completed, perform a `tf
-  plan` to ensure the terraform state matches that of the environment.  The
-  timeout is a hard-coded item inside of the google provider and is therefore
-  not configurable.
+Open an MR against the terraform repo, for the cluster in question (it's either
+in `gke-regional.tf` or `gke-zonal.tf`) to bump the `kubernetes_version`
+parameter to the Kubernetes minor version we just upgraded to. E.g. if we just
+upgraded to `1.18.12-gke.1206` change the parameter in terraform to `1.18`
 
-[Change Management Guidelines]: https://about.gitlab.com/handbook/engineering/infrastructure/change-management/
-[GKE Release Notes]: https://cloud.google.com/kubernetes-engine/docs/release-notes
+* [ ] MR `<Merge Request>` to be applied via terraform to lock cluster to minimum
+as new version
+
+## Post upgrade Considerations
+
+Once all clusters have been upgraded to a new version, we should look at all our
+kubernetes deployment tooling repositories under https://cloud.google.com/kubernetes-engine/docs/release-notes-regular
+and open issues/MRs against them to upgrade the version of `kubectl` they are
+using to match the new minor version.

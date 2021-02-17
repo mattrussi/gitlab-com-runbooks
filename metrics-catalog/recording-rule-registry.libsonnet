@@ -55,7 +55,7 @@ local supportsLabelsAndSelector(metricName, requiredAggregationLabels, selector)
       if missingLabels == [] then
         true
       else
-        std.trace('Unable to use recording rule for ' + metricName + '. Missing labels: ' + missingLabels, false)
+        std.trace('Unable to use recording rule for ' + metricName + '. Missing labels: ' + missingLabels + 'requiredAggregationLabels=' + requiredAggregationLabels + ', selector=' + selector, false)
     else
       std.assertEqual(selector, { __assert__: 'selector should be a selector hash' })
   else

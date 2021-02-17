@@ -20,7 +20,7 @@ groups:
           $labels.environment }}&var-type={{ $labels.type }}&var-component={{ $labels.component }}&var-stage={{
           $labels.stage }}
         grafana_min_zoom_hours: '24'
-        grafana_panel_id: '41384'
+        grafana_panel_id: '803754892'
         grafana_variables: environment,type,component,stage
       labels:
         alert_type: cause
@@ -36,8 +36,8 @@ groups:
             gitlab_component_ops:rate{monitor!="global"} >= 0
           )
         )
-        and on (env, environment, tier, type, component)
-        gitlab_component_service:mapping{monitor!="global"}
+        and on (type, component)
+        gitlab_component_service:mapping{monitor="global"}
     - alert: gitlab_component_apdex_missing_series
       for: 1h
       annotations:
@@ -54,7 +54,7 @@ groups:
           $labels.environment }}&var-type={{ $labels.type }}&var-component={{ $labels.component }}&var-stage={{
           $labels.stage }}
         grafana_min_zoom_hours: '24'
-        grafana_panel_id: '41384'
+        grafana_panel_id: '803754892'
         grafana_variables: environment,type,component,stage
       labels:
         alert_type: cause
@@ -70,8 +70,8 @@ groups:
             gitlab_component_apdex:ratio{monitor!="global"}
           )
         )
-        and on (env, environment, tier, type, component)
-        gitlab_component_service:mapping{monitor!="global"}
+        and on (type, component)
+        gitlab_component_service:mapping{monitor="global"}
     - alert: gitlab_component_error_missing_series
       for: 2h
       annotations:
@@ -88,7 +88,7 @@ groups:
           $labels.environment }}&var-type={{ $labels.type }}&var-component={{ $labels.component }}&var-stage={{
           $labels.stage }}
         grafana_min_zoom_hours: '24'
-        grafana_panel_id: '41384'
+        grafana_panel_id: '803754892'
         grafana_variables: environment,type,component,stage
       labels:
         alert_type: cause
@@ -104,5 +104,5 @@ groups:
             gitlab_component_errors:rate{monitor!="global", stage!="cny"}
           )
         )
-        and on (env, environment, tier, type, component)
-        gitlab_component_service:mapping{monitor!="global"}
+        and on (type, component)
+        gitlab_component_service:mapping{monitor="global"}

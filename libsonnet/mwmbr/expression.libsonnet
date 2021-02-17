@@ -3,7 +3,6 @@ local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 
-
 local errorRateTermWithFixedThreshold(
   metric,
   metricSelectorHash,
@@ -27,25 +26,25 @@ local errorRateTermWithMetricSLO(
   metricSelectorHash,
   comparator,
   burnrate,
-  sloMetric,
+  thresholdSLOMetricName,
   sloMetricSelectorHash,
-  sloMetricAggregationLabels,
+  thresholdSLOMetricAggregationLabels,
       ) =
   |||
     %(metric)s{%(metricSelector)s}
-    %(comparator)s on(%(sloMetricAggregationLabels)s) group_left()
+    %(comparator)s on(%(thresholdSLOMetricAggregationLabels)s) group_left()
     (
       %(burnrate)g * (
-        avg by (%(sloMetricAggregationLabels)s) (%(sloMetric)s{%(sloSelector)s})
+        avg by (%(thresholdSLOMetricAggregationLabels)s) (%(thresholdSLOMetricName)s{%(sloSelector)s})
       )
     )
   ||| % {
     metric: metric,
     burnrate: burnrate,
     metricSelector: selectors.serializeHash(metricSelectorHash),
-    sloMetric: sloMetric,
+    thresholdSLOMetricName: thresholdSLOMetricName,
     sloSelector: selectors.serializeHash(sloMetricSelectorHash),
-    sloMetricAggregationLabels: aggregations.serialize(sloMetricAggregationLabels),
+    thresholdSLOMetricAggregationLabels: aggregations.serialize(thresholdSLOMetricAggregationLabels),
     comparator: comparator,
   };
 
@@ -73,26 +72,26 @@ local apdexRateTermWithMetricSLO(
   metricSelectorHash,
   comparator,
   burnrate,
-  sloMetric,
+  thresholdSLOMetricName,
   sloMetricSelectorHash,
-  sloMetricAggregationLabels,
+  thresholdSLOMetricAggregationLabels,
       ) =
   |||
     %(metric)s{%(metricSelector)s}
-    %(comparator)s on(%(sloMetricAggregationLabels)s) group_left()
+    %(comparator)s on(%(thresholdSLOMetricAggregationLabels)s) group_left()
     (
       1 -
       (
-        %(burnrate)g * (1 - avg by (%(sloMetricAggregationLabels)s) (%(sloMetric)s{%(sloSelector)s}))
+        %(burnrate)g * (1 - avg by (%(thresholdSLOMetricAggregationLabels)s) (%(thresholdSLOMetricName)s{%(sloSelector)s}))
       )
     )
   ||| % {
     metric: metric,
     burnrate: burnrate,
     metricSelector: selectors.serializeHash(metricSelectorHash),
-    sloMetric: sloMetric,
+    thresholdSLOMetricName: thresholdSLOMetricName,
     sloSelector: selectors.serializeHash(sloMetricSelectorHash),
-    sloMetricAggregationLabels: aggregations.serialize(sloMetricAggregationLabels),
+    thresholdSLOMetricAggregationLabels: aggregations.serialize(thresholdSLOMetricAggregationLabels),
     comparator: comparator,
   };
 
@@ -103,78 +102,61 @@ local operationRateFilter(
   operationRateSelectorHash,
   minimumOperationRateForMonitoring
       ) =
-  if operationRateMetric == null then
+  if minimumOperationRateForMonitoring == null then
     expression
   else
-    if operationRateAggregationLabels == null then
-      |||
-        (
-          %(expression)s
-        )
-        and
-        (
-          %(operationRateMetric)s{%(operationRateSelector)s} >= %(minimumOperationRateForMonitoring)g
-        )
-      ||| % {
-        expression: strings.indent(expression, 2),
-        operationRateMetric: operationRateMetric,
-        minimumOperationRateForMonitoring: minimumOperationRateForMonitoring,
-        operationRateSelector: selectors.serializeHash(operationRateSelectorHash),
-      }
-    else
-      |||
-        (
-          %(expression)s
-        )
-        and on(%(operationRateAggregationLabels)s)
-        (
-          sum by(%(operationRateAggregationLabels)s) (%(operationRateMetric)s{%(operationRateSelector)s}) >= %(minimumOperationRateForMonitoring)g
-        )
-      ||| % {
-        expression: strings.indent(expression, 2),
-        operationRateMetric: operationRateMetric,
-        minimumOperationRateForMonitoring: minimumOperationRateForMonitoring,
-        operationRateSelector: selectors.serializeHash(operationRateSelectorHash),
-        operationRateAggregationLabels: aggregations.serialize(operationRateAggregationLabels),
-      };
+    |||
+      (
+        %(expression)s
+      )
+      and on(%(operationRateAggregationLabels)s)
+      (
+        sum by(%(operationRateAggregationLabels)s) (%(operationRateMetric)s{%(operationRateSelector)s}) >= %(minimumOperationRateForMonitoring)g
+      )
+    ||| % {
+      expression: strings.indent(expression, 2),
+      operationRateMetric: operationRateMetric,
+      minimumOperationRateForMonitoring: minimumOperationRateForMonitoring,
+      operationRateSelector: selectors.serializeHash(operationRateSelectorHash),
+      operationRateAggregationLabels: aggregations.serialize(operationRateAggregationLabels),
+    };
 
 {
   // Generates a multi-window, multi-burn-rate error expression
   multiburnRateErrorExpression(
-    metric1h,  // 1h burn rate metric
-    metric5m,  // 5m burn rate metric
-    metric30m,  // 30m burn rate metric
-    metric6h,  // 6h burn rate metric
+    aggregationSet,
     metricSelectorHash,  // Selectors for the error rate metrics
-    sloMetric=null,  // SLO metric name
-    sloMetricSelectorHash=null,  // Selectors for the slo metric
-    sloMetricAggregationLabels=null,  // Labels to join the SLO metric to the error rate metrics with
-    operationRateMetric=null,  // Optional: operation rate metric for minimum operation rate clause
-    operationRateAggregationLabels=null,  // Labels to aggregate the operation rate on, if any
-    operationRateSelectorHash=null,  // Selector for the operation rate metric
+    thresholdSLOMetricName=null,  // SLO metric name
+    thresholdSLOMetricAggregationLabels=null,  // Labels to join the SLO metric to the error rate metrics with
     minimumOperationRateForMonitoring=null,  // minium operation rate vaue (in request-per-second)
     thresholdSLOValue=null,  // Error budget float value (between 0 and 1)
   )::
+    local mergedMetricSelectors = selectors.merge(aggregationSet.selector, metricSelectorHash);
     local term(metric, burnrate) =
-      if sloMetric != null then
+      if thresholdSLOMetricName != null then
         errorRateTermWithMetricSLO(
           metric=metric,
-          metricSelectorHash=metricSelectorHash,
+          metricSelectorHash=mergedMetricSelectors,
           comparator='>',
           burnrate=burnrate,
-          sloMetric=sloMetric,
-          sloMetricSelectorHash=sloMetricSelectorHash,
-          sloMetricAggregationLabels=sloMetricAggregationLabels,
+          thresholdSLOMetricName=thresholdSLOMetricName,
+          sloMetricSelectorHash=aggregationSet.selector,
+          thresholdSLOMetricAggregationLabels=thresholdSLOMetricAggregationLabels,
         )
       else
         errorRateTermWithFixedThreshold(
           metric=metric,
-          metricSelectorHash=metricSelectorHash,
+          metricSelectorHash=mergedMetricSelectors,
           comparator='>',
           burnrate=burnrate,
           thresholdSLOValue=thresholdSLOValue
         );
 
+    local metric1h = aggregationSet.getErrorRatioMetricForBurnRate('1h', required=true);
+    local metric5m = aggregationSet.getErrorRatioMetricForBurnRate('5m', required=true);
+    local metric6h = aggregationSet.getErrorRatioMetricForBurnRate('6h', required=true);
+    local metric30m = aggregationSet.getErrorRatioMetricForBurnRate('30m', required=true);
+
     local term_1h = term(metric1h, multiburn_factors.burnrate_1h);
     local term_5m = term(metric5m, multiburn_factors.burnrate_1h);
     local term_6h = term(metric6h, multiburn_factors.burnrate_6h);
@@ -205,47 +187,46 @@ local operationRateFilter(
 
     operationRateFilter(
       preOperationRateExpr,
-      operationRateMetric,
-      operationRateAggregationLabels,
-      operationRateSelectorHash,
+      aggregationSet.getOpsRateMetricForBurnRate('1h', required=true),
+      aggregationSet.labels,
+      mergedMetricSelectors,
       minimumOperationRateForMonitoring
     ),
 
   // Generates a multi-window, multi-burn-rate apdex score expression
   multiburnRateApdexExpression(
-    metric1h,  // 1h burn rate metric
-    metric5m,  // 5m burn rate metric
-    metric30m,  // 30m burn rate metric
-    metric6h,  // 6h burn rate metric
+    aggregationSet,
     metricSelectorHash,  // Selectors for the error rate metrics
-    sloMetric=null,  // SLO metric name
-    sloMetricSelectorHash=null,  // Selectors for the slo metric
-    sloMetricAggregationLabels=null,  // Labels to join the SLO metric to the error rate metrics with
-    operationRateMetric=null,  // Optional: operation rate metric for minimum operation rate clause
-    operationRateAggregationLabels=null,  // Labels to aggregate the operation rate on, if any
-    operationRateSelectorHash=null,  // Selector for the operation rate metric
+    thresholdSLOMetricName=null,  // SLO metric name
+    thresholdSLOMetricAggregationLabels=null,  // Labels to join the SLO metric to the error rate metrics with
     minimumOperationRateForMonitoring=null,  // minium operation rate vaue (in request-per-second)
     thresholdSLOValue=null  // Error budget float value (between 0 and 1)
   )::
+    local mergedMetricSelectors = selectors.merge(aggregationSet.selector, metricSelectorHash);
     local term(metric, burnrate) =
-      if sloMetric != null then
+      if thresholdSLOMetricName != null then
         apdexRateTermWithMetricSLO(
           metric=metric,
-          metricSelectorHash=metricSelectorHash,
+          metricSelectorHash=mergedMetricSelectors,
           comparator='<',
           burnrate=burnrate,
-          sloMetric=sloMetric,
-          sloMetricSelectorHash=sloMetricSelectorHash,
-          sloMetricAggregationLabels=sloMetricAggregationLabels,
+          thresholdSLOMetricName=thresholdSLOMetricName,
+          sloMetricSelectorHash=aggregationSet.selector,
+          thresholdSLOMetricAggregationLabels=thresholdSLOMetricAggregationLabels,
         )
       else
         apdexRateTermWithFixedThreshold(
           metric=metric,
-          metricSelectorHash=metricSelectorHash,
+          metricSelectorHash=mergedMetricSelectors,
           comparator='<',
           burnrate=burnrate,
           thresholdSLOValue=thresholdSLOValue,
         );
+
+    local metric1h = aggregationSet.getApdexRatioMetricForBurnRate('1h', required=true);
+    local metric5m = aggregationSet.getApdexRatioMetricForBurnRate('5m', required=true);
+    local metric6h = aggregationSet.getApdexRatioMetricForBurnRate('6h', required=true);
+    local metric30m = aggregationSet.getApdexRatioMetricForBurnRate('30m', required=true);
 
     local term_1h = term(metric1h, multiburn_factors.burnrate_1h);
     local term_5m = term(metric5m, multiburn_factors.burnrate_1h);
@@ -277,32 +258,34 @@ local operationRateFilter(
 
     operationRateFilter(
       preOperationRateExpr,
-      operationRateMetric,
-      operationRateAggregationLabels,
-      operationRateSelectorHash,
+      aggregationSet.getOpsRateMetricForBurnRate('1h', required=true),
+      aggregationSet.labels,
+      mergedMetricSelectors,
       minimumOperationRateForMonitoring
     ),
 
   errorHealthExpression(
-    metric1h,  // 1h burn rate metric
-    metric5m,  // 5m burn rate metric
-    metric30m,  // 30m burn rate metric
-    metric6h,  // 6h burn rate metric
+    aggregationSet,
     metricSelectorHash,  // Selectors for the error rate metrics
-    sloMetric,  // SLO metric name
-    sloMetricSelectorHash,  // Selectors for the slo metric
-    sloMetricAggregationLabels,  // Labels to join the SLO metric to the error rate metrics with
+    thresholdSLOMetricName,  // SLO metric name
+    thresholdSLOMetricAggregationLabels,  // Labels to join the SLO metric to the error rate metrics with
   )::
+    local mergedMetricSelectors = selectors.merge(aggregationSet.selector, metricSelectorHash);
     local term(metric, burnrate) =
       errorRateTermWithMetricSLO(
         metric=metric,
-        metricSelectorHash=metricSelectorHash,
+        metricSelectorHash=mergedMetricSelectors,
         comparator='> bool',
         burnrate=burnrate,
-        sloMetric=sloMetric,
-        sloMetricSelectorHash=sloMetricSelectorHash,
-        sloMetricAggregationLabels=sloMetricAggregationLabels,
+        thresholdSLOMetricName=thresholdSLOMetricName,
+        sloMetricSelectorHash=aggregationSet.selector,
+        thresholdSLOMetricAggregationLabels=thresholdSLOMetricAggregationLabels,
       );
+
+    local metric1h = aggregationSet.getErrorRatioMetricForBurnRate('1h', required=true);
+    local metric5m = aggregationSet.getErrorRatioMetricForBurnRate('5m', required=true);
+    local metric6h = aggregationSet.getErrorRatioMetricForBurnRate('6h', required=true);
+    local metric30m = aggregationSet.getErrorRatioMetricForBurnRate('30m', required=true);
 
     local term_1h = term(metric1h, multiburn_factors.burnrate_1h);
     local term_5m = term(metric5m, multiburn_factors.burnrate_1h);
@@ -342,25 +325,27 @@ local operationRateFilter(
     },
 
   apdexHealthExpression(
-    metric1h,  // 1h burn rate metric
-    metric5m,  // 5m burn rate metric
-    metric30m,  // 30m burn rate metric
-    metric6h,  // 6h burn rate metric
+    aggregationSet,
     metricSelectorHash,  // Selectors for the error rate metrics
-    sloMetric,  // SLO metric name
-    sloMetricSelectorHash,  // Selectors for the slo metric
-    sloMetricAggregationLabels,  // Labels to join the SLO metric to the error rate metrics with
+    thresholdSLOMetricName,  // SLO metric name
+    thresholdSLOMetricAggregationLabels,  // Labels to join the SLO metric to the error rate metrics with
   )::
+    local mergedMetricSelectors = selectors.merge(aggregationSet.selector, metricSelectorHash);
     local term(metric, burnrate) =
       apdexRateTermWithMetricSLO(
         metric=metric,
-        metricSelectorHash=metricSelectorHash,
+        metricSelectorHash=mergedMetricSelectors,
         comparator='< bool',
         burnrate=burnrate,
-        sloMetric=sloMetric,
-        sloMetricSelectorHash=sloMetricSelectorHash,
-        sloMetricAggregationLabels=sloMetricAggregationLabels,
+        thresholdSLOMetricName=thresholdSLOMetricName,
+        sloMetricSelectorHash=aggregationSet.selector,
+        thresholdSLOMetricAggregationLabels=thresholdSLOMetricAggregationLabels,
       );
+
+    local metric1h = aggregationSet.getApdexRatioMetricForBurnRate('1h', required=true);
+    local metric5m = aggregationSet.getApdexRatioMetricForBurnRate('5m', required=true);
+    local metric6h = aggregationSet.getApdexRatioMetricForBurnRate('6h', required=true);
+    local metric30m = aggregationSet.getApdexRatioMetricForBurnRate('30m', required=true);
 
     local term_1h = term(metric1h, multiburn_factors.burnrate_1h);
     local term_5m = term(metric5m, multiburn_factors.burnrate_1h);

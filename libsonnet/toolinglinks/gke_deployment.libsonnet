@@ -1,5 +1,4 @@
-local toolingLinkDefinition = (import './tooling_link_definition.libsonnet').toolingLinkDefinition;
-local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libsonnet';
+local toolingLinkDefinition = (import './tooling_link_definition.libsonnet').toolingLinkDefinition({ tool:: 'gke_deployment' });
 local stackdriverLogs = import './stackdriver_logs.libsonnet';
 
 {

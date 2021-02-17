@@ -1,8 +1,6 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
-local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local derivMetric = metricsCatalog.derivMetric;
-local customQuery = metricsCatalog.customQuery;
 local googleLoadBalancerComponents = import './lib/google_load_balancer_components.libsonnet';
 
 metricsCatalog.serviceDefinition({
@@ -101,7 +99,7 @@ metricsCatalog.serviceDefinition({
       ),
 
       significantLabels: ['tag', 'type'],
-      aggregateRequestRate: false,
+      serviceAggregation: false,
     },
   },
 })

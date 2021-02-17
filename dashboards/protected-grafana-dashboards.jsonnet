@@ -73,30 +73,16 @@ local union(sets) = std.foldl(function(memo, a) std.setUnion(std.set(a), memo), 
       // bjk's dashboards
       // https://gitlab.com/gitlab-com/runbooks/-/merge_requests/2345#note_358186936
       [
-        'J0QFZXomk',
-        'Qe6veT_mk',
-        'pqlQq0xik',
-        'x2SD_9Siz',
-        '-l1W8kDWz',
-        'JahkiwyWk',
-        '9l09q0qik',
-        'aBCbl9Smzv',
-        'ozFp_56mk',
-        'OYXV_5eik',
-        'u0LwqvzWk',
-        'L0HBvojWzv',
-        '-gJSV0Yiz',
-        'GTp20b1Zk',
-        'O92e3k9Zkv',
-        '1CgmG_zZz',
-        '-UvftW1iz',
-        'opwl5gSiz',
-        'KqPVKRIiz',
-        '64YQGnbZz',
-        '_W4xKboWk',
-        'nCKUurSmk',
-        'Eo8BHoNZz',
-        '4QhoV1tZk',
+        'J0QFZXomk',  // blackbox-ssh
+        'Qe6veT_mk',  // fleet-utilization
+        'pqlQq0xik',  // git-protocol-versions
+        'x2SD_9Siz',  // go-processes
+        '9l09q0qik',  // node-iostat
+        'u0LwqvzWk',  // node-ntp
+        '-UvftW1iz',  // ssh-performance
+        'KqPVKRIiz',  // thanos-store
+        '64YQGnbZz',  // thanos-store-oom
+        '4QhoV1tZk',  // writes-per-gitaly-operation-copy
       ],
       // nnelson's dashboards
       // https://gitlab.com/gitlab-com/runbooks/-/merge_requests/2345#note_359096247

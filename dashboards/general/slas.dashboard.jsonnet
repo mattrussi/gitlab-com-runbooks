@@ -7,28 +7,12 @@ local platformLinks = import 'platform_links.libsonnet';
 local row = grafana.row;
 local selectors = import 'promql/selectors.libsonnet';
 local seriesOverrides = import 'grafana/series_overrides.libsonnet';
-local serviceCatalog = import 'service_catalog.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 local thresholds = import 'thresholds.libsonnet';
+local generalServicesDashboard = import 'general-services-dashboard.libsonnet';
 
 // These charts have a very high interval factor, to create a wide trend line
-local INTERVAL_FACTOR = 50;
 local INTERVAL = '1d';
-
-// Preferred ordering of rows on the SLA dashboard
-local serviceOrdering = [
-  'web',
-  'git',
-  'api',
-  'ci-runners',
-  'registry',
-  'web-pages',
-];
-
-// Note, by having a overall_sla_weighting value, even if it is zero, the service will
-// be included on the SLA dashboard. To remove it, delete the key
-local keyServices = serviceCatalog.findServices(function(service)
-  std.objectHas(service.business.SLA, 'overall_sla_weighting') && service.business.SLA.overall_sla_weighting >= 0);
 
 local overviewDashboardLinks(type) =
   local formatConfig = { type: type };
@@ -44,14 +28,6 @@ local thresholdsValues = {
     thresholds.errorLevel('lt', metricsConfig.slaTarget),
   ],
 };
-
-local keyServiceSorter(service) =
-  local l = std.find(service.name, serviceOrdering);
-  if l == [] then
-    100
-  else
-    l[0];
-
 
 local systemWeightQueryTerm(service, selectorHash, rangeInterval) =
   local defaultSelector = {
@@ -86,7 +62,7 @@ local systemAvailabilityQuery(selectorHash, rangeInterval) =
    In the mean time, we'll use this workaround:
    */
 
-  local keyServicesWithWeights = std.filter(function(service) service.business.SLA.overall_sla_weighting > 0, keyServices);
+  local keyServicesWithWeights = std.filter(function(service) service.business.SLA.overall_sla_weighting > 0, generalServicesDashboard.keyServices);
   local weightsQueryTerms = std.map(function(service) systemWeightQueryTerm(service, selectorHash, rangeInterval), keyServicesWithWeights);
   local weightsQuery = std.join('\n+\n', weightsQueryTerms);
   local totalWeight = std.foldl(function(memo, service) memo + service.business.SLA.overall_sla_weighting, keyServicesWithWeights, 0);
@@ -196,7 +172,7 @@ local serviceRow(service) =
     },
   ];
 
-local primaryServiceRows = std.map(serviceRow, std.sort(keyServices, keyServiceSorter));
+local primaryServiceRows = std.map(serviceRow, generalServicesDashboard.sortedKeyServices);
 
 basic.dashboard(
   'SLAs',
