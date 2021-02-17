@@ -229,6 +229,26 @@ groups:
       gitlab:component:feature_category:execution:error:rate_1m
       /
       gitlab:component:feature_category:execution:ops:rate_1m > 0
+  - record: gitlab:component:feature_category:execution:apdex:ratio_1m
+    labels:
+      component: puma
+    expr: |
+      sum by (environment,tier,type,stage,feature_category) (
+        rate(gitlab_transaction_duration_seconds_bucket{job="gitlab-rails",le="1.0",type="git"}[1m])
+      )
+      /
+      (
+        sum by (environment,tier,type,stage,feature_category) (
+          rate(gitlab_transaction_duration_seconds_bucket{job="gitlab-rails",le="+Inf",type="git"}[1m])
+        ) > 0
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_1m
+    labels:
+      component: puma
+    expr: |
+      sum by (environment,tier,type,stage,feature_category) (
+        rate(gitlab_transaction_duration_seconds_bucket{job="gitlab-rails",le="+Inf",type="git"}[1m])
+      )
 - name: 'Component-Level SLIs: git - 5m burn-rate'
   interval: 1m
   rules:
@@ -457,6 +477,26 @@ groups:
       gitlab:component:feature_category:execution:error:rate_5m
       /
       gitlab:component:feature_category:execution:ops:rate_5m > 0
+  - record: gitlab:component:feature_category:execution:apdex:ratio_5m
+    labels:
+      component: puma
+    expr: |
+      sum by (environment,tier,type,stage,feature_category) (
+        rate(gitlab_transaction_duration_seconds_bucket{job="gitlab-rails",le="1.0",type="git"}[5m])
+      )
+      /
+      (
+        sum by (environment,tier,type,stage,feature_category) (
+          rate(gitlab_transaction_duration_seconds_bucket{job="gitlab-rails",le="+Inf",type="git"}[5m])
+        ) > 0
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_5m
+    labels:
+      component: puma
+    expr: |
+      sum by (environment,tier,type,stage,feature_category) (
+        rate(gitlab_transaction_duration_seconds_bucket{job="gitlab-rails",le="+Inf",type="git"}[5m])
+      )
 - name: 'Component-Level SLIs: git - 30m burn-rate'
   interval: 2m
   rules:
@@ -685,6 +725,26 @@ groups:
       gitlab:component:feature_category:execution:error:rate_30m
       /
       gitlab:component:feature_category:execution:ops:rate_30m > 0
+  - record: gitlab:component:feature_category:execution:apdex:ratio_30m
+    labels:
+      component: puma
+    expr: |
+      sum by (environment,tier,type,stage,feature_category) (
+        rate(gitlab_transaction_duration_seconds_bucket{job="gitlab-rails",le="1.0",type="git"}[30m])
+      )
+      /
+      (
+        sum by (environment,tier,type,stage,feature_category) (
+          rate(gitlab_transaction_duration_seconds_bucket{job="gitlab-rails",le="+Inf",type="git"}[30m])
+        ) > 0
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_30m
+    labels:
+      component: puma
+    expr: |
+      sum by (environment,tier,type,stage,feature_category) (
+        rate(gitlab_transaction_duration_seconds_bucket{job="gitlab-rails",le="+Inf",type="git"}[30m])
+      )
 - name: 'Component-Level SLIs: git - 1h burn-rate'
   interval: 1m
   rules:
@@ -913,6 +973,26 @@ groups:
       gitlab:component:feature_category:execution:error:rate_1h
       /
       gitlab:component:feature_category:execution:ops:rate_1h > 0
+  - record: gitlab:component:feature_category:execution:apdex:ratio_1h
+    labels:
+      component: puma
+    expr: |
+      sum by (environment,tier,type,stage,feature_category) (
+        rate(gitlab_transaction_duration_seconds_bucket{job="gitlab-rails",le="1.0",type="git"}[1h])
+      )
+      /
+      (
+        sum by (environment,tier,type,stage,feature_category) (
+          rate(gitlab_transaction_duration_seconds_bucket{job="gitlab-rails",le="+Inf",type="git"}[1h])
+        ) > 0
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_1h
+    labels:
+      component: puma
+    expr: |
+      sum by (environment,tier,type,stage,feature_category) (
+        rate(gitlab_transaction_duration_seconds_bucket{job="gitlab-rails",le="+Inf",type="git"}[1h])
+      )
 - name: 'Component-Level SLIs: git - 6h burn-rate'
   interval: 2m
   rules:
@@ -1141,6 +1221,26 @@ groups:
       gitlab:component:feature_category:execution:error:rate_6h
       /
       gitlab:component:feature_category:execution:ops:rate_6h > 0
+  - record: gitlab:component:feature_category:execution:apdex:ratio_6h
+    labels:
+      component: puma
+    expr: |
+      sum by (environment,tier,type,stage,feature_category) (
+        rate(gitlab_transaction_duration_seconds_bucket{job="gitlab-rails",le="1.0",type="git"}[6h])
+      )
+      /
+      (
+        sum by (environment,tier,type,stage,feature_category) (
+          rate(gitlab_transaction_duration_seconds_bucket{job="gitlab-rails",le="+Inf",type="git"}[6h])
+        ) > 0
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_6h
+    labels:
+      component: puma
+    expr: |
+      sum by (environment,tier,type,stage,feature_category) (
+        rate(gitlab_transaction_duration_seconds_bucket{job="gitlab-rails",le="+Inf",type="git"}[6h])
+      )
 - name: 'Component mapping: git'
   interval: 1m
   rules:
