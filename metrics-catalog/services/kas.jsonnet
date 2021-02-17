@@ -5,13 +5,9 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 metricsCatalog.serviceDefinition({
   type: 'kas',
   tier: 'sv',
-  // contractualThresholds: {
-  //   apdexRatio: 0.95,
-  //   errorRatio: 0.05,
-  // },
   monitoringThresholds: {
     // apdexScore: 0.95,
-    errorRatio: 0.95,
+    errorRatio: 0.99,
   },
   serviceDependencies: {
     gitaly: true,
@@ -47,7 +43,7 @@ metricsCatalog.serviceDefinition({
 
       errorRate: rateMetric(
         counter='grpc_server_handled_total',
-        selector=baseSelector { grpc_code: { ne: 'OK' } }
+        selector=baseSelector { grpc_code: { ne: 'OK' }, grpc_method: 'GetConfiguration' }
       ),
       significantLabels: [],
       toolingLinks: [
