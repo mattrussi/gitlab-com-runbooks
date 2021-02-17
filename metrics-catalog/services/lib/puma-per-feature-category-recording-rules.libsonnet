@@ -1,4 +1,7 @@
 local rateMetric = (import 'servicemetrics/metrics.libsonnet').rateMetric;
+local histogramApdex = (import 'servicemetrics/histogram_apdex.libsonnet').histogramApdex;
+
+local metricsCatalog = import '../../metrics-catalog.libsonnet';
 
 local aggregationLabels = [
   'environment',
@@ -23,6 +26,34 @@ local errorRate = rateMetric(
   },
 );
 
+local latencyApdex(service) =
+  local pumaComponent = metricsCatalog.getService(service).serviceLevelIndicators.puma;
+  if std.objectHas(pumaComponent, 'apdex') then
+    histogramApdex(
+      histogram='gitlab_transaction_duration_seconds_bucket',
+      selector={ job: 'gitlab-rails' },
+      satisfiedThreshold='%i.0' % [pumaComponent.apdex.satisfiedThreshold],
+    )
+  else null;
+
+local latencyApdexRatioRules(selector, rangeInterval) =
+  local apdex = latencyApdex(selector.type);
+  if apdex != null then
+    [
+      {
+        record: 'gitlab:component:feature_category:execution:apdex:ratio_%s' % [rangeInterval],
+        labels: { component: 'puma' },
+        expr: latencyApdex(selector.type).apdexQuery(aggregationLabels, selector, rangeInterval),
+      },
+      {
+        record: 'gitlab:component:feature_category:execution:apdex:weight:score_%s' % [rangeInterval],
+        labels: { component: 'puma' },
+        expr: latencyApdex(selector.type).apdexWeightQuery(aggregationLabels, selector, rangeInterval),
+      },
+    ]
+  else
+    [];
+
 {
   // Record error rates for each category
   perFeatureCategoryRecordingRules(selector)::
@@ -46,5 +77,5 @@ local errorRate = rateMetric(
             gitlab:component:feature_category:execution:ops:rate_%(rangeInterval)s > 0
           ||| % { rangeInterval: rangeInterval },
         },
-      ],
+      ] + latencyApdexRatioRules(selector, rangeInterval),
 }
