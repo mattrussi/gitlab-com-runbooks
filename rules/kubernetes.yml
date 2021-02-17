@@ -2,31 +2,6 @@ groups:
   - name: kubernetes.rules
     rules:
 
-      - alert: GKENodeCountCritical
-        annotations:
-          title: Reached maximum node count
-          description: '{{ $labels.environment }} has reached maximum allowed nodes'
-          runbook: docs/uncategorized/kubernetes.md#gkenodecount
-        expr: |-
-          count(stackdriver_gce_instance_compute_googleapis_com_instance_uptime{instance_name=~"gke-.*"}) by (environment) >= 270
-        for: 5m
-        labels:
-          pager: pagerduty
-          severity: s2
-          alert_type: cause
-
-      - alert: GKENodeCountHigh
-        annotations:
-          title: High node count in GKE
-          description: '{{ $labels.environment }} is close to the maximum allowed nodes'
-          runbook: docs/uncategorized/kubernetes.md#gkenodecount
-        expr: |-
-          count(stackdriver_gce_instance_compute_googleapis_com_instance_uptime{instance_name=~"gke-.*"}) by (environment) > 243
-        for: 30m
-        labels:
-          severity: s3
-          alert_type: cause
-
       - alert: KubeReplicasSetPodMismatch
         annotations:
           title: Deployment Replicas Mismatch
