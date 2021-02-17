@@ -4,10 +4,11 @@ The apdex score for a service is a measure of relative performance for a service
 
 Our apdex scoring is loosely based on NewRelic's apdex scoring: https://docs.newrelic.com/docs/apm/new-relic-apm/apdex/apdex-measure-user-satisfaction
 
-For a given service, we define two latency values:
+For a given service, we define three latency values:
 
 * **Satisfied**: this is the target latency for incoming requests to this service.
 * **Tolerated**: this is a acceptable, tolerated latency.
+* **Frustrated**: this is unacceptable latency.
 
 The apdex score for a service is measured as:
 
@@ -33,4 +34,4 @@ the metric.
 
 ## Service Apdex Definitions
 
-The definitions of service availability are defined in https://gitlab.com/gitlab-com/runbooks/blob/master/rules/service_apdex.yml
+The definitions of service availability are defined in https://gitlab.com/gitlab-com/runbooks/-/tree/master/metrics-catalog

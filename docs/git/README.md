@@ -61,6 +61,7 @@
 * [../runner/update-gitlab-runner-on-managers.md](../runner/update-gitlab-runner-on-managers.md)
 * [../sidekiq/large-sidekiq-queue.md](../sidekiq/large-sidekiq-queue.md)
 * [../sidekiq/silent-project-exports.md](../sidekiq/silent-project-exports.md)
+* [../uncategorized/apdex-alerts-guide.md](../uncategorized/apdex-alerts-guide.md)
 * [../uncategorized/azure-snapshots.md](../uncategorized/azure-snapshots.md)
 * [../uncategorized/blocked-user-logins.md](../uncategorized/blocked-user-logins.md)
 * [../uncategorized/deleted-project-restore.md](../uncategorized/deleted-project-restore.md)
