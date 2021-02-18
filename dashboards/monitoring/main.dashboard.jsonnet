@@ -10,11 +10,7 @@ local annotation = grafana.annotation;
 local serviceDashboard = import 'service_dashboard.libsonnet';
 local thresholds = import 'thresholds.libsonnet';
 
-serviceDashboard.overview(
-  'monitoring',
-  environmentSelectorHash={ environment: 'ops', env: 'ops', type: 'monitoring', stage: '$stage' },
-  saturationEnvironmentSelectorHash={ environment: { re: 'ops|gprd|ci-prd' }, type: 'monitoring', stage: '$stage' }
-)
+serviceDashboard.overview('monitoring')
 .addPanel(
   row.new(title='Grafana Latencies'),
   gridPos={
