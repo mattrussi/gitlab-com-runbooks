@@ -7,7 +7,7 @@ local serviceDashboard = import 'service_dashboard.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 
-serviceDashboard.overview('websockets', 'sv')
+serviceDashboard.overview('websockets')
 .addPanel(
   row.new(title='Workhorse'),
   gridPos={

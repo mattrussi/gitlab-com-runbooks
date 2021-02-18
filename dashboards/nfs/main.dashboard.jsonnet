@@ -4,7 +4,7 @@ local serviceDashboard = import 'service_dashboard.libsonnet';
 local row = grafana.row;
 local basic = import 'grafana/basic.libsonnet';
 
-serviceDashboard.overview('nfs', 'stor')
+serviceDashboard.overview('nfs')
 .addPanel(
   row.new(title='NFS Client Activity'),
   gridPos={ x: 0, y: 1000, w: 24, h: 1 }
