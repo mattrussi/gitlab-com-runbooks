@@ -366,4 +366,77 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
     aggregationFilter: 'regional',
   }),
 
+  featureCategorySourceSLIs: aggregationSets.AggregationSet({
+    id: 'source_feature_category',
+    name: 'Prometheus Source Feature Category Metrics',
+    intermediateSource: true,  // Used in dashboards and alerts
+    selector: { monitor: { ne: 'global' } },  // Not Thanos Ruler
+    labels: ['env', 'environment', 'tier', 'type', 'stage', 'component', 'feature_category'],
+    burnRates: {
+      // No 1m burn rate
+      '5m': {
+        apdexRatio: 'gitlab:component:feature_category:execution:apdex:ratio_5m',
+        apdexWeight: 'gitlab:component:feature_category:execution:apdex:weight:score_5m',
+        opsRate: 'gitlab:component:feature_category:execution:ops:rate_5m',
+        errorRate: 'gitlab:component:feature_category:execution:error:rate_5m',
+        errorRatio: 'gitlab:component:feature_category:execution:error:ratio_5m',
+      },
+      '30m': {
+        apdexRatio: 'gitlab:component:feature_category:execution:apdex:ratio_30m',
+        apdexWeight: 'gitlab:component:feature_category:execution:apdex:weight:score_30m',
+        opsRate: 'gitlab:component:feature_category:execution:ops:rate_30m',
+        errorRate: 'gitlab:component:feature_category:execution:error:rate_30m',
+        errorRatio: 'gitlab:component:feature_category:execution:error:ratio_30m',
+      },
+      '1h': {
+        apdexRatio: 'gitlab:component:feature_category:execution:apdex:ratio_1h',
+        apdexWeight: 'gitlab:component:feature_category:execution:apdex:weight:score_1h',
+        opsRate: 'gitlab:component:feature_category:execution:ops:rate_1h',
+        errorRate: 'gitlab:component:feature_category:execution:error:rate_1h',
+        errorRatio: 'gitlab:component:feature_category:execution:error:ratio_1h',
+      },
+      '6h': {
+        apdexRatio: 'gitlab:component:feature_category:execution:apdex:ratio_6h',
+        apdexWeight: 'gitlab:component:feature_category:execution:apdex:weight:score_6h',
+        opsRate: 'gitlab:component:feature_category:execution:ops:rate_6h',
+        errorRate: 'gitlab:component:feature_category:execution:error:rate_6h',
+        errorRatio: 'gitlab:component:feature_category:execution:error:ratio_6h',
+      },
+    },
+  }),
+
+  globalFeatureCategorySLIs: aggregationSets.AggregationSet({
+    id: 'feature_category',
+    name: 'Feature Category Metrics',
+    intermediateSource: false,  // Used in dashboards and alerts
+    selector: { monitor: 'global' },  // Thanos Ruler
+    labels: ['env', 'environment', 'tier', 'type', 'stage', 'component', 'feature_category'],
+    burnRates: {
+      // No 1m burn rate
+      '5m': {
+        apdexRatio: 'gitlab:component:feature_category:execution:apdex:ratio_5m',
+        opsRate: 'gitlab:component:feature_category:execution:ops:rate_5m',
+        errorRate: 'gitlab:component:feature_category:execution:error:rate_5m',
+        errorRatio: 'gitlab:component:feature_category:execution:error:ratio_5m',
+      },
+      '30m': {
+        apdexRatio: 'gitlab:component:feature_category:execution:apdex:ratio_30m',
+        opsRate: 'gitlab:component:feature_category:execution:ops:rate_30m',
+        errorRate: 'gitlab:component:feature_category:execution:error:rate_30m',
+        errorRatio: 'gitlab:component:feature_category:execution:error:ratio_30m',
+      },
+      '1h': {
+        apdexRatio: 'gitlab:component:feature_category:execution:apdex:ratio_1h',
+        opsRate: 'gitlab:component:feature_category:execution:ops:rate_1h',
+        errorRate: 'gitlab:component:feature_category:execution:error:rate_1h',
+        errorRatio: 'gitlab:component:feature_category:execution:error:ratio_1h',
+      },
+      '6h': {
+        apdexRatio: 'gitlab:component:feature_category:execution:apdex:ratio_6h',
+        opsRate: 'gitlab:component:feature_category:execution:ops:rate_6h',
+        errorRate: 'gitlab:component:feature_category:execution:error:rate_6h',
+        errorRatio: 'gitlab:component:feature_category:execution:error:ratio_6h',
+      },
+    },
+  }),
 }
