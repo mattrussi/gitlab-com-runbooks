@@ -764,12 +764,14 @@ local pgbouncerSyncPool(serviceType, role) =
       saturation on this as GitLab will stop to work at this point.
     |||,
     grafana_dashboard_uid: 'sat_pg_int4_id',
-    resourceLabels: ['tablename'],
+    resourceLabels: ['table_name'],
     burnRatePeriod: '5m',
     query: |||
-      pg_integer_capacity_current{%(selector)s}
-      /
-      pg_integer_capacity_maximum{%(selector)s}
+      max by (%(aggregationLabels)s) (
+        pg_integer_capacity_current{%(selector)s}
+        /
+        pg_integer_capacity_maximum{%(selector)s}
+      )
     |||,
     slos: {
       soft: 0.70,

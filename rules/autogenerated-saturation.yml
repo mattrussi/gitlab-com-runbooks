@@ -437,9 +437,11 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            pg_integer_capacity_current{environment!="",type="patroni"}
-            /
-            pg_integer_capacity_maximum{environment!="",type="patroni"}
+            max by (environment, tier, type, stage, table_name) (
+              pg_integer_capacity_current{environment!="",type="patroni"}
+              /
+              pg_integer_capacity_maximum{environment!="",type="patroni"}
+            )
             ,
             1)
         ,
@@ -2517,12 +2519,14 @@ groups:
       grafana_panel_id: '3254820333'
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, tablename) (
+        max by(environment, tier, type, stage, table_name) (
           clamp_min(
             clamp_max(
-              pg_integer_capacity_current{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
-              /
-              pg_integer_capacity_maximum{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              max by (environment, tier, type, stage, table_name) (
+                pg_integer_capacity_current{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+                /
+                pg_integer_capacity_maximum{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              )
               ,
               1)
           ,
