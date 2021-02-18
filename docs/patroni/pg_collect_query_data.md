@@ -1,9 +1,8 @@
 ## The goal of this runbook is collect the info to fulfill the (form)[https://gitlab.com/gitlab-org/gitlab/-/issues/new?issuable_template=Query%20Performance%20Investigation] for a SQL query investigation. 
 
-
 We need to gather the following information:
 
-- TPS
+- QPS - Queries per second.
 - Duration
 - Source of calls (Sidekiq, WebAPI, etc)
 - Query ID
@@ -29,15 +28,15 @@ We have the info of the:
 
 ```
 SELECT
-	queryid, 
-	calls, 
-	total_time, 
-	stddev_time, 
-	query 
+  queryid, 
+  calls, 
+  total_time, 
+  stddev_time, 
+  query 
 FROM 
-	pg_stat_statements 
+  pg_stat_statements 
 WHERE 
-	query like '%SELECT "users".* FROM "users" INNER JOIN "project_authorizations" ON "users"."id" = "project_authorizations"."user_id" WHERE "project_authorizations"."project_id" = $1%' ;
+  query like '%SELECT "users".* FROM "users" INNER JOIN "project_authorizations" ON "users"."id" = "project_authorizations"."user_id" WHERE "project_authorizations"."project_id" = $1%' ;
 
 ```
 
@@ -48,7 +47,7 @@ The output is:
 queryid     | -6386890822646776524
 calls       | 80523859
 total_time  | 1245866438.33135
-stddev_time | 26.659849185085
+mean_time   | 26.659849185085
 query       | SELECT "users".* FROM "users" INNER JOIN "project_authorizations" ON "users"."id" = "project_authorizations"."user_id" WHERE "project_authorizations"."project_id" = $1 /*application:web,correlation_id:1UUb7KNTS51*/
 
 ```
@@ -63,7 +62,7 @@ query       | SELECT "users".* FROM "users" INNER JOIN "project_authorizations" 
 
 We are still missing the following fields: 
 
-- TPS
+- QPS
 - Query Plan
 - Query Example 
 
@@ -71,7 +70,7 @@ We are still missing the following fields:
 
 To execute an analyze we need to have the correct values from the parameters. In case of our example we need to gather 1 parameter the $1 from the SQL statement.
 
-In this case we need to query the PostgreSQL logs where the query is executed.
+In this case we need to query the PostgreSQL logs where the query is executed. Due to the setup of the parameter `log_min_duration_statement` we log all the queries that ran for at least 1 second. 
 
 We recommend to copy locally the logs and do not leave extra copies on the host. Consider the postgresql.csv the PostgreSQL log file.
 
@@ -124,10 +123,12 @@ gitlabhq_production=# EXPLAIN SELECT users.* FROM users INNER JOIN project_autho
                Index Cond: (id = project_authorizations.user_id)
 ```
 
+Another interesting step is evaluate the access plan on https://explain.depesz.com and share in the template.
 
-## Collecting TPS info from Thanos
 
-TPS: to gather the TPS we need to execute the following thanos query: 
+## Collecting QPS info from Thanos
+
+QPS: to gather the QPS we need to execute the following thanos query: 
 
 https://thanos-query.ops.gitlab.net/graph?g0.range_input=6h&g0.end_input=2021-02-17%2013%3A36&g0.step_input=3&g0.moment_input=2021-02-01%2011%3A00%3A00&g0.max_source_resolution=0s&g0.expr=sum(rate(%20pg_stat_statements_calls%7Bqueryid%3D%22-6386890822646776524%22%2C%20env%3D%22gprd%22%2C%20monitor%3D%22db%22%2C%20type%3D%22patroni%22%2Cinstance%3D%22patroni-03-db-gprd.c.gitlab-production.internal%3A9187%22%7D%5B5m%5D))&g0.tab=0
 
@@ -135,4 +136,4 @@ Please remember to change the queryId and update the timeframe.:
 
 Example of Thanos query: `sum(rate( pg_stat_statements_calls{queryid="-6386890822646776524", env="gprd", monitor="db", type="patroni",instance="patroni-03-db-gprd.c.gitlab-production.internal:9187"}[5m]))`
 
-TPS: between 35 and 45
+QPS: between 35 and 45
