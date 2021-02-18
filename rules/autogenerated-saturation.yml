@@ -432,6 +432,21 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
+      component: pg_int4_id
+    expr: |
+      max by(environment, tier, type, stage) (
+        clamp_min(
+          clamp_max(
+            pg_integer_capacity_current{environment!="",type="patroni"}
+            /
+            pg_integer_capacity_maximum{environment!="",type="patroni"}
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
       component: pgbouncer_async_primary_pool
     expr: |
       max by(environment, tier, type, stage) (
@@ -972,6 +987,14 @@ groups:
     expr: '0.9'
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
+      component: pg_int4_id
+    expr: '0.7'
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: pg_int4_id
+    expr: '0.75'
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
       component: pgbouncer_async_primary_pool
     expr: '0.9'
   - record: slo:max:hard:gitlab_component_saturation:ratio
@@ -1274,6 +1297,12 @@ groups:
       component: pg_active_db_connections_replica
       horiz_scaling: 'yes'
       severity: s3
+    expr: '1'
+  - record: gitlab_component_saturation_info
+    labels:
+      component: pg_int4_id
+      horiz_scaling: 'no'
+      severity: s1
     expr: '1'
   - record: gitlab_component_saturation_info
     labels:
@@ -2468,6 +2497,46 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="pg_active_db_connections_replica"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="pg_active_db_connections_replica"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: >-
+        The Postgres int4 ID capacity resource of the {{ $labels.type }} service ({{ $labels.stage }}
+        stage), component has a saturation exceeding SLO and is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Postgres int4 ID capacity resource:
+
+        This measures used int4 primary key capacity in selected postgres tables. It is critically important that we do not reach saturation on this as GitLab will stop to work at this point.
+      grafana_dashboard_id: alerts-sat_pg_int4_id
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/alerts-sat_pg_int4_id?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '3254820333'
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, tablename) (
+          clamp_min(
+            clamp_max(
+              pg_integer_capacity_current{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              /
+              pg_integer_capacity_maximum{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      pager: pagerduty
+      rules_domain: general
+      severity: s1
+    expr: |
+      gitlab_component_saturation:ratio{component="pg_int4_id"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="pg_int4_id"}
   - alert: component_saturation_slo_out_of_bounds
     for: 10m
     annotations:
