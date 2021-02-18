@@ -104,4 +104,18 @@ local outputPromYaml(groups) =
         ),
       }]
     ),
+
+  'aggregated-feature-category-metrics.yml':
+    outputPromYaml(
+      [{
+        name: aggregationSets.globalFeatureCategorySLIs.name,
+        interval: '1m',
+        partial_response_strategy: 'warn',
+        rules: aggregationSetTransformer.generateRecordingRules(
+          sourceAggregationSet=aggregationSets.featureCategorySourceSLIs,
+          targetAggregationSet=aggregationSets.globalFeatureCategorySLIs
+        ),
+      }]
+    ),
+
 }
