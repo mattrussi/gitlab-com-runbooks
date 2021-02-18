@@ -1,13 +1,19 @@
 local stageGroupDashboards = import './stage-group-dashboards.libsonnet';
 local test = import 'github.com/yugui/jsonnetunit/jsonnetunit/test.libsonnet';
 
+local sliPanelTitles = [
+  'SLIs Apdex',
+  'SLIs Error Ratio',
+  'SLIs RPS - Requests per Second',
+];
+
 test.suite({
   testDefaultComponents: {
     actual: stageGroupDashboards.dashboard('geo').stageGroupDashboardTrailer(),
     expectThat: function(results)
       results.title == 'Group dashboard: enablement (Geo)' &&
       std.type(results.panels) == 'array' &&
-      [panel.title for panel in results.panels] == [
+      [panel.title for panel in results.panels] == sliPanelTitles + [
         'Rails Request Rates',
         'API Request Rate',
         'GIT Request Rate',
@@ -54,11 +60,14 @@ test.suite({
   testDisplayEmptyGuidance: {
     actual: stageGroupDashboards.dashboard('geo', displayEmptyGuidance=true).stageGroupDashboardTrailer(),
     expectThat: function(results)
+      local introPanels = [
+        'Introduction',
+        'Introduction',
+      ];
       results.title == 'Group dashboard: enablement (Geo)' &&
       std.type(results.panels) == 'array' &&
-      [panel.title for panel in results.panels] == [
-        'Introduction',
-        'Introduction',
+      [panel.title for panel in results.panels] == introPanels +
+                                                   sliPanelTitles + [
         'Rails Request Rates',
         'API Request Rate',
         'GIT Request Rate',
@@ -107,7 +116,7 @@ test.suite({
     expectThat: function(results)
       results.title == 'Group dashboard: enablement (Geo)' &&
       std.type(results.panels) == 'array' &&
-      [panel.title for panel in results.panels] == [
+      [panel.title for panel in results.panels] == sliPanelTitles + [
         'Rails Request Rates',
         'WEB Request Rate',
         'Extra links',
@@ -138,7 +147,7 @@ test.suite({
     expectThat: function(results)
       results.title == 'Group dashboard: enablement (Geo)' &&
       std.type(results.panels) == 'array' &&
-      [panel.title for panel in results.panels] == [
+      [panel.title for panel in results.panels] == sliPanelTitles + [
         'Rails Request Rates',
         'API Request Rate',
         'WEB Request Rate',

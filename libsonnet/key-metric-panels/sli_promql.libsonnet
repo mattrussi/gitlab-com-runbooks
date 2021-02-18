@@ -127,17 +127,17 @@ local errorRatioQuery(aggregationSet, aggregationLabels, selectorHash, range=nul
      */
     serviceApdexDegradationSLOQuery(type)::
       |||
-        (1 - %(burnrate_6h)g * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{monitor="global",type="%(type)s"})))
+        (1 - %(burnrate_6h)g * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{%(selectors)s})))
       ||| % {
-        type: type,
+        selectors: selectors.serializeHash({ type: type, monitor: 'global' }),
         burnrate_6h: multiburnFactors.burnrate_6h,
       },
 
     serviceApdexOutageSLOQuery(type)::
       |||
-        (1 - %(burnrate_1h)g * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{monitor="global",type="%(type)s"})))
+        (1 - %(burnrate_1h)g * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{%(selectors)s})))
       ||| % {
-        type: type,
+        selectors: selectors.serializeHash({ type: type, monitor: 'global' }),
         burnrate_1h: multiburnFactors.burnrate_1h,
       },
   },
@@ -162,17 +162,17 @@ local errorRatioQuery(aggregationSet, aggregationLabels, selectorHash, range=nul
   errorRate:: {
     serviceErrorRateDegradationSLOQuery(type)::
       |||
-        (%(burnrate_6h)g * avg(slo:max:events:gitlab_service_errors:ratio{monitor="global",type="%(type)s"}))
+        (%(burnrate_6h)g * avg(slo:max:events:gitlab_service_errors:ratio{%(selectors)s}))
       ||| % {
-        type: type,
+        selectors: selectors.serializeHash({ type: type, monitor: 'global' }),
         burnrate_6h: multiburnFactors.burnrate_6h,
       },
 
     serviceErrorRateOutageSLOQuery(type)::
       |||
-        (%(burnrate_1h)g * avg(slo:max:events:gitlab_service_errors:ratio{monitor="global",type="%(type)s"}))
+        (%(burnrate_1h)g * avg(slo:max:events:gitlab_service_errors:ratio{%(selectors)s}))
       ||| % {
-        type: type,
+        selectors: selectors.serializeHash({ type: type, monitor: 'global' }),
         burnrate_1h: multiburnFactors.burnrate_1h,
       },
   },

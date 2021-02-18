@@ -6,6 +6,8 @@ local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local platformLinks = import '../platform_links.libsonnet';
+local singleMetricRow = import 'key-metric-panels/single-metric-row.libsonnet';
+local aggregationSets = import '../../metrics-catalog/aggregation-sets.libsonnet';
 
 local actionLegend(type) =
   if type == 'api' then '{{action}}' else '{{controller}}#{{action}}';
@@ -269,6 +271,27 @@ local sidekiqJobRate(counter, title, description, featureCategoriesSelector) =
     }
   );
 
+local featureCategorySLIs(featureCategoriesSelector, typeSelector) =
+  singleMetricRow.row(
+    // This will aggregate all thresholds into an average. This means that all
+    // series will be judged on an average threshold that does not match how the
+    // service is normally judged.
+    // We'll improve this while iterating on
+    // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/888
+    serviceType={ re: typeSelector },
+    aggregationSet=aggregationSets.globalFeatureCategorySLIs,
+    selectorHash={ feature_category: { re: featureCategoriesSelector }, environment: '$environment', stage: '$stage' },
+    titlePrefix='SLIs',
+    stableIdPrefix='puma-slis',
+    // For now, we'll show a series per feature category. We can't easily
+    // aggregate this using a `min` right now, because a feature category with
+    // low RPS could hide a busy one that's performing well.
+    legendFormatPrefix='{{ type }} {{ feature_category }}',
+    expectMultipleSeries=true,
+    showApdex=true,
+    showErrorRatio=true,
+    showOpsRate=true,
+  );
 
 local requestComponents = std.set(['web', 'api', 'git']);
 local backgroundComponents = std.set(['sidekiq']);
@@ -287,6 +310,7 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
   local featureCategoriesSelector = std.join('|', featureCategories);
 
   local enabledRequestComponents = std.setInter(requestComponents, setComponents);
+  local typeSelector = std.join('|', enabledRequestComponents);
 
   local dashboard =
     basic
@@ -329,6 +353,11 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
     )
     .addPanels(
       if std.length(enabledRequestComponents) != 0 then
+        layout.splitColumnGrid(
+          featureCategorySLIs(featureCategoriesSelector, typeSelector),
+          [7, 1],
+          startRow=200
+        ) +
         layout.rowGrid(
           'Rails Request Rates',
           [
