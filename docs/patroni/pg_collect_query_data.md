@@ -1,4 +1,4 @@
-## The goal of this runbook is collect the info to fulfill the (form)[https://gitlab.com/gitlab-org/gitlab/-/issues/new#Query_Performance_Investigation] for a SQL query investigation. 
+## The goal of this runbook is collect the info to fulfill the (form)[https://gitlab.com/gitlab-org/gitlab/-/issues/new?issuable_template=Query%20Performance%20Investigation] for a SQL query investigation. 
 
 
 We need to gather the following information:
