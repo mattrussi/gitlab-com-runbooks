@@ -22,6 +22,18 @@
 * [../version/version-gitlab-com.md](../version/version-gitlab-com.md)
 <!-- END_MARKER -->
 
+## Result logs
+
+The blackbox exporter keeps logs from failed probes in memory and exposes them over an HTTP interface.
+
+You can access it by using port forwarding, and then navigating to `http://localhost:9115`:
+
+```
+ssh blackbox-01-inf-gprd.c.gitlab-production.internal -L 9115:localhost:9115
+```
+
+Please note that the exporter will only keep up to 1000 results, and drop older
+ones. So make sure to grab these as quickly as possible, before they expire.
 
 <!-- ## Summary -->
 
