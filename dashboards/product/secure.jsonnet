@@ -50,4 +50,14 @@ basic.dashboard(
     ],
     startRow=2001,
   ),
+).addPanel(
+  row.new(title='DAST'), gridPos={ x: 0, y: 3000, w: 24, h: 1 }
+).addPanels(
+  layout.grid(
+    [
+      productCommon.pageDetail('On-Demand Scans', 'On_Demand_Scans', 'https://gitlab.com/gitlab-org/secure/general/-/on_demand_scans'),
+      productCommon.pageDetail('DAST Profiles', 'DAST_Profiles', 'https://gitlab.com/gitlab-org/secure/general/-/security/configuration/dast_profiles'),
+    ],
+    startRow=3001,
+  ),
 )
