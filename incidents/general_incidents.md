@@ -21,3 +21,56 @@ The incident will also have an affected infrastructure section where you can pic
 You can update incidents with the Update Status button on an existing incident, again you can tweet, etc from that update point.
 
 Remember to close out the incident when the issue is resolved.  Also, when possible, put the issue and/or google doc in the post mortem link.
+
+## IMOC Checklist
+
+As we start to open up the role of IMOC, we realized we should add and IMOC checklist for things done in the role when joining an incident.
+
+### Assess the overall status
+Take a minute to assess the overall situation:
+  1. Are we down, degraded, how concerned should we be?   
+  2. Are we in S1 / all hands on deck?  
+  3. Do I need to be ready to yell for help?
+  
+Look at Apdex and Error Ratio Graphs. Are there spikes or dips passing the outage SLO dashed lines?  If the graph has been past the SLO for outage for more than 5 min, be concerned.  If the slope of the graph is continuing down for the last 5 min, be concerned. 
+
+  1. Is GitLab.com up/degraded? Start with https://dashboards.gitlab.net/d/general-public-splashscreen/general-gitlab-dashboards?orgId=1 and then drill further
+    * Web (This is what users see) https://dashboards.gitlab.net/d/web-main/web-overview?orgId=1 
+    * API (This is what robots see) https://dashboards.gitlab.net/d/api-main/api-overview?orgId=1
+  2. Are runners doing okay?
+    * https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?orgId=1 
+  3. Other services overview - 1 dashboard:
+    * https://dashboards.gitlab.net/d/general-service/general-service-platform-metrics?orgId=1 
+    * ^^ You can pick services here in the “type” dropdown. Make sure environment is gprd (not gstg) and stage is main or cny depending on what you are looking at.
+
+### Estimate the Severity of the issue
+
+Estimate the severity of the issue as soon as EOC or you have an idea on what the problem is. Evaluate based on https://about.gitlab.com/handbook/engineering/quality/issue-triage/#availability . Sometimes it is tough to say to the upset customer that their issue is not S1 for us, but we need to think about the whole situation and other users. 
+
+Severity will drive further decisions! 
+  1. Do we need a hotpatch? Hotpatches are for S1 but:  
+    * Probably yes if a security issue?
+    * How bad is the bug?  Still probably yes if major blocker, but pull in the dev team, support, and PM to assess severity. 
+    * In situations where reputational risk is high, even a non S1 issue can receive a hotpatch. If that is the case, the incident can’t be lower than S2. This is not strictly documented for a reason, because it gives the IMOC, EOC, Release Managers the power to decide based on the situation. It is critical that there is some flexibility and common sense in the process. 
+    * Will the situation degrade, or is it ‘stable’ and next deploy will fix?
+
+### Timers/Mental checks 
+As an IMOC, on roughly these times, you can ask yourself these questions:
+  1. Do we have the right people in the incident room? (every 5 min early on)
+  2. Do we need DB team help? (if postgres related, have we engaged Ongres/Jose or the Database team?)  
+  3. Do we understand what is going on? (first 10 min frequently - every 2-3 min)
+    * If not sev1/down, a little more relaxed - say every 10  min
+  4. Do we understand what to do to resolve or mitigate the problem? (first 10 min frequently after we have identified the issue- every 2-3 min)
+    * If not sev1/down, again a little more relaxed, every 10 min
+  5. Do we need a CMOC?  Is this customer facing?  Default to yes, but if deploy blocker - probably no.
+  6. Regularly check on the EOC. EOC is in a highly stressful situation, pager is going off every few minutes and they are asked to try and deduct what is happening. As IMOC, you need to support the EOC. 
+  7. 10-15 minutes in.  Make sure there is an executive summary somewhere.  Most times at the top of the prod issue description.  If hard down, make sure gdoc exists with this summary.  Make sure the gdoc is shared in slack so people see it.
+
+### Handling S3/S3
+If not on full alert, now in the realm of judgement related to next steps
+  1. Is this internal? 
+    * Deploy blocker?  
+    * Data team (replication delay)?
+    * Are the right people involved to fix the problem? Ask for help if not.  
+  2. You can click the runbooks links from the alerts in #production
+    * Are we doing / have we done the things listed there?
