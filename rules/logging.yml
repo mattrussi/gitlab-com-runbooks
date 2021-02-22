@@ -63,3 +63,16 @@ groups:
           This will lead to Elastic lagging behind with the log data.
         runbook: docs/logging/troubleshooting/README.md
         title: PubSub queuing high
+
+    - alert: FluentdDown
+      expr: |
+        up{job="fluentd"} != 1
+      for: 30m
+      labels:
+        severity: s3
+        alert_type: cause
+      annotations:
+        description: >
+          fluentd is failing to start on VMs. This is resulting in logs not being forwarded to our logging pipeline and as a result diminished visibility.
+        runbook: docs/logging/troubleshooting/README.md
+        title: PubSub queuing high
