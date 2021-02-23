@@ -226,7 +226,7 @@ catching up slowly.
 
 ## Check Replication Lag
 
-[Thanos](https://thanos-query.ops.gitlab.net/graph?g0.range_input=1h&g0.max_source_resolution=0s&g0.expr=pg_replication_lag%7Benv%3D%22gprd%22%2C%20fqdn%3D~%22postgres-dr.*%22%7D&g0.tab=0)
+[Thanos](https://thanos.gitlab.net/graph?g0.range_input=1h&g0.max_source_resolution=0s&g0.expr=pg_replication_lag%7Benv%3D%22gprd%22%2C%20fqdn%3D~%22postgres-dr.*%22%7D&g0.tab=0)
 
 ## Pause Replay on Delayed Replica
 
