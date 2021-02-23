@@ -71,7 +71,7 @@ As an IMOC, on roughly these times, you can ask yourself these questions:
   6. Regularly check on the EOC. EOC is in a highly stressful situation, pager is going off every few minutes and they are asked to try and deduct what is happening. As IMOC, you need to support the EOC. 
   7. 10-15 minutes in.  Make sure there is an executive summary somewhere.  Most times at the top of the prod issue description.  If hard down, make sure gdoc exists with this summary.  Make sure the gdoc is shared in slack so people see it.
 
-### Handling S3/S3
+### Handling S3/P3
 If not on full alert, now in the realm of judgement related to next steps
   1. Is this internal? 
     * Deploy blocker?  
