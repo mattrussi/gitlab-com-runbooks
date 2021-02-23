@@ -18,5 +18,23 @@ test.suite({
     actual: stages.findStageNameForFeatureCategory('not_owned'),
     expect: 'not_owned',
   },
-
+  testStageGroupAddsKey: {
+    actual: stages.stageGroup('access').key,
+    expect: 'access',
+  },
+  testFeatureCategoryMapCategories: {
+    actual: std.objectFields(stages.featureCategoryMap),
+    expectThat: {
+      knownCategories: std.set(['source_code_management', 'code_review']),
+      result:
+        local intersection = std.setInter(self.knownCategories, self.actual);
+        intersection == self.knownCategories,
+      description: 'did not contain known categories: %s' % std.toString(self.knownCategories),
+    },
+  },
+  testFeatureCategoryMapGroup: {
+    // The feature category 'source_code_management' is owned by the 'source_code' group
+    actual: stages.featureCategoryMap.source_code_management,
+    expect: stages.stageGroup('source_code'),
+  },
 })
