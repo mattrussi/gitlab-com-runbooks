@@ -15,7 +15,9 @@
 ## Troubleshooting Pointers
 
 * [../ci-runners/ci-investigate-abuse.md](../ci-runners/ci-investigate-abuse.md)
+* [../ci-runners/ci-runner-timeouts.md](../ci-runners/ci-runner-timeouts.md)
 * [../ci-runners/service-ci-runners.md](../ci-runners/service-ci-runners.md)
+* [../ci-runners/update-gitlab-runner-on-managers.md](../ci-runners/update-gitlab-runner-on-managers.md)
 * [../cloudflare/logging.md](../cloudflare/logging.md)
 * [../cloudflare/troubleshooting.md](../cloudflare/troubleshooting.md)
 * [../config_management/chef-guidelines.md](../config_management/chef-guidelines.md)
@@ -30,8 +32,6 @@
 * [../patroni/postgresql-role-credential-rotation.md](../patroni/postgresql-role-credential-rotation.md)
 * [../praefect/praefect-error-rate.md](../praefect/praefect-error-rate.md)
 * [../redis/redis-survival-guide-for-sres.md](../redis/redis-survival-guide-for-sres.md)
-* [../runner/ci-runner-timeouts.md](../runner/ci-runner-timeouts.md)
-* [../runner/update-gitlab-runner-on-managers.md](../runner/update-gitlab-runner-on-managers.md)
 * [../sidekiq/sidekiq-survival-guide-for-sres.md](../sidekiq/sidekiq-survival-guide-for-sres.md)
 * [../sidekiq/sidekiq_error_rate_high.md](../sidekiq/sidekiq_error_rate_high.md)
 * [../uncategorized/camoproxy.md](../uncategorized/camoproxy.md)
