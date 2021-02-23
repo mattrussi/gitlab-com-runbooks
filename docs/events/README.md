@@ -2,6 +2,9 @@
 
 Infrastructure events are log messages that helpful for [incident management](https://about.gitlab.com/handbook/engineering/infrastructure/incident-management/) to help answer the question **what changes happened leading up to the event?**
 
+* **[View events for Production](https://nonprod-log.gitlab.net/goto/2f2872632ccd39c3895e11290c77c346)**
+* **[View events for Staging](https://nonprod-log.gitlab.net/goto/77b2443ce24964b34f3f5b535c8bfaed)**
+
 We collect events from all infrastructure and deployment pipelines for the staging (`gstg`) and production (`gprd`) environments.
 Other environments like `pre`, `release`, etc. are not included because they are not part of incident management.
 
