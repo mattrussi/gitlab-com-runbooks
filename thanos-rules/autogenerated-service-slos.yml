@@ -694,6 +694,14 @@ groups:
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
+      component: thanos_query_frontend
+      regional_aggregation: 'no'
+      service_aggregation: 'yes'
+      tier: inf
+      type: monitoring
+    expr: '1'
+  - record: gitlab_component_service:mapping
+    labels:
       component: thanos_rule_alert_sender
       regional_aggregation: 'no'
       service_aggregation: 'yes'
