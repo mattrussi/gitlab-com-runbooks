@@ -24,7 +24,7 @@ Remember to close out the incident when the issue is resolved.  Also, when possi
 
 ## IMOC Checklist
 
-As we start to open up the role of IMOC, we realized we should add and IMOC checklist for things done in the role when joining an incident.
+As we start to open up the role of IMOC, we realized we should add an IMOC checklist for things done in the role when joining an incident.
 
 ### Assess the overall status
 Take a minute to assess the overall situation:
