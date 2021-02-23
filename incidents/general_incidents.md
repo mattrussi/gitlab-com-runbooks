@@ -45,7 +45,7 @@ Look at Apdex and Error Ratio Graphs. Are there spikes or dips passing the outag
 
 ### Estimate the Severity of the issue
 
-Estimate the severity of the issue as soon as EOC or you have an idea on what the problem is. Evaluate based on https://about.gitlab.com/handbook/engineering/quality/issue-triage/#availability . Sometimes it is tough to say to the upset customer that their issue is not S1 for us, but we need to think about the whole situation and other users. 
+Estimate the severity of the issue as soon as EOC or you have an idea on what the problem is. Evaluate based on [Availability](/handbook/engineering/quality/issue-triage/#availability). Sometimes it is tough to say to the upset customer that their issue is not S1 for us, but we need to think about the whole situation and other users. 
 
 Severity will drive further decisions! 
   1. Do we need a hotpatch? Hotpatches are for S1 but:  
