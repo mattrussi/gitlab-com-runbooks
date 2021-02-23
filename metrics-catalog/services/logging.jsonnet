@@ -11,12 +11,12 @@ metricsCatalog.serviceDefinition({
     errorRatio: 0.999,
   },
   serviceLevelIndicators: {
-    elasticsearch_searching: {
+    elasticsearch_searching_cluster: {
       userImpacting: false,
       featureCategory: 'not_owned',
       team: 'sre_observability',
       description: |||
-        This SLI monitors searches issued to GitLab's logging ELK instance.
+        This cluster SLI monitors searches issued to GitLab's logging ELK instance.
       |||,
 
       requestRate: derivMetric(
@@ -28,12 +28,12 @@ metricsCatalog.serviceDefinition({
       significantLabels: ['name'],
     },
 
-    elasticsearch_indexing: {
+    elasticsearch_indexing_cluster: {
       userImpacting: false,
       featureCategory: 'not_owned',
       team: 'sre_observability',
       description: |||
-        This SLI monitors log index operations to GitLab's logging ELK instance.
+        This cluster SLI monitors log index operations to GitLab's logging ELK instance.
       |||,
 
       requestRate: derivMetric(
@@ -43,6 +43,40 @@ metricsCatalog.serviceDefinition({
       ),
 
       significantLabels: ['name'],
+    },
+
+    elasticsearch_searching_index: {
+      userImpacting: false,
+      featureCategory: 'not_owned',
+      team: 'sre_observability',
+      description: |||
+        This index SLI monitors searches issued to GitLab's logging ELK instance.
+      |||,
+
+      requestRate: derivMetric(
+        counter='elasticsearch_index_stats_search_query_total',
+        selector='type="logging"',
+        clampMinZero=true,
+      ),
+
+      significantLabels: ['index'],
+    },
+
+    elasticsearch_indexing_index: {
+      userImpacting: false,
+      featureCategory: 'not_owned',
+      team: 'sre_observability',
+      description: |||
+        This index SLI monitors log index operations to GitLab's logging ELK instance.
+      |||,
+
+      requestRate: derivMetric(
+        counter='elasticsearch_index_stats_indexing_index_total',
+        selector='type="logging"',
+        clampMinZero=true,
+      ),
+
+      significantLabels: ['index'],
     },
 
     // This component represents the Google Load Balancer in front
@@ -74,6 +108,46 @@ metricsCatalog.serviceDefinition({
       ),
 
       significantLabels: ['log', 'severity'],
+    },
+
+    pubsub_topics: {
+      userImpacting: false,
+      featureCategory: 'not_owned',
+      team: 'sre_observability',
+      description: |||
+        This SLI monitors pubsub topics.
+      |||,
+
+      staticLabels: {
+        stage: 'main',
+      },
+
+      requestRate: rateMetric(
+        counter='stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost',
+        selector='type="monitoring"',
+      ),
+
+      significantLabels: ['topic_id'],
+    },
+
+    pubsub_subscriptions: {
+      userImpacting: false,
+      featureCategory: 'not_owned',
+      team: 'sre_observability',
+      description: |||
+        This SLI monitors pubsub subscriptions.
+      |||,
+
+      staticLabels: {
+        stage: 'main',
+      },
+
+      requestRate: rateMetric(
+        counter='stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost',
+        selector='type="monitoring"',
+      ),
+
+      significantLabels: ['subscription_id'],
     },
 
     // This component tracks fluentd log output

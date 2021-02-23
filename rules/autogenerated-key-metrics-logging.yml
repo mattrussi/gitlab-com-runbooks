@@ -6,7 +6,7 @@ groups:
   rules:
   - record: gitlab_component_ops:rate
     labels:
-      component: elasticsearch_indexing
+      component: elasticsearch_indexing_cluster
       tier: inf
       type: logging
     expr: |
@@ -15,12 +15,30 @@ groups:
       )
   - record: gitlab_component_ops:rate
     labels:
-      component: elasticsearch_searching
+      component: elasticsearch_indexing_index
+      tier: inf
+      type: logging
+    expr: |
+      sum by (environment,stage) (
+        clamp_min(deriv(elasticsearch_index_stats_indexing_index_total{type="logging"}[1m]), 0)
+      )
+  - record: gitlab_component_ops:rate
+    labels:
+      component: elasticsearch_searching_cluster
       tier: inf
       type: logging
     expr: |
       sum by (environment,stage) (
         clamp_min(deriv(elasticsearch_indices_search_query_total{type="logging"}[1m]), 0)
+      )
+  - record: gitlab_component_ops:rate
+    labels:
+      component: elasticsearch_searching_index
+      tier: inf
+      type: logging
+    expr: |
+      sum by (environment,stage) (
+        clamp_min(deriv(elasticsearch_index_stats_search_query_total{type="logging"}[1m]), 0)
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -62,6 +80,26 @@ groups:
       )
   - record: gitlab_component_ops:rate
     labels:
+      component: pubsub_subscriptions
+      stage: main
+      tier: inf
+      type: logging
+    expr: |
+      sum by (environment) (
+        rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{type="monitoring"}[1m])
+      )
+  - record: gitlab_component_ops:rate
+    labels:
+      component: pubsub_topics
+      stage: main
+      tier: inf
+      type: logging
+    expr: |
+      sum by (environment) (
+        rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{type="monitoring"}[1m])
+      )
+  - record: gitlab_component_ops:rate
+    labels:
       component: stackdriver
       stage: main
       tier: inf
@@ -75,7 +113,7 @@ groups:
   rules:
   - record: gitlab_component_ops:rate_5m
     labels:
-      component: elasticsearch_indexing
+      component: elasticsearch_indexing_cluster
       tier: inf
       type: logging
     expr: |
@@ -84,12 +122,30 @@ groups:
       )
   - record: gitlab_component_ops:rate_5m
     labels:
-      component: elasticsearch_searching
+      component: elasticsearch_indexing_index
+      tier: inf
+      type: logging
+    expr: |
+      sum by (environment,stage) (
+        clamp_min(deriv(elasticsearch_index_stats_indexing_index_total{type="logging"}[5m]), 0)
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: elasticsearch_searching_cluster
       tier: inf
       type: logging
     expr: |
       sum by (environment,stage) (
         clamp_min(deriv(elasticsearch_indices_search_query_total{type="logging"}[5m]), 0)
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: elasticsearch_searching_index
+      tier: inf
+      type: logging
+    expr: |
+      sum by (environment,stage) (
+        clamp_min(deriv(elasticsearch_index_stats_search_query_total{type="logging"}[5m]), 0)
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -131,6 +187,26 @@ groups:
       )
   - record: gitlab_component_ops:rate_5m
     labels:
+      component: pubsub_subscriptions
+      stage: main
+      tier: inf
+      type: logging
+    expr: |
+      sum by (environment) (
+        rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{type="monitoring"}[5m])
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: pubsub_topics
+      stage: main
+      tier: inf
+      type: logging
+    expr: |
+      sum by (environment) (
+        rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{type="monitoring"}[5m])
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
       component: stackdriver
       stage: main
       tier: inf
@@ -144,7 +220,7 @@ groups:
   rules:
   - record: gitlab_component_ops:rate_30m
     labels:
-      component: elasticsearch_indexing
+      component: elasticsearch_indexing_cluster
       tier: inf
       type: logging
     expr: |
@@ -153,12 +229,30 @@ groups:
       )
   - record: gitlab_component_ops:rate_30m
     labels:
-      component: elasticsearch_searching
+      component: elasticsearch_indexing_index
+      tier: inf
+      type: logging
+    expr: |
+      sum by (environment,stage) (
+        clamp_min(deriv(elasticsearch_index_stats_indexing_index_total{type="logging"}[30m]), 0)
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: elasticsearch_searching_cluster
       tier: inf
       type: logging
     expr: |
       sum by (environment,stage) (
         clamp_min(deriv(elasticsearch_indices_search_query_total{type="logging"}[30m]), 0)
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: elasticsearch_searching_index
+      tier: inf
+      type: logging
+    expr: |
+      sum by (environment,stage) (
+        clamp_min(deriv(elasticsearch_index_stats_search_query_total{type="logging"}[30m]), 0)
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -200,6 +294,26 @@ groups:
       )
   - record: gitlab_component_ops:rate_30m
     labels:
+      component: pubsub_subscriptions
+      stage: main
+      tier: inf
+      type: logging
+    expr: |
+      sum by (environment) (
+        rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{type="monitoring"}[30m])
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: pubsub_topics
+      stage: main
+      tier: inf
+      type: logging
+    expr: |
+      sum by (environment) (
+        rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{type="monitoring"}[30m])
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
       component: stackdriver
       stage: main
       tier: inf
@@ -213,7 +327,7 @@ groups:
   rules:
   - record: gitlab_component_ops:rate_1h
     labels:
-      component: elasticsearch_indexing
+      component: elasticsearch_indexing_cluster
       tier: inf
       type: logging
     expr: |
@@ -222,12 +336,30 @@ groups:
       )
   - record: gitlab_component_ops:rate_1h
     labels:
-      component: elasticsearch_searching
+      component: elasticsearch_indexing_index
+      tier: inf
+      type: logging
+    expr: |
+      sum by (environment,stage) (
+        clamp_min(deriv(elasticsearch_index_stats_indexing_index_total{type="logging"}[1h]), 0)
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: elasticsearch_searching_cluster
       tier: inf
       type: logging
     expr: |
       sum by (environment,stage) (
         clamp_min(deriv(elasticsearch_indices_search_query_total{type="logging"}[1h]), 0)
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: elasticsearch_searching_index
+      tier: inf
+      type: logging
+    expr: |
+      sum by (environment,stage) (
+        clamp_min(deriv(elasticsearch_index_stats_search_query_total{type="logging"}[1h]), 0)
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -269,6 +401,26 @@ groups:
       )
   - record: gitlab_component_ops:rate_1h
     labels:
+      component: pubsub_subscriptions
+      stage: main
+      tier: inf
+      type: logging
+    expr: |
+      sum by (environment) (
+        rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{type="monitoring"}[1h])
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: pubsub_topics
+      stage: main
+      tier: inf
+      type: logging
+    expr: |
+      sum by (environment) (
+        rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{type="monitoring"}[1h])
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
       component: stackdriver
       stage: main
       tier: inf
@@ -282,7 +434,7 @@ groups:
   rules:
   - record: gitlab_component_ops:rate_6h
     labels:
-      component: elasticsearch_indexing
+      component: elasticsearch_indexing_cluster
       tier: inf
       type: logging
     expr: |
@@ -291,12 +443,30 @@ groups:
       )
   - record: gitlab_component_ops:rate_6h
     labels:
-      component: elasticsearch_searching
+      component: elasticsearch_indexing_index
+      tier: inf
+      type: logging
+    expr: |
+      sum by (environment,stage) (
+        clamp_min(deriv(elasticsearch_index_stats_indexing_index_total{type="logging"}[6h]), 0)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: elasticsearch_searching_cluster
       tier: inf
       type: logging
     expr: |
       sum by (environment,stage) (
         clamp_min(deriv(elasticsearch_indices_search_query_total{type="logging"}[6h]), 0)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: elasticsearch_searching_index
+      tier: inf
+      type: logging
+    expr: |
+      sum by (environment,stage) (
+        clamp_min(deriv(elasticsearch_index_stats_search_query_total{type="logging"}[6h]), 0)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -338,6 +508,26 @@ groups:
       )
   - record: gitlab_component_ops:rate_6h
     labels:
+      component: pubsub_subscriptions
+      stage: main
+      tier: inf
+      type: logging
+    expr: |
+      sum by (environment) (
+        rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{type="monitoring"}[6h])
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: pubsub_topics
+      stage: main
+      tier: inf
+      type: logging
+    expr: |
+      sum by (environment) (
+        rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{type="monitoring"}[6h])
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
       component: stackdriver
       stage: main
       tier: inf
@@ -351,7 +541,7 @@ groups:
   rules:
   - record: gitlab_component_service:mapping
     labels:
-      component: elasticsearch_indexing
+      component: elasticsearch_indexing_cluster
       regional_aggregation: 'no'
       service_aggregation: 'yes'
       tier: inf
@@ -359,7 +549,23 @@ groups:
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      component: elasticsearch_searching
+      component: elasticsearch_indexing_index
+      regional_aggregation: 'no'
+      service_aggregation: 'yes'
+      tier: inf
+      type: logging
+    expr: '1'
+  - record: gitlab_component_service:mapping
+    labels:
+      component: elasticsearch_searching_cluster
+      regional_aggregation: 'no'
+      service_aggregation: 'yes'
+      tier: inf
+      type: logging
+    expr: '1'
+  - record: gitlab_component_service:mapping
+    labels:
+      component: elasticsearch_searching_index
       regional_aggregation: 'no'
       service_aggregation: 'yes'
       tier: inf
@@ -376,6 +582,22 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: kibana_googlelb
+      regional_aggregation: 'no'
+      service_aggregation: 'yes'
+      tier: inf
+      type: logging
+    expr: '1'
+  - record: gitlab_component_service:mapping
+    labels:
+      component: pubsub_subscriptions
+      regional_aggregation: 'no'
+      service_aggregation: 'yes'
+      tier: inf
+      type: logging
+    expr: '1'
+  - record: gitlab_component_service:mapping
+    labels:
+      component: pubsub_topics
       regional_aggregation: 'no'
       service_aggregation: 'yes'
       tier: inf
