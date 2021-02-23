@@ -236,7 +236,7 @@ current chef configuration.
 You can check WAL-E `backup-push` in several ways:
 
 1. Metric (injected via prometheus push-gateway from the backup script):
-[gitlab_com:last_wale_successful_basebackup_age_in_hours](https://thanos-query.ops.gitlab.net/graph?g0.range_input=1d&g0.max_source_resolution=0s&g0.expr=gitlab_com%3Alast_wale_successful_basebackup_age_in_hours&g0.tab=0)
+[gitlab_com:last_wale_successful_basebackup_age_in_hours](https://thanos.gitlab.net/graph?g0.range_input=1d&g0.max_source_resolution=0s&g0.expr=gitlab_com%3Alast_wale_successful_basebackup_age_in_hours&g0.tab=0)
 1. using Kibana (bear in mind that there were cases in the past when logs where
 not shipped): <!-- NS: doubtful, TODO: double check it; update once
 https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10499 is done-->
@@ -312,7 +312,7 @@ wal_e.worker.upload INFO     MSG: completed archiving to a file
 ### Continuous Shipping of WAL Files (wal-push) is not working
 
 Metric (via mtail): [gitlab_com:last_wale_backup_age_in_seconds
-metric](https://thanos-query.ops.gitlab.net/graph?g0.range_input=2h&g0.max_source_resolution=0s&g0.expr=gitlab_com%3Alast_wale_backup_age_in_seconds&g0.tab=0)
+metric](https://thanos.gitlab.net/graph?g0.range_input=2h&g0.max_source_resolution=0s&g0.expr=gitlab_com%3Alast_wale_backup_age_in_seconds&g0.tab=0)
 
 *Attention*: If WAL shipping (`archive_command`) fails for some reason, WAL
 files will be kept on the server until the disk is running full!

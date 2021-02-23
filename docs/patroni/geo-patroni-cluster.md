@@ -108,7 +108,7 @@ replication (see recovery.conf). As of writing,
 * `curl localhost:9187/metrics`. If it hangs, `sv restart postgres_exporter`
 * `chef-client-enable`
 * Check the [replication
-  lag](https://thanos-query.ops.gitlab.net/graph?g0.range_input=2h&g0.max_source_resolution=0s&g0.expr=pg_replication_lag%7Benv%3D%22gstg%22%2Cfqdn%3D%22geo-secondary-01-sv-gstg.c.gitlab-staging-1.internal%22%7D&g0.tab=0)
+  lag](https://thanos.gitlab.net/graph?g0.range_input=2h&g0.max_source_resolution=0s&g0.expr=pg_replication_lag%7Benv%3D%22gstg%22%2Cfqdn%3D%22geo-secondary-01-sv-gstg.c.gitlab-staging-1.internal%22%7D&g0.tab=0)
   for this node. As long as it is generally decreasing over time, archive
   recovery is working.
 * Once the replication lag is near zero, the geo postgres should switch to using

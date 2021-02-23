@@ -189,7 +189,7 @@ As well there are a few alerts that are intended to detect problems that could *
 
 ### Possible checks
 
-* [replication lag in Thanos](https://thanos-query.ops.gitlab.net/graph?g0.range_input=2h&g0.max_source_resolution=0s&g0.expr=pg_replication_lag%7Benv%3D%22gprd%22%2C%20type%3D%22patroni%22%7D%20AND%20pg_replication_is_replica%20%3D%3D%201&g0.tab=0)
+* [replication lag in Thanos](https://thanos.gitlab.net/graph?g0.range_input=2h&g0.max_source_resolution=0s&g0.expr=pg_replication_lag%7Benv%3D%22gprd%22%2C%20type%3D%22patroni%22%7D%20AND%20pg_replication_is_replica%20%3D%3D%201&g0.tab=0)
 
 * Also check for bloat (see the section "Tables with a large amount of
   dead tuples" below). Replication lag can cause bloat on the primary
@@ -209,7 +209,7 @@ keep up with.
 Not yet on the dashboards but you can look at `rate(pg_xlog_position_bytes[1m])
 ` compared with `pg_replication_lag` to see if the replication lag is correlated
 with unusually high WAL generation and what time it started:
-[Thanos](https://thanos-query.ops.gitlab.net/graph?g0.range_input=2h&g0.max_source_resolution=0s&g0.expr=pg_replication_lag%7Benv%3D%22gprd%22%2C%20type%3D%22patroni%22%7D%20AND%20pg_replication_is_replica%20%3D%3D%201&g0.tab=0&g1.range_input=1h&g1.max_source_resolution=0s&g1.expr=rate(pg_xlog_position_bytes%7Benv%3D%22gprd%22%2C%20type%3D%22patroni%22%7D%5B1m%5D)&g1.tab=0)
+[Thanos](https://thanos.gitlab.net/graph?g0.range_input=2h&g0.max_source_resolution=0s&g0.expr=pg_replication_lag%7Benv%3D%22gprd%22%2C%20type%3D%22patroni%22%7D%20AND%20pg_replication_is_replica%20%3D%3D%201&g0.tab=0&g1.range_input=1h&g1.max_source_resolution=0s&g1.expr=rate(pg_xlog_position_bytes%7Benv%3D%22gprd%22%2C%20type%3D%22patroni%22%7D%5B1m%5D)&g1.tab=0)
 
 Another cause of replication lag to investigate is a long-running query on the
 replica which conflicts with a vacuum operation from the primary. This should

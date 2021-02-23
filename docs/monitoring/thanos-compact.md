@@ -111,7 +111,7 @@ wait for the systemd timeout, `kill -9` the process.
 Validate that the alert has resolved. thanos-compact should be able to process
 the section it was previously failing on - but it's possible that there are more
 duplicates ahead, which will cause the alert to re-fire. Pay attention to
-[`thanos_compactor_halted`](https://thanos-query.ops.gitlab.net/graph?g0.range_input=12h&g0.max_source_resolution=0s&g0.expr=thanos_compactor_halted%7Benv%3D%22gprd%22%7D&g0.tab=0).
+[`thanos_compactor_halted`](https://thanos.gitlab.net/graph?g0.range_input=12h&g0.max_source_resolution=0s&g0.expr=thanos_compactor_halted%7Benv%3D%22gprd%22%7D&g0.tab=0).
 
 ### Compacted indexes too large
 

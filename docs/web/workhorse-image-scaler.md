@@ -36,7 +36,7 @@ In case of an incident, look at:
 
 1. The `imagescaler` component panels in the [web overview dashboard](https://dashboards.gitlab.net/d/web-main/web-overview?orgId=1)
    for general component health and performance
-1. Thanos [total requests metric](https://thanos-query.ops.gitlab.net/graph?g0.range_input=1h&g0.max_source_resolution=0s&g0.expr=sum%20by%20(env%2C%20stage%2C%20type%2C%20status)%20(rate(gitlab_workhorse_image_resize_requests_total%5B5m%5D))&g0.tab=1)
+1. Thanos [total requests metric](https://thanos.gitlab.net/graph?g0.range_input=1h&g0.max_source_resolution=0s&g0.expr=sum%20by%20(env%2C%20stage%2C%20type%2C%20status)%20(rate(gitlab_workhorse_image_resize_requests_total%5B5m%5D))&g0.tab=1)
    for a more direct breakdown of scaler `status` per environment etc.
 1. [Kibana logs](https://log.gprd.gitlab.net/app/kibana#/discover/4499a940-32e6-11eb-a21e-1dac77733556?_g=(filters%3A!()%2CrefreshInterval%3A(pause%3A!t%2Cvalue%3A0)%2Ctime%3A(from%3Anow-1h%2Cto%3Anow))) for detailed request logs
 1. [Kibana error breakdown](https://log.gprd.gitlab.net/app/visualize#/edit/0802fce0-2d71-11eb-af41-ad80f197fa45?_g=(filters%3A!()%2CrefreshInterval%3A(pause%3A!t%2Cvalue%3A0)%2Ctime%3A(from%3Anow-1d%2Cto%3Anow))) counting scaler errors by message.

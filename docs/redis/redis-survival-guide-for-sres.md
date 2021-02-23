@@ -194,7 +194,7 @@ So you think something is wrong with Redis, either as a cause or a symptom.  Wha
 While the shell prompt on the servers tells you if it is the primary or a replica, you have to potentially shell into
 multiple nodes to find the primary.
 
-Thankfully, Prometheus/Thanos has this information already, and you can find the current primary for all 3 clusters [here](https://thanos-query.ops.gitlab.net/graph?g0.range_input=1h&g0.max_source_resolution=0s&g0.expr=sum%28redis_instance_info%7Brole%3D%22master%22%2C%20type%3D~%22redis.*%22%2C%20environment%3D%22gprd%22%7D%29%20by%20%28fqdn%29&g0.tab=1)
+Thankfully, Prometheus/Thanos has this information already, and you can find the current primary for all 3 clusters [here](https://thanos.gitlab.net/graph?g0.range_input=1h&g0.max_source_resolution=0s&g0.expr=sum%28redis_instance_info%7Brole%3D%22master%22%2C%20type%3D~%22redis.*%22%2C%20environment%3D%22gprd%22%7D%29%20by%20%28fqdn%29&g0.tab=1)
 
 ### Basic stats
 There is 1 core dashboard for redis, with a variant for each cluster:
