@@ -21,7 +21,7 @@
 * [../bastions/testbed-bastion.md](../bastions/testbed-bastion.md)
 * [../ci-runners/service-ci-runners.md](../ci-runners/service-ci-runners.md)
 * [../cloudflare/logging.md](../cloudflare/logging.md)
-* [../customers.gitlab.com/api-key-rotation.md](../customers.gitlab.com/api-key-rotation.md)
+* [../customers/api-key-rotation.md](../customers/api-key-rotation.md)
 * [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
 * [../frontend/haproxy.md](../frontend/haproxy.md)
 * [../git/purge-git-data.md](../git/purge-git-data.md)

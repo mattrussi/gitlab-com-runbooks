@@ -18,7 +18,7 @@
 * [../config_management/chef-process-overview.md](../config_management/chef-process-overview.md)
 * [../config_management/chef-vault.md](../config_management/chef-vault.md)
 * [../config_management/chef-workflow.md](../config_management/chef-workflow.md)
-* [../customers.gitlab.com/api-key-rotation.md](../customers.gitlab.com/api-key-rotation.md)
+* [../customers/api-key-rotation.md](../customers/api-key-rotation.md)
 * [../elastic/elastic-cloud.md](../elastic/elastic-cloud.md)
 * [../frontend/haproxy.md](../frontend/haproxy.md)
 * [../git/deploy-gitlab-rb-change.md](../git/deploy-gitlab-rb-change.md)

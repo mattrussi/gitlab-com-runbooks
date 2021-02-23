@@ -28,7 +28,7 @@
 * [../cloudflare/services-locations.md](../cloudflare/services-locations.md)
 * [../cloudflare/terraform.md](../cloudflare/terraform.md)
 * [../config_management/chef-workflow.md](../config_management/chef-workflow.md)
-* [../customers.gitlab.com/api-key-rotation.md](../customers.gitlab.com/api-key-rotation.md)
+* [../customers/api-key-rotation.md](../customers/api-key-rotation.md)
 * [../elastic/elastic-cloud.md](../elastic/elastic-cloud.md)
 * [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
 * [../frontend/haproxy.md](../frontend/haproxy.md)
