@@ -39,14 +39,13 @@ Look at [Apdex and Error Ratio Graphs](https://dashboards.gitlab.net/d/general-s
    1. the graph has been past the SLO for outage for more than 5 min.
    1. the slope of the graph is continuing down for the last 5 min.
 
-  1. Is GitLab.com up/degraded? Start with https://dashboards.gitlab.net/d/general-public-splashscreen/general-gitlab-dashboards?orgId=1 and then drill further
-    * Web (This is what users see) https://dashboards.gitlab.net/d/web-main/web-overview?orgId=1 
-    * API (This is what robots see) https://dashboards.gitlab.net/d/api-main/api-overview?orgId=1
+  1. Is GitLab.com up/degraded? Start with [general: GitLab Dashboards](https://dashboards.gitlab.net/d/general-public-splashscreen/general-gitlab-dashboards?orgId=1) and then drill further
+    * [Web](https://dashboards.gitlab.net/d/web-main/web-overview?orgId=1). This is what users see.
+    * [API](https://dashboards.gitlab.net/d/api-main/api-overview?orgId=1). This is what robots see.
   2. Are runners doing okay?
-    * https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?orgId=1 
-  3. Other services overview - 1 dashboard:
-    * https://dashboards.gitlab.net/d/general-service/general-service-platform-metrics?orgId=1 
-    * ^^ You can pick services here in the “type” dropdown. Make sure environment is gprd (not gstg) and stage is main or cny depending on what you are looking at.
+    * [ci-runners: Overview](https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?orgId=1)
+  3. Other services overview:
+    * [general: Service Platform Metrics](https://dashboards.gitlab.net/d/general-service/general-service-platform-metrics?orgId=1). You can pick services here in the “type” dropdown. Make sure environment is `gprd` (not `gstg`) and stage is `main` (all servers) or `cny` (canary) depending on what you are looking at.
 
 ### Estimate the Severity of the issue
 
