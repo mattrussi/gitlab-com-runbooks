@@ -51,10 +51,11 @@ Look at [Apdex and Error Ratio Graphs](https://dashboards.gitlab.net/d/general-s
 
 Estimate the severity of the issue as soon as EOC or you have an idea on what the problem is. Evaluate based on [Availability](/handbook/engineering/quality/issue-triage/#availability). Sometimes it is tough to say to the upset customer that their issue is not S1 for us, but we need to think about the whole situation and other users. 
 
-Severity will drive further decisions! 
-  1. Do we need a hotpatch? Hotpatches are for S1 but:  
-    * Probably yes if a security issue?
-    * How bad is the bug?  Still probably yes if major blocker, but pull in the dev team, support, and PM to assess severity. 
+We prefer to avoid hotpatches. If a hotpatch is being considered, the issue severity will drive the decision:
+
+1. Hotpatches are usually for S1 issues.
+1. Security issues may receive a hotpatch regardless of severity.
+1. Lower severity bugs that are still a major blocker may receive a hotpatch, but pull in the dev team, support, and PM to reassess and confirm severity. 
     * In situations where reputational risk is high, even a non S1 issue can receive a hotpatch. If that is the case, the incident can’t be lower than S2. This is not strictly documented for a reason, because it gives the IMOC, EOC, Release Managers the power to decide based on the situation. It is critical that there is some flexibility and common sense in the process. 
     * Will the situation degrade, or is it ‘stable’ and next deploy will fix?
 
