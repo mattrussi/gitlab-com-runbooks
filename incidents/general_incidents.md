@@ -32,7 +32,12 @@ Take a minute to assess the overall situation:
   2. Are we in S1 / all hands on deck?  
   3. Do I need to be ready to yell for help?
   
-Look at Apdex and Error Ratio Graphs. Are there spikes or dips passing the outage SLO dashed lines?  If the graph has been past the SLO for outage for more than 5 min, be concerned.  If the slope of the graph is continuing down for the last 5 min, be concerned. 
+Look at [Apdex and Error Ratio Graphs](https://dashboards.gitlab.net/d/general-service/general-service-platform-metrics?orgId=1). 
+
+1. Are there spikes or dips passing the outage SLO dashed lines?  
+1. Be concerned if:
+   1. the graph has been past the SLO for outage for more than 5 min.
+   1. the slope of the graph is continuing down for the last 5 min.
 
   1. Is GitLab.com up/degraded? Start with https://dashboards.gitlab.net/d/general-public-splashscreen/general-gitlab-dashboards?orgId=1 and then drill further
     * Web (This is what users see) https://dashboards.gitlab.net/d/web-main/web-overview?orgId=1 
