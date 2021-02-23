@@ -269,7 +269,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(http_request_duration_seconds_bucket{job=~"thanos|thanos-query-frontend",le="+Inf",shard="default",type="monitoring"}[1m])
+        rate(http_request_duration_seconds_bucket{job="thanos-query",le="+Inf",shard="default",type="monitoring"}[1m])
       )
   - record: gitlab_component_apdex:ratio
     labels:
@@ -278,7 +278,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(http_request_duration_seconds_bucket{job=~"thanos|thanos-query-frontend",le="30",shard="default",type="monitoring"}[1m])
+        rate(http_request_duration_seconds_bucket{job="thanos-query",le="30",shard="default",type="monitoring"}[1m])
       )
       / on(environment,stage) group_left()
       (
@@ -291,11 +291,51 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        sli_aggregations:http_requests_total_rate1m{job=~"thanos|thanos-query-frontend",shard="default",type="monitoring"}
+        sli_aggregations:http_requests_total_rate1m{job="thanos-query",shard="default",type="monitoring"}
       )
   - record: gitlab_component_errors:rate
     labels:
       component: thanos_query
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:http_requests_total_rate1m{code=~"^5.*",job="thanos-query",shard="default",type="monitoring"}
+      )
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: thanos_query_frontend
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(http_request_duration_seconds_bucket{job=~"thanos|thanos-query-frontend",le="+Inf",shard="default",type="monitoring"}[1m])
+      )
+  - record: gitlab_component_apdex:ratio
+    labels:
+      component: thanos_query_frontend
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(http_request_duration_seconds_bucket{job=~"thanos|thanos-query-frontend",le="30",shard="default",type="monitoring"}[1m])
+      )
+      / on(environment,stage) group_left()
+      (
+        gitlab_component_apdex:weight:score{component="thanos_query_frontend",tier="inf",type="monitoring"} > 0
+      )
+  - record: gitlab_component_ops:rate
+    labels:
+      component: thanos_query_frontend
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:http_requests_total_rate1m{job=~"thanos|thanos-query-frontend",shard="default",type="monitoring"}
+      )
+  - record: gitlab_component_errors:rate
+    labels:
+      component: thanos_query_frontend
       tier: inf
       type: monitoring
     expr: |
@@ -684,7 +724,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(http_request_duration_seconds_bucket{job=~"thanos|thanos-query-frontend",le="+Inf",shard="default",type="monitoring"}[5m])
+        rate(http_request_duration_seconds_bucket{job="thanos-query",le="+Inf",shard="default",type="monitoring"}[5m])
       )
   - record: gitlab_component_apdex:ratio_5m
     labels:
@@ -693,7 +733,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(http_request_duration_seconds_bucket{job=~"thanos|thanos-query-frontend",le="30",shard="default",type="monitoring"}[5m])
+        rate(http_request_duration_seconds_bucket{job="thanos-query",le="30",shard="default",type="monitoring"}[5m])
       )
       / on(environment,stage) group_left()
       (
@@ -706,11 +746,51 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        sli_aggregations:http_requests_total_rate5m{job=~"thanos|thanos-query-frontend",shard="default",type="monitoring"}
+        sli_aggregations:http_requests_total_rate5m{job="thanos-query",shard="default",type="monitoring"}
       )
   - record: gitlab_component_errors:rate_5m
     labels:
       component: thanos_query
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:http_requests_total_rate5m{code=~"^5.*",job="thanos-query",shard="default",type="monitoring"}
+      )
+  - record: gitlab_component_apdex:weight:score_5m
+    labels:
+      component: thanos_query_frontend
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(http_request_duration_seconds_bucket{job=~"thanos|thanos-query-frontend",le="+Inf",shard="default",type="monitoring"}[5m])
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: thanos_query_frontend
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(http_request_duration_seconds_bucket{job=~"thanos|thanos-query-frontend",le="30",shard="default",type="monitoring"}[5m])
+      )
+      / on(environment,stage) group_left()
+      (
+        gitlab_component_apdex:weight:score_5m{component="thanos_query_frontend",tier="inf",type="monitoring"} > 0
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: thanos_query_frontend
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:http_requests_total_rate5m{job=~"thanos|thanos-query-frontend",shard="default",type="monitoring"}
+      )
+  - record: gitlab_component_errors:rate_5m
+    labels:
+      component: thanos_query_frontend
       tier: inf
       type: monitoring
     expr: |
@@ -1099,7 +1179,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(http_request_duration_seconds_bucket{job=~"thanos|thanos-query-frontend",le="+Inf",shard="default",type="monitoring"}[30m])
+        rate(http_request_duration_seconds_bucket{job="thanos-query",le="+Inf",shard="default",type="monitoring"}[30m])
       )
   - record: gitlab_component_apdex:ratio_30m
     labels:
@@ -1108,7 +1188,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(http_request_duration_seconds_bucket{job=~"thanos|thanos-query-frontend",le="30",shard="default",type="monitoring"}[30m])
+        rate(http_request_duration_seconds_bucket{job="thanos-query",le="30",shard="default",type="monitoring"}[30m])
       )
       / on(environment,stage) group_left()
       (
@@ -1121,11 +1201,51 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        sli_aggregations:http_requests_total_rate30m{job=~"thanos|thanos-query-frontend",shard="default",type="monitoring"}
+        sli_aggregations:http_requests_total_rate30m{job="thanos-query",shard="default",type="monitoring"}
       )
   - record: gitlab_component_errors:rate_30m
     labels:
       component: thanos_query
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:http_requests_total_rate30m{code=~"^5.*",job="thanos-query",shard="default",type="monitoring"}
+      )
+  - record: gitlab_component_apdex:weight:score_30m
+    labels:
+      component: thanos_query_frontend
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(http_request_duration_seconds_bucket{job=~"thanos|thanos-query-frontend",le="+Inf",shard="default",type="monitoring"}[30m])
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: thanos_query_frontend
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(http_request_duration_seconds_bucket{job=~"thanos|thanos-query-frontend",le="30",shard="default",type="monitoring"}[30m])
+      )
+      / on(environment,stage) group_left()
+      (
+        gitlab_component_apdex:weight:score_30m{component="thanos_query_frontend",tier="inf",type="monitoring"} > 0
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: thanos_query_frontend
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:http_requests_total_rate30m{job=~"thanos|thanos-query-frontend",shard="default",type="monitoring"}
+      )
+  - record: gitlab_component_errors:rate_30m
+    labels:
+      component: thanos_query_frontend
       tier: inf
       type: monitoring
     expr: |
@@ -1514,7 +1634,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(http_request_duration_seconds_bucket{job=~"thanos|thanos-query-frontend",le="+Inf",shard="default",type="monitoring"}[1h])
+        rate(http_request_duration_seconds_bucket{job="thanos-query",le="+Inf",shard="default",type="monitoring"}[1h])
       )
   - record: gitlab_component_apdex:ratio_1h
     labels:
@@ -1523,7 +1643,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(http_request_duration_seconds_bucket{job=~"thanos|thanos-query-frontend",le="30",shard="default",type="monitoring"}[1h])
+        rate(http_request_duration_seconds_bucket{job="thanos-query",le="30",shard="default",type="monitoring"}[1h])
       )
       / on(environment,stage) group_left()
       (
@@ -1536,11 +1656,51 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        sli_aggregations:http_requests_total_rate1h{job=~"thanos|thanos-query-frontend",shard="default",type="monitoring"}
+        sli_aggregations:http_requests_total_rate1h{job="thanos-query",shard="default",type="monitoring"}
       )
   - record: gitlab_component_errors:rate_1h
     labels:
       component: thanos_query
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:http_requests_total_rate1h{code=~"^5.*",job="thanos-query",shard="default",type="monitoring"}
+      )
+  - record: gitlab_component_apdex:weight:score_1h
+    labels:
+      component: thanos_query_frontend
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(http_request_duration_seconds_bucket{job=~"thanos|thanos-query-frontend",le="+Inf",shard="default",type="monitoring"}[1h])
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: thanos_query_frontend
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(http_request_duration_seconds_bucket{job=~"thanos|thanos-query-frontend",le="30",shard="default",type="monitoring"}[1h])
+      )
+      / on(environment,stage) group_left()
+      (
+        gitlab_component_apdex:weight:score_1h{component="thanos_query_frontend",tier="inf",type="monitoring"} > 0
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: thanos_query_frontend
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:http_requests_total_rate1h{job=~"thanos|thanos-query-frontend",shard="default",type="monitoring"}
+      )
+  - record: gitlab_component_errors:rate_1h
+    labels:
+      component: thanos_query_frontend
       tier: inf
       type: monitoring
     expr: |
@@ -1929,7 +2089,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(http_request_duration_seconds_bucket{job=~"thanos|thanos-query-frontend",le="+Inf",shard="default",type="monitoring"}[6h])
+        rate(http_request_duration_seconds_bucket{job="thanos-query",le="+Inf",shard="default",type="monitoring"}[6h])
       )
   - record: gitlab_component_apdex:ratio_6h
     labels:
@@ -1938,7 +2098,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(http_request_duration_seconds_bucket{job=~"thanos|thanos-query-frontend",le="30",shard="default",type="monitoring"}[6h])
+        rate(http_request_duration_seconds_bucket{job="thanos-query",le="30",shard="default",type="monitoring"}[6h])
       )
       / on(environment,stage) group_left()
       (
@@ -1951,11 +2111,51 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        sli_aggregations:http_requests_total_rate6h{job=~"thanos|thanos-query-frontend",shard="default",type="monitoring"}
+        sli_aggregations:http_requests_total_rate6h{job="thanos-query",shard="default",type="monitoring"}
       )
   - record: gitlab_component_errors:rate_6h
     labels:
       component: thanos_query
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:http_requests_total_rate6h{code=~"^5.*",job="thanos-query",shard="default",type="monitoring"}
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: thanos_query_frontend
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(http_request_duration_seconds_bucket{job=~"thanos|thanos-query-frontend",le="+Inf",shard="default",type="monitoring"}[6h])
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: thanos_query_frontend
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(http_request_duration_seconds_bucket{job=~"thanos|thanos-query-frontend",le="30",shard="default",type="monitoring"}[6h])
+      )
+      / on(environment,stage) group_left()
+      (
+        gitlab_component_apdex:weight:score_6h{component="thanos_query_frontend",tier="inf",type="monitoring"} > 0
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: thanos_query_frontend
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:http_requests_total_rate6h{job=~"thanos|thanos-query-frontend",shard="default",type="monitoring"}
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: thanos_query_frontend
       tier: inf
       type: monitoring
     expr: |
@@ -2154,6 +2354,14 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: thanos_query
+      regional_aggregation: 'no'
+      service_aggregation: 'yes'
+      tier: inf
+      type: monitoring
+    expr: '1'
+  - record: gitlab_component_service:mapping
+    labels:
+      component: thanos_query_frontend
       regional_aggregation: 'no'
       service_aggregation: 'yes'
       tier: inf

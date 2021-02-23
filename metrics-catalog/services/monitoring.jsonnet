@@ -70,6 +70,44 @@ metricsCatalog.serviceDefinition({
       |||,
 
       local thanosQuerySelector = {
+        job: 'thanos-query',
+        type: 'monitoring',
+        shard: 'default',
+      },
+
+      apdex: histogramApdex(
+        histogram='http_request_duration_seconds_bucket',
+        selector=thanosQuerySelector,
+        satisfiedThreshold=30,
+      ),
+
+      requestRate: rateMetric(
+        counter='http_requests_total',
+        selector=thanosQuerySelector
+      ),
+
+      errorRate: rateMetric(
+        counter='http_requests_total',
+        selector=thanosQuerySelector { code: { re: '^5.*' } }
+      ),
+
+      significantLabels: ['fqdn'],
+
+      toolingLinks: [
+        toolingLinks.elasticAPM(service='thanos'),
+      ],
+    },
+
+    thanos_query_frontend: {
+      userImpacting: false,
+      featureCategory: 'not_owned',
+      team: 'sre_observability',
+      description: |||
+        Thanos query gathers the data needed to evaluate Prometheus queries from multiple underlying prometheus and thanos instances.
+        This SLI monitors the Thanos query HTTP interface. 5xx responses are considered failures.
+      |||,
+
+      local thanosQuerySelector = {
         // The job regex was written while we were transitioning from a thanos
         // stack deployed in GCE to a new one deployed in GKE. job=thanos
         // covers all thanos components, but the metrics this filter is used for
