@@ -59,6 +59,11 @@ We prefer to avoid hotpatches. If a hotpatch is being considered, the issue seve
     * In situations where reputational risk is high, even a non S1 issue can receive a hotpatch. If that is the case, the incident can’t be lower than S2. This is not strictly documented for a reason, because it gives the IMOC, EOC, Release Managers the power to decide based on the situation. It is critical that there is some flexibility and common sense in the process. 
     * Will the situation degrade, or is it ‘stable’ and next deploy will fix?
 
+Reasons that we are careful about hot patches:
+1. There is a cognitive/disruptive workload introduced (multiple people co-ordinating/reviewing/wrangling) that is out-of-band from our otherwise structured and generally automated release procedures.
+2. They occasionally hit edge cases and have to be re-done
+3. Generally riskier (may not get any automated CI tests, we're trusting the diff that is applied to be accurate and not introduce any new problems).
+
 ### Timers/Mental checks 
 As an IMOC, on roughly these times, you can ask yourself these questions:
   1. Do we have the right people in the incident room? (every 5 min early on)
@@ -71,7 +76,7 @@ As an IMOC, on roughly these times, you can ask yourself these questions:
   6. Regularly check on the EOC. EOC is in a highly stressful situation, pager is going off every few minutes and they are asked to try and deduct what is happening. As IMOC, you need to support the EOC. 
   7. 10-15 minutes in.  Make sure there is an executive summary somewhere.  Most times at the top of the prod issue description.  If hard down, make sure gdoc exists with this summary.  Make sure the gdoc is shared in slack so people see it.
 
-### Handling S3/P3
+### Handling S3/S4
 If not on full alert, now in the realm of judgement related to next steps
   1. Is this internal? 
     * Deploy blocker?  
