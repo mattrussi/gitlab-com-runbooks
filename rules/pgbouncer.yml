@@ -12,3 +12,24 @@ groups:
       title: 'Sidekiq is using most of its PgBouncer connections: {{$value}}'
       description: On average, Sidekiq is using over 140 connections for the last 10 minutes. Check https://dashboards.gitlab.net/d/PwlB97Jmk/pgbouncer-overview.
       runbook: docs/pgbouncer/pgbouncer-saturation.md
+  - alert: PGBouncerCannotProcessQueries
+    expr: >
+      (
+        sum by (env, environment, node) (consul_health_service_status{service_id="pgbouncer-health",status="critical"})
+        / ignoring(node) group_left()
+        sum by (env, environment, node) (consul_up)
+      ) >= 0.5
+    for: 1m
+    labels:
+      severity: s3 # S1 or S2 must have pager label, we don't want to page at this stage
+      alert_type: cause
+    annotations:
+      title: 'PGBouncer cannot process client queries'
+      description: |
+        This alert is experimental, it can be a false-positive.
+        PGBouncer on {{$labels.node}} does not seem to be processing client queries for the last minute.
+        This alert uses Consul health check of the pgbouncer-health service, which in turn just queries ';'
+        in a psql session (connected the same way Rails connects to pgbouncer, only using a different user).
+        This can be due to its inability to connect to the PostgreSQL or hitting its
+        maximum number of connections. Check the logs for clues.
+      runbook: docs/pgbouncer/README.md
