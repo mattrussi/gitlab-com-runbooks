@@ -14,6 +14,12 @@ metricsCatalog.serviceDefinition({
     apdexScore: 0.97,
     errorRatio: 0.995,  // 99.5% of ci-runner requests should succeed, over multiple window periods
   },
+  otherThresholds: {
+    mtbf: {
+      apdexScore: 0.97,
+      errorRatio: 0.995,
+    },
+  },
   serviceDependencies: {
     api: true,
   },

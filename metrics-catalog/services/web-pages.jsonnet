@@ -15,6 +15,12 @@ metricsCatalog.serviceDefinition({
     apdexScore: 0.995,
     errorRatio: 0.9995,
   },
+  otherThresholds: {
+    mtbf: {
+      apdexScore: 0.999,
+      errorRatio: 0.9999,
+    },
+  },
   serviceLevelIndicators: {
     loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
       userImpacting=true,

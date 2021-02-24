@@ -25,6 +25,11 @@ metricsCatalog.serviceDefinition({
       apdexScore: 0.998,
       errorRatio: 0.9999,
     },
+
+    mtbf: {
+      apdexScore: 0.999,
+      errorRatio: 0.99995,
+    },
   },
   serviceDependencies: {
     gitaly: true,

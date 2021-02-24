@@ -20,6 +20,11 @@ metricsCatalog.serviceDefinition({
       apdexScore: 0.9929,
       errorRatio: 0.9700,
     },
+
+    mtbf: {
+      apdexScore: 0.999,
+      errorRatio: 0.99995,
+    },
   },
   monitoringThresholds: {
     apdexScore: 0.997,
