@@ -107,6 +107,19 @@ These subnets are created under the `windows-ci` network.
 | runner-windows-ci  | 10.3.0.0/24 | Runner network for ansible/packer |
 
 
+## Production Change Lock (PCL)
+
+It is a good practice to temporarily halt production changes during
+certain events such as GitLab Summit, major global holidays, and
+Weekends. Apart from the list already documented in
+<https://about.gitlab.com/handbook/engineering/infrastructure/change-management/#production-change-lock-pcl>,
+GitLab Runner extends this with the following:
+
+| Dates | Type | Reason |
+| ------| ----- | -----|
+| Recurring: Friday | Soft | Friday |
+| Recurring: Weekend (Sat - Sun) | Soft | Weekend |
+
 <!-- ## Summary -->
 
 <!-- ## Architecture -->

@@ -125,7 +125,7 @@ graph LR
     r::gdsrm-us-east1-b ==> n::gdsrm3
 ```
 
-## Requirements
+## Prerequisites
 
 To upgrade runners on managers you need to:
 
@@ -145,6 +145,10 @@ To upgrade runners on managers you need to:
     ```
 
     </details>
+
+## Preflight checklist
+
+1. [ ] [Not in a PCL time window](README.md#production-change-lock-pcl).
 
 ## Procedure description
 
