@@ -83,6 +83,7 @@ local union(sets) = std.foldl(function(memo, a) std.setUnion(std.set(a), memo), 
         'KqPVKRIiz',  // thanos-store
         '64YQGnbZz',  // thanos-store-oom
         '4QhoV1tZk',  // writes-per-gitaly-operation-copy
+        'memcached',  // memcached
       ],
       // nnelson's dashboards
       // https://gitlab.com/gitlab-com/runbooks/-/merge_requests/2345#note_359096247
