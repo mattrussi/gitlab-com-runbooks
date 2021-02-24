@@ -55,8 +55,8 @@ basic.dashboard(
 ).addPanels(
   layout.grid(
     [
-      productCommon.pageDetail('On-Demand Scans', 'On_Demand_Scans', 'https://gitlab.com/gitlab-org/secure/general/-/on_demand_scans'),
-      productCommon.pageDetail('DAST Profiles', 'DAST_Profiles', 'https://gitlab.com/gitlab-org/secure/general/-/security/configuration/dast_profiles'),
+      productCommon.pageDetail('On-Demand Scans', 'On_Demand_Scans', 'https://gitlab.com/gitlab-examples/security/security-reports/-/on_demand_scans'),
+      productCommon.pageDetail('DAST Profiles', 'DAST_Profiles', 'https://gitlab.com/gitlab-examples/security/security-reports/-/security/configuration/dast_profiles'),
     ],
     startRow=3001,
   ),
