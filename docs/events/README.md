@@ -6,6 +6,7 @@ Infrastructure events are log messages that helpful for [incident management](ht
 * **[View events for Staging](https://nonprod-log.gitlab.net/goto/77b2443ce24964b34f3f5b535c8bfaed)**
 
 We collect events from all infrastructure and deployment pipelines for the staging (`gstg`) and production (`gprd`) environments.
+Note that we do not currently differentiate between successful and failed deployments, tracked in https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/12685.
 Other environments like `pre`, `release`, etc. are not included because they are not part of incident management.
 
 There are two ElasticSearch indexes that are used for events, `events-gstg` and `events-gprd`.
