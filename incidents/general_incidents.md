@@ -31,7 +31,8 @@ Take a minute to assess the overall situation:
   1. Are we down, degraded, how concerned should we be?   
   2. Are we in S1 / all hands on deck?  
   3. Do I need to be ready to yell for help?
-  
+  4. If on the weekend, you may need to act as the CMOC.  Support has coverage for most shifts, but APAC is still being sorted as of early 2021.
+
 Look at [Apdex and Error Ratio Graphs](https://dashboards.gitlab.net/d/general-service/general-service-platform-metrics?orgId=1). 
 
 1. Are there spikes or dips passing the outage SLO dashed lines?  
@@ -41,7 +42,7 @@ Look at [Apdex and Error Ratio Graphs](https://dashboards.gitlab.net/d/general-s
 
   1. Is GitLab.com up/degraded? Start with [general: GitLab Dashboards](https://dashboards.gitlab.net/d/general-public-splashscreen/general-gitlab-dashboards?orgId=1) and then drill further
     * [Web](https://dashboards.gitlab.net/d/web-main/web-overview?orgId=1). This is what users see.
-    * [API](https://dashboards.gitlab.net/d/api-main/api-overview?orgId=1). This is what robots see.
+    * [API](https://dashboards.gitlab.net/d/api-main/api-overview?orgId=1). This is what automation (including gitaly/registry/kas) sees.
   2. Are runners doing okay?
     * [ci-runners: Overview](https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?orgId=1)
   3. Other services overview:
@@ -51,7 +52,7 @@ Look at [Apdex and Error Ratio Graphs](https://dashboards.gitlab.net/d/general-s
 
 Estimate the severity of the issue as soon as EOC or you have an idea on what the problem is. Evaluate based on [Availability](/handbook/engineering/quality/issue-triage/#availability). Sometimes it is tough to say to the upset customer that their issue is not S1 for us, but we need to think about the whole situation and other users. 
 
-We prefer to avoid hotpatches. If a hotpatch is being considered, the issue severity will drive the decision:
+We prefer to avoid [hotpatches](https://gitlab.com/gitlab-org/release/docs/-/blob/master/general/deploy/post-deployment-patches.md#overview). If a hotpatch is being considered, the issue severity will drive the decision:
 
 1. Hotpatches are usually for S1 issues.
 1. Security issues may receive a hotpatch regardless of severity.
@@ -67,7 +68,7 @@ Reasons that we are careful about hot patches:
 ### Timers/Mental checks 
 As an IMOC, on roughly these times, you can ask yourself these questions:
   1. Do we have the right people in the incident room? (every 5 min early on)
-  2. Do we need DB team help? (if postgres related, have we engaged Ongres/Jose or the Database team?)  
+  2. Do we need [DB team help](https://about.gitlab.com/handbook/engineering/infrastructure/database/#ongres-third-party-support)? (if postgres related, have we engaged Ongres/Jose or the Database team?)  
   3. Do we understand what is going on? (first 10 min frequently - every 2-3 min)
     * If not sev1/down, a little more relaxed - say every 10  min
   4. Do we understand what to do to resolve or mitigate the problem? (first 10 min frequently after we have identified the issue- every 2-3 min)
@@ -75,6 +76,7 @@ As an IMOC, on roughly these times, you can ask yourself these questions:
   5. Do we need a [CMOC](/handbook/engineering/infrastructure/incident-management/#how-to-engage-the-cmoc-only-during-weekdays)?  Is this customer facing?  Default to yes, but if deploy blocker - probably no.
   6. Regularly check on the EOC. EOC is in a highly stressful situation, pager is going off every few minutes and they are asked to try and deduct what is happening. As IMOC, you need to support the EOC. 
   7. 10-15 minutes in.  Make sure there is an executive summary somewhere.  Most times at the top of the prod issue description.  If hard down, make sure gdoc exists with this summary.  Make sure the gdoc is shared in slack so people see it.
+  8. Help the EOC keep the timeline in the incident up to date.  Usually done in the description of the issue.  If you are collecitng things, use issue comments, then edit teh description later.
 
 ### Handling S3/S4
 If not on full alert, now in the realm of judgement related to next steps
