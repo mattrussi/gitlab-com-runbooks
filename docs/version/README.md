@@ -53,7 +53,6 @@
 * [../uncategorized/remove-kernels.md](../uncategorized/remove-kernels.md)
 * [../uncategorized/tweeting-guidelines.md](../uncategorized/tweeting-guidelines.md)
 * [../uncategorized/upgrade-camoproxy.md](../uncategorized/upgrade-camoproxy.md)
-* [../uncategorized/upgrade-docker-machine.md](../uncategorized/upgrade-docker-machine.md)
 * [../uncategorized/uptycs_osquery.md](../uncategorized/uptycs_osquery.md)
 * [../uncategorized/yubikey.md](../uncategorized/yubikey.md)
 * [gitaly-version-mismatch.md](gitaly-version-mismatch.md)

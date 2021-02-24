@@ -62,7 +62,6 @@
 * [../uncategorized/ruby-profiling.md](../uncategorized/ruby-profiling.md)
 * [../uncategorized/shared-configurations.md](../uncategorized/shared-configurations.md)
 * [../uncategorized/tracing-app-db-queries.md](../uncategorized/tracing-app-db-queries.md)
-* [../uncategorized/upgrade-docker-machine.md](../uncategorized/upgrade-docker-machine.md)
 * [../web/static-repository-objects-caching.md](../web/static-repository-objects-caching.md)
 <!-- END_MARKER -->
 
