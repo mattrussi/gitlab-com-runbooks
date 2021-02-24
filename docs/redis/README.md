@@ -18,6 +18,7 @@
 
 * [../config_management/chef-guidelines.md](../config_management/chef-guidelines.md)
 * [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
+* [../monitoring/definition-service-apdex.md](../monitoring/definition-service-apdex.md)
 * [../monitoring/sentry-is-down.md](../monitoring/sentry-is-down.md)
 * [../patroni/rotating-rails-postgresql-password.md](../patroni/rotating-rails-postgresql-password.md)
 * [ban-an-IP-with-redis.md](ban-an-IP-with-redis.md)
@@ -28,7 +29,6 @@
 * [../sidekiq/sidekiq-inspection.md](../sidekiq/sidekiq-inspection.md)
 * [../sidekiq/sidekiq-survival-guide-for-sres.md](../sidekiq/sidekiq-survival-guide-for-sres.md)
 * [../sidekiq/sidekiq_stats_no_longer_showing.md](../sidekiq/sidekiq_stats_no_longer_showing.md)
-* [../uncategorized/definition-service-apdex.md](../uncategorized/definition-service-apdex.md)
 * [../uncategorized/deleted-project-restore.md](../uncategorized/deleted-project-restore.md)
 * [../uncategorized/manage-pacemaker.md](../uncategorized/manage-pacemaker.md)
 * [../uncategorized/namespace-restore.md](../uncategorized/namespace-restore.md)

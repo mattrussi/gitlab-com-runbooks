@@ -1875,6 +1875,8 @@ services:
     logging:
       - name: system
         permalink: https://log.gprd.gitlab.net/goto/3a0b51d10d33c9558765e97640acb325
+      - name: monitoring
+        permalink: https://log.gprd.gitlab.net/goto/09f7c84d5f36e3df0d03382dc350cddf
   infrastructure:
     provider: gcp
     architecture:
