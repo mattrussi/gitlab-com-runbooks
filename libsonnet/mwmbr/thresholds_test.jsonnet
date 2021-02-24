@@ -16,6 +16,6 @@ test.suite({
   },
   testKnownOtherThresholds: {
     actual: std.map(function(t) t.name, thresholds.knownOtherThresholds),
-    expect: ['deployment'],
+    expect: ['deployment', 'mtbf'],
   },
 })
