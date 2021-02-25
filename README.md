@@ -269,7 +269,7 @@ During an incident, we have [roles defined in the handbook](https://about.gitlab
 * [Debug failed provisioning](howto/debug-failed-chef-provisioning.md)
 
 ### Work with CI Infrastructure
-* [Update GitLab Runner on runners managers](docs/ci-runners/update-gitlab-runner-on-managers.md)
+* [Runners fleet configuration management](docs/ci-runners/fleet-configuration-management/README.md)
 * [Investigate Abuse Reports](docs/ci-runners/ci-investigate-abuse.md)
 * [Create runners manager for GitLab.com](docs/ci-runners/create-runners-manager-node.md)
 * [Update docker-machine](docs/uncategorized/upgrade-docker-machine.md)

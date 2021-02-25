@@ -33,6 +33,7 @@ They all have acronyms as well, which are indicated next to each name.
   - [gitlab-ci project](#gitlab-ci-project)
   - [gitlab-org-ci project](#gitlab-org-ci-project)
   - [gitlab-ci-windows project](#gitlab-ci-windows-project)
+- [Configuration management for the Linux based Runners fleet](linux/README.md)
 
 ## Runner Descriptions
 
