@@ -89,16 +89,18 @@ local railsP95RequestLatency(type, featureCategories, featureCategoriesSelector)
     format='s',
     legendFormat=actionLegend(type),
     query=|||
-      avg_over_time(
-        controller_action:gitlab_transaction_duration_seconds:p95{
-          environment="$environment",
-          stage='$stage',
-          action=~"$action",
-          controller=~"$controller",
-          feature_category=~'(%(featureCategories)s)',
-          type='%(type)s'
-        }[$__interval]
-      )
+      avg(
+        avg_over_time(
+          controller_action:gitlab_transaction_duration_seconds:p95{
+            environment="$environment",
+            stage='$stage',
+            action=~"$action",
+            controller=~"$controller",
+            feature_category=~'(%(featureCategories)s)',
+            type='%(type)s'
+          }[$__interval]
+        )
+      ) by (controller, action)
     ||| % {
       type: type,
       featureCategories: featureCategoriesSelector,

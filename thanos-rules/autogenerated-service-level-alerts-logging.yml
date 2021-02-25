@@ -5,14 +5,14 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
-  - alert: LoggingServiceElasticsearchIndexingTrafficCessation
+  - alert: LoggingServiceElasticsearchIndexingClusterTrafficCessation
     for: 5m
     annotations:
       title: >-
-        The elasticsearch_indexing SLI of the logging service (`{{ $labels.stage }}` stage) has not received
-        any traffic in the past 30 minutes
+        The elasticsearch_indexing_cluster SLI of the logging service (`{{ $labels.stage }}` stage) has
+        not received any traffic in the past 30 minutes
       description: |
-        This SLI monitors log index operations to GitLab's logging ELK instance.
+        This cluster SLI monitors log index operations to GitLab's logging ELK instance.
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: logging-main/logging-overview
@@ -20,7 +20,7 @@ groups:
         https://dashboards.gitlab.net/d/logging-main/logging-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '1156496897'
+      grafana_panel_id: '1468912914'
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -40,16 +40,16 @@ groups:
       slo_alert: 'no'
       user_impacting: 'no'
     expr: >
-      gitlab_component_ops:rate_30m{type="logging", component="elasticsearch_indexing", stage="main",
+      gitlab_component_ops:rate_30m{type="logging", component="elasticsearch_indexing_cluster", stage="main",
       monitor="global"} == 0
-  - alert: LoggingServiceElasticsearchIndexingTrafficAbsent
+  - alert: LoggingServiceElasticsearchIndexingClusterTrafficAbsent
     for: 30m
     annotations:
       title: >-
-        The elasticsearch_indexing SLI of the logging service (`{{ $labels.stage }}` stage) has not reported
-        any traffic in the past 30 minutes
+        The elasticsearch_indexing_cluster SLI of the logging service (`{{ $labels.stage }}` stage) has
+        not reported any traffic in the past 30 minutes
       description: |
-        This SLI monitors log index operations to GitLab's logging ELK instance.
+        This cluster SLI monitors log index operations to GitLab's logging ELK instance.
 
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 
@@ -59,7 +59,7 @@ groups:
         https://dashboards.gitlab.net/d/logging-main/logging-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '1156496897'
+      grafana_panel_id: '1468912914'
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -79,17 +79,17 @@ groups:
       slo_alert: 'no'
       user_impacting: 'no'
     expr: |
-      gitlab_component_ops:rate_5m{type="logging", component="elasticsearch_indexing", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{type="logging", component="elasticsearch_indexing_cluster", stage="main", monitor="global"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="logging", component="elasticsearch_indexing", stage="main", monitor="global"}
-  - alert: LoggingServiceElasticsearchSearchingTrafficCessation
+      gitlab_component_ops:rate_5m{type="logging", component="elasticsearch_indexing_cluster", stage="main", monitor="global"}
+  - alert: LoggingServiceElasticsearchIndexingIndexTrafficCessation
     for: 5m
     annotations:
       title: >-
-        The elasticsearch_searching SLI of the logging service (`{{ $labels.stage }}` stage) has not received
-        any traffic in the past 30 minutes
+        The elasticsearch_indexing_index SLI of the logging service (`{{ $labels.stage }}` stage) has
+        not received any traffic in the past 30 minutes
       description: |
-        This SLI monitors searches issued to GitLab's logging ELK instance.
+        This index SLI monitors log index operations to GitLab's logging ELK instance.
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: logging-main/logging-overview
@@ -97,7 +97,84 @@ groups:
         https://dashboards.gitlab.net/d/logging-main/logging-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '1015871477'
+      grafana_panel_id: '2294808141'
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          clamp_min(deriv(elasticsearch_index_stats_indexing_index_total{type="logging", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]), 0)
+        )
+      runbook: docs/logging/README.md
+    labels:
+      aggregation: component
+      alert_type: cause
+      feature_category: not_owned
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s3
+      sli_type: ops
+      slo_alert: 'no'
+      user_impacting: 'no'
+    expr: >
+      gitlab_component_ops:rate_30m{type="logging", component="elasticsearch_indexing_index", stage="main",
+      monitor="global"} == 0
+  - alert: LoggingServiceElasticsearchIndexingIndexTrafficAbsent
+    for: 30m
+    annotations:
+      title: >-
+        The elasticsearch_indexing_index SLI of the logging service (`{{ $labels.stage }}` stage) has
+        not reported any traffic in the past 30 minutes
+      description: |
+        This index SLI monitors log index operations to GitLab's logging ELK instance.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: logging-main/logging-overview
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/logging-main/logging-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '2294808141'
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          clamp_min(deriv(elasticsearch_index_stats_indexing_index_total{type="logging", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]), 0)
+        )
+      runbook: docs/logging/README.md
+    labels:
+      aggregation: component
+      alert_type: cause
+      feature_category: not_owned
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s3
+      sli_type: ops
+      slo_alert: 'no'
+      user_impacting: 'no'
+    expr: |
+      gitlab_component_ops:rate_5m{type="logging", component="elasticsearch_indexing_index", stage="main", monitor="global"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{type="logging", component="elasticsearch_indexing_index", stage="main", monitor="global"}
+  - alert: LoggingServiceElasticsearchSearchingClusterTrafficCessation
+    for: 5m
+    annotations:
+      title: >-
+        The elasticsearch_searching_cluster SLI of the logging service (`{{ $labels.stage }}` stage) has
+        not received any traffic in the past 30 minutes
+      description: |
+        This cluster SLI monitors searches issued to GitLab's logging ELK instance.
+
+        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+      grafana_dashboard_id: logging-main/logging-overview
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/logging-main/logging-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '4214347698'
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -117,16 +194,16 @@ groups:
       slo_alert: 'no'
       user_impacting: 'no'
     expr: >
-      gitlab_component_ops:rate_30m{type="logging", component="elasticsearch_searching", stage="main",
+      gitlab_component_ops:rate_30m{type="logging", component="elasticsearch_searching_cluster", stage="main",
       monitor="global"} == 0
-  - alert: LoggingServiceElasticsearchSearchingTrafficAbsent
+  - alert: LoggingServiceElasticsearchSearchingClusterTrafficAbsent
     for: 30m
     annotations:
       title: >-
-        The elasticsearch_searching SLI of the logging service (`{{ $labels.stage }}` stage) has not reported
-        any traffic in the past 30 minutes
+        The elasticsearch_searching_cluster SLI of the logging service (`{{ $labels.stage }}` stage) has
+        not reported any traffic in the past 30 minutes
       description: |
-        This SLI monitors searches issued to GitLab's logging ELK instance.
+        This cluster SLI monitors searches issued to GitLab's logging ELK instance.
 
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 
@@ -136,7 +213,7 @@ groups:
         https://dashboards.gitlab.net/d/logging-main/logging-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '1015871477'
+      grafana_panel_id: '4214347698'
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -156,9 +233,86 @@ groups:
       slo_alert: 'no'
       user_impacting: 'no'
     expr: |
-      gitlab_component_ops:rate_5m{type="logging", component="elasticsearch_searching", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{type="logging", component="elasticsearch_searching_cluster", stage="main", monitor="global"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="logging", component="elasticsearch_searching", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{type="logging", component="elasticsearch_searching_cluster", stage="main", monitor="global"}
+  - alert: LoggingServiceElasticsearchSearchingIndexTrafficCessation
+    for: 5m
+    annotations:
+      title: >-
+        The elasticsearch_searching_index SLI of the logging service (`{{ $labels.stage }}` stage) has
+        not received any traffic in the past 30 minutes
+      description: |
+        This index SLI monitors searches issued to GitLab's logging ELK instance.
+
+        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+      grafana_dashboard_id: logging-main/logging-overview
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/logging-main/logging-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '2852417009'
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          clamp_min(deriv(elasticsearch_index_stats_search_query_total{type="logging", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]), 0)
+        )
+      runbook: docs/logging/README.md
+    labels:
+      aggregation: component
+      alert_type: cause
+      feature_category: not_owned
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s3
+      sli_type: ops
+      slo_alert: 'no'
+      user_impacting: 'no'
+    expr: >
+      gitlab_component_ops:rate_30m{type="logging", component="elasticsearch_searching_index", stage="main",
+      monitor="global"} == 0
+  - alert: LoggingServiceElasticsearchSearchingIndexTrafficAbsent
+    for: 30m
+    annotations:
+      title: >-
+        The elasticsearch_searching_index SLI of the logging service (`{{ $labels.stage }}` stage) has
+        not reported any traffic in the past 30 minutes
+      description: |
+        This index SLI monitors searches issued to GitLab's logging ELK instance.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: logging-main/logging-overview
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/logging-main/logging-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '2852417009'
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          clamp_min(deriv(elasticsearch_index_stats_search_query_total{type="logging", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]), 0)
+        )
+      runbook: docs/logging/README.md
+    labels:
+      aggregation: component
+      alert_type: cause
+      feature_category: not_owned
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s3
+      sli_type: ops
+      slo_alert: 'no'
+      user_impacting: 'no'
+    expr: |
+      gitlab_component_ops:rate_5m{type="logging", component="elasticsearch_searching_index", stage="main", monitor="global"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{type="logging", component="elasticsearch_searching_index", stage="main", monitor="global"}
   - alert: LoggingServiceFluentdLogOutputErrorSLOViolation
     for: 2m
     annotations:
@@ -432,3 +586,157 @@ groups:
       gitlab_component_ops:rate_5m{type="logging", component="kibana_googlelb", stage="main", monitor="global"} offset 1h
       unless
       gitlab_component_ops:rate_5m{type="logging", component="kibana_googlelb", stage="main", monitor="global"}
+  - alert: LoggingServicePubsubSubscriptionsTrafficCessation
+    for: 5m
+    annotations:
+      title: >-
+        The pubsub_subscriptions SLI of the logging service (`{{ $labels.stage }}` stage) has not received
+        any traffic in the past 30 minutes
+      description: |
+        This SLI monitors pubsub subscriptions.
+
+        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+      grafana_dashboard_id: logging-main/logging-overview
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/logging-main/logging-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '3855936082'
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{type="monitoring", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/logging/README.md
+    labels:
+      aggregation: component
+      alert_type: cause
+      feature_category: not_owned
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s3
+      sli_type: ops
+      slo_alert: 'no'
+      user_impacting: 'no'
+    expr: >
+      gitlab_component_ops:rate_30m{type="logging", component="pubsub_subscriptions", stage="main", monitor="global"}
+      == 0
+  - alert: LoggingServicePubsubSubscriptionsTrafficAbsent
+    for: 30m
+    annotations:
+      title: >-
+        The pubsub_subscriptions SLI of the logging service (`{{ $labels.stage }}` stage) has not reported
+        any traffic in the past 30 minutes
+      description: |
+        This SLI monitors pubsub subscriptions.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: logging-main/logging-overview
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/logging-main/logging-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '3855936082'
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{type="monitoring", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/logging/README.md
+    labels:
+      aggregation: component
+      alert_type: cause
+      feature_category: not_owned
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s3
+      sli_type: ops
+      slo_alert: 'no'
+      user_impacting: 'no'
+    expr: |
+      gitlab_component_ops:rate_5m{type="logging", component="pubsub_subscriptions", stage="main", monitor="global"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{type="logging", component="pubsub_subscriptions", stage="main", monitor="global"}
+  - alert: LoggingServicePubsubTopicsTrafficCessation
+    for: 5m
+    annotations:
+      title: >-
+        The pubsub_topics SLI of the logging service (`{{ $labels.stage }}` stage) has not received any
+        traffic in the past 30 minutes
+      description: |
+        This SLI monitors pubsub topics.
+
+        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+      grafana_dashboard_id: logging-main/logging-overview
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/logging-main/logging-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '705066779'
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{type="monitoring", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/logging/README.md
+    labels:
+      aggregation: component
+      alert_type: cause
+      feature_category: not_owned
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s3
+      sli_type: ops
+      slo_alert: 'no'
+      user_impacting: 'no'
+    expr: >
+      gitlab_component_ops:rate_30m{type="logging", component="pubsub_topics", stage="main", monitor="global"}
+      == 0
+  - alert: LoggingServicePubsubTopicsTrafficAbsent
+    for: 30m
+    annotations:
+      title: >-
+        The pubsub_topics SLI of the logging service (`{{ $labels.stage }}` stage) has not reported any
+        traffic in the past 30 minutes
+      description: |
+        This SLI monitors pubsub topics.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: logging-main/logging-overview
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/logging-main/logging-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '705066779'
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{type="monitoring", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/logging/README.md
+    labels:
+      aggregation: component
+      alert_type: cause
+      feature_category: not_owned
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s3
+      sli_type: ops
+      slo_alert: 'no'
+      user_impacting: 'no'
+    expr: |
+      gitlab_component_ops:rate_5m{type="logging", component="pubsub_topics", stage="main", monitor="global"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{type="logging", component="pubsub_topics", stage="main", monitor="global"}

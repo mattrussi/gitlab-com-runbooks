@@ -222,7 +222,7 @@ groups:
       title: 'Prometheus has failed wal truncations'
   - alert: PrometheusRuleEvalFailures
     expr: >
-      sum by(environment, tier, type, shard, stage, rule_group) (
+      sum by(environment, tier, type, shard, stage) (
         rate(prometheus_rule_evaluation_failures_total[5m])
       ) > 0
     for: 10m
@@ -231,7 +231,9 @@ groups:
       incident_project: gitlab.com/gitlab-com/gl-infra/production
       alert_type: cause
     annotations:
-      description: 'The {{$labels.rule_group}} rule group has failing rule evaluations.'
+      description: |
+        Some rule groups have failing evaluations. Start by checking which groups:
+        https://thanos.gitlab.net/graph?g0.range_input=12h&g0.max_source_resolution=0s&g0.expr=rate(prometheus_rule_evaluation_failures_total%5B5m%5D)%20%3E%200%0A&g0.tab=1
       runbook: docs/monitoring/prometheus-failing-rule-evaluations.md
       title: 'Prometheus has failing rule evaluations'
   - alert: PrometheusEmptyJobs
@@ -363,23 +365,6 @@ groups:
       title: Thanos Rule is failing to send alerts
       description: Thanos Rule {{$labels.instance}} is failing to send alerts
         to alertmanager.
-      runbook: docs/monitoring/thanos-rule.md
-  - alert: ThanosRuleHighRuleEvaluationFailures
-    expr: |
-      (
-        rate(prometheus_rule_evaluation_failures_total{job="thanos"}[5m])
-      /
-        rate(prometheus_rule_evaluations_total{job="thanos"}[5m])
-      * 100 > 0
-      )
-    for: 5m
-    labels:
-      severity: s4
-      incident_project: gitlab.com/gitlab-com/gl-infra/production
-      alert_type: cause
-    annotations:
-      title: Thanos Rule is failing to evaluate rules
-      description: Thanos Rule {{$labels.instance}} is failing to evaluate {{ $value }}% rules.
       runbook: docs/monitoring/thanos-rule.md
   - alert: ThanosRuleHighRuleEvaluationWarnings
     expr: rate(thanos_rule_evaluation_with_warnings_total[5m]) > 0

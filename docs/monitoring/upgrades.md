@@ -86,6 +86,6 @@ Don't forget to bump cookbook versions when submitting cookbook changes.
 * [ ] Prepare and submit rollback MRs for Chef/Helmfiles/Tanka
 * [ ] Verify service returns to normal.
 
-[prometheus_build_info]: https://thanos-query.ops.gitlab.net/graph?g0.range_input=1h&g0.max_source_resolution=0s&g0.expr=count%20by%20(env%2Cversion)%20(prometheus_build_info)&g0.tab=0
-[process_start_time_seconds]: https://thanos-query.ops.gitlab.net/graph?g0.range_input=1h&g0.max_source_resolution=0s&g0.expr=changes(process_start_time_seconds%7Bjob%3D%22prometheus%22%7D%5B1h%5D)&g0.tab=1
-[up]: https://thanos-query.ops.gitlab.net/graph?g0.range_input=1h&g0.max_source_resolution=0s&g0.expr=avg%20by%20(env)%20(up%7Bjob%3D%22thanos%22%7D)&g0.tab=0
+[prometheus_build_info]: https://thanos.gitlab.net/graph?g0.range_input=1h&g0.max_source_resolution=0s&g0.expr=count%20by%20(env%2Cversion)%20(prometheus_build_info)&g0.tab=0
+[process_start_time_seconds]: https://thanos.gitlab.net/graph?g0.range_input=1h&g0.max_source_resolution=0s&g0.expr=changes(process_start_time_seconds%7Bjob%3D%22prometheus%22%7D%5B1h%5D)&g0.tab=1
+[up]: https://thanos.gitlab.net/graph?g0.range_input=1h&g0.max_source_resolution=0s&g0.expr=avg%20by%20(env)%20(up%7Bjob%3D%22thanos%22%7D)&g0.tab=0

@@ -454,6 +454,7 @@ deploy_dashboards:
     - dashboards/ensure-grafana-folders.sh
     - dashboards/upload.sh
     - dashboards/delete-orphaned-dashboards.sh
+    - dashboards/tag-unmanaged-dashboards.sh
 
 .docker_image_template:
   image: docker:stable

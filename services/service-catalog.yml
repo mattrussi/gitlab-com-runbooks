@@ -1875,6 +1875,8 @@ services:
     logging:
       - name: system
         permalink: https://log.gprd.gitlab.net/goto/3a0b51d10d33c9558765e97640acb325
+      - name: monitoring
+        permalink: https://log.gprd.gitlab.net/goto/09f7c84d5f36e3df0d03382dc350cddf
   infrastructure:
     provider: gcp
     architecture:
@@ -2396,77 +2398,6 @@ services:
       primary_grafana_dashboard: "sidekiq-main/sidekiq-overview"
       sentry_slug: "gitlab/gitlabcom/?query=program%3A%22sidekiq%22"
 
-- name: runner
-  tier: sv
-  friendly_name: Chatops Runner
-  teams:
-    - verify
-  infra_owner: sre_observability
-  label: Service:Runner
-  business:
-    requirement: |
-      It is required to run CI jobs that process ChatOps commands.
-    customers:
-      - GitLab.com employees
-    business_value: |
-      ChatOps is convenient for GitLab employees as it allows them to perform actions
-      that would otherwise require elevated access, such as getting the EXPLAIN ANALYZE
-      of a query, seeing who's currently on-call, etc.
-    SLA:
-      availability:
-      response_time:
-  technical:
-    project:
-      - https://gitlab.com/gitlab-org/gitlab-runner
-      - https://gitlab.com/gitlab-com/chatops
-    slx:
-    documents:
-      design:
-      architecture:
-      readiness_review:
-      service:
-        - https://gitlab.com/gitlab-org/gitlab-runner/blob/master/README.md
-      security: https://gitlab.com/gitlab-org/gitlab-runner/blob/master/docs/security/index.md
-    dependencies:
-    configurations:
-      - config_name: Runner
-        location: /etc/gitlab-runner/config.toml
-    chef_roles:
-      - gstg-base-runner
-      - gprd-base-runner
-    scalability:
-      bound: cpu
-      scalable: horizontal
-    security:
-      security_reviewed:
-      data_classification: red
-      security_incidents:
-    logging:
-      - name: system
-        permalink: https://log.gprd.gitlab.net/goto/9b8322ad2ddacec15c7c1691d6c67733
-  infrastructure:
-    provider: gcp
-    architecture:
-    provisioning: terraform
-    accesses:
-      - account_name:
-        access_type:
-        reviewed:
-  operations:
-    maintenance:
-    runbooks:
-      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/ci-runners/runners_manager_is_down.md
-      - https://gitlab.com/gitlab-com/runbooks/blob/master/troubleshooting/ci_runner_manager_errors.md
-      - https://gitlab.com/gitlab-com/runbooks/blob/master/troubleshooting/ci_runner_manager_do_limits.md
-    playbooks:
-      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/ci-runners/create-runners-manager-node.md
-      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/runner/update-gitlab-runner-on-managers.md
-    error_budget: https://docs.google.com/spreadsheets/d/1wkK2n5EAvoVXwQZrVoCDsvkYTb1BftL56EzsFW_IA-w/edit
-  observability:
-    monitors:
-      grafana_folder: bpcbFeIiz
-      primary_grafana_dashboard: "000000159/ci"
-
 - name: license
   tier: sv
   friendly_name: license.gitlab.com
@@ -2744,8 +2675,8 @@ services:
       - name: shared runners
         permalink: https://log.gprd.gitlab.net/goto/b9aed2474a7ffe194a10d4445a02893a
   infrastructure:
-    provider: gcp and do
-    architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/ci-architecture.html
+    provider: gcp
+    architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production/architecture/ci-architecture.html
     provisioning: manual
     accesses:
       - account_name:
@@ -2754,9 +2685,8 @@ services:
   operations:
     maintenance:
     runbooks:
-      - https://gitlab.com/gitlab-com/runbooks/blob/master/troubleshooting/cicd/runners_manager_is_down.md
-      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/runner/cicd/ci_runner_manager_errors.md
-      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/runner/cicd/ci_runner_manager_do_limits.md
+      - https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/ci-runners/runners_manager_is_down.md
+      - https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/ci-runners/cicd/ci_runner_manager_errors.md
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/ci-runners/cicd/ci_graphs.md
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/ci-runners/cicd/ci_too_many_connections_on_runners_cache_server.md
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/ci-runners/cicd/ci_constantnumberoflongrunningrepeatedjobs.md
@@ -2766,7 +2696,7 @@ services:
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/ci-runners/README.md
     playbooks:
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/ci-runners/create-runners-manager-node.md
-      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/runner/update-gitlab-runner-on-managers.md
+      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/ci-runners/update-gitlab-runner-on-managers.md
     error_budget: https://docs.google.com/spreadsheets/d/1wkK2n5EAvoVXwQZrVoCDsvkYTb1BftL56EzsFW_IA-w/edit
   observability:
     monitors:

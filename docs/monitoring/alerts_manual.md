@@ -163,7 +163,7 @@ mountpoint              /var/opt/gitlab
 * Trigger alerts to see how they work by writing a condition that will always be true.
 * Print the whole alerting data and model using go template printf, with a text such as: `text: '{{ printf "%#v" . }}'` in the alert receiver configuration on the alert manager.
 * Verify alertmanager config using https://prometheus.io/webtools/alerting/routing-tree-editor/ . It will also visualize the routing tree for you. When pasting config, remove any ruby templated strings and do not paste any secrets!
-* Test changes to routing rules in alertmanager's config using routing tree editor and alerts which can be [easily found in Thanos](https://thanos-query.ops.gitlab.net/graph?g0.range_input=1h&g0.expr=ALERTS&g0.tab=1)
+* Test changes to routing rules in alertmanager's config using routing tree editor and alerts which can be [easily found in Thanos](https://thanos.gitlab.net/graph?g0.range_input=1h&g0.expr=ALERTS&g0.tab=1)
 
 ## References
 

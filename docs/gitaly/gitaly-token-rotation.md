@@ -17,7 +17,7 @@ To disable enforcement of gitaly authentication:
 
 - [ ] apply the changes to the gitaly servers. `knife ssh -C3 roles:gprd-base-stor-gitaly 'sudo chef-client'`
 - [ ] Ensure that `gitaly_authentications_total` is set to true in prometheus and that 100% of all requests are "unenforced"
-  - https://thanos-query.ops.gitlab.net/graph?g0.range_input=1h&g0.expr=count(gitaly_authentications_total%7Benv%3D%22gprd%22%2Cenforced%3D%22true%22%2Cstatus%3D~%22.*ok%22%7D)%20or%20vector(0)&g0.tab=0
+  - https://thanos.gitlab.net/graph?g0.range_input=1h&g0.expr=count(gitaly_authentications_total%7Benv%3D%22gprd%22%2Cenforced%3D%22true%22%2Cstatus%3D~%22.*ok%22%7D)%20or%20vector(0)&g0.tab=0
   - [ ] That should go down to 0
 
 Backup and replace the current `auth_token`
@@ -36,7 +36,7 @@ Backup and replace the current `auth_token`
   - [ ] `knife ssh -C3 roles:gprd-base-console-node 'sudo chef-client'`
 
 Verify that the tokens are updated in all the places and ensure that authentication is working as expected.
- - https://thanos-query.ops.gitlab.net/graph?g0.range_input=1h&g0.expr=count(gitaly_authentications_total%7Benv%3D%22gprd%22%2Cenforced%3D%22false%22%2Cstatus%3D~%22.*ok%22%7D)%20or%20vector(0)&g0.tab=0
+ - https://thanos.gitlab.net/graph?g0.range_input=1h&g0.expr=count(gitaly_authentications_total%7Benv%3D%22gprd%22%2Cenforced%3D%22false%22%2Cstatus%3D~%22.*ok%22%7D)%20or%20vector(0)&g0.tab=0
   - [ ] This should be equal to the number of gitaly nodes
 - [ ] Finally, re-enable authentication enforcement by removing the `gitaly['auth_transitioning'] = true` setting added to the role in step 1
 - [ ] apply that to the gitlay servers. `knife ssh -C3 roles:gprd-base-stor-gitaly 'sudo chef-client'`

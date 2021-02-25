@@ -14,6 +14,7 @@
 
 ## Troubleshooting Pointers
 
+* [../ci-runners/update-gitlab-runner-on-managers.md](../ci-runners/update-gitlab-runner-on-managers.md)
 * [../cloudflare/managing-traffic.md](../cloudflare/managing-traffic.md)
 * [../cloudflare/services-locations.md](../cloudflare/services-locations.md)
 * [../config_management/chef-guidelines.md](../config_management/chef-guidelines.md)
@@ -24,6 +25,7 @@
 * [../gitaly/gitaly-error-rate.md](../gitaly/gitaly-error-rate.md)
 * [../gitaly/storage-sharding.md](../gitaly/storage-sharding.md)
 * [../logging/logging_gcs_archive_bigquery.md](../logging/logging_gcs_archive_bigquery.md)
+* [../monitoring/apdex-alerts-guide.md](../monitoring/apdex-alerts-guide.md)
 * [../monitoring/filesystem_alerts_inodes.md](../monitoring/filesystem_alerts_inodes.md)
 * [../monitoring/thanos-compact.md](../monitoring/thanos-compact.md)
 * [../packaging/manage-package-signing-keys.md](../packaging/manage-package-signing-keys.md)
@@ -35,9 +37,7 @@
 * [../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md](../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md)
 * [../postgres-dr-delayed/postgres-dr-replicas.md](../postgres-dr-delayed/postgres-dr-replicas.md)
 * [../praefect/praefect-read-only.md](../praefect/praefect-read-only.md)
-* [../runner/update-gitlab-runner-on-managers.md](../runner/update-gitlab-runner-on-managers.md)
 * [../uncategorized/about-gitlab-com.md](../uncategorized/about-gitlab-com.md)
-* [../uncategorized/apdex-alerts-guide.md](../uncategorized/apdex-alerts-guide.md)
 * [../uncategorized/aptly.md](../uncategorized/aptly.md)
 * [../uncategorized/cloudsql-data-export.md](../uncategorized/cloudsql-data-export.md)
 * [../uncategorized/dev-environment.md](../uncategorized/dev-environment.md)

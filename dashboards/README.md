@@ -39,7 +39,7 @@ Follow the guidelines for setting up your development environment with `asdf` an
 
 ## Modify a dashboard
 
-In order to modify a dashboard you will need to write code using [Grafonnet library](https://grafana.github.io/grafonnet-lib/) built on top of [Jsonnet](https://jsonnet.org/) syntax. In most cases you will also need to specify a PromQL query to source the data from Prometheus. You can experiment with PromQL using our [Thanos instance](https://thanos-query.ops.gitlab.net/) or [Grafana playground for Prometheus](https://dashboards.gitlab.net/explore).
+In order to modify a dashboard you will need to write code using [Grafonnet library](https://grafana.github.io/grafonnet-lib/) built on top of [Jsonnet](https://jsonnet.org/) syntax. In most cases you will also need to specify a PromQL query to source the data from Prometheus. You can experiment with PromQL using our [Thanos instance](https://thanos.gitlab.net/) or [Grafana playground for Prometheus](https://dashboards.gitlab.net/explore).
 
 ## Create a new snapshot of the modified dashboard
 

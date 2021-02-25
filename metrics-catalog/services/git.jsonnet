@@ -16,7 +16,7 @@ metricsCatalog.serviceDefinition({
     errorRatio: 0.005,
   },
   monitoringThresholds: {
-    apdexScore: 0.9995,
+    apdexScore: 0.998,
     errorRatio: 0.9995,
   },
   otherThresholds: {
@@ -27,6 +27,11 @@ metricsCatalog.serviceDefinition({
     deployment: {
       apdexScore: 0.9995,
       errorRatio: 0.9995,
+    },
+
+    mtbf: {
+      apdexScore: 0.9997,
+      errorRatio: 0.9999,
     },
   },
   serviceDependencies: {

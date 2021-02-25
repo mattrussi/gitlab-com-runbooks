@@ -15,6 +15,7 @@
 
 ## Troubleshooting Pointers
 
+* [../monitoring/apdex-alerts-guide.md](../monitoring/apdex-alerts-guide.md)
 * [praefect-bypass.md](praefect-bypass.md)
 * [praefect-database.md](praefect-database.md)
 * [praefect-error-rate.md](praefect-error-rate.md)
@@ -22,7 +23,6 @@
 * [praefect-read-only.md](praefect-read-only.md)
 * [praefect-replication.md](praefect-replication.md)
 * [praefect-startup.md](praefect-startup.md)
-* [../uncategorized/apdex-alerts-guide.md](../uncategorized/apdex-alerts-guide.md)
 * [../version/gitaly-version-mismatch.md](../version/gitaly-version-mismatch.md)
 <!-- END_MARKER -->
 

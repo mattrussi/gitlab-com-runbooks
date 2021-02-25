@@ -366,22 +366,22 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_1h{component="puma",monitor="global",type="git"}
-          < (1 - 14.4 * 0.000500)
+          < (1 - 14.4 * 0.002000)
         )
         and
         (
           gitlab_component_apdex:ratio_5m{component="puma",monitor="global",type="git"}
-          < (1 - 14.4 * 0.000500)
+          < (1 - 14.4 * 0.002000)
         )
         or
         (
           gitlab_component_apdex:ratio_6h{component="puma",monitor="global",type="git"}
-          < (1 - 6 * 0.000500)
+          < (1 - 6 * 0.002000)
         )
         and
         (
           gitlab_component_apdex:ratio_30m{component="puma",monitor="global",type="git"}
-          < (1 - 6 * 0.000500)
+          < (1 - 6 * 0.002000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -428,22 +428,22 @@ groups:
       (
         (
           gitlab_regional_sli_apdex:ratio_1h{component="puma",monitor="global",type="git"}
-          < (1 - 14.4 * 0.000500)
+          < (1 - 14.4 * 0.002000)
         )
         and
         (
           gitlab_regional_sli_apdex:ratio_5m{component="puma",monitor="global",type="git"}
-          < (1 - 14.4 * 0.000500)
+          < (1 - 14.4 * 0.002000)
         )
         or
         (
           gitlab_regional_sli_apdex:ratio_6h{component="puma",monitor="global",type="git"}
-          < (1 - 6 * 0.000500)
+          < (1 - 6 * 0.002000)
         )
         and
         (
           gitlab_regional_sli_apdex:ratio_30m{component="puma",monitor="global",type="git"}
-          < (1 - 6 * 0.000500)
+          < (1 - 6 * 0.002000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
@@ -688,22 +688,22 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_1h{component="workhorse",monitor="global",type="git"}
-          < (1 - 14.4 * 0.000500)
+          < (1 - 14.4 * 0.002000)
         )
         and
         (
           gitlab_component_apdex:ratio_5m{component="workhorse",monitor="global",type="git"}
-          < (1 - 14.4 * 0.000500)
+          < (1 - 14.4 * 0.002000)
         )
         or
         (
           gitlab_component_apdex:ratio_6h{component="workhorse",monitor="global",type="git"}
-          < (1 - 6 * 0.000500)
+          < (1 - 6 * 0.002000)
         )
         and
         (
           gitlab_component_apdex:ratio_30m{component="workhorse",monitor="global",type="git"}
-          < (1 - 6 * 0.000500)
+          < (1 - 6 * 0.002000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -751,22 +751,22 @@ groups:
       (
         (
           gitlab_regional_sli_apdex:ratio_1h{component="workhorse",monitor="global",type="git"}
-          < (1 - 14.4 * 0.000500)
+          < (1 - 14.4 * 0.002000)
         )
         and
         (
           gitlab_regional_sli_apdex:ratio_5m{component="workhorse",monitor="global",type="git"}
-          < (1 - 14.4 * 0.000500)
+          < (1 - 14.4 * 0.002000)
         )
         or
         (
           gitlab_regional_sli_apdex:ratio_6h{component="workhorse",monitor="global",type="git"}
-          < (1 - 6 * 0.000500)
+          < (1 - 6 * 0.002000)
         )
         and
         (
           gitlab_regional_sli_apdex:ratio_30m{component="workhorse",monitor="global",type="git"}
-          < (1 - 6 * 0.000500)
+          < (1 - 6 * 0.002000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
@@ -1012,22 +1012,22 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_1h{component="workhorse_auth_api",monitor="global",type="git"}
-          < (1 - 14.4 * 0.000500)
+          < (1 - 14.4 * 0.002000)
         )
         and
         (
           gitlab_component_apdex:ratio_5m{component="workhorse_auth_api",monitor="global",type="git"}
-          < (1 - 14.4 * 0.000500)
+          < (1 - 14.4 * 0.002000)
         )
         or
         (
           gitlab_component_apdex:ratio_6h{component="workhorse_auth_api",monitor="global",type="git"}
-          < (1 - 6 * 0.000500)
+          < (1 - 6 * 0.002000)
         )
         and
         (
           gitlab_component_apdex:ratio_30m{component="workhorse_auth_api",monitor="global",type="git"}
-          < (1 - 6 * 0.000500)
+          < (1 - 6 * 0.002000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -1076,22 +1076,22 @@ groups:
       (
         (
           gitlab_regional_sli_apdex:ratio_1h{component="workhorse_auth_api",monitor="global",type="git"}
-          < (1 - 14.4 * 0.000500)
+          < (1 - 14.4 * 0.002000)
         )
         and
         (
           gitlab_regional_sli_apdex:ratio_5m{component="workhorse_auth_api",monitor="global",type="git"}
-          < (1 - 14.4 * 0.000500)
+          < (1 - 14.4 * 0.002000)
         )
         or
         (
           gitlab_regional_sli_apdex:ratio_6h{component="workhorse_auth_api",monitor="global",type="git"}
-          < (1 - 6 * 0.000500)
+          < (1 - 6 * 0.002000)
         )
         and
         (
           gitlab_regional_sli_apdex:ratio_30m{component="workhorse_auth_api",monitor="global",type="git"}
-          < (1 - 6 * 0.000500)
+          < (1 - 6 * 0.002000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)

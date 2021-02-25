@@ -97,7 +97,7 @@ For example, there is a Grafana chart showing number of slowlog events in redis-
 
 ### Prometheus/Thanos ###
 
-https://thanos-query.ops.gitlab.net/graph?g0.range_input=1w&g0.expr=redis_up%20%3C%201&g0.tab=0
+https://thanos.gitlab.net/graph?g0.range_input=1w&g0.expr=redis_up%20%3C%201&g0.tab=0
 
 ### directly on a redis host ###
 
@@ -122,7 +122,7 @@ REDISCLI_AUTH=$(sudo grep ^masterauth /var/opt/gitlab/redis/redis.conf|cut -d\" 
 
 Redis hosts are running the `redis_exporter` . It is scraped by Prometheus. See [the exporter documentation](https://github.com/oliver006/redis_exporter) for more details.
 
-[Example `redis_exporter` metric](https://thanos-query.ops.gitlab.net/graph?g0.range_input=1h&g0.max_source_resolution=0s&g0.expr=redis_commands_processed_total&g0.tab=1) in Thanos.
+[Example `redis_exporter` metric](https://thanos.gitlab.net/graph?g0.range_input=1h&g0.max_source_resolution=0s&g0.expr=redis_commands_processed_total&g0.tab=1) in Thanos.
 
 ### redis-cli ###
 
@@ -683,7 +683,7 @@ $  /opt/gitlab/embedded/bin/redis-cli -h 10.66.2.102 -p 26379 sentinel slaves gi
 
 ##### Get Sentinel machines
 
-[Get Sentinel machines](https://thanos-query.ops.gitlab.net/graph?g0.expr=count%20by%20%28env%2C%20type%29%20%28namedprocess_namegroup_num_procs%7Bgroupname%3D%22redis-sentinel%22%7D%29)
+[Get Sentinel machines](https://thanos.gitlab.net/graph?g0.expr=count%20by%20%28env%2C%20type%29%20%28namedprocess_namegroup_num_procs%7Bgroupname%3D%22redis-sentinel%22%7D%29)
 
 
 #### Redis console ####

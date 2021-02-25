@@ -2,6 +2,7 @@ local stageGroupMapping = import 'stage-group-mapping.jsonnet';
 
 /* This is a special pseudo-stage group for the feature_category of `not_owned` */
 local notOwnedGroup = {
+  key: 'not_owned',
   name: 'not_owned',
   stage: 'not_owned',
   feature_categories: [
@@ -9,12 +10,17 @@ local notOwnedGroup = {
   ],
 };
 
+local stageGroup(groupName) =
+  stageGroupMapping[groupName] { key: groupName };
+
+local stageGroups =
+  std.map(stageGroup, std.objectFields(stageGroupMapping)) + [notOwnedGroup];
+
 /**
  * Constructs a map of [featureCategory]stageGroup for featureCategory lookups
  */
 local stageGroupMappingLookup = std.foldl(
-  function(map, stageGroupName)
-    local stageGroup = stageGroupMapping[stageGroupName];
+  function(map, stageGroup)
     std.foldl(
       function(map, featureCategory)
         map {
@@ -23,10 +29,8 @@ local stageGroupMappingLookup = std.foldl(
       stageGroup.feature_categories,
       map
     ),
-  std.objectFields(stageGroupMapping),
-  {
-    [notOwnedGroup.feature_categories[0]]: notOwnedGroup,
-  }
+  stageGroups,
+  {}
 );
 
 local findStageGroupForFeatureCategory(featureCategory) =
@@ -37,9 +41,6 @@ local findStageGroupNameForFeatureCategory(featureCategory) =
 
 local findStageNameForFeatureCategory(featureCategory) =
   findStageGroupForFeatureCategory(featureCategory).stage;
-
-local stageGroup(groupName) =
-  stageGroupMapping[groupName];
 
 local categoriesForStageGroup(groupName) =
   stageGroup(groupName).feature_categories;
@@ -73,4 +74,9 @@ local categoriesForStageGroup(groupName) =
    * Will result in an error if an unknown group name is passed
    */
   stageGroup(groupName):: stageGroup(groupName),
+
+  /**
+   * Returns a map of featureCategory[stageGroup]
+   **/
+  featureCategoryMap:: stageGroupMappingLookup,
 }

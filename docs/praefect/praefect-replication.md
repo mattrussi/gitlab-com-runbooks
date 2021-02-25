@@ -42,7 +42,7 @@ update and the corresponding row will be removed from the
 ### Replication delay metrics
 
 Check [the `gitaly_praefect_replication_delay_count` metric on
-thanos](https://thanos-query.ops.gitlab.net/new/graph?g0.expr=gitaly_praefect_replication_delay_count%7Benv%3D%22gprd%22%7D&g0.tab=0&g0.stacked=0&g0.range_input=2w).
+thanos](https://thanos.gitlab.net/new/graph?g0.expr=gitaly_praefect_replication_delay_count%7Benv%3D%22gprd%22%7D&g0.tab=0&g0.stacked=0&g0.range_input=2w).
 A sawtooth graph (as below) is ideal, with replication delay growing gradually
 until it is brought down by replication jobs being executed.
 

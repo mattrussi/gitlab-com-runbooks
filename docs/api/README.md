@@ -20,6 +20,7 @@
 
 ## Troubleshooting Pointers
 
+* [../ci-runners/ci-runner-timeouts.md](../ci-runners/ci-runner-timeouts.md)
 * [../ci-runners/create-runners-manager-node.md](../ci-runners/create-runners-manager-node.md)
 * [../ci-runners/pipeline-deletion.md](../ci-runners/pipeline-deletion.md)
 * [../ci-runners/tracing-app-db-queries.md](../ci-runners/tracing-app-db-queries.md)
@@ -28,7 +29,7 @@
 * [../cloudflare/services-locations.md](../cloudflare/services-locations.md)
 * [../cloudflare/terraform.md](../cloudflare/terraform.md)
 * [../config_management/chef-workflow.md](../config_management/chef-workflow.md)
-* [../customers.gitlab.com/api-key-rotation.md](../customers.gitlab.com/api-key-rotation.md)
+* [../customers/api-key-rotation.md](../customers/api-key-rotation.md)
 * [../elastic/elastic-cloud.md](../elastic/elastic-cloud.md)
 * [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
 * [../frontend/haproxy.md](../frontend/haproxy.md)
@@ -42,6 +43,7 @@
 * [../kas/kubernetes-agent-basic-troubleshooting.md](../kas/kubernetes-agent-basic-troubleshooting.md)
 * [../monitoring/alertmanager-notification-failures.md](../monitoring/alertmanager-notification-failures.md)
 * [../monitoring/alerts_manual.md](../monitoring/alerts_manual.md)
+* [../monitoring/apdex-alerts-guide.md](../monitoring/apdex-alerts-guide.md)
 * [../patroni/geo-patroni-cluster.md](../patroni/geo-patroni-cluster.md)
 * [../patroni/patroni-management.md](../patroni/patroni-management.md)
 * [../patroni/pg_repack.md](../patroni/pg_repack.md)
@@ -50,10 +52,8 @@
 * [../pgbouncer/pgbouncer-connections.md](../pgbouncer/pgbouncer-connections.md)
 * [../pgbouncer/pgbouncer-saturation.md](../pgbouncer/pgbouncer-saturation.md)
 * [../redis/redis-survival-guide-for-sres.md](../redis/redis-survival-guide-for-sres.md)
-* [../runner/ci-runner-timeouts.md](../runner/ci-runner-timeouts.md)
 * [../sidekiq/large-sidekiq-queue.md](../sidekiq/large-sidekiq-queue.md)
 * [../sidekiq/sidekiq-survival-guide-for-sres.md](../sidekiq/sidekiq-survival-guide-for-sres.md)
-* [../uncategorized/apdex-alerts-guide.md](../uncategorized/apdex-alerts-guide.md)
 * [../uncategorized/blocked-user-logins.md](../uncategorized/blocked-user-logins.md)
 * [../uncategorized/gemnasium_is_down.md](../uncategorized/gemnasium_is_down.md)
 * [../uncategorized/k8s-oncall-setup.md](../uncategorized/k8s-oncall-setup.md)

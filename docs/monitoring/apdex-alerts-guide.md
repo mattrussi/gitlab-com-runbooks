@@ -124,7 +124,7 @@ although there are others and you should explore as necessary.  As at the curren
 1. Remove the original (top) query
     * ![Remove original](./img/apdex-dashboard-remove-query.png)
 
-If you're not sure what labels are available to aggregate on, copy the metric name (inside the 'rate' expression), paste it into https://thanos-query.ops.gitlab.net/graph and inspect/choose from the available labels (warning: there can be a lot of metric instances, so you probably want to also include the `job` label from the original expression as well, e.g. `grpc_server_handling_seconds_bucket{job="gitaly"}`
+If you're not sure what labels are available to aggregate on, copy the metric name (inside the 'rate' expression), paste it into https://thanos.gitlab.net/graph and inspect/choose from the available labels (warning: there can be a lot of metric instances, so you probably want to also include the `job` label from the original expression as well, e.g. `grpc_server_handling_seconds_bucket{job="gitaly"}`
 
 Notes:
 1. Adding/copying the query ensures you get a label key on the graph that reflects the label you chose; if you just edit the original in place, the label definition isn't updated.
