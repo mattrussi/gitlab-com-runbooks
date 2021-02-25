@@ -18,10 +18,6 @@
 ## Troubleshooting Pointers
 
 * [../ci-runners/create-runners-manager-node.md](../ci-runners/create-runners-manager-node.md)
-* [../ci-runners/runners-cache.md](../ci-runners/runners-cache.md)
-* [../ci-runners/runners_cache_disk_space.md](../ci-runners/runners_cache_disk_space.md)
-* [../ci-runners/runners_cache_is_down.md](../ci-runners/runners_cache_is_down.md)
-* [../ci-runners/runners_registry_is_down.md](../ci-runners/runners_registry_is_down.md)
 * [../cloudflare/managing-traffic.md](../cloudflare/managing-traffic.md)
 * [../frontend/ban-netblocks-on-haproxy.md](../frontend/ban-netblocks-on-haproxy.md)
 * [../frontend/haproxy.md](../frontend/haproxy.md)

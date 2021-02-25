@@ -17,7 +17,6 @@
 ## Troubleshooting Pointers
 
 * [../ci-runners/service-ci-runners.md](../ci-runners/service-ci-runners.md)
-* [../ci-runners/tracing-app-db-queries.md](../ci-runners/tracing-app-db-queries.md)
 * [../monitoring/prometheus-failing-rule-evaluations.md](../monitoring/prometheus-failing-rule-evaluations.md)
 * [check_wraparound.md](check_wraparound.md)
 * [gcs-snapshots.md](gcs-snapshots.md)
@@ -50,6 +49,7 @@
 * [../pgbouncer/pgbouncer-remove-instance.md](../pgbouncer/pgbouncer-remove-instance.md)
 * [../pgbouncer/service-pgbouncer.md](../pgbouncer/service-pgbouncer.md)
 * [../postgres-dr-delayed/postgres-dr-replicas.md](../postgres-dr-delayed/postgres-dr-replicas.md)
+* [../uncategorized/tracing-app-db-queries.md](../uncategorized/tracing-app-db-queries.md)
 <!-- END_MARKER -->
 
 

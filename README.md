@@ -124,7 +124,7 @@ During an incident, we have [roles defined in the handbook](https://about.gitlab
 * [PgBouncer](docs/pgbouncer/pgbouncer-1.md)
 * [PostgreSQL High Availability & Failovers](docs/patroni/pg-ha.md)
 * [PostgreSQL switchover](howto/postgresql-switchover.md)
-* [Read-only Load Balancing](docs/ci-runners/load-balancing.md)
+* [Read-only Load Balancing](docs/uncategorized/load-balancing.md)
 * [Add a new secondary replica](docs/patroni/postgresql-replica.md)
 * [Database backups](docs/patroni/postgresql-backups-wale-walg.md)
 * [Database backups restore testing](docs/patroni/postgresql-backups-wale-walg.md#database-backups-restore-testing)
@@ -164,12 +164,7 @@ During an incident, we have [roles defined in the handbook](https://about.gitlab
 ### CI
 
 * [Large number of CI pending builds](troubleshooting/ci_pending_builds.md)
-* [The CI runner manager report a high DO Token Rate Limit usage](troubleshooting/ci_runner_manager_do_limits.md)
 * [The CI runner manager report a high number of errors](troubleshooting/ci_runner_manager_errors.md)
-* [Runners cache is down](docs/ci-runners/runners_cache_is_down.md)
-* [Runners registry is down](docs/ci-runners/runners_registry_is_down.md)
-* [Runners cache free disk space is less than 20%](docs/ci-runners/runners_cache_disk_space.md)
-* [Too many connections on Runner's cache server](troubleshooting/ci_too_many_connections_on_runners_cache_server.md)
 
 ### Geo
 
@@ -335,7 +330,7 @@ Selected logging documents and resources:
 * [Managing internal DNS](docs/uncategorized/internal_dns.md)
 
 ### Debug and monitor
-* [Tracing the source of an expensive query](docs/ci-runners/tracing-app-db-queries.md)
+* [Tracing the source of an expensive query](docs/uncategorized/tracing-app-db-queries.md)
 * [Work with Kibana (logs view)](logging/doc/README.md#searching-logs)
 
 ### Secrets
