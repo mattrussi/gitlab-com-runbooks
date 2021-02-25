@@ -15,7 +15,6 @@
 ## Troubleshooting Pointers
 
 * [blackbox-git-exporter.md](blackbox-git-exporter.md)
-* [../ci-runners/runners_cache_is_down.md](../ci-runners/runners_cache_is_down.md)
 * [../license/license-gitlab-com.md](../license/license-gitlab-com.md)
 * [../patroni/postgres.md](../patroni/postgres.md)
 * [../uncategorized/camoproxy.md](../uncategorized/camoproxy.md)

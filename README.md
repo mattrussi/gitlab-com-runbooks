@@ -164,12 +164,7 @@ During an incident, we have [roles defined in the handbook](https://about.gitlab
 ### CI
 
 * [Large number of CI pending builds](troubleshooting/ci_pending_builds.md)
-* [The CI runner manager report a high DO Token Rate Limit usage](troubleshooting/ci_runner_manager_do_limits.md)
 * [The CI runner manager report a high number of errors](troubleshooting/ci_runner_manager_errors.md)
-* [Runners cache is down](docs/ci-runners/runners_cache_is_down.md)
-* [Runners registry is down](docs/ci-runners/runners_registry_is_down.md)
-* [Runners cache free disk space is less than 20%](docs/ci-runners/runners_cache_disk_space.md)
-* [Too many connections on Runner's cache server](troubleshooting/ci_too_many_connections_on_runners_cache_server.md)
 
 ### Geo
 
