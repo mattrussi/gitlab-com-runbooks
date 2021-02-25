@@ -2675,8 +2675,8 @@ services:
       - name: shared runners
         permalink: https://log.gprd.gitlab.net/goto/b9aed2474a7ffe194a10d4445a02893a
   infrastructure:
-    provider: gcp and do
-    architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/ci-architecture.html
+    provider: gcp
+    architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production/architecture/ci-architecture.html
     provisioning: manual
     accesses:
       - account_name:
@@ -2685,9 +2685,8 @@ services:
   operations:
     maintenance:
     runbooks:
-      - https://gitlab.com/gitlab-com/runbooks/blob/master/troubleshooting/cicd/runners_manager_is_down.md
-      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/runner/cicd/ci_runner_manager_errors.md
-      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/runner/cicd/ci_runner_manager_do_limits.md
+      - https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/ci-runners/runners_manager_is_down.md
+      - https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/ci-runners/cicd/ci_runner_manager_errors.md
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/ci-runners/cicd/ci_graphs.md
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/ci-runners/cicd/ci_too_many_connections_on_runners_cache_server.md
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/ci-runners/cicd/ci_constantnumberoflongrunningrepeatedjobs.md
@@ -2697,7 +2696,7 @@ services:
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/ci-runners/README.md
     playbooks:
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/ci-runners/create-runners-manager-node.md
-      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/runner/update-gitlab-runner-on-managers.md
+      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/ci-runners/update-gitlab-runner-on-managers.md
     error_budget: https://docs.google.com/spreadsheets/d/1wkK2n5EAvoVXwQZrVoCDsvkYTb1BftL56EzsFW_IA-w/edit
   observability:
     monitors:

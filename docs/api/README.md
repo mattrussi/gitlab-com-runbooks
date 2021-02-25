@@ -20,6 +20,7 @@
 
 ## Troubleshooting Pointers
 
+* [../ci-runners/ci-runner-timeouts.md](../ci-runners/ci-runner-timeouts.md)
 * [../ci-runners/create-runners-manager-node.md](../ci-runners/create-runners-manager-node.md)
 * [../ci-runners/pipeline-deletion.md](../ci-runners/pipeline-deletion.md)
 * [../ci-runners/tracing-app-db-queries.md](../ci-runners/tracing-app-db-queries.md)
@@ -51,7 +52,6 @@
 * [../pgbouncer/pgbouncer-connections.md](../pgbouncer/pgbouncer-connections.md)
 * [../pgbouncer/pgbouncer-saturation.md](../pgbouncer/pgbouncer-saturation.md)
 * [../redis/redis-survival-guide-for-sres.md](../redis/redis-survival-guide-for-sres.md)
-* [../runner/ci-runner-timeouts.md](../runner/ci-runner-timeouts.md)
 * [../sidekiq/large-sidekiq-queue.md](../sidekiq/large-sidekiq-queue.md)
 * [../sidekiq/sidekiq-survival-guide-for-sres.md](../sidekiq/sidekiq-survival-guide-for-sres.md)
 * [../uncategorized/blocked-user-logins.md](../uncategorized/blocked-user-logins.md)
