@@ -124,7 +124,7 @@ During an incident, we have [roles defined in the handbook](https://about.gitlab
 * [PgBouncer](docs/pgbouncer/pgbouncer-1.md)
 * [PostgreSQL High Availability & Failovers](docs/patroni/pg-ha.md)
 * [PostgreSQL switchover](howto/postgresql-switchover.md)
-* [Read-only Load Balancing](docs/ci-runners/load-balancing.md)
+* [Read-only Load Balancing](docs/uncategorized/load-balancing.md)
 * [Add a new secondary replica](docs/patroni/postgresql-replica.md)
 * [Database backups](docs/patroni/postgresql-backups-wale-walg.md)
 * [Database backups restore testing](docs/patroni/postgresql-backups-wale-walg.md#database-backups-restore-testing)
@@ -335,7 +335,7 @@ Selected logging documents and resources:
 * [Managing internal DNS](docs/uncategorized/internal_dns.md)
 
 ### Debug and monitor
-* [Tracing the source of an expensive query](docs/ci-runners/tracing-app-db-queries.md)
+* [Tracing the source of an expensive query](docs/uncategorized/tracing-app-db-queries.md)
 * [Work with Kibana (logs view)](logging/doc/README.md#searching-logs)
 
 ### Secrets
