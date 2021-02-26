@@ -73,6 +73,7 @@
 * [../uncategorized/namespace-restore.md](../uncategorized/namespace-restore.md)
 * [../uncategorized/ruby-profiling.md](../uncategorized/ruby-profiling.md)
 * [../uncategorized/shared-configurations.md](../uncategorized/shared-configurations.md)
+* [../uncategorized/terraform-broken-master.md](../uncategorized/terraform-broken-master.md)
 * [../uncategorized/upload-file-to-gcs-using-signed-url.md](../uncategorized/upload-file-to-gcs-using-signed-url.md)
 * [../uncategorized/workers-high-load.md](../uncategorized/workers-high-load.md)
 * [../uncategorized/yubikey.md](../uncategorized/yubikey.md)
