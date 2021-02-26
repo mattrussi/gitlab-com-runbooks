@@ -237,14 +237,16 @@ groups:
       runbook: docs/monitoring/prometheus-failing-rule-evaluations.md
       title: 'Prometheus has failing rule evaluations'
   - alert: PrometheusEmptyJobs
-    expr: prometheus_sd_discovered_targets == 0
+    expr:  count by (type, stage, cluster) (prometheus_sd_discovered_targets == 0) > 0
     for: 5m
     labels:
       severity: s4
       incident_project: gitlab.com/gitlab-com/gl-infra/production
       alert_type: cause
     annotations:
-      description: '{{$labels.config}} at {{$labels.instance}} {{$labels.pod}} has no targets in service discovery.'
+      description: |
+        Some prometheus instances have no discovered targets for at least one service discovery config. Drill down with
+        https://thanos.gitlab.net/graph?g0.range_input=12h&g0.max_source_resolution=0s&g0.expr=prometheus_sd_discovered_targets%20%3D%3D%200&g0.tab=1
       runbook: docs/monitoring/prometheus-empty-sd.md
       title: 'Prometheus has no targets'
   - alert: PrometheusHighMemoryUtilization
