@@ -16,7 +16,7 @@ metricsCatalog.serviceDefinition({
   },
   otherThresholds: {
     mtbf: {
-      apdexScore: 0.97,
+      apdexScore: 0.985,
       errorRatio: 0.995,
     },
   },
