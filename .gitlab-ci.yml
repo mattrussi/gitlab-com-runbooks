@@ -86,6 +86,8 @@ notify_mirror_source:
   image: registry.gitlab.com/gitlab-com/gl-infra/woodhouse:latest
   script: woodhouse gitlab notify-mirrored-mr
   rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+      when: never
     - if: '$CI_API_V4_URL == "https://ops.gitlab.net/api/v4"'
       allow_failure: true
 
