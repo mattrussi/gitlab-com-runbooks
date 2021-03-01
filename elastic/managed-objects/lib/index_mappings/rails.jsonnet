@@ -631,9 +631,7 @@
               },
             },
             project_id: {
-              type: 'keyword',
-              ignore_above: 256,
-              store: true,
+              type: 'long',
             },
             project_ids: {
               type: 'keyword',
@@ -1240,9 +1238,7 @@
           },
         },
         project_id: {
-          type: 'keyword',
-          ignore_above: 256,
-          store: true,
+          type: 'long',
         },
         project_ids: {
           type: 'keyword',
@@ -1587,9 +1583,7 @@
           },
         },
         user_id: {
-          type: 'keyword',
-          ignore_above: 256,
-          store: true,
+          type: 'long',
         },
         username: {
           type: 'text',
