@@ -39,12 +39,12 @@ groups:
     labels:
       tier: sv
       type: api
-    expr: '0.998000'
+    expr: '0.998500'
   - record: slo:max:mtbf:gitlab_service_errors:ratio
     labels:
       tier: sv
       type: api
-    expr: '0.001000'
+    expr: '0.000200'
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       tier: sv
@@ -79,7 +79,7 @@ groups:
     labels:
       tier: runners
       type: ci-runners
-    expr: '0.970000'
+    expr: '0.985000'
   - record: slo:max:mtbf:gitlab_service_errors:ratio
     labels:
       tier: runners
@@ -269,7 +269,7 @@ groups:
     labels:
       tier: sv
       type: registry
-    expr: '0.999000'
+    expr: '0.999500'
   - record: slo:max:mtbf:gitlab_service_errors:ratio
     labels:
       tier: sv
@@ -364,7 +364,7 @@ groups:
     labels:
       tier: sv
       type: web
-    expr: '0.999000'
+    expr: '0.999300'
   - record: slo:max:mtbf:gitlab_service_errors:ratio
     labels:
       tier: sv
