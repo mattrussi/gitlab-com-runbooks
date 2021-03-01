@@ -34,7 +34,7 @@ The following fields are recommended for events:
 | `diff_url` | string | no |
 
 * `message`: Free-form text describing the event
-* `env`: Either `gprd` or `gstg.
+* `env`: Either `gprd` or `gstg`.
 * `stage`: Either `main` or `cny`
 * `username`: GitLab username if available, if unknown use `unknown` as the value.
 * `type`: The type of event, for example: `deployment`, `configuration`, `alert`, etc.
