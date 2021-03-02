@@ -31,7 +31,7 @@ SELECT
   queryid, 
   calls, 
   total_time, 
-  stddev_time, 
+  mean_time, 
   query 
 FROM 
   pg_stat_statements 
