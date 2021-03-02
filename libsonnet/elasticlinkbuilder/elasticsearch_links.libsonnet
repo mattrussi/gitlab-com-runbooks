@@ -105,7 +105,7 @@ local indexCatalog = {
 
   kas: indexDefaults {
     timestamp: 'json.time',
-    indexPattern: 'cbc471e0-603e-11eb-97f3-f3d390ced411',
+    indexPattern: '78f49290-709e-11eb-b821-df2c3b5b1510',
     defaultColumns: ['json.msg', 'json.project_id', 'json.commit_id', 'json.number_of_files', 'json.grpc.time_ms'],
     defaultSeriesSplitField: 'json.grpc.method.keyword',
     failureFilter: [existsFilter('json.error')],
