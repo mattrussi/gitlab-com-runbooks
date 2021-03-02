@@ -123,7 +123,7 @@ gitlabhq_production=# EXPLAIN SELECT users.* FROM users INNER JOIN project_autho
                Index Cond: (id = project_authorizations.user_id)
 ```
 
-Another interesting step is evaluate the access plan on https://explain.depesz.com and share in the template.
+Another interesting step is to evaluate the access plan on https://explain.depesz.com and share in the template.
 
 
 ## Collecting QPS info from Thanos
