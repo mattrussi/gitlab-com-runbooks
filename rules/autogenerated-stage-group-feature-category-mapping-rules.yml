@@ -54,6 +54,12 @@ groups:
     expr: '1'
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: auto_portfolio_mgmt
+      product_stage: learn
+      stage_group: applied_ml
+    expr: '1'
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: backup_restore
       product_stage: enablement
       stage_group: geo
@@ -63,6 +69,12 @@ groups:
       feature_category: boards
       product_stage: plan
       stage_group: project_management
+    expr: '1'
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: browser_performance
+      product_stage: verify
+      stage_group: testing
     expr: '1'
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -153,6 +165,12 @@ groups:
       feature_category: database
       product_stage: enablement
       stage_group: database
+    expr: '1'
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: dataops
+      product_stage: learn
+      stage_group: dataops
     expr: '1'
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -308,7 +326,7 @@ groups:
     labels:
       feature_category: insider_threat
       product_stage: learn
-      stage_group: ml-ai
+      stage_group: applied_ml
     expr: '1'
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -321,6 +339,12 @@ groups:
       feature_category: integrations
       product_stage: create
       stage_group: ecosystem
+    expr: '1'
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: intel_code_security
+      product_stage: learn
+      stage_group: applied_ml
     expr: '1'
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -344,13 +368,13 @@ groups:
     labels:
       feature_category: jenkins_importer
       product_stage: verify
-      stage_group: continuous_integration
+      stage_group: pipeline_authoring
     expr: '1'
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: jira_importer
-      product_stage: plan
-      stage_group: project_management
+      product_stage: create
+      stage_group: ecosystem
     expr: '1'
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -410,7 +434,7 @@ groups:
     labels:
       feature_category: mlops
       product_stage: learn
-      stage_group: ml-ai
+      stage_group: mlops
     expr: '1'
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -681,12 +705,6 @@ groups:
       feature_category: web_ide
       product_stage: create
       stage_group: editor
-    expr: '1'
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: web_performance
-      product_stage: verify
-      stage_group: testing
     expr: '1'
   - record: gitlab:feature_category:stage_group:mapping
     labels:
