@@ -20,7 +20,7 @@ how upgrade works see the
 
 Application rollback is triggered from GitLab Chatops. For more information
 about how rollback works see the
-[release documentation for rollback](https://gitlab.com/gitlab-org/release/docs/blob/master/general/deploy/gitlab-com-deployer.md#creating-a-new-deployment-for-rolling-back-gitlab).
+[release documentation for rollback](https://gitlab.com/gitlab-org/release/docs/-/blob/master/runbooks/rollback-a-deployment.md).
 
 **Before rolling back the application on GitLab.com the following steps must be
 performed**
