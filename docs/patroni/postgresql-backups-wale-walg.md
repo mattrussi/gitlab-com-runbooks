@@ -374,6 +374,20 @@ The problem might be `mtail`.
 1. If `mtail` is up, check `/var/log/mtail` for errors under `/var/log/mtail.ERROR`.
 1. You might want to restart `mtail` if it's stuck with `sudo sv restart mtail`.
 
+### Regular basebackup has failed
+
+1. Check the logs in ` /var/log/wal-g/wal-g_backup_push.log` (and possibly
+   rotated files).
+1. If the error looks to be a transient GCS error, you can retry the backup in a
+   tmux with:
+
+   ```
+   sudo su - gitlab-psql
+   /opt/wal-g/bin/backup.sh >> /var/log/wal-g/wal-g_backup_push.log 2>&1
+   ```
+
+Transient object store errors should be retried once this PR lands in a wal-g
+release that we consume: https://github.com/wal-g/wal-g/pull/833.
 
 ## Database Backups Restore Testing
 
