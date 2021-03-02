@@ -163,6 +163,12 @@ deploy-rules-gstg-us-east1-d:
     CLUSTER: gstg-us-east1-d
     REGION: us-east1-d
 
+deploy-rules-org-ci:
+  environment: org-ci
+  extends: .deploy-rules
+  variables:
+    CLUSTER: org-ci-gitlab-gke
+    REGION: us-east1
 
 deploy-rules-pre:
   environment: pre
