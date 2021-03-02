@@ -46,7 +46,6 @@
       'issue_tracking',
       'boards',
       'time_tracking',
-      'jira_importer',
       'projects',
     ],
   },
@@ -111,6 +110,7 @@
       'integrations',
       'gdk',
       'foundations',
+      'jira_importer',
     ],
   },
   continuous_integration: {
@@ -119,7 +119,6 @@
     feature_categories: [
       'continuous_integration',
       'merge_trains',
-      'jenkins_importer',
     ],
   },
   pipeline_authoring: {
@@ -127,6 +126,7 @@
     stage: 'verify',
     feature_categories: [
       'pipeline_authoring',
+      'jenkins_importer',
     ],
   },
   runner: {
@@ -143,7 +143,7 @@
       'code_quality',
       'code_testing',
       'load_testing',
-      'web_performance',
+      'browser_performance',
       'usability_testing',
       'accessibility_testing',
     ],
@@ -361,12 +361,27 @@
       'infrastructure',
     ],
   },
-  'ml-ai': {
-    name: 'Machine Learning',
+  applied_ml: {
+    name: 'Applied Machine Learning',
+    stage: 'learn',
+    feature_categories: [
+      'auto_portfolio_mgmt',
+      'insider_threat',
+      'intel_code_security',
+    ],
+  },
+  mlops: {
+    name: 'MLOps',
     stage: 'learn',
     feature_categories: [
       'mlops',
-      'insider_threat',
+    ],
+  },
+  dataops: {
+    name: 'DataOps',
+    stage: 'learn',
+    feature_categories: [
+      'dataops',
     ],
   },
   moble_devops: {
