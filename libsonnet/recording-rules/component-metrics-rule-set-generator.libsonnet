@@ -58,8 +58,9 @@ local generateRecordingRulesForComponent(burnRate, recordingRuleNames, serviceDe
     aggregationSet,
   )::
     local recordingRuleNames = {
-      apdexRatio: aggregationSet.getApdexRatioMetricForBurnRate(burnRate),
+      apdexSuccessRate: aggregationSet.getApdexSuccessRateMetricForBurnRate(burnRate),
       apdexWeight: aggregationSet.getApdexWeightMetricForBurnRate(burnRate),
+      apdexRatio: aggregationSet.getApdexRatioMetricForBurnRate(burnRate),
       requestRate: aggregationSet.getOpsRateMetricForBurnRate(burnRate),
       errorRate: aggregationSet.getErrorRateMetricForBurnRate(burnRate),
     };

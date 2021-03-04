@@ -24,16 +24,7 @@ groups:
       sum by (environment) (
         rate(haproxy_backend_http_responses_total{backend="camoproxy",code="5xx",type="camoproxy"}[1m])
       )
-  - record: gitlab_component_apdex:weight:score
-    labels:
-      component: server
-      tier: sv
-      type: camoproxy
-    expr: |
-      sum by (environment,stage) (
-        rate(camo_response_duration_seconds_bucket{le="+Inf"}[1m])
-      )
-  - record: gitlab_component_apdex:ratio
+  - record: gitlab_component_apdex:success:rate
     labels:
       component: server
       tier: sv
@@ -50,6 +41,22 @@ groups:
       )
       /
       2
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: server
+      tier: sv
+      type: camoproxy
+    expr: |
+      sum by (environment,stage) (
+        rate(camo_response_duration_seconds_bucket{le="+Inf"}[1m])
+      )
+  - record: gitlab_component_apdex:ratio
+    labels:
+      component: server
+      tier: sv
+      type: camoproxy
+    expr: |
+      gitlab_component_apdex:success:rate{component="server",tier="sv",type="camoproxy"}
       / on(environment,stage) group_left()
       (
         gitlab_component_apdex:weight:score{component="server",tier="sv",type="camoproxy"} > 0

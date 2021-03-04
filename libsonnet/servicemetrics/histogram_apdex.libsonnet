@@ -71,29 +71,17 @@ local generateApdexNumeratorQuery(histogramApdex, additionalSelectors, rangeInte
   else
     generateDoubleThresholdApdexNumeratorQuery(histogramApdex, additionalSelectors, rangeInterval, aggregationFunction=aggregationFunction, aggregationLabels=aggregationLabels);
 
-local groupByClauseFor(substituteWeightWithRecordingRule, aggregationLabels) =
-  if substituteWeightWithRecordingRule == null then
-    ''
-  else
-    ' on(%(aggregationLabels)s) group_left()' % {
-      aggregationLabels: aggregations.serialize(aggregationLabels),
-    };
-
-local generateApdexScoreQuery(histogramApdex, aggregationLabels, additionalSelectors, rangeInterval, aggregationFunction=null, substituteWeightWithRecordingRule=null) =
+local generateApdexScoreQuery(histogramApdex, aggregationLabels, additionalSelectors, rangeInterval, aggregationFunction=null) =
   local numeratorQuery = generateApdexNumeratorQuery(histogramApdex, additionalSelectors, rangeInterval, aggregationFunction=aggregationFunction, aggregationLabels=aggregationLabels);
-  local weightQuery = if substituteWeightWithRecordingRule == null then
-    generateApdexComponentRateQuery(histogramApdex, additionalSelectors, rangeInterval, { le: '+Inf' }, aggregationFunction=aggregationFunction, aggregationLabels=aggregationLabels)
-  else
-    substituteWeightWithRecordingRule;
+  local weightQuery = generateApdexComponentRateQuery(histogramApdex, additionalSelectors, rangeInterval, { le: '+Inf' }, aggregationFunction=aggregationFunction, aggregationLabels=aggregationLabels);
 
   |||
     %(numeratorQuery)s
-    /%(groupByClause)s
+    /
     (
       %(weightQuery)s > 0
     )
   ||| % {
-    groupByClause: groupByClauseFor(substituteWeightWithRecordingRule, aggregationLabels),
     numeratorQuery: strings.chomp(numeratorQuery),
     weightQuery: strings.indent(strings.chomp(weightQuery), 2),
   };
@@ -146,15 +134,18 @@ local generateApdexAttributionQuery(histogram, selector, rangeInterval, aggregat
     satisfiedThreshold: satisfiedThreshold,
     toleratedThreshold: toleratedThreshold,
 
-    apdexQuery(aggregationLabels, selector, rangeInterval, substituteWeightWithRecordingRule=null)::
+    apdexQuery(aggregationLabels, selector, rangeInterval)::
       generateApdexScoreQuery(
         self,
         aggregationLabels,
         selector,
         rangeInterval,
-        aggregationFunction='sum',
-        substituteWeightWithRecordingRule=substituteWeightWithRecordingRule
+        aggregationFunction='sum'
       ),
+
+    /* apdexSuccessRateQuery measures the rate at which apdex violations occur */
+    apdexSuccessRateQuery(aggregationLabels, selector, rangeInterval)::
+      generateApdexNumeratorQuery(self, selector, rangeInterval, aggregationFunction='sum', aggregationLabels=aggregationLabels),
 
     apdexWeightQuery(aggregationLabels, selector, rangeInterval)::
       generateApdexComponentRateQuery(self, selector, rangeInterval, { le: '+Inf' }, aggregationFunction='sum', aggregationLabels=aggregationLabels),

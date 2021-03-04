@@ -1,5 +1,7 @@
+local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
+local strings = import 'utils/strings.libsonnet';
 
 // For now we assume that services are provisioned on vms and not kubernetes
 // Please consult the README.md file for details of team and feature_category
@@ -65,27 +67,65 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
     // Generate recording rules for apdex
     generateApdexRecordingRules(burnRate, recordingRuleNames, aggregationLabels, recordingRuleStaticLabels)::
       local allStaticLabels = recordingRuleStaticLabels + serviceLevelIndicator.staticLabels;
+      local aggregationLabelsWithoutStaticLabels = filterStaticLabelsFromAggregationLabels(aggregationLabels, allStaticLabels);
 
       if self.hasApdex() then
-        local substituteWeightWithRecordingRuleExpression =
-          if recordingRuleNames.apdexWeight != null then
+        local apdexSuccessRateExpr = serviceLevelIndicator.apdex.apdexSuccessRateQuery(
+          aggregationLabels=aggregationLabelsWithoutStaticLabels,
+          selector={},
+          rangeInterval=burnRate
+        );
+
+        local apdexWeightExpr = serviceLevelIndicator.apdex.apdexWeightQuery(
+          aggregationLabels=aggregationLabelsWithoutStaticLabels,
+          selector={},
+          rangeInterval=burnRate
+        );
+
+        local substExpr = function(recordingRule, expr)
+          if recordingRule != null then
             '%(recordingRule)s{%(selector)s}' % {
-              recordingRule: recordingRuleNames.apdexWeight,
+              recordingRule: recordingRule,
               selector: selectors.serializeHash(allStaticLabels),
             }
           else
-            null;
+            strings.chomp(expr);
 
+        local apdexRatioExpr =
+          |||
+            %(apdexSuccessRateExpr)s
+            /%(groupByClause)s
+            (
+              %(apdexWeightExpr)s > 0
+            )
+          ||| % {
+            groupByClause: if recordingRuleNames.apdexWeight == null then
+              ''
+            else
+              ' on(%(aggregationLabels)s) group_left()' % {
+                aggregationLabels: aggregations.serialize(aggregationLabelsWithoutStaticLabels),
+              },
+            apdexSuccessRateExpr: substExpr(recordingRuleNames.apdexSuccessRate, apdexSuccessRateExpr),
+            apdexWeightExpr: strings.indent(substExpr(recordingRuleNames.apdexWeight, apdexWeightExpr), 2),
+          };
+
+        (
+          if recordingRuleNames.apdexSuccessRate != null then
+            [{
+              record: recordingRuleNames.apdexSuccessRate,
+              labels: allStaticLabels,
+              expr: apdexSuccessRateExpr,
+            }]
+          else
+            []
+        )
+        +
         (
           if recordingRuleNames.apdexWeight != null then
             [{
               record: recordingRuleNames.apdexWeight,
               labels: allStaticLabels,
-              expr: serviceLevelIndicator.apdex.apdexWeightQuery(
-                aggregationLabels=filterStaticLabelsFromAggregationLabels(aggregationLabels, allStaticLabels),
-                selector={},
-                rangeInterval=burnRate
-              ),
+              expr: apdexWeightExpr,
             }]
           else
             []
@@ -94,12 +134,7 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
         [{
           record: recordingRuleNames.apdexRatio,
           labels: allStaticLabels,
-          expr: serviceLevelIndicator.apdex.apdexQuery(
-            aggregationLabels=filterStaticLabelsFromAggregationLabels(aggregationLabels, allStaticLabels),
-            selector={},
-            rangeInterval=burnRate,
-            substituteWeightWithRecordingRule=substituteWeightWithRecordingRuleExpression,
-          ),
+          expr: apdexRatioExpr,
         }]
       else
         [],
