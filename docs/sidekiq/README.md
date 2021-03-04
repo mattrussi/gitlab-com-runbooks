@@ -26,6 +26,7 @@
 * [../gitaly/storage-rebalancing.md](../gitaly/storage-rebalancing.md)
 * [../monitoring/apdex-alerts-guide.md](../monitoring/apdex-alerts-guide.md)
 * [../patroni/geo-patroni-cluster.md](../patroni/geo-patroni-cluster.md)
+* [../patroni/pg_collect_query_data.md](../patroni/pg_collect_query_data.md)
 * [../patroni/postgresql-locking.md](../patroni/postgresql-locking.md)
 * [../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md](../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md)
 * [../pgbouncer/pgbouncer-add-instance.md](../pgbouncer/pgbouncer-add-instance.md)
