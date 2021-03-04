@@ -62,38 +62,37 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
     renderToolingLinks()::
       toolingLinks.renderLinks(self.getToolingLinks()),
 
-    // Generate recording rules for apdex weight
-    generateApdexWeightRecordingRules(burnRate, recordingRuleName, aggregationLabels, recordingRuleStaticLabels)::
+    // Generate recording rules for apdex
+    generateApdexRecordingRules(burnRate, recordingRuleNames, aggregationLabels, recordingRuleStaticLabels)::
       local allStaticLabels = recordingRuleStaticLabels + serviceLevelIndicator.staticLabels;
 
       if self.hasApdex() then
+        local substituteWeightWithRecordingRuleExpression =
+          if recordingRuleNames.apdexWeight != null then
+            '%(recordingRule)s{%(selector)s}' % {
+              recordingRule: recordingRuleNames.apdexWeight,
+              selector: selectors.serializeHash(allStaticLabels),
+            }
+          else
+            null;
+
+        (
+          if recordingRuleNames.apdexWeight != null then
+            [{
+              record: recordingRuleNames.apdexWeight,
+              labels: allStaticLabels,
+              expr: serviceLevelIndicator.apdex.apdexWeightQuery(
+                aggregationLabels=filterStaticLabelsFromAggregationLabels(aggregationLabels, allStaticLabels),
+                selector={},
+                rangeInterval=burnRate
+              ),
+            }]
+          else
+            []
+        )
+        +
         [{
-          record: recordingRuleName,
-          labels: allStaticLabels,
-          expr: serviceLevelIndicator.apdex.apdexWeightQuery(
-            aggregationLabels=filterStaticLabelsFromAggregationLabels(aggregationLabels, allStaticLabels),
-            selector={},
-            rangeInterval=burnRate
-          ),
-        }]
-      else
-        [],
-
-    // Generate recording rules for apdex score
-    generateApdexScoreRecordingRules(burnRate, recordingRuleName, aggregationLabels, recordingRuleStaticLabels, substituteWeightWithRecordingRuleName)::
-      local allStaticLabels = recordingRuleStaticLabels + serviceLevelIndicator.staticLabels;
-
-      local substituteWeightWithRecordingRuleExpression = if substituteWeightWithRecordingRuleName != null then
-        '%(recordingRule)s{%(selector)s}' % {
-          recordingRule: substituteWeightWithRecordingRuleName,
-          selector: selectors.serializeHash(allStaticLabels),
-        }
-      else
-        null;
-
-      if self.hasApdex() then
-        [{
-          record: recordingRuleName,
+          record: recordingRuleNames.apdexRatio,
           labels: allStaticLabels,
           expr: serviceLevelIndicator.apdex.apdexQuery(
             aggregationLabels=filterStaticLabelsFromAggregationLabels(aggregationLabels, allStaticLabels),
