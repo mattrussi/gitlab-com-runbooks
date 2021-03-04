@@ -15,3 +15,21 @@ groups:
         description: >
           Some targets for job="{{ $labels.job }}", shard="{{ $labels.shard }}", type="{{ $labels.type }}" are down.
           See 'https://thanos.gitlab.net/graph?g0.expr=up%7Benv%3D"{{ $externalLabels.env }}"%2Cjob%3D"{{ $labels.job }}"%2Cshard%3D"{{ $labels.shard }}"%2Ctype%3D"{{ $labels.type }}"%7D%20%3D%3D%200'
+
+- name: Fluentd is down
+  rules:
+    - alert: FluentdDown
+      expr: >
+        count by (shard,type) (
+          avg_over_time(up{job="fluentd"}[5m]) * 100 < 50
+        )
+      for: 10m
+      labels:
+        pager: pagerduty
+        severity: s3
+        alert_type: cause
+      annotations:
+        title: Fluentd Prometheus targets are down
+        description: >
+          Some Prometheus targets for fluentd jobs, shard="{{ $labels.shard }}", type="{{ $labels.type }}" are down.
+          See 'https://thanos.gitlab.net/graph?g0.expr=up%7Benv%3D"{{ $externalLabels.env }}"%2Cjob%3D"{{ $labels.job }}"%2Cshard%3D"{{ $labels.shard }}"%2Ctype%3D"{{ $labels.type }}"%7D%20%3D%3D%200'
