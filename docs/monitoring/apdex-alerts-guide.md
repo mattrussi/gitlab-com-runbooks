@@ -53,15 +53,15 @@ All these bits and pieces are defined in `metrics-catalog/services/<service-name
 
 As always the goal is to find the misbehaving thing, which could be anything from a server to a single endpoint/RPC/controller.  Here's some things you can do.
 
-An apdex alert in #production should be paired with an alert in #feed_alerts-general from (Slackline)[https://gitlab.com/gitlab-com/gl-infra/slackline/tree/master].  The Prometheus link on the origin alert might give you a broad brush idea of the impact (length, intensity etc), but you probably want to find the Slackline message.  That will also give you an idea of whether it's a slow or fast burn (see [#burn_rate]) and more particularly a '<service> Overview' button/link, which takes you to the relevant Grafana dashboard:
+An apdex alert in #production should be paired with an alert in #feed_alerts-general from [Slackline](https://gitlab.com/gitlab-com/gl-infra/slackline/tree/master.  The Prometheus link on the origin alert might give you a broad brush idea of the impact (length, intensity etc), but you probably want to find the Slackline message.  That will also give you an idea of whether it's a slow or fast burn (see [Burn Rate](#burn_rate) and more particularly a '<service> Overview' button/link, which takes you to the relevant Grafana dashboard:
 
 ![Slackline message](img/apdex-slackline-message.png)
 
 ### Service Overview dashboard
 
-#### [Aggregated Service Level Indicators]
+#### Aggregated Service Level Indicators
 
-#### [Service Level Indicators]
+#### Service Level Indicators
 
 The alert will have identified which component of the service is at fault, but in case it's not clear check the 'Service Level Indicators' section of the dashboard detailing SLI metrics for components.  This should confirm which component is causing the alerts (or show that it is multiple).
 
@@ -76,7 +76,7 @@ Apdex alerts are about latency, but keep an eye on error rates and RPS as well, 
 
 This section also contains links to useful Kibana queries. See 'Kibana links' section below for more details.
 
-#### [<COMPONENT> Service Level Indicator Detail]
+#### Service Level Indicator Detail
 
 Once you identify a component that's misbehaving (either from the alert or using the SLI section), , expand its `<COMPONENT> Service Level Indicator Detail` section.
 
