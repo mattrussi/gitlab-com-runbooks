@@ -101,6 +101,15 @@ groups:
 - name: 'Component-Level SLIs: woodhouse - 5m burn-rate'
   interval: 1m
   rules:
+  - record: gitlab_component_apdex:success:rate_5m
+    labels:
+      component: async_jobs
+      tier: sv
+      type: woodhouse
+    expr: |
+      sum by (environment,stage) (
+        rate(woodhouse_async_job_duration_seconds_bucket{job="woodhouse",le="10"}[5m])
+      )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
       component: async_jobs
@@ -116,9 +125,7 @@ groups:
       tier: sv
       type: woodhouse
     expr: |
-      sum by (environment,stage) (
-        rate(woodhouse_async_job_duration_seconds_bucket{job="woodhouse",le="10"}[5m])
-      )
+      gitlab_component_apdex:success:rate_5m{component="async_jobs",tier="sv",type="woodhouse"}
       / on(environment,stage) group_left()
       (
         gitlab_component_apdex:weight:score_5m{component="async_jobs",tier="sv",type="woodhouse"} > 0
@@ -141,6 +148,15 @@ groups:
       sum by (environment,stage) (
         rate(woodhouse_async_jobs_total{job="woodhouse",status="error"}[5m])
       )
+  - record: gitlab_component_apdex:success:rate_5m
+    labels:
+      component: http
+      tier: sv
+      type: woodhouse
+    expr: |
+      sum by (environment,stage) (
+        rate(woodhouse_http_request_duration_seconds_bucket{job="woodhouse",le="1",route!="/ready"}[5m])
+      )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
       component: http
@@ -156,9 +172,7 @@ groups:
       tier: sv
       type: woodhouse
     expr: |
-      sum by (environment,stage) (
-        rate(woodhouse_http_request_duration_seconds_bucket{job="woodhouse",le="1",route!="/ready"}[5m])
-      )
+      gitlab_component_apdex:success:rate_5m{component="http",tier="sv",type="woodhouse"}
       / on(environment,stage) group_left()
       (
         gitlab_component_apdex:weight:score_5m{component="http",tier="sv",type="woodhouse"} > 0
@@ -184,6 +198,15 @@ groups:
 - name: 'Component-Level SLIs: woodhouse - 30m burn-rate'
   interval: 2m
   rules:
+  - record: gitlab_component_apdex:success:rate_30m
+    labels:
+      component: async_jobs
+      tier: sv
+      type: woodhouse
+    expr: |
+      sum by (environment,stage) (
+        rate(woodhouse_async_job_duration_seconds_bucket{job="woodhouse",le="10"}[30m])
+      )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
       component: async_jobs
@@ -199,9 +222,7 @@ groups:
       tier: sv
       type: woodhouse
     expr: |
-      sum by (environment,stage) (
-        rate(woodhouse_async_job_duration_seconds_bucket{job="woodhouse",le="10"}[30m])
-      )
+      gitlab_component_apdex:success:rate_30m{component="async_jobs",tier="sv",type="woodhouse"}
       / on(environment,stage) group_left()
       (
         gitlab_component_apdex:weight:score_30m{component="async_jobs",tier="sv",type="woodhouse"} > 0
@@ -224,6 +245,15 @@ groups:
       sum by (environment,stage) (
         rate(woodhouse_async_jobs_total{job="woodhouse",status="error"}[30m])
       )
+  - record: gitlab_component_apdex:success:rate_30m
+    labels:
+      component: http
+      tier: sv
+      type: woodhouse
+    expr: |
+      sum by (environment,stage) (
+        rate(woodhouse_http_request_duration_seconds_bucket{job="woodhouse",le="1",route!="/ready"}[30m])
+      )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
       component: http
@@ -239,9 +269,7 @@ groups:
       tier: sv
       type: woodhouse
     expr: |
-      sum by (environment,stage) (
-        rate(woodhouse_http_request_duration_seconds_bucket{job="woodhouse",le="1",route!="/ready"}[30m])
-      )
+      gitlab_component_apdex:success:rate_30m{component="http",tier="sv",type="woodhouse"}
       / on(environment,stage) group_left()
       (
         gitlab_component_apdex:weight:score_30m{component="http",tier="sv",type="woodhouse"} > 0
@@ -267,6 +295,15 @@ groups:
 - name: 'Component-Level SLIs: woodhouse - 1h burn-rate'
   interval: 1m
   rules:
+  - record: gitlab_component_apdex:success:rate_1h
+    labels:
+      component: async_jobs
+      tier: sv
+      type: woodhouse
+    expr: |
+      sum by (environment,stage) (
+        rate(woodhouse_async_job_duration_seconds_bucket{job="woodhouse",le="10"}[1h])
+      )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
       component: async_jobs
@@ -282,9 +319,7 @@ groups:
       tier: sv
       type: woodhouse
     expr: |
-      sum by (environment,stage) (
-        rate(woodhouse_async_job_duration_seconds_bucket{job="woodhouse",le="10"}[1h])
-      )
+      gitlab_component_apdex:success:rate_1h{component="async_jobs",tier="sv",type="woodhouse"}
       / on(environment,stage) group_left()
       (
         gitlab_component_apdex:weight:score_1h{component="async_jobs",tier="sv",type="woodhouse"} > 0
@@ -307,6 +342,15 @@ groups:
       sum by (environment,stage) (
         rate(woodhouse_async_jobs_total{job="woodhouse",status="error"}[1h])
       )
+  - record: gitlab_component_apdex:success:rate_1h
+    labels:
+      component: http
+      tier: sv
+      type: woodhouse
+    expr: |
+      sum by (environment,stage) (
+        rate(woodhouse_http_request_duration_seconds_bucket{job="woodhouse",le="1",route!="/ready"}[1h])
+      )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
       component: http
@@ -322,9 +366,7 @@ groups:
       tier: sv
       type: woodhouse
     expr: |
-      sum by (environment,stage) (
-        rate(woodhouse_http_request_duration_seconds_bucket{job="woodhouse",le="1",route!="/ready"}[1h])
-      )
+      gitlab_component_apdex:success:rate_1h{component="http",tier="sv",type="woodhouse"}
       / on(environment,stage) group_left()
       (
         gitlab_component_apdex:weight:score_1h{component="http",tier="sv",type="woodhouse"} > 0
@@ -350,6 +392,15 @@ groups:
 - name: 'Component-Level SLIs: woodhouse - 6h burn-rate'
   interval: 2m
   rules:
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: async_jobs
+      tier: sv
+      type: woodhouse
+    expr: |
+      sum by (environment,stage) (
+        rate(woodhouse_async_job_duration_seconds_bucket{job="woodhouse",le="10"}[6h])
+      )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
       component: async_jobs
@@ -365,9 +416,7 @@ groups:
       tier: sv
       type: woodhouse
     expr: |
-      sum by (environment,stage) (
-        rate(woodhouse_async_job_duration_seconds_bucket{job="woodhouse",le="10"}[6h])
-      )
+      gitlab_component_apdex:success:rate_6h{component="async_jobs",tier="sv",type="woodhouse"}
       / on(environment,stage) group_left()
       (
         gitlab_component_apdex:weight:score_6h{component="async_jobs",tier="sv",type="woodhouse"} > 0
@@ -390,6 +439,15 @@ groups:
       sum by (environment,stage) (
         rate(woodhouse_async_jobs_total{job="woodhouse",status="error"}[6h])
       )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: http
+      tier: sv
+      type: woodhouse
+    expr: |
+      sum by (environment,stage) (
+        rate(woodhouse_http_request_duration_seconds_bucket{job="woodhouse",le="1",route!="/ready"}[6h])
+      )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
       component: http
@@ -405,9 +463,7 @@ groups:
       tier: sv
       type: woodhouse
     expr: |
-      sum by (environment,stage) (
-        rate(woodhouse_http_request_duration_seconds_bucket{job="woodhouse",le="1",route!="/ready"}[6h])
-      )
+      gitlab_component_apdex:success:rate_6h{component="http",tier="sv",type="woodhouse"}
       / on(environment,stage) group_left()
       (
         gitlab_component_apdex:weight:score_6h{component="http",tier="sv",type="woodhouse"} > 0
