@@ -13,7 +13,7 @@
         },
       },
       delete: {
-        min_age: '360d',
+        min_age: '1095d',
         actions: {
           delete: {},
         },
