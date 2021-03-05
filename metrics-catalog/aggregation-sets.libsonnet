@@ -20,6 +20,7 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
     labels: ['environment', 'tier', 'type', 'stage'],
     burnRates: {
       '1m': {
+        apdexSuccessRate: 'gitlab_component_apdex:success:rate',
         apdexRatio: 'gitlab_component_apdex:ratio',
         apdexWeight: 'gitlab_component_apdex:weight:score',
         opsRate: 'gitlab_component_ops:rate',
@@ -27,6 +28,7 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
         errorRatio: null,
       },
       '5m': {
+        // apdexSuccessRate: 'gitlab_component_apdex:success:rate_5m',
         apdexRatio: 'gitlab_component_apdex:ratio_5m',
         apdexWeight: 'gitlab_component_apdex:weight:score_5m',
         opsRate: 'gitlab_component_ops:rate_5m',
@@ -34,6 +36,7 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
         errorRatio: 'gitlab_component_errors:ratio_5m',
       },
       '30m': {
+        // apdexSuccessRate: 'gitlab_component_apdex:success:rate_30m',
         apdexRatio: 'gitlab_component_apdex:ratio_30m',
         apdexWeight: 'gitlab_component_apdex:weight:score_30m',
         opsRate: 'gitlab_component_ops:rate_30m',
@@ -41,6 +44,7 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
         errorRatio: 'gitlab_component_errors:ratio_30m',
       },
       '1h': {
+        // apdexSuccessRate: 'gitlab_component_apdex:success:rate_1h',
         apdexRatio: 'gitlab_component_apdex:ratio_1h',
         apdexWeight: 'gitlab_component_apdex:weight:score_1h',
         opsRate: 'gitlab_component_ops:rate_1h',
@@ -48,6 +52,7 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
         errorRatio: 'gitlab_component_errors:ratio_1h',
       },
       '6h': {
+        // apdexSuccessRate: 'gitlab_component_apdex:success:rate_6h',
         apdexRatio: 'gitlab_component_apdex:ratio_6h',
         apdexWeight: 'gitlab_component_apdex:weight:score_6h',
         opsRate: 'gitlab_component_ops:rate_6h',

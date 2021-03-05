@@ -13,17 +13,7 @@ groups:
       sum by (environment,stage) (
         rate(redis_commands_processed_total{type="redis-cache"}[1m]) and on (instance) redis_instance_info{role="master"}
       )
-  - record: gitlab_component_apdex:weight:score
-    labels:
-      component: rails_cache
-      stage: main
-      tier: db
-      type: redis-cache
-    expr: |
-      sum by (environment) (
-        rate(gitlab_cache_operation_duration_seconds_bucket{le="+Inf"}[1m])
-      )
-  - record: gitlab_component_apdex:ratio
+  - record: gitlab_component_apdex:success:rate
     labels:
       component: rails_cache
       stage: main
@@ -41,6 +31,24 @@ groups:
       )
       /
       2
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: rails_cache
+      stage: main
+      tier: db
+      type: redis-cache
+    expr: |
+      sum by (environment) (
+        rate(gitlab_cache_operation_duration_seconds_bucket{le="+Inf"}[1m])
+      )
+  - record: gitlab_component_apdex:ratio
+    labels:
+      component: rails_cache
+      stage: main
+      tier: db
+      type: redis-cache
+    expr: |
+      gitlab_component_apdex:success:rate{component="rails_cache",stage="main",tier="db",type="redis-cache"}
       / on(environment) group_left()
       (
         gitlab_component_apdex:weight:score{component="rails_cache",stage="main",tier="db",type="redis-cache"} > 0
@@ -55,17 +63,7 @@ groups:
       sum by (environment) (
         rate(gitlab_cache_operation_duration_seconds_count{}[1m])
       )
-  - record: gitlab_component_apdex:weight:score
-    labels:
-      component: rails_redis_client
-      stage: main
-      tier: db
-      type: redis-cache
-    expr: |
-      sum by (environment) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{le="+Inf",storage="cache"}[1m])
-      )
-  - record: gitlab_component_apdex:ratio
+  - record: gitlab_component_apdex:success:rate
     labels:
       component: rails_redis_client
       stage: main
@@ -83,6 +81,24 @@ groups:
       )
       /
       2
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: rails_redis_client
+      stage: main
+      tier: db
+      type: redis-cache
+    expr: |
+      sum by (environment) (
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{le="+Inf",storage="cache"}[1m])
+      )
+  - record: gitlab_component_apdex:ratio
+    labels:
+      component: rails_redis_client
+      stage: main
+      tier: db
+      type: redis-cache
+    expr: |
+      gitlab_component_apdex:success:rate{component="rails_redis_client",stage="main",tier="db",type="redis-cache"}
       / on(environment) group_left()
       (
         gitlab_component_apdex:weight:score{component="rails_redis_client",stage="main",tier="db",type="redis-cache"} > 0

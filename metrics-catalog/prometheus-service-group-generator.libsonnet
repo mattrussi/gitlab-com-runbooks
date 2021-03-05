@@ -9,12 +9,7 @@ local recordingRuleGroupsForServiceForBurnRate(serviceDefinition, burnRate) =
       recordingRules.sliRecordingRulesSetGenerator(burnRate, recordingRuleRegistry),
       recordingRules.componentMetricsRuleSetGenerator(
         burnRate=burnRate,
-        aggregationSet=aggregationSets.promSourceSLIs,
-
-        // This should only be done at the Prometheus level
-        // as the group_left may not work correctly in all
-        // cases at the Thanos level
-        substituteWeightWithRecordingRule=true,
+        aggregationSet=aggregationSets.promSourceSLIs
       ),
       recordingRules.extraRecordingRuleSetGenerator(burnRate),
     ]

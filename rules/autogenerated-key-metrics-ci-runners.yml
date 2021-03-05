@@ -22,6 +22,15 @@ groups:
       sum by (environment,stage) (
         rate(gitlab_workhorse_http_requests_total{code=~"5..", route="^/api/v4/jobs/request\\z"}[1m])
       )
+  - record: gitlab_component_apdex:success:rate
+    labels:
+      component: shared_runner_queues
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (environment,stage) (
+        rate(job_queue_duration_seconds_bucket{shared_runner="true", jobs_running_for_project=~"^(0|1|2|3|4)$", le="60"}[1m])
+      )
   - record: gitlab_component_apdex:weight:score
     labels:
       component: shared_runner_queues
@@ -37,9 +46,7 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
-        rate(job_queue_duration_seconds_bucket{shared_runner="true", jobs_running_for_project=~"^(0|1|2|3|4)$", le="60"}[1m])
-      )
+      gitlab_component_apdex:success:rate{component="shared_runner_queues",tier="runners",type="ci-runners"}
       / on(environment,stage) group_left()
       (
         gitlab_component_apdex:weight:score{component="shared_runner_queues",tier="runners",type="ci-runners"} > 0

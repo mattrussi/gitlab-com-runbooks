@@ -74,16 +74,7 @@ groups:
       sum by (environment) (
         rate(haproxy_server_connection_errors_total{backend=~"ssh|altssh",type="frontend"}[1m])
       )
-  - record: gitlab_component_apdex:weight:score
-    labels:
-      component: puma
-      tier: sv
-      type: git
-    expr: |
-      sum by (environment,stage) (
-        rate(http_request_duration_seconds_bucket{job="gitlab-rails",le="+Inf",type="git"}[1m])
-      )
-  - record: gitlab_component_apdex:ratio
+  - record: gitlab_component_apdex:success:rate
     labels:
       component: puma
       tier: sv
@@ -100,6 +91,22 @@ groups:
       )
       /
       2
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: puma
+      tier: sv
+      type: git
+    expr: |
+      sum by (environment,stage) (
+        rate(http_request_duration_seconds_bucket{job="gitlab-rails",le="+Inf",type="git"}[1m])
+      )
+  - record: gitlab_component_apdex:ratio
+    labels:
+      component: puma
+      tier: sv
+      type: git
+    expr: |
+      gitlab_component_apdex:success:rate{component="puma",tier="sv",type="git"}
       / on(environment,stage) group_left()
       (
         gitlab_component_apdex:weight:score{component="puma",tier="sv",type="git"} > 0
@@ -122,16 +129,7 @@ groups:
       sum by (environment,stage) (
         sli_aggregations:http_requests_total_rate1m{job="gitlab-rails",status=~"5..",type="git"}
       )
-  - record: gitlab_component_apdex:weight:score
-    labels:
-      component: workhorse
-      tier: sv
-      type: git
-    expr: |
-      sum by (environment,stage) (
-        rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-git",le="+Inf",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="^/([^/]+/){1,}[^/]+/-/jobs/[0-9]+/terminal.ws\\z",route!="^/([^/]+/){1,}[^/]+/-/environments/[0-9]+/terminal.ws\\z",route!="^/-/cable\\z",type="git"}[1m])
-      )
-  - record: gitlab_component_apdex:ratio
+  - record: gitlab_component_apdex:success:rate
     labels:
       component: workhorse
       tier: sv
@@ -148,6 +146,22 @@ groups:
       )
       /
       2
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: workhorse
+      tier: sv
+      type: git
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-git",le="+Inf",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="^/([^/]+/){1,}[^/]+/-/jobs/[0-9]+/terminal.ws\\z",route!="^/([^/]+/){1,}[^/]+/-/environments/[0-9]+/terminal.ws\\z",route!="^/-/cable\\z",type="git"}[1m])
+      )
+  - record: gitlab_component_apdex:ratio
+    labels:
+      component: workhorse
+      tier: sv
+      type: git
+    expr: |
+      gitlab_component_apdex:success:rate{component="workhorse",tier="sv",type="git"}
       / on(environment,stage) group_left()
       (
         gitlab_component_apdex:weight:score{component="workhorse",tier="sv",type="git"} > 0
@@ -170,6 +184,15 @@ groups:
       sum by (environment,stage) (
         rate(gitlab_workhorse_http_requests_total{code=~"^5.*",job=~"gitlab-workhorse|gitlab-workhorse-git",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",type="git"}[1m])
       )
+  - record: gitlab_component_apdex:success:rate
+    labels:
+      component: workhorse_auth_api
+      tier: sv
+      type: git
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-git",le="1",route="^/api/",type="git"}[1m])
+      )
   - record: gitlab_component_apdex:weight:score
     labels:
       component: workhorse_auth_api
@@ -185,9 +208,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
-        rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-git",le="1",route="^/api/",type="git"}[1m])
-      )
+      gitlab_component_apdex:success:rate{component="workhorse_auth_api",tier="sv",type="git"}
       / on(environment,stage) group_left()
       (
         gitlab_component_apdex:weight:score{component="workhorse_auth_api",tier="sv",type="git"} > 0

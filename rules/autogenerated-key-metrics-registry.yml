@@ -44,16 +44,7 @@ groups:
       sum by (environment) (
         rate(haproxy_backend_http_responses_total{backend="registry",code="5xx",type="registry"}[1m])
       )
-  - record: gitlab_component_apdex:weight:score
-    labels:
-      component: server
-      tier: sv
-      type: registry
-    expr: |
-      sum by (environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{type="registry", le="+Inf"}[1m])
-      )
-  - record: gitlab_component_apdex:ratio
+  - record: gitlab_component_apdex:success:rate
     labels:
       component: server
       tier: sv
@@ -70,6 +61,22 @@ groups:
       )
       /
       2
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: server
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_bucket{type="registry", le="+Inf"}[1m])
+      )
+  - record: gitlab_component_apdex:ratio
+    labels:
+      component: server
+      tier: sv
+      type: registry
+    expr: |
+      gitlab_component_apdex:success:rate{component="server",tier="sv",type="registry"}
       / on(environment,stage) group_left()
       (
         gitlab_component_apdex:weight:score{component="server",tier="sv",type="registry"} > 0
@@ -92,6 +99,15 @@ groups:
       sum by (environment,stage) (
         rate(registry_http_requests_total{type="registry", code=~"5.."}[1m])
       )
+  - record: gitlab_component_apdex:success:rate
+    labels:
+      component: storage
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_storage_action_seconds_bucket{le="1"}[1m])
+      )
   - record: gitlab_component_apdex:weight:score
     labels:
       component: storage
@@ -107,9 +123,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
-        rate(registry_storage_action_seconds_bucket{le="1"}[1m])
-      )
+      gitlab_component_apdex:success:rate{component="storage",tier="sv",type="registry"}
       / on(environment,stage) group_left()
       (
         gitlab_component_apdex:weight:score{component="storage",tier="sv",type="registry"} > 0

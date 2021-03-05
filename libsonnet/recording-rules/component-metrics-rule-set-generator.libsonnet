@@ -1,28 +1,14 @@
 // Generates apdex weight recording rules for a component definition
-local generateApdexWeightRules(burnRate, recordingRuleNames, aggregationLabels, sliDefinition, recordingRuleStaticLabels) =
-  if recordingRuleNames.apdexWeight != null then
-    sliDefinition.generateApdexWeightRecordingRules(
+local generateApdexRules(burnRate, recordingRuleNames, aggregationLabels, sliDefinition, recordingRuleStaticLabels) =
+  if recordingRuleNames.apdexRatio != null then
+    sliDefinition.generateApdexRecordingRules(
       burnRate=burnRate,
-      recordingRuleName=recordingRuleNames.apdexWeight,
+      recordingRuleNames=recordingRuleNames,
       aggregationLabels=aggregationLabels,
       recordingRuleStaticLabels=recordingRuleStaticLabels
     )
   else
     [];
-
-// Generates a curryable function to apdex score recording rules for a component definition
-local generateApdexScoreRulesCurry(substituteWeightWithRecordingRule) =
-  function(burnRate, recordingRuleNames, aggregationLabels, sliDefinition, recordingRuleStaticLabels)
-    if recordingRuleNames.apdexRatio != null then
-      sliDefinition.generateApdexScoreRecordingRules(
-        burnRate=burnRate,
-        recordingRuleName=recordingRuleNames.apdexRatio,
-        aggregationLabels=aggregationLabels,
-        recordingRuleStaticLabels=recordingRuleStaticLabels,
-        substituteWeightWithRecordingRuleName=if substituteWeightWithRecordingRule then recordingRuleNames.apdexWeight else null
-      )
-    else
-      [];
 
 local generateRequestRateRules(burnRate, recordingRuleNames, aggregationLabels, sliDefinition, recordingRuleStaticLabels) =
   // All components have a requestRate metric
@@ -48,7 +34,7 @@ local generateErrorRateRules(burnRate, recordingRuleNames, aggregationLabels, sl
     [];
 
 // Generates the recording rules given a component definition
-local generateRecordingRulesForComponent(burnRate, recordingRuleNames, serviceDefinition, sliDefinition, aggregationLabels, substituteWeightWithRecordingRule) =
+local generateRecordingRulesForComponent(burnRate, recordingRuleNames, serviceDefinition, sliDefinition, aggregationLabels) =
   local recordingRuleStaticLabels = {
     tier: serviceDefinition.tier,
     type: serviceDefinition.type,
@@ -58,8 +44,7 @@ local generateRecordingRulesForComponent(burnRate, recordingRuleNames, serviceDe
   std.flatMap(
     function(generator) generator(burnRate=burnRate, recordingRuleNames=recordingRuleNames, aggregationLabels=aggregationLabels, sliDefinition=sliDefinition, recordingRuleStaticLabels=recordingRuleStaticLabels),
     [
-      generateApdexWeightRules,
-      generateApdexScoreRulesCurry(substituteWeightWithRecordingRule),
+      generateApdexRules,
       generateRequestRateRules,
       generateErrorRateRules,
     ]
@@ -71,11 +56,11 @@ local generateRecordingRulesForComponent(burnRate, recordingRuleNames, serviceDe
   componentMetricsRuleSetGenerator(
     burnRate,
     aggregationSet,
-    substituteWeightWithRecordingRule=false,
   )::
     local recordingRuleNames = {
-      apdexRatio: aggregationSet.getApdexRatioMetricForBurnRate(burnRate),
+      apdexSuccessRate: aggregationSet.getApdexSuccessRateMetricForBurnRate(burnRate),
       apdexWeight: aggregationSet.getApdexWeightMetricForBurnRate(burnRate),
+      apdexRatio: aggregationSet.getApdexRatioMetricForBurnRate(burnRate),
       requestRate: aggregationSet.getOpsRateMetricForBurnRate(burnRate),
       errorRate: aggregationSet.getErrorRateMetricForBurnRate(burnRate),
     };
@@ -90,7 +75,6 @@ local generateRecordingRulesForComponent(burnRate, recordingRuleNames, serviceDe
             serviceDefinition=serviceDefinition,
             sliDefinition=sliDefinition,
             aggregationLabels=aggregationSet.labels,
-            substituteWeightWithRecordingRule=substituteWeightWithRecordingRule
           ),
           serviceDefinition.listServiceLevelIndicators()
         ),

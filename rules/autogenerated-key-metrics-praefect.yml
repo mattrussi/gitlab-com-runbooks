@@ -22,16 +22,7 @@ groups:
       sum by (environment,stage) (
         avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database="praefect_production",job="stackdriver",transaction_type="rollback"}[1m])
       )
-  - record: gitlab_component_apdex:weight:score
-    labels:
-      component: proxy
-      tier: stor
-      type: praefect
-    expr: |
-      sum by (environment,stage) (
-        rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_type="unary",job="praefect",le="+Inf"}[1m])
-      )
-  - record: gitlab_component_apdex:ratio
+  - record: gitlab_component_apdex:success:rate
     labels:
       component: proxy
       tier: stor
@@ -48,6 +39,22 @@ groups:
       )
       /
       2
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: proxy
+      tier: stor
+      type: praefect
+    expr: |
+      sum by (environment,stage) (
+        rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_type="unary",job="praefect",le="+Inf"}[1m])
+      )
+  - record: gitlab_component_apdex:ratio
+    labels:
+      component: proxy
+      tier: stor
+      type: praefect
+    expr: |
+      gitlab_component_apdex:success:rate{component="proxy",tier="stor",type="praefect"}
       / on(environment,stage) group_left()
       (
         gitlab_component_apdex:weight:score{component="proxy",tier="stor",type="praefect"} > 0
@@ -70,6 +77,15 @@ groups:
       sum by (environment,stage) (
         rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|Canceled)$",job="praefect"}[1m])
       )
+  - record: gitlab_component_apdex:success:rate
+    labels:
+      component: replicator_queue
+      tier: stor
+      type: praefect
+    expr: |
+      sum by (environment,stage) (
+        rate(gitaly_praefect_replication_delay_bucket{job="praefect",le="300"}[1m])
+      )
   - record: gitlab_component_apdex:weight:score
     labels:
       component: replicator_queue
@@ -85,9 +101,7 @@ groups:
       tier: stor
       type: praefect
     expr: |
-      sum by (environment,stage) (
-        rate(gitaly_praefect_replication_delay_bucket{job="praefect",le="300"}[1m])
-      )
+      gitlab_component_apdex:success:rate{component="replicator_queue",tier="stor",type="praefect"}
       / on(environment,stage) group_left()
       (
         gitlab_component_apdex:weight:score{component="replicator_queue",tier="stor",type="praefect"} > 0

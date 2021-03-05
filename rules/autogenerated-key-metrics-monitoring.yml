@@ -22,6 +22,15 @@ groups:
       sum by (environment,stage) (
         rate(http_request_total{job="grafana",statuscode=~"^5.*"}[1m])
       )
+  - record: gitlab_component_apdex:success:rate
+    labels:
+      component: memcached_thanos_qfe_labels
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-qfe-labels-metrics",le="1",type="monitoring"}[1m])
+      )
   - record: gitlab_component_apdex:weight:score
     labels:
       component: memcached_thanos_qfe_labels
@@ -37,9 +46,7 @@ groups:
       tier: inf
       type: monitoring
     expr: |
-      sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-qfe-labels-metrics",le="1",type="monitoring"}[1m])
-      )
+      gitlab_component_apdex:success:rate{component="memcached_thanos_qfe_labels",tier="inf",type="monitoring"}
       / on(environment,stage) group_left()
       (
         gitlab_component_apdex:weight:score{component="memcached_thanos_qfe_labels",tier="inf",type="monitoring"} > 0
@@ -62,6 +69,15 @@ groups:
       sum by (environment,stage) (
         rate(thanos_memcached_operation_failures_total{job="memcached-thanos-qfe-labels-metrics",type="monitoring"}[1m])
       )
+  - record: gitlab_component_apdex:success:rate
+    labels:
+      component: memcached_thanos_qfe_query_range
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-qfe-query-range-metrics",le="1",type="monitoring"}[1m])
+      )
   - record: gitlab_component_apdex:weight:score
     labels:
       component: memcached_thanos_qfe_query_range
@@ -77,9 +93,7 @@ groups:
       tier: inf
       type: monitoring
     expr: |
-      sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-qfe-query-range-metrics",le="1",type="monitoring"}[1m])
-      )
+      gitlab_component_apdex:success:rate{component="memcached_thanos_qfe_query_range",tier="inf",type="monitoring"}
       / on(environment,stage) group_left()
       (
         gitlab_component_apdex:weight:score{component="memcached_thanos_qfe_query_range",tier="inf",type="monitoring"} > 0
@@ -102,16 +116,7 @@ groups:
       sum by (environment,stage) (
         rate(thanos_memcached_operation_failures_total{job="memcached-thanos-qfe-query-range-metrics",type="monitoring"}[1m])
       )
-  - record: gitlab_component_apdex:weight:score
-    labels:
-      component: prometheus
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(prometheus_http_request_duration_seconds_bucket{job=~"prometheus.*",job!="prometheus-metamon",le="+Inf",type="monitoring"}[1m])
-      )
-  - record: gitlab_component_apdex:ratio
+  - record: gitlab_component_apdex:success:rate
     labels:
       component: prometheus
       tier: inf
@@ -128,6 +133,22 @@ groups:
       )
       /
       2
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: prometheus
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(prometheus_http_request_duration_seconds_bucket{job=~"prometheus.*",job!="prometheus-metamon",le="+Inf",type="monitoring"}[1m])
+      )
+  - record: gitlab_component_apdex:ratio
+    labels:
+      component: prometheus
+      tier: inf
+      type: monitoring
+    expr: |
+      gitlab_component_apdex:success:rate{component="prometheus",tier="inf",type="monitoring"}
       / on(environment,stage) group_left()
       (
         gitlab_component_apdex:weight:score{component="prometheus",tier="inf",type="monitoring"} > 0
@@ -168,6 +189,15 @@ groups:
       sum by (environment,stage) (
         rate(prometheus_notifications_errors_total{job="prometheus",type="monitoring"}[1m])
       )
+  - record: gitlab_component_apdex:success:rate
+    labels:
+      component: public_dashboards_thanos_query
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(http_request_duration_seconds_bucket{job="thanos",le="30",shard="public-dashboards",type="monitoring"}[1m])
+      )
   - record: gitlab_component_apdex:weight:score
     labels:
       component: public_dashboards_thanos_query
@@ -183,9 +213,7 @@ groups:
       tier: inf
       type: monitoring
     expr: |
-      sum by (environment,stage) (
-        rate(http_request_duration_seconds_bucket{job="thanos",le="30",shard="public-dashboards",type="monitoring"}[1m])
-      )
+      gitlab_component_apdex:success:rate{component="public_dashboards_thanos_query",tier="inf",type="monitoring"}
       / on(environment,stage) group_left()
       (
         gitlab_component_apdex:weight:score{component="public_dashboards_thanos_query",tier="inf",type="monitoring"} > 0
@@ -262,6 +290,15 @@ groups:
       sum by (environment,stage) (
         rate(thanos_compact_group_compactions_failures_total{job="thanos",type="monitoring"}[1m])
       )
+  - record: gitlab_component_apdex:success:rate
+    labels:
+      component: thanos_query
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(http_request_duration_seconds_bucket{job="thanos-query",le="30",shard="default",type="monitoring"}[1m])
+      )
   - record: gitlab_component_apdex:weight:score
     labels:
       component: thanos_query
@@ -277,9 +314,7 @@ groups:
       tier: inf
       type: monitoring
     expr: |
-      sum by (environment,stage) (
-        rate(http_request_duration_seconds_bucket{job="thanos-query",le="30",shard="default",type="monitoring"}[1m])
-      )
+      gitlab_component_apdex:success:rate{component="thanos_query",tier="inf",type="monitoring"}
       / on(environment,stage) group_left()
       (
         gitlab_component_apdex:weight:score{component="thanos_query",tier="inf",type="monitoring"} > 0
@@ -302,6 +337,15 @@ groups:
       sum by (environment,stage) (
         sli_aggregations:http_requests_total_rate1m{code=~"^5.*",job="thanos-query",shard="default",type="monitoring"}
       )
+  - record: gitlab_component_apdex:success:rate
+    labels:
+      component: thanos_query_frontend
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(http_request_duration_seconds_bucket{job=~"thanos|thanos-query-frontend",le="30",shard="default",type="monitoring"}[1m])
+      )
   - record: gitlab_component_apdex:weight:score
     labels:
       component: thanos_query_frontend
@@ -317,9 +361,7 @@ groups:
       tier: inf
       type: monitoring
     expr: |
-      sum by (environment,stage) (
-        rate(http_request_duration_seconds_bucket{job=~"thanos|thanos-query-frontend",le="30",shard="default",type="monitoring"}[1m])
-      )
+      gitlab_component_apdex:success:rate{component="thanos_query_frontend",tier="inf",type="monitoring"}
       / on(environment,stage) group_left()
       (
         gitlab_component_apdex:weight:score{component="thanos_query_frontend",tier="inf",type="monitoring"} > 0
@@ -360,16 +402,7 @@ groups:
       sum by (environment,stage) (
         rate(thanos_alert_sender_errors_total{job="thanos",type="monitoring"}[1m])
       )
-  - record: gitlab_component_apdex:weight:score
-    labels:
-      component: thanos_store
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(grpc_server_handling_seconds_bucket{grpc_service="thanos.Store",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le="+Inf",type="monitoring"}[1m])
-      )
-  - record: gitlab_component_apdex:ratio
+  - record: gitlab_component_apdex:success:rate
     labels:
       component: thanos_store
       tier: inf
@@ -386,6 +419,22 @@ groups:
       )
       /
       2
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: thanos_store
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(grpc_server_handling_seconds_bucket{grpc_service="thanos.Store",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le="+Inf",type="monitoring"}[1m])
+      )
+  - record: gitlab_component_apdex:ratio
+    labels:
+      component: thanos_store
+      tier: inf
+      type: monitoring
+    expr: |
+      gitlab_component_apdex:success:rate{component="thanos_store",tier="inf",type="monitoring"}
       / on(environment,stage) group_left()
       (
         gitlab_component_apdex:weight:score{component="thanos_store",tier="inf",type="monitoring"} > 0
@@ -408,16 +457,7 @@ groups:
       sum by (environment,stage) (
         rate(grpc_server_handled_total{grpc_code!="OK",grpc_service="thanos.Store",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",type="monitoring"}[1m])
       )
-  - record: gitlab_component_apdex:weight:score
-    labels:
-      component: trickster
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(trickster_frontend_requests_duration_seconds_bucket{le="+Inf"}[1m])
-      )
-  - record: gitlab_component_apdex:ratio
+  - record: gitlab_component_apdex:success:rate
     labels:
       component: trickster
       tier: inf
@@ -434,6 +474,22 @@ groups:
       )
       /
       2
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: trickster
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(trickster_frontend_requests_duration_seconds_bucket{le="+Inf"}[1m])
+      )
+  - record: gitlab_component_apdex:ratio
+    labels:
+      component: trickster
+      tier: inf
+      type: monitoring
+    expr: |
+      gitlab_component_apdex:success:rate{component="trickster",tier="inf",type="monitoring"}
       / on(environment,stage) group_left()
       (
         gitlab_component_apdex:weight:score{component="trickster",tier="inf",type="monitoring"} > 0

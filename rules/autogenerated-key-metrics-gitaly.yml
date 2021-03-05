@@ -4,16 +4,7 @@ groups:
 - name: 'Component-Level SLIs: gitaly - 1m burn-rate'
   interval: 1m
   rules:
-  - record: gitlab_component_apdex:weight:score
-    labels:
-      component: gitalyruby
-      tier: stor
-      type: gitaly
-    expr: |
-      sum by (environment,stage) (
-        rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook|GetLFSPointers|GetAllLFSPointers",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf"}[1m]) and on(grpc_service,grpc_method) grpc_client_handled_total{job="gitaly"}
-      )
-  - record: gitlab_component_apdex:ratio
+  - record: gitlab_component_apdex:success:rate
     labels:
       component: gitalyruby
       tier: stor
@@ -30,6 +21,22 @@ groups:
       )
       /
       2
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: gitalyruby
+      tier: stor
+      type: gitaly
+    expr: |
+      sum by (environment,stage) (
+        rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook|GetLFSPointers|GetAllLFSPointers",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf"}[1m]) and on(grpc_service,grpc_method) grpc_client_handled_total{job="gitaly"}
+      )
+  - record: gitlab_component_apdex:ratio
+    labels:
+      component: gitalyruby
+      tier: stor
+      type: gitaly
+    expr: |
+      gitlab_component_apdex:success:rate{component="gitalyruby",tier="stor",type="gitaly"}
       / on(environment,stage) group_left()
       (
         gitlab_component_apdex:weight:score{component="gitalyruby",tier="stor",type="gitaly"} > 0
@@ -52,16 +59,7 @@ groups:
       sum by (environment,stage) (
         rate(grpc_client_handled_total{grpc_code!~"OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded",grpc_method!~"UpdateRemoteMirror|AddRemote",job="gitaly"}[1m])
       )
-  - record: gitlab_component_apdex:weight:score
-    labels:
-      component: goserver
-      tier: stor
-      type: gitaly
-    expr: |
-      sum by (environment,stage) (
-        rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf"}[1m])
-      )
-  - record: gitlab_component_apdex:ratio
+  - record: gitlab_component_apdex:success:rate
     labels:
       component: goserver
       tier: stor
@@ -78,6 +76,22 @@ groups:
       )
       /
       2
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: goserver
+      tier: stor
+      type: gitaly
+    expr: |
+      sum by (environment,stage) (
+        rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf"}[1m])
+      )
+  - record: gitlab_component_apdex:ratio
+    labels:
+      component: goserver
+      tier: stor
+      type: gitaly
+    expr: |
+      gitlab_component_apdex:success:rate{component="goserver",tier="stor",type="gitaly"}
       / on(environment,stage) group_left()
       (
         gitlab_component_apdex:weight:score{component="goserver",tier="stor",type="gitaly"} > 0
@@ -102,16 +116,7 @@ groups:
         or
         label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",grpc_service!="gitaly.OperationService",job="gitaly"}[1m]), "_c", "1", "", "")
       )
-  - record: gitlab_component_apdex:weight:score
-    labels:
-      component: goserver_op_service
-      tier: stor
-      type: gitaly
-    expr: |
-      sum by (environment,stage) (
-        rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf"}[1m])
-      )
-  - record: gitlab_component_apdex:ratio
+  - record: gitlab_component_apdex:success:rate
     labels:
       component: goserver_op_service
       tier: stor
@@ -128,6 +133,22 @@ groups:
       )
       /
       2
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: goserver_op_service
+      tier: stor
+      type: gitaly
+    expr: |
+      sum by (environment,stage) (
+        rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf"}[1m])
+      )
+  - record: gitlab_component_apdex:ratio
+    labels:
+      component: goserver_op_service
+      tier: stor
+      type: gitaly
+    expr: |
+      gitlab_component_apdex:success:rate{component="goserver_op_service",tier="stor",type="gitaly"}
       / on(environment,stage) group_left()
       (
         gitlab_component_apdex:weight:score{component="goserver_op_service",tier="stor",type="gitaly"} > 0
@@ -329,11 +350,9 @@ groups:
       )
       /
       2
-      /
+      / on(environment,stage,shard,fqdn) group_left()
       (
-        sum by (environment,stage,shard,fqdn) (
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook|GetLFSPointers|GetAllLFSPointers",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf"}[5m]) and on(grpc_service,grpc_method) grpc_client_handled_total{job="gitaly"}
-        ) > 0
+        gitlab_component_node_apdex:weight:score_5m{component="gitalyruby",tier="stor",type="gitaly"} > 0
       )
   - record: gitlab_component_node_ops:rate_5m
     labels:
@@ -379,11 +398,9 @@ groups:
       )
       /
       2
-      /
+      / on(environment,stage,shard,fqdn) group_left()
       (
-        sum by (environment,stage,shard,fqdn) (
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf"}[5m])
-        ) > 0
+        gitlab_component_node_apdex:weight:score_5m{component="goserver",tier="stor",type="gitaly"} > 0
       )
   - record: gitlab_component_node_ops:rate_5m
     labels:
@@ -431,11 +448,9 @@ groups:
       )
       /
       2
-      /
+      / on(environment,stage,shard,fqdn) group_left()
       (
-        sum by (environment,stage,shard,fqdn) (
-          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf"}[5m])
-        ) > 0
+        gitlab_component_node_apdex:weight:score_5m{component="goserver_op_service",tier="stor",type="gitaly"} > 0
       )
   - record: gitlab_component_node_ops:rate_5m
     labels:
@@ -634,11 +649,9 @@ groups:
       )
       /
       2
-      /
+      / on(environment,stage,shard,fqdn) group_left()
       (
-        sum by (environment,stage,shard,fqdn) (
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook|GetLFSPointers|GetAllLFSPointers",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf"}[30m]) and on(grpc_service,grpc_method) grpc_client_handled_total{job="gitaly"}
-        ) > 0
+        gitlab_component_node_apdex:weight:score_30m{component="gitalyruby",tier="stor",type="gitaly"} > 0
       )
   - record: gitlab_component_node_ops:rate_30m
     labels:
@@ -684,11 +697,9 @@ groups:
       )
       /
       2
-      /
+      / on(environment,stage,shard,fqdn) group_left()
       (
-        sum by (environment,stage,shard,fqdn) (
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf"}[30m])
-        ) > 0
+        gitlab_component_node_apdex:weight:score_30m{component="goserver",tier="stor",type="gitaly"} > 0
       )
   - record: gitlab_component_node_ops:rate_30m
     labels:
@@ -736,11 +747,9 @@ groups:
       )
       /
       2
-      /
+      / on(environment,stage,shard,fqdn) group_left()
       (
-        sum by (environment,stage,shard,fqdn) (
-          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf"}[30m])
-        ) > 0
+        gitlab_component_node_apdex:weight:score_30m{component="goserver_op_service",tier="stor",type="gitaly"} > 0
       )
   - record: gitlab_component_node_ops:rate_30m
     labels:
@@ -939,11 +948,9 @@ groups:
       )
       /
       2
-      /
+      / on(environment,stage,shard,fqdn) group_left()
       (
-        sum by (environment,stage,shard,fqdn) (
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook|GetLFSPointers|GetAllLFSPointers",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf"}[1h]) and on(grpc_service,grpc_method) grpc_client_handled_total{job="gitaly"}
-        ) > 0
+        gitlab_component_node_apdex:weight:score_1h{component="gitalyruby",tier="stor",type="gitaly"} > 0
       )
   - record: gitlab_component_node_ops:rate_1h
     labels:
@@ -989,11 +996,9 @@ groups:
       )
       /
       2
-      /
+      / on(environment,stage,shard,fqdn) group_left()
       (
-        sum by (environment,stage,shard,fqdn) (
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf"}[1h])
-        ) > 0
+        gitlab_component_node_apdex:weight:score_1h{component="goserver",tier="stor",type="gitaly"} > 0
       )
   - record: gitlab_component_node_ops:rate_1h
     labels:
@@ -1041,11 +1046,9 @@ groups:
       )
       /
       2
-      /
+      / on(environment,stage,shard,fqdn) group_left()
       (
-        sum by (environment,stage,shard,fqdn) (
-          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf"}[1h])
-        ) > 0
+        gitlab_component_node_apdex:weight:score_1h{component="goserver_op_service",tier="stor",type="gitaly"} > 0
       )
   - record: gitlab_component_node_ops:rate_1h
     labels:
@@ -1244,11 +1247,9 @@ groups:
       )
       /
       2
-      /
+      / on(environment,stage,shard,fqdn) group_left()
       (
-        sum by (environment,stage,shard,fqdn) (
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook|GetLFSPointers|GetAllLFSPointers",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf"}[6h]) and on(grpc_service,grpc_method) grpc_client_handled_total{job="gitaly"}
-        ) > 0
+        gitlab_component_node_apdex:weight:score_6h{component="gitalyruby",tier="stor",type="gitaly"} > 0
       )
   - record: gitlab_component_node_ops:rate_6h
     labels:
@@ -1294,11 +1295,9 @@ groups:
       )
       /
       2
-      /
+      / on(environment,stage,shard,fqdn) group_left()
       (
-        sum by (environment,stage,shard,fqdn) (
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf"}[6h])
-        ) > 0
+        gitlab_component_node_apdex:weight:score_6h{component="goserver",tier="stor",type="gitaly"} > 0
       )
   - record: gitlab_component_node_ops:rate_6h
     labels:
@@ -1346,11 +1345,9 @@ groups:
       )
       /
       2
-      /
+      / on(environment,stage,shard,fqdn) group_left()
       (
-        sum by (environment,stage,shard,fqdn) (
-          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf"}[6h])
-        ) > 0
+        gitlab_component_node_apdex:weight:score_6h{component="goserver_op_service",tier="stor",type="gitaly"} > 0
       )
   - record: gitlab_component_node_ops:rate_6h
     labels:
