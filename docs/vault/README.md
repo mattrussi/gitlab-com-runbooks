@@ -39,7 +39,6 @@
 * [../uncategorized/reprovisioning-nodes.md](../uncategorized/reprovisioning-nodes.md)
 * [../uncategorized/shared-configurations.md](../uncategorized/shared-configurations.md)
 * [../uncategorized/subnet-allocations.md](../uncategorized/subnet-allocations.md)
-* [../uncategorized/upgrade-docker-machine.md](../uncategorized/upgrade-docker-machine.md)
 * [../uncategorized/yubikey.md](../uncategorized/yubikey.md)
 * [vault.md](vault.md)
 <!-- END_MARKER -->

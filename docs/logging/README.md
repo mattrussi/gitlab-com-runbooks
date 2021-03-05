@@ -40,7 +40,6 @@
 * [../uncategorized/camoproxy.md](../uncategorized/camoproxy.md)
 * [../uncategorized/k8s-oncall-setup.md](../uncategorized/k8s-oncall-setup.md)
 * [../uncategorized/kubernetes.md](../uncategorized/kubernetes.md)
-* [../uncategorized/upgrade-docker-machine.md](../uncategorized/upgrade-docker-machine.md)
 * [../version/version-gitlab-com.md](../version/version-gitlab-com.md)
 * [../web/static-repository-objects-caching.md](../web/static-repository-objects-caching.md)
 <!-- END_MARKER -->

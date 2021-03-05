@@ -43,7 +43,6 @@
 * [../uncategorized/k8s-operations.md](../uncategorized/k8s-operations.md)
 * [../uncategorized/packagecloud-infrastructure.md](../uncategorized/packagecloud-infrastructure.md)
 * [../uncategorized/subnet-allocations.md](../uncategorized/subnet-allocations.md)
-* [../uncategorized/upgrade-docker-machine.md](../uncategorized/upgrade-docker-machine.md)
 * [../version/version-gitlab-com.md](../version/version-gitlab-com.md)
 <!-- END_MARKER -->
 

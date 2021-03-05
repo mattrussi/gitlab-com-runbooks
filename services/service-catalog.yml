@@ -2697,6 +2697,7 @@ services:
     playbooks:
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/ci-runners/create-runners-manager-node.md
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/ci-runners/update-gitlab-runner-on-managers.md
+      - https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/ci-runners/linux/docker-machine/deploy.md
     error_budget: https://docs.google.com/spreadsheets/d/1wkK2n5EAvoVXwQZrVoCDsvkYTb1BftL56EzsFW_IA-w/edit
   observability:
     monitors:
