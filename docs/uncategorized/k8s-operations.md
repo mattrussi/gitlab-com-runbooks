@@ -8,7 +8,7 @@ https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com
 
 ## Application Upgrading
 
-* [CHART_VERSION](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/blob/dd201383641d01c5b5471012563a3079fdcdbdf1/CHART_VERSION)
+* [CHART_VERSION](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/tree/master#setting-chart-version)
   sets the version of the GitLab helm chart
 * For individual services see the project [README](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/#services)
 
