@@ -2694,6 +2694,7 @@ services:
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/ci-runners/cicd/ci_too_many_archiving_trace_failures.md
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/ci-runners/cicd/ci_workhorse-queuing.md
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/ci-runners/README.md
+      - https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/ci-runners/providers/gcp/quotas.md
     playbooks:
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/ci-runners/create-runners-manager-node.md
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/ci-runners/update-gitlab-runner-on-managers.md
