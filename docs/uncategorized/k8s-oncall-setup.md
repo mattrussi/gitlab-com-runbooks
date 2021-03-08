@@ -134,7 +134,7 @@ $ sshuttle -r console-01-sv-gstg.c.gitlab-staging-1.internal '35.229.107.91/32'
 $ sshuttle -r console-01-sv-gstg.c.gitlab-staging-1.internal '34.73.144.43/32'
 
 # kubectl config use-context gke_gitlab-production_us-east1_gprd-gitlab-gke
-$ sshuttle -r console-01-sv-gprd.c.gitlab-production.internal '35.185.25.234/32'
+$ sshuttle -r console-01-sv-gprd.c.gitlab-production.internal '35.243.230.38/32'
 ```
 
 - [ ] Ensure you can list pods in one of the regions
