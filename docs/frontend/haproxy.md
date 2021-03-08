@@ -184,6 +184,8 @@ not want _any_ traffic going to a server.
 
 Note, this will trigger the [`HAProxyServerDown`](#server-down) alert. Before you drain a node, add [a new silence](https://alerts.gitlab.net/#/silences/new).
 
+**Important**: Be sure to alert release managers on Slack when changing the state of VMs or Clusters in HAProxy by mentioning `@release-managers`.
+
 Example Matchers:
 
 * Name: `alertname`, Value: `HAProxyServerDown`
