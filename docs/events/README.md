@@ -5,7 +5,15 @@ Infrastructure events are log messages that helpful for [incident management](ht
 * **[View events for Production](https://nonprod-log.gitlab.net/goto/2f2872632ccd39c3895e11290c77c346)**
 * **[View events for Staging](https://nonprod-log.gitlab.net/goto/77b2443ce24964b34f3f5b535c8bfaed)**
 
-We collect events from all infrastructure and deployment pipelines for the staging (`gstg`) and production (`gprd`) environments.
+We log events for the following actions:
+
+- All infrastructure and deployment pipelines for the staging (`gstg`) and production (`gprd`) environments.
+  - https://ops.gitlab.net/gitlab-cookbooks/chef-repo/
+  - https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/
+  - https://gitlab.com/gitlab-com/gl-infra/k8s-workloads
+- Chatops commands for Feature Flags and Canary
+- PagerDuty events via a webhook listener https://gitlab.com/gitlab-com/gl-infra/pd-event-logger
+
 Note that we do not currently differentiate between successful and failed deployments, tracked in https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/12685.
 Other environments like `pre`, `release`, etc. are not included because they are not part of incident management.
 
@@ -22,16 +30,16 @@ In CI, use the variable named `$ES_NONPROD_EVENTS_URL` for sending events with `
 
 The following fields are recommended for events:
 
-| name       | type | required |
-| ---        | ---  | --- |
-| `time`     | string | yes |
-| `type`     | string | yes |
-| `message`  | string | yes |
-| `env`      | string | yes |
-| `stage`    | string | yes |
-| `username` | string | yes |
-| `source`   | string | no |
-| `diff_url` | string | no |
+| name       | type |
+| ---        | ---  |
+| `time`     | string |
+| `type`     | string |
+| `message`  | string |
+| `env`      | string |
+| `stage`    | string |
+| `username` | string |
+| `source`   | string |
+| `diff_url` | string |
 
 * `message`: Free-form text describing the event
 * `env`: Either `gprd` or `gstg`.
