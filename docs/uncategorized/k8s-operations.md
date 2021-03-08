@@ -25,7 +25,7 @@ OLD_NODE_POOL=<name of old pool>
 NEW_NODE_POOL=<name of new pool>
 ```
 
-* Add the new node pool to Terraform
+* Add the new node pool to Terraform by creating a new entry in the relevant TF environment, for example for staging you'd add an entry [here](https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/blob/master/environments/gstg/gke-zonal.tf#L47).
 * Apply the change and confirm the new node pool is created
 * Cordon the existing node pool
 
