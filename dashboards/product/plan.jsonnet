@@ -24,7 +24,7 @@ basic.dashboard(
     content='### Synthetic tests of GitLab.com pages for the Plan group.\n\nFor more information, please see: https://about.gitlab.com/handbook/product/product-processes/#page-load-performance-metrics\n\n\n\n',
   ), gridPos={ h: 3, w: 24, x: 0, y: 0 }
 ).addPanel(
-  row.new(title='Soure Code'), gridPos={ x: 0, y: 1000, w: 24, h: 1 }
+  row.new(title='Project Management'), gridPos={ x: 0, y: 1000, w: 24, h: 1 }
 ).addPanels(
   layout.grid(
     [
@@ -42,9 +42,9 @@ basic.dashboard(
 ).addPanels(
   layout.grid(
     [
-      productCommon.pageDetail('Epics - Detail', 'ProductPlanning_Epic_Detail', 'https://gitlab.com/groups/gitlab-org/-/epics/3003'),
-      productCommon.pageDetail('Roadmap - Small', 'ProductPlanning_Roadmaps_Small', 'https://gitlab.com/groups/gitlab-com/support/-/roadmap'),
-      productCommon.pageDetail('Roadmap - Large', 'ProductPlanning_Roadmaps_Large', 'https://gitlab.com/groups/gitlab-org/-/roadmap'),
+      productCommon.pageDetail('Epics - Detail', 'PortfolioManagement_Epics', 'https://gitlab.com/groups/gitlab-org/-/epics/3003'),
+      productCommon.pageDetail('Roadmap - Small', 'PortfolioManagement_Roadmaps_Small', 'https://gitlab.com/groups/gitlab-com/support/-/roadmap'),
+      productCommon.pageDetail('Roadmap - Large', 'PortfolioManagement_Roadmaps_Large', 'https://gitlab.com/groups/gitlab-org/-/roadmap'),
     ],
     startRow=2001,
   ),
