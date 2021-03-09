@@ -367,6 +367,7 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
     legend_rightSide=false,
     linewidth=2,
     max=null,
+    maxY2=1,
     decimals=0,
     thresholds=[],
     stableId=null,
@@ -409,7 +410,7 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
     )
     .addYaxis(
       format='short',
-      max=1,
+      max=maxY2,
       min=0,
       show=false,
     ),
@@ -429,6 +430,7 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
     linewidth=2,
     decimals=0,
     max=null,
+    maxY2=1,
     thresholds=[],
     stableId=null,
     fill=0,
@@ -447,6 +449,7 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
       legend_rightSide=legend_rightSide,
       linewidth=linewidth,
       max=max,
+      maxY2=maxY2,
       decimals=decimals,
       thresholds=thresholds,
       stableId=stableId,
