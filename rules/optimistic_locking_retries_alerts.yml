@@ -1,0 +1,19 @@
+groups:
+- name: optimistic-locking-retries.rules
+  rules:
+  - alert: TooManyRetriesInOptimisticLocks 
+    expr: >
+      (sum(rate(gitlab_optimistic_locking_retries_bucket{le="1"}[30m])) by (job, type)
+       /
+      sum(rate(gitlab_optimistic_locking_retries_count[30m])) by (job, type)
+      ) < 0.95
+    for: 10m
+    labels:
+      severity: s4
+      alert_type: symptom
+    annotations:
+      title: 'Large number of queries under optimistic lock which required > 1 retries'
+      description: >
+        There have been too many queries under optimistic locks
+        which required > 1 retry to release the lock
+        for the last 30 minutes.
