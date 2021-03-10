@@ -23,6 +23,33 @@ built with Packer to build the machines that execute jobs.
 Please read the [connecting to Windows](./connecting.md) documentation
 to install relevant software and connect to Windows.
 
+## Graceful Shutdown and Windows Runner Managers
+
+Unfortunately, as for now Windows version of GitLab Runner doesn't support Graceful Shutdown. It's a limitation
+[that we're currently trying to remove](https://gitlab.com/gitlab-org/gitlab-runner/-/merge_requests/1688).
+
+Therefore to gracefully handle Runner shutdown on these managers, we need to work differently.
+
+Because we can't force Runner to stop requesting new jobs, we need to go to the Runner's configuration
+form **at GitLab side**. In case of `windows-shared-runners-manager-X.gitlab.com` runner managers, we need
+to go to the **GitLab.com admin area!**. Therefore the operation must be performed or at least supported
+by someone with GitLab.com admin access.
+
+At the Runner's settings page we need to **pause the first runner selected for graceful shutdown**. From that moment
+on GitLab will stop assigning jobs to this Runner, even if it requests them. However, currently running jobs will be
+still processed without interruption.
+
+From this moment on we need to observe the number of jobs that are being executed by the runner manager. For that
+we can follow [this panel](https://dashboards.gitlab.net/d/000000159/ci?viewPanel=28&orgId=1&var-shard=windows-shared&var-runner_type=All&var-runner_managers=All&var-gitlab_env=gprd&var-gl_monitor_fqdn=All&var-has_minutes=yes&var-runner_job_failure_reason=All&var-jobs_running_for_project=0&var-runner_request_endpoint_status=All)
+with the shard set to `windows-shared`. When the job will reach `0` it means that Runner finished processing the last
+job. At this moment we can terminate the process manually in a Windows specific way.
+
+After updating the configuration or restarting the VM or doing whatever else we needed the Graceful Shutdown for
+(for example: applying ansible change to update GitLab Runner version), we can start again the Runner process. Having
+this done we can go again to the GitLab.com Runner's admin page and unpause the runner.
+
+Next we need to repeat the step for any other Windows Runner Manager that we need to handle.
+
 ## Tools
 
 ### Powershell

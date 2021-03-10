@@ -14,7 +14,6 @@
 
 ## Troubleshooting Pointers
 
-* [../ci-runners/update-gitlab-runner-on-managers.md](../ci-runners/update-gitlab-runner-on-managers.md)
 * [../cloudflare/managing-traffic.md](../cloudflare/managing-traffic.md)
 * [../cloudflare/services-locations.md](../cloudflare/services-locations.md)
 * [../config_management/chef-guidelines.md](../config_management/chef-guidelines.md)

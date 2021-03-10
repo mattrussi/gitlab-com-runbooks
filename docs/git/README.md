@@ -24,7 +24,6 @@
 * [../bastions/gstg-bastions.md](../bastions/gstg-bastions.md)
 * [../blackbox/blackbox-git-exporter.md](../blackbox/blackbox-git-exporter.md)
 * [../ci-runners/ci-investigate-abuse.md](../ci-runners/ci-investigate-abuse.md)
-* [../ci-runners/update-gitlab-runner-on-managers.md](../ci-runners/update-gitlab-runner-on-managers.md)
 * [../config_management/chef-vault.md](../config_management/chef-vault.md)
 * [../config_management/chef-workflow.md](../config_management/chef-workflow.md)
 * [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)

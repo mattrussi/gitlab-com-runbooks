@@ -17,7 +17,6 @@
 * [../ci-runners/ci-investigate-abuse.md](../ci-runners/ci-investigate-abuse.md)
 * [../ci-runners/ci-runner-timeouts.md](../ci-runners/ci-runner-timeouts.md)
 * [../ci-runners/service-ci-runners.md](../ci-runners/service-ci-runners.md)
-* [../ci-runners/update-gitlab-runner-on-managers.md](../ci-runners/update-gitlab-runner-on-managers.md)
 * [../cloudflare/logging.md](../cloudflare/logging.md)
 * [../cloudflare/troubleshooting.md](../cloudflare/troubleshooting.md)
 * [../config_management/chef-guidelines.md](../config_management/chef-guidelines.md)
