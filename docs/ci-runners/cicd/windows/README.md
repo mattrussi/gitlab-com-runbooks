@@ -25,10 +25,12 @@ to install relevant software and connect to Windows.
 
 ## Graceful Shutdown and Windows Runner Managers
 
-Unfortunately, as for now Windows version of GitLab Runner doesn't support Graceful Shutdown. It's a limitation
-[that we're currently trying to remove](https://gitlab.com/gitlab-org/gitlab-runner/-/merge_requests/1688).
+With GitLab Runner v13.10 we've added support for Graceful Shutdown for Windows runners. However, it still needs to be
+enabled for our Windows shared runners - by updating the runners to version 13.10 and updating our scripting around
+`wsrmX` runners management. This work is being tracked with the issue https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/12790.
 
-Therefore to gracefully handle Runner shutdown on these managers, we need to work differently.
+Until it's done, Graceful Shutdown needs to be considered as unsupported on our runner managers. Therefore to
+gracefully handle Runner shutdown on these managers, we need to work differently.
 
 Because we can't force Runner to stop requesting new jobs, we need to go to the Runner's configuration
 form **at GitLab side**. In case of `windows-shared-runners-manager-X.gitlab.com` runner managers, we need
