@@ -23,6 +23,8 @@ on-call engineer about SLO violation.
 Quick reference:
 * [Example PagerDuty alert](https://gitlab.pagerduty.com/incidents/PVDAS6I)
 * [Apdex formula (search for `type: ci-runners`)](https://gitlab.com/gitlab-com/runbooks/blob/master/rules/service_apdex.yml)
+* [list of users in the queue](https://log.gprd.gitlab.net/goto/4fa4466e0b5d7cd7e0721b94a41eefae)
+* [list of jobs per project](https://log.gprd.gitlab.net/goto/63f83c2a163fb0b29edc33b19773db25)
 
 The following are some known ways for this alert to be triggered.
 
