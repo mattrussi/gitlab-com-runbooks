@@ -55,9 +55,9 @@ local combinedServiceLevelIndicatorDefinition(
         renderToolingLinks()::
           toolingLinks.renderLinks(self.getToolingLinks()),
 
-        // Generate recording rules for apdex weight
-        generateApdexRecordingRules(burnRate, recordingRuleNames, aggregationLabels, recordingRuleStaticLabels)::
-          std.flatMap(function(c) c.generateApdexRecordingRules(burnRate, recordingRuleNames, aggregationLabels, recordingRuleStaticLabels), componentsInitialised),
+        // Generate recording rules for apdex
+        generateApdexRecordingRules(burnRate, aggregationSet, aggregationLabels, recordingRuleStaticLabels)::
+          std.flatMap(function(c) c.generateApdexRecordingRules(burnRate, aggregationSet, aggregationLabels, recordingRuleStaticLabels), componentsInitialised),
 
         // Generate recording rules for request rate
         generateRequestRateRecordingRules(burnRate, recordingRuleName, aggregationLabels, recordingRuleStaticLabels)::

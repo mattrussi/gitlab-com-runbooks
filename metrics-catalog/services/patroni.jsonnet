@@ -27,6 +27,7 @@ metricsCatalog.serviceDefinition({
       userImpacting: true,
       featureCategory: 'not_owned',
       team: 'sre_datastores',
+      // upscaleLongerBurnRates: true,
       description: |||
         Deprecrated: replaced by `rails_primary_sql` and `rails_replica_sql`.
 
@@ -62,6 +63,7 @@ metricsCatalog.serviceDefinition({
       userImpacting: true,
       featureCategory: 'not_owned',
       team: 'sre_datastores',
+      // upscaleLongerBurnRates: true,
       description: |||
         Represents all SQL transactions issued through ActiveRecord from the Rails monolith (currently web, api, websockets, but not sidekiq) to the Postgres primary.
         Durations can be impacted by various conditions other than Patroni, including client pool saturation, pgbouncer saturation,
@@ -95,6 +97,7 @@ metricsCatalog.serviceDefinition({
       userImpacting: true,
       featureCategory: 'not_owned',
       team: 'sre_datastores',
+      // upscaleLongerBurnRates: true,
       description: |||
         Represents all SQL transactions issued through ActiveRecord from the Rails monolith (currently web, api, websockets, but not sidekiq) to Postgres replicas.
         Durations can be impacted by various conditions other than Patroni, including client pool saturation, pgbouncer saturation,

@@ -230,6 +230,7 @@ groups:
       component: server
       tier: sv
       type: camoproxy
+      upscale_source: 'yes'
     expr: |
       (
         sum by (environment,stage) (
@@ -247,6 +248,7 @@ groups:
       component: server
       tier: sv
       type: camoproxy
+      upscale_source: 'yes'
     expr: |
       sum by (environment,stage) (
         rate(camo_response_duration_seconds_bucket{le="+Inf"}[1h])
@@ -291,32 +293,6 @@ groups:
     expr: |
       sum by (environment) (
         rate(haproxy_backend_http_responses_total{backend="camoproxy",code="5xx",type="camoproxy"}[6h])
-      )
-  - record: gitlab_component_apdex:success:rate_6h
-    labels:
-      component: server
-      tier: sv
-      type: camoproxy
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(camo_response_duration_seconds_bucket{le="5"}[6h])
-        )
-        +
-        sum by (environment,stage) (
-          rate(camo_response_duration_seconds_bucket{le="10"}[6h])
-        )
-      )
-      /
-      2
-  - record: gitlab_component_apdex:weight:score_6h
-    labels:
-      component: server
-      tier: sv
-      type: camoproxy
-    expr: |
-      sum by (environment,stage) (
-        rate(camo_response_duration_seconds_bucket{le="+Inf"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
     labels:

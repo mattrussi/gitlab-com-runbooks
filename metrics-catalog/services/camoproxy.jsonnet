@@ -29,6 +29,7 @@ metricsCatalog.serviceDefinition({
       userImpacting: true,
       featureCategory: 'not_owned',
       team: 'sre_coreinfra',
+      upscaleLongerBurnRates: true,  // TODO: enabling this here to test that this approach works
       description: |||
         This SLI monitors the camoproxy server via its HTTP interface.
         5xx responses are considered to be failures. Note that this SLI
