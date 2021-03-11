@@ -126,22 +126,22 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_1h{component="rails_primary_sql",monitor="global",type="patroni"}
-          < (1 - 14.4 * 0.005000)
+          < (1 - 14.4 * 0.001000)
         )
         and
         (
           gitlab_component_apdex:ratio_5m{component="rails_primary_sql",monitor="global",type="patroni"}
-          < (1 - 14.4 * 0.005000)
+          < (1 - 14.4 * 0.001000)
         )
         or
         (
           gitlab_component_apdex:ratio_6h{component="rails_primary_sql",monitor="global",type="patroni"}
-          < (1 - 6 * 0.005000)
+          < (1 - 6 * 0.001000)
         )
         and
         (
           gitlab_component_apdex:ratio_30m{component="rails_primary_sql",monitor="global",type="patroni"}
-          < (1 - 6 * 0.005000)
+          < (1 - 6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -265,22 +265,22 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_1h{component="rails_replica_sql",monitor="global",type="patroni"}
-          < (1 - 14.4 * 0.005000)
+          < (1 - 14.4 * 0.001000)
         )
         and
         (
           gitlab_component_apdex:ratio_5m{component="rails_replica_sql",monitor="global",type="patroni"}
-          < (1 - 14.4 * 0.005000)
+          < (1 - 14.4 * 0.001000)
         )
         or
         (
           gitlab_component_apdex:ratio_6h{component="rails_replica_sql",monitor="global",type="patroni"}
-          < (1 - 6 * 0.005000)
+          < (1 - 6 * 0.001000)
         )
         and
         (
           gitlab_component_apdex:ratio_30m{component="rails_replica_sql",monitor="global",type="patroni"}
-          < (1 - 6 * 0.005000)
+          < (1 - 6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -405,22 +405,22 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_1h{component="rails_sql",monitor="global",type="patroni"}
-          < (1 - 14.4 * 0.005000)
+          < (1 - 14.4 * 0.001000)
         )
         and
         (
           gitlab_component_apdex:ratio_5m{component="rails_sql",monitor="global",type="patroni"}
-          < (1 - 14.4 * 0.005000)
+          < (1 - 14.4 * 0.001000)
         )
         or
         (
           gitlab_component_apdex:ratio_6h{component="rails_sql",monitor="global",type="patroni"}
-          < (1 - 6 * 0.005000)
+          < (1 - 6 * 0.001000)
         )
         and
         (
           gitlab_component_apdex:ratio_30m{component="rails_sql",monitor="global",type="patroni"}
-          < (1 - 6 * 0.005000)
+          < (1 - 6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)

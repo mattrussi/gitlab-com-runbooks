@@ -8,7 +8,7 @@ metricsCatalog.serviceDefinition({
   type: 'patroni',
   tier: 'db',
   monitoringThresholds: {
-    apdexScore: 0.995,
+    apdexScore: 0.999,
     errorRatio: 0.999,
   },
   // Use recordingRuleMetrics to specify a set of metrics with known high
