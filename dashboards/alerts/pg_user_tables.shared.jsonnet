@@ -68,6 +68,21 @@ local promQuery = import 'grafana/prom_query.libsonnet';
         zindex: -3,
       }),
       basic.timeseries(
+        title='Tuple Fetches as Percentage of Total for Host',
+        query=|||
+          sum by (environment, tier, type, fqdn, relname) (
+            rate(pg_stat_user_tables_idx_tup_fetch{type="patroni", env="$environment", relname="$relname", fqdn="$fqdn"}[$__rate_interval])
+          )
+          / ignoring (relname) group_left()
+          sum by (environment, tier, type, fqdn) (
+            rate(pg_stat_user_tables_idx_tup_fetch{type="patroni", env="$environment", fqdn="$fqdn"}[$__rate_interval])
+          )
+        |||,
+        format='percentunit',
+        legendFormat='{{relname}}',
+        linewidth=2,
+      ),
+      basic.timeseries(
         title='Tuple Modifies per Second',
         query=|||
           sum by (environment, tier, type, fqdn, relname) (
@@ -179,6 +194,21 @@ local promQuery = import 'grafana/prom_query.libsonnet';
           )
         |||,
         legendFormat='{{fqdn}}',
+        linewidth=2,
+      ),
+      basic.timeseries(
+        title='Tuple Fetches as Percentage of Total across all Postgres instances',
+        query=|||
+          sum by (environment, tier, type, relname) (
+            rate(pg_stat_user_tables_idx_tup_fetch{type="patroni", env="$environment", relname="$relname"}[$__rate_interval])
+          )
+          / ignoring (relname) group_left()
+          sum by (environment, tier, type) (
+            rate(pg_stat_user_tables_idx_tup_fetch{type="patroni", env="$environment"}[$__rate_interval])
+          )
+        |||,
+        format='percentunit',
+        legendFormat='{{relname}}',
         linewidth=2,
       ),
       basic.timeseries(
