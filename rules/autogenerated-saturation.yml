@@ -628,12 +628,11 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            (
-              rate(redis_cpu_user_seconds_total{environment!="",type=~"redis|redis-sidekiq|redis-cache"}[1m])
-              +
-              rate(redis_cpu_sys_seconds_total{environment!="",type=~"redis|redis-sidekiq|redis-cache"}[1m])
+            sum by (environment, tier, type, stage, fqdn) (
+              rate(
+                namedprocess_namegroup_thread_cpu_seconds_total{environment!="",type=~"redis|redis-sidekiq|redis-cache", groupname="redis-server", threadname="redis-server"}[1m])
             )
-            and on (instance) redis_instance_info{role="master"}
+            and on (fqdn) redis_instance_info{role="master"}
             ,
             1)
         ,
@@ -2973,7 +2972,7 @@ groups:
 
         Redis Primary CPU Utilization per Node.
 
-        Redis is single-threaded. A single Redis server is only able to scale as far as a single CPU on a single host. When the primary Redis service is saturated, major slowdowns should be expected across the application, so avoid if at all possible.
+        The core server of redis is single-threaded; this thread is only able to scale to full use of a single CPU on a given server. When the primary Redis thread is saturated, major slowdowns should be expected across the application, so avoid if at all possible.
       grafana_dashboard_id: alerts-sat_redis_primary_cpu
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/alerts-sat_redis_primary_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
@@ -2985,12 +2984,11 @@ groups:
         max by(environment, tier, type, stage, fqdn) (
           clamp_min(
             clamp_max(
-              (
-                rate(redis_cpu_user_seconds_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[1m])
-                +
-                rate(redis_cpu_sys_seconds_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[1m])
+              sum by (environment, tier, type, stage, fqdn) (
+                rate(
+                  namedprocess_namegroup_thread_cpu_seconds_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", groupname="redis-server", threadname="redis-server"}[1m])
               )
-              and on (instance) redis_instance_info{role="master"}
+              and on (fqdn) redis_instance_info{role="master"}
               ,
               1)
           ,
