@@ -1013,7 +1013,7 @@ local pgbouncerSyncPool(serviceType, role) =
     |||,
     slos: {
       soft: 0.70,
-      hard: 0.90,
+      hard: 0.95,
     },
   }),
 
