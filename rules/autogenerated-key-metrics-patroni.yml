@@ -9,6 +9,16 @@ groups:
       sum by (environment,le,shard,stage,tier,type) (
         rate(gitlab_sql_duration_seconds_bucket[1m])
       )
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate1m
+    expr: |
+      sum by (environment,feature_category,le,shard,stage,tier,type) (
+        rate(gitlab_sql_primary_duration_seconds_bucket[1m])
+      )
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate1m
+    expr: |
+      sum by (environment,shard,stage,tier,type) (
+        rate(gitlab_sql_replica_duration_seconds_bucket[1m])
+      )
   - record: gitlab_component_ops:rate
     labels:
       component: pgbouncer
@@ -19,6 +29,106 @@ groups:
         label_replace(rate(pgbouncer_stats_sql_transactions_pooled_total{type="patroni", tier="db"}[1m]), "_c", "0", "", "")
         or
         label_replace(rate(pgbouncer_stats_queries_pooled_total{type="patroni", tier="db"}[1m]), "_c", "1", "", "")
+      )
+  - record: gitlab_component_apdex:success:rate
+    labels:
+      component: rails_primary_sql
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      (
+        sum by (environment) (
+          sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate1m{le="0.05"}
+        )
+        +
+        sum by (environment) (
+          sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate1m{le="0.1"}
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: rails_primary_sql
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      sum by (environment) (
+        sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate1m{le="+Inf"}
+      )
+  - record: gitlab_component_apdex:ratio
+    labels:
+      component: rails_primary_sql
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      gitlab_component_apdex:success:rate{component="rails_primary_sql",stage="main",tier="db",type="patroni"}
+      / on(environment) group_left()
+      (
+        gitlab_component_apdex:weight:score{component="rails_primary_sql",stage="main",tier="db",type="patroni"} > 0
+      )
+  - record: gitlab_component_ops:rate
+    labels:
+      component: rails_primary_sql
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      sum by (environment) (
+        sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate1m{le="+Inf"}
+      )
+  - record: gitlab_component_apdex:success:rate
+    labels:
+      component: rails_replica_sql
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      (
+        sum by (environment) (
+          sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate1m{le="0.05"}
+        )
+        +
+        sum by (environment) (
+          sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate1m{le="0.1"}
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: rails_replica_sql
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      sum by (environment) (
+        sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate1m{le="+Inf"}
+      )
+  - record: gitlab_component_apdex:ratio
+    labels:
+      component: rails_replica_sql
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      gitlab_component_apdex:success:rate{component="rails_replica_sql",stage="main",tier="db",type="patroni"}
+      / on(environment) group_left()
+      (
+        gitlab_component_apdex:weight:score{component="rails_replica_sql",stage="main",tier="db",type="patroni"} > 0
+      )
+  - record: gitlab_component_ops:rate
+    labels:
+      component: rails_replica_sql
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      sum by (environment) (
+        sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate1m{le="+Inf"}
       )
   - record: gitlab_component_apdex:success:rate
     labels:
@@ -118,6 +228,16 @@ groups:
       sum by (environment,le,shard,stage,tier,type) (
         rate(gitlab_sql_duration_seconds_bucket[5m])
       )
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate5m
+    expr: |
+      sum by (environment,feature_category,le,shard,stage,tier,type) (
+        rate(gitlab_sql_primary_duration_seconds_bucket[5m])
+      )
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate5m
+    expr: |
+      sum by (environment,shard,stage,tier,type) (
+        rate(gitlab_sql_replica_duration_seconds_bucket[5m])
+      )
   - record: gitlab_component_ops:rate_5m
     labels:
       component: pgbouncer
@@ -128,6 +248,106 @@ groups:
         label_replace(rate(pgbouncer_stats_sql_transactions_pooled_total{type="patroni", tier="db"}[5m]), "_c", "0", "", "")
         or
         label_replace(rate(pgbouncer_stats_queries_pooled_total{type="patroni", tier="db"}[5m]), "_c", "1", "", "")
+      )
+  - record: gitlab_component_apdex:success:rate_5m
+    labels:
+      component: rails_primary_sql
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      (
+        sum by (environment) (
+          sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate5m{le="0.05"}
+        )
+        +
+        sum by (environment) (
+          sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate5m{le="0.1"}
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_5m
+    labels:
+      component: rails_primary_sql
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      sum by (environment) (
+        sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate5m{le="+Inf"}
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: rails_primary_sql
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      gitlab_component_apdex:success:rate_5m{component="rails_primary_sql",stage="main",tier="db",type="patroni"}
+      / on(environment) group_left()
+      (
+        gitlab_component_apdex:weight:score_5m{component="rails_primary_sql",stage="main",tier="db",type="patroni"} > 0
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: rails_primary_sql
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      sum by (environment) (
+        sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate5m{le="+Inf"}
+      )
+  - record: gitlab_component_apdex:success:rate_5m
+    labels:
+      component: rails_replica_sql
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      (
+        sum by (environment) (
+          sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate5m{le="0.05"}
+        )
+        +
+        sum by (environment) (
+          sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate5m{le="0.1"}
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_5m
+    labels:
+      component: rails_replica_sql
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      sum by (environment) (
+        sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate5m{le="+Inf"}
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: rails_replica_sql
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      gitlab_component_apdex:success:rate_5m{component="rails_replica_sql",stage="main",tier="db",type="patroni"}
+      / on(environment) group_left()
+      (
+        gitlab_component_apdex:weight:score_5m{component="rails_replica_sql",stage="main",tier="db",type="patroni"} > 0
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: rails_replica_sql
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      sum by (environment) (
+        sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate5m{le="+Inf"}
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
@@ -227,6 +447,16 @@ groups:
       sum by (environment,le,shard,stage,tier,type) (
         rate(gitlab_sql_duration_seconds_bucket[30m])
       )
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate30m
+    expr: |
+      sum by (environment,feature_category,le,shard,stage,tier,type) (
+        rate(gitlab_sql_primary_duration_seconds_bucket[30m])
+      )
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate30m
+    expr: |
+      sum by (environment,shard,stage,tier,type) (
+        rate(gitlab_sql_replica_duration_seconds_bucket[30m])
+      )
   - record: gitlab_component_ops:rate_30m
     labels:
       component: pgbouncer
@@ -237,6 +467,106 @@ groups:
         label_replace(rate(pgbouncer_stats_sql_transactions_pooled_total{type="patroni", tier="db"}[30m]), "_c", "0", "", "")
         or
         label_replace(rate(pgbouncer_stats_queries_pooled_total{type="patroni", tier="db"}[30m]), "_c", "1", "", "")
+      )
+  - record: gitlab_component_apdex:success:rate_30m
+    labels:
+      component: rails_primary_sql
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      (
+        sum by (environment) (
+          sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate30m{le="0.05"}
+        )
+        +
+        sum by (environment) (
+          sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate30m{le="0.1"}
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_30m
+    labels:
+      component: rails_primary_sql
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      sum by (environment) (
+        sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate30m{le="+Inf"}
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: rails_primary_sql
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      gitlab_component_apdex:success:rate_30m{component="rails_primary_sql",stage="main",tier="db",type="patroni"}
+      / on(environment) group_left()
+      (
+        gitlab_component_apdex:weight:score_30m{component="rails_primary_sql",stage="main",tier="db",type="patroni"} > 0
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: rails_primary_sql
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      sum by (environment) (
+        sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate30m{le="+Inf"}
+      )
+  - record: gitlab_component_apdex:success:rate_30m
+    labels:
+      component: rails_replica_sql
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      (
+        sum by (environment) (
+          sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate30m{le="0.05"}
+        )
+        +
+        sum by (environment) (
+          sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate30m{le="0.1"}
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_30m
+    labels:
+      component: rails_replica_sql
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      sum by (environment) (
+        sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate30m{le="+Inf"}
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: rails_replica_sql
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      gitlab_component_apdex:success:rate_30m{component="rails_replica_sql",stage="main",tier="db",type="patroni"}
+      / on(environment) group_left()
+      (
+        gitlab_component_apdex:weight:score_30m{component="rails_replica_sql",stage="main",tier="db",type="patroni"} > 0
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: rails_replica_sql
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      sum by (environment) (
+        sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate30m{le="+Inf"}
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
@@ -336,6 +666,16 @@ groups:
       sum by (environment,le,shard,stage,tier,type) (
         rate(gitlab_sql_duration_seconds_bucket[1h])
       )
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate1h
+    expr: |
+      sum by (environment,feature_category,le,shard,stage,tier,type) (
+        rate(gitlab_sql_primary_duration_seconds_bucket[1h])
+      )
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate1h
+    expr: |
+      sum by (environment,shard,stage,tier,type) (
+        rate(gitlab_sql_replica_duration_seconds_bucket[1h])
+      )
   - record: gitlab_component_ops:rate_1h
     labels:
       component: pgbouncer
@@ -346,6 +686,106 @@ groups:
         label_replace(rate(pgbouncer_stats_sql_transactions_pooled_total{type="patroni", tier="db"}[1h]), "_c", "0", "", "")
         or
         label_replace(rate(pgbouncer_stats_queries_pooled_total{type="patroni", tier="db"}[1h]), "_c", "1", "", "")
+      )
+  - record: gitlab_component_apdex:success:rate_1h
+    labels:
+      component: rails_primary_sql
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      (
+        sum by (environment) (
+          sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate1h{le="0.05"}
+        )
+        +
+        sum by (environment) (
+          sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate1h{le="0.1"}
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_1h
+    labels:
+      component: rails_primary_sql
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      sum by (environment) (
+        sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate1h{le="+Inf"}
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: rails_primary_sql
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      gitlab_component_apdex:success:rate_1h{component="rails_primary_sql",stage="main",tier="db",type="patroni"}
+      / on(environment) group_left()
+      (
+        gitlab_component_apdex:weight:score_1h{component="rails_primary_sql",stage="main",tier="db",type="patroni"} > 0
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: rails_primary_sql
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      sum by (environment) (
+        sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate1h{le="+Inf"}
+      )
+  - record: gitlab_component_apdex:success:rate_1h
+    labels:
+      component: rails_replica_sql
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      (
+        sum by (environment) (
+          sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate1h{le="0.05"}
+        )
+        +
+        sum by (environment) (
+          sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate1h{le="0.1"}
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_1h
+    labels:
+      component: rails_replica_sql
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      sum by (environment) (
+        sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate1h{le="+Inf"}
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: rails_replica_sql
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      gitlab_component_apdex:success:rate_1h{component="rails_replica_sql",stage="main",tier="db",type="patroni"}
+      / on(environment) group_left()
+      (
+        gitlab_component_apdex:weight:score_1h{component="rails_replica_sql",stage="main",tier="db",type="patroni"} > 0
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: rails_replica_sql
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      sum by (environment) (
+        sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate1h{le="+Inf"}
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
@@ -445,6 +885,16 @@ groups:
       sum by (environment,le,shard,stage,tier,type) (
         rate(gitlab_sql_duration_seconds_bucket[6h])
       )
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate6h
+    expr: |
+      sum by (environment,feature_category,le,shard,stage,tier,type) (
+        rate(gitlab_sql_primary_duration_seconds_bucket[6h])
+      )
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate6h
+    expr: |
+      sum by (environment,shard,stage,tier,type) (
+        rate(gitlab_sql_replica_duration_seconds_bucket[6h])
+      )
   - record: gitlab_component_ops:rate_6h
     labels:
       component: pgbouncer
@@ -455,6 +905,106 @@ groups:
         label_replace(rate(pgbouncer_stats_sql_transactions_pooled_total{type="patroni", tier="db"}[6h]), "_c", "0", "", "")
         or
         label_replace(rate(pgbouncer_stats_queries_pooled_total{type="patroni", tier="db"}[6h]), "_c", "1", "", "")
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: rails_primary_sql
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      (
+        sum by (environment) (
+          sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate6h{le="0.05"}
+        )
+        +
+        sum by (environment) (
+          sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate6h{le="0.1"}
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: rails_primary_sql
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      sum by (environment) (
+        sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate6h{le="+Inf"}
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: rails_primary_sql
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      gitlab_component_apdex:success:rate_6h{component="rails_primary_sql",stage="main",tier="db",type="patroni"}
+      / on(environment) group_left()
+      (
+        gitlab_component_apdex:weight:score_6h{component="rails_primary_sql",stage="main",tier="db",type="patroni"} > 0
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: rails_primary_sql
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      sum by (environment) (
+        sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate6h{le="+Inf"}
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: rails_replica_sql
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      (
+        sum by (environment) (
+          sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate6h{le="0.05"}
+        )
+        +
+        sum by (environment) (
+          sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate6h{le="0.1"}
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: rails_replica_sql
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      sum by (environment) (
+        sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate6h{le="+Inf"}
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: rails_replica_sql
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      gitlab_component_apdex:success:rate_6h{component="rails_replica_sql",stage="main",tier="db",type="patroni"}
+      / on(environment) group_left()
+      (
+        gitlab_component_apdex:weight:score_6h{component="rails_replica_sql",stage="main",tier="db",type="patroni"} > 0
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: rails_replica_sql
+      stage: main
+      tier: db
+      type: patroni
+    expr: |
+      sum by (environment) (
+        sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate6h{le="+Inf"}
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
@@ -552,6 +1102,22 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: pgbouncer
+      regional_aggregation: 'no'
+      service_aggregation: 'yes'
+      tier: db
+      type: patroni
+    expr: '1'
+  - record: gitlab_component_service:mapping
+    labels:
+      component: rails_primary_sql
+      regional_aggregation: 'no'
+      service_aggregation: 'yes'
+      tier: db
+      type: patroni
+    expr: '1'
+  - record: gitlab_component_service:mapping
+    labels:
+      component: rails_replica_sql
       regional_aggregation: 'no'
       service_aggregation: 'yes'
       tier: db

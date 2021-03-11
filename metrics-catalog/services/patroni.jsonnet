@@ -17,6 +17,8 @@ metricsCatalog.serviceDefinition({
   // Use sparingly, and don't overuse.
   recordingRuleMetrics: [
     'gitlab_sql_duration_seconds_bucket',
+    'gitlab_sql_primary_duration_seconds_bucket',
+    'gitlab_sql_replica_duration_seconds_bucket',
   ],
   serviceLevelIndicators: {
     // We don't have latency histograms for patroni but for now we will
@@ -26,6 +28,8 @@ metricsCatalog.serviceDefinition({
       featureCategory: 'not_owned',
       team: 'sre_datastores',
       description: |||
+        Deprecrated: replaced by `rails_primary_sql` and `rails_replica_sql`.
+
         Represents all SQL transactions issued through ActiveRecord from the Rails monolith. Durations
         can be impacted by various conditions other than Patroni, including client pool saturation, pgbouncer saturation,
         Ruby thread contention and network conditions.
@@ -48,6 +52,72 @@ metricsCatalog.serviceDefinition({
       ),
 
       significantLabels: [],
+    },
+
+    // We don't have latency histograms for patroni but for now we will
+    // use the rails controller SQL latencies as an indirect proxy.
+    //
+    // This is intended to be a replacement for `rails_sql`
+    rails_primary_sql: {
+      userImpacting: true,
+      featureCategory: 'not_owned',
+      team: 'sre_datastores',
+      description: |||
+        Represents all SQL transactions issued through ActiveRecord from the Rails monolith (currently web, api, websockets, but not sidekiq) to the Postgres primary.
+        Durations can be impacted by various conditions other than Patroni, including client pool saturation, pgbouncer saturation,
+        Ruby thread contention and network conditions.
+      |||,
+
+      staticLabels: {
+        stage: 'main',
+      },
+
+      apdex: histogramApdex(
+        histogram='gitlab_sql_primary_duration_seconds_bucket',
+        selector={},
+        satisfiedThreshold=0.05,
+        toleratedThreshold=0.1
+      ),
+
+      requestRate: rateMetric(
+        counter='gitlab_sql_primary_duration_seconds_bucket',
+        selector={ le: '+Inf' },
+      ),
+
+      significantLabels: ['feature_category'],
+    },
+
+    // We don't have latency histograms for patroni but for now we will
+    // use the rails controller SQL latencies as an indirect proxy.
+    //
+    // This is intended to be a replacement for `rails_sql`
+    rails_replica_sql: {
+      userImpacting: true,
+      featureCategory: 'not_owned',
+      team: 'sre_datastores',
+      description: |||
+        Represents all SQL transactions issued through ActiveRecord from the Rails monolith (currently web, api, websockets, but not sidekiq) to Postgres replicas.
+        Durations can be impacted by various conditions other than Patroni, including client pool saturation, pgbouncer saturation,
+        Ruby thread contention and network conditions.
+      |||,
+
+      staticLabels: {
+        stage: 'main',
+      },
+
+      apdex: histogramApdex(
+        histogram='gitlab_sql_primary_duration_seconds_bucket',
+        selector={},
+        satisfiedThreshold=0.05,
+        toleratedThreshold=0.1
+      ),
+
+      requestRate: rateMetric(
+        counter='gitlab_sql_primary_duration_seconds_bucket',
+        selector={ le: '+Inf' },
+      ),
+
+      significantLabels: ['feature_category'],
     },
 
     transactions_primary: {
