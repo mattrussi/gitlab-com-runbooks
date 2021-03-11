@@ -996,20 +996,19 @@ local pgbouncerSyncPool(serviceType, role) =
     description: |||
       Redis Primary CPU Utilization per Node.
 
-      Redis is single-threaded. A single Redis server is only able to scale as far as a single CPU on a single host.
-      When the primary Redis service is saturated, major slowdowns should be expected across the application, so avoid if at all
+      The core server of redis is single-threaded; this thread is only able to scale to full use of a single CPU on a given server.
+      When the primary Redis thread is saturated, major slowdowns should be expected across the application, so avoid if at all
       possible.
     |||,
     grafana_dashboard_uid: 'sat_redis_primary_cpu',
     resourceLabels: ['fqdn'],
     burnRate: '5m',
     query: |||
-      (
-        rate(redis_cpu_user_seconds_total{%(selector)s}[%(rangeInterval)s])
-        +
-        rate(redis_cpu_sys_seconds_total{%(selector)s}[%(rangeInterval)s])
+      sum by (%(aggregationLabels)s) (
+        rate(
+          namedprocess_namegroup_thread_cpu_seconds_total{%(selector)s, groupname="redis-server", threadname="redis-server"}[%(rangeInterval)s])
       )
-      and on (instance) redis_instance_info{role="master"}
+      and on (fqdn) redis_instance_info{role="master"}
     |||,
     slos: {
       soft: 0.70,
