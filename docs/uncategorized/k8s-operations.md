@@ -1,3 +1,5 @@
+[[_TOC_]]
+
 # GitLab
 
 https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com
@@ -267,3 +269,76 @@ requests will help as it will ask Kubernetes to provision new nodes if capacity
 is limited.
 
 Kubernetes Resource Management: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+
+## Profiling in kubernetes
+
+### SSH to a GKE node
+
+```bash
+$ kubectl -n pubsubbeat get pods -o wide  # find the node hosting the pod with the container you want to profile
+pubsubbeat-pubsub-praefect-inf-gprd-d6ddcf5bb-7lrgv               3/3     Running   0          20m   10.222.56.148   gke-gprd-gitlab-gke-git-https-1-29f46e3d-4fmr         <none>           <none>
+pubsubbeat-pubsub-puma-inf-gprd-68dcc4fc7-ddwcb                   3/3     Running   0          20m   10.222.5.110    gke-gprd-gitlab-gke-sidekiq-urgent-ot-9be5be8a-ptgj   <none>           <none>
+pubsubbeat-pubsub-rails-inf-gprd-788c4c5f59-p74rk                 3/3     Running   0          19m   10.222.8.89     gke-gprd-gitlab-gke-sidekiq-urgent-ot-9be5be8a-o05q   <none>           <none>
+(...)
+$ gcloud beta compute ssh --zone "us-east1-c" "gke-gprd-gitlab-gke-sidekiq-urgent-ot-9be5be8a-o05q" --project "gitlab-production"  # ssh to the GKE node
+```
+
+### Check for presence of symbols
+
+```bash
+$ CONTAINER_ID=$(docker ps | grep pubsubbeat_pubsubbeat-pubsub-rails | awk '{print $1}')  # Find the ContainerID of the container you want to profile
+$ docker container top $CONTAINER_ID  # list processes in the container and find the path of the binary
+UID                 PID                 PPID                C                   STIME               TTY                 TIME                CMD
+root                2932207             2932188             0                   14:28               ?                   00:00:00            /bin/sh -c /bin/pubsubbeat -c /etc/configmap/pubsubbeat.yml -e 2>&1 | /usr/bin/rotatelogs -e /volumes/emptydir/pubsubbeat.log 50M
+root                2932237             2932207             99                  14:28               ?                   03:05:29            /bin/pubsubbeat -c /etc/configmap/pubsubbeat.yml -e
+root                2932238             2932207             0                   14:28               ?                   00:00:00            /usr/bin/rotatelogs -e /volumes/emptydir/pubsubbeat.log 50M
+$ CONTAINER_ROOTFS="$(docker inspect --format="{{ .GraphDriver.Data.MergedDir }}" $CONTAINER_ID)"  # find the path to the root fs of the container
+$ sudo file "$CONTAINER_ROOTFS/bin/pubsubbeat"  # check if the binary contains symbols, the last column should say: "not stripped"
+/var/lib/docker/overlay2/2d9bc0cc996455ae6adc02b8681d4136135ab3fc93a89514bb6aa204e1d63233/merged/bin/pubsubbeat: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), statically linked, Go BuildID=dj2P7xQg9cLDu7_yJhYO/nEBeM2i2MX7nGA4gEyTu/oWmkQmXlToiIjtBSa6lZ/eWGiKNvzpYh2Ftm14MGU, not stripped
+```
+
+### Collect `perf record` data
+
+#### on the entire node
+
+```bash
+$ sudo perf record -a -g -e cpu-cycles --freq 99 -- sleep 60
+```
+
+#### on a single container
+
+If the binary running in the container doesn't contain symbols, the data you collect will include empty function names (will not provide a lot of value).
+
+```bash
+$ CONTAINER_ID=$(docker ps | grep pubsubbeat_pubsubbeat-pubsub-rails | awk '{print $1}')  # Find the ContainerID of the container you want to profile
+$ CONTAINER_CGROUP=$(docker inspect --format='{{ .HostConfig.CgroupParent }}' $CONTAINER_ID)  # Find the cgroup of the container
+$ sudo perf record -a -g -e cpu-cycles --freq 99 --cgroup $CONTAINER_CGROUP -- sleep 60
+```
+
+### Extract stacks from `perf record` data with `perf script`
+
+```bash
+$ sudo perf script --header | gzip > stacks.$(hostname).$(date +'%Y-%m-%d_%H%M%S_%Z').gz
+```
+
+### Download `perf script` output
+
+So that we avoid installing additional tooling on the GKE node.
+
+On your localhost:
+```bash
+$ gcloud beta compute scp --zone "us-east1-c" "gke-gprd-gitlab-gke-sidekiq-urgent-ot-9be5be8a-o05q:stacks.gke-gprd-gitlab-gke-sidekiq-urgent-ot-9be5be8a-o05q.2021-03-05_173617.gz" --project "gitlab-production" .
+$ gunzip stacks.gke-gprd-gitlab-gke-sidekiq-urgent-ot-9be5be8a-o05q.2021-03-05_173617.gz
+```
+
+### Visualize using Flamescope
+
+```bash
+$ docker run -d --rm -v $(pwd):/profiles:ro -p 5000:5000 igorwgitlab/flamescope  # open your browser and go to http://127.0.0.1:5000/
+```
+
+### Visualize using Flamegraph
+
+```bash
+$ cat stacks.gke-gprd-gitlab-gke-sidekiq-urgent-ot-9be5be8a-o05q.2021-03-05_173617 | stackcollapse-perf.pl --kernel | flamegraph.pl > flamegraph.$(hostname).$(date '+%Y%m%d_%H%M%S_%Z').svg
+```
