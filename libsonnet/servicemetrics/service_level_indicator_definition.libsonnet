@@ -82,33 +82,6 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
           rangeInterval=burnRate
         );
 
-        local substExpr = function(recordingRule, expr)
-          if recordingRule != null then
-            '%(recordingRule)s{%(selector)s}' % {
-              recordingRule: recordingRule,
-              selector: selectors.serializeHash(allStaticLabels),
-            }
-          else
-            strings.chomp(expr);
-
-        local apdexRatioExpr =
-          |||
-            %(apdexSuccessRateExpr)s
-            /%(groupByClause)s
-            (
-              %(apdexWeightExpr)s > 0
-            )
-          ||| % {
-            groupByClause: if recordingRuleNames.apdexWeight == null then
-              ''
-            else
-              ' on(%(aggregationLabels)s) group_left()' % {
-                aggregationLabels: aggregations.serialize(aggregationLabelsWithoutStaticLabels),
-              },
-            apdexSuccessRateExpr: substExpr(recordingRuleNames.apdexSuccessRate, apdexSuccessRateExpr),
-            apdexWeightExpr: strings.indent(substExpr(recordingRuleNames.apdexWeight, apdexWeightExpr), 2),
-          };
-
         (
           if recordingRuleNames.apdexSuccessRate != null then
             [{
@@ -130,12 +103,6 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
           else
             []
         )
-        +
-        [{
-          record: recordingRuleNames.apdexRatio,
-          labels: allStaticLabels,
-          expr: apdexRatioExpr,
-        }]
       else
         [],
 
