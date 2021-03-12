@@ -421,10 +421,12 @@ $ less ./script_report
 
 The redis trace script parses out flows into a timeline of commands, one line per key. The fields are: timestamp, second offset, command, src host, key pattern, key.
 
+It has some pre-canned key pattern extractions that can be enabled via `GITLAB_REDIS_CLUSTER`. Supported values are: `persistent`, `cache`.
+
 The script can be tweaked or its output further processed with `awk` and friends.
 
 ```shell
-$ find redis-analysis -name '*.06379.findx' | parallel -j0 -n100 ruby runbooks/scripts/redis_trace_cmd.rb | sed '/^$/d' > trace.txt
+$ find redis-analysis -name '*.06379.findx' | GITLAB_REDIS_CLUSTER=cache parallel -j0 -n100 ruby runbooks/scripts/redis_trace_cmd.rb | sed '/^$/d' > trace.txt
 $ gsort --parallel=8 trace.txt -o trace.txt
 ```
 
