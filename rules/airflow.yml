@@ -14,3 +14,15 @@ groups:
         description: >
           Prometheus has failed to get metrics from Airflow for about 10 minutes.
           See 'https://thanos.gitlab.net/graph?g0.expr=up%7Benv%3D"{{ $externalLabels.env }}"%2Cjob%3D"{{ $labels.job }}"%7D%20%3D%3D%200'
+    - alert: AirflowLongRunningTask
+      expr: >
+        sum by (task_id)(airflow_task_status{status="running"}) > 0
+      for: 12h
+      labels:
+        alert_type: cause
+        severity: s4
+        team: data-analytics
+      annotations:
+        title: There is a long-running Airflow task
+        description: >
+          The task {{ $labels.task_id }} has been running for more than 12 hours.
