@@ -23,11 +23,7 @@ groups:
   - record: gitlab_service_apdex:ratio
     expr: |
       sum by (env,environment,tier,type,stage) (
-        (
-          (gitlab_component_apdex:ratio{monitor!="global"} >= 0)
-          *
-          (gitlab_component_apdex:weight:score{monitor!="global"} >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global", service_aggregation="yes"})
-        )
+        (gitlab_component_apdex:success:rate{monitor!="global"} >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global", service_aggregation="yes"})
       )
       /
       sum by (env,environment,tier,type,stage) (
@@ -51,11 +47,7 @@ groups:
   - record: gitlab_service_apdex:ratio_5m
     expr: |
       sum by (env,environment,tier,type,stage) (
-        (
-          (gitlab_component_apdex:ratio_5m{monitor!="global"} >= 0)
-          *
-          (gitlab_component_apdex:weight:score_5m{monitor!="global"} >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global", service_aggregation="yes"})
-        )
+        (gitlab_component_apdex:success:rate_5m{monitor!="global"} >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global", service_aggregation="yes"})
       )
       /
       sum by (env,environment,tier,type,stage) (
@@ -79,11 +71,7 @@ groups:
   - record: gitlab_service_apdex:ratio_30m
     expr: |
       sum by (env,environment,tier,type,stage) (
-        (
-          (gitlab_component_apdex:ratio_30m{monitor!="global"} >= 0)
-          *
-          (gitlab_component_apdex:weight:score_30m{monitor!="global"} >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global", service_aggregation="yes"})
-        )
+        (gitlab_component_apdex:success:rate_30m{monitor!="global"} >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global", service_aggregation="yes"})
       )
       /
       sum by (env,environment,tier,type,stage) (
@@ -107,11 +95,7 @@ groups:
   - record: gitlab_service_apdex:ratio_1h
     expr: |
       sum by (env,environment,tier,type,stage) (
-        (
-          (gitlab_component_apdex:ratio_1h{monitor!="global"} >= 0)
-          *
-          (gitlab_component_apdex:weight:score_1h{monitor!="global"} >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global", service_aggregation="yes"})
-        )
+        (gitlab_component_apdex:success:rate_1h{monitor!="global"} >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global", service_aggregation="yes"})
       )
       /
       sum by (env,environment,tier,type,stage) (
@@ -135,11 +119,7 @@ groups:
   - record: gitlab_service_apdex:ratio_6h
     expr: |
       sum by (env,environment,tier,type,stage) (
-        (
-          (gitlab_component_apdex:ratio_6h{monitor!="global"} >= 0)
-          *
-          (gitlab_component_apdex:weight:score_6h{monitor!="global"} >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global", service_aggregation="yes"})
-        )
+        (gitlab_component_apdex:success:rate_6h{monitor!="global"} >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global", service_aggregation="yes"})
       )
       /
       sum by (env,environment,tier,type,stage) (

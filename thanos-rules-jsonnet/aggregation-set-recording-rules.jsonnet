@@ -67,7 +67,7 @@ local outputPromYaml(groups) =
         interval: '1m',
         partial_response_strategy: 'warn',
         rules: aggregationSetTransformer.generateRecordingRules(
-          sourceAggregationSet=aggregationSets.globalNodeSLIs,
+          sourceAggregationSet=aggregationSets.promSourceNodeAggregatedSLIs,
           targetAggregationSet=aggregationSets.serviceNodeAggregatedSLIs
         ),
       }]

@@ -28,11 +28,7 @@ groups:
   - record: gitlab_component_node_apdex:ratio_5m
     expr: |
       sum by (env,environment,tier,type,stage,shard,fqdn,component) (
-        (
-          (gitlab_component_node_apdex:ratio_5m{monitor!="global"} >= 0)
-          *
-          (gitlab_component_node_apdex:weight:score_5m{monitor!="global"} >= 0)
-        )
+        (gitlab_component_node_apdex:success:rate_5m{monitor!="global"} >= 0)
       )
       /
       sum by (env,environment,tier,type,stage,shard,fqdn,component) (
@@ -61,11 +57,7 @@ groups:
   - record: gitlab_component_node_apdex:ratio_30m
     expr: |
       sum by (env,environment,tier,type,stage,shard,fqdn,component) (
-        (
-          (gitlab_component_node_apdex:ratio_30m{monitor!="global"} >= 0)
-          *
-          (gitlab_component_node_apdex:weight:score_30m{monitor!="global"} >= 0)
-        )
+        (gitlab_component_node_apdex:success:rate_30m{monitor!="global"} >= 0)
       )
       /
       sum by (env,environment,tier,type,stage,shard,fqdn,component) (
@@ -94,11 +86,7 @@ groups:
   - record: gitlab_component_node_apdex:ratio_1h
     expr: |
       sum by (env,environment,tier,type,stage,shard,fqdn,component) (
-        (
-          (gitlab_component_node_apdex:ratio_1h{monitor!="global"} >= 0)
-          *
-          (gitlab_component_node_apdex:weight:score_1h{monitor!="global"} >= 0)
-        )
+        (gitlab_component_node_apdex:success:rate_1h{monitor!="global"} >= 0)
       )
       /
       sum by (env,environment,tier,type,stage,shard,fqdn,component) (
@@ -127,11 +115,7 @@ groups:
   - record: gitlab_component_node_apdex:ratio_6h
     expr: |
       sum by (env,environment,tier,type,stage,shard,fqdn,component) (
-        (
-          (gitlab_component_node_apdex:ratio_6h{monitor!="global"} >= 0)
-          *
-          (gitlab_component_node_apdex:weight:score_6h{monitor!="global"} >= 0)
-        )
+        (gitlab_component_node_apdex:success:rate_6h{monitor!="global"} >= 0)
       )
       /
       sum by (env,environment,tier,type,stage,shard,fqdn,component) (
