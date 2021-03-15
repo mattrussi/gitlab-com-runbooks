@@ -106,14 +106,14 @@ metricsCatalog.serviceDefinition({
       },
 
       apdex: histogramApdex(
-        histogram='gitlab_sql_primary_duration_seconds_bucket',
+        histogram='gitlab_sql_replica_duration_seconds_bucket',
         selector={},
         satisfiedThreshold=0.05,
         toleratedThreshold=0.1
       ),
 
       requestRate: rateMetric(
-        counter='gitlab_sql_primary_duration_seconds_bucket',
+        counter='gitlab_sql_replica_duration_seconds_bucket',
         selector={ le: '+Inf' },
       ),
 
