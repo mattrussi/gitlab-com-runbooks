@@ -1,5 +1,6 @@
 local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
+local strings = import 'utils/strings.libsonnet';
 
 {
   // Aggregates apdex scores from one aggregation set to another. Intended to be used
@@ -50,9 +51,10 @@ local selectors = import 'promql/selectors.libsonnet';
       if targetApdexRatioMetric == null then
         []
       else
-        [{
-          record: targetApdexRatioMetric,
-          expr: |||
+        local sourceApdexSuccessRateMetric = sourceAggregationSet.getApdexSuccessRateMetricForBurnRate(burnRate, required=true);
+        local sourceApdexWeightMetric = sourceAggregationSet.getApdexWeightMetricForBurnRate(burnRate, required=true);
+        local expr =
+          |||
             sum by (%(targetAggregationLabels)s) (
               (%(sourceApdexSuccessRateMetric)s{%(sourceSelector)s} >= 0)%(aggregationFilterExpr)s
             )
@@ -61,9 +63,43 @@ local selectors = import 'promql/selectors.libsonnet';
               (%(sourceApdexWeightMetric)s{%(sourceSelector)s} >= 0)%(aggregationFilterExpr)s
             )
           ||| % formatConfig {
-            sourceApdexSuccessRateMetric: sourceAggregationSet.getApdexSuccessRateMetricForBurnRate(burnRate, required=true),
-            sourceApdexWeightMetric: sourceAggregationSet.getApdexWeightMetricForBurnRate(burnRate, required=true),
-          },
+            sourceApdexSuccessRateMetric: sourceApdexSuccessRateMetric,
+            sourceApdexWeightMetric: sourceApdexWeightMetric,
+          };
+
+        [{
+          record: targetApdexRatioMetric,
+          expr:
+            /**
+             * For 6h burn rates for SLIs with `upscaleLongerBurnRates` set to true,
+             * we may not have 6h apdex components, so for those we calculate the 6h metric
+             * by upscaling 1h metrics
+             */
+            if burnRate == '6h' then
+              |||
+                (
+                  %(expr)s
+                )
+                or
+                (
+                  sum by (%(targetAggregationLabels)s) (
+                    sum_over_time(%(apdexSuccessRateMetric1h)s{%(sourceSelectorWithUpscale)s}[6h])%(aggregationFilterExpr)s
+                  )
+                  /
+                  sum by (%(targetAggregationLabels)s) (
+                    sum_over_time(%(sourceApdexWeightMetric1h)s{%(sourceSelectorWithUpscale)s}[6h])%(aggregationFilterExpr)s
+                  )
+                )
+              ||| % formatConfig {
+                expr: expr,
+                sourceApdexWeightMetric1h: sourceAggregationSet.getApdexWeightMetricForBurnRate('1h', required=true),
+                apdexSuccessRateMetric1h: sourceAggregationSet.getApdexSuccessRateMetricForBurnRate('1h', required=true),
+                sourceApdexSuccessRateMetric: sourceApdexSuccessRateMetric,
+                sourceApdexWeightMetric: sourceApdexWeightMetric,
+                sourceSelectorWithUpscale: selectors.serializeHash(sourceAggregationSet.selector { upscale_source: 'yes' }),
+              }
+            else
+              expr,
         }]
     ),
 

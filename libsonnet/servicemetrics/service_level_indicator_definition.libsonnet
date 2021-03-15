@@ -12,6 +12,7 @@ local serviceLevelIndicatorDefaults = {
   staticLabels: {},  // by default, no static labels
   serviceAggregation: true,  // by default, requestRate is aggregated up to the service level
   ignoreTrafficCessation: false,  // Override to true to disable alerting when SLI is zero or absent
+  upscaleLongerBurnRates: false,  // When true, long-term burn rates will be upscaled from shorter burn rates, to optimize for high cardinality metrics
 };
 
 local validateHasField(object, field, message) =
@@ -65,44 +66,59 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
       toolingLinks.renderLinks(self.getToolingLinks()),
 
     // Generate recording rules for apdex
-    generateApdexRecordingRules(burnRate, recordingRuleNames, aggregationLabels, recordingRuleStaticLabels)::
-      local allStaticLabels = recordingRuleStaticLabels + serviceLevelIndicator.staticLabels;
+    generateApdexRecordingRules(burnRate, aggregationSet, aggregationLabels, recordingRuleStaticLabels)::
+      local upscaleLabels =
+        if self.upscaleLongerBurnRates && burnRate == '1h' then
+          { upscale_source: 'yes' }
+        else
+          {};
+
+      local allStaticLabels = recordingRuleStaticLabels + serviceLevelIndicator.staticLabels + upscaleLabels;
       local aggregationLabelsWithoutStaticLabels = filterStaticLabelsFromAggregationLabels(aggregationLabels, allStaticLabels);
 
       if self.hasApdex() then
-        local apdexSuccessRateExpr = serviceLevelIndicator.apdex.apdexSuccessRateQuery(
-          aggregationLabels=aggregationLabelsWithoutStaticLabels,
-          selector={},
-          rangeInterval=burnRate
-        );
+        // Currently we only do upscaling on apdex scores and on 6h burn rates
+        if self.upscaleLongerBurnRates && burnRate == '6h' then
+          /* Do not generate source aggregations for upscaleLongerBurnRates components */
+          []
+        else
+          local apdexSuccessRateRecordingRuleName = aggregationSet.getApdexSuccessRateMetricForBurnRate(burnRate);
+          local apdexWeightRecordingRuleName = aggregationSet.getApdexWeightMetricForBurnRate(burnRate);
+          local apdexRatioRecordingRuleName = aggregationSet.getApdexRatioMetricForBurnRate(burnRate);
 
-        local apdexWeightExpr = serviceLevelIndicator.apdex.apdexWeightQuery(
-          aggregationLabels=aggregationLabelsWithoutStaticLabels,
-          selector={},
-          rangeInterval=burnRate
-        );
+          local apdexSuccessRateExpr = serviceLevelIndicator.apdex.apdexSuccessRateQuery(
+            aggregationLabels=aggregationLabelsWithoutStaticLabels,
+            selector={},
+            rangeInterval=burnRate
+          );
 
-        (
-          if recordingRuleNames.apdexSuccessRate != null then
-            [{
-              record: recordingRuleNames.apdexSuccessRate,
-              labels: allStaticLabels,
-              expr: apdexSuccessRateExpr,
-            }]
-          else
-            []
-        )
-        +
-        (
-          if recordingRuleNames.apdexWeight != null then
-            [{
-              record: recordingRuleNames.apdexWeight,
-              labels: allStaticLabels,
-              expr: apdexWeightExpr,
-            }]
-          else
-            []
-        )
+          local apdexWeightExpr = serviceLevelIndicator.apdex.apdexWeightQuery(
+            aggregationLabels=aggregationLabelsWithoutStaticLabels,
+            selector={},
+            rangeInterval=burnRate
+          );
+
+          (
+            if apdexSuccessRateRecordingRuleName != null then
+              [{
+                record: apdexSuccessRateRecordingRuleName,
+                labels: allStaticLabels,
+                expr: apdexSuccessRateExpr,
+              }]
+            else
+              []
+          )
+          +
+          (
+            if apdexWeightRecordingRuleName != null then
+              [{
+                record: apdexWeightRecordingRuleName,
+                labels: allStaticLabels,
+                expr: apdexWeightExpr,
+              }]
+            else
+              []
+          )
       else
         [],
 

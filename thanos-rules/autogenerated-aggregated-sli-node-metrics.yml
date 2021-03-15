@@ -94,10 +94,23 @@ groups:
       gitlab_component_node_ops:rate_6h{monitor="global"}
   - record: gitlab_component_node_apdex:ratio_6h
     expr: |
-      sum by (env,environment,tier,type,stage,shard,fqdn,component) (
+      (
+        sum by (env,environment,tier,type,stage,shard,fqdn,component) (
         (gitlab_component_node_apdex:success:rate_6h{monitor!="global"} >= 0)
       )
       /
       sum by (env,environment,tier,type,stage,shard,fqdn,component) (
         (gitlab_component_node_apdex:weight:score_6h{monitor!="global"} >= 0)
+      )
+
+      )
+      or
+      (
+        sum by (env,environment,tier,type,stage,shard,fqdn,component) (
+          sum_over_time(gitlab_component_node_apdex:success:rate_1h{monitor!="global",upscale_source="yes"}[6h])
+        )
+        /
+        sum by (env,environment,tier,type,stage,shard,fqdn,component) (
+          sum_over_time(gitlab_component_node_apdex:weight:score_1h{monitor!="global",upscale_source="yes"}[6h])
+        )
       )
