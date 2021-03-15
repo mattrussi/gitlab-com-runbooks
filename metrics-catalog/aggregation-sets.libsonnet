@@ -21,43 +21,33 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
     burnRates: {
       '1m': {
         apdexSuccessRate: 'gitlab_component_apdex:success:rate',
-        apdexRatio: 'gitlab_component_apdex:ratio',
         apdexWeight: 'gitlab_component_apdex:weight:score',
         opsRate: 'gitlab_component_ops:rate',
         errorRate: 'gitlab_component_errors:rate',
-        errorRatio: null,
       },
       '5m': {
         apdexSuccessRate: 'gitlab_component_apdex:success:rate_5m',
-        apdexRatio: 'gitlab_component_apdex:ratio_5m',
         apdexWeight: 'gitlab_component_apdex:weight:score_5m',
         opsRate: 'gitlab_component_ops:rate_5m',
         errorRate: 'gitlab_component_errors:rate_5m',
-        errorRatio: 'gitlab_component_errors:ratio_5m',
       },
       '30m': {
         apdexSuccessRate: 'gitlab_component_apdex:success:rate_30m',
-        apdexRatio: 'gitlab_component_apdex:ratio_30m',
         apdexWeight: 'gitlab_component_apdex:weight:score_30m',
         opsRate: 'gitlab_component_ops:rate_30m',
         errorRate: 'gitlab_component_errors:rate_30m',
-        errorRatio: 'gitlab_component_errors:ratio_30m',
       },
       '1h': {
         apdexSuccessRate: 'gitlab_component_apdex:success:rate_1h',
-        apdexRatio: 'gitlab_component_apdex:ratio_1h',
         apdexWeight: 'gitlab_component_apdex:weight:score_1h',
         opsRate: 'gitlab_component_ops:rate_1h',
         errorRate: 'gitlab_component_errors:rate_1h',
-        errorRatio: 'gitlab_component_errors:ratio_1h',
       },
       '6h': {
         apdexSuccessRate: 'gitlab_component_apdex:success:rate_6h',
-        apdexRatio: 'gitlab_component_apdex:ratio_6h',
         apdexWeight: 'gitlab_component_apdex:weight:score_6h',
         opsRate: 'gitlab_component_ops:rate_6h',
         errorRate: 'gitlab_component_errors:rate_6h',
-        errorRatio: 'gitlab_component_errors:ratio_6h',
       },
     },
   }),
@@ -169,23 +159,18 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
       '5m': {
         apdexSuccessRate: 'gitlab_component_node_apdex:success:rate_5m',
         apdexWeight: 'gitlab_component_node_apdex:weight:score_5m',
-        apdexRatio: 'gitlab_component_node_apdex:ratio_5m',
         opsRate: 'gitlab_component_node_ops:rate_5m',
         errorRate: 'gitlab_component_node_errors:rate_5m',
-        errorRatio: 'gitlab_component_node_errors:ratio_5m',
       },
       '30m': {
         apdexSuccessRate: 'gitlab_component_node_apdex:success:rate_30m',
         apdexWeight: 'gitlab_component_node_apdex:weight:score_30m',
-        apdexRatio: 'gitlab_component_node_apdex:ratio_30m',
         opsRate: 'gitlab_component_node_ops:rate_30m',
         errorRate: 'gitlab_component_node_errors:rate_30m',
-        errorRatio: 'gitlab_component_node_errors:ratio_30m',
       },
       '1h': {
         apdexSuccessRate: 'gitlab_component_node_apdex:success:rate_1h',
         apdexWeight: 'gitlab_component_node_apdex:weight:score_1h',
-        apdexRatio: 'gitlab_component_node_apdex:ratio_1h',
         opsRate: 'gitlab_component_node_ops:rate_1h',
         errorRate: 'gitlab_component_node_errors:rate_1h',
         errorRatio: 'gitlab_component_node_errors:ratio_1h',
@@ -193,10 +178,8 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
       '6h': {
         apdexSuccessRate: 'gitlab_component_node_apdex:success:rate_6h',
         apdexWeight: 'gitlab_component_node_apdex:weight:score_6h',
-        apdexRatio: 'gitlab_component_node_apdex:ratio_6h',
         opsRate: 'gitlab_component_node_ops:rate_6h',
         errorRate: 'gitlab_component_node_errors:rate_6h',
-        errorRatio: 'gitlab_component_node_errors:ratio_6h',
       },
     },
   }),
@@ -214,28 +197,24 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
     burnRates: {
       '5m': {
         apdexRatio: 'gitlab_component_node_apdex:ratio_5m',
-        apdexWeight: 'gitlab_component_node_apdex:weight:score_5m',  // Required for further aggregation into serviceNodeAggregatedSLIs
         opsRate: 'gitlab_component_node_ops:rate_5m',
         errorRate: 'gitlab_component_node_errors:rate_5m',
         errorRatio: 'gitlab_component_node_errors:ratio_5m',
       },
       '30m': {
         apdexRatio: 'gitlab_component_node_apdex:ratio_30m',
-        apdexWeight: 'gitlab_component_node_apdex:weight:score_30m',  // Required for further aggregation into serviceNodeAggregatedSLIs
         opsRate: 'gitlab_component_node_ops:rate_30m',
         errorRate: 'gitlab_component_node_errors:rate_30m',
         errorRatio: 'gitlab_component_node_errors:ratio_30m',
       },
       '1h': {
         apdexRatio: 'gitlab_component_node_apdex:ratio_1h',
-        apdexWeight: 'gitlab_component_node_apdex:weight:score_1h',  // Required for further aggregation into serviceNodeAggregatedSLIs
         opsRate: 'gitlab_component_node_ops:rate_1h',
         errorRate: 'gitlab_component_node_errors:rate_1h',
         errorRatio: 'gitlab_component_node_errors:ratio_1h',
       },
       '6h': {
         apdexRatio: 'gitlab_component_node_apdex:ratio_6h',
-        apdexWeight: 'gitlab_component_node_apdex:weight:score_6h',  // Required for further aggregation into serviceNodeAggregatedSLIs
         opsRate: 'gitlab_component_node_ops:rate_6h',
         errorRate: 'gitlab_component_node_errors:rate_6h',
         errorRatio: 'gitlab_component_node_errors:ratio_6h',
@@ -386,34 +365,26 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
       '5m': {
         apdexSuccessRate: 'gitlab:component:feature_category:execution:apdex:weight:score_5m',
         apdexWeight: 'gitlab:component:feature_category:execution:apdex:weight:score_5m',
-        apdexRatio: 'gitlab:component:feature_category:execution:apdex:ratio_5m',
         opsRate: 'gitlab:component:feature_category:execution:ops:rate_5m',
         errorRate: 'gitlab:component:feature_category:execution:error:rate_5m',
-        errorRatio: 'gitlab:component:feature_category:execution:error:ratio_5m',
       },
       '30m': {
         apdexSuccessRate: 'gitlab:component:feature_category:execution:apdex:weight:score_30m',
-        apdexRatio: 'gitlab:component:feature_category:execution:apdex:ratio_30m',
         apdexWeight: 'gitlab:component:feature_category:execution:apdex:weight:score_30m',
         opsRate: 'gitlab:component:feature_category:execution:ops:rate_30m',
         errorRate: 'gitlab:component:feature_category:execution:error:rate_30m',
-        errorRatio: 'gitlab:component:feature_category:execution:error:ratio_30m',
       },
       '1h': {
         apdexSuccessRate: 'gitlab:component:feature_category:execution:apdex:weight:score_1h',
         apdexWeight: 'gitlab:component:feature_category:execution:apdex:weight:score_1h',
-        apdexRatio: 'gitlab:component:feature_category:execution:apdex:ratio_1h',
         opsRate: 'gitlab:component:feature_category:execution:ops:rate_1h',
         errorRate: 'gitlab:component:feature_category:execution:error:rate_1h',
-        errorRatio: 'gitlab:component:feature_category:execution:error:ratio_1h',
       },
       '6h': {
         apdexSuccessRate: 'gitlab:component:feature_category:execution:apdex:weight:score_6h',
         apdexWeight: 'gitlab:component:feature_category:execution:apdex:weight:score_6h',
-        apdexRatio: 'gitlab:component:feature_category:execution:apdex:ratio_6h',
         opsRate: 'gitlab:component:feature_category:execution:ops:rate_6h',
         errorRate: 'gitlab:component:feature_category:execution:error:rate_6h',
-        errorRatio: 'gitlab:component:feature_category:execution:error:ratio_6h',
       },
     },
   }),

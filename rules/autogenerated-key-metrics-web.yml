@@ -35,17 +35,6 @@ groups:
       sum by (environment,stage) (
         rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job="gitlab-workhorse-web", type="web", le="+Inf"}[1m])
       )
-  - record: gitlab_component_apdex:ratio
-    labels:
-      component: imagescaler
-      tier: sv
-      type: web
-    expr: |
-      gitlab_component_apdex:success:rate{component="imagescaler",tier="sv",type="web"}
-      / on(environment,stage) group_left()
-      (
-        gitlab_component_apdex:weight:score{component="imagescaler",tier="sv",type="web"} > 0
-      )
   - record: gitlab_component_ops:rate
     labels:
       component: imagescaler
@@ -130,17 +119,6 @@ groups:
       sum by (environment,stage) (
         rate(http_request_duration_seconds_bucket{job="gitlab-rails",le="+Inf",type="web"}[1m])
       )
-  - record: gitlab_component_apdex:ratio
-    labels:
-      component: puma
-      tier: sv
-      type: web
-    expr: |
-      gitlab_component_apdex:success:rate{component="puma",tier="sv",type="web"}
-      / on(environment,stage) group_left()
-      (
-        gitlab_component_apdex:weight:score{component="puma",tier="sv",type="web"} > 0
-      )
   - record: gitlab_component_ops:rate
     labels:
       component: puma
@@ -184,17 +162,6 @@ groups:
     expr: |
       sum by (environment,stage) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{job="gitlab-workhorse-web",le="+Inf",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z"}[1m])
-      )
-  - record: gitlab_component_apdex:ratio
-    labels:
-      component: workhorse
-      tier: sv
-      type: web
-    expr: |
-      gitlab_component_apdex:success:rate{component="workhorse",tier="sv",type="web"}
-      / on(environment,stage) group_left()
-      (
-        gitlab_component_apdex:weight:score{component="workhorse",tier="sv",type="web"} > 0
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -287,17 +254,6 @@ groups:
       sum by (environment,stage) (
         rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job="gitlab-workhorse-web", type="web", le="+Inf"}[5m])
       )
-  - record: gitlab_component_apdex:ratio_5m
-    labels:
-      component: imagescaler
-      tier: sv
-      type: web
-    expr: |
-      gitlab_component_apdex:success:rate_5m{component="imagescaler",tier="sv",type="web"}
-      / on(environment,stage) group_left()
-      (
-        gitlab_component_apdex:weight:score_5m{component="imagescaler",tier="sv",type="web"} > 0
-      )
   - record: gitlab_component_ops:rate_5m
     labels:
       component: imagescaler
@@ -382,17 +338,6 @@ groups:
       sum by (environment,stage) (
         rate(http_request_duration_seconds_bucket{job="gitlab-rails",le="+Inf",type="web"}[5m])
       )
-  - record: gitlab_component_apdex:ratio_5m
-    labels:
-      component: puma
-      tier: sv
-      type: web
-    expr: |
-      gitlab_component_apdex:success:rate_5m{component="puma",tier="sv",type="web"}
-      / on(environment,stage) group_left()
-      (
-        gitlab_component_apdex:weight:score_5m{component="puma",tier="sv",type="web"} > 0
-      )
   - record: gitlab_component_ops:rate_5m
     labels:
       component: puma
@@ -436,17 +381,6 @@ groups:
     expr: |
       sum by (environment,stage) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{job="gitlab-workhorse-web",le="+Inf",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z"}[5m])
-      )
-  - record: gitlab_component_apdex:ratio_5m
-    labels:
-      component: workhorse
-      tier: sv
-      type: web
-    expr: |
-      gitlab_component_apdex:success:rate_5m{component="workhorse",tier="sv",type="web"}
-      / on(environment,stage) group_left()
-      (
-        gitlab_component_apdex:weight:score_5m{component="workhorse",tier="sv",type="web"} > 0
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -539,17 +473,6 @@ groups:
       sum by (environment,stage) (
         rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job="gitlab-workhorse-web", type="web", le="+Inf"}[30m])
       )
-  - record: gitlab_component_apdex:ratio_30m
-    labels:
-      component: imagescaler
-      tier: sv
-      type: web
-    expr: |
-      gitlab_component_apdex:success:rate_30m{component="imagescaler",tier="sv",type="web"}
-      / on(environment,stage) group_left()
-      (
-        gitlab_component_apdex:weight:score_30m{component="imagescaler",tier="sv",type="web"} > 0
-      )
   - record: gitlab_component_ops:rate_30m
     labels:
       component: imagescaler
@@ -634,17 +557,6 @@ groups:
       sum by (environment,stage) (
         rate(http_request_duration_seconds_bucket{job="gitlab-rails",le="+Inf",type="web"}[30m])
       )
-  - record: gitlab_component_apdex:ratio_30m
-    labels:
-      component: puma
-      tier: sv
-      type: web
-    expr: |
-      gitlab_component_apdex:success:rate_30m{component="puma",tier="sv",type="web"}
-      / on(environment,stage) group_left()
-      (
-        gitlab_component_apdex:weight:score_30m{component="puma",tier="sv",type="web"} > 0
-      )
   - record: gitlab_component_ops:rate_30m
     labels:
       component: puma
@@ -688,17 +600,6 @@ groups:
     expr: |
       sum by (environment,stage) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{job="gitlab-workhorse-web",le="+Inf",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z"}[30m])
-      )
-  - record: gitlab_component_apdex:ratio_30m
-    labels:
-      component: workhorse
-      tier: sv
-      type: web
-    expr: |
-      gitlab_component_apdex:success:rate_30m{component="workhorse",tier="sv",type="web"}
-      / on(environment,stage) group_left()
-      (
-        gitlab_component_apdex:weight:score_30m{component="workhorse",tier="sv",type="web"} > 0
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -791,17 +692,6 @@ groups:
       sum by (environment,stage) (
         rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job="gitlab-workhorse-web", type="web", le="+Inf"}[1h])
       )
-  - record: gitlab_component_apdex:ratio_1h
-    labels:
-      component: imagescaler
-      tier: sv
-      type: web
-    expr: |
-      gitlab_component_apdex:success:rate_1h{component="imagescaler",tier="sv",type="web"}
-      / on(environment,stage) group_left()
-      (
-        gitlab_component_apdex:weight:score_1h{component="imagescaler",tier="sv",type="web"} > 0
-      )
   - record: gitlab_component_ops:rate_1h
     labels:
       component: imagescaler
@@ -886,17 +776,6 @@ groups:
       sum by (environment,stage) (
         rate(http_request_duration_seconds_bucket{job="gitlab-rails",le="+Inf",type="web"}[1h])
       )
-  - record: gitlab_component_apdex:ratio_1h
-    labels:
-      component: puma
-      tier: sv
-      type: web
-    expr: |
-      gitlab_component_apdex:success:rate_1h{component="puma",tier="sv",type="web"}
-      / on(environment,stage) group_left()
-      (
-        gitlab_component_apdex:weight:score_1h{component="puma",tier="sv",type="web"} > 0
-      )
   - record: gitlab_component_ops:rate_1h
     labels:
       component: puma
@@ -940,17 +819,6 @@ groups:
     expr: |
       sum by (environment,stage) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{job="gitlab-workhorse-web",le="+Inf",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z"}[1h])
-      )
-  - record: gitlab_component_apdex:ratio_1h
-    labels:
-      component: workhorse
-      tier: sv
-      type: web
-    expr: |
-      gitlab_component_apdex:success:rate_1h{component="workhorse",tier="sv",type="web"}
-      / on(environment,stage) group_left()
-      (
-        gitlab_component_apdex:weight:score_1h{component="workhorse",tier="sv",type="web"} > 0
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -1043,17 +911,6 @@ groups:
       sum by (environment,stage) (
         rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job="gitlab-workhorse-web", type="web", le="+Inf"}[6h])
       )
-  - record: gitlab_component_apdex:ratio_6h
-    labels:
-      component: imagescaler
-      tier: sv
-      type: web
-    expr: |
-      gitlab_component_apdex:success:rate_6h{component="imagescaler",tier="sv",type="web"}
-      / on(environment,stage) group_left()
-      (
-        gitlab_component_apdex:weight:score_6h{component="imagescaler",tier="sv",type="web"} > 0
-      )
   - record: gitlab_component_ops:rate_6h
     labels:
       component: imagescaler
@@ -1138,17 +995,6 @@ groups:
       sum by (environment,stage) (
         rate(http_request_duration_seconds_bucket{job="gitlab-rails",le="+Inf",type="web"}[6h])
       )
-  - record: gitlab_component_apdex:ratio_6h
-    labels:
-      component: puma
-      tier: sv
-      type: web
-    expr: |
-      gitlab_component_apdex:success:rate_6h{component="puma",tier="sv",type="web"}
-      / on(environment,stage) group_left()
-      (
-        gitlab_component_apdex:weight:score_6h{component="puma",tier="sv",type="web"} > 0
-      )
   - record: gitlab_component_ops:rate_6h
     labels:
       component: puma
@@ -1192,17 +1038,6 @@ groups:
     expr: |
       sum by (environment,stage) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{job="gitlab-workhorse-web",le="+Inf",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z"}[6h])
-      )
-  - record: gitlab_component_apdex:ratio_6h
-    labels:
-      component: workhorse
-      tier: sv
-      type: web
-    expr: |
-      gitlab_component_apdex:success:rate_6h{component="workhorse",tier="sv",type="web"}
-      / on(environment,stage) group_left()
-      (
-        gitlab_component_apdex:weight:score_6h{component="workhorse",tier="sv",type="web"} > 0
       )
   - record: gitlab_component_ops:rate_6h
     labels:

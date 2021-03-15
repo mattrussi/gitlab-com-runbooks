@@ -45,11 +45,11 @@ local rules = [
     expr: |||
       (
         sum by (env, environment, tier, type, stage, component) (
-          gitlab_component_apdex:ratio{monitor!="global"} offset 1d >= 0
+          gitlab_component_apdex:ratio{monitor="global"} offset 1d >= 0
         )
         unless
         sum by (env, environment, tier, type, stage, component) (
-          gitlab_component_apdex:ratio{monitor!="global"}
+          gitlab_component_apdex:ratio{monitor="global"}
         )
       )
       and on (type, component)

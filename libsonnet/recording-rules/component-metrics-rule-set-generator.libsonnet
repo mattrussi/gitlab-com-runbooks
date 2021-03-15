@@ -1,6 +1,6 @@
 // Generates apdex weight recording rules for a component definition
 local generateApdexRules(burnRate, recordingRuleNames, aggregationLabels, sliDefinition, recordingRuleStaticLabels) =
-  if recordingRuleNames.apdexRatio != null then
+  if recordingRuleNames.apdexSuccessRate != null || recordingRuleNames.apdexWeight != null then
     sliDefinition.generateApdexRecordingRules(
       burnRate=burnRate,
       recordingRuleNames=recordingRuleNames,
@@ -60,7 +60,6 @@ local generateRecordingRulesForComponent(burnRate, recordingRuleNames, serviceDe
     local recordingRuleNames = {
       apdexSuccessRate: aggregationSet.getApdexSuccessRateMetricForBurnRate(burnRate),
       apdexWeight: aggregationSet.getApdexWeightMetricForBurnRate(burnRate),
-      apdexRatio: aggregationSet.getApdexRatioMetricForBurnRate(burnRate),
       requestRate: aggregationSet.getOpsRateMetricForBurnRate(burnRate),
       errorRate: aggregationSet.getErrorRateMetricForBurnRate(burnRate),
     };
