@@ -19,6 +19,6 @@ groups:
           grafana_dashobard_link: >
             https://dashboards.gitlab.net/d/stage-groups-global_search/stage-groups-group-dashboard-enablement-global-search?orgId=1&var-environment={{ $labels.environment }}&var-stage={{ $labels.stage }}
           description: >
-            There are over {{ $value }} on {{ $labels.environment }} documents waiting to be indexed for the last
+            There are over {{ $value }} documents on {{ $labels.environment }}  waiting to be indexed for the last
             15 minutes. This could indicate that ElasticSearch is failing. Or Sidekiq
             cannot keep up with the number of elements being enqueued. Reach out to  #g_global_search to see what is causing this.

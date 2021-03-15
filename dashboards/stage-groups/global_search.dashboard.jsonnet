@@ -13,9 +13,7 @@ local elasticQueueSize(title, metric) =
       The number of documents waiting to be indexed by ElasticSearch.
     |||,
     query=|||
-      avg(
-        %(metric)s{environment="$environment", stage="$stage"}
-      )
+      quantile(0.5, %(metric)s{environment="$environment", stage="$stage"})
     ||| % { metric: metric },
   );
 
