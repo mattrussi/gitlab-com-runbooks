@@ -398,7 +398,7 @@ groups:
 
         If this alert happens frequently, we may need to increase the postgres setting max_locks_per_transaction.
       title: Too many locks acquired
-  - alert: PostgreSQL_CatastrophicTupleFetchingPrimary
+  - alert: PostgreSQL_HotSpotTupleFetchingPrimary
     expr: >
       (
         sum by (environment, tier, type, fqdn, relname) (
@@ -419,7 +419,7 @@ groups:
       alert_type: cause
       pager: pagerduty
     annotations:
-      title: Catastrophic tuple fetches on the postgres primary `{{ $labels.fqdn }}` in the `{{ $labels.relname }}` table
+      title: Hot spot tuple fetches on the postgres primary `{{ $labels.fqdn }}` in the `{{ $labels.relname }}` table
       description: >
         More than 50% of all tuple fetches on the primary postgres server are for a single table. This may indicate that
         the query optimizer is using incorrect statistics to execute a query. This could be due to vacuum and
