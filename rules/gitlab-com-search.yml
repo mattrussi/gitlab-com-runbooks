@@ -1,0 +1,24 @@
+groups:
+  - name: gitlab-com-search.rules
+    rules:
+      - alert: gitlab_search_indexing_queue_backing_up
+        expr: >
+          avg by (environment, stage) (
+            global_search_bulk_cron_queue_size
+          ) > 50000
+        for: 15m
+        labels:
+          severity: s4
+          alert_type: symptom
+          feature_category: "global_search"
+        annotations:
+          title: 'Large number of documents waiting to be indexed by ElasticSearch'
+          environment: "{{ $labels.environment }}"
+          grafana_dashboard_id: stage-groups-global_search/stage-groups-group-dashboard-enablement-global-search
+          grafana_panel_id: "499025569"
+          grafana_dashobard_link: >
+            https://dashboards.gitlab.net/d/stage-groups-global_search/stage-groups-group-dashboard-enablement-global-search?orgId=1&var-environment={{ $labels.environment }}&var-stage={{ $labels.stage }}
+          description: >
+            There are over {{ $value }} on {{ $labels.environment }} documents waiting to be indexed for the last
+            15 minutes. This could indicate that ElasticSearch is failing. Or Sidekiq
+            cannot keep up with the number of elements being enqueued. Reach out to  #g_global_search to see what is causing this.
