@@ -16,7 +16,7 @@ groups:
       )
   - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate1m
     expr: |
-      sum by (environment,shard,stage,tier,type) (
+      sum by (environment,feature_category,le,shard,stage,tier,type) (
         rate(gitlab_sql_replica_duration_seconds_bucket[1m])
       )
   - record: gitlab_component_ops:rate
@@ -77,11 +77,11 @@ groups:
     expr: |
       (
         sum by (environment) (
-          sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate1m{le="0.05"}
+          sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate1m{le="0.05"}
         )
         +
         sum by (environment) (
-          sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate1m{le="0.1"}
+          sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate1m{le="0.1"}
         )
       )
       /
@@ -94,7 +94,7 @@ groups:
       type: patroni
     expr: |
       sum by (environment) (
-        sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate1m{le="+Inf"}
+        sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate1m{le="+Inf"}
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -104,7 +104,7 @@ groups:
       type: patroni
     expr: |
       sum by (environment) (
-        sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate1m{le="+Inf"}
+        sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate1m{le="+Inf"}
       )
   - record: gitlab_component_apdex:success:rate
     labels:
@@ -199,7 +199,7 @@ groups:
       )
   - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate5m
     expr: |
-      sum by (environment,shard,stage,tier,type) (
+      sum by (environment,feature_category,le,shard,stage,tier,type) (
         rate(gitlab_sql_replica_duration_seconds_bucket[5m])
       )
   - record: gitlab_component_ops:rate_5m
@@ -260,11 +260,11 @@ groups:
     expr: |
       (
         sum by (environment) (
-          sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate5m{le="0.05"}
+          sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate5m{le="0.05"}
         )
         +
         sum by (environment) (
-          sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate5m{le="0.1"}
+          sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate5m{le="0.1"}
         )
       )
       /
@@ -277,7 +277,7 @@ groups:
       type: patroni
     expr: |
       sum by (environment) (
-        sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate5m{le="+Inf"}
+        sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate5m{le="+Inf"}
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -287,7 +287,7 @@ groups:
       type: patroni
     expr: |
       sum by (environment) (
-        sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate5m{le="+Inf"}
+        sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate5m{le="+Inf"}
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
@@ -382,7 +382,7 @@ groups:
       )
   - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate30m
     expr: |
-      sum by (environment,shard,stage,tier,type) (
+      sum by (environment,feature_category,le,shard,stage,tier,type) (
         rate(gitlab_sql_replica_duration_seconds_bucket[30m])
       )
   - record: gitlab_component_ops:rate_30m
@@ -443,11 +443,11 @@ groups:
     expr: |
       (
         sum by (environment) (
-          sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate30m{le="0.05"}
+          sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate30m{le="0.05"}
         )
         +
         sum by (environment) (
-          sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate30m{le="0.1"}
+          sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate30m{le="0.1"}
         )
       )
       /
@@ -460,7 +460,7 @@ groups:
       type: patroni
     expr: |
       sum by (environment) (
-        sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate30m{le="+Inf"}
+        sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate30m{le="+Inf"}
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -470,7 +470,7 @@ groups:
       type: patroni
     expr: |
       sum by (environment) (
-        sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate30m{le="+Inf"}
+        sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate30m{le="+Inf"}
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
@@ -565,7 +565,7 @@ groups:
       )
   - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate1h
     expr: |
-      sum by (environment,shard,stage,tier,type) (
+      sum by (environment,feature_category,le,shard,stage,tier,type) (
         rate(gitlab_sql_replica_duration_seconds_bucket[1h])
       )
   - record: gitlab_component_ops:rate_1h
@@ -626,11 +626,11 @@ groups:
     expr: |
       (
         sum by (environment) (
-          sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate1h{le="0.05"}
+          sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate1h{le="0.05"}
         )
         +
         sum by (environment) (
-          sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate1h{le="0.1"}
+          sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate1h{le="0.1"}
         )
       )
       /
@@ -643,7 +643,7 @@ groups:
       type: patroni
     expr: |
       sum by (environment) (
-        sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate1h{le="+Inf"}
+        sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate1h{le="+Inf"}
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -653,7 +653,7 @@ groups:
       type: patroni
     expr: |
       sum by (environment) (
-        sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate1h{le="+Inf"}
+        sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate1h{le="+Inf"}
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
@@ -748,7 +748,7 @@ groups:
       )
   - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate6h
     expr: |
-      sum by (environment,shard,stage,tier,type) (
+      sum by (environment,feature_category,le,shard,stage,tier,type) (
         rate(gitlab_sql_replica_duration_seconds_bucket[6h])
       )
   - record: gitlab_component_ops:rate_6h
@@ -809,11 +809,11 @@ groups:
     expr: |
       (
         sum by (environment) (
-          sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate6h{le="0.05"}
+          sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate6h{le="0.05"}
         )
         +
         sum by (environment) (
-          sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate6h{le="0.1"}
+          sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate6h{le="0.1"}
         )
       )
       /
@@ -826,7 +826,7 @@ groups:
       type: patroni
     expr: |
       sum by (environment) (
-        sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate6h{le="+Inf"}
+        sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate6h{le="+Inf"}
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -836,7 +836,7 @@ groups:
       type: patroni
     expr: |
       sum by (environment) (
-        sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate6h{le="+Inf"}
+        sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate6h{le="+Inf"}
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
