@@ -285,15 +285,16 @@ groups:
       runbook: "docs/patroni/postgres.md"
       title: |
         {{$labels.fqdn}} postgres service appears to be restarted
-  - alert: PostgreSQL_RoleChange
+  - alert: PostgreSQLPossibleFailover
     expr: pg_replication_is_replica and changes(pg_replication_is_replica[5m]) > 0
     labels:
-      severity: s4
+      severity: s1
       alert_type: cause
+      pager: pagerduty
     annotations:
       description: Database on {{$labels.fqdn}} changed role to {{if eq $value 1.0}}
-        *replica* {{else}} *primary* {{end}}
-      title: Postgres Database replica promotion occurred in environment "{{$labels.environment}}"
+        *replica* {{else}} *primary* {{end}}, which indicates possible failover.
+      title: Possible Database failover in {{$labels.environment}}
   - alert: PostgreSQL_ConfigurationChange
     expr: '{__name__=~"pg_settings_.*"} != ON(__name__, fqdn) {__name__=~"pg_settings_([^t]|t[^r]|tr[^a]|tra[^n]|tran[^s]|trans[^a]|transa[^c]|transac[^t]|transact[^i]|transacti[^o]|transactio[^n]|transaction[^_]|transaction_[^r]|transaction_r[^e]|transaction_re[^a]|transaction_rea[^d]|transaction_read[^_]|transaction_read_[^o]|transaction_read_o[^n]|transaction_read_on[^l]|transaction_read_onl[^y]).*"}
       OFFSET 10m'
