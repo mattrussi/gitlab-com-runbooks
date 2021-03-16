@@ -19,8 +19,16 @@ groups:
       tier: stor
       type: nfs
     expr: |
-      sum by (environment,stage) (
-        rate(node_nfsd_rpc_errors_total{type="nfs"}[1m])
+      (
+        sum by (environment,stage) (
+          rate(node_nfsd_rpc_errors_total{type="nfs"}[1m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate{component="nfs_service",tier="stor",type="nfs"}
+        )
       )
 - name: 'Component-Level SLIs: nfs - 5m burn-rate'
   interval: 1m
@@ -40,8 +48,16 @@ groups:
       tier: stor
       type: nfs
     expr: |
-      sum by (environment,stage) (
-        rate(node_nfsd_rpc_errors_total{type="nfs"}[5m])
+      (
+        sum by (environment,stage) (
+          rate(node_nfsd_rpc_errors_total{type="nfs"}[5m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_5m{component="nfs_service",tier="stor",type="nfs"}
+        )
       )
 - name: 'Component-Level SLIs: nfs - 30m burn-rate'
   interval: 2m
@@ -61,8 +77,16 @@ groups:
       tier: stor
       type: nfs
     expr: |
-      sum by (environment,stage) (
-        rate(node_nfsd_rpc_errors_total{type="nfs"}[30m])
+      (
+        sum by (environment,stage) (
+          rate(node_nfsd_rpc_errors_total{type="nfs"}[30m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_30m{component="nfs_service",tier="stor",type="nfs"}
+        )
       )
 - name: 'Component-Level SLIs: nfs - 1h burn-rate'
   interval: 1m
@@ -82,8 +106,16 @@ groups:
       tier: stor
       type: nfs
     expr: |
-      sum by (environment,stage) (
-        rate(node_nfsd_rpc_errors_total{type="nfs"}[1h])
+      (
+        sum by (environment,stage) (
+          rate(node_nfsd_rpc_errors_total{type="nfs"}[1h])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_1h{component="nfs_service",tier="stor",type="nfs"}
+        )
       )
 - name: 'Component-Level SLIs: nfs - 6h burn-rate'
   interval: 2m
@@ -103,8 +135,16 @@ groups:
       tier: stor
       type: nfs
     expr: |
-      sum by (environment,stage) (
-        rate(node_nfsd_rpc_errors_total{type="nfs"}[6h])
+      (
+        sum by (environment,stage) (
+          rate(node_nfsd_rpc_errors_total{type="nfs"}[6h])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_6h{component="nfs_service",tier="stor",type="nfs"}
+        )
       )
 - name: 'Component mapping: nfs'
   interval: 1m

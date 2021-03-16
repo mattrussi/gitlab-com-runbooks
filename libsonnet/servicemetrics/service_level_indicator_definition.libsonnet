@@ -123,11 +123,12 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
         [],
 
     // Generate recording rules for request rate
-    generateRequestRateRecordingRules(burnRate, recordingRuleName, aggregationLabels, recordingRuleStaticLabels)::
+    generateRequestRateRecordingRules(burnRate, aggregationSet, aggregationLabels, recordingRuleStaticLabels)::
+      local requestRateRecordingRuleName = aggregationSet.getOpsRateMetricForBurnRate(burnRate, required=true);
       local allStaticLabels = recordingRuleStaticLabels + serviceLevelIndicator.staticLabels;
 
       [{
-        record: recordingRuleName,
+        record: requestRateRecordingRuleName,
         labels: allStaticLabels,
         expr: serviceLevelIndicator.requestRate.aggregatedRateQuery(
           aggregationLabels=filterStaticLabelsFromAggregationLabels(aggregationLabels, allStaticLabels),
@@ -137,18 +138,37 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
       }],
 
     // Generate recording rules for error rate
-    generateErrorRateRecordingRules(burnRate, recordingRuleName, aggregationLabels, recordingRuleStaticLabels)::
-      local allStaticLabels = recordingRuleStaticLabels + serviceLevelIndicator.staticLabels;
-
+    generateErrorRateRecordingRules(burnRate, aggregationSet, aggregationLabels, recordingRuleStaticLabels)::
       if self.hasErrorRate() then
+        local allStaticLabels = recordingRuleStaticLabels + serviceLevelIndicator.staticLabels;
+        local requestRateRecordingRuleName = aggregationSet.getOpsRateMetricForBurnRate(burnRate, required=true);
+        local errorRateRecordingRuleName = aggregationSet.getErrorRateMetricForBurnRate(burnRate, required=true);
+        local filteredAggregationLabels = filterStaticLabelsFromAggregationLabels(aggregationLabels, allStaticLabels);
+
+        local expr = serviceLevelIndicator.errorRate.aggregatedRateQuery(
+          aggregationLabels=filterStaticLabelsFromAggregationLabels(aggregationLabels, allStaticLabels),
+          selector={},
+          rangeInterval=burnRate
+        );
         [{
-          record: recordingRuleName,
+          record: errorRateRecordingRuleName,
           labels: allStaticLabels,
-          expr: serviceLevelIndicator.errorRate.aggregatedRateQuery(
-            aggregationLabels=filterStaticLabelsFromAggregationLabels(aggregationLabels, allStaticLabels),
-            selector={},
-            rangeInterval=burnRate
-          ),
+          expr: |||
+            (
+              %(expr)s
+            )
+            or
+            (
+              0 * group by(%(filteredAggregationLabels)s) (
+                %(requestRateRecordingRuleName)s{%(allStaticLabels)s}
+              )
+            )
+          ||| % {
+            expr: strings.indent(expr, 2),
+            filteredAggregationLabels: aggregations.serialize(filteredAggregationLabels),
+            requestRateRecordingRuleName: requestRateRecordingRuleName,
+            allStaticLabels: selectors.serializeHash(allStaticLabels),
+          },
         }]
       else
         [],
