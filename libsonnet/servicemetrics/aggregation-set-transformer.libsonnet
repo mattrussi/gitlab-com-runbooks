@@ -9,7 +9,7 @@ local generateRecordingRules(sourceAggregationSet, targetAggregationSet) =
       recordingRules.aggregationSetRateRuleSet(sourceAggregationSet=sourceAggregationSet, targetAggregationSet=targetAggregationSet, burnRate=burnRate)
       +
       // Error Ratio
-      recordingRules.aggregationSetErrorRatioRuleSet(aggregationSet=targetAggregationSet, burnRate=burnRate)
+      recordingRules.aggregationSetErrorRatioRuleSet(sourceAggregationSet=sourceAggregationSet, targetAggregationSet=targetAggregationSet, burnRate=burnRate)
       +
       // Apdex Score and Apdex Weight
       recordingRules.aggregationSetApdexRatioRuleSet(sourceAggregationSet=sourceAggregationSet, targetAggregationSet=targetAggregationSet, burnRate=burnRate),
