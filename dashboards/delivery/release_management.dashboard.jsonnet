@@ -160,6 +160,7 @@ local bargaugePanel(
   legendFormat='',
   thresholds={},
   links=[],
+  fieldLinks=[],
   orientation='horizontal',
       ) =
   {
@@ -170,6 +171,7 @@ local bargaugePanel(
         min: 0,
         max: 25,
         thresholds: thresholds,
+        links: fieldLinks,
       },
     },
     links: links,
@@ -286,6 +288,13 @@ basic.dashboard(
           sum(delivery_release_pressure{state="merged"}) by (state, version)
         |||,
         legendFormat='{{version}} ({{state}})',
+        fieldLinks=[
+          {
+            title: 'View merge requests',
+            url: 'https://gitlab.com/groups/gitlab-org/-/merge_requests?scope=all&state=${__field.labels.state}&label_name[]=Pick+into+${__field.labels.version}',
+            targetBlank: true,
+          },
+        ],
         thresholds={
           mode: 'absolute',
           steps: [
