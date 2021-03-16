@@ -5,7 +5,10 @@ local merge(h1, h2) =
   local folderFunc = function(memo, k)
     if std.objectHas(memo, k) then
       memo {
-        [k]: std.setUnion(memo[k], h2[k]),
+        [k]: {
+          labels: std.setUnion(memo[k].labels, h2[k].labels),
+          burnRates: std.setUnion(memo[k].burnRates, h2[k].burnRates),
+        },
       }
     else
       memo {
@@ -17,16 +20,7 @@ local merge(h1, h2) =
 local mergeFoldl(fn, array) =
   std.foldl(function(memo, item) merge(memo, fn(item)), array, {});
 
-local applySignificantLabels(metricNamesAndLabels, significantLabels) =
-  std.foldl(
-    function(memo, metricName) memo {
-      [metricName]: std.setUnion(significantLabels, metricNamesAndLabels[metricName]),
-    },
-    std.objectFields(metricNamesAndLabels),
-    {}
-  );
-
-local collectMetricsAndLabelsForKeyMetric(sli, keyMetricAttribute, significantLabels) =
+local collectMetricsBurnRatesLabelsForKeyMetric(sli, keyMetricAttribute, significantLabels) =
   // Check the sli supports the key metric `keyMetricAttribute`
   if std.objectHas(sli, keyMetricAttribute) then
     local keyMetric = sli[keyMetricAttribute];
@@ -34,7 +28,17 @@ local collectMetricsAndLabelsForKeyMetric(sli, keyMetricAttribute, significantLa
     // Does the key metric support reflection?
     if std.objectHasAll(keyMetric, 'supportsReflection') then
       local reflection = sli[keyMetricAttribute].supportsReflection();
-      applySignificantLabels(reflection.getMetricNamesAndLabels(), significantLabels)
+      local metricNamesAndLabels = reflection.getMetricNamesAndLabels();
+      std.foldl(
+        function(memo, metricName) memo {
+          [metricName]: {
+            labels: std.setUnion(significantLabels, metricNamesAndLabels[metricName]),
+            burnRates: if sli.upscaleLongerBurnRates then std.set(['1m', '5m', '30m', '1h']) else std.set(['1m', '5m', '30m', '1h', '6h']),
+          },
+        },
+        std.objectFields(metricNamesAndLabels),
+        {}
+      )
     else
       {}
   else
@@ -45,29 +49,42 @@ local collectMetricsAndLabelsForSLI(sli) =
   local significantLabels = std.set(sli.significantLabels);
 
   mergeFoldl(function(keyMetricAttribute)
-               collectMetricsAndLabelsForKeyMetric(sli, keyMetricAttribute, significantLabels),
+               collectMetricsBurnRatesLabelsForKeyMetric(sli, keyMetricAttribute, significantLabels),
              ['apdex', 'requestRate', 'errorRate']);
 
 // Return a hash of { metric: set(labels) } for a service
-local collectMetricsAndLabelsForService(service) =
+local collectMetricsLabelsBurnRatesForService(service) =
   local foldFunc = function(memo, sliName)
     local sli = service.serviceLevelIndicators[sliName];
     merge(memo, collectMetricsAndLabelsForSLI(sli));
+
   std.foldl(foldFunc, std.objectFields(service.serviceLevelIndicators), {});
 
 // Return a hash of metrics and dimensions, for use in composing recording rules
-local collectMetricsAndLabels() =
+local collectMetricsLabelsBurnRates() =
   local foldFunc = function(memo, service)
-    merge(memo, collectMetricsAndLabelsForService(service));
+    merge(memo, collectMetricsLabelsBurnRatesForService(service));
   std.foldl(foldFunc, metricsCatalog.services, {});
 
-local labelsForMetricNames = collectMetricsAndLabels();
+local labelsBurnRatesForMetricNames = collectMetricsLabelsBurnRates();
 
 {
   // Returns a set of label names used for the given metric name
   lookupLabelsForMetricName(metricName)::
-    if std.objectHas(labelsForMetricNames, metricName) then
-      labelsForMetricNames[metricName]
+    if std.objectHas(labelsBurnRatesForMetricNames, metricName) then
+      labelsBurnRatesForMetricNames[metricName].labels
+    else
+      [],
+
+  supportsBurnRateForMetricName(metricName, burnRate)::
+    if std.objectHas(labelsBurnRatesForMetricNames, metricName) then
+      std.member(labelsBurnRatesForMetricNames[metricName].burnRates, burnRate)
+    else
+      false,
+
+  getSupportedBurnRatesForMetricName(metricName)::
+    if std.objectHas(labelsBurnRatesForMetricNames, metricName) then
+      labelsBurnRatesForMetricNames[metricName].burnRates
     else
       [],
 }

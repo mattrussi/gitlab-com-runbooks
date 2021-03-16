@@ -22,9 +22,6 @@ local standardEnvironmentLabels = std.set(['environment', 'type', 'tier', 'stage
  */
 local ignoredRecordingRuleResolutionLabels = std.set(['env', 'monitor']);
 
-// TODO: move this to configuration
-local burnRates = std.set(['1m', '5m', '30m', '1h', '6h']);
-
 // Collect recordingRuleMetrics for all services
 local metricsWithRecordingRules = std.foldl(
   function(memo, service)
@@ -36,26 +33,27 @@ local metricsWithRecordingRules = std.foldl(
   []
 );
 
-local supportsDuration(duration) =
-  std.setMember(duration, burnRates);
-
-local supportsLabelsAndSelector(metricName, requiredAggregationLabels, selector) =
+local supportsLabelsBurnRateAndSelector(metricName, requiredAggregationLabels, burnRate, selector) =
   if std.setMember(metricName, metricsWithRecordingRules) then
     if std.type(selector) == 'object' then
       local allRequiredLabels = std.set(requiredAggregationLabels + selectors.getLabels(selector));
       local allRequiredLabelsExcludingIgnored = std.setDiff(allRequiredLabels, ignoredRecordingRuleResolutionLabels);
 
       local recordingRuleLabels = metricsLabelRegistry.lookupLabelsForMetricName(metricName);
+      local supportsBurnRate = metricsLabelRegistry.supportsBurnRateForMetricName(metricName, burnRate);
 
-      local allRequiredLabelsMinusStandards = std.setDiff(allRequiredLabelsExcludingIgnored, standardEnvironmentLabels);
+      if supportsBurnRate then
+        local allRequiredLabelsMinusStandards = std.setDiff(allRequiredLabelsExcludingIgnored, standardEnvironmentLabels);
 
-      local missingLabels = std.setDiff(allRequiredLabelsMinusStandards, recordingRuleLabels);
+        local missingLabels = std.setDiff(allRequiredLabelsMinusStandards, recordingRuleLabels);
 
-      // Check that allRequiredLabels is a subset of recordingRuleLabels
-      if missingLabels == [] then
-        true
+        // Check that allRequiredLabels is a subset of recordingRuleLabels
+        if missingLabels == [] then
+          true
+        else
+          std.trace('Unable to use recording rule for ' + metricName + '. Missing labels: ' + missingLabels + ', requiredAggregationLabels=' + requiredAggregationLabels + ', selector=' + selector, false)
       else
-        std.trace('Unable to use recording rule for ' + metricName + '. Missing labels: ' + missingLabels + 'requiredAggregationLabels=' + requiredAggregationLabels + ', selector=' + selector, false)
+        std.trace('Unable to use recording rule for ' + metricName + '. Unsupported burn rate: ' + burnRate + ', supportedBurnRates=' + metricsLabelRegistry.getSupportedBurnRatesForMetricName(metricName), false)
     else
       std.assertEqual(selector, { __assert__: 'selector should be a selector hash' })
   else
@@ -79,7 +77,7 @@ local resolveRecordingRuleFor(metricName, requiredAggregationLabels, selector, d
   else
     splitAggregationString(requiredAggregationLabels);
 
-  if supportsDuration(durationWithRecordingRule) && supportsLabelsAndSelector(metricName, requiredAggregationLabelsArray, selector) then
+  if supportsLabelsBurnRateAndSelector(metricName, requiredAggregationLabelsArray, durationWithRecordingRule, selector) then
     'sli_aggregations:%(metricName)s_rate%(duration)s{%(selector)s}' % {
       metricName: metricName,
       duration: durationWithRecordingRule,
@@ -131,5 +129,8 @@ local resolveRecordingRuleFor(metricName, requiredAggregationLabels, selector, d
       metricName: metricName,
       rangeInterval: rangeInterval,
     },
+
+  recordingRuleForMetricAtBurnRate(metricName, rangeInterval)::
+    metricsLabelRegistry.supportsBurnRateForMetricName(metricName, rangeInterval),
 
 }
