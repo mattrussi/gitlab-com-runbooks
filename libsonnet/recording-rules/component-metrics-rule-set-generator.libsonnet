@@ -16,12 +16,10 @@ local generateApdexRules(burnRate, aggregationSet, aggregationLabels, sliDefinit
 
 local generateRequestRateRules(burnRate, aggregationSet, aggregationLabels, sliDefinition, recordingRuleStaticLabels) =
   local requestRateRecordingRuleName = aggregationSet.getOpsRateMetricForBurnRate(burnRate);
-
-  // All components have a requestRate metric
   if requestRateRecordingRuleName != null then
     sliDefinition.generateRequestRateRecordingRules(
       burnRate=burnRate,
-      recordingRuleName=requestRateRecordingRuleName,
+      aggregationSet=aggregationSet,
       aggregationLabels=aggregationLabels,
       recordingRuleStaticLabels=recordingRuleStaticLabels
     )
@@ -30,11 +28,10 @@ local generateRequestRateRules(burnRate, aggregationSet, aggregationLabels, sliD
 
 local generateErrorRateRules(burnRate, aggregationSet, aggregationLabels, sliDefinition, recordingRuleStaticLabels) =
   local errorRateRecordingRuleName = aggregationSet.getErrorRateMetricForBurnRate(burnRate);
-
   if errorRateRecordingRuleName != null then
     sliDefinition.generateErrorRateRecordingRules(
       burnRate=burnRate,
-      recordingRuleName=errorRateRecordingRuleName,
+      aggregationSet=aggregationSet,
       aggregationLabels=aggregationLabels,
       recordingRuleStaticLabels=recordingRuleStaticLabels
     )
@@ -54,7 +51,7 @@ local generateRecordingRulesForComponent(burnRate, aggregationSet, serviceDefini
     [
       generateApdexRules,
       generateRequestRateRules,
-      generateErrorRateRules,
+      generateErrorRateRules,  // Error rates should always go after request rates as we have a fallback clause which relies on request rate existing
     ]
   );
 

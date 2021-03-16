@@ -76,8 +76,16 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      sum by (environment,stage) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate1m{shard="catchall"}
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate1m{shard="catchall"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate{component="shard_catchall",tier="sv",type="sidekiq"}
+        )
       )
   - record: gitlab_component_apdex:success:rate
     labels:
@@ -136,8 +144,16 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      sum by (environment,stage) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate1m{shard="catchnfs"}
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate1m{shard="catchnfs"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate{component="shard_catchnfs",tier="sv",type="sidekiq"}
+        )
       )
   - record: gitlab_component_apdex:success:rate
     labels:
@@ -172,8 +188,16 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      sum by (environment,stage) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate1m{shard="database-throttled"}
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate1m{shard="database-throttled"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate{component="shard_database_throttled",tier="sv",type="sidekiq"}
+        )
       )
   - record: gitlab_component_apdex:success:rate
     labels:
@@ -208,8 +232,16 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      sum by (environment,stage) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate1m{shard="elasticsearch"}
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate1m{shard="elasticsearch"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate{component="shard_elasticsearch",tier="sv",type="sidekiq"}
+        )
       )
   - record: gitlab_component_apdex:success:rate
     labels:
@@ -244,8 +276,16 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      sum by (environment,stage) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate1m{shard="gitaly-throttled"}
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate1m{shard="gitaly-throttled"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate{component="shard_gitaly_throttled",tier="sv",type="sidekiq"}
+        )
       )
   - record: gitlab_component_apdex:success:rate
     labels:
@@ -284,8 +324,16 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      sum by (environment,stage) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate1m{shard="low-urgency-cpu-bound"}
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate1m{shard="low-urgency-cpu-bound"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate{component="shard_low_urgency_cpu_bound",tier="sv",type="sidekiq"}
+        )
       )
   - record: gitlab_component_apdex:success:rate
     labels:
@@ -320,8 +368,16 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      sum by (environment,stage) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate1m{shard="memory-bound"}
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate1m{shard="memory-bound"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate{component="shard_memory_bound",tier="sv",type="sidekiq"}
+        )
       )
   - record: gitlab_component_apdex:success:rate
     labels:
@@ -360,8 +416,16 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      sum by (environment,stage) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate1m{shard="urgent-cpu-bound"}
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate1m{shard="urgent-cpu-bound"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate{component="shard_urgent_cpu_bound",tier="sv",type="sidekiq"}
+        )
       )
   - record: gitlab_component_apdex:success:rate
     labels:
@@ -400,8 +464,16 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      sum by (environment,stage) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate1m{shard="urgent-other"}
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate1m{shard="urgent-other"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate{component="shard_urgent_other",tier="sv",type="sidekiq"}
+        )
       )
   - record: gitlab_background_jobs:queue:apdex:ratio_1m
     expr: |
@@ -548,8 +620,16 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      sum by (environment,stage) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate5m{shard="catchall"}
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{shard="catchall"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_5m{component="shard_catchall",tier="sv",type="sidekiq"}
+        )
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
@@ -608,8 +688,16 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      sum by (environment,stage) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate5m{shard="catchnfs"}
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{shard="catchnfs"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_5m{component="shard_catchnfs",tier="sv",type="sidekiq"}
+        )
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
@@ -644,8 +732,16 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      sum by (environment,stage) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate5m{shard="database-throttled"}
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{shard="database-throttled"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_5m{component="shard_database_throttled",tier="sv",type="sidekiq"}
+        )
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
@@ -680,8 +776,16 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      sum by (environment,stage) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate5m{shard="elasticsearch"}
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{shard="elasticsearch"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_5m{component="shard_elasticsearch",tier="sv",type="sidekiq"}
+        )
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
@@ -716,8 +820,16 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      sum by (environment,stage) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate5m{shard="gitaly-throttled"}
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{shard="gitaly-throttled"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_5m{component="shard_gitaly_throttled",tier="sv",type="sidekiq"}
+        )
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
@@ -756,8 +868,16 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      sum by (environment,stage) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate5m{shard="low-urgency-cpu-bound"}
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{shard="low-urgency-cpu-bound"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_5m{component="shard_low_urgency_cpu_bound",tier="sv",type="sidekiq"}
+        )
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
@@ -792,8 +912,16 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      sum by (environment,stage) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate5m{shard="memory-bound"}
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{shard="memory-bound"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_5m{component="shard_memory_bound",tier="sv",type="sidekiq"}
+        )
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
@@ -832,8 +960,16 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      sum by (environment,stage) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate5m{shard="urgent-cpu-bound"}
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{shard="urgent-cpu-bound"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_5m{component="shard_urgent_cpu_bound",tier="sv",type="sidekiq"}
+        )
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
@@ -872,8 +1008,16 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      sum by (environment,stage) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate5m{shard="urgent-other"}
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{shard="urgent-other"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_5m{component="shard_urgent_other",tier="sv",type="sidekiq"}
+        )
       )
   - record: gitlab_background_jobs:queue:apdex:ratio_5m
     expr: |
@@ -1020,8 +1164,16 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      sum by (environment,stage) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate30m{shard="catchall"}
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate30m{shard="catchall"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_30m{component="shard_catchall",tier="sv",type="sidekiq"}
+        )
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
@@ -1080,8 +1232,16 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      sum by (environment,stage) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate30m{shard="catchnfs"}
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate30m{shard="catchnfs"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_30m{component="shard_catchnfs",tier="sv",type="sidekiq"}
+        )
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
@@ -1116,8 +1276,16 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      sum by (environment,stage) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate30m{shard="database-throttled"}
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate30m{shard="database-throttled"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_30m{component="shard_database_throttled",tier="sv",type="sidekiq"}
+        )
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
@@ -1152,8 +1320,16 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      sum by (environment,stage) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate30m{shard="elasticsearch"}
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate30m{shard="elasticsearch"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_30m{component="shard_elasticsearch",tier="sv",type="sidekiq"}
+        )
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
@@ -1188,8 +1364,16 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      sum by (environment,stage) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate30m{shard="gitaly-throttled"}
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate30m{shard="gitaly-throttled"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_30m{component="shard_gitaly_throttled",tier="sv",type="sidekiq"}
+        )
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
@@ -1228,8 +1412,16 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      sum by (environment,stage) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate30m{shard="low-urgency-cpu-bound"}
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate30m{shard="low-urgency-cpu-bound"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_30m{component="shard_low_urgency_cpu_bound",tier="sv",type="sidekiq"}
+        )
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
@@ -1264,8 +1456,16 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      sum by (environment,stage) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate30m{shard="memory-bound"}
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate30m{shard="memory-bound"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_30m{component="shard_memory_bound",tier="sv",type="sidekiq"}
+        )
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
@@ -1304,8 +1504,16 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      sum by (environment,stage) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate30m{shard="urgent-cpu-bound"}
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate30m{shard="urgent-cpu-bound"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_30m{component="shard_urgent_cpu_bound",tier="sv",type="sidekiq"}
+        )
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
@@ -1344,8 +1552,16 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      sum by (environment,stage) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate30m{shard="urgent-other"}
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate30m{shard="urgent-other"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_30m{component="shard_urgent_other",tier="sv",type="sidekiq"}
+        )
       )
   - record: gitlab_background_jobs:queue:apdex:ratio_30m
     expr: |
@@ -1492,8 +1708,16 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      sum by (environment,stage) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate1h{shard="catchall"}
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate1h{shard="catchall"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_1h{component="shard_catchall",tier="sv",type="sidekiq"}
+        )
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
@@ -1552,8 +1776,16 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      sum by (environment,stage) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate1h{shard="catchnfs"}
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate1h{shard="catchnfs"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_1h{component="shard_catchnfs",tier="sv",type="sidekiq"}
+        )
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
@@ -1588,8 +1820,16 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      sum by (environment,stage) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate1h{shard="database-throttled"}
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate1h{shard="database-throttled"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_1h{component="shard_database_throttled",tier="sv",type="sidekiq"}
+        )
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
@@ -1624,8 +1864,16 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      sum by (environment,stage) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate1h{shard="elasticsearch"}
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate1h{shard="elasticsearch"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_1h{component="shard_elasticsearch",tier="sv",type="sidekiq"}
+        )
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
@@ -1660,8 +1908,16 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      sum by (environment,stage) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate1h{shard="gitaly-throttled"}
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate1h{shard="gitaly-throttled"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_1h{component="shard_gitaly_throttled",tier="sv",type="sidekiq"}
+        )
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
@@ -1700,8 +1956,16 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      sum by (environment,stage) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate1h{shard="low-urgency-cpu-bound"}
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate1h{shard="low-urgency-cpu-bound"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_1h{component="shard_low_urgency_cpu_bound",tier="sv",type="sidekiq"}
+        )
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
@@ -1736,8 +2000,16 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      sum by (environment,stage) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate1h{shard="memory-bound"}
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate1h{shard="memory-bound"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_1h{component="shard_memory_bound",tier="sv",type="sidekiq"}
+        )
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
@@ -1776,8 +2048,16 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      sum by (environment,stage) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate1h{shard="urgent-cpu-bound"}
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate1h{shard="urgent-cpu-bound"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_1h{component="shard_urgent_cpu_bound",tier="sv",type="sidekiq"}
+        )
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
@@ -1816,8 +2096,16 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      sum by (environment,stage) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate1h{shard="urgent-other"}
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate1h{shard="urgent-other"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_1h{component="shard_urgent_other",tier="sv",type="sidekiq"}
+        )
       )
   - record: gitlab_background_jobs:queue:apdex:ratio_1h
     expr: |
@@ -1964,8 +2252,16 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      sum by (environment,stage) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate6h{shard="catchall"}
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate6h{shard="catchall"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_6h{component="shard_catchall",tier="sv",type="sidekiq"}
+        )
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
@@ -2024,8 +2320,16 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      sum by (environment,stage) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate6h{shard="catchnfs"}
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate6h{shard="catchnfs"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_6h{component="shard_catchnfs",tier="sv",type="sidekiq"}
+        )
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
@@ -2060,8 +2364,16 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      sum by (environment,stage) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate6h{shard="database-throttled"}
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate6h{shard="database-throttled"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_6h{component="shard_database_throttled",tier="sv",type="sidekiq"}
+        )
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
@@ -2096,8 +2408,16 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      sum by (environment,stage) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate6h{shard="elasticsearch"}
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate6h{shard="elasticsearch"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_6h{component="shard_elasticsearch",tier="sv",type="sidekiq"}
+        )
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
@@ -2132,8 +2452,16 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      sum by (environment,stage) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate6h{shard="gitaly-throttled"}
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate6h{shard="gitaly-throttled"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_6h{component="shard_gitaly_throttled",tier="sv",type="sidekiq"}
+        )
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
@@ -2172,8 +2500,16 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      sum by (environment,stage) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate6h{shard="low-urgency-cpu-bound"}
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate6h{shard="low-urgency-cpu-bound"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_6h{component="shard_low_urgency_cpu_bound",tier="sv",type="sidekiq"}
+        )
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
@@ -2208,8 +2544,16 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      sum by (environment,stage) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate6h{shard="memory-bound"}
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate6h{shard="memory-bound"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_6h{component="shard_memory_bound",tier="sv",type="sidekiq"}
+        )
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
@@ -2248,8 +2592,16 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      sum by (environment,stage) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate6h{shard="urgent-cpu-bound"}
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate6h{shard="urgent-cpu-bound"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_6h{component="shard_urgent_cpu_bound",tier="sv",type="sidekiq"}
+        )
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
@@ -2288,8 +2640,16 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      sum by (environment,stage) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate6h{shard="urgent-other"}
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate6h{shard="urgent-other"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_6h{component="shard_urgent_other",tier="sv",type="sidekiq"}
+        )
       )
   - record: gitlab_background_jobs:queue:apdex:ratio_6h
     expr: |

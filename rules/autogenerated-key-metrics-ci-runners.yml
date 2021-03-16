@@ -19,8 +19,16 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
-        rate(gitlab_workhorse_http_requests_total{code=~"5..", route="^/api/v4/jobs/request\\z"}[1m])
+      (
+        sum by (environment,stage) (
+          rate(gitlab_workhorse_http_requests_total{code=~"5..", route="^/api/v4/jobs/request\\z"}[1m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate{component="polling",tier="runners",type="ci-runners"}
+        )
       )
   - record: gitlab_component_apdex:success:rate
     labels:
@@ -55,8 +63,16 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
-        rate(gitlab_runner_failed_jobs_total{failure_reason="runner_system_failure",job="runners-manager",shard="shared"}[1m])
+      (
+        sum by (environment,stage) (
+          rate(gitlab_runner_failed_jobs_total{failure_reason="runner_system_failure",job="runners-manager",shard="shared"}[1m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate{component="shared_runner_queues",tier="runners",type="ci-runners"}
+        )
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -73,8 +89,16 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
-        rate(job_trace_archive_failed_total{}[1m])
+      (
+        sum by (environment,stage) (
+          rate(job_trace_archive_failed_total{}[1m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate{component="trace_archiving_ci_jobs",tier="runners",type="ci-runners"}
+        )
       )
 - name: 'Component-Level SLIs: ci-runners - 5m burn-rate'
   interval: 1m
@@ -94,8 +118,16 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
-        rate(gitlab_workhorse_http_requests_total{code=~"5..", route="^/api/v4/jobs/request\\z"}[5m])
+      (
+        sum by (environment,stage) (
+          rate(gitlab_workhorse_http_requests_total{code=~"5..", route="^/api/v4/jobs/request\\z"}[5m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_5m{component="polling",tier="runners",type="ci-runners"}
+        )
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
@@ -130,8 +162,16 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
-        rate(gitlab_runner_failed_jobs_total{failure_reason="runner_system_failure",job="runners-manager",shard="shared"}[5m])
+      (
+        sum by (environment,stage) (
+          rate(gitlab_runner_failed_jobs_total{failure_reason="runner_system_failure",job="runners-manager",shard="shared"}[5m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_5m{component="shared_runner_queues",tier="runners",type="ci-runners"}
+        )
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -148,8 +188,16 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
-        rate(job_trace_archive_failed_total{}[5m])
+      (
+        sum by (environment,stage) (
+          rate(job_trace_archive_failed_total{}[5m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_5m{component="trace_archiving_ci_jobs",tier="runners",type="ci-runners"}
+        )
       )
 - name: 'Component-Level SLIs: ci-runners - 30m burn-rate'
   interval: 2m
@@ -169,8 +217,16 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
-        rate(gitlab_workhorse_http_requests_total{code=~"5..", route="^/api/v4/jobs/request\\z"}[30m])
+      (
+        sum by (environment,stage) (
+          rate(gitlab_workhorse_http_requests_total{code=~"5..", route="^/api/v4/jobs/request\\z"}[30m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_30m{component="polling",tier="runners",type="ci-runners"}
+        )
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
@@ -205,8 +261,16 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
-        rate(gitlab_runner_failed_jobs_total{failure_reason="runner_system_failure",job="runners-manager",shard="shared"}[30m])
+      (
+        sum by (environment,stage) (
+          rate(gitlab_runner_failed_jobs_total{failure_reason="runner_system_failure",job="runners-manager",shard="shared"}[30m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_30m{component="shared_runner_queues",tier="runners",type="ci-runners"}
+        )
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -223,8 +287,16 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
-        rate(job_trace_archive_failed_total{}[30m])
+      (
+        sum by (environment,stage) (
+          rate(job_trace_archive_failed_total{}[30m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_30m{component="trace_archiving_ci_jobs",tier="runners",type="ci-runners"}
+        )
       )
 - name: 'Component-Level SLIs: ci-runners - 1h burn-rate'
   interval: 1m
@@ -244,8 +316,16 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
-        rate(gitlab_workhorse_http_requests_total{code=~"5..", route="^/api/v4/jobs/request\\z"}[1h])
+      (
+        sum by (environment,stage) (
+          rate(gitlab_workhorse_http_requests_total{code=~"5..", route="^/api/v4/jobs/request\\z"}[1h])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_1h{component="polling",tier="runners",type="ci-runners"}
+        )
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
@@ -280,8 +360,16 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
-        rate(gitlab_runner_failed_jobs_total{failure_reason="runner_system_failure",job="runners-manager",shard="shared"}[1h])
+      (
+        sum by (environment,stage) (
+          rate(gitlab_runner_failed_jobs_total{failure_reason="runner_system_failure",job="runners-manager",shard="shared"}[1h])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_1h{component="shared_runner_queues",tier="runners",type="ci-runners"}
+        )
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -298,8 +386,16 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
-        rate(job_trace_archive_failed_total{}[1h])
+      (
+        sum by (environment,stage) (
+          rate(job_trace_archive_failed_total{}[1h])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_1h{component="trace_archiving_ci_jobs",tier="runners",type="ci-runners"}
+        )
       )
 - name: 'Component-Level SLIs: ci-runners - 6h burn-rate'
   interval: 2m
@@ -319,8 +415,16 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
-        rate(gitlab_workhorse_http_requests_total{code=~"5..", route="^/api/v4/jobs/request\\z"}[6h])
+      (
+        sum by (environment,stage) (
+          rate(gitlab_workhorse_http_requests_total{code=~"5..", route="^/api/v4/jobs/request\\z"}[6h])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_6h{component="polling",tier="runners",type="ci-runners"}
+        )
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
@@ -355,8 +459,16 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
-        rate(gitlab_runner_failed_jobs_total{failure_reason="runner_system_failure",job="runners-manager",shard="shared"}[6h])
+      (
+        sum by (environment,stage) (
+          rate(gitlab_runner_failed_jobs_total{failure_reason="runner_system_failure",job="runners-manager",shard="shared"}[6h])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_6h{component="shared_runner_queues",tier="runners",type="ci-runners"}
+        )
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -373,8 +485,16 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
-        rate(job_trace_archive_failed_total{}[6h])
+      (
+        sum by (environment,stage) (
+          rate(job_trace_archive_failed_total{}[6h])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_6h{component="trace_archiving_ci_jobs",tier="runners",type="ci-runners"}
+        )
       )
 - name: 'Component mapping: ci-runners'
   interval: 1m

@@ -60,12 +60,12 @@ local combinedServiceLevelIndicatorDefinition(
           std.flatMap(function(c) c.generateApdexRecordingRules(burnRate, aggregationSet, aggregationLabels, recordingRuleStaticLabels), componentsInitialised),
 
         // Generate recording rules for request rate
-        generateRequestRateRecordingRules(burnRate, recordingRuleName, aggregationLabels, recordingRuleStaticLabels)::
-          std.flatMap(function(c) c.generateRequestRateRecordingRules(burnRate, recordingRuleName, aggregationLabels, recordingRuleStaticLabels), componentsInitialised),
+        generateRequestRateRecordingRules(burnRate, aggregationSet, aggregationLabels, recordingRuleStaticLabels)::
+          std.flatMap(function(c) c.generateRequestRateRecordingRules(burnRate, aggregationSet, aggregationLabels, recordingRuleStaticLabels), componentsInitialised),
 
         // Generate recording rules for error rate
-        generateErrorRateRecordingRules(burnRate, recordingRuleName, aggregationLabels, recordingRuleStaticLabels)::
-          std.flatMap(function(c) c.generateErrorRateRecordingRules(burnRate, recordingRuleName, aggregationLabels, recordingRuleStaticLabels), componentsInitialised),
+        generateErrorRateRecordingRules(burnRate, aggregationSet, aggregationLabels, recordingRuleStaticLabels)::
+          std.flatMap(function(c) c.generateErrorRateRecordingRules(burnRate, aggregationSet, aggregationLabels, recordingRuleStaticLabels), componentsInitialised),
 
         // Significant labels are the union of all significantLabels from the components
         significantLabels:
