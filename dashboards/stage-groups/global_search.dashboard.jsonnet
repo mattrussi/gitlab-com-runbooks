@@ -10,7 +10,7 @@ local elasticQueueSize(title, metric) =
     yAxisLabel='Documents in queue',
     stableId='global-search-queue-size-%s' % std.asciiLower(title),
     description=|||
-      The number of documents waiting to be indexed by ElasticSearch.
+      The number of records waiting to be synced to Elasticsearch for Global Search. These jobs are created when projects are imported or when Elasticsearch is enabled for a group in order to backfill all project data to the index. These are picked up in batches every minute. Lower is better but the batching every minute means it will not usually stay at 0. Occasional spikes are expected but sustained steady growth over a long period of time may indicate that ElasticIndexBulkCronWorker or ElasticIndexInitialBulkCronWorker is not keeping up. It may also indicate that indexing is paused in `Admin > Settings > Advanced Search`. Indexing may have been deliberately paused for maintenance.
     |||,
     query=|||
       quantile(0.5, %(metric)s{environment="$environment", stage="$stage"})
