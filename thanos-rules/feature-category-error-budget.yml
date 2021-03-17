@@ -1,0 +1,28 @@
+groups:
+- name: Ratio of successful operations for a feature category over 3 days
+  partial_response_strategy: "warn"
+  interval: 1m
+  rules:
+  - record: gitlab:feature_category:slo:ratio_3d
+    expr: |
+      (
+        # The number of requests that had a satisfactory apdex
+        sum by (environment, stage, feature_category) (
+          sum_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{monitor!="global"}[3d])
+        ) +
+        # The number of requests that did not error
+        sum by (environment, stage, feature_category) (
+          sum_over_time(gitlab:component:feature_category:execution:ops:rate_1h{monitor!="global"}[3d])
+          -
+          sum_over_time(gitlab:component:feature_category:execution:error:rate_1h{monitor!="global"}[3d])
+        )
+      ) / (
+        # Total number of apdex measurements
+        sum by (environment, stage, feature_category) (
+          sum_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{monitor!="global"}[3d])
+        ) +
+        # total number of requests
+        sum by (environment, stage, feature_category) (
+          sum_over_time(gitlab:component:feature_category:execution:ops:rate_1h{monitor!="global"}[3d])
+        )
+      )
