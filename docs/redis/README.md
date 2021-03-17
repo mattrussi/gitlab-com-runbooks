@@ -18,6 +18,7 @@
 
 * [../config_management/chef-guidelines.md](../config_management/chef-guidelines.md)
 * [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
+* [../kas/kubernetes-agent-disable-integrations.md](../kas/kubernetes-agent-disable-integrations.md)
 * [../monitoring/definition-service-apdex.md](../monitoring/definition-service-apdex.md)
 * [../monitoring/sentry-is-down.md](../monitoring/sentry-is-down.md)
 * [../patroni/rotating-rails-postgresql-password.md](../patroni/rotating-rails-postgresql-password.md)
