@@ -79,12 +79,5 @@ local definitionDefaults = {
       // ordered by duration ascending
       getBurnRates()::
         std.set(std.objectFields(definitionWithDefaults.burnRates), durationParser.toSeconds),
-
-      // Given another aggregation set, returns the common set of burn rates
-      getCommonBurnRates(aggregationSetB)::
-        local burnRates = self.getBurnRates();
-        local burnRatesB = aggregationSetB.getBurnRates();
-
-        std.setInter(burnRates, burnRatesB, durationParser.toSeconds),
     },
 }

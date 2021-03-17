@@ -1,6 +1,8 @@
+local helpers = import './helpers.libsonnet';
 local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local strings = import 'utils/strings.libsonnet';
+
 
 {
   aggregationSetErrorRatioRuleSet(sourceAggregationSet, targetAggregationSet, burnRate)::
@@ -12,25 +14,14 @@ local strings = import 'utils/strings.libsonnet';
     local sourceSelector = selectors.serializeHash(sourceAggregationSet.selector);
     local aggregationFilter = targetAggregationSet.aggregationFilter;
 
-    // For service level aggregations, we need to filter out any SLIs which we don't want to include
-    // in the service level aggregation.
-    // These are defined in the SLI with `aggregateToService:false`
-    local aggregationFilterExpr =
-      if aggregationFilter != null then
-        ' and on(component, type) (gitlab_component_service:mapping{monitor="global", %(aggregationFilter)s_aggregation="yes"})' % {
-          sourceSelector: sourceSelector,
-          aggregationFilter: aggregationFilter,
-        }
-      else
-        '';
-
     local formatConfig = {
+      burnRate: burnRate,
       targetOpsRateMetric: targetOpsRateMetric,
       targetErrorRateMetric: targetErrorRateMetric,
       targetSelector: selectors.serializeHash(targetAggregationSet.selector),
       targetAggregationLabels: targetAggregationLabels,
       sourceSelector: sourceSelector,
-      aggregationFilterExpr: aggregationFilterExpr,
+      aggregationFilterExpr: helpers.aggregationFilterExpr(targetAggregationSet),
     };
 
     if targetErrorRatioMetric == null then
@@ -71,6 +62,8 @@ local strings = import 'utils/strings.libsonnet';
         opsRateExpr: opsRateExpr,
       };
 
+      local upscaledExpr = helpers.upscaledErrorRatioExpression(sourceAggregationSet, targetAggregationSet, burnRate);
+
       [{
         record: targetErrorRatioMetric,
         expr:
@@ -86,20 +79,14 @@ local strings = import 'utils/strings.libsonnet';
               )
               or
               (
-                sum by (%(targetAggregationLabels)s) (
-                  sum_over_time(%(sourceErrorRateMetric1h)s{%(sourceSelectorWithUpscale)s}[6h])%(aggregationFilterExpr)s
-                )
-                /
-                sum by (%(targetAggregationLabels)s) (
-                  sum_over_time(%(sourceApdexOpsRateMetric1h)s{%(sourceSelectorWithUpscale)s}[6h])%(aggregationFilterExpr)s
-                )
+                %(upscaledExpr)s
               )
-            ||| % formatConfig {
+            ||| % {
               expr: strings.indent(expr, 2),
-              sourceErrorRateMetric1h: sourceAggregationSet.getErrorRateMetricForBurnRate('1h', required=true),
-              sourceApdexOpsRateMetric1h: sourceAggregationSet.getOpsRateMetricForBurnRate('1h', required=true),
-              sourceSelectorWithUpscale: selectors.serializeHash(sourceAggregationSet.selector { upscale_source: 'yes' }),
+              upscaledExpr: strings.indent(upscaledExpr, 2),
             }
+          else if burnRate == '3d' then
+            upscaledExpr
           else
             expr,
       }],

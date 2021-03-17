@@ -1,3 +1,4 @@
+local helpers = import './helpers.libsonnet';
 local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local strings = import 'utils/strings.libsonnet';
@@ -10,7 +11,6 @@ local strings = import 'utils/strings.libsonnet';
     local targetApdexWeightMetric = targetAggregationSet.getApdexWeightMetricForBurnRate(burnRate);
 
     local targetAggregationLabels = aggregations.serialize(targetAggregationSet.labels);
-    local aggregationFilter = targetAggregationSet.aggregationFilter;
     local sourceSelector = selectors.serializeHash(sourceAggregationSet.selector);
 
     local formatConfig = {
@@ -18,17 +18,7 @@ local strings = import 'utils/strings.libsonnet';
       targetApdexWeightMetric: targetApdexWeightMetric,
       targetAggregationLabels: targetAggregationLabels,
       sourceSelector: sourceSelector,
-      aggregationFilterExpr:
-        // For service level aggregations, we need to filter out any SLIs which we don't want to include
-        // in the service level aggregation.
-        // These are defined in the SLI with `aggregateToService:false`
-        if aggregationFilter != null then
-          ' and on(component, type) (gitlab_component_service:mapping{monitor="global", %(aggregationFilter)s_aggregation="yes"})' % {
-            sourceSelector: sourceSelector,
-            aggregationFilter: aggregationFilter,
-          }
-        else
-          '',
+      aggregationFilterExpr: helpers.aggregationFilterExpr(targetAggregationSet),
     };
 
     (
@@ -67,6 +57,8 @@ local strings = import 'utils/strings.libsonnet';
             sourceApdexWeightMetric: sourceApdexWeightMetric,
           };
 
+        local upscaledExpr = helpers.upscaledApdexRatioExpression(sourceAggregationSet, targetAggregationSet, burnRate);
+
         [{
           record: targetApdexRatioMetric,
           expr:
@@ -82,22 +74,14 @@ local strings = import 'utils/strings.libsonnet';
                 )
                 or
                 (
-                  sum by (%(targetAggregationLabels)s) (
-                    sum_over_time(%(apdexSuccessRateMetric1h)s{%(sourceSelectorWithUpscale)s}[6h])%(aggregationFilterExpr)s
-                  )
-                  /
-                  sum by (%(targetAggregationLabels)s) (
-                    sum_over_time(%(sourceApdexWeightMetric1h)s{%(sourceSelectorWithUpscale)s}[6h])%(aggregationFilterExpr)s
-                  )
+                  %(upscaledExpr)s
                 )
-              ||| % formatConfig {
-                expr: expr,
-                sourceApdexWeightMetric1h: sourceAggregationSet.getApdexWeightMetricForBurnRate('1h', required=true),
-                apdexSuccessRateMetric1h: sourceAggregationSet.getApdexSuccessRateMetricForBurnRate('1h', required=true),
-                sourceApdexSuccessRateMetric: sourceApdexSuccessRateMetric,
-                sourceApdexWeightMetric: sourceApdexWeightMetric,
-                sourceSelectorWithUpscale: selectors.serializeHash(sourceAggregationSet.selector { upscale_source: 'yes' }),
+              ||| % {
+                expr: strings.indent(expr, 2),
+                upscaledExpr: strings.indent(upscaledExpr, 2),
               }
+            else if burnRate == '3d' then
+              upscaledExpr
             else
               expr,
         }]
