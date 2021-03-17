@@ -39,7 +39,19 @@ serviceDashboard.overview('patroni')
 )
 .addPanels(pgbouncerCommonGraphs.networkStats('patroni', 3001))
 .addPanel(
-  row.new(title='patroni process stats'),
+  row.new(title='postgres process stats', collapse=true)
+  .addPanels(
+    processExporter.namedGroup(
+      'postgres',
+      {
+        environment: '$environment',
+        groupname: 'postgres',
+        type: 'patroni',
+        stage: 'main',
+      },
+    )
+  )
+  ,
   gridPos={
     x: 0,
     y: 4000,
@@ -47,16 +59,47 @@ serviceDashboard.overview('patroni')
     h: 1,
   }
 )
-.addPanels(
-  processExporter.namedGroup(
-    'patroni',
-    {
-      environment: '$environment',
-      groupname: 'patroni',
-      type: 'patroni',
-      stage: 'main',
-    },
-    startRow=4001
+.addPanel(
+  row.new(title='wal-g process stats', collapse=true)
+  .addPanels(
+    processExporter.namedGroup(
+      'wal-g',
+      {
+        environment: '$environment',
+        groupname: 'wal-g',
+        type: 'patroni',
+        stage: 'main',
+      },
+    )
   )
+  ,
+  gridPos={
+    x: 0,
+    y: 4010,
+    w: 24,
+    h: 1,
+  }
+)
+
+.addPanel(
+  row.new(title='patroni process stats', collapse=true)
+  .addPanels(
+    processExporter.namedGroup(
+      'patroni',
+      {
+        environment: '$environment',
+        groupname: 'patroni',
+        type: 'patroni',
+        stage: 'main',
+      },
+    )
+  )
+  ,
+  gridPos={
+    x: 0,
+    y: 4020,
+    w: 24,
+    h: 1,
+  }
 )
 .overviewTrailer()
