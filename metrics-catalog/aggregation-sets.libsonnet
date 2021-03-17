@@ -372,25 +372,25 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
     labels: ['env', 'environment', 'tier', 'type', 'stage', 'component', 'feature_category'],
     burnRates: {
       '5m': {
-        apdexSuccessRate: 'gitlab:component:feature_category:execution:apdex:weight:score_5m',
+        apdexSuccessRate: 'gitlab:component:feature_category:execution:apdex:success:rate_5m',
         apdexWeight: 'gitlab:component:feature_category:execution:apdex:weight:score_5m',
         opsRate: 'gitlab:component:feature_category:execution:ops:rate_5m',
         errorRate: 'gitlab:component:feature_category:execution:error:rate_5m',
       },
       '30m': {
-        apdexSuccessRate: 'gitlab:component:feature_category:execution:apdex:weight:score_30m',
+        apdexSuccessRate: 'gitlab:component:feature_category:execution:apdex:success:rate_30m',
         apdexWeight: 'gitlab:component:feature_category:execution:apdex:weight:score_30m',
         opsRate: 'gitlab:component:feature_category:execution:ops:rate_30m',
         errorRate: 'gitlab:component:feature_category:execution:error:rate_30m',
       },
       '1h': {
-        apdexSuccessRate: 'gitlab:component:feature_category:execution:apdex:weight:score_1h',
+        apdexSuccessRate: 'gitlab:component:feature_category:execution:apdex:success:rate_1h',
         apdexWeight: 'gitlab:component:feature_category:execution:apdex:weight:score_1h',
         opsRate: 'gitlab:component:feature_category:execution:ops:rate_1h',
         errorRate: 'gitlab:component:feature_category:execution:error:rate_1h',
       },
       '6h': {
-        apdexSuccessRate: 'gitlab:component:feature_category:execution:apdex:weight:score_6h',
+        apdexSuccessRate: 'gitlab:component:feature_category:execution:apdex:success:rate_6h',
         apdexWeight: 'gitlab:component:feature_category:execution:apdex:weight:score_6h',
         opsRate: 'gitlab:component:feature_category:execution:ops:rate_6h',
         errorRate: 'gitlab:component:feature_category:execution:error:rate_6h',
