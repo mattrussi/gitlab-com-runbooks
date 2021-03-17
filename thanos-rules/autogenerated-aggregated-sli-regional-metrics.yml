@@ -102,13 +102,12 @@ groups:
     expr: |
       (
         sum by (env,environment,tier,type,stage,region,component) (
-        (gitlab_component_apdex:success:rate_6h{monitor!="global"} >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global", regional_aggregation="yes"})
-      )
-      /
-      sum by (env,environment,tier,type,stage,region,component) (
-        (gitlab_component_apdex:weight:score_6h{monitor!="global"} >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global", regional_aggregation="yes"})
-      )
-
+          (gitlab_component_apdex:success:rate_6h{monitor!="global"} >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global", regional_aggregation="yes"})
+        )
+        /
+        sum by (env,environment,tier,type,stage,region,component) (
+          (gitlab_component_apdex:weight:score_6h{monitor!="global"} >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global", regional_aggregation="yes"})
+        )
       )
       or
       (
@@ -119,4 +118,22 @@ groups:
         sum by (env,environment,tier,type,stage,region,component) (
           sum_over_time(gitlab_component_apdex:weight:score_1h{monitor!="global",upscale_source="yes"}[6h]) and on(component, type) (gitlab_component_service:mapping{monitor="global", regional_aggregation="yes"})
         )
+      )
+  - record: gitlab_regional_sli_errors:ratio_3d
+    expr: |
+      sum by (env,environment,tier,type,stage,region,component) (
+        sum_over_time(gitlab_component_errors:rate_1h{monitor!="global"}[3d]) and on(component, type) (gitlab_component_service:mapping{monitor="global", regional_aggregation="yes"})
+      )
+      /
+      sum by (env,environment,tier,type,stage,region,component) (
+        sum_over_time(gitlab_component_ops:rate_1h{monitor!="global"}[3d]) and on(component, type) (gitlab_component_service:mapping{monitor="global", regional_aggregation="yes"})
+      )
+  - record: gitlab_regional_sli_apdex:ratio_3d
+    expr: |
+      sum by (env,environment,tier,type,stage,region,component) (
+        sum_over_time(gitlab_component_apdex:success:rate_1h{monitor!="global"}[3d]) and on(component, type) (gitlab_component_service:mapping{monitor="global", regional_aggregation="yes"})
+      )
+      /
+      sum by (env,environment,tier,type,stage,region,component) (
+        sum_over_time(gitlab_component_apdex:weight:score_1h{monitor!="global"}[3d]) and on(component, type) (gitlab_component_service:mapping{monitor="global", regional_aggregation="yes"})
       )

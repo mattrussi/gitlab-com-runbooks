@@ -1,0 +1,70 @@
+local aggregations = import 'promql/aggregations.libsonnet';
+local selectors = import 'promql/selectors.libsonnet';
+local strings = import 'utils/strings.libsonnet';
+
+local upscalePromExpression = |||
+  sum by (%(targetAggregationLabels)s) (
+    sum_over_time(%(numeratorMetricName)s{%(sourceSelectorWithExtras)s}[%(burnRate)s])%(aggregationFilterExpr)s
+  )
+  /
+  sum by (%(targetAggregationLabels)s) (
+    sum_over_time(%(denominatorMetricName)s{%(sourceSelectorWithExtras)s}[%(burnRate)s])%(aggregationFilterExpr)s
+  )
+|||;
+
+local aggregationFilterExpr(targetAggregationSet) =
+  local aggregationFilter = targetAggregationSet.aggregationFilter;
+
+  // For service level aggregations, we need to filter out any SLIs which we don't want to include
+  // in the service level aggregation.
+  // These are defined in the SLI with `aggregateToService:false`
+  if aggregationFilter != null then
+    ' and on(component, type) (gitlab_component_service:mapping{monitor="global", %(aggregationFilter)s_aggregation="yes"})' % {
+      aggregationFilter: aggregationFilter,
+    }
+  else
+    '';
+
+
+local selectorForUpscaling(sourceAggregationSet, burnRate) =
+  sourceAggregationSet.selector +
+  if burnRate == '3d' then
+    // No SLI has a 3d burn rate source metric. We always upscale from 1h metrics for 3d
+    {}
+  else
+    { upscale_source: 'yes' };
+
+
+local upscaledApdexRatioExpression(sourceAggregationSet, targetAggregationSet, burnRate) =
+  local targetAggregationLabels = aggregations.serialize(targetAggregationSet.labels);
+  local sourceSelectorWithExtras = selectorForUpscaling(sourceAggregationSet, burnRate);
+
+  upscalePromExpression % {
+    burnRate: burnRate,
+    targetAggregationLabels: aggregations.serialize(targetAggregationSet.labels),
+    numeratorMetricName: sourceAggregationSet.getApdexSuccessRateMetricForBurnRate('1h', required=true),
+    denominatorMetricName: sourceAggregationSet.getApdexWeightMetricForBurnRate('1h', required=true),
+    sourceSelectorWithExtras: selectors.serializeHash(sourceSelectorWithExtras),
+    aggregationFilterExpr: aggregationFilterExpr(targetAggregationSet),
+  };
+
+
+local upscaledErrorRatioExpression(sourceAggregationSet, targetAggregationSet, burnRate) =
+  local targetAggregationLabels = aggregations.serialize(targetAggregationSet.labels);
+  local sourceSelectorWithExtras = selectorForUpscaling(sourceAggregationSet, burnRate);
+
+  upscalePromExpression % {
+    burnRate: burnRate,
+    targetAggregationLabels: aggregations.serialize(targetAggregationSet.labels),
+    numeratorMetricName: sourceAggregationSet.getErrorRateMetricForBurnRate('1h', required=true),
+    denominatorMetricName: sourceAggregationSet.getOpsRateMetricForBurnRate('1h', required=true),
+    sourceSelectorWithExtras: selectors.serializeHash(sourceSelectorWithExtras),
+    aggregationFilterExpr: aggregationFilterExpr(targetAggregationSet),
+  };
+
+
+{
+  aggregationFilterExpr:: aggregationFilterExpr,
+  upscaledApdexRatioExpression: upscaledApdexRatioExpression,
+  upscaledErrorRatioExpression: upscaledErrorRatioExpression,
+}

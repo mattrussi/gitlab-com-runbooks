@@ -91,6 +91,10 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
         apdexRatio: 'gitlab_component_apdex:ratio_6h',
         errorRatio: 'gitlab_component_errors:ratio_6h',
       },
+      '3d': {
+        apdexRatio: 'gitlab_component_apdex:ratio_3d',
+        errorRatio: 'gitlab_component_errors:ratio_3d',
+      },
     },
   }),
 
@@ -126,6 +130,10 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
       '6h': {
         apdexRatio: 'gitlab_regional_sli_apdex:ratio_6h',
         errorRatio: 'gitlab_regional_sli_errors:ratio_6h',
+      },
+      '3d': {
+        apdexRatio: 'gitlab_regional_sli_apdex:ratio_3d',
+        errorRatio: 'gitlab_regional_sli_errors:ratio_3d',
       },
     },
     // Only include components (SLIs) with regional_aggregation="yes"
@@ -213,6 +221,10 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
         apdexRatio: 'gitlab_component_node_apdex:ratio_6h',
         errorRatio: 'gitlab_component_node_errors:ratio_6h',
       },
+      '3d': {
+        apdexRatio: 'gitlab_component_node_apdex:ratio_3d',
+        errorRatio: 'gitlab_component_node_errors:ratio_3d',
+      },
     },
   }),
 
@@ -258,6 +270,10 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
         apdexRatio: 'gitlab_service_apdex:ratio_6h',
         errorRatio: 'gitlab_service_errors:ratio_6h',
       },
+      '3d': {
+        apdexRatio: 'gitlab_service_apdex:ratio_3d',
+        errorRatio: 'gitlab_service_errors:ratio_3d',
+      },
     },
     // Only include components (SLIs) with service_aggregation="yes"
     aggregationFilter: 'service',
@@ -276,7 +292,6 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
     selector: { monitor: 'global' },  // Thanos Ruler
     labels: ['env', 'environment', 'tier', 'type', 'stage', 'shard', 'fqdn'],
     burnRates: {
-      // No 1m burn rate
       '5m': {
         apdexRatio: 'gitlab_service_node_apdex:ratio_5m',
         opsRate: 'gitlab_service_node_ops:rate_5m',
@@ -299,6 +314,10 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
         apdexRatio: 'gitlab_service_node_apdex:ratio_6h',
         errorRatio: 'gitlab_service_node_errors:ratio_6h',
       },
+      '3d': {
+        apdexRatio: 'gitlab_service_node_apdex:ratio_3d',
+        errorRatio: 'gitlab_service_node_errors:ratio_3d',
+      },
     },
     // Only include components (SLIs) with service_aggregation="yes"
     aggregationFilter: 'service',
@@ -314,7 +333,6 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
     selector: { monitor: 'global' },  // Thanos Ruler
     labels: ['env', 'environment', 'tier', 'type', 'stage', 'region'],
     burnRates: {
-      // No 1m burn rate
       '5m': {
         apdexRatio: 'gitlab_service_regional_apdex:ratio_5m',
         opsRate: 'gitlab_service_regional_ops:rate_5m',
@@ -337,6 +355,10 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
         apdexRatio: 'gitlab_service_regional_apdex:ratio_6h',
         errorRatio: 'gitlab_service_regional_errors:ratio_6h',
       },
+      '3d': {
+        apdexRatio: 'gitlab_service_regional_apdex:ratio_3d',
+        errorRatio: 'gitlab_service_regional_errors:ratio_3d',
+      },
     },
     // Only include components (SLIs) with regional_aggregation="yes"
     aggregationFilter: 'regional',
@@ -349,7 +371,6 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
     selector: { monitor: { ne: 'global' } },  // Not Thanos Ruler
     labels: ['env', 'environment', 'tier', 'type', 'stage', 'component', 'feature_category'],
     burnRates: {
-      // No 1m burn rate
       '5m': {
         apdexSuccessRate: 'gitlab:component:feature_category:execution:apdex:weight:score_5m',
         apdexWeight: 'gitlab:component:feature_category:execution:apdex:weight:score_5m',
@@ -384,7 +405,6 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
     selector: { monitor: 'global' },  // Thanos Ruler
     labels: ['env', 'environment', 'tier', 'type', 'stage', 'component', 'feature_category'],
     burnRates: {
-      // No 1m burn rate
       '5m': {
         apdexRatio: 'gitlab:component:feature_category:execution:apdex:ratio_5m',
         opsRate: 'gitlab:component:feature_category:execution:ops:rate_5m',
@@ -406,6 +426,10 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
       '6h': {
         apdexRatio: 'gitlab:component:feature_category:execution:apdex:ratio_6h',
         errorRatio: 'gitlab:component:feature_category:execution:error:ratio_6h',
+      },
+      '3d': {
+        apdexRatio: 'gitlab:component:feature_category:execution:apdex:ratio_3d',
+        errorRatio: 'gitlab:component:feature_category:execution:error:ratio_3d',
       },
     },
   }),

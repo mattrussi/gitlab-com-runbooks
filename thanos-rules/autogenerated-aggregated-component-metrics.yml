@@ -126,13 +126,12 @@ groups:
     expr: |
       (
         sum by (env,environment,tier,type,stage,component) (
-        (gitlab_component_apdex:success:rate_6h{monitor!="global"} >= 0)
-      )
-      /
-      sum by (env,environment,tier,type,stage,component) (
-        (gitlab_component_apdex:weight:score_6h{monitor!="global"} >= 0)
-      )
-
+          (gitlab_component_apdex:success:rate_6h{monitor!="global"} >= 0)
+        )
+        /
+        sum by (env,environment,tier,type,stage,component) (
+          (gitlab_component_apdex:weight:score_6h{monitor!="global"} >= 0)
+        )
       )
       or
       (
@@ -143,4 +142,22 @@ groups:
         sum by (env,environment,tier,type,stage,component) (
           sum_over_time(gitlab_component_apdex:weight:score_1h{monitor!="global",upscale_source="yes"}[6h])
         )
+      )
+  - record: gitlab_component_errors:ratio_3d
+    expr: |
+      sum by (env,environment,tier,type,stage,component) (
+        sum_over_time(gitlab_component_errors:rate_1h{monitor!="global"}[3d])
+      )
+      /
+      sum by (env,environment,tier,type,stage,component) (
+        sum_over_time(gitlab_component_ops:rate_1h{monitor!="global"}[3d])
+      )
+  - record: gitlab_component_apdex:ratio_3d
+    expr: |
+      sum by (env,environment,tier,type,stage,component) (
+        sum_over_time(gitlab_component_apdex:success:rate_1h{monitor!="global"}[3d])
+      )
+      /
+      sum by (env,environment,tier,type,stage,component) (
+        sum_over_time(gitlab_component_apdex:weight:score_1h{monitor!="global"}[3d])
       )
