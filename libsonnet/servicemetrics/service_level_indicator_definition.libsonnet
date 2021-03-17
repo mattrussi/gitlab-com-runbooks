@@ -41,6 +41,17 @@ local validateAndApplySLIDefaults(sliName, component, inheritedDefaults) =
 local filterStaticLabelsFromAggregationLabels(aggregationLabels, staticLabelsHash) =
   std.filter(function(label) !std.objectHas(staticLabelsHash, label), aggregationLabels);
 
+// Currently, we use 1h metrics for upscaling source
+local getUpscaleLabels(sli, burnRate) =
+  if sli.upscaleLongerBurnRates && burnRate == '1h' then
+    { upscale_source: 'yes' }
+  else
+    {};
+
+// Currently we only do upscaling on 6h burn rates
+local isUpscalingTarget(sli, burnRate) =
+  sli.upscaleLongerBurnRates && burnRate == '6h';
+
 // Definition of a service level indicator
 local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
   serviceLevelIndicator {
@@ -67,80 +78,75 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
 
     // Generate recording rules for apdex
     generateApdexRecordingRules(burnRate, aggregationSet, aggregationLabels, recordingRuleStaticLabels)::
-      local upscaleLabels =
-        if self.upscaleLongerBurnRates && burnRate == '1h' then
-          { upscale_source: 'yes' }
-        else
-          {};
+      if self.hasApdex() && !isUpscalingTarget(self, burnRate) then
+        local upscaleLabels = getUpscaleLabels(self, burnRate);
+        local allStaticLabels = recordingRuleStaticLabels + serviceLevelIndicator.staticLabels + upscaleLabels;
+        local aggregationLabelsWithoutStaticLabels = filterStaticLabelsFromAggregationLabels(aggregationLabels, allStaticLabels);
 
-      local allStaticLabels = recordingRuleStaticLabels + serviceLevelIndicator.staticLabels + upscaleLabels;
-      local aggregationLabelsWithoutStaticLabels = filterStaticLabelsFromAggregationLabels(aggregationLabels, allStaticLabels);
+        local apdexSuccessRateRecordingRuleName = aggregationSet.getApdexSuccessRateMetricForBurnRate(burnRate);
+        local apdexWeightRecordingRuleName = aggregationSet.getApdexWeightMetricForBurnRate(burnRate);
+        local apdexRatioRecordingRuleName = aggregationSet.getApdexRatioMetricForBurnRate(burnRate);
 
-      if self.hasApdex() then
-        // Currently we only do upscaling on apdex scores and on 6h burn rates
-        if self.upscaleLongerBurnRates && burnRate == '6h' then
-          /* Do not generate source aggregations for upscaleLongerBurnRates components */
-          []
-        else
-          local apdexSuccessRateRecordingRuleName = aggregationSet.getApdexSuccessRateMetricForBurnRate(burnRate);
-          local apdexWeightRecordingRuleName = aggregationSet.getApdexWeightMetricForBurnRate(burnRate);
-          local apdexRatioRecordingRuleName = aggregationSet.getApdexRatioMetricForBurnRate(burnRate);
+        local apdexSuccessRateExpr = serviceLevelIndicator.apdex.apdexSuccessRateQuery(
+          aggregationLabels=aggregationLabelsWithoutStaticLabels,
+          selector={},
+          rangeInterval=burnRate
+        );
 
-          local apdexSuccessRateExpr = serviceLevelIndicator.apdex.apdexSuccessRateQuery(
-            aggregationLabels=aggregationLabelsWithoutStaticLabels,
-            selector={},
-            rangeInterval=burnRate
-          );
+        local apdexWeightExpr = serviceLevelIndicator.apdex.apdexWeightQuery(
+          aggregationLabels=aggregationLabelsWithoutStaticLabels,
+          selector={},
+          rangeInterval=burnRate
+        );
 
-          local apdexWeightExpr = serviceLevelIndicator.apdex.apdexWeightQuery(
-            aggregationLabels=aggregationLabelsWithoutStaticLabels,
-            selector={},
-            rangeInterval=burnRate
-          );
-
-          (
-            if apdexSuccessRateRecordingRuleName != null then
-              [{
-                record: apdexSuccessRateRecordingRuleName,
-                labels: allStaticLabels,
-                expr: apdexSuccessRateExpr,
-              }]
-            else
-              []
-          )
-          +
-          (
-            if apdexWeightRecordingRuleName != null then
-              [{
-                record: apdexWeightRecordingRuleName,
-                labels: allStaticLabels,
-                expr: apdexWeightExpr,
-              }]
-            else
-              []
-          )
+        (
+          if apdexSuccessRateRecordingRuleName != null then
+            [{
+              record: apdexSuccessRateRecordingRuleName,
+              labels: allStaticLabels,
+              expr: apdexSuccessRateExpr,
+            }]
+          else
+            []
+        )
+        +
+        (
+          if apdexWeightRecordingRuleName != null then
+            [{
+              record: apdexWeightRecordingRuleName,
+              labels: allStaticLabels,
+              expr: apdexWeightExpr,
+            }]
+          else
+            []
+        )
       else
         [],
 
     // Generate recording rules for request rate
     generateRequestRateRecordingRules(burnRate, aggregationSet, aggregationLabels, recordingRuleStaticLabels)::
-      local requestRateRecordingRuleName = aggregationSet.getOpsRateMetricForBurnRate(burnRate, required=true);
-      local allStaticLabels = recordingRuleStaticLabels + serviceLevelIndicator.staticLabels;
+      if !isUpscalingTarget(self, burnRate) then
+        local upscaleLabels = getUpscaleLabels(self, burnRate);
+        local requestRateRecordingRuleName = aggregationSet.getOpsRateMetricForBurnRate(burnRate, required=true);
+        local allStaticLabels = recordingRuleStaticLabels + serviceLevelIndicator.staticLabels + upscaleLabels;
 
-      [{
-        record: requestRateRecordingRuleName,
-        labels: allStaticLabels,
-        expr: serviceLevelIndicator.requestRate.aggregatedRateQuery(
-          aggregationLabels=filterStaticLabelsFromAggregationLabels(aggregationLabels, allStaticLabels),
-          selector={},
-          rangeInterval=burnRate
-        ),
-      }],
+        [{
+          record: requestRateRecordingRuleName,
+          labels: allStaticLabels,
+          expr: serviceLevelIndicator.requestRate.aggregatedRateQuery(
+            aggregationLabels=filterStaticLabelsFromAggregationLabels(aggregationLabels, allStaticLabels),
+            selector={},
+            rangeInterval=burnRate
+          ),
+        }]
+      else
+        [],
 
     // Generate recording rules for error rate
     generateErrorRateRecordingRules(burnRate, aggregationSet, aggregationLabels, recordingRuleStaticLabels)::
-      if self.hasErrorRate() then
-        local allStaticLabels = recordingRuleStaticLabels + serviceLevelIndicator.staticLabels;
+      if self.hasErrorRate() && !isUpscalingTarget(self, burnRate) then
+        local upscaleLabels = getUpscaleLabels(self, burnRate);
+        local allStaticLabels = recordingRuleStaticLabels + serviceLevelIndicator.staticLabels + upscaleLabels;
         local requestRateRecordingRuleName = aggregationSet.getOpsRateMetricForBurnRate(burnRate, required=true);
         local errorRateRecordingRuleName = aggregationSet.getErrorRateMetricForBurnRate(burnRate, required=true);
         local filteredAggregationLabels = filterStaticLabelsFromAggregationLabels(aggregationLabels, allStaticLabels);
@@ -150,6 +156,7 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
           selector={},
           rangeInterval=burnRate
         );
+
         [{
           record: errorRateRecordingRuleName,
           labels: allStaticLabels,

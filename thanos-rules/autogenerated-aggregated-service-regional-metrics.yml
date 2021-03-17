@@ -77,21 +77,27 @@ groups:
       sum by (env,environment,tier,type,stage,region) (
         (gitlab_component_apdex:weight:score_1h{monitor!="global"} >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global", regional_aggregation="yes"})
       )
-  - record: gitlab_service_regional_errors:rate_6h
-    expr: |
-      sum by (env,environment,tier,type,stage,region) (
-        gitlab_component_errors:rate_6h{monitor!="global"} >= 0 and on(component, type) (gitlab_component_service:mapping{monitor="global", regional_aggregation="yes"})
-      )
-  - record: gitlab_service_regional_ops:rate_6h
-    expr: |
-      sum by (env,environment,tier,type,stage,region) (
-        gitlab_component_ops:rate_6h{monitor!="global"} >= 0 and on(component, type) (gitlab_component_service:mapping{monitor="global", regional_aggregation="yes"})
-      )
   - record: gitlab_service_regional_errors:ratio_6h
     expr: |
-      gitlab_service_regional_errors:rate_6h{monitor="global"}
-      /
-      gitlab_service_regional_ops:rate_6h{monitor="global"}
+      (
+        sum by (env,environment,tier,type,stage,region) (
+          gitlab_component_errors:rate_6h{monitor!="global"} >= 0 and on(component, type) (gitlab_component_service:mapping{monitor="global", regional_aggregation="yes"})
+        )
+        /
+        sum by (env,environment,tier,type,stage,region) (
+          gitlab_component_ops:rate_6h{monitor!="global"} >= 0 and on(component, type) (gitlab_component_service:mapping{monitor="global", regional_aggregation="yes"})
+        )
+      )
+      or
+      (
+        sum by (env,environment,tier,type,stage,region) (
+          sum_over_time(gitlab_component_errors:rate_1h{monitor!="global",upscale_source="yes"}[6h]) and on(component, type) (gitlab_component_service:mapping{monitor="global", regional_aggregation="yes"})
+        )
+        /
+        sum by (env,environment,tier,type,stage,region) (
+          sum_over_time(gitlab_component_ops:rate_1h{monitor!="global",upscale_source="yes"}[6h]) and on(component, type) (gitlab_component_service:mapping{monitor="global", regional_aggregation="yes"})
+        )
+      )
   - record: gitlab_service_regional_apdex:ratio_6h
     expr: |
       (

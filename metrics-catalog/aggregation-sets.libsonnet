@@ -89,8 +89,6 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
       },
       '6h': {
         apdexRatio: 'gitlab_component_apdex:ratio_6h',
-        opsRate: 'gitlab_component_ops:rate_6h',
-        errorRate: 'gitlab_component_errors:rate_6h',
         errorRatio: 'gitlab_component_errors:ratio_6h',
       },
     },
@@ -127,8 +125,6 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
       },
       '6h': {
         apdexRatio: 'gitlab_regional_sli_apdex:ratio_6h',
-        opsRate: 'gitlab_regional_sli_ops:rate_6h',
-        errorRate: 'gitlab_regional_sli_errors:rate_6h',
         errorRatio: 'gitlab_regional_sli_errors:ratio_6h',
       },
     },
@@ -215,8 +211,6 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
       },
       '6h': {
         apdexRatio: 'gitlab_component_node_apdex:ratio_6h',
-        opsRate: 'gitlab_component_node_ops:rate_6h',
-        errorRate: 'gitlab_component_node_errors:rate_6h',
         errorRatio: 'gitlab_component_node_errors:ratio_6h',
       },
     },
@@ -262,8 +256,6 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
       },
       '6h': {
         apdexRatio: 'gitlab_service_apdex:ratio_6h',
-        opsRate: 'gitlab_service_ops:rate_6h',
-        errorRate: 'gitlab_service_errors:rate_6h',
         errorRatio: 'gitlab_service_errors:ratio_6h',
       },
     },
@@ -305,8 +297,6 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
       },
       '6h': {
         apdexRatio: 'gitlab_service_node_apdex:ratio_6h',
-        opsRate: 'gitlab_service_node_ops:rate_6h',
-        errorRate: 'gitlab_service_node_errors:rate_6h',
         errorRatio: 'gitlab_service_node_errors:ratio_6h',
       },
     },
@@ -345,8 +335,6 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
       },
       '6h': {
         apdexRatio: 'gitlab_service_regional_apdex:ratio_6h',
-        opsRate: 'gitlab_service_regional_ops:rate_6h',
-        errorRate: 'gitlab_service_regional_errors:rate_6h',
         errorRatio: 'gitlab_service_regional_errors:ratio_6h',
       },
     },
@@ -417,8 +405,6 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
       },
       '6h': {
         apdexRatio: 'gitlab:component:feature_category:execution:apdex:ratio_6h',
-        opsRate: 'gitlab:component:feature_category:execution:ops:rate_6h',
-        errorRate: 'gitlab:component:feature_category:execution:error:rate_6h',
         errorRatio: 'gitlab:component:feature_category:execution:error:ratio_6h',
       },
     },
