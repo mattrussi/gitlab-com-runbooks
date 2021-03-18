@@ -143,7 +143,7 @@ local indexCatalog = {
   postgres: indexDefaults {
     timestamp: '@timestamp',
     indexPattern: '97f04200-024b-11eb-81e5-155ba78758d4',
-    defaultColumns: ['json.hostname', 'json.application_name', 'json.error_severity', 'json.message', 'json.session_start_time', 'json.sql_state_code', 'json.duration_ms'],
+    defaultColumns: ['json.hostname', 'json.endpoint_id', 'json.error_severity', 'json.message', 'json.session_start_time', 'json.sql_state_code', 'json.duration_s', 'json.sql'],
     defaultSeriesSplitField: 'json.sql_state_code',
     failureFilter: [mustNot(matchFilter('json.sql_state_code', '00000')), existsFilter('json.sql_state_code')],  // SQL Codes reference: https://www.postgresql.org/docs/9.4/errcodes-appendix.html
     defaultLatencyField: 'json.duration_ms',  // Only makes sense in the context of slowlog entries
@@ -245,7 +245,7 @@ local indexCatalog = {
   },
 };
 
-local buildElasticDiscoverSearchQueryURL(index, filters, luceneQueries=[]) =
+local buildElasticDiscoverSearchQueryURL(index, filters, luceneQueries=[], includeTime=true) =
   local applicationState = {
     columns: indexCatalog[index].defaultColumns,
     filters: filters,
@@ -256,7 +256,7 @@ local buildElasticDiscoverSearchQueryURL(index, filters, luceneQueries=[]) =
     },
   };
 
-  indexCatalog[index].kibanaEndpoint + '#/discover?_a=' + rison.encode(applicationState) + grafanaTimeRange;
+  indexCatalog[index].kibanaEndpoint + '#/discover?_a=' + rison.encode(applicationState) + (if includeTime then grafanaTimeRange else '');
 
 local buildElasticLineCountVizURL(index, filters, luceneQueries=[], splitSeries=false) =
   local ic = indexCatalog[index];
@@ -524,8 +524,8 @@ local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latency
   rangeFilter:: rangeFilter,
 
   // Given an index, and a set of filters, returns a URL to a Kibana discover module/search
-  buildElasticDiscoverSearchQueryURL(index, filters, luceneQueries=[])::
-    buildElasticDiscoverSearchQueryURL(index, filters, luceneQueries),
+  buildElasticDiscoverSearchQueryURL(index, filters, luceneQueries=[], includeTime=true)::
+    buildElasticDiscoverSearchQueryURL(index, filters, luceneQueries, includeTime),
 
   // Search for failed requests
   buildElasticDiscoverFailureSearchQueryURL(index, filters, luceneQueries=[])::
