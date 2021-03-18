@@ -1,4 +1,4 @@
 # Summary
-For information about how to handle CI abuse see
-https://docs.google.com/document/d/16NTzcLu183n853abpUpaZf9MeDo2aGFEsGlUpbBVaBY/edit#
-(gitlab internal)
+
+For information about how to handle certain types of CI abuse, see
+the [SIRT runbook](https://gitlab.com/gitlab-com/gl-security/runbooks/-/blob/master/sirt/gitlab/cryptomining_and_ci_abuse.md). (gitlab internal)
