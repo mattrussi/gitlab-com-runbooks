@@ -6,6 +6,8 @@ This alert has the following possible causes, in the first few minutes it is imp
 
 Look for quota-exceeded errors in logs to determine if we are hitting any GCP `gitlab-ci` project quotas that are causing scaling issues: https://log.gprd.gitlab.net/goto/8f65b43718b6e95ccf5f6972e7ca1887
 
+Check the [Quotas Runbook](./providers/gcp/quotas.md) for more details.
+
 **If we believe there is a GCP scaling or quota issue**:
 - Contact the Runner team 24/7 using [this contact sheet](https://docs.google.com/spreadsheets/d/1JPgmmYgJxom-__vgDnvX0yyQaDPwX-XNmPsGT-S-Dvw/edit#gid=0)
 
