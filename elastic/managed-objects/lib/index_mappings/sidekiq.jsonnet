@@ -171,6 +171,9 @@
         duration_s: {
           type: 'float',
         },
+        duration_ms: {
+          type: 'float',
+        },
         enqueued_at: {
           type: 'date',
         },
