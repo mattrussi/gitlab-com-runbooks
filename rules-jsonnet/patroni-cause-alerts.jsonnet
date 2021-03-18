@@ -41,6 +41,8 @@ local hotspotTupleAlert(alertName, periodFor, warning, replica) =
     if !replica then elasticsearchLinks.matchFilter('json.fqdn', '{{$labels.fqdn}}'),
   ];
 
+  local postgresLocation = if replica then 'replicas' else 'primary `{{ $labels.fqdn }}`';
+
   alerts.processAlertRule({
     alert: alertName,
     expr: alertExpr(aggregationLabels=aggregationLabels, selector=selector, replica=replica, threshold=threshold),
@@ -52,7 +54,7 @@ local hotspotTupleAlert(alertName, periodFor, warning, replica) =
       [if !warning then 'pager']: 'pagerduty',
     },
     annotations: {
-      title: 'Hot spot tuple fetches on the postgres %(postgresLocation)s in the `{{ $labels.relname }}` table, `{{ $labels.relname }}`.',
+      title: 'Hot spot tuple fetches on the postgres %(postgresLocation)s in the `{{ $labels.relname }}` table, `{{ $labels.relname }}`.' % { postgresLocation: postgresLocation },
       description: |||
         More than %(thresholdPercent)g%% of all tuple fetches on postgres %(postgresLocation)s are for a single table.
 
@@ -66,7 +68,7 @@ local hotspotTupleAlert(alertName, periodFor, warning, replica) =
         Previous incidents of this type include https://gitlab.com/gitlab-com/gl-infra/production/-/issues/2885 and
         https://gitlab.com/gitlab-com/gl-infra/production/-/issues/3875.
       ||| % {
-        postgresLocation: if replica then 'postgres replicas' else 'primary `{{ $labels.fqdn }}`',
+        postgresLocation: postgresLocation,
         thresholdPercent: threshold * 100,
         kibanaUrl: elasticsearchLinks.buildElasticDiscoverSearchQueryURL('postgres', elasticFilters, includeTime=false),
       },

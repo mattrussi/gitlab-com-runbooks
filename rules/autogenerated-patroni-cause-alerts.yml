@@ -7,8 +7,8 @@ groups:
     for: 10m
     annotations:
       title: >-
-        Hot spot tuple fetches on the postgres %(postgresLocation)s in the `{{ $labels.relname }}` table,
-        `{{ $labels.relname }}`.
+        Hot spot tuple fetches on the postgres primary `{{ $labels.fqdn }}` in the `{{ $labels.relname
+        }}` table, `{{ $labels.relname }}`.
       description: |
         More than 50% of all tuple fetches on postgres primary `{{ $labels.fqdn }}` are for a single table.
 
@@ -50,10 +50,10 @@ groups:
     for: 10m
     annotations:
       title: >-
-        Hot spot tuple fetches on the postgres %(postgresLocation)s in the `{{ $labels.relname }}` table,
-        `{{ $labels.relname }}`.
+        Hot spot tuple fetches on the postgres replicas in the `{{ $labels.relname }}` table, `{{ $labels.relname
+        }}`.
       description: |
-        More than 50% of all tuple fetches on postgres postgres replicas are for a single table.
+        More than 50% of all tuple fetches on postgres replicas are for a single table.
 
         This may indicate that the query optimizer is using incorrect statistics to execute a query.
 
@@ -92,10 +92,10 @@ groups:
     for: 3m
     annotations:
       title: >-
-        Hot spot tuple fetches on the postgres %(postgresLocation)s in the `{{ $labels.relname }}` table,
-        `{{ $labels.relname }}`.
+        Hot spot tuple fetches on the postgres replicas in the `{{ $labels.relname }}` table, `{{ $labels.relname
+        }}`.
       description: |
-        More than 50% of all tuple fetches on postgres postgres replicas are for a single table.
+        More than 50% of all tuple fetches on postgres replicas are for a single table.
 
         This may indicate that the query optimizer is using incorrect statistics to execute a query.
 
@@ -133,10 +133,10 @@ groups:
     for: 5m
     annotations:
       title: >-
-        Hot spot tuple fetches on the postgres %(postgresLocation)s in the `{{ $labels.relname }}` table,
-        `{{ $labels.relname }}`.
+        Hot spot tuple fetches on the postgres replicas in the `{{ $labels.relname }}` table, `{{ $labels.relname
+        }}`.
       description: |
-        More than 50% of all tuple fetches on postgres postgres replicas are for a single table.
+        More than 50% of all tuple fetches on postgres replicas are for a single table.
 
         This may indicate that the query optimizer is using incorrect statistics to execute a query.
 
