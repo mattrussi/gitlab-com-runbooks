@@ -38,8 +38,19 @@ local hotspotTupleAlert(alertName, periodFor, warning, replica) =
 
   local elasticFilters = [
     elasticsearchLinks.matchFilter('json.sql', '{{$labels.relname}}'),
-    if !replica then elasticsearchLinks.matchFilter('json.fqdn', '{{$labels.fqdn}}'),
-  ];
+  ] + (
+    if replica then
+      []
+    else
+      [elasticsearchLinks.matchFilter('json.fqdn', '{{$labels.fqdn}}')]
+  );
+
+
+  local formatConfig = {
+    postgresLocation: if replica then 'postgres replicas' else 'primary `{{ $labels.fqdn }}`',
+    thresholdPercent: threshold * 100,
+    kibanaUrl: elasticsearchLinks.buildElasticDiscoverSearchQueryURL('postgres', elasticFilters, includeTime=false),
+  };
 
   alerts.processAlertRule({
     alert: alertName,
@@ -52,7 +63,7 @@ local hotspotTupleAlert(alertName, periodFor, warning, replica) =
       [if !warning then 'pager']: 'pagerduty',
     },
     annotations: {
-      title: 'Hot spot tuple fetches on the postgres %(postgresLocation)s in the `{{ $labels.relname }}` table, `{{ $labels.relname }}`.',
+      title: 'Hot spot tuple fetches on the postgres %(postgresLocation)s in the `{{ $labels.relname }}` table, `{{ $labels.relname }}`.' % formatConfig,
       description: |||
         More than %(thresholdPercent)g%% of all tuple fetches on postgres %(postgresLocation)s are for a single table.
 
@@ -61,19 +72,15 @@ local hotspotTupleAlert(alertName, periodFor, warning, replica) =
         This could be due to vacuum and analyze commands (issued either automatically or manually) against this table or closely related table.
         As a new step, check which tables were analyzed and vacuumed immediately prior to this incident.
 
-        Check the [postgres slowlog in Kibana](%(kibanaUrl)s&_=_).
+        <%(kibanaUrl)s|postgres slowlog in Kibana>
 
-        Previous incidents of this type include https://gitlab.com/gitlab-com/gl-infra/production/-/issues/2885 and
-        https://gitlab.com/gitlab-com/gl-infra/production/-/issues/3875.
-      ||| % {
-        postgresLocation: if replica then 'postgres replicas' else 'primary `{{ $labels.fqdn }}`',
-        thresholdPercent: threshold * 100,
-        kibanaUrl: elasticsearchLinks.buildElasticDiscoverSearchQueryURL('postgres', elasticFilters, includeTime=false),
-      },
+        Previous incidents of this type include <https://gitlab.com/gitlab-com/gl-infra/production/-/issues/2885> and
+        <https://gitlab.com/gitlab-com/gl-infra/production/-/issues/3875>.
+      ||| % formatConfig,
       grafana_dashboard_id: if replica then 'alerts-pg_user_tables_replica/alerts-pg-user-table-alerts-replicas' else 'alerts-pg_user_tables_primary/alerts-pg-user-table-alerts-primary',
       grafana_min_zoom_hours: '6',
       grafana_panel_id: '2',
-      grafana_variables: aggregations.serialize(aggregationLabels),
+      grafana_variables: aggregations.serialize(aggregationLabels + ['relname']),
     },
   });
 

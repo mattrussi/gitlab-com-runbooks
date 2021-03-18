@@ -7,8 +7,8 @@ groups:
     for: 10m
     annotations:
       title: >-
-        Hot spot tuple fetches on the postgres %(postgresLocation)s in the `{{ $labels.relname }}` table,
-        `{{ $labels.relname }}`.
+        Hot spot tuple fetches on the postgres primary `{{ $labels.fqdn }}` in the `{{ $labels.relname
+        }}` table, `{{ $labels.relname }}`.
       description: |
         More than 50% of all tuple fetches on postgres primary `{{ $labels.fqdn }}` are for a single table.
 
@@ -16,17 +16,17 @@ groups:
 
         This could be due to vacuum and analyze commands (issued either automatically or manually) against this table or closely related table. As a new step, check which tables were analyzed and vacuumed immediately prior to this incident.
 
-        Check the [postgres slowlog in Kibana](https://log.gprd.gitlab.net/app/kibana#/discover?_a=(columns:!(json.hostname,json.endpoint_id,json.error_severity,json.message,json.session_start_time,json.sql_state_code,json.duration_s,json.sql),filters:!((query:(match:(json.sql:(query:'{{$labels.relname}}',type:phrase)))),(query:(match:(json.fqdn:(query:'{{$labels.fqdn}}',type:phrase))))),index:'97f04200-024b-11eb-81e5-155ba78758d4',query:(language:kuery,query:''))&_=_).
+        <https://log.gprd.gitlab.net/app/kibana#/discover?_a=(columns:!(json.hostname,json.endpoint_id,json.error_severity,json.message,json.session_start_time,json.sql_state_code,json.duration_s,json.sql),filters:!((query:(match:(json.sql:(query:'{{$labels.relname}}',type:phrase)))),(query:(match:(json.fqdn:(query:'{{$labels.fqdn}}',type:phrase))))),index:'97f04200-024b-11eb-81e5-155ba78758d4',query:(language:kuery,query:''))|postgres slowlog in Kibana>
 
-        Previous incidents of this type include https://gitlab.com/gitlab-com/gl-infra/production/-/issues/2885 and https://gitlab.com/gitlab-com/gl-infra/production/-/issues/3875.
+        Previous incidents of this type include <https://gitlab.com/gitlab-com/gl-infra/production/-/issues/2885> and <https://gitlab.com/gitlab-com/gl-infra/production/-/issues/3875>.
       grafana_dashboard_id: alerts-pg_user_tables_primary/alerts-pg-user-table-alerts-primary
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/alerts-pg_user_tables_primary/alerts-pg-user-table-alerts-primary?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-tier={{ $labels.tier }}&var-type={{ $labels.type }}&var-fqdn={{ $labels.fqdn
-        }}
+        }}&var-relname={{ $labels.relname }}
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '2'
-      grafana_variables: environment,tier,type,fqdn
+      grafana_variables: environment,tier,type,fqdn,relname
     labels:
       alert_type: cause
       pager: pagerduty
@@ -50,7 +50,7 @@ groups:
     for: 10m
     annotations:
       title: >-
-        Hot spot tuple fetches on the postgres %(postgresLocation)s in the `{{ $labels.relname }}` table,
+        Hot spot tuple fetches on the postgres postgres replicas in the `{{ $labels.relname }}` table,
         `{{ $labels.relname }}`.
       description: |
         More than 50% of all tuple fetches on postgres postgres replicas are for a single table.
@@ -59,16 +59,17 @@ groups:
 
         This could be due to vacuum and analyze commands (issued either automatically or manually) against this table or closely related table. As a new step, check which tables were analyzed and vacuumed immediately prior to this incident.
 
-        Check the [postgres slowlog in Kibana](https://log.gprd.gitlab.net/app/kibana#/discover?_a=(columns:!(json.hostname,json.endpoint_id,json.error_severity,json.message,json.session_start_time,json.sql_state_code,json.duration_s,json.sql),filters:!((query:(match:(json.sql:(query:'{{$labels.relname}}',type:phrase)))),!n),index:'97f04200-024b-11eb-81e5-155ba78758d4',query:(language:kuery,query:''))&_=_).
+        <https://log.gprd.gitlab.net/app/kibana#/discover?_a=(columns:!(json.hostname,json.endpoint_id,json.error_severity,json.message,json.session_start_time,json.sql_state_code,json.duration_s,json.sql),filters:!((query:(match:(json.sql:(query:'{{$labels.relname}}',type:phrase))))),index:'97f04200-024b-11eb-81e5-155ba78758d4',query:(language:kuery,query:''))|postgres slowlog in Kibana>
 
-        Previous incidents of this type include https://gitlab.com/gitlab-com/gl-infra/production/-/issues/2885 and https://gitlab.com/gitlab-com/gl-infra/production/-/issues/3875.
+        Previous incidents of this type include <https://gitlab.com/gitlab-com/gl-infra/production/-/issues/2885> and <https://gitlab.com/gitlab-com/gl-infra/production/-/issues/3875>.
       grafana_dashboard_id: alerts-pg_user_tables_replica/alerts-pg-user-table-alerts-replicas
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/alerts-pg_user_tables_replica/alerts-pg-user-table-alerts-replicas?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-tier={{ $labels.tier }}&var-type={{ $labels.type }}
+        $labels.environment }}&var-tier={{ $labels.tier }}&var-type={{ $labels.type }}&var-relname={{
+        $labels.relname }}
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '2'
-      grafana_variables: environment,tier,type
+      grafana_variables: environment,tier,type,relname
     labels:
       alert_type: cause
       pager: pagerduty
@@ -92,7 +93,7 @@ groups:
     for: 3m
     annotations:
       title: >-
-        Hot spot tuple fetches on the postgres %(postgresLocation)s in the `{{ $labels.relname }}` table,
+        Hot spot tuple fetches on the postgres postgres replicas in the `{{ $labels.relname }}` table,
         `{{ $labels.relname }}`.
       description: |
         More than 50% of all tuple fetches on postgres postgres replicas are for a single table.
@@ -101,16 +102,17 @@ groups:
 
         This could be due to vacuum and analyze commands (issued either automatically or manually) against this table or closely related table. As a new step, check which tables were analyzed and vacuumed immediately prior to this incident.
 
-        Check the [postgres slowlog in Kibana](https://log.gprd.gitlab.net/app/kibana#/discover?_a=(columns:!(json.hostname,json.endpoint_id,json.error_severity,json.message,json.session_start_time,json.sql_state_code,json.duration_s,json.sql),filters:!((query:(match:(json.sql:(query:'{{$labels.relname}}',type:phrase)))),!n),index:'97f04200-024b-11eb-81e5-155ba78758d4',query:(language:kuery,query:''))&_=_).
+        <https://log.gprd.gitlab.net/app/kibana#/discover?_a=(columns:!(json.hostname,json.endpoint_id,json.error_severity,json.message,json.session_start_time,json.sql_state_code,json.duration_s,json.sql),filters:!((query:(match:(json.sql:(query:'{{$labels.relname}}',type:phrase))))),index:'97f04200-024b-11eb-81e5-155ba78758d4',query:(language:kuery,query:''))|postgres slowlog in Kibana>
 
-        Previous incidents of this type include https://gitlab.com/gitlab-com/gl-infra/production/-/issues/2885 and https://gitlab.com/gitlab-com/gl-infra/production/-/issues/3875.
+        Previous incidents of this type include <https://gitlab.com/gitlab-com/gl-infra/production/-/issues/2885> and <https://gitlab.com/gitlab-com/gl-infra/production/-/issues/3875>.
       grafana_dashboard_id: alerts-pg_user_tables_replica/alerts-pg-user-table-alerts-replicas
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/alerts-pg_user_tables_replica/alerts-pg-user-table-alerts-replicas?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-tier={{ $labels.tier }}&var-type={{ $labels.type }}
+        $labels.environment }}&var-tier={{ $labels.tier }}&var-type={{ $labels.type }}&var-relname={{
+        $labels.relname }}
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '2'
-      grafana_variables: environment,tier,type
+      grafana_variables: environment,tier,type,relname
     labels:
       alert_type: cause
       severity: s4
@@ -133,7 +135,7 @@ groups:
     for: 5m
     annotations:
       title: >-
-        Hot spot tuple fetches on the postgres %(postgresLocation)s in the `{{ $labels.relname }}` table,
+        Hot spot tuple fetches on the postgres postgres replicas in the `{{ $labels.relname }}` table,
         `{{ $labels.relname }}`.
       description: |
         More than 50% of all tuple fetches on postgres postgres replicas are for a single table.
@@ -142,16 +144,17 @@ groups:
 
         This could be due to vacuum and analyze commands (issued either automatically or manually) against this table or closely related table. As a new step, check which tables were analyzed and vacuumed immediately prior to this incident.
 
-        Check the [postgres slowlog in Kibana](https://log.gprd.gitlab.net/app/kibana#/discover?_a=(columns:!(json.hostname,json.endpoint_id,json.error_severity,json.message,json.session_start_time,json.sql_state_code,json.duration_s,json.sql),filters:!((query:(match:(json.sql:(query:'{{$labels.relname}}',type:phrase)))),!n),index:'97f04200-024b-11eb-81e5-155ba78758d4',query:(language:kuery,query:''))&_=_).
+        <https://log.gprd.gitlab.net/app/kibana#/discover?_a=(columns:!(json.hostname,json.endpoint_id,json.error_severity,json.message,json.session_start_time,json.sql_state_code,json.duration_s,json.sql),filters:!((query:(match:(json.sql:(query:'{{$labels.relname}}',type:phrase))))),index:'97f04200-024b-11eb-81e5-155ba78758d4',query:(language:kuery,query:''))|postgres slowlog in Kibana>
 
-        Previous incidents of this type include https://gitlab.com/gitlab-com/gl-infra/production/-/issues/2885 and https://gitlab.com/gitlab-com/gl-infra/production/-/issues/3875.
+        Previous incidents of this type include <https://gitlab.com/gitlab-com/gl-infra/production/-/issues/2885> and <https://gitlab.com/gitlab-com/gl-infra/production/-/issues/3875>.
       grafana_dashboard_id: alerts-pg_user_tables_replica/alerts-pg-user-table-alerts-replicas
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/alerts-pg_user_tables_replica/alerts-pg-user-table-alerts-replicas?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-tier={{ $labels.tier }}&var-type={{ $labels.type }}
+        $labels.environment }}&var-tier={{ $labels.tier }}&var-type={{ $labels.type }}&var-relname={{
+        $labels.relname }}
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '2'
-      grafana_variables: environment,tier,type
+      grafana_variables: environment,tier,type,relname
     labels:
       alert_type: cause
       severity: s4
