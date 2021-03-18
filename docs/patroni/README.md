@@ -16,6 +16,7 @@
 
 ## Troubleshooting Pointers
 
+* [../ci-runners/ci-apdex-violating-slo.md](../ci-runners/ci-apdex-violating-slo.md)
 * [../ci-runners/service-ci-runners.md](../ci-runners/service-ci-runners.md)
 * [../monitoring/prometheus-failing-rule-evaluations.md](../monitoring/prometheus-failing-rule-evaluations.md)
 * [check_wraparound.md](check_wraparound.md)

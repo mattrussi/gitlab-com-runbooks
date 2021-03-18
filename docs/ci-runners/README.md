@@ -15,6 +15,7 @@
 
 ## Troubleshooting Pointers
 
+* [ci-apdex-violating-slo.md](ci-apdex-violating-slo.md)
 * [service-ci-runners.md](service-ci-runners.md)
 <!-- END_MARKER -->
 
