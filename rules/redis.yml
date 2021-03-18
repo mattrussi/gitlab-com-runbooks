@@ -37,19 +37,6 @@ groups:
       (rate(redis_used_cpu_user[1m]) + rate(redis_used_cpu_sys[1m]))
 - name: Redis Alerts
   rules:
-  - alert: RedisSwitchMaster
-    expr: >
-      max without (fqdn,instance) (
-        changes(redis_sentinel_commands_total{event=~"switch-master"}[1h])
-      ) > 1
-    labels:
-      pager: pagerduty
-      severity: s1
-      alert_type: cause
-    annotations:
-      title: Redis Switch Master
-      description: Redis type {{$labels.type}} has {{$value}} switch-master event in the last hour.
-      runbook: docs/redis/redis.md
   - alert: RedisMasterMissing
     expr: >
       (gitlab:redis_cluster_nodes:count > bool 1)
