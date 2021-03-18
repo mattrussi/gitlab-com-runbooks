@@ -133,6 +133,10 @@ teams:
 - name: workhorse
   slack_alerts_channel: workhorse
 
+# Rapid Action Intercom
+- name: rapid-action-intercom
+  slack_alerts_channel: rapid-action-intercom
+
 tiers:
 - name: sv
 - name: lb
