@@ -28,3 +28,23 @@ Run the commands:
 - $ knife search node role:gprd-base-bastion -i
 - $ knife search node roles:gprd-base -i
 - $ knife search node 'roles:gprd-base-db-postgres OR roles:gprd-base-db-patroni' -i
+
+Updates based on the [definition of production](https://gitlab.com/gitlab-com/gl-security/security-assurance/sec-compliance/compliance/-/blob/master/production_definition.md) for how to list machines (compute) that meet this definition:
+
+GitLab.com:
+- `gcloud config set project gitlab-ops` then `gcloud compute instances list`
+- `gcloud config set project gitlab-production` then `gcloud compute instances list` 
+- `gcloud config set project gemnasium-production` then `gcloud compute instances list`
+
+CI:
+- `gcloud config set project gitlab-ci-155816` then `gcloud compute instances list --filter="name~'manager'"`
+- `gcloud config set project gitlab-org-ci` then `gcloud compute instances list --filter="name~'manager'"`
+- `gcloud config set project gitlab-ci-plan-free-7` then `gcloud compute instances list --filter="name~'manager'"`
+- `gcloud config set project gitlab-ci-windows` then `gcloud compute instances list --filter="name~'manager'"`
+
+License, Version:
+- `gcloud config set project gs-production` then `gcloud compute instances list` #home of version.gitlab.com
+- `gcloud config set project license-prd` then `gcloud compute instances list`   #home of license.gitlab.com
+
+dev.gitlab.org and customers.gitlab.com:
+- as of 2021-03-18, still in Azure as single VMs, get IP/VM information from the Azure portal
