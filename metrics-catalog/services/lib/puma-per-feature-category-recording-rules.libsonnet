@@ -50,6 +50,11 @@ local latencyApdexRatioRules(selector, rangeInterval) =
         labels: { component: 'puma' },
         expr: latencyApdex(selector.type).apdexWeightQuery(aggregationLabels, selector, rangeInterval),
       },
+      {
+        record: 'gitlab:component:feature_category:execution:apdex:success:rate_%s' % [rangeInterval],
+        labels: { component: 'puma' },
+        expr: latencyApdex(selector.type).apdexSuccessRateQuery(aggregationLabels, selector, rangeInterval),
+      },
     ]
   else
     [];

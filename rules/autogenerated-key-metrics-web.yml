@@ -260,6 +260,13 @@ groups:
       sum by (environment,tier,type,stage,feature_category) (
         rate(gitlab_transaction_duration_seconds_bucket{job="gitlab-rails",le="+Inf",type="web"}[1m])
       )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_1m
+    labels:
+      component: puma
+    expr: |
+      sum by (environment,tier,type,stage,feature_category) (
+        rate(gitlab_transaction_duration_seconds_bucket{job="gitlab-rails",le="1.0",type="web"}[1m])
+      )
 - name: 'Component-Level SLIs: web - 5m burn-rate'
   interval: 1m
   rules:
@@ -518,6 +525,13 @@ groups:
     expr: |
       sum by (environment,tier,type,stage,feature_category) (
         rate(gitlab_transaction_duration_seconds_bucket{job="gitlab-rails",le="+Inf",type="web"}[5m])
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_5m
+    labels:
+      component: puma
+    expr: |
+      sum by (environment,tier,type,stage,feature_category) (
+        rate(gitlab_transaction_duration_seconds_bucket{job="gitlab-rails",le="1.0",type="web"}[5m])
       )
 - name: 'Component-Level SLIs: web - 30m burn-rate'
   interval: 2m
@@ -778,6 +792,13 @@ groups:
       sum by (environment,tier,type,stage,feature_category) (
         rate(gitlab_transaction_duration_seconds_bucket{job="gitlab-rails",le="+Inf",type="web"}[30m])
       )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_30m
+    labels:
+      component: puma
+    expr: |
+      sum by (environment,tier,type,stage,feature_category) (
+        rate(gitlab_transaction_duration_seconds_bucket{job="gitlab-rails",le="1.0",type="web"}[30m])
+      )
 - name: 'Component-Level SLIs: web - 1h burn-rate'
   interval: 1m
   rules:
@@ -1037,6 +1058,13 @@ groups:
       sum by (environment,tier,type,stage,feature_category) (
         rate(gitlab_transaction_duration_seconds_bucket{job="gitlab-rails",le="+Inf",type="web"}[1h])
       )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
+    labels:
+      component: puma
+    expr: |
+      sum by (environment,tier,type,stage,feature_category) (
+        rate(gitlab_transaction_duration_seconds_bucket{job="gitlab-rails",le="1.0",type="web"}[1h])
+      )
 - name: 'Component-Level SLIs: web - 6h burn-rate'
   interval: 2m
   rules:
@@ -1295,6 +1323,13 @@ groups:
     expr: |
       sum by (environment,tier,type,stage,feature_category) (
         rate(gitlab_transaction_duration_seconds_bucket{job="gitlab-rails",le="+Inf",type="web"}[6h])
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_6h
+    labels:
+      component: puma
+    expr: |
+      sum by (environment,tier,type,stage,feature_category) (
+        rate(gitlab_transaction_duration_seconds_bucket{job="gitlab-rails",le="1.0",type="web"}[6h])
       )
 - name: 'Component mapping: web'
   interval: 1m
