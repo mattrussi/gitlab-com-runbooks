@@ -1,6 +1,6 @@
 local TRIGGER_SCHEDULE_HOURS = 24;  // Run this watcher once a day
 
-local P95_THRESHOLD_MILLIS = 10000;  // Minimum p95 on which to report
+local P95_THRESHOLD_MILLIS = 5000;  // Minimum p95 on which to report
 
 local query() = {
   search_type: 'query_then_fetch',
