@@ -1,5 +1,13 @@
 ## Runner Manager's queues violating the SLI of the ci-runners service
 
+To Check the overall health of the runners:
+
+- Check the [CI-Runners standard SLI dashboard](https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?orgId=1&from=now-6h%2Fm&to=now%2Fm&var-PROMETHEUS_DS=Global&var-environment=gprd&var-stage=main) to check the impact of degradation
+  - Note that job queue charts are inaccurate in the following ways that are tracked in https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/12850 and https://gitlab.com/gitlab-org/gitlab/-/merge_requests/19517:
+    - it's outdated, because gitlab_exporter is pointed at the archive replica (which is lagging behind)
+    - it's incomplete, because most of the times the Postgres queries for pulling this data are timing out
+- [Job queue duration histogram percentiles](https://dashboards.gitlab.net/d/000000159/ci?viewPanel=89&orgId=1&from=now-6h&to=now) may also point to a degradation, note that these are only for jobs that have been picked up by a runner.
+
 This alert has the following possible causes, in the first few minutes it is important to determine the high-level cause before investigating further, the following are the common three causes of this alert:
 
 ### GCP Quotas causing scaling issues
@@ -24,8 +32,24 @@ Check the [Quotas Runbook](./providers/gcp/quotas.md) for more details.
 
 ### Abuse
 
-- See this note for abuse handling: https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/12776#note_530435580
-- See https://gitlab.com/gitlab-com/gl-security/runbooks/-/blob/master/sirt/gitlab/cryptomining_and_ci_abuse.md for cryptomining abuse handling
+**Note**: there is additional coverage by trust-and-safety up until April 4th, 2021: gitlab-com/gl-security/security-operations/trust-and-safety/operations#509 (see spreadsheet for coverage)
 
-**If we believe the source of the degradation is Abuse**:
-- During normal working hours, notify @trust-and-safety
+Methods of finding potential abusers (copied from [issues/12776](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/12776#note_530435580)):
+
+- `#ci-abus-alerting` private Slack channel
+- getting a list of jobs by talking directly to runners and greping with a regex:
+
+```
+(for i in $(seq 3 7); do ssh shared-runners-manager-${i} -- curl -s http://localhost:9402/debug/jobs/list | grep -Eo 'url=[^ ]+' | sed -r 's|/-/jobs/[0-9]+||'; done) | grep -E "gitlab\.com/(([a-zA-Z0-9]+/[a-zA-Z0-9])|([a-zA-Z0-9]+_[a-zA-Z0-9]+/[a-zA-Z0-9]+))$" | sed -r 's|url=https://gitlab.com/||' | sed -r 's|/[a-zA-Z0-9]+$||' | sort | uniq -c | sort -g
+```
+
+```
+(for i in $(seq 3 7); do ssh shared-runners-manager-${i} -- curl -s http://localhost:9402/debug/jobs/list | grep -Eo 'url=[^ ]+' | sed -r 's|/-/jobs/[0-9]+||'; done) | sort | uniq -c | sort -g | grep -E "gitlab\.com/(([a-zA-Z0-9]+/[a-zA-Z0-9])|([a-zA-Z0-9]+_[a-zA-Z0-9]+/[a-zA-Z0-9]+))$"
+```
+- Kibana visualization: https://log.gprd.gitlab.net/goto/baca81ec588b366ca0ec68ff6d5e5322
+- Thanos: https://thanos.gitlab.net/graph?g0.range_input=1h&g0.max_source_resolution=0s&g0.expr=sum(ci_pending_builds%7Bfqdn%3D~%22postgres-dr-archive-01-db-gprd%5C%5C.c%5C%5C.gitlab-production%5C%5C.internal%22%2C%20shared_runners%3D%22yes%22%2Chas_minutes%3D~%22yes%22%7D)%20by%20(namespace)%20%3E%20200&g0.tab=0
+- GCP "Security Command Center": https://console.cloud.google.com/security/command-center/findings?view_type=vt_severity_type&organizationId=769164969568&orgonly=true&supportedpurview=organizationId&vt_severity_type=All&columns=category,resourceName,eventTime,createTime,parent,securityMarks.marks
+
+- For blocking users see the Scrubber Runbook: https://gitlab.com/gitlab-com/gl-security/runbooks/-/blob/ad11eaf0771badcc9a7ae24885e5f969b420b37a/trust_and_safety/Abuse_Mitigation_Bouncer_Web.md
+- See https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/ci-runners/ci-abuse-handling.md for cryptomining abuse handling
+- For all issues be sure to also notify `@trust-and-safety` on Slack
