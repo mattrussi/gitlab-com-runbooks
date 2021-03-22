@@ -3,4 +3,5 @@
 local stageGroupDashboards = import './stage-group-dashboards.libsonnet';
 
 stageGroupDashboards.dashboard('access')
+.addSidekiqJobDurationByUrgency()
 .stageGroupDashboardTrailer()
