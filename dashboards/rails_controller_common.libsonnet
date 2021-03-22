@@ -133,8 +133,8 @@ local elasticsearchExternalHTTPLink(type) = function(options)
           stableId='cache-operations',
           title='Cache Operations',
           query=|||
-            sum without (fqdn, instance) (
-            rate(gitlab_cache_operations_total{%(selector)s}[$__interval])
+            sum by (operation) (
+              rate(gitlab_cache_operations_total{%(selector)s}[$__interval])
             )
           ||| % { selector: selectorString },
           legendFormat='{{ operation }}',
