@@ -92,11 +92,13 @@ local elasticsearchExternalHTTPLink(type) = function(options)
           stableId='sql-requests-per-controller-request',
           title='SQL Requests per Controller Request',
           query=|||
-            sum without (fqdn,instance) (
-            rate(gitlab_sql_duration_seconds_count{%(selector)s}[$__interval])
+            sum by (action) (
+              rate(gitlab_sql_duration_seconds_count{%(selector)s}[$__interval])
             )
             /
-            avg_over_time(controller_action:gitlab_transaction_duration_seconds_count:rate1m{%(selector)s}[$__interval])
+            avg_over_time(
+              controller_action:gitlab_transaction_duration_seconds_count:rate1m{%(selector)s}[$__interval]
+            )
           ||| % { selector: selectorString },
           legendFormat='{{ action }}',
         ),
@@ -115,18 +117,42 @@ local elasticsearchExternalHTTPLink(type) = function(options)
           stableId='sql-latency-per-sql-request',
           title='SQL Latency per SQL Request',
           query=|||
-            sum without (fqdn,instance) (
-            rate(gitlab_sql_duration_seconds_sum{%(selector)s}[$__interval])
+            sum by (action) (
+              rate(gitlab_sql_duration_seconds_sum{%(selector)s}[$__interval])
             )
             /
-            sum without (fqdn,instance) (
-            rate(gitlab_sql_duration_seconds_count{%(selector)s}[$__interval])
+            sum by (action) (
+              rate(gitlab_sql_duration_seconds_count{%(selector)s}[$__interval])
             )
           ||| % { selector: selectorString },
           legendFormat='{{ action }}',
           format='s'
         ),
       ], startRow=201)
+      +
+      layout.rowGrid('SQL Transaction', [
+        basic.timeseries(
+          stableId='sql-transaction-per-controller-request',
+          title='SQL Transactions per Controller Request',
+          query=|||
+            sum by (action) (
+              rate(gitlab_sql_duration_seconds_count{%(selector)s}[$__interval])
+            )
+          ||| % { selector: selectorString },
+          legendFormat='{{ action }}',
+        ),
+        basic.timeseries(
+          stableId='sql-transaction-duration-per-controller-request',
+          title='Average Duration per SQL Transaction Duration',
+          query=|||
+            sum(rate(gitlab_database_transaction_seconds_sum{%(selector)s}[$__interval])) by (action)
+            /
+            sum(rate(gitlab_database_transaction_seconds_count{%(selector)s}[$__interval])) by (action)
+          ||| % { selector: selectorString },
+          legendFormat='{{ action }}',
+          format='s'
+        ),
+      ], startRow=301)
       +
       layout.rowGrid('Cache', [
         basic.timeseries(
@@ -139,11 +165,11 @@ local elasticsearchExternalHTTPLink(type) = function(options)
           ||| % { selector: selectorString },
           legendFormat='{{ operation }}',
         ),
-      ], startRow=301)
+      ], startRow=401)
       +
       layout.rowGrid('Elasticsearch', [
         basic.multiQuantileTimeseries('Elasticsearch Time', selector, '{{ action }}', bucketMetric='http_elasticsearch_requests_duration_seconds_bucket', aggregators='controller, action'),
-      ], startRow=401)
+      ], startRow=501)
       +
       layout.rowGrid('External HTTP', [
         basic.timeseries(
@@ -208,7 +234,7 @@ local elasticsearchExternalHTTPLink(type) = function(options)
             elasticsearchExternalHTTPLink(type),
           ])
         ),
-      ], startRow=501)
+      ], startRow=601)
       +
       layout.grid([])
     )
