@@ -41,6 +41,19 @@ local runnerJobFailureReason = template.new(
   includeAll=true,
 );
 
+local jobsRunningForProject = template.new(
+  'jobs_running_for_project',
+  '$PROMETHEUS_DS',
+  query=|||
+    label_values(job_queue_duration_seconds_sum, jobs_running_for_project)
+  |||,
+  current='0',
+  refresh='load',
+  sort=1,
+  multi=true,
+  includeAll=true
+);
+
 local selectorHash = {
   type: runnersService.type,
   tier: runnersService.tier,
@@ -52,6 +65,7 @@ local selectorHash = {
   shard:: shard,
   runnerManager:: runnerManager,
   runnerJobFailureReason:: runnerJobFailureReason,
+  jobsRunningForProject:: jobsRunningForProject,
 
   selectorHash:: selectorHash,
 }

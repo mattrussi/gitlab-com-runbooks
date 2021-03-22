@@ -34,6 +34,7 @@ local commonFilters = [
 
 local runnerServiceDashboardsLinks = [
   platformLinks.dynamicLinks('%s Detail' % runnerServiceType, 'type:%s' % runnerServiceType),
+  platformLinks.dynamicLinks('%s Incident Dashboards' % runnerServiceType, '%s:incident-support' % runnerServiceType),
 ];
 
 local dashboard(title, tags=[], time_from='now-3h/m') =
@@ -44,7 +45,7 @@ local dashboard(title, tags=[], time_from='now-3h/m') =
       'managed',
     ] + tags,
     editable=true,
-    time_from='now-12h/m',
+    time_from=time_from,
     time_to='now/m',
     refresh='1m',
     graphTooltip='shared_crosshair',
@@ -93,13 +94,12 @@ local dashboard(title, tags=[], time_from='now-3h/m') =
     addGrid(
       panels,
       startRow,
-      cols=2,
       rowHeight=6,
     ):: self.addPanels(
       layout.grid(
         panels=panels,
+        cols=std.length(panels),
         startRow=startRow,
-        cols=cols,
         rowHeight=rowHeight,
       )
     ),
