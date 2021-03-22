@@ -21,7 +21,7 @@ local incidentDashboard(incidentType, description=null) =
   local commonPanels = [
     jobGraphs.running(['shard']),
     jobQueueGraphs.durationHistogram,
-    jobGraphs.legacyGitLabJobsOverview,
+    jobQueueGraphs.pendingSize,
   ] + descriptionPanel;
 
   dashboardHelpers.dashboard(
