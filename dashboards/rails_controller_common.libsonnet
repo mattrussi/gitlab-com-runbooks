@@ -142,8 +142,8 @@ local elasticsearchExternalHTTPLink(type) = function(options)
           legendFormat='{{ action }}',
         ),
         basic.timeseries(
-          stableId='sql-transaction-duration-per-controller-request',
-          title='Average Duration per SQL Transaction Duration',
+          stableId='avg-duration-per-sql-transaction',
+          title='Average Duration per SQL Transaction',
           query=|||
             sum(rate(gitlab_database_transaction_seconds_sum{%(selector)s}[$__interval])) by (action)
             /
@@ -159,7 +159,7 @@ local elasticsearchExternalHTTPLink(type) = function(options)
           stableId='cache-operations',
           title='Cache Operations',
           query=|||
-            sum by (operation) (
+            sum by (action, operation) (
               rate(gitlab_cache_operations_total{%(selector)s}[$__interval])
             )
           ||| % { selector: selectorString },
