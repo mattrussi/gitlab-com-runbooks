@@ -118,4 +118,17 @@ local outputPromYaml(groups) =
       }]
     ),
 
+  'aggregated-stage-group-metrics.yml':
+    outputPromYaml(
+      [{
+        name: aggregationSets.globalStageGroupSLIs.name,
+        interval: '1m',
+        partial_response_strategy: 'warn',
+        rules: aggregationSetTransformer.generateRecordingRules(
+          sourceAggregationSet=aggregationSets.featureCategorySourceSLIs,
+          targetAggregationSet=aggregationSets.globalStageGroupSLIs
+        ),
+      }]
+    ),
+
 }

@@ -31,7 +31,7 @@ local selectors = import 'promql/selectors.libsonnet';
           record: targetErrorRateMetric,
           expr: |||
             sum by (%(targetAggregationLabels)s) (
-              %(sourceErrorRateMetric)s{%(sourceSelector)s} >= 0%(aggregationFilterExpr)s
+              (%(sourceErrorRateMetric)s{%(sourceSelector)s} >= 0)%(aggregationFilterExpr)s
             )
           ||| % formatConfig,
         }]
@@ -45,7 +45,7 @@ local selectors = import 'promql/selectors.libsonnet';
           record: targetOpsRateMetric,
           expr: |||
             sum by (%(targetAggregationLabels)s) (
-              %(sourceOpsRateMetric)s{%(sourceSelector)s} >= 0%(aggregationFilterExpr)s
+              (%(sourceOpsRateMetric)s{%(sourceSelector)s} >= 0)%(aggregationFilterExpr)s
             )
           ||| % formatConfig,
         }]

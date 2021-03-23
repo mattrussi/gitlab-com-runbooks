@@ -32,7 +32,7 @@ local strings = import 'utils/strings.libsonnet';
           local sourceErrorRateMetric = sourceAggregationSet.getErrorRateMetricForBurnRate(burnRate, required=true);
           |||
             sum by (%(targetAggregationLabels)s) (
-              %(sourceErrorRateMetric)s{%(sourceSelector)s} >= 0%(aggregationFilterExpr)s
+              (%(sourceErrorRateMetric)s{%(sourceSelector)s} >= 0)%(aggregationFilterExpr)s
             )
           ||| % formatConfig {
             sourceErrorRateMetric: sourceErrorRateMetric,
@@ -45,7 +45,7 @@ local strings = import 'utils/strings.libsonnet';
           local sourceOpsRateMetric = sourceAggregationSet.getOpsRateMetricForBurnRate(burnRate, required=true);
           |||
             sum by (%(targetAggregationLabels)s) (
-              %(sourceOpsRateMetric)s{%(sourceSelector)s} >= 0%(aggregationFilterExpr)s
+              (%(sourceOpsRateMetric)s{%(sourceSelector)s} >= 0)%(aggregationFilterExpr)s
             )
           ||| % formatConfig {
             sourceOpsRateMetric: sourceOpsRateMetric,
