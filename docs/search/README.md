@@ -28,6 +28,7 @@
 * [../gitaly/gitaly-unusual-activity.md](../gitaly/gitaly-unusual-activity.md)
 * [../pages/gitlab-pages.md](../pages/gitlab-pages.md)
 * [../patroni/performance-degradation-troubleshooting.md](../patroni/performance-degradation-troubleshooting.md)
+* [../patroni/pg_collect_query_data.md](../patroni/pg_collect_query_data.md)
 * [../patroni/postgresql-role-credential-rotation.md](../patroni/postgresql-role-credential-rotation.md)
 * [../praefect/praefect-error-rate.md](../praefect/praefect-error-rate.md)
 * [../redis/redis-survival-guide-for-sres.md](../redis/redis-survival-guide-for-sres.md)
