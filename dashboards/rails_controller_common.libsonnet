@@ -96,8 +96,10 @@ local elasticsearchExternalHTTPLink(type) = function(options)
               rate(gitlab_sql_duration_seconds_count{%(selector)s}[$__interval])
             )
             /
-            avg_over_time(
-              controller_action:gitlab_transaction_duration_seconds_count:rate1m{%(selector)s}[$__interval]
+            sum by (action) (
+              avg_over_time(
+                controller_action:gitlab_transaction_duration_seconds_count:rate1m{%(selector)s}[$__interval]
+              )
             )
           ||| % { selector: selectorString },
           legendFormat='{{ action }}',
@@ -136,7 +138,7 @@ local elasticsearchExternalHTTPLink(type) = function(options)
           title='SQL Transactions per Controller Request',
           query=|||
             sum by (action) (
-              rate(gitlab_sql_duration_seconds_count{%(selector)s}[$__interval])
+              rate(gitlab_database_transaction_seconds_count{%(selector)s}[$__interval])
             )
           ||| % { selector: selectorString },
           legendFormat='{{ action }}',
@@ -163,7 +165,7 @@ local elasticsearchExternalHTTPLink(type) = function(options)
               rate(gitlab_cache_operations_total{%(selector)s}[$__interval])
             )
           ||| % { selector: selectorString },
-          legendFormat='{{ operation }}',
+          legendFormat='{{ action }} - {{ operation }}',
         ),
       ], startRow=401)
       +
