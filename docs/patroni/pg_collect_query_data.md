@@ -125,22 +125,37 @@ gitlabhq_production=# EXPLAIN SELECT users.* FROM users INNER JOIN project_autho
 
 Another interesting step is to evaluate the access plan on https://explain.depesz.com and share in the template.
 
-## Collecting most commonly sources from Elasticsearch
+## Searching PostgreSQL logs with Kibana/Elasticsearch
 
 If you do not have direct access to the PostgreSQL CSV logs, you can
-still use Elasticsearch to determine the most common endpoints that
-originated the slow SQL statements in question. PostgreSQL slow logs are
-indexed in Elasticsearch, and there are a number of key fields:
+still use Kibana to determine the most common endpoints that
+originated the slow SQL statements in question.
 
-1. `json.sql`: The normalized SQL query stripped of all
+### Slow queries
+
+PostgreSQL slow logs are indexed in Elasticsearch, and there are a
+number of key fields:
+
+- `json.sql`: The normalized SQL query stripped of all
 parameters. Parameters are substituted with `$1`, `$2`, `$3`, etc.
 Marginalia comments are also stripped and parsed into structured fields (e.g. `application_name`, `endpoint_id`, etc.).
-1. `json.fingerprint`: A unique hash value for a given SQL query. This makes it easier to see how often the same query appears.
-1. `json.duration_s`: The time in seconds that this SQL query took.
-1. `json.endpoint_id`: The Rails controller and action
+- `json.fingerprint`: A unique hash value for a given SQL query. This makes it easier to see how often the same query appears.
+- `json.duration_s`: The time in seconds that this SQL query took.
+- `json.endpoint_id`: The Rails controller and action
 (e.g. `ProjectsController#index`), API call (`/api/v4/jobs/request`), or
 Sidekiq job (e.g. `PostReceive`) responsible for that SQL query.
-1. `json.hostname`: The name of the PostgreSQL host that served the query (e.g. `patroni-01`, `patroni-02`, etc.).
+- `json.hostname`: The name of the PostgreSQL host that served the query (e.g. `patroni-01`, `patroni-02`, etc.).
+
+### Canceled queries
+
+Queries that exceed the statement timeout (15 seconds on GitLab.com)
+will also have all the above fields except for
+`json.duration_s`. Canceled queries will have an additional message that
+distinguishes them from slow queries:
+
+- `json.message`: `Canceling statement due to statement timeout`
+
+### Using Kibana
 
 You can search for matching hits via:
 
@@ -149,7 +164,7 @@ You can search for matching hits via:
 1. Click `Add filter`, select `json.sql`, and enter in part or all of the SQL query to match.
 
 For example, [in this issue](https://gitlab.com/gitlab-org/gitlab/-/issues/325338), we can use
-Kibana to search for part of this SQL. https://log.gprd.gitlab.net/goto/874aac0ee2ceba629e5f2a62d2f00bf5
+Kibana to search for part of this SQL. [This Kibana link](https://log.gprd.gitlab.net/goto/874aac0ee2ceba629e5f2a62d2f00bf5)
 shows:
 
 ![kibana-postgresql-slow-queries](img/kibana-postgresql-slow-queries.png)
