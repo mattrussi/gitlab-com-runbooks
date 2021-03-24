@@ -85,7 +85,7 @@
             },
           },
         },
-        duration_ms: {
+        duration_s: {
           type: 'float',
         },
         environment: {
