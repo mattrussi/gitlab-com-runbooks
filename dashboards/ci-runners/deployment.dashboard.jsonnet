@@ -16,7 +16,6 @@ dashboardHelpers.dashboard(
 .addOverviewPanels()
 .addGrid(
   startRow=2000,
-  cols=3,
   rowHeight=8,
   panels=[
     jobGraphs.running(['instance']),

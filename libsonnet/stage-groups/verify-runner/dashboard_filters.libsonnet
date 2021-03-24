@@ -41,6 +41,55 @@ local runnerJobFailureReason = template.new(
   includeAll=true,
 );
 
+local jobsRunningForProject = template.new(
+  'jobs_running_for_project',
+  '$PROMETHEUS_DS',
+  query=|||
+    label_values(job_queue_duration_seconds_sum, jobs_running_for_project)
+  |||,
+  current='0',
+  refresh='load',
+  sort=1,
+  multi=true,
+  includeAll=true
+);
+
+local gcpExporter = template.new(
+  'gcp_exporter',
+  '$PROMETHEUS_DS',
+  query=|||
+    label_values(gcp_exporter_region_quota_limit, instance)
+  |||,
+  refresh='load',
+  sort=1,
+  multi=false,
+  includeAll=false
+);
+
+local gcpProject = template.new(
+  'gcp_project',
+  '$PROMETHEUS_DS',
+  query=|||
+    label_values(gcp_exporter_region_quota_limit, project)
+  |||,
+  refresh='load',
+  sort=1,
+  multi=true,
+  includeAll=true,
+);
+
+local gcpRegion = template.new(
+  'gcp_region',
+  '$PROMETHEUS_DS',
+  query=|||
+    label_values(gcp_exporter_region_quota_usage, region)
+  |||,
+  refresh='load',
+  sort=1,
+  multi=true,
+  includeAll=true,
+);
+
 local selectorHash = {
   type: runnersService.type,
   tier: runnersService.tier,
@@ -52,6 +101,10 @@ local selectorHash = {
   shard:: shard,
   runnerManager:: runnerManager,
   runnerJobFailureReason:: runnerJobFailureReason,
+  jobsRunningForProject:: jobsRunningForProject,
+  gcpExporter:: gcpExporter,
+  gcpProject:: gcpProject,
+  gcpRegion:: gcpRegion,
 
   selectorHash:: selectorHash,
 }
