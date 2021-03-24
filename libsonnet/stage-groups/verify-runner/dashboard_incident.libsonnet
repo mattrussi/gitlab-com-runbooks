@@ -26,7 +26,7 @@ local incidentDashboard(incidentType, description=null) =
 
   dashboardHelpers.dashboard(
     'Incident Support: %s' % incidentType,
-    tags=['%s:incident-support', dashboardHelpers.runnerServiceType]
+    tags=['%s:incident-support' % dashboardHelpers.runnerServiceType]
   )
   .addTemplates([
     dashboardFilters.jobsRunningForProject,
