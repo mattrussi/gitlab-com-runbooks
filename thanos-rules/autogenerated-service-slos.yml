@@ -698,6 +698,22 @@ groups:
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
+      component: memcached_thanos_store_bucket
+      regional_aggregation: 'no'
+      service_aggregation: 'yes'
+      tier: inf
+      type: monitoring
+    expr: '1'
+  - record: gitlab_component_service:mapping
+    labels:
+      component: memcached_thanos_store_index
+      regional_aggregation: 'no'
+      service_aggregation: 'yes'
+      tier: inf
+      type: monitoring
+    expr: '1'
+  - record: gitlab_component_service:mapping
+    labels:
       component: prometheus
       regional_aggregation: 'no'
       service_aggregation: 'yes'
