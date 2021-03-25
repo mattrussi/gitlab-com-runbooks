@@ -406,18 +406,24 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
     labels: ['env', 'environment', 'tier', 'type', 'stage', 'component', 'feature_category'],
     burnRates: {
       '5m': {
+        apdexSuccessRate: 'gitlab:component:feature_category:execution:apdex:success:rate_5m',
+        apdexWeight: 'gitlab:component:feature_category:execution:apdex:weight:score_5m',
         apdexRatio: 'gitlab:component:feature_category:execution:apdex:ratio_5m',
         opsRate: 'gitlab:component:feature_category:execution:ops:rate_5m',
         errorRate: 'gitlab:component:feature_category:execution:error:rate_5m',
         errorRatio: 'gitlab:component:feature_category:execution:error:ratio_5m',
       },
       '30m': {
+        apdexSuccessRate: 'gitlab:component:feature_category:execution:apdex:success:rate_30m',
+        apdexWeight: 'gitlab:component:feature_category:execution:apdex:weight:score_30m',
         apdexRatio: 'gitlab:component:feature_category:execution:apdex:ratio_30m',
         opsRate: 'gitlab:component:feature_category:execution:ops:rate_30m',
         errorRate: 'gitlab:component:feature_category:execution:error:rate_30m',
         errorRatio: 'gitlab:component:feature_category:execution:error:ratio_30m',
       },
       '1h': {
+        apdexSuccessRate: 'gitlab:component:feature_category:execution:apdex:success:rate_1h',
+        apdexWeight: 'gitlab:component:feature_category:execution:apdex:weight:score_1h',
         apdexRatio: 'gitlab:component:feature_category:execution:apdex:ratio_1h',
         opsRate: 'gitlab:component:feature_category:execution:ops:rate_1h',
         errorRate: 'gitlab:component:feature_category:execution:error:rate_1h',
@@ -430,6 +436,49 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
       '3d': {
         apdexRatio: 'gitlab:component:feature_category:execution:apdex:ratio_3d',
         errorRatio: 'gitlab:component:feature_category:execution:error:ratio_3d',
+      },
+    },
+  }),
+
+  globalStageGroupSLIs: aggregationSets.AggregationSet({
+    id: 'stage_Groups',
+    name: 'Stage Group metrics',
+    intermediateSource: false,
+    selector: { monitor: 'global' },
+    labels: ['env', 'environment', 'tier', 'type', 'stage', 'component', 'stage_group', 'product_stage'],
+    joinSource: {
+      metric: 'gitlab:feature_category:stage_group:mapping',
+      on: 'feature_category',
+      labels: ['stage_group', 'product_stage'],
+    },
+    burnRates: {
+      '5m': {
+        apdexSuccessRate: 'gitlab:component:stage_group:execution:apdex:success:rate_5m',
+        apdexWeight: 'gitlab:component:stage_group:execution:apdex:weight:score_5m',
+        apdexRatio: 'gitlab:component:stage_group:execution:apdex:ratio_5m',
+        opsRate: 'gitlab:component:stage_group:execution:ops:rate_5m',
+        errorRate: 'gitlab:component:stage_group:execution:error:rate_5m',
+        errorRatio: 'gitlab:component:stage_group:execution:error:ratio_5m',
+      },
+      '30m': {
+        apdexSuccessRate: 'gitlab:component:stage_group:execution:apdex:success:rate_30m',
+        apdexWeight: 'gitlab:component:stage_group:execution:apdex:weight:score_30m',
+        apdexRatio: 'gitlab:component:stage_group:execution:apdex:ratio_30m',
+        opsRate: 'gitlab:component:stage_group:execution:ops:rate_30m',
+        errorRate: 'gitlab:component:stage_group:execution:error:rate_30m',
+        errorRatio: 'gitlab:component:stage_group:execution:error:ratio_30m',
+      },
+      '1h': {
+        apdexSuccessRate: 'gitlab:component:stage_group:execution:apdex:success:rate_1h',
+        apdexWeight: 'gitlab:component:stage_group:execution:apdex:weight:score_1h',
+        apdexRatio: 'gitlab:component:stage_group:execution:apdex:ratio_1h',
+        opsRate: 'gitlab:component:stage_group:execution:ops:rate_1h',
+        errorRate: 'gitlab:component:stage_group:execution:error:rate_1h',
+        errorRatio: 'gitlab:component:stage_group:execution:error:ratio_1h',
+      },
+      '6h': {
+        apdexRatio: 'gitlab:component:stage_group:execution:apdex:ratio_6h',
+        errorRatio: 'gitlab:component:stage_group:execution:error:ratio_6h',
       },
     },
   }),

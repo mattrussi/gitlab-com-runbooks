@@ -9,6 +9,7 @@ local strings = import 'utils/strings.libsonnet';
   aggregationSetApdexRatioRuleSet(sourceAggregationSet, targetAggregationSet, burnRate)::
     local targetApdexRatioMetric = targetAggregationSet.getApdexRatioMetricForBurnRate(burnRate);
     local targetApdexWeightMetric = targetAggregationSet.getApdexWeightMetricForBurnRate(burnRate);
+    local targetApdexSuccessRateMetric = targetAggregationSet.getApdexSuccessRateMetricForBurnRate(burnRate);
 
     local targetAggregationLabels = aggregations.serialize(targetAggregationSet.labels);
     local sourceSelector = selectors.serializeHash(sourceAggregationSet.selector);
@@ -33,6 +34,22 @@ local strings = import 'utils/strings.libsonnet';
             )
           ||| % formatConfig {
             sourceApdexWeightMetric: sourceAggregationSet.getApdexWeightMetricForBurnRate(burnRate, required=true),
+          },
+        }]
+    )
+    +
+    (
+      if targetApdexSuccessRateMetric == null then
+        []
+      else
+        [{
+          record: targetApdexSuccessRateMetric,
+          expr: |||
+            sum by (%(targetAggregationLabels)s) (
+              (%(sourceApdexWeightMetric)s{%(sourceSelector)s} >= 0)%(aggregationFilterExpr)s
+            )
+          ||| % formatConfig {
+            sourceApdexWeightMetric: sourceAggregationSet.getApdexSuccessRateMetricForBurnRate(burnRate, required=true),
           },
         }]
     )

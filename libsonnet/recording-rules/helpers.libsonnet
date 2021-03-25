@@ -12,13 +12,25 @@ local upscalePromExpression = |||
   )
 |||;
 
+local joinExpr(targetAggregationSet) =
+  if !std.objectHas(targetAggregationSet, 'joinSource') then
+    ''
+  else
+    local requiredLabelsFromJoin = targetAggregationSet.joinSource.labels + [targetAggregationSet.joinSource.on];
+    ' * on(%(joinOn)s) group_left(%(labels)s) (group by (%(aggregatedLabels)s) (%(metric)s))' % {
+      joinOn: aggregations.serialize(targetAggregationSet.joinSource.on),
+      labels: aggregations.serialize(targetAggregationSet.joinSource.labels),
+      aggregatedLabels: aggregations.serialize(requiredLabelsFromJoin),
+      metric: targetAggregationSet.joinSource.metric,
+    };
+
 local aggregationFilterExpr(targetAggregationSet) =
   local aggregationFilter = targetAggregationSet.aggregationFilter;
 
   // For service level aggregations, we need to filter out any SLIs which we don't want to include
   // in the service level aggregation.
   // These are defined in the SLI with `aggregateToService:false`
-  if aggregationFilter != null then
+  joinExpr(targetAggregationSet) + if aggregationFilter != null then
     ' and on(component, type) (gitlab_component_service:mapping{monitor="global", %(aggregationFilter)s_aggregation="yes"})' % {
       aggregationFilter: aggregationFilter,
     }
