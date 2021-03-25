@@ -105,6 +105,15 @@
             },
           },
         },
+        cleanup_scheduled_count: {
+          type: 'long',
+        },
+        cleanup_total_count: {
+          type: 'long',
+        },
+        cleanup_unfinished_count: {
+          type: 'long',
+        },
         completed_at: {
           type: 'date',
         },
@@ -257,6 +266,46 @@
         },
         extra: {
           properties: {
+            container_expiration_policies_cleanup_container_repository_worker: {
+              properties: {
+                cleanup_status: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                cleanup_tags_service_after_truncate_size: {
+                  type: 'long',
+                },
+                cleanup_tags_service_before_delete_size: {
+                  type: 'long',
+                },
+                cleanup_tags_service_before_truncate_size: {
+                  type: 'long',
+                },
+                cleanup_tags_service_deleted_size: {
+                  type: 'long',
+                },
+                cleanup_tags_service_original_size: {
+                  type: 'long',
+                },
+                cleanup_tags_service_truncated: {
+                  type: 'boolean',
+                },
+                container_repository_id: {
+                  type: 'long',
+                },
+                project_id: {
+                  type: 'long',
+                },
+                running_jobs_count: {
+                  type: 'long',
+                },
+              },
+            },
             elastic_index_bulk_cron_worker: {
               properties: {
                 records_count: {
