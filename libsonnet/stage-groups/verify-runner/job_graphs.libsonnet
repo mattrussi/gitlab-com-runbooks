@@ -19,7 +19,7 @@ local aggregationTimeSeries(title, query, aggregators=[]) =
 local runningJobsGraph(aggregators=[]) =
   aggregationTimeSeries(
     'Jobs running on GitLab Inc. runners (by %s)',
-    'sum by(%s) (gitlab_runner_jobs{environment="$environment", stage="$stage", job="runners-manager",instance=~"${runner_manager:pipe}"})',
+    'sum by(%s) (gitlab_runner_jobs{instance=~"${runner_manager:pipe}"})',
     aggregators,
   );
 
@@ -29,7 +29,18 @@ local runnerJobFailuresGraph(aggregators=[]) =
     |||
       sum by (%s)
       (
-        increase(gitlab_runner_failed_jobs_total{environment="$environment", stage="$stage", job="runners-manager",instance=~"${runner_manager:pipe}",failure_reason=~"$runner_job_failure_reason"}[$__interval])
+        increase(gitlab_runner_failed_jobs_total{instance=~"${runner_manager:pipe}",failure_reason=~"$runner_job_failure_reason"}[$__interval])
+      )
+    |||,
+    aggregators,
+  );
+
+local startedJobsGraph(aggregators=[]) =
+  aggregationTimeSeries(
+    'Jobs started on runners (by %s)',
+    |||
+      sum by(%s) (
+        increase(gitlab_runner_jobs_total{instance=~"${runner_manager:pipe}"}[$__interval])
       )
     |||,
     aggregators,
@@ -81,5 +92,6 @@ local legacyGitLabJobsOverview =
 {
   running:: runningJobsGraph,
   failures:: runnerJobFailuresGraph,
+  started:: startedJobsGraph,
   legacyGitLabJobsOverview:: legacyGitLabJobsOverview,
 }

@@ -44,7 +44,6 @@ local dashboard(title, tags=[], time_from='now-3h/m') =
       'type:%s' % runnerServiceType,
       'managed',
     ] + tags,
-    editable=true,
     time_from=time_from,
     time_to='now/m',
     refresh='1m',

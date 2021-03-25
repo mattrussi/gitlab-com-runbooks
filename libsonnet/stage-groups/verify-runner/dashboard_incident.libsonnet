@@ -20,6 +20,7 @@ local incidentDashboard(incidentType, description=null) =
 
   local commonPanels = [
     jobGraphs.running(['shard']),
+    jobGraphs.started(['shard']),
     jobQueueGraphs.durationHistogram,
     jobQueueGraphs.pendingSize,
   ] + descriptionPanel;

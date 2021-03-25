@@ -1,5 +1,3 @@
-local layout = import 'grafana/layout.libsonnet';
-
 local autoscalingGraphs = import 'stage-groups/verify-runner/autoscaling_graphs.libsonnet';
 local dashboardFilters = import 'stage-groups/verify-runner/dashboard_filters.libsonnet';
 local dashboardIncident = import 'stage-groups/verify-runner/dashboard_incident.libsonnet';
