@@ -49,7 +49,7 @@ local hotspotTupleAlert(alertName, periodFor, warning, replica) =
   local formatConfig = {
     postgresLocation: if replica then 'postgres replicas' else 'primary `{{ $labels.fqdn }}`',
     thresholdPercent: threshold * 100,
-    kibanaUrl: elasticsearchLinks.buildElasticDiscoverSearchQueryURL('postgres', elasticFilters, includeTime=false),
+    kibanaUrl: elasticsearchLinks.buildElasticDiscoverSearchQueryURL('postgres', elasticFilters, timeRange=''),
   };
 
   alerts.processAlertRule({
