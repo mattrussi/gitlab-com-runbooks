@@ -103,11 +103,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{type="registry", le="1"}[1m])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",route!~"/v2/{name}/manifests/{reference}",type="registry"}[1m])
         )
         +
         sum by (environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{type="registry", le="2.5"}[1m])
+          rate(registry_http_request_duration_seconds_bucket{le="25",route!~"/v2/{name}/manifests/{reference}",type="registry"}[1m])
         )
       )
       /
@@ -119,7 +119,7 @@ groups:
       type: registry
     expr: |
       sum by (environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{type="registry", le="+Inf"}[1m])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",route!~"/v2/{name}/manifests/{reference}",type="registry"}[1m])
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -138,7 +138,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(registry_http_requests_total{type="registry", code=~"5.."}[1m])
+          rate(registry_http_requests_total{code=~"5..",type="registry"}[1m])
         )
       )
       or
@@ -146,6 +146,76 @@ groups:
         0 * group by(environment,stage) (
           gitlab_component_ops:rate{component="server",tier="sv",type="registry"}
         )
+      )
+  - record: gitlab_component_apdex:success:rate
+    labels:
+      component: server_route_manifest_reads
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[1m])
+        )
+        +
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[1m])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: server_route_manifest_reads
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[1m])
+      )
+  - record: gitlab_component_ops:rate
+    labels:
+      component: server_route_manifest_reads
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/manifests/{reference}"}[1m])
+      )
+  - record: gitlab_component_apdex:success:rate
+    labels:
+      component: server_route_manifest_writes
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="10",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[1m])
+        )
+        +
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[1m])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: server_route_manifest_writes
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[1m])
+      )
+  - record: gitlab_component_ops:rate
+    labels:
+      component: server_route_manifest_writes
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_count{method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}"}[1m])
       )
   - record: gitlab_component_apdex:success:rate
     labels:
@@ -276,11 +346,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{type="registry", le="1"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",route!~"/v2/{name}/manifests/{reference}",type="registry"}[5m])
         )
         +
         sum by (environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{type="registry", le="2.5"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le="25",route!~"/v2/{name}/manifests/{reference}",type="registry"}[5m])
         )
       )
       /
@@ -292,7 +362,7 @@ groups:
       type: registry
     expr: |
       sum by (environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{type="registry", le="+Inf"}[5m])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",route!~"/v2/{name}/manifests/{reference}",type="registry"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -311,7 +381,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(registry_http_requests_total{type="registry", code=~"5.."}[5m])
+          rate(registry_http_requests_total{code=~"5..",type="registry"}[5m])
         )
       )
       or
@@ -319,6 +389,76 @@ groups:
         0 * group by(environment,stage) (
           gitlab_component_ops:rate_5m{component="server",tier="sv",type="registry"}
         )
+      )
+  - record: gitlab_component_apdex:success:rate_5m
+    labels:
+      component: server_route_manifest_reads
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[5m])
+        )
+        +
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[5m])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_5m
+    labels:
+      component: server_route_manifest_reads
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[5m])
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: server_route_manifest_reads
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/manifests/{reference}"}[5m])
+      )
+  - record: gitlab_component_apdex:success:rate_5m
+    labels:
+      component: server_route_manifest_writes
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="10",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[5m])
+        )
+        +
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[5m])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_5m
+    labels:
+      component: server_route_manifest_writes
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[5m])
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: server_route_manifest_writes
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_count{method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}"}[5m])
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
@@ -449,11 +589,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{type="registry", le="1"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",route!~"/v2/{name}/manifests/{reference}",type="registry"}[30m])
         )
         +
         sum by (environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{type="registry", le="2.5"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le="25",route!~"/v2/{name}/manifests/{reference}",type="registry"}[30m])
         )
       )
       /
@@ -465,7 +605,7 @@ groups:
       type: registry
     expr: |
       sum by (environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{type="registry", le="+Inf"}[30m])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",route!~"/v2/{name}/manifests/{reference}",type="registry"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -484,7 +624,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(registry_http_requests_total{type="registry", code=~"5.."}[30m])
+          rate(registry_http_requests_total{code=~"5..",type="registry"}[30m])
         )
       )
       or
@@ -492,6 +632,76 @@ groups:
         0 * group by(environment,stage) (
           gitlab_component_ops:rate_30m{component="server",tier="sv",type="registry"}
         )
+      )
+  - record: gitlab_component_apdex:success:rate_30m
+    labels:
+      component: server_route_manifest_reads
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[30m])
+        )
+        +
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[30m])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_30m
+    labels:
+      component: server_route_manifest_reads
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[30m])
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: server_route_manifest_reads
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/manifests/{reference}"}[30m])
+      )
+  - record: gitlab_component_apdex:success:rate_30m
+    labels:
+      component: server_route_manifest_writes
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="10",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[30m])
+        )
+        +
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[30m])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_30m
+    labels:
+      component: server_route_manifest_writes
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[30m])
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: server_route_manifest_writes
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_count{method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}"}[30m])
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
@@ -622,11 +832,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{type="registry", le="1"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",route!~"/v2/{name}/manifests/{reference}",type="registry"}[1h])
         )
         +
         sum by (environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{type="registry", le="2.5"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le="25",route!~"/v2/{name}/manifests/{reference}",type="registry"}[1h])
         )
       )
       /
@@ -638,7 +848,7 @@ groups:
       type: registry
     expr: |
       sum by (environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{type="registry", le="+Inf"}[1h])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",route!~"/v2/{name}/manifests/{reference}",type="registry"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -657,7 +867,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(registry_http_requests_total{type="registry", code=~"5.."}[1h])
+          rate(registry_http_requests_total{code=~"5..",type="registry"}[1h])
         )
       )
       or
@@ -665,6 +875,76 @@ groups:
         0 * group by(environment,stage) (
           gitlab_component_ops:rate_1h{component="server",tier="sv",type="registry"}
         )
+      )
+  - record: gitlab_component_apdex:success:rate_1h
+    labels:
+      component: server_route_manifest_reads
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[1h])
+        )
+        +
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[1h])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_1h
+    labels:
+      component: server_route_manifest_reads
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[1h])
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: server_route_manifest_reads
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/manifests/{reference}"}[1h])
+      )
+  - record: gitlab_component_apdex:success:rate_1h
+    labels:
+      component: server_route_manifest_writes
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="10",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[1h])
+        )
+        +
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[1h])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_1h
+    labels:
+      component: server_route_manifest_writes
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[1h])
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: server_route_manifest_writes
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_count{method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}"}[1h])
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
@@ -795,11 +1075,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{type="registry", le="1"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",route!~"/v2/{name}/manifests/{reference}",type="registry"}[6h])
         )
         +
         sum by (environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{type="registry", le="2.5"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le="25",route!~"/v2/{name}/manifests/{reference}",type="registry"}[6h])
         )
       )
       /
@@ -811,7 +1091,7 @@ groups:
       type: registry
     expr: |
       sum by (environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{type="registry", le="+Inf"}[6h])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",route!~"/v2/{name}/manifests/{reference}",type="registry"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -830,7 +1110,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(registry_http_requests_total{type="registry", code=~"5.."}[6h])
+          rate(registry_http_requests_total{code=~"5..",type="registry"}[6h])
         )
       )
       or
@@ -838,6 +1118,76 @@ groups:
         0 * group by(environment,stage) (
           gitlab_component_ops:rate_6h{component="server",tier="sv",type="registry"}
         )
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: server_route_manifest_reads
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[6h])
+        )
+        +
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[6h])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: server_route_manifest_reads
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[6h])
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: server_route_manifest_reads
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/manifests/{reference}"}[6h])
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: server_route_manifest_writes
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="10",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[6h])
+        )
+        +
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[6h])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: server_route_manifest_writes
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[6h])
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: server_route_manifest_writes
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_count{method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}"}[6h])
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
@@ -888,6 +1238,22 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: server
+      regional_aggregation: 'yes'
+      service_aggregation: 'yes'
+      tier: sv
+      type: registry
+    expr: '1'
+  - record: gitlab_component_service:mapping
+    labels:
+      component: server_route_manifest_reads
+      regional_aggregation: 'yes'
+      service_aggregation: 'yes'
+      tier: sv
+      type: registry
+    expr: '1'
+  - record: gitlab_component_service:mapping
+    labels:
+      component: server_route_manifest_writes
       regional_aggregation: 'yes'
       service_aggregation: 'yes'
       tier: sv
