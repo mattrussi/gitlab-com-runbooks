@@ -368,6 +368,7 @@ metricsCatalog.serviceDefinition({
       userImpacting=false,
       loadBalancerName='ops-dashboards-com',
       projectId='gitlab-ops',
+      ignoreTrafficCessation=true
     ),
 
     prometheus: {

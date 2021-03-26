@@ -7,11 +7,12 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
   // for monitoring a load balancer via stackdriver metrics
   // loadBalancerName: the name of the load balancer
   // projectId: the Google ProjectID that the load balancer is declared in
-  googleLoadBalancer(userImpacting, loadBalancerName, projectId)::
+  googleLoadBalancer(userImpacting, loadBalancerName, projectId, ignoreTrafficCessation=false)::
     local baseSelector = { target_proxy_name: loadBalancerName, project_id: projectId };
 
     metricsCatalog.serviceLevelIndicatorDefinition({
       userImpacting: userImpacting,
+      ignoreTrafficCessation: ignoreTrafficCessation,
 
       requestRate: rateMetric(
         counter='stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count',
