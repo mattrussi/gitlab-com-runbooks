@@ -145,6 +145,18 @@ groups:
         $value | humanize1024}}B behind {{$labels.primary}}
       runbook: docs/patroni/postgres.md#replication-is-lagging-or-has-stopped
       title: Postgres Replication lag (in bytes) is high
+  - alert: PostgreSQL_PendingWALFilesTooHigh
+    expr: pg_archiver_pending_wal_count > 2000
+    for: 5m
+    labels:
+      pager: pagerduty
+      severity: s1
+      alert_type: cause
+    annotations:
+      description: There are currently {{$value}} pending WAL files waiting to be archived on the primary db {{$labels.instance}}.
+        This is putting us at risk to lose data and can be caused by high write activity on the primary.
+        Consider increasing WALG_UPLOAD_CONCURRENCY if the load on the primary allows for it.
+      title: Postgres pending WAL files on primary is high
   - alert: PostgreSQL_XLOGConsumptionTooHigh
     expr: rate(pg_xlog_position_bytes[2m]) > 36700160 and ON(instance) (pg_replication_is_replica == 0)
     for: 20m
