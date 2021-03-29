@@ -15,6 +15,7 @@
 
 ## Troubleshooting Pointers
 
+* [../Teleport/Connect_to_Rails_Console_via_Teleport.md](../Teleport/Connect_to_Rails_Console_via_Teleport.md)
 * [../bastions/gprd-bastions.md](../bastions/gprd-bastions.md)
 * [../bastions/gstg-bastions.md](../bastions/gstg-bastions.md)
 * [../bastions/pre-bastions.md](../bastions/pre-bastions.md)
