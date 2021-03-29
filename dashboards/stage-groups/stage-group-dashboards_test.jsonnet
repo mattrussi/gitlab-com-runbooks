@@ -1,10 +1,11 @@
 local stageGroupDashboards = import './stage-group-dashboards.libsonnet';
 local test = import 'github.com/yugui/jsonnetunit/jsonnetunit/test.libsonnet';
 
-local sliPanelTitles = [
-  'SLIs Apdex',
-  'SLIs Error Ratio',
-  'SLIs RPS - Requests per Second',
+local errorBudgetTitles = [
+  'Error Budgets',
+  'Availability',
+  'Budget Spent',
+  'Info',
 ];
 
 test.suite({
@@ -13,7 +14,7 @@ test.suite({
     expectThat: function(results)
       results.title == 'Group dashboard: enablement (Geo)' &&
       std.type(results.panels) == 'array' &&
-      [panel.title for panel in results.panels] == sliPanelTitles + [
+      [panel.title for panel in results.panels] == errorBudgetTitles + [
         'Rails Request Rates',
         'API Request Rate',
         'GIT Request Rate',
@@ -67,7 +68,7 @@ test.suite({
       results.title == 'Group dashboard: enablement (Geo)' &&
       std.type(results.panels) == 'array' &&
       [panel.title for panel in results.panels] == introPanels +
-                                                   sliPanelTitles + [
+                                                   errorBudgetTitles + [
         'Rails Request Rates',
         'API Request Rate',
         'GIT Request Rate',
@@ -116,7 +117,7 @@ test.suite({
     expectThat: function(results)
       results.title == 'Group dashboard: enablement (Geo)' &&
       std.type(results.panels) == 'array' &&
-      [panel.title for panel in results.panels] == sliPanelTitles + [
+      [panel.title for panel in results.panels] == errorBudgetTitles + [
         'Rails Request Rates',
         'WEB Request Rate',
         'Extra links',
@@ -147,7 +148,7 @@ test.suite({
     expectThat: function(results)
       results.title == 'Group dashboard: enablement (Geo)' &&
       std.type(results.panels) == 'array' &&
-      [panel.title for panel in results.panels] == sliPanelTitles + [
+      [panel.title for panel in results.panels] == errorBudgetTitles + [
         'Rails Request Rates',
         'API Request Rate',
         'WEB Request Rate',
@@ -185,7 +186,7 @@ test.suite({
     expectThat: function(results)
       results.title == 'Group dashboard: enablement (Geo)' &&
       std.type(results.panels) == 'array' &&
-      [panel.title for panel in results.panels] == [
+      [panel.title for panel in results.panels] == errorBudgetTitles + [
         'Sidekiq',
         'Sidekiq Completion Rate',
         'Sidekiq Error Rate',
