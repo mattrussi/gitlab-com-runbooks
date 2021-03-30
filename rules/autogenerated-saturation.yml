@@ -1567,7 +1567,7 @@ groups:
       gitlab_component_saturation:ratio{component="disk_inodes"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="disk_inodes"}
   - alert: component_saturation_slo_out_of_bounds
-    for: 5m
+    for: 15m
     annotations:
       title: >-
         The Disk Space Utilization per Device per Node resource of the {{ $labels.type }} service ({{
