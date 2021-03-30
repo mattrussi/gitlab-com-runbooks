@@ -21,6 +21,8 @@ local serializeQueryHashPair(key, value) =
     null
   else if !std.isObject(value) then
     serializeQueryHashItem(key, '=', serializeQueryHashValue(value))
+  else if std.objectHas(value, 'ne') then
+    '-' + serializeQueryHashItem(key, '=', serializeQueryHashValue(value.ne))
   else if std.objectHas(value, 'gt') then
     serializeQueryHashItem(key, '>', serializeQueryHashValue(value.gt))
   else if std.objectHas(value, 'gte') then
@@ -38,24 +40,45 @@ local serializeQueryHash(hash) =
   local linesFiltered = std.filter(function(f) f != null, lines);
   std.join('\n', linesFiltered);
 
+
+local stackdriverLogsEntry(
+  title,
+  queryHash,
+  project='gitlab-production',
+  timeRange='PT30M',
+      ) =
+  function(options)
+    toolingLinkDefinition({
+      title: title,
+      url: 'https://console.cloud.google.com/logs/query;query=%(query)s;timeRange=%(timeRange)s?project=%(project)s' % {
+        project: project,
+        timeRange: timeRange,
+        query: url.escapeString(serializeQueryHash(queryHash)),
+      },
+    });
+
 {
   // Given a hash, returns a textual stackdriver logs query
   serializeQueryHash:: serializeQueryHash,
 
-  // Returns a link to a stackdriver logging query
-  stackdriverLogsEntry(
+  stackdriverLogs(
     title,
     queryHash,
     project='gitlab-production',
     timeRange='PT30M',
   )::
+    local entry = stackdriverLogsEntry(
+      title=title,
+      queryHash=queryHash,
+      project=project,
+      timeRange=timeRange,
+    );
+
     function(options)
-      toolingLinkDefinition({
-        title: title,
-        url: 'https://console.cloud.google.com/logs/query;query=%(query)s;timeRange=%(timeRange)s?project=%(project)s' % {
-          project: project,
-          timeRange: timeRange,
-          query: url.escapeString(serializeQueryHash(queryHash)),
-        },
-      }),
+      [
+        entry(options),
+      ],
+
+  // Returns a link to a stackdriver logging query
+  stackdriverLogsEntry:: stackdriverLogsEntry,
 }

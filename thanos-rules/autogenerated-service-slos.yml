@@ -810,6 +810,22 @@ groups:
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
+      component: received_tcp_packets
+      regional_aggregation: 'no'
+      service_aggregation: 'yes'
+      tier: inf
+      type: nat
+    expr: '1'
+  - record: gitlab_component_service:mapping
+    labels:
+      component: sent_tcp_packets
+      regional_aggregation: 'no'
+      service_aggregation: 'yes'
+      tier: inf
+      type: nat
+    expr: '1'
+  - record: gitlab_component_service:mapping
+    labels:
       component: loadbalancer
       regional_aggregation: 'no'
       service_aggregation: 'yes'

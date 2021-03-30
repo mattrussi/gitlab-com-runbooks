@@ -15,6 +15,7 @@
   import 'mailroom.jsonnet',
   import 'monitoring.jsonnet',
   import 'nfs.jsonnet',
+  import 'nat.jsonnet',
   import 'pages.jsonnet',
   import 'patroni.jsonnet',
   import 'pgbouncer.jsonnet',
