@@ -56,13 +56,24 @@ fi
 
 prepare
 
+function validate_dashboard_requests() {
+  while IFS= read -r request; do
+    uid=$(echo "${request}" | jq -r '.dashboard.uid')
+    if [[ ${#uid} -gt 40 ]]; then
+      echo >&2 "UID ${uid} is longer than the 40 char max allowed by Grafana"
+      return 1
+    fi
+    echo "${request}"
+  done
+}
+
 function generate_dashboard_requests() {
   find_dashboards "$@" | while read -r line; do
     relative=${line#"./"}
     folder=${GRAFANA_FOLDER:-$(dirname "$relative")}
     folderId=$(resolve_folder_id "${folder}")
 
-    generate_dashboards_for_file "${line}" | prepare_dashboard_requests "${folderId}" | (
+    generate_dashboards_for_file "${line}" | validate_dashboard_requests | prepare_dashboard_requests "${folderId}" | (
       if [[ -n $dry_run ]]; then
         jq -r --arg file "$line" --arg folder "$folder" '"Running in dry run mode, would create \($file) in folder \($folder) with uid \(.dashboard.uid)"'
       else
@@ -79,9 +90,14 @@ else
   trap 'rm -rf "${tmpfile}"' EXIT
 
   generate_dashboard_requests "$@" | while IFS= read -r request; do
+    uid=$(echo "${request}" | jq -r '.dashboard.uid')
     # Use http1.1 and gzip compression to workaround unexplainable random errors that
     # occur when uploading some dashboards
-    response=$(echo "${request}" | call_grafana_api https://dashboards.gitlab.net/api/dashboards/db -d @-)
+    response=$(echo "${request}" | call_grafana_api https://dashboards.gitlab.net/api/dashboards/db -d @-) || {
+      echo >&2 ""
+      echo >&2 "Failed to upload '${uid}'"
+      exit 1
+    }
 
     url=$(echo "${response}" | jq -r '.url')
     echo "Installed https://dashboards.gitlab.net${url}"
