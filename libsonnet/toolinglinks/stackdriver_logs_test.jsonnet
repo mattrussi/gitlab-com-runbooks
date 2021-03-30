@@ -22,8 +22,9 @@ test.suite({
       b: { gt: 2 },
       c: { gte: 3 },
       d: { lte: 5 },
+      e: { ne: '6' },
     }),
-    expect: 'a<1\nb>2\nc>=3\nd<=5',
+    expect: 'a<1\nb>2\nc>=3\nd<=5\n-e="6"',
   },
 
 })
