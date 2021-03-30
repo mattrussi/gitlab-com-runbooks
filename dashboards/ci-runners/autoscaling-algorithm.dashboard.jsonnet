@@ -79,7 +79,7 @@ local algorithmVisualisation =
   };
 
 dashboardHelpers.dashboard(
-  'Autoscaling algorithm visualisation',
+  'Autoscaling algorithm',
   time_from='now-6h/m',
 )
 .addGrid(
