@@ -2246,6 +2246,52 @@ services:
       grafana_folder: Ymoh2MEmk
       primary_grafana_dashboard: "registry-main/registry-overview"
 
+- name: nat
+  tier: inf
+  friendly_name: NAT
+  infra_owner: sre_coreinfra
+  label: Service:NAT
+  business:
+    requirement: |
+      Provides NAT translation for GitLab's service fleet
+    customers:
+      - GitLab.com customers
+    business_value: |
+      Provides NAT translation for GitLab's service fleet.
+    SLA:
+      availability:
+      response_time:
+  technical:
+    project:
+    slx:
+    documents:
+      design: https://cloud.google.com/nat/docs/overview
+      architecture:
+      readiness_review:
+      service:
+      security:
+    security:
+      security_reviewed:
+      data_classification: red
+      security_incidents:
+    logging:
+      - name: dropped packet logs
+        permalink: https://cloudlogging.app.goo.gl/XvxRJx3ECzThD87x7
+  infrastructure:
+    provider: gcp
+    architecture:
+    provisioning: terraform
+  operations:
+    maintenance:
+    runbooks:
+      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/nat/cloud-nat.md
+    playbooks:
+    error_budget:
+  observability:
+    monitors:
+      grafana_folder:
+      primary_grafana_dashboard: "nat-main/nat-overview"
+
 - name: nfs
   tier: stor
   friendly_name: NFS

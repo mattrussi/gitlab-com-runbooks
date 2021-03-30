@@ -126,17 +126,21 @@ def validate(service_catalog_path)
     raise "'#{service_name}' | chef_roles field must be list" unless chef_roles.is_a?(Array) || chef_roles.nil?
 
     # scalability
-    # node
-    node = service["technical"]["scalability"]["note"]
-    raise "'#{service_name}' | node field must be string" unless node.is_a?(String) || node.nil?
+    scalability = service["technical"]["scalability"]
 
-    # bound
-    bound = service["technical"]["scalability"]["bound"]
-    raise "'#{service_name}' | bound field must be string" unless bound.is_a?(String) || bound.nil?
+    if scalability
+      # node
+      node = scalability["note"]
+      raise "'#{service_name}' | node field must be string" unless node.is_a?(String) || node.nil?
 
-    # scalable
-    scalable = service["technical"]["scalability"]["scalable"]
-    raise "'#{service_name}' | scalable field must be string" unless scalable.is_a?(String) || scalable.nil?
+      # bound
+      bound = scalability["bound"]
+      raise "'#{service_name}' | bound field must be string" unless bound.is_a?(String) || bound.nil?
+
+      # scalable
+      scalable = scalability["scalable"]
+      raise "'#{service_name}' | scalable field must be string" unless scalable.is_a?(String) || scalable.nil?
+    end
 
     # security_reviewed
     security_reviewed = service["technical"]["security"]["security_reviewed"]
@@ -228,6 +232,6 @@ end
 begin
   validate(File.join(__dir__, "..", "services", "service-catalog.yml"))
 rescue StandardError => e
-  warn "error: #{e.message}"
+  warn "error: #{e.stack}"
   exit 1
 end
