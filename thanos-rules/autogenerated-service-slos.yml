@@ -69,7 +69,7 @@ groups:
     labels:
       tier: runners
       type: ci-runners
-    expr: '0.950000'
+    expr: '0.970000'
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       tier: runners
