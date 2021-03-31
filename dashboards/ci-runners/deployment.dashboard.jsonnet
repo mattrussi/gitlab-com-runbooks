@@ -6,6 +6,7 @@ local layout = import 'grafana/layout.libsonnet';
 local dashboardFilters = import 'stage-groups/verify-runner/dashboard_filters.libsonnet';
 local dashboardHelpers = import 'stage-groups/verify-runner/dashboard_helpers.libsonnet';
 local jobGraphs = import 'stage-groups/verify-runner/job_graphs.libsonnet';
+local jobQueueGraphs = import 'stage-groups/verify-runner/job_queue_graphs.libsonnet';
 local deploymentDetails = import 'stage-groups/verify-runner/deployment_details.libsonnet';
 
 dashboardHelpers.dashboard(
@@ -20,7 +21,7 @@ dashboardHelpers.dashboard(
   panels=[
     jobGraphs.running(['instance']),
     jobGraphs.failures(['instance']),
-    jobGraphs.legacyGitLabJobsOverview,
+    jobQueueGraphs.pendingSize,
   ],
 )
 .addPanels(
