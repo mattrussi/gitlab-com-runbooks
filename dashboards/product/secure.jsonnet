@@ -56,7 +56,7 @@ basic.dashboard(
   layout.grid(
     [
       productCommon.pageDetail('On-Demand Scans', 'On_Demand_Scans', 'https://gitlab.com/gitlab-examples/security/security-reports/-/on_demand_scans'),
-      productCommon.pageDetail('DAST Profiles', 'DAST_Profiles', 'https://gitlab.com/gitlab-examples/security/security-reports/-/security/configuration/dast_profiles'),
+      productCommon.pageDetail('DAST Profiles', 'DAST_Profiles', 'https://gitlab.com/gitlab-examples/security/security-reports/-/security/configuration/dast_scans'),
     ],
     startRow=3001,
   ),
