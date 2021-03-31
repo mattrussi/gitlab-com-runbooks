@@ -46,52 +46,8 @@ local startedJobsGraph(aggregators=[]) =
     aggregators,
   );
 
-local legacyGitLabMonitorFQDN = 'postgres-dr-archive-01-db-gprd.c.gitlab-production.internal';
-
-local legacyGitLabJobsOverview =
-  basic.multiTimeseries(
-    title='⚠ Jobs at GitLab.com ⚠',
-    description=|||
-      ⚠ This panel uses data gathered by GitLab Exporter with few very heavy SQL queries executed on an archive
-      replica of our database. Therefore the metrics are often missing and when they are present, they are not
-      fully accurate.
-
-      YOU SHOULD NOT DEPEND ON THIS DATA and instead just treat it as a very rough estimate of what is happening
-      with the jobs.
-
-      A replacement for these metrics is under development. If you are interested, then please follow:
-      https://gitlab.com/gitlab-org/gitlab/-/issues/290751.
-    |||,
-    linewidth=2,
-    queries=[
-      {
-        query: 'sum(ci_pending_builds{shared_runners="yes",has_minutes="yes",fqdn="%s"})' % legacyGitLabMonitorFQDN,
-        legendFormat: 'pending jobs for project with shared runners enabled',
-      },
-      {
-        query: 'sum(ci_pending_builds{shared_runners="no",has_minutes="yes",fqdn="%s"})' % legacyGitLabMonitorFQDN,
-        legendFormat: 'pending jobs for project without shared runners enabled',
-      },
-      {
-        query: 'sum(ci_running_builds{shared_runner="yes",has_minutes="yes",fqdn="%s"})' % legacyGitLabMonitorFQDN,
-        legendFormat: 'running jobs on shared runners',
-      },
-      {
-        query: 'sum(ci_running_builds{shared_runner="yes",has_minutes="yes",fqdn="%s"})' % legacyGitLabMonitorFQDN,
-        legendFormat: 'running jobs on group/project runners',
-      },
-      {
-        query: 'sum(ci_stale_builds{fqdn="%s"})' % legacyGitLabMonitorFQDN,
-        legendFormat: 'stale jobs',
-      },
-    ],
-  ) + {
-    nullPointMode: 'null as zero',
-  };
-
 {
   running:: runningJobsGraph,
   failures:: runnerJobFailuresGraph,
   started:: startedJobsGraph,
-  legacyGitLabJobsOverview:: legacyGitLabJobsOverview,
 }
