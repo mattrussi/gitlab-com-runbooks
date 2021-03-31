@@ -373,7 +373,7 @@ groups:
                 job="stackdriver",
                 project_id=~"gitlab-production|gitlab-staging-1",
                 environment!=""
-              }[1m]
+              }[5m]
             )
             /
             64512
@@ -398,7 +398,7 @@ groups:
                   job="stackdriver",
                   project_id=~"gitlab-production|gitlab-staging-1",
                   environment!=""
-                }[1m]
+                }[5m]
               )
             )
             /
@@ -408,7 +408,7 @@ groups:
                   job="stackdriver",
                   project_id=~"gitlab-production|gitlab-staging-1",
                   environment!=""
-                }[1m]
+                }[5m]
               )
             )
             ,
@@ -2435,7 +2435,7 @@ groups:
                   job="stackdriver",
                   project_id=~"gitlab-production|gitlab-staging-1",
                   environment="{{ $labels.environment }}"
-                }[1m]
+                }[5m]
               )
               /
               64512
@@ -2488,7 +2488,7 @@ groups:
                     job="stackdriver",
                     project_id=~"gitlab-production|gitlab-staging-1",
                     environment="{{ $labels.environment }}"
-                  }[1m]
+                  }[5m]
                 )
               )
               /
@@ -2498,7 +2498,7 @@ groups:
                     job="stackdriver",
                     project_id=~"gitlab-production|gitlab-staging-1",
                     environment="{{ $labels.environment }}"
-                  }[1m]
+                  }[5m]
                 )
               )
               ,
