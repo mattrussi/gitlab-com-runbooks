@@ -628,6 +628,7 @@ local pgbouncerSyncPool(serviceType, role) =
     |||,
     grafana_dashboard_uid: 'sat_nat_host_port_allocation',
     resourceLabels: ['instance_id', 'nat_gateway_name', 'zone'],
+    burnRatePeriod: '5m',  // This needs to be high, since the StackDriver export only updates infrequently
     query: |||
       sum without(ip_protocol) (
         max_over_time(
@@ -684,6 +685,7 @@ local pgbouncerSyncPool(serviceType, role) =
     |||,
     grafana_dashboard_uid: 'sat_nat_gw_port_allocation',
     resourceLabels: ['nat_ip', 'gateway_name', 'project_id'],  // Each nat_ip has 64512 ports for allocation
+    burnRatePeriod: '5m',  // This needs to be high, since the StackDriver export only updates infrequently
     query: |||
       max_over_time(
         stackdriver_nat_gateway_router_googleapis_com_nat_allocated_ports{
