@@ -8,8 +8,7 @@
 ## Support Portal and numbers
 
 Google:
-* See the [readme in the vendor tracker](https://gitlab.com/gitlab-com/gl-infra/google-gitlab-tracker)
-* There is also a dedicated slack channel for urgent help: ext-google-cloud
+* There is also a dedicated slack channel to inquire about any issues which GCP may be seeing and for seeking assistance: [#ext-google-cloud](https://gitlab.slack.com/archives/C01KPV0V3SM)
 
 Rackspace: 
 * Link to Portal https://mycloud.rackspace.com
