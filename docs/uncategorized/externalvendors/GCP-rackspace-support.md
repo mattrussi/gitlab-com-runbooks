@@ -8,7 +8,7 @@
 ## Support Portal and numbers
 
 Google:
-* See the [readme in the vendor tracker](https://gitlab.com/gitlab-com/gl-infra/google-gitlab-tracker)
+* There is also a dedicated slack channel to inquire about any issues which GCP may be seeing and for seeking assistance: [#ext-google-cloud](https://gitlab.slack.com/archives/C01KPV0V3SM)
 
 Rackspace: 
 * Link to Portal https://mycloud.rackspace.com
@@ -25,8 +25,6 @@ Rackspace:
 Google:
 * See the [readme in the vendor tracker](https://gitlab.com/gitlab-com/gl-infra/google-gitlab-tracker). The project is private due to confidential interactions with the vendor.
 
-Rackspace:
-* Ben Garza is our TAM - reports to Sergio Gonzalez as support leader.
 
 ### Making a support ticket in Rackspace (For billing questions only):
 Pick the Rackspace Ticketing System, Project ID: mgcp-1173105-ticket-escalation.  This will allow you to pick a severity.
