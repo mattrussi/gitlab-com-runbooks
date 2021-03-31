@@ -32,6 +32,7 @@
 * [../customers/api-key-rotation.md](../customers/api-key-rotation.md)
 * [../elastic/elastic-cloud.md](../elastic/elastic-cloud.md)
 * [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
+* [../frontend/block-things-in-haproxy.md](../frontend/block-things-in-haproxy.md)
 * [../frontend/haproxy.md](../frontend/haproxy.md)
 * [../frontend/ssh-maxstartups-breach.md](../frontend/ssh-maxstartups-breach.md)
 * [../git/deploy-gitlab-rb-change.md](../git/deploy-gitlab-rb-change.md)
