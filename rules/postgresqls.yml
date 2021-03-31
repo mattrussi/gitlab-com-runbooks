@@ -114,6 +114,8 @@ groups:
     expr: (pg_replication_lag > 10800) and ON(instance) (pg_replication_is_replica{type = "postgres-archive"} == 1)
     for: 5m
     labels:
+      # TODO: notify the data team about this
+      # team: data
       severity: s3
       alert_type: cause
     annotations:

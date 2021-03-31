@@ -1596,7 +1596,7 @@ services:
       grafana_folder: RNfEDpLmz
       primary_grafana_dashboard: "patroni-main/patroni-overview"
 
-- name: postgres-dr-archive
+- name: postgres-archive
   tier: db
   friendly_name: Postgres DR Archive
   infra_owner: sre_datastores

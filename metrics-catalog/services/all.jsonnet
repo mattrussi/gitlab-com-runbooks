@@ -18,6 +18,7 @@
   import 'nat.jsonnet',
   import 'pages.jsonnet',
   import 'patroni.jsonnet',
+  import 'postgres-archive.jsonnet',
   import 'pgbouncer.jsonnet',
   import 'praefect.jsonnet',
   import 'redis-cache.jsonnet',

@@ -4,9 +4,9 @@
 
 [[_TOC_]]
 
-#  Postgres-dr-archive Service
+#  Postgres-archive Service
 * [Service Overview](https://dashboards.gitlab.net/d/000000144/postgresql-overview)
-* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22postgres-dr-archive%22%2C%20tier%3D%22db%22%7D
+* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22postgres-archive%22%2C%20tier%3D%22db%22%7D
 * **Label**: gitlab-com/gl-infra/production~"Service:PostgresArchive"
 
 ## Logging
@@ -16,7 +16,6 @@
 
 ## Troubleshooting Pointers
 
-* [../patroni/patroni-management.md](../patroni/patroni-management.md)
 * [../postgres-dr-delayed/postgres-dr-replicas.md](../postgres-dr-delayed/postgres-dr-replicas.md)
 <!-- END_MARKER -->
 
