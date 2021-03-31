@@ -798,7 +798,7 @@ local pgbouncerSyncPool(serviceType, role) =
 
   // Note that this pool is currently not used, but may be added in the medium
   // term
-  // pgbouncer_async_replica_pool: pgbouncerAsyncPool('patroni', 'replica'),
+  pgbouncer_async_replica_pool: pgbouncerAsyncPool('patroni', 'replica'),
   pgbouncer_sync_primary_pool: pgbouncerSyncPool('pgbouncer', 'primary'),
   pgbouncer_sync_replica_pool: pgbouncerSyncPool('patroni', 'replica'),
 

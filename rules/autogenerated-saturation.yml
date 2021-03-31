@@ -529,6 +529,28 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
+      component: pgbouncer_async_replica_pool
+    expr: |
+      max by(environment, tier, type, stage) (
+        clamp_min(
+          clamp_max(
+            (
+              avg_over_time(pgbouncer_pools_server_active_connections{user="gitlab", database="gitlabhq_production_sidekiq", environment!="",type="patroni"}[5m]) +
+              avg_over_time(pgbouncer_pools_server_testing_connections{user="gitlab", database="gitlabhq_production_sidekiq", environment!="",type="patroni"}[5m]) +
+              avg_over_time(pgbouncer_pools_server_used_connections{user="gitlab", database="gitlabhq_production_sidekiq", environment!="",type="patroni"}[5m]) +
+              avg_over_time(pgbouncer_pools_server_login_connections{user="gitlab", database="gitlabhq_production_sidekiq", environment!="",type="patroni"}[5m])
+            )
+            / on(environment, tier, type, stage, fqdn, instance) group_left()
+            sum by (environment, tier, type, stage, fqdn, instance) (
+              avg_over_time(pgbouncer_databases_pool_size{name="gitlabhq_production_sidekiq", environment!="",type="patroni"}[5m])
+            )
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
       component: pgbouncer_single_core
     expr: |
       max by(environment, tier, type, stage) (
@@ -1078,6 +1100,14 @@ groups:
     expr: '0.95'
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
+      component: pgbouncer_async_replica_pool
+    expr: '0.9'
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: pgbouncer_async_replica_pool
+    expr: '0.95'
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
       component: pgbouncer_single_core
     expr: '0.8'
   - record: slo:max:hard:gitlab_component_saturation:ratio
@@ -1395,6 +1425,12 @@ groups:
     labels:
       component: pgbouncer_async_primary_pool
       horiz_scaling: 'no'
+      severity: s4
+    expr: '1'
+  - record: gitlab_component_saturation_info
+    labels:
+      component: pgbouncer_async_replica_pool
+      horiz_scaling: 'yes'
       severity: s4
     expr: '1'
   - record: gitlab_component_saturation_info
@@ -2786,6 +2822,55 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="pgbouncer_async_primary_pool"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="pgbouncer_async_primary_pool"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 10m
+    annotations:
+      title: >-
+        The Postgres Async (Sidekiq) replica Connection Pool Utilization per Node resource of the {{ $labels.type
+        }} service ({{ $labels.stage }} stage), component has a saturation exceeding SLO and is close
+        to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Postgres Async (Sidekiq) replica Connection Pool Utilization per Node resource:
+
+        pgbouncer async connection pool utilization per database node, for replica database connections.
+
+        Sidekiq maintains it's own pgbouncer connection pool. When this resource is saturated, database operations may queue, leading to additional latency in background processing.
+      grafana_dashboard_id: alerts-sat_pgbouncer_async_pool_replica
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/alerts-sat_pgbouncer_async_pool_replica?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '4069682945'
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, fqdn, instance) (
+          clamp_min(
+            clamp_max(
+              (
+                avg_over_time(pgbouncer_pools_server_active_connections{user="gitlab", database="gitlabhq_production_sidekiq", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m]) +
+                avg_over_time(pgbouncer_pools_server_testing_connections{user="gitlab", database="gitlabhq_production_sidekiq", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m]) +
+                avg_over_time(pgbouncer_pools_server_used_connections{user="gitlab", database="gitlabhq_production_sidekiq", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m]) +
+                avg_over_time(pgbouncer_pools_server_login_connections{user="gitlab", database="gitlabhq_production_sidekiq", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
+              )
+              / on(environment, tier, type, stage, fqdn, instance) group_left()
+              sum by (environment, tier, type, stage, fqdn, instance) (
+                avg_over_time(pgbouncer_databases_pool_size{name="gitlabhq_production_sidekiq", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+    expr: |
+      gitlab_component_saturation:ratio{component="pgbouncer_async_replica_pool"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="pgbouncer_async_replica_pool"}
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
