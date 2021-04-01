@@ -88,6 +88,43 @@ local elasticsearchExternalHTTPLink(type) = function(options)
       ])
       +
       layout.rowGrid('SQL', [
+        basic.multiTimeseries(
+          stableId='total-sql-queries-rate',
+          title='Total SQL Queries Rate',
+          format='ops',
+          queries=[
+            {
+              query: |||
+                sum by (action) (
+                  rate(
+                    gitlab_transaction_db_count_total{%(selector)s}[$__interval]
+                  )
+                )
+              ||| % { selector: selectorString },
+              legendFormat: 'Total - {{ action }}',
+            },
+            {
+              query: |||
+                sum by (action) (
+                  rate(
+                    gitlab_transaction_db_primary_count_total{%(selector)s}[$__interval]
+                  )
+                )
+              ||| % { selector: selectorString },
+              legendFormat: 'Primary - {{ action }}',
+            },
+            {
+              query: |||
+                sum by (action) (
+                  rate(
+                    gitlab_transaction_db_replica_count_total{%(selector)s}[$__interval]
+                  )
+                )
+              ||| % { selector: selectorString },
+              legendFormat: 'Replica - {{ action }}',
+            },
+          ]
+        ),
         basic.timeseries(
           stableId='sql-requests-per-controller-request',
           title='SQL Requests per Controller Request',
