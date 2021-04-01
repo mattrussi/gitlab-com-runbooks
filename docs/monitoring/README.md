@@ -215,8 +215,6 @@ Luckily, it's not quite as common as it sounds to really care where a given
 metric comes from. Dashboards and ad-hoc queries via a web console should
 usually be satisfied by Thanos, which has a global view of all shards.
 
-![Logical scheme](./img/gitlab-monitoring.png)
-
 #### A note about GitLab CI
 
 GitLab CI jobs run in their own Google Project. This is not peered with our ops
@@ -401,7 +399,6 @@ defence.
 - [Monitoring infrastructure troubleshooting](https://youtu.be/iiLClqUQjYw)
 - [Metrics catalog README](https://gitlab.com/gitlab-com/runbooks/-/blob/master/metrics-catalog/README.md)
 - [Apdex alert guide](./apdex-alerts-guide.md)
-- [draw.io source](../../graphs/gitlab-monitoring.xml) for later modifications.
 - [video: delivery: intro to monitoring at gitlab.com](https://www.youtube.com/watch?reload=9&v=fDeeYqCnuoM&list=PL05JrBw4t0KoPzC03-4yXuJEWdUo7VZfX&index=13&t=0s)
 - [epic about figuring out and documenting monitoring](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/75)
 - [video: General metrics and anomaly detection](https://www.youtube.com/watch?reload=9&v=Oq5PHtgEM1g&feature=youtu.be)
