@@ -113,7 +113,7 @@ prepare_snapshot_requests() {
   jq -c '
 {
   dashboard: .,
-  expires: 86400
+  expires: 259200
 } * {
   dashboard: {
     editable: true,
