@@ -193,7 +193,7 @@ local sqlLatenciesPerQuery(type, featureCategories, featureCategoriesSelector) =
       Average latency of individual SQL queries
     |||,
     query=|||
-      sum without (fqdn,instance) (
+      sum by (controller, action) (
         rate(
           gitlab_sql_duration_seconds_sum{
             environment="$environment",
@@ -206,7 +206,7 @@ local sqlLatenciesPerQuery(type, featureCategories, featureCategoriesSelector) =
         )
       )
       /
-      sum without (fqdn,instance) (
+      sum by (controller, action) (
         rate(
           gitlab_sql_duration_seconds_count{
             environment="$environment",
@@ -228,13 +228,13 @@ local cachesPerAction(type, featureCategories, featureCategoriesSelector) =
   basic.timeseries(
     title='%(type)s Caches per Action' % { type: std.asciiUpper(type) },
     decimals=2,
-    legendFormat='{{operation}} - ' + actionLegend(type),
+    legendFormat='{{operation}} - %s' % actionLegend(type),
     yAxisLabel='Operations',
     description=|||
       Average total number of caching operations (Read & Write) per action.
     |||,
     query=|||
-      sum without (fqdn, instance) (
+      sum by (controller, action, operation) (
         rate(
           gitlab_cache_operations_total{
             environment="$environment",
