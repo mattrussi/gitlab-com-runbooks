@@ -65,6 +65,7 @@ local statusCode(field) =
   [rangeFilter(field, gteValue=500, lteValue=null)];
 
 local indexDefaults = {
+  defaultFilters: [],
   kibanaEndpoint: 'https://log.gprd.gitlab.net/app/kibana',
   prometheusLabelMappings: {},
 };
@@ -243,20 +244,31 @@ local indexCatalog = {
     defaultLatencyField: 'json.duration_ms',
     latencyFieldUnitMultiplier: 1000,
   },
+
+  workhorse_imageresizer: indexDefaults {
+    timestamp: 'json.time',
+    indexPattern: 'a4f5b470-edde-11ea-81e5-155ba78758d4',
+    defaultFilters: [matchFilter('json.subsystem', 'imageresizer')],
+    defaultColumns: ['json.method', 'json.uri', 'json.imageresizer.content_type', 'json.imageresizer.original_filesize', 'json.imageresizer.target_width', 'json.imageresizer.status'],
+    defaultSeriesSplitField: 'json.uri',
+    failureFilter: [mustNot(matchFilter('json.imageresizer.status', 'success'))],
+  },
 };
 
 local buildElasticDiscoverSearchQueryURL(index, filters, luceneQueries=[], includeTime=true) =
+  local ic = indexCatalog[index];
+
   local applicationState = {
-    columns: indexCatalog[index].defaultColumns,
-    filters: filters,
-    index: indexCatalog[index].indexPattern,
+    columns: ic.defaultColumns,
+    filters: ic.defaultFilters + filters,
+    index: ic.indexPattern,
     query: {
       language: 'kuery',
       query: std.join(' AND ', luceneQueries),
     },
   };
 
-  indexCatalog[index].kibanaEndpoint + '#/discover?_a=' + rison.encode(applicationState) + (if includeTime then grafanaTimeRange else '');
+  ic.kibanaEndpoint + '#/discover?_a=' + rison.encode(applicationState) + (if includeTime then grafanaTimeRange else '');
 
 local buildElasticLineCountVizURL(index, filters, luceneQueries=[], splitSeries=false) =
   local ic = indexCatalog[index];
@@ -314,7 +326,7 @@ local buildElasticLineCountVizURL(index, filters, luceneQueries=[], splitSeries=
     );
 
   local applicationState = {
-    filters: filters,
+    filters: ic.defaultFilters + filters,
     query: {
       language: 'kuery',
       query: std.join(' AND ', luceneQueries),
@@ -384,7 +396,7 @@ local buildElasticLineTotalDurationVizURL(index, filters, luceneQueries=[], late
     );
 
   local applicationState = {
-    filters: filters,
+    filters: ic.defaultFilters + filters,
     query: {
       language: 'kuery',
       query: std.join(' AND ', luceneQueries),
@@ -486,7 +498,7 @@ local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latency
     );
 
   local applicationState = {
-    filters: filters,
+    filters: ic.defaultFilters + filters,
     query: {
       language: 'kuery',
       query: std.join(' AND ', luceneQueries),
