@@ -1,8 +1,8 @@
 #! /usr/bin/env bash
 
-# database-gitlab-superuser-user-role-password-update.sh
+# user-role-password-update.sh
 #
-# This script will update the password for a gitlab-superuser user account.
+# This script will update the password for a user account.
 #
 # Make sure to set the NEW_PASSWORD environment variable appropriately.
 #
@@ -12,8 +12,8 @@
 #
 # Example:
 #
-# /root/scripts/database-gitlab-superuser-user-role-password-update.sh --dry-run
-# /root/scripts/database-gitlab-superuser-user-role-password-update.sh --wet-run
+# /root/scripts/user-role-password-update.sh gitlab-superuser --dry-run
+# /root/scripts/user-role-password-update.sh gitlab-superuser --wet-run
 
 # Immediately exit if any command has a non-zero exit status.
 set -e
@@ -29,7 +29,7 @@ run_mode="${1:---dry-run}"
 script_dir_path="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 [[ -f "${script_dir_path}/.new_password.sh" ]] && source "${script_dir_path}/.new_password.sh"
 
-username='gitlab-superuser'
+username="${1}"
 # Disable shellcheck warning for "Possible misspelling"
 # Here the variable NEW_PASSWORD is expected to be defined in one's environment.
 # shellcheck disable=SC2153

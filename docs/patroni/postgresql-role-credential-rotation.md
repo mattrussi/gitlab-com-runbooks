@@ -4,7 +4,7 @@ Rotating credentials in a high-availability database deployment with the
 objective to ensure zero downtime can be a challenge.
 
 Here are some explicit tasks which are required to accomplish the changing
-of a password for an important database role like the `gitlab-superuser`.
+of a password for an important database role like `gitlab-superuser`.
 
 ## Change issue creation
 
@@ -40,8 +40,6 @@ bundle install --path=vendor/bundle
 
 ## Procedure
 
-To update the credentials for *only* the `gitlab-superuser` user in the PostgreSQL database and the patroni cluster configuration:
-
 ### Phase one
 
 1. [ ] Specify the environment in which to conduct operations:
@@ -52,15 +50,19 @@ To update the credentials for *only* the `gitlab-superuser` user in the PostgreS
    ```bash
    export issue_link='https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10961' # CHANGEME (as necessary)
    ```
+1. [ ] Specify the username whose password you wish to rotate:
+   ```bash
+   export GITLAB_USERNAME='gitlab-superuser' # CHANGEME (as necessary)
+   ```
 1. [ ] Copy the current user password:
    ```bash
    bin/gkms-vault-cat gitlab-patroni "${GITLAB_ENVIRONMENT}" | jq --raw-output '."gitlab-patroni".patroni.users.superuser.password' | pbcopy
    ```
-1. [ ] Record the password in a field of type `Password` in a secure note entitled "`gitlab-patroni ${GITLAB_ENVIRONMENT} gitlab-superuser`" in 1Password for reference in case a roll-back is necessary.
+1. [ ] Record the password in a field of type `Password` in a secure note entitled "`gitlab-patroni ${GITLAB_ENVIRONMENT} ${GITLAB_USERNAME}`" in 1Password for reference in case a roll-back is necessary.
 1. [ ] Deploy the scripts from https://gitlab.com/gitlab-com/runbooks/-/merge_requests/2197 on each patroni node:
    ```bash
-   export mode=0700 install_dir='/root/scripts' repository='https://gitlab.com/gitlab-com/runbooks' branch='master' artifacts=$(echo "scripts/database-gitlab-superuser-session-connection-terminate.sh scripts/database-gitlab-superuser-user-role-create.sh scripts/database-gitlab-superuser-user-role-password-update.sh scripts/database-user-role-delete.sh")
-   for patroni_node in $(bundle exec knife search node "fqdn:patroni-*-db-${GITLAB_ENVIRONMENT}*" --format=json | jq --raw-output '.rows|=sort_by(.automatic.fqdn)|.rows|.[] .automatic.fqdn'); do echo "Deploying database utility scripts from ${repository}/-/raw/${branch} to ${patroni_node}:${install_dir}"; for artifact in ${artifacts}; do ssh "${patroni_node}" "sudo mkdir -p ${install_dir} && curl --silent --show-error --location '${repository}/-/raw/${branch}/${artifact}' --output - | sudo tee ${install_dir}/${script}  &>/dev/null && sudo chmod $mode ${install_dir}/${script}"; done; done
+   export mode=0700 install_dir='/root/scripts' repository='https://gitlab.com/gitlab-com/runbooks' branch='master' artifacts=$(echo "scripts/database/session-connection-terminate.sh scripts/database/user-role-create.sh scripts/database/user-role-password-update.sh scripts/database/user-role-delete.sh")
+   for patroni_node in $(bundle exec knife search node "fqdn:patroni-*-db-${GITLAB_ENVIRONMENT}*" --format=json | jq --raw-output '.rows|=sort_by(.automatic.fqdn)|.rows|.[] .automatic.fqdn'); do echo "Deploying database utility scripts database/from ${repository}/-/raw/${branch} to ${patroni_node}:${install_dir}"; for artifact in ${artifacts}; do ssh "${patroni_node}" "sudo mkdir -p ${install_dir} && curl --silent --show-error --location '${repository}/-/raw/${branch}/${artifact}' --output - | sudo tee ${install_dir}/${script}  &>/dev/null && sudo chmod $mode ${install_dir}/${script}"; done; done
    ```
 1. [ ] Create a new password:
    ```bash
@@ -68,7 +70,7 @@ To update the credentials for *only* the `gitlab-superuser` user in the PostgreS
    echo "${new_password}" | pbcopy
    echo "export NEW_PASSWORD=${new_password}" | tee ./new_password.sh &>/dev/null
    ```
-1. [ ] Record the **new** password in a field of type `Password` named "`Temporary PostgreSQL superuser role password`" in the environmentally appropriate "`Postgres gitlab-superuser`" Password entry in 1Password.
+1. [ ] Record the **new** password in a field of type `Password` named "`Temporary PostgreSQL superuser role password`" in the environmentally appropriate "`Postgres <username>`" Password entry in 1Password.
 1. [ ] Select the first member node of the patroni cluster:
    ```bash
    export patroni_node=$(bundle exec knife search node "fqdn:patroni-*-db-${GITLAB_ENVIRONMENT}*" --format=json | jq --raw-output '.rows|=sort_by(.automatic.fqdn)|.rows[0]|.automatic.fqdn')
@@ -86,21 +88,21 @@ To update the credentials for *only* the `gitlab-superuser` user in the PostgreS
    ```
 1. [ ] Dry-run the script to create a new temporary database user role on the leader and record the output:
    ```bash
-   bundle exec knife ssh "fqdn:${leader_patroni_node}" 'sudo /root/scripts/database-gitlab-superuser-user-role-create.sh --dry-run'
+   bundle exec knife ssh "fqdn:${leader_patroni_node}" 'sudo /root/scripts/user-role-create.sh $GITLAB_USERNAME --dry-run'
    ```
 1. [ ] Confirm that there were no relevant errors in the `dry-run` invocation.
 1. [ ] Run the script to create a new temporary database user role on the patroni leader and record the output:
    ```bash
-   bundle exec knife ssh "fqdn:${leader_patroni_node}" 'sudo /root/scripts/database-gitlab-superuser-user-role-create.sh --wet-run'
+   bundle exec knife ssh "fqdn:${leader_patroni_node}" 'sudo /root/scripts/user-role-create.sh $GITLAB_USERNAME --wet-run'
    ```
 1. [ ] Confirm that there were no relevant errors in the `wet-run` invocation.
-1. [ ] Record the verbatim character string of the new user role in a field of type `Text` named "`Temporary PostgreSQL superuser role username`" in the environmentally appropriate "`Postgres gitlab-superuser`" Password entry in 1Password.
+1. [ ] Record the verbatim character string of the new user role in a field of type `Text` named "`Temporary PostgreSQL superuser role username`" in the environmentally appropriate "`Postgres <username>`" Password entry in 1Password.
 1. [ ] Wait for replication to "catch up" to the changes in the database of the leader.
    - [ ] Optionally check each node in the patroni cluster to confirm that the new temporary user role exists in each database:
       ```bash
-      bundle exec knife ssh --concurrency 1 "fqdn:patroni-*-db-${GITLAB_ENVIRONMENT}*" 'sudo /usr/local/bin/gitlab-psql --command "\du" | grep "gitlab-superuser-"'
+      bundle exec knife ssh --concurrency 1 "fqdn:patroni-*-db-${GITLAB_ENVIRONMENT}*" 'sudo /usr/local/bin/gitlab-psql --command "\du" | grep "$GITLAB_USERNAME-"'
       ```
-1. [ ] Create (but DO NOT yet merge) a chef MR to change the username defined in `patroni.yml` for the `gitlab-superuser` user role to the name of the new temporary user in the `gitlab-cookbooks/chef-repo/roles/${GITLAB_ENVIRONMENT}-base-db-patroni.json` file, by committing changes to:
+1. [ ] Create (but DO NOT yet merge) a chef MR to change the username defined in `patroni.yml` for the `GITLAB_USERNAME` user role to the name of the new temporary user in the `gitlab-cookbooks/chef-repo/roles/${GITLAB_ENVIRONMENT}-base-db-patroni.json` file, by committing changes to:
    - [ ] Set the `default_attributes.gitlab-patroni.patroni.users.superuser.username` field to the name of the new temporary user, and also...
    - [ ] Set the `default_attributes.gitlab_walg.backup_user` field to the name of the new temporary user.
 1. [ ] Add a link to the MR here: [For example: Configure the staging patroni fleet to use a temporary role with a time-stamped username](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/-/merge_requests/3253)
@@ -112,7 +114,7 @@ To update the credentials for *only* the `gitlab-superuser` user in the PostgreS
    ```bash
    bundle exec knife ssh --concurrency 1 "fqdn:patroni-*-db-${GITLAB_ENVIRONMENT}*" 'sudo systemctl status chef-client --full --no-pager | tail --lines=1'
    ```
-1. [ ] Update the password in the GKMS vault at `gitlab-patroni.patroni.users.superuser.password` to be the temporary database role password (created above) instead of the original password for the original `gitlab-superuser` user role:
+1. [ ] Update the password in the GKMS vault at `gitlab-patroni.patroni.users.superuser.password` to be the temporary database role password (created above) instead of the original password for the original `GITLAB_USERNAME` user role:
    ```bash
    EDITOR=`which vim` bin/gkms-vault-edit gitlab-patroni "${GITLAB_ENVIRONMENT}"
    ```
@@ -135,7 +137,10 @@ To update the credentials for *only* the `gitlab-superuser` user in the PostgreS
    ```bash
    for patroni_node in $(bundle exec knife search node "fqdn:patroni-*-db-${GITLAB_ENVIRONMENT}*" --format=json | jq --raw-output '.rows|=sort_by(.automatic.fqdn)|.rows|.[] .automatic.fqdn'); do DATE=$(date -u '+%Y/%m/%d') ssh "${patroni_node}" "sudo egrep '$DATE.*Wrote backup with name' /var/log/wal-g/wal-g_backup_push.log && hostname --fqdn"; done
    ```
-
+1. [ ] Delete the temporary new password file:
+   ```bash
+   bundle exec knife ssh "fqdn:${leader_patroni_node}" 'sudo rm /root/scripts/.new_password.sh'
+   ```
 
 ### Phase two
 
@@ -146,25 +151,25 @@ Now that the original superuser role is not being used by the patroni cluster or
    export leader_patroni_node=$(ssh "${patroni_node}" 'test -e /usr/bin/jq && sudo /usr/local/bin/gitlab-patronictl list --format json 2>/dev/null' | jq --raw-output '.[] | select(.Role=="Leader").Member')
    echo "${leader_patroni_node}"
    ```
-1. [ ] Dry-run the script to update the original `gitlab-superuser` role with the new password on the patroni leader and record the output:
+1. [ ] Dry-run the script to update the original `GITLAB_USERNAME` role with the new password on the patroni leader and record the output:
    ```bash
-   bundle exec knife ssh "fqdn:${leader_patroni_node}" 'sudo /root/scripts/database-gitlab-superuser-user-role-password-update.sh --dry-run'
+   bundle exec knife ssh "fqdn:${leader_patroni_node}" 'sudo /root/scripts/user-role-password-update.sh $GITLAB_USERNAME --dry-run'
    ```
 1. [ ] Confirm that there were no relevant errors in the `dry-run` invocation.
-1. [ ] Run the script to set the password of the original `gitlab-superuser` role in the database to the new password on the patroni leader and record the output:
+1. [ ] Run the script to set the password of the original `GITLAB_USERNAME` role in the database to the new password on the patroni leader and record the output:
    ```bash
-   bundle exec knife ssh "fqdn:${leader_patroni_node}" 'sudo /root/scripts/database-gitlab-superuser-user-role-password-update.sh --wet-run'
+   bundle exec knife ssh "fqdn:${leader_patroni_node}" 'sudo /root/scripts/user-role-password-update.sh $GITLAB_USERNAME --wet-run'
    ```
 1. [ ] Confirm that there were no relevant errors in the `wet-run` invocation.
 1. [ ] Wait for replication to "catch up" to the changes in the database of the leader.
-   - [ ] Optionally confirm that the change has replicated to each patroni node (You will be repeatedly prompted to enter the new password, so it is recommended that you **turn off any screen-sharing or recording**.  If you paste the new password correctly, but the credentials update has not yet been replicated to all nodes in the patroni cluster, then this error will be displayed: `psql: FATAL:  password authentication failed for user "gitlab-superuser"`):
+   - [ ] Optionally confirm that the change has replicated to each patroni node (You will be repeatedly prompted to enter the new password, so it is recommended that you **turn off any screen-sharing or recording**.  If you paste the new password correctly, but the credentials update has not yet been replicated to all nodes in the patroni cluster, then this error will be displayed: `psql: FATAL:  password authentication failed for user "$GITLAB_USERNAME"`):
       ```bash
-      for patroni_node in $(bundle exec knife search node "fqdn:patroni-*-db-${GITLAB_ENVIRONMENT}*" --format=json | jq --raw-output '.rows|=sort_by(.automatic.fqdn)|.rows|.[] .automatic.fqdn'); do ssh "${patroni_node}" "sudo su --command \"psql --password --port=5432 --host=localhost --username=gitlab-superuser --dbname=gitlabhq_production --tuples-only --quiet --command 'SELECT 1;'\" root"; done
+      for patroni_node in $(bundle exec knife search node "fqdn:patroni-*-db-${GITLAB_ENVIRONMENT}*" --format=json | jq --raw-output '.rows|=sort_by(.automatic.fqdn)|.rows|.[] .automatic.fqdn'); do ssh "${patroni_node}" "sudo su --command \"psql --password --port=5432 --host=localhost --username=$GITLAB_USERNAME --dbname=gitlabhq_production --tuples-only --quiet --command 'SELECT 1;'\" root"; done
       ```
-1. [ ] Create (but DO NOT yet merge) a chef MR to change the username defined in `patroni.yml` for the `gitlab-superuser` user role from the name of the temporary user back to the name of the original user in the `gitlab-cookbooks/chef-repo/roles/${GITLAB_ENVIRONMENT}-base-db-patroni.json` file, by committing changes to:
-   - [ ] Set the `default_attributes.gitlab-patroni.patroni.users.superuser.username` field back to the name of the original `gitlab-superuser` user role, and also...
-   - [ ] Set the `default_attributes.gitlab_wale.backup_user` field back to the name of the original `gitlab-superuser` user role, and also...
-   - [ ] Set the `default_attributes.gitlab_walg.backup_user` field back to the name of the original `gitlab-superuser` user role.
+1. [ ] Create (but DO NOT yet merge) a chef MR to change the username defined in `patroni.yml` for the `GITLAB_USERNAME` user role from the name of the temporary user back to the name of the original user in the `gitlab-cookbooks/chef-repo/roles/${GITLAB_ENVIRONMENT}-base-db-patroni.json` file, by committing changes to:
+   - [ ] Set the `default_attributes.gitlab-patroni.patroni.users.superuser.username` field back to the name of the original `GITLAB_USERNAME` user role, and also...
+   - [ ] Set the `default_attributes.gitlab_wale.backup_user` field back to the name of the original `GITLAB_USERNAME` user role, and also...
+   - [ ] Set the `default_attributes.gitlab_walg.backup_user` field back to the name of the original `GITLAB_USERNAME` user role.
 1. [ ] Add a link to the MR here: [For example: Configure the staging patroni fleet to use the original superuser role](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/-/merge_requests/3992)
 1. [ ] Block/disable the chef-client service with an explanation on all patroni hosts:
    ```bash
@@ -199,6 +204,5 @@ Now that the original superuser role is not being used by the patroni cluster or
 
 ### TODO
 
-1. [ ] Include steps to delete the `/root/scripts/.new_password.sh` from the patroni leader node.
 1. [ ] Delete the temporary superuser role which is no longer being used by any patroni node or database operation.
 
