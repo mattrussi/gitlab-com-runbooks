@@ -85,6 +85,9 @@ metricsCatalog.serviceDefinition({
       userImpacting=false,
       loadBalancerName='ops-prod-proxy',
       projectId='gitlab-ops',
+
+      // No need to alert if Kibana isn't receiving traffic
+      ignoreTrafficCessation=true
     ),
 
     // Stackdriver component represents log messages
