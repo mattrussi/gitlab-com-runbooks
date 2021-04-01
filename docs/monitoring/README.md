@@ -46,8 +46,6 @@
 * [../version/version-gitlab-com.md](../version/version-gitlab-com.md)
 <!-- END_MARKER -->
 
-[[_TOC_]]
-
 ## Introduction
 
 This document describes the monitoring stack used by gitlab.com. "Monitoring
