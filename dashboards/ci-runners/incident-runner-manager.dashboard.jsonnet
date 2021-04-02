@@ -6,6 +6,7 @@ local saturationGraphs = import 'stage-groups/verify-runner/saturation_graphs.li
 
 dashboardIncident.incidentDashboard(
   'runner-manager',
+  'rm',
   description=|||
     Runner Manager is the central point of job execution. It's responsible for asking GitLab for
     new jobs, executing them with the configured executor, collecting and sending back the job log
