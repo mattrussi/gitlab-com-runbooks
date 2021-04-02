@@ -47,14 +47,16 @@ local errorBudgetPanels(group) =
       title='Info',
       mode='markdown',
       content=|||
+        ### [Error budget](https://about.gitlab.com/handbook/engineering/error-budgets/)
+
         These error budget panels show an aggregate of SLIs across all components.
         Though not all components have been implemented yet.
 
-        Read more about how the error budgets are calculated in the
-        [stage group dashboard documentation](https://docs.gitlab.com/ee/development/stage_group_dashboards.html#error-budget).
-
         The [handbook](https://about.gitlab.com/handbook/engineering/error-budgets/)
         explains how these budgets are used.
+
+        Read more about how the error budgets are calculated in the
+        [stage group dashboard documentation](https://docs.gitlab.com/ee/development/stage_group_dashboards.html#error-budget).
 
         The error budget is compared to our SLO of %(slaTarget)s and is always in
         a range of 28 days from the selected end date in Grafana.
@@ -372,7 +374,7 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
     )
     .addPanels(
       if displayBudget then
-        layout.rowGrid('Error Budgets', errorBudgetPanels(group), startRow=100, rowHeight=5)
+        layout.rowGrid('Error Budgets', errorBudgetPanels(group), startRow=100, rowHeight=5, collapse=true)
       else
         []
     )
