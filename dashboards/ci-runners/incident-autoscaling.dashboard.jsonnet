@@ -4,6 +4,7 @@ local dashboardIncident = import 'stage-groups/verify-runner/dashboard_incident.
 
 dashboardIncident.incidentDashboard(
   'autoscaling',
+  'as',
   description=|||
     In short: problems with autoscaling will reduce (even totally) the capacity of our Runners.
 

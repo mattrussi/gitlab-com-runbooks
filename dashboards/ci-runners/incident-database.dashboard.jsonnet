@@ -2,6 +2,7 @@ local dashboardIncident = import 'stage-groups/verify-runner/dashboard_incident.
 
 dashboardIncident.incidentDashboard(
   'database',
+  'db',
   description=|||
     Here we will leave some useful notes for the incidents caused by database problems.
 

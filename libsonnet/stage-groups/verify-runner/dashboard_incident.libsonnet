@@ -6,7 +6,7 @@ local dashboardHelpers = import './dashboard_helpers.libsonnet';
 local jobGraphs = import './job_graphs.libsonnet';
 local jobQueueGraphs = import './job_queue_graphs.libsonnet';
 
-local incidentDashboard(incidentType, description=null) =
+local incidentDashboard(incidentType, incidentTypeTag, description=null) =
   local descriptionPanel = if description != null then
     [
       grafana.text.new(
@@ -27,7 +27,13 @@ local incidentDashboard(incidentType, description=null) =
 
   dashboardHelpers.dashboard(
     'Incident Support: %s' % incidentType,
-    tags=['%s:incident-support' % dashboardHelpers.runnerServiceType]
+    tags=[
+      '%s:incident-support' % dashboardHelpers.runnerServiceType,
+      '%(serviceType)s:incident-%(incidentType)s' % {
+        serviceType: dashboardHelpers.runnerServiceType,
+        incidentType: incidentTypeTag,
+      },
+    ]
   )
   .addTemplates([
     dashboardFilters.jobsRunningForProject,

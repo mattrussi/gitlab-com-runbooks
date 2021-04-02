@@ -2,6 +2,7 @@ local dashboardIncident = import 'stage-groups/verify-runner/dashboard_incident.
 
 dashboardIncident.incidentDashboard(
   'gitlab-application',
+  'gl-app',
   description=|||
     Here we will leave some useful notes for the incidents caused by autoscaling GitLab application stack problems.
 
