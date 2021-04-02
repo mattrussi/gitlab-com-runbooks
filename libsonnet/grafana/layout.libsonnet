@@ -40,10 +40,10 @@ local generateDropOffsets(cellHeights, rowOffsets) =
   // rowGrid method adds the panels as consecutive panels. It makes collapse
   // option doesn't work on child panels of a row. A panel should be a child of
   // a row.
-  rowGrid(rowTitle, panels, startRow)::
+  rowGrid(rowTitle, panels, startRow, rowHeight=10)::
     [
       grafana.row.new(title=rowTitle) { gridPos: { x: 0, y: startRow, w: 24, h: 1 } },
-    ] + self.singleRow(panels, startRow=(startRow + 1)),
+    ] + self.singleRow(panels, rowHeight=rowHeight, startRow=(startRow + 1)),
 
   // Rows -> array of arrays. Each outer array is a row.
   rows(rowsOfPanels, rowHeight=10, startRow=0)::

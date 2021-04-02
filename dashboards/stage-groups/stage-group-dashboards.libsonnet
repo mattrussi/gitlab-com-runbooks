@@ -8,6 +8,7 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local platformLinks = import '../platform_links.libsonnet';
 local singleMetricRow = import 'key-metric-panels/single-metric-row.libsonnet';
 local aggregationSets = import '../../metrics-catalog/aggregation-sets.libsonnet';
+local errorBudget = import 'stage-groups/error_budget.libsonnet';
 
 local actionLegend(type) =
   if type == 'api' then '{{action}}' else '{{controller}}#{{action}}';
@@ -37,6 +38,45 @@ local actionFilter(featureCategoriesSelector) =
     includeAll=true,
     allValues='.*'
   );
+
+local errorBudgetPanels(group) =
+  [
+    errorBudget.availabilityStatPanel(group.key, '28d'),
+    errorBudget.timeSpentStatPanel(group.key, '28d'),
+    grafana.text.new(
+      title='Info',
+      mode='markdown',
+      content=|||
+        These error budget panels show an aggregate of SLIs across all components.
+        Though not all components have been implemented yet.
+
+        Read more about how the error budgets are calculated in the
+        [stage group dashboard documentation](https://docs.gitlab.com/ee/development/stage_group_dashboards.html#error-budget).
+
+        The [handbook](https://about.gitlab.com/handbook/engineering/error-budgets/)
+        explains how these budgets are used.
+
+        The error budget is compared to our SLO of %(slaTarget)s and is always in
+        a range of 28 days from the selected end date in Grafana.
+
+        ### Availability
+
+        The availability shows the percentage operations labeled with one of the
+        categories owned by %(groupName)s comleted satisfactory.
+
+        ### Budget spent
+
+        The budget spent shows the time spent during the past 28 days on operations
+        that did not complete satisfactory.
+
+        For example, if there were 43200 (28 * 24 * 60) operations for %(groupName)s the last
+        28 days, and 10 of them did not meet SLO, this means 10 minutes were spent.
+      ||| % {
+        slaTarget: '%.2f%%' % (errorBudget.slaTarget * 100.0),
+        groupName: group.name,
+      },
+    ),
+  ];
 
 local railsRequestRate(type, featureCategories, featureCategoriesSelector) =
   basic.timeseries(
@@ -273,32 +313,10 @@ local sidekiqJobRate(counter, title, description, featureCategoriesSelector) =
     }
   );
 
-local featureCategorySLIs(featureCategoriesSelector, typeSelector) =
-  singleMetricRow.row(
-    // This will aggregate all thresholds into an average. This means that all
-    // series will be judged on an average threshold that does not match how the
-    // service is normally judged.
-    // We'll improve this while iterating on
-    // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/888
-    serviceType={ re: typeSelector },
-    aggregationSet=aggregationSets.globalFeatureCategorySLIs,
-    selectorHash={ feature_category: { re: featureCategoriesSelector }, environment: '$environment', stage: '$stage' },
-    titlePrefix='SLIs',
-    stableIdPrefix='puma-slis',
-    // For now, we'll show a series per feature category. We can't easily
-    // aggregate this using a `min` right now, because a feature category with
-    // low RPS could hide a busy one that's performing well.
-    legendFormatPrefix='{{ type }} {{ feature_category }}',
-    expectMultipleSeries=true,
-    showApdex=true,
-    showErrorRatio=true,
-    showOpsRate=true,
-  );
-
 local requestComponents = std.set(['web', 'api', 'git']);
 local backgroundComponents = std.set(['sidekiq']);
 local validComponents = std.setUnion(requestComponents, backgroundComponents);
-local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false) =
+local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false, displayBudget=true) =
   assert std.type(components) == 'array' : 'Invalid components argument type';
 
   local setComponents = std.set(components);
@@ -353,12 +371,13 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
         []
     )
     .addPanels(
+      if displayBudget then
+        layout.rowGrid('Error Budgets', errorBudgetPanels(group), startRow=100, rowHeight=5)
+      else
+        []
+    )
+    .addPanels(
       if std.length(enabledRequestComponents) != 0 then
-        layout.splitColumnGrid(
-          featureCategorySLIs(featureCategoriesSelector, typeSelector),
-          [7, 1],
-          startRow=200
-        ) +
         layout.rowGrid(
           'Rails Request Rates',
           [

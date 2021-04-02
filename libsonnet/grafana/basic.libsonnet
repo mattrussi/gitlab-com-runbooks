@@ -954,8 +954,17 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
     query,
     legendFormat,
     unit='',
-    instant=true
+    decimals=0,
+    instant=true,
   )::
+    local steps = if std.type(color) == 'string' then
+      [
+        {
+          color: color,
+          value: null,
+        },
+      ] else
+      color;
     {
       links: [],
       options: {
@@ -970,17 +979,12 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
           defaults: {
             thresholds: {
               mode: 'absolute',
-              steps: [
-                {
-                  color: color,
-                  value: null,
-                },
-              ],
+              steps: steps,
             },
             mappings: [],
             title: title,
             unit: unit,
-            decimals: 0,
+            decimals: decimals,
           },
           overrides: [],
         },
