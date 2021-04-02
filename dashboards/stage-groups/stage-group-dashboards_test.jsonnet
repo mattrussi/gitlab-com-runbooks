@@ -3,9 +3,6 @@ local test = import 'github.com/yugui/jsonnetunit/jsonnetunit/test.libsonnet';
 
 local errorBudgetTitles = [
   'Error Budgets',
-  'Availability',
-  'Budget Spent',
-  'Info',
 ];
 
 test.suite({
