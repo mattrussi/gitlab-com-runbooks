@@ -36,7 +36,7 @@ stageGroupDashboards.dashboard('continuous_integration')
     ),
     basic.timeseries(
       title='Rate of build logs streamed',
-      description='The total rate of partial build logs received by that were sent by runners.',
+      description='The total rate of partial build logs received by that were sent by runners',
       query=|||
         sum(
           rate(
@@ -53,7 +53,7 @@ stageGroupDashboards.dashboard('continuous_integration')
     ),
     basic.timeseries(
       title='Rate of invalid build logs detected',
-      description='The total rate of invalid build logs detected (including mutated ones).',
+      description='The total rate of invalid build logs detected (including mutated ones)',
       query=|||
         sum(
           rate(
@@ -70,7 +70,7 @@ stageGroupDashboards.dashboard('continuous_integration')
     ),
     basic.timeseries(
       title='Rate of corrupted build logs detected',
-      description='The total rate of corrupted build logs detected.',
+      description='The total rate of corrupted build logs detected',
       query=|||
         sum(
           rate(
@@ -87,7 +87,7 @@ stageGroupDashboards.dashboard('continuous_integration')
     ),
     basic.timeseries(
       title='All metrics for build logs',
-      description='The rate of different operations happening related to build logs.',
+      description='The rate of different operations happening related to build logs',
       query=|||
         sum(
           rate(
@@ -103,7 +103,7 @@ stageGroupDashboards.dashboard('continuous_integration')
     ),
     basic.timeseries(
       title='Throughput of build logs processing',
-      description='Rate of build logs received from the runners in bytes.',
+      description='Rate of build logs received from the runners in bytes',
       query=|||
         sum(
           rate(
@@ -119,5 +119,380 @@ stageGroupDashboards.dashboard('continuous_integration')
       yAxisLabel='Bytes received per second',
     ),
   ], cols=2, startRow=1001)
+)
+.addPanel(
+  grafana.row.new(title='Metrics for builds queuing'),
+  gridPos={ x: 0, y: 1100, w: 24, h: 1 }
+)
+.addPanels(
+  layout.grid([
+    grafana.text.new(
+      title='Metrics for CI/CD build queuing',
+      mode='markdown',
+      content=|||
+        Panels available here show detailed metrics for CI/CD build queuing mechanisms.
+      |||
+    ),
+    basic.timeseries(
+      title='Rate of builds queue operations',
+      description='The rate of various operations related to builds queuing.',
+      query=|||
+        sum(
+          rate(
+            gitlab_ci_queue_operations_total{
+              environment="$environment",
+              stage="$stage",
+            }[$__interval]
+          )
+        ) by (operation)
+      |||,
+      legendFormat='queuing operation {{ operation }}',
+      yAxisLabel='Rate per second',
+    ),
+    basic.timeseries(
+      title='Rate of builds queuing results',
+      description='Rate of builds queuing results per second.',
+      query=|||
+        sum(
+          rate(
+            gitlab_ci_queue_depth_total_count{
+              environment="$environment",
+              stage="$stage"
+            }[$__interval]
+          )
+        ) by (queue)
+      |||,
+      legendFormat='queuing result {{ queue }}',
+      yAxisLabel='Rate per second',
+    ),
+    basic.multiTimeseries(
+      stableId='builds-queue-big-query-duration',
+      title='Duration of the builds queue retrieval using the big query SQL',
+      queries=[{
+        query: |||
+          histogram_quantile(
+            0.50,
+            sum(
+              rate(
+                gitlab_ci_queue_retrieval_duration_seconds_bucket{
+                  environment="$environment",
+                  stage="$stage"
+                }[$__interval]
+              )
+            ) by (le, runner_type)
+          )
+        |||,
+        legendFormat: 'queue duration for {{ runner_type }} runner - p50',
+      }, {
+        query: |||
+          histogram_quantile(
+            0.90,
+            sum(
+              rate(
+                gitlab_ci_queue_retrieval_duration_seconds_bucket{
+                  environment="$environment",
+                  stage="$stage"
+                }[$__interval]
+              )
+            ) by (runner_type)
+          )
+        |||,
+        legendFormat: 'queue duration for {{ runner_type }} runner - p90',
+      }, {
+        query: |||
+          histogram_quantile(
+            0.99,
+            sum(
+              rate(
+                gitlab_ci_queue_retrieval_duration_seconds_bucket{
+                  environment="$environment",
+                  stage="$stage"
+                }[$__interval]
+              )
+            ) by (le, runner_type)
+          )
+        |||,
+        legendFormat: 'queue duration for {{ runner_type }} runner - p99',
+      }],
+      format='s',
+    ),
+    basic.multiTimeseries(
+      stableId='builds-queue-size',
+      title='Size of the builds queue per runner type',
+      queries=[{
+        query: |||
+          histogram_quantile(
+            0.50,
+            sum(
+              rate(
+                gitlab_ci_queue_size_total_bucket{
+                  environment="$environment",
+                  stage="$stage"
+                }[$__interval]
+              )
+            ) by (le, runner_type)
+          )
+        |||,
+        legendFormat: 'queue size for {{ runner_type }} runner - p50',
+      }, {
+        query: |||
+          histogram_quantile(
+            0.90,
+            sum(
+              rate(
+                gitlab_ci_queue_size_total_bucket{
+                  environment="$environment",
+                  stage="$stage"
+                }[$__interval]
+              )
+            ) by (le, runner_type)
+          )
+        |||,
+        legendFormat: 'queue size for {{ runner_type }} runner - p90',
+      }, {
+        query: |||
+          histogram_quantile(
+            0.99,
+            sum(
+              rate(
+                gitlab_ci_queue_size_total_bucket{
+                  environment="$environment",
+                  stage="$stage"
+                }[$__interval]
+              )
+            ) by (le, runner_type)
+          )
+        |||,
+        legendFormat: 'queue size for {{ runner_type }} runner - p99',
+      }],
+    ),
+    basic.multiTimeseries(
+      stableId='builds-queue-depth',
+      title='Depth of the builds queue per queuing result',
+      queries=[{
+        query: |||
+          histogram_quantile(
+            0.50,
+            sum(
+              rate(
+                gitlab_ci_queue_depth_total_bucket{
+                  environment="$environment",
+                  stage="$stage"
+                }[$__interval]
+              )
+            ) by (le, queue)
+          )
+        |||,
+        legendFormat: 'queue depth for {{ queue }} result - p50',
+      }, {
+        query: |||
+          histogram_quantile(
+            0.90,
+            sum(
+              rate(
+                gitlab_ci_queue_depth_total_bucket{
+                  environment="$environment",
+                  stage="$stage"
+                }[$__interval]
+              )
+            ) by (le, queue)
+          )
+        |||,
+        legendFormat: 'queue depth for {{ queue }} result - p90',
+      }, {
+        query: |||
+          histogram_quantile(
+            0.99,
+            sum(
+              rate(
+                gitlab_ci_queue_depth_total_bucket{
+                  environment="$environment",
+                  stage="$stage"
+                }[$__interval]
+              )
+            ) by (le, queue)
+          )
+        |||,
+        legendFormat: 'queue depth for {{ queue }} result - p99',
+      }],
+    ),
+  ], cols=2, startRow=1101)
+)
+.addPanel(
+  grafana.row.new(title='Metrics for pipeline creation'),
+  gridPos={ x: 0, y: 1200, w: 24, h: 1 }
+)
+.addPanels(
+  layout.grid([
+    grafana.text.new(
+      title='Metrics for CI/CD pipeline creation',
+      mode='markdown',
+      content=|||
+        Panels available here show detailed metrics for CI/CD pipeline creation.
+      |||
+    ),
+    basic.timeseries(
+      title='Aggregated rate of pipelines created',
+      description='The aggregated rate of pipeline creation.',
+      query=|||
+        sum(
+          rate(
+            pipelines_created_total{
+              environment="$environment",
+              stage="$stage",
+            }[$__interval]
+          )
+        )
+      |||,
+      yAxisLabel='Rate per second',
+    ),
+    basic.timeseries(
+      title='Rate of pipeline creation by pipeline source',
+      description='Rate of pipeline creation by pipeline source.',
+      query=|||
+        sum(
+          rate(
+            pipelines_created_total{
+              environment="$environment",
+              stage="$stage"
+            }[$__interval]
+          )
+        ) by (source)
+      |||,
+      legendFormat='Pipeline source {{ source }}',
+      yAxisLabel='Rate per second',
+    ),
+    basic.multiTimeseries(
+      stableId='pipeline-creation-duration',
+      title='Duration of the pipeline creation chain',
+      queries=[{
+        query: |||
+          histogram_quantile(
+            0.50,
+            sum(
+              rate(
+                gitlab_ci_pipeline_creation_duration_seconds_bucket{
+                  environment="$environment",
+                  stage="$stage"
+                }[$__interval]
+              )
+            ) by (le)
+          )
+        |||,
+        legendFormat: 'pipeline creation duration - p50',
+      }, {
+        query: |||
+          histogram_quantile(
+            0.90,
+            sum(
+              rate(
+                gitlab_ci_pipeline_creation_duration_seconds_bucket{
+                  environment="$environment",
+                  stage="$stage"
+                }[$__interval]
+              )
+            ) by (le)
+          )
+        |||,
+        legendFormat: 'pipeline creation duration - p90',
+      }, {
+        query: |||
+          histogram_quantile(
+            0.99,
+            sum(
+              rate(
+                gitlab_ci_pipeline_creation_duration_seconds_bucket{
+                  environment="$environment",
+                  stage="$stage"
+                }[$__interval]
+              )
+            ) by (le)
+          )
+        |||,
+        legendFormat: 'pipeline creation duration - p99',
+      }],
+      format='s',
+    ),
+    basic.multiTimeseries(
+      stableId='pipeline-size',
+      title='Pipeline size by pipeline source',
+      queries=[{
+        query: |||
+          histogram_quantile(
+            0.50,
+            sum(
+              rate(
+                gitlab_ci_pipeline_size_builds_bucket{
+                  environment="$environment",
+                  stage="$stage"
+                }[$__interval]
+              )
+            ) by (le, source)
+          )
+        |||,
+        legendFormat: 'pipeline size for {{ source }} source - p50',
+      }, {
+        query: |||
+          histogram_quantile(
+            0.90,
+            sum(
+              rate(
+                gitlab_ci_pipeline_size_builds_bucket{
+                  environment="$environment",
+                  stage="$stage"
+                }[$__interval]
+              )
+            ) by (le, source)
+          )
+        |||,
+        legendFormat: 'pipeline size for {{ source }} pipeline - p90',
+      }, {
+        query: |||
+          histogram_quantile(
+            0.99,
+            sum(
+              rate(
+                gitlab_ci_pipeline_size_builds_bucket{
+                  environment="$environment",
+                  stage="$stage"
+                }[$__interval]
+              )
+            ) by (le, source)
+          )
+        |||,
+        legendFormat: 'pipeline size for {{ source }} source - p99',
+      }],
+    ),
+  ], cols=2, startRow=1201)
+)
+.addPanel(
+  grafana.row.new(title='Metrics for pipeline processing'),
+  gridPos={ x: 0, y: 1400, w: 24, h: 1 }
+)
+.addPanels(
+  layout.grid([
+    grafana.text.new(
+      title='Metrics for CI/CD pipeline processing',
+      mode='markdown',
+      content=|||
+        Panels available here show detailed metrics for CI/CD pipeline processing.
+      |||
+    ),
+    basic.timeseries(
+      title='Rate of pipelines processing events',
+      description='Rate of pipeline processing events.',
+      query=|||
+        sum(
+          rate(
+            gitlab_ci_pipeline_processing_events_total{
+              environment="$environment",
+              stage="$stage",
+            }[$__interval]
+          )
+        )
+      |||,
+      yAxisLabel='Rate per second',
+    ),
+  ], cols=2, startRow=1401)
 )
 .stageGroupDashboardTrailer()
