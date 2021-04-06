@@ -98,7 +98,7 @@ local indexCatalog = {
     defaultSeriesSplitField: 'json.grpc.method.keyword',
     failureFilter: [mustNot(matchFilter('json.grpc.code', 'OK')), existsFilter('json.grpc.code')],
     defaultLatencyField: 'json.grpc.time_ms',
-    prometheusLabelMappings: {
+    prometheusLabelMappings+: {
       fqdn: 'json.fqdn',
     },
     latencyFieldUnitMultiplier: 1000,
@@ -599,7 +599,7 @@ local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latency
    * to convert it into a ES matcher.
    * Returns an array of zero or more matchers.
    *
-   * TODO: for now, only supports equal matches, improve this
+   * TODO: for now, only supports equal matches, re (single value), eq, ne, improve this
    */
   getMatchersForPrometheusSelectorHash(index, selectorHash)::
     local prometheusLabelMappings = defaultPrometheusLabelMappings + indexCatalog[index].prometheusLabelMappings;
@@ -607,9 +607,23 @@ local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latency
     std.flatMap(
       function(label)
         if std.objectHas(prometheusLabelMappings, label) then
+          local selectorValue = selectorHash[label];
+
           // A mapping from this prometheus label to a ES field exists
-          if std.isString(selectorHash[label]) then  // TODO: improve this by expanding this to include eq, ne etc
-            [matchFilter(prometheusLabelMappings[label], selectorHash[label])]
+          if std.isString(selectorValue) then
+            [matchFilter(prometheusLabelMappings[label], selectorValue)]
+          else if std.objectHas(selectorValue, 're') then
+            // Most of the time, re contains a single value,
+            // so treating it as such is better than ignoring
+            [matchFilter(prometheusLabelMappings[label], selectorValue.re)]
+          else if std.objectHas(selectorValue, 'eq') then
+            // Most of the time, re contains a single value,
+            // so treating it as such is better than ignoring
+            [matchFilter(prometheusLabelMappings[label], selectorValue.eq)]
+          else if std.objectHas(selectorValue, 'ne') then
+            // Most of the time, re contains a single value,
+            // so treating it as such is better than ignoring
+            [mustNot(matchFilter(prometheusLabelMappings[label], selectorValue.ne))]
           else
             []
         else
