@@ -672,7 +672,6 @@ local pgbouncerSyncPool(serviceType, role) =
       tier: 'inf',
       stage: 'main',
     },
-
     appliesTo: ['nat'],
     description: |||
       Each NAT IP address on a Cloud NAT gateway offers 64,512 TCP source ports and 64,512 UDP source ports.
@@ -684,18 +683,31 @@ local pgbouncerSyncPool(serviceType, role) =
       More details in the Cloud NAT documentation: https://cloud.google.com/nat/docs/ports-and-addresses
     |||,
     grafana_dashboard_uid: 'sat_nat_gw_port_allocation',
-    resourceLabels: ['nat_ip', 'gateway_name', 'project_id'],  // Each nat_ip has 64512 ports for allocation
+    resourceLabels: ['gateway_name', 'project_id'],
     burnRatePeriod: '5m',  // This needs to be high, since the StackDriver export only updates infrequently
+    queryFormatConfig: {
+      // From https://cloud.google.com/nat/docs/ports-and-addresses#ports
+      // Each NAT IP address on a Cloud NAT gateway offers 64,512 TCP source ports
+      max_ports_per_nat_ip: 64512,
+    },
     query: |||
-      max_over_time(
+      sum without(nat_ip) (
         stackdriver_nat_gateway_router_googleapis_com_nat_allocated_ports{
           job="stackdriver",
           project_id=~"gitlab-production|gitlab-staging-1",
           %(selector)s
-        }[%(rangeInterval)s]
+        }
       )
       /
-      64512
+      (
+        %(max_ports_per_nat_ip)d * count without(nat_ip) (
+          stackdriver_nat_gateway_router_googleapis_com_nat_allocated_ports{
+            job="stackdriver",
+            project_id=~"gitlab-production|gitlab-staging-1",
+            %(selector)s
+          }
+        )
+      )
     |||,
     slos: {
       soft: 0.80,
