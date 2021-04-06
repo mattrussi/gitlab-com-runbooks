@@ -275,7 +275,7 @@ which is populated from jsonnet in [runbooks/thanos-rules-jsonnet](https://gitla
 
 ### Alertmanager
 
-We run a single Alertmanager service in our ops cluster. All Prometheus instances
+We run a single Alertmanager service. It runs in our ops cluster. All Prometheus instances
 (and thanos-rule, which can send alerts) make direct connections to each
 Alertmanager pod. This is made possible by:
 
@@ -381,7 +381,7 @@ go wrong.
        notified.
      - If the Alertmanager itself is down, all snitches will notify.
 
-### Black-box monitoring
+### External black-box monitoring
 
 Finally, we also use an external third-party service, Pingdom, to notify us when
 certain public services (e.g. gitlab.com) are down to it, as a last line of
@@ -390,6 +390,7 @@ defence.
 
 ## Other materials
 
+- ["Prometheus: Up & Running" book](https://www.oreilly.com/library/view/prometheus-up/9781492034131/)
 - <https://about.gitlab.com/handbook/engineering/monitoring>
 - <https://about.gitlab.com/handbook/engineering/monitoring/#related-videos>
 - [A recent "Prometheus 101" video](https://www.youtube.com/watch?v=KXs50X2Td2I) (private, you'll need a "GitLab Unfiltered" Youtube login).
