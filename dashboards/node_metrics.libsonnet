@@ -6,11 +6,12 @@ local graphPanel = grafana.graphPanel;
 local row = grafana.row;
 local seriesOverrides = import 'grafana/series_overrides.libsonnet';
 local thresholds = import 'thresholds.libsonnet';
+local selectors = import 'promql/selectors.libsonnet';
 
 {
   nodeMetricsDetailRow(nodeSelector)::
     local formatConfig = {
-      nodeSelector: nodeSelector,
+      nodeSelector: selectors.serializeHash(nodeSelector),
     };
     row.new(title='🖥️ Node Metrics', collapse=true)
     .addPanels(layout.grid([
