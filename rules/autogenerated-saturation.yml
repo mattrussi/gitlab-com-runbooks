@@ -368,15 +368,23 @@ groups:
       max by(environment) (
         clamp_min(
           clamp_max(
-            max_over_time(
+            sum by (gateway_name, env) (
               stackdriver_nat_gateway_router_googleapis_com_nat_allocated_ports{
                 job="stackdriver",
                 project_id=~"gitlab-production|gitlab-staging-1",
                 environment!=""
-              }[5m]
+              }
             )
             /
-            64512
+            sum without(nat_ip) (
+              64512 * group by (gateway_name, env, nat_ip) (
+                stackdriver_nat_gateway_router_googleapis_com_nat_allocated_ports{
+                  job="stackdriver",
+                  project_id=~"gitlab-production|gitlab-staging-1",
+                  environment!=""
+                }
+              )
+            )
             ,
             1)
         ,
@@ -2463,18 +2471,26 @@ groups:
       grafana_panel_id: '1436589381'
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, nat_ip, gateway_name, project_id) (
+        max by(environment, gateway_name, project_id) (
           clamp_min(
             clamp_max(
-              max_over_time(
+              sum by (gateway_name, env) (
                 stackdriver_nat_gateway_router_googleapis_com_nat_allocated_ports{
                   job="stackdriver",
                   project_id=~"gitlab-production|gitlab-staging-1",
                   environment="{{ $labels.environment }}"
-                }[5m]
+                }
               )
               /
-              64512
+              sum without(nat_ip) (
+                64512 * group by (gateway_name, env, nat_ip) (
+                  stackdriver_nat_gateway_router_googleapis_com_nat_allocated_ports{
+                    job="stackdriver",
+                    project_id=~"gitlab-production|gitlab-staging-1",
+                    environment="{{ $labels.environment }}"
+                  }
+                )
+              )
               ,
               1)
           ,
