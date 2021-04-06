@@ -368,7 +368,7 @@ groups:
       max by(environment) (
         clamp_min(
           clamp_max(
-            sum by (gateway_name, env) (
+            sum without(nat_ip) (
               stackdriver_nat_gateway_router_googleapis_com_nat_allocated_ports{
                 job="stackdriver",
                 project_id=~"gitlab-production|gitlab-staging-1",
@@ -376,8 +376,8 @@ groups:
               }
             )
             /
-            sum without(nat_ip) (
-              64512 * group by (gateway_name, env, nat_ip) (
+            (
+              64512 * count without(nat_ip) (
                 stackdriver_nat_gateway_router_googleapis_com_nat_allocated_ports{
                   job="stackdriver",
                   project_id=~"gitlab-production|gitlab-staging-1",
@@ -2474,7 +2474,7 @@ groups:
         max by(environment, gateway_name, project_id) (
           clamp_min(
             clamp_max(
-              sum by (gateway_name, env) (
+              sum without(nat_ip) (
                 stackdriver_nat_gateway_router_googleapis_com_nat_allocated_ports{
                   job="stackdriver",
                   project_id=~"gitlab-production|gitlab-staging-1",
@@ -2482,8 +2482,8 @@ groups:
                 }
               )
               /
-              sum without(nat_ip) (
-                64512 * group by (gateway_name, env, nat_ip) (
+              (
+                64512 * count without(nat_ip) (
                   stackdriver_nat_gateway_router_googleapis_com_nat_allocated_ports{
                     job="stackdriver",
                     project_id=~"gitlab-production|gitlab-staging-1",

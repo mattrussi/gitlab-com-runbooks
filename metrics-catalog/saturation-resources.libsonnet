@@ -688,10 +688,10 @@ local pgbouncerSyncPool(serviceType, role) =
     queryFormatConfig: {
       // From https://cloud.google.com/nat/docs/ports-and-addresses#ports
       // Each NAT IP address on a Cloud NAT gateway offers 64,512 TCP source ports
-      max_ports_per_nat_ip: 64512
+      max_ports_per_nat_ip: 64512,
     },
     query: |||
-      sum by (gateway_name, env) (
+      sum without(nat_ip) (
         stackdriver_nat_gateway_router_googleapis_com_nat_allocated_ports{
           job="stackdriver",
           project_id=~"gitlab-production|gitlab-staging-1",
@@ -699,8 +699,8 @@ local pgbouncerSyncPool(serviceType, role) =
         }
       )
       /
-      sum without(nat_ip) (
-        %(max_ports_per_nat_ip)d * group by (gateway_name, env, nat_ip) (
+      (
+        %(max_ports_per_nat_ip)d * count without(nat_ip) (
           stackdriver_nat_gateway_router_googleapis_com_nat_allocated_ports{
             job="stackdriver",
             project_id=~"gitlab-production|gitlab-staging-1",
