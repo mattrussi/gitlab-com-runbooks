@@ -132,6 +132,10 @@ metricsCatalog.serviceDefinition({
       ),
 
       significantLabels: ['fqdn'],
+
+      toolingLinks: [
+        toolingLinks.kibana(title='Image Resizer', index='workhorse_imageresizer', type='web'),
+      ],
     },
 
     puma: {
