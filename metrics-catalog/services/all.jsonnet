@@ -28,6 +28,7 @@
   import 'redis.jsonnet',
   import 'registry.jsonnet',
   import 'search.jsonnet',
+  import 'sentry.jsonnet',
   import 'sidekiq.jsonnet',
   import 'waf.jsonnet',
   import 'web-pages.jsonnet',

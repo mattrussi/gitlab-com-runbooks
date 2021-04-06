@@ -2469,6 +2469,69 @@ services:
       grafana_folder:
       primary_grafana_dashboard: "nfs-main/nfs-overview"
 
+- name: sentry
+  tier: inf
+  friendly_name: Monitoring
+  infra_owner: sre_observability
+  label: Service:Sentry
+  business:
+    requirement: |
+      It is needed to collect, prioritize, and view error events
+      in several applications.
+    customers:
+      - Internally for viewing errors
+    business_value: |
+      It gives visibility into errors we might see in different applications we manage.
+    SLA:
+      availability:
+      response_time:
+  technical:
+    project:
+      - https://github.com/getsentry/sentry
+    slx:
+    documents:
+      design:
+      architecture:
+      readiness_review:
+      service:
+      security:
+    dependencies:
+      - service:
+    configurations:
+      - config_name: sentry/config.yml
+        location: /etc/sentry
+    chef_roles:
+      - ops-infra-sentry
+    scalability:
+      bound: disk
+      scalable: vertical
+    security:
+      security_reviewed:
+      data_classification:
+      security_incidents:
+    logging:
+      - name: system
+        permalink: https://log.gprd.gitlab.net/goto/b4618f79f80f44cb21a32623a275a0e6
+
+  infrastructure:
+    provider: gcp
+    architecture:
+    provisioning: terraform
+    accesses:
+      - account_name:
+        access_type:
+        reviewed:
+  operations:
+    maintenance:
+    runbooks:
+      - https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/monitoring/sentry-is-down.md
+    playbooks:
+    error_budget:
+  observability:
+    monitors:
+      grafana_folder: sentry
+      primary_grafana_dashboard: "sentry-main/sentry-overview"
+
 - name: sidekiq
   tier: sv
   friendly_name: Sidekiq Background Jobs
