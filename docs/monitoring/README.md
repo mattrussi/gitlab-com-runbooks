@@ -140,7 +140,7 @@ intuitive instrumentation without worrying about having to relay environmental
 context such as which server group it is running in, or whether it's production
 or not. Context can be added to metrics in a few places in its lifecycle:
 
-1. At scrape time, by Prometheus service discovery rules.
+1. At scrape time, by relabeling in Prometheus service discovery configurations.
    1. Kubernetes / GCE labels can be functionally mapped to metric labels using
       custom rules.
    1. Static labels can be applied per scrape-job.
@@ -149,14 +149,16 @@ or not. Context can be added to metrics in a few places in its lifecycle:
       at this level.
    1. This adds "external context" to metrics. Hostnames, service types, shards,
       stages, etc.
-1. If the metric is the result of a rule (recording or alerting), by static
-   labels on that rule definition.
+1. If the metric is the result of a rule (whether recording or alerting), by
+   static labels on that rule definition.
    1. e.g. for an alert: `{severity="S1"}`.
 1. Static "external labels", applied at the prometheus server level.
    1. e.g. `{env="gprd", monitor="db"}`
    1. These are added by prometheus when a metric is part of an alerting rule,
       and sent to alertmanager, but are not stored in the TSDB and cannot be
       queried.
+         - Note that these external labels are additional to the rule-level
+           labels that might have already been defined - see point above.
          - There was an open issue on prometheus to change this, but I can't
            find it.
    1. These are also applied by thanos-sidecar (more later) so _are_ exposed to
@@ -171,23 +173,25 @@ or not. Context can be added to metrics in a few places in its lifecycle:
 
 "Jobs" in Prometheus terminology are instructions to pull ("scrape") metrics
 from a set of exporter endpoints. Typically, our GCE Prometheus nodes typically
-monitor jobs deployed via Chef to VMs, and use static file service discovery,
-with the endpoints for each job and their labels populated by Chef from our
-inventory. Our GKE Prometheus nodes typically monitor jobs deployed to
-Kubernetes, and as such use Kubernetes service discovery to build lists of
-endpoints and map pod/service labels to Prometheus labels.
+only monitor jobs that are themselves deployed via Chef to VMs, using static
+file service discovery, with the endpoints for each job and their labels
+populated by Chef from our Chef inventory.
 
-### Sharding
+Our GKE Prometheus nodes typically only monitor jobs deployed to Kubernetes, and
+as such use Kubernetes service discovery to build lists of endpoints and map
+pod/service labels to Prometheus labels.
+
+### Job partitioning
 
 We run Prometheus in redundant pairs so that we can still scrape metrics and
 send alerts when performing rolling updates, and to survive single-node failure.
 We run several Prometheus pairs, each with a different set of scrape jobs.
 
-Prometheus itself can only really be scaled by sharding jobs across different
-instances of it, and directing queries to the relevant shard. At the time of
-writing, our Prometheus sharding layout is in a state of flux, due to the
-ongoing Kubernetes migrations. A given Prometheus shard is primarily identified
-by the following 3 external labels:
+Prometheus can be scaled by partitioning jobs across different instances of it,
+and directing queries to the relevant partition (often referred to as a shard).
+At the time of writing, our Prometheus partitioning layout is in a state of
+flux, due to the ongoing Kubernetes migrations. A given Prometheus partition is
+primarily identified by the following 3 external labels:
 
 - **env**: loosely corresponds to a Google project. E.g. gprd, gstg, ops.
    - It can refer to a GitLab SaaS environment (gprd, gstg, pre), our
@@ -291,7 +295,7 @@ The alertmanager routing tree is defined in
 
 ## Scaling Prometheus (Thanos)
 
-In the "Sharding" section above we've already discussed how Prometheus'
+In the "Job partitioning" section above we've already discussed how Prometheus'
 write/alerting path is sharded by scrape job. This gives us some problems in the
 read/query path though:
 
@@ -311,24 +315,29 @@ The [Thanos project](https://thanos.io) aims to solve all of these problems:
 
 We deploy:
 
-- thanos-sidecar, colocated with each Prometheus instance
+- thanos-sidecar
+   - colocated with each prometheus instance
    - uploads metrics from TSDB disk to object storage buckets
    - Answers queries from thanos-query, including external labels on metrics so
      that they can be attributed to an environment / shard.
 - thanos-query
+   - to our ops environment
    - Queries recent metrics from all Prometheus instances (via thanos-sidecar)
    - Queries longer-term metrics from thanos-store.
    - Available for ad-hoc queries at <https://thanos.gitlab.net>.
    - You'll usually actually be interacting with thanos-query-frontend, a
      caching layer, but this is somewhat of an implementation detail.
 - thanos-store
+   - one deployment per bucket, so one per environment / google project
    - Provides a gateway to the metrics buckets populated by thanos-sidecar.
    - These are deployed to each environment separately. Each environment (Google
      project) gets its own bucket.
 - thanos-compact
+   - a singleton per bucket, so one per environment / google project
    - a background component that builds downsampled metrics and applies
      retention lifecycle rules.
 - thanos-rule
+   - to our ops environment
    - already discussed in "alerting" above, although evaluates many non-alerting
      rules too.
 
@@ -387,8 +396,21 @@ Finally, we also use an external third-party service, Pingdom, to notify us when
 certain public services (e.g. gitlab.com) are down to it, as a last line of
 defence.
 
+## Architecture
 
-## Other materials
+## Performance
+
+## Scalability
+
+## Availability
+
+## Durability
+
+## Security/Compliance
+
+## Monitoring/Alerting
+
+## Links to further Documentation
 
 - ["Prometheus: Up & Running" book](https://www.oreilly.com/library/view/prometheus-up/9781492034131/)
 - <https://about.gitlab.com/handbook/engineering/monitoring>
