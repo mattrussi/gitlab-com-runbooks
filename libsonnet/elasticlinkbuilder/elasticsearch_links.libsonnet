@@ -2,7 +2,7 @@ local rison = import 'rison.libsonnet';
 
 local grafanaTimeFrom = '${__from:date:iso}';
 local grafanaTimeTo = '${__to:date:iso}';
-local grafanaTimeRange = "&_g=(time:(from:'" + grafanaTimeFrom + "',to:'" + grafanaTimeTo + "'))";
+local grafanaTimeRange = "(time:(from:'" + grafanaTimeFrom + "',to:'" + grafanaTimeTo + "'))";
 
 // Builds an ElasticSearch match filter clause
 local matchFilter(field, value) =
@@ -69,6 +69,12 @@ local indexDefaults = {
   kibanaEndpoint: 'https://log.gprd.gitlab.net/app/kibana',
   prometheusLabelMappings: {},
 };
+
+local globalState(str) =
+  if str == null || str == '' then
+    ''
+  else
+    '&_g=' + str;
 
 // These are default prometheus label mappings, for mapping
 // between prometheus labels and their equivalent ELK fields
@@ -170,7 +176,7 @@ local indexCatalog = {
 
   rails: indexDefaults {
     timestamp: 'json.time',
-    indexPattern: 'AW5F1e45qthdGjPJueGO',
+    indexPattern: '7092c4e2-4eb5-46f2-8305-a7da2edad090',
     defaultColumns: ['json.method', 'json.status', 'json.controller', 'json.action', 'json.path', 'json.duration_s'],
     defaultSeriesSplitField: 'json.controller.keyword',
     failureFilter: statusCode('json.status'),
@@ -180,7 +186,7 @@ local indexCatalog = {
 
   rails_api: indexDefaults {
     timestamp: 'json.time',
-    indexPattern: 'AW5F1e45qthdGjPJueGO',
+    indexPattern: '7092c4e2-4eb5-46f2-8305-a7da2edad090',
     defaultColumns: ['json.method', 'json.status', 'json.route', 'json.path', 'json.duration_s'],
     defaultSeriesSplitField: 'json.route.keyword',
     failureFilter: statusCode('json.status'),
@@ -255,20 +261,35 @@ local indexCatalog = {
   },
 };
 
-local buildElasticDiscoverSearchQueryURL(index, filters, luceneQueries=[], includeTime=true) =
+// This is similar to std.setUnion, except that the array order is maintained
+// items from newItems will be added to array if they don't already exist
+local appendUnion(array, newItems) =
+  std.foldl(
+    function(memo, item)
+      if std.member(memo, item) then
+        memo
+      else
+        memo + [item],
+    newItems,
+    array
+  );
+
+local buildElasticDiscoverSearchQueryURL(index, filters=[], luceneQueries=[], timeRange=grafanaTimeRange, sort=[], extraColumns=[]) =
   local ic = indexCatalog[index];
 
+  local columnsWithExtras = appendUnion(indexCatalog[index].defaultColumns, extraColumns);
+
   local applicationState = {
-    columns: ic.defaultColumns,
+    columns: columnsWithExtras,
     filters: ic.defaultFilters + filters,
     index: ic.indexPattern,
-    query: {
+    [if std.length(luceneQueries) > 0 then 'query']: {
       language: 'kuery',
       query: std.join(' AND ', luceneQueries),
     },
+    [if std.length(sort) > 0 then 'sort']: sort,
   };
-
-  ic.kibanaEndpoint + '#/discover?_a=' + rison.encode(applicationState) + (if includeTime then grafanaTimeRange else '');
+  ic.kibanaEndpoint + '#/discover?_a=' + rison.encode(applicationState) + globalState(timeRange);
 
 local buildElasticLineCountVizURL(index, filters, luceneQueries=[], splitSeries=false) =
   local ic = indexCatalog[index];
@@ -336,7 +357,7 @@ local buildElasticLineCountVizURL(index, filters, luceneQueries=[], splitSeries=
     },
   };
 
-  indexCatalog[index].kibanaEndpoint + '#/visualize/create?type=line&indexPattern=' + indexCatalog[index].indexPattern + '&_a=' + rison.encode(applicationState) + grafanaTimeRange;
+  indexCatalog[index].kibanaEndpoint + '#/visualize/create?type=line&indexPattern=' + indexCatalog[index].indexPattern + '&_a=' + rison.encode(applicationState) + globalState(grafanaTimeRange);
 
 local buildElasticLineTotalDurationVizURL(index, filters, luceneQueries=[], latencyField, splitSeries=false) =
   local ic = indexCatalog[index];
@@ -425,7 +446,7 @@ local buildElasticLineTotalDurationVizURL(index, filters, luceneQueries=[], late
     },
   };
 
-  indexCatalog[index].kibanaEndpoint + '#/visualize/create?type=line&indexPattern=' + indexCatalog[index].indexPattern + '&_a=' + rison.encode(applicationState) + grafanaTimeRange;
+  indexCatalog[index].kibanaEndpoint + '#/visualize/create?type=line&indexPattern=' + indexCatalog[index].indexPattern + '&_a=' + rison.encode(applicationState) + globalState(grafanaTimeRange);
 
 local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latencyField, splitSeries=false) =
   local ic = indexCatalog[index];
@@ -527,7 +548,7 @@ local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latency
     },
   };
 
-  indexCatalog[index].kibanaEndpoint + '#/visualize/create?type=line&indexPattern=' + indexCatalog[index].indexPattern + '&_a=' + rison.encode(applicationState) + grafanaTimeRange;
+  indexCatalog[index].kibanaEndpoint + '#/visualize/create?type=line&indexPattern=' + indexCatalog[index].indexPattern + '&_a=' + rison.encode(applicationState) + globalState(grafanaTimeRange);
 
 {
   matcher:: matcher,
@@ -536,23 +557,29 @@ local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latency
   rangeFilter:: rangeFilter,
 
   // Given an index, and a set of filters, returns a URL to a Kibana discover module/search
-  buildElasticDiscoverSearchQueryURL(index, filters, luceneQueries=[], includeTime=true)::
-    buildElasticDiscoverSearchQueryURL(index, filters, luceneQueries, includeTime),
+  buildElasticDiscoverSearchQueryURL:: buildElasticDiscoverSearchQueryURL,
 
   // Search for failed requests
-  buildElasticDiscoverFailureSearchQueryURL(index, filters, luceneQueries=[])::
+  buildElasticDiscoverFailureSearchQueryURL(index, filters=[], luceneQueries=[], timeRange=grafanaTimeRange, sort=[], extraColumns=[])::
     buildElasticDiscoverSearchQueryURL(
-      index,
-      filters + indexCatalog[index].failureFilter,
-      luceneQueries
+      index=index,
+      filters=filters + indexCatalog[index].failureFilter,
+      luceneQueries=luceneQueries,
+      timeRange=timeRange,
+      sort=sort,
+      extraColumns=extraColumns
     ),
 
   // Search for requests taking longer than the specified number of seconds
-  buildElasticDiscoverSlowRequestSearchQueryURL(index, filters, luceneQueries=[], slowRequestSeconds)::
+  buildElasticDiscoverSlowRequestSearchQueryURL(index, filters=[], luceneQueries=[], slowRequestSeconds, timeRange=grafanaTimeRange, extraColumns=[])::
     local ic = indexCatalog[index];
+
     buildElasticDiscoverSearchQueryURL(
-      index,
-      filters + [rangeFilter(ic.defaultLatencyField, gteValue=slowRequestSeconds * ic.latencyFieldUnitMultiplier, lteValue=null)]
+      index=index,
+      filters=filters + [rangeFilter(ic.defaultLatencyField, gteValue=slowRequestSeconds * ic.latencyFieldUnitMultiplier, lteValue=null)],
+      timeRange=timeRange,
+      sort=[[ic.defaultLatencyField, 'desc']],
+      extraColumns=extraColumns
     ),
 
   // Given an index, and a set of filters, returns a URL to a Kibana count visualization
@@ -630,4 +657,6 @@ local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latency
           [],
       std.objectFields(selectorHash)
     ),
+
+  getCustomTimeRange(from, to):: "(time:(from:'" + from + "',to:'" + to + "'))",
 }
