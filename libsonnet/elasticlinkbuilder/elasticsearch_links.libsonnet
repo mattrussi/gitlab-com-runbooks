@@ -151,10 +151,10 @@ local indexCatalog = {
     timestamp: '@timestamp',
     indexPattern: '97f04200-024b-11eb-81e5-155ba78758d4',
     defaultColumns: ['json.hostname', 'json.endpoint_id', 'json.error_severity', 'json.message', 'json.session_start_time', 'json.sql_state_code', 'json.duration_s', 'json.sql'],
-    defaultSeriesSplitField: 'json.sql_state_code',
+    defaultSeriesSplitField: 'json.fingerprint.keyword',
     failureFilter: [mustNot(matchFilter('json.sql_state_code', '00000')), existsFilter('json.sql_state_code')],  // SQL Codes reference: https://www.postgresql.org/docs/9.4/errcodes-appendix.html
-    defaultLatencyField: 'json.duration_ms',  // Only makes sense in the context of slowlog entries
-    latencyFieldUnitMultiplier: 1000,
+    defaultLatencyField: 'json.duration_s',  // Only makes sense in the context of slowlog entries
+    latencyFieldUnitMultiplier: 1,
   },
 
   postgres_pgbouncer: indexDefaults {
@@ -291,7 +291,7 @@ local buildElasticDiscoverSearchQueryURL(index, filters=[], luceneQueries=[], ti
   };
   ic.kibanaEndpoint + '#/discover?_a=' + rison.encode(applicationState) + globalState(timeRange);
 
-local buildElasticLineCountVizURL(index, filters, luceneQueries=[], splitSeries=false) =
+local buildElasticLineCountVizURL(index, filters, luceneQueries=[], splitSeries=false, timeRange=grafanaTimeRange) =
   local ic = indexCatalog[index];
 
   local aggs =
@@ -357,7 +357,7 @@ local buildElasticLineCountVizURL(index, filters, luceneQueries=[], splitSeries=
     },
   };
 
-  indexCatalog[index].kibanaEndpoint + '#/visualize/create?type=line&indexPattern=' + indexCatalog[index].indexPattern + '&_a=' + rison.encode(applicationState) + globalState(grafanaTimeRange);
+  indexCatalog[index].kibanaEndpoint + '#/visualize/create?type=line&indexPattern=' + indexCatalog[index].indexPattern + '&_a=' + rison.encode(applicationState) + globalState(timeRange);
 
 local buildElasticLineTotalDurationVizURL(index, filters, luceneQueries=[], latencyField, splitSeries=false) =
   local ic = indexCatalog[index];
@@ -583,15 +583,16 @@ local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latency
     ),
 
   // Given an index, and a set of filters, returns a URL to a Kibana count visualization
-  buildElasticLineCountVizURL(index, filters, luceneQueries=[], splitSeries=false)::
-    buildElasticLineCountVizURL(index, filters, luceneQueries, splitSeries=splitSeries),
+  buildElasticLineCountVizURL(index, filters, luceneQueries=[], splitSeries=false, timeRange=grafanaTimeRange,)::
+    buildElasticLineCountVizURL(index, filters, luceneQueries, splitSeries=splitSeries, timeRange=timeRange),
 
-  buildElasticLineFailureCountVizURL(index, filters, luceneQueries=[], splitSeries=false)::
+  buildElasticLineFailureCountVizURL(index, filters, luceneQueries=[], splitSeries=false, timeRange=grafanaTimeRange)::
     buildElasticLineCountVizURL(
       index,
       filters + indexCatalog[index].failureFilter,
       luceneQueries,
-      splitSeries=splitSeries
+      splitSeries=splitSeries,
+      timeRange=timeRange,
     ),
 
   /**

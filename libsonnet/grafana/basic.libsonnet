@@ -341,6 +341,7 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
     interval='1m',
     intervalFactor=3,
     stableId=null,
+    sort=null,
   )::
     tablePanel.new(
       title,
@@ -350,6 +351,7 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
       datasource='$PROMETHEUS_DS',
       styles=styles,
       columns=columns,
+      sort=sort,
     )
     .addTarget(promQuery.target(query, instant=instant, format='table')) +
     panelOverrides(stableId),

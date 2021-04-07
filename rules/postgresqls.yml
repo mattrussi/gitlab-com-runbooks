@@ -198,18 +198,6 @@ groups:
         This can cause an increase in dead tuples on the primary. This can be
         caused by long-running transactions on the master or any standby, or unused replication.
       runbook: docs/patroni/postgres.md#tables-with-a-large-amount-of-dead-tuples
-  - alert: PostgreSQL_LongLivedTransaction
-    expr: pg_stat_activity_max_tx_duration > 3600
-    labels:
-      severity: s4
-      alert_type: cause
-    annotations:
-      description: >
-        "Postgres server {{$labels.fqdn}} has a transaction in currently in
-        state "{{$labels.state}}" that started {{ $value | humanizeDuration }}
-        ago"
-      runbook: docs/patroni/postgres.md#tables-with-a-large-amount-of-dead-tuples
-      title: "There's a long-lived Postgres transaction"
   - alert: PostgreSQL_DBHeavyLoad
     expr: node_load1{type=~"postgres|patroni"} > 200
     for: 5m
