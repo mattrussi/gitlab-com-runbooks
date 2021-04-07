@@ -14,7 +14,6 @@
 
 ## Troubleshooting Pointers
 
-* [../ci-runners/ci-investigate-abuse.md](../ci-runners/ci-investigate-abuse.md)
 * [../ci-runners/ci-runner-timeouts.md](../ci-runners/ci-runner-timeouts.md)
 * [../ci-runners/service-ci-runners.md](../ci-runners/service-ci-runners.md)
 * [../cloudflare/logging.md](../cloudflare/logging.md)

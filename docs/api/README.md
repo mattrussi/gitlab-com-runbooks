@@ -22,8 +22,6 @@
 
 * [../ci-runners/ci-apdex-violating-slo.md](../ci-runners/ci-apdex-violating-slo.md)
 * [../ci-runners/ci-runner-timeouts.md](../ci-runners/ci-runner-timeouts.md)
-* [../ci-runners/create-runners-manager-node.md](../ci-runners/create-runners-manager-node.md)
-* [../ci-runners/pipeline-deletion.md](../ci-runners/pipeline-deletion.md)
 * [../cloudflare/logging.md](../cloudflare/logging.md)
 * [../cloudflare/managing-traffic.md](../cloudflare/managing-traffic.md)
 * [../cloudflare/services-locations.md](../cloudflare/services-locations.md)

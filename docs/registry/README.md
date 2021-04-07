@@ -17,7 +17,6 @@
 
 ## Troubleshooting Pointers
 
-* [../ci-runners/create-runners-manager-node.md](../ci-runners/create-runners-manager-node.md)
 * [../cloudflare/managing-traffic.md](../cloudflare/managing-traffic.md)
 * [../frontend/ban-netblocks-on-haproxy.md](../frontend/ban-netblocks-on-haproxy.md)
 * [../frontend/haproxy.md](../frontend/haproxy.md)
