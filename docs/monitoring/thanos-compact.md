@@ -27,14 +27,6 @@ Oct 19 11:11:37 thanos-compact-01-inf-gprd thanos[16770]: {"caller":"compact.go:
 Then thanos-compact is complaining that 2 or more TSDB blocks in the metrics
 bucket have overlapping time periods.
 
-We're not 100% sure why this happens, but we suspect it could be due to a race
-condition that is most likely to be teased out when prometheus pods are
-restarting frequently. The prometheus process will attempt to recover from WAL
-on the persistent volume, writing out a TSDB segment. The thanos-sidecar process
-will then try to upload these TSDB segments. If Prometheus crashes without
-completing the WAL replay, it may not know that the TSDB block write was
-successful. It then attempts to create the same block a second time.
-
 For each set of overlapping blocks, pull down the metadata corresponding to
 their ULIDs:
 
@@ -82,9 +74,41 @@ Examine the metedata files. They should look similar to this:
 }
 ```
 
-Note the time range, between the timestamps minTime and maxTime. We have only
-observed these block clashes for matching time ranges - i.e., the overlap is
-100%, not partial.
+We have observed 2 scenarios, with different solutions: totally overlapping
+blocks, and partially overlapping blocks. Note the time range, between the
+timestamps minTime and maxTime, and follow one of the scenarios below.
+
+#### Partially overlapping blocks
+
+We have observed this scenario less often, and are not yet sure why it occurs.
+When it has occurred, it has been for compact-sourced (as opposed to
+sidecar-sourced) blocks with level > 1.
+
+The current mitigation is to mark all blocks involved as "no-compact":
+
+```
+export GOOGLE_APPLICATION_CREDENTIALS=/opt/prometheus/thanos/gcs-creds.json
+block_list='01EJQ1JVX2RYAVAVBC1CJCESJD 01EJR6MVVKPKQ781VFYKHSH5Z0 01EJXNXJ9NRKESZ7GQT6JXZNNW 01EK36WZ2W5HJKXC1D7S8HFY4H 01ERY52QYS0TXXSRAP14N6NJH5'
+for id in ${block_list} ; do
+  /opt/prometheus/thanos/thanos tools bucket mark \
+    --objstore.config-file=/opt/prometheus/thanos/objstore.yml \
+    --marker=no-compact-mark.json \
+    --details='ISSUE LINK HERE' \
+    --id="${id}"
+done
+```
+
+Then restart thanos-compact.
+
+#### Totally overlapping blocks
+
+We're not 100% sure why this happens, but we suspect it could be due to a race
+condition that is most likely to be teased out when prometheus pods are
+restarting frequently. The prometheus process will attempt to recover from WAL
+on the persistent volume, writing out a TSDB segment. The thanos-sidecar process
+will then try to upload these TSDB segments. If Prometheus crashes without
+completing the WAL replay, it may not know that the TSDB block write was
+successful. It then attempts to create the same block a second time.
 
 We have only observed this problem for sidecar-uploaded "raw" blocks, not ones
 that have already been compacted by thanos-query:
