@@ -1,6 +1,6 @@
 # Summary
 
-**Note**: there is additional coverage by trust-and-safety up until April 4th, 2021: gitlab-com/gl-security/security-operations/trust-and-safety/operations#509 (see [spreadsheet](https://docs.google.com/spreadsheets/d/1KRGdGvPDWekGFYTPIjN8PAdB3ya283Xj2ydFjJr6U70/edit#gid=0) for coverage)
+**Note**: there is additional coverage by trust-and-safety up until April 15th, 2021: gitlab-com/gl-security/security-operations/trust-and-safety/operations#509 (see [spreadsheet](https://docs.google.com/spreadsheets/d/1KRGdGvPDWekGFYTPIjN8PAdB3ya283Xj2ydFjJr6U70/edit#gid=673454602) for coverage)
 
 **For all issues be sure to also notify `@trust-and-safety` on Slack**
 
