@@ -1,13 +1,13 @@
 #! /usr/bin/env bash
 
-# database-gitlab-superuser-session-connection-terminate.sh
+# session-connection-terminate.sh
 #
-# This script will terminate session connections for the gitlab-superuser.
+# This script will terminate session connections for a given user
 #
 # Example:
 #
-# /root/scripts/database-gitlab-superuser-session-connection-terminate.sh --dry-run
-# /root/scripts/database-gitlab-superuser-session-connection-terminate.sh --wet-run
+# /root/scripts/session-connection-terminate.sh gitlab-superuser --dry-run
+# /root/scripts/session-connection-terminate.sh gitlab-superuser --wet-run
 
 # Immediately exit if any command has a non-zero exit status.
 set -e
@@ -20,7 +20,7 @@ set -o pipefail
 
 run_mode="${1:---dry-run}"
 
-old_username='gitlab-superuser'
+username="${1}"
 
 current_host=$(hostname)
 
@@ -29,7 +29,7 @@ set +e
 read -r -d '' terminate_database_connection_session_command <<EOF
 SELECT pg_terminate_backend(pid)
 FROM pg_stat_activity
-WHERE usename = '${old_username}';
+WHERE usename = '${username}';
 EOF
 set -e
 
@@ -78,7 +78,7 @@ function list_all_connections_except_my_session() {
 }
 
 function terminate_database_connection_session() {
-  echo "Terminating database session connection(s) for user role ${old_username}"
+  echo "Terminating database session connection(s) for user role ${username}"
   if [[ "${run_mode}" == "--wet-run" ]]; then
     echo "Executing psql command: ${terminate_database_connection_session_command}"
     set -x

@@ -1,8 +1,8 @@
 #! /usr/bin/env bash
 
-# database-gitlab-superuser-user-role-create.sh
+# user-role-create.sh
 #
-# This script will create a new gitlab-superuser user account.
+# This script will create a new user account.
 #
 # Make sure to set the NEW_PASSWORD environment variable appropriately.
 #
@@ -12,8 +12,8 @@
 #
 # Example:
 #
-# /root/scripts/database-gitlab-superuser-user-role-create.sh --dry-run
-# /root/scripts/database-gitlab-superuser-user-role-create.sh --wet-run
+# /root/scripts/user-role-create.sh --dry-run
+# /root/scripts/user-role-create.sh --wet-run
 
 # Immediately exit if any command has a non-zero exit status.
 set -e
@@ -29,7 +29,7 @@ run_mode="${1:---dry-run}"
 script_dir_path="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 [[ -f "${script_dir_path}/.new_password.sh" ]] && source "${script_dir_path}/.new_password.sh"
 
-old_username='gitlab-superuser'
+old_username="${1}"
 new_username="${old_username}-$(date --utc +%Y%m%d_%H%M%S)"
 # Disable shellcheck warning for "Possible misspelling"
 # Here the variable NEW_PASSWORD is expected to be defined in one's environment.
@@ -121,7 +121,7 @@ function show_new_user() {
   psql_command '\du' | grep " ${new_username} "
 }
 
-function find_new_gitlab_superuser_role() {
+function find_new_role() {
   # Allow non-zero status
   set +e
   show_new_user
@@ -191,4 +191,4 @@ list_owned_tables
 # This does not appear to be necessary; preserving for instructional purposes
 # reassign_owned_objects
 set_statement_timeout_for_role
-find_new_gitlab_superuser_role
+find_new_role
