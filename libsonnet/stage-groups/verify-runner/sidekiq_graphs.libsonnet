@@ -13,11 +13,7 @@ local pipelineQueues =
     query=|||
       (
         sum by (worker) (
-          irate(sidekiq_enqueued_jobs_total{environment="$environment", stage="$stage", feature_category=~"(continuous_integration|runner)"}[$__interval])
-        )
-        -
-        sum by (worker) (
-          irate(sidekiq_jobs_completion_seconds_count{environment="$environment", stage="$stage", feature_category=~"(continuous_integration|runner)"}[$__interval])
+          sidekiq_jobs_inflight:irate1m{environment="$environment", stage="$stage", feature_category=~"(continuous_integration|runner)"}
         )
       )
     |||,
