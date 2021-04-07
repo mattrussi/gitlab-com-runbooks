@@ -150,11 +150,11 @@ local indexCatalog = {
   postgres: indexDefaults {
     timestamp: '@timestamp',
     indexPattern: '97f04200-024b-11eb-81e5-155ba78758d4',
-    defaultColumns: ['json.hostname', 'json.endpoint_id', 'json.error_severity', 'json.message', 'json.session_start_time', 'json.sql_state_code', 'json.duration_s', 'json.sql'],
-    defaultSeriesSplitField: 'json.sql_state_code',
+    defaultColumns: ['json.hostname', 'json.endpoint_id', 'json.error_severity', 'json.message', 'json.session_start_time', 'json.sql_state_code', 'json.duration_s', 'json.fingerprint', 'json.sql'],
+    defaultSeriesSplitField: 'json.fingerprint',
     failureFilter: [mustNot(matchFilter('json.sql_state_code', '00000')), existsFilter('json.sql_state_code')],  // SQL Codes reference: https://www.postgresql.org/docs/9.4/errcodes-appendix.html
-    defaultLatencyField: 'json.duration_ms',  // Only makes sense in the context of slowlog entries
-    latencyFieldUnitMultiplier: 1000,
+    defaultLatencyField: 'json.duration_s',  // Only makes sense in the context of slowlog entries
+    latencyFieldUnitMultiplier: 1,
   },
 
   postgres_pgbouncer: indexDefaults {
