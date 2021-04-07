@@ -20,7 +20,7 @@
 * [../bastions/gstg-bastions.md](../bastions/gstg-bastions.md)
 * [../bastions/pre-bastions.md](../bastions/pre-bastions.md)
 * [../bastions/testbed-bastion.md](../bastions/testbed-bastion.md)
-* [../ci-runners/ci-apdex-violating-slo.md](../ci-runners/ci-apdex-violating-slo.md)
+* [../ci-runners/ci-abuse-handling.md](../ci-runners/ci-abuse-handling.md)
 * [../ci-runners/service-ci-runners.md](../ci-runners/service-ci-runners.md)
 * [../cloudflare/logging.md](../cloudflare/logging.md)
 * [../customers/api-key-rotation.md](../customers/api-key-rotation.md)
