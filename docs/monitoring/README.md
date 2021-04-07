@@ -16,6 +16,7 @@
 
 ## Troubleshooting Pointers
 
+* [../ci-runners/ci-abuse-handling.md](../ci-runners/ci-abuse-handling.md)
 * [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
 * [../license/license-gitlab-com.md](../license/license-gitlab-com.md)
 * [alertmanager-notification-failures.md](alertmanager-notification-failures.md)
