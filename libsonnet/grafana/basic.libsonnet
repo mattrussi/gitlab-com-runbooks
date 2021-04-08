@@ -277,6 +277,8 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
     legend_show=true,
     linewidth=2,
     stableId=null,
+    dataFormat='timeseries',
+    hideZeroBuckets=true
   )::
     heatmapPanel.new(
       title,
@@ -285,6 +287,8 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
       legend_show=false,
       yAxis_format='s',
       color_mode='opacity',
+      dataFormat=dataFormat,
+      hideZeroBuckets=hideZeroBuckets
     )
     .addTarget(promQuery.target(query, legendFormat=legendFormat, interval=interval, intervalFactor=intervalFactor))
     + panelOverrides(stableId),
