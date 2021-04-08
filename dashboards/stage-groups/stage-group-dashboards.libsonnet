@@ -9,6 +9,8 @@ local platformLinks = import '../platform_links.libsonnet';
 local singleMetricRow = import 'key-metric-panels/single-metric-row.libsonnet';
 local aggregationSets = import '../../metrics-catalog/aggregation-sets.libsonnet';
 local errorBudget = import 'stage-groups/error_budget.libsonnet';
+local sidekiqHelpers = import 'services/lib/sidekiq-helpers.libsonnet';
+local thresholds = import 'thresholds.libsonnet';
 
 local actionLegend(type) =
   if type == 'api' then '{{action}}' else '{{controller}}#{{action}}';
@@ -315,6 +317,58 @@ local sidekiqJobRate(counter, title, description, featureCategoriesSelector) =
     }
   );
 
+local sidekiqJobDurationP95(featureCategories, urgency, threshold) =
+  basic.timeseries(
+    title='%s urgency jobs' % urgency,
+    description='%(urgency)s urgency jobs (%(threshold)i seconds max duration)' % {
+      urgency: urgency,
+      threshold: threshold,
+    },
+    decimals=2,
+    yAxisLabel='Job Duration seconds',
+    legendFormat='{{ worker }}',
+    thresholds=[thresholds.errorLevel('gt', threshold)],
+    query=|||
+      histogram_quantile(0.95,
+        sum by (worker, le) (
+          rate(
+            sidekiq_jobs_completion_seconds_bucket{
+              environment="$environment",
+              stage='$stage',
+              feature_category=~'(%(featureCategories)s)',
+              urgency='%(urgency)s'
+            }[$__interval]
+          )
+        )
+      )
+    ||| % {
+      featureCategories: featureCategories,
+      urgency: urgency,
+    }
+  );
+
+local sidekiqJobDurationByUrgency(urgencies, featureCategoriesSelector) =
+  // mapping an urgency to the slo key in `services/lib/sidekiq-helpers.libsonnet`
+  local urgencySLOMapping = {
+    high: 'urgent',
+    low: 'lowUrgency',
+    throttled: 'throttled',
+  };
+  local unknownUrgencies = std.setDiff(urgencies, std.objectFields(urgencySLOMapping));
+  assert std.length(unknownUrgencies) == 0 :
+         'Unknown urgency %s' % unknownUrgencies;
+  local slos = sidekiqHelpers.slos;
+
+  layout.rowGrid(
+    'Sidekiq job duration',
+    [
+      sidekiqJobDurationP95(featureCategoriesSelector, urgency, slos[urgencySLOMapping[urgency]].executionDurationSeconds)
+      for urgency in urgencies
+    ],
+    // Just after the sidekiq panels
+    startRow=950,
+  );
+
 local requestComponents = std.set(['web', 'api', 'git']);
 local backgroundComponents = std.set(['sidekiq']);
 local validComponents = std.setUnion(requestComponents, backgroundComponents);
@@ -507,6 +561,8 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
         platformLinks.dynamicLinks('Web Detail', 'type:web'),
         platformLinks.dynamicLinks('Git Detail', 'type:git'),
       ],
+    addSidekiqJobDurationByUrgency(urgencies=['high', 'low'])::
+      self.addPanels(sidekiqJobDurationByUrgency(urgencies, featureCategoriesSelector)),
   };
 
 {
