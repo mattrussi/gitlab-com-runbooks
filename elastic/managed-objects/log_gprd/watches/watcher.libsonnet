@@ -6,14 +6,38 @@ local conditionScript = |||
 
 local percentileThresholdTransformerScript(percentileFormatted) =
   |||
+    String extractFeatureCategory(def bucket) {
+      def feature_category = bucket.feature_category_top_hit;
+      if (feature_category == null) { return ""; }
+
+      def hits = feature_category.hits.hits;
+      if (hits.length == 0) { return ""; }
+
+      def topHit = hits[0];
+      def source = topHit._source;
+      if (source ==  null) { return ""; }
+
+      def json = source.json;
+      if (json ==  null) { return ""; }
+
+      def fc = json['meta.feature_category'];
+      if (fc == null) { return ""; }
+
+      return fc;
+    }
+
     def items = ctx.payload.aggregations.key.buckets
       .collect(bucket -> {
         def v = bucket.agg_value.values['%(percentileFormatted)s'];
+        def maxValue = bucket.max_value.value;
 
         [
         'key': bucket.key,
         'value': v,
-        'percentileFormattedValue': new DecimalFormat("###,###.###").format(v)
+        'percentileFormattedValue': new DecimalFormat("###,###.###").format(v),
+        'maxValueFormatted': new DecimalFormat("###,###.###").format(maxValue),
+        'feature_category': extractFeatureCategory(bucket),
+        'doc_count': bucket.doc_count
         ]
       });
 
@@ -66,8 +90,11 @@ local percentileThresholdAlert(
   emoji=':rails:',
   unit='s',
   queryFilters=[],
+  extraDetail=''
       ) =
 
+  local pathComponents = std.split(identifier, '/');
+  local identifierShort = pathComponents[std.length(pathComponents) - 1];
   local percentileFormatted = '%.1f' % [percentile];
 
   {
@@ -114,11 +141,24 @@ local percentileThresholdAlert(
                       field: percentileValueField,
                     },
                   },
+                  max_value: {
+                    max: {
+                      field: percentileValueField,
+                    },
+                  },
                   agg_value: {
                     percentiles: {
                       field: percentileValueField,
                       percents: [percentile],
                       keyed: true,
+                    },
+                  },
+                  feature_category_top_hit: {
+                    top_hits: {
+                      size: 1,
+                      _source: {
+                        includes: ['json.meta.feature_category'],
+                      },
                     },
                   },
                   filter: {
@@ -144,7 +184,7 @@ local percentileThresholdAlert(
         slack: {
           account: 'gitlab_team',
           message: {
-            from: 'ElasticCloud Watcher: ' + identifier,
+            from: 'ElasticCloud Watcher: ' + identifierShort,
             to: [
               slackChannel,
             ],
@@ -154,15 +194,17 @@ local percentileThresholdAlert(
               attachment_template: {
                 title: emoji + ' {{key}}',
                 text: |||
-                  p%(percentile)d: {{ percentileFormattedValue }}%(unit)s.
+                  *p%(percentile)d*: {{ percentileFormattedValue }}%(unit)s, *max*: {{ maxValueFormatted }}%(unit)s, *samples* {{ doc_count }}
+                  *Feature Category*: `{{feature_category}}`
 
-                  :elasticsearch: <%(link)s|Kibana search>
-                  :issue-created: <%(issueSearchLink)s|Search for issues>
+                  :elasticsearch: <%(link)s|Kibana search> | :mag: <%(issueSearchLink)s|Search for issues>
+                  %(extraDetail)s
                 ||| % {
                   percentile: percentile,
                   link: searchLinkTemplate(elasticsearchIndexName, keyField, percentileValueField, thresholdValue, scheduleHours),
                   issueSearchLink: issueSearchPrefix + '{{#url}}{{key}}{{/url}}',
                   unit: unit,
+                  extraDetail: extraDetail,
                 },
               },
             },
