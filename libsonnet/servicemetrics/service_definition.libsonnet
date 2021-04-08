@@ -33,7 +33,7 @@ local validateAndApplyServiceDefaults(service) =
     }
   else
     // Service definition has a mismatch between provisioning.kubernetes and kubeResources
-    std.assertEqual(false, { __message__: 'Mismatching kubernetes config' });
+    std.assertEqual(false, { __message__: 'Mismatching kubernetes config for service ' + service.type });
 
 local serviceDefinition(service) =
   // Private functions

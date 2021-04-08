@@ -195,6 +195,11 @@ groups:
       tier: db
       type: patroni
     expr: '0.001000'
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      tier: sv
+      type: plantuml
+    expr: '0.001000'
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       tier: stor
@@ -895,6 +900,14 @@ groups:
       service_aggregation: 'yes'
       tier: db
       type: pgbouncer
+    expr: '1'
+  - record: gitlab_component_service:mapping
+    labels:
+      component: loadbalancer
+      regional_aggregation: 'no'
+      service_aggregation: 'yes'
+      tier: sv
+      type: plantuml
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
