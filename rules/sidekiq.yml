@@ -6,3 +6,14 @@ groups:
       sum without (fqdn,instance,node,pod) (
         rate(sidekiq_jobs_completion_seconds_count[1m])
       )
+  - record: sidekiq_jobs_inflight:irate1m
+    expr: >
+      (
+        sum by (environment, stage, feature_category, worker) (
+          irate(sidekiq_enqueued_jobs_total[1m])
+        )
+        -
+        sum by (environment, stage, feature_category, worker) (
+          irate(sidekiq_jobs_completion_seconds_count[1m])
+        )
+      )
