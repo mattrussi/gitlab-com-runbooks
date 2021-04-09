@@ -24,7 +24,7 @@ local runnerManager = template.new(
   regex='/fqdn="([^"]+)"/',
   current=null,
   refresh='load',
-  sort=1,
+  sort=true,
   multi=true,
   includeAll=true,
 );
@@ -36,7 +36,7 @@ local runnerJobFailureReason = template.new(
     label_values(gitlab_runner_failed_jobs_total, failure_reason)
   |||,
   refresh='load',
-  sort=1,
+  sort=true,
   multi=true,
   includeAll=true,
 );
@@ -49,7 +49,7 @@ local jobsRunningForProject = template.new(
   |||,
   current='0',
   refresh='load',
-  sort=1,
+  sort=true,
   multi=true,
   includeAll=true
 );
@@ -61,7 +61,7 @@ local gcpExporter = template.new(
     label_values(gcp_exporter_region_quota_limit, instance)
   |||,
   refresh='load',
-  sort=1,
+  sort=true,
   multi=false,
   includeAll=false
 );
@@ -73,7 +73,7 @@ local gcpProject = template.new(
     label_values(gcp_exporter_region_quota_limit, project)
   |||,
   refresh='load',
-  sort=1,
+  sort=true,
   multi=true,
   includeAll=true,
 );
@@ -85,7 +85,61 @@ local gcpRegion = template.new(
     label_values(gcp_exporter_region_quota_usage, region)
   |||,
   refresh='load',
-  sort=1,
+  sort=true,
+  multi=true,
+  includeAll=true,
+);
+
+local dbInstance = template.new(
+  'db_instance',
+  '$PROMETHEUS_DS',
+  query=|||
+    query_result(pg_replication_is_replica{environment="$environment"} == 0)
+  |||,
+  regex='/.*fqdn="(.*?)".*/',
+  refresh='load',
+  hide='all',
+  sort=true,
+  multi=false,
+  includeAll=false,
+);
+
+local dbInstances = template.new(
+  'db_instances',
+  '$PROMETHEUS_DS',
+  query=|||
+    label_values(pg_slow_queries{environment="$environment"},fqdn)
+  |||,
+  refresh='load',
+  hide='all',
+  sort=true,
+  multi=true,
+  includeAll=true,
+);
+local dbDatabase = template.new(
+  'db_database',
+  '$PROMETHEUS_DS',
+  query=|||
+    label_values(pg_stat_database_tup_deleted{env="$environment",fqdn="$db_instance"}, datname)
+  |||,
+  regex='/gitlabhq_.*/',
+  refresh='load',
+  hide='all',
+  sort=true,
+  multi=false,
+  includeAll=false,
+);
+
+local dbTopDeadTuples = template.new(
+  'db_top_dead_tup',
+  '$PROMETHEUS_DS',
+  query=|||
+    query_result(topk(20, max_over_time(pg_stat_user_tables_n_dead_tup{env="$environment",fqdn="$db_instance",datname="$db_database"}[${__range_s}s])))
+  |||,
+  regex='/.*relname="(.*?)".*/',
+  refresh='load',
+  hide='all',
+  sort=true,
   multi=true,
   includeAll=true,
 );
@@ -93,8 +147,8 @@ local gcpRegion = template.new(
 local selectorHash = {
   type: runnersService.type,
   tier: runnersService.tier,
-  stage: '$stage',
   environment: '$environment',
+  stage: '$stage',
 };
 
 {
@@ -105,6 +159,10 @@ local selectorHash = {
   gcpExporter:: gcpExporter,
   gcpProject:: gcpProject,
   gcpRegion:: gcpRegion,
+  dbInstance:: dbInstance,
+  dbInstances:: dbInstances,
+  dbDatabase:: dbDatabase,
+  dbTopDeadTuples:: dbTopDeadTuples,
 
   selectorHash:: selectorHash,
 }

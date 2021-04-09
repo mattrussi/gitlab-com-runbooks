@@ -4,8 +4,11 @@ local stageGroupDashboards = import './stage-group-dashboards.libsonnet';
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
+local buildsQueueGraphs = import 'stage-groups/verify-continuous-integration/builds_queue_graphs.libsonnet';
+local dashboardFilters = import 'stage-groups/verify-continuous-integration/dashboard_filters.libsonnet';
 
 stageGroupDashboards.dashboard('continuous_integration')
+.addTemplate(dashboardFilters.runnerTypeTemplate())
 .addPanel(
   grafana.row.new(title='Metrics for build logs'),
   gridPos={ x: 0, y: 1000, w: 24, h: 1 }
@@ -165,57 +168,7 @@ stageGroupDashboards.dashboard('continuous_integration')
       legendFormat='queuing result {{ queue }}',
       yAxisLabel='Rate per second',
     ),
-    basic.multiTimeseries(
-      stableId='builds-queue-big-query-duration',
-      title='Duration of the builds queue retrieval using the big query SQL',
-      queries=[{
-        query: |||
-          histogram_quantile(
-            0.50,
-            sum(
-              rate(
-                gitlab_ci_queue_retrieval_duration_seconds_bucket{
-                  environment="$environment",
-                  stage="$stage"
-                }[$__interval]
-              )
-            ) by (le, runner_type)
-          )
-        |||,
-        legendFormat: 'queue duration for {{ runner_type }} runner - p50',
-      }, {
-        query: |||
-          histogram_quantile(
-            0.90,
-            sum(
-              rate(
-                gitlab_ci_queue_retrieval_duration_seconds_bucket{
-                  environment="$environment",
-                  stage="$stage"
-                }[$__interval]
-              )
-            ) by (runner_type)
-          )
-        |||,
-        legendFormat: 'queue duration for {{ runner_type }} runner - p90',
-      }, {
-        query: |||
-          histogram_quantile(
-            0.99,
-            sum(
-              rate(
-                gitlab_ci_queue_retrieval_duration_seconds_bucket{
-                  environment="$environment",
-                  stage="$stage"
-                }[$__interval]
-              )
-            ) by (le, runner_type)
-          )
-        |||,
-        legendFormat: 'queue duration for {{ runner_type }} runner - p99',
-      }],
-      format='s',
-    ),
+    buildsQueueGraphs.bigQueryDuration(),
     basic.multiTimeseries(
       stableId='builds-queue-size',
       title='Size of the builds queue per runner type',
