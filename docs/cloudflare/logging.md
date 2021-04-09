@@ -70,3 +70,6 @@ rule, or modified a DNS entry, etc.
   select `Audit Logs`
 
 [Cloudflare Article](https://support.cloudflare.com/hc/en-us/articles/115002833612-Understanding-Cloudflare-Audit-Logs)
+
+## Retention
+Cloudflare logs will be retained for 1 year via a GCS bucket policy.
