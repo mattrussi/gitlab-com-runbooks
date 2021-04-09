@@ -16,6 +16,7 @@
 
 ## Troubleshooting Pointers
 
+* [../ci-runners/ci_pending_builds.md](../ci-runners/ci_pending_builds.md)
 * [../cloudflare/logging.md](../cloudflare/logging.md)
 * [../cloudflare/managing-traffic.md](../cloudflare/managing-traffic.md)
 * [../elastic/elastic-cloud.md](../elastic/elastic-cloud.md)

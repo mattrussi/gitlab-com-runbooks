@@ -16,6 +16,7 @@
 
 ## Troubleshooting Pointers
 
+* [../ci-runners/ci_graphs.md](../ci-runners/ci_graphs.md)
 * [../config_management/chef-guidelines.md](../config_management/chef-guidelines.md)
 * [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
 * [../kas/kubernetes-agent-disable-integrations.md](../kas/kubernetes-agent-disable-integrations.md)

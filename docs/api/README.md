@@ -22,6 +22,10 @@
 
 * [../ci-runners/ci-apdex-violating-slo.md](../ci-runners/ci-apdex-violating-slo.md)
 * [../ci-runners/ci-runner-timeouts.md](../ci-runners/ci-runner-timeouts.md)
+* [../ci-runners/ci_constantnumberoflongrunningrepeatedjobs.md](../ci-runners/ci_constantnumberoflongrunningrepeatedjobs.md)
+* [../ci-runners/ci_graphs.md](../ci-runners/ci_graphs.md)
+* [../ci-runners/ci_pending_builds.md](../ci-runners/ci_pending_builds.md)
+* [../ci-runners/ci_runner_manager_errors.md](../ci-runners/ci_runner_manager_errors.md)
 * [../cloudflare/logging.md](../cloudflare/logging.md)
 * [../cloudflare/managing-traffic.md](../cloudflare/managing-traffic.md)
 * [../cloudflare/services-locations.md](../cloudflare/services-locations.md)

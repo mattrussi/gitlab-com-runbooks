@@ -23,6 +23,7 @@
 * [../bastions/gprd-bastions.md](../bastions/gprd-bastions.md)
 * [../bastions/gstg-bastions.md](../bastions/gstg-bastions.md)
 * [../blackbox/blackbox-git-exporter.md](../blackbox/blackbox-git-exporter.md)
+* [../ci-runners/ci_pending_builds.md](../ci-runners/ci_pending_builds.md)
 * [../config_management/chef-vault.md](../config_management/chef-vault.md)
 * [../config_management/chef-workflow.md](../config_management/chef-workflow.md)
 * [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)

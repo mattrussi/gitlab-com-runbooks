@@ -14,6 +14,7 @@
 
 ## Troubleshooting Pointers
 
+* [../ci-runners/ci_pending_builds.md](../ci-runners/ci_pending_builds.md)
 * [../cloudflare/managing-traffic.md](../cloudflare/managing-traffic.md)
 * [../cloudflare/services-locations.md](../cloudflare/services-locations.md)
 * [../config_management/chef-guidelines.md](../config_management/chef-guidelines.md)
