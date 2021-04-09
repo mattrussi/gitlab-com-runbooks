@@ -236,7 +236,7 @@ groups:
     labels:
       feature_category: experimentation
       product_stage: growth
-      stage_group: expansion
+      stage_group: activation
     expr: '1'
   - record: gitlab:feature_category:stage_group:mapping
     labels:

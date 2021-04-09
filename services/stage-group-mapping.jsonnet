@@ -291,21 +291,21 @@
     name: 'Conversion',
     stage: 'growth',
     feature_categories: [
-      'experimentation',
+
     ],
   },
   expansion: {
     name: 'Expansion',
     stage: 'growth',
     feature_categories: [
-      'experimentation',
+
     ],
   },
   adoption: {
     name: 'Adoption',
     stage: 'growth',
     feature_categories: [
-      'experimentation',
+
     ],
   },
   product_intelligence: {
