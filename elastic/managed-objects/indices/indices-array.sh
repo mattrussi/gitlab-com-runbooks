@@ -8,6 +8,7 @@ export indices=(
   consul
   fluentd
   gitaly
+  gcs
   gke
   gke-audit
   gke-systemd
