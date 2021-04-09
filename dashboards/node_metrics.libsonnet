@@ -8,6 +8,34 @@ local seriesOverrides = import 'grafana/series_overrides.libsonnet';
 local thresholds = import 'thresholds.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 
+local nodeLoadForDuration(duration, nodeSelector) =
+  assert (duration == 1 || duration == 5 || duration == 15) : 'Load duration needs to be 1, 5 or 15';
+  local formatConfigWithDuration = {
+    duration: duration,
+    nodeSelector: nodeSelector,
+  };
+  basic.timeseries(
+    title='loadavg%(duration)d per core' % formatConfigWithDuration,
+    description='Loadavg (%(duration)d minute) per core, below 1 is better.' % formatConfigWithDuration,
+    query=
+    |||
+      avg by (environment, type, stage, fqdn) (node_load%(duration)d{%(nodeSelector)s})
+      /
+      count by (environment, type, stage, fqdn) (node_cpu_seconds_total{mode="idle", %(nodeSelector)s})
+    ||| % formatConfigWithDuration,
+    legendFormat='{{ fqdn }}',
+    interval='1m',
+    intervalFactor=1,
+    yAxisLabel='loadavg%(duration)d' % formatConfigWithDuration,
+    legend_show=false,
+    linewidth=1,
+    decimals=2,
+    thresholds=[
+      thresholds.errorLevel('gt', 1),
+      thresholds.warningLevel('gt', 0.8),
+    ]
+  );
+
 {
   nodeMetricsDetailRow(nodeSelector)::
     local formatConfig = {
@@ -249,29 +277,9 @@ local selectors = import 'promql/selectors.libsonnet';
     ] + [
       // Node-level load averages
       (
-        local formatConfigWithDuration = formatConfig { duration: duration };
-        basic.timeseries(
-          title='loadavg%(duration)d per core' % formatConfigWithDuration,
-          description='Loadavg (%(duration)d minute) per core, below 1 is better.' % formatConfigWithDuration,
-          query=
-          |||
-            avg by (environment, type, stage, fqdn) (node_load%(duration)d{%(nodeSelector)s})
-            /
-            count by (environment, type, stage, fqdn) (node_cpu_seconds_total{mode="idle", %(nodeSelector)s})
-          ||| % formatConfigWithDuration,
-          legendFormat='{{ fqdn }}',
-          interval='1m',
-          intervalFactor=1,
-          yAxisLabel='loadavg%(duration)d' % formatConfigWithDuration,
-          legend_show=false,
-          linewidth=1,
-          decimals=2,
-          thresholds=[
-            thresholds.errorLevel('gt', 1),
-            thresholds.warningLevel('gt', 0.8),
-          ]
-        )
+        nodeLoadForDuration(duration, nodeSelector)
       )
       for duration in [1, 5, 15]
     ])),
+  nodeLoadForDuration:: nodeLoadForDuration,
 }
