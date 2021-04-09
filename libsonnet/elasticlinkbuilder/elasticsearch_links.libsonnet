@@ -2,7 +2,11 @@ local rison = import 'rison.libsonnet';
 
 local grafanaTimeFrom = '${__from:date:iso}';
 local grafanaTimeTo = '${__to:date:iso}';
-local grafanaTimeRange = "(time:(from:'" + grafanaTimeFrom + "',to:'" + grafanaTimeTo + "'))";
+
+local globalStateTimeFrame(from, to) =
+  "(time:(from:'%(from)s',to:'%(to)s'))" % { from: from, to: to };
+
+local grafanaTimeRange = globalStateTimeFrame(grafanaTimeFrom, grafanaTimeTo);
 
 // Builds an ElasticSearch match filter clause
 local matchFilter(field, value) =
@@ -659,4 +663,24 @@ local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latency
     ),
 
   getCustomTimeRange(from, to):: "(time:(from:'" + from + "',to:'" + to + "'))",
+
+  dashboards:: {
+    // A dashboard for reviewing rails log metrics
+    // The caller_id is the route or the controller#action
+    railsEndpointDashboard(caller_id, from='now-24', to='now')::
+      local globalState = {
+        filters: [
+          {
+            query: {
+              match_phrase: {
+                'json.meta.caller_id.keyword': '{{#url}}{{key}}{{/url}}',
+              },
+            },
+          },
+        ],
+        time: { from: from, to: to },
+      };
+      local g = rison.encode(globalState);
+      'https://log.gprd.gitlab.net/app/dashboards#/view/db37b560-9793-11eb-a990-d72c312ff8e9?_g=' + g,
+  },
 }
