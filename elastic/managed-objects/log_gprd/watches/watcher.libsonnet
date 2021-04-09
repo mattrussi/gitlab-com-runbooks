@@ -4,7 +4,7 @@ local conditionScript = |||
   ctx.payload.aggregations.key.buckets.length > 0
 |||;
 
-local percentileThresholdTransformerScript(percentileFormatted) =
+local percentileThresholdTransformerScript(percentileFormatted, displayUnitDivisionFactor) =
   |||
     String extractFeatureCategory(def bucket) {
       def feature_category = bucket.feature_category_top_hit;
@@ -34,8 +34,8 @@ local percentileThresholdTransformerScript(percentileFormatted) =
         [
         'key': bucket.key,
         'value': v,
-        'percentileFormattedValue': new DecimalFormat("###,###.###").format(v),
-        'maxValueFormatted': new DecimalFormat("###,###.###").format(maxValue),
+        'percentileFormattedValue': new DecimalFormat("###,###.###").format(v / %(displayUnitDivisionFactor)g),
+        'maxValueFormatted': new DecimalFormat("###,###.###").format(maxValue / %(displayUnitDivisionFactor)g),
         'feature_category': extractFeatureCategory(bucket),
         'doc_count': bucket.doc_count
         ]
@@ -48,6 +48,7 @@ local percentileThresholdTransformerScript(percentileFormatted) =
     ];
   ||| % {
     percentileFormatted: percentileFormatted,
+    displayUnitDivisionFactor: displayUnitDivisionFactor,
   };
 
 local painlessScript(script, params={}) = {
@@ -77,6 +78,7 @@ local percentileThresholdAlert(
   identifier,
   slackChannel='#mech_symp_alerts',
   scheduleHours=24,
+  schedule={ interval: std.format('%dh', scheduleHours) },  // See https://www.elastic.co/guide/en/elasticsearch/reference/current/trigger-schedule.html for format
   keyField,
   elasticsearchIndexName,
   index='pubsub-rails-inf-gprd*',
@@ -89,19 +91,29 @@ local percentileThresholdAlert(
   issueSearchPrefix='https://gitlab.com/gitlab-org/gitlab/issues?scope=all&state=all&label_name[]=Mechanical%20Sympathy&search=',
   emoji=':rails:',
   unit='s',
+  displayUnitDivisionFactor=1.0,
   queryFilters=[],
-  extraDetail=''
+  includeRailsEndpointDashboardLink=false
       ) =
 
   local pathComponents = std.split(identifier, '/');
   local identifierShort = pathComponents[std.length(pathComponents) - 1];
   local percentileFormatted = '%.1f' % [percentile];
 
+
+  // Link to the Rails Endpoint Dashboard
+  local extraDetail = if includeRailsEndpointDashboardLink then
+    |||
+      :chart_with_upwards_trend: <%(link)s|Rails Endpoint Dashboard>
+    ||| % {
+      link: elasticsearchLinks.dashboards.railsEndpointDashboard('{{#url}}{{key}}{{/url}}', from='now-24', to='now'),
+    }
+  else
+    '';
+
   {
     trigger: {
-      schedule: {
-        interval: std.format('%dh', scheduleHours),
-      },
+      schedule: schedule,
     },
     input: {
       search: {
@@ -178,7 +190,7 @@ local percentileThresholdAlert(
       },
     },
     condition: painlessScript(conditionScript),
-    transform: painlessScript(percentileThresholdTransformerScript(percentileFormatted), { maxElementsReturned: maxElementsReturned }),
+    transform: painlessScript(percentileThresholdTransformerScript(percentileFormatted, displayUnitDivisionFactor), { maxElementsReturned: maxElementsReturned }),
     actions: {
       'notify-slack': {
         slack: {
