@@ -44,7 +44,10 @@ local startedJobsGraph(aggregators=[]) =
       )
     |||,
     aggregators,
-  );
+  ) + {
+    lines: false,
+    bars: true,
+  };
 
 {
   running:: runningJobsGraph,
