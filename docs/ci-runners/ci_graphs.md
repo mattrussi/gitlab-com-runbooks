@@ -49,29 +49,6 @@ Most of the stages are self-explanatory, excluding one:
 * **stage**: currently the name of this is stage can be considered as an error.
 This name indicates that job is currently on preparation phase: download docker images and configuring services.
 
-## Runners Manager: Auto-scaling
-
-![](../img/auto_scaling_details.png)
-
-This is a very important graph as it represents the health of auto-scaling.
-You can read more about auto-scaling of Docker in this document:  https://gitlab.com/gitlab-org/gitlab-ci-multi-runner/blob/master/docs/configuration/autoscale.md#autoscaling-algorithm-and-parameters.
-
-This graph is `gauge` so it doesn't represent rate of change,
-but represent a state in given moment.
-
-The naming of groups is the same as in the previous paragraph,
-but what is interesting are the states:
-* **acquired**: the number of machines that are "locked" as used for requesting jobs from GitLab,
-it can translate to a number of requests executed by runner to job request endpoint of GitLab.
-The high number is a result of change described in this MR: https://gitlab.com/gitlab-org/gitlab-ci-multi-runner/merge_requests/518.
-
-* **creating**: the number of machines that are currently being provisioned that will be later used to run new builds,
-
-* **idle**: the number of machines that are currently waiting idle and if needed can be used to run new builds,
-
-* **used**: the number of machines that are currently assigned to specific received job as they are used to run job payload,
-
-* **removing**: the number of machines that are currently being removed.
 
 ### How to interpret this data?
 

@@ -21,6 +21,7 @@
 * [../bastions/pre-bastions.md](../bastions/pre-bastions.md)
 * [../bastions/testbed-bastion.md](../bastions/testbed-bastion.md)
 * [../ci-runners/ci-abuse-handling.md](../ci-runners/ci-abuse-handling.md)
+* [../ci-runners/ci_constantnumberoflongrunningrepeatedjobs.md](../ci-runners/ci_constantnumberoflongrunningrepeatedjobs.md)
 * [../ci-runners/service-ci-runners.md](../ci-runners/service-ci-runners.md)
 * [../cloudflare/logging.md](../cloudflare/logging.md)
 * [../customers/api-key-rotation.md](../customers/api-key-rotation.md)

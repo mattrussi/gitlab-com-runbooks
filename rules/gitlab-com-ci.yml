@@ -28,7 +28,7 @@ groups:
       title: 'Number of pending jobs per namespace too high: {{$value}}'
       description: 'Number of pending jobs for namespace {{$labels.namespace}} is too high: {{$value}}.
         Check https://dashboards.gitlab.net/dashboard/db/ci?panelId=33&fullscreen'
-      runbook: docs/ci-runners/cicd/ci_pending_builds.md#2-verify-graphs-and-potential-outcomes-out-of-the-graphs-as-described-in-ci-graphsci_graphsmd
+      runbook: docs/ci-runners/ci_pending_builds.md#2-verify-graphs-and-potential-outcomes-out-of-the-graphs-as-described-in-ci-graphsci_graphsmd
 
   - alert: CICDTooManyRunningJobsPerNamespaceOnSharedRunners
     expr: max(sum(ci_running_builds{has_minutes="yes",namespace!="",namespace!="9970",shared_runner="yes",runner=~"40786|40788|44028|44949|380986|380987"}) by (fqdn,namespace)) by (namespace) > 350
@@ -41,7 +41,7 @@ groups:
       title: 'Number of running jobs per namespace too high: {{$value}}'
       description: 'Number of running jobs for namespace {{$labels.namespace}} running on regular Shared Runners is too high: {{$value}}.
         Check https://dashboards.gitlab.net/dashboard/db/ci?panelId=60&fullscreen'
-      runbook: docs/ci-runners/cicd/ci_pending_builds.md#2-verify-graphs-and-potential-outcomes-out-of-the-graphs-as-described-in-ci-graphsci_graphsmd
+      runbook: docs/ci-runners/ci_pending_builds.md#2-verify-graphs-and-potential-outcomes-out-of-the-graphs-as-described-in-ci-graphsci_graphsmd
 
   - alert: CICDTooManyRunningJobsPerNamespaceOnSharedRunnersGitLabOrg
     expr: max(sum(ci_running_builds{has_minutes="yes",namespace!="",namespace!="9970",shared_runner="yes",runner=~"37397|37398|157328|157329|380989|380990"}) by (fqdn,namespace)) by (namespace) > 350
@@ -54,7 +54,7 @@ groups:
       title: 'Number of running jobs per namespace too high: {{$value}}'
       description: 'Number of running jobs for namespace {{$labels.namespace}} running on gitlab-org Shared Runners is too high: {{$value}}.
         Check https://dashboards.gitlab.net/dashboard/db/ci?panelId=60&fullscreen'
-      runbook: docs/ci-runners/cicd/ci_pending_builds.md#2-verify-graphs-and-potential-outcomes-out-of-the-graphs-as-described-in-ci-graphsci_graphsmd
+      runbook: docs/ci-runners/ci_pending_builds.md#2-verify-graphs-and-potential-outcomes-out-of-the-graphs-as-described-in-ci-graphsci_graphsmd
 
   - alert: CICDNoJobsOnSharedRunners
     expr: sum(gitlab_runner_jobs{job="shared-runners"}) == 0
@@ -119,8 +119,8 @@ groups:
       title: 'Machine creation rate for runners is too high: {{$value | printf "%.2f" }}'
       description: 'Machine creation rate for the last 1 minute is at least {{$value}}
         times greater than machines idle rate. This may by a symptom of problems with
-        the auto-scaling provider. Check http://dashboards.gitlab.net/dashboard/db/ci.'
-      runbook: docs/ci-runners/cicd/ci_graphs.md#runners-manager-auto-scaling
+        the auto-scaling provider. Check https://dashboards.gitlab.net/d/ci-runners-incident-autoscaling/ci-runners-incident-support-autoscaling.'
+      runbook: docs/ci-runners/linux/autoscaling.md
 
   - alert: CICDPrometheusDown
     expr: up{job="ci-node",fqdn=~"prometheus-.*us-east1-(c|d).*"} == 0
@@ -184,7 +184,7 @@ groups:
       description: >
         Namespace {{ $labels.namespace }} is running a constant number of jobs with
         repeated commands for more than 45 minutes.
-      runbook: docs/ci-runners/cicd/ci_constantnumberoflongrunningrepeatedjobs.md
+      runbook: docs/ci-runners/ci_constantnumberoflongrunningrepeatedjobs.md
 
 
   - alert: CICDWorkhorseQueuingUnderperformant
@@ -204,7 +204,7 @@ groups:
         90% of requests queued on Workhorse are longer than 30s for last 5 minutes.
 
         This should be considered as service degradation and the reason should be investigated.
-      runbook: docs/ci-runners/cicd/ci_workhorse-queuing.md
+      runbook: docs/ci-runners/ci_workhorse-queuing.md
 
   - alert: CICDTooManyArchivingTraceFailures
     expr: (sum (rate(job_trace_archive_failed_total[5m])) by (job)) > 10
@@ -220,7 +220,7 @@ groups:
         Plese check https://dashboards.gitlab.net/d/000000159/ci?refresh=5m&orgId=1&panelId=153&fullscreen,
         https://sentry.gitlab.net/gitlab/gitlabcom/?query=ArchiveTraceWorker, and
         https://sentry.gitlab.net/gitlab/gitlabcom/?query=ArchiveTracesCronWorker to find out more details
-      runbook: docs/ci-runners/cicd/ci_too_many_archiving_trace_failures.md
+      runbook: docs/ci-runners/ci_too_many_archiving_trace_failures.md
 
   - alert: CICDSidekiqQueuesTooBig
     expr: (sidekiq_queue_size{environment=~"gprd",name=~"pipeline.*"} and on (fqdn) gitlab:redis_master) > 1000
