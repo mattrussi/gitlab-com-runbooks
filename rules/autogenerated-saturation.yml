@@ -1177,7 +1177,7 @@ groups:
   - record: slo:max:hard:gitlab_component_saturation:ratio
     labels:
       component: redis_memory
-    expr: '0.75'
+    expr: '0.7'
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: redis_primary_cpu
@@ -3223,6 +3223,8 @@ groups:
         As Redis memory saturates node memory, the likelyhood of OOM kills, possibly to the Redis process, become more likely.
 
         For caches, consider lowering the `maxmemory` setting in Redis. For non-caching Redis instances, this has been caused in the past by credential stuffing, leading to large numbers of web sessions.
+
+        This threshold is kept deliberately low, since Redis RDB snapshots could consume a significant amount of memory, especially when the rate of change in Redis is high, leading to copy-on-write consuming more memory than when the rate-of-change is low.
       grafana_dashboard_id: alerts-sat_redis_memory
       grafana_dashboard_link: >-
         https://dashboards.gitlab.net/d/alerts-sat_redis_memory?from=now-6h/m&to=now-1m/m&var-environment={{
