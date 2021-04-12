@@ -114,6 +114,46 @@ local rules = {
           replica=true
         ),
 
+        // Long running transaction alert
+        alerts.processAlertRule({
+          alert: 'PatroniLongRunningTransactionDetected',
+          expr: |||
+            topk by (environment, type, stage, shard) (1,
+              max by (environment, type, stage, shard, application, endpoint, fqdn) (
+                pg_stat_activity_marginalia_sampler_max_tx_age_in_seconds{
+                  type="patroni",
+                  command!="autovacuum",
+                  command!~"[aA][nN][aA][lL][yY][zZ][eE]",
+                }
+              )
+              > 540
+            )
+          |||,
+          'for': '1m',
+          labels: {
+            team: 'sre_datastores',
+            severity: 's2',
+            alert_type: 'cause',
+            pager: 'pagerduty',
+            runbook: 'docs/patroni/postgres.md#tables-with-a-large-amount-of-dead-tuples',
+          },
+          annotations: {
+            title: 'Transactions detected that have been running on `{{ $labels.fqdn }}` for more than 10m',
+            description: |||
+              Endpoint `{{ $labels.endpoint }}` on `{{ $labels.application }}` is executing a transaction that has been running
+              for more than 10m. This could lead to dead-tuples and performance degradation in our Patroni fleet.
+
+              Ideally, no transaction should remain open for more than a few seconds.
+
+              <%(kibanaUrl)s|Check the slowlog for changes in the usual trends>.
+            ||| % {
+              kibanaUrl: elasticsearchLinks.buildElasticLineCountVizURL('postgres', [], splitSeries=true, timeRange=''),
+            },
+            grafana_dashboard_id: 'alerts-long_running_transactions/alerts-long-running-transactions',
+            grafana_min_zoom_hours: '6',
+            grafana_variables: 'environment',
+          },
+        }),
       ],
     },
   ],
