@@ -48,6 +48,17 @@ acl is_delete method DELETE
 http-request deny if is_delete is_stop_impersonation
 ```
 
+##### Block project imports using blacklist
+
+[Example MR for Production](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/-/merge_requests/5222)
+
+```
+        "blacklist": {
+          "uri": {
+            "/api/v4/projects/import": "gitlab-com/gl-infra/production/-/issues/XXXX",
+            "/import/gitlab_project": "gitlab-com/gl-infra/production/-/issues/XXXX",
+```
+
 #### Once the changes are applied
 
 Remember to run the chef-client in all the LBs
