@@ -1,5 +1,11 @@
 # Linux CI/CD Runners fleet deployments
 
+## Recent Deployments
+
+To find recent deployments check the [`chef-repo` Merge
+Requests](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/-/merge_requests?scope=all&utf8=%E2%9C%93&state=merged&label_name%5B%5D=group%3A%3Arunner&label_name%5B%5D=deploy)
+that are merged.
+
 ## Preflight checklist
 
 Before you will start any work
@@ -104,7 +110,7 @@ Or it can be done for whatever other reason, for example a rollback after introd
         git checkout -b origin update-prmx-to-13-9-0 && \
         git add roles/gitlab-runner-prm.json && \
         git commit -m "Update prmX runners to 13.9.0" && \
-        git push -u origin update-prmx-to-13-9-0
+        git push -u origin update-prmx-to-13-9-0 -o merge_request.create -o merge_request.label="deploy" -o merge_request.label="group::runner"
     ```
 
    After pushing the commit, create, review and work upon a merge of the MR. When the MR gets approved and merged,
@@ -168,7 +174,7 @@ git checkout -b update-runners-fleet
 $EDITOR roles/gitlab-runner-base.json
 $EDITOR roles/org-ci-base-runner.json
 git add roles/gitlab-runner-base.json roles/org-ci-base-runner.json && git commit -m "Update runners fleet to [X.Y.Z-...]"
-git push -u origin update-runners-fleet
+git push -u origin update-runners-fleet -o merge_request.create -o merge_request.label="deploy" -o merge_request.label="group::runner"
 ```
 
 When the push will be finished - use the printed URL to open an MR. Double check if the
