@@ -1,4 +1,6 @@
+local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
+local text = grafana.text;
 
 local table(title, query, sortBy=[], transform_organize={}, transform_groupBy={}) = (
   basic.table(
@@ -160,7 +162,18 @@ local uptimeTable = table(
   },
 };
 
+local notes = text.new(
+  title='Notes',
+  mode='markdown',
+  content=|||
+    ## Useful links
+
+    - [Deployments Merge Requests](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/-/merge_requests?scope=all&utf8=%E2%9C%93&state=merged&label_name[]=group%3A%3Arunner&label_name[]=deploy).
+  |||
+);
+
 {
   versions:: versionsTable,
   uptime:: uptimeTable,
+  notes:: notes,
 }

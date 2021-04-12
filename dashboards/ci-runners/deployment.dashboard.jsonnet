@@ -22,6 +22,7 @@ dashboardHelpers.dashboard(
     jobGraphs.running(['instance']),
     jobGraphs.failures(['instance']),
     jobQueueGraphs.pendingSize,
+    deploymentDetails.notes,
   ],
 )
 .addPanels(
