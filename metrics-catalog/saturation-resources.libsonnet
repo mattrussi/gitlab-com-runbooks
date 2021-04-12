@@ -938,6 +938,10 @@ local pgbouncerSyncPool(serviceType, role) =
 
       For caches, consider lowering the `maxmemory` setting in Redis. For non-caching Redis instances,
       this has been caused in the past by credential stuffing, leading to large numbers of web sessions.
+
+      This threshold is kept deliberately low, since Redis RDB snapshots could consume a significant amount of memory,
+      especially when the rate of change in Redis is high, leading to copy-on-write consuming more memory than when the
+      rate-of-change is low.
     |||,
     grafana_dashboard_uid: 'sat_redis_memory',
     resourceLabels: ['fqdn'],
@@ -954,7 +958,10 @@ local pgbouncerSyncPool(serviceType, role) =
     |||,
     slos: {
       soft: 0.65,
-      hard: 0.75,
+      // Keep this low, since processes like the Redis RDB snapshot can put sort-term memory pressure
+      // Ideally we don't want to go over 75%, so alerting at 70% gives us due warning before we hit
+      //
+      hard: 0.70,
     },
   }),
 
