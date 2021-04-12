@@ -9,11 +9,12 @@ watcher.percentileThresholdAlert(
     these requests may fail on smaller memory-constrained GitLab instances.
   |||,
   identifier=std.thisFile,
+  percentile=99,  // "If we have requests that can allocate 1GB, this is clearly bad. As this increases pressure for all, and each GC cycle costs a ton" -- @ayufan
   scheduleHours=24,
   schedule={ daily: { at: '02:32' } },
   keyField='json.meta.caller_id.keyword',
   percentileValueField='json.mem_bytes',
-  thresholdValue=80 * (1024 * 1024),  // 80 MiB
+  thresholdValue=300 * (1024 * 1024),  // 300 MiB
   elasticsearchIndexName='rails',
   emoji=':memory:',
   unit=' MiB',
