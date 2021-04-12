@@ -283,7 +283,8 @@
     name: 'Activation',
     stage: 'growth',
     feature_categories: [
-
+      'experimentation',
+      'onboarding',
     ],
   },
   conversion: {
