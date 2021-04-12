@@ -1,3 +1,3 @@
 local auxDashboards = import 'aux_dashboards.libsonnet';
 
-auxDashboards.forService('plantuml')
+auxDashboards.forService('git')
