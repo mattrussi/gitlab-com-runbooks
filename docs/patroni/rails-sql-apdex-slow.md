@@ -19,6 +19,7 @@ This runbook covers some of the topics that were discussed in the [EOC Firedrill
 ### Logs
 
 - [Primary queries by endpoint_id if it exists](https://log.gprd.gitlab.net/goto/1aee2b0cd35ffb9b14c82e5b09237392)
+    - Grab the first `endpoint_id`, search [the logs](https://log.gprd.gitlab.net/goto/07606a8985e78fa0a4f83e07f043c7d5) by setting  `json.meta.caller_id` to the `endpoint_id` and try to find a common denominator, for example, `json.meta.root_namespace`.
 - [Slow queries on the primary](https://log.gprd.gitlab.net/goto/7648f3995aa30dd1681fd9f4af2c13c0)
 - [Statement timeouts on the primary](https://log.gprd.gitlab.net/goto/6744c482baeb5494fd2ce124d08b9e82)
 - [Locks on the primary](https://log.gprd.gitlab.net/goto/20db7e839d10534b9c47fa1149898e21)
