@@ -16,6 +16,7 @@
 
 ## Troubleshooting Pointers
 
+* [../Teleport/Connect_to_Rails_Console_via_Teleport.md](../Teleport/Connect_to_Rails_Console_via_Teleport.md)
 * [../ci-runners/ci_pending_builds.md](../ci-runners/ci_pending_builds.md)
 * [../cloudflare/logging.md](../cloudflare/logging.md)
 * [../cloudflare/managing-traffic.md](../cloudflare/managing-traffic.md)
