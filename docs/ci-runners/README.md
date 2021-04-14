@@ -108,6 +108,13 @@ These subnets are created under the `windows-ci` network.
 | bastion-windows-ci | 10.3.1.0/24 | bastion network                   |
 | runner-windows-ci  | 10.3.0.0/24 | Runner network for ansible/packer |
 
+### gitlab-ci-plan-free-7 project
+
+These subnets are created under the `ephemeral-runners` network.
+
+| Subnet Name       | CIDR         | Purpose                   |
+|-------------------|--------------|---------------------------|
+| ephemeral-runners | 10.10.0.0/21 | Ephemeral runner machines |
 
 ## Production Change Lock (PCL)
 
