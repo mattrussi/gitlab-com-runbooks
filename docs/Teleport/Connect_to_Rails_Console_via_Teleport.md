@@ -18,13 +18,12 @@ It is as simple as running, from your laptop's console:
 `$> brew install teleport`
 
 #### Accessing the Rails console via Teleport
+
+> Note: It is not required, but it is easier to be logged in to Okta already before this step
+
 The access will be temporary (`24h` max) and approved by Teleport admins - typically Reliability Managers. Access can be extended with approval, using the same process.
 
-Before using teleport, you should switch off the local SSH agent. The console server can't forward connections, and Teleport is known to write keys which are incompatable with GPG agent.  If you aren't using a Yubikey, this is less important.  You can also add this to your shell startup files (`.bash_profile`)
-
-`$> export TELEPORT_USE_LOCAL_SSH_AGENT=false`
-
-Now login to the Teleport proxy/server:
+Login to the Teleport proxy/server:
 
 `$> tsh login --proxy=teleport.gstg.gitlab.net`
 
