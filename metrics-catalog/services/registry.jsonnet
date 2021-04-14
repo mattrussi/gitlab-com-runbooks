@@ -109,5 +109,27 @@ metricsCatalog.serviceDefinition({
 
       significantLabels: ['action'],
     },
+
+    database: {
+      userImpacting: true,
+      featureCategory: 'container_registry',
+      description: |||
+        Aggregation of all container registry database operations.
+      |||,
+
+      apdex: histogramApdex(
+        histogram='registry_database_query_duration_seconds_bucket',
+        selector='type="registry"',
+        satisfiedThreshold=1,
+        toleratedThreshold=2.5
+      ),
+
+      requestRate: rateMetric(
+        counter='registry_database_queries_total',
+        selector='type="registry"'
+      ),
+
+      significantLabels: ['name'],
+    },
   },
 })
