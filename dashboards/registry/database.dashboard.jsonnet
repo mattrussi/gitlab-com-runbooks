@@ -45,7 +45,7 @@ basic.dashboard(
   layout.grid([
     basic.timeseries(
       title='CPU Utilization',
-      description= |||
+      description=|||
         CPU utilization.
 
         See https://cloud.google.com/monitoring/api/metrics_gcp#gcp-cloudsql for
@@ -57,7 +57,7 @@ basic.dashboard(
     ),
     basic.timeseries(
       title='Memory Utilization',
-      description= |||
+      description=|||
         Memory utilization.
 
         See https://cloud.google.com/monitoring/api/metrics_gcp#gcp-cloudsql for
@@ -69,7 +69,7 @@ basic.dashboard(
     ),
     basic.timeseries(
       title='Disk Utilization',
-      description= |||
+      description=|||
         Data utilization in bytes.
 
         See https://cloud.google.com/monitoring/api/metrics_gcp#gcp-cloudsql for
@@ -81,7 +81,7 @@ basic.dashboard(
     ),
     basic.timeseries(
       title='Transactions',
-      description= |||
+      description=|||
         Delta count of number of transactions. Sampled every 60 seconds.
 
         See https://cloud.google.com/monitoring/api/metrics_gcp#gcp-cloudsql for
