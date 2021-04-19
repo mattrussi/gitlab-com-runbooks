@@ -16,6 +16,10 @@ This runbook covers some of the topics that were discussed in the [EOC Firedrill
 - Look for unusual usage patterns in [tuple statistics](https://dashboards.gitlab.net/d/000000167/postgresql-tuple-statistics?orgId=1&refresh=1m)
 - Look for outliers in the [marginalia sampler dashboard](https://dashboards.gitlab.net/d/patroni-marginalia-sampler/patroni-marginalia-sampler?orgId=1&from=now-1h&to=now&var-PROMETHEUS_DS=Global&var-environment=gprd&var-fqdn=patroni-03-db-gprd.c.gitlab-production.internal&var-application=All&var-endpoint=All&var-state=All&var-wait_event_type=All)
 
+### Metric queries
+
+- Check [top query durations by ID](https://thanos.gitlab.net/graph?g0.range_input=30m&g0.end_input=2021-03-18%2014%3A15&g0.step_input=3&g0.moment_input=2021-03-18%2014%3A30%3A46&g0.max_source_resolution=0s&g0.expr=topk(10%2C%20%0A%20%20sum%20by%20(queryid)%20(%0A%20%20%20%20rate(pg_stat_statements_seconds_total%7Benv%3D%22gprd%22%2C%20monitor%3D%22db%22%2C%20type%3D%22patroni%22%2Cinstance%3D%22patroni-03-db-gprd.c.gitlab-production.internal%3A9187%22%7D%5B1m%5D)%0A%20%20)%0A)&g0.tab=0)
+
 ### Logs
 
 - [Primary queries by endpoint_id if it exists](https://log.gprd.gitlab.net/goto/1aee2b0cd35ffb9b14c82e5b09237392)
