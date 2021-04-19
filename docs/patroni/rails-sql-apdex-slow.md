@@ -23,6 +23,7 @@ This runbook covers some of the topics that were discussed in the [EOC Firedrill
 - [Slow queries on the primary](https://log.gprd.gitlab.net/goto/7648f3995aa30dd1681fd9f4af2c13c0)
 - [Statement timeouts on the primary](https://log.gprd.gitlab.net/goto/6744c482baeb5494fd2ce124d08b9e82)
 - [Locks on the primary](https://log.gprd.gitlab.net/goto/20db7e839d10534b9c47fa1149898e21)
+- [Check for unusual stats for a specific relname](https://prometheus-db.gprd.gitlab.net/graph?g0.expr=(sum%20by(environment%2C%20tier%2C%20type%2C%20relname)%20(rate(pg_stat_user_tables_idx_tup_fetch%7Btype%3D%22patroni%22%7D%5B5m%5D)%20and%20on(job%2C%20instance)%20pg_replication_is_replica%20%3D%3D%201)%20%2F%20ignoring(relname)%20group_left()%20sum%20by(environment%2C%20tier%2C%20type)%20(rate(pg_stat_user_tables_idx_tup_fetch%7Btype%3D%22patroni%22%7D%5B5m%5D)%20and%20on(job%2C%20instance)%20pg_replication_is_replica%20%3D%3D%201))%20%3E%200.5&g0.tab=0&g0.stacked=0&g0.range_input=2h)
 
 _For any of the above queries, you can search for json.fingerprint on the left list of fields, click on it to see if a particular fingerprint is dominating slow queries or timeouts. From this, you can get the full query (or the endpoint ID) which will help to narrow down the performance degradation_
 
