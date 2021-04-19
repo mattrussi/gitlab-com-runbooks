@@ -372,6 +372,9 @@
         job_id: {
           type: 'float',
         },
+        job_size_bytes: {
+          type: 'long',
+        },
         job_status: {
           type: 'text',
           fields: {
