@@ -16,7 +16,7 @@ local saturationTypes = [
   import 'go_memory.libsonnet',
   import 'kube_container_cpu.libsonnet',
   import 'kube_container_memory.libsonnet',
-  import 'kube_hpa_instances.libsonnet',
+  import 'kube_hpa_desired_replicas.libsonnet',
   import 'kube_persistent_volume_claim_disk_space.libsonnet',
   import 'kube_persistent_volume_claim_inodes.libsonnet',
   import 'memory.libsonnet',
