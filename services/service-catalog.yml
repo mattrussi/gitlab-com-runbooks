@@ -1248,6 +1248,61 @@ services:
       grafana_folder: SRXyrrSmk
       primary_grafana_dashboard: "praefect-main/praefect-overview"
 
+- name: pvs
+  tier: inf
+  friendly_name: Pipeline Validation Service
+  teams:
+    - trust_and_safety
+  infra_owner: sre_coreinfra
+  label: Service:PVS
+  business:
+    requirement: |
+      Performs pipeline validation
+    customers:
+      - Internal
+    business_value: |
+      Validates pipelines
+    SLA:
+      availability:
+      response_time:
+  technical:
+    project:
+      - https://gitlab.com/gitlab-com/gl-security/security-operations/trust-and-safety/pipeline-validation-service
+    slx:
+    documents:
+      design:
+      architecture:
+      readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/issues/17
+      service:
+      security:
+    dependencies:
+    configurations:
+    chef_roles:
+    security:
+      security_reviewed:
+      data_classification: red
+      security_incidents:
+    logging:
+      - name: stackdriver
+        permalink: https://cloudlogging.app.goo.gl/mLPtczm9LrLekYcw5
+  infrastructure:
+    provider: gcp
+    architecture:
+    provisioning: cloudrun
+    accesses:
+      - account_name:
+        access_type:
+        reviewed:
+  operations:
+    maintenance:
+    runbooks:
+    playbooks:
+    error_budget:
+  observability:
+    monitors:
+      grafana_folder: pvs
+      primary_grafana_dashboard: "pvs-main/pvs-overview"
+
 - name: mailroom
   tier: sv
   friendly_name: Mailroom Incoming Mail Service

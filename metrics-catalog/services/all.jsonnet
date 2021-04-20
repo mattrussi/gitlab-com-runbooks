@@ -22,6 +22,7 @@
   import 'pgbouncer.jsonnet',
   import 'plantuml.jsonnet',
   import 'praefect.jsonnet',
+  import 'pvs.jsonnet',
   import 'redis-cache.jsonnet',
   import 'redis-sidekiq.jsonnet',
   import 'redis.jsonnet',
