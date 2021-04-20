@@ -41,6 +41,7 @@
 * [postgresql-replica.md](postgresql-replica.md)
 * [postgresql-role-credential-rotation.md](postgresql-role-credential-rotation.md)
 * [postgresql.md](postgresql.md)
+* [rails-sql-apdex-slow.md](rails-sql-apdex-slow.md)
 * [rotating-rails-postgresql-password.md](rotating-rails-postgresql-password.md)
 * [scale-down-patroni.md](scale-down-patroni.md)
 * [scale-up-patroni.md](scale-up-patroni.md)

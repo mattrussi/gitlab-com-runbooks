@@ -17,6 +17,7 @@
 
 * [ci-apdex-violating-slo.md](ci-apdex-violating-slo.md)
 * [service-ci-runners.md](service-ci-runners.md)
+* [../patroni/rails-sql-apdex-slow.md](../patroni/rails-sql-apdex-slow.md)
 <!-- END_MARKER -->
 
 # CI Runner Overview

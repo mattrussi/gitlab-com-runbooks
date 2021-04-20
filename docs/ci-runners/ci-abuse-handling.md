@@ -1,6 +1,10 @@
+# How to detect CI Abuse
+
+- Check [started jobs by project](https://log.gprd.gitlab.net/goto/63f83c2a163fb0b29edc33b19773db25).
+
 # Summary
 
-**Note**: there is additional coverage by trust-and-safety up until April 15th, 2021: gitlab-com/gl-security/security-operations/trust-and-safety/operations#509 (see [spreadsheet](https://docs.google.com/spreadsheets/d/1KRGdGvPDWekGFYTPIjN8PAdB3ya283Xj2ydFjJr6U70/edit#gid=673454602) for coverage)
+**Note**: There is additional coverage by trust-and-safety to handle CI abuse up until April 15th, 2021: gitlab-com/gl-security/security-operations/trust-and-safety/operations#509 (see [spreadsheet](https://docs.google.com/spreadsheets/d/1KRGdGvPDWekGFYTPIjN8PAdB3ya283Xj2ydFjJr6U70/edit#gid=673454602) for coverage)
 
 **For all issues be sure to also notify `@trust-and-safety` on Slack**
 
