@@ -29,6 +29,7 @@ local generateMarkdown(toolingLinks, options={}) =
   kibana:: (import './kibana.libsonnet').kibana,
   gkeDeployment:: (import './gke_deployment.libsonnet').gkeDeployment,
   googleLoadBalancer: (import './google_load_balancer.libsonnet').googleLoadBalancer,
+  googleCloudRun: (import './google_cloud_run.libsonnet').googleCloudRun,
   stackdriverLogs: (import './stackdriver_logs.libsonnet').stackdriverLogs,
   generateMarkdown:: generateMarkdown,
   renderLinks:: renderLinks,
