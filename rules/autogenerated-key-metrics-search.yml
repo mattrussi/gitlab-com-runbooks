@@ -7,7 +7,6 @@ groups:
   - record: gitlab_component_ops:rate
     labels:
       component: elasticsearch_indexing
-      feature_category: global_search
       tier: inf
       type: search
     expr: |
@@ -17,7 +16,6 @@ groups:
   - record: gitlab_component_ops:rate
     labels:
       component: elasticsearch_searching
-      feature_category: global_search
       tier: inf
       type: search
     expr: |
@@ -30,7 +28,6 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: elasticsearch_indexing
-      feature_category: global_search
       tier: inf
       type: search
     expr: |
@@ -40,7 +37,6 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: elasticsearch_searching
-      feature_category: global_search
       tier: inf
       type: search
     expr: |
@@ -53,7 +49,6 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: elasticsearch_indexing
-      feature_category: global_search
       tier: inf
       type: search
     expr: |
@@ -63,7 +58,6 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: elasticsearch_searching
-      feature_category: global_search
       tier: inf
       type: search
     expr: |
@@ -76,7 +70,6 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: elasticsearch_indexing
-      feature_category: global_search
       tier: inf
       type: search
     expr: |
@@ -86,7 +79,6 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: elasticsearch_searching
-      feature_category: global_search
       tier: inf
       type: search
     expr: |
@@ -99,7 +91,6 @@ groups:
   - record: gitlab_component_ops:rate_6h
     labels:
       component: elasticsearch_indexing
-      feature_category: global_search
       tier: inf
       type: search
     expr: |
@@ -109,7 +100,6 @@ groups:
   - record: gitlab_component_ops:rate_6h
     labels:
       component: elasticsearch_searching
-      feature_category: global_search
       tier: inf
       type: search
     expr: |
