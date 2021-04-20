@@ -179,10 +179,30 @@ basic.dashboard(
   ), gridPos={ x: 0, y: 7100 }
 )
 .addPanel(
-  row.new(title='git process activity'),
+  row.new(title='gitaly process activity'),
   gridPos={
     x: 0,
     y: 8000,
+    w: 24,
+    h: 1,
+  }
+)
+.addPanels(
+  processExporter.namedGroup(
+    'gitaly processes',
+    selectorHash
+    {
+      groupname: { re: 'gitaly' },
+    },
+    aggregationLabels=[],
+    startRow=8001
+  )
+)
+.addPanel(
+  row.new(title='git process activity'),
+  gridPos={
+    x: 0,
+    y: 8100,
     w: 24,
     h: 1,
   }
@@ -195,14 +215,14 @@ basic.dashboard(
       groupname: { re: 'git.*' },
     },
     aggregationLabels=['groupname'],
-    startRow=8001
+    startRow=8101
   )
 )
 .addPanel(
   row.new(title='gitaly-ruby process activity'),
   gridPos={
     x: 0,
-    y: 9000,
+    y: 8200,
     w: 24,
     h: 1,
   }
@@ -215,7 +235,7 @@ basic.dashboard(
       groupname: 'gitaly-ruby',
     },
     aggregationLabels=[],
-    startRow=9001
+    startRow=8201
   )
 )
 
