@@ -29,7 +29,10 @@ This runbook covers some of the topics that were discussed in the [EOC Firedrill
 - [Locks on the primary](https://log.gprd.gitlab.net/goto/20db7e839d10534b9c47fa1149898e21)
 - [Check for unusual stats for a specific relname](https://prometheus-db.gprd.gitlab.net/graph?g0.expr=(sum%20by(environment%2C%20tier%2C%20type%2C%20relname)%20(rate(pg_stat_user_tables_idx_tup_fetch%7Btype%3D%22patroni%22%7D%5B5m%5D)%20and%20on(job%2C%20instance)%20pg_replication_is_replica%20%3D%3D%201)%20%2F%20ignoring(relname)%20group_left()%20sum%20by(environment%2C%20tier%2C%20type)%20(rate(pg_stat_user_tables_idx_tup_fetch%7Btype%3D%22patroni%22%7D%5B5m%5D)%20and%20on(job%2C%20instance)%20pg_replication_is_replica%20%3D%3D%201))%20%3E%200.5&g0.tab=0&g0.stacked=0&g0.range_input=2h)
 
-To find the exact query by the `query_id` from thanos, run `select queryid, substr(query ,1, 5000) from pg_stat_statements where queryid='xxxxx';` on the matching Postgres node where the query was handled on.
+To find the exact query by the `query_id` from thanos on the matching Postgres node where the query was handled run
+```sql
+select queryid, substr(query ,1, 5000) from pg_stat_statements where queryid='xxxxx';
+```
 
 _For any of the above queries, you can search for json.fingerprint on the left list of fields, click on it to see if a particular fingerprint is dominating slow queries or timeouts. From this, you can get the full query (or the endpoint ID) which will help to narrow down the performance degradation_
 
