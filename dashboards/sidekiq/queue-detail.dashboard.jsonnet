@@ -397,7 +397,7 @@ basic.dashboard(
               )
             )
           ||| % { selector: selectors.serializeHash(selector) },
-          legendFormat: 'Total - {{ endpoint_id }}',
+          legendFormat: '{{ endpoint_id }} - total',
         },
         {
           query: |||
@@ -407,7 +407,7 @@ basic.dashboard(
               )
             )
           ||| % { selector: selectors.serializeHash(selector) },
-          legendFormat: 'Primary - {{ endpoint_id }}',
+          legendFormat: '{{ endpoint_id }} - primary',
         },
         {
           query: |||
@@ -417,7 +417,7 @@ basic.dashboard(
               )
             )
           ||| % { selector: selectors.serializeHash(selector) },
-          legendFormat: 'Replica - {{ endpoint_id }}',
+          legendFormat: '{{ endpoint_id }} - replica',
         },
       ]
     ),
@@ -431,16 +431,26 @@ basic.dashboard(
       ||| % { selector: selectors.serializeHash(selector) },
       legendFormat='{{ endpoint_id }}',
     ),
-    basic.timeseries(
-      stableId='avg-duration-per-sql-transaction',
-      title='Average Duration per SQL Transaction',
-      query=|||
-        sum(rate(gitlab_database_transaction_seconds_sum{%(selector)s}[$__interval])) by (endpoint_id)
-        /
-        sum(rate(gitlab_database_transaction_seconds_count{%(selector)s}[$__interval])) by (endpoint_id)
-      ||| % { selector: selectors.serializeHash(selector) },
-      legendFormat='{{ endpoint_id }}',
-      format='s'
+    basic.multiTimeseries(
+      stableId='sql-transaction-holding-duration',
+      title='SQL Transaction Holding Duration',
+      format='s',
+      queries=[
+        {
+          query: |||
+            sum(rate(gitlab_database_transaction_seconds_sum{%(selector)s}[$__interval])) by (endpoint_id)
+            /
+            sum(rate(gitlab_database_transaction_seconds_count{%(selector)s}[$__interval])) by (endpoint_id)
+          ||| % { selector: selectors.serializeHash(selector) },
+          legendFormat: '{{ endpoint_id }} - p50',
+        },
+        {
+          query: |||
+            histogram_quantile(0.95, sum(rate(gitlab_database_transaction_seconds_bucket{%(selector)s}[$__interval])) by (endpoint_id, le))
+          ||| % { selector: selectors.serializeHash(selector) },
+          legendFormat: '{{ endpoint_id }} - p95',
+        },
+      ],
     ),
   ], startRow=901)
 )
