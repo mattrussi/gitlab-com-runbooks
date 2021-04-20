@@ -7,6 +7,7 @@ groups:
   - record: gitlab_component_apdex:success:rate
     labels:
       component: gitalyruby
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -24,6 +25,7 @@ groups:
   - record: gitlab_component_apdex:weight:score
     labels:
       component: gitalyruby
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -33,6 +35,7 @@ groups:
   - record: gitlab_component_ops:rate
     labels:
       component: gitalyruby
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -42,6 +45,7 @@ groups:
   - record: gitlab_component_errors:rate
     labels:
       component: gitalyruby
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -53,12 +57,13 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate{component="gitalyruby",tier="stor",type="gitaly"}
+          gitlab_component_ops:rate{component="gitalyruby",feature_category="gitaly",tier="stor",type="gitaly"}
         )
       )
   - record: gitlab_component_apdex:success:rate
     labels:
       component: goserver
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -76,6 +81,7 @@ groups:
   - record: gitlab_component_apdex:weight:score
     labels:
       component: goserver
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -85,6 +91,7 @@ groups:
   - record: gitlab_component_ops:rate
     labels:
       component: goserver
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -94,6 +101,7 @@ groups:
   - record: gitlab_component_errors:rate
     labels:
       component: goserver
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -107,12 +115,13 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate{component="goserver",tier="stor",type="gitaly"}
+          gitlab_component_ops:rate{component="goserver",feature_category="gitaly",tier="stor",type="gitaly"}
         )
       )
   - record: gitlab_component_apdex:success:rate
     labels:
       component: goserver_op_service
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -130,6 +139,7 @@ groups:
   - record: gitlab_component_apdex:weight:score
     labels:
       component: goserver_op_service
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -139,6 +149,7 @@ groups:
   - record: gitlab_component_ops:rate
     labels:
       component: goserver_op_service
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -148,6 +159,7 @@ groups:
   - record: gitlab_component_errors:rate
     labels:
       component: goserver_op_service
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -161,7 +173,7 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate{component="goserver_op_service",tier="stor",type="gitaly"}
+          gitlab_component_ops:rate{component="goserver_op_service",feature_category="gitaly",tier="stor",type="gitaly"}
         )
       )
 - name: 'Component-Level SLIs: gitaly - 5m burn-rate'
@@ -170,6 +182,7 @@ groups:
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: gitalyruby
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -187,6 +200,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_5m
     labels:
       component: gitalyruby
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -196,6 +210,7 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: gitalyruby
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -205,6 +220,7 @@ groups:
   - record: gitlab_component_errors:rate_5m
     labels:
       component: gitalyruby
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -216,12 +232,13 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate_5m{component="gitalyruby",tier="stor",type="gitaly"}
+          gitlab_component_ops:rate_5m{component="gitalyruby",feature_category="gitaly",tier="stor",type="gitaly"}
         )
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: goserver
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -239,6 +256,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_5m
     labels:
       component: goserver
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -248,6 +266,7 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: goserver
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -257,6 +276,7 @@ groups:
   - record: gitlab_component_errors:rate_5m
     labels:
       component: goserver
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -270,12 +290,13 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate_5m{component="goserver",tier="stor",type="gitaly"}
+          gitlab_component_ops:rate_5m{component="goserver",feature_category="gitaly",tier="stor",type="gitaly"}
         )
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: goserver_op_service
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -293,6 +314,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_5m
     labels:
       component: goserver_op_service
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -302,6 +324,7 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: goserver_op_service
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -311,6 +334,7 @@ groups:
   - record: gitlab_component_errors:rate_5m
     labels:
       component: goserver_op_service
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -324,12 +348,13 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate_5m{component="goserver_op_service",tier="stor",type="gitaly"}
+          gitlab_component_ops:rate_5m{component="goserver_op_service",feature_category="gitaly",tier="stor",type="gitaly"}
         )
       )
   - record: gitlab_component_node_apdex:success:rate_5m
     labels:
       component: gitalyruby
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -347,6 +372,7 @@ groups:
   - record: gitlab_component_node_apdex:weight:score_5m
     labels:
       component: gitalyruby
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -356,6 +382,7 @@ groups:
   - record: gitlab_component_node_ops:rate_5m
     labels:
       component: gitalyruby
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -365,6 +392,7 @@ groups:
   - record: gitlab_component_node_errors:rate_5m
     labels:
       component: gitalyruby
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -376,12 +404,13 @@ groups:
       or
       (
         0 * group by(environment,stage,shard,fqdn) (
-          gitlab_component_node_ops:rate_5m{component="gitalyruby",tier="stor",type="gitaly"}
+          gitlab_component_node_ops:rate_5m{component="gitalyruby",feature_category="gitaly",tier="stor",type="gitaly"}
         )
       )
   - record: gitlab_component_node_apdex:success:rate_5m
     labels:
       component: goserver
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -399,6 +428,7 @@ groups:
   - record: gitlab_component_node_apdex:weight:score_5m
     labels:
       component: goserver
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -408,6 +438,7 @@ groups:
   - record: gitlab_component_node_ops:rate_5m
     labels:
       component: goserver
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -417,6 +448,7 @@ groups:
   - record: gitlab_component_node_errors:rate_5m
     labels:
       component: goserver
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -430,12 +462,13 @@ groups:
       or
       (
         0 * group by(environment,stage,shard,fqdn) (
-          gitlab_component_node_ops:rate_5m{component="goserver",tier="stor",type="gitaly"}
+          gitlab_component_node_ops:rate_5m{component="goserver",feature_category="gitaly",tier="stor",type="gitaly"}
         )
       )
   - record: gitlab_component_node_apdex:success:rate_5m
     labels:
       component: goserver_op_service
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -453,6 +486,7 @@ groups:
   - record: gitlab_component_node_apdex:weight:score_5m
     labels:
       component: goserver_op_service
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -462,6 +496,7 @@ groups:
   - record: gitlab_component_node_ops:rate_5m
     labels:
       component: goserver_op_service
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -471,6 +506,7 @@ groups:
   - record: gitlab_component_node_errors:rate_5m
     labels:
       component: goserver_op_service
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -484,7 +520,7 @@ groups:
       or
       (
         0 * group by(environment,stage,shard,fqdn) (
-          gitlab_component_node_ops:rate_5m{component="goserver_op_service",tier="stor",type="gitaly"}
+          gitlab_component_node_ops:rate_5m{component="goserver_op_service",feature_category="gitaly",tier="stor",type="gitaly"}
         )
       )
 - name: 'Component-Level SLIs: gitaly - 30m burn-rate'
@@ -493,6 +529,7 @@ groups:
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: gitalyruby
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -510,6 +547,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_30m
     labels:
       component: gitalyruby
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -519,6 +557,7 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: gitalyruby
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -528,6 +567,7 @@ groups:
   - record: gitlab_component_errors:rate_30m
     labels:
       component: gitalyruby
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -539,12 +579,13 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate_30m{component="gitalyruby",tier="stor",type="gitaly"}
+          gitlab_component_ops:rate_30m{component="gitalyruby",feature_category="gitaly",tier="stor",type="gitaly"}
         )
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: goserver
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -562,6 +603,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_30m
     labels:
       component: goserver
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -571,6 +613,7 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: goserver
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -580,6 +623,7 @@ groups:
   - record: gitlab_component_errors:rate_30m
     labels:
       component: goserver
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -593,12 +637,13 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate_30m{component="goserver",tier="stor",type="gitaly"}
+          gitlab_component_ops:rate_30m{component="goserver",feature_category="gitaly",tier="stor",type="gitaly"}
         )
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: goserver_op_service
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -616,6 +661,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_30m
     labels:
       component: goserver_op_service
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -625,6 +671,7 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: goserver_op_service
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -634,6 +681,7 @@ groups:
   - record: gitlab_component_errors:rate_30m
     labels:
       component: goserver_op_service
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -647,12 +695,13 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate_30m{component="goserver_op_service",tier="stor",type="gitaly"}
+          gitlab_component_ops:rate_30m{component="goserver_op_service",feature_category="gitaly",tier="stor",type="gitaly"}
         )
       )
   - record: gitlab_component_node_apdex:success:rate_30m
     labels:
       component: gitalyruby
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -670,6 +719,7 @@ groups:
   - record: gitlab_component_node_apdex:weight:score_30m
     labels:
       component: gitalyruby
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -679,6 +729,7 @@ groups:
   - record: gitlab_component_node_ops:rate_30m
     labels:
       component: gitalyruby
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -688,6 +739,7 @@ groups:
   - record: gitlab_component_node_errors:rate_30m
     labels:
       component: gitalyruby
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -699,12 +751,13 @@ groups:
       or
       (
         0 * group by(environment,stage,shard,fqdn) (
-          gitlab_component_node_ops:rate_30m{component="gitalyruby",tier="stor",type="gitaly"}
+          gitlab_component_node_ops:rate_30m{component="gitalyruby",feature_category="gitaly",tier="stor",type="gitaly"}
         )
       )
   - record: gitlab_component_node_apdex:success:rate_30m
     labels:
       component: goserver
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -722,6 +775,7 @@ groups:
   - record: gitlab_component_node_apdex:weight:score_30m
     labels:
       component: goserver
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -731,6 +785,7 @@ groups:
   - record: gitlab_component_node_ops:rate_30m
     labels:
       component: goserver
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -740,6 +795,7 @@ groups:
   - record: gitlab_component_node_errors:rate_30m
     labels:
       component: goserver
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -753,12 +809,13 @@ groups:
       or
       (
         0 * group by(environment,stage,shard,fqdn) (
-          gitlab_component_node_ops:rate_30m{component="goserver",tier="stor",type="gitaly"}
+          gitlab_component_node_ops:rate_30m{component="goserver",feature_category="gitaly",tier="stor",type="gitaly"}
         )
       )
   - record: gitlab_component_node_apdex:success:rate_30m
     labels:
       component: goserver_op_service
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -776,6 +833,7 @@ groups:
   - record: gitlab_component_node_apdex:weight:score_30m
     labels:
       component: goserver_op_service
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -785,6 +843,7 @@ groups:
   - record: gitlab_component_node_ops:rate_30m
     labels:
       component: goserver_op_service
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -794,6 +853,7 @@ groups:
   - record: gitlab_component_node_errors:rate_30m
     labels:
       component: goserver_op_service
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -807,7 +867,7 @@ groups:
       or
       (
         0 * group by(environment,stage,shard,fqdn) (
-          gitlab_component_node_ops:rate_30m{component="goserver_op_service",tier="stor",type="gitaly"}
+          gitlab_component_node_ops:rate_30m{component="goserver_op_service",feature_category="gitaly",tier="stor",type="gitaly"}
         )
       )
 - name: 'Component-Level SLIs: gitaly - 1h burn-rate'
@@ -816,6 +876,7 @@ groups:
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: gitalyruby
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -833,6 +894,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_1h
     labels:
       component: gitalyruby
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -842,6 +904,7 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: gitalyruby
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -851,6 +914,7 @@ groups:
   - record: gitlab_component_errors:rate_1h
     labels:
       component: gitalyruby
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -862,12 +926,13 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate_1h{component="gitalyruby",tier="stor",type="gitaly"}
+          gitlab_component_ops:rate_1h{component="gitalyruby",feature_category="gitaly",tier="stor",type="gitaly"}
         )
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: goserver
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -885,6 +950,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_1h
     labels:
       component: goserver
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -894,6 +960,7 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: goserver
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -903,6 +970,7 @@ groups:
   - record: gitlab_component_errors:rate_1h
     labels:
       component: goserver
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -916,12 +984,13 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate_1h{component="goserver",tier="stor",type="gitaly"}
+          gitlab_component_ops:rate_1h{component="goserver",feature_category="gitaly",tier="stor",type="gitaly"}
         )
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: goserver_op_service
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -939,6 +1008,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_1h
     labels:
       component: goserver_op_service
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -948,6 +1018,7 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: goserver_op_service
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -957,6 +1028,7 @@ groups:
   - record: gitlab_component_errors:rate_1h
     labels:
       component: goserver_op_service
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -970,12 +1042,13 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate_1h{component="goserver_op_service",tier="stor",type="gitaly"}
+          gitlab_component_ops:rate_1h{component="goserver_op_service",feature_category="gitaly",tier="stor",type="gitaly"}
         )
       )
   - record: gitlab_component_node_apdex:success:rate_1h
     labels:
       component: gitalyruby
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -993,6 +1066,7 @@ groups:
   - record: gitlab_component_node_apdex:weight:score_1h
     labels:
       component: gitalyruby
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -1002,6 +1076,7 @@ groups:
   - record: gitlab_component_node_ops:rate_1h
     labels:
       component: gitalyruby
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -1011,6 +1086,7 @@ groups:
   - record: gitlab_component_node_errors:rate_1h
     labels:
       component: gitalyruby
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -1022,12 +1098,13 @@ groups:
       or
       (
         0 * group by(environment,stage,shard,fqdn) (
-          gitlab_component_node_ops:rate_1h{component="gitalyruby",tier="stor",type="gitaly"}
+          gitlab_component_node_ops:rate_1h{component="gitalyruby",feature_category="gitaly",tier="stor",type="gitaly"}
         )
       )
   - record: gitlab_component_node_apdex:success:rate_1h
     labels:
       component: goserver
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -1045,6 +1122,7 @@ groups:
   - record: gitlab_component_node_apdex:weight:score_1h
     labels:
       component: goserver
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -1054,6 +1132,7 @@ groups:
   - record: gitlab_component_node_ops:rate_1h
     labels:
       component: goserver
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -1063,6 +1142,7 @@ groups:
   - record: gitlab_component_node_errors:rate_1h
     labels:
       component: goserver
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -1076,12 +1156,13 @@ groups:
       or
       (
         0 * group by(environment,stage,shard,fqdn) (
-          gitlab_component_node_ops:rate_1h{component="goserver",tier="stor",type="gitaly"}
+          gitlab_component_node_ops:rate_1h{component="goserver",feature_category="gitaly",tier="stor",type="gitaly"}
         )
       )
   - record: gitlab_component_node_apdex:success:rate_1h
     labels:
       component: goserver_op_service
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -1099,6 +1180,7 @@ groups:
   - record: gitlab_component_node_apdex:weight:score_1h
     labels:
       component: goserver_op_service
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -1108,6 +1190,7 @@ groups:
   - record: gitlab_component_node_ops:rate_1h
     labels:
       component: goserver_op_service
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -1117,6 +1200,7 @@ groups:
   - record: gitlab_component_node_errors:rate_1h
     labels:
       component: goserver_op_service
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -1130,7 +1214,7 @@ groups:
       or
       (
         0 * group by(environment,stage,shard,fqdn) (
-          gitlab_component_node_ops:rate_1h{component="goserver_op_service",tier="stor",type="gitaly"}
+          gitlab_component_node_ops:rate_1h{component="goserver_op_service",feature_category="gitaly",tier="stor",type="gitaly"}
         )
       )
 - name: 'Component-Level SLIs: gitaly - 6h burn-rate'
@@ -1139,6 +1223,7 @@ groups:
   - record: gitlab_component_apdex:success:rate_6h
     labels:
       component: gitalyruby
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -1156,6 +1241,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_6h
     labels:
       component: gitalyruby
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -1165,6 +1251,7 @@ groups:
   - record: gitlab_component_ops:rate_6h
     labels:
       component: gitalyruby
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -1174,6 +1261,7 @@ groups:
   - record: gitlab_component_errors:rate_6h
     labels:
       component: gitalyruby
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -1185,12 +1273,13 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate_6h{component="gitalyruby",tier="stor",type="gitaly"}
+          gitlab_component_ops:rate_6h{component="gitalyruby",feature_category="gitaly",tier="stor",type="gitaly"}
         )
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
       component: goserver
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -1208,6 +1297,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_6h
     labels:
       component: goserver
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -1217,6 +1307,7 @@ groups:
   - record: gitlab_component_ops:rate_6h
     labels:
       component: goserver
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -1226,6 +1317,7 @@ groups:
   - record: gitlab_component_errors:rate_6h
     labels:
       component: goserver
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -1239,12 +1331,13 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate_6h{component="goserver",tier="stor",type="gitaly"}
+          gitlab_component_ops:rate_6h{component="goserver",feature_category="gitaly",tier="stor",type="gitaly"}
         )
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
       component: goserver_op_service
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -1262,6 +1355,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_6h
     labels:
       component: goserver_op_service
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -1271,6 +1365,7 @@ groups:
   - record: gitlab_component_ops:rate_6h
     labels:
       component: goserver_op_service
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -1280,6 +1375,7 @@ groups:
   - record: gitlab_component_errors:rate_6h
     labels:
       component: goserver_op_service
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -1293,12 +1389,13 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate_6h{component="goserver_op_service",tier="stor",type="gitaly"}
+          gitlab_component_ops:rate_6h{component="goserver_op_service",feature_category="gitaly",tier="stor",type="gitaly"}
         )
       )
   - record: gitlab_component_node_apdex:success:rate_6h
     labels:
       component: gitalyruby
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -1316,6 +1413,7 @@ groups:
   - record: gitlab_component_node_apdex:weight:score_6h
     labels:
       component: gitalyruby
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -1325,6 +1423,7 @@ groups:
   - record: gitlab_component_node_ops:rate_6h
     labels:
       component: gitalyruby
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -1334,6 +1433,7 @@ groups:
   - record: gitlab_component_node_errors:rate_6h
     labels:
       component: gitalyruby
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -1345,12 +1445,13 @@ groups:
       or
       (
         0 * group by(environment,stage,shard,fqdn) (
-          gitlab_component_node_ops:rate_6h{component="gitalyruby",tier="stor",type="gitaly"}
+          gitlab_component_node_ops:rate_6h{component="gitalyruby",feature_category="gitaly",tier="stor",type="gitaly"}
         )
       )
   - record: gitlab_component_node_apdex:success:rate_6h
     labels:
       component: goserver
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -1368,6 +1469,7 @@ groups:
   - record: gitlab_component_node_apdex:weight:score_6h
     labels:
       component: goserver
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -1377,6 +1479,7 @@ groups:
   - record: gitlab_component_node_ops:rate_6h
     labels:
       component: goserver
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -1386,6 +1489,7 @@ groups:
   - record: gitlab_component_node_errors:rate_6h
     labels:
       component: goserver
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -1399,12 +1503,13 @@ groups:
       or
       (
         0 * group by(environment,stage,shard,fqdn) (
-          gitlab_component_node_ops:rate_6h{component="goserver",tier="stor",type="gitaly"}
+          gitlab_component_node_ops:rate_6h{component="goserver",feature_category="gitaly",tier="stor",type="gitaly"}
         )
       )
   - record: gitlab_component_node_apdex:success:rate_6h
     labels:
       component: goserver_op_service
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -1422,6 +1527,7 @@ groups:
   - record: gitlab_component_node_apdex:weight:score_6h
     labels:
       component: goserver_op_service
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -1431,6 +1537,7 @@ groups:
   - record: gitlab_component_node_ops:rate_6h
     labels:
       component: goserver_op_service
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -1440,6 +1547,7 @@ groups:
   - record: gitlab_component_node_errors:rate_6h
     labels:
       component: goserver_op_service
+      feature_category: gitaly
       tier: stor
       type: gitaly
     expr: |
@@ -1453,7 +1561,7 @@ groups:
       or
       (
         0 * group by(environment,stage,shard,fqdn) (
-          gitlab_component_node_ops:rate_6h{component="goserver_op_service",tier="stor",type="gitaly"}
+          gitlab_component_node_ops:rate_6h{component="goserver_op_service",feature_category="gitaly",tier="stor",type="gitaly"}
         )
       )
 - name: 'Component mapping: gitaly'

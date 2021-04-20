@@ -7,6 +7,7 @@ groups:
   - record: gitlab_component_ops:rate
     labels:
       component: praefect_cloudsql
+      feature_category: gitaly
       tier: stor
       type: praefect
     expr: |
@@ -16,6 +17,7 @@ groups:
   - record: gitlab_component_errors:rate
     labels:
       component: praefect_cloudsql
+      feature_category: gitaly
       tier: stor
       type: praefect
     expr: |
@@ -27,12 +29,13 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate{component="praefect_cloudsql",tier="stor",type="praefect"}
+          gitlab_component_ops:rate{component="praefect_cloudsql",feature_category="gitaly",tier="stor",type="praefect"}
         )
       )
   - record: gitlab_component_apdex:success:rate
     labels:
       component: proxy
+      feature_category: gitaly
       tier: stor
       type: praefect
     expr: |
@@ -50,6 +53,7 @@ groups:
   - record: gitlab_component_apdex:weight:score
     labels:
       component: proxy
+      feature_category: gitaly
       tier: stor
       type: praefect
     expr: |
@@ -59,6 +63,7 @@ groups:
   - record: gitlab_component_ops:rate
     labels:
       component: proxy
+      feature_category: gitaly
       tier: stor
       type: praefect
     expr: |
@@ -68,6 +73,7 @@ groups:
   - record: gitlab_component_errors:rate
     labels:
       component: proxy
+      feature_category: gitaly
       tier: stor
       type: praefect
     expr: |
@@ -79,12 +85,13 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate{component="proxy",tier="stor",type="praefect"}
+          gitlab_component_ops:rate{component="proxy",feature_category="gitaly",tier="stor",type="praefect"}
         )
       )
   - record: gitlab_component_apdex:success:rate
     labels:
       component: replicator_queue
+      feature_category: gitaly
       tier: stor
       type: praefect
     expr: |
@@ -94,6 +101,7 @@ groups:
   - record: gitlab_component_apdex:weight:score
     labels:
       component: replicator_queue
+      feature_category: gitaly
       tier: stor
       type: praefect
     expr: |
@@ -103,6 +111,7 @@ groups:
   - record: gitlab_component_ops:rate
     labels:
       component: replicator_queue
+      feature_category: gitaly
       tier: stor
       type: praefect
     expr: |
@@ -115,6 +124,7 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: praefect_cloudsql
+      feature_category: gitaly
       tier: stor
       type: praefect
     expr: |
@@ -124,6 +134,7 @@ groups:
   - record: gitlab_component_errors:rate_5m
     labels:
       component: praefect_cloudsql
+      feature_category: gitaly
       tier: stor
       type: praefect
     expr: |
@@ -135,12 +146,13 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate_5m{component="praefect_cloudsql",tier="stor",type="praefect"}
+          gitlab_component_ops:rate_5m{component="praefect_cloudsql",feature_category="gitaly",tier="stor",type="praefect"}
         )
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: proxy
+      feature_category: gitaly
       tier: stor
       type: praefect
     expr: |
@@ -158,6 +170,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_5m
     labels:
       component: proxy
+      feature_category: gitaly
       tier: stor
       type: praefect
     expr: |
@@ -167,6 +180,7 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: proxy
+      feature_category: gitaly
       tier: stor
       type: praefect
     expr: |
@@ -176,6 +190,7 @@ groups:
   - record: gitlab_component_errors:rate_5m
     labels:
       component: proxy
+      feature_category: gitaly
       tier: stor
       type: praefect
     expr: |
@@ -187,12 +202,13 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate_5m{component="proxy",tier="stor",type="praefect"}
+          gitlab_component_ops:rate_5m{component="proxy",feature_category="gitaly",tier="stor",type="praefect"}
         )
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: replicator_queue
+      feature_category: gitaly
       tier: stor
       type: praefect
     expr: |
@@ -202,6 +218,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_5m
     labels:
       component: replicator_queue
+      feature_category: gitaly
       tier: stor
       type: praefect
     expr: |
@@ -211,6 +228,7 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: replicator_queue
+      feature_category: gitaly
       tier: stor
       type: praefect
     expr: |
@@ -223,6 +241,7 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: praefect_cloudsql
+      feature_category: gitaly
       tier: stor
       type: praefect
     expr: |
@@ -232,6 +251,7 @@ groups:
   - record: gitlab_component_errors:rate_30m
     labels:
       component: praefect_cloudsql
+      feature_category: gitaly
       tier: stor
       type: praefect
     expr: |
@@ -243,12 +263,13 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate_30m{component="praefect_cloudsql",tier="stor",type="praefect"}
+          gitlab_component_ops:rate_30m{component="praefect_cloudsql",feature_category="gitaly",tier="stor",type="praefect"}
         )
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: proxy
+      feature_category: gitaly
       tier: stor
       type: praefect
     expr: |
@@ -266,6 +287,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_30m
     labels:
       component: proxy
+      feature_category: gitaly
       tier: stor
       type: praefect
     expr: |
@@ -275,6 +297,7 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: proxy
+      feature_category: gitaly
       tier: stor
       type: praefect
     expr: |
@@ -284,6 +307,7 @@ groups:
   - record: gitlab_component_errors:rate_30m
     labels:
       component: proxy
+      feature_category: gitaly
       tier: stor
       type: praefect
     expr: |
@@ -295,12 +319,13 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate_30m{component="proxy",tier="stor",type="praefect"}
+          gitlab_component_ops:rate_30m{component="proxy",feature_category="gitaly",tier="stor",type="praefect"}
         )
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: replicator_queue
+      feature_category: gitaly
       tier: stor
       type: praefect
     expr: |
@@ -310,6 +335,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_30m
     labels:
       component: replicator_queue
+      feature_category: gitaly
       tier: stor
       type: praefect
     expr: |
@@ -319,6 +345,7 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: replicator_queue
+      feature_category: gitaly
       tier: stor
       type: praefect
     expr: |
@@ -331,6 +358,7 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: praefect_cloudsql
+      feature_category: gitaly
       tier: stor
       type: praefect
     expr: |
@@ -340,6 +368,7 @@ groups:
   - record: gitlab_component_errors:rate_1h
     labels:
       component: praefect_cloudsql
+      feature_category: gitaly
       tier: stor
       type: praefect
     expr: |
@@ -351,12 +380,13 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate_1h{component="praefect_cloudsql",tier="stor",type="praefect"}
+          gitlab_component_ops:rate_1h{component="praefect_cloudsql",feature_category="gitaly",tier="stor",type="praefect"}
         )
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: proxy
+      feature_category: gitaly
       tier: stor
       type: praefect
     expr: |
@@ -374,6 +404,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_1h
     labels:
       component: proxy
+      feature_category: gitaly
       tier: stor
       type: praefect
     expr: |
@@ -383,6 +414,7 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: proxy
+      feature_category: gitaly
       tier: stor
       type: praefect
     expr: |
@@ -392,6 +424,7 @@ groups:
   - record: gitlab_component_errors:rate_1h
     labels:
       component: proxy
+      feature_category: gitaly
       tier: stor
       type: praefect
     expr: |
@@ -403,12 +436,13 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate_1h{component="proxy",tier="stor",type="praefect"}
+          gitlab_component_ops:rate_1h{component="proxy",feature_category="gitaly",tier="stor",type="praefect"}
         )
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: replicator_queue
+      feature_category: gitaly
       tier: stor
       type: praefect
     expr: |
@@ -418,6 +452,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_1h
     labels:
       component: replicator_queue
+      feature_category: gitaly
       tier: stor
       type: praefect
     expr: |
@@ -427,6 +462,7 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: replicator_queue
+      feature_category: gitaly
       tier: stor
       type: praefect
     expr: |
@@ -439,6 +475,7 @@ groups:
   - record: gitlab_component_ops:rate_6h
     labels:
       component: praefect_cloudsql
+      feature_category: gitaly
       tier: stor
       type: praefect
     expr: |
@@ -448,6 +485,7 @@ groups:
   - record: gitlab_component_errors:rate_6h
     labels:
       component: praefect_cloudsql
+      feature_category: gitaly
       tier: stor
       type: praefect
     expr: |
@@ -459,12 +497,13 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate_6h{component="praefect_cloudsql",tier="stor",type="praefect"}
+          gitlab_component_ops:rate_6h{component="praefect_cloudsql",feature_category="gitaly",tier="stor",type="praefect"}
         )
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
       component: proxy
+      feature_category: gitaly
       tier: stor
       type: praefect
     expr: |
@@ -482,6 +521,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_6h
     labels:
       component: proxy
+      feature_category: gitaly
       tier: stor
       type: praefect
     expr: |
@@ -491,6 +531,7 @@ groups:
   - record: gitlab_component_ops:rate_6h
     labels:
       component: proxy
+      feature_category: gitaly
       tier: stor
       type: praefect
     expr: |
@@ -500,6 +541,7 @@ groups:
   - record: gitlab_component_errors:rate_6h
     labels:
       component: proxy
+      feature_category: gitaly
       tier: stor
       type: praefect
     expr: |
@@ -511,12 +553,13 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate_6h{component="proxy",tier="stor",type="praefect"}
+          gitlab_component_ops:rate_6h{component="proxy",feature_category="gitaly",tier="stor",type="praefect"}
         )
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
       component: replicator_queue
+      feature_category: gitaly
       tier: stor
       type: praefect
     expr: |
@@ -526,6 +569,7 @@ groups:
   - record: gitlab_component_apdex:weight:score_6h
     labels:
       component: replicator_queue
+      feature_category: gitaly
       tier: stor
       type: praefect
     expr: |
@@ -535,6 +579,7 @@ groups:
   - record: gitlab_component_ops:rate_6h
     labels:
       component: replicator_queue
+      feature_category: gitaly
       tier: stor
       type: praefect
     expr: |
