@@ -1,13 +1,12 @@
 local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
-local stages = import 'stages.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 
 // For now we assume that services are provisioned on vms and not kubernetes
 // Please consult the README.md file for details of team and feature_category
 local serviceLevelIndicatorDefaults = {
-  featureCategory: stages.notOwned.key,
+  featureCategory: 'not_owned',
   team: null,
   description: '',
   staticLabels: {},  // by default, no static labels
@@ -18,12 +17,6 @@ local serviceLevelIndicatorDefaults = {
 
 local validateHasField(object, field, message) =
   if std.objectHas(object, field) then
-    object
-  else
-    std.assertEqual(true, { __assert: message });
-
-local validateFeatureCategory(object, message) =
-  if !std.objectHas(object, 'featureCategory') || std.objectHas(stages.featureCategoryMap, object.featureCategory) then
     object
   else
     std.assertEqual(true, { __assert: message });
@@ -40,8 +33,6 @@ local validateAndApplySLIDefaults(sliName, component, inheritedDefaults) =
   validateHasField(component, 'significantLabels', '%s component requires a significantLabels attribute' % [sliName])
   +
   validateHasField(component, 'userImpacting', '%s component requires a userImpacting attribute' % [sliName])
-  +
-  validateFeatureCategory(component, '%s is not a valid feature category for %s' % [component.featureCategory, sliName])
   {
     name: sliName,
   };
@@ -85,20 +76,11 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
     renderToolingLinks()::
       toolingLinks.renderLinks(self.getToolingLinks()),
 
-    featureCategoryLabels()::
-      if std.objectHas(serviceLevelIndicator, 'featureCategory') && serviceLevelIndicator.featureCategory != stages.notOwned.key then
-        { feature_category: serviceLevelIndicator.featureCategory }
-      else
-        {},
-
-    labels()::
-      self.staticLabels + self.featureCategoryLabels(),
-
     // Generate recording rules for apdex
     generateApdexRecordingRules(burnRate, aggregationSet, aggregationLabels, recordingRuleStaticLabels)::
       if self.hasApdex() && !isUpscalingTarget(self, burnRate) then
         local upscaleLabels = getUpscaleLabels(self, burnRate);
-        local allStaticLabels = recordingRuleStaticLabels + self.labels() + upscaleLabels;
+        local allStaticLabels = recordingRuleStaticLabels + serviceLevelIndicator.staticLabels + upscaleLabels;
         local aggregationLabelsWithoutStaticLabels = filterStaticLabelsFromAggregationLabels(aggregationLabels, allStaticLabels);
 
         local apdexSuccessRateRecordingRuleName = aggregationSet.getApdexSuccessRateMetricForBurnRate(burnRate);
@@ -146,7 +128,7 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
       if !isUpscalingTarget(self, burnRate) then
         local upscaleLabels = getUpscaleLabels(self, burnRate);
         local requestRateRecordingRuleName = aggregationSet.getOpsRateMetricForBurnRate(burnRate, required=true);
-        local allStaticLabels = recordingRuleStaticLabels + self.labels() + upscaleLabels;
+        local allStaticLabels = recordingRuleStaticLabels + serviceLevelIndicator.staticLabels + upscaleLabels;
 
         [{
           record: requestRateRecordingRuleName,
@@ -164,7 +146,7 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
     generateErrorRateRecordingRules(burnRate, aggregationSet, aggregationLabels, recordingRuleStaticLabels)::
       if self.hasErrorRate() && !isUpscalingTarget(self, burnRate) then
         local upscaleLabels = getUpscaleLabels(self, burnRate);
-        local allStaticLabels = recordingRuleStaticLabels + self.labels() + upscaleLabels;
+        local allStaticLabels = recordingRuleStaticLabels + serviceLevelIndicator.staticLabels + upscaleLabels;
         local requestRateRecordingRuleName = aggregationSet.getOpsRateMetricForBurnRate(burnRate, required=true);
         local errorRateRecordingRuleName = aggregationSet.getErrorRateMetricForBurnRate(burnRate, required=true);
         local filteredAggregationLabels = filterStaticLabelsFromAggregationLabels(aggregationLabels, allStaticLabels);

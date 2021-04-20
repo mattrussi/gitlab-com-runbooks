@@ -7,7 +7,6 @@ groups:
   - record: gitlab_component_ops:rate
     labels:
       component: polling
-      feature_category: runner
       tier: runners
       type: ci-runners
     expr: |
@@ -17,7 +16,6 @@ groups:
   - record: gitlab_component_errors:rate
     labels:
       component: polling
-      feature_category: runner
       tier: runners
       type: ci-runners
     expr: |
@@ -29,13 +27,12 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate{component="polling",feature_category="runner",tier="runners",type="ci-runners"}
+          gitlab_component_ops:rate{component="polling",tier="runners",type="ci-runners"}
         )
       )
   - record: gitlab_component_apdex:success:rate
     labels:
       component: shared_runner_queues
-      feature_category: runner
       tier: runners
       type: ci-runners
     expr: |
@@ -45,7 +42,6 @@ groups:
   - record: gitlab_component_apdex:weight:score
     labels:
       component: shared_runner_queues
-      feature_category: runner
       tier: runners
       type: ci-runners
     expr: |
@@ -55,7 +51,6 @@ groups:
   - record: gitlab_component_ops:rate
     labels:
       component: shared_runner_queues
-      feature_category: runner
       tier: runners
       type: ci-runners
     expr: |
@@ -65,7 +60,6 @@ groups:
   - record: gitlab_component_errors:rate
     labels:
       component: shared_runner_queues
-      feature_category: runner
       tier: runners
       type: ci-runners
     expr: |
@@ -77,13 +71,12 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate{component="shared_runner_queues",feature_category="runner",tier="runners",type="ci-runners"}
+          gitlab_component_ops:rate{component="shared_runner_queues",tier="runners",type="ci-runners"}
         )
       )
   - record: gitlab_component_ops:rate
     labels:
       component: trace_archiving_ci_jobs
-      feature_category: continuous_integration
       tier: runners
       type: ci-runners
     expr: |
@@ -93,7 +86,6 @@ groups:
   - record: gitlab_component_errors:rate
     labels:
       component: trace_archiving_ci_jobs
-      feature_category: continuous_integration
       tier: runners
       type: ci-runners
     expr: |
@@ -105,7 +97,7 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate{component="trace_archiving_ci_jobs",feature_category="continuous_integration",tier="runners",type="ci-runners"}
+          gitlab_component_ops:rate{component="trace_archiving_ci_jobs",tier="runners",type="ci-runners"}
         )
       )
 - name: 'Component-Level SLIs: ci-runners - 5m burn-rate'
@@ -114,7 +106,6 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: polling
-      feature_category: runner
       tier: runners
       type: ci-runners
     expr: |
@@ -124,7 +115,6 @@ groups:
   - record: gitlab_component_errors:rate_5m
     labels:
       component: polling
-      feature_category: runner
       tier: runners
       type: ci-runners
     expr: |
@@ -136,13 +126,12 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate_5m{component="polling",feature_category="runner",tier="runners",type="ci-runners"}
+          gitlab_component_ops:rate_5m{component="polling",tier="runners",type="ci-runners"}
         )
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: shared_runner_queues
-      feature_category: runner
       tier: runners
       type: ci-runners
     expr: |
@@ -152,7 +141,6 @@ groups:
   - record: gitlab_component_apdex:weight:score_5m
     labels:
       component: shared_runner_queues
-      feature_category: runner
       tier: runners
       type: ci-runners
     expr: |
@@ -162,7 +150,6 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: shared_runner_queues
-      feature_category: runner
       tier: runners
       type: ci-runners
     expr: |
@@ -172,7 +159,6 @@ groups:
   - record: gitlab_component_errors:rate_5m
     labels:
       component: shared_runner_queues
-      feature_category: runner
       tier: runners
       type: ci-runners
     expr: |
@@ -184,13 +170,12 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate_5m{component="shared_runner_queues",feature_category="runner",tier="runners",type="ci-runners"}
+          gitlab_component_ops:rate_5m{component="shared_runner_queues",tier="runners",type="ci-runners"}
         )
       )
   - record: gitlab_component_ops:rate_5m
     labels:
       component: trace_archiving_ci_jobs
-      feature_category: continuous_integration
       tier: runners
       type: ci-runners
     expr: |
@@ -200,7 +185,6 @@ groups:
   - record: gitlab_component_errors:rate_5m
     labels:
       component: trace_archiving_ci_jobs
-      feature_category: continuous_integration
       tier: runners
       type: ci-runners
     expr: |
@@ -212,7 +196,7 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate_5m{component="trace_archiving_ci_jobs",feature_category="continuous_integration",tier="runners",type="ci-runners"}
+          gitlab_component_ops:rate_5m{component="trace_archiving_ci_jobs",tier="runners",type="ci-runners"}
         )
       )
 - name: 'Component-Level SLIs: ci-runners - 30m burn-rate'
@@ -221,7 +205,6 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: polling
-      feature_category: runner
       tier: runners
       type: ci-runners
     expr: |
@@ -231,7 +214,6 @@ groups:
   - record: gitlab_component_errors:rate_30m
     labels:
       component: polling
-      feature_category: runner
       tier: runners
       type: ci-runners
     expr: |
@@ -243,13 +225,12 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate_30m{component="polling",feature_category="runner",tier="runners",type="ci-runners"}
+          gitlab_component_ops:rate_30m{component="polling",tier="runners",type="ci-runners"}
         )
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: shared_runner_queues
-      feature_category: runner
       tier: runners
       type: ci-runners
     expr: |
@@ -259,7 +240,6 @@ groups:
   - record: gitlab_component_apdex:weight:score_30m
     labels:
       component: shared_runner_queues
-      feature_category: runner
       tier: runners
       type: ci-runners
     expr: |
@@ -269,7 +249,6 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: shared_runner_queues
-      feature_category: runner
       tier: runners
       type: ci-runners
     expr: |
@@ -279,7 +258,6 @@ groups:
   - record: gitlab_component_errors:rate_30m
     labels:
       component: shared_runner_queues
-      feature_category: runner
       tier: runners
       type: ci-runners
     expr: |
@@ -291,13 +269,12 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate_30m{component="shared_runner_queues",feature_category="runner",tier="runners",type="ci-runners"}
+          gitlab_component_ops:rate_30m{component="shared_runner_queues",tier="runners",type="ci-runners"}
         )
       )
   - record: gitlab_component_ops:rate_30m
     labels:
       component: trace_archiving_ci_jobs
-      feature_category: continuous_integration
       tier: runners
       type: ci-runners
     expr: |
@@ -307,7 +284,6 @@ groups:
   - record: gitlab_component_errors:rate_30m
     labels:
       component: trace_archiving_ci_jobs
-      feature_category: continuous_integration
       tier: runners
       type: ci-runners
     expr: |
@@ -319,7 +295,7 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate_30m{component="trace_archiving_ci_jobs",feature_category="continuous_integration",tier="runners",type="ci-runners"}
+          gitlab_component_ops:rate_30m{component="trace_archiving_ci_jobs",tier="runners",type="ci-runners"}
         )
       )
 - name: 'Component-Level SLIs: ci-runners - 1h burn-rate'
@@ -328,7 +304,6 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: polling
-      feature_category: runner
       tier: runners
       type: ci-runners
     expr: |
@@ -338,7 +313,6 @@ groups:
   - record: gitlab_component_errors:rate_1h
     labels:
       component: polling
-      feature_category: runner
       tier: runners
       type: ci-runners
     expr: |
@@ -350,13 +324,12 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate_1h{component="polling",feature_category="runner",tier="runners",type="ci-runners"}
+          gitlab_component_ops:rate_1h{component="polling",tier="runners",type="ci-runners"}
         )
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: shared_runner_queues
-      feature_category: runner
       tier: runners
       type: ci-runners
     expr: |
@@ -366,7 +339,6 @@ groups:
   - record: gitlab_component_apdex:weight:score_1h
     labels:
       component: shared_runner_queues
-      feature_category: runner
       tier: runners
       type: ci-runners
     expr: |
@@ -376,7 +348,6 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: shared_runner_queues
-      feature_category: runner
       tier: runners
       type: ci-runners
     expr: |
@@ -386,7 +357,6 @@ groups:
   - record: gitlab_component_errors:rate_1h
     labels:
       component: shared_runner_queues
-      feature_category: runner
       tier: runners
       type: ci-runners
     expr: |
@@ -398,13 +368,12 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate_1h{component="shared_runner_queues",feature_category="runner",tier="runners",type="ci-runners"}
+          gitlab_component_ops:rate_1h{component="shared_runner_queues",tier="runners",type="ci-runners"}
         )
       )
   - record: gitlab_component_ops:rate_1h
     labels:
       component: trace_archiving_ci_jobs
-      feature_category: continuous_integration
       tier: runners
       type: ci-runners
     expr: |
@@ -414,7 +383,6 @@ groups:
   - record: gitlab_component_errors:rate_1h
     labels:
       component: trace_archiving_ci_jobs
-      feature_category: continuous_integration
       tier: runners
       type: ci-runners
     expr: |
@@ -426,7 +394,7 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate_1h{component="trace_archiving_ci_jobs",feature_category="continuous_integration",tier="runners",type="ci-runners"}
+          gitlab_component_ops:rate_1h{component="trace_archiving_ci_jobs",tier="runners",type="ci-runners"}
         )
       )
 - name: 'Component-Level SLIs: ci-runners - 6h burn-rate'
@@ -435,7 +403,6 @@ groups:
   - record: gitlab_component_ops:rate_6h
     labels:
       component: polling
-      feature_category: runner
       tier: runners
       type: ci-runners
     expr: |
@@ -445,7 +412,6 @@ groups:
   - record: gitlab_component_errors:rate_6h
     labels:
       component: polling
-      feature_category: runner
       tier: runners
       type: ci-runners
     expr: |
@@ -457,13 +423,12 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate_6h{component="polling",feature_category="runner",tier="runners",type="ci-runners"}
+          gitlab_component_ops:rate_6h{component="polling",tier="runners",type="ci-runners"}
         )
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
       component: shared_runner_queues
-      feature_category: runner
       tier: runners
       type: ci-runners
     expr: |
@@ -473,7 +438,6 @@ groups:
   - record: gitlab_component_apdex:weight:score_6h
     labels:
       component: shared_runner_queues
-      feature_category: runner
       tier: runners
       type: ci-runners
     expr: |
@@ -483,7 +447,6 @@ groups:
   - record: gitlab_component_ops:rate_6h
     labels:
       component: shared_runner_queues
-      feature_category: runner
       tier: runners
       type: ci-runners
     expr: |
@@ -493,7 +456,6 @@ groups:
   - record: gitlab_component_errors:rate_6h
     labels:
       component: shared_runner_queues
-      feature_category: runner
       tier: runners
       type: ci-runners
     expr: |
@@ -505,13 +467,12 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate_6h{component="shared_runner_queues",feature_category="runner",tier="runners",type="ci-runners"}
+          gitlab_component_ops:rate_6h{component="shared_runner_queues",tier="runners",type="ci-runners"}
         )
       )
   - record: gitlab_component_ops:rate_6h
     labels:
       component: trace_archiving_ci_jobs
-      feature_category: continuous_integration
       tier: runners
       type: ci-runners
     expr: |
@@ -521,7 +482,6 @@ groups:
   - record: gitlab_component_errors:rate_6h
     labels:
       component: trace_archiving_ci_jobs
-      feature_category: continuous_integration
       tier: runners
       type: ci-runners
     expr: |
@@ -533,7 +493,7 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate_6h{component="trace_archiving_ci_jobs",feature_category="continuous_integration",tier="runners",type="ci-runners"}
+          gitlab_component_ops:rate_6h{component="trace_archiving_ci_jobs",tier="runners",type="ci-runners"}
         )
       )
 - name: 'Component mapping: ci-runners'

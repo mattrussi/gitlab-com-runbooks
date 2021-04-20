@@ -79,9 +79,4 @@ local categoriesForStageGroup(groupName) =
    * Returns a map of featureCategory[stageGroup]
    **/
   featureCategoryMap:: stageGroupMappingLookup,
-
-  /**
-   * Returns the not owned group
-   */
-  notOwned:: notOwnedGroup,
 }
