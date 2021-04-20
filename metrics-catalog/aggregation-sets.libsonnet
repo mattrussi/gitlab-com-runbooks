@@ -430,7 +430,11 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
         errorRatio: 'gitlab:component:feature_category:execution:error:ratio_1h',
       },
       '6h': {
+        apdexSuccessRate: 'gitlab:component:feature_category:execution:apdex:success:rate_6h',
+        apdexWeight: 'gitlab:component:feature_category:execution:apdex:weight:score_6h',
         apdexRatio: 'gitlab:component:feature_category:execution:apdex:ratio_6h',
+        opsRate: 'gitlab:component:feature_category:execution:ops:rate_6h',
+        errorRate: 'gitlab:component:feature_category:execution:error:rate_6h',
         errorRatio: 'gitlab:component:feature_category:execution:error:ratio_6h',
       },
       '3d': {
