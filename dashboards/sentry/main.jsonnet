@@ -1,4 +1,9 @@
 local serviceDashboard = import 'service_dashboard.libsonnet';
 
-serviceDashboard.overview('sentry')
+local environmentSelector = {
+  environment: 'ops',
+  env: 'ops',
+};
+
+serviceDashboard.overview('sentry', environmentSelectorHash=environmentSelector)
 .overviewTrailer()
