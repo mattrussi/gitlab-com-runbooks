@@ -5,5 +5,8 @@ local environmentSelector = {
   env: 'ops',
 };
 
-serviceDashboard.overview('sentry', environmentSelectorHash=environmentSelector)
+serviceDashboard.overview(
+  'sentry',
+  environmentSelectorHash=environmentSelector,
+)
 .overviewTrailer()

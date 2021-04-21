@@ -5,6 +5,148 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
+  - alert: SentryServicePgTransactionsErrorSLOViolation
+    for: 2m
+    annotations:
+      title: >-
+        The pg_transactions SLI of the sentry service (`{{ $labels.stage }}` stage) has an error rate
+        violating SLO
+      description: |
+        Represents all SQL transactions issued to the sentry Postgres instance. Errors represent transaction rollbacks.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: sentry-main/sentry-overview
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/sentry-main/sentry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '2208809543'
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(pg_stat_database_xact_rollback{datname="sentry",environment="{{ $labels.environment }}",job="postgres",stage="{{ $labels.stage }}",type="sentry"}[5m])
+        )
+      runbook: docs/sentry/README.md
+    labels:
+      aggregation: component
+      alert_type: symptom
+      feature_category: not_owned
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: 'yes'
+      user_impacting: 'no'
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_1h{component="pg_transactions",monitor="global",type="sentry"}
+          > (14.4 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_5m{component="pg_transactions",monitor="global",type="sentry"}
+          > (14.4 * 0.001000)
+        )
+        or
+        (
+          gitlab_component_errors:ratio_6h{component="pg_transactions",monitor="global",type="sentry"}
+          > (6 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_30m{component="pg_transactions",monitor="global",type="sentry"}
+          > (6 * 0.001000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="pg_transactions",monitor="global",type="sentry"}) >= 1
+      )
+  - alert: SentryServicePgTransactionsTrafficCessation
+    for: 5m
+    annotations:
+      title: >-
+        The pg_transactions SLI of the sentry service (`{{ $labels.stage }}` stage) has not received any
+        traffic in the past 30 minutes
+      description: |
+        Represents all SQL transactions issued to the sentry Postgres instance. Errors represent transaction rollbacks.
+
+        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+      grafana_dashboard_id: sentry-main/sentry-overview
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/sentry-main/sentry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '4230593776'
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          label_replace(rate(pg_stat_database_xact_commit{datname="sentry",environment="{{ $labels.environment }}",job="postgres",stage="{{ $labels.stage }}",type="sentry"}[5m]), "_c", "0", "", "")
+          or
+          label_replace(rate(pg_stat_database_xact_rollback{datname="sentry",environment="{{ $labels.environment }}",job="postgres",stage="{{ $labels.stage }}",type="sentry"}[5m]), "_c", "1", "", "")
+        )
+      runbook: docs/sentry/README.md
+    labels:
+      aggregation: component
+      alert_type: cause
+      feature_category: not_owned
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s3
+      sli_type: ops
+      slo_alert: 'no'
+      user_impacting: 'no'
+    expr: >
+      gitlab_component_ops:rate_30m{type="sentry", component="pg_transactions", stage="main", monitor="global"}
+      == 0
+  - alert: SentryServicePgTransactionsTrafficAbsent
+    for: 30m
+    annotations:
+      title: >-
+        The pg_transactions SLI of the sentry service (`{{ $labels.stage }}` stage) has not reported any
+        traffic in the past 30 minutes
+      description: |
+        Represents all SQL transactions issued to the sentry Postgres instance. Errors represent transaction rollbacks.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: sentry-main/sentry-overview
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/sentry-main/sentry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '4230593776'
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          label_replace(rate(pg_stat_database_xact_commit{datname="sentry",environment="{{ $labels.environment }}",job="postgres",stage="{{ $labels.stage }}",type="sentry"}[5m]), "_c", "0", "", "")
+          or
+          label_replace(rate(pg_stat_database_xact_rollback{datname="sentry",environment="{{ $labels.environment }}",job="postgres",stage="{{ $labels.stage }}",type="sentry"}[5m]), "_c", "1", "", "")
+        )
+      runbook: docs/sentry/README.md
+    labels:
+      aggregation: component
+      alert_type: cause
+      feature_category: not_owned
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s3
+      sli_type: ops
+      slo_alert: 'no'
+      user_impacting: 'no'
+    expr: |
+      gitlab_component_ops:rate_5m{type="sentry", component="pg_transactions", stage="main", monitor="global"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{type="sentry", component="pg_transactions", stage="main", monitor="global"}
   - alert: SentryServiceSentryEventsApdexSLOViolation
     for: 2m
     annotations:
