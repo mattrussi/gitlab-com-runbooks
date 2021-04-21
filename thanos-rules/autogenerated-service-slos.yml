@@ -1051,6 +1051,14 @@ groups:
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
+      component: garbagecollector
+      regional_aggregation: 'yes'
+      service_aggregation: 'yes'
+      tier: sv
+      type: registry
+    expr: '1'
+  - record: gitlab_component_service:mapping
+    labels:
       component: loadbalancer
       regional_aggregation: 'no'
       service_aggregation: 'no'

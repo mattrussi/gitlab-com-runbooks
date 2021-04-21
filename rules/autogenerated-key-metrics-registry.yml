@@ -39,6 +39,41 @@ groups:
       sum by (environment,stage) (
         rate(registry_database_queries_total{type="registry"}[1m])
       )
+  - record: gitlab_component_apdex:success:rate
+    labels:
+      component: garbagecollector
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(registry_gc_run_duration_seconds_bucket{type="registry", le="1"}[1m])
+        )
+        +
+        sum by (environment,stage) (
+          rate(registry_gc_run_duration_seconds_bucket{type="registry", le="2.5"}[1m])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: garbagecollector
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_gc_run_duration_seconds_bucket{type="registry", le="+Inf"}[1m])
+      )
+  - record: gitlab_component_ops:rate
+    labels:
+      component: garbagecollector
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_gc_runs_total{type="registry"}[1m])
+      )
   - record: gitlab_component_ops:rate
     labels:
       component: loadbalancer
@@ -281,6 +316,41 @@ groups:
     expr: |
       sum by (environment,stage) (
         rate(registry_database_queries_total{type="registry"}[5m])
+      )
+  - record: gitlab_component_apdex:success:rate_5m
+    labels:
+      component: garbagecollector
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(registry_gc_run_duration_seconds_bucket{type="registry", le="1"}[5m])
+        )
+        +
+        sum by (environment,stage) (
+          rate(registry_gc_run_duration_seconds_bucket{type="registry", le="2.5"}[5m])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_5m
+    labels:
+      component: garbagecollector
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_gc_run_duration_seconds_bucket{type="registry", le="+Inf"}[5m])
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: garbagecollector
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_gc_runs_total{type="registry"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -525,6 +595,41 @@ groups:
       sum by (environment,stage) (
         rate(registry_database_queries_total{type="registry"}[30m])
       )
+  - record: gitlab_component_apdex:success:rate_30m
+    labels:
+      component: garbagecollector
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(registry_gc_run_duration_seconds_bucket{type="registry", le="1"}[30m])
+        )
+        +
+        sum by (environment,stage) (
+          rate(registry_gc_run_duration_seconds_bucket{type="registry", le="2.5"}[30m])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_30m
+    labels:
+      component: garbagecollector
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_gc_run_duration_seconds_bucket{type="registry", le="+Inf"}[30m])
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: garbagecollector
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_gc_runs_total{type="registry"}[30m])
+      )
   - record: gitlab_component_ops:rate_30m
     labels:
       component: loadbalancer
@@ -767,6 +872,41 @@ groups:
     expr: |
       sum by (environment,stage) (
         rate(registry_database_queries_total{type="registry"}[1h])
+      )
+  - record: gitlab_component_apdex:success:rate_1h
+    labels:
+      component: garbagecollector
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(registry_gc_run_duration_seconds_bucket{type="registry", le="1"}[1h])
+        )
+        +
+        sum by (environment,stage) (
+          rate(registry_gc_run_duration_seconds_bucket{type="registry", le="2.5"}[1h])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_1h
+    labels:
+      component: garbagecollector
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_gc_run_duration_seconds_bucket{type="registry", le="+Inf"}[1h])
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: garbagecollector
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_gc_runs_total{type="registry"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -1011,6 +1151,41 @@ groups:
       sum by (environment,stage) (
         rate(registry_database_queries_total{type="registry"}[6h])
       )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: garbagecollector
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(registry_gc_run_duration_seconds_bucket{type="registry", le="1"}[6h])
+        )
+        +
+        sum by (environment,stage) (
+          rate(registry_gc_run_duration_seconds_bucket{type="registry", le="2.5"}[6h])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: garbagecollector
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_gc_run_duration_seconds_bucket{type="registry", le="+Inf"}[6h])
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: garbagecollector
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_gc_runs_total{type="registry"}[6h])
+      )
   - record: gitlab_component_ops:rate_6h
     labels:
       component: loadbalancer
@@ -1222,6 +1397,14 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: database
+      regional_aggregation: 'yes'
+      service_aggregation: 'yes'
+      tier: sv
+      type: registry
+    expr: '1'
+  - record: gitlab_component_service:mapping
+    labels:
+      component: garbagecollector
       regional_aggregation: 'yes'
       service_aggregation: 'yes'
       tier: sv

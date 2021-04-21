@@ -131,5 +131,27 @@ metricsCatalog.serviceDefinition({
 
       significantLabels: ['name'],
     },
+
+    garbagecollector: {
+      userImpacting: false,
+      featureCategory: 'container_registry',
+      description: |||
+        Aggregation of all container registry online garbage collection operations.
+      |||,
+
+      apdex: histogramApdex(
+        histogram='registry_gc_run_duration_seconds_bucket',
+        selector='type="registry"',
+        satisfiedThreshold=1,
+        toleratedThreshold=2.5
+      ),
+
+      requestRate: rateMetric(
+        counter='registry_gc_runs_total',
+        selector='type="registry"'
+      ),
+
+      significantLabels: ['worker'],
+    },
   } + registryHelpers.apdexPerRoute,
 })
