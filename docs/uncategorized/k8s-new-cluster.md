@@ -37,8 +37,18 @@ See [bootstrapping new clusters](https://gitlab.com/gitlab-com/gl-infra/k8s-work
 
 #### Prometheus rules:
 
+##### New Clusters
+
 * Inside of our `runbooks` repo, we need to add a configuration inside of `.gitlab-ci.yaml` to deploy to our new cluster.
 * Ensure the appropriate variables are added to the ops instance Utilize this MR as a guideline: https://gitlab.com/gitlab-com/runbooks/merge_requests/1200
+
+##### Replacement Clusters
+
+* Go to the `runbooks` CI jobs, find the latest green pipeline on our default
+  branch, then find the job associated with the existing cluster and retry it
+* Check the CI output, we should see the addition of our custom resources
+  required by our various Prometheus components
+  * This includes various service monitors, alert rules, and prometheus rules
 
 #### Thanos configuration
 
