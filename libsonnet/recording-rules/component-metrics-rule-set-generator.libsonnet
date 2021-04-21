@@ -1,3 +1,16 @@
+// Get the set of static labels for an aggregation
+// The feature category will be included if the aggregation needs it and the SLI has
+// a feature category
+local staticLabelsForAggregation(serviceDefinition, sliDefinition, aggregationLabels) =
+  local baseLabels = {
+    tier: serviceDefinition.tier,
+    type: serviceDefinition.type,
+    component: sliDefinition.name,
+  };
+  if sliDefinition.hasFeatureCategory() && std.member(aggregationLabels, 'feature_category')
+  then baseLabels + sliDefinition.featureCategoryLabels()
+  else baseLabels;
+
 // Generates apdex weight recording rules for a component definition
 
 local generateApdexRules(burnRate, aggregationSet, aggregationLabels, sliDefinition, recordingRuleStaticLabels) =
@@ -40,11 +53,7 @@ local generateErrorRateRules(burnRate, aggregationSet, aggregationLabels, sliDef
 
 // Generates the recording rules given a component definition
 local generateRecordingRulesForComponent(burnRate, aggregationSet, serviceDefinition, sliDefinition, aggregationLabels) =
-  local recordingRuleStaticLabels = {
-    tier: serviceDefinition.tier,
-    type: serviceDefinition.type,
-    component: sliDefinition.name,
-  };
+  local recordingRuleStaticLabels = staticLabelsForAggregation(serviceDefinition, sliDefinition, aggregationLabels);
 
   std.flatMap(
     function(generator) generator(burnRate=burnRate, aggregationSet=aggregationSet, aggregationLabels=aggregationLabels, sliDefinition=sliDefinition, recordingRuleStaticLabels=recordingRuleStaticLabels),
@@ -64,7 +73,7 @@ local generateRecordingRulesForComponent(burnRate, aggregationSet, serviceDefini
   )::
     {
       // Generates the recording rules given a service definition
-      generateRecordingRulesForService(serviceDefinition)::
+      generateRecordingRulesForService(serviceDefinition, serviceLevelIndicators=serviceDefinition.listServiceLevelIndicators())::
         std.flatMap(
           function(sliDefinition) generateRecordingRulesForComponent(
             burnRate=burnRate,
@@ -73,7 +82,7 @@ local generateRecordingRulesForComponent(burnRate, aggregationSet, serviceDefini
             sliDefinition=sliDefinition,
             aggregationLabels=aggregationSet.labels,
           ),
-          serviceDefinition.listServiceLevelIndicators()
+          serviceLevelIndicators,
         ),
     },
 

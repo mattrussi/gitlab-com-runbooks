@@ -44,12 +44,19 @@ local serviceDefinition(service) =
         std.objectFields(service.serviceLevelIndicators),
         false
       ),
+    serviceHasComponentWithFeatureCategory()::
+      std.foldl(
+        function(memo, sliName) memo || service.serviceLevelIndicators[sliName].hasFeatureCategory(),
+        std.objectFields(service.serviceLevelIndicators),
+        false
+      ),
   };
 
   service {
     hasApdex():: private.serviceHasComponentWith('apdex'),
     hasRequestRate():: true,  // requestRate is mandatory
     hasErrorRate():: private.serviceHasComponentWith('errorRate'),
+    hasFeatureCatogorySLIs():: private.serviceHasComponentWithFeatureCategory(),
 
     getProvisioning()::
       service.provisioning,

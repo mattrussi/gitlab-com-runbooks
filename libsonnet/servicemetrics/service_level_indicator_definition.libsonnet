@@ -85,6 +85,15 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
     renderToolingLinks()::
       toolingLinks.renderLinks(self.getToolingLinks()),
 
+    hasFeatureCategory()::
+      std.objectHas(serviceLevelIndicator, 'featureCategory') && serviceLevelIndicator.featureCategory != stages.notOwned.key,
+
+    featureCategoryLabels()::
+      if self.hasFeatureCategory() then
+        { feature_category: serviceLevelIndicator.featureCategory }
+      else
+        {},
+
     // Generate recording rules for apdex
     generateApdexRecordingRules(burnRate, aggregationSet, aggregationLabels, recordingRuleStaticLabels)::
       if self.hasApdex() && !isUpscalingTarget(self, burnRate) then
