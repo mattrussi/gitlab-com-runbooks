@@ -1,12 +1,13 @@
 local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
+local stages = import 'stages.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 
 // For now we assume that services are provisioned on vms and not kubernetes
 // Please consult the README.md file for details of team and feature_category
 local serviceLevelIndicatorDefaults = {
-  featureCategory: 'not_owned',
+  featureCategory: stages.notOwned.key,
   team: null,
   description: '',
   staticLabels: {},  // by default, no static labels
@@ -17,6 +18,12 @@ local serviceLevelIndicatorDefaults = {
 
 local validateHasField(object, field, message) =
   if std.objectHas(object, field) then
+    object
+  else
+    std.assertEqual(true, { __assert: message });
+
+local validateFeatureCategory(object, message) =
+  if !std.objectHas(object, 'featureCategory') || std.objectHas(stages.featureCategoryMap, object.featureCategory) then
     object
   else
     std.assertEqual(true, { __assert: message });
@@ -33,6 +40,8 @@ local validateAndApplySLIDefaults(sliName, component, inheritedDefaults) =
   validateHasField(component, 'significantLabels', '%s component requires a significantLabels attribute' % [sliName])
   +
   validateHasField(component, 'userImpacting', '%s component requires a userImpacting attribute' % [sliName])
+  +
+  validateFeatureCategory(component, '%s is not a valid feature category for %s' % [component.featureCategory, sliName])
   {
     name: sliName,
   };
