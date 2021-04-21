@@ -292,6 +292,16 @@ groups:
     expr: '0.000050'
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      tier: inf
+      type: sentry
+    expr: '0.999000'
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      tier: inf
+      type: sentry
+    expr: '0.001000'
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
       tier: sv
       type: sidekiq
     expr: '0.995000'
@@ -1094,6 +1104,14 @@ groups:
       service_aggregation: 'yes'
       tier: inf
       type: search
+    expr: '1'
+  - record: gitlab_component_service:mapping
+    labels:
+      component: sentry_events
+      regional_aggregation: 'no'
+      service_aggregation: 'yes'
+      tier: inf
+      type: sentry
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
