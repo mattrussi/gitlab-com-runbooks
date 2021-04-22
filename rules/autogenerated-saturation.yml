@@ -563,6 +563,21 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
+      component: pgbouncer_client_conn
+    expr: |
+      max by(environment, tier, type, stage) (
+        clamp_min(
+          clamp_max(
+            avg_over_time(pgbouncer_pools_client_active_connections {environment!="",type=~"patroni|pgbouncer"}[5m])
+            /
+            4096
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
       component: pgbouncer_single_core
     expr: |
       max by(environment, tier, type, stage) (
@@ -1128,6 +1143,14 @@ groups:
     expr: '0.95'
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
+      component: pgbouncer_client_conn
+    expr: '0.9'
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: pgbouncer_client_conn
+    expr: '0.95'
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
       component: pgbouncer_single_core
     expr: '0.8'
   - record: slo:max:hard:gitlab_component_saturation:ratio
@@ -1458,6 +1481,12 @@ groups:
       component: pgbouncer_async_replica_pool
       horiz_scaling: 'yes'
       severity: s4
+    expr: '1'
+  - record: gitlab_component_saturation_info
+    labels:
+      component: pgbouncer_client_conn
+      horiz_scaling: 'yes'
+      severity: s2
     expr: '1'
   - record: gitlab_component_saturation_info
     labels:
@@ -2942,6 +2971,52 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="pgbouncer_async_replica_pool"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="pgbouncer_async_replica_pool"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: >-
+        The PGBouncer Client Connections per Process resource of the {{ $labels.type }} service ({{ $labels.stage
+        }} stage), component has a saturation exceeding SLO and is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the PGBouncer Client Connections per Process resource:
+
+        Client connections per pgbouncer process.
+
+        pgbouncer is configured to use a `max_client_conn` setting. This limits the total number of client connections per pgbouncer.
+
+        When this limit is reached, client connections may be refused, and `max_client_conn` errors may appear in the pgbouncer logs.
+
+        This could affect users as Rails clients are left unable to connect to the database. Another potential knock-on effect is that Rails clients could fail their readiness checks for extended periods during a deployment, leading to saturation of the older nodes.
+      grafana_dashboard_id: alerts-sat_pgbouncer_client_conn
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/alerts-sat_pgbouncer_client_conn?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '1258049746'
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, fqdn) (
+          clamp_min(
+            clamp_max(
+              avg_over_time(pgbouncer_pools_client_active_connections {environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
+              /
+              4096
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+    expr: |
+      gitlab_component_saturation:ratio{component="pgbouncer_client_conn"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="pgbouncer_client_conn"}
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
