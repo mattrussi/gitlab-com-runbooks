@@ -7,7 +7,7 @@ local row = grafana.row;
 local text = grafana.text;
 
 basic.dashboard(
-  'Overview',
+  'Events',
   tags=['sentry'],
   includeStandardEnvironmentAnnotations=false,
   includeEnvironmentTemplate=false,
