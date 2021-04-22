@@ -34,17 +34,17 @@ The logs will also be ingested into Elasticsearch (Details TBD)
 
 TODO: what details are included in the logs (non-direct identifiers so it's not strictly PII) and scripts/processes we can use to map those back to users/groups/projects if we had to. 
 
-
 ## Metrics 
 
 TODO: Explain the *key* metrics available (with links to https://thanos.gitlab.net/graph.); we can assume general familiarity with the golang built in ones, and *roughly* what the http metrics are, but need to point out which labels are meaningful
 TODO: Links to dashboards (we'll have to create those first, and we might need some actual real-life data from at least staging to makethose look useful)
 
+## Rules fetching
+
+The rules used by the service are periodically queried from a Git repository (TODO: add URL here) through HTTP requests. Anytime that the HEAD of the configured Git branch is determined to have changed, a Git pull is executed and rules updated.
 
 ## Control
 
 TODO: The feature flag and how to disable the use of the service in a hurry
 TODO: Who is responsible for read-only vs active mode in the service (T&S) and how to get that changed if necessary
-TODO: The env vars for the URL, Token, and Timeout; @cmiskell to add this when details are finalized. 
-
-
+TODO: The env vars for the URL, Token, and Timeout, Git rules repository name, branch, private and deploy tokens; @cmiskell to add this when details are finalized. 
