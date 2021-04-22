@@ -34,6 +34,17 @@ The logs will also be ingested into Elasticsearch (Details TBD)
 
 TODO: what details are included in the logs (non-direct identifiers so it's not strictly PII) and scripts/processes we can use to map those back to users/groups/projects if we had to. 
 
+An example of logging that happens per request on the `/validate` endpoint:
+
+```json
+# Service request acknowledgement
+{"correlation_id":"123","level":"info","mode":"active","msg":"received request","time":"2021-04-22T09:28:15+02:00"}
+# Service request outcome
+{"correlation_id":"123","failure_reason":"invalid_script","level":"warning","mode":"active","msg":"pipeline rejected due to invalid script string","pipeline_sha":"9459c735bdc2352b8169789e5cc61b2a382d6f25","project_id":35,"rejection_hint":"xmr","status_code":406,"time":"2021-04-22T09:28:15+02:00","user_id":37,"validation_status":"fail"}
+# HTTP server generic response log entry
+{"content_type":"text/plain; charset=utf-8","correlation_id":"123","duration_ms":0,"host":"127.0.0.1:8080","level":"info","method":"POST","msg":"access","proto":"HTTP/1.1","referrer":"","remote_addr":"127.0.0.1:65204","remote_ip":"127.0.0.1","status":406,"system":"http","time":"2021-04-22T09:28:15+02:00","ttfb_ms":0,"uri":"/validate?token=[FILTERED]","user_agent":"HTTPie/2.4.0","written_bytes":15}
+```
+
 ## Metrics 
 
 TODO: Explain the *key* metrics available (with links to https://thanos.gitlab.net/graph.); we can assume general familiarity with the golang built in ones, and *roughly* what the http metrics are, but need to point out which labels are meaningful
