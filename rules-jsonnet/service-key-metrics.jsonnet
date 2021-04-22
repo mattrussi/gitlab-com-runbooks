@@ -6,13 +6,26 @@ local outputPromYaml(groups) =
     groups: groups,
   });
 
+local featureCategoryFileForService(service) =
+  if service.hasFeatureCatogorySLIs() then
+    {
+      ['feature-category-metrics-%s.yml' % [service.type]]:
+        outputPromYaml(
+          prometheusServiceGroupGenerator.featureCategoryRecordingRuleGroupsForService(service)
+        ),
+    }
+  else {};
+
+local filesForService(service) =
+  {
+    ['key-metrics-%s.yml' % [service.type]]:
+      outputPromYaml(
+        prometheusServiceGroupGenerator.recordingRuleGroupsForService(service)
+      ),
+  } + featureCategoryFileForService(service);
+
 /**
  * The source SLI recording rules are each kept in their own files, generated from this
  */
-{
-  ['key-metrics-%s.yml' % [service.type]]:
-    outputPromYaml(
-      prometheusServiceGroupGenerator.recordingRuleGroupsForService(service)
-    )
-  for service in services
-}
+
+std.foldl(function(memo, service) memo + filesForService(service), services, {})
