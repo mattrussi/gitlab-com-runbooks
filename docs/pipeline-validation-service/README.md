@@ -10,7 +10,13 @@ The actual external service for gitlab.com is provided and run by Trust & Safety
 
 ## Status codes
 
-TODO: quick recap of the status code meanings (200 OK, 4XX not accepted, eveyrthing else accepted), and what it does in read-only mode.
+The service responds to requests from .com at the `/validate` endpoint. As per the [spec](https://docs.gitlab.com/ee/administration/external_pipeline_validation.html#usage), it replies with the following status codes:
+
+- `200`: will cause .com to accept pipeline
+- `406`: will cause .com to reject pipeline
+- `500`: will cause .com to accept pipeline and log event
+
+The service supports a read-only mode (enabled by setting the `PIPELINE_VALIDATION_MODE` environment variable to `read-only`). In this mode, the service will perform its usual logic and logging, but always return status code `200`, effectively becoming merely an observer.
 
 ## Failure modes
 
