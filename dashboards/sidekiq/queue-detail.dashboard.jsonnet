@@ -382,6 +382,77 @@ basic.dashboard(
       basic.multiQuantileTimeseries('Elasticsearch Time', selector, '{{ queue }}', bucketMetric='sidekiq_elasticsearch_requests_duration_seconds_bucket', aggregators='queue'),
     ], cols=3, startRow=703
   )
+  +
+  layout.rowGrid('SQL', [
+    basic.multiTimeseries(
+      stableId='total-sql-queries-rate',
+      title='Total SQL Queries Rate',
+      format='ops',
+      queries=[
+        {
+          query: |||
+            sum by (endpoint_id) (
+              rate(
+                gitlab_transaction_db_count_total{%(selector)s}[$__interval]
+              )
+            )
+          ||| % { selector: selectors.serializeHash(selector) },
+          legendFormat: '{{ endpoint_id }} - total',
+        },
+        {
+          query: |||
+            sum by (endpoint_id) (
+              rate(
+                gitlab_transaction_db_primary_count_total{%(selector)s}[$__interval]
+              )
+            )
+          ||| % { selector: selectors.serializeHash(selector) },
+          legendFormat: '{{ endpoint_id }} - primary',
+        },
+        {
+          query: |||
+            sum by (endpoint_id) (
+              rate(
+                gitlab_transaction_db_replica_count_total{%(selector)s}[$__interval]
+              )
+            )
+          ||| % { selector: selectors.serializeHash(selector) },
+          legendFormat: '{{ endpoint_id }} - replica',
+        },
+      ]
+    ),
+    basic.timeseries(
+      stableId='sql-transaction',
+      title='SQL Transactions Rate',
+      query=|||
+        sum by (endpoint_id) (
+          rate(gitlab_database_transaction_seconds_count{%(selector)s}[$__interval])
+        )
+      ||| % { selector: selectors.serializeHash(selector) },
+      legendFormat='{{ endpoint_id }}',
+    ),
+    basic.multiTimeseries(
+      stableId='sql-transaction-holding-duration',
+      title='SQL Transaction Holding Duration',
+      format='s',
+      queries=[
+        {
+          query: |||
+            sum(rate(gitlab_database_transaction_seconds_sum{%(selector)s}[$__interval])) by (endpoint_id)
+            /
+            sum(rate(gitlab_database_transaction_seconds_count{%(selector)s}[$__interval])) by (endpoint_id)
+          ||| % { selector: selectors.serializeHash(selector) },
+          legendFormat: '{{ endpoint_id }} - p50',
+        },
+        {
+          query: |||
+            histogram_quantile(0.95, sum(rate(gitlab_database_transaction_seconds_bucket{%(selector)s}[$__interval])) by (endpoint_id, le))
+          ||| % { selector: selectors.serializeHash(selector) },
+          legendFormat: '{{ endpoint_id }} - p95',
+        },
+      ],
+    ),
+  ], startRow=901)
 )
 .trailer()
 + {
