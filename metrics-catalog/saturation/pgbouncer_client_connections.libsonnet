@@ -22,8 +22,8 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
     resourceLabels: ['fqdn'],
     burnRatePeriod: '5m',
     queryFormatConfig: {
-      /** This value is configured in chef */
-      maxClientConns: 4096,
+      /** This value is configured in chef - make sure that it's kept in sync */
+      maxClientConns: 6200,
     },
     query: |||
       avg_over_time(pgbouncer_pools_client_active_connections {%(selector)s}[%(rangeInterval)s])
