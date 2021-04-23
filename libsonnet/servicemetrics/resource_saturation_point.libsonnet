@@ -124,7 +124,7 @@ local resourceSaturationPoint = function(options)
               { type: { ne: '' } }
         );
 
-      local query = definition.getQuery({ environment: { ne: '' } } + typeFilter, definition.getBurnRatePeriod());
+      local query = definition.getQuery(typeFilter, definition.getBurnRatePeriod());
 
       {
         record: 'gitlab_component_saturation:ratio',
