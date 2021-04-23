@@ -31,18 +31,21 @@ And finally you request a role to connect to the Rails console:
 
 `$> tsh login --proxy=teleport.gstg.gitlab.net --request-roles=rails-ro --request-reason="Issue-URL or explanation"`
 
+This command will wait for the approver to approve your request.  It may appear to hang, but it will return as soon as the request is approved or denied.
+
 > Note: These examples are for the staging environment only to prevent unintentional copy/paste behavior.  To connect to the production environment, change `gstg` to `gprd`
 
 #### Access approval
-From here, a reliability manager will get your request (notification via slack) and will attend it as soon as possible (your user profile will be checked and your request approved via slack or console). You may receive a confirmation from the approver via slack.
 
-The final step will be to finally get your Rails console access via:
+In the future, a reliability manager will get your request via an automated notification in Slack. For now, you'll need to ping them manually in `#infrastructure-lounge`.  They will review the issue URL in the request and if console access seems like a reasonable step to address that issue, they will approve it.
+
+The final step will be to finally access the Rails console via:
 
 `$> tsh ssh rails-ro@console-ro-01-sv-gstg.c.gitlab-staging-1.internal`
 
 Remember that your access request - and its approval - will expire in `24h` maximum.
 
-If you have any issues using Teleport, or this approval process, please ask the **Reliability team** (SREs and/or managers) in the [#production](https://gitlab.slack.com/archives/C101F3796) or [#infra-lounge](https://gitlab.slack.com/archives/CB3LSMEJV) channels.
+If you have any issues using Teleport, or this approval process, please ask the **Reliability team** (SREs and/or managers) in the [#production](https://gitlab.slack.com/archives/C101F3796) or [#infrastructure-lounge](https://gitlab.slack.com/archives/CB3LSMEJV) channels.
 
 > Note: If you need more time, you can renew your role access approval at any time using the same method as the initial request
 
