@@ -1,18 +1,12 @@
 local sidekiqHelpers = import './sidekiq-helpers.libsonnet';
+local aggregationSets = import 'aggregation-sets.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local combined = metricsCatalog.combined;
-local aggregationLabels = [
-  'environment',
-  'tier',
-  'type',
-  'stage',
-  'shard',
-  'queue',
-  'feature_category',
-  'urgency',
-];
+
+local executionAggregationSet = aggregationSets.sidekiqWorkerExecutionSLIs;
+local aggregationLabels = executionAggregationSet.labels;
 
 // This is used to calculate the queue apdex across all queues
 local combinedQueueApdex = combined([
@@ -61,7 +55,52 @@ local errorRate = rateMetric(
   selector={},
 );
 
+local executionRulesForBurnRate(aggregationSet, burnRate, staticLabels={}) =
+  local recordings =
+    if std.objectHas(aggregationSet.burnRates, burnRate) then
+      local recordingNames = aggregationSet.burnRates[burnRate];
+      [
+        if std.objectHas(recordingNames, 'apdexSuccessRate') then
+          {  // Key metric: Execution apdex (ratio)
+            record: recordingNames.apdexSuccessRate,
+            expr: combinedExecutionApdex.apdexSuccessRateQuery(aggregationSet.labels, {}, burnRate),
+          }
+        else {},
+        if std.objectHas(recordingNames, 'apdexRatio') then
+          {  // Key metric: Execution apdex (ratio)
+            record: recordingNames.apdexRatio,
+            expr: combinedExecutionApdex.apdexQuery(aggregationSet.labels, {}, burnRate),
+          }
+        else {},
+        {  // Key metric: Execution apdex (weight score)
+          record: recordingNames.apdexWeight,
+          expr: combinedExecutionApdex.apdexWeightQuery(aggregationSet.labels, {}, burnRate),
+        },
+        {  // Key metric: QPS
+          record: recordingNames.opsRate,
+          expr: requestRate.aggregatedRateQuery(aggregationSet.labels, {}, burnRate),
+        },
+        {  // Key metric: Errors per Second
+          record: recordingNames.errorRate,
+          expr: errorRate.aggregatedRateQuery(aggregationSet.labels, {}, burnRate),
+        },
+        if std.objectHas(recordingNames, 'errorRatio') then
+          {
+            record: recordingNames.errorRatio,
+            expr: |||
+              %(errorRate)s
+              /
+              %(executionRate)s
+            ||| % { executionRate: recordingNames.opsRate, errorRate: recordingNames.errorRate },
+          }
+        else {},
+      ] else [];
+  std.foldl(function(memo, recording) memo + [recording + staticLabels], std.prune(recordings), []);
+
 {
+  perWorkerRecordingRulesForAggregationSet(aggregationSet, staticLabels = {})::
+    std.flatMap(function(burnRate) executionRulesForBurnRate(aggregationSet, burnRate, staticLabels), aggregationSet.getBurnRates()),
+
   // Record queue apdex, execution apdex, error rates, QPS metrics
   // for each worker, similar to how we record these for each
   // service
@@ -79,29 +118,5 @@ local errorRate = rateMetric(
         record: 'gitlab_background_jobs:queue:ops:rate_%s' % [rangeInterval],
         expr: queueRate.aggregatedRateQuery(aggregationLabels, {}, rangeInterval),
       },
-      {  // Key metric: Execution apdex (ratio)
-        record: 'gitlab_background_jobs:execution:apdex:ratio_%s' % [rangeInterval],
-        expr: combinedExecutionApdex.apdexQuery(aggregationLabels, {}, rangeInterval),
-      },
-      {  // Key metric: Execution apdex (weight score)
-        record: 'gitlab_background_jobs:execution:apdex:weight:score_%s' % [rangeInterval],
-        expr: combinedExecutionApdex.apdexWeightQuery(aggregationLabels, {}, rangeInterval),
-      },
-      {  // Key metric: QPS
-        record: 'gitlab_background_jobs:execution:ops:rate_%s' % [rangeInterval],
-        expr: requestRate.aggregatedRateQuery(aggregationLabels, {}, rangeInterval),
-      },
-      {  // Key metric: Errors per Second
-        record: 'gitlab_background_jobs:execution:error:rate_%s' % [rangeInterval],
-        expr: errorRate.aggregatedRateQuery(aggregationLabels, {}, rangeInterval),
-      },
-      {
-        record: 'gitlab_background_jobs:execution:error:ratio_%s' % [rangeInterval],
-        expr: |||
-          gitlab_background_jobs:execution:error:rate_%(rangeInterval)s
-          /
-          gitlab_background_jobs:execution:ops:rate_%(rangeInterval)s
-        ||| % { rangeInterval: rangeInterval },
-      },
-    ],
+    ] + executionRulesForBurnRate(executionAggregationSet, rangeInterval),
 }
