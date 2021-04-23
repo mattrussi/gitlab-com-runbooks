@@ -98,7 +98,7 @@ local executionRulesForBurnRate(aggregationSet, burnRate, staticLabels={}) =
   std.foldl(function(memo, recording) memo + [recording + staticLabels], std.prune(recordings), []);
 
 {
-  perWorkerRecordingRulesForAggregationSet(aggregationSet, staticLabels = {})::
+  perWorkerRecordingRulesForAggregationSet(aggregationSet, staticLabels={})::
     std.flatMap(function(burnRate) executionRulesForBurnRate(aggregationSet, burnRate, staticLabels), aggregationSet.getBurnRates()),
 
   // Record queue apdex, execution apdex, error rates, QPS metrics
