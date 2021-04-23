@@ -44,22 +44,22 @@ groups:
       (
         (
           gitlab_component_errors:ratio_1h{component="pg_transactions",monitor="global",type="sentry"}
-          > (14.4 * 0.001000)
+          > (14.4 * 0.010000)
         )
         and
         (
           gitlab_component_errors:ratio_5m{component="pg_transactions",monitor="global",type="sentry"}
-          > (14.4 * 0.001000)
+          > (14.4 * 0.010000)
         )
         or
         (
           gitlab_component_errors:ratio_6h{component="pg_transactions",monitor="global",type="sentry"}
-          > (6 * 0.001000)
+          > (6 * 0.010000)
         )
         and
         (
           gitlab_component_errors:ratio_30m{component="pg_transactions",monitor="global",type="sentry"}
-          > (6 * 0.001000)
+          > (6 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -250,22 +250,22 @@ groups:
       (
         (
           gitlab_component_errors:ratio_1h{component="sentry_events",monitor="global",type="sentry"}
-          > (14.4 * 0.001000)
+          > (14.4 * 0.010000)
         )
         and
         (
           gitlab_component_errors:ratio_5m{component="sentry_events",monitor="global",type="sentry"}
-          > (14.4 * 0.001000)
+          > (14.4 * 0.010000)
         )
         or
         (
           gitlab_component_errors:ratio_6h{component="sentry_events",monitor="global",type="sentry"}
-          > (6 * 0.001000)
+          > (6 * 0.010000)
         )
         and
         (
           gitlab_component_errors:ratio_30m{component="sentry_events",monitor="global",type="sentry"}
-          > (6 * 0.001000)
+          > (6 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
