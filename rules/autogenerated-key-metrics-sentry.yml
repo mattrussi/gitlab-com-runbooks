@@ -383,7 +383,7 @@ groups:
     labels:
       component: pg_transactions
       regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      service_aggregation: 'no'
       tier: inf
       type: sentry
     expr: '1'

@@ -8,7 +8,9 @@ metricsCatalog.serviceDefinition({
   tier: 'inf',
   monitoringThresholds: {
     apdexScore: 0.999,
-    errorRatio: 0.999,
+    // Setting the Error SLO at 99% because we see high transaction rollback rates
+    // TODO: investigate
+    errorRatio: 0.99,
   },
   /*
    * Our anomaly detection uses normal distributions and the monitoring service
@@ -56,6 +58,7 @@ metricsCatalog.serviceDefinition({
 
     pg_transactions: {
       userImpacting: false,
+      serviceAggregation: false,
       featureCategory: 'not_owned',
       team: 'sre_observability',
       description: |||

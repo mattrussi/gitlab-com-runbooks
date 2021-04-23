@@ -299,7 +299,7 @@ groups:
     labels:
       tier: inf
       type: sentry
-    expr: '0.001000'
+    expr: '0.010000'
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       tier: sv
@@ -1109,7 +1109,7 @@ groups:
     labels:
       component: pg_transactions
       regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      service_aggregation: 'no'
       tier: inf
       type: sentry
     expr: '1'
