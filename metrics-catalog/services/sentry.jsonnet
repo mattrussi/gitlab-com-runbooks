@@ -1,6 +1,7 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
+local combined = metricsCatalog.combined;
 
 metricsCatalog.serviceDefinition({
   type: 'sentry',
@@ -51,7 +52,38 @@ metricsCatalog.serviceDefinition({
       ),
 
       significantLabels: ['api_version', 'status'],
-
     },
+
+    pg_transactions: {
+      userImpacting: false,
+      featureCategory: 'not_owned',
+      team: 'sre_observability',
+      description: |||
+        Represents all SQL transactions issued to the sentry Postgres instance.
+        Errors represent transaction rollbacks.
+      |||,
+
+      local baseSelector = { type: 'sentry', job: 'postgres', datname: 'sentry' },
+
+      requestRate: combined([
+        rateMetric(
+          counter='pg_stat_database_xact_commit',
+          selector=baseSelector,
+        ),
+        rateMetric(
+          counter='pg_stat_database_xact_rollback',
+          selector=baseSelector,
+        ),
+      ]),
+
+      errorRate: rateMetric(
+        counter='pg_stat_database_xact_rollback',
+        selector=baseSelector,
+      ),
+
+      significantLabels: [],
+      toolingLinks: [],
+    },
+
   },
 })
