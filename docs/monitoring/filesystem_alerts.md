@@ -17,12 +17,6 @@ First, check out if the host you're working on is one of the following:
 
 ### Well known hosts
 
-#### dashboards.gitlab.net
-
-This alerts triggered on `/var/lib/influxdb/data` and `influxdb` is likely to be the culprit. Apparently there is a file handler leak somewhere and this happens regularly.
-
-Take a look at [how to fix file handler leaks](#file-handler-leaks) later in this page. You can restart influxdb with `sudo service influxdb restart`.
-
 #### worker*.gitlab.com
 
 It's probably nginx leaking file handlers.
