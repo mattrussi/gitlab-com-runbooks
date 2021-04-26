@@ -20,7 +20,10 @@ The service supports a read-only mode (enabled by setting the `PIPELINE_VALIDATI
 
 ## Failure modes
 
-TODO: how it can fail (too restrictive, too permissive), and reasonable courses of actions (disable mostly, I guess, but tease these out)
+1. Service outage - in the case of a complete service outage, pipelines will default to authorized, which would result in abusive pipelines being executed, however it won't affect the running of any pipelines as it the service request will timeout after 1 second as per the `DEFAULT_VALIDATION_REQUEST_TIMEOUT` configuration.
+2. Overly permissive rule - in the case where an overly permissive rule is deployed abusive jobs would no longer be blocked in the same way. The rollout of changes will need to be monitored closely by the engineering teams in order to ensure rule changes are having the expected results.
+3. Overly restrictive rule - in the case where an overly restrictive rule is deployed legitimate jobs would start to be blocked. This would be observed by an increase in the rate of pipeline validation failures. If this type of failure is observed, the first course of action would be to rollback the most recent rule change.
+
 
 ## Alerts
  
@@ -28,11 +31,19 @@ TODO: once we have the requisite metrics (from the readiness review), and alerti
 
 ## Logging
 
-The raw logs can always be seen in the GCP console, either via the CloudRun [log viewer](https://console.cloud.google.com/run/detail/us-central1/pipeline-validation-service/logs?project=glsec-trust-safety-live) or in [StackDriver](https://console.cloud.google.com/logs/viewer?advancedFilter=resource.type%20%3D%20%22cloud_run_revision%22%0Aresource.labels.service_name%20%3D%20%22pipeline-validation-service%22%0Aresource.labels.location%20%3D%20%22us-central1%22%0A%20severity%3E%3DDEFAULT&project=glsec-trust-safety-live)
+Logs are ingested into Elasticsearch and can be searched via the [pubsub-pvs-inf-gprd*](https://log.gprd.gitlab.net/app/management/kibana/indexPatterns/patterns/4858f3a0-a312-11eb-966b-2361593353f9#/?_a=h@9293420) index.
 
-The logs will also be ingested into Elasticsearch (Details TBD)
+Below is a list of useful attributes emitted to the logs:
 
-TODO: what details are included in the logs (non-direct identifiers so it's not strictly PII) and scripts/processes we can use to map those back to users/groups/projects if we had to. 
+* `correlation_id`
+* `mode` active or passive
+* `failure_reason` reason for the failure if applicable
+* `msg` additional details about the failure if applicable
+* `rejection_hint` an indicator of the specific rule failure if applicable
+* `status_code` status code returned to as part of the request (200, 406, or 500)
+* `user_id` id of the user who created the pipeline
+* `validation_status` pass or fail
+
 
 An example of logging that happens per request on the `/validate` endpoint:
 
@@ -47,12 +58,16 @@ An example of logging that happens per request on the `/validate` endpoint:
 
 ## Metrics 
 
+A basic metrics dashboard exits at https://dashboards.gitlab.net/d/pvs-main/pvs-overview
+
 TODO: Explain the *key* metrics available (with links to https://thanos.gitlab.net/graph.); we can assume general familiarity with the golang built in ones, and *roughly* what the http metrics are, but need to point out which labels are meaningful
 TODO: Links to dashboards (we'll have to create those first, and we might need some actual real-life data from at least staging to makethose look useful)
 
 ## Rules fetching
 
-The rules used by the service are periodically queried from a Git repository (TODO: add URL here) through HTTP requests. Anytime that the HEAD of the configured Git branch is determined to have changed, a Git pull is executed and rules updated.
+For the initial version of the service there will only be a two simple rules implemented which are controlled by setting the read-only mode feature flag on the service to enable or disable.
+
+The next iteration (implemented in https://gitlab.com/gitlab-com/gl-security/security-operations/trust-and-safety/pipeline-validation-service/-/merge_requests/31) will support granular control over the state of each rule. The rules are stored in a separate repository, which will be checked on a regular basis for new rules. When new or changed rules are found, they are loaded into the service and the configuration is updated.
 
 ## Control
 
