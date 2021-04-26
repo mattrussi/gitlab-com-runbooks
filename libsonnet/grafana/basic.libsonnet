@@ -1001,4 +1001,6 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
       title: panelTitle,
       type: 'stat',
     },
+
+  text:: text.new,
 }
