@@ -1,4 +1,4 @@
-local HIGH_THROUHGPUT = ['gitaly', 'rails', 'workhorse', 'sidekiq', 'shell', 'puma', 'monitoring', 'registry', 'system', 'gcs'];
+local HIGH_THROUHGPUT = ['gitaly', 'rails', 'workhorse', 'sidekiq', 'shell', 'puma', 'monitoring', 'registry', 'system'];
 local MEDIUM_THROUGHPUT = ['gke-audit', 'pages', 'fluentd', 'postgres', 'runner'];
 
 local setting(index, env) = if std.member(HIGH_THROUHGPUT, index) then {
