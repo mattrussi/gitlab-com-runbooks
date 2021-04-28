@@ -1,4 +1,5 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
+local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
@@ -32,10 +33,12 @@ metricsCatalog.serviceDefinition({
       local baseSelector = {
         job: 'gitlab-kas',
       },
-      //apdex: histogramApdex(
-      //histogram='',
-      //selector=baseSelector
-      //),
+      apdex: histogramApdex(
+        histogram='gitops_poll_interval_bucket',
+        selector=baseSelector,
+        satisfiedThreshold=20,
+        toleratedThreshold=80,
+      ),
       requestRate: rateMetric(
         counter='grpc_server_handled_total',
         selector=baseSelector
