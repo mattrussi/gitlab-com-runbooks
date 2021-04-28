@@ -152,7 +152,7 @@ metricsCatalog.serviceDefinition({
       // Note: these labels will also be included in the
       // intermediate recording rules specified in the
       // `recordingRuleMetrics` stanza above
-      significantLabels: ['feature_category', 'queue', 'urgency'],
+      significantLabels: ['feature_category', 'queue', 'urgency', 'worker'],
 
       local slowRequestSeconds =
         if shard.urgency == 'high' then
