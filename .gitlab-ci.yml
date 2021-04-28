@@ -10,6 +10,47 @@ variables:
   BUNDLER_VERSION: 2.1.4
   GOLANG_IMAGE: golang:1.15
 
+.matrix_production:
+  parallel:
+    matrix:
+      - DEPLOY_ENV: gprd
+        CLUSTER: gprd-gitlab-gke
+        REGION: us-east1
+      - DEPLOY_ENV: gprd-us-east1-b
+        CLUSTER: gprd-us-east1-b
+        REGION: us-east1-b
+      - DEPLOY_ENV: gprd-us-east1-c
+        CLUSTER: gprd-us-east1-c
+        REGION: us-east1-c
+      - DEPLOY_ENV: gprd-us-east1-d
+        CLUSTER: gprd-us-east1-d
+        REGION: us-east1-d
+      - DEPLOY_ENV: org-ci
+        CLUSTER: org-ci-gitlab-gke
+        REGION: us-east1
+
+.matrix_non_production:
+  parallel:
+    matrix:
+      - DEPLOY_ENV: pre
+        CLUSTER: pre-gitlab-gke
+        REGION: us-east1
+      - DEPLOY_ENV: gstg
+        CLUSTER: gstg-gitlab-gke
+        REGION: us-east1
+      - DEPLOY_ENV: gstg-us-east1-b
+        CLUSTER: gstg-us-east1-b
+        REGION: us-east1-b
+      - DEPLOY_ENV: gstg-us-east1-c
+        CLUSTER: gstg-us-east1-c
+        REGION: us-east1-c
+      - DEPLOY_ENV: gstg-us-east1-d
+        CLUSTER: gstg-us-east1-d
+        REGION: us-east1-d
+      - DEPLOY_ENV: ops
+        CLUSTER: ops-gitlab-gke
+        REGION: us-east1
+
 default:
   image: "${CI_REGISTRY_IMAGE}:latest"
   tags:
@@ -46,7 +87,6 @@ workflow:
     - if: '$CI_PIPELINE_SOURCE == "pipeline"'
 
 .deploy-rules:
-  extends: .rules-artifacts
   stage: deploy
   rules:
     - *avoid-stage-group-check-rule
@@ -57,16 +97,14 @@ workflow:
     - gcloud auth activate-service-account --key-file ${SERVICE_KEY}
     - gcloud config set project ${PROJECT}
     - gcloud container clusters get-credentials ${CLUSTER} --region ${REGION}
+    # Generate rules
+    - gem install bundler --no-document -v $BUNDLER_VERSION
+    - bundle install --with=test
+    - bundle exec ./bin/create_kubernetes_rules.rb --create --validate
     - ./bin/delete_orphan_kubenetes_rules.sh # Delete ophaned PrometheusRules
     - kubectl apply --namespace monitoring --filename ${CI_PROJECT_DIR}/rules-k8s/
   tags:
     - k8s-workloads
-
-.rules-artifacts:
-  artifacts:
-    expire_in: 1 day
-    paths:
-      - rules-k8s
 
 .dashboards:
   rules:
@@ -97,16 +135,6 @@ verify:
   script:
     - make verify
 
-test-rules:
-  extends:
-    - .rules-artifacts
-    - .default-job-rules
-  stage: test
-  script:
-    - gem install bundler --no-document -v $BUNDLER_VERSION
-    - bundle install --with=test
-    - bundle exec ./bin/create_kubernetes_rules.rb --create --validate
-
 danger:
   stage: test
   script:
@@ -135,86 +163,42 @@ rspec:
     - bundle install --with=test
     - bundle exec rspec
 
-deploy-rules-gstg:
-  environment: gstg
-  extends: .deploy-rules
-  variables:
-    CLUSTER: gstg-gitlab-gke
-    REGION: us-east1
+.test-rules:
+  extends:
+    - .default-job-rules
+  stage: test
+  script:
+    - gem install bundler --no-document -v $BUNDLER_VERSION
+    - bundle install --with=test
+    - bundle exec ./bin/create_kubernetes_rules.rb --create --validate
 
-deploy-rules-gstg-us-east1-b:
-  environment: gstg-us-east1-b
-  extends: .deploy-rules
-  variables:
-    CLUSTER: gstg-us-east1-b
-    REGION: us-east1-b
+# Test rules to non-production environments
+test-rules-non-production:
+  extends:
+    - .test-rules
+    - .matrix_non_production
 
-deploy-rules-gstg-us-east1-c:
-  environment: gstg-us-east1-c
-  extends: .deploy-rules
-  variables:
-    CLUSTER: gstg-us-east1-c
-    REGION: us-east1-c
+# Test rules to non-production environments
+test-rules-production:
+  extends:
+    - .test-rules
+    - .matrix_production
 
-deploy-rules-gstg-us-east1-d:
-  environment: gstg-us-east1-d
-  extends: .deploy-rules
-  variables:
-    CLUSTER: gstg-us-east1-d
-    REGION: us-east1-d
+# Deploy rules to non-production environments
+deploy-rules-non-production:
+  environment: $DEPLOY_ENV
+  stage: deploy
+  extends:
+    - .deploy-rules
+    - .matrix_non_production
 
-deploy-rules-org-ci:
-  environment: org-ci
-  extends: .deploy-rules
-  variables:
-    CLUSTER: org-ci-gitlab-gke
-    REGION: us-east1
-
-deploy-rules-pre:
-  environment: pre
-  extends: .deploy-rules
-  variables:
-    CLUSTER: pre-gitlab-gke
-    REGION: us-east1
-
-deploy-rules-ops:
-  environment: ops
-  extends: .deploy-rules
-  variables:
-    CLUSTER: ops-gitlab-gke
-    REGION: us-east1
-
-deploy-rules-gprd:
-  environment: gprd
-  extends: .deploy-rules
+# Deploy rules to non-production environments
+deploy-rules-production:
+  environment: $DEPLOY_ENV
   stage: deploy-rules-production
-  variables:
-    CLUSTER: gprd-gitlab-gke
-    REGION: us-east1
-
-deploy-rules-gprd-us-east1-b:
-  environment: gprd-us-east1-b
-  extends: .deploy-rules
-  stage: deploy-rules-production
-  variables:
-    CLUSTER: gprd-us-east1-b
-    REGION: us-east1-b
-
-deploy-rules-gprd-us-east1-c:
-  environment: gprd-us-east1-c
-  extends: .deploy-rules
-  stage: deploy-rules-production
-  variables:
-    CLUSTER: gprd-us-east1-c
-    REGION: us-east1-c
-
-deploy-rules-gprd-us-east1-d:
-  environment: gprd-us-east1-d
-  extends: .deploy-rules
-  stage: deploy-rules-production
-  variables:
-    CLUSTER: gprd-us-east1-d
-    REGION: us-east1-d
+  extends:
+    - .deploy-rules
+    - .matrix_production
 
 update-alertmanager:
   stage: deploy
