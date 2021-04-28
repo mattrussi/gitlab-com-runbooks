@@ -3241,9 +3241,9 @@ groups:
         Cloud Run is configured with a maximum number of container instances. When this is saturated, Google Cloud Run will no longer scale up.
 
         More information available at https://cloud.google.com/run/docs/configuring/max-instances.
-      grafana_dashboard_id: alerts-sat_pvs_cloudrun_container_instances
+      grafana_dashboard_id: alerts-sat_pvs_cloudrun_ctr_instances
       grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/alerts-sat_pvs_cloudrun_container_instances?from=now-6h/m&to=now-1m/m&var-environment={{
+        https://dashboards.gitlab.net/d/alerts-sat_pvs_cloudrun_ctr_instances?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '754592114'

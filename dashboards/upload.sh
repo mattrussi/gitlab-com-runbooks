@@ -58,7 +58,7 @@ prepare
 
 function validate_dashboard_requests() {
   while IFS= read -r request; do
-    uid=$(echo "${request}" | jq -r '.dashboard.uid')
+    uid=$(echo "${request}" | jq -r '.uid')
     if [[ ${#uid} -gt 40 ]]; then
       echo >&2 "UID ${uid} is longer than the 40 char max allowed by Grafana"
       return 1

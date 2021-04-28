@@ -13,7 +13,7 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
 
       More information available at https://cloud.google.com/run/docs/configuring/max-instances.
     |||,
-    grafana_dashboard_uid: 'sat_pvs_cloudrun_container_instances',
+    grafana_dashboard_uid: 'sat_pvs_cloudrun_ctr_instances',
     resourceLabels: ['state'],
     queryFormatConfig: {
       // Hard-coded since Google don't expose this via Stackdriver.
