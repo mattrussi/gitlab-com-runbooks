@@ -25,7 +25,7 @@ basic.dashboard(
       title='Migration progress overall',
       description='Overview of all data migrations and their progress over time',
       query=|||
-        max(batched_migration_migrated_tuples_total{env="$environment", migration_identifier="$migration_identifier"}) / avg(batched_migration_total_tuple_count{env="$environment", migration_identifier="$migration_identifier"})
+        max(batched_migration_migrated_tuples_total{env="$environment", migration_identifier="$migration_identifier"}) / max(batched_migration_total_tuple_count{env="$environment", migration_identifier="$migration_identifier"})
       |||,
       interval='1m',
       linewidth=1,
@@ -34,7 +34,7 @@ basic.dashboard(
     basic.timeseries(
       title='Rate of migrating tuples (tuples migrated per second)',
       query=|||
-        sum(rate(batched_migration_job_updated_tuples_total{env="$environment", migration_identifier="$migration_identifier"}[5m]))
+        sum(rate(batched_migration_job_updated_tuples_total{env="$environment", migration_identifier="$migration_identifier"}[15m]))
       |||,
       interval='1m',
       linewidth=1,
@@ -42,7 +42,7 @@ basic.dashboard(
     basic.timeseries(
       title='Batch size',
       query=|||
-        avg(batched_migration_job_batch_size{env="$environment", migration_identifier="$migration_identifier"})
+        max(batched_migration_job_batch_size{env="$environment", migration_identifier="$migration_identifier"})
       |||,
       interval='1m',
       linewidth=1,
@@ -50,7 +50,7 @@ basic.dashboard(
     basic.timeseries(
       title='Sub-batch size',
       query=|||
-        avg(batched_migration_job_sub_batch_size{env="$environment", migration_identifier="$migration_identifier"})
+        max(batched_migration_job_sub_batch_size{env="$environment", migration_identifier="$migration_identifier"})
       |||,
       interval='1m',
       linewidth=1,
@@ -58,7 +58,7 @@ basic.dashboard(
     basic.timeseries(
       title='Interval',
       query=|||
-        avg(batched_migration_job_interval_seconds{env="$environment", migration_identifier="$migration_identifier"})
+        max(batched_migration_job_interval_seconds{env="$environment", migration_identifier="$migration_identifier"})
       |||,
       interval='1m',
       linewidth=1,
@@ -66,7 +66,7 @@ basic.dashboard(
     basic.timeseries(
       title='Time Efficiency',
       query=|||
-        avg(batched_migration_job_duration_seconds{env="$environment", migration_identifier="$migration_identifier"}) / avg(batched_migration_job_interval_seconds{env="$environment", migration_identifier="$migration_identifier"})
+        max(batched_migration_job_duration_seconds{env="$environment", migration_identifier="$migration_identifier"}) / max(batched_migration_job_interval_seconds{env="$environment", migration_identifier="$migration_identifier"})
       |||,
       interval='1m',
       linewidth=1,
