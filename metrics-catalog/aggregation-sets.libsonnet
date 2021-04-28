@@ -364,6 +364,60 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
     aggregationFilter: 'regional',
   }),
 
+  sidekiqWorkerExecutionSLIs: aggregationSets.AggregationSet({
+    id: 'sidekiq_execution',
+    name: 'Sidekiq execution source metrics per worker',
+    intermediateSource: true,
+    selector: { monitor: { ne: 'global' } },
+    labels: [
+      'environment',
+      'tier',
+      'type',
+      'stage',
+      'shard',
+      'queue',
+      'feature_category',
+      'urgency',
+    ],
+    burnRates: {
+      '1m': {
+        apdexWeight: 'gitlab_background_jobs:execution:apdex:weight:score_1m',
+        apdexRatio: 'gitlab_background_jobs:execution:apdex:ratio_1m',
+        opsRate: 'gitlab_background_jobs:execution:ops:rate_1m',
+        errorRate: 'gitlab_background_jobs:execution:error:rate_1m',
+        errorRatio: 'gitlab_background_jobs:execution:error:ratio_1m',
+      },
+      '5m': {
+        apdexWeight: 'gitlab_background_jobs:execution:apdex:weight:score_5m',
+        apdexRatio: 'gitlab_background_jobs:execution:apdex:ratio_5m',
+        opsRate: 'gitlab_background_jobs:execution:ops:rate_5m',
+        errorRate: 'gitlab_background_jobs:execution:error:rate_5m',
+        errorRatio: 'gitlab_background_jobs:execution:error:ratio_5m',
+      },
+      '30m': {
+        apdexWeight: 'gitlab_background_jobs:execution:apdex:weight:score_30m',
+        apdexRatio: 'gitlab_background_jobs:execution:apdex:ratio_30m',
+        opsRate: 'gitlab_background_jobs:execution:ops:rate_30m',
+        errorRate: 'gitlab_background_jobs:execution:error:rate_30m',
+        errorRatio: 'gitlab_background_jobs:execution:error:ratio_30m',
+      },
+      '1h': {
+        apdexWeight: 'gitlab_background_jobs:execution:apdex:weight:score_1h',
+        apdexRatio: 'gitlab_background_jobs:execution:apdex:ratio_1h',
+        opsRate: 'gitlab_background_jobs:execution:ops:rate_1h',
+        errorRate: 'gitlab_background_jobs:execution:error:rate_1h',
+        errorRatio: 'gitlab_background_jobs:execution:error:ratio_1h',
+      },
+      '6h': {
+        apdexWeight: 'gitlab_background_jobs:execution:apdex:weight:score_6h',
+        apdexRatio: 'gitlab_background_jobs:execution:apdex:ratio_6h',
+        opsRate: 'gitlab_background_jobs:execution:ops:rate_6h',
+        errorRate: 'gitlab_background_jobs:execution:error:rate_6h',
+        errorRatio: 'gitlab_background_jobs:execution:error:ratio_6h',
+      },
+    },
+  }),
+
   featureCategorySourceSLIs: aggregationSets.AggregationSet({
     id: 'source_feature_category',
     name: 'Prometheus Source Feature Category Metrics',
