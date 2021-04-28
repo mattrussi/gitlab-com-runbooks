@@ -33,6 +33,7 @@ local saturationTypes = [
   import 'pgbouncer_single_core.libsonnet',
   import 'praefect_cloudsql_cpu.libsonnet',
   import 'private_runners.libsonnet',
+  import 'pvs_cloudrun_container_instances.libsonnet',
   import 'rails_db_connection_pool.libsonnet',
   import 'redis_clients.libsonnet',
   import 'redis_memory.libsonnet',
