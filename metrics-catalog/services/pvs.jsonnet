@@ -19,7 +19,7 @@ metricsCatalog.serviceDefinition({
       projectId='glsec-trust-safety-live',
       gcpRegion='us-central1',
       ignoreTrafficCessation=false,
-      apdexSatisfactoryLatency=1
+      apdexSatisfactoryLatency=1000
     ),
   },
 })
