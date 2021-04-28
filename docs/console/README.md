@@ -66,6 +66,7 @@
 * [../sidekiq/sidekiq_stats_no_longer_showing.md](../sidekiq/sidekiq_stats_no_longer_showing.md)
 * [../sidekiq/silent-project-exports.md](../sidekiq/silent-project-exports.md)
 * [../uncategorized/about-gitlab-com.md](../uncategorized/about-gitlab-com.md)
+* [../uncategorized/access-requests.md](../uncategorized/access-requests.md)
 * [../uncategorized/block-high-load-project.md](../uncategorized/block-high-load-project.md)
 * [../uncategorized/debug-failed-chef-provisioning.md](../uncategorized/debug-failed-chef-provisioning.md)
 * [../uncategorized/delete-projects-manually.md](../uncategorized/delete-projects-manually.md)
