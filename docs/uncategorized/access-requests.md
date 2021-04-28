@@ -22,3 +22,7 @@ chef-server-ctl org-user-add gitlab <username>
 Generally when developers ask for access to the ops instance, we are concerned
 with chatops access, which requires developer on `gitlab-com` group.
 If access to any other groups are needed, please clarify with the requester.
+
+## Read Only Rails Console Access
+
+When developers ask for access to the rails console, have them submit an access request via Teleport using the [Teleport Rails Console Runbook](../Teleport/Connect_to_Rails_Console_via_Teleport.md) - Then approve that request (if appropriate) using the [Teleport Approval Workflow](../Teleport/teleport_approval_workflow.md) - If the request is for Read/Write access, it's best to give the commands to an SRE and have them run them.

@@ -14,6 +14,7 @@
 
 ## Troubleshooting Pointers
 
+* [../Teleport/teleport_approval_workflow.md](../Teleport/teleport_approval_workflow.md)
 * [../ci-runners/ci_pending_builds.md](../ci-runners/ci_pending_builds.md)
 * [../cloudflare/managing-traffic.md](../cloudflare/managing-traffic.md)
 * [../cloudflare/services-locations.md](../cloudflare/services-locations.md)

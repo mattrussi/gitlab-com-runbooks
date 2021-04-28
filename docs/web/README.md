@@ -20,6 +20,7 @@
 
 ## Troubleshooting Pointers
 
+* [../Teleport/teleport_approval_workflow.md](../Teleport/teleport_approval_workflow.md)
 * [../ci-runners/service-ci-runners.md](../ci-runners/service-ci-runners.md)
 * [../cloudflare/managing-traffic.md](../cloudflare/managing-traffic.md)
 * [../cloudflare/oncall.md](../cloudflare/oncall.md)
