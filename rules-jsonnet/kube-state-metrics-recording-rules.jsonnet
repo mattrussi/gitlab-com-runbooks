@@ -52,6 +52,26 @@ local kubeHPAMetrics = [
   'kube_hpa_spec_min_replicas',
 ];
 
+local kubeNodeMetrics = [
+  'kube_node_status_capacity',
+  'kube_node_status_allocatable',
+  'kube_node_status_condition',
+  'node_schedstat_waiting_seconds_total',
+  'node_cpu_seconds_total',
+  'node_network_transmit_bytes_total',
+  'node_network_receive_bytes_total',
+  'node_disk_reads_completed_total',
+  'node_disk_writes_completed_total',
+  'node_disk_read_bytes_total',
+  'node_disk_written_bytes_total',
+  'node_disk_read_time_seconds_total',
+  'node_disk_write_time_seconds_total',
+  'node_load1',
+  'node_load5',
+  'node_load15',
+  'node_vmstat_oom_kill',
+];
+
 local podLabelJoinExpression(expression) =
   |||
     min without(label_queue_pod_name, label_stage, label_type, label_deployment)
@@ -113,6 +133,16 @@ local cadvisorWithLabelNamesExpression(metricName) =
     metricName: metricName,
   });
 
+local nodeLabelJoinExpression(expression) =
+  |||
+    %(expression)s
+    *
+    on(node) group_left(shard, stage, type, tier)
+    topk by (node) (1, kube_node_labels:labeled)
+  ||| % {
+    expression: expression,
+  };
+
 local recordingRuleFor(metricName, expression) =
   {
     record: metricName + ':labeled',
@@ -135,6 +165,34 @@ local rules = {
       /* kube_hpa_* recording rules */
       recordingRuleFor(metricName, kubeHPALabelJoinExpression(metricName))
       for metricName in kubeHPAMetrics
+    ] + [
+      recordingRuleFor(
+        'kube_node_labels',
+        |||
+          group without(service_type, service_tier, service_shard, service_stage)
+          (
+            label_replace(
+              label_replace(
+                label_replace(
+                  label_replace(
+                    kube_node_labels * on(label_type)
+                    group_left(service_type, service_tier, service_shard, service_stage)
+                    topk by(label_type) (1, gitlab:kube_node_pool_labels),
+                    "type", "$0", "service_type", ".*"
+                  ),
+                  "tier", "$0", "service_tier", ".*"
+                ),
+                "shard", "$0", "service_shard", ".*"
+              ),
+              "stage", "$0", "service_stage", ".*"
+            )
+          )
+        |||
+      ),
+    ] + [
+      /* node_* recording rules */
+      recordingRuleFor(metricName, nodeLabelJoinExpression(metricName))
+      for metricName in kubeNodeMetrics
     ],
   }],
 };
