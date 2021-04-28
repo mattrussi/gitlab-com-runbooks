@@ -12,7 +12,7 @@ basic.dashboard(
   time_from='now-7d',
   time_to='now',
   includeStandardEnvironmentAnnotations=false,
-  refresh='5m',
+  refresh='1m',
 )
 .addPanels(
   layout.grid([
