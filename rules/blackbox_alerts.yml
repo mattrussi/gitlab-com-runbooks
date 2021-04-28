@@ -24,6 +24,11 @@ groups:
       title: Blackbox probes for {{ $labels.instance }} are failing.
 - name: SSL Certificates
   rules:
+  - record: domain:probe_ssl_earliest_cert_expiry:min
+    expr: |
+      min without (instance) (
+        label_replace(probe_ssl_earliest_cert_expiry, "domain", "$1", "instance", "https://(([a-zA-Z0-9][a-zA-Z0-9-]{1,61}\\.?)+\\.[a-zA-Z]{2,})/.*")
+      )
   - alert: SSLCertExpiresVerySoon
     expr: probe_ssl_earliest_cert_expiry - time() < 7 * 86400
     for: 30m
