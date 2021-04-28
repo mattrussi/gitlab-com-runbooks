@@ -63,30 +63,36 @@ local executionRulesForBurnRate(aggregationSet, burnRate, staticLabels={}) =
         if std.objectHas(recordingNames, 'apdexSuccessRate') then
           {  // Key metric: Execution apdex (ratio)
             record: recordingNames.apdexSuccessRate,
+            labels: staticLabels,
             expr: combinedExecutionApdex.apdexSuccessRateQuery(aggregationSet.labels, {}, burnRate),
           }
         else {},
         if std.objectHas(recordingNames, 'apdexRatio') then
           {  // Key metric: Execution apdex (ratio)
             record: recordingNames.apdexRatio,
+            labels: staticLabels,
             expr: combinedExecutionApdex.apdexQuery(aggregationSet.labels, {}, burnRate),
           }
         else {},
         {  // Key metric: Execution apdex (weight score)
           record: recordingNames.apdexWeight,
+          labels: staticLabels,
           expr: combinedExecutionApdex.apdexWeightQuery(aggregationSet.labels, {}, burnRate),
         },
         {  // Key metric: QPS
           record: recordingNames.opsRate,
+          labels: staticLabels,
           expr: requestRate.aggregatedRateQuery(aggregationSet.labels, {}, burnRate),
         },
         {  // Key metric: Errors per Second
           record: recordingNames.errorRate,
+          labels: staticLabels,
           expr: errorRate.aggregatedRateQuery(aggregationSet.labels, {}, burnRate),
         },
         if std.objectHas(recordingNames, 'errorRatio') then
           {
             record: recordingNames.errorRatio,
+            labels: staticLabels,
             expr: |||
               %(errorRate)s
               /
@@ -95,7 +101,7 @@ local executionRulesForBurnRate(aggregationSet, burnRate, staticLabels={}) =
           }
         else {},
       ] else [];
-  std.foldl(function(memo, recording) memo + [recording + staticLabels], std.prune(recordings), []);
+  std.prune(recordings);
 
 {
   perWorkerRecordingRulesForAggregationSet(aggregationSet, staticLabels={})::

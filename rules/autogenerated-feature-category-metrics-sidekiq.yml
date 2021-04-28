@@ -5,6 +5,8 @@ groups:
   interval: 1m
   rules:
   - record: gitlab:component:feature_category:execution:apdex:success:rate_5m
+    labels:
+      component: sidekiq_execution
     expr: |
       sum by (env,environment,tier,type,stage,component,feature_category) (
         label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="10",urgency="high"}, "_c", "0", "", "")
@@ -13,8 +15,9 @@ groups:
         or
         label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",urgency="throttled"}, "_c", "2", "", "")
       )
-    component: sidekiq_execution
   - record: gitlab:component:feature_category:execution:apdex:weight:score_5m
+    labels:
+      component: sidekiq_execution
     expr: |
       sum by (env,environment,tier,type,stage,component,feature_category) (
         label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",urgency="high"}, "_c", "0", "", "")
@@ -23,20 +26,23 @@ groups:
         or
         label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",urgency="throttled"}, "_c", "2", "", "")
       )
-    component: sidekiq_execution
   - record: gitlab:component:feature_category:execution:ops:rate_5m
+    labels:
+      component: sidekiq_execution
     expr: |
       sum by (env,environment,tier,type,stage,component,feature_category) (
         rate(sidekiq_jobs_completion_seconds_bucket{le="+Inf"}[5m])
       )
-    component: sidekiq_execution
   - record: gitlab:component:feature_category:execution:error:rate_5m
+    labels:
+      component: sidekiq_execution
     expr: |
       sum by (env,environment,tier,type,stage,component,feature_category) (
         rate(sidekiq_jobs_failed_total{}[5m])
       )
-    component: sidekiq_execution
   - record: gitlab:component:feature_category:execution:apdex:success:rate_30m
+    labels:
+      component: sidekiq_execution
     expr: |
       sum by (env,environment,tier,type,stage,component,feature_category) (
         label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="10",urgency="high"}, "_c", "0", "", "")
@@ -45,8 +51,9 @@ groups:
         or
         label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",urgency="throttled"}, "_c", "2", "", "")
       )
-    component: sidekiq_execution
   - record: gitlab:component:feature_category:execution:apdex:weight:score_30m
+    labels:
+      component: sidekiq_execution
     expr: |
       sum by (env,environment,tier,type,stage,component,feature_category) (
         label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",urgency="high"}, "_c", "0", "", "")
@@ -55,20 +62,23 @@ groups:
         or
         label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",urgency="throttled"}, "_c", "2", "", "")
       )
-    component: sidekiq_execution
   - record: gitlab:component:feature_category:execution:ops:rate_30m
+    labels:
+      component: sidekiq_execution
     expr: |
       sum by (env,environment,tier,type,stage,component,feature_category) (
         rate(sidekiq_jobs_completion_seconds_bucket{le="+Inf"}[30m])
       )
-    component: sidekiq_execution
   - record: gitlab:component:feature_category:execution:error:rate_30m
+    labels:
+      component: sidekiq_execution
     expr: |
       sum by (env,environment,tier,type,stage,component,feature_category) (
         rate(sidekiq_jobs_failed_total{}[30m])
       )
-    component: sidekiq_execution
   - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
+    labels:
+      component: sidekiq_execution
     expr: |
       sum by (env,environment,tier,type,stage,component,feature_category) (
         label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="10",urgency="high"}, "_c", "0", "", "")
@@ -77,8 +87,9 @@ groups:
         or
         label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",urgency="throttled"}, "_c", "2", "", "")
       )
-    component: sidekiq_execution
   - record: gitlab:component:feature_category:execution:apdex:weight:score_1h
+    labels:
+      component: sidekiq_execution
     expr: |
       sum by (env,environment,tier,type,stage,component,feature_category) (
         label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",urgency="high"}, "_c", "0", "", "")
@@ -87,20 +98,23 @@ groups:
         or
         label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",urgency="throttled"}, "_c", "2", "", "")
       )
-    component: sidekiq_execution
   - record: gitlab:component:feature_category:execution:ops:rate_1h
+    labels:
+      component: sidekiq_execution
     expr: |
       sum by (env,environment,tier,type,stage,component,feature_category) (
         rate(sidekiq_jobs_completion_seconds_bucket{le="+Inf"}[1h])
       )
-    component: sidekiq_execution
   - record: gitlab:component:feature_category:execution:error:rate_1h
+    labels:
+      component: sidekiq_execution
     expr: |
       sum by (env,environment,tier,type,stage,component,feature_category) (
         rate(sidekiq_jobs_failed_total{}[1h])
       )
-    component: sidekiq_execution
   - record: gitlab:component:feature_category:execution:apdex:success:rate_6h
+    labels:
+      component: sidekiq_execution
     expr: |
       sum by (env,environment,tier,type,stage,component,feature_category) (
         label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate6h{le="10",urgency="high"}, "_c", "0", "", "")
@@ -109,8 +123,9 @@ groups:
         or
         label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate6h{le="300",urgency="throttled"}, "_c", "2", "", "")
       )
-    component: sidekiq_execution
   - record: gitlab:component:feature_category:execution:apdex:weight:score_6h
+    labels:
+      component: sidekiq_execution
     expr: |
       sum by (env,environment,tier,type,stage,component,feature_category) (
         label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate6h{le="+Inf",urgency="high"}, "_c", "0", "", "")
@@ -119,16 +134,17 @@ groups:
         or
         label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate6h{le="+Inf",urgency="throttled"}, "_c", "2", "", "")
       )
-    component: sidekiq_execution
   - record: gitlab:component:feature_category:execution:ops:rate_6h
+    labels:
+      component: sidekiq_execution
     expr: |
       sum by (env,environment,tier,type,stage,component,feature_category) (
         rate(sidekiq_jobs_completion_seconds_bucket{le="+Inf"}[6h])
       )
-    component: sidekiq_execution
   - record: gitlab:component:feature_category:execution:error:rate_6h
+    labels:
+      component: sidekiq_execution
     expr: |
       sum by (env,environment,tier,type,stage,component,feature_category) (
         rate(sidekiq_jobs_failed_total{}[6h])
       )
-    component: sidekiq_execution
