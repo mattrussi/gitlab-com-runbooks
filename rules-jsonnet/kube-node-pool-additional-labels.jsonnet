@@ -290,24 +290,37 @@ local kubeNodePoolAdditionalLabelsForEnv(env) =
     additionalLabelsForNodePoolTypes[env]
   );
 
-// Note that ideally we would only export each environments
-// cluster information to that environment. However, at present
-// we don't have a mechanism for using different rules for different
-// environments, so we ship each environments cluster information
-// to all environments
-local rules = {
-  groups: [{
-    // External monitoring
-    name: 'Kube Node Pool Additional Labels',
-    interval: '1m',
-    rules: std.flatMap(
-      function(env)
-        kubeNodePoolAdditionalLabelsForEnv(env),
-      std.objectFields(additionalLabelsForNodePoolTypes)
-    ),
-  }],
-};
+local recordingRules = std.flatMap(
+  function(env)
+    kubeNodePoolAdditionalLabelsForEnv(env),
+  std.objectFields(additionalLabelsForNodePoolTypes)
+);
 
-{
-  'kube-node-pool-additional-labels.yml': std.manifestYamlDoc(rules),
-}
+local recordingRulesGroupedByCluster = std.foldl(
+  function(memo, rule)
+    local cluster = rule.labels.cluster;
+    if std.objectHas(memo, cluster) then
+      memo { [cluster]+: [rule] }
+    else
+      memo { [cluster]: [rule] },
+  recordingRules,
+  {},
+);
+
+
+std.foldl(
+  function(memo, cluster)
+    local filename = 'clusters/' + cluster + '/kube-node-pool-additional-labels.yml';
+    memo {
+      [filename]: std.manifestYamlDoc({
+        groups: [{
+          // External monitoring
+          name: 'Kube Node Pool Additional Labels: ' + cluster,
+          interval: '1m',
+          rules: recordingRulesGroupedByCluster[cluster],
+        }],
+      }),
+    },
+  std.objectFields(recordingRulesGroupedByCluster),
+  {}
+)
