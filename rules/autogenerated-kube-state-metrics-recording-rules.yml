@@ -763,3 +763,125 @@ groups:
           "tier", "$1", "label_tier", "(.*)"
         )
       )
+  - record: kube_node_labels:labeled
+    expr: |
+      group without(service_type, service_tier, service_shard, service_stage)
+      (
+        label_replace(
+          label_replace(
+            label_replace(
+              label_replace(
+                kube_node_labels * on(label_type)
+                group_left(service_type, service_tier, service_shard, service_stage)
+                topk by(label_type) (1, gitlab:kube_node_pool_labels),
+                "type", "$0", "service_type", ".*"
+              ),
+              "tier", "$0", "service_tier", ".*"
+            ),
+            "shard", "$0", "service_shard", ".*"
+          ),
+          "stage", "$0", "service_stage", ".*"
+        )
+      )
+  - record: kube_node_status_capacity:labeled
+    expr: |
+      kube_node_status_capacity
+      *
+      on(node) group_left(shard, stage, type, tier)
+      topk by (node) (1, kube_node_labels:labeled)
+  - record: kube_node_status_allocatable:labeled
+    expr: |
+      kube_node_status_allocatable
+      *
+      on(node) group_left(shard, stage, type, tier)
+      topk by (node) (1, kube_node_labels:labeled)
+  - record: kube_node_status_condition:labeled
+    expr: |
+      kube_node_status_condition
+      *
+      on(node) group_left(shard, stage, type, tier)
+      topk by (node) (1, kube_node_labels:labeled)
+  - record: node_schedstat_waiting_seconds_total:labeled
+    expr: |
+      node_schedstat_waiting_seconds_total
+      *
+      on(node) group_left(shard, stage, type, tier)
+      topk by (node) (1, kube_node_labels:labeled)
+  - record: node_cpu_seconds_total:labeled
+    expr: |
+      node_cpu_seconds_total
+      *
+      on(node) group_left(shard, stage, type, tier)
+      topk by (node) (1, kube_node_labels:labeled)
+  - record: node_network_transmit_bytes_total:labeled
+    expr: |
+      node_network_transmit_bytes_total
+      *
+      on(node) group_left(shard, stage, type, tier)
+      topk by (node) (1, kube_node_labels:labeled)
+  - record: node_network_receive_bytes_total:labeled
+    expr: |
+      node_network_receive_bytes_total
+      *
+      on(node) group_left(shard, stage, type, tier)
+      topk by (node) (1, kube_node_labels:labeled)
+  - record: node_disk_reads_completed_total:labeled
+    expr: |
+      node_disk_reads_completed_total
+      *
+      on(node) group_left(shard, stage, type, tier)
+      topk by (node) (1, kube_node_labels:labeled)
+  - record: node_disk_writes_completed_total:labeled
+    expr: |
+      node_disk_writes_completed_total
+      *
+      on(node) group_left(shard, stage, type, tier)
+      topk by (node) (1, kube_node_labels:labeled)
+  - record: node_disk_read_bytes_total:labeled
+    expr: |
+      node_disk_read_bytes_total
+      *
+      on(node) group_left(shard, stage, type, tier)
+      topk by (node) (1, kube_node_labels:labeled)
+  - record: node_disk_written_bytes_total:labeled
+    expr: |
+      node_disk_written_bytes_total
+      *
+      on(node) group_left(shard, stage, type, tier)
+      topk by (node) (1, kube_node_labels:labeled)
+  - record: node_disk_read_time_seconds_total:labeled
+    expr: |
+      node_disk_read_time_seconds_total
+      *
+      on(node) group_left(shard, stage, type, tier)
+      topk by (node) (1, kube_node_labels:labeled)
+  - record: node_disk_write_time_seconds_total:labeled
+    expr: |
+      node_disk_write_time_seconds_total
+      *
+      on(node) group_left(shard, stage, type, tier)
+      topk by (node) (1, kube_node_labels:labeled)
+  - record: node_load1:labeled
+    expr: |
+      node_load1
+      *
+      on(node) group_left(shard, stage, type, tier)
+      topk by (node) (1, kube_node_labels:labeled)
+  - record: node_load5:labeled
+    expr: |
+      node_load5
+      *
+      on(node) group_left(shard, stage, type, tier)
+      topk by (node) (1, kube_node_labels:labeled)
+  - record: node_load15:labeled
+    expr: |
+      node_load15
+      *
+      on(node) group_left(shard, stage, type, tier)
+      topk by (node) (1, kube_node_labels:labeled)
+  - record: node_vmstat_oom_kill:labeled
+    expr: |
+      node_vmstat_oom_kill
+      *
+      on(node) group_left(shard, stage, type, tier)
+      topk by (node) (1, kube_node_labels:labeled)
