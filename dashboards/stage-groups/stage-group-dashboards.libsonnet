@@ -41,45 +41,68 @@ local actionFilter(featureCategoriesSelector) =
     allValues='.*'
   );
 
-local errorBudgetPanels(group) =
+local errorBudgetPanels(group, range) =
   [
-    errorBudget.availabilityStatPanel(group.key, '28d'),
-    errorBudget.timeSpentStatPanel(group.key, '28d'),
-    grafana.text.new(
-      title='Info',
-      mode='markdown',
-      content=|||
-        ### [Error budget](https://about.gitlab.com/handbook/engineering/error-budgets/)
+    [
+      errorBudget.availabilityStatPanel(group.key, range),
+      errorBudget.availabilityTargetStatPanel(group.key, range),
+    ],
+    [
+      errorBudget.timeRemainingStatPanel(group.key, range),
+      errorBudget.timeRemainingTargetStatPanel(group.key, range),
+    ],
+    [
+      errorBudget.timeSpentStatPanel(group.key, range),
+      errorBudget.timeSpentTargetStatPanel(group.key, range),
+    ],
+    [
+      grafana.text.new(
+        title='Info',
+        mode='markdown',
+        content=|||
+          ### [Error budget](https://about.gitlab.com/handbook/engineering/error-budgets/)
 
-        These error budget panels show an aggregate of SLIs across all components.
-        Though not all components have been implemented yet.
+          These error budget panels show an aggregate of SLIs across all components.
+          However, not all components have been implemented yet.
 
-        The [handbook](https://about.gitlab.com/handbook/engineering/error-budgets/)
-        explains how these budgets are used.
+          The [handbook](https://about.gitlab.com/handbook/engineering/error-budgets/)
+          explains how these budgets are used.
 
-        Read more about how the error budgets are calculated in the
-        [stage group dashboard documentation](https://docs.gitlab.com/ee/development/stage_group_dashboards.html#error-budget).
+          Read more about how the error budgets are calculated in the
+          [stage group dashboard documentation](https://docs.gitlab.com/ee/development/stage_group_dashboards.html#error-budget).
 
-        The error budget is compared to our SLO of %(slaTarget)s and is always in
-        a range of 28 days from the selected end date in Grafana.
+          The error budget is compared to our SLO of %(slaTarget)s and is always in
+          a range of 28 days from the selected end date in Grafana.
 
-        ### Availability
+          ### Availability
 
-        The availability shows the percentage operations labeled with one of the
-        categories owned by %(groupName)s comleted satisfactory.
+          The availability shows the percentage of operations labeled with one of the
+          categories owned by %(groupName)s with satisfactory completion.
 
-        ### Budget spent
+          ### Budget remaining
 
-        The budget spent shows the time spent during the past 28 days on operations
-        that did not complete satisfactory.
+          The error budget in minutes is calculated based on the %(slaTarget)s.
+          There are 40320 minutes in 28 days, we allow %(budgetRatio)s of failures, which
+          means the budget in minutes is %(budgetMinutes)s minutes.
 
-        For example, if there were 43200 (28 * 24 * 60) operations for %(groupName)s the last
-        28 days, and 10 of them did not meet SLO, this means 10 minutes were spent.
-      ||| % {
-        slaTarget: '%.2f%%' % (errorBudget.slaTarget * 100.0),
-        groupName: group.name,
-      },
-    ),
+          The budget remaining shows how many minutes have not been spent in the
+          past 28 days.
+
+          ### Minutes spent
+
+          This shows the total minutes spent over the past 28 days.
+
+          For example, if there were 403200 (28 * 24 * 60) operations in 28 days.
+          This would be 1 every minute. If 10 of those were unsatisfactory, that
+          would mean 10 minutes of the budget were spent.
+        ||| % {
+          slaTarget: '%.2f%%' % (errorBudget.slaTarget * 100.0),
+          budgetRatio: '%.2f%%' % ((1 - errorBudget.slaTarget) * 100.0),
+          budgetMinutes: '%i' % (errorBudget.budgetSeconds(range) / 60),
+          groupName: group.name,
+        },
+      ),
+    ],
   ];
 
 local railsRequestRate(type, featureCategories, featureCategoriesSelector) =
@@ -428,7 +451,11 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
     )
     .addPanels(
       if displayBudget then
-        layout.rowGrid('Error Budgets', errorBudgetPanels(group), startRow=100, rowHeight=5, collapse=true)
+        // Errorbudgets are always viewed over a 28d rolling average, regardles of the
+        // selected range
+        local range = '28d';
+        local title = 'Error Budget (past 28 days)';
+        layout.splitColumnGrid(errorBudgetPanels(group, range), startRow=100, cellHeights=[4, 2], title=title, collapse=true)
       else
         []
     )
