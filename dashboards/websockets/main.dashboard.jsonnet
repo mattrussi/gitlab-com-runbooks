@@ -9,6 +9,39 @@ local basic = import 'grafana/basic.libsonnet';
 
 serviceDashboard.overview('websockets')
 .addPanel(
+  row.new(title='Connections'),
+  gridPos={
+    x: 0,
+    y: 500,
+    w: 24,
+    h: 1,
+  }
+)
+.addPanels(
+  layout.grid(
+    [
+      basic.timeseries(
+        stableId='action_cable_active_connections',
+        title='ActionCable Active Connections',
+        decimals=2,
+        yAxisLabel='Connections',
+        description=|||
+          Number of ActionCable connections active at the time of sampling.
+        |||,
+        query=|||
+          sum(
+            action_cable_active_connections{
+              environment="$environment",
+              stage="$stage",
+            }
+          )
+        |||,
+      ),
+    ],
+    startRow=750
+  )
+)
+.addPanel(
   row.new(title='Workhorse'),
   gridPos={
     x: 0,
