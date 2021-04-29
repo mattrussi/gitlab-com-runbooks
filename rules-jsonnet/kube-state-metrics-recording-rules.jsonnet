@@ -1,3 +1,6 @@
+local aggregations = import 'promql/aggregations.libsonnet';
+local strings = import 'utils/strings.libsonnet';
+
 //
 // EXPERIMENTAL: applying our application label taxonomy to cadvisor
 // metrics would help use in attribution of problems.
@@ -74,54 +77,20 @@ local kubeNodeMetrics = [
 
 local podLabelJoinExpression(expression) =
   |||
-    min without(label_queue_pod_name, label_stage, label_type, label_deployment)
-    (
-      label_replace(
-        label_replace(
-          label_replace(
-            label_replace(
-              %(expression)s
-              *
-              on(pod, cluster) group_left(label_type, label_stage, label_queue_pod_name, label_deployment)
-              topk by (pod, cluster, label_type, label_stage, label_queue_pod_name, label_deployment) (1, kube_pod_labels{
-                label_type!=""
-              }),
-              "shard", "$1", "label_queue_pod_name", "(.*)"
-            ),
-            "stage", "$1", "label_stage", "(.*)"
-          ),
-          "type", "$1", "label_type", "(.*)"
-        ),
-        "deployment", "$1", "label_deployment", "(.*)"
-      )
-    )
+    %(expression)s
+    *
+    on(pod) group_left(tier, type, stage, shard, deployment)
+    topk by (pod) (1, kube_pod_labels:labeled{type!=""})
   ||| % {
     expression: expression,
   };
 
 local kubeHPALabelJoinExpression(expression) =
   |||
-    min without(label_shard, label_stage, label_type, label_tier)
-    (
-      label_replace(
-        label_replace(
-          label_replace(
-            label_replace(
-              %(expression)s
-              *
-              on(hpa, cluster) group_left(label_shard, label_stage, label_type, label_tier)
-              topk by (hpa, cluster) (1, kube_hpa_labels{
-                label_type!=""
-              }),
-              "shard", "$1", "label_shard", "(.*)"
-            ),
-            "stage", "$1", "label_stage", "(.*)"
-          ),
-          "type", "$1", "label_type", "(.*)"
-        ),
-        "tier", "$1", "label_tier", "(.*)"
-      )
-    )
+    %(expression)s
+    *
+    on(hpa) group_left(tier, type, stage, shard)
+    topk by (hpa) (1, kube_hpa_labels{type!=""})
   ||| % {
     expression: expression,
   };
@@ -149,11 +118,52 @@ local recordingRuleFor(metricName, expression) =
     expr: expression,
   };
 
+local relabel(expression, labelMap) =
+  local fromLabels = std.objectFields(labelMap);
+  local relabels = std.foldl(
+    function(memo, labelFrom)
+      local labelTo = labelMap[labelFrom];
+      |||
+        label_replace(
+          %(memo)s,
+          "%(labelTo)s", "$0", "%(labelFrom)s", ".*"
+        )
+      ||| % {
+        labelTo: labelTo,
+        labelFrom: labelFrom,
+        memo: strings.indent(memo, 2),
+      },
+    fromLabels,
+    expression
+  );
+  |||
+    group without(%(fromLabels)s) (
+      %(relabels)s
+    )
+  ||| % {
+    fromLabels: aggregations.serialize(fromLabels),
+    relabels: strings.indent(relabels, 2),
+  };
+
 local rules = {
   groups: [{
     name: 'kube-state-metrics-recording-rules',
     interval: '1m',
     rules: [
+      recordingRuleFor(
+        'kube_pod_labels',
+        relabel(
+          'topk by (pod) (1, kube_pod_labels{})',
+          {
+            label_tier: 'tier',
+            label_type: 'type',
+            label_stage: 'stage',
+            label_queue_pod_name: 'shard',
+            label_deployment: 'deployment',
+          }
+        )
+      ),
+    ] + [
       /* container_* recording rules */
       recordingRuleFor(metricName, cadvisorWithLabelNamesExpression(metricName))
       for metricName in cadvisorMetrics
@@ -162,32 +172,38 @@ local rules = {
       recordingRuleFor(metricName, podLabelJoinExpression(metricName))
       for metricName in kubePodContainerMetrics
     ] + [
+      recordingRuleFor(
+        'kube_hpa_labels',
+        relabel(
+          'topk by (hpa) (1, kube_hpa_labels{})',
+          {
+            label_tier: 'tier',
+            label_type: 'type',
+            label_stage: 'stage',
+            label_shard: 'shard',
+          }
+        )
+      ),
+    ] + [
       /* kube_hpa_* recording rules */
       recordingRuleFor(metricName, kubeHPALabelJoinExpression(metricName))
       for metricName in kubeHPAMetrics
     ] + [
       recordingRuleFor(
         'kube_node_labels',
-        |||
-          group without(service_type, service_tier, service_shard, service_stage)
-          (
-            label_replace(
-              label_replace(
-                label_replace(
-                  label_replace(
-                    kube_node_labels * on(label_type)
-                    group_left(service_type, service_tier, service_shard, service_stage)
-                    topk by(label_type) (1, gitlab:kube_node_pool_labels),
-                    "type", "$0", "service_type", ".*"
-                  ),
-                  "tier", "$0", "service_tier", ".*"
-                ),
-                "shard", "$0", "service_shard", ".*"
-              ),
-              "stage", "$0", "service_stage", ".*"
-            )
-          )
-        |||
+        relabel(
+          |||
+            kube_node_labels
+            * on(label_type) group_left(service_type, service_tier, service_shard, service_stage)
+            topk by(label_type) (1, gitlab:kube_node_pool_labels)
+          |||,
+          {
+            service_tier: 'tier',
+            service_type: 'type',
+            service_stage: 'stage',
+            service_shard: 'shard',
+          }
+        )
       ),
     ] + [
       /* node_* recording rules */
