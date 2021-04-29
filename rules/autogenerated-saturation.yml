@@ -31,7 +31,7 @@ groups:
         clamp_min(
           clamp_max(
             1 - avg by (environment, tier, type, stage) (
-              rate(node_cpu_seconds_total{mode="idle", type!="",type!~"nat|waf|console-node|deploy-node|security"}[5m])
+              rate(node_cpu_seconds_total{mode="idle", type!="",type!~"nat|waf|console-node|deploy-node|security|git|mailroom|websockets|kas"}[5m])
             )
             ,
             1)
@@ -46,9 +46,9 @@ groups:
         clamp_min(
           clamp_max(
             1 - (
-              node_filesystem_files_free{fstype=~"(ext.|xfs)", type!="",type!~"nat|waf|bastion"}
+              node_filesystem_files_free{fstype=~"(ext.|xfs)", type!="",type!~"nat|waf|bastion|git|mailroom|websockets|kas"}
               /
-              node_filesystem_files{fstype=~"(ext.|xfs)", type!="",type!~"nat|waf|bastion"}
+              node_filesystem_files{fstype=~"(ext.|xfs)", type!="",type!~"nat|waf|bastion|git|mailroom|websockets|kas"}
             )
             ,
             1)
@@ -63,7 +63,7 @@ groups:
         clamp_min(
           clamp_max(
             (
-              1 - instance:node_filesystem_avail:ratio{fstype=~"ext.|xfs", type!="",type!~"nat|waf|bastion"}
+              1 - instance:node_filesystem_avail:ratio{fstype=~"ext.|xfs", type!="",type!~"nat|waf|bastion|git|mailroom|websockets|kas"}
             )
             ,
             1)
@@ -343,7 +343,7 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            instance:node_memory_utilization:ratio{type!="",type!~"nat|waf|monitoring"}
+            instance:node_memory_utilization:ratio{type!="",type!~"nat|waf|monitoring|git|mailroom|websockets|kas"}
             ,
             1)
         ,
@@ -379,9 +379,9 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            max_over_time(node_nf_conntrack_entries{type!="",type!~"nat|waf"}[1m])
+            max_over_time(node_nf_conntrack_entries{type!="",type!~"nat|waf|git|mailroom|websockets|kas"}[1m])
             /
-            node_nf_conntrack_entries_limit{type!="",type!~"nat|waf"}
+            node_nf_conntrack_entries_limit{type!="",type!~"nat|waf|git|mailroom|websockets|kas"}
             ,
             1)
         ,
@@ -394,7 +394,7 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            avg without (cpu) (rate(node_schedstat_waiting_seconds_total{type!="",type!~"nat|waf|console-node|deploy-node|security"}[1h]))
+            avg without (cpu) (rate(node_schedstat_waiting_seconds_total{type!="",type!~"nat|waf|console-node|deploy-node|security|git|mailroom|websockets|kas"}[1h]))
             ,
             1)
         ,
@@ -750,7 +750,7 @@ groups:
         clamp_min(
           clamp_max(
             1 - avg by (environment, tier, type, stage, shard) (
-              rate(node_cpu_seconds_total{mode="idle", type!="",type!~"nat|waf|console-node|deploy-node|security"}[5m])
+              rate(node_cpu_seconds_total{mode="idle", type!="",type!~"nat|waf|console-node|deploy-node|security|git|mailroom|websockets|kas"}[5m])
             )
             ,
             1)
@@ -820,7 +820,7 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{mode="idle", type!="",type!~"nat|waf|console-node|deploy-node|security"}[5m]))
+            avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{mode="idle", type!="",type!~"nat|waf|console-node|deploy-node|security|git|mailroom|websockets|kas"}[5m]))
             ,
             1)
         ,

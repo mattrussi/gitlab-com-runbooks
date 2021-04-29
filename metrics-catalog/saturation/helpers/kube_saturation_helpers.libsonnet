@@ -4,4 +4,5 @@
 
 {
   kubeProvisionedServices:: ['git', 'mailroom', 'registry', 'sidekiq', 'websockets', 'kas'],
+  kubeOnlyServices:: ['git', 'mailroom', 'websockets', 'kas'],
 }
