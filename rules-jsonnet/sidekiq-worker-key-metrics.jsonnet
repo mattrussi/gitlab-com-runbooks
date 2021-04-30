@@ -24,12 +24,12 @@ local sidekiqSLOAlert(alertname, expr, grafanaPanelStableId, metricName, alertDe
       slo_alert: 'yes',
     },
     annotations: {
-      title: 'The `{{ $labels.queue }}` queue, `{{ $labels.stage }}` stage, has %s' % [alertDescription],
+      title: 'The `{{ $labels.worker }}` worker, `{{ $labels.stage }}` stage, has %s' % [alertDescription],
       description: 'Currently the %s is {{ $value | humanizePercentage }}.' % [metricDescription],
       runbook: 'docs/sidekiq/README.md',
-      grafana_dashboard_id: 'sidekiq-queue-detail/sidekiq-queue-detail',
+      grafana_dashboard_id: 'sidekiq-worker-detail/sidekiq-worker-detail',
       grafana_panel_id: stableIds.hashStableId(grafanaPanelStableId),
-      grafana_variables: 'environment,stage,queue',
+      grafana_variables: 'environment,stage,worker',
       grafana_min_zoom_hours: '6',
       promql_template_1: '%s{environment="$environment", type="$type", stage="$stage", component="$component"}' % [metricName],
     },
@@ -126,9 +126,9 @@ local generateAlerts() =
       metricDescription='apdex score',
     ),
     {
-      alert: 'ignored_sidekiq_queues_receiving_work',
+      alert: 'ignored_sidekiq_workers_receiving_work',
       expr: |||
-        sum by (environment, queue, feature_category) (gitlab_background_jobs:queue:ops:rate_5m{environment="gprd", queue=~"%s"}) > 0
+        sum by (environment, worker, feature_category) (gitlab_background_jobs:queue:ops:rate_5m{environment="gprd", worker=~"%s"}) > 0
       ||| % [std.join('|', IGNORED_GPRD_QUEUES)],
       'for': '2m',
       labels: {
@@ -141,15 +141,15 @@ local generateAlerts() =
         pager: 'pagerduty',
       },
       annotations: {
-        title: 'Sidekiq jobs are being enqueued to an ignored queue that will never be dequeued',
+        title: 'Sidekiq jobs are being enqueued to an ignored worker queue that will never be dequeued',
         description: |||
-          The `{{ $labels.queue }}` queue is receiving work, but this queue has been
+          The `{{ $labels.worker }}` worker is receiving work, but this worker has been
           explicitly ignored in the `gprd` environment, to help reduce load on
           our redis-sidekiq cluster.
 
           This is a temporary measure.
 
-          It appears that the `{{ $labels.queue }}` queue is receiving work.
+          It appears that the `{{ $labels.worker}}` worker is receiving work.
           Since no sidekiq workers are listening to the queue, this work will be
           ignored.
 
@@ -164,11 +164,10 @@ local generateAlerts() =
           Also, review https://ops.gitlab.net/gitlab-cookbooks/chef-repo/-/merge_requests/2948
         |||,
         runbook: 'docs/sidekiq/README.md',
-        grafana_dashboard_id: 'sidekiq-queue-detail/sidekiq-queue-detail',
-        grafana_panel_id: stableIds.hashStableId('queue-length'),
-        grafana_variables: 'environment,stage,queue',
+        grafana_dashboard_id: 'sidekiq-worker-detail/sidekiq-worker-detail',
+        grafana_variables: 'environment,stage,worker',
         grafana_min_zoom_hours: '6',
-        promql_template_1: 'sidekiq_enqueued_jobs_total{environment="$environment", queue="$queue"}',
+        promql_template_1: 'sidekiq_enqueued_jobs_total{environment="$environment", worker="$worker"}',
       },
     },
   ];
