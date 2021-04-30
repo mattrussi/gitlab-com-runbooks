@@ -111,7 +111,7 @@ The initially chosen split is somewhat arbitrary (e.g. for Web it is 'controller
 * `json.grpc.request.glProjectPath.keyword` (gitaly-specific)
 
 although there are others and you should explore as necessary.  As at the current version of kibana, it's on the right under the 'Buckets' section.  Expand the 'Split series' toggle, change the 'Field' value to the one you want to aggregate on, then click 'Update'
-![kibana buckets](apdex-kibana-buckets.png)
+![kibana buckets](img/apdex-kibana-buckets.png)
 
 #### Grafana Explore (for exploring more grouping/aggregation dimensions)
 
