@@ -2,7 +2,7 @@ local stageGroupDashboards = import './stage-group-dashboards.libsonnet';
 local test = import 'github.com/yugui/jsonnetunit/jsonnetunit/test.libsonnet';
 
 local errorBudgetTitles = [
-  'Error Budgets',
+  'Error Budget (past 28 days)',
 ];
 
 test.suite({

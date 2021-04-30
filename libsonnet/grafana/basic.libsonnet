@@ -962,6 +962,7 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
     unit='',
     decimals=0,
     instant=true,
+    mappings=[]
   )::
     local steps = if std.type(color) == 'string' then
       [
@@ -987,7 +988,7 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
               mode: 'absolute',
               steps: steps,
             },
-            mappings: [],
+            mappings: mappings,
             title: title,
             unit: unit,
             decimals: decimals,
