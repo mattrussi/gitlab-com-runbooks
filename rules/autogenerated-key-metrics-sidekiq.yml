@@ -533,12 +533,12 @@ groups:
   - record: gitlab_background_jobs:execution:ops:rate_1m
     expr: |
       sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        rate(sidekiq_jobs_completion_seconds_bucket{le="+Inf"}[1m])
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="+Inf"}
       )
   - record: gitlab_background_jobs:execution:error:rate_1m
     expr: |
       sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        rate(sidekiq_jobs_failed_total{}[1m])
+        sli_aggregations:sidekiq_jobs_failed_total_rate1m{}
       )
   - record: gitlab_background_jobs:execution:error:ratio_1m
     expr: |
@@ -1077,12 +1077,12 @@ groups:
   - record: gitlab_background_jobs:execution:ops:rate_5m
     expr: |
       sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        rate(sidekiq_jobs_completion_seconds_bucket{le="+Inf"}[5m])
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf"}
       )
   - record: gitlab_background_jobs:execution:error:rate_5m
     expr: |
       sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        rate(sidekiq_jobs_failed_total{}[5m])
+        sli_aggregations:sidekiq_jobs_failed_total_rate5m{}
       )
   - record: gitlab_background_jobs:execution:error:ratio_5m
     expr: |
@@ -1621,12 +1621,12 @@ groups:
   - record: gitlab_background_jobs:execution:ops:rate_30m
     expr: |
       sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        rate(sidekiq_jobs_completion_seconds_bucket{le="+Inf"}[30m])
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf"}
       )
   - record: gitlab_background_jobs:execution:error:rate_30m
     expr: |
       sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        rate(sidekiq_jobs_failed_total{}[30m])
+        sli_aggregations:sidekiq_jobs_failed_total_rate30m{}
       )
   - record: gitlab_background_jobs:execution:error:ratio_30m
     expr: |
@@ -2165,12 +2165,12 @@ groups:
   - record: gitlab_background_jobs:execution:ops:rate_1h
     expr: |
       sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        rate(sidekiq_jobs_completion_seconds_bucket{le="+Inf"}[1h])
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf"}
       )
   - record: gitlab_background_jobs:execution:error:rate_1h
     expr: |
       sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        rate(sidekiq_jobs_failed_total{}[1h])
+        sli_aggregations:sidekiq_jobs_failed_total_rate1h{}
       )
   - record: gitlab_background_jobs:execution:error:ratio_1h
     expr: |
@@ -2709,12 +2709,12 @@ groups:
   - record: gitlab_background_jobs:execution:ops:rate_6h
     expr: |
       sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        rate(sidekiq_jobs_completion_seconds_bucket{le="+Inf"}[6h])
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate6h{le="+Inf"}
       )
   - record: gitlab_background_jobs:execution:error:rate_6h
     expr: |
       sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        rate(sidekiq_jobs_failed_total{}[6h])
+        sli_aggregations:sidekiq_jobs_failed_total_rate6h{}
       )
   - record: gitlab_background_jobs:execution:error:ratio_6h
     expr: |
