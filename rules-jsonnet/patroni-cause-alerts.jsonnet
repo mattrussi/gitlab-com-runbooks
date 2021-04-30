@@ -61,6 +61,7 @@ local hotspotTupleAlert(alertName, periodFor, warning, replica) =
       severity: if warning then 's4' else 's1',
       alert_type: 'cause',
       [if !warning then 'pager']: 'pagerduty',
+      runbook: 'docs/patroni/rails-sql-apdex-slow.md',
     },
     annotations: {
       title: 'Hot spot tuple fetches on the postgres %(postgresLocation)s in the `{{ $labels.relname }}` table, `{{ $labels.relname }}`.' % formatConfig,
