@@ -41,8 +41,10 @@ local validateAndApplyDefaults(definition) =
   if validated then
     {
       queryFormatConfig: {},
+      dangerouslyThanosEvaluated: false,
     } + definition + {
       // slo defaults
+
       slos: {
         alertTriggerDuration: '5m',
       } + definition.slos,
@@ -164,16 +166,21 @@ local resourceSaturationPoint = function(options)
       },
 
 
-    getSaturationAlerts(componentName)::
+    getSaturationAlerts(componentName, selectorHash)::
       local definition = self;
 
       local triggerDuration = definition.slos.alertTriggerDuration;
+
+      local selectorHashWithComponent = selectorHash {
+        component: componentName,
+      };
 
       local formatConfig = {
         triggerDuration: triggerDuration,
         componentName: componentName,
         description: definition.description,
         title: definition.title,
+        selector: selectors.serializeHash(selectorHashWithComponent),
       };
 
       local severityLabels =
@@ -186,8 +193,8 @@ local resourceSaturationPoint = function(options)
       [alerts.processAlertRule({
         alert: 'component_saturation_slo_out_of_bounds',
         expr: |||
-          gitlab_component_saturation:ratio{component="%(componentName)s"} > on(component) group_left
-          slo:max:hard:gitlab_component_saturation:ratio{component="%(componentName)s"}
+          gitlab_component_saturation:ratio{%(selector)s} > on(component) group_left
+          slo:max:hard:gitlab_component_saturation:ratio{%(selector)s}
         ||| % formatConfig,
         'for': triggerDuration,
         labels: {

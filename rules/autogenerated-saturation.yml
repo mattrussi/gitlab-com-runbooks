@@ -1580,15 +1580,15 @@ groups:
   interval: 5m
   rules:
   - record: gitlab_component_saturation:ratio_quantile95_1w
-    expr: quantile_over_time(0.95, gitlab_component_saturation:ratio[1w])
+    expr: quantile_over_time(0.95, gitlab_component_saturation:ratio{}[1w])
   - record: gitlab_component_saturation:ratio_quantile99_1w
-    expr: quantile_over_time(0.99, gitlab_component_saturation:ratio[1w])
+    expr: quantile_over_time(0.99, gitlab_component_saturation:ratio{}[1w])
   - record: gitlab_component_saturation:ratio_quantile95_1h
-    expr: quantile_over_time(0.95, gitlab_component_saturation:ratio[1h])
+    expr: quantile_over_time(0.95, gitlab_component_saturation:ratio{}[1h])
   - record: gitlab_component_saturation:ratio_quantile99_1h
-    expr: quantile_over_time(0.99, gitlab_component_saturation:ratio[1h])
+    expr: quantile_over_time(0.99, gitlab_component_saturation:ratio{}[1h])
   - record: gitlab_component_saturation:ratio_avg_1h
-    expr: avg_over_time(gitlab_component_saturation:ratio[1h])
+    expr: avg_over_time(gitlab_component_saturation:ratio{}[1h])
 - name: GitLab Saturation Alerts
   interval: 1m
   rules:
