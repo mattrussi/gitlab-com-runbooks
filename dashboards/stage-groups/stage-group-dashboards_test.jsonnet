@@ -3,197 +3,154 @@ local test = import 'github.com/yugui/jsonnetunit/jsonnetunit/test.libsonnet';
 
 local errorBudgetTitles = [
   'Error Budget (past 28 days)',
+  'Availability',
+  'Budget remaining',
+  'Budget spent',
+  'Info',
 ];
 
+local allComponentTitles = [
+  'Rails Request Rates',
+  'API Request Rate',
+  'GIT Request Rate',
+  'WEB Request Rate',
+  'Extra links',
+  'Rails 95th Percentile Request Latency',
+  'API 95th Percentile Request Latency',
+  'GIT 95th Percentile Request Latency',
+  'WEB 95th Percentile Request Latency',
+  'Rails Error Rates (accumulated by components)',
+  'API Error Rate',
+  'GIT Error Rate',
+  'WEB Error Rate',
+  'SQL Queries Per Action',
+  'API SQL Queries per Action',
+  'GIT SQL Queries per Action',
+  'WEB SQL Queries per Action',
+  'SQL Latency Per Action',
+  'API SQL Latency per Action',
+  'GIT SQL Latency per Action',
+  'WEB SQL Latency per Action',
+  'SQL Latency Per Query',
+  'API SQL Latency per Query',
+  'GIT SQL Latency per Query',
+  'WEB SQL Latency per Query',
+  'Caches per Action',
+  'API Caches per Action',
+  'GIT Caches per Action',
+  'WEB Caches per Action',
+  'Sidekiq',
+  'Sidekiq Completion Rate',
+  'Sidekiq Error Rate',
+  'Extra links',
+  'Source',
+];
+
+local panelTitles(dashboard) =
+  std.filter(function(title) title != '', [panel.title for panel in dashboard.panels]);
+
 test.suite({
+  testTemplates: {
+    actual: [template.name for template in stageGroupDashboards.dashboard('geo').stageGroupDashboardTrailer().templating.list],
+    expect: [
+      'PROMETHEUS_DS',
+      'environment',
+      'stage',
+      'controller',
+      'action',
+    ],
+  },
+
+  testTitle: {
+    actual: stageGroupDashboards.dashboard('geo').stageGroupDashboardTrailer().title,
+    expect: 'Group dashboard: enablement (Geo)',
+  },
+
   testDefaultComponents: {
-    actual: stageGroupDashboards.dashboard('geo').stageGroupDashboardTrailer(),
-    expectThat: function(results)
-      results.title == 'Group dashboard: enablement (Geo)' &&
-      std.type(results.panels) == 'array' &&
-      [panel.title for panel in results.panels] == errorBudgetTitles + [
-        'Rails Request Rates',
-        'API Request Rate',
-        'GIT Request Rate',
-        'WEB Request Rate',
-        'Extra links',
-        'Rails 95th Percentile Request Latency',
-        'API 95th Percentile Request Latency',
-        'GIT 95th Percentile Request Latency',
-        'WEB 95th Percentile Request Latency',
-        'Rails Error Rates (accumulated by components)',
-        'API Error Rate',
-        'GIT Error Rate',
-        'WEB Error Rate',
-        'SQL Queries Per Action',
-        'API SQL Queries per Action',
-        'GIT SQL Queries per Action',
-        'WEB SQL Queries per Action',
-        'SQL Latency Per Action',
-        'API SQL Latency per Action',
-        'GIT SQL Latency per Action',
-        'WEB SQL Latency per Action',
-        'SQL Latency Per Query',
-        'API SQL Latency per Query',
-        'GIT SQL Latency per Query',
-        'WEB SQL Latency per Query',
-        'Caches per Action',
-        'API Caches per Action',
-        'GIT Caches per Action',
-        'WEB Caches per Action',
-        'Sidekiq',
-        'Sidekiq Completion Rate',
-        'Sidekiq Error Rate',
-        'Extra links',
-        'Source',
-      ] &&
-      [template.name for template in results.templating.list] == [
-        'PROMETHEUS_DS',
-        'environment',
-        'stage',
-        'controller',
-        'action',
-      ],
+    actual: panelTitles(stageGroupDashboards.dashboard('geo').stageGroupDashboardTrailer()),
+    expect: errorBudgetTitles + allComponentTitles,
   },
+
   testDisplayEmptyGuidance: {
-    actual: stageGroupDashboards.dashboard('geo', displayEmptyGuidance=true).stageGroupDashboardTrailer(),
-    expectThat: function(results)
-      local introPanels = [
-        'Introduction',
-        'Introduction',
-      ];
-      results.title == 'Group dashboard: enablement (Geo)' &&
-      std.type(results.panels) == 'array' &&
-      [panel.title for panel in results.panels] == introPanels +
-                                                   errorBudgetTitles + [
-        'Rails Request Rates',
-        'API Request Rate',
-        'GIT Request Rate',
-        'WEB Request Rate',
-        'Extra links',
-        'Rails 95th Percentile Request Latency',
-        'API 95th Percentile Request Latency',
-        'GIT 95th Percentile Request Latency',
-        'WEB 95th Percentile Request Latency',
-        'Rails Error Rates (accumulated by components)',
-        'API Error Rate',
-        'GIT Error Rate',
-        'WEB Error Rate',
-        'SQL Queries Per Action',
-        'API SQL Queries per Action',
-        'GIT SQL Queries per Action',
-        'WEB SQL Queries per Action',
-        'SQL Latency Per Action',
-        'API SQL Latency per Action',
-        'GIT SQL Latency per Action',
-        'WEB SQL Latency per Action',
-        'SQL Latency Per Query',
-        'API SQL Latency per Query',
-        'GIT SQL Latency per Query',
-        'WEB SQL Latency per Query',
-        'Caches per Action',
-        'API Caches per Action',
-        'GIT Caches per Action',
-        'WEB Caches per Action',
-        'Sidekiq',
-        'Sidekiq Completion Rate',
-        'Sidekiq Error Rate',
-        'Extra links',
-        'Source',
-      ] &&
-      [template.name for template in results.templating.list] == [
-        'PROMETHEUS_DS',
-        'environment',
-        'stage',
-        'controller',
-        'action',
-      ],
+    introPanels: [
+      'Introduction',
+      'Introduction',
+    ],
+    actual: panelTitles(stageGroupDashboards.dashboard('geo', displayEmptyGuidance=true).stageGroupDashboardTrailer()),
+    expect: self.introPanels + errorBudgetTitles + allComponentTitles,
   },
+
   testWeb: {
-    actual: stageGroupDashboards.dashboard('geo', components=['web']).stageGroupDashboardTrailer(),
-    expectThat: function(results)
-      results.title == 'Group dashboard: enablement (Geo)' &&
-      std.type(results.panels) == 'array' &&
-      [panel.title for panel in results.panels] == errorBudgetTitles + [
-        'Rails Request Rates',
-        'WEB Request Rate',
-        'Extra links',
-        'Rails 95th Percentile Request Latency',
-        'WEB 95th Percentile Request Latency',
-        'Rails Error Rates (accumulated by components)',
-        'WEB Error Rate',
-        'SQL Queries Per Action',
-        'WEB SQL Queries per Action',
-        'SQL Latency Per Action',
-        'WEB SQL Latency per Action',
-        'SQL Latency Per Query',
-        'WEB SQL Latency per Query',
-        'Caches per Action',
-        'WEB Caches per Action',
-        'Source',
-      ] &&
-      [template.name for template in results.templating.list] == [
-        'PROMETHEUS_DS',
-        'environment',
-        'stage',
-        'controller',
-        'action',
-      ],
+    webTitles: [
+      'Rails Request Rates',
+      'WEB Request Rate',
+      'Extra links',
+      'Rails 95th Percentile Request Latency',
+      'WEB 95th Percentile Request Latency',
+      'Rails Error Rates (accumulated by components)',
+      'WEB Error Rate',
+      'SQL Queries Per Action',
+      'WEB SQL Queries per Action',
+      'SQL Latency Per Action',
+      'WEB SQL Latency per Action',
+      'SQL Latency Per Query',
+      'WEB SQL Latency per Query',
+      'Caches per Action',
+      'WEB Caches per Action',
+      'Source',
+    ],
+    actual: panelTitles(stageGroupDashboards.dashboard('geo', components=['web']).stageGroupDashboardTrailer()),
+    expect: errorBudgetTitles + self.webTitles,
   },
+
   testApiWeb: {
-    actual: stageGroupDashboards.dashboard('geo', components=['api', 'web']).stageGroupDashboardTrailer(),
-    expectThat: function(results)
-      results.title == 'Group dashboard: enablement (Geo)' &&
-      std.type(results.panels) == 'array' &&
-      [panel.title for panel in results.panels] == errorBudgetTitles + [
-        'Rails Request Rates',
-        'API Request Rate',
-        'WEB Request Rate',
-        'Extra links',
-        'Rails 95th Percentile Request Latency',
-        'API 95th Percentile Request Latency',
-        'WEB 95th Percentile Request Latency',
-        'Rails Error Rates (accumulated by components)',
-        'API Error Rate',
-        'WEB Error Rate',
-        'SQL Queries Per Action',
-        'API SQL Queries per Action',
-        'WEB SQL Queries per Action',
-        'SQL Latency Per Action',
-        'API SQL Latency per Action',
-        'WEB SQL Latency per Action',
-        'SQL Latency Per Query',
-        'API SQL Latency per Query',
-        'WEB SQL Latency per Query',
-        'Caches per Action',
-        'API Caches per Action',
-        'WEB Caches per Action',
-        'Source',
-      ] &&
-      [template.name for template in results.templating.list] == [
-        'PROMETHEUS_DS',
-        'environment',
-        'stage',
-        'controller',
-        'action',
-      ],
+    apiWebTitles: [
+      'Rails Request Rates',
+      'API Request Rate',
+      'WEB Request Rate',
+      'Extra links',
+      'Rails 95th Percentile Request Latency',
+      'API 95th Percentile Request Latency',
+      'WEB 95th Percentile Request Latency',
+      'Rails Error Rates (accumulated by components)',
+      'API Error Rate',
+      'WEB Error Rate',
+      'SQL Queries Per Action',
+      'API SQL Queries per Action',
+      'WEB SQL Queries per Action',
+      'SQL Latency Per Action',
+      'API SQL Latency per Action',
+      'WEB SQL Latency per Action',
+      'SQL Latency Per Query',
+      'API SQL Latency per Query',
+      'WEB SQL Latency per Query',
+      'Caches per Action',
+      'API Caches per Action',
+      'WEB Caches per Action',
+      'Source',
+    ],
+    actual: panelTitles(stageGroupDashboards.dashboard('geo', components=['api', 'web']).stageGroupDashboardTrailer()),
+    expect: errorBudgetTitles + self.apiWebTitles,
   },
-  testSidekiq: {
-    actual: stageGroupDashboards.dashboard('geo', components=['sidekiq']).stageGroupDashboardTrailer(),
-    expectThat: function(results)
-      results.title == 'Group dashboard: enablement (Geo)' &&
-      std.type(results.panels) == 'array' &&
-      [panel.title for panel in results.panels] == errorBudgetTitles + [
-        'Sidekiq',
-        'Sidekiq Completion Rate',
-        'Sidekiq Error Rate',
-        'Extra links',
-        'Source',
-      ] &&
-      [template.name for template in results.templating.list if template != {}] == [
-        'PROMETHEUS_DS',
-        'environment',
-        'stage',
-      ],
+
+  testSidekiqPanels: {
+    sidekiqTitles: [
+      'Sidekiq',
+      'Sidekiq Completion Rate',
+      'Sidekiq Error Rate',
+      'Extra links',
+      'Source',
+    ],
+    actual: panelTitles(stageGroupDashboards.dashboard('geo', components=['sidekiq']).stageGroupDashboardTrailer()),
+    expect: errorBudgetTitles + self.sidekiqTitles,
+  },
+
+  testSidekiqOnlyTemplates: {
+    actual: std.prune([template.name for template in stageGroupDashboards.dashboard('geo', components=['sidekiq']).stageGroupDashboardTrailer().templating.list]),
+    expect: [
+      'PROMETHEUS_DS',
+      'environment',
+      'stage',
+    ],
   },
 })
