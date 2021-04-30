@@ -39,6 +39,7 @@
 * [../redis/redis.md](../redis/redis.md)
 * [../sentry/sentry-is-down.md](../sentry/sentry-is-down.md)
 * [../sidekiq/sidekiq-survival-guide-for-sres.md](../sidekiq/sidekiq-survival-guide-for-sres.md)
+* [../spamcheck/index.md](../spamcheck/index.md)
 * [../uncategorized/access-gcp-hosts.md](../uncategorized/access-gcp-hosts.md)
 * [../uncategorized/job_completion.md](../uncategorized/job_completion.md)
 * [../uncategorized/k8s-new-cluster.md](../uncategorized/k8s-new-cluster.md)
