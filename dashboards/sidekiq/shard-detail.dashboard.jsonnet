@@ -30,9 +30,9 @@ local optimalMargin = 0.10;
 local selectorHash = { type: 'sidekiq', environment: '$environment', stage: '$stage', shard: { re: '$shard' } };
 local selector = selectors.serializeHash(selectorHash);
 
-local queueDetailDataLink = {
-  url: '/d/sidekiq-queue-detail?${__url_time_range}&${__all_variables}&var-queue=${__field.label.queue}',
-  title: 'Queue Detail: ${__field.label.queue}',
+local workerDetailDataLink = {
+  url: '/d/sidekiq-worker-detail?${__url_time_range}&${__all_variables}&var-worker=${__field.label.worker}',
+  title: 'Worker Detail: ${__field.labels.worker}',
 };
 
 local queueTimeLatencyTimeseries(title, aggregator) =
@@ -110,7 +110,7 @@ basic.dashboard(
       intervalFactor=3,
       yAxisLabel='Jobs',
     )
-    .addDataLink(queueDetailDataLink),
+    .addDataLink(workerDetailDataLink),
     basic.queueLengthTimeseries(
       title='Aggregate queue length',
       description='The sum total number of unstarted jobs in all queues serviced by this shard',
@@ -147,7 +147,7 @@ basic.dashboard(
       title='Sidekiq Estimated p95 Job Queue Time per Queue, $shard shard',
       aggregator='queue'
     )
-    .addDataLink(queueDetailDataLink),
+    .addDataLink(workerDetailDataLink),
   ], startRow=201)
   +
   layout.rowGrid('Inflight Jobs - jobs currently running', [
@@ -159,7 +159,7 @@ basic.dashboard(
       title='Sidekiq Inflight Jobs per Queue, $shard shard',
       aggregator='queue'
     )
-    .addDataLink(queueDetailDataLink),
+    .addDataLink(workerDetailDataLink),
   ], startRow=301)
   +
   layout.rowGrid('Individual Execution Time - time taken for individual jobs to complete', [
@@ -267,7 +267,7 @@ basic.dashboard(
       legend_show=true,
       yAxisLabel='Jobs Completed per Second',
     )
-    .addDataLink(queueDetailDataLink),
+    .addDataLink(workerDetailDataLink),
   ], startRow=601)
   +
   layout.rowGrid('Utilization - saturation of workers in this fleet', [

@@ -31,8 +31,8 @@ local styles = [
     pattern: 'queue',
     mappingType: 2,
     link: true,
-    linkUrl: '/d/sidekiq-queue-detail/sidekiq-queue-detail?orgId=1&var-environment=$environment&var-queue=${__cell}',
-    linkTooltip: 'View queue details',
+    linkUrl: '/d/sidekiq-worker-detail/sidekiq-worker-detail?orgId=1&var-environment=$environment&var-worker=${__cell}',
+    linkTooltip: 'View worker details',
   },
 ];
 
