@@ -43,3 +43,9 @@ tsh login --proxy=teleport.gstg.gitlab.net
 ```
 > This example is for the `gstg` environment.  Replace `gstg` with `gprd` for production
 
+-----
+
+Last resort solutions if UI and tctl from your machine don't work.
+You can ssh directly to the teleport server and do tctl commands:
+
+ssh teleport-01-inf-gprd.c.gitlab-production.internal `sudo tctl requests ls` and `sudo tctl requests approve XXX`
