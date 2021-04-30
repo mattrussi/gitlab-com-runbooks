@@ -66,6 +66,7 @@
 * [../sidekiq/sidekiq_error_rate_high.md](../sidekiq/sidekiq_error_rate_high.md)
 * [../sidekiq/sidekiq_stats_no_longer_showing.md](../sidekiq/sidekiq_stats_no_longer_showing.md)
 * [../sidekiq/silent-project-exports.md](../sidekiq/silent-project-exports.md)
+* [../spamcheck/index.md](../spamcheck/index.md)
 * [../uncategorized/about-gitlab-com.md](../uncategorized/about-gitlab-com.md)
 * [../uncategorized/access-requests.md](../uncategorized/access-requests.md)
 * [../uncategorized/block-high-load-project.md](../uncategorized/block-high-load-project.md)

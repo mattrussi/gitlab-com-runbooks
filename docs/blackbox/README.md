@@ -17,6 +17,7 @@
 * [blackbox-git-exporter.md](blackbox-git-exporter.md)
 * [../license/license-gitlab-com.md](../license/license-gitlab-com.md)
 * [../patroni/postgres.md](../patroni/postgres.md)
+* [../spamcheck/index.md](../spamcheck/index.md)
 * [../uncategorized/camoproxy.md](../uncategorized/camoproxy.md)
 * [../version/version-gitlab-com.md](../version/version-gitlab-com.md)
 <!-- END_MARKER -->

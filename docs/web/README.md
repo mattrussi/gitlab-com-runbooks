@@ -57,6 +57,7 @@
 * [../redis/redis-survival-guide-for-sres.md](../redis/redis-survival-guide-for-sres.md)
 * [../sentry/sentry-is-down.md](../sentry/sentry-is-down.md)
 * [../sidekiq/sidekiq-survival-guide-for-sres.md](../sidekiq/sidekiq-survival-guide-for-sres.md)
+* [../spamcheck/index.md](../spamcheck/index.md)
 * [../uncategorized/blocked-user-logins.md](../uncategorized/blocked-user-logins.md)
 * [../uncategorized/debug-failed-chef-provisioning.md](../uncategorized/debug-failed-chef-provisioning.md)
 * [../uncategorized/deploycmd.md](../uncategorized/deploycmd.md)
