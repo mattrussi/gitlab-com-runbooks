@@ -87,25 +87,35 @@ alleviate the pain.  We alert for containers that trigger this alert that we
 cannot manage as any container in this namespace is critical for the successful
 operation of the cluster and it's health overall.
 
-## GKENodeCount
 
-### HPAScaleCapability
+## HPAScaleCapability
 
 The Horizontal Pod Autoscaler has reached it's maximum configured allowed Pods.
-Start troubleshooting by validating the service is able to successfully handle
-requests.
+This doesn't necessarily mean we are in trouble.
+
+1. Start troubleshooting by validating the service is able to successfully handle
+   requests. Utilize the SLI/SLO metrics of the service that is alerting to determine
+   if we are violating any service Apdex or Errors
+1. If we are not suffering problems, this means we need to further tweak the HPA
+   and better optimize its configuration.  Open an issue, noting your findings.
+1. Create an alert silence for a period of time and ensure the newly created
+   issue is appropriately prioritized to be completed prior to the expiration of
+   the silence.
+1. If we are violating the service SLI/SLO's we must take further action.  Use
+   guidelines below to assist in taking the appropriate action.
 
 When we reach this threshold we must start an investigation into the load that
 this service is taking to see if there's been a trend upward that we simply
 haven't noticed over time, or if there's a problem processing requests which led
 to an undesired effect of scaling upwards out of normal.
 
-Utilize the dashboard https://dashboards.gitlab.net/d/oWe9aYxmk/pod-metrics and
-observe the Active Replicaset over the course of time to take into account how
-many Pods we've been scaling.  Normally we scale with traffic.  If there are
-spikes, something must be amiss and is a signal that we need to investigate
-further.  If we've been scaling up over a lengthy period of time (say months),
-it may simply mean we need to bump the amount of maximum allowed Pods.
+Utilize the dashboard
+https://dashboards.gitlab.net/d/alerts-sat_kube_hpa_instances/alerts-kube_hpa_desired_replicas-saturation-detail
+and observe the Saturation over the course of time to take into account how many
+Pods we've been scaling.  Normally we scale with traffic, but how this is
+derived differs between services.  If we've been scaling up over a lengthy
+period of time (say months), it may simply mean we need to bump the amount of
+maximum allowed Pods only if we are in violation of other SLO's for said service.
 
 During the investigation, take a look at the HPA configuration to understand
 what drives the scaling needs.  This will help determine what signals to look
@@ -113,13 +123,16 @@ deeper into and drive the conversation for what changes need to be made.  When
 making changes to the HPA we need to ensure that the cluster will not endure
 undue stress.
 
-### GKENodeCountCritical
+These configurations are located:
+https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/
+
+## GKENodeCountCritical
 
 We have reached the maximum configured amount of nodes allowed by all node pools.
 We must make changes to the node pool configuration.  This is maintained in
 Terraform here: [ops.gitlab.net/.../gitlab-com-infrastructure/.../gprd/main.tf](https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/blob/e3f1f5edfe90d98f4e410bfc5cc79b265b5fa1f0/environments/gprd/main.tf#L1797)
 
-### GKENodeCountHigh
+## GKENodeCountHigh
 
 We are close to reaching the maximum allowed nodes in the node_pool
 configuration as defined by terraform.  It would be wise to open an issue an
