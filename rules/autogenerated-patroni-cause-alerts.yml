@@ -30,6 +30,7 @@ groups:
     labels:
       alert_type: cause
       pager: pagerduty
+      runbook: docs/patroni/rails-sql-apdex-slow.md
       severity: s1
       team: rapid-action-intercom
     expr: |
@@ -73,6 +74,7 @@ groups:
     labels:
       alert_type: cause
       pager: pagerduty
+      runbook: docs/patroni/rails-sql-apdex-slow.md
       severity: s1
       team: rapid-action-intercom
     expr: |
@@ -115,6 +117,7 @@ groups:
       grafana_variables: environment,tier,type,relname
     labels:
       alert_type: cause
+      runbook: docs/patroni/rails-sql-apdex-slow.md
       severity: s4
       team: rapid-action-intercom
     expr: |
@@ -157,6 +160,7 @@ groups:
       grafana_variables: environment,tier,type,relname
     labels:
       alert_type: cause
+      runbook: docs/patroni/rails-sql-apdex-slow.md
       severity: s4
       team: rapid-action-intercom
     expr: |
