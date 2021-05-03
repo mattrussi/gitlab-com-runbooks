@@ -643,7 +643,11 @@ services:
   label: Service:Kubernetes
   technical:
     project:
+      - https://gitlab.com/gitlab-com/gitlab-com-infrastructure
+      - https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/common
+      - https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com
       - https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/
+      - https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments
     slx:
     documents:
       design:
@@ -662,6 +666,7 @@ services:
   operations:
     maintenance:
     runbooks:
+      - https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/kube/
     playbooks:
     error_budget:
   observability:
