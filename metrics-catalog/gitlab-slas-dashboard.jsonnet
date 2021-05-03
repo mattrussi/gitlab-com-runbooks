@@ -1,6 +1,5 @@
 local serviceCatalog = import 'service_catalog.libsonnet';
-local keyServices = serviceCatalog.findServices(function(service)
-  std.objectHas(service.business.SLA, 'overall_sla_weighting'));
+local keyServices = serviceCatalog.findKeyBusinessServices(includeZeroScore=true);
 
 local keyServiceNames = std.sort(std.map(function(service) service.name, keyServices));
 local keyServiceRegExp = std.join('|', keyServiceNames);

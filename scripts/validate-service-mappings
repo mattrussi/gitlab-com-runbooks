@@ -56,26 +56,30 @@ def validate(service_catalog_path)
 
     # Business
     # =========
+    business = service["business"]
 
-    # requirement
-    requirement = service["business"]["requirement"]
-    raise "'#{service_name}' | requirement field must be string" unless requirement.is_a? String
+    # Business requirements are optional for purely technical services
+    if business
+      # requirement
+      requirement = business["requirement"]
+      raise "'#{service_name}' | requirement field must be string" unless requirement.is_a? String
 
-    # customers
-    requirement = service["business"]["customers"]
-    raise "'#{service_name}' | customers field must be list" unless requirement.is_a? Array
+      # customers
+      requirement = business["customers"]
+      raise "'#{service_name}' | customers field must be list" unless requirement.is_a? Array
 
-    # business_value
-    value = service["business"]["business_value"]
-    raise "'#{service_name}' | business_value field must be string" unless value.is_a? String
+      # business_value
+      value = business["business_value"]
+      raise "'#{service_name}' | business_value field must be string" unless value.is_a? String
 
-    # availability
-    availability = service["business"]["SLA"]["availability"]
-    raise "'#{service_name}' | availability field must be string" unless availability.is_a?(String) || availability.nil?
+      # availability
+      availability = business["SLA"]["availability"]
+      raise "'#{service_name}' | availability field must be string" unless availability.is_a?(String) || availability.nil?
 
-    # response_time
-    response_time = service["business"]["SLA"]["response_time"]
-    raise "'#{service_name}' | response_time field must be string" unless response_time.is_a?(String) || response_time.nil?
+      # response_time
+      response_time = business["SLA"]["response_time"]
+      raise "'#{service_name}' | response_time field must be string" unless response_time.is_a?(String) || response_time.nil?
+    end
 
     # Technical
     # =========
@@ -143,16 +147,20 @@ def validate(service_catalog_path)
     end
 
     # security_reviewed
-    security_reviewed = service["technical"]["security"]["security_reviewed"]
-    raise "'#{service_name}' | security_reviewed field must be string" unless security_reviewed.is_a?(String) || security_reviewed.nil?
+    security = service["technical"]["security"]
 
-    # data_classification
-    data_classification = service["technical"]["security"]["data_classification"]
-    raise "'#{service_name}' | data_classification field must be string" unless data_classification.is_a?(String) || data_classification.nil?
+    if security
+      security_reviewed = security["security_reviewed"]
+      raise "'#{service_name}' | security_reviewed field must be string" unless security_reviewed.is_a?(String) || security_reviewed.nil?
 
-    # security_incidents
-    security_incidents = service["technical"]["security"]["security_incidents"]
-    raise "'#{service_name}' | security_incidents field must be list" unless security_incidents.is_a?(Array) || security_incidents.nil?
+      # data_classification
+      data_classification = security["data_classification"]
+      raise "'#{service_name}' | data_classification field must be string" unless data_classification.is_a?(String) || data_classification.nil?
+
+      # security_incidents
+      security_incidents = security["security_incidents"]
+      raise "'#{service_name}' | security_incidents field must be list" unless security_incidents.is_a?(Array) || security_incidents.nil?
+    end
 
     # logging
     logging = service["technical"]["logging"]
