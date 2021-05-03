@@ -26,6 +26,8 @@
 * [../frontend/ssh-maxstartups-breach.md](../frontend/ssh-maxstartups-breach.md)
 * [../git/purge-git-data.md](../git/purge-git-data.md)
 * [../kas/kubernetes-agent-basic-troubleshooting.md](../kas/kubernetes-agent-basic-troubleshooting.md)
+* [../kube/k8s-oncall-setup.md](../kube/k8s-oncall-setup.md)
+* [../kube/kubernetes.md](../kube/kubernetes.md)
 * [../license/license-gitlab-com.md](../license/license-gitlab-com.md)
 * [logging_gcs_archive_bigquery.md](logging_gcs_archive_bigquery.md)
 * [../pages/gitlab-pages.md](../pages/gitlab-pages.md)
@@ -40,8 +42,6 @@
 * [../uncategorized/access-azure-test-subscription.md](../uncategorized/access-azure-test-subscription.md)
 * [../uncategorized/access-gcp-hosts.md](../uncategorized/access-gcp-hosts.md)
 * [../uncategorized/camoproxy.md](../uncategorized/camoproxy.md)
-* [../uncategorized/k8s-oncall-setup.md](../uncategorized/k8s-oncall-setup.md)
-* [../uncategorized/kubernetes.md](../uncategorized/kubernetes.md)
 * [../version/version-gitlab-com.md](../version/version-gitlab-com.md)
 * [../web/static-repository-objects-caching.md](../web/static-repository-objects-caching.md)
 <!-- END_MARKER -->

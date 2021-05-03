@@ -22,7 +22,7 @@ local sidekiqHelpers = import './services/lib/sidekiq-helpers.libsonnet';
       single zone clusters the number of nodes will match the limit, for regional clusters, the limit is multiplied by
       the number of zones the cluster is deployed over.
     |||,
-    runbook: 'docs/uncategorized/kubernetes.md#hpascalecapability',
+    runbook: 'docs/kube/kubernetes.md#hpascalecapability',
     grafana_dashboard_uid: 'sat_kube_pool_max_nodes',
     resourceLabels: ['cluster', 'label_pool', 'shard'],
     query: |||
