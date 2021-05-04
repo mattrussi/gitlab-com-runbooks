@@ -378,6 +378,7 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
       'queue',
       'feature_category',
       'urgency',
+      'worker',
     ],
     burnRates: {
       '1m': {
