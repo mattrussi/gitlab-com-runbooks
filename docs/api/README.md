@@ -48,6 +48,7 @@
 * [../monitoring/alertmanager-notification-failures.md](../monitoring/alertmanager-notification-failures.md)
 * [../monitoring/alerts_manual.md](../monitoring/alerts_manual.md)
 * [../monitoring/apdex-alerts-guide.md](../monitoring/apdex-alerts-guide.md)
+* [../onboarding/gitlab.com_on_k8s.md](../onboarding/gitlab.com_on_k8s.md)
 * [../patroni/geo-patroni-cluster.md](../patroni/geo-patroni-cluster.md)
 * [../patroni/patroni-management.md](../patroni/patroni-management.md)
 * [../patroni/pg_collect_query_data.md](../patroni/pg_collect_query_data.md)

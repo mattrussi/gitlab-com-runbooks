@@ -39,6 +39,7 @@
 * [../kas/kubernetes-agent-disable-integrations.md](../kas/kubernetes-agent-disable-integrations.md)
 * [../monitoring/apdex-alerts-guide.md](../monitoring/apdex-alerts-guide.md)
 * [../monitoring/definition-service-apdex.md](../monitoring/definition-service-apdex.md)
+* [../onboarding/gitlab.com_on_k8s.md](../onboarding/gitlab.com_on_k8s.md)
 * [../praefect/praefect-bypass.md](../praefect/praefect-bypass.md)
 * [../praefect/praefect-error-rate.md](../praefect/praefect-error-rate.md)
 * [../praefect/praefect-file-storages.md](../praefect/praefect-file-storages.md)

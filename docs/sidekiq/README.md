@@ -25,6 +25,7 @@
 * [../gitaly/gitaly-token-rotation.md](../gitaly/gitaly-token-rotation.md)
 * [../gitaly/storage-rebalancing.md](../gitaly/storage-rebalancing.md)
 * [../monitoring/apdex-alerts-guide.md](../monitoring/apdex-alerts-guide.md)
+* [../onboarding/gitlab.com_on_k8s.md](../onboarding/gitlab.com_on_k8s.md)
 * [../patroni/geo-patroni-cluster.md](../patroni/geo-patroni-cluster.md)
 * [../patroni/pg_collect_query_data.md](../patroni/pg_collect_query_data.md)
 * [../patroni/postgresql-locking.md](../patroni/postgresql-locking.md)

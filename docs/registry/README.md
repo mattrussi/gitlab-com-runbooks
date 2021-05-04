@@ -20,6 +20,7 @@
 * [../cloudflare/managing-traffic.md](../cloudflare/managing-traffic.md)
 * [../frontend/ban-netblocks-on-haproxy.md](../frontend/ban-netblocks-on-haproxy.md)
 * [../frontend/haproxy.md](../frontend/haproxy.md)
+* [../onboarding/gitlab.com_on_k8s.md](../onboarding/gitlab.com_on_k8s.md)
 * [gitlab-registry.md](gitlab-registry.md)
 * [../uncategorized/delete-projects-manually.md](../uncategorized/delete-projects-manually.md)
 * [../uncategorized/k8s-operations.md](../uncategorized/k8s-operations.md)
