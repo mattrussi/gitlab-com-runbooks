@@ -1,5 +1,6 @@
 local stackdriverLogs = import './stackdriver_logs.libsonnet';
 local test = import 'github.com/yugui/jsonnetunit/jsonnetunit/test.libsonnet';
+local strings = import 'utils/strings.libsonnet';
 
 test.suite({
   testToolingLink: {
@@ -24,7 +25,45 @@ test.suite({
       d: { lte: 5 },
       e: { ne: '6' },
     }),
-    expect: 'a<1\nb>2\nc>=3\nd<=5\n-e="6"',
+    expect: strings.chomp(|||
+      a<1
+      b>2
+      c>=3
+      d<=5
+      -e="6"
+    |||),
+  },
+  testArrays1: {
+    actual: stackdriverLogs.serializeQueryHash({
+      a: { ne: ['1', '2', '3'] },
+    }),
+    expect: strings.chomp(|||
+      -a="1"
+      -a="2"
+      -a="3"
+    |||),
+  },
+  testArrays2: {
+    actual: stackdriverLogs.serializeQueryHash({
+      a: [{ gt: 1 }, { lt: 2 }],
+      b: [{ gt: 3 }, { lt: 4 }],
+    }),
+    expect: strings.chomp(|||
+      a>1
+      a<2
+      b>3
+      b<4
+    |||),
+  },
+  testOneOf: {
+    actual: stackdriverLogs.serializeQueryHash({
+      a: { one_of: ['a', 'b', 'c'] },
+      b: { one_of: ['1', '2', '3'] },
+    }),
+    expect: strings.chomp(|||
+      a=("a" OR "b" OR "c")
+      b=("1" OR "2" OR "3")
+    |||),
   },
 
 })

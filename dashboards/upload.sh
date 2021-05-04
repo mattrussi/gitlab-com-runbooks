@@ -71,7 +71,14 @@ function generate_dashboard_requests() {
   find_dashboards "$@" | while read -r line; do
     relative=${line#"./"}
     folder=${GRAFANA_FOLDER:-$(dirname "$relative")}
-    folderId=$(resolve_folder_id "${folder}")
+
+    # No need to resolve actual folderId in dry-run mode,
+    # since it may not yet exist
+    if [[ -n $dry_run ]]; then
+      folderId=1
+    else
+      folderId=$(resolve_folder_id "${folder}")
+    fi
 
     generate_dashboards_for_file "${line}" | validate_dashboard_requests | prepare_dashboard_requests "${folderId}" | (
       if [[ -n $dry_run ]]; then

@@ -671,8 +671,8 @@ services:
     error_budget:
   observability:
     monitors:
-      grafana_folder:
-      primary_grafana_dashboard:
+      grafana_folder: kube
+      primary_grafana_dashboard: "kube-main/kube-overview"
 
 - name: logging
   tier: inf
