@@ -22,10 +22,11 @@ groups:
   - record: gitlab_component_ops:rate
     labels:
       component: pgbouncer
+      stage: main
       tier: db
       type: patroni
     expr: |
-      sum by (environment,stage) (
+      sum by (environment) (
         label_replace(rate(pgbouncer_stats_sql_transactions_pooled_total{type="patroni", tier="db"}[1m]), "_c", "0", "", "")
         or
         label_replace(rate(pgbouncer_stats_queries_pooled_total{type="patroni", tier="db"}[1m]), "_c", "1", "", "")
@@ -147,10 +148,11 @@ groups:
   - record: gitlab_component_ops:rate
     labels:
       component: transactions_primary
+      stage: main
       tier: db
       type: patroni
     expr: |
-      sum by (environment,stage) (
+      sum by (environment) (
         label_replace(rate(pg_stat_database_xact_commit{type="patroni", tier="db"}[1m]) and on (instance) (pg_replication_is_replica == 0), "_c", "0", "", "")
         or
         label_replace(rate(pg_stat_database_xact_rollback{type="patroni", tier="db"}[1m]) and on (instance) (pg_replication_is_replica == 0), "_c", "1", "", "")
@@ -158,27 +160,29 @@ groups:
   - record: gitlab_component_errors:rate
     labels:
       component: transactions_primary
+      stage: main
       tier: db
       type: patroni
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (environment) (
           rate(pg_stat_database_xact_rollback{type="patroni", tier="db"}[1m]) and on (instance) (pg_replication_is_replica == 0)
         )
       )
       or
       (
-        0 * group by(environment,stage) (
-          gitlab_component_ops:rate{component="transactions_primary",tier="db",type="patroni"}
+        0 * group by(environment) (
+          gitlab_component_ops:rate{component="transactions_primary",stage="main",tier="db",type="patroni"}
         )
       )
   - record: gitlab_component_ops:rate
     labels:
       component: transactions_replica
+      stage: main
       tier: db
       type: patroni
     expr: |
-      sum by (environment,stage) (
+      sum by (environment) (
         label_replace(rate(pg_stat_database_xact_commit{type="patroni", tier="db"}[1m]) and on (instance) (pg_replication_is_replica == 1), "_c", "0", "", "")
         or
         label_replace(rate(pg_stat_database_xact_rollback{type="patroni", tier="db"}[1m]) and on (instance) (pg_replication_is_replica == 1), "_c", "1", "", "")
@@ -186,18 +190,19 @@ groups:
   - record: gitlab_component_errors:rate
     labels:
       component: transactions_replica
+      stage: main
       tier: db
       type: patroni
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (environment) (
           rate(pg_stat_database_xact_rollback{type="patroni", tier="db"}[1m]) and on (instance) (pg_replication_is_replica == 1)
         )
       )
       or
       (
-        0 * group by(environment,stage) (
-          gitlab_component_ops:rate{component="transactions_replica",tier="db",type="patroni"}
+        0 * group by(environment) (
+          gitlab_component_ops:rate{component="transactions_replica",stage="main",tier="db",type="patroni"}
         )
       )
 - name: 'Component-Level SLIs: patroni - 5m burn-rate'
@@ -221,10 +226,11 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: pgbouncer
+      stage: main
       tier: db
       type: patroni
     expr: |
-      sum by (environment,stage) (
+      sum by (environment) (
         label_replace(rate(pgbouncer_stats_sql_transactions_pooled_total{type="patroni", tier="db"}[5m]), "_c", "0", "", "")
         or
         label_replace(rate(pgbouncer_stats_queries_pooled_total{type="patroni", tier="db"}[5m]), "_c", "1", "", "")
@@ -346,10 +352,11 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: transactions_primary
+      stage: main
       tier: db
       type: patroni
     expr: |
-      sum by (environment,stage) (
+      sum by (environment) (
         label_replace(rate(pg_stat_database_xact_commit{type="patroni", tier="db"}[5m]) and on (instance) (pg_replication_is_replica == 0), "_c", "0", "", "")
         or
         label_replace(rate(pg_stat_database_xact_rollback{type="patroni", tier="db"}[5m]) and on (instance) (pg_replication_is_replica == 0), "_c", "1", "", "")
@@ -357,27 +364,29 @@ groups:
   - record: gitlab_component_errors:rate_5m
     labels:
       component: transactions_primary
+      stage: main
       tier: db
       type: patroni
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (environment) (
           rate(pg_stat_database_xact_rollback{type="patroni", tier="db"}[5m]) and on (instance) (pg_replication_is_replica == 0)
         )
       )
       or
       (
-        0 * group by(environment,stage) (
-          gitlab_component_ops:rate_5m{component="transactions_primary",tier="db",type="patroni"}
+        0 * group by(environment) (
+          gitlab_component_ops:rate_5m{component="transactions_primary",stage="main",tier="db",type="patroni"}
         )
       )
   - record: gitlab_component_ops:rate_5m
     labels:
       component: transactions_replica
+      stage: main
       tier: db
       type: patroni
     expr: |
-      sum by (environment,stage) (
+      sum by (environment) (
         label_replace(rate(pg_stat_database_xact_commit{type="patroni", tier="db"}[5m]) and on (instance) (pg_replication_is_replica == 1), "_c", "0", "", "")
         or
         label_replace(rate(pg_stat_database_xact_rollback{type="patroni", tier="db"}[5m]) and on (instance) (pg_replication_is_replica == 1), "_c", "1", "", "")
@@ -385,18 +394,19 @@ groups:
   - record: gitlab_component_errors:rate_5m
     labels:
       component: transactions_replica
+      stage: main
       tier: db
       type: patroni
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (environment) (
           rate(pg_stat_database_xact_rollback{type="patroni", tier="db"}[5m]) and on (instance) (pg_replication_is_replica == 1)
         )
       )
       or
       (
-        0 * group by(environment,stage) (
-          gitlab_component_ops:rate_5m{component="transactions_replica",tier="db",type="patroni"}
+        0 * group by(environment) (
+          gitlab_component_ops:rate_5m{component="transactions_replica",stage="main",tier="db",type="patroni"}
         )
       )
 - name: 'Component-Level SLIs: patroni - 30m burn-rate'
@@ -420,10 +430,11 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: pgbouncer
+      stage: main
       tier: db
       type: patroni
     expr: |
-      sum by (environment,stage) (
+      sum by (environment) (
         label_replace(rate(pgbouncer_stats_sql_transactions_pooled_total{type="patroni", tier="db"}[30m]), "_c", "0", "", "")
         or
         label_replace(rate(pgbouncer_stats_queries_pooled_total{type="patroni", tier="db"}[30m]), "_c", "1", "", "")
@@ -545,10 +556,11 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: transactions_primary
+      stage: main
       tier: db
       type: patroni
     expr: |
-      sum by (environment,stage) (
+      sum by (environment) (
         label_replace(rate(pg_stat_database_xact_commit{type="patroni", tier="db"}[30m]) and on (instance) (pg_replication_is_replica == 0), "_c", "0", "", "")
         or
         label_replace(rate(pg_stat_database_xact_rollback{type="patroni", tier="db"}[30m]) and on (instance) (pg_replication_is_replica == 0), "_c", "1", "", "")
@@ -556,27 +568,29 @@ groups:
   - record: gitlab_component_errors:rate_30m
     labels:
       component: transactions_primary
+      stage: main
       tier: db
       type: patroni
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (environment) (
           rate(pg_stat_database_xact_rollback{type="patroni", tier="db"}[30m]) and on (instance) (pg_replication_is_replica == 0)
         )
       )
       or
       (
-        0 * group by(environment,stage) (
-          gitlab_component_ops:rate_30m{component="transactions_primary",tier="db",type="patroni"}
+        0 * group by(environment) (
+          gitlab_component_ops:rate_30m{component="transactions_primary",stage="main",tier="db",type="patroni"}
         )
       )
   - record: gitlab_component_ops:rate_30m
     labels:
       component: transactions_replica
+      stage: main
       tier: db
       type: patroni
     expr: |
-      sum by (environment,stage) (
+      sum by (environment) (
         label_replace(rate(pg_stat_database_xact_commit{type="patroni", tier="db"}[30m]) and on (instance) (pg_replication_is_replica == 1), "_c", "0", "", "")
         or
         label_replace(rate(pg_stat_database_xact_rollback{type="patroni", tier="db"}[30m]) and on (instance) (pg_replication_is_replica == 1), "_c", "1", "", "")
@@ -584,18 +598,19 @@ groups:
   - record: gitlab_component_errors:rate_30m
     labels:
       component: transactions_replica
+      stage: main
       tier: db
       type: patroni
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (environment) (
           rate(pg_stat_database_xact_rollback{type="patroni", tier="db"}[30m]) and on (instance) (pg_replication_is_replica == 1)
         )
       )
       or
       (
-        0 * group by(environment,stage) (
-          gitlab_component_ops:rate_30m{component="transactions_replica",tier="db",type="patroni"}
+        0 * group by(environment) (
+          gitlab_component_ops:rate_30m{component="transactions_replica",stage="main",tier="db",type="patroni"}
         )
       )
 - name: 'Component-Level SLIs: patroni - 1h burn-rate'
@@ -619,10 +634,11 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: pgbouncer
+      stage: main
       tier: db
       type: patroni
     expr: |
-      sum by (environment,stage) (
+      sum by (environment) (
         label_replace(rate(pgbouncer_stats_sql_transactions_pooled_total{type="patroni", tier="db"}[1h]), "_c", "0", "", "")
         or
         label_replace(rate(pgbouncer_stats_queries_pooled_total{type="patroni", tier="db"}[1h]), "_c", "1", "", "")
@@ -753,10 +769,11 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: transactions_primary
+      stage: main
       tier: db
       type: patroni
     expr: |
-      sum by (environment,stage) (
+      sum by (environment) (
         label_replace(rate(pg_stat_database_xact_commit{type="patroni", tier="db"}[1h]) and on (instance) (pg_replication_is_replica == 0), "_c", "0", "", "")
         or
         label_replace(rate(pg_stat_database_xact_rollback{type="patroni", tier="db"}[1h]) and on (instance) (pg_replication_is_replica == 0), "_c", "1", "", "")
@@ -764,27 +781,29 @@ groups:
   - record: gitlab_component_errors:rate_1h
     labels:
       component: transactions_primary
+      stage: main
       tier: db
       type: patroni
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (environment) (
           rate(pg_stat_database_xact_rollback{type="patroni", tier="db"}[1h]) and on (instance) (pg_replication_is_replica == 0)
         )
       )
       or
       (
-        0 * group by(environment,stage) (
-          gitlab_component_ops:rate_1h{component="transactions_primary",tier="db",type="patroni"}
+        0 * group by(environment) (
+          gitlab_component_ops:rate_1h{component="transactions_primary",stage="main",tier="db",type="patroni"}
         )
       )
   - record: gitlab_component_ops:rate_1h
     labels:
       component: transactions_replica
+      stage: main
       tier: db
       type: patroni
     expr: |
-      sum by (environment,stage) (
+      sum by (environment) (
         label_replace(rate(pg_stat_database_xact_commit{type="patroni", tier="db"}[1h]) and on (instance) (pg_replication_is_replica == 1), "_c", "0", "", "")
         or
         label_replace(rate(pg_stat_database_xact_rollback{type="patroni", tier="db"}[1h]) and on (instance) (pg_replication_is_replica == 1), "_c", "1", "", "")
@@ -792,18 +811,19 @@ groups:
   - record: gitlab_component_errors:rate_1h
     labels:
       component: transactions_replica
+      stage: main
       tier: db
       type: patroni
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (environment) (
           rate(pg_stat_database_xact_rollback{type="patroni", tier="db"}[1h]) and on (instance) (pg_replication_is_replica == 1)
         )
       )
       or
       (
-        0 * group by(environment,stage) (
-          gitlab_component_ops:rate_1h{component="transactions_replica",tier="db",type="patroni"}
+        0 * group by(environment) (
+          gitlab_component_ops:rate_1h{component="transactions_replica",stage="main",tier="db",type="patroni"}
         )
       )
 - name: 'Component-Level SLIs: patroni - 6h burn-rate'
@@ -812,10 +832,11 @@ groups:
   - record: gitlab_component_ops:rate_6h
     labels:
       component: pgbouncer
+      stage: main
       tier: db
       type: patroni
     expr: |
-      sum by (environment,stage) (
+      sum by (environment) (
         label_replace(rate(pgbouncer_stats_sql_transactions_pooled_total{type="patroni", tier="db"}[6h]), "_c", "0", "", "")
         or
         label_replace(rate(pgbouncer_stats_queries_pooled_total{type="patroni", tier="db"}[6h]), "_c", "1", "", "")
@@ -823,10 +844,11 @@ groups:
   - record: gitlab_component_ops:rate_6h
     labels:
       component: transactions_primary
+      stage: main
       tier: db
       type: patroni
     expr: |
-      sum by (environment,stage) (
+      sum by (environment) (
         label_replace(rate(pg_stat_database_xact_commit{type="patroni", tier="db"}[6h]) and on (instance) (pg_replication_is_replica == 0), "_c", "0", "", "")
         or
         label_replace(rate(pg_stat_database_xact_rollback{type="patroni", tier="db"}[6h]) and on (instance) (pg_replication_is_replica == 0), "_c", "1", "", "")
@@ -834,27 +856,29 @@ groups:
   - record: gitlab_component_errors:rate_6h
     labels:
       component: transactions_primary
+      stage: main
       tier: db
       type: patroni
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (environment) (
           rate(pg_stat_database_xact_rollback{type="patroni", tier="db"}[6h]) and on (instance) (pg_replication_is_replica == 0)
         )
       )
       or
       (
-        0 * group by(environment,stage) (
-          gitlab_component_ops:rate_6h{component="transactions_primary",tier="db",type="patroni"}
+        0 * group by(environment) (
+          gitlab_component_ops:rate_6h{component="transactions_primary",stage="main",tier="db",type="patroni"}
         )
       )
   - record: gitlab_component_ops:rate_6h
     labels:
       component: transactions_replica
+      stage: main
       tier: db
       type: patroni
     expr: |
-      sum by (environment,stage) (
+      sum by (environment) (
         label_replace(rate(pg_stat_database_xact_commit{type="patroni", tier="db"}[6h]) and on (instance) (pg_replication_is_replica == 1), "_c", "0", "", "")
         or
         label_replace(rate(pg_stat_database_xact_rollback{type="patroni", tier="db"}[6h]) and on (instance) (pg_replication_is_replica == 1), "_c", "1", "", "")
@@ -862,18 +886,19 @@ groups:
   - record: gitlab_component_errors:rate_6h
     labels:
       component: transactions_replica
+      stage: main
       tier: db
       type: patroni
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (environment) (
           rate(pg_stat_database_xact_rollback{type="patroni", tier="db"}[6h]) and on (instance) (pg_replication_is_replica == 1)
         )
       )
       or
       (
-        0 * group by(environment,stage) (
-          gitlab_component_ops:rate_6h{component="transactions_replica",tier="db",type="patroni"}
+        0 * group by(environment) (
+          gitlab_component_ops:rate_6h{component="transactions_replica",stage="main",tier="db",type="patroni"}
         )
       )
 - name: 'Component mapping: patroni'

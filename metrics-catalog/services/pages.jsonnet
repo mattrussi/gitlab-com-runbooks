@@ -5,6 +5,7 @@ local combined = metricsCatalog.combined;
 metricsCatalog.serviceDefinition({
   type: 'pages',
   tier: 'lb',
+  serviceIsStageless: true,  // pages does not have a cny stage
   monitoringThresholds: {
     errorRatio: 0.9999,
   },
@@ -24,10 +25,6 @@ metricsCatalog.serviceDefinition({
         HTTPS traffic are considered to be errors. The loadbalancer is unable to determine the
         status code of HTTPS traffic as it passes through the loadbalancer encrypted.
       |||,
-
-      staticLabels: {
-        stage: 'main',
-      },
 
       requestRate: rateMetric(
         counter='haproxy_server_sessions_total',

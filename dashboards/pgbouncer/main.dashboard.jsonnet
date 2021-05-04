@@ -17,7 +17,7 @@ local graphPanel = grafana.graphPanel;
 local annotation = grafana.annotation;
 local serviceDashboard = import 'service_dashboard.libsonnet';
 
-serviceDashboard.overview('pgbouncer', 'main')
+serviceDashboard.overview('pgbouncer')
 .addPanel(
   row.new(title='pgbouncer Workload'),
   gridPos={

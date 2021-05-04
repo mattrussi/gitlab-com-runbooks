@@ -6,6 +6,7 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 metricsCatalog.serviceDefinition({
   type: 'nat',
   tier: 'inf',
+  serviceIsStageless: true,  // nat does not have a cny stage
   monitoringThresholds: {
     // TODO: define thresholds for the NAT service
   },
@@ -18,11 +19,6 @@ metricsCatalog.serviceDefinition({
       userImpacting: true,
       featureCategory: 'not_owned',
       team: 'sre_coreinfra',
-
-      staticLabels: {
-        tier: 'inf',
-        stage: 'main',
-      },
 
       description: |||
         Monitors GCP Cloud NAT TCP packets sent.
@@ -66,11 +62,6 @@ metricsCatalog.serviceDefinition({
       userImpacting: true,
       featureCategory: 'not_owned',
       team: 'sre_coreinfra',
-
-      staticLabels: {
-        tier: 'inf',
-        stage: 'main',
-      },
 
       description: |||
         Monitors GCP Cloud NAT TCP packets received.

@@ -15,7 +15,6 @@ local serviceCatalog = import 'service_catalog.libsonnet';
 local systemDiagramPanel = import 'system_diagram_panel.libsonnet';
 local row = grafana.row;
 
-
 local defaultEnvironmentSelector = { environment: '$environment', env: '$environment' };
 
 local listComponentThresholds(service) =
@@ -65,14 +64,22 @@ local headlineMetricsRow(
 
 local overviewDashboard(
   type,
-  stage,
   environmentSelectorHash,
   saturationEnvironmentSelectorHash
       ) =
-  local selectorHash = environmentSelectorHash { type: type, stage: stage };
-  local selector = selectors.serializeHash(selectorHash);
+
   local metricsCatalogServiceInfo = metricsCatalog.getService(type);
   local saturationComponents = metricsCatalogServiceInfo.applicableSaturationTypes();
+
+  local stageLabels =
+    if metricsCatalogServiceInfo.serviceIsStageless then
+      {}
+    else
+      { stage: '$stage' };
+
+  local environmentStageSelectorHash = environmentSelectorHash + stageLabels;
+  local selectorHash = environmentStageSelectorHash { type: type };
+  local selector = selectors.serializeHash(selectorHash);
 
   local dashboard =
     basic.dashboard(
@@ -116,10 +123,9 @@ local overviewDashboard(
     )
     .addPanels(
       if metricsCatalogServiceInfo.getProvisioning().kubernetes == true then
-        local kubeSelectorHash = { environment: '$environment', env: '$environment', stage: '$stage' };
         [
           row.new(title='☸️ Kubernetes Overview', collapse=true)
-          .addPanels(kubeServiceDashboards.deploymentOverview(type, kubeSelectorHash, startRow=1)) +
+          .addPanels(kubeServiceDashboards.deploymentOverview(type, environmentSelectorHash, startRow=1)) +
           { gridPos: { x: 0, y: 400, w: 24, h: 1 } },
         ]
       else [],
@@ -128,7 +134,7 @@ local overviewDashboard(
       if std.length(saturationComponents) > 0 then
         [
           // saturationSelector is env + type + stage
-          local saturationSelector = saturationEnvironmentSelectorHash { type: type, stage: stage };
+          local saturationSelector = saturationEnvironmentSelectorHash + stageLabels + { type: type };
           saturationDetail.saturationDetailPanels(saturationSelector, components=saturationComponents)
           { gridPos: { x: 0, y: 500, w: 24, h: 1 } },
         ]
@@ -136,16 +142,16 @@ local overviewDashboard(
     );
 
   // Optionally add the stage variable
-  local dashboardWithStage = if stage == '$stage' then dashboard.addTemplate(templates.stage) else dashboard;
+  local dashboardWithStage = if !metricsCatalogServiceInfo.serviceIsStageless then dashboard.addTemplate(templates.stage) else dashboard;
 
-  dashboardWithStage.addTemplate(templates.sigma)
+  dashboardWithStage
   {
     overviewTrailer()::
       self
       .addPanels(
         if std.length(saturationComponents) > 0 then
           [
-            capacityPlanning.capacityPlanningRow(type, stage) { gridPos: { x: 0, y: 100000 } },
+            capacityPlanning.capacityPlanningRow(selectorHash) { gridPos: { x: 0, y: 100000 } },
           ] else []
       )
       .addPanel(
@@ -169,13 +175,11 @@ local overviewDashboard(
 {
   overview(
     type,
-    stage='$stage',
     environmentSelectorHash=defaultEnvironmentSelector,
     saturationEnvironmentSelectorHash=defaultEnvironmentSelector
   )::
     overviewDashboard(
       type,
-      stage,
       environmentSelectorHash=environmentSelectorHash,
       saturationEnvironmentSelectorHash=saturationEnvironmentSelectorHash
     ),

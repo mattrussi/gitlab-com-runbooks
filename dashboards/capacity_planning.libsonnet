@@ -216,9 +216,10 @@ local twoWeekSaturationWarnings(nodeSelector) =
       twoWeekSaturationWarnings(nodeSelector),
     ], cols=1, startRow=startRow),
 
-  capacityPlanningRow(serviceType, serviceStage)::
-    local formatConfig = { serviceType: serviceType, serviceStage: serviceStage };
-    local nodeSelector = 'type="%(serviceType)s", stage=~"|%(serviceStage)s"' % formatConfig;
+  capacityPlanningRow(selectorHash)::
+    local nodeSelector = selectors.serializeHash(selectorHash);
+    local formatConfig = { nodeSelector: nodeSelector };
+
     row.new(title='📆 Capacity Planning', collapse=true)
     .addPanels(
       layout.grid(
@@ -242,11 +243,7 @@ local twoWeekSaturationWarnings(nodeSelector) =
               |||
                 clamp_min(clamp_max(
                   max(
-                    gitlab_component_saturation:ratio{
-                      type="%(serviceType)s",
-                      environment="$environment",
-                      stage=~"|%(serviceStage)s"
-                    }
+                    gitlab_component_saturation:ratio{%(nodeSelector)s}
                   ) by (component)
                   ,1)
                 ,0)
@@ -292,11 +289,7 @@ local twoWeekSaturationWarnings(nodeSelector) =
                 clamp_min(
                   clamp_max(
                     max(
-                      gitlab_component_saturation:ratio:avg_over_time_1w{
-                        type="%(serviceType)s",
-                        environment="$environment",
-                        stage=~"%(serviceStage)s|"
-                      }
+                      gitlab_component_saturation:ratio:avg_over_time_1w{%(nodeSelector)s}
                     ) by (component)
                   ,1)
                 ,0)

@@ -7,10 +7,11 @@ groups:
   - record: gitlab_component_ops:rate
     labels:
       component: primary_server
+      stage: main
       tier: db
       type: redis-cache
     expr: |
-      sum by (environment,stage) (
+      sum by (environment) (
         rate(redis_commands_processed_total{type="redis-cache"}[1m]) and on (instance) redis_instance_info{role="master"}
       )
   - record: gitlab_component_apdex:success:rate
@@ -110,10 +111,11 @@ groups:
   - record: gitlab_component_ops:rate
     labels:
       component: secondary_servers
+      stage: main
       tier: db
       type: redis-cache
     expr: |
-      sum by (environment,stage) (
+      sum by (environment) (
         rate(redis_commands_processed_total{type="redis-cache"}[1m]) and on (instance) redis_instance_info{role="slave"}
       )
 - name: 'Component-Level SLIs: redis-cache - 5m burn-rate'
@@ -122,10 +124,11 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: primary_server
+      stage: main
       tier: db
       type: redis-cache
     expr: |
-      sum by (environment,stage) (
+      sum by (environment) (
         rate(redis_commands_processed_total{type="redis-cache"}[5m]) and on (instance) redis_instance_info{role="master"}
       )
   - record: gitlab_component_apdex:success:rate_5m
@@ -225,10 +228,11 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: secondary_servers
+      stage: main
       tier: db
       type: redis-cache
     expr: |
-      sum by (environment,stage) (
+      sum by (environment) (
         rate(redis_commands_processed_total{type="redis-cache"}[5m]) and on (instance) redis_instance_info{role="slave"}
       )
 - name: 'Component-Level SLIs: redis-cache - 30m burn-rate'
@@ -237,10 +241,11 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: primary_server
+      stage: main
       tier: db
       type: redis-cache
     expr: |
-      sum by (environment,stage) (
+      sum by (environment) (
         rate(redis_commands_processed_total{type="redis-cache"}[30m]) and on (instance) redis_instance_info{role="master"}
       )
   - record: gitlab_component_apdex:success:rate_30m
@@ -340,10 +345,11 @@ groups:
   - record: gitlab_component_ops:rate_30m
     labels:
       component: secondary_servers
+      stage: main
       tier: db
       type: redis-cache
     expr: |
-      sum by (environment,stage) (
+      sum by (environment) (
         rate(redis_commands_processed_total{type="redis-cache"}[30m]) and on (instance) redis_instance_info{role="slave"}
       )
 - name: 'Component-Level SLIs: redis-cache - 1h burn-rate'
@@ -352,10 +358,11 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: primary_server
+      stage: main
       tier: db
       type: redis-cache
     expr: |
-      sum by (environment,stage) (
+      sum by (environment) (
         rate(redis_commands_processed_total{type="redis-cache"}[1h]) and on (instance) redis_instance_info{role="master"}
       )
   - record: gitlab_component_apdex:success:rate_1h
@@ -455,10 +462,11 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: secondary_servers
+      stage: main
       tier: db
       type: redis-cache
     expr: |
-      sum by (environment,stage) (
+      sum by (environment) (
         rate(redis_commands_processed_total{type="redis-cache"}[1h]) and on (instance) redis_instance_info{role="slave"}
       )
 - name: 'Component-Level SLIs: redis-cache - 6h burn-rate'
@@ -467,10 +475,11 @@ groups:
   - record: gitlab_component_ops:rate_6h
     labels:
       component: primary_server
+      stage: main
       tier: db
       type: redis-cache
     expr: |
-      sum by (environment,stage) (
+      sum by (environment) (
         rate(redis_commands_processed_total{type="redis-cache"}[6h]) and on (instance) redis_instance_info{role="master"}
       )
   - record: gitlab_component_apdex:success:rate_6h
@@ -570,10 +579,11 @@ groups:
   - record: gitlab_component_ops:rate_6h
     labels:
       component: secondary_servers
+      stage: main
       tier: db
       type: redis-cache
     expr: |
-      sum by (environment,stage) (
+      sum by (environment) (
         rate(redis_commands_processed_total{type="redis-cache"}[6h]) and on (instance) redis_instance_info{role="slave"}
       )
 - name: 'Component mapping: redis-cache'
