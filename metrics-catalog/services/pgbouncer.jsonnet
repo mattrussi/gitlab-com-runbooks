@@ -6,6 +6,8 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 metricsCatalog.serviceDefinition({
   type: 'pgbouncer',
   tier: 'db',
+  // pgbouncer doesn't have a `cny` stage
+  serviceIsStageless: true,
   serviceDependencies: {
     patroni: true,
   },

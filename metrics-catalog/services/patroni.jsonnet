@@ -7,6 +7,7 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 metricsCatalog.serviceDefinition({
   type: 'patroni',
   tier: 'db',
+  serviceIsStageless: true,
   monitoringThresholds: {
     apdexScore: 0.999,
     errorRatio: 0.999,
@@ -35,10 +36,6 @@ metricsCatalog.serviceDefinition({
         can be impacted by various conditions other than Patroni, including client pool saturation, pgbouncer saturation,
         Ruby thread contention and network conditions.
       |||,
-
-      staticLabels: {
-        stage: 'main',
-      },
 
       apdex: histogramApdex(
         histogram='gitlab_sql_duration_seconds_bucket',
@@ -70,10 +67,6 @@ metricsCatalog.serviceDefinition({
         Ruby thread contention and network conditions.
       |||,
 
-      staticLabels: {
-        stage: 'main',
-      },
-
       apdex: histogramApdex(
         histogram='gitlab_sql_primary_duration_seconds_bucket',
         selector={},
@@ -103,10 +96,6 @@ metricsCatalog.serviceDefinition({
         Durations can be impacted by various conditions other than Patroni, including client pool saturation, pgbouncer saturation,
         Ruby thread contention and network conditions.
       |||,
-
-      staticLabels: {
-        stage: 'main',
-      },
 
       apdex: histogramApdex(
         histogram='gitlab_sql_replica_duration_seconds_bucket',

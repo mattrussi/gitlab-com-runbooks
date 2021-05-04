@@ -11,7 +11,6 @@ basic.dashboard(
 )
 .addTemplate(templates.type)
 .addTemplate(templates.stage)
-.addTemplate(templates.sigma)
 .addPanels(
   keyMetrics.headlineMetricsRow(
     '$type',
@@ -29,8 +28,6 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanel(capacityPlanning.capacityPlanningRow('$type', '$stage'), gridPos={ x: 0, y: 6000 })
-
 + {
   links+: platformLinks.services + platformLinks.triage,
 }
