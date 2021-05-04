@@ -883,14 +883,6 @@ groups:
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      component: rails_sql
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
-      tier: db
-      type: patroni
-    expr: '1'
-  - record: gitlab_component_service:mapping
-    labels:
       component: transactions_primary
       regional_aggregation: 'no'
       service_aggregation: 'yes'
