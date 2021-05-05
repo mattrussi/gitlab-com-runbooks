@@ -93,7 +93,7 @@ local elasticsearchLogSearchDataLink = {
 };
 
 basic.dashboard(
-  'Queue Detail',
+  'Worker Detail',
   tags=['type:sidekiq', 'detail'],
 )
 .addTemplate(templates.stage)
@@ -121,7 +121,7 @@ basic.dashboard(
         default: attribute.default,
       },
       title=attribute.title,
-      panelTitle='Queue Attribute: ' + attribute.title,
+      panelTitle='Worker Attribute: ' + attribute.title,
       color=attribute.color,
       legendFormat='{{ %s }} ({{ worker }})' % [attribute.label],
       links=attribute.links
@@ -198,7 +198,7 @@ basic.dashboard(
     ),
   ], cols=8, rowHeight=4)
   +
-  [row.new(title='🌡 Queue Key Metrics') { gridPos: { x: 0, y: 100, w: 24, h: 1 } }]
+  [row.new(title='🌡 Worker Key Metrics') { gridPos: { x: 0, y: 100, w: 24, h: 1 } }]
   +
   layout.grid([
     basic.apdexTimeseries(
