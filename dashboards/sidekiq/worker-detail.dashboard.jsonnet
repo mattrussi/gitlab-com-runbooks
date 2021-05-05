@@ -24,6 +24,13 @@ local selector = {
   worker: { re: '$worker' },
 };
 
+local transactionSelector = {
+  environment: '$environment',
+  type: 'sidekiq',
+  stage: '$stage',
+  endpoint_id: { re: '$worker' },  //gitlab_transaction_* metrics have worker encoded in the endpoint_id label
+};
+
 local recordingRuleLatencyHistogramQuery(percentile, recordingRule, selector, aggregator) =
   |||
     histogram_quantile(%(percentile)g, sum by (%(aggregator)s, le) (
@@ -196,7 +203,7 @@ basic.dashboard(
       '{{ worker }}',
       unit='s',
     ),
-  ], cols=8, rowHeight=4)
+  ], cols=7, rowHeight=4)
   +
   [row.new(title='🌡 Worker Key Metrics') { gridPos: { x: 0, y: 100, w: 24, h: 1 } }]
   +
@@ -363,30 +370,30 @@ basic.dashboard(
           query: |||
             sum by (endpoint_id) (
               rate(
-                gitlab_transaction_db_count_total{%(selector)s}[$__interval]
+                gitlab_transaction_db_count_total{%(transactionSelector)s}[$__interval]
               )
             )
-          ||| % { selector: selectors.serializeHash(selector) },
+          ||| % { transactionSelector: selectors.serializeHash(transactionSelector) },
           legendFormat: '{{ endpoint_id }} - total',
         },
         {
           query: |||
             sum by (endpoint_id) (
               rate(
-                gitlab_transaction_db_primary_count_total{%(selector)s}[$__interval]
+                gitlab_transaction_db_primary_count_total{%(transactionSelector)s}[$__interval]
               )
             )
-          ||| % { selector: selectors.serializeHash(selector) },
+          ||| % { transactionSelector: selectors.serializeHash(transactionSelector) },
           legendFormat: '{{ endpoint_id }} - primary',
         },
         {
           query: |||
             sum by (endpoint_id) (
               rate(
-                gitlab_transaction_db_replica_count_total{%(selector)s}[$__interval]
+                gitlab_transaction_db_replica_count_total{%(transactionSelector)s}[$__interval]
               )
             )
-          ||| % { selector: selectors.serializeHash(selector) },
+          ||| % { transactionSelector: selectors.serializeHash(transactionSelector) },
           legendFormat: '{{ endpoint_id }} - replica',
         },
       ]
@@ -396,9 +403,9 @@ basic.dashboard(
       title='SQL Transactions Rate',
       query=|||
         sum by (endpoint_id) (
-          rate(gitlab_database_transaction_seconds_count{%(selector)s}[$__interval])
+          rate(gitlab_database_transaction_seconds_count{%(transactionSelector)s}[$__interval])
         )
-      ||| % { selector: selectors.serializeHash(selector) },
+      ||| % { transactionSelector: selectors.serializeHash(transactionSelector) },
       legendFormat='{{ endpoint_id }}',
     ),
     basic.multiTimeseries(
@@ -408,16 +415,16 @@ basic.dashboard(
       queries=[
         {
           query: |||
-            sum(rate(gitlab_database_transaction_seconds_sum{%(selector)s}[$__interval])) by (endpoint_id)
+            sum(rate(gitlab_database_transaction_seconds_sum{%(transactionSelector)s}[$__interval])) by (endpoint_id)
             /
-            sum(rate(gitlab_database_transaction_seconds_count{%(selector)s}[$__interval])) by (endpoint_id)
-          ||| % { selector: selectors.serializeHash(selector) },
+            sum(rate(gitlab_database_transaction_seconds_count{%(transactionSelector)s}[$__interval])) by (endpoint_id)
+          ||| % { transactionSelector: selectors.serializeHash(transactionSelector) },
           legendFormat: '{{ endpoint_id }} - p50',
         },
         {
           query: |||
-            histogram_quantile(0.95, sum(rate(gitlab_database_transaction_seconds_bucket{%(selector)s}[$__interval])) by (endpoint_id, le))
-          ||| % { selector: selectors.serializeHash(selector) },
+            histogram_quantile(0.95, sum(rate(gitlab_database_transaction_seconds_bucket{%(transactionSelector)s}[$__interval])) by (endpoint_id, le))
+          ||| % { transactionSelector: selectors.serializeHash(transactionSelector) },
           legendFormat: '{{ endpoint_id }} - p95',
         },
       ],
