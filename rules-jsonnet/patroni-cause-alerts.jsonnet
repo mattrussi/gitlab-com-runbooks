@@ -123,8 +123,9 @@ local rules = {
               max by (environment, type, stage, shard, application, endpoint, fqdn) (
                 pg_stat_activity_marginalia_sampler_max_tx_age_in_seconds{
                   type="patroni",
-                  command!~"[cC][rR][eE][aA][tT][eE]",
+                  command!="vacuum",
                   command!="autovacuum",
+                  command!~"[cC][rR][eE][aA][tT][eE]",
                   command!~"[aA][nN][aA][lL][yY][zZ][eE]",
                 }
               )
