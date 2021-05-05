@@ -27,4 +27,13 @@ local safeMap(fn, v) = if std.isArray(v) then std.map(fn, v) else [];
 
   findServices(filterFunc)::
     std.filter(filterFunc, serviceCatalog.services),
+
+  findKeyBusinessServices(includeZeroScore=false)::
+    std.filter(
+      function(service)
+        std.objectHas(service, 'business') &&
+        std.objectHas(service.business.SLA, 'overall_sla_weighting') &&
+        (if includeZeroScore then service.business.SLA.overall_sla_weighting >= 0 else service.business.SLA.overall_sla_weighting > 0),
+      serviceCatalog.services
+    ),
 }

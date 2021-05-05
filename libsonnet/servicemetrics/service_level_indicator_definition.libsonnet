@@ -10,7 +10,7 @@ local serviceLevelIndicatorDefaults = {
   featureCategory: stages.notOwned.key,
   team: null,
   description: '',
-  staticLabels: {},  // by default, no static labels
+  staticLabels+: {},  // by default, no static labels
   serviceAggregation: true,  // by default, requestRate is aggregated up to the service level
   ignoreTrafficCessation: false,  // Override to true to disable alerting when SLI is zero or absent
   upscaleLongerBurnRates: false,  // When true, long-term burn rates will be upscaled from shorter burn rates, to optimize for high cardinality metrics
@@ -29,9 +29,9 @@ local validateFeatureCategory(object, message) =
     std.assertEqual(true, { __assert: message });
 
 local validateAndApplySLIDefaults(sliName, component, inheritedDefaults) =
-  inheritedDefaults
-  +
   serviceLevelIndicatorDefaults
+  +
+  inheritedDefaults
   +
   // All components must have a requestRate measurement, since
   // we filter out low-RPS alerts for apdex monitoring and require the RPS for error ratios

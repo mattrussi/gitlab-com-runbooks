@@ -6,6 +6,7 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 metricsCatalog.serviceDefinition({
   type: 'redis-sidekiq',
   tier: 'db',
+  serviceIsStageless: true,  // redis-sidekiq does not have a cny stage
   monitoringThresholds: {
     apdexScore: 0.9999,
     errorRatio: 0.999,
@@ -24,11 +25,6 @@ metricsCatalog.serviceDefinition({
 
         Reviewing Sidekiq job logs may help the investigation.
       |||,
-
-      staticLabels: {
-        tier: 'db',
-        stage: 'main',
-      },
       significantLabels: ['type'],
 
       apdex: histogramApdex(

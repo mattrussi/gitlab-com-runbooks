@@ -6,6 +6,8 @@ local rateMetric = metricsCatalog.rateMetric;
 metricsCatalog.serviceDefinition({
   type: 'plantuml',
   tier: 'sv',
+  // plantuml doesn't have a `cny` stage
+  serviceIsStageless: true,
   monitoringThresholds: {
     errorRatio: 0.999,
   },

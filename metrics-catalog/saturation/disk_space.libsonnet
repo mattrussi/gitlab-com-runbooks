@@ -1,12 +1,13 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
+local kubeSaturationHelpers = import 'helpers/kube_saturation_helpers.libsonnet';
 
 {
   disk_space: resourceSaturationPoint({
     title: 'Disk Space Utilization per Device per Node',
     severity: 's2',
     horizontallyScalable: true,
-    appliesTo: { allExcept: ['nat', 'waf', 'bastion'], default: 'gitaly' },
+    appliesTo: { allExcept: ['nat', 'waf', 'bastion'] + kubeSaturationHelpers.kubeOnlyServices, default: 'gitaly' },
     description: |||
       Disk space utilization per device per node.
     |||,

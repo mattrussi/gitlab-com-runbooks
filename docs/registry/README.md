@@ -20,11 +20,11 @@
 * [../cloudflare/managing-traffic.md](../cloudflare/managing-traffic.md)
 * [../frontend/ban-netblocks-on-haproxy.md](../frontend/ban-netblocks-on-haproxy.md)
 * [../frontend/haproxy.md](../frontend/haproxy.md)
+* [../kube/k8s-operations.md](../kube/k8s-operations.md)
+* [../kube/kubernetes.md](../kube/kubernetes.md)
 * [../onboarding/gitlab.com_on_k8s.md](../onboarding/gitlab.com_on_k8s.md)
 * [gitlab-registry.md](gitlab-registry.md)
 * [../uncategorized/delete-projects-manually.md](../uncategorized/delete-projects-manually.md)
-* [../uncategorized/k8s-operations.md](../uncategorized/k8s-operations.md)
-* [../uncategorized/kubernetes.md](../uncategorized/kubernetes.md)
 * [../uncategorized/tweeting-guidelines.md](../uncategorized/tweeting-guidelines.md)
 * [../vault/vault.md](../vault/vault.md)
 <!-- END_MARKER -->

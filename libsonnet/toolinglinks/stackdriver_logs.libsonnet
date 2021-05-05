@@ -7,39 +7,67 @@ local serializeQueryHashValue(value) =
   else
     value;
 
-
-local serializeQueryHashItem(key, op, value) =
-  '%(key)s%(op)s%(value)s' % {
+local serializeQueryHashItemUnwrapped(key, op, value, prefix='') =
+  '%(prefix)s%(key)s%(op)s%(value)s' % {
     key: key,
     op: op,
-    value: value,
+    value: serializeQueryHashValue(value),
+    prefix: prefix,
   };
 
+local serializeQueryHashItem(key, op, value, prefix='') =
+  if std.isArray(value) then
+    std.map(function(item) serializeQueryHashItemUnwrapped(key, op, item, prefix), value)
+  else
+    [serializeQueryHashItemUnwrapped(key, op, value, prefix)];
+
+local serializeOneOf(key, values) =
+  local serializedValues = std.map(serializeQueryHashValue, values);
+  local joinedValues = std.join(' OR ', serializedValues);
+  [
+    '%(key)s=(%(joinedValues)s)' % {
+      key: key,
+      joinedValues: joinedValues,
+    },
+  ];
 
 local serializeQueryHashPair(key, value) =
   if value == null then
-    null
+    []
   else if !std.isObject(value) then
-    serializeQueryHashItem(key, '=', serializeQueryHashValue(value))
+    serializeQueryHashItem(key, '=', value)
   else if std.objectHas(value, 'ne') then
-    '-' + serializeQueryHashItem(key, '=', serializeQueryHashValue(value.ne))
+    serializeQueryHashItem(key, '=', value.ne, prefix='-')
   else if std.objectHas(value, 'gt') then
-    serializeQueryHashItem(key, '>', serializeQueryHashValue(value.gt))
+    serializeQueryHashItem(key, '>', value.gt)
   else if std.objectHas(value, 'gte') then
-    serializeQueryHashItem(key, '>=', serializeQueryHashValue(value.gte))
+    serializeQueryHashItem(key, '>=', value.gte)
   else if std.objectHas(value, 'lt') then
-    serializeQueryHashItem(key, '<', serializeQueryHashValue(value.lt))
+    serializeQueryHashItem(key, '<', value.lt)
   else if std.objectHas(value, 'lte') then
-    serializeQueryHashItem(key, '<=', serializeQueryHashValue(value.lte))
+    serializeQueryHashItem(key, '<=', value.lte)
+  else if std.objectHas(value, 'one_of') then
+    serializeOneOf(key, value.one_of)
   else
     std.assertEqual(value, { __message__: 'unknown operator' });
 
 // https://cloud.google.com/logging/docs/view/advanced-queries
 local serializeQueryHash(hash) =
-  local lines = std.map(function(key) serializeQueryHashPair(key, hash[key]), std.objectFields(hash));
-  local linesFiltered = std.filter(function(f) f != null, lines);
-  std.join('\n', linesFiltered);
-
+  local keys = std.objectFields(hash);
+  local lines = std.flatMap(
+    function(key)
+      local value = hash[key];
+      if std.isArray(value) then
+        std.flatMap(
+          function(item)
+            serializeQueryHashPair(key, item),
+          value
+        )
+      else
+        serializeQueryHashPair(key, value),
+    keys
+  );
+  std.join('\n', lines);
 
 local stackdriverLogsEntry(
   title,

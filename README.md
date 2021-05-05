@@ -349,7 +349,7 @@ Selected logging documents and resources:
 * [Manage DNS entries](docs/uncategorized/manage-dns-entries.md)
 * [Setup and Use my Yubikey](docs/uncategorized/yubikey.md)
 * [Purge Git data](docs/git/purge-git-data.md)
-* [Getting Started with Kubernetes and GitLab.com](docs/uncategorized/k8s-gitlab.md)
+* [Getting Started with Kubernetes and GitLab.com](docs/kube/k8s-gitlab.md)
 * [Using Chatops bot to run commands across the fleet](docs/uncategorized/deploycmd.md)
 
 ### Gitter

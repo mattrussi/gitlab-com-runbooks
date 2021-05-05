@@ -9,7 +9,7 @@ local heatmapPanel = grafana.heatmapPanel;
 local row = grafana.row;
 local text = grafana.text;
 
-serviceDashboard.overview('plantuml', 'sv')
+serviceDashboard.overview('plantuml')
 .addPanel(
   row.new(title='Stackdriver Logs'),
   gridPos={

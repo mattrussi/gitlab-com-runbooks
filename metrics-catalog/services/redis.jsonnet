@@ -6,6 +6,7 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 metricsCatalog.serviceDefinition({
   type: 'redis',
   tier: 'db',
+  serviceIsStageless: true,  // redis does not have a cny stage
   monitoringThresholds: {
     apdexScore: 0.9999,
     errorRatio: 0.999,
@@ -18,11 +19,6 @@ metricsCatalog.serviceDefinition({
       description: |||
         Aggregation of all Redis operations issued from the Rails codebase.
       |||,
-
-      staticLabels: {
-        tier: 'db',
-        stage: 'main',
-      },
       significantLabels: ['type'],
 
       apdex: histogramApdex(

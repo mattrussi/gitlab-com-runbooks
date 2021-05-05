@@ -126,6 +126,9 @@ teams:
   slack_alerts_channel: data-prom-alerts
   oncall_schedule: https://about.gitlab.com/handbook/business-ops/data-team/how-we-work/duties/
 
+- name: delivery
+  slack_alerts_channel: g_delivery
+
 - name: scalability
   slack_alerts_channel: g_scalability
 
@@ -632,6 +635,44 @@ services:
       grafana_folder:
       primary_grafana_dashboard: https://dashboards.gitlab.net/d/bd2Kl9Imk/host-stats?orgId=1&refresh=1m&var-environment=ops&var-node=forum.gitlab.com
       sentry_slug:
+
+- name: kube
+  tier: inf
+  friendly_name: Kubernetes
+  infra_owner: delivery
+  label: Service:Kubernetes
+  technical:
+    project:
+      - https://gitlab.com/gitlab-com/gitlab-com-infrastructure
+      - https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/common
+      - https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com
+      - https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/
+      - https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments
+    slx:
+    documents:
+      design:
+      architecture:
+      readiness_review:
+      service:
+      security:
+    logging:
+      - name: Stackdriver
+        permalink: https://cloudlogging.app.goo.gl/81mKjkvq3BfTUwRN9
+  infrastructure:
+    provider: gcp
+    architecture:
+    provisioning: terraform
+    accesses:
+  operations:
+    maintenance:
+    runbooks:
+      - https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/kube/
+    playbooks:
+    error_budget:
+  observability:
+    monitors:
+      grafana_folder: kube
+      primary_grafana_dashboard: "kube-main/kube-overview"
 
 - name: logging
   tier: inf
@@ -1961,7 +2002,7 @@ services:
       response_time:
   technical:
     project:
-      - https://github.com/prometheus/prometheus
+      - https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments
     slx:
     documents:
       design:
@@ -1995,7 +2036,7 @@ services:
   infrastructure:
     provider: gcp
     architecture:
-    provisioning: terraform
+    provisioning: tanka
     accesses:
       - account_name:
         access_type:
