@@ -51,6 +51,7 @@
 * [../monitoring/alerts_manual.md](../monitoring/alerts_manual.md)
 * [../monitoring/apdex-alerts-guide.md](../monitoring/apdex-alerts-guide.md)
 * [../nfs/recovering-from-nfs-disaster.md](../nfs/recovering-from-nfs-disaster.md)
+* [../onboarding/gitlab.com_on_k8s.md](../onboarding/gitlab.com_on_k8s.md)
 * [../patroni/geo-patroni-cluster.md](../patroni/geo-patroni-cluster.md)
 * [../patroni/patroni-management.md](../patroni/patroni-management.md)
 * [../patroni/pg_repack.md](../patroni/pg_repack.md)

@@ -22,6 +22,7 @@
 * [../frontend/haproxy.md](../frontend/haproxy.md)
 * [../kube/k8s-operations.md](../kube/k8s-operations.md)
 * [../kube/kubernetes.md](../kube/kubernetes.md)
+* [../onboarding/gitlab.com_on_k8s.md](../onboarding/gitlab.com_on_k8s.md)
 * [gitlab-registry.md](gitlab-registry.md)
 * [../uncategorized/delete-projects-manually.md](../uncategorized/delete-projects-manually.md)
 * [../uncategorized/tweeting-guidelines.md](../uncategorized/tweeting-guidelines.md)

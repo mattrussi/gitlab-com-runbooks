@@ -16,6 +16,7 @@
 ## Troubleshooting Pointers
 
 * [../frontend/haproxy.md](../frontend/haproxy.md)
+* [../onboarding/gitlab.com_on_k8s.md](../onboarding/gitlab.com_on_k8s.md)
 * [../uncategorized/manage-workers.md](../uncategorized/manage-workers.md)
 <!-- END_MARKER -->
 
