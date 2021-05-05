@@ -119,6 +119,7 @@
     feature_categories: [
       'continuous_integration',
       'merge_trains',
+      'continuous_integration_scaling',
     ],
   },
   pipeline_authoring: {
@@ -176,6 +177,7 @@
       'dynamic_application_security_testing',
       'interactive_application_security_testing',
       'attack_emulation',
+      'fuzz_testing',
     ],
   },
   composition_analysis: {
@@ -184,13 +186,6 @@
     feature_categories: [
       'dependency_scanning',
       'license_compliance',
-    ],
-  },
-  fuzz_testing: {
-    name: 'Fuzz Testing',
-    stage: 'secure',
-    feature_categories: [
-      'fuzz_testing',
     ],
   },
   threat_insights: {
@@ -283,7 +278,7 @@
     name: 'Activation',
     stage: 'growth',
     feature_categories: [
-      'experimentation',
+      'experimentation_activation',
       'onboarding',
     ],
   },
@@ -291,21 +286,21 @@
     name: 'Conversion',
     stage: 'growth',
     feature_categories: [
-
+      'experimentation_conversion',
     ],
   },
   expansion: {
     name: 'Expansion',
     stage: 'growth',
     feature_categories: [
-
+      'experimentation_expansion',
     ],
   },
   adoption: {
     name: 'Adoption',
     stage: 'growth',
     feature_categories: [
-
+      'experimentation_adoption',
     ],
   },
   product_intelligence: {

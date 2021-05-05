@@ -162,6 +162,12 @@ groups:
     expr: '1'
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: continuous_integration_scaling
+      product_stage: verify
+      stage_group: continuous_integration
+    expr: '1'
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: database
       product_stage: enablement
       stage_group: database
@@ -234,9 +240,27 @@ groups:
     expr: '1'
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: experimentation
+      feature_category: experimentation_activation
       product_stage: growth
       stage_group: activation
+    expr: '1'
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: experimentation_adoption
+      product_stage: growth
+      stage_group: adoption
+    expr: '1'
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: experimentation_conversion
+      product_stage: growth
+      stage_group: conversion
+    expr: '1'
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: experimentation_expansion
+      product_stage: growth
+      stage_group: expansion
     expr: '1'
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -260,7 +284,7 @@ groups:
     labels:
       feature_category: fuzz_testing
       product_stage: secure
-      stage_group: fuzz_testing
+      stage_group: dynamic_analysis
     expr: '1'
   - record: gitlab:feature_category:stage_group:mapping
     labels:
