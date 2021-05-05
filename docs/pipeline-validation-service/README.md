@@ -24,6 +24,19 @@ The service supports a read-only mode (enabled by setting the `PIPELINE_VALIDATI
 2. Overly permissive rule - in the case where an overly permissive rule is deployed abusive jobs would no longer be blocked in the same way. The rollout of changes will need to be monitored closely by the engineering teams in order to ensure rule changes are having the expected results.
 3. Overly restrictive rule - in the case where an overly restrictive rule is deployed legitimate jobs would start to be blocked. This would be observed by an increase in the rate of pipeline validation failures. If this type of failure is observed, the first course of action would be to rollback the most recent rule change.
 
+### Rollout / Rollback
+
+#### Rollout
+
+Rollout is done by triggering manual CI jobs associated with the desired rollout percentage
+
+![Screen_Shot_2021-05-05_at_3.55.10_PM](https://gitlab.com/gitlab-com/gl-security/security-operations/trust-and-safety/pipeline-validation-service/uploads/2b712e971e2a27082446fe380082729b/Screen_Shot_2021-05-05_at_3.55.10_PM.png)
+
+#### Rollback
+
+Rollbacks are executed by running a manual pipeline with the `ROLLBACK_REVISION` pipeline variable set to the desired rollback revision.
+
+A manual pipeline can be run from: [https://gitlab.com/gitlab-com/gl-security/security-operations/trust-and-safety/pipeline-validation-service/-/pipelines/new](). 
 
 ## Alerts
  
@@ -43,7 +56,7 @@ Below is a list of useful attributes emitted to the logs:
 * `status_code` status code returned to as part of the request (200, 406, or 500)
 * `user_id` id of the user who created the pipeline
 * `validation_status` pass or fail
-
+* `validation_input` the full CI script input that triggered a validation failure
 
 An example of logging that happens per request on the `/validate` endpoint:
 
@@ -63,11 +76,11 @@ A basic metrics dashboard exits at https://dashboards.gitlab.net/d/pvs-main/pvs-
 TODO: Explain the *key* metrics available (with links to https://thanos.gitlab.net/graph.); we can assume general familiarity with the golang built in ones, and *roughly* what the http metrics are, but need to point out which labels are meaningful
 TODO: Links to dashboards (we'll have to create those first, and we might need some actual real-life data from at least staging to makethose look useful)
 
-## Rules fetching
+## Rules
 
-For the initial version of the service there will only be a two simple rules implemented which are controlled by setting the read-only mode feature flag on the service to enable or disable.
+For the initial version of the service a static set of rules are defined in the rules.yml file https://gitlab.com/gitlab-com/gl-security/security-operations/trust-and-safety/pipeline-validation-service/-/blob/master/rules/rules.yaml. These rules can be on a granular level to active or passive mode. 
 
-The next iteration (implemented in https://gitlab.com/gitlab-com/gl-security/security-operations/trust-and-safety/pipeline-validation-service/-/merge_requests/31) will support granular control over the state of each rule. The rules are stored in a separate repository, which will be checked on a regular basis for new rules. When new or changed rules are found, they are loaded into the service and the configuration is updated.
+**NOTE: NOT CURRENTLY IMPLEMENTED** The next iteration (implemented in https://gitlab.com/gitlab-com/gl-security/security-operations/trust-and-safety/pipeline-validation-service/-/merge_requests/31) will support granular control over the state of each rule. The rules are stored in a separate repository, which will be checked on a regular basis for new rules. When new or changed rules are found, they are loaded into the service and the configuration is updated.
 
 ## Control
 
