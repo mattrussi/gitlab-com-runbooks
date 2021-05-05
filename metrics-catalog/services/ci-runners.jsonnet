@@ -12,12 +12,12 @@ metricsCatalog.serviceDefinition({
   },
   monitoringThresholds: {
     apdexScore: 0.97,
-    errorRatio: 0.995,  // 99.5% of ci-runner requests should succeed, over multiple window periods
+    errorRatio: 0.999,
   },
   otherThresholds: {
     mtbf: {
       apdexScore: 0.985,
-      errorRatio: 0.995,
+      errorRatio: 0.9999,
     },
   },
   serviceDependencies: {
@@ -29,32 +29,40 @@ metricsCatalog.serviceDefinition({
       featureCategory: 'runner',
       team: 'sre_coreinfra',
       description: |||
-        This SLI monitors job polling operations from runners, via the workhorse HTTP interface.
-        5xx responses are considered to be failures.
+        This SLI monitors job polling operations from runners, via
+        Workhorse's `/api/v4/jobs/request` route.
+
+        5xx responses are considered to be errors, and could indicate postgres timeouts (after 15s) on the main query
+        used in assigning jobs to runners.
       |||,
+
+      local baseSelector = {
+        route: '^/api/v4/jobs/request\\\\z',
+      },
 
       requestRate: rateMetric(
         counter='gitlab_workhorse_http_requests_total',
-        // Note, using `|||` avoids having to double-escape the backslashes in the selector query
-        selector=|||
-          route="^/api/v4/jobs/request\\z"
-        |||,
+        selector=baseSelector,
       ),
 
       errorRate: rateMetric(
         counter='gitlab_workhorse_http_requests_total',
-        selector=|||
-          code=~"5..", route="^/api/v4/jobs/request\\z"
-        |||,
+        selector=baseSelector { code: { re: '5..' } },
       ),
 
-      significantLabels: [],
+      significantLabels: ['code'],
 
       toolingLinks: [
         toolingLinks.kibana(
           title='Workhorse',
           index='workhorse',
           matches={ 'json.uri.keyword': '/api/v4/jobs/request' }
+        ),
+        toolingLinks.kibana(
+          title='Postgres Slowlog',
+          index='postgres',
+          matches={ 'json.endpoint_id.keyword': 'POST /api/:version/jobs/request' },
+          includeMatchersForPrometheusSelector=false
         ),
       ],
     },
@@ -65,7 +73,9 @@ metricsCatalog.serviceDefinition({
       team: 'sre_coreinfra',
       description: |||
         This SLI monitors the shared runner queues on GitLab.com. Each job is an operation.
+
         Apdex uses queueing latencies for jobs which are considered to be fair-usage (less than 5 concurrently running jobs).
+
         Jobs marked as failing with runner system failures are considered to be in error.
       |||,
 

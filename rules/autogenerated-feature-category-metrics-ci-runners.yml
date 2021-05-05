@@ -22,7 +22,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_workhorse_http_requests_total{code=~"5..", route="^/api/v4/jobs/request\\z"}[5m])
+          rate(gitlab_workhorse_http_requests_total{code=~"5..",route="^/api/v4/jobs/request\\z"}[5m])
         )
       )
       or
@@ -128,7 +128,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_workhorse_http_requests_total{code=~"5..", route="^/api/v4/jobs/request\\z"}[30m])
+          rate(gitlab_workhorse_http_requests_total{code=~"5..",route="^/api/v4/jobs/request\\z"}[30m])
         )
       )
       or
@@ -234,7 +234,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_workhorse_http_requests_total{code=~"5..", route="^/api/v4/jobs/request\\z"}[1h])
+          rate(gitlab_workhorse_http_requests_total{code=~"5..",route="^/api/v4/jobs/request\\z"}[1h])
         )
       )
       or
@@ -340,7 +340,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_workhorse_http_requests_total{code=~"5..", route="^/api/v4/jobs/request\\z"}[6h])
+          rate(gitlab_workhorse_http_requests_total{code=~"5..",route="^/api/v4/jobs/request\\z"}[6h])
         )
       )
       or
