@@ -2002,7 +2002,7 @@ services:
       response_time:
   technical:
     project:
-      - https://github.com/prometheus/prometheus
+      - https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments
     slx:
     documents:
       design:
@@ -2036,7 +2036,7 @@ services:
   infrastructure:
     provider: gcp
     architecture:
-    provisioning: terraform
+    provisioning: tanka
     accesses:
       - account_name:
         access_type:
