@@ -40,7 +40,7 @@ A manual pipeline can be run from: [https://gitlab.com/gitlab-com/gl-security/se
 
 ## Alerts
  
-TODO: once we have the requisite metrics (from the readiness review), and alerting, we need to note the key alerts and key actions to take in various scenarios; closely related to Failure modes (actions are likely to be similar), but we're focusing on somewhat more prescriptive responses like 'Got Alert X, investigate Y, perform action Z if conditions A and B hold' .  Or, more wordy descriptions of criteria involved in making appropriate decisions.  We need at least one for each specific alert that can fire.
+Currently there are no alerts in place for this service. Once we are able to establish metrics for baseline activity we intend to setup alerts around the rate at which pipelines are being blocked and alert when that metric goes out of range. We may also uncover better metrics for alerting as we use the service more.
 
 ## Logging
 
@@ -71,10 +71,9 @@ An example of logging that happens per request on the `/validate` endpoint:
 
 ## Metrics 
 
-A basic metrics dashboard exits at https://dashboards.gitlab.net/d/pvs-main/pvs-overview
+A basic metrics dashboard exists at https://dashboards.gitlab.net/d/pvs-main/pvs-overview
 
-TODO: Explain the *key* metrics available (with links to https://thanos.gitlab.net/graph.); we can assume general familiarity with the golang built in ones, and *roughly* what the http metrics are, but need to point out which labels are meaningful
-TODO: Links to dashboards (we'll have to create those first, and we might need some actual real-life data from at least staging to makethose look useful)
+The primary observability metrics available today are Apdex, Error Rate, and RPS. These metrics can be used to observe any instability or unexpected change in the service utilization.
 
 ## Rules
 
