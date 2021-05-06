@@ -36,17 +36,24 @@ Rollout is done by triggering manual CI jobs associated with the desired rollout
 
 Rollbacks are executed by running a manual pipeline with the `ROLLBACK_REVISION` pipeline variable set to the desired rollback revision.
 
-A manual pipeline can be run from: [https://gitlab.com/gitlab-com/gl-security/security-operations/trust-and-safety/pipeline-validation-service/-/pipelines/new](). 
+A manual pipeline can be run from: [https://gitlab.com/gitlab-com/gl-security/security-operations/trust-and-safety/pipeline-validation-service/-/pipelines/new]().
 
 ## Alerts
- 
+
 Currently there are no alerts in place for this service. Once we are able to establish metrics for baseline activity we intend to setup alerts around the rate at which pipelines are being blocked and alert when that metric goes out of range. We may also uncover better metrics for alerting as we use the service more.
 
 ## Logging
 
-Logs are ingested into Elasticsearch and can be searched via the [pubsub-pvs-inf-gprd*](https://log.gprd.gitlab.net/app/management/kibana/indexPatterns/patterns/4858f3a0-a312-11eb-966b-2361593353f9#/?_a=h@9293420) index.
+Logs are ingested into Elasticsearch and can be searched via the [pubsub-pvs-inf-gprd\*](https://log.gprd.gitlab.net/app/management/kibana/indexPatterns/patterns/4858f3a0-a312-11eb-966b-2361593353f9#/?_a=h@9293420) index.
 
-Below is a list of useful attributes emitted to the logs:
+The logs can be observed from both sides:
+* PVS (logs from the service itself): https://log.gprd.gitlab.net/goto/0fa08b4c0506cdee202d4b58736c7330 
+* GitLab (logging the rejection): https://log.gprd.gitlab.net/goto/764d373889cb1d9f6fd6f7f93856198c
+   * There is some duplication/repeat logging here, so raw counts may be misleading
+
+The PVS logs are likely more immediately useful as they show *why* the job was rejected, but it may be helpful to correlate with what GitLab saw.
+
+Useful attributes emitted to the PVS logs:
 
 * `correlation_id`
 * `mode` active or passive
@@ -69,7 +76,7 @@ An example of logging that happens per request on the `/validate` endpoint:
 {"content_type":"text/plain; charset=utf-8","correlation_id":"123","duration_ms":0,"host":"127.0.0.1:8080","level":"info","method":"POST","msg":"access","proto":"HTTP/1.1","referrer":"","remote_addr":"127.0.0.1:65204","remote_ip":"127.0.0.1","status":406,"system":"http","time":"2021-04-22T09:28:15+02:00","ttfb_ms":0,"uri":"/validate?token=[FILTERED]","user_agent":"HTTPie/2.4.0","written_bytes":15}
 ```
 
-## Metrics 
+## Metrics
 
 A basic metrics dashboard exists at https://dashboards.gitlab.net/d/pvs-main/pvs-overview
 
@@ -77,12 +84,39 @@ The primary observability metrics available today are Apdex, Error Rate, and RPS
 
 ## Rules
 
-For the initial version of the service a static set of rules are defined in the rules.yml file https://gitlab.com/gitlab-com/gl-security/security-operations/trust-and-safety/pipeline-validation-service/-/blob/master/rules/rules.yaml. These rules can be on a granular level to active or passive mode. 
+For the initial version of the service a static set of rules are defined in the [rules.yml](https://gitlab.com/gitlab-com/gl-security/security-operations/trust-and-safety/pipeline-validation-service/-/blob/master/rules/rules.yaml). These rules can be on a granular level to active or passive mode.
 
 **NOTE: NOT CURRENTLY IMPLEMENTED** The next iteration (implemented in https://gitlab.com/gitlab-com/gl-security/security-operations/trust-and-safety/pipeline-validation-service/-/merge_requests/31) will support granular control over the state of each rule. The rules are stored in a separate repository, which will be checked on a regular basis for new rules. When new or changed rules are found, they are loaded into the service and the configuration is updated.
 
 ## Control
 
-TODO: The feature flag and how to disable the use of the service in a hurry
+### Emergency Disabling
+
+In the event that this service is causing too many false positives (or some other large problem) and it needs to be disabled quickly, there are two methods:
+1. Feature Flag: Disable the `ci_external_validation_service` flag; using chatops in #production in Slack:
+  * `/chatops run feature set ci_external_validation_service false`.
+  * However, the feature flag may be removed in future, so if this returns an error about the flag not existing, use the next method instead
+1. Remove the configured URL: Using an admin-level Private Access Token in $TOKEN:
+  * ```curl --request PUT --header "PRIVATE-TOKEN: $TOKEN" "http://gitlab.com/api/v4/application/settings?external_pipeline_validation_service_url="```
+  * A UI may be provided in future.
+
+### Readonly vs Active
+
 TODO: Who is responsible for read-only vs active mode in the service (T&S) and how to get that changed if necessary
-TODO: The env vars for the URL, Token, and Timeout, Git rules repository name, branch, private and deploy tokens; @cmiskell to add this when details are finalized. 
+
+### GitLab Configuration
+
+This feature is configured in GitLab using either environment variables or application settings, with the latter taking precedence.  In practice, we use application settings because they live in the database and are modifiable live with API calls (and perhaps a Web UI in future), without having to do full deployments/restarts across the fleet.
+
+The settings are:
+* external_pipeline_validation_service_url
+* external_pipeline_validation_service_token
+* external_pipeline_validation_service_timeout
+
+The presence of a configured URL is (in addition to the feature flag which may be removed) sufficient for GitLab to start making the checks; therefore when (re-)enabling, ensure you have set the token (and probably timeout) first before setting the URL.
+
+To set these options, obtain an admin-level Personal Access Token and run something like ```curl --request PUT --header "PRIVATE-TOKEN: $TOKEN" "http://gitlab.com/api/v4/application/settings?external_pipeline_validation_service_url=$VALUE"``` (the setting name varies in the obvious manner).
+
+The token is optional; if provided it is passed to the external service in a header (`X-Gitlab-Token`), the alternative being a query parameter embedded in the URL.  We use the token/header functionality for the GitLab implementation of PVS so that it is unlikely to logged in any normal scenarios.
+
+The values for the URL and Token are saved in 1Password, in the Engineering Vault in an item called `Pipeline Authorization Configuration`
