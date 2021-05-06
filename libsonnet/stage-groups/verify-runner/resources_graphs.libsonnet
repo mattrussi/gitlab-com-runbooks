@@ -35,9 +35,9 @@ local fdsUsage =
     fill=0,
     stack=false,
     query=|||
-      process_open_fds{instance=~"${runner_manager:pipe}"}
+      process_open_fds{instance=~"${runner_manager:pipe}",job="runners-manager"}
       /
-      process_max_fds{instance=~"${runner_manager:pipe}"}
+      process_max_fds{instance=~"${runner_manager:pipe}",job="runners-manager"}
     |||,
   );
 
