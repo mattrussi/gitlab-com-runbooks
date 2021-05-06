@@ -10,16 +10,15 @@ groups:
     annotations:
       title: Sidekiq jobs are being enqueued without being dequeued
       description: |
-        The `{{ $labels.queue }}` queue appears to have jobs being enqueued without those jobs being executed.
+        The `{{ $labels.worker}}` worker in the {{ $labels.queue }} queue appears to have jobs being enqueued without those jobs being executed.
 
-        This could be the result of a Sidekiq server configuration issue, where no Sidekiq servers are configured to dequeue the specific queue.
-      grafana_dashboard_id: sidekiq-queue-detail/sidekiq-queue-detail
+        This could be the result of a Sidekiq server configuration issue, where no Sidekiq servers are configured to dequeue the specific worker.
+      grafana_dashboard_id: sidekiq-worker-detail/sidekiq-worker-detail
       grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/sidekiq-queue-detail/sidekiq-queue-detail?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}&var-queue={{ $labels.queue }}
+        https://dashboards.gitlab.net/d/sidekiq-worker-detail/sidekiq-worker-detail?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}&var-worker={{ $labels.worker }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '922970012'
-      grafana_variables: environment,stage,queue
+      grafana_variables: environment,stage,worker
       promql_template_1: >-
         sidekiq_enqueued_jobs_total{environment="$environment", type="$type", stage="$stage", component="$component"}
       runbook: docs/sidekiq/README.md
@@ -32,13 +31,13 @@ groups:
       type: sidekiq
     expr: |
       (
-        sum by (environment, queue, feature_category) (
+        sum by (environment, queue, feature_category, worker) (
           gitlab_background_jobs:queue:ops:rate_1h{urgency="throttled"}
         ) > 0
       )
       unless
       (
-        sum by (environment, queue, feature_category) (
+        sum by (environment, queue, feature_category, worker) (
           gitlab_background_jobs:execution:ops:rate_1h{urgency="throttled"}
         ) > 0
       )
@@ -67,3 +66,29 @@ groups:
       (sum by(environment, queue) (gitlab_background_jobs:queue:ops:rate_6h) > 0.001)
       unless
       (sum by(environment, queue) (gitlab_background_jobs:execution:ops:rate_6h)  > 0)
+  - alert: SidekiqWorkerNoLongerBeingProcessed
+    for: 20m
+    annotations:
+      title: A Sidekiq worker is no longer being processed.
+      description: Sidekiq worker {{ $labels.worker }} in shard {{ $labels.shard }} is no longer being
+        processed.
+      grafana_dashboard_id: sidekiq-worker-detail/sidekiq-worker-detail
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/sidekiq-worker-detail/sidekiq-worker-detail?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}&var-worker={{ $labels.worker }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '3168042924'
+      grafana_variables: environment,stage,worker
+      promql_template_1: gitlab_background_jobs:execution:ops:rate_6h{environment="$environment", worker="$worker"}
+      runbook: docs/sidekiq/sidekiq-queue-not-being-processed.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s3
+      stage: main
+      tier: sv
+      type: sidekiq
+    expr: |
+      (sum by(environment, worker) (gitlab_background_jobs:queue:ops:rate_6h) > 0.001)
+      unless
+      (sum by(environment, worker) (gitlab_background_jobs:execution:ops:rate_6h)  > 0)

@@ -24,12 +24,12 @@ local sidekiqSLOAlert(alertname, expr, grafanaPanelStableId, metricName, alertDe
       slo_alert: 'yes',
     },
     annotations: {
-      title: 'The `{{ $labels.queue }}` queue, `{{ $labels.stage }}` stage, has %s' % [alertDescription],
+      title: 'The `{{ $labels.worker }}` worker, `{{ $labels.stage }}` stage, has %s' % [alertDescription],
       description: 'Currently the %s is {{ $value | humanizePercentage }}.' % [metricDescription],
       runbook: 'docs/sidekiq/README.md',
-      grafana_dashboard_id: 'sidekiq-queue-detail/sidekiq-queue-detail',
+      grafana_dashboard_id: 'sidekiq-worker-detail/sidekiq-worker-detail',
       grafana_panel_id: stableIds.hashStableId(grafanaPanelStableId),
-      grafana_variables: 'environment,stage,queue',
+      grafana_variables: 'environment,stage,worker',
       grafana_min_zoom_hours: '6',
       promql_template_1: '%s{environment="$environment", type="$type", stage="$stage", component="$component"}' % [metricName],
     },
@@ -126,7 +126,7 @@ local generateAlerts() =
       metricDescription='apdex score',
     ),
     {
-      alert: 'ignored_sidekiq_queues_receiving_work',
+      alert: 'ignored_sidekiq_workers_receiving_work',
       expr: |||
         sum by (environment, queue, feature_category) (gitlab_background_jobs:queue:ops:rate_5m{environment="gprd", queue=~"%s"}) > 0
       ||| % [std.join('|', IGNORED_GPRD_QUEUES)],
@@ -165,7 +165,6 @@ local generateAlerts() =
         |||,
         runbook: 'docs/sidekiq/README.md',
         grafana_dashboard_id: 'sidekiq-queue-detail/sidekiq-queue-detail',
-        grafana_panel_id: stableIds.hashStableId('queue-length'),
         grafana_variables: 'environment,stage,queue',
         grafana_min_zoom_hours: '6',
         promql_template_1: 'sidekiq_enqueued_jobs_total{environment="$environment", queue="$queue"}',
