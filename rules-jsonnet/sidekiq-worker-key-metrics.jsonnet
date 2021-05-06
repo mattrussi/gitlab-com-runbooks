@@ -1,5 +1,4 @@
 local aggregationSets = import './aggregation-sets.libsonnet';
-local IGNORED_GPRD_QUEUES = import './temp-ignored-gprd-queue-list.libsonnet';
 local alerts = import 'alerts/alerts.libsonnet';
 local multiburnExpression = import 'mwmbr/expression.libsonnet';
 local multiburnFactors = import 'mwmbr/multiburn_factors.libsonnet';
@@ -86,51 +85,6 @@ local generateAlerts() =
       alertDescription='a queue latency outside of SLO',
       metricDescription='apdex score',
     ),
-    {
-      alert: 'ignored_sidekiq_workers_receiving_work',
-      expr: |||
-        sum by (environment, queue, feature_category) (gitlab_background_jobs:queue:ops:rate_5m{environment="gprd", queue=~"%s"}) > 0
-      ||| % [std.join('|', IGNORED_GPRD_QUEUES)],
-      'for': '2m',
-      labels: {
-        type: 'sidekiq',  // Hardcoded because `sidekiq_enqueued_jobs_total` `type` label depends on the sidekiq client `type`
-        tier: 'sv',  // Hardcoded becayse `sidekiq_enqueued_jobs_total` `tier` label depends on the sidekiq client `tier`
-        stage: 'main',
-        alert_type: 'cause',
-        rules_domain: 'general',
-        severity: 's1',
-        pager: 'pagerduty',
-      },
-      annotations: {
-        title: 'Sidekiq jobs are being enqueued to an ignored queue that will never be dequeued',
-        description: |||
-          The `{{ $labels.queue }}` queue is receiving work, but this queue has been
-          explicitly ignored in the `gprd` environment, to help reduce load on
-          our redis-sidekiq cluster.
-
-          This is a temporary measure.
-
-          It appears that the `{{ $labels.queue }}` queue is receiving work.
-          Since no sidekiq workers are listening to the queue, this work will be
-          ignored.
-
-          Recommended course of action: Communicate with the team responsible for
-          the {{ $labels.feature_category }} feature category, and find out whether
-          the work to the queue is intentional. If it is, update the ignore list on
-          https://ops.gitlab.net/gitlab-cookbooks/chef-repo/-/blob/master/tools/sidekiq-config/sidekiq-queue-configurations.libsonnet
-          and the corresponding list used for this alert, in
-          https://gitlab.com/gitlab-com/runbooks/blob/master/rules-jsonnet/temp-ignored-gprd-queue-list.libsonnet
-          removing the ignored queue from both.
-
-          Also, review https://ops.gitlab.net/gitlab-cookbooks/chef-repo/-/merge_requests/2948
-        |||,
-        runbook: 'docs/sidekiq/README.md',
-        grafana_dashboard_id: 'sidekiq-queue-detail/sidekiq-queue-detail',
-        grafana_variables: 'environment,stage,queue',
-        grafana_min_zoom_hours: '6',
-        promql_template_1: 'sidekiq_enqueued_jobs_total{environment="$environment", queue="$queue"}',
-      },
-    },
   ];
 
 local rules = {
