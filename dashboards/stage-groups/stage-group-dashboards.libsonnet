@@ -455,7 +455,7 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
         // selected range
         local range = '28d';
         local title = 'Error Budget (past 28 days)';
-        layout.splitColumnGrid(errorBudgetPanels(group, range), startRow=100, cellHeights=[4, 2], title=title, collapse=true)
+        layout.splitColumnGrid(errorBudgetPanels(group, range), startRow=100, cellHeights=[4, 2], title=title)
       else
         []
     )
