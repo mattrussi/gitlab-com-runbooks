@@ -39,8 +39,8 @@ local sidekiqThanosAlerts = [
     annotations: {
       title: 'Sidekiq jobs are being enqueued without being dequeued',
       description: |||
-        The `{{ $labels.worker}}` worker appears to have jobs being enqueued without
-        those jobs being executed.
+        The `{{ $labels.worker}}` worker in the {{ $labels.queue }} queue
+        appears to have jobs being enqueued without those jobs being executed.
 
         This could be the result of a Sidekiq server configuration issue, where
         no Sidekiq servers are configured to dequeue the specific worker.

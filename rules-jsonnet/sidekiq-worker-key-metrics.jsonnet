@@ -128,7 +128,7 @@ local generateAlerts() =
     {
       alert: 'ignored_sidekiq_workers_receiving_work',
       expr: |||
-        sum by (environment, worker, feature_category) (gitlab_background_jobs:queue:ops:rate_5m{environment="gprd", worker=~"%s"}) > 0
+        sum by (environment, queue, feature_category) (gitlab_background_jobs:queue:ops:rate_5m{environment="gprd", queue=~"%s"}) > 0
       ||| % [std.join('|', IGNORED_GPRD_QUEUES)],
       'for': '2m',
       labels: {
@@ -141,15 +141,15 @@ local generateAlerts() =
         pager: 'pagerduty',
       },
       annotations: {
-        title: 'Sidekiq jobs are being enqueued to an ignored worker queue that will never be dequeued',
+        title: 'Sidekiq jobs are being enqueued to an ignored queue that will never be dequeued',
         description: |||
-          The `{{ $labels.worker }}` worker is receiving work, but this worker has been
+          The `{{ $labels.queue }}` queue is receiving work, but this queue has been
           explicitly ignored in the `gprd` environment, to help reduce load on
           our redis-sidekiq cluster.
 
           This is a temporary measure.
 
-          It appears that the `{{ $labels.worker}}` worker is receiving work.
+          It appears that the `{{ $labels.queue }}` queue is receiving work.
           Since no sidekiq workers are listening to the queue, this work will be
           ignored.
 
@@ -164,10 +164,10 @@ local generateAlerts() =
           Also, review https://ops.gitlab.net/gitlab-cookbooks/chef-repo/-/merge_requests/2948
         |||,
         runbook: 'docs/sidekiq/README.md',
-        grafana_dashboard_id: 'sidekiq-worker-detail/sidekiq-worker-detail',
-        grafana_variables: 'environment,stage,worker',
+        grafana_dashboard_id: 'sidekiq-queue-detail/sidekiq-queue-detail',
+        grafana_variables: 'environment,stage,queue',
         grafana_min_zoom_hours: '6',
-        promql_template_1: 'sidekiq_enqueued_jobs_total{environment="$environment", worker="$worker"}',
+        promql_template_1: 'sidekiq_enqueued_jobs_total{environment="$environment", queue="$queue"}',
       },
     },
   ];
