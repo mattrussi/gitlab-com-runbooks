@@ -93,13 +93,14 @@ basic.dashboard(
       unit='s',
     )
     .addTarget(
-      promQuery.target(|||
-        histogram_quantile(0.5,
-          sum by (le) (
-            rate(registry_database_query_duration_seconds_bucket{name=~"gc_.*_task_is_dangling", environment="$environment"}[$__interval])
+      promQuery.target(
+        |||
+          histogram_quantile(0.5,
+            sum by (le) (
+              rate(registry_database_query_duration_seconds_bucket{name=~"gc_.*_task_is_dangling", environment="$environment"}[$__interval])
+            )
           )
-        )
-      |||,
+        |||,
       )
     )
     .addThresholds([
@@ -115,13 +116,14 @@ basic.dashboard(
       unit='s',
     )
     .addTarget(
-      promQuery.target(|||
-        histogram_quantile(0.5,
-          sum by (le) (
-            rate(registry_gc_delete_duration_seconds_bucket{backend="database", error="false", environment="$environment"}[$__interval])
+      promQuery.target(
+        |||
+          histogram_quantile(0.5,
+            sum by (le) (
+              rate(registry_gc_delete_duration_seconds_bucket{backend="database", error="false", environment="$environment"}[$__interval])
+            )
           )
-        )
-      |||,
+        |||,
       )
     )
     .addThresholds([
@@ -137,13 +139,14 @@ basic.dashboard(
       unit='s',
     )
     .addTarget(
-      promQuery.target(|||
-        histogram_quantile(0.5,
-          sum by (le) (
-            rate(registry_gc_delete_duration_seconds_bucket{backend="storage", error="false", environment="$environment"}[$__interval])
+      promQuery.target(
+        |||
+          histogram_quantile(0.5,
+            sum by (le) (
+              rate(registry_gc_delete_duration_seconds_bucket{backend="storage", error="false", environment="$environment"}[$__interval])
+            )
           )
-        )
-      |||,
+        |||,
       )
     )
     .addThresholds([
@@ -156,13 +159,14 @@ basic.dashboard(
       description='The percentage of online GC runs that completed without error.',
     )
     .addTarget(
-      promQuery.target(|||
-        (
-          sum(rate(registry_gc_runs_total{error="false", environment="$environment"}[$__interval]))
-          /
-          sum(rate(registry_gc_runs_total{environment="$environment"}[$__interval]))
-        ) * 100
-      |||,
+      promQuery.target(
+        |||
+          (
+            sum(rate(registry_gc_runs_total{error="false", environment="$environment"}[$__interval]))
+            /
+            sum(rate(registry_gc_runs_total{environment="$environment"}[$__interval]))
+          ) * 100
+        |||,
       )
     )
     .addThresholds([
