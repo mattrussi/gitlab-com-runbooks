@@ -143,7 +143,7 @@ metricsCatalog.serviceDefinition({
         histogram='registry_gc_run_duration_seconds_bucket',
         selector='type="registry"',
         satisfiedThreshold=1,
-        toleratedThreshold=2.5
+        toleratedThreshold=2
       ),
 
       requestRate: rateMetric(

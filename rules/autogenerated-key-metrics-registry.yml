@@ -51,7 +51,7 @@ groups:
         )
         +
         sum by (environment,stage) (
-          rate(registry_gc_run_duration_seconds_bucket{type="registry", le="2.5"}[1m])
+          rate(registry_gc_run_duration_seconds_bucket{type="registry", le="2"}[1m])
         )
       )
       /
@@ -329,7 +329,7 @@ groups:
         )
         +
         sum by (environment,stage) (
-          rate(registry_gc_run_duration_seconds_bucket{type="registry", le="2.5"}[5m])
+          rate(registry_gc_run_duration_seconds_bucket{type="registry", le="2"}[5m])
         )
       )
       /
@@ -607,7 +607,7 @@ groups:
         )
         +
         sum by (environment,stage) (
-          rate(registry_gc_run_duration_seconds_bucket{type="registry", le="2.5"}[30m])
+          rate(registry_gc_run_duration_seconds_bucket{type="registry", le="2"}[30m])
         )
       )
       /
@@ -885,7 +885,7 @@ groups:
         )
         +
         sum by (environment,stage) (
-          rate(registry_gc_run_duration_seconds_bucket{type="registry", le="2.5"}[1h])
+          rate(registry_gc_run_duration_seconds_bucket{type="registry", le="2"}[1h])
         )
       )
       /
@@ -1163,7 +1163,7 @@ groups:
         )
         +
         sum by (environment,stage) (
-          rate(registry_gc_run_duration_seconds_bucket{type="registry", le="2.5"}[6h])
+          rate(registry_gc_run_duration_seconds_bucket{type="registry", le="2"}[6h])
         )
       )
       /
