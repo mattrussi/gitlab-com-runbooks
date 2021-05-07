@@ -4,7 +4,7 @@ groups:
     - alert: AirflowDown
       expr: >
         count(avg_over_time(up{job='airflow'}[5m]) * 100 < 50)
-      for: 10m
+      for: 5m
       labels:
         alert_type: cause
         severity: s4
