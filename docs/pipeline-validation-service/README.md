@@ -102,7 +102,11 @@ In the event that this service is causing too many false positives (or some othe
 
 ### Readonly vs Active
 
-TODO: Who is responsible for read-only vs active mode in the service (T&S) and how to get that changed if necessary
+Active/read-only mode of the pipeline validation service gets set during the deployment. The mode is stored in an environment variable that gets forwarded to Cloud Run in `--set-env-var` parameter to `gcloud run deploy`. The variable name is `PIPELINE_VALIDATION_MODE` and it gets injected into a deployment build when it starts. It is defined in the secret variables page that can be accessed from the Pipeline Validation Service project -> Settings -> CI/CD -> Variables (expand).
+
+In order to enable the `read-only` mode the contents of this secret variable needs to be exactly `read-only`. For active mode it can be set to `active` but a value that is not `read-only` will be considered to be `active` automatically.
+
+After a change to `PIPELINE_VALIDATION_MODE` is made, a new deployment needs to be done to change the mode.
 
 ### GitLab Configuration
 
