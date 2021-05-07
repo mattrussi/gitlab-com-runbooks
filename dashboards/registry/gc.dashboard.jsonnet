@@ -5,6 +5,10 @@ local templates = import 'grafana/templates.libsonnet';
 local row = grafana.row;
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
+local statPanel = grafana.statPanel;
+local gaugePanel = grafana.gaugePanel;
+local promQuery = import 'grafana/prom_query.libsonnet';
+local colorScheme = import 'grafana/color_scheme.libsonnet';
 
 basic.dashboard(
   'Garbage Collection Detail',
@@ -21,8 +25,9 @@ basic.dashboard(
     hide='variable',
   )
 )
+
 .addPanel(
-  row.new(title='Task Queues'),
+  row.new(title='Overview'),
   gridPos={
     x: 0,
     y: 0,
@@ -32,89 +37,145 @@ basic.dashboard(
 )
 .addPanels(
   layout.grid([
-    basic.timeseries(
-      title='Pending Tasks',
-      description=|||
-        The number of tasks pending of review.
-      |||,
-      query='registry_gc_queue_size{environment="$environment"}',
-      legendFormat='{{ queue }}'
+    statPanel.new(
+      title='Blob Queue Size',
+      description='Maximum blob queue size measured across instances.',
+      graphMode='area',
+      decimals=0,
+    )
+    .addTarget(
+      promQuery.target(
+        'max(registry_gc_queue_size{queue="gc_blob_review_queue", environment="$environment"})',
+      )
+    )
+    .addThresholds([
+      { color: colorScheme.normalRangeColor, value: 0 },
+      { color: colorScheme.warningColor, value: 10 },
+      { color: colorScheme.errorColor, value: 50 },
+      { color: colorScheme.criticalColor, value: 100 },
+    ]),
+    statPanel.new(
+      title='Manifest Queue Size',
+      description='Maximum manifest queue size measured across instances.',
+      graphMode='area',
+      decimals=0,
+    )
+    .addTarget(
+      promQuery.target(
+        'max(registry_gc_queue_size{queue="gc_manifest_review_queue", environment="$environment"})',
+      )
+    )
+    .addThresholds([
+      { color: colorScheme.normalRangeColor, value: 0 },
+      { color: colorScheme.warningColor, value: 10 },
+      { color: colorScheme.errorColor, value: 50 },
+      { color: colorScheme.criticalColor, value: 100 },
+    ]),
+    statPanel.new(
+      title='Recovered Storage Space',
+      description='The number of bytes recovered by online GC.',
+      graphMode='none',
+      unit='bytes',
+    )
+    .addTarget(
+      promQuery.target(
+        'sum(registry_gc_storage_deleted_bytes_total{environment="$environment"}) or vector(0)',
+      )
     ),
-    basic.timeseries(
-      title='Postponed Tasks',
+    statPanel.new(
+      title='Median Analysis Latency',
       description=|||
-        The number of tasks whose review was postponed due processing errors.
+        The aggregated P50 latency of the database queries used to determine if
+        a blob or manifest are eligible for deletion (dangling).
       |||,
-      query='registry_gc_postpones_total{environment="$environment"}',
-      legendFormat='{{ worker }}'
-    ),
-    basic.timeseries(
-      title='Time Between Reviews',
-      description=|||
-        The time between task reviews. This is the workers' sleep duration
-        between runs.
-      |||,
-      query=|||
-        sum by (worker, le) (
-          rate(registry_gc_sleep_duration_seconds_bucket{environment="$environment"}[$__interval])
+      graphMode='none',
+      decimals=2,
+      unit='s',
+    )
+    .addTarget(
+      promQuery.target(|||
+        histogram_quantile(0.5,
+          sum by (le) (
+            rate(registry_database_query_duration_seconds_bucket{name=~"gc_.*_task_is_dangling", environment="$environment"}[$__interval])
+          )
         )
       |||,
-      legendFormat='{{ worker }}',
-    ),
-  ], cols=4, rowHeight=5, startRow=1)
+      )
+    )
+    .addThresholds([
+      { color: colorScheme.normalRangeColor, value: 0.025 },
+      { color: colorScheme.warningColor, value: 0.05 },
+      { color: colorScheme.criticalColor, value: 0.1 },
+    ]),
+    statPanel.new(
+      title='Median Database Delete Latency',
+      description='The aggregated P50 latency of the database delete queries.',
+      graphMode='none',
+      decimals=2,
+      unit='s',
+    )
+    .addTarget(
+      promQuery.target(|||
+        histogram_quantile(0.5,
+          sum by (le) (
+            rate(registry_gc_delete_duration_seconds_bucket{backend="database", error="false", environment="$environment"}[$__interval])
+          )
+        )
+      |||,
+      )
+    )
+    .addThresholds([
+      { color: colorScheme.normalRangeColor, value: 0.025 },
+      { color: colorScheme.warningColor, value: 0.05 },
+      { color: colorScheme.criticalColor, value: 0.1 },
+    ]),
+    statPanel.new(
+      title='Median Storage Delete Latency',
+      description='The aggregated P50 latency of the storage delete requests.',
+      graphMode='none',
+      decimals=2,
+      unit='s',
+    )
+    .addTarget(
+      promQuery.target(|||
+        histogram_quantile(0.5,
+          sum by (le) (
+            rate(registry_gc_delete_duration_seconds_bucket{backend="storage", error="false", environment="$environment"}[$__interval])
+          )
+        )
+      |||,
+      )
+    )
+    .addThresholds([
+      { color: colorScheme.normalRangeColor, value: 0.250 },
+      { color: colorScheme.warningColor, value: 0.500 },
+      { color: colorScheme.criticalColor, value: 0.750 },
+    ]),
+    gaugePanel.new(
+      title='Successfull Runs',
+      description='The percentage of online GC runs that completed without error.',
+    )
+    .addTarget(
+      promQuery.target(|||
+        (
+          sum(rate(registry_gc_runs_total{error="false", environment="$environment"}[$__interval]))
+          /
+          sum(rate(registry_gc_runs_total{environment="$environment"}[$__interval]))
+        ) * 100
+      |||,
+      )
+    )
+    .addThresholds([
+      { color: colorScheme.criticalColor, value: 50 },
+      { color: colorScheme.errorColor, value: 75 },
+      { color: colorScheme.warningColor, value: 95 },
+      { color: colorScheme.normalRangeColor, value: 100 },
+    ]),
+  ], cols=7, rowHeight=5, startRow=1)
 )
 
 .addPanel(
-  row.new(title='Run Counts'),
-  gridPos={
-    x: 0,
-    y: 500,
-    w: 24,
-    h: 1,
-  }
-)
-.addPanels(
-  layout.grid([
-    basic.timeseries(
-      title='Overall',
-      description=|||
-        The number of online GC runs per worker.
-      |||,
-      query='registry_gc_runs_total{environment="$environment"}',
-      legendFormat='{{ worker }}',
-    ),
-    basic.timeseries(
-      title='Successful',
-      description=|||
-        The number of successful online GC runs per worker.
-      |||,
-      query='registry_gc_runs_total{error="false", environment="$environment"}',
-      legendFormat='{{ worker }}',
-    ),
-    basic.timeseries(
-      title='Failed',
-      description=|||
-        The number of failed online GC runs per worker.
-      |||,
-      query='registry_gc_runs_total{error="true", environment="$environment"}',
-      legendFormat='{{ worker }}',
-    ),
-    basic.singlestat(
-      title='Noop',
-      description=|||
-        The percentage of online GC runs per worker that did not result in a
-        deletion (false positives).
-      |||,
-      query='sum by (worker)(registry_gc_runs_total{error="false", noop="true", environment="$environment"}) / sum by (worker)(registry_gc_runs_total{error="false", environment="$environment"}) * 100',
-      legendFormat='{{ worker }}',
-      gaugeShow=true,
-      format='percent'
-    ),
-  ], cols=4, rowHeight=5, startRow=501)
-)
-
-.addPanel(
-  row.new(title='Run Rate'),
+  row.new(title='Queues'),
   gridPos={
     x: 0,
     y: 1000,
@@ -125,46 +186,43 @@ basic.dashboard(
 .addPanels(
   layout.grid([
     basic.timeseries(
-      title='Overall',
-      description=|||
-        The per-second rate of all online GC runs.
-      |||,
-
-      query='sum by (worker) (rate(registry_gc_run_duration_seconds_count{environment="$environment"}[$__interval]))',
-      legendFormat='{{ worker }}',
+      title='Pending Tasks',
+      description='The number of tasks pending of review.',
+      query='sum by (queue) (registry_gc_queue_size{environment="$environment"})',
+      legendFormat='{{ queue }}',
+      intervalFactor=1,
+      yAxisLabel='Count'
     ),
     basic.timeseries(
-      title='Successful',
+      title='Postponed Tasks',
       description=|||
-        The per-second rate of successful online GC runs.
+        The number of tasks whose review was postponed due processing errors.
       |||,
-
-      query='sum by (worker) (rate(registry_gc_run_duration_seconds_count{environment="$environment", error="false", noop="false"}[$__interval]))',
+      query='sum by (worker) (registry_gc_postpones_total{environment="$environment"})',
       legendFormat='{{ worker }}',
+      yAxisLabel='Count'
     ),
     basic.timeseries(
-      title='Failed',
+      title='Time Between Reviews',
       description=|||
-        The per-second rate of failed online GC runs.
+        The median time between task reviews. This is the workers' sleep duration
+        between runs.
       |||,
-
-      query='sum by (worker) (rate(registry_gc_run_duration_seconds_count{environment="$environment", error="true", noop="false"}[$__interval]))',
-      legendFormat='{{ worker }}',
-    ),
-    basic.timeseries(
-      title='Noop',
-      description=|||
-        The per-second rate of noop (false positive) online GC runs.
+      query=|||
+        histogram_quantile(0.50,
+          sum by (worker, le) (
+            rate(registry_gc_sleep_duration_seconds_bucket{environment="$environment"}[$__interval])
+          )
+        )
       |||,
-
-      query='sum by (worker) (rate(registry_gc_run_duration_seconds_count{environment="$environment", error="false", noop="true"}[$__interval]))',
       legendFormat='{{ worker }}',
+      format='s'
     ),
-  ], cols=4, rowHeight=5, startRow=1001)
+  ], cols=3, rowHeight=7, startRow=1001)
 )
 
 .addPanel(
-  row.new(title='Run Latencies'),
+  row.new(title='Run Rate'),
   gridPos={
     x: 0,
     y: 2000,
@@ -175,70 +233,51 @@ basic.dashboard(
 .addPanels(
   layout.grid([
     basic.timeseries(
-      title='P90 Overall',
-      description=|||
-        The estimated overal P90 latency of online GC runs.
-      |||,
-      query=|||
-        histogram_quantile(
-          0.900000,
-          sum by (worker, le) (
-            rate(registry_gc_run_duration_seconds_bucket{environment="$environment"}[$__interval])
-          )
-        )
-      |||,
+      title='Aggregate',
+      description='The per-second rate of all online GC runs.',
+      query='sum by (worker) (rate(registry_gc_run_duration_seconds_count{environment="$environment"}[$__interval]))',
       legendFormat='{{ worker }}',
+      format='ops'
     ),
     basic.timeseries(
-      title='P90 Successful',
-      description=|||
-        The estimated P90 latency of successful online GC runs.
-      |||,
+      title='Successful',
+      description='The per-second rate of successful online GC runs.',
+
       query=|||
-        histogram_quantile(
-          0.900000,
-          sum by (worker, le) (
-            rate(registry_gc_run_duration_seconds_bucket{environment="$environment", error="false", noop="false"}[$__interval])
-          )
+        sum by (worker) (
+          rate(registry_gc_run_duration_seconds_count{error="false", noop="false", environment="$environment"}[$__interval])
         )
       |||,
       legendFormat='{{ worker }}',
+      format='ops'
     ),
     basic.timeseries(
-      title='P90 Failed',
-      description=|||
-        The estimated P90 latency of failed online GC runs.
-      |||,
+      title='Failed',
+      description='The per-second rate of failed online GC runs.',
       query=|||
-        histogram_quantile(
-          0.900000,
-          sum by (worker, le) (
-            rate(registry_gc_run_duration_seconds_bucket{environment="$environment", error="true", noop="false"}[$__interval])
-          )
+        sum by (worker) (
+          rate(registry_gc_run_duration_seconds_count{error="true", noop="false", environment="$environment"}[$__interval])
         )
       |||,
       legendFormat='{{ worker }}',
+      format='ops'
     ),
     basic.timeseries(
-      title='P90 Noop',
-      description=|||
-        The estimated P90 latency of noop (false positive) online GC runs.
-      |||,
+      title='Noop',
+      description='The per-second rate of noop (no tasks available) online GC runs.',
       query=|||
-        histogram_quantile(
-          0.900000,
-          sum by (worker, le) (
-            rate(registry_gc_run_duration_seconds_bucket{environment="$environment", error="false", noop="true"}[$__interval])
-          )
+        sum by (worker) (
+          rate(registry_gc_run_duration_seconds_count{error="false", noop="true", environment="$environment"}[$__interval])
         )
       |||,
       legendFormat='{{ worker }}',
+      format='ops'
     ),
-  ], cols=4, rowHeight=5, startRow=2001)
+  ], cols=4, rowHeight=7, startRow=2001)
 )
 
 .addPanel(
-  row.new(title='Delete Counts'),
+  row.new(title='Run Latencies'),
   gridPos={
     x: 0,
     y: 3000,
@@ -249,37 +288,62 @@ basic.dashboard(
 .addPanels(
   layout.grid([
     basic.timeseries(
-      title='Overall',
-      description=|||
-        The number of deletions during online GC.
+      title='P90 Aggregate',
+      description='The estimated overal P90 latency of online GC runs.',
+      query=|||
+        histogram_quantile(
+          0.900000,
+          sum by (worker, le) (
+            rate(registry_gc_run_duration_seconds_bucket{environment="$environment"}[$__interval])
+          )
+        )
       |||,
-      query='registry_gc_deletes_total{environment="$environment"}'
+      legendFormat='{{ worker }}',
+      format='s'
     ),
     basic.timeseries(
-      title='Blobs',
-      description=|||
-        The number of blobs deleted during online GC, per backend.
+      title='P90 Successful',
+      description='The estimated P90 latency of successful online GC runs.',
+      query=|||
+        histogram_quantile(
+          0.900000,
+          sum by (worker, le) (
+            rate(registry_gc_run_duration_seconds_bucket{error="false", noop="false", environment="$environment"}[$__interval])
+          )
+        )
       |||,
-      query='registry_gc_runs_total{artifact="blob", environment="$environment"}',
-      legendFormat='{{ backend }}',
+      legendFormat='{{ worker }}',
+      format='s'
     ),
     basic.timeseries(
-      title='Manifests',
-      description=|||
-        The number of manifests deleted during online GC, per backend.
+      title='P90 Failed',
+      description='The estimated P90 latency of failed online GC runs.',
+      query=|||
+        histogram_quantile(
+          0.900000,
+          sum by (worker, le) (
+            rate(registry_gc_run_duration_seconds_bucket{error="true", noop="false", environment="$environment"}[$__interval])
+          )
+        )
       |||,
-      query='registry_gc_runs_total{artifact="manifest", environment="$environment"}',
-      legendFormat='{{ backend }}',
+      legendFormat='{{ worker }}',
+      format='s'
     ),
     basic.timeseries(
-      title='Failed',
-      description=|||
-        The number of failed deletes during online GC, per backend and artifact.
+      title='P90 Noop',
+      description='The estimated P90 latency of noop (false positive) online GC runs.',
+      query=|||
+        histogram_quantile(
+          0.900000,
+          sum by (worker, le) (
+            rate(registry_gc_run_duration_seconds_bucket{error="false", noop="true", environment="$environment"}[$__interval])
+          )
+        )
       |||,
-      query='registry_gc_runs_total{error="true", environment="$environment"}',
-      legendFormat='{{ legendFormat= }} {{ backend }}',
+      legendFormat='{{ worker }}',
+      format='s'
     ),
-  ], cols=4, rowHeight=5, startRow=3001)
+  ], cols=4, rowHeight=7, startRow=3001)
 )
 
 .addPanel(
@@ -294,32 +358,39 @@ basic.dashboard(
 .addPanels(
   layout.grid([
     basic.timeseries(
-      title='Overall',
-      description=|||
-        The per-second rate of all online GC deletions.
+      title='Aggregate',
+      description='The per-second rate of all online GC deletions.',
+      query=|||
+        sum by (backend) (
+          rate(registry_gc_delete_duration_seconds_count{environment="$environment"}[$__interval])
+        )
       |||,
-
-      query='rate(registry_gc_delete_duration_seconds_count{environment="$environment"}[$__interval])',
+      legendFormat='{{ backend }}',
+      format='ops'
     ),
     basic.timeseries(
       title='Blobs',
-      description=|||
-        The per-second rate of online GC blob deletions.
+      description='The per-second rate of online GC blob deletions.',
+      query=|||
+        sum by (backend) (
+          rate(registry_gc_delete_duration_seconds_count{artifact="blob", environment="$environment"}[$__interval])
+        )
       |||,
-
-      query='sum by (backend) (rate(registry_gc_delete_duration_seconds_count{environment="$environment", artifact="blob"}[$__interval]))',
       legendFormat='{{ backend }}',
+      format='ops'
     ),
     basic.timeseries(
       title='Manifests',
-      description=|||
-        The per-second rate of online GC manifest deletions.
+      description='The per-second rate of online GC manifest deletions.',
+      query=|||
+        sum by (backend) (
+          rate(registry_gc_delete_duration_seconds_count{environment="$environment", artifact="manifest"}[$__interval])
+        )
       |||,
-
-      query='sum by (backend) (rate(registry_gc_delete_duration_seconds_count{environment="$environment", artifact="manifest"}[$__interval]))',
       legendFormat='{{ backend }}',
+      format='ops'
     ),
-  ], cols=3, rowHeight=5, startRow=4001)
+  ], cols=3, rowHeight=7, startRow=4001)
 )
 
 .addPanel(
@@ -334,10 +405,8 @@ basic.dashboard(
 .addPanels(
   layout.grid([
     basic.timeseries(
-      title='P90 Overall',
-      description=|||
-        The estimated overal P90 latency of online GC deletions.
-      |||,
+      title='P90 Aggregate',
+      description='The estimated overal P90 latency of online GC deletions.',
       query=|||
         histogram_quantile(
           0.900000,
@@ -345,68 +414,37 @@ basic.dashboard(
             rate(registry_gc_delete_duration_seconds_bucket{environment="$environment"}[$__interval])
           )
         )
-      |||
+      |||,
+      format='s',
+      legend_show=false
     ),
     basic.timeseries(
       title='P90 Blobs',
-      description=|||
-        The estimated P90 latency of online GC blob deletions.
-      |||,
+      description='The estimated P90 latency of online GC blob deletions.',
       query=|||
         histogram_quantile(
           0.900000,
           sum by (backend, le) (
-            rate(registry_gc_run_duration_seconds_bucket{environment="$environment", artifact="blob"}[$__interval])
+            rate(registry_gc_delete_duration_seconds_bucket{artifact="blob", environment="$environment"}[$__interval])
           )
         )
       |||,
       legendFormat='{{ backend }}',
+      format='s'
     ),
     basic.timeseries(
       title='P90 Manifests',
-      description=|||
-        The estimated P90 latency of online GC manifest deletions.
-      |||,
+      description='The estimated P90 latency of online GC manifest deletions.',
       query=|||
         histogram_quantile(
           0.900000,
           sum by (backend, le) (
-            rate(registry_gc_run_duration_seconds_bucket{environment="$environment", artifact="manifest"}[$__interval])
+            rate(registry_gc_delete_duration_seconds_bucket{artifact="manifest", environment="$environment"}[$__interval])
           )
         )
       |||,
       legendFormat='{{ backend }}',
+      format='s'
     ),
-  ], cols=3, rowHeight=5, startRow=5001)
-)
-
-.addPanel(
-  row.new(title='Storage Space'),
-  gridPos={
-    x: 0,
-    y: 6000,
-    w: 24,
-    h: 1,
-  }
-)
-.addPanels(
-  layout.grid([
-    basic.timeseries(
-      title='Overall',
-      description=|||
-        The number of bytes recovered by online GC.
-      |||,
-      query='registry_gc_storage_deleted_bytes_total{environment="$environment"}',
-      format='bytes'
-    ),
-    basic.timeseries(
-      title='Per Media Type',
-      description=|||
-        The number of bytes recovered by online GC, by media type.
-      |||,
-      query='sum by (media_type) (registry_gc_deletes_total{environment="$environment"})',
-      format='bytes',
-      legendFormat='{{ media_type }}'
-    ),
-  ], cols=2, rowHeight=5, startRow=6001)
+  ], cols=3, rowHeight=7, startRow=5001)
 )
