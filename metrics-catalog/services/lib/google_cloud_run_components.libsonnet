@@ -15,7 +15,8 @@ local histogramApdex = metricsCatalog.histogramApdex;
     projectId,
     gcpRegion,  // Don't confuse this with the prometheus `region` which is where we collect the metrics, not where google host Cloud Run
     ignoreTrafficCessation=false,
-    apdexSatisfactoryLatency=null
+    apdexSatisfactoryLatency=null,
+    additionalToolingLinks=[]
   )::
     local baseSelector = { configuration_name: configurationName, project_id: projectId };
 
@@ -54,6 +55,6 @@ local histogramApdex = metricsCatalog.histogramApdex;
           gcpRegion=gcpRegion,
           project=projectId
         ),
-      ],
+      ] + additionalToolingLinks,
     }),
 }

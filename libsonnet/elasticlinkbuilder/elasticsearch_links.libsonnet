@@ -178,6 +178,15 @@ local indexCatalog = {
     latencyFieldUnitMultiplier: 1000,
   },
 
+  pvs: indexDefaults {
+    timestamp: 'json.timestamp',
+    indexPattern: '4858f3a0-a312-11eb-966b-2361593353f9',
+    defaultColumns: ['json.jsonPayload.mode', 'json.jsonPayload.validation_status', 'json.jsonPayload.project_id', 'json.jsonPayload.correation_id', 'json.jsonPayload.msg'],
+    defaultSeriesSplitField: 'json.jsonPayload.validation_status.keyword',
+    failureFilter: statusCode('json.jsonPayload.status_code'),
+    defaultLatencyField: 'json.jsonPayload.duration_ms',
+  },
+
   rails: indexDefaults {
     timestamp: 'json.time',
     indexPattern: '7092c4e2-4eb5-46f2-8305-a7da2edad090',
