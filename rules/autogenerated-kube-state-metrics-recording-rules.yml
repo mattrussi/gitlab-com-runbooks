@@ -360,3 +360,134 @@ groups:
       *
       on(node) group_left(shard, stage, type, tier)
       topk by (node) (1, kube_node_labels:labeled)
+  - record: kube_ingress_labels:labeled
+    expr: |
+      group without(label_stage,label_tier,label_type,service_shard) (
+        label_replace(
+          label_replace(
+            label_replace(
+              label_replace(
+                topk by(label_type) (1, kube_ingress_labels),
+                "stage", "$0", "label_stage", ".*"
+              ),
+              "tier", "$0", "label_tier", ".*"
+            ),
+            "type", "$0", "label_type", ".*"
+          ),
+          "shard", "$0", "service_shard", ".*"
+        )
+      )
+  - record: nginx_ingress_controller_bytes_sent_count:labeled
+    expr: |
+      nginx_ingress_controller_bytes_sent_count
+      *
+      on(ingress) group_left(shard, stage, type, tier)
+      topk by (ingress) (1, kube_ingress_labels:labeled)
+  - record: nginx_ingress_controller_request_duration_seconds_bucket:labeled
+    expr: |
+      nginx_ingress_controller_request_duration_seconds_bucket
+      *
+      on(ingress) group_left(shard, stage, type, tier)
+      topk by (ingress) (1, kube_ingress_labels:labeled)
+  - record: nginx_ingress_controller_request_duration_seconds_sum:labeled
+    expr: |
+      nginx_ingress_controller_request_duration_seconds_sum
+      *
+      on(ingress) group_left(shard, stage, type, tier)
+      topk by (ingress) (1, kube_ingress_labels:labeled)
+  - record: nginx_ingress_controller_response_size_count:labeled
+    expr: |
+      nginx_ingress_controller_response_size_count
+      *
+      on(ingress) group_left(shard, stage, type, tier)
+      topk by (ingress) (1, kube_ingress_labels:labeled)
+  - record: nginx_ingress_controller_ingress_upstream_latency_seconds:labeled
+    expr: |
+      nginx_ingress_controller_ingress_upstream_latency_seconds
+      *
+      on(ingress) group_left(shard, stage, type, tier)
+      topk by (ingress) (1, kube_ingress_labels:labeled)
+  - record: nginx_ingress_controller_ingress_upstream_latency_seconds_count:labeled
+    expr: |
+      nginx_ingress_controller_ingress_upstream_latency_seconds_count
+      *
+      on(ingress) group_left(shard, stage, type, tier)
+      topk by (ingress) (1, kube_ingress_labels:labeled)
+  - record: nginx_ingress_controller_ingress_upstream_latency_seconds_sum:labeled
+    expr: |
+      nginx_ingress_controller_ingress_upstream_latency_seconds_sum
+      *
+      on(ingress) group_left(shard, stage, type, tier)
+      topk by (ingress) (1, kube_ingress_labels:labeled)
+  - record: nginx_ingress_controller_request_duration_seconds_count:labeled
+    expr: |
+      nginx_ingress_controller_request_duration_seconds_count
+      *
+      on(ingress) group_left(shard, stage, type, tier)
+      topk by (ingress) (1, kube_ingress_labels:labeled)
+  - record: nginx_ingress_controller_request_size_bucket:labeled
+    expr: |
+      nginx_ingress_controller_request_size_bucket
+      *
+      on(ingress) group_left(shard, stage, type, tier)
+      topk by (ingress) (1, kube_ingress_labels:labeled)
+  - record: nginx_ingress_controller_response_duration_seconds_bucket:labeled
+    expr: |
+      nginx_ingress_controller_response_duration_seconds_bucket
+      *
+      on(ingress) group_left(shard, stage, type, tier)
+      topk by (ingress) (1, kube_ingress_labels:labeled)
+  - record: nginx_ingress_controller_bytes_sent_bucket:labeled
+    expr: |
+      nginx_ingress_controller_bytes_sent_bucket
+      *
+      on(ingress) group_left(shard, stage, type, tier)
+      topk by (ingress) (1, kube_ingress_labels:labeled)
+  - record: nginx_ingress_controller_bytes_sent_sum:labeled
+    expr: |
+      nginx_ingress_controller_bytes_sent_sum
+      *
+      on(ingress) group_left(shard, stage, type, tier)
+      topk by (ingress) (1, kube_ingress_labels:labeled)
+  - record: nginx_ingress_controller_request_size_count:labeled
+    expr: |
+      nginx_ingress_controller_request_size_count
+      *
+      on(ingress) group_left(shard, stage, type, tier)
+      topk by (ingress) (1, kube_ingress_labels:labeled)
+  - record: nginx_ingress_controller_response_duration_seconds_sum:labeled
+    expr: |
+      nginx_ingress_controller_response_duration_seconds_sum
+      *
+      on(ingress) group_left(shard, stage, type, tier)
+      topk by (ingress) (1, kube_ingress_labels:labeled)
+  - record: nginx_ingress_controller_request_size_sum:labeled
+    expr: |
+      nginx_ingress_controller_request_size_sum
+      *
+      on(ingress) group_left(shard, stage, type, tier)
+      topk by (ingress) (1, kube_ingress_labels:labeled)
+  - record: nginx_ingress_controller_requests:labeled
+    expr: |
+      nginx_ingress_controller_requests
+      *
+      on(ingress) group_left(shard, stage, type, tier)
+      topk by (ingress) (1, kube_ingress_labels:labeled)
+  - record: nginx_ingress_controller_response_duration_seconds_count:labeled
+    expr: |
+      nginx_ingress_controller_response_duration_seconds_count
+      *
+      on(ingress) group_left(shard, stage, type, tier)
+      topk by (ingress) (1, kube_ingress_labels:labeled)
+  - record: nginx_ingress_controller_response_size_bucket:labeled
+    expr: |
+      nginx_ingress_controller_response_size_bucket
+      *
+      on(ingress) group_left(shard, stage, type, tier)
+      topk by (ingress) (1, kube_ingress_labels:labeled)
+  - record: nginx_ingress_controller_response_size_sum:labeled
+    expr: |
+      nginx_ingress_controller_response_size_sum
+      *
+      on(ingress) group_left(shard, stage, type, tier)
+      topk by (ingress) (1, kube_ingress_labels:labeled)

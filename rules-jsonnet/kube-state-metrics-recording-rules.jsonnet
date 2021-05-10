@@ -75,6 +75,28 @@ local kubeNodeMetrics = [
   'node_vmstat_oom_kill',
 ];
 
+local ingressMetrics = [
+  'nginx_ingress_controller_bytes_sent_count',
+  'nginx_ingress_controller_request_duration_seconds_bucket',
+  'nginx_ingress_controller_request_duration_seconds_sum',
+  'nginx_ingress_controller_response_size_count',
+  'nginx_ingress_controller_ingress_upstream_latency_seconds',
+  'nginx_ingress_controller_ingress_upstream_latency_seconds_count',
+  'nginx_ingress_controller_ingress_upstream_latency_seconds_sum',
+  'nginx_ingress_controller_request_duration_seconds_count',
+  'nginx_ingress_controller_request_size_bucket',
+  'nginx_ingress_controller_response_duration_seconds_bucket',
+  'nginx_ingress_controller_bytes_sent_bucket',
+  'nginx_ingress_controller_bytes_sent_sum',
+  'nginx_ingress_controller_request_size_count',
+  'nginx_ingress_controller_response_duration_seconds_sum',
+  'nginx_ingress_controller_request_size_sum',
+  'nginx_ingress_controller_requests',
+  'nginx_ingress_controller_response_duration_seconds_count',
+  'nginx_ingress_controller_response_size_bucket',
+  'nginx_ingress_controller_response_size_sum',
+];
+
 local podLabelJoinExpression(expression) =
   |||
     %(expression)s
@@ -108,6 +130,16 @@ local nodeLabelJoinExpression(expression) =
     *
     on(node) group_left(shard, stage, type, tier)
     topk by (node) (1, kube_node_labels:labeled)
+  ||| % {
+    expression: expression,
+  };
+
+local nginxIngressJoinExpression(expression) =
+  |||
+    %(expression)s
+    *
+    on(ingress) group_left(shard, stage, type, tier)
+    topk by (ingress) (1, kube_ingress_labels:labeled)
   ||| % {
     expression: expression,
   };
@@ -150,6 +182,7 @@ local rules = {
     name: 'kube-state-metrics-recording-rules',
     interval: '1m',
     rules: [
+      // Relabel: kube_pod_labels
       recordingRuleFor(
         'kube_pod_labels',
         relabel(
@@ -172,6 +205,7 @@ local rules = {
       recordingRuleFor(metricName, podLabelJoinExpression(metricName))
       for metricName in kubePodContainerMetrics
     ] + [
+      // Relabel: kube_hpa_labels
       recordingRuleFor(
         'kube_hpa_labels',
         relabel(
@@ -189,6 +223,7 @@ local rules = {
       recordingRuleFor(metricName, kubeHPALabelJoinExpression(metricName))
       for metricName in kubeHPAMetrics
     ] + [
+      // Relabel: kube_node_labels
       recordingRuleFor(
         'kube_node_labels',
         relabel(
@@ -209,6 +244,26 @@ local rules = {
       /* node_* recording rules */
       recordingRuleFor(metricName, nodeLabelJoinExpression(metricName))
       for metricName in kubeNodeMetrics
+    ] + [
+      // Relabel: kube_ingress_labels
+      recordingRuleFor(
+        'kube_ingress_labels',
+        relabel(
+          |||
+            topk by(label_type) (1, kube_ingress_labels)
+          |||,
+          {
+            label_tier: 'tier',
+            label_type: 'type',
+            label_stage: 'stage',  // Requires https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/1727 to work
+            service_shard: 'shard',  // Requires https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/1727 to work
+          }
+        )
+      ),
+    ] + [
+      /* ingress recording rules */
+      recordingRuleFor(metricName, nginxIngressJoinExpression(metricName))
+      for metricName in ingressMetrics
     ],
   }],
 };
