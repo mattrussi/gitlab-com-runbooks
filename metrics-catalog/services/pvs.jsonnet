@@ -1,4 +1,5 @@
 local googleCloudRunComponents = import './lib/google_cloud_run_components.libsonnet';
+local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 
 metricsCatalog.serviceDefinition({
@@ -19,7 +20,10 @@ metricsCatalog.serviceDefinition({
       projectId='glsec-trust-safety-live',
       gcpRegion='us-central1',
       ignoreTrafficCessation=false,
-      apdexSatisfactoryLatency=1024
+      apdexSatisfactoryLatency=1024,
+      additionalToolingLinks=[
+        toolingLinks.kibana(title='PVS', index='pvs', includeMatchersForPrometheusSelector=false),
+      ]
     ),
   },
 })
