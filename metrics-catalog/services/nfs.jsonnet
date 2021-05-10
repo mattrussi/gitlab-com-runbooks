@@ -7,11 +7,16 @@ metricsCatalog.serviceDefinition({
   monitoringThresholds: {
     errorRatio: 0.9999,  // 99.99% of nfs requests should succeed, over multiple window periods
   },
+  // NFS traffic is no longer very predicatable, as we ramp it down
+  // don't alert on anomalies in the data
+  disableOpsRatePrediction: true,
   serviceLevelIndicators: {
     nfs_service: {
       userImpacting: true,
       featureCategory: 'not_owned',
       team: 'sre_coreinfra',
+      ignoreTrafficCessation: true,
+
       description: |||
         Monitors NFS RPC calls in aggregate.
       |||,
