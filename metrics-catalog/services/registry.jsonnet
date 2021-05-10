@@ -134,6 +134,7 @@ metricsCatalog.serviceDefinition({
 
     garbagecollector: {
       userImpacting: false,
+      serviceAggregation: false, 
       featureCategory: 'container_registry',
       description: |||
         Aggregation of all container registry online garbage collection operations.
