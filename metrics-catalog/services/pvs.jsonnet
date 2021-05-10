@@ -1,6 +1,6 @@
 local googleCloudRunComponents = import './lib/google_cloud_run_components.libsonnet';
-local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
+local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'pvs',
