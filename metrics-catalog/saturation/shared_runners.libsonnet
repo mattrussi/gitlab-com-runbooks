@@ -23,11 +23,11 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
       stage: 'main',
     },
     query: |||
-      sum without(executor_stage, exported_stage, state) (
+      sum without(executor_stage, exported_stage, state, runner) (
         max_over_time(gitlab_runner_jobs{job="runners-manager",shard="shared"}[%(rangeInterval)s])
       )
       /
-      gitlab_runner_limit{job="runners-manager",shard="shared"} > 0
+      gitlab_runner_concurrent{job="runners-manager",shard="shared"} > 0
     |||,
     slos: {
       soft: 0.90,
