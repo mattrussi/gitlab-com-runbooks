@@ -8,7 +8,7 @@ groups:
         "primary", "$1", "instance", "(.*)"
       )
       - ignoring (fqdn,instance,primary) group_right (primary) (
-        min_over_time(pg_xlog_position_bytes[30s]) and pg_replication_is_replica == 1
+        pg_xlog_position_bytes and pg_replication_is_replica == 1
       )
 
   - alert: PostgreSQL_WALGReplicationStopped
@@ -136,7 +136,7 @@ groups:
       runbook: docs/patroni/postgres.md#replication-is-lagging-or-has-stopped
       title: Postgres Replication lag is over 9 hours on delayed replica (normal is 8 hours)
   - alert: PostgreSQL_ReplicationLagBytesTooLarge
-    expr: postgres:pg_replication_lag_bytes > 1e+09
+    expr: postgres:pg_replication_lag_bytes > 1e+09*10
     for: 5m
     labels:
       pager: pagerduty
