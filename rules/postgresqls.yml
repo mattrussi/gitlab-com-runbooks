@@ -8,7 +8,7 @@ groups:
         "primary", "$1", "instance", "(.*)"
       )
       - ignoring (fqdn,instance,primary) group_right (primary) (
-        pg_xlog_position_bytes and pg_replication_is_replica == 1
+        min_over_time(pg_xlog_position_bytes[30s]) and pg_replication_is_replica == 1
       )
 
   - alert: PostgreSQL_WALGReplicationStopped
