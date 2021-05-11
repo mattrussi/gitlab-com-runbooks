@@ -1,7 +1,10 @@
 local rateMetric = (import 'servicemetrics/metrics.libsonnet').rateMetric;
 local histogramApdex = (import 'servicemetrics/histogram_apdex.libsonnet').histogramApdex;
 
+local aggregations = import 'promql/aggregations.libsonnet';
 local metricsCatalog = import '../../metrics-catalog.libsonnet';
+local selectors = import 'promql/selectors.libsonnet';
+local strings = import 'utils/strings.libsonnet';
 
 local aggregationLabels = [
   'environment',
@@ -10,6 +13,8 @@ local aggregationLabels = [
   'stage',
   'feature_category',
 ];
+
+local staticLabels = { component: 'puma' };
 
 local requestRate = rateMetric(
   counter='http_requests_total',
@@ -42,17 +47,17 @@ local latencyApdexRatioRules(selector, rangeInterval) =
     [
       {
         record: 'gitlab:component:feature_category:execution:apdex:ratio_%s' % [rangeInterval],
-        labels: { component: 'puma' },
+        labels: staticLabels,
         expr: latencyApdex(selector.type).apdexQuery(aggregationLabels, selector, rangeInterval),
       },
       {
         record: 'gitlab:component:feature_category:execution:apdex:weight:score_%s' % [rangeInterval],
-        labels: { component: 'puma' },
+        labels: staticLabels,
         expr: latencyApdex(selector.type).apdexWeightQuery(aggregationLabels, selector, rangeInterval),
       },
       {
         record: 'gitlab:component:feature_category:execution:apdex:success:rate_%s' % [rangeInterval],
-        labels: { component: 'puma' },
+        labels: staticLabels,
         expr: latencyApdex(selector.type).apdexSuccessRateQuery(aggregationLabels, selector, rangeInterval),
       },
     ]
@@ -66,13 +71,27 @@ local latencyApdexRatioRules(selector, rangeInterval) =
       [
         {
           record: 'gitlab:component:feature_category:execution:ops:rate_%s' % [rangeInterval],
-          labels: { component: 'puma' },
+          labels: staticLabels,
           expr: requestRate.aggregatedRateQuery(aggregationLabels, selector, rangeInterval),
         },
         {
           record: 'gitlab:component:feature_category:execution:error:rate_%s' % [rangeInterval],
-          labels: { component: 'puma' },
-          expr: errorRate.aggregatedRateQuery(aggregationLabels, selector, rangeInterval),
+          labels: staticLabels,
+          expr: |||
+            %(errorRate)s
+            or
+            (
+              0 * group by (%(aggregationLabels)s) (
+                %(operationRateName)s{%(staticLabels)s}
+              )
+            )
+          ||| % {
+            errorRate: strings.chomp(errorRate.aggregatedRateQuery(aggregationLabels, selector, rangeInterval)),
+            rangeInterval: rangeInterval,
+            aggregationLabels: aggregations.serialize(aggregationLabels),
+            operationRateName: 'gitlab:component:feature_category:execution:ops:rate_%s' % [rangeInterval],
+            staticLabels: selectors.serializeHash(selector + staticLabels),
+          },
         },
         {
           record: 'gitlab:component:feature_category:execution:error:ratio_%s' % [rangeInterval],
