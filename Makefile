@@ -98,3 +98,9 @@ ensure-generated-content-up-to-date: generate
 	(git diff --exit-code && \
 		[[ "$$(git ls-files -o --directory --exclude-standard | sed q | wc -l)" == "0" ]]) || \
 	(echo "Please run 'make generate'" && exit 1)
+
+# Ensure that you have Graphviz and Python installed
+# Instructions at https://diagrams.mingrammer.com/docs/getting-started/installation
+# then install `pip install diagrams`
+diagrams:
+	./scripts/make-diagrams
