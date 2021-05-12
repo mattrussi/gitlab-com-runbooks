@@ -76,7 +76,11 @@
 
 <!-- ## Summary -->
 
-<!-- ## Architecture -->
+## Architecture
+
+### Kubernetes Deployment
+
+![Kubernetes Deployment Diagram](api_service_kubernetes_deployment.png)
 
 <!-- ## Performance -->
 
