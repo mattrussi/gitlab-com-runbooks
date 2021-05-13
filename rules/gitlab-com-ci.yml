@@ -6,7 +6,7 @@ groups:
       predict_linear(ci_pending_builds{has_minutes="yes",shared_runners="yes"}[15m], 3600)) > 1000)
     for: 5m
     labels:
-      team: verify
+      team: runner
       severity: s4
       alert_type: cause
     annotations:
@@ -21,7 +21,7 @@ groups:
     expr: max(ci_pending_builds{has_minutes="yes",namespace!="",namespace!="9970",shared_runners="yes"}) by (namespace) > 1000
     for: 5m
     labels:
-      team: verify
+      team: runner
       severity: s4
       alert_type: cause
     annotations:
@@ -34,7 +34,7 @@ groups:
     expr: max(sum(ci_running_builds{has_minutes="yes",namespace!="",namespace!="9970",shared_runner="yes",runner=~"40786|40788|44028|44949|380986|380987"}) by (fqdn,namespace)) by (namespace) > 350
     for: 5m
     labels:
-      team: verify
+      team: runner
       severity: s4
       alert_type: cause
     annotations:
@@ -47,7 +47,7 @@ groups:
     expr: max(sum(ci_running_builds{has_minutes="yes",namespace!="",namespace!="9970",shared_runner="yes",runner=~"37397|37398|157328|157329|380989|380990"}) by (fqdn,namespace)) by (namespace) > 350
     for: 10m
     labels:
-      team: verify
+      team: runner
       severity: s4
       alert_type: cause
     annotations:
@@ -60,7 +60,7 @@ groups:
     expr: sum(gitlab_runner_jobs{job="shared-runners"}) == 0
     for: 5m
     labels:
-      team: verify
+      team: runner
       severity: s4
       alert_type: cause
     annotations:
@@ -73,7 +73,7 @@ groups:
     expr: (sum(gitlab_runner_jobs) by (job) / sum(gitlab_runner_concurrent) by (job)) > 0.85
     for: 5m
     labels:
-      team: verify
+      team: runner
       severity: s4
       alert_type: cause
     annotations:
@@ -85,7 +85,7 @@ groups:
     expr: (sum(gitlab_runner_jobs) by (job) / sum(gitlab_runner_concurrent) by (job)) > 0.95
     for: 5m
     labels:
-      team: verify
+      team: runner
       severity: s3
       alert_type: cause
     annotations:
@@ -97,7 +97,7 @@ groups:
     expr: up{job="runners-manager"} == 0
     for: 5m
     labels:
-      team: verify
+      team: runner
       severity: s3
       alert_type: cause
     annotations:
@@ -112,7 +112,7 @@ groups:
     expr: sum(gitlab_runner_autoscaling_machine_states{executor="docker+machine", state="creating"}) / (sum(gitlab_runner_autoscaling_machine_states{executor="docker+machine", state="idle"}) + 1) > 100
     for: 1m
     labels:
-      team: verify
+      team: runner
       severity: s3
       alert_type: cause
     annotations:
@@ -126,7 +126,7 @@ groups:
     expr: up{job="ci-node",fqdn=~"prometheus-.*us-east1-(c|d).*"} == 0
     for: 5m
     labels:
-      team: verify
+      team: runner
       severity: s4
       alert_type: cause
     annotations:
@@ -145,7 +145,7 @@ groups:
     expr: predict_linear(quota_region:quota_usage:ratio[6h], 3600) >= 1.0
     for: 5m
     labels:
-      team: verify
+      team: runner
       severity: s4
       alert_type: cause
     annotations:
@@ -159,7 +159,7 @@ groups:
     expr: quota_region:quota_usage:ratio * 100 > 95
     for: 5m
     labels:
-      team: verify
+      team: runner
       severity: s3
       alert_type: cause
     annotations:
@@ -176,7 +176,7 @@ groups:
       sum(changes(ci_repeated_commands_builds{shared_runners="yes",has_minutes="yes",status="running"}[45m])) by (namespace) == 0
     for: 45m
     labels:
-      team: verify
+      team: runner
       severity: s4
       alert_type: cause
     annotations:
@@ -195,7 +195,7 @@ groups:
       ) >= 30
     for: 5m
     labels:
-      team: verify
+      team: runner
       severity: s3
       alert_type: cause
     annotations:
@@ -210,7 +210,7 @@ groups:
     expr: (sum (rate(job_trace_archive_failed_total[5m])) by (job)) > 10
     for: 5m
     labels:
-      team: verify
+      team: runner
       severity: s4
       alert_type: cause
     annotations:
@@ -226,7 +226,7 @@ groups:
     expr: (sidekiq_queue_size{environment=~"gprd",name=~"pipeline.*"} and on (fqdn) gitlab:redis_master) > 1000
     for: 5m
     labels:
-      team: verify
+      team: runner
       severity: s3
       alert_type: cause
     annotations:
@@ -243,7 +243,7 @@ groups:
       sum by (environment, tier, type, stage, shard) (gitlab_runner_jobs{executor_stage="docker_run"})) > 1
     for: 5m
     labels:
-      team: verify
+      team: runner
       severity: s4
       alert_type: cause
     annotations:
