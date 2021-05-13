@@ -820,7 +820,7 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{mode="idle", type!="",type!~"nat|waf|console-node|deploy-node|security|git|mailroom|websockets|kas|kube"}[5m]))
+            avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{fqdn!="", mode="idle", type!="",type!~"nat|waf|console-node|deploy-node|security|git|mailroom|websockets|kas|kube"}[5m]))
             ,
             1)
         ,
@@ -3745,7 +3745,7 @@ groups:
         max by(environment, tier, type, stage, fqdn) (
           clamp_min(
             clamp_max(
-              avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{mode="idle", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m]))
+              avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{fqdn!="", mode="idle", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m]))
               ,
               1)
           ,
