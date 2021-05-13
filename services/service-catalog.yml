@@ -29,7 +29,6 @@ teams:
 
 - name: distribution
   url: https://about.gitlab.com/handbook/engineering/dev-backend/distribution/
-  manager_slug: marin
   slack_channel: distribution
   engagement_policy: # Link to doc that talks about engagement
                      # and escalation policy
@@ -49,14 +48,6 @@ teams:
   slack_alerts_channel: gitaly-alerts
   engagement_policy:
   oncall_schedule:
-
-- name: gitter
-  url: https://about.gitlab.com/handbook/engineering/dev-backend/gitter/
-  manager_slug: eng-manager-gitaly
-  slack_channel: g_gitaly
-  engagement_policy: # Link to doc that talks about engagement
-                     # and escalation policy
-  oncall_schedule:   # Link to pagerduty oncall schedule
 
 - name: manage
   url: https://about.gitlab.com/handbook/engineering/dev-backend/manage/
@@ -159,7 +150,6 @@ services:
     - distribution
     - geo
     - gitaly
-    - gitter
     - manage
     - plan
   infra_owner: sre_coreinfra
@@ -834,7 +824,6 @@ services:
     - distribution
     - geo
     - gitaly
-    - gitter
     - manage
     - plan
   infra_owner: sre_coreinfra
@@ -989,7 +978,6 @@ services:
     - distribution
     - geo
     - gitaly
-    - gitter
     - manage
     - plan
   infra_owner: sre_datastores
@@ -1355,7 +1343,6 @@ services:
     - distribution
     - geo
     - gitaly
-    - gitter
     - manage
     - plan
   infra_owner: sre_coreinfra
@@ -2584,7 +2571,6 @@ services:
     - distribution
     - geo
     - gitaly
-    - gitter
     - manage
     - plan
   infra_owner: sre_observability
