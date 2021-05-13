@@ -35,16 +35,25 @@ local labelsForSLI(sli, severity, aggregationSet, sliType) =
     alert_type: if sliType == 'apdex' || sliType == 'error' then 'symptom' else 'cause',
   };
 
-  if sli.team != null then
-    local team = serviceCatalog.getTeam(sli.team);
-    if std.objectHas(team, 'issue_tracker') then
-      labels {
-        incident_project: team.issue_tracker,
-      }
+  local team = if sli.team != null then serviceCatalog.getTeam(sli.team) else null;
+
+  labels + (
+    if team != null && team.issue_tracker != null then
+      { incident_project: team.issue_tracker }
     else
-      labels
-  else
-    labels;
+      {}
+  ) + (
+    /**
+     * When team.send_slo_alerts_to_team_slack_channel is configured in the service catalog
+     * alerts will be sent to slack team alert channels in addition to the
+     * usual locations
+     */
+    if team != null && team.send_slo_alerts_to_team_slack_channel then
+      { team: sli.team }
+    else
+      {}
+  );
+
 
 local toCamelCase(str) =
   std.join(

@@ -20,7 +20,8 @@ metricsCatalog.serviceDefinition({
       projectId='glsec-trust-safety-live',
       gcpRegion='us-central1',
       ignoreTrafficCessation=false,
-      apdexSatisfactoryLatency=1024,
+      apdexSatisfactoryLatency=1024,  // Latency, in milliseconds
+      team='pipeline_validation',
       additionalToolingLinks=[
         toolingLinks.kibana(title='PVS', index='pvs', includeMatchersForPrometheusSelector=false),
       ]

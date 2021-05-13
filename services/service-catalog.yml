@@ -92,7 +92,6 @@ teams:
 
 - name: support
   url: https://about.gitlab.com/handbook/support/
-  manager_slug: tcooney
   slack_channel: support_gitlab-com
   engagement_policy: # Link to doc that talks about engagement
                      # and escalation policy
@@ -101,7 +100,6 @@ teams:
 # Package team doesn't seem to exist
 - name: package
   url: https://about.gitlab.com/handbook/engineering/dev-backend/
-  manager_slug: clement
   slack_channel: backend
   engagement_policy: # Link to doc that talks about engagement
                      # and escalation policy
@@ -112,6 +110,7 @@ teams:
   manager_slug: Elliot
   slack_channel: g_verify
   slack_alerts_channel: alerts-ci-cd
+  send_slo_alerts_to_team_slack_channel: true
   engagement_policy: # Link to doc that talks about engagement
                      # and escalation policy
   oncall_schedule:   # Link to pagerduty oncall schedule
@@ -139,6 +138,10 @@ teams:
 # Rapid Action Intercom
 - name: rapid-action-intercom
   slack_alerts_channel: rapid-action-intercom
+
+- name: pipeline_validation
+  slack_alerts_channel: f_pipeline_validation_service
+  send_slo_alerts_to_team_slack_channel: true
 
 tiers:
 - name: sv
