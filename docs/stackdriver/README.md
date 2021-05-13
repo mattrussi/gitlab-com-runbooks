@@ -21,6 +21,7 @@
 * [../kube/kubernetes.md](../kube/kubernetes.md)
 * [../license/license-gitlab-com.md](../license/license-gitlab-com.md)
 * [../logging/logging_gcs_archive_bigquery.md](../logging/logging_gcs_archive_bigquery.md)
+* [../onboarding/kibana-diagnosis.md](../onboarding/kibana-diagnosis.md)
 * [../pgbouncer/pgbouncer-saturation.md](../pgbouncer/pgbouncer-saturation.md)
 * [../pubsub/pubsub-queing.md](../pubsub/pubsub-queing.md)
 * [../uncategorized/node-reboots.md](../uncategorized/node-reboots.md)

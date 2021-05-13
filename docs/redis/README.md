@@ -21,6 +21,8 @@
 * [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
 * [../kas/kubernetes-agent-disable-integrations.md](../kas/kubernetes-agent-disable-integrations.md)
 * [../monitoring/definition-service-apdex.md](../monitoring/definition-service-apdex.md)
+* [../onboarding/architecture.md](../onboarding/architecture.md)
+* [../onboarding/kibana-diagnosis.md](../onboarding/kibana-diagnosis.md)
 * [../patroni/rotating-rails-postgresql-password.md](../patroni/rotating-rails-postgresql-password.md)
 * [ban-an-IP-with-redis.md](ban-an-IP-with-redis.md)
 * [clear_anonymous_sessions.md](clear_anonymous_sessions.md)

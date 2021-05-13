@@ -22,6 +22,7 @@
 * [../gitaly/git-high-cpu-and-memory-usage.md](../gitaly/git-high-cpu-and-memory-usage.md)
 * [../gitaly/gitaly-unusual-activity.md](../gitaly/gitaly-unusual-activity.md)
 * [../monitoring/node_memory_alerts.md](../monitoring/node_memory_alerts.md)
+* [../onboarding/kibana-diagnosis.md](../onboarding/kibana-diagnosis.md)
 * [gitlab-pages.md](gitlab-pages.md)
 * [pages-domain-lookup.md](pages-domain-lookup.md)
 * [pages-letsencrypt.md](pages-letsencrypt.md)
