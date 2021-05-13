@@ -12,12 +12,14 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
     loadBalancerName,
     targetProxyName=loadBalancerName,
     projectId,
+    team=null,
     ignoreTrafficCessation=false
   )::
     local baseSelector = { target_proxy_name: targetProxyName, project_id: projectId };
 
     metricsCatalog.serviceLevelIndicatorDefinition({
       userImpacting: userImpacting,
+      [if team != null then 'team']: team,
       ignoreTrafficCessation: ignoreTrafficCessation,
 
       staticLabels: {
