@@ -46,11 +46,6 @@ local latencyApdexRatioRules(selector, rangeInterval) =
   if apdex != null then
     [
       {
-        record: 'gitlab:component:feature_category:execution:apdex:ratio_%s' % [rangeInterval],
-        labels: staticLabels,
-        expr: latencyApdex(selector.type).apdexQuery(aggregationLabels, selector, rangeInterval),
-      },
-      {
         record: 'gitlab:component:feature_category:execution:apdex:weight:score_%s' % [rangeInterval],
         labels: staticLabels,
         expr: latencyApdex(selector.type).apdexWeightQuery(aggregationLabels, selector, rangeInterval),
@@ -92,14 +87,6 @@ local latencyApdexRatioRules(selector, rangeInterval) =
             operationRateName: 'gitlab:component:feature_category:execution:ops:rate_%s' % [rangeInterval],
             staticLabels: selectors.serializeHash(selector + staticLabels),
           },
-        },
-        {
-          record: 'gitlab:component:feature_category:execution:error:ratio_%s' % [rangeInterval],
-          expr: |||
-            gitlab:component:feature_category:execution:error:rate_%(rangeInterval)s
-            /
-            gitlab:component:feature_category:execution:ops:rate_%(rangeInterval)s > 0
-          ||| % { rangeInterval: rangeInterval },
         },
       ] + latencyApdexRatioRules(selector, rangeInterval),
 }
