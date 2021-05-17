@@ -87,6 +87,10 @@ Additionally, `cmder` is an easier to use terminal emulator.
 
 ## Troubleshooting
 
+### Deadman Test
+
+A simple pipeline is executed at the project [windows-srm-deadman-test](https://gitlab.com/gitlab-org/ci-cd/tests/windows-srm-deadman-test) on a schedule every 2 hours. This serves as a canary type test to see if jobs are executing and be handled correctly by the Windows Shared Runner Managers. The job it runs is extremely simple and so a failure can be assumed to be a systemic failure of the Windows Shared Runners themselves. Notifications about job failures are posted to the Slack channel #f_win_shared_runners. If a problem is suspected on the Windows Shared Runners, look at the [history of past pipelines](https://gitlab.com/gitlab-org/ci-cd/tests/windows-srm-deadman-test/-/pipelines) for this project, and consider [triggering one manually](https://gitlab.com/gitlab-org/ci-cd/tests/windows-srm-deadman-test/-/pipelines/new) to see how it behaves.
+
 ### Shared Runners Manager Offline
 
 If a shared runners manager is [shown offline](https://gitlab.com/gitlab-com/gl-infra/infrastructure/issues/9186):
