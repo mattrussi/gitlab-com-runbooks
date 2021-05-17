@@ -17,7 +17,7 @@ local elasticQueueSize(title, metric) =
     ||| % { metric: metric },
   );
 
-stageGroupDashboards.dashboard('global_search')
+stageGroupDashboards.dashboard('global_search', ['api', 'sidekiq', 'web'])
 .addPanels(
   layout.rowGrid(
     'ElasticSearch queue size',
