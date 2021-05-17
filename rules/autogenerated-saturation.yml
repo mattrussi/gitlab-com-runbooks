@@ -77,9 +77,9 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            rate(node_disk_reads_completed_total{device!="sda", type=~"patroni|gitaly|nfs"}[20m])
+            rate(node_disk_reads_completed_total{device!="sda", type=~"patroni|gitaly"}[20m])
             /
-            node_disk_max_read_iops{device!="sda", type=~"patroni|gitaly|nfs"}
+            node_disk_max_read_iops{device!="sda", type=~"patroni|gitaly"}
             ,
             1)
         ,
@@ -92,9 +92,9 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            rate(node_disk_read_bytes_total{device!="sda", type=~"patroni|gitaly|nfs"}[20m])
+            rate(node_disk_read_bytes_total{device!="sda", type=~"patroni|gitaly"}[20m])
             /
-            node_disk_max_read_bytes_seconds{device!="sda", type=~"patroni|gitaly|nfs"}
+            node_disk_max_read_bytes_seconds{device!="sda", type=~"patroni|gitaly"}
             ,
             1)
         ,
@@ -107,9 +107,9 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            rate(node_disk_writes_completed_total{device!="sda", type=~"patroni|gitaly|nfs"}[20m])
+            rate(node_disk_writes_completed_total{device!="sda", type=~"patroni|gitaly"}[20m])
             /
-            node_disk_max_write_iops{device!="sda", type=~"patroni|gitaly|nfs"}
+            node_disk_max_write_iops{device!="sda", type=~"patroni|gitaly"}
             ,
             1)
         ,
@@ -122,9 +122,9 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            rate(node_disk_written_bytes_total{device!="sda", type=~"patroni|gitaly|nfs"}[20m])
+            rate(node_disk_written_bytes_total{device!="sda", type=~"patroni|gitaly"}[20m])
             /
-            node_disk_max_write_bytes_seconds{device!="sda", type=~"patroni|gitaly|nfs"}
+            node_disk_max_write_bytes_seconds{device!="sda", type=~"patroni|gitaly"}
             ,
             1)
         ,

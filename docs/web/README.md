@@ -48,7 +48,6 @@
 * [../monitoring/common-tasks.md](../monitoring/common-tasks.md)
 * [../monitoring/definition-service-error-rate.md](../monitoring/definition-service-error-rate.md)
 * [../monitoring/definition-service-ops-rate.md](../monitoring/definition-service-ops-rate.md)
-* [../nfs/recovering-from-nfs-disaster.md](../nfs/recovering-from-nfs-disaster.md)
 * [../patroni/pg_collect_query_data.md](../patroni/pg_collect_query_data.md)
 * [../patroni/postgres.md](../patroni/postgres.md)
 * [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
