@@ -74,7 +74,7 @@ replication (see recovery.conf). As of writing,
 * In a tmux: 
   * `cd /tmp; sudo -u gitlab-psql PGHOST=/var/opt/gitlab/postgresql /usr/bin/envdir /etc/wal-g.d/env /opt/wal-g/bin/wal-g backup-fetch /var/opt/gitlab/postgresql/data base_00000...`
     * **take the backup name found above**; this might take 20m or so to finish
-* Restore recovery configurations: `cat /var/opt/gitlab/postgresql/data.bak/recovery.conf >> /var/opt/gitlab/postgresql/data/gitlab-geo.conf`
+* Restore recovery configurations: `cat /var/opt/gitlab/postgresql/data.bak/recovery.conf | grep -v recovery_target_timeline >> /var/opt/gitlab/postgresql/data/gitlab-geo.conf`
   * it should look like this:
 
    ```
