@@ -177,11 +177,6 @@ groups:
     expr: '0.001000'
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
-      tier: stor
-      type: nfs
-    expr: '0.000100'
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
       tier: lb
       type: pages
     expr: '0.000100'
@@ -414,11 +409,6 @@ groups:
     labels:
       tier: inf
       type: monitoring
-    expr: '1'
-  - record: gitlab_service:mapping:disable_ops_rate_prediction
-    labels:
-      tier: stor
-      type: nfs
     expr: '1'
   - record: gitlab_service:mapping:disable_ops_rate_prediction
     labels:
@@ -853,14 +843,6 @@ groups:
       service_aggregation: 'yes'
       tier: inf
       type: nat
-    expr: '1'
-  - record: gitlab_component_service:mapping
-    labels:
-      component: nfs_service
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
-      tier: stor
-      type: nfs
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:

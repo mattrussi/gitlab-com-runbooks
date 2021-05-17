@@ -16,7 +16,6 @@
   import 'mailroom.jsonnet',
   import 'monitoring.jsonnet',
   import 'nat.jsonnet',
-  import 'nfs.jsonnet',
   import 'pages.jsonnet',
   import 'patroni.jsonnet',
   import 'postgres-archive.jsonnet',

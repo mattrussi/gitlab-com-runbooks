@@ -3,5 +3,5 @@
 // as such, we only record this utilisation metric on IO subset of the fleet for now.
 
 {
-  diskPerformanceSensitiveServices:: ['patroni', 'gitaly', 'nfs'],
+  diskPerformanceSensitiveServices:: ['patroni', 'gitaly'],
 }
