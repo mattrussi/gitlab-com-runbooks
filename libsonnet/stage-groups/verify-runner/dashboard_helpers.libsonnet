@@ -37,7 +37,7 @@ local runnerServiceDashboardsLinks = [
   platformLinks.dynamicLinks('%s Incident Dashboards' % runnerServiceType, '%s:incident-support' % runnerServiceType),
 ];
 
-local dashboard(title, tags=[], time_from='now-3h/m') =
+local dashboard(title, tags=[], time_from='now-3h/m', includeStandardEnvironmentAnnotations=true) =
   basic.dashboard(
     title,
     tags=[
@@ -48,7 +48,7 @@ local dashboard(title, tags=[], time_from='now-3h/m') =
     time_to='now/m',
     refresh='1m',
     graphTooltip='shared_crosshair',
-    includeStandardEnvironmentAnnotations=true,
+    includeStandardEnvironmentAnnotations=includeStandardEnvironmentAnnotations,
     includeEnvironmentTemplate=true,
   )
   .addTemplate(prebuiltTemplates.stage)
@@ -82,12 +82,14 @@ local dashboard(title, tags=[], time_from='now-3h/m') =
     addRowGrid(
       title,
       startRow,
+      collapse=false,
       panels=[],
     ):: self.addPanels(
       layout.rowGrid(
         title,
         panels,
-        startRow=startRow
+        startRow=startRow,
+        collapse=collapse,
       )
     ),
     addGrid(
