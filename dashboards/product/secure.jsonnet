@@ -62,21 +62,21 @@ basic.dashboard(
     startRow=3001,
   ),
 ).addPanel(
-  row.new(title='SAST'), gridPos={ x: 0, y: 3000, w: 24, h: 1 }
+  row.new(title='SAST'), gridPos={ x: 0, y: 4000, w: 24, h: 1 }
 ).addPanels(
   layout.grid(
     [
       productCommon.pageDetail('SAST Config UI', 'SAST_Config_UI', 'https://gitlab.com/gitlab-examples/security/security-reports/-/security/configuration/sast'),
     ],
-    startRow=3001,
+    startRow=4001,
   ),
 ).addPanel(
-  row.new(title='Fuzz Testing'), gridPos={ x: 0, y: 3000, w: 24, h: 1 }
+  row.new(title='Fuzz Testing'), gridPos={ x: 0, y: 5000, w: 24, h: 1 }
 ).addPanels(
   layout.grid(
     [
       productCommon.pageDetail('API Fuzzing Config UI', 'API_Fuzzing_Config_UI', 'https://gitlab.com/gitlab-examples/security/security-reports/-/security/configuration/api_fuzzing'),
     ],
-    startRow=3001,
+    startRow=5001,
   ),
 )
