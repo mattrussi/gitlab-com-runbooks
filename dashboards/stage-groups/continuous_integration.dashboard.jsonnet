@@ -452,16 +452,10 @@ stageGroupDashboards.dashboard('continuous_integration')
   layout.rowGrid(
     'Metrics for pipeline and jobs failures',
     [
-      grafana.text.new(
-        title='Metrics for pipeline and job failures',
-        mode='markdown',
-        content=|||
-          Metrics pertaining to pipeline and job failures.
-        |||
-      ),
       basic.timeseries(
         title='Pipeline Failure Reasons',
         description='Rate of pipeline failure reasons.',
+        legendFormat='{{ reason }}',
         query=|||
           sum(
             rate(
@@ -476,6 +470,7 @@ stageGroupDashboards.dashboard('continuous_integration')
       basic.timeseries(
         title='Job Failure Reasons',
         description='Rate of job failure reasons.',
+        legendFormat='{{ reason }}',
         query=|||
           sum(
             rate(
