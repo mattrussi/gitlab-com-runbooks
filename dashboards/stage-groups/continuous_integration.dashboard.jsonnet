@@ -448,4 +448,42 @@ stageGroupDashboards.dashboard('continuous_integration')
     ),
   ], cols=2, startRow=1401)
 )
+.addPanels(
+  layout.rowGrid(
+    'Metrics for pipeline and jobs failures',
+    [
+      basic.timeseries(
+        title='Pipeline Failure Reasons',
+        description='Rate of pipeline failure reasons.',
+        legendFormat='{{ reason }}',
+        query=|||
+          sum(
+            rate(
+              gitlab_ci_pipeline_failure_reasons{
+                environment="$environment",
+                stage="$stage",
+              }[$__interval]
+            )
+          ) by (reason)
+        |||,
+      ),
+      basic.timeseries(
+        title='Job Failure Reasons',
+        description='Rate of job failure reasons.',
+        legendFormat='{{ reason }}',
+        query=|||
+          sum(
+            rate(
+              gitlab_ci_job_failure_reasons{
+                environment="$environment",
+                stage="$stage",
+              }[$__interval]
+            )
+          ) by (reason)
+        |||,
+      ),
+    ],
+    startRow=1500
+  )
+)
 .stageGroupDashboardTrailer()
