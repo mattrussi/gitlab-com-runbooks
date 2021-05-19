@@ -202,43 +202,43 @@ groups:
       kube_hpa_spec_target_metric
       *
       on(hpa) group_left(tier, type, stage, shard)
-      topk by (hpa) (1, kube_hpa_labels{type!=""})
+      topk by (hpa) (1, kube_hpa_labels:labeled{type!=""})
   - record: kube_hpa_status_condition:labeled
     expr: |
       kube_hpa_status_condition
       *
       on(hpa) group_left(tier, type, stage, shard)
-      topk by (hpa) (1, kube_hpa_labels{type!=""})
+      topk by (hpa) (1, kube_hpa_labels:labeled{type!=""})
   - record: kube_hpa_status_current_replicas:labeled
     expr: |
       kube_hpa_status_current_replicas
       *
       on(hpa) group_left(tier, type, stage, shard)
-      topk by (hpa) (1, kube_hpa_labels{type!=""})
+      topk by (hpa) (1, kube_hpa_labels:labeled{type!=""})
   - record: kube_hpa_status_desired_replicas:labeled
     expr: |
       kube_hpa_status_desired_replicas
       *
       on(hpa) group_left(tier, type, stage, shard)
-      topk by (hpa) (1, kube_hpa_labels{type!=""})
+      topk by (hpa) (1, kube_hpa_labels:labeled{type!=""})
   - record: kube_hpa_metadata_generation:labeled
     expr: |
       kube_hpa_metadata_generation
       *
       on(hpa) group_left(tier, type, stage, shard)
-      topk by (hpa) (1, kube_hpa_labels{type!=""})
+      topk by (hpa) (1, kube_hpa_labels:labeled{type!=""})
   - record: kube_hpa_spec_max_replicas:labeled
     expr: |
       kube_hpa_spec_max_replicas
       *
       on(hpa) group_left(tier, type, stage, shard)
-      topk by (hpa) (1, kube_hpa_labels{type!=""})
+      topk by (hpa) (1, kube_hpa_labels:labeled{type!=""})
   - record: kube_hpa_spec_min_replicas:labeled
     expr: |
       kube_hpa_spec_min_replicas
       *
       on(hpa) group_left(tier, type, stage, shard)
-      topk by (hpa) (1, kube_hpa_labels{type!=""})
+      topk by (hpa) (1, kube_hpa_labels:labeled{type!=""})
   - record: kube_node_labels:labeled
     expr: |
       group without(service_shard,service_stage,service_tier,service_type) (

@@ -112,7 +112,7 @@ local kubeHPALabelJoinExpression(expression) =
     %(expression)s
     *
     on(hpa) group_left(tier, type, stage, shard)
-    topk by (hpa) (1, kube_hpa_labels{type!=""})
+    topk by (hpa) (1, kube_hpa_labels:labeled{type!=""})
   ||| % {
     expression: expression,
   };
