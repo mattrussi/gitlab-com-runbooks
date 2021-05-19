@@ -1638,6 +1638,8 @@ services:
         location:  /var/opt/gitlab/postgresql/pg_ident.conf
       - config_name:  pg_hba.conf
         location:  /var/opt/gitlab/postgresql/pg_hba.conf
+      - config_name:  postgresql.auto.conf
+        location:  /var/opt/gitlab/postgresql/postgresql.auto.conf
       - config_name:  patroni.yml
         location:  /var/opt/gitlab/patroni/patroni.yml
     chef_roles:
@@ -1781,8 +1783,8 @@ services:
         location: /var/opt/gitlab/postgresql/pg_ident.conf
       - config_name: pg_hba.conf
         location: /var/opt/gitlab/postgresql/pg_hba.conf
-      - config_name: recovery.conf
-        location: /var/opt/gitlab/postgresql/data/recovery.conf
+      - config_name:  postgresql.auto.conf
+        location:  /var/opt/gitlab/postgresql/postgresql.auto.conf
     chef_roles:
       - gstg-base-db-postgres-archive
       - gprd-base-db-postgres-archive
@@ -1864,8 +1866,8 @@ services:
         location: /var/opt/gitlab/postgresql/pg_ident.conf
       - config_name: pg_hba.conf
         location: /var/opt/gitlab/postgresql/pg_hba.conf
-      - config_name: recovery.conf
-        location: /var/opt/gitlab/postgresql/data/recovery.conf
+      - config_name:  postgresql.auto.conf
+        location:  /var/opt/gitlab/postgresql/postgresql.auto.conf
     chef_roles:
       - gstg-base-db-postgres-delayed
       - gprd-base-db-postgres-delayed
