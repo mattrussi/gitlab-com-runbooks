@@ -1126,14 +1126,6 @@ groups:
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
-      component: shard_catchnfs
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
-      tier: sv
-      type: sidekiq
-    expr: '1'
-  - record: gitlab_component_service:mapping
-    labels:
       component: shard_database_throttled
       regional_aggregation: 'no'
       service_aggregation: 'yes'
