@@ -175,17 +175,24 @@ In order to restore, the following steps should be performed. It is assumed that
 you have already set up the new server, and that server is configured with our
 current chef configuration.
 
-1. Log in to the `gitlab-psql` user (`su - gitlab-psql`)
 
-1. Create restore.conf file: <!-- Nik: TODO: review and fix this, this is very outdated -->
+1. In the Chef role assigned to the node, add `recipe[gitlab-server::postgresql-standby]` to the runlist,
+   apply the following attributes then converge Chef:
 
-    ```bash
-    cat > /var/opt/gitlab/postgresql/data/recovery.conf <<RECOVERY
-    restore_command = '/usr/bin/envdir /etc/wal-e.d/env /opt/wal-e/bin/wal-e wal-fetch -p 4 "%f" "%p"'
-    recovery_target_timeline = 'latest'
-    RECOVERY
-    chown gitlab-psql:gitlab-psql/var/opt/gitlab/postgresql/data/recovery.conf
+    ```json
+    {
+      "gitlab-server": {
+        "postgresql-standby": {
+          "postgres-conf-auto-rules": {
+            "restore_command": "/usr/bin/envdir /etc/wal-g.d/env /opt/wal-g/bin/wal-g wal-fetch \"%f\" \"%p\"",
+            "recovery_target_timeline": "latest"
+          }
+        }
+      }
+    }
     ```
+
+1. Log in to the `gitlab-psql` user (`su - gitlab-psql`)
 
 1. Restore the base backup (run in a screen on tmux session and be ready to wait
    several hours):
@@ -208,15 +215,15 @@ current chef configuration.
 
 1. Optional: In case the database should only be recovered to a certain
    point-in-time, add [recovery target
-   settings](https://www.postgresql.org/docs/9.6/recovery-target-settings.html)
-   to `recovery.conf`.
+   settings](https://www.postgresql.org/docs/12/runtime-config-wal.html#RUNTIME-CONFIG-WAL-RECOVERY-TARGET)
+   to `postgresql.auto.conf`.
 
 1. Start PostgreSQL. This will begin the archive recovery. You can watch the
    progress in the postgres log.
 
 1. IMPORTANT:
     - WAL-G won't stores the PostgreSQL configuration (postgresql.conf,
-      postgresql.auto.conf, recovery.conf). You need to take care about
+      postgresql.auto.conf). You need to take care about
       configuration separately.
     - As of June 2020, `restore_command` is not used on `patroni-XX` nodes.
       Therefore, if your restoration is happening as a part of DR, you need to

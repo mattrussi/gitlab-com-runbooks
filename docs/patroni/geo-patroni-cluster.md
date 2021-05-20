@@ -78,7 +78,6 @@ replication (see recovery.conf). As of writing,
   * it should look like this:
 
    ```
-   standby_mode = 'on'
    restore_command = '/usr/bin/envdir /etc/wal-g.d/env /opt/wal-g/bin/wal-g wal-fetch "%f" "%p"'
    recovery_target_timeline = 'latest'
 

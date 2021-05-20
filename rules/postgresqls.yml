@@ -376,7 +376,7 @@ groups:
         Database {{ $labels.fqdn }} has {{ $value | printf "%.1f" }}
         connections with SSL compression enabled. This may add significant
         jitter in replication delay. Replicas should turn off SSL compression
-        via `sslcompression=0` in `recovery.conf`.
+        via `sslcompression=0` in `postgresql.conf` (under `primary_conninfo` parameter).
       title: Clients are using SSL compression
   - alert: PostgreSQL_HighRateOfTempFilesCreation
     expr: rate(postgresql_temp_files_total[1m]) > 1
