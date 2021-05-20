@@ -29,9 +29,8 @@ groups:
       grafana_variables: environment,tier,type,fqdn,relname
     labels:
       alert_type: cause
-      pager: pagerduty
       runbook: docs/patroni/rails-sql-apdex-slow.md
-      severity: s1
+      severity: s4
       team: rapid-action-intercom
     expr: |
       (
@@ -49,93 +48,6 @@ groups:
       ) > 0.5
   - alert: PostgreSQL_HotSpotTupleFetchingReplicas
     for: 10m
-    annotations:
-      title: >-
-        Hot spot tuple fetches on the postgres postgres replicas in the `{{ $labels.relname }}` table,
-        `{{ $labels.relname }}`.
-      description: |
-        More than 50% of all tuple fetches on postgres postgres replicas are for a single table.
-
-        This may indicate that the query optimizer is using incorrect statistics to execute a query.
-
-        This could be due to vacuum and analyze commands (issued either automatically or manually) against this table or closely related table. As a new step, check which tables were analyzed and vacuumed immediately prior to this incident.
-
-        <https://log.gprd.gitlab.net/app/kibana#/discover?_a=(columns:!(json.hostname,json.endpoint_id,json.error_severity,json.message,json.session_start_time,json.sql_state_code,json.duration_s,json.sql),filters:!((query:(match:(json.sql:(query:'{{$labels.relname}}',type:phrase))))),index:'97f04200-024b-11eb-81e5-155ba78758d4')|postgres slowlog in Kibana>
-
-        Previous incidents of this type include <https://gitlab.com/gitlab-com/gl-infra/production/-/issues/2885> and <https://gitlab.com/gitlab-com/gl-infra/production/-/issues/3875>.
-      grafana_dashboard_id: alerts-pg_user_tables_replica/alerts-pg-user-table-alerts-replicas
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/alerts-pg_user_tables_replica/alerts-pg-user-table-alerts-replicas?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-tier={{ $labels.tier }}&var-type={{ $labels.type }}&var-relname={{
-        $labels.relname }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2'
-      grafana_variables: environment,tier,type,relname
-    labels:
-      alert_type: cause
-      pager: pagerduty
-      runbook: docs/patroni/rails-sql-apdex-slow.md
-      severity: s1
-      team: rapid-action-intercom
-    expr: |
-      (
-        sum by (environment,tier,type,relname) (
-          rate(pg_stat_user_tables_idx_tup_fetch{type="patroni"}[5m])
-          and on(job, instance)
-          pg_replication_is_replica == 1
-        )
-        / ignoring(relname) group_left()
-          sum by (environment,tier,type) (
-            rate(pg_stat_user_tables_idx_tup_fetch{type="patroni"}[5m])
-            and on(job, instance)
-            pg_replication_is_replica == 1
-        )
-      ) > 0.5
-  - alert: PostgreSQL_HotSpotTupleFetchingPrimaryWarning
-    for: 3m
-    annotations:
-      title: >-
-        Hot spot tuple fetches on the postgres postgres replicas in the `{{ $labels.relname }}` table,
-        `{{ $labels.relname }}`.
-      description: |
-        More than 50% of all tuple fetches on postgres postgres replicas are for a single table.
-
-        This may indicate that the query optimizer is using incorrect statistics to execute a query.
-
-        This could be due to vacuum and analyze commands (issued either automatically or manually) against this table or closely related table. As a new step, check which tables were analyzed and vacuumed immediately prior to this incident.
-
-        <https://log.gprd.gitlab.net/app/kibana#/discover?_a=(columns:!(json.hostname,json.endpoint_id,json.error_severity,json.message,json.session_start_time,json.sql_state_code,json.duration_s,json.sql),filters:!((query:(match:(json.sql:(query:'{{$labels.relname}}',type:phrase))))),index:'97f04200-024b-11eb-81e5-155ba78758d4')|postgres slowlog in Kibana>
-
-        Previous incidents of this type include <https://gitlab.com/gitlab-com/gl-infra/production/-/issues/2885> and <https://gitlab.com/gitlab-com/gl-infra/production/-/issues/3875>.
-      grafana_dashboard_id: alerts-pg_user_tables_replica/alerts-pg-user-table-alerts-replicas
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/alerts-pg_user_tables_replica/alerts-pg-user-table-alerts-replicas?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-tier={{ $labels.tier }}&var-type={{ $labels.type }}&var-relname={{
-        $labels.relname }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2'
-      grafana_variables: environment,tier,type,relname
-    labels:
-      alert_type: cause
-      runbook: docs/patroni/rails-sql-apdex-slow.md
-      severity: s4
-      team: rapid-action-intercom
-    expr: |
-      (
-        sum by (environment,tier,type,relname) (
-          rate(pg_stat_user_tables_idx_tup_fetch{type="patroni"}[5m])
-          and on(job, instance)
-          pg_replication_is_replica == 1
-        )
-        / ignoring(relname) group_left()
-          sum by (environment,tier,type) (
-            rate(pg_stat_user_tables_idx_tup_fetch{type="patroni"}[5m])
-            and on(job, instance)
-            pg_replication_is_replica == 1
-        )
-      ) > 0.5
-  - alert: PostgreSQL_HotSpotTupleFetchingReplicasWarning
-    for: 5m
     annotations:
       title: >-
         Hot spot tuple fetches on the postgres postgres replicas in the `{{ $labels.relname }}` table,
