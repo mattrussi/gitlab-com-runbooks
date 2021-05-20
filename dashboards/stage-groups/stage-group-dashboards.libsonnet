@@ -9,6 +9,7 @@ local platformLinks = import '../platform_links.libsonnet';
 local singleMetricRow = import 'key-metric-panels/single-metric-row.libsonnet';
 local aggregationSets = import '../../metrics-catalog/aggregation-sets.libsonnet';
 local errorBudget = import 'stage-groups/error_budget.libsonnet';
+local budgetUtils = import 'stage-groups/error-budget/utils.libsonnet';
 local sidekiqHelpers = import 'services/lib/sidekiq-helpers.libsonnet';
 local thresholds = import 'thresholds.libsonnet';
 
@@ -41,19 +42,19 @@ local actionFilter(featureCategoriesSelector) =
     allValues='.*'
   );
 
-local errorBudgetPanels(group, range) =
+local errorBudgetPanels(group) =
   [
     [
-      errorBudget.availabilityStatPanel(group.key, range),
-      errorBudget.availabilityTargetStatPanel(group.key, range),
+      errorBudget.panels.availabilityStatPanel(group.key),
+      errorBudget.panels.availabilityTargetStatPanel(group.key),
     ],
     [
-      errorBudget.timeRemainingStatPanel(group.key, range),
-      errorBudget.timeRemainingTargetStatPanel(group.key, range),
+      errorBudget.panels.timeRemainingStatPanel(group.key),
+      errorBudget.panels.timeRemainingTargetStatPanel(group.key),
     ],
     [
-      errorBudget.timeSpentStatPanel(group.key, range),
-      errorBudget.timeSpentTargetStatPanel(group.key, range),
+      errorBudget.panels.timeSpentStatPanel(group.key),
+      errorBudget.panels.timeSpentTargetStatPanel(group.key),
     ],
     [
       grafana.text.new(
@@ -98,7 +99,7 @@ local errorBudgetPanels(group, range) =
         ||| % {
           slaTarget: '%.2f%%' % (errorBudget.slaTarget * 100.0),
           budgetRatio: '%.2f%%' % ((1 - errorBudget.slaTarget) * 100.0),
-          budgetMinutes: '%i' % (errorBudget.budgetSeconds(range) / 60),
+          budgetMinutes: '%i' % (budgetUtils.budgetSeconds(errorBudget.slaTarget, errorBudget.range) / 60),
           groupName: group.name,
         },
       ),
@@ -452,10 +453,9 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
     .addPanels(
       if displayBudget then
         // Errorbudgets are always viewed over a 28d rolling average, regardles of the
-        // selected range
-        local range = '28d';
+        // selected range see the configuration in `libsonnet/stage-groups/error_budget.libsonnet`
         local title = 'Error Budget (past 28 days)';
-        layout.splitColumnGrid(errorBudgetPanels(group, range), startRow=100, cellHeights=[4, 2], title=title)
+        layout.splitColumnGrid(errorBudgetPanels(group), startRow=100, cellHeights=[4, 2], title=title)
       else
         []
     )
