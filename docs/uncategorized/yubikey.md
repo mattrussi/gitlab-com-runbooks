@@ -699,6 +699,12 @@ This problem can manifest itself in a few ways:
 The solution is to "kick" gpg-agent into checking for a SmartCard by running
 `gpg --card-status`.
 
+If you run gpg --card-status with the YubiKey plugged in and GPG does not detect the YubiKey, try the steps below:
+
+* Specify the smart card reader GPG uses by adding the line `reader-port Yubico Yubi` to the scdaemon.conf file; create the file if it does not exist. After making this change, reboot your computer to ensure it takes affect. 
+  * On macOS and Linux it is at: ~/.gnupg/scdaemon.conf
+  * On macOS or Linux, you may need to add "reader-port Yubico Yubikey" (with a lowercase K) instead of what is above if you are using a YubiKey 4 Series or NEO
+
 ### ssh connections hang
 
 add `disable-ccid` to `~/.gnupg/scdaemon.conf` and use the restart script to restart `gpg-agent` (which manages scdaemon)
