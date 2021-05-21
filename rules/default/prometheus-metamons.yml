@@ -227,7 +227,7 @@ groups:
     expr: >
       sum by(environment, tier, type, shard, stage) (
         rate(prometheus_rule_evaluation_failures_total[5m])
-      ) > 0
+      ) > 10
     for: 10m
     labels:
       severity: s3
