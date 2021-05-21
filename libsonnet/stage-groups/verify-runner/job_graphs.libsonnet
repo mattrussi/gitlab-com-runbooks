@@ -62,7 +62,7 @@ local startedJobsGraph(aggregators=[]) =
     seriesOverrides+: [{
       alias: 'avg',
       bars: false,
-      color: '#ffffffff',
+      color: '#ff0000ff',
       fill: 0,
       lines: true,
       linewidth: 2,
@@ -129,7 +129,7 @@ local finishedJobsMinutesIncreaseGraph =
     seriesOverrides+: [{
       alias: 'avg',
       bars: false,
-      color: '#ffffffff',
+      color: '#ff0000ff',
       fill: 0,
       lines: true,
       linewidth: 2,
