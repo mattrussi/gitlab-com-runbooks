@@ -1,8 +1,21 @@
 # GKE Cluster Upgrade Procedure
 
-All of our non-gprd GKE clusters are now set to automatically upgrade. They are all
+All of our GKE clusters are now set to automatically upgrade. They are all
 using the [Regular release channel](https://cloud.google.com/kubernetes-engine/docs/concepts/release-channels)
-and have specific times they will upgrade themselves, as documented [here](https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/1137#note_433946309).
+and have specific times they will upgrade themselves, as documented below
+
+| Environment | Cluster | Upgrade Window 1 | Upgrade Window 2 |
+| --- | --- | --- | --- |
+| pre | pre-gitlab-gke | 02:00:00 - 08:00:00 MON | 02:00:00 - 08:00:00 TUE |
+| gstg | gstg-gitlab-gke | 02:00:00 - 08:00:00 TUE | 02:00:00 - 08:00:00 WED |
+| gstg | gstg-us-east1-b | 02:00:00 - 08:00:00 MON | 02:00:00 - 08:00:00 TUE |
+| gstg | gstg-us-east1-c | 02:00:00 - 08:00:00 TUE | 02:00:00 - 08:00:00 WED |
+| gstg | gstg-us-east1-d | 02:00:00 - 08:00:00 TUE | 02:00:00 - 08:00:00 WED |
+| gprd | gprd-gitlab-gke | 02:00:00 - 08:00:00 TUE | 02:00:00 - 08:00:00 WED |
+| gprd | gprd-us-east1-b | 02:00:00 - 08:00:00 MON | 02:00:00 - 08:00:00 TUE |
+| gprd | gprd-us-east1-c | 02:00:00 - 08:00:00 TUE | 02:00:00 - 08:00:00 WED |
+| gprd | gprd-us-east1-d | 02:00:00 - 08:00:00 TUE | 02:00:00 - 08:00:00 WED |
+| ops | gitlab-ops | 02:00:00 - 08:00:00 MON | 02:00:00 - 08:00:00 TUE |
 
 We have a cloud function called [gke-notifications](https://gitlab.com/gitlab-com/gl-infra/gke-notifications/)
 which will add annotations to Grafana every time a GKE auto upgrade takes place.
@@ -23,6 +36,44 @@ reach out to Google support with a sev 1 issue to attempt to recover the cluster
 In the case of entire catastrophic failure, we can destroy the cluster and
 recreate it using terraform (and bootstrap it following instructions at
 https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/uncategorized/k8s-new-cluster.md
+
+## Notes about auto-ugprades being "cancelled"
+The short take is that it's not a problem that this happens.
+
+If a node-pool upgrade doesn't finish by the time our "maintenance window" is over, GCP "cancels" the upgrade,
+which sounds a lot more serious than it is. Basically it finishes the node it was upgrading, then leaves the
+node pool in a state where some nodes are the old version, some are the new, and it will continue the upgrade next maintenance window.
+
+An example
+
+```
+operation-1617690426743-bb7cc7db  UPGRADE_NODES      us-east1    sidekiq-catchall-1                         Operation was aborted:
+```
+
+Timing for that operation (note 08:00 is the time maintenance window stops)
+
+```
+operation-1617690426743-bb7cc7db.  DONE    2021-04-06T06:27:06.743928908Z  2021-04-06T08:05:29.438407193Z
+```
+
+Now if we look at what happens to the node pool with auto-scaling after an aborted upgrade we see
+
+```
+ggillies@console-01-sv-gprd.c.gitlab-production.internal:~$ kubectl get nodes | grep sidekiq-catchall
+gke-gprd-gitlab-gke-sidekiq-catchall--4055e82f-dm0m   Ready    <none>   23h     v1.18.16-gke.302
+gke-gprd-gitlab-gke-sidekiq-catchall--4055e82f-gmjm   Ready    <none>   14h     v1.18.16-gke.302
+gke-gprd-gitlab-gke-sidekiq-catchall--4055e82f-kvlb   Ready    <none>   23h     v1.18.16-gke.302
+gke-gprd-gitlab-gke-sidekiq-catchall--4055e82f-lsv0   Ready    <none>   40h     v1.18.16-gke.302
+gke-gprd-gitlab-gke-sidekiq-catchall--8adf5714-0hou   Ready    <none>   41h     v1.18.16-gke.302
+gke-gprd-gitlab-gke-sidekiq-catchall--8adf5714-f4ub   Ready    <none>   41h     v1.18.16-gke.302
+gke-gprd-gitlab-gke-sidekiq-catchall--8adf5714-qg4r   Ready    <none>   41h     v1.18.16-gke.302
+gke-gprd-gitlab-gke-sidekiq-catchall--8adf5714-wln2   Ready    <none>   41h     v1.18.16-gke.302
+gke-gprd-gitlab-gke-sidekiq-catchall--9cb3bfc4-2158   Ready    <none>   14h     v1.18.12-gke.1210
+gke-gprd-gitlab-gke-sidekiq-catchall--9cb3bfc4-g0gh   Ready    <none>   36h     v1.18.12-gke.1210
+gke-gprd-gitlab-gke-sidekiq-catchall--9cb3bfc4-ps05   Ready    <none>   14h     v1.18.12-gke.1210
+```
+
+New nodes are spun up with the old version (note this upgrade was a minor upgrade from v1.18.12-gke.1210 to v1.18.16-gke.302.
 
 ## Notes about forced upgrades across minor versions
 You can look at the release notes for the regular release channel [here](https://cloud.google.com/kubernetes-engine/docs/release-notes-regular)
@@ -125,7 +176,11 @@ gcloud --project <PROJECT> container node-pools list --cluster <CLUSTER> --regio
 And make a note of the names of all the node pools. Each node pool will need
 it's own step documented as below
 
-### Step 3: Upgrade Node Pool <NODE POOL NAME>
+### OPTIONAL Step 3: Upgrade Node Pool <NODE POOL NAME>
+
+Note with auto-upgrades enabled on all our clusters, this step really is optional. The default and best solution
+is to just let nodes auto-upgrade at their leisure.
+
 * [ ] Upgrade the node pool by running the following command
 
 ```
