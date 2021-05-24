@@ -1,11 +1,11 @@
 local selectors = import 'promql/selectors.libsonnet';
 
 local generateUtilizationRules(utilizationRules) =
-  local selectorHash =  {};
+  local selectorHash = {};
   local selector = selectors.serializeHash(selectorHash);
 
   local utilizationRuleNames = std.objectFields(utilizationRules);
-  local rules = std.map(function(key) utilizationRules[key].getRecordingRuleDefinition(key), utilizationRuleNames);
+  local rules = std.flatMap(function(key) utilizationRules[key].getRecordingRuleDefinitions(key), utilizationRuleNames);
 
   {
     'utilization.yml':

@@ -9,8 +9,8 @@ local utilizationMetric = metricsCatalog.utilizationMetric;
     description: |||
       Monitors the size of the biggest tables in Postgres
     |||,
-    grafana_dashboard_uid: 'util_pg_table_size',
     resourceLabels: ['relname'],
+    topk: 10,
     query: |||
       avg by (%(aggregationLabels)s) (
         avg_over_time(pg_total_relation_size_bytes{%(selector)s}[1h])
@@ -18,6 +18,6 @@ local utilizationMetric = metricsCatalog.utilizationMetric;
           pg_replication_is_replica{%(selector)s} == 0
         )
       )
-    |||
+    |||,
   }),
 }

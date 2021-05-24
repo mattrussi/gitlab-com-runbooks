@@ -1,7 +1,16 @@
+local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 
 local environmentLabels = ['environment', 'tier', 'type', 'stage'];
+
+// Default values to apply to a utilization definition
+local utilizationDefinitionDefaults = {
+  staticLabels: {},
+  queryFormatConfig: {},
+  /* When topk is set we record the topk items */
+  topk: null,
+};
 
 local getAllowedServiceApplicator(allowedList) =
   local allowedSet = std.set(allowedList);
@@ -24,18 +33,12 @@ local validateAndApplyDefaults(definition) =
     std.isString(definition.title) &&
     (std.isArray(definition.appliesTo) || std.isObject(definition.appliesTo)) &&
     std.isString(definition.description) &&
-    std.isString(definition.grafana_dashboard_uid) &&
     std.isArray(definition.resourceLabels) &&
     std.isString(definition.query);
 
   // Apply defaults
   if validated then
-    {
-      staticLabels: {},
-      queryFormatConfig: {},
-      topk: 10,
-    } + definition + {
-    }
+    utilizationDefinitionDefaults + definition
   else
     std.assertEqual(definition, { __assert__: 'Resource definition is invalid' });
 
@@ -44,32 +47,58 @@ local utilizationMetric = function(options)
   local serviceApplicator = getServiceApplicator(definition.appliesTo);
 
   definition {
-    getQuery(selectorHash, rangeInterval, maxAggregationLabels=[])::
+    getTypeFilter()::
+      (
+        if std.isArray(definition.appliesTo) then
+          if std.length(definition.appliesTo) > 1 then
+            { type: { re: std.join('|', definition.appliesTo) } }
+          else
+            { type: definition.appliesTo[0] }
+        else
+          if std.length(definition.appliesTo.allExcept) > 0 then
+            { type: [{ ne: '' }, { nre: std.join('|', definition.appliesTo.allExcept) }] }
+          else
+            { type: { ne: '' } }
+      ),
+
+    getFormatConfig()::
+      local definition = self;
+      local selectorHash = definition.getTypeFilter();
       local staticLabels = definition.staticLabels;
-      local queryAggregationLabels = environmentLabels + self.resourceLabels;
-      local allMaxAggregationLabels = environmentLabels + maxAggregationLabels;
-      local queryAggregationLabelsExcludingStaticLabels = std.filter(function(label) !std.objectHas(staticLabels, label), queryAggregationLabels);
-      local maxAggregationLabelsExcludingStaticLabels = std.filter(function(label) !std.objectHas(staticLabels, label), allMaxAggregationLabels);
-      local queryFormatConfig = self.queryFormatConfig;
 
       // Remove any statically defined labels from the selectors, if they are defined
-      local selectorWithoutStaticLabels = if staticLabels == {} then selectorHash else selectors.without(selectorHash, staticLabels);
+      local selectorWithoutStaticLabels = selectors.without(selectorHash, staticLabels);
 
-      local preaggregation = self.query % queryFormatConfig {
-        // rangeInterval: rangeInterval,
+      local aggregationLabels = if definition.topk == null then
+        environmentLabels
+      else
+        environmentLabels + definition.resourceLabels;
+
+      local aggregationLabelsWithoutStaticLabels = std.filter(function(label) !std.objectHas(staticLabels, label), aggregationLabels);
+
+      definition.queryFormatConfig {
         selector: selectors.serializeHash(selectorWithoutStaticLabels),
-        aggregationLabels: std.join(', ', queryAggregationLabelsExcludingStaticLabels),
-      };
+        aggregationLabels: aggregations.serialize(aggregationLabelsWithoutStaticLabels),
+      },
+
+    getTopkQuery()::
+      local definition = self;
+      local formatConfig = definition.getFormatConfig();
+      local preaggregationQuery = definition.query % formatConfig;
 
       |||
-        topk by(%(maxAggregationLabels)s) (%(topk)d,
-          %(quantileOverTimeQuery)s
+        topk by(%(aggregationLabels)s) (%(topk)d,
+          %(preaggregationQuery)s
         )
-      ||| % {
+      ||| % formatConfig {
         topk: definition.topk,
-        quantileOverTimeQuery: strings.indent(preaggregation, 2),
-        maxAggregationLabels: std.join(', ', maxAggregationLabelsExcludingStaticLabels),
+        preaggregationQuery: strings.indent(preaggregationQuery, 2),
       },
+
+    getTotalQuery()::
+      local definition = self;
+      local formatConfig = definition.getFormatConfig();
+      definition.query % formatConfig,
 
     getLegendFormat()::
       if std.length(definition.resourceLabels) > 0 then
@@ -78,39 +107,27 @@ local utilizationMetric = function(options)
         '{{ type }}',
 
     getStaticLabels()::
-      ({ staticLabels: {} } + definition).staticLabels,
+      self.staticLabels,
 
-    // This signifies the minimum period over which this resource is
-    // evaluated. Defaults to 1m, which is the legacy value
-    getBurnRatePeriod()::
-      ({ burnRatePeriod: '1m' } + self).burnRatePeriod,
-
-    getRecordingRuleDefinition(componentName)::
+    getRecordingRuleDefinitions(componentName)::
       local definition = self;
 
-      local typeFilter =
-        (
-          if std.isArray(definition.appliesTo) then
-            if std.length(definition.appliesTo) > 1 then
-              { type: { re: std.join('|', definition.appliesTo) } }
-            else
-              { type: definition.appliesTo[0] }
-          else
-            if std.length(definition.appliesTo.allExcept) > 0 then
-              { type: [{ ne: '' }, { nre: std.join('|', definition.appliesTo.allExcept) }] }
-            else
-              { type: { ne: '' } }
-        );
-
-      local query = definition.getQuery(typeFilter, definition.getBurnRatePeriod());
-
-      {
-        record: 'gitlab_component_saturation:ratio',
-        labels: {
-          component: componentName,
-        } + definition.getStaticLabels(),
-        expr: query,
-      },
+      if definition.topk == null then
+        [{
+          record: 'gitlab_component_utilization:rate_1h',
+          labels: {
+            component: componentName,
+          } + definition.getStaticLabels(),
+          expr: definition.getTotalQuery(),
+        }]
+      else
+        [{
+          record: 'gitlab_component_utilization:topk:rate_1h',
+          labels: {
+            component: componentName,
+          } + definition.getStaticLabels(),
+          expr: definition.getTopkQuery(),
+        }],
 
     // Returns a boolean to indicate whether this saturation point applies to
     // a given service
@@ -132,5 +149,5 @@ local utilizationMetric = function(options)
   };
 
 {
-  utilizationMetric:: utilizationMetric
+  utilizationMetric:: utilizationMetric,
 }
