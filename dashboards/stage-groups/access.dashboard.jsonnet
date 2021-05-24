@@ -3,6 +3,6 @@
 local stageGroupDashboards = import './stage-group-dashboards.libsonnet';
 
 stageGroupDashboards
-.dashboard('access', components=['web', 'api', 'git', 'sidekiq'])
+.dashboard('access', components=stageGroupDashboards.supportedComponents)
 .addSidekiqJobDurationByUrgency()
 .stageGroupDashboardTrailer()

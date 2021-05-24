@@ -79,7 +79,7 @@ local banzaiAvgRenderingDuration() =
   );
 
 stageGroupDashboards
-.dashboard('project_management', components=['web', 'api', 'git', 'sidekiq'])
+.dashboard('project_management', components=stageGroupDashboards.supportedComponents)
 .addPanels(
   layout.rowGrid(
     'Banzai Pipelines',

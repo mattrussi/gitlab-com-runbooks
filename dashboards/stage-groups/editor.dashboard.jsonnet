@@ -3,5 +3,5 @@
 local stageGroupDashboards = import './stage-group-dashboards.libsonnet';
 
 stageGroupDashboards
-.dashboard('editor', components=['web', 'api', 'git', 'sidekiq'])
+.dashboard('editor', components=stageGroupDashboards.supportedComponents)
 .stageGroupDashboardTrailer()
