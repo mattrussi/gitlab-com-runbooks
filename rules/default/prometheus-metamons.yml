@@ -227,7 +227,7 @@ groups:
     expr: >
       sum by(environment, tier, type, shard, stage) (
         rate(prometheus_rule_evaluation_failures_total[5m])
-      ) > 0
+      ) > 10
     for: 10m
     labels:
       severity: s3
@@ -372,7 +372,7 @@ groups:
         to alertmanager.
       runbook: docs/monitoring/thanos-rule.md
   - alert: ThanosRuleHighRuleEvaluationWarnings
-    expr: rate(thanos_rule_evaluation_with_warnings_total[5m]) > 0
+    expr: rate(thanos_rule_evaluation_with_warnings_total[5m]) > 1
     for: 15m
     labels:
       severity: s4
