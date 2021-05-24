@@ -396,7 +396,8 @@ local sidekiqJobDurationByUrgency(urgencies, featureCategoriesSelector) =
 local requestComponents = std.set(['web', 'api', 'git']);
 local backgroundComponents = std.set(['sidekiq']);
 local validComponents = std.setUnion(requestComponents, backgroundComponents);
-local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false, displayBudget=true) =
+local defaultComponents = std.set(['web', 'api', 'sidekiq']);
+local dashboard(groupKey, components=defaultComponents, displayEmptyGuidance=false, displayBudget=true) =
   assert std.type(components) == 'array' : 'Invalid components argument type';
 
   local setComponents = std.set(components);
