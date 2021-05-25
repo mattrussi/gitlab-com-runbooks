@@ -60,6 +60,32 @@ groups:
           gitlab_component_ops:rate{component="loadbalancer",stage="main",tier="sv",type="api"}
         )
       )
+  - record: gitlab_component_ops:rate
+    labels:
+      component: nginx_ingress
+      tier: sv
+      type: api
+    expr: |
+      sum by (environment,stage) (
+        rate(nginx_ingress_controller_requests:labeled{type="api"}[1m])
+      )
+  - record: gitlab_component_errors:rate
+    labels:
+      component: nginx_ingress
+      tier: sv
+      type: api
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(nginx_ingress_controller_requests:labeled{status=~"^5.*",type="api"}[1m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate{component="nginx_ingress",tier="sv",type="api"}
+        )
+      )
   - record: gitlab_component_apdex:success:rate
     labels:
       component: puma
@@ -255,6 +281,32 @@ groups:
       (
         0 * group by(environment) (
           gitlab_component_ops:rate_5m{component="loadbalancer",stage="main",tier="sv",type="api"}
+        )
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: nginx_ingress
+      tier: sv
+      type: api
+    expr: |
+      sum by (environment,stage) (
+        rate(nginx_ingress_controller_requests:labeled{type="api"}[5m])
+      )
+  - record: gitlab_component_errors:rate_5m
+    labels:
+      component: nginx_ingress
+      tier: sv
+      type: api
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(nginx_ingress_controller_requests:labeled{status=~"^5.*",type="api"}[5m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_5m{component="nginx_ingress",tier="sv",type="api"}
         )
       )
   - record: gitlab_component_apdex:success:rate_5m
@@ -454,6 +506,32 @@ groups:
           gitlab_component_ops:rate_30m{component="loadbalancer",stage="main",tier="sv",type="api"}
         )
       )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: nginx_ingress
+      tier: sv
+      type: api
+    expr: |
+      sum by (environment,stage) (
+        rate(nginx_ingress_controller_requests:labeled{type="api"}[30m])
+      )
+  - record: gitlab_component_errors:rate_30m
+    labels:
+      component: nginx_ingress
+      tier: sv
+      type: api
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(nginx_ingress_controller_requests:labeled{status=~"^5.*",type="api"}[30m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_30m{component="nginx_ingress",tier="sv",type="api"}
+        )
+      )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: puma
@@ -649,6 +727,32 @@ groups:
       (
         0 * group by(environment) (
           gitlab_component_ops:rate_1h{component="loadbalancer",stage="main",tier="sv",type="api"}
+        )
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: nginx_ingress
+      tier: sv
+      type: api
+    expr: |
+      sum by (environment,stage) (
+        rate(nginx_ingress_controller_requests:labeled{type="api"}[1h])
+      )
+  - record: gitlab_component_errors:rate_1h
+    labels:
+      component: nginx_ingress
+      tier: sv
+      type: api
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(nginx_ingress_controller_requests:labeled{status=~"^5.*",type="api"}[1h])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_1h{component="nginx_ingress",tier="sv",type="api"}
         )
       )
   - record: gitlab_component_apdex:success:rate_1h
@@ -848,6 +952,32 @@ groups:
           gitlab_component_ops:rate_6h{component="loadbalancer",stage="main",tier="sv",type="api"}
         )
       )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: nginx_ingress
+      tier: sv
+      type: api
+    expr: |
+      sum by (environment,stage) (
+        rate(nginx_ingress_controller_requests:labeled{type="api"}[6h])
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: nginx_ingress
+      tier: sv
+      type: api
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(nginx_ingress_controller_requests:labeled{status=~"^5.*",type="api"}[6h])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_6h{component="nginx_ingress",tier="sv",type="api"}
+        )
+      )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
       component: puma
@@ -993,6 +1123,14 @@ groups:
     labels:
       component: loadbalancer
       regional_aggregation: 'no'
+      service_aggregation: 'no'
+      tier: sv
+      type: api
+    expr: '1'
+  - record: gitlab_component_service:mapping
+    labels:
+      component: nginx_ingress
+      regional_aggregation: 'yes'
       service_aggregation: 'no'
       tier: sv
       type: api
