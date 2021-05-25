@@ -146,6 +146,10 @@ basic.dashboard(
     queueTimeLatencyTimeseries(
       title='Sidekiq Estimated p95 Job Queue Time per Queue, $shard shard',
       aggregator='queue'
+    ),
+    queueTimeLatencyTimeseries(
+      title='Sidekiq Estimated p95 Job Queue Time per Worker, $shard shard',
+      aggregator='worker'
     )
     .addDataLink(workerDetailDataLink),
   ], startRow=201)
@@ -158,6 +162,10 @@ basic.dashboard(
     inflightJobsTimeseries(
       title='Sidekiq Inflight Jobs per Queue, $shard shard',
       aggregator='queue'
+    ),
+    inflightJobsTimeseries(
+      title='Sidekiq Inflight Jobs per Worker, $shard shard',
+      aggregator='worker'
     )
     .addDataLink(workerDetailDataLink),
   ], startRow=301)
@@ -203,7 +211,7 @@ basic.dashboard(
     ),
     basic.latencyTimeseries(
       title='Sidekiq Estimated p95 Job Latency per Queue, for $shard shard',
-      description='The 95th percentile duration, once a job starts executing, that it runs for, by shard. Lower is better.',
+      description='The 95th percentile duration, once a job starts executing, that it runs for, by queue. Lower is better.',
       query=|||
         histogram_quantile(0.95,
           sum by (queue, le) (
@@ -215,6 +223,28 @@ basic.dashboard(
         )
       |||,
       legendFormat='p95 {{ queue }}',
+      format='s',
+      yAxisLabel='Duration',
+      interval='2m',
+      intervalFactor=5,
+      legend_show=true,
+      logBase=10,
+      linewidth=1,
+    ),
+    basic.latencyTimeseries(
+      title='Sidekiq Estimated p95 Job Latency per Worker, for $shard shard',
+      description='The 95th percentile duration, once a job starts executing, that it runs for, by worker. Lower is better.',
+      query=|||
+        histogram_quantile(0.95,
+          sum by (worker, le) (
+            rate(sidekiq_jobs_completion_seconds_bucket{
+              environment="$environment",
+              shard=~"$shard"
+            }[$__interval])
+          )
+        )
+      |||,
+      legendFormat='p95 {{ worker }}',
       format='s',
       yAxisLabel='Duration',
       interval='2m',
@@ -261,6 +291,19 @@ basic.dashboard(
         sum(queue:sidekiq_jobs_completion:rate1m{environment="$environment", shard=~"$shard"}) by (queue)
       |||,
       legendFormat='{{ queue }}',
+      interval='1m',
+      intervalFactor=1,
+      linewidth=1,
+      legend_show=true,
+      yAxisLabel='Jobs Completed per Second',
+    ),
+    basic.timeseries(
+      title='Sidekiq Throughput per Worker for $shard Shard',
+      description='The total number of jobs being completed per worker for shard',
+      query=|||
+        sum(queue:sidekiq_jobs_completion:rate1m{environment="$environment", shard=~"$shard"}) by (worker)
+      |||,
+      legendFormat='{{ worker }}',
       interval='1m',
       intervalFactor=1,
       linewidth=1,
