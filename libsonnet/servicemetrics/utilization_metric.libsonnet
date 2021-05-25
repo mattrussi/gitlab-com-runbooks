@@ -1,8 +1,17 @@
 local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local strings = import 'utils/strings.libsonnet';
+local validator = import 'utils/validator.libsonnet';
 
 local environmentLabels = ['environment', 'tier', 'type', 'stage'];
+
+local definitionValidor = validator.new({
+  title: validator.string,
+  appliesTo: validator.or(validator.array, validator.object),
+  description: validator.string,
+  resourceLabels: validator.array,
+  query: validator.string,
+});
 
 // Default values to apply to a utilization definition
 local utilizationDefinitionDefaults = {
@@ -29,18 +38,8 @@ local getServiceApplicator(appliesTo) =
     getDisallowedServiceApplicator(appliesTo.allExcept);
 
 local validateAndApplyDefaults(definition) =
-  local validated =
-    std.isString(definition.title) &&
-    (std.isArray(definition.appliesTo) || std.isObject(definition.appliesTo)) &&
-    std.isString(definition.description) &&
-    std.isArray(definition.resourceLabels) &&
-    std.isString(definition.query);
-
-  // Apply defaults
-  if validated then
-    utilizationDefinitionDefaults + definition
-  else
-    std.assertEqual(definition, { __assert__: 'Resource definition is invalid' });
+  local validated = definitionValidor.assertValid(definition);
+  utilizationDefinitionDefaults + validated;
 
 local utilizationMetric = function(options)
   local definition = validateAndApplyDefaults(options);
