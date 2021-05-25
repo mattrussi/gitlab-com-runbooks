@@ -15,4 +15,5 @@
 
   // Resource Saturation & Utilization definition
   resourceSaturationPoint: (import './resource_saturation_point.libsonnet').resourceSaturationPoint,
+  utilizationMetric: (import './utilization_metric.libsonnet').utilizationMetric,
 }
