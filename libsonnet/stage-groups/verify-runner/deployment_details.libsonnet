@@ -168,7 +168,7 @@ local notes = text.new(
   content=|||
     ## Useful links
 
-    - [Deployments Merge Requests](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/-/merge_requests?scope=all&utf8=%E2%9C%93&state=merged&label_name[]=group%3A%3Arunner&label_name[]=deploy).
+    - [Deployments Merge Requests](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests?scope=all&utf8=%E2%9C%93&state=merged&label_name[]=group%3A%3Arunner&label_name[]=deploy).
   |||
 );
 
