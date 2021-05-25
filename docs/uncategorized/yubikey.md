@@ -102,22 +102,22 @@ location on a virtual disk that we mount locally. This can afford two benefits:
 * The virtual disk has a password and must be mounted locally for access to
   the gpg_config location by gpg.
 
-We'll facilitate this by creating an encrypted portable drive on a USB drive.
-For the purpose of this tutorial our USB drive will be called 'transit' and our
-encrypted volume will be called 'GitLab'.
+For these steps, we will create an encrypted disk file we can mount locally.
+It will be located in our home directory, but can be copied to a USB drive
+for a secure, offline backup.
 
 ### MacOS
 
 1. Create an encrypted sparse bundle using MacOS' `hdiutil`:
 
   ```bash
-  hdiutil create -fs HFS+ -layout GPTSPUD -type SPARSEBUNDLE -encryption AES-256 -volname "GitLab" -size 100m -stdinpass /Volumes/transit/gitlab.sparsebundle
+  hdiutil create -fs HFS+ -layout GPTSPUD -type SPARSEBUNDLE -encryption AES-256 -volname "GitLab" -size 100m -stdinpass ~/gitlab.sparsebundle
   ```
 
 1. Mount it up:
 
   ```bash
-  hdiutil attach -encryption -stdinpass -mountpoint /Volumes/GitLab /Volumes/transit/gitlab.sparsebundle
+  hdiutil attach -encryption -stdinpass -mountpoint /Volumes/GitLab ~/gitlab.sparsebundle
   ```
 
 ### Linux
@@ -390,38 +390,13 @@ gpg> save
 
 Place a reminder in your calendar in about 11 months to [extend the expiry](#extend-the-expiry-of-sub-keys) of your sub-keys
 
-## Backup and Publish your Public Key
+## Backup your Public Key
 
 ```bash
-> gpg --armor --export FAEFD83E > $MOUNTPOINT/gpg_config/FAEFD83E.asc
+gpg --armor --export FAEFD83E > $MOUNTPOINT/gpg_config/FAEFD83E.asc
 ```
 
 If your gpg version does not output the key id you should use the full fingerprint instead.
-
-```bash
-> gpg --keyserver hkps://hkps.pool.sks-keyservers.net --send-key FAEFD83E
-```
-
-### Troubleshooting publishing
-
-#### `gpg: keyserver send failed: No route to host`
-
-This problem is particular to the macOS version of GPG, and occurs on systems
-that do not have IPv6 access.
-
-This can be resolved by disabling IPv6 in dirmngr:
-
-```
-$ cat ~/.gnupg/dirmngr.conf
-
-keyserver hkps://hkps.pool.sks-keyservers.net
-disable-ipv6
-```
-
-Then kill all dirnmgr and gpg-agent processes.
-
-You can now also use `gpg --send-keys` without specifying `--keyserver`, as a
-bonus.
 
 ## Import Public Key to Regular Keychain
 
@@ -479,20 +454,33 @@ cp $MOUNTPOINT/gpg_config/gpg.conf ~/.gnupg/
 
 ## Ensure proper options are set in gpg-agent.conf
 
-Your `gpg-agent.conf` should look something **like**
-
+### Linux
 ```bash
-$ cat ~/.gnupg/gpg-agent.conf
+cat << EOF > ~/.gnupg/gpg-agent.conf
 default-cache-ttl 600
 max-cache-ttl 7200
-
-# For MacOS
-pinentry-program /usr/local/bin/pinentry-mac
-
-# For Linux
 pinentry-program /usr/bin/pinentry
-
 enable-ssh-support
+EOF
+```
+
+### MacOS
+```bash
+cat << EOF > ~/.gnupg/gpg-agent.conf
+default-cache-ttl 600
+max-cache-ttl 7200
+pinentry-program /usr/local/bin/pinentry-mac
+enable-ssh-support
+EOF
+```
+
+## Ensure proper options are set in scdaemon.conf
+
+```bash
+cat << EOF > ~/.gnupg/scdaemon.conf
+reader-port Yubico Yubi
+disable-ccid
+EOF
 ```
 
 For graphical pin-entry on MacOS install the brew package `pinentry-mac`
