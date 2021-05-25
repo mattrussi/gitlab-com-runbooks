@@ -2,5 +2,6 @@
 // Please feel free to customize this file.
 local stageGroupDashboards = import './stage-group-dashboards.libsonnet';
 
-stageGroupDashboards.dashboard('editor')
+stageGroupDashboards
+.dashboard('editor', components=stageGroupDashboards.supportedComponents)
 .stageGroupDashboardTrailer()

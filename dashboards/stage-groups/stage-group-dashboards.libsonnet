@@ -395,12 +395,13 @@ local sidekiqJobDurationByUrgency(urgencies, featureCategoriesSelector) =
 
 local requestComponents = std.set(['web', 'api', 'git']);
 local backgroundComponents = std.set(['sidekiq']);
-local validComponents = std.setUnion(requestComponents, backgroundComponents);
-local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false, displayBudget=true) =
+local supportedComponents = std.setUnion(requestComponents, backgroundComponents);
+local defaultComponents = std.set(['web', 'api', 'sidekiq']);
+local dashboard(groupKey, components=defaultComponents, displayEmptyGuidance=false, displayBudget=true) =
   assert std.type(components) == 'array' : 'Invalid components argument type';
 
   local setComponents = std.set(components);
-  local invalidComponents = std.setDiff(setComponents, validComponents);
+  local invalidComponents = std.setDiff(setComponents, supportedComponents);
   assert std.length(invalidComponents) == 0 :
          'Invalid components: ' + std.join(', ', invalidComponents);
 
@@ -596,4 +597,5 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
   // dashboard generates a basic stage group dashboard for a stage group
   // The group should match a group a `stage` from `./services/stage-group-mapping.jsonnet`
   dashboard: dashboard,
+  supportedComponents: supportedComponents,
 }
