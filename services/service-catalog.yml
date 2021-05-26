@@ -96,15 +96,9 @@ teams:
                      # and escalation policy
   oncall_schedule:   # Link to pagerduty oncall schedule
 
-- name: verify
-  url: https://about.gitlab.com/handbook/engineering/ops-backend/verify/
-  manager_slug: Elliot
-  slack_channel: g_verify
+- name: runner
+  product_stage_group: runner
   slack_alerts_channel: alerts-ci-cd
-  send_slo_alerts_to_team_slack_channel: true
-  engagement_policy: # Link to doc that talks about engagement
-                     # and escalation policy
-  oncall_schedule:   # Link to pagerduty oncall schedule
 
 # From https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/344
 - name: gitlab-pages

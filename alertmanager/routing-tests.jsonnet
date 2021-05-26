@@ -236,15 +236,15 @@ generateTests([
     ],
   },
   {
-    name: 'pager=pagerduty, team=verify, env=gprd',
+    name: 'pager=pagerduty, team=runner, env=gprd',
     labels: {
       pager: 'pagerduty',
-      team: 'verify',
+      team: 'runner',
       env: 'gprd',
     },
     receivers: [
       'prod_pagerduty',
-      'team_verify_alerts_channel',
+      'team_runner_alerts_channel',
       'production_slack_channel',
     ],
   },
@@ -273,4 +273,45 @@ generateTests([
       'prod_alerts_slack_channel',
     ],
   },
+  {
+    name: 'pagerduty, product_stage_group=runner',
+    labels: {
+      pager: 'pagerduty',
+      product_stage_group: 'runner',
+      severity: 's1',
+      env: 'gprd',
+    },
+    receivers: [
+      'prod_pagerduty',
+      'team_runner_alerts_channel',
+      'production_slack_channel',
+    ],
+  },
+  {
+    name: 'nonpagerduty, team=runner, product_stage_group=runner',
+    labels: {
+      rules_domain: 'general',
+      product_stage_group: 'runner',
+      env: 'gprd',
+    },
+    receivers: [
+      'slack_bridge-prod',
+      'team_runner_alerts_channel',
+      'prod_alerts_slack_channel',
+    ],
+  },
+  {
+    name: 'unknown product_stage_group: pagerduty product_stage_group=wombats',
+    labels: {
+      pager: 'pagerduty',
+      severity: 's1',
+      product_stage_group: 'wombats',
+      env: 'gprd',
+    },
+    receivers: [
+      'prod_pagerduty',
+      'production_slack_channel',
+    ],
+  },
+
 ])
