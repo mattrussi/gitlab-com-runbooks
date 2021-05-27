@@ -11,6 +11,14 @@ groups:
       sum by (environment,tier,type,stage) (
         rate(cloudflare_zones_http_country_bytes_total{type="waf"}[1h])
       )
+  - record: gitlab_component_utilization:rate_1h
+    labels:
+      component: pg_dead_tup_rate
+    expr: |
+      sum by (environment,tier,type,stage) (
+        deriv(pg_stat_user_tables_n_dead_tup{type=~"patroni|sentry"}[1h]) > 0
+        and on (instance, job) (pg_replication_is_replica==0)
+      )
   - record: gitlab_component_utilization:topk:rate_1h
     labels:
       component: pg_table_size
