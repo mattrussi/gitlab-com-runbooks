@@ -30,6 +30,7 @@ local saturationTypes = [
   import 'pg_active_db_connections_replica.libsonnet',
   import 'pg_int4_id.libsonnet',
   import 'pg_txid_wraparound.libsonnet',
+  import 'pg_vacuum_activity.libsonnet',
   import 'pgbouncer_client_connections.libsonnet',
   import 'pgbouncer_pools.libsonnet',
   import 'pgbouncer_single_core.libsonnet',
