@@ -536,4 +536,5 @@ check-stage-groups:
   script:
     - scripts/update_stage_groups_feature_categories.rb
     - scripts/update_stage_groups_dashboards.rb
+    - scripts/update_stage_error_budget_dashboards.rb
     - git diff --exit-code

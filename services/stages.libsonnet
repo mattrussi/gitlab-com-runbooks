@@ -45,6 +45,12 @@ local findStageNameForFeatureCategory(featureCategory) =
 local categoriesForStageGroup(groupName) =
   stageGroup(groupName).feature_categories;
 
+local groupsForStage(stageName) = std.filter(
+  function(stageGroupElement)
+    stageGroupElement.stage == stageName,
+  stageGroups
+);
+
 {
   /**
    * Given a feature category, returns the appropriate stage group
@@ -84,4 +90,9 @@ local categoriesForStageGroup(groupName) =
    * Returns the not owned group
    */
   notOwned:: notOwnedGroup,
+
+  /**
+   * Return all the groups of a stage
+   */
+  groupsForStage: groupsForStage,
 }
