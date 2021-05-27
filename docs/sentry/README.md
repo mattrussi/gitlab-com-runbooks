@@ -17,6 +17,7 @@
 
 * [../frontend/high-error-rate.md](../frontend/high-error-rate.md)
 * [../gitaly/gitaly-down.md](../gitaly/gitaly-down.md)
+* [../patroni/pg_xid_wraparound_alert.md](../patroni/pg_xid_wraparound_alert.md)
 * [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
 * [../patroni/rotating-rails-postgresql-password.md](../patroni/rotating-rails-postgresql-password.md)
 * [../praefect/praefect-startup.md](../praefect/praefect-startup.md)

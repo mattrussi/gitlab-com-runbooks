@@ -45,6 +45,7 @@ local getServiceApplicator(appliesTo) =
 local validateAndApplyDefaults(definition) =
   {
     queryFormatConfig: {},
+    alertRunbook: 'docs/{{ $labels.type }}/README.md',
     dangerouslyThanosEvaluated: false,
   } + definitionValidor.assertValid(definition) + {
     slos: {
@@ -210,7 +211,7 @@ local resourceSaturationPoint = function(options)
 
             %(description)s
           ||| % formatConfig,
-          runbook: 'docs/{{ $labels.type }}/README.md',
+          runbook: definition.alertRunbook,
           grafana_dashboard_id: 'alerts-' + definition.grafana_dashboard_uid,
           grafana_panel_id: stableIds.hashStableId('saturation-' + componentName),
           grafana_variables: 'environment,type,stage',
