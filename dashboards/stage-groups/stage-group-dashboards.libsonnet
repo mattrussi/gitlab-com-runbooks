@@ -57,52 +57,7 @@ local errorBudgetPanels(group) =
       errorBudget.panels.timeSpentTargetStatPanel(group.key),
     ],
     [
-      grafana.text.new(
-        title='Info',
-        mode='markdown',
-        content=|||
-          ### [Error budget](https://about.gitlab.com/handbook/engineering/error-budgets/)
-
-          These error budget panels show an aggregate of SLIs across all components.
-          However, not all components have been implemented yet.
-
-          The [handbook](https://about.gitlab.com/handbook/engineering/error-budgets/)
-          explains how these budgets are used.
-
-          Read more about how the error budgets are calculated in the
-          [stage group dashboard documentation](https://docs.gitlab.com/ee/development/stage_group_dashboards.html#error-budget).
-
-          The error budget is compared to our SLO of %(slaTarget)s and is always in
-          a range of 28 days from the selected end date in Grafana.
-
-          ### Availability
-
-          The availability shows the percentage of operations labeled with one of the
-          categories owned by %(groupName)s with satisfactory completion.
-
-          ### Budget remaining
-
-          The error budget in minutes is calculated based on the %(slaTarget)s.
-          There are 40320 minutes in 28 days, we allow %(budgetRatio)s of failures, which
-          means the budget in minutes is %(budgetMinutes)s minutes.
-
-          The budget remaining shows how many minutes have not been spent in the
-          past 28 days.
-
-          ### Minutes spent
-
-          This shows the total minutes spent over the past 28 days.
-
-          For example, if there were 403200 (28 * 24 * 60) operations in 28 days.
-          This would be 1 every minute. If 10 of those were unsatisfactory, that
-          would mean 10 minutes of the budget were spent.
-        ||| % {
-          slaTarget: '%.2f%%' % (errorBudget.slaTarget * 100.0),
-          budgetRatio: '%.2f%%' % ((1 - errorBudget.slaTarget) * 100.0),
-          budgetMinutes: '%i' % (budgetUtils.budgetSeconds(errorBudget.slaTarget, errorBudget.range) / 60),
-          groupName: group.name,
-        },
-      ),
+      errorBudget.panels.explanationPanel(group.name),
     ],
   ];
 
@@ -393,6 +348,11 @@ local sidekiqJobDurationByUrgency(urgencies, featureCategoriesSelector) =
     startRow=950,
   );
 
+local dashboardUid(stage, group) = 'group-%(stage)s-%(group)s' % {
+  stage: stage,
+  group: group,
+};
+
 local requestComponents = std.set(['web', 'api', 'git']);
 local backgroundComponents = std.set(['sidekiq']);
 local supportedComponents = std.setUnion(requestComponents, backgroundComponents);
@@ -418,7 +378,8 @@ local dashboard(groupKey, components=defaultComponents, displayEmptyGuidance=fal
       std.format('Group dashboard: %s (%s)', [group.stage, group.name]),
       tags=['feature_category'],
       time_from='now-6h/m',
-      time_to='now/m'
+      time_to='now/m',
+      uid=dashboardUid(group.stage, group.key),
     )
     .addTemplate(prebuiltTemplates.stage)
     .addTemplates(
@@ -597,5 +558,6 @@ local dashboard(groupKey, components=defaultComponents, displayEmptyGuidance=fal
   // dashboard generates a basic stage group dashboard for a stage group
   // The group should match a group a `stage` from `./services/stage-group-mapping.jsonnet`
   dashboard: dashboard,
+  dashboardUid: dashboardUid,
   supportedComponents: supportedComponents,
 }

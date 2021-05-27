@@ -163,7 +163,11 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
     description=null,
     includeStandardEnvironmentAnnotations=true,
     includeEnvironmentTemplate=true,
+    uid=null,
   )::
+    // Grafana doesn't want the uid to be too long (40 chars)
+    assert uid == null || std.length(uid) < 40 : 'Uid is too long: %s' % uid;
+
     local dashboard =
       grafana.dashboard.new(
         title,
@@ -178,6 +182,7 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
         description=null,
         time_from=time_from,
         time_to=time_to,
+        uid=uid,
       )
       .addTemplate(templates.ds);  // All dashboards include the `ds` variable
 

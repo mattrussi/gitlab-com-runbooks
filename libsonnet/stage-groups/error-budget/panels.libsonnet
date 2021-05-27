@@ -166,6 +166,54 @@ local timeSpentTargetStatPanel(queries, slaTarget, range, groupSelectors) =
     decimals='2'
   );
 
+local explanationPanel(slaTarget, range, group) =
+  basic.text(
+    title='Info',
+    mode='markdown',
+    content=|||
+      ### [Error budget](https://about.gitlab.com/handbook/engineering/error-budgets/)
+
+      These error budget panels show an aggregate of SLIs across all components.
+      However, not all components have been implemented yet.
+
+      The [handbook](https://about.gitlab.com/handbook/engineering/error-budgets/)
+      explains how these budgets are used.
+
+      Read more about how the error budgets are calculated in the
+      [stage group dashboard documentation](https://docs.gitlab.com/ee/development/stage_group_dashboards.html#error-budget).
+
+      The error budget is compared to our SLO of %(slaTarget)s and is always in
+      a range of 28 days from the selected end date in Grafana.
+
+      ### Availability
+
+      The availability shows the percentage of operations labeled with one of the
+      categories owned by %(group)s with satisfactory completion.
+
+      ### Budget remaining
+
+      The error budget in minutes is calculated based on the %(slaTarget)s.
+      There are 40320 minutes in 28 days, we allow %(budgetRatio)s of failures, which
+      means the budget in minutes is %(budgetMinutes)s minutes.
+
+      The budget remaining shows how many minutes have not been spent in the
+      past 28 days.
+
+      ### Minutes spent
+
+      This shows the total minutes spent over the past 28 days.
+
+      For example, if there were 403200 (28 * 24 * 60) operations in 28 days.
+      This would be 1 every minute. If 10 of those were unsatisfactory, that
+      would mean 10 minutes of the budget were spent.
+    ||| % {
+      slaTarget: '%.2f%%' % (slaTarget * 100.0),
+      budgetRatio: '%.2f%%' % ((1 - slaTarget) * 100.0),
+      budgetMinutes: '%i' % (utils.budgetSeconds(slaTarget, range) / 60),
+      group: group,
+    },
+  );
+
 {
   init(queries, slaTarget, range):: {
     availabilityStatPanel(group)::
@@ -182,5 +230,7 @@ local timeSpentTargetStatPanel(queries, slaTarget, range, groupSelectors) =
       timeSpentTargetStatPanel(queries, slaTarget, range, group),
     timeSpentTargetStatPanel(group)::
       timeSpentTargetStatPanel(queries, slaTarget, range, group),
+    explanationPanel(group)::
+      explanationPanel(slaTarget, range, group),
   },
 }
