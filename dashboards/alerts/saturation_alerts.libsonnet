@@ -45,6 +45,7 @@ local selector = { env: '$environment', type: '$type', stage: '$stage' };
     .addPanel(panel, gridPos={ x: 0, y: 0, h: 20, w: 18 })
     .addPanel(helpPanel, gridPos={ x: 18, y: 0, h: 14, w: 6 })
     .addPanel(serviceHealth.activeAlertsPanel('alert_type="symptom", type="${type}", environment="$environment"', title='Potentially User Impacting Alerts'), gridPos={ x: 18, y: 14, h: 6, w: 6 })
+    .trailer()
     + {
       links+: platformLinks.parameterizedServiceLink +
               platformLinks.services +
