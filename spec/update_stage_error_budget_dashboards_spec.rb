@@ -52,18 +52,18 @@ describe UpdateStageErrorBudgetDashboards do
     end
 
     context 'when the mapping file is valid' do
-      let(:should_remove_file) { "#{dashboard_dir}/should-remove.error_budget.jsonnet" }
+      let(:should_remove_file) { "#{dashboard_dir}/should-remove_error_budget.dashboard.jsonnet" }
 
-      let(:should_remove_file_2) { "#{dashboard_dir}/should-remove-2.error_budget.jsonnet" }
+      let(:should_remove_file_2) { "#{dashboard_dir}/should-remove-2_error_budget.dashboard.jsonnet" }
       let(:should_remove_content_2) { described_class.render_template('should-remove-2') + "\nThis template is customized" }
 
-      let(:manage_file) { "#{dashboard_dir}/manage.error_budget.jsonnet" }
+      let(:manage_file) { "#{dashboard_dir}/manage_error_budget.dashboard.jsonnet" }
       let(:manage_template) { described_class.render_template('manage') }
 
-      let(:comply_file) { "#{dashboard_dir}/comply.error_budget.jsonnet" }
+      let(:comply_file) { "#{dashboard_dir}/comply_error_budget.dashboard.jsonnet" }
       let(:comply_template) { described_class.render_template('comply') }
 
-      let(:plan_file) { "#{dashboard_dir}/plan.error_budget.jsonnet" }
+      let(:plan_file) { "#{dashboard_dir}/plan_error_budget.dashboard.jsonnet" }
       let(:plan_template) { described_class.render_template('plan') }
 
       before do
