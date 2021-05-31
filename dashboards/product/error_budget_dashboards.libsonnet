@@ -12,7 +12,7 @@ local groupDashboardLink(group) =
   toolingLinks.generateMarkdown([
     toolingLinks.grafana(
       "%(group)s's group dashboard" % group.name,
-      stageGroupDashboards.dashboardUid(group.stage, group.key),
+      toolingLinks.grafanaUid('stage-groups/%s.jsonnet' % group.key),
     ),
   ]);
 
@@ -67,8 +67,6 @@ local selectGroups(stage, groups) =
 
   std.map(function(groupName) stages.stageGroup(groupName), groups);
 
-local dashboardUid(stage) = 'stage-error-budget-%s' % stage;
-
 local dashboard(stage, groups=null, range=errorBudget.range) =
   assert std.type(groups) == 'null' || std.type(groups) == 'array' : 'Invalid groups argument type';
 
@@ -81,8 +79,7 @@ local dashboard(stage, groups=null, range=errorBudget.range) =
   local basicDashboard = basic.dashboard(
     title='Error Budgets - %s' % stage,
     time_from='now-%s' % range,
-    tags=['product performance'],
-    uid=dashboardUid(stage),
+    tags=['product performance']
   ).addTemplate(
     prebuiltTemplates.stage
   ).addPanel(
@@ -110,5 +107,4 @@ local dashboard(stage, groups=null, range=errorBudget.range) =
 
 {
   dashboard: dashboard,
-  dashboardUid: dashboardUid,
 }

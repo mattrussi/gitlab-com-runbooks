@@ -348,11 +348,6 @@ local sidekiqJobDurationByUrgency(urgencies, featureCategoriesSelector) =
     startRow=950,
   );
 
-local dashboardUid(stage, group) = 'group-%(stage)s-%(group)s' % {
-  stage: stage,
-  group: group,
-};
-
 local requestComponents = std.set(['web', 'api', 'git']);
 local backgroundComponents = std.set(['sidekiq']);
 local supportedComponents = std.setUnion(requestComponents, backgroundComponents);
@@ -378,8 +373,7 @@ local dashboard(groupKey, components=defaultComponents, displayEmptyGuidance=fal
       std.format('Group dashboard: %s (%s)', [group.stage, group.name]),
       tags=['feature_category'],
       time_from='now-6h/m',
-      time_to='now/m',
-      uid=dashboardUid(group.stage, group.key),
+      time_to='now/m'
     )
     .addTemplate(prebuiltTemplates.stage)
     .addTemplates(
@@ -558,6 +552,5 @@ local dashboard(groupKey, components=defaultComponents, displayEmptyGuidance=fal
   // dashboard generates a basic stage group dashboard for a stage group
   // The group should match a group a `stage` from `./services/stage-group-mapping.jsonnet`
   dashboard: dashboard,
-  dashboardUid: dashboardUid,
   supportedComponents: supportedComponents,
 }

@@ -45,7 +45,7 @@ class UpdateStageErrorBudgetDashboards
   private
 
   def dashboard_extension
-    '.error_budget.jsonnet'
+    '_error_budget.dashboard.jsonnet'
   end
 
   def dashboard_file(group)
