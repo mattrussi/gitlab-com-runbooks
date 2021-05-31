@@ -343,7 +343,7 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            instance:node_memory_utilization:ratio{type!="",type!~"nat|waf|monitoring|git|mailroom|websockets|kas|kube"}
+            instance:node_memory_utilization:ratio{fqdn!="", type!="",type!~"nat|waf|monitoring|git|mailroom|websockets|kas|kube"}
             ,
             1)
         ,
@@ -2536,7 +2536,7 @@ groups:
         max by(environment, tier, type, stage, fqdn) (
           clamp_min(
             clamp_max(
-              instance:node_memory_utilization:ratio{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              instance:node_memory_utilization:ratio{fqdn!="", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
               ,
               1)
           ,
