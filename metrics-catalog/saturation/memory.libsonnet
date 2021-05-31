@@ -13,8 +13,9 @@ local kubeSaturationHelpers = import 'helpers/kube_saturation_helpers.libsonnet'
     |||,
     grafana_dashboard_uid: 'sat_memory',
     resourceLabels: ['fqdn'],
+    // Filter out fqdn nodes as these could be CI runners
     query: |||
-      instance:node_memory_utilization:ratio{%(selector)s}
+      instance:node_memory_utilization:ratio{fqdn!="", %(selector)s}
     |||,
     slos: {
       soft: 0.90,
