@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 require 'json'
 require 'fileutils'
-require 'open3'
-require 'English'
+
+require_relative './jsonnet_wrapper'
 
 ##
 # Sync dashboards
@@ -10,10 +10,7 @@ module SyncDashboards
   def parse_jsonnet(jsonnet_file)
     raise "#{jsonnet_file} does not exist." unless File.exist?(jsonnet_file)
 
-    group_info_json = IO.popen("jsonnet \"#{jsonnet_file}\"", &:read)
-    raise "Fail to compile #{jsonnet_file}" unless $CHILD_STATUS.success?
-
-    JSON.parse(group_info_json)
+    JsonnetWrapper.new.parse(jsonnet_file)
   end
 
   def sync_dashboards(dashboards_dir, dashboards)

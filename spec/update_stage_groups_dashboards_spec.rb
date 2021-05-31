@@ -47,7 +47,7 @@ describe UpdateStageGroupsDashboard do
     context 'when the mapping file is invalid' do
       it 'raises an exception' do
         File.write(mapping_path, 'A junk file')
-        expect { operation.call }.to raise_error(/fail to compile/i)
+        expect { operation.call }.to raise_error(/failed to compile/i)
       end
     end
 
