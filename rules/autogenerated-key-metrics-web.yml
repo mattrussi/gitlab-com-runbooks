@@ -44,23 +44,6 @@ groups:
       sum by (environment,stage) (
         rate(gitlab_workhorse_image_resize_requests_total{job="gitlab-workhorse-web", type="web"}[1m])
       )
-  - record: gitlab_component_errors:rate
-    labels:
-      component: imagescaler
-      tier: sv
-      type: web
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(gitlab_workhorse_image_resize_requests_total{job="gitlab-workhorse-web", type="web", status="request-failed"}[1m])
-        )
-      )
-      or
-      (
-        0 * group by(environment,stage) (
-          gitlab_component_ops:rate{component="imagescaler",tier="sv",type="web"}
-        )
-      )
   - record: gitlab_component_ops:rate
     labels:
       component: loadbalancer
@@ -297,23 +280,6 @@ groups:
     expr: |
       sum by (environment,stage) (
         rate(gitlab_workhorse_image_resize_requests_total{job="gitlab-workhorse-web", type="web"}[5m])
-      )
-  - record: gitlab_component_errors:rate_5m
-    labels:
-      component: imagescaler
-      tier: sv
-      type: web
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(gitlab_workhorse_image_resize_requests_total{job="gitlab-workhorse-web", type="web", status="request-failed"}[5m])
-        )
-      )
-      or
-      (
-        0 * group by(environment,stage) (
-          gitlab_component_ops:rate_5m{component="imagescaler",tier="sv",type="web"}
-        )
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -552,23 +518,6 @@ groups:
       sum by (environment,stage) (
         rate(gitlab_workhorse_image_resize_requests_total{job="gitlab-workhorse-web", type="web"}[30m])
       )
-  - record: gitlab_component_errors:rate_30m
-    labels:
-      component: imagescaler
-      tier: sv
-      type: web
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(gitlab_workhorse_image_resize_requests_total{job="gitlab-workhorse-web", type="web", status="request-failed"}[30m])
-        )
-      )
-      or
-      (
-        0 * group by(environment,stage) (
-          gitlab_component_ops:rate_30m{component="imagescaler",tier="sv",type="web"}
-        )
-      )
   - record: gitlab_component_ops:rate_30m
     labels:
       component: loadbalancer
@@ -806,23 +755,6 @@ groups:
       sum by (environment,stage) (
         rate(gitlab_workhorse_image_resize_requests_total{job="gitlab-workhorse-web", type="web"}[1h])
       )
-  - record: gitlab_component_errors:rate_1h
-    labels:
-      component: imagescaler
-      tier: sv
-      type: web
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(gitlab_workhorse_image_resize_requests_total{job="gitlab-workhorse-web", type="web", status="request-failed"}[1h])
-        )
-      )
-      or
-      (
-        0 * group by(environment,stage) (
-          gitlab_component_ops:rate_1h{component="imagescaler",tier="sv",type="web"}
-        )
-      )
   - record: gitlab_component_ops:rate_1h
     labels:
       component: loadbalancer
@@ -1059,23 +991,6 @@ groups:
     expr: |
       sum by (environment,stage) (
         rate(gitlab_workhorse_image_resize_requests_total{job="gitlab-workhorse-web", type="web"}[6h])
-      )
-  - record: gitlab_component_errors:rate_6h
-    labels:
-      component: imagescaler
-      tier: sv
-      type: web
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(gitlab_workhorse_image_resize_requests_total{job="gitlab-workhorse-web", type="web", status="request-failed"}[6h])
-        )
-      )
-      or
-      (
-        0 * group by(environment,stage) (
-          gitlab_component_ops:rate_6h{component="imagescaler",tier="sv",type="web"}
-        )
       )
   - record: gitlab_component_ops:rate_6h
     labels:

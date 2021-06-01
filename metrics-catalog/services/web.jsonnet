@@ -126,11 +126,6 @@ metricsCatalog.serviceDefinition({
         selector='job="gitlab-workhorse-web", type="web"'
       ),
 
-      errorRate: rateMetric(
-        counter='gitlab_workhorse_image_resize_requests_total',
-        selector='job="gitlab-workhorse-web", type="web", status="request-failed"'
-      ),
-
       significantLabels: ['fqdn'],
 
       toolingLinks: [
