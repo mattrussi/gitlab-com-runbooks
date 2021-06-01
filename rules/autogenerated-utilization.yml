@@ -31,3 +31,12 @@ groups:
           )
         )
       )
+  - record: gitlab_component_utilization:rate_1h
+    labels:
+      component: pg_wraparound_time
+    expr: |
+      (2^31 - 10^6)
+      /
+      (
+        avg by (environment,tier,type,stage) (deriv(pg_txid_current{type=~"patroni|sentry"}[24h]) > 0)
+      )
