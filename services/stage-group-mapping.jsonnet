@@ -113,8 +113,8 @@
       'jira_importer',
     ],
   },
-  continuous_integration: {
-    name: 'Continuous Integration',
+  pipeline_execution: {
+    name: 'Pipeline Execution',
     stage: 'verify',
     feature_categories: [
       'continuous_integration',
@@ -141,10 +141,8 @@
     name: 'Testing',
     stage: 'verify',
     feature_categories: [
-      'code_quality',
       'code_testing',
-      'load_testing',
-      'browser_performance',
+      'performance_testing',
       'usability_testing',
       'accessibility_testing',
     ],
@@ -168,6 +166,7 @@
     feature_categories: [
       'static_application_security_testing',
       'secret_detection',
+      'code_quality',
     ],
   },
   dynamic_analysis: {
@@ -235,6 +234,7 @@
     feature_categories: [
       'error_tracking',
       'incident_management',
+      'on_call_schedule_management',
       'metrics',
       'tracing',
       'logging',
@@ -350,6 +350,13 @@
       'database',
     ],
   },
+  sharding: {
+    name: 'Sharding',
+    stage: 'enablement',
+    feature_categories: [
+      'sharding',
+    ],
+  },
   infrastructure: {
     name: 'Infrastructure',
     stage: 'enablement',
@@ -359,23 +366,23 @@
   },
   applied_ml: {
     name: 'Applied Machine Learning',
-    stage: 'learn',
+    stage: 'ModelOps',
     feature_categories: [
-      'auto_portfolio_mgmt',
+      'workflow_automation',
       'insider_threat',
       'intel_code_security',
     ],
   },
   mlops: {
     name: 'MLOps',
-    stage: 'learn',
+    stage: 'ModelOps',
     feature_categories: [
       'mlops',
     ],
   },
   dataops: {
     name: 'DataOps',
-    stage: 'learn',
+    stage: 'ModelOps',
     feature_categories: [
       'dataops',
     ],

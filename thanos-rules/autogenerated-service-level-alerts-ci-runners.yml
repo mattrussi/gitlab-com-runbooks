@@ -389,7 +389,7 @@ groups:
       feature_category: continuous_integration
       pager: pagerduty
       product_stage: verify
-      product_stage_group: continuous integration
+      product_stage_group: pipeline execution
       rules_domain: general
       severity: s2
       sli_type: error
@@ -448,7 +448,7 @@ groups:
       alert_type: cause
       feature_category: continuous_integration
       product_stage: verify
-      product_stage_group: continuous integration
+      product_stage_group: pipeline execution
       rules_domain: general
       severity: s3
       sli_type: ops
@@ -486,7 +486,7 @@ groups:
       alert_type: cause
       feature_category: continuous_integration
       product_stage: verify
-      product_stage_group: continuous integration
+      product_stage_group: pipeline execution
       rules_domain: general
       severity: s3
       sli_type: ops

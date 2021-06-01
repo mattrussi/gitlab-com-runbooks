@@ -7,7 +7,7 @@ local layout = import 'grafana/layout.libsonnet';
 local buildsQueueGraphs = import 'stage-groups/verify-continuous-integration/builds_queue_graphs.libsonnet';
 local dashboardFilters = import 'stage-groups/verify-continuous-integration/dashboard_filters.libsonnet';
 
-stageGroupDashboards.dashboard('continuous_integration')
+stageGroupDashboards.dashboard('pipeline_execution')
 .addTemplate(dashboardFilters.runnerTypeTemplate())
 .addPanel(
   grafana.row.new(title='Metrics for build logs'),
