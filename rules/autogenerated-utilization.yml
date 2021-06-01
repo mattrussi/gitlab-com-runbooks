@@ -33,6 +33,13 @@ groups:
       )
   - record: gitlab_component_utilization:rate_1h
     labels:
+      component: pg_vacuum_time_per_day
+    expr: |
+      sum by (environment,tier,type,stage) (
+        increase(fluentd_pg_auto_vacuum_elapsed_seconds_total{type="patroni"}[1d])
+      )
+  - record: gitlab_component_utilization:rate_1h
+    labels:
       component: pg_wraparound_time
     expr: |
       (2^31 - 10^6)
