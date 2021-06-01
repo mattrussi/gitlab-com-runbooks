@@ -25,6 +25,7 @@
   import 'pvs.jsonnet',
   import 'redis-cache.jsonnet',
   import 'redis-sidekiq.jsonnet',
+  import 'redis-tracechunks.jsonnet',
   import 'redis.jsonnet',
   import 'registry.jsonnet',
   import 'search.jsonnet',
