@@ -5,6 +5,7 @@ require 'kubernetes_rules'
 require 'webmock/rspec'
 require 'tmpdir'
 require 'stringio'
+require 'pry'
 
 def file_fixture(file)
   File.read(

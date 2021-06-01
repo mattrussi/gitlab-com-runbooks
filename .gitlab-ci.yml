@@ -538,3 +538,38 @@ check-stage-groups:
     - scripts/update_stage_groups_dashboards.rb
     - scripts/update_stage_error_budget_dashboards.rb
     - git diff --exit-code
+
+test-periodic-queries:
+  rules:
+    - *avoid-schedule-rule
+    - *avoid-stage-group-check-rule
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      changes:
+        - periodic_queries/*
+        - lib/periodic_queries.rb
+        - lib/periodic_queries/**/*
+      when: 'always'
+  script:
+    - gem install bundler --no-document -v $BUNDLER_VERSION
+    - bundle install
+    - bundle exec scripts/perform-periodic-thanos-queries.rb --dry-run
+
+publish-periodic-queries:
+  stage: deploy
+  rules:
+    - if: '$PERIODIC_QUERY_PUBLISH == "1"'
+      when: always
+      # This condition allows us to open a test MR on ops to demo publishing
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_API_V4_URL == "https://ops.gitlab.net/api/v4"'
+      when: manual
+      allow_failure: true
+  script:
+    - gem install bundler --no-document -v $BUNDLER_VERSION
+    - bundle install
+    - bundle exec scripts/perform-periodic-thanos-queries.rb
+  artifacts:
+    expose_as: 'thanos query results'
+    paths:
+      - periodic-query-results/
+  tags:
+    - k8s-workloads
