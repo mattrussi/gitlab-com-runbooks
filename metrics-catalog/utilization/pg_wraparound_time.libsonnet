@@ -11,6 +11,7 @@ local utilizationMetric = metricsCatalog.utilizationMetric;
       time it will take for a full XID wraparound cycle to occur. The more transactions/higher the transaction rate, the
       faster the wraparound time, and the less time available to perform vacuums.
     |||,
+    rangeDuration: '1d',
     resourceLabels: [],
     queryFormatConfig: {
       txWraparoundExpression: '(2^31 - 10^6)',
@@ -19,7 +20,7 @@ local utilizationMetric = metricsCatalog.utilizationMetric;
       %(txWraparoundExpression)s
       /
       (
-        avg by (%(aggregationLabels)s) (deriv(pg_txid_current{%(selector)s}[24h]) > 0)
+        avg by (%(aggregationLabels)s) (deriv(pg_txid_current{%(selector)s}[%(rangeDuration)s]) > 0)
       )
     |||,
   }),
