@@ -3812,9 +3812,9 @@ groups:
         Trace chunks should be extremely transient (written to redis, then offloaded to objectstorage nearly immediately) so any uncontrolled growth in memory saturation implies a potentially significant problem.  Short term mitigation is usually to upsize the instances to have more memory while the underlying problem is identified, but low thresholds give us more time to investigate first
 
         This threshold is kept deliberately very low; because we use C2 instances we are generally overprovisioned for RAM, and because of the transient nature of the data here, it is advantageous to know early if there is any non-trivial storage occurring
-      grafana_dashboard_id: alerts-sat_redis_memory
+      grafana_dashboard_id: alerts-sat_redis_memory_tracechunks
       grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/alerts-sat_redis_memory?from=now-6h/m&to=now-1m/m&var-environment={{
+        https://dashboards.gitlab.net/d/alerts-sat_redis_memory_tracechunks?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
       grafana_panel_id: '3185191014'
