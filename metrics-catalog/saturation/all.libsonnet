@@ -32,6 +32,7 @@ local saturationTypes = [
   import 'pg_txid_vacuum_to_wraparound.libsonnet',
   import 'pg_txid_wraparound.libsonnet',
   import 'pg_vacuum_activity.libsonnet',
+  import 'pg_walsender_cpu.libsonnet',
   import 'pgbouncer_client_connections.libsonnet',
   import 'pgbouncer_pools.libsonnet',
   import 'pgbouncer_single_core.libsonnet',
