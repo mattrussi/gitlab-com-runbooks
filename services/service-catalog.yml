@@ -2309,6 +2309,69 @@ services:
     monitors:
       primary_grafana_dashboard: "redis-sidekiq-main/redis-sidekiq-overview"
 
+- name: redis-tracechunks
+  tier: db
+  friendly_name: Redis TraceChunks
+  infra_owner: sre_observability
+  label: Service:Redis
+  business:
+    requirement: |
+      Redis-Tracechunks is used as a fast persistent key-value store for CI build log (trace) chunks on receipt before moving them to object storage
+    customers:
+      - GitLab.com customers
+    business_value: |
+      Redis-TraceChunks allows the CI job system to work, an important part of GitLab.com value
+    SLA:
+      availability:
+      response_time:
+  technical:
+    project:
+      - https://github.com/antirez/redis/
+    slx:
+    documents:
+      design:
+      architecture:
+      readiness_review:
+      service:
+        - https://redis.io/documentation
+        - https://docs.gitlab.com/omnibus/settings/redis.html
+      security:
+    dependencies:
+      - service:
+    configurations:
+      - config_name: redis.conf
+        location: /var/opt/gitlab/redis/redis.conf
+    chef_roles:
+      - gstg-base-db-redis-server-tracechunks
+      - gprd-base-db-redis-server-tracechunks
+    scalability:
+      bound: cpu
+      scalable: vertical
+    security:
+      security_reviewed:
+      data_classification: red
+      security_incidents:
+    logging:
+      - name: system
+        permalink: https://log.gprd.gitlab.net/goto/a10c2cd2b710f9eb65b13b9a2a328d51
+  infrastructure:
+    provider: gcp
+    architecture: https://drive.google.com/open?id=1H5s5EonMX0Mzz6jahAotMOb349TNO7YK
+    provisioning: terraform
+    accesses:
+      - account_name:
+        access_type:
+        reviewed:
+  operations:
+    maintenance:
+    runbooks:
+    playbooks:
+      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/redis/README.md
+    error_budget:
+  observability:
+    monitors:
+      primary_grafana_dashboard: "redis-tracechunks-main/redis-tracechunks-overview"
+
 - name: registry
   tier: sv
   friendly_name: Container Registry
