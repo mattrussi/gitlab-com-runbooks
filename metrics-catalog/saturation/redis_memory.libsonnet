@@ -61,7 +61,7 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
       for RAM, and because of the transient nature of the data here, it is advantageous to know early if there is any
       non-trivial storage occurring
     |||,
-    grafana_dashboard_uid: 'sat_redis_memory',
+    grafana_dashboard_uid: 'sat_redis_memory_tracechunks',
     resourceLabels: ['fqdn'],
     query: |||
       max by (%(aggregationLabels)s) (
