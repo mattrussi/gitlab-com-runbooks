@@ -1,13 +1,4 @@
----
-layout: handbook-page-toc
-title: "Tips for writing tutorials"
----
-
-## On this page
-{:.no_toc .hidden-md .hidden-lg}
-
-- TOC
-{:toc .hidden-md .hidden-lg}
+# Tips for writing tutorials
 
 ## Learning objectives
 
@@ -22,7 +13,7 @@ Adding elements to support different styles of engagement on key topics helps re
 group discussion, recorded walk-through, etc.) and encourages exploring core concepts and relationships (e.g. revisiting diagrams and
 demo results as new related content is progressively introduced).
 
-Ultimately the goal is to give participants exposure and retention to new skills and knowledge that aids them in practical ways.  
+Ultimately the goal is to give participants exposure and retention to new skills and knowledge that aids them in practical ways.
 Enriching a tutorial with multiple ways of interacting with the content helps more participants synthesize the main take-aways.
 
 

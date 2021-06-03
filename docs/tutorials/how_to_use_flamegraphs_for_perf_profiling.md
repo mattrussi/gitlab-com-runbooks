@@ -1,14 +1,4 @@
----
-layout: handbook-page-toc
-title: "How to use flamegraphs for performance profiling"
----
-
-## On this page
-{:.no_toc .hidden-md .hidden-lg}
-
-- TOC
-{:toc .hidden-md .hidden-lg}
-
+# How to use flamegraphs for performance profiling
 
 Work in progress:
 * Issue: https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10399
@@ -43,9 +33,9 @@ As a quick preview of what we will be learning, here is an example flamegraph wi
 It may look complex at first, but don't be intimidated.
 By the end of this tutorial, you will know how to read the shape and structure of the graph to identify which code paths consume relatively large amounts of CPU time.
 
-<img src="/images/handbook/engineering/infrastructure/tutorials/how_to_use_flamegraphs_for_perf_profiling/postgres_primary_db.png">
+<img src="how_to_use_flamegraphs_for_perf_profiling/postgres_primary_db.png">
 
-[Interactive SVG image](/images/handbook/engineering/infrastructure/tutorials/how_to_use_flamegraphs_for_perf_profiling/postgres_primary_db.svg)
+[Interactive SVG image](how_to_use_flamegraphs_for_perf_profiling/postgres_primary_db.svg)
 Open this link in its own browser tab to zoom in and see full function names.
 
 
@@ -168,12 +158,12 @@ $ scp -p redis-03-db-gprd.c.gitlab-production.internal:/tmp/perf-record-results.
 $ firefox /tmp/redis-03-db-gprd.20200618_153650_UTC.pid_2997.flamegraph.svg
 ```
 
-<img src="/images/handbook/engineering/infrastructure/tutorials/how_to_use_flamegraphs_for_perf_profiling/redis-03-db-gprd.20200618_153650_UTC.pid_2997.flamegraph.svg">
+<img src="how_to_use_flamegraphs_for_perf_profiling/redis-03-db-gprd.20200618_153650_UTC.pid_2997.flamegraph.svg">
 
-[Interactive SVG image](/images/handbook/engineering/infrastructure/tutorials/how_to_use_flamegraphs_for_perf_profiling/redis-03-db-gprd.20200618_153650_UTC.pid_2997.flamegraph.svg)
+[Interactive SVG image](how_to_use_flamegraphs_for_perf_profiling/redis-03-db-gprd.20200618_153650_UTC.pid_2997.flamegraph.svg)
 
 If you wish, you can also review the individual stack traces in the `*.perf-script.txt` output file:
-[perf-script.txt.gz](/images/handbook/engineering/infrastructure/tutorials/how_to_use_flamegraphs_for_perf_profiling/redis-03-db-gprd.20200618_153650_UTC.pid_2997.perf-script.txt.gz)
+[perf-script.txt.gz](how_to_use_flamegraphs_for_perf_profiling/redis-03-db-gprd.20200618_153650_UTC.pid_2997.perf-script.txt.gz)
 
 We will talk more about stack traces shortly.  For now just be aware that this is available if you need it.
 
@@ -262,7 +252,7 @@ The example stack trace we examined above was a random pick from the 637 stack t
 # Find the PID of the redis-server process.
 
 $ pgrep -a -f 'redis-server'
-2997 /opt/gitlab/embedded/bin/redis-server 0.0.0.0:6379                    
+2997 /opt/gitlab/embedded/bin/redis-server 0.0.0.0:6379
 
 # For 30 seconds, periodically capture stack traces from the redis-server PID at a rate of 99 times per second.
 
@@ -286,9 +276,9 @@ $ zcat redis_stack_traces.out.gz | ./FlameGraph/stackcollapse-perf.pl | ./FlameG
 The `stackcollapse-perf.pl` script folds the perf-script output into 1 line per stack, with a count of the number of times each stack was seen.
 Then `flamegraph.pl` renders this into an SVG image.
 
-<img src="/images/handbook/engineering/infrastructure/tutorials/how_to_use_flamegraphs_for_perf_profiling/redis-server.svg">
+<img src="how_to_use_flamegraphs_for_perf_profiling/redis-server.svg">
 
-[View as an interactive SVG image](/images/handbook/engineering/infrastructure/tutorials/how_to_use_flamegraphs_for_perf_profiling/redis-server.svg)
+[View as an interactive SVG image](how_to_use_flamegraphs_for_perf_profiling/redis-server.svg)
 
 
 ### Flamegraphs in SVG format are interactive
@@ -545,7 +535,7 @@ Context will often give you clues about behavior without even looking at the sou
 
 ---
 
-<img src="/images/handbook/engineering/infrastructure/tutorials/how_to_use_flamegraphs_for_perf_profiling/postgres_primary_db.zoom_in_to_PortalRun.png">
+<img src="how_to_use_flamegraphs_for_perf_profiling/postgres_primary_db.zoom_in_to_PortalRun.png">
 
 ---
 

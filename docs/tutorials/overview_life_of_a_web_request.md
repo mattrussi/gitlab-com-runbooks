@@ -1,13 +1,4 @@
----
-layout: handbook-page-toc
-title: "Life of a Web Request"
----
-
-## On this page
-{:.no_toc .hidden-md .hidden-lg}
-
-- TOC
-{:toc .hidden-md .hidden-lg}
+# Life of a Web Request
 
 Work in progress:
 * Issue: https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10388
@@ -63,7 +54,7 @@ The main application components involved in handling a typical HTTP request are:
 
 * Gitlab-rails: The most central component of GitLab.  Most of the application logic lives here.  Often referred to as "Puma" or "Unicorn", named after two widely-used Ruby webservers that can wrap the application (like Jetty and Tomcat do for many Java applications).
 * Workhorse: A reverse-proxy service to which gitlab-rails delegates certain large HTTP requests that would be inefficient to handle natively within the Rails app due to Ruby's concurrency model.
-* Gitaly: 
+* Gitaly:
 * Postgres: Relational database supporting the gitlab-rails application.
 
 Other activities involve additional components, such as:

@@ -1,14 +1,4 @@
----
-layout: handbook-page-toc
-title: "Life of a Git Request"
----
-
-## On this page
-{:.no_toc .hidden-md .hidden-lg}
-
-- TOC
-{:toc .hidden-md .hidden-lg}
-
+# Life of a Git Request
 
 Work in progress:
 * Issue: https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10389
@@ -105,7 +95,7 @@ remote: Total 10274 (delta 2612), reused 2342 (delta 2265), pack-reused 7499
 Receiving objects: 100% (10274/10274), 21.97 MiB | 7.86 MiB/s, done.
 Resolving deltas: 100% (6485/6485), done.
 
-$ cat /tmp/git-trace.log 
+$ cat /tmp/git-trace.log
 23:04:51.527628 git.c:344               trace: built-in: git clone https://gitlab.com/gitlab-org/gitlab-docs.git /tmp/git-trace-test
 23:04:51.559198 run-command.c:646       trace: run_command: unset GIT_DIR; ssh git@gitlab.com 'git-upload-pack '\''gitlab-org/gitlab-docs.git'\'''
 23:04:54.275131 run-command.c:646       trace: run_command: git index-pack --stdin -v --fix-thin '--keep=fetch-pack 30882 on saoirse' --check-self-contained-and-connected
@@ -155,7 +145,7 @@ remote: Total 10274 (delta 2612), reused 2342 (delta 2265), pack-reused 7499
 Receiving objects: 100% (10274/10274), 21.97 MiB | 8.03 MiB/s, done.
 Resolving deltas: 100% (6485/6485), done.
 
-$ cat /tmp/git-trace.log 
+$ cat /tmp/git-trace.log
 23:10:51.531056 git.c:344               trace: built-in: git clone https://gitlab.com/gitlab-org/gitlab-docs.git /tmp/git-trace-test
 23:10:51.562453 run-command.c:646       trace: run_command: git-remote-https origin https://gitlab.com/gitlab-org/gitlab-docs.git
 23:10:52.114174 run-command.c:646       trace: run_command: git fetch-pack --stateless-rpc --stdin --lock-pack --thin --check-self-contained-and-connected --cloning https://gitlab.com/gitlab-org/gitlab-docs.git/
@@ -197,14 +187,14 @@ Resolving deltas: 100% (6485/6485), done.
 The curl tracing output is much more verbose, even without logging the data.
 
 ```shell
-$ wc -l /tmp/git-trace-curl.log 
+$ wc -l /tmp/git-trace-curl.log
 117 /tmp/git-trace-curl.log
 ```
 
 But for now we just want to see what HTTP requests were sent to the server.
 
 ```shell
-$ grep 'Send.*HTTP' /tmp/git-trace-curl.log 
+$ grep 'Send.*HTTP' /tmp/git-trace-curl.log
 00:18:52.539909 http.c:654              => Send header: GET /gitlab-org/gitlab-docs.git/info/refs?service=git-upload-pack HTTP/1.1
 00:18:53.353662 http.c:654              => Send header: POST /gitlab-org/gitlab-docs.git/git-upload-pack HTTP/1.1
 ```

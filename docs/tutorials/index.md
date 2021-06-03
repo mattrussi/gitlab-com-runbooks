@@ -1,13 +1,4 @@
----
-layout: handbook-page-toc
-title: "Tutorials"
----
-
-## On this page
-{:.no_toc .hidden-md .hidden-lg}
-
-- TOC
-{:toc .hidden-md .hidden-lg}
+# Tutorials
 
 ## Purpose
 

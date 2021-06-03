@@ -1,13 +1,4 @@
----
-layout: handbook-page-toc
-title: "Example Tutorial Template"
----
-
-## On this page
-{:.no_toc .hidden-md .hidden-lg}
-
-- TOC
-{:toc .hidden-md .hidden-lg}
+# Example Tutorial Template
 
 ## Learning objectives
 
