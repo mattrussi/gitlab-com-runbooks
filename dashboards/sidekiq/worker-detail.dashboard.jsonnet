@@ -108,7 +108,7 @@ basic.dashboard(
   'worker',
   '$PROMETHEUS_DS',
   'label_values(sidekiq_jobs_completion_seconds_count{environment="$environment", type="sidekiq"}, worker)',
-  current='post_receive',
+  current='PostReceive',
   refresh='load',
   sort=1,
   multi=true,
