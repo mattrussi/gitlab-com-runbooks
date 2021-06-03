@@ -58,7 +58,7 @@ local queuelatencyTimeseries(title, aggregators, legendFormat) =
 local latencyTimeseries(title, aggregators, legendFormat) =
   basic.latencyTimeseries(
     title=title,
-    query=recordingRuleLatencyHistogramQuery(0.95, 'sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m', selector, aggregators),
+    query=recordingRuleLatencyHistogramQuery(0.95, 'sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m', selector, aggregators),
     legendFormat=legendFormat,
   );
 
@@ -339,7 +339,7 @@ basic.dashboard(
     queuelatencyTimeseries('Queue Time per Node', aggregators='fqdn, queue', legendFormat='p95 {{ queue }} - {{ fqdn }}'),
   ], startRow=301)
   +
-  layout.rowGrid('Execution Latency (the amount of time the job takes to execution after dequeue)', [
+  layout.rowGrid('Execution Latency (the amount of time the job takes to execute after dequeue)', [
     latencyTimeseries('Execution Time', aggregators='queue', legendFormat='p95 {{ queue }}'),
     latencyTimeseries('Execution Time per Node', aggregators='fqdn, queue', legendFormat='p95 {{ queue }} - {{ fqdn }}'),
   ], startRow=401)
