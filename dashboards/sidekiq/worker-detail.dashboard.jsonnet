@@ -313,22 +313,18 @@ basic.dashboard(
   +
   layout.rowGrid('Queue Latency (the amount of time spent queueing)', [
     workerlatencyTimeseries('Queue Time', aggregators='worker', legendFormat='p95 {{ worker }}'),
-    workerlatencyTimeseries('Queue Time per Node', aggregators='fqdn, worker', legendFormat='p95 {{ worker }} - {{ fqdn }}'),
   ], startRow=201)
   +
   layout.rowGrid('Execution Latency (the amount of time the job takes to execute after dequeue)', [
     latencyTimeseries('Execution Time', aggregators='worker', legendFormat='p95 {{ worker }}'),
-    latencyTimeseries('Execution Time per Node', aggregators='fqdn, worker', legendFormat='p95 {{ worker }} - {{ fqdn }}'),
   ], startRow=301)
   +
   layout.rowGrid('Execution RPS (the rate at which jobs are completed after dequeue)', [
     rpsTimeseries('RPS', aggregators='worker', legendFormat='{{ worker }}'),
-    rpsTimeseries('RPS per Node', aggregators='fqdn, worker', legendFormat='{{ worker }} - {{ fqdn }}'),
   ], startRow=401)
   +
   layout.rowGrid('Error Rate (the rate at which jobs fail)', [
     errorRateTimeseries('Errors', aggregators='worker', legendFormat='{{ worker }}'),
-    errorRateTimeseries('Errors per Node', aggregators='fqdn, worker', legendFormat='{{ worker }} - {{ fqdn }}'),
     basic.timeseries(
       title='Dead Jobs',
       query=|||
