@@ -23,6 +23,8 @@
 * [../logging/logging_gcs_archive_bigquery.md](../logging/logging_gcs_archive_bigquery.md)
 * [../pgbouncer/pgbouncer-saturation.md](../pgbouncer/pgbouncer-saturation.md)
 * [../pubsub/pubsub-queing.md](../pubsub/pubsub-queing.md)
+* [../tutorials/example_tutorial_template.md](../tutorials/example_tutorial_template.md)
+* [../tutorials/overview_life_of_a_web_request.md](../tutorials/overview_life_of_a_web_request.md)
 * [../uncategorized/node-reboots.md](../uncategorized/node-reboots.md)
 * [../version/version-gitlab-com.md](../version/version-gitlab-com.md)
 <!-- END_MARKER -->

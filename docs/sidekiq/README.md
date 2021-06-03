@@ -47,6 +47,7 @@
 * [sidekiq-survival-guide-for-sres.md](sidekiq-survival-guide-for-sres.md)
 * [sidekiq_error_rate_high.md](sidekiq_error_rate_high.md)
 * [sidekiq_stats_no_longer_showing.md](sidekiq_stats_no_longer_showing.md)
+* [../tutorials/index.md](../tutorials/index.md)
 * [../uncategorized/debug-failed-chef-provisioning.md](../uncategorized/debug-failed-chef-provisioning.md)
 * [../uncategorized/load-balancing.md](../uncategorized/load-balancing.md)
 * [../uncategorized/manage-workers.md](../uncategorized/manage-workers.md)

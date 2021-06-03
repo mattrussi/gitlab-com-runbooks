@@ -31,6 +31,8 @@
 * [../sidekiq/sidekiq-inspection.md](../sidekiq/sidekiq-inspection.md)
 * [../sidekiq/sidekiq-survival-guide-for-sres.md](../sidekiq/sidekiq-survival-guide-for-sres.md)
 * [../sidekiq/sidekiq_stats_no_longer_showing.md](../sidekiq/sidekiq_stats_no_longer_showing.md)
+* [../tutorials/how_to_use_flamegraphs_for_perf_profiling.md](../tutorials/how_to_use_flamegraphs_for_perf_profiling.md)
+* [../tutorials/index.md](../tutorials/index.md)
 * [../uncategorized/deleted-project-restore.md](../uncategorized/deleted-project-restore.md)
 * [../uncategorized/manage-pacemaker.md](../uncategorized/manage-pacemaker.md)
 * [../uncategorized/namespace-restore.md](../uncategorized/namespace-restore.md)

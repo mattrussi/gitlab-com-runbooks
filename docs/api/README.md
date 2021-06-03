@@ -59,6 +59,8 @@
 * [../sidekiq/large-sidekiq-queue.md](../sidekiq/large-sidekiq-queue.md)
 * [../sidekiq/sidekiq-survival-guide-for-sres.md](../sidekiq/sidekiq-survival-guide-for-sres.md)
 * [../spamcheck/index.md](../spamcheck/index.md)
+* [../tutorials/example_tutorial_template.md](../tutorials/example_tutorial_template.md)
+* [../tutorials/overview_life_of_a_web_request.md](../tutorials/overview_life_of_a_web_request.md)
 * [../uncategorized/blocked-user-logins.md](../uncategorized/blocked-user-logins.md)
 * [../uncategorized/gemnasium_is_down.md](../uncategorized/gemnasium_is_down.md)
 * [../uncategorized/manage-workers.md](../uncategorized/manage-workers.md)
