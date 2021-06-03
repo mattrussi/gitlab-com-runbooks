@@ -6,6 +6,7 @@ local validator = import 'utils/validator.libsonnet';
 local environmentLabels = ['environment', 'tier', 'type', 'stage'];
 
 local definitionValidor = validator.new({
+  rangeDuration: validator.string,
   title: validator.string,
   appliesTo: validator.or(validator.array, validator.object),
   description: validator.string,
@@ -15,6 +16,7 @@ local definitionValidor = validator.new({
 
 // Default values to apply to a utilization definition
 local utilizationDefinitionDefaults = {
+  rangeDuration: '1h',
   staticLabels: {},
   queryFormatConfig: {},
   /* When topk is set we record the topk items */
@@ -38,8 +40,7 @@ local getServiceApplicator(appliesTo) =
     getDisallowedServiceApplicator(appliesTo.allExcept);
 
 local validateAndApplyDefaults(definition) =
-  local validated = definitionValidor.assertValid(definition);
-  utilizationDefinitionDefaults + validated;
+  definitionValidor.assertValid(utilizationDefinitionDefaults + definition);
 
 local utilizationMetric = function(options)
   local definition = validateAndApplyDefaults(options);
@@ -61,43 +62,47 @@ local utilizationMetric = function(options)
       ),
 
     getFormatConfig()::
-      local definition = self;
-      local selectorHash = definition.getTypeFilter();
-      local staticLabels = definition.staticLabels;
+      local s = self;
+      local selectorHash = s.getTypeFilter();
+      local staticLabels = s.staticLabels;
 
       // Remove any statically defined labels from the selectors, if they are defined
       local selectorWithoutStaticLabels = selectors.without(selectorHash, staticLabels);
 
-      local aggregationLabels = if definition.topk == null then
+      local aggregationLabels = if s.topk == null then
         environmentLabels
       else
-        environmentLabels + definition.resourceLabels;
+        environmentLabels + s.resourceLabels;
 
       local aggregationLabelsWithoutStaticLabels = std.filter(function(label) !std.objectHas(staticLabels, label), aggregationLabels);
 
-      definition.queryFormatConfig {
+      s.queryFormatConfig {
+        rangeDuration: s.rangeDuration,
         selector: selectors.serializeHash(selectorWithoutStaticLabels),
         aggregationLabels: aggregations.serialize(aggregationLabelsWithoutStaticLabels),
       },
 
     getTopkQuery()::
-      local definition = self;
-      local formatConfig = definition.getFormatConfig();
-      local preaggregationQuery = definition.query % formatConfig;
+      local s = self;
+      local formatConfig = s.getFormatConfig();
+      local preaggregationQuery = s.query % formatConfig;
 
       |||
         topk by(%(aggregationLabels)s) (%(topk)d,
           %(preaggregationQuery)s
         )
       ||| % formatConfig {
-        topk: definition.topk,
+        topk: s.topk,
         preaggregationQuery: strings.indent(preaggregationQuery, 2),
       },
 
-    getTotalQuery()::
-      local definition = self;
-      local formatConfig = definition.getFormatConfig();
-      definition.query % formatConfig,
+    getTotalQuery():: self.query % self.getFormatConfig(),
+
+    getRecordingRuleQuery()::
+      if self.topk == null then
+        self.getTotalQuery()
+      else
+        self.getTopkQuery(),
 
     getLegendFormat()::
       if std.length(definition.resourceLabels) > 0 then
@@ -108,25 +113,34 @@ local utilizationMetric = function(options)
     getStaticLabels()::
       self.staticLabels,
 
-    getRecordingRuleDefinitions(componentName)::
-      local definition = self;
+    getRecordingRuleName(componentName)::
+      local s = self;
+      local formatConfig = {
+        componentName: componentName,
+        rangeDuration: s.rangeDuration,
+        unit: s.unit,
+        topKComponent: if s.topk == null then '' else 'topk:',
+      };
 
-      if definition.topk == null then
-        [{
-          record: 'gitlab_component_utilization:rate_1h',
-          labels: {
-            component: componentName,
-          } + definition.getStaticLabels(),
-          expr: definition.getTotalQuery(),
-        }]
-      else
-        [{
-          record: 'gitlab_component_utilization:topk:rate_1h',
-          labels: {
-            component: componentName,
-          } + definition.getStaticLabels(),
-          expr: definition.getTopkQuery(),
-        }],
+      'gitlab_component_utilization:%(componentName)s_%(unit)s:%(topKComponent)s%(rangeDuration)s' % formatConfig,
+
+    getRecordingRuleDefinitions(componentName)::
+      local s = self;
+
+      local labels = {
+        component: componentName,
+        unit: s.unit,
+        metrics_subsystem: 'utilization',
+        // In future, it might make more sense to move some of these labels onto a static "info" recording rule
+        summaryType: if s.topk == null then 'aggregate' else 'topk',
+        [if s.resourceLabels != [] then 'resource_labels']: std.join(',', s.resourceLabels),
+      } + s.getStaticLabels();
+
+      [{
+        record: s.getRecordingRuleName(componentName),
+        labels: labels,
+        expr: s.getRecordingRuleQuery(),
+      }],
 
     // Returns a boolean to indicate whether this saturation point applies to
     // a given service
@@ -138,11 +152,12 @@ local utilizationMetric = function(options)
     // For allowLists: always use the first item
     // For blockLists: use the default or web
     getDefaultGrafanaType()::
-      if std.isArray(definition.appliesTo) then
+      local s = self;
+      if std.isArray(s.appliesTo) then
         definition.appliesTo[0]
       else
-        if std.objectHas(definition.appliesTo, 'default') then
-          definition.appliesTo.default
+        if std.objectHas(s.appliesTo, 'default') then
+          s.appliesTo.default
         else
           'web',
   };
