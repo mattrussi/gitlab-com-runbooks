@@ -37,5 +37,6 @@ GitLab.com.
 - Runbooks for GitLab.com: https://gitlab.com/gitlab-com/runbooks/-/tree/master/
   - This git repo contains much more than just "runbooks".
   - It is the main place where we collect internal documentation and advice to ourselves for working with our infrastructure components and services.
+  - `/docs` sub-directory contain more up-to-date Runbooks than the root directory in this Repo. 
   - It also composes metrics, alerts, and dashboards for our services using jsonnet.
   - We should probably record a guided tour of this repo.  Or just commit to giving a tour in a pairing session.
