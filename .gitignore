@@ -8,3 +8,4 @@ alertmanager/k8s_alertmanager.yaml
 /services/service_catalog.json
 /vendor
 /dashboards/vendor
+/periodic-query-results

@@ -3,6 +3,6 @@
 // as such, we only record this utilisation metric on IO subset of the fleet for now.
 
 {
-  kubeProvisionedServices:: ['git', 'mailroom', 'registry', 'sidekiq', 'websockets', 'kas'],
+  kubeProvisionedServices:: ['git', 'mailroom', 'registry', 'sidekiq', 'websockets', 'kas', 'api'],
   kubeOnlyServices:: ['git', 'mailroom', 'websockets', 'kas', 'kube'],
 }

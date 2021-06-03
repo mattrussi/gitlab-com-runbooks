@@ -132,11 +132,6 @@ groups:
           gitlab:component:feature_category:execution:ops:rate_1m{component="puma",type="websockets"}
         )
       )
-  - record: gitlab:component:feature_category:execution:error:ratio_1m
-    expr: |
-      gitlab:component:feature_category:execution:error:rate_1m
-      /
-      gitlab:component:feature_category:execution:ops:rate_1m > 0
 - name: 'Component-Level SLIs: websockets - 5m burn-rate'
   interval: 1m
   rules:
@@ -268,11 +263,6 @@ groups:
           gitlab:component:feature_category:execution:ops:rate_5m{component="puma",type="websockets"}
         )
       )
-  - record: gitlab:component:feature_category:execution:error:ratio_5m
-    expr: |
-      gitlab:component:feature_category:execution:error:rate_5m
-      /
-      gitlab:component:feature_category:execution:ops:rate_5m > 0
 - name: 'Component-Level SLIs: websockets - 30m burn-rate'
   interval: 2m
   rules:
@@ -404,11 +394,6 @@ groups:
           gitlab:component:feature_category:execution:ops:rate_30m{component="puma",type="websockets"}
         )
       )
-  - record: gitlab:component:feature_category:execution:error:ratio_30m
-    expr: |
-      gitlab:component:feature_category:execution:error:rate_30m
-      /
-      gitlab:component:feature_category:execution:ops:rate_30m > 0
 - name: 'Component-Level SLIs: websockets - 1h burn-rate'
   interval: 1m
   rules:
@@ -540,11 +525,6 @@ groups:
           gitlab:component:feature_category:execution:ops:rate_1h{component="puma",type="websockets"}
         )
       )
-  - record: gitlab:component:feature_category:execution:error:ratio_1h
-    expr: |
-      gitlab:component:feature_category:execution:error:rate_1h
-      /
-      gitlab:component:feature_category:execution:ops:rate_1h > 0
 - name: 'Component-Level SLIs: websockets - 6h burn-rate'
   interval: 2m
   rules:
@@ -676,11 +656,6 @@ groups:
           gitlab:component:feature_category:execution:ops:rate_6h{component="puma",type="websockets"}
         )
       )
-  - record: gitlab:component:feature_category:execution:error:ratio_6h
-    expr: |
-      gitlab:component:feature_category:execution:error:rate_6h
-      /
-      gitlab:component:feature_category:execution:ops:rate_6h > 0
 - name: 'Component mapping: websockets'
   interval: 1m
   rules:

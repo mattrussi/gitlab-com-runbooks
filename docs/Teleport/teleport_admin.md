@@ -5,6 +5,15 @@ This run book covers administration of the Teleport service from an infrastructu
 - See the [Teleport Rails Console](Connect_to_Rails_Console_via_Teleport.md) runbook if you'd like to log in to a machine using teleport
 - See the [Teleport Approval Workflow](teleport_approval_workflow.md) runbook if you'd like to review and approve access requests
 
+## Checking status on the Teleport Server
+
+Summary from the [teleport admin docs](https://goteleport.com/docs/admin-guide/).  There is a systemd unit for teleport and the standard systemctl commands should work.
+
+- Check the status of the server: `systemctl status teleport` 
+- Restart teleport on the server: `sudo systemctl restart teleport`
+- Check the systemd logs: `sudo journalctl -u teleport `
+- local check that things are up: `sudo tctl status`
+
 ## Rebuilding the service
 
 For the most part, the service can be rebuilt by using `tf destroy` and `tf apply` in the usual way.  There are a few manual steps though.

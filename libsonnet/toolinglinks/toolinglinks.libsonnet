@@ -24,6 +24,7 @@ local generateMarkdown(toolingLinks, options={}) =
   continuousProfiler:: (import './continuous_profiler.libsonnet').continuousProfiler,
   elasticAPM:: (import './elastic_apm.libsonnet').elasticAPM,
   grafana:: (import './grafana.libsonnet').grafana,
+  grafanaUid:: (import './grafana.libsonnet').grafanaUid,
   sentry:: (import './sentry.libsonnet').sentry,
   bigquery:: (import './bigquery.libsonnet').bigquery,
   kibana:: (import './kibana.libsonnet').kibana,

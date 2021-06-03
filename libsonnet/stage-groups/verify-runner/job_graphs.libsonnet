@@ -1,3 +1,4 @@
+local panels = import './panels.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local aggregations = import 'promql/aggregations.libsonnet';
 
@@ -47,10 +48,125 @@ local startedJobsGraph(aggregators=[]) =
   ) + {
     lines: false,
     bars: true,
+    targets+: [{
+      expr: |||
+        avg (
+          increase(gitlab_runner_jobs_total{instance=~"${runner_manager:pipe}"}[$__interval])
+        )
+      |||,
+      format: 'time_series',
+      interval: '',
+      intervalFactor: 10,
+      legendFormat: 'avg',
+    }],
+    seriesOverrides+: [{
+      alias: 'avg',
+      bars: false,
+      color: '#ff0000ff',
+      fill: 0,
+      lines: true,
+      linewidth: 2,
+      stack: false,
+      zindex: 3,
+    }],
   };
+
+local startedJobsCounter =
+  basic.statPanel(
+    title=null,
+    panelTitle='Started jobs',
+    color='green',
+    query='sum by(shard) (increase(gitlab_runner_jobs_total{instance=~"${runner_manager:pipe}"}[1d]))',
+    legendFormat='{{shard}}',
+    unit='short',
+    decimals=1,
+    colorMode='value',
+    instant=false,
+    interval='1d',
+    intevalFactor=1,
+    calcs=['sum'],
+    justifyMode='center',
+  );
+
+local finishedJobsDurationHistogram = panels.heatmap(
+  'Finished job durations histogram',
+  |||
+    sum by (le) (
+      rate(gitlab_runner_job_duration_seconds_bucket{instance=~"${runner_manager:pipe}"}[$__interval])
+    )
+  |||,
+  intervalFactor=1,
+  color_cardColor='blue',
+);
+
+local finishedJobsMinutesIncreaseGraph =
+  basic.timeseries(
+    title='Finished job minutes increase',
+    legendFormat='{{shard}}',
+    format='short',
+    stack=true,
+    interval='',
+    intervalFactor=5,
+    query=|||
+      sum by(shard) (
+        increase(gitlab_runner_job_duration_seconds_sum{instance=~"${runner_manager:pipe}"}[$__interval])
+      )/60
+    |||,
+  ) + {
+    lines: false,
+    bars: true,
+    targets+: [{
+      expr: |||
+        avg (
+          increase(gitlab_runner_job_duration_seconds_sum{instance=~"${runner_manager:pipe}"}[$__interval])
+        )/60
+      |||,
+      format: 'time_series',
+      interval: '',
+      intervalFactor: 10,
+      legendFormat: 'avg',
+    }],
+    seriesOverrides+: [{
+      alias: 'avg',
+      bars: false,
+      color: '#ff0000ff',
+      fill: 0,
+      lines: true,
+      linewidth: 2,
+      stack: false,
+      zindex: 3,
+    }],
+  };
+
+local finishedJobsMinutesIncreaseCounter =
+  basic.statPanel(
+    title=null,
+    panelTitle='Finished job minutes increase',
+    color='green',
+    query=|||
+      sum by(shard) (
+        increase(gitlab_runner_job_duration_seconds_sum{instance=~"${runner_manager:pipe}"}[1d])
+      )/60
+    |||,
+    legendFormat='{{shard}}',
+    unit='short',
+    decimals=1,
+    colorMode='value',
+    instant=false,
+    interval='1d',
+    intevalFactor=1,
+    calcs=['sum'],
+    justifyMode='center',
+  );
 
 {
   running:: runningJobsGraph,
   failures:: runnerJobFailuresGraph,
   started:: startedJobsGraph,
+  finishedJobsMinutesIncrease:: finishedJobsMinutesIncreaseGraph,
+
+  startedCounter:: startedJobsCounter,
+  finishedJobsMinutesIncreaseCounter:: finishedJobsMinutesIncreaseCounter,
+
+  finishedJobsDurationHistogram:: finishedJobsDurationHistogram,
 }

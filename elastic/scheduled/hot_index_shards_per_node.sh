@@ -42,7 +42,7 @@ curl -s "$ELASTICSEARCH_URL/*/_settings" |
   jq -r --arg INDEX_MATCH_DATA "$INDEX_MATCH_DATA" \
     --arg INDEX_MATCH_NUMBER_OF_SHARDS "$INDEX_MATCH_NUMBER_OF_SHARDS" \
     --arg INDEX_MATCH_TOTAL_SHARDS_PER_NODE "$INDEX_MATCH_TOTAL_SHARDS_PER_NODE" \
-    'to_entries[]|select(.value.settings.index.routing.allocation.require.data == $INDEX_MATCH_DATA and .value.settings.index.number_of_shards == $INDEX_MATCH_NUMBER_OF_SHARDS and .value.settings.index.routing.allocation.total_shards_per_node == $INDEX_MATCH_TOTAL_SHARDS_PER_NODE)|.key' |
+    'to_entries[]|select(.value.settings.index.routing.allocation.require.data == $INDEX_MATCH_DATA and (.value.settings.index.number_of_shards|tonumber) >= ($INDEX_MATCH_NUMBER_OF_SHARDS|tonumber) and .value.settings.index.routing.allocation.total_shards_per_node == $INDEX_MATCH_TOTAL_SHARDS_PER_NODE)|.key' |
   sort >"${TMPDIR}/indices.txt"
 
 # remove indices that are still being written to

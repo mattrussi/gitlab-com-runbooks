@@ -228,10 +228,10 @@ local indexCatalog = {
 
   runners: indexDefaults {
     timestamp: '@timestamp',
-    indexPattern: 'AWgzayS3ENm-ja4G1a8d',
+    indexPattern: 'pubsub-runner-inf-gprd',
     defaultColumns: ['json.operation', 'json.job', 'json.operation', 'json.repo_url', 'json.project', 'json.msg'],
     defaultSeriesSplitField: 'json.repo_url.keyword',
-    failureFilter: [matchFilter('json.msg', 'failed')],
+    failureFilter: [matchFilter('json.msg', 'Job failed (system failure)')],
     defaultLatencyField: 'json.duration',
     latencyFieldUnitMultiplier: 1000000000,  // nanoseconds, ah yeah
   },

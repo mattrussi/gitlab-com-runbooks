@@ -960,9 +960,16 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
     query,
     legendFormat,
     unit='',
+    colorMode='background',
     decimals=0,
     instant=true,
-    mappings=[]
+    interval='1m',
+    intevalFactor=3,
+    calcs=[
+      'lastNotNull',
+    ],
+    mappings=[],
+    justifyMode='auto'
   )::
     local steps = if std.type(color) == 'string' then
       [
@@ -976,13 +983,11 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
       links: [],
       options: {
         graphMode: 'none',
-        colorMode: 'background',
-        justifyMode: 'auto',
+        colorMode: colorMode,
+        justifyMode: justifyMode,
         fieldOptions: {
           values: false,
-          calcs: [
-            'lastNotNull',
-          ],
+          calcs: calcs,
           defaults: {
             thresholds: {
               mode: 'absolute',
@@ -998,7 +1003,13 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
         orientation: 'vertical',
       },
       pluginVersion: '6.6.1',
-      targets: [promQuery.target(query, legendFormat=legendFormat, instant=instant)],
+      targets: [promQuery.target(
+        query,
+        legendFormat=legendFormat,
+        instant=instant,
+        interval=interval,
+        intervalFactor=intevalFactor,
+      )],
       title: panelTitle,
       type: 'stat',
     },

@@ -12,7 +12,7 @@ By default the PITR database restore instance is read/only.  To make it read/wri
 
 ```shell
 gitlab-ctl stop postgresql
-mv /var/opt/gitlab/postgresql/data/recovery.conf /var/opt/gitlab/postgresql/data/recovery.conf.old
+rm /var/opt/gitlab/postgresql/data/standby.signal
 gitlab-ctl start postgresql
 ```
 

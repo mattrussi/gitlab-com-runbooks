@@ -197,6 +197,18 @@ And a possible result:
 Normal bootstrapping is when you start a brand-new cluster with zero data. Patroni will create the PostgreSQL database
 cluster using `initdb` with the options specified in `node['gitlab-patroni']['patroni']['config']['bootstrap']['initdb']`.
 
+#### Creating base configuration for normal bootstrapping
+
+By default our Chef cookbooks won't create the `postgresql.base.conf` file, to prevent Patroni refusing to start due to a
+non-empty PGDATA folder. When creating a new cluster from scratch, you can signal the Chef client run to provision this
+file by simply `touch`ing it. For example:
+
+```sh
+sudo -u gitlab-psql touch /var/opt/gitlab/postgresql/data/postgresql.base.conf
+```
+
+Where `/var/opt/gitlab/postgresql/data/` corresponds to `node['gitlab-patroni']['postgresql]['config_directory']`.
+
 ### Standby bootstrapping
 
 Standby bootstrapping is starting a Patroni cluster that replicates from a remote master (i.e. not part of the Patroni cluster).

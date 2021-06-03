@@ -93,24 +93,12 @@ local rules = {
         hotspotTupleAlert(
           'PostgreSQL_HotSpotTupleFetchingPrimary',
           '10m',
-          warning=false,
+          warning=true,
           replica=false
         ),
         hotspotTupleAlert(
           'PostgreSQL_HotSpotTupleFetchingReplicas',
           '10m',
-          warning=false,
-          replica=true
-        ),
-        hotspotTupleAlert(
-          'PostgreSQL_HotSpotTupleFetchingPrimaryWarning',
-          '3m',
-          warning=true,
-          replica=true
-        ),
-        hotspotTupleAlert(
-          'PostgreSQL_HotSpotTupleFetchingReplicasWarning',
-          '5m',
           warning=true,
           replica=true
         ),

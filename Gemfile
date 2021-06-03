@@ -10,6 +10,7 @@ gem 'json'
 gem 'digest-crc'
 
 group :development, :test do
+  gem 'rake'
   gem 'pry'
   gem 'rspec'
   gem 'rubocop'

@@ -48,7 +48,6 @@
 * [../monitoring/common-tasks.md](../monitoring/common-tasks.md)
 * [../monitoring/definition-service-error-rate.md](../monitoring/definition-service-error-rate.md)
 * [../monitoring/definition-service-ops-rate.md](../monitoring/definition-service-ops-rate.md)
-* [../nfs/recovering-from-nfs-disaster.md](../nfs/recovering-from-nfs-disaster.md)
 * [../onboarding/architecture.md](../onboarding/architecture.md)
 * [../onboarding/kibana-diagnosis.md](../onboarding/kibana-diagnosis.md)
 * [../patroni/pg_collect_query_data.md](../patroni/pg_collect_query_data.md)

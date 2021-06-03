@@ -329,8 +329,11 @@ We deploy:
    - Queries recent metrics from all Prometheus instances (via thanos-sidecar)
    - Queries longer-term metrics from thanos-store.
    - Available for ad-hoc queries at <https://thanos.gitlab.net>.
-   - You'll usually actually be interacting with thanos-query-frontend, a
-     caching layer, but this is somewhat of an implementation detail.
+- thanos-query frontend
+   - A service that acts like a load balancing and caching layer for thanos-query.
+   - Allows splitting queries into multiple short queries by interval which allows parallelization, prevents large queries from causing OOM, and allows for load balancing.
+   - Supports a retry mechanism when queries fail.
+   - Allows caching query results, label names, and values and reuses them on subsequent requested queries.
 - thanos-store
    - one deployment per bucket, so one per environment / google project
    - Provides a gateway to the metrics buckets populated by thanos-sidecar.

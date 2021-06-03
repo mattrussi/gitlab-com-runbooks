@@ -77,9 +77,9 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            rate(node_disk_reads_completed_total{device!="sda", type=~"patroni|gitaly|nfs"}[20m])
+            rate(node_disk_reads_completed_total{device!="sda", type=~"patroni|gitaly"}[20m])
             /
-            node_disk_max_read_iops{device!="sda", type=~"patroni|gitaly|nfs"}
+            node_disk_max_read_iops{device!="sda", type=~"patroni|gitaly"}
             ,
             1)
         ,
@@ -92,9 +92,9 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            rate(node_disk_read_bytes_total{device!="sda", type=~"patroni|gitaly|nfs"}[20m])
+            rate(node_disk_read_bytes_total{device!="sda", type=~"patroni|gitaly"}[20m])
             /
-            node_disk_max_read_bytes_seconds{device!="sda", type=~"patroni|gitaly|nfs"}
+            node_disk_max_read_bytes_seconds{device!="sda", type=~"patroni|gitaly"}
             ,
             1)
         ,
@@ -107,9 +107,9 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            rate(node_disk_writes_completed_total{device!="sda", type=~"patroni|gitaly|nfs"}[20m])
+            rate(node_disk_writes_completed_total{device!="sda", type=~"patroni|gitaly"}[20m])
             /
-            node_disk_max_write_iops{device!="sda", type=~"patroni|gitaly|nfs"}
+            node_disk_max_write_iops{device!="sda", type=~"patroni|gitaly"}
             ,
             1)
         ,
@@ -122,9 +122,9 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            rate(node_disk_written_bytes_total{device!="sda", type=~"patroni|gitaly|nfs"}[20m])
+            rate(node_disk_written_bytes_total{device!="sda", type=~"patroni|gitaly"}[20m])
             /
-            node_disk_max_write_bytes_seconds{device!="sda", type=~"patroni|gitaly|nfs"}
+            node_disk_max_write_bytes_seconds{device!="sda", type=~"patroni|gitaly"}
             ,
             1)
         ,
@@ -257,13 +257,13 @@ groups:
         clamp_min(
           clamp_max(
             sum by (environment, tier, type, stage, pod, container) (
-              rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", type=~"git|mailroom|registry|sidekiq|websockets|kas"}[5m])
+              rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", type=~"git|mailroom|registry|sidekiq|websockets|kas|api"}[5m])
             )
             /
             sum by(environment, tier, type, stage, pod, container) (
-              container_spec_cpu_quota:labeled{container!="", container!="POD", type=~"git|mailroom|registry|sidekiq|websockets|kas"}
+              container_spec_cpu_quota:labeled{container!="", container!="POD", type=~"git|mailroom|registry|sidekiq|websockets|kas|api"}
               /
-              container_spec_cpu_period:labeled{container!="", container!="POD", type=~"git|mailroom|registry|sidekiq|websockets|kas"}
+              container_spec_cpu_period:labeled{container!="", container!="POD", type=~"git|mailroom|registry|sidekiq|websockets|kas|api"}
             )
             ,
             1)
@@ -277,9 +277,9 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            container_memory_working_set_bytes:labeled{container!="", container!="POD", type=~"git|mailroom|registry|sidekiq|websockets|kas"}
+            container_memory_working_set_bytes:labeled{container!="", container!="POD", type=~"git|mailroom|registry|sidekiq|websockets|kas|api"}
             /
-            (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", type=~"git|mailroom|registry|sidekiq|websockets|kas"} > 0)
+            (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", type=~"git|mailroom|registry|sidekiq|websockets|kas|api"} > 0)
             ,
             1)
         ,
@@ -292,9 +292,9 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            kube_hpa_status_desired_replicas:labeled{type=~"git|mailroom|registry|sidekiq|websockets|kas", shard!~"database-throttled|elasticsearch|gitaly-throttled|memory-bound|urgent-other"}
+            kube_hpa_status_desired_replicas:labeled{type=~"git|mailroom|registry|sidekiq|websockets|kas|api", shard!~"database-throttled|elasticsearch|gitaly-throttled|memory-bound|urgent-other"}
             /
-            kube_hpa_spec_max_replicas:labeled{type=~"git|mailroom|registry|sidekiq|websockets|kas", shard!~"database-throttled|elasticsearch|gitaly-throttled|memory-bound|urgent-other"}
+            kube_hpa_spec_max_replicas:labeled{type=~"git|mailroom|registry|sidekiq|websockets|kas|api", shard!~"database-throttled|elasticsearch|gitaly-throttled|memory-bound|urgent-other"}
             ,
             1)
         ,
@@ -343,7 +343,7 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            instance:node_memory_utilization:ratio{type!="",type!~"nat|waf|monitoring|git|mailroom|websockets|kas|kube"}
+            instance:node_memory_utilization:ratio{fqdn!="", type!="",type!~"nat|waf|monitoring|git|mailroom|websockets|kas|kube"}
             ,
             1)
         ,
@@ -469,6 +469,112 @@ groups:
               /
               pg_integer_capacity_maximum{type="patroni"}
             )
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
+      component: pg_txid_vacuum_to_wraparound
+    expr: |
+      max by(environment, tier, type, stage) (
+        clamp_min(
+          clamp_max(
+            (
+              sum by (environment, tier, type, stage) (
+                increase(fluentd_pg_auto_vacuum_elapsed_seconds_total{type="patroni"}[1d])
+              )
+              / on(environment, type) group_left() (
+                pg_settings_autovacuum_max_workers and
+                on (instance) pg_replication_is_replica == 0
+              )
+            )
+            /
+            (
+              (2^31 - 10^6)
+              /
+              (
+                avg by (environment, tier, type, stage) (
+                  deriv(pg_txid_current{type="patroni"}[1d]) and
+                  on (instance) pg_replication_is_replica == 0
+                )
+              )
+            )
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
+      component: pg_vacuum_activity
+    expr: |
+      max by(environment, tier, type, stage) (
+        clamp_min(
+          clamp_max(
+            (
+              sum by (environment, tier, type, stage) (
+                avg_over_time(pg_stat_activity_autovacuum_active_workers_count{type=~"patroni|sentry"}[1m])
+                and on (instance, job) (pg_replication_is_replica{type=~"patroni|sentry"} == 0)
+              )
+              or
+              clamp_max(
+                group by (environment, tier, type, stage) (
+                  pg_settings_autovacuum_max_workers{type=~"patroni|sentry"}
+                  and on (instance, job) (pg_replication_is_replica{type=~"patroni|sentry"} == 0)
+                ),
+              0)
+            )
+            /
+            avg by (environment, tier, type, stage) (
+              pg_settings_autovacuum_max_workers{type=~"patroni|sentry"}
+              and on (instance, job) (pg_replication_is_replica{type=~"patroni|sentry"} == 0)
+            )
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
+      component: pg_walsender_cpu
+    expr: |
+      max by(environment, tier, type, stage) (
+        clamp_min(
+          clamp_max(
+            sum by (environment, tier, type, stage) (
+              sum by(environment, tier, type, stage, fqdn) (
+                rate(namedprocess_namegroup_cpu_seconds_total{type="patroni", groupname=~"pg.worker.walsender|pg.worker.walwriter|wal-g"}[5m])
+                and on (fqdn) (pg_replication_is_replica{type="patroni"} == 0)
+              )
+              /
+              count by (environment, tier, type, stage, fqdn) (
+                node_cpu_seconds_total{type="patroni", mode="idle"} and on(fqdn) (pg_replication_is_replica{type="patroni"} == 0)
+              )
+            )
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
+      component: pg_xid_wraparound
+    expr: |
+      max by(environment, tier, type, stage) (
+        clamp_min(
+          clamp_max(
+            (
+              max without (series) (
+                label_replace(pg_database_wraparound_age_datfrozenxid{type="patroni"}, "series", "datfrozenxid", "", "")
+                or
+                label_replace(pg_database_wraparound_age_datminmxid{type="patroni"}, "series", "datminmxid", "", "")
+              )
+              and on (instance, job) (pg_replication_is_replica{type="patroni"} == 0)
+            )
+            /
+            (2^31 - 10^6)
             ,
             1)
         ,
@@ -820,7 +926,7 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{mode="idle", type!="",type!~"nat|waf|console-node|deploy-node|security|git|mailroom|websockets|kas|kube"}[5m]))
+            avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{fqdn!="", mode="idle", type!="",type!~"nat|waf|console-node|deploy-node|security|git|mailroom|websockets|kas|kube"}[5m]))
             ,
             1)
         ,
@@ -1091,6 +1197,38 @@ groups:
     labels:
       component: pg_int4_id
     expr: '0.75'
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: pg_txid_vacuum_to_wraparound
+    expr: '0.2'
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: pg_txid_vacuum_to_wraparound
+    expr: '0.33'
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: pg_vacuum_activity
+    expr: '0.9'
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: pg_vacuum_activity
+    expr: '1'
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: pg_walsender_cpu
+    expr: '0.1'
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: pg_walsender_cpu
+    expr: '0.2'
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: pg_xid_wraparound
+    expr: '0.6'
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: pg_xid_wraparound
+    expr: '0.7'
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: pgbouncer_async_primary_pool
@@ -1441,6 +1579,30 @@ groups:
   - record: gitlab_component_saturation_info
     labels:
       component: pg_int4_id
+      horiz_scaling: 'no'
+      severity: s1
+    expr: '1'
+  - record: gitlab_component_saturation_info
+    labels:
+      component: pg_txid_vacuum_to_wraparound
+      horiz_scaling: 'no'
+      severity: s1
+    expr: '1'
+  - record: gitlab_component_saturation_info
+    labels:
+      component: pg_vacuum_activity
+      horiz_scaling: 'yes'
+      severity: s2
+    expr: '1'
+  - record: gitlab_component_saturation_info
+    labels:
+      component: pg_walsender_cpu
+      horiz_scaling: 'no'
+      severity: s3
+    expr: '1'
+  - record: gitlab_component_saturation_info
+    labels:
+      component: pg_xid_wraparound
       horiz_scaling: 'no'
       severity: s1
     expr: '1'
@@ -2456,7 +2618,7 @@ groups:
         max by(environment, tier, type, stage, fqdn) (
           clamp_min(
             clamp_max(
-              instance:node_memory_utilization:ratio{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              instance:node_memory_utilization:ratio{fqdn!="", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
               ,
               1)
           ,
@@ -2853,6 +3015,248 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="pg_int4_id"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="pg_int4_id"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: >-
+        The Total autovacuum time to TXID wraparound horizon resource of the {{ $labels.type }} service
+        ({{ $labels.stage }} stage), component has a saturation exceeding SLO and is close to its capacity
+        limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Total autovacuum time to TXID wraparound horizon resource:
+
+        This saturation metric measures the capacity of the Postgres primary instance to perform autovacuum operations on all tables.
+
+        It measures the total time spent in vacuum operations, over a 24 hour period divided the maximum number of autovacuum processes to give the total vacuum activity, in seconds. This value is divided by the TXID wraparound horizon for the database to produce a percentage.
+
+        This value will approach 100% as two situation occur:
+
+        1. The amount of time spent performing autovacuum operations goes up, due to high dead-tuple generation in the database. 1. The write transaction volume goes up, decreasing the wraparound horizon.
+
+        If the total time spent vacuuming approached the wraparound time horizon, this would mean that the database would be at risk of being unable to complete a vacuum of all tables within the wraparound time horizon. This would put the database at risk of XID wraparound and immediate shutdown.
+      grafana_dashboard_id: alerts-sat_pg_txid_vac_wraparound
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/alerts-sat_pg_txid_vac_wraparound?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '4019870218'
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage) (
+          clamp_min(
+            clamp_max(
+              (
+                sum by (environment, tier, type, stage) (
+                  increase(fluentd_pg_auto_vacuum_elapsed_seconds_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[1d])
+                )
+                / on(environment, type) group_left() (
+                  pg_settings_autovacuum_max_workers and
+                  on (instance) pg_replication_is_replica == 0
+                )
+              )
+              /
+              (
+                (2^31 - 10^6)
+                /
+                (
+                  avg by (environment, tier, type, stage) (
+                    deriv(pg_txid_current{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[1d]) and
+                    on (instance) pg_replication_is_replica == 0
+                  )
+                )
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      pager: pagerduty
+      rules_domain: general
+      severity: s1
+    expr: |
+      gitlab_component_saturation:ratio{component="pg_txid_vacuum_to_wraparound"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="pg_txid_vacuum_to_wraparound"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 60m
+    annotations:
+      title: >-
+        The Postgres Autovacuum Activity resource of the {{ $labels.type }} service ({{ $labels.stage
+        }} stage), component has a saturation exceeding SLO and is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Postgres Autovacuum Activity resource:
+
+        Measures the number of active autovacuum workers, as a percentage of the maximum, configured via the `autovacuum_max_workers` setting.
+
+        If this is saturated for a sustained period, it may indicate that postgres is struggling to keep up with vacuum activity.
+
+        This could ultimately lead to a transaction ID wraparound situation: see https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/patroni/pg_xid_wraparound_alert.md
+      grafana_dashboard_id: alerts-sat_pg_vacuum_activity
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/alerts-sat_pg_vacuum_activity?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '1494397745'
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage) (
+          clamp_min(
+            clamp_max(
+              (
+                sum by (environment, tier, type, stage) (
+                  avg_over_time(pg_stat_activity_autovacuum_active_workers_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[1m])
+                  and on (instance, job) (pg_replication_is_replica{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} == 0)
+                )
+                or
+                clamp_max(
+                  group by (environment, tier, type, stage) (
+                    pg_settings_autovacuum_max_workers{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+                    and on (instance, job) (pg_replication_is_replica{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} == 0)
+                  ),
+                0)
+              )
+              /
+              avg by (environment, tier, type, stage) (
+                pg_settings_autovacuum_max_workers{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+                and on (instance, job) (pg_replication_is_replica{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} == 0)
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+    expr: |
+      gitlab_component_saturation:ratio{component="pg_vacuum_activity"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="pg_vacuum_activity"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: >-
+        The Walsender CPU Saturation resource of the {{ $labels.type }} service ({{ $labels.stage }} stage),
+        component has a saturation exceeding SLO and is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Walsender CPU Saturation resource:
+
+        This saturation metric measures the total amount of time that the primary postgres instance is spending sending WAL segments to replicas. It is expressed as a percentage of all CPU available on the primary postgres instance.
+
+        The more replicas connected, the higher this metric will be.
+
+        Since it's expressed as a percentage of all CPU, this should always remain low, since the CPU primarily needs to be available for handling SQL statements.
+      grafana_dashboard_id: alerts-sat_pg_walsender_cpu
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/alerts-sat_pg_walsender_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '1879384722'
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage) (
+          clamp_min(
+            clamp_max(
+              sum by (environment, tier, type, stage) (
+                sum by(environment, tier, type, stage, fqdn) (
+                  rate(namedprocess_namegroup_cpu_seconds_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", groupname=~"pg.worker.walsender|pg.worker.walwriter|wal-g"}[5m])
+                  and on (fqdn) (pg_replication_is_replica{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} == 0)
+                )
+                /
+                count by (environment, tier, type, stage, fqdn) (
+                  node_cpu_seconds_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", mode="idle"} and on(fqdn) (pg_replication_is_replica{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} == 0)
+                )
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s3
+    expr: |
+      gitlab_component_saturation:ratio{component="pg_walsender_cpu"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="pg_walsender_cpu"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: >-
+        The Transaction ID Wraparound resource of the {{ $labels.type }} service ({{ $labels.stage }}
+        stage), component has a saturation exceeding SLO and is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Transaction ID Wraparound resource:
+
+        Risk of DB shutdown in the near future, approaching transaction ID wraparound.
+
+        This is a critical situation.
+
+        This saturation metric measures how close the database is to Transaction ID wraparound.
+
+        When wraparound occurs, the database will automatically shutdown to prevent data loss, causing a full outage.
+
+        Recovery would require entering single-user mode to run vacuum, taking the site down for a potentially multi-hour maintenance session.
+
+        To avoid reaching the db shutdown threshold, consider the following short-term actions:
+
+        1. Escalate to the SRE Datastores team, and then,
+
+        2. Find and terminate any very old transactions. The runbook for this alert has details.  Do this first.  It is the most critical step and may be all that is necessary to let autovacuum do its job.
+
+        3. Run a manual vacuum on tables with oldest relfrozenxid.  Manual vacuums run faster than autovacuum.
+
+        4. Add autovacuum workers or reduce autovacuum cost delay, if autovacuum is chronically unable to keep up with the transaction rate.
+
+        Long running transaction dashboard: https://dashboards.gitlab.net/d/alerts-long_running_transactions/alerts-long-running-transactions?orgId=1
+      grafana_dashboard_id: alerts-sat_pg_xid_wraparound
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/alerts-sat_pg_xid_wraparound?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '3666116359'
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, datname) (
+          clamp_min(
+            clamp_max(
+              (
+                max without (series) (
+                  label_replace(pg_database_wraparound_age_datfrozenxid{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}, "series", "datfrozenxid", "", "")
+                  or
+                  label_replace(pg_database_wraparound_age_datminmxid{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}, "series", "datminmxid", "", "")
+                )
+                and on (instance, job) (pg_replication_is_replica{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} == 0)
+              )
+              /
+              (2^31 - 10^6)
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/patroni/pg_xid_wraparound_alert.md
+    labels:
+      alert_type: cause
+      pager: pagerduty
+      rules_domain: general
+      severity: s1
+    expr: |
+      gitlab_component_saturation:ratio{component="pg_xid_wraparound"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="pg_xid_wraparound"}
   - alert: component_saturation_slo_out_of_bounds
     for: 10m
     annotations:
@@ -3745,7 +4149,7 @@ groups:
         max by(environment, tier, type, stage, fqdn) (
           clamp_min(
             clamp_max(
-              avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{mode="idle", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m]))
+              avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{fqdn!="", mode="idle", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m]))
               ,
               1)
           ,

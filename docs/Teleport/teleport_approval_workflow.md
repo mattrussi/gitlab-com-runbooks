@@ -2,7 +2,11 @@
 
 To use the approval workflows, you must be running the enterprise version of the `tctl` client.  This can be installed locally on a laptop, or can be run on the teleport servers.  Note that the version installed with `brew install teleport` is NOT the enterprise version.  It will work fine for client connections, but will not work for approvals.
 
-To install the enterprise version on a MacOS workstation, download and install this package: https://get.gravitational.com/teleport-ent-6.1.1.pkg 
+To install the enterprise version on a MacOS workstation, download and install this package: 
+
+- Mac Package: https://get.gravitational.com/teleport-ent-6.1.1.pkg 
+- Linux DEB: https://get.gravitational.com/teleport-ent_6.1.5_amd64.deb
+- Linux TAR: https://get.gravitational.com/teleport-ent-v6.1.5-linux-amd64-bin.tar.gz
 
 > You must be logged in with the role `teleport-approver` to use these commands. That means you'll need to be in the `GitLab - SRE Managers` group in Okta. (This is configured in the [okta-connector.yaml](https://gitlab.com/gitlab-cookbooks/gitlab-teleport/-/blob/master/templates/default/okta-connector.yaml.erb#L14) file)
 

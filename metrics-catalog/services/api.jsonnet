@@ -72,6 +72,36 @@ metricsCatalog.serviceDefinition({
       regional=false,
     ),
 
+    nginx_ingress: {
+      userImpacting: true,
+      featureCategory: 'not_owned',
+      team: 'sre_datastores',
+      description: |||
+        nginx for api
+      |||,
+
+      local baseSelector = { type: 'api' },
+
+      requestRate: rateMetric(
+        counter='nginx_ingress_controller_requests:labeled',
+        selector=baseSelector
+      ),
+
+      errorRate: rateMetric(
+        counter='nginx_ingress_controller_requests:labeled',
+        selector=baseSelector {
+          status: { re: '^5.*' },
+        }
+      ),
+
+      significantLabels: ['path', 'status'],
+
+      // TODO: Add some links here
+      toolingLinks: [
+      ],
+      serviceAggregation: false,
+    },
+
     workhorse: {
       userImpacting: true,
       featureCategory: 'not_owned',

@@ -9,6 +9,7 @@ local platformLinks = import '../platform_links.libsonnet';
 local singleMetricRow = import 'key-metric-panels/single-metric-row.libsonnet';
 local aggregationSets = import '../../metrics-catalog/aggregation-sets.libsonnet';
 local errorBudget = import 'stage-groups/error_budget.libsonnet';
+local budgetUtils = import 'stage-groups/error-budget/utils.libsonnet';
 local sidekiqHelpers = import 'services/lib/sidekiq-helpers.libsonnet';
 local thresholds = import 'thresholds.libsonnet';
 
@@ -41,67 +42,22 @@ local actionFilter(featureCategoriesSelector) =
     allValues='.*'
   );
 
-local errorBudgetPanels(group, range) =
+local errorBudgetPanels(group) =
   [
     [
-      errorBudget.availabilityStatPanel(group.key, range),
-      errorBudget.availabilityTargetStatPanel(group.key, range),
+      errorBudget.panels.availabilityStatPanel(group.key),
+      errorBudget.panels.availabilityTargetStatPanel(group.key),
     ],
     [
-      errorBudget.timeRemainingStatPanel(group.key, range),
-      errorBudget.timeRemainingTargetStatPanel(group.key, range),
+      errorBudget.panels.timeRemainingStatPanel(group.key),
+      errorBudget.panels.timeRemainingTargetStatPanel(group.key),
     ],
     [
-      errorBudget.timeSpentStatPanel(group.key, range),
-      errorBudget.timeSpentTargetStatPanel(group.key, range),
+      errorBudget.panels.timeSpentStatPanel(group.key),
+      errorBudget.panels.timeSpentTargetStatPanel(group.key),
     ],
     [
-      grafana.text.new(
-        title='Info',
-        mode='markdown',
-        content=|||
-          ### [Error budget](https://about.gitlab.com/handbook/engineering/error-budgets/)
-
-          These error budget panels show an aggregate of SLIs across all components.
-          However, not all components have been implemented yet.
-
-          The [handbook](https://about.gitlab.com/handbook/engineering/error-budgets/)
-          explains how these budgets are used.
-
-          Read more about how the error budgets are calculated in the
-          [stage group dashboard documentation](https://docs.gitlab.com/ee/development/stage_group_dashboards.html#error-budget).
-
-          The error budget is compared to our SLO of %(slaTarget)s and is always in
-          a range of 28 days from the selected end date in Grafana.
-
-          ### Availability
-
-          The availability shows the percentage of operations labeled with one of the
-          categories owned by %(groupName)s with satisfactory completion.
-
-          ### Budget remaining
-
-          The error budget in minutes is calculated based on the %(slaTarget)s.
-          There are 40320 minutes in 28 days, we allow %(budgetRatio)s of failures, which
-          means the budget in minutes is %(budgetMinutes)s minutes.
-
-          The budget remaining shows how many minutes have not been spent in the
-          past 28 days.
-
-          ### Minutes spent
-
-          This shows the total minutes spent over the past 28 days.
-
-          For example, if there were 403200 (28 * 24 * 60) operations in 28 days.
-          This would be 1 every minute. If 10 of those were unsatisfactory, that
-          would mean 10 minutes of the budget were spent.
-        ||| % {
-          slaTarget: '%.2f%%' % (errorBudget.slaTarget * 100.0),
-          budgetRatio: '%.2f%%' % ((1 - errorBudget.slaTarget) * 100.0),
-          budgetMinutes: '%i' % (errorBudget.budgetSeconds(range) / 60),
-          groupName: group.name,
-        },
-      ),
+      errorBudget.panels.explanationPanel(group.name),
     ],
   ];
 
@@ -394,12 +350,13 @@ local sidekiqJobDurationByUrgency(urgencies, featureCategoriesSelector) =
 
 local requestComponents = std.set(['web', 'api', 'git']);
 local backgroundComponents = std.set(['sidekiq']);
-local validComponents = std.setUnion(requestComponents, backgroundComponents);
-local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false, displayBudget=true) =
+local supportedComponents = std.setUnion(requestComponents, backgroundComponents);
+local defaultComponents = std.set(['web', 'api', 'sidekiq']);
+local dashboard(groupKey, components=defaultComponents, displayEmptyGuidance=false, displayBudget=true) =
   assert std.type(components) == 'array' : 'Invalid components argument type';
 
   local setComponents = std.set(components);
-  local invalidComponents = std.setDiff(setComponents, validComponents);
+  local invalidComponents = std.setDiff(setComponents, supportedComponents);
   assert std.length(invalidComponents) == 0 :
          'Invalid components: ' + std.join(', ', invalidComponents);
 
@@ -452,10 +409,9 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
     .addPanels(
       if displayBudget then
         // Errorbudgets are always viewed over a 28d rolling average, regardles of the
-        // selected range
-        local range = '28d';
+        // selected range see the configuration in `libsonnet/stage-groups/error_budget.libsonnet`
         local title = 'Error Budget (past 28 days)';
-        layout.splitColumnGrid(errorBudgetPanels(group, range), startRow=100, cellHeights=[4, 2], title=title)
+        layout.splitColumnGrid(errorBudgetPanels(group), startRow=100, cellHeights=[4, 2], title=title)
       else
         []
     )
@@ -596,4 +552,5 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
   // dashboard generates a basic stage group dashboard for a stage group
   // The group should match a group a `stage` from `./services/stage-group-mapping.jsonnet`
   dashboard: dashboard,
+  supportedComponents: supportedComponents,
 }

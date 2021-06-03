@@ -60,6 +60,32 @@ groups:
           gitlab_component_ops:rate{component="loadbalancer",stage="main",tier="sv",type="api"}
         )
       )
+  - record: gitlab_component_ops:rate
+    labels:
+      component: nginx_ingress
+      tier: sv
+      type: api
+    expr: |
+      sum by (environment,stage) (
+        rate(nginx_ingress_controller_requests:labeled{type="api"}[1m])
+      )
+  - record: gitlab_component_errors:rate
+    labels:
+      component: nginx_ingress
+      tier: sv
+      type: api
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(nginx_ingress_controller_requests:labeled{status=~"^5.*",type="api"}[1m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate{component="nginx_ingress",tier="sv",type="api"}
+        )
+      )
   - record: gitlab_component_apdex:success:rate
     labels:
       component: puma
@@ -184,24 +210,6 @@ groups:
           gitlab:component:feature_category:execution:ops:rate_1m{component="puma",type="api"}
         )
       )
-  - record: gitlab:component:feature_category:execution:error:ratio_1m
-    expr: |
-      gitlab:component:feature_category:execution:error:rate_1m
-      /
-      gitlab:component:feature_category:execution:ops:rate_1m > 0
-  - record: gitlab:component:feature_category:execution:apdex:ratio_1m
-    labels:
-      component: puma
-    expr: |
-      sum by (environment,tier,type,stage,feature_category) (
-        rate(gitlab_transaction_duration_seconds_bucket{job="gitlab-rails",le="1.0",type="api"}[1m])
-      )
-      /
-      (
-        sum by (environment,tier,type,stage,feature_category) (
-          rate(gitlab_transaction_duration_seconds_bucket{job="gitlab-rails",le="+Inf",type="api"}[1m])
-        ) > 0
-      )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_1m
     labels:
       component: puma
@@ -273,6 +281,32 @@ groups:
       (
         0 * group by(environment) (
           gitlab_component_ops:rate_5m{component="loadbalancer",stage="main",tier="sv",type="api"}
+        )
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: nginx_ingress
+      tier: sv
+      type: api
+    expr: |
+      sum by (environment,stage) (
+        rate(nginx_ingress_controller_requests:labeled{type="api"}[5m])
+      )
+  - record: gitlab_component_errors:rate_5m
+    labels:
+      component: nginx_ingress
+      tier: sv
+      type: api
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(nginx_ingress_controller_requests:labeled{status=~"^5.*",type="api"}[5m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_5m{component="nginx_ingress",tier="sv",type="api"}
         )
       )
   - record: gitlab_component_apdex:success:rate_5m
@@ -399,24 +433,6 @@ groups:
           gitlab:component:feature_category:execution:ops:rate_5m{component="puma",type="api"}
         )
       )
-  - record: gitlab:component:feature_category:execution:error:ratio_5m
-    expr: |
-      gitlab:component:feature_category:execution:error:rate_5m
-      /
-      gitlab:component:feature_category:execution:ops:rate_5m > 0
-  - record: gitlab:component:feature_category:execution:apdex:ratio_5m
-    labels:
-      component: puma
-    expr: |
-      sum by (environment,tier,type,stage,feature_category) (
-        rate(gitlab_transaction_duration_seconds_bucket{job="gitlab-rails",le="1.0",type="api"}[5m])
-      )
-      /
-      (
-        sum by (environment,tier,type,stage,feature_category) (
-          rate(gitlab_transaction_duration_seconds_bucket{job="gitlab-rails",le="+Inf",type="api"}[5m])
-        ) > 0
-      )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_5m
     labels:
       component: puma
@@ -488,6 +504,32 @@ groups:
       (
         0 * group by(environment) (
           gitlab_component_ops:rate_30m{component="loadbalancer",stage="main",tier="sv",type="api"}
+        )
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: nginx_ingress
+      tier: sv
+      type: api
+    expr: |
+      sum by (environment,stage) (
+        rate(nginx_ingress_controller_requests:labeled{type="api"}[30m])
+      )
+  - record: gitlab_component_errors:rate_30m
+    labels:
+      component: nginx_ingress
+      tier: sv
+      type: api
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(nginx_ingress_controller_requests:labeled{status=~"^5.*",type="api"}[30m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_30m{component="nginx_ingress",tier="sv",type="api"}
         )
       )
   - record: gitlab_component_apdex:success:rate_30m
@@ -614,24 +656,6 @@ groups:
           gitlab:component:feature_category:execution:ops:rate_30m{component="puma",type="api"}
         )
       )
-  - record: gitlab:component:feature_category:execution:error:ratio_30m
-    expr: |
-      gitlab:component:feature_category:execution:error:rate_30m
-      /
-      gitlab:component:feature_category:execution:ops:rate_30m > 0
-  - record: gitlab:component:feature_category:execution:apdex:ratio_30m
-    labels:
-      component: puma
-    expr: |
-      sum by (environment,tier,type,stage,feature_category) (
-        rate(gitlab_transaction_duration_seconds_bucket{job="gitlab-rails",le="1.0",type="api"}[30m])
-      )
-      /
-      (
-        sum by (environment,tier,type,stage,feature_category) (
-          rate(gitlab_transaction_duration_seconds_bucket{job="gitlab-rails",le="+Inf",type="api"}[30m])
-        ) > 0
-      )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_30m
     labels:
       component: puma
@@ -703,6 +727,32 @@ groups:
       (
         0 * group by(environment) (
           gitlab_component_ops:rate_1h{component="loadbalancer",stage="main",tier="sv",type="api"}
+        )
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: nginx_ingress
+      tier: sv
+      type: api
+    expr: |
+      sum by (environment,stage) (
+        rate(nginx_ingress_controller_requests:labeled{type="api"}[1h])
+      )
+  - record: gitlab_component_errors:rate_1h
+    labels:
+      component: nginx_ingress
+      tier: sv
+      type: api
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(nginx_ingress_controller_requests:labeled{status=~"^5.*",type="api"}[1h])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_1h{component="nginx_ingress",tier="sv",type="api"}
         )
       )
   - record: gitlab_component_apdex:success:rate_1h
@@ -829,24 +879,6 @@ groups:
           gitlab:component:feature_category:execution:ops:rate_1h{component="puma",type="api"}
         )
       )
-  - record: gitlab:component:feature_category:execution:error:ratio_1h
-    expr: |
-      gitlab:component:feature_category:execution:error:rate_1h
-      /
-      gitlab:component:feature_category:execution:ops:rate_1h > 0
-  - record: gitlab:component:feature_category:execution:apdex:ratio_1h
-    labels:
-      component: puma
-    expr: |
-      sum by (environment,tier,type,stage,feature_category) (
-        rate(gitlab_transaction_duration_seconds_bucket{job="gitlab-rails",le="1.0",type="api"}[1h])
-      )
-      /
-      (
-        sum by (environment,tier,type,stage,feature_category) (
-          rate(gitlab_transaction_duration_seconds_bucket{job="gitlab-rails",le="+Inf",type="api"}[1h])
-        ) > 0
-      )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_1h
     labels:
       component: puma
@@ -918,6 +950,32 @@ groups:
       (
         0 * group by(environment) (
           gitlab_component_ops:rate_6h{component="loadbalancer",stage="main",tier="sv",type="api"}
+        )
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: nginx_ingress
+      tier: sv
+      type: api
+    expr: |
+      sum by (environment,stage) (
+        rate(nginx_ingress_controller_requests:labeled{type="api"}[6h])
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: nginx_ingress
+      tier: sv
+      type: api
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(nginx_ingress_controller_requests:labeled{status=~"^5.*",type="api"}[6h])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_6h{component="nginx_ingress",tier="sv",type="api"}
         )
       )
   - record: gitlab_component_apdex:success:rate_6h
@@ -1044,24 +1102,6 @@ groups:
           gitlab:component:feature_category:execution:ops:rate_6h{component="puma",type="api"}
         )
       )
-  - record: gitlab:component:feature_category:execution:error:ratio_6h
-    expr: |
-      gitlab:component:feature_category:execution:error:rate_6h
-      /
-      gitlab:component:feature_category:execution:ops:rate_6h > 0
-  - record: gitlab:component:feature_category:execution:apdex:ratio_6h
-    labels:
-      component: puma
-    expr: |
-      sum by (environment,tier,type,stage,feature_category) (
-        rate(gitlab_transaction_duration_seconds_bucket{job="gitlab-rails",le="1.0",type="api"}[6h])
-      )
-      /
-      (
-        sum by (environment,tier,type,stage,feature_category) (
-          rate(gitlab_transaction_duration_seconds_bucket{job="gitlab-rails",le="+Inf",type="api"}[6h])
-        ) > 0
-      )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_6h
     labels:
       component: puma
@@ -1083,6 +1123,14 @@ groups:
     labels:
       component: loadbalancer
       regional_aggregation: 'no'
+      service_aggregation: 'no'
+      tier: sv
+      type: api
+    expr: '1'
+  - record: gitlab_component_service:mapping
+    labels:
+      component: nginx_ingress
+      regional_aggregation: 'yes'
       service_aggregation: 'no'
       tier: sv
       type: api

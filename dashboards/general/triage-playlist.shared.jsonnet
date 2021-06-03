@@ -38,7 +38,6 @@ local playlistDefinitions = {
     services: [
       'gitaly',
       'praefect',
-      'nfs',
     ],
   },
   database: {

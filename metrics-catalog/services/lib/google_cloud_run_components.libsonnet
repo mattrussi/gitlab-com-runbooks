@@ -16,12 +16,14 @@ local histogramApdex = metricsCatalog.histogramApdex;
     gcpRegion,  // Don't confuse this with the prometheus `region` which is where we collect the metrics, not where google host Cloud Run
     ignoreTrafficCessation=false,
     apdexSatisfactoryLatency=null,
+    team=null,
     additionalToolingLinks=[]
   )::
     local baseSelector = { configuration_name: configurationName, project_id: projectId };
 
     metricsCatalog.serviceLevelIndicatorDefinition({
       userImpacting: userImpacting,
+      [if team != null then 'team']: team,
       ignoreTrafficCessation: ignoreTrafficCessation,
 
       staticLabels: {

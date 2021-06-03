@@ -6,8 +6,8 @@
 * [Setup](#setup)
   * [Setup Replication](#setup-replication)
     * [Pre-requisites](#pre-requisites)
-      * [recovery.conf for archive replica](#recovery.conf-for-archive-replica)
-      * [recovery.conf for delayed replica](#recovery.conf-for-delayed-replica)
+      * [postgresql.auto.conf for archive replica](#postgresql.auto.conf-for-archive-replica)
+      * [postgresql.auto.conf for delayed replica](#postgresql.auto.conf-for-delayed-replica)
     * [Restoring with WAL-G](#restoring-with-wal-g)
     * [Restoring with a disk-snapshot](#restoring-with-a-disk-snapshot)
 * [Check Replication Lag](#check-replication-lag)
@@ -91,25 +91,44 @@ policy moving files to nearline storage is updating the modify date, so you
 could end up restoring from a backup from 2 weeks ago by accident. Sort the list
 by name to be safe!
 
-The `/var/opt/gitlab/postgresql/data/recovery.conf` file is not managed by
-configuration management nor backed up by WAL-G and needs to be setup manually.
+The `/var/opt/gitlab/postgresql/data/postgresql.auto.conf` file can be managed by
+Chef (via `gitlab-server::postgresql-standby` recipe).
 
-##### recovery.conf for archive replica
+##### postgresql.auto.conf for archive replica
 
-```
-standby_mode = 'on'
-restore_command = '/usr/bin/envdir /etc/wal-g.d/env /opt/wal-g/bin/wal-g wal-fetch "%f" "%p"'
-recovery_target_timeline = 'latest'
-```
-
-##### recovery.conf for delayed replica
+The following Chef attributes are used for the archive replica:
 
 ```
-standby_mode = 'on'
-restore_command = '/usr/bin/envdir /etc/wal-g.d/env /opt/wal-g/bin/wal-g wal-fetch "%f" "%p"'
-recovery_target_timeline = 'latest'
-recovery_min_apply_delay = '8h'
+{
+  "gitlab-server": {
+    "postgresql-standby": {
+      "postgres-conf-auto-rules": {
+        "restore_command": "/usr/bin/envdir /etc/wal-g.d/env /opt/wal-g/bin/wal-g wal-fetch \"%f\" \"%p\"",
+        "recovery_target_timeline": "latest"
+      }
+    }
+  }
+}
 ```
+
+##### postgresql.auto.conf for delayed replica
+
+The following Chef attributes are used for the delayed replica:
+
+```
+{
+  "gitlab-server": {
+    "postgresql-standby": {
+      "postgres-conf-auto-rules": {
+        "restore_command": "/usr/bin/envdir /etc/wal-g.d/env /opt/wal-g/bin/wal-g wal-fetch \"%f\" \"%p\"",
+        "recovery_target_timeline": "latest",
+        "recovery_min_apply_delay": "8h"
+      }
+    }
+  }
+}
+```
+
 
 #### Restoring with WAL-G
 
@@ -124,16 +143,13 @@ you'll just restore then re-run the WALs to the failover point at which time the
 will fail again in exactly the same manner.  The primary base backups occur at/around midnight UTC,
 and (currently) take about 9 hrs (mileage-may-vary)
 
-* make a backup copy of `recovery.conf`:
-  * `cp -a /var/opt/gitlab/postgresql/data/recovery.conf $HOME/`
 * `chef-client-disable <comment or link to issue>`
 * `gitlab-ctl stop postgresql`
 * Clean up the current PGDATA: `rm -rf /var/opt/gitlab/postgresql/data/*`
 * Run backup-fetch __in a tmux__ as it will take hours:
   * `BASE=<base_000... from backup-list above>`
   * `cd /tmp/; sudo -u gitlab-psql /usr/bin/envdir /etc/wal-g.d/env /opt/wal-g/bin/wal-g backup-fetch /var/opt/gitlab/postgresql/data/ $BASE`
-* copy back the recovery.conf file, make sure it is looking like [above](#pre-requisites)
-  * `cp -a $HOME/recovery.conf /var/opt/gitlab/postgresql/data/`
+* Converge Chef to create `postgresql.auto.conf` and `standby.signal`: `sudo /opt/chef/bin/chef-client`
 * run `gitlab-ctl reconfigure`; this will generate a new postgresql.conf, but will
   probably then fail trying to connect to the newly started up (but still not recovered)
   DB, to create users (or some such).

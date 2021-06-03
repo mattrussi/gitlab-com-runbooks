@@ -255,15 +255,6 @@
         errors_count: {
           type: 'long',
         },
-        exception: {
-          type: 'text',
-          fields: {
-            keyword: {
-              type: 'keyword',
-              ignore_above: 256,
-            },
-          },
-        },
         extra: {
           properties: {
             container_expiration_policies_cleanup_container_repository_worker: {

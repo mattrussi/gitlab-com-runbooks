@@ -29,7 +29,7 @@ Recovering meta- and project data is a multi-step process:
 ### Special procedure if the deletion was less than 8h ago
 
 We run a delayed archive replica of our production database, with
-`recovery_min_apply_delay = '8h'` in its recovery.conf. It is therefore at least
+`recovery_min_apply_delay = '8h'`. It is therefore at least
 8h behind the production database at all times. If the request for restoration
 comes quickly enough, we can skip the creation of a PITR instance and use this
 delayed-replica instead.

@@ -28,6 +28,7 @@ basic.dashboard(
     h: 1,
   }
 )
+.trailer()
 + {
   links+: platformLinks.services + platformLinks.triage,
 }

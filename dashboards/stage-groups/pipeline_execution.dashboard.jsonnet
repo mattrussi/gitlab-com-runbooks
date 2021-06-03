@@ -7,7 +7,7 @@ local layout = import 'grafana/layout.libsonnet';
 local buildsQueueGraphs = import 'stage-groups/verify-continuous-integration/builds_queue_graphs.libsonnet';
 local dashboardFilters = import 'stage-groups/verify-continuous-integration/dashboard_filters.libsonnet';
 
-stageGroupDashboards.dashboard('continuous_integration')
+stageGroupDashboards.dashboard('pipeline_execution')
 .addTemplate(dashboardFilters.runnerTypeTemplate())
 .addPanel(
   grafana.row.new(title='Metrics for build logs'),
@@ -447,5 +447,43 @@ stageGroupDashboards.dashboard('continuous_integration')
       yAxisLabel='Rate per second',
     ),
   ], cols=2, startRow=1401)
+)
+.addPanels(
+  layout.rowGrid(
+    'Metrics for pipeline and jobs failures',
+    [
+      basic.timeseries(
+        title='Pipeline Failure Reasons',
+        description='Rate of pipeline failure reasons.',
+        legendFormat='{{ reason }}',
+        query=|||
+          sum(
+            rate(
+              gitlab_ci_pipeline_failure_reasons{
+                environment="$environment",
+                stage="$stage",
+              }[$__interval]
+            )
+          ) by (reason)
+        |||,
+      ),
+      basic.timeseries(
+        title='Job Failure Reasons',
+        description='Rate of job failure reasons.',
+        legendFormat='{{ reason }}',
+        query=|||
+          sum(
+            rate(
+              gitlab_ci_job_failure_reasons{
+                environment="$environment",
+                stage="$stage",
+              }[$__interval]
+            )
+          ) by (reason)
+        |||,
+      ),
+    ],
+    startRow=1500
+  )
 )
 .stageGroupDashboardTrailer()
