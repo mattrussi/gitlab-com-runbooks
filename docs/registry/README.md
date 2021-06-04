@@ -24,7 +24,6 @@
 * [../kube/kubernetes.md](../kube/kubernetes.md)
 * [../onboarding/gitlab.com_on_k8s.md](../onboarding/gitlab.com_on_k8s.md)
 * [gitlab-registry.md](gitlab-registry.md)
-* [../tutorials/overview_life_of_a_web_request.md](../tutorials/overview_life_of_a_web_request.md)
 * [../uncategorized/delete-projects-manually.md](../uncategorized/delete-projects-manually.md)
 * [../uncategorized/tweeting-guidelines.md](../uncategorized/tweeting-guidelines.md)
 * [../vault/vault.md](../vault/vault.md)
