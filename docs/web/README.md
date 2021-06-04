@@ -60,7 +60,6 @@
 * [../spamcheck/index.md](../spamcheck/index.md)
 * [../tutorials/example_tutorial_template.md](../tutorials/example_tutorial_template.md)
 * [../tutorials/how_to_use_flamegraphs_for_perf_profiling.md](../tutorials/how_to_use_flamegraphs_for_perf_profiling.md)
-* [../tutorials/index.md](../tutorials/index.md)
 * [../tutorials/overview_life_of_a_git_request.md](../tutorials/overview_life_of_a_git_request.md)
 * [../tutorials/overview_life_of_a_web_request.md](../tutorials/overview_life_of_a_web_request.md)
 * [../uncategorized/blocked-user-logins.md](../uncategorized/blocked-user-logins.md)
