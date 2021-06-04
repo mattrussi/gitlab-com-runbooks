@@ -18,7 +18,7 @@ Understanding what parts of the code are expensive can help guide optimization a
 
 In this tutorial, you will learn:
 
-* How to generate flamegraphs using sampling profilers such as `perf` and `rbspy`.
+* How to generate flamegraphs using sampling profilers such as `perf`.
 * How to interpret the shape and structure of flamegraphs to find which code paths are hot.
 * Understand what important behaviors are implicitly omitted by profilers that only sample processes while they are actively running on a CPU.
 
@@ -172,9 +172,6 @@ A brief introduction to such tricks is included at the end of this tutorial:
 [Bonus: Custom capture using `perf record`](/handbook/engineering/infrastructure/tutorials/how_to_use_flamegraphs_for_perf_profiling.html#bonus-custom-capture-using-perf-record)
 
 
-## How to capture just ruby stack traces with `rbspy`
-
-
 ## How to interpret flamegraphs for profiling where CPU time is spent
 
 
@@ -319,7 +316,12 @@ Optionally, it is possible to choose other more meaningful color schemes, such a
 
 ## Common profiling gotchas
 
-Off-CPU time, incomplete/incorrect stack traces, missing function names, catching or excluding rare outlier events
+When profiling with perf, there are a few things to be aware of, and issues you might run into.
+
+- Off-CPU time: The most common type of profiling will tell you about time spent running on the CPU. However, it may also be interesting to understand why a process is being de-scheduled (e.g. blocking syscalls, contention). For this purpose you can perform an [off-CPU analysis](http://www.brendangregg.com/offcpuanalysis.html).
+- Incomplete/incorrect stack traces: In order to walk the stack, `perf` needs to have access to the frame pointer. However, compilers usually do not include frame pointers by default. In order to get complete stacks, you may need to add `CFLAGS=-fno-omit-frame-pointer` to the compilation of the binary you are analyzing.
+- Missing function names: Another thing that `perf` needs is symbols. If symbols are stripped as part of the compilation process, such stripping may need to be removed.
+- Catching or excluding rare outlier events: Because a sampling profiler is probabilistic, it will not catch every single event. This means that rare events may not show up in profiles. In order to capture such events, you can instead use tracing profiling via kprobes or uprobes. These may incur a significant overhead for frequent code paths though.
 
 
 ## Bonus: Custom capture using `perf record`
@@ -437,7 +439,6 @@ Be cautious of the overhead!
 With timer-based profiling, the event rate is directly controlled by you, but when profiling events like a function call, the application's behavior and workload controls the event rate.
 
 As shown below, you can preview the event rate with a cheap counter before running the somewhat more expensive stack profiling.
-If the event rate is high (e.g. over 10K events/CPU/second), then to reduce overhead you may want to only capture 1 out of every N events (`--count N`).
 
 ```shell
 # Suppose we want to trace any process that asks /dev/urandom for some randomly
@@ -455,8 +456,7 @@ $ sudo perf list | grep 'random'
 $ sudo perf stat --event random:urandom_read --event syscalls:sys_enter_getrandom --all-cpus -- sleep 10
 
 # Capture a stack trace when any process triggers the chosen tracepoint.
-# To reduce overhead, only capture every 1 out of 5 events instead of all events.
-$ sudo perf record --event random:urandom_read --count 5 --all-cpus -g -- sleep 10
+$ sudo perf record --event random:urandom_read --all-cpus -g -- sleep 10
 ```
 
 
@@ -467,15 +467,19 @@ The `perf-script` output can be downloaded to your laptop and loaded into Flames
 * select any portion of the timeline and generate a flamegraph for just that timespan
 * directly compare two flamegraphs, somewhat like a `diff` for visualizing which functions were more or less prominently on-CPU during timespan A versus timespan B
 
+<img src="how_to_use_flamegraphs_for_perf_profiling/screenshot-flamescope-02-annotated.png">
+
+Another tool that can provide ad-hoc flamegraphs and includes a time dimension is [speedscope](https://www.speedscope.app/).
+
 
 ## Learn more
 
 
 ### Continuous profiling
 
-**(TODO):**  Write and link to a tutorial on continuous profiling for golang apps on GitLab.com
-
 In addition to the ad hoc profiling covered here, some of the GitLab components support continuous profiling.
+
+These profiles can be accessed [in the GCP Cloud Profiler](https://console.cloud.google.com/profiler?project=gitlab-production).
 
 
 ### More about `perf` tool
@@ -495,55 +499,3 @@ BPF programs typically use the kernel's `perf_events` infrastructure, and `perf`
 
 [kernel.org's wiki on `perf`](https://perf.wiki.kernel.org/index.php/Main_Page) provides many more details and explained examples than `perf`'s already detailed manpages.
 In particular, it's [Tutorial](https://perf.wiki.kernel.org/index.php/Tutorial) includes a wealth of advice on how to use `perf`, interpret its sometimes opaque output, and troubleshoot errors.
-
-
----
-
-# DISCARD PILE
-
-Tips:
-  * Look for wide plateaus.
-    * The wider a function's cell is in the graph, the more often it was part of the call chain for the actively running function.
-    * If the top of the call tree is relatively wide, then that function itself spent a lot of time running on the CPU.
-  * Ignore the colors.
-    * By default the colors are randomly chosen.  They just make it easier for your eyes to find the wide cells in the graph.
-    * There are alternate color schemes that use different color pallettes to visually distinguish different contexts (e.g. kernel functions versus userspace functions).
-      If those are in use, it will be obvious.
-  * Ignore tall thin towers in the graph.
-    * Tall towers just indicate a long call chain, which is just an implementation detail of the code organization and has nothing to do with performance.
-    * If a tower is thin (regardless of its height), it did not spend much time on the CPU.
-
-* For example, `PostgresMain` is the main event processing loop, so it calls a variety of other functions depending on what task it is doing at the time:
-  * It calls `GetCachedPlan` to find or create an execution plan for an SQL query.
-  * It calls `PortalRun` to actually execute an SQL query using whichever execution plan `GetCachedPlan` chose for that query.
-* You do not have to know what every function does.
-
-Surprisingly, this graph shows Postgres is spending a third of its CPU time in the query optimizer just choosing an execution plan for the SQL its clients send it.
-It spends roughly the same amount of time planning how to run queries as it does actually running them.
-Knowing this, we could potentially look for ways to reduce that overhead (e.g. caching query plans, tuning the optimizer, dropping unused indexes).
-
-A lot of data is represented by this one graph.
-
-It aggregates of 136399 stack traces collected from multiple postgres processes over a 60-second timespan.
-Each of these stack traces represents an instant in time -- what function was running on CPU, and what chain of function calls lead up to it?
-By aggregating many such point-in-time snapshots, we can see a pattern of which functions appear often.
-This gives us clues about what behaviors the process is spending CPU time doing.
-
-To interpret this graph, you *do not* have to know what every function in the graph does.
-Think of it as a map to understand which code paths are prominent in whatever workload you are observing.
-Context will often give you clues about behavior without even looking at the source code.
-
----
-
-<img src="how_to_use_flamegraphs_for_perf_profiling/postgres_primary_db.zoom_in_to_PortalRun.png">
-
----
-
-A stack profiler collects a bunch of stack traces, each of which represents what a single thread is doing at that moment in time.
-These can be aggregated to show what areas of a program's source code we spend the most time executing.
-
-Which parts of a program are most time-consuming can change depending on many factors, some of which are controlled (machine resources, configuration, etc.)
-and some of which may not be (incoming workload, software's algorithm and implementation choices, etc.).
-Profiling a live system can give vital clues as to where the time is spent, so that tuning and optimization efforts can focus where they will have the greatest impact.
-
-There are several ways to represent this kind of aggregation.  Flamegraphs are one such way, popular because they provide an intuitive visual map of the performance data.
