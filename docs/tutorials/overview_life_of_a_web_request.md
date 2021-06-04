@@ -54,18 +54,13 @@ The main application components involved in handling a typical HTTP request are:
 
 * Gitlab-rails: The most central component of GitLab.  Most of the application logic lives here.  Often referred to as "Puma" or "Unicorn", named after two widely-used Ruby webservers that can wrap the application (like Jetty and Tomcat do for many Java applications).
 * Workhorse: A reverse-proxy service to which gitlab-rails delegates certain large HTTP requests that would be inefficient to handle natively within the Rails app due to Ruby's concurrency model.
-* Gitaly:
+* Gitaly: The Git storage backend which hosts the data for Git repositories and serves fetches, pushes, as well as objects displayed through gitlab-rails.
 * Postgres: Relational database supporting the gitlab-rails application.
-
-Other activities involve additional components, such as:
-
-* Registry: A registry service for storing and retrieving package and container build artifacts.
-* Gitlab-Runner: A manager service for executing CI/CD jobs in containers on a pool of ephemeral VMs.
+* Redis: Key-value datastore used for application metadata storage, job delivery, and caching
 
 In addition to the above application components, some major supporting infrastructure components include:
 * Cloudflare: Denial-of-service protection, web-application firewall, and caching tier for some static content.
 * HAProxy: Load balancer, security control point, and first layer of request routing.
-* Nginx: TLS endpoint in front of Workhorse.
 * GCP load balancers: Handles TCP connection routing from external or internal clients to backend instances of the targeted service.
 
 
@@ -157,14 +152,6 @@ For example, suppose the service dashboard shows an increase in HTTP 500 respons
 * Are these errors all associated with high latency, such that timeouts in this or other services may play a role?  If so, is the time spent in this service or in a dependency it calls?
 
 
-## Quick reference
-
-Briefly reiterate key concepts from the overview.
-
-* To support returning visitors, include a quick reference section with a terse summary of steps or commands.
-* Include enough context to support a user who does not have time to re-read any other section.
-
-
 ## Exercises
 
 Optionally include safe non-destructive practice exercises to reinforce the concepts, techniques, and tools covered by this tutorial.
@@ -199,43 +186,3 @@ Here we can use the more concrete terms and concepts covered in the material.
 The goal here is to give the reader a moment to reflect on the distance traveled and enjoy a milestone on their journey.
 
 For the tutorial author, this is an opportunity to reflect on whether the content aligns well with the learning objectives and to refine scope if needed.
-
-
-## Learn more
-
-Annotated list of related supplemental material.  This may include resources like:
-* Related GitLab tutorials (e.g. deeper dive into tools or techniques shown, related service layers, etc.)
-* External documentation or tutorials on the tools and core concepts
-* GitLab product documentation for the GitLab services mentioned here (docs.gitlab.com)
-* Dashboards used in the demos
-* Runbook sections, especially if they document additional known failure modes or additional analytical methods
-
-Repeat links cited inline, to consolidate the list of supplemental material.
-
-For each link, explain why the reader may be interested -- how it relates to this tutorial's topic and what additional learning objectives the supplemental work supports.
-
-
-------------------------------------------------------------------
-
-
-## TODO: Place or delete this supplemental content
-
-
-### What safety mechanisms mitigate the risks of a high change rate?
-
-Feature velocity is high, and iteration is a core company value, so the suite of application behaviors is constantly evolving.
-
-From an operational standpoint, the high feature velocity and continuous deployment mean that frequent but small changesets make their way to production.
-In contrast with infrequent large changesets, continuous deployment reduces risk, both by greatly reducing the size and scope of each change and by
-enforcing that deployments must be boring routines that have safe transitional states.  Very few changesets require mindful choreography or planned downtime.
-
-Several safeguards work in concert to reduce the risk of the changesets themselves, such as:
-* Robust continuous integration testing pipelines and acceptance test automation provides early detection of the vast majority of defects.
-* Use of small changesets supports rapid regression analysis.
-* Ensuring changes are forward and backward compatible supports seamless continuous deployment and rollback
-* Gradual promotion path through staging and canary environments before reaching production provides opportunities to detect more abstract defects
-  such as usability or performance problems.
-* Using the canary environment for our own daily work (as part of our culture of dog-fooding our product) means that many humans see the effects of pre-release
-  changesets, greatly increasing the probability of detecting usability defects before they are exposed to external users or self-managed customers.
-* For operational awareness, the start and end of every deployment or feature-flag change is annotated on our service dashboards, supporting easy correlation
-  between deployments, feature flags, and changes in SLO or SLI metrics.
