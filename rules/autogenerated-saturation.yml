@@ -459,6 +459,21 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
+      component: pg_btree_bloat
+    expr: |
+      max by(environment, tier, type, stage) (
+        clamp_min(
+          clamp_max(
+            sum by (environment, tier, type, stage, fqdn) (avg_over_time(gitlab_database_bloat_btree_bloat_size{job="gitlab-monitor-database-bloat", type=~"patroni|postgres-archive"}[58m]))
+            /
+            sum by (environment, tier, type, stage, fqdn) (avg_over_time(gitlab_database_bloat_btree_real_size{job="gitlab-monitor-database-bloat", type=~"patroni|postgres-archive"}[58m]))
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
       component: pg_int4_id
     expr: |
       max by(environment, tier, type, stage) (
@@ -1159,6 +1174,14 @@ groups:
     expr: '0.9'
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
+      component: pg_btree_bloat
+    expr: '0.3'
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: pg_btree_bloat
+    expr: '0.4'
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
       component: pg_int4_id
     expr: '0.7'
   - record: slo:max:hard:gitlab_component_saturation:ratio
@@ -1534,6 +1557,12 @@ groups:
     labels:
       component: pg_active_db_connections_replica
       horiz_scaling: 'yes'
+      severity: s3
+    expr: '1'
+  - record: gitlab_component_saturation_info
+    labels:
+      component: pg_btree_bloat
+      horiz_scaling: 'no'
       severity: s3
     expr: '1'
   - record: gitlab_component_saturation_info
@@ -2927,6 +2956,47 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="pg_active_db_connections_replica"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="pg_active_db_connections_replica"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: >-
+        The Postgres btree bloat resource of the {{ $labels.type }} service ({{ $labels.stage }} stage),
+        component has a saturation exceeding SLO and is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Postgres btree bloat resource:
+
+        This measures the total bloat in Postgres Btree indexes, as a percentage of total index size.
+
+        The larger this measure, the more pages will unnecessarily be retrieved during index scans.
+      grafana_dashboard_id: alerts-sat_pg_btree_bloat
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/alerts-sat_pg_btree_bloat?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '2387842464'
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, fqdn) (
+          clamp_min(
+            clamp_max(
+              sum by (environment, tier, type, stage, fqdn) (avg_over_time(gitlab_database_bloat_btree_bloat_size{job="gitlab-monitor-database-bloat", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[58m]))
+              /
+              sum by (environment, tier, type, stage, fqdn) (avg_over_time(gitlab_database_bloat_btree_real_size{job="gitlab-monitor-database-bloat", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[58m]))
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s3
+    expr: |
+      gitlab_component_saturation:ratio{component="pg_btree_bloat"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="pg_btree_bloat"}
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
