@@ -969,7 +969,9 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
       'lastNotNull',
     ],
     mappings=[],
-    justifyMode='auto'
+    justifyMode='auto',
+    noValue=null,
+    links=[],
   )::
     local steps = if std.type(color) == 'string' then
       [
@@ -997,6 +999,8 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
             title: title,
             unit: unit,
             decimals: decimals,
+            [if noValue != null then 'noValue']: noValue,
+            links: links,
           },
           overrides: [],
         },
