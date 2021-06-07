@@ -6,6 +6,12 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
     title: 'Walsender CPU Saturation',
     severity: 's3',
     horizontallyScalable: false,
+
+    // Unfortunately this saturation metric relies on node_exporter data from prometheus-default shards,
+    // and postgres_exporter data from the prometheus-db shards, so we need to evaluate it in Thanos
+    // which is not ideal.
+    dangerouslyThanosEvaluated: true,
+
     appliesTo: ['patroni'],
     description: |||
       This saturation metric measures the total amount of time that the primary postgres instance is spending sending WAL segments

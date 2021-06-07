@@ -7,6 +7,12 @@ local kubeSaturationHelpers = import 'helpers/kube_saturation_helpers.libsonnet'
     title: 'Average CPU Utilization on Postgres Primary Instance',
     severity: 's2',
     horizontallyScalable: false,
+
+    // Unfortunately this saturation metric relies on node_exporter data from prometheus-default shards,
+    // and postgres_exporter data from the prometheus-db shards, so we need to evaluate it in Thanos
+    // which is not ideal.
+    dangerouslyThanosEvaluated: true,
+
     appliesTo: ['patroni'],
     description: |||
       Average CPU utilization across all cores on the Postgres primary instance.
