@@ -3,10 +3,10 @@ local rison = import 'rison.libsonnet';
 local grafanaTimeFrom = '${__from:date:iso}';
 local grafanaTimeTo = '${__to:date:iso}';
 
-local globalStateTimeFrame(from, to) =
+local elasticTimeRange(from, to) =
   "(time:(from:'%(from)s',to:'%(to)s'))" % { from: from, to: to };
 
-local grafanaTimeRange = globalStateTimeFrame(grafanaTimeFrom, grafanaTimeTo);
+local grafanaTimeRange = elasticTimeRange(grafanaTimeFrom, grafanaTimeTo);
 
 // Builds an ElasticSearch match filter clause
 local matchFilter(field, value) =
@@ -59,11 +59,29 @@ local mustNot(filter) =
     },
   };
 
+local matchObject(fieldName, matchInfo) =
+  local gte = if std.objectHas(matchInfo, 'gte') then matchInfo.gte else null;
+  local lte = if std.objectHas(matchInfo, 'lte') then matchInfo.lte else null;
+  local values = std.prune([gte, lte]);
+
+  if std.length(values) > 0 then
+    rangeFilter(fieldName, gte, lte)
+  else
+    std.assertEqual(false, { __message__: 'Only gte and lte fields are supported but not in [%s]' % std.join(', ', std.objectFields(matchInfo)) });
+
 local matcher(fieldName, matchInfo) =
   if std.isString(matchInfo) then
     matchFilter(fieldName, matchInfo)
   else if std.isArray(matchInfo) then
-    matchInFilter(fieldName, matchInfo);
+    matchInFilter(fieldName, matchInfo)
+  else if std.isObject(matchInfo) then
+    matchObject(fieldName, matchInfo);
+
+local matchers(matches) =
+  [
+    matcher(k, matches[k])
+    for k in std.objectFields(matches)
+  ];
 
 local statusCode(field) =
   [rangeFilter(field, gteValue=500, lteValue=null)];
@@ -563,11 +581,15 @@ local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latency
 
   indexCatalog[index].kibanaEndpoint + '#/visualize/create?type=line&indexPattern=' + indexCatalog[index].indexPattern + '&_a=' + rison.encode(applicationState) + globalState(grafanaTimeRange);
 
+
 {
   matcher:: matcher,
+  matchers:: matchers,
   matchFilter:: matchFilter,
   existsFilter:: existsFilter,
   rangeFilter:: rangeFilter,
+
+  timeRange:: elasticTimeRange,
 
   // Given an index, and a set of filters, returns a URL to a Kibana discover module/search
   buildElasticDiscoverSearchQueryURL:: buildElasticDiscoverSearchQueryURL,
