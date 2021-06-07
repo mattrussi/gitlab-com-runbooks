@@ -73,7 +73,12 @@ local errorBudgetTimeRemaining(slaTarget, range, selectors, aggregationLabels) =
 
 local errorBudgetViolationRate(range, groupSelectors, aggregationLabels) =
   local partsInterpolation = {
-    aggregationLabels: aggregations.join(aggregationLabels),
+    aggregationLabels: aggregations.join(
+      std.filter(
+        function(label) label != 'violation_type',
+        aggregationLabels
+      )
+    ),
     selectors: selectors.serializeHash(groupSelectors),
     range: range,
   };
@@ -102,7 +107,7 @@ local errorBudgetViolationRate(range, groupSelectors, aggregationLabels) =
       %(errorRate)s
     )
   ||| % {
-    aggregationLabelsWithViolationType: aggregations.join(aggregationLabels + ['violation_type']),
+    aggregationLabelsWithViolationType: aggregations.join(aggregationLabels),
     apdexViolationRate: strings.indent(labels.addStaticLabel('violation_type', 'apdex', apdexViolationRate), 2),
     errorRate: strings.indent(labels.addStaticLabel('violation_type', 'error', errorRate), 2),
   };
