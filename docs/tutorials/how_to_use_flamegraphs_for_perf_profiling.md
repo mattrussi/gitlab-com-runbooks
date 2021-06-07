@@ -1,9 +1,5 @@
 # How to use flamegraphs for performance profiling
 
-Work in progress:
-* Issue: https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10399
-* [Style guide](/handbook/engineering/infrastructure/tutorials/tips_for_tutorial_writing.html)
-
 
 ## Learning objectives
 
@@ -16,13 +12,13 @@ And comparing profiles of the same workload under different configurations or ap
 
 Understanding what parts of the code are expensive can help guide optimization and tuning efforts, and sometimes it uncovers unexpected inefficiencies.
 
-In this tutorial, you will learn:
+In this tutorial, you will learn how to:
 
-* How to generate flamegraphs using sampling profilers such as `perf`.
-* How to interpret the shape and structure of flamegraphs to find which code paths are hot.
-* Understand what important behaviors are implicitly omitted by profilers that only sample processes while they are actively running on a CPU.
+* Generate flamegraphs using sampling profilers such as `perf`.
+* Interpret the shape and structure of flamegraphs to find which code paths are hot.
+* Identify what important behaviors are implicitly omitted by profilers that only sample processes while they are actively running on a CPU.
 
-For troubleshooting defective profiling results, it is helpful but not required to have a basic understanding of how compilers and linkers work.
+For troubleshooting incomplete or broken profiling results, it is helpful but not required to have a basic understanding of how compilers and linkers work.
 The essentials will be covered in this tutorial.
 
 
@@ -35,8 +31,7 @@ By the end of this tutorial, you will know how to read the shape and structure o
 
 <img src="how_to_use_flamegraphs_for_perf_profiling/postgres_primary_db.png">
 
-[Interactive SVG image](how_to_use_flamegraphs_for_perf_profiling/postgres_primary_db.svg)
-Open this link in its own browser tab to zoom in and see full function names.
+[Interactive SVG image](how_to_use_flamegraphs_for_perf_profiling/postgres_primary_db.svg) -- Open this link in its own browser tab to zoom in and see full function names.
 
 
 ### What am I looking at?
@@ -69,7 +64,8 @@ Similarly:
 Conversely, if you did not already know that relational databases like Postgres have query planners, exploring that call chain in the graph would lead you
 to discover that query planning is a significant activity of the database.
 
-Exploring the call chains in a flamegraph can be way to learn interesting internal behaviors of even programs that you know very little about.
+Exploring the call chains in a flamegraph can be a way to learn interesting internal behaviors of even programs that you know very little about.
+It shows which components are interacting for your workload, which lets you focus your exploration on those particular code paths that matter in your environment.
 
 
 ### What is this telling me?
@@ -131,8 +127,10 @@ Here are the scripts:
 * `perf_flamegraph_for_pid.sh [pid_to_capture]` takes 1 argument: the PID of the process to capture.
   * This is convenient when you want to profile a single-process application like Redis or HAProxy.
   * If you want to capture multiple PIDs, you can give it a comma-delimited PID list, but it may be simpler to instead just capture all running processes.
+  * If the PID you specified forks any child processes while perf is running, they will implicitly be profiled as well, but any pre-existing child processes will not automatically inherit profiling.
 * `perf_flamegraph_for_user.sh [username_to_capture]` takes 1 argument: the username or UID of a Unix account whose processes you want to capture.
   * This is convenient when a multi-process application runs as a specific user, such as `gitlab-psql` on our `patroni-XX` hosts or `git` on our `web-XX` hosts.
+  * Caveat: This may fail to start if the user runs extremely short-lived processes that disappear during perf startup, before they can be instrumented.  If this happens, consider instead using `perf_flamegraph_for_all_running_processes.sh`.
 
 Example: Profile the `redis-server` process on the primary redis host.
 
@@ -169,7 +167,7 @@ We will talk more about stack traces shortly.  For now just be aware that this i
 
 Once you are comfortable using these helper scripts, you may later be interested in customizing what gets captured or how it gets rendered.
 A brief introduction to such tricks is included at the end of this tutorial:
-[Bonus: Custom capture using `perf record`](/handbook/engineering/infrastructure/tutorials/how_to_use_flamegraphs_for_perf_profiling.html#bonus-custom-capture-using-perf-record)
+[Bonus: Custom capture using `perf record`](how_to_use_flamegraphs_for_perf_profiling.html#bonus-custom-capture-using-perf-record)
 
 
 ## How to interpret flamegraphs for profiling where CPU time is spent
@@ -189,7 +187,7 @@ Generating a stack trace effectively means figuring out the name of the function
 
 Recovering the names of the functions for compiled software can be surprisingly hard.
 In pursuit of other efficiencies, compilers often make tracing difficult.  Usually this shows up as missing stack frames or unknown function names.
-Later we will review a few examples, but for now, just be aware that these deficiencies can occur and the remedy (adding debug symbols) may or may not
+Later we will review a few examples, but for now, just be aware that these deficiencies can occur.  Remedies such as resolving debug symbols may or may not
 be straightforward depending on how the software was built.
 
 
@@ -216,7 +214,7 @@ For now, ignore the 1st and 3rd columns; just look at the middle column which sh
 6c3e258d4c544155  [unknown]               ([unknown])
 ```
 
-The top stack frame shows the currently executing function, and the bottom few stack frames show the generic entry point for the program.
+The top stack frame shows the currently executing function (`dictFind`), and the bottom few stack frames show the generic entry point for the program.
 As mentioned earlier, all C programs start with a function named `main`.  The bottom 2 frames in this stack trace are generic, and the `main`
 frame is the earliest part of the stack that is specific to the program we are tracing (redis-server).
 
@@ -296,7 +294,7 @@ When viewed in a Javascript-capable browser, the SVG image supports interactive 
 
 When interpreting flamegraphs, the main thing to remember is: width matters, height does not.
 
-The width of any stack frame in the flamegraph represents the number of sampled events that included the series of function calls leading up to that point.
+The width of any stack frame in the flamegraph represents the number of sampled events that included the exact same chain of function calls leading up to that point.
 
 If the event sampling strategy was timer-based sampling (e.g. capture stack traces 99 times per second if the process is currently running on CPU),
 then the more often you see a common series of function calls, the more CPU time was spent there.  Consequently, any function appearing in a wide frame was part of
@@ -318,10 +316,10 @@ Optionally, it is possible to choose other more meaningful color schemes, such a
 
 When profiling with perf, there are a few things to be aware of, and issues you might run into.
 
-- Off-CPU time: The most common type of profiling will tell you about time spent running on the CPU. However, it may also be interesting to understand why a process is being de-scheduled (e.g. blocking syscalls, contention). For this purpose you can perform an [off-CPU analysis](http://www.brendangregg.com/offcpuanalysis.html).
-- Incomplete/incorrect stack traces: In order to walk the stack, `perf` needs to have access to the frame pointer. However, compilers usually do not include frame pointers by default. In order to get complete stacks, you may need to add `CFLAGS=-fno-omit-frame-pointer` to the compilation of the binary you are analyzing.
-- Missing function names: Another thing that `perf` needs is symbols. If symbols are stripped as part of the compilation process, such stripping may need to be removed.
-- Catching or excluding rare outlier events: Because a sampling profiler is probabilistic, it will not catch every single event. This means that rare events may not show up in profiles. In order to capture such events, you can instead use tracing profiling via kprobes or uprobes. These may incur a significant overhead for frequent code paths though.
+- **Off-CPU time:** The most common type of profiling will tell you about time spent running on the CPU. However, it may also be interesting to understand why a process is being de-scheduled (e.g. IO and other blocking syscalls, waiting for a wake-up event, etc.). For this purpose you can perform an [off-CPU analysis](http://www.brendangregg.com/offcpuanalysis.html).
+- **Incomplete/incorrect stack traces:** To produce a stack trace, `perf` has to "unwind" the stack, finding the address of each stack frame's next instruction. To do this stack walk, `perf` by default relies on frame pointers. However, for largely historical reasons, compilers often try to use an optimization technique that opportunistically omits frame pointers. This can cause `perf` to produce bogus call graphs. This kind of breakage is obvious when it occurs. As a work-around, you can tell perf to use an alternative method for unwinding stacks (e.g. `--call-graph=dwarf`). See the manpage for `perf record` for more details. Alternately, if you happen to be able to customize the build procedure for the binary you want to trace, you can explicitly request that the compiler use frame pointers (e.g. add `CFLAGS=-fno-omit-frame-pointer` when the compiling the binary you are analyzing).  Doing so may fix framepointer-based stack unwind (for perf and other similar profilers).
+- **Missing function names:** Another thing that `perf` needs is symbols. If symbols were stripped from the binary as part of the build procedure, then perf cannot translate addresses into function names. Sometimes the build process will produce a separate package containing debug info, including symbols, and installing that supplemental package (e.g. `-dbg` or `-dbgsym` suffix) will provide the missing symbols. Alternately, if you control the build procedure for the binary you want to trace, you can disable stripping symbols. This is standard practice for most of GitLab's build pipelines, so typically the binaries shipped by GitLab do have all of their debug symbols.
+- **Catching or excluding rare outlier events:** A sampling profiler will not catch examples of every executed code path. Rare events may not show up in profiles. If you need to capture rare events involving a certain code path or need to audit every code executed code path that leads to a certain function, you can use `perf` for tracing specific events via kprobes or uprobes. Rather than sampling based on a timer, this use-case captures data (e.g. increments a counter or saves a stack trace) every time that instrumented function call occurs. This may incur a noticeable overhead for very frequently executed functions, so use this approach with caution. If the function you want to trace is called a million times per second, consider if there are other functions that could answer the same question, and if you must use high frequency instrumentation, keep the tracing brief.
 
 
 ## Bonus: Custom capture using `perf record`
@@ -378,20 +376,20 @@ To capture more data (i.e. sample more stack traces), you can either:
 * Increase the sampling rate per second.
 
 When practical, prefer a longer duration rather than a higher sampling frequency.
-A higher sampling rate is more likely to affect the performance of the processes being traced, because those processes must be paused each time their stack is captured.
+A higher sampling rate adds proportionally more overhead to the processes being traced, but any of the recommended rates (49, 99, 497) should be fine for almost any workload.
 
 To profile PID 1234 for a longer duration than 60 seconds:
 
 ```shell
-# Profile all on-CPU processes for 300 seconds (5 minutes).
+# Profile PID 1234 when it is actively on-CPU, sampling at up to 99 times per second for 300 seconds (5 minutes).
 $ sudo perf record --freq 99 -g --pid 1234 -- sleep 300
 ```
 
 To profile PID 1234 at a higher sampling frequency for a shorter duration:
 
 ```shell
-# Profile PID 1234 at a sampling rate of stack traces 497 per second.
-# Pausing the process every 2 ms is high overhead, so keep the duration short.
+# Profile PID 1234 at a sampling rate of 497 times per second for 30 seconds.
+# This rate captures a stack trace once every 2 milliseconds if the process is actively running on a CPU.
 $ sudo perf record --freq 497 -g --pid 1234 -- sleep 30
 ```
 
@@ -459,15 +457,82 @@ $ sudo perf stat --event random:urandom_read --event syscalls:sys_enter_getrando
 $ sudo perf record --event random:urandom_read --all-cpus -g -- sleep 10
 ```
 
+#### Gotcha: Some event types ignore `perf record --count N`
+
+Although `perf record` provides an option to sample only 1 out of N events (`--count 1000` to capture 1 in 1000 events),
+that mechanism is silently ignored by some event types (e.g. software events implement it, but tracepoints and kprobes ignore it).
+If you want to instrument a high-frequency event using a kprobe or tracepoint, you cannot use `--count N` to downsample and reduce overhead.
+
+Example:
+
+When capturing tracepoint `sched:sched_wakeup`, even though we specify `--count 1000`, perf-record still captures all events.
+The demo below shows the same event count (178 events) as seen by both `perf stat` and `perf record --count 1000`.
+The `--count 1000` was ignored for this tracepoint-type event, but it is honored by software-type events like `page-faults`.
+
+Script:
+
+```shell
+$ cat show_perf_record_silently_ignores_count_option_for_tracepoint_events.sh
+#!/bin/bash
+
+echo "Starting target process"
+dd if=/dev/zero of=/dev/null bs=1c count=10M &
+TARGET_PID=$!
+
+echo "Starting perf-record"
+sudo perf record --pid $TARGET_PID -g -e 'sched:sched_wakeup' --count 100 &
+
+echo "Starting perf-stat"
+sudo perf stat --pid $TARGET_PID -e 'sched:sched_wakeup' &
+
+echo "Waiting for all processes to exit"
+wait
+
+echo "Done"
+```
+
+Output:
+
+```shell
+$ ./show_perf_record_silently_ignores_count_option_for_tracepoint_events.sh
+...
+[ perf record: Captured and wrote 0.071 MB perf.data (178 samples) ]
+...
+ Performance counter stats for process id '5862':
+
+               178      sched:sched_wakeup
+...
+```
+
 
 ## Bonus: Exploring subsets of a timeline with Flamescope
 
-The `perf-script` output can be downloaded to your laptop and loaded into Flamescope, where you can more interactively explore the data you captured:
+The `perf-script` output can be downloaded to your laptop and loaded into [Flamescope](https://github.com/Netflix/flamescope), where you can more interactively explore the data you captured:
 * visualize what points in the timeline had more on-CPU activity (i.e. more stack traces collected per second)
 * select any portion of the timeline and generate a flamegraph for just that timespan
 * directly compare two flamegraphs, somewhat like a `diff` for visualizing which functions were more or less prominently on-CPU during timespan A versus timespan B
 
 <img src="how_to_use_flamegraphs_for_perf_profiling/screenshot-flamescope-02-annotated.png">
+
+To use Flamescope locally, build and run it in a docker container, and copy the perf-script files into a directory that you expose to that container:
+
+```shell
+# Locally build the docker image for flamescope.
+$ git clone https://github.com/Netflix/flamescope.git
+$ cd flamescope/
+$ docker build -t flamescope .
+
+# Run flamescope in a container, and mount a local directory into its "/profiles" volume.
+$ mkdir /tmp/profiles
+$ docker run --rm -it -v /tmp/profiles/:/profiles:ro -p 5000:5000 flamescope
+
+# Copy a perf profile (optionally gzipped) into the directory we mounted into the flamescope container.
+$ cp -pi perf-script.txt.gz /tmp/profiles/
+
+# Open a web browser to localhost on the container's exposed port (5000).
+# Choose your perf-script output file, and start exploring the timeline.
+$ firefox http://0.0.0.0:5000/
+```
 
 Another tool that can provide ad-hoc flamegraphs and includes a time dimension is [speedscope](https://www.speedscope.app/).
 
