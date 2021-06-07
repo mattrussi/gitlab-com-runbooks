@@ -390,6 +390,80 @@ local buildElasticLineCountVizURL(index, filters, luceneQueries=[], splitSeries=
 
   indexCatalog[index].kibanaEndpoint + '#/visualize/create?type=line&indexPattern=' + indexCatalog[index].indexPattern + '&_a=' + rison.encode(applicationState) + globalState(timeRange);
 
+local splitDefinition(split) =
+  local defaults = {
+    enabled: true,
+    schema: 'bucket',
+  };
+
+  if std.isString(split) then
+    // When the split is a string, turn it into a 'term' split
+    defaults {
+      type: 'terms',
+      params: {
+        field: split,
+        missingBucket: false,
+        missingBucketLabel: 'Missing',
+        otherBucket: true,
+        otherBucketLabel: 'Other',
+        orderBy: '1',
+        order: 'desc',
+        size: 5,
+      },
+    }
+  else if std.isObject(split) then defaults + split;
+
+local buildElasticTableCountVizURL(index, filters, luceneQueries=[], splitSeries=false, timeRange=grafanaTimeRange) =
+  local ic = indexCatalog[index];
+  local aggs =
+    [
+      {
+        enabled: true,
+        id: '1',
+        params: {},
+        schema: 'metric',
+        type: 'count',
+      },
+    ]
+    +
+    (
+      if std.isBoolean(splitSeries) && splitSeries then
+        [{
+          enabled: true,
+          id: '',
+          params: {
+            field: ic.defaultSeriesSplitField,
+            missingBucket: false,
+            missingBucketLabel: 'Missing',
+            order: 'desc',
+            orderBy: '1',
+            otherBucket: true,
+            otherBucketLabel: 'Other',
+            size: 5,
+          },
+          schema: 'group',
+          type: 'terms',
+        }]
+      else if std.isArray(splitSeries) then
+        [splitDefinition(split) for split in splitSeries]
+      else
+        []
+    );
+
+  local applicationState = {
+    filters: ic.defaultFilters + filters,
+    query: {
+      language: 'kuery',
+      query: std.join(' AND ', luceneQueries),
+    },
+    vis: {
+      aggs: aggs,
+    },
+  };
+
+  indexCatalog[index].kibanaEndpoint + '#/visualize/create?type=table&indexPattern=' + indexCatalog[index].indexPattern + '&_a=' + rison.encode(applicationState) + globalState(timeRange);
+
+
 local buildElasticLineTotalDurationVizURL(index, filters, luceneQueries=[], latencyField, splitSeries=false) =
   local ic = indexCatalog[index];
 
@@ -629,6 +703,10 @@ local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latency
       splitSeries=splitSeries,
       timeRange=timeRange,
     ),
+
+  buildElasticTableCountVizURL:: buildElasticTableCountVizURL,
+  buildElasticTableFailureCountVizURL(index, filters, luceneQueries=[], splitSeries=false, timeRange=grafanaTimeRange)::
+    buildElasticTableCountVizURL(index, filters + indexCatalog[index].failureFilter, luceneQueries, splitSeries, timeRange),
 
   /**
    * Builds a total (sum) duration visualization. These queries are particularly useful for picking up
