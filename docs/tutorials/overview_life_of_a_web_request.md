@@ -33,6 +33,8 @@ It includes numerous features for every stage of the software development lifecy
 At its heart, the GitLab product provides a rich suite of software development tools wrapped around git repository management, supporting a wide variety of use cases.
 To get a sense of the breadth of the product, take a moment to browse the [brilliantly concise and illustrative feature matrix](https://about.gitlab.com/).
 
+<img src="overview_life_of_a_web_request/feature_matrix.png">
+
 
 ## Components of the application and infrastructure
 
