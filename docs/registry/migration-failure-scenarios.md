@@ -4,14 +4,171 @@ This document lists and describes all the identified possible failure scenarios 
 
 Please see the [architecture blueprint](https://docs.gitlab.com/ee/architecture/blueprints/container_registry_metadata_database/) and the [gradual migration plan](https://gitlab.com/gitlab-org/container-registry/-/issues/374) for additional context.
 
-| Scenario | Point of Failure               | Failure                         | Impact                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | Expected App Behavior on Failure                                                                                                                                                                                                                                                                              | Observability                                                                                                                           | Recovery Definition                                                            | Expected App Behavior on Recovery                                                                              | Mitigation                                                                                                                | Possible Corrective Actions                                                                             |
-|----------|--------------------------------|---------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|
-| 1        | Database Cluster               | Primary server failure          | - API unable to serve all `POST`/`PUT`/`PATCH`/`DELETE` requests ([4%]() of all traffic). **Note:** During [Phase 1](https://gitlab.com/gitlab-org/container-registry/-/issues/374#phase-1-the-metadata-db-serves-new-repositories), only requests that target *new* repositories can be affected;<br />- API unable to serve all `GET`/`HEAD` requests ([96%]() of all traffic). The impact will change once we deliver *active* database load-balancing (routing reads to a secondary server). **Note:** During [Phase 1](https://gitlab.com/gitlab-org/container-registry/-/issues/374#phase-1-the-metadata-db-serves-new-repositories), only requests that target *new* repositories can be affected;<br />- GC unable to process tasks. | API and GC handle refused or timed out database connections gracefully. <br />Connections are retried once (at the database driver level). In case of failure, connections are discarded and requests halted with a `503 Service Unavailable` response.<br />A new request leads to a new connection attempt. | Errors show up in Sentry and logs. <br />Grafana dashboards reflect the impact scale.                                                   | Primary server is back online. Either the same instance or a promoted replica. | API and GC resume operations normally, without external intervention.                                          | Re-establish normal operation of database cluster/network.                                                                | - Database cluster deployment adjustments;<br />- Escalation to development in case of odd use pattern. |
-| 2        | Database Cluster               | Single secondary server failure | NA<br />Need to be revisited once we deliver active database load-balancing.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | NA                                                                                                                                                                                                                                                                                                            | NA                                                                                                                                      | NA                                                                             | NA                                                                                                             | NA                                                                                                                        | NA                                                                                                      |
-| 3        | Database Cluster               | Secondary servers failure       | NA<br />Need to be revisited once we deliver active database load-balancing.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | NA                                                                                                                                                                                                                                                                                                            | NA                                                                                                                                      | NA                                                                             | NA                                                                                                             | NA                                                                                                                        | NA                                                                                                      |
-| 4        | Database Cluster / Application | Connection pool saturation      | - API unable to serve requests;<br />- GC unable to process tasks.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | API and/or GC fails to pull a connection from a pool at any given time.<br />API requests will timeout with a `500 Internal Server Error` response.                                                                                                                                                            | Errors show up in Sentry and logs. <br />Grafana dashboards reflect the magnitude of the impact on the API and pool saturation metrics. | Connection pool is no longer saturated.                                        | API and GC resume operations normally. External intervention may be required.                                  | Increase connection pool limits on application/PGBouncer if it is due to a legitimate traffic increase.<br />What if not? | Adjust connection pool limits on application/PGBouncer.                                                 |
-| 5        | Database Cluster / Application | Excessive Latency               | - Drop on API request and GC run rates;<br />- A portion of API requests and GC runs may timeout.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | API requests and GC runs may timeout with a `500 Internal Server Error` response.                                                                                                                                                                                                                             | Errors show up in Sentry and logs. <br />Grafana dashboards reflect the impact scale.                                                   | Latency is back to normal levels.                                              | API and GC resume operations normally, without external intervention.                                          | Re-establish normal operation of database cluster/network.                                                                | Escalation to development in case of odd use pattern.                                                   |
-| 6        | Application                    | Any fatal error during a GC run | - Tasks fail to be processed;<br />- GC queues size may increase if it's not a transient error.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | GC attempts to postpone the review of the task to a future date. If failed, the original review date remains unchanged (no impact).<br />The GC workers should backoff exponentially for every failed run, up to the maximum configured duration (24h by default).                                                    | Errors show up in Sentry and logs. <br />Grafana dashboards reflect the magnitude of the impact on the Online GC dashboard.             | Normal operation re-established. Root cause mitigated.                         | GC workers resume normal operation. The next run will happen automatically after the last exponential backoff. |                                                                                                                           | Escalation to development in case of error unrelated to database/storage connection failures.        |
+Failure scenarios are broken down by category (database, application, migration, etc.).
 
+### Database
 
+#### Primary Server Failure
+
+##### Impact
+
+- API unable to serve all `POST`/`PUT`/`PATCH`/`DELETE` requests ([4%](https://thanos.gitlab.net/new/graph?g0.expr=(sum(%0A%20%20%20%20rate(%0A%20%20%20%20%20%20registry_http_requests_total%7B%0A%20%20%20%20%20%20%20%20env%3D%22gprd%22%2C%0A%20%20%20%20%20%20%20%20code%3D~%22%5E2.*%22%2C%0A%20%20%20%20%20%20%20%20method%3D~%22put%7Cpatch%7Cpost%7Cdelete%22%0A%20%20%20%20%20%20%7D%5B7d%5D%0A%20%20%20%20)%0A)%0A%2F%20%0Asum(%0A%20%20%20%20rate(%0A%20%20%20%20%20%20registry_http_requests_total%7B%0A%20%20%20%20%20%20%20%20env%3D%22gprd%22%2C%0A%20%20%20%20%20%20%20%20code%3D~%22%5E2.*%22%0A%20%20%20%20%20%20%7D%5B7d%5D%0A%20%20%20%20)%0A))%20*%20100&g0.tab=1&g0.stacked=0&g0.range_input=1h&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D&g1.expr=(sum(%0A%20%20%20%20rate(%0A%20%20%20%20%20%20registry_http_requests_total%7B%0A%20%20%20%20%20%20%20%20env%3D%22gprd%22%2C%0A%20%20%20%20%20%20%20%20code%3D~%22%5E2.*%22%2C%0A%20%20%20%20%20%20%20%20method%3D~%22get%7Chead%7Coptions%22%0A%20%20%20%20%20%20%7D%5B7d%5D%0A%20%20%20%20)%0A)%0A%2F%20%0Asum(%0A%20%20%20%20rate(%0A%20%20%20%20%20%20registry_http_requests_total%7B%0A%20%20%20%20%20%20%20%20env%3D%22gprd%22%2C%0A%20%20%20%20%20%20%20%20code%3D~%22%5E2.*%22%0A%20%20%20%20%20%20%7D%5B7d%5D%0A%20%20%20%20)%0A))%20*%20100&g1.tab=1&g1.stacked=0&g1.range_input=1h&g1.max_source_resolution=0s&g1.deduplicate=1&g1.partial_response=0&g1.store_matches=%5B%5D) of all traffic);
+- API unable to serve all `GET`/`HEAD` requests ([96%](https://thanos.gitlab.net/new/graph?g0.expr=(sum(%0A%20%20%20%20rate(%0A%20%20%20%20%20%20registry_http_requests_total%7B%0A%20%20%20%20%20%20%20%20env%3D%22gprd%22%2C%0A%20%20%20%20%20%20%20%20code%3D~%22%5E2.*%22%2C%0A%20%20%20%20%20%20%20%20method%3D~%22put%7Cpatch%7Cpost%7Cdelete%22%0A%20%20%20%20%20%20%7D%5B7d%5D%0A%20%20%20%20)%0A)%0A%2F%20%0Asum(%0A%20%20%20%20rate(%0A%20%20%20%20%20%20registry_http_requests_total%7B%0A%20%20%20%20%20%20%20%20env%3D%22gprd%22%2C%0A%20%20%20%20%20%20%20%20code%3D~%22%5E2.*%22%0A%20%20%20%20%20%20%7D%5B7d%5D%0A%20%20%20%20)%0A))%20*%20100&g0.tab=1&g0.stacked=0&g0.range_input=1h&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D&g1.expr=(sum(%0A%20%20%20%20rate(%0A%20%20%20%20%20%20registry_http_requests_total%7B%0A%20%20%20%20%20%20%20%20env%3D%22gprd%22%2C%0A%20%20%20%20%20%20%20%20code%3D~%22%5E2.*%22%2C%0A%20%20%20%20%20%20%20%20method%3D~%22get%7Chead%7Coptions%22%0A%20%20%20%20%20%20%7D%5B7d%5D%0A%20%20%20%20)%0A)%0A%2F%20%0Asum(%0A%20%20%20%20rate(%0A%20%20%20%20%20%20registry_http_requests_total%7B%0A%20%20%20%20%20%20%20%20env%3D%22gprd%22%2C%0A%20%20%20%20%20%20%20%20code%3D~%22%5E2.*%22%0A%20%20%20%20%20%20%7D%5B7d%5D%0A%20%20%20%20)%0A))%20*%20100&g1.tab=1&g1.stacked=0&g1.range_input=1h&g1.max_source_resolution=0s&g1.deduplicate=1&g1.partial_response=0&g1.store_matches=%5B%5D) of all traffic). This will change once we deliver *active* database load-balancing (routing reads to a secondary server);
+- GC unable to process tasks.
+
+**Note:** During [Phase 1](https://gitlab.com/gitlab-org/container-registry/-/issues/374#phase-1-the-metadata-db-serves-new-repositories), only requests that target *new* repositories can be affected.
+
+##### Expected app behavior on failure
+
+- API and GC handle refused or timed out database connections gracefully;
+- Connections are retried once (at the database driver level). In case of failure, connections are discarded and requests halted with a `503 Service Unavailable` response;
+- A new request leads to a new connection attempt.
+
+##### Observability
+
+- Errors show up in Sentry and logs;
+- Grafana dashboards reflect the impact scale.
+
+##### Recovery definition
+
+Primary server is back online. Either the same instance or a promoted replica.
+
+##### Expected app behavior on recovery
+
+API and GC resume operations normally, without external intervention.
+
+##### Mitigation
+
+Re-establish normal operation of database cluster/network.
+
+##### Possible corrective actions
+
+- Database cluster deployment adjustments;
+- Escalation to development in case of odd use pattern.
+
+#### Single Secondary Server Failure
+
+NA. Needs to be revisited once we deliver active database load-balancing.
+
+#### Secondary Servers Failure
+
+NA. Needs to be revisited once we deliver active database load-balancing.
+
+#### Connection Pool Saturation
+
+##### Impact
+
+- API unable to serve requests;
+- GC unable to process tasks.
+
+##### Expected app behavior on failure
+
+- API and/or GC fail to pull a connection from a pool at any given time;
+- API requests will timeout with a `500 Internal Server Error` response.
+
+##### Observability
+
+- Errors show up in Sentry and logs;
+- Grafana dashboards reflect the magnitude of the impact on the API and pool saturation metrics.
+
+##### Recovery definition
+
+Connection pool is no longer saturated.
+
+##### Expected app behavior on recovery
+
+API and GC resume operations normally. External intervention may be required.
+
+##### Mitigation
+
+Increase connection pool limits on application/PGBouncer if it is due to a legitimate traffic increase. What if not?
+
+##### Possible corrective actions
+
+Adjust connection pool limits on application/PGBouncer.
+
+#### Excessive Latency
+
+##### Impact
+
+- Drop on API request and GC run rates;
+- A portion of API requests and GC runs may timeout.
+
+##### Expected app behavior on failure
+
+API requests and GC runs may timeout with a `500 Internal Server Error` response.
+
+##### Observability
+
+- Errors show up in Sentry and logs;
+- Grafana dashboards reflect the impact scale.
+
+##### Recovery definition
+
+Latency is back to normal levels.
+
+##### Expected bpp behavior on recovery
+
+API and GC resume operations normally, without external intervention.
+
+##### Mitigation
+
+Re-establish normal operation of database cluster/network.
+
+##### Possible corrective actions
+
+Escalation to development in case of odd use pattern.
+
+### Application
+
+#### Fatal Error During a GC Run
+
+##### Impact
+
+- Task fails to be processed;
+- GC queues size may increase if it's not a transient error.
+
+##### Expected app behavior on failure
+
+- GC attempts to postpone review of the task to a future date. If failed, original review date remains unchanged, but this has little to no impact (ideally we should postpone the next review in case of error);
+- The GC workers should backoff exponentially for every failed run, up to the maximum configured duration (24h by default).
+
+##### Observability
+
+- Errors show up in Sentry and logs;
+- Grafana dashboards reflect the magnitude of the impact on the Online GC dashboard.
+
+##### Recovery definition
+
+Normal operation re-established. Root cause mitigated.
+
+##### Expected bpp behavior on recovery
+
+GC workers resume normal operation. The next run will happen automatically after the last exponential backoff.
+
+##### Mitigation
+
+NA
+
+##### Possible corrective actions
+
+Escalation to development in case of  error unrelated with database/storage connection failures.
+
+### < Category >
+
+#### < Failure >
+
+##### Impact
+
+##### Expected app behavior on failure
+
+##### Observability
+
+##### Recovery definition
+
+##### Expected bpp behavior on recovery
+
+##### Mitigation
+
+##### Possible corrective actions
 
