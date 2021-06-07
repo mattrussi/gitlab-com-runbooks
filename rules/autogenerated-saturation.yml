@@ -491,6 +491,27 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
+      component: pg_primary_cpu
+    expr: |
+      max by(environment, tier, type, stage) (
+        clamp_min(
+          clamp_max(
+            avg without(cpu, mode) (
+              1
+              -
+              (
+                rate(node_cpu_seconds_total{mode="idle", type="patroni"}[5m])
+                and on(fqdn)
+                pg_replication_is_replica{type="patroni"} == 0
+              )
+            )
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
       component: pg_table_bloat
     expr: |
       max by(environment, tier, type, stage) (
@@ -1205,6 +1226,14 @@ groups:
     expr: '0.75'
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
+      component: pg_primary_cpu
+    expr: '0.8'
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: pg_primary_cpu
+    expr: '0.9'
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
       component: pg_table_bloat
     expr: '0.3'
   - record: slo:max:hard:gitlab_component_saturation:ratio
@@ -1593,6 +1622,12 @@ groups:
       component: pg_int4_id
       horiz_scaling: 'no'
       severity: s1
+    expr: '1'
+  - record: gitlab_component_saturation_info
+    labels:
+      component: pg_primary_cpu
+      horiz_scaling: 'no'
+      severity: s2
     expr: '1'
   - record: gitlab_component_saturation_info
     labels:
@@ -3068,6 +3103,53 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="pg_int4_id"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="pg_int4_id"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: >-
+        The Average CPU Utilization on Postgres Primary Instance resource of the {{ $labels.type }} service
+        ({{ $labels.stage }} stage), component has a saturation exceeding SLO and is close to its capacity
+        limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Average CPU Utilization on Postgres Primary Instance resource:
+
+        Average CPU utilization across all cores on the Postgres primary instance.
+      grafana_dashboard_id: alerts-sat_pg_primary_cpu
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/alerts-sat_pg_primary_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '3989464622'
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, fqdn) (
+          clamp_min(
+            clamp_max(
+              avg without(cpu, mode) (
+                1
+                -
+                (
+                  rate(node_cpu_seconds_total{mode="idle", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
+                  and on(fqdn)
+                  pg_replication_is_replica{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} == 0
+                )
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+    expr: |
+      gitlab_component_saturation:ratio{component="pg_primary_cpu"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="pg_primary_cpu"}
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
