@@ -1,5 +1,4 @@
 local aggregationSets = import './aggregation-sets.libsonnet';
-local capacityPlanning = import 'capacity_planning.libsonnet';
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local templates = import 'grafana/templates.libsonnet';
@@ -148,12 +147,6 @@ local overviewDashboard(
   {
     overviewTrailer()::
       self
-      .addPanels(
-        if std.length(saturationComponents) > 0 then
-          [
-            capacityPlanning.capacityPlanningRow(selectorHash) { gridPos: { x: 0, y: 100000 } },
-          ] else []
-      )
       .addPanel(
         systemDiagramPanel.systemDiagramRowForService(type),
         gridPos={ x: 0, y: 100010 }
