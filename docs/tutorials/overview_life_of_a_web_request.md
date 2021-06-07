@@ -50,8 +50,6 @@ If you prefer to preview the full list of components:
 
 ### Short list of core components
 
-or an introductory overview, we can start with a much shorter list.
-
 The main application components involved in handling a typical HTTP request are:
 
 * Gitlab-rails: The most central component of GitLab.  Most of the application logic lives here.  Often referred to as "Puma" or "Unicorn", named after two widely-used Ruby webservers that can wrap the application (like Jetty and Tomcat do for many Java applications).
@@ -88,11 +86,6 @@ To illustrate this purpose, it may help to show:
 * annotated list of the main API endpoints
 * list of common use-cases or client personas
 * diagram of how this service fits into the overall application architecture
-
-
-### What are its main dependencies and clients?
-
-Describe its relationship to other services it directly calls and those that call it.
 
 
 ## Walk-through: Life of a request
@@ -156,12 +149,6 @@ For example, suppose the service dashboard shows an increase in HTTP 500 respons
 
 ## Exercises
 
-Optionally include safe non-destructive practice exercises to reinforce the concepts, techniques, and tools covered by this tutorial.
-Include a range of difficulties.
-Ensure the questions clearly relate to content and themes presented in this tutorial are answerable primarily with content presented in this tutorial.
-Ideally also include hints or full solutions (hidden by default).
-
-Examples:
 * *Performance:*
   * What do you think would happen to this service's throughput, response latency, and error rate if...
     * One of its dependencies became 10x slower for all requests.
