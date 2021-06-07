@@ -1,5 +1,4 @@
 local aggregationSets = import './aggregation-sets.libsonnet';
-local capacityPlanning = import 'capacity_planning.libsonnet';
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local colorScheme = import 'grafana/color_scheme.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
@@ -307,7 +306,6 @@ basic.dashboard(
   ),
   gridPos=genGridPos(0, 4.5, w=2)
 )
-.addPanel(capacityPlanning.environmentCapacityPlanningRow(''), gridPos=genGridPos(0, 6.5))
 + {
-  links+: platformLinks.capacityPlanning + platformLinks.services,
+  links+: platformLinks.services,
 }

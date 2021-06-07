@@ -1,4 +1,3 @@
-local capacityPlanning = import 'capacity_planning.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local templates = import 'grafana/templates.libsonnet';
 local keyMetrics = import 'key_metrics.libsonnet';
