@@ -79,13 +79,19 @@ Entry points:
 
 ### What does this service do?
 
-Describe the purpose of this service.  What role does it fill?  What behaviors satisfy that goal?
+Gitlab-rails is the core user-facing application for GitLab. Almost all web requests targeting GitLab.com will be served by it.
 
-To illustrate this purpose, it may help to show:
-* screenshots of the service's web UI
-* annotated list of the main API endpoints
-* list of common use-cases or client personas
-* diagram of how this service fits into the overall application architecture
+For example, when you visit the GitLab source code at [gitlab-org/gitlab](https://gitlab.com/gitlab-org/gitlab), that page is rendered by a rails process.
+
+<img src="overview_life_of_a_web_request/gitlab_com.png">
+
+The rails infrastructure is partitioned into distinct "webservice" fleets, serving different endpoints.
+
+* `api`: This fleet serves API endpoints.
+* `git`: This fleet serves git interactions over HTTP.
+* `web`: This fleet serves user interactions. Web is what you see when you visit GitLab.com in a browser.
+
+This partitioning can be seen in [the production architecture diagram](https://about.gitlab.com/handbook/engineering/infrastructure/production/architecture/#gitlab-com-architecture).
 
 
 ## Walk-through: Life of a request
