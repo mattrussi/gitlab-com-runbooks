@@ -80,6 +80,7 @@ local utilizationMetric = function(options)
         rangeDuration: s.rangeDuration,
         selector: selectors.serializeHash(selectorWithoutStaticLabels),
         aggregationLabels: aggregations.serialize(aggregationLabelsWithoutStaticLabels),
+        environmentLabels: aggregations.serialize(environmentLabels),
       },
 
     getTopkQuery()::
@@ -88,7 +89,7 @@ local utilizationMetric = function(options)
       local preaggregationQuery = s.query % formatConfig;
 
       |||
-        topk by(%(aggregationLabels)s) (%(topk)d,
+        topk by(%(environmentLabels)s) (%(topk)d,
           %(preaggregationQuery)s
         )
       ||| % formatConfig {

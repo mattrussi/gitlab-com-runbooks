@@ -35,7 +35,7 @@ groups:
       summaryType: topk
       unit: bytes
     expr: |
-      topk by(environment,tier,type,stage,relname) (10,
+      topk by(environment,tier,type,stage) (10,
         avg by (environment,tier,type,stage,relname) (
           avg_over_time(pg_total_relation_size_bytes{type=~"patroni|sentry"}[1h])
           and on (job, instance) (
