@@ -23,7 +23,7 @@ local rules = {
             link: 'https://gitlab-com.gitlab.io/gl-infra/tamland/{{ $labels.pagename }}.html#{{ $labels.type }}-service-{{ $labels.component }}-resource-saturation',
           },
           annotations: {
-            title: 'Tamland Forecast a Potential Capacity Violation for the `{{ $labels.type }}` service, `{{ $labels.stage }}` stage',
+            title: '{{ $labels.type }} / {{ $labels.component }} potential saturation',
             description: |||
               Tamland forecast a potential future violation
 

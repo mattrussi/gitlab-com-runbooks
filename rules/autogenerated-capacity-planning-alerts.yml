@@ -6,9 +6,7 @@ groups:
   - alert: CapacityPlanningViolationForecast
     for: 1m
     annotations:
-      title: >-
-        Tamland Forecast a Potential Capacity Violation for the `{{ $labels.type }}` service, `{{ $labels.stage
-        }}` stage
+      title: "{{ $labels.type }} / {{ $labels.component }} potential saturation"
       description: |
         Tamland forecast a potential future violation
 
