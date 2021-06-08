@@ -119,9 +119,9 @@ Re-establish normal operation of database cluster/network.
 
 Escalation to development in case of odd use pattern.
 
-### Application
+### Online Garbage Collection
 
-#### Fatal Error During a GC Run
+#### Fatal Error During Run
 
 ##### Impact
 
@@ -136,7 +136,7 @@ Escalation to development in case of odd use pattern.
 ##### Observability
 
 - Errors show up in Sentry and logs;
-- Grafana dashboards reflect the magnitude of the impact on the Online GC dashboard.
+- Grafana dashboards reflect the magnitude of the impact on the [Garbage Collection Detail](https://dashboards.gitlab.net/d/registry-gc/registry-garbage-collection-detail?orgId=1) dashboard.
 
 ##### Recovery definition
 
@@ -153,6 +153,78 @@ NA
 ##### Possible corrective actions
 
 Escalation to development in case of  error unrelated with database/storage connection failures.
+
+#### False Positive
+
+##### Impact
+
+A manifest or blob was garbage collected when it should not.
+
+##### Expected app behavior on failure
+
+Download requests for the corresponding image will fail with a `404 Not Found`.
+
+##### Observability
+
+It is not possible for us to identify this among all other `404 Not Found` responses, which happen quite frequently. Only end users are able to detect this problem, if it ever occurs. For example, they may have sucessfully pushed an image and then tried to pull it the day after but without success.
+
+##### Recovery definition
+
+The deleted image is available once again.
+
+##### Expected app behavior on recovery
+
+Download requests for the corresponding image will succeed.
+
+##### Mitigation
+
+If possible, the easiest mitigation is to rebuild the image from the *client side*. This can be for example, retrying the CI job that was responsible for building the image in the first place.
+
+Alternatively, on the *server side*, once we know the corresponding repository and tag, we can look at the online GC logs to identify when the corresponding image manifest and/or layers where deleted and the reason why.
+
+If proven to be a false positive, online GC should be disabled until further analysis. This can be done by setting [`gc.disabled`](https://gitlab.com/gitlab-org/container-registry/-/blob/e58e8c2f66c246fbdae7ace849238b08e7bfbb25/docs/configuration.md#gc) to `true` in the registry config. After that, we can attempt to recover the deleted manifest or blob.
+
+**TODO:** Detail server side recovery mechanism. This probably deserves a separate section/doc. The raw idea would be: 1. Identify manifest and/or blob digests; 2. Restore blobs on the storage bucket (GCS deleted objects are retained for 30 days); 3. Restore database metadata from filesystem, which will be available as long as write mirroring is enabled (this metadata is not garbage collected).
+
+##### Possible corrective actions
+
+Identify and fix bug on the online GC review process.
+
+#### False Negative
+
+##### Impact
+
+A manifest or blob that should have been garbage collected was not.
+
+##### Expected app behavior on failure
+
+Download requests for the corresponding image will succeed.
+
+##### Observability
+
+It is not possible for us to identify this. Only end users are able to detect this problem, if it ever occurs. For example, they may have deleted all tags for an image but the underlying manifest and layers remain available.
+
+##### Recovery definition
+
+The manifest or blobs are garbage collected and no longer acessible.
+
+##### Expected app behavior on recovery
+
+Download requests for the corresponding image will fail with `404 Not Found`.
+
+##### Mitigation
+
+This is considered low in criticality and priority. It should be escalated to the development team for analysis.
+
+Once we know the corresponding repository and manifest or blobs, we can look at the online GC logs to identify that the corresponding artifacts where already reviewed and the result was "not dangling". We should then look at the database to indentify any remaining references for the manifest (tags or other manifests) or blob (manifest).
+
+If proven to be a false negative, the bug on the online GC review process should be fixed and the corresponding manifest or blobs re-scheduled for review.
+
+**TODO:** Detail manual reschedule mechanism. This is likely an insert on the DB review queue tables.
+
+##### Possible corrective actions
+
+Identify and fix bug on the online GC review process.
 
 ### < Category >
 
