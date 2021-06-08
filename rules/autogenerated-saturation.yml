@@ -63,7 +63,7 @@ groups:
         clamp_min(
           clamp_max(
             (
-              1 - instance:node_filesystem_avail:ratio{fstype=~"ext.|xfs", type!="",type!~"nat|waf|bastion|git|mailroom|websockets|kas|kube"}
+              1 - instance:node_filesystem_avail:ratio{fstype=~"ext.|xfs", fqdn!="", type!="",type!~"nat|waf|bastion|git|mailroom|websockets|kas|kube"}
             )
             ,
             1)
@@ -1886,7 +1886,7 @@ groups:
           clamp_min(
             clamp_max(
               (
-                1 - instance:node_filesystem_avail:ratio{fstype=~"ext.|xfs", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+                1 - instance:node_filesystem_avail:ratio{fstype=~"ext.|xfs", fqdn!="", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
               )
               ,
               1)
