@@ -110,8 +110,7 @@ Timer-based profiling is arguably the most common use-case, and mastering it giv
 
 ### The easy way: Helper scripts
 
-*Note:* This is a preview of a set of convenience scripts that will soon be available on all of GitLab.com's Chef-managed hosts.
-See [this issue](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10592) for current status.
+A set of convenience scripts that is available on all of GitLab.com's Chef-managed hosts.
 
 These helper scripts make it easy to quickly capture a `perf` profile and generate a flamegraph with a minimum of arguments.
 * They run for 60 seconds capturing stack traces at a sampling rate of 99 times per second.
