@@ -9,7 +9,7 @@ groups:
     labels:
       component: kube_pool_max_nodes
     expr: |
-      max by(environment, tier, type, stage) (
+      max by(env, environment, tier, type, stage) (
         clamp_min(
           clamp_max(
             count by (cluster, env, environment, label_pool, tier, type, stage, shard) (
@@ -36,7 +36,7 @@ groups:
     labels:
       component: pg_primary_cpu
     expr: |
-      max by(environment, tier, type, stage) (
+      max by(env, environment, tier, type, stage) (
         clamp_min(
           clamp_max(
             avg without(cpu, mode) (
@@ -57,16 +57,16 @@ groups:
     labels:
       component: pg_walsender_cpu
     expr: |
-      max by(environment, tier, type, stage) (
+      max by(env, environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            sum by (environment, tier, type, stage) (
-              sum by(environment, tier, type, stage, fqdn) (
+            sum by (env, environment, tier, type, stage) (
+              sum by(env, environment, tier, type, stage, fqdn) (
                 rate(namedprocess_namegroup_cpu_seconds_total{type="patroni", groupname=~"pg.worker.walsender|pg.worker.walwriter|wal-g"}[5m])
                 and on (fqdn) (pg_replication_is_replica{type="patroni"} == 0)
               )
               /
-              count by (environment, tier, type, stage, fqdn) (
+              count by (env, environment, tier, type, stage, fqdn) (
                 node_cpu_seconds_total{type="patroni", mode="idle"} and on(fqdn) (pg_replication_is_replica{type="patroni"} == 0)
               )
             )
@@ -165,7 +165,7 @@ groups:
       grafana_panel_id: '1686893332'
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, cluster, label_pool, shard) (
+        max by(env, environment, tier, type, stage, cluster, label_pool, shard) (
           clamp_min(
             clamp_max(
               count by (cluster, env, environment, label_pool, tier, type, stage, shard) (
@@ -217,7 +217,7 @@ groups:
       grafana_panel_id: '3989464622'
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, fqdn) (
+        max by(env, environment, tier, type, stage, fqdn) (
           clamp_min(
             clamp_max(
               avg without(cpu, mode) (
@@ -267,16 +267,16 @@ groups:
       grafana_panel_id: '1879384722'
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage) (
+        max by(env, environment, tier, type, stage) (
           clamp_min(
             clamp_max(
-              sum by (environment, tier, type, stage) (
-                sum by(environment, tier, type, stage, fqdn) (
+              sum by (env, environment, tier, type, stage) (
+                sum by(env, environment, tier, type, stage, fqdn) (
                   rate(namedprocess_namegroup_cpu_seconds_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", groupname=~"pg.worker.walsender|pg.worker.walwriter|wal-g"}[5m])
                   and on (fqdn) (pg_replication_is_replica{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} == 0)
                 )
                 /
-                count by (environment, tier, type, stage, fqdn) (
+                count by (env, environment, tier, type, stage, fqdn) (
                   node_cpu_seconds_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", mode="idle"} and on(fqdn) (pg_replication_is_replica{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} == 0)
                 )
               )
