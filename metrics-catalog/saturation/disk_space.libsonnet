@@ -13,9 +13,10 @@ local kubeSaturationHelpers = import 'helpers/kube_saturation_helpers.libsonnet'
     |||,
     grafana_dashboard_uid: 'sat_disk_space',
     resourceLabels: ['fqdn', 'device'],
+    // We filter on `fqdn!=""` to filter out any nameless workers. This is done mostly for the ci-runner fleet
     query: |||
       (
-        1 - instance:node_filesystem_avail:ratio{fstype=~"ext.|xfs", %(selector)s}
+        1 - instance:node_filesystem_avail:ratio{fstype=~"ext.|xfs", fqdn!="", %(selector)s}
       )
     |||,
     slos: {
