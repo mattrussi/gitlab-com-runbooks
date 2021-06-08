@@ -67,7 +67,7 @@ replication (see recovery.conf). As of writing,
 * **Only** in case you want to upgrade the major postgres version or gitlab-ee:
   * Re-Install gitlab-ee manually: `dpkg -r gitlab-ee && apt-get -y install gitlab-ee=13.2....`
     * take the same version as found in staging; run `dpkg -l gitlab-ee` on
-    `api-01-sv-gstg.c.gitlab-staging-1.internal` to find the right version
+    `web-01-sv-gstg.c.gitlab-staging-1.internal` to find the right version
   * `gitlab-ctl reconfigure`
   * `gitlab-ctl stop`
   * Clean up current PGDATA again: `rm -rf /var/opt/gitlab/postgresql/data/*`

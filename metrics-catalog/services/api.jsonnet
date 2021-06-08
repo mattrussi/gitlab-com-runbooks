@@ -41,7 +41,7 @@ metricsCatalog.serviceDefinition({
     praefect: true,
   },
   provisioning: {
-    vms: true,
+    vms: false,
     kubernetes: true,
   },
   regional: true,
@@ -171,7 +171,6 @@ metricsCatalog.serviceDefinition({
       significantLabels: ['fqdn', 'method', 'feature_category'],
 
       toolingLinks: [
-        // Improve sentry link once https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/532 arrives
         toolingLinks.sentry(slug='gitlab/gitlabcom'),
         toolingLinks.kibana(title='Rails', index='rails_api', type='api', slowRequestSeconds=10),
       ],

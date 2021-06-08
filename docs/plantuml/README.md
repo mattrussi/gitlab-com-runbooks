@@ -15,6 +15,7 @@
 
 ## Troubleshooting Pointers
 
+* [../kube/kubernetes.md](../kube/kubernetes.md)
 * [readiness.md](readiness.md)
 <!-- END_MARKER -->
 
