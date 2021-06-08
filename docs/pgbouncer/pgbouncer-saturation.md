@@ -19,10 +19,7 @@
           * The healthcheck is a TCP check to pgbouncer, not anything more active
         * `HUP` all unicorns and sidekiq workers to re-establish db connections.
           * web-cny: `knife ssh -C4 'role:gprd-base-fe-web-cny AND chef_environment:gprd' 'hostname -f && sudo gitlab-ctl hup unicorn && sleep 60'`
-          * api-cny: `knife ssh -C4 'role:gprd-base-fe-api-cny AND chef_environment:gprd' 'hostname -f && sudo gitlab-ctl hup unicorn && sleep 60'`
           * web: `knife ssh -C4 'role:gprd-base-fe-web AND chef_environment:gprd' 'hostname -f && sudo gitlab-ctl hup unicorn && sleep 60'`
-          * api: `knife ssh -C4 'role:gprd-base-fe-api AND chef_environment:gprd' 'hostname -f && sudo gitlab-ctl hup unicorn && sleep 60'`
-          * sidekiq: `knife ssh -C4 'roles:gprd-base-be-sidekiq AND chef_environment:gprd' 'hostname -f && sudo gitlab-ctl hup sidekiq && sleep 60'`
 
 1. Too many Sidekiq connections
   * Check the [PostgreSQL dashboard](https://dashboards.gitlab.net/d/000000144/postgresql-overview?orgId=1) and look at several graphs:

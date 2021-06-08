@@ -25,7 +25,6 @@
 * [../registry/gitlab-registry.md](../registry/gitlab-registry.md)
 * [../sentry/sentry-is-down.md](../sentry/sentry-is-down.md)
 * [../uncategorized/alert-for-ssl-certificate-expiration.md](../uncategorized/alert-for-ssl-certificate-expiration.md)
-* [../uncategorized/manage-workers.md](../uncategorized/manage-workers.md)
 <!-- END_MARKER -->
 
 

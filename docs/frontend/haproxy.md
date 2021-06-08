@@ -27,24 +27,15 @@ configure our nodes. Browse to `chef-repo/roles` directory and you will see them
 * The references after the _frontends_ and _backends_ refer to _node_ concept in
 HAProxy configuration.
 
-```
-     client request
-            |
-            V
-      Route53 DNS
-            |
-            V
-    GCP Load Balancer
-            |
-            V
-    HAProxy Frontend
-            |
-            V
-     backend choice
-            |
-            V
-    HAproxy Backend
+```mermaid
+graph TB
 
+a[client request] --> b[Route 53]
+a --> c[CloudFlare]
+c --> d[GCP Load Balancer]
+d --> e[HAProxy Frontend]
+e --> f[backend choice]
+g --> h[HAProxy Backend]
 ```
 
 ## Frontend and Backend configuration
@@ -74,26 +65,48 @@ HAProxy configuration.
 
 ### Backends
 
-* `api`: all of the `api-xx` nodes
+* `api`: NGINX ingress for the `gitlab-webservice-api` Kubernetes Deployment
 * `api_rate_limit`: proxy for the `api_rate_limit` front-end
-* `https_git`: all of the `git-xx` nodes
+* `https_git`: Service IP of the `gitlab-gitlab-shell` Kubernetes Deployment
 * `web`: all of the `web-xx` nodes
 * `registry`: all of the `registry-xx` nodes
-* `ssh`: all of the `git-xx` nodes
+* `ssh`: Service IP of the `gitlab-gitlab-shell` Kubernetes Deployment
 * `websockets`: all of the `git-xx` nodes
-* `altssh`: all of the `git-xx` nodes
+* `altssh`: Service IP of the `gitlab-gitlab-shell` Kubernetes Deployment
 * `pages_http`: all of the `web-pages-xx` nodes
 * `pages_https`: all of the `web-pages-xx` nodes
 * `canary_web`: all of the `web-cny-xx` nodes
-* `canary_api`: all of the `api-cny-xx` nodes
-* `canary_https_git`: all of the `git-cny-xx` nodes
-* `canary_registry`: all of the `registry-cny-xx` nodes
+* `canary_api`: NGINX ingress for the `gitlab-cny-webservice-api` Kubernetes Deployment
+* `canary_https_git`: Service IP of the `gitlab-webservice-git` Kubernetes Deployment
+* `canary_registry`: Service IP of the `gitlab-registry` Kubernetes Deployment
+
+### Kubernetes Backends
+
+For services which reside in Kubernetes, we have one backend that sends all
+traffic going to each cluster.  For the purposes of cost savings, backends that
+reside in the same zone are active, while backends that are in differing zones
+are marked as `backup` in the `server` configuration line.  Doing so enables us
+to still send traffic to a differing zone should we suffer a zonal failure.  We
+obtain some cost savings with this as traffic is mostly kept inside of a single
+zone. Example:
+
+```mermaid
+graph TB
+
+a[HAProxy node in zone b] --> b[cluster b]
+a -->|backup| c[cluster c]
+a -->|backup| d[cluster d]
+```
+
+Some services send traffic to an NGINX Ingress endpoint, while others use the
+Service IP provided by the Kubernetes Deployment for that service.  Go to the
+associated documentation for a given service to determine how this is
+configured.
 
 ## Load balancing
 
 Currently the haproxy backend configuration is such that every pool of servers is round-robin with the exception of websockets, ssh and pages.
 There is an open issue to discuss using sticky sessions for the web backend, see https://gitlab.com/gitlab-com/gl-infra/infrastructure/issues/5253.
-
 
 ## Server Weights
 
@@ -103,7 +116,6 @@ backends with a weight of zero. It is possible to direct all traffic to canary
 but the normal way we send traffic is through a static list of request paths for
 internal projects. For more information see the
 [canary release documentation](https://gitlab.com/gitlab-org/release/docs/blob/master/general/deploy/canary.md)
-
 
 ## Draining
 
@@ -171,10 +183,10 @@ Fetching server state...
    3 websockets/git-02-sv-gstg: UP
    3 websockets/git-cny-01-sv-gstg: UP
 ```
+
 * The first number refers to the number of load balancers reporting the server status
 * The second field is the backend/server-name
 * The last field is the current status which may be {UP,MAINT,DRAIN}
-
 
 ## set-server-state
 
@@ -244,11 +256,12 @@ This script is also run in CI and will fail the job if there is a missing server
 that needs to be added.
 
 ### Admin console for haproxy (single node)
+
 haproxy has a built-in web admin console; this is not terribly useful for managing a fleet of haproxy nodes, but if just one is misbehaving then it might be handy.  To access it, ssh port forward to port 7331, e.g.:
 
 `ssh -L 7331:localhost:7331 fe-01-lb-gstg.c.gitlab-staging-1.internal`
 
-then access http://localhost:7331/ in  your browser.
+Then access http://localhost:7331/ in  your browser.
 
 The username is admin, the password is most easily obtained from haproxy.cfg on the server itself (look for 'stats auth' section), but can also be obtained by looking for the admin_password value in gkms vault, e.g.
 
@@ -275,10 +288,12 @@ sudo hatop -s /run/haproxy/admin.sock
 # HAPrpoxy Alert Troubleshooting
 
 ## Reason
+
 * Errors are being reported by HAProxy, this could be a spike in 5xx errors,
   server connection errors, or backends reporting unhealthy.
 
 ## Prechecks
+
 * Examine the health of all backends and the HAProxy dashboard
     * HAProxy - https://dashboards.gitlab.net/d/ZOOh_aNik/haproxy
     * HAProxy Backend Status - https://dashboards.gitlab.net/d/7Zq1euZmz/haproxy-status?orgId=1
@@ -288,6 +303,7 @@ sudo hatop -s /run/haproxy/admin.sock
     * To disable canary traffic see the [canary chatops documentation](https://gitlab.com/gitlab-org/release/docs/blob/master/general/deploy/canary.md#canary-chatops)
 
 ## Resolution
+
 * If there is a single backend server alerting, check to see if the node is healthy on
   the host status dashboard. It is possible in some cases, most notably the git
   server where it is possible to reject connections even though the server is
@@ -339,7 +355,7 @@ haproxy   2002      20 /usr/sbin/haproxy -Ws -f /etc/haproxy/haproxy.cfg -p /run
 
 # Server Down
 
-HAProxy will mark a server for a backend down if it is unreachble or has a failing health check.
+HAProxy will mark a server for a backend down if it is unreachable or has a failing health check.
 
 It will also be marked down if the node has been drained with [`set-server-state`](#set-server-state).
 

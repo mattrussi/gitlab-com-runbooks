@@ -26,6 +26,7 @@
 * [../gitaly/storage-rebalancing.md](../gitaly/storage-rebalancing.md)
 * [../kube/k8s-cluster-upgrade.md](../kube/k8s-cluster-upgrade.md)
 * [../kube/k8s-operations.md](../kube/k8s-operations.md)
+* [../kube/kubernetes.md](../kube/kubernetes.md)
 * [../monitoring/apdex-alerts-guide.md](../monitoring/apdex-alerts-guide.md)
 * [../onboarding/gitlab.com_on_k8s.md](../onboarding/gitlab.com_on_k8s.md)
 * [../patroni/geo-patroni-cluster.md](../patroni/geo-patroni-cluster.md)
