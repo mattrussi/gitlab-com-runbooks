@@ -66,15 +66,20 @@ In addition to the above application components, some major supporting infrastru
 
 ## Clients and entry points
 
-Clients include:
-* Browser-based web UI
-* `git` command
-* API calls from external and internal agents
+In this tutorial, we focus on clients that interact with GitLab via HTTP.
 
-Entry points:
-* HTTP requests
-* REST API
-* GraphQL API
+Mostly this traffic consists of:
+* Web browsers using the web UI
+* REST API calls from external and internal user-agents
+
+But it also includes:
+* GraphQL API calls
+* Websockets
+
+Apart from HTTP-based interactions, clients can also use git-over-SSH to interact with their repositories, but that is a topic for another tutorial.
+
+The entry point for all of these interactions is the HAProxy fleet, which implements routing rules to delegate traffic from the main frontend (`https`)
+to workload-specific backends like `api`, `web`, and `https_git`.
 
 
 ### What does this service do?
@@ -96,14 +101,42 @@ This partitioning can be seen in [the production architecture diagram](https://a
 
 ## Walk-through: Life of a request
 
-May include a components diagram showing which components directly interact.
+For quick reference, the following diagram shows at a high level which major pieces of the service stack directly interact while handling a web request:
 
-May include a sequence diagram showing the order of events in a series of interactions.
-This kind of diagram can concisely map the purpose and order of interactions with other services.
-It can also visually highlight important or unintuitive portions of the request-processing behavior, such as a group of calls to helper services
-being made concurrently, with the slowest responder of that group dominating the overall latency.
+```mermaid
+graph LR
+    Browser --> Cloudflare
 
-If it does not distract from the content, these diagrams may indicate (e.g. via label or color-code) which interactions are observable with the tools demoed in this tutorial.
+    Cloudflare --> HAProxy
+
+    HAProxy --> Workhorse
+
+    Workhorse --> Rails
+    Workhorse --> Gitaly
+
+    Rails --> Postgres
+    Rails --> Redis
+    Rails --> Gitaly
+```
+
+In practice, each service in the above diagram has multiple nodes and supporting infrastructure, but for now we will focus on high level interactions.
+
+1. `Browser --> Cloudflare`
+  * The user's web browser (or other user-agent) resolves the domain name `gitlab.com` to a Cloudflare IP address and connects to Cloudflare's nearest point-of-presence (POP or data center).
+  * The browser and Cloudflare establish an SSL session, and the browser sends an HTTP request.
+  * Cloudflare evaluates traffic scrubbing rules to block abuse and then forwards the HTTP request to "origin" (i.e. the HAProxy pool in our GCP infrastructure).
+2. `Cloudflare -> HAProxy`
+  * For tracking purposes, Cloudflare injects some extra HTTP headers into the request: the original client's IP address and a unique id for finding this request in Cloudflare's logs.
+  * Cloudflare establishes an SSL session with HAProxy and forwards the HTTP request.
+3. `HAProxy --> Workhorse`
+  * HAProxy parses the HTTP request URI and headers, and routes the request to one of its backends.
+  * As part of our release-testing process, HAProxy sends a small random percentage of requests to the `canary` stage, and the majority of requests are sent to the `main` stage.
+  * If you are curious about the details of how HAProxy chooses which backend to handle a request, these rules are defined in the HAProxy configuration file (`/etc/haproxy/haproxy.cfg`) on the `fe-XX` nodes.
+  * For some backends, an Nginx instance sits between HAProxy and Workhorse, but this approach is being phased out, so it is elided in this diagram.
+4. `Workhorse --> Rails` and `Workhorse --> Gitaly`
+  * Workhorse and Rails (Puma) are tightly coupled, typically running together on the same VM or kubernetes pod.
+  * Workhorse handles certain kinds of requests that would be too expensive (harder to scale) in Rails itself.
+  * For example, Git Fetch operations are often much slower than most HTTP requests (e.g. due to large response payloads and limited client network bandwidth).  It is much cheaper to delegate that IO-bound work to a goroutine in Workhorse than a Puma thread.
 
 
 ## Demo: Observing a single example request
