@@ -226,6 +226,56 @@ If proven to be a false negative, the bug on the online GC review process should
 
 Identify and fix bug on the online GC review process.
 
+### Migration of New Repositories
+
+#### Old Repository Handled by New Code Path
+
+##### Impact
+
+##### Expected app behavior on failure
+
+##### Observability
+
+##### Recovery definition
+
+##### Expected bpp behavior on recovery
+
+##### Mitigation
+
+##### Possible corrective actions
+
+#### Eligible New Repository Handled by Old Code Path
+
+##### Impact
+
+##### Expected app behavior on failure
+
+##### Observability
+
+##### Recovery definition
+
+##### Expected bpp behavior on recovery
+
+##### Mitigation
+
+##### Possible corrective actions
+
+#### Non-Eligible New Repository Handled by New Code Path
+
+##### Impact
+
+##### Expected app behavior on failure
+
+##### Observability
+
+##### Recovery definition
+
+##### Expected bpp behavior on recovery
+
+##### Mitigation
+
+##### Possible corrective actions
+
 ### < Category >
 
 #### < Failure >
