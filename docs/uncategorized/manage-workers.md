@@ -1,4 +1,4 @@
-# Managing unicorn and sidekiq workers
+# Managing Puma and sidekiq workers
 
 ## First and foremost
 
@@ -6,11 +6,11 @@
 
 ## How do I
 
-### Reload unicorn with zero downtime
+### Reload Puma with zero downtime
 
 Issue the following command from the chef repo:
 
-`bundle exec knife ssh -aipaddress role:gitlab-cluster-worker 'sudo gitlab-ctl hup unicorn'`
+`bundle exec knife ssh -aipaddress role:gitlab-cluster-worker 'sudo gitlab-ctl hup puma'`
 
 ### Gracefully restart sidekiq jobs
 

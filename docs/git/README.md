@@ -13,7 +13,7 @@
 
 * [Rails](https://log.gprd.gitlab.net/goto/b368513b02f183a06d28c2a958b00602)
 * [Workhorse](https://log.gprd.gitlab.net/goto/3ddd4ee7141ba2ec1a8b3bb0cb1476fe)
-* [Unicorn](https://log.gprd.gitlab.net/goto/0cf60e9a1c94236eefb23348c39feaeb)
+* [Puma](https://log.gprd.gitlab.net/goto/0cf60e9a1c94236eefb23348c39feaeb)
 * [nginx](https://log.gprd.gitlab.net/goto/8a5fb5820ec7c8daebf719c51fa00ce0)
 * [Unstructured Rails](https://console.cloud.google.com/logs/viewer?project=gitlab-production&interval=PT1H&resource=gce_instance&advancedFilter=jsonPayload.hostname%3A%22git%22%0Alabels.tag%3D%22unstructured.production%22&customFacets=labels.%22compute.googleapis.com%2Fresource_name%22)
 * [system](https://log.gprd.gitlab.net/goto/bd680ccb3c21567e47a821bbf52a7c09)
@@ -31,7 +31,6 @@
 * [../frontend/block-things-in-haproxy.md](../frontend/block-things-in-haproxy.md)
 * [../frontend/haproxy.md](../frontend/haproxy.md)
 * [../frontend/ssh-maxstartups-breach.md](../frontend/ssh-maxstartups-breach.md)
-* [deploy-gitlab-rb-change.md](deploy-gitlab-rb-change.md)
 * [git-stuck-processes.md](git-stuck-processes.md)
 * [git.md](git.md)
 * [purge-git-data.md](purge-git-data.md)

@@ -84,7 +84,7 @@ For up to date retention period see details of the ILM policy assigned to the in
 | pubsub-shell-inf        | 7 days            | 6 days         |
 | pubsub-sidekiq-inf      | 7 days            | 6 days         |
 | pubsub-system-inf       | 7 days            | 6 days         |
-| pubsub-unicorn-inf      | 7 days            | 6 days         |
+| pubsub-puma-inf         | 7 days            | 6 days         |
 | pubsub-unstructured-inf | 7 days            | 6 days         |
 | pubsub-workhorse-inf    | 7 days            | 6 days         |
 | pubsub-consul-inf       | 7 days            | 6 days         |
@@ -128,9 +128,9 @@ There are many entries missing from this list:
 | rails.features                | /var/log/gitlab/gitlab-rails/features_json.log   | JSON             | pubsub-rails-inf        |
 | rails.production              | gitlab-rails/production\_json.log                | JSON             | pubsub-rails-inf        |
 | shell                         | gitlab-shell/gitlab-shell.log                    | JSON             | pubsub-shell-inf        |
-| unicorn.current               | /var/log/gitlab/unicorn/current                  | line regex       | pubsub-unicorn-inf      |
-| unicorn.stderr                | /var/log/gitlab/unicorn/unicorn\_stderr.log      | line regex       | pubsub-unicorn-inf      |
-| unicorn.stdout                | /var/log/gitlab/unicorn/unicorn\_stdout.log      | line regex       | pubsub-unicorn-inf      |
+| puma.current                  | /var/log/gitlab/puma/current                     | line regex       | pubsub-puma-inf         |
+| puma.stderr                   | /var/log/gitlab/puma/puma_stderr.log             | line regex       | pubsub-puma-inf         |
+| puma.stdout                   | /var/log/gitlab/puma/puma_stdout.log             | line regex       | pubsub-puma-inf         |
 | unstructured.production       | gitlab-rails/production.log                      | lines            | pubsub-unstructured-inf |
 | sidekiq                       | /var/log/gitlab/sidekiq-cluster/current          | JSON             | pubsub-sidekiq-inf      |
 | haproxy                       | /var/log/haproxy.log                             | syslog           | pubsub-haproxy-inf      |
