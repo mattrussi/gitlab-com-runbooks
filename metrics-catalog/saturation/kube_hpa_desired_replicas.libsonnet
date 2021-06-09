@@ -1,6 +1,6 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
-local kubeSaturationHelpers = import 'helpers/kube_saturation_helpers.libsonnet';
+local saturationHelpers = import 'helpers/saturation_helpers.libsonnet';
 local sidekiqHelpers = import './services/lib/sidekiq-helpers.libsonnet';
 
 {
@@ -8,7 +8,7 @@ local sidekiqHelpers = import './services/lib/sidekiq-helpers.libsonnet';
     title: 'HPA Desired Replicas',
     severity: 's2',
     horizontallyScalable: true,
-    appliesTo: kubeSaturationHelpers.kubeProvisionedServices,
+    appliesTo: saturationHelpers.kubeProvisionedServices,
     description: |||
       The HPA is the [Horizontal Pod Autoscaler](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/).
       It automatically scales the number of Pods in a deployment based on metrics.

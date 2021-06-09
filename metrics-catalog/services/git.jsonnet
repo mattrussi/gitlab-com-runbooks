@@ -44,7 +44,7 @@ metricsCatalog.serviceDefinition({
     praefect: true,
   },
   provisioning: {
-    vms: true,
+    vms: false,
     kubernetes: true,
   },
   // Git service is spread across multiple regions, monitor it as such
