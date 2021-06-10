@@ -39,7 +39,7 @@ metricsCatalog.serviceDefinition({
   },
   provisioning: {
     kubernetes: true,
-    vms: true,
+    vms: false,
   },
   // Use recordingRuleMetrics to specify a set of metrics with known high
   // cardinality. The metrics catalog will generate recording rules with

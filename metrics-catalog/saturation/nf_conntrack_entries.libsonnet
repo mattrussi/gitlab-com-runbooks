@@ -1,13 +1,13 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
-local kubeSaturationHelpers = import 'helpers/kube_saturation_helpers.libsonnet';
+local saturationHelpers = import 'helpers/saturation_helpers.libsonnet';
 
 {
   nf_conntrack_entries: resourceSaturationPoint({
     title: 'conntrack Entries per Node',
     severity: 's3',
     horizontallyScalable: true,
-    appliesTo: { allExcept: ['nat', 'waf'] + kubeSaturationHelpers.kubeOnlyServices },
+    appliesTo: saturationHelpers.vmProvisionedServices(default='patroni'),
     description: |||
       Netfilter connection tracking table utilization per node.
 
