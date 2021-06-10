@@ -96,6 +96,12 @@ groups:
       *
       on(pod) group_left(tier, type, stage, shard, deployment)
       topk by (pod) (1, kube_pod_labels:labeled{type!=""})
+  - record: container_spec_cpu_shares:labeled
+    expr: |
+      container_spec_cpu_shares{metrics_path="/metrics/cadvisor"}
+      *
+      on(pod) group_left(tier, type, stage, shard, deployment)
+      topk by (pod) (1, kube_pod_labels:labeled{type!=""})
   - record: container_spec_memory_limit_bytes:labeled
     expr: |
       container_spec_memory_limit_bytes{metrics_path="/metrics/cadvisor"}
