@@ -221,6 +221,50 @@ groups:
       )
   - record: gitlab_component_apdex:success:rate
     labels:
+      component: shard_imports
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="300",shard="imports",urgency="throttled"}
+      )
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: shard_imports
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="+Inf",shard="imports",urgency="throttled"}
+      )
+  - record: gitlab_component_ops:rate
+    labels:
+      component: shard_imports
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="+Inf",shard="imports"}
+      )
+  - record: gitlab_component_errors:rate
+    labels:
+      component: shard_imports
+      tier: sv
+      type: sidekiq
+    expr: |
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate1m{shard="imports"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate{component="shard_imports",tier="sv",type="sidekiq"}
+        )
+      )
+  - record: gitlab_component_apdex:success:rate
+    labels:
       component: shard_low_urgency_cpu_bound
       tier: sv
       type: sidekiq
@@ -693,6 +737,50 @@ groups:
       (
         0 * group by(environment,stage) (
           gitlab_component_ops:rate_5m{component="shard_gitaly_throttled",tier="sv",type="sidekiq"}
+        )
+      )
+  - record: gitlab_component_apdex:success:rate_5m
+    labels:
+      component: shard_imports
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",shard="imports",urgency="throttled"}
+      )
+  - record: gitlab_component_apdex:weight:score_5m
+    labels:
+      component: shard_imports
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="imports",urgency="throttled"}
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: shard_imports
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="imports"}
+      )
+  - record: gitlab_component_errors:rate_5m
+    labels:
+      component: shard_imports
+      tier: sv
+      type: sidekiq
+    expr: |
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{shard="imports"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_5m{component="shard_imports",tier="sv",type="sidekiq"}
         )
       )
   - record: gitlab_component_apdex:success:rate_5m
@@ -1173,6 +1261,50 @@ groups:
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
+      component: shard_imports
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",shard="imports",urgency="throttled"}
+      )
+  - record: gitlab_component_apdex:weight:score_30m
+    labels:
+      component: shard_imports
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="imports",urgency="throttled"}
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: shard_imports
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="imports"}
+      )
+  - record: gitlab_component_errors:rate_30m
+    labels:
+      component: shard_imports
+      tier: sv
+      type: sidekiq
+    expr: |
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate30m{shard="imports"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_30m{component="shard_imports",tier="sv",type="sidekiq"}
+        )
+      )
+  - record: gitlab_component_apdex:success:rate_30m
+    labels:
       component: shard_low_urgency_cpu_bound
       tier: sv
       type: sidekiq
@@ -1645,6 +1777,50 @@ groups:
       (
         0 * group by(environment,stage) (
           gitlab_component_ops:rate_1h{component="shard_gitaly_throttled",tier="sv",type="sidekiq"}
+        )
+      )
+  - record: gitlab_component_apdex:success:rate_1h
+    labels:
+      component: shard_imports
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",shard="imports",urgency="throttled"}
+      )
+  - record: gitlab_component_apdex:weight:score_1h
+    labels:
+      component: shard_imports
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="imports",urgency="throttled"}
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: shard_imports
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="imports"}
+      )
+  - record: gitlab_component_errors:rate_1h
+    labels:
+      component: shard_imports
+      tier: sv
+      type: sidekiq
+    expr: |
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate1h{shard="imports"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_1h{component="shard_imports",tier="sv",type="sidekiq"}
         )
       )
   - record: gitlab_component_apdex:success:rate_1h
@@ -2125,6 +2301,50 @@ groups:
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
+      component: shard_imports
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate6h{le="300",shard="imports",urgency="throttled"}
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: shard_imports
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate6h{le="+Inf",shard="imports",urgency="throttled"}
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: shard_imports
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate6h{le="+Inf",shard="imports"}
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: shard_imports
+      tier: sv
+      type: sidekiq
+    expr: |
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate6h{shard="imports"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_6h{component="shard_imports",tier="sv",type="sidekiq"}
+        )
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
       component: shard_low_urgency_cpu_bound
       tier: sv
       type: sidekiq
@@ -2411,6 +2631,14 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: shard_gitaly_throttled
+      regional_aggregation: 'no'
+      service_aggregation: 'yes'
+      tier: sv
+      type: sidekiq
+    expr: '1'
+  - record: gitlab_component_service:mapping
+    labels:
+      component: shard_imports
       regional_aggregation: 'no'
       service_aggregation: 'yes'
       tier: sv
