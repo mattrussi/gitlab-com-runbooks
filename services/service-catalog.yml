@@ -1020,7 +1020,7 @@ services:
       - name: Workhorse
         permalink: https://log.gprd.gitlab.net/goto/3ddd4ee7141ba2ec1a8b3bb0cb1476fe
       - name: Puma
-        permalink: https://log.gprd.gitlab.net/goto/0cf60e9a1c94236eefb23348c39feaeb
+        permalink: https://log.gprd.gitlab.net/goto/a2601cff0b6f000339e05cdb9deab58b
       - name: nginx
         permalink: https://log.gprd.gitlab.net/goto/8a5fb5820ec7c8daebf719c51fa00ce0
       - name: Unstructured Rails
