@@ -59,7 +59,7 @@ local saturationHelpers = import 'helpers/saturation_helpers.libsonnet';
       sum by(%(aggregationLabels)s) (
         container_spec_cpu_shares:labeled{container!="", container!="POD", %(selector)s}
         /
-        container_spec_cpu_period:labeled{container!="", container!="POD", %(selector)s}
+        1000
       )
     |||,
     slos: {
