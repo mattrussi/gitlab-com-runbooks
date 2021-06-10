@@ -864,7 +864,7 @@ services:
       - name: Workhorse
         permalink: https://log.gprd.gitlab.net/goto/cebefc3cf285ce2a94fbfdcadc55f1a4
       - name: Puma
-        permalink: https://log.gprd.gitlab.net/goto/766f73d879983f5ec962d5d6c0ae1cf4
+        permalink: https://log.gprd.gitlab.net/goto/a2601cff0b6f000339e05cdb9deab58b
       - name: nginx
         permalink: https://log.gprd.gitlab.net/goto/4844ecfa4a7e6f0491685b2cc9224eb0
       - name: Unstructured Rails
@@ -2549,7 +2549,7 @@ services:
       - name: Rails
         permalink: https://log.gprd.gitlab.net/goto/86fbcd537588abef69339a352ef81d72
       - name: Puma
-        permalink: https://log.gprd.gitlab.net/goto/c87a39cf228c45ed8691c855aa583170
+        permalink: https://log.gprd.gitlab.net/goto/a2601cff0b6f000339e05cdb9deab58b
       - name: Unstructured
         permalink: https://console.cloud.google.com/logs/viewer?project=gitlab-production&interval=PT1H&resource=gce_instance&advancedFilter=jsonPayload.hostname%3A%22sidekiq%22%0Alabels.tag%3D%22unstructured.production%22&customFacets=labels.%22compute.googleapis.com%2Fresource_name%22
       - name: system
