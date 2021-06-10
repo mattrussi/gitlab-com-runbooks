@@ -159,6 +159,7 @@ local defaultGroupBy = [
   'type',
   'alertname',
   'stage',
+  'component',
 ];
 
 local Route(
