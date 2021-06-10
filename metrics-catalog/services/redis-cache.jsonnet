@@ -57,6 +57,7 @@ metricsCatalog.serviceDefinition({
 
       toolingLinks: [
         toolingLinks.kibana(title='Redis', index='redis', type='redis-cache'),
+        toolingLinks.kibana(title='Redis Slowlog', index='redis_slowlog', type='redis-cache'),
       ],
     },
 

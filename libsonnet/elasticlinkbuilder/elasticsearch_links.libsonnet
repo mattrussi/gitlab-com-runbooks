@@ -230,8 +230,16 @@ local indexCatalog = {
     indexPattern: 'AWSQX_Vf93rHTYrsexmk',
     defaultColumns: ['json.hostname', 'json.redis_message'],
     defaultSeriesSplitField: 'json.hostname.keyword',
-    defaultLatencyField: 'json.exec_time_s',  // Note: this is only useful in the context of slowlogs
-    latencyFieldUnitMultiplier: 1000000,  // Redis uses us
+  },
+
+  redis_slowlog: indexDefaults {
+    timestamp: 'json.time',
+    indexPattern: 'AWSQX_Vf93rHTYrsexmk',
+    defaultColumns: ['json.hostname', 'json.command', 'json.exec_time_s'],
+    defaultSeriesSplitField: 'json.hostname.keyword',
+    defaultFilters: [matchFilter('json.tag', 'redis.slowlog')],
+    defaultLatencyField: 'json.exec_time_s',
+    latencyFieldUnitMultiplier: 1,  // Redis uses `µs`, but the field is in `s`
   },
 
   registry: indexDefaults {

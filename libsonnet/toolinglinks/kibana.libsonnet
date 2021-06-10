@@ -21,21 +21,21 @@ local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libson
           if type == null then
             []
           else
-            [elasticsearchLinks.matchFilter('json.type', type)]
+            [elasticsearchLinks.matchFilter('json.type.keyword', type)]
         )
         +
         (
           if tag == null then
             []
           else
-            [elasticsearchLinks.matchFilter('json.tag', tag)]
+            [elasticsearchLinks.matchFilter('json.tag.keyword', tag)]
         )
         +
         (
           if shard == null then
             []
           else
-            [elasticsearchLinks.matchFilter('json.shard', shard)]
+            [elasticsearchLinks.matchFilter('json.shard.keyword', shard)]
         )
         +
         elasticsearchLinks.matchers(matches)
