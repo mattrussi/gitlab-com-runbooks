@@ -7,6 +7,7 @@ local errorBudgetTitles = [
   'Budget remaining',
   'Budget spent',
   'Info',
+  'Budget spend attribution',
 ];
 
 local allComponentTitles = [

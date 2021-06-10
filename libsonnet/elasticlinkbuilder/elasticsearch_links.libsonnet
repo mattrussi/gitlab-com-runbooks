@@ -3,10 +3,10 @@ local rison = import 'rison.libsonnet';
 local grafanaTimeFrom = '${__from:date:iso}';
 local grafanaTimeTo = '${__to:date:iso}';
 
-local globalStateTimeFrame(from, to) =
+local elasticTimeRange(from, to) =
   "(time:(from:'%(from)s',to:'%(to)s'))" % { from: from, to: to };
 
-local grafanaTimeRange = globalStateTimeFrame(grafanaTimeFrom, grafanaTimeTo);
+local grafanaTimeRange = elasticTimeRange(grafanaTimeFrom, grafanaTimeTo);
 
 // Builds an ElasticSearch match filter clause
 local matchFilter(field, value) =
@@ -59,11 +59,29 @@ local mustNot(filter) =
     },
   };
 
+local matchObject(fieldName, matchInfo) =
+  local gte = if std.objectHas(matchInfo, 'gte') then matchInfo.gte else null;
+  local lte = if std.objectHas(matchInfo, 'lte') then matchInfo.lte else null;
+  local values = std.prune([gte, lte]);
+
+  if std.length(values) > 0 then
+    rangeFilter(fieldName, gte, lte)
+  else
+    std.assertEqual(false, { __message__: 'Only gte and lte fields are supported but not in [%s]' % std.join(', ', std.objectFields(matchInfo)) });
+
 local matcher(fieldName, matchInfo) =
   if std.isString(matchInfo) then
     matchFilter(fieldName, matchInfo)
   else if std.isArray(matchInfo) then
-    matchInFilter(fieldName, matchInfo);
+    matchInFilter(fieldName, matchInfo)
+  else if std.isObject(matchInfo) then
+    matchObject(fieldName, matchInfo);
+
+local matchers(matches) =
+  [
+    matcher(k, matches[k])
+    for k in std.objectFields(matches)
+  ];
 
 local statusCode(field) =
   [rangeFilter(field, gteValue=500, lteValue=null)];
@@ -372,6 +390,80 @@ local buildElasticLineCountVizURL(index, filters, luceneQueries=[], splitSeries=
 
   indexCatalog[index].kibanaEndpoint + '#/visualize/create?type=line&indexPattern=' + indexCatalog[index].indexPattern + '&_a=' + rison.encode(applicationState) + globalState(timeRange);
 
+local splitDefinition(split) =
+  local defaults = {
+    enabled: true,
+    schema: 'bucket',
+  };
+
+  if std.isString(split) then
+    // When the split is a string, turn it into a 'term' split
+    defaults {
+      type: 'terms',
+      params: {
+        field: split,
+        missingBucket: false,
+        missingBucketLabel: 'Missing',
+        otherBucket: true,
+        otherBucketLabel: 'Other',
+        orderBy: '1',
+        order: 'desc',
+        size: 5,
+      },
+    }
+  else if std.isObject(split) then defaults + split;
+
+local buildElasticTableCountVizURL(index, filters, luceneQueries=[], splitSeries=false, timeRange=grafanaTimeRange) =
+  local ic = indexCatalog[index];
+  local aggs =
+    [
+      {
+        enabled: true,
+        id: '1',
+        params: {},
+        schema: 'metric',
+        type: 'count',
+      },
+    ]
+    +
+    (
+      if std.isBoolean(splitSeries) && splitSeries then
+        [{
+          enabled: true,
+          id: '',
+          params: {
+            field: ic.defaultSeriesSplitField,
+            missingBucket: false,
+            missingBucketLabel: 'Missing',
+            order: 'desc',
+            orderBy: '1',
+            otherBucket: true,
+            otherBucketLabel: 'Other',
+            size: 5,
+          },
+          schema: 'group',
+          type: 'terms',
+        }]
+      else if std.isArray(splitSeries) then
+        [splitDefinition(split) for split in splitSeries]
+      else
+        []
+    );
+
+  local applicationState = {
+    filters: ic.defaultFilters + filters,
+    query: {
+      language: 'kuery',
+      query: std.join(' AND ', luceneQueries),
+    },
+    vis: {
+      aggs: aggs,
+    },
+  };
+
+  indexCatalog[index].kibanaEndpoint + '#/visualize/create?type=table&indexPattern=' + indexCatalog[index].indexPattern + '&_a=' + rison.encode(applicationState) + globalState(timeRange);
+
+
 local buildElasticLineTotalDurationVizURL(index, filters, luceneQueries=[], latencyField, splitSeries=false) =
   local ic = indexCatalog[index];
 
@@ -563,11 +655,15 @@ local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latency
 
   indexCatalog[index].kibanaEndpoint + '#/visualize/create?type=line&indexPattern=' + indexCatalog[index].indexPattern + '&_a=' + rison.encode(applicationState) + globalState(grafanaTimeRange);
 
+
 {
   matcher:: matcher,
+  matchers:: matchers,
   matchFilter:: matchFilter,
   existsFilter:: existsFilter,
   rangeFilter:: rangeFilter,
+
+  timeRange:: elasticTimeRange,
 
   // Given an index, and a set of filters, returns a URL to a Kibana discover module/search
   buildElasticDiscoverSearchQueryURL:: buildElasticDiscoverSearchQueryURL,
@@ -607,6 +703,10 @@ local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latency
       splitSeries=splitSeries,
       timeRange=timeRange,
     ),
+
+  buildElasticTableCountVizURL:: buildElasticTableCountVizURL,
+  buildElasticTableFailureCountVizURL(index, filters, luceneQueries=[], splitSeries=false, timeRange=grafanaTimeRange)::
+    buildElasticTableCountVizURL(index, filters + indexCatalog[index].failureFilter, luceneQueries, splitSeries, timeRange),
 
   /**
    * Builds a total (sum) duration visualization. These queries are particularly useful for picking up

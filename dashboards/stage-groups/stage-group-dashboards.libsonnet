@@ -8,6 +8,7 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local platformLinks = import '../platform_links.libsonnet';
 local singleMetricRow = import 'key-metric-panels/single-metric-row.libsonnet';
 local aggregationSets = import '../../metrics-catalog/aggregation-sets.libsonnet';
+local metricsCatalog = import '../../metrics-catalog/metrics-catalog.libsonnet';
 local errorBudget = import 'stage-groups/error_budget.libsonnet';
 local budgetUtils = import 'stage-groups/error-budget/utils.libsonnet';
 local sidekiqHelpers = import 'services/lib/sidekiq-helpers.libsonnet';
@@ -59,6 +60,13 @@ local errorBudgetPanels(group) =
     [
       errorBudget.panels.explanationPanel(group.name),
     ],
+  ];
+
+local errorBudgetAttribution(group, featureCategories) =
+  [
+    errorBudget.panels.violationRatePanel(group.key),
+    errorBudget.panels.violationRateExplanation,
+    errorBudget.panels.logLinks(featureCategories),
   ];
 
 local railsRequestRate(type, featureCategories, featureCategoriesSelector) =
@@ -411,7 +419,8 @@ local dashboard(groupKey, components=defaultComponents, displayEmptyGuidance=fal
         // Errorbudgets are always viewed over a 28d rolling average, regardles of the
         // selected range see the configuration in `libsonnet/stage-groups/error_budget.libsonnet`
         local title = 'Error Budget (past 28 days)';
-        layout.splitColumnGrid(errorBudgetPanels(group), startRow=100, cellHeights=[4, 2], title=title)
+        layout.splitColumnGrid(errorBudgetPanels(group), startRow=100, cellHeights=[4, 2], title=title) +
+        layout.rowGrid('Budget spend attribution', errorBudgetAttribution(group, featureCategories), startRow=110, collapse=true)
       else
         []
     )

@@ -38,10 +38,7 @@ local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libson
             [elasticsearchLinks.matchFilter('json.shard', shard)]
         )
         +
-        [
-          elasticsearchLinks.matcher(k, matches[k])
-          for k in std.objectFields(matches)
-        ]
+        elasticsearchLinks.matchers(matches)
         +
         (
           if includeMatchersForPrometheusSelector then
