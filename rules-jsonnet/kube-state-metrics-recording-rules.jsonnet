@@ -24,6 +24,7 @@ local cadvisorMetrics = [
   'container_network_transmit_bytes_total',
   'container_spec_cpu_period',
   'container_spec_cpu_quota',
+  'container_spec_cpu_shares',
   'container_spec_memory_limit_bytes',
 ];
 
