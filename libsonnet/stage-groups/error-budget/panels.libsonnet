@@ -334,10 +334,26 @@ local logLinks(featureCategories) =
   });
   local timeFrame = elasticsearchLinks.timeRange('now-7d', 'now');
 
-  local pumaSlowRequestFilters = elasticsearchLinks.matchers({ 'json.duration_s': { gte: pumaThreshold } });
   local pumaSplitColumns = ['json.meta.caller_id.keyword'];
   local pumaApdexTable = elasticsearchLinks.buildElasticTableCountVizURL(
-    'rails', featureCategoryFilters + pumaSlowRequestFilters, splitSeries=pumaSplitColumns, timeRange=timeFrame
+    'rails',
+    featureCategoryFilters,
+    splitSeries=pumaSplitColumns,
+    timeRange=timeFrame,
+    extraAggs=[
+      {
+        enabled: true,
+        id: '3',
+        params: {
+          customLabel: 'Operations over threshold',
+          field: 'json.duration_s',
+          json: '{"script": "doc[\'json.duration_s\'].value >= ' + pumaThreshold + ' ? 1 : 0"}',
+        },
+        schema: 'metric',
+        type: 'sum',
+      },
+    ],
+    orderById='3',
   );
   local pumaErrorsTable = elasticsearchLinks.buildElasticTableFailureCountVizURL(
     'rails', featureCategoryFilters, splitSeries=pumaSplitColumns, timeRange=timeFrame
