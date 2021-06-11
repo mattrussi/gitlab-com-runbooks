@@ -53,7 +53,7 @@ serviceDashboard.overview('sidekiq')
       title='Sidekiq Queuing Latency per Job',
       description='The amount of time a job has to wait before it starts being executed. Lower is better.',
       query=|||
-        avg_over_time(sidekiq_queue_latency{environment="$environment"}[$__interval]) and on (fqdn) (redis_connected_slaves != 0)
+        avg_over_time(sidekiq_queue_latency_seconds{environment="$environment"}[$__interval]) and on (fqdn) (redis_connected_slaves != 0)
       |||,
       legendFormat='{{ name }}',
       format='s',
