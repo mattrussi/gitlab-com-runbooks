@@ -46,6 +46,7 @@
 * [../gitaly/storage-rebalancing.md](../gitaly/storage-rebalancing.md)
 * [../gitaly/storage-servers.md](../gitaly/storage-servers.md)
 * [../gitaly/storage-sharding.md](../gitaly/storage-sharding.md)
+* [../incidents/when-gitlab-com-is-down.md](../incidents/when-gitlab-com-is-down.md)
 * [../kube/k8s-oncall-setup.md](../kube/k8s-oncall-setup.md)
 * [../kube/k8s-operations.md](../kube/k8s-operations.md)
 * [../kube/kubernetes.md](../kube/kubernetes.md)
