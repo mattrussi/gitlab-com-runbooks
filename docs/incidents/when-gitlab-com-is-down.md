@@ -34,7 +34,7 @@ git commit -m ' ... '
 git push ops
 ```
 
-One the MR is merged, apply it on the `ops` CI pipeline like you would normally
+Once the MR is merged, apply it on the `ops` CI pipeline like you would normally.
 
 ### Incorporate changes into canonical when gitlab.com is available
 
