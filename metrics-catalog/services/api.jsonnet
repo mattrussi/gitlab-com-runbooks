@@ -172,7 +172,7 @@ metricsCatalog.serviceDefinition({
       significantLabels: ['fqdn', 'method', 'feature_category'],
 
       toolingLinks: [
-        toolingLinks.sentry(slug='gitlab/gitlabcom'),
+        toolingLinks.sentry(slug='gitlab/gitlabcom', type='api', variables=['environment', 'stage']),
         toolingLinks.kibana(title='Rails', index='rails_api', type='api', slowRequestSeconds=10),
       ],
     },

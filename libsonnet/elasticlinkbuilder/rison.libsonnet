@@ -1,3 +1,5 @@
+local strings = import 'utils/strings.libsonnet';
+
 local charIsSafe(char) =
   char >= 'a' && char <= 'z' || char >= 'A' && char <= 'Z' || char == '.' || char == '_';
 
@@ -11,7 +13,7 @@ local encodeString(string) =
   else if stringIsSafe(string) then
     string
   else
-    "'" + std.strReplace(string, ' ', '+') + "'";
+    "'" + strings.urlEncode(string, [[' ', '+']]) + "'";
 
 local encodeArray(array, encodeUnknown) =
   local items = [

@@ -52,6 +52,20 @@ local splitOnChars(str, chars) =
       std.split(stringIntermediate, first)
     );
 
+// (very) partial implementation of URL encode
+// aka, enough to get by
+local defaultReplacements = [
+  [' ', '+'],
+  [':', '%3A'],
+];
+local urlEncode(string, replacements=defaultReplacements) =
+  std.foldl(
+    function(string, replacement) std.strReplace(string, replacement[0], replacement[1]),
+    replacements,
+    string
+  );
+
+
 {
   removeBlankLines(str):: removeBlankLines(str),
   chomp(str):: chomp(str),
@@ -63,4 +77,8 @@ local splitOnChars(str, chars) =
 
   /* Make the first letter of a string capital */
   capitalizeFirstLetter: capitalizeFirstLetter,
+
+  // (very) partial implementation of URL encode
+  // aka, enough to get by
+  urlEncode: urlEncode,
 }
