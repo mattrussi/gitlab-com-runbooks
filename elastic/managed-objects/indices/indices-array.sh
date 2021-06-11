@@ -9,6 +9,7 @@ export indices=(
   fluentd
   gitaly
   gcs
+  gcp-events
   gke
   gke-audit
   gke-systemd
