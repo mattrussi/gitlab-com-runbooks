@@ -13,7 +13,7 @@ If GitLab.com is completely down, it may be difficult to push or rollback a chan
 
 ## Making configuration changes
 
-Application configuration changes are made by applying changes in CI pipelines on [chef-repo](https://ops.gitlab.net/gitlab-com/gl-infra/chef-repo) or [k8s-workloads/gitlab-com](https://ops.gitlab.net/gitlab-com/gl-infra/k8s-workloads/gitlab-com).
+Application configuration changes are made by applying changes in CI pipelines on the `ops.gitlab.net` mirrors for [chef-repo](https://ops.gitlab.net/gitlab-com/gl-infra/chef-repo) or [k8s-workloads/gitlab-com](https://ops.gitlab.net/gitlab-com/gl-infra/k8s-workloads/gitlab-com).
 
 ### Update your remote and create an MR on ops.gitlab.net
 
