@@ -6,7 +6,7 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
     title: 'Redis Primary CPU Utilization per Node',
     severity: 's1',
     horizontallyScalable: false,
-    appliesTo: ['redis', 'redis-sidekiq', 'redis-cache'],
+    appliesTo: ['redis', 'redis-sidekiq', 'redis-cache', 'redis-tracechunks'],
     description: |||
       Redis Primary CPU Utilization per Node.
 
