@@ -8,7 +8,7 @@
     - Logs Flow: Application => Log file => FluentD => Pub/Sub => Pubsubbeat => Elasticsearch
   - GCS archive
     - Retention: 1 year
-    - Application => Log file => FluentD => Stackdriver => Archive GCS bucket
+    - Logs Flow: Application => Log file => FluentD => Stackdriver => Archive GCS bucket
     - Most useful for security-related RCAs.
     - Can be imported into BigQuery for analysis.
 - Logging cluster: https://log.gprd.gitlab.net
