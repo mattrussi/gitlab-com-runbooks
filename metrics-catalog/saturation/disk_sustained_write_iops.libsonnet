@@ -1,13 +1,13 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
-local diskSaturationHelpers = import 'helpers/disk_saturation_helpers.libsonnet';
+local saturationHelpers = import 'helpers/saturation_helpers.libsonnet';
 
 {
   disk_sustained_write_iops: resourceSaturationPoint({
     title: 'Disk Sustained Write IOPS Utilization per Node',
     severity: 's3',
     horizontallyScalable: true,
-    appliesTo: diskSaturationHelpers.diskPerformanceSensitiveServices,
+    appliesTo: saturationHelpers.diskPerformanceSensitiveServices,
     description: |||
       Gitaly runs on Google Cloud's Persistent Disk product. This has a published sustained
       maximum write IOPS value. This value can be exceeded for brief periods.

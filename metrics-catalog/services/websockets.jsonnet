@@ -106,7 +106,7 @@ metricsCatalog.serviceDefinition({
 
       toolingLinks: [
         // Improve sentry link once https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/532 arrives
-        toolingLinks.sentry(slug='gitlab/gitlabcom'),
+        toolingLinks.sentry(slug='gitlab/gitlabcom', type='websockets', variables=['environment', 'stage']),
         toolingLinks.kibana(title='Rails', index='rails', type='websockets', slowRequestSeconds=10),
       ],
     },

@@ -1,6 +1,6 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
-local kubeSaturationHelpers = import 'helpers/kube_saturation_helpers.libsonnet';
+local saturationHelpers = import 'helpers/saturation_helpers.libsonnet';
 local sidekiqHelpers = import './services/lib/sidekiq-helpers.libsonnet';
 
 {
@@ -14,7 +14,7 @@ local sidekiqHelpers = import './services/lib/sidekiq-helpers.libsonnet';
     dangerouslyThanosEvaluated: true,
 
     horizontallyScalable: true,
-    appliesTo: kubeSaturationHelpers.kubeProvisionedServices + ['kube']/* special kube service for non-service-aligned node pools */,
+    appliesTo: saturationHelpers.kubeProvisionedServices + ['kube']/* special kube service for non-service-aligned node pools */,
     description: |||
       A GKE kubernetes node pool is close to it's maximum number of nodes.
 

@@ -87,7 +87,7 @@ There are two mechanisms you can use to access these clusters via ssh tunnel.
 
 ### Using `sshuttle` ###
 
-You might want to use [`kubectx`](https://github.com/ahmetb/kubectx) to smooth
+You might want to use a tool like [`kubectx`](https://github.com/ahmetb/kubectx) or [`kubie`](https://github.com/sbstp/kubie) to smooth
 the process of switching kubernetes contexts and namespaces.
 
 Perform the below on your workstation:

@@ -63,6 +63,7 @@ metricsCatalog.serviceDefinition({
 
       toolingLinks: [
         toolingLinks.kibana(title='Redis', index='redis', type='redis-sidekiq'),
+        toolingLinks.kibana(title='Redis Slowlog', index='redis_slowlog', type='redis-sidekiq'),
       ],
     },
     secondary_servers: {

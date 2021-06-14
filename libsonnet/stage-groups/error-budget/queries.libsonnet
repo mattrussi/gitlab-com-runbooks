@@ -1,7 +1,9 @@
 local utils = import './utils.libsonnet';
 local aggregations = import 'promql/aggregations.libsonnet';
+local labels = import 'promql/labels.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local durationParser = import 'utils/duration-parser.libsonnet';
+local strings = import 'utils/strings.libsonnet';
 
 local errorBudgetRatio(slaTarget, range, groupSelectors, aggregationLabels) =
   |||
@@ -69,6 +71,47 @@ local errorBudgetTimeRemaining(slaTarget, range, selectors, aggregationLabels) =
     timeSpentQuery: errorBudgetTimeSpent(slaTarget, range, selectors, aggregationLabels),
   };
 
+local errorBudgetViolationRate(range, groupSelectors, aggregationLabels) =
+  local partsInterpolation = {
+    aggregationLabels: aggregations.join(
+      std.filter(
+        function(label) label != 'violation_type',
+        aggregationLabels
+      )
+    ),
+    selectors: selectors.serializeHash(groupSelectors),
+    range: range,
+  };
+  local apdexViolationRate = |||
+    sum by (%(aggregationLabels)s)(
+      sum_over_time(
+        gitlab:component:stage_group:execution:apdex:weight:score_1h{%(selectors)s}[%(range)s]
+      ) -
+      # Request with satisfactory apdex
+      sum_over_time(
+        gitlab:component:stage_group:execution:apdex:success:rate_1h{%(selectors)s}[%(range)s]
+      )
+    )
+  ||| % partsInterpolation;
+  local errorRate = |||
+    sum by (%(aggregationLabels)s)(
+      sum_over_time(
+        gitlab:component:stage_group:execution:error:rate_1h{%(selectors)s}[%(range)s]
+      )
+    )
+  ||| % partsInterpolation;
+  |||
+    sum by (%(aggregationLabelsWithViolationType)s) (
+      %(apdexViolationRate)s
+      or
+      %(errorRate)s
+    )
+  ||| % {
+    aggregationLabelsWithViolationType: aggregations.join(aggregationLabels),
+    apdexViolationRate: strings.indent(labels.addStaticLabel('violation_type', 'apdex', apdexViolationRate), 2),
+    errorRate: strings.indent(labels.addStaticLabel('violation_type', 'error', errorRate), 2),
+  };
+
 {
   init(slaTarget, range): {
     errorBudgetRatio(selectors, aggregationLabels=[]):
@@ -77,5 +120,7 @@ local errorBudgetTimeRemaining(slaTarget, range, selectors, aggregationLabels) =
       errorBudgetTimeSpent(slaTarget, range, selectors, aggregationLabels),
     errorBudgetTimeRemaining(selectors, aggregationLabels=[]):
       errorBudgetTimeRemaining(slaTarget, range, selectors, aggregationLabels),
+    errorBudgetViolationRate(selectors, aggregationLabels=[]):
+      errorBudgetViolationRate(range, selectors, aggregationLabels),
   },
 }

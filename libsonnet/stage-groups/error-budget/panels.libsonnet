@@ -1,7 +1,11 @@
+local metricsCatalog = import '../../../metrics-catalog/metrics-catalog.libsonnet';
+local sidekiqHelpers = import '../../../metrics-catalog/services/lib/sidekiq-helpers.libsonnet';
 local utils = import './utils.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local queries = import 'stage-groups/error-budget/queries.libsonnet';
 local durationParser = import 'utils/duration-parser.libsonnet';
+
+local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libsonnet';
 
 local baseSelector = {
   stage: '$stage',
@@ -214,6 +218,194 @@ local explanationPanel(slaTarget, range, group) =
     },
   );
 
+local violationRatePanel(queries, group) =
+  basic.table(
+    title='Budget failure rates',
+    description='Number of failures per component per type',
+    query=queries.errorBudgetViolationRate(
+      baseSelector {
+        stage_group: group,
+      },
+      ['component', 'violation_type'],
+    ),
+    sort={ col: 2, desc: true },
+    transformations=[
+      {
+        id: 'organize',
+        options: {
+          indexByName: {
+            violation_type: 0,
+            component: 1,
+            Value: 2,
+          },
+        },
+      },
+    ],
+  )
+  .hideColumn('Time')
+  .addColumn('Value', { alias: 'failure rate' });
+
+local violationRateExplanation =
+  basic.text(
+    title='Info',
+    mode='markdown',
+    content=|||
+      This table shows the failures that contribute to the spend of the error budget.
+      Fixing the top item in this table will have the biggest impact on the
+      budget spend.
+
+      A failure is one of 2 types:
+
+      - **error**: An operation that failed: 500 response, failed background job.
+      - **apdex**: This means an operation that succeeded, but did not perform within the set threshold.
+
+      See the [developer documentation](https://gitlab.com/gitlab-org/gitlab/-/blob/master/doc/development/stage_group_dashboards.md#error-budget)
+      to learn more about this.
+
+      The component refers to the component in our stack where the violation occurred.
+      The most common ones are:
+
+      - **puma**: This component signifies requests handled by rails
+      - **sidekiq_execution**: This component signifies background jobs executed by Sidekiq
+
+      To find the endpoint that is attributing to the budget spend and a violation type
+      we can use the logs over a 7 day range. Links for puma and sidekiq are available on the right.
+      These logs lists the endpoints that had the most violations over the past 7 days.
+
+      The "Other" row is the sum of all the other violations excluding the top ones
+      that are listed.
+    |||,
+  );
+
+local pumaThreshold =
+  local pumaServices = std.filter(
+    function(service)
+      std.objectHas(service.serviceLevelIndicators, 'puma') &&
+      std.objectHas(service.serviceLevelIndicators.puma, 'apdex'),
+    metricsCatalog.services
+  );
+  local pumaThresholds = std.map(
+    function(service)
+      service.serviceLevelIndicators.puma.apdex.satisfiedThreshold,
+    pumaServices,
+  );
+  local uniqueThresholds = std.set(pumaThresholds);
+  assert std.length(uniqueThresholds) == 1 :
+         |||
+    Multiple puma request thresholds not supported, please update the Kibana
+    visualisation for requests not meeting the apdex threshold. Perhaps
+    split up the table by json.type.
+  |||;
+  uniqueThresholds[0];
+
+local sidekiqDurationThresholdByFilter =
+  local knownDurationThresholds = std.map(
+    function(sloName)
+      sidekiqHelpers.slos[sloName].executionDurationSeconds,
+    std.objectFields(sidekiqHelpers.slos)
+  );
+  local thresholds = {
+    'json.shard: "urgent"': sidekiqHelpers.slos.urgent.executionDurationSeconds,
+    'not json.shard: "urgent"': sidekiqHelpers.slos.lowUrgency.executionDurationSeconds,
+  };
+  local definedThresholds = std.set(std.sort(std.objectValues(thresholds)));
+  local knownThresholds = std.set(std.sort(knownDurationThresholds));
+  if std.assertEqual(definedThresholds, knownThresholds) then
+    thresholds;
+
+local sidekiqDurationTableFilters = std.map(
+  function(filter)
+    local duration = sidekiqDurationThresholdByFilter[filter];
+    {
+      label: 'Jobs exeeding %is' % duration,
+      input: {
+        language: 'kuery',
+        query: '%(filter)s AND json.duration_s > %(duration)i' % {
+          filter: filter,
+          duration: duration,
+        },
+      },
+    },
+  std.objectFields(sidekiqDurationThresholdByFilter),
+);
+local logLinks(featureCategories) =
+  local featureCategoryFilters = elasticsearchLinks.matchers({
+    'json.meta.feature_category': featureCategories,
+  });
+  local timeFrame = elasticsearchLinks.timeRange('now-7d', 'now');
+
+  local pumaSlowRequestFilters = elasticsearchLinks.matchers({ 'json.duration_s': { gte: pumaThreshold } });
+  local pumaSplitColumns = ['json.meta.caller_id.keyword'];
+  local pumaApdexTable = elasticsearchLinks.buildElasticTableCountVizURL(
+    'rails', featureCategoryFilters + pumaSlowRequestFilters, splitSeries=pumaSplitColumns, timeRange=timeFrame
+  );
+  local pumaErrorsTable = elasticsearchLinks.buildElasticTableFailureCountVizURL(
+    'rails', featureCategoryFilters, splitSeries=pumaSplitColumns, timeRange=timeFrame
+  );
+
+  local sidekiqSplitColumns = ['json.class.keyword'];
+
+  local sidekiqErrorsTable = elasticsearchLinks.buildElasticTableFailureCountVizURL(
+    'sidekiq', featureCategoryFilters, splitSeries=sidekiqSplitColumns, timeRange=timeFrame
+  );
+
+  local urgencySplit = {
+    type: 'filters',
+    schema: 'split',
+    params: {
+      filters: sidekiqDurationTableFilters,
+    },
+  };
+  local doneFilter = elasticsearchLinks.matchers({
+    'json.job_status': 'done',
+  });
+
+  local sidekiqApdexTables = elasticsearchLinks.buildElasticTableCountVizURL(
+    'sidekiq', featureCategoryFilters + doneFilter, splitSeries=[urgencySplit] + sidekiqSplitColumns, timeRange=timeFrame
+  );
+
+  basic.text(
+    title='Failure log links',
+    mode='markdown',
+    content=|||
+      ##### [Puma Apdex](%(pumaApdexLink)s): slow requests
+
+      This shows the number of requests exceeding %(pumaThreshold)is request
+      duration per endpoint over the past 7 days.
+
+      This is the only threshold at the moment. We're discussing making
+      it configurable in [this issue](%(thresholdsCounterIssue)s). Let us know
+      if you know of an endpoint that would need this kind of customization.
+
+      ##### [Puma Errors](%(pumaErrorsLink)s): failing requests
+
+      This shows the number of Rails requests that failed per endpoint over
+      the past 7 days.
+
+      ##### [Sidekiq Execution Apdex](%(sidekiqApdexLink)s): slow jobs
+
+      This shows the number of jobs per worker that took longer than their threshold to
+      execute over the past 7 days.
+      For urgent jobs the threshold is %(sidekiqUrgentThreshold)is, this is the table on the left.
+      For other jobs the threshold is %(sidekiqNormalThreshold)is, this is the table on the right.
+
+      ##### [Sidekiq Execution Errors](%(sidekiqErrorsLink)s): failing jobs
+
+      This shows the number of jobs per worker that failed over the past 7 days.
+      This includes retries: if a job with a was retried 3 times, before exhausting
+      its retries, this counts as 3 failures towards the budget.
+    ||| % {
+      pumaApdexLink: pumaApdexTable,
+      pumaErrorsLink: pumaErrorsTable,
+      sidekiqErrorsLink: sidekiqErrorsTable,
+      sidekiqApdexLink: sidekiqApdexTables,
+      pumaThreshold: pumaThreshold,
+      thresholdsCounterIssue: 'https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1099',
+      sidekiqUrgentThreshold: sidekiqHelpers.slos.urgent.executionDurationSeconds,
+      sidekiqNormalThreshold: sidekiqHelpers.slos.lowUrgency.executionDurationSeconds,
+    },
+  );
+
 {
   init(queries, slaTarget, range):: {
     availabilityStatPanel(group)::
@@ -232,5 +424,9 @@ local explanationPanel(slaTarget, range, group) =
       timeSpentTargetStatPanel(queries, slaTarget, range, group),
     explanationPanel(group)::
       explanationPanel(slaTarget, range, group),
+    violationRatePanel(group)::
+      violationRatePanel(queries, group),
+    violationRateExplanation:: violationRateExplanation,
+    logLinks:: logLinks,
   },
 }

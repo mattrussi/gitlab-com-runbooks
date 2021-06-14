@@ -30,6 +30,7 @@ metricsCatalog.serviceDefinition({
   },
   serviceDependencies: {
     gitaly: true,
+    'redis-tracechunks': true,
     'redis-sidekiq': true,
     'redis-cache': true,
     redis: true,
@@ -39,7 +40,7 @@ metricsCatalog.serviceDefinition({
   },
   provisioning: {
     kubernetes: true,
-    vms: true,
+    vms: false,
   },
   // Use recordingRuleMetrics to specify a set of metrics with known high
   // cardinality. The metrics catalog will generate recording rules with
@@ -166,7 +167,7 @@ metricsCatalog.serviceDefinition({
 
       toolingLinks: [
         // Improve sentry link once https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/532 arrives
-        toolingLinks.sentry(slug='gitlab/gitlabcom'),
+        toolingLinks.sentry(slug='gitlab/gitlabcom', type='sidekiq'),
         toolingLinks.kibana(title=shard.name, index='sidekiq', type='sidekiq', shard=shard.name, slowRequestSeconds=slowRequestSeconds),
       ] + (
         if std.objectHas(shard, 'gkeDeployment') then

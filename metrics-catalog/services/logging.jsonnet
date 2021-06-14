@@ -11,6 +11,10 @@ metricsCatalog.serviceDefinition({
     // apdexScore: 0.999,
     errorRatio: 0.999,
   },
+  provisioning: {
+    vms: false,
+    kubernetes: false,
+  },
   serviceLevelIndicators: {
     elasticsearch_searching_cluster: {
       userImpacting: false,

@@ -31,7 +31,7 @@ groups:
         clamp_min(
           clamp_max(
             1 - avg by (environment, tier, type, stage) (
-              rate(node_cpu_seconds_total{mode="idle", type!="",type!~"nat|waf|console-node|deploy-node|security|git|mailroom|websockets|kas|kube"}[5m])
+              rate(node_cpu_seconds_total{mode="idle", type=~"gitaly|camoproxy|ci-runners|frontend|jaeger|monitoring|pages|patroni|pgbouncer|postgres-archive|praefect|redis|redis-cache|redis-sidekiq|redis-tracechunks|registry|sentry|web|web-pages"}[5m])
             )
             ,
             1)
@@ -46,9 +46,9 @@ groups:
         clamp_min(
           clamp_max(
             1 - (
-              node_filesystem_files_free{fstype=~"(ext.|xfs)", type!="",type!~"nat|waf|bastion|git|mailroom|websockets|kas|kube"}
+              node_filesystem_files_free{fstype=~"(ext.|xfs)", type=~"gitaly|camoproxy|ci-runners|frontend|jaeger|monitoring|pages|patroni|pgbouncer|postgres-archive|praefect|redis|redis-cache|redis-sidekiq|redis-tracechunks|registry|sentry|web|web-pages"}
               /
-              node_filesystem_files{fstype=~"(ext.|xfs)", type!="",type!~"nat|waf|bastion|git|mailroom|websockets|kas|kube"}
+              node_filesystem_files{fstype=~"(ext.|xfs)", type=~"gitaly|camoproxy|ci-runners|frontend|jaeger|monitoring|pages|patroni|pgbouncer|postgres-archive|praefect|redis|redis-cache|redis-sidekiq|redis-tracechunks|registry|sentry|web|web-pages"}
             )
             ,
             1)
@@ -63,7 +63,7 @@ groups:
         clamp_min(
           clamp_max(
             (
-              1 - instance:node_filesystem_avail:ratio{fstype=~"ext.|xfs", type!="",type!~"nat|waf|bastion|git|mailroom|websockets|kas|kube"}
+              1 - instance:node_filesystem_avail:ratio{fstype=~"ext.|xfs", fqdn!="", type=~"gitaly|camoproxy|ci-runners|frontend|jaeger|monitoring|pages|patroni|pgbouncer|postgres-archive|praefect|redis|redis-cache|redis-sidekiq|redis-tracechunks|registry|sentry|web|web-pages"}
             )
             ,
             1)
@@ -257,13 +257,13 @@ groups:
         clamp_min(
           clamp_max(
             sum by (environment, tier, type, stage, pod, container) (
-              rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", type=~"git|mailroom|registry|sidekiq|websockets|kas|api"}[5m])
+              rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", type=~"api|git|kas|mailroom|monitoring|plantuml|registry|sidekiq|websockets|woodhouse"}[5m])
             )
             /
             sum by(environment, tier, type, stage, pod, container) (
-              container_spec_cpu_quota:labeled{container!="", container!="POD", type=~"git|mailroom|registry|sidekiq|websockets|kas|api"}
+              container_spec_cpu_quota:labeled{container!="", container!="POD", type=~"api|git|kas|mailroom|monitoring|plantuml|registry|sidekiq|websockets|woodhouse"}
               /
-              container_spec_cpu_period:labeled{container!="", container!="POD", type=~"git|mailroom|registry|sidekiq|websockets|kas|api"}
+              container_spec_cpu_period:labeled{container!="", container!="POD", type=~"api|git|kas|mailroom|monitoring|plantuml|registry|sidekiq|websockets|woodhouse"}
             )
             ,
             1)
@@ -277,9 +277,9 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            container_memory_working_set_bytes:labeled{container!="", container!="POD", type=~"git|mailroom|registry|sidekiq|websockets|kas|api"}
+            container_memory_working_set_bytes:labeled{container!="", container!="POD", type=~"api|git|kas|mailroom|monitoring|plantuml|registry|sidekiq|websockets|woodhouse"}
             /
-            (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", type=~"git|mailroom|registry|sidekiq|websockets|kas|api"} > 0)
+            (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", type=~"api|git|kas|mailroom|monitoring|plantuml|registry|sidekiq|websockets|woodhouse"} > 0)
             ,
             1)
         ,
@@ -292,9 +292,9 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            kube_hpa_status_desired_replicas:labeled{type=~"git|mailroom|registry|sidekiq|websockets|kas|api", shard!~"database-throttled|elasticsearch|gitaly-throttled|memory-bound|urgent-other"}
+            kube_hpa_status_desired_replicas:labeled{type=~"api|git|kas|mailroom|monitoring|plantuml|registry|sidekiq|websockets|woodhouse", shard!~"database-throttled|elasticsearch|gitaly-throttled|imports|memory-bound|urgent-other"}
             /
-            kube_hpa_spec_max_replicas:labeled{type=~"git|mailroom|registry|sidekiq|websockets|kas|api", shard!~"database-throttled|elasticsearch|gitaly-throttled|memory-bound|urgent-other"}
+            kube_hpa_spec_max_replicas:labeled{type=~"api|git|kas|mailroom|monitoring|plantuml|registry|sidekiq|websockets|woodhouse", shard!~"database-throttled|elasticsearch|gitaly-throttled|imports|memory-bound|urgent-other"}
             ,
             1)
         ,
@@ -343,7 +343,7 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            instance:node_memory_utilization:ratio{fqdn!="", type!="",type!~"nat|waf|monitoring|git|mailroom|websockets|kas|kube"}
+            instance:node_memory_utilization:ratio{fqdn!="", type=~"gitaly|camoproxy|ci-runners|frontend|jaeger|monitoring|pages|patroni|pgbouncer|postgres-archive|praefect|redis|redis-cache|redis-sidekiq|redis-tracechunks|registry|sentry|web|web-pages"}
             ,
             1)
         ,
@@ -379,9 +379,9 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            max_over_time(node_nf_conntrack_entries{type!="",type!~"nat|waf|git|mailroom|websockets|kas|kube"}[1m])
+            max_over_time(node_nf_conntrack_entries{type=~"patroni|camoproxy|ci-runners|frontend|gitaly|jaeger|monitoring|pages|pgbouncer|postgres-archive|praefect|redis|redis-cache|redis-sidekiq|redis-tracechunks|registry|sentry|web|web-pages"}[1m])
             /
-            node_nf_conntrack_entries_limit{type!="",type!~"nat|waf|git|mailroom|websockets|kas|kube"}
+            node_nf_conntrack_entries_limit{type=~"patroni|camoproxy|ci-runners|frontend|gitaly|jaeger|monitoring|pages|pgbouncer|postgres-archive|praefect|redis|redis-cache|redis-sidekiq|redis-tracechunks|registry|sentry|web|web-pages"}
             ,
             1)
         ,
@@ -394,7 +394,7 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            avg without (cpu) (rate(node_schedstat_waiting_seconds_total{type!="",type!~"nat|waf|console-node|deploy-node|security|git|mailroom|websockets|kas|kube"}[1h]))
+            avg without (cpu) (rate(node_schedstat_waiting_seconds_total{type=~"patroni|camoproxy|ci-runners|frontend|gitaly|jaeger|monitoring|pages|pgbouncer|postgres-archive|praefect|redis|redis-cache|redis-sidekiq|redis-tracechunks|registry|sentry|web|web-pages"}[1h]))
             ,
             1)
         ,
@@ -459,6 +459,21 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
+      component: pg_btree_bloat
+    expr: |
+      max by(environment, tier, type, stage) (
+        clamp_min(
+          clamp_max(
+            sum by (environment, tier, type, stage, fqdn) (avg_over_time(gitlab_database_bloat_btree_bloat_size{job="gitlab-monitor-database-bloat", type=~"patroni|postgres-archive"}[58m]))
+            /
+            sum by (environment, tier, type, stage, fqdn) (avg_over_time(gitlab_database_bloat_btree_real_size{job="gitlab-monitor-database-bloat", type=~"patroni|postgres-archive"}[58m]))
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
       component: pg_int4_id
     expr: |
       max by(environment, tier, type, stage) (
@@ -476,31 +491,14 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
-      component: pg_txid_vacuum_to_wraparound
+      component: pg_table_bloat
     expr: |
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            (
-              sum by (environment, tier, type, stage) (
-                increase(fluentd_pg_auto_vacuum_elapsed_seconds_total{type="patroni"}[1d])
-              )
-              / on(environment, type) group_left() (
-                pg_settings_autovacuum_max_workers and
-                on (instance) pg_replication_is_replica == 0
-              )
-            )
+            sum by (environment, tier, type, stage, fqdn) (avg_over_time(gitlab_database_bloat_table_bloat_size{job="gitlab-monitor-database-bloat", type=~"patroni|postgres-archive"}[58m]))
             /
-            (
-              (2^31 - 10^6)
-              /
-              (
-                avg by (environment, tier, type, stage) (
-                  deriv(pg_txid_current{type="patroni"}[1d]) and
-                  on (instance) pg_replication_is_replica == 0
-                )
-              )
-            )
+            sum by (environment, tier, type, stage, fqdn) (avg_over_time(gitlab_database_bloat_table_real_size{job="gitlab-monitor-database-bloat", type=~"patroni|postgres-archive"}[58m]))
             ,
             1)
         ,
@@ -530,28 +528,6 @@ groups:
             avg by (environment, tier, type, stage) (
               pg_settings_autovacuum_max_workers{type=~"patroni|sentry"}
               and on (instance, job) (pg_replication_is_replica{type=~"patroni|sentry"} == 0)
-            )
-            ,
-            1)
-        ,
-        0)
-      )
-  - record: gitlab_component_saturation:ratio
-    labels:
-      component: pg_walsender_cpu
-    expr: |
-      max by(environment, tier, type, stage) (
-        clamp_min(
-          clamp_max(
-            sum by (environment, tier, type, stage) (
-              sum by(environment, tier, type, stage, fqdn) (
-                rate(namedprocess_namegroup_cpu_seconds_total{type="patroni", groupname=~"pg.worker.walsender|pg.worker.walwriter|wal-g"}[5m])
-                and on (fqdn) (pg_replication_is_replica{type="patroni"} == 0)
-              )
-              /
-              count by (environment, tier, type, stage, fqdn) (
-                node_cpu_seconds_total{type="patroni", mode="idle"} and on(fqdn) (pg_replication_is_replica{type="patroni"} == 0)
-              )
             )
             ,
             1)
@@ -771,9 +747,9 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            max_over_time(redis_connected_clients{type=~"redis|redis-sidekiq|redis-cache"}[1m])
+            max_over_time(redis_connected_clients{type=~"redis|redis-sidekiq|redis-cache|redis-tracechunks"}[1m])
             /
-            redis_config_maxclients{type=~"redis|redis-sidekiq|redis-cache"}
+            redis_config_maxclients{type=~"redis|redis-sidekiq|redis-cache|redis-tracechunks"}
             ,
             1)
         ,
@@ -802,6 +778,27 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
+      component: redis_memory_tracechunks
+    expr: |
+      max by(environment, tier, type, stage) (
+        clamp_min(
+          clamp_max(
+            max by (environment, tier, type, stage, fqdn) (
+              label_replace(redis_memory_used_rss_bytes{type="redis-tracechunks"}, "memtype", "rss","","")
+              or
+              label_replace(redis_memory_used_bytes{type="redis-tracechunks"}, "memtype", "used","","")
+            )
+            /
+            avg by (environment, tier, type, stage, fqdn) (
+              node_memory_MemTotal_bytes{type="redis-tracechunks"}
+            )
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
       component: redis_primary_cpu
     expr: |
       max by(environment, tier, type, stage) (
@@ -809,7 +806,7 @@ groups:
           clamp_max(
             sum by (environment, tier, type, stage, fqdn) (
               rate(
-                namedprocess_namegroup_thread_cpu_seconds_total{type=~"redis|redis-sidekiq|redis-cache", groupname="redis-server", threadname="redis-server"}[1m])
+                namedprocess_namegroup_thread_cpu_seconds_total{type=~"redis|redis-sidekiq|redis-cache|redis-tracechunks", groupname="redis-server", threadname="redis-server"}[1m])
             )
             and on (fqdn) redis_instance_info{role="master"}
             ,
@@ -825,9 +822,9 @@ groups:
         clamp_min(
           clamp_max(
             (
-              rate(redis_cpu_user_seconds_total{type=~"redis|redis-sidekiq|redis-cache"}[1m])
+              rate(redis_cpu_user_seconds_total{type=~"redis|redis-sidekiq|redis-cache|redis-tracechunks"}[1m])
               +
-              rate(redis_cpu_sys_seconds_total{type=~"redis|redis-sidekiq|redis-cache"}[1m])
+              rate(redis_cpu_sys_seconds_total{type=~"redis|redis-sidekiq|redis-cache|redis-tracechunks"}[1m])
             )
             and on (instance) redis_instance_info{role!="master"}
             ,
@@ -856,7 +853,7 @@ groups:
         clamp_min(
           clamp_max(
             1 - avg by (environment, tier, type, stage, shard) (
-              rate(node_cpu_seconds_total{mode="idle", type!="",type!~"nat|waf|console-node|deploy-node|security|git|mailroom|websockets|kas|kube"}[5m])
+              rate(node_cpu_seconds_total{mode="idle", type=~"gitaly|camoproxy|ci-runners|frontend|jaeger|monitoring|pages|patroni|pgbouncer|postgres-archive|praefect|redis|redis-cache|redis-sidekiq|redis-tracechunks|registry|sentry|web|web-pages"}[5m])
             )
             ,
             1)
@@ -908,11 +905,11 @@ groups:
         clamp_min(
           clamp_max(
             sum by (environment, tier, type, stage, shard) (
-              avg_over_time(sidekiq_running_jobs{shard!~"database-throttled|elasticsearch|gitaly-throttled|memory-bound", type="sidekiq"}[5m])
+              avg_over_time(sidekiq_running_jobs{shard!~"database-throttled|elasticsearch|gitaly-throttled|imports|memory-bound", type="sidekiq"}[5m])
             )
             /
             sum by (environment, tier, type, stage, shard) (
-              avg_over_time(sidekiq_concurrency{shard!~"database-throttled|elasticsearch|gitaly-throttled|memory-bound", type="sidekiq"}[5m])
+              avg_over_time(sidekiq_concurrency{shard!~"database-throttled|elasticsearch|gitaly-throttled|imports|memory-bound", type="sidekiq"}[5m])
             )
             ,
             1)
@@ -926,7 +923,7 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{fqdn!="", mode="idle", type!="",type!~"nat|waf|console-node|deploy-node|security|git|mailroom|websockets|kas|kube"}[5m]))
+            avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{fqdn!="", mode="idle", type=~"gitaly|camoproxy|ci-runners|frontend|jaeger|monitoring|pages|patroni|pgbouncer|postgres-archive|praefect|redis|redis-cache|redis-sidekiq|redis-tracechunks|registry|sentry|web|web-pages"}[5m]))
             ,
             1)
         ,
@@ -1191,6 +1188,14 @@ groups:
     expr: '0.9'
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
+      component: pg_btree_bloat
+    expr: '0.3'
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: pg_btree_bloat
+    expr: '0.4'
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
       component: pg_int4_id
     expr: '0.7'
   - record: slo:max:hard:gitlab_component_saturation:ratio
@@ -1199,12 +1204,12 @@ groups:
     expr: '0.75'
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
-      component: pg_txid_vacuum_to_wraparound
-    expr: '0.2'
+      component: pg_table_bloat
+    expr: '0.3'
   - record: slo:max:hard:gitlab_component_saturation:ratio
     labels:
-      component: pg_txid_vacuum_to_wraparound
-    expr: '0.33'
+      component: pg_table_bloat
+    expr: '0.4'
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: pg_vacuum_activity
@@ -1213,14 +1218,6 @@ groups:
     labels:
       component: pg_vacuum_activity
     expr: '1'
-  - record: slo:max:soft:gitlab_component_saturation:ratio
-    labels:
-      component: pg_walsender_cpu
-    expr: '0.1'
-  - record: slo:max:hard:gitlab_component_saturation:ratio
-    labels:
-      component: pg_walsender_cpu
-    expr: '0.2'
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: pg_xid_wraparound
@@ -1325,6 +1322,14 @@ groups:
     labels:
       component: redis_memory
     expr: '0.7'
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: redis_memory_tracechunks
+    expr: '0.4'
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: redis_memory_tracechunks
+    expr: '0.5'
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: redis_primary_cpu
@@ -1578,27 +1583,27 @@ groups:
     expr: '1'
   - record: gitlab_component_saturation_info
     labels:
+      component: pg_btree_bloat
+      horiz_scaling: 'no'
+      severity: s3
+    expr: '1'
+  - record: gitlab_component_saturation_info
+    labels:
       component: pg_int4_id
       horiz_scaling: 'no'
       severity: s1
     expr: '1'
   - record: gitlab_component_saturation_info
     labels:
-      component: pg_txid_vacuum_to_wraparound
+      component: pg_table_bloat
       horiz_scaling: 'no'
-      severity: s1
+      severity: s4
     expr: '1'
   - record: gitlab_component_saturation_info
     labels:
       component: pg_vacuum_activity
       horiz_scaling: 'yes'
       severity: s2
-    expr: '1'
-  - record: gitlab_component_saturation_info
-    labels:
-      component: pg_walsender_cpu
-      horiz_scaling: 'no'
-      severity: s3
     expr: '1'
   - record: gitlab_component_saturation_info
     labels:
@@ -1675,6 +1680,12 @@ groups:
   - record: gitlab_component_saturation_info
     labels:
       component: redis_memory
+      horiz_scaling: 'no'
+      severity: s2
+    expr: '1'
+  - record: gitlab_component_saturation_info
+    labels:
+      component: redis_memory_tracechunks
       horiz_scaling: 'no'
       severity: s2
     expr: '1'
@@ -1910,7 +1921,7 @@ groups:
           clamp_min(
             clamp_max(
               (
-                1 - instance:node_filesystem_avail:ratio{fstype=~"ext.|xfs", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+                1 - instance:node_filesystem_avail:ratio{fstype=~"ext.|xfs", fqdn!="", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
               )
               ,
               1)
@@ -2496,9 +2507,9 @@ groups:
         max by(environment, tier, type, stage, hpa, shard) (
           clamp_min(
             clamp_max(
-              kube_hpa_status_desired_replicas:labeled{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", shard!~"database-throttled|elasticsearch|gitaly-throttled|memory-bound|urgent-other"}
+              kube_hpa_status_desired_replicas:labeled{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", shard!~"database-throttled|elasticsearch|gitaly-throttled|imports|memory-bound|urgent-other"}
               /
-              kube_hpa_spec_max_replicas:labeled{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", shard!~"database-throttled|elasticsearch|gitaly-throttled|memory-bound|urgent-other"}
+              kube_hpa_spec_max_replicas:labeled{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", shard!~"database-throttled|elasticsearch|gitaly-throttled|imports|memory-bound|urgent-other"}
               ,
               1)
           ,
@@ -2977,6 +2988,47 @@ groups:
     for: 5m
     annotations:
       title: >-
+        The Postgres btree bloat resource of the {{ $labels.type }} service ({{ $labels.stage }} stage),
+        component has a saturation exceeding SLO and is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Postgres btree bloat resource:
+
+        This measures the total bloat in Postgres Btree indexes, as a percentage of total index size.
+
+        The larger this measure, the more pages will unnecessarily be retrieved during index scans.
+      grafana_dashboard_id: alerts-sat_pg_btree_bloat
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/alerts-sat_pg_btree_bloat?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '2387842464'
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, fqdn) (
+          clamp_min(
+            clamp_max(
+              sum by (environment, tier, type, stage, fqdn) (avg_over_time(gitlab_database_bloat_btree_bloat_size{job="gitlab-monitor-database-bloat", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[58m]))
+              /
+              sum by (environment, tier, type, stage, fqdn) (avg_over_time(gitlab_database_bloat_btree_real_size{job="gitlab-monitor-database-bloat", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[58m]))
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s3
+    expr: |
+      gitlab_component_saturation:ratio{component="pg_btree_bloat"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="pg_btree_bloat"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: >-
         The Postgres int4 ID capacity resource of the {{ $labels.type }} service ({{ $labels.stage }}
         stage), component has a saturation exceeding SLO and is close to its capacity limit.
       description: |
@@ -3019,54 +3071,28 @@ groups:
     for: 5m
     annotations:
       title: >-
-        The Total autovacuum time to TXID wraparound horizon resource of the {{ $labels.type }} service
-        ({{ $labels.stage }} stage), component has a saturation exceeding SLO and is close to its capacity
-        limit.
+        The Postgres Table Bloat resource of the {{ $labels.type }} service ({{ $labels.stage }} stage),
+        component has a saturation exceeding SLO and is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
-        Details of the Total autovacuum time to TXID wraparound horizon resource:
+        Details of the Postgres Table Bloat resource:
 
-        This saturation metric measures the capacity of the Postgres primary instance to perform autovacuum operations on all tables.
-
-        It measures the total time spent in vacuum operations, over a 24 hour period divided the maximum number of autovacuum processes to give the total vacuum activity, in seconds. This value is divided by the TXID wraparound horizon for the database to produce a percentage.
-
-        This value will approach 100% as two situation occur:
-
-        1. The amount of time spent performing autovacuum operations goes up, due to high dead-tuple generation in the database. 1. The write transaction volume goes up, decreasing the wraparound horizon.
-
-        If the total time spent vacuuming approached the wraparound time horizon, this would mean that the database would be at risk of being unable to complete a vacuum of all tables within the wraparound time horizon. This would put the database at risk of XID wraparound and immediate shutdown.
-      grafana_dashboard_id: alerts-sat_pg_txid_vac_wraparound
+        This measures the total bloat in Postgres Table pages, as a percentage of total size. This includes bloat in TOAST tables, and excludes extra space reserved due to fillfactor.
+      grafana_dashboard_id: alerts-sat_pg_table_bloat
       grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/alerts-sat_pg_txid_vac_wraparound?from=now-6h/m&to=now-1m/m&var-environment={{
+        https://dashboards.gitlab.net/d/alerts-sat_pg_table_bloat?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: '6'
-      grafana_panel_id: '4019870218'
+      grafana_panel_id: '773890326'
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage) (
+        max by(environment, tier, type, stage, fqdn) (
           clamp_min(
             clamp_max(
-              (
-                sum by (environment, tier, type, stage) (
-                  increase(fluentd_pg_auto_vacuum_elapsed_seconds_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[1d])
-                )
-                / on(environment, type) group_left() (
-                  pg_settings_autovacuum_max_workers and
-                  on (instance) pg_replication_is_replica == 0
-                )
-              )
+              sum by (environment, tier, type, stage, fqdn) (avg_over_time(gitlab_database_bloat_table_bloat_size{job="gitlab-monitor-database-bloat", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[58m]))
               /
-              (
-                (2^31 - 10^6)
-                /
-                (
-                  avg by (environment, tier, type, stage) (
-                    deriv(pg_txid_current{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[1d]) and
-                    on (instance) pg_replication_is_replica == 0
-                  )
-                )
-              )
+              sum by (environment, tier, type, stage, fqdn) (avg_over_time(gitlab_database_bloat_table_real_size{job="gitlab-monitor-database-bloat", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[58m]))
               ,
               1)
           ,
@@ -3075,12 +3101,11 @@ groups:
       runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: cause
-      pager: pagerduty
       rules_domain: general
-      severity: s1
+      severity: s4
     expr: |
-      gitlab_component_saturation:ratio{component="pg_txid_vacuum_to_wraparound"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="pg_txid_vacuum_to_wraparound"}
+      gitlab_component_saturation:ratio{component="pg_table_bloat"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="pg_table_bloat"}
   - alert: component_saturation_slo_out_of_bounds
     for: 60m
     annotations:
@@ -3140,56 +3165,6 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="pg_vacuum_activity"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="pg_vacuum_activity"}
-  - alert: component_saturation_slo_out_of_bounds
-    for: 5m
-    annotations:
-      title: >-
-        The Walsender CPU Saturation resource of the {{ $labels.type }} service ({{ $labels.stage }} stage),
-        component has a saturation exceeding SLO and is close to its capacity limit.
-      description: |
-        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
-
-        Details of the Walsender CPU Saturation resource:
-
-        This saturation metric measures the total amount of time that the primary postgres instance is spending sending WAL segments to replicas. It is expressed as a percentage of all CPU available on the primary postgres instance.
-
-        The more replicas connected, the higher this metric will be.
-
-        Since it's expressed as a percentage of all CPU, this should always remain low, since the CPU primarily needs to be available for handling SQL statements.
-      grafana_dashboard_id: alerts-sat_pg_walsender_cpu
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/alerts-sat_pg_walsender_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '1879384722'
-      grafana_variables: environment,type,stage
-      promql_query: |
-        max by(environment, tier, type, stage) (
-          clamp_min(
-            clamp_max(
-              sum by (environment, tier, type, stage) (
-                sum by(environment, tier, type, stage, fqdn) (
-                  rate(namedprocess_namegroup_cpu_seconds_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", groupname=~"pg.worker.walsender|pg.worker.walwriter|wal-g"}[5m])
-                  and on (fqdn) (pg_replication_is_replica{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} == 0)
-                )
-                /
-                count by (environment, tier, type, stage, fqdn) (
-                  node_cpu_seconds_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", mode="idle"} and on(fqdn) (pg_replication_is_replica{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} == 0)
-                )
-              )
-              ,
-              1)
-          ,
-          0)
-        )
-      runbook: docs/{{ $labels.type }}/README.md
-    labels:
-      alert_type: cause
-      rules_domain: general
-      severity: s3
-    expr: |
-      gitlab_component_saturation:ratio{component="pg_walsender_cpu"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="pg_walsender_cpu"}
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
@@ -3823,6 +3798,58 @@ groups:
     for: 5m
     annotations:
       title: >-
+        The Redis Memory Utilization per Node resource of the {{ $labels.type }} service ({{ $labels.stage
+        }} stage), component has a saturation exceeding SLO and is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Redis Memory Utilization per Node resource:
+
+        Redis memory utilization per node.
+
+        As Redis memory saturates node memory, the likelyhood of OOM kills, possibly to the Redis process, become more likely.
+
+        Trace chunks should be extremely transient (written to redis, then offloaded to objectstorage nearly immediately) so any uncontrolled growth in memory saturation implies a potentially significant problem.  Short term mitigation is usually to upsize the instances to have more memory while the underlying problem is identified, but low thresholds give us more time to investigate first
+
+        This threshold is kept deliberately very low; because we use C2 instances we are generally overprovisioned for RAM, and because of the transient nature of the data here, it is advantageous to know early if there is any non-trivial storage occurring
+      grafana_dashboard_id: alerts-sat_redis_memory_tracechunks
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/alerts-sat_redis_memory_tracechunks?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '3185191014'
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, fqdn) (
+          clamp_min(
+            clamp_max(
+              max by (environment, tier, type, stage, fqdn) (
+                label_replace(redis_memory_used_rss_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}, "memtype", "rss","","")
+                or
+                label_replace(redis_memory_used_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}, "memtype", "used","","")
+              )
+              /
+              avg by (environment, tier, type, stage, fqdn) (
+                node_memory_MemTotal_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+    expr: |
+      gitlab_component_saturation:ratio{component="redis_memory_tracechunks"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="redis_memory_tracechunks"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: >-
         The Redis Primary CPU Utilization per Node resource of the {{ $labels.type }} service ({{ $labels.stage
         }} stage), component has a saturation exceeding SLO and is close to its capacity limit.
       description: |
@@ -4105,11 +4132,11 @@ groups:
           clamp_min(
             clamp_max(
               sum by (environment, tier, type, stage, shard) (
-                avg_over_time(sidekiq_running_jobs{shard!~"database-throttled|elasticsearch|gitaly-throttled|memory-bound", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
+                avg_over_time(sidekiq_running_jobs{shard!~"database-throttled|elasticsearch|gitaly-throttled|imports|memory-bound", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
               )
               /
               sum by (environment, tier, type, stage, shard) (
-                avg_over_time(sidekiq_concurrency{shard!~"database-throttled|elasticsearch|gitaly-throttled|memory-bound", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
+                avg_over_time(sidekiq_concurrency{shard!~"database-throttled|elasticsearch|gitaly-throttled|imports|memory-bound", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
               )
               ,
               1)

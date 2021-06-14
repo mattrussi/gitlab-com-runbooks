@@ -1,3 +1,31 @@
+# Kubernetes
+
+GitLab utilizes Google Kubernetes Engine (GKE) for running Kubernetes provided
+resources.
+
+Groups/Repositories of interest:
+
+* https://gitlab.com/gitlab-com/gl-infra/k8s-workloads
+
+## Cluster Configurations
+
+* Configurations for how our GKE clusters and associated node pools are defined
+  are stored in https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/
+* For our staging and production environments, we run 1 regional cluster, and 3
+  zonal clusters
+* The 3 zonal clusters are clusters that are locked into the zone for which
+  Google provides for the chosen region we are operating out of
+* These cluster splits allow us to perform some cost savings and limiting blast
+  radius in the case of cluster failures
+
+### Typical Deployments
+
+* Anything related to observability are installed on all clusters
+* Sidekiq, PlantUML, Kubernetes Agent Service are installed onto the Regional
+  Clusters
+* API, Git, Registry, and Websocket deployments are configured on the zonal
+  clusters to which HAProxy is then configured to reach to each zone as desired
+
 ## Kubernetes Log Hunting
 
 Our logging mechanism for GKE will capture all events coming from the Kubernetes

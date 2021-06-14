@@ -9,10 +9,11 @@ local utilizationMetric = metricsCatalog.utilizationMetric;
     description: |||
       Tracks total data transfer across the cloudflare network
     |||,
+    rangeDuration: '1d',
     resourceLabels: ['zone'],
     query: |||
       sum by (%(aggregationLabels)s) (
-        rate(cloudflare_zones_http_country_bytes_total{%(selector)s}[1h])
+        rate(cloudflare_zones_http_country_bytes_total{%(selector)s}[%(rangeDuration)s])
       )
     |||,
   }),

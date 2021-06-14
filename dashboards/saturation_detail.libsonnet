@@ -17,8 +17,11 @@ local issueSearch = import 'issue_search.libsonnet';
 local saturationResources = import './saturation-resources.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 
+local maxOverTime(query) =
+  'max_over_time(%(query)s[$__interval])' % { query: query };
+
 {
-  saturationPanel(title, description, component, linewidth=1, query=null, legendFormat=null, selector=null)::
+  saturationPanel(title, description, component, linewidth=1, query=null, legendFormat=null, selector=null, overTimeFunction=maxOverTime)::
     local formatConfig = {
       component: component,
       query: query,
@@ -61,19 +64,24 @@ local selectors = import 'promql/selectors.libsonnet';
     else
       panel;
 
+    local recordingRuleQuery = 'gitlab_component_saturation:ratio{%(selector)s, component="%(component)s"}' % formatConfig;
+
+    local recordingRuleQueryWithTimeFunction = if overTimeFunction != null then
+      overTimeFunction(recordingRuleQuery)
+    else
+      recordingRuleQuery;
+
     p2.addTarget(  // Primary metric
       promQuery.target(
         |||
           clamp_min(
             clamp_max(
               max(
-                max_over_time(
-                  gitlab_component_saturation:ratio{%(selector)s, component="%(component)s"}[$__interval]
-                )
+                %(recordingRuleQueryWithTimeFunction)s
               ) by (component)
             ,1)
           ,0)
-        ||| % formatConfig,
+        ||| % formatConfig { recordingRuleQueryWithTimeFunction: recordingRuleQueryWithTimeFunction },
         legendFormat='aggregated {{ component }}',
       )
     )
