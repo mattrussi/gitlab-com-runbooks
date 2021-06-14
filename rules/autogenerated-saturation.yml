@@ -1245,11 +1245,11 @@ groups:
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: pgbouncer_client_conn
-    expr: '0.9'
+    expr: '0.8'
   - record: slo:max:hard:gitlab_component_saturation:ratio
     labels:
       component: pgbouncer_client_conn
-    expr: '0.95'
+    expr: '0.85'
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: pgbouncer_single_core
