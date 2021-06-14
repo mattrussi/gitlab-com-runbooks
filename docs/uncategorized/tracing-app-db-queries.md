@@ -15,7 +15,7 @@ query is doing and trace it back to the code. But sometimes that's difficult, an
 need a more systematic way of identifying the cause. Here's how:
 
 1. Look at the application name in the DB. For PostgreSQL, this is the `application_name`
-   column in `pg_stat_activity`. This should be `unicorn` if it's coming from the Rails application
+   column in `pg_stat_activity`. This should be `puma` if it's coming from the Rails application
    or `sidekiq` if it's coming from Sidekiq.
 
 2. Insert a snippet of code that prints a log message when this expression is executed. For example,
@@ -31,7 +31,7 @@ need a more systematic way of identifying the cause. Here's how:
     end
     ```
 
-3. Restart the application (e.g. `sudo gitlab-ctl restart unicorn`).
+3. Restart the application (e.g. `sudo gitlab-ctl restart puma`).
 
 4. Look in `/var/log/gitlab/gitlab-rails/production.log` for these log entries. You will see a
    backtrace telling you where the query came from:

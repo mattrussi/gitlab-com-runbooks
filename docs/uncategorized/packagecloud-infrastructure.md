@@ -18,7 +18,7 @@ omnibus package contains:
 * rainbows
 * redis
 * resque
-* unicorn
+* puma
 
 Most notably, PackageCloud uses MySQL, not PostgreSQL like most of our
 applications.

@@ -224,7 +224,7 @@ During an incident, we have [roles defined in the handbook](https://about.gitlab
 
 ### Work with the fleet and the rails app
 
-* [Reload unicorn with zero downtime](docs/uncategorized/manage-workers.md#reload-unicorn-with-zero-downtime)
+* [Reload Puma with zero downtime](docs/uncategorized/manage-workers.md#reload-puma-with-zero-downtime)
 * [How to perform zero downtime frontend host reboot](docs/uncategorized/manage-workers.md#how-to-perform-zero-downtime-frontend-host-reboot)
 * [Gracefully restart sidekiq jobs](docs/uncategorized/manage-workers.md#gracefully-restart-sidekiq-jobs)
 * [Start a read-only rails console](docs/Teleport/Connect_to_Rails_Console_via_Teleport.md)

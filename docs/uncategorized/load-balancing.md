@@ -11,7 +11,7 @@ the load across.
 ## Disabling Load Balancing
 
 To disable load balancing you simply remove the hosts from the array, then
-reload all Unicorn and Sidekiq processes. Reverting this requires doing the
+reload all Puma and Sidekiq processes. Reverting this requires doing the
 inverse.
 
 ## Dealing With Replication Lag
@@ -32,4 +32,4 @@ case something goes wrong.
 Restarting the primary can currently still lead to errors popping up due to the
 vast number of places a query can be executed in the Rails application (handling
 all this is rather tricky). Furthermore, a primary can take up to a minute to
-come back online which may lead to Unicorn connection timeouts.
+come back online which may lead to Puma connection timeouts.
