@@ -30,6 +30,7 @@
 * [../kube/kubernetes.md](../kube/kubernetes.md)
 * [../license/license-gitlab-com.md](../license/license-gitlab-com.md)
 * [logging_gcs_archive_bigquery.md](logging_gcs_archive_bigquery.md)
+* [../onboarding/kibana-diagnosis.md](../onboarding/kibana-diagnosis.md)
 * [../pages/gitlab-pages.md](../pages/gitlab-pages.md)
 * [../pages/pages-letsencrypt.md](../pages/pages-letsencrypt.md)
 * [../patroni/log_analysis.md](../patroni/log_analysis.md)

@@ -29,6 +29,7 @@
 * [../kube/kubernetes.md](../kube/kubernetes.md)
 * [../monitoring/apdex-alerts-guide.md](../monitoring/apdex-alerts-guide.md)
 * [../onboarding/gitlab.com_on_k8s.md](../onboarding/gitlab.com_on_k8s.md)
+* [../onboarding/kibana-diagnosis.md](../onboarding/kibana-diagnosis.md)
 * [../patroni/geo-patroni-cluster.md](../patroni/geo-patroni-cluster.md)
 * [../patroni/pg_collect_query_data.md](../patroni/pg_collect_query_data.md)
 * [../patroni/postgresql-locking.md](../patroni/postgresql-locking.md)

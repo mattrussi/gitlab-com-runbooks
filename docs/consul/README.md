@@ -16,6 +16,7 @@
 
 ## Troubleshooting Pointers
 
+* [../onboarding/kibana-diagnosis.md](../onboarding/kibana-diagnosis.md)
 * [../patroni/geo-patroni-cluster.md](../patroni/geo-patroni-cluster.md)
 * [../patroni/log_analysis.md](../patroni/log_analysis.md)
 * [../patroni/patroni-management.md](../patroni/patroni-management.md)
