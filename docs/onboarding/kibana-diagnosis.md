@@ -26,6 +26,7 @@ correspond to which service.
 - `pubsub-consul-inf-gprd*` service discovery, DB failover
 - `pubsub-gitaly-inf-gprd-*` Git repository Storage
 - `pubsub-gke-inf-gprd*` meta Kubernetes logs
+- `pubsub-gcp-events-inf-gprd-*` GCP maintenance events
 - `pubsub-kas-inf-gprd*` Server side Kubernetes Agent Service
 - `pubsub-mailroom-inf-gprd-*` receiving emails
 - `pubsub-monitoring-inf-gprd-*` Prometheus & Thanos meta monitoring
