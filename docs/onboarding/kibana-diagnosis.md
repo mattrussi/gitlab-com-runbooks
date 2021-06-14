@@ -5,7 +5,7 @@
 - Logging pipeline architecture ([complex diagram](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/logging/README.md#concepts))
   - Elasticsearch / Kibana
     - Retention: 7 days retention
-    - Application => Log file => FluentD => Pub/Sub => Pubsubbeat => Elasticsearch
+    - Logs Flow: Application => Log file => FluentD => Pub/Sub => Pubsubbeat => Elasticsearch
   - GCS archive
     - Retention: 1 year
     - Application => Log file => FluentD => Stackdriver => Archive GCS bucket
