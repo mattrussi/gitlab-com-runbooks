@@ -31,8 +31,11 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
       %(maxClientConns)g
     |||,
     slos: {
-      soft: 0.90,
-      hard: 0.95,
+      // in https://gitlab.com/gitlab-com/gl-infra/production/-/issues/4889 we found that
+      // saturation occurred at 90%, substantially lower than the expected ceiling.
+      // TODO: reconsider as part of https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/13556
+      soft: 0.80,
+      hard: 0.85,
     },
   }),
 }
