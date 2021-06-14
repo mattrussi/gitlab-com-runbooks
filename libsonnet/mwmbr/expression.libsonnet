@@ -129,6 +129,7 @@ local operationRateFilter(
     thresholdSLOMetricName=null,  // SLO metric name
     thresholdSLOMetricAggregationLabels=null,  // Labels to join the SLO metric to the error rate metrics with
     minimumOperationRateForMonitoring=null,  // minium operation rate vaue (in request-per-second)
+    operationRateWindowDuration='1h',  // Window over which to evaluate operation rate
     thresholdSLOValue=null,  // Error budget float value (between 0 and 1)
   )::
     local mergedMetricSelectors = selectors.merge(aggregationSet.selector, metricSelectorHash);
@@ -187,7 +188,7 @@ local operationRateFilter(
 
     operationRateFilter(
       preOperationRateExpr,
-      aggregationSet.getOpsRateMetricForBurnRate('1h', required=true),
+      aggregationSet.getOpsRateMetricForBurnRate(operationRateWindowDuration, required=true),
       aggregationSet.labels,
       mergedMetricSelectors,
       minimumOperationRateForMonitoring
@@ -200,6 +201,7 @@ local operationRateFilter(
     thresholdSLOMetricName=null,  // SLO metric name
     thresholdSLOMetricAggregationLabels=null,  // Labels to join the SLO metric to the error rate metrics with
     minimumOperationRateForMonitoring=null,  // minium operation rate vaue (in request-per-second)
+    operationRateWindowDuration='1h',  // Window over which to evaluate operation rate
     thresholdSLOValue=null  // Error budget float value (between 0 and 1)
   )::
     local mergedMetricSelectors = selectors.merge(aggregationSet.selector, metricSelectorHash);
@@ -258,7 +260,7 @@ local operationRateFilter(
 
     operationRateFilter(
       preOperationRateExpr,
-      aggregationSet.getOpsRateMetricForBurnRate('1h', required=true),
+      aggregationSet.getOpsRateMetricForBurnRate(operationRateWindowDuration, required=true),
       aggregationSet.labels,
       mergedMetricSelectors,
       minimumOperationRateForMonitoring
