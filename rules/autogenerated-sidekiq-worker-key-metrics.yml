@@ -29,20 +29,28 @@ groups:
     expr: |
       (
         (
-          gitlab_background_jobs:execution:error:ratio_1h > (14.4 * 0.01)
+          gitlab_background_jobs:execution:error:ratio_1h{monitor!="global"}
+          > (14.4 * 0.010000)
+        )
         and
-          gitlab_background_jobs:execution:error:ratio_5m > (14.4 * 0.01)
+        (
+          gitlab_background_jobs:execution:error:ratio_5m{monitor!="global"}
+          > (14.4 * 0.010000)
         )
         or
         (
-          gitlab_background_jobs:execution:error:ratio_6h > (6 * 0.01)
+          gitlab_background_jobs:execution:error:ratio_6h{monitor!="global"}
+          > (6 * 0.010000)
+        )
         and
-          gitlab_background_jobs:execution:error:ratio_30m > (6 * 0.01)
+        (
+          gitlab_background_jobs:execution:error:ratio_30m{monitor!="global"}
+          > (6 * 0.010000)
         )
       )
-      and
+      and on(environment,tier,type,stage,shard,queue,feature_category,urgency,worker)
       (
-        gitlab_background_jobs:execution:ops:rate_6h > 0.1
+        sum by(environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (gitlab_background_jobs:execution:ops:rate_6h{monitor!="global"}) >= 0.1
       )
   - alert: sidekiq_background_job_execution_apdex_ratio_burn_rate_slo_out_of_bounds
     for: 2m
@@ -70,20 +78,28 @@ groups:
     expr: |
       (
         (
-          (1 - gitlab_background_jobs:execution:apdex:ratio_1h) > (14.4 * 0.01)
-          and
-          (1 - gitlab_background_jobs:execution:apdex:ratio_5m) > (14.4 * 0.01)
+          gitlab_background_jobs:execution:apdex:ratio_1h{monitor!="global"}
+          < (1 - 14.4 * 0.010000)
+        )
+        and
+        (
+          gitlab_background_jobs:execution:apdex:ratio_5m{monitor!="global"}
+          < (1 - 14.4 * 0.010000)
         )
         or
         (
-          (1 - gitlab_background_jobs:execution:apdex:ratio_6h) > (6 * 0.01)
-          and
-          (1 - gitlab_background_jobs:execution:apdex:ratio_30m) > (6 * 0.01)
+          gitlab_background_jobs:execution:apdex:ratio_6h{monitor!="global"}
+          < (1 - 6 * 0.010000)
+        )
+        and
+        (
+          gitlab_background_jobs:execution:apdex:ratio_30m{monitor!="global"}
+          < (1 - 6 * 0.010000)
         )
       )
-      and
+      and on(environment,tier,type,stage,shard,queue,feature_category,urgency,worker)
       (
-        gitlab_background_jobs:execution:ops:rate_6h > 0.1
+        sum by(environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (gitlab_background_jobs:execution:ops:rate_1h{monitor!="global"}) >= 0.1
       )
   - alert: sidekiq_background_job_queue_apdex_ratio_burn_rate_slo_out_of_bounds
     for: 2m
@@ -110,20 +126,28 @@ groups:
     expr: |
       (
         (
-          (1 - gitlab_background_jobs:queue:apdex:ratio_1h) > (14.4 * 0.01)
-          and
-          (1 - gitlab_background_jobs:queue:apdex:ratio_5m) > (14.4 * 0.01)
+          gitlab_background_jobs:queue:apdex:ratio_1h{monitor!="global"}
+          < (1 - 14.4 * 0.010000)
+        )
+        and
+        (
+          gitlab_background_jobs:queue:apdex:ratio_5m{monitor!="global"}
+          < (1 - 14.4 * 0.010000)
         )
         or
         (
-          (1 - gitlab_background_jobs:queue:apdex:ratio_6h) > (6 * 0.01)
-          and
-          (1 - gitlab_background_jobs:queue:apdex:ratio_30m) > (6 * 0.01)
+          gitlab_background_jobs:queue:apdex:ratio_6h{monitor!="global"}
+          < (1 - 6 * 0.010000)
+        )
+        and
+        (
+          gitlab_background_jobs:queue:apdex:ratio_30m{monitor!="global"}
+          < (1 - 6 * 0.010000)
         )
       )
-      and
+      and on(environment,tier,type,stage,shard,queue,feature_category,urgency,worker)
       (
-        gitlab_background_jobs:execution:ops:rate_6h > 0.1
+        sum by(environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (gitlab_background_jobs:queue:ops:rate_6h{monitor!="global"}) >= 0.1
       )
   - alert: ignored_sidekiq_workers_receiving_work
     for: 2m
