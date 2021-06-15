@@ -89,8 +89,8 @@ serviceDashboard.overview('gitaly')
       |||,
       valueColumnTitle='Apdex Score',
       thresholds=[
-        multiburnFactors.apdexRatioThreshold1h(gitalyServiceInfo.monitoringThresholds.apdexScore),
-        multiburnFactors.apdexRatioThreshold6h(gitalyServiceInfo.monitoringThresholds.apdexScore),
+        multiburnFactors.apdexRatioThreshold(gitalyServiceInfo.monitoringThresholds.apdexScore, windowDuration='1h'),
+        multiburnFactors.apdexRatioThreshold(gitalyServiceInfo.monitoringThresholds.apdexScore, windowDuration='6h'),
       ],
       thresholdColors=[
         colorScheme.criticalColor,
@@ -110,8 +110,8 @@ serviceDashboard.overview('gitaly')
       |||,
       valueColumnTitle='Error Rate',
       thresholds=[
-        multiburnFactors.errorRatioThreshold6h(gitalyServiceInfo.monitoringThresholds.errorRatio),
-        multiburnFactors.errorRatioThreshold1h(gitalyServiceInfo.monitoringThresholds.errorRatio),
+        multiburnFactors.errorRatioThreshold(gitalyServiceInfo.monitoringThresholds.errorRatio, windowDuration='6h'),
+        multiburnFactors.errorRatioThreshold(gitalyServiceInfo.monitoringThresholds.errorRatio, windowDuration='1h'),
       ],
       thresholdColors=[
         'black',

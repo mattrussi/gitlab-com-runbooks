@@ -99,22 +99,22 @@ local apdexStatusQuery(selectorHash, type, aggregationSet) =
       )
       or
       label_replace(
-        vector(1) and on () (%(metric5m)s{%(selector)s} < on(tier, type) group_left() (1 - (%(burnrate_1h)g * (1 - slo:min:events:gitlab_service_apdex:ratio{%(slaSelector)s})))),
+        vector(1) and on () (%(metric5m)s{%(selector)s} < on(tier, type) group_left() (1 - (%(burnrate_factor_1h)g * (1 - slo:min:events:gitlab_service_apdex:ratio{%(slaSelector)s})))),
         "period", "5m", "", ""
       )
       or
       label_replace(
-        vector(2) and on () (%(metric1h)s{%(selector)s} < on(tier, type) group_left() (1 - (%(burnrate_1h)g * (1 - slo:min:events:gitlab_service_apdex:ratio{%(slaSelector)s})))),
+        vector(2) and on () (%(metric1h)s{%(selector)s} < on(tier, type) group_left() (1 - (%(burnrate_factor_1h)g * (1 - slo:min:events:gitlab_service_apdex:ratio{%(slaSelector)s})))),
         "period", "1h", "", ""
       )
       or
       label_replace(
-        vector(4) and on () (%(metric30m)s{%(selector)s} < on(tier, type) group_left() (1 - (%(burnrate_6h)g * (1 - slo:min:events:gitlab_service_apdex:ratio{%(slaSelector)s})))),
+        vector(4) and on () (%(metric30m)s{%(selector)s} < on(tier, type) group_left() (1 - (%(burnrate_factor_6h)g * (1 - slo:min:events:gitlab_service_apdex:ratio{%(slaSelector)s})))),
         "period", "30m", "", ""
       )
       or
       label_replace(
-        vector(8) and on () (%(metric6h)s{%(selector)s} < on(tier, type) group_left() (1 - (%(burnrate_6h)g * (1 - slo:min:events:gitlab_service_apdex:ratio{%(slaSelector)s})))),
+        vector(8) and on () (%(metric6h)s{%(selector)s} < on(tier, type) group_left() (1 - (%(burnrate_factor_6h)g * (1 - slo:min:events:gitlab_service_apdex:ratio{%(slaSelector)s})))),
         "period", "6h", "", ""
       )
     )
@@ -126,7 +126,9 @@ local apdexStatusQuery(selectorHash, type, aggregationSet) =
      metric5m: metric5m,
      metric6h: metric6h,
      metric30m: metric30m,
-   } + multiburnFactors);
+     burnrate_factor_1h: multiburnFactors.errorBudgetFactorFor('1h'),
+     burnrate_factor_6h: multiburnFactors.errorBudgetFactorFor('6h'),
+   });
 
 local errorRateStatusQuery(selectorHash, type, aggregationSet) =
   local metric1h = aggregationSet.getErrorRatioMetricForBurnRate('1h', required=true);
@@ -142,22 +144,22 @@ local errorRateStatusQuery(selectorHash, type, aggregationSet) =
       )
       or
       label_replace(
-        vector(1) and on() (%(metric5m)s{%(selector)s} > on(tier, type) group_left() (%(burnrate_1h)g * slo:max:events:gitlab_service_errors:ratio{%(slaSelector)s})),
+        vector(1) and on() (%(metric5m)s{%(selector)s} > on(tier, type) group_left() (%(burnrate_factor_1h)g * slo:max:events:gitlab_service_errors:ratio{%(slaSelector)s})),
         "period", "5m", "", ""
       )
       or
       label_replace(
-        vector(2) and on() (%(metric1h)s{%(selector)s} > on(tier, type) group_left() (%(burnrate_1h)g * slo:max:events:gitlab_service_errors:ratio{%(slaSelector)s})),
+        vector(2) and on() (%(metric1h)s{%(selector)s} > on(tier, type) group_left() (%(burnrate_factor_1h)g * slo:max:events:gitlab_service_errors:ratio{%(slaSelector)s})),
         "period", "1h", "", ""
       )
       or
       label_replace(
-        vector(4) and on() (%(metric30m)s{%(selector)s} > on(tier, type) group_left() (%(burnrate_6h)g * slo:max:events:gitlab_service_errors:ratio{%(slaSelector)s})),
+        vector(4) and on() (%(metric30m)s{%(selector)s} > on(tier, type) group_left() (%(burnrate_factor_6h)g * slo:max:events:gitlab_service_errors:ratio{%(slaSelector)s})),
         "period", "30m", "", ""
       )
       or
       label_replace(
-        vector(8) and on() (%(metric6h)s{%(selector)s} > on(tier, type) group_left() (%(burnrate_6h)g * slo:max:events:gitlab_service_errors:ratio{%(slaSelector)s})),
+        vector(8) and on() (%(metric6h)s{%(selector)s} > on(tier, type) group_left() (%(burnrate_factor_6h)g * slo:max:events:gitlab_service_errors:ratio{%(slaSelector)s})),
         "period", "6h", "", ""
       )
     )
@@ -169,7 +171,9 @@ local errorRateStatusQuery(selectorHash, type, aggregationSet) =
      metric5m: metric5m,
      metric6h: metric6h,
      metric30m: metric30m,
-   } + multiburnFactors);
+     burnrate_factor_1h: multiburnFactors.errorBudgetFactorFor('1h'),
+     burnrate_factor_6h: multiburnFactors.errorBudgetFactorFor('6h'),
+   });
 
 
 local statusDescriptionPanel(legendFormat, query) =
