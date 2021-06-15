@@ -161,6 +161,8 @@ metricsCatalog.serviceDefinition({
       description: |||
         All transactions destined for the Postgres secondary instances are routed through the pgbouncer instances
         running on the patroni nodes themselves. This SLI models those transactions in aggregate.
+
+        Error rate uses mtail metrics from pgbouncer logs.
       |||,
 
       // The same query, with different labels is also used on the patroni nodes pgbouncer instances
@@ -175,7 +177,12 @@ metricsCatalog.serviceDefinition({
         ),
       ]),
 
-      significantLabels: ['fqdn'],
+      errorRate: rateMetric(
+        counter='pgbouncer_pooler_errors_total',
+        selector='type="patroni", tier="db"',
+      ),
+
+      significantLabels: ['fqdn', 'error'],
 
       toolingLinks: [
         toolingLinks.kibana(title='pgbouncer', index='postgres_pgbouncer', type='patroni', tag='postgres.pgbouncer'),
