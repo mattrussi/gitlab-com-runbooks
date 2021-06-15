@@ -338,6 +338,21 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
+      component: kube_pool_cpu
+    expr: |
+      max by(environment, tier, type, stage) (
+        clamp_min(
+          clamp_max(
+            1 - avg by (environment, tier, type, stage) (
+              rate(node_cpu_seconds_total:labeled{mode="idle", type=~"kube|git|registry|ci-runners|sidekiq|kas|api|websocket"}[5m])
+            )
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
       component: memory
     expr: |
       max by(environment, tier, type, stage) (
@@ -1124,6 +1139,14 @@ groups:
     expr: '0.9'
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
+      component: kube_pool_cpu
+    expr: '0.8'
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: kube_pool_cpu
+    expr: '0.9'
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
       component: memory
     expr: '0.9'
   - record: slo:max:hard:gitlab_component_saturation:ratio
@@ -1532,6 +1555,12 @@ groups:
       component: kube_persistent_volume_claim_inodes
       horiz_scaling: 'yes'
       severity: s2
+    expr: '1'
+  - record: gitlab_component_saturation_info
+    labels:
+      component: kube_pool_cpu
+      horiz_scaling: 'yes'
+      severity: s3
     expr: '1'
   - record: gitlab_component_saturation_info
     labels:
@@ -2606,6 +2635,47 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="kube_persistent_volume_claim_inodes"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="kube_persistent_volume_claim_inodes"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: >-
+        The Average Node Pool CPU Utilization resource of the {{ $labels.type }} service ({{ $labels.stage
+        }} stage), component has a saturation exceeding SLO and is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Average Node Pool CPU Utilization resource:
+
+        This resource measures average CPU utilization across an all cores in the node pool for a service fleet.
+
+        If it is becoming saturated, it may indicate that the fleet needs horizontal scaling.
+      grafana_dashboard_id: alerts-sat_kube_pool_cpu
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/alerts-sat_kube_pool_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '1839360107'
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage) (
+          clamp_min(
+            clamp_max(
+              1 - avg by (environment, tier, type, stage) (
+                rate(node_cpu_seconds_total:labeled{mode="idle", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s3
+    expr: |
+      gitlab_component_saturation:ratio{component="kube_pool_cpu"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_pool_cpu"}
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
