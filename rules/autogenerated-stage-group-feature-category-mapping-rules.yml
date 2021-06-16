@@ -54,12 +54,6 @@ groups:
     expr: '1'
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: auto_portfolio_mgmt
-      product_stage: learn
-      stage_group: applied_ml
-    expr: '1'
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: backup_restore
       product_stage: enablement
       stage_group: geo
@@ -69,12 +63,6 @@ groups:
       feature_category: boards
       product_stage: plan
       stage_group: project_management
-    expr: '1'
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: browser_performance
-      product_stage: verify
-      stage_group: testing
     expr: '1'
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -103,8 +91,8 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: code_quality
-      product_stage: verify
-      stage_group: testing
+      product_stage: secure
+      stage_group: static_analysis
     expr: '1'
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -158,7 +146,13 @@ groups:
     labels:
       feature_category: continuous_integration
       product_stage: verify
-      stage_group: continuous_integration
+      stage_group: pipeline_execution
+    expr: '1'
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: continuous_integration_scaling
+      product_stage: verify
+      stage_group: pipeline_execution
     expr: '1'
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -169,7 +163,7 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: dataops
-      product_stage: learn
+      product_stage: ModelOps
       stage_group: dataops
     expr: '1'
   - record: gitlab:feature_category:stage_group:mapping
@@ -234,6 +228,30 @@ groups:
     expr: '1'
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: experimentation_activation
+      product_stage: growth
+      stage_group: activation
+    expr: '1'
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: experimentation_adoption
+      product_stage: growth
+      stage_group: adoption
+    expr: '1'
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: experimentation_conversion
+      product_stage: growth
+      stage_group: conversion
+    expr: '1'
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: experimentation_expansion
+      product_stage: growth
+      stage_group: expansion
+    expr: '1'
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: feature_flags
       product_stage: release
       stage_group: release
@@ -254,7 +272,7 @@ groups:
     labels:
       feature_category: fuzz_testing
       product_stage: secure
-      stage_group: fuzz_testing
+      stage_group: dynamic_analysis
     expr: '1'
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -325,7 +343,7 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: insider_threat
-      product_stage: learn
+      product_stage: ModelOps
       stage_group: applied_ml
     expr: '1'
   - record: gitlab:feature_category:stage_group:mapping
@@ -343,7 +361,7 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: intel_code_security
-      product_stage: learn
+      product_stage: ModelOps
       stage_group: applied_ml
     expr: '1'
   - record: gitlab:feature_category:stage_group:mapping
@@ -402,12 +420,6 @@ groups:
     expr: '1'
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: load_testing
-      product_stage: verify
-      stage_group: testing
-    expr: '1'
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: logging
       product_stage: monitor
       stage_group: monitor
@@ -422,7 +434,7 @@ groups:
     labels:
       feature_category: merge_trains
       product_stage: verify
-      stage_group: continuous_integration
+      stage_group: pipeline_execution
     expr: '1'
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -433,7 +445,7 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: mlops
-      product_stage: learn
+      product_stage: ModelOps
       stage_group: mlops
     expr: '1'
   - record: gitlab:feature_category:stage_group:mapping
@@ -462,6 +474,18 @@ groups:
     expr: '1'
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: on_call_schedule_management
+      product_stage: monitor
+      stage_group: monitor
+    expr: '1'
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: onboarding
+      product_stage: growth
+      stage_group: activation
+    expr: '1'
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: package_registry
       product_stage: package
       stage_group: package
@@ -471,6 +495,12 @@ groups:
       feature_category: pages
       product_stage: release
       stage_group: release
+    expr: '1'
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: performance_testing
+      product_stage: verify
+      stage_group: testing
     expr: '1'
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -600,6 +630,12 @@ groups:
     expr: '1'
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: sharding
+      product_stage: enablement
+      stage_group: sharding
+    expr: '1'
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: snippets
       product_stage: create
       stage_group: editor
@@ -711,4 +747,10 @@ groups:
       feature_category: wiki
       product_stage: create
       stage_group: editor
+    expr: '1'
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: workflow_automation
+      product_stage: ModelOps
+      stage_group: applied_ml
     expr: '1'

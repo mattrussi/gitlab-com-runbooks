@@ -14,10 +14,8 @@
 
 ## Troubleshooting Pointers
 
-* [../ci-runners/ci-investigate-abuse.md](../ci-runners/ci-investigate-abuse.md)
 * [../ci-runners/ci-runner-timeouts.md](../ci-runners/ci-runner-timeouts.md)
 * [../ci-runners/service-ci-runners.md](../ci-runners/service-ci-runners.md)
-* [../ci-runners/update-gitlab-runner-on-managers.md](../ci-runners/update-gitlab-runner-on-managers.md)
 * [../cloudflare/logging.md](../cloudflare/logging.md)
 * [../cloudflare/troubleshooting.md](../cloudflare/troubleshooting.md)
 * [../config_management/chef-guidelines.md](../config_management/chef-guidelines.md)
@@ -27,9 +25,13 @@
 * [../gitaly/find-project-from-hashed-storage.md](../gitaly/find-project-from-hashed-storage.md)
 * [../gitaly/gitaly-permission-denied.md](../gitaly/gitaly-permission-denied.md)
 * [../gitaly/gitaly-unusual-activity.md](../gitaly/gitaly-unusual-activity.md)
+* [../kube/k8s-operations.md](../kube/k8s-operations.md)
+* [../kube/kubernetes.md](../kube/kubernetes.md)
 * [../pages/gitlab-pages.md](../pages/gitlab-pages.md)
 * [../patroni/performance-degradation-troubleshooting.md](../patroni/performance-degradation-troubleshooting.md)
+* [../patroni/pg_collect_query_data.md](../patroni/pg_collect_query_data.md)
 * [../patroni/postgresql-role-credential-rotation.md](../patroni/postgresql-role-credential-rotation.md)
+* [../patroni/rails-sql-apdex-slow.md](../patroni/rails-sql-apdex-slow.md)
 * [../praefect/praefect-error-rate.md](../praefect/praefect-error-rate.md)
 * [../redis/redis-survival-guide-for-sres.md](../redis/redis-survival-guide-for-sres.md)
 * [../sidekiq/sidekiq-survival-guide-for-sres.md](../sidekiq/sidekiq-survival-guide-for-sres.md)
@@ -39,8 +41,6 @@
 * [../uncategorized/gcp-network-intelligence.md](../uncategorized/gcp-network-intelligence.md)
 * [../uncategorized/gcp-project.md](../uncategorized/gcp-project.md)
 * [../uncategorized/gcp-snapshots.md](../uncategorized/gcp-snapshots.md)
-* [../uncategorized/k8s-operations.md](../uncategorized/k8s-operations.md)
-* [../uncategorized/kubernetes.md](../uncategorized/kubernetes.md)
 * [../uncategorized/manage-chef.md](../uncategorized/manage-chef.md)
 * [../uncategorized/node-reboots.md](../uncategorized/node-reboots.md)
 * [../uncategorized/uploads.md](../uncategorized/uploads.md)

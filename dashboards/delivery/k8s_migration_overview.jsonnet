@@ -12,6 +12,7 @@ local services = [
   'registry',
   'mailroom',
   'sidekiq-catchall',
+  'sidekiq-imports',
   'sidekiq-memory-bound',
   'sidekiq-elasticsearch',
   'sidekiq-low-urgency-cpu-bound',

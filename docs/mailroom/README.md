@@ -13,6 +13,10 @@
 
 * [system](https://log.gprd.gitlab.net/goto/0ce3bf67abafcfc0f81f3d6e7a066912)
 
+## Troubleshooting Pointers
+
+* [../onboarding/gitlab.com_on_k8s.md](../onboarding/gitlab.com_on_k8s.md)
+* [../onboarding/kibana-diagnosis.md](../onboarding/kibana-diagnosis.md)
 <!-- END_MARKER -->
 
 ## Operations

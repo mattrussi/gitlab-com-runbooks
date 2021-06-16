@@ -224,9 +224,10 @@ During an incident, we have [roles defined in the handbook](https://about.gitlab
 
 ### Work with the fleet and the rails app
 
-* [Reload unicorn with zero downtime](docs/uncategorized/manage-workers.md#reload-unicorn-with-zero-downtime)
+* [Reload Puma with zero downtime](docs/uncategorized/manage-workers.md#reload-puma-with-zero-downtime)
 * [How to perform zero downtime frontend host reboot](docs/uncategorized/manage-workers.md#how-to-perform-zero-downtime-frontend-host-reboot)
 * [Gracefully restart sidekiq jobs](docs/uncategorized/manage-workers.md#gracefully-restart-sidekiq-jobs)
+* [Start a read-only rails console](docs/Teleport/Connect_to_Rails_Console_via_Teleport.md)
 * [Start a rails console in the staging environment](docs/uncategorized/staging-environment.md#run-a-rails-console-in-staging-environment)
 * [Start a redis console in the staging environment](docs/uncategorized/staging-environment.md#run-a-redis-console-in-staging-environment)
 * [Start a psql console in the staging environment](docs/uncategorized/staging-environment.md#run-a-psql-console-in-staging-environment)
@@ -269,7 +270,7 @@ During an incident, we have [roles defined in the handbook](https://about.gitlab
 * [Debug failed provisioning](howto/debug-failed-chef-provisioning.md)
 
 ### Work with CI Infrastructure
-* [Update GitLab Runner on runners managers](docs/ci-runners/update-gitlab-runner-on-managers.md)
+* [Runners fleet configuration management](docs/ci-runners/fleet-configuration-management/README.md)
 * [Investigate Abuse Reports](docs/ci-runners/ci-investigate-abuse.md)
 * [Create runners manager for GitLab.com](docs/ci-runners/create-runners-manager-node.md)
 * [Update docker-machine](docs/uncategorized/upgrade-docker-machine.md)
@@ -348,7 +349,7 @@ Selected logging documents and resources:
 * [Manage DNS entries](docs/uncategorized/manage-dns-entries.md)
 * [Setup and Use my Yubikey](docs/uncategorized/yubikey.md)
 * [Purge Git data](docs/git/purge-git-data.md)
-* [Getting Started with Kubernetes and GitLab.com](docs/uncategorized/k8s-gitlab.md)
+* [Getting Started with Kubernetes and GitLab.com](docs/kube/k8s-gitlab.md)
 * [Using Chatops bot to run commands across the fleet](docs/uncategorized/deploycmd.md)
 
 ### Gitter

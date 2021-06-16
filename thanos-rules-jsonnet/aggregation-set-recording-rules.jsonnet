@@ -67,7 +67,7 @@ local outputPromYaml(groups) =
         interval: '1m',
         partial_response_strategy: 'warn',
         rules: aggregationSetTransformer.generateRecordingRules(
-          sourceAggregationSet=aggregationSets.globalNodeSLIs,
+          sourceAggregationSet=aggregationSets.promSourceNodeAggregatedSLIs,
           targetAggregationSet=aggregationSets.serviceNodeAggregatedSLIs
         ),
       }]
@@ -114,6 +114,19 @@ local outputPromYaml(groups) =
         rules: aggregationSetTransformer.generateRecordingRules(
           sourceAggregationSet=aggregationSets.featureCategorySourceSLIs,
           targetAggregationSet=aggregationSets.globalFeatureCategorySLIs
+        ),
+      }]
+    ),
+
+  'aggregated-stage-group-metrics.yml':
+    outputPromYaml(
+      [{
+        name: aggregationSets.globalStageGroupSLIs.name,
+        interval: '1m',
+        partial_response_strategy: 'warn',
+        rules: aggregationSetTransformer.generateRecordingRules(
+          sourceAggregationSet=aggregationSets.globalFeatureCategorySLIs,
+          targetAggregationSet=aggregationSets.globalStageGroupSLIs
         ),
       }]
     ),

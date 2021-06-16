@@ -2,11 +2,29 @@ local alerts = import 'alerts/alerts.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local stableIds = import 'stable-ids/stable-ids.libsonnet';
 local strings = import 'utils/strings.libsonnet';
+local validator = import 'utils/validator.libsonnet';
 
 // The severity labels that we allow on resources
 local severities = std.set(['s1', 's2', 's3', 's4']);
-
 local environmentLabels = ['environment', 'tier', 'type', 'stage'];
+
+local sloValidator = validator.validator(function(v) v > 0 && v <= 1, 'SLO threshold should be in the range (0,1]');
+
+local definitionValidor = validator.new({
+  title: validator.string,
+  severity: validator.setMember(severities),
+  horizontallyScalable: validator.boolean,
+  appliesTo: validator.or(validator.array, validator.object),
+  description: validator.string,
+  grafana_dashboard_uid: validator.string,
+  resourceLabels: validator.array,
+  query: validator.string,
+  slos: {
+    soft: sloValidator,
+    hard: sloValidator,
+  },
+});
+
 
 local getAllowedServiceApplicator(allowedList) =
   local allowedSet = std.set(allowedList);
@@ -25,30 +43,15 @@ local getServiceApplicator(appliesTo) =
     getDisallowedServiceApplicator(appliesTo.allExcept);
 
 local validateAndApplyDefaults(definition) =
-  local validated =
-    std.isString(definition.title) &&
-    std.setMember(definition.severity, severities) &&
-    std.isBoolean(definition.horizontallyScalable) &&
-    (std.isArray(definition.appliesTo) || std.isObject(definition.appliesTo)) &&
-    std.isString(definition.description) &&
-    std.isString(definition.grafana_dashboard_uid) &&
-    std.isArray(definition.resourceLabels) &&
-    std.isString(definition.query) &&
-    std.isNumber(definition.slos.soft) && definition.slos.soft > 0 && definition.slos.soft <= 1 &&
-    std.isNumber(definition.slos.hard) && definition.slos.hard > 0 && definition.slos.hard <= 1;
-
-  // Apply defaults
-  if validated then
-    {
-      queryFormatConfig: {},
-    } + definition + {
-      // slo defaults
-      slos: {
-        alertTriggerDuration: '5m',
-      } + definition.slos,
-    }
-  else
-    std.assertEqual(definition, { __assert__: 'Resource definition is invalid' });
+  {
+    queryFormatConfig: {},
+    alertRunbook: 'docs/{{ $labels.type }}/README.md',
+    dangerouslyThanosEvaluated: false,
+  } + definitionValidor.assertValid(definition) + {
+    slos: {
+      alertTriggerDuration: '5m',
+    } + definition.slos,
+  };
 
 local resourceSaturationPoint = function(options)
   local definition = validateAndApplyDefaults(options);
@@ -57,8 +60,9 @@ local resourceSaturationPoint = function(options)
   definition {
     getQuery(selectorHash, rangeInterval, maxAggregationLabels=[])::
       local staticLabels = self.getStaticLabels();
-      local queryAggregationLabels = environmentLabels + self.resourceLabels;
-      local allMaxAggregationLabels = environmentLabels + maxAggregationLabels;
+      local environmentLabelsLocal = (if self.dangerouslyThanosEvaluated then ['env'] else []) + environmentLabels;
+      local queryAggregationLabels = environmentLabelsLocal + self.resourceLabels;
+      local allMaxAggregationLabels = environmentLabelsLocal + maxAggregationLabels;
       local queryAggregationLabelsExcludingStaticLabels = std.filter(function(label) !std.objectHas(staticLabels, label), queryAggregationLabels);
       local maxAggregationLabelsExcludingStaticLabels = std.filter(function(label) !std.objectHas(staticLabels, label), allMaxAggregationLabels);
       local queryFormatConfig = self.queryFormatConfig;
@@ -124,7 +128,7 @@ local resourceSaturationPoint = function(options)
               { type: { ne: '' } }
         );
 
-      local query = definition.getQuery({ environment: { ne: '' } } + typeFilter, definition.getBurnRatePeriod());
+      local query = definition.getQuery(typeFilter, definition.getBurnRatePeriod());
 
       {
         record: 'gitlab_component_saturation:ratio',
@@ -164,16 +168,21 @@ local resourceSaturationPoint = function(options)
       },
 
 
-    getSaturationAlerts(componentName)::
+    getSaturationAlerts(componentName, selectorHash)::
       local definition = self;
 
       local triggerDuration = definition.slos.alertTriggerDuration;
+
+      local selectorHashWithComponent = selectorHash {
+        component: componentName,
+      };
 
       local formatConfig = {
         triggerDuration: triggerDuration,
         componentName: componentName,
         description: definition.description,
         title: definition.title,
+        selector: selectors.serializeHash(selectorHashWithComponent),
       };
 
       local severityLabels =
@@ -186,8 +195,8 @@ local resourceSaturationPoint = function(options)
       [alerts.processAlertRule({
         alert: 'component_saturation_slo_out_of_bounds',
         expr: |||
-          gitlab_component_saturation:ratio{component="%(componentName)s"} > on(component) group_left
-          slo:max:hard:gitlab_component_saturation:ratio{component="%(componentName)s"}
+          gitlab_component_saturation:ratio{%(selector)s} > on(component) group_left
+          slo:max:hard:gitlab_component_saturation:ratio{%(selector)s}
         ||| % formatConfig,
         'for': triggerDuration,
         labels: {
@@ -203,7 +212,7 @@ local resourceSaturationPoint = function(options)
 
             %(description)s
           ||| % formatConfig,
-          runbook: 'docs/{{ $labels.type }}/README.md',
+          runbook: definition.alertRunbook,
           grafana_dashboard_id: 'alerts-' + definition.grafana_dashboard_uid,
           grafana_panel_id: stableIds.hashStableId('saturation-' + componentName),
           grafana_variables: 'environment,type,stage',

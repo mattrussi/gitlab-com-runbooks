@@ -14,6 +14,8 @@ groups:
       description: |
         All transactions destined for the Postgres primary instance are routed through the pgbouncer service. This SLI models those transactions in aggregate.
 
+        Error rate uses mtail metrics from pgbouncer logs.
+
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: pgbouncer-main/pgbouncer-overview
       grafana_dashboard_link: >-
@@ -51,6 +53,8 @@ groups:
         in the past 30 minutes
       description: |
         All transactions destined for the Postgres primary instance are routed through the pgbouncer service. This SLI models those transactions in aggregate.
+
+        Error rate uses mtail metrics from pgbouncer logs.
 
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 

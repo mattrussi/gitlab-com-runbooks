@@ -1,4 +1,3 @@
-local capacityPlanning = import 'capacity_planning.libsonnet';
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
@@ -17,7 +16,7 @@ local graphPanel = grafana.graphPanel;
 local annotation = grafana.annotation;
 local serviceDashboard = import 'service_dashboard.libsonnet';
 
-serviceDashboard.overview('pgbouncer', 'main')
+serviceDashboard.overview('pgbouncer')
 .addPanel(
   row.new(title='pgbouncer Workload'),
   gridPos={

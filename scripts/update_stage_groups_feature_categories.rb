@@ -4,6 +4,7 @@ require 'net/http'
 require 'yaml'
 require 'json'
 require 'fileutils'
+require 'logger'
 
 ##
 # Generate a slim jsonnet stage group file from Gitlab's stages data.
@@ -12,9 +13,10 @@ class UpdateStageGroupsFeatureCategories
   DEFAULT_STAGE_URL = 'https://gitlab.com/gitlab-com/www-gitlab-com/-/raw/master/data/stages.yml'
   DEFAULT_MAPPING_PATH = File.expand_path(File.join(File.dirname(__FILE__), '../services/stage-group-mapping.jsonnet'))
 
-  def initialize(stages_url = DEFAULT_STAGE_URL, mapping_path = DEFAULT_MAPPING_PATH)
+  def initialize(stages_url = DEFAULT_STAGE_URL, mapping_path = DEFAULT_MAPPING_PATH, logger = Logger.new($stdout))
     @stages_url = stages_url
     @mapping_path = mapping_path
+    @logger = logger
   end
 
   def call
@@ -22,6 +24,7 @@ class UpdateStageGroupsFeatureCategories
     stages_yml = YAML.safe_load(response)
 
     resulting_group_info = {}
+    known_category_map = {}
 
     stages_yml['stages'].each do |stage, stage_info|
       stage_info['groups'].each do |group, group_info|
@@ -29,10 +32,26 @@ class UpdateStageGroupsFeatureCategories
         # group name prevents later headaches such as "ML/AI" group.
         # The convention for group key is <group-key>
         group_key = group.downcase.gsub(/[^a-z0-9\-_]/, '-')
+
+        categories_in_group = group_info['categories'] || []
+        categories = categories_in_group - known_category_map.keys
+
+        if categories.size != group_info['categories'].size
+          duplicates = categories_in_group & known_category_map.keys
+
+          msg = duplicates.map do |duplicate|
+            "#{duplicate} was already in #{known_category_map[duplicate]} not adding to #{group_key}"
+          end.join("\n")
+
+          @logger.warn(msg)
+        end
+
+        known_category_map.merge!(categories.map { |category| [category, group_key] }.to_h)
+
         resulting_group_info[group_key] = {
           name: group_info['name'],
           stage: stage,
-          feature_categories: group_info['categories'] || []
+          feature_categories: categories
         }
       end
     end

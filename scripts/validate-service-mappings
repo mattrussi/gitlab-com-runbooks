@@ -56,26 +56,30 @@ def validate(service_catalog_path)
 
     # Business
     # =========
+    business = service["business"]
 
-    # requirement
-    requirement = service["business"]["requirement"]
-    raise "'#{service_name}' | requirement field must be string" unless requirement.is_a? String
+    # Business requirements are optional for purely technical services
+    if business
+      # requirement
+      requirement = business["requirement"]
+      raise "'#{service_name}' | requirement field must be string" unless requirement.is_a? String
 
-    # customers
-    requirement = service["business"]["customers"]
-    raise "'#{service_name}' | customers field must be list" unless requirement.is_a? Array
+      # customers
+      requirement = business["customers"]
+      raise "'#{service_name}' | customers field must be list" unless requirement.is_a? Array
 
-    # business_value
-    value = service["business"]["business_value"]
-    raise "'#{service_name}' | business_value field must be string" unless value.is_a? String
+      # business_value
+      value = business["business_value"]
+      raise "'#{service_name}' | business_value field must be string" unless value.is_a? String
 
-    # availability
-    availability = service["business"]["SLA"]["availability"]
-    raise "'#{service_name}' | availability field must be string" unless availability.is_a?(String) || availability.nil?
+      # availability
+      availability = business["SLA"]["availability"]
+      raise "'#{service_name}' | availability field must be string" unless availability.is_a?(String) || availability.nil?
 
-    # response_time
-    response_time = service["business"]["SLA"]["response_time"]
-    raise "'#{service_name}' | response_time field must be string" unless response_time.is_a?(String) || response_time.nil?
+      # response_time
+      response_time = business["SLA"]["response_time"]
+      raise "'#{service_name}' | response_time field must be string" unless response_time.is_a?(String) || response_time.nil?
+    end
 
     # Technical
     # =========
@@ -126,29 +130,37 @@ def validate(service_catalog_path)
     raise "'#{service_name}' | chef_roles field must be list" unless chef_roles.is_a?(Array) || chef_roles.nil?
 
     # scalability
-    # node
-    node = service["technical"]["scalability"]["note"]
-    raise "'#{service_name}' | node field must be string" unless node.is_a?(String) || node.nil?
+    scalability = service["technical"]["scalability"]
 
-    # bound
-    bound = service["technical"]["scalability"]["bound"]
-    raise "'#{service_name}' | bound field must be string" unless bound.is_a?(String) || bound.nil?
+    if scalability
+      # node
+      node = scalability["note"]
+      raise "'#{service_name}' | node field must be string" unless node.is_a?(String) || node.nil?
 
-    # scalable
-    scalable = service["technical"]["scalability"]["scalable"]
-    raise "'#{service_name}' | scalable field must be string" unless scalable.is_a?(String) || scalable.nil?
+      # bound
+      bound = scalability["bound"]
+      raise "'#{service_name}' | bound field must be string" unless bound.is_a?(String) || bound.nil?
+
+      # scalable
+      scalable = scalability["scalable"]
+      raise "'#{service_name}' | scalable field must be string" unless scalable.is_a?(String) || scalable.nil?
+    end
 
     # security_reviewed
-    security_reviewed = service["technical"]["security"]["security_reviewed"]
-    raise "'#{service_name}' | security_reviewed field must be string" unless security_reviewed.is_a?(String) || security_reviewed.nil?
+    security = service["technical"]["security"]
 
-    # data_classification
-    data_classification = service["technical"]["security"]["data_classification"]
-    raise "'#{service_name}' | data_classification field must be string" unless data_classification.is_a?(String) || data_classification.nil?
+    if security
+      security_reviewed = security["security_reviewed"]
+      raise "'#{service_name}' | security_reviewed field must be string" unless security_reviewed.is_a?(String) || security_reviewed.nil?
 
-    # security_incidents
-    security_incidents = service["technical"]["security"]["security_incidents"]
-    raise "'#{service_name}' | security_incidents field must be list" unless security_incidents.is_a?(Array) || security_incidents.nil?
+      # data_classification
+      data_classification = security["data_classification"]
+      raise "'#{service_name}' | data_classification field must be string" unless data_classification.is_a?(String) || data_classification.nil?
+
+      # security_incidents
+      security_incidents = security["security_incidents"]
+      raise "'#{service_name}' | security_incidents field must be list" unless security_incidents.is_a?(Array) || security_incidents.nil?
+    end
 
     # logging
     logging = service["technical"]["logging"]
@@ -228,6 +240,6 @@ end
 begin
   validate(File.join(__dir__, "..", "services", "service-catalog.yml"))
 rescue StandardError => e
-  warn "error: #{e.message}"
+  warn "error: #{e.stack}"
   exit 1
 end

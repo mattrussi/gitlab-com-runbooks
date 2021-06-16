@@ -9,12 +9,7 @@ local recordingRuleGroupsForServiceForBurnRate(serviceDefinition, burnRate) =
       recordingRules.sliRecordingRulesSetGenerator(burnRate, recordingRuleRegistry),
       recordingRules.componentMetricsRuleSetGenerator(
         burnRate=burnRate,
-        aggregationSet=aggregationSets.promSourceSLIs,
-
-        // This should only be done at the Prometheus level
-        // as the group_left may not work correctly in all
-        // cases at the Thanos level
-        substituteWeightWithRecordingRule=true,
+        aggregationSet=aggregationSets.promSourceSLIs
       ),
       recordingRules.extraRecordingRuleSetGenerator(burnRate),
     ]
@@ -41,6 +36,13 @@ local recordingRuleGroupsForServiceForBurnRate(serviceDefinition, burnRate) =
       ),
   };
 
+local featureCategoryRecordingRuleGroupsForService(serviceDefinition, burnRate) =
+  local generator = recordingRules.componentMetricsRuleSetGenerator(burnRate, aggregationSets.featureCategorySourceSLIs);
+  local indicators = std.filter(function(indicator) indicator.hasFeatureCategory(), serviceDefinition.listServiceLevelIndicators());
+  {
+    name: 'Prometheus Intermediate Metrics per feature: %s - burn-rate %s' % [serviceDefinition.type, burnRate],
+    rules: generator.generateRecordingRulesForService(serviceDefinition, serviceLevelIndicators=indicators),
+  };
 {
   /**
    * Generate all source recording rule groups for a specific service.
@@ -69,4 +71,10 @@ local recordingRuleGroupsForServiceForBurnRate(serviceDefinition, burnRate) =
         +
         componentNodeSLORuleSetGenerator.generateRecordingRulesForService(serviceDefinition),
     }],
+  featureCategoryRecordingRuleGroupsForService(serviceDefinition)::
+    [
+      featureCategoryRecordingRuleGroupsForService(serviceDefinition, burnRate)
+      for burnRate in aggregationSets.featureCategorySourceSLIs.getBurnRates()
+    ],
+
 }

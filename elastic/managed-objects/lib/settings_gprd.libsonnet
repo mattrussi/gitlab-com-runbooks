@@ -1,5 +1,5 @@
-local HIGH_THROUHGPUT = ['gitaly', 'rails', 'workhorse', 'sidekiq', 'shell', 'puma'];
-local MEDIUM_THROUGHPUT = ['gke-audit', 'registry', 'pages', 'system', 'fluentd', 'postgres', 'runner'];
+local HIGH_THROUHGPUT = ['gitaly', 'rails', 'workhorse', 'sidekiq', 'shell', 'puma', 'monitoring', 'registry', 'system'];
+local MEDIUM_THROUGHPUT = ['gke-audit', 'pages', 'fluentd', 'postgres', 'runner'];
 
 local setting(index, env) = if std.member(HIGH_THROUHGPUT, index) then {
   index: {
@@ -42,7 +42,7 @@ local setting(index, env) = if std.member(HIGH_THROUHGPUT, index) then {
     },
     refresh_interval: '60s',  // see: https://gitlab.com/gitlab-com/gl-infra/production/-/issues/3006#note_445081437
   },
-  number_of_shards: 5,
+  number_of_shards: 8,
   // number_of_replicas: 1,
 }
 else if std.member(MEDIUM_THROUGHPUT, index) then {

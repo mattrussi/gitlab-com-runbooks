@@ -7,8 +7,9 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 metricsCatalog.serviceDefinition({
   type: 'patroni',
   tier: 'db',
+  serviceIsStageless: true,
   monitoringThresholds: {
-    apdexScore: 0.995,
+    apdexScore: 0.999,
     errorRatio: 0.999,
   },
   // Use recordingRuleMetrics to specify a set of metrics with known high
@@ -17,37 +18,69 @@ metricsCatalog.serviceDefinition({
   // Use sparingly, and don't overuse.
   recordingRuleMetrics: [
     'gitlab_sql_duration_seconds_bucket',
+    'gitlab_sql_primary_duration_seconds_bucket',
+    'gitlab_sql_replica_duration_seconds_bucket',
   ],
   serviceLevelIndicators: {
+    // Sidekiq has a distinct usage profile; this is used to select 'the others' which
+    // are more interactive and thus require lower thresholds
+    // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1059
+    local railsBaseSelector = {
+      type: { ne: 'sidekiq' },
+    },
+
     // We don't have latency histograms for patroni but for now we will
-    // use the rails controller SQL latencies as an indirect proxy.
-    rails_sql: {
+    // use the rails SQL latencies as an indirect proxy.
+    rails_primary_sql: {
       userImpacting: true,
       featureCategory: 'not_owned',
       team: 'sre_datastores',
+      upscaleLongerBurnRates: true,
       description: |||
-        Represents all SQL transactions issued through ActiveRecord from the Rails monolith. Durations
-        can be impacted by various conditions other than Patroni, including client pool saturation, pgbouncer saturation,
+        Represents all SQL transactions issued through ActiveRecord from the Rails monolith (web, api, websockets, but not sidekiq) to the Postgres primary.
+        Durations can be impacted by various conditions other than Patroni, including client pool saturation, pgbouncer saturation,
         Ruby thread contention and network conditions.
       |||,
 
-      staticLabels: {
-        stage: 'main',
-      },
-
       apdex: histogramApdex(
-        histogram='gitlab_sql_duration_seconds_bucket',
-        selector={},
+        histogram='gitlab_sql_primary_duration_seconds_bucket',
+        selector=railsBaseSelector,
         satisfiedThreshold=0.05,
         toleratedThreshold=0.1
       ),
 
       requestRate: rateMetric(
-        counter='gitlab_sql_duration_seconds_bucket',
-        selector={ le: '+Inf' },
+        counter='gitlab_sql_primary_duration_seconds_bucket',
+        selector=railsBaseSelector { le: '+Inf' },
       ),
 
-      significantLabels: [],
+      significantLabels: ['feature_category'],
+    },
+
+    rails_replica_sql: {
+      userImpacting: true,
+      featureCategory: 'not_owned',
+      team: 'sre_datastores',
+      upscaleLongerBurnRates: true,
+      description: |||
+        Represents all SQL transactions issued through ActiveRecord from the Rails monolith (web, api, websockets, but not sidekiq) to Postgres replicas.
+        Durations can be impacted by various conditions other than Patroni, including client pool saturation, pgbouncer saturation,
+        Ruby thread contention and network conditions.
+      |||,
+
+      apdex: histogramApdex(
+        histogram='gitlab_sql_replica_duration_seconds_bucket',
+        selector=railsBaseSelector,
+        satisfiedThreshold=0.05,
+        toleratedThreshold=0.1
+      ),
+
+      requestRate: rateMetric(
+        counter='gitlab_sql_replica_duration_seconds_bucket',
+        selector=railsBaseSelector { le: '+Inf' },
+      ),
+
+      significantLabels: ['feature_category'],
     },
 
     transactions_primary: {
@@ -128,6 +161,8 @@ metricsCatalog.serviceDefinition({
       description: |||
         All transactions destined for the Postgres secondary instances are routed through the pgbouncer instances
         running on the patroni nodes themselves. This SLI models those transactions in aggregate.
+
+        Error rate uses mtail metrics from pgbouncer logs.
       |||,
 
       // The same query, with different labels is also used on the patroni nodes pgbouncer instances
@@ -142,7 +177,12 @@ metricsCatalog.serviceDefinition({
         ),
       ]),
 
-      significantLabels: ['fqdn'],
+      errorRate: rateMetric(
+        counter='pgbouncer_pooler_errors_total',
+        selector='type="patroni", tier="db"',
+      ),
+
+      significantLabels: ['fqdn', 'error'],
 
       toolingLinks: [
         toolingLinks.kibana(title='pgbouncer', index='postgres_pgbouncer', type='patroni', tag='postgres.pgbouncer'),

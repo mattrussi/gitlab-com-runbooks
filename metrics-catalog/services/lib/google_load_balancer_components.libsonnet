@@ -7,11 +7,27 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
   // for monitoring a load balancer via stackdriver metrics
   // loadBalancerName: the name of the load balancer
   // projectId: the Google ProjectID that the load balancer is declared in
-  googleLoadBalancer(userImpacting, loadBalancerName, projectId)::
-    local baseSelector = { target_proxy_name: loadBalancerName, project_id: projectId };
+  googleLoadBalancer(
+    userImpacting,
+    loadBalancerName,
+    targetProxyName=loadBalancerName,
+    projectId,
+    team=null,
+    ignoreTrafficCessation=false
+  )::
+    local baseSelector = { target_proxy_name: targetProxyName, project_id: projectId };
 
     metricsCatalog.serviceLevelIndicatorDefinition({
       userImpacting: userImpacting,
+      [if team != null then 'team']: team,
+      ignoreTrafficCessation: ignoreTrafficCessation,
+
+      staticLabels: {
+        // TODO: In future, we may need to allow other stages here too
+        // in which case we'll need to use a scheme similar that the one
+        // we use for HAPRoxy
+        stage: 'main',
+      },
 
       requestRate: rateMetric(
         counter='stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count',

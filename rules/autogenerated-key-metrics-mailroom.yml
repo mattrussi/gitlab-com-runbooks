@@ -21,8 +21,16 @@ groups:
       tier: sv
       type: mailroom
     expr: |
-      sum by (environment) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate1m{queue="email_receiver"}
+      (
+        sum by (environment) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate1m{queue="email_receiver"}
+        )
+      )
+      or
+      (
+        0 * group by(environment) (
+          gitlab_component_ops:rate{component="emailsProcessed",stage="main",tier="sv",type="mailroom"}
+        )
       )
 - name: 'Component-Level SLIs: mailroom - 5m burn-rate'
   interval: 1m
@@ -44,8 +52,16 @@ groups:
       tier: sv
       type: mailroom
     expr: |
-      sum by (environment) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate5m{queue="email_receiver"}
+      (
+        sum by (environment) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{queue="email_receiver"}
+        )
+      )
+      or
+      (
+        0 * group by(environment) (
+          gitlab_component_ops:rate_5m{component="emailsProcessed",stage="main",tier="sv",type="mailroom"}
+        )
       )
 - name: 'Component-Level SLIs: mailroom - 30m burn-rate'
   interval: 2m
@@ -67,8 +83,16 @@ groups:
       tier: sv
       type: mailroom
     expr: |
-      sum by (environment) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate30m{queue="email_receiver"}
+      (
+        sum by (environment) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate30m{queue="email_receiver"}
+        )
+      )
+      or
+      (
+        0 * group by(environment) (
+          gitlab_component_ops:rate_30m{component="emailsProcessed",stage="main",tier="sv",type="mailroom"}
+        )
       )
 - name: 'Component-Level SLIs: mailroom - 1h burn-rate'
   interval: 1m
@@ -90,8 +114,16 @@ groups:
       tier: sv
       type: mailroom
     expr: |
-      sum by (environment) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate1h{queue="email_receiver"}
+      (
+        sum by (environment) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate1h{queue="email_receiver"}
+        )
+      )
+      or
+      (
+        0 * group by(environment) (
+          gitlab_component_ops:rate_1h{component="emailsProcessed",stage="main",tier="sv",type="mailroom"}
+        )
       )
 - name: 'Component-Level SLIs: mailroom - 6h burn-rate'
   interval: 2m
@@ -113,8 +145,16 @@ groups:
       tier: sv
       type: mailroom
     expr: |
-      sum by (environment) (
-        sli_aggregations:sidekiq_jobs_failed_total_rate6h{queue="email_receiver"}
+      (
+        sum by (environment) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate6h{queue="email_receiver"}
+        )
+      )
+      or
+      (
+        0 * group by(environment) (
+          gitlab_component_ops:rate_6h{component="emailsProcessed",stage="main",tier="sv",type="mailroom"}
+        )
       )
 - name: 'Component mapping: mailroom'
   interval: 1m

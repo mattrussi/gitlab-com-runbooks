@@ -21,7 +21,6 @@
   'cronjob:geo_scheduler_primary_per_shard_scheduler',
   'cronjob:geo_scheduler_secondary_per_shard_scheduler',
   'cronjob:geo_secondary_registry_consistency',
-  'default',
   'geo:geo_batch_project_registry',
   'geo:geo_batch_project_registry_scheduler',
   'geo:geo_container_repository_sync',

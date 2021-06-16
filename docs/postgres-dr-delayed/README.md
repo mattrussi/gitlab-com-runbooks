@@ -16,7 +16,7 @@
 ## Troubleshooting Pointers
 
 * [../patroni/patroni-management.md](../patroni/patroni-management.md)
-* [../postgres-dr-archive/postgres-dr-replicas.md](../postgres-dr-archive/postgres-dr-replicas.md)
+* [../postgres-archive/postgres-dr-replicas.md](../postgres-archive/postgres-dr-replicas.md)
 * [postgres-dr-replicas.md](postgres-dr-replicas.md)
 <!-- END_MARKER -->
 

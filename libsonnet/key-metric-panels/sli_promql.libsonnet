@@ -114,6 +114,22 @@ local errorRatioQuery(aggregationSet, aggregationLabels, selectorHash, range=nul
     )
   ||| % [expr, clampMaxExpressionWithDefault];
 
+local getApdexThresholdExpressionForWindow(type, windowDuration) =
+  |||
+    (1 - %(factor)g * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{%(selectors)s})))
+  ||| % {
+    selectors: selectors.serializeHash({ type: type, monitor: 'global' }),
+    factor: multiburnFactors.errorBudgetFactorFor(windowDuration),
+  };
+
+local getErrorRateThresholdExpressionForWindow(type, windowDuration) =
+  |||
+    (%(factor)g * avg(slo:max:events:gitlab_service_errors:ratio{%(selectors)s}))
+  ||| % {
+    selectors: selectors.serializeHash({ type: type, monitor: 'global' }),
+    factor: multiburnFactors.errorBudgetFactorFor(windowDuration),
+  };
+
 {
   apdexQuery:: apdexQuery,
   opsRateQuery:: opsRateQuery,
@@ -126,20 +142,10 @@ local errorRatioQuery(aggregationSet, aggregationLabels, selectorHash, range=nul
      * @return a string representation of the PromQL query
      */
     serviceApdexDegradationSLOQuery(type)::
-      |||
-        (1 - %(burnrate_6h)g * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{%(selectors)s})))
-      ||| % {
-        selectors: selectors.serializeHash({ type: type, monitor: 'global' }),
-        burnrate_6h: multiburnFactors.burnrate_6h,
-      },
+      getApdexThresholdExpressionForWindow(type, '6h'),
 
     serviceApdexOutageSLOQuery(type)::
-      |||
-        (1 - %(burnrate_1h)g * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{%(selectors)s})))
-      ||| % {
-        selectors: selectors.serializeHash({ type: type, monitor: 'global' }),
-        burnrate_1h: multiburnFactors.burnrate_1h,
-      },
+      getApdexThresholdExpressionForWindow(type, '1h'),
   },
 
   opsRate:: {
@@ -161,19 +167,9 @@ local errorRatioQuery(aggregationSet, aggregationLabels, selectorHash, range=nul
 
   errorRate:: {
     serviceErrorRateDegradationSLOQuery(type)::
-      |||
-        (%(burnrate_6h)g * avg(slo:max:events:gitlab_service_errors:ratio{%(selectors)s}))
-      ||| % {
-        selectors: selectors.serializeHash({ type: type, monitor: 'global' }),
-        burnrate_6h: multiburnFactors.burnrate_6h,
-      },
+      getErrorRateThresholdExpressionForWindow(type, '6h'),
 
     serviceErrorRateOutageSLOQuery(type)::
-      |||
-        (%(burnrate_1h)g * avg(slo:max:events:gitlab_service_errors:ratio{%(selectors)s}))
-      ||| % {
-        selectors: selectors.serializeHash({ type: type, monitor: 'global' }),
-        burnrate_1h: multiburnFactors.burnrate_1h,
-      },
+      getErrorRateThresholdExpressionForWindow(type, '1h'),
   },
 }

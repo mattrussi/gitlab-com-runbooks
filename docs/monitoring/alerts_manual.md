@@ -157,6 +157,9 @@ mountpoint              /var/opt/gitlab
 ```
 * Set a duration, an owner and a comment.
 
+*Note*: During a site-wide outage it may be desired to globally silence alerts while we investigate issues.
+To create one, navigate to https://alerts.gitlab.net/#/silences and add a silence for `env=gprd` with a duration of <= 1hour.
+
 ## Tips and tricks
 
 * Route new alerts to a testing channel by adding `channel: "#testing"` where the channel is something you know and have agreed. This will reduce noise when developing alerts.

@@ -18,6 +18,7 @@ function kibana_client() {
 function execute_jsonnet() {
   # MARQUEE_CUSTOMERS_TOP_LEVEL_DOMAINS should be comma-delimited
   jsonnet -J "${SCRIPT_DIR}/../../lib" \
+    -J "${SCRIPT_DIR}/../../../../libsonnet" \
     --ext-str "marquee_customers_top_level_domains=${MARQUEE_CUSTOMERS_TOP_LEVEL_DOMAINS:-}" \
     "$@"
 }

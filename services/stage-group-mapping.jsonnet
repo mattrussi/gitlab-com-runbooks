@@ -113,12 +113,13 @@
       'jira_importer',
     ],
   },
-  continuous_integration: {
-    name: 'Continuous Integration',
+  pipeline_execution: {
+    name: 'Pipeline Execution',
     stage: 'verify',
     feature_categories: [
       'continuous_integration',
       'merge_trains',
+      'continuous_integration_scaling',
     ],
   },
   pipeline_authoring: {
@@ -140,10 +141,8 @@
     name: 'Testing',
     stage: 'verify',
     feature_categories: [
-      'code_quality',
       'code_testing',
-      'load_testing',
-      'browser_performance',
+      'performance_testing',
       'usability_testing',
       'accessibility_testing',
     ],
@@ -167,6 +166,7 @@
     feature_categories: [
       'static_application_security_testing',
       'secret_detection',
+      'code_quality',
     ],
   },
   dynamic_analysis: {
@@ -176,6 +176,7 @@
       'dynamic_application_security_testing',
       'interactive_application_security_testing',
       'attack_emulation',
+      'fuzz_testing',
     ],
   },
   composition_analysis: {
@@ -184,13 +185,6 @@
     feature_categories: [
       'dependency_scanning',
       'license_compliance',
-    ],
-  },
-  fuzz_testing: {
-    name: 'Fuzz Testing',
-    stage: 'secure',
-    feature_categories: [
-      'fuzz_testing',
     ],
   },
   threat_insights: {
@@ -240,6 +234,7 @@
     feature_categories: [
       'error_tracking',
       'incident_management',
+      'on_call_schedule_management',
       'metrics',
       'tracing',
       'logging',
@@ -283,28 +278,29 @@
     name: 'Activation',
     stage: 'growth',
     feature_categories: [
-
+      'experimentation_activation',
+      'onboarding',
     ],
   },
   conversion: {
     name: 'Conversion',
     stage: 'growth',
     feature_categories: [
-
+      'experimentation_conversion',
     ],
   },
   expansion: {
     name: 'Expansion',
     stage: 'growth',
     feature_categories: [
-
+      'experimentation_expansion',
     ],
   },
   adoption: {
     name: 'Adoption',
     stage: 'growth',
     feature_categories: [
-
+      'experimentation_adoption',
     ],
   },
   product_intelligence: {
@@ -354,6 +350,13 @@
       'database',
     ],
   },
+  sharding: {
+    name: 'Sharding',
+    stage: 'enablement',
+    feature_categories: [
+      'sharding',
+    ],
+  },
   infrastructure: {
     name: 'Infrastructure',
     stage: 'enablement',
@@ -363,23 +366,23 @@
   },
   applied_ml: {
     name: 'Applied Machine Learning',
-    stage: 'learn',
+    stage: 'ModelOps',
     feature_categories: [
-      'auto_portfolio_mgmt',
+      'workflow_automation',
       'insider_threat',
       'intel_code_security',
     ],
   },
   mlops: {
     name: 'MLOps',
-    stage: 'learn',
+    stage: 'ModelOps',
     feature_categories: [
       'mlops',
     ],
   },
   dataops: {
     name: 'DataOps',
-    stage: 'learn',
+    stage: 'ModelOps',
     feature_categories: [
       'dataops',
     ],

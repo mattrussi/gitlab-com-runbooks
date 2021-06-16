@@ -8,6 +8,8 @@ export indices=(
   consul
   fluentd
   gitaly
+  gcs
+  gcp-events
   gke
   gke-audit
   gke-systemd
@@ -20,6 +22,7 @@ export indices=(
   praefect
   pubsubbeat
   puma
+  pvs
   rails
   redis
   registry

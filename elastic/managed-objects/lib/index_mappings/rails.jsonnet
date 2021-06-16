@@ -3,6 +3,19 @@
     '@timestamp': {
       type: 'date',
     },
+    docker: {
+      properties: {
+        container_id: {
+          type: 'text',
+          fields: {
+            keyword: {
+              type: 'keyword',
+              ignore_above: 256,
+            },
+          },
+        },
+      },
+    },
     ecs: {
       properties: {
         version: {
@@ -88,8 +101,8 @@
         },
         app_id: {
           type: 'keyword',
-          ignore_above: 256,
           store: true,
+          ignore_above: 256,
         },
         app_name: {
           type: 'text',
@@ -120,8 +133,8 @@
         },
         author_id: {
           type: 'keyword',
-          ignore_above: 256,
           store: true,
+          ignore_above: 256,
         },
         author_name: {
           type: 'text',
@@ -197,14 +210,26 @@
         },
         cluster_id: {
           type: 'keyword',
-          ignore_above: 256,
           store: true,
+          ignore_above: 256,
         },
         complexity: {
           type: 'long',
         },
         conflict_retried: {
           type: 'long',
+        },
+        content_length: {
+          type: 'long',
+        },
+        content_range: {
+          type: 'text',
+          fields: {
+            keyword: {
+              type: 'keyword',
+              ignore_above: 256,
+            },
+          },
         },
         controller: {
           type: 'text',
@@ -232,8 +257,8 @@
         },
         current_user_id: {
           type: 'keyword',
-          ignore_above: 256,
           store: true,
+          ignore_above: 256,
         },
         custom_message: {
           type: 'text',
@@ -246,6 +271,12 @@
         },
         db: {
           type: 'float',
+        },
+        db_cached_count: {
+          type: 'long',
+        },
+        db_count: {
+          type: 'long',
         },
         db_duration_s: {
           type: 'float',
@@ -262,16 +293,46 @@
         db_port: {
           type: 'long',
         },
+        db_primary_cached_count: {
+          type: 'long',
+        },
+        db_primary_count: {
+          type: 'long',
+        },
+        db_primary_duration_s: {
+          type: 'float',
+        },
+        db_replica_cached_count: {
+          type: 'long',
+        },
+        db_replica_count: {
+          type: 'long',
+        },
+        db_replica_duration_s: {
+          type: 'float',
+        },
+        db_write_count: {
+          type: 'long',
+        },
         depth: {
           type: 'long',
         },
         duration_s: {
           type: 'float',
         },
+        elasticsearch_calls: {
+          type: 'long',
+        },
+        elasticsearch_duration_s: {
+          type: 'float',
+        },
+        elasticsearch_timed_out_count: {
+          type: 'long',
+        },
         entity_id: {
           type: 'keyword',
-          ignore_above: 256,
           store: true,
+          ignore_above: 256,
         },
         entity_path: {
           type: 'text',
@@ -398,12 +459,18 @@
         expiry_to: {
           type: 'date',
         },
+        external_http_count: {
+          type: 'long',
+        },
+        external_http_duration_s: {
+          type: 'float',
+        },
         extra: {
           properties: {
             app_id: {
               type: 'keyword',
-              ignore_above: 256,
               store: true,
+              ignore_above: 256,
             },
             app_name: {
               type: 'text',
@@ -416,13 +483,22 @@
             },
             bridge_id: {
               type: 'keyword',
-              ignore_above: 256,
               store: true,
+              ignore_above: 256,
             },
             build_id: {
               type: 'keyword',
-              ignore_above: 256,
               store: true,
+              ignore_above: 256,
+            },
+            checksum: {
+              type: 'text',
+              fields: {
+                keyword: {
+                  type: 'keyword',
+                  ignore_above: 256,
+                },
+              },
             },
             child: {
               type: 'text',
@@ -444,18 +520,21 @@
             },
             cluster_id: {
               type: 'keyword',
-              ignore_above: 256,
               store: true,
+              ignore_above: 256,
+            },
+            created_at: {
+              type: 'date',
             },
             deployment_id: {
               type: 'keyword',
-              ignore_above: 256,
               store: true,
+              ignore_above: 256,
             },
             downstream_pipeline_id: {
               type: 'keyword',
-              ignore_above: 256,
               store: true,
+              ignore_above: 256,
             },
             'error': {
               type: 'text',
@@ -480,8 +559,8 @@
             },
             exportable_id: {
               type: 'keyword',
-              ignore_above: 256,
               store: true,
+              ignore_above: 256,
             },
             exportable_path: {
               type: 'text',
@@ -503,13 +582,22 @@
             },
             group_ids: {
               type: 'keyword',
-              ignore_above: 256,
               store: true,
+              ignore_above: 256,
+            },
+            id: {
+              type: 'text',
+              fields: {
+                keyword: {
+                  type: 'keyword',
+                  ignore_above: 256,
+                },
+              },
             },
             iid: {
               type: 'keyword',
-              ignore_above: 256,
               store: true,
+              ignore_above: 256,
             },
             import_jid: {
               type: 'text',
@@ -540,8 +628,8 @@
             },
             job_id: {
               type: 'keyword',
-              ignore_above: 256,
               store: true,
+              ignore_above: 256,
             },
             merge_request: {
               type: 'text',
@@ -554,8 +642,8 @@
             },
             merge_request_id: {
               type: 'keyword',
-              ignore_above: 256,
               store: true,
+              ignore_above: 256,
             },
             message: {
               type: 'text',
@@ -566,10 +654,28 @@
                 },
               },
             },
+            model_id: {
+              type: 'text',
+              fields: {
+                keyword: {
+                  type: 'keyword',
+                  ignore_above: 256,
+                },
+              },
+            },
+            model_type: {
+              type: 'text',
+              fields: {
+                keyword: {
+                  type: 'keyword',
+                  ignore_above: 256,
+                },
+              },
+            },
             namespace_id: {
               type: 'keyword',
-              ignore_above: 256,
               store: true,
+              ignore_above: 256,
             },
             new_name: {
               type: 'text',
@@ -609,8 +715,8 @@
             },
             pipeline_id: {
               type: 'keyword',
-              ignore_above: 256,
               store: true,
+              ignore_above: 256,
             },
             plan: {
               type: 'text',
@@ -632,13 +738,13 @@
             },
             project_id: {
               type: 'keyword',
-              ignore_above: 256,
               store: true,
+              ignore_above: 256,
             },
             project_ids: {
               type: 'keyword',
-              ignore_above: 256,
               store: true,
+              ignore_above: 256,
             },
             project_path: {
               type: 'text',
@@ -702,6 +808,15 @@
             },
             save_message_on_model: {
               type: 'boolean',
+            },
+            secret: {
+              type: 'text',
+              fields: {
+                keyword: {
+                  type: 'keyword',
+                  ignore_above: 256,
+                },
+              },
             },
             service: {
               type: 'text',
@@ -882,6 +997,15 @@
                 },
               },
             },
+            size: {
+              type: 'text',
+              fields: {
+                keyword: {
+                  type: 'keyword',
+                  ignore_above: 256,
+                },
+              },
+            },
             source: {
               type: 'text',
               fields: {
@@ -909,10 +1033,19 @@
                 },
               },
             },
+            store: {
+              type: 'text',
+              fields: {
+                keyword: {
+                  type: 'keyword',
+                  ignore_above: 256,
+                },
+              },
+            },
             subject_id: {
               type: 'keyword',
-              ignore_above: 256,
               store: true,
+              ignore_above: 256,
             },
             trace: {
               type: 'text',
@@ -924,6 +1057,15 @@
               },
             },
             type: {
+              type: 'text',
+              fields: {
+                keyword: {
+                  type: 'keyword',
+                  ignore_above: 256,
+                },
+              },
+            },
+            uploader: {
               type: 'text',
               fields: {
                 keyword: {
@@ -956,8 +1098,8 @@
             },
             id: {
               type: 'keyword',
-              ignore_above: 256,
               store: true,
+              ignore_above: 256,
             },
           },
         },
@@ -994,6 +1136,40 @@
         gitaly_duration_s: {
           type: 'float',
         },
+        graphql: {
+          properties: {
+            complexity: {
+              type: 'text',
+              fields: {
+                keyword: {
+                  type: 'keyword',
+                  ignore_above: 256,
+                },
+              },
+            },
+            depth: {
+              type: 'long',
+            },
+            used_fields: {
+              type: 'text',
+              fields: {
+                keyword: {
+                  type: 'keyword',
+                  ignore_above: 256,
+                },
+              },
+            },
+            variables: {
+              type: 'text',
+              fields: {
+                keyword: {
+                  type: 'keyword',
+                  ignore_above: 256,
+                },
+              },
+            },
+          },
+        },
         group_full_path: {
           type: 'text',
           fields: {
@@ -1005,13 +1181,13 @@
         },
         group_id: {
           type: 'keyword',
-          ignore_above: 256,
           store: true,
+          ignore_above: 256,
         },
         group_ids: {
           type: 'keyword',
-          ignore_above: 256,
           store: true,
+          ignore_above: 256,
         },
         group_name: {
           type: 'text',
@@ -1045,8 +1221,8 @@
         },
         iid: {
           type: 'keyword',
-          ignore_above: 256,
           store: true,
+          ignore_above: 256,
         },
         inline_comments_count: {
           type: 'long',
@@ -1094,6 +1270,24 @@
             },
           },
         },
+        matched: {
+          type: 'text',
+          fields: {
+            keyword: {
+              type: 'keyword',
+              ignore_above: 256,
+            },
+          },
+        },
+        mem_bytes: {
+          type: 'long',
+        },
+        mem_mallocs: {
+          type: 'long',
+        },
+        mem_objects: {
+          type: 'long',
+        },
         merge_access_levels: {
           type: 'text',
           fields: {
@@ -1117,8 +1311,8 @@
         },
         merge_request_id: {
           type: 'keyword',
-          ignore_above: 256,
           store: true,
+          ignore_above: 256,
         },
         message: {
           type: 'text',
@@ -1140,7 +1334,25 @@
                 },
               },
             },
+            feature_category: {
+              type: 'text',
+              fields: {
+                keyword: {
+                  type: 'keyword',
+                  ignore_above: 256,
+                },
+              },
+            },
             project: {
+              type: 'text',
+              fields: {
+                keyword: {
+                  type: 'keyword',
+                  ignore_above: 256,
+                },
+              },
+            },
+            remote_ip: {
               type: 'text',
               fields: {
                 keyword: {
@@ -1155,6 +1367,37 @@
                 keyword: {
                   type: 'keyword',
                   ignore_above: 256,
+                },
+              },
+            },
+            search: {
+              properties: {
+                group_id: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                project_id: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                scope: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
                 },
               },
             },
@@ -1241,13 +1484,13 @@
         },
         project_id: {
           type: 'keyword',
-          ignore_above: 256,
           store: true,
+          ignore_above: 256,
         },
         project_ids: {
           type: 'keyword',
-          ignore_above: 256,
           store: true,
+          ignore_above: 256,
         },
         project_path: {
           type: 'text',
@@ -1288,13 +1531,55 @@
         queue_duration_s: {
           type: 'float',
         },
+        rack_attack_redis_count: {
+          type: 'long',
+        },
+        rack_attack_redis_duration_s: {
+          type: 'float',
+        },
+        redis_cache_calls: {
+          type: 'long',
+        },
+        redis_cache_duration_s: {
+          type: 'float',
+        },
+        redis_cache_read_bytes: {
+          type: 'long',
+        },
+        redis_cache_write_bytes: {
+          type: 'long',
+        },
         redis_calls: {
           type: 'long',
         },
         redis_duration_s: {
           type: 'float',
         },
+        redis_queues_calls: {
+          type: 'long',
+        },
+        redis_queues_duration_s: {
+          type: 'float',
+        },
+        redis_queues_read_bytes: {
+          type: 'long',
+        },
+        redis_queues_write_bytes: {
+          type: 'long',
+        },
         redis_read_bytes: {
+          type: 'long',
+        },
+        redis_shared_state_calls: {
+          type: 'long',
+        },
+        redis_shared_state_duration_s: {
+          type: 'float',
+        },
+        redis_shared_state_read_bytes: {
+          type: 'long',
+        },
+        redis_shared_state_write_bytes: {
           type: 'long',
         },
         redis_write_bytes: {
@@ -1445,7 +1730,43 @@
                 },
               },
             },
+            feature_category: {
+              type: 'text',
+              fields: {
+                keyword: {
+                  type: 'keyword',
+                  ignore_above: 256,
+                },
+              },
+            },
             locale: {
+              type: 'text',
+              fields: {
+                keyword: {
+                  type: 'keyword',
+                  ignore_above: 256,
+                },
+              },
+            },
+            program: {
+              type: 'text',
+              fields: {
+                keyword: {
+                  type: 'keyword',
+                  ignore_above: 256,
+                },
+              },
+            },
+            stage: {
+              type: 'text',
+              fields: {
+                keyword: {
+                  type: 'keyword',
+                  ignore_above: 256,
+                },
+              },
+            },
+            type: {
               type: 'text',
               fields: {
                 keyword: {
@@ -1475,6 +1796,15 @@
           },
         },
         target_type: {
+          type: 'text',
+          fields: {
+            keyword: {
+              type: 'keyword',
+              ignore_above: 256,
+            },
+          },
+        },
+        throttle_safelist: {
           type: 'text',
           fields: {
             keyword: {
@@ -1549,6 +1879,15 @@
             },
           },
         },
+        used_fields: {
+          type: 'text',
+          fields: {
+            keyword: {
+              type: 'keyword',
+              ignore_above: 256,
+            },
+          },
+        },
         user: {
           properties: {
             email: {
@@ -1562,8 +1901,8 @@
             },
             id: {
               type: 'keyword',
-              ignore_above: 256,
               store: true,
+              ignore_above: 256,
             },
             ip_address: {
               type: 'ip',
@@ -1588,8 +1927,8 @@
         },
         user_id: {
           type: 'keyword',
-          ignore_above: 256,
           store: true,
+          ignore_above: 256,
         },
         username: {
           type: 'text',
@@ -1623,6 +1962,207 @@
         },
       },
     },
+    kubernetes: {
+      properties: {
+        container_image: {
+          type: 'text',
+          fields: {
+            keyword: {
+              type: 'keyword',
+              ignore_above: 256,
+            },
+          },
+        },
+        container_image_id: {
+          type: 'text',
+          fields: {
+            keyword: {
+              type: 'keyword',
+              ignore_above: 256,
+            },
+          },
+        },
+        container_name: {
+          type: 'text',
+          fields: {
+            keyword: {
+              type: 'keyword',
+              ignore_above: 256,
+            },
+          },
+        },
+        host: {
+          type: 'text',
+          fields: {
+            keyword: {
+              type: 'keyword',
+              ignore_above: 256,
+            },
+          },
+        },
+        labels: {
+          properties: {
+            app: {
+              type: 'text',
+              fields: {
+                keyword: {
+                  type: 'keyword',
+                  ignore_above: 256,
+                },
+              },
+            },
+            chart: {
+              type: 'text',
+              fields: {
+                keyword: {
+                  type: 'keyword',
+                  ignore_above: 256,
+                },
+              },
+            },
+            deployment: {
+              type: 'text',
+              fields: {
+                keyword: {
+                  type: 'keyword',
+                  ignore_above: 256,
+                },
+              },
+            },
+            'gitlab_com/webservice-name': {
+              type: 'text',
+              fields: {
+                keyword: {
+                  type: 'keyword',
+                  ignore_above: 256,
+                },
+              },
+            },
+            heritage: {
+              type: 'text',
+              fields: {
+                keyword: {
+                  type: 'keyword',
+                  ignore_above: 256,
+                },
+              },
+            },
+            'pod-template-hash': {
+              type: 'text',
+              fields: {
+                keyword: {
+                  type: 'keyword',
+                  ignore_above: 256,
+                },
+              },
+            },
+            release: {
+              type: 'text',
+              fields: {
+                keyword: {
+                  type: 'keyword',
+                  ignore_above: 256,
+                },
+              },
+            },
+            stage: {
+              type: 'text',
+              fields: {
+                keyword: {
+                  type: 'keyword',
+                  ignore_above: 256,
+                },
+              },
+            },
+            tier: {
+              type: 'text',
+              fields: {
+                keyword: {
+                  type: 'keyword',
+                  ignore_above: 256,
+                },
+              },
+            },
+            type: {
+              type: 'text',
+              fields: {
+                keyword: {
+                  type: 'keyword',
+                  ignore_above: 256,
+                },
+              },
+            },
+          },
+        },
+        master_url: {
+          type: 'text',
+          fields: {
+            keyword: {
+              type: 'keyword',
+              ignore_above: 256,
+            },
+          },
+        },
+        namespace_id: {
+          type: 'text',
+          fields: {
+            keyword: {
+              type: 'keyword',
+              ignore_above: 256,
+            },
+          },
+        },
+        namespace_labels: {
+          properties: {
+            name: {
+              type: 'text',
+              fields: {
+                keyword: {
+                  type: 'keyword',
+                  ignore_above: 256,
+                },
+              },
+            },
+          },
+        },
+        namespace_name: {
+          type: 'text',
+          fields: {
+            keyword: {
+              type: 'keyword',
+              ignore_above: 256,
+            },
+          },
+        },
+        pod_id: {
+          type: 'text',
+          fields: {
+            keyword: {
+              type: 'keyword',
+              ignore_above: 256,
+            },
+          },
+        },
+        pod_name: {
+          type: 'text',
+          fields: {
+            keyword: {
+              type: 'keyword',
+              ignore_above: 256,
+            },
+          },
+        },
+        region: {
+          type: 'text',
+          fields: {
+            keyword: {
+              type: 'keyword',
+              ignore_above: 256,
+            },
+          },
+        },
+      },
+    },
     message_id: {
       type: 'text',
       fields: {
@@ -1634,6 +2174,15 @@
     },
     publish_time: {
       type: 'date',
+    },
+    tag: {
+      type: 'text',
+      fields: {
+        keyword: {
+          type: 'keyword',
+          ignore_above: 256,
+        },
+      },
     },
     type: {
       type: 'text',

@@ -220,13 +220,13 @@ have the instant option as well.  Note that 'instant' actually means Grafana's a
 long periods of time (days) this can get large and make 'instant' approach or possible surpass the 10m interval
 
 From the Shard Detail dashboard on any graph that shows job-specific stats, left-clicking on the line for a job opens a
-menu from which the "[Queue Detail](https://dashboards.gitlab.net/d/sidekiq-queue-detail/sidekiq-queue-detail)"
+menu from which the "[Worker Detail](https://dashboards.gitlab.net/d/sidekiq-worker-detail/sidekiq-worker-detail)"
 dashboard can be opened.
 
-### Queue Detail
+### Queue/Worker Detail
 
-https://dashboards.gitlab.net/d/sidekiq-queue-detail/sidekiq-queue-detail is the lowest level of the
-Sidekiq dashboards, and shows graphs specific to the selected queue(s). The graphs on this page are fairly
+https://dashboards.gitlab.net/d/sidekiq-worker-detail/sidekiq-worker-detail is the lowest level of the
+Sidekiq dashboards, and shows graphs specific to the selected worker. The graphs on this page are fairly
 self-explanatory. One neat feature is that it shows which shard this job is running on in the brightly colored boxes at
 the top (Queue Attribute: Shard), which can be a lot quicker than trying to find the job in the all_workers.yml file in
 the gitlab code base.

@@ -6,9 +6,14 @@ local googleLoadBalancerComponents = import './lib/google_load_balancer_componen
 metricsCatalog.serviceDefinition({
   type: 'logging',
   tier: 'inf',
+  serviceIsStageless: true,  // logging does not have a cny stage
   monitoringThresholds: {
     // apdexScore: 0.999,
     errorRatio: 0.999,
+  },
+  provisioning: {
+    vms: false,
+    kubernetes: false,
   },
   serviceLevelIndicators: {
     elasticsearch_searching_cluster: {
@@ -85,6 +90,9 @@ metricsCatalog.serviceDefinition({
       userImpacting=false,
       loadBalancerName='ops-prod-proxy',
       projectId='gitlab-ops',
+
+      // No need to alert if Kibana isn't receiving traffic
+      ignoreTrafficCessation=true
     ),
 
     // Stackdriver component represents log messages
@@ -98,10 +106,6 @@ metricsCatalog.serviceDefinition({
       description: |||
         This SLI monitors the total number of logs sent to GCP StackDriver logging.
       |||,
-
-      staticLabels: {
-        stage: 'main',
-      },
 
       requestRate: rateMetric(
         counter='stackdriver_gce_instance_logging_googleapis_com_log_entry_count',
@@ -118,10 +122,6 @@ metricsCatalog.serviceDefinition({
         This SLI monitors pubsub topics.
       |||,
 
-      staticLabels: {
-        stage: 'main',
-      },
-
       requestRate: rateMetric(
         counter='stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost',
         selector='type="monitoring"',
@@ -137,10 +137,6 @@ metricsCatalog.serviceDefinition({
       description: |||
         This SLI monitors pubsub subscriptions.
       |||,
-
-      staticLabels: {
-        stage: 'main',
-      },
 
       requestRate: rateMetric(
         counter='stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost',
@@ -159,10 +155,6 @@ metricsCatalog.serviceDefinition({
       description: |||
         This SLI monitors fluentd log output and the number of output errors in fluentd.
       |||,
-
-      staticLabels: {
-        stage: 'main',
-      },
 
       requestRate: rateMetric(
         counter='fluentd_output_status_write_count',

@@ -22,11 +22,12 @@ as a side-effect than the direct reason.
 ## Architecture
 For gitlab.com, as at September 2020, we have 3 distinct sets of Redis instances, each handling a distinct use case:
 
-| Role                    | Nodes            | Clients                                  | Sentinel?                     | Persistence?               |
-| ----------------------- | ---------------- | ---------------------------------------- | ----------------------------- | -------------------------- |
-| Cache for `Rails.cache` | redis-cache-XX   | Puma workers, Sidekiq workers            | Yes (redis-cache-sentinel-XX) | None                       |
-| Sidekiq job queues      | redis-sidekiq-XX | Puma workers, Sidekiq workers            | Yes (localhost)               | RDB dump every 900 seconds |
-| Persistent shared state | redis-XX         | Puma workers, Sidekiq workers, Workhorse | Yes (localhost)               | RDB dump every 900 seconds |
+| Role                    | Nodes                | Clients                                  | Sentinel?                     | Persistence?               |
+| ----------------------- | -------------------- | ---------------------------------------- | ----------------------------- | -------------------------- |
+| Cache for `Rails.cache` | redis-cache-XX       | Puma workers, Sidekiq workers            | Yes (redis-cache-sentinel-XX) | None                       |
+| Sidekiq job queues      | redis-sidekiq-XX     | Puma workers, Sidekiq workers            | Yes (localhost)               | RDB dump every 900 seconds |
+| Persistent shared state | redis-XX             | Puma workers, Sidekiq workers, Workhorse | Yes (localhost)               | RDB dump every 900 seconds |
+| CI build trace chunks   | redis-tracechunks-XX | Puma workers (API), Sidekiq workers      | Yes (localhost)               | RDB dump every 900 seconds |
 
 We do not yet have a separate actioncable instance.
 
@@ -40,6 +41,10 @@ for insufficient benefit.  While we don't want to lose our cache regularly, we c
 in unlikely circumstances (all 3 nodes die at once, which would probably mean all or much of the rest of our
 infrastructure is also down or badly affected).
 
+At the time (mid 2021) we chose to split CI build trace chunks into it's own instance, CI trace chunks were responsible for roughly 60% of the
+data throughput into/out of the shared state redis, and 16% of Redis calls (see https://gitlab.com/gitlab-org/gitlab/-/issues/327469#note_556531587)
+which was sufficient reason for the split, along with the distinctive usage profile (transient data on its way to permanent storage).
+
 ### CPUs
 Redis VMs were the first nodes we switched to from N1 to '[C2](https://cloud.google.com/compute/docs/machine-types#c2_machine_types)'
 node types for the best raw single-threaded CPU performance.  This [halved](https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/230#note_312403063)
@@ -47,7 +52,7 @@ the CPU usage on our sidekiq cluster, and [almost the same](https://gitlab.com/g
 on the cache cluster.   Just in case you were in any doubt as to how important the single-threaded CPU performance was
 to redis.
 
-Redis 6 (not yet in use) has [multithreaded I/O](https://github.com/redis/redis/pull/6038/files) which helps by moving
+Redis 6 has [multithreaded I/O](https://github.com/redis/redis/pull/6038/files) which helps by moving
 some network I/O work to non-core threads, but the core work must still occur on the main thread, so it is only a
 mitigation.
 
@@ -61,7 +66,7 @@ balancer involved in this path.  Failover is automatic (handled by Sentinel) and
 from the primary and then reconnecting via the sentinels again.  It requires no operator intervention under normal circumstances
 
 The configuration is subtly different across the clusters, for historical reasons; the persistent and sidekiq clusters
-have sentinel running on the VMs alongside redis, whereas the cache cluster uses a distinct set of sentinel VMs.  
+have sentinel running on the VMs alongside redis, whereas the cache cluster uses a distinct set of sentinel VMs.
 https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/11389 records the desire to clean this up.
 
 ### Node failure
@@ -142,6 +147,7 @@ application, which we do not currently use).  This means any uncontrolled failov
 accepted by the lost primary.  This is of very little concern for the cache cluster, but could be lightly problematic for
 the others.  For sidekiq it likely means we'll not run jobs that should be run, or that some jobs will run twice.  For
 the persistent cluster, results may vary (it will be deeply dependent on the specific key and how the application behaves).
+For tracechunks we may lose the output of some CI jobs.
 
 On the non-cache clusters, the data is saved to disk (RDB format) every 900 seconds (15 minutes) as long as at least
 1 key has changed.  In the event that all 3 nodes fail at once and the in-memory contents is lost, we may lose up to
@@ -156,10 +162,18 @@ acceptable as it will be refilled on demand.
 https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/419 contains some summary analysis of the keyspace across
 the persistent and cache instances, as at July 2020.  This will change over time as the code base evolves, but the link
 provides some indication what we're storing (it's not as wide a range of things as you might expect in the
-persistent instance).  
+persistent instance).
 
 The data stored in the sidekiq instances is not really under our control (it's whatever sidekiq needs to do its job).
 Some details on that are available in [Sidekiq Survival Guide for SREs](../sidekiq/sidekiq-survival-guide-for-sres.md).
+
+The data in the tracechunks instance is exclusively the output of CI jobs on its way into Object Storage (received by
+and API request, written into Redis, and a Sidekiq job immediately scheduled to asynchronously write it to Object Storage);
+while important, it is also extremely transient, and under normal circumstances there should be no significant build up
+of data in this instance.  Any such build up implies a problem (Sidekiq not processing, perhaps?) and so we have
+particularly low alert thresholds for memory saturation on this instance.  At the time we chose to split this instance
+from the primary persistent (shared state) instance (mid 2021), CI trace chunks were responsible for roughly 60% of the
+data throughput into/out of the shared state redis, and 16% of Redis calls.
 
 ## Clients
 
@@ -201,6 +215,7 @@ There is 1 core dashboard for redis, with a variant for each cluster:
 * [Persistent/shared](https://dashboards.gitlab.net/d/redis-main/redis-overview?orgId=1)
 * [Cache](https://dashboards.gitlab.net/d/redis-cache-main/redis-cache-overview?orgId=1)
 * [Sidekiq](https://dashboards.gitlab.net/d/redis-sidekiq-main/redis-sidekiq-overview?orgId=1)
+* [Tracechunks](https://dashboards.gitlab.net/d/redis-tracechunks-main/redis-tracechunks-overview?orgId=1)
 
 Note that many of the panels are have both Primary and Secondary variants; because only the primary is active, usually
 only the primary graphs matter *and* the secondaries should be pretty quiet (other than some housekeeping/analysis
@@ -263,9 +278,9 @@ to redis usage.  These are:
 * read_bytes
 * write_bytes
 
-There is one set for each of the clusters, with a different prefix e.g. `redis` (persistent), `redis_cache_`, and
-`redis_queues` (sidekiq).  You can perform the usual sort of visualizations and explorations that you might on other
-numeric fields, e.g. to find the top 20 Controllers by average number of calls to Redis.
+There is one set for each of the clusters, with a different prefix e.g. `redis` (persistent), `redis_cache_`,
+`redis_queues` (sidekiq), and `redis_tracechunks`.  You can perform the usual sort of visualizations and explorations
+that you might on other numeric fields, e.g. to find the top 20 Controllers by average number of calls to Redis.
 
 This would be an excellent approach to diagnosing the source of changes in Redis usage, although if the change was beyond
 our log retention (7 days) you can only really reason about the current state (looking for outliers), which constrains

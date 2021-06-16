@@ -13,6 +13,14 @@ local generateDropOffsets(cellHeights, rowOffsets) =
     for rowOffset in rowOffsets
   ];
 
+local titleRowWithPanels(title, panels, collapse, startRow) =
+  local titleRow = grafana.row.new(title=title, collapse=collapse) { gridPos: { x: 0, y: startRow, w: 24, h: 1 } };
+  if collapse then
+    [titleRow.addPanels(panels)]
+  else
+    [
+      titleRow,
+    ] + panels;
 
 {
   // Returns a grid layout with `cols` columns
@@ -36,14 +44,9 @@ local generateDropOffsets(cellHeights, rowOffsets) =
     local cols = std.length(panels);
     self.grid(panels, cols=cols, rowHeight=rowHeight, startRow=startRow),
 
-  // Layout all panels in a single row, with a title row
-  // rowGrid method adds the panels as consecutive panels. It makes collapse
-  // option doesn't work on child panels of a row. A panel should be a child of
-  // a row.
-  rowGrid(rowTitle, panels, startRow)::
-    [
-      grafana.row.new(title=rowTitle) { gridPos: { x: 0, y: startRow, w: 24, h: 1 } },
-    ] + self.singleRow(panels, startRow=(startRow + 1)),
+  rowGrid(rowTitle, panels, startRow, rowHeight=10, collapse=false)::
+    local panelRow = self.singleRow(panels, rowHeight=rowHeight, startRow=(startRow + 1));
+    titleRowWithPanels(rowTitle, panelRow, collapse, startRow),
 
   // Rows -> array of arrays. Each outer array is a row.
   rows(rowsOfPanels, rowHeight=10, startRow=0)::
@@ -92,7 +95,7 @@ local generateDropOffsets(cellHeights, rowOffsets) =
 
   // Each column contains an array of cells, stacked vertically
   // the heights of each cell are defined by cellHeights
-  splitColumnGrid(columnsOfPanels, cellHeights, startRow, columnWidths=null)::
+  splitColumnGrid(columnsOfPanels, cellHeights, startRow, columnWidths=null, title='', collapse=false)::
     local getXOffsetForColumn =
       if columnWidths == null then
         local colWidth = std.floor(24 / std.length(columnsOfPanels));
@@ -115,7 +118,7 @@ local generateDropOffsets(cellHeights, rowOffsets) =
     local rowOffsets = generateRowOffsets(cellHeights);
     local dropOffsets = generateDropOffsets(cellHeights, rowOffsets);
 
-    std.prune(
+    local panels = std.prune(
       std.flattenArrays(
         std.mapWithIndex(
           function(colIndex, columnOfPanels)
@@ -150,6 +153,9 @@ local generateDropOffsets(cellHeights, rowOffsets) =
           columnsOfPanels
         )
       )
-    ),
+    );
 
+    if title != '' then
+      titleRowWithPanels(title, panels, collapse, startRow)
+    else panels,
 }

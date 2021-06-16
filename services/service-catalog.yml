@@ -29,7 +29,6 @@ teams:
 
 - name: distribution
   url: https://about.gitlab.com/handbook/engineering/dev-backend/distribution/
-  manager_slug: marin
   slack_channel: distribution
   engagement_policy: # Link to doc that talks about engagement
                      # and escalation policy
@@ -49,14 +48,6 @@ teams:
   slack_alerts_channel: gitaly-alerts
   engagement_policy:
   oncall_schedule:
-
-- name: gitter
-  url: https://about.gitlab.com/handbook/engineering/dev-backend/gitter/
-  manager_slug: eng-manager-gitaly
-  slack_channel: g_gitaly
-  engagement_policy: # Link to doc that talks about engagement
-                     # and escalation policy
-  oncall_schedule:   # Link to pagerduty oncall schedule
 
 - name: manage
   url: https://about.gitlab.com/handbook/engineering/dev-backend/manage/
@@ -92,7 +83,6 @@ teams:
 
 - name: support
   url: https://about.gitlab.com/handbook/support/
-  manager_slug: tcooney
   slack_channel: support_gitlab-com
   engagement_policy: # Link to doc that talks about engagement
                      # and escalation policy
@@ -101,20 +91,14 @@ teams:
 # Package team doesn't seem to exist
 - name: package
   url: https://about.gitlab.com/handbook/engineering/dev-backend/
-  manager_slug: clement
   slack_channel: backend
   engagement_policy: # Link to doc that talks about engagement
                      # and escalation policy
   oncall_schedule:   # Link to pagerduty oncall schedule
 
-- name: verify
-  url: https://about.gitlab.com/handbook/engineering/ops-backend/verify/
-  manager_slug: Elliot
-  slack_channel: g_verify
+- name: runner
+  product_stage_group: runner
   slack_alerts_channel: alerts-ci-cd
-  engagement_policy: # Link to doc that talks about engagement
-                     # and escalation policy
-  oncall_schedule:   # Link to pagerduty oncall schedule
 
 # From https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/344
 - name: gitlab-pages
@@ -126,12 +110,23 @@ teams:
   slack_alerts_channel: data-prom-alerts
   oncall_schedule: https://about.gitlab.com/handbook/business-ops/data-team/how-we-work/duties/
 
+- name: delivery
+  slack_alerts_channel: g_delivery
+
 - name: scalability
   slack_alerts_channel: g_scalability
 
 # Workhorse is a virtual team
 - name: workhorse
   slack_alerts_channel: workhorse
+
+# Rapid Action Intercom
+- name: rapid-action-intercom
+  slack_alerts_channel: rapid-action-intercom
+
+- name: pipeline_validation
+  slack_alerts_channel: f_pipeline_validation_service
+  send_slo_alerts_to_team_slack_channel: true
 
 tiers:
 - name: sv
@@ -149,7 +144,6 @@ services:
     - distribution
     - geo
     - gitaly
-    - gitter
     - manage
     - plan
   infra_owner: sre_coreinfra
@@ -178,7 +172,7 @@ services:
     documents:
       design:
       architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#service-architecture
-      readiness_review:
+      readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/tree/master/api-k8s-migration
       service:
         - https://docs.gitlab.com/ce/api/
         - https://docs.gitlab.com/ee/api/
@@ -188,11 +182,10 @@ services:
       - service: gitaly
       - service: redis
     configurations:
-      - config_name: gitlab.rb
-        location: /etc/gitlab/gitlab.rb
-    chef_roles:
-      - gprd-base-fe-api
-      - gstg-base-fe-api
+      - location: /srv/gitlab/config
+        name: webservice
+      - location: /srv/gitlab/config
+        name: workhorse-config.toml
     scalability:
       bound: cpu
       scalable: horizontal
@@ -208,17 +201,11 @@ services:
         - https://gitlab.com/gitlab-org/gitlab-ce/issues/54865
     logging:
       - name: Rails
-        permalink: https://log.gprd.gitlab.net/goto/0238ddb1480bb4bd19c09f0467b6e684
+        permalink: https://log.gprd.gitlab.net/goto/f61f543b668c26f2dcdb8a0eb06e2edb
       - name: Workhorse
-        permalink: https://log.gprd.gitlab.net/goto/eb99f28c17cfcdfd30969a1c85e209dc
-      - name: Unicorn
-        permalink: https://log.gprd.gitlab.net/goto/c8f89b2415788b46978fcd2910b4afec
-      - name: nginx
-        permalink: https://log.gprd.gitlab.net/goto/0d1c84486d6fb28a785f1c21473e5611
-      - name: Unstructured Rails
-        permalink: https://console.cloud.google.com/logs/viewer?project=gitlab-production&interval=PT1H&resource=gce_instance&advancedFilter=jsonPayload.hostname%3A%22api%22%0Alabels.tag%3D%22unstructured.production%22&customFacets=labels.%22compute.googleapis.com%2Fresource_name%22
-      - name: system
-        permalink: https://log.gprd.gitlab.net/goto/2b9679dab019791136cb8ae1535fb781
+        permalink: https://log.gprd.gitlab.net/goto/66979d90ca195652b7a4d10d22ca2db7
+      - name: Kubernetes
+        permalink: https://log.gprd.gitlab.net/goto/88eab835042a07b213b8c7f24213d5bf
   infrastructure:
     provider: gcp
     architecture: gke
@@ -230,6 +217,7 @@ services:
   operations:
     maintenance:
     runbooks:
+      - https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/api
     playbooks:
     error_budget: https://docs.google.com/spreadsheets/d/1wkK2n5EAvoVXwQZrVoCDsvkYTb1BftL56EzsFW_IA-w/edit
   observability:
@@ -629,6 +617,44 @@ services:
       primary_grafana_dashboard: https://dashboards.gitlab.net/d/bd2Kl9Imk/host-stats?orgId=1&refresh=1m&var-environment=ops&var-node=forum.gitlab.com
       sentry_slug:
 
+- name: kube
+  tier: inf
+  friendly_name: Kubernetes
+  infra_owner: delivery
+  label: Service:Kubernetes
+  technical:
+    project:
+      - https://gitlab.com/gitlab-com/gitlab-com-infrastructure
+      - https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/common
+      - https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com
+      - https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/
+      - https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments
+    slx:
+    documents:
+      design:
+      architecture:
+      readiness_review:
+      service:
+      security:
+    logging:
+      - name: Stackdriver
+        permalink: https://cloudlogging.app.goo.gl/81mKjkvq3BfTUwRN9
+  infrastructure:
+    provider: gcp
+    architecture:
+    provisioning: terraform
+    accesses:
+  operations:
+    maintenance:
+    runbooks:
+      - https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/kube/
+    playbooks:
+    error_budget:
+  observability:
+    monitors:
+      grafana_folder: kube
+      primary_grafana_dashboard: "kube-main/kube-overview"
+
 - name: logging
   tier: inf
   friendly_name: Logging
@@ -786,7 +812,6 @@ services:
     - distribution
     - geo
     - gitaly
-    - gitter
     - manage
     - plan
   infra_owner: sre_coreinfra
@@ -838,8 +863,8 @@ services:
         permalink: https://log.gprd.gitlab.net/goto/5e1aa9dac377ff2282c70748e9278860
       - name: Workhorse
         permalink: https://log.gprd.gitlab.net/goto/cebefc3cf285ce2a94fbfdcadc55f1a4
-      - name: Unicorn
-        permalink: https://log.gprd.gitlab.net/goto/766f73d879983f5ec962d5d6c0ae1cf4
+      - name: Puma
+        permalink: https://log.gprd.gitlab.net/goto/a2601cff0b6f000339e05cdb9deab58b
       - name: nginx
         permalink: https://log.gprd.gitlab.net/goto/4844ecfa4a7e6f0491685b2cc9224eb0
       - name: Unstructured Rails
@@ -941,7 +966,6 @@ services:
     - distribution
     - geo
     - gitaly
-    - gitter
     - manage
     - plan
   infra_owner: sre_datastores
@@ -995,8 +1019,8 @@ services:
         permalink: https://log.gprd.gitlab.net/goto/b368513b02f183a06d28c2a958b00602
       - name: Workhorse
         permalink: https://log.gprd.gitlab.net/goto/3ddd4ee7141ba2ec1a8b3bb0cb1476fe
-      - name: Unicorn
-        permalink: https://log.gprd.gitlab.net/goto/0cf60e9a1c94236eefb23348c39feaeb
+      - name: Puma
+        permalink: https://log.gprd.gitlab.net/goto/a2601cff0b6f000339e05cdb9deab58b
       - name: nginx
         permalink: https://log.gprd.gitlab.net/goto/8a5fb5820ec7c8daebf719c51fa00ce0
       - name: Unstructured Rails
@@ -1244,6 +1268,61 @@ services:
       grafana_folder: SRXyrrSmk
       primary_grafana_dashboard: "praefect-main/praefect-overview"
 
+- name: pvs
+  tier: inf
+  friendly_name: Pipeline Validation Service
+  teams:
+    - trust_and_safety
+  infra_owner: sre_coreinfra
+  label: Service:PVS
+  business:
+    requirement: |
+      Performs pipeline validation
+    customers:
+      - Internal
+    business_value: |
+      Validates pipelines
+    SLA:
+      availability:
+      response_time:
+  technical:
+    project:
+      - https://gitlab.com/gitlab-com/gl-security/security-operations/trust-and-safety/pipeline-validation-service
+    slx:
+    documents:
+      design:
+      architecture:
+      readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/issues/17
+      service:
+      security:
+    dependencies:
+    configurations:
+    chef_roles:
+    security:
+      security_reviewed:
+      data_classification: red
+      security_incidents:
+    logging:
+      - name: stackdriver
+        permalink: https://cloudlogging.app.goo.gl/mLPtczm9LrLekYcw5
+  infrastructure:
+    provider: gcp
+    architecture:
+    provisioning: cloudrun
+    accesses:
+      - account_name:
+        access_type:
+        reviewed:
+  operations:
+    maintenance:
+    runbooks:
+    playbooks:
+    error_budget:
+  observability:
+    monitors:
+      grafana_folder: pvs
+      primary_grafana_dashboard: "pvs-main/pvs-overview"
+
 - name: mailroom
   tier: sv
   friendly_name: Mailroom Incoming Mail Service
@@ -1252,7 +1331,6 @@ services:
     - distribution
     - geo
     - gitaly
-    - gitter
     - manage
     - plan
   infra_owner: sre_coreinfra
@@ -1548,6 +1626,8 @@ services:
         location:  /var/opt/gitlab/postgresql/pg_ident.conf
       - config_name:  pg_hba.conf
         location:  /var/opt/gitlab/postgresql/pg_hba.conf
+      - config_name:  postgresql.auto.conf
+        location:  /var/opt/gitlab/postgresql/postgresql.auto.conf
       - config_name:  patroni.yml
         location:  /var/opt/gitlab/patroni/patroni.yml
     chef_roles:
@@ -1592,7 +1672,63 @@ services:
       grafana_folder: RNfEDpLmz
       primary_grafana_dashboard: "patroni-main/patroni-overview"
 
-- name: postgres-dr-archive
+- name: plantuml
+  tier: sv
+  friendly_name: PlantUML
+  infra_owner: sre_coreinfra
+  label: Service:PlantUML
+  business:
+    requirement: PlantUML is used to render UML diagrams in the GitLab application
+    customers:
+      - GitLab.com customers
+    SLA:
+      availability:    # Availability SLA promised to customers
+      response_time:   # Response time for inquiries or issues
+                       # relating this service
+    business_value: PlantUML is used to render unified modeling language (UML) diagrams.
+  technical:
+    project:
+      - https://plantuml.com/
+    slx:
+    documents:
+      design:
+      architecture:  https://docs.gitlab.com/ee/administration/integration/plantuml.html
+      readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/blob/master/plantuml/overview.md
+      service:
+      security: https://www.postgresql.org/support/security/
+    dependencies:
+    components:
+    configurations:
+    chef_roles:
+    scalability:
+      bound:
+      scalable:
+    security:
+      security_reviewed:
+      data_classification:
+      security_incidents:
+    logging:
+      - name: Access Logs
+        permalink: 'https://console.cloud.google.com/logs/query;query=resource.labels.target_proxy_name%3D%22k8s-tps-plantuml-plantuml--58df01f69d082883%22%0Aresource.type%3D%22http_load_balancer%22;timeRange=PT30M?project=gitlab-production'
+  infrastructure:
+    provider: gcp
+    architecture:
+    provisioning:
+    accesses:
+      - account_name:
+        access_type:
+        reviewed:
+  operations:
+    maintenance:
+    runbooks: []
+    playbooks: []
+    error_budget:
+  observability:
+    monitors:
+      grafana_folder: plantuml
+      primary_grafana_dashboard: "plantuml-main/plantuml-overview"
+
+- name: postgres-archive
   tier: db
   friendly_name: Postgres DR Archive
   infra_owner: sre_datastores
@@ -1635,8 +1771,8 @@ services:
         location: /var/opt/gitlab/postgresql/pg_ident.conf
       - config_name: pg_hba.conf
         location: /var/opt/gitlab/postgresql/pg_hba.conf
-      - config_name: recovery.conf
-        location: /var/opt/gitlab/postgresql/data/recovery.conf
+      - config_name:  postgresql.auto.conf
+        location:  /var/opt/gitlab/postgresql/postgresql.auto.conf
     chef_roles:
       - gstg-base-db-postgres-archive
       - gprd-base-db-postgres-archive
@@ -1718,8 +1854,8 @@ services:
         location: /var/opt/gitlab/postgresql/pg_ident.conf
       - config_name: pg_hba.conf
         location: /var/opt/gitlab/postgresql/pg_hba.conf
-      - config_name: recovery.conf
-        location: /var/opt/gitlab/postgresql/data/recovery.conf
+      - config_name:  postgresql.auto.conf
+        location:  /var/opt/gitlab/postgresql/postgresql.auto.conf
     chef_roles:
       - gstg-base-db-postgres-delayed
       - gprd-base-db-postgres-delayed
@@ -1846,7 +1982,7 @@ services:
       response_time:
   technical:
     project:
-      - https://github.com/prometheus/prometheus
+      - https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments
     slx:
     documents:
       design:
@@ -1880,7 +2016,7 @@ services:
   infrastructure:
     provider: gcp
     architecture:
-    provisioning: terraform
+    provisioning: tanka
     accesses:
       - account_name:
         access_type:
@@ -2173,6 +2309,69 @@ services:
     monitors:
       primary_grafana_dashboard: "redis-sidekiq-main/redis-sidekiq-overview"
 
+- name: redis-tracechunks
+  tier: db
+  friendly_name: Redis TraceChunks
+  infra_owner: sre_observability
+  label: Service:Redis
+  business:
+    requirement: |
+      Redis-Tracechunks is used as a fast persistent key-value store for CI build log (trace) chunks on receipt before moving them to object storage
+    customers:
+      - GitLab.com customers
+    business_value: |
+      Redis-TraceChunks allows the CI job system to work, an important part of GitLab.com value
+    SLA:
+      availability:
+      response_time:
+  technical:
+    project:
+      - https://github.com/antirez/redis/
+    slx:
+    documents:
+      design:
+      architecture:
+      readiness_review:
+      service:
+        - https://redis.io/documentation
+        - https://docs.gitlab.com/omnibus/settings/redis.html
+      security:
+    dependencies:
+      - service:
+    configurations:
+      - config_name: redis.conf
+        location: /var/opt/gitlab/redis/redis.conf
+    chef_roles:
+      - gstg-base-db-redis-server-tracechunks
+      - gprd-base-db-redis-server-tracechunks
+    scalability:
+      bound: cpu
+      scalable: vertical
+    security:
+      security_reviewed:
+      data_classification: red
+      security_incidents:
+    logging:
+      - name: system
+        permalink: https://log.gprd.gitlab.net/goto/a10c2cd2b710f9eb65b13b9a2a328d51
+  infrastructure:
+    provider: gcp
+    architecture: https://drive.google.com/open?id=1H5s5EonMX0Mzz6jahAotMOb349TNO7YK
+    provisioning: terraform
+    accesses:
+      - account_name:
+        access_type:
+        reviewed:
+  operations:
+    maintenance:
+    runbooks:
+    playbooks:
+      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/redis/README.md
+    error_budget:
+  observability:
+    monitors:
+      primary_grafana_dashboard: "redis-tracechunks-main/redis-tracechunks-overview"
+
 - name: registry
   tier: sv
   friendly_name: Container Registry
@@ -2242,27 +2441,18 @@ services:
       grafana_folder: Ymoh2MEmk
       primary_grafana_dashboard: "registry-main/registry-overview"
 
-- name: nfs
-  tier: stor
-  friendly_name: NFS
-  teams:
-    - create
-    - distribution
-    - geo
-    - manage
-    - plan
+- name: nat
+  tier: inf
+  friendly_name: NAT
   infra_owner: sre_coreinfra
-  label: Service:Share
+  label: Service:NAT
   business:
     requirement: |
-      It is required to have a storage node that's shared between the workers.
+      Provides NAT translation for GitLab's service fleet
     customers:
       - GitLab.com customers
     business_value: |
-      In the absence of a cloud object storage configuration, the node is used for storing different
-      classes of files (e.g. uploads, artifacts, LFS objects, job traces, temporary files, ...), making them accessible
-      to all workers so they can be served to clients. With object storage configuration present, it can
-      store files temporarily until they are picked by a background worker to be uploaded to said object storage.
+      Provides NAT translation for GitLab's service fleet.
     SLA:
       availability:
       response_time:
@@ -2270,29 +2460,80 @@ services:
     project:
     slx:
     documents:
-      design:
-      architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#storage-architecture
+      design: https://cloud.google.com/nat/docs/overview
+      architecture:
       readiness_review:
       service:
       security:
-    dependencies:
-    configurations:
-    chef_roles:
-      - gstg-base-stor-nfs-server
-      - gprd-base-stor-nfs-server
-    scalability:
-      bound: disk
-      scalable: vertical
     security:
       security_reviewed:
       data_classification: red
       security_incidents:
     logging:
-      - name: system
-        permalink: https://log.gprd.gitlab.net/goto/3a1a0019df2f6b555866b6f11eb92172
+      - name: dropped packet logs
+        permalink: https://cloudlogging.app.goo.gl/XvxRJx3ECzThD87x7
   infrastructure:
     provider: gcp
-    architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#storage-architecture
+    architecture:
+    provisioning: terraform
+  operations:
+    maintenance:
+    runbooks:
+      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/nat/cloud-nat.md
+    playbooks:
+    error_budget:
+  observability:
+    monitors:
+      grafana_folder:
+      primary_grafana_dashboard: "nat-main/nat-overview"
+
+- name: sentry
+  tier: inf
+  friendly_name: Monitoring
+  infra_owner: sre_observability
+  label: Service:Sentry
+  business:
+    requirement: |
+      It is needed to collect, prioritize, and view error events
+      in several applications.
+    customers:
+      - Internally for viewing errors
+    business_value: |
+      It gives visibility into errors we might see in different applications we manage.
+    SLA:
+      availability:
+      response_time:
+  technical:
+    project:
+      - https://github.com/getsentry/sentry
+    slx:
+    documents:
+      design:
+      architecture:
+      readiness_review:
+      service:
+      security:
+    dependencies:
+      - service:
+    configurations:
+      - config_name: sentry/config.yml
+        location: /etc/sentry
+    chef_roles:
+      - ops-infra-sentry
+    scalability:
+      bound: disk
+      scalable: vertical
+    security:
+      security_reviewed:
+      data_classification:
+      security_incidents:
+    logging:
+      - name: system
+        permalink: https://log.gprd.gitlab.net/goto/b4618f79f80f44cb21a32623a275a0e6
+
+  infrastructure:
+    provider: gcp
+    architecture:
     provisioning: terraform
     accesses:
       - account_name:
@@ -2301,12 +2542,13 @@ services:
   operations:
     maintenance:
     runbooks:
+      - https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/monitoring/sentry-is-down.md
     playbooks:
-    error_budget: https://docs.google.com/spreadsheets/d/1wkK2n5EAvoVXwQZrVoCDsvkYTb1BftL56EzsFW_IA-w/edit
+    error_budget:
   observability:
     monitors:
-      grafana_folder:
-      primary_grafana_dashboard: "nfs-main/nfs-overview"
+      grafana_folder: sentry
+      primary_grafana_dashboard: "sentry-main/sentry-overview"
 
 - name: sidekiq
   tier: sv
@@ -2316,7 +2558,6 @@ services:
     - distribution
     - geo
     - gitaly
-    - gitter
     - manage
     - plan
   infra_owner: sre_observability
@@ -2370,8 +2611,8 @@ services:
         permalink: https://log.gprd.gitlab.net/goto/d7e4791e63d2a2b192514ac821c9f14f
       - name: Rails
         permalink: https://log.gprd.gitlab.net/goto/86fbcd537588abef69339a352ef81d72
-      - name: Unicorn
-        permalink: https://log.gprd.gitlab.net/goto/c87a39cf228c45ed8691c855aa583170
+      - name: Puma
+        permalink: https://log.gprd.gitlab.net/goto/a2601cff0b6f000339e05cdb9deab58b
       - name: Unstructured
         permalink: https://console.cloud.google.com/logs/viewer?project=gitlab-production&interval=PT1H&resource=gce_instance&advancedFilter=jsonPayload.hostname%3A%22sidekiq%22%0Alabels.tag%3D%22unstructured.production%22&customFacets=labels.%22compute.googleapis.com%2Fresource_name%22
       - name: system
@@ -2432,8 +2673,6 @@ services:
         location: /etc/nginx/nginx.conf
       - config_name: production
         location: /home/gitlab-license/license-gitlab-com/config/environments/production.rb
-      - config_name: unicorn
-        location: /home/gitlab-license/license-gitlab-com/config/unicorn/production.rb
     chef_roles:
       - license-gitlab-com
       - license-gitlab-walg
@@ -2503,8 +2742,6 @@ services:
         location: /etc/redis/redis.conf
       - config_name: sidekiq
         location: /etc/supervisor/conf.d/version-sidekiq.conf
-      - config_name: unicorn
-        location: /home/gitlab-version/version-gitlab-com/config/unicorn/production.rb
     chef_roles:
       - version-gitlab-com
       - version-gitlab-walg
@@ -2694,9 +2931,11 @@ services:
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/ci-runners/cicd/ci_too_many_archiving_trace_failures.md
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/ci-runners/cicd/ci_workhorse-queuing.md
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/ci-runners/README.md
+      - https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/ci-runners/providers/gcp/quotas.md
     playbooks:
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/ci-runners/create-runners-manager-node.md
-      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/ci-runners/update-gitlab-runner-on-managers.md
+      - https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/ci-runners/linux/docker-machine/deploy.md
+      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/ci-runners/fleet-configuration-management/README.md
     error_budget: https://docs.google.com/spreadsheets/d/1wkK2n5EAvoVXwQZrVoCDsvkYTb1BftL56EzsFW_IA-w/edit
   observability:
     monitors:
@@ -3030,8 +3269,13 @@ services:
         - https://docs.gitlab.com/ee/user/clusters/agent/
       security:
     dependencies:
+          - service: api
+          - service: gitaly
+          - service: redis
     configurations:
-      - config_name: K8s deployment repo
+      - config_name: config.yaml
+        location: https://gitlab.com/gitlab-org/charts/gitlab/-/blob/master/charts/gitlab/charts/kas/templates/configmap.yaml
+      - config_name: helm
         location: https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com
     chef_roles: []
     scalability:
@@ -3043,7 +3287,7 @@ services:
       security_incidents:
     logging:
       - name: kas
-        permalink: https://log.gprd.gitlab.net/goto/0f6064d1900494870a10af9310d6ece0
+        permalink: https://log.gprd.gitlab.net/goto/b8204a41999cc1a136fa12c885ce8d22
   infrastructure:
     provider: gcp
     architecture:

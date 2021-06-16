@@ -126,12 +126,11 @@ metricsCatalog.serviceDefinition({
         selector='job="gitlab-workhorse-web", type="web"'
       ),
 
-      errorRate: rateMetric(
-        counter='gitlab_workhorse_image_resize_requests_total',
-        selector='job="gitlab-workhorse-web", type="web", status="request-failed"'
-      ),
-
       significantLabels: ['fqdn'],
+
+      toolingLinks: [
+        toolingLinks.kibana(title='Image Resizer', index='workhorse_imageresizer', type='web'),
+      ],
     },
 
     puma: {
@@ -165,7 +164,7 @@ metricsCatalog.serviceDefinition({
 
       toolingLinks: [
         // Improve sentry link once https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/532 arrives
-        toolingLinks.sentry(slug='gitlab/gitlabcom'),
+        toolingLinks.sentry(slug='gitlab/gitlabcom', type='web', variables=['environment', 'stage']),
         toolingLinks.kibana(title='Rails', index='rails', type='web', slowRequestSeconds=10),
       ],
     },

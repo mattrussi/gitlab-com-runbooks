@@ -1,18 +1,30 @@
 #!/usr/bin/env bash
 
 function call_grafana_api() {
-  local response
+  local status_code
+  local response_file
+  response_file=$(mktemp)
 
-  response=$(curl -H 'Expect:' --http1.1 --compressed --silent --fail \
-    -H "Authorization: Bearer $GRAFANA_API_TOKEN" \
-    -H "Accept: application/json" \
-    -H "Content-Type: application/json" \
-    "$@") || {
-    echo >&2 "API call to $1 failed: $response: exit code $?"
-    return 1
-  }
+  status_code=$(
+    curl -H 'Expect:' --http1.1 --compressed --silent \
+      -H "Authorization: Bearer $GRAFANA_API_TOKEN" \
+      -H "Accept: application/json" \
+      -H "Content-Type: application/json" \
+      -o "${response_file}" \
+      -w "%{http_code}" \
+      "$@"
+  )
 
-  echo "$response"
+  if [[ $status_code =~ ^2.*$ ]]; then
+    cat "$response_file"
+    rm -f "$response_file"
+    return 0
+  fi
+
+  echo >&2 "API call to $1 failed with $status_code:"
+  cat >&2 "$response_file"
+  rm -f "$response_file"
+  return 1
 }
 
 function resolve_folder_id() {
@@ -88,9 +100,19 @@ function generate_dashboards_for_file() {
   uid="${folder}-${basename%%.*}"
 
   if [[ "$file" == *".shared.jsonnet" ]]; then
-    jsonnet_compile "${file}" | augment_shared_dashboards "${folder}"
+    compiled_json=$(jsonnet_compile "${file}")
+    if [[ $(echo "${compiled_json}" | jq 'length') -eq '0' ]]; then
+      echo ''
+    else
+      echo "${compiled_json}" | augment_shared_dashboards "${folder}"
+    fi
   elif [[ "$file" == *".jsonnet" ]]; then
-    jsonnet_compile "${file}" | augment_dashboard "${uid}" "${folder}"
+    compiled_json=$(jsonnet_compile "${file}")
+    if [[ $(echo "${compiled_json}" | jq 'length') -eq '0' ]]; then
+      echo ''
+    else
+      echo "${compiled_json}" | augment_dashboard "${uid}" "${folder}"
+    fi
   else
     augment_dashboard "${uid}" "${folder}" <"${file}"
   fi
@@ -101,7 +123,7 @@ prepare_snapshot_requests() {
   jq -c '
 {
   dashboard: .,
-  expires: 86400
+  expires: 259200
 } * {
   dashboard: {
     editable: true,

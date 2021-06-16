@@ -21,19 +21,18 @@ groups:
       tier: sv
       type: camoproxy
     expr: |
-      sum by (environment) (
-        rate(haproxy_backend_http_responses_total{backend="camoproxy",code="5xx",type="camoproxy"}[1m])
+      (
+        sum by (environment) (
+          rate(haproxy_backend_http_responses_total{backend="camoproxy",code="5xx",type="camoproxy"}[1m])
+        )
       )
-  - record: gitlab_component_apdex:weight:score
-    labels:
-      component: server
-      tier: sv
-      type: camoproxy
-    expr: |
-      sum by (environment,stage) (
-        rate(camo_response_duration_seconds_bucket{le="+Inf"}[1m])
+      or
+      (
+        0 * group by(environment) (
+          gitlab_component_ops:rate{component="loadbalancer",stage="main",tier="sv",type="camoproxy"}
+        )
       )
-  - record: gitlab_component_apdex:ratio
+  - record: gitlab_component_apdex:success:rate
     labels:
       component: server
       tier: sv
@@ -50,9 +49,14 @@ groups:
       )
       /
       2
-      / on(environment,stage) group_left()
-      (
-        gitlab_component_apdex:weight:score{component="server",tier="sv",type="camoproxy"} > 0
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: server
+      tier: sv
+      type: camoproxy
+    expr: |
+      sum by (environment,stage) (
+        rate(camo_response_duration_seconds_bucket{le="+Inf"}[1m])
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -69,8 +73,16 @@ groups:
       tier: sv
       type: camoproxy
     expr: |
-      sum by (environment,stage) (
-        rate(camo_proxy_reponses_failed_total{}[1m])
+      (
+        sum by (environment,stage) (
+          rate(camo_proxy_reponses_failed_total{}[1m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate{component="server",tier="sv",type="camoproxy"}
+        )
       )
 - name: 'Component-Level SLIs: camoproxy - 5m burn-rate'
   interval: 1m
@@ -92,19 +104,18 @@ groups:
       tier: sv
       type: camoproxy
     expr: |
-      sum by (environment) (
-        rate(haproxy_backend_http_responses_total{backend="camoproxy",code="5xx",type="camoproxy"}[5m])
+      (
+        sum by (environment) (
+          rate(haproxy_backend_http_responses_total{backend="camoproxy",code="5xx",type="camoproxy"}[5m])
+        )
       )
-  - record: gitlab_component_apdex:weight:score_5m
-    labels:
-      component: server
-      tier: sv
-      type: camoproxy
-    expr: |
-      sum by (environment,stage) (
-        rate(camo_response_duration_seconds_bucket{le="+Inf"}[5m])
+      or
+      (
+        0 * group by(environment) (
+          gitlab_component_ops:rate_5m{component="loadbalancer",stage="main",tier="sv",type="camoproxy"}
+        )
       )
-  - record: gitlab_component_apdex:ratio_5m
+  - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: server
       tier: sv
@@ -121,9 +132,14 @@ groups:
       )
       /
       2
-      / on(environment,stage) group_left()
-      (
-        gitlab_component_apdex:weight:score_5m{component="server",tier="sv",type="camoproxy"} > 0
+  - record: gitlab_component_apdex:weight:score_5m
+    labels:
+      component: server
+      tier: sv
+      type: camoproxy
+    expr: |
+      sum by (environment,stage) (
+        rate(camo_response_duration_seconds_bucket{le="+Inf"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -140,8 +156,16 @@ groups:
       tier: sv
       type: camoproxy
     expr: |
-      sum by (environment,stage) (
-        rate(camo_proxy_reponses_failed_total{}[5m])
+      (
+        sum by (environment,stage) (
+          rate(camo_proxy_reponses_failed_total{}[5m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_5m{component="server",tier="sv",type="camoproxy"}
+        )
       )
 - name: 'Component-Level SLIs: camoproxy - 30m burn-rate'
   interval: 2m
@@ -163,19 +187,18 @@ groups:
       tier: sv
       type: camoproxy
     expr: |
-      sum by (environment) (
-        rate(haproxy_backend_http_responses_total{backend="camoproxy",code="5xx",type="camoproxy"}[30m])
+      (
+        sum by (environment) (
+          rate(haproxy_backend_http_responses_total{backend="camoproxy",code="5xx",type="camoproxy"}[30m])
+        )
       )
-  - record: gitlab_component_apdex:weight:score_30m
-    labels:
-      component: server
-      tier: sv
-      type: camoproxy
-    expr: |
-      sum by (environment,stage) (
-        rate(camo_response_duration_seconds_bucket{le="+Inf"}[30m])
+      or
+      (
+        0 * group by(environment) (
+          gitlab_component_ops:rate_30m{component="loadbalancer",stage="main",tier="sv",type="camoproxy"}
+        )
       )
-  - record: gitlab_component_apdex:ratio_30m
+  - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: server
       tier: sv
@@ -192,9 +215,14 @@ groups:
       )
       /
       2
-      / on(environment,stage) group_left()
-      (
-        gitlab_component_apdex:weight:score_30m{component="server",tier="sv",type="camoproxy"} > 0
+  - record: gitlab_component_apdex:weight:score_30m
+    labels:
+      component: server
+      tier: sv
+      type: camoproxy
+    expr: |
+      sum by (environment,stage) (
+        rate(camo_response_duration_seconds_bucket{le="+Inf"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -211,8 +239,16 @@ groups:
       tier: sv
       type: camoproxy
     expr: |
-      sum by (environment,stage) (
-        rate(camo_proxy_reponses_failed_total{}[30m])
+      (
+        sum by (environment,stage) (
+          rate(camo_proxy_reponses_failed_total{}[30m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_30m{component="server",tier="sv",type="camoproxy"}
+        )
       )
 - name: 'Component-Level SLIs: camoproxy - 1h burn-rate'
   interval: 1m
@@ -234,23 +270,23 @@ groups:
       tier: sv
       type: camoproxy
     expr: |
-      sum by (environment) (
-        rate(haproxy_backend_http_responses_total{backend="camoproxy",code="5xx",type="camoproxy"}[1h])
+      (
+        sum by (environment) (
+          rate(haproxy_backend_http_responses_total{backend="camoproxy",code="5xx",type="camoproxy"}[1h])
+        )
       )
-  - record: gitlab_component_apdex:weight:score_1h
+      or
+      (
+        0 * group by(environment) (
+          gitlab_component_ops:rate_1h{component="loadbalancer",stage="main",tier="sv",type="camoproxy"}
+        )
+      )
+  - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: server
       tier: sv
       type: camoproxy
-    expr: |
-      sum by (environment,stage) (
-        rate(camo_response_duration_seconds_bucket{le="+Inf"}[1h])
-      )
-  - record: gitlab_component_apdex:ratio_1h
-    labels:
-      component: server
-      tier: sv
-      type: camoproxy
+      upscale_source: 'yes'
     expr: |
       (
         sum by (environment,stage) (
@@ -263,15 +299,22 @@ groups:
       )
       /
       2
-      / on(environment,stage) group_left()
-      (
-        gitlab_component_apdex:weight:score_1h{component="server",tier="sv",type="camoproxy"} > 0
+  - record: gitlab_component_apdex:weight:score_1h
+    labels:
+      component: server
+      tier: sv
+      type: camoproxy
+      upscale_source: 'yes'
+    expr: |
+      sum by (environment,stage) (
+        rate(camo_response_duration_seconds_bucket{le="+Inf"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
     labels:
       component: server
       tier: sv
       type: camoproxy
+      upscale_source: 'yes'
     expr: |
       sum by (environment,stage) (
         rate(camo_response_duration_seconds_bucket{le="+Inf"}[1h])
@@ -281,9 +324,18 @@ groups:
       component: server
       tier: sv
       type: camoproxy
+      upscale_source: 'yes'
     expr: |
-      sum by (environment,stage) (
-        rate(camo_proxy_reponses_failed_total{}[1h])
+      (
+        sum by (environment,stage) (
+          rate(camo_proxy_reponses_failed_total{}[1h])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_1h{component="server",tier="sv",type="camoproxy",upscale_source="yes"}
+        )
       )
 - name: 'Component-Level SLIs: camoproxy - 6h burn-rate'
   interval: 2m
@@ -305,56 +357,16 @@ groups:
       tier: sv
       type: camoproxy
     expr: |
-      sum by (environment) (
-        rate(haproxy_backend_http_responses_total{backend="camoproxy",code="5xx",type="camoproxy"}[6h])
-      )
-  - record: gitlab_component_apdex:weight:score_6h
-    labels:
-      component: server
-      tier: sv
-      type: camoproxy
-    expr: |
-      sum by (environment,stage) (
-        rate(camo_response_duration_seconds_bucket{le="+Inf"}[6h])
-      )
-  - record: gitlab_component_apdex:ratio_6h
-    labels:
-      component: server
-      tier: sv
-      type: camoproxy
-    expr: |
       (
-        sum by (environment,stage) (
-          rate(camo_response_duration_seconds_bucket{le="5"}[6h])
-        )
-        +
-        sum by (environment,stage) (
-          rate(camo_response_duration_seconds_bucket{le="10"}[6h])
+        sum by (environment) (
+          rate(haproxy_backend_http_responses_total{backend="camoproxy",code="5xx",type="camoproxy"}[6h])
         )
       )
-      /
-      2
-      / on(environment,stage) group_left()
+      or
       (
-        gitlab_component_apdex:weight:score_6h{component="server",tier="sv",type="camoproxy"} > 0
-      )
-  - record: gitlab_component_ops:rate_6h
-    labels:
-      component: server
-      tier: sv
-      type: camoproxy
-    expr: |
-      sum by (environment,stage) (
-        rate(camo_response_duration_seconds_bucket{le="+Inf"}[6h])
-      )
-  - record: gitlab_component_errors:rate_6h
-    labels:
-      component: server
-      tier: sv
-      type: camoproxy
-    expr: |
-      sum by (environment,stage) (
-        rate(camo_proxy_reponses_failed_total{}[6h])
+        0 * group by(environment) (
+          gitlab_component_ops:rate_6h{component="loadbalancer",stage="main",tier="sv",type="camoproxy"}
+        )
       )
 - name: 'Component mapping: camoproxy'
   interval: 1m

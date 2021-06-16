@@ -1,11 +1,14 @@
 local generateRecordingRulesForMetric(recordingRuleMetric, burnRate, recordingRuleRegistry) =
-  local expression = recordingRuleRegistry.recordingRuleExpressionFor(metricName=recordingRuleMetric, rangeInterval=burnRate);
-  local recordingRuleName = recordingRuleRegistry.recordingRuleNameFor(metricName=recordingRuleMetric, rangeInterval=burnRate);
+  if recordingRuleRegistry.recordingRuleForMetricAtBurnRate(metricName=recordingRuleMetric, rangeInterval=burnRate) then
+    local expression = recordingRuleRegistry.recordingRuleExpressionFor(metricName=recordingRuleMetric, rangeInterval=burnRate);
+    local recordingRuleName = recordingRuleRegistry.recordingRuleNameFor(metricName=recordingRuleMetric, rangeInterval=burnRate);
 
-  {
-    record: recordingRuleName,
-    expr: expression,
-  };
+    [{
+      record: recordingRuleName,
+      expr: expression,
+    }]
+  else
+    [];
 
 {
   // This generates recording rules for metrics with high-cardinality
@@ -21,10 +24,10 @@ local generateRecordingRulesForMetric(recordingRuleMetric, burnRate, recordingRu
       // Generates the recording rules given a service definition
       generateRecordingRulesForService(serviceDefinition)::
         if std.objectHas(serviceDefinition, 'recordingRuleMetrics') then
-          [
-            generateRecordingRulesForMetric(recordingRuleMetric, burnRate, recordingRuleRegistry)
-            for recordingRuleMetric in serviceDefinition.recordingRuleMetrics
-          ]
+          std.flatMap(
+            function(recordingRuleMetric) generateRecordingRulesForMetric(recordingRuleMetric, burnRate, recordingRuleRegistry),
+            serviceDefinition.recordingRuleMetrics
+          )
         else
           [],
     },

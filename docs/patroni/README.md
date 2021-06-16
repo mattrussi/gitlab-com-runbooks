@@ -16,8 +16,10 @@
 
 ## Troubleshooting Pointers
 
+* [../ci-runners/ci-apdex-violating-slo.md](../ci-runners/ci-apdex-violating-slo.md)
 * [../ci-runners/service-ci-runners.md](../ci-runners/service-ci-runners.md)
 * [../monitoring/prometheus-failing-rule-evaluations.md](../monitoring/prometheus-failing-rule-evaluations.md)
+* [../onboarding/kibana-diagnosis.md](../onboarding/kibana-diagnosis.md)
 * [check_wraparound.md](check_wraparound.md)
 * [gcs-snapshots.md](gcs-snapshots.md)
 * [geo-patroni-cluster.md](geo-patroni-cluster.md)
@@ -27,6 +29,7 @@
 * [patroni-management.md](patroni-management.md)
 * [performance-degradation-troubleshooting.md](performance-degradation-troubleshooting.md)
 * [pg-ha.md](pg-ha.md)
+* [pg_collect_query_data.md](pg_collect_query_data.md)
 * [pg_repack.md](pg_repack.md)
 * [pgbadger_report.md](pgbadger_report.md)
 * [postgres-backups-verification-failures.md](postgres-backups-verification-failures.md)
@@ -39,6 +42,7 @@
 * [postgresql-replica.md](postgresql-replica.md)
 * [postgresql-role-credential-rotation.md](postgresql-role-credential-rotation.md)
 * [postgresql.md](postgresql.md)
+* [rails-sql-apdex-slow.md](rails-sql-apdex-slow.md)
 * [rotating-rails-postgresql-password.md](rotating-rails-postgresql-password.md)
 * [scale-down-patroni.md](scale-down-patroni.md)
 * [scale-up-patroni.md](scale-up-patroni.md)

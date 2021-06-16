@@ -146,12 +146,20 @@ local teamsWithAlertingSlackChannels() =
   local allTeams = serviceCatalog.getTeams();
   std.filter(function(team) std.objectHas(team, 'slack_alerts_channel') && team.slack_alerts_channel != '', allTeams);
 
+// Returns a list of stage group teams wiht slack channels for alerting
+local teamsWithProductStageGroups() =
+  std.filter(
+    function(team) std.objectHas(team, 'product_stage_group'),
+    teamsWithAlertingSlackChannels()
+  );
+
 local defaultGroupBy = [
   'env',
   'tier',
   'type',
   'alertname',
   'stage',
+  'component',
 ];
 
 local Route(
@@ -299,6 +307,16 @@ local routingTree = Route(
       // rules_domain='general' should be preaggregated so no need for additional groupBy keys
       group_by=['...']
     ),
+  ] + [
+    Route(
+      receiver=receiverNameForTeamSlackChannel(team),
+      continue=true,
+      match={
+        env: 'gprd',  // For now we only send production channel alerts to teams
+        product_stage_group: team.name,
+      },
+    )
+    for team in teamsWithProductStageGroups()
   ] + [
     Route(
       receiver=receiverNameForTeamSlackChannel(team),

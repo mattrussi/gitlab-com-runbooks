@@ -9,6 +9,11 @@ metricsCatalog.serviceDefinition({
    * disable anomaly detection for RPS
    */
   disableOpsRatePrediction: true,
+  provisioning: {
+    /* Provisioned with Elastic Cloud, no VMs, no Kube */
+    vms: false,
+    kubernetes: false,
+  },
   serviceLevelIndicators: {
 
     elasticsearch_searching: {

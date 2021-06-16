@@ -19,7 +19,7 @@ As GitLab.com grows, the number of mirrored project is going to grow as well. We
 
 ## Troubleshoot
 
-1. View the [repository_update_mirror dashboard](https://dashboards.gitlab.net/d/sidekiq-queue-detail/sidekiq-queue-detail?var-queue=repository_update_mirror)
+1. View the [repository_update_mirror dashboard](https://dashboards.gitlab.net/d/sidekiq-worker-detail/sidekiq-worker-detail?var-worker=RepositoryUpdateMirrorWorker)
 1. View the [catchall dashboard](https://dashboards.gitlab.net/d/sidekiq-shard-detail/sidekiq-shard-detail?var-shard=catchall)
 1. View the [Sidekiq Queue size graph][sidekiq-queue-sizes].
 1. This alert may just be a symptom of slow Sidekiq jobs. If there are many jobs in the queue (i.e. over 10,000 and growing),

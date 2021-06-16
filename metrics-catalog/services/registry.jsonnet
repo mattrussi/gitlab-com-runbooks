@@ -3,6 +3,9 @@ local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local haproxyComponents = import './lib/haproxy_components.libsonnet';
+local registryHelpers = import './lib/registry-helpers.libsonnet';
+local registryBaseSelector = registryHelpers.registryBaseSelector;
+local defaultRegistrySLIProperties = registryHelpers.defaultRegistrySLIProperties;
 
 metricsCatalog.serviceDefinition({
   type: 'registry',
@@ -55,32 +58,29 @@ metricsCatalog.serviceDefinition({
         main: { backends: ['registry'], toolingLinks: [] },
         cny: { backends: ['canary_registry'], toolingLinks: [] },
       },
-      selector={ type: 'registry' },
+      selector=registryBaseSelector,
       regional=false
     ),
 
-    server: {
-      userImpacting: true,
-      featureCategory: 'container_registry',
+    server: defaultRegistrySLIProperties {
       description: |||
-        Aggregation of all registry requests for registry.gitlab.com.
+        Aggregation of all registry requests.
       |||,
-      apdex: histogramApdex(
-        histogram='registry_http_request_duration_seconds_bucket',
-        selector='type="registry"',
-        satisfiedThreshold=1,
-        toleratedThreshold=2.5
-      ),
+
+      apdex: registryHelpers.mainApdex,
 
       requestRate: rateMetric(
         counter='registry_http_requests_total',
-        selector='type="registry"'
+        selector=registryBaseSelector
       ),
 
       errorRate: rateMetric(
         counter='registry_http_requests_total',
-        selector='type="registry", code=~"5.."'
+        selector=registryBaseSelector {
+          code: { re: '5..' },
+        }
       ),
+
       significantLabels: ['route', 'method'],
 
       toolingLinks: [
@@ -109,5 +109,50 @@ metricsCatalog.serviceDefinition({
 
       significantLabels: ['action'],
     },
-  },
+
+    database: {
+      userImpacting: true,
+      featureCategory: 'container_registry',
+      description: |||
+        Aggregation of all container registry database operations.
+      |||,
+
+      apdex: histogramApdex(
+        histogram='registry_database_query_duration_seconds_bucket',
+        selector='type="registry"',
+        satisfiedThreshold=1,
+        toleratedThreshold=2.5
+      ),
+
+      requestRate: rateMetric(
+        counter='registry_database_queries_total',
+        selector='type="registry"'
+      ),
+
+      significantLabels: ['name'],
+    },
+
+    garbagecollector: {
+      userImpacting: false,
+      serviceAggregation: false,
+      featureCategory: 'container_registry',
+      description: |||
+        Aggregation of all container registry online garbage collection operations.
+      |||,
+
+      apdex: histogramApdex(
+        histogram='registry_gc_run_duration_seconds_bucket',
+        selector='type="registry"',
+        satisfiedThreshold=1,
+        toleratedThreshold=2
+      ),
+
+      requestRate: rateMetric(
+        counter='registry_gc_runs_total',
+        selector='type="registry"'
+      ),
+
+      significantLabels: ['worker'],
+    },
+  } + registryHelpers.apdexPerRoute,
 })

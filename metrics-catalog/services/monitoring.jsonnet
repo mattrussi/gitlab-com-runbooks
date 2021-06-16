@@ -368,6 +368,7 @@ metricsCatalog.serviceDefinition({
       userImpacting=false,
       loadBalancerName='ops-dashboards-com',
       projectId='gitlab-ops',
+      ignoreTrafficCessation=true
     ),
 
     prometheus: {
@@ -500,12 +501,9 @@ metricsCatalog.serviceDefinition({
       significantLabels: ['fqdn'],
     },
 
-    // We can add thanos-store memcached jobs here if we end up choosing to use
-    // memcached for store.
+    memcached_thanos_store_index: thanosMemcachedSLI('memcached-thanos-index-cache-metrics'),
+    memcached_thanos_store_bucket: thanosMemcachedSLI('memcached-thanos-bucket-cache-metrics'),
     memcached_thanos_qfe_query_range: thanosMemcachedSLI('memcached-thanos-qfe-query-range-metrics'),
-    // Note that this label cache will not be deployed and metrics will be empty
-    // until this TODO is resolved:
-    // https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments/blob/master/environments/thanos/ops/main.jsonnet#L49
     memcached_thanos_qfe_labels: thanosMemcachedSLI('memcached-thanos-qfe-labels-metrics'),
   },
 })

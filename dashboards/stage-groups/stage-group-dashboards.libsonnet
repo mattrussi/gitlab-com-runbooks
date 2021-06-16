@@ -8,6 +8,11 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local platformLinks = import '../platform_links.libsonnet';
 local singleMetricRow = import 'key-metric-panels/single-metric-row.libsonnet';
 local aggregationSets = import '../../metrics-catalog/aggregation-sets.libsonnet';
+local metricsCatalog = import '../../metrics-catalog/metrics-catalog.libsonnet';
+local errorBudget = import 'stage-groups/error_budget.libsonnet';
+local budgetUtils = import 'stage-groups/error-budget/utils.libsonnet';
+local sidekiqHelpers = import 'services/lib/sidekiq-helpers.libsonnet';
+local thresholds = import 'thresholds.libsonnet';
 
 local actionLegend(type) =
   if type == 'api' then '{{action}}' else '{{controller}}#{{action}}';
@@ -37,6 +42,32 @@ local actionFilter(featureCategoriesSelector) =
     includeAll=true,
     allValues='.*'
   );
+
+local errorBudgetPanels(group) =
+  [
+    [
+      errorBudget.panels.availabilityStatPanel(group.key),
+      errorBudget.panels.availabilityTargetStatPanel(group.key),
+    ],
+    [
+      errorBudget.panels.timeRemainingStatPanel(group.key),
+      errorBudget.panels.timeRemainingTargetStatPanel(group.key),
+    ],
+    [
+      errorBudget.panels.timeSpentStatPanel(group.key),
+      errorBudget.panels.timeSpentTargetStatPanel(group.key),
+    ],
+    [
+      errorBudget.panels.explanationPanel(group.name),
+    ],
+  ];
+
+local errorBudgetAttribution(group, featureCategories) =
+  [
+    errorBudget.panels.violationRatePanel(group.key),
+    errorBudget.panels.violationRateExplanation,
+    errorBudget.panels.logLinks(featureCategories),
+  ];
 
 local railsRequestRate(type, featureCategories, featureCategoriesSelector) =
   basic.timeseries(
@@ -193,7 +224,7 @@ local sqlLatenciesPerQuery(type, featureCategories, featureCategoriesSelector) =
       Average latency of individual SQL queries
     |||,
     query=|||
-      sum without (fqdn,instance) (
+      sum by (controller, action) (
         rate(
           gitlab_sql_duration_seconds_sum{
             environment="$environment",
@@ -206,7 +237,7 @@ local sqlLatenciesPerQuery(type, featureCategories, featureCategoriesSelector) =
         )
       )
       /
-      sum without (fqdn,instance) (
+      sum by (controller, action) (
         rate(
           gitlab_sql_duration_seconds_count{
             environment="$environment",
@@ -228,13 +259,13 @@ local cachesPerAction(type, featureCategories, featureCategoriesSelector) =
   basic.timeseries(
     title='%(type)s Caches per Action' % { type: std.asciiUpper(type) },
     decimals=2,
-    legendFormat='{{operation}} - ' + actionLegend(type),
+    legendFormat='{{operation}} - %s' % actionLegend(type),
     yAxisLabel='Operations',
     description=|||
       Average total number of caching operations (Read & Write) per action.
     |||,
     query=|||
-      sum without (fqdn, instance) (
+      sum by (controller, action, operation) (
         rate(
           gitlab_cache_operations_total{
             environment="$environment",
@@ -273,37 +304,67 @@ local sidekiqJobRate(counter, title, description, featureCategoriesSelector) =
     }
   );
 
-local featureCategorySLIs(featureCategoriesSelector, typeSelector) =
-  singleMetricRow.row(
-    // This will aggregate all thresholds into an average. This means that all
-    // series will be judged on an average threshold that does not match how the
-    // service is normally judged.
-    // We'll improve this while iterating on
-    // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/888
-    serviceType={ re: typeSelector },
-    aggregationSet=aggregationSets.globalFeatureCategorySLIs,
-    selectorHash={ feature_category: { re: featureCategoriesSelector }, environment: '$environment', stage: '$stage' },
-    titlePrefix='SLIs',
-    stableIdPrefix='puma-slis',
-    // For now, we'll show a series per feature category. We can't easily
-    // aggregate this using a `min` right now, because a feature category with
-    // low RPS could hide a busy one that's performing well.
-    legendFormatPrefix='{{ type }} {{ feature_category }}',
-    expectMultipleSeries=true,
-    showApdex=true,
-    showErrorRatio=true,
-    showOpsRate=true,
+local sidekiqJobDurationP95(featureCategories, urgency, threshold) =
+  basic.timeseries(
+    title='%s urgency jobs' % urgency,
+    description='%(urgency)s urgency jobs (%(threshold)i seconds max duration)' % {
+      urgency: urgency,
+      threshold: threshold,
+    },
+    decimals=2,
+    yAxisLabel='Job Duration seconds',
+    legendFormat='{{ worker }}',
+    thresholds=[thresholds.errorLevel('gt', threshold)],
+    query=|||
+      histogram_quantile(0.95,
+        sum by (worker, le) (
+          rate(
+            sidekiq_jobs_completion_seconds_bucket{
+              environment="$environment",
+              stage='$stage',
+              feature_category=~'(%(featureCategories)s)',
+              urgency='%(urgency)s'
+            }[$__interval]
+          )
+        )
+      )
+    ||| % {
+      featureCategories: featureCategories,
+      urgency: urgency,
+    }
+  );
+
+local sidekiqJobDurationByUrgency(urgencies, featureCategoriesSelector) =
+  // mapping an urgency to the slo key in `services/lib/sidekiq-helpers.libsonnet`
+  local urgencySLOMapping = {
+    high: 'urgent',
+    low: 'lowUrgency',
+    throttled: 'throttled',
+  };
+  local unknownUrgencies = std.setDiff(urgencies, std.objectFields(urgencySLOMapping));
+  assert std.length(unknownUrgencies) == 0 :
+         'Unknown urgency %s' % unknownUrgencies;
+  local slos = sidekiqHelpers.slos;
+
+  layout.rowGrid(
+    'Sidekiq job duration',
+    [
+      sidekiqJobDurationP95(featureCategoriesSelector, urgency, slos[urgencySLOMapping[urgency]].executionDurationSeconds)
+      for urgency in urgencies
+    ],
+    // Just after the sidekiq panels
+    startRow=950,
   );
 
 local requestComponents = std.set(['web', 'api', 'git']);
 local backgroundComponents = std.set(['sidekiq']);
-local validComponents = std.setUnion(requestComponents, backgroundComponents);
-local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false) =
+local supportedComponents = std.setUnion(requestComponents, backgroundComponents);
+local defaultComponents = std.set(['web', 'api', 'sidekiq']);
+local dashboard(groupKey, components=defaultComponents, displayEmptyGuidance=false, displayBudget=true) =
   assert std.type(components) == 'array' : 'Invalid components argument type';
-  assert std.length(components) != 0 : 'There must be at least one component';
 
   local setComponents = std.set(components);
-  local invalidComponents = std.setDiff(setComponents, validComponents);
+  local invalidComponents = std.setDiff(setComponents, supportedComponents);
   assert std.length(invalidComponents) == 0 :
          'Invalid components: ' + std.join(', ', invalidComponents);
 
@@ -354,12 +415,17 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
         []
     )
     .addPanels(
+      if displayBudget then
+        // Errorbudgets are always viewed over a 28d rolling average, regardles of the
+        // selected range see the configuration in `libsonnet/stage-groups/error_budget.libsonnet`
+        local title = 'Error Budget (past 28 days)';
+        layout.splitColumnGrid(errorBudgetPanels(group), startRow=100, cellHeights=[4, 2], title=title) +
+        layout.rowGrid('Budget spend attribution', errorBudgetAttribution(group, featureCategories), startRow=110, collapse=true)
+      else
+        []
+    )
+    .addPanels(
       if std.length(enabledRequestComponents) != 0 then
-        layout.splitColumnGrid(
-          featureCategorySLIs(featureCategoriesSelector, typeSelector),
-          [7, 1],
-          startRow=200
-        ) +
         layout.rowGrid(
           'Rails Request Rates',
           [
@@ -378,6 +444,7 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
                     'json.meta.feature_category': featureCategories,
                   },
                 ),
+                toolingLinks.sentry(slug='gitlab/gitlabcom', featureCategories=featureCategories, variables=['environment', 'stage']),
               ], { prometheusSelectorHash: {} })
             ),
           ],
@@ -468,6 +535,7 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
                     'json.meta.feature_category': featureCategories,
                   },
                 ),
+                toolingLinks.sentry(slug='gitlab/gitlabcom', type='sidekiq', featureCategories=featureCategories, variables=['environment', 'stage']),
               ], { prometheusSelectorHash: {} })
             ),
           ],
@@ -487,10 +555,13 @@ local dashboard(groupKey, components=validComponents, displayEmptyGuidance=false
         platformLinks.dynamicLinks('Web Detail', 'type:web'),
         platformLinks.dynamicLinks('Git Detail', 'type:git'),
       ],
+    addSidekiqJobDurationByUrgency(urgencies=['high', 'low'])::
+      self.addPanels(sidekiqJobDurationByUrgency(urgencies, featureCategoriesSelector)),
   };
 
 {
   // dashboard generates a basic stage group dashboard for a stage group
   // The group should match a group a `stage` from `./services/stage-group-mapping.jsonnet`
   dashboard: dashboard,
+  supportedComponents: supportedComponents,
 }

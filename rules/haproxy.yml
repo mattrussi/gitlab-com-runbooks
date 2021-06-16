@@ -71,28 +71,6 @@ groups:
         turning it off and on again?
       runbook: docs/frontend/haproxy.md
       title: High Error Rate on Front End Web
-  - alert: IncreasedErrorRateHTTPSGit
-    expr: sum(backend_code:haproxy_server_http_responses_total:irate1m{code="5xx",tier="lb",backend="https_git"}) by (environment) > 20
-    for: 15s
-    labels:
-      pager: pagerduty
-      severity: s1
-      alert_type: cause
-    annotations:
-      description: We are having a high rate of 5xx on https_git backend. It's likely that customers are impacted.
-      runbook: docs/frontend/high-error-rate.md
-      title: Increased Error Rate Across Fleet
-  - alert: IncreasedErrorRateOtherBackends
-    expr: sum(backend_code:haproxy_server_http_responses_total:irate1m{code="5xx",tier="lb",backend!="https_git"}) by (backend, environment) > 20
-    for: 15s
-    labels:
-      pager: pagerduty
-      severity: s1
-      alert_type: cause
-    annotations:
-      description: We are having a high rate of 5xx across other backends (web(sockets)?/api/registry/etc, anything except https_git). It's likely that customers are impacted.
-      runbook: docs/frontend/high-error-rate.md
-      title: Increased Error Rate Across Fleet
   - alert: HAProxyHighCPU
     expr: rate(haproxy_process_cpu_seconds_total[30s]) > 0.95
     for: 15m

@@ -33,6 +33,7 @@ metricsCatalog.serviceDefinition({
   },
   serviceDependencies: {
     gitaly: true,
+    'redis-tracechunks': true,
     'redis-sidekiq': true,
     'redis-cache': true,
     redis: true,
@@ -41,7 +42,7 @@ metricsCatalog.serviceDefinition({
     praefect: true,
   },
   provisioning: {
-    vms: true,
+    vms: false,
     kubernetes: true,
   },
   regional: true,
@@ -72,6 +73,36 @@ metricsCatalog.serviceDefinition({
       regional=false,
     ),
 
+    nginx_ingress: {
+      userImpacting: true,
+      featureCategory: 'not_owned',
+      team: 'sre_datastores',
+      description: |||
+        nginx for api
+      |||,
+
+      local baseSelector = { type: 'api' },
+
+      requestRate: rateMetric(
+        counter='nginx_ingress_controller_requests:labeled',
+        selector=baseSelector
+      ),
+
+      errorRate: rateMetric(
+        counter='nginx_ingress_controller_requests:labeled',
+        selector=baseSelector {
+          status: { re: '^5.*' },
+        }
+      ),
+
+      significantLabels: ['path', 'status'],
+
+      // TODO: Add some links here
+      toolingLinks: [
+      ],
+      serviceAggregation: false,
+    },
+
     workhorse: {
       userImpacting: true,
       featureCategory: 'not_owned',
@@ -86,7 +117,7 @@ metricsCatalog.serviceDefinition({
         histogram='gitlab_workhorse_http_request_duration_seconds_bucket',
         // Note, using `|||` avoids having to double-escape the backslashes in the selector query
         selector=|||
-          job="gitlab-workhorse-api", type="api", route!="\\A/api/v4/jobs/request\\z", route!="^/api/v4/jobs/request\\z", route!="^/-/health$", route!="^/-/(readiness|liveness)$"
+          job=~"gitlab-workhorse-api|gitlab-workhorse", type="api", route!="\\A/api/v4/jobs/request\\z", route!="^/api/v4/jobs/request\\z", route!="^/-/health$", route!="^/-/(readiness|liveness)$"
         |||,
         satisfiedThreshold=1,
         toleratedThreshold=10
@@ -94,12 +125,12 @@ metricsCatalog.serviceDefinition({
 
       requestRate: rateMetric(
         counter='gitlab_workhorse_http_requests_total',
-        selector='job="gitlab-workhorse-api", type="api"'
+        selector='job=~"gitlab-workhorse-api|gitlab-workhorse", type="api"'
       ),
 
       errorRate: rateMetric(
         counter='gitlab_workhorse_http_requests_total',
-        selector='job="gitlab-workhorse-api", type="api", code=~"^5.*", route!="^/-/health$", route!="^/-/(readiness|liveness)$"'
+        selector='job=~"gitlab-workhorse-api|gitlab-workhorse", type="api", code=~"^5.*", route!="^/-/health$", route!="^/-/(readiness|liveness)$"'
       ),
 
       significantLabels: ['method', 'route'],
@@ -141,8 +172,7 @@ metricsCatalog.serviceDefinition({
       significantLabels: ['fqdn', 'method', 'feature_category'],
 
       toolingLinks: [
-        // Improve sentry link once https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/532 arrives
-        toolingLinks.sentry(slug='gitlab/gitlabcom'),
+        toolingLinks.sentry(slug='gitlab/gitlabcom', type='api', variables=['environment', 'stage']),
         toolingLinks.kibana(title='Rails', index='rails_api', type='api', slowRequestSeconds=10),
       ],
     },

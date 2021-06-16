@@ -17,12 +17,13 @@
 
 * [../frontend/haproxy.md](../frontend/haproxy.md)
 * [../gitaly/gitaly-down.md](../gitaly/gitaly-down.md)
+* [../kube/k8s-operations.md](../kube/k8s-operations.md)
+* [../kube/kubernetes.md](../kube/kubernetes.md)
 * [../license/license-gitlab-com.md](../license/license-gitlab-com.md)
 * [../logging/logging_gcs_archive_bigquery.md](../logging/logging_gcs_archive_bigquery.md)
+* [../onboarding/kibana-diagnosis.md](../onboarding/kibana-diagnosis.md)
 * [../pgbouncer/pgbouncer-saturation.md](../pgbouncer/pgbouncer-saturation.md)
 * [../pubsub/pubsub-queing.md](../pubsub/pubsub-queing.md)
-* [../uncategorized/k8s-operations.md](../uncategorized/k8s-operations.md)
-* [../uncategorized/kubernetes.md](../uncategorized/kubernetes.md)
 * [../uncategorized/node-reboots.md](../uncategorized/node-reboots.md)
 * [../version/version-gitlab-com.md](../version/version-gitlab-com.md)
 <!-- END_MARKER -->

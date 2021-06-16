@@ -277,6 +277,8 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
     legend_show=true,
     linewidth=2,
     stableId=null,
+    dataFormat='timeseries',
+    hideZeroBuckets=true
   )::
     heatmapPanel.new(
       title,
@@ -285,6 +287,8 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
       legend_show=false,
       yAxis_format='s',
       color_mode='opacity',
+      dataFormat=dataFormat,
+      hideZeroBuckets=hideZeroBuckets
     )
     .addTarget(promQuery.target(query, legendFormat=legendFormat, interval=interval, intervalFactor=intervalFactor))
     + panelOverrides(stableId),
@@ -341,6 +345,8 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
     interval='1m',
     intervalFactor=3,
     stableId=null,
+    sort=null,
+    transformations=[],
   )::
     tablePanel.new(
       title,
@@ -350,9 +356,12 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
       datasource='$PROMETHEUS_DS',
       styles=styles,
       columns=columns,
+      sort=sort,
     )
     .addTarget(promQuery.target(query, instant=instant, format='table')) +
-    panelOverrides(stableId),
+    panelOverrides(stableId) + {
+      transformations: transformations,
+    },
 
   multiTimeseries(
     title='Multi timeseries',
@@ -367,6 +376,7 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
     legend_rightSide=false,
     linewidth=2,
     max=null,
+    maxY2=1,
     decimals=0,
     thresholds=[],
     stableId=null,
@@ -409,7 +419,7 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
     )
     .addYaxis(
       format='short',
-      max=1,
+      max=maxY2,
       min=0,
       show=false,
     ),
@@ -429,6 +439,7 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
     linewidth=2,
     decimals=0,
     max=null,
+    maxY2=1,
     thresholds=[],
     stableId=null,
     fill=0,
@@ -447,6 +458,7 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
       legend_rightSide=legend_rightSide,
       linewidth=linewidth,
       max=max,
+      maxY2=maxY2,
       decimals=decimals,
       thresholds=thresholds,
       stableId=stableId,
@@ -951,41 +963,63 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
     query,
     legendFormat,
     unit='',
-    instant=true
+    colorMode='background',
+    decimals=0,
+    instant=true,
+    interval='1m',
+    intevalFactor=3,
+    calcs=[
+      'lastNotNull',
+    ],
+    mappings=[],
+    justifyMode='auto',
+    noValue=null,
+    links=[],
   )::
+    local steps = if std.type(color) == 'string' then
+      [
+        {
+          color: color,
+          value: null,
+        },
+      ] else
+      color;
     {
       links: [],
       options: {
         graphMode: 'none',
-        colorMode: 'background',
-        justifyMode: 'auto',
+        colorMode: colorMode,
+        justifyMode: justifyMode,
         fieldOptions: {
           values: false,
-          calcs: [
-            'lastNotNull',
-          ],
+          calcs: calcs,
           defaults: {
             thresholds: {
               mode: 'absolute',
-              steps: [
-                {
-                  color: color,
-                  value: null,
-                },
-              ],
+              steps: steps,
             },
-            mappings: [],
+            mappings: mappings,
             title: title,
             unit: unit,
-            decimals: 0,
+            decimals: decimals,
+            [if noValue != null then 'noValue']: noValue,
+            links: links,
           },
           overrides: [],
         },
         orientation: 'vertical',
       },
       pluginVersion: '6.6.1',
-      targets: [promQuery.target(query, legendFormat=legendFormat, instant=instant)],
+      targets: [promQuery.target(
+        query,
+        legendFormat=legendFormat,
+        instant=instant,
+        interval=interval,
+        intervalFactor=intevalFactor,
+      )],
       title: panelTitle,
       type: 'stat',
     },
+
+  text:: text.new,
 }

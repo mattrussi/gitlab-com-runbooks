@@ -6,6 +6,7 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 metricsCatalog.serviceDefinition({
   type: 'redis-cache',
   tier: 'db',
+  serviceIsStageless: true,  // redis-cache does not have a cny stage
   monitoringThresholds: {
     apdexScore: 0.9995,
     errorRatio: 0.999,
@@ -18,11 +19,6 @@ metricsCatalog.serviceDefinition({
       description: |||
         Aggregation of all Redis Cache operations issued from the Rails codebase.
       |||,
-
-      staticLabels: {
-        tier: 'db',
-        stage: 'main',
-      },
       significantLabels: ['type'],
 
       apdex: histogramApdex(
@@ -61,6 +57,7 @@ metricsCatalog.serviceDefinition({
 
       toolingLinks: [
         toolingLinks.kibana(title='Redis', index='redis', type='redis-cache'),
+        toolingLinks.kibana(title='Redis Slowlog', index='redis_slowlog', type='redis-cache'),
       ],
     },
 
@@ -92,12 +89,6 @@ metricsCatalog.serviceDefinition({
       description: |||
         Rails ActiveSupport Cache operations against the Redis Cache
       |||,
-
-      staticLabels: {
-        // Redis only has a main stage, but since we take this metric from other services
-        // which do have a `stage`, we should not aggregate on it
-        stage: 'main',
-      },
 
       apdex: histogramApdex(
         histogram='gitlab_cache_operation_duration_seconds_bucket',

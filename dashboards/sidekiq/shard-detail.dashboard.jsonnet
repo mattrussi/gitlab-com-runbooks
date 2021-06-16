@@ -1,4 +1,3 @@
-local capacityPlanning = import 'capacity_planning.libsonnet';
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local commonAnnotations = import 'grafana/common_annotations.libsonnet';
@@ -30,9 +29,9 @@ local optimalMargin = 0.10;
 local selectorHash = { type: 'sidekiq', environment: '$environment', stage: '$stage', shard: { re: '$shard' } };
 local selector = selectors.serializeHash(selectorHash);
 
-local queueDetailDataLink = {
-  url: '/d/sidekiq-queue-detail?${__url_time_range}&${__all_variables}&var-queue=${__field.label.queue}',
-  title: 'Queue Detail: ${__field.label.queue}',
+local workerDetailDataLink = {
+  url: '/d/sidekiq-worker-detail?${__url_time_range}&${__all_variables}&var-worker=${__field.label.worker}',
+  title: 'Worker Detail: ${__field.labels.worker}',
 };
 
 local queueTimeLatencyTimeseries(title, aggregator) =
@@ -110,7 +109,7 @@ basic.dashboard(
       intervalFactor=3,
       yAxisLabel='Jobs',
     )
-    .addDataLink(queueDetailDataLink),
+    .addDataLink(workerDetailDataLink),
     basic.queueLengthTimeseries(
       title='Aggregate queue length',
       description='The sum total number of unstarted jobs in all queues serviced by this shard',
@@ -146,8 +145,12 @@ basic.dashboard(
     queueTimeLatencyTimeseries(
       title='Sidekiq Estimated p95 Job Queue Time per Queue, $shard shard',
       aggregator='queue'
+    ),
+    queueTimeLatencyTimeseries(
+      title='Sidekiq Estimated p95 Job Queue Time per Worker, $shard shard',
+      aggregator='worker'
     )
-    .addDataLink(queueDetailDataLink),
+    .addDataLink(workerDetailDataLink),
   ], startRow=201)
   +
   layout.rowGrid('Inflight Jobs - jobs currently running', [
@@ -158,8 +161,12 @@ basic.dashboard(
     inflightJobsTimeseries(
       title='Sidekiq Inflight Jobs per Queue, $shard shard',
       aggregator='queue'
+    ),
+    inflightJobsTimeseries(
+      title='Sidekiq Inflight Jobs per Worker, $shard shard',
+      aggregator='worker'
     )
-    .addDataLink(queueDetailDataLink),
+    .addDataLink(workerDetailDataLink),
   ], startRow=301)
   +
   layout.rowGrid('Individual Execution Time - time taken for individual jobs to complete', [
@@ -203,7 +210,7 @@ basic.dashboard(
     ),
     basic.latencyTimeseries(
       title='Sidekiq Estimated p95 Job Latency per Queue, for $shard shard',
-      description='The 95th percentile duration, once a job starts executing, that it runs for, by shard. Lower is better.',
+      description='The 95th percentile duration, once a job starts executing, that it runs for, by queue. Lower is better.',
       query=|||
         histogram_quantile(0.95,
           sum by (queue, le) (
@@ -215,6 +222,28 @@ basic.dashboard(
         )
       |||,
       legendFormat='p95 {{ queue }}',
+      format='s',
+      yAxisLabel='Duration',
+      interval='2m',
+      intervalFactor=5,
+      legend_show=true,
+      logBase=10,
+      linewidth=1,
+    ),
+    basic.latencyTimeseries(
+      title='Sidekiq Estimated p95 Job Latency per Worker, for $shard shard',
+      description='The 95th percentile duration, once a job starts executing, that it runs for, by worker. Lower is better.',
+      query=|||
+        histogram_quantile(0.95,
+          sum by (worker, le) (
+            rate(sidekiq_jobs_completion_seconds_bucket{
+              environment="$environment",
+              shard=~"$shard"
+            }[$__interval])
+          )
+        )
+      |||,
+      legendFormat='p95 {{ worker }}',
       format='s',
       yAxisLabel='Duration',
       interval='2m',
@@ -266,8 +295,21 @@ basic.dashboard(
       linewidth=1,
       legend_show=true,
       yAxisLabel='Jobs Completed per Second',
+    ),
+    basic.timeseries(
+      title='Sidekiq Throughput per Worker for $shard Shard',
+      description='The total number of jobs being completed per worker for shard',
+      query=|||
+        sum(queue:sidekiq_jobs_completion:rate1m{environment="$environment", shard=~"$shard"}) by (worker)
+      |||,
+      legendFormat='{{ worker }}',
+      interval='1m',
+      intervalFactor=1,
+      linewidth=1,
+      legend_show=true,
+      yAxisLabel='Jobs Completed per Second',
     )
-    .addDataLink(queueDetailDataLink),
+    .addDataLink(workerDetailDataLink),
   ], startRow=601)
   +
   layout.rowGrid('Utilization - saturation of workers in this fleet', [

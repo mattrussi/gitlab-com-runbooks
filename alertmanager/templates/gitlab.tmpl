@@ -29,13 +29,13 @@
   {{ .Annotations.description }}
 {{ end }}
 {{- end }}
+:chart: *<{{ with index .Alerts 0 }}{{ reReplaceAll "g0.tab=1" "g0.tab=0" .GeneratorURL }}{{ end }}|View Prometheus graph>*
 {{- if gt (len $cl) 0 -}}
 :label: *Labels*:
 {{ range $cl.SortedPairs }}
   *{{ .Name | title }}*: {{ .Value }}
 {{- end }}
 {{ end }}
-:chart: *<{{ with index .Alerts 0 }}{{ reReplaceAll "g0.tab=1" "g0.tab=0" .GeneratorURL }}{{ end }}|View Prometheus graph>*
 {{- end }}
 {{- end }}
 {{ define "gitlab.runbook.link" }}

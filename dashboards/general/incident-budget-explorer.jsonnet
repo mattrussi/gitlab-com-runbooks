@@ -37,8 +37,7 @@ local thresholdsValues = {
 
 // Note, by having a overall_sla_weighting value, even if it is zero, the service will
 // be included on the SLA dashboard. To remove it, delete the key
-local keyServices = serviceCatalog.findServices(function(service)
-  std.objectHas(service.business.SLA, 'overall_sla_weighting') && service.business.SLA.overall_sla_weighting >= 0);
+local keyServices = serviceCatalog.findKeyBusinessServices(includeZeroScore=true);
 
 local keyServiceRegExp = std.join('|', std.map(function(service) service.name, keyServices));
 

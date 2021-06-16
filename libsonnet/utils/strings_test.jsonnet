@@ -99,5 +99,12 @@ test.suite({
     actual: strings.splitOnChars('+-++-', '-+'),
     expect: [],
   },
-
+  testUrlEncoding: {
+    actual: strings.urlEncode('type:git feature_category:groups'),
+    expect: 'type%3Agit+feature_category%3Agroups',
+  },
+  testUrlEncodingWithInputReplacements: {
+    actual: strings.urlEncode('type:git feature_category:groups', [[' ', '+']]),
+    expect: 'type:git+feature_category:groups',
+  },
 })

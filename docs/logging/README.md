@@ -16,6 +16,8 @@
 
 ## Troubleshooting Pointers
 
+* [../Teleport/Connect_to_Rails_Console_via_Teleport.md](../Teleport/Connect_to_Rails_Console_via_Teleport.md)
+* [../ci-runners/ci_pending_builds.md](../ci-runners/ci_pending_builds.md)
 * [../cloudflare/logging.md](../cloudflare/logging.md)
 * [../cloudflare/managing-traffic.md](../cloudflare/managing-traffic.md)
 * [../elastic/elastic-cloud.md](../elastic/elastic-cloud.md)
@@ -24,8 +26,11 @@
 * [../frontend/ssh-maxstartups-breach.md](../frontend/ssh-maxstartups-breach.md)
 * [../git/purge-git-data.md](../git/purge-git-data.md)
 * [../kas/kubernetes-agent-basic-troubleshooting.md](../kas/kubernetes-agent-basic-troubleshooting.md)
+* [../kube/k8s-oncall-setup.md](../kube/k8s-oncall-setup.md)
+* [../kube/kubernetes.md](../kube/kubernetes.md)
 * [../license/license-gitlab-com.md](../license/license-gitlab-com.md)
 * [logging_gcs_archive_bigquery.md](logging_gcs_archive_bigquery.md)
+* [../onboarding/kibana-diagnosis.md](../onboarding/kibana-diagnosis.md)
 * [../pages/gitlab-pages.md](../pages/gitlab-pages.md)
 * [../pages/pages-letsencrypt.md](../pages/pages-letsencrypt.md)
 * [../patroni/log_analysis.md](../patroni/log_analysis.md)
@@ -38,9 +43,6 @@
 * [../uncategorized/access-azure-test-subscription.md](../uncategorized/access-azure-test-subscription.md)
 * [../uncategorized/access-gcp-hosts.md](../uncategorized/access-gcp-hosts.md)
 * [../uncategorized/camoproxy.md](../uncategorized/camoproxy.md)
-* [../uncategorized/k8s-oncall-setup.md](../uncategorized/k8s-oncall-setup.md)
-* [../uncategorized/kubernetes.md](../uncategorized/kubernetes.md)
-* [../uncategorized/upgrade-docker-machine.md](../uncategorized/upgrade-docker-machine.md)
 * [../version/version-gitlab-com.md](../version/version-gitlab-com.md)
 * [../web/static-repository-objects-caching.md](../web/static-repository-objects-caching.md)
 <!-- END_MARKER -->
@@ -83,7 +85,7 @@ For up to date retention period see details of the ILM policy assigned to the in
 | pubsub-shell-inf        | 7 days            | 6 days         |
 | pubsub-sidekiq-inf      | 7 days            | 6 days         |
 | pubsub-system-inf       | 7 days            | 6 days         |
-| pubsub-unicorn-inf      | 7 days            | 6 days         |
+| pubsub-puma-inf         | 7 days            | 6 days         |
 | pubsub-unstructured-inf | 7 days            | 6 days         |
 | pubsub-workhorse-inf    | 7 days            | 6 days         |
 | pubsub-consul-inf       | 7 days            | 6 days         |
@@ -127,9 +129,9 @@ There are many entries missing from this list:
 | rails.features                | /var/log/gitlab/gitlab-rails/features_json.log   | JSON             | pubsub-rails-inf        |
 | rails.production              | gitlab-rails/production\_json.log                | JSON             | pubsub-rails-inf        |
 | shell                         | gitlab-shell/gitlab-shell.log                    | JSON             | pubsub-shell-inf        |
-| unicorn.current               | /var/log/gitlab/unicorn/current                  | line regex       | pubsub-unicorn-inf      |
-| unicorn.stderr                | /var/log/gitlab/unicorn/unicorn\_stderr.log      | line regex       | pubsub-unicorn-inf      |
-| unicorn.stdout                | /var/log/gitlab/unicorn/unicorn\_stdout.log      | line regex       | pubsub-unicorn-inf      |
+| puma.current                  | /var/log/gitlab/puma/current                     | line regex       | pubsub-puma-inf         |
+| puma.stderr                   | /var/log/gitlab/puma/puma_stderr.log             | line regex       | pubsub-puma-inf         |
+| puma.stdout                   | /var/log/gitlab/puma/puma_stdout.log             | line regex       | pubsub-puma-inf         |
 | unstructured.production       | gitlab-rails/production.log                      | lines            | pubsub-unstructured-inf |
 | sidekiq                       | /var/log/gitlab/sidekiq-cluster/current          | JSON             | pubsub-sidekiq-inf      |
 | haproxy                       | /var/log/haproxy.log                             | syslog           | pubsub-haproxy-inf      |
@@ -181,18 +183,26 @@ It is not possible to search for application logs using Operations (Stackdriver)
 
 #### Adding a logfile and using an existing ES index
 
-* Adding a logfile and using an existing ES index:
-    * GCE VMs infrastructure:
-        * Update one of the [fluentd templates](https://gitlab.com/gitlab-cookbooks/gitlab_fluentd/tree/master/templates/default) and add a section for the new log file. Remember to bump the cookbook version in `metadata.rb`
-        * follow the chef roll out process
-    * kubernetes infrastructure:
-        * Update config of the Gitlab managed Fluentd DaemonSet here: https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/fluentd-elasticsearch
+Adding a logfile and using an existing ES index
+
+##### Chef-managed VMs
+
+* GCE VMs infrastructure:
+  * Update one of the [fluentd templates](https://gitlab.com/gitlab-cookbooks/gitlab_fluentd/tree/master/templates/default) and add a section for the new log file. Remember to bump the cookbook version in `metadata.rb`
+  * follow the chef roll out process
+
+##### Kubernetes infrastructure
+
+* Update config of the Gitlab managed Fluentd DaemonSet here: https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/fluentd
 
 #### Adding a logfile and creating a dedicated index for it
 
 * Adding a logfile and creating a dedicated index for it
     * Configure Elastic
-        * Add your index to the list of objects managed in the git repo, for example: https://gitlab.com/gitlab-com/runbooks/merge_requests/1736 and wait for the CI job to update ES config.
+        * Add and modify the following and once merged, wait for the CI job to update ES config. An example of these changes is in this commit https://gitlab.com/gitlab-com/runbooks/-/commit/2b1c86471cfb3c792137c746613838d34d223e59
+	  * Add the index name to the [indices array file](elastic/managed-objects/indices/indices-array.sh)
+	  * Add a new file with your index name with empty index mapping (such as `{}`) in the [index mapping directory](http://gitlab.com/gitlab-com/runbooks/elastic/managed-objects/lib/index_mappings). This will need to be modified later with the log mappings.
+	  * Add the index to prod and non-prod index template files
         * Initialize the alias and create the first index using an api call. You can do it in Kibana UI with:
         ```
         PUT /pubsub-<index_name>-inf-<env_name>-000001
@@ -219,7 +229,8 @@ It is not possible to search for application logs using Operations (Stackdriver)
         * Edit the relevant roles in the chef repo to apply the new recipe to VMs managed with that role, for example: https://ops.gitlab.net/gitlab-cookbooks/chef-repo/merge_requests/2367/diffs
         * follow the chef roll out process
     * For log files in GKE
-        * Update config of the Gitlab managed Fluentd DaemonSet here: https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/fluentd-elasticsearch
+        * Update config of the Gitlab managed Fluentd DaemonSet here: https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/fluentd
+	* To view the logs in kibana you'll need to create an index pattern. You can do this by going to Management > Stack Management > Kibana > Index Patterns and click on the "Create index pattern" button.
 
 
 <!-- ## Architecture -->

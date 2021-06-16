@@ -2,7 +2,11 @@ local rison = import 'rison.libsonnet';
 
 local grafanaTimeFrom = '${__from:date:iso}';
 local grafanaTimeTo = '${__to:date:iso}';
-local grafanaTimeRange = "&_g=(time:(from:'" + grafanaTimeFrom + "',to:'" + grafanaTimeTo + "'))";
+
+local elasticTimeRange(from, to) =
+  "(time:(from:'%(from)s',to:'%(to)s'))" % { from: from, to: to };
+
+local grafanaTimeRange = elasticTimeRange(grafanaTimeFrom, grafanaTimeTo);
 
 // Builds an ElasticSearch match filter clause
 local matchFilter(field, value) =
@@ -55,19 +59,44 @@ local mustNot(filter) =
     },
   };
 
+local matchObject(fieldName, matchInfo) =
+  local gte = if std.objectHas(matchInfo, 'gte') then matchInfo.gte else null;
+  local lte = if std.objectHas(matchInfo, 'lte') then matchInfo.lte else null;
+  local values = std.prune([gte, lte]);
+
+  if std.length(values) > 0 then
+    rangeFilter(fieldName, gte, lte)
+  else
+    std.assertEqual(false, { __message__: 'Only gte and lte fields are supported but not in [%s]' % std.join(', ', std.objectFields(matchInfo)) });
+
 local matcher(fieldName, matchInfo) =
   if std.isString(matchInfo) then
     matchFilter(fieldName, matchInfo)
   else if std.isArray(matchInfo) then
-    matchInFilter(fieldName, matchInfo);
+    matchInFilter(fieldName, matchInfo)
+  else if std.isObject(matchInfo) then
+    matchObject(fieldName, matchInfo);
+
+local matchers(matches) =
+  [
+    matcher(k, matches[k])
+    for k in std.objectFields(matches)
+  ];
 
 local statusCode(field) =
   [rangeFilter(field, gteValue=500, lteValue=null)];
 
 local indexDefaults = {
+  defaultFilters: [],
   kibanaEndpoint: 'https://log.gprd.gitlab.net/app/kibana',
   prometheusLabelMappings: {},
 };
+
+local globalState(str) =
+  if str == null || str == '' then
+    ''
+  else
+    '&_g=' + str;
 
 // These are default prometheus label mappings, for mapping
 // between prometheus labels and their equivalent ELK fields
@@ -97,7 +126,7 @@ local indexCatalog = {
     defaultSeriesSplitField: 'json.grpc.method.keyword',
     failureFilter: [mustNot(matchFilter('json.grpc.code', 'OK')), existsFilter('json.grpc.code')],
     defaultLatencyField: 'json.grpc.time_ms',
-    prometheusLabelMappings: {
+    prometheusLabelMappings+: {
       fqdn: 'json.fqdn',
     },
     latencyFieldUnitMultiplier: 1000,
@@ -143,11 +172,11 @@ local indexCatalog = {
   postgres: indexDefaults {
     timestamp: '@timestamp',
     indexPattern: '97f04200-024b-11eb-81e5-155ba78758d4',
-    defaultColumns: ['json.hostname', 'json.application_name', 'json.error_severity', 'json.message', 'json.session_start_time', 'json.sql_state_code', 'json.duration_ms'],
-    defaultSeriesSplitField: 'json.sql_state_code',
+    defaultColumns: ['json.hostname', 'json.endpoint_id', 'json.error_severity', 'json.message', 'json.session_start_time', 'json.sql_state_code', 'json.duration_s', 'json.sql'],
+    defaultSeriesSplitField: 'json.fingerprint.keyword',
     failureFilter: [mustNot(matchFilter('json.sql_state_code', '00000')), existsFilter('json.sql_state_code')],  // SQL Codes reference: https://www.postgresql.org/docs/9.4/errcodes-appendix.html
-    defaultLatencyField: 'json.duration_ms',  // Only makes sense in the context of slowlog entries
-    latencyFieldUnitMultiplier: 1000,
+    defaultLatencyField: 'json.duration_s',  // Only makes sense in the context of slowlog entries
+    latencyFieldUnitMultiplier: 1,
   },
 
   postgres_pgbouncer: indexDefaults {
@@ -167,9 +196,18 @@ local indexCatalog = {
     latencyFieldUnitMultiplier: 1000,
   },
 
+  pvs: indexDefaults {
+    timestamp: 'json.timestamp',
+    indexPattern: '4858f3a0-a312-11eb-966b-2361593353f9',
+    defaultColumns: ['json.jsonPayload.mode', 'json.jsonPayload.validation_status', 'json.jsonPayload.project_id', 'json.jsonPayload.correation_id', 'json.jsonPayload.msg'],
+    defaultSeriesSplitField: 'json.jsonPayload.validation_status.keyword',
+    failureFilter: statusCode('json.jsonPayload.status_code'),
+    defaultLatencyField: 'json.jsonPayload.duration_ms',
+  },
+
   rails: indexDefaults {
     timestamp: 'json.time',
-    indexPattern: 'AW5F1e45qthdGjPJueGO',
+    indexPattern: '7092c4e2-4eb5-46f2-8305-a7da2edad090',
     defaultColumns: ['json.method', 'json.status', 'json.controller', 'json.action', 'json.path', 'json.duration_s'],
     defaultSeriesSplitField: 'json.controller.keyword',
     failureFilter: statusCode('json.status'),
@@ -179,7 +217,7 @@ local indexCatalog = {
 
   rails_api: indexDefaults {
     timestamp: 'json.time',
-    indexPattern: 'AW5F1e45qthdGjPJueGO',
+    indexPattern: '7092c4e2-4eb5-46f2-8305-a7da2edad090',
     defaultColumns: ['json.method', 'json.status', 'json.route', 'json.path', 'json.duration_s'],
     defaultSeriesSplitField: 'json.route.keyword',
     failureFilter: statusCode('json.status'),
@@ -192,8 +230,16 @@ local indexCatalog = {
     indexPattern: 'AWSQX_Vf93rHTYrsexmk',
     defaultColumns: ['json.hostname', 'json.redis_message'],
     defaultSeriesSplitField: 'json.hostname.keyword',
-    defaultLatencyField: 'json.exec_time_s',  // Note: this is only useful in the context of slowlogs
-    latencyFieldUnitMultiplier: 1000000,  // Redis uses us
+  },
+
+  redis_slowlog: indexDefaults {
+    timestamp: 'json.time',
+    indexPattern: 'AWSQX_Vf93rHTYrsexmk',
+    defaultColumns: ['json.hostname', 'json.command', 'json.exec_time_s'],
+    defaultSeriesSplitField: 'json.hostname.keyword',
+    defaultFilters: [matchFilter('json.tag', 'redis.slowlog')],
+    defaultLatencyField: 'json.exec_time_s',
+    latencyFieldUnitMultiplier: 1,  // Redis uses `µs`, but the field is in `s`
   },
 
   registry: indexDefaults {
@@ -208,10 +254,10 @@ local indexCatalog = {
 
   runners: indexDefaults {
     timestamp: '@timestamp',
-    indexPattern: 'AWgzayS3ENm-ja4G1a8d',
+    indexPattern: 'pubsub-runner-inf-gprd',
     defaultColumns: ['json.operation', 'json.job', 'json.operation', 'json.repo_url', 'json.project', 'json.msg'],
     defaultSeriesSplitField: 'json.repo_url.keyword',
-    failureFilter: [matchFilter('json.msg', 'failed')],
+    failureFilter: [matchFilter('json.msg', 'Job failed (system failure)')],
     defaultLatencyField: 'json.duration',
     latencyFieldUnitMultiplier: 1000000000,  // nanoseconds, ah yeah
   },
@@ -243,22 +289,48 @@ local indexCatalog = {
     defaultLatencyField: 'json.duration_ms',
     latencyFieldUnitMultiplier: 1000,
   },
+
+  workhorse_imageresizer: indexDefaults {
+    timestamp: 'json.time',
+    indexPattern: 'a4f5b470-edde-11ea-81e5-155ba78758d4',
+    defaultFilters: [matchFilter('json.subsystem', 'imageresizer')],
+    defaultColumns: ['json.method', 'json.uri', 'json.imageresizer.content_type', 'json.imageresizer.original_filesize', 'json.imageresizer.target_width', 'json.imageresizer.status'],
+    defaultSeriesSplitField: 'json.uri',
+    failureFilter: [mustNot(matchFilter('json.imageresizer.status', 'success'))],
+  },
 };
 
-local buildElasticDiscoverSearchQueryURL(index, filters, luceneQueries=[]) =
+// This is similar to std.setUnion, except that the array order is maintained
+// items from newItems will be added to array if they don't already exist
+local appendUnion(array, newItems) =
+  std.foldl(
+    function(memo, item)
+      if std.member(memo, item) then
+        memo
+      else
+        memo + [item],
+    newItems,
+    array
+  );
+
+local buildElasticDiscoverSearchQueryURL(index, filters=[], luceneQueries=[], timeRange=grafanaTimeRange, sort=[], extraColumns=[]) =
+  local ic = indexCatalog[index];
+
+  local columnsWithExtras = appendUnion(indexCatalog[index].defaultColumns, extraColumns);
+
   local applicationState = {
-    columns: indexCatalog[index].defaultColumns,
-    filters: filters,
-    index: indexCatalog[index].indexPattern,
-    query: {
+    columns: columnsWithExtras,
+    filters: ic.defaultFilters + filters,
+    index: ic.indexPattern,
+    [if std.length(luceneQueries) > 0 then 'query']: {
       language: 'kuery',
       query: std.join(' AND ', luceneQueries),
     },
+    [if std.length(sort) > 0 then 'sort']: sort,
   };
+  ic.kibanaEndpoint + '#/discover?_a=' + rison.encode(applicationState) + globalState(timeRange);
 
-  indexCatalog[index].kibanaEndpoint + '#/discover?_a=' + rison.encode(applicationState) + grafanaTimeRange;
-
-local buildElasticLineCountVizURL(index, filters, luceneQueries=[], splitSeries=false) =
+local buildElasticLineCountVizURL(index, filters, luceneQueries=[], splitSeries=false, timeRange=grafanaTimeRange) =
   local ic = indexCatalog[index];
 
   local aggs =
@@ -314,7 +386,7 @@ local buildElasticLineCountVizURL(index, filters, luceneQueries=[], splitSeries=
     );
 
   local applicationState = {
-    filters: filters,
+    filters: ic.defaultFilters + filters,
     query: {
       language: 'kuery',
       query: std.join(' AND ', luceneQueries),
@@ -324,7 +396,81 @@ local buildElasticLineCountVizURL(index, filters, luceneQueries=[], splitSeries=
     },
   };
 
-  indexCatalog[index].kibanaEndpoint + '#/visualize/create?type=line&indexPattern=' + indexCatalog[index].indexPattern + '&_a=' + rison.encode(applicationState) + grafanaTimeRange;
+  indexCatalog[index].kibanaEndpoint + '#/visualize/create?type=line&indexPattern=' + indexCatalog[index].indexPattern + '&_a=' + rison.encode(applicationState) + globalState(timeRange);
+
+local splitDefinition(split) =
+  local defaults = {
+    enabled: true,
+    schema: 'bucket',
+  };
+
+  if std.isString(split) then
+    // When the split is a string, turn it into a 'term' split
+    defaults {
+      type: 'terms',
+      params: {
+        field: split,
+        missingBucket: false,
+        missingBucketLabel: 'Missing',
+        otherBucket: true,
+        otherBucketLabel: 'Other',
+        orderBy: '1',
+        order: 'desc',
+        size: 5,
+      },
+    }
+  else if std.isObject(split) then defaults + split;
+
+local buildElasticTableCountVizURL(index, filters, luceneQueries=[], splitSeries=false, timeRange=grafanaTimeRange) =
+  local ic = indexCatalog[index];
+  local aggs =
+    [
+      {
+        enabled: true,
+        id: '1',
+        params: {},
+        schema: 'metric',
+        type: 'count',
+      },
+    ]
+    +
+    (
+      if std.isBoolean(splitSeries) && splitSeries then
+        [{
+          enabled: true,
+          id: '',
+          params: {
+            field: ic.defaultSeriesSplitField,
+            missingBucket: false,
+            missingBucketLabel: 'Missing',
+            order: 'desc',
+            orderBy: '1',
+            otherBucket: true,
+            otherBucketLabel: 'Other',
+            size: 5,
+          },
+          schema: 'group',
+          type: 'terms',
+        }]
+      else if std.isArray(splitSeries) then
+        [splitDefinition(split) for split in splitSeries]
+      else
+        []
+    );
+
+  local applicationState = {
+    filters: ic.defaultFilters + filters,
+    query: {
+      language: 'kuery',
+      query: std.join(' AND ', luceneQueries),
+    },
+    vis: {
+      aggs: aggs,
+    },
+  };
+
+  indexCatalog[index].kibanaEndpoint + '#/visualize/create?type=table&indexPattern=' + indexCatalog[index].indexPattern + '&_a=' + rison.encode(applicationState) + globalState(timeRange);
+
 
 local buildElasticLineTotalDurationVizURL(index, filters, luceneQueries=[], latencyField, splitSeries=false) =
   local ic = indexCatalog[index];
@@ -384,7 +530,7 @@ local buildElasticLineTotalDurationVizURL(index, filters, luceneQueries=[], late
     );
 
   local applicationState = {
-    filters: filters,
+    filters: ic.defaultFilters + filters,
     query: {
       language: 'kuery',
       query: std.join(' AND ', luceneQueries),
@@ -413,7 +559,7 @@ local buildElasticLineTotalDurationVizURL(index, filters, luceneQueries=[], late
     },
   };
 
-  indexCatalog[index].kibanaEndpoint + '#/visualize/create?type=line&indexPattern=' + indexCatalog[index].indexPattern + '&_a=' + rison.encode(applicationState) + grafanaTimeRange;
+  indexCatalog[index].kibanaEndpoint + '#/visualize/create?type=line&indexPattern=' + indexCatalog[index].indexPattern + '&_a=' + rison.encode(applicationState) + globalState(grafanaTimeRange);
 
 local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latencyField, splitSeries=false) =
   local ic = indexCatalog[index];
@@ -486,7 +632,7 @@ local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latency
     );
 
   local applicationState = {
-    filters: filters,
+    filters: ic.defaultFilters + filters,
     query: {
       language: 'kuery',
       query: std.join(' AND ', luceneQueries),
@@ -515,45 +661,60 @@ local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latency
     },
   };
 
-  indexCatalog[index].kibanaEndpoint + '#/visualize/create?type=line&indexPattern=' + indexCatalog[index].indexPattern + '&_a=' + rison.encode(applicationState) + grafanaTimeRange;
+  indexCatalog[index].kibanaEndpoint + '#/visualize/create?type=line&indexPattern=' + indexCatalog[index].indexPattern + '&_a=' + rison.encode(applicationState) + globalState(grafanaTimeRange);
+
 
 {
   matcher:: matcher,
+  matchers:: matchers,
   matchFilter:: matchFilter,
   existsFilter:: existsFilter,
   rangeFilter:: rangeFilter,
 
+  timeRange:: elasticTimeRange,
+
   // Given an index, and a set of filters, returns a URL to a Kibana discover module/search
-  buildElasticDiscoverSearchQueryURL(index, filters, luceneQueries=[])::
-    buildElasticDiscoverSearchQueryURL(index, filters, luceneQueries),
+  buildElasticDiscoverSearchQueryURL:: buildElasticDiscoverSearchQueryURL,
 
   // Search for failed requests
-  buildElasticDiscoverFailureSearchQueryURL(index, filters, luceneQueries=[])::
+  buildElasticDiscoverFailureSearchQueryURL(index, filters=[], luceneQueries=[], timeRange=grafanaTimeRange, sort=[], extraColumns=[])::
     buildElasticDiscoverSearchQueryURL(
-      index,
-      filters + indexCatalog[index].failureFilter,
-      luceneQueries
+      index=index,
+      filters=filters + indexCatalog[index].failureFilter,
+      luceneQueries=luceneQueries,
+      timeRange=timeRange,
+      sort=sort,
+      extraColumns=extraColumns
     ),
 
   // Search for requests taking longer than the specified number of seconds
-  buildElasticDiscoverSlowRequestSearchQueryURL(index, filters, luceneQueries=[], slowRequestSeconds)::
+  buildElasticDiscoverSlowRequestSearchQueryURL(index, filters=[], luceneQueries=[], slowRequestSeconds, timeRange=grafanaTimeRange, extraColumns=[])::
     local ic = indexCatalog[index];
+
     buildElasticDiscoverSearchQueryURL(
-      index,
-      filters + [rangeFilter(ic.defaultLatencyField, gteValue=slowRequestSeconds * ic.latencyFieldUnitMultiplier, lteValue=null)]
+      index=index,
+      filters=filters + [rangeFilter(ic.defaultLatencyField, gteValue=slowRequestSeconds * ic.latencyFieldUnitMultiplier, lteValue=null)],
+      timeRange=timeRange,
+      sort=[[ic.defaultLatencyField, 'desc']],
+      extraColumns=extraColumns
     ),
 
   // Given an index, and a set of filters, returns a URL to a Kibana count visualization
-  buildElasticLineCountVizURL(index, filters, luceneQueries=[], splitSeries=false)::
-    buildElasticLineCountVizURL(index, filters, luceneQueries, splitSeries=splitSeries),
+  buildElasticLineCountVizURL(index, filters, luceneQueries=[], splitSeries=false, timeRange=grafanaTimeRange,)::
+    buildElasticLineCountVizURL(index, filters, luceneQueries, splitSeries=splitSeries, timeRange=timeRange),
 
-  buildElasticLineFailureCountVizURL(index, filters, luceneQueries=[], splitSeries=false)::
+  buildElasticLineFailureCountVizURL(index, filters, luceneQueries=[], splitSeries=false, timeRange=grafanaTimeRange)::
     buildElasticLineCountVizURL(
       index,
       filters + indexCatalog[index].failureFilter,
       luceneQueries,
-      splitSeries=splitSeries
+      splitSeries=splitSeries,
+      timeRange=timeRange,
     ),
+
+  buildElasticTableCountVizURL:: buildElasticTableCountVizURL,
+  buildElasticTableFailureCountVizURL(index, filters, luceneQueries=[], splitSeries=false, timeRange=grafanaTimeRange)::
+    buildElasticTableCountVizURL(index, filters + indexCatalog[index].failureFilter, luceneQueries, splitSeries, timeRange),
 
   /**
    * Builds a total (sum) duration visualization. These queries are particularly useful for picking up
@@ -587,7 +748,7 @@ local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latency
    * to convert it into a ES matcher.
    * Returns an array of zero or more matchers.
    *
-   * TODO: for now, only supports equal matches, improve this
+   * TODO: for now, only supports equal matches, re (single value), eq, ne, improve this
    */
   getMatchersForPrometheusSelectorHash(index, selectorHash)::
     local prometheusLabelMappings = defaultPrometheusLabelMappings + indexCatalog[index].prometheusLabelMappings;
@@ -595,13 +756,49 @@ local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latency
     std.flatMap(
       function(label)
         if std.objectHas(prometheusLabelMappings, label) then
+          local selectorValue = selectorHash[label];
+
           // A mapping from this prometheus label to a ES field exists
-          if std.isString(selectorHash[label]) then  // TODO: improve this by expanding this to include eq, ne etc
-            [matchFilter(prometheusLabelMappings[label], selectorHash[label])]
+          if std.isString(selectorValue) then
+            [matchFilter(prometheusLabelMappings[label], selectorValue)]
+          else if std.objectHas(selectorValue, 're') then
+            // Most of the time, re contains a single value,
+            // so treating it as such is better than ignoring
+            [matchFilter(prometheusLabelMappings[label], selectorValue.re)]
+          else if std.objectHas(selectorValue, 'eq') then
+            // Most of the time, re contains a single value,
+            // so treating it as such is better than ignoring
+            [matchFilter(prometheusLabelMappings[label], selectorValue.eq)]
+          else if std.objectHas(selectorValue, 'ne') then
+            // Most of the time, re contains a single value,
+            // so treating it as such is better than ignoring
+            [mustNot(matchFilter(prometheusLabelMappings[label], selectorValue.ne))]
           else
             []
         else
           [],
       std.objectFields(selectorHash)
     ),
+
+  getCustomTimeRange(from, to):: "(time:(from:'" + from + "',to:'" + to + "'))",
+
+  dashboards:: {
+    // A dashboard for reviewing rails log metrics
+    // The caller_id is the route or the controller#action
+    railsEndpointDashboard(caller_id, from='now-24', to='now')::
+      local globalState = {
+        filters: [
+          {
+            query: {
+              match_phrase: {
+                'json.meta.caller_id.keyword': '{{#url}}{{key}}{{/url}}',
+              },
+            },
+          },
+        ],
+        time: { from: from, to: to },
+      };
+      local g = rison.encode(globalState);
+      'https://log.gprd.gitlab.net/app/dashboards#/view/db37b560-9793-11eb-a990-d72c312ff8e9?_g=' + g,
+  },
 }

@@ -16,15 +16,19 @@
 
 ## Troubleshooting Pointers
 
+* [../ci-runners/ci_graphs.md](../ci-runners/ci_graphs.md)
 * [../config_management/chef-guidelines.md](../config_management/chef-guidelines.md)
 * [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
+* [../kas/kubernetes-agent-disable-integrations.md](../kas/kubernetes-agent-disable-integrations.md)
 * [../monitoring/definition-service-apdex.md](../monitoring/definition-service-apdex.md)
-* [../monitoring/sentry-is-down.md](../monitoring/sentry-is-down.md)
+* [../onboarding/architecture.md](../onboarding/architecture.md)
+* [../onboarding/kibana-diagnosis.md](../onboarding/kibana-diagnosis.md)
 * [../patroni/rotating-rails-postgresql-password.md](../patroni/rotating-rails-postgresql-password.md)
 * [ban-an-IP-with-redis.md](ban-an-IP-with-redis.md)
 * [clear_anonymous_sessions.md](clear_anonymous_sessions.md)
 * [redis-survival-guide-for-sres.md](redis-survival-guide-for-sres.md)
 * [redis.md](redis.md)
+* [../sentry/sentry-is-down.md](../sentry/sentry-is-down.md)
 * [../sidekiq/large-pull-mirror-queue.md](../sidekiq/large-pull-mirror-queue.md)
 * [../sidekiq/sidekiq-inspection.md](../sidekiq/sidekiq-inspection.md)
 * [../sidekiq/sidekiq-survival-guide-for-sres.md](../sidekiq/sidekiq-survival-guide-for-sres.md)

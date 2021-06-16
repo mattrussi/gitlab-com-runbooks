@@ -78,13 +78,4 @@ test.suite({
     actual: fixture1.getBurnRates(),
     expect: ['1m', '5m', '30m', '1h', '6h', '3d'],
   },
-  testGetCommonBurnRates: {
-    actual: fixture1.getCommonBurnRates(fixture1),
-    expect: fixture1.getBurnRates(),
-  },
-  testGetCommonBurnRates2: {
-    actual: fixture1.getCommonBurnRates(fixture2),
-    expect: ['1m', '5m'],
-  },
-
 })

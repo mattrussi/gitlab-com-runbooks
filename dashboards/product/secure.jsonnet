@@ -37,6 +37,7 @@ basic.dashboard(
       productCommon.pageDetail('Project Security Dashboard', 'Secure_Project_Security_Dashboard', 'https://gitlab.com/gitlab-examples/security/simply-simple-notes/-/security/dashboard'),
       productCommon.pageDetail('Project Vulnerability Report', 'Secure_Project_Vulnerability_Report', 'https://gitlab.com/gitlab-examples/security/simply-simple-notes/-/security/vulnerability_report'),
       productCommon.pageDetail('Vulnerability Details Page', 'Secure_Standalone_Vulnerability', 'https://gitlab.com/gitlab-examples/security/security-reports/-/security/vulnerabilities/26231'),
+      productCommon.pageDetail('Security Configuration', 'Security_Configuration', 'https://gitlab.com/gitlab-examples/security/security-reports/-/security/configuration'),
     ],
     startRow=1001,
   ),
@@ -56,8 +57,26 @@ basic.dashboard(
   layout.grid(
     [
       productCommon.pageDetail('On-Demand Scans', 'On_Demand_Scans', 'https://gitlab.com/gitlab-examples/security/security-reports/-/on_demand_scans'),
-      productCommon.pageDetail('DAST Profiles', 'DAST_Profiles', 'https://gitlab.com/gitlab-examples/security/security-reports/-/security/configuration/dast_profiles'),
+      productCommon.pageDetail('DAST Profiles', 'DAST_Profiles', 'https://gitlab.com/gitlab-examples/security/security-reports/-/security/configuration/dast_scans'),
     ],
     startRow=3001,
+  ),
+).addPanel(
+  row.new(title='SAST'), gridPos={ x: 0, y: 4000, w: 24, h: 1 }
+).addPanels(
+  layout.grid(
+    [
+      productCommon.pageDetail('SAST Config UI', 'SAST_Config_UI', 'https://gitlab.com/gitlab-examples/security/security-reports/-/security/configuration/sast'),
+    ],
+    startRow=4001,
+  ),
+).addPanel(
+  row.new(title='Fuzz Testing'), gridPos={ x: 0, y: 5000, w: 24, h: 1 }
+).addPanels(
+  layout.grid(
+    [
+      productCommon.pageDetail('API Fuzzing Config UI', 'API_Fuzzing_Config_UI', 'https://gitlab.com/gitlab-examples/security/security-reports/-/security/configuration/api_fuzzing'),
+    ],
+    startRow=5001,
   ),
 )

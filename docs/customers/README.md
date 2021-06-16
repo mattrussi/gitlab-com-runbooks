@@ -9,6 +9,12 @@ Currently, the production node for this service is an Azure classic virtual
 machine running in the `East US 2` zone. It can be connected to via SSH
 directly as `customers.gitlab.com`.
 
+From there, if you have the rights you can connect to the DB (a postgres v9.6/v10 
+instance running locally in the VM) via:
+`sudo su - postgres -c psql`
+
+(only superusers have access to the DB. We are improving this soon)
+
 ### Staging
 The staging node is an Azure virtual machine running in the `East US 2` zone.
 It can be connected to via SSH directly as `customers.stg.gitlab.com`.

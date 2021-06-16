@@ -46,6 +46,9 @@
         bitmaps: {
           type: 'long',
         },
+        bytes: {
+          type: 'long',
+        },
         correlation_id: {
           type: 'text',
           fields: {

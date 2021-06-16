@@ -9,6 +9,7 @@
 - [How](#how)
   - [Using the UI](#using-the-ui)
   - [Alternative: Starting from an existing schema](#alternative-starting-from-an-existing-schema)
+  - [Accessing fields that can't be loaded due to invalid characters](#accessing-fields-that-cant-be-loaded-due-to-invalid-characters)
   - [Example Queries](#example-queries)
     - [Find the most used Source-IP-Addresses for a User](#find-the-most-used-source-ip-addresses-for-a-user)
     - [Find Actions by User and respective Paths Performed from a given IP-Address](#find-actions-by-user-and-respective-paths-performed-from-a-given-ip-address)
@@ -82,6 +83,49 @@ dumped with the `bq` command-line tool as follows:
 The result can be copied and pasted into BQ by selecting `Edit as text` when creating a table that relies on a similar schema.
 
 Contribute changes or new schemas back to [logging_bigquery_schemas](./logging_bigquery_schemas).
+
+## Accessing fields that can't be loaded due to invalid characters
+
+BigQuery doesn't allow loading fields that contain dots in their names.
+For instance, a field called `grpc.method` cannot be expressed in the
+schema in a way that BigQuery will load it. To work around that, we can
+do the following:
+
+1. Load the JSON data as CSV into a table as a single column, giving a
+   fake delimiter that doesn't appear anywhere in the JSON itself (here
+   we choose ±):
+
+    ```shell
+    bq --project_id "$GCP_PROJECT" \
+      load \
+      --source_format=CSV \
+      --field_delimiter "±" \
+      --max_bad_records 100 \
+      --replace \
+      --ignore_unknown_values \
+      ${WORKSPACE}.${TABLE_NAME}_pre \
+      gs://gitlab-gprd-logging-archive/${DIRECTORY}/* \
+      json:STRING
+    ```
+2. Transform that data and load into the desired table using
+   [`JSON_EXTRACT`](https://cloud.google.com/bigquery/docs/reference/standard-sql/json_functions#json_extract):
+
+    ```shell
+    read -r -d '' query <<EOF || true
+      CREATE OR REPLACE TABLE \`gitlab-production.${WORKSPACE}.${TABLE_NAME}\` AS
+      SELECT
+        PARSE_TIMESTAMP("%FT%H:%M:%E*SZ", JSON_EXTRACT_SCALAR(json, "$.timestamp")) as timestamp,
+        JSON_EXTRACT_SCALAR(json, "$.jsonPayload['path']") as path,
+        JSON_EXTRACT_SCALAR(json, "$.jsonPayload['ua']") as ua,
+        JSON_EXTRACT_SCALAR(json, "$.jsonPayload['route']") as route,
+        CAST(JSON_EXTRACT_SCALAR(json, "$.jsonPayload['status']") as INT64) as status
+      FROM \`gitlab-production.${WORKSPACE}.${TABLE_NAME}_pre\`
+    EOF
+
+    bq --project_id "$GCP_
+      query --nouse_legacy_sql "$query"
+    ```
+3. The table with the `_pre` suffix can now be deleted.
 
 ## Example Queries
 

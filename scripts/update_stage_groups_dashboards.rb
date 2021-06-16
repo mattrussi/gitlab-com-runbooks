@@ -1,20 +1,18 @@
 #! /usr/bin/env ruby
 # frozen_string_literal: true
-require 'json'
-require 'fileutils'
-require 'open3'
-require 'English'
+require_relative '../lib/sync_dashboards'
 
 ##
 # Generate Grafana dashboard definitions for each group.
 # Prerequisite: latest services/stage-group-mapping.jsonnet file generated from
 # scripts/update_stage_groups_feature_categories.rb
 class UpdateStageGroupsDashboard
+  include SyncDashboards
+
   DEFAULT_DASHBOARDS_DIR = File.expand_path(File.join(File.dirname(__FILE__), '../dashboards/stage-groups/'))
   DEFAULT_MAPPING_PATH = File.expand_path(File.join(File.dirname(__FILE__), '../services/stage-group-mapping.jsonnet'))
-  TEMPLATE_EXTENSION = ".dashboard.jsonnet" # Convention in dashboards/README.md
 
-  def self.group_template(group)
+  def self.render_template(group)
     raise 'Group key is empty' if group.nil? || group.empty?
 
     <<~JSONNET
@@ -27,82 +25,34 @@ class UpdateStageGroupsDashboard
     JSONNET
   end
 
-  def initialize(dashboards_dir: DEFAULT_DASHBOARDS_DIR, mapping_path: DEFAULT_MAPPING_PATH, output: $stdout)
+  attr_reader :dashboards_dir, :mapping_path, :output
+
+  def initialize(dashboards_dir: DEFAULT_DASHBOARDS_DIR, mapping_path: DEFAULT_MAPPING_PATH, output: STDOUT)
     @dashboards_dir = dashboards_dir
     @mapping_path = mapping_path
     @output = output
   end
 
   def call
-    groups = parse_groups
-    existing_groups = fetch_existing_groups
+    group_info = parse_jsonnet(@mapping_path)
+    raise "#{@mapping_path} is invalid" unless group_info.is_a?(Hash)
 
-    FileUtils.mkdir_p(@dashboards_dir)
-
-    delete_groups(existing_groups - groups)
-    add_groups(groups - existing_groups)
+    dashboards = group_info.keys.map(&:strip)
+    sync_dashboards(@dashboards_dir, dashboards)
   end
 
   private
 
-  def parse_groups
-    unless File.exist?(@mapping_path)
-      raise "#{@mapping_path} does not exist."\
-        "Please run scripts/update_stage_groups_feature_categories.rb beforehand"
-    end
-
-    group_info_json = IO.popen("jsonnet \"#{@mapping_path}\"", &:read)
-    raise "Fail to compile #{@mapping_path}" unless $CHILD_STATUS.success?
-
-    group_info = JSON.parse(group_info_json)
-    raise "#{@mapping_path} is invalid" unless group_info.is_a?(Hash)
-
-    group_info.keys.map(&:strip)
+  def dashboard_extension
+    '.dashboard.jsonnet'
   end
 
-  def fetch_existing_groups
-    existing_files = Dir["#{@dashboards_dir}/*#{TEMPLATE_EXTENSION}"]
-    existing_files.map { |file| File.basename(file, TEMPLATE_EXTENSION).strip }
+  def dashboard_file(group)
+    File.join(@dashboards_dir, "/#{group}#{dashboard_extension}")
   end
 
-  def add_groups(groups)
-    return if groups.empty?
-
-    @output.puts "=== Adding #{groups.length} dashboards"
-    groups.each do |group|
-      @output.puts "  - #{group}"
-      file = group_file(group)
-      write_file(file, group_template(group))
-    end
-  end
-
-  def delete_groups(groups)
-    return if groups.empty?
-
-    @output.puts "=== Deleting #{groups.length} dashboards"
-    groups.each do |group|
-      file = group_file(group)
-      File.delete(file)
-      @output.puts "  - #{group}"
-    end
-  end
-
-  def write_file(file, content)
-    File.write(file, content)
-    Kernel.system("make jsonnet-fmt JSONNET_FILES=#{file} > /dev/null", exception: true)
-  end
-
-  def group_file(group)
-    File.join(@dashboards_dir, "/#{group}#{TEMPLATE_EXTENSION}")
-  end
-
-  def group_template(group)
-    self.class.group_template(group)
-  end
-
-  def format_template(content)
-    # Remove whitespaces, empty lines and stuff to prevent trivial differences
-    content.to_s.split("\n").map(&:strip).reject(&:empty?).join("\n")
+  def render_template(group)
+    self.class.render_template(group)
   end
 end
 

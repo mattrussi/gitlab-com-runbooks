@@ -1,3 +1,4 @@
+local capacityReviewDashboards = import 'capacity_review_dashboard.libsonnet';
 local kubeDashboards = import 'kube_service_dashboards.libsonnet';
 local metricsCatalog = import 'metrics-catalog.libsonnet';
 local regionalDashboards = import 'regional_service_dashboard.libsonnet';
@@ -19,7 +20,9 @@ local forService(serviceType) =
       kubeDashboards.dashboardsForService(serviceType)
     else
       {}
-  );
+  )
+  +
+  capacityReviewDashboards.dashboardsForService(serviceType);
 
 {
   forService:: forService,

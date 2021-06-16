@@ -1,7 +1,7 @@
 local recordingRules = import 'recording-rules/recording-rules.libsonnet';
 
 local generateRecordingRules(sourceAggregationSet, targetAggregationSet) =
-  local burnRates = sourceAggregationSet.getCommonBurnRates(targetAggregationSet);
+  local burnRates = targetAggregationSet.getBurnRates();
 
   std.flatMap(
     function(burnRate)
@@ -9,9 +9,9 @@ local generateRecordingRules(sourceAggregationSet, targetAggregationSet) =
       recordingRules.aggregationSetRateRuleSet(sourceAggregationSet=sourceAggregationSet, targetAggregationSet=targetAggregationSet, burnRate=burnRate)
       +
       // Error Ratio
-      recordingRules.aggregationSetErrorRatioRuleSet(aggregationSet=targetAggregationSet, burnRate=burnRate)
+      recordingRules.aggregationSetErrorRatioRuleSet(sourceAggregationSet=sourceAggregationSet, targetAggregationSet=targetAggregationSet, burnRate=burnRate)
       +
-      // Apdex Score and Apdex Weight
+      // Apdex Score and Apdex Weight and Apdex SuccessRate
       recordingRules.aggregationSetApdexRatioRuleSet(sourceAggregationSet=sourceAggregationSet, targetAggregationSet=targetAggregationSet, burnRate=burnRate),
     burnRates
   );

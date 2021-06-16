@@ -9,6 +9,18 @@ metricsCatalog.serviceDefinition({
     apdexScore: 0.999,
     errorRatio: 0.999,
   },
+  provisioning: {
+    vms: false,
+    kubernetes: true,
+  },
+  kubeResources: {
+    woodhouse: {
+      kind: 'Deployment',
+      containers: [
+        'woodhouse',
+      ],
+    },
+  },
   serviceLevelIndicators: {
     http: {
       userImpacting: false,

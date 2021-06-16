@@ -15,7 +15,10 @@
 
 ## Troubleshooting Pointers
 
+* [ci-apdex-violating-slo.md](ci-apdex-violating-slo.md)
 * [service-ci-runners.md](service-ci-runners.md)
+* [../patroni/rails-sql-apdex-slow.md](../patroni/rails-sql-apdex-slow.md)
+* [../uncategorized/alert-routing.md](../uncategorized/alert-routing.md)
 <!-- END_MARKER -->
 
 # CI Runner Overview
@@ -23,16 +26,22 @@
 We have several different kind of runners. Below is a brief overview of each.
 They all have acronyms as well, which are indicated next to each name.
 
+- [Logging](#logging)
+- [Troubleshooting Pointers](#troubleshooting-pointers)
+- [Configuration management for the Linux based Runners fleet](linux/README.md)
 - [Runner Descriptions](#runner-descriptions)
   - [shared-runners-manager (SRM)](#shared-runners-manager-srm)
   - [gitlab-shared-runners-manager (GSRM)](#gitlab-shared-runners-manager-gsrm)
   - [private-runners-manager (PRM)](#private-runners-manager-prm)
   - [gitlab-docker-shared-runners-manager (GDSRM)](#gitlab-docker-shared-runners-manager-gdsrm)
   - [windows-shared-runners-manager (WSRM)](#windows-shared-runners-manager-wsrm)
+- [Cost Factors](#cost-factors)
 - [Network Info](#network-info)
   - [gitlab-ci project](#gitlab-ci-project)
   - [gitlab-org-ci project](#gitlab-org-ci-project)
   - [gitlab-ci-windows project](#gitlab-ci-windows-project)
+  - [gitlab-ci-plan-free-X projects](#gitlab-ci-plan-free-x-projects)
+- [Production Change Lock (PCL)](#production-change-lock-pcl)
 
 ## Runner Descriptions
 
@@ -66,6 +75,19 @@ For network information see [gitlab-org-ci networking](#gitlab-org-ci-project).
 As the name suggests, these are runners that spawn Windows machines. They are currently in
 beta. They are housed in the `gitlab-ci-windows` project. For further info please see the
 [windows CI README](./cicd/windows/README.md). For network information see [gitlab-ci-windows networking](#gitlab-ci-windows-project).
+
+## Cost Factors
+
+Each runner has an associated `cost factor` that determines how many minutes are deducted from the customers account
+per minute used. For example, if a cost factor was 2.0, the customer would use 2 minutes for each minute a CI job
+runs. Below is a table that details the cost factor for each runner type.
+
+| Runner Type                                 | Public Project Factor | Private Project Factor |
+| ------------------------------------------- | --------------------- | ---------------------- |
+| shared-runners-manager (srm)                | 0.0                   | 1.0                    |
+| gitlab-shared-runners-manager (gsrm)        | 0.0                   | 1.0                    |
+| windows-runners-manager (wsrm)              | 0.0                   | 1.0                    |
+| gitlab-docker-shared-runners-manager (gsrm) | 0.0                   | 1.0                    |
 
 ## Network Info
 
@@ -106,6 +128,17 @@ These subnets are created under the `windows-ci` network.
 | bastion-windows-ci | 10.3.1.0/24 | bastion network                   |
 | runner-windows-ci  | 10.3.0.0/24 | Runner network for ansible/packer |
 
+### gitlab-ci-plan-free-X projects
+
+These subnets are created under the `ephemeral-runners` network.
+
+| GCP project             | Subnet Name       | CIDR          | Purpose                   |
+| ----------------------- | ----------------- | ------------- | ------------------------- |
+| `gitlab-ci-plan-free-3` | ephemeral-runners | 10.10.32.0/21 | Ephemeral runner machines |
+| `gitlab-ci-plan-free-4` | ephemeral-runners | 10.10.24.0/21 | Ephemeral runner machines |
+| `gitlab-ci-plan-free-5` | ephemeral-runners | 10.10.16.0/21 | Ephemeral runner machines |
+| `gitlab-ci-plan-free-6` | ephemeral-runners | 10.10.8.0/21  | Ephemeral runner machines |
+| `gitlab-ci-plan-free-7` | ephemeral-runners | 10.10.0.0/21  | Ephemeral runner machines |
 
 ## Production Change Lock (PCL)
 
@@ -115,9 +148,9 @@ Weekends. Apart from the list already documented in
 <https://about.gitlab.com/handbook/engineering/infrastructure/change-management/#production-change-lock-pcl>,
 GitLab Runner extends this with the following:
 
-| Dates | Type | Reason |
-| ------| ----- | -----|
-| Recurring: Friday | Soft | Friday |
+| Dates                          | Type | Reason  |
+| ------------------------------ | ---- | ------- |
+| Recurring: Friday              | Soft | Friday  |
 | Recurring: Weekend (Sat - Sun) | Soft | Weekend |
 
 <!-- ## Summary -->

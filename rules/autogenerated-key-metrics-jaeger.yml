@@ -19,8 +19,25 @@ groups:
       tier: inf
       type: jaeger
     expr: |
+      (
+        sum by (environment,stage) (
+          rate(jaeger_agent_reporter_spans_failures_total{type="jaeger"}[1m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate{component="jaeger_agent",tier="inf",type="jaeger"}
+        )
+      )
+  - record: gitlab_component_apdex:success:rate
+    labels:
+      component: jaeger_collector
+      tier: inf
+      type: jaeger
+    expr: |
       sum by (environment,stage) (
-        rate(jaeger_agent_reporter_spans_failures_total{type="jaeger"}[1m])
+        rate(jaeger_collector_save_latency_bucket{type="jaeger", le="10"}[1m])
       )
   - record: gitlab_component_apdex:weight:score
     labels:
@@ -30,19 +47,6 @@ groups:
     expr: |
       sum by (environment,stage) (
         rate(jaeger_collector_save_latency_bucket{type="jaeger", le="+Inf"}[1m])
-      )
-  - record: gitlab_component_apdex:ratio
-    labels:
-      component: jaeger_collector
-      tier: inf
-      type: jaeger
-    expr: |
-      sum by (environment,stage) (
-        rate(jaeger_collector_save_latency_bucket{type="jaeger", le="10"}[1m])
-      )
-      / on(environment,stage) group_left()
-      (
-        gitlab_component_apdex:weight:score{component="jaeger_collector",tier="inf",type="jaeger"} > 0
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -59,8 +63,25 @@ groups:
       tier: inf
       type: jaeger
     expr: |
+      (
+        sum by (environment,stage) (
+          rate(jaeger_collector_spans_dropped_total{type="jaeger"}[1m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate{component="jaeger_collector",tier="inf",type="jaeger"}
+        )
+      )
+  - record: gitlab_component_apdex:success:rate
+    labels:
+      component: jaeger_query
+      tier: inf
+      type: jaeger
+    expr: |
       sum by (environment,stage) (
-        rate(jaeger_collector_spans_dropped_total{type="jaeger"}[1m])
+        rate(jaeger_query_latency_bucket{type="jaeger", le="10"}[1m])
       )
   - record: gitlab_component_apdex:weight:score
     labels:
@@ -70,19 +91,6 @@ groups:
     expr: |
       sum by (environment,stage) (
         rate(jaeger_query_latency_bucket{type="jaeger", le="+Inf"}[1m])
-      )
-  - record: gitlab_component_apdex:ratio
-    labels:
-      component: jaeger_query
-      tier: inf
-      type: jaeger
-    expr: |
-      sum by (environment,stage) (
-        rate(jaeger_query_latency_bucket{type="jaeger", le="10"}[1m])
-      )
-      / on(environment,stage) group_left()
-      (
-        gitlab_component_apdex:weight:score{component="jaeger_query",tier="inf",type="jaeger"} > 0
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -99,8 +107,16 @@ groups:
       tier: inf
       type: jaeger
     expr: |
-      sum by (environment,stage) (
-        rate(jaeger_query_requests_total{result="err"}[1m])
+      (
+        sum by (environment,stage) (
+          rate(jaeger_query_requests_total{result="err"}[1m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate{component="jaeger_query",tier="inf",type="jaeger"}
+        )
       )
 - name: 'Component-Level SLIs: jaeger - 5m burn-rate'
   interval: 1m
@@ -120,8 +136,25 @@ groups:
       tier: inf
       type: jaeger
     expr: |
+      (
+        sum by (environment,stage) (
+          rate(jaeger_agent_reporter_spans_failures_total{type="jaeger"}[5m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_5m{component="jaeger_agent",tier="inf",type="jaeger"}
+        )
+      )
+  - record: gitlab_component_apdex:success:rate_5m
+    labels:
+      component: jaeger_collector
+      tier: inf
+      type: jaeger
+    expr: |
       sum by (environment,stage) (
-        rate(jaeger_agent_reporter_spans_failures_total{type="jaeger"}[5m])
+        rate(jaeger_collector_save_latency_bucket{type="jaeger", le="10"}[5m])
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -131,19 +164,6 @@ groups:
     expr: |
       sum by (environment,stage) (
         rate(jaeger_collector_save_latency_bucket{type="jaeger", le="+Inf"}[5m])
-      )
-  - record: gitlab_component_apdex:ratio_5m
-    labels:
-      component: jaeger_collector
-      tier: inf
-      type: jaeger
-    expr: |
-      sum by (environment,stage) (
-        rate(jaeger_collector_save_latency_bucket{type="jaeger", le="10"}[5m])
-      )
-      / on(environment,stage) group_left()
-      (
-        gitlab_component_apdex:weight:score_5m{component="jaeger_collector",tier="inf",type="jaeger"} > 0
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -160,8 +180,25 @@ groups:
       tier: inf
       type: jaeger
     expr: |
+      (
+        sum by (environment,stage) (
+          rate(jaeger_collector_spans_dropped_total{type="jaeger"}[5m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_5m{component="jaeger_collector",tier="inf",type="jaeger"}
+        )
+      )
+  - record: gitlab_component_apdex:success:rate_5m
+    labels:
+      component: jaeger_query
+      tier: inf
+      type: jaeger
+    expr: |
       sum by (environment,stage) (
-        rate(jaeger_collector_spans_dropped_total{type="jaeger"}[5m])
+        rate(jaeger_query_latency_bucket{type="jaeger", le="10"}[5m])
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -171,19 +208,6 @@ groups:
     expr: |
       sum by (environment,stage) (
         rate(jaeger_query_latency_bucket{type="jaeger", le="+Inf"}[5m])
-      )
-  - record: gitlab_component_apdex:ratio_5m
-    labels:
-      component: jaeger_query
-      tier: inf
-      type: jaeger
-    expr: |
-      sum by (environment,stage) (
-        rate(jaeger_query_latency_bucket{type="jaeger", le="10"}[5m])
-      )
-      / on(environment,stage) group_left()
-      (
-        gitlab_component_apdex:weight:score_5m{component="jaeger_query",tier="inf",type="jaeger"} > 0
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -200,8 +224,16 @@ groups:
       tier: inf
       type: jaeger
     expr: |
-      sum by (environment,stage) (
-        rate(jaeger_query_requests_total{result="err"}[5m])
+      (
+        sum by (environment,stage) (
+          rate(jaeger_query_requests_total{result="err"}[5m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_5m{component="jaeger_query",tier="inf",type="jaeger"}
+        )
       )
 - name: 'Component-Level SLIs: jaeger - 30m burn-rate'
   interval: 2m
@@ -221,8 +253,25 @@ groups:
       tier: inf
       type: jaeger
     expr: |
+      (
+        sum by (environment,stage) (
+          rate(jaeger_agent_reporter_spans_failures_total{type="jaeger"}[30m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_30m{component="jaeger_agent",tier="inf",type="jaeger"}
+        )
+      )
+  - record: gitlab_component_apdex:success:rate_30m
+    labels:
+      component: jaeger_collector
+      tier: inf
+      type: jaeger
+    expr: |
       sum by (environment,stage) (
-        rate(jaeger_agent_reporter_spans_failures_total{type="jaeger"}[30m])
+        rate(jaeger_collector_save_latency_bucket{type="jaeger", le="10"}[30m])
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -232,19 +281,6 @@ groups:
     expr: |
       sum by (environment,stage) (
         rate(jaeger_collector_save_latency_bucket{type="jaeger", le="+Inf"}[30m])
-      )
-  - record: gitlab_component_apdex:ratio_30m
-    labels:
-      component: jaeger_collector
-      tier: inf
-      type: jaeger
-    expr: |
-      sum by (environment,stage) (
-        rate(jaeger_collector_save_latency_bucket{type="jaeger", le="10"}[30m])
-      )
-      / on(environment,stage) group_left()
-      (
-        gitlab_component_apdex:weight:score_30m{component="jaeger_collector",tier="inf",type="jaeger"} > 0
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -261,8 +297,25 @@ groups:
       tier: inf
       type: jaeger
     expr: |
+      (
+        sum by (environment,stage) (
+          rate(jaeger_collector_spans_dropped_total{type="jaeger"}[30m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_30m{component="jaeger_collector",tier="inf",type="jaeger"}
+        )
+      )
+  - record: gitlab_component_apdex:success:rate_30m
+    labels:
+      component: jaeger_query
+      tier: inf
+      type: jaeger
+    expr: |
       sum by (environment,stage) (
-        rate(jaeger_collector_spans_dropped_total{type="jaeger"}[30m])
+        rate(jaeger_query_latency_bucket{type="jaeger", le="10"}[30m])
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -272,19 +325,6 @@ groups:
     expr: |
       sum by (environment,stage) (
         rate(jaeger_query_latency_bucket{type="jaeger", le="+Inf"}[30m])
-      )
-  - record: gitlab_component_apdex:ratio_30m
-    labels:
-      component: jaeger_query
-      tier: inf
-      type: jaeger
-    expr: |
-      sum by (environment,stage) (
-        rate(jaeger_query_latency_bucket{type="jaeger", le="10"}[30m])
-      )
-      / on(environment,stage) group_left()
-      (
-        gitlab_component_apdex:weight:score_30m{component="jaeger_query",tier="inf",type="jaeger"} > 0
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -301,8 +341,16 @@ groups:
       tier: inf
       type: jaeger
     expr: |
-      sum by (environment,stage) (
-        rate(jaeger_query_requests_total{result="err"}[30m])
+      (
+        sum by (environment,stage) (
+          rate(jaeger_query_requests_total{result="err"}[30m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_30m{component="jaeger_query",tier="inf",type="jaeger"}
+        )
       )
 - name: 'Component-Level SLIs: jaeger - 1h burn-rate'
   interval: 1m
@@ -322,8 +370,25 @@ groups:
       tier: inf
       type: jaeger
     expr: |
+      (
+        sum by (environment,stage) (
+          rate(jaeger_agent_reporter_spans_failures_total{type="jaeger"}[1h])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_1h{component="jaeger_agent",tier="inf",type="jaeger"}
+        )
+      )
+  - record: gitlab_component_apdex:success:rate_1h
+    labels:
+      component: jaeger_collector
+      tier: inf
+      type: jaeger
+    expr: |
       sum by (environment,stage) (
-        rate(jaeger_agent_reporter_spans_failures_total{type="jaeger"}[1h])
+        rate(jaeger_collector_save_latency_bucket{type="jaeger", le="10"}[1h])
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -333,19 +398,6 @@ groups:
     expr: |
       sum by (environment,stage) (
         rate(jaeger_collector_save_latency_bucket{type="jaeger", le="+Inf"}[1h])
-      )
-  - record: gitlab_component_apdex:ratio_1h
-    labels:
-      component: jaeger_collector
-      tier: inf
-      type: jaeger
-    expr: |
-      sum by (environment,stage) (
-        rate(jaeger_collector_save_latency_bucket{type="jaeger", le="10"}[1h])
-      )
-      / on(environment,stage) group_left()
-      (
-        gitlab_component_apdex:weight:score_1h{component="jaeger_collector",tier="inf",type="jaeger"} > 0
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -362,8 +414,25 @@ groups:
       tier: inf
       type: jaeger
     expr: |
+      (
+        sum by (environment,stage) (
+          rate(jaeger_collector_spans_dropped_total{type="jaeger"}[1h])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_1h{component="jaeger_collector",tier="inf",type="jaeger"}
+        )
+      )
+  - record: gitlab_component_apdex:success:rate_1h
+    labels:
+      component: jaeger_query
+      tier: inf
+      type: jaeger
+    expr: |
       sum by (environment,stage) (
-        rate(jaeger_collector_spans_dropped_total{type="jaeger"}[1h])
+        rate(jaeger_query_latency_bucket{type="jaeger", le="10"}[1h])
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -373,19 +442,6 @@ groups:
     expr: |
       sum by (environment,stage) (
         rate(jaeger_query_latency_bucket{type="jaeger", le="+Inf"}[1h])
-      )
-  - record: gitlab_component_apdex:ratio_1h
-    labels:
-      component: jaeger_query
-      tier: inf
-      type: jaeger
-    expr: |
-      sum by (environment,stage) (
-        rate(jaeger_query_latency_bucket{type="jaeger", le="10"}[1h])
-      )
-      / on(environment,stage) group_left()
-      (
-        gitlab_component_apdex:weight:score_1h{component="jaeger_query",tier="inf",type="jaeger"} > 0
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -402,8 +458,16 @@ groups:
       tier: inf
       type: jaeger
     expr: |
-      sum by (environment,stage) (
-        rate(jaeger_query_requests_total{result="err"}[1h])
+      (
+        sum by (environment,stage) (
+          rate(jaeger_query_requests_total{result="err"}[1h])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_1h{component="jaeger_query",tier="inf",type="jaeger"}
+        )
       )
 - name: 'Component-Level SLIs: jaeger - 6h burn-rate'
   interval: 2m
@@ -423,8 +487,25 @@ groups:
       tier: inf
       type: jaeger
     expr: |
+      (
+        sum by (environment,stage) (
+          rate(jaeger_agent_reporter_spans_failures_total{type="jaeger"}[6h])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_6h{component="jaeger_agent",tier="inf",type="jaeger"}
+        )
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: jaeger_collector
+      tier: inf
+      type: jaeger
+    expr: |
       sum by (environment,stage) (
-        rate(jaeger_agent_reporter_spans_failures_total{type="jaeger"}[6h])
+        rate(jaeger_collector_save_latency_bucket{type="jaeger", le="10"}[6h])
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
@@ -434,19 +515,6 @@ groups:
     expr: |
       sum by (environment,stage) (
         rate(jaeger_collector_save_latency_bucket{type="jaeger", le="+Inf"}[6h])
-      )
-  - record: gitlab_component_apdex:ratio_6h
-    labels:
-      component: jaeger_collector
-      tier: inf
-      type: jaeger
-    expr: |
-      sum by (environment,stage) (
-        rate(jaeger_collector_save_latency_bucket{type="jaeger", le="10"}[6h])
-      )
-      / on(environment,stage) group_left()
-      (
-        gitlab_component_apdex:weight:score_6h{component="jaeger_collector",tier="inf",type="jaeger"} > 0
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -463,8 +531,25 @@ groups:
       tier: inf
       type: jaeger
     expr: |
+      (
+        sum by (environment,stage) (
+          rate(jaeger_collector_spans_dropped_total{type="jaeger"}[6h])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_6h{component="jaeger_collector",tier="inf",type="jaeger"}
+        )
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: jaeger_query
+      tier: inf
+      type: jaeger
+    expr: |
       sum by (environment,stage) (
-        rate(jaeger_collector_spans_dropped_total{type="jaeger"}[6h])
+        rate(jaeger_query_latency_bucket{type="jaeger", le="10"}[6h])
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
@@ -474,19 +559,6 @@ groups:
     expr: |
       sum by (environment,stage) (
         rate(jaeger_query_latency_bucket{type="jaeger", le="+Inf"}[6h])
-      )
-  - record: gitlab_component_apdex:ratio_6h
-    labels:
-      component: jaeger_query
-      tier: inf
-      type: jaeger
-    expr: |
-      sum by (environment,stage) (
-        rate(jaeger_query_latency_bucket{type="jaeger", le="10"}[6h])
-      )
-      / on(environment,stage) group_left()
-      (
-        gitlab_component_apdex:weight:score_6h{component="jaeger_query",tier="inf",type="jaeger"} > 0
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -503,8 +575,16 @@ groups:
       tier: inf
       type: jaeger
     expr: |
-      sum by (environment,stage) (
-        rate(jaeger_query_requests_total{result="err"}[6h])
+      (
+        sum by (environment,stage) (
+          rate(jaeger_query_requests_total{result="err"}[6h])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_6h{component="jaeger_query",tier="inf",type="jaeger"}
+        )
       )
 - name: 'Component mapping: jaeger'
   interval: 1m

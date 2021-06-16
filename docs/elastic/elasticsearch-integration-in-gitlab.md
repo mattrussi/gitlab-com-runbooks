@@ -151,7 +151,7 @@ ES integration deep dive video: https://www.youtube.com/watch?reload=9&v=vrvl-tN
 
 Indexing happens in two scenarios:
 - initial indexing - triggered by adding namespaces or by manually running rake tasks
-- new events (e.g. git push) - unicorn schedules sidekiq jobs that run indexers
+- new events (e.g. git push) - webserver schedules sidekiq jobs that run indexers
 
 There are two indexers that are used by sidekiq jobs, they are delivered as part of omnibus:
 - Ruby indexer, `/opt/gitlab/embedded/service/gitlab-rails/bin/elastic_repo_indexer`, expects the repo to be Present at `/var/opt/gitlab/`

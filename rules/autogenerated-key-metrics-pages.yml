@@ -21,10 +21,18 @@ groups:
       tier: lb
       type: pages
     expr: |
-      sum by (environment) (
-        label_replace(rate(haproxy_backend_http_responses_total{type="pages",job="haproxy",code="5xx"}[1m]), "_c", "0", "", "")
-        or
-        label_replace(rate(haproxy_server_connection_errors_total{type="pages", job="haproxy"}[1m]), "_c", "1", "", "")
+      (
+        sum by (environment) (
+          label_replace(rate(haproxy_backend_http_responses_total{type="pages",job="haproxy",code="5xx"}[1m]), "_c", "0", "", "")
+          or
+          label_replace(rate(haproxy_server_connection_errors_total{type="pages", job="haproxy"}[1m]), "_c", "1", "", "")
+        )
+      )
+      or
+      (
+        0 * group by(environment) (
+          gitlab_component_ops:rate{component="loadbalancer",stage="main",tier="lb",type="pages"}
+        )
       )
 - name: 'Component-Level SLIs: pages - 5m burn-rate'
   interval: 1m
@@ -46,10 +54,18 @@ groups:
       tier: lb
       type: pages
     expr: |
-      sum by (environment) (
-        label_replace(rate(haproxy_backend_http_responses_total{type="pages",job="haproxy",code="5xx"}[5m]), "_c", "0", "", "")
-        or
-        label_replace(rate(haproxy_server_connection_errors_total{type="pages", job="haproxy"}[5m]), "_c", "1", "", "")
+      (
+        sum by (environment) (
+          label_replace(rate(haproxy_backend_http_responses_total{type="pages",job="haproxy",code="5xx"}[5m]), "_c", "0", "", "")
+          or
+          label_replace(rate(haproxy_server_connection_errors_total{type="pages", job="haproxy"}[5m]), "_c", "1", "", "")
+        )
+      )
+      or
+      (
+        0 * group by(environment) (
+          gitlab_component_ops:rate_5m{component="loadbalancer",stage="main",tier="lb",type="pages"}
+        )
       )
 - name: 'Component-Level SLIs: pages - 30m burn-rate'
   interval: 2m
@@ -71,10 +87,18 @@ groups:
       tier: lb
       type: pages
     expr: |
-      sum by (environment) (
-        label_replace(rate(haproxy_backend_http_responses_total{type="pages",job="haproxy",code="5xx"}[30m]), "_c", "0", "", "")
-        or
-        label_replace(rate(haproxy_server_connection_errors_total{type="pages", job="haproxy"}[30m]), "_c", "1", "", "")
+      (
+        sum by (environment) (
+          label_replace(rate(haproxy_backend_http_responses_total{type="pages",job="haproxy",code="5xx"}[30m]), "_c", "0", "", "")
+          or
+          label_replace(rate(haproxy_server_connection_errors_total{type="pages", job="haproxy"}[30m]), "_c", "1", "", "")
+        )
+      )
+      or
+      (
+        0 * group by(environment) (
+          gitlab_component_ops:rate_30m{component="loadbalancer",stage="main",tier="lb",type="pages"}
+        )
       )
 - name: 'Component-Level SLIs: pages - 1h burn-rate'
   interval: 1m
@@ -96,10 +120,18 @@ groups:
       tier: lb
       type: pages
     expr: |
-      sum by (environment) (
-        label_replace(rate(haproxy_backend_http_responses_total{type="pages",job="haproxy",code="5xx"}[1h]), "_c", "0", "", "")
-        or
-        label_replace(rate(haproxy_server_connection_errors_total{type="pages", job="haproxy"}[1h]), "_c", "1", "", "")
+      (
+        sum by (environment) (
+          label_replace(rate(haproxy_backend_http_responses_total{type="pages",job="haproxy",code="5xx"}[1h]), "_c", "0", "", "")
+          or
+          label_replace(rate(haproxy_server_connection_errors_total{type="pages", job="haproxy"}[1h]), "_c", "1", "", "")
+        )
+      )
+      or
+      (
+        0 * group by(environment) (
+          gitlab_component_ops:rate_1h{component="loadbalancer",stage="main",tier="lb",type="pages"}
+        )
       )
 - name: 'Component-Level SLIs: pages - 6h burn-rate'
   interval: 2m
@@ -121,10 +153,18 @@ groups:
       tier: lb
       type: pages
     expr: |
-      sum by (environment) (
-        label_replace(rate(haproxy_backend_http_responses_total{type="pages",job="haproxy",code="5xx"}[6h]), "_c", "0", "", "")
-        or
-        label_replace(rate(haproxy_server_connection_errors_total{type="pages", job="haproxy"}[6h]), "_c", "1", "", "")
+      (
+        sum by (environment) (
+          label_replace(rate(haproxy_backend_http_responses_total{type="pages",job="haproxy",code="5xx"}[6h]), "_c", "0", "", "")
+          or
+          label_replace(rate(haproxy_server_connection_errors_total{type="pages", job="haproxy"}[6h]), "_c", "1", "", "")
+        )
+      )
+      or
+      (
+        0 * group by(environment) (
+          gitlab_component_ops:rate_6h{component="loadbalancer",stage="main",tier="lb",type="pages"}
+        )
       )
 - name: 'Component mapping: pages'
   interval: 1m

@@ -1,49 +1,52 @@
+local durationParser = import 'utils/duration-parser.libsonnet';
+
 // For details of how these factors are calculated,
 // read https://landing.google.com/sre/workbook/chapters/alerting-on-slos/
 local hoursPerMonth = 24 * 30;
 
-local burnrate(errorConsumptionRate, windowHours) =
-  (errorConsumptionRate * hoursPerMonth) / windowHours;
+/* MWMBR parameters, indexed by long window */
+local parameters = std.foldl(function(memo, f) memo { [f.longWindow]: f { longWindowHours: durationParser.toSeconds(f.longWindow) / 3600 } }, [
+  { longWindow: '1h', shortWindow: '5m', forDuration: '2m', budgetThresholdForPeriod: 0.02/* 2% */, notification: 'pager' },
+  { longWindow: '6h', shortWindow: '30m', forDuration: '10m', budgetThresholdForPeriod: 0.05/* 5% */, notification: 'pager' },
+  { longWindow: '3d', shortWindow: '6h', forDuration: '1h', budgetThresholdForPeriod: 0.1/* 10% */, notification: 'issue' },
+], {});
+
+local errorBudgetFactorFor(longWindow) =
+  local budgetThresholdForPeriod = parameters[longWindow].budgetThresholdForPeriod;
+  local longWindowHours = parameters[longWindow].longWindowHours;
+  (budgetThresholdForPeriod * hoursPerMonth) / longWindowHours;
 
 {
-  allWindowIntervals: ['5m', '30m', '1h', '6h'],
-  burnrate_1h: burnrate(0.02, 1),  // Burning 2% of error budget in 1h window
-  burnrate_6h: burnrate(0.05, 6),  // Burning 5% of error budget in 6h window
+  /* Given a long window, returns the factor */
+  errorBudgetFactorFor:: errorBudgetFactorFor,
+
+  /* Lookup MWMBR params, given a long window */
+  getParametersForLongWindow(longWindowDuration)::
+    parameters[longWindowDuration],
 
   /**
-   * Given an SLA, returns a max 1h error threshold
+   * Given an SLA and a window duration, returns the max error threshold.
+   *
+   * windowDuration should match one of the long window duration periods in the
+   * parameters table.
    *
    * @param sla an SLA expressed as a fraction from 0 to 1. Eg 0.9995 = 99.95%
+   * @param windowDuration a duration string - 1h, 6h, 1d
    * @return a threshold maximum error percentage for a 1 hour burn rate
    */
-  errorRatioThreshold1h(sla)::
-    self.burnrate_1h * (1 - sla),
+  errorRatioThreshold(sla, windowDuration)::
+    errorBudgetFactorFor(windowDuration) * (1 - sla),
 
   /**
-   * Given an SLA, returns a max 6h error threshold
+   * Given an SLA and a window duration, returns a min 1h apdex threshold.
+   *
+   * windowDuration should match one of the long window duration periods in the
+   * parameters table.
    *
    * @param sla an SLA expressed as a fraction from 0 to 1. Eg 0.9995 = 99.95%
-   * @return a threshold maximum error percentage for a 6 hour burn rate
-   */
-  errorRatioThreshold6h(sla)::
-    self.burnrate_6h * (1 - sla),
-
-  /**
-   * Given an SLA, returns a min 1h apdex threshold
-   *
-   * @param sla an SLA expressed as a fraction from 0 to 1. Eg 0.9995 = 99.95%
+   * @param windowDuration a duration string - 1h, 6h, 1d
    * @return a threshold minimum apdex percentage for a 1 hour burn rate
    */
-  apdexRatioThreshold1h(sla)::
-    1 - self.burnrate_1h * (1 - sla),
-
-  /**
-   * Given an SLA, returns a min 6h apdex threshold
-   *
-   * @param sla an SLA expressed as a fraction from 0 to 1. Eg 0.9995 = 99.95%
-   * @return a threshold minimum apdex percentage for a 6 hour burn rate
-   */
-  apdexRatioThreshold6h(sla)::
-    1 - self.burnrate_6h * (1 - sla),
-
+  apdexRatioThreshold(sla, windowDuration)::
+    1 - errorBudgetFactorFor(windowDuration) * (1 - sla),
 }

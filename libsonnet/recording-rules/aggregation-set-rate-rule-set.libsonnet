@@ -1,3 +1,4 @@
+local helpers = import './helpers.libsonnet';
 local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 
@@ -10,7 +11,6 @@ local selectors = import 'promql/selectors.libsonnet';
     local targetErrorRateMetric = targetAggregationSet.getErrorRateMetricForBurnRate(burnRate);
 
     local targetAggregationLabels = aggregations.serialize(targetAggregationSet.labels);
-    local aggregationFilter = targetAggregationSet.aggregationFilter;
     local sourceSelector = selectors.serializeHash(sourceAggregationSet.selector);
 
     local formatConfig = {
@@ -20,17 +20,7 @@ local selectors = import 'promql/selectors.libsonnet';
       targetErrorRateMetric: targetErrorRateMetric,
       targetAggregationLabels: targetAggregationLabels,
       sourceSelector: sourceSelector,
-      aggregationFilterExpr:
-        // For service level aggregations, we need to filter out any SLIs which we don't want to include
-        // in the service level aggregation.
-        // These are defined in the SLI with `aggregateToService:false`
-        if aggregationFilter != null then
-          ' and on(component, type) (gitlab_component_service:mapping{monitor="global", %(aggregationFilter)s_aggregation="yes"})' % {
-            sourceSelector: sourceSelector,
-            aggregationFilter: aggregationFilter,
-          }
-        else
-          '',
+      aggregationFilterExpr: helpers.aggregationFilterExpr(targetAggregationSet),
     };
 
     (
@@ -41,7 +31,7 @@ local selectors = import 'promql/selectors.libsonnet';
           record: targetErrorRateMetric,
           expr: |||
             sum by (%(targetAggregationLabels)s) (
-              %(sourceErrorRateMetric)s{%(sourceSelector)s} >= 0%(aggregationFilterExpr)s
+              (%(sourceErrorRateMetric)s{%(sourceSelector)s} >= 0)%(aggregationFilterExpr)s
             )
           ||| % formatConfig,
         }]
@@ -55,7 +45,7 @@ local selectors = import 'promql/selectors.libsonnet';
           record: targetOpsRateMetric,
           expr: |||
             sum by (%(targetAggregationLabels)s) (
-              %(sourceOpsRateMetric)s{%(sourceSelector)s} >= 0%(aggregationFilterExpr)s
+              (%(sourceOpsRateMetric)s{%(sourceSelector)s} >= 0)%(aggregationFilterExpr)s
             )
           ||| % formatConfig,
         }]

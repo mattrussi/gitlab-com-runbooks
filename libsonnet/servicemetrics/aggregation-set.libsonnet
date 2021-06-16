@@ -51,11 +51,15 @@ local definitionDefaults = {
         nullOrFail();
 
     definitionWithDefaults {
+      // Returns the apdexSuccessRate metric name, null if not required, or fails if missing and required
+      getApdexSuccessRateMetricForBurnRate(burnRate, required=false)::
+        getMetricNameForBurnRate(burnRate, 'apdexSuccessRate', required),
+
       // Returns the apdexRatio metric name, null if not required, or fails if missing and required
       getApdexRatioMetricForBurnRate(burnRate, required=false)::
         getMetricNameForBurnRate(burnRate, 'apdexRatio', required),
 
-      // Returns the apdexRatio metric name, null if not required, or fails if missing and required
+      // Returns the apdexWeight metric name, null if not required, or fails if missing and required
       getApdexWeightMetricForBurnRate(burnRate, required=false)::
         getMetricNameForBurnRate(burnRate, 'apdexWeight', required),
 
@@ -75,12 +79,5 @@ local definitionDefaults = {
       // ordered by duration ascending
       getBurnRates()::
         std.set(std.objectFields(definitionWithDefaults.burnRates), durationParser.toSeconds),
-
-      // Given another aggregation set, returns the common set of burn rates
-      getCommonBurnRates(aggregationSetB)::
-        local burnRates = self.getBurnRates();
-        local burnRatesB = aggregationSetB.getBurnRates();
-
-        std.setInter(burnRates, burnRatesB, durationParser.toSeconds),
     },
 }

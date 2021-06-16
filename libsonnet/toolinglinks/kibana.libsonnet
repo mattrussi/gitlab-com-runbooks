@@ -10,6 +10,7 @@ local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libson
     shard=null,
     slowRequestSeconds=null,
     matches={},
+    includeMatchersForPrometheusSelector=true
   )::
     function(options)
       local supportsFailures = elasticsearchLinks.indexSupportsFailureQueries(index);
@@ -20,29 +21,31 @@ local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libson
           if type == null then
             []
           else
-            [elasticsearchLinks.matchFilter('json.type', type)]
+            [elasticsearchLinks.matchFilter('json.type.keyword', type)]
         )
         +
         (
           if tag == null then
             []
           else
-            [elasticsearchLinks.matchFilter('json.tag', tag)]
+            [elasticsearchLinks.matchFilter('json.tag.keyword', tag)]
         )
         +
         (
           if shard == null then
             []
           else
-            [elasticsearchLinks.matchFilter('json.shard', shard)]
+            [elasticsearchLinks.matchFilter('json.shard.keyword', shard)]
         )
         +
-        [
-          elasticsearchLinks.matcher(k, matches[k])
-          for k in std.objectFields(matches)
-        ]
+        elasticsearchLinks.matchers(matches)
         +
-        elasticsearchLinks.getMatchersForPrometheusSelectorHash(index, options.prometheusSelectorHash);
+        (
+          if includeMatchersForPrometheusSelector then
+            elasticsearchLinks.getMatchersForPrometheusSelectorHash(index, options.prometheusSelectorHash)
+          else
+            []
+        );
 
       [
         toolingLinkDefinition({

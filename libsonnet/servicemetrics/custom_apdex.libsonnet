@@ -10,14 +10,6 @@ local generateQuery(rateQueryTemplate, selector, rangeInterval) =
     rangeInterval: rangeInterval,
   };
 
-local groupByClauseFor(substituteWeightWithRecordingRule, aggregationLabels) =
-  if substituteWeightWithRecordingRule == null then
-    ''
-  else
-    ' on(%(aggregationLabels)s) group_left()' % {
-      aggregationLabels: aggregations.serialize(aggregationLabels),
-    };
-
 local generateSingleNumeratorClause(customApdex, aggregationLabels, additionalSelectors, duration) =
   local selector = selectors.merge(customApdex.selector, additionalSelectors);
   local satisfiedSelector = selectors.merge(selector, { le: customApdex.satisfiedThreshold });
@@ -53,25 +45,21 @@ local generateNumeratorClause(customApdex, aggregationLabels, additionalSelector
 
 
 // A single threshold apdex score only has a SATISFACTORY threshold, no TOLERABLE threshold
-local generateApdexScoreQuery(customApdex, aggregationLabels, additionalSelectors, duration, substituteWeightWithRecordingRule) =
+local generateApdexScoreQuery(customApdex, aggregationLabels, additionalSelectors, duration) =
   local selector = selectors.merge(customApdex.selector, additionalSelectors);
 
-  local denominatorAggregation = if substituteWeightWithRecordingRule == null then
-    local totalSelector = selectors.merge(selector, { le: '+Inf' });
-    local totalRateQuery = generateQuery(customApdex.rateQueryTemplate, totalSelector, duration);
-    aggregations.aggregateOverQuery('sum', aggregationLabels, totalRateQuery)
-  else
-    substituteWeightWithRecordingRule;
+  local totalSelector = selectors.merge(selector, { le: '+Inf' });
+  local totalRateQuery = generateQuery(customApdex.rateQueryTemplate, totalSelector, duration);
+  local denominatorAggregation = aggregations.aggregateOverQuery('sum', aggregationLabels, totalRateQuery);
 
   local numeratorAggregation = generateNumeratorClause(customApdex, aggregationLabels, additionalSelectors, duration);
   |||
     %(numeratorAggregation)s
-    /%(groupByClause)s
+    /
     (
       %(denominatorAggregation)s > 0
     )
   ||| % {
-    groupByClause: groupByClauseFor(substituteWeightWithRecordingRule, aggregationLabels),
     numeratorAggregation: strings.chomp(numeratorAggregation),
     denominatorAggregation: strings.indent(denominatorAggregation, 2),
   };
@@ -132,9 +120,13 @@ local generateApdexAttributionQuery(customApdex, selector, rangeInterval, aggreg
     satisfiedThreshold: satisfiedThreshold,
     toleratedThreshold: toleratedThreshold,
 
-    apdexQuery(aggregationLabels, selector, rangeInterval, substituteWeightWithRecordingRule=null)::
+    /* apdexSuccessRateQuery measures the rate at which apdex violations occur */
+    apdexSuccessRateQuery(aggregationLabels, selector, rangeInterval)::
+      generateNumeratorClause(self, aggregationLabels, selector, rangeInterval),
+
+    apdexQuery(aggregationLabels, selector, rangeInterval)::
       local s = self;
-      generateApdexScoreQuery(s, aggregationLabels, selector, rangeInterval, substituteWeightWithRecordingRule=substituteWeightWithRecordingRule),
+      generateApdexScoreQuery(s, aggregationLabels, selector, rangeInterval),
 
     apdexWeightQuery(aggregationLabels, selector, rangeInterval)::
       local s = self;

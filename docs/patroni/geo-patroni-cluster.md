@@ -67,18 +67,17 @@ replication (see recovery.conf). As of writing,
 * **Only** in case you want to upgrade the major postgres version or gitlab-ee:
   * Re-Install gitlab-ee manually: `dpkg -r gitlab-ee && apt-get -y install gitlab-ee=13.2....`
     * take the same version as found in staging; run `dpkg -l gitlab-ee` on
-    `api-01-sv-gstg.c.gitlab-staging-1.internal` to find the right version
+    `web-01-sv-gstg.c.gitlab-staging-1.internal` to find the right version
   * `gitlab-ctl reconfigure`
   * `gitlab-ctl stop`
   * Clean up current PGDATA again: `rm -rf /var/opt/gitlab/postgresql/data/*`
 * In a tmux: 
   * `cd /tmp; sudo -u gitlab-psql PGHOST=/var/opt/gitlab/postgresql /usr/bin/envdir /etc/wal-g.d/env /opt/wal-g/bin/wal-g backup-fetch /var/opt/gitlab/postgresql/data base_00000...`
     * **take the backup name found above**; this might take 20m or so to finish
-* restore recovery.conf: `cp -a /var/opt/gitlab/postgresql/data.bak/recovery.conf /var/opt/gitlab/postgresql/data/`
+* Restore recovery configurations: `cat /var/opt/gitlab/postgresql/data.bak/recovery.conf | grep -v standby_mode >> /var/opt/gitlab/postgresql/data/gitlab-geo.conf`
   * it should look like this:
 
    ```
-   standby_mode = 'on'
    restore_command = '/usr/bin/envdir /etc/wal-g.d/env /opt/wal-g/bin/wal-g wal-fetch "%f" "%p"'
    recovery_target_timeline = 'latest'
 
@@ -95,6 +94,13 @@ replication (see recovery.conf). As of writing,
    The password can be obtained from the recovery.conf file on this replica.
 
    `chown` it to `gitlab-psql:gitlab-psql` and `chmod` it to `600` (if needed).
+
+* Create `standby.signal`:
+  ```
+  touch /var/opt/gitlab/postgresql/data/standby.signal
+  chown gitlab-psql:gitlab-psql /var/opt/gitlab/postgresql/data/standby.signal
+  chmod 0644 /var/opt/gitlab/postgresql/data/standby.signal
+  ```
 
 * `gitlab-ctl reconfigure`
   * This will cause postgres to start at some point, and you will see the
