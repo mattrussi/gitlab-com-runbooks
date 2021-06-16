@@ -7,6 +7,15 @@ groups:
   - record: gitlab:kube_node_pool_labels
     labels:
       cluster: gprd-us-east1-b
+      label_type: api
+      service_shard: default
+      service_stage: main
+      service_tier: sv
+      service_type: api
+    expr: '1'
+  - record: gitlab:kube_node_pool_labels
+    labels:
+      cluster: gprd-us-east1-b
       label_type: default
       service_shard: default
       service_stage: main

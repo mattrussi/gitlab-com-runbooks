@@ -107,6 +107,12 @@ local additionalLabelsForNodePoolTypes = {
           service_stage: 'main',
           service_shard: 'default',
         },
+        api: {
+          service_type: 'api',
+          service_tier: 'sv',
+          service_stage: 'main',
+          service_shard: 'default',
+        },
         'git-https': {
           service_type: 'git',
           service_tier: 'sv',
@@ -202,6 +208,12 @@ local additionalLabelsForNodePoolTypes = {
         default: {
           service_type: 'kube',
           service_tier: 'inf',
+          service_stage: 'main',
+          service_shard: 'default',
+        },
+        api: {
+          service_type: 'api',
+          service_tier: 'sv',
           service_stage: 'main',
           service_shard: 'default',
         },
