@@ -2513,7 +2513,7 @@ groups:
 
         Details of the Kube Container CPU Utilization resource:
 
-        Kubernetes containers can have a limit on allocated shares of CPU. In this case the container may be throttled if the limit is exhausted. This is in contrast to unlimited containers, where usage above the requested shares is allowed if the node still has unused resources. Unlimited containers are not accounted for in this saturation metric.
+        Kubernetes containers can have a limit on allocated shares of CPU. In this case the container may be throttled if the limit is exhausted. This is in contrast to containers where no CPU limit is configured, where usage above the requested shares is allowed if the node still has unused resources. Unlimited containers are not accounted for in this saturation metric.
       grafana_dashboard_id: alerts-sat_kube_container_cpu
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_kube_container_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
