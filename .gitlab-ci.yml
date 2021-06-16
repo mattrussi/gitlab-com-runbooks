@@ -486,7 +486,7 @@ docker_image_build:
     - schedules
 
 publish:
-  image: node:10
+  image: node:12
   stage: images
   before_script:
     - npm install -g semantic-release @semantic-release/gitlab
