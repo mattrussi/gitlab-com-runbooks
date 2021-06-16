@@ -10,7 +10,7 @@ local saturationHelpers = import 'helpers/saturation_helpers.libsonnet';
     appliesTo: saturationHelpers.kubeProvisionedServices,
     description: |||
       Kubernetes containers can have a limit on allocated shares of CPU. In this case the container
-      may be throttled if the limit is exhausted. This is in contrast to unlimited containers, where
+      may be throttled if the limit is exhausted. This is in contrast to no CPU limit is set, where
       usage above the requested shares is allowed if the node still has unused resources. Unlimited
       containers are not accounted for in this saturation metric.
     |||,
