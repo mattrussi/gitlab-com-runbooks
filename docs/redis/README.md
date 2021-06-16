@@ -30,6 +30,7 @@
 * [redis.md](redis.md)
 * [../sentry/sentry-is-down.md](../sentry/sentry-is-down.md)
 * [../sidekiq/large-pull-mirror-queue.md](../sidekiq/large-pull-mirror-queue.md)
+* [../sidekiq/queue-migration.md](../sidekiq/queue-migration.md)
 * [../sidekiq/sidekiq-inspection.md](../sidekiq/sidekiq-inspection.md)
 * [../sidekiq/sidekiq-survival-guide-for-sres.md](../sidekiq/sidekiq-survival-guide-for-sres.md)
 * [../sidekiq/sidekiq_stats_no_longer_showing.md](../sidekiq/sidekiq_stats_no_longer_showing.md)

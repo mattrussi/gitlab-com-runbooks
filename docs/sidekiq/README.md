@@ -44,6 +44,7 @@
 * [disabling-a-queue.md](disabling-a-queue.md)
 * [large-pull-mirror-queue.md](large-pull-mirror-queue.md)
 * [large-sidekiq-queue.md](large-sidekiq-queue.md)
+* [queue-migration.md](queue-migration.md)
 * [sidekiq-inspection.md](sidekiq-inspection.md)
 * [sidekiq-queue-not-being-processed.md](sidekiq-queue-not-being-processed.md)
 * [sidekiq-survival-guide-for-sres.md](sidekiq-survival-guide-for-sres.md)
