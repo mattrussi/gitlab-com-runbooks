@@ -624,7 +624,7 @@ groups:
           clamp_max(
             avg_over_time(pgbouncer_pools_client_active_connections {type=~"patroni|pgbouncer"}[5m])
             /
-            6200
+            8192
             ,
             1)
         ,
@@ -3431,7 +3431,7 @@ groups:
             clamp_max(
               avg_over_time(pgbouncer_pools_client_active_connections {environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
               /
-              6200
+              8192
               ,
               1)
           ,
