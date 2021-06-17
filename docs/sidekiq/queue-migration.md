@@ -74,13 +74,13 @@ At a high level, migrating workers looks like this:
 
    For example:
 
-   ```js
-  [
-    ["resource_boundary=cpu&urgency=high", null], // existing configuration
-    ["tags=example_tag", "default"], // new configuration; routes workers with `example_tag` to the `default` queue
-    ["*", null] // existing configuration
-  ]
-   ```
+    ```js
+    [
+      ["resource_boundary=cpu&urgency=high", null], // existing configuration
+      ["tags=example_tag", "default"], // new configuration; routes workers with `example_tag` to the `default` queue
+      ["*", null] // existing configuration
+    ]
+    ```
 1. [Migrate jobs] from the special scheduled and retry sets to match the
    newly-configured queue name: `gitlab-rake
    gitlab:sidekiq:migrate_jobs:retry
