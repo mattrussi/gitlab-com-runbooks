@@ -119,6 +119,22 @@ Re-establish normal operation of database cluster/network.
 
 Escalation to development in case of odd use pattern.
 
+#### Failed Schema Migration
+
+##### Impact
+
+##### Expected app behavior on failure
+
+##### Observability
+
+##### Recovery definition
+
+##### Expected bpp behavior on recovery
+
+##### Mitigation
+
+##### Possible corrective actions
+
 ### Online Garbage Collection
 
 #### Fatal Error During Run
