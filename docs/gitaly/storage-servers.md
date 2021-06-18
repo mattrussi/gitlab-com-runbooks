@@ -80,7 +80,7 @@ If all of the above works, use your admin account to change where new projects a
 If you receive an Alert about Disk space utilization on the Gitaly service, try to find the nodes with the most used space:
 
 ```shell
-bundle exec knife search 'role:gprd-base-stor-gitaly' --id-only --format json | jq -r '.["rows"][]' | sort | xargs -I% ssh -o StrictHostKeyChecking=no % 'hostname --fqdn && sudo df --human-readable / | tail -n1'
+knife ssh -C1 'role:gprd-base-stor-gitaly' 'hostname --fqdn && sudo df --human-readable / | tail -n1'
 ```
 
 Carefully inspect the files on the offending nodes, and decide whether or not manual removing action is needed. Checkout the work on https://gitlab.com/gitlab-com/gl-infra/production/-/issues/4114 for inspiration.
