@@ -6,14 +6,14 @@ local charIsSafe(char) =
 local stringIsSafe(string) =
   std.foldl(function(memo, char) memo && charIsSafe(char), std.stringChars(string), true);
 
-// TODO: handle encoding of "'" chars better
 local encodeString(string) =
   if string == '' then
     "''"
   else if stringIsSafe(string) then
     string
   else
-    "'" + strings.urlEncode(string, [[' ', '+']]) + "'";
+    local replacements = [[' ', '+'], ["'", "!'"]];
+    "'" + strings.urlEncode(string, replacements) + "'";
 
 local encodeArray(array, encodeUnknown) =
   local items = [

@@ -398,7 +398,7 @@ local buildElasticLineCountVizURL(index, filters, luceneQueries=[], splitSeries=
 
   indexCatalog[index].kibanaEndpoint + '#/visualize/create?type=line&indexPattern=' + indexCatalog[index].indexPattern + '&_a=' + rison.encode(applicationState) + globalState(timeRange);
 
-local splitDefinition(split) =
+local splitDefinition(split, orderById='1') =
   local defaults = {
     enabled: true,
     schema: 'bucket',
@@ -414,14 +414,14 @@ local splitDefinition(split) =
         missingBucketLabel: 'Missing',
         otherBucket: true,
         otherBucketLabel: 'Other',
-        orderBy: '1',
+        orderBy: orderById,
         order: 'desc',
         size: 5,
       },
     }
   else if std.isObject(split) then defaults + split;
 
-local buildElasticTableCountVizURL(index, filters, luceneQueries=[], splitSeries=false, timeRange=grafanaTimeRange) =
+local buildElasticTableCountVizURL(index, filters, luceneQueries=[], splitSeries=false, timeRange=grafanaTimeRange, extraAggs=[], orderById='1') =
   local ic = indexCatalog[index];
   local aggs =
     [
@@ -444,7 +444,7 @@ local buildElasticTableCountVizURL(index, filters, luceneQueries=[], splitSeries
             missingBucket: false,
             missingBucketLabel: 'Missing',
             order: 'desc',
-            orderBy: '1',
+            orderBy: orderById,
             otherBucket: true,
             otherBucketLabel: 'Other',
             size: 5,
@@ -453,10 +453,12 @@ local buildElasticTableCountVizURL(index, filters, luceneQueries=[], splitSeries
           type: 'terms',
         }]
       else if std.isArray(splitSeries) then
-        [splitDefinition(split) for split in splitSeries]
+        [splitDefinition(split, orderById) for split in splitSeries]
       else
         []
-    );
+    )
+    +
+    extraAggs;
 
   local applicationState = {
     filters: ic.defaultFilters + filters,
