@@ -15,6 +15,7 @@ local saturationTypes = [
   import 'elastic_thread_pools.libsonnet',
   import 'go_memory.libsonnet',
   import 'kube_container_cpu.libsonnet',
+  import 'kube_container_cpu_shares.libsonnet',
   import 'kube_container_memory.libsonnet',
   import 'kube_go_memory.libsonnet',
   import 'kube_hpa_desired_replicas.libsonnet',
