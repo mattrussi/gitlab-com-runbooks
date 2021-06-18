@@ -238,11 +238,11 @@ groups:
         clamp_min(
           clamp_max(
             sum by (environment, tier, type, stage, fqdn) (
-              go_memstats_alloc_bytes{type=~"gitaly|web-pages|monitoring|web|praefect|registry|api"}
+              go_memstats_alloc_bytes{type=~"gitaly|monitoring|praefect|registry|web|web-pages"}
             )
             /
             sum by (environment, tier, type, stage, fqdn) (
-              node_memory_MemTotal_bytes{type=~"gitaly|web-pages|monitoring|web|praefect|registry|api"}
+              node_memory_MemTotal_bytes{type=~"gitaly|monitoring|praefect|registry|web|web-pages"}
             )
             ,
             1)
