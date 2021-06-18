@@ -49,7 +49,7 @@ local saturationHelpers = import 'helpers/saturation_helpers.libsonnet';
       the limit.
     |||,
     grafana_dashboard_uid: 'sat_kube_container_cpu_shares',
-    resourceLabels: ['pod', 'container'],
+    resourceLabels: ['cluster', 'pod', 'container'],
     burnRatePeriod: '5m',
     queryFormatConfig: {
       // container_spec_cpu_shares is exported in millicores, so
@@ -57,7 +57,13 @@ local saturationHelpers = import 'helpers/saturation_helpers.libsonnet';
       containerSpecCpuSharesFactor: 1000,
     },
     query: |||
-      sum by (%(aggregationLabels)s) (
+      rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", %(selector)s}[%(rangeInterval)s])
+      / on(%(aggregationLabels)s)
+      (
+        container_spec_cpu_shares:labeled{container!="", container!="POD", %(selector)s}
+        /
+        %(containerSpecCpuSharesFactor)d
+      )
         rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", %(selector)s}[%(rangeInterval)s])
       )
       /
