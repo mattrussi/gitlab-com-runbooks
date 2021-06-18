@@ -7,7 +7,7 @@ local saturationHelpers = import 'helpers/saturation_helpers.libsonnet';
     title: 'Go Memory Utilization per Node',
     severity: 's4',
     horizontallyScalable: true,
-    appliesTo: std.setInter(std.set(saturationHelpers.goServices), std.set(saturationHelpers.vmProvisionedServices(default='gitaly'))),
+    appliesTo: std.setInter(saturationHelpers.goServices, std.set(saturationHelpers.vmProvisionedServices(default='gitaly'))),
     description: |||
       Go's memory allocation strategy can make it look like a Go process is saturating memory when measured using RSS, when in fact
       the process is not at risk of memory saturation. For this reason, we measure Go processes using the `go_memstat_alloc_bytes`

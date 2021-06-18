@@ -9,7 +9,18 @@ local ensureFirst(default, types) =
   [default] + std.filter(function(f) f != default, types);
 
 {
-  goServices: ['gitaly', 'web-pages', 'monitoring', 'web', 'praefect', 'registry', 'api'],
+  goServices: std.set([
+    'api',
+    'git',
+    'gitaly',
+    'kas',
+    'monitoring',
+    'praefect',
+    'registry',
+    'web-pages',
+    'web',
+    'websockets',
+  ]),
 
   // Disk utilisation metrics are currently reporting incorrectly for
   // HDD volumes, see https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10248
