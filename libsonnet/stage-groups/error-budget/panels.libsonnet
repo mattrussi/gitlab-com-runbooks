@@ -317,7 +317,7 @@ local sidekiqDurationTableFilters = std.map(
   function(filter)
     local duration = sidekiqDurationThresholdByFilter[filter];
     {
-      label: 'Jobs exeeding %is' % duration,
+      label: 'Jobs exceeding %is' % duration,
       input: {
         language: 'kuery',
         query: '%(filter)s AND json.duration_s > %(duration)i' % {
