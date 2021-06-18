@@ -2556,7 +2556,7 @@ groups:
 
         Details of the Kube Container CPU Utilization of Requested Shares resource:
 
-        Kubernetes containers are allocated a share of CPU (called "CPU requests" in K8s). When this is exhausted, the container may be throttled if the node doesn't have additional allocatable capacity. This is in contrast to container CPU quota (called "limits" in K8s), which prevent to use available capacity beyond the limit.
+        The Kube Container CPU Utilization is close to the amount of CPU Shares requested for the {{ $labels.type }} service ({{ $labels.stage }} stage). This could lead to over-utilization of the nodes.
       grafana_dashboard_id: alerts-sat_kube_container_cpu_shares
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_kube_container_cpu_shares?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage

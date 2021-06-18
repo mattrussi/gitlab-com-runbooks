@@ -9,10 +9,8 @@ local kubeSaturationHelpers = import 'helpers/kube_saturation_helpers.libsonnet'
     horizontallyScalable: true,
     appliesTo: kubeSaturationHelpers.kubeProvisionedServices,
     description: |||
-      Kubernetes containers are allocated a share of CPU (called "CPU requests" in K8s). When this is exhausted,
-      the container may be throttled if the node doesn't have additional allocatable capacity. This is in
-      contrast to container CPU quota (called "limits" in K8s), which prevent to use available capacity beyond
-      the limit.
+      The Kube Container CPU Utilization is close to the amount of CPU Shares requested for the
+      {{ $labels.type }} service ({{ $labels.stage }} stage). This could lead to over-utilization of the nodes.
     |||,
     grafana_dashboard_uid: 'sat_kube_container_cpu_shares',
     resourceLabels: ['cluster', 'pod', 'container'],
