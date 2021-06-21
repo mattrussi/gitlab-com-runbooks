@@ -219,6 +219,7 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
       },
       '6h': {
         apdexRatio: 'gitlab_component_node_apdex:ratio_6h',
+        opsRate: 'gitlab_component_node_ops:rate_6h',
         errorRatio: 'gitlab_component_node_errors:ratio_6h',
       },
       '3d': {

@@ -184,10 +184,12 @@ local apdexAlertForSLI(service, sli) =
           aggregationSet=aggregationSets.globalNodeSLIs,
           metricSelectorHash={ type: service.type, component: sli.name },
           minimumOperationRateForMonitoring=minimumOperationRateForMonitoring,
-          thresholdSLOValue=apdexScoreSLO
+          thresholdSLOValue=apdexScoreSLO,
+          windows=[windowDuration],
+          operationRateWindowDuration=windowDuration
         ),
         'for': nodeAlertWaitPeriod,
-        labels: labelsForSLI(sli, 's2', aggregationSets.globalNodeSLIs, 'apdex'),
+        labels: labelsForSLI(sli, 's2', aggregationSets.globalNodeSLIs, 'apdex') { window: windowDuration },
         annotations: commonAnnotations(service.type, sli, aggregationSets.globalNodeSLIs, 'apdex') {
           title: 'The %(sliName)s SLI of the %(serviceType)s service on node `{{ $labels.fqdn }}` has an apdex violating SLO' % formatConfig,
           description: |||
@@ -198,7 +200,7 @@ local apdexAlertForSLI(service, sli) =
             Currently the apdex value for {{ $labels.fqdn }} is {{ $value | humanizePercentage }}.
           ||| % formatConfig,
         },
-      }]
+      } for windowDuration in ['1h', '6h']]
     else
       []
   )
@@ -269,9 +271,11 @@ local errorRateAlertForSLI(service, sli) =
           metricSelectorHash={ type: service.type, component: sli.name },
           minimumOperationRateForMonitoring=minimumOperationRateForMonitoring,
           thresholdSLOValue=1 - errorRateSLO,
+          windows=[windowDuration],
+          operationRateWindowDuration=windowDuration
         ),
         'for': nodeAlertWaitPeriod,
-        labels: labelsForSLI(sli, 's2', aggregationSets.globalNodeSLIs, 'error'),
+        labels: labelsForSLI(sli, 's2', aggregationSets.globalNodeSLIs, 'error') { window: windowDuration },
         annotations: commonAnnotations(service.type, sli, aggregationSets.globalNodeSLIs, 'error') {
           title: 'The %(sliName)s SLI of the %(serviceType)s service on node `{{ $labels.fqdn }}` has an error rate violating SLO' % formatConfig,
           description: |||
@@ -282,7 +286,7 @@ local errorRateAlertForSLI(service, sli) =
             Currently the apdex value for {{ $labels.fqdn }} is {{ $value | humanizePercentage }}.
           ||| % formatConfig,
         },
-      }]
+      } for windowDuration in ['1h', '6h']]
     else
       []
   )

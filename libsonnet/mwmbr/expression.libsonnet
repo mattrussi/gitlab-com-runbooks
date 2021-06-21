@@ -46,6 +46,7 @@ local clampMaxHealthExpression(expression) =
   multiburnRateErrorExpression(
     aggregationSet,
     metricSelectorHash,  // Selectors for the error rate metrics
+    windows=['1h', '6h'],  // Sets of windows in this SLO expression, identified by longWindow duration
     thresholdSLOValue,  // Error budget float value (between 0 and 1)
     minimumOperationRateForMonitoring=null,  // minium operation rate vaue (in request-per-second)
     operationRateWindowDuration='1h',  // Window over which to evaluate operation rate
@@ -55,6 +56,7 @@ local clampMaxHealthExpression(expression) =
     local preOperationRateExpr = generator.expressionGenerator(
       aggregationSet=aggregationSet,
       metricSelectorHash=metricSelectorHash,
+      windows=windows,
       termGenerator=generator.termGenerators.fixed(thresholdValue=thresholdSLOValue),
       metricLookup=generator.metricLookups.errorRate(),
       isApdexExpression=false,
@@ -73,6 +75,7 @@ local clampMaxHealthExpression(expression) =
     aggregationSet,
     metricSelectorHash,  // Selectors for the error rate metrics
     thresholdSLOValue,  // Error budget float value (between 0 and 1)
+    windows=['1h', '6h'],  // Sets of windows in this SLO expression, identified by longWindow duration
     minimumOperationRateForMonitoring=null,  // minium operation rate vaue (in request-per-second)
     operationRateWindowDuration='1h',  // Window over which to evaluate operation rate
   )::
@@ -81,6 +84,7 @@ local clampMaxHealthExpression(expression) =
     local preOperationRateExpr = generator.expressionGenerator(
       aggregationSet=aggregationSet,
       metricSelectorHash=metricSelectorHash,
+      windows=windows,
       termGenerator=generator.termGenerators.fixed(thresholdValue=thresholdSLOValue),
       metricLookup=generator.metricLookups.apdex(),
       isApdexExpression=true,
