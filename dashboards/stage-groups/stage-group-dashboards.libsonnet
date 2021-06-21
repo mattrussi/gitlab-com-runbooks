@@ -148,20 +148,18 @@ local sqlQueriesPerAction(type, featureCategories, featureCategoriesSelector) =
       Average amount of SQL queries performed by a controller action.
     |||,
     query=|||
-      sum without (fqdn,instance) (
-        rate(
-          gitlab_sql_duration_seconds_count{
-            environment="$environment",
-            stage='$stage',
-            action=~"$action",
-            controller=~"$controller",
-            feature_category=~'(%(featureCategories)s)',
-            type='%(type)s'
-          }[$__interval]
-        )
+      sum by (controller, action) (
+        controller_action:gitlab_sql_duration_seconds_count:rate1m{
+          environment="$environment",
+          stage='$stage',
+          action=~"$action",
+          controller=~"$controller",
+          feature_category=~'(%(featureCategories)s)',
+          type='%(type)s'
+        }
       )
       /
-      avg_over_time(
+      sum by (controller, action) (
         controller_action:gitlab_transaction_duration_seconds_count:rate1m{
           environment="$environment",
           stage='$stage',
@@ -169,7 +167,7 @@ local sqlQueriesPerAction(type, featureCategories, featureCategoriesSelector) =
           controller=~"$controller",
           feature_category=~'(%(featureCategories)s)',
           type='%(type)s'
-        }[$__interval]
+        }
       )
     ||| % {
       type: type,
