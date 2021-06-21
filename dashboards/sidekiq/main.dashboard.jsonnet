@@ -250,7 +250,7 @@ serviceDashboard.overview('sidekiq')
       title='Sidekiq Aggregated Inflight Operations',
       description='The total number of jobs being executed at a single moment',
       query=|||
-        sum(sidekiq_running_jobs{environment="$environment", shard!="default"})
+        sum(sidekiq_running_jobs{environment="$environment"})
       |||,
       legendFormat='Total',
       interval='1m',
@@ -261,7 +261,7 @@ serviceDashboard.overview('sidekiq')
       title='Sidekiq Inflight Operations by Shard',
       description='The total number of jobs being executed at a single moment, for each queue',
       query=|||
-        sum(sidekiq_running_jobs{environment="$environment", shard!="default"}) by (shard)
+        sum(sidekiq_running_jobs{environment="$environment"}) by (shard)
       |||,
       legendFormat='{{ shard }}',
       interval='1m',
