@@ -56,6 +56,7 @@ Here is a brief summary of how Postgres database access is supported by Patroni,
 * Database clients (Rails, Sidekiq, etc.) discover Postgres through Consul service discovery and access it through PgBouncer (a connection pooler).
   * PgBouncer is a connection pooling proxy in front of Postgres.  Having thousands of clients connected directly to Postgres causes significant performance overhead.  To avoid this penalty, PgBouncer dynamically maps thousands of client connections to a few hundred db sessions.
   * Consul advertises each PgBouncer instance as a proxy for a corresponding Postgres instance.
+  * Consul keeps DNS records for primary and replica up to date by Consul agent on each node running periodic service healthchecks against the local Patroni API
   * Because PgBouncer itself is single-threaded and CPU-bound, it can use at most 1 vCPU, so we run multiple PgBouncer instances in front of each Postgres instance to avoid CPU starvation.
   * Database clients discover the IP+port of the available PgBouncer instances by sending DNS queries to a local Consul agent.
 * Currently we use dedicated PgBouncer VMs for accessing the primary db, rather than local PgBouncer processes on the db host (as we do for the replica dbs).
@@ -702,7 +703,7 @@ $ ( for ZONE in us-east1-{b,c,d} ; do INSTANCE_GROUP="gprd-pgbouncer-${ZONE}" ; 
 * We also use Consul to publish via DNS which Patroni node is the leader (i.e. the primary db) and which are healthy replica dbs.
   * Database clients (e.g. Rails app instances) periodically query their host's local Consul agent via DNS to discover the list of available databases.  This list actually refers to PgBouncer instances, which proxy to Postgres itself.
   * If Consul's list of available dbs changes, our Rails app updates its internal database connection pool accordingly.
-
+  * Patroni does not update the DNS records (services in Consul) by calling Consul, but instead Consul agents on the DB hosts periodically run health checks on their local instance to check if they are primary or replica nodes. They do this by requesting `http://0.0.0.0:8009/master` and `http://0.0.0.0:8009/replica` every 2s to check the statuses of each service.
 
 ## Details of how Patroni uses Consul
 
@@ -717,7 +718,7 @@ Patroni's job is to provide high availability for Postgres by automatically dete
 Consul has 2 primary jobs:
 * Store Patroni's state data in a highly-available distributed datastore.
 * Advertise via DNS to database clients how to connect to a primary or replica database.
-
+  * This is kept up to date by health checks run periodically from Consul agents on the Patroni hosts
 
 ### How and why does Patroni interact with Consul as a datastore?
 
@@ -728,6 +729,7 @@ Patroni stores several kinds of data in its DCS (Consul), such as:
 * Patroni config settings from the `dcs` stanza of patroni.yml. (consul key `service/pg-ha-cluster/config`)
 * Each Patroni node periodically self-describes its status (xlog_location, timeline, role, etc.). (consul keys `service/pg-ha-cluster/members/[hostname]`)
 * Other ancillary data, including a history of past failover events, metadata about an in-progress failover, whether or not failover is currently paused, etc.
+* While Patroni updates KV stores for Patroni state by calling Consul APIs it does not directly call Consul service APIs to update service status (and hence DNS records). Instead Consul agent is requesting `http://0.0.0.0:8009/master` and `http://0.0.0.0:8009/replica` every 2s to check the statuses of each service using the Patroni API.
 
 *Warning:* If you need to manually `PAUSE` Patroni (i.e. prevent failover even if the primary starts failing health checks), a Chef run an *any* Patroni node will revert that pause.  Chef tells the Patroni agent to force the `dcs` settings in patroni.yml to overwrite any conflicting settings stored in Consul, and that scope unfortunately includes the consul key used for pausing failovers.  So to pause Patroni (e.g. for maintenance), we must first stop Chef on *all* Patroni hosts.
 
