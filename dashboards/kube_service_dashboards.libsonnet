@@ -64,7 +64,6 @@ local panelsForDeployment(serviceType, deployment, selectorHash) =
         sum by(cluster) (
           rate(
             container_network_transmit_bytes_total:labeled{
-              container="POD",
               %(containerSelector)s
             }[$__rate_interval]
           )
@@ -74,7 +73,6 @@ local panelsForDeployment(serviceType, deployment, selectorHash) =
         sum by(cluster) (
           rate(
             container_network_receive_bytes_total:labeled{
-              container="POD",
               %(containerSelector)s
             }[$__rate_interval]
           )
