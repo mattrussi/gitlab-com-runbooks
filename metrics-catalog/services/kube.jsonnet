@@ -77,6 +77,7 @@ metricsCatalog.serviceDefinition({
       userImpacting: false,
       featureCategory: 'not_owned',
       team: 'delivery',
+      ignoreTrafficCessation: true,
       description: |||
         We rely on the GKE Cluster Autoscaler (https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-autoscaler) to
         automatically scale up and scale down our Kubernetes fleets.

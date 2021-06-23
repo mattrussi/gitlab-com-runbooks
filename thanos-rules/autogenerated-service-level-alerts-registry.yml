@@ -32,6 +32,7 @@ groups:
       runbook: docs/registry/README.md
     labels:
       aggregation: component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: container_registry
       pager: pagerduty
@@ -95,6 +96,7 @@ groups:
       runbook: docs/registry/README.md
     labels:
       aggregation: regional_component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: container_registry
       pager: pagerduty
@@ -155,12 +157,14 @@ groups:
       runbook: docs/registry/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: container_registry
+      pager: pagerduty
       product_stage: package
       product_stage_group: package
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
@@ -193,12 +197,14 @@ groups:
       runbook: docs/registry/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: container_registry
+      pager: pagerduty
       product_stage: package
       product_stage_group: package
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
@@ -234,6 +240,7 @@ groups:
       runbook: docs/registry/README.md
     labels:
       aggregation: component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: container_registry
       pager: pagerduty
@@ -298,6 +305,7 @@ groups:
       runbook: docs/registry/README.md
     labels:
       aggregation: regional_component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: container_registry
       pager: pagerduty
@@ -358,12 +366,14 @@ groups:
       runbook: docs/registry/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: container_registry
+      pager: pagerduty
       product_stage: package
       product_stage_group: package
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
       slo_alert: 'no'
       user_impacting: 'no'
@@ -396,12 +406,14 @@ groups:
       runbook: docs/registry/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: container_registry
+      pager: pagerduty
       product_stage: package
       product_stage_group: package
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
       slo_alert: 'no'
       user_impacting: 'no'
@@ -429,6 +441,7 @@ groups:
       runbook: docs/registry/README.md
     labels:
       aggregation: component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: container_registry
       pager: pagerduty
@@ -485,12 +498,14 @@ groups:
       runbook: docs/registry/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: container_registry
+      pager: pagerduty
       product_stage: package
       product_stage_group: package
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
@@ -519,12 +534,14 @@ groups:
       runbook: docs/registry/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: container_registry
+      pager: pagerduty
       product_stage: package
       product_stage_group: package
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
@@ -559,6 +576,7 @@ groups:
       runbook: docs/registry/README.md
     labels:
       aggregation: component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: container_registry
       pager: pagerduty
@@ -622,6 +640,7 @@ groups:
       runbook: docs/registry/README.md
     labels:
       aggregation: regional_component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: container_registry
       pager: pagerduty
@@ -681,6 +700,7 @@ groups:
       runbook: docs/registry/README.md
     labels:
       aggregation: component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: container_registry
       pager: pagerduty
@@ -744,6 +764,7 @@ groups:
       runbook: docs/registry/README.md
     labels:
       aggregation: regional_component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: container_registry
       pager: pagerduty
@@ -804,12 +825,14 @@ groups:
       runbook: docs/registry/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: container_registry
+      pager: pagerduty
       product_stage: package
       product_stage_group: package
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
@@ -842,12 +865,14 @@ groups:
       runbook: docs/registry/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: container_registry
+      pager: pagerduty
       product_stage: package
       product_stage_group: package
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
@@ -883,6 +908,7 @@ groups:
       runbook: docs/registry/README.md
     labels:
       aggregation: component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: container_registry
       pager: pagerduty
@@ -947,6 +973,7 @@ groups:
       runbook: docs/registry/README.md
     labels:
       aggregation: regional_component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: container_registry
       pager: pagerduty
@@ -1007,12 +1034,14 @@ groups:
       runbook: docs/registry/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: container_registry
+      pager: pagerduty
       product_stage: package
       product_stage_group: package
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
@@ -1045,12 +1074,14 @@ groups:
       runbook: docs/registry/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: container_registry
+      pager: pagerduty
       product_stage: package
       product_stage_group: package
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
@@ -1090,6 +1121,7 @@ groups:
       runbook: docs/registry/README.md
     labels:
       aggregation: component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: container_registry
       pager: pagerduty
@@ -1158,6 +1190,7 @@ groups:
       runbook: docs/registry/README.md
     labels:
       aggregation: regional_component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: container_registry
       pager: pagerduty
@@ -1222,12 +1255,14 @@ groups:
       runbook: docs/registry/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: container_registry
+      pager: pagerduty
       product_stage: package
       product_stage_group: package
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
@@ -1264,12 +1299,14 @@ groups:
       runbook: docs/registry/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: container_registry
+      pager: pagerduty
       product_stage: package
       product_stage_group: package
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
@@ -1304,6 +1341,7 @@ groups:
       runbook: docs/registry/README.md
     labels:
       aggregation: component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: container_registry
       pager: pagerduty
@@ -1367,6 +1405,7 @@ groups:
       runbook: docs/registry/README.md
     labels:
       aggregation: regional_component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: container_registry
       pager: pagerduty
@@ -1427,12 +1466,14 @@ groups:
       runbook: docs/registry/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: container_registry
+      pager: pagerduty
       product_stage: package
       product_stage_group: package
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
@@ -1465,12 +1506,14 @@ groups:
       runbook: docs/registry/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: container_registry
+      pager: pagerduty
       product_stage: package
       product_stage_group: package
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
