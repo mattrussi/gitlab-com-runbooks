@@ -32,6 +32,7 @@ groups:
       runbook: docs/gitaly/README.md
     labels:
       aggregation: component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
@@ -97,6 +98,7 @@ groups:
       runbook: docs/gitaly/README.md
     labels:
       aggregation: component_node
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
@@ -153,6 +155,7 @@ groups:
       runbook: docs/gitaly/README.md
     labels:
       aggregation: component_node
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
@@ -204,6 +207,7 @@ groups:
       runbook: docs/gitaly/README.md
     labels:
       aggregation: component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
@@ -267,6 +271,7 @@ groups:
       runbook: docs/gitaly/README.md
     labels:
       aggregation: component_node
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
@@ -321,6 +326,7 @@ groups:
       runbook: docs/gitaly/README.md
     labels:
       aggregation: component_node
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
@@ -372,12 +378,14 @@ groups:
       runbook: docs/gitaly/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: gitaly
+      pager: pagerduty
       product_stage: create
       product_stage_group: gitaly
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
@@ -410,12 +418,14 @@ groups:
       runbook: docs/gitaly/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: gitaly
+      pager: pagerduty
       product_stage: create
       product_stage_group: gitaly
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
@@ -450,6 +460,7 @@ groups:
       runbook: docs/gitaly/README.md
     labels:
       aggregation: component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
@@ -515,6 +526,7 @@ groups:
       runbook: docs/gitaly/README.md
     labels:
       aggregation: component_node
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
@@ -571,6 +583,7 @@ groups:
       runbook: docs/gitaly/README.md
     labels:
       aggregation: component_node
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
@@ -623,6 +636,7 @@ groups:
       runbook: docs/gitaly/README.md
     labels:
       aggregation: component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
@@ -687,6 +701,7 @@ groups:
       runbook: docs/gitaly/README.md
     labels:
       aggregation: component_node
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
@@ -742,6 +757,7 @@ groups:
       runbook: docs/gitaly/README.md
     labels:
       aggregation: component_node
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
@@ -793,12 +809,14 @@ groups:
       runbook: docs/gitaly/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: gitaly
+      pager: pagerduty
       product_stage: create
       product_stage_group: gitaly
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
@@ -831,12 +849,14 @@ groups:
       runbook: docs/gitaly/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: gitaly
+      pager: pagerduty
       product_stage: create
       product_stage_group: gitaly
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
@@ -872,6 +892,7 @@ groups:
       runbook: docs/gitaly/README.md
     labels:
       aggregation: component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
@@ -938,6 +959,7 @@ groups:
       runbook: docs/gitaly/README.md
     labels:
       aggregation: component_node
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
@@ -995,6 +1017,7 @@ groups:
       runbook: docs/gitaly/README.md
     labels:
       aggregation: component_node
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
@@ -1048,6 +1071,7 @@ groups:
       runbook: docs/gitaly/README.md
     labels:
       aggregation: component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
@@ -1113,6 +1137,7 @@ groups:
       runbook: docs/gitaly/README.md
     labels:
       aggregation: component_node
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
@@ -1169,6 +1194,7 @@ groups:
       runbook: docs/gitaly/README.md
     labels:
       aggregation: component_node
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
@@ -1220,12 +1246,14 @@ groups:
       runbook: docs/gitaly/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: gitaly
+      pager: pagerduty
       product_stage: create
       product_stage_group: gitaly
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
@@ -1258,12 +1286,14 @@ groups:
       runbook: docs/gitaly/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: gitaly
+      pager: pagerduty
       product_stage: create
       product_stage_group: gitaly
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'

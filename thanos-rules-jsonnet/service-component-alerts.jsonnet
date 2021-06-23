@@ -17,10 +17,11 @@ local minimumOperationRateForMonitoring = 1; /* rps */
 // Consider bringing this down to 2m after 1 Sep 2020
 local nodeAlertWaitPeriod = '10m';
 
-local labelsForSLI(sli, severity, aggregationSet, sliType) =
+local labelsForSLI(sli, severity, aggregationSet, sliType, alertClass) =
   local pager = if severity == 's1' || severity == 's2' then 'pagerduty' else null;
 
   local labels = {
+    alert_class: alertClass,
     aggregation: aggregationSet.id,
     sli_type: sliType,
     rules_domain: 'general',
@@ -163,7 +164,7 @@ local apdexAlertForSLI(service, sli) =
       thresholdSLOValue=apdexScoreSLO
     ),
     'for': '2m',
-    labels: labelsForSLI(sli, 's2', aggregationSets.globalSLIs, 'apdex'),
+    labels: labelsForSLI(sli, 's2', aggregationSets.globalSLIs, 'apdex', 'slo_violation'),
     annotations: commonAnnotations(service.type, sli, aggregationSets.globalSLIs, 'apdex') {
       title: 'The %(sliName)s SLI of the %(serviceType)s service (`{{ $labels.stage }}` stage) has an apdex violating SLO' % formatConfig,
       description: |||
@@ -189,7 +190,7 @@ local apdexAlertForSLI(service, sli) =
           operationRateWindowDuration=windowDuration
         ),
         'for': nodeAlertWaitPeriod,
-        labels: labelsForSLI(sli, 's2', aggregationSets.globalNodeSLIs, 'apdex') { window: windowDuration },
+        labels: labelsForSLI(sli, 's2', aggregationSets.globalNodeSLIs, 'apdex', 'slo_violation') { window: windowDuration },
         annotations: commonAnnotations(service.type, sli, aggregationSets.globalNodeSLIs, 'apdex') {
           title: 'The %(sliName)s SLI of the %(serviceType)s service on node `{{ $labels.fqdn }}` has an apdex violating SLO' % formatConfig,
           description: |||
@@ -216,7 +217,7 @@ local apdexAlertForSLI(service, sli) =
           thresholdSLOValue=apdexScoreSLO
         ),
         'for': '2m',
-        labels: labelsForSLI(sli, 's2', aggregationSets.regionalSLIs, 'apdex'),
+        labels: labelsForSLI(sli, 's2', aggregationSets.regionalSLIs, 'apdex', 'slo_violation'),
         annotations: commonAnnotations(service.type, sli, aggregationSets.regionalSLIs, 'apdex') {
           title: 'The %(sliName)s SLI of the %(serviceType)s service in region `{{ $labels.region }}` has an apdex violating SLO' % formatConfig,
           description: |||
@@ -248,7 +249,7 @@ local errorRateAlertForSLI(service, sli) =
       thresholdSLOValue=1 - errorRateSLO,
     ),
     'for': '2m',
-    labels: labelsForSLI(sli, 's2', aggregationSets.globalSLIs, 'error'),
+    labels: labelsForSLI(sli, 's2', aggregationSets.globalSLIs, 'error', 'slo_violation'),
     annotations: commonAnnotations(service.type, sli, aggregationSets.globalSLIs, 'error') {
       title: 'The %(sliName)s SLI of the %(serviceType)s service (`{{ $labels.stage }}` stage) has an error rate violating SLO' % formatConfig,
       description: |||
@@ -275,7 +276,7 @@ local errorRateAlertForSLI(service, sli) =
           operationRateWindowDuration=windowDuration
         ),
         'for': nodeAlertWaitPeriod,
-        labels: labelsForSLI(sli, 's2', aggregationSets.globalNodeSLIs, 'error') { window: windowDuration },
+        labels: labelsForSLI(sli, 's2', aggregationSets.globalNodeSLIs, 'error', 'slo_violation') { window: windowDuration },
         annotations: commonAnnotations(service.type, sli, aggregationSets.globalNodeSLIs, 'error') {
           title: 'The %(sliName)s SLI of the %(serviceType)s service on node `{{ $labels.fqdn }}` has an error rate violating SLO' % formatConfig,
           description: |||
@@ -302,7 +303,7 @@ local errorRateAlertForSLI(service, sli) =
           thresholdSLOValue=1 - errorRateSLO,
         ),
         'for': '2m',
-        labels: labelsForSLI(sli, 's2', aggregationSets.regionalSLIs, 'error'),
+        labels: labelsForSLI(sli, 's2', aggregationSets.regionalSLIs, 'error', 'slo_violation'),
         annotations: commonAnnotations(service.type, sli, aggregationSets.regionalSLIs, 'error') {
           title: 'The %(sliName)s SLI of the %(serviceType)s service in region `{{ $labels.region }}` has an error rate violating SLO' % formatConfig,
           description: |||
@@ -332,7 +333,7 @@ local trafficCessationAlert(service, sli) =
         gitlab_component_ops:rate_30m{type="%(serviceType)s", component="%(sliName)s", stage="main", monitor="global"} == 0
       ||| % formatConfig,
       'for': '5m',
-      labels: labelsForSLI(sli, 's3', aggregationSets.globalSLIs, 'ops'),
+      labels: labelsForSLI(sli, 's2', aggregationSets.globalSLIs, 'ops', 'traffic_cessation'),
       annotations: commonAnnotations(service.type, sli, aggregationSets.globalSLIs, 'ops') {
         title: 'The %(sliName)s SLI of the %(serviceType)s service (`{{ $labels.stage }}` stage) has not received any traffic in the past 30 minutes' % formatConfig,
         description: |||
@@ -353,7 +354,7 @@ local trafficCessationAlert(service, sli) =
         gitlab_component_ops:rate_5m{type="%(serviceType)s", component="%(sliName)s", stage="main", monitor="global"}
       ||| % formatConfig,
       'for': '30m',
-      labels: labelsForSLI(sli, 's3', aggregationSets.globalSLIs, 'ops'),
+      labels: labelsForSLI(sli, 's2', aggregationSets.globalSLIs, 'ops', 'traffic_cessation'),
       annotations: commonAnnotations(service.type, sli, aggregationSets.globalSLIs, 'ops') {
         title: 'The %(sliName)s SLI of the %(serviceType)s service (`{{ $labels.stage }}` stage) has not reported any traffic in the past 30 minutes' % formatConfig,
         description: |||
