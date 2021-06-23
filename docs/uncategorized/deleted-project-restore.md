@@ -40,12 +40,12 @@ lagging replication, which will need to be silenced for the duration of this
 procedure.
 
 1. `ssh` to the delayed replica.
-1. In a `gitlab-psql` shell: `SELECT pg_xlog_replay_pause();`
+1. In a `gitlab-psql` shell: `SELECT pg_wal_replay_pause();`
 1. `systemctl stop chef-client.service`
 
 Later, when you have extracted the project export:
 
-1. In a `gitlab-psql` shell: `SELECT pg_xlog_replay_resume();`
+1. In a `gitlab-psql` shell: `SELECT pg_wal_replay_resume();`
 1. `systemctl start chef-client.service`
 
 Continue at "Export project from database backup and import into GitLab".
@@ -125,7 +125,7 @@ irb(main):028:0> proj.disk_path
 irb(main):023:0> admin_user = User.find_by_username('an-admin')
 => #<User id:1234 @an-admin>
 
-pts = Gitlab::ImportExport::ProjectTreeSaver.new(project: proj, current_user: admin_user, shared: proj.import_export_shared)
+pts = Gitlab::ImportExport::ProjectTree::Saver.new(project: proj, current_user: admin_user, shared: proj.import_export_shared)
 ... some output that includes the path to a project.json file. Note this down.
 pts.save
 ```
