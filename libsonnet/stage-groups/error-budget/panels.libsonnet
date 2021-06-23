@@ -226,17 +226,18 @@ local violationRatePanel(queries, group) =
       baseSelector {
         stage_group: group,
       },
-      ['component', 'violation_type'],
+      ['component', 'violation_type', 'type'],
     ),
-    sort={ col: 2, desc: true },
+    sort={ col: 3, desc: true },
     transformations=[
       {
         id: 'organize',
         options: {
           indexByName: {
             violation_type: 0,
-            component: 1,
-            Value: 2,
+            type: 1,
+            component: 2,
+            Value: 3,
           },
         },
       },
