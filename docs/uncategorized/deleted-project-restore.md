@@ -126,7 +126,7 @@ irb(main):023:0> admin_user = User.find_by_username('an-admin')
 => #<User id:1234 @an-admin>
 
 pts = Gitlab::ImportExport::ProjectTree::Saver.new(project: proj, current_user: admin_user, shared: proj.import_export_shared)
-... some output that includes the path to a project.json file. Note this down.
+... some output that includes the path to a project tree directory, which will be something like /var/opt/gitlab/gitlab-rails/shared/tmp/gitlab_exports/@hashed/. Note this down.
 pts.save
 ```
 
@@ -158,13 +158,13 @@ matter that it won't contain the repository.
 Make the project.json accessible to your `gcloud ssh` user:
 
 ```
-mv /path/to/project.json /tmp/
-chmod 644 /tmp/project.json
+mv /path/to/project/tree /tmp/
+chmod -R 644 /tmp/project
 ```
 
 Download the file, replacing the project and instance name in this example as
-appropriate: `gcloud --project gitlab-restore compute scp
-restore-postgres-gprd-88895:/tmp/project.json ./`
+appropriate: `gcloud --project gitlab-restore compute scp -r
+restore-postgres-gprd-88895:/tmp/project ./`
 
 Download [a
 stub](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/spec/features/projects/import_export/test_project_export.tar.gz)
