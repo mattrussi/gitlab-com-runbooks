@@ -30,10 +30,10 @@ groups:
     labels:
       aggregation: component
       alert_type: symptom
-      feature_category: not_owned
+      feature_category: kubernetes_management
       pager: pagerduty
-      product_stage: not_owned
-      product_stage_group: not_owned
+      product_stage: configure
+      product_stage_group: configure
       rules_domain: general
       severity: s2
       sli_type: error
@@ -43,22 +43,22 @@ groups:
       (
         (
           gitlab_component_errors:ratio_1h{component="grpc_requests",monitor="global",type="kas"}
-          > (14.4 * 0.010000)
+          > (14.4 * 0.000500)
         )
         and
         (
           gitlab_component_errors:ratio_5m{component="grpc_requests",monitor="global",type="kas"}
-          > (14.4 * 0.010000)
+          > (14.4 * 0.000500)
         )
         or
         (
           gitlab_component_errors:ratio_6h{component="grpc_requests",monitor="global",type="kas"}
-          > (6 * 0.010000)
+          > (6 * 0.000500)
         )
         and
         (
           gitlab_component_errors:ratio_30m{component="grpc_requests",monitor="global",type="kas"}
-          > (6 * 0.010000)
+          > (6 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -90,9 +90,9 @@ groups:
     labels:
       aggregation: component
       alert_type: cause
-      feature_category: not_owned
-      product_stage: not_owned
-      product_stage_group: not_owned
+      feature_category: kubernetes_management
+      product_stage: configure
+      product_stage_group: configure
       rules_domain: general
       severity: s3
       sli_type: ops
@@ -128,9 +128,9 @@ groups:
     labels:
       aggregation: component
       alert_type: cause
-      feature_category: not_owned
-      product_stage: not_owned
-      product_stage_group: not_owned
+      feature_category: kubernetes_management
+      product_stage: configure
+      product_stage_group: configure
       rules_domain: general
       severity: s3
       sli_type: ops
