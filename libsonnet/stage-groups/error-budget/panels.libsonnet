@@ -222,29 +222,40 @@ local violationRatePanel(queries, group) =
   basic.table(
     title='Budget failures',
     description='Number of failures contributing to the budget send per component and type ',
+    styles=null,  // https://github.com/grafana/grafonnet-lib/issues/240
     query=queries.errorBudgetViolationRate(
       baseSelector {
         stage_group: group,
       },
       ['component', 'violation_type', 'type'],
     ),
-    sort={ col: 3, desc: true },
     transformations=[
       {
         id: 'organize',
         options: {
+          excludeByName: {
+            Time: true,
+          },
           indexByName: {
             violation_type: 0,
             type: 1,
             component: 2,
             Value: 3,
           },
+          renameByName: {
+            Value: 'failures past 28 days',
+          },
         },
       },
     ],
-  )
-  .hideColumn('Time')
-  .addColumn('Value', { alias: 'failures past 28 days' });
+  ) + {
+    options: {
+      sortBy: [{
+        displayName: 'failures past 28 days',
+        desc: true,
+      }],
+    },
+  };
 
 local violationRateExplanation =
   basic.text(
