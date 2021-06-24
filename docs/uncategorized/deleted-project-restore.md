@@ -109,7 +109,7 @@ ProjectTreeSaver needs to run "as a user", so we use an admin user to ensure
 that we have permissions.
 
 ```ruby
-irb(main):024:0> Namespace.find_by_path('some-ns')
+Namespace.find_by_full_path('some-ns')
 => #<Group id:1234 @myns>
 irb(main):027:0> Project.where(namespace_id: 1234, path: 'some-project')
 => #<ActiveRecord::Relation [#<Project id:5678 myns/some-project>]>
@@ -125,7 +125,7 @@ irb(main):028:0> proj.disk_path
 irb(main):023:0> admin_user = User.find_by_username('an-admin')
 => #<User id:1234 @an-admin>
 
-pts = Gitlab::ImportExport::ProjectTree::Saver.new(project: proj, current_user: admin_user, shared: proj.import_export_shared)
+pts = Gitlab::ImportExport::Project::TreeSaver.new(project: proj, current_user: admin_user, shared: proj.import_export_shared)
 ... some output that includes the path to a project tree directory, which will be something like /var/opt/gitlab/gitlab-rails/shared/tmp/gitlab_exports/@hashed/. Note this down.
 pts.save
 ```
