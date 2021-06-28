@@ -242,6 +242,16 @@ local violationRatePanel(queries, group) =
         },
       },
     ],
+    styles=[
+      {
+        pattern: 'type',
+        type: 'string',
+        link: true,
+        linkUrl: 'https://dashboards.gitlab.net/d/${__cell}-main/',
+        linkTooltip: 'Generic ${__cell_1} dashboard. For details, please search Service Level Indicators > ${__cell_2} SLI ${__cell_0} panel',
+        linkTargetBlank: true,
+      },
+    ],
   )
   .hideColumn('Time')
   .addColumn('Value', { alias: 'failure rate' });
