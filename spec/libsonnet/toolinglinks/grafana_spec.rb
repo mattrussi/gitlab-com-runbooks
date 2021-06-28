@@ -6,29 +6,25 @@ describe 'libsonnet/toolinglinks/grafana.libsonnet' do
 
     context 'input path is at the root directory' do
       it 'raises an error' do
-        result = JsonnetTestHelper.render(
+        expect(
           <<~JSONNET
             local grafana = import 'toolinglinks/grafana.libsonnet';
 
             grafana.grafanaUid("bare-file.jsonnet")
           JSONNET
-        )
-        expect(result.success?).to be(false)
-        expect(result.error_message).to match(/invalid dashboard path/i)
+        ).to reject_jsonnet(/invalid dashboard path/i)
       end
     end
 
     context 'input file is too deep' do
       it 'raises an error' do
-        result = JsonnetTestHelper.render(
+        expect(
           <<~JSONNET
             local grafana = import 'toolinglinks/grafana.libsonnet';
 
             grafana.grafanaUid("folder1/folder2/bare-file.jsonnet")
           JSONNET
-        )
-        expect(result.success?).to be(false)
-        expect(result.error_message).to match(/invalid dashboard path/i)
+        ).to reject_jsonnet(/invalid dashboard path/i)
       end
     end
 
@@ -43,15 +39,13 @@ describe 'libsonnet/toolinglinks/grafana.libsonnet' do
 
       with_them do
         it 'returns legitimate UIDs' do
-          result = JsonnetTestHelper.render(
+          expect(
             <<~JSONNET
               local grafana = import 'toolinglinks/grafana.libsonnet';
 
               grafana.grafanaUid("#{path}")
             JSONNET
-          )
-          expect(result.success?).to be(true)
-          expect(result.data).to eql(uid)
+          ).to render_jsonnet(eql(uid))
         end
       end
     end
