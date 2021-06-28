@@ -41,6 +41,7 @@
 * [../pgbouncer/service-pgbouncer.md](../pgbouncer/service-pgbouncer.md)
 * [../redis/redis-survival-guide-for-sres.md](../redis/redis-survival-guide-for-sres.md)
 * [../redis/redis.md](../redis/redis.md)
+* [creating-a-shard.md](creating-a-shard.md)
 * [disabling-a-queue.md](disabling-a-queue.md)
 * [large-pull-mirror-queue.md](large-pull-mirror-queue.md)
 * [large-sidekiq-queue.md](large-sidekiq-queue.md)
