@@ -71,7 +71,7 @@ describe 'Jsonnet Matcher' do
         JSONNET
       )
       expect(result).to be(false)
-      expect(matcher.failure_message).to eql(
+      expect(matcher.failure_message).to starting_with(
         <<~ERROR.strip
         Fail to render jsonnet content:
         ```
@@ -79,6 +79,8 @@ describe 'Jsonnet Matcher' do
           a = 1
         }
         ```
+
+        Error: Failed to compile
         ERROR
       )
     end
@@ -92,13 +94,15 @@ describe 'Jsonnet Matcher' do
         JSONNET
       )
       expect(result).to be(false)
-      expect(matcher.failure_message).to eql(
+      expect(matcher.failure_message).to starting_with(
         <<~ERROR.strip
         Fail to render jsonnet content:
         ```
         assert false : "A random assertion failure";
         {}
         ```
+
+        Error: Failed to compile
         ERROR
       )
     end

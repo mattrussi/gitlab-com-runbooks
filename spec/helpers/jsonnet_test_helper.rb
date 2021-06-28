@@ -91,6 +91,8 @@ RSpec::Matchers.define :render_jsonnet do |expected|
       ```
       #{actual}
       ```
+
+      Error: #{@result.error_message}
       EOF
     end
   end
