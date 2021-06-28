@@ -11,7 +11,6 @@ require 'rspec-parameterized'
 require 'ruby_jard'
 
 Dir[File.join(File.dirname(__FILE__), "/helpers/**.rb")].each do |helper_file|
-  puts helper_file
   require File.expand_path(helper_file)
 end
 
