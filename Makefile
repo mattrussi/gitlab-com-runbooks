@@ -16,6 +16,10 @@ PROMTOOL_COMMAND = $(shell which promtool || echo "/prometheus/promtool")
 
 SHELLCHECK_FLAGS := -e SC1090,SC1091
 
+.PHONY: help
+help:  ## Lists all available commands
+	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/\\$$//' | sed -e 's/##//'
+
 .PHONY: all
 all: verify
 
