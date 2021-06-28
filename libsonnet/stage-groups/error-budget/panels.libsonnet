@@ -255,6 +255,19 @@ local violationRatePanel(queries, group) =
         desc: true,
       }],
     },
+    fieldConfig+: {
+      overrides+: [{
+        matcher: { id: 'byName', options: 'type' },
+        properties: [{
+          id: 'links',
+          value: [{
+            targetBlank: true,
+            title: '${__value.text} overview: See ${__data.fields.component} SLI for details',
+            url: 'https://dashboards.gitlab.net/d/${__value.text}-main',
+          }],
+        }],
+      }],
+    },
   };
 
 local violationRateExplanation =
