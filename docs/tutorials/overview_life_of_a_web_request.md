@@ -141,13 +141,19 @@ In practice, each service in the above diagram has multiple nodes and supporting
 
 ## Demo: Observing a single example request
 
-Show how to either choose a typical request from the service's event logs or manually create a synthetic request.
+TODO: This section is incomplete and still needs to be finished.
 
-Show an example of a typical request and response.
-If the full details (e.g. request/response bodies) would be distracting, then elide it in the demo (especially if you have a separate section for hands-on practice).
+Possible methods for observing a request:
+
+* Browser debug toolbar, fetch correlation ID from response headers
+* Performance bar on gitlab.com
+* Anonymous API request via curl
+* Authenticated API request via curl
 
 
 ## Demo: How to interpret the dashboards representing service health, capacity, errors, and other key properties
+
+TODO: This section is incomplete and still needs to be finished.
 
 List the key behaviors again, and map them to elements on the service dashboard.
 
@@ -167,6 +173,8 @@ If practical, offer suggestions about how to decide whether or not a case like t
 If we have a decent runbook for this service, cite it for additional failure modes.
 
 ## Demo: How to explore patterns and changes in the nature of requests and responses
+
+TODO: This section is incomplete and still needs to be finished.
 
 How do we answer ad hoc questions about the service's workload and behaviors?
 For some services this is easier than others, but this is always a critical topic to address.
@@ -206,6 +214,8 @@ For example, suppose the service dashboard shows an increase in HTTP 500 respons
 
 
 ## Summary
+
+TODO: This section is incomplete and still needs to be finished.
 
 Conclude with a summary of key points that ties the presented content back to the learning objectives.
 How does the presented content satisfy each of the learning objectives?
