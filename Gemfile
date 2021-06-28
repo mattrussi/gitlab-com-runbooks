@@ -11,7 +11,8 @@ gem 'digest-crc'
 
 group :development, :test do
   gem 'rake'
-  gem 'pry'
+  gem 'pry', '~> 0.13'
+  gem 'ruby_jard'
   gem 'rspec'
   gem 'rspec-parameterized'
   gem 'rubocop'
