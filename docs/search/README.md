@@ -36,6 +36,8 @@
 * [../redis/redis-survival-guide-for-sres.md](../redis/redis-survival-guide-for-sres.md)
 * [../sidekiq/sidekiq-survival-guide-for-sres.md](../sidekiq/sidekiq-survival-guide-for-sres.md)
 * [../sidekiq/sidekiq_error_rate_high.md](../sidekiq/sidekiq_error_rate_high.md)
+* [../tutorials/how_to_use_flamegraphs_for_perf_profiling.md](../tutorials/how_to_use_flamegraphs_for_perf_profiling.md)
+* [../tutorials/overview_life_of_a_git_request.md](../tutorials/overview_life_of_a_git_request.md)
 * [../uncategorized/camoproxy.md](../uncategorized/camoproxy.md)
 * [../uncategorized/domain-registration.md](../uncategorized/domain-registration.md)
 * [../uncategorized/gcp-network-intelligence.md](../uncategorized/gcp-network-intelligence.md)

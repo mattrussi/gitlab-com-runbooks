@@ -25,6 +25,7 @@
 * [praefect-read-only.md](praefect-read-only.md)
 * [praefect-replication.md](praefect-replication.md)
 * [praefect-startup.md](praefect-startup.md)
+* [../tutorials/overview_life_of_a_git_request.md](../tutorials/overview_life_of_a_git_request.md)
 * [../version/gitaly-version-mismatch.md](../version/gitaly-version-mismatch.md)
 <!-- END_MARKER -->
 

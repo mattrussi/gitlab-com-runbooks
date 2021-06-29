@@ -53,6 +53,7 @@
 * [../pgbouncer/pgbouncer-remove-instance.md](../pgbouncer/pgbouncer-remove-instance.md)
 * [../pgbouncer/service-pgbouncer.md](../pgbouncer/service-pgbouncer.md)
 * [../postgres-dr-delayed/postgres-dr-replicas.md](../postgres-dr-delayed/postgres-dr-replicas.md)
+* [../tutorials/how_to_use_flamegraphs_for_perf_profiling.md](../tutorials/how_to_use_flamegraphs_for_perf_profiling.md)
 * [../uncategorized/tracing-app-db-queries.md](../uncategorized/tracing-app-db-queries.md)
 <!-- END_MARKER -->
 

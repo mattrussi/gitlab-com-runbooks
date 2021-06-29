@@ -72,6 +72,7 @@
 * [../sidekiq/sidekiq_stats_no_longer_showing.md](../sidekiq/sidekiq_stats_no_longer_showing.md)
 * [../sidekiq/silent-project-exports.md](../sidekiq/silent-project-exports.md)
 * [../spamcheck/index.md](../spamcheck/index.md)
+* [../tutorials/how_to_use_flamegraphs_for_perf_profiling.md](../tutorials/how_to_use_flamegraphs_for_perf_profiling.md)
 * [../uncategorized/about-gitlab-com.md](../uncategorized/about-gitlab-com.md)
 * [../uncategorized/access-requests.md](../uncategorized/access-requests.md)
 * [../uncategorized/block-high-load-project.md](../uncategorized/block-high-load-project.md)

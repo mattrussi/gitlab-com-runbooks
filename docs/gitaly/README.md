@@ -46,6 +46,8 @@
 * [../praefect/praefect-error-rate.md](../praefect/praefect-error-rate.md)
 * [../praefect/praefect-file-storages.md](../praefect/praefect-file-storages.md)
 * [../redis/redis-survival-guide-for-sres.md](../redis/redis-survival-guide-for-sres.md)
+* [../tutorials/overview_life_of_a_git_request.md](../tutorials/overview_life_of_a_git_request.md)
+* [../tutorials/overview_life_of_a_web_request.md](../tutorials/overview_life_of_a_web_request.md)
 * [../uncategorized/deleted-project-restore.md](../uncategorized/deleted-project-restore.md)
 * [../uncategorized/namespace-restore.md](../uncategorized/namespace-restore.md)
 * [../uncategorized/pingdom.md](../uncategorized/pingdom.md)

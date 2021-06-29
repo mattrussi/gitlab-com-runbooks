@@ -17,6 +17,7 @@
 
 * [../frontend/haproxy.md](../frontend/haproxy.md)
 * [../onboarding/gitlab.com_on_k8s.md](../onboarding/gitlab.com_on_k8s.md)
+* [../tutorials/overview_life_of_a_web_request.md](../tutorials/overview_life_of_a_web_request.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->
