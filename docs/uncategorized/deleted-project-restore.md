@@ -167,7 +167,7 @@ appropriate: `gcloud --project gitlab-restore compute scp -r
 restore-postgres-gprd-88895:/tmp/project ./`
 
 Download [a
-stub](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/spec/features/projects/import_export/test_project_export.tar.gz)
+stub](https://gitlab.com/gitlab-com/gl-infra/infrastructure/uploads/832946b5bd7474ac51a976e42bee4afb/blank_export.tar.gz)
 exported project.
 
 On your local machine, replace the project.json inside the stub archive with the
