@@ -49,7 +49,7 @@ basic.dashboard(
 .addPanels(
   layout.grid([
     balanceChart(
-      title='Balacing',
+      title='Balancing',
       description='Balancing Ranking. Equal is better.',
       format='short',
       query=|||
