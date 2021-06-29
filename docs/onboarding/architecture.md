@@ -7,9 +7,9 @@ GitLab.com.
 
 - [Architecture diagram](https://about.gitlab.com/handbook/engineering/infrastructure/production/architecture/)
 - GCP console overview of VMs
-- Life of a request: web ([tutorial](https://gitlab.com/gitlab-com/www-gitlab-com/-/blob/00d0fb19b0e7d90c32b9c73dc8d0faff86c05117/source/handbook/engineering/infrastructure/tutorials/overview_life_of_a_web_request.html.md))
+- Life of a request: web ([tutorial](../tutorials/overview_life_of_a_web_request.md))
   - `Cloudflare` => `HAProxy` (routing to webservice api/git/web) => `web: Workhorse` => `web: rails` => Databases (Postgres, Redis, `Gitaly`, GCS)
-- Life of a request: git ([tutorial](https://gitlab.com/gitlab-com/www-gitlab-com/-/blob/9636e8addd6c1130accd4e157991f714f48262aa/source/handbook/engineering/infrastructure/tutorials/overview_life_of_a_git_request.html.md))
+- Life of a request: git ([tutorial](../tutorials/overview_life_of_a_git_request.md))
   - https: `Cloudflare` => `HAProxy` => `git: Workhorse` (=> `git: rails` for authn) => `Gitaly`
   - ssh: `Cloudflare` => `HAProxy` => `gitlab-shell` (=> `git: rails` for authn) => `Gitaly`
 - Exploration of hosts over SSH
@@ -37,6 +37,6 @@ GitLab.com.
 - Runbooks for GitLab.com: https://gitlab.com/gitlab-com/runbooks/-/tree/master/
   - This git repo contains much more than just "runbooks".
   - It is the main place where we collect internal documentation and advice to ourselves for working with our infrastructure components and services.
-  - `/docs` sub-directory contain more up-to-date Runbooks than the root directory in this Repo. 
+  - `/docs` sub-directory contain more up-to-date Runbooks than the root directory in this Repo.
   - It also composes metrics, alerts, and dashboards for our services using jsonnet.
   - We should probably record a guided tour of this repo.  Or just commit to giving a tour in a pairing session.
