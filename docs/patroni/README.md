@@ -19,6 +19,7 @@
 * [../ci-runners/ci-apdex-violating-slo.md](../ci-runners/ci-apdex-violating-slo.md)
 * [../ci-runners/service-ci-runners.md](../ci-runners/service-ci-runners.md)
 * [../monitoring/prometheus-failing-rule-evaluations.md](../monitoring/prometheus-failing-rule-evaluations.md)
+* [../onboarding/kibana-diagnosis.md](../onboarding/kibana-diagnosis.md)
 * [check_wraparound.md](check_wraparound.md)
 * [gcs-snapshots.md](gcs-snapshots.md)
 * [geo-patroni-cluster.md](geo-patroni-cluster.md)

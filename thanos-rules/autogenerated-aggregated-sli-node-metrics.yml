@@ -77,6 +77,11 @@ groups:
       sum by (env,environment,tier,type,stage,shard,fqdn,component) (
         (gitlab_component_node_apdex:weight:score_1h{monitor!="global"} >= 0)
       )
+  - record: gitlab_component_node_ops:rate_6h
+    expr: |
+      sum by (env,environment,tier,type,stage,shard,fqdn,component) (
+        (gitlab_component_node_ops:rate_6h{monitor!="global"} >= 0)
+      )
   - record: gitlab_component_node_errors:ratio_6h
     expr: |
       (
@@ -84,9 +89,7 @@ groups:
           (gitlab_component_node_errors:rate_6h{monitor!="global"} >= 0)
         )
         /
-        sum by (env,environment,tier,type,stage,shard,fqdn,component) (
-          (gitlab_component_node_ops:rate_6h{monitor!="global"} >= 0)
-        )
+        gitlab_component_node_ops:rate_6h{monitor="global"}
       )
       or
       (

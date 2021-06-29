@@ -13,7 +13,7 @@ local utilizationMetric = metricsCatalog.utilizationMetric;
     topk: 10,
     query: |||
       avg by (%(aggregationLabels)s) (
-        avg_over_time(pg_total_relation_size_bytes{%(selector)s}[1h])
+        avg_over_time(pg_total_relation_size_bytes{%(selector)s}[%(rangeDuration)s])
         and on (job, instance) (
           pg_replication_is_replica{%(selector)s} == 0
         )

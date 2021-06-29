@@ -32,6 +32,7 @@
 * [../monitoring/apdex-alerts-guide.md](../monitoring/apdex-alerts-guide.md)
 * [../monitoring/filesystem_alerts_inodes.md](../monitoring/filesystem_alerts_inodes.md)
 * [../monitoring/thanos-compact.md](../monitoring/thanos-compact.md)
+* [../onboarding/architecture.md](../onboarding/architecture.md)
 * [../packaging/manage-package-signing-keys.md](../packaging/manage-package-signing-keys.md)
 * [../patroni/geo-patroni-cluster.md](../patroni/geo-patroni-cluster.md)
 * [../patroni/patroni-management.md](../patroni/patroni-management.md)

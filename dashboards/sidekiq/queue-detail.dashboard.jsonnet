@@ -58,7 +58,7 @@ local queuelatencyTimeseries(title, aggregators, legendFormat) =
 local latencyTimeseries(title, aggregators, legendFormat) =
   basic.latencyTimeseries(
     title=title,
-    query=recordingRuleLatencyHistogramQuery(0.95, 'sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m', selector, aggregators),
+    query=recordingRuleLatencyHistogramQuery(0.95, 'sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m', selector, aggregators),
     legendFormat=legendFormat,
   );
 
@@ -336,22 +336,18 @@ basic.dashboard(
   +
   layout.rowGrid('Queue Latency (the amount of time spent queueing)', [
     queuelatencyTimeseries('Queue Time', aggregators='queue', legendFormat='p95 {{ queue }}'),
-    queuelatencyTimeseries('Queue Time per Node', aggregators='fqdn, queue', legendFormat='p95 {{ queue }} - {{ fqdn }}'),
   ], startRow=301)
   +
-  layout.rowGrid('Execution Latency (the amount of time the job takes to execution after dequeue)', [
+  layout.rowGrid('Execution Latency (the amount of time the job takes to execute after dequeue)', [
     latencyTimeseries('Execution Time', aggregators='queue', legendFormat='p95 {{ queue }}'),
-    latencyTimeseries('Execution Time per Node', aggregators='fqdn, queue', legendFormat='p95 {{ queue }} - {{ fqdn }}'),
   ], startRow=401)
   +
   layout.rowGrid('Execution RPS (the rate at which jobs are completed after dequeue)', [
     rpsTimeseries('RPS', aggregators='queue', legendFormat='{{ queue }}'),
-    rpsTimeseries('RPS per Node', aggregators='fqdn, queue', legendFormat='{{ queue }} - {{ fqdn }}'),
   ], startRow=501)
   +
   layout.rowGrid('Error Rate (the rate at which jobs fail)', [
     errorRateTimeseries('Errors', aggregators='queue', legendFormat='{{ queue }}'),
-    errorRateTimeseries('Errors per Node', aggregators='fqdn, queue', legendFormat='{{ queue }} - {{ fqdn }}'),
     basic.timeseries(
       title='Dead Jobs',
       query=|||

@@ -5,6 +5,69 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
+  - alert: PatroniServicePgbouncerErrorSLOViolation
+    for: 2m
+    annotations:
+      title: >-
+        The pgbouncer SLI of the patroni service (`{{ $labels.stage }}` stage) has an error rate violating
+        SLO
+      description: |
+        All transactions destined for the Postgres secondary instances are routed through the pgbouncer instances running on the patroni nodes themselves. This SLI models those transactions in aggregate.
+
+        Error rate uses mtail metrics from pgbouncer logs.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: patroni-main/patroni-overview
+      grafana_dashboard_link: >-
+        https://dashboards.gitlab.net/d/patroni-main/patroni-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: '6'
+      grafana_panel_id: '3935075118'
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(pgbouncer_pooler_errors_total{type="patroni", tier="db", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/patroni/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: 'yes'
+      user_impacting: 'yes'
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_1h{component="pgbouncer",monitor="global",type="patroni"}
+          > (14.4 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_5m{component="pgbouncer",monitor="global",type="patroni"}
+          > (14.4 * 0.001000)
+        )
+        or
+        (
+          gitlab_component_errors:ratio_6h{component="pgbouncer",monitor="global",type="patroni"}
+          > (6 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_30m{component="pgbouncer",monitor="global",type="patroni"}
+          > (6 * 0.001000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="pgbouncer",monitor="global",type="patroni"}) >= 1
+      )
   - alert: PatroniServicePgbouncerTrafficCessation
     for: 5m
     annotations:
@@ -13,6 +76,8 @@ groups:
         in the past 30 minutes
       description: |
         All transactions destined for the Postgres secondary instances are routed through the pgbouncer instances running on the patroni nodes themselves. This SLI models those transactions in aggregate.
+
+        Error rate uses mtail metrics from pgbouncer logs.
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: patroni-main/patroni-overview
@@ -31,12 +96,14 @@ groups:
       runbook: docs/patroni/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
@@ -51,6 +118,8 @@ groups:
         in the past 30 minutes
       description: |
         All transactions destined for the Postgres secondary instances are routed through the pgbouncer instances running on the patroni nodes themselves. This SLI models those transactions in aggregate.
+
+        Error rate uses mtail metrics from pgbouncer logs.
 
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 
@@ -71,12 +140,14 @@ groups:
       runbook: docs/patroni/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
@@ -112,6 +183,7 @@ groups:
       runbook: docs/patroni/README.md
     labels:
       aggregation: component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -172,12 +244,14 @@ groups:
       runbook: docs/patroni/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
@@ -210,12 +284,14 @@ groups:
       runbook: docs/patroni/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
@@ -251,6 +327,7 @@ groups:
       runbook: docs/patroni/README.md
     labels:
       aggregation: component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -311,12 +388,14 @@ groups:
       runbook: docs/patroni/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
@@ -349,12 +428,14 @@ groups:
       runbook: docs/patroni/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
@@ -386,6 +467,7 @@ groups:
       runbook: docs/patroni/README.md
     labels:
       aggregation: component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -448,12 +530,14 @@ groups:
       runbook: docs/patroni/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
@@ -488,12 +572,14 @@ groups:
       runbook: docs/patroni/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
@@ -525,6 +611,7 @@ groups:
       runbook: docs/patroni/README.md
     labels:
       aggregation: component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -587,12 +674,14 @@ groups:
       runbook: docs/patroni/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
@@ -627,12 +716,14 @@ groups:
       runbook: docs/patroni/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'

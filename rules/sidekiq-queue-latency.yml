@@ -2,7 +2,10 @@ groups:
 - name: sidekiq-queue-latency.rules
   rules:
   - alert: SidekiqSchedulingLatencyTooHigh
-    expr: (max(sidekiq_queue_latency{name != "project_export"}) by (fqdn) and on (fqdn) (redis_connected_slaves != 0)) > 600
+    expr: >
+      ( (max(sidekiq_queue_latency_seconds{name != "project_export"}) by (fqdn) and on (fqdn) (redis_connected_slaves != 0)) > 600 )
+      or
+      ( (max(sidekiq_queue_latency{name != "project_export"}) by (fqdn) and on (fqdn) (redis_connected_slaves != 0)) > 600 )
     for: 15m
     labels:
       severity: s3

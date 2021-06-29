@@ -356,7 +356,7 @@ $ OPS_API_TOKEN=secure-token MIGRATION_ENV=gprd-or-gstg ansible-playbook -i prod
 ## Replica Maintenance
 
 If clients are connecting to replicas by means of [service
-discovery][service-discovery] (as opposed to hard-coded list of hosts), you can temporarly
+discovery][service-discovery] (as opposed to hard-coded list of hosts), you can temporarily
 remove a replica from the list of hosts used by the clients by tagging it as not
 suitable for failing over (`nofailover: true`) and load balancing (`noloadbalance: true`).
 
@@ -392,6 +392,27 @@ suitable for failing over (`nofailover: true`) and load balancing (`noloadbalanc
 
 You can see an example of taking a node out of service [in this
 issue](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/2195).
+
+### Caveat
+
+If the maintenance involves restarting/stopping either the replica host or Consul agent itself,
+consider removing the `db-replica` service(s) from Consul before attempting such restart/stop.
+Failing to do so could result in the replica being added back to Rails DB load-balancing,
+for a brief time, which in the case of stopping the node, could result in a spike of client errors
+as they wouldn't be able to connect to the stopped node.
+
+Removing the service from Consul can be done as follows:
+
+```
+sudo rm /etc/consul/conf.d/db-replica*
+sudo systemctl reload consul
+```
+
+Now it should be safe to restart/stop either the node or Consul agent.
+
+For more information on why this is necessary, please read this [investigation](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/4820#note_596035402).
+
+An example for stopping, decommissioning then re-provisioning a replica can be found in this [issue](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/4721).
 
 ### Permanently marking a replica as in maintenance
 

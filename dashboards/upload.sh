@@ -80,13 +80,23 @@ function generate_dashboard_requests() {
       folderId=$(resolve_folder_id "${folder}")
     fi
 
-    generate_dashboards_for_file "${line}" | validate_dashboard_requests | prepare_dashboard_requests "${folderId}" | (
+    dashboard_json=$(generate_dashboards_for_file "${line}")
+    if [[ -z "$dashboard_json" ]]; then
       if [[ -n $dry_run ]]; then
-        jq -r --arg file "$line" --arg folder "$folder" '"Running in dry run mode, would create \($file) in folder \($folder) with uid \(.dashboard.uid)"'
+        echo "Running in dry run mode, ignored empty dashboard $line!"
       else
-        cat
+        echo >&2 "Ignore empty dashboard $line!"
+        echo ''
       fi
-    )
+    else
+      echo "${dashboard_json}" | validate_dashboard_requests | prepare_dashboard_requests "${folderId}" | (
+        if [[ -n $dry_run ]]; then
+          jq -r --arg file "$line" --arg folder "$folder" '"Running in dry run mode, would create \($file) in folder \($folder) with uid \(.dashboard.uid)"'
+        else
+          cat
+        fi
+      )
+    fi
   done
 }
 
@@ -97,18 +107,20 @@ else
   trap 'rm -rf "${tmpfile}"' EXIT
 
   generate_dashboard_requests "$@" | while IFS= read -r request; do
-    uid=$(echo "${request}" | jq -r '.dashboard.uid')
-    # Use http1.1 and gzip compression to workaround unexplainable random errors that
-    # occur when uploading some dashboards
-    response=$(echo "${request}" | call_grafana_api https://dashboards.gitlab.net/api/dashboards/db -d @-) || {
-      echo >&2 ""
-      echo >&2 "Failed to upload '${uid}'"
-      exit 1
-    }
+    if [[ -n "$request" ]]; then
+      uid=$(echo "${request}" | jq -r '.dashboard.uid')
+      # Use http1.1 and gzip compression to workaround unexplainable random errors that
+      # occur when uploading some dashboards
+      response=$(echo "${request}" | call_grafana_api https://dashboards.gitlab.net/api/dashboards/db -d @-) || {
+        echo >&2 ""
+        echo >&2 "Failed to upload '${uid}'"
+        exit 1
+      }
 
-    url=$(echo "${response}" | jq -r '.url')
-    echo "Installed https://dashboards.gitlab.net${url}"
-    echo "${url}" >>"${tmpfile}"
+      url=$(echo "${response}" | jq -r '.url')
+      echo "Installed https://dashboards.gitlab.net${url}"
+      echo "${url}" >>"${tmpfile}"
+    fi
   done
 
   duplicates=$(sort "${tmpfile}" | uniq -d)

@@ -1,11 +1,11 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
-local kubeSaturationHelpers = import 'helpers/kube_saturation_helpers.libsonnet';
+local saturationHelpers = import 'helpers/saturation_helpers.libsonnet';
 
 {
   node_schedstat_waiting: resourceSaturationPoint({
     title: 'Node Scheduler Waiting Time',
-    appliesTo: { allExcept: ['nat', 'waf', 'console-node', 'deploy-node', 'security' /* ops-only security scanning service */] + kubeSaturationHelpers.kubeOnlyServices, default: 'sidekiq' },
+    appliesTo: saturationHelpers.vmProvisionedServices(default='patroni'),
     severity: 's4',
     horizontallyScalable: true,
     description: |||

@@ -1,4 +1,4 @@
-# Gitlab.com on K8S
+# Gitlab.com on Kubernetes
 
 A collection of info about gitlab.com on K8S
 
@@ -8,20 +8,20 @@ A collection of info about gitlab.com on K8S
   - Regional
     ```
       gitlab-kas
-      gitlab-mailroom                     
+      gitlab-mailroom
       gitlab-sidekiq-catchall-v1
       gitlab-sidekiq-database-throttled-v1
-      gitlab-sidekiq-elasticsearch-v1     
+      gitlab-sidekiq-elasticsearch-v1
       gitlab-sidekiq-gitaly-throttled-v1
       gitlab-sidekiq-low-urgency-cpu-bound-v1
-      gitlab-sidekiq-memory-bound-v1      
+      gitlab-sidekiq-memory-bound-v1
       gitlab-sidekiq-urgent-cpu-bound-v1
       gitlab-sidekiq-urgent-other-v1
   - Zonal
     ```
-       gitlab-gitlab-shell         
+       gitlab-gitlab-shell
        gitlab-registry
-       gitlab-webservice-git       
+       gitlab-webservice-git
        gitlab-webservice-websockets
 
 - Staging:

@@ -1,17 +1,19 @@
+local strings = import 'utils/strings.libsonnet';
+
 local charIsSafe(char) =
   char >= 'a' && char <= 'z' || char >= 'A' && char <= 'Z' || char == '.' || char == '_';
 
 local stringIsSafe(string) =
   std.foldl(function(memo, char) memo && charIsSafe(char), std.stringChars(string), true);
 
-// TODO: handle encoding of "'" chars better
 local encodeString(string) =
   if string == '' then
     "''"
   else if stringIsSafe(string) then
     string
   else
-    "'" + std.strReplace(string, ' ', '+') + "'";
+    local replacements = [[' ', '+'], ["'", "!'"]];
+    "'" + strings.urlEncode(string, replacements) + "'";
 
 local encodeArray(array, encodeUnknown) =
   local items = [

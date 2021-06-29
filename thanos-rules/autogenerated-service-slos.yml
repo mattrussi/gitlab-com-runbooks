@@ -154,7 +154,7 @@ groups:
     labels:
       tier: sv
       type: kas
-    expr: '0.010000'
+    expr: '0.000500'
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       tier: inf
@@ -234,6 +234,16 @@ groups:
     labels:
       tier: db
       type: redis-sidekiq
+    expr: '0.001000'
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      tier: db
+      type: redis-tracechunks
+    expr: '0.999900'
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      tier: db
+      type: redis-tracechunks
     expr: '0.001000'
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
@@ -630,6 +640,14 @@ groups:
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
+      component: cluster_scaleups
+      regional_aggregation: 'no'
+      service_aggregation: 'yes'
+      tier: inf
+      type: kube
+    expr: '1'
+  - record: gitlab_component_service:mapping
+    labels:
       component: elasticsearch_indexing_cluster
       regional_aggregation: 'no'
       service_aggregation: 'yes'
@@ -1018,6 +1036,30 @@ groups:
       regional_aggregation: 'no'
       service_aggregation: 'yes'
       tier: db
+      type: redis-tracechunks
+    expr: '1'
+  - record: gitlab_component_service:mapping
+    labels:
+      component: rails_redis_client
+      regional_aggregation: 'no'
+      service_aggregation: 'yes'
+      tier: db
+      type: redis-tracechunks
+    expr: '1'
+  - record: gitlab_component_service:mapping
+    labels:
+      component: secondary_servers
+      regional_aggregation: 'no'
+      service_aggregation: 'no'
+      tier: db
+      type: redis-tracechunks
+    expr: '1'
+  - record: gitlab_component_service:mapping
+    labels:
+      component: primary_server
+      regional_aggregation: 'no'
+      service_aggregation: 'yes'
+      tier: db
       type: redis
     expr: '1'
   - record: gitlab_component_service:mapping
@@ -1151,6 +1193,14 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: shard_gitaly_throttled
+      regional_aggregation: 'no'
+      service_aggregation: 'yes'
+      tier: sv
+      type: sidekiq
+    expr: '1'
+  - record: gitlab_component_service:mapping
+    labels:
+      component: shard_imports
       regional_aggregation: 'no'
       service_aggregation: 'yes'
       tier: sv

@@ -9,10 +9,11 @@ local utilizationMetric = metricsCatalog.utilizationMetric;
     description: |||
       Measures the total time spent on vacuum operations per day.
     |||,
+    rangeDuration: '1d',
     resourceLabels: [],
     query: |||
       sum by (%(aggregationLabels)s) (
-        increase(fluentd_pg_auto_vacuum_elapsed_seconds_total{%(selector)s}[1d])
+        increase(fluentd_pg_auto_vacuum_elapsed_seconds_total{%(selector)s}[%(rangeDuration)s])
       )
     |||,
   }),

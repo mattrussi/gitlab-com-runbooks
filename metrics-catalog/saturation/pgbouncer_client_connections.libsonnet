@@ -23,7 +23,7 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
     burnRatePeriod: '5m',
     queryFormatConfig: {
       /** This value is configured in chef - make sure that it's kept in sync */
-      maxClientConns: 6200,
+      maxClientConns: 8192,
     },
     query: |||
       avg_over_time(pgbouncer_pools_client_active_connections {%(selector)s}[%(rangeInterval)s])
@@ -31,8 +31,11 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
       %(maxClientConns)g
     |||,
     slos: {
-      soft: 0.90,
-      hard: 0.95,
+      // in https://gitlab.com/gitlab-com/gl-infra/production/-/issues/4889 we found that
+      // saturation occurred at 90%, substantially lower than the expected ceiling.
+      // TODO: reconsider as part of https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/13556
+      soft: 0.80,
+      hard: 0.85,
     },
   }),
 }

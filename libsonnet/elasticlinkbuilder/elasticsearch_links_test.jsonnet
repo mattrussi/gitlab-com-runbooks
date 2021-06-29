@@ -35,6 +35,38 @@ test.suite({
       },
     },
   },
+  testMatchers: {
+    actual: elastic.matchers({
+      fieldName: ['hello', 'world'],
+      rangeTest: { gte: 1, lte: 10 },
+      equalMatch: 'match the exact thing',
+    }),
+    expect: [
+      {
+        query: {
+          match: {
+            equalMatch: {
+              query: 'match the exact thing',
+              type: 'phrase',
+            },
+          },
+        },
+      },
+      {
+        query:
+          {
+            bool: {
+              minimum_should_match: 1,
+              should: [
+                { match_phrase: { fieldName: 'hello' } },
+                { match_phrase: { fieldName: 'world' } },
+              ],
+            },
+          },
+      },
+      { query: { range: { rangeTest: { gte: 1, lte: 10 } } } },
+    ],
+  },
   testBuildElasticDiscoverSearchQueryURL: {
     actual: elastic.buildElasticDiscoverSearchQueryURL(
       index='sidekiq',

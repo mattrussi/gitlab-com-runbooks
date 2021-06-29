@@ -7,7 +7,7 @@ metricsCatalog.serviceDefinition({
   tier: 'sv',
   monitoringThresholds: {
     // apdexScore: 0.95,
-    errorRatio: 0.99,
+    errorRatio: 0.9995,
   },
   serviceDependencies: {
     gitaly: true,
@@ -27,15 +27,12 @@ metricsCatalog.serviceDefinition({
   serviceLevelIndicators: {
     grpc_requests: {
       userImpacting: true,
-      featureCategory: 'not_owned',
+      featureCategory: 'kubernetes_management',
       team: 'sre_coreinfra',
       local baseSelector = {
         job: 'gitlab-kas',
       },
-      //apdex: histogramApdex(
-      //histogram='',
-      //selector=baseSelector
-      //),
+
       requestRate: rateMetric(
         counter='grpc_server_handled_total',
         selector=baseSelector
@@ -45,7 +42,9 @@ metricsCatalog.serviceDefinition({
         counter='grpc_server_handled_total',
         selector=baseSelector { grpc_code: { nre: 'OK|FailedPrecondition|Unauthenticated|PermissionDenied' }, grpc_method: 'GetConfiguration' }
       ),
-      significantLabels: [],
+
+      significantLabels: ['grpc_method'],
+
       toolingLinks: [
         toolingLinks.sentry(slug='gitlab/kas'),
         toolingLinks.kibana(title='Kubernetes Agent Server', index='kas', type='kas'),

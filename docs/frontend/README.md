@@ -26,7 +26,6 @@
 * [../sentry/sentry-is-down.md](../sentry/sentry-is-down.md)
 * [../tutorials/overview_life_of_a_web_request.md](../tutorials/overview_life_of_a_web_request.md)
 * [../uncategorized/alert-for-ssl-certificate-expiration.md](../uncategorized/alert-for-ssl-certificate-expiration.md)
-* [../uncategorized/manage-workers.md](../uncategorized/manage-workers.md)
 <!-- END_MARKER -->
 
 

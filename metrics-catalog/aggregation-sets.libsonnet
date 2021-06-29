@@ -219,6 +219,7 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
       },
       '6h': {
         apdexRatio: 'gitlab_component_node_apdex:ratio_6h',
+        opsRate: 'gitlab_component_node_ops:rate_6h',
         errorRatio: 'gitlab_component_node_errors:ratio_6h',
       },
       '3d': {
@@ -415,6 +416,51 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
         opsRate: 'gitlab_background_jobs:execution:ops:rate_6h',
         errorRate: 'gitlab_background_jobs:execution:error:rate_6h',
         errorRatio: 'gitlab_background_jobs:execution:error:ratio_6h',
+      },
+    },
+  }),
+
+  sidekiqWorkerQueueSLIs: aggregationSets.AggregationSet({
+    id: 'sidekiq_queue',
+    name: 'Sidekiq queue source metrics per worker',
+    intermediateSource: true,
+    selector: { monitor: { ne: 'global' } },
+    labels: [
+      'environment',
+      'tier',
+      'type',
+      'stage',
+      'shard',
+      'queue',
+      'feature_category',
+      'urgency',
+      'worker',
+    ],
+    burnRates: {
+      '1m': {
+        apdexWeight: 'gitlab_background_jobs:queue:apdex:weight:score_1m',
+        apdexRatio: 'gitlab_background_jobs:queue:apdex:ratio_1m',
+        opsRate: 'gitlab_background_jobs:queue:ops:rate_1m',
+      },
+      '5m': {
+        apdexWeight: 'gitlab_background_jobs:queue:apdex:weight:score_5m',
+        apdexRatio: 'gitlab_background_jobs:queue:apdex:ratio_5m',
+        opsRate: 'gitlab_background_jobs:queue:ops:rate_5m',
+      },
+      '30m': {
+        apdexWeight: 'gitlab_background_jobs:queue:apdex:weight:score_30m',
+        apdexRatio: 'gitlab_background_jobs:queue:apdex:ratio_30m',
+        opsRate: 'gitlab_background_jobs:queue:ops:rate_30m',
+      },
+      '1h': {
+        apdexWeight: 'gitlab_background_jobs:queue:apdex:weight:score_1h',
+        apdexRatio: 'gitlab_background_jobs:queue:apdex:ratio_1h',
+        opsRate: 'gitlab_background_jobs:queue:ops:rate_1h',
+      },
+      '6h': {
+        apdexWeight: 'gitlab_background_jobs:queue:apdex:weight:score_6h',
+        apdexRatio: 'gitlab_background_jobs:queue:apdex:ratio_6h',
+        opsRate: 'gitlab_background_jobs:queue:ops:rate_6h',
       },
     },
   }),

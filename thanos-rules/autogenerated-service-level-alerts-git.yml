@@ -29,12 +29,14 @@ groups:
       runbook: docs/git/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
@@ -67,12 +69,14 @@ groups:
       runbook: docs/git/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
@@ -100,6 +104,7 @@ groups:
       runbook: docs/git/README.md
     labels:
       aggregation: component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -156,12 +161,14 @@ groups:
       runbook: docs/git/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
@@ -190,12 +197,14 @@ groups:
       runbook: docs/git/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
@@ -223,6 +232,7 @@ groups:
       runbook: docs/git/README.md
     labels:
       aggregation: component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -279,12 +289,14 @@ groups:
       runbook: docs/git/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
@@ -313,12 +325,14 @@ groups:
       runbook: docs/git/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
@@ -352,6 +366,7 @@ groups:
       runbook: docs/git/README.md
     labels:
       aggregation: component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -414,6 +429,7 @@ groups:
       runbook: docs/git/README.md
     labels:
       aggregation: regional_component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -473,6 +489,7 @@ groups:
       runbook: docs/git/README.md
     labels:
       aggregation: component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -535,6 +552,7 @@ groups:
       runbook: docs/git/README.md
     labels:
       aggregation: regional_component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -595,12 +613,14 @@ groups:
       runbook: docs/git/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
@@ -634,12 +654,14 @@ groups:
       runbook: docs/git/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
@@ -674,6 +696,7 @@ groups:
       runbook: docs/git/README.md
     labels:
       aggregation: component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -737,6 +760,7 @@ groups:
       runbook: docs/git/README.md
     labels:
       aggregation: regional_component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -796,6 +820,7 @@ groups:
       runbook: docs/git/README.md
     labels:
       aggregation: component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -859,6 +884,7 @@ groups:
       runbook: docs/git/README.md
     labels:
       aggregation: regional_component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -919,12 +945,14 @@ groups:
       runbook: docs/git/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
@@ -957,12 +985,14 @@ groups:
       runbook: docs/git/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
@@ -998,6 +1028,7 @@ groups:
       runbook: docs/git/README.md
     labels:
       aggregation: component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -1062,6 +1093,7 @@ groups:
       runbook: docs/git/README.md
     labels:
       aggregation: regional_component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -1122,6 +1154,7 @@ groups:
       runbook: docs/git/README.md
     labels:
       aggregation: component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -1185,6 +1218,7 @@ groups:
       runbook: docs/git/README.md
     labels:
       aggregation: regional_component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -1245,12 +1279,14 @@ groups:
       runbook: docs/git/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'
@@ -1283,12 +1319,14 @@ groups:
       runbook: docs/git/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
       slo_alert: 'no'
       user_impacting: 'yes'

@@ -1,13 +1,13 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
-local kubeSaturationHelpers = import 'helpers/kube_saturation_helpers.libsonnet';
+local saturationHelpers = import 'helpers/saturation_helpers.libsonnet';
 
 {
   disk_inodes: resourceSaturationPoint({
     title: 'Disk inode Utilization per Device per Node',
     severity: 's2',
     horizontallyScalable: true,
-    appliesTo: { allExcept: ['nat', 'waf', 'bastion'] + kubeSaturationHelpers.kubeOnlyServices, default: 'gitaly' },
+    appliesTo: saturationHelpers.vmProvisionedServices(default='gitaly'),
     description: |||
       Disk inode utilization per device per node.
 

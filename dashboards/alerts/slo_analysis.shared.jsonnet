@@ -20,7 +20,7 @@ local errorBurnRatePair(aggregationSet, shortDuration, longDuration, selectorHas
     shortDuration: shortDuration,
     longMetric: aggregationSet.getErrorRatioMetricForBurnRate(longDuration, required=true),
     longDuration: longDuration,
-    longBurnFactor: multiburnFactors['burnrate_' + longDuration],
+    longBurnFactor: multiburnFactors.errorBudgetFactorFor(longDuration),
     selector: selectors.serializeHash(selectorHash + aggregationSet.selector),
     thresholdSLOMetricName: errorSLOMetric,
   };
@@ -60,7 +60,7 @@ local apdexBurnRatePair(aggregationSet, shortDuration, longDuration, selectorHas
     shortDuration: shortDuration,
     longMetric: aggregationSet.getApdexRatioMetricForBurnRate(longDuration, required=true),
     longDuration: longDuration,
-    longBurnFactor: multiburnFactors['burnrate_' + longDuration],
+    longBurnFactor: multiburnFactors.errorBudgetFactorFor(longDuration),
     selector: selectors.serializeHash(selectorHash + aggregationSet.selector),
     thresholdSLOMetricName: apdexSLOMetric,
   };

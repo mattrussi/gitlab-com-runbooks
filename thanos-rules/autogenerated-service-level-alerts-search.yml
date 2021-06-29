@@ -29,12 +29,14 @@ groups:
       runbook: docs/search/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: global_search
+      pager: pagerduty
       product_stage: enablement
       product_stage_group: global search
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
       slo_alert: 'no'
       user_impacting: 'no'
@@ -67,12 +69,14 @@ groups:
       runbook: docs/search/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: global_search
+      pager: pagerduty
       product_stage: enablement
       product_stage_group: global search
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
       slo_alert: 'no'
       user_impacting: 'no'
@@ -104,12 +108,14 @@ groups:
       runbook: docs/search/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: global_search
+      pager: pagerduty
       product_stage: enablement
       product_stage_group: global search
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
       slo_alert: 'no'
       user_impacting: 'no'
@@ -142,12 +148,14 @@ groups:
       runbook: docs/search/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: global_search
+      pager: pagerduty
       product_stage: enablement
       product_stage_group: global search
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
       slo_alert: 'no'
       user_impacting: 'no'

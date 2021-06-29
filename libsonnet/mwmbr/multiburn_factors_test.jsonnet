@@ -4,28 +4,32 @@ local test = import 'github.com/yugui/jsonnetunit/jsonnetunit/test.libsonnet';
 test.suite({
   // See https://landing.google.com/sre/workbook/chapters/alerting-on-slos/#5-multiple-burn-rate-alerts
   // for more details
-  testBurnrate_1h: {
-    actual: multiburnFactors.burnrate_1h,
+  testErrorBudgetFactorFor_1h: {
+    actual: multiburnFactors.errorBudgetFactorFor('1h'),
     expect: 14.4,
   },
-  testBurnrate_6h: {
-    actual: multiburnFactors.burnrate_6h,
+  testErrorBudgetFactorFor_6h: {
+    actual: multiburnFactors.errorBudgetFactorFor('6h'),
     expect: 6,
   },
+  testErrorBudgetFactorFor_3d: {
+    actual: multiburnFactors.errorBudgetFactorFor('3d'),
+    expect: 1,
+  },
   testErrorRatioThreshold1h: {
-    actual: '%g' % [multiburnFactors.errorRatioThreshold1h(0.9995)],
+    actual: '%g' % [multiburnFactors.errorRatioThreshold(0.9995, windowDuration='1h')],
     expect: '%g' % [0.0072],
   },
   testErrorRatioThreshold6h: {
-    actual: '%g' % [multiburnFactors.errorRatioThreshold6h(0.9995)],
+    actual: '%g' % [multiburnFactors.errorRatioThreshold(0.9995, windowDuration='6h')],
     expect: '%g' % [0.003],
   },
   testApdexRatioThreshold1h: {
-    actual: '%g' % [multiburnFactors.apdexRatioThreshold1h(0.9995)],
+    actual: '%g' % [multiburnFactors.apdexRatioThreshold(0.9995, windowDuration='1h')],
     expect: '%g' % [0.9928],
   },
   testApdexRatioThreshold6h: {
-    actual: '%g' % [multiburnFactors.apdexRatioThreshold6h(0.9995)],
+    actual: '%g' % [multiburnFactors.apdexRatioThreshold(0.9995, windowDuration='6h')],
     expect: '%g' % [0.997],
   },
 })

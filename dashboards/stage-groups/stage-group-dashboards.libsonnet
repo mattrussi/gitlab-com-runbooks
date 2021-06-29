@@ -8,6 +8,7 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local platformLinks = import '../platform_links.libsonnet';
 local singleMetricRow = import 'key-metric-panels/single-metric-row.libsonnet';
 local aggregationSets = import '../../metrics-catalog/aggregation-sets.libsonnet';
+local metricsCatalog = import '../../metrics-catalog/metrics-catalog.libsonnet';
 local errorBudget = import 'stage-groups/error_budget.libsonnet';
 local budgetUtils = import 'stage-groups/error-budget/utils.libsonnet';
 local sidekiqHelpers = import 'services/lib/sidekiq-helpers.libsonnet';
@@ -59,6 +60,13 @@ local errorBudgetPanels(group) =
     [
       errorBudget.panels.explanationPanel(group.name),
     ],
+  ];
+
+local errorBudgetAttribution(group, featureCategories) =
+  [
+    errorBudget.panels.violationRatePanel(group.key),
+    errorBudget.panels.violationRateExplanation,
+    errorBudget.panels.logLinks(featureCategories),
   ];
 
 local railsRequestRate(type, featureCategories, featureCategoriesSelector) =
@@ -140,20 +148,18 @@ local sqlQueriesPerAction(type, featureCategories, featureCategoriesSelector) =
       Average amount of SQL queries performed by a controller action.
     |||,
     query=|||
-      sum without (fqdn,instance) (
-        rate(
-          gitlab_sql_duration_seconds_count{
-            environment="$environment",
-            stage='$stage',
-            action=~"$action",
-            controller=~"$controller",
-            feature_category=~'(%(featureCategories)s)',
-            type='%(type)s'
-          }[$__interval]
-        )
+      sum by (controller, action) (
+        controller_action:gitlab_sql_duration_seconds_count:rate1m{
+          environment="$environment",
+          stage='$stage',
+          action=~"$action",
+          controller=~"$controller",
+          feature_category=~'(%(featureCategories)s)',
+          type='%(type)s'
+        }
       )
       /
-      avg_over_time(
+      sum by (controller, action) (
         controller_action:gitlab_transaction_duration_seconds_count:rate1m{
           environment="$environment",
           stage='$stage',
@@ -161,7 +167,7 @@ local sqlQueriesPerAction(type, featureCategories, featureCategoriesSelector) =
           controller=~"$controller",
           feature_category=~'(%(featureCategories)s)',
           type='%(type)s'
-        }[$__interval]
+        }
       )
     ||| % {
       type: type,
@@ -411,7 +417,8 @@ local dashboard(groupKey, components=defaultComponents, displayEmptyGuidance=fal
         // Errorbudgets are always viewed over a 28d rolling average, regardles of the
         // selected range see the configuration in `libsonnet/stage-groups/error_budget.libsonnet`
         local title = 'Error Budget (past 28 days)';
-        layout.splitColumnGrid(errorBudgetPanels(group), startRow=100, cellHeights=[4, 2], title=title)
+        layout.splitColumnGrid(errorBudgetPanels(group), startRow=100, cellHeights=[4, 2], title=title) +
+        layout.rowGrid('Budget spend attribution', errorBudgetAttribution(group, featureCategories), startRow=110, collapse=true)
       else
         []
     )
@@ -435,6 +442,7 @@ local dashboard(groupKey, components=defaultComponents, displayEmptyGuidance=fal
                     'json.meta.feature_category': featureCategories,
                   },
                 ),
+                toolingLinks.sentry(slug='gitlab/gitlabcom', featureCategories=featureCategories, variables=['environment', 'stage']),
               ], { prometheusSelectorHash: {} })
             ),
           ],
@@ -525,6 +533,7 @@ local dashboard(groupKey, components=defaultComponents, displayEmptyGuidance=fal
                     'json.meta.feature_category': featureCategories,
                   },
                 ),
+                toolingLinks.sentry(slug='gitlab/gitlabcom', type='sidekiq', featureCategories=featureCategories, variables=['environment', 'stage']),
               ], { prometheusSelectorHash: {} })
             ),
           ],

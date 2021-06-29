@@ -40,3 +40,9 @@ This should only be followed if for whatever reason you can't use a
 1. `ssh console-01-sv-gprd.c.gitlab-production.internal`
   1. On the console: `psql -h <DB IP> -U <DB user> -d <database>`
   1. Paste in the password when prompted.
+
+### Via gcloud
+
+1. `gcloud --project gitlab-production sql instances list`
+1. `gcloud --project gitlab-production sql connect <instance> -u default`
+  1. Paste in the password when prompted.

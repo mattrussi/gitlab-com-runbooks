@@ -1,13 +1,13 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
-local kubeSaturationHelpers = import 'helpers/kube_saturation_helpers.libsonnet';
+local saturationHelpers = import 'helpers/saturation_helpers.libsonnet';
 
 {
   single_node_cpu: resourceSaturationPoint({
     title: 'Average CPU Utilization per Node',
     severity: 's4',
     horizontallyScalable: true,
-    appliesTo: { allExcept: ['nat', 'waf', 'console-node', 'deploy-node', 'security' /* ops-only security scanning service */] + kubeSaturationHelpers.kubeOnlyServices },
+    appliesTo: saturationHelpers.vmProvisionedServices(default='gitaly'),
     description: |||
       Average CPU utilization per Node.
 

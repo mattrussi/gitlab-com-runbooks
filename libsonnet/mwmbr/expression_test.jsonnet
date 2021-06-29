@@ -43,49 +43,28 @@ test.suite({
   testErrorBurnWithoutMinimumRate: {
     actual: expression.multiburnRateErrorExpression(
       aggregationSet=testAggregationSet,
+      thresholdSLOValue=0.99,
       metricSelectorHash={ type: 'web' },
-      thresholdSLOMetricName='sla:error:rate',
-      thresholdSLOMetricAggregationLabels=['type', 'tier'],
     ),
     expect: |||
       (
         error:ratio_1h{monitor="global",type="web"}
-        > on(type,tier) group_left()
-        (
-          14.4 * (
-            avg by (type,tier) (sla:error:rate{monitor="global"})
-          )
-        )
+        > (14.4 * 0.990000)
       )
       and
       (
         error:ratio_5m{monitor="global",type="web"}
-        > on(type,tier) group_left()
-        (
-          14.4 * (
-            avg by (type,tier) (sla:error:rate{monitor="global"})
-          )
-        )
+        > (14.4 * 0.990000)
       )
       or
       (
         error:ratio_6h{monitor="global",type="web"}
-        > on(type,tier) group_left()
-        (
-          6 * (
-            avg by (type,tier) (sla:error:rate{monitor="global"})
-          )
-        )
+        > (6 * 0.990000)
       )
       and
       (
         error:ratio_30m{monitor="global",type="web"}
-        > on(type,tier) group_left()
-        (
-          6 * (
-            avg by (type,tier) (sla:error:rate{monitor="global"})
-          )
-        )
+        > (6 * 0.990000)
       )
     |||,
   },
@@ -93,51 +72,30 @@ test.suite({
   testErrorBurnWithMinimumRate: {
     actual: expression.multiburnRateErrorExpression(
       aggregationSet=testAggregationSet,
+      thresholdSLOValue=0.99,
       metricSelectorHash={ type: 'web' },
-      thresholdSLOMetricName='sla:error:rate',
-      thresholdSLOMetricAggregationLabels=['type', 'tier'],
       minimumOperationRateForMonitoring=1,
     ),
     expect: |||
       (
         (
           error:ratio_1h{monitor="global",type="web"}
-          > on(type,tier) group_left()
-          (
-            14.4 * (
-              avg by (type,tier) (sla:error:rate{monitor="global"})
-            )
-          )
+          > (14.4 * 0.990000)
         )
         and
         (
           error:ratio_5m{monitor="global",type="web"}
-          > on(type,tier) group_left()
-          (
-            14.4 * (
-              avg by (type,tier) (sla:error:rate{monitor="global"})
-            )
-          )
+          > (14.4 * 0.990000)
         )
         or
         (
           error:ratio_6h{monitor="global",type="web"}
-          > on(type,tier) group_left()
-          (
-            6 * (
-              avg by (type,tier) (sla:error:rate{monitor="global"})
-            )
-          )
+          > (6 * 0.990000)
         )
         and
         (
           error:ratio_30m{monitor="global",type="web"}
-          > on(type,tier) group_left()
-          (
-            6 * (
-              avg by (type,tier) (sla:error:rate{monitor="global"})
-            )
-          )
+          > (6 * 0.990000)
         )
       )
       and on(environment,tier,type,stage)
@@ -188,52 +146,27 @@ test.suite({
     actual: expression.multiburnRateApdexExpression(
       aggregationSet=testAggregationSet,
       metricSelectorHash={ type: 'web' },
-      thresholdSLOMetricName='sla:apdex:rate',
-      thresholdSLOMetricAggregationLabels=['type', 'tier'],
+      thresholdSLOValue=0.99,
     ),
     expect: |||
       (
         apdex:ratio_1h{monitor="global",type="web"}
-        < on(type,tier) group_left()
-        (
-          1 -
-          (
-            14.4 * (1 - avg by (type,tier) (sla:apdex:rate{monitor="global"}))
-          )
-        )
+        < (1 - 14.4 * 0.010000)
       )
       and
       (
         apdex:ratio_5m{monitor="global",type="web"}
-        < on(type,tier) group_left()
-        (
-          1 -
-          (
-            14.4 * (1 - avg by (type,tier) (sla:apdex:rate{monitor="global"}))
-          )
-        )
+        < (1 - 14.4 * 0.010000)
       )
       or
       (
         apdex:ratio_6h{monitor="global",type="web"}
-        < on(type,tier) group_left()
-        (
-          1 -
-          (
-            6 * (1 - avg by (type,tier) (sla:apdex:rate{monitor="global"}))
-          )
-        )
+        < (1 - 6 * 0.010000)
       )
       and
       (
         apdex:ratio_30m{monitor="global",type="web"}
-        < on(type,tier) group_left()
-        (
-          1 -
-          (
-            6 * (1 - avg by (type,tier) (sla:apdex:rate{monitor="global"}))
-          )
-        )
+        < (1 - 6 * 0.010000)
       )
     |||,
   },
@@ -270,55 +203,30 @@ test.suite({
   testApdexBurnWithMinimumRate: {
     actual: expression.multiburnRateApdexExpression(
       aggregationSet=testAggregationSet,
+      thresholdSLOValue=0.99,
       metricSelectorHash={ type: 'web' },
-      thresholdSLOMetricName='sla:apdex:rate',
-      thresholdSLOMetricAggregationLabels=['type', 'tier'],
       minimumOperationRateForMonitoring=1,
     ),
     expect: |||
       (
         (
           apdex:ratio_1h{monitor="global",type="web"}
-          < on(type,tier) group_left()
-          (
-            1 -
-            (
-              14.4 * (1 - avg by (type,tier) (sla:apdex:rate{monitor="global"}))
-            )
-          )
+          < (1 - 14.4 * 0.010000)
         )
         and
         (
           apdex:ratio_5m{monitor="global",type="web"}
-          < on(type,tier) group_left()
-          (
-            1 -
-            (
-              14.4 * (1 - avg by (type,tier) (sla:apdex:rate{monitor="global"}))
-            )
-          )
+          < (1 - 14.4 * 0.010000)
         )
         or
         (
           apdex:ratio_6h{monitor="global",type="web"}
-          < on(type,tier) group_left()
-          (
-            1 -
-            (
-              6 * (1 - avg by (type,tier) (sla:apdex:rate{monitor="global"}))
-            )
-          )
+          < (1 - 6 * 0.010000)
         )
         and
         (
           apdex:ratio_30m{monitor="global",type="web"}
-          < on(type,tier) group_left()
-          (
-            1 -
-            (
-              6 * (1 - avg by (type,tier) (sla:apdex:rate{monitor="global"}))
-            )
-          )
+          < (1 - 6 * 0.010000)
         )
       )
       and on(environment,tier,type,stage)
@@ -332,54 +240,29 @@ test.suite({
     actual: expression.multiburnRateApdexExpression(
       aggregationSet=testAggregationSet,
       metricSelectorHash={ type: 'web' },
-      thresholdSLOMetricName='sla:apdex:rate',
-      thresholdSLOMetricAggregationLabels=['type', 'tier'],
+      thresholdSLOValue=0.99,
       minimumOperationRateForMonitoring=1
     ),
     expect: |||
       (
         (
           apdex:ratio_1h{monitor="global",type="web"}
-          < on(type,tier) group_left()
-          (
-            1 -
-            (
-              14.4 * (1 - avg by (type,tier) (sla:apdex:rate{monitor="global"}))
-            )
-          )
+          < (1 - 14.4 * 0.010000)
         )
         and
         (
           apdex:ratio_5m{monitor="global",type="web"}
-          < on(type,tier) group_left()
-          (
-            1 -
-            (
-              14.4 * (1 - avg by (type,tier) (sla:apdex:rate{monitor="global"}))
-            )
-          )
+          < (1 - 14.4 * 0.010000)
         )
         or
         (
           apdex:ratio_6h{monitor="global",type="web"}
-          < on(type,tier) group_left()
-          (
-            1 -
-            (
-              6 * (1 - avg by (type,tier) (sla:apdex:rate{monitor="global"}))
-            )
-          )
+          < (1 - 6 * 0.010000)
         )
         and
         (
           apdex:ratio_30m{monitor="global",type="web"}
-          < on(type,tier) group_left()
-          (
-            1 -
-            (
-              6 * (1 - avg by (type,tier) (sla:apdex:rate{monitor="global"}))
-            )
-          )
+          < (1 - 6 * 0.010000)
         )
       )
       and on(environment,tier,type,stage)

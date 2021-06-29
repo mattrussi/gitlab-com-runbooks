@@ -10,6 +10,10 @@ local aggregations = import 'promql/aggregations.libsonnet';
     aggregatedRateQuery(aggregationLabels, selector, rangeInterval)::
       // Note that we ignore the rangeInterval and selectors for now
       // TODO: handle selector and rangeIntervals better, if we can
-      aggregations.aggregateOverQuery('sum', aggregationLabels, query % { burnRate: rangeInterval }),
+      local queryText = query % {
+        burnRate: rangeInterval,
+        aggregationLabels: aggregations.serialize(aggregationLabels),
+      };
+      aggregations.aggregateOverQuery('sum', aggregationLabels, queryText),
   },
 }

@@ -72,8 +72,8 @@ it should return something like:
 ```
 sidekiq_queue_size{name="system_hook"} 0
 sidekiq_queue_size{name="update_merge_requests"} 0
-sidekiq_queue_latency{name="admin_emails"} 0
-sidekiq_queue_latency{name="archive_repo"} 0
+sidekiq_queue_latency_seconds{name="admin_emails"} 0
+sidekiq_queue_latency_seconds{name="archive_repo"} 0
 <snip>
 ```
 

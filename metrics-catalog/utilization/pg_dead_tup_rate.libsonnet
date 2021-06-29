@@ -12,7 +12,7 @@ local utilizationMetric = metricsCatalog.utilizationMetric;
     resourceLabels: ['relname'],
     query: |||
       sum by (%(aggregationLabels)s) (
-        deriv(pg_stat_user_tables_n_dead_tup{%(selector)s}[1h]) > 0
+        deriv(pg_stat_user_tables_n_dead_tup{%(selector)s}[%(rangeDuration)s]) > 0
         and on (instance, job) (pg_replication_is_replica==0)
       )
     |||,

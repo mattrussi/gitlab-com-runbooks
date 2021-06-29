@@ -17,6 +17,7 @@
 
 * [../kube/k8s-operations.md](../kube/k8s-operations.md)
 * [../monitoring/apdex-alerts-guide.md](../monitoring/apdex-alerts-guide.md)
+* [../onboarding/kibana-diagnosis.md](../onboarding/kibana-diagnosis.md)
 * [praefect-bypass.md](praefect-bypass.md)
 * [praefect-database.md](praefect-database.md)
 * [praefect-error-rate.md](praefect-error-rate.md)

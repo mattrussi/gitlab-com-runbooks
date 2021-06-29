@@ -346,6 +346,7 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
     intervalFactor=3,
     stableId=null,
     sort=null,
+    transformations=[],
   )::
     tablePanel.new(
       title,
@@ -358,7 +359,9 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
       sort=sort,
     )
     .addTarget(promQuery.target(query, instant=instant, format='table')) +
-    panelOverrides(stableId),
+    panelOverrides(stableId) + {
+      transformations: transformations,
+    },
 
   multiTimeseries(
     title='Multi timeseries',
@@ -969,7 +972,9 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
       'lastNotNull',
     ],
     mappings=[],
-    justifyMode='auto'
+    justifyMode='auto',
+    noValue=null,
+    links=[],
   )::
     local steps = if std.type(color) == 'string' then
       [
@@ -997,6 +1002,8 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
             title: title,
             unit: unit,
             decimals: decimals,
+            [if noValue != null then 'noValue']: noValue,
+            links: links,
           },
           overrides: [],
         },

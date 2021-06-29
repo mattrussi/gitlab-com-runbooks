@@ -100,9 +100,19 @@ function generate_dashboards_for_file() {
   uid="${folder}-${basename%%.*}"
 
   if [[ "$file" == *".shared.jsonnet" ]]; then
-    jsonnet_compile "${file}" | augment_shared_dashboards "${folder}"
+    compiled_json=$(jsonnet_compile "${file}")
+    if [[ $(echo "${compiled_json}" | jq 'length') -eq '0' ]]; then
+      echo ''
+    else
+      echo "${compiled_json}" | augment_shared_dashboards "${folder}"
+    fi
   elif [[ "$file" == *".jsonnet" ]]; then
-    jsonnet_compile "${file}" | augment_dashboard "${uid}" "${folder}"
+    compiled_json=$(jsonnet_compile "${file}")
+    if [[ $(echo "${compiled_json}" | jq 'length') -eq '0' ]]; then
+      echo ''
+    else
+      echo "${compiled_json}" | augment_dashboard "${uid}" "${folder}"
+    fi
   else
     augment_dashboard "${uid}" "${folder}" <"${file}"
   fi
