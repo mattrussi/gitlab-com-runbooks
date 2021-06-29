@@ -7,9 +7,13 @@ local stableIds = import 'stable-ids/stable-ids.libsonnet';
 local stages = import 'stages.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 
-// For now, only include components that run at least once a second
-// in the monitoring. This is to avoid low-volume, noisy alerts
+// Minimum operation rate thresholds:
+// This is to avoid low-volume, noisy alerts.
+// NOTE: at present we are transitioning from minimumOperationRateForMonitoring to minimumSamplesForMonitoring.
+// Initially only a subset of alerts are using minimumSamplesForMonitoring, but we expect this to expand
+// until all alerts are using this approach. At that point, we can drop minimumOperationRateForMonitoring.
 local minimumOperationRateForMonitoring = 1; /* rps */
+local minimumSamplesForMonitoring = 1200;
 
 // Most MWMBR alerts use a 2m period
 // Initially for this alert, use a long period to ensure that
@@ -184,7 +188,7 @@ local apdexAlertForSLI(service, sli) =
         expr: multiburnExpression.multiburnRateApdexExpression(
           aggregationSet=aggregationSets.globalNodeSLIs,
           metricSelectorHash={ type: service.type, component: sli.name },
-          minimumOperationRateForMonitoring=minimumOperationRateForMonitoring,
+          minimumSamplesForMonitoring=minimumSamplesForMonitoring,
           thresholdSLOValue=apdexScoreSLO,
           windows=[windowDuration],
           operationRateWindowDuration=windowDuration
@@ -270,7 +274,7 @@ local errorRateAlertForSLI(service, sli) =
         expr: multiburnExpression.multiburnRateErrorExpression(
           aggregationSet=aggregationSets.globalNodeSLIs,
           metricSelectorHash={ type: service.type, component: sli.name },
-          minimumOperationRateForMonitoring=minimumOperationRateForMonitoring,
+          minimumSamplesForMonitoring=minimumSamplesForMonitoring,
           thresholdSLOValue=1 - errorRateSLO,
           windows=[windowDuration],
           operationRateWindowDuration=windowDuration

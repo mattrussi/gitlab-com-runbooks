@@ -35,6 +35,13 @@ local testAggregationSet = aggregationSets.AggregationSet({
       errorRate: 'error:rate_6h',
       errorRatio: 'error:ratio_6h',
     },
+    '3d': {
+      apdexRatio: 'apdex:ratio_3d',
+      apdexWeight: 'apdex:weight:score_3d',
+      opsRate: 'operation:rate_3d',
+      errorRate: 'error:rate_3d',
+      errorRatio: 'error:ratio_3d',
+    },
   },
 });
 
@@ -271,4 +278,61 @@ test.suite({
       )
     |||,
   },
+
+  testApdexBurnWithMinimumSamples1h: {
+    actual: expression.multiburnRateApdexExpression(
+      aggregationSet=testAggregationSet,
+      metricSelectorHash={ type: 'web' },
+      thresholdSLOValue=0.99,
+      windows=['1h'],
+      minimumSamplesForMonitoring=60,
+      operationRateWindowDuration='1h',
+    ),
+    expect: |||
+      (
+        (
+          apdex:ratio_1h{monitor="global",type="web"}
+          < (1 - 14.4 * 0.010000)
+        )
+        and
+        (
+          apdex:ratio_5m{monitor="global",type="web"}
+          < (1 - 14.4 * 0.010000)
+        )
+      )
+      and on(environment,tier,type,stage)
+      (
+        sum by(environment,tier,type,stage) (operation:rate_1h{monitor="global",type="web"}) >= 0.01667
+      )
+    |||,
+  },
+
+  testErrorBurnWithMinimumSamples3d: {
+    actual: expression.multiburnRateErrorExpression(
+      aggregationSet=testAggregationSet,
+      metricSelectorHash={ type: 'web' },
+      thresholdSLOValue=0.99,
+      windows=['3d'],
+      minimumSamplesForMonitoring=60,
+      operationRateWindowDuration='3d',
+    ),
+    expect: |||
+      (
+        (
+          error:ratio_3d{monitor="global",type="web"}
+          > (1 * 0.990000)
+        )
+        and
+        (
+          error:ratio_6h{monitor="global",type="web"}
+          > (1 * 0.990000)
+        )
+      )
+      and on(environment,tier,type,stage)
+      (
+        sum by(environment,tier,type,stage) (operation:rate_3d{monitor="global",type="web"}) >= 0.00023
+      )
+    |||,
+  },
+
 })
