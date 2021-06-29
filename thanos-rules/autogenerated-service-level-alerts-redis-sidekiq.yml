@@ -32,7 +32,6 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
-      incident_project: gitlab.com/gitlab-com/gl-infra/production
       pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
@@ -73,7 +72,6 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
-      incident_project: gitlab.com/gitlab-com/gl-infra/production
       pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
@@ -121,7 +119,6 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
-      incident_project: gitlab.com/gitlab-com/gl-infra/production
       pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
@@ -187,7 +184,6 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
-      incident_project: gitlab.com/gitlab-com/gl-infra/production
       pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
@@ -253,7 +249,6 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
-      incident_project: gitlab.com/gitlab-com/gl-infra/production
       pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
@@ -298,7 +293,6 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
-      incident_project: gitlab.com/gitlab-com/gl-infra/production
       pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
@@ -338,7 +332,6 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
-      incident_project: gitlab.com/gitlab-com/gl-infra/production
       pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
@@ -379,7 +372,6 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
-      incident_project: gitlab.com/gitlab-com/gl-infra/production
       pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned

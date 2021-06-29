@@ -43,11 +43,6 @@ local labelsForSLI(sli, severity, aggregationSet, sliType, alertClass) =
   local team = if sli.team != null then serviceCatalog.getTeam(sli.team) else null;
 
   labels + (
-    if team != null && team.issue_tracker != null then
-      { incident_project: team.issue_tracker }
-    else
-      {}
-  ) + (
     /**
      * When team.send_slo_alerts_to_team_slack_channel is configured in the service catalog
      * alerts will be sent to slack team alert channels in addition to the
