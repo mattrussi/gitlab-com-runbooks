@@ -21,7 +21,7 @@ class JsonnetTestHelper
   end
 
   def success?
-    raise 'Content has not been render'  unless @rendered
+    raise 'Content has not been render' unless @rendered
 
     @error.nil?
   end
@@ -31,7 +31,7 @@ class JsonnetTestHelper
   end
 
   def data
-    raise 'Content has not been render'  unless @rendered
+    raise 'Content has not been render' unless @rendered
 
     @data
   end
@@ -52,9 +52,7 @@ RSpec::Matchers.define :render_jsonnet do |expected|
     @result = JsonnetTestHelper.render(actual)
     next false unless @result.success?
 
-    unless block_arg.nil?
-      next block_arg.call(@result.data)
-    end
+    next block_arg.call(@result.data) unless block_arg.nil?
 
     if ::RSpec::Matchers.is_a_matcher?(expected)
       expected.matches?(@result.data)
@@ -69,31 +67,28 @@ RSpec::Matchers.define :render_jsonnet do |expected|
 
   failure_message do |actual|
     if @result.success?
-      <<~EOF.strip
-      Jsonnet rendered content does not match expectations:
+      <<~DESCRIPTION.strip
+      Jsonnet rendered content does not match expectations.
 
-      Jsonnet Content:
-      ```
+      >>> Jsonnet content:
       #{actual}
-      ```
 
-      Jsonnet compiled data:
-      ```
-      #{@result.data}
-      ```
+      >>> Jsonnet compiled data:
+      #{@result.data.inspect}
 
-      Expectations:
-      #{::RSpec::Matchers.is_a_matcher?(expected) ? RSpec::Support::ObjectFormatter.format(expected) : expected}
-      EOF
+      >>> Expected:
+      #{::RSpec::Matchers.is_a_matcher?(expected) ? RSpec::Support::ObjectFormatter.format(expected) : expected.inspect}
+      DESCRIPTION
     else
-      <<~EOF.strip
-      Fail to render jsonnet content:
-      ```
-      #{actual}
-      ```
+      <<~DESCRIPTION.strip
+      Fail to render jsonnet content.
 
-      Error: #{@result.error_message}
-      EOF
+      >>> Jsonnet content:
+      #{actual}
+
+      >>> Error:
+      #{@result.error_message}
+      DESCRIPTION
     end
   end
 end
@@ -121,19 +116,15 @@ RSpec::Matchers.define :reject_jsonnet do |expected|
     if @result.success?
       'Jsonnet content renders successfully. Expecting an error!'
     else
-      <<~EOF.strip
+      <<~DESCRIPTION.strip
         Jsonnet error does not match
 
-        Actual:
-        ```
+        >>> Actual:
         #{@result.error_message}
-        ```
 
-        Expected:
-        ```
+        >>> Expected:
         #{expected.inspect}
-        ```
-      EOF
+      DESCRIPTION
     end
   end
 end

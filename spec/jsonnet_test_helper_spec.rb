@@ -5,7 +5,7 @@ require 'spec_helper'
 describe 'Jsonnet Matcher' do
   describe 'render_jsonnet' do
     it 'supports hash matching' do
-      matcher = render_jsonnet({'a' => 'hello'})
+      matcher = render_jsonnet({ 'a' => 'hello' })
       result = matcher.matches?(
         <<~JSONNET.strip
           local hello = "he" + "llo";
@@ -62,7 +62,7 @@ describe 'Jsonnet Matcher' do
     end
 
     it 'renders jsonnet rendering failure' do
-      matcher = render_jsonnet({'a' => 1})
+      matcher = render_jsonnet({ 'a' => 1 })
       result = matcher.matches?(
         <<~JSONNET.strip
         {
@@ -73,20 +73,21 @@ describe 'Jsonnet Matcher' do
       expect(result).to be(false)
       expect(matcher.failure_message).to starting_with(
         <<~ERROR.strip
-        Fail to render jsonnet content:
-        ```
+        Fail to render jsonnet content.
+
+        >>> Jsonnet content:
         {
           a = 1
         }
-        ```
 
-        Error: Failed to compile
+        >>> Error:
+        Failed to compile
         ERROR
       )
     end
 
     it 'renders jsonnet assertion failure' do
-      matcher = render_jsonnet({'a' => 1})
+      matcher = render_jsonnet({ 'a' => 1 })
       result = matcher.matches?(
         <<~JSONNET.strip
           assert false : "A random assertion failure";
@@ -96,19 +97,20 @@ describe 'Jsonnet Matcher' do
       expect(result).to be(false)
       expect(matcher.failure_message).to starting_with(
         <<~ERROR.strip
-        Fail to render jsonnet content:
-        ```
+        Fail to render jsonnet content.
+
+        >>> Jsonnet content:
         assert false : "A random assertion failure";
         {}
-        ```
 
-        Error: Failed to compile
+        >>> Error:
+        Failed to compile
         ERROR
       )
     end
 
     it 'renders error details intensively' do
-      matcher = render_jsonnet({'a' => 'hi'})
+      matcher = render_jsonnet({ 'a' => 'hi' })
       result = matcher.matches?(
         <<~JSONNET.strip
           local hello = "he" + "llo";
@@ -120,24 +122,20 @@ describe 'Jsonnet Matcher' do
       expect(result).to be(false)
       expect(matcher.failure_message).to eql(
         <<~ERROR.strip
-       Jsonnet rendered content does not match expectations:
+       Jsonnet rendered content does not match expectations.
 
-       Jsonnet Content:
-       ```
+       >>> Jsonnet content:
        local hello = "he" + "llo";
        {
          a: hello
        }
-       ```
 
-       Jsonnet compiled data:
-       ```
+       >>> Jsonnet compiled data:
        {"a"=>"hello"}
-       ```
 
-       Expectations:
+       >>> Expected:
        {"a"=>"hi"}
-       ERROR
+        ERROR
       )
     end
   end
