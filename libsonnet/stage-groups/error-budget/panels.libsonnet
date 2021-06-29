@@ -220,8 +220,8 @@ local explanationPanel(slaTarget, range, group) =
 
 local violationRatePanel(queries, group) =
   basic.table(
-    title='Budget failure rates',
-    description='Number of failures per component per type',
+    title='Budget failures',
+    description='Number of failures contributing to the budget send per component and type ',
     query=queries.errorBudgetViolationRate(
       baseSelector {
         stage_group: group,
@@ -244,7 +244,7 @@ local violationRatePanel(queries, group) =
     ],
   )
   .hideColumn('Time')
-  .addColumn('Value', { alias: 'failure rate' });
+  .addColumn('Value', { alias: 'failures past 28 days' });
 
 local violationRateExplanation =
   basic.text(
