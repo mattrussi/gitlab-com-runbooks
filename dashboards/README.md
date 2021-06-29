@@ -125,4 +125,23 @@ expect(
     a_hash_including('title' => 'Git Detail', 'type' => "dashboards", 'tags' => "type:git")
   ])
 }
+
+# Or, if you are into matchers
+
+expect(
+  <<~JSONNET
+  local stageGroupDashboards = import 'stage-groups/stage-group-dashboards.libsonnet';
+
+  stageGroupDashboards.dashboard('geo').stageGroupDashboardTrailer()
+  JSONNET
+).to render_jsonnet(
+  a_hash_including(
+    'title' => eql('Group dashboard: enablement (Geo)'),
+    'links' => match([
+      a_hash_including('title' => 'API Detail', 'type' => "dashboards", 'tags' => "type:api"),
+      a_hash_including('title' => 'Web Detail', 'type' => "dashboards", 'tags' => "type:web"),
+      a_hash_including('title' => 'Git Detail', 'type' => "dashboards", 'tags' => "type:git")
+    ])
+  )
+)
 ```
