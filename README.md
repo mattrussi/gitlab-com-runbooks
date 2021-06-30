@@ -564,17 +564,17 @@ expect(
 
 ### Location of test files
 
-- JsonnetUnit tests must stay in the same directory and have the same name with the testing Jsonnet file plus `_test` suffixes. The test files must have `.jsonnet` extension . Some examples:
+- JsonnetUnit tests must stay in the same directory and have the same name as the jsonnet file being tested but ending in `_test.jsonnet`. Some examples:
   + `services/stages.libsonnet`  -> `services/stages_test.jsonnet`
   + `libsonnet/toolinglinks/sentry.libsonnet`  -> `libsonnet/toolinglinks/sentry_test.jsonnet`
 
-- RSpec tests replicates the directory structure of the Jsonnet files inside `spec` directory and must have `_spec` suffixes. Obviously, the test files must have `.rb` extension. Some example:
+- RSpec tests replicates the directory structure of the Jsonnet files inside `spec` directory and must end in `_spec.rb` suffixes. Some example:
   + `libsonnet/toolinglinks/grafana.libsonnet` -> `spec/libsonnet/toolinglinks/grafana_spec.rb`
   + `dashboards/stage-groups/stage-group-dashboards.libsonnet` -> `spec/dashboards/stage-groups/stage-group-dashboards_spec.rb`
 
 ### How to run tests?
 
-- Run the full Jsonnet test suite in your local environment with `make test && bundle exec rspec`
+- Run the full Jsonnet test suite in your local environment with `make test-jsonnet && bundle exec rspec`
 - Run a particular Jsonnet unit test file with `scripts/jsonnet_test.sh periodic-thanos-queries/periodic-query_test.jsonnet`
 - Run a particular Jsonnet integration test file with `bundle exec rspec spec/libsonnet/toolinglinks/grafana_spec.rb`
 
