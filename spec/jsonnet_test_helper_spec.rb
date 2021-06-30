@@ -1,4 +1,4 @@
-# Of course, a test to test a test matcher 🧐
+# Of course, a test to test a test matcher :monocle:
 
 require 'spec_helper'
 
@@ -122,24 +122,24 @@ describe 'Jsonnet Matcher' do
       expect(result).to be(false)
       expect(matcher.failure_message).to start_with(
         <<~ERROR.strip
-       Jsonnet rendered content does not match expectations.
+        Jsonnet rendered content does not match expectations.
 
-       >>> Jsonnet content:
-       local hello = "he" + "llo";
-       {
-         a: hello
-       }
+        >>> Jsonnet content:
+        local hello = "he" + "llo";
+        {
+          a: hello
+        }
 
-       >>> Jsonnet compiled data:
-       {"a"=>"hello"}
-
-
-       >>> Expected:
-       {"a"=>"hi"}
+        >>> Jsonnet compiled data:
+        {"a"=>"hello"}
 
 
-       >>> Diff:
-       ERROR
+        >>> Expected:
+        {"a"=>"hi"}
+
+
+        >>> Diff:
+        ERROR
       )
     end
 

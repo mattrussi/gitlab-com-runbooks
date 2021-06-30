@@ -4,6 +4,8 @@ require 'pp'
 require_relative '../../lib/jsonnet_wrapper'
 
 class JsonnetTestHelper
+  attr_reader :data
+
   def self.render(content)
     new.tap { |helper| helper.render(content) }
   end
@@ -26,10 +28,6 @@ class JsonnetTestHelper
 
   def error_message
     @error.message
-  end
-
-  def data
-    @data
   end
 
   private
@@ -116,16 +114,12 @@ end
 # Matchers for jsonnet rendering
 RSpec::Matchers.define :reject_jsonnet do |expected|
   match do |actual|
+    raise 'reject_jsonnet matcher argument should be a Regexp' unless expected.is_a?(Regexp)
+
     @result = JsonnetTestHelper.render(actual)
     next false if @result.success?
 
-    raise 'reject_jsonnet matcher argument should be either nil or Regexp' if !expected.nil? && !expected.is_a?(Regexp)
-
-    if expected.nil?
-      true
-    else
-      @result.error_message.match?(expected)
-    end
+    @result.error_message.match?(expected)
   end
 
   description do
