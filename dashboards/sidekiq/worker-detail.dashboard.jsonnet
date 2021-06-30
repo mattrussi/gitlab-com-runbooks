@@ -107,7 +107,7 @@ basic.dashboard(
 .addTemplate(template.new(
   'worker',
   '$PROMETHEUS_DS',
-  'label_values(sidekiq_jobs_completion_seconds_count{environment="$environment", type="sidekiq"}, worker)',
+  'label_values(gitlab_background_jobs:execution:ops:rate_1h{environment="$environment", type="sidekiq"}, worker)',
   current='PostReceive',
   refresh='load',
   sort=1,

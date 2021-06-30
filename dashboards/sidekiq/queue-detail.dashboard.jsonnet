@@ -100,7 +100,7 @@ basic.dashboard(
 .addTemplate(template.new(
   'queue',
   '$PROMETHEUS_DS',
-  'label_values(sidekiq_jobs_completion_seconds_count{environment="$environment", type="sidekiq"}, queue)',
+  'label_values(gitlab_background_jobs:queue:apdex:weight:score_1h{environment="$environment", type="sidekiq"}, queue)',
   current='post_receive',
   refresh='load',
   sort=1,
