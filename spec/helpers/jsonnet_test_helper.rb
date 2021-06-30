@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'pp'
 require_relative '../../lib/jsonnet_wrapper'
 
 class JsonnetTestHelper
@@ -16,13 +17,10 @@ class JsonnetTestHelper
   rescue StandardError => e
     @error = e
   ensure
-    @rendered = true
     file.unlink
   end
 
   def success?
-    raise 'Content has not been render' unless @rendered
-
     @error.nil?
   end
 
@@ -31,27 +29,26 @@ class JsonnetTestHelper
   end
 
   def data
-    raise 'Content has not been render' unless @rendered
-
     @data
   end
 
   private
 
   def initialize
-    @rendered = false
     @error = nil
   end
 end
 
 # Matchers for jsonnet rendering
 RSpec::Matchers.define :render_jsonnet do |expected|
-  match do |actual|
+  match do |jsonnet_content|
     raise 'render_jsonnet matcher supports either argument or block' if !block_arg.nil? && !expected.nil?
 
-    @result = JsonnetTestHelper.render(actual)
+    @jsonnet_content = jsonnet_content
+    @result = JsonnetTestHelper.render(jsonnet_content)
     next false unless @result.success?
 
+    @actual = @result.data
     next block_arg.call(@result.data) unless block_arg.nil?
 
     if ::RSpec::Matchers.is_a_matcher?(expected)
@@ -59,6 +56,26 @@ RSpec::Matchers.define :render_jsonnet do |expected|
     else
       @result.data == expected
     end
+  end
+
+  attr_reader :actual
+
+  def inspect_data(data)
+    io = StringIO.new
+    ::PP.pp(data, io)
+    output = io.string
+
+    if output.length > 10_000
+      tmp_path = "/tmp/jsonnet-#{SecureRandom.uuid}.json"
+      File.open(tmp_path, "w") { |f| f.write data.to_json }
+      "The generated Jsonnet data is too big to display on the screen. It is available at #{tmp_path}"
+    else
+      output
+    end
+  end
+
+  def diff(actual, expected)
+    SuperDiff::RSpec::Differ.diff(actual, expected)
   end
 
   description do
@@ -71,20 +88,23 @@ RSpec::Matchers.define :render_jsonnet do |expected|
       Jsonnet rendered content does not match expectations.
 
       >>> Jsonnet content:
-      #{actual}
+      #{@jsonnet_content}
 
       >>> Jsonnet compiled data:
-      #{@result.data.inspect}
+      #{inspect_data(actual)}
 
       >>> Expected:
-      #{::RSpec::Matchers.is_a_matcher?(expected) ? RSpec::Support::ObjectFormatter.format(expected) : expected.inspect}
+      #{::RSpec::Matchers.is_a_matcher?(expected) ? expected.description : inspect_data(expected)}
+
+      >>> Diff:
+      #{diff(actual, expected)}
       DESCRIPTION
     else
       <<~DESCRIPTION.strip
-      Fail to render jsonnet content.
+      Failed to render jsonnet content.
 
       >>> Jsonnet content:
-      #{actual}
+      #{@jsonnet_content}
 
       >>> Error:
       #{@result.error_message}

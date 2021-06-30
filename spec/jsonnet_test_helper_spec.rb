@@ -1,4 +1,4 @@
-# Of course, a test to test the test matcher
+# Of course, a test to test a test matcher 🧐
 
 require 'spec_helper'
 
@@ -73,7 +73,7 @@ describe 'Jsonnet Matcher' do
       expect(result).to be(false)
       expect(matcher.failure_message).to starting_with(
         <<~ERROR.strip
-        Fail to render jsonnet content.
+        Failed to render jsonnet content.
 
         >>> Jsonnet content:
         {
@@ -97,7 +97,7 @@ describe 'Jsonnet Matcher' do
       expect(result).to be(false)
       expect(matcher.failure_message).to starting_with(
         <<~ERROR.strip
-        Fail to render jsonnet content.
+        Failed to render jsonnet content.
 
         >>> Jsonnet content:
         assert false : "A random assertion failure";
@@ -120,7 +120,7 @@ describe 'Jsonnet Matcher' do
         JSONNET
       )
       expect(result).to be(false)
-      expect(matcher.failure_message).to eql(
+      expect(matcher.failure_message).to start_with(
         <<~ERROR.strip
        Jsonnet rendered content does not match expectations.
 
@@ -133,8 +133,67 @@ describe 'Jsonnet Matcher' do
        >>> Jsonnet compiled data:
        {"a"=>"hello"}
 
+
        >>> Expected:
        {"a"=>"hi"}
+
+
+       >>> Diff:
+       ERROR
+      )
+    end
+
+    it 'renders long error intensively' do
+      matcher = render_jsonnet(
+        'title' => 'Group dashboard: enablement (Geo)',
+        'links' => [
+          { 'title' => 'API Detail', 'type' => "dashboards", 'tags' => "type:api" },
+          { 'title' => 'Web Detail', 'type' => "dashboards", 'tags' => "type:web" },
+          { 'title' => 'Git Detail', 'type' => "dashboards", 'tags' => "type:git" }
+        ]
+      )
+      result = matcher.matches?(
+        <<~JSONNET.strip
+        local title = "Group dashboard: enablement (Geo)";
+        local links = std.map(
+          function(type)
+            { title: "%s Detail" % type, type: "dashboards", tags: "type:%s" % type },
+          ['api', 'web', 'git'],
+        );
+        { title: title, links: links }
+        JSONNET
+      )
+      expect(result).to be(false)
+      expect(matcher.failure_message).to starting_with(
+        <<~ERROR.strip
+        Jsonnet rendered content does not match expectations.
+
+        >>> Jsonnet content:
+        local title = "Group dashboard: enablement (Geo)";
+        local links = std.map(
+          function(type)
+            { title: "%s Detail" % type, type: "dashboards", tags: "type:%s" % type },
+          ['api', 'web', 'git'],
+        );
+        { title: title, links: links }
+
+        >>> Jsonnet compiled data:
+        {"links"=>
+          [{"tags"=>"type:api", "title"=>"api Detail", "type"=>"dashboards"},
+           {"tags"=>"type:web", "title"=>"web Detail", "type"=>"dashboards"},
+           {"tags"=>"type:git", "title"=>"git Detail", "type"=>"dashboards"}],
+         "title"=>"Group dashboard: enablement (Geo)"}
+
+
+        >>> Expected:
+        {"title"=>"Group dashboard: enablement (Geo)",
+         "links"=>
+          [{"title"=>"API Detail", "type"=>"dashboards", "tags"=>"type:api"},
+           {"title"=>"Web Detail", "type"=>"dashboards", "tags"=>"type:web"},
+           {"title"=>"Git Detail", "type"=>"dashboards", "tags"=>"type:git"}]}
+
+
+        >>> Diff:
         ERROR
       )
     end

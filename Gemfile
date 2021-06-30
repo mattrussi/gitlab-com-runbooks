@@ -19,4 +19,5 @@ group :development, :test do
   gem 'danger-gitlab'
   gem 'bigdecimal'
   gem 'webmock'
+  gem 'super_diff'
 end

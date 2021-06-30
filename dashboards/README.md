@@ -92,7 +92,7 @@ There are 2 approaches to write a test for a jsonnet file:
 ```ruby
 expect(
   <<~JSONNET
-  ocal grafana = import 'toolinglinks/grafana.libsonnet';
+  local grafana = import 'toolinglinks/grafana.libsonnet';
 
   grafana.grafanaUid("bare-file.jsonnet")
 JSONNET
