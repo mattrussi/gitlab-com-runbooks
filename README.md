@@ -487,6 +487,97 @@ Additional to `adsf`, many developers use `rbenv`, `rvm` or other tooling, so, f
 the standard `.ruby-version` file for the Ruby version. ASDF needs to be configured using
 the `legacy_version_file = yes` setting described in the [parent section](#tool-versioning).
 
+## Test jsonnet files
+
+There are 2 approaches to write a test for a jsonnet file:
+- Use [`jsonnetunit`](https://github.com/yugui/jsonnetunit). This method is
+  simple and straight-forward. This approach is perfect for writing unit tests
+  that asserts the output of a particular method. The downside is that it
+  doesn't support jsonnet assertion and inspecting complicated result is not
+  trivial.
+- When a jsonnet file becomes more complicated, consists of multiple
+  conditional branches and chains of methods, we should think of writing
+  integration tests for it instead. Jsonnet Unit doesn't serve this purpose
+  very well. Instead, let's use Rspec. Note that we probably don't want to use
+  RSpec for testing small jsonnet functions, the idea would more be for testing
+  error cases or complicated scenarios where we need to be more expressive
+  about the output we expect
+
+We have two custom matchers for writing integration tests:
+
+```ruby
+expect(
+  <<~JSONNET
+  local grafana = import 'toolinglinks/grafana.libsonnet';
+
+  grafana.grafanaUid("bare-file.jsonnet")
+JSONNET
+).to reject_jsonnet(/invalid dashboard path/i)
+```
+
+```ruby
+expect(
+  <<~JSONNET
+  local grafana = import 'toolinglinks/grafana.libsonnet';
+
+  grafana.grafanaUid("stage-groups/code_review.dashboard.jsonnet")
+  JSONNET
+).to render_jsonnet('stage-groups-code_review')
+
+# Or a more complicated scenario
+
+expect(
+  <<~JSONNET
+  local stageGroupDashboards = import 'stage-groups/stage-group-dashboards.libsonnet';
+
+  stageGroupDashboards.dashboard('geo').stageGroupDashboardTrailer()
+  JSONNET
+).to render_jsonnet { |template|
+  expect(template['title']).to eql('Group dashboard: enablement (Geo)')
+
+  expect(template['links']).to match([
+    a_hash_including('title' => 'API Detail', 'type' => "dashboards", 'tags' => "type:api"),
+    a_hash_including('title' => 'Web Detail', 'type' => "dashboards", 'tags' => "type:web"),
+    a_hash_including('title' => 'Git Detail', 'type' => "dashboards", 'tags' => "type:git")
+  ])
+}
+
+# Or, if you are into matchers
+
+expect(
+  <<~JSONNET
+  local stageGroupDashboards = import 'stage-groups/stage-group-dashboards.libsonnet';
+
+  stageGroupDashboards.dashboard('geo').stageGroupDashboardTrailer()
+  JSONNET
+).to render_jsonnet(
+  a_hash_including(
+    'title' => eql('Group dashboard: enablement (Geo)'),
+    'links' => match([
+      a_hash_including('title' => 'API Detail', 'type' => "dashboards", 'tags' => "type:api"),
+      a_hash_including('title' => 'Web Detail', 'type' => "dashboards", 'tags' => "type:web"),
+      a_hash_including('title' => 'Git Detail', 'type' => "dashboards", 'tags' => "type:git")
+    ])
+  )
+)
+```
+
+### Location of test files
+
+- JsonnetUnit tests must stay in the same directory and have the same name with the testing Jsonnet file plus `_test` suffixes. The test files must have `.jsonnet` extension . Some examples:
+  + `services/stages.libsonnet`  -> `services/stages_test.jsonnet`
+  + `libsonnet/toolinglinks/sentry.libsonnet`  -> `libsonnet/toolinglinks/sentry_test.jsonnet`
+
+- RSpec tests replicates the directory structure of the Jsonnet files inside `spec` directory and must have `_spec` suffixes. Obviously, the test files must have `.rb` extension. Some example:
+  + `libsonnet/toolinglinks/grafana.libsonnet` -> `spec/libsonnet/toolinglinks/grafana_spec.rb`
+  + `dashboards/stage-groups/stage-group-dashboards.libsonnet` -> `spec/dashboards/stage-groups/stage-group-dashboards_spec.rb`
+
+### How to run tests?
+
+- Run the full Jsonnet test suite in your local environment with `make test && bundle exec rspec`
+- Run a particular Jsonnet unit test file with `scripts/jsonnet_test.sh periodic-thanos-queries/periodic-query_test.jsonnet`
+- Run a particular Jsonnet integration test file with `bundle exec rspec spec/libsonnet/toolinglinks/grafana_spec.rb`
+
 ## Contributing
 
 Please see the [contribution guidelines](CONTRIBUTING.md)
