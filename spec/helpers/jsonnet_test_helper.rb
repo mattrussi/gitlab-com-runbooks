@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'pp'
-require 'securerandom'
 require_relative '../../lib/jsonnet_wrapper'
 
 class JsonnetTestHelper
@@ -65,9 +64,10 @@ RSpec::Matchers.define :render_jsonnet do |expected|
     output = io.string
 
     if output.length > 10_000
-      tmp_path = "/tmp/jsonnet-#{SecureRandom.uuid}.json"
-      File.open(tmp_path, "w") { |f| f.write data.to_json }
-      "The generated Jsonnet data is too big to display on the screen. It is available at #{tmp_path}"
+      f = Tempfile.create('jsonnet-dump')
+      f.write(data.to_json)
+      f.close
+      "The generated Jsonnet data is too big to display on the screen. It is available at #{f.path}"
     else
       output
     end
