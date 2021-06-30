@@ -15,6 +15,12 @@ metricsCatalog.serviceDefinition({
   },
   serviceDependencies: {
   },
+  /*
+   * Our anomaly detection uses normal distributions and the monitoring service
+   * is prone to spikes that lead to a non-normal distribution. For that reason,
+   * disable ops-rate anomaly detection on this service.
+   */
+  disableOpsRatePrediction: true,
   provisioning: {
     kubernetes: false,  // Kubernetes isn't deployed on Kubernetes
     vms: false,
