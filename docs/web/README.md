@@ -48,6 +48,7 @@
 * [../monitoring/common-tasks.md](../monitoring/common-tasks.md)
 * [../monitoring/definition-service-error-rate.md](../monitoring/definition-service-error-rate.md)
 * [../monitoring/definition-service-ops-rate.md](../monitoring/definition-service-ops-rate.md)
+* [../monitoring/prometheus-empty-sd.md](../monitoring/prometheus-empty-sd.md)
 * [../onboarding/architecture.md](../onboarding/architecture.md)
 * [../onboarding/kibana-diagnosis.md](../onboarding/kibana-diagnosis.md)
 * [../patroni/geo-patroni-cluster.md](../patroni/geo-patroni-cluster.md)
