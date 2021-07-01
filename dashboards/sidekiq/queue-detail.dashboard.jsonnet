@@ -319,6 +319,17 @@ basic.dashboard(
   layout.rowGrid('Enqueuing (rate of jobs enqueuing)', [
     enqueueCountTimeseries('Jobs Enqueued', aggregators='queue', legendFormat='{{ queue }}'),
     enqueueCountTimeseries('Jobs Enqueued per Service', aggregators='type, queue', legendFormat='{{ queue }} - {{ type }}'),
+    basic.timeseries(
+      stableId='enqueued-by-scheduling-type',
+      title='Jobs Enqueued by Schedule',
+      description='Enqueue events separated by immediate (destined for execution) vs delayed (destined for ScheduledSet) scheduling.',
+      query=|||
+        sum by (queue, scheduling) (
+          rate(sidekiq_enqueued_jobs_total{environment="$environment", stage="$stage", queue=~"$queue"}[$__interval])
+          )
+      |||,
+      legendFormat='{{ queue }} - {{ scheduling }}',
+    ),
     basic.queueLengthTimeseries(
       stableId='queue-length',
       title='Queue length',
