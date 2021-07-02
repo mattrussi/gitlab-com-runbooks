@@ -71,7 +71,18 @@ local packageDashboard = std.foldl(
     ),
   std.mapWithIndex(
     function(i, name) { i: i, name: name },
-    ['Composer', 'Conan', 'Go', 'Maven', 'NPM', 'NuGet', 'PyPI']
+    [
+      'Composer',
+      'Conan',
+      'Go',
+      'Maven',
+      'NPM',
+      'NuGet',
+      'PyPI',
+      'RubyGems',
+      'Debian',
+      'Generic',
+    ]
   ),
   stageGroupDashboards.dashboard(groupKey, ['api', 'sidekiq', 'web'])
 );
