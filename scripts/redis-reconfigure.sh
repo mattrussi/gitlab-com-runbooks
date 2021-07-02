@@ -113,10 +113,6 @@ reconfigure() {
     exit 1
   fi
 
-  # ensure current config is as expected
-  echo config get io-threads
-  ssh $fqdn "$redis_cli config get io-threads"
-
   # run chef-client
   echo chef-client
   wait_for_input
@@ -135,9 +131,13 @@ reconfigure() {
   wait_for_input
   ssh $fqdn "sudo gitlab-ctl reconfigure"
 
+  # TODO: we may need to wait for redis to come back up here
+  echo please wait for redis restart
+  wait_for_input
+
   # ensure config change took effect
+  echo config get save
   ssh $fqdn "$redis_cli config get save"
-  ssh $fqdn "$redis_cli config get io-threads"
 
   # check sync status
   echo $hosts | xargs -n1 -I{} ssh "{}.c.${gitlab_project}.internal" 'hostname; '$redis_cli' role | head -n1; echo'
