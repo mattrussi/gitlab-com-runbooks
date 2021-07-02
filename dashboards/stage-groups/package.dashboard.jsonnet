@@ -19,7 +19,7 @@ local packageRequestRate(packageType) =
     decimals=2,
     query=|||
       sum by (controller, action) (
-        rate(gitlab_transaction_duration_seconds_count{
+        avg_over_time(controller_action:gitlab_transaction_duration_seconds_count:rate1m{
           environment='$environment',
           stage='$stage',
           feature_category=~'(%(featureCategories)s)',
