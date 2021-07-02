@@ -1,4 +1,5 @@
 #!/bin/bash
+# shellcheck disable=SC2089,SC2016,SC2155,SC2162,SC2029,SC2086,SC2090
 
 # TODO: consider adding a dry-run mode
 
@@ -58,27 +59,27 @@ failover_if_master() {
   export fqdn="${gitlab_redis_cluster}-$i-db-${gitlab_env}.c.${gitlab_project}.internal"
 
   echo "> failover_if_master $fqdn"
-  ssh $fqdn "$redis_cli role | head -n1"
+  ssh "$fqdn" "$redis_cli role | head -n1"
 
   # if role is master, perform failover
-  if [[ "$(ssh $fqdn "$redis_cli role | head -n1")" = "master" ]]; then
+  if [[ "$(ssh "$fqdn" "$redis_cli role | head -n1")" = "master" ]]; then
     echo failing over
     wait_for_input
-    ssh $sentinel "/opt/gitlab/embedded/bin/redis-cli -p 26379 sentinel failover ${gitlab_env}-${gitlab_redis_cluster}"
+    ssh "$sentinel" "/opt/gitlab/embedded/bin/redis-cli -p 26379 sentinel failover ${gitlab_env}-${gitlab_redis_cluster}"
   fi
 
   # wait for master to step down and sync (expect "slave" [sic] and "connected")
-  while ! [[ "$(ssh $fqdn "$redis_cli role" | head -n1)" = "slave" ]]; do
+  while ! [[ "$(ssh "$fqdn" "$redis_cli role" | head -n1)" = "slave" ]]; do
     echo waiting for stepdown
-    sleep 1
+    sleep 30
   done
-  while ! [[ "$(ssh $fqdn "$redis_cli --raw role" | tail -n +4 | head -n1)" = "connected" ]]; do
+  while ! [[ "$(ssh "$fqdn" "$redis_cli --raw role" | tail -n +4 | head -n1)" = "connected" ]]; do
     echo waiting for sync
     sleep 30
   done
 
   # wait for sentinel to ack the master change
-  while [[ "$(ssh $sentinel "/opt/gitlab/embedded/bin/redis-cli -p 26379 --raw sentinel master ${gitlab_env}-${gitlab_redis_cluster}" | grep -A1 ^ip$ | tail -n +2 | awk '{ print substr($0, length($0)-1) }')" = "$i" ]]; do
+  while [[ "$(ssh "$sentinel" "/opt/gitlab/embedded/bin/redis-cli -p 26379 --raw sentinel master ${gitlab_env}-${gitlab_redis_cluster}" | grep -A1 ^ip$ | tail -n +2 | awk '{ print substr($0, length($0)-1) }')" = "$i" ]]; do
     echo waiting for sentinel
     sleep 1
   done
@@ -94,23 +95,23 @@ reconfigure() {
 
   # double check that we are dealing with a replica
   echo checking role
-  ssh $fqdn "$redis_cli --no-raw role"
+  ssh "$fqdn" "$redis_cli --no-raw role"
 
-  if [[ "$(ssh $fqdn "$redis_cli role | head -n1")" = "master" ]]; then
+  if [[ "$(ssh "$fqdn" "$redis_cli role | head -n1")" = "master" ]]; then
     >&2 echo "error: expected $fqdn to be replica, but it was a master"
     exit 1
   fi
 
-  if [[ "$(ssh $fqdn "$redis_cli --raw role" | tail -n +4 | head -n1)" != "connected" ]]; then
+  if [[ "$(ssh "$fqdn" "$redis_cli --raw role" | tail -n +4 | head -n1)" != "connected" ]]; then
     >&2 echo "error: expected $fqdn to be in state connected"
     exit 1
   fi
 
   # check sentinel quorum
   echo sentinel ckquorum
-  ssh $sentinel "hostname; /opt/gitlab/embedded/bin/redis-cli -p 26379 sentinel ckquorum ${gitlab_env}-${gitlab_redis_cluster}"
+  ssh "$sentinel" "hostname; /opt/gitlab/embedded/bin/redis-cli -p 26379 sentinel ckquorum ${gitlab_env}-${gitlab_redis_cluster}"
 
-  if [[ "$(ssh $sentinel "/opt/gitlab/embedded/bin/redis-cli -p 26379 sentinel ckquorum ${gitlab_env}-${gitlab_redis_cluster}")" != "OK 3 usable Sentinels. Quorum and failover authorization can be reached" ]]; then
+  if [[ "$(ssh "$sentinel" "/opt/gitlab/embedded/bin/redis-cli -p 26379 sentinel ckquorum ${gitlab_env}-${gitlab_redis_cluster}")" != "OK 3 usable Sentinels. Quorum and failover authorization can be reached" ]]; then
     >&2 echo "error: sentinel quorum to be ok"
     exit 1
   fi
@@ -118,40 +119,40 @@ reconfigure() {
   # run chef-client
   echo chef-client
   wait_for_input
-  ssh $fqdn "sudo chef-client"
+  ssh "$fqdn" "sudo chef-client"
 
   # temporarily disable rdb saving to allow for fast restart
   echo config get save
-  ssh $fqdn "$redis_cli config get save"
+  ssh "$fqdn" "$redis_cli config get save"
 
   echo config set save
-  ssh $fqdn "$redis_cli config set save ''"
+  ssh "$fqdn" "$redis_cli config set save ''"
 
   # reconfigure
   # this _will_ restart processes
   echo gitlab-ctl reconfigure
   wait_for_input
-  ssh $fqdn "sudo gitlab-ctl reconfigure"
+  ssh "$fqdn" "sudo gitlab-ctl reconfigure"
 
   # wait for master to step down and sync (expect "slave" [sic] and "connected")
-  while ! [[ "$(ssh $fqdn "$redis_cli role" | head -n1)" = "slave" ]]; do
+  while ! [[ "$(ssh "$fqdn" "$redis_cli role" | head -n1)" = "slave" ]]; do
     echo waiting for stepdown
-    sleep 1
+    sleep 30
   done
-  while ! [[ "$(ssh $fqdn "$redis_cli --raw role" | tail -n +4 | head -n1)" = "connected" ]]; do
+  while ! [[ "$(ssh "$fqdn" "$redis_cli --raw role" | tail -n +4 | head -n1)" = "connected" ]]; do
     echo waiting for sync
     sleep 30
   done
 
   # ensure config change took effect
   echo config get save
-  ssh $fqdn "$redis_cli config get save"
+  ssh "$fqdn" "$redis_cli config get save"
 
   # check sync status
   echo $hosts | xargs -n1 -I{} ssh "{}.c.${gitlab_project}.internal" 'hostname; '$redis_cli' role | head -n1; echo'
 
   # check sentinel status
-  ssh $sentinel "hostname; /opt/gitlab/embedded/bin/redis-cli -p 26379 sentinel ckquorum ${gitlab_env}-${gitlab_redis_cluster}"
+  ssh "$sentinel" "hostname; /opt/gitlab/embedded/bin/redis-cli -p 26379 sentinel ckquorum ${gitlab_env}-${gitlab_redis_cluster}"
 
   echo "< reconfigure $fqdn"
 }
