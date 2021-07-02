@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# TODO: consider adding a dry-run mode
+
 set -euo pipefail
 
 if [[ $# -ne 2 ]]; then
@@ -72,7 +74,7 @@ failover_if_master() {
   done
   while ! [[ "$(ssh $fqdn "$redis_cli --raw role" | tail -n +4 | head -n1)" = "connected" ]]; do
     echo waiting for sync
-    sleep 1
+    sleep 30
   done
 
   # wait for sentinel to ack the master change
@@ -131,9 +133,15 @@ reconfigure() {
   wait_for_input
   ssh $fqdn "sudo gitlab-ctl reconfigure"
 
-  # TODO: we may need to wait for redis to come back up here
-  echo please wait for redis restart
-  wait_for_input
+  # wait for master to step down and sync (expect "slave" [sic] and "connected")
+  while ! [[ "$(ssh $fqdn "$redis_cli role" | head -n1)" = "slave" ]]; do
+    echo waiting for stepdown
+    sleep 1
+  done
+  while ! [[ "$(ssh $fqdn "$redis_cli --raw role" | tail -n +4 | head -n1)" = "connected" ]]; do
+    echo waiting for sync
+    sleep 30
+  done
 
   # ensure config change took effect
   echo config get save
