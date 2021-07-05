@@ -19,7 +19,7 @@ local packageRequestRate(packageType) =
     decimals=2,
     query=|||
       sum by (controller, action) (
-        rate(gitlab_transaction_duration_seconds_count{
+        avg_over_time(controller_action:gitlab_transaction_duration_seconds_count:rate1m{
           environment='$environment',
           stage='$stage',
           feature_category=~'(%(featureCategories)s)',
@@ -71,7 +71,18 @@ local packageDashboard = std.foldl(
     ),
   std.mapWithIndex(
     function(i, name) { i: i, name: name },
-    ['Composer', 'Conan', 'Go', 'Maven', 'NPM', 'NuGet', 'PyPI']
+    [
+      'Composer',
+      'Conan',
+      'Go',
+      'Maven',
+      'NPM',
+      'NuGet',
+      'PyPI',
+      'RubyGems',
+      'Debian',
+      'Generic',
+    ]
   ),
   stageGroupDashboards.dashboard(groupKey, ['api', 'sidekiq', 'web'])
 );
