@@ -201,6 +201,20 @@ See:
 1. https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/9788
 1. https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/305
 
+## Maintanence
+
+### Reconfigure
+
+In order to apply config changes, we need to run a `sudo gitlab-ctl reconfigure`. However, this operation requires coordination, since it will usually restart the redis process.
+
+In order to ensure we remain highly available, this operation should only be applied to redis replicas. In order to apply it to a primary, a failover should first be performed, turning it into a replica.
+
+This process is automated via a script in the `runbooks` repository:
+
+```
+scripts/redis-reconfigure.sh gstg redis-cache
+```
+
 ## Debugging and Diagnosis
 So you think something is wrong with Redis, either as a cause or a symptom.  What can you do to find out more?
 
@@ -265,7 +279,7 @@ average.  An increase in these would be very interesting, particularly if it was
 #### CLI
 You can obtain the 10 most recent entries:
 
-```REDISCLI_AUTH=$(sudo grep ^masterauth /var/opt/gitlab/redis/redis.conf|cut -d\" -f2) /opt/gitlab/embedded/bin/redis-cli
+```sudo gitlab-redis-cli
 127.0.0.1:6379> SLOWLOG GET 10
 ```
 See https://redis.io/commands/slowlog for details of the output format.
@@ -291,7 +305,7 @@ It might be useful to observe live traffic.  SSH to the primary redis node (see 
 a quick way to do that) and run:
 
 ```
-REDISCLI_AUTH=$(sudo grep ^masterauth /var/opt/gitlab/redis/redis.conf|cut -d\" -f2) /opt/gitlab/embedded/bin/redis-cli monitor
+sudo gitlab-redis-cli monitor
 ```
 
 This will show you not only the commands (including keys + values) being run, but also which client they are from.  Use
@@ -346,6 +360,6 @@ less than 10% runtime to the memkeys invocation
 
 Here's how to run them directly:
 
-```REDISCLI_AUTH=$(sudo grep ^masterauth /var/opt/gitlab/redis/redis.conf|cut -d\" -f2) /opt/gitlab/embedded/bin/redis-cli --bigkeys```
+```sudo gitlab-redis-cli --bigkeys```
 
-```REDISCLI_AUTH=$(sudo grep ^masterauth /var/opt/gitlab/redis/redis.conf|cut -d\" -f2) /opt/gitlab/embedded/bin/redis-cli --memkeys --memkeys-samples -1```
+```sudo gitlab-redis-cli --memkeys --memkeys-samples -1```
