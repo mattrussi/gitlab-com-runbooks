@@ -24,7 +24,7 @@ help:  ## Lists all available commands
 all: verify
 
 .PHONY: verify
-verify: verify-shellcheck verify-fmt
+verify: verify-shellcheck jsonnet-lint verify-fmt
 
 .PHONY: verify-fmt
 verify-fmt:
@@ -34,6 +34,10 @@ verify-fmt:
 .PHONY: verify-shellcheck
 verify-shellcheck:
 	shellcheck $(SHELLCHECK_FLAGS) $(SHELL_FILES)
+
+.PHONY: jsonnet-lint
+jsonnet-lint:
+	./scripts/jsonnet_lint.sh
 
 .PHONY: fmt
 fmt: jsonnet-fmt shell-fmt
