@@ -490,7 +490,6 @@ groups:
     for: 10m
     labels:
       severity: s4
-      incident_project: gitlab.com/gitlab-com/gl-infra/production
       alert_type: cause
     annotations:
       title: Thanos Store has high latency
