@@ -10,40 +10,46 @@ We have a new way to access our Rails consoles in Staging/Production - via Gravi
 ## How to use Teleport to connect to Rails console
 There are two ways to use to Teleport to connect to a Rails console:
 1. Installing [**tsh**](https://goteleport.com/teleport/docs/cli-docs/#tsh), the Teleport CLI client. This is the recommended way.
-1. Via the Teleport HTTP portal (https://teleport.gstg.gitlab.net:3080 in staging). If you are going to use this option please ask a Reliability manager in slack.
+1. Via the Teleport HTTP portal (https://teleport.gstg.gitlab.net:3080 in staging).
 
 #### Installing tsh
-It is as simple as running, from your laptop's console:
+On MacOS, It is as simple as running, from your laptop's console:
 
 `$> brew install teleport`
+
+Linux install instructions are [also available on the Teleport site](https://goteleport.com/docs/installation/#linux)
 
 #### Accessing the Rails console via Teleport
 
 > Note: It is not required, but it is easier to be logged in to Okta already before this step
 
-The access will be temporary (`24h` max) and approved by Teleport admins - typically Reliability Managers. Access can be extended with approval, using the same process.
+The access will be temporary (`24h` max) and approved by any SRE or Reliability Manager.  The `@sre-oncall` can help if it's urgent, but it's considerate to spread the load out by asking the wider SRE team in `#infrastructure-lounge` if you can wait. Access can be extended past 24 hours, with approval, using the same process.
+
+> Tip: As long as you understand that two separate things are happening in the second command below, you can skip the first and just use the second.
 
 Login to the Teleport proxy/server:
 
 `$> tsh login --proxy=teleport.gstg.gitlab.net`
 
-And finally you request a role to connect to the Rails console:
+And finally you request a role to connect to the staging Rails console - for production, see the note below:
 
 `$> tsh login --proxy=teleport.gstg.gitlab.net --request-roles=rails-ro --request-reason="Issue-URL or explanation"`
 
 This command will wait for the approver to approve your request.  It may appear to hang, but it will return as soon as the request is approved or denied.
 
-> Note: These examples are for the staging environment only to prevent unintentional copy/paste behavior.  To connect to the production environment, change `gstg` to `gprd`
+> Note: These examples are for the **staging environment** only! This is to prevent unintended copy/paste behavior.  To connect to the production environment, change `gstg` to `gprd`
 
 #### Access approval
 
-In the future, a reliability manager will get your request via an automated notification in Slack. For now, you'll need to ping them manually in `#infrastructure-lounge`.  They will review the issue URL in the request and if console access seems like a reasonable step to address that issue, they will approve it.
+In the future, approvers will get your request via an [automated notification in Slack](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/12256). For now, you'll need to ping them manually in `#infrastructure-lounge`.  They will review the issue URL in the request and if console access seems like a reasonable step to address that issue, they will approve it.
 
-The final step will be to finally access the Rails console via:
+Once an approval is issued, access the Rails console via:
 
-`$> tsh ssh rails-ro@console-ro-01-sv-gstg.c.gitlab-staging-1.internal`
+`$> tsh ssh rails-ro@console-ro-01-sv-gstg`
 
 Remember that your access request - and its approval - will expire in `24h` maximum.
+
+> Tip: The syntax and options for `tsh ssh` are very similar to `ssh` (with some additional options), so it's possible to do something like `alias ssh="tsh ssh"`
 
 If you have any issues using Teleport, or this approval process, please ask the **Reliability team** (SREs and/or managers) in the [#production](https://gitlab.slack.com/archives/C101F3796) or [#infrastructure-lounge](https://gitlab.slack.com/archives/CB3LSMEJV) channels.
 
@@ -59,12 +65,12 @@ The login process is a little different from other services.  With Teleport, you
 $ tsh status
 > Profile URL:        https://teleport.gstg.gitlab.net:3080
   Logged in as:       yourname@gitlab.com
-  Cluster:            staging-teleport-cluster
+  Cluster:            gstg-teleport-cluster
   Roles:              backend-developer
   Logins:             yourname@gitlab.com
   Kubernetes:         disabled
   Valid until:        2021-04-13 21:38:09 -1000 HST [valid for 11h27m0s]
-  Extensions:         permit-agent-forwarding, permit-port-forwarding, permit-pty
+  Extensions:         permit-pty
 ```
 
 Note that the default token does not have the `rails-ro` role and does not have the `rails-ro` login available. This key allows you to interact with the server, and to reuqest more roles, but does not allow connecting to any other services.
