@@ -120,6 +120,7 @@
       'continuous_integration',
       'merge_trains',
       'continuous_integration_scaling',
+      'pipeline_abuse_prevention',
     ],
   },
   pipeline_authoring: {
@@ -145,6 +146,7 @@
       'performance_testing',
       'usability_testing',
       'accessibility_testing',
+      'build_artifacts',
     ],
   },
   package: {
@@ -246,7 +248,6 @@
     name: 'Container Security',
     stage: 'protect',
     feature_categories: [
-      'web_firewall',
       'security_orchestration',
       'container_network_security',
       'container_host_security',
@@ -309,6 +310,7 @@
     feature_categories: [
       'product_analytics',
       'usage_ping',
+      'service_ping',
       'privacy_control_center',
     ],
   },
