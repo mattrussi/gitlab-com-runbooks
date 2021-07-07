@@ -82,6 +82,8 @@ local packageDashboard = std.foldl(
       'RubyGems',
       'Debian',
       'Generic',
+      'Helm',
+      'Terraform',
     ]
   ),
   stageGroupDashboards.dashboard(groupKey, ['api', 'sidekiq', 'web'])
