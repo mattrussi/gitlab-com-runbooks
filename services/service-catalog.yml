@@ -9,7 +9,6 @@ teams:
 - name: sre_observability
   url: https://about.gitlab.com/handbook/engineering/infrastructure/team/reliability/#observability
   slack_channel: sre_observability
-  issue_tracker: gitlab.com/gitlab-com/gl-infra/production
   engagement_policy:
   oncall_schedule: https://gitlab.pagerduty.com/schedules#P22HQSG
 
