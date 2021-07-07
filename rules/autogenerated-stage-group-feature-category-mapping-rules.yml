@@ -66,6 +66,12 @@ groups:
     expr: '1'
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: build_artifacts
+      product_stage: verify
+      stage_group: testing
+    expr: '1'
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: chatops
       product_stage: configure
       stage_group: configure
@@ -504,6 +510,12 @@ groups:
     expr: '1'
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: pipeline_abuse_prevention
+      product_stage: verify
+      stage_group: pipeline_execution
+    expr: '1'
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: pipeline_authoring
       product_stage: verify
       stage_group: pipeline_authoring
@@ -630,6 +642,12 @@ groups:
     expr: '1'
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: service_ping
+      product_stage: growth
+      stage_group: product_intelligence
+    expr: '1'
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: sharding
       product_stage: enablement
       stage_group: sharding
@@ -729,12 +747,6 @@ groups:
       feature_category: vulnerability_management
       product_stage: secure
       stage_group: threat_insights
-    expr: '1'
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: web_firewall
-      product_stage: protect
-      stage_group: container_security
     expr: '1'
   - record: gitlab:feature_category:stage_group:mapping
     labels:
