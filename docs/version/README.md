@@ -34,6 +34,7 @@
 * [../monitoring/thanos-compact.md](../monitoring/thanos-compact.md)
 * [../onboarding/architecture.md](../onboarding/architecture.md)
 * [../packaging/manage-package-signing-keys.md](../packaging/manage-package-signing-keys.md)
+* [../patroni/database_peak_analysis.md](../patroni/database_peak_analysis.md)
 * [../patroni/geo-patroni-cluster.md](../patroni/geo-patroni-cluster.md)
 * [../patroni/patroni-management.md](../patroni/patroni-management.md)
 * [../patroni/postgres-checkup.md](../patroni/postgres-checkup.md)

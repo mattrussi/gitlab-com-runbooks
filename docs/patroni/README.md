@@ -21,6 +21,7 @@
 * [../monitoring/prometheus-failing-rule-evaluations.md](../monitoring/prometheus-failing-rule-evaluations.md)
 * [../onboarding/kibana-diagnosis.md](../onboarding/kibana-diagnosis.md)
 * [check_wraparound.md](check_wraparound.md)
+* [database_peak_analysis.md](database_peak_analysis.md)
 * [gcs-snapshots.md](gcs-snapshots.md)
 * [geo-patroni-cluster.md](geo-patroni-cluster.md)
 * [gitlab-com-wale-backups.md](gitlab-com-wale-backups.md)
