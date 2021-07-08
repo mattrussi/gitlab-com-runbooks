@@ -51,6 +51,7 @@
 * [../monitoring/prometheus-empty-sd.md](../monitoring/prometheus-empty-sd.md)
 * [../onboarding/architecture.md](../onboarding/architecture.md)
 * [../onboarding/kibana-diagnosis.md](../onboarding/kibana-diagnosis.md)
+* [../patroni/database_peak_analysis.md](../patroni/database_peak_analysis.md)
 * [../patroni/geo-patroni-cluster.md](../patroni/geo-patroni-cluster.md)
 * [../patroni/pg_collect_query_data.md](../patroni/pg_collect_query_data.md)
 * [../patroni/postgres.md](../patroni/postgres.md)

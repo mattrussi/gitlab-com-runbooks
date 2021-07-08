@@ -28,6 +28,7 @@
 * [../kube/k8s-operations.md](../kube/k8s-operations.md)
 * [../kube/kubernetes.md](../kube/kubernetes.md)
 * [../pages/gitlab-pages.md](../pages/gitlab-pages.md)
+* [../patroni/database_peak_analysis.md](../patroni/database_peak_analysis.md)
 * [../patroni/performance-degradation-troubleshooting.md](../patroni/performance-degradation-troubleshooting.md)
 * [../patroni/pg_collect_query_data.md](../patroni/pg_collect_query_data.md)
 * [../patroni/postgresql-role-credential-rotation.md](../patroni/postgresql-role-credential-rotation.md)

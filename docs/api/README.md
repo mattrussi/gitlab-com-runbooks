@@ -50,6 +50,7 @@
 * [../onboarding/architecture.md](../onboarding/architecture.md)
 * [../onboarding/gitlab.com_on_k8s.md](../onboarding/gitlab.com_on_k8s.md)
 * [../onboarding/kibana-diagnosis.md](../onboarding/kibana-diagnosis.md)
+* [../patroni/database_peak_analysis.md](../patroni/database_peak_analysis.md)
 * [../patroni/patroni-management.md](../patroni/patroni-management.md)
 * [../patroni/pg_collect_query_data.md](../patroni/pg_collect_query_data.md)
 * [../patroni/pg_repack.md](../patroni/pg_repack.md)
