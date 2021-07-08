@@ -42,6 +42,7 @@ groups:
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "yes"
+      window: 1h
     expr: |
       (
         (
@@ -53,7 +54,51 @@ groups:
           gitlab_component_apdex:ratio_5m{component="gitalyruby",monitor="global",type="gitaly"}
           < (1 - 14.4 * 0.001000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="gitalyruby",monitor="global",type="gitaly"}) >= 1
+      )
+  - alert: GitalyServiceGitalyrubyApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The gitalyruby SLI of the gitaly service (`{{ $labels.stage }}` stage)
+        has an apdex violating SLO
+      description: |
+        This SLI monitors requests to Gitaly's Ruby sidecar, known as Gitaly-Ruby. All requests made to Gitaly-Ruby are monitored in aggregate, via its GRPC interface.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: gitaly-main/gitaly-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "4223379407"
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]) and on(grpc_service,grpc_method) grpc_client_handled_total{job="gitaly"}
+          )
+        )
+      runbook: docs/gitaly/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: gitaly
+      pager: pagerduty
+      product_stage: create
+      product_stage_group: gitaly
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_apdex:ratio_6h{component="gitalyruby",monitor="global",type="gitaly"}
           < (1 - 6 * 0.001000)
@@ -460,6 +505,7 @@ groups:
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "yes"
+      window: 1h
     expr: |
       (
         (
@@ -471,7 +517,51 @@ groups:
           gitlab_component_apdex:ratio_5m{component="goserver",monitor="global",type="gitaly"}
           < (1 - 14.4 * 0.001000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="goserver",monitor="global",type="gitaly"}) >= 1
+      )
+  - alert: GitalyServiceGoserverApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The goserver SLI of the gitaly service (`{{ $labels.stage }}` stage)
+        has an apdex violating SLO
+      description: |
+        This SLI monitors all Gitaly GRPC requests in aggregate, excluding the OperationService. GRPC failures which are considered to be the "server's fault" are counted as errors. The apdex score is based on a subset of GRPC methods which are expected to be fast.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: gitaly-main/gitaly-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "877804374"
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",stage="{{ $labels.stage }}"}[5m])
+          )
+        )
+      runbook: docs/gitaly/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: gitaly
+      pager: pagerduty
+      product_stage: create
+      product_stage_group: gitaly
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_apdex:ratio_6h{component="goserver",monitor="global",type="gitaly"}
           < (1 - 6 * 0.001000)

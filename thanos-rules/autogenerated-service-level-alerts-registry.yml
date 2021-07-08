@@ -42,6 +42,7 @@ groups:
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "yes"
+      window: 1h
     expr: |
       (
         (
@@ -53,7 +54,51 @@ groups:
           gitlab_component_apdex:ratio_5m{component="database",monitor="global",type="registry"}
           < (1 - 14.4 * 0.003000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="database",monitor="global",type="registry"}) >= 1
+      )
+  - alert: RegistryServiceDatabaseApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The database SLI of the registry service (`{{ $labels.stage }}` stage)
+        has an apdex violating SLO
+      description: |
+        Aggregation of all container registry database operations.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3734296734"
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(registry_database_query_duration_seconds_bucket{type="registry", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          )
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: container_registry
+      pager: pagerduty
+      product_stage: package
+      product_stage_group: package
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_apdex:ratio_6h{component="database",monitor="global",type="registry"}
           < (1 - 6 * 0.003000)
@@ -242,6 +287,7 @@ groups:
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "no"
+      window: 1h
     expr: |
       (
         (
@@ -253,7 +299,51 @@ groups:
           gitlab_component_apdex:ratio_5m{component="garbagecollector",monitor="global",type="registry"}
           < (1 - 14.4 * 0.003000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="garbagecollector",monitor="global",type="registry"}) >= 1
+      )
+  - alert: RegistryServiceGarbagecollectorApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The garbagecollector SLI of the registry service (`{{ $labels.stage }}`
+        stage) has an apdex violating SLO
+      description: |
+        Aggregation of all container registry online garbage collection operations.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2354862550"
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(registry_gc_run_duration_seconds_bucket{type="registry", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          )
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: container_registry
+      pager: pagerduty
+      product_stage: package
+      product_stage_group: package
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_apdex:ratio_6h{component="garbagecollector",monitor="global",type="registry"}
           < (1 - 6 * 0.003000)
@@ -563,6 +653,7 @@ groups:
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "yes"
+      window: 1h
     expr: |
       (
         (
@@ -574,7 +665,51 @@ groups:
           gitlab_component_apdex:ratio_5m{component="server",monitor="global",type="registry"}
           < (1 - 14.4 * 0.003000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="server",monitor="global",type="registry"}) >= 1
+      )
+  - alert: RegistryServiceServerApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The server SLI of the registry service (`{{ $labels.stage }}` stage)
+        has an apdex violating SLO
+      description: |
+        Aggregation of all registry requests.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2863319079"
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",route!~"/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
+          )
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: container_registry
+      pager: pagerduty
+      product_stage: package
+      product_stage_group: package
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_apdex:ratio_6h{component="server",monitor="global",type="registry"}
           < (1 - 6 * 0.003000)
@@ -884,6 +1019,7 @@ groups:
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "yes"
+      window: 1h
     expr: |
       (
         (
@@ -895,7 +1031,51 @@ groups:
           gitlab_component_apdex:ratio_5m{component="server_route_manifest_reads",monitor="global",type="registry"}
           < (1 - 14.4 * 0.003000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="server_route_manifest_reads",monitor="global",type="registry"}) >= 1
+      )
+  - alert: RegistryServiceServerRouteManifestReadsApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The server_route_manifest_reads SLI of the registry service (`{{ $labels.stage
+        }}` stage) has an apdex violating SLO
+      description: |
+        All read-requests (HEAD or GET) for the manifest endpoints on the registry. Fetch the manifest identified by name and reference where reference can be a tag or digest. A HEAD request can also be issued to this endpoint to obtain resource information without receiving all data.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2850495079"
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"get|head",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
+          )
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: container_registry
+      pager: pagerduty
+      product_stage: package
+      product_stage_group: package
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_apdex:ratio_6h{component="server_route_manifest_reads",monitor="global",type="registry"}
           < (1 - 6 * 0.003000)
@@ -1088,6 +1268,7 @@ groups:
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "yes"
+      window: 1h
     expr: |
       (
         (
@@ -1099,7 +1280,55 @@ groups:
           gitlab_component_apdex:ratio_5m{component="server_route_manifest_writes",monitor="global",type="registry"}
           < (1 - 14.4 * 0.003000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="server_route_manifest_writes",monitor="global",type="registry"}) >= 1
+      )
+  - alert: RegistryServiceServerRouteManifestWritesApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The server_route_manifest_writes SLI of the registry service (`{{ $labels.stage
+        }}` stage) has an apdex violating SLO
+      description: |
+        All write-requests (put, delete) for the manifest endpoints on the registry.
+
+        Put the manifest identified by name and reference where reference can be a tag or digest.
+
+        Delete the manifest identified by name and reference. Note that a manifest can only be deleted by digest.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1201783796"
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
+          )
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: container_registry
+      pager: pagerduty
+      product_stage: package
+      product_stage_group: package
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_apdex:ratio_6h{component="server_route_manifest_writes",monitor="global",type="registry"}
           < (1 - 6 * 0.003000)
@@ -1300,6 +1529,7 @@ groups:
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "yes"
+      window: 1h
     expr: |
       (
         (
@@ -1311,7 +1541,51 @@ groups:
           gitlab_component_apdex:ratio_5m{component="storage",monitor="global",type="registry"}
           < (1 - 14.4 * 0.003000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="storage",monitor="global",type="registry"}) >= 1
+      )
+  - alert: RegistryServiceStorageApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The storage SLI of the registry service (`{{ $labels.stage }}` stage)
+        has an apdex violating SLO
+      description: |
+        Aggregation of all container registry GCS storage operations.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "695776990"
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(registry_storage_action_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          )
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: container_registry
+      pager: pagerduty
+      product_stage: package
+      product_stage_group: package
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_apdex:ratio_6h{component="storage",monitor="global",type="registry"}
           < (1 - 6 * 0.003000)

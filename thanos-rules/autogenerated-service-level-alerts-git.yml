@@ -358,6 +358,7 @@ groups:
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "yes"
+      window: 1h
     expr: |
       (
         (
@@ -369,7 +370,51 @@ groups:
           gitlab_component_apdex:ratio_5m{component="puma",monitor="global",type="git"}
           < (1 - 14.4 * 0.002000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="puma",monitor="global",type="git"}) >= 1
+      )
+  - alert: GitServicePumaApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The puma SLI of the git service (`{{ $labels.stage }}` stage) has an
+        apdex violating SLO
+      description: |
+        Monitors Rails endpoints, running in the Git fleet, via the HTTP interface.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: git-main/git-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "561966508"
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="git"}[5m])
+          )
+        )
+      runbook: docs/git/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_apdex:ratio_6h{component="puma",monitor="global",type="git"}
           < (1 - 6 * 0.002000)
@@ -679,6 +724,7 @@ groups:
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "yes"
+      window: 1h
     expr: |
       (
         (
@@ -690,7 +736,51 @@ groups:
           gitlab_component_apdex:ratio_5m{component="workhorse",monitor="global",type="git"}
           < (1 - 14.4 * 0.002000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="workhorse",monitor="global",type="git"}) >= 1
+      )
+  - alert: GitServiceWorkhorseApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The workhorse SLI of the git service (`{{ $labels.stage }}` stage) has
+        an apdex violating SLO
+      description: |
+        Monitors the Workhorse instance running in the Git fleet, via the HTTP interface. This SLI excludes API requests, which have their own SLI with tigher latency thresholds. Websocket connections are excluded from the apdex score.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: git-main/git-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2586818196"
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-git",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="^/([^/]+/){1,}[^/]+/-/jobs/[0-9]+/terminal.ws\\z",route!="^/([^/]+/){1,}[^/]+/-/environments/[0-9]+/terminal.ws\\z",route!="^/-/cable\\z",stage="{{ $labels.stage }}",type="git"}[5m])
+          )
+        )
+      runbook: docs/git/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_apdex:ratio_6h{component="workhorse",monitor="global",type="git"}
           < (1 - 6 * 0.002000)
@@ -1000,6 +1090,7 @@ groups:
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "yes"
+      window: 1h
     expr: |
       (
         (
@@ -1011,7 +1102,51 @@ groups:
           gitlab_component_apdex:ratio_5m{component="workhorse_auth_api",monitor="global",type="git"}
           < (1 - 14.4 * 0.002000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="workhorse_auth_api",monitor="global",type="git"}) >= 1
+      )
+  - alert: GitServiceWorkhorseAuthApiApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The workhorse_auth_api SLI of the git service (`{{ $labels.stage }}`
+        stage) has an apdex violating SLO
+      description: |
+        Monitors Workhorse API endpoints, running in the Git fleet, via the HTTP interface. Workhorse API requests have much tigher latency requirements, as these requests originate in GitLab-Shell and are on the critical path for authentication of Git SSH commands.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: git-main/git-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3139093701"
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-git",route="^/api/",stage="{{ $labels.stage }}",type="git"}[5m])
+          )
+        )
+      runbook: docs/git/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_apdex:ratio_6h{component="workhorse_auth_api",monitor="global",type="git"}
           < (1 - 6 * 0.002000)

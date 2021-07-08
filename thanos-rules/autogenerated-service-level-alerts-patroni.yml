@@ -185,6 +185,7 @@ groups:
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "yes"
+      window: 1h
     expr: |
       (
         (
@@ -196,7 +197,51 @@ groups:
           gitlab_component_apdex:ratio_5m{component="rails_primary_sql",monitor="global",type="patroni"}
           < (1 - 14.4 * 0.001000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="rails_primary_sql",monitor="global",type="patroni"}) >= 1
+      )
+  - alert: PatroniServiceRailsPrimarySqlApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The rails_primary_sql SLI of the patroni service (`{{ $labels.stage }}`
+        stage) has an apdex violating SLO
+      description: |
+        Represents all SQL transactions issued through ActiveRecord from the Rails monolith (web, api, websockets, but not sidekiq) to the Postgres primary. Durations can be impacted by various conditions other than Patroni, including client pool saturation, pgbouncer saturation, Ruby thread contention and network conditions.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: patroni-main/patroni-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/patroni-main/patroni-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2409561530"
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type!="sidekiq"}
+          )
+        )
+      runbook: docs/patroni/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_apdex:ratio_6h{component="rails_primary_sql",monitor="global",type="patroni"}
           < (1 - 6 * 0.001000)
@@ -322,6 +367,7 @@ groups:
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "yes"
+      window: 1h
     expr: |
       (
         (
@@ -333,7 +379,51 @@ groups:
           gitlab_component_apdex:ratio_5m{component="rails_replica_sql",monitor="global",type="patroni"}
           < (1 - 14.4 * 0.001000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="rails_replica_sql",monitor="global",type="patroni"}) >= 1
+      )
+  - alert: PatroniServiceRailsReplicaSqlApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The rails_replica_sql SLI of the patroni service (`{{ $labels.stage }}`
+        stage) has an apdex violating SLO
+      description: |
+        Represents all SQL transactions issued through ActiveRecord from the Rails monolith (web, api, websockets, but not sidekiq) to Postgres replicas. Durations can be impacted by various conditions other than Patroni, including client pool saturation, pgbouncer saturation, Ruby thread contention and network conditions.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: patroni-main/patroni-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/patroni-main/patroni-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "4242138551"
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type!="sidekiq"}
+          )
+        )
+      runbook: docs/patroni/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_apdex:ratio_6h{component="rails_replica_sql",monitor="global",type="patroni"}
           < (1 - 6 * 0.001000)

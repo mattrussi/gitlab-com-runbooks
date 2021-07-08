@@ -159,19 +159,6 @@ local apdexAlertForSLI(service, sli) =
     serviceType: service.type,
   };
 
-  local globalWindows = if std.objectHas(service, 'alertWindows') then
-    [[window] for window in service.alertWindows]
-  else  // Include all windows in a single alert
-    [multiburnExpression.defaultWindows];
-
-  // If we have an array with a single window in it, we want to add that
-  // label to the alert.
-  local windowLabel(windows) =
-    if std.length(windows) == 1 then
-      { window: windows[0] }
-    else
-      {};
-
   [{
     alert: nameSLOViolationAlert(service.type, sli.name, 'ApdexSLOViolation'),
     expr: multiburnExpression.multiburnRateApdexExpression(
@@ -179,10 +166,10 @@ local apdexAlertForSLI(service, sli) =
       metricSelectorHash={ type: service.type, component: sli.name },
       minimumOperationRateForMonitoring=minimumOperationRateForMonitoring,
       thresholdSLOValue=apdexScoreSLO,
-      windows=windows
+      windows=[windowDuration]
     ),
     'for': '2m',
-    labels: labelsForSLI(sli, 's2', aggregationSets.globalSLIs, 'apdex', 'slo_violation') + windowLabel(windows),
+    labels: labelsForSLI(sli, 's2', aggregationSets.globalSLIs, 'apdex', 'slo_violation') { window: windowDuration },
     annotations: commonAnnotations(service.type, sli, aggregationSets.globalSLIs, 'apdex') {
       title: 'The %(sliName)s SLI of the %(serviceType)s service (`{{ $labels.stage }}` stage) has an apdex violating SLO' % formatConfig,
       description: |||
@@ -193,7 +180,7 @@ local apdexAlertForSLI(service, sli) =
       grafana_dashboard_id: dashboardForService(service),
       grafana_panel_id: stableIds.hashStableId('sli-%(sliName)s-apdex' % formatConfig),
     },
-  } for windows in globalWindows]
+  } for windowDuration in service.alertWindows]
   +
   (
     if service.nodeLevelMonitoring then
@@ -219,7 +206,7 @@ local apdexAlertForSLI(service, sli) =
             Currently the apdex value for {{ $labels.fqdn }} is {{ $value | humanizePercentage }}.
           ||| % formatConfig,
         },
-      } for windowDuration in ['1h', '6h']]
+      } for windowDuration in service.alertWindows]
     else
       []
   )

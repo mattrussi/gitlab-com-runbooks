@@ -42,6 +42,7 @@ groups:
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "no"
+      window: 1h
     expr: |
       (
         (
@@ -53,7 +54,51 @@ groups:
           gitlab_component_apdex:ratio_5m{component="imagescaler",monitor="global",type="web"}
           < (1 - 14.4 * 0.002000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="imagescaler",monitor="global",type="web"}) >= 1
+      )
+  - alert: WebServiceImagescalerApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The imagescaler SLI of the web service (`{{ $labels.stage }}` stage)
+        has an apdex violating SLO
+      description: |
+        The imagescaler rescales images before sending them to clients. This allows faster transmission of images and faster rendering of web pages.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: web-main/web-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2653912995"
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job="gitlab-workhorse-web", type="web", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          )
+        )
+      runbook: docs/web/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: users
+      pager: pagerduty
+      product_stage: manage
+      product_stage_group: workspace
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_apdex:ratio_6h{component="imagescaler",monitor="global",type="web"}
           < (1 - 6 * 0.002000)
@@ -363,6 +408,7 @@ groups:
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "yes"
+      window: 1h
     expr: |
       (
         (
@@ -374,7 +420,51 @@ groups:
           gitlab_component_apdex:ratio_5m{component="puma",monitor="global",type="web"}
           < (1 - 14.4 * 0.002000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="puma",monitor="global",type="web"}) >= 1
+      )
+  - alert: WebServicePumaApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The puma SLI of the web service (`{{ $labels.stage }}` stage) has an
+        apdex violating SLO
+      description: |
+        Aggregation of most web requests that pass through the puma to the GitLab rails monolith. Healthchecks are excluded.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: web-main/web-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "561966508"
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="web"}[5m])
+          )
+        )
+      runbook: docs/web/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_apdex:ratio_6h{component="puma",monitor="global",type="web"}
           < (1 - 6 * 0.002000)
@@ -684,6 +774,7 @@ groups:
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "yes"
+      window: 1h
     expr: |
       (
         (
@@ -695,7 +786,51 @@ groups:
           gitlab_component_apdex:ratio_5m{component="workhorse",monitor="global",type="web"}
           < (1 - 14.4 * 0.002000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="workhorse",monitor="global",type="web"}) >= 1
+      )
+  - alert: WebServiceWorkhorseApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The workhorse SLI of the web service (`{{ $labels.stage }}` stage) has
+        an apdex violating SLO
+      description: |
+        Aggregation of most web requests that pass through workhorse, monitored via the HTTP interface. Excludes health, readiness and liveness requests. Some known slow requests, such as HTTP uploads, are excluded from the apdex score.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: web-main/web-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2586818196"
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job="gitlab-workhorse-web",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",stage="{{ $labels.stage }}"}[5m])
+          )
+        )
+      runbook: docs/web/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_apdex:ratio_6h{component="workhorse",monitor="global",type="web"}
           < (1 - 6 * 0.002000)

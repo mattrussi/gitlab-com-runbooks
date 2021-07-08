@@ -42,7 +42,6 @@ metricsCatalog.serviceDefinition({
     kubernetes: true,
     vms: false,
   },
-  alertWindows: ['1h', '6h'],
   // Use recordingRuleMetrics to specify a set of metrics with known high
   // cardinality. The metrics catalog will generate recording rules with
   // the appropriate aggregations based on this set.

@@ -42,6 +42,7 @@ groups:
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "no"
+      window: 1h
     expr: |
       (
         (
@@ -53,7 +54,51 @@ groups:
           gitlab_component_apdex:ratio_5m{component="cnyHttpServices",monitor="global",type="frontend"}
           < (1 - 14.4 * 0.001000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="cnyHttpServices",monitor="global",type="frontend"}) >= 1
+      )
+  - alert: FrontendServiceCnyHttpServicesApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The cnyHttpServices SLI of the frontend service (`{{ $labels.stage }}`
+        stage) has an apdex violating SLO
+      description: |2
+
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: frontend-main/frontend-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/frontend-main/frontend-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2527431809"
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name=~"canary_.*", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          )
+        )
+      runbook: docs/frontend/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_apdex:ratio_6h{component="cnyHttpServices",monitor="global",type="frontend"}
           < (1 - 6 * 0.001000)
@@ -238,6 +283,7 @@ groups:
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "no"
+      window: 1h
     expr: |
       (
         (
@@ -249,7 +295,51 @@ groups:
           gitlab_component_apdex:ratio_5m{component="mainHttpServices",monitor="global",type="frontend"}
           < (1 - 14.4 * 0.001000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="mainHttpServices",monitor="global",type="frontend"}) >= 1
+      )
+  - alert: FrontendServiceMainHttpServicesApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The mainHttpServices SLI of the frontend service (`{{ $labels.stage }}`
+        stage) has an apdex violating SLO
+      description: |2
+
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: frontend-main/frontend-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/frontend-main/frontend-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3744296237"
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name!~"canary_.*", backend_name!="api_rate_limit", backend_name!="websockets", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          )
+        )
+      runbook: docs/frontend/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_apdex:ratio_6h{component="mainHttpServices",monitor="global",type="frontend"}
           < (1 - 6 * 0.001000)
@@ -434,6 +524,7 @@ groups:
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "no"
+      window: 1h
     expr: |
       (
         (
@@ -445,7 +536,51 @@ groups:
           gitlab_component_apdex:ratio_5m{component="sshServices",monitor="global",type="frontend"}
           < (1 - 14.4 * 0.001000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="sshServices",monitor="global",type="frontend"}) >= 1
+      )
+  - alert: FrontendServiceSshServicesApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The sshServices SLI of the frontend service (`{{ $labels.stage }}` stage)
+        has an apdex violating SLO
+      description: |2
+
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: frontend-main/frontend-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/frontend-main/frontend-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2331021071"
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(haproxy_ssh_request_duration_seconds_bucket{type="frontend", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          )
+        )
+      runbook: docs/frontend/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_apdex:ratio_6h{component="sshServices",monitor="global",type="frontend"}
           < (1 - 6 * 0.001000)

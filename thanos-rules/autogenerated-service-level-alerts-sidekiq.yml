@@ -1463,6 +1463,7 @@ groups:
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "yes"
+      window: 1h
     expr: |
       (
         (
@@ -1474,7 +1475,53 @@ groups:
           gitlab_component_apdex:ratio_5m{component="shard_quarantine",monitor="global",type="sidekiq"}
           < (1 - 14.4 * 0.005000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_quarantine",monitor="global",type="sidekiq"}) >= 1
+      )
+  - alert: SidekiqServiceShardQuarantineApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The shard_quarantine SLI of the sidekiq service (`{{ $labels.stage }}`
+        stage) has an apdex violating SLO
+      description: |
+        Aggregation of all jobs for the quarantine Sidekiq shard.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "838516108"
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="quarantine",stage="{{ $labels.stage }}",urgency="high"}
+            or
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="quarantine",stage="{{ $labels.stage }}",urgency="high"}
+          )
+        )
+      runbook: docs/sidekiq/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_apdex:ratio_6h{component="shard_quarantine",monitor="global",type="sidekiq"}
           < (1 - 6 * 0.005000)

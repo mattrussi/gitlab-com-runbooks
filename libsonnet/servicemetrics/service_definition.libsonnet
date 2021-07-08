@@ -1,3 +1,4 @@
+local multiburnExpression = import 'mwmbr/expression.libsonnet';
 local serviceLevelIndicatorDefinition = import 'service_level_indicator_definition.libsonnet';
 
 // For now we assume that services are provisioned on vms and not kubernetes
@@ -9,6 +10,7 @@ local serviceDefaults = {
   nodeLevelMonitoring: false,  // By default we do not use node-level monitoring
   kubeResources: {},
   regional: false,  // By default we don't support regional monitoring for services
+  alertWindows: multiburnExpression.defaultWindows,
 };
 
 // Convience method, will wrap a raw definition in a serviceLevelIndicatorDefinition if needed
