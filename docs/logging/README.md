@@ -136,7 +136,7 @@ There are many entries missing from this list:
 | puma.stderr                   | /var/log/gitlab/puma/puma_stderr.log             | line regex       | pubsub-puma-inf         |
 | puma.stdout                   | /var/log/gitlab/puma/puma_stdout.log             | line regex       | pubsub-puma-inf         |
 | unstructured.production       | gitlab-rails/production.log                      | lines            | pubsub-unstructured-inf |
-| sidekiq                       | /var/log/gitlab/sidekiq-cluster/current          | JSON             | pubsub-sidekiq-inf      |
+| sidekiq                       | n/a                                              | JSON             | pubsub-sidekiq-inf      |
 | haproxy                       | /var/log/haproxy.log                             | syslog           | pubsub-haproxy-inf      |
 | nginx.access                  | /var/log/gitlab/nginx/gitlab\_access.log         | nginx            | pubsub-nginx-inf        |
 | registry                      | n/a                                              | mix (lines/json) | pubsub-gke-inf          |
