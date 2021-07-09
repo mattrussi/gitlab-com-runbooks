@@ -12,6 +12,8 @@ groups:
         or
         min without(slo) (avg_over_time(slo_observation_status{type="git", monitor="global"}[5m])) * 5
         or
+        min without(slo) (avg_over_time(slo_observation_status{type="nginx", monitor="global"}[5m])) * 5
+        or
         min without(slo) (avg_over_time(slo_observation_status{type="registry", monitor="global"}[5m])) * 1
         or
         min without(slo) (avg_over_time(slo_observation_status{type="web", monitor="global"}[5m])) * 5
@@ -22,6 +24,8 @@ groups:
         group without(slo) (avg_over_time(slo_observation_status{type="api", monitor="global"}[5m])) * 5
         or
         group without(slo) (avg_over_time(slo_observation_status{type="git", monitor="global"}[5m])) * 5
+        or
+        group without(slo) (avg_over_time(slo_observation_status{type="nginx", monitor="global"}[5m])) * 5
         or
         group without(slo) (avg_over_time(slo_observation_status{type="registry", monitor="global"}[5m])) * 1
         or

@@ -752,6 +752,69 @@ services:
       grafana_folder:
       primary_grafana_dashboard:
 
+- name: nginx
+  friendly_name: NGINX
+  tier: sv
+  teams:
+    - distribution
+  infra_owner: sre_coreinfra
+  label: Service:NGINX
+  business:
+    requirement: |
+      Proxies requests to help protect puma against specific network attacks.
+    customers:
+      - GitLab.com customers
+    business_value: "Puma thread abuse protection"
+    SLA:
+      overall_sla_weighting: 5 # If this exists, this service will be included in the overall SLA, using this value as a weighted average
+      availability:
+      response_time:
+  technical:
+    project:
+      - https://gitlab.com/gitlab-org/omnibus-gitlab
+      - https://gitlab.com/gitlab-org/charts/gitlab/
+    slx:
+    documents:
+      design:
+      architecture:
+      readiness_review:
+      service:
+      security:
+    dependencies:
+    configurations:
+      - location: /etc/nginx/
+        name: NGINX Ingress
+      - location: /var/opt/gitlab/nginx/conf
+        name: Omnibus installed NGINX
+    scalability:
+      bound: cpu
+      scalable: horizontal
+    security:
+      security_reviewed:
+      data_classification:
+      security_incidents:
+    logging:
+      - name: Kubernetes
+        permalink: https://log.gprd.gitlab.net/goto/88eab835042a07b213b8c7f24213d5bf
+      - name: Error Logs
+        permalink: https://cloudlogging.app.goo.gl/neeqq5jQEKWsxZRx8
+  infrastructure:
+    provider: gcp
+    architecture:
+    provisioning:
+    accesses:
+      - account_name:
+        access_type:
+        reviewed:
+  operations:
+    maintenance:
+    runbooks:
+    playbooks:
+    error_budget:
+  observability:
+    monitors:
+      primary_grafana_dashboard:
+
 - name: search
   tier: inf
   friendly_name: Global Search

@@ -138,7 +138,7 @@ There are many entries missing from this list:
 | unstructured.production       | gitlab-rails/production.log                      | lines            | pubsub-unstructured-inf |
 | sidekiq                       | n/a                                              | JSON             | pubsub-sidekiq-inf      |
 | haproxy                       | /var/log/haproxy.log                             | syslog           | pubsub-haproxy-inf      |
-| nginx.access                  | /var/log/gitlab/nginx/gitlab\_access.log         | nginx            | pubsub-nginx-inf        |
+| nginx.error                   | n/a                                              | unstructured     | StackDriver             |
 | registry                      | n/a                                              | mix (lines/json) | pubsub-gke-inf          |
 | system.auth                   | /var/log/auth.log                                | syslog           | pubsub-system-inf       |
 | system.syslog                 | /var/log/syslog                                  | syslog           | pubsub-system-inf       |
@@ -386,7 +386,7 @@ Deployment: https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfile
 
 ### Historical notes
 
-haproxy logs and nginx logs are not sent to ElasticStack because it was overwhelming our cluster. Currently, these logs are only available through BigQuery.
+haproxy logs and nginx logs are not sent to ElasticStack because it was overwhelming our cluster. Currently, only HAProxy logs are only available through BigQuery.  NGINX logs via STDERR on Kubernetes can be found in StackDriver.  NGINX Access logs are completely ignored.
 
 Design document for migration to ES7: https://about.gitlab.com/handbook/engineering/infrastructure/design/logging-upgrade/
 
