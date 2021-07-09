@@ -872,6 +872,14 @@ groups:
     expr: '1'
   - record: gitlab_component_service:mapping
     labels:
+      component: nginx_ingress
+      regional_aggregation: 'yes'
+      service_aggregation: 'yes'
+      tier: sv
+      type: nginx
+    expr: '1'
+  - record: gitlab_component_service:mapping
+    labels:
       component: loadbalancer
       regional_aggregation: 'no'
       service_aggregation: 'yes'
