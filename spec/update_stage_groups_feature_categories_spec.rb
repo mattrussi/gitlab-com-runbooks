@@ -13,6 +13,7 @@ describe UpdateStageGroupsFeatureCategories do
       stages:
         manage:
           pm: Jeremy Watson
+          section: modelops
           groups:
             access:
               name: Access
@@ -38,6 +39,7 @@ describe UpdateStageGroupsFeatureCategories do
 
         plan:
           pm: Jeremy Watson
+          section: dev
           groups:
             project_management:
               name: Project Management
@@ -67,6 +69,7 @@ describe UpdateStageGroupsFeatureCategories do
           access: {
             name: 'Access',
             stage: 'manage',
+            section: 'modelops',
             feature_categories: [
               'authentication_and_authorization',
               'subgroups',
@@ -76,6 +79,7 @@ describe UpdateStageGroupsFeatureCategories do
           'ml-ai': {
             name: 'Machine Learning',
             stage: 'manage',
+            section: 'modelops',
             feature_categories: [
               'mlops',
               'insider_threat',
@@ -84,6 +88,7 @@ describe UpdateStageGroupsFeatureCategories do
           compliance: {
             name: 'Compliance',
             stage: 'manage',
+            section: 'modelops',
             feature_categories: [
               'audit_events',
               'audit_reports',
@@ -93,6 +98,7 @@ describe UpdateStageGroupsFeatureCategories do
           project_management: {
             name: 'Project Management',
             stage: 'plan',
+            section: 'dev',
             feature_categories: [
               'issue_tracking',
               'boards',
@@ -104,6 +110,7 @@ describe UpdateStageGroupsFeatureCategories do
           product_planning: {
             name: 'Product Planning',
             stage: 'plan',
+            section: 'dev',
             feature_categories: [
               'epics',
               'roadmaps',
@@ -145,6 +152,7 @@ describe UpdateStageGroupsFeatureCategories do
           access: {
             name: 'Access',
             stage: 'manage',
+            section: 'dev',
             feature_categories: [
               'authentication_and_authorization',
               'subgroups',
@@ -154,6 +162,7 @@ describe UpdateStageGroupsFeatureCategories do
           compliance: {
             name: 'Compliance',
             stage: 'manage',
+            section: 'dev',
             feature_categories: [
               'audit_events',
               'audit_reports',
@@ -179,6 +188,7 @@ describe UpdateStageGroupsFeatureCategories do
       <<~YAML
         stages:
           growth:
+            section: growth
             groups:
               activation:
                 name: Activation
@@ -206,6 +216,7 @@ describe UpdateStageGroupsFeatureCategories do
         activation: {
           name: 'Activation',
           stage: 'growth',
+          section: 'growth',
           feature_categories: [
             'experimentation',
             'onboarding',
@@ -214,6 +225,7 @@ describe UpdateStageGroupsFeatureCategories do
         conversion: {
           name: 'Conversion',
           stage: 'growth',
+          section: 'growth',
           feature_categories: [
 
           ],
@@ -221,6 +233,7 @@ describe UpdateStageGroupsFeatureCategories do
         expansion: {
           name: 'Expansion',
           stage: 'growth',
+          section: 'growth',
           feature_categories: [
             'expansion',
           ],

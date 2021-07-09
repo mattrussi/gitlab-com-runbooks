@@ -51,6 +51,7 @@ class UpdateStageGroupsFeatureCategories
         resulting_group_info[group_key] = {
           name: group_info['name'],
           stage: stage,
+          section: stage_info['section'],
           feature_categories: categories
         }
       end
