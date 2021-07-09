@@ -1,5 +1,11 @@
 inherit_from: .rubocop_todo.yml
 
+# We can remove this section once this MR is merged and the new version
+# is released:
+# https://gitlab.com/gitlab-org/gitlab-styles/-/merge_requests/86
+require:
+  - gitlab/styles/rubocop
+
 inherit_gem:
   gitlab-styles:
   - rubocop-bundler.yml
