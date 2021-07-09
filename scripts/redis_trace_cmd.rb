@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'time'
 
 raise 'no input file provided' if ARGV.empty?

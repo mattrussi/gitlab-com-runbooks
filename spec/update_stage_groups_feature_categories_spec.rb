@@ -2,9 +2,11 @@
 
 require 'spec_helper'
 
-require_relative '../scripts/update_stage_groups_feature_categories.rb'
+require_relative '../scripts/update_stage_groups_feature_categories'
 
 describe UpdateStageGroupsFeatureCategories do
+  subject { described_class.new(stage_url, mapping_path, logger) }
+
   let(:tmp_dir) { Dir.mktmpdir }
   let(:stage_url) { 'http://example.local/stages.yml' }
   let(:mapping_path) { "#{tmp_dir}/stage-group-mapping.jsonnet" }
@@ -115,8 +117,6 @@ describe UpdateStageGroupsFeatureCategories do
   end
 
   let(:logger) { Logger.new(StringIO.new) }
-
-  subject { described_class.new(stage_url, mapping_path, logger) }
 
   before do
     stub_request(:get, "http://example.local/stages.yml").to_return(body: stages_yml)
@@ -229,7 +229,7 @@ describe UpdateStageGroupsFeatureCategories do
       JSONNET
     end
 
-    it "Only writes the feature category to the first group and logs warnigns for the others" do
+    it "only writes the feature category to the first group and logs warnigns for the others" do
       expect(logger).to receive(:warn).with(/experimentation was already in activation not adding to conversion/)
       expect(logger).to receive(:warn).with(/experimentation was already in activation not adding to expansion/)
 

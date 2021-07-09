@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-require_relative '../scripts/storage_project_selector.rb'
+require_relative '../scripts/storage_project_selector'
 
 unless defined? Project
   # Define a dummy Project class
@@ -12,6 +12,7 @@ end
 
 describe ::Storage::ProjectSelector do
   subject { described_class.new(options) }
+
   let(:test_node_01) { 'nfs-file03' }
   let(:test_node_02) { 'nfs-file04' }
   let(:gitaly_address_fqdn_01) { 'test.01' }
@@ -22,18 +23,21 @@ describe ::Storage::ProjectSelector do
     { test_node_01 => { 'gitaly_address' => gitaly_address_01 },
       test_node_02 => { 'gitaly_address' => gitaly_address_02 } }
   end
+
   let(:shard_entry_01) do
     entry = {}
     entry['repository_storage'] = test_node_01
     entry['gitaly_address'] = gitaly_address_01
     entry
   end
+
   let(:shard_entry_02) do
     entry = {}
     entry['repository_storage'] = test_node_02
     entry['gitaly_address'] = gitaly_address_02
     entry
   end
+
   let(:test_time) { DateTime.now.iso8601(::Storage::Helpers::ISO8601_FRACTIONAL_SECONDS_LENGTH) }
   let(:test_output) do
     test_output = {}
@@ -41,6 +45,7 @@ describe ::Storage::ProjectSelector do
     test_output['timestamp'] = test_time
     test_output
   end
+
   let(:test_node_configuration_json) { JSON.pretty_generate(test_output) }
   let(:test_private_token) { 'test_token' }
   let(:test_project_id) { 1 }
@@ -58,7 +63,7 @@ describe ::Storage::ProjectSelector do
 
   describe '#print_configured_gitaly_shards' do
     it 'prints a list of the configured storage shard nodes' do
-      expect { subject.print_configured_gitaly_shards }.to output(test_node_configuration_json + "\n").to_stdout
+      expect { subject.print_configured_gitaly_shards }.to output("#{test_node_configuration_json}\n").to_stdout
     end
   end
 
@@ -70,7 +75,8 @@ describe ::Storage::ProjectSelector do
 end
 
 describe ::Storage::ProjectSelectorScript do
-  subject { Object.new.extend(::Storage::ProjectSelectorScript) }
+  subject { Object.new.extend(described_class) }
+
   let(:test_node_01) { 'nfs-file03' }
   let(:test_node_02) { 'nfs-file04' }
   let(:gitaly_address_01) { 'test://test.01' }
@@ -79,6 +85,7 @@ describe ::Storage::ProjectSelectorScript do
     { test_node_01 => { 'gitaly_address' => gitaly_address_01 },
       test_node_02 => { 'gitaly_address' => gitaly_address_02 } }
   end
+
   let(:args) { { source_shard: test_node_01, destination_shard: test_node_02 } }
   let(:defaults) { ::Storage::ProjectSelectorScript::Config::DEFAULTS.dup.merge(args) }
   let(:options) { defaults }
@@ -92,6 +99,7 @@ describe ::Storage::ProjectSelectorScript do
     test_output['timestamp'] = test_time
     test_output
   end
+
   let(:test_projects_json) { JSON.pretty_generate(test_output) }
 
   before do
@@ -107,7 +115,7 @@ describe ::Storage::ProjectSelectorScript do
       expect(subject).to receive(:parse).and_return(options)
       expect(::Storage::ProjectSelector).to receive(:new).and_return(project_selector)
       expect(project_selector).to receive(:get_projects).and_return(test_projects)
-      expect { subject.main }.to output(test_projects_json + "\n").to_stdout
+      expect { subject.main }.to output("#{test_projects_json}\n").to_stdout
     end
   end
 end

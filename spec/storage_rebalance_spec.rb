@@ -2,10 +2,11 @@
 
 require 'spec_helper'
 
-require_relative '../scripts/storage_rebalance.rb'
+require_relative '../scripts/storage_rebalance'
 
 describe ::Storage::Rebalancer do
   subject { described_class.new(options) }
+
   let(:test_node_01) { 'nfs-file03' }
   let(:test_node_02) { 'nfs-file04' }
   let(:test_private_token) { 'test_token' }
@@ -16,6 +17,7 @@ describe ::Storage::Rebalancer do
     { source_shard: test_node_01, destination_shard: test_node_02,
       dry_run: dry_run }
   end
+
   let(:defaults) { ::Storage::RebalanceScript::Config::DEFAULTS.dup.merge(args) }
   let(:options) { defaults }
   let(:projects) { [{ id: test_project_id }] }
@@ -33,6 +35,7 @@ describe ::Storage::Rebalancer do
       { test_node_01 => { 'gitaly_address' => gitaly_address_01 },
         test_node_02 => { 'gitaly_address' => gitaly_address_02 } }
     end
+
     let(:test_project_name) { 'test_project_name' }
     let(:test_project_path_with_namespace) { 'test/test_project_name' }
     let(:test_project_disk_path) { 'test/project_disk_path' }
@@ -41,6 +44,7 @@ describe ::Storage::Rebalancer do
       allow(repository).to receive(:expire_exists_cache)
       repository
     end
+
     let(:test_project) do
       {
         id: test_project_id,
@@ -54,6 +58,7 @@ describe ::Storage::Rebalancer do
         destination_repository_storage: test_node_02
       }
     end
+
     let(:test_project_json) { test_project.to_json }
     let(:test_projects) { { projects: [test_project] } }
     let(:test_projects_json) { test_projects.to_json }
@@ -61,11 +66,13 @@ describe ::Storage::Rebalancer do
       { id: test_project_id, name: test_project_name, path_with_namespace: test_project_path_with_namespace,
         disk_path: test_project_disk_path, repository_storage: test_node_01 }
     end
+
     let(:test_project_put_response) { { 'id': test_project_id }.transform_keys(&:to_s) }
     let(:test_updated_full_project) do
       { id: test_project_id, name: test_project_name, path_with_namespace: test_project_path_with_namespace,
         disk_path: test_project_disk_path, repository_storage: test_node_02 }
     end
+
     let(:test_moves) { [{ 'project': { 'id': test_project_id }, 'state': 'finished' }] }
     let(:test_move) { { 'project': { 'id': test_project_id }, 'state': 'started' } }
     let(:test_migration_logger) { double('FileLogger') }
@@ -80,6 +87,7 @@ describe ::Storage::Rebalancer do
         date: test_time
       }
     end
+
     let(:test_migration_failure_id) { 1234567890 }
     let(:test_migration_failures) do
       [
@@ -93,11 +101,13 @@ describe ::Storage::Rebalancer do
         }
       ]
     end
+
     let(:test_hostname) { options[:console_nodes][:production] }
     let(:test_command) do
       "sudo gitlab-rails runner /var/opt/gitlab/scripts/storage_project_selector.rb " \
         "#{test_node_01} #{test_node_02} --limit=1 --skip=#{test_migration_failure_id}"
     end
+
     let(:options) do
       defaults.merge(
         source_shard: test_node_01,
@@ -322,7 +332,8 @@ end
 # describe ::Storage::Rebalancer
 
 describe ::Storage::RebalanceScript do
-  subject { Object.new.extend(::Storage::RebalanceScript) }
+  subject { Object.new.extend(described_class) }
+
   let(:test_project_id) { 1 }
   let(:test_node_01) { 'nfs-file03' }
   let(:test_node_02) { 'nfs-file04' }
@@ -331,6 +342,7 @@ describe ::Storage::RebalanceScript do
     { source_shard: test_node_01, destination_shard: test_node_02,
       projects: projects, dry_run: dry_run }
   end
+
   let(:defaults) { ::Storage::RebalanceScript::Config::DEFAULTS.dup.merge(args) }
   let(:options) { defaults }
   let(:rebalancer) { double('::Storage::Rebalancer') }
@@ -390,6 +402,7 @@ end
 
 describe ::Storage::GitLabClient do
   subject { described_class.new(options) }
+
   let(:defaults) { ::Storage::RebalanceScript::Config::DEFAULTS.dup }
   let(:options) { defaults.merge({ gitlab_admin_api_token: test_token }) }
   let(:test_token) { 'test' }
@@ -403,6 +416,7 @@ describe ::Storage::GitLabClient do
     body['resource'] = 'value'
     body
   end
+
   let(:test_response_headers) { {} }
   let(:test_response_body_serialized_json) { test_response_body.to_json }
   let(:test_error) { nil }
@@ -413,6 +427,7 @@ describe ::Storage::GitLabClient do
     allow(response).to receive(:each_header)
     response
   end
+
   let(:test_response_code_not_found) { 404 }
   let(:test_not_found_message) { 'NotFound' }
   let(:test_http_not_found_error) { Net::HTTPClientException.new(test_not_found_message, test_response_not_found) }
@@ -429,6 +444,7 @@ describe ::Storage::GitLabClient do
     allow(net_http).to receive(:use_ssl=).with(true)
     net_http
   end
+
   let(:get_url) { 'https://test.com/api/resource.json' }
   let(:put_url) { 'https://test.com/api/resource.json' }
   let(:post_url) { 'https://test.com/api/resource.json' }

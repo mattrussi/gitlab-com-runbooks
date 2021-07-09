@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-require_relative '../scripts/update_stage_error_budget_dashboards.rb'
+require_relative '../scripts/update_stage_error_budget_dashboards'
 
 describe UpdateStageErrorBudgetDashboards do
   describe '.render_template' do
@@ -55,7 +55,7 @@ describe UpdateStageErrorBudgetDashboards do
       let(:should_remove_file) { "#{dashboard_dir}/should-remove_error_budget.dashboard.jsonnet" }
 
       let(:should_remove_file_2) { "#{dashboard_dir}/should-remove-2_error_budget.dashboard.jsonnet" }
-      let(:should_remove_content_2) { described_class.render_template('should-remove-2') + "\nThis template is customized" }
+      let(:should_remove_content_2) { "#{described_class.render_template('should-remove-2')}\nThis template is customized" }
 
       let(:manage_file) { "#{dashboard_dir}/manage_error_budget.dashboard.jsonnet" }
       let(:manage_template) { described_class.render_template('manage') }
@@ -78,16 +78,16 @@ describe UpdateStageErrorBudgetDashboards do
       it 'synchronizes groups into the dashboard dir' do
         operation.call
 
-        expect(File.exist?(should_remove_file)).to eql(false)
-        expect(File.exist?(should_remove_file_2)).to eql(false)
+        expect(File.exist?(should_remove_file)).to be(false)
+        expect(File.exist?(should_remove_file_2)).to be(false)
 
-        expect(File.exist?(plan_file)).to eql(true)
+        expect(File.exist?(plan_file)).to be(true)
         expect(File.read(plan_file)).to eql(plan_template)
 
-        expect(File.exist?(comply_file)).to eql(true)
+        expect(File.exist?(comply_file)).to be(true)
         expect(File.read(comply_file)).to eql(comply_template)
 
-        expect(File.exist?(manage_file)).to eql(true)
+        expect(File.exist?(manage_file)).to be(true)
         expect(File.read(manage_file)).to eql(manage_template)
       end
     end

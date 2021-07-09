@@ -24,7 +24,7 @@ require 'logger'
 require 'optparse'
 
 begin
-  require '/opt/gitlab/embedded/service/gitlab-rails/config/environment.rb'
+  require '/opt/gitlab/embedded/service/gitlab-rails/config/environment'
 rescue LoadError => e
   warn "WARNING: #{e.message}"
 end
@@ -53,9 +53,9 @@ module Storage
   # This module defines logging methods
   module Logging
     def initialize_log
-      STDOUT.sync = true
+      $stdout.sync = true
       timestamp_format = ::Storage::RevertScript::LOG_TIMESTAMP_FORMAT
-      log = Logger.new STDOUT
+      log = Logger.new $stdout
       log.level = Logger::INFO
       log.formatter = proc do |level, t, _name, msg|
         fields = { timestamp: t.strftime(timestamp_format), level: level, msg: msg }
@@ -196,6 +196,7 @@ module Storage
       project = Project.find_by(id: @options[:project_id])
       log.info "Project id: #{project.id}"
       log.info "Current repository storage: #{project.repository_storage}"
+
       if @options[:dry_run]
         log.info "[Dry-run] Would have set repository_storage field of project " \
           "id: #{project.id} to #{@options[:original_file_server]}"
@@ -226,6 +227,7 @@ module Storage
         reverter.list_nodes
         exit
       end
+
       reverter.revert
     rescue SystemExit
       exit 0

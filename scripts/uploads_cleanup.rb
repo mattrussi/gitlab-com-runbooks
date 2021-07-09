@@ -1,4 +1,5 @@
 #! /usr/bin/env ruby
+# frozen_string_literal: true
 
 # Execution example:
 #
@@ -42,7 +43,7 @@ module Uploads
       }.freeze
     end
 
-    LOG_TIMESTAMP_FORMAT = '%Y-%m-%d %H:%M:%S'.freeze
+    LOG_TIMESTAMP_FORMAT = '%Y-%m-%d %H:%M:%S'
   end
 end
 
@@ -51,9 +52,9 @@ module Uploads
   # This module defines logging methods
   module LoggingSupport
     def initialize_log
-      STDOUT.sync = true
+      $stdout.sync = true
       timestamp_format = ::Uploads::CleanupScript::LOG_TIMESTAMP_FORMAT
-      log = Logger.new STDOUT
+      log = Logger.new $stdout
       log.level = Logger::INFO
       log.formatter = proc do |level, t, _name, msg|
         fields = { timestamp: t.strftime(timestamp_format), level: level, msg: msg }
@@ -224,6 +225,7 @@ module Uploads
         log.info "Invoking command: #{remote_command}"
         invoke(remote_command)
       end
+
       nil
     end
   end
@@ -237,6 +239,7 @@ module Uploads
     include ::Uploads::SelectorMethods
     include ::Uploads::CommandSupport
     attr_reader :options
+
     def initialize(opts)
       @options = opts
       @hostname = opts[:hostname]

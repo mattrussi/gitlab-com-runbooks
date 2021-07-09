@@ -7,3 +7,13 @@ inherit_gem:
   - rubocop-metrics.yml
   - rubocop-naming.yml
   - rubocop-style.yml
+
+# This project doesn't use ActiveRecord, so these will all be false
+# positives.
+CodeReuse/ActiveRecord:
+  Enabled: false
+
+# We often have long strings in this project and breaking those across
+# multiple lines does not really improve readability.
+Layout/LineLength:
+  Enabled: false

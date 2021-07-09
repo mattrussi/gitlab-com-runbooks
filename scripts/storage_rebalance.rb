@@ -127,19 +127,20 @@ module Storage
     end
   end
 
-  class UserError < StandardError; end
-  class Timeout < StandardError; end
-  class NoCommits < StandardError; end
-  class MigrationTimeout < StandardError; end
+  UserError = Class.new(StandardError)
+  Timeout = Class.new(StandardError)
+  NoCommits = Class.new(StandardError)
+  MigrationTimeout = Class.new(StandardError)
   class ServiceFailure < StandardError
     attr_reader :repository_move
+
     def initialize(message, migration_state_info = nil)
       super(message)
       @repository_move = migration_state_info
     end
   end
-  class CommitsMismatch < StandardError; end
-  class ShardMismatch < StandardError; end
+  CommitsMismatch = Class.new(StandardError)
+  ShardMismatch = Class.new(StandardError)
 end
 
 # Re-open the Storage module to add the Logging module
@@ -163,8 +164,8 @@ module Storage
     end
 
     def initialize_log(formatter = formatter_procedure)
-      STDOUT.sync = true
-      log = Logger.new(STDOUT)
+      $stdout.sync = true
+      log = Logger.new($stdout)
       log.level = Logger::INFO
       log.formatter = formatter
       log
@@ -207,16 +208,19 @@ module Storage
         symbolize_keys_deep!(error_body)
         error_message = error_body.fetch(:message, nil)
       end
+
       error_message ||= error.message if error.respond_to?(:message)
       error_record = { project_id: project[:id], message: error_message }
       error_record[:disk_path] = project[:disk_path] if project.include?(:disk_path)
       log_migration_error(project, error_record) if options[:persist]
       migration_errors << error_record
+
       if options[:include_backtrace]
         error.backtrace.each { |t| log.error t }
       else
         log.error "Error: #{error}"
       end
+
       log.warn "Skipping migration"
     end
 
@@ -244,8 +248,8 @@ module Storage
       headers = get_request_headers(request)
       log.debug "[The following curl command is for external diagnostic purposes only:]"
       curl_command = "curl --verbose --silent --compressed ".dup
-      curl_command = curl_command.concat("--request #{request.method.to_s.upcase} ") if request.method != :get
-      curl_command = curl_command.concat("'#{request.uri}'")
+      curl_command.concat("--request #{request.method.to_s.upcase} ") if request.method != :get
+      curl_command.concat("'#{request.uri}'")
       header_arguments = headers.collect do |field, values|
         if PRIVATE_TOKEN_HEADER_PATTERN.match?(field)
           "--header \"#{field}: ${#{env_variable_name}}\""
@@ -253,12 +257,14 @@ module Storage
           "--header \"#{field}: #{values.join(',')}\""
         end
       end
+
       unless header_arguments.empty?
-        curl_command = curl_command.concat(' ')
-        curl_command = curl_command.concat(header_arguments.join(' '))
+        curl_command.concat(' ')
+        curl_command.concat(header_arguments.join(' '))
       end
+
       body = request.body
-      curl_command = curl_command.concat(" --data '#{to_unescaped_json(body)}'") unless body.nil? || body.empty?
+      curl_command.concat(" --data '#{to_unescaped_json(body)}'") unless body.nil? || body.empty?
       log.debug curl_command
     end
 
@@ -333,7 +339,7 @@ module Storage
     end
 
     def symbolize_keys_deep!(memo)
-      memo.keys.each do |key|
+      memo.each_key do |key|
         symbolized_key = key.respond_to?(:to_sym) ? key.to_sym : key
         memo[symbolized_key] = memo.delete(key) # Preserve order even when key == symbolized_key
         symbolize_keys_deep!(memo[symbolized_key]) if memo[symbolized_key].is_a?(Hash)
@@ -354,7 +360,7 @@ module Storage
       $stdin.echo = true
       # $stdout.flush
       $stdout.ioflush
-      $stdout.write "\r" + (' ' * prompt.length) + "\n"
+      $stdout.write "\r#{(' ' * prompt.length)}\n"
       $stdout.flush
     end
 
@@ -371,6 +377,7 @@ module Storage
           on_failure.call
         end
       end
+
       gitlab_api_client.required_headers['Private-Token'] = token
     end
 
@@ -407,6 +414,7 @@ module Storage
       else
         columns = ::Storage::RebalanceScript::DISPLAY_WIDTH
       end
+
       columns
     end
 
@@ -434,12 +442,14 @@ module Storage
         iteration += 1
         bar_characters = progress_character * (iteration % columns)
         progress_log.info(format('%s%s', bar_characters, progress_character))
+
         if (iteration % columns).zero?
           bar_characters = ''
           $stdout.write("\n")
         elsif log.level == Logger::DEBUG
           $stdout.write("\n")
         end
+
         $stdout.flush
       end
     ensure
@@ -686,10 +696,11 @@ module Storage
       opt.options[:source_shard] = args.shift
       opt.options[:destination_shard] = args.shift
       # TODO: Handle with a helper method
-      unless STDIN.tty? || STDIN.closed?
+      unless $stdin.tty? || $stdin.closed?
         projects = CSV.new(file_path).to_a
         projects.each { |project| opt.options[:projects].push(Project.new(*project)) }
       end
+
       opt.options
     rescue OptionParser::InvalidArgument, OptionParser::InvalidOption,
            OptionParser::MissingArgument, OptionParser::NeedlessArgument => e
@@ -712,6 +723,7 @@ module Storage
     include ::Storage::Logging
     attr_reader :options
     attr_accessor :required_headers
+
     def initialize(options)
       @options = options
       log.level = @options[:log_level]
@@ -725,6 +737,7 @@ module Storage
     def post(url, opts = {})
       opts.update(headers: { 'Content-Type': 'application/json' }) if opts.fetch(
         :body, nil).respond_to?(:[]) && !opts.fetch(:headers, {}).include?('Content-Type')
+
       request(Net::HTTP::Post, url, opts)
     end
 
@@ -856,6 +869,7 @@ module Storage
     include ::Storage::Logging
     include ::Storage::Helpers
     attr_reader :options, :gitlab_api_client, :migration_errors
+
     def initialize(options)
       @options = options
       @gitlab_api_client = Storage::GitLabClient.new(@options)
@@ -1002,6 +1016,7 @@ module Storage
               raise ServiceFailure.new(
                 'Noticed service failure during repository replication', repository_move)
             end
+
             repository_move_state == success_state
           end
         end
@@ -1020,6 +1035,7 @@ module Storage
     def summarize(total)
       log_separator
       log.info "Done"
+
       if total.positive?
         if options[:dry_run]
           log.info "[Dry-run] Would have processed #{to_filesize(total)} of data"
@@ -1027,10 +1043,12 @@ module Storage
           log.info "Processed #{to_filesize(total)} of data"
         end
       end
+
       return if options[:dry_run]
 
       destination = options[:destination_shard].nil? ? 'different shards' : options[:destination_shard]
       log.info "Finished migrating projects from #{options[:source_shard]} to #{destination}"
+
       if migration_errors.empty?
         log.info "No errors encountered during migration"
       else
@@ -1049,6 +1067,7 @@ module Storage
     # rubocop: disable Metrics/AbcSize
     def schedule_repository_replication(project)
       verify_source(project)
+
       if repository_replication_already_in_progress?(project)
         log.warn "Repository replication for project id #{project[:id]} already in progress; skipping"
         return
@@ -1062,6 +1081,7 @@ module Storage
       log.info "  Project path: #{project[:path_with_namespace]}"
       log.info "  Current shard name: #{project[:repository_storage]}"
       log.info "  Disk path: #{project[:disk_path]}" if project.include?(:disk_path)
+
       if project.include?(:statistics)
         log.info "  Repository size: #{to_filesize(project[:statistics][:repository_size])}"
       elsif project.include?(:size)
@@ -1196,10 +1216,12 @@ module Storage
       paginate_projects(projects) do |project|
         repository_size_bytes = get_repository_size(project)
         move_project(project)
+
         if migration_errors.length >= options[:max_failures]
           log.error "Failed too many times"
           break
         end
+
         moved_projects_count += 1
         total_bytes_moved += repository_size_bytes
         break if limit.positive? && moved_projects_count >= limit

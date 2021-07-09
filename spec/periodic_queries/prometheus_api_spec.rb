@@ -4,8 +4,9 @@ require_relative '../../lib/periodic_queries/prometheus_api'
 require_relative '../../lib/periodic_queries/query'
 
 describe PeriodicQueries::PrometheusApi do
-  let(:url) { "https://url-to-thanos.gitlab.internal" }
   subject(:api) { described_class.new(url) }
+
+  let(:url) { "https://url-to-thanos.gitlab.internal" }
 
   describe "#with_connection" do
     it 'starts and finishes a connection' do

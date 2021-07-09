@@ -2,10 +2,11 @@
 
 require 'spec_helper'
 
-require_relative '../scripts/registry_search.rb'
+require_relative '../scripts/registry_search'
 
 describe ::Registry::Storage do
   subject { described_class.new(options) }
+
   let(:args) { { operation: :delete } }
   let(:defaults) { ::Registry::Config::DEFAULTS.dup.merge(args) }
   let(:options) { defaults }
@@ -35,10 +36,10 @@ describe ::Registry::Storage do
       let(:options) { defaults.merge(dry_run: false) }
 
       it 'logs the operation and executes it' do
-        allow(subject).to receive(:filter_by_age).exactly(1).times.and_yield(gcs_file)
-        expect(subject).to receive(:options).exactly(2).times.and_return(options)
+        allow(subject).to receive(:filter_by_age).once.and_yield(gcs_file)
+        expect(subject).to receive(:options).twice.and_return(options)
         expect(subject.log).to receive(:info).with("Invoking delete on #{gcs_file.name}")
-        expect(gcs_file).to receive(options[:operation]).exactly(1).times
+        expect(gcs_file).to receive(options[:operation]).once
         expect(subject.safely_invoke_operation(gcs_file)).to be_nil
       end
     end
@@ -63,6 +64,7 @@ end
 
 describe ::Registry::SearchScript do
   subject { Object.new.extend(Registry::SearchScript) }
+
   let(:args) { { operation: :delete } }
   let(:defaults) { ::Registry::Config::DEFAULTS.dup.merge(args) }
   let(:options) { defaults }

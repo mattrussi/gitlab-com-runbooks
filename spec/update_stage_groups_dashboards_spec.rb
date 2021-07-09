@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-require_relative '../scripts/update_stage_groups_dashboards.rb'
+require_relative '../scripts/update_stage_groups_dashboards'
 
 describe UpdateStageGroupsDashboard do
   describe '.render_template' do
@@ -55,13 +55,13 @@ describe UpdateStageGroupsDashboard do
       let(:should_remove_file) { "#{dashboard_dir}/should-remove.dashboard.jsonnet" }
 
       let(:should_remove_file_2) { "#{dashboard_dir}/should-remove-2.dashboard.jsonnet" }
-      let(:should_remove_content_2) { described_class.render_template('should-remove-2') + "\nThis template is customized" }
+      let(:should_remove_content_2) { "#{described_class.render_template('should-remove-2')}\nThis template is customized" }
 
       let(:ml_ai_file) { "#{dashboard_dir}/ml-ai.dashboard.jsonnet" }
       let(:ml_ai_template) { described_class.render_template('ml-ai') }
 
       let(:compliance_file) { "#{dashboard_dir}/compliance.dashboard.jsonnet" }
-      let(:compliance_template) { described_class.render_template('ml-ai') + "\nThis template is customized" }
+      let(:compliance_template) { "#{described_class.render_template('ml-ai')}\nThis template is customized" }
 
       let(:access_file) { "#{dashboard_dir}/access.dashboard.jsonnet" }
       let(:access_template) { described_class.render_template('access') }
@@ -81,19 +81,19 @@ describe UpdateStageGroupsDashboard do
       it 'synchronizes groups into the dashboard dir' do
         operation.call
 
-        expect(File.exist?(should_remove_file)).to eql(false)
-        expect(File.exist?(should_remove_file_2)).to eql(false)
+        expect(File.exist?(should_remove_file)).to be(false)
+        expect(File.exist?(should_remove_file_2)).to be(false)
 
-        expect(File.exist?(ml_ai_file)).to eql(true)
+        expect(File.exist?(ml_ai_file)).to be(true)
         expect(File.read(ml_ai_file)).to eql(ml_ai_template)
 
-        expect(File.exist?(compliance_file)).to eql(true)
+        expect(File.exist?(compliance_file)).to be(true)
         expect(File.read(compliance_file)).to eql(compliance_template)
 
-        expect(File.exist?(access_file)).to eql(true)
+        expect(File.exist?(access_file)).to be(true)
         expect(File.read(access_file)).to eql(access_template)
 
-        expect(File.exist?(project_management_file)).to eql(true)
+        expect(File.exist?(project_management_file)).to be(true)
         expect(File.read(project_management_file)).to eql(project_management_template)
       end
     end

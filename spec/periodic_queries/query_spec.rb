@@ -3,8 +3,6 @@ require 'spec_helper'
 require_relative '../../lib/periodic_queries/query'
 
 describe PeriodicQueries::Query do
-  let(:name) { 'error_budget_availability' }
-
   subject(:query) do
     described_class.new(
       'error_budget_availability',
@@ -15,6 +13,8 @@ describe PeriodicQueries::Query do
       }
     )
   end
+
+  let(:name) { 'error_budget_availability' }
 
   describe '#params' do
     it 'excludes the type from the passed info' do

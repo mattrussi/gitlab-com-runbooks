@@ -43,8 +43,8 @@ module Registry
     LOG_TIMESTAMP_FORMAT = '%Y-%m-%d %H:%M:%S'
 
     def initialize_log
-      STDOUT.sync = true
-      log = Logger.new STDOUT
+      $stdout.sync = true
+      log = Logger.new $stdout
       log.level = Logger::INFO
       log.formatter = proc do |level, t, _name, msg|
         fields = { timestamp: t.strftime(LOG_TIMESTAMP_FORMAT), level: level, msg: msg }
@@ -209,6 +209,7 @@ module Registry
     include ::Registry::LoggingSupport
     include ::Registry::SelectorMethods
     attr_reader :options, :project, :client, :buckets_cache, :files_cache
+
     def initialize(opts)
       @options = opts
       @project = @options[:project]
