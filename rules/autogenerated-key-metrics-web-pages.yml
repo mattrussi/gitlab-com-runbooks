@@ -68,11 +68,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(gitlab_pages_http_request_duration_seconds_bucket{type="web-pages", le="1"}[1m])
+          rate(gitlab_pages_http_request_duration_seconds_bucket{le="1",type="web-pages"}[1m])
         )
         +
         sum by (environment,stage) (
-          rate(gitlab_pages_http_request_duration_seconds_bucket{type="web-pages", le="10"}[1m])
+          rate(gitlab_pages_http_request_duration_seconds_bucket{le="10",type="web-pages"}[1m])
         )
       )
       /
@@ -84,7 +84,7 @@ groups:
       type: web-pages
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_pages_http_request_duration_seconds_bucket{type="web-pages", le="+Inf"}[1m])
+        rate(gitlab_pages_http_request_duration_seconds_bucket{le="+Inf",type="web-pages"}[1m])
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -111,6 +111,33 @@ groups:
         0 * group by(environment,stage) (
           gitlab_component_ops:rate{component="server",tier="sv",type="web-pages"}
         )
+      )
+  - record: gitlab_component_apdex:success:rate
+    labels:
+      component: server_headers
+      tier: sv
+      type: web-pages
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_pages_http_time_to_write_header_seconds_bucket{le="0.5",type="web-pages"}[1m])
+      )
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: server_headers
+      tier: sv
+      type: web-pages
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_pages_http_time_to_write_header_seconds_bucket{le="+Inf",type="web-pages"}[1m])
+      )
+  - record: gitlab_component_ops:rate
+    labels:
+      component: server_headers
+      tier: sv
+      type: web-pages
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_pages_http_time_to_write_header_seconds_count{type="web-pages"}[1m])
       )
 - name: 'Component-Level SLIs: web-pages - 5m burn-rate'
   interval: 1m
@@ -179,11 +206,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(gitlab_pages_http_request_duration_seconds_bucket{type="web-pages", le="1"}[5m])
+          rate(gitlab_pages_http_request_duration_seconds_bucket{le="1",type="web-pages"}[5m])
         )
         +
         sum by (environment,stage) (
-          rate(gitlab_pages_http_request_duration_seconds_bucket{type="web-pages", le="10"}[5m])
+          rate(gitlab_pages_http_request_duration_seconds_bucket{le="10",type="web-pages"}[5m])
         )
       )
       /
@@ -195,7 +222,7 @@ groups:
       type: web-pages
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_pages_http_request_duration_seconds_bucket{type="web-pages", le="+Inf"}[5m])
+        rate(gitlab_pages_http_request_duration_seconds_bucket{le="+Inf",type="web-pages"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -222,6 +249,33 @@ groups:
         0 * group by(environment,stage) (
           gitlab_component_ops:rate_5m{component="server",tier="sv",type="web-pages"}
         )
+      )
+  - record: gitlab_component_apdex:success:rate_5m
+    labels:
+      component: server_headers
+      tier: sv
+      type: web-pages
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_pages_http_time_to_write_header_seconds_bucket{le="0.5",type="web-pages"}[5m])
+      )
+  - record: gitlab_component_apdex:weight:score_5m
+    labels:
+      component: server_headers
+      tier: sv
+      type: web-pages
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_pages_http_time_to_write_header_seconds_bucket{le="+Inf",type="web-pages"}[5m])
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: server_headers
+      tier: sv
+      type: web-pages
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_pages_http_time_to_write_header_seconds_count{type="web-pages"}[5m])
       )
 - name: 'Component-Level SLIs: web-pages - 30m burn-rate'
   interval: 2m
@@ -290,11 +344,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(gitlab_pages_http_request_duration_seconds_bucket{type="web-pages", le="1"}[30m])
+          rate(gitlab_pages_http_request_duration_seconds_bucket{le="1",type="web-pages"}[30m])
         )
         +
         sum by (environment,stage) (
-          rate(gitlab_pages_http_request_duration_seconds_bucket{type="web-pages", le="10"}[30m])
+          rate(gitlab_pages_http_request_duration_seconds_bucket{le="10",type="web-pages"}[30m])
         )
       )
       /
@@ -306,7 +360,7 @@ groups:
       type: web-pages
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_pages_http_request_duration_seconds_bucket{type="web-pages", le="+Inf"}[30m])
+        rate(gitlab_pages_http_request_duration_seconds_bucket{le="+Inf",type="web-pages"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -333,6 +387,33 @@ groups:
         0 * group by(environment,stage) (
           gitlab_component_ops:rate_30m{component="server",tier="sv",type="web-pages"}
         )
+      )
+  - record: gitlab_component_apdex:success:rate_30m
+    labels:
+      component: server_headers
+      tier: sv
+      type: web-pages
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_pages_http_time_to_write_header_seconds_bucket{le="0.5",type="web-pages"}[30m])
+      )
+  - record: gitlab_component_apdex:weight:score_30m
+    labels:
+      component: server_headers
+      tier: sv
+      type: web-pages
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_pages_http_time_to_write_header_seconds_bucket{le="+Inf",type="web-pages"}[30m])
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: server_headers
+      tier: sv
+      type: web-pages
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_pages_http_time_to_write_header_seconds_count{type="web-pages"}[30m])
       )
 - name: 'Component-Level SLIs: web-pages - 1h burn-rate'
   interval: 1m
@@ -401,11 +482,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(gitlab_pages_http_request_duration_seconds_bucket{type="web-pages", le="1"}[1h])
+          rate(gitlab_pages_http_request_duration_seconds_bucket{le="1",type="web-pages"}[1h])
         )
         +
         sum by (environment,stage) (
-          rate(gitlab_pages_http_request_duration_seconds_bucket{type="web-pages", le="10"}[1h])
+          rate(gitlab_pages_http_request_duration_seconds_bucket{le="10",type="web-pages"}[1h])
         )
       )
       /
@@ -417,7 +498,7 @@ groups:
       type: web-pages
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_pages_http_request_duration_seconds_bucket{type="web-pages", le="+Inf"}[1h])
+        rate(gitlab_pages_http_request_duration_seconds_bucket{le="+Inf",type="web-pages"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -444,6 +525,33 @@ groups:
         0 * group by(environment,stage) (
           gitlab_component_ops:rate_1h{component="server",tier="sv",type="web-pages"}
         )
+      )
+  - record: gitlab_component_apdex:success:rate_1h
+    labels:
+      component: server_headers
+      tier: sv
+      type: web-pages
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_pages_http_time_to_write_header_seconds_bucket{le="0.5",type="web-pages"}[1h])
+      )
+  - record: gitlab_component_apdex:weight:score_1h
+    labels:
+      component: server_headers
+      tier: sv
+      type: web-pages
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_pages_http_time_to_write_header_seconds_bucket{le="+Inf",type="web-pages"}[1h])
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: server_headers
+      tier: sv
+      type: web-pages
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_pages_http_time_to_write_header_seconds_count{type="web-pages"}[1h])
       )
 - name: 'Component-Level SLIs: web-pages - 6h burn-rate'
   interval: 2m
@@ -512,11 +620,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(gitlab_pages_http_request_duration_seconds_bucket{type="web-pages", le="1"}[6h])
+          rate(gitlab_pages_http_request_duration_seconds_bucket{le="1",type="web-pages"}[6h])
         )
         +
         sum by (environment,stage) (
-          rate(gitlab_pages_http_request_duration_seconds_bucket{type="web-pages", le="10"}[6h])
+          rate(gitlab_pages_http_request_duration_seconds_bucket{le="10",type="web-pages"}[6h])
         )
       )
       /
@@ -528,7 +636,7 @@ groups:
       type: web-pages
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_pages_http_request_duration_seconds_bucket{type="web-pages", le="+Inf"}[6h])
+        rate(gitlab_pages_http_request_duration_seconds_bucket{le="+Inf",type="web-pages"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -556,6 +664,33 @@ groups:
           gitlab_component_ops:rate_6h{component="server",tier="sv",type="web-pages"}
         )
       )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: server_headers
+      tier: sv
+      type: web-pages
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_pages_http_time_to_write_header_seconds_bucket{le="0.5",type="web-pages"}[6h])
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: server_headers
+      tier: sv
+      type: web-pages
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_pages_http_time_to_write_header_seconds_bucket{le="+Inf",type="web-pages"}[6h])
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: server_headers
+      tier: sv
+      type: web-pages
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_pages_http_time_to_write_header_seconds_count{type="web-pages"}[6h])
+      )
 - name: 'Component mapping: web-pages'
   interval: 1m
   rules:
@@ -578,6 +713,14 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: server
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: sv
+      type: web-pages
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: server_headers
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
