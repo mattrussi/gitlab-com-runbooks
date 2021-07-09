@@ -167,7 +167,7 @@ Examples of indexer jobs:
 - `ee/app/workers/elastic_namespace_indexer_worker.rb`
 - `ee/app/workers/elastic_index_bulk_cron_worker.rb`
 
-Logs available locally in `sidekiq.log` or in centralised logging
+Logs available in centralised logging, see [Logging](../logging/README.md)
 
 ### Elastic_indexer_worker.rb ###
 

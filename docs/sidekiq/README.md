@@ -19,10 +19,7 @@
 
 ## Troubleshooting Pointers
 
-* [../bastions/rm-bastion-access.md](../bastions/rm-bastion-access.md)
 * [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
-* [../git/deploy-gitlab-rb-change.md](../git/deploy-gitlab-rb-change.md)
-* [../gitaly/gitaly-token-rotation.md](../gitaly/gitaly-token-rotation.md)
 * [../gitaly/storage-rebalancing.md](../gitaly/storage-rebalancing.md)
 * [../kube/k8s-cluster-upgrade.md](../kube/k8s-cluster-upgrade.md)
 * [../kube/k8s-operations.md](../kube/k8s-operations.md)
@@ -53,7 +50,6 @@
 * [sidekiq_error_rate_high.md](sidekiq_error_rate_high.md)
 * [sidekiq_stats_no_longer_showing.md](sidekiq_stats_no_longer_showing.md)
 * [../uncategorized/debug-failed-chef-provisioning.md](../uncategorized/debug-failed-chef-provisioning.md)
-* [../uncategorized/load-balancing.md](../uncategorized/load-balancing.md)
 * [../uncategorized/manage-workers.md](../uncategorized/manage-workers.md)
 * [../uncategorized/ruby-profiling.md](../uncategorized/ruby-profiling.md)
 * [../uncategorized/tracing-app-db-queries.md](../uncategorized/tracing-app-db-queries.md)

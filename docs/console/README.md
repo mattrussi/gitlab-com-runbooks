@@ -20,6 +20,7 @@
 * [../bastions/gprd-bastions.md](../bastions/gprd-bastions.md)
 * [../bastions/gstg-bastions.md](../bastions/gstg-bastions.md)
 * [../bastions/pre-bastions.md](../bastions/pre-bastions.md)
+* [../bastions/rm-bastion-access.md](../bastions/rm-bastion-access.md)
 * [../bastions/testbed-bastion.md](../bastions/testbed-bastion.md)
 * [../ci-runners/ci-abuse-handling.md](../ci-runners/ci-abuse-handling.md)
 * [../ci-runners/ci_constantnumberoflongrunningrepeatedjobs.md](../ci-runners/ci_constantnumberoflongrunningrepeatedjobs.md)

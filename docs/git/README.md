@@ -73,7 +73,6 @@
 * [../uncategorized/dev-environment.md](../uncategorized/dev-environment.md)
 * [../uncategorized/geo-recover-repo-from-azure.md](../uncategorized/geo-recover-repo-from-azure.md)
 * [../uncategorized/granting-rails-or-db-access.md](../uncategorized/granting-rails-or-db-access.md)
-* [../uncategorized/load-balancing.md](../uncategorized/load-balancing.md)
 * [../uncategorized/missing_repos.md](../uncategorized/missing_repos.md)
 * [../uncategorized/namespace-restore.md](../uncategorized/namespace-restore.md)
 * [../uncategorized/ruby-profiling.md](../uncategorized/ruby-profiling.md)
