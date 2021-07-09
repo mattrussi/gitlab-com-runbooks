@@ -40,7 +40,7 @@ describe ::Storage::Rebalancer do
     let(:test_project_path_with_namespace) { 'test/test_project_name' }
     let(:test_project_disk_path) { 'test/project_disk_path' }
     let(:test_repository) do
-      repository = double('Repository')
+      repository = instance_double('Repository')
       allow(repository).to receive(:expire_exists_cache)
       repository
     end
@@ -75,7 +75,7 @@ describe ::Storage::Rebalancer do
 
     let(:test_moves) { [{ 'project': { 'id': test_project_id }, 'state': 'finished' }] }
     let(:test_move) { { 'project': { 'id': test_project_id }, 'state': 'started' } }
-    let(:test_migration_logger) { double('FileLogger') }
+    let(:test_migration_logger) { instance_double('FileLogger') }
     let(:test_time) { DateTime.now.iso8601(::Storage::Helpers::ISO8601_FRACTIONAL_SECONDS_LENGTH) }
     let(:test_artifact) do
       {
@@ -345,14 +345,14 @@ describe ::Storage::RebalanceScript do
 
   let(:defaults) { ::Storage::RebalanceScript::Config::DEFAULTS.dup.merge(args) }
   let(:options) { defaults }
-  let(:rebalancer) { double('::Storage::Rebalancer') }
+  let(:rebalancer) { instance_double('::Storage::Rebalancer') }
   let(:projects) { [{ id: test_project_id }] }
   let(:test_token) { 'test' }
   let(:no_token_message) { 'Cannot proceed without a GitLab admin API private token' }
 
   before do
-    allow(::Storage::Rebalancer).to receive(:new).and_return(rebalancer)
-    allow(rebalancer).to receive(:set_api_token_or_else)
+    allow(::Storage::Rebalancer).to receive(:new).and_return(subject)
+    allow(subject).to receive(:set_api_token_or_else)
     allow(subject).to receive(:parse).and_return(options)
     token_env_variable_name = options[:token_env_variable_name]
     allow(ENV).to receive(:[]).with(token_env_variable_name).and_return(test_token)
@@ -365,7 +365,7 @@ describe ::Storage::RebalanceScript do
       it 'aborts and whines about it' do
         expect(subject.log).to receive(:info).with('[Dry-run] This is only a dry-run -- write ' \
           'operations will be logged but not executed')
-        expect(rebalancer).to receive(:set_api_token_or_else).and_yield
+        expect(subject).to receive(:set_api_token_or_else).and_yield
         expect { subject.main }.to raise_error(SystemExit, no_token_message).and output(Regexp.new(no_token_message)).to_stderr
       end
       # it 'aborts and whines about it'
@@ -376,7 +376,7 @@ describe ::Storage::RebalanceScript do
       it 'logs the given operation' do
         expect(subject.log).to receive(:info).with('[Dry-run] This is only a dry-run -- write ' \
           'operations will be logged but not executed')
-        expect(rebalancer).to receive(:rebalance)
+        expect(subject).to receive(:rebalance)
         expect(subject.main).to be_nil
       end
       # it 'logs the given operation'
@@ -388,7 +388,7 @@ describe ::Storage::RebalanceScript do
 
       it 'safely invokes the given operation' do
         expect(subject).to receive(:parse).and_return(options)
-        expect(rebalancer).to receive(:rebalance)
+        expect(subject).to receive(:rebalance)
         expect(subject.log).not_to receive(:info)
         expect(subject.main).to be_nil
       end
@@ -407,7 +407,7 @@ describe ::Storage::GitLabClient do
   let(:options) { defaults.merge({ gitlab_admin_api_token: test_token }) }
   let(:test_token) { 'test' }
 
-  let(:test_request) { double('Net::HTTPRequest') }
+  let(:test_request) { instance_double('Net::HTTPRequest') }
 
   let(:test_status_code) { test_response_code_ok }
   let(:test_response_code_ok) { 200 }
@@ -421,7 +421,7 @@ describe ::Storage::GitLabClient do
   let(:test_response_body_serialized_json) { test_response_body.to_json }
   let(:test_error) { nil }
   let(:test_response_successful) do
-    response = double('Net::HTTP::Response')
+    response = instance_double('Net::HTTP::Response')
     allow(response).to receive(:code).and_return(test_response_code_ok)
     allow(response).to receive(:body).and_return(test_response_body_serialized_json)
     allow(response).to receive(:each_header)
@@ -432,7 +432,7 @@ describe ::Storage::GitLabClient do
   let(:test_not_found_message) { 'NotFound' }
   let(:test_http_not_found_error) { Net::HTTPClientException.new(test_not_found_message, test_response_not_found) }
   let(:test_response_not_found) do
-    response = double('Net::HTTP::Response')
+    response = instance_double('Net::HTTP::Response')
     allow(response).to receive(:code).and_return(test_response_code_not_found)
     allow(response).to receive(:body).and_return(test_response_body_serialized_json)
     response
@@ -440,7 +440,7 @@ describe ::Storage::GitLabClient do
 
   let(:test_headers) { ['test: header'] }
   let(:net_http) do
-    net_http = double('Net::HTTP')
+    net_http = instance_double('Net::HTTP')
     allow(net_http).to receive(:use_ssl=).with(true)
     net_http
   end

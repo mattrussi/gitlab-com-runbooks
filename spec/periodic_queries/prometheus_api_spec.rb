@@ -23,14 +23,14 @@ describe PeriodicQueries::PrometheusApi do
     # This should be validated when defining queries in jsonnet to give early
     # feedback. So here the exception can bubble up.
     it 'raises an error for unknown query types' do
-      query = double(PeriodicQueries::Query, type: 'unknown')
+      query = instance_double(PeriodicQueries::Query, type: 'unknown')
 
       expect { api.perform_query(query) }.to raise_error(KeyError)
     end
 
     it 'makes requests for instant queries' do
       uri = URI(url)
-      query = double(
+      query = instance_double(
         PeriodicQueries::Query,
         type: 'instant',
         params: {

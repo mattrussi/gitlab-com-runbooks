@@ -68,7 +68,7 @@ describe ::Uploads::CleanupScript do
   let(:args) { { operation: :delete } }
   let(:defaults) { ::Uploads::CleanupScript::Config::DEFAULTS.dup.merge(args) }
   let(:options) { defaults }
-  let(:cleanup) { double('::Uploads::Cleaner') }
+  let(:cleanup) { instance_double('::Uploads::Cleaner') }
 
   before do
     allow(subject).to receive(:parse).and_return(options)

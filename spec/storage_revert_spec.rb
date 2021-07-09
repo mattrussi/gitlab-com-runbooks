@@ -32,7 +32,7 @@ describe ::Storage::Reverter do
 
   describe '#revert' do
     let(:test_project) do
-      project = double('project')
+      project = instance_double('project')
       allow(project).to receive(:id).and_return(test_project_id)
       allow(project).to receive(:repository_storage).and_return('test')
       project
@@ -80,7 +80,7 @@ describe ::Storage::RevertScript do
   let(:args) { { original_file_server: 'nfs-file03', project_id: 1, dry_run: dry_run } }
   let(:defaults) { ::Storage::RevertScript::Config::DEFAULTS.dup.merge(args) }
   let(:options) { defaults }
-  let(:reverter) { double('::Registry::Reverter') }
+  let(:reverter) { instance_double('::Registry::Reverter') }
 
   describe '#main' do
     context 'when the dry-run option is true' do

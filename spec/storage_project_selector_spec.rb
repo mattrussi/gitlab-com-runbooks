@@ -89,7 +89,7 @@ describe ::Storage::ProjectSelectorScript do
   let(:args) { { source_shard: test_node_01, destination_shard: test_node_02 } }
   let(:defaults) { ::Storage::ProjectSelectorScript::Config::DEFAULTS.dup.merge(args) }
   let(:options) { defaults }
-  let(:project_selector) { double('::Registry::ProjectSelector') }
+  let(:project_selector) { instance_double('::Registry::ProjectSelector') }
   let(:test_project_id) { 1 }
   let(:test_projects) { [{ id: test_project_id }] }
   let(:test_time) { DateTime.now.iso8601(::Storage::Helpers::ISO8601_FRACTIONAL_SECONDS_LENGTH) }

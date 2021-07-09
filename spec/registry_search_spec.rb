@@ -11,10 +11,10 @@ describe ::Registry::Storage do
   let(:defaults) { ::Registry::Config::DEFAULTS.dup.merge(args) }
   let(:options) { defaults }
   let(:age) { DateTime.now - 31 }
-  let(:gcs_file) { double('Google::Cloud::Storage::File', name: 'test/path', created_at: age) }
+  let(:gcs_file) { instance_double('Google::Cloud::Storage::File', name: 'test/path', created_at: age) }
   let(:files) { [gcs_file] }
-  let(:client) { double('Google::Cloud::Storage') }
-  let(:bucket) { double('Google::Cloud::Storage::Bucket') }
+  let(:client) { instance_double('Google::Cloud::Storage::Project') }
+  let(:bucket) { instance_double('Google::Cloud::Storage::Bucket') }
 
   before do
     allow(gcs_file).to receive(:delete)
@@ -70,8 +70,8 @@ describe ::Registry::SearchScript do
   let(:options) { defaults }
   let(:age) { DateTime.now - 31 }
   let(:gcs_file_fields) { { name: 'test/path', created_at: age } }
-  let(:storage) { double('::Registry::Storage') }
-  let(:gcs_file) { double('Google::Cloud::Storage::File', **gcs_file_fields) }
+  let(:storage) { instance_double('::Registry::Storage') }
+  let(:gcs_file) { instance_double('Google::Cloud::Storage::File', **gcs_file_fields) }
 
   before do
     allow(subject).to receive(:parse).and_return(options)
