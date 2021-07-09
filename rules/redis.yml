@@ -33,8 +33,9 @@ groups:
     expr: redis_connected_slaves > 1
   - record: instance:redis_cpu_usage:rate1m
     expr: >
-      (rate(redis_cpu_user_seconds_total[1m]) + rate(redis_cpu_sys_seconds_total[1m])) or
-      (rate(redis_used_cpu_user[1m]) + rate(redis_used_cpu_sys[1m]))
+      sum by (environment, type, fqdn, instance)(
+        rate(namedprocess_namegroup_thread_cpu_seconds_total{type=~"redis.*", groupname="redis-server", threadname="redis-server"}[1m])
+      )
 - name: Redis Alerts
   rules:
   - alert: RedisMasterMissing
