@@ -587,7 +587,7 @@ groups:
       stage: main
       tier: db
       type: patroni
-      upscale_source: 'yes'
+      upscale_source: "yes"
     expr: |
       (
         sum by (environment) (
@@ -606,7 +606,7 @@ groups:
       stage: main
       tier: db
       type: patroni
-      upscale_source: 'yes'
+      upscale_source: "yes"
     expr: |
       sum by (environment) (
         sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate1h{le="+Inf",type!="sidekiq"}
@@ -617,7 +617,7 @@ groups:
       stage: main
       tier: db
       type: patroni
-      upscale_source: 'yes'
+      upscale_source: "yes"
     expr: |
       sum by (environment) (
         sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate1h{le="+Inf",type!="sidekiq"}
@@ -628,7 +628,7 @@ groups:
       stage: main
       tier: db
       type: patroni
-      upscale_source: 'yes'
+      upscale_source: "yes"
     expr: |
       (
         sum by (environment) (
@@ -647,7 +647,7 @@ groups:
       stage: main
       tier: db
       type: patroni
-      upscale_source: 'yes'
+      upscale_source: "yes"
     expr: |
       sum by (environment) (
         sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate1h{le="+Inf",type!="sidekiq"}
@@ -658,7 +658,7 @@ groups:
       stage: main
       tier: db
       type: patroni
-      upscale_source: 'yes'
+      upscale_source: "yes"
     expr: |
       sum by (environment) (
         sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate1h{le="+Inf",type!="sidekiq"}
@@ -822,40 +822,40 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: pgbouncer
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: db
       type: patroni
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: rails_primary_sql
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: db
       type: patroni
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: rails_replica_sql
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: db
       type: patroni
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: transactions_primary
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: db
       type: patroni
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: transactions_replica
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: db
       type: patroni
-    expr: '1'
+    expr: "1"

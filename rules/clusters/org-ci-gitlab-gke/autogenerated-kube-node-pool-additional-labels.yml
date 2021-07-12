@@ -12,4 +12,4 @@ groups:
       service_stage: main
       service_type: ci-runners
       tier: runners
-    expr: '1'
+    expr: "1"

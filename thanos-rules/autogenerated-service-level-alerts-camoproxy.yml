@@ -8,19 +8,17 @@ groups:
   - alert: CamoproxyServiceLoadbalancerErrorSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The loadbalancer SLI of the camoproxy service (`{{ $labels.stage }}` stage) has an error rate
-        violating SLO
+      title: The loadbalancer SLI of the camoproxy service (`{{ $labels.stage }}`
+        stage) has an error rate violating SLO
       description: |
         Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: camoproxy-main/camoproxy-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/camoproxy-main/camoproxy-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/camoproxy-main/camoproxy-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '3255520955'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3255520955"
       grafana_variables: environment,stage
       runbook: docs/camoproxy/README.md
     labels:
@@ -34,8 +32,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -65,19 +63,17 @@ groups:
   - alert: CamoproxyServiceLoadbalancerTrafficCessation
     for: 5m
     annotations:
-      title: >-
-        The loadbalancer SLI of the camoproxy service (`{{ $labels.stage }}` stage) has not received any
-        traffic in the past 30 minutes
+      title: The loadbalancer SLI of the camoproxy service (`{{ $labels.stage }}`
+        stage) has not received any traffic in the past 30 minutes
       description: |
         Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: camoproxy-main/camoproxy-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/camoproxy-main/camoproxy-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/camoproxy-main/camoproxy-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '138982496'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "138982496"
       grafana_variables: environment,stage
       runbook: docs/camoproxy/README.md
     labels:
@@ -91,17 +87,15 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
-    expr: >
-      gitlab_component_ops:rate_30m{type="camoproxy", component="loadbalancer", stage="main", monitor="global"}
-      == 0
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{type="camoproxy", component="loadbalancer", stage="main", monitor="global"} == 0
   - alert: CamoproxyServiceLoadbalancerTrafficAbsent
     for: 30m
     annotations:
-      title: >-
-        The loadbalancer SLI of the camoproxy service (`{{ $labels.stage }}` stage) has not reported any
-        traffic in the past 30 minutes
+      title: The loadbalancer SLI of the camoproxy service (`{{ $labels.stage }}`
+        stage) has not reported any traffic in the past 30 minutes
       description: |
         Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
 
@@ -109,11 +103,10 @@ groups:
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
       grafana_dashboard_id: camoproxy-main/camoproxy-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/camoproxy-main/camoproxy-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/camoproxy-main/camoproxy-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '138982496'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "138982496"
       grafana_variables: environment,stage
       runbook: docs/camoproxy/README.md
     labels:
@@ -127,8 +120,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
+      slo_alert: "no"
+      user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{type="camoproxy", component="loadbalancer", stage="main", monitor="global"} offset 1h
       unless
@@ -136,19 +129,18 @@ groups:
   - alert: CamoproxyServiceServerApdexSLOViolation
     for: 2m
     annotations:
-      title: The server SLI of the camoproxy service (`{{ $labels.stage }}` stage) has an apdex violating
-        SLO
+      title: The server SLI of the camoproxy service (`{{ $labels.stage }}` stage)
+        has an apdex violating SLO
       description: |
         This SLI monitors the camoproxy server via its HTTP interface. 5xx responses are considered to be failures. Note that this SLI is highly dependent on upstream proxy targets, not under the control of GitLab. We are unable to distinguish problems in the proxy from upstream problems. This should be taken into account for this SLI.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: camoproxy-main/camoproxy-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/camoproxy-main/camoproxy-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
-        $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2863319079'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/camoproxy-main/camoproxy-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2863319079"
       grafana_variables: environment,type,stage,component
       promql_template_1: |
         histogram_quantile(
@@ -169,8 +161,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: apdex
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -200,19 +192,17 @@ groups:
   - alert: CamoproxyServiceServerErrorSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The server SLI of the camoproxy service (`{{ $labels.stage }}` stage) has an error rate violating
-        SLO
+      title: The server SLI of the camoproxy service (`{{ $labels.stage }}` stage)
+        has an error rate violating SLO
       description: |
         This SLI monitors the camoproxy server via its HTTP interface. 5xx responses are considered to be failures. Note that this SLI is highly dependent on upstream proxy targets, not under the control of GitLab. We are unable to distinguish problems in the proxy from upstream problems. This should be taken into account for this SLI.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: camoproxy-main/camoproxy-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/camoproxy-main/camoproxy-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/camoproxy-main/camoproxy-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '1631973137'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1631973137"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -230,8 +220,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -261,19 +251,17 @@ groups:
   - alert: CamoproxyServiceServerTrafficCessation
     for: 5m
     annotations:
-      title: >-
-        The server SLI of the camoproxy service (`{{ $labels.stage }}` stage) has not received any traffic
-        in the past 30 minutes
+      title: The server SLI of the camoproxy service (`{{ $labels.stage }}` stage)
+        has not received any traffic in the past 30 minutes
       description: |
         This SLI monitors the camoproxy server via its HTTP interface. 5xx responses are considered to be failures. Note that this SLI is highly dependent on upstream proxy targets, not under the control of GitLab. We are unable to distinguish problems in the proxy from upstream problems. This should be taken into account for this SLI.
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: camoproxy-main/camoproxy-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/camoproxy-main/camoproxy-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/camoproxy-main/camoproxy-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2414183688'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2414183688"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -291,17 +279,15 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
-    expr: >
-      gitlab_component_ops:rate_30m{type="camoproxy", component="server", stage="main", monitor="global"}
-      == 0
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{type="camoproxy", component="server", stage="main", monitor="global"} == 0
   - alert: CamoproxyServiceServerTrafficAbsent
     for: 30m
     annotations:
-      title: >-
-        The server SLI of the camoproxy service (`{{ $labels.stage }}` stage) has not reported any traffic
-        in the past 30 minutes
+      title: The server SLI of the camoproxy service (`{{ $labels.stage }}` stage)
+        has not reported any traffic in the past 30 minutes
       description: |
         This SLI monitors the camoproxy server via its HTTP interface. 5xx responses are considered to be failures. Note that this SLI is highly dependent on upstream proxy targets, not under the control of GitLab. We are unable to distinguish problems in the proxy from upstream problems. This should be taken into account for this SLI.
 
@@ -309,11 +295,10 @@ groups:
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
       grafana_dashboard_id: camoproxy-main/camoproxy-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/camoproxy-main/camoproxy-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/camoproxy-main/camoproxy-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2414183688'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2414183688"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -331,8 +316,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
+      slo_alert: "no"
+      user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{type="camoproxy", component="server", stage="main", monitor="global"} offset 1h
       unless

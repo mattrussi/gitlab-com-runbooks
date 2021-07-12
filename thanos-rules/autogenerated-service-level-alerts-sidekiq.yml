@@ -8,20 +8,18 @@ groups:
   - alert: SidekiqServiceShardCatchallApdexSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The shard_catchall SLI of the sidekiq service (`{{ $labels.stage }}` stage) has an apdex violating
-        SLO
+      title: The shard_catchall SLI of the sidekiq service (`{{ $labels.stage }}`
+        stage) has an apdex violating SLO
       description: |
         Aggregation of all jobs for the catchall Sidekiq shard.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
-        $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '4125397901'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "4125397901"
       grafana_variables: environment,type,stage,component
       promql_template_1: |
         histogram_quantile(
@@ -54,8 +52,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: apdex
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -85,19 +83,17 @@ groups:
   - alert: SidekiqServiceShardCatchallErrorSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The shard_catchall SLI of the sidekiq service (`{{ $labels.stage }}` stage) has an error rate
-        violating SLO
+      title: The shard_catchall SLI of the sidekiq service (`{{ $labels.stage }}`
+        stage) has an error rate violating SLO
       description: |
         Aggregation of all jobs for the catchall Sidekiq shard.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '532783926'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "532783926"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -115,8 +111,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -146,19 +142,17 @@ groups:
   - alert: SidekiqServiceShardCatchallTrafficCessation
     for: 5m
     annotations:
-      title: >-
-        The shard_catchall SLI of the sidekiq service (`{{ $labels.stage }}` stage) has not received any
-        traffic in the past 30 minutes
+      title: The shard_catchall SLI of the sidekiq service (`{{ $labels.stage }}`
+        stage) has not received any traffic in the past 30 minutes
       description: |
         Aggregation of all jobs for the catchall Sidekiq shard.
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2518816313'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2518816313"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -176,17 +170,15 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
-    expr: >
-      gitlab_component_ops:rate_30m{type="sidekiq", component="shard_catchall", stage="main", monitor="global"}
-      == 0
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{type="sidekiq", component="shard_catchall", stage="main", monitor="global"} == 0
   - alert: SidekiqServiceShardCatchallTrafficAbsent
     for: 30m
     annotations:
-      title: >-
-        The shard_catchall SLI of the sidekiq service (`{{ $labels.stage }}` stage) has not reported any
-        traffic in the past 30 minutes
+      title: The shard_catchall SLI of the sidekiq service (`{{ $labels.stage }}`
+        stage) has not reported any traffic in the past 30 minutes
       description: |
         Aggregation of all jobs for the catchall Sidekiq shard.
 
@@ -194,11 +186,10 @@ groups:
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2518816313'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2518816313"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -216,8 +207,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
+      slo_alert: "no"
+      user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{type="sidekiq", component="shard_catchall", stage="main", monitor="global"} offset 1h
       unless
@@ -225,20 +216,18 @@ groups:
   - alert: SidekiqServiceShardDatabaseThrottledApdexSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The shard_database_throttled SLI of the sidekiq service (`{{ $labels.stage }}` stage) has an apdex
-        violating SLO
+      title: The shard_database_throttled SLI of the sidekiq service (`{{ $labels.stage
+        }}` stage) has an apdex violating SLO
       description: |
         Aggregation of all jobs for the database-throttled Sidekiq shard.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
-        $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '564185305'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "564185305"
       grafana_variables: environment,type,stage,component
       promql_template_1: |
         histogram_quantile(
@@ -259,8 +248,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: apdex
-      slo_alert: 'yes'
-      user_impacting: 'no'
+      slo_alert: "yes"
+      user_impacting: "no"
     expr: |
       (
         (
@@ -290,19 +279,17 @@ groups:
   - alert: SidekiqServiceShardDatabaseThrottledErrorSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The shard_database_throttled SLI of the sidekiq service (`{{ $labels.stage }}` stage) has an error
-        rate violating SLO
+      title: The shard_database_throttled SLI of the sidekiq service (`{{ $labels.stage
+        }}` stage) has an error rate violating SLO
       description: |
         Aggregation of all jobs for the database-throttled Sidekiq shard.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '1659464052'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1659464052"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -320,8 +307,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'no'
+      slo_alert: "yes"
+      user_impacting: "no"
     expr: |
       (
         (
@@ -351,20 +338,18 @@ groups:
   - alert: SidekiqServiceShardElasticsearchApdexSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The shard_elasticsearch SLI of the sidekiq service (`{{ $labels.stage }}` stage) has an apdex
-        violating SLO
+      title: The shard_elasticsearch SLI of the sidekiq service (`{{ $labels.stage
+        }}` stage) has an apdex violating SLO
       description: |
         Aggregation of all jobs for the elasticsearch Sidekiq shard.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
-        $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2299339214'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2299339214"
       grafana_variables: environment,type,stage,component
       promql_template_1: |
         histogram_quantile(
@@ -385,8 +370,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: apdex
-      slo_alert: 'yes'
-      user_impacting: 'no'
+      slo_alert: "yes"
+      user_impacting: "no"
     expr: |
       (
         (
@@ -416,19 +401,17 @@ groups:
   - alert: SidekiqServiceShardElasticsearchErrorSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The shard_elasticsearch SLI of the sidekiq service (`{{ $labels.stage }}` stage) has an error
-        rate violating SLO
+      title: The shard_elasticsearch SLI of the sidekiq service (`{{ $labels.stage
+        }}` stage) has an error rate violating SLO
       description: |
         Aggregation of all jobs for the elasticsearch Sidekiq shard.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '389908901'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "389908901"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -446,8 +429,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'no'
+      slo_alert: "yes"
+      user_impacting: "no"
     expr: |
       (
         (
@@ -477,20 +460,18 @@ groups:
   - alert: SidekiqServiceShardGitalyThrottledApdexSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The shard_gitaly_throttled SLI of the sidekiq service (`{{ $labels.stage }}` stage) has an apdex
-        violating SLO
+      title: The shard_gitaly_throttled SLI of the sidekiq service (`{{ $labels.stage
+        }}` stage) has an apdex violating SLO
       description: |
         Aggregation of all jobs for the gitaly-throttled Sidekiq shard.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
-        $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '1517683275'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1517683275"
       grafana_variables: environment,type,stage,component
       promql_template_1: |
         histogram_quantile(
@@ -511,8 +492,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: apdex
-      slo_alert: 'yes'
-      user_impacting: 'no'
+      slo_alert: "yes"
+      user_impacting: "no"
     expr: |
       (
         (
@@ -542,19 +523,17 @@ groups:
   - alert: SidekiqServiceShardGitalyThrottledErrorSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The shard_gitaly_throttled SLI of the sidekiq service (`{{ $labels.stage }}` stage) has an error
-        rate violating SLO
+      title: The shard_gitaly_throttled SLI of the sidekiq service (`{{ $labels.stage
+        }}` stage) has an error rate violating SLO
       description: |
         Aggregation of all jobs for the gitaly-throttled Sidekiq shard.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '4031214920'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "4031214920"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -572,8 +551,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'no'
+      slo_alert: "yes"
+      user_impacting: "no"
     expr: |
       (
         (
@@ -603,20 +582,18 @@ groups:
   - alert: SidekiqServiceShardImportsApdexSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The shard_imports SLI of the sidekiq service (`{{ $labels.stage }}` stage) has an apdex violating
-        SLO
+      title: The shard_imports SLI of the sidekiq service (`{{ $labels.stage }}` stage)
+        has an apdex violating SLO
       description: |
         Aggregation of all jobs for the imports Sidekiq shard.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
-        $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '3422932483'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3422932483"
       grafana_variables: environment,type,stage,component
       promql_template_1: |
         histogram_quantile(
@@ -637,8 +614,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: apdex
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -668,19 +645,17 @@ groups:
   - alert: SidekiqServiceShardImportsErrorSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The shard_imports SLI of the sidekiq service (`{{ $labels.stage }}` stage) has an error rate violating
-        SLO
+      title: The shard_imports SLI of the sidekiq service (`{{ $labels.stage }}` stage)
+        has an error rate violating SLO
       description: |
         Aggregation of all jobs for the imports Sidekiq shard.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '1270469885'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1270469885"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -698,8 +673,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -729,20 +704,18 @@ groups:
   - alert: SidekiqServiceShardLowUrgencyCpuBoundApdexSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The shard_low_urgency_cpu_bound SLI of the sidekiq service (`{{ $labels.stage }}` stage) has an
-        apdex violating SLO
+      title: The shard_low_urgency_cpu_bound SLI of the sidekiq service (`{{ $labels.stage
+        }}` stage) has an apdex violating SLO
       description: |
         Aggregation of all jobs for the low-urgency-cpu-bound Sidekiq shard.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
-        $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '1949742512'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1949742512"
       grafana_variables: environment,type,stage,component
       promql_template_1: |
         histogram_quantile(
@@ -765,8 +738,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: apdex
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -796,19 +769,17 @@ groups:
   - alert: SidekiqServiceShardLowUrgencyCpuBoundErrorSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The shard_low_urgency_cpu_bound SLI of the sidekiq service (`{{ $labels.stage }}` stage) has an
-        error rate violating SLO
+      title: The shard_low_urgency_cpu_bound SLI of the sidekiq service (`{{ $labels.stage
+        }}` stage) has an error rate violating SLO
       description: |
         Aggregation of all jobs for the low-urgency-cpu-bound Sidekiq shard.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '230682702'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "230682702"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -826,8 +797,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -857,19 +828,17 @@ groups:
   - alert: SidekiqServiceShardLowUrgencyCpuBoundTrafficCessation
     for: 5m
     annotations:
-      title: >-
-        The shard_low_urgency_cpu_bound SLI of the sidekiq service (`{{ $labels.stage }}` stage) has not
-        received any traffic in the past 30 minutes
+      title: The shard_low_urgency_cpu_bound SLI of the sidekiq service (`{{ $labels.stage
+        }}` stage) has not received any traffic in the past 30 minutes
       description: |
         Aggregation of all jobs for the low-urgency-cpu-bound Sidekiq shard.
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '3240333014'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3240333014"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -887,17 +856,15 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
-    expr: >
-      gitlab_component_ops:rate_30m{type="sidekiq", component="shard_low_urgency_cpu_bound", stage="main",
-      monitor="global"} == 0
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{type="sidekiq", component="shard_low_urgency_cpu_bound", stage="main", monitor="global"} == 0
   - alert: SidekiqServiceShardLowUrgencyCpuBoundTrafficAbsent
     for: 30m
     annotations:
-      title: >-
-        The shard_low_urgency_cpu_bound SLI of the sidekiq service (`{{ $labels.stage }}` stage) has not
-        reported any traffic in the past 30 minutes
+      title: The shard_low_urgency_cpu_bound SLI of the sidekiq service (`{{ $labels.stage
+        }}` stage) has not reported any traffic in the past 30 minutes
       description: |
         Aggregation of all jobs for the low-urgency-cpu-bound Sidekiq shard.
 
@@ -905,11 +872,10 @@ groups:
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '3240333014'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3240333014"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -927,8 +893,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
+      slo_alert: "no"
+      user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{type="sidekiq", component="shard_low_urgency_cpu_bound", stage="main", monitor="global"} offset 1h
       unless
@@ -936,20 +902,18 @@ groups:
   - alert: SidekiqServiceShardMemoryBoundApdexSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The shard_memory_bound SLI of the sidekiq service (`{{ $labels.stage }}` stage) has an apdex violating
-        SLO
+      title: The shard_memory_bound SLI of the sidekiq service (`{{ $labels.stage
+        }}` stage) has an apdex violating SLO
       description: |
         Aggregation of all jobs for the memory-bound Sidekiq shard.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
-        $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '546338609'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "546338609"
       grafana_variables: environment,type,stage,component
       promql_template_1: |
         histogram_quantile(
@@ -970,8 +934,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: apdex
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -1001,19 +965,17 @@ groups:
   - alert: SidekiqServiceShardMemoryBoundErrorSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The shard_memory_bound SLI of the sidekiq service (`{{ $labels.stage }}` stage) has an error rate
-        violating SLO
+      title: The shard_memory_bound SLI of the sidekiq service (`{{ $labels.stage
+        }}` stage) has an error rate violating SLO
       description: |
         Aggregation of all jobs for the memory-bound Sidekiq shard.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2190820353'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2190820353"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -1031,8 +993,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -1062,19 +1024,17 @@ groups:
   - alert: SidekiqServiceShardMemoryBoundTrafficCessation
     for: 5m
     annotations:
-      title: >-
-        The shard_memory_bound SLI of the sidekiq service (`{{ $labels.stage }}` stage) has not received
-        any traffic in the past 30 minutes
+      title: The shard_memory_bound SLI of the sidekiq service (`{{ $labels.stage
+        }}` stage) has not received any traffic in the past 30 minutes
       description: |
         Aggregation of all jobs for the memory-bound Sidekiq shard.
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '1943089289'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1943089289"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -1092,17 +1052,15 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
-    expr: >
-      gitlab_component_ops:rate_30m{type="sidekiq", component="shard_memory_bound", stage="main", monitor="global"}
-      == 0
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{type="sidekiq", component="shard_memory_bound", stage="main", monitor="global"} == 0
   - alert: SidekiqServiceShardMemoryBoundTrafficAbsent
     for: 30m
     annotations:
-      title: >-
-        The shard_memory_bound SLI of the sidekiq service (`{{ $labels.stage }}` stage) has not reported
-        any traffic in the past 30 minutes
+      title: The shard_memory_bound SLI of the sidekiq service (`{{ $labels.stage
+        }}` stage) has not reported any traffic in the past 30 minutes
       description: |
         Aggregation of all jobs for the memory-bound Sidekiq shard.
 
@@ -1110,11 +1068,10 @@ groups:
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '1943089289'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1943089289"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -1132,8 +1089,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
+      slo_alert: "no"
+      user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{type="sidekiq", component="shard_memory_bound", stage="main", monitor="global"} offset 1h
       unless
@@ -1141,20 +1098,18 @@ groups:
   - alert: SidekiqServiceShardUrgentCpuBoundApdexSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The shard_urgent_cpu_bound SLI of the sidekiq service (`{{ $labels.stage }}` stage) has an apdex
-        violating SLO
+      title: The shard_urgent_cpu_bound SLI of the sidekiq service (`{{ $labels.stage
+        }}` stage) has an apdex violating SLO
       description: |
         Aggregation of all jobs for the urgent-cpu-bound Sidekiq shard.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
-        $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '627077500'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "627077500"
       grafana_variables: environment,type,stage,component
       promql_template_1: |
         histogram_quantile(
@@ -1177,8 +1132,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: apdex
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -1208,19 +1163,17 @@ groups:
   - alert: SidekiqServiceShardUrgentCpuBoundErrorSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The shard_urgent_cpu_bound SLI of the sidekiq service (`{{ $labels.stage }}` stage) has an error
-        rate violating SLO
+      title: The shard_urgent_cpu_bound SLI of the sidekiq service (`{{ $labels.stage
+        }}` stage) has an error rate violating SLO
       description: |
         Aggregation of all jobs for the urgent-cpu-bound Sidekiq shard.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '953665318'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "953665318"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -1238,8 +1191,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -1269,19 +1222,17 @@ groups:
   - alert: SidekiqServiceShardUrgentCpuBoundTrafficCessation
     for: 5m
     annotations:
-      title: >-
-        The shard_urgent_cpu_bound SLI of the sidekiq service (`{{ $labels.stage }}` stage) has not received
-        any traffic in the past 30 minutes
+      title: The shard_urgent_cpu_bound SLI of the sidekiq service (`{{ $labels.stage
+        }}` stage) has not received any traffic in the past 30 minutes
       description: |
         Aggregation of all jobs for the urgent-cpu-bound Sidekiq shard.
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '659062113'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "659062113"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -1299,17 +1250,15 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
-    expr: >
-      gitlab_component_ops:rate_30m{type="sidekiq", component="shard_urgent_cpu_bound", stage="main",
-      monitor="global"} == 0
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{type="sidekiq", component="shard_urgent_cpu_bound", stage="main", monitor="global"} == 0
   - alert: SidekiqServiceShardUrgentCpuBoundTrafficAbsent
     for: 30m
     annotations:
-      title: >-
-        The shard_urgent_cpu_bound SLI of the sidekiq service (`{{ $labels.stage }}` stage) has not reported
-        any traffic in the past 30 minutes
+      title: The shard_urgent_cpu_bound SLI of the sidekiq service (`{{ $labels.stage
+        }}` stage) has not reported any traffic in the past 30 minutes
       description: |
         Aggregation of all jobs for the urgent-cpu-bound Sidekiq shard.
 
@@ -1317,11 +1266,10 @@ groups:
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '659062113'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "659062113"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -1339,8 +1287,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
+      slo_alert: "no"
+      user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{type="sidekiq", component="shard_urgent_cpu_bound", stage="main", monitor="global"} offset 1h
       unless
@@ -1348,20 +1296,18 @@ groups:
   - alert: SidekiqServiceShardUrgentOtherApdexSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The shard_urgent_other SLI of the sidekiq service (`{{ $labels.stage }}` stage) has an apdex violating
-        SLO
+      title: The shard_urgent_other SLI of the sidekiq service (`{{ $labels.stage
+        }}` stage) has an apdex violating SLO
       description: |
         Aggregation of all jobs for the urgent-other Sidekiq shard.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
-        $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '203761782'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "203761782"
       grafana_variables: environment,type,stage,component
       promql_template_1: |
         histogram_quantile(
@@ -1384,8 +1330,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: apdex
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -1415,19 +1361,17 @@ groups:
   - alert: SidekiqServiceShardUrgentOtherErrorSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The shard_urgent_other SLI of the sidekiq service (`{{ $labels.stage }}` stage) has an error rate
-        violating SLO
+      title: The shard_urgent_other SLI of the sidekiq service (`{{ $labels.stage
+        }}` stage) has an error rate violating SLO
       description: |
         Aggregation of all jobs for the urgent-other Sidekiq shard.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2399846707'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2399846707"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -1445,8 +1389,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -1476,19 +1420,17 @@ groups:
   - alert: SidekiqServiceShardUrgentOtherTrafficCessation
     for: 5m
     annotations:
-      title: >-
-        The shard_urgent_other SLI of the sidekiq service (`{{ $labels.stage }}` stage) has not received
-        any traffic in the past 30 minutes
+      title: The shard_urgent_other SLI of the sidekiq service (`{{ $labels.stage
+        }}` stage) has not received any traffic in the past 30 minutes
       description: |
         Aggregation of all jobs for the urgent-other Sidekiq shard.
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '907052725'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "907052725"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -1506,17 +1448,15 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
-    expr: >
-      gitlab_component_ops:rate_30m{type="sidekiq", component="shard_urgent_other", stage="main", monitor="global"}
-      == 0
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{type="sidekiq", component="shard_urgent_other", stage="main", monitor="global"} == 0
   - alert: SidekiqServiceShardUrgentOtherTrafficAbsent
     for: 30m
     annotations:
-      title: >-
-        The shard_urgent_other SLI of the sidekiq service (`{{ $labels.stage }}` stage) has not reported
-        any traffic in the past 30 minutes
+      title: The shard_urgent_other SLI of the sidekiq service (`{{ $labels.stage
+        }}` stage) has not reported any traffic in the past 30 minutes
       description: |
         Aggregation of all jobs for the urgent-other Sidekiq shard.
 
@@ -1524,11 +1464,10 @@ groups:
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '907052725'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "907052725"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -1546,8 +1485,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
+      slo_alert: "no"
+      user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{type="sidekiq", component="shard_urgent_other", stage="main", monitor="global"} offset 1h
       unless

@@ -1402,48 +1402,48 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: gitlab_shell
-      regional_aggregation: 'yes'
-      service_aggregation: 'yes'
+      regional_aggregation: "yes"
+      service_aggregation: "yes"
       tier: sv
       type: git
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: loadbalancer
-      regional_aggregation: 'no'
-      service_aggregation: 'no'
+      regional_aggregation: "no"
+      service_aggregation: "no"
       tier: sv
       type: git
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: loadbalancer_ssh
-      regional_aggregation: 'no'
-      service_aggregation: 'no'
+      regional_aggregation: "no"
+      service_aggregation: "no"
       tier: sv
       type: git
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: puma
-      regional_aggregation: 'yes'
-      service_aggregation: 'yes'
+      regional_aggregation: "yes"
+      service_aggregation: "yes"
       tier: sv
       type: git
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: workhorse
-      regional_aggregation: 'yes'
-      service_aggregation: 'yes'
+      regional_aggregation: "yes"
+      service_aggregation: "yes"
       tier: sv
       type: git
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: workhorse_auth_api
-      regional_aggregation: 'yes'
-      service_aggregation: 'yes'
+      regional_aggregation: "yes"
+      service_aggregation: "yes"
       tier: sv
       type: git
-    expr: '1'
+    expr: "1"

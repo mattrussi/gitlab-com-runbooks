@@ -112,16 +112,16 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: elasticsearch_indexing
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: inf
       type: search
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: elasticsearch_searching
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: inf
       type: search
-    expr: '1'
+    expr: "1"

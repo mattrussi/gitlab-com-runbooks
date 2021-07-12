@@ -44,4 +44,4 @@ groups:
   partial_response_strategy: warn
   rules:
   - record: sla:gitlab:target
-    expr: '0.9995'
+    expr: "0.9995"

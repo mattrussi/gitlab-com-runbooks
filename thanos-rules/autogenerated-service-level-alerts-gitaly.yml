@@ -8,19 +8,18 @@ groups:
   - alert: GitalyServiceGitalyrubyApdexSLOViolation
     for: 2m
     annotations:
-      title: The gitalyruby SLI of the gitaly service (`{{ $labels.stage }}` stage) has an apdex violating
-        SLO
+      title: The gitalyruby SLI of the gitaly service (`{{ $labels.stage }}` stage)
+        has an apdex violating SLO
       description: |
         This SLI monitors requests to Gitaly's Ruby sidecar, known as Gitaly-Ruby. All requests made to Gitaly-Ruby are monitored in aggregate, via its GRPC interface.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: gitaly-main/gitaly-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
-        $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '4223379407'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "4223379407"
       grafana_variables: environment,type,stage,component
       promql_template_1: |
         histogram_quantile(
@@ -41,8 +40,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: apdex
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -72,8 +71,8 @@ groups:
   - alert: GitalyServiceGitalyrubyApdexSLOViolationSingleNode
     for: 10m
     annotations:
-      title: The gitalyruby SLI of the gitaly service on node `{{ $labels.fqdn }}` has an apdex violating
-        SLO
+      title: The gitalyruby SLI of the gitaly service on node `{{ $labels.fqdn }}`
+        has an apdex violating SLO
       description: |
         This SLI monitors requests to Gitaly's Ruby sidecar, known as Gitaly-Ruby. All requests made to Gitaly-Ruby are monitored in aggregate, via its GRPC interface.
 
@@ -81,12 +80,12 @@ groups:
 
         Currently the apdex value for {{ $labels.fqdn }} is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: alerts-component_node_slo_apdex
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/alerts-component_node_slo_apdex?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-shard={{
-        $labels.shard }}&var-fqdn={{ $labels.fqdn }}&var-component={{ $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '965700560'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-component_node_slo_apdex?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-shard={{ $labels.shard }}&var-fqdn={{ $labels.fqdn }}&var-component={{
+        $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "965700560"
       grafana_variables: environment,type,stage,shard,fqdn,component
       promql_template_1: |
         histogram_quantile(
@@ -107,8 +106,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: apdex
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
       window: 1h
     expr: |
       (
@@ -129,8 +128,8 @@ groups:
   - alert: GitalyServiceGitalyrubyApdexSLOViolationSingleNode
     for: 10m
     annotations:
-      title: The gitalyruby SLI of the gitaly service on node `{{ $labels.fqdn }}` has an apdex violating
-        SLO
+      title: The gitalyruby SLI of the gitaly service on node `{{ $labels.fqdn }}`
+        has an apdex violating SLO
       description: |
         This SLI monitors requests to Gitaly's Ruby sidecar, known as Gitaly-Ruby. All requests made to Gitaly-Ruby are monitored in aggregate, via its GRPC interface.
 
@@ -138,12 +137,12 @@ groups:
 
         Currently the apdex value for {{ $labels.fqdn }} is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: alerts-component_node_slo_apdex
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/alerts-component_node_slo_apdex?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-shard={{
-        $labels.shard }}&var-fqdn={{ $labels.fqdn }}&var-component={{ $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '965700560'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-component_node_slo_apdex?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-shard={{ $labels.shard }}&var-fqdn={{ $labels.fqdn }}&var-component={{
+        $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "965700560"
       grafana_variables: environment,type,stage,shard,fqdn,component
       promql_template_1: |
         histogram_quantile(
@@ -164,8 +163,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: apdex
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
       window: 6h
     expr: |
       (
@@ -186,19 +185,17 @@ groups:
   - alert: GitalyServiceGitalyrubyErrorSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The gitalyruby SLI of the gitaly service (`{{ $labels.stage }}` stage) has an error rate violating
-        SLO
+      title: The gitalyruby SLI of the gitaly service (`{{ $labels.stage }}` stage)
+        has an error rate violating SLO
       description: |
         This SLI monitors requests to Gitaly's Ruby sidecar, known as Gitaly-Ruby. All requests made to Gitaly-Ruby are monitored in aggregate, via its GRPC interface.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: gitaly-main/gitaly-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '29379121'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "29379121"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -216,8 +213,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -247,9 +244,8 @@ groups:
   - alert: GitalyServiceGitalyrubyErrorSLOViolationSingleNode
     for: 10m
     annotations:
-      title: >-
-        The gitalyruby SLI of the gitaly service on node `{{ $labels.fqdn }}` has an error rate violating
-        SLO
+      title: The gitalyruby SLI of the gitaly service on node `{{ $labels.fqdn }}`
+        has an error rate violating SLO
       description: |
         This SLI monitors requests to Gitaly's Ruby sidecar, known as Gitaly-Ruby. All requests made to Gitaly-Ruby are monitored in aggregate, via its GRPC interface.
 
@@ -257,12 +253,12 @@ groups:
 
         Currently the apdex value for {{ $labels.fqdn }} is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: alerts-component_node_slo_error
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/alerts-component_node_slo_error?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-shard={{
-        $labels.shard }}&var-fqdn={{ $labels.fqdn }}&var-component={{ $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '965700560'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-component_node_slo_error?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-shard={{ $labels.shard }}&var-fqdn={{ $labels.fqdn }}&var-component={{
+        $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "965700560"
       grafana_variables: environment,type,stage,shard,fqdn,component
       promql_template_1: |
         sum by (env,environment,tier,stage,shard,fqdn) (
@@ -280,8 +276,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
       window: 1h
     expr: |
       (
@@ -302,9 +298,8 @@ groups:
   - alert: GitalyServiceGitalyrubyErrorSLOViolationSingleNode
     for: 10m
     annotations:
-      title: >-
-        The gitalyruby SLI of the gitaly service on node `{{ $labels.fqdn }}` has an error rate violating
-        SLO
+      title: The gitalyruby SLI of the gitaly service on node `{{ $labels.fqdn }}`
+        has an error rate violating SLO
       description: |
         This SLI monitors requests to Gitaly's Ruby sidecar, known as Gitaly-Ruby. All requests made to Gitaly-Ruby are monitored in aggregate, via its GRPC interface.
 
@@ -312,12 +307,12 @@ groups:
 
         Currently the apdex value for {{ $labels.fqdn }} is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: alerts-component_node_slo_error
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/alerts-component_node_slo_error?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-shard={{
-        $labels.shard }}&var-fqdn={{ $labels.fqdn }}&var-component={{ $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '965700560'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-component_node_slo_error?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-shard={{ $labels.shard }}&var-fqdn={{ $labels.fqdn }}&var-component={{
+        $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "965700560"
       grafana_variables: environment,type,stage,shard,fqdn,component
       promql_template_1: |
         sum by (env,environment,tier,stage,shard,fqdn) (
@@ -335,8 +330,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
       window: 6h
     expr: |
       (
@@ -357,19 +352,17 @@ groups:
   - alert: GitalyServiceGitalyrubyTrafficCessation
     for: 5m
     annotations:
-      title: >-
-        The gitalyruby SLI of the gitaly service (`{{ $labels.stage }}` stage) has not received any traffic
-        in the past 30 minutes
+      title: The gitalyruby SLI of the gitaly service (`{{ $labels.stage }}` stage)
+        has not received any traffic in the past 30 minutes
       description: |
         This SLI monitors requests to Gitaly's Ruby sidecar, known as Gitaly-Ruby. All requests made to Gitaly-Ruby are monitored in aggregate, via its GRPC interface.
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: gitaly-main/gitaly-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2219036706'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2219036706"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -387,17 +380,15 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
-    expr: >
-      gitlab_component_ops:rate_30m{type="gitaly", component="gitalyruby", stage="main", monitor="global"}
-      == 0
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{type="gitaly", component="gitalyruby", stage="main", monitor="global"} == 0
   - alert: GitalyServiceGitalyrubyTrafficAbsent
     for: 30m
     annotations:
-      title: >-
-        The gitalyruby SLI of the gitaly service (`{{ $labels.stage }}` stage) has not reported any traffic
-        in the past 30 minutes
+      title: The gitalyruby SLI of the gitaly service (`{{ $labels.stage }}` stage)
+        has not reported any traffic in the past 30 minutes
       description: |
         This SLI monitors requests to Gitaly's Ruby sidecar, known as Gitaly-Ruby. All requests made to Gitaly-Ruby are monitored in aggregate, via its GRPC interface.
 
@@ -405,11 +396,10 @@ groups:
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
       grafana_dashboard_id: gitaly-main/gitaly-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2219036706'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2219036706"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -427,8 +417,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
+      slo_alert: "no"
+      user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{type="gitaly", component="gitalyruby", stage="main", monitor="global"} offset 1h
       unless
@@ -436,19 +426,18 @@ groups:
   - alert: GitalyServiceGoserverApdexSLOViolation
     for: 2m
     annotations:
-      title: The goserver SLI of the gitaly service (`{{ $labels.stage }}` stage) has an apdex violating
-        SLO
+      title: The goserver SLI of the gitaly service (`{{ $labels.stage }}` stage)
+        has an apdex violating SLO
       description: |
         This SLI monitors all Gitaly GRPC requests in aggregate, excluding the OperationService. GRPC failures which are considered to be the "server's fault" are counted as errors. The apdex score is based on a subset of GRPC methods which are expected to be fast.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: gitaly-main/gitaly-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
-        $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '877804374'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "877804374"
       grafana_variables: environment,type,stage,component
       promql_template_1: |
         histogram_quantile(
@@ -469,8 +458,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: apdex
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -500,8 +489,8 @@ groups:
   - alert: GitalyServiceGoserverApdexSLOViolationSingleNode
     for: 10m
     annotations:
-      title: The goserver SLI of the gitaly service on node `{{ $labels.fqdn }}` has an apdex violating
-        SLO
+      title: The goserver SLI of the gitaly service on node `{{ $labels.fqdn }}` has
+        an apdex violating SLO
       description: |
         This SLI monitors all Gitaly GRPC requests in aggregate, excluding the OperationService. GRPC failures which are considered to be the "server's fault" are counted as errors. The apdex score is based on a subset of GRPC methods which are expected to be fast.
 
@@ -509,12 +498,12 @@ groups:
 
         Currently the apdex value for {{ $labels.fqdn }} is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: alerts-component_node_slo_apdex
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/alerts-component_node_slo_apdex?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-shard={{
-        $labels.shard }}&var-fqdn={{ $labels.fqdn }}&var-component={{ $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '965700560'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-component_node_slo_apdex?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-shard={{ $labels.shard }}&var-fqdn={{ $labels.fqdn }}&var-component={{
+        $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "965700560"
       grafana_variables: environment,type,stage,shard,fqdn,component
       promql_template_1: |
         histogram_quantile(
@@ -535,8 +524,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: apdex
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
       window: 1h
     expr: |
       (
@@ -557,8 +546,8 @@ groups:
   - alert: GitalyServiceGoserverApdexSLOViolationSingleNode
     for: 10m
     annotations:
-      title: The goserver SLI of the gitaly service on node `{{ $labels.fqdn }}` has an apdex violating
-        SLO
+      title: The goserver SLI of the gitaly service on node `{{ $labels.fqdn }}` has
+        an apdex violating SLO
       description: |
         This SLI monitors all Gitaly GRPC requests in aggregate, excluding the OperationService. GRPC failures which are considered to be the "server's fault" are counted as errors. The apdex score is based on a subset of GRPC methods which are expected to be fast.
 
@@ -566,12 +555,12 @@ groups:
 
         Currently the apdex value for {{ $labels.fqdn }} is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: alerts-component_node_slo_apdex
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/alerts-component_node_slo_apdex?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-shard={{
-        $labels.shard }}&var-fqdn={{ $labels.fqdn }}&var-component={{ $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '965700560'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-component_node_slo_apdex?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-shard={{ $labels.shard }}&var-fqdn={{ $labels.fqdn }}&var-component={{
+        $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "965700560"
       grafana_variables: environment,type,stage,shard,fqdn,component
       promql_template_1: |
         histogram_quantile(
@@ -592,8 +581,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: apdex
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
       window: 6h
     expr: |
       (
@@ -614,18 +603,17 @@ groups:
   - alert: GitalyServiceGoserverErrorSLOViolation
     for: 2m
     annotations:
-      title: The goserver SLI of the gitaly service (`{{ $labels.stage }}` stage) has an error rate violating
-        SLO
+      title: The goserver SLI of the gitaly service (`{{ $labels.stage }}` stage)
+        has an error rate violating SLO
       description: |
         This SLI monitors all Gitaly GRPC requests in aggregate, excluding the OperationService. GRPC failures which are considered to be the "server's fault" are counted as errors. The apdex score is based on a subset of GRPC methods which are expected to be fast.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: gitaly-main/gitaly-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '594670537'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "594670537"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -645,8 +633,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -676,8 +664,8 @@ groups:
   - alert: GitalyServiceGoserverErrorSLOViolationSingleNode
     for: 10m
     annotations:
-      title: The goserver SLI of the gitaly service on node `{{ $labels.fqdn }}` has an error rate violating
-        SLO
+      title: The goserver SLI of the gitaly service on node `{{ $labels.fqdn }}` has
+        an error rate violating SLO
       description: |
         This SLI monitors all Gitaly GRPC requests in aggregate, excluding the OperationService. GRPC failures which are considered to be the "server's fault" are counted as errors. The apdex score is based on a subset of GRPC methods which are expected to be fast.
 
@@ -685,12 +673,12 @@ groups:
 
         Currently the apdex value for {{ $labels.fqdn }} is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: alerts-component_node_slo_error
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/alerts-component_node_slo_error?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-shard={{
-        $labels.shard }}&var-fqdn={{ $labels.fqdn }}&var-component={{ $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '965700560'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-component_node_slo_error?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-shard={{ $labels.shard }}&var-fqdn={{ $labels.fqdn }}&var-component={{
+        $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "965700560"
       grafana_variables: environment,type,stage,shard,fqdn,component
       promql_template_1: |
         sum by (env,environment,tier,stage,shard,fqdn) (
@@ -710,8 +698,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
       window: 1h
     expr: |
       (
@@ -732,8 +720,8 @@ groups:
   - alert: GitalyServiceGoserverErrorSLOViolationSingleNode
     for: 10m
     annotations:
-      title: The goserver SLI of the gitaly service on node `{{ $labels.fqdn }}` has an error rate violating
-        SLO
+      title: The goserver SLI of the gitaly service on node `{{ $labels.fqdn }}` has
+        an error rate violating SLO
       description: |
         This SLI monitors all Gitaly GRPC requests in aggregate, excluding the OperationService. GRPC failures which are considered to be the "server's fault" are counted as errors. The apdex score is based on a subset of GRPC methods which are expected to be fast.
 
@@ -741,12 +729,12 @@ groups:
 
         Currently the apdex value for {{ $labels.fqdn }} is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: alerts-component_node_slo_error
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/alerts-component_node_slo_error?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-shard={{
-        $labels.shard }}&var-fqdn={{ $labels.fqdn }}&var-component={{ $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '965700560'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-component_node_slo_error?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-shard={{ $labels.shard }}&var-fqdn={{ $labels.fqdn }}&var-component={{
+        $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "965700560"
       grafana_variables: environment,type,stage,shard,fqdn,component
       promql_template_1: |
         sum by (env,environment,tier,stage,shard,fqdn) (
@@ -766,8 +754,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
       window: 6h
     expr: |
       (
@@ -788,19 +776,17 @@ groups:
   - alert: GitalyServiceGoserverTrafficCessation
     for: 5m
     annotations:
-      title: >-
-        The goserver SLI of the gitaly service (`{{ $labels.stage }}` stage) has not received any traffic
-        in the past 30 minutes
+      title: The goserver SLI of the gitaly service (`{{ $labels.stage }}` stage)
+        has not received any traffic in the past 30 minutes
       description: |
         This SLI monitors all Gitaly GRPC requests in aggregate, excluding the OperationService. GRPC failures which are considered to be the "server's fault" are counted as errors. The apdex score is based on a subset of GRPC methods which are expected to be fast.
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: gitaly-main/gitaly-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '1687078843'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1687078843"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -818,17 +804,15 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
-    expr: >
-      gitlab_component_ops:rate_30m{type="gitaly", component="goserver", stage="main", monitor="global"}
-      == 0
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{type="gitaly", component="goserver", stage="main", monitor="global"} == 0
   - alert: GitalyServiceGoserverTrafficAbsent
     for: 30m
     annotations:
-      title: >-
-        The goserver SLI of the gitaly service (`{{ $labels.stage }}` stage) has not reported any traffic
-        in the past 30 minutes
+      title: The goserver SLI of the gitaly service (`{{ $labels.stage }}` stage)
+        has not reported any traffic in the past 30 minutes
       description: |
         This SLI monitors all Gitaly GRPC requests in aggregate, excluding the OperationService. GRPC failures which are considered to be the "server's fault" are counted as errors. The apdex score is based on a subset of GRPC methods which are expected to be fast.
 
@@ -836,11 +820,10 @@ groups:
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
       grafana_dashboard_id: gitaly-main/gitaly-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '1687078843'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1687078843"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -858,8 +841,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
+      slo_alert: "no"
+      user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{type="gitaly", component="goserver", stage="main", monitor="global"} offset 1h
       unless
@@ -867,20 +850,18 @@ groups:
   - alert: GitalyServiceGoserverOpServiceApdexSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The goserver_op_service SLI of the gitaly service (`{{ $labels.stage }}` stage) has an apdex violating
-        SLO
+      title: The goserver_op_service SLI of the gitaly service (`{{ $labels.stage
+        }}` stage) has an apdex violating SLO
       description: |
         This SLI monitors requests to Gitaly's OperationService, via its GRPC endpoint. OperationService methods are generally expected to be slower than other Gitaly endpoints and this is reflected in the SLI.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: gitaly-main/gitaly-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
-        $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '3220316186'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3220316186"
       grafana_variables: environment,type,stage,component
       promql_template_1: |
         histogram_quantile(
@@ -901,8 +882,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: apdex
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -932,9 +913,8 @@ groups:
   - alert: GitalyServiceGoserverOpServiceApdexSLOViolationSingleNode
     for: 10m
     annotations:
-      title: >-
-        The goserver_op_service SLI of the gitaly service on node `{{ $labels.fqdn }}` has an apdex violating
-        SLO
+      title: The goserver_op_service SLI of the gitaly service on node `{{ $labels.fqdn
+        }}` has an apdex violating SLO
       description: |
         This SLI monitors requests to Gitaly's OperationService, via its GRPC endpoint. OperationService methods are generally expected to be slower than other Gitaly endpoints and this is reflected in the SLI.
 
@@ -942,12 +922,12 @@ groups:
 
         Currently the apdex value for {{ $labels.fqdn }} is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: alerts-component_node_slo_apdex
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/alerts-component_node_slo_apdex?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-shard={{
-        $labels.shard }}&var-fqdn={{ $labels.fqdn }}&var-component={{ $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '965700560'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-component_node_slo_apdex?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-shard={{ $labels.shard }}&var-fqdn={{ $labels.fqdn }}&var-component={{
+        $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "965700560"
       grafana_variables: environment,type,stage,shard,fqdn,component
       promql_template_1: |
         histogram_quantile(
@@ -968,8 +948,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: apdex
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
       window: 1h
     expr: |
       (
@@ -990,9 +970,8 @@ groups:
   - alert: GitalyServiceGoserverOpServiceApdexSLOViolationSingleNode
     for: 10m
     annotations:
-      title: >-
-        The goserver_op_service SLI of the gitaly service on node `{{ $labels.fqdn }}` has an apdex violating
-        SLO
+      title: The goserver_op_service SLI of the gitaly service on node `{{ $labels.fqdn
+        }}` has an apdex violating SLO
       description: |
         This SLI monitors requests to Gitaly's OperationService, via its GRPC endpoint. OperationService methods are generally expected to be slower than other Gitaly endpoints and this is reflected in the SLI.
 
@@ -1000,12 +979,12 @@ groups:
 
         Currently the apdex value for {{ $labels.fqdn }} is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: alerts-component_node_slo_apdex
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/alerts-component_node_slo_apdex?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-shard={{
-        $labels.shard }}&var-fqdn={{ $labels.fqdn }}&var-component={{ $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '965700560'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-component_node_slo_apdex?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-shard={{ $labels.shard }}&var-fqdn={{ $labels.fqdn }}&var-component={{
+        $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "965700560"
       grafana_variables: environment,type,stage,shard,fqdn,component
       promql_template_1: |
         histogram_quantile(
@@ -1026,8 +1005,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: apdex
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
       window: 6h
     expr: |
       (
@@ -1048,19 +1027,17 @@ groups:
   - alert: GitalyServiceGoserverOpServiceErrorSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The goserver_op_service SLI of the gitaly service (`{{ $labels.stage }}` stage) has an error rate
-        violating SLO
+      title: The goserver_op_service SLI of the gitaly service (`{{ $labels.stage
+        }}` stage) has an error rate violating SLO
       description: |
         This SLI monitors requests to Gitaly's OperationService, via its GRPC endpoint. OperationService methods are generally expected to be slower than other Gitaly endpoints and this is reflected in the SLI.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: gitaly-main/gitaly-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '1534403952'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1534403952"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -1080,8 +1057,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -1111,9 +1088,8 @@ groups:
   - alert: GitalyServiceGoserverOpServiceErrorSLOViolationSingleNode
     for: 10m
     annotations:
-      title: >-
-        The goserver_op_service SLI of the gitaly service on node `{{ $labels.fqdn }}` has an error rate
-        violating SLO
+      title: The goserver_op_service SLI of the gitaly service on node `{{ $labels.fqdn
+        }}` has an error rate violating SLO
       description: |
         This SLI monitors requests to Gitaly's OperationService, via its GRPC endpoint. OperationService methods are generally expected to be slower than other Gitaly endpoints and this is reflected in the SLI.
 
@@ -1121,12 +1097,12 @@ groups:
 
         Currently the apdex value for {{ $labels.fqdn }} is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: alerts-component_node_slo_error
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/alerts-component_node_slo_error?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-shard={{
-        $labels.shard }}&var-fqdn={{ $labels.fqdn }}&var-component={{ $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '965700560'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-component_node_slo_error?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-shard={{ $labels.shard }}&var-fqdn={{ $labels.fqdn }}&var-component={{
+        $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "965700560"
       grafana_variables: environment,type,stage,shard,fqdn,component
       promql_template_1: |
         sum by (env,environment,tier,stage,shard,fqdn) (
@@ -1146,8 +1122,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
       window: 1h
     expr: |
       (
@@ -1168,9 +1144,8 @@ groups:
   - alert: GitalyServiceGoserverOpServiceErrorSLOViolationSingleNode
     for: 10m
     annotations:
-      title: >-
-        The goserver_op_service SLI of the gitaly service on node `{{ $labels.fqdn }}` has an error rate
-        violating SLO
+      title: The goserver_op_service SLI of the gitaly service on node `{{ $labels.fqdn
+        }}` has an error rate violating SLO
       description: |
         This SLI monitors requests to Gitaly's OperationService, via its GRPC endpoint. OperationService methods are generally expected to be slower than other Gitaly endpoints and this is reflected in the SLI.
 
@@ -1178,12 +1153,12 @@ groups:
 
         Currently the apdex value for {{ $labels.fqdn }} is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: alerts-component_node_slo_error
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/alerts-component_node_slo_error?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-shard={{
-        $labels.shard }}&var-fqdn={{ $labels.fqdn }}&var-component={{ $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '965700560'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-component_node_slo_error?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-shard={{ $labels.shard }}&var-fqdn={{ $labels.fqdn }}&var-component={{
+        $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "965700560"
       grafana_variables: environment,type,stage,shard,fqdn,component
       promql_template_1: |
         sum by (env,environment,tier,stage,shard,fqdn) (
@@ -1203,8 +1178,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
       window: 6h
     expr: |
       (
@@ -1225,19 +1200,17 @@ groups:
   - alert: GitalyServiceGoserverOpServiceTrafficCessation
     for: 5m
     annotations:
-      title: >-
-        The goserver_op_service SLI of the gitaly service (`{{ $labels.stage }}` stage) has not received
-        any traffic in the past 30 minutes
+      title: The goserver_op_service SLI of the gitaly service (`{{ $labels.stage
+        }}` stage) has not received any traffic in the past 30 minutes
       description: |
         This SLI monitors requests to Gitaly's OperationService, via its GRPC endpoint. OperationService methods are generally expected to be slower than other Gitaly endpoints and this is reflected in the SLI.
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: gitaly-main/gitaly-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '1897473754'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1897473754"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -1255,17 +1228,15 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
-    expr: >
-      gitlab_component_ops:rate_30m{type="gitaly", component="goserver_op_service", stage="main", monitor="global"}
-      == 0
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{type="gitaly", component="goserver_op_service", stage="main", monitor="global"} == 0
   - alert: GitalyServiceGoserverOpServiceTrafficAbsent
     for: 30m
     annotations:
-      title: >-
-        The goserver_op_service SLI of the gitaly service (`{{ $labels.stage }}` stage) has not reported
-        any traffic in the past 30 minutes
+      title: The goserver_op_service SLI of the gitaly service (`{{ $labels.stage
+        }}` stage) has not reported any traffic in the past 30 minutes
       description: |
         This SLI monitors requests to Gitaly's OperationService, via its GRPC endpoint. OperationService methods are generally expected to be slower than other Gitaly endpoints and this is reflected in the SLI.
 
@@ -1273,11 +1244,10 @@ groups:
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
       grafana_dashboard_id: gitaly-main/gitaly-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '1897473754'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1897473754"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -1295,8 +1265,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
+      slo_alert: "no"
+      user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{type="gitaly", component="goserver_op_service", stage="main", monitor="global"} offset 1h
       unless

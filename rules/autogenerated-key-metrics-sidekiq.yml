@@ -2607,72 +2607,72 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: shard_catchall
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: sv
       type: sidekiq
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: shard_database_throttled
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: sv
       type: sidekiq
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: shard_elasticsearch
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: sv
       type: sidekiq
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: shard_gitaly_throttled
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: sv
       type: sidekiq
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: shard_imports
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: sv
       type: sidekiq
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: shard_low_urgency_cpu_bound
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: sv
       type: sidekiq
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: shard_memory_bound
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: sv
       type: sidekiq
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: shard_urgent_cpu_bound
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: sv
       type: sidekiq
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: shard_urgent_other
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: sv
       type: sidekiq
-    expr: '1'
+    expr: "1"

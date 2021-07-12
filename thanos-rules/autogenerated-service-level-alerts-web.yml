@@ -8,19 +8,18 @@ groups:
   - alert: WebServiceImagescalerApdexSLOViolation
     for: 2m
     annotations:
-      title: The imagescaler SLI of the web service (`{{ $labels.stage }}` stage) has an apdex violating
-        SLO
+      title: The imagescaler SLI of the web service (`{{ $labels.stage }}` stage)
+        has an apdex violating SLO
       description: |
         The imagescaler rescales images before sending them to clients. This allows faster transmission of images and faster rendering of web pages.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: web-main/web-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
-        $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2653912995'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2653912995"
       grafana_variables: environment,type,stage,component
       promql_template_1: |
         histogram_quantile(
@@ -41,8 +40,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: apdex
-      slo_alert: 'yes'
-      user_impacting: 'no'
+      slo_alert: "yes"
+      user_impacting: "no"
     expr: |
       (
         (
@@ -72,19 +71,17 @@ groups:
   - alert: WebServiceImagescalerTrafficCessation
     for: 5m
     annotations:
-      title: >-
-        The imagescaler SLI of the web service (`{{ $labels.stage }}` stage) has not received any traffic
-        in the past 30 minutes
+      title: The imagescaler SLI of the web service (`{{ $labels.stage }}` stage)
+        has not received any traffic in the past 30 minutes
       description: |
         The imagescaler rescales images before sending them to clients. This allows faster transmission of images and faster rendering of web pages.
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: web-main/web-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2371921356'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2371921356"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -102,17 +99,15 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'no'
-    expr: >
-      gitlab_component_ops:rate_30m{type="web", component="imagescaler", stage="main", monitor="global"}
-      == 0
+      slo_alert: "no"
+      user_impacting: "no"
+    expr: |
+      gitlab_component_ops:rate_30m{type="web", component="imagescaler", stage="main", monitor="global"} == 0
   - alert: WebServiceImagescalerTrafficAbsent
     for: 30m
     annotations:
-      title: >-
-        The imagescaler SLI of the web service (`{{ $labels.stage }}` stage) has not reported any traffic
-        in the past 30 minutes
+      title: The imagescaler SLI of the web service (`{{ $labels.stage }}` stage)
+        has not reported any traffic in the past 30 minutes
       description: |
         The imagescaler rescales images before sending them to clients. This allows faster transmission of images and faster rendering of web pages.
 
@@ -120,11 +115,10 @@ groups:
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
       grafana_dashboard_id: web-main/web-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2371921356'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2371921356"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -142,8 +136,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'no'
+      slo_alert: "no"
+      user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_5m{type="web", component="imagescaler", stage="main", monitor="global"} offset 1h
       unless
@@ -151,19 +145,17 @@ groups:
   - alert: WebServiceLoadbalancerErrorSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The loadbalancer SLI of the web service (`{{ $labels.stage }}` stage) has an error rate violating
-        SLO
+      title: The loadbalancer SLI of the web service (`{{ $labels.stage }}` stage)
+        has an error rate violating SLO
       description: |
         Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: web-main/web-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '3255520955'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3255520955"
       grafana_variables: environment,stage
       runbook: docs/web/README.md
     labels:
@@ -177,8 +169,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -208,19 +200,17 @@ groups:
   - alert: WebServiceLoadbalancerTrafficCessation
     for: 5m
     annotations:
-      title: >-
-        The loadbalancer SLI of the web service (`{{ $labels.stage }}` stage) has not received any traffic
-        in the past 30 minutes
+      title: The loadbalancer SLI of the web service (`{{ $labels.stage }}` stage)
+        has not received any traffic in the past 30 minutes
       description: |
         Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: web-main/web-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '138982496'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "138982496"
       grafana_variables: environment,stage
       runbook: docs/web/README.md
     labels:
@@ -234,17 +224,15 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
-    expr: >
-      gitlab_component_ops:rate_30m{type="web", component="loadbalancer", stage="main", monitor="global"}
-      == 0
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{type="web", component="loadbalancer", stage="main", monitor="global"} == 0
   - alert: WebServiceLoadbalancerTrafficAbsent
     for: 30m
     annotations:
-      title: >-
-        The loadbalancer SLI of the web service (`{{ $labels.stage }}` stage) has not reported any traffic
-        in the past 30 minutes
+      title: The loadbalancer SLI of the web service (`{{ $labels.stage }}` stage)
+        has not reported any traffic in the past 30 minutes
       description: |
         Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
 
@@ -252,11 +240,10 @@ groups:
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
       grafana_dashboard_id: web-main/web-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '138982496'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "138982496"
       grafana_variables: environment,stage
       runbook: docs/web/README.md
     labels:
@@ -270,8 +257,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
+      slo_alert: "no"
+      user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{type="web", component="loadbalancer", stage="main", monitor="global"} offset 1h
       unless
@@ -279,18 +266,18 @@ groups:
   - alert: WebServicePumaApdexSLOViolation
     for: 2m
     annotations:
-      title: The puma SLI of the web service (`{{ $labels.stage }}` stage) has an apdex violating SLO
+      title: The puma SLI of the web service (`{{ $labels.stage }}` stage) has an
+        apdex violating SLO
       description: |
         Aggregation of most web requests that pass through the puma to the GitLab rails monolith. Healthchecks are excluded.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: web-main/web-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
-        $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '561966508'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "561966508"
       grafana_variables: environment,type,stage,component
       promql_template_1: |
         histogram_quantile(
@@ -311,8 +298,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: apdex
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -342,18 +329,17 @@ groups:
   - alert: WebServicePumaErrorSLOViolation
     for: 2m
     annotations:
-      title: The puma SLI of the web service (`{{ $labels.stage }}` stage) has an error rate violating
-        SLO
+      title: The puma SLI of the web service (`{{ $labels.stage }}` stage) has an
+        error rate violating SLO
       description: |
         Aggregation of most web requests that pass through the puma to the GitLab rails monolith. Healthchecks are excluded.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: web-main/web-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2425637513'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2425637513"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -371,8 +357,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -402,19 +388,17 @@ groups:
   - alert: WebServicePumaTrafficCessation
     for: 5m
     annotations:
-      title: >-
-        The puma SLI of the web service (`{{ $labels.stage }}` stage) has not received any traffic in
-        the past 30 minutes
+      title: The puma SLI of the web service (`{{ $labels.stage }}` stage) has not
+        received any traffic in the past 30 minutes
       description: |
         Aggregation of most web requests that pass through the puma to the GitLab rails monolith. Healthchecks are excluded.
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: web-main/web-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '110019945'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "110019945"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -432,18 +416,15 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
-    expr: 'gitlab_component_ops:rate_30m{type="web", component="puma", stage="main", monitor="global"}
-      == 0
-
-      '
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{type="web", component="puma", stage="main", monitor="global"} == 0
   - alert: WebServicePumaTrafficAbsent
     for: 30m
     annotations:
-      title: >-
-        The puma SLI of the web service (`{{ $labels.stage }}` stage) has not reported any traffic in
-        the past 30 minutes
+      title: The puma SLI of the web service (`{{ $labels.stage }}` stage) has not
+        reported any traffic in the past 30 minutes
       description: |
         Aggregation of most web requests that pass through the puma to the GitLab rails monolith. Healthchecks are excluded.
 
@@ -451,11 +432,10 @@ groups:
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
       grafana_dashboard_id: web-main/web-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '110019945'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "110019945"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -473,8 +453,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
+      slo_alert: "no"
+      user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{type="web", component="puma", stage="main", monitor="global"} offset 1h
       unless
@@ -482,19 +462,18 @@ groups:
   - alert: WebServiceWorkhorseApdexSLOViolation
     for: 2m
     annotations:
-      title: The workhorse SLI of the web service (`{{ $labels.stage }}` stage) has an apdex violating
-        SLO
+      title: The workhorse SLI of the web service (`{{ $labels.stage }}` stage) has
+        an apdex violating SLO
       description: |
         Aggregation of most web requests that pass through workhorse, monitored via the HTTP interface. Excludes health, readiness and liveness requests. Some known slow requests, such as HTTP uploads, are excluded from the apdex score.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: web-main/web-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
-        $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2586818196'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2586818196"
       grafana_variables: environment,type,stage,component
       promql_template_1: |
         histogram_quantile(
@@ -515,8 +494,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: apdex
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -546,18 +525,17 @@ groups:
   - alert: WebServiceWorkhorseErrorSLOViolation
     for: 2m
     annotations:
-      title: The workhorse SLI of the web service (`{{ $labels.stage }}` stage) has an error rate violating
-        SLO
+      title: The workhorse SLI of the web service (`{{ $labels.stage }}` stage) has
+        an error rate violating SLO
       description: |
         Aggregation of most web requests that pass through workhorse, monitored via the HTTP interface. Excludes health, readiness and liveness requests. Some known slow requests, such as HTTP uploads, are excluded from the apdex score.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: web-main/web-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2047984749'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2047984749"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -575,8 +553,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -606,19 +584,17 @@ groups:
   - alert: WebServiceWorkhorseTrafficCessation
     for: 5m
     annotations:
-      title: >-
-        The workhorse SLI of the web service (`{{ $labels.stage }}` stage) has not received any traffic
-        in the past 30 minutes
+      title: The workhorse SLI of the web service (`{{ $labels.stage }}` stage) has
+        not received any traffic in the past 30 minutes
       description: |
         Aggregation of most web requests that pass through workhorse, monitored via the HTTP interface. Excludes health, readiness and liveness requests. Some known slow requests, such as HTTP uploads, are excluded from the apdex score.
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: web-main/web-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '831392945'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "831392945"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -636,17 +612,15 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
-    expr: >
-      gitlab_component_ops:rate_30m{type="web", component="workhorse", stage="main", monitor="global"}
-      == 0
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{type="web", component="workhorse", stage="main", monitor="global"} == 0
   - alert: WebServiceWorkhorseTrafficAbsent
     for: 30m
     annotations:
-      title: >-
-        The workhorse SLI of the web service (`{{ $labels.stage }}` stage) has not reported any traffic
-        in the past 30 minutes
+      title: The workhorse SLI of the web service (`{{ $labels.stage }}` stage) has
+        not reported any traffic in the past 30 minutes
       description: |
         Aggregation of most web requests that pass through workhorse, monitored via the HTTP interface. Excludes health, readiness and liveness requests. Some known slow requests, such as HTTP uploads, are excluded from the apdex score.
 
@@ -654,11 +628,10 @@ groups:
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
       grafana_dashboard_id: web-main/web-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '831392945'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "831392945"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -676,8 +649,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
+      slo_alert: "no"
+      user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{type="web", component="workhorse", stage="main", monitor="global"} offset 1h
       unless
