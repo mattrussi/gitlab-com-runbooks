@@ -26,7 +26,7 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
       maxClientConns: 8192,
     },
     query: |||
-      avg_over_time(pgbouncer_pools_client_active_connections {%(selector)s}[%(rangeInterval)s])
+      avg_over_time(pgbouncer_used_clients {%(selector)s}[%(rangeInterval)s])
       /
       %(maxClientConns)g
     |||,

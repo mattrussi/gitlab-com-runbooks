@@ -649,7 +649,7 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            avg_over_time(pgbouncer_pools_client_active_connections {type=~"patroni|pgbouncer"}[5m])
+            avg_over_time(pgbouncer_used_clients {type=~"patroni|pgbouncer"}[5m])
             /
             8192
             ,
@@ -3521,7 +3521,7 @@ groups:
         max by(environment, tier, type, stage, fqdn) (
           clamp_min(
             clamp_max(
-              avg_over_time(pgbouncer_pools_client_active_connections {environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
+              avg_over_time(pgbouncer_used_clients {environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
               /
               8192
               ,
