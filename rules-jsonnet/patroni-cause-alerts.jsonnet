@@ -115,6 +115,7 @@ local rules = {
                   command!="autovacuum",
                   command!~"[cC][rR][eE][aA][tT][eE]",
                   command!~"[aA][nN][aA][lL][yY][zZ][eE]",
+                  command!~"[rR][eE][iI][nN][dD][eE][xX]",
                 }
               )
               > 540
