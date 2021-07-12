@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # rubocop:disable Style/TrailingCommaInHashLiteral
 # rubocop:disable Style/TrailingCommaInArguments
 # rubocop:disable Style/TrailingCommaInArrayLiteral
@@ -6,9 +7,6 @@
 # rubocop:disable Style/BlockDelimiters
 # rubocop:disable Style/MultilineBlockChain
 # rubocop:disable Layout/SpaceAroundOperators
-# rubocop:disable Layout/EmptyLineAfterGuardClause
-# rubocop:disable Layout/IndentFirstHashElement
-# rubocop:disable Layout/AlignHash
 # rubocop:disable Layout/SpaceAfterColon
 # rubocop:disable Layout/SpaceInsideHashLiteralBraces
 # rubocop:disable Layout/SpaceAfterComma
@@ -57,6 +55,7 @@ OptionParser.new do |opts|
 
   opts.on("--correlation-query=Q", "Specific correlation query to run (defaults to all of them)") do |v|
     raise "correlation query must be one of: #{correlation_queries.keys}" unless correlation_queries[v]
+
     options[:correlation_query] = v
   end
 
@@ -101,27 +100,30 @@ client = HTTP
 
 resp = client.get('/')
 raise "expected status 200, got #{resp.status.code}, response #{resp}" unless resp.status.success?
+
 body = JSON.parse(resp.body)
 
 req = JSON.generate({
-  "_source": ["json.correlation_id"],
-  "query": {
-    "bool":{"must":[
-      {"exists": {"field": "json.correlation_id"}},
-      {"range":{"json.time":{"gte":timestamp_yesterday,"lte":timestamp_until,"format":"epoch_millis"}}},
-    ]}
-  },
-  "size": options[:num_correlation_ids],
-})
+                      "_source": ["json.correlation_id"],
+                      "query": {
+                        "bool": {"must": [
+                          {"exists": {"field": "json.correlation_id"}},
+                          {"range":{"json.time":{"gte":timestamp_yesterday,"lte":timestamp_until,"format":"epoch_millis"}}},
+                        ]}
+                      },
+                      "size": options[:num_correlation_ids],
+                    })
 resp = client.post(
   '/pubsub-rails-inf-gprd-*/_search',
   headers: { 'Content-Type': 'application/json; charset=utf-8' },
   body: req,
 )
 raise "expected status 200, got #{resp.status.code}, response #{resp}" unless resp.status.success?
+
 body = JSON.parse(resp.body)
 
 raise "expected a hit on correlation_id, found none" unless body['hits']['hits'].size > 0
+
 correlation_ids = body['hits']['hits'].map {|hit| hit['_source']['json']['correlation_id']}
 
 if options[:verbose]
@@ -150,6 +152,7 @@ clusters.each do |cluster, url|
 
   resp = client.get('/')
   raise "expected status 200, got #{resp.status.code}, response #{resp}" unless resp.status.success?
+
   body = JSON.parse(resp.body)
 
   correlation_queries.each do |index, query_json|
@@ -179,6 +182,7 @@ clusters.each do |cluster, url|
         body: query_json,
       )
       raise "expected status 200, got #{resp.status.code}, response #{resp}" unless resp.status.success?
+
       body = JSON.parse(resp.body)
 
       stats[cluster]["correlation_server_#{index}"].record(body['took'])
@@ -252,9 +256,6 @@ puts stats.map { |c,v| [c,v.map { |k,h| [k,h.stats([ 50.0, 75.0, 90.0, 99.0, 100
 # rubocop:enable Style/BlockDelimiters
 # rubocop:enable Style/MultilineBlockChain
 # rubocop:enable Layout/SpaceAroundOperators
-# rubocop:enable Layout/EmptyLineAfterGuardClause
-# rubocop:enable Layout/IndentFirstHashElement
-# rubocop:enable Layout/AlignHash
 # rubocop:enable Layout/SpaceAfterColon
 # rubocop:enable Layout/SpaceInsideHashLiteralBraces
 # rubocop:enable Layout/SpaceAfterComma

@@ -10,7 +10,7 @@ class Validator
     @context = []
     @failures = []
     @service_catalog = YAML.load_file(File.join(__dir__, "..", "services", "service-catalog.yml"))
-    @service_catalog_teams = @service_catalog["teams"].collect { |team| [team["name"], team] }.to_h
+    @service_catalog_teams = @service_catalog["teams"].to_h { |team| [team["name"], team] }
   end
 
   private
@@ -122,23 +122,22 @@ class Validator
     @context << "group: #{name}"
 
     begin
-      begin
-        if thanos_evaluation
-          # Partial Response Strategy:
-          # See https://github.com/thanos-io/thanos/blob/master/docs/components/rule.md#partial-response
-          partial_response_strategy = group["partial_response_strategy"]
+      if thanos_evaluation
+        # Partial Response Strategy:
+        # See https://github.com/thanos-io/thanos/blob/master/docs/components/rule.md#partial-response
+        partial_response_strategy = group["partial_response_strategy"]
 
-          validation_error("group should include an explicit partial_response_strategy value. The default is 'abort' but because of the way we use Thanos Ruler, many of our rules will use 'warn' and therefore we prefer this to be explicitly set.") unless partial_response_strategy
-          validation_error("group should have an partial_response_strategy value of 'warn' or 'abort'.") unless %w[warn abort].include?(partial_response_strategy)
-        end
-
-        rules = group["rules"]
-        rules.each do |rule|
-          validate_rule rule, thanos_evaluation
-        rescue ValidationError
-          # Continue onto next rule after validation failure
-        end
+        validation_error("group should include an explicit partial_response_strategy value. The default is 'abort' but because of the way we use Thanos Ruler, many of our rules will use 'warn' and therefore we prefer this to be explicitly set.") unless partial_response_strategy
+        validation_error("group should have an partial_response_strategy value of 'warn' or 'abort'.") unless %w[warn abort].include?(partial_response_strategy)
       end
+
+      rules = group["rules"]
+      rules.each do |rule|
+        validate_rule rule, thanos_evaluation
+      rescue ValidationError
+        # Continue onto next rule after validation failure
+      end
+
     ensure
       @context.pop
     end

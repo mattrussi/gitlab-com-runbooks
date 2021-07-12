@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'digest/crc16'
 require 'json'
 
@@ -21,6 +22,7 @@ def self.hash_slot(key)
     e = key.index "}", s + 1
     key = key[s + 1..e - 1] if e && e != s + 1
   end
+
   Digest::CRC16.checksum(key) % 16384
 end
 

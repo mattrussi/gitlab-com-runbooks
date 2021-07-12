@@ -40,13 +40,13 @@ parser.parse!
 
 abort("Missing options. Use #{$PROGRAM_NAME} --help to see the list of options available".red) if options.values.empty?
 
-require '/opt/gitlab/embedded/service/gitlab-rails/config/environment.rb'
+require '/opt/gitlab/embedded/service/gitlab-rails/config/environment'
 
 class SlackWebhook
   CouldNotPostError = Class.new(StandardError)
 
   CHANNEL = '#announcements'
-  WEBHOOK_URL = 'https://hooks.slack.com/services/' + ENV['SLACK_TOKEN'].to_s
+  WEBHOOK_URL = "https://hooks.slack.com/services/#{ENV['SLACK_TOKEN']}"
 
   def self.start(project)
     fire_hook("#{username} started a foreground import of *#{project}*")
@@ -85,7 +85,7 @@ class LocalProjectService < ::Projects::CreateService
     @project.import_state&.update_column(:status, 'scheduled')
 
     if @project.errors.empty?
-      job_id = 'custom-import-@project.id-' + SecureRandom.base64
+      job_id = "custom-import-@project.id-#{SecureRandom.base64}"
 
       @project.import_state.update_column(:jid, job_id) if job_id
       @project.log_import_activity(job_id)

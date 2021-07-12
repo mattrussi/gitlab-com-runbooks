@@ -128,8 +128,8 @@ module Runbooks
       end
 
       def initialize_log(formatter = formatter_procedure)
-        STDOUT.sync = true
-        log = Logger.new(STDOUT)
+        $stdout.sync = true
+        log = Logger.new($stdout)
         log.level = Logger::INFO
         log.formatter = formatter
         log
@@ -143,6 +143,7 @@ module Runbooks
     class Sidekick
       include ::Runbooks::Sidekiq::Logging
       attr_reader :options
+
       def initialize(options)
         @options = options
         log.level = options.log_level
@@ -241,6 +242,7 @@ module Runbooks
             log.debug "Killing job: #{job_to_s(job)}"
             job.delete
           end
+
           count += 1
         end
         count
@@ -250,6 +252,7 @@ module Runbooks
         jobs = []
         for_each_job(query) do |job|
           jobs << job
+
           break if safely_meets_or_exceeds?(jobs.length, options.fetch_limit) ||
             safely_meets_or_exceeds?(jobs.length, options.limit)
         end
@@ -314,14 +317,17 @@ module Runbooks
         log.info '-----------'
         log.info 'Queue size:'
         log.info '-----------'
+
         if queue_data.empty?
           log.info "None"
         else
           pretty_print(queue_data)
         end
+
         log.info '------------------------------'
         log.info 'Top job counts with arguments:'
         log.info '------------------------------'
+
         if job_data.empty?
           log.info "None"
         else

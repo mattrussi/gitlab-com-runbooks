@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 diff_stats = git.diff.stats
 
 key_metrics_changes =
