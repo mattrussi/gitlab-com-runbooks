@@ -449,9 +449,11 @@ deploy_dashboards:
     - dashboards/tag-unmanaged-dashboards.sh
 
 .docker_image_template:
-  image: docker:stable
+  image: docker:19.03.12
+  tags:
+    - gitlab-org-docker
   services:
-    - docker:dind
+    - docker:19.03.12-dind
   retry: 2
   variables:
     DOCKER_TLS_CERTDIR: ""

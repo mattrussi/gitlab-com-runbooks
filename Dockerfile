@@ -21,7 +21,17 @@ FROM google/cloud-sdk:alpine
 ENV ALERTMANAGER_VERSION 0.21.0
 ENV PROMETHEUS_VERSION 2.20.1
 
-RUN apk add --no-cache curl bash git jq alpine-sdk ruby build-base ruby-dev tar gcc libc-dev make
+RUN apk add --no-cache curl bash git jq alpine-sdk build-base openssl tar gcc libc-dev make
+
+COPY .ruby-version .ruby-version
+
+RUN apk add --no-cache linux-headers openssl-dev zlib-dev && \
+  git clone https://github.com/rbenv/ruby-build.git && \
+  PREFIX=/usr/local ./ruby-build/install.sh && \
+  ruby-build $(cat .ruby-version) /usr/local && \
+  apk del --no-cache glib-dev linux-headers openssl-dev zlib-dev && \
+  rm -rf /tmp/* /var/tmp/* /var/cache/apk/*
+
 RUN gcloud components install kubectl -q
 
 RUN mkdir /alertmanager && \
