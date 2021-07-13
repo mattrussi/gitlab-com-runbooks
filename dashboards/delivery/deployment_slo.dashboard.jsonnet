@@ -107,4 +107,16 @@ basic.dashboard(
   ),
 ], rowHeight=10, startRow=200))
 
+.addPanel(
+  grafana.row.new(title='⚙️ delivery-metrics service'),
+  gridPos={ x: 0, y: 300, w: 24, h: 1 },
+).addPanels(layout.singleRow([
+  basic.table(
+    'PODs',
+    description='This table shows the pods running delivery-metrics with their revision and build date, except during a deployment, we expect to see only one pod',
+    query='count(delivery_version_info) by (revision, build_date, pod)',
+  ),
+], rowHeight=4, startRow=300))
+
+
 .trailer()
