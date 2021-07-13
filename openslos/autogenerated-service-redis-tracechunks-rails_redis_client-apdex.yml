@@ -1,0 +1,26 @@
+# HEADER
+apiVersion: openslo/v1alpha
+kind: SLO
+metadata:
+  name: service-redis-tracechunks-rails_redis_client-apdex
+spec:
+  budgetingMethod: Occurrences
+  description: "Aggregation of all Redis operations issued to the Redis Tracechunks
+    service from the Rails codebase.\n\nIf this SLI is experiencing a degradation
+    then the output of CI jobs may be delayed in becoming visible\nor in severe situations
+    the data may be lost \n"
+  objectives:
+  - ratioMetrics:
+      good:
+        query: sum(rate(apiserver_request_total{code!~"(5..|429)"}[{{.window}}]))
+        queryType: promql
+        source: prometheus
+      target: 0.9999
+      total:
+        query: sum(rate(apiserver_request_total[{{.window}}]))
+        queryType: promql
+        source: prometheus
+  service: redis-tracechunks
+  timeWindows:
+  - count: 30
+    unit: Day

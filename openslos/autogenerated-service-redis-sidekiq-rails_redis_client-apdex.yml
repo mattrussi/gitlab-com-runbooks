@@ -1,0 +1,30 @@
+# HEADER
+apiVersion: openslo/v1alpha
+kind: SLO
+metadata:
+  name: service-redis-sidekiq-rails_redis_client-apdex
+spec:
+  budgetingMethod: Occurrences
+  description: |
+    Aggregation of all Redis operations issued to the Redis Sidekiq service from the Rails codebase.
+
+    If this SLI is experiencing a degradation, it may be caused by saturation in the Redis Sidekiq instance caused by
+    high traffic volumes from Sidekiq clients (Rails or other sidekiq jobs), or very large messages being delivered
+    via Sidekiq.
+
+    Reviewing Sidekiq job logs may help the investigation.
+  objectives:
+  - ratioMetrics:
+      good:
+        query: sum(rate(apiserver_request_total{code!~"(5..|429)"}[{{.window}}]))
+        queryType: promql
+        source: prometheus
+      target: 0.9999
+      total:
+        query: sum(rate(apiserver_request_total[{{.window}}]))
+        queryType: promql
+        source: prometheus
+  service: redis-sidekiq
+  timeWindows:
+  - count: 30
+    unit: Day

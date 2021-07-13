@@ -1,0 +1,26 @@
+# HEADER
+apiVersion: openslo/v1alpha
+kind: SLO
+metadata:
+  name: service-patroni-rails_primary_sql-apdex
+spec:
+  budgetingMethod: Occurrences
+  description: |
+    Represents all SQL transactions issued through ActiveRecord from the Rails monolith (web, api, websockets, but not sidekiq) to the Postgres primary.
+    Durations can be impacted by various conditions other than Patroni, including client pool saturation, pgbouncer saturation,
+    Ruby thread contention and network conditions.
+  objectives:
+  - ratioMetrics:
+      good:
+        query: sum(rate(apiserver_request_total{code!~"(5..|429)"}[{{.window}}]))
+        queryType: promql
+        source: prometheus
+      target: 0.999
+      total:
+        query: sum(rate(apiserver_request_total[{{.window}}]))
+        queryType: promql
+        source: prometheus
+  service: patroni
+  timeWindows:
+  - count: 30
+    unit: Day

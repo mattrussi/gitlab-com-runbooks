@@ -1,0 +1,28 @@
+# HEADER
+apiVersion: openslo/v1alpha
+kind: SLO
+metadata:
+  name: service-ci-runners-shared_runner_queues-apdex
+spec:
+  budgetingMethod: Occurrences
+  description: |
+    This SLI monitors the shared runner queues on GitLab.com. Each job is an operation.
+
+    Apdex uses queueing latencies for jobs which are considered to be fair-usage (less than 5 concurrently running jobs).
+
+    Jobs marked as failing with runner system failures are considered to be in error.
+  objectives:
+  - ratioMetrics:
+      good:
+        query: sum(rate(apiserver_request_total{code!~"(5..|429)"}[{{.window}}]))
+        queryType: promql
+        source: prometheus
+      target: 0.97
+      total:
+        query: sum(rate(apiserver_request_total[{{.window}}]))
+        queryType: promql
+        source: prometheus
+  service: ci-runners
+  timeWindows:
+  - count: 30
+    unit: Day

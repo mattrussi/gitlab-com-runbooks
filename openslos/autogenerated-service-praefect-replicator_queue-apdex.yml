@@ -1,0 +1,24 @@
+# HEADER
+apiVersion: openslo/v1alpha
+kind: SLO
+metadata:
+  name: service-praefect-replicator_queue-apdex
+spec:
+  budgetingMethod: Occurrences
+  description: |
+    Praefect replication operations. Latency represents the queuing delay before replication is carried out.
+  objectives:
+  - ratioMetrics:
+      good:
+        query: sum(rate(apiserver_request_total{code!~"(5..|429)"}[{{.window}}]))
+        queryType: promql
+        source: prometheus
+      target: 0.995
+      total:
+        query: sum(rate(apiserver_request_total[{{.window}}]))
+        queryType: promql
+        source: prometheus
+  service: praefect
+  timeWindows:
+  - count: 30
+    unit: Day

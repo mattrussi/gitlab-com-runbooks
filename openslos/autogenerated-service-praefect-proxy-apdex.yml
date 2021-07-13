@@ -1,0 +1,25 @@
+# HEADER
+apiVersion: openslo/v1alpha
+kind: SLO
+metadata:
+  name: service-praefect-proxy-apdex
+spec:
+  budgetingMethod: Occurrences
+  description: |
+    All Gitaly operations pass through the Praefect proxy on the way to a Gitaly instance. This SLI monitors
+    those operations in aggregate.
+  objectives:
+  - ratioMetrics:
+      good:
+        query: sum(rate(apiserver_request_total{code!~"(5..|429)"}[{{.window}}]))
+        queryType: promql
+        source: prometheus
+      target: 0.995
+      total:
+        query: sum(rate(apiserver_request_total[{{.window}}]))
+        queryType: promql
+        source: prometheus
+  service: praefect
+  timeWindows:
+  - count: 30
+    unit: Day

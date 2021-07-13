@@ -1,0 +1,25 @@
+# HEADER
+apiVersion: openslo/v1alpha
+kind: SLO
+metadata:
+  name: service-monitoring-memcached_thanos_store_bucket-apdex
+spec:
+  budgetingMethod: Occurrences
+  description: |
+    Various memcached instances support our thanos infrastructure, for the
+    store and query-frontend components.
+  objectives:
+  - ratioMetrics:
+      good:
+        query: sum(rate(apiserver_request_total{code!~"(5..|429)"}[{{.window}}]))
+        queryType: promql
+        source: prometheus
+      target: 0.999
+      total:
+        query: sum(rate(apiserver_request_total[{{.window}}]))
+        queryType: promql
+        source: prometheus
+  service: monitoring
+  timeWindows:
+  - count: 30
+    unit: Day

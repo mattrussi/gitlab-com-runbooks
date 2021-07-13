@@ -1,0 +1,25 @@
+# HEADER
+apiVersion: openslo/v1alpha
+kind: SLO
+metadata:
+  name: service-api-puma-apdex
+spec:
+  budgetingMethod: Occurrences
+  description: |
+    This SLI monitors API traffic in aggregate, in the GitLab rails monolith, via its
+    HTTP interface. 5xx responses are treated as failures.
+  objectives:
+  - ratioMetrics:
+      good:
+        query: sum(rate(apiserver_request_total{code!~"(5..|429)"}[{{.window}}]))
+        queryType: promql
+        source: prometheus
+      target: 0.995
+      total:
+        query: sum(rate(apiserver_request_total[{{.window}}]))
+        queryType: promql
+        source: prometheus
+  service: api
+  timeWindows:
+  - count: 30
+    unit: Day

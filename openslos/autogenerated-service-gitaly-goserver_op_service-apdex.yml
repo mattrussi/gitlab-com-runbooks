@@ -1,0 +1,26 @@
+# HEADER
+apiVersion: openslo/v1alpha
+kind: SLO
+metadata:
+  name: service-gitaly-goserver_op_service-apdex
+spec:
+  budgetingMethod: Occurrences
+  description: |
+    This SLI monitors requests to Gitaly's OperationService, via its GRPC endpoint.
+    OperationService methods are generally expected to be slower than other Gitaly endpoints
+    and this is reflected in the SLI.
+  objectives:
+  - ratioMetrics:
+      good:
+        query: sum(rate(apiserver_request_total{code!~"(5..|429)"}[{{.window}}]))
+        queryType: promql
+        source: prometheus
+      target: 0.999
+      total:
+        query: sum(rate(apiserver_request_total[{{.window}}]))
+        queryType: promql
+        source: prometheus
+  service: gitaly
+  timeWindows:
+  - count: 30
+    unit: Day
