@@ -162,8 +162,8 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: emailsProcessed
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: sv
       type: mailroom
-    expr: '1'
+    expr: "1"

@@ -8,19 +8,18 @@ groups:
   - alert: RegistryServiceDatabaseApdexSLOViolation
     for: 2m
     annotations:
-      title: The database SLI of the registry service (`{{ $labels.stage }}` stage) has an apdex violating
-        SLO
+      title: The database SLI of the registry service (`{{ $labels.stage }}` stage)
+        has an apdex violating SLO
       description: |
         Aggregation of all container registry database operations.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: registry-main/registry-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
-        $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '3734296734'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3734296734"
       grafana_variables: environment,type,stage,component
       promql_template_1: |
         histogram_quantile(
@@ -41,8 +40,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: apdex
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -72,19 +71,18 @@ groups:
   - alert: RegistryServiceDatabaseApdexSLOViolationRegional
     for: 2m
     annotations:
-      title: The database SLI of the registry service in region `{{ $labels.region }}` has an apdex violating
-        SLO
+      title: The database SLI of the registry service in region `{{ $labels.region
+        }}` has an apdex violating SLO
       description: |
         Aggregation of all container registry database operations.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: alerts-regional_component_slo_apdex
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/alerts-regional_component_slo_apdex?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-region={{
-        $labels.region }}&var-component={{ $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '965700560'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-regional_component_slo_apdex?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-region={{ $labels.region }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "965700560"
       grafana_variables: environment,type,stage,region,component
       promql_template_1: |
         histogram_quantile(
@@ -105,8 +103,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: apdex
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -136,19 +134,17 @@ groups:
   - alert: RegistryServiceDatabaseTrafficCessation
     for: 5m
     annotations:
-      title: >-
-        The database SLI of the registry service (`{{ $labels.stage }}` stage) has not received any traffic
-        in the past 30 minutes
+      title: The database SLI of the registry service (`{{ $labels.stage }}` stage)
+        has not received any traffic in the past 30 minutes
       description: |
         Aggregation of all container registry database operations.
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: registry-main/registry-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2984148133'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2984148133"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -166,17 +162,15 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
-    expr: >
-      gitlab_component_ops:rate_30m{type="registry", component="database", stage="main", monitor="global"}
-      == 0
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{type="registry", component="database", stage="main", monitor="global"} == 0
   - alert: RegistryServiceDatabaseTrafficAbsent
     for: 30m
     annotations:
-      title: >-
-        The database SLI of the registry service (`{{ $labels.stage }}` stage) has not reported any traffic
-        in the past 30 minutes
+      title: The database SLI of the registry service (`{{ $labels.stage }}` stage)
+        has not reported any traffic in the past 30 minutes
       description: |
         Aggregation of all container registry database operations.
 
@@ -184,11 +178,10 @@ groups:
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
       grafana_dashboard_id: registry-main/registry-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2984148133'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2984148133"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -206,8 +199,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
+      slo_alert: "no"
+      user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{type="registry", component="database", stage="main", monitor="global"} offset 1h
       unless
@@ -215,20 +208,18 @@ groups:
   - alert: RegistryServiceGarbagecollectorApdexSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The garbagecollector SLI of the registry service (`{{ $labels.stage }}` stage) has an apdex violating
-        SLO
+      title: The garbagecollector SLI of the registry service (`{{ $labels.stage }}`
+        stage) has an apdex violating SLO
       description: |
         Aggregation of all container registry online garbage collection operations.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: registry-main/registry-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
-        $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2354862550'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2354862550"
       grafana_variables: environment,type,stage,component
       promql_template_1: |
         histogram_quantile(
@@ -249,8 +240,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: apdex
-      slo_alert: 'yes'
-      user_impacting: 'no'
+      slo_alert: "yes"
+      user_impacting: "no"
     expr: |
       (
         (
@@ -280,20 +271,18 @@ groups:
   - alert: RegistryServiceGarbagecollectorApdexSLOViolationRegional
     for: 2m
     annotations:
-      title: >-
-        The garbagecollector SLI of the registry service in region `{{ $labels.region }}` has an apdex
-        violating SLO
+      title: The garbagecollector SLI of the registry service in region `{{ $labels.region
+        }}` has an apdex violating SLO
       description: |
         Aggregation of all container registry online garbage collection operations.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: alerts-regional_component_slo_apdex
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/alerts-regional_component_slo_apdex?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-region={{
-        $labels.region }}&var-component={{ $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '965700560'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-regional_component_slo_apdex?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-region={{ $labels.region }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "965700560"
       grafana_variables: environment,type,stage,region,component
       promql_template_1: |
         histogram_quantile(
@@ -314,8 +303,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: apdex
-      slo_alert: 'yes'
-      user_impacting: 'no'
+      slo_alert: "yes"
+      user_impacting: "no"
     expr: |
       (
         (
@@ -345,19 +334,17 @@ groups:
   - alert: RegistryServiceGarbagecollectorTrafficCessation
     for: 5m
     annotations:
-      title: >-
-        The garbagecollector SLI of the registry service (`{{ $labels.stage }}` stage) has not received
-        any traffic in the past 30 minutes
+      title: The garbagecollector SLI of the registry service (`{{ $labels.stage }}`
+        stage) has not received any traffic in the past 30 minutes
       description: |
         Aggregation of all container registry online garbage collection operations.
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: registry-main/registry-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '3281014584'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3281014584"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -375,17 +362,15 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'no'
-    expr: >
-      gitlab_component_ops:rate_30m{type="registry", component="garbagecollector", stage="main", monitor="global"}
-      == 0
+      slo_alert: "no"
+      user_impacting: "no"
+    expr: |
+      gitlab_component_ops:rate_30m{type="registry", component="garbagecollector", stage="main", monitor="global"} == 0
   - alert: RegistryServiceGarbagecollectorTrafficAbsent
     for: 30m
     annotations:
-      title: >-
-        The garbagecollector SLI of the registry service (`{{ $labels.stage }}` stage) has not reported
-        any traffic in the past 30 minutes
+      title: The garbagecollector SLI of the registry service (`{{ $labels.stage }}`
+        stage) has not reported any traffic in the past 30 minutes
       description: |
         Aggregation of all container registry online garbage collection operations.
 
@@ -393,11 +378,10 @@ groups:
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
       grafana_dashboard_id: registry-main/registry-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '3281014584'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3281014584"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -415,8 +399,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'no'
+      slo_alert: "no"
+      user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_5m{type="registry", component="garbagecollector", stage="main", monitor="global"} offset 1h
       unless
@@ -424,19 +408,17 @@ groups:
   - alert: RegistryServiceLoadbalancerErrorSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The loadbalancer SLI of the registry service (`{{ $labels.stage }}` stage) has an error rate violating
-        SLO
+      title: The loadbalancer SLI of the registry service (`{{ $labels.stage }}` stage)
+        has an error rate violating SLO
       description: |
         Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: registry-main/registry-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '3255520955'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3255520955"
       grafana_variables: environment,stage
       runbook: docs/registry/README.md
     labels:
@@ -450,8 +432,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -481,19 +463,17 @@ groups:
   - alert: RegistryServiceLoadbalancerTrafficCessation
     for: 5m
     annotations:
-      title: >-
-        The loadbalancer SLI of the registry service (`{{ $labels.stage }}` stage) has not received any
-        traffic in the past 30 minutes
+      title: The loadbalancer SLI of the registry service (`{{ $labels.stage }}` stage)
+        has not received any traffic in the past 30 minutes
       description: |
         Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: registry-main/registry-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '138982496'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "138982496"
       grafana_variables: environment,stage
       runbook: docs/registry/README.md
     labels:
@@ -507,17 +487,15 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
-    expr: >
-      gitlab_component_ops:rate_30m{type="registry", component="loadbalancer", stage="main", monitor="global"}
-      == 0
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{type="registry", component="loadbalancer", stage="main", monitor="global"} == 0
   - alert: RegistryServiceLoadbalancerTrafficAbsent
     for: 30m
     annotations:
-      title: >-
-        The loadbalancer SLI of the registry service (`{{ $labels.stage }}` stage) has not reported any
-        traffic in the past 30 minutes
+      title: The loadbalancer SLI of the registry service (`{{ $labels.stage }}` stage)
+        has not reported any traffic in the past 30 minutes
       description: |
         Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
 
@@ -525,11 +503,10 @@ groups:
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
       grafana_dashboard_id: registry-main/registry-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '138982496'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "138982496"
       grafana_variables: environment,stage
       runbook: docs/registry/README.md
     labels:
@@ -543,8 +520,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
+      slo_alert: "no"
+      user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{type="registry", component="loadbalancer", stage="main", monitor="global"} offset 1h
       unless
@@ -552,19 +529,18 @@ groups:
   - alert: RegistryServiceServerApdexSLOViolation
     for: 2m
     annotations:
-      title: The server SLI of the registry service (`{{ $labels.stage }}` stage) has an apdex violating
-        SLO
+      title: The server SLI of the registry service (`{{ $labels.stage }}` stage)
+        has an apdex violating SLO
       description: |
         Aggregation of all registry requests.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: registry-main/registry-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
-        $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2863319079'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2863319079"
       grafana_variables: environment,type,stage,component
       promql_template_1: |
         histogram_quantile(
@@ -585,8 +561,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: apdex
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -616,19 +592,18 @@ groups:
   - alert: RegistryServiceServerApdexSLOViolationRegional
     for: 2m
     annotations:
-      title: The server SLI of the registry service in region `{{ $labels.region }}` has an apdex violating
-        SLO
+      title: The server SLI of the registry service in region `{{ $labels.region }}`
+        has an apdex violating SLO
       description: |
         Aggregation of all registry requests.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: alerts-regional_component_slo_apdex
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/alerts-regional_component_slo_apdex?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-region={{
-        $labels.region }}&var-component={{ $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '965700560'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-regional_component_slo_apdex?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-region={{ $labels.region }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "965700560"
       grafana_variables: environment,type,stage,region,component
       promql_template_1: |
         histogram_quantile(
@@ -649,8 +624,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: apdex
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -680,18 +655,17 @@ groups:
   - alert: RegistryServiceServerErrorSLOViolation
     for: 2m
     annotations:
-      title: The server SLI of the registry service (`{{ $labels.stage }}` stage) has an error rate violating
-        SLO
+      title: The server SLI of the registry service (`{{ $labels.stage }}` stage)
+        has an error rate violating SLO
       description: |
         Aggregation of all registry requests.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: registry-main/registry-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '1631973137'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1631973137"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -709,8 +683,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -740,9 +714,8 @@ groups:
   - alert: RegistryServiceServerErrorSLOViolationRegional
     for: 2m
     annotations:
-      title: >-
-        The server SLI of the registry service in region `{{ $labels.region }}` has an error rate violating
-        SLO
+      title: The server SLI of the registry service in region `{{ $labels.region }}`
+        has an error rate violating SLO
       description: |
         Aggregation of all registry requests.
 
@@ -750,12 +723,11 @@ groups:
 
         Currently the apdex value for {{ $labels.region }} is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: alerts-regional_component_slo_error
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/alerts-regional_component_slo_error?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-region={{
-        $labels.region }}&var-component={{ $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '965700560'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-regional_component_slo_error?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-region={{ $labels.region }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "965700560"
       grafana_variables: environment,type,stage,region,component
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
@@ -773,8 +745,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -804,19 +776,17 @@ groups:
   - alert: RegistryServiceServerTrafficCessation
     for: 5m
     annotations:
-      title: >-
-        The server SLI of the registry service (`{{ $labels.stage }}` stage) has not received any traffic
-        in the past 30 minutes
+      title: The server SLI of the registry service (`{{ $labels.stage }}` stage)
+        has not received any traffic in the past 30 minutes
       description: |
         Aggregation of all registry requests.
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: registry-main/registry-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2414183688'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2414183688"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -834,17 +804,15 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
-    expr: >
-      gitlab_component_ops:rate_30m{type="registry", component="server", stage="main", monitor="global"}
-      == 0
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{type="registry", component="server", stage="main", monitor="global"} == 0
   - alert: RegistryServiceServerTrafficAbsent
     for: 30m
     annotations:
-      title: >-
-        The server SLI of the registry service (`{{ $labels.stage }}` stage) has not reported any traffic
-        in the past 30 minutes
+      title: The server SLI of the registry service (`{{ $labels.stage }}` stage)
+        has not reported any traffic in the past 30 minutes
       description: |
         Aggregation of all registry requests.
 
@@ -852,11 +820,10 @@ groups:
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
       grafana_dashboard_id: registry-main/registry-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2414183688'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2414183688"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -874,8 +841,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
+      slo_alert: "no"
+      user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{type="registry", component="server", stage="main", monitor="global"} offset 1h
       unless
@@ -883,20 +850,18 @@ groups:
   - alert: RegistryServiceServerRouteManifestReadsApdexSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The server_route_manifest_reads SLI of the registry service (`{{ $labels.stage }}` stage) has
-        an apdex violating SLO
+      title: The server_route_manifest_reads SLI of the registry service (`{{ $labels.stage
+        }}` stage) has an apdex violating SLO
       description: |
         All read-requests (HEAD or GET) for the manifest endpoints on the registry. Fetch the manifest identified by name and reference where reference can be a tag or digest. A HEAD request can also be issued to this endpoint to obtain resource information without receiving all data.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: registry-main/registry-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
-        $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2850495079'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2850495079"
       grafana_variables: environment,type,stage,component
       promql_template_1: |
         histogram_quantile(
@@ -917,8 +882,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: apdex
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -948,20 +913,18 @@ groups:
   - alert: RegistryServiceServerRouteManifestReadsApdexSLOViolationRegional
     for: 2m
     annotations:
-      title: >-
-        The server_route_manifest_reads SLI of the registry service in region `{{ $labels.region }}` has
-        an apdex violating SLO
+      title: The server_route_manifest_reads SLI of the registry service in region
+        `{{ $labels.region }}` has an apdex violating SLO
       description: |
         All read-requests (HEAD or GET) for the manifest endpoints on the registry. Fetch the manifest identified by name and reference where reference can be a tag or digest. A HEAD request can also be issued to this endpoint to obtain resource information without receiving all data.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: alerts-regional_component_slo_apdex
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/alerts-regional_component_slo_apdex?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-region={{
-        $labels.region }}&var-component={{ $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '965700560'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-regional_component_slo_apdex?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-region={{ $labels.region }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "965700560"
       grafana_variables: environment,type,stage,region,component
       promql_template_1: |
         histogram_quantile(
@@ -982,8 +945,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: apdex
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -1013,19 +976,17 @@ groups:
   - alert: RegistryServiceServerRouteManifestReadsTrafficCessation
     for: 5m
     annotations:
-      title: >-
-        The server_route_manifest_reads SLI of the registry service (`{{ $labels.stage }}` stage) has
-        not received any traffic in the past 30 minutes
+      title: The server_route_manifest_reads SLI of the registry service (`{{ $labels.stage
+        }}` stage) has not received any traffic in the past 30 minutes
       description: |
         All read-requests (HEAD or GET) for the manifest endpoints on the registry. Fetch the manifest identified by name and reference where reference can be a tag or digest. A HEAD request can also be issued to this endpoint to obtain resource information without receiving all data.
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: registry-main/registry-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '3999566506'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3999566506"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -1043,17 +1004,15 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
-    expr: >
-      gitlab_component_ops:rate_30m{type="registry", component="server_route_manifest_reads", stage="main",
-      monitor="global"} == 0
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{type="registry", component="server_route_manifest_reads", stage="main", monitor="global"} == 0
   - alert: RegistryServiceServerRouteManifestReadsTrafficAbsent
     for: 30m
     annotations:
-      title: >-
-        The server_route_manifest_reads SLI of the registry service (`{{ $labels.stage }}` stage) has
-        not reported any traffic in the past 30 minutes
+      title: The server_route_manifest_reads SLI of the registry service (`{{ $labels.stage
+        }}` stage) has not reported any traffic in the past 30 minutes
       description: |
         All read-requests (HEAD or GET) for the manifest endpoints on the registry. Fetch the manifest identified by name and reference where reference can be a tag or digest. A HEAD request can also be issued to this endpoint to obtain resource information without receiving all data.
 
@@ -1061,11 +1020,10 @@ groups:
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
       grafana_dashboard_id: registry-main/registry-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '3999566506'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3999566506"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -1083,8 +1041,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
+      slo_alert: "no"
+      user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{type="registry", component="server_route_manifest_reads", stage="main", monitor="global"} offset 1h
       unless
@@ -1092,9 +1050,8 @@ groups:
   - alert: RegistryServiceServerRouteManifestWritesApdexSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The server_route_manifest_writes SLI of the registry service (`{{ $labels.stage }}` stage) has
-        an apdex violating SLO
+      title: The server_route_manifest_writes SLI of the registry service (`{{ $labels.stage
+        }}` stage) has an apdex violating SLO
       description: |
         All write-requests (put, delete) for the manifest endpoints on the registry.
 
@@ -1104,12 +1061,11 @@ groups:
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: registry-main/registry-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
-        $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '1201783796'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1201783796"
       grafana_variables: environment,type,stage,component
       promql_template_1: |
         histogram_quantile(
@@ -1130,8 +1086,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: apdex
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -1161,9 +1117,8 @@ groups:
   - alert: RegistryServiceServerRouteManifestWritesApdexSLOViolationRegional
     for: 2m
     annotations:
-      title: >-
-        The server_route_manifest_writes SLI of the registry service in region `{{ $labels.region }}`
-        has an apdex violating SLO
+      title: The server_route_manifest_writes SLI of the registry service in region
+        `{{ $labels.region }}` has an apdex violating SLO
       description: |
         All write-requests (put, delete) for the manifest endpoints on the registry.
 
@@ -1173,12 +1128,11 @@ groups:
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: alerts-regional_component_slo_apdex
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/alerts-regional_component_slo_apdex?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-region={{
-        $labels.region }}&var-component={{ $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '965700560'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-regional_component_slo_apdex?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-region={{ $labels.region }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "965700560"
       grafana_variables: environment,type,stage,region,component
       promql_template_1: |
         histogram_quantile(
@@ -1199,8 +1153,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: apdex
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -1230,9 +1184,8 @@ groups:
   - alert: RegistryServiceServerRouteManifestWritesTrafficCessation
     for: 5m
     annotations:
-      title: >-
-        The server_route_manifest_writes SLI of the registry service (`{{ $labels.stage }}` stage) has
-        not received any traffic in the past 30 minutes
+      title: The server_route_manifest_writes SLI of the registry service (`{{ $labels.stage
+        }}` stage) has not received any traffic in the past 30 minutes
       description: |
         All write-requests (put, delete) for the manifest endpoints on the registry.
 
@@ -1242,11 +1195,10 @@ groups:
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: registry-main/registry-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '1199706222'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1199706222"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -1264,17 +1216,15 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
-    expr: >
-      gitlab_component_ops:rate_30m{type="registry", component="server_route_manifest_writes", stage="main",
-      monitor="global"} == 0
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{type="registry", component="server_route_manifest_writes", stage="main", monitor="global"} == 0
   - alert: RegistryServiceServerRouteManifestWritesTrafficAbsent
     for: 30m
     annotations:
-      title: >-
-        The server_route_manifest_writes SLI of the registry service (`{{ $labels.stage }}` stage) has
-        not reported any traffic in the past 30 minutes
+      title: The server_route_manifest_writes SLI of the registry service (`{{ $labels.stage
+        }}` stage) has not reported any traffic in the past 30 minutes
       description: |
         All write-requests (put, delete) for the manifest endpoints on the registry.
 
@@ -1286,11 +1236,10 @@ groups:
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
       grafana_dashboard_id: registry-main/registry-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '1199706222'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1199706222"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -1308,8 +1257,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
+      slo_alert: "no"
+      user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{type="registry", component="server_route_manifest_writes", stage="main", monitor="global"} offset 1h
       unless
@@ -1317,19 +1266,18 @@ groups:
   - alert: RegistryServiceStorageApdexSLOViolation
     for: 2m
     annotations:
-      title: The storage SLI of the registry service (`{{ $labels.stage }}` stage) has an apdex violating
-        SLO
+      title: The storage SLI of the registry service (`{{ $labels.stage }}` stage)
+        has an apdex violating SLO
       description: |
         Aggregation of all container registry GCS storage operations.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: registry-main/registry-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
-        $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '695776990'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "695776990"
       grafana_variables: environment,type,stage,component
       promql_template_1: |
         histogram_quantile(
@@ -1350,8 +1298,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: apdex
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -1381,19 +1329,18 @@ groups:
   - alert: RegistryServiceStorageApdexSLOViolationRegional
     for: 2m
     annotations:
-      title: The storage SLI of the registry service in region `{{ $labels.region }}` has an apdex violating
-        SLO
+      title: The storage SLI of the registry service in region `{{ $labels.region
+        }}` has an apdex violating SLO
       description: |
         Aggregation of all container registry GCS storage operations.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: alerts-regional_component_slo_apdex
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/alerts-regional_component_slo_apdex?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-region={{
-        $labels.region }}&var-component={{ $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '965700560'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-regional_component_slo_apdex?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-region={{ $labels.region }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "965700560"
       grafana_variables: environment,type,stage,region,component
       promql_template_1: |
         histogram_quantile(
@@ -1414,8 +1361,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: apdex
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -1445,19 +1392,17 @@ groups:
   - alert: RegistryServiceStorageTrafficCessation
     for: 5m
     annotations:
-      title: >-
-        The storage SLI of the registry service (`{{ $labels.stage }}` stage) has not received any traffic
-        in the past 30 minutes
+      title: The storage SLI of the registry service (`{{ $labels.stage }}` stage)
+        has not received any traffic in the past 30 minutes
       description: |
         Aggregation of all container registry GCS storage operations.
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: registry-main/registry-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '1582946156'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1582946156"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -1475,17 +1420,15 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
-    expr: >
-      gitlab_component_ops:rate_30m{type="registry", component="storage", stage="main", monitor="global"}
-      == 0
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{type="registry", component="storage", stage="main", monitor="global"} == 0
   - alert: RegistryServiceStorageTrafficAbsent
     for: 30m
     annotations:
-      title: >-
-        The storage SLI of the registry service (`{{ $labels.stage }}` stage) has not reported any traffic
-        in the past 30 minutes
+      title: The storage SLI of the registry service (`{{ $labels.stage }}` stage)
+        has not reported any traffic in the past 30 minutes
       description: |
         Aggregation of all container registry GCS storage operations.
 
@@ -1493,11 +1436,10 @@ groups:
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
       grafana_dashboard_id: registry-main/registry-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '1582946156'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1582946156"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -1515,8 +1457,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
+      slo_alert: "no"
+      user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{type="registry", component="storage", stage="main", monitor="global"} offset 1h
       unless

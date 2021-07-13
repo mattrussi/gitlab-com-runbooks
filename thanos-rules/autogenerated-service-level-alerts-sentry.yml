@@ -8,19 +8,17 @@ groups:
   - alert: SentryServicePgTransactionsErrorSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The pg_transactions SLI of the sentry service (`{{ $labels.stage }}` stage) has an error rate
-        violating SLO
+      title: The pg_transactions SLI of the sentry service (`{{ $labels.stage }}`
+        stage) has an error rate violating SLO
       description: |
         Represents all SQL transactions issued to the sentry Postgres instance. Errors represent transaction rollbacks.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sentry-main/sentry-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/sentry-main/sentry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sentry-main/sentry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2208809543'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2208809543"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -38,8 +36,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'no'
+      slo_alert: "yes"
+      user_impacting: "no"
     expr: |
       (
         (
@@ -69,19 +67,17 @@ groups:
   - alert: SentryServicePgTransactionsTrafficCessation
     for: 5m
     annotations:
-      title: >-
-        The pg_transactions SLI of the sentry service (`{{ $labels.stage }}` stage) has not received any
-        traffic in the past 30 minutes
+      title: The pg_transactions SLI of the sentry service (`{{ $labels.stage }}`
+        stage) has not received any traffic in the past 30 minutes
       description: |
         Represents all SQL transactions issued to the sentry Postgres instance. Errors represent transaction rollbacks.
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: sentry-main/sentry-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/sentry-main/sentry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sentry-main/sentry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '4230593776'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "4230593776"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -101,17 +97,15 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'no'
-    expr: >
-      gitlab_component_ops:rate_30m{type="sentry", component="pg_transactions", stage="main", monitor="global"}
-      == 0
+      slo_alert: "no"
+      user_impacting: "no"
+    expr: |
+      gitlab_component_ops:rate_30m{type="sentry", component="pg_transactions", stage="main", monitor="global"} == 0
   - alert: SentryServicePgTransactionsTrafficAbsent
     for: 30m
     annotations:
-      title: >-
-        The pg_transactions SLI of the sentry service (`{{ $labels.stage }}` stage) has not reported any
-        traffic in the past 30 minutes
+      title: The pg_transactions SLI of the sentry service (`{{ $labels.stage }}`
+        stage) has not reported any traffic in the past 30 minutes
       description: |
         Represents all SQL transactions issued to the sentry Postgres instance. Errors represent transaction rollbacks.
 
@@ -119,11 +113,10 @@ groups:
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
       grafana_dashboard_id: sentry-main/sentry-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/sentry-main/sentry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sentry-main/sentry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '4230593776'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "4230593776"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -143,8 +136,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'no'
+      slo_alert: "no"
+      user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_5m{type="sentry", component="pg_transactions", stage="main", monitor="global"} offset 1h
       unless
@@ -152,19 +145,18 @@ groups:
   - alert: SentryServiceSentryEventsApdexSLOViolation
     for: 2m
     annotations:
-      title: The sentry_events SLI of the sentry service (`{{ $labels.stage }}` stage) has an apdex violating
-        SLO
+      title: The sentry_events SLI of the sentry service (`{{ $labels.stage }}` stage)
+        has an apdex violating SLO
       description: |
         Sentry is an application monitoring platform.  This SLI monitors the sentry API. 5xx responses are considered failures.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sentry-main/sentry-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/sentry-main/sentry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
-        $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2366272614'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sentry-main/sentry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2366272614"
       grafana_variables: environment,type,stage,component
       promql_template_1: |
         histogram_quantile(
@@ -185,8 +177,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: apdex
-      slo_alert: 'yes'
-      user_impacting: 'no'
+      slo_alert: "yes"
+      user_impacting: "no"
     expr: |
       (
         (
@@ -216,19 +208,17 @@ groups:
   - alert: SentryServiceSentryEventsErrorSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The sentry_events SLI of the sentry service (`{{ $labels.stage }}` stage) has an error rate violating
-        SLO
+      title: The sentry_events SLI of the sentry service (`{{ $labels.stage }}` stage)
+        has an error rate violating SLO
       description: |
         Sentry is an application monitoring platform.  This SLI monitors the sentry API. 5xx responses are considered failures.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sentry-main/sentry-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/sentry-main/sentry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sentry-main/sentry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2130486158'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2130486158"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -246,8 +236,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'no'
+      slo_alert: "yes"
+      user_impacting: "no"
     expr: |
       (
         (
@@ -277,19 +267,17 @@ groups:
   - alert: SentryServiceSentryEventsTrafficCessation
     for: 5m
     annotations:
-      title: >-
-        The sentry_events SLI of the sentry service (`{{ $labels.stage }}` stage) has not received any
-        traffic in the past 30 minutes
+      title: The sentry_events SLI of the sentry service (`{{ $labels.stage }}` stage)
+        has not received any traffic in the past 30 minutes
       description: |
         Sentry is an application monitoring platform.  This SLI monitors the sentry API. 5xx responses are considered failures.
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: sentry-main/sentry-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/sentry-main/sentry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sentry-main/sentry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2778770723'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2778770723"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -307,17 +295,15 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'no'
-    expr: >
-      gitlab_component_ops:rate_30m{type="sentry", component="sentry_events", stage="main", monitor="global"}
-      == 0
+      slo_alert: "no"
+      user_impacting: "no"
+    expr: |
+      gitlab_component_ops:rate_30m{type="sentry", component="sentry_events", stage="main", monitor="global"} == 0
   - alert: SentryServiceSentryEventsTrafficAbsent
     for: 30m
     annotations:
-      title: >-
-        The sentry_events SLI of the sentry service (`{{ $labels.stage }}` stage) has not reported any
-        traffic in the past 30 minutes
+      title: The sentry_events SLI of the sentry service (`{{ $labels.stage }}` stage)
+        has not reported any traffic in the past 30 minutes
       description: |
         Sentry is an application monitoring platform.  This SLI monitors the sentry API. 5xx responses are considered failures.
 
@@ -325,11 +311,10 @@ groups:
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
       grafana_dashboard_id: sentry-main/sentry-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/sentry-main/sentry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sentry-main/sentry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2778770723'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2778770723"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -347,8 +332,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'no'
+      slo_alert: "no"
+      user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_5m{type="sentry", component="sentry_events", stage="main", monitor="global"} offset 1h
       unless

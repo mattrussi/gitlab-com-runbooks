@@ -12,7 +12,7 @@ groups:
       service_stage: main
       service_tier: sv
       service_type: sidekiq
-    expr: '1'
+    expr: "1"
   - record: gitlab:kube_node_pool_labels
     labels:
       cluster: gstg-gitlab-gke
@@ -21,7 +21,7 @@ groups:
       service_stage: main
       service_tier: inf
       service_type: kube
-    expr: '1'
+    expr: "1"
   - record: gitlab:kube_node_pool_labels
     labels:
       cluster: gstg-gitlab-gke
@@ -30,7 +30,7 @@ groups:
       service_stage: main
       service_tier: sv
       service_type: kas
-    expr: '1'
+    expr: "1"
   - record: gitlab:kube_node_pool_labels
     labels:
       cluster: gstg-gitlab-gke
@@ -39,7 +39,7 @@ groups:
       service_stage: main
       service_tier: sv
       service_type: sidekiq
-    expr: '1'
+    expr: "1"
   - record: gitlab:kube_node_pool_labels
     labels:
       cluster: gstg-gitlab-gke
@@ -48,7 +48,7 @@ groups:
       service_stage: main
       service_tier: sv
       service_type: sidekiq
-    expr: '1'
+    expr: "1"
   - record: gitlab:kube_node_pool_labels
     labels:
       cluster: gstg-gitlab-gke
@@ -57,7 +57,7 @@ groups:
       service_stage: main
       service_tier: sv
       service_type: sidekiq
-    expr: '1'
+    expr: "1"
   - record: gitlab:kube_node_pool_labels
     labels:
       cluster: gstg-gitlab-gke
@@ -66,4 +66,4 @@ groups:
       service_stage: main
       service_tier: sv
       service_type: sidekiq
-    expr: '1'
+    expr: "1"

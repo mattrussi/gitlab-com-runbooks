@@ -1462,34 +1462,34 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: gitalyruby
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: stor
       type: gitaly
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: goserver
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: stor
       type: gitaly
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: goserver_op_service
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: stor
       type: gitaly
-    expr: '1'
+    expr: "1"
   - record: slo:min:events:gitlab_component_node_apdex:ratio
     labels:
       tier: stor
       type: gitaly
-    expr: '0.999000'
+    expr: "0.999000"
   - record: slo:max:events:gitlab_component_node_errors:ratio
     labels:
       tier: stor
       type: gitaly
-    expr: '0.000500'
+    expr: "0.000500"

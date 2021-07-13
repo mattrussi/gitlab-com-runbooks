@@ -8,19 +8,18 @@ groups:
   - alert: WoodhouseServiceAsyncJobsApdexSLOViolation
     for: 2m
     annotations:
-      title: The async_jobs SLI of the woodhouse service (`{{ $labels.stage }}` stage) has an apdex violating
-        SLO
+      title: The async_jobs SLI of the woodhouse service (`{{ $labels.stage }}` stage)
+        has an apdex violating SLO
       description: |
         Async jobs performed by woodhouse.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: woodhouse-main/woodhouse-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/woodhouse-main/woodhouse-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
-        $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '839701162'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/woodhouse-main/woodhouse-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "839701162"
       grafana_variables: environment,type,stage,component
       promql_template_1: |
         histogram_quantile(
@@ -41,8 +40,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: apdex
-      slo_alert: 'yes'
-      user_impacting: 'no'
+      slo_alert: "yes"
+      user_impacting: "no"
     expr: |
       (
         (
@@ -72,19 +71,17 @@ groups:
   - alert: WoodhouseServiceAsyncJobsErrorSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The async_jobs SLI of the woodhouse service (`{{ $labels.stage }}` stage) has an error rate violating
-        SLO
+      title: The async_jobs SLI of the woodhouse service (`{{ $labels.stage }}` stage)
+        has an error rate violating SLO
       description: |
         Async jobs performed by woodhouse.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: woodhouse-main/woodhouse-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/woodhouse-main/woodhouse-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/woodhouse-main/woodhouse-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '648994915'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "648994915"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -102,8 +99,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'no'
+      slo_alert: "yes"
+      user_impacting: "no"
     expr: |
       (
         (
@@ -133,19 +130,18 @@ groups:
   - alert: WoodhouseServiceHttpApdexSLOViolation
     for: 2m
     annotations:
-      title: The http SLI of the woodhouse service (`{{ $labels.stage }}` stage) has an apdex violating
-        SLO
+      title: The http SLI of the woodhouse service (`{{ $labels.stage }}` stage) has
+        an apdex violating SLO
       description: |
         HTTP requests handled by woodhouse.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: woodhouse-main/woodhouse-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/woodhouse-main/woodhouse-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
-        $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '308155966'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/woodhouse-main/woodhouse-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "308155966"
       grafana_variables: environment,type,stage,component
       promql_template_1: |
         histogram_quantile(
@@ -166,8 +162,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: apdex
-      slo_alert: 'yes'
-      user_impacting: 'no'
+      slo_alert: "yes"
+      user_impacting: "no"
     expr: |
       (
         (
@@ -197,18 +193,17 @@ groups:
   - alert: WoodhouseServiceHttpErrorSLOViolation
     for: 2m
     annotations:
-      title: The http SLI of the woodhouse service (`{{ $labels.stage }}` stage) has an error rate violating
-        SLO
+      title: The http SLI of the woodhouse service (`{{ $labels.stage }}` stage) has
+        an error rate violating SLO
       description: |
         HTTP requests handled by woodhouse.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: woodhouse-main/woodhouse-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/woodhouse-main/woodhouse-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/woodhouse-main/woodhouse-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '1863342341'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1863342341"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -226,8 +221,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'no'
+      slo_alert: "yes"
+      user_impacting: "no"
     expr: |
       (
         (

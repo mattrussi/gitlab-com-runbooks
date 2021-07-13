@@ -1397,56 +1397,56 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: database
-      regional_aggregation: 'yes'
-      service_aggregation: 'yes'
+      regional_aggregation: "yes"
+      service_aggregation: "yes"
       tier: sv
       type: registry
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: garbagecollector
-      regional_aggregation: 'yes'
-      service_aggregation: 'no'
+      regional_aggregation: "yes"
+      service_aggregation: "no"
       tier: sv
       type: registry
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: loadbalancer
-      regional_aggregation: 'no'
-      service_aggregation: 'no'
+      regional_aggregation: "no"
+      service_aggregation: "no"
       tier: sv
       type: registry
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: server
-      regional_aggregation: 'yes'
-      service_aggregation: 'yes'
+      regional_aggregation: "yes"
+      service_aggregation: "yes"
       tier: sv
       type: registry
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: server_route_manifest_reads
-      regional_aggregation: 'yes'
-      service_aggregation: 'yes'
+      regional_aggregation: "yes"
+      service_aggregation: "yes"
       tier: sv
       type: registry
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: server_route_manifest_writes
-      regional_aggregation: 'yes'
-      service_aggregation: 'yes'
+      regional_aggregation: "yes"
+      service_aggregation: "yes"
       tier: sv
       type: registry
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: storage
-      regional_aggregation: 'yes'
-      service_aggregation: 'yes'
+      regional_aggregation: "yes"
+      service_aggregation: "yes"
       tier: sv
       type: registry
-    expr: '1'
+    expr: "1"

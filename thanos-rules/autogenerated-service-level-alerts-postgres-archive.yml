@@ -8,19 +8,17 @@ groups:
   - alert: PostgresArchiveServiceTransactionsTrafficCessation
     for: 5m
     annotations:
-      title: >-
-        The transactions SLI of the postgres-archive service (`{{ $labels.stage }}` stage) has not received
-        any traffic in the past 30 minutes
+      title: The transactions SLI of the postgres-archive service (`{{ $labels.stage
+        }}` stage) has not received any traffic in the past 30 minutes
       description: |
         Represents all SQL transactions issued to the primary Postgres instance. Errors represent transaction rollbacks.
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: postgres-archive-main/postgres-archive-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/postgres-archive-main/postgres-archive-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/postgres-archive-main/postgres-archive-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2867357670'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2867357670"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -40,17 +38,15 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
-    expr: >
-      gitlab_component_ops:rate_30m{type="postgres-archive", component="transactions", stage="main", monitor="global"}
-      == 0
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{type="postgres-archive", component="transactions", stage="main", monitor="global"} == 0
   - alert: PostgresArchiveServiceTransactionsTrafficAbsent
     for: 30m
     annotations:
-      title: >-
-        The transactions SLI of the postgres-archive service (`{{ $labels.stage }}` stage) has not reported
-        any traffic in the past 30 minutes
+      title: The transactions SLI of the postgres-archive service (`{{ $labels.stage
+        }}` stage) has not reported any traffic in the past 30 minutes
       description: |
         Represents all SQL transactions issued to the primary Postgres instance. Errors represent transaction rollbacks.
 
@@ -58,11 +54,10 @@ groups:
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
       grafana_dashboard_id: postgres-archive-main/postgres-archive-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/postgres-archive-main/postgres-archive-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/postgres-archive-main/postgres-archive-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2867357670'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2867357670"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -82,8 +77,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
+      slo_alert: "no"
+      user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{type="postgres-archive", component="transactions", stage="main", monitor="global"} offset 1h
       unless

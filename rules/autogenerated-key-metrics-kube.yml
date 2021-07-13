@@ -442,16 +442,16 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: apiserver
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: inf
       type: kube
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: cluster_scaleups
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: inf
       type: kube
-    expr: '1'
+    expr: "1"

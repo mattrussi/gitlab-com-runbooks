@@ -462,16 +462,16 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: async_jobs
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: sv
       type: woodhouse
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: http
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: sv
       type: woodhouse
-    expr: '1'
+    expr: "1"

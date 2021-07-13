@@ -152,8 +152,8 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: nginx_ingress
-      regional_aggregation: 'yes'
-      service_aggregation: 'yes'
+      regional_aggregation: "yes"
+      service_aggregation: "yes"
       tier: sv
       type: nginx
-    expr: '1'
+    expr: "1"

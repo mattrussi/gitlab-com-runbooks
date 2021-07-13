@@ -3132,128 +3132,128 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: grafana
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: inf
       type: monitoring
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: memcached_thanos_qfe_labels
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: inf
       type: monitoring
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: memcached_thanos_qfe_query_range
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: inf
       type: monitoring
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: memcached_thanos_store_bucket
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: inf
       type: monitoring
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: memcached_thanos_store_index
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: inf
       type: monitoring
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: prometheus
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: inf
       type: monitoring
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: prometheus_alert_sender
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: inf
       type: monitoring
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: public_dashboards_thanos_query
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: inf
       type: monitoring
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: public_grafana_googlelb
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: inf
       type: monitoring
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: rule_evaluation
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: inf
       type: monitoring
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: thanos_compactor
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: inf
       type: monitoring
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: thanos_query
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: inf
       type: monitoring
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: thanos_query_frontend
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: inf
       type: monitoring
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: thanos_rule_alert_sender
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: inf
       type: monitoring
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: thanos_store
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: inf
       type: monitoring
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: trickster
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: inf
       type: monitoring
-    expr: '1'
+    expr: "1"

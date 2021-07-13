@@ -8,19 +8,17 @@ groups:
   - alert: MailroomServiceEmailsProcessedErrorSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The emailsProcessed SLI of the mailroom service (`{{ $labels.stage }}` stage) has an error rate
-        violating SLO
+      title: The emailsProcessed SLI of the mailroom service (`{{ $labels.stage }}`
+        stage) has an error rate violating SLO
       description: |
         Monitors incoming emails delivered from the imap inbox and processed through Sidekiq's `email_receiver` queue. Note that since Mailroom has poor observability, we use Sidekiq metrics for this, and this could lead to certain Sidekiq problems being attributed to Mailroom
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: mailroom-main/mailroom-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/mailroom-main/mailroom-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/mailroom-main/mailroom-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '225761444'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "225761444"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -38,8 +36,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -69,19 +67,17 @@ groups:
   - alert: MailroomServiceEmailsProcessedTrafficCessation
     for: 5m
     annotations:
-      title: >-
-        The emailsProcessed SLI of the mailroom service (`{{ $labels.stage }}` stage) has not received
-        any traffic in the past 30 minutes
+      title: The emailsProcessed SLI of the mailroom service (`{{ $labels.stage }}`
+        stage) has not received any traffic in the past 30 minutes
       description: |
         Monitors incoming emails delivered from the imap inbox and processed through Sidekiq's `email_receiver` queue. Note that since Mailroom has poor observability, we use Sidekiq metrics for this, and this could lead to certain Sidekiq problems being attributed to Mailroom
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: mailroom-main/mailroom-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/mailroom-main/mailroom-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/mailroom-main/mailroom-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '1411619640'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1411619640"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -99,17 +95,15 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
-    expr: >
-      gitlab_component_ops:rate_30m{type="mailroom", component="emailsProcessed", stage="main", monitor="global"}
-      == 0
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{type="mailroom", component="emailsProcessed", stage="main", monitor="global"} == 0
   - alert: MailroomServiceEmailsProcessedTrafficAbsent
     for: 30m
     annotations:
-      title: >-
-        The emailsProcessed SLI of the mailroom service (`{{ $labels.stage }}` stage) has not reported
-        any traffic in the past 30 minutes
+      title: The emailsProcessed SLI of the mailroom service (`{{ $labels.stage }}`
+        stage) has not reported any traffic in the past 30 minutes
       description: |
         Monitors incoming emails delivered from the imap inbox and processed through Sidekiq's `email_receiver` queue. Note that since Mailroom has poor observability, we use Sidekiq metrics for this, and this could lead to certain Sidekiq problems being attributed to Mailroom
 
@@ -117,11 +111,10 @@ groups:
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
       grafana_dashboard_id: mailroom-main/mailroom-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/mailroom-main/mailroom-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/mailroom-main/mailroom-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '1411619640'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1411619640"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -139,8 +132,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
+      slo_alert: "no"
+      user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{type="mailroom", component="emailsProcessed", stage="main", monitor="global"} offset 1h
       unless

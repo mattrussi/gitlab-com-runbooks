@@ -6,9 +6,8 @@ groups:
   - alert: PostgreSQL_HotSpotTupleFetchingPrimary
     for: 10m
     annotations:
-      title: >-
-        Hot spot tuple fetches on the postgres primary `{{ $labels.fqdn }}` in the `{{ $labels.relname
-        }}` table, `{{ $labels.relname }}`.
+      title: Hot spot tuple fetches on the postgres primary `{{ $labels.fqdn }}` in
+        the `{{ $labels.relname }}` table, `{{ $labels.relname }}`.
       description: |
         More than 50% of all tuple fetches on postgres primary `{{ $labels.fqdn }}` are for a single table.
 
@@ -20,12 +19,11 @@ groups:
 
         Previous incidents of this type include <https://gitlab.com/gitlab-com/gl-infra/production/-/issues/2885> and <https://gitlab.com/gitlab-com/gl-infra/production/-/issues/3875>.
       grafana_dashboard_id: alerts-pg_user_tables_primary/alerts-pg-user-table-alerts-primary
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/alerts-pg_user_tables_primary/alerts-pg-user-table-alerts-primary?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-tier={{ $labels.tier }}&var-type={{ $labels.type }}&var-fqdn={{ $labels.fqdn
-        }}&var-relname={{ $labels.relname }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-pg_user_tables_primary/alerts-pg-user-table-alerts-primary?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-tier={{ $labels.tier }}&var-type={{ $labels.type
+        }}&var-fqdn={{ $labels.fqdn }}&var-relname={{ $labels.relname }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2"
       grafana_variables: environment,tier,type,fqdn,relname
     labels:
       alert_type: cause
@@ -49,9 +47,8 @@ groups:
   - alert: PostgreSQL_HotSpotTupleFetchingReplicas
     for: 10m
     annotations:
-      title: >-
-        Hot spot tuple fetches on the postgres postgres replicas in the `{{ $labels.relname }}` table,
-        `{{ $labels.relname }}`.
+      title: Hot spot tuple fetches on the postgres postgres replicas in the `{{ $labels.relname
+        }}` table, `{{ $labels.relname }}`.
       description: |
         More than 50% of all tuple fetches on postgres postgres replicas are for a single table.
 
@@ -63,12 +60,11 @@ groups:
 
         Previous incidents of this type include <https://gitlab.com/gitlab-com/gl-infra/production/-/issues/2885> and <https://gitlab.com/gitlab-com/gl-infra/production/-/issues/3875>.
       grafana_dashboard_id: alerts-pg_user_tables_replica/alerts-pg-user-table-alerts-replicas
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/alerts-pg_user_tables_replica/alerts-pg-user-table-alerts-replicas?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-tier={{ $labels.tier }}&var-type={{ $labels.type }}&var-relname={{
-        $labels.relname }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-pg_user_tables_replica/alerts-pg-user-table-alerts-replicas?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-tier={{ $labels.tier }}&var-type={{ $labels.type
+        }}&var-relname={{ $labels.relname }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2"
       grafana_variables: environment,tier,type,relname
     labels:
       alert_type: cause
@@ -92,7 +88,8 @@ groups:
   - alert: PatroniLongRunningTransactionDetected
     for: 1m
     annotations:
-      title: Transactions detected that have been running on `{{ $labels.fqdn }}` for more than 10m
+      title: Transactions detected that have been running on `{{ $labels.fqdn }}`
+        for more than 10m
       description: |
         Endpoint `{{ $labels.endpoint }}` on `{{ $labels.application }}` is executing a transaction that has been running for more than 10m. This could lead to dead-tuples and performance degradation in our Patroni fleet.
 
@@ -100,10 +97,9 @@ groups:
 
         <https://log.gprd.gitlab.net/app/kibana#/visualize/create?type=line&indexPattern=97f04200-024b-11eb-81e5-155ba78758d4&_a=(filters:!(),query:(language:kuery,query:''),vis:(aggs:!((enabled:!t,id:'1',params:(),schema:metric,type:count),(enabled:!t,id:'2',params:(drop_partials:!t,extended_bounds:(),field:'@timestamp',interval:auto,min_doc_count:1,scaleMetricValues:!f,timeRange:(from:'${__from:date:iso}',to:'${__to:date:iso}'),useNormalizedEsInterval:!t),schema:segment,type:date_histogram),(enabled:!t,id:'3',params:(field:json.fingerprint.keyword,missingBucket:!f,missingBucketLabel:Missing,order:desc,orderBy:'1',otherBucket:!t,otherBucketLabel:Other,size:5),schema:group,type:terms))))|Check the slowlog for changes in the usual trends>.
       grafana_dashboard_id: alerts-long_running_transactions/alerts-long-running-transactions
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/alerts-long_running_transactions/alerts-long-running-transactions?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-long_running_transactions/alerts-long-running-transactions?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}
-      grafana_min_zoom_hours: '6'
+      grafana_min_zoom_hours: "6"
       grafana_variables: environment
     labels:
       alert_type: cause

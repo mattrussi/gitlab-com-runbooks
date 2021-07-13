@@ -502,24 +502,24 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: polling
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: runners
       type: ci-runners
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: shared_runner_queues
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: runners
       type: ci-runners
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: trace_archiving_ci_jobs
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: runners
       type: ci-runners
-    expr: '1'
+    expr: "1"

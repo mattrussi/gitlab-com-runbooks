@@ -12,4 +12,4 @@ groups:
       service_stage: main
       service_tier: inf
       service_type: kube
-    expr: '1'
+    expr: "1"
