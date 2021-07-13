@@ -13,6 +13,8 @@ RUN apk add --no-cache bash git && \
     go build -o /build/bin/jsonnetfmt github.com/google/go-jsonnet/cmd/jsonnetfmt && \
     go get -d github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb@v$JB_VERSION && \
     go build -o /build/bin/jb github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb && \
+    go get -d gitlab.com/gitlab-com/gl-infra/jsonnet-tool && \
+    go build -o /build/bin/jsonnet-tool gitlab.com/gitlab-com/gl-infra/jsonnet-tool && \
     rm -rf /tmp/* /var/tmp/* /var/cache/apk/*
 
 FROM google/cloud-sdk:alpine
@@ -50,6 +52,7 @@ COPY --from=nlknguyen/alpine-shellcheck:latest /usr/local/bin/shellcheck /usr/lo
 COPY --from=peterdavehello/shfmt:latest /bin/shfmt /usr/local/bin/shfmt
 
 COPY --from=go-jsonnet /build/bin/jsonnet /bin/jsonnet
+COPY --from=go-jsonnet /build/bin/jsonnet-tool /bin/jsonnet-tool
 COPY --from=go-jsonnet /build/bin/jsonnetfmt /bin/jsonnetfmt
 COPY --from=go-jsonnet /build/bin/jb /bin/jb
 
