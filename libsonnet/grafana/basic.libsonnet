@@ -856,6 +856,7 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
     decimals=2,
     invertColors=false,
     unit='percentunit',
+    colors=getDefaultAvailabilityColorScale(invertColors, if unit == 'percentunit' then 1 else 100),
   )::
     {
       datasource: '$PROMETHEUS_DS',
@@ -872,7 +873,7 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
           fields: '',
         },
         orientation: 'auto',
-        colorMode: 'background',
+        colorMode: if std.length(colors) > 1 then 'background' else 'value',
         graphMode: 'none',
         justifyMode: 'auto',
       },
@@ -886,7 +887,7 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
           displayName: displayName,
           thresholds: {
             mode: 'absolute',
-            steps: getDefaultAvailabilityColorScale(invertColors, if unit == 'percentunit' then 1 else 100),
+            steps: colors,
           },
           mappings: [],
           links: links,

@@ -29,6 +29,19 @@ local thresholdsValues = {
   ],
 };
 
+// This graph shows a dynamic range: from the begining of last month to
+// yesterday. This means that error budget in minutes also changed
+// depending on $__range_ms. Since we cannot perform calculations in the
+// threshold specification of a stat-panel we don't know the the budget
+// in minutes to deduct thresholds.
+//
+// To avoid confusion, we'll show a single color as the background here.
+// https://github.com/grafana/grafana/issues/922
+local budgetMinutesColor = {
+  color: 'light-blue',
+  value: null,
+};
+
 local systemAvailabilityQuery(selectorHash, rangeInterval) =
   local defaultSelector = {
     env: { re: 'ops|$environment' },
@@ -106,12 +119,6 @@ local serviceRow(service) =
       displayName=service.friendly_name,
       links=links,
     ),
-    grafanaCalHeatmap.heatmapCalendarPanel(
-      '',
-      query=serviceAvailabilityQuery({ type: service.name }, 'slo_observation_status', '1d'),
-      legendFormat='',
-      datasource='$PROMETHEUS_DS',
-    ),
     basic.slaStats(
       title='',
       query=serviceAvailabilityMillisecondsQuery({ type: service.name }, 'slo_observation_status'),
@@ -120,6 +127,14 @@ local serviceRow(service) =
       links=links,
       decimals=1,
       unit='ms',
+      colors=[budgetMinutesColor],
+      colorMode='value',
+    ),
+    grafanaCalHeatmap.heatmapCalendarPanel(
+      '',
+      query=serviceAvailabilityQuery({ type: service.name }, 'slo_observation_status', '1d'),
+      legendFormat='',
+      datasource='$PROMETHEUS_DS',
     ),
     basic.slaTimeseries(
       title='%s: SLA Trends ' % [service.friendly_name],
@@ -161,12 +176,6 @@ basic.dashboard(
       title='GitLab.com Availability',
       query=systemAvailabilityQuery({}, '$__range'),
     ),
-    grafanaCalHeatmap.heatmapCalendarPanel(
-      'Calendar',
-      query=systemAvailabilityQuery({}, '1d'),
-      legendFormat='',
-      datasource='$PROMETHEUS_DS',
-    ),
     basic.slaStats(
       title='',
       query=serviceAvailabilityMillisecondsQuery({}, 'sla:gitlab:ratio'),
@@ -174,6 +183,14 @@ basic.dashboard(
       displayName='Budget Spent',
       decimals=1,
       unit='ms',
+      colors=[budgetMinutesColor],
+      colorMode='value'
+    ),
+    grafanaCalHeatmap.heatmapCalendarPanel(
+      'Calendar',
+      query=systemAvailabilityQuery({}, '1d'),
+      legendFormat='',
+      datasource='$PROMETHEUS_DS',
     ),
     basic.slaTimeseries(
       title='Overall SLA over time period - gitlab.com',
