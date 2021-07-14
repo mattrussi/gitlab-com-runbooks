@@ -29,54 +29,19 @@ local thresholdsValues = {
   ],
 };
 
-local systemWeightQueryTerm(service, selectorHash, rangeInterval) =
+local systemAvailabilityQuery(selectorHash, rangeInterval) =
   local defaultSelector = {
     env: { re: 'ops|$environment' },
     environment: '$environment',
     stage: 'main',
     monitor: { re: 'global|' },
-    type: service.name,
   };
 
   |||
-    avg without(type, slo) (avg_over_time(slo_observation_status{%(selector)s}[%(rangeInterval)s]) * %(serviceWeight)d)
+    avg_over_time(sla:gitlab:ratio{%(selectors)s}[%(rangeInterval)s])
   ||| % {
-    serviceWeight: service.business.SLA.overall_sla_weighting,
-    selector: selectors.serializeHash(defaultSelector + selectorHash),
+    selectors: selectors.serializeHash(defaultSelector + selectorHash),
     rangeInterval: rangeInterval,
-  };
-
-local systemAvailabilityQuery(selectorHash, rangeInterval) =
-
-  /**
-   TODO: after 2021-01-01 consider using the recording rule that we have for this:
-
-   ```
-    avg_over_time(sla:gitlab:ratio{%(selector)s}[%(rangeInterval)s)
-   ```
-
-   Unfortunately we cannot use this at present and need to rely on subqueries instead due to
-   the bug found in https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/11457.
-   This was fixed on 2020-09-28, so any SLA data forward of that date can use the recording rule.
-
-   In the mean time, we'll use this workaround:
-   */
-
-  local keyServicesWithWeights = std.filter(function(service) service.business.SLA.overall_sla_weighting > 0, generalServicesDashboard.keyServices);
-  local weightsQueryTerms = std.map(function(service) systemWeightQueryTerm(service, selectorHash, rangeInterval), keyServicesWithWeights);
-  local weightsQuery = std.join('\n+\n', weightsQueryTerms);
-  local totalWeight = std.foldl(function(memo, service) memo + service.business.SLA.overall_sla_weighting, keyServicesWithWeights, 0);
-
-  |||
-    (
-      %(weightsQuery)s
-    )
-    /
-    %(totalWeight)d
-  ||| % {
-    rangeInterval: rangeInterval,
-    weightsQuery: strings.indent(weightsQuery, 2),
-    totalWeight: totalWeight,
   };
 
 // NB: this query takes into account values recorded in Prometheus prior to
