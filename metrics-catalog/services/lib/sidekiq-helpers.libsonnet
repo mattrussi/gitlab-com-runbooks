@@ -15,6 +15,7 @@ local shards = {
   imports: { urgency: 'throttled', gkeDeployment: 'gitlab-sidekiq-catchall-v1', userImpacting: true, ignoreTrafficCessation: true },
   'low-urgency-cpu-bound': { urgency: 'low', gkeDeployment: 'gitlab-sidekiq-low-urgency-cpu-bound-v1', userImpacting: true, ignoreTrafficCessation: false },
   'memory-bound': { urgency: 'throttled', gkeDeployment: 'gitlab-sidekiq-memory-bound-v1', userImpacting: true, ignoreTrafficCessation: false },
+  quarantine: { urgency: 'high', gkeDeployment: 'gitlab-sidekiq-catchall-v1', userImpacting: true, ignoreTrafficCessation: true },
   'urgent-cpu-bound': { urgency: 'high', gkeDeployment: 'gitlab-sidekiq-urgent-cpu-bound-v1', userImpacting: true, ignoreTrafficCessation: false },
   'urgent-other': { urgency: 'high', autoScaling: false, gkeDeployment: 'gitlab-sidekiq-urgent-other-v1', userImpacting: true, ignoreTrafficCessation: false },
   catchall: { urgency: null, gkeDeployment: 'gitlab-sidekiq-catchall-v1', userImpacting: true, ignoreTrafficCessation: false /* no urgency attribute since multiple values are supported */ },

@@ -16,6 +16,7 @@ local services = [
   'sidekiq-memory-bound',
   'sidekiq-elasticsearch',
   'sidekiq-low-urgency-cpu-bound',
+  'sidekiq-quarantine',
   'sidekiq-urgent-other',
   'sidekiq-database-throttled',
   'sidekiq-gitaly-throttled',
