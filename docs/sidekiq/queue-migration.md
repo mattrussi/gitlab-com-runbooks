@@ -2,8 +2,6 @@
 
 ## Overview
 
-### Definitions
-
 As of June 2021, we use a model for our background jobs (which use
 Sidekiq - see the [survival guide]) where each worker class has its own
 queue. This means that we have over 400 queues that the application can
