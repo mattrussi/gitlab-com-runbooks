@@ -57,3 +57,15 @@ There are no performance constraints relevant to Zlonk. However, we do have some
 
 Zlonk implements [job completion](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/uncategorized/job_completion.md) monitoring. Alerts are funneled to the `#alerts` Slack channel with a S4 severity.
 
+## Troubleshooting
+
+#### Clone timeouts
+
+Clone timeouts will generally occur when Postgres is unable to recover the database, which we have [observed once](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/5126) since ZLonk went into operation two months ago.
+
+Alert generated:
+
+* **GitLab job has failed**: The GitLab job "clone" resource "zlonk.<project>.<instance>" has failed.
+* Tier: `db`, Type: `zlonk.postgres`
+
+We have not found a root cause, but the solution is to destroy and regenerate the clone, so run `zlonk` twice (see crontab for invocation).
