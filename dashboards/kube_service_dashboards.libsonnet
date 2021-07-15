@@ -82,6 +82,57 @@ local panelsForDeployment(serviceType, deployment, selectorHash) =
     ),
   ];
 
+local panelsForRequestsUtilization(serviceType, selectorHash) =
+  local nodeSelectorHash = selectorHash {
+    type: serviceType,
+  };
+
+  local formatConfig = {
+    type: serviceType,
+    nodeSelector: selectors.serializeHash(nodeSelectorHash),
+  };
+
+  [
+    basic.timeseries(
+      title='Node CPU Requests Utilization' % formatConfig,
+      description=|||
+        Ratio of requested CPU resources from allocatable resources.
+        Ideally we have requests utilization close to 100%. Values are
+        below 100% typically because pods do not fit well on nodes or
+        because we might be bound by memory requests already.
+      |||,
+      query=|||
+        sum by (node) (
+          kube_pod_container_resource_requests_cpu_cores
+        )
+        / on (node) group_left()
+        kube_node_status_allocatable:labeled{%(nodeSelector)s,resource="cpu"}
+      ||| % formatConfig,
+      format='percentunit',
+      linewidth=1,
+      legendFormat='{{ node }}',
+    ),
+    basic.timeseries(
+      title='Node Memory Requests Utilization' % formatConfig,
+      description=|||
+        Ratio of requested Memory resources from allocatable resources.
+        Ideally we have requests utilization close to 100%. Values are
+        below 100% typically because pods do not fit well on nodes or
+        because we might be bound by CPU requests already.
+      |||,
+      query=|||
+        sum by (node) (
+          kube_pod_container_resource_requests_memory_bytes
+        )
+        / on (node) group_left()
+        kube_node_status_allocatable:labeled{%(nodeSelector)s,resource="memory"}
+      ||| % formatConfig,
+      format='percentunit',
+      linewidth=1,
+      legendFormat='{{ node }}',
+    ),
+  ];
+
 local rowsForContainer(container, type, deployment) =
   local formatConfig = { container: container, type: type, deployment: deployment };
   [
@@ -288,7 +339,11 @@ local dashboardsForService(type) =
                 panelsForDeployment(type, deployment, selector),
               ],
             deployments
-          ),
+          )
+          +
+          [
+            panelsForRequestsUtilization(type, selector),
+          ],
           rowHeight=8
         )
       )
@@ -322,7 +377,11 @@ local deploymentOverview(type, selector, startRow=1) =
           panelsForDeployment(type, deployment, selector)
         ),
       deployments
-    ),
+    )
+    +
+    [
+      panelsForRequestsUtilization(type, selector),
+    ],
     rowHeight=8,
     startRow=startRow
   );
