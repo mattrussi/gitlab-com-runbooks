@@ -1296,6 +1296,14 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
+      component: server_headers
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: sv
+      type: web-pages
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
       component: imagescaler
       regional_aggregation: "no"
       service_aggregation: "yes"
