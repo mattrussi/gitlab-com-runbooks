@@ -38,11 +38,11 @@ local generalGraphPanel(
 );
 
 {
-  version(startRow)::
+  version(startRow, deploymentKind='Deployment')::
     layout.grid([
       basic.timeseries(
         title='Active Version',
-        query='count(kube_pod_container_info{pod=~"^$Deployment.*", container_id!="", cluster="$cluster", namespace="$namespace"}) by (image)',
+        query='count(kube_pod_container_info{container_id!="", cluster="$cluster", namespace="$namespace"}) by (image)',
         legendFormat='{{ image }}',
       ),
       basic.timeseries(
@@ -53,18 +53,18 @@ local generalGraphPanel(
       ),
     ], cols=2, rowHeight=5, startRow=startRow),
 
-  deployment(startRow)::
+  deployment(startRow, deploymentKind='Deployment')::
     layout.grid([
       basic.singlestat(
         title='Deployment Memory Usage',
-        query='sum (container_memory_working_set_bytes{env=~"$environment", pod=~"^$Deployment.*$", kubernetes_io_hostname=~"^$Node$", pod!="", cluster="$cluster", namespace="$namespace"}) / sum (kube_node_status_allocatable_memory_bytes{env=~"$environment", node=~"^$Node.*$"}) * 100',
+        query='sum (container_memory_working_set_bytes{env=~"$environment", pod=~"^$' + deploymentKind + '.*$", kubernetes_io_hostname=~"^$Node$", pod!="", cluster="$cluster", namespace="$namespace"}) / sum (kube_node_status_allocatable_memory_bytes{env=~"$environment", node=~"^$Node.*$"}) * 100',
         format='percent',
         gaugeShow=true,
         thresholds='65,90',
       ),
       basic.singlestat(
         title='Deployment CPU Usage',
-        query='sum (rate (container_cpu_usage_seconds_total{env=~"$environment", pod=~"^$Deployment.*$", cluster="$cluster", kubernetes_io_hostname=~"^$Node$"}[2m])) / sum (machine_cpu_cores{env=~"$environment", cluster="$cluster", kubernetes_io_hostname=~"^$Node$"}) * 100',
+        query='sum (rate (container_cpu_usage_seconds_total{env=~"$environment", pod=~"^$' + deploymentKind + '.*$", cluster="$cluster", kubernetes_io_hostname=~"^$Node$"}[2m])) / sum (machine_cpu_cores{env=~"$environment", cluster="$cluster", kubernetes_io_hostname=~"^$Node$"}) * 100',
         format='percentunit',
         gaugeMaxValue=1,
         gaugeShow=true,
@@ -78,11 +78,11 @@ local generalGraphPanel(
       ),
     ], cols=3, rowHeight=5, startRow=startRow),
 
-  status(startRow)::
+  status(startRow, deploymentKind='Deployment')::
     layout.grid([
       basic.singlestat(
         title='Memory Used',
-        query='sum (container_memory_working_set_bytes{env=~"$environment", pod=~"^$Deployment.*$", kubernetes_io_hostname=~"^$Node$", pod!="", cluster="$cluster", namespace="$namespace"})',
+        query='sum (container_memory_working_set_bytes{env=~"$environment", pod=~"^$' + deploymentKind + '.*$", kubernetes_io_hostname=~"^$Node$", pod!="", cluster="$cluster", namespace="$namespace"})',
         format='bytes',
       ),
       basic.singlestat(
@@ -92,7 +92,7 @@ local generalGraphPanel(
       ),
       basic.singlestat(
         title='CPU Used',
-        query='sum (rate (container_cpu_usage_seconds_total{env=~"$environment", pod=~"^$Deployment.*$", kubernetes_io_hostname=~"^$Node$", cluster="$cluster", namespace="$namespace"}[1m]))',
+        query='sum (rate (container_cpu_usage_seconds_total{env=~"$environment", pod=~"^$' + deploymentKind + '.*$", kubernetes_io_hostname=~"^$Node$", cluster="$cluster", namespace="$namespace"}[1m]))',
         format='none',
         postfix='cores',
       ),
@@ -116,20 +116,20 @@ local generalGraphPanel(
       ),
     ], cols=6, rowHeight=3, startRow=startRow + 1),
 
-  cpu(startRow)::
+  cpu(startRow, deploymentKind='Deployment')::
     layout.grid([
       generalGraphPanel(
         'Usage',
       )
       .addTarget(
         promQuery.target(
-          'sum (rate (container_cpu_usage_seconds_total{env=~"$environment", image!="", pod=~"^$Deployment.*$", node=~"^$Node$", cluster="$cluster", namespace="$namespace"}[1m])) by (pod,node)',
+          'sum (rate (container_cpu_usage_seconds_total{env=~"$environment", image!="", pod=~"^$' + deploymentKind + '.*$", node=~"^$Node$", cluster="$cluster", namespace="$namespace"}[1m])) by (pod,node)',
           legendFormat='real: {{ pod }}',
         )
       )
       .addTarget(
         promQuery.target(
-          'sum (kube_pod_container_resource_requests_cpu_cores{env=~"$environment", pod=~"^$Deployment.*$",node=~"^$Node$", cluster="$cluster", namespace="$namespace"}) by (pod,node)',
+          'sum (kube_pod_container_resource_requests_cpu_cores{env=~"$environment", pod=~"^$' + deploymentKind + '.*$",node=~"^$Node$", cluster="$cluster", namespace="$namespace"}) by (pod,node)',
           legendFormat='rqst: {{ pod }}',
         )
       )
@@ -190,21 +190,21 @@ local generalGraphPanel(
       )
       .addTarget(
         promQuery.target(
-          'sum(label_replace(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate{env=~"$environment"}, "pod", "$1", "pod", "(.*)") * on(namespace,pod) group_left(workload) mixin_pod_workload{env=~"$environment", workload=~"^$Deployment", cluster="$cluster", namespace="$namespace"}) by (pod)',
+          'sum(label_replace(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate{env=~"$environment"}, "pod", "$1", "pod", "(.*)") * on(namespace,pod) group_left(workload) mixin_pod_workload{env=~"$environment", workload=~"^$' + deploymentKind + '", cluster="$cluster", namespace="$namespace"}) by (pod)',
           format='table',
           instant=true,
         )
       )
       .addTarget(
         promQuery.target(
-          'sum(kube_pod_container_resource_requests_cpu_cores{env=~"$environment"} * on(namespace,pod) group_left(workload) mixin_pod_workload{env=~"$environment", workload=~"^$Deployment", cluster="$cluster", namespace="$namespace"}) by (pod)',
+          'sum(kube_pod_container_resource_requests_cpu_cores{env=~"$environment"} * on(namespace,pod) group_left(workload) mixin_pod_workload{env=~"$environment", workload=~"^$' + deploymentKind + '", cluster="$cluster", namespace="$namespace"}) by (pod)',
           format='table',
           instant=true,
         )
       )
       .addTarget(
         promQuery.target(
-          'sum(label_replace(namespace_pod_container:container_cpu_usage_seconds_total:sum_rate{env=~"$environment"}, "pod", "$1", "pod", "(.*)") * on(pod) group_left(workload) mixin_pod_workload{env=~"$environment", workload=~"^$Deployment", cluster="$cluster", namespace="$namespace"}) by (pod) / sum(kube_pod_container_resource_requests_cpu_cores{env=~"$environment"} * on(pod) group_left(workload) mixin_pod_workload{env=~"$environment", workload=~"^$Deployment", cluster="$cluster", namespace="$namespace"}) by (pod)',
+          'sum(label_replace(namespace_pod_container:container_cpu_usage_seconds_total:sum_rate{env=~"$environment"}, "pod", "$1", "pod", "(.*)") * on(pod) group_left(workload) mixin_pod_workload{env=~"$environment", workload=~"^$' + deploymentKind + '", cluster="$cluster", namespace="$namespace"}) by (pod) / sum(kube_pod_container_resource_requests_cpu_cores{env=~"$environment"} * on(pod) group_left(workload) mixin_pod_workload{env=~"$environment", workload=~"^$' + deploymentKind + '", cluster="$cluster", namespace="$namespace"}) by (pod)',
           format='table',
           instant=true,
         )
@@ -212,7 +212,7 @@ local generalGraphPanel(
 
     ], cols=1, rowHeight=10, startRow=startRow),
 
-  memory(startRow, container)::
+  memory(deploymentKind='Deployment', startRow, container)::
     layout.grid([
       generalGraphPanel(
         'Usage',
@@ -220,7 +220,7 @@ local generalGraphPanel(
       )
       .addTarget(
         promQuery.target(
-          'sum (container_memory_working_set_bytes{env=~"$environment", id!="/",pod=~"^$Deployment.*$",node=~"^$Node$", container="%(container)s", cluster="$cluster", namespace="$namespace"}) by (pod)' % { container: container },
+          'sum (container_memory_working_set_bytes{env=~"$environment", id!="/",pod=~"^$' + deploymentKind + '.*$",node=~"^$Node$", container="%(container)s", cluster="$cluster", namespace="$namespace"}) by (pod)' % { container: container },
           legendFormat='real: {{ pod }}',
         )
       ),
@@ -269,28 +269,28 @@ local generalGraphPanel(
       )
       .addTarget(
         promQuery.target(
-          'sum(label_replace(container_memory_usage_bytes{env=~"$environment", container!=""}, "pod", "$1", "pod", "(.*)") * on(pod) group_left(workload) mixin_pod_workload{env=~"$environment", workload=~"^$Deployment", cluster="$cluster", namespace="$namespace"}) by (pod)',
+          'sum(label_replace(container_memory_usage_bytes{env=~"$environment", container!=""}, "pod", "$1", "pod", "(.*)") * on(pod) group_left(workload) mixin_pod_workload{env=~"$environment", workload=~"^$' + deploymentKind + '", cluster="$cluster", namespace="$namespace"}) by (pod)',
           format='table',
           instant=true,
         )
       )
       .addTarget(
         promQuery.target(
-          'sum(kube_pod_container_resource_requests_memory_bytes{env=~"$environment"} * on(pod) group_left(workload) mixin_pod_workload{env=~"$environment", workload=~"^$Deployment", cluster="$cluster", namespace="$namespace"}) by (pod)',
+          'sum(kube_pod_container_resource_requests_memory_bytes{env=~"$environment"} * on(pod) group_left(workload) mixin_pod_workload{env=~"$environment", workload=~"^$' + deploymentKind + '", cluster="$cluster", namespace="$namespace"}) by (pod)',
           format='table',
           instant=true,
         )
       )
       .addTarget(
         promQuery.target(
-          'sum(label_replace(container_memory_usage_bytes{env=~"$environment", container!=""}, "pod", "$1", "pod", "(.*)") * on(pod) group_left(workload) mixin_pod_workload{env=~"$environment", workload=~"^$Deployment", cluster="$cluster", namespace="$namespace"}) by (pod) /sum(kube_pod_container_resource_requests_memory_bytes{env=~"$environment", } * on(pod) group_left(workload) mixin_pod_workload{env=~"$environment", workload=~"^$Deployment", cluster="$cluster", namespace="$namespace"}) by (pod)',
+          'sum(label_replace(container_memory_usage_bytes{env=~"$environment", container!=""}, "pod", "$1", "pod", "(.*)") * on(pod) group_left(workload) mixin_pod_workload{env=~"$environment", workload=~"^$' + deploymentKind + '", cluster="$cluster", namespace="$namespace"}) by (pod) /sum(kube_pod_container_resource_requests_memory_bytes{env=~"$environment", } * on(pod) group_left(workload) mixin_pod_workload{env=~"$environment", workload=~"^$' + deploymentKind + '", cluster="$cluster", namespace="$namespace"}) by (pod)',
           format='table',
           instant=true,
         )
       ),
     ], cols=1, rowHeight=10, startRow=startRow),
 
-  network(startRow)::
+  network(deploymentKind='Deployment', startRow)::
     layout.grid([
       generalGraphPanel(
         'All processes network I/O',
@@ -301,13 +301,13 @@ local generalGraphPanel(
       )
       .addTarget(
         promQuery.target(
-          'sum (rate (container_network_receive_bytes_total{env=~"$environment", id!="/",pod=~"^$Deployment.*$",node=~"^$Node$", cluster="$cluster", namespace="$namespace"}[1m])) by (pod)',
+          'sum (rate (container_network_receive_bytes_total{env=~"$environment", id!="/",pod=~"^$' + deploymentKind + '.*$",node=~"^$Node$", cluster="$cluster", namespace="$namespace"}[1m])) by (pod)',
           legendFormat='-> {{ pod }}',
         )
       )
       .addTarget(
         promQuery.target(
-          '- sum( rate (container_network_transmit_bytes_total{env=~"$environment", id!="/",pod=~"^$Deployment.*$",node=~"^$Node$", cluster="$cluster", namespace="$namespace"}[1m])) by (pod)',
+          '- sum( rate (container_network_transmit_bytes_total{env=~"$environment", id!="/",pod=~"^$' + deploymentKind + '.*$",node=~"^$Node$", cluster="$cluster", namespace="$namespace"}[1m])) by (pod)',
           legendFormat='<- {{ pod }}',
         )
       ),

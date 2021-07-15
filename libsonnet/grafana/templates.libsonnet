@@ -18,6 +18,17 @@ local template = grafana.template;
       'label_values(kube_pod_container_info{environment="$environment"}, namespace)',
       refresh='load',
     ),
+  // Specify the default namespace to be utilized for this template
+  namespaceDefault(namespace)::
+    template.new(
+      'namespace',
+      '$PROMETHEUS_DS',
+      'label_values(kube_pod_container_info{environment="$environment"}, namespace)',
+      current=namespace,
+      refresh='load',
+      sort=1,
+    ),
+  // TODO: figure out to replace the below template with the above
   namespaceGitlab::
     template.new(
       'namespace',
@@ -177,5 +188,4 @@ local template = grafana.template;
       refresh='load',
       sort=1,
     ),
-
 }
