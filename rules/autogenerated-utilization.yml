@@ -28,7 +28,7 @@ groups:
           kube_pod_container_resource_requests_cpu_cores
         )
         / on (node) group_left(cluster,env,tier,type,stage,shard)
-        kube_node_status_allocatable:labeled{type=~"api|git|kas|mailroom|monitoring|nginx|plantuml|registry|sidekiq|websockets|woodhouse",resource="cpu"}
+        kube_node_status_allocatable:labeled{type=~"api|git|kas|mailroom|monitoring|nginx|plantuml|registry|sidekiq|web|websockets|woodhouse",resource="cpu"}
       )
       * 100
   - record: gitlab_component_utilization:kube_node_memory_requests_percent:1h
@@ -44,7 +44,7 @@ groups:
           kube_pod_container_resource_requests_memory_bytes
         )
         / on (node) group_left(cluster,env,tier,type,stage,shard)
-        kube_node_status_allocatable:labeled{type=~"api|git|kas|mailroom|monitoring|nginx|plantuml|registry|sidekiq|websockets|woodhouse",resource="memory"}
+        kube_node_status_allocatable:labeled{type=~"api|git|kas|mailroom|monitoring|nginx|plantuml|registry|sidekiq|web|websockets|woodhouse",resource="memory"}
       )
       * 100
   - record: gitlab_component_utilization:pg_dead_tup_rate_tuples:1h

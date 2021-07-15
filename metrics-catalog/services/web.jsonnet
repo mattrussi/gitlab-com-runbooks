@@ -43,6 +43,20 @@ metricsCatalog.serviceDefinition({
   recordingRuleMetrics: [
     'http_requests_total',
   ],
+  provisioning: {
+    vms: true,
+    kubernetes: true,
+  },
+  regional: true,
+  kubeResources: {
+    web: {
+      kind: 'Deployment',
+      containers: [
+        'gitlab-workhorse',
+        'webservice',
+      ],
+    },
+  },
   serviceLevelIndicators: {
     loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
       userImpacting=true,
@@ -53,6 +67,7 @@ metricsCatalog.serviceDefinition({
         cny: { backends: ['canary_web'], toolingLinks: [] },
       },
       selector={ type: 'frontend' },
+      regional=false,
     ),
 
     workhorse: {

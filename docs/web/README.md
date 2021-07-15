@@ -11,12 +11,9 @@
 
 ## Logging
 
-* [Rails](https://log.gprd.gitlab.net/goto/5e1aa9dac377ff2282c70748e9278860)
-* [Workhorse](https://log.gprd.gitlab.net/goto/cebefc3cf285ce2a94fbfdcadc55f1a4)
-* [Puma](https://log.gprd.gitlab.net/goto/a2601cff0b6f000339e05cdb9deab58b)
-* [nginx](https://log.gprd.gitlab.net/goto/4844ecfa4a7e6f0491685b2cc9224eb0)
-* [Unstructured Rails](https://console.cloud.google.com/logs/viewer?project=gitlab-production&interval=PT1H&resource=gce_instance&advancedFilter=jsonPayload.hostname%3A%22web%22%0Alabels.tag%3D%22unstructured.production%22&customFacets=labels.%22compute.googleapis.com%2Fresource_name%22)
-* [system](https://log.gprd.gitlab.net/goto/c93fb9b8e5df92ed79d993d3a62b5452)
+* [Rails](https://log.gprd.gitlab.net/goto/15b83f5a97e93af2496072d4aa53105f)
+* [Workhorse](https://log.gprd.gitlab.net/goto/464bddf849abfd4ca28494a04bad3ead)
+* [Kubernetes](https://log.gprd.gitlab.net/goto/88eab835042a07b213b8c7f24213d5bf)
 
 ## Troubleshooting Pointers
 
