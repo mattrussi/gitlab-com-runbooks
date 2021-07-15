@@ -257,13 +257,13 @@ groups:
         clamp_min(
           clamp_max(
             sum by (environment, tier, type, stage, pod, container) (
-              rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", type=~"api|git|kas|mailroom|monitoring|nginx|plantuml|registry|sidekiq|websockets|woodhouse"}[5m])
+              rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", type=~"api|git|kas|mailroom|monitoring|nginx|plantuml|registry|sidekiq|web|websockets|woodhouse"}[5m])
             )
             /
             sum by(environment, tier, type, stage, pod, container) (
-              container_spec_cpu_quota:labeled{container!="", container!="POD", type=~"api|git|kas|mailroom|monitoring|nginx|plantuml|registry|sidekiq|websockets|woodhouse"}
+              container_spec_cpu_quota:labeled{container!="", container!="POD", type=~"api|git|kas|mailroom|monitoring|nginx|plantuml|registry|sidekiq|web|websockets|woodhouse"}
               /
-              container_spec_cpu_period:labeled{container!="", container!="POD", type=~"api|git|kas|mailroom|monitoring|nginx|plantuml|registry|sidekiq|websockets|woodhouse"}
+              container_spec_cpu_period:labeled{container!="", container!="POD", type=~"api|git|kas|mailroom|monitoring|nginx|plantuml|registry|sidekiq|web|websockets|woodhouse"}
             )
             ,
             1)
@@ -277,9 +277,9 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            container_memory_working_set_bytes:labeled{container!="", container!="POD", type=~"api|git|kas|mailroom|monitoring|nginx|plantuml|registry|sidekiq|websockets|woodhouse"}
+            container_memory_working_set_bytes:labeled{container!="", container!="POD", type=~"api|git|kas|mailroom|monitoring|nginx|plantuml|registry|sidekiq|web|websockets|woodhouse"}
             /
-            (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", type=~"api|git|kas|mailroom|monitoring|nginx|plantuml|registry|sidekiq|websockets|woodhouse"} > 0)
+            (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", type=~"api|git|kas|mailroom|monitoring|nginx|plantuml|registry|sidekiq|web|websockets|woodhouse"} > 0)
             ,
             1)
         ,
@@ -293,15 +293,15 @@ groups:
         clamp_min(
           clamp_max(
             (
-              go_memstats_alloc_bytes{type=~"api|git|kas|monitoring|registry|websockets"}
+              go_memstats_alloc_bytes{type=~"api|git|kas|monitoring|registry|web|websockets"}
               / on(environment, tier, type, stage, cluster, pod) group_left()
               topk by(environment, tier, type, stage, cluster, pod) (1,
-                container_spec_memory_limit_bytes:labeled{container=~"gitlab-workhorse|kas|registry|thanos-store",type=~"api|git|kas|monitoring|registry|websockets"}
+                container_spec_memory_limit_bytes:labeled{container=~"gitlab-workhorse|kas|registry|thanos-store",type=~"api|git|kas|monitoring|registry|web|websockets"}
               )
             )
             or
             (
-              go_memstats_alloc_bytes{type="monitoring", type=~"api|git|kas|monitoring|registry|websockets"}
+              go_memstats_alloc_bytes{type="monitoring", type=~"api|git|kas|monitoring|registry|web|websockets"}
               / on(environment, tier, type, cluster, pod) group_left()
               topk by (environment, tier, type, cluster, pod) (1,
                 container_spec_memory_limit_bytes:labeled{type="monitoring", container=~"gitlab-workhorse|kas|registry|thanos-store"}
@@ -319,9 +319,9 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            kube_hpa_status_desired_replicas:labeled{type=~"api|git|kas|mailroom|monitoring|nginx|plantuml|registry|sidekiq|websockets|woodhouse", shard!~"database-throttled|elasticsearch|gitaly-throttled|imports|memory-bound|urgent-other"}
+            kube_hpa_status_desired_replicas:labeled{type=~"api|git|kas|mailroom|monitoring|nginx|plantuml|registry|sidekiq|web|websockets|woodhouse", shard!~"database-throttled|elasticsearch|gitaly-throttled|imports|memory-bound|urgent-other"}
             /
-            kube_hpa_spec_max_replicas:labeled{type=~"api|git|kas|mailroom|monitoring|nginx|plantuml|registry|sidekiq|websockets|woodhouse", shard!~"database-throttled|elasticsearch|gitaly-throttled|imports|memory-bound|urgent-other"}
+            kube_hpa_spec_max_replicas:labeled{type=~"api|git|kas|mailroom|monitoring|nginx|plantuml|registry|sidekiq|web|websockets|woodhouse", shard!~"database-throttled|elasticsearch|gitaly-throttled|imports|memory-bound|urgent-other"}
             ,
             1)
         ,
