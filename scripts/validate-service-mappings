@@ -85,31 +85,31 @@ def validate(service_catalog_path)
     # =========
 
     # project
-    project = service["technical"]["project"]
+    project = service.dig("technical", "project")
     raise "'#{service_name}' | project field must be list" unless project.is_a?(Array) || project.nil?
 
     # slx
-    slx = service["technical"]["slx"]
+    slx = service.dig("technical", "slx")
     raise "'#{service_name}' | slx field must be string" unless slx.is_a?(String) || slx.nil?
 
     # design
-    design_doc = service["technical"]["documents"]["design"]
+    design_doc = service.dig("technical", "documents", "design")
     raise "'#{service_name}' | design document field must be string" unless design_doc.is_a?(String) || design_doc.nil?
 
     # architecture
-    architecture_doc = service["technical"]["documents"]["architecture"]
+    architecture_doc = service.dig("technical", "documents", "architecture")
     raise "'#{service_name}' | architecture document field must be string" unless architecture_doc.is_a?(String) || architecture_doc.nil?
 
     # service
-    service_doc = service["technical"]["documents"]["service"]
+    service_doc = service.dig("technical", "documents", "service")
     raise "'#{service_name}' | service document field must be list" unless service_doc.is_a?(Array) || service_doc.nil?
 
     # security
-    security_doc = service["technical"]["documents"]["security"]
+    security_doc = service.dig("technical", "documents", "security")
     raise "'#{service_name}' | security document field must be string" unless security_doc.is_a?(String) || security_doc.nil?
 
     # dependencies
-    dependencies = service["technical"]["dependencies"]
+    dependencies = service.dig("technical", "dependencies")
     raise "'#{service_name}' | dependencies field must be list" unless dependencies.is_a?(Array) || dependencies.nil?
 
     dependencies&.each do |dependency|
@@ -117,7 +117,7 @@ def validate(service_catalog_path)
     end
 
     # configurations
-    configurations = service["technical"]["configurations"]
+    configurations = service.dig("technical", "configurations")
     raise "'#{service_name}' | configurations field must be list" unless configurations.is_a?(Array) || configurations.nil?
 
     configurations&.each do |configuration|
@@ -126,11 +126,11 @@ def validate(service_catalog_path)
     end
 
     # chef_roles
-    chef_roles = service["technical"]["chef_roles"]
+    chef_roles = service.dig("technical", "chef_roles")
     raise "'#{service_name}' | chef_roles field must be list" unless chef_roles.is_a?(Array) || chef_roles.nil?
 
     # scalability
-    scalability = service["technical"]["scalability"]
+    scalability = service.dig("technical", "scalability")
 
     if scalability
       # node
@@ -147,7 +147,7 @@ def validate(service_catalog_path)
     end
 
     # security_reviewed
-    security = service["technical"]["security"]
+    security = service.dig("technical", "security")
 
     if security
       security_reviewed = security["security_reviewed"]
@@ -163,28 +163,31 @@ def validate(service_catalog_path)
     end
 
     # logging
-    logging = service["technical"]["logging"]
-    raise "'#{service_name}' | logging field must be list" unless logging.is_a? Array
+    logging = service.dig("technical", "logging")
+    if logging
+      raise "'#{service_name}' | logging field must be list" unless logging.is_a? Array
+      raise "service '#{service_name}' requires at least one logging configuration" if logging.empty?
 
-    logging.each do |log|
-      raise "'#{service_name}' | log name field must be string" unless log["name"].is_a?(String) || log["name"].nil?
-      raise "'#{service_name}' | log permalink field must be string" unless log["permalink"].is_a?(String) || log["permalink"].nil?
+      logging.each do |log|
+        raise "'#{service_name}' | log name field must be string" unless log["name"].is_a?(String) || log["name"].nil?
+        raise "'#{service_name}' | log permalink field must be string" unless log["permalink"].is_a?(String) || log["permalink"].nil?
+      end
     end
 
     # provider
-    provider = service["infrastructure"]["provider"]
+    provider = service.dig("infrastructure", "provider")
     raise "'#{service_name}' | provider field must be string" unless provider.is_a? String
 
     # architecture
-    architecture = service["infrastructure"]["architecture"]
+    architecture = service.dig("infrastructure", "architecture")
     raise "'#{service_name}' | architecture field must be string" unless architecture.is_a?(String) || architecture.nil?
 
     # provisioning
-    provisioning = service["infrastructure"]["provisioning"]
+    provisioning = service.dig("infrastructure", "provisioning")
     raise "'#{service_name}' | provisioning field must be string" unless provisioning.is_a?(String) || provisioning.nil?
 
     # accesses
-    accesses = service["infrastructure"]["accesses"]
+    accesses = service.dig("infrastructure", "accesses")
     raise "'#{service_name}' | accesses field must be list" unless accesses.is_a?(Array) || accesses.nil?
 
     accesses&.each do |access|
@@ -194,26 +197,26 @@ def validate(service_catalog_path)
     end
 
     # maintenance
-    maintenance = service["operations"]["maintenance"]
+    maintenance = service.dig("operations", "maintenance")
     raise "'#{service_name}' | maintenance field must be string" unless maintenance.is_a?(String) || maintenance.nil?
 
     # runbooks
-    runbooks = service["operations"]["runbooks"]
+    runbooks = service.dig("operations", "runbooks")
     raise "'#{service_name}' | runbooks field must be list" unless runbooks.is_a?(Array) || runbooks.nil?
 
     # playbooks
-    playbooks = service["operations"]["playbooks"]
+    playbooks = service.dig("operations", "playbooks")
     raise "'#{service_name}' | playbooks field must be list" unless playbooks.is_a?(Array) || playbooks.nil?
 
     # error_budget
-    error_budget = service["operations"]["error_budget"]
+    error_budget = service.dig("operations", "error_budget")
     raise "'#{service_name}' | error_budget field must be string" unless error_budget.is_a?(String) || error_budget.nil?
 
     # observability
     # monitors
-    monitors = service["observability"]["monitors"]
+    monitors = service.dig("observability", "monitors")
 
-    unless monitors.nil?
+    unless monitors.nil? # rubocop:disable Style/Next
       if monitors.key?("grafana_folder")
         grafana_folder = monitors["grafana_folder"]
         raise "'#{service_name}' | grafana_folder field must be string" unless grafana_folder.is_a?(String) || grafana_folder.nil?
@@ -229,8 +232,6 @@ def validate(service_catalog_path)
         raise "'#{service_name}' | sentry_slug field must be string" unless sentry_slug.is_a?(String) || sentry_slug.nil?
       end
     end
-
-    raise "service '#{service_name}' requires at least one logging configuration" unless service["technical"]["logging"] && !service["technical"]["logging"].empty?
   end
 end
 # rubocop:enable Metrics/PerceivedComplexity

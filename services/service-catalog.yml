@@ -1019,6 +1019,18 @@ services:
       grafana_folder: N9YSt6Siz
       primary_grafana_dashboard: "frontend-main/frontend-overview"
 
+- name: gcs
+  tier: inf
+  friendly_name: Google Cloud Storage
+  infra_owner: sre_coreinfra
+  label: Service:GCS
+  infrastructure:
+    provider: gcp
+  observability:
+    monitors:
+      grafana_folder: gcs
+      primary_grafana_dashboard: "gcs-main/gcs-overview"
+
 - name: git
   tier: sv
   friendly_name: Git Access
