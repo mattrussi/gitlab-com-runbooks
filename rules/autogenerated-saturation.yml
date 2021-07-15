@@ -2647,13 +2647,13 @@ groups:
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
-      title: The Kube Persistent Volume Claim inode Utilisation resource of the {{
+      title: The Kube Persistent Volume Claim Space Utilisation resource of the {{
         $labels.type }} service ({{ $labels.stage }} stage), component has a saturation
         exceeding SLO and is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
-        Details of the Kube Persistent Volume Claim inode Utilisation resource:
+        Details of the Kube Persistent Volume Claim Space Utilisation resource:
 
         disk space utilization on persistent volume claims.
       grafana_dashboard_id: alerts-sat_kube_pvc_disk_space
