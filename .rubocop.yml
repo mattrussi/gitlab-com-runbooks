@@ -25,3 +25,12 @@ CodeReuse/ActiveRecord:
 # multiple lines does not really improve readability.
 Layout/LineLength:
   Enabled: false
+
+Lint/HashCompareByIdentity: # (new in 0.93)
+  Enabled: true
+Lint/RedundantSafeNavigation: # (new in 0.93)
+  Enabled: true
+Style/ClassEqualityComparison: # (new in 0.93)
+  Enabled: true
+RSpec/StubbedMock: # (new in 1.44)
+  Enabled: false
