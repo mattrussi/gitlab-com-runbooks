@@ -6,6 +6,7 @@
   import 'api.jsonnet',
   import 'camoproxy.jsonnet',
   import 'ci-runners.jsonnet',
+  import 'consul.jsonnet',
   import 'frontend.jsonnet',
   import 'git.jsonnet',
   import 'gitaly.jsonnet',
