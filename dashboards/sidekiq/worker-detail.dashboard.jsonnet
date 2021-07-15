@@ -311,17 +311,46 @@ basic.dashboard(
     }),
   ], cols=4, rowHeight=8, startRow=101)
   +
+  layout.rowGrid('Enqueuing (rate of jobs enqueuing)', [
+    enqueueCountTimeseries('Jobs Enqueued', aggregators='worker', legendFormat='{{ worker }}'),
+    enqueueCountTimeseries('Jobs Enqueued per Service', aggregators='type, worker', legendFormat='{{ worker }} - {{ type }}'),
+    basic.timeseries(
+      stableId='enqueued-by-scheduling-type',
+      title='Jobs Enqueued by Schedule',
+      description='Enqueue events separated by immediate (destined for execution) vs delayed (destined for ScheduledSet) scheduling.',
+      query=|||
+        sum by (queue, scheduling) (
+          rate(sidekiq_enqueued_jobs_total{environment="$environment", stage="$stage", worker=~"$worker"}[$__interval])
+          )
+      |||,
+      legendFormat='{{ queue }} - {{ scheduling }}',
+    ),
+    basic.queueLengthTimeseries(
+      stableId='queue-length',
+      title='Queue length',
+      description='The number of unstarted jobs in a queue (capped at 1000 at scrape time for performance reasons)',
+      query=|||
+        max by (name) (max_over_time(sidekiq_enqueued_jobs{environment="$environment", name=~"$worker"}[$__interval]) and on(fqdn) (redis_connected_slaves != 0)) or on () vector(0)
+      |||,
+      legendFormat='{{ name }}',
+      format='short',
+      interval='1m',
+      intervalFactor=3,
+      yAxisLabel='',
+    ),
+  ], startRow=201)
+  +
   layout.rowGrid('Queue Latency (the amount of time spent queueing)', [
     workerlatencyTimeseries('Queue Time', aggregators='worker', legendFormat='p95 {{ worker }}'),
-  ], startRow=201)
+  ], startRow=301)
   +
   layout.rowGrid('Execution Latency (the amount of time the job takes to execute after dequeue)', [
     latencyTimeseries('Execution Time', aggregators='worker', legendFormat='p95 {{ worker }}'),
-  ], startRow=301)
+  ], startRow=401)
   +
   layout.rowGrid('Execution RPS (the rate at which jobs are completed after dequeue)', [
     rpsTimeseries('RPS', aggregators='worker', legendFormat='{{ worker }}'),
-  ], startRow=401)
+  ], startRow=501)
   +
   layout.rowGrid('Error Rate (the rate at which jobs fail)', [
     errorRateTimeseries('Errors', aggregators='worker', legendFormat='{{ worker }}'),
@@ -336,24 +365,24 @@ basic.dashboard(
       },
       legendFormat='{{ worker }}',
     ),
-  ], startRow=501)
+  ], startRow=601)
   +
   [
-    row.new(title='Resource Usage') { gridPos: { x: 0, y: 601, w: 24, h: 1 } },
+    row.new(title='Resource Usage') { gridPos: { x: 0, y: 701, w: 24, h: 1 } },
   ] +
   layout.grid(
     [
       basic.multiQuantileTimeseries('CPU Time', selector, '{{ worker }}', bucketMetric='sidekiq_jobs_cpu_seconds_bucket', aggregators='worker'),
       basic.multiQuantileTimeseries('Gitaly Time', selector, '{{ worker }}', bucketMetric='sidekiq_jobs_gitaly_seconds_bucket', aggregators='worker'),
       basic.multiQuantileTimeseries('Database Time', selector, '{{ worker }}', bucketMetric='sidekiq_jobs_db_seconds_bucket', aggregators='worker'),
-    ], cols=3, startRow=602
+    ], cols=3, startRow=702
   )
   +
   layout.grid(
     [
       basic.multiQuantileTimeseries('Redis Time', selector, '{{ worker }}', bucketMetric='sidekiq_redis_requests_duration_seconds_bucket', aggregators='worker'),
       basic.multiQuantileTimeseries('Elasticsearch Time', selector, '{{ worker }}', bucketMetric='sidekiq_elasticsearch_requests_duration_seconds_bucket', aggregators='worker'),
-    ], cols=3, startRow=603
+    ], cols=3, startRow=703
   )
   +
   layout.rowGrid('SQL', [
