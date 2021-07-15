@@ -80,7 +80,7 @@ basic.dashboard(
     format='s',
   ).addTarget(prometheus.target(
     'topk(1, count(delivery_deployment_duration_seconds_bucket{job="delivery-metrics",le="$target_slo"}) by (le))',
-    instant=true,
+    instant=false,
     format='table',
     legendFormat='{{le}}',
   )),
