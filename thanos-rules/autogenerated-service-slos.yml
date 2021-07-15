@@ -528,6 +528,22 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
+      component: registry_storage
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: inf
+      type: gcs
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: workhorse_uploads
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: inf
+      type: gcs
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
       component: gitlab_shell
       regional_aggregation: "yes"
       service_aggregation: "yes"

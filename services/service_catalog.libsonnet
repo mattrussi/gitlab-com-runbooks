@@ -2,8 +2,14 @@ local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libso
 local serviceCatalog = import 'service_catalog.json';
 local link = grafana.link;
 
+local serviceDefaults = {
+  technical+: {
+    logging+: [],
+  },
+};
+
 local serviceMap = {
-  [x.name]: x
+  [x.name]: x + serviceDefaults
   for x in serviceCatalog.services
 };
 
