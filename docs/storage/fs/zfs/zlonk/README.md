@@ -46,8 +46,8 @@ bin/zlonk.sh <project> <instance>
 
 Once invoked, it will behave in one of two ways:
 
-* It the `project:instance` clone **does not exist**, Zlonk will checkpoint postgres, snapshot the file system, create and mount a clone, and start Postgres, which will attempt recovery. Clones are mounted under  `/var/opt/gitlab/postgresql/zlonk/`. At that point, the cloned replica, which is completely indepdendent of the cascaded replica, will be available on an alternate port.
-* It the `project:instance` clone **does exist**, Zlonk will fast-stop the *cloned Postgres instance*and and destroy the clone.
+* If the `project:instance` clone **does not exist**, Zlonk will checkpoint postgres, snapshot the file system, create and mount a clone, and start Postgres, which will attempt recovery. Clones are mounted under  `/var/opt/gitlab/postgresql/zlonk/`. At that point, the cloned replica, which is completely indepdendent of the cascaded replica, will be available on an alternate port.
+* If the `project:instance` clone **does exist**, Zlonk will fast-stop the *cloned Postgres instance*and and destroy the clone.
 
 ## Performance
 
