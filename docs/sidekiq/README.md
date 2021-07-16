@@ -37,6 +37,7 @@
 * [../pgbouncer/pgbouncer-remove-instance.md](../pgbouncer/pgbouncer-remove-instance.md)
 * [../pgbouncer/pgbouncer-saturation.md](../pgbouncer/pgbouncer-saturation.md)
 * [../pgbouncer/service-pgbouncer.md](../pgbouncer/service-pgbouncer.md)
+* [../redis/redis-sidekiq-catchall-workloads-reduction.md](../redis/redis-sidekiq-catchall-workloads-reduction.md)
 * [../redis/redis-survival-guide-for-sres.md](../redis/redis-survival-guide-for-sres.md)
 * [../redis/redis.md](../redis/redis.md)
 * [creating-a-shard.md](creating-a-shard.md)

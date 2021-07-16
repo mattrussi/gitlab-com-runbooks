@@ -43,6 +43,7 @@
 * [../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md](../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md)
 * [../postgres-dr-delayed/postgres-dr-replicas.md](../postgres-dr-delayed/postgres-dr-replicas.md)
 * [../praefect/praefect-read-only.md](../praefect/praefect-read-only.md)
+* [../redis/redis-sidekiq-catchall-workloads-reduction.md](../redis/redis-sidekiq-catchall-workloads-reduction.md)
 * [../uncategorized/about-gitlab-com.md](../uncategorized/about-gitlab-com.md)
 * [../uncategorized/aptly.md](../uncategorized/aptly.md)
 * [../uncategorized/cloudsql-data-export.md](../uncategorized/cloudsql-data-export.md)

@@ -63,6 +63,7 @@
 * [../postgres-dr-delayed/postgres-dr-replicas.md](../postgres-dr-delayed/postgres-dr-replicas.md)
 * [../praefect/praefect-database.md](../praefect/praefect-database.md)
 * [../redis/clear_anonymous_sessions.md](../redis/clear_anonymous_sessions.md)
+* [../redis/redis-sidekiq-catchall-workloads-reduction.md](../redis/redis-sidekiq-catchall-workloads-reduction.md)
 * [../redis/redis.md](../redis/redis.md)
 * [../registry/gitlab-registry.md](../registry/gitlab-registry.md)
 * [../sentry/sentry-is-down.md](../sentry/sentry-is-down.md)

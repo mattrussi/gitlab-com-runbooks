@@ -26,6 +26,7 @@
 * [../patroni/rotating-rails-postgresql-password.md](../patroni/rotating-rails-postgresql-password.md)
 * [ban-an-IP-with-redis.md](ban-an-IP-with-redis.md)
 * [clear_anonymous_sessions.md](clear_anonymous_sessions.md)
+* [redis-sidekiq-catchall-workloads-reduction.md](redis-sidekiq-catchall-workloads-reduction.md)
 * [redis-survival-guide-for-sres.md](redis-survival-guide-for-sres.md)
 * [redis.md](redis.md)
 * [../sentry/sentry-is-down.md](../sentry/sentry-is-down.md)
