@@ -61,6 +61,7 @@
 * [../praefect/praefect-bypass.md](../praefect/praefect-bypass.md)
 * [../praefect/praefect-read-only.md](../praefect/praefect-read-only.md)
 * [../praefect/praefect-replication.md](../praefect/praefect-replication.md)
+* [../redis/redis-sidekiq-catchall-workloads-reduction.md](../redis/redis-sidekiq-catchall-workloads-reduction.md)
 * [../redis/redis-survival-guide-for-sres.md](../redis/redis-survival-guide-for-sres.md)
 * [../sidekiq/large-sidekiq-queue.md](../sidekiq/large-sidekiq-queue.md)
 * [../sidekiq/silent-project-exports.md](../sidekiq/silent-project-exports.md)
