@@ -38,7 +38,6 @@
 * [../tutorials/how_to_use_flamegraphs_for_perf_profiling.md](../tutorials/how_to_use_flamegraphs_for_perf_profiling.md)
 * [../tutorials/overview_life_of_a_web_request.md](../tutorials/overview_life_of_a_web_request.md)
 * [../uncategorized/deleted-project-restore.md](../uncategorized/deleted-project-restore.md)
-* [../uncategorized/manage-pacemaker.md](../uncategorized/manage-pacemaker.md)
 * [../uncategorized/namespace-restore.md](../uncategorized/namespace-restore.md)
 * [../uncategorized/node_cpu.md](../uncategorized/node_cpu.md)
 * [../uncategorized/packagecloud-infrastructure.md](../uncategorized/packagecloud-infrastructure.md)

@@ -51,7 +51,6 @@
 * [sidekiq_error_rate_high.md](sidekiq_error_rate_high.md)
 * [sidekiq_stats_no_longer_showing.md](sidekiq_stats_no_longer_showing.md)
 * [../uncategorized/debug-failed-chef-provisioning.md](../uncategorized/debug-failed-chef-provisioning.md)
-* [../uncategorized/manage-workers.md](../uncategorized/manage-workers.md)
 * [../uncategorized/ruby-profiling.md](../uncategorized/ruby-profiling.md)
 * [../uncategorized/tracing-app-db-queries.md](../uncategorized/tracing-app-db-queries.md)
 * [../uncategorized/tweeting-guidelines.md](../uncategorized/tweeting-guidelines.md)

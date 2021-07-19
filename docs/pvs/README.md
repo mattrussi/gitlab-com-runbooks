@@ -16,7 +16,6 @@
 ## Troubleshooting Pointers
 
 * [../onboarding/kibana-diagnosis.md](../onboarding/kibana-diagnosis.md)
-* [../uncategorized/azure-snapshots.md](../uncategorized/azure-snapshots.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->
