@@ -44,10 +44,36 @@ local generateApdexComponentRateQuery(histogramApdex, additionalSelectors, range
   else
     resolvedRecordingRule;
 
+// Compared to Prometheus, Openmetrics has a slightly different format for `le` labels on histograms. As clients migrate to more recent
+// Prometheus clients, the `le` value for whole numbers changes from
+// le="1" to le="1.0"
+// This breaks some of our apdex recording rules. Since jsonnet does not
+// not distinguish floats from integers, we need to check for whole
+// numbers and treat them as floats.
+local openMetricsSafeFloatValue(value) =
+  if std.floor(value) == value then
+    '%d.0' % [value]
+  else
+    '%g' % [value];
+
+// Enables the histogramApdex to handle floats, integers or floats+integers
+// Depends on metricsFormat
+// 1) If metricsFormat isn't defined, the default behavior is to return integers.
+// 2) If metricsFormat is set to `opernmetrics`, the returned `le` is a float.
+// 3) If metricsFormat is set to `migrating` it will return an expression that would allow handling both `floats` and `integers`.
+local representLe(histogramApdex, value) =
+  local formatConfig = { value: value };
+  if histogramApdex.metricsFormat == 'openmetrics' then
+    { le: openMetricsSafeFloatValue(value) }
+  else if histogramApdex.metricsFormat == 'migrating' then
+    { le: { re: '%g|%s' % [value, openMetricsSafeFloatValue(value)] } }
+  else
+    { le: value };
+
 // A double threshold apdex score only has both SATISFACTORY threshold and TOLERABLE thresholds
 local generateDoubleThresholdApdexNumeratorQuery(histogramApdex, additionalSelectors, rangeInterval, aggregationFunction=null, aggregationLabels=[]) =
-  local satisfiedQuery = generateApdexComponentRateQuery(histogramApdex, additionalSelectors, rangeInterval, { le: histogramApdex.satisfiedThreshold }, aggregationFunction=aggregationFunction, aggregationLabels=aggregationLabels);
-  local toleratedQuery = generateApdexComponentRateQuery(histogramApdex, additionalSelectors, rangeInterval, { le: histogramApdex.toleratedThreshold }, aggregationFunction=aggregationFunction, aggregationLabels=aggregationLabels);
+  local satisfiedQuery = generateApdexComponentRateQuery(histogramApdex, additionalSelectors, rangeInterval, representLe(histogramApdex, histogramApdex.satisfiedThreshold), aggregationFunction=aggregationFunction, aggregationLabels=aggregationLabels);
+  local toleratedQuery = generateApdexComponentRateQuery(histogramApdex, additionalSelectors, rangeInterval, representLe(histogramApdex, histogramApdex.toleratedThreshold), aggregationFunction=aggregationFunction, aggregationLabels=aggregationLabels);
 
   |||
     (
@@ -67,7 +93,7 @@ local generateApdexNumeratorQuery(histogramApdex, additionalSelectors, rangeInte
     generateApdexComponentRateQuery(histogramApdex, additionalSelectors, rangeInterval, {}, aggregationFunction=aggregationFunction, aggregationLabels=aggregationLabels)
   else if histogramApdex.toleratedThreshold == null then
     // A single threshold apdex score only has a SATISFACTORY threshold, no TOLERABLE threshold
-    generateApdexComponentRateQuery(histogramApdex, additionalSelectors, rangeInterval, { le: histogramApdex.satisfiedThreshold }, aggregationFunction=aggregationFunction, aggregationLabels=aggregationLabels)
+    generateApdexComponentRateQuery(histogramApdex, additionalSelectors, rangeInterval, representLe(histogramApdex, histogramApdex.satisfiedThreshold), aggregationFunction=aggregationFunction, aggregationLabels=aggregationLabels)
   else
     generateDoubleThresholdApdexNumeratorQuery(histogramApdex, additionalSelectors, rangeInterval, aggregationFunction=aggregationFunction, aggregationLabels=aggregationLabels);
 
@@ -127,12 +153,14 @@ local generateApdexAttributionQuery(histogram, selector, rangeInterval, aggregat
     histogram,
     selector='',
     satisfiedThreshold=null,
-    toleratedThreshold=null
+    toleratedThreshold=null,
+    metricsFormat='prometheus',
   ):: {
     histogram: histogram,
     selector: selector,
     satisfiedThreshold: satisfiedThreshold,
     toleratedThreshold: toleratedThreshold,
+    metricsFormat: metricsFormat,
 
     apdexQuery(aggregationLabels, selector, rangeInterval)::
       generateApdexScoreQuery(

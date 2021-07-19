@@ -79,6 +79,7 @@ metricsCatalog.serviceDefinition({
         histogram='http_request_duration_seconds_bucket',
         selector=thanosQuerySelector,
         satisfiedThreshold=30,
+        metricsFormat='migrating'
       ),
 
       requestRate: rateMetric(
