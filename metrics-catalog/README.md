@@ -51,7 +51,8 @@ metricsCatalog.serviceDefinition({
         histogram='gitlab_workhorse_http_request_duration_seconds_bucket', // The _bucket histogram metric to use
         selector='job="gitlab-workhorse-web"',                             // Any selectors to filter the metric with
         satisfiedThreshold=1,                                              // The bucket (eg `le="1"`) to use for the satisfactory threshold
-        toleratedThreshold=10
+        toleratedThreshold=10,
+        metricsFormat='prometheus'                                         // Format of `le` labels on histograms, example of accepted values (prometheus: le="1"), (openmetrics: le="1.0"), (migrating: le=~"1|1.0")
       ),
 
       // requestRate is mandatory for all components

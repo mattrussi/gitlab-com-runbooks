@@ -415,7 +415,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(http_request_duration_seconds_bucket{job="thanos-query",le="30",shard="default",type="monitoring"}[1m])
+        rate(http_request_duration_seconds_bucket{job="thanos-query",le=~"30|30.0",shard="default",type="monitoring"}[1m])
       )
   - record: gitlab_component_apdex:weight:score
     labels:
@@ -1040,7 +1040,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(http_request_duration_seconds_bucket{job="thanos-query",le="30",shard="default",type="monitoring"}[5m])
+        rate(http_request_duration_seconds_bucket{job="thanos-query",le=~"30|30.0",shard="default",type="monitoring"}[5m])
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -1665,7 +1665,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(http_request_duration_seconds_bucket{job="thanos-query",le="30",shard="default",type="monitoring"}[30m])
+        rate(http_request_duration_seconds_bucket{job="thanos-query",le=~"30|30.0",shard="default",type="monitoring"}[30m])
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -2290,7 +2290,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(http_request_duration_seconds_bucket{job="thanos-query",le="30",shard="default",type="monitoring"}[1h])
+        rate(http_request_duration_seconds_bucket{job="thanos-query",le=~"30|30.0",shard="default",type="monitoring"}[1h])
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -2915,7 +2915,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(http_request_duration_seconds_bucket{job="thanos-query",le="30",shard="default",type="monitoring"}[6h])
+        rate(http_request_duration_seconds_bucket{job="thanos-query",le=~"30|30.0",shard="default",type="monitoring"}[6h])
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
