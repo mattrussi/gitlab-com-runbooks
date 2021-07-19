@@ -213,8 +213,7 @@ metricsCatalog.serviceDefinition({
         histogram='grpc_server_handling_seconds_bucket',
         selector=thanosStoreSelector,
         satisfiedThreshold=1,
-        toleratedThreshold=3,
-        metricsFormat='migrating'
+        toleratedThreshold=3
       ),
 
       requestRate: rateMetric(
@@ -488,7 +487,6 @@ metricsCatalog.serviceDefinition({
         histogram='thanos_memcached_operation_duration_seconds_bucket',
         satisfiedThreshold=1,
         selector=selector,
-        metricsFormat='migrating'
       ),
 
       requestRate: rateMetric(
