@@ -44,6 +44,12 @@ local generateApdexComponentRateQuery(histogramApdex, additionalSelectors, range
   else
     resolvedRecordingRule;
 
+// Since we're using a regular expression, we need to escape the `.` otherwise
+// it will match any character and could match a bigger le value
+local escapeRegexpDecimal(value) =
+  local str = if std.isNumber(value) then '%g' % [value] else value;
+  std.strReplace(str, '.', '\\\\.');
+
 // Compared to Prometheus, Openmetrics has a slightly different format for `le` labels on histograms. As clients migrate to more recent
 // Prometheus clients, the `le` value for whole numbers changes from
 // le="1" to le="1.0"
@@ -66,7 +72,7 @@ local representLe(histogramApdex, value) =
   if histogramApdex.metricsFormat == 'openmetrics' then
     { le: openMetricsSafeFloatValue(value) }
   else if histogramApdex.metricsFormat == 'migrating' then
-    { le: { re: '%g|%s' % [value, openMetricsSafeFloatValue(value)] } }
+    { le: { re: '%s|%s' % [escapeRegexpDecimal(value), escapeRegexpDecimal(openMetricsSafeFloatValue(value))] } }
   else
     { le: value };
 
