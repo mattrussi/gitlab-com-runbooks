@@ -49,8 +49,6 @@
 * [../uncategorized/cloudsql-data-export.md](../uncategorized/cloudsql-data-export.md)
 * [../uncategorized/dev-environment.md](../uncategorized/dev-environment.md)
 * [../uncategorized/manage-chef.md](../uncategorized/manage-chef.md)
-* [../uncategorized/manage-pacemaker.md](../uncategorized/manage-pacemaker.md)
-* [../uncategorized/manage-workers.md](../uncategorized/manage-workers.md)
 * [../uncategorized/mtail.md](../uncategorized/mtail.md)
 * [../uncategorized/omnibus-package-updates.md](../uncategorized/omnibus-package-updates.md)
 * [../uncategorized/project-export.md](../uncategorized/project-export.md)
