@@ -1,7 +1,6 @@
 [[_TOC_]]
 
 # Summary
-
 [OSQuery](https://osquery.io/) is an operating system instrumentation framework,
 providing an agent able to collect data from the underlying operating system
 and to expose such data as a high-performance relational database.
@@ -21,7 +20,6 @@ be obtained via [Falco](https://falco.org/) at a later stage.
 
 
 # Architecture
-
 Starting from the Gitlab.com Architecture diagram, OSQuery will impact only
 the "_Legacy VM Infrastructure_":
 ![](https://docs.google.com/drawings/d/e/2PACX-1vShfNY5bxtjAsYq-YBDAJAnyjBuxN0i62NoDvbmhvDVOrCas20_Q4XA8Qxm1D2v0mmemP9y-rDsRQFe/pub?w=669&h=551)
@@ -42,7 +40,6 @@ The [gitlab_fluentd](https://gitlab.com/gitlab-cookbooks/gitlab_fluentd) configu
 
 
 # Performance
-
 It is known that a previous rollout of OSQuery in 2019 caused performance issues
 on the Production hosts, which ultimately led to the decision to abandon the rollout.
 
@@ -64,3 +61,54 @@ console-01-sv-gstg.c.gitlab-staging-1.internal:~$ ps -p 6716 -o %cpu,%mem
  0.0  0.2
 ```
 
+
+# Availability
+In case of an internal error, the OSQuery daemon might stop its execution.
+Although this won't have any direct impact on the host on which it is running,
+the SIRT team will be able to notice a lack of incoming logs.
+
+
+# Durability
+OSQuery logs are shipped, via fluentd, to a dedicated Pub/Sub Topic.
+From there, the SIRT team will be able to consume such logs and to store them accordingly.
+
+
+# Security/Compliance
+Compliance requirements mandated the rollout of OSQuery itself.
+
+
+# Monitoring/Alerting
+The most likely issue deriving from the OSQuery rollout might be related to an
+eventual performance penalty on the underlying hosts.
+
+Spikes in CPU and/or memory usage can be detected by standard monitoring
+already in place on such hosts.
+
+
+# Troubleshooting
+
+## Service Management
+The `osqueryd` service can be controlled like any other systemd service:
+
+```
+$ service osqueryd status
+● osqueryd.service - The osquery Daemon
+   Loaded: loaded (/usr/lib/systemd/system/osqueryd.service; enabled; vendor preset: enabled)
+   Active: active (running) since Mon 2021-07-19 11:20:42 UTC; 26min ago
+  Process: 27572 ExecStartPre=/bin/sh -c if [ -f $LOCAL_PIDFILE ]; then mv $LOCAL_PIDFILE $PIDFILE
+  Process: 27569 ExecStartPre=/bin/sh -c if [ ! -f $FLAG_FILE ]; then touch $FLAG_FILE; fi (code=e
+ Main PID: 27575 (osqueryd)
+    Tasks: 18
+   Memory: 57.7M
+      CPU: 2.895s
+   CGroup: /system.slice/osqueryd.service
+           ├─27575 /usr/bin/osqueryd --flagfile /etc/osquery/osquery.flags --config_path /etc/osquery/
+           └─27587 /usr/bin/osqueryd
+```
+
+
+# Links to further Documentation
+* [gitlab-osquery](https://gitlab.com/gitlab-cookbooks/gitlab-osquery)
+* [OSQuery | InfraSec Wiki](https://gitlab.com/groups/gitlab-com/gl-security/security-operations/infrastructure-security/-/wikis/Tooling/OSQuery)
+* [Main OSQuery cookbook](https://supermarket.chef.io/cookbooks/osquery)
+* [Palantir's OSQuery Configuration](https://github.com/palantir/osquery-configuration)
