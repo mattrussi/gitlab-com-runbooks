@@ -37,7 +37,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-qfe-labels-metrics",le=~"1|1.0",type="monitoring"}[1m])
+        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-qfe-labels-metrics",le=~"1|1\\.0",type="monitoring"}[1m])
       )
   - record: gitlab_component_apdex:weight:score
     labels:
@@ -81,7 +81,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-qfe-query-range-metrics",le=~"1|1.0",type="monitoring"}[1m])
+        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-qfe-query-range-metrics",le=~"1|1\\.0",type="monitoring"}[1m])
       )
   - record: gitlab_component_apdex:weight:score
     labels:
@@ -125,7 +125,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-bucket-cache-metrics",le=~"1|1.0",type="monitoring"}[1m])
+        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-bucket-cache-metrics",le=~"1|1\\.0",type="monitoring"}[1m])
       )
   - record: gitlab_component_apdex:weight:score
     labels:
@@ -169,7 +169,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-index-cache-metrics",le=~"1|1.0",type="monitoring"}[1m])
+        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-index-cache-metrics",le=~"1|1\\.0",type="monitoring"}[1m])
       )
   - record: gitlab_component_apdex:weight:score
     labels:
@@ -415,7 +415,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(http_request_duration_seconds_bucket{job="thanos-query",le=~"30|30.0",shard="default",type="monitoring"}[1m])
+        rate(http_request_duration_seconds_bucket{job="thanos-query",le=~"30|30\\.0",shard="default",type="monitoring"}[1m])
       )
   - record: gitlab_component_apdex:weight:score
     labels:
@@ -530,11 +530,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_service="thanos.Store",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"1|1.0",type="monitoring"}[1m])
+          rate(grpc_server_handling_seconds_bucket{grpc_service="thanos.Store",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"1|1\\.0",type="monitoring"}[1m])
         )
         +
         sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_service="thanos.Store",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"3|3.0",type="monitoring"}[1m])
+          rate(grpc_server_handling_seconds_bucket{grpc_service="thanos.Store",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"3|3\\.0",type="monitoring"}[1m])
         )
       )
       /
@@ -662,7 +662,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-qfe-labels-metrics",le=~"1|1.0",type="monitoring"}[5m])
+        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-qfe-labels-metrics",le=~"1|1\\.0",type="monitoring"}[5m])
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -706,7 +706,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-qfe-query-range-metrics",le=~"1|1.0",type="monitoring"}[5m])
+        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-qfe-query-range-metrics",le=~"1|1\\.0",type="monitoring"}[5m])
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -750,7 +750,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-bucket-cache-metrics",le=~"1|1.0",type="monitoring"}[5m])
+        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-bucket-cache-metrics",le=~"1|1\\.0",type="monitoring"}[5m])
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -794,7 +794,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-index-cache-metrics",le=~"1|1.0",type="monitoring"}[5m])
+        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-index-cache-metrics",le=~"1|1\\.0",type="monitoring"}[5m])
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -1040,7 +1040,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(http_request_duration_seconds_bucket{job="thanos-query",le=~"30|30.0",shard="default",type="monitoring"}[5m])
+        rate(http_request_duration_seconds_bucket{job="thanos-query",le=~"30|30\\.0",shard="default",type="monitoring"}[5m])
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -1155,11 +1155,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_service="thanos.Store",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"1|1.0",type="monitoring"}[5m])
+          rate(grpc_server_handling_seconds_bucket{grpc_service="thanos.Store",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"1|1\\.0",type="monitoring"}[5m])
         )
         +
         sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_service="thanos.Store",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"3|3.0",type="monitoring"}[5m])
+          rate(grpc_server_handling_seconds_bucket{grpc_service="thanos.Store",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"3|3\\.0",type="monitoring"}[5m])
         )
       )
       /
@@ -1287,7 +1287,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-qfe-labels-metrics",le=~"1|1.0",type="monitoring"}[30m])
+        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-qfe-labels-metrics",le=~"1|1\\.0",type="monitoring"}[30m])
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -1331,7 +1331,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-qfe-query-range-metrics",le=~"1|1.0",type="monitoring"}[30m])
+        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-qfe-query-range-metrics",le=~"1|1\\.0",type="monitoring"}[30m])
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -1375,7 +1375,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-bucket-cache-metrics",le=~"1|1.0",type="monitoring"}[30m])
+        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-bucket-cache-metrics",le=~"1|1\\.0",type="monitoring"}[30m])
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -1419,7 +1419,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-index-cache-metrics",le=~"1|1.0",type="monitoring"}[30m])
+        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-index-cache-metrics",le=~"1|1\\.0",type="monitoring"}[30m])
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -1665,7 +1665,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(http_request_duration_seconds_bucket{job="thanos-query",le=~"30|30.0",shard="default",type="monitoring"}[30m])
+        rate(http_request_duration_seconds_bucket{job="thanos-query",le=~"30|30\\.0",shard="default",type="monitoring"}[30m])
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -1780,11 +1780,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_service="thanos.Store",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"1|1.0",type="monitoring"}[30m])
+          rate(grpc_server_handling_seconds_bucket{grpc_service="thanos.Store",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"1|1\\.0",type="monitoring"}[30m])
         )
         +
         sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_service="thanos.Store",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"3|3.0",type="monitoring"}[30m])
+          rate(grpc_server_handling_seconds_bucket{grpc_service="thanos.Store",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"3|3\\.0",type="monitoring"}[30m])
         )
       )
       /
@@ -1912,7 +1912,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-qfe-labels-metrics",le=~"1|1.0",type="monitoring"}[1h])
+        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-qfe-labels-metrics",le=~"1|1\\.0",type="monitoring"}[1h])
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -1956,7 +1956,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-qfe-query-range-metrics",le=~"1|1.0",type="monitoring"}[1h])
+        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-qfe-query-range-metrics",le=~"1|1\\.0",type="monitoring"}[1h])
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -2000,7 +2000,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-bucket-cache-metrics",le=~"1|1.0",type="monitoring"}[1h])
+        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-bucket-cache-metrics",le=~"1|1\\.0",type="monitoring"}[1h])
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -2044,7 +2044,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-index-cache-metrics",le=~"1|1.0",type="monitoring"}[1h])
+        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-index-cache-metrics",le=~"1|1\\.0",type="monitoring"}[1h])
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -2290,7 +2290,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(http_request_duration_seconds_bucket{job="thanos-query",le=~"30|30.0",shard="default",type="monitoring"}[1h])
+        rate(http_request_duration_seconds_bucket{job="thanos-query",le=~"30|30\\.0",shard="default",type="monitoring"}[1h])
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -2405,11 +2405,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_service="thanos.Store",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"1|1.0",type="monitoring"}[1h])
+          rate(grpc_server_handling_seconds_bucket{grpc_service="thanos.Store",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"1|1\\.0",type="monitoring"}[1h])
         )
         +
         sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_service="thanos.Store",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"3|3.0",type="monitoring"}[1h])
+          rate(grpc_server_handling_seconds_bucket{grpc_service="thanos.Store",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"3|3\\.0",type="monitoring"}[1h])
         )
       )
       /
@@ -2537,7 +2537,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-qfe-labels-metrics",le=~"1|1.0",type="monitoring"}[6h])
+        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-qfe-labels-metrics",le=~"1|1\\.0",type="monitoring"}[6h])
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
@@ -2581,7 +2581,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-qfe-query-range-metrics",le=~"1|1.0",type="monitoring"}[6h])
+        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-qfe-query-range-metrics",le=~"1|1\\.0",type="monitoring"}[6h])
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
@@ -2625,7 +2625,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-bucket-cache-metrics",le=~"1|1.0",type="monitoring"}[6h])
+        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-bucket-cache-metrics",le=~"1|1\\.0",type="monitoring"}[6h])
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
@@ -2669,7 +2669,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-index-cache-metrics",le=~"1|1.0",type="monitoring"}[6h])
+        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-index-cache-metrics",le=~"1|1\\.0",type="monitoring"}[6h])
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
@@ -2915,7 +2915,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(http_request_duration_seconds_bucket{job="thanos-query",le=~"30|30.0",shard="default",type="monitoring"}[6h])
+        rate(http_request_duration_seconds_bucket{job="thanos-query",le=~"30|30\\.0",shard="default",type="monitoring"}[6h])
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
@@ -3030,11 +3030,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_service="thanos.Store",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"1|1.0",type="monitoring"}[6h])
+          rate(grpc_server_handling_seconds_bucket{grpc_service="thanos.Store",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"1|1\\.0",type="monitoring"}[6h])
         )
         +
         sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_service="thanos.Store",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"3|3.0",type="monitoring"}[6h])
+          rate(grpc_server_handling_seconds_bucket{grpc_service="thanos.Store",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"3|3\\.0",type="monitoring"}[6h])
         )
       )
       /
