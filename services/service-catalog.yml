@@ -766,7 +766,6 @@ services:
       - GitLab.com customers
     business_value: "Puma thread abuse protection"
     SLA:
-      overall_sla_weighting: 5 # If this exists, this service will be included in the overall SLA, using this value as a weighted average
       availability:
       response_time:
   technical:
