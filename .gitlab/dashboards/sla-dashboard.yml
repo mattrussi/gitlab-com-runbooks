@@ -54,15 +54,6 @@ panel_groups:
         stage="main", type="git"}[7d]))
       unit: '%'
     type: single-stat
-  - title: Primary Services Average Availability for Period - nginx
-    max_value: 1
-    metrics:
-    - id: single-stat-sla-trend-nginx
-      label: Primary Services Average Availability for Period - nginx
-      query: avg(avg_over_time(slo_observation_status{env=~"ops|gprd", environment="gprd",
-        stage="main", type="nginx"}[7d]))
-      unit: '%'
-    type: single-stat
   - title: Primary Services Average Availability for Period - registry
     max_value: 1
     metrics:
@@ -95,7 +86,7 @@ panel_groups:
     - id: line-chart-sla-trends-primary-services
       label: '{{type}}'
       query_range: clamp_min(clamp_max(avg(avg_over_time(slo_observation_status{env=~"ops|gprd",
-        environment="gprd", stage="main", type=~"api|ci-runners|git|nginx|registry|web|web-pages"}[1d]))
+        environment="gprd", stage="main", type=~"api|ci-runners|git|registry|web|web-pages"}[1d]))
         by (type),1),0)
       step: 86400
       unit: '%'
