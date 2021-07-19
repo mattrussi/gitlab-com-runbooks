@@ -2,6 +2,8 @@
 # vim: ai:ts=2:sw=2:expandtab
 
 set -euo pipefail
+# Fail on subshells failing, dashboards are generated in subshells
+shopt -s inherit_errexit
 
 IFS=$'\n\t'
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
