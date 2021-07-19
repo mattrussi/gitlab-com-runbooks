@@ -135,7 +135,7 @@ protoPayload.methodName="io.k8s.apps.v1.replicasets.create"
 
 ## Attaching to a running container
 
-### Using Docker
+### Using Docker/Containerd
 
 Figure out what node/zone a Pod is running:
 
@@ -148,27 +148,40 @@ zone=$(gcloud compute instances list --filter name=$node_name --format="value(zo
 SSH into the node:
 
 ```
-gcloud compute ssh $node_name --zone=$zone
+gcloud compute ssh $node_name --zone=$zone --tunnel-through-iap
 ```
+
+At this writing most of our nodepools run containerd, but the default pool still runs docker; when operating on the default node pool, use `docker` instead of `crictl`; they are functionally mostly equivalent, certainly for common tasks.
+
 
 Discover which container we need to attach too
 
 ```
-docker ps | grep <KEYWORD>
+critcl ps | grep <KEYWORD>
 ```
 
-Example, we want to log into a specific sidekiq container:
+Example, we want to log into a specific sidekiq container, the one with pod id bff9289702da0:
 
 ```
-$ docker ps | grep sidekiq-export-966444c8-sbpj5
-56a476f72f30        4a879bb96135                                          "/scripts/entrypoint…"   6 hours ago         Up 6 hours                              k8s_sidekiq_gitlab-sidekiq-export-966444c8-sbpj5_gitlab_148e5cfb-21a2-11ea-b2f5-4201ac100006_0
-f66cb9d37ec6        k8s.gcr.io/pause:3.1                                  "/pause"                 6 hours ago         Up 6 hours                              k8s_POD_gitlab-sidekiq-export-966444c8-sbpj5_gitlab_148e5cfb-21a2-11ea-b2f5-4201ac100006_0
+$ crictl ps | grep sidekiq | grep bff9289702da0
+7aa3c4ad2775c       d822635bdc440       5 minutes ago       Running             sidekiq                     0                   bff9289702da0
 ```
 
-You'll notice two containers are running, one using the `pause` image, and one that is executing the entry point script.
+Note that when running docker there will be two containers, one using the `pause` image, and one that is executing the entry point script.
 [The `pause` image is NOT the one you are looking for.](https://www.ianlewis.org/en/almighty-pause-container)
 Determining which container you need will greatly depend on both the knowledge you have for the desired container and what information you are trying to get too.
-Knowing we need the first container listed, we can then attach a new container to it:
+
+If the container contains all the tools you need, you can simply exec into it:
+
+```
+crictl exec -it 7aa3c4ad2775c /bin/bash
+```
+
+where `7aa3c4ad2775c` is the container id (first column) from the `ps` output.  If it doesn't have `/bin/bash`, try `/bin/sh` or just exec'ing `ls` to find what binaries are available.
+
+At this point we can install whatever tooling necessary and interrogate the best we can.  Remember that the container could be shutdown at any time by k8s, and any changes are very transient.
+
+If it's a more constrained container (e.g. just a go binary), you can attach another container to the same network/pid namespaces when running docker, but I've been unable to find an equivalent for crictl
 
 ```
 docker run \
@@ -180,12 +193,7 @@ docker run \
   ubuntu /bin/bash
 ```
 
-In the above example we attached an ubuntu container running `bash` to the desired
-sidekiq container we need.
-
-At this point we can install whatever tooling necessary and interrogate the best we can.
-Note that we are provided a read only file system using this troubleshooting method, so certain tooling may not properly work.
-In instances like this, we can try the `toolbox` documented [below](./#using-toolbox)
+In the above example we attached an ubuntu container running `bash` to the sidekiq container.  This will be a read-only filesystem (unlike the `exec` case above)
 
 ### Using Toolbox
 
@@ -215,6 +223,8 @@ One way to workaround it is to investigate the container from the host. Below ar
 1. Alternatively, you can use nsenter: `nsenter -target <PID> -mount -uts -ipc -net -pid`
 
 #### Start a container that will use network and process namespaces of a pod
+
+Only available for docker, not containerd:
 
 1. Get container id from PID: `cat /proc/<PID>/cgroup`
 1. Get container name from container id: `docker inspect --format '{{.Name}}' "<containerId>" | sed 's/^\///'`
