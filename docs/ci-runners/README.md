@@ -97,12 +97,13 @@ Below is the networking information for each project.
 
 These subnets are created under the `default` network.
 
-| Subnet Name           | CIDR          | Purpose                                              |
-| --------------------- | ------------- | ---------------------------------------------------- |
-| default               | 10.142.0.0/20 | all non-runner machines (managers, prometheus, etc.) |
-| shared-runners        | 10.0.32.0/20  | shared runner (SRM) machines                         |
-| private-runners       | 10.0.0.0/20   | private runner (PRM) machines                        |
-| gitlab-shared-runners | 10.0.16.0/20  | gitlab shared runner (GSRM) machines                 |
+| Subnet Name               | CIDR          | Purpose                                                |
+|---------------------------|---------------|--------------------------------------------------------|
+| default                   | 10.142.0.0/20 | all non-runner machines (managers, prometheus, etc.)   |
+| shared-runners            | 10.0.32.0/20  | shared runner (SRM) machines                           |
+| private-runners           | 10.0.0.0/20   | private runner (PRM) machines                          |
+| gitlab-shared-runners     | 10.0.16.0/20  | gitlab shared runner (GSRM) machines                   |
+| ephemeral-runners-private | 10.10.40.0/21 | Ephemeral runner machines for the new `private` shard. |
 
 ### gitlab-org-ci project
 
