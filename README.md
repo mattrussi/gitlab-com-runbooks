@@ -340,8 +340,7 @@ Selected logging documents and resources:
 ### Security
 
 * [Working with the CloudFlare WAF/CDN](howto/externalvendors/cloudflare.md)
-* [Uptycs osquery](docs/uncategorized/uptycs_osquery.md)
-* [Uptycs osquery troubleshooting](docs/uncategorized/uptycs_osqueryd.md)
+* [OSQuery](docs/uncategorized/osquery.md)
 
 ### Other
 * [Setup oauth2-proxy protection for web based application](docs/uncategorized/setup-oauth2-proxy-protected-application.md)
