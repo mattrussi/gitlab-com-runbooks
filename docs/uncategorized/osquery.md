@@ -84,6 +84,9 @@ eventual performance penalty on the underlying hosts.
 Spikes in CPU and/or memory usage can be detected by standard monitoring
 already in place on such hosts.
 
+In addition, an [alert has been created](../../rules/osquery.yml) to trigger
+whenever the `osqueryd` process is using more than 10% CPU.
+
 
 # Troubleshooting
 
