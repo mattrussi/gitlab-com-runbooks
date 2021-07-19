@@ -3,7 +3,9 @@
 
 set -euo pipefail
 # Fail on subshells failing, dashboards are generated in subshells
-shopt -s inherit_errexit
+# But not on macOS, because that ships with an older version of bash
+# that does not support this shell option yet
+(shopt -p | grep inherit_errexit) && shopt -s inherit_errexit
 
 IFS=$'\n\t'
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
