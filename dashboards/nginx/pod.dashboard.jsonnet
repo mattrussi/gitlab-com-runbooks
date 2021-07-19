@@ -69,7 +69,7 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(k8sPodsCommon.memory(startRow=2001, container='webservice'))
+.addPanels(k8sPodsCommon.memory(startRow=2001, container='controller'))
 .addPanel(
 
   row.new(title='Network'),
