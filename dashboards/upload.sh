@@ -2,6 +2,8 @@
 # vim: ai:ts=2:sw=2:expandtab
 
 set -euo pipefail
+# Also fail when subshells fail
+shopt -s inherit_errexit
 
 IFS=$'\n\t'
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
