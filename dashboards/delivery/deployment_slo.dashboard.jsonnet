@@ -4,6 +4,7 @@ local layout = import 'grafana/layout.libsonnet';
 local prometheus = grafana.prometheus;
 local template = grafana.template;
 local singlestat = grafana.singlestat;
+local graphPanel = grafana.graphPanel;
 
 local sloQuery = |||
   sum(rate(delivery_deployment_duration_seconds_bucket{job="delivery-metrics",status="success",le="$target_slo"}[$__range]))
@@ -62,7 +63,7 @@ basic.dashboard(
 )
 
 // Number of deployments
-.addPanels(layout.singleRow([
+.addPanels(layout.grid([
   basic.statPanel(
     title='',
     panelTitle='# deployments',
@@ -96,16 +97,38 @@ basic.dashboard(
       { color: 'green', value: 95 },
     ]
   ),
-], rowHeight=4, startRow=100))
+], cols=3, rowHeight=4, startRow=100))
 
-// Apdex SLO
-.addPanels(layout.singleRow([
-  basic.apdexTimeseries(
-    description='Apdex is a measure of deployments that complete within an acceptable threshold duration. Actual threshold can be adjusted using the target SLO variable above in this page. Higher is better.',
-    yAxisLabel='% Deploymens w/ Satisfactory duration',
-    query=sloQuery
+.addPanels(
+  layout.grid(
+    [
+      // Deployment duration over time
+      graphPanel.new(
+        'Deployment duration',
+        decimals=1,
+        labelY1='Duration',
+        formatY1='clocks',
+
+        legend_values=true,
+        legend_max=true,
+        legend_min=true,
+        legend_avg=true,
+        legend_current=true,
+        legend_alignAsTable=true,
+      )
+      .addTarget(
+        prometheus.target('delivery_deployment_duration_last_seconds', legendFormat='Duration')
+      ),
+
+      // Apdex
+      basic.apdexTimeseries(
+        description='Apdex is a measure of deployments that complete within an acceptable threshold duration. Actual threshold can be adjusted using the target SLO variable above in this page. Higher is better.',
+        yAxisLabel='% Deployments w/ satisfactory duration',
+        query=sloQuery
+      ),
+    ], startRow=200,
   ),
-], rowHeight=10, startRow=200))
+)
 
 .addPanel(
   grafana.row.new(title='⚙️ delivery-metrics service'),
