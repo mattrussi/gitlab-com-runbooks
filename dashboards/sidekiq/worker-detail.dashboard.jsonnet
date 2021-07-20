@@ -330,7 +330,7 @@ basic.dashboard(
       title='Queue length',
       description='The number of unstarted jobs in a queue (capped at 1000 at scrape time for performance reasons)',
       query=|||
-        max by (name) (max_over_time(sidekiq_enqueued_jobs{environment="$environment", name=~"$worker"}[$__interval]) and on(fqdn) (redis_connected_slaves != 0)) or on () vector(0)
+        max by (name) (max_over_time(sidekiq_enqueued_jobs{environment="$environment", name=~"$worker"}[$__interval]) and on(fqdn) (redis_connected_slaves != 0)) or on () label_replace(vector(0), "name", "$worker", "name", "")
       |||,
       legendFormat='{{ name }}',
       format='short',
