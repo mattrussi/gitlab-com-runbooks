@@ -30,6 +30,18 @@ local explainer = |||
   - __Apdex__ shows the Apdex score over time
 |||;
 
+local weekendTimeRegion = {
+  // Add a gray time region to denote weekends
+  timeRegions: [{
+    op: 'time',
+    fromDayOfWeek: 6,
+    toDayOfWeek: 7,
+    colorMode: 'gray',
+    fill: true,
+    line: true,
+  }],
+};
+
 basic.dashboard(
   'Deployment SLO',
   tags=['release'],
@@ -118,14 +130,14 @@ basic.dashboard(
       )
       .addTarget(
         prometheus.target('delivery_deployment_duration_last_seconds', legendFormat='Duration')
-      ),
+      ) + weekendTimeRegion,
 
       // Apdex
       basic.apdexTimeseries(
         description='Apdex is a measure of deployments that complete within an acceptable threshold duration. Actual threshold can be adjusted using the target SLO variable above in this page. Higher is better.',
         yAxisLabel='% Deployments w/ satisfactory duration',
         query=sloQuery
-      ),
+      ) + weekendTimeRegion,
     ], startRow=200,
   ),
 )
