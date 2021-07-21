@@ -1,6 +1,7 @@
 [[_TOC_]]
 
 # Summary
+
 [OSQuery](https://osquery.io/) is an operating system instrumentation framework,
 providing an agent able to collect data from the underlying operating system
 and to expose such data as a high-performance relational database.
@@ -20,6 +21,7 @@ be obtained via [Falco](https://falco.org/) at a later stage.
 
 
 # Architecture
+
 Starting from the Gitlab.com Architecture diagram, OSQuery will impact only
 the "_Legacy VM Infrastructure_":
 ![](https://docs.google.com/drawings/d/e/2PACX-1vShfNY5bxtjAsYq-YBDAJAnyjBuxN0i62NoDvbmhvDVOrCas20_Q4XA8Qxm1D2v0mmemP9y-rDsRQFe/pub?w=669&h=551)
@@ -40,6 +42,7 @@ The [gitlab_fluentd](https://gitlab.com/gitlab-cookbooks/gitlab_fluentd) configu
 
 
 # Performance
+
 It is known that a previous rollout of OSQuery in 2019 caused performance issues
 on the Production hosts, which ultimately led to the decision to abandon the rollout.
 
@@ -47,7 +50,7 @@ The main differences with this rollout (2021) are:
 
 * We won't leverage a 3rd party vendor (`uptycs`), but the vanilla open source version of OSQuery.
 * We won't enable file integrity monitoring for *every* file access. In fact, during the first iteration of the OSQuery rollout, file integrity monitoring will be completely disabled.
-* The [configuration options related to performance](https://gitlab.com/gitlab-cookbooks/gitlab-osquery/-/blob/master/attributes/config.rb#L16-23) have been tuned in alignment with the [thresholds defined by Palantir](https://github.com/palantir/osquery-configuration) in their open source configurtion of OSQuery.
+* The [configuration options related to performance](https://gitlab.com/gitlab-cookbooks/gitlab-osquery/-/blob/master/attributes/config.rb#L16-23) have been tuned in alignment with the [thresholds defined by Palantir](https://github.com/palantir/osquery-configuration) in their open source configuration of OSQuery.
 
 In addition, CPU and Memory usage has been checked in Staging,
 and it is as follows:
@@ -63,21 +66,25 @@ console-01-sv-gstg.c.gitlab-staging-1.internal:~$ ps -p 6716 -o %cpu,%mem
 
 
 # Availability
+
 In case of an internal error, the OSQuery daemon might stop its execution.
 Although this won't have any direct impact on the host on which it is running,
 the SIRT team will be able to notice a lack of incoming logs.
 
 
 # Durability
+
 OSQuery logs are shipped, via fluentd, to a dedicated Pub/Sub Topic.
 From there, the SIRT team will be able to consume such logs and to store them accordingly.
 
 
 # Security/Compliance
+
 Compliance requirements mandated the rollout of OSQuery itself.
 
 
 # Monitoring/Alerting
+
 The most likely issue deriving from the OSQuery rollout might be related to an
 eventual performance penalty on the underlying hosts.
 
@@ -91,6 +98,7 @@ whenever the `osqueryd` process is using more than 10% CPU.
 # Troubleshooting
 
 ## Service Management
+
 The `osqueryd` service can be controlled like any other systemd service:
 
 ```
@@ -111,6 +119,7 @@ $ service osqueryd status
 
 
 # Links to further Documentation
+
 * [gitlab-osquery](https://gitlab.com/gitlab-cookbooks/gitlab-osquery)
 * [OSQuery | InfraSec Wiki](https://gitlab.com/groups/gitlab-com/gl-security/security-operations/infrastructure-security/-/wikis/Tooling/OSQuery)
 * [Main OSQuery cookbook](https://supermarket.chef.io/cookbooks/osquery)
