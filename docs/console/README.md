@@ -89,6 +89,7 @@
 * [../uncategorized/missing_repos.md](../uncategorized/missing_repos.md)
 * [../uncategorized/namespace-restore.md](../uncategorized/namespace-restore.md)
 * [../uncategorized/node_cpu.md](../uncategorized/node_cpu.md)
+* [../uncategorized/osquery.md](../uncategorized/osquery.md)
 * [../uncategorized/project-export.md](../uncategorized/project-export.md)
 * [../uncategorized/reindex-package-in-packagecloud.md](../uncategorized/reindex-package-in-packagecloud.md)
 * [../uncategorized/ruby-profiling.md](../uncategorized/ruby-profiling.md)

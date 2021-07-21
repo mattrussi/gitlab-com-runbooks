@@ -45,6 +45,7 @@
 * [../spamcheck/index.md](../spamcheck/index.md)
 * [../uncategorized/access-gcp-hosts.md](../uncategorized/access-gcp-hosts.md)
 * [../uncategorized/job_completion.md](../uncategorized/job_completion.md)
+* [../uncategorized/osquery.md](../uncategorized/osquery.md)
 * [../uncategorized/packagecloud-infrastructure.md](../uncategorized/packagecloud-infrastructure.md)
 * [../uncategorized/subnet-allocations.md](../uncategorized/subnet-allocations.md)
 * [../version/version-gitlab-com.md](../version/version-gitlab-com.md)
