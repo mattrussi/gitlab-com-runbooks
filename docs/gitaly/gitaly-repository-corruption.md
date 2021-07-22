@@ -3,13 +3,13 @@
 ## Why does this happen?
 
 For all we know commits and git objects themselves are not lost, but in some cases refs getting updated might result in them getting stored as an empty file.
-It is likely, that gitaly wants to update the ref, but dones not sync the content to disk before having the host fail, so the file containing the ref was corrupted in the process.
+It is likely, that gitaly wants to update the ref, but did not sync the content to disk before having the host fail, so the file containing the ref was corrupted in the process.
 
 Objects are fine (with errors being detectable that is) as they are hashed, and `fsync()`ed by git (https://gitlab.com/gitlab-org/gitaly/-/issues/1727), but refs are not. Not even when updated via `git update-ref`.
 
 ## Detecting corruption
 
-When viewing a project's main site returns 5xx errors, it might have been a victim of corruption. To confirm, double check with this dashboard https://log.gprd.gitlab.net/goto/5d10a91b65b89df295d089f1bd5f8a52 (internal). If it appears there, it has at least parts of it's refs corrupted.  
+When viewing a project's main site returns 5xx errors, it might have been a victim of corruption. To confirm, double check with [this dashboard](https://log.gprd.gitlab.net/goto/5d10a91b65b89df295d089f1bd5f8a52) (internal). If it appears there, it has at least parts of it's refs corrupted.  
 Any curruption will only surface here if there is traffic on that project. It might get picked up during housekeeping, but then additional damage is done.
 
 ## Before you start
@@ -83,7 +83,7 @@ In most cases, a quick look in `packed-refs` (if it exists) will yield the commi
 
 These are user-facing branches of the project. In case of the project's primary branch (such as `main` or `master`), this has to be recreated first for GitLab (and various `git` commands) to function properly.
 
-Onfortunately, this is also the type of ref we have the least redundancy for. Your best bet here is to use the project's activity feed (visit `https://gitlab.com/<namespace>/<project>/activity` via your admin account) to get some info here. Individual links to commits on that page might fail to load, so copy their link which will contain the full hash to the commit.
+Unfortunately, this is also the type of ref we have the least redundancy for. Your best bet here is to use the project's activity feed (visit `https://gitlab.com/<namespace>/<project>/activity` via your admin account) to get some info here. Individual links to commits on that page might fail to load, so copy their link which will contain the full hash to the commit.
 
 In the case of the primary branches it is most important to have the ref pointing to *something* that is in the tree, rather than getting the latest commit (which you might only be able to piece together afterwards). Use your best judgement here to point it to a commit that was definitely on the branch you restore. You can validate this afterwards by running a `git log`. It should print no errors and a continous tree of commits.
 
