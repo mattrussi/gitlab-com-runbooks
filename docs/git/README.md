@@ -41,6 +41,7 @@
 * [../gitaly/gitaly-down.md](../gitaly/gitaly-down.md)
 * [../gitaly/gitaly-latency.md](../gitaly/gitaly-latency.md)
 * [../gitaly/gitaly-rate-limiting.md](../gitaly/gitaly-rate-limiting.md)
+* [../gitaly/gitaly-repository-corruption.md](../gitaly/gitaly-repository-corruption.md)
 * [../gitaly/gitaly-unusual-activity.md](../gitaly/gitaly-unusual-activity.md)
 * [../gitaly/storage-rebalancing.md](../gitaly/storage-rebalancing.md)
 * [../gitaly/storage-servers.md](../gitaly/storage-servers.md)
