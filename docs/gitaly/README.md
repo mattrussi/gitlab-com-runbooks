@@ -30,6 +30,7 @@
 * [gitaly-permission-denied.md](gitaly-permission-denied.md)
 * [gitaly-profiling.md](gitaly-profiling.md)
 * [gitaly-rate-limiting.md](gitaly-rate-limiting.md)
+* [gitaly-repository-corruption.md](gitaly-repository-corruption.md)
 * [gitaly-token-rotation.md](gitaly-token-rotation.md)
 * [gitaly-unusual-activity.md](gitaly-unusual-activity.md)
 * [gracefully-restart-gitaly-ruby.md](gracefully-restart-gitaly-ruby.md)
