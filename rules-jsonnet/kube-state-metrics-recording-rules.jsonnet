@@ -98,6 +98,21 @@ local ingressMetrics = [
   'nginx_ingress_controller_response_size_sum',
 ];
 
+local deploymentMetrics = [
+  'kube_deployment_status_replicas_unavailable',
+  'kube_deployment_status_replicas_updated',
+  'kube_deployment_spec_paused',
+  'kube_deployment_spec_replicas',
+  'kube_deployment_spec_strategy_rollingupdate_max_surge',
+  'kube_deployment_spec_strategy_rollingupdate_max_unavailable',
+  'kube_deployment_status_condition',
+  'kube_deployment_status_replicas_available',
+  'kube_deployment_created',
+  'kube_deployment_metadata_generation',
+  'kube_deployment_status_observed_generation',
+  'kube_deployment_status_replicas',
+];
+
 local podLabelJoinExpression(expression) =
   |||
     %(expression)s
@@ -141,6 +156,16 @@ local nginxIngressJoinExpression(expression) =
     *
     on(ingress) group_left(shard, stage, type, tier)
     topk by (ingress) (1, kube_ingress_labels:labeled)
+  ||| % {
+    expression: expression,
+  };
+
+local deploymentJoinExpression(expression) =
+  |||
+    %(expression)s
+    *
+    on(deployment) group_left(shard, stage, type, tier)
+    topk by (deployment) (1, kube_deployment_labels:labeled)
   ||| % {
     expression: expression,
   };
@@ -265,6 +290,26 @@ local rules = {
       /* ingress recording rules */
       recordingRuleFor(metricName, nginxIngressJoinExpression(metricName))
       for metricName in ingressMetrics
+    ] + [
+      // Relabel: kube_deployment_labels
+      recordingRuleFor(
+        'kube_deployment_labels',
+        relabel(
+          |||
+            topk by(label_type) (1, kube_deployment_labels)
+          |||,
+          {
+            label_tier: 'tier',
+            label_type: 'type',
+            label_stage: 'stage',
+            service_shard: 'shard',
+          }
+        )
+      ),
+    ] + [
+      /* deployment recording rules */
+      recordingRuleFor(metricName, deploymentJoinExpression(metricName))
+      for metricName in deploymentMetrics
     ],
   }],
 };
