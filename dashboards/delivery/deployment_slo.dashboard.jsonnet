@@ -35,7 +35,7 @@ basic.dashboard(
   tags=['release'],
   editable=true,
   refresh='5m',
-  time_from='now-7d',
+  time_from='now-30d',
   time_to='now',
   includeStandardEnvironmentAnnotations=false,
   includeEnvironmentTemplate=false,
