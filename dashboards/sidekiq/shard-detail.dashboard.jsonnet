@@ -39,7 +39,7 @@ local queueTimeLatencyTimeseries(title, aggregator) =
     title=title,
     description='Estimated queue time, between when the job is enqueued and executed. Lower is better.',
     query=|||
-      histogram_quantile(0.95, sum(rate(sidekiq_jobs_queue_duration_seconds_bucket{environment="$environment", shard=~"$shard"}[$__interval])) by (le, %s))
+      histogram_quantile(0.95, sum(sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="$environment", shard=~"$shard"}) by (le, %s))
     ||| % [aggregator],
     legendFormat='{{ %s }}' % [aggregator],
     format='s',
@@ -178,10 +178,10 @@ basic.dashboard(
           query: |||
             histogram_quantile(0.50,
               sum by (shard, le) (
-                rate(sidekiq_jobs_completion_seconds_bucket{
+                sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{
                   environment="$environment",
                   shard=~"$shard"
-                }[$__interval])
+                }
               )
             )
           |||,
@@ -191,10 +191,10 @@ basic.dashboard(
           query: |||
             histogram_quantile(0.95,
               sum by (shard, le) (
-                rate(sidekiq_jobs_completion_seconds_bucket{
+                sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{
                   environment="$environment",
                   shard=~"$shard"
-                }[$__interval])
+                }
               )
             )
           |||,
@@ -214,10 +214,10 @@ basic.dashboard(
       query=|||
         histogram_quantile(0.95,
           sum by (queue, le) (
-            rate(sidekiq_jobs_completion_seconds_bucket{
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{
               environment="$environment",
               shard=~"$shard"
-            }[$__interval])
+            }
           )
         )
       |||,
@@ -236,10 +236,10 @@ basic.dashboard(
       query=|||
         histogram_quantile(0.95,
           sum by (worker, le) (
-            rate(sidekiq_jobs_completion_seconds_bucket{
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{
               environment="$environment",
               shard=~"$shard"
-            }[$__interval])
+            }
           )
         )
       |||,
