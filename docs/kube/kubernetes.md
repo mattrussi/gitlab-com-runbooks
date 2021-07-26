@@ -175,3 +175,19 @@ shift workloads around to a differing node pool
 
 Trends for node scaling can be seen using this metric over the course of time:
 `count(stackdriver_gce_instance_compute_googleapis_com_instance_uptime{instance_name=~"gke-gprd.*"})`
+
+## `KubeContainersWaitingInError`
+
+More than 50% of the containers waiting to start for a deployment are waiting due
+to reasons that we consider to be an error state (that is, any reason other than
+`ContainerCreating`).
+
+Review the [Grafana Dashboard](https://dashboards.gitlab.net/d/alerts-kube_containers_waiting/alerts-containers-waiting),
+for a detailed breakdown of the reasons why containers are not starting.
+
+There are many reasons why containers will fail to start, but some include:
+
+1. GCP Quota Limits: we are unable to increase the capacity of a node pool.
+1. A configuration error has been pushed to the application, resulting in a termination during startup and a `CrashLoopBackOff`.
+1. Kubernetes is unable to pull the required image from the registry
+

@@ -3,7 +3,7 @@
 
 set -euo pipefail
 # Also fail when subshells fail
-shopt -s inherit_errexit
+shopt -s inherit_errexit || true # Not all bash shells have this
 
 IFS=$'\n\t'
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
