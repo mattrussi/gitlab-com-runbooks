@@ -25,7 +25,6 @@
     feature_categories: [
       'importers',
       'internationalization',
-      'templates',
     ],
   },
   optimize: {
