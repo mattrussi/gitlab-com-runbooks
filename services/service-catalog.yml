@@ -43,10 +43,9 @@ teams:
 
 - name: gitaly
   url: https://about.gitlab.com/handbook/engineering/dev-backend/gitaly/
-  slack_channel: gitaly
   slack_alerts_channel: gitaly-alerts
-  engagement_policy:
-  oncall_schedule:
+  product_stage_group: gitaly
+  send_slo_alerts_to_team_slack_channel: true
 
 - name: manage
   url: https://about.gitlab.com/handbook/engineering/dev-backend/manage/
