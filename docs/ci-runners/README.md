@@ -144,15 +144,18 @@ subnetworks with overlapping CIDR peered. Let's consider few simple examples.
 ##### Peering conflicting networks directly
 
 ```mermaid
-graph TD
+graph LR
+  classDef subnetwork stroke-dasharray: 5 5;
+  classDef vpc fill:#bbf,stroke:#333,stroke-width:2px;
+
   subgraph Network A
-    subnetwork_A_1("10.0.1.0/24") -->|part of| network_A["Network A"]
-    subnetwork_A_2("10.0.0.0/24") -->|part of| network_A
+    subnetwork_A_1("10.0.1.0/24"):::subnetwork -->|part of| network_A["Network A"]:::vpc
+    subnetwork_A_2("10.0.0.0/24"):::subnetwork -->|part of| network_A
   end
 
   subgraph Network B
-    subnetwork_B_2("10.0.0.0/24") -->|part of| network_B["Network B"]
-    subnetwork_B_1("10.0.2.0/24") -->|part of| network_B
+    subnetwork_B_2("10.0.0.0/24"):::subnetwork -->|part of| network_B["Network B"]:::vpc
+    subnetwork_B_1("10.0.2.0/24"):::subnetwork -->|part of| network_B
   end
 
   network_B ===|peering| network_A
@@ -177,19 +180,22 @@ and GCP will fail and reject to create the second side of the peering.
 ##### Peering conflicting networks with one hop between them
 
 ```mermaid
-graph TD
+graph LR
+  classDef subnetwork stroke-dasharray: 5 5;
+  classDef vpc fill:#bbf,stroke:#333,stroke-width:2px;
+
   subgraph Network A
-    subnetwork_A_1("10.0.1.0/24") -->|part of| network_A["Network A"]
-    subnetwork_A_2("10.0.0.0/24") -->|part of| network_A
+    subnetwork_A_1("10.0.1.0/24"):::subnetwork -->|part of| network_A["Network A"]:::vpc
+    subnetwork_A_2("10.0.0.0/24"):::subnetwork -->|part of| network_A
   end
 
   subgraph Network B
-    subnetwork_B_2("10.0.0.0/24") -->|part of| network_B["Network B"]
-    subnetwork_B_1("10.0.2.0/24") -->|part of| network_B
+    subnetwork_B_2("10.0.0.0/24"):::subnetwork -->|part of| network_B["Network B"]:::vpc
+    subnetwork_B_1("10.0.2.0/24"):::subnetwork -->|part of| network_B
   end
 
   subgraph Network C
-    subnetwork_C_1("10.0.3.0/24") -->|part of| network_C["Network C"]
+    subnetwork_C_1("10.0.3.0/24"):::subnetwork -->|part of| network_C["Network C"]:::vpc
   end
 
   network_B ===|peering| network_C
@@ -216,23 +222,26 @@ successfully. The second one will fail just like in the case of peering conflict
 ##### Peering conflicting networks with more than one hop between them
 
 ```mermaid
-graph TD
+graph LR
+  classDef subnetwork stroke-dasharray: 5 5;
+  classDef vpc fill:#bbf,stroke:#333,stroke-width:2px;
+
   subgraph Network A
-    subnetwork_A_1("10.0.1.0/24") -->|part of| network_A["Network A"]
-    subnetwork_A_2("10.0.0.0/24") -->|part of| network_A
+    subnetwork_A_1("10.0.1.0/24"):::subnetwork -->|part of| network_A["Network A"]:::vpc
+    subnetwork_A_2("10.0.0.0/24"):::subnetwork -->|part of| network_A
   end
 
   subgraph Network B
-    subnetwork_B_2("10.0.0.0/24") -->|part of| network_B["Network B"]
-    subnetwork_B_1("10.0.2.0/24") -->|part of| network_B
+    subnetwork_B_2("10.0.0.0/24"):::subnetwork -->|part of| network_B["Network B"]:::vpc
+    subnetwork_B_1("10.0.2.0/24"):::subnetwork -->|part of| network_B
   end
 
   subgraph Network C
-    subnetwork_C_1("10.0.3.0/24") -->|part of| network_C["Network C"]
+    subnetwork_C_1("10.0.3.0/24"):::subnetwork -->|part of| network_C["Network C"]:::vpc
   end
 
   subgraph Network D
-    subnetwork_D_1("10.0.4.0/24") -->|part of| network_D["Network D"]
+    subnetwork_D_1("10.0.4.0/24"):::subnetwork -->|part of| network_D["Network D"]:::vpc
   end
 
   network_B ===|peering| network_D
@@ -263,15 +272,18 @@ Let's consider this example layout:
 
 ```mermaid
 graph LR
-  subgraph gitlab-ci
-    ci_ci(gitlab-ci/ci)
-    ci_ci_bastion[bastion subnetwork]
-    ci_ci_runner_managers[runner-managers subnetwork]
-    ci_ci_ep[ephemeral-runners-private subnetwork]
-    ci_ci_esgo[ephemeral-runners-shared-gitlab-org subnetwork]
+  classDef subnetwork stroke-dasharray: 5 5;
+  classDef vpc fill:#bbf,stroke:#333,stroke-width:2px;
 
-    ci_ci_gke(gitlab-ci/gke)
-    ci_ci_gke_gke[gke subnetwork]
+  subgraph gitlab-ci
+    ci_ci(gitlab-ci/ci):::vpc
+    ci_ci_bastion[bastion subnetwork]:::subnetwork
+    ci_ci_runner_managers[runner-managers subnetwork]:::subnetwork
+    ci_ci_ep[ephemeral-runners-private subnetwork]:::subnetwork
+    ci_ci_esgo[ephemeral-runners-shared-gitlab-org subnetwork]:::subnetwork
+
+    ci_ci_gke(gitlab-ci/gke):::vpc
+    ci_ci_gke_gke[gke subnetwork]:::subnetwork
 
     ci_ci_bastion --> ci_ci
     ci_ci_runner_managers --> ci_ci
@@ -282,18 +294,18 @@ graph LR
   end
 
   subgraph gitlab-production
-    prd_gprd(gitlab-production/gprd)
-    prd_gprd_monitoring
+    prd_gprd(gitlab-production/gprd):::vpc
+    prd_gprd_monitoring(monitoring-gprd subnetwork):::subnetwork
 
     prd_gprd_monitoring --> prd_gprd
   end
 
   subgraph gitlab-ci-plan-free-4
-    ci_plan_free_4_ephemeral(gitlab-ci-plan-free-4/ephemeral-runners)
-    ci_plan_free_4_ephemeral_e[ephemeral-runners subnetwork]
+    ci_plan_free_4_ephemeral(gitlab-ci-plan-free-4/ephemeral-runners):::vpc
+    ci_plan_free_4_ephemeral_e[ephemeral-runners subnetwork]:::subnetwork
 
-    ci_plan_free_4_gke(gitlab-ci-plan-free-4/gke)
-    ci_plan_free_4_gke_gke[gke subnetwork]
+    ci_plan_free_4_gke(gitlab-ci-plan-free-4/gke):::vpc
+    ci_plan_free_4_gke_gke[gke subnetwork]:::subnetwork
 
     ci_plan_free_4_ephemeral_e --> ci_plan_free_4_ephemeral
     ci_plan_free_4_ephemeral ===|peering| ci_plan_free_4_gke
@@ -301,11 +313,11 @@ graph LR
   end
 
   subgraph gitlab-ci-plan-free-3
-    ci_plan_free_3_ephemeral(gitlab-ci-plan-free-3/ephemeral-runners)
-    ci_plan_free_3_ephemeral_e[ephemeral-runners subnetwork]
+    ci_plan_free_3_ephemeral(gitlab-ci-plan-free-3/ephemeral-runners):::vpc
+    ci_plan_free_3_ephemeral_e[ephemeral-runners subnetwork]:::subnetwork
 
-    ci_plan_free_3_gke(gitlab-ci-plan-free-3/gke)
-    ci_plan_free_3_gke_gke[gke subnetwork]
+    ci_plan_free_3_gke(gitlab-ci-plan-free-3/gke):::vpc
+    ci_plan_free_3_gke_gke[gke subnetwork]:::subnetwork
 
     ci_plan_free_3_ephemeral_e --> ci_plan_free_3_ephemeral
     ci_plan_free_3_ephemeral ===|peering| ci_plan_free_3_gke
