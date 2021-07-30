@@ -26,6 +26,14 @@ local explainer = |||
     - `18000`: 5h
     - `19800`: 5.5h
     - `21600`: 6h
+    - `23400`: 6.5h
+    - `25200`: 7h
+    - `27000`: 7.5h
+    - `28800`: 8h
+    - `30600`: 8.5h
+    - `32400`: 9h
+    - `34200`: 9.5
+    - `36000`: 10h
   - __Apdex Score__ shows the percentage of deploymens in the time range that matched the `target SLO`.
   - __Apdex__ shows the Apdex score over time
 |||;
@@ -41,7 +49,7 @@ basic.dashboard(
   includeEnvironmentTemplate=false,
 )
 .addTemplate(template.new(
-  current='19800',
+  current='28800',
   datasource='Global',
   label='target SLO',
   name='target_slo',
