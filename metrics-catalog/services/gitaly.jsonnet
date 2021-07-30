@@ -26,7 +26,6 @@ local gitalyApdexIgnoredMethods = std.set([
   'FetchIntoObjectPool',
   'FetchSourceBranch',
   'OptimizeRepository',
-  'UserMergeToRef',  // https://gitlab.com/gitlab-org/gitlab/-/issues/336979
   'CommitStats',  // https://gitlab.com/gitlab-org/gitlab/-/issues/337080
 
   // Excluding Hook RPCs, as these are dependent on the internal Rails API.
@@ -37,7 +36,13 @@ local gitalyApdexIgnoredMethods = std.set([
   'UpdateHook',
 ]);
 
+local gitalyOpServiceApdexIgnoredMethods = std.set([
+  'UserMergeToRef',  // https://gitlab.com/gitlab-org/gitlab/-/issues/336979
+]);
+
+
 local gitalyApdexIgnoredMethodsRegexp = std.join('|', gitalyApdexIgnoredMethods);
+local gitalyOpServiceApdexIgnoredMethodsRegexp = std.join('|', gitalyOpServiceApdexIgnoredMethods);
 
 local gitalyGRPCErrorRate(baseSelector) =
   combined([
@@ -125,6 +130,7 @@ metricsCatalog.serviceDefinition({
         histogram='grpc_server_handling_seconds_bucket',
         selector=baseSelector {
           grpc_type: 'unary',
+          grpc_method: { nre: gitalyOpServiceApdexIgnoredMethodsRegexp },
         },
         satisfiedThreshold=10,
         toleratedThreshold=30
