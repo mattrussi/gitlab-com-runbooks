@@ -312,7 +312,7 @@ graph LR
     ci_plan_free_3_gke_gke --> ci_plan_free_3_gke
   end
 
-  ci_ci ===|remporary peering| prd_gprd
+  ci_ci ===|temporary peering| prd_gprd
   ci_ci ===|peering| ci_plan_free_3_ephemeral
   ci_ci ===|peering| ci_plan_free_4_ephemeral
 ```
