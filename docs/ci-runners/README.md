@@ -145,16 +145,17 @@ subnetworks with overlapping CIDR peered. Let's consider few simple examples.
 
 ```mermaid
 graph LR
-  classDef subnetwork stroke-dasharray: 5 5;
-  classDef vpc fill:#bbf,stroke:#333,stroke-width:2px;
+  classDef subnetwork          color:#fff,fill:#555,stroke:#000,stroke-dasharray: 5 5;
+  classDef subnetwork_conflict color:#fff,fill:#555,stroke:#a00,stroke-width:2px,stroke-dasharray: 5 5;
+  classDef vpc                 color:#fff,fill:#555,stroke:#000,stroke-width:2px;
 
   subgraph Network A
     subnetwork_A_1("10.0.1.0/24"):::subnetwork -->|part of| network_A["Network A"]:::vpc
-    subnetwork_A_2("10.0.0.0/24"):::subnetwork -->|part of| network_A
+    subnetwork_A_2("10.0.0.0/24"):::subnetwork_conflict -->|part of| network_A
   end
 
   subgraph Network B
-    subnetwork_B_2("10.0.0.0/24"):::subnetwork -->|part of| network_B["Network B"]:::vpc
+    subnetwork_B_2("10.0.0.0/24"):::subnetwork_conflict -->|part of| network_B["Network B"]:::vpc
     subnetwork_B_1("10.0.2.0/24"):::subnetwork -->|part of| network_B
   end
 
@@ -162,8 +163,7 @@ graph LR
 
   subnetwork_A_2 -.-|direct conflict| subnetwork_B_2
 
-  style subnetwork_A_2 stroke-dasharray: 5 5
-  style subnetwork_B_2 stroke-dasharray: 5 5
+  linkStyle 5 stroke:#a00,stroke-width:2px,stroke-dasharray: 5 5;
 ```
 
 In this example we have two networks: `Network A` and `Network B`. Both have two subnetworks defined. One of the
@@ -181,16 +181,17 @@ and GCP will fail and reject to create the second side of the peering.
 
 ```mermaid
 graph LR
-  classDef subnetwork stroke-dasharray: 5 5;
-  classDef vpc fill:#bbf,stroke:#333,stroke-width:2px;
+  classDef subnetwork          color:#fff,fill:#555,stroke:#000,stroke-dasharray: 5 5;
+  classDef subnetwork_conflict color:#fff,fill:#555,stroke:#a00,stroke-width:2px,stroke-dasharray: 5 5;
+  classDef vpc                 color:#fff,fill:#555,stroke:#000,stroke-width:2px;
 
   subgraph Network A
     subnetwork_A_1("10.0.1.0/24"):::subnetwork -->|part of| network_A["Network A"]:::vpc
-    subnetwork_A_2("10.0.0.0/24"):::subnetwork -->|part of| network_A
+    subnetwork_A_2("10.0.0.0/24"):::subnetwork_conflict -->|part of| network_A
   end
 
   subgraph Network B
-    subnetwork_B_2("10.0.0.0/24"):::subnetwork -->|part of| network_B["Network B"]:::vpc
+    subnetwork_B_2("10.0.0.0/24"):::subnetwork_conflict -->|part of| network_B["Network B"]:::vpc
     subnetwork_B_1("10.0.2.0/24"):::subnetwork -->|part of| network_B
   end
 
@@ -203,8 +204,7 @@ graph LR
 
   subnetwork_A_2 -.-|conflict in Network C| subnetwork_B_2
 
-  style subnetwork_A_2 stroke-dasharray: 5 5
-  style subnetwork_B_2 stroke-dasharray: 5 5
+  linkStyle 7 stroke:#a00,stroke-width:2px,stroke-dasharray: 5 5;
 ```
 
 Here we extend the previous example with a new network: `Network C`. It has only one subnetwork with unique CIDR:
@@ -223,8 +223,8 @@ successfully. The second one will fail just like in the case of peering conflict
 
 ```mermaid
 graph LR
-  classDef subnetwork stroke-dasharray: 5 5;
-  classDef vpc fill:#bbf,stroke:#333,stroke-width:2px;
+  classDef subnetwork color:#fff,fill:#555,stroke:#000,stroke-dasharray: 5 5;
+  classDef vpc        color:#fff,fill:#555,stroke:#000,stroke-width:2px;
 
   subgraph Network A
     subnetwork_A_1("10.0.1.0/24"):::subnetwork -->|part of| network_A["Network A"]:::vpc
@@ -272,8 +272,8 @@ Let's consider this example layout:
 
 ```mermaid
 graph LR
-  classDef subnetwork stroke-dasharray: 5 5;
-  classDef vpc fill:#bbf,stroke:#333,stroke-width:2px;
+  classDef subnetwork color:#fff,fill:#555,stroke:#000,stroke-dasharray: 5 5;
+  classDef vpc        color:#fff,fill:#555,stroke:#000,stroke-width:2px;
 
   subgraph gitlab-ci
     ci_ci[gitlab-ci/ci]:::vpc
@@ -327,6 +327,8 @@ graph LR
   ci_ci ===|temporary peering| prd_gprd
   ci_ci ===|peering| ci_plan_free_3_ephemeral
   ci_ci ===|peering| ci_plan_free_4_ephemeral
+
+  linkStyle 13 stroke:#0a0,stroke-width:4px;
 ```
 
 `gitlab-ci-plan-free-3` project have two networks that are peered: `ephemeral-runners` and `gke`. They are peered as
