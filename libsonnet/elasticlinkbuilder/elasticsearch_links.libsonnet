@@ -694,10 +694,11 @@ local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latency
   // Search for requests taking longer than the specified number of seconds
   buildElasticDiscoverSlowRequestSearchQueryURL(index, filters=[], luceneQueries=[], slowRequestSeconds, timeRange=grafanaTimeRange, extraColumns=[])::
     local ic = indexCatalog[index];
+    local slowRequestFilter = if std.objectHas(ic, 'slowRequestFilter') then ic.slowRequestFilter else [];
 
     buildElasticDiscoverSearchQueryURL(
       index=index,
-      filters=filters + (indexCatalog[index].slowRequestFilter || []) + [rangeFilter(ic.defaultLatencyField, gteValue=slowRequestSeconds * ic.latencyFieldUnitMultiplier, lteValue=null)],
+      filters=filters + slowRequestFilter + [rangeFilter(ic.defaultLatencyField, gteValue=slowRequestSeconds * ic.latencyFieldUnitMultiplier, lteValue=null)],
       timeRange=timeRange,
       sort=[[ic.defaultLatencyField, 'desc']],
       extraColumns=extraColumns
