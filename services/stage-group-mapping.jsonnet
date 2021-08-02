@@ -6,6 +6,12 @@
     stage: 'manage',
     feature_categories: [
       'authentication_and_authorization',
+    ],
+  },
+  workspace: {
+    name: 'Workspace',
+    stage: 'manage',
+    feature_categories: [
       'subgroups',
       'users',
     ],
@@ -25,7 +31,6 @@
     feature_categories: [
       'importers',
       'internationalization',
-      'templates',
     ],
   },
   optimize: {
@@ -33,10 +38,8 @@
     stage: 'manage',
     feature_categories: [
       'devops_reports',
-      'planning_analytics',
       'code_analytics',
       'value_stream_management',
-      'insights',
     ],
   },
   project_management: {
@@ -47,6 +50,7 @@
       'boards',
       'time_tracking',
       'projects',
+      'planning_analytics',
     ],
   },
   product_planning: {
@@ -102,15 +106,25 @@
       'gitaly',
     ],
   },
-  ecosystem: {
-    name: 'Ecosystem',
-    stage: 'create',
+  integrations: {
+    name: 'Integrations',
+    stage: 'ecosystem',
     feature_categories: [
-      'api',
       'integrations',
-      'gdk',
+    ],
+  },
+  foundations: {
+    name: 'Foundations',
+    stage: 'ecosystem',
+    feature_categories: [
       'foundations',
-      'jira_importer',
+    ],
+  },
+  contributor_experience: {
+    name: 'Contributor Experience',
+    stage: 'ecosystem',
+    feature_categories: [
+      'gdk',
     ],
   },
   pipeline_execution: {
