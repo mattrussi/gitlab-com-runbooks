@@ -36,7 +36,7 @@ groups:
       feature_category: users
       pager: pagerduty
       product_stage: manage
-      product_stage_group: access
+      product_stage_group: workspace
       rules_domain: general
       severity: s2
       sli_type: apdex
@@ -99,7 +99,7 @@ groups:
       feature_category: users
       pager: pagerduty
       product_stage: manage
-      product_stage_group: access
+      product_stage_group: workspace
       rules_domain: general
       severity: s2
       sli_type: apdex
@@ -158,7 +158,7 @@ groups:
       feature_category: users
       pager: pagerduty
       product_stage: manage
-      product_stage_group: access
+      product_stage_group: workspace
       rules_domain: general
       severity: s2
       sli_type: ops
@@ -195,7 +195,7 @@ groups:
       feature_category: users
       pager: pagerduty
       product_stage: manage
-      product_stage_group: access
+      product_stage_group: workspace
       rules_domain: general
       severity: s2
       sli_type: ops

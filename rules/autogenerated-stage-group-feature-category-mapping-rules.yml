@@ -18,12 +18,6 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: api
-      product_stage: create
-      stage_group: ecosystem
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: attack_emulation
       product_stage: secure
       stage_group: dynamic_analysis
@@ -271,8 +265,8 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: foundations
-      product_stage: create
-      stage_group: ecosystem
+      product_stage: ecosystem
+      stage_group: foundations
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -283,8 +277,8 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: gdk
-      product_stage: create
-      stage_group: ecosystem
+      product_stage: ecosystem
+      stage_group: contributor_experience
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -354,15 +348,9 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: insights
-      product_stage: manage
-      stage_group: optimize
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: integrations
-      product_stage: create
-      stage_group: ecosystem
+      product_stage: ecosystem
+      stage_group: integrations
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -393,12 +381,6 @@ groups:
       feature_category: jenkins_importer
       product_stage: verify
       stage_group: pipeline_authoring
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: jira_importer
-      product_stage: create
-      stage_group: ecosystem
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -523,8 +505,8 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: planning_analytics
-      product_stage: manage
-      stage_group: optimize
+      product_stage: plan
+      stage_group: project_management
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -680,7 +662,7 @@ groups:
     labels:
       feature_category: subgroups
       product_stage: manage
-      stage_group: access
+      stage_group: workspace
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -716,7 +698,7 @@ groups:
     labels:
       feature_category: users
       product_stage: manage
-      stage_group: access
+      stage_group: workspace
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
