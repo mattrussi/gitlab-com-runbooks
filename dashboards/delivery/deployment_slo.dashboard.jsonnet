@@ -125,7 +125,7 @@ basic.dashboard(
         legend_alignAsTable=true,
       )
       .addTarget(
-        prometheus.target('delivery_deployment_duration_last_seconds', legendFormat='Duration')
+        prometheus.target('max(delivery_deployment_duration_last_seconds) by (deployment_type, status)', legendFormat='Duration')
       ),
 
       // Apdex
