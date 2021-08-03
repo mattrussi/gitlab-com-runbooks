@@ -125,6 +125,7 @@ local indexCatalog = {
     defaultColumns: ['json.hostname', 'json.grpc.method', 'json.grpc.request.glProjectPath', 'json.grpc.code', 'json.grpc.time_ms'],
     defaultSeriesSplitField: 'json.grpc.method.keyword',
     failureFilter: [mustNot(matchFilter('json.grpc.code', 'OK')), existsFilter('json.grpc.code')],
+    slowRequestFilter: [matchFilter('json.msg', 'unary')],
     defaultLatencyField: 'json.grpc.time_ms',
     prometheusLabelMappings+: {
       fqdn: 'json.fqdn',
@@ -192,6 +193,7 @@ local indexCatalog = {
     defaultColumns: ['json.hostname', 'json.virtual_storage', 'json.grpc.method', 'json.relative_path', 'json.grpc.code', 'json.grpc.time_ms'],
     defaultSeriesSplitField: 'json.grpc.method.keyword',
     failureFilter: [mustNot(matchFilter('json.grpc.code', 'OK')), existsFilter('json.grpc.code')],
+    slowRequestFilter: [matchFilter('json.msg', 'unary')],
     defaultLatencyField: 'json.grpc.time_ms',
     latencyFieldUnitMultiplier: 1000,
   },
@@ -692,10 +694,11 @@ local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latency
   // Search for requests taking longer than the specified number of seconds
   buildElasticDiscoverSlowRequestSearchQueryURL(index, filters=[], luceneQueries=[], slowRequestSeconds, timeRange=grafanaTimeRange, extraColumns=[])::
     local ic = indexCatalog[index];
+    local slowRequestFilter = if std.objectHas(ic, 'slowRequestFilter') then ic.slowRequestFilter else [];
 
     buildElasticDiscoverSearchQueryURL(
       index=index,
-      filters=filters + [rangeFilter(ic.defaultLatencyField, gteValue=slowRequestSeconds * ic.latencyFieldUnitMultiplier, lteValue=null)],
+      filters=filters + slowRequestFilter + [rangeFilter(ic.defaultLatencyField, gteValue=slowRequestSeconds * ic.latencyFieldUnitMultiplier, lteValue=null)],
       timeRange=timeRange,
       sort=[[ic.defaultLatencyField, 'desc']],
       extraColumns=extraColumns
