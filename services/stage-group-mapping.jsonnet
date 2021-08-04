@@ -161,6 +161,7 @@
       'usability_testing',
       'accessibility_testing',
       'build_artifacts',
+      'review_apps',
     ],
   },
   package: {
@@ -173,7 +174,6 @@
       'dependency_proxy',
       'dependency_firewall',
       'git_lfs',
-      'release_evidence',
     ],
   },
   static_analysis: {
@@ -224,9 +224,9 @@
     feature_categories: [
       'continuous_delivery',
       'advanced_deployments',
-      'review_apps',
       'feature_flags',
       'release_orchestration',
+      'release_evidence',
       'pages',
     ],
   },
@@ -239,9 +239,9 @@
       'kubernetes_management',
       'cluster_cost_management',
       'serverless',
-      'secrets_management',
       'chatops',
       'runbooks',
+      'secrets_management',
     ],
   },
   monitor: {

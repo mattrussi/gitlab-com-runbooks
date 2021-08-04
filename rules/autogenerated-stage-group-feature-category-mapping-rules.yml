@@ -541,8 +541,8 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: release_evidence
-      product_stage: package
-      stage_group: package
+      product_stage: release
+      stage_group: release
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -559,8 +559,8 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: review_apps
-      product_stage: release
-      stage_group: release
+      product_stage: verify
+      stage_group: testing
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
