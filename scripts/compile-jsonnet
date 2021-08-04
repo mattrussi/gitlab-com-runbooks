@@ -1,0 +1,47 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+
+require_relative '../lib/jsonnet_wrapper.rb'
+
+class CompileJsonnet
+  def initialize
+    @options = {}
+  end
+
+  def run
+    parse_options
+    wrapper = JsonnetWrapper.new(libs: jsonnet_libs)
+    puts wrapper.evaluate(@options[:target_file])
+  end
+
+  private
+
+  def parse_options
+    OptionParser.new do |opts|
+      opts.banner = "Usage: scripts/generate-jsonnet [options] [file path]"
+
+      opts.on("-I lib_a,lib_b,lib_c", "--libs=lib_a,lib_b,lib_c", Array, "Libraries to be included when compiling the Jsonnet files") do |libs|
+        @options[:libs] = libs
+      end
+    end.parse!
+
+    if ARGV.nil? || ARGV.length != 1
+      puts "Please provide exactly one target file!"
+      exit 1
+    end
+
+    @options[:target_file] = File.expand_path(ARGV.first)
+  end
+
+  def jsonnet_libs
+    return JsonnetWrapper::DEFAULT_LIBS if @options[:libs].nil? || @options[:libs].empty?
+
+    repo_dir = File.expand_path(File.join(File.dirname(__FILE__), '..')).freeze
+    @options[:libs].map do |lib|
+      File.join(repo_dir, lib)
+    end
+  end
+end
+
+CompileJsonnet.new.run
