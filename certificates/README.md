@@ -73,6 +73,18 @@ Note that sslmate may complain that you won't have the key in your `${CWD}`.
 This is fine as we should have the key on minimally on a server, but may also
 exist inside of 1Password, and even better, inside a chef vault.
 
+#### Status.io-specific instructions
+
+At the time of this writing, status.io SSL certificate is being renewed manually.
+
+Status.io would silently fail if provided with mismatching private key or certificate chain.
+
+The private key can be found in 1Password, and when providing the certifcate chain, make
+sure you're providing `status.gitlab.com.chain.crt` and **not** `status.gitlab.com.chained.crt`.
+
+See https://gitlab.com/gitlab-com/gl-infra/production/-/issues/5260 for more details on
+what went wrong during our last renewal attempt.
+
 ### Re-keying a certificate
 
 If a certificate auto-renews but we have lost the private key, generate a new
