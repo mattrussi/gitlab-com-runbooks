@@ -66,7 +66,7 @@ generateTests([
     receivers: [
       'non_prod_pagerduty',
       'slack_bridge-nonprod',
-      'nonprod_alerts_slack_channel',
+      'blackhole',
     ],
   },
   {
@@ -106,7 +106,7 @@ generateTests([
     receivers: [
       'non_prod_pagerduty',
       'slack_bridge-nonprod',
-      'nonprod_alerts_slack_channel',
+      'blackhole',
     ],
   },
   {
@@ -126,7 +126,7 @@ generateTests([
       env: 'gstg',
     },
     receivers: [
-      'nonprod_alerts_slack_channel',
+      'blackhole',
     ],
   },
   {
@@ -232,7 +232,7 @@ generateTests([
     },
     receivers: [
       'non_prod_pagerduty',
-      'nonprod_alerts_slack_channel',
+      'blackhole',
     ],
   },
   {
