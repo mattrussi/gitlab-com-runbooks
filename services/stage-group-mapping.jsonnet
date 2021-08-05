@@ -228,6 +228,7 @@
       'release_orchestration',
       'release_evidence',
       'pages',
+      'environment_management',
     ],
   },
   configure: {
@@ -240,8 +241,8 @@
       'cluster_cost_management',
       'serverless',
       'chatops',
-      'runbooks',
       'secrets_management',
+      'delivery_management',
     ],
   },
   monitor: {
@@ -256,6 +257,7 @@
       'logging',
       'synthetic_monitoring',
       'self_monitoring',
+      'runbooks',
     ],
   },
   container_security: {
