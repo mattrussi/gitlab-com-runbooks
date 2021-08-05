@@ -386,10 +386,10 @@ local receivers =
   }) for team in teamsWithAlertingSlackChannels()] +
   [WebhookReceiver(c) for c in webhookChannels] +
   [
-    # receiver that does nothing with the alert, blackholing it
+    // receiver that does nothing with the alert, blackholing it
     {
-      name: 'blackhole'
-    }
+      name: 'blackhole',
+    },
   ];
 
 //
