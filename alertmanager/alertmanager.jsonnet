@@ -330,17 +330,17 @@ local routingTree = Route(
   ] + [
     // Terminators go last
     Route(
-      receiver='nonprod_alerts_slack_channel',
+      receiver='blackhole',
       match={ env: 'pre' },
       continue=false,
     ),
     Route(
-      receiver='nonprod_alerts_slack_channel',
+      receiver='blackhole',
       match={ env: 'dr' },
       continue=false,
     ),
     Route(
-      receiver='nonprod_alerts_slack_channel',
+      receiver='blackhole',
       match={ env: 'gstg' },
       continue=false,
     ),
@@ -384,7 +384,13 @@ local receivers =
     name: receiverNameForTeamSlackChannel(team),
     channel: team.slack_alerts_channel,
   }) for team in teamsWithAlertingSlackChannels()] +
-  [WebhookReceiver(c) for c in webhookChannels];
+  [WebhookReceiver(c) for c in webhookChannels] +
+  [
+    # receiver that does nothing with the alert, blackholing it
+    {
+      name: 'blackhole'
+    }
+  ];
 
 //
 // Generate the whole alertmanager config.
