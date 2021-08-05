@@ -1,9 +1,14 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 require 'optparse'
 
-require_relative '../lib/jsonnet_wrapper.rb'
+require_relative '../lib/jsonnet_wrapper'
 
+##
+# Compile an arbitrary Jsonnet file in this runbook project to JSON, and dump
+# to STDOUT. All the necessary libraries, paths, required external variables
+# are already setup by default.
 class CompileJsonnet
   def initialize
     @options = {}
@@ -19,7 +24,13 @@ class CompileJsonnet
 
   def parse_options
     OptionParser.new do |opts|
-      opts.banner = "Usage: scripts/generate-jsonnet [options] [file path]"
+      opts.banner = <<~BANNER
+      Compile an arbitrary Jsonnet file in this runbook project to JSON, and dump to STDOUT. All the necessary libraries, paths, required external variables are already setup by default.
+
+      Usage: scripts/generate-jsonnet [options] [file path]"
+
+      scripts/generate-jsonnet
+      BANNER
 
       opts.on("-I lib_a,lib_b,lib_c", "--libs=lib_a,lib_b,lib_c", Array, "Libraries to be included when compiling the Jsonnet files") do |libs|
         @options[:libs] = libs
@@ -44,4 +55,4 @@ class CompileJsonnet
   end
 end
 
-CompileJsonnet.new.run
+CompileJsonnet.new.run if $PROGRAM_NAME == __FILE__

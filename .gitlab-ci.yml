@@ -291,6 +291,18 @@ update_elastic_log_gprd_hot_index_shards_per_node:
   variables:
     ELASTICSEARCH_URL: $ES_LOG_GPRD_URL
 
+generate_service_maturity_manifest:
+  stage: scheduled
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "trigger" && $GENERATE_SERVICE_MATURITY_MANIFEST'
+  script:
+    - mkdir -p service-maturity-manifest
+    - ./scripts/compile_jsonnet ./metrics-catalog/maturity.jsonnet > ./service-maturity-manifest/service_maturity.yml
+  artifacts:
+    expose_as: 'service maturity manifest'
+    paths:
+      - service-maturity-manifest/
+
 # nonprod-log.gitlab.net
 ################################################################################
 update_elastic_nonprod-log_watches:
