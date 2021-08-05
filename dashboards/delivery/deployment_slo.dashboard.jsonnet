@@ -102,7 +102,8 @@ basic.dashboard(
     unit='percentunit',
     color=[
       { color: 'red', value: null },
-      { color: 'green', value: 95 },
+      { color: 'yellow', value: 0.5 },
+      { color: 'green', value: 0.95 },
     ]
   ),
 ], cols=3, rowHeight=4, startRow=100))
@@ -125,7 +126,7 @@ basic.dashboard(
         legend_alignAsTable=true,
       )
       .addTarget(
-        prometheus.target('delivery_deployment_duration_last_seconds', legendFormat='Duration')
+        prometheus.target('max(delivery_deployment_duration_last_seconds) by (deployment_type, status)', legendFormat='Duration')
       ),
 
       // Apdex

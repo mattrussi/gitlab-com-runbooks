@@ -102,6 +102,10 @@ Below is the networking information for each project.
 | `ci`           | `bastion-ci`                | `10.1.4.0/24`   | Bastion network                                        |
 | `ci`           | `runner-managers`           | `10.1.5.0/24`   | Network for Runner Managers ([new ones](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/456))                 |
 | `ci`           | `ephemeral-runners-private` | `10.10.40.0/21` | Ephemeral runner machines for the new `private` shard. See [Ephemeral runner VMs networking](#ephemera-runner-vms-networking) bellow. |
+| `gke`          | `gke`                       | `10.9.0.0/24`   | Primary; GKE nodes range      |
+| `gke`          | `gke`                       | `10.8.0.0/16`   | Secondary; GKE pods range     |
+| `gke`          | `gke`                       | `10.9.1.0/22`   | secondary; GKE services range |
+
 
 #### gitlab-org-ci project
 
@@ -129,12 +133,16 @@ For high capacity shards (like `shared`) we create dedicated projects for epheme
 
 All these projects have the same networking structure:
 
-| Network Name        | Subnet Name          | CIDR            | Purpose                 |
-| ------------------- | -------------------- | --------------- | ----------------------- |
-| `ephemeral-runners` | `ephemeral-runners`  | **UNIQUE CIDR** | Runner manager machines |
+| Network Name        | Subnet Name          | CIDR            | Purpose                       |
+| ------------------- | -------------------- | --------------- | ----------------------------- |
+| `ephemeral-runners` | `ephemeral-runners`  | **UNIQUE CIDR** | Runner manager machines       |
+| `gke`               | `gke`                | `10.9.0.0/24`   | Primary; GKE nodes range      |
+| `gke`               | `gke`                | `10.8.0.0/16`   | Secondary; GKE pods range     |
+| `gke`               | `gke`                | `10.9.1.0/22`   | secondary; GKE services range |
 
-[There is a plan](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/13887) to introduce networks for
-GKE cluster for Prometheus servers in the near future.
+Please read [GCP documentation about `VPC-native
+clusters`](https://cloud.google.com/kubernetes-engine/docs/concepts/alias-ips) to understand how the different
+ranges of the subnet are being used by GKE.
 
 #### Network peering theory and issues
 

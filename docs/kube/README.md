@@ -20,6 +20,7 @@
 * [../kas/kubernetes-agent-basic-troubleshooting.md](../kas/kubernetes-agent-basic-troubleshooting.md)
 * [k8s-oncall-setup.md](k8s-oncall-setup.md)
 * [k8s-operations.md](k8s-operations.md)
+* [k8s-pvc-resize.md](k8s-pvc-resize.md)
 * [kubernetes.md](kubernetes.md)
 * [../license/license-gitlab-com.md](../license/license-gitlab-com.md)
 * [../version/version-gitlab-com.md](../version/version-gitlab-com.md)
