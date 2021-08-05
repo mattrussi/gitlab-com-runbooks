@@ -21,6 +21,7 @@
 * [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
 * [../kube/k8s-new-cluster.md](../kube/k8s-new-cluster.md)
 * [../kube/k8s-operations.md](../kube/k8s-operations.md)
+* [../kube/k8s-pvc-resize.md](../kube/k8s-pvc-resize.md)
 * [../license/license-gitlab-com.md](../license/license-gitlab-com.md)
 * [alertmanager-notification-failures.md](alertmanager-notification-failures.md)
 * [alerts_gke.md](alerts_gke.md)
