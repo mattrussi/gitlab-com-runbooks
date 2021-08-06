@@ -2,6 +2,7 @@
 # frozen_string_literal: true
 
 require 'optparse'
+require 'pathname'
 
 require_relative '../lib/jsonnet_wrapper'
 
@@ -10,19 +11,20 @@ require_relative '../lib/jsonnet_wrapper'
 # to STDOUT. All the necessary libraries, paths, required external variables
 # are already setup by default.
 class CompileJsonnet
-  def initialize
+  def initialize(output = $stdout)
+    @output = output
     @options = {}
   end
 
-  def run
-    parse_options
-    wrapper = JsonnetWrapper.new(libs: jsonnet_libs)
-    puts wrapper.evaluate(@options[:target_file])
+  def run(argv = ARGV)
+    parse_options(argv)
+    wrapper = JsonnetWrapper.new(libs: JsonnetWrapper::DEFAULT_LIBS + jsonnet_libs)
+    @output.write wrapper.evaluate(@options[:target_file])
   end
 
   private
 
-  def parse_options
+  def parse_options(argv)
     OptionParser.new do |opts|
       opts.banner = <<~BANNER
       Compile an arbitrary Jsonnet file in this runbook project to JSON, and dump to STDOUT. All the necessary libraries, paths, required external variables are already setup by default.
@@ -35,22 +37,23 @@ class CompileJsonnet
       opts.on("-I lib_a,lib_b,lib_c", "--libs=lib_a,lib_b,lib_c", Array, "Libraries to be included when compiling the Jsonnet files") do |libs|
         @options[:libs] = libs
       end
-    end.parse!
+    end.parse!(argv)
 
-    if ARGV.nil? || ARGV.length != 1
-      puts "Please provide exactly one target file!"
-      exit 1
-    end
+    raise "Please provide exactly one target file!" if argv.nil? || argv.length != 1
 
-    @options[:target_file] = File.expand_path(ARGV.first)
+    @options[:target_file] = File.expand_path(argv.first)
   end
 
   def jsonnet_libs
-    return JsonnetWrapper::DEFAULT_LIBS if @options[:libs].nil? || @options[:libs].empty?
+    return [] if @options[:libs].nil? || @options[:libs].empty?
 
     repo_dir = File.expand_path(File.join(File.dirname(__FILE__), '..')).freeze
     @options[:libs].map do |lib|
-      File.join(repo_dir, lib)
+      if Pathname.new(lib).absolute?
+        lib
+      else
+        File.join(repo_dir, lib)
+      end
     end
   end
 end

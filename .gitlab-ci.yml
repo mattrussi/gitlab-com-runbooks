@@ -297,7 +297,7 @@ generate_service_maturity_manifest:
     - if: '$CI_PIPELINE_SOURCE == "trigger" && $GENERATE_SERVICE_MATURITY_MANIFEST'
   script:
     - mkdir -p service-maturity-manifest
-    - ./scripts/compile_jsonnet ./metrics-catalog/maturity.jsonnet > ./service-maturity-manifest/service_maturity.yml
+    - ./scripts/compile_jsonnet.rb ./metrics-catalog/maturity.jsonnet > ./service-maturity-manifest/service_maturity.yml
   artifacts:
     expose_as: 'service maturity manifest'
     paths:
