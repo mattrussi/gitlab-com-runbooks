@@ -36,10 +36,7 @@ local gitalyApdexIgnoredMethods = std.set([
   'UpdateHook',
 ]);
 
-local gitalyOpServiceApdexIgnoredMethods = std.set([
-  'UserMergeToRef',  // https://gitlab.com/gitlab-org/gitlab/-/issues/336979
-  'UserSquash',  // https://gitlab.com/gitlab-com/gl-infra/production/-/issues/5305
-]);
+local gitalyOpServiceApdexIgnoredMethods = std.set([]);
 
 
 local gitalyApdexIgnoredMethodsRegexp = std.join('|', gitalyApdexIgnoredMethods);
@@ -127,15 +124,25 @@ metricsCatalog.serviceDefinition({
       |||,
 
       local baseSelector = { job: 'gitaly', grpc_service: 'gitaly.OperationService' },
-      apdex: histogramApdex(
-        histogram='grpc_server_handling_seconds_bucket',
-        selector=baseSelector {
-          grpc_type: 'unary',
-          grpc_method: { nre: gitalyOpServiceApdexIgnoredMethodsRegexp },
-        },
-        satisfiedThreshold=10,
-        toleratedThreshold=30
-      ),
+      // The OperationService apdex is disabled primarily to deal with very slow
+      // operations producing a lot of alerts.
+      // Excluding those RPCs is not a very effective strategy, as OperationService
+      // is very low-traffic to begin with, and with every excluded RPC, we increase
+      // the sensitivity of the alerts. Thus, we opt to remove this SLO completely
+      // for the time being.
+      //
+      // Infradev issues addressing sources of latency:
+      // - https://gitlab.com/gitlab-com/gl-infra/production/-/issues/5311
+      //
+      //apdex: histogramApdex(
+      //  histogram='grpc_server_handling_seconds_bucket',
+      //  selector=baseSelector {
+      //    grpc_type: 'unary',
+      //    grpc_method: { nre: gitalyOpServiceApdexIgnoredMethodsRegexp },
+      //  },
+      //  satisfiedThreshold=10,
+      //  toleratedThreshold=30
+      //),
 
       requestRate: rateMetric(
         counter='gitaly_service_client_requests_total',
