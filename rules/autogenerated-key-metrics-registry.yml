@@ -11,11 +11,11 @@ groups:
       type: registry
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_database_query_duration_seconds_bucket{type="registry", le="1"}[1m])
         )
         +
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_database_query_duration_seconds_bucket{type="registry", le="2.5"}[1m])
         )
       )
@@ -27,7 +27,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_database_query_duration_seconds_bucket{type="registry", le="+Inf"}[1m])
       )
   - record: gitlab_component_ops:rate
@@ -36,7 +36,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_database_queries_total{type="registry"}[1m])
       )
   - record: gitlab_component_apdex:success:rate
@@ -46,11 +46,11 @@ groups:
       type: registry
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_gc_run_duration_seconds_bucket{type="registry", le="1"}[1m])
         )
         +
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_gc_run_duration_seconds_bucket{type="registry", le="2"}[1m])
         )
       )
@@ -62,7 +62,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_gc_run_duration_seconds_bucket{type="registry", le="+Inf"}[1m])
       )
   - record: gitlab_component_ops:rate
@@ -71,7 +71,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_gc_runs_total{type="registry"}[1m])
       )
   - record: gitlab_component_ops:rate
@@ -81,7 +81,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment) (
+      sum by (environment,migration_path) (
         rate(haproxy_backend_http_responses_total{backend="canary_registry",type="registry"}[1m])
       )
   - record: gitlab_component_ops:rate
@@ -91,7 +91,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment) (
+      sum by (environment,migration_path) (
         rate(haproxy_backend_http_responses_total{backend="registry",type="registry"}[1m])
       )
   - record: gitlab_component_errors:rate
@@ -102,13 +102,13 @@ groups:
       type: registry
     expr: |
       (
-        sum by (environment) (
+        sum by (environment,migration_path) (
           rate(haproxy_backend_http_responses_total{backend="canary_registry",code="5xx",type="registry"}[1m])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(environment,migration_path) (
           gitlab_component_ops:rate{component="loadbalancer",stage="cny",tier="sv",type="registry"}
         )
       )
@@ -120,13 +120,13 @@ groups:
       type: registry
     expr: |
       (
-        sum by (environment) (
+        sum by (environment,migration_path) (
           rate(haproxy_backend_http_responses_total{backend="registry",code="5xx",type="registry"}[1m])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(environment,migration_path) (
           gitlab_component_ops:rate{component="loadbalancer",stage="main",tier="sv",type="registry"}
         )
       )
@@ -137,11 +137,11 @@ groups:
       type: registry
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_http_request_duration_seconds_bucket{le="2.5",route!~"/v2/{name}/manifests/{reference}",type="registry"}[1m])
         )
         +
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_http_request_duration_seconds_bucket{le="25",route!~"/v2/{name}/manifests/{reference}",type="registry"}[1m])
         )
       )
@@ -153,7 +153,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_http_request_duration_seconds_bucket{le="+Inf",route!~"/v2/{name}/manifests/{reference}",type="registry"}[1m])
       )
   - record: gitlab_component_ops:rate
@@ -162,7 +162,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_http_requests_total{type="registry"}[1m])
       )
   - record: gitlab_component_errors:rate
@@ -172,13 +172,13 @@ groups:
       type: registry
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_http_requests_total{code=~"5..",type="registry"}[1m])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(environment,stage,migration_path) (
           gitlab_component_ops:rate{component="server",tier="sv",type="registry"}
         )
       )
@@ -189,11 +189,11 @@ groups:
       type: registry
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[1m])
         )
         +
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_http_request_duration_seconds_bucket{le="1",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[1m])
         )
       )
@@ -205,7 +205,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[1m])
       )
   - record: gitlab_component_ops:rate
@@ -214,7 +214,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/manifests/{reference}"}[1m])
       )
   - record: gitlab_component_apdex:success:rate
@@ -224,11 +224,11 @@ groups:
       type: registry
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_http_request_duration_seconds_bucket{le="10",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[1m])
         )
         +
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[1m])
         )
       )
@@ -240,7 +240,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[1m])
       )
   - record: gitlab_component_ops:rate
@@ -249,7 +249,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_http_request_duration_seconds_count{method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}"}[1m])
       )
   - record: gitlab_component_apdex:success:rate
@@ -258,7 +258,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_storage_action_seconds_bucket{le="1"}[1m])
       )
   - record: gitlab_component_apdex:weight:score
@@ -267,7 +267,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_storage_action_seconds_bucket{le="+Inf"}[1m])
       )
   - record: gitlab_component_ops:rate
@@ -276,7 +276,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_storage_action_seconds_count{}[1m])
       )
 - name: 'Component-Level SLIs: registry - 5m burn-rate'
@@ -289,11 +289,11 @@ groups:
       type: registry
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_database_query_duration_seconds_bucket{type="registry", le="1"}[5m])
         )
         +
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_database_query_duration_seconds_bucket{type="registry", le="2.5"}[5m])
         )
       )
@@ -305,7 +305,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_database_query_duration_seconds_bucket{type="registry", le="+Inf"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
@@ -314,7 +314,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_database_queries_total{type="registry"}[5m])
       )
   - record: gitlab_component_apdex:success:rate_5m
@@ -324,11 +324,11 @@ groups:
       type: registry
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_gc_run_duration_seconds_bucket{type="registry", le="1"}[5m])
         )
         +
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_gc_run_duration_seconds_bucket{type="registry", le="2"}[5m])
         )
       )
@@ -340,7 +340,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_gc_run_duration_seconds_bucket{type="registry", le="+Inf"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
@@ -349,7 +349,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_gc_runs_total{type="registry"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
@@ -359,7 +359,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment) (
+      sum by (environment,migration_path) (
         rate(haproxy_backend_http_responses_total{backend="canary_registry",type="registry"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
@@ -369,7 +369,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment) (
+      sum by (environment,migration_path) (
         rate(haproxy_backend_http_responses_total{backend="registry",type="registry"}[5m])
       )
   - record: gitlab_component_errors:rate_5m
@@ -380,13 +380,13 @@ groups:
       type: registry
     expr: |
       (
-        sum by (environment) (
+        sum by (environment,migration_path) (
           rate(haproxy_backend_http_responses_total{backend="canary_registry",code="5xx",type="registry"}[5m])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(environment,migration_path) (
           gitlab_component_ops:rate_5m{component="loadbalancer",stage="cny",tier="sv",type="registry"}
         )
       )
@@ -398,13 +398,13 @@ groups:
       type: registry
     expr: |
       (
-        sum by (environment) (
+        sum by (environment,migration_path) (
           rate(haproxy_backend_http_responses_total{backend="registry",code="5xx",type="registry"}[5m])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(environment,migration_path) (
           gitlab_component_ops:rate_5m{component="loadbalancer",stage="main",tier="sv",type="registry"}
         )
       )
@@ -415,11 +415,11 @@ groups:
       type: registry
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_http_request_duration_seconds_bucket{le="2.5",route!~"/v2/{name}/manifests/{reference}",type="registry"}[5m])
         )
         +
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_http_request_duration_seconds_bucket{le="25",route!~"/v2/{name}/manifests/{reference}",type="registry"}[5m])
         )
       )
@@ -431,7 +431,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_http_request_duration_seconds_bucket{le="+Inf",route!~"/v2/{name}/manifests/{reference}",type="registry"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
@@ -440,7 +440,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_http_requests_total{type="registry"}[5m])
       )
   - record: gitlab_component_errors:rate_5m
@@ -450,13 +450,13 @@ groups:
       type: registry
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_http_requests_total{code=~"5..",type="registry"}[5m])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(environment,stage,migration_path) (
           gitlab_component_ops:rate_5m{component="server",tier="sv",type="registry"}
         )
       )
@@ -467,11 +467,11 @@ groups:
       type: registry
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[5m])
         )
         +
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_http_request_duration_seconds_bucket{le="1",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[5m])
         )
       )
@@ -483,7 +483,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
@@ -492,7 +492,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/manifests/{reference}"}[5m])
       )
   - record: gitlab_component_apdex:success:rate_5m
@@ -502,11 +502,11 @@ groups:
       type: registry
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_http_request_duration_seconds_bucket{le="10",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[5m])
         )
         +
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[5m])
         )
       )
@@ -518,7 +518,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
@@ -527,7 +527,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_http_request_duration_seconds_count{method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}"}[5m])
       )
   - record: gitlab_component_apdex:success:rate_5m
@@ -536,7 +536,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_storage_action_seconds_bucket{le="1"}[5m])
       )
   - record: gitlab_component_apdex:weight:score_5m
@@ -545,7 +545,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_storage_action_seconds_bucket{le="+Inf"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
@@ -554,7 +554,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_storage_action_seconds_count{}[5m])
       )
 - name: 'Component-Level SLIs: registry - 30m burn-rate'
@@ -567,11 +567,11 @@ groups:
       type: registry
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_database_query_duration_seconds_bucket{type="registry", le="1"}[30m])
         )
         +
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_database_query_duration_seconds_bucket{type="registry", le="2.5"}[30m])
         )
       )
@@ -583,7 +583,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_database_query_duration_seconds_bucket{type="registry", le="+Inf"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
@@ -592,7 +592,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_database_queries_total{type="registry"}[30m])
       )
   - record: gitlab_component_apdex:success:rate_30m
@@ -602,11 +602,11 @@ groups:
       type: registry
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_gc_run_duration_seconds_bucket{type="registry", le="1"}[30m])
         )
         +
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_gc_run_duration_seconds_bucket{type="registry", le="2"}[30m])
         )
       )
@@ -618,7 +618,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_gc_run_duration_seconds_bucket{type="registry", le="+Inf"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
@@ -627,7 +627,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_gc_runs_total{type="registry"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
@@ -637,7 +637,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment) (
+      sum by (environment,migration_path) (
         rate(haproxy_backend_http_responses_total{backend="canary_registry",type="registry"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
@@ -647,7 +647,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment) (
+      sum by (environment,migration_path) (
         rate(haproxy_backend_http_responses_total{backend="registry",type="registry"}[30m])
       )
   - record: gitlab_component_errors:rate_30m
@@ -658,13 +658,13 @@ groups:
       type: registry
     expr: |
       (
-        sum by (environment) (
+        sum by (environment,migration_path) (
           rate(haproxy_backend_http_responses_total{backend="canary_registry",code="5xx",type="registry"}[30m])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(environment,migration_path) (
           gitlab_component_ops:rate_30m{component="loadbalancer",stage="cny",tier="sv",type="registry"}
         )
       )
@@ -676,13 +676,13 @@ groups:
       type: registry
     expr: |
       (
-        sum by (environment) (
+        sum by (environment,migration_path) (
           rate(haproxy_backend_http_responses_total{backend="registry",code="5xx",type="registry"}[30m])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(environment,migration_path) (
           gitlab_component_ops:rate_30m{component="loadbalancer",stage="main",tier="sv",type="registry"}
         )
       )
@@ -693,11 +693,11 @@ groups:
       type: registry
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_http_request_duration_seconds_bucket{le="2.5",route!~"/v2/{name}/manifests/{reference}",type="registry"}[30m])
         )
         +
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_http_request_duration_seconds_bucket{le="25",route!~"/v2/{name}/manifests/{reference}",type="registry"}[30m])
         )
       )
@@ -709,7 +709,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_http_request_duration_seconds_bucket{le="+Inf",route!~"/v2/{name}/manifests/{reference}",type="registry"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
@@ -718,7 +718,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_http_requests_total{type="registry"}[30m])
       )
   - record: gitlab_component_errors:rate_30m
@@ -728,13 +728,13 @@ groups:
       type: registry
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_http_requests_total{code=~"5..",type="registry"}[30m])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(environment,stage,migration_path) (
           gitlab_component_ops:rate_30m{component="server",tier="sv",type="registry"}
         )
       )
@@ -745,11 +745,11 @@ groups:
       type: registry
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[30m])
         )
         +
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_http_request_duration_seconds_bucket{le="1",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[30m])
         )
       )
@@ -761,7 +761,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
@@ -770,7 +770,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/manifests/{reference}"}[30m])
       )
   - record: gitlab_component_apdex:success:rate_30m
@@ -780,11 +780,11 @@ groups:
       type: registry
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_http_request_duration_seconds_bucket{le="10",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[30m])
         )
         +
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[30m])
         )
       )
@@ -796,7 +796,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
@@ -805,7 +805,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_http_request_duration_seconds_count{method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}"}[30m])
       )
   - record: gitlab_component_apdex:success:rate_30m
@@ -814,7 +814,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_storage_action_seconds_bucket{le="1"}[30m])
       )
   - record: gitlab_component_apdex:weight:score_30m
@@ -823,7 +823,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_storage_action_seconds_bucket{le="+Inf"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
@@ -832,7 +832,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_storage_action_seconds_count{}[30m])
       )
 - name: 'Component-Level SLIs: registry - 1h burn-rate'
@@ -845,11 +845,11 @@ groups:
       type: registry
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_database_query_duration_seconds_bucket{type="registry", le="1"}[1h])
         )
         +
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_database_query_duration_seconds_bucket{type="registry", le="2.5"}[1h])
         )
       )
@@ -861,7 +861,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_database_query_duration_seconds_bucket{type="registry", le="+Inf"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
@@ -870,7 +870,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_database_queries_total{type="registry"}[1h])
       )
   - record: gitlab_component_apdex:success:rate_1h
@@ -880,11 +880,11 @@ groups:
       type: registry
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_gc_run_duration_seconds_bucket{type="registry", le="1"}[1h])
         )
         +
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_gc_run_duration_seconds_bucket{type="registry", le="2"}[1h])
         )
       )
@@ -896,7 +896,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_gc_run_duration_seconds_bucket{type="registry", le="+Inf"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
@@ -905,7 +905,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_gc_runs_total{type="registry"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
@@ -915,7 +915,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment) (
+      sum by (environment,migration_path) (
         rate(haproxy_backend_http_responses_total{backend="canary_registry",type="registry"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
@@ -925,7 +925,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment) (
+      sum by (environment,migration_path) (
         rate(haproxy_backend_http_responses_total{backend="registry",type="registry"}[1h])
       )
   - record: gitlab_component_errors:rate_1h
@@ -936,13 +936,13 @@ groups:
       type: registry
     expr: |
       (
-        sum by (environment) (
+        sum by (environment,migration_path) (
           rate(haproxy_backend_http_responses_total{backend="canary_registry",code="5xx",type="registry"}[1h])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(environment,migration_path) (
           gitlab_component_ops:rate_1h{component="loadbalancer",stage="cny",tier="sv",type="registry"}
         )
       )
@@ -954,13 +954,13 @@ groups:
       type: registry
     expr: |
       (
-        sum by (environment) (
+        sum by (environment,migration_path) (
           rate(haproxy_backend_http_responses_total{backend="registry",code="5xx",type="registry"}[1h])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(environment,migration_path) (
           gitlab_component_ops:rate_1h{component="loadbalancer",stage="main",tier="sv",type="registry"}
         )
       )
@@ -971,11 +971,11 @@ groups:
       type: registry
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_http_request_duration_seconds_bucket{le="2.5",route!~"/v2/{name}/manifests/{reference}",type="registry"}[1h])
         )
         +
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_http_request_duration_seconds_bucket{le="25",route!~"/v2/{name}/manifests/{reference}",type="registry"}[1h])
         )
       )
@@ -987,7 +987,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_http_request_duration_seconds_bucket{le="+Inf",route!~"/v2/{name}/manifests/{reference}",type="registry"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
@@ -996,7 +996,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_http_requests_total{type="registry"}[1h])
       )
   - record: gitlab_component_errors:rate_1h
@@ -1006,13 +1006,13 @@ groups:
       type: registry
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_http_requests_total{code=~"5..",type="registry"}[1h])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(environment,stage,migration_path) (
           gitlab_component_ops:rate_1h{component="server",tier="sv",type="registry"}
         )
       )
@@ -1023,11 +1023,11 @@ groups:
       type: registry
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[1h])
         )
         +
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_http_request_duration_seconds_bucket{le="1",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[1h])
         )
       )
@@ -1039,7 +1039,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
@@ -1048,7 +1048,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/manifests/{reference}"}[1h])
       )
   - record: gitlab_component_apdex:success:rate_1h
@@ -1058,11 +1058,11 @@ groups:
       type: registry
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_http_request_duration_seconds_bucket{le="10",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[1h])
         )
         +
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[1h])
         )
       )
@@ -1074,7 +1074,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
@@ -1083,7 +1083,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_http_request_duration_seconds_count{method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}"}[1h])
       )
   - record: gitlab_component_apdex:success:rate_1h
@@ -1092,7 +1092,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_storage_action_seconds_bucket{le="1"}[1h])
       )
   - record: gitlab_component_apdex:weight:score_1h
@@ -1101,7 +1101,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_storage_action_seconds_bucket{le="+Inf"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
@@ -1110,7 +1110,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_storage_action_seconds_count{}[1h])
       )
 - name: 'Component-Level SLIs: registry - 6h burn-rate'
@@ -1123,11 +1123,11 @@ groups:
       type: registry
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_database_query_duration_seconds_bucket{type="registry", le="1"}[6h])
         )
         +
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_database_query_duration_seconds_bucket{type="registry", le="2.5"}[6h])
         )
       )
@@ -1139,7 +1139,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_database_query_duration_seconds_bucket{type="registry", le="+Inf"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
@@ -1148,7 +1148,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_database_queries_total{type="registry"}[6h])
       )
   - record: gitlab_component_apdex:success:rate_6h
@@ -1158,11 +1158,11 @@ groups:
       type: registry
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_gc_run_duration_seconds_bucket{type="registry", le="1"}[6h])
         )
         +
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_gc_run_duration_seconds_bucket{type="registry", le="2"}[6h])
         )
       )
@@ -1174,7 +1174,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_gc_run_duration_seconds_bucket{type="registry", le="+Inf"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
@@ -1183,7 +1183,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_gc_runs_total{type="registry"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
@@ -1193,7 +1193,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment) (
+      sum by (environment,migration_path) (
         rate(haproxy_backend_http_responses_total{backend="canary_registry",type="registry"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
@@ -1203,7 +1203,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment) (
+      sum by (environment,migration_path) (
         rate(haproxy_backend_http_responses_total{backend="registry",type="registry"}[6h])
       )
   - record: gitlab_component_errors:rate_6h
@@ -1214,13 +1214,13 @@ groups:
       type: registry
     expr: |
       (
-        sum by (environment) (
+        sum by (environment,migration_path) (
           rate(haproxy_backend_http_responses_total{backend="canary_registry",code="5xx",type="registry"}[6h])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(environment,migration_path) (
           gitlab_component_ops:rate_6h{component="loadbalancer",stage="cny",tier="sv",type="registry"}
         )
       )
@@ -1232,13 +1232,13 @@ groups:
       type: registry
     expr: |
       (
-        sum by (environment) (
+        sum by (environment,migration_path) (
           rate(haproxy_backend_http_responses_total{backend="registry",code="5xx",type="registry"}[6h])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(environment,migration_path) (
           gitlab_component_ops:rate_6h{component="loadbalancer",stage="main",tier="sv",type="registry"}
         )
       )
@@ -1249,11 +1249,11 @@ groups:
       type: registry
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_http_request_duration_seconds_bucket{le="2.5",route!~"/v2/{name}/manifests/{reference}",type="registry"}[6h])
         )
         +
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_http_request_duration_seconds_bucket{le="25",route!~"/v2/{name}/manifests/{reference}",type="registry"}[6h])
         )
       )
@@ -1265,7 +1265,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_http_request_duration_seconds_bucket{le="+Inf",route!~"/v2/{name}/manifests/{reference}",type="registry"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
@@ -1274,7 +1274,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_http_requests_total{type="registry"}[6h])
       )
   - record: gitlab_component_errors:rate_6h
@@ -1284,13 +1284,13 @@ groups:
       type: registry
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_http_requests_total{code=~"5..",type="registry"}[6h])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(environment,stage,migration_path) (
           gitlab_component_ops:rate_6h{component="server",tier="sv",type="registry"}
         )
       )
@@ -1301,11 +1301,11 @@ groups:
       type: registry
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[6h])
         )
         +
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_http_request_duration_seconds_bucket{le="1",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[6h])
         )
       )
@@ -1317,7 +1317,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
@@ -1326,7 +1326,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/manifests/{reference}"}[6h])
       )
   - record: gitlab_component_apdex:success:rate_6h
@@ -1336,11 +1336,11 @@ groups:
       type: registry
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_http_request_duration_seconds_bucket{le="10",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[6h])
         )
         +
-        sum by (environment,stage) (
+        sum by (environment,stage,migration_path) (
           rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[6h])
         )
       )
@@ -1352,7 +1352,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
@@ -1361,7 +1361,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_http_request_duration_seconds_count{method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}"}[6h])
       )
   - record: gitlab_component_apdex:success:rate_6h
@@ -1370,7 +1370,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_storage_action_seconds_bucket{le="1"}[6h])
       )
   - record: gitlab_component_apdex:weight:score_6h
@@ -1379,7 +1379,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_storage_action_seconds_bucket{le="+Inf"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
@@ -1388,7 +1388,7 @@ groups:
       tier: sv
       type: registry
     expr: |
-      sum by (environment,stage) (
+      sum by (environment,stage,migration_path) (
         rate(registry_storage_action_seconds_count{}[6h])
       )
 - name: 'Component mapping: registry'

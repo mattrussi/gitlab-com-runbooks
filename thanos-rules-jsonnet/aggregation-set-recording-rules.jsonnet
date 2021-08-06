@@ -41,6 +41,23 @@ local outputPromYaml(groups) =
     ),
 
   /**
+   * Handle special aggregation sets for registry, adding the migration_path
+   * label for the registry migration.
+   */
+  'aggregated-registry-migration-metrics.yml':
+    outputPromYaml(
+      [{
+        name: aggregationSets.registryMigrationSLIs.name,
+        interval: '1m',
+        partial_response_strategy: 'warn',
+        rules: aggregationSetTransformer.generateRecordingRules(
+          sourceAggregationSet=aggregationSets.registryMigrationSourceSLIs,
+          targetAggregationSet=aggregationSets.registryMigrationSLIs
+        ),
+      }]
+    ),
+
+  /**
    * Aggregates from multiple "split-brain" prometheus per-node SLIs to a global/single-view SLI-node-level aggregated metrics
    */
   'aggregated-sli-node-metrics.yml':

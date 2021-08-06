@@ -281,6 +281,102 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
   }),
 
   /**
+   * registryMigrationSourceSLIs is an intermediate recording rule representing
+   * the "start" of the aggregation pipeline for registry.
+   * This is a small deviation from promSourceSLIs adding the
+   * migration_path label. Needed during the registry migration.
+   * Used by registryMigrationSLIs.
+   */
+  registryMigrationSourceSLIs: aggregationSets.AggregationSet({
+    id: 'registry_migration_sli',
+    name: 'Registry Source SLI Metrics including migration_path label',
+    intermediateSource: true,  // Not intended for consumption in dashboards or alerts
+    selector: { monitor: { ne: 'global' }, type: 'registry' },  // Not Thanos Ruler
+    labels: ['environment', 'tier', 'type', 'stage', 'migration_path'],
+    burnRates: {
+      '1m': {
+        apdexSuccessRate: 'gitlab_component_apdex:success:rate',
+        apdexWeight: 'gitlab_component_apdex:weight:score',
+        opsRate: 'gitlab_component_ops:rate',
+        errorRate: 'gitlab_component_errors:rate',
+      },
+      '5m': {
+        apdexSuccessRate: 'gitlab_component_apdex:success:rate_5m',
+        apdexWeight: 'gitlab_component_apdex:weight:score_5m',
+        opsRate: 'gitlab_component_ops:rate_5m',
+        errorRate: 'gitlab_component_errors:rate_5m',
+      },
+      '30m': {
+        apdexSuccessRate: 'gitlab_component_apdex:success:rate_30m',
+        apdexWeight: 'gitlab_component_apdex:weight:score_30m',
+        opsRate: 'gitlab_component_ops:rate_30m',
+        errorRate: 'gitlab_component_errors:rate_30m',
+      },
+      '1h': {
+        apdexSuccessRate: 'gitlab_component_apdex:success:rate_1h',
+        apdexWeight: 'gitlab_component_apdex:weight:score_1h',
+        opsRate: 'gitlab_component_ops:rate_1h',
+        errorRate: 'gitlab_component_errors:rate_1h',
+      },
+      '6h': {
+        apdexSuccessRate: 'gitlab_component_apdex:success:rate_6h',
+        apdexWeight: 'gitlab_component_apdex:weight:score_6h',
+        opsRate: 'gitlab_component_ops:rate_6h',
+        errorRate: 'gitlab_component_errors:rate_6h',
+      },
+    },
+  }),
+
+  /**
+  * Uses registryMigrationSourceSLIs as source.
+  * Is adding the migration_path label which is needed
+  * during the registry migration.
+  */
+  registryMigrationSLIs: aggregationSets.AggregationSet({
+    id: 'registry_migration',
+    name: 'Registry Aggregated Metrics including the migration_path label',
+    intermediateSource: false,  // Used in dashboards and alerts
+    selector: { monitor: 'global', type: 'registry' },  // Thanos Ruler
+    labels: ['env', 'environment', 'tier', 'type', 'stage', 'region', 'migration_path'],
+    burnRates: {
+      '1m': {
+        apdexRatio: 'gitlab_registry_service_apdex:ratio',
+        opsRate: 'gitlab_registry_service_ops:rate',
+        errorRate: 'gitlab_registry_service_errors:rate',
+        errorRatio: 'gitlab_registry_service_errors:ratio',
+      },
+      '5m': {
+        apdexRatio: 'gitlab_registry_service_apdex:ratio_5m',
+        opsRate: 'gitlab_registry_service_ops:rate_5m',
+        errorRate: 'gitlab_registry_service_errors:rate_5m',
+        errorRatio: 'gitlab_registry_service_errors:ratio_5m',
+      },
+      '30m': {
+        apdexRatio: 'gitlab_registry_service_apdex:ratio_30m',
+        opsRate: 'gitlab_registry_service_ops:rate_30m',
+        errorRate: 'gitlab_registry_service_errors:rate_30m',
+        errorRatio: 'gitlab_registry_service_errors:ratio_30m',
+      },
+      '1h': {
+        apdexRatio: 'gitlab_registry_service_apdex:ratio_1h',
+        opsRate: 'gitlab_registry_service_ops:rate_1h',
+        errorRate: 'gitlab_registry_service_errors:rate_1h',
+        errorRatio: 'gitlab_registry_service_errors:ratio_1h',
+      },
+      '6h': {
+        apdexRatio: 'gitlab_registry_service_apdex:ratio_6h',
+        errorRatio: 'gitlab_registry_service_errors:ratio_6h',
+      },
+      '3d': {
+        apdexRatio: 'gitlab_registry_service_apdex:ratio_3d',
+        errorRatio: 'gitlab_registry_service_errors:ratio_3d',
+      },
+    },
+    // Only include components (SLIs) with service_aggregation="yes"
+    aggregationFilter: 'service',
+  }),
+
+  /**
    * serviceNodeAggregatedSLIs consumes globalNodeSLIs and aggregates
    * all the SLIs in a service up to the service level for each node.
    * This is not particularly useful and should probably be reconsidered

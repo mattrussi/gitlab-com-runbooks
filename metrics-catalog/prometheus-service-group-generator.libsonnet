@@ -5,14 +5,28 @@ local intervalForDuration = import 'servicemetrics/interval-for-duration.libsonn
 
 local recordingRuleGroupsForServiceForBurnRate(serviceDefinition, burnRate) =
   local rulesetGenerators =
-    [
-      recordingRules.sliRecordingRulesSetGenerator(burnRate, recordingRuleRegistry),
-      recordingRules.componentMetricsRuleSetGenerator(
-        burnRate=burnRate,
-        aggregationSet=aggregationSets.promSourceSLIs
-      ),
-      recordingRules.extraRecordingRuleSetGenerator(burnRate),
-    ]
+    (
+      if serviceDefinition.type != "registry" then
+        [
+          recordingRules.sliRecordingRulesSetGenerator(burnRate, recordingRuleRegistry),
+          recordingRules.componentMetricsRuleSetGenerator(
+            burnRate=burnRate,
+            aggregationSet=aggregationSets.promSourceSLIs
+          ),
+          recordingRules.extraRecordingRuleSetGenerator(burnRate),
+        ]
+      else
+        // registry needs to include an extra label for migration_path during the migration
+        // so we use an extra source aggregation set for it
+        [
+          recordingRules.sliRecordingRulesSetGenerator(burnRate, recordingRuleRegistry),
+          recordingRules.componentMetricsRuleSetGenerator(
+            burnRate=burnRate,
+            aggregationSet=aggregationSets.registryMigrationSourceSLIs
+          ),
+          recordingRules.extraRecordingRuleSetGenerator(burnRate),
+        ]
+    )
     +
     (
       if serviceDefinition.nodeLevelMonitoring then

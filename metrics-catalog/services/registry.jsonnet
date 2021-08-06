@@ -81,7 +81,7 @@ metricsCatalog.serviceDefinition({
         }
       ),
 
-      significantLabels: ['route', 'method'],
+      significantLabels: ['route', 'method', 'migration_path'],
 
       toolingLinks: [
         toolingLinks.gkeDeployment('gitlab-registry', type='registry', containerName='registry'),
