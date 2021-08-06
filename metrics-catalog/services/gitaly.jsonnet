@@ -37,6 +37,7 @@ local gitalyApdexIgnoredMethods = std.set([
 ]);
 
 local gitalyOpServiceApdexIgnoredMethods = std.set([
+  'UserCreateBranch',  // https://gitlab.com/gitlab-org/gitlab/-/issues/337505
   'UserMergeToRef',  // https://gitlab.com/gitlab-org/gitlab/-/issues/336979
   'UserSquash',  // https://gitlab.com/gitlab-com/gl-infra/production/-/issues/5305
 ]);
