@@ -126,11 +126,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"UserMergeToRef",grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="10"}[5m])
+          rate(grpc_server_handling_seconds_bucket{grpc_method!~"UserMergeToRef|UserSquash",grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="10"}[5m])
         )
         +
         sum by (env,environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"UserMergeToRef",grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="30"}[5m])
+          rate(grpc_server_handling_seconds_bucket{grpc_method!~"UserMergeToRef|UserSquash",grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="30"}[5m])
         )
       )
       /
@@ -143,7 +143,7 @@ groups:
       type: gitaly
     expr: |
       sum by (env,environment,stage) (
-        rate(grpc_server_handling_seconds_bucket{grpc_method!~"UserMergeToRef",grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf"}[5m])
+        rate(grpc_server_handling_seconds_bucket{grpc_method!~"UserMergeToRef|UserSquash",grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf"}[5m])
       )
   - record: gitlab:component:feature_category:execution:ops:rate_5m
     labels:
@@ -300,11 +300,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"UserMergeToRef",grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="10"}[30m])
+          rate(grpc_server_handling_seconds_bucket{grpc_method!~"UserMergeToRef|UserSquash",grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="10"}[30m])
         )
         +
         sum by (env,environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"UserMergeToRef",grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="30"}[30m])
+          rate(grpc_server_handling_seconds_bucket{grpc_method!~"UserMergeToRef|UserSquash",grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="30"}[30m])
         )
       )
       /
@@ -317,7 +317,7 @@ groups:
       type: gitaly
     expr: |
       sum by (env,environment,stage) (
-        rate(grpc_server_handling_seconds_bucket{grpc_method!~"UserMergeToRef",grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf"}[30m])
+        rate(grpc_server_handling_seconds_bucket{grpc_method!~"UserMergeToRef|UserSquash",grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf"}[30m])
       )
   - record: gitlab:component:feature_category:execution:ops:rate_30m
     labels:
@@ -474,11 +474,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"UserMergeToRef",grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="10"}[1h])
+          rate(grpc_server_handling_seconds_bucket{grpc_method!~"UserMergeToRef|UserSquash",grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="10"}[1h])
         )
         +
         sum by (env,environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"UserMergeToRef",grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="30"}[1h])
+          rate(grpc_server_handling_seconds_bucket{grpc_method!~"UserMergeToRef|UserSquash",grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="30"}[1h])
         )
       )
       /
@@ -491,7 +491,7 @@ groups:
       type: gitaly
     expr: |
       sum by (env,environment,stage) (
-        rate(grpc_server_handling_seconds_bucket{grpc_method!~"UserMergeToRef",grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf"}[1h])
+        rate(grpc_server_handling_seconds_bucket{grpc_method!~"UserMergeToRef|UserSquash",grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf"}[1h])
       )
   - record: gitlab:component:feature_category:execution:ops:rate_1h
     labels:
@@ -648,11 +648,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"UserMergeToRef",grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="10"}[6h])
+          rate(grpc_server_handling_seconds_bucket{grpc_method!~"UserMergeToRef|UserSquash",grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="10"}[6h])
         )
         +
         sum by (env,environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"UserMergeToRef",grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="30"}[6h])
+          rate(grpc_server_handling_seconds_bucket{grpc_method!~"UserMergeToRef|UserSquash",grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="30"}[6h])
         )
       )
       /
@@ -665,7 +665,7 @@ groups:
       type: gitaly
     expr: |
       sum by (env,environment,stage) (
-        rate(grpc_server_handling_seconds_bucket{grpc_method!~"UserMergeToRef",grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf"}[6h])
+        rate(grpc_server_handling_seconds_bucket{grpc_method!~"UserMergeToRef|UserSquash",grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf"}[6h])
       )
   - record: gitlab:component:feature_category:execution:ops:rate_6h
     labels:
