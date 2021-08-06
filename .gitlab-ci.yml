@@ -291,18 +291,6 @@ update_elastic_log_gprd_hot_index_shards_per_node:
   variables:
     ELASTICSEARCH_URL: $ES_LOG_GPRD_URL
 
-generate_service_maturity_manifest:
-  stage: scheduled
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "trigger" && $GENERATE_SERVICE_MATURITY_MANIFEST'
-  script:
-    - mkdir -p service-maturity-manifest
-    - ./scripts/compile_jsonnet.rb ./metrics-catalog/maturity.jsonnet > ./service-maturity-manifest/service_maturity.yml
-  artifacts:
-    expose_as: 'service maturity manifest'
-    paths:
-      - service-maturity-manifest/
-
 # nonprod-log.gitlab.net
 ################################################################################
 update_elastic_nonprod-log_watches:
@@ -552,6 +540,25 @@ check-stage-groups:
     - scripts/update_stage_groups_dashboards.rb
     - scripts/update_stage_error_budget_dashboards.rb
     - git diff --exit-code
+
+generate_service_maturity_manifest:
+  stage: test
+  rules:
+    - *avoid-stage-group-check-rule
+    - if: '$GENERATE_SERVICE_MATURITY_MANIFEST == "1"'
+      when: always
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: manual
+      allow_failure: true
+  script:
+    - ./scripts/bundler.sh # Install jsonnet bundles
+    - ./scripts/generate-jsonnet-rules.sh
+    - mkdir -p service-maturity-manifest
+    - ./scripts/compile_jsonnet.rb ./metrics-catalog/maturity.jsonnet > ./service-maturity-manifest/service_maturity.yml
+  artifacts:
+    expose_as: 'service maturity manifest'
+    paths:
+      - service-maturity-manifest/
 
 test-periodic-queries:
   rules:

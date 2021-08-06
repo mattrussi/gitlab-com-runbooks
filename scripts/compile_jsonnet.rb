@@ -29,9 +29,7 @@ class CompileJsonnet
       opts.banner = <<~BANNER
       Compile an arbitrary Jsonnet file in this runbook project to JSON, and dump to STDOUT. All the necessary libraries, paths, required external variables are already setup by default.
 
-      Usage: scripts/generate-jsonnet [options] [file path]"
-
-      scripts/generate-jsonnet
+      Usage: scripts/compile_jsonnet.rb [options] [file path]"
       BANNER
 
       opts.on("-I lib_a,lib_b,lib_c", "--libs=lib_a,lib_b,lib_c", Array, "Libraries to be included when compiling the Jsonnet files") do |libs|
