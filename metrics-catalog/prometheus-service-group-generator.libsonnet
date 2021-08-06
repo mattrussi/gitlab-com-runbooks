@@ -6,7 +6,7 @@ local intervalForDuration = import 'servicemetrics/interval-for-duration.libsonn
 local recordingRuleGroupsForServiceForBurnRate(serviceDefinition, burnRate) =
   local rulesetGenerators =
     (
-      if serviceDefinition.type != "registry" then
+      if serviceDefinition.type != 'registry' then
         [
           recordingRules.sliRecordingRulesSetGenerator(burnRate, recordingRuleRegistry),
           recordingRules.componentMetricsRuleSetGenerator(
