@@ -867,7 +867,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",grpc_method!~"UserMergeToRef",grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",stage="{{ $labels.stage }}"}[5m])
+            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",grpc_method!~"UserMergeToRef|UserSquash",grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",stage="{{ $labels.stage }}"}[5m])
           )
         )
       runbook: docs/gitaly/README.md
@@ -933,7 +933,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,shard,fqdn,le) (
-            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_method!~"UserMergeToRef",grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m])
+            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_method!~"UserMergeToRef|UserSquash",grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m])
           )
         )
       runbook: docs/gitaly/README.md
@@ -990,7 +990,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,shard,fqdn,le) (
-            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_method!~"UserMergeToRef",grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m])
+            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_method!~"UserMergeToRef|UserSquash",grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m])
           )
         )
       runbook: docs/gitaly/README.md

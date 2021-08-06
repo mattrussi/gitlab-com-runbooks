@@ -38,6 +38,7 @@ local gitalyApdexIgnoredMethods = std.set([
 
 local gitalyOpServiceApdexIgnoredMethods = std.set([
   'UserMergeToRef',  // https://gitlab.com/gitlab-org/gitlab/-/issues/336979
+  'UserSquash',  // https://gitlab.com/gitlab-com/gl-infra/production/-/issues/5305
 ]);
 
 
