@@ -36,6 +36,7 @@ generateTests([
   {
     name: 'pagerduty',
     labels: {
+      env: 'gprd',
       pager: 'pagerduty',
     },
     receivers: [
@@ -74,7 +75,6 @@ generateTests([
       pager: 'pagerduty',
     },
     receivers: [
-      'prod_pagerduty',
       'production_slack_channel',
     ],
   },
