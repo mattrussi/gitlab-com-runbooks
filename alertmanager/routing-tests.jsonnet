@@ -64,7 +64,6 @@ generateTests([
       env: 'gstg',
     },
     receivers: [
-      'non_prod_pagerduty',
       'slack_bridge-nonprod',
       'blackhole',
     ],
@@ -104,7 +103,6 @@ generateTests([
       env: 'gstg',
     },
     receivers: [
-      'non_prod_pagerduty',
       'slack_bridge-nonprod',
       'blackhole',
     ],
@@ -231,7 +229,6 @@ generateTests([
       stage: 'cny',
     },
     receivers: [
-      'non_prod_pagerduty',
       'blackhole',
     ],
   },
