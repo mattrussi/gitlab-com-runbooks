@@ -4,7 +4,7 @@
 We have a new way to access our Rails consoles in Staging/Production - via Gravitational [Teleport](https://goteleport.com/teleport/docs/). Our standard Rails console is in the process of being fully removed.
 
 - The main reason for this change is security and compliance: With Teleport we'll have fully flexible, on-demand, and audited access to our Rails consoles and to some other terminal/CLI tools, like Kubernetes-ctl, Database access via psql and more.
-- Teleport's goal is to provide a _Unified Access Plane for all our infrastructure. [Here](https://goteleport.com/teleport/docs/#why-use-teleport) you can find some of the most popular use cases for Teleport.
+- Teleport's goal is to provide a Unified Access Plane for all our infrastructure. [Here](https://goteleport.com/teleport/docs/#why-use-teleport) you can find some of the most popular use cases for Teleport.
 - We evaluated Teleport thoroughly (see this [issue](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/11568)) and found it to comply with most of our infrastructure access requirements, unlike some of its competitors ([Okta-ASA](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/12042), [Hashicorp Boundary](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/11666) and others).
 
 ## How to use Teleport to connect to Rails console
@@ -35,13 +35,15 @@ And finally you request a role to connect to the staging Rails console - for pro
 
 `$> tsh login --proxy=teleport.gstg.gitlab.net --request-roles=rails-ro --request-reason="Issue-URL or explanation"`
 
-This command will wait for the approver to approve your request.  It may appear to hang, but it will return as soon as the request is approved or denied.
+This command will pause while it waits for the approver to approve your request.  It may appear to hang, but it will return as soon as the request is approved or denied.
 
 > Note: These examples are for the **staging environment** only! This is to prevent unintended copy/paste behavior.  To connect to the production environment, change `gstg` to `gprd`
 
 #### Access approval
 
-In the future, approvers will get your request via an [automated notification in Slack](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/12256). For now, you'll need to ping them manually in `#infrastructure-lounge`.  They will review the issue URL in the request and if console access seems like a reasonable step to address that issue, they will approve it.
+Approvers will get your request via an automated notification in Slack. This posts a notification into the `#infrastructure-lounge` channel.  If you have additional context, or need to expedite an approval, please comment as a thread under that message.  If the request is urgent, you can ping `@sre-oncall`, but to spread out the workload please try to allow some time for others to review first if possible.
+
+Approvers will review the issue URL in the request and if console access seems like a reasonable step to address that issue, they will approve it.
 
 Once an approval is issued, access the Rails console via:
 
@@ -75,11 +77,11 @@ $ tsh status
 
 Note that the default token does not have the `rails-ro` role and does not have the `rails-ro` login available. This key allows you to interact with the server, and to reuqest more roles, but does not allow connecting to any other services.
 
-To request permission to connect to a service, you must use the `--request-roles` flag.  You can request a role after already having a valid session key, or more simply, but just using the flag to your initial login:
+To request permission to connect to a service, you must use the `--request-roles` flag.  You can request a role after already having a valid session key, or more simply, by just adding the flag to your initial login:
 
 ````shell
 tsh login --proxy=teleport.gstg.gitlab.net --request-roles=rails-ro --request-reason="Issue-URL or explanation"
 ````
 
-Each request requires a reason, and it's best to use the URL of the issue or incident that this relates to.
+Each request requires a reason, and it's best to include the URL of the issue or incident that this relates to.
 
