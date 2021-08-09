@@ -66,17 +66,9 @@ groups:
       tier: sv
       type: web-pages
     expr: |
-      (
-        sum by (environment,stage) (
-          rate(gitlab_pages_http_request_duration_seconds_bucket{le="1",type="web-pages"}[1m])
-        )
-        +
-        sum by (environment,stage) (
-          rate(gitlab_pages_http_request_duration_seconds_bucket{le="10",type="web-pages"}[1m])
-        )
+      sum by (environment,stage) (
+        rate(gitlab_pages_http_request_duration_seconds_bucket{le="10",type="web-pages"}[1m])
       )
-      /
-      2
   - record: gitlab_component_apdex:weight:score
     labels:
       component: server
@@ -204,17 +196,9 @@ groups:
       tier: sv
       type: web-pages
     expr: |
-      (
-        sum by (environment,stage) (
-          rate(gitlab_pages_http_request_duration_seconds_bucket{le="1",type="web-pages"}[5m])
-        )
-        +
-        sum by (environment,stage) (
-          rate(gitlab_pages_http_request_duration_seconds_bucket{le="10",type="web-pages"}[5m])
-        )
+      sum by (environment,stage) (
+        rate(gitlab_pages_http_request_duration_seconds_bucket{le="10",type="web-pages"}[5m])
       )
-      /
-      2
   - record: gitlab_component_apdex:weight:score_5m
     labels:
       component: server
@@ -342,17 +326,9 @@ groups:
       tier: sv
       type: web-pages
     expr: |
-      (
-        sum by (environment,stage) (
-          rate(gitlab_pages_http_request_duration_seconds_bucket{le="1",type="web-pages"}[30m])
-        )
-        +
-        sum by (environment,stage) (
-          rate(gitlab_pages_http_request_duration_seconds_bucket{le="10",type="web-pages"}[30m])
-        )
+      sum by (environment,stage) (
+        rate(gitlab_pages_http_request_duration_seconds_bucket{le="10",type="web-pages"}[30m])
       )
-      /
-      2
   - record: gitlab_component_apdex:weight:score_30m
     labels:
       component: server
@@ -480,17 +456,9 @@ groups:
       tier: sv
       type: web-pages
     expr: |
-      (
-        sum by (environment,stage) (
-          rate(gitlab_pages_http_request_duration_seconds_bucket{le="1",type="web-pages"}[1h])
-        )
-        +
-        sum by (environment,stage) (
-          rate(gitlab_pages_http_request_duration_seconds_bucket{le="10",type="web-pages"}[1h])
-        )
+      sum by (environment,stage) (
+        rate(gitlab_pages_http_request_duration_seconds_bucket{le="10",type="web-pages"}[1h])
       )
-      /
-      2
   - record: gitlab_component_apdex:weight:score_1h
     labels:
       component: server
@@ -618,17 +586,9 @@ groups:
       tier: sv
       type: web-pages
     expr: |
-      (
-        sum by (environment,stage) (
-          rate(gitlab_pages_http_request_duration_seconds_bucket{le="1",type="web-pages"}[6h])
-        )
-        +
-        sum by (environment,stage) (
-          rate(gitlab_pages_http_request_duration_seconds_bucket{le="10",type="web-pages"}[6h])
-        )
+      sum by (environment,stage) (
+        rate(gitlab_pages_http_request_duration_seconds_bucket{le="10",type="web-pages"}[6h])
       )
-      /
-      2
   - record: gitlab_component_apdex:weight:score_6h
     labels:
       component: server
