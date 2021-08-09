@@ -50,14 +50,12 @@ metricsCatalog.serviceDefinition({
       description: |||
         Aggregation of most web requests into the GitLab Pages process.
       |||,
-      // 1 second satisfactory, 10 second tolerable thresholds are
-      // very poor for what is essentially a static site server
-      // we should investigate the poor performance
+      // GitLab Pages sometimes serves very large files which takes some reasonable time
+      // we have stricter server_headers SLI, so this threshold can be set higher
       apdex: histogramApdex(
         histogram='gitlab_pages_http_request_duration_seconds_bucket',
         selector=baseSelector,
-        satisfiedThreshold=1,
-        toleratedThreshold=10
+        satisfiedThreshold=10
       ),
 
       requestRate: rateMetric(
