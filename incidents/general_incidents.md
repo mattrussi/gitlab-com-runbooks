@@ -50,7 +50,7 @@ As an IMOC, on roughly these times, you can ask yourself these questions:
   7. Help the EOC keep the timeline in the incident up to date.  Usually done in the description of the issue.  If you are collecting things, use issue comments, then edit the description later.
 
 ### Handling S3/S4
-If you've determined we don't need to be on full alert, consider these next steps
+For lower severity incidents, consider these next steps
   1. Is this internal? 
     * Deploy blocker?  
     * Data team (replication delay)?
