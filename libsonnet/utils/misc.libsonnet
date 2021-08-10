@@ -4,7 +4,8 @@ local isPresent(object, nullValue=false) =
   if object == null then
     nullValue
   else if std.isBoolean(object) then
-    object else
+    object
+  else
     std.length(object) > 0;
 
 local all(func, collection) =
@@ -22,7 +23,7 @@ local dig(object, keys) =
 
 local occurences(array) = std.foldl(
   function(hash, item)
-    if std.objectHas(hash, item) then hash { [item]: 1 } else hash { [item]: hash[item] + 1 },
+    if !std.objectHas(hash, item) then hash { [item]: 1 } else hash { [item]: hash[item] + 1 },
   array,
   {}
 );
@@ -37,9 +38,9 @@ local arrayDiff(arr1, arr2) =
       diff +
       if std.objectHas(hash2, field) then
         local num = hash1[field] - hash2[field];
-        std.repeat(hash1[field], if num < 0 then 0 else num)
+        std.repeat([field], if num < 1 then 0 else num)
       else
-        std.repeat(hash1[field], hash1[field]),
+        std.repeat([field], hash1[field]),
     std.objectFields(hash1),
     []
   );

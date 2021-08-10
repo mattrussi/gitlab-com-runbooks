@@ -5,7 +5,7 @@ local evaluateCriterion(criterion, service) =
     {
       name: criterion.name,
       result: 'skipped',
-      evidence: [],
+      evidence: null,
     }
   else
     local evidence = criterion.evidence(service);
