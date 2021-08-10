@@ -36,6 +36,7 @@ generateTests([
   {
     name: 'pagerduty',
     labels: {
+      env: 'gprd',
       pager: 'pagerduty',
     },
     receivers: [
@@ -64,7 +65,6 @@ generateTests([
       env: 'gstg',
     },
     receivers: [
-      'non_prod_pagerduty',
       'slack_bridge-nonprod',
       'blackhole',
     ],
@@ -75,7 +75,6 @@ generateTests([
       pager: 'pagerduty',
     },
     receivers: [
-      'prod_pagerduty',
       'production_slack_channel',
     ],
   },
@@ -104,7 +103,6 @@ generateTests([
       env: 'gstg',
     },
     receivers: [
-      'non_prod_pagerduty',
       'slack_bridge-nonprod',
       'blackhole',
     ],
@@ -231,7 +229,6 @@ generateTests([
       stage: 'cny',
     },
     receivers: [
-      'non_prod_pagerduty',
       'blackhole',
     ],
   },

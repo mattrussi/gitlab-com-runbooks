@@ -267,14 +267,11 @@ local routingTree = Route(
     /* pager=pagerduty alerts do continue */
     RouteCase(
       match={ pager: 'pagerduty' },
+      match_re={ env: 'gprd|ops' },
       continue=true,
       /* must be less than the 6h auto-resolve in PagerDuty */
       repeat_interval='2h',
       when=[
-        { match: { env: 'gstg' }, receiver: 'non_prod_pagerduty' },
-        { match: { env: 'dr' }, receiver: 'non_prod_pagerduty' },
-        { match: { env: 'pre' }, receiver: 'non_prod_pagerduty' },
-
         { match: { slo_alert: 'yes', env: 'gprd', stage: 'cny' }, receiver: 'slo_gprd_cny' },
         { match: { slo_alert: 'yes', env: 'gprd', stage: 'main' }, receiver: 'slo_gprd_main' },
         { match: { slo_alert: 'yes', env: 'gprd', stage: 'main' }, receiver: 'slo_gprd_main' },
