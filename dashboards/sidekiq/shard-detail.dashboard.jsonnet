@@ -259,7 +259,7 @@ basic.dashboard(
       title='Sidekiq Total Execution Time for $shard Shard',
       description='The sum of job execution times',
       query=|||
-        sum(rate(sidekiq_jobs_completion_seconds_sum{environment="$environment", shard=~"$shard"}[$__interval])) by (shard)
+        sum(sidekiq_jobs_execution_time:1m{environment="$environment", shard=~"$shard"}) by (shard)
       |||,
       legendFormat='{{ shard }}',
       interval='1m',
@@ -317,9 +317,9 @@ basic.dashboard(
       'Shard Utilization',
       description='How heavily utilized is this shard? Ideally this should be around 33% plus minus 10%. If outside this range for long periods, consider scaling fleet appropriately.',
       query=|||
-        sum by (environment, stage, shard)  (rate(sidekiq_jobs_completion_seconds_sum{environment="$environment", shard=~"$shard"}[1h]))
+        sum by (shard, stage) (sidekiq_jobs_execution_time:1h{environment="$environment", shard=~"$shard"})
         /
-        sum by (environment, stage, shard)  (avg_over_time(sidekiq_concurrency{environment="$environment", shard=~"$shard"}[1h]))
+        sum by (stage, shard)  (avg_over_time(sidekiq_concurrency{environment="$environment", shard=~"$shard"}[1h]))
       |||,
       legendFormat='{{ shard }} utilization (per hour)',
       yAxisLabel='Percent',
@@ -336,9 +336,9 @@ basic.dashboard(
     .addTarget(
       promQuery.target(
         expr=|||
-          sum by (environment, stage, shard)  (rate(sidekiq_jobs_completion_seconds_sum{environment="$environment", shard=~"$shard"}[10m]))
+          sum by (shard, stage) (sidekiq_jobs_execution_time:10m{environment="$environment", shard=~"$shard"})
           /
-          sum by (environment, stage, shard)  (avg_over_time(sidekiq_concurrency{environment="$environment", shard=~"$shard"}[10m]))
+          sum by (stage, shard)  (avg_over_time(sidekiq_concurrency{environment="$environment", shard=~"$shard"}[10m]))
         |||,
         legendFormat='{{ shard }} utilization (per 10m)'
       )
@@ -346,9 +346,9 @@ basic.dashboard(
     .addTarget(
       promQuery.target(
         expr=|||
-          sum by (environment, stage, shard)  (rate(sidekiq_jobs_completion_seconds_sum{environment="$environment", shard=~"$shard"}[$__interval]))
+          sum by (shard, stage) (sidekiq_jobs_execution_time:1m{environment="$environment", shard=~"$shard"})
           /
-          sum by (environment, stage, shard)  (avg_over_time(sidekiq_concurrency{environment="$environment", shard=~"$shard"}[$__interval]))
+          sum by (stage, shard)  (avg_over_time(sidekiq_concurrency{environment="$environment", shard=~"$shard"}[1m]))
         |||,
         legendFormat='{{ shard }} utilization (instant)'
       )
