@@ -185,6 +185,7 @@ groups:
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "yes"
+      window: 1h
     expr: |
       (
         (
@@ -196,7 +197,55 @@ groups:
           gitlab_component_apdex:ratio_5m{component="shared_runner_queues",monitor="global",type="ci-runners"}
           < (1 - 14.4 * 0.030000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shared_runner_queues",monitor="global",type="ci-runners"}) >= 1
+      )
+  - alert: CiRunnersServiceSharedRunnerQueuesApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The shared_runner_queues SLI of the ci-runners service (`{{ $labels.stage
+        }}` stage) has an apdex violating SLO
+      description: |
+        This SLI monitors the shared runner queues on GitLab.com. Each job is an operation.
+
+        Apdex uses queueing latencies for jobs which are considered to be fair-usage (less than 5 concurrently running jobs).
+
+        Jobs marked as failing with runner system failures are considered to be in error.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: ci-runners-main/ci-runners-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "433168901"
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(job_queue_duration_seconds_bucket{shared_runner="true", jobs_running_for_project=~"^(0|1|2|3|4)$", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          )
+        )
+      runbook: docs/ci-runners/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: runner
+      pager: pagerduty
+      product_stage: verify
+      product_stage_group: runner
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_apdex:ratio_6h{component="shared_runner_queues",monitor="global",type="ci-runners"}
           < (1 - 6 * 0.030000)

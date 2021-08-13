@@ -165,10 +165,11 @@ local apdexAlertForSLI(service, sli) =
       aggregationSet=aggregationSets.globalSLIs,
       metricSelectorHash={ type: service.type, component: sli.name },
       minimumOperationRateForMonitoring=minimumOperationRateForMonitoring,
-      thresholdSLOValue=apdexScoreSLO
+      thresholdSLOValue=apdexScoreSLO,
+      windows=[windowDuration]
     ),
     'for': '2m',
-    labels: labelsForSLI(sli, 's2', aggregationSets.globalSLIs, 'apdex', 'slo_violation'),
+    labels: labelsForSLI(sli, 's2', aggregationSets.globalSLIs, 'apdex', 'slo_violation') { window: windowDuration },
     annotations: commonAnnotations(service.type, sli, aggregationSets.globalSLIs, 'apdex') {
       title: 'The %(sliName)s SLI of the %(serviceType)s service (`{{ $labels.stage }}` stage) has an apdex violating SLO' % formatConfig,
       description: |||
@@ -179,7 +180,7 @@ local apdexAlertForSLI(service, sli) =
       grafana_dashboard_id: dashboardForService(service),
       grafana_panel_id: stableIds.hashStableId('sli-%(sliName)s-apdex' % formatConfig),
     },
-  }]
+  } for windowDuration in service.alertWindows]
   +
   (
     if service.nodeLevelMonitoring then
@@ -205,7 +206,7 @@ local apdexAlertForSLI(service, sli) =
             Currently the apdex value for {{ $labels.fqdn }} is {{ $value | humanizePercentage }}.
           ||| % formatConfig,
         },
-      } for windowDuration in ['1h', '6h']]
+      } for windowDuration in service.alertWindows]
     else
       []
   )

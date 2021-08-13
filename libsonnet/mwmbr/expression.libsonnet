@@ -69,12 +69,16 @@ local clampMaxHealthExpression(expression) =
     expression: strings.indent(expression, 2),
   };
 
+local defaultWindows = ['1h', '6h'];
+
 {
+  defaultWindows:: defaultWindows,
+
   // Generates a multi-window, multi-burn-rate error expression
   multiburnRateErrorExpression(
     aggregationSet,
     metricSelectorHash,  // Selectors for the error rate metrics
-    windows=['1h', '6h'],  // Sets of windows in this SLO expression, identified by longWindow duration
+    windows=defaultWindows,  // Sets of windows in this SLO expression, identified by longWindow duration
     thresholdSLOValue,  // Error budget float value (between 0 and 1)
     minimumOperationRateForMonitoring=null,  // minium operation rate vaue (in request-per-second)
     minimumSamplesForMonitoring=null,  // minimum number of operations recorded, over the longWindow period, for monitoring
