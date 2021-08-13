@@ -1,3 +1,3 @@
 local panels = import './panels.jsonnet';
 
-panels.patroni()
+panels.patroni('patroni-registry')

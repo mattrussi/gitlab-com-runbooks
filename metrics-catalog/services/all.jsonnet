@@ -20,6 +20,7 @@
   import 'nginx.jsonnet',
   import 'pages.jsonnet',
   import 'patroni.jsonnet',
+  import 'patroni-registry.jsonnet',
   import 'postgres-archive.jsonnet',
   import 'pgbouncer.jsonnet',
   import 'plantuml.jsonnet',
