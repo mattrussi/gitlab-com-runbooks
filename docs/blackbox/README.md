@@ -19,6 +19,7 @@
 * [../patroni/postgres.md](../patroni/postgres.md)
 * [../spamcheck/index.md](../spamcheck/index.md)
 * [../uncategorized/camoproxy.md](../uncategorized/camoproxy.md)
+* [../uncategorized/job_completion.md](../uncategorized/job_completion.md)
 * [../version/version-gitlab-com.md](../version/version-gitlab-com.md)
 <!-- END_MARKER -->
 
