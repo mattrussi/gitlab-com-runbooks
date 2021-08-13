@@ -12,33 +12,41 @@ local errorBudgetRatio(slaTarget, range, groupSelectors, aggregationLabels) =
       # Number of successful measurements
       sum by (%(aggregations)s)(
         # Reuest with satisfactory apdex
-        sum_over_time(
-          gitlab:component:stage_group:execution:apdex:success:rate_1h{%(selectorHash)s}[%(range)s]
-        ) or vector(0)
-        +
-        # Requests without error
-        (
+        label_replace(
           sum_over_time(
-            gitlab:component:stage_group:execution:ops:rate_1h{%(selectorHash)s}[%(range)s]
+            gitlab:component:stage_group:execution:apdex:success:rate_1h{%(selectorHash)s}[%(range)s]
+          ), 'sli_kind', 'apdex', '', '')
+        or
+        # Requests without error
+        label_replace(
+          sum by(%(aggregations)s) (
+            sum_over_time(
+              gitlab:component:stage_group:execution:ops:rate_1h{%(selectorHash)s}[%(range)s]
+            )
           )
           -
-          sum_over_time(
-            gitlab:component:stage_group:execution:error:rate_1h{%(selectorHash)s}[%(range)s]
-          ) or vector(0)
-        )
+          sum by(%(aggregations)s) (
+            sum_over_time(
+              gitlab:component:stage_group:execution:error:rate_1h{%(selectorHash)s}[%(range)s]
+            )
+          ), 'sli_kind', 'error', '', '')
       )
       /
       # Number of measurements
       sum by (%(aggregations)s)(
         # Apdex Measurements
-        sum_over_time(
-          gitlab:component:stage_group:execution:apdex:weight:score_1h{%(selectorHash)s}[%(range)s]
-        ) or vector(0)
-        +
+        label_replace(
+          sum_over_time(
+            gitlab:component:stage_group:execution:apdex:weight:score_1h{%(selectorHash)s}[%(range)s]
+          ),
+        'sli_kind', 'apdex', '', '')
+        or
         # Requests
-        sum_over_time(
-          gitlab:component:stage_group:execution:ops:rate_1h{%(selectorHash)s}[%(range)s]
-        )
+        label_replace(
+          sum_over_time(
+            gitlab:component:stage_group:execution:ops:rate_1h{%(selectorHash)s}[%(range)s]
+          ),
+        'sli_kind', 'error', '', '')
       ),
     1)
   ||| % {
