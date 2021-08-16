@@ -25,7 +25,7 @@ For more examples, review `services/*.jsonnet`.
 
 ```jsonnet
 metricsCatalog.serviceDefinition({
-  type: 'service_type',     // Tehe `type` identifier label for the service
+  type: 'service_type',     // The `type` identifier label for the service
   tier: 'sv',               // The `tier` identifier label for the service
   contractualThresholds: {  // Thresholds are used to calculate SLA metrics (selected services only)
     apdexRatio: 0.95,       // Apdex must be above this value for the service to be in SLA
@@ -93,7 +93,7 @@ This definition is used to generate several different configurations, including:
    1. This is the first step in reducing the cardinality of the application metrics before further aggregation at the global level.
    1. The global view is used for alerting, visualization, capacity planning etc.
 1. **Aggregation recording rules**, defined as "aggregation sets".
-   1. These are evaluated in Thanos Ruler](https://github.com/thanos-io/thanos/blob/master/docs/components/rule.md) and consume the source recording rules.
+   1. These are evaluated in [Thanos Ruler](https://github.com/thanos-io/thanos/blob/master/docs/components/rule.md) and consume the source recording rules.
    1. Thanos Ruler reads the source recording rules from Prometheus, and aggregates them into globally aggregated view of the metrics.
 1. **SLO violation alerts** for each SLI for apdex and error ratios
 1. **Weighted Average SLA** caclulation as described in https://about.gitlab.com/handbook/engineering/monitoring/
