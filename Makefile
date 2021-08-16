@@ -71,7 +71,8 @@ validate-service-mappings:
 .PHONY: validate-prom-rules
 validate-prom-rules:
 	# TODO: Add rules/*/*.yml when valid rules are created.
-	$(PROMTOOL_COMMAND) check rules rules/*.yml rules/clusters/*/*.yml thanos-rules/*.yml
+	$(PROMTOOL_COMMAND) check rules rules/*.yml rules/clusters/*/*.yml
+	# TODO: enable this $(THANOS_COMMAND) tools rules-check thanos-rules/*.yml
 	# Prometheus config checks are stricter than rules checks, so use a fake config to check this too
 	$(PROMTOOL_COMMAND)  check config scripts/prometheus.yml
 
