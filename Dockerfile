@@ -2,6 +2,7 @@ FROM golang:alpine AS go-jsonnet
 
 ENV JSONNET_VERSION 0.17.0
 ENV JB_VERSION 0.4.0
+ENV THANOS_VERSION 0.20.1
 
 RUN apk add --no-cache bash git && \
     mkdir -p /build/bin && \
@@ -47,6 +48,13 @@ RUN mkdir /prometheus && \
   tar -xvf prometheus.tar.gz -C /prometheus --strip-components 1 --wildcards */promtool && \
   rm prometheus.tar.gz && \
   ln -s /prometheus/promtool /bin/promtool
+
+# Include Thanos
+RUN mkdir /thanos && \
+  wget -O thanos.tar.gz https://github.com/thanos-io/thanos/releases/download/v$THANOS_VERSION/thanos-$THANOS_VERSION.linux-amd64.tar.gz && \
+  tar -xvf thanos.tar.gz -C /thanos --strip-components 1 --wildcards */thanos && \
+  rm thanos.tar.gz && \
+  ln -s /thanos/thanos /bin/thanos
 
 COPY --from=nlknguyen/alpine-shellcheck:latest /usr/local/bin/shellcheck /usr/local/bin/shellcheck
 COPY --from=peterdavehello/shfmt:latest /bin/shfmt /usr/local/bin/shfmt
