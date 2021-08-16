@@ -58,6 +58,62 @@ test.suite({
     actual: misc.isPresent(false),
     expect: false,
   },
+  testDigLEmpty: {
+    actual: misc.dig({}, ['a']),
+    expect: {},
+  },
+  testDigLShallow: {
+    actual: misc.dig({ a: 1, b: 2 }, ['a']),
+    expect: 1,
+  },
+  testDigMiddle: {
+    actual: misc.dig({ a: { b: { c: 3 } }, d: 2 }, ['a', 'b']),
+    expect: { c: 3 },
+  },
+  testDigDeep: {
+    actual: misc.dig({ a: { b: { c: 3 } }, d: 2 }, ['a', 'b', 'c']),
+    expect: 3,
+  },
+  testDigNotExistLeaf: {
+    actual: misc.dig({ a: { b: { c: 3 } }, d: 2 }, ['a', 'b', 'd']),
+    expect: {},
+  },
+  testDigNotExistMiddle: {
+    actual: misc.dig({ a: { b: { c: 3 } }, d: 2 }, ['a', 'c', 'c']),
+    expect: {},
+  },
+  testDigNotExistTop: {
+    actual: misc.dig({ a: { b: { c: 3 } }, d: 2 }, ['b', 'b', 'c']),
+    expect: {},
+  },
+  testDigHasLEmpty: {
+    actual: misc.digHas({}, ['a']),
+    expect: false,
+  },
+  testDigHasLShallow: {
+    actual: misc.digHas({ a: 1, b: 2 }, ['a']),
+    expect: true,
+  },
+  testDigHasMiddle: {
+    actual: misc.digHas({ a: { b: { c: 3 } }, d: 2 }, ['a', 'b']),
+    expect: true,
+  },
+  testDigHasDeep: {
+    actual: misc.digHas({ a: { b: { c: 3 } }, d: 2 }, ['a', 'b', 'c']),
+    expect: true,
+  },
+  testDigHasNotExistLeaf: {
+    actual: misc.digHas({ a: { b: { c: 3 } }, d: 2 }, ['a', 'b', 'd']),
+    expect: false,
+  },
+  testDigHasNotExistMiddle: {
+    actual: misc.digHas({ a: { b: { c: 3 } }, d: 2 }, ['a', 'c', 'c']),
+    expect: false,
+  },
+  testDigHasNotExistTop: {
+    actual: misc.digHas({ a: { b: { c: 3 } }, d: 2 }, ['b', 'b', 'c']),
+    expect: false,
+  },
   testArrayDiff: {
     actual: misc.arrayDiff(['a', 'b', 'c', 'd'], ['b', 'c', 'e']),
     expect: ['a', 'd'],
