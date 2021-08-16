@@ -21,7 +21,7 @@ FROM google/cloud-sdk:alpine
 
 # Make sure these version numbers are not ahead of whats running in Production
 ENV ALERTMANAGER_VERSION 0.22.2
-ENV PROMETHEUS_VERSION 2.20.1
+ENV PROMETHEUS_VERSION 2.27.0
 
 RUN apk add --no-cache curl bash git jq alpine-sdk build-base openssl tar gcc libc-dev make
 
