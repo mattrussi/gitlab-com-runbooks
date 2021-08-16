@@ -47,6 +47,7 @@
 * [../monitoring/filesystem_alerts.md](../monitoring/filesystem_alerts.md)
 * [../monitoring/prometheus-pod-crashlooping.md](../monitoring/prometheus-pod-crashlooping.md)
 * [../onboarding/architecture.md](../onboarding/architecture.md)
+* [../onboarding/gitlab.com_on_k8s.md](../onboarding/gitlab.com_on_k8s.md)
 * [../pages/pages-domain-lookup.md](../pages/pages-domain-lookup.md)
 * [../pages/pages-letsencrypt.md](../pages/pages-letsencrypt.md)
 * [../patroni/patroni-management.md](../patroni/patroni-management.md)
