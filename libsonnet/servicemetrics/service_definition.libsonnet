@@ -9,8 +9,9 @@ local serviceDefaults = {
   disableOpsRatePrediction: false,
   nodeLevelMonitoring: false,  // By default we do not use node-level monitoring
   kubeResources: {},
-  regional: false,  // By default we don't support regional monitoring for services
+  regional: false,  // By default we don't support regional monitoring for services,
   alertWindows: multiburnExpression.defaultWindows,
+  excludedMaturityCriteria: [],
 };
 
 // Convience method, will wrap a raw definition in a serviceLevelIndicatorDefinition if needed

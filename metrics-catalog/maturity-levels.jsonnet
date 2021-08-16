@@ -150,16 +150,14 @@ assert std.length(criteriaList) == std.length(std.uniq(criteriaList)) :
        'Duplicated criterias: %s' % std.join(', ', miscUtils.arrayDiff(criteriaList, std.uniq(criteriaList)));
 
 local getCriteria(criteria) =
-  std.prune(
-    std.map(
-      function(level)
-        local criterias = std.filter(function(c) c.name == criteria, level.criteria);
-        if std.length(criterias) == 0 then null else criterias[1],
-      levels
-    )
-  );
+  assert std.member(criteriaList, criteria) :
+         'Criteria %s does not exist' % criteria;
+  criteria;
+
+local getCriterias(criterias) = std.map(getCriteria, criterias);
 
 {
   getLevels():: levels,
-  getCriteria(criteria):: getCriteria,
+  getCriteria: getCriteria,
+  getCriterias: getCriterias,
 }

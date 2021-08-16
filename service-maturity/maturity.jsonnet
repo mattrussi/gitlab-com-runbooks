@@ -3,13 +3,20 @@ local metricsCatalog = import 'metrics-catalog.libsonnet';
 local miscUtils = import 'utils/misc.libsonnet';
 
 local evaluateCriterion(criterion, service) =
-  local evidence = criterion.evidence(service);
+  if std.objectHas(service, 'excludedMaturityCriteria') && std.member(service.excludedMaturityCriteria, criterion.name) then
+    {
+      name: criterion.name,
+      passed: true,
+      evidence: [],
+    }
+  else
+    local evidence = criterion.evidence(service);
 
-  {
-    name: criterion.name,
-    passed: miscUtils.isPresent(evidence, nullValue=null),
-    evidence: evidence,
-  };
+    {
+      name: criterion.name,
+      passed: miscUtils.isPresent(evidence, nullValue=null),
+      evidence: evidence,
+    };
 
 // A level passes if:
 // 1. It doesn't have any failures.
