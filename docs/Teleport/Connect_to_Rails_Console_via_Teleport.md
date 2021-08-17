@@ -75,7 +75,7 @@ $ tsh status
   Extensions:         permit-pty
 ```
 
-Note that the default token does not have the `rails-ro` role and does not have the `rails-ro` login available. This key allows you to interact with the server, and to reuqest more roles, but does not allow connecting to any other services.
+Note that the default token does not have the `rails-ro` role and does not have the `rails-ro` login available. This key allows you to interact with the server, and to request more roles, but does not allow connecting to any other services.
 
 To request permission to connect to a service, you must use the `--request-roles` flag.  You can request a role after already having a valid session key, or more simply, by just adding the flag to your initial login:
 
