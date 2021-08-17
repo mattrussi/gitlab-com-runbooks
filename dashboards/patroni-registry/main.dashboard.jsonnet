@@ -1,3 +1,3 @@
 local panels = import 'patroni-panels.libsonnet';
 
-panels.patroni()
+panels.patroni('patroni-registry')
