@@ -12,11 +12,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web", le="0.2"}[5m])
+          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job="gitlab-workhorse-web", type="web", le="0.2"}[5m])
         )
         +
         sum by (env,environment,stage) (
-          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web", le="0.8"}[5m])
+          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job="gitlab-workhorse-web", type="web", le="0.8"}[5m])
         )
       )
       /
@@ -29,7 +29,7 @@ groups:
       type: web
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web", le="+Inf"}[5m])
+        rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job="gitlab-workhorse-web", type="web", le="+Inf"}[5m])
       )
   - record: gitlab:component:feature_category:execution:ops:rate_5m
     labels:
@@ -39,7 +39,7 @@ groups:
       type: web
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_workhorse_image_resize_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web"}[5m])
+        rate(gitlab_workhorse_image_resize_requests_total{job="gitlab-workhorse-web", type="web"}[5m])
       )
 - name: 'Prometheus Intermediate Metrics per feature: web - burn-rate 30m'
   rules:
@@ -52,11 +52,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web", le="0.2"}[30m])
+          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job="gitlab-workhorse-web", type="web", le="0.2"}[30m])
         )
         +
         sum by (env,environment,stage) (
-          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web", le="0.8"}[30m])
+          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job="gitlab-workhorse-web", type="web", le="0.8"}[30m])
         )
       )
       /
@@ -69,7 +69,7 @@ groups:
       type: web
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web", le="+Inf"}[30m])
+        rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job="gitlab-workhorse-web", type="web", le="+Inf"}[30m])
       )
   - record: gitlab:component:feature_category:execution:ops:rate_30m
     labels:
@@ -79,7 +79,7 @@ groups:
       type: web
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_workhorse_image_resize_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web"}[30m])
+        rate(gitlab_workhorse_image_resize_requests_total{job="gitlab-workhorse-web", type="web"}[30m])
       )
 - name: 'Prometheus Intermediate Metrics per feature: web - burn-rate 1h'
   rules:
@@ -92,11 +92,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web", le="0.2"}[1h])
+          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job="gitlab-workhorse-web", type="web", le="0.2"}[1h])
         )
         +
         sum by (env,environment,stage) (
-          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web", le="0.8"}[1h])
+          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job="gitlab-workhorse-web", type="web", le="0.8"}[1h])
         )
       )
       /
@@ -109,7 +109,7 @@ groups:
       type: web
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web", le="+Inf"}[1h])
+        rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job="gitlab-workhorse-web", type="web", le="+Inf"}[1h])
       )
   - record: gitlab:component:feature_category:execution:ops:rate_1h
     labels:
@@ -119,7 +119,7 @@ groups:
       type: web
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_workhorse_image_resize_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web"}[1h])
+        rate(gitlab_workhorse_image_resize_requests_total{job="gitlab-workhorse-web", type="web"}[1h])
       )
 - name: 'Prometheus Intermediate Metrics per feature: web - burn-rate 6h'
   rules:
@@ -132,11 +132,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web", le="0.2"}[6h])
+          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job="gitlab-workhorse-web", type="web", le="0.2"}[6h])
         )
         +
         sum by (env,environment,stage) (
-          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web", le="0.8"}[6h])
+          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job="gitlab-workhorse-web", type="web", le="0.8"}[6h])
         )
       )
       /
@@ -149,7 +149,7 @@ groups:
       type: web
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web", le="+Inf"}[6h])
+        rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job="gitlab-workhorse-web", type="web", le="+Inf"}[6h])
       )
   - record: gitlab:component:feature_category:execution:ops:rate_6h
     labels:
@@ -159,5 +159,5 @@ groups:
       type: web
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_workhorse_image_resize_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web"}[6h])
+        rate(gitlab_workhorse_image_resize_requests_total{job="gitlab-workhorse-web", type="web"}[6h])
       )
