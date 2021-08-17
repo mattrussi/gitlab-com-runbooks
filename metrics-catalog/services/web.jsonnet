@@ -83,7 +83,9 @@ metricsCatalog.serviceDefinition({
       apdex: histogramApdex(
         histogram='gitlab_workhorse_http_request_duration_seconds_bucket',
         selector={
-          job: 'gitlab-workhorse-web',
+          job: {
+            re: 'gitlab-workhorse|gitlab-workhorse-web',
+          },
           route: {
             ne: [
               '^/([^/]+/){1,}[^/]+/uploads\\\\z',
@@ -104,12 +106,12 @@ metricsCatalog.serviceDefinition({
 
       requestRate: rateMetric(
         counter='gitlab_workhorse_http_requests_total',
-        selector='job="gitlab-workhorse-web", type="web"'
+        selector='job=~"gitlab-workhorse|gitlab-workhorse-web", type="web"'
       ),
 
       errorRate: rateMetric(
         counter='gitlab_workhorse_http_requests_total',
-        selector='job="gitlab-workhorse-web", type="web", code=~"^5.*", route!="^/-/health$", route!="^/-/(readiness|liveness)$"'
+        selector='job=~"gitlab-workhorse|gitlab-workhorse-web", type="web", code=~"^5.*", route!="^/-/health$", route!="^/-/(readiness|liveness)$"'
       ),
 
       significantLabels: ['fqdn', 'route'],
@@ -131,14 +133,14 @@ metricsCatalog.serviceDefinition({
 
       apdex: histogramApdex(
         histogram='gitlab_workhorse_image_resize_duration_seconds_bucket',
-        selector='job="gitlab-workhorse-web", type="web"',
+        selector='job=~"gitlab-workhorse|gitlab-workhorse-web", type="web"',
         satisfiedThreshold=0.2,
         toleratedThreshold=0.8
       ),
 
       requestRate: rateMetric(
         counter='gitlab_workhorse_image_resize_requests_total',
-        selector='job="gitlab-workhorse-web", type="web"'
+        selector='job=~"gitlab-workhorse|gitlab-workhorse-web", type="web"'
       ),
 
       significantLabels: ['fqdn'],
