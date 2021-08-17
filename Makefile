@@ -1,3 +1,5 @@
+SHELL := /bin/bash
+
 # Exclude vendor and dot directories, but do include the `.gitlab` directory
 VERIFY_PATH_SELECTOR := \( -not \( -path "*/vendor/*" -o -path "*/.*/*" \) -o -path "*/.gitlab/*" \)
 
@@ -13,6 +15,7 @@ AMTOOL = $(shell which amtool || echo "/alertmanager/amtool")
 AMTOOL_PATH=$(dir $(AMTOOL))
 JSONET_COMMAND = $(shell which jsonnetfmt || (which jsonnet && echo " fmt"))
 PROMTOOL_COMMAND = $(shell which promtool || echo "/prometheus/promtool")
+THANOS_COMMAND = $(shell which thanos || echo "/thanos/thanos")
 
 SHELLCHECK_FLAGS := -e SC1090,SC1091
 
@@ -72,7 +75,10 @@ validate-service-mappings:
 validate-prom-rules:
 	# TODO: Add rules/*/*.yml when valid rules are created.
 	$(PROMTOOL_COMMAND) check rules rules/*.yml rules/clusters/*/*.yml
-	# TODO: enable this $(THANOS_COMMAND) tools rules-check thanos-rules/*.yml
+	# Temporary command. Remove when https://github.com/thanos-io/thanos/issues/4082 is fixed (v0.20.2+)
+	$(THANOS_COMMAND) tools rules-check $(shell ls thanos-rules/*.yml | xargs -i echo "--rules {}");
+	# Original command
+	#$(THANOS_COMMAND) tools rules-check --rules thanos-rules/*.yml
 	# Prometheus config checks are stricter than rules checks, so use a fake config to check this too
 	$(PROMTOOL_COMMAND)  check config scripts/prometheus.yml
 
