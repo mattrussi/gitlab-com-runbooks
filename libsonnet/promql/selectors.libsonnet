@@ -89,6 +89,12 @@ local serializeHashItem(label, value) =
         std.join(',', pairs)
       ),
 
+  // Expresses the selector syntax as an AlertManager matcher
+  // https://prometheus.io/docs/alerting/latest/configuration/#matcher
+  alertManagerMatchers(selectorHash)::
+    local fields = std.set(std.objectFields(selectorHash));
+    std.flatMap(function(key) serializeHashItem(key, selectorHash[key]), fields),
+
   // Remove certain selectors from a selectorHash
   without(selectorHash, labels)::
     if std.isString(selectorHash) then
