@@ -310,5 +310,37 @@ generateTests([
       'production_slack_channel',
     ],
   },
-
+  {
+    name: 'gstg traffic anomaly service_ops_out_of_bounds_lower_5m alerts should go to blackhole',
+    labels: {
+      alertname: 'service_ops_out_of_bounds_lower_5m',
+      rules_domain: 'general',
+      env: 'gstg',
+    },
+    receivers: [
+      'blackhole',
+    ],
+  },
+  {
+    name: 'gstg traffic anomaly service_ops_out_of_bounds_upper_5m alerts should go to blackhole',
+    labels: {
+      alertname: 'service_ops_out_of_bounds_upper_5m',
+      rules_domain: 'general',
+      env: 'gstg',
+    },
+    receivers: [
+      'blackhole',
+    ],
+  },
+  {
+    name: 'gstg traffic_cessation alerts should go to blackhole',
+    labels: {
+      alert_class: 'traffic_cessation',
+      rules_domain: 'general',
+      env: 'gstg',
+    },
+    receivers: [
+      'blackhole',
+    ],
+  },
 ])

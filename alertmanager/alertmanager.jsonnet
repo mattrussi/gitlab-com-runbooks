@@ -306,6 +306,10 @@ local routingTree = Route(
       receiver='slack_bridge-nonprod',
       matchers={
         rules_domain: 'general',
+        /* Traffic cessation and traffic anomaly alerts should be disabled for
+         * slackline-nonprod as they are very noisy */
+        alert_class: { ne: 'traffic_cessation' },
+        alertname: { nre: 'service_ops_out_of_bounds_upper_5m|service_ops_out_of_bounds_lower_5m' },
         env: 'gstg',
       },
       continue=true,
