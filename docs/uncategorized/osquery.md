@@ -89,7 +89,7 @@ The most likely issue deriving from the OSQuery rollout might be related to an
 eventual performance penalty on the underlying hosts.
 
 Spikes in CPU and/or memory usage can be detected by standard monitoring
-already in place on such hosts.
+already in place on such hosts. For example, this [Grafana dashboard](https://dashboards.gitlab.net/d/fjSLYzRWz/osquery?orgId=1&refresh=1m&var-environment=gstg) could be helpful to identify the hosts where `osqueryd` is using the most CPU, memory or IO.
 
 In addition, an [alert has been created](../../rules/osquery.yml) to trigger
 whenever the `osqueryd` process is using more than 10% CPU.
