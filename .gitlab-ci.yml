@@ -59,6 +59,9 @@ default:
 .avoid-stage-group-check: &avoid-stage-group-check-rule
   if: '$CHECK_STAGE_GROUPS == "1"'
   when: never
+.avoid-maturity-model-generate: &avoid-maturity-model-generate-rule
+  if: '$GENERATE_SERVICE_MATURITY_MANIFEST == "1"'
+  when: never
 .avoid-schedule: &avoid-schedule-rule
   if: '$CI_PIPELINE_SOURCE == "schedule"'
   when: never
@@ -72,6 +75,7 @@ default:
     # by default, don't create a job when triggered with `CHECK_STAGE_GROUPS` set
     # in this case we'll only want to run the `check-stage-groups` job.
   - *avoid-stage-group-check-rule
+  - *avoid-maturity-model-generate-rule
   - *avoid-schedule-rule
   - when: always
 
@@ -90,6 +94,7 @@ workflow:
   stage: deploy
   rules:
     - *avoid-stage-group-check-rule
+    - *avoid-maturity-model-generate-rule
     - *avoid-schedule-rule
     # Only run deploy rules from ops on the default branch
     - if: '$CI_API_V4_URL == "https://ops.gitlab.net/api/v4" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
@@ -109,6 +114,7 @@ workflow:
 .dashboards:
   rules:
     - *avoid-stage-group-check-rule
+    - *avoid-maturity-model-generate-rule
     - *avoid-schedule-rule
     - if: '$CI_PROJECT_URL !~ /^https:\/\/gitlab\.com\/.*/'
       when: never
@@ -237,6 +243,7 @@ ensure_generated_content_up_to_date:
 update_elastic_log_gprd_ilm:
   rules:
     - *avoid-stage-group-check-rule
+    - *avoid-maturity-model-generate-rule
     - *avoid-schedule-rule
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_LOG_GPRD_URL'
       changes:
@@ -248,6 +255,7 @@ update_elastic_log_gprd_ilm:
 update_elastic_log_gprd_watches:
   rules:
     - *avoid-stage-group-check-rule
+    - *avoid-maturity-model-generate-rule
     - *avoid-schedule-rule
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_LOG_GPRD_URL'
       changes:
@@ -260,6 +268,7 @@ update_elastic_log_gprd_index_templates:
   stage: deploy
   rules:
     - *avoid-stage-group-check-rule
+    - *avoid-maturity-model-generate-rule
     - *avoid-schedule-rule
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_LOG_GPRD_URL'
       changes:
@@ -275,6 +284,7 @@ update_elastic_log_gprd_cluster_settings:
   stage: deploy
   rules:
     - *avoid-stage-group-check-rule
+    - *avoid-maturity-model-generate-rule
     - *avoid-schedule-rule
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_LOG_GPRD_URL'
       changes:
@@ -297,6 +307,7 @@ update_elastic_nonprod-log_watches:
   stage: deploy
   rules:
     - *avoid-stage-group-check-rule
+    - *avoid-maturity-model-generate-rule
     - *avoid-schedule-rule
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_NONPROD_URL'
       changes:
@@ -308,6 +319,7 @@ update_elastic_nonprod-log_ilm:
   stage: deploy
   rules:
     - *avoid-stage-group-check-rule
+    - *avoid-maturity-model-generate-rule
     - *avoid-schedule-rule
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_NONPROD_URL'
       changes:
@@ -319,6 +331,7 @@ update_elastic_nonprod-log_index_templates:
   stage: deploy
   rules:
     - *avoid-stage-group-check-rule
+    - *avoid-maturity-model-generate-rule
     - *avoid-schedule-rule
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_NONPROD_URL'
       changes:
@@ -334,6 +347,7 @@ update_elastic_nonprod-log_cluster_settings:
   stage: deploy
   rules:
     - *avoid-stage-group-check-rule
+    - *avoid-maturity-model-generate-rule
     - *avoid-schedule-rule
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_NONPROD_URL'
       changes:
@@ -357,6 +371,7 @@ update_elastic_monitoring-es7_cluster_settings:
   stage: deploy
   rules:
     - *avoid-stage-group-check-rule
+    - *avoid-maturity-model-generate-rule
     - *avoid-schedule-rule
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_MONITORING_ES7_URL'
       changes:
@@ -368,6 +383,7 @@ update_elastic_monitoring-es7_ilm:
   stage: deploy
   rules:
     - *avoid-stage-group-check-rule
+    - *avoid-maturity-model-generate-rule
     - *avoid-schedule-rule
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_MONITORING_ES7_URL'
       changes:
@@ -437,6 +453,7 @@ deploy_dashboards:
   rules:
     # This will override all the rules from .dashboards, we only want to run this on master
     - *avoid-stage-group-check-rule
+    - *avoid-maturity-model-generate-rule
     - *avoid-schedule-rule
     - if: '$CI_PROJECT_URL !~ /^https:\/\/gitlab\.com\/.*/'
       when: never
@@ -514,6 +531,7 @@ alertmanager_test:
   rules:
     - *avoid-schedule-rule
     - *avoid-stage-group-check-rule
+    - *avoid-maturity-model-generate-rule
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
     - if: '$CI_COMMIT_TAG'
     # only run for merge request changing alertmanager files
@@ -564,6 +582,7 @@ test-periodic-queries:
   rules:
     - *avoid-schedule-rule
     - *avoid-stage-group-check-rule
+    - *avoid-maturity-model-generate-rule
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       changes:
         - periodic_queries/*
