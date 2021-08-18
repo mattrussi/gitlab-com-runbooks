@@ -465,7 +465,19 @@ mean key rotation.
   sub  4096R/DE86E396  created: 2017-08-25  expires: 2018-08-25  usage: A
   [ultimate] (1). John Rando <rando@gitlab.com>
 
+  # WARNING: Without saving your changes will be lost, all the above would need to be repeated.
   gpg> save
+
+  # Make sure the subkeys were created as expected
+  > gpg --list-secret-keys
+  /home/rehab/.gnupg/pubring.kbx
+------------------------------
+sec#  rsa4096 2021-04-09 [C] [expires: 2025-04-08]
+      3FCA9E1453C08NO887297DBDE61B3B56057B132D
+uid           [ultimate] Rehab Hassanein <rhassanein@gitlab.com>
+ssb>  rsa2048 2021-04-09 [S] [expires: 2022-04-09]
+ssb>  rsa2048 2021-04-09 [E] [expires: 2022-04-09]
+ssb>  rsa2048 2021-04-09 [A] [expires: 2022-04-09]
   ```
 
 </details>
@@ -479,10 +491,20 @@ Usually, there will be one running with `$HOME/.gnupg` that is the culprit.
 
 ### 6. Backup your Public Key
 
-If your gpg version does not output the key id you should use the full fingerprint instead.
+If your gpg version does not output the **master** key id you should use the full fingerprint instead.
 
 ```bash
+# To obtain your key fingerprint
+gpg --list-key
+# example output
+#pub   rsa4096 2021-04-09 [C] [expires: 2025-04-08]
+#     3FCA9E1453C08NO887297DBDE61B3B56057B132D
+
 gpg --armor --export FAEFD83E > $MOUNTPOINT/gpg_config/FAEFD83E.asc
+
+#OR
+
+gpg --armor --export 3FCA9E1453C08NO887297DBDE61B3B56057B132D > $MOUNTPOINT/gpg_config/3FCA9E1453C08NO887297DBDE61B3B56057B132D.asc
 ```
 
 ### 7. Import Public Key to Regular Keychain
