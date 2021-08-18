@@ -98,7 +98,7 @@ basic.dashboard(
           and on (queue)
           (
             max by (queue) (
-              rate(sidekiq_jobs_queue_duration_seconds_sum{environment="$environment", shard=~"$shard"}[$__range]) > 0
+              sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{environment="$environment", shard=~"$shard"} > 0
             )
           )
         )
@@ -124,7 +124,7 @@ basic.dashboard(
           and on (queue)
           (
             max by (queue) (
-              rate(sidekiq_jobs_queue_duration_seconds_sum{environment="$environment", shard=~"$shard"}[$__range]) > 0
+              sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{environment="$environment", shard=~"$shard"} > 0
             )
           )
         )
