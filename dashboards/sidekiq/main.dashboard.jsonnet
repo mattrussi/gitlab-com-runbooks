@@ -49,6 +49,19 @@ serviceDashboard.overview('sidekiq')
       intervalFactor=3,
       yAxisLabel='Queue Length',
     ),
+    basic.queueLengthTimeseries(
+      title='Sidekiq Queue Lengths per Worker',
+      description='The number of jobs queued up to be executed. Lower is better',
+      query=|||
+        max_over_time(sidekiq_enqueued_jobs{environment="$environment"}[$__interval]) and on(fqdn) (redis_connected_slaves != 0)
+      |||,
+      legendFormat='{{ name }}',
+      format='short',
+      interval='1m',
+      linewidth=1,
+      intervalFactor=3,
+      yAxisLabel='Queue Length',
+    ),
     basic.latencyTimeseries(
       title='Sidekiq Queuing Latency per Job',
       description='The amount of time a job has to wait before it starts being executed. Lower is better.',
