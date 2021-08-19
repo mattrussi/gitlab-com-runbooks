@@ -23,6 +23,7 @@
   import 'patroni-registry.jsonnet',
   import 'postgres-archive.jsonnet',
   import 'pgbouncer.jsonnet',
+  import 'pgbouncer-registry.jsonnet',
   import 'plantuml.jsonnet',
   import 'praefect.jsonnet',
   import 'pvs.jsonnet',
