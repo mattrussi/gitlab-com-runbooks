@@ -2664,7 +2664,7 @@ groups:
       grafana_panel_id: "4167694322"
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, persistentvolumeclaim) (
+        max by(environment, cluster, namespace, persistentvolumeclaim) (
           clamp_min(
             clamp_max(
               kubelet_volume_stats_used_bytes
