@@ -978,6 +978,14 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
+      component: service
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: db
+      type: pgbouncer-registry
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
       component: loadbalancer
       regional_aggregation: "no"
       service_aggregation: "yes"
