@@ -190,6 +190,16 @@ groups:
       tier: db
       type: patroni
     expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      tier: db
+      type: patroni-registry
+    expr: "0.999000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      tier: db
+      type: patroni-registry
+    expr: "0.001000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       tier: sv
@@ -925,6 +935,30 @@ groups:
       service_aggregation: "yes"
       tier: db
       type: patroni
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: pgbouncer
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: db
+      type: patroni-registry
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: transactions_primary
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: db
+      type: patroni-registry
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: transactions_replica
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: db
+      type: patroni-registry
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
