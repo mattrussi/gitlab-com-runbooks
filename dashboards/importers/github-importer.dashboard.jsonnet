@@ -101,7 +101,7 @@ local totalGithubObjectCounter() =
 
 basic
 .dashboard(
-  'Github Importer - Test',
+  'Github Importer',
   tags=[
     'sidekiq',
     'managed',
