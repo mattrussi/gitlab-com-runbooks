@@ -590,6 +590,7 @@ test-periodic-queries:
         - lib/periodic_queries/**/*
       when: 'always'
   script:
+    - services/generate-json.sh
     - gem install bundler --no-document -v $BUNDLER_VERSION
     - bundle install
     - bundle exec scripts/perform-periodic-thanos-queries.rb --dry-run
@@ -604,6 +605,7 @@ publish-periodic-queries:
       when: manual
       allow_failure: true
   script:
+    - services/generate-json.sh
     - gem install bundler --no-document -v $BUNDLER_VERSION
     - bundle install
     - bundle exec scripts/perform-periodic-thanos-queries.rb
