@@ -37,7 +37,13 @@ local latencyApdex(service) =
     histogramApdex(
       histogram='gitlab_transaction_duration_seconds_bucket',
       selector={ job: 'gitlab-rails' },
-      satisfiedThreshold='%i.0' % [pumaComponent.apdex.satisfiedThreshold],
+      // The threshold that is used for error budgets is different from the alerting
+      // Please see https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1243
+      // We'll get this back to acceptable durations by introducing improved SLIs in
+      // https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/525
+      // We're discussing applying the same SLO for error budgets in
+      // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1232
+      satisfiedThreshold='5.0'
     )
   else null;
 
