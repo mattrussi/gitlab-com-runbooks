@@ -585,10 +585,13 @@ test-periodic-queries:
     - *avoid-maturity-model-generate-rule
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       changes:
-        - periodic_queries/*
+        - periodic-thanos-queries/*
         - lib/periodic_queries.rb
         - lib/periodic_queries/**/*
       when: 'always'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: manual
+      allow_failure: true
   script:
     - gem install bundler --no-document -v $BUNDLER_VERSION
     - bundle install
