@@ -8,7 +8,7 @@ local defaultSelector = {
   stage: 'main',
   monitor: 'global',
 };
-local interval = '1d';
+local interval = '2d';
 local keyServiceNames = std.map(
   function(service) service.name,
   serviceCatalog.findKeyBusinessServices(includeZeroScore=true)
