@@ -370,9 +370,20 @@ local logLinks(featureCategories) =
         enabled: true,
         id: '3',
         params: {
-          customLabel: 'Operations over threshold',
+          customLabel: 'Operations over threshold (%is)' % pumaThreshold,
           field: 'json.duration_s',
           json: '{"script": "doc[\'json.duration_s\'].value >= ' + pumaThreshold + ' ? 1 : 0"}',
+        },
+        schema: 'metric',
+        type: 'sum',
+      },
+      {
+        enabled: true,
+        id: '4',
+        params: {
+          customLabel: 'Operations over error budget threshold (5s)',
+          field: 'json.duration_s',
+          json: '{"script": "doc[\'json.duration_s\'].value >= ' + 5 + ' ? 1 : 0"}',
         },
         schema: 'metric',
         type: 'sum',
@@ -411,8 +422,8 @@ local logLinks(featureCategories) =
     content=|||
       ##### [Puma Apdex](%(pumaApdexLink)s): slow requests
 
-      This shows the number of requests exceeding %(pumaThreshold)is request
-      duration per endpoint over the past 7 days.
+      This shows the number of requests exceeding the request duration thresholds
+      per endpoint over the past 7 days.
 
       This is the only threshold at the moment. We're discussing making
       it configurable in [this issue](%(thresholdsCounterIssue)s). Let us know
