@@ -1,2 +1,2 @@
-local serviceDashboard = import 'service_dashboard.libsonnet';
+local serviceDashboard = import 'gitlab-dashboards/service_dashboard.libsonnet';
 serviceDashboard.overview('woodhouse').overviewTrailer()

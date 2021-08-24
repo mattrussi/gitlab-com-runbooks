@@ -1,6 +1,6 @@
+local keyMetrics = import 'gitlab-dashboards/key_metrics.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
-local keyMetrics = import 'key_metrics.libsonnet';
-local patroniService = (import 'metrics-catalog.libsonnet').getService('patroni');
+local patroniService = (import 'servicemetrics/metrics-catalog.libsonnet').getService('patroni');
 
 local patroniOverview(startRow, rowHeight) =
   keyMetrics.headlineMetricsRow(

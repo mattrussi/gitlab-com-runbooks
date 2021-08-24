@@ -5,7 +5,6 @@ local promQuery = import 'grafana/prom_query.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local annotation = grafana.annotation;
-local dashboard = grafana.dashboard;
 local graphPanel = grafana.graphPanel;
 local row = grafana.row;
 local singlestat = grafana.singlestat;

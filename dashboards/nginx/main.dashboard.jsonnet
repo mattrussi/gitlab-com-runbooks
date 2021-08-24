@@ -2,7 +2,7 @@ local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libso
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local row = grafana.row;
-local serviceDashboard = import 'service_dashboard.libsonnet';
+local serviceDashboard = import 'gitlab-dashboards/service_dashboard.libsonnet';
 
 serviceDashboard.overview('nginx')
 .addPanel(

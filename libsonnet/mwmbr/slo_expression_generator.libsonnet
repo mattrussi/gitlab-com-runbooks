@@ -2,7 +2,6 @@ local multiburn_factors = import './multiburn_factors.libsonnet';
 local aggregations = import 'promql/aggregations.libsonnet';
 local joins = import 'promql/joins.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
-local strings = import 'utils/strings.libsonnet';
 
 {
   termGenerators:: {

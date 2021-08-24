@@ -3,9 +3,9 @@ local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
 local row = grafana.row;
-local serviceDashboard = import 'service_dashboard.libsonnet';
+local serviceDashboard = import 'gitlab-dashboards/service_dashboard.libsonnet';
 local colorScheme = import 'grafana/color_scheme.libsonnet';
-local metricsCatalog = import 'metrics-catalog.libsonnet';
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local multiburnFactors = import 'mwmbr/multiburn_factors.libsonnet';
 
 local selector = 'environment="$environment", type="gitaly", stage="$stage"';

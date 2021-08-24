@@ -1,6 +1,6 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local template = grafana.template;
-local runnersService = (import 'metrics-catalog.libsonnet').getService('ci-runners');
+local runnersService = (import 'servicemetrics/metrics-catalog.libsonnet').getService('ci-runners');
 
 local shard = template.new(
   'shard',

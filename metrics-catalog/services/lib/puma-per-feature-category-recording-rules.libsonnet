@@ -2,7 +2,7 @@ local rateMetric = (import 'servicemetrics/metrics.libsonnet').rateMetric;
 local histogramApdex = (import 'servicemetrics/histogram_apdex.libsonnet').histogramApdex;
 
 local aggregations = import 'promql/aggregations.libsonnet';
-local metricsCatalog = import '../../metrics-catalog.libsonnet';
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 

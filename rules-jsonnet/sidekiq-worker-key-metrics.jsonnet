@@ -1,7 +1,6 @@
-local aggregationSets = import './aggregation-sets.libsonnet';
+local aggregationSets = (import 'metrics-config.libsonnet').aggregationSets;
 local alerts = import 'alerts/alerts.libsonnet';
 local multiburnExpression = import 'mwmbr/expression.libsonnet';
-local multiburnFactors = import 'mwmbr/multiburn_factors.libsonnet';
 local stableIds = import 'stable-ids/stable-ids.libsonnet';
 
 // For the first iteration, all sidekiq workers will have the samne

@@ -572,7 +572,7 @@ generate_service_maturity_manifest:
     - ./scripts/bundler.sh # Install jsonnet bundles
     - ./scripts/generate-jsonnet-rules.sh
     - mkdir -p service-maturity-manifest
-    - ./scripts/compile_jsonnet.rb ./metrics-catalog/maturity.jsonnet > ./service-maturity-manifest/service_maturity.yml
+    - ./scripts/compile_jsonnet.rb ./service-maturity/maturity.jsonnet > ./service-maturity-manifest/service_maturity.yml
   artifacts:
     expose_as: 'service maturity manifest'
     paths:
@@ -593,7 +593,7 @@ test-periodic-queries:
       when: manual
       allow_failure: true
   script:
-    - services/generate-json.sh
+    - scripts/generate-service-catalog-json.sh
     - gem install bundler --no-document -v $BUNDLER_VERSION
     - bundle install
     - bundle exec scripts/perform-periodic-thanos-queries.rb --dry-run
@@ -608,7 +608,7 @@ publish-periodic-queries:
       when: manual
       allow_failure: true
   script:
-    - services/generate-json.sh
+    - scripts/generate-service-catalog-json.sh
     - gem install bundler --no-document -v $BUNDLER_VERSION
     - bundle install
     - bundle exec scripts/perform-periodic-thanos-queries.rb

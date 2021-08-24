@@ -68,7 +68,6 @@ local openMetricsSafeFloatValue(value) =
 // 2) If metricsFormat is set to `opernmetrics`, the returned `le` is a float.
 // 3) If metricsFormat is set to `migrating` it will return an expression that would allow handling both `floats` and `integers`.
 local representLe(histogramApdex, value) =
-  local formatConfig = { value: value };
   if histogramApdex.metricsFormat == 'openmetrics' then
     { le: openMetricsSafeFloatValue(value) }
   else if histogramApdex.metricsFormat == 'migrating' then

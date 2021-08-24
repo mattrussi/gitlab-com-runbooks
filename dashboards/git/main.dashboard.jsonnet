@@ -1,9 +1,9 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
-local processExporter = import 'process_exporter.libsonnet';
-local railsCommon = import 'rails_common_graphs.libsonnet';
-local workhorseCommon = import 'workhorse_common_graphs.libsonnet';
+local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
+local railsCommon = import 'gitlab-dashboards/rails_common_graphs.libsonnet';
+local workhorseCommon = import 'gitlab-dashboards/workhorse_common_graphs.libsonnet';
 local row = grafana.row;
-local serviceDashboard = import 'service_dashboard.libsonnet';
+local serviceDashboard = import 'gitlab-dashboards/service_dashboard.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 

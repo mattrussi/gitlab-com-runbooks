@@ -4,7 +4,6 @@ local customApdex = metricsCatalog.customApdex;
 local combined = metricsCatalog.combined;
 local gitalyHelpers = import './lib/gitaly-helpers.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
-local histogramApdex = metricsCatalog.histogramApdex;
 
 // This is a list of unary GRPC methods that should not be included in measuring the apdex score
 // for the Gitaly service, since they're called from background jobs and the latency
@@ -36,11 +35,9 @@ local gitalyApdexIgnoredMethods = std.set([
   'UpdateHook',
 ]);
 
-local gitalyOpServiceApdexIgnoredMethods = std.set([]);
-
-
+// local gitalyOpServiceApdexIgnoredMethods = std.set([]);
 local gitalyApdexIgnoredMethodsRegexp = std.join('|', gitalyApdexIgnoredMethods);
-local gitalyOpServiceApdexIgnoredMethodsRegexp = std.join('|', gitalyOpServiceApdexIgnoredMethods);
+// local gitalyOpServiceApdexIgnoredMethodsRegexp = std.join('|', gitalyOpServiceApdexIgnoredMethods);
 
 local gitalyGRPCErrorRate(baseSelector) =
   combined([

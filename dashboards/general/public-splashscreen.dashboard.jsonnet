@@ -1,6 +1,6 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
+local keyMetrics = import 'gitlab-dashboards/key_metrics.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
-local keyMetrics = import 'key_metrics.libsonnet';
 local row = grafana.row;
 local text = grafana.text;
 

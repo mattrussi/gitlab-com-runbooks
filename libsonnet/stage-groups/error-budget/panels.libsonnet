@@ -1,11 +1,9 @@
-local metricsCatalog = import '../../../metrics-catalog/metrics-catalog.libsonnet';
 local sidekiqHelpers = import '../../../metrics-catalog/services/lib/sidekiq-helpers.libsonnet';
 local utils = import './utils.libsonnet';
-local basic = import 'grafana/basic.libsonnet';
-local queries = import 'stage-groups/error-budget/queries.libsonnet';
-local durationParser = import 'utils/duration-parser.libsonnet';
-
 local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libsonnet';
+local basic = import 'grafana/basic.libsonnet';
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
+local durationParser = import 'utils/duration-parser.libsonnet';
 
 local baseSelector = {
   stage: '$stage',

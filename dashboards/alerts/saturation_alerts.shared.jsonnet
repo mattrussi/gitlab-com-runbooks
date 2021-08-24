@@ -1,5 +1,5 @@
-local saturationResources = import './saturation-resources.libsonnet';
 local saturationAlerts = import 'alerts/saturation_alerts.libsonnet';
+local saturationResources = import 'servicemetrics/saturation-resources.libsonnet';
 
 {
   [saturationResources[key].grafana_dashboard_uid]:

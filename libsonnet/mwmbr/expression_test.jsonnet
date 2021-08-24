@@ -1,8 +1,8 @@
 local expression = import './expression.libsonnet';
 local test = import 'github.com/yugui/jsonnetunit/jsonnetunit/test.libsonnet';
-local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
+local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
 
-local testAggregationSet = aggregationSets.AggregationSet({
+local testAggregationSet = aggregationSet.AggregationSet({
   name: 'Test',
   selector: { monitor: 'global' },  // Not Thanos Ruler
   labels: ['environment', 'tier', 'type', 'stage'],

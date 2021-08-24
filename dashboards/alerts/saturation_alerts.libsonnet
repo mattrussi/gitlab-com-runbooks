@@ -1,16 +1,11 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
-local commonAnnotations = import 'grafana/common_annotations.libsonnet';
+local platformLinks = import 'gitlab-dashboards/platform_links.libsonnet';
+local saturationDetail = import 'gitlab-dashboards/saturation_detail.libsonnet';
 local templates = import 'grafana/templates.libsonnet';
-local platformLinks = import 'platform_links.libsonnet';
-local saturationDetail = import 'saturation_detail.libsonnet';
-local dashboard = grafana.dashboard;
-local row = grafana.row;
 local template = grafana.template;
-local graphPanel = grafana.graphPanel;
-local annotation = grafana.annotation;
 local basic = import 'grafana/basic.libsonnet';
-local saturationResources = import './saturation-resources.libsonnet';
-local serviceHealth = import './service_health.libsonnet';
+local saturationResources = import 'servicemetrics/saturation-resources.libsonnet';
+local serviceHealth = import './gitlab-dashboards/service_health.libsonnet';
 
 local selector = { env: '$environment', type: '$type', stage: '$stage' };
 

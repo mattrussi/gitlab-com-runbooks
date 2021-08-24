@@ -1,23 +1,14 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
+local nodeMetrics = import 'gitlab-dashboards/node_metrics.libsonnet';
+local platformLinks = import 'gitlab-dashboards/platform_links.libsonnet';
+local railsCommon = import 'gitlab-dashboards/rails_common_graphs.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
-local commonAnnotations = import 'grafana/common_annotations.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
-local promQuery = import 'grafana/prom_query.libsonnet';
-local seriesOverrides = import 'grafana/series_overrides.libsonnet';
 local templates = import 'grafana/templates.libsonnet';
-local keyMetrics = import 'key_metrics.libsonnet';
-local nodeMetrics = import 'node_metrics.libsonnet';
-local platformLinks = import 'platform_links.libsonnet';
-local railsCommon = import 'rails_common_graphs.libsonnet';
-local serviceCatalog = import 'service_catalog.libsonnet';
-local dashboard = grafana.dashboard;
 local row = grafana.row;
 local template = grafana.template;
-local graphPanel = grafana.graphPanel;
-local annotation = grafana.annotation;
-local sidekiq = import 'sidekiq.libsonnet';
-local saturationDetail = import 'saturation_detail.libsonnet';
-local thresholds = import 'thresholds.libsonnet';
+local saturationDetail = import 'gitlab-dashboards/saturation_detail.libsonnet';
+local thresholds = import 'gitlab-dashboards/thresholds.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
 local link = grafana.link;
 local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libsonnet';
@@ -382,7 +373,6 @@ basic.dashboard(
 + {
   links+:
     platformLinks.triage +
-    serviceCatalog.getServiceLinks('sidekiq') +
     platformLinks.services +
     [
       platformLinks.dynamicLinks('Sidekiq Detail', 'type:sidekiq'),

@@ -1,7 +1,6 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local text = grafana.text;
 local basic = import 'grafana/basic.libsonnet';
-local layout = import 'grafana/layout.libsonnet';
 local dashboardHelpers = import 'stage-groups/verify-runner/dashboard_helpers.libsonnet';
 
 local algorithmVisualisation =

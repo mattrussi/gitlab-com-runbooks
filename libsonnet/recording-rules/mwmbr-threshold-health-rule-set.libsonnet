@@ -1,11 +1,11 @@
-local aggregationSets = import 'aggregation-sets.libsonnet';
 local mwmbrExpression = import 'mwmbr/expression.libsonnet';
+local aggregationSets = (import 'metrics-config.libsonnet').aggregationSets;
 
 local otherThresholdRules(threshold) =
   [{
     record: threshold.errorHealth,
     expr: mwmbrExpression.errorHealthExpression(
-      aggregationSet=aggregationSets.serviceAggregatedSLIs,
+      aggregationSet=aggregationSets.serviceSLIs,
       metricSelectorHash={},
       thresholdSLOMetricName=threshold.errorSLO,
       thresholdSLOMetricAggregationLabels=['type', 'tier'],
@@ -13,7 +13,7 @@ local otherThresholdRules(threshold) =
   }, {
     record: threshold.apdexHealth,
     expr: mwmbrExpression.apdexHealthExpression(
-      aggregationSet=aggregationSets.serviceAggregatedSLIs,
+      aggregationSet=aggregationSets.serviceSLIs,
       metricSelectorHash={},
       thresholdSLOMetricName=threshold.apdexSLO,
       thresholdSLOMetricAggregationLabels=['type', 'tier'],

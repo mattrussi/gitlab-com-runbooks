@@ -1,8 +1,6 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
-local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local combined = metricsCatalog.combined;
-local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
 local selector = { type: 'postgres-archive', tier: 'db' };
 

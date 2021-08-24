@@ -15,12 +15,12 @@ local outputPromYaml(groups) =
    */
   'aggregated-component-metrics.yml':
     outputPromYaml([{
-      name: aggregationSets.globalSLIs.name,
+      name: aggregationSets.componentSLIs.name,
       interval: '1m',
       partial_response_strategy: 'warn',
       rules: aggregationSetTransformer.generateRecordingRules(
         sourceAggregationSet=aggregationSets.promSourceSLIs,
-        targetAggregationSet=aggregationSets.globalSLIs
+        targetAggregationSet=aggregationSets.componentSLIs
       ),
     }]),
 
@@ -30,12 +30,12 @@ local outputPromYaml(groups) =
   'aggregated-service-metrics.yml':
     outputPromYaml(
       [{
-        name: aggregationSets.serviceAggregatedSLIs.name,
+        name: aggregationSets.serviceSLIs.name,
         interval: '1m',
         partial_response_strategy: 'warn',
         rules: aggregationSetTransformer.generateRecordingRules(
           sourceAggregationSet=aggregationSets.promSourceSLIs,
-          targetAggregationSet=aggregationSets.serviceAggregatedSLIs
+          targetAggregationSet=aggregationSets.serviceSLIs
         ),
       }]
     ),
@@ -46,12 +46,12 @@ local outputPromYaml(groups) =
   'aggregated-sli-node-metrics.yml':
     outputPromYaml(
       [{
-        name: aggregationSets.globalNodeSLIs.name,
+        name: aggregationSets.nodeComponentSLIs.name,
         interval: '1m',
         partial_response_strategy: 'warn',
         rules: aggregationSetTransformer.generateRecordingRules(
-          sourceAggregationSet=aggregationSets.promSourceNodeAggregatedSLIs,
-          targetAggregationSet=aggregationSets.globalNodeSLIs
+          sourceAggregationSet=aggregationSets.promSourceNodeComponentSLIs,
+          targetAggregationSet=aggregationSets.nodeComponentSLIs
         ),
       }]
     ),
@@ -63,12 +63,12 @@ local outputPromYaml(groups) =
   'aggregated-service-node-metrics.yml':
     outputPromYaml(
       [{
-        name: aggregationSets.serviceNodeAggregatedSLIs.name,
+        name: aggregationSets.nodeServiceSLIs.name,
         interval: '1m',
         partial_response_strategy: 'warn',
         rules: aggregationSetTransformer.generateRecordingRules(
-          sourceAggregationSet=aggregationSets.promSourceNodeAggregatedSLIs,
-          targetAggregationSet=aggregationSets.serviceNodeAggregatedSLIs
+          sourceAggregationSet=aggregationSets.promSourceNodeComponentSLIs,
+          targetAggregationSet=aggregationSets.nodeServiceSLIs
         ),
       }]
     ),
@@ -79,12 +79,12 @@ local outputPromYaml(groups) =
   'aggregated-sli-regional-metrics.yml':
     outputPromYaml(
       [{
-        name: aggregationSets.regionalSLIs.name,
+        name: aggregationSets.regionalComponentSLIs.name,
         interval: '1m',
         partial_response_strategy: 'warn',
         rules: aggregationSetTransformer.generateRecordingRules(
           sourceAggregationSet=aggregationSets.promSourceSLIs,
-          targetAggregationSet=aggregationSets.regionalSLIs
+          targetAggregationSet=aggregationSets.regionalComponentSLIs
         ),
       }]
     ),
@@ -95,12 +95,12 @@ local outputPromYaml(groups) =
   'aggregated-service-regional-metrics.yml':
     outputPromYaml(
       [{
-        name: aggregationSets.serviceNodeAggregatedSLIs.name,
+        name: aggregationSets.nodeServiceSLIs.name,
         interval: '1m',
         partial_response_strategy: 'warn',
         rules: aggregationSetTransformer.generateRecordingRules(
           sourceAggregationSet=aggregationSets.promSourceSLIs,
-          targetAggregationSet=aggregationSets.serviceRegionalAggregatedSLIs
+          targetAggregationSet=aggregationSets.regionalServiceSLIs
         ),
       }]
     ),
@@ -108,12 +108,12 @@ local outputPromYaml(groups) =
   'aggregated-feature-category-metrics.yml':
     outputPromYaml(
       [{
-        name: aggregationSets.globalFeatureCategorySLIs.name,
+        name: aggregationSets.featureCategorySLIs.name,
         interval: '1m',
         partial_response_strategy: 'warn',
         rules: aggregationSetTransformer.generateRecordingRules(
           sourceAggregationSet=aggregationSets.featureCategorySourceSLIs,
-          targetAggregationSet=aggregationSets.globalFeatureCategorySLIs
+          targetAggregationSet=aggregationSets.featureCategorySLIs
         ),
       }]
     ),
@@ -121,12 +121,12 @@ local outputPromYaml(groups) =
   'aggregated-stage-group-metrics.yml':
     outputPromYaml(
       [{
-        name: aggregationSets.globalStageGroupSLIs.name,
+        name: aggregationSets.stageGroupSLIs.name,
         interval: '1m',
         partial_response_strategy: 'warn',
         rules: aggregationSetTransformer.generateRecordingRules(
-          sourceAggregationSet=aggregationSets.globalFeatureCategorySLIs,
-          targetAggregationSet=aggregationSets.globalStageGroupSLIs
+          sourceAggregationSet=aggregationSets.featureCategorySLIs,
+          targetAggregationSet=aggregationSets.stageGroupSLIs
         ),
       }]
     ),

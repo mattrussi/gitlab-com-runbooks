@@ -169,45 +169,6 @@ local statPanel(
     type: 'stat',
   };
 
-
-local savingsStatPanel(
-  title,
-  query,
-      ) =
-  {
-    links: [],
-    options: {
-      graphMode: 'none',
-      colorMode: 'background',
-      justifyMode: 'auto',
-
-      fieldOptions: {
-        calcs: [
-          'lastNotNull',
-        ],
-        defaults: {
-          thresholds: {
-            mode: 'absolute',
-            steps: [
-              { color: 'orange', value: 0 },
-              { color: 'green', value: 10 },
-            ],
-          },
-          mappings: [],
-          title: title,
-          unit: '%',
-          decimals: 2,
-        },
-        overrides: [],
-      },
-      orientation: 'vertical',
-    },
-    pluginVersion: '6.6.1',
-    targets: [promQuery.target(query, legendFormat='')],
-    title: title,
-    type: 'stat',
-  };
-
 basic.dashboard(
   'Kubernetes Migration Overview',
   tags=['release'],

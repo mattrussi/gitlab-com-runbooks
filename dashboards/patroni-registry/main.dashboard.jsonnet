@@ -1,3 +1,3 @@
-local panels = import 'patroni-panels.libsonnet';
+local panels = import 'gitlab-dashboards/patroni-panels.libsonnet';
 
 panels.patroni('patroni-registry')

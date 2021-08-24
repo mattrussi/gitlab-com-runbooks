@@ -1,25 +1,15 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 
+local panels = import 'gitlab-dashboards/panels.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
-local templates = import 'grafana/templates.libsonnet';
-local panels = import 'panels.libsonnet';
 
 local gatewayNameTemplate = grafana.template.new(
   'gateway',
   '$PROMETHEUS_DS',
   'label_values(stackdriver_nat_gateway_logging_googleapis_com_user_nat_translations{environment="$environment"}, gateway_name)',
   current='gitlab-gke',
-  refresh='load',
-  sort=1,
-);
-
-local environmentTemplate = grafana.template.new(
-  'environment',
-  '$PROMETHEUS_DS',
-  'label_values(stackdriver_nat_gateway_logging_googleapis_com_user_nat_translations, environment)',
-  current='gprd',
   refresh='load',
   sort=1,
 );
