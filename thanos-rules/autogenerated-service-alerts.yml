@@ -19,7 +19,7 @@ groups:
       grafana_panel_id: "588840999"
       grafana_variables: environment,type,stage
       link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-apdex.md
+      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/monitoring/definition-service-apdex.md
       promql_template_1: gitlab_service_apdex:ratio{environment="$environment", type="$type",
         stage="$stage"}
       promql_template_2: gitlab_component_apdex:ratio{environment="$environment",
@@ -57,7 +57,7 @@ groups:
       grafana_panel_id: "588840999"
       grafana_variables: environment,type,stage
       link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-apdex.md
+      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/monitoring/definition-service-apdex.md
       promql_template_1: gitlab_service_apdex:ratio{environment="$environment", type="$type",
         stage="$stage"}
       promql_template_2: gitlab_component_apdex:ratio{environment="$environment",
@@ -95,7 +95,7 @@ groups:
       grafana_panel_id: "2383655193"
       grafana_variables: environment,type,stage
       link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-error-rate.md
+      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/monitoring/definition-service-error-rate.md
       promql_template_1: gitlab_service_errors:ratio{environment="$environment", type="$type",
         stage="$stage"}
       promql_template_2: gitlab_component_errors:ratio{environment="$environment",
@@ -133,7 +133,7 @@ groups:
       grafana_panel_id: "2383655193"
       grafana_variables: environment,type,stage
       link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-error-rate.md
+      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/monitoring/definition-service-error-rate.md
       promql_template_1: gitlab_service_errors:ratio{environment="$environment", type="$type",
         stage="$stage"}
       promql_template_2: gitlab_component_errors:ratio{environment="$environment",
@@ -171,7 +171,7 @@ groups:
       grafana_panel_id: "3168042924"
       grafana_variables: environment,type,stage
       link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
+      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/monitoring/definition-service-ops-rate.md
       promql_template_1: gitlab_service_ops:rate{environment="$environment", type="$type",
         stage="$stage"}
       promql_template_2: gitlab_component_ops:rate{environment="$environment", type="$type",
@@ -207,7 +207,7 @@ groups:
       grafana_panel_id: "3168042924"
       grafana_variables: environment,type,stage
       link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md
+      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/monitoring/definition-service-ops-rate.md
       promql_template_1: gitlab_service_ops:rate{environment="$environment", type="$type",
         stage="$stage"}
       promql_template_2: gitlab_component_ops:rate{environment="$environment", type="$type",
@@ -242,7 +242,7 @@ groups:
       grafana_panel_id: "588840999"
       grafana_variables: environment,type
       link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-apdex.md
+      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/monitoring/definition-service-apdex.md
       promql_template_1: gitlab_service_apdex:ratio{environment="$environment", type="$type",
         stage="$stage"}
       promql_template_2: gitlab_component_apdex:ratio{environment="$environment",
@@ -298,7 +298,7 @@ groups:
       grafana_panel_id: "2383655193"
       grafana_variables: environment,type
       link1_title: Definition
-      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-error-rate.md
+      link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/monitoring/definition-service-error-rate.md
       promql_template_1: gitlab_service_errors:ratio{environment="$environment", type="$type",
         stage="$stage"}
       promql_template_2: gitlab_component_errors:ratio{environment="$environment",
