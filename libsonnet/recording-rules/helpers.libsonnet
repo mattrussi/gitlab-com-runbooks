@@ -1,6 +1,5 @@
 local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
-local strings = import 'utils/strings.libsonnet';
 
 local upscalePromExpression = |||
   sum by (%(targetAggregationLabels)s) (
@@ -48,7 +47,6 @@ local selectorForUpscaling(sourceAggregationSet, burnRate) =
 
 
 local upscaledApdexRatioExpression(sourceAggregationSet, targetAggregationSet, burnRate) =
-  local targetAggregationLabels = aggregations.serialize(targetAggregationSet.labels);
   local sourceSelectorWithExtras = selectorForUpscaling(sourceAggregationSet, burnRate);
 
   upscalePromExpression % {
@@ -62,7 +60,6 @@ local upscaledApdexRatioExpression(sourceAggregationSet, targetAggregationSet, b
 
 
 local upscaledErrorRatioExpression(sourceAggregationSet, targetAggregationSet, burnRate) =
-  local targetAggregationLabels = aggregations.serialize(targetAggregationSet.labels);
   local sourceSelectorWithExtras = selectorForUpscaling(sourceAggregationSet, burnRate);
 
   upscalePromExpression % {

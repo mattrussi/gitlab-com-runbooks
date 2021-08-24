@@ -1,6 +1,6 @@
 // Generate Alertmanager configurations
 local secrets = std.extVar('secrets_file');
-local serviceCatalog = import 'service_catalog.libsonnet';
+local serviceCatalog = import 'service-catalog/service-catalog.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 
 // Where the alertmanager templates are deployed.

@@ -1,6 +1,6 @@
 local periodicQuery = import './periodic-query.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
-local serviceCatalog = import 'service_catalog.libsonnet';
+local serviceCatalog = import 'service-catalog/service-catalog.libsonnet';
 
 local defaultSelector = {
   env: { re: 'ops|gprd' },

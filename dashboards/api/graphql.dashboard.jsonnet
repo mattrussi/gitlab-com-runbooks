@@ -1,7 +1,7 @@
+local platformLinks = import 'gitlab-dashboards/platform_links.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local templates = import 'grafana/templates.libsonnet';
-local platformLinks = import 'platform_links.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 
 local selector = {

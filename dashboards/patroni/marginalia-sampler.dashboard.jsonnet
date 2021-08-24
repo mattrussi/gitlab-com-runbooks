@@ -1,9 +1,7 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
+local platformLinks = import 'gitlab-dashboards/platform_links.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
-local templates = import 'grafana/templates.libsonnet';
-local row = grafana.row;
-local platformLinks = import 'platform_links.libsonnet';
 local template = grafana.template;
 
 basic.dashboard(

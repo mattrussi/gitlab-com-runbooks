@@ -9,7 +9,7 @@ IFS=$'\n\t'
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
 # Ensure service-catalog is up-to-date
-../services/generate-json.sh
+../scripts/generate-service-catalog-json.sh
 
 secrets_file="${ALERTMANAGER_SECRETS_FILE:-dummy-secrets.jsonnet}"
 

@@ -1,5 +1,4 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
-local rateMetric = metricsCatalog.rateMetric;
 local customRateQuery = metricsCatalog.customRateQuery;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 

@@ -1,4 +1,4 @@
-local metricsCatalog = import './metrics-catalog.libsonnet';
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 
 local findServiceTypes(predicate) =
   local matchingServices = std.filter(predicate, metricsCatalog.services);

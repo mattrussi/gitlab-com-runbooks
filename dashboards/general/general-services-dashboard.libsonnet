@@ -1,4 +1,4 @@
-local serviceCatalog = import 'service_catalog.libsonnet';
+local serviceCatalog = import 'service-catalog/service-catalog.libsonnet';
 
 // Preferred ordering services on dashboards
 local serviceOrdering = [

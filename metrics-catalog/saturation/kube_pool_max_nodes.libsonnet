@@ -1,7 +1,6 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
 local saturationHelpers = import 'helpers/saturation_helpers.libsonnet';
-local sidekiqHelpers = import './services/lib/sidekiq-helpers.libsonnet';
 
 {
   kube_pool_max_nodes: resourceSaturationPoint({

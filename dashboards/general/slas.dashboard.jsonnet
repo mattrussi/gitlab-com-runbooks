@@ -1,14 +1,13 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
+local platformLinks = import 'gitlab-dashboards/platform_links.libsonnet';
 local grafanaCalHeatmap = import 'grafana-cal-heatmap-panel/panel.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local metricsConfig = import 'metrics-config.libsonnet';
-local platformLinks = import 'platform_links.libsonnet';
 local row = grafana.row;
 local selectors = import 'promql/selectors.libsonnet';
 local seriesOverrides = import 'grafana/series_overrides.libsonnet';
-local strings = import 'utils/strings.libsonnet';
-local thresholds = import 'thresholds.libsonnet';
+local thresholds = import 'gitlab-dashboards/thresholds.libsonnet';
 local generalServicesDashboard = import 'general-services-dashboard.libsonnet';
 
 // These charts have a very high interval factor, to create a wide trend line

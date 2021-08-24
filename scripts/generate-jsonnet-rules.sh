@@ -12,7 +12,7 @@ REPO_DIR=$(
 "${REPO_DIR}/scripts/ensure-jsonnet-tool.sh"
 
 # Convert the service catalog yaml into a JSON file in a format thats consumable by jsonnet
-"${REPO_DIR}/services/generate-json.sh"
+"${REPO_DIR}/scripts/generate-service-catalog-json.sh"
 
 function render_multi_jsonnet() {
   local dest_dir="$1"

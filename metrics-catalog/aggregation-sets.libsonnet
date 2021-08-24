@@ -1,4 +1,4 @@
-local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
+local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
 
 {
   /**
@@ -12,7 +12,7 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
    * only represents the view from a single prometheus instance,
    * not globally across all shards.
    */
-  promSourceSLIs: aggregationSets.AggregationSet({
+  promSourceSLIs: aggregationSet.AggregationSet({
     id: 'source_sli',
     name: 'Prometheus Source SLI Metrics',
     intermediateSource: true,  // Not intended for consumption in dashboards or alerts
@@ -53,10 +53,10 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
   }),
 
   /**
-   * globalSLIs consumes promSourceSLIs and is the primary
+   * componentSLIs consumes promSourceSLIs and is the primary
    * aggregation used for alerting, monitoring, visualizations, etc.
    */
-  globalSLIs: aggregationSets.AggregationSet({
+  componentSLIs: aggregationSet.AggregationSet({
     id: 'component',
     name: 'Global SLI Metrics',
     intermediateSource: false,  // Used in dashboards and alerts
@@ -99,10 +99,10 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
   }),
 
   /**
-   * regionalSLIs consumes promSourceSLIs and is the primary
+   * regionalComponentSLIs consumes promSourceSLIs and is the primary
    * aggregation used for alerting, monitoring, visualizations, etc.
    */
-  regionalSLIs: aggregationSets.AggregationSet({
+  regionalComponentSLIs: aggregationSet.AggregationSet({
     id: 'regional_component',
     name: 'Regional SLI Metrics',
     intermediateSource: false,  // Used in dashboards and alerts
@@ -141,7 +141,7 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
   }),
 
   /**
-   * promSourceNodeAggregatedSLIs is an source recording rule representing
+   * promSourceNodeComponentSLIs is an source recording rule representing
    * the "start" of the aggregation pipeline for per-node aggregations,
    * used by Gitaly.
    *
@@ -153,7 +153,7 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
    * only represents the view from a single prometheus instance,
    * not globally across all shards.
    */
-  promSourceNodeAggregatedSLIs: aggregationSets.AggregationSet({
+  promSourceNodeComponentSLIs: aggregationSet.AggregationSet({
     id: 'source_node',
     name: 'Prometheus Source Node-Aggregated SLI Metrics',
     intermediateSource: true,  // Not intended for consumption in dashboards or alerts
@@ -189,10 +189,10 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
   }),
 
   /**
-   * globalNodeSLIs consumes promSourceSLIs and is
+   * nodeComponentSLIs consumes promSourceSLIs and is
    * used for per-node monitoring, alerting, visualzation for Gitaly.
    */
-  globalNodeSLIs: aggregationSets.AggregationSet({
+  nodeComponentSLIs: aggregationSet.AggregationSet({
     id: 'component_node',
     name: 'Global Node-Aggregated SLI Metrics',
     intermediateSource: false,  // Used in dashboards and alerts
@@ -230,13 +230,13 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
   }),
 
   /**
-   * globalNodeSLIs consumes promSourceSLIs and aggregates
+   * serviceSLIs consumes promSourceSLIs and aggregates
    * all the SLIs in a service up to the service level.
    * This is primarily used for visualizations, to give an
    * summary overview of the service. Not used heavily for
    * alerting.
    */
-  serviceAggregatedSLIs: aggregationSets.AggregationSet({
+  serviceSLIs: aggregationSet.AggregationSet({
     id: 'service',
     name: 'Global Service-Aggregated Metrics',
     intermediateSource: false,  // Used in dashboards and alerts
@@ -281,12 +281,12 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
   }),
 
   /**
-   * serviceNodeAggregatedSLIs consumes globalNodeSLIs and aggregates
+   * nodeServiceSLIs consumes nodeComponentSLIs and aggregates
    * all the SLIs in a service up to the service level for each node.
    * This is not particularly useful and should probably be reconsidered
    * at a later stage.
    */
-  serviceNodeAggregatedSLIs: aggregationSets.AggregationSet({
+  nodeServiceSLIs: aggregationSet.AggregationSet({
     id: 'service_node',
     name: 'Global Service-Node-Aggregated Metrics',
     intermediateSource: false,  // Used in dashboards and alerts
@@ -327,7 +327,7 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
   /**
    * Regional SLIs, aggregated to the service level
    */
-  serviceRegionalAggregatedSLIs: aggregationSets.AggregationSet({
+  regionalServiceSLIs: aggregationSet.AggregationSet({
     id: 'service_regional',
     name: 'Global Service-Regional-Aggregated Metrics',
     intermediateSource: false,  // Used in dashboards and alerts
@@ -365,7 +365,7 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
     aggregationFilter: 'regional',
   }),
 
-  sidekiqWorkerExecutionSLIs: aggregationSets.AggregationSet({
+  sidekiqWorkerExecutionSLIs: aggregationSet.AggregationSet({
     id: 'sidekiq_execution',
     name: 'Sidekiq execution source metrics per worker',
     intermediateSource: true,
@@ -420,7 +420,7 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
     },
   }),
 
-  sidekiqWorkerQueueSLIs: aggregationSets.AggregationSet({
+  sidekiqWorkerQueueSLIs: aggregationSet.AggregationSet({
     id: 'sidekiq_queue',
     name: 'Sidekiq queue source metrics per worker',
     intermediateSource: true,
@@ -465,7 +465,7 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
     },
   }),
 
-  featureCategorySourceSLIs: aggregationSets.AggregationSet({
+  featureCategorySourceSLIs: aggregationSet.AggregationSet({
     id: 'source_feature_category',
     name: 'Prometheus Source Feature Category Metrics',
     intermediateSource: true,  // Used in dashboards and alerts
@@ -499,7 +499,7 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
     },
   }),
 
-  globalFeatureCategorySLIs: aggregationSets.AggregationSet({
+  featureCategorySLIs: aggregationSet.AggregationSet({
     id: 'feature_category',
     name: 'Feature Category Metrics',
     intermediateSource: false,  // Used in dashboards and alerts
@@ -545,7 +545,7 @@ local aggregationSets = import 'servicemetrics/aggregation-set.libsonnet';
     },
   }),
 
-  globalStageGroupSLIs: aggregationSets.AggregationSet({
+  stageGroupSLIs: aggregationSet.AggregationSet({
     id: 'stage_Groups',
     name: 'Stage Group metrics',
     intermediateSource: false,

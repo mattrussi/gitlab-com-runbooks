@@ -1,11 +1,8 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
-local commonAnnotations = import 'grafana/common_annotations.libsonnet';
-local k8sPodsCommon = import 'kubernetes_pods_common.libsonnet';
-local platformLinks = import 'platform_links.libsonnet';
-local serviceCatalog = import 'service_catalog.libsonnet';
+local k8sPodsCommon = import 'gitlab-dashboards/kubernetes_pods_common.libsonnet';
+local platformLinks = import 'gitlab-dashboards/platform_links.libsonnet';
 local template = grafana.template;
 local templates = import 'grafana/templates.libsonnet';
-local dashboard = grafana.dashboard;
 local row = grafana.row;
 local basic = import 'grafana/basic.libsonnet';
 
@@ -83,6 +80,5 @@ basic.dashboard(
 .addPanels(k8sPodsCommon.network(startRow=3001))
 + {
   links+: platformLinks.triage +
-          serviceCatalog.getServiceLinks('api') +
           platformLinks.services,
 }

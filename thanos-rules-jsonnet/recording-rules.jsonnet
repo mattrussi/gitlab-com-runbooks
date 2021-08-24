@@ -1,7 +1,8 @@
-local services = import './services/all.jsonnet';
+local services = (import 'metrics-config.libsonnet').monitoredServices;
 local thresholds = import 'mwmbr/thresholds.libsonnet';
 local recordingRules = import 'recording-rules/recording-rules.libsonnet';
 local strings = import 'utils/strings.libsonnet';
+local aggregationSets = (import 'metrics-config.libsonnet').aggregationSets;
 
 local outputPromYaml(groups) =
   std.manifestYamlDoc({

@@ -1,6 +1,5 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
-local saturationHelpers = import 'helpers/saturation_helpers.libsonnet';
 
 {
   kube_pool_cpu: resourceSaturationPoint({

@@ -1,7 +1,6 @@
 local periodicQuery = import './periodic-query.libsonnet';
 local errorBudget = import 'stage-groups/error_budget.libsonnet';
 
-local range = errorBudget.range;
 local selector = {
   stage: 'main',
   environment: 'gprd',

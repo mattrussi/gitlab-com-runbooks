@@ -1,7 +1,5 @@
 local googleLoadBalancerComponents = import './lib/google_load_balancer_components.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
-local histogramApdex = metricsCatalog.histogramApdex;
-local rateMetric = metricsCatalog.rateMetric;
 
 metricsCatalog.serviceDefinition({
   type: 'plantuml',

@@ -1,10 +1,10 @@
 local aggregationSets = import 'aggregation-sets.libsonnet';
 local alerts = import 'alerts/alerts.libsonnet';
-local metricsCatalog = import 'metrics-catalog.libsonnet';
 local multiburnExpression = import 'mwmbr/expression.libsonnet';
-local serviceCatalog = import 'service_catalog.libsonnet';
+local serviceCatalog = import 'service-catalog/service-catalog.libsonnet';
+local stages = import 'service-catalog/stages.libsonnet';
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local stableIds = import 'stable-ids/stable-ids.libsonnet';
-local stages = import 'stages.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 
 // Minimum operation rate thresholds:
@@ -162,15 +162,15 @@ local apdexAlertForSLI(service, sli) =
   [{
     alert: nameSLOViolationAlert(service.type, sli.name, 'ApdexSLOViolation'),
     expr: multiburnExpression.multiburnRateApdexExpression(
-      aggregationSet=aggregationSets.globalSLIs,
+      aggregationSet=aggregationSets.componentSLIs,
       metricSelectorHash={ type: service.type, component: sli.name },
       minimumOperationRateForMonitoring=minimumOperationRateForMonitoring,
       thresholdSLOValue=apdexScoreSLO,
       windows=[windowDuration]
     ),
     'for': '2m',
-    labels: labelsForSLI(sli, 's2', aggregationSets.globalSLIs, 'apdex', 'slo_violation') { window: windowDuration },
-    annotations: commonAnnotations(service.type, sli, aggregationSets.globalSLIs, 'apdex') {
+    labels: labelsForSLI(sli, 's2', aggregationSets.componentSLIs, 'apdex', 'slo_violation') { window: windowDuration },
+    annotations: commonAnnotations(service.type, sli, aggregationSets.componentSLIs, 'apdex') {
       title: 'The %(sliName)s SLI of the %(serviceType)s service (`{{ $labels.stage }}` stage) has an apdex violating SLO' % formatConfig,
       description: |||
         %(sliDescription)s
@@ -187,7 +187,7 @@ local apdexAlertForSLI(service, sli) =
       [{
         alert: nameSLOViolationAlert(service.type, sli.name, 'ApdexSLOViolationSingleNode'),
         expr: multiburnExpression.multiburnRateApdexExpression(
-          aggregationSet=aggregationSets.globalNodeSLIs,
+          aggregationSet=aggregationSets.nodeComponentSLIs,
           metricSelectorHash={ type: service.type, component: sli.name },
           minimumSamplesForMonitoring=minimumSamplesForMonitoring,
           thresholdSLOValue=apdexScoreSLO,
@@ -195,8 +195,8 @@ local apdexAlertForSLI(service, sli) =
           operationRateWindowDuration=windowDuration
         ),
         'for': nodeAlertWaitPeriod,
-        labels: labelsForSLI(sli, 's2', aggregationSets.globalNodeSLIs, 'apdex', 'slo_violation') { window: windowDuration },
-        annotations: commonAnnotations(service.type, sli, aggregationSets.globalNodeSLIs, 'apdex') {
+        labels: labelsForSLI(sli, 's2', aggregationSets.nodeComponentSLIs, 'apdex', 'slo_violation') { window: windowDuration },
+        annotations: commonAnnotations(service.type, sli, aggregationSets.nodeComponentSLIs, 'apdex') {
           title: 'The %(sliName)s SLI of the %(serviceType)s service on node `{{ $labels.fqdn }}` has an apdex violating SLO' % formatConfig,
           description: |||
             %(sliDescription)s
@@ -216,14 +216,14 @@ local apdexAlertForSLI(service, sli) =
       [{
         alert: nameSLOViolationAlert(service.type, sli.name, 'ApdexSLOViolationRegional'),
         expr: multiburnExpression.multiburnRateApdexExpression(
-          aggregationSet=aggregationSets.regionalSLIs,
+          aggregationSet=aggregationSets.regionalComponentSLIs,
           metricSelectorHash={ type: service.type, component: sli.name },
           minimumOperationRateForMonitoring=minimumOperationRateForMonitoring,
           thresholdSLOValue=apdexScoreSLO
         ),
         'for': '2m',
-        labels: labelsForSLI(sli, 's2', aggregationSets.regionalSLIs, 'apdex', 'slo_violation'),
-        annotations: commonAnnotations(service.type, sli, aggregationSets.regionalSLIs, 'apdex') {
+        labels: labelsForSLI(sli, 's2', aggregationSets.regionalComponentSLIs, 'apdex', 'slo_violation'),
+        annotations: commonAnnotations(service.type, sli, aggregationSets.regionalComponentSLIs, 'apdex') {
           title: 'The %(sliName)s SLI of the %(serviceType)s service in region `{{ $labels.region }}` has an apdex violating SLO' % formatConfig,
           description: |||
             %(sliDescription)s
@@ -248,14 +248,14 @@ local errorRateAlertForSLI(service, sli) =
   [{
     alert: nameSLOViolationAlert(service.type, sli.name, 'ErrorSLOViolation'),
     expr: multiburnExpression.multiburnRateErrorExpression(
-      aggregationSet=aggregationSets.globalSLIs,
+      aggregationSet=aggregationSets.componentSLIs,
       metricSelectorHash={ type: service.type, component: sli.name },
       minimumOperationRateForMonitoring=minimumOperationRateForMonitoring,
       thresholdSLOValue=1 - errorRateSLO,
     ),
     'for': '2m',
-    labels: labelsForSLI(sli, 's2', aggregationSets.globalSLIs, 'error', 'slo_violation'),
-    annotations: commonAnnotations(service.type, sli, aggregationSets.globalSLIs, 'error') {
+    labels: labelsForSLI(sli, 's2', aggregationSets.componentSLIs, 'error', 'slo_violation'),
+    annotations: commonAnnotations(service.type, sli, aggregationSets.componentSLIs, 'error') {
       title: 'The %(sliName)s SLI of the %(serviceType)s service (`{{ $labels.stage }}` stage) has an error rate violating SLO' % formatConfig,
       description: |||
         %(sliDescription)s
@@ -273,7 +273,7 @@ local errorRateAlertForSLI(service, sli) =
       [{
         alert: nameSLOViolationAlert(service.type, sli.name, 'ErrorSLOViolationSingleNode'),
         expr: multiburnExpression.multiburnRateErrorExpression(
-          aggregationSet=aggregationSets.globalNodeSLIs,
+          aggregationSet=aggregationSets.nodeComponentSLIs,
           metricSelectorHash={ type: service.type, component: sli.name },
           minimumSamplesForMonitoring=minimumSamplesForMonitoring,
           thresholdSLOValue=1 - errorRateSLO,
@@ -281,8 +281,8 @@ local errorRateAlertForSLI(service, sli) =
           operationRateWindowDuration=windowDuration
         ),
         'for': nodeAlertWaitPeriod,
-        labels: labelsForSLI(sli, 's2', aggregationSets.globalNodeSLIs, 'error', 'slo_violation') { window: windowDuration },
-        annotations: commonAnnotations(service.type, sli, aggregationSets.globalNodeSLIs, 'error') {
+        labels: labelsForSLI(sli, 's2', aggregationSets.nodeComponentSLIs, 'error', 'slo_violation') { window: windowDuration },
+        annotations: commonAnnotations(service.type, sli, aggregationSets.nodeComponentSLIs, 'error') {
           title: 'The %(sliName)s SLI of the %(serviceType)s service on node `{{ $labels.fqdn }}` has an error rate violating SLO' % formatConfig,
           description: |||
             %(sliDescription)s
@@ -302,14 +302,14 @@ local errorRateAlertForSLI(service, sli) =
       [{
         alert: nameSLOViolationAlert(service.type, sli.name, 'ErrorSLOViolationRegional'),
         expr: multiburnExpression.multiburnRateErrorExpression(
-          aggregationSet=aggregationSets.regionalSLIs,
+          aggregationSet=aggregationSets.regionalComponentSLIs,
           metricSelectorHash={ type: service.type, component: sli.name },
           minimumOperationRateForMonitoring=minimumOperationRateForMonitoring,
           thresholdSLOValue=1 - errorRateSLO,
         ),
         'for': '2m',
-        labels: labelsForSLI(sli, 's2', aggregationSets.regionalSLIs, 'error', 'slo_violation'),
-        annotations: commonAnnotations(service.type, sli, aggregationSets.regionalSLIs, 'error') {
+        labels: labelsForSLI(sli, 's2', aggregationSets.regionalComponentSLIs, 'error', 'slo_violation'),
+        annotations: commonAnnotations(service.type, sli, aggregationSets.regionalComponentSLIs, 'error') {
           title: 'The %(sliName)s SLI of the %(serviceType)s service in region `{{ $labels.region }}` has an error rate violating SLO' % formatConfig,
           description: |||
             %(sliDescription)s
@@ -338,8 +338,8 @@ local trafficCessationAlert(service, sli) =
         gitlab_component_ops:rate_30m{type="%(serviceType)s", component="%(sliName)s", stage="main", monitor="global"} == 0
       ||| % formatConfig,
       'for': '5m',
-      labels: labelsForSLI(sli, 's2', aggregationSets.globalSLIs, 'ops', 'traffic_cessation'),
-      annotations: commonAnnotations(service.type, sli, aggregationSets.globalSLIs, 'ops') {
+      labels: labelsForSLI(sli, 's2', aggregationSets.componentSLIs, 'ops', 'traffic_cessation'),
+      annotations: commonAnnotations(service.type, sli, aggregationSets.componentSLIs, 'ops') {
         title: 'The %(sliName)s SLI of the %(serviceType)s service (`{{ $labels.stage }}` stage) has not received any traffic in the past 30 minutes' % formatConfig,
         description: |||
           %(sliDescription)s
@@ -359,8 +359,8 @@ local trafficCessationAlert(service, sli) =
         gitlab_component_ops:rate_5m{type="%(serviceType)s", component="%(sliName)s", stage="main", monitor="global"}
       ||| % formatConfig,
       'for': '30m',
-      labels: labelsForSLI(sli, 's2', aggregationSets.globalSLIs, 'ops', 'traffic_cessation'),
-      annotations: commonAnnotations(service.type, sli, aggregationSets.globalSLIs, 'ops') {
+      labels: labelsForSLI(sli, 's2', aggregationSets.componentSLIs, 'ops', 'traffic_cessation'),
+      annotations: commonAnnotations(service.type, sli, aggregationSets.componentSLIs, 'ops') {
         title: 'The %(sliName)s SLI of the %(serviceType)s service (`{{ $labels.stage }}` stage) has not reported any traffic in the past 30 minutes' % formatConfig,
         description: |||
           %(sliDescription)s

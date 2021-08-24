@@ -2,7 +2,6 @@ local panels = import './panels.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
 local seriesOverrides = import 'grafana/series_overrides.libsonnet';
-local aggregations = import 'promql/aggregations.libsonnet';
 
 local vmStates =
   basic.timeseries(

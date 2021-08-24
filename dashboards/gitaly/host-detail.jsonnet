@@ -1,17 +1,16 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
+local nodeMetrics = import 'gitlab-dashboards/node_metrics.libsonnet';
+local platformLinks = import 'gitlab-dashboards/platform_links.libsonnet';
+local saturationDetail = import 'gitlab-dashboards/saturation_detail.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local templates = import 'grafana/templates.libsonnet';
-local nodeMetrics = import 'node_metrics.libsonnet';
-local platformLinks = import 'platform_links.libsonnet';
-local saturationDetail = import 'saturation_detail.libsonnet';
-local serviceCatalog = import 'service_catalog.libsonnet';
 local row = grafana.row;
-local metricsCatalogDashboards = import 'metrics_catalog_dashboards.libsonnet';
+local metricsCatalogDashboards = import 'gitlab-dashboards/metrics_catalog_dashboards.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
-local processExporter = import 'process_exporter.libsonnet';
-local metricsCatalog = import 'metrics-catalog.libsonnet';
-local aggregationSets = import './aggregation-sets.libsonnet';
+local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
+local aggregationSets = (import 'metrics-config.libsonnet').aggregationSets;
 local singleMetricRow = import 'key-metric-panels/single-metric-row.libsonnet';
 
 local serviceType = 'gitaly';
@@ -84,7 +83,7 @@ local headlineRow(startRow=1) =
   local columns =
     singleMetricRow.row(
       serviceType='gitaly',
-      aggregationSet=aggregationSets.serviceNodeAggregatedSLIs,
+      aggregationSet=aggregationSets.nodeServiceSLIs,
       selectorHash=selectorHashWithExtras,
       titlePrefix='Gitaly Per-Node Service Aggregated SLIs',
       stableIdPrefix='node-latency-%(serviceType)s' % formatConfig,
@@ -106,7 +105,7 @@ basic.dashboard(
 .addPanels(
   metricsCatalogDashboards.sliMatrixForService(
     title='🔬 Node SLIs',
-    aggregationSet=aggregationSets.globalNodeSLIs,
+    aggregationSet=aggregationSets.nodeComponentSLIs,
     serviceType='gitaly',
     selectorHash=selectorHash,
     startRow=200
@@ -241,6 +240,6 @@ basic.dashboard(
 
 .trailer()
 + {
-  links+: platformLinks.triage + serviceCatalog.getServiceLinks('gitaly') + platformLinks.services +
+  links+: platformLinks.triage + platformLinks.services +
           [platformLinks.dynamicLinks('Gitaly Detail', 'type:gitaly')],
 }

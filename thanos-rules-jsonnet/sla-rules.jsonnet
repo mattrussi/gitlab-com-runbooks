@@ -1,5 +1,5 @@
 local metricsConfig = import 'metrics-config.libsonnet';
-local serviceCatalog = import 'service_catalog.libsonnet';
+local serviceCatalog = import 'service-catalog/service-catalog.libsonnet';
 
 local keyServices = serviceCatalog.findKeyBusinessServices();
 

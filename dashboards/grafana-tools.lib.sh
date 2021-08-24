@@ -37,7 +37,7 @@ function prepare() {
     "../scripts/bundler.sh"
   fi
 
-  ../services/generate-json.sh
+  ../scripts/generate-service-catalog-json.sh
 }
 
 function get_description() {

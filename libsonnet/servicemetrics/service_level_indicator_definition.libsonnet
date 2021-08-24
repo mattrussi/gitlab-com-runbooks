@@ -1,6 +1,6 @@
 local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
-local stages = import 'stages.libsonnet';
+local stages = import 'service-catalog/stages.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 
@@ -103,7 +103,6 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
 
         local apdexSuccessRateRecordingRuleName = aggregationSet.getApdexSuccessRateMetricForBurnRate(burnRate);
         local apdexWeightRecordingRuleName = aggregationSet.getApdexWeightMetricForBurnRate(burnRate);
-        local apdexRatioRecordingRuleName = aggregationSet.getApdexRatioMetricForBurnRate(burnRate);
 
         local apdexSuccessRateExpr = serviceLevelIndicator.apdex.apdexSuccessRateQuery(
           aggregationLabels=aggregationLabelsWithoutStaticLabels,
