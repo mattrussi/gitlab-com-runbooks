@@ -269,17 +269,47 @@ Identify and fix bug on the online GC review process.
 
 ##### Impact
 
+An old repository was handled by the new code path.
+
 ##### Expected app behavior on failure
+
+If no writes to the new path were made, read requests made against this repository will fail with `404 Not Found`.
+
+Write requests should succeed, writing data to the new code path.
+
+For subsequent read requests, data written to the new path will be visible to the UI and available to pull. While the old data will not appear in the UI and will not be available to pull, failing with `404 Not Found`.
 
 ##### Observability
 
+The logs in Kibana will always include `serving request in migration mode` for once for each request made in migration mode. This log entry will contain the path that the repository followed, but its presence is not a signal or alert for this scenario in particular. 
+
+End users will observe this issue as older tags not suddenly and consistently not appearing in the UI and older images suddenly and consistently failing to pull. While newer tags and images consistently remain visible in the UI and pullable.
+
 ##### Recovery definition
 
-##### Expected bpp behavior on recovery
+Requests are once again routed to the old code path.
+
+##### Expected app behavior on recovery
+
+If no writes to the new path were made, read requests made against this repository will succeed again.
+
+Write requests should succeed, writing data to the old code path.
+
+If data were written to the new code path, those images would no longer be visible in the UI or pullible.
 
 ##### Mitigation
 
+If possible, newer images that were pushed during this scenario should be rebuilt from the client side.
+
+On the server side, we should remove this repository and all of its images _from the database_. This will ensure a clean environment for when this repository is migrated.
+
 ##### Possible corrective actions
+
+This scenario represents a relatively serious situation, as serving repositories via the old code path is the default scenario during migration.
+
+If this issue is a bug, it would need to be identified and patched by the registry development team.
+
+If there is an intermittent GCS issue, it's possible that an existing path would return `404 Not Found`, rather than a more appropriate error. This would cause a single repository old, but otherwise eligible, repository to flip over to the new side and flip back to the old side again, likely without our direct intervention, or possibly knowledge.
 
 #### Eligible New Repository Handled by Old Code Path
 
