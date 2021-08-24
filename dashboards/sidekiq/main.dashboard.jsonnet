@@ -211,7 +211,7 @@ serviceDashboard.overview('sidekiq')
         sidekiq_retry_set_processing_delay_seconds{environment="$environment"} and on(fqdn) (redis_connected_slaves != 0)
       |||,
       legendFormat='Delay',
-      format='short',
+      format='s',
       interval='1m',
       intervalFactor=3,
       yAxisLabel='Seconds',
