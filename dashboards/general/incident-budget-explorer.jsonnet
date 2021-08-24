@@ -7,7 +7,7 @@ local serviceCatalog = import 'service-catalog/service-catalog.libsonnet';
 local row = grafana.row;
 local thresholds = import 'gitlab-dashboards/thresholds.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
-local metricsConfig = import 'metrics-config.libsonnet';
+local metricsConfig = import 'gitlab-metrics-config.libsonnet';
 local templates = import 'grafana/templates.libsonnet';
 
 // Preferred ordering of rows on the SLA dashboard

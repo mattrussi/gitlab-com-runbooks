@@ -7,7 +7,7 @@ local template = grafana.template;
 local multiburnFactors = import 'mwmbr/multiburn_factors.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local statusDescription = import 'key-metric-panels/status_description.libsonnet';
-local aggregationSets = (import 'metrics-config.libsonnet').aggregationSets;
+local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
 
 local apdexSLOMetric = 'slo:min:events:gitlab_service_apdex:ratio';
 local errorSLOMetric = 'slo:max:events:gitlab_service_errors:ratio';

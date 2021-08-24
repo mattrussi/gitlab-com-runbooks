@@ -10,7 +10,7 @@ local metricsCatalogDashboards = import 'gitlab-dashboards/metrics_catalog_dashb
 local selectors = import 'promql/selectors.libsonnet';
 local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
-local aggregationSets = (import 'metrics-config.libsonnet').aggregationSets;
+local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
 local singleMetricRow = import 'key-metric-panels/single-metric-row.libsonnet';
 
 local serviceType = 'gitaly';

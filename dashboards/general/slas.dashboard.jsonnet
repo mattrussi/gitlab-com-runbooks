@@ -1,9 +1,9 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local platformLinks = import 'gitlab-dashboards/platform_links.libsonnet';
+local metricsConfig = import 'gitlab-metrics-config.libsonnet';
 local grafanaCalHeatmap = import 'grafana-cal-heatmap-panel/panel.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
-local metricsConfig = import 'metrics-config.libsonnet';
 local row = grafana.row;
 local selectors = import 'promql/selectors.libsonnet';
 local seriesOverrides = import 'grafana/series_overrides.libsonnet';

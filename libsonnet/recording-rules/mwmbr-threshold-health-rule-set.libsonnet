@@ -1,5 +1,5 @@
 local mwmbrExpression = import 'mwmbr/expression.libsonnet';
-local aggregationSets = (import 'metrics-config.libsonnet').aggregationSets;
+local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
 
 local otherThresholdRules(threshold) =
   [{

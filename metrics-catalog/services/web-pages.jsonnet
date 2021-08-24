@@ -9,6 +9,9 @@ local baseSelector = { type: 'web-pages' };
 metricsCatalog.serviceDefinition({
   type: 'web-pages',
   tier: 'sv',
+
+  tags: ['golang'],
+
   contractualThresholds: {
     apdexRatio: 0.95,
     errorRatio: 0.05,

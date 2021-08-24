@@ -1,4 +1,4 @@
-local aggregationSets = (import 'metrics-config.libsonnet').aggregationSets;
+local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local platformLinks = import 'gitlab-dashboards/platform_links.libsonnet';
 local thresholds = import 'gitlab-dashboards/thresholds.libsonnet';

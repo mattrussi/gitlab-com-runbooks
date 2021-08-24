@@ -1,13 +1,12 @@
-local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
-local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
-local saturationHelpers = import 'helpers/saturation_helpers.libsonnet';
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
+local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_point.libsonnet').resourceSaturationPoint;
 
 {
   nf_conntrack_entries: resourceSaturationPoint({
     title: 'conntrack Entries per Node',
     severity: 's3',
     horizontallyScalable: true,
-    appliesTo: saturationHelpers.vmProvisionedServices(default='patroni'),
+    appliesTo: metricsCatalog.findVMProvisionedServices(first='patroni'),
     description: |||
       Netfilter connection tracking table utilization per node.
 

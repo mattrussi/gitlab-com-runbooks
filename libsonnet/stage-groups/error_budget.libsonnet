@@ -1,4 +1,4 @@
-local slaTarget = (import 'metrics-config.libsonnet').slaTarget;
+local slaTarget = (import 'gitlab-metrics-config.libsonnet').slaTarget;
 
 {
   /**

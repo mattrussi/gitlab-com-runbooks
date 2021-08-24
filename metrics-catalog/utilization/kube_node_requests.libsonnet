@@ -1,12 +1,11 @@
-local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
-local utilizationMetric = metricsCatalog.utilizationMetric;
-local saturationHelpers = import '../saturation/helpers/saturation_helpers.libsonnet';
+local utilizationMetric = (import 'servicemetrics/utilization_metric.libsonnet').utilizationMetric;
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 
 {
   kube_node_cpu_requests: utilizationMetric({
     title: 'Kube Node CPU Requests Utilization',
     unit: 'percent',
-    appliesTo: saturationHelpers.kubeProvisionedServices,
+    appliesTo: metricsCatalog.findKubeProvisionedServices(first='web'),
     description: |||
       Kubernetes pods are requesting cpu shares, to indicate how many pods may fit on a node.
       If all cpu shares on a node have been requested by pods, no more pods can be scheduled
@@ -29,7 +28,7 @@ local saturationHelpers = import '../saturation/helpers/saturation_helpers.libso
   kube_node_memory_requests: utilizationMetric({
     title: 'Kube Node Memory Requests Utilization',
     unit: 'percent',
-    appliesTo: saturationHelpers.kubeProvisionedServices,
+    appliesTo: metricsCatalog.findKubeProvisionedServices(first='web'),
     description: |||
       Kubernetes pods are requesting memory, to indicate how many pods may fit on a node.
       If all memory on a node has been requested by pods, no more pods can be scheduled

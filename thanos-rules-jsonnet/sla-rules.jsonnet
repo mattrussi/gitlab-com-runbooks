@@ -1,4 +1,4 @@
-local metricsConfig = import 'metrics-config.libsonnet';
+local metricsConfig = import 'gitlab-metrics-config.libsonnet';
 local serviceCatalog = import 'service-catalog/service-catalog.libsonnet';
 
 local keyServices = serviceCatalog.findKeyBusinessServices();

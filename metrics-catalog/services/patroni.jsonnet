@@ -5,7 +5,13 @@ local patroniHelpers = import './lib/patroni-helpers.libsonnet';
 
 patroniHelpers.serviceDefinition(
   'patroni',
-  {
+
+  // disk_performance_monitoring requires disk utilisation metrics are currently reporting correctly for
+  // HDD volumes, see https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10248
+  // as such, we only record this utilisation metric on IO subset of the fleet for now.
+  tags=['disk_performance_monitoring'],
+
+  additionalServiceLevelIndicators={
     // Sidekiq has a distinct usage profile; this is used to select 'the others' which
     // are more interactive and thus require lower thresholds
     // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1059

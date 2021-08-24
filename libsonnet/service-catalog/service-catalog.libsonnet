@@ -1,6 +1,4 @@
-// service_catalog.json is stored in the `services` directory
-// alongside service_catalog.yml
-local serviceCatalog = import 'service_catalog.json';
+local serviceCatalog = (import 'gitlab-metrics-config.libsonnet').serviceCatalog;
 
 local serviceMap = {
   [x.name]: x
@@ -12,7 +10,6 @@ local teamDefaults = {
   send_slo_alerts_to_team_slack_channel: false,
 };
 
-local safeMap(fn, v) = if std.isArray(v) then std.map(fn, v) else [];
 
 {
   lookupService(name)::

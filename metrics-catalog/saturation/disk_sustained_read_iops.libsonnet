@@ -1,13 +1,12 @@
-local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
-local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
-local saturationHelpers = import 'helpers/saturation_helpers.libsonnet';
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
+local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_point.libsonnet').resourceSaturationPoint;
 
 {
   disk_sustained_read_iops: resourceSaturationPoint({
     title: 'Disk Sustained Read IOPS Utilization per Node',
     severity: 's3',
     horizontallyScalable: true,
-    appliesTo: saturationHelpers.diskPerformanceSensitiveServices,
+    appliesTo: metricsCatalog.findServicesWithTag(tag='disk_performance_monitoring'),
     description: |||
       Disk sustained read IOPS utilization per node.
     |||,

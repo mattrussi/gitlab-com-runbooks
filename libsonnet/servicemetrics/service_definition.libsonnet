@@ -4,6 +4,7 @@ local serviceLevelIndicatorDefinition = import 'service_level_indicator_definiti
 // For now we assume that services are provisioned on vms and not kubernetes
 local provisioningDefaults = { vms: true, kubernetes: false };
 local serviceDefaults = {
+  tags: [],
   serviceIsStageless: false,  // Set to true for services that don't use stage labels
   autogenerateRecordingRules: true,
   disableOpsRatePrediction: false,
@@ -39,6 +40,7 @@ local validateAndApplyServiceDefaults(service) =
   // If this service is provisioned on kubernetes we should include a kubernetes deployment map
   if serviceWithProvisioningDefaults.provisioning.kubernetes == (serviceWithProvisioningDefaults.kubeResources != {}) then
     serviceWithProvisioningDefaults {
+      tags: std.set(serviceWithProvisioningDefaults.tags),
       serviceLevelIndicators: {
         [sliName]: prepareComponent(service.serviceLevelIndicators[sliName]).initServiceLevelIndicatorWithName(sliName, sliInheritedDefaults)
         for sliName in std.objectFields(service.serviceLevelIndicators)

@@ -1,4 +1,4 @@
-local services = (import 'metrics-config.libsonnet').monitoredServices;
+local services = (import 'gitlab-metrics-config.libsonnet').monitoredServices;
 
 local generateDashboardForService(service) =
   local type = service.type;

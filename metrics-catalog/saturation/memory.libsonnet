@@ -1,13 +1,12 @@
-local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
-local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
-local saturationHelpers = import 'helpers/saturation_helpers.libsonnet';
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
+local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_point.libsonnet').resourceSaturationPoint;
 
 {
   memory: resourceSaturationPoint({
     title: 'Memory Utilization per Node',
     severity: 's4',
     horizontallyScalable: true,
-    appliesTo: saturationHelpers.vmProvisionedServices(default='gitaly'),
+    appliesTo: metricsCatalog.findVMProvisionedServices(first='gitaly'),
     description: |||
       Memory utilization per device per node.
     |||,

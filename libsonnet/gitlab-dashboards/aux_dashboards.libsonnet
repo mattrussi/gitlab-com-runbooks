@@ -2,7 +2,7 @@ local capacityReviewDashboards = import './capacity_review_dashboard.libsonnet';
 local kubeDashboards = import './kube_service_dashboards.libsonnet';
 local regionalDashboards = import './regional_service_dashboard.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
-local aggregationSets = (import 'metrics-config.libsonnet').aggregationSets;
+local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
 
 local forService(serviceType) =
   local serviceInfo = metricsCatalog.getService(serviceType);

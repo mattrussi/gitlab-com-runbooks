@@ -5,11 +5,13 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
 local serviceDefinition(
   type='patroni',
+  tags=[],
   additionalServiceLevelIndicators={},
       ) =
   metricsCatalog.serviceDefinition({
     type: type,
     tier: 'db',
+    tags: tags,
     serviceIsStageless: true,
     monitoringThresholds: {
       apdexScore: 0.999,

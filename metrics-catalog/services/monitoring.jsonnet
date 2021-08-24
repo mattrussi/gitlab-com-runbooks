@@ -7,6 +7,9 @@ local googleLoadBalancerComponents = import './lib/google_load_balancer_componen
 metricsCatalog.serviceDefinition({
   type: 'monitoring',
   tier: 'inf',
+
+  tags: ['golang'],
+
   monitoringThresholds: {
     apdexScore: 0.999,
     errorRatio: 0.999,

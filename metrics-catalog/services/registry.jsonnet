@@ -10,6 +10,9 @@ local defaultRegistrySLIProperties = registryHelpers.defaultRegistrySLIPropertie
 metricsCatalog.serviceDefinition({
   type: 'registry',
   tier: 'sv',
+
+  tags: ['golang'],
+
   contractualThresholds: {
     apdexRatio: 0.9,
     errorRatio: 0.005,
