@@ -1,5 +1,5 @@
-local evaluator = import './maturity-evaluator.libsonnet';
 local test = import 'github.com/yugui/jsonnetunit/jsonnetunit/test.libsonnet';
+local evaluator = import 'service-maturity/evaluator.libsonnet';
 
 local mockService = {
   type: 'mock',
@@ -12,6 +12,27 @@ local levels = [
     criteria: [
       { name: 'Criteria 1', evidence: function(service) 'evidence 1' },
       { name: 'Criteria 2', evidence: function(service) ['evidence 2', 'evidence 3'] },
+    ],
+  },
+  {
+    name: 'All failed',
+    criteria: [
+      { name: 'Criteria 1', evidence: function(service) false },
+      { name: 'Criteria 2', evidence: function(service) false },
+    ],
+  },
+  {
+    name: 'All unimplemented',
+    criteria: [
+      { name: 'Criteria 1', evidence: function(service) null },
+      { name: 'Criteria 2', evidence: function(service) null },
+    ],
+  },
+  {
+    name: 'All skipped',
+    criteria: [
+      { name: 'Skipped Criteria 1', evidence: function(service) null },
+      { name: 'Skipped Criteria 2', evidence: function(service) null },
     ],
   },
   {
@@ -58,6 +79,30 @@ test.suite({
         criteria: [
           { name: 'Criteria 1', evidence: 'evidence 1', result: 'passed' },
           { name: 'Criteria 2', evidence: ['evidence 2', 'evidence 3'], result: 'passed' },
+        ],
+      },
+      {
+        name: 'All failed',
+        passed: false,
+        criteria: [
+          { name: 'Criteria 1', evidence: false, result: 'failed' },
+          { name: 'Criteria 2', evidence: false, result: 'failed' },
+        ],
+      },
+      {
+        name: 'All unimplemented',
+        passed: false,
+        criteria: [
+          { name: 'Criteria 1', evidence: null, result: 'unimplemented' },
+          { name: 'Criteria 2', evidence: null, result: 'unimplemented' },
+        ],
+      },
+      {
+        name: 'All skipped',
+        passed: true,
+        criteria: [
+          { name: 'Skipped Criteria 1', evidence: null, result: 'skipped' },
+          { name: 'Skipped Criteria 2', evidence: null, result: 'skipped' },
         ],
       },
       {

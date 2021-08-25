@@ -26,12 +26,13 @@ local evaluateCriterion(criterion, service) =
 // A level passes if it doesn't have any failures.
 //
 // Unimplemented (null) and skipped are considered to be passed. If a whole
-// level's criteria are all skipped or unimplemented, it is acceptable, but
-// weird.
+// level's criteria are all unimplemented, the level is considered to be
+// failed. If a level's criteria are all skipped, the level is passed.
 local levelPassed(criteria) =
   local results = std.map(function(criterion) criterion.result, criteria);
 
-  misc.all(function(result) result != 'failed', std.prune(results));
+  misc.all(function(result) result != 'failed', std.prune(results)) &&
+  misc.any(function(result) result != 'unimplemented', std.prune(results));
 
 local evaluateLevel(level, service) =
   local criteria = std.map(function(criterion) evaluateCriterion(criterion, service), level.criteria);
@@ -42,9 +43,6 @@ local evaluateLevel(level, service) =
     criteria: criteria,
   };
 
-local evaluate(service, levels) =
-  std.map(function(level) evaluateLevel(level, service), levels);
-
 {
-  evaluate: evaluate,
+  evaluate: function(service, levels) std.map(function(level) evaluateLevel(level, service), levels),
 }
