@@ -1,6 +1,5 @@
-local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
-local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
-local saturationHelpers = import 'helpers/saturation_helpers.libsonnet';
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
+local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_point.libsonnet').resourceSaturationPoint;
 
 // HACK: containers running Go
 // Ideally we shouldn't need to keep this updated manually
@@ -11,7 +10,10 @@ local goContainers = ['gitlab-workhorse', 'kas', 'registry', 'thanos-store'];
     title: 'Go Memory Utilization per Node',
     severity: 's4',
     horizontallyScalable: true,
-    appliesTo: std.setInter(saturationHelpers.goServices, std.set(saturationHelpers.kubeProvisionedServices)),
+    appliesTo: std.setInter(
+      std.set(metricsCatalog.findServicesWithTag(tag='golang')),
+      std.set(metricsCatalog.findKubeProvisionedServices())
+    ),
     description: |||
       Measures Go memory usage as a percentage of container memory limit
     |||,

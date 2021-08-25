@@ -1,5 +1,5 @@
-local services = (import 'metrics-config.libsonnet').monitoredServices;
-local aggregationSets = (import 'metrics-config.libsonnet').aggregationSets;
+local services = (import 'gitlab-metrics-config.libsonnet').monitoredServices;
+local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
 local prometheusServiceGroupGenerator = import 'servicemetrics/prometheus-service-group-generator.libsonnet';
 
 local outputPromYaml(groups) =

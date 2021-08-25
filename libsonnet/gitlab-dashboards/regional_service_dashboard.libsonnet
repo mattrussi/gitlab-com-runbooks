@@ -6,7 +6,7 @@ local singleMetricRow = import 'key-metric-panels/single-metric-row.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 
 local dashboardForService(serviceType, serviceSLIsAggregationSet, componentSLIsAggregationSet) =
-  local metricsCatalogServiceInfo = metricsCatalog.getService('gitaly');
+  local metricsCatalogServiceInfo = metricsCatalog.getService(serviceType);
   local formatConfig = { serviceType: serviceType };
   local selectorHash = { env: '$environment', environment: '$environment', type: serviceType, stage: '$stage' };
 

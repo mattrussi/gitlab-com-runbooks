@@ -8,6 +8,9 @@ local perFeatureCategoryRecordingRules = (import './lib/puma-per-feature-categor
 metricsCatalog.serviceDefinition({
   type: 'api',
   tier: 'sv',
+
+  tags: ['golang'],
+
   contractualThresholds: {
     apdexRatio: 0.9,
     errorRatio: 0.005,

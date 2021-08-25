@@ -5,6 +5,9 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 metricsCatalog.serviceDefinition({
   type: 'kas',
   tier: 'sv',
+
+  tags: ['golang'],
+
   monitoringThresholds: {
     // apdexScore: 0.95,
     errorRatio: 0.9995,

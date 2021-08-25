@@ -8,6 +8,9 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 metricsCatalog.serviceDefinition({
   type: 'praefect',
   tier: 'stor',
+
+  tags: ['golang'],
+
   monitoringThresholds: {
     apdexScore: 0.995,
     errorRatio: 0.9995,  // 99.95% of Praefect requests should succeed, over multiple window periods

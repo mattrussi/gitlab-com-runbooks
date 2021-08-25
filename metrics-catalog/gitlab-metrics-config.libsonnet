@@ -11,4 +11,11 @@ local allServices = import './services/all.jsonnet';
 
   // Hash of all aggregation sets
   aggregationSets:: aggregationSets,
+
+  // service_catalog.json is stored in the `services` directory
+  // alongside service_catalog.yml
+  serviceCatalog:: import 'service_catalog.json',
+
+  // stage-group-mapping.jsonnet is generated file, stored in the `services` directory
+  stageGroupMapping:: import 'stage-group-mapping.jsonnet',
 }

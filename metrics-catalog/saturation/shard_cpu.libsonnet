@@ -1,13 +1,12 @@
-local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
-local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
-local saturationHelpers = import 'helpers/saturation_helpers.libsonnet';
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
+local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_point.libsonnet').resourceSaturationPoint;
 
 {
   shard_cpu: resourceSaturationPoint({
     title: 'Average CPU Utilization per Shard',
     severity: 's3',
     horizontallyScalable: true,
-    appliesTo: saturationHelpers.vmProvisionedServices(default='gitaly'),
+    appliesTo: metricsCatalog.findVMProvisionedServices(first='gitaly'),
     description: |||
       This resource measures average CPU utilization across an all cores in a shard of a
       service fleet. If it is becoming saturated, it may indicate that the

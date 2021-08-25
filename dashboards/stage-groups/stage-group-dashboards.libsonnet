@@ -1,5 +1,5 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
-local stages = import 'service-catalog/stages.libsonnet';
+local stages = (import 'service-catalog/stages.libsonnet');
 local template = grafana.template;
 local prebuiltTemplates = import 'grafana/templates.libsonnet';
 local basic = import 'grafana/basic.libsonnet';

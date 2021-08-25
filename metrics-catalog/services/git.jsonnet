@@ -11,6 +11,9 @@ local gitWorkhorseJobNameSelector = { job: { re: 'gitlab-workhorse|gitlab-workho
 metricsCatalog.serviceDefinition({
   type: 'git',
   tier: 'sv',
+
+  tags: ['golang'],
+
   contractualThresholds: {
     apdexRatio: 0.95,
     errorRatio: 0.005,

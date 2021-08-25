@@ -1,5 +1,4 @@
-// stage-group-mapping.jsonnet is generated file, stored in the `services` directory
-local stageGroupMapping = import 'stage-group-mapping.jsonnet';
+local stageGroupMapping = (import 'gitlab-metrics-config.libsonnet').stageGroupMapping;
 
 /* This is a special pseudo-stage group for the feature_category of `not_owned` */
 local notOwnedGroup = {

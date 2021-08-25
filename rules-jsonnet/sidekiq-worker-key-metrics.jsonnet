@@ -1,4 +1,4 @@
-local aggregationSets = (import 'metrics-config.libsonnet').aggregationSets;
+local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
 local alerts = import 'alerts/alerts.libsonnet';
 local multiburnExpression = import 'mwmbr/expression.libsonnet';
 local stableIds = import 'stable-ids/stable-ids.libsonnet';
