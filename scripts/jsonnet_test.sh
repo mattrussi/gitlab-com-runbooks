@@ -15,9 +15,9 @@ find_tests() {
 
 find_tests "${1:-}" | while read -r line; do
   echo "# ${line}"
-  if ! jsonnet -J "$REPO_DIR/libsonnet" -J "$REPO_DIR/vendor" -J "$REPO_DIR/metrics-catalog" -J "$REPO_DIR/services" --ext-str "dashboardPath=test_file" "$line"; then
+  if ! jsonnet -J "$REPO_DIR/libsonnet" -J "$REPO_DIR/vendor" -J "$REPO_DIR/metrics-catalog" -J "$REPO_DIR/services" "$line"; then
     echo "# ${line} failed"
-    echo "# Retry with \`jsonnet -J \"$REPO_DIR/libsonnet\" -J \"$REPO_DIR/vendor\" -J \"$REPO_DIR/metrics-catalog\" -J \"$REPO_DIR/services\" --ext-str \"dashboardPath=test_file\" \"$line\"\`"
+    echo "# Retry with \`jsonnet -J \"$REPO_DIR/libsonnet\" -J \"$REPO_DIR/vendor\" -J \"$REPO_DIR/metrics-catalog\" -J \"$REPO_DIR/services\" \"$line\"\`"
     exit 1
   fi
 done

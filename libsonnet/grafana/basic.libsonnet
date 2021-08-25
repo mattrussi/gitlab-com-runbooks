@@ -202,8 +202,8 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
             title='Source',
             mode='markdown',
             content=|||
-              Made with ❤️ and [Grafonnet](https://github.com/grafana/grafonnet-lib). [Contribute to this dashboard on GitLab.com](https://gitlab.com/gitlab-com/runbooks/blob/master/dashboards/%(filePath)s)
-            ||| % { filePath: std.extVar('dashboardPath') },
+              Made with ❤️ and [Grafonnet](https://github.com/grafana/grafonnet-lib). [Contribute to this dashboard on GitLab.com](https://gitlab.com/gitlab-com/runbooks/blob/master/dashboards)
+            |||,
           ),
           gridPos={
             x: 0,
