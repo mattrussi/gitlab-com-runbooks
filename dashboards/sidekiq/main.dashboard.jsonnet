@@ -181,10 +181,73 @@ serviceDashboard.overview('sidekiq')
   }
 )
 .addPanel(
-  row.new(title='Sidekiq Execution'),
+  row.new(title='Sidekiq Future Sets'),
   gridPos={
     x: 0,
     y: 2000,
+    w: 24,
+    h: 1,
+  }
+)
+.addPanels(
+  layout.grid([
+    basic.queueLengthTimeseries(
+      title='Sidekiq Scheduled Set Delay',
+      description='How late is scheduled job that is next to execute. Lower is better; up to 20 seconds is normal',
+      query=|||
+        sidekiq_schedule_set_processing_delay_seconds{environment="$environment"} and on(fqdn) (redis_connected_slaves != 0)
+      |||,
+      legendFormat='Delay',
+      format='s',
+      interval='1m',
+      intervalFactor=3,
+      yAxisLabel='Seconds',
+    ),
+    basic.queueLengthTimeseries(
+      title='Sidekiq Scheduled Set Backlog',
+      description='How many scheduled jobs are overdue. Lower is better; periodic processing means some backlog is normal',
+      query=|||
+        sidekiq_schedule_set_backlog_count{environment="$environment"} and on(fqdn) (redis_connected_slaves != 0)
+      |||,
+      legendFormat='Backlog',
+      format='short',
+      interval='1m',
+      linewidth=1,
+      intervalFactor=3,
+      yAxisLabel='Count',
+    ),
+    basic.queueLengthTimeseries(
+      title='Sidekiq Retry Set Delay',
+      description='How late is retry job that is next to execute. Lower is better; up to 20 seconds is normal',
+      query=|||
+        sidekiq_retry_set_processing_delay_seconds{environment="$environment"} and on(fqdn) (redis_connected_slaves != 0)
+      |||,
+      legendFormat='Delay',
+      format='s',
+      interval='1m',
+      intervalFactor=3,
+      yAxisLabel='Seconds',
+    ),
+    basic.queueLengthTimeseries(
+      title='Sidekiq Retry Set Backlog',
+      description='How many retry jobs are overdue. Lower is better; periodic processing means some backlog is normal',
+      query=|||
+        sidekiq_retry_set_backlog_count{environment="$environment"} and on(fqdn) (redis_connected_slaves != 0)
+      |||,
+      legendFormat='Backlog',
+      format='short',
+      interval='1m',
+      linewidth=1,
+      intervalFactor=3,
+      yAxisLabel='Count',
+    ),
+  ], cols=2, rowHeight=10, startRow=2001),
+)
+.addPanel(
+  row.new(title='Sidekiq Execution'),
+  gridPos={
+    x: 0,
+    y: 2500,
     w: 24,
     h: 1,
   }
@@ -328,7 +391,7 @@ serviceDashboard.overview('sidekiq')
       min=0.01,
     )
     .addDataLink(shardDetailDataLink),
-  ], cols=2, rowHeight=10, startRow=2001),
+  ], cols=2, rowHeight=10, startRow=2501),
 )
 .addPanel(
   row.new(title='Shard Workloads'),
