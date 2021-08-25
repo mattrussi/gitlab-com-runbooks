@@ -35,9 +35,7 @@ class JsonnetWrapper
   def build_command
     [
       executable,
-      *libs.map { |dir| ["-J", dir] }.flatten,
-      "--ext-str",
-      "dashboardPath=#{File.join(REPO_DIR, 'dashboards')}"
+      *libs.map { |dir| ["-J", dir] }.flatten
     ]
   end
 
