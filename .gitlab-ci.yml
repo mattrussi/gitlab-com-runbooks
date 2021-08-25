@@ -566,8 +566,7 @@ generate_service_maturity_manifest:
     - if: '$GENERATE_SERVICE_MATURITY_MANIFEST == "1"'
       when: always
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      when: manual
-      allow_failure: true
+      when: always
   script:
     - ./scripts/bundler.sh # Install jsonnet bundles
     - ./scripts/generate-jsonnet-rules.sh
@@ -575,6 +574,7 @@ generate_service_maturity_manifest:
     - ./scripts/compile_jsonnet.rb ./service-maturity/maturity.jsonnet > ./service-maturity-manifest/service_maturity.yml
   artifacts:
     expose_as: 'service maturity manifest'
+    expire_in: 1 day
     paths:
       - service-maturity-manifest/
 

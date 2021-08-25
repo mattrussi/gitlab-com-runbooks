@@ -1,5 +1,6 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local rateMetric = metricsCatalog.rateMetric;
+local maturityLevels = import 'service-maturity/levels.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'waf',
@@ -64,4 +65,7 @@ metricsCatalog.serviceDefinition({
       significantLabels: [],
     },
   },
+  skippedMaturityCriteria: maturityLevels.getCriterias([
+    'Developer guides exist in developer documentation',
+  ]),
 })
