@@ -30,8 +30,10 @@ local aggregationFilterExpr(targetAggregationSet) =
   // in the service level aggregation.
   // These are defined in the SLI with `aggregateToService:false`
   joinExpr(targetAggregationSet) + if aggregationFilter != null then
-    ' and on(component, type) (gitlab_component_service:mapping{monitor="global", %(aggregationFilter)s_aggregation="yes"})' % {
-      aggregationFilter: aggregationFilter,
+    ' and on(component, type) (gitlab_component_service:mapping{%(selector)s})' % {
+      selector: selectors.serializeHash(targetAggregationSet.selector {
+        [aggregationFilter + '_aggregation']: 'yes',
+      }),
     }
   else
     '';
