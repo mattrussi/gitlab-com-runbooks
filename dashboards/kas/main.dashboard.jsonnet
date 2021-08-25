@@ -17,7 +17,7 @@ serviceDashboard.overview('kas')
 .addPanels(
   layout.grid([
     basic.timeseries(
-      title="Number of connected agentk's",
+      title='Number of connected agentk Pods',
       description='Number of connected agentk from user Kubernetes clusters',
       query='sum(grpc_server_requests_in_flight{app="kas",env=~"$environment", grpc_method="GetConfiguration"})',
       interval='1m',
