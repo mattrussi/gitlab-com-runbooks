@@ -7,19 +7,19 @@ local aggregationLabelsForPrimary = ['environment', 'tier', 'type', 'fqdn'];
 local aggregationLabelsForReplicas = ['environment', 'tier', 'type'];
 local selector = { type: 'patroni' };
 
-local alertExpr(aggregationLabels, selector, replica, threshold) =
+local alertExpr(aggregationLabels, selectorNumerator, selectorDenominator, replica, threshold, window='5m') =
   local aggregationLabelsWithRelName = aggregationLabels + ['relname'];
 
   |||
     (
       sum by (%(aggregationLabelsWithRelName)s) (
-        rate(pg_stat_user_tables_idx_tup_fetch{%(selector)s}[5m])
+        rate(pg_stat_user_tables_idx_tup_fetch{%(selectorNumerator)s}[%(window)s])
         and on(job, instance)
         pg_replication_is_replica == %(replica)s
       )
       / ignoring(relname) group_left()
         sum by (%(aggregationLabels)s) (
-          rate(pg_stat_user_tables_idx_tup_fetch{%(selector)s}[5m])
+          rate(pg_stat_user_tables_idx_tup_fetch{%(selectorDenominator)s}[%(window)s])
           and on(job, instance)
           pg_replication_is_replica == %(replica)s
       )
@@ -27,8 +27,10 @@ local alertExpr(aggregationLabels, selector, replica, threshold) =
   ||| % {
     aggregationLabelsWithRelName: aggregations.serialize(aggregationLabelsWithRelName),
     aggregationLabels: aggregations.serialize(aggregationLabels),
-    selector: selectors.serializeHash(selector),
+    selectorNumerator: selectors.serializeHash(selectorNumerator),
+    selectorDenominator: selectors.serializeHash(selectorDenominator),
     replica: if replica then '1' else '0',
+    window: window,
     threshold: threshold,
   };
 
@@ -54,7 +56,13 @@ local hotspotTupleAlert(alertName, periodFor, warning, replica) =
 
   alerts.processAlertRule({
     alert: alertName,
-    expr: alertExpr(aggregationLabels=aggregationLabels, selector=selector, replica=replica, threshold=threshold),
+    expr: alertExpr(
+      aggregationLabels=aggregationLabels,
+      selectorNumerator=selector,
+      selectorDenominator=selector,
+      replica=replica,
+      threshold=threshold
+    ),
     'for': periodFor,
     labels: {
       team: 'rapid-action-intercom',
@@ -102,6 +110,41 @@ local rules = {
           warning=true,
           replica=true
         ),
+
+        // Special alert for Access Group
+        // See https://gitlab.com/groups/gitlab-org/-/epics/3343#note_651528817
+        alerts.processAlertRule({
+          alert: 'PostgreSQLAccessGroupTupleFetchesWarningTrigger',
+          expr: alertExpr(
+            aggregationLabels=aggregationLabelsForPrimary,
+            selectorNumerator=selector { relname: 'project_authorizations' },
+            selectorDenominator=selector,
+            replica=false,
+            threshold=0.05,
+            window='1d'
+          ),
+          'for': '1h',
+          labels: {
+            team: 'access',
+            severity: 's4',
+            alert_type: 'cause',
+            runbook: 'docs/patroni/rails-sql-apdex-slow.md',
+          },
+          annotations: {
+            title: 'Average fetches on the postgres primary in the project_authorizations table exceeds 5% of total',
+            description: |||
+              More than 5% of all tuple fetches on the postgres primary are for the `project_authorizations` table.
+
+              This work was previously addressed through the epic https://gitlab.com/groups/gitlab-org/-/epics/3343#note_652970688.
+
+              The Access team should work to understand why this is happening and look to address the problem.
+            |||,
+            grafana_dashboard_id: 'alerts-pg_user_tables_primary/alerts-pg-user-table-alerts-primary',
+            grafana_min_zoom_hours: '24',
+            grafana_panel_id: '2',
+            grafana_variables: aggregations.serialize(aggregationLabelsForPrimary + ['relname']),
+          },
+        }),
 
         // Long running transaction alert
         alerts.processAlertRule({

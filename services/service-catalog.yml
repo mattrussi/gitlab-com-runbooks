@@ -131,6 +131,11 @@ teams:
   slack_alerts_channel: feed_alerts_configure
   send_slo_alerts_to_team_slack_channel: true
 
+- name: access
+  slack_alerts_channel: feed_alerts_access
+  product_stage_group: access
+  send_slo_alerts_to_team_slack_channel: true
+
 tiers:
 - name: sv
 - name: lb
