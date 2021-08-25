@@ -1,4 +1,4 @@
-local serviceCatalog = import '../services/service_catalog.libsonnet';
+local serviceCatalog = import 'service-catalog/service-catalog.libsonnet';
 local miscUtils = import 'utils/misc.libsonnet';
 
 local metricsDashboardLink(serviceName) =
