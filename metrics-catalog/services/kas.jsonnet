@@ -40,7 +40,9 @@ metricsCatalog.serviceDefinition({
 
       errorRate: rateMetric(
         counter='grpc_server_handled_total',
-        selector=baseSelector { grpc_code: { nre: 'OK|FailedPrecondition|Unauthenticated|PermissionDenied' }, grpc_method: 'GetConfiguration' }
+        selector=baseSelector {
+          grpc_code: { nre: '^(OK|NotFound|FailedPrecondition|Unauthenticated|PermissionDenied|Canceled|DeadlineExceeded)$' },
+        },
       ),
 
       significantLabels: ['grpc_method'],
