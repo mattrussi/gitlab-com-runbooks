@@ -4,7 +4,10 @@ local evaluator = import 'service-maturity/evaluator.libsonnet';
 local mockService = {
   type: 'mock',
   tier: 'test',
-  skippedMaturityCriteria: ['Skipped Criteria 1', 'Skipped Criteria 2'],
+  skippedMaturityCriteria: [
+    { name: 'Skipped Criteria 1', level: 'Level 1' },
+    { name: 'Skipped Criteria 2', level: 'Level 2' },
+  ],
 };
 local levels = [
   {

@@ -1,7 +1,14 @@
 local misc = import 'utils/misc.libsonnet';
 
+local skippedCrition(criterion, service) =
+  if std.objectHas(service, 'skippedMaturityCriteria') then
+    local names = std.map(function(c) c.name, service.skippedMaturityCriteria);
+    std.member(names, criterion.name)
+  else
+    false;
+
 local evaluateCriterion(criterion, service) =
-  if std.objectHas(service, 'skippedMaturityCriteria') && std.member(service.skippedMaturityCriteria, criterion.name) then
+  if skippedCrition(criterion, service) then
     {
       name: criterion.name,
       result: 'skipped',

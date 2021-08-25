@@ -144,15 +144,23 @@ local levels = [
 ];
 
 local criteriaList =
-  std.flatMap(function(level) std.map(function(criteria) criteria.name, level.criteria), levels);
+  std.flatMap(
+    function(level) std.map(
+      function(criteria) { name: criteria.name, level: level.name },
+      level.criteria
+    ),
+    levels
+  );
 
-assert std.length(criteriaList) == std.length(std.uniq(criteriaList)) :
-       'Duplicated criterias: %s' % std.join(', ', miscUtils.arrayDiff(criteriaList, std.uniq(criteriaList)));
+local criteriaNames = std.map(function(criteria) criteria.name, criteriaList);
+assert std.length(criteriaNames) == std.length(std.uniq(criteriaNames)) :
+       'Duplicated criterias: %s' % std.join(', ', miscUtils.arrayDiff(criteriaNames, std.uniq(criteriaNames)));
 
-local getCriteria(criteria) =
-  assert std.member(criteriaList, criteria) :
-         'Criteria %s does not exist' % criteria;
-  criteria;
+local getCriteria(criteriaName) =
+  local criteria = std.filter(function(c) c.name == criteriaName, criteriaList);
+  assert std.length(criteria) == 1 :
+         'Criteria not found %s' % criteriaName;
+  criteria[0];
 
 local getCriterias(criterias) = std.map(getCriteria, criterias);
 
