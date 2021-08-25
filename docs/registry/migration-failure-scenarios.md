@@ -315,17 +315,45 @@ If there is an intermittent GCS issue, it's possible that an existing path would
 
 ##### Impact
 
+A new repository was handled by the old code path.
+
 ##### Expected app behavior on failure
+
+If no writes to the old path were made, read requests made against this repository will fail with `404 Not Found`.
+
+Write requests should succeed, writing data to the old code path.
+
+For subsequent read requests, data written to the old path will be visible to the UI and available to pull. While the data on the new path will not appear in the UI and will not be available to pull, failing with `404 Not Found`.
 
 ##### Observability
 
+The logs in Kibana will always include `serving request in migration mode` for once for each request made in migration mode. This log entry will contain the path that the repository followed, but its presence is not a signal or alert for this scenario in particular. 
+
+End users will observe this issue as older tags not suddenly and consistently not appearing in the UI and older images suddenly and consistently failing to pull. While newer tags and images consistently remain visible in the UI and pullable.
+
 ##### Recovery definition
 
-##### Expected bpp behavior on recovery
+Requests are once again routed to the new code path.
+
+##### Expected app behavior on recovery
+
+If no writes to the old path were made, read requests made against this repository will succeed again.
+
+Write requests should succeed, writing data to the new code path.
+
+If data were written to the old code path, those images would no longer be visible in the UI or pullible.
 
 ##### Mitigation
 
+On the server side during [Phase 2](https://gitlab.com/gitlab-org/container-registry/-/issues/374#phase-2-migrate-existing-repositories), the data on the old prefix on the GCS bucket will not cause future requests to be routed to the old code path, so we are not required to remove it.
+
+If possible, newer images that were pushed during this scenario should be rebuilt from the client side.
+
 ##### Possible corrective actions
+
+For [Phase 1](https://gitlab.com/gitlab-org/container-registry/-/issues/374#phase-1-the-metadata-db-serves-new-repositories), it's possible that the `container_registry_migration_phase1_deny` feature flag was set for a repository what was previously eligible. This feature flag would need to be removed, and we **must** remove this repository and all of its images _from the old prefix on the GCS bucket_ — otherwise eligible repositories that are present on the old prefix, will always be served by the old code path during Phase 1.
+
+For [Phase 2](https://gitlab.com/gitlab-org/container-registry/-/issues/374#phase-2-migrate-existing-repositories), this likely indicates a bug in the container registry. Either in the logic to identify a new repository, or in the routing logic. This issue would need to investigated and fixed by the registry development team.
 
 #### Non-Eligible New Repository Handled by New Code Path
 
