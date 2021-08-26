@@ -6,6 +6,7 @@ local annotation = grafana.annotation;
     annotation.datasource(
       'deploy',
       '-- Grafana --',
+      enable=false,
       tags=['deploy', '$environment'],
       builtIn=1,
       iconColor='#96D98D',
@@ -14,6 +15,7 @@ local annotation = grafana.annotation;
     annotation.datasource(
       'canary-deploy',
       '-- Grafana --',
+      enable=false,
       tags=['deploy', '${environment}-cny'],
       builtIn=1,
       iconColor='#FFEE52',
@@ -22,6 +24,7 @@ local annotation = grafana.annotation;
     annotation.datasource(
       'k8s-workloads',
       '-- Grafana --',
+      enable=false,
       tags=['k8s-workloads'],
       builtIn=1,
       iconColor='#316CE6',
@@ -30,6 +33,7 @@ local annotation = grafana.annotation;
     annotation.datasource(
       'feature-flags',
       '-- Grafana --',
+      enable=false,
       tags=['feature-flag', '${environment}'],
       builtIn=1,
       iconColor='#CA95E5',
