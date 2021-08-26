@@ -13,7 +13,10 @@ metricsCatalog.serviceDefinition({
     errorRatio: 0.9995,
   },
   serviceDependencies: {
+    api: true,
     gitaly: true,
+    praefect: true,
+    redis: true,
   },
   provisioning: {
     kubernetes: true,
