@@ -18,4 +18,13 @@ local allServices = import './services/all.jsonnet';
 
   // stage-group-mapping.jsonnet is generated file, stored in the `services` directory
   stageGroupMapping:: import 'stage-group-mapping.jsonnet',
+
+  // The base selector for the environment, as configured in Grafana dashboards
+  grafanaEnvironmentSelector:: { environment: '$environment', env: '$environment' },
+
+  // Signifies that a stage is partitioned into canary, main stage etc
+  useEnvironmentStages:: true,
+
+  // Name of the default Prometheus datasource to use
+  defaultPrometheusDatasource: 'Global',
 }

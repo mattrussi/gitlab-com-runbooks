@@ -1,5 +1,6 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local template = grafana.template;
+local defaultPrometheusDatasource = (import 'gitlab-metrics-config.libsonnet').defaultPrometheusDatasource;
 
 {
   gkeCluster::
@@ -42,8 +43,7 @@ local template = grafana.template;
     template.datasource(
       'PROMETHEUS_DS',
       'prometheus',
-      'Global',
-      regex='/(.*-gprd|Frank|Global|gprd-.*)/',
+      defaultPrometheusDatasource,
     ),
   environment::
     template.new(
