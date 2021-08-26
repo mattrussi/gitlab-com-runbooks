@@ -407,6 +407,10 @@ defence.
 
 ## Architecture
 
+THIS IS WORK IN PROGRESS! IT IS LIKELY TO BE INACCURATE! IT WILL BE UPDATED IN THE NEAR FUTURE!
+
+![monitoring](./img/monitoring.png)
+
 ## Performance
 
 ## Scalability
