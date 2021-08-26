@@ -11,9 +11,10 @@ local basic = import 'grafana/basic.libsonnet';
 local templates = import 'grafana/templates.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
+local gitlabMetricsConfig = (import 'gitlab-metrics-config.libsonnet');
 local row = grafana.row;
 
-local defaultEnvironmentSelector = { environment: '$environment', env: '$environment' };
+local defaultEnvironmentSelector = gitlabMetricsConfig.grafanaEnvironmentSelector;
 
 local listComponentThresholds(service) =
   std.prune([
@@ -70,20 +71,19 @@ local overviewDashboard(
   local saturationComponents = metricsCatalogServiceInfo.applicableSaturationTypes();
 
   local stageLabels =
-    if metricsCatalogServiceInfo.serviceIsStageless then
+    if metricsCatalogServiceInfo.serviceIsStageless || !gitlabMetricsConfig.useEnvironmentStages then
       {}
     else
       { stage: '$stage' };
 
   local environmentStageSelectorHash = environmentSelectorHash + stageLabels;
   local selectorHash = environmentStageSelectorHash { type: type };
-  local selector = selectors.serializeHash(selectorHash);
 
   local dashboard =
     basic.dashboard(
       'Overview',
       tags=['type:' + type, type, 'service overview'],
-      includeEnvironmentTemplate=environmentSelectorHash == defaultEnvironmentSelector,
+      includeEnvironmentTemplate=std.objectHas(environmentStageSelectorHash, 'environment'),
     )
     .addPanels(
       headlineMetricsRow(
@@ -109,7 +109,7 @@ local overviewDashboard(
     .addPanels(
       if metricsCatalogServiceInfo.getProvisioning().vms == true then
         [
-          nodeMetrics.nodeMetricsDetailRow(selector) {
+          nodeMetrics.nodeMetricsDetailRow(selectorHash) {
             gridPos: {
               x: 0,
               y: 300,
@@ -140,7 +140,11 @@ local overviewDashboard(
     );
 
   // Optionally add the stage variable
-  local dashboardWithStage = if !metricsCatalogServiceInfo.serviceIsStageless then dashboard.addTemplate(templates.stage) else dashboard;
+  local dashboardWithStage =
+    if metricsCatalogServiceInfo.serviceIsStageless || !std.objectHas(environmentStageSelectorHash, 'stage') then
+      dashboard
+    else
+      dashboard.addTemplate(templates.stage);
 
   dashboardWithStage
   {
