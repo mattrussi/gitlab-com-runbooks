@@ -85,6 +85,43 @@ groups:
             pg_replication_is_replica == 1
         )
       ) > 0.5
+  - alert: PostgreSQLAccessGroupTupleFetchesWarningTrigger
+    for: 1h
+    annotations:
+      title: Average fetches on the postgres primary in the project_authorizations
+        table exceeds 5% of total
+      description: |
+        More than 5% of all tuple fetches on the postgres primary are for the `project_authorizations` table.
+
+        This work was previously addressed through the epic https://gitlab.com/groups/gitlab-org/-/epics/3343#note_652970688.
+
+        The Access team should work to understand why this is happening and look to address the problem.
+      grafana_dashboard_id: alerts-pg_user_tables_primary/alerts-pg-user-table-alerts-primary
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-pg_user_tables_primary/alerts-pg-user-table-alerts-primary?from=now-24h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-tier={{ $labels.tier }}&var-type={{ $labels.type
+        }}&var-fqdn={{ $labels.fqdn }}&var-relname={{ $labels.relname }}
+      grafana_min_zoom_hours: "24"
+      grafana_panel_id: "2"
+      grafana_variables: environment,tier,type,fqdn,relname
+    labels:
+      alert_type: cause
+      runbook: docs/patroni/rails-sql-apdex-slow.md
+      severity: s4
+      team: access
+    expr: |
+      (
+        sum by (environment,tier,type,fqdn,relname) (
+          rate(pg_stat_user_tables_idx_tup_fetch{relname="project_authorizations",type="patroni"}[1d])
+          and on(job, instance)
+          pg_replication_is_replica == 0
+        )
+        / ignoring(relname) group_left()
+          sum by (environment,tier,type,fqdn) (
+            rate(pg_stat_user_tables_idx_tup_fetch{type="patroni"}[1d])
+            and on(job, instance)
+            pg_replication_is_replica == 0
+        )
+      ) > 0.05
   - alert: PatroniLongRunningTransactionDetected
     for: 1m
     annotations:
