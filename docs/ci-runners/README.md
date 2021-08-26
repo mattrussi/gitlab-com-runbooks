@@ -87,46 +87,6 @@ runs. Below is a table that details the cost factor for each runner type.
 
 ## Network Info
 
-Below is the networking information for each project.
-
-### GCP projects
-
-#### gitlab-ci project
-
-| Network Name   | Subnet Name                 | CIDR            | Purpose                                                |
-| -------------- | --------------------------- | --------------- | ------------------------------------------------------ |
-| `default`      | `default`                   | `10.142.0.0/20` | all non-runner machines (managers, prometheus, etc.). In `us-east1` - we don't use this subnetwork in any other region. |
-| `default`      | `shared-runners`            | `10.0.32.0/20`  | shared runner (SRM) machines                           |
-| `default`      | `private-runners`           | `10.0.0.0/20`   | private runner (PRM) machines                          |
-| `default`      | `gitlab-shared-runners `    | `10.0.16.0/20`  | gitlab shared runner (GSRM) machines                   |
-| `ci`           | `bastion-ci`                | `10.1.4.0/24`   | Bastion network                                        |
-| `ci`           | `runner-managers`           | `10.1.5.0/24`   | Network for Runner Managers ([new ones](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/456))                 |
-| `ci`           | `ephemeral-runners-private` | `10.10.40.0/21` | Ephemeral runner machines for the new `private` shard. See [Ephemeral runner VMs networking](#ephemera-runner-vms-networking) bellow. |
-| `runners-gke`  | `runners-gke`               | `10.9.4.0/24`   | Primary; GKE nodes range      |
-| `runners-gke`  | `runners-gke`               | `10.8.0.0/16`   | Secondary; GKE pods range     |
-| `runners-gke`  | `runners-gke`               | `10.9.0.0/22`   | secondary; GKE services range |
-
-
-#### gitlab-org-ci project
-
-| Network Name   | Subnet Name               | CIDR          | Purpose                               |
-| -------------- | ------------------------- | ------------- | ------------------------------------- |
-| `org-ci`       | `manager`                 | `10.1.0.0/24` | Runner manager machines               |
-| `org-ci`       | `bastion-org-ci`          | `10.1.2.0/24` | Bastion network                       |
-| `org-ci`       | `gitlab-gke-org-ci`       | `10.1.3.0/24` | GKE network                           |
-| `org-ci`       | `gitlab-gke-org-ci`       | `10.3.0.0/16` | GKE network                           |
-| `org-ci`       | `gitlab-gke-org-ci`       | `10.1.8.0/23` | GKE network                           |
-| `org-ci`       | `shared-runner`           | `10.2.0.0/16` | Ephemeral runner machines             |
-
-#### gitlab-ci-windows project
-
-| Network Name   | Subnet Name          | CIDR          | Purpose                           |
-| -------------- | -------------------- | ------------- | --------------------------------- |
-| `windows-ci`   | `manager-subnet`     | `10.1.0.0/16` | Runner manager machines           |
-| `windows-ci`   | `executor-subnet`    | `10.2.0.0/16` | Ephemeral runner machines         |
-| `windows-ci`   | `runner-windows-ci`  | `10.3.0.0/24` | Runner network for ansible/packer |
-| `windows-ci`   | `bastion-windows-ci` | `10.3.1.0/24` | bastion network                   |
-
 ### Ephemeral runner VMs networking
 
 For high capacity shards (like `shared`) we create dedicated projects for ephemeral VMs.
@@ -410,6 +370,63 @@ Every new CIDR should start at directly after the previously reserved one ends.
 | `gitlab-ci-plan-free-4` | `ephemeral-runners/ephemeral-runners` | `10.10.24.0/21` |
 | `gitlab-ci-plan-free-3` | `ephemeral-runners/ephemeral-runners` | `10.10.32.0/21` |
 | `gitlab-ci`             | `ci/ephemeral-runners-private`        | `10.10.40.0/21` |
+
+### GCP projects
+
+Here you can find details about networking in different projects used by CI Runners service.
+
+#### gitlab-ci project
+
+| Network Name   | Subnet Name                 | CIDR            | Purpose                                                |
+| -------------- | --------------------------- | --------------- | ------------------------------------------------------ |
+| `default`      | `default`                   | `10.142.0.0/20` | all non-runner machines (managers, prometheus, etc.). In `us-east1` - we don't use this subnetwork in any other region. |
+| `default`      | `shared-runners`            | `10.0.32.0/20`  | shared runner (SRM) machines                           |
+| `default`      | `private-runners`           | `10.0.0.0/20`   | private runner (PRM) machines                          |
+| `default`      | `gitlab-shared-runners `    | `10.0.16.0/20`  | gitlab shared runner (GSRM) machines                   |
+| `ci`           | `bastion-ci`                | `10.1.4.0/24`   | Bastion network                                        |
+| `ci`           | `runner-managers`           | `10.1.5.0/24`   | Network for Runner Managers ([new ones](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/456))                 |
+| `ci`           | `ephemeral-runners-private` | `10.10.40.0/21` | Ephemeral runner machines for the new `private` shard. See [Ephemeral runner VMs networking](#ephemera-runner-vms-networking) bellow. |
+| `runners-gke`  | `runners-gke`               | `10.9.4.0/24`   | Primary; GKE nodes range      |
+| `runners-gke`  | `runners-gke`               | `10.8.0.0/16`   | Secondary; GKE pods range     |
+| `runners-gke`  | `runners-gke`               | `10.9.0.0/22`   | secondary; GKE services range |
+
+The `default` network will be removed once we will move all of the runner managers to a new
+infrastructure, which is being tracked [by this epic](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/456).
+
+The `ci` network will be getting new subnetworks for `ephemeral-runners-X` while working on
+[this epic]((https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/456)).
+
+The `runners-gke` network, at least for now, is in the expected state.
+
+#### gitlab-org-ci project
+
+| Network Name   | Subnet Name               | CIDR          | Purpose                               |
+| -------------- | ------------------------- | ------------- | ------------------------------------- |
+| `org-ci`       | `manager`                 | `10.1.0.0/24` | Runner manager machines               |
+| `org-ci`       | `bastion-org-ci`          | `10.1.2.0/24` | Bastion network                       |
+| `org-ci`       | `gitlab-gke-org-ci`       | `10.1.3.0/24` | GKE network                           |
+| `org-ci`       | `gitlab-gke-org-ci`       | `10.3.0.0/16` | GKE network                           |
+| `org-ci`       | `gitlab-gke-org-ci`       | `10.1.8.0/23` | GKE network                           |
+| `org-ci`       | `shared-runner`           | `10.2.0.0/16` | Ephemeral runner machines             |
+
+We are considering removing this environment at all when the
+[Linux CI Runners Continuous Delivery](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/456) will be done.
+Our current plan is to add the `gitlab-docker-shared-runners-manager` as another entry in the `shared-gitlab-org`
+runner managers. Since we've moved a lot of load from the `ci` project to the `ci-plan-free-X` projects, it should
+have a lot of space for load currently handled by `gitlab-org-ci` project. Removing it will make our configuration
+a little more simple.
+
+#### gitlab-ci-windows project
+
+| Network Name   | Subnet Name          | CIDR          | Purpose                           |
+| -------------- | -------------------- | ------------- | --------------------------------- |
+| `windows-ci`   | `manager-subnet`     | `10.1.0.0/16` | Runner manager machines           |
+| `windows-ci`   | `executor-subnet`    | `10.2.0.0/16` | Ephemeral runner machines         |
+| `windows-ci`   | `runner-windows-ci`  | `10.3.0.0/24` | Runner network for ansible/packer |
+| `windows-ci`   | `bastion-windows-ci` | `10.3.1.0/24` | bastion network                   |
+
+Windows project will most probably get the `runners-gke` network and GKE based monitoring in the future. This
+is however not yet scheduled.
 
 ## Production Change Lock (PCL)
 
