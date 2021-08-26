@@ -38,7 +38,6 @@
     stage: 'manage',
     feature_categories: [
       'devops_reports',
-      'code_analytics',
       'value_stream_management',
     ],
   },
