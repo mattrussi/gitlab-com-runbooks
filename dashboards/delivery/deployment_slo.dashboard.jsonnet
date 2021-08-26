@@ -147,6 +147,17 @@ basic.dashboard(
     'PODs',
     description='This table shows the pods running delivery-metrics with their revision and build date, except during a deployment, we expect to see only one pod',
     query='count(delivery_version_info) by (revision, build_date, pod)',
+    transformations=[
+      {
+        // Exclude timestamp and value, which aren't meaningful here
+        id: 'filterFieldsByName',
+        options: {
+          include: {
+            names: ['revision', 'build_date', 'pod'],
+          },
+        },
+      },
+    ],
   ),
 ], rowHeight=4, startRow=300))
 
