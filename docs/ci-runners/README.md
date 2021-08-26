@@ -37,6 +37,7 @@ They all have acronyms as well, which are indicated next to each name.
   - [windows-shared-runners-manager (WSRM)](#windows-shared-runners-manager-wsrm)
 - [Cost Factors](#cost-factors)
 - [Network Info](#network-info)
+- [Monitoring](#monitoring)
 - [Production Change Lock (PCL)](#production-change-lock-pcl)
 
 ## Runner Descriptions
@@ -427,6 +428,45 @@ a little more simple.
 
 Windows project will most probably get the `runners-gke` network and GKE based monitoring in the future. This
 is however not yet scheduled.
+
+## Monitoring
+
+![CI Runners monitoring stack design](./img/ci-runners-monitoring.png)
+
+Monitoring is be defined in almost the same configuration in all CI related projects. It is deployed using GKE and
+a cluster created by terraform. For that
+[a dedicated terraform module](https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/tree/master/modules/ci-runners/gke)
+was created. For it's purpose the GKE cluster is using the `runners-gke` network defined above.
+
+Prometheus is deployed in at least two replicas. Both have a Thanos Sidecar running alongside. Sidecar's gRPC
+endpoint is exposed as publicly accessible (we don't want to peer the `ops` or `gprd` network here) and the GCP Firewall
+limits access to it to only Thanos Query public IPs. This service uses TCP port `10901`.
+
+Long-term metrics storage is handled by using a dedicated GCS bucket created by the terraform module alongside
+the cluster. Thanos Sidecar is configured with write access to this bucket.
+
+Apart from the Sidecar we also have Thanos Store Gateway and Thanos Compact deployed and configured to use the same
+GCS bucket. Store Gateway's gRPC endpoint is exposed similarly to the Sidecar's one. This service uses TCP port `10903`.
+
+[Traefik](https://traefik.io/) is used as the ingress and load-balancing mechanism. It exposes gRPC services on given
+ports (using TCP routing), Prometheus UI and own dashboard. HTTP endpoints are automatically redirected to HTTPS,
+and Let's Encrypt certificates are used for TLS.
+
+For external access each project where monitoring is deployed is using a reserved public IP address. This address
+is bound to two DNS A records:
+
+- `monitoring-lb.[ENVIRONMENT].ci-runners.gitlab.net` - which is used for Thanos Query store DNS discovery and
+  to access Traefik dashboard in the browser. Access to the Dashboard is limited by oAuth, using Google as the Identity
+  Provider allowing `@gitlab.com` accounts. Consent screen and oAuth2 secrets are defined in the `gitlab-ci-155816`
+  project and should be used for all deployments of this monitoring stack (**remember:** new deploys will use new
+  domains for the redirection URLs, which should be added to the oAuth2 credentials configuration; unfortunately this
+  can't be managed by terraform).
+- `prometheus.[ENVIRONMENT].ci-runners.gitlab.net` - which is used to access directly the Prometheus deployment. As with
+  the Traefik dashboard, access is limited by oAuth2 with the same configuration.
+
+K8S deployment configuration is managed fully from CI. [A dedicated
+project](https://gitlab.com/gitlab-com/gl-infra/ci-runners/k8s-workloads) covers all monitoring clusters in different
+CI projects that we maintain.
 
 ## Production Change Lock (PCL)
 
