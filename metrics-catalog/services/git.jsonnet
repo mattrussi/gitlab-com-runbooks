@@ -115,7 +115,7 @@ metricsCatalog.serviceDefinition({
 
       local baseSelector = gitWorkhorseJobNameSelector {
         type: 'git',
-        route: [{ ne: '^/-/health$' }, { ne: '^/-/(readiness|liveness)$' }, { ne: '^/api/' }],
+        route: [{ ne: '^/-/health$' }, { ne: '^/-/(readiness|liveness)$' }, { ne: '^/api/' }, { ne: '\\\\A/api/v4/jobs/request\\\\z' }, { ne: '^/api/v4/jobs/request\\\\z' }],
       },
 
       apdex: histogramApdex(
