@@ -52,7 +52,12 @@ We have rate limiting in HAProxy, using stick tables, per IP address per minute.
 is used so that all the front-end haproxy nodes share the state (only one count per IP across the fleet). As with
 CloudFlare, haproxy has no concept of who the users are, it can only look at the IP addresses.
 
-Rate limiting is set to 2000/minute for consistency with RackAttack settings.
+The limit is 2000/minute for consistency with RackAttack settings.  The matching/consistency of the values is *very*
+important for a consistent user experience and being able to concisely express in words what will happen for any given
+pattern of traffic.  Before adjusting this value, please read the two background issues [1](https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/732)
+and [2](https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/707#note_464565358).  However as a TL;DR, we
+want this value to be *no lower* than the highest limit in RackAttack.  It can be higher, but those numbers are already quite
+high, so we'd only really want to look to drop it, in conjunction with dropping the RackAttack limits.
 
 The rate-limiting period is per-minute, and we use the same period in RackAttack.  This should almost never be changed;
 some clients actually assume this period, but it is also a reasonable one, and it makes the math easier.  Shorter would
