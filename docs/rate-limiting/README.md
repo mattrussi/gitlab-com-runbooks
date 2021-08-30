@@ -245,7 +245,8 @@ paid groups/users and permanent identities of customers.
 ### Application (ApplicationRateLimiter)
 
 The application has simple rate limit logic that can be used to throttle certain actions which is used when we need more
-flexibility than what Rack Attack can provide, since it can throttle at the controller or API level.
+flexibility than what Rack Attack can provide, since it can throttle at the controller or API level.  The scope is up to the individual limit 
+implementation and can be any ActiveRecord object or combination of multiple.  It is commonly per-user or per-project (or both), but it can be anything, e.g. the [RawController](https://gitlab.com/gitlab-org/gitlab/-/blob/1b86edced6397495fd2a61f2a312573dbc044aa6/app/controllers/projects/raw_controller.rb#L37) limits by project and *path*.
 
 These rate limits are set configured in [application_rate_limiter.rb](https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/application_rate_limiter.rb)
 
