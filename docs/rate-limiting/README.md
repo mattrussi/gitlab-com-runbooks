@@ -250,7 +250,7 @@ implementation and can be any ActiveRecord object or combination of multiple.  I
 
 These rate limits are set configured in [application_rate_limiter.rb](https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/application_rate_limiter.rb)
 
-At this time there is no way to bypass these rate limits, when the rate limit is reached a plain response with a `429` status code is issued without rate limiting headers.
+At this time there is no way to bypass these rate limits (e.g. for select users/groups/projects); when the rate limit is reached a plain response with a 429 status code is issued without rate limiting headers.
 
 [Example of a rate limit response.](https://gitlab.com/gitlab-org/gitlab/-/blob/7a99c1e7b4435fa230735b9046f7a0eacfa5b5a5/app/controllers/projects_controller.rb#L525-529)
 
