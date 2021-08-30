@@ -1,6 +1,6 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local row = grafana.row;
-local serviceDashboard = import 'gitlab-dashboards/service_dashboard.libsonnet';
+local serviceDashboard = import 'gitlab-monitoring/gitlab-dashboards/service_dashboard.libsonnet';
 
 serviceDashboard.overview('consul')
 .addPanel(

@@ -1,4 +1,4 @@
-local utilizationMetrics = import 'servicemetrics/utilization-metrics.libsonnet';
-local utilizationRules = import 'servicemetrics/utilization_rules.libsonnet';
+local utilizationMetrics = import 'gitlab-monitoring/servicemetrics/utilization-metrics.libsonnet';
+local utilizationRules = import 'gitlab-monitoring/servicemetrics/utilization_rules.libsonnet';
 
 utilizationRules.generateUtilizationRules(utilizationMetrics)

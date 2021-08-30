@@ -1,15 +1,15 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
-local nodeMetrics = import 'gitlab-dashboards/node_metrics.libsonnet';
-local platformLinks = import 'gitlab-dashboards/platform_links.libsonnet';
-local saturationDetail = import 'gitlab-dashboards/saturation_detail.libsonnet';
-local basic = import 'grafana/basic.libsonnet';
-local layout = import 'grafana/layout.libsonnet';
-local templates = import 'grafana/templates.libsonnet';
+local nodeMetrics = import 'gitlab-monitoring/gitlab-dashboards/node_metrics.libsonnet';
+local platformLinks = import 'gitlab-monitoring/gitlab-dashboards/platform_links.libsonnet';
+local saturationDetail = import 'gitlab-monitoring/gitlab-dashboards/saturation_detail.libsonnet';
+local basic = import 'gitlab-monitoring/grafana/basic.libsonnet';
+local layout = import 'gitlab-monitoring/grafana/layout.libsonnet';
+local templates = import 'gitlab-monitoring/grafana/templates.libsonnet';
 local row = grafana.row;
-local metricsCatalogDashboards = import 'gitlab-dashboards/metrics_catalog_dashboards.libsonnet';
-local selectors = import 'promql/selectors.libsonnet';
-local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
-local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
+local metricsCatalogDashboards = import 'gitlab-monitoring/gitlab-dashboards/metrics_catalog_dashboards.libsonnet';
+local selectors = import 'gitlab-monitoring/promql/selectors.libsonnet';
+local processExporter = import 'gitlab-monitoring/gitlab-dashboards/process_exporter.libsonnet';
+local metricsCatalog = import 'gitlab-monitoring/servicemetrics/metrics-catalog.libsonnet';
 local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
 local singleMetricRow = import 'key-metric-panels/single-metric-row.libsonnet';
 

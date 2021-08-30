@@ -1,6 +1,6 @@
-local panels = import 'gitlab-dashboards/pgbouncer-panels.libsonnet';
-local basic = import 'grafana/basic.libsonnet';
-local layout = import 'grafana/layout.libsonnet';
+local panels = import 'gitlab-monitoring/gitlab-dashboards/pgbouncer-panels.libsonnet';
+local basic = import 'gitlab-monitoring/grafana/basic.libsonnet';
+local layout = import 'gitlab-monitoring/grafana/layout.libsonnet';
 
 panels.pgbouncer()
 .addPanels(

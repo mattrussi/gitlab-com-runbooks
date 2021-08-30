@@ -1,6 +1,6 @@
 local sidekiqHelpers = import './sidekiq-helpers.libsonnet';
 local aggregationSets = import 'aggregation-sets.libsonnet';
-local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
+local metricsCatalog = import 'gitlab-monitoring/servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local combined = metricsCatalog.combined;

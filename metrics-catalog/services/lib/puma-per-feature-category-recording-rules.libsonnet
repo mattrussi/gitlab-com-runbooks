@@ -1,9 +1,9 @@
-local rateMetric = (import 'servicemetrics/metrics.libsonnet').rateMetric;
-local histogramApdex = (import 'servicemetrics/histogram_apdex.libsonnet').histogramApdex;
+local rateMetric = (import 'gitlab-monitoring/servicemetrics/metrics.libsonnet').rateMetric;
+local histogramApdex = (import 'gitlab-monitoring/servicemetrics/histogram_apdex.libsonnet').histogramApdex;
 
-local aggregations = import 'promql/aggregations.libsonnet';
-local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
-local selectors = import 'promql/selectors.libsonnet';
+local aggregations = import 'gitlab-monitoring/promql/aggregations.libsonnet';
+local metricsCatalog = import 'gitlab-monitoring/servicemetrics/metrics-catalog.libsonnet';
+local selectors = import 'gitlab-monitoring/promql/selectors.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 
 local aggregationLabels = [

@@ -1,14 +1,14 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local stages = (import 'service-catalog/stages.libsonnet');
 local template = grafana.template;
-local prebuiltTemplates = import 'grafana/templates.libsonnet';
-local basic = import 'grafana/basic.libsonnet';
-local layout = import 'grafana/layout.libsonnet';
+local prebuiltTemplates = import 'gitlab-monitoring/grafana/templates.libsonnet';
+local basic = import 'gitlab-monitoring/grafana/basic.libsonnet';
+local layout = import 'gitlab-monitoring/grafana/layout.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
-local platformLinks = import 'gitlab-dashboards/platform_links.libsonnet';
+local platformLinks = import 'gitlab-monitoring/gitlab-dashboards/platform_links.libsonnet';
 local errorBudget = import 'stage-groups/error_budget.libsonnet';
 local sidekiqHelpers = import 'services/lib/sidekiq-helpers.libsonnet';
-local thresholds = import 'gitlab-dashboards/thresholds.libsonnet';
+local thresholds = import 'gitlab-monitoring/gitlab-dashboards/thresholds.libsonnet';
 
 local actionLegend(type) =
   if type == 'api' then '{{action}}' else '{{controller}}#{{action}}';

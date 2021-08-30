@@ -1,7 +1,7 @@
-local alerts = import 'alerts/alerts.libsonnet';
-local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libsonnet';
-local aggregations = import 'promql/aggregations.libsonnet';
-local selectors = import 'promql/selectors.libsonnet';
+local alerts = import 'gitlab-monitoring/alerts/alerts.libsonnet';
+local elasticsearchLinks = import 'gitlab-monitoring/elasticlinkbuilder/elasticsearch_links.libsonnet';
+local aggregations = import 'gitlab-monitoring/promql/aggregations.libsonnet';
+local selectors = import 'gitlab-monitoring/promql/selectors.libsonnet';
 
 local aggregationLabelsForPrimary = ['environment', 'tier', 'type', 'fqdn'];
 local aggregationLabelsForReplicas = ['environment', 'tier', 'type'];

@@ -1,5 +1,5 @@
 local periodicQuery = import './periodic-query.libsonnet';
-local selectors = import 'promql/selectors.libsonnet';
+local selectors = import 'gitlab-monitoring/promql/selectors.libsonnet';
 local serviceCatalog = import 'service-catalog/service-catalog.libsonnet';
 
 local defaultSelector = {

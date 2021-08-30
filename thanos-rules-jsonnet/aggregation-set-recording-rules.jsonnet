@@ -1,5 +1,5 @@
 local aggregationSets = import 'aggregation-sets.libsonnet';
-local aggregationSetTransformer = import 'servicemetrics/aggregation-set-transformer.libsonnet';
+local aggregationSetTransformer = import 'gitlab-monitoring/servicemetrics/aggregation-set-transformer.libsonnet';
 
 local outputPromYaml(groups) =
   std.manifestYamlDoc({

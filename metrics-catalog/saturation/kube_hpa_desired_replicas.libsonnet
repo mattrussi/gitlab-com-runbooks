@@ -1,5 +1,5 @@
-local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
-local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_point.libsonnet').resourceSaturationPoint;
+local metricsCatalog = import 'gitlab-monitoring/servicemetrics/metrics-catalog.libsonnet';
+local resourceSaturationPoint = (import 'gitlab-monitoring/servicemetrics/resource_saturation_point.libsonnet').resourceSaturationPoint;
 local sidekiqHelpers = import './services/lib/sidekiq-helpers.libsonnet';
 
 {

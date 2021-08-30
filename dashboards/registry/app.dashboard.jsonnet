@@ -1,10 +1,10 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
-local common = import 'gitlab-dashboards/container_common_graphs.libsonnet';
-local crCommon = import 'gitlab-dashboards/container_registry_graphs.libsonnet';
+local common = import 'gitlab-monitoring/gitlab-dashboards/container_common_graphs.libsonnet';
+local crCommon = import 'gitlab-monitoring/gitlab-dashboards/container_registry_graphs.libsonnet';
 local template = grafana.template;
-local templates = import 'grafana/templates.libsonnet';
+local templates = import 'gitlab-monitoring/grafana/templates.libsonnet';
 local row = grafana.row;
-local basic = import 'grafana/basic.libsonnet';
+local basic = import 'gitlab-monitoring/grafana/basic.libsonnet';
 
 basic.dashboard(
   'Application Info',

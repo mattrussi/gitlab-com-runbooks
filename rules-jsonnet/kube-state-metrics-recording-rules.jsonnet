@@ -1,4 +1,4 @@
-local aggregations = import 'promql/aggregations.libsonnet';
+local aggregations = import 'gitlab-monitoring/promql/aggregations.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 
 //

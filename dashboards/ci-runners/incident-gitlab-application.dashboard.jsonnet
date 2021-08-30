@@ -1,4 +1,4 @@
-local nodeMetrics = import 'gitlab-dashboards/node_metrics.libsonnet';
+local nodeMetrics = import 'gitlab-monitoring/gitlab-dashboards/node_metrics.libsonnet';
 local apiGraphs = import 'stage-groups/verify-runner/api_graphs.libsonnet';
 local dashboardIncident = import 'stage-groups/verify-runner/dashboard_incident.libsonnet';
 local sidekiqGraphs = import 'stage-groups/verify-runner/sidekiq_graphs.libsonnet';

@@ -1,8 +1,8 @@
-local keyMetrics = import 'gitlab-dashboards/key_metrics.libsonnet';
-local nodeMetrics = import 'gitlab-dashboards/node_metrics.libsonnet';
-local platformLinks = import 'gitlab-dashboards/platform_links.libsonnet';
-local basic = import 'grafana/basic.libsonnet';
-local templates = import 'grafana/templates.libsonnet';
+local keyMetrics = import 'gitlab-monitoring/gitlab-dashboards/key_metrics.libsonnet';
+local nodeMetrics = import 'gitlab-monitoring/gitlab-dashboards/node_metrics.libsonnet';
+local platformLinks = import 'gitlab-monitoring/gitlab-dashboards/platform_links.libsonnet';
+local basic = import 'gitlab-monitoring/grafana/basic.libsonnet';
+local templates = import 'gitlab-monitoring/grafana/templates.libsonnet';
 
 basic.dashboard(
   'Service Platform Metrics',

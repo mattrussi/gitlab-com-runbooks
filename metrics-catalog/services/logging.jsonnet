@@ -1,4 +1,4 @@
-local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
+local metricsCatalog = import 'gitlab-monitoring/servicemetrics/metrics.libsonnet';
 local rateMetric = metricsCatalog.rateMetric;
 local derivMetric = metricsCatalog.derivMetric;
 local googleLoadBalancerComponents = import './lib/google_load_balancer_components.libsonnet';

@@ -1,10 +1,10 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
-local railsCommon = import 'gitlab-dashboards/rails_common_graphs.libsonnet';
-local basic = import 'grafana/basic.libsonnet';
-local layout = import 'grafana/layout.libsonnet';
+local railsCommon = import 'gitlab-monitoring/gitlab-dashboards/rails_common_graphs.libsonnet';
+local basic = import 'gitlab-monitoring/grafana/basic.libsonnet';
+local layout = import 'gitlab-monitoring/grafana/layout.libsonnet';
 local row = grafana.row;
 local sidekiq = import 'sidekiq.libsonnet';
-local serviceDashboard = import 'gitlab-dashboards/service_dashboard.libsonnet';
+local serviceDashboard = import 'gitlab-monitoring/gitlab-dashboards/service_dashboard.libsonnet';
 
 local shardDetailDataLink = {
   url: '/d/sidekiq-shard-detail?${__url_time_range}&${__all_variables}&var-shard=${__field.label.shard}&var-shard=${__field.label.shard}',

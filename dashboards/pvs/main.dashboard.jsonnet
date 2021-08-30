@@ -1,6 +1,6 @@
-local serviceDashboard = import 'gitlab-dashboards/service_dashboard.libsonnet';
-local basic = import 'grafana/basic.libsonnet';
-local layout = import 'grafana/layout.libsonnet';
+local serviceDashboard = import 'gitlab-monitoring/gitlab-dashboards/service_dashboard.libsonnet';
+local basic = import 'gitlab-monitoring/grafana/basic.libsonnet';
+local layout = import 'gitlab-monitoring/grafana/layout.libsonnet';
 
 serviceDashboard.overview('pvs')
 .addPanels(

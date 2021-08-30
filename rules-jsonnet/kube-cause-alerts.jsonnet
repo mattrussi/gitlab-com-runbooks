@@ -1,4 +1,4 @@
-local alerts = import 'alerts/alerts.libsonnet';
+local alerts = import 'gitlab-monitoring/alerts/alerts.libsonnet';
 
 local rules = {
   groups: [

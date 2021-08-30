@@ -1,10 +1,10 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
-local k8sPodsCommon = import 'gitlab-dashboards/kubernetes_pods_common.libsonnet';
-local platformLinks = import 'gitlab-dashboards/platform_links.libsonnet';
+local k8sPodsCommon = import 'gitlab-monitoring/gitlab-dashboards/kubernetes_pods_common.libsonnet';
+local platformLinks = import 'gitlab-monitoring/gitlab-dashboards/platform_links.libsonnet';
 local template = grafana.template;
-local templates = import 'grafana/templates.libsonnet';
+local templates = import 'gitlab-monitoring/grafana/templates.libsonnet';
 local row = grafana.row;
-local basic = import 'grafana/basic.libsonnet';
+local basic = import 'gitlab-monitoring/grafana/basic.libsonnet';
 
 basic.dashboard(
   'GitLab Shell - Pod Info',

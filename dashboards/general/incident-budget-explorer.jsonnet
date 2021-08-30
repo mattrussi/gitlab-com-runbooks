@@ -1,14 +1,14 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
-local platformLinks = import 'gitlab-dashboards/platform_links.libsonnet';
-local basic = import 'grafana/basic.libsonnet';
-local layout = import 'grafana/layout.libsonnet';
-local seriesOverrides = import 'grafana/series_overrides.libsonnet';
+local platformLinks = import 'gitlab-monitoring/gitlab-dashboards/platform_links.libsonnet';
+local basic = import 'gitlab-monitoring/grafana/basic.libsonnet';
+local layout = import 'gitlab-monitoring/grafana/layout.libsonnet';
+local seriesOverrides = import 'gitlab-monitoring/grafana/series_overrides.libsonnet';
 local serviceCatalog = import 'service-catalog/service-catalog.libsonnet';
 local row = grafana.row;
-local thresholds = import 'gitlab-dashboards/thresholds.libsonnet';
-local selectors = import 'promql/selectors.libsonnet';
+local thresholds = import 'gitlab-monitoring/gitlab-dashboards/thresholds.libsonnet';
+local selectors = import 'gitlab-monitoring/promql/selectors.libsonnet';
 local metricsConfig = import 'gitlab-metrics-config.libsonnet';
-local templates = import 'grafana/templates.libsonnet';
+local templates = import 'gitlab-monitoring/grafana/templates.libsonnet';
 
 // Preferred ordering of rows on the SLA dashboard
 local serviceOrdering = [

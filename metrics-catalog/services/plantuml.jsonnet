@@ -1,5 +1,5 @@
 local googleLoadBalancerComponents = import './lib/google_load_balancer_components.libsonnet';
-local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
+local metricsCatalog = import 'gitlab-monitoring/servicemetrics/metrics.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'plantuml',

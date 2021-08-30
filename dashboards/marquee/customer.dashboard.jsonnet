@@ -1,8 +1,8 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
-local basic = import 'grafana/basic.libsonnet';
-local layout = import 'grafana/layout.libsonnet';
+local basic = import 'gitlab-monitoring/grafana/basic.libsonnet';
+local layout = import 'gitlab-monitoring/grafana/layout.libsonnet';
 local template = grafana.template;
-local seriesOverrides = import 'grafana/series_overrides.libsonnet';
+local seriesOverrides = import 'gitlab-monitoring/grafana/series_overrides.libsonnet';
 
 basic.dashboard(
   'Customer Dashboard',

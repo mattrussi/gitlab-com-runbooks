@@ -1,8 +1,8 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
-local railsCommon = import 'gitlab-dashboards/rails_common_graphs.libsonnet';
-local workhorseCommon = import 'gitlab-dashboards/workhorse_common_graphs.libsonnet';
+local railsCommon = import 'gitlab-monitoring/gitlab-dashboards/rails_common_graphs.libsonnet';
+local workhorseCommon = import 'gitlab-monitoring/gitlab-dashboards/workhorse_common_graphs.libsonnet';
 local row = grafana.row;
-local serviceDashboard = import 'gitlab-dashboards/service_dashboard.libsonnet';
+local serviceDashboard = import 'gitlab-monitoring/gitlab-dashboards/service_dashboard.libsonnet';
 
 serviceDashboard.overview('api')
 .addPanel(

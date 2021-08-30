@@ -1,4 +1,4 @@
-local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
+local metricsCatalog = import 'gitlab-monitoring/servicemetrics/metrics-catalog.libsonnet';
 
 [
   { name: 'Web Frontend: gitlab.com web traffic', definition: metricsCatalog.getService('web') },

@@ -1,5 +1,5 @@
 local googleCloudRunComponents = import './lib/google_cloud_run_components.libsonnet';
-local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
+local metricsCatalog = import 'gitlab-monitoring/servicemetrics/metrics.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
 metricsCatalog.serviceDefinition({

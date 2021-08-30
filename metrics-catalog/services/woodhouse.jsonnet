@@ -1,4 +1,4 @@
-local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
+local metricsCatalog = import 'gitlab-monitoring/servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 

@@ -1,10 +1,10 @@
 local aggregationSets = import 'aggregation-sets.libsonnet';
-local alerts = import 'alerts/alerts.libsonnet';
-local multiburnExpression = import 'mwmbr/expression.libsonnet';
+local alerts = import 'gitlab-monitoring/alerts/alerts.libsonnet';
+local multiburnExpression = import 'gitlab-monitoring/mwmbr/expression.libsonnet';
 local serviceCatalog = import 'service-catalog/service-catalog.libsonnet';
 local stages = import 'service-catalog/stages.libsonnet';
-local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
-local stableIds = import 'stable-ids/stable-ids.libsonnet';
+local metricsCatalog = import 'gitlab-monitoring/servicemetrics/metrics-catalog.libsonnet';
+local stableIds = import 'gitlab-monitoring/stable-ids/stable-ids.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 
 // Minimum operation rate thresholds:

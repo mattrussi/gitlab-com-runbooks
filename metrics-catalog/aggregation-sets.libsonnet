@@ -1,4 +1,4 @@
-local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
+local aggregationSet = import 'gitlab-monitoring/servicemetrics/aggregation-set.libsonnet';
 
 {
   /**

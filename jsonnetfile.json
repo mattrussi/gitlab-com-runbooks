@@ -45,6 +45,15 @@
         }
       },
       "version": "master"
+    },
+    {
+      "source": {
+        "git": {
+          "remote": "https://gitlab.com/gitlab-com/gl-infra/gitlab-monitoring.git",
+          "subdir": "gitlab-monitoring"
+        }
+      },
+      "version": "main"
     }
   ],
   "legacyImports": true

@@ -11,9 +11,9 @@ local githubObjectTypes = [
   'release',
 ];
 
-local basic = import 'grafana/basic.libsonnet';
-local layout = import 'grafana/layout.libsonnet';
-local promQuery = import 'grafana/prom_query.libsonnet';
+local basic = import 'gitlab-monitoring/grafana/basic.libsonnet';
+local layout = import 'gitlab-monitoring/grafana/layout.libsonnet';
+local promQuery = import 'gitlab-monitoring/grafana/prom_query.libsonnet';
 
 local rate(operation, objectType) =
   ('rate(github_importer_%s_%s{env="$environment"}[$__interval])' % [operation, objectType]);

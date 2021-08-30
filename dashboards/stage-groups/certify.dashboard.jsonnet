@@ -1,5 +1,5 @@
-local basic = import 'grafana/basic.libsonnet';
-local layout = import 'grafana/layout.libsonnet';
+local basic = import 'gitlab-monitoring/grafana/basic.libsonnet';
+local layout = import 'gitlab-monitoring/grafana/layout.libsonnet';
 
 local stageGroupDashboards = import './stage-group-dashboards.libsonnet';
 

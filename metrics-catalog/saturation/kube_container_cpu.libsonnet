@@ -1,5 +1,5 @@
-local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
-local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_point.libsonnet').resourceSaturationPoint;
+local metricsCatalog = import 'gitlab-monitoring/servicemetrics/metrics-catalog.libsonnet';
+local resourceSaturationPoint = (import 'gitlab-monitoring/servicemetrics/resource_saturation_point.libsonnet').resourceSaturationPoint;
 {
   kube_container_cpu: resourceSaturationPoint({
     title: 'Kube Container CPU Utilization',

@@ -1,4 +1,4 @@
-local layout = import 'grafana/layout.libsonnet';
+local layout = import 'gitlab-monitoring/grafana/layout.libsonnet';
 
 local dashboardFilters = import 'stage-groups/verify-runner/dashboard_filters.libsonnet';
 local dashboardHelpers = import 'stage-groups/verify-runner/dashboard_helpers.libsonnet';

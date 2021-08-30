@@ -1,8 +1,8 @@
 local generalServicesDashboard = import 'general-services-dashboard.libsonnet';
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
-local basic = import 'grafana/basic.libsonnet';
-local layout = import 'grafana/layout.libsonnet';
-local templates = import 'grafana/templates.libsonnet';
+local basic = import 'gitlab-monitoring/grafana/basic.libsonnet';
+local layout = import 'gitlab-monitoring/grafana/layout.libsonnet';
+local templates = import 'gitlab-monitoring/grafana/templates.libsonnet';
 
 local daysSinceLastFailure(serviceSelector, serviceName) =
   local title = 'Time since last failure (%(serviceName)s)' % {

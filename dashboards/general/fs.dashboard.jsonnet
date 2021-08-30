@@ -1,8 +1,8 @@
-local panels = import 'gitlab-dashboards/panels.libsonnet';
-local basic = import 'grafana/basic.libsonnet';
-local layout = import 'grafana/layout.libsonnet';
-local promQuery = import 'grafana/prom_query.libsonnet';
-local templates = import 'grafana/templates.libsonnet';
+local panels = import 'gitlab-monitoring/gitlab-dashboards/panels.libsonnet';
+local basic = import 'gitlab-monitoring/grafana/basic.libsonnet';
+local layout = import 'gitlab-monitoring/grafana/layout.libsonnet';
+local promQuery = import 'gitlab-monitoring/grafana/prom_query.libsonnet';
+local templates = import 'gitlab-monitoring/grafana/templates.libsonnet';
 
 //######################################
 // ARC                                 #

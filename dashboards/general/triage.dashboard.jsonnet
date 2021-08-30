@@ -1,14 +1,14 @@
 local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
-local platformLinks = import 'gitlab-dashboards/platform_links.libsonnet';
-local thresholds = import 'gitlab-dashboards/thresholds.libsonnet';
-local colorScheme = import 'grafana/color_scheme.libsonnet';
-local promQuery = import 'grafana/prom_query.libsonnet';
-local seriesOverrides = import 'grafana/series_overrides.libsonnet';
-local templates = import 'grafana/templates.libsonnet';
-local selectors = import 'promql/selectors.libsonnet';
+local platformLinks = import 'gitlab-monitoring/gitlab-dashboards/platform_links.libsonnet';
+local thresholds = import 'gitlab-monitoring/gitlab-dashboards/thresholds.libsonnet';
+local colorScheme = import 'gitlab-monitoring/grafana/color_scheme.libsonnet';
+local promQuery = import 'gitlab-monitoring/grafana/prom_query.libsonnet';
+local seriesOverrides = import 'gitlab-monitoring/grafana/series_overrides.libsonnet';
+local templates = import 'gitlab-monitoring/grafana/templates.libsonnet';
+local selectors = import 'gitlab-monitoring/promql/selectors.libsonnet';
 local graphPanel = grafana.graphPanel;
-local basic = import 'grafana/basic.libsonnet';
+local basic = import 'gitlab-monitoring/grafana/basic.libsonnet';
 local sliPromQL = import 'key-metric-panels/sli_promql.libsonnet';
 
 local rowHeight = 8;

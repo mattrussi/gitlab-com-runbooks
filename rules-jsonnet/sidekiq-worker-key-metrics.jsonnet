@@ -1,7 +1,7 @@
 local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
-local alerts = import 'alerts/alerts.libsonnet';
-local multiburnExpression = import 'mwmbr/expression.libsonnet';
-local stableIds = import 'stable-ids/stable-ids.libsonnet';
+local alerts = import 'gitlab-monitoring/alerts/alerts.libsonnet';
+local multiburnExpression = import 'gitlab-monitoring/mwmbr/expression.libsonnet';
+local stableIds = import 'gitlab-monitoring/stable-ids/stable-ids.libsonnet';
 
 // For the first iteration, all sidekiq workers will have the samne
 // error budget. In future, we may introduce a criticality attribute to

@@ -1,4 +1,4 @@
-local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
+local metricsCatalog = import 'gitlab-monitoring/servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
@@ -20,7 +20,7 @@ metricsCatalog.serviceDefinition({
         Aggregation of all Redis operations issued to the Redis Tracechunks service from the Rails codebase.
 
         If this SLI is experiencing a degradation then the output of CI jobs may be delayed in becoming visible
-        or in severe situations the data may be lost 
+        or in severe situations the data may be lost
       |||,
       significantLabels: ['type'],
 

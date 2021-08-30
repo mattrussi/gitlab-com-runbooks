@@ -1,13 +1,13 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local template = grafana.template;
-local templates = import 'grafana/templates.libsonnet';
+local templates = import 'gitlab-monitoring/grafana/templates.libsonnet';
 local row = grafana.row;
-local basic = import 'grafana/basic.libsonnet';
-local layout = import 'grafana/layout.libsonnet';
+local basic = import 'gitlab-monitoring/grafana/basic.libsonnet';
+local layout = import 'gitlab-monitoring/grafana/layout.libsonnet';
 local statPanel = grafana.statPanel;
 local gaugePanel = grafana.gaugePanel;
-local promQuery = import 'grafana/prom_query.libsonnet';
-local colorScheme = import 'grafana/color_scheme.libsonnet';
+local promQuery = import 'gitlab-monitoring/grafana/prom_query.libsonnet';
+local colorScheme = import 'gitlab-monitoring/grafana/color_scheme.libsonnet';
 
 basic.dashboard(
   'Garbage Collection Detail',

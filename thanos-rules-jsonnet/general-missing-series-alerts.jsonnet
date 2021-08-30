@@ -1,5 +1,5 @@
-local alerts = import 'alerts/alerts.libsonnet';
-local stableIds = import 'stable-ids/stable-ids.libsonnet';
+local alerts = import 'gitlab-monitoring/alerts/alerts.libsonnet';
+local stableIds = import 'gitlab-monitoring/stable-ids/stable-ids.libsonnet';
 
 local labels = {
   rules_domain: 'general',

@@ -1,9 +1,9 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
-local basic = import 'grafana/basic.libsonnet';
-local layout = import 'grafana/layout.libsonnet';
+local basic = import 'gitlab-monitoring/grafana/basic.libsonnet';
+local layout = import 'gitlab-monitoring/grafana/layout.libsonnet';
 local row = grafana.row;
 local template = grafana.template;
-local productCommon = import 'gitlab-dashboards/product_common.libsonnet';
+local productCommon = import 'gitlab-monitoring/gitlab-dashboards/product_common.libsonnet';
 
 basic.dashboard(
   title='Performance - Verify',

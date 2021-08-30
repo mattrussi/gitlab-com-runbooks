@@ -1,6 +1,6 @@
-local basic = import 'grafana/basic.libsonnet';
-local layout = import 'grafana/layout.libsonnet';
-local templates = import 'grafana/templates.libsonnet';
+local basic = import 'gitlab-monitoring/grafana/basic.libsonnet';
+local layout = import 'gitlab-monitoring/grafana/layout.libsonnet';
+local templates = import 'gitlab-monitoring/grafana/templates.libsonnet';
 
 local missingSeriesDashboard(title, metric, basicPanelType='percentageTimeseries') =
   basic.dashboard(

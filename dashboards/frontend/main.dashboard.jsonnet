@@ -1,7 +1,7 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
-local serviceDashboard = import 'gitlab-dashboards/service_dashboard.libsonnet';
+local serviceDashboard = import 'gitlab-monitoring/gitlab-dashboards/service_dashboard.libsonnet';
 local row = grafana.row;
-local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
+local processExporter = import 'gitlab-monitoring/gitlab-dashboards/process_exporter.libsonnet';
 
 serviceDashboard.overview('frontend')
 .addPanel(

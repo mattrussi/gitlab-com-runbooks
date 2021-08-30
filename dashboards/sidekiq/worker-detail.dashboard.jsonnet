@@ -1,16 +1,16 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
-local platformLinks = import 'gitlab-dashboards/platform_links.libsonnet';
-local basic = import 'grafana/basic.libsonnet';
-local layout = import 'grafana/layout.libsonnet';
-local templates = import 'grafana/templates.libsonnet';
+local platformLinks = import 'gitlab-monitoring/gitlab-dashboards/platform_links.libsonnet';
+local basic = import 'gitlab-monitoring/grafana/basic.libsonnet';
+local layout = import 'gitlab-monitoring/grafana/layout.libsonnet';
+local templates = import 'gitlab-monitoring/grafana/templates.libsonnet';
 local link = grafana.link;
 local template = grafana.template;
 local sidekiqHelpers = import 'services/lib/sidekiq-helpers.libsonnet';
-local seriesOverrides = import 'grafana/series_overrides.libsonnet';
+local seriesOverrides = import 'gitlab-monitoring/grafana/series_overrides.libsonnet';
 local row = grafana.row;
 local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libsonnet';
-local issueSearch = import 'gitlab-dashboards/issue_search.libsonnet';
-local selectors = import 'promql/selectors.libsonnet';
+local issueSearch = import 'gitlab-monitoring/gitlab-dashboards/issue_search.libsonnet';
+local selectors = import 'gitlab-monitoring/promql/selectors.libsonnet';
 
 local selector = {
   environment: '$environment',

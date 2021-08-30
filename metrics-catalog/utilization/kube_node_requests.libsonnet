@@ -1,5 +1,5 @@
-local utilizationMetric = (import 'servicemetrics/utilization_metric.libsonnet').utilizationMetric;
-local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
+local utilizationMetric = (import 'gitlab-monitoring/servicemetrics/utilization_metric.libsonnet').utilizationMetric;
+local metricsCatalog = import 'gitlab-monitoring/servicemetrics/metrics-catalog.libsonnet';
 
 {
   kube_node_cpu_requests: utilizationMetric({

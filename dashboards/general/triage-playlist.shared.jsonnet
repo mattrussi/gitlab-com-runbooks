@@ -1,6 +1,6 @@
-local keyMetrics = import 'gitlab-dashboards/key_metrics.libsonnet';
-local basic = import 'grafana/basic.libsonnet';
-local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
+local keyMetrics = import 'gitlab-monitoring/gitlab-dashboards/key_metrics.libsonnet';
+local basic = import 'gitlab-monitoring/grafana/basic.libsonnet';
+local metricsCatalog = import 'gitlab-monitoring/servicemetrics/metrics-catalog.libsonnet';
 
 local selector = { stage: 'main', env: '$environment', environment: '$environment' };
 

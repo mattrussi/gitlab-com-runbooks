@@ -1,9 +1,9 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
-local common = import 'gitlab-dashboards/container_common_graphs.libsonnet';
-local platformLinks = import 'gitlab-dashboards/platform_links.libsonnet';
-local basic = import 'grafana/basic.libsonnet';
+local common = import 'gitlab-monitoring/gitlab-dashboards/container_common_graphs.libsonnet';
+local platformLinks = import 'gitlab-monitoring/gitlab-dashboards/platform_links.libsonnet';
+local basic = import 'gitlab-monitoring/grafana/basic.libsonnet';
 local template = grafana.template;
-local templates = import 'grafana/templates.libsonnet';
+local templates = import 'gitlab-monitoring/grafana/templates.libsonnet';
 local row = grafana.row;
 
 basic.dashboard(
