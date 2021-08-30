@@ -244,7 +244,7 @@ paid groups/users and permanent identities of customers.
 
 ### Application (ApplicationRateLimiter)
 
-The application has simple rate limit logic that can be used to throttle certain actions, this is used when we need more
+The application has simple rate limit logic that can be used to throttle certain actions which is used when we need more
 flexibility than what Rack Attack can provide, since it can throttle at the controller or API level.
 
 These rate limits are set configured in [application_rate_limiter.rb](https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/application_rate_limiter.rb)
