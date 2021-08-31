@@ -27,6 +27,7 @@ local gitalyApdexIgnoredMethods = std.set([
   'FetchSourceBranch',
   'OptimizeRepository',
   'CommitStats',  // https://gitlab.com/gitlab-org/gitlab/-/issues/337080
+  'PackObjectsHookWithSidechannel',
 
   // Excluding Hook RPCs, as these are dependent on the internal Rails API.
   // Almost all time is spend there, once it's slow of failing it's usually not
