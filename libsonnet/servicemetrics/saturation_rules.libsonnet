@@ -1,13 +1,25 @@
 local selectors = import 'promql/selectors.libsonnet';
 
-local generateSaturationRules(dangerouslyThanosEvaluated, saturationResources) =
-  local selectorHash = if dangerouslyThanosEvaluated then { monitor: 'global' } else {};
+local generateSaturationRules(
+  includePrometheusEvaluated,
+  includeDangerouslyThanosEvaluated,
+  saturationResources
+) =
+  local selectorHash = if includeDangerouslyThanosEvaluated then { monitor: 'global' } else {};
   local selector = selectors.serializeHash(selectorHash);
 
   local saturationResourceNames = std.objectFields(saturationResources);
   local filtered = std.filter(
     function(key)
-      saturationResources[key].dangerouslyThanosEvaluated == dangerouslyThanosEvaluated,
+      local definition = saturationResources[key];
+      // Not all saturation metrics will match all topologies, filter our non-matches
+      (std.length(definition.appliesTo) > 0)
+      &&
+      (
+        (includePrometheusEvaluated && !definition.dangerouslyThanosEvaluated)
+        ||
+        (includeDangerouslyThanosEvaluated && definition.dangerouslyThanosEvaluated)
+      ),
     saturationResourceNames
   );
 
@@ -18,7 +30,7 @@ local generateSaturationRules(dangerouslyThanosEvaluated, saturationResources) =
 
   local recordedQuantiles = [0.95, 0.99];
 
-  local groupBase = if dangerouslyThanosEvaluated then { partial_response_strategy: 'warn' } else {};
+  local groupBase = if !includePrometheusEvaluated && includeDangerouslyThanosEvaluated then { partial_response_strategy: 'warn' } else {};
 
   {
     'saturation.yml':
