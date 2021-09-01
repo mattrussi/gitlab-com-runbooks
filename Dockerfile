@@ -1,20 +1,25 @@
+ARG GL_ASDF_JSONNET_TOOL_VERSION
+ARG GL_ASDF_SHFMT_VERSION
+
+FROM registry.gitlab.com/gitlab-com/gl-infra/jsonnet-tool:v${GL_ASDF_JSONNET_TOOL_VERSION} as jsonnet-tool-image
+
+FROM mvdan/shfmt:v${GL_ASDF_SHFMT_VERSION} as shfmt-image
+
 FROM golang:alpine AS go-jsonnet
 
-ENV JSONNET_VERSION 0.17.0
-ENV JB_VERSION 0.4.0
+ARG GL_ASDF_GO_JSONNET_VERSION
+ARG GL_ASDF_JB_VERSION
 
 RUN apk add --no-cache bash git && \
     mkdir -p /build/bin && \
     cd /build && \
     go mod init local/build && \
-    go get -d github.com/google/go-jsonnet/cmd/jsonnet@v$JSONNET_VERSION && \
+    go get -d github.com/google/go-jsonnet/cmd/jsonnet@v${GL_ASDF_GO_JSONNET_VERSION} && \
     go build -o /build/bin/jsonnet github.com/google/go-jsonnet/cmd/jsonnet && \
-    go get -d github.com/google/go-jsonnet/cmd/jsonnetfmt@v$JSONNET_VERSION && \
+    go get -d github.com/google/go-jsonnet/cmd/jsonnetfmt@v${GL_ASDF_GO_JSONNET_VERSION} && \
     go build -o /build/bin/jsonnetfmt github.com/google/go-jsonnet/cmd/jsonnetfmt && \
-    go get -d github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb@v$JB_VERSION && \
+    go get -d github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb@v${GL_ASDF_JB_VERSION} && \
     go build -o /build/bin/jb github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb && \
-    go get -d gitlab.com/gitlab-com/gl-infra/jsonnet-tool && \
-    go build -o /build/bin/jsonnet-tool gitlab.com/gitlab-com/gl-infra/jsonnet-tool && \
     rm -rf /tmp/* /var/tmp/* /var/cache/apk/*
 
 FROM google/cloud-sdk:alpine
@@ -57,12 +62,13 @@ RUN mkdir /thanos && \
   ln -s /thanos/thanos /bin/thanos
 
 COPY --from=nlknguyen/alpine-shellcheck:latest /usr/local/bin/shellcheck /usr/local/bin/shellcheck
-COPY --from=peterdavehello/shfmt:latest /bin/shfmt /usr/local/bin/shfmt
+COPY --from=shfmt-image /bin/shfmt /usr/local/bin/shfmt
 
 COPY --from=go-jsonnet /build/bin/jsonnet /bin/jsonnet
-COPY --from=go-jsonnet /build/bin/jsonnet-tool /bin/jsonnet-tool
 COPY --from=go-jsonnet /build/bin/jsonnetfmt /bin/jsonnetfmt
 COPY --from=go-jsonnet /build/bin/jb /bin/jb
+
+COPY --from=jsonnet-tool-image /jsonnet-tool /bin/jsonnet-tool
 
 RUN gem install --no-document json && \
     gem install --no-document yaml-lint && \

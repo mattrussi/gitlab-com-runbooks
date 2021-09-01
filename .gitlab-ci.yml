@@ -1,3 +1,7 @@
+include:
+  # Import GL_ASDF_* variables to match versions declared in ASDF
+  - local: .gitlab-ci-asdf-versions.yml
+
 stages:
   - notify
   - images
@@ -8,7 +12,7 @@ stages:
 
 variables:
   BUNDLER_VERSION: 2.1.4
-  GOLANG_IMAGE: golang:1.15
+  GOLANG_IMAGE: golang:${GL_ASDF_GOLANG_VERSION}
 
 .matrix_production:
   parallel:
@@ -480,7 +484,12 @@ docker_image_test:
   extends: .docker_image_template
   stage: test
   script:
-    - docker build .
+    - docker build
+      --build-arg GL_ASDF_GO_JSONNET_VERSION=${GL_ASDF_GO_JSONNET_VERSION}
+      --build-arg GL_ASDF_JB_VERSION=${GL_ASDF_JB_VERSION}
+      --build-arg GL_ASDF_SHFMT_VERSION=${GL_ASDF_SHFMT_VERSION}
+      --build-arg GL_ASDF_JSONNET_TOOL_VERSION=${GL_ASDF_JSONNET_TOOL_VERSION}
+      .
   only:
     changes:
       - Dockerfile
@@ -496,7 +505,12 @@ docker_image_build:
   script:
     - export ci_image_tag=${CI_COMMIT_TAG:-$CI_COMMIT_SHORT_SHA}
     - echo ${CI_JOB_TOKEN} | docker login --password-stdin -u $CI_REGISTRY_USER $CI_REGISTRY
-    - docker build -t ${IMAGE}:$ci_image_tag -t ${IMAGE}:latest .
+    - docker build -t ${IMAGE}:$ci_image_tag -t ${IMAGE}:latest
+        --build-arg GL_ASDF_GO_JSONNET_VERSION=${GL_ASDF_GO_JSONNET_VERSION}
+        --build-arg GL_ASDF_JB_VERSION=${GL_ASDF_JB_VERSION}
+        --build-arg GL_ASDF_SHFMT_VERSION=${GL_ASDF_SHFMT_VERSION}
+        --build-arg GL_ASDF_JSONNET_TOOL_VERSION=${GL_ASDF_JSONNET_TOOL_VERSION}
+        .
     - docker push ${IMAGE}:latest
     - docker push ${IMAGE}:$ci_image_tag
   only:
@@ -612,3 +626,28 @@ publish-periodic-queries:
       - periodic-query-results/
   tags:
     - k8s-workloads
+
+# Checks that the `.tool-versions` file is synced with .gitlab-ci-asdf-versions.yml,
+# that all the plugins are declared in `./scripts/install-asdf-plugins.sh`
+# and that ASDF is generally working
+verify-tool-versions:
+  stage: test
+  image: "ubuntu:21.04" # Don't use the runbooks image as it has busybox utils only
+  variables:
+    ASDF_DIR: /asdf
+  script:
+    - apt-get update && apt-get install -y jq curl git bash build-essential libssl-dev zlib1g-dev
+    - echo 'legacy_version_file = yes' >> ~/.asdfrc
+    - git clone https://github.com/asdf-vm/asdf.git "${ASDF_DIR}"
+    - bash --norc --noprofile ./scripts/verify-asdf-setup.sh
+  rules:
+    # This script can be quite slow (mostly due to the ruby install)
+    # so we only run it when there have been changes
+    - changes:
+        - scripts/verify-asdf-setup.sh
+        - scripts/install-asdf-plugins.sh
+        - update-asdf-version-variables
+        - .tool-versions
+        - .ruby-version
+        - .gitlab-ci-asdf-versions.yml
+
