@@ -11,8 +11,10 @@ fi
 cat <<-EOF
 jsonnet-tool is not installed.
 
-The easiest way to install jsonnet-tool is by running the following command:
+The easiest way to install jsonnet-tool is through asdf, by running the following command:
 
-\`go get -u gitlab.com/gitlab-com/gl-infra/jsonnet-tool\`
+\` asdf plugin add jsonnet-tool https://gitlab.com/gitlab-com/gl-infra/asdf-jsonnet-tool.git; asdf install\`
+
+For more information, consult the README.md
 EOF
 exit 1

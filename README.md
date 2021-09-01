@@ -433,15 +433,14 @@ You can install most of them using `asdf` tool.
 
 ### Manage your dependencies using `asdf`
 
-Our `asdf` toolset uses the following plugins:
+Before using `asdf` for the first time, install all the plugins by running:
 
-* `golang`: `asdf plugin add golang`
-* `ruby`: `asdf plugin add ruby`
-* `go-jsonnet`: `asdf plugin add go-jsonnet`.
-* `jsonnet-bundler`: `asdf plugin add jb`.
+```console
+./scripts/install-asdf-plugins.sh
+```
 
-Once you have installed these plugins, run the following command to install the
-required versions.
+Once you have installed the plugins, run the following command to install the
+required versions of each tool.
 
 ```console
 $ asdf install
@@ -457,6 +456,19 @@ ruby           2.6.5    (set by ~/runbooks/.ruby-version)
 
 You don't need to use `asdf`, but in such case you will need install all
 dependencies manually and track their versions.
+
+### Keeping Versions in Sync between GitLab-CI and `asdf`.
+
+`asdf` (and `.tool-versions` generally) is the SSOT for tool versions used in this repository.
+To keep `.tool-versions` in sync with `.gitlab-ci.yml`, there is a helper script,
+`./scripts/update-asdf-version-variables`.
+
+#### Process for updating a tool version
+
+1. Update the version in `.tool-versions`
+1. Run `asdf install` to install latest version
+1. Run `./scripts/update-asdf-version-variables` to update a refresh of the `.gitlab-ci-asdf-versions.yml` file
+1. Commit the changes
 
 ### Go, Jsonnet
 
@@ -479,6 +491,21 @@ brew install go-jsonnet
 ```
 Or if you're using `asdf`, you can use [an asdf
 plugin](https://gitlab.com/craigfurman/asdf-go-jsonnet).
+
+### `jsonnet-tool`
+
+[`jsonnet-tool`](https://gitlab.com/gitlab-com/gl-infra/jsonnet-tool) is a small home-grown tool for
+generating configuration from Jsonnet files. The primary reason we use it is because it is much faster
+than the bash scripts we used to use for the task. Some tasks have gone from 20+ minutes to 2.5 minutes.
+
+We recommend using asdf to manage `jsonnet-tool`. The plugin can be installed with:
+
+```console
+# Install the plugin once
+asdf plugin add jsonnet-tool https://gitlab.com/gitlab-com/gl-infra/asdf-jsonnet-tool.git
+# Install the correct version of jsonnet-tool from `.tool-versions`
+asdf install
+````
 
 ### Ruby
 
