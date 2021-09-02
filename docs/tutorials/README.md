@@ -26,12 +26,11 @@ rarely have the chance to informally share tips and insights.
 
 When writing, reviewing, or updating tutorials in this library, consider the optional suggestions in the style guide:
 
-[Tips for writing engaging tutorials that support multiple learning styles](/handbook/engineering/infrastructure/tutorials/tips_for_tutorial_writing.html)
+[Tips for writing engaging tutorials that support multiple learning styles](./tips_for_tutorial_writing.md)
 
 For convenience, this template can optionally be used for starting new tutorials:
 
-[Example tutorial template](/handbook/engineering/infrastructure/tutorials/example_tutorial_template.html)
-
+[Example tutorial template](./example_tutorial_template.md)
 
 ## Orientation: Overview of major system components and behaviors
 
@@ -44,9 +43,9 @@ new and existing team members and the many folks who help us support these syste
 
 These tutorials tend to be more conceptual than hands-on but still aim to give practical tips for observing the behaviors described.
 
-* [Life of a web request](/handbook/engineering/infrastructure/tutorials/overview_life_of_a_web_request.html):
+* [Life of a web request](./overview_life_of_a_web_request.md):
   A high level introduction to the major frontend and backend components of GitLab.com
-* [IN PROGRESS](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10389)  Life of a git request:
+* [Life of a git request](./overview_life_of_a_git_request.md)  Life of a git request:
   Tracing a git-fetch request through the gitlab.com infrastructure, contrasting git-over-ssh and git-over-http.
 * [IN PROGRESS](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10390)  Life of a sidekiq job:
   A high level introduction to asynchronous background job processing, including job creation, scheduling, execution, and callbacks
@@ -54,7 +53,6 @@ These tutorials tend to be more conceptual than hands-on but still aim to give p
   Walk through the high availability and load balancing mechanisms supporting the main relational database.
 * [TODO](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10400)  Tour of Redis at GitLab.com:
   Tour the Redis clusters, their distinct roles as shared caching and queuing datastores, their high availability mechanisms, and scaling constraints.
-
 
 ## How-to: Demos of analytical methods and exploratory tools
 
@@ -71,7 +69,6 @@ These tutorials demonstrate generalizable methods or tools for analyzing interes
 * request tracing
 * log mining techniques
 * ... anything else related to exploring a live subsystem or its artifacts
-
 
 ### Metrics and Monitoring
 
@@ -93,7 +90,6 @@ Tutorials list:
 * [TODO](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10398)  How are metrics exposed by gitlab-runners?
   Learn how to see for yourself: What events increment that counter? What points in the code start and end this latency measurement?
 
-
 ### Performance analysis and profiling
 
 These tutorials focus on performance profiling techniques.
@@ -109,7 +105,7 @@ Understanding where a system spends its time, memory, I/O, and other resources h
 most relevant areas -- the places in the code or infrastructure that represent a capacity constraint, a tipping point, or a potentially large efficiency gain.
 
 Tutorials list:
-* [IN PROGRESS](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10399)  How to use flamegraphs for performance profiling:
+* [How to use flamegraphs for performance profiling](./how_to_use_flamegraphs_for_perf_profiling.md):
   Find what code paths we spend the most time in.
 * **(TODO)**  Demo: Profiling a process starved for disk I/O, including variants such as synchronous reads, synchronous writes, serial I/O, frequent fsyncs
 * **(TODO)**  Demo: Profiling a process starved for network I/O, including bandwidth saturation and latency-bound serial I/O
