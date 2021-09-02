@@ -47,7 +47,7 @@ metricsCatalog.serviceDefinition({
     'http_requests_total',
   ],
   provisioning: {
-    vms: true,
+    vms: false,
     kubernetes: true,
   },
   regional: true,
