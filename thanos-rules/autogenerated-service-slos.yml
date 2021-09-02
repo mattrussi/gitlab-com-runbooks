@@ -309,7 +309,7 @@ groups:
     labels:
       tier: inf
       type: sentry
-    expr: "0.999000"
+    expr: "0.990000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       tier: inf

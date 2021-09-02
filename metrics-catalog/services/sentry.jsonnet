@@ -7,7 +7,7 @@ metricsCatalog.serviceDefinition({
   type: 'sentry',
   tier: 'inf',
   monitoringThresholds: {
-    apdexScore: 0.999,
+    apdexScore: 0.99,
     // Setting the Error SLO at 99% because we see high transaction rollback rates
     // TODO: investigate
     errorRatio: 0.99,
