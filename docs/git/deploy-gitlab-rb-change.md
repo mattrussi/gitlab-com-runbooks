@@ -30,28 +30,9 @@ A non-obvious detail: some components, notably gitlab-rails (running under puma)
 
 ## Known process
 
-For a recent change to the omniauth providers, this process was followed.  It's a good starting point to derive a process for your change.
-
-This process ends with puma re-execing itself with the same environment
-variables - and so cannot be used for changes to rails env maps in gitlab.rb
-(e.g. anything under the `gitlab_rails["env"]` key). For that, see the more
-arduous procedure in the section below.
-
-1. Stop chef on the nodes where changes need to be somewhat carefully shepherded through; in this case, web (because scary and the most affected), and API because we want to ensure we don't restart them all too close together
-```
-knife ssh 'roles:gstg-base-fe-web' 'sudo systemctl stop chef-client
-knife ssh 'roles:gstg-base-fe-api' 'sudo systemctl stop chef-client
-```
-
-1. Make the change to the GKMS encrypted vault using gkms-vault-edit
-
-1. On the web nodes, run "sudo chef-client".  This runs chef and per above updates gitlab.rb, runs `gitlab-ctl reconfigure` which regenerates config files and HUP's puma.
-    * Note that you may like to do one or two manually/sequentially to verify the change is correct, but then you could reasonably run them in batches with knife, e.g. ```knife ssh 'roles:gstg-base-fe-web' -C3 'sudo chef-client'```.  This will be a fairly short no-op on the ones already done, then will complete the rest in batches of 3.
-
-1. On the api nodes, run "sudo chef-client", in batches.  Similar as for the 'web' nodes, but this is not because there will be a noticeable change in behavior, just to ensure we don't restart all the API servers at once causing a blip:
-    * ```knife ssh 'roles:gstg-base-fe-api' -C3 "sudo chef-client"```
-
-Note also that running chef by hand will cause the daemon to be started up, so there's no need to manually start the chef-client service afterwards.
+As almost all our rails applications now run in Kubernetes, you will need to make
+a change to the [gitlab-com](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com)
+repository following the documentation in that repo.
 
 ## Rolling out changes that require restarts
 
