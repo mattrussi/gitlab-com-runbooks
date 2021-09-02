@@ -916,11 +916,10 @@ services:
       - service: gitaly
       - service: redis
     configurations:
-      - config_name: gitlab.rb
-        location: /etc/gitlab/gitlab.rb
-    chef_roles:
-      - gprd-base-fe-web
-      - gstg-base-fe-web
+      - location: /srv/gitlab/config
+        name: webservice
+      - location: /srv/gitlab/config
+        name: workhorse-config.toml
     scalability:
       bound: cpu
       scalable: horizontal

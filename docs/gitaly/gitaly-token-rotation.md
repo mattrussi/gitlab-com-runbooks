@@ -30,7 +30,6 @@ Backup and replace the current `auth_token`
 - [ ] Update the auth token  in the `gitlab-omnibus-secrets gprd` vault for the application by setting `["omnibus-gitlab"].gitlab_rb.gitlab_rails.gitaly_token`
 - [ ] and apply that to the fleet
   - [ ] `knife ssh -C3 roles:gprd-base-stor-gitaly 'sudo chef-client'`
-  - [ ] `knife ssh -C3 roles:gprd-base-fe-web 'sudo chef-client'`
   - [ ] `knife ssh -C3 roles:gprd-base-console-node 'sudo chef-client'`
 - [ ] Follow instructions provided for our Kubernetes Infrastructure:
   https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/blob/master/README.md#secret-rotation
