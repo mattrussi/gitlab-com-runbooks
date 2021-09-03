@@ -3,7 +3,7 @@ local query_period = schedule_mins + 2;
 local alert_threshold = 0;
 
 // Using this a variant of query:
-// https://log.gprd.gitlab.net/goto/c6e1fe51e851414d878f59c8b043c1a5
+// https://log.gprd.gitlab.net/goto/558fbc0dd1e5c53b69f9e95c542b36b1
 local es_query = {
   search_type: 'query_then_fetch',
   indices: [
@@ -22,8 +22,20 @@ local es_query = {
             },
           },
           {
-            match_phrase: {
-              'json.exception.class': 'Gitlab::SidekiqMiddleware::SizeLimiter::ExceedLimitError',
+            bool: {
+              should: [
+                {
+                  match_phrase: {
+                    'json.exception.class': 'Gitlab::SidekiqMiddleware::SizeLimiter::ExceedLimitError',
+                  },
+                },
+                {
+                  match_phrase: {
+                    'json.error_class': 'Gitlab::SidekiqMiddleware::SizeLimiter::ExceedLimitError',
+                  },
+                },
+              ],
+              minimum_should_match: 1,
             },
           },
         ],
@@ -59,7 +71,7 @@ local es_query = {
           to: [
             '#scalability-490-sidekiq-job-limits',
           ],
-          text: 'Sidekiq jobs with a compressed payload > 5MB are being rejected. Please investigate this further. See https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/490 and https://log.gprd.gitlab.net/goto/321a6c1bb2b8ebd0432508c2de7645b8',
+          text: 'Sidekiq jobs with a compressed payload > 5MB are being rejected. Please investigate this further. See https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/490 and https://log.gprd.gitlab.net/goto/558fbc0dd1e5c53b69f9e95c542b36b1',
         },
       },
     },
