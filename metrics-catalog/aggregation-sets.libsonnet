@@ -470,7 +470,7 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     name: 'Prometheus Source Feature Category Metrics',
     intermediateSource: true,  // Used in dashboards and alerts
     selector: { monitor: { ne: 'global' } },  // Not Thanos Ruler
-    labels: ['env', 'environment', 'tier', 'type', 'stage', 'component', 'feature_category'],
+    labels: ['env', 'environment', 'tier', 'type', 'stage', 'feature_category'],
     burnRates: {
       '5m': {
         apdexSuccessRate: 'gitlab:component:feature_category:execution:apdex:success:rate_5m',
