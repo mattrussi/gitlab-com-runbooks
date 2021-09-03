@@ -55,8 +55,8 @@ local levels = [
             false,
       },
       {
-        // TODO: https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/829
-        name: 'Metrics on downstream service usage',
+        // TODO: https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1284
+        name: 'Service exists in the dependency graph',
         evidence: function(service) null,
       },
     ],
@@ -102,6 +102,11 @@ local levels = [
         evidence: function(service)
           // TODO: https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/857
           'https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/%s' % service.type,
+      },
+      {
+        // TODO: https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/829
+        name: 'Metrics on downstream service usage',
+        evidence: function(service) null,
       },
     ],
   },
