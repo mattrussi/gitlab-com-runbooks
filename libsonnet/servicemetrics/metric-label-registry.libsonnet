@@ -8,6 +8,7 @@ local merge(h1, h2) =
         [k]: {
           labels: std.setUnion(memo[k].labels, h2[k].labels),
           burnRates: std.setUnion(memo[k].burnRates, h2[k].burnRates),
+          upscaledBurnRates: std.setUnion(memo[k].upscaledBurnRates, h2[k].upscaledBurnRates),
         },
       }
     else
@@ -34,6 +35,7 @@ local collectMetricsBurnRatesLabelsForKeyMetric(sli, keyMetricAttribute, signifi
           [metricName]: {
             labels: std.setUnion(significantLabels, metricNamesAndLabels[metricName]),
             burnRates: if sli.upscaleLongerBurnRates then std.set(['1m', '5m', '30m', '1h']) else std.set(['1m', '5m', '30m', '1h', '6h']),
+            upscaledBurnRates: if sli.upscaleLongerBurnRates then std.set(['6h']) else std.set([]),
           },
         },
         std.objectFields(metricNamesAndLabels),
@@ -79,6 +81,12 @@ local labelsBurnRatesForMetricNames = collectMetricsLabelsBurnRates();
   supportsBurnRateForMetricName(metricName, burnRate)::
     if std.objectHas(labelsBurnRatesForMetricNames, metricName) then
       std.member(labelsBurnRatesForMetricNames[metricName].burnRates, burnRate)
+    else
+      false,
+
+  supportsUpscaledBurnRateForMetricName(metricName, burnRate)::
+    if std.objectHas(labelsBurnRatesForMetricNames, metricName) then
+      std.member(labelsBurnRatesForMetricNames[metricName].upscaledBurnRates, burnRate)
     else
       false,
 

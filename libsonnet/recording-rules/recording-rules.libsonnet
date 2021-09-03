@@ -9,5 +9,6 @@
   serviceMappingRuleSetGenerator: (import 'service-mapping-rule-set-generator.libsonnet').serviceMappingRuleSetGenerator,
   serviceSLORuleSetGenerator: (import 'service-slo-rule-set-generator.libsonnet').serviceSLORuleSetGenerator,
   sliRecordingRulesSetGenerator: (import 'sli-recording-rule-set-generator.libsonnet').sliRecordingRulesSetGenerator,
+  sliUpscaledRecordingRulesSetGenerator: (import 'sli-upscaled-recording-rule-set-generator.libsonnet').sliUpscaledRecordingRulesSetGenerator,
   thresholdHealthRuleSet(threshold): (import 'mwmbr-threshold-health-rule-set.libsonnet').thresholdHealthRuleSet(threshold),
 }

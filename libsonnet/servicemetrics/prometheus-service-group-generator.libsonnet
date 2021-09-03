@@ -6,6 +6,7 @@ local recordingRuleGroupsForServiceForBurnRate(serviceDefinition, componentAggre
   local rulesetGenerators =
     [
       recordingRules.sliRecordingRulesSetGenerator(burnRate, recordingRuleRegistry),
+      recordingRules.sliUpscaledRecordingRulesSetGenerator(burnRate, recordingRuleRegistry),
       recordingRules.componentMetricsRuleSetGenerator(
         burnRate=burnRate,
         aggregationSet=componentAggregationSet

@@ -726,6 +726,24 @@ groups:
 - name: 'Component-Level SLIs: patroni - 6h burn-rate'
   interval: 2m
   rules:
+  - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate6h
+    expr: |
+      sum(
+        60
+        *
+        sum_over_time(sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate1h[6h])
+        /
+        21600
+      )
+  - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate6h
+    expr: |
+      sum(
+        60
+        *
+        sum_over_time(sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate1h[6h])
+        /
+        21600
+      )
   - record: gitlab_component_ops:rate_6h
     labels:
       component: pgbouncer

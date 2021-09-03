@@ -10,6 +10,8 @@ local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local metricsLabelRegistry = import 'servicemetrics/metric-label-registry.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
+local durationParser = import 'utils/duration-parser.libsonnet';
+local strings = import 'utils/strings.libsonnet';
 
 local standardEnvironmentLabels = std.set(['environment', 'type', 'tier', 'stage', 'shard']);
 
@@ -41,8 +43,9 @@ local supportsLabelsBurnRateAndSelector(metricName, requiredAggregationLabels, b
 
       local recordingRuleLabels = metricsLabelRegistry.lookupLabelsForMetricName(metricName);
       local supportsBurnRate = metricsLabelRegistry.supportsBurnRateForMetricName(metricName, burnRate);
+      local supportsUpscaledBurnRate = metricsLabelRegistry.supportsUpscaledBurnRateForMetricName(metricName, burnRate);
 
-      if supportsBurnRate then
+      if supportsBurnRate || supportsUpscaledBurnRate then
         local allRequiredLabelsMinusStandards = std.setDiff(allRequiredLabelsExcludingIgnored, standardEnvironmentLabels);
 
         local missingLabels = std.setDiff(allRequiredLabelsMinusStandards, recordingRuleLabels);
@@ -124,6 +127,22 @@ local resolveRecordingRuleFor(metricName, requiredAggregationLabels, selector, d
     };
     aggregations.aggregateOverQuery('sum', allRequiredLabelsPlusStandards, query),
 
+  upscaledRecordingRuleExpressionFor(expression, recordingRuleInterval, rangeInterval)::
+    |||
+      sum(
+        %(recordingRuleInterval)s
+        *
+        sum_over_time(%(expression)s[%(rangeInterval)s])
+        /
+        %(rangeIntervalSeconds)s
+      )
+    ||| % {
+      expression: strings.indent(expression, 4),
+      recordingRuleInterval: durationParser.toSeconds(recordingRuleInterval),
+      rangeInterval: rangeInterval,
+      rangeIntervalSeconds: durationParser.toSeconds(rangeInterval),
+    },
+
   recordingRuleNameFor(metricName, rangeInterval)::
     'sli_aggregations:%(metricName)s_rate%(rangeInterval)s' % {
       metricName: metricName,
@@ -133,4 +152,6 @@ local resolveRecordingRuleFor(metricName, requiredAggregationLabels, selector, d
   recordingRuleForMetricAtBurnRate(metricName, rangeInterval)::
     metricsLabelRegistry.supportsBurnRateForMetricName(metricName, rangeInterval),
 
+  upscaledRecordingRuleForMetricAtBurnRate(metricName, rangeInterval)::
+    metricsLabelRegistry.supportsUpscaledBurnRateForMetricName(metricName, rangeInterval),
 }
