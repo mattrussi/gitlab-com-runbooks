@@ -3,7 +3,7 @@
 # Apdex alerts troubleshooting
 Or: *How I learned to stop worrying and love the metrics*
 
-In the interests of consistent and mathematically sound alerts about which we can reason, we use the Apdex concept (see [definition-service-apdex.md] for a more formal definition of the concept).  But as an on-call SRE, what do you do when confronted with an apdex alert for a service?  How do we drill down to identify the problematic area?
+In the interests of consistent and mathematically sound alerts about which we can reason, we use the [Apdex concept](./definition-service-apdex.md).  But as an on-call SRE, what do you do when confronted with an apdex alert for a service?  How do we drill down to identify the problematic area?
 
 ## Concepts
 
