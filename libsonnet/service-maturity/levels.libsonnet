@@ -6,6 +6,7 @@ local metricsDashboardLink(serviceName) =
 
 local levels = [
   {
+    number: 1,
     name: 'Level 1',
     criteria: [
       {
@@ -28,6 +29,7 @@ local levels = [
     ],
   },
   {
+    number: 2,
     name: 'Level 2',
     criteria: [
       {
@@ -62,6 +64,7 @@ local levels = [
     ],
   },
   {
+    number: 3,
     name: 'Level 3',
     criteria: [
       {
@@ -112,6 +115,7 @@ local levels = [
   },
   {
     // TODO: https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/834
+    number: 4,
     name: 'Level 4',
     criteria: [
       {
@@ -130,6 +134,7 @@ local levels = [
   },
   {
     // TODO: https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/835
+    number: 5,
     name: 'Level 5',
     criteria: [
       {
