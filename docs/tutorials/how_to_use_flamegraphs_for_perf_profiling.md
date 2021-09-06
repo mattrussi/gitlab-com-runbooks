@@ -166,7 +166,7 @@ We will talk more about stack traces shortly.  For now just be aware that this i
 
 Once you are comfortable using these helper scripts, you may later be interested in customizing what gets captured or how it gets rendered.
 A brief introduction to such tricks is included at the end of this tutorial:
-[Bonus: Custom capture using `perf record`](how_to_use_flamegraphs_for_perf_profiling.html#bonus-custom-capture-using-perf-record)
+[Bonus: Custom capture using `perf record`](#bonus-custom-capture-using-perf-record)
 
 
 ## How to interpret flamegraphs for profiling where CPU time is spent
