@@ -311,49 +311,67 @@ If this issue is a bug, it would need to be identified and patched by the regist
 
 If there is an intermittent GCS issue, it's possible that an existing path would return `404 Not Found`, rather than a more appropriate error. This would cause a single repository old, but otherwise eligible, repository to flip over to the new side and flip back to the old side again, likely without our direct intervention, or possibly knowledge.
 
+#### Eligible New Repository Handled by Old Code Path
+
+##### Impact
+
+A new repository was handled by the old code path.
+
+##### Expected app behavior on failure
+
+If no writes to the old path were made, read requests made against this repository will fail with `404 Not Found`.
+
+Write requests should succeed, writing data to the old code path.
+
+For subsequent read requests, data written to the old path will be visible to the UI and available to pull. While the data on the new path will not appear in the UI and will not be available to pull, failing with `404 Not Found`.
+
+##### Observability
+
+The logs in Kibana will always include `serving request in migration mode` for once for each request made in migration mode. This log entry will contain the path that the repository followed, but its presence is not a signal or alert for this scenario in particular. 
+
+End users will observe this issue as older tags not suddenly and consistently not appearing in the UI and older images suddenly and consistently failing to pull. While newer tags and images consistently remain visible in the UI and pullable.
+
+##### Recovery definition
+
+Requests are once again routed to the new code path.
+
+##### Expected app behavior on recovery
+
+If no writes to the old path were made, read requests made against this repository will succeed again.
+
+Write requests should succeed, writing data to the new code path.
+
+If data were written to the old code path, those images would no longer be visible in the UI or pullible.
+
+##### Mitigation
+
+On the server side during [Phase 2](https://gitlab.com/gitlab-org/container-registry/-/issues/374#phase-2-migrate-existing-repositories), the data on the old prefix on the GCS bucket will not cause future requests to be routed to the old code path, so we are not required to remove it.
+
+If possible, newer images that were pushed during this scenario should be rebuilt from the client side.
+
+##### Possible corrective actions
+
+For [Phase 1](https://gitlab.com/gitlab-org/container-registry/-/issues/374#phase-1-the-metadata-db-serves-new-repositories), it's possible that the `container_registry_migration_phase1_deny` feature flag was set for a repository what was previously eligible. This feature flag would need to be removed, and we **must** remove this repository and all of its images _from the old prefix on the GCS bucket_ — otherwise eligible repositories that are present on the old prefix, will always be served by the old code path during Phase 1.
+
+For [Phase 2](https://gitlab.com/gitlab-org/container-registry/-/issues/374#phase-2-migrate-existing-repositories), this likely indicates a bug in the container registry. Either in the logic to identify a new repository, or in the routing logic. This issue would need to investigated and fixed by the registry development team.
+
 #### Non-Eligible New Repository Handled by New Code Path
 
 ##### Impact
 
-An ineligible new repository was handled by the new code path.
-
 ##### Expected app behavior on failure
-
-Read requests will initially fail before writes are made, but they should do so in the same way as with any non-existing repository.
-
-Write requests should succeed, writing data to the new code path.
-
-For subsequent read requests, data written to the new path will be visible to the UI and available to pull.
 
 ##### Observability
 
-The logs in Kibana will always include `serving request in migration mode` for once for each request made in migration mode. This log entry will contain the path that the repository followed, but its presence is not a signal or alert for this scenario in particular.
-
-End users _will not_ observe this issue as this will only happen with new repositories and ll the data written to the repository will be on the new side, so there will be no data consistency issues for the duration of this incident.
-
 ##### Recovery definition
 
-This repository begins to be served by the old code path.
-
-##### Expected app behavior on recovery
-
-Write requests should succeed, writing data to the old code path.
-
-This incident cannot occur in a meaningful way without data written to the new code path, those images would no longer be visible in the UI or pullible.
+##### Expected bpp behavior on recovery
 
 ##### Mitigation
 
-On the server side during [Phase 1](https://gitlab.com/gitlab-org/container-registry/-/issues/374#phase-1-the-metadata-db-serves-new-repositories), data written to the database prefix on the GCS bucket **will not** cause future requests to be routed to the new code path, so we are not required to remove it to immediately resolve the issue. However, the data on the database and metadata on the new storage prefix should be removed afterward, as data on the database during [Phase 2](https://gitlab.com/gitlab-org/container-registry/-/issues/374#phase-2-migrate-existing-repositories) will cause future requests to be routed to the new code path.
-
-On the server side during Phase 2, data written to the database prefix on the GCS bucket **will** cause future requests to be routed to the new code path, so we must remove it to immediately resolve the issue. Metadata on the new storage prefix should be removed afterward, but this is not required to immediate resolve the issue.
-
-If possible, images that were pushed during this scenario should be rebuilt from the client side.
-
 ##### Possible corrective actions
 
-The most likely scenario for a single repository experiencing this issue that a `container_registry_migration_phase1_deny` feature flag is not being detected or honored by the registry auth service, so that the auth service is not populating the `migration.eligible` header appropriately.
 
-This issue would need to investigated and fixed by the registry development team.
 
 ### < Category >
 
