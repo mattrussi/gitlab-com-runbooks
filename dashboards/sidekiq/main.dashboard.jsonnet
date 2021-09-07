@@ -62,8 +62,8 @@ serviceDashboard.overview('sidekiq')
       yAxisLabel='Queue Length',
     ),
     basic.latencyTimeseries(
-      title='Sidekiq Queuing Latency per Job',
-      description='The amount of time a job has to wait before it starts being executed. Lower is better.',
+      title='Sidekiq Queuing Latency per Queue',
+      description='How long the oldest job has been waiting in the queue to execute. Lower is better'
       query=|||
         avg_over_time(sidekiq_queue_latency_seconds{environment="$environment"}[$__interval]) and on (fqdn) (redis_connected_slaves != 0)
         or
