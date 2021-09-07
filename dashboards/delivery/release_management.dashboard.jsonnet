@@ -31,6 +31,13 @@ local environments = [
     stage: 'main',
     icon: '🏗',
   },
+  {
+    id: 'gstg-cny',
+    name: 'Staging Canary',
+    role: 'gstg',
+    stage: 'cny',
+    icon: '🐣',
+  },
 ];
 
 local annotations = [
@@ -54,6 +61,13 @@ local annotations = [
     enable=false,
     iconColor='#5794F2',
     tags=['deploy', 'gstg'],
+  ),
+  annotation.datasource(
+    'Staging Canary deploys',
+    '-- Grafana --',
+    enable=false,
+    iconColor='#8F3BB8',
+    tags=['deploy', 'gstg-cny'],
   ),
 ];
 
