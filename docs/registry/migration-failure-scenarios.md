@@ -359,19 +359,45 @@ For [Phase 2](https://gitlab.com/gitlab-org/container-registry/-/issues/374#phas
 
 ##### Impact
 
+An ineligible new repository was handled by the new code path.
+
 ##### Expected app behavior on failure
+
+Read requests will initially fail before writes are made, but they should do so in the same way as with any non-existing repository.
+
+Write requests should succeed, writing data to the new code path.
+
+For subsequent read requests, data written to the new path will be visible to the UI and available to pull.
 
 ##### Observability
 
+The logs in Kibana will always include `serving request in migration mode` for once for each request made in migration mode. This log entry will contain the path that the repository followed, but its presence is not a signal or alert for this scenario in particular.
+
+End users _will not_ observe this issue as this will only happen with new repositories and ll the data written to the repository will be on the new side, so there will be no data consistency issues for the duration of this incident.
+
 ##### Recovery definition
 
-##### Expected bpp behavior on recovery
+This repository begins to be served by the old code path.
+
+##### Expected app behavior on recovery
+
+Write requests should succeed, writing data to the old code path.
+
+This incident cannot occur in a meaningful way without data written to the new code path, those images would no longer be visible in the UI or pullible.
 
 ##### Mitigation
 
+On the server side during [Phase 1](https://gitlab.com/gitlab-org/container-registry/-/issues/374#phase-1-the-metadata-db-serves-new-repositories), data written to the database prefix on the GCS bucket **will not** cause future requests to be routed to the new code path, so we are not required to remove it to immediately resolve the issue. However, the data on the database and metadata on the new storage prefix should be removed afterward, as data on the database during [Phase 2](https://gitlab.com/gitlab-org/container-registry/-/issues/374#phase-2-migrate-existing-repositories) will cause future requests to be routed to the new code path.
+
+On the server side during Phase 2, data written to the database prefix on the GCS bucket **will** cause future requests to be routed to the new code path, so we must remove it to immediately resolve the issue. Metadata on the new storage prefix should be removed afterward, but this is not required to immediate resolve the issue.
+
+If possible, images that were pushed during this scenario should be rebuilt from the client side.
+
 ##### Possible corrective actions
 
+The most likely scenario for a single repository experiencing this issue that a `container_registry_migration_phase1_deny` feature flag is not being detected or honored by the registry auth service, so that the auth service is not populating the `migration.eligible` header appropriately.
 
+This issue would need to investigated and fixed by the registry development team.
 
 ### < Category >
 
