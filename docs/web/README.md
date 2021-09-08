@@ -25,6 +25,7 @@
 * [../cloudflare/troubleshooting.md](../cloudflare/troubleshooting.md)
 * [../config_management/chef-guidelines.md](../config_management/chef-guidelines.md)
 * [../config_management/chef-workflow.md](../config_management/chef-workflow.md)
+* [../consul/interaction.md](../consul/interaction.md)
 * [../elastic/elastic-cloud.md](../elastic/elastic-cloud.md)
 * [../elastic/kibana.md](../elastic/kibana.md)
 * [../forum/discourse-forum.md](../forum/discourse-forum.md)
