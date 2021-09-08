@@ -20,7 +20,7 @@
                 {
                   range: {
                     '@timestamp': {
-                      gte: 'now-30m',
+                      gte: 'now-20m',
                       lte: 'now',
                     },
                   },
@@ -54,7 +54,7 @@
   },
   actions: {
     'notify-slack': {
-      throttle_period_in_millis: 420000,
+      throttle_period: '20m',
       slack: {
         message: {
           from: 'ElasticCloud Watcher: Subtransactions detected',
