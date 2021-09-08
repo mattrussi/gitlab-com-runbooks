@@ -16,6 +16,7 @@
 
 ## Troubleshooting Pointers
 
+* [../consul/interaction.md](../consul/interaction.md)
 * [../frontend/gitlab-com-is-down.md](../frontend/gitlab-com-is-down.md)
 * [../patroni/log_analysis.md](../patroni/log_analysis.md)
 * [../patroni/patroni-management.md](../patroni/patroni-management.md)

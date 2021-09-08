@@ -18,6 +18,7 @@
 
 * [../ci-runners/ci-apdex-violating-slo.md](../ci-runners/ci-apdex-violating-slo.md)
 * [../ci-runners/service-ci-runners.md](../ci-runners/service-ci-runners.md)
+* [../consul/interaction.md](../consul/interaction.md)
 * [../monitoring/prometheus-failing-rule-evaluations.md](../monitoring/prometheus-failing-rule-evaluations.md)
 * [../onboarding/kibana-diagnosis.md](../onboarding/kibana-diagnosis.md)
 * [check_wraparound.md](check_wraparound.md)

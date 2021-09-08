@@ -186,6 +186,7 @@ services:
         - https://docs.gitlab.com/ee/api/
       security:
     dependencies:
+      - service: consul
       - service: postgres
       - service: gitaly
       - service: redis
@@ -461,7 +462,7 @@ services:
     documents:
       design:
       architecture: https://www.consul.io/docs/internals/architecture.html
-      readiness_review:
+      readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/merge_requests/80
       service:
         - https://github.com/hashicorp/consul/blob/master/README.md
       security: https://www.consul.io/docs/internals/security.html
@@ -912,6 +913,7 @@ services:
         - https://docs.gitlab.com/ee/
       security:
     dependencies:
+      - service: consul
       - service: postgres
       - service: gitaly
       - service: redis
@@ -1069,6 +1071,7 @@ services:
         - https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#service-architecture
       security:
     dependencies:
+      - service: consul
       - service: gitaly
       - service: postgres
       - service: redis

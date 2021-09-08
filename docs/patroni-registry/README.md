@@ -14,6 +14,9 @@
 * [Postgres](https://log.gprd.gitlab.net/goto/d0f8993486c9007a69d85e3a08f1ea7c)
 * [system](https://log.gprd.gitlab.net/goto/3669d551a595a3a5cf1e9318b74e6c22)
 
+## Troubleshooting Pointers
+
+* [../consul/interaction.md](../consul/interaction.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->
