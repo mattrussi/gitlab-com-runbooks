@@ -73,7 +73,7 @@
             },
             {
               title: ':runbooks: Runbook:',
-              text: 'https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/postgresql/subtransactions.md',
+              text: 'https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/patroni/postgresql-subtransactions.md',
             },
           ],
         },
