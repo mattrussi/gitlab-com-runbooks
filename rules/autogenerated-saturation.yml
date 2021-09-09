@@ -232,6 +232,27 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
+      component: gitaly_total_disk_space
+    expr: |
+      max by(environment, tier, type, stage) (
+        clamp_min(
+          clamp_max(
+            1 - (
+              sum by (environment, tier, type, stage, shard) (
+                node_filesystem_avail_bytes{type="gitaly", device="/dev/sdb"}
+              )
+              /
+              sum by (environment, tier, type, stage, shard) (
+                node_filesystem_size_bytes{type="gitaly", device="/dev/sdb"}
+              )
+            )
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
       component: go_memory
     expr: |
       max by(environment, tier, type, stage) (
@@ -1123,6 +1144,14 @@ groups:
     expr: "0.9"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
+      component: gitaly_total_disk_space
+    expr: "0.69"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: gitaly_total_disk_space
+    expr: "0.7"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
       component: go_memory
     expr: "0.9"
   - record: slo:max:hard:gitlab_component_saturation:ratio
@@ -1559,6 +1588,12 @@ groups:
       component: elastic_thread_pools
       horiz_scaling: "yes"
       severity: s4
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      component: gitaly_total_disk_space
+      horiz_scaling: "yes"
+      severity: s3
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
@@ -2424,6 +2459,55 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="elastic_thread_pools"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="elastic_thread_pools"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: The Gitaly Total Disk Utilization resource of the {{ $labels.type }}
+        service ({{ $labels.stage }} stage), component has a saturation exceeding
+        SLO and is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Gitaly Total Disk Utilization resource:
+
+        Gitaly Total Disk Utilization.
+
+        This saturation metric monitors the total available capacity across the entire Gitaly fleet. By ensuring that we keep sufficient headroom on the saturation resource, we are able to spread load across the fleet.
+
+        When this alert fires, consider adding new Gitaly nodes. The [Gitaly Capacity Planner](https://dashboards.gitlab.net/d/alerts-gitaly_capacity_planner/alerts-gitaly-capacity-planner?orgId=1) dashboard can help determine how many new nodes will be needed.
+      grafana_dashboard_id: alerts-sat_gitaly_total_disk_space
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_gitaly_total_disk_space?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "998219612"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, shard) (
+          clamp_min(
+            clamp_max(
+              1 - (
+                sum by (environment, tier, type, stage, shard) (
+                  node_filesystem_avail_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", device="/dev/sdb"}
+                )
+                /
+                sum by (environment, tier, type, stage, shard) (
+                  node_filesystem_size_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", device="/dev/sdb"}
+                )
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s3
+    expr: |
+      gitlab_component_saturation:ratio{component="gitaly_total_disk_space"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="gitaly_total_disk_space"}
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
