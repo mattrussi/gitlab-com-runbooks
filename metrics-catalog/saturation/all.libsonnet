@@ -13,6 +13,7 @@ local saturationTypes = [
   import 'elastic_single_node_cpu.libsonnet',
   import 'elastic_single_node_disk_space.libsonnet',
   import 'elastic_thread_pools.libsonnet',
+  import 'gitaly_total_disk_space.libsonnet',
   import 'go_memory.libsonnet',
   import 'kube_container_cpu.libsonnet',
   import 'kube_container_memory.libsonnet',
