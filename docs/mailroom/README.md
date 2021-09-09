@@ -17,6 +17,7 @@
 
 * [../onboarding/gitlab.com_on_k8s.md](../onboarding/gitlab.com_on_k8s.md)
 * [../onboarding/kibana-diagnosis.md](../onboarding/kibana-diagnosis.md)
+* [../sidekiq/sidekiq-survival-guide-for-sres.md](../sidekiq/sidekiq-survival-guide-for-sres.md)
 <!-- END_MARKER -->
 
 ## Operations

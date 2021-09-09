@@ -9,51 +9,93 @@ limited number) being kept busy waiting on 3rd party services with unknown and u
 classic example is sending e-mails in response to user actions, but GitLab also uses background jobs for other local
 tasks that are time critical but which are better served by being extracted from the main web request cycle e.g. merging.
 
+# Definitions
+
+These will be explained in more detail as we go, but to provide a little heads-up:
+
+* Job: A request to run a bit of Ruby code to perform a specific operation on specific data (e.g. send a webhook for an
+  event on a project, start a CI pipeline, etc)
+* Queue: A Redis structure that holds Jobs waiting to execute
+* Worker: A running instance of Rails that executes Jobs retrieved from a Queue
+* Shard: A set of Workers that executes Jobs from one or more Queues of Jobs with some common characteristics
+
 # How do jobs get into Sidekiq
 
 Sidekiq uses Redis as its datastore, because it has excellent [performance
 characteristics](https://github.com/mperham/sidekiq/wiki/FAQ#wouldnt-it-be-awesome-if-sidekiq-supported-mongodb-postgresql-mysql-sqs--for-persistence)
 for the Sidekiq use case. Sidekiq can put jobs into named 'queues', and by default the only queue is one called
-'default'. GitLab, however, creates one queue per Worker class to allow routing to appropriately scaled processor
-nodes, although this may change in [future](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/194).
+'default'. GitLab, however, uses more than one queue.  By default there is one queue per Worker class (a historical decision
+to help with workload management/queuing at scale), but [Routing Rules](#routing-rules) means that this is no longer
+the only way, and arbitrary groups of jobs can be routed to arbitrarily named queues.  Indeed, for .com
+(gprd/gstg at least) we exclusively use routing rules, and other than a small handful of special cases which still have a queue-per-worker,
+we use a single queue per [shard](#shards).
 
 Client side Ruby code, typically in the web or API tiers, uses the Sidekiq client gem to request that a certain 'Worker'
 class be executed (an instance created and the `perform` method called) with a set of arguments. The Sidekiq client
 serializes the job request to a JSON string which is added to a per-queue
-[LIST](https://redis.io/topics/data-types#lists) in Redis, under the key `resque:gitlab:queue:QUEUE_NAME`, where
-QUEUE_NAME is the lower-snake-case of the Worker class name, without the Worker suffix. For example the
-`WebHookWorker` class will be put in the `web_hook` queue, meaning there will be a JSON string entry pushed
-onto the `resque:gitlab:queue:web_hook` LIST in Redis. Note that the job definition in Redis contains the class
-name as well as the arguments, and putting a job for `FooWorker` in the queue `bar` will execute correctly in any
-Sidekiq configured to look at the queue `bar`. The GitLab mapping from worker class to queue is a GitLab-specific
-architectural choice, to grant control where specific jobs run.
+[LIST](https://redis.io/topics/data-types#lists) in Redis, under the key `resque:gitlab:queue:QUEUE_NAME`.
 
-We also have `namespaces` (colon separated, two parts only) e.g. The `NewReleaseWorker` has a queue_namespace of
-`notifications`, and so gets put into a queue called `notifications:new_release`. This may just be a relic of previous
+To decide on the queue name, the [Routing Rules](#routing-rules) are consulted in order until there is a match.
+
+Regarding the serialization:
+1. The job definition in Redis contains the class name as well as the arguments, and putting a job for
+   `FooWorker` in the queue `bar` will execute correctly in any Sidekiq worker configured to look at the queue `bar` (assuming
+   the code for FooWorker exists on that Sidekiq deployment)
+1. The arguments for the Worker `perform` method must be able to be encoded to JSON safely. This means that Ruby objects
+   are not allowed (well, it's possible if you try really hard, but just don't, it'll end badly). Typically they'll be
+   simple strings, or the database primary key for the row/object that the worker should work on; the Sidekiq worker
+   will then fetch that object from the DB and perform the requested operation on it.  The arguments are (hopefully
+   obviously) order-dependent, so the order seen in the JSON (and as logged) is important to consider when reviewing
+   what the code will do.
+
+## Routing rules
+
+* Syntax: https://docs.gitlab.com/ee/administration/operations/extra_sidekiq_routing.html
+* Current configuration (gprd):
+   * Search `routingRules` in https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/blob/master/releases/gitlab/values/gprd.yaml.gotmpl
+   * Search `routing_rules` in https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/blob/master/roles/gprd-base.json
+
+These should be configured identically in chef and helm but there are no technical controls ensuring they are kept the same.
+If they are not, then jobs *may* execute on the wrong shard, or not execute at all.  Divergence is only in exceptional
+and likely transient situations where you can describe and reason out exactly what will happen and why that is necessary
+(or: "you'll know when you know").
+It is very important to remember that the routing rules are consulted when a job is submitted, which can be from anywhere
+running Rails, including web, api, and Rails consoles, not just Sidekiq, so this repeated configuration will be required
+until we eliminate all chef-configured VMs running Rails.
+
+For .com the rules start with some special-case-worker handling, then a rule for each [shard](#shards), finished by a `*` rule
+that routes all unmatched jobs to the `default` queue, which runs on the `catchall` shard.
+
+At Rails boot time each worker class uses the routing rules to determine which queue it goes into, where each rule may use a queue
+selector which is a boolean expression on the [job characteristics](#job-characteristics).
+
+## Historical queue-per-worker
+
+The default/unconfigured behavior has an implied route for all (`*`) to `nil/null` where nil means the per-worker autogenerated
+queue name being the lower-snake-case of the Worker class name, without the Worker suffix. For example the `WebHookWorker` class would
+be put in the `web_hook` queue, meaning there will be a JSON string entry pushed onto the `resque:gitlab:queue:web_hook` LIST.
+
+There are also `namespaces` (colon separated, two parts only) e.g. The `NewReleaseWorker` has a queue\_namespace of
+`notifications`, and in the default configuration gets put into a queue called `notifications:new_release`. This is a relic of previous
 attempts to control where Sidekiq jobs run, where we used wildcards on namespaces, e.g. to make all the pipeline jobs
-run on a pipeline fleet of VMs. It has no current effect (see later)
+run on a pipeline fleet of VMs. It has no current effect.
 
-An important detail here is that the arguments for the Worker `perform` method must be able to be encoded to JSON
-safely. This means that Ruby objects are not allowed (well, it's possible if you try really hard, but just don't, it'll
-end badly). Typically they'll be simple strings, or the database primary key for the row/object that the worker should
-work on; the Sidekiq worker will then fetch that object from the DB and perform the requested operation on it.  The
-arguments are (hopefully obviously) order-dependent, so the order seen in the JSON (and as logged) is important to
-consider when reviewing what the code will do.
+## Redis
 
-For gitlab.com we have a distinct Redis cluster specifically for Sidekiq, split out in 2019. The loading is very
-particular and we were running into problems sharing that load with our core 'persistent' (Shared State) Redis. Note
+For gitlab.com we have a separate Redis cluster specifically for Sidekiq, split out in 2019. The workload is very
+specific and we were running into problems sharing that load with our core 'persistent' (Shared State) Redis. Note
 that this is not a cache-type Redis instance, and it does not evict keys when memory limits are reached, so if we have
-too many queued jobs we could OOM the Redis cluster, which would be very bad. We have
+too many (or overly large) queued jobs we could OOM the Redis cluster, which would be very bad. We have
 [monitoring](https://dashboards.gitlab.net/d/alerts-sat_redis_memory/alerts-redis_memory-saturation-detail?orgId=1&var-PROMETHEUS_DS=Global&var-environment=gprd&var-type=redis-sidekiq&var-stage=main)
 of this tied into our saturation alerting, so we should be made aware of this with plenty of time to spare. At this
 writing, the memory saturation is below 5%, so there's plenty of headroom.
 
-It may be interesting to peruse the [sidekiq style guide](https://docs.gitlab.com/ee/development/sidekiq_style_guide.html)
+It may be interesting to read the [sidekiq style guide](https://docs.gitlab.com/ee/development/sidekiq_style_guide.html)
 for GitLab as that describes some of this in more detail, from a backend engineers perspective.
 
 # How do jobs get picked up
 
-At it's simplest, a Sidekiq (Ruby) process runs somewhere with all the same application code as is in the web
+At it's simplest, a Sidekiq (Ruby) process runs somewhere with all the same application code as the web
 application. It is started with 'bundle exec sidekiq' which runs the 'sidekiq' CLI script from the Sidekiq gem; this
 subscribes to a set of queues (Redis LISTs) named on the command line, pops jobs off those queues and executes them in
 one of the worker threads by deserializing the JSON, finding the specified class, creating an instance of that class,
@@ -68,64 +110,28 @@ similar way to how [DB migrations](https://docs.gitlab.com/ee/development/backgr
 requiring multiple releases to safely migrate with zero-downtime. This is discussed at
 https://docs.gitlab.com/ee/development/sidekiq_style_guide.html#sidekiq-compatibility-across-updates
 
-## Virtual machines
+## Sidekiq Cluster (historical)
 
-In GitLab in general, there are two ways that Sidekiq can run: legacy/traditional mode, and
-sidekiq-cluster. As at this writing (mid-2020) the legacy mode is being removed from omnibus deployments and
-sidekiq-cluster is becoming the default. While the gitlab Sidekiq docker image used on Kubernetes runs only a single
-traditional mode Sidekiq process (see [Kubernetes](#kubernetes)) our Sidekiq VMs have been using sidekiq-cluster on VMs
-for years now.
+Mostly not relevant to *gitlab.com* (gstg, gprd, pre) but possibly still occasionally useful for SREs working with
+other deployments (e.g. ops)
 
-Sidekiq-cluster runs multiple (traditional gem) Sidekiq processes, with a configurable concurrency (thread count) for
-each worker. The intention is to run one worker per CPU core, with a suitable concurrency chosen depending on the
-workload (more to come on that later). The sidekiq-cluster process then monitors the processes it created; if any die,
-it gracefully terminates the rest and exits, with the supervisor process then restarting sidekiq-cluster.
+In GitLab there are two ways that Sidekiq can run: legacy/traditional mode, and sidekiq-cluster.
+The legacy mode has been removed from omnibus deployments and sidekiq-cluster is now the default, but that doesn't
+matter to us because GitLab.com runs sidekiq exclusively in kubernetes, where the CNG Sidekiq docker image runs only a single
+traditional mode Sidekiq process (see [Kubernetes](#kubernetes)), although it uses sidekiq-cluster in dry-run mode to
+figure out what to run (a slight hack for convenience).
 
-As noted above, GitLab creates one queue per Worker class, so we need to tell sidekiq-cluster which queues to tell the
-individual Sidekiq processes to listen on. On gitlab.com in particular, we want to split our Sidekiq processing up into
-individual workloads or `shards`, each of them processing some subset of the Sidekiq jobs, to maintain control e.g.
-limiting some types of jobs, and ensuring we can see that jobs are being processed fast enough for their urgency. Each
-workload/shard translates into either a set of VMs running sidekiq-cluster, or a Kubernetes workload running a single
-Sidekiq process per pod (with threaded concurrency, of course).
-
-The distribution of jobs used to be complicated and manual, including things like queue namespaces and carefully
-curated/counted configurations of queue names given to Sidekiq to get a certain number of workers available to run each
-type of queue, on suitably provisioned VMs. This was fragile, easily misconfigured (e.g. queues running on multiple
-different types of Sidekiq VMs), and difficult to reason about, particularly during incidents if capacity was limited by
-our per-queue configuration but Sidekiq VMs were not actually busy. So in early 2020 we rolled out, and now exclusively
-use, the `experimental-sidekiq-selector`
-(https://docs.gitlab.com/ee/administration/operations/extra_sidekiq_processes.html#using-sidekiq-cluster-by-default-experimental).
-This uses the [execution characteristics](#job-characteristics) of jobs to select which jobs to run on a given set of
-nodes, allowing for a more effective allocation of resources with more predictable and reliable effects.  We choose
-the threading concurrency per Sidekiq worker carefully here. For example, nodes that will be processing jobs with long
-running external I/O (e.g. webhooks) can run with a high concurrency, as most of the time the Sidekiq thread will be
-waiting on network I/O to 3rd parties. On the other hand, jobs running what we know to be locally CPU-bound jobs should
-run at a much lower concurrency; while such jobs may still have times they're waiting on local databases and can have
-*some* concurrency, those delays are much smaller so concurrency needs to be much lower.
-
-Each of our Sidekiq `shards` now runs only jobs that match a given `selector`, giving us the benefits noted above
-(control + observability).
-
-Finally: to ensure we always run all enqueued jobs, sidekiq-cluster has a `--negate` option that affects the queue
-selector. For the `catchall` Sidekiq nodes we combine the selectors used for all the other workloads, and add
-`--negate`. When sidekiq-cluster starts up with that option, it will find all the jobs that are *not* explicitly listed
-(i.e not running on any other Sidekiq workload) and subscribe to those. There is nothing stopping us creating this list
-by hand (other than risk of errors), or *not* doing this at all and thus potentially never executing some jobs (which
-might be bad). The key fact is that we ensure there is a Sidekiq process listening to every queue by deliberate action; it is
-not something that has occurred by accident.
-
-References
-* https://ops.gitlab.net/gitlab-cookbooks/chef-repo/-/blob/master/tools/sidekiq-config/sidekiq-queue-configurations.libsonnet
-- the specification of Sidekiq workloads, which jobs they run, with how many workers (match CPU count usually) and
-concurrency. This is used to update chef roles (see comment at the top)
+When in active use (not dry-run mode), sidekiq-cluster executes multiple (traditional gem) Sidekiq processes, with a
+configurable concurrency (thread count) for each worker. The intention is to run one worker per CPU core, with a suitable
+concurrency chosen depending on the workload (more to come on that later). The sidekiq-cluster process then monitors the
+processes it created; if any die, it gracefully terminates the rest and exits, with the supervisor process then restarting
+sidekiq-cluster.
 
 ## Kubernetes
 
 Rather than running sidekiq-cluster and thus having an additional layer of supervision, we use Kubernetes to handle the
-"multiple process" problem and run the traditional single Sidekiq Ruby/Rails process. Arguably the only reason we have
-multiple processes on sidekiq-cluster VMs is that the overhead of one process per small (1 CPU) VM would be hideous, and
-with Kubernetes doing the management/mapping of processes to nodes, we can step back from that and go simpler. We still
-have *concurrency* > 1 to try and maximize our CPU utilization, but that's threads not processes.
+"multiple process" problem and run the traditional single Sidekiq Ruby/Rails process. We still have *concurrency* > 1
+to maximize our CPU utilization, but that's threads not processes.
 
 Side note: the docker container actually use sidekiq-cluster with the queue selector argument in dry-run mode to
 generate a list of queues to pass to the single Sidekiq process, much as sidekiq-cluster would do if it were running
@@ -133,7 +139,7 @@ the sub-processes itself. This is just a startup step, and could plausibly be si
 
 Autoscaling ([Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/))
 is interesting; it's not always practical. The primary issue is boot-time for a Sidekiq process. With some effort it's
-now down to approximately 1 minute, however, some of our shards have workload profiles that are incompatible with this
+now down to approximately 1 minute, however, some of our [shards](#shards) have workload profiles that are incompatible with this
 because they drop many (hundreds or thousands) of jobs on the queue at once. With a fully provisioned set of VMs, the
 jobs can often be completed within a minute or two. However in Kubernetes, if the workload was scaled down to some
 smaller size, it will see the CPU usage caused by the existing workers getting busy and start spinning up more pods.
@@ -144,14 +150,40 @@ all the new workers are ready. In short, boot times are too long and expensive t
 which we solve by sometimes having a fixed number of pods for a shard. Some shards do manage work well with this
 (elasticsearch, particularly while we're doing backfill indexing of existing projects), and they are allowed to
 autoscale, within limits. The list of shards and whether they autoscale or not may change with time, so they will not be
-listed here. Simply be aware that there is variation.
+listed here. Simply be aware that there is variation, and this is an area of ongoing work.
 
-Consideration also needs to be given to NFS: some of our Sidekiq jobs still need to write to shared storage, and these
-cannot be migrated to Kubernetes until that is changed (object storage being the obvious replacement candidate in many
-cases). This is the subject of ongoing work by the delivery team.
+Other than these matters, jobs are picked up and processed in exactly the same fashion in Kubernetes as on VMs.
 
-Other than these matters, jobs are picked up and processed in exactly the same fashion in Kubernetes as under
-sidekiq-cluster.
+## Shards
+
+We need to tell sidekiq which queues to tell the individual Sidekiq processes to listen on. On gitlab.com in particular,
+we want to split our Sidekiq processing up into individual workloads or `shards`, each of them processing some subset
+of the Sidekiq jobs, to maintain control e.g.  limiting some types of jobs, and ensuring that jobs are being processed
+fast enough for their urgency. Each workload/shard translates into a Kubernetes workload running a single Sidekiq
+process per pod (with threaded concurrency, of course).
+
+The distribution of jobs used to be complicated and manual, including things like queue namespaces and carefully
+curated/counted configurations of queue names given to Sidekiq to get a certain number of workers available to run each
+type of queue, on suitably provisioned VMs. This was fragile, easily misconfigured (e.g. queues running on multiple
+different types of Sidekiq VMs), and difficult to reason about, particularly during incidents if capacity was limited by
+our per-queue configuration but Sidekiq VMs were not actually busy.
+
+So we created the [queue selector](https://docs.gitlab.com/ee/administration/operations/extra_sidekiq_processes.html#queue-selector)
+This uses the [execution characteristics](#job-characteristics) of jobs to select jobs allowing for a more effective
+allocation of resources with more predictable and reliable effects. We choose
+the threading concurrency for a shard carefully. For example, a shard that will be processing jobs with long
+running external I/O (e.g. webhooks) can run with a high concurrency, as most of the time the Sidekiq thread will be
+waiting on network I/O to 3rd parties. On the other hand, jobs running what we know to be locally CPU-bound jobs should
+run at a much lower concurrency; while such jobs may still have times they're waiting on databases and can therefore have
+concurrency a little over 1, those delays are much smaller so concurrency needs to be much lower.
+
+Each of our Sidekiq `shards` runs only jobs that match a given selector, giving us the benefits noted above
+(control + observability).  However, we implement this using [routing rules](#routing-rules) such that the shard
+selection is done when the job is *scheduled* by the Sidekiq client by targeting a queue (arbitrarily) named the same
+as the shard name.  Each shard generally only listens to that one queue name, other than a small handful of exceptions
+where the name cannot be configured (e.g. mailroom with email_receiver), or where the job still requires it's own
+queue for capacity management or similar purposes.  There should be comments in the k8s routing rules noting
+the `why` for each such exception.
 
 ## Job Characteristics
 
@@ -159,14 +191,13 @@ To support the routing of jobs by characteristics, there is metadata included in
 Guide](https://gitlab.com/gitlab-org/gitlab/-/blob/master/doc/development/sidekiq_style_guide.md)). A [rake
 task](https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/tasks/gitlab/sidekiq.rake) looks for all the Sidekiq
 workers in the code base and generates `app/workers/all_queues.yml` (and `ee/app/workers/all_queues.yml` for EE-specific
-jobs). At startup sidekiq-cluster reads these files, finds the jobs that match the selector given on the command line
-(or with `--negate`, the ones that do not), and gives this list to the traditional Sidekiq process it starts up.
+jobs).
 
 The characteristics are well described in the Sidekiq style guide, but boil down to:
 * urgency: how quickly must this job be picked up; `high` typically means a user is sitting at a UI action waiting on
-  this, e.g. a merge, or many CI pipeline jobs, whereas low urgency can be dealt with 'eventually'.
-* resource-boundary: cpu, memory, or none: CPU implies it needs lower concurrency; memory means it needs to run on nodes
-  with higher memory (e.g. project exports); these are mutually exclusive, and if neither applies, 'none' is the default
+  this job (e.g. a merge, or many CI pipeline jobs) whereas low urgency can be dealt with 'eventually'.
+* resource-boundary: cpu, memory, or none: CPU implies it needs lower concurrency; memory means it needs to run in places
+  with more memory allocated (e.g. project exports); these are mutually exclusive, and if neither applies, 'none' is the default
 
 The urgency expectations flow into SLIs and SLOs, such that the nodes running high urgency jobs will alert when the
 latency (waiting time) for jobs rises above a fairly low threshold, whereas low urgency jobs can wait for quite a bit
@@ -223,7 +254,7 @@ From the Shard Detail dashboard on any graph that shows job-specific stats, left
 menu from which the "[Worker Detail](https://dashboards.gitlab.net/d/sidekiq-worker-detail/sidekiq-worker-detail)"
 dashboard can be opened.
 
-### Queue/Worker Detail
+### Worker Detail
 
 https://dashboards.gitlab.net/d/sidekiq-worker-detail/sidekiq-worker-detail is the lowest level of the
 Sidekiq dashboards, and shows graphs specific to the selected worker. The graphs on this page are fairly
