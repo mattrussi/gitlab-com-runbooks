@@ -282,12 +282,6 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: gdk
-      product_stage: ecosystem
-      stage_group: contributor_experience
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: geo_replication
       product_stage: enablement
       stage_group: geo
@@ -529,8 +523,8 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: projects
-      product_stage: plan
-      stage_group: project_management
+      product_stage: manage
+      stage_group: workspace
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:

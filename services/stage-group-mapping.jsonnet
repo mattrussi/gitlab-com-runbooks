@@ -14,6 +14,7 @@
     feature_categories: [
       'subgroups',
       'users',
+      'projects',
     ],
   },
   compliance: {
@@ -48,7 +49,6 @@
       'issue_tracking',
       'boards',
       'time_tracking',
-      'projects',
       'planning_analytics',
     ],
   },
@@ -117,13 +117,6 @@
     stage: 'ecosystem',
     feature_categories: [
       'foundations',
-    ],
-  },
-  contributor_experience: {
-    name: 'Contributor Experience',
-    stage: 'ecosystem',
-    feature_categories: [
-      'gdk',
     ],
   },
   pipeline_execution: {
