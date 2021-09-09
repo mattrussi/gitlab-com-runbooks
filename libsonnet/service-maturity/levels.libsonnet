@@ -1,12 +1,16 @@
 local serviceCatalog = import 'service-catalog/service-catalog.libsonnet';
+local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local miscUtils = import 'utils/misc.libsonnet';
 
 local metricsDashboardLink(serviceName) =
   'https://dashboards.gitlab.net/d/general-service/general-service-platform-metrics?var-type=%s' % serviceName;
 
+local diagramDashboardLink = 'https://dashboards.gitlab.net/d/%(uuid)s' % {
+  uuid: toolingLinks.grafanaUid('diagrams/main.dashboard.jsonnet'),
+};
+
 local levels = [
   {
-    number: 1,
     name: 'Level 1',
     criteria: [
       {
@@ -29,7 +33,6 @@ local levels = [
     ],
   },
   {
-    number: 2,
     name: 'Level 2',
     criteria: [
       {
@@ -57,14 +60,17 @@ local levels = [
             false,
       },
       {
-        // TODO: https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1284
         name: 'Service exists in the dependency graph',
-        evidence: function(service) null,
+        evidence: function(service)
+          local serviceGraph = serviceCatalog.serviceGraph;
+          if std.length(serviceGraph[service.type].inward) > 0 || std.length(serviceGraph[service.type].outward) > 0 then
+            [diagramDashboardLink]
+          else
+            false,
       },
     ],
   },
   {
-    number: 3,
     name: 'Level 3',
     criteria: [
       {
@@ -115,7 +121,6 @@ local levels = [
   },
   {
     // TODO: https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/834
-    number: 4,
     name: 'Level 4',
     criteria: [
       {
@@ -134,7 +139,6 @@ local levels = [
   },
   {
     // TODO: https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/835
-    number: 5,
     name: 'Level 5',
     criteria: [
       {

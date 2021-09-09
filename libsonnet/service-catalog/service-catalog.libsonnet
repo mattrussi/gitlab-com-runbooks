@@ -1,4 +1,6 @@
 local serviceCatalog = (import 'gitlab-metrics-config.libsonnet').serviceCatalog;
+local allServices = (import 'gitlab-metrics-config.libsonnet').monitoredServices;
+local miscUtils = import 'utils/misc.libsonnet';
 
 local serviceMap = {
   [x.name]: x
@@ -10,10 +12,43 @@ local teamDefaults = {
   send_slo_alerts_to_team_slack_channel: false,
 };
 
+local buildServiceGraph(services) =
+  std.foldl(
+    function(graph, service)
+      local dependencies =
+        if std.objectHas(service, 'serviceDependencies') then
+          miscUtils.arrayDiff(std.objectFields(service.serviceDependencies), [service.type])
+        else
+          [];
+      if std.length(dependencies) > 0 then
+        graph + {
+          [dependency]: {
+            inward: std.uniq([service.type] + graph[dependency].inward),
+            outward: graph[dependency].outward,
+          }
+          for dependency in dependencies
+        } + {
+          [service.type]: {
+            inward: graph[service.type].inward,
+            outward: std.uniq(dependencies + graph[service.type].outward),
+          },
+        }
+      else
+        graph,
+    services,
+    std.foldl(
+      function(graph, service) graph { [service.type]: { inward: [], outward: [] } },
+      services,
+      {}
+    )
+  );
 
 {
   lookupService(name)::
     if std.objectHas(serviceMap, name) then serviceMap[name],
+
+  buildServiceGraph: buildServiceGraph,
+  serviceGraph:: buildServiceGraph(allServices),
 
   getTeams()::
     serviceCatalog.teams,
