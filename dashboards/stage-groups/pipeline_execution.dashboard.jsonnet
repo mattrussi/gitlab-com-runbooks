@@ -370,7 +370,7 @@ stageGroupDashboards.dashboard('pipeline_execution')
       stableId='pipeline-creation-step-duration-p50',
       title='Duration of each pipeline creation step (p50)',
       queries=[{
-        query: 'pipeline_creation_step_duration:p50{env="$enviroment", stage="$stage"}',
+        query: 'pipeline_creation_step_duration:p50{env="$environment", stage="$stage"}',
         legendFormat: '{{ step }} duration - p50',
       }],
       format='s',
@@ -379,7 +379,7 @@ stageGroupDashboards.dashboard('pipeline_execution')
       stableId='pipeline-creation-step-duration-p90',
       title='Duration of each pipeline creation step (p90)',
       queries=[{
-        query: 'pipeline_creation_step_duration:p90{env="$enviroment", stage="$stage"}',
+        query: 'pipeline_creation_step_duration:p90{env="$environment", stage="$stage"}',
         legendFormat: '{{ step }} duration - p90',
       }],
       format='s',
@@ -388,7 +388,7 @@ stageGroupDashboards.dashboard('pipeline_execution')
       stableId='pipeline-creation-step-duration-p99',
       title='Duration of each pipeline creation step (p99)',
       queries=[{
-        query: 'pipeline_creation_step_duration:p99{env="$enviroment", stage="$stage"}',
+        query: 'pipeline_creation_step_duration:p99{env="$environment", stage="$stage"}',
         legendFormat: '{{ step }} duration - p99',
       }],
       format='s',
