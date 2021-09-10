@@ -24,6 +24,7 @@
 * [../onboarding/architecture.md](../onboarding/architecture.md)
 * [../onboarding/kibana-diagnosis.md](../onboarding/kibana-diagnosis.md)
 * [../patroni/rotating-rails-postgresql-password.md](../patroni/rotating-rails-postgresql-password.md)
+* [../redis-cache/remove-cache-entries.md](../redis-cache/remove-cache-entries.md)
 * [ban-an-IP-with-redis.md](ban-an-IP-with-redis.md)
 * [clear_anonymous_sessions.md](clear_anonymous_sessions.md)
 * [redis-sidekiq-catchall-workloads-reduction.md](redis-sidekiq-catchall-workloads-reduction.md)
