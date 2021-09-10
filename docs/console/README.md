@@ -64,6 +64,7 @@
 * [../pgbouncer/pgbouncer-saturation.md](../pgbouncer/pgbouncer-saturation.md)
 * [../postgres-dr-delayed/postgres-dr-replicas.md](../postgres-dr-delayed/postgres-dr-replicas.md)
 * [../praefect/praefect-database.md](../praefect/praefect-database.md)
+* [../redis-cache/remove-cache-entries.md](../redis-cache/remove-cache-entries.md)
 * [../redis/clear_anonymous_sessions.md](../redis/clear_anonymous_sessions.md)
 * [../redis/redis-sidekiq-catchall-workloads-reduction.md](../redis/redis-sidekiq-catchall-workloads-reduction.md)
 * [../redis/redis.md](../redis/redis.md)
