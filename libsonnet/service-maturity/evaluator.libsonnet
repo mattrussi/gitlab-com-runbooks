@@ -50,6 +50,19 @@ local evaluateLevel(level, service) =
     criteria: criteria,
   };
 
+local evaluate = function(service, levels) std.map(function(level) evaluateLevel(level, service), levels);
+
+local maxLevel(service, levelDefinitions) =
+  local levels = std.filter(
+    function(level) level.passed,
+    evaluate(service, levelDefinitions),
+  );
+  if std.length(levels) == 0 then
+    'Level 0'
+  else
+    levels[std.length(levels) - 1].name;
+
 {
-  evaluate: function(service, levels) std.map(function(level) evaluateLevel(level, service), levels),
+  evaluate: evaluate,
+  maxLevel: maxLevel,
 }

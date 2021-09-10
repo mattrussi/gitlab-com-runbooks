@@ -7,9 +7,13 @@ local dependencies = import 'service-dependencies/service-dependencies.libsonnet
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local row = grafana.row;
 
+local evaluator = import 'service-maturity/evaluator.libsonnet';
+local levels = import 'service-maturity/levels.libsonnet';
+local strings = import 'utils/strings.libsonnet';
+
 local MERMAID_DIAGRAM_TEMPLATE =
   |||
-    graph TD
+    graph %(direction)s
       %(subgraphs)s
 
       %(dependencyList)s
@@ -40,17 +44,19 @@ local generateMermaidDependencyList(services) =
   local lines = std.flattenArrays(std.map(generateMermaidDependencyForService, services));
   std.join('\n', lines);
 
-local generateMermaidDiagram(services) =
+local generateMermaidDiagram(services, diagramOptions={}) =
+  local direction = if std.objectHas(diagramOptions, 'direction') then diagramOptions.direction else 'TD';
   MERMAID_DIAGRAM_TEMPLATE % {
     subgraphs: generateMermaidSubgraphs(services),
     dependencyList: generateMermaidDependencyList(services),
+    direction: direction,
   };
 
-local systemDiagram(title, target, colors, thresholds, graphId, services) = {
+local systemDiagram(title, graphId, services, targets, diagramOptions) = {
   datasource: '$PROMETHEUS_DS',
-  colors: colors,
+  colors: diagramOptions.colors,
   composites: [],
-  content: generateMermaidDiagram(services),
+  content: generateMermaidDiagram(services, diagramOptions),
   decimals: 3,
   format: 'percentunit',
   graphId: graphId,
@@ -120,8 +126,8 @@ local systemDiagram(title, target, colors, thresholds, graphId, services) = {
   options: {},
   seriesOverrides: [],
   style: '',
-  targets: [target],
-  thresholds: thresholds,
+  targets: targets,
+  thresholds: diagramOptions.thresholds,
   title: title,
   type: 'jdbranham-diagram-panel',
   valueMaps: [],
@@ -135,40 +141,66 @@ local systemDiagram(title, target, colors, thresholds, graphId, services) = {
   ],
 };
 
-local errorDiagram(services) =
+local errorDiagram(services, diagramOptions={}) =
   systemDiagram(
     title='System Diagram (Keyed by Error Rates)',
-    colors=[
-      'rgba(50, 172, 45, 0.97)',
-      'rgba(237, 129, 40, 0.89)',
-      'rgba(245, 54, 54, 0.9)',
-    ],
-    services=services,
     graphId='diagram_errors',
-    thresholds='0,0.001',
-    target=promQuery.target(
+    targets=[promQuery.target(
       sliPromQL.errorRatioQuery(aggregationSets.serviceSLIs, null, selectorHash={ environment: '$environment', stage: '$stage' }, range='$__range'),
       legendFormat='{{ type }}',
       instant=true
-    )
+    )],
+    services=services,
+    diagramOptions={
+      colors: [
+        'rgba(50, 172, 45, 0.97)',
+        'rgba(237, 129, 40, 0.89)',
+        'rgba(245, 54, 54, 0.9)',
+      ],
+      thresholds: '0,0.001',
+    } + diagramOptions
   );
 
-local apdexDiagram(services) =
+local apdexDiagram(services, diagramOptions={}) =
   systemDiagram(
     title='System Diagram (Keyed by Apdex/Latency Scores)',
-    colors=[
-      'rgba(245, 54, 54, 0.9)',
-      '#FF9830',
-      '#73BF69',
-    ],
-    services=services,
     graphId='diagram_apdex',
-    thresholds='0.99,0.995,0.999',
-    target=promQuery.target(
+    targets=[promQuery.target(
       sliPromQL.apdexQuery(aggregationSets.serviceSLIs, null, { environment: '$environment', stage: '$stage' }, range='$__range'),
       legendFormat='{{ type }}',
       instant=true
-    )
+    )],
+    services=services,
+    diagramOptions={
+      colors: [
+        'rgba(245, 54, 54, 0.9)',
+        '#FF9830',
+        '#73BF69',
+      ],
+      thresholds: '0.99,0.995,0.999',
+    } + diagramOptions
+  );
+
+local maturityDiagram(services, diagramOptions={}) =
+  systemDiagram(
+    title='System Diagram (Keyed by Maturity Model)',
+    graphId='diagram_maturity',
+    targets=[],
+    services=std.map(
+      function(service)
+        local level = evaluator.maxLevel(service, levels.getLevels());
+        service {
+          type: '%(service)s["%(serviceLabel)s"]' % {
+            service: service.type,
+            serviceLabel: '%s (%s)' % [service.type, level],
+          },
+        },
+      services
+    ),
+    diagramOptions={
+      colors: [],
+      thresholds: '',
+    } + diagramOptions
   );
 
 local getServicesFor(serviceName) =
@@ -186,5 +218,9 @@ local getServicesFor(serviceName) =
     .addPanels(layout.grid([
       errorDiagram(services),
       apdexDiagram(services),
-    ], cols=2, rowHeight=10)),
+      maturityDiagram(services),
+    ], cols=1, rowHeight=10)),
+  errorDiagram: errorDiagram,
+  apdexDiagram: apdexDiagram,
+  maturityDiagram: maturityDiagram,
 }
