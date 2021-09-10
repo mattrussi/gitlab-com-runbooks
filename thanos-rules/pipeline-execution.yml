@@ -1,5 +1,7 @@
 groups:
   - name: Pipeline Execution metrics
+    partial_response_strategy: warn
+    interval: 1m
     rules:
       - record: pipeline_creation_step_duration:p50
         expr: |
