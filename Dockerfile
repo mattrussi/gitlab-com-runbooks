@@ -68,7 +68,7 @@ COPY --from=go-jsonnet /build/bin/jsonnet /bin/jsonnet
 COPY --from=go-jsonnet /build/bin/jsonnetfmt /bin/jsonnetfmt
 COPY --from=go-jsonnet /build/bin/jb /bin/jb
 
-COPY --from=jsonnet-tool-image /jsonnet-tool /bin/jsonnet-tool
+COPY --from=jsonnet-tool-image /usr/local/bin/jsonnet-tool /bin/jsonnet-tool
 
 RUN gem install --no-document json && \
     gem install --no-document yaml-lint && \
