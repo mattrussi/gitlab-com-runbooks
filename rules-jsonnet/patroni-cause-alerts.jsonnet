@@ -159,6 +159,7 @@ local rules = {
                   command!~"[cC][rR][eE][aA][tT][eE]",
                   command!~"[aA][nN][aA][lL][yY][zZ][eE]",
                   command!~"[rR][eE][iI][nN][dD][eE][xX]",
+                  command!~"[aA][lL][tT][eE][rR]",
                 }
               )
               > 540
