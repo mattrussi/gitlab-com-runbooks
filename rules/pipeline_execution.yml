@@ -1,0 +1,11 @@
+groups:
+  - name: Pipeline Execution metrics
+    interval: 1m
+    rules:
+      - record: pipeline_creation_step_duration_bucket:le_step:rate1m
+        expr: |
+            sum by (le, step, env, stage) (
+              rate(
+                gitlab_ci_pipeline_creation_step_duration_seconds_bucket[1m]
+              )
+            )
