@@ -373,7 +373,7 @@ stageGroupDashboards.dashboard('pipeline_execution')
         query: |||
           histogram_quantile(
              0.50,
-             pipeline_creation_step_duration_bucket:le_step:rate1m{env="$environment", stage="$stage"}
+             sum by (step, le) (pipeline_creation_step_duration_bucket:le_step:rate1m{env="$environment", stage="$stage"})
           )
         |||,
         legendFormat: '{{ step }} duration - p50',
@@ -387,7 +387,7 @@ stageGroupDashboards.dashboard('pipeline_execution')
         query: |||
           histogram_quantile(
              0.90,
-             pipeline_creation_step_duration_bucket:le_step:rate1m{env="$environment", stage="$stage"}
+             sum by (step, le) (pipeline_creation_step_duration_bucket:le_step:rate1m{env="$environment", stage="$stage"})
           )
         |||,
         legendFormat: '{{ step }} duration - p90',
@@ -401,7 +401,7 @@ stageGroupDashboards.dashboard('pipeline_execution')
         query: |||
           histogram_quantile(
              0.99,
-             pipeline_creation_step_duration_bucket:le_step:rate1m{env="$environment", stage="$stage"}
+             sum by (step, le) (pipeline_creation_step_duration_bucket:le_step:rate1m{env="$environment", stage="$stage"})
           )
         |||,
         legendFormat: '{{ step }} duration - p99',
