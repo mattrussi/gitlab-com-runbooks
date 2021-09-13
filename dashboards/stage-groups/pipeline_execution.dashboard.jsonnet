@@ -370,7 +370,12 @@ stageGroupDashboards.dashboard('pipeline_execution')
       stableId='pipeline-creation-step-duration-p50',
       title='Duration of each pipeline creation step (p50)',
       queries=[{
-        query: 'pipeline_creation_step_duration:p50{env="$environment", stage="$stage"}',
+        query: |||
+          histogram_quantile(
+             0.50,
+             pipeline_creation_step_duration_bucket:le_step:rate1m{env="$environment", stage="$stage"}
+          )
+        |||,
         legendFormat: '{{ step }} duration - p50',
       }],
       format='s',
@@ -379,7 +384,12 @@ stageGroupDashboards.dashboard('pipeline_execution')
       stableId='pipeline-creation-step-duration-p90',
       title='Duration of each pipeline creation step (p90)',
       queries=[{
-        query: 'pipeline_creation_step_duration:p90{env="$environment", stage="$stage"}',
+        query: |||
+          histogram_quantile(
+             0.90,
+             pipeline_creation_step_duration_bucket:le_step:rate1m{env="$environment", stage="$stage"}
+          )
+        |||,
         legendFormat: '{{ step }} duration - p90',
       }],
       format='s',
@@ -388,7 +398,12 @@ stageGroupDashboards.dashboard('pipeline_execution')
       stableId='pipeline-creation-step-duration-p99',
       title='Duration of each pipeline creation step (p99)',
       queries=[{
-        query: 'pipeline_creation_step_duration:p99{env="$environment", stage="$stage"}',
+        query: |||
+          histogram_quantile(
+             0.99,
+             pipeline_creation_step_duration_bucket:le_step:rate1m{env="$environment", stage="$stage"}
+          )
+        |||,
         legendFormat: '{{ step }} duration - p99',
       }],
       format='s',
