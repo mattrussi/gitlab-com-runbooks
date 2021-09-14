@@ -8,6 +8,7 @@
   import 'ci-runners.jsonnet',
   import 'consul.jsonnet',
   import 'frontend.jsonnet',
+  import 'gcs.jsonnet',
   import 'git.jsonnet',
   import 'gitaly.jsonnet',
   import 'jaeger.jsonnet',

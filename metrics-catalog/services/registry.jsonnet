@@ -38,6 +38,7 @@ metricsCatalog.serviceDefinition({
   },
   serviceDependencies: {
     api: true,
+    gcs: true,
   },
   provisioning: {
     kubernetes: true,
@@ -91,26 +92,6 @@ metricsCatalog.serviceDefinition({
         toolingLinks.kibana(title='Registry', index='registry', type='registry', slowRequestSeconds=10),
         toolingLinks.continuousProfiler(service='gitlab-registry'),
       ],
-    },
-
-    storage: {
-      userImpacting: true,
-      featureCategory: 'container_registry',
-      description: |||
-        Aggregation of all container registry GCS storage operations.
-      |||,
-
-      apdex: histogramApdex(
-        histogram='registry_storage_action_seconds_bucket',
-        selector='',
-        satisfiedThreshold=1
-      ),
-
-      requestRate: rateMetric(
-        counter='registry_storage_action_seconds_count',
-      ),
-
-      significantLabels: ['action', 'migration_path'],
     },
 
     database: {
