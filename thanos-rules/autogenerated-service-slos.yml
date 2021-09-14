@@ -95,6 +95,16 @@ groups:
       tier: lb
       type: frontend
     expr: "0.000100"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      tier: sv
+      type: google_cloud_storage
+    expr: "0.997000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      tier: sv
+      type: google_cloud_storage
+    expr: "0.000100"
   - record: slo:min:gitlab_service_apdex:ratio
     labels:
       tier: sv
@@ -530,6 +540,14 @@ groups:
       service_aggregation: "yes"
       tier: lb
       type: frontend
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: registry_storage
+      regional_aggregation: "yes"
+      service_aggregation: "yes"
+      tier: sv
+      type: google_cloud_storage
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
@@ -1166,14 +1184,6 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: server_route_manifest_writes
-      regional_aggregation: "yes"
-      service_aggregation: "yes"
-      tier: sv
-      type: registry
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: storage
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
