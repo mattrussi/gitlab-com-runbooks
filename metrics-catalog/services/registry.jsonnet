@@ -38,7 +38,6 @@ metricsCatalog.serviceDefinition({
   },
   serviceDependencies: {
     api: true,
-    'google-cloud-storage': true,
   },
   provisioning: {
     kubernetes: true,
