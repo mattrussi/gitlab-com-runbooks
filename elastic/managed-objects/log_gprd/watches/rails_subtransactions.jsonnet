@@ -20,7 +20,7 @@
                 {
                   range: {
                     '@timestamp': {
-                      gte: 'now-30m',
+                      gte: 'now-20m',
                       lte: 'now',
                     },
                   },
@@ -54,14 +54,28 @@
   },
   actions: {
     'notify-slack': {
-      throttle_period_in_millis: 420000,
+      throttle_period: '20m',
       slack: {
         message: {
-          from: 'ElasticCloud Watcher: Subtransactions detected',
+          from: 'Elastic Logs: Subtransactions detected',
           to: [
             '#subtransaction_troubleshooting',
           ],
-          text: 'There are {{ctx.payload.hits.total}} subtransactions detected in the logs collected in the last 30 minutes. See them in Rails: https://log.gprd.gitlab.net/goto/ef66c78edf65016ffeb7caf0fb3912a7 and in Sidekiq: https://log.gprd.gitlab.net/goto/cfc096f18757764fcf6c2e44b3af1c66',
+          text: ':postgres: {{ctx.payload.hits.total}} new transaction/s using subtransactions detected in the logs collected in the last 30 minutes!',
+          attachments: [
+            {
+              title: ':spiral_note_book: Subtransactions in Rails logs:',
+              text: 'https://log.gprd.gitlab.net/goto/ef66c78edf65016ffeb7caf0fb3912a7',
+            },
+            {
+              title: ':spiral_note_book: Subtransactions in Sidekiq logs:',
+              text: 'https://log.gprd.gitlab.net/goto/cfc096f18757764fcf6c2e44b3af1c66',
+            },
+            {
+              title: ':runbooks: Runbook:',
+              text: 'https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/patroni/postgresql-subtransactions.md',
+            },
+          ],
         },
       },
     },
