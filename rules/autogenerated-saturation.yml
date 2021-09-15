@@ -232,6 +232,23 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
+      component: gcp_quota
+    expr: |
+      max by(environment, tier, type, stage) (
+        clamp_min(
+          clamp_max(
+            (
+              gcp_quota_usage{type!=""}
+            )
+            /
+            gcp_quota_limit{type!=""}
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
       component: gitaly_total_disk_space
     expr: |
       max by(environment, tier, type, stage) (
@@ -1144,6 +1161,14 @@ groups:
     expr: "0.9"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
+      component: gcp_quota
+    expr: "0.85"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: gcp_quota
+    expr: "0.95"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
       component: gitaly_total_disk_space
     expr: "0.69"
   - record: slo:max:hard:gitlab_component_saturation:ratio
@@ -1587,6 +1612,12 @@ groups:
     labels:
       component: elastic_thread_pools
       horiz_scaling: "yes"
+      severity: s4
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      component: gcp_quota
+      horiz_scaling: "no"
       severity: s4
     expr: "1"
   - record: gitlab_component_saturation_info
@@ -2459,6 +2490,51 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="elastic_thread_pools"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="elastic_thread_pools"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 10m
+    annotations:
+      title: The GCP Quota utilization per environment resource of the {{ $labels.type
+        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
+        SLO and is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the GCP Quota utilization per environment resource:
+
+        GCP Quota utilization / limit ratio
+
+        Saturation on a quota may cause problems with creating infrastructure resources on GCP.
+
+        To fix, we can request a quota increase for the specific resource to the GCP support team.
+      grafana_dashboard_id: alerts-gcp_quota_limits
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-gcp_quota_limits?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "935820816"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, metric) (
+          clamp_min(
+            clamp_max(
+              (
+                gcp_quota_usage{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              )
+              /
+              gcp_quota_limit{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+    expr: |
+      gitlab_component_saturation:ratio{component="gcp_quota"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="gcp_quota"}
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
