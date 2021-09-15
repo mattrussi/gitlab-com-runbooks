@@ -2,11 +2,11 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
 
 {
-  gcp_quota: resourceSaturationPoint({
+  gcp_quota_limit: resourceSaturationPoint({
     title: 'GCP Quota utilization per environment',
     severity: 's4',
     horizontallyScalable: false,
-    appliesTo: { allExcept: [] },
+    appliesTo: ['monitoring'],
     burnRatePeriod: '15m',
     description: |||
       GCP Quota utilization / limit ratio
@@ -15,7 +15,7 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
 
       To fix, we can request a quota increase for the specific resource to the GCP support team.
     |||,
-    grafana_dashboard_uid: 'gcp_quota_limits',
+    grafana_dashboard_uid: 'gcp_quota_limit',
     resourceLabels: ['metric'],
     query: |||
       (

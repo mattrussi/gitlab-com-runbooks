@@ -232,16 +232,16 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
-      component: gcp_quota
+      component: gcp_quota_limit
     expr: |
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
             (
-              gcp_quota_usage{type!=""}
+              gcp_quota_usage{type="monitoring"}
             )
             /
-            gcp_quota_limit{type!=""}
+            gcp_quota_limit{type="monitoring"}
             ,
             1)
         ,
@@ -1161,11 +1161,11 @@ groups:
     expr: "0.9"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
-      component: gcp_quota
+      component: gcp_quota_limit
     expr: "0.85"
   - record: slo:max:hard:gitlab_component_saturation:ratio
     labels:
-      component: gcp_quota
+      component: gcp_quota_limit
     expr: "0.95"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
@@ -1616,7 +1616,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
-      component: gcp_quota
+      component: gcp_quota_limit
       horiz_scaling: "no"
       severity: s4
     expr: "1"
@@ -2506,12 +2506,12 @@ groups:
         Saturation on a quota may cause problems with creating infrastructure resources on GCP.
 
         To fix, we can request a quota increase for the specific resource to the GCP support team.
-      grafana_dashboard_id: alerts-gcp_quota_limits
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-gcp_quota_limits?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_id: alerts-gcp_quota_limit
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-gcp_quota_limit?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "935820816"
+      grafana_panel_id: "2585628061"
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, tier, type, stage, metric) (
@@ -2533,8 +2533,8 @@ groups:
       rules_domain: general
       severity: s4
     expr: |
-      gitlab_component_saturation:ratio{component="gcp_quota"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="gcp_quota"}
+      gitlab_component_saturation:ratio{component="gcp_quota_limit"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="gcp_quota_limit"}
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:

@@ -57,7 +57,7 @@ local saturationTypes = [
   import 'single_node_cpu.libsonnet',
   import 'single_node_puma_workers.libsonnet',
   import 'workhorse_image_scaling.libsonnet',
-  import 'gcp_quota.libsonnet',
+  import 'gcp_quota_limit.libsonnet',
 ];
 
 std.foldl(
