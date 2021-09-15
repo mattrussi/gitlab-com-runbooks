@@ -54,7 +54,7 @@ metricsCatalog.serviceDefinition({
       // see https://gitlab.com/gitlab-org/gitlab/blob/master/workhorse/internal/objectstore/prometheus.go
       errorRate: rateMetric(
         counter='gitlab_workhorse_object_storage_upload_requests',
-        selector={ },
+        selector={},
       ),
 
       significantLabels: ['type'],
@@ -68,13 +68,13 @@ metricsCatalog.serviceDefinition({
 
       apdex: histogramApdex(
         histogram='gitlab_pages_httprange_trace_duration_bucket',
-        selector={ request_stage: "httptrace.ClientTrace.GotFirstResponseByte" },
+        selector={ request_stage: 'httptrace.ClientTrace.GotFirstResponseByte' },
         satisfiedThreshold=0.5
       ),
 
       requestRate: rateMetric(
         counter='gitlab_pages_httprange_trace_duration_bucket',
-        selector={ request_stage: "httptrace.ClientTrace.GotFirstResponseByte", le: '+Inf' },
+        selector={ request_stage: 'httptrace.ClientTrace.GotFirstResponseByte', le: '+Inf' },
       ),
 
       significantLabels: [],
