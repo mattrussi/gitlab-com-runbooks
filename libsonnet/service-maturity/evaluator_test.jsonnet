@@ -146,4 +146,60 @@ test.suite({
       },
     ],
   },
+  testMaxLevel0: {
+    actual: evaluator.maxLevel(
+      mockService,
+      [
+        {
+          name: 'Level 1',
+          criteria: [{ name: 'Criteria 1', evidence: function(service) false }],
+        },
+        {
+          name: 'Level 2',
+          criteria: [{ name: 'Criteria 1', evidence: function(service) false }],
+        },
+      ]
+    ),
+    expect: 'Level 0',
+  },
+  testMaxLevelMax: {
+    actual: evaluator.maxLevel(
+      mockService,
+      [
+        {
+          name: 'Level 1',
+          criteria: [{ name: 'Criteria 1', evidence: function(service) '123' }],
+        },
+        {
+          name: 'Level 2',
+          criteria: [{ name: 'Criteria 1', evidence: function(service) '456' }],
+        },
+        {
+          name: 'Level 3',
+          criteria: [{ name: 'Criteria 1', evidence: function(service) '789' }],
+        },
+      ]
+    ),
+    expect: 'Level 3',
+  },
+  testMaxLevelPassHigherLevelButFailedLowerOne: {
+    actual: evaluator.maxLevel(
+      mockService,
+      [
+        {
+          name: 'Level 1',
+          criteria: [{ name: 'Criteria 1', evidence: function(service) '123' }],
+        },
+        {
+          name: 'Level 2',
+          criteria: [{ name: 'Criteria 1', evidence: function(service) false }],
+        },
+        {
+          name: 'Level 3',
+          criteria: [{ name: 'Criteria 1', evidence: function(service) '789' }],
+        },
+      ]
+    ),
+    expect: 'Level 1',
+  },
 })
