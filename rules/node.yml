@@ -122,7 +122,11 @@ groups:
   - expr: max by (instance, namespace, pod, device) (node_filesystem_avail_bytes{fstype=~"ext[234]|btrfs|xfs|zfs"} / node_filesystem_size_bytes{fstype=~"ext[234]|btrfs|xfs|zfs"})
     record: 'node:node_filesystem_avail:'
   - alert: FilesystemFullSoon
-    expr: predict_linear(node_filesystem_avail_bytes{fstype=~"(ext.|xfs|zfs)"}[6h], 24 * 3600) < 0
+    # Ignore ci-runners with no fqdn field (ephemeral runners)
+    expr: |-
+      predict_linear(node_filesystem_avail_bytes{fstype=~"(ext.|xfs|zfs)", type!="ci-runners"}[6h], 24 * 3600) < 0
+      or
+      predict_linear(node_filesystem_avail_bytes{fstype=~"(ext.|xfs|zfs)", type="ci-runners", fqdn!=""}[6h], 24 * 3600) < 0
     for: 2h
     labels:
       severity: s4
