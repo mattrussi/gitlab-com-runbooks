@@ -3,6 +3,7 @@ local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local googleLoadBalancerComponents = import './lib/google_load_balancer_components.libsonnet';
+local maturityLevels = import 'service-maturity/levels.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'monitoring',
@@ -512,4 +513,7 @@ metricsCatalog.serviceDefinition({
     memcached_thanos_qfe_query_range: thanosMemcachedSLI('memcached-thanos-qfe-query-range-metrics'),
     memcached_thanos_qfe_labels: thanosMemcachedSLI('memcached-thanos-qfe-labels-metrics'),
   },
+  skippedMaturityCriteria: maturityLevels.getCriterias([
+    'Service exists in the dependency graph',
+  ]),
 })

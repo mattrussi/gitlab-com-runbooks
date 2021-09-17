@@ -9,6 +9,9 @@ metricsCatalog.serviceDefinition({
   monitoringThresholds: {
     errorRatio: 0.9999,
   },
+  serviceDependencies: {
+    'web-pages': true,
+  },
   /*
    * No need to have operation rate alerting for both pages and web-pages
    * so disabling it for this service, and keeping the anomaly detection

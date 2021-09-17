@@ -12,6 +12,7 @@ metricsCatalog.serviceDefinition({
   },
   serviceDependencies: {
     frontend: true,
+    nat: true,
   },
   provisioning: {
     kubernetes: false,

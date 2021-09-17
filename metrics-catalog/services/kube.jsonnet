@@ -3,6 +3,7 @@ local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local customRateQuery = metricsCatalog.customRateQuery;
+local maturityLevels = import 'service-maturity/levels.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'kube',
@@ -130,4 +131,7 @@ metricsCatalog.serviceDefinition({
       ],
     },
   },
+  skippedMaturityCriteria: maturityLevels.getCriterias([
+    'Service exists in the dependency graph',
+  ]),
 })

@@ -8,6 +8,10 @@ metricsCatalog.serviceDefinition({
   type: 'postgres-archive',
   tier: 'db',
 
+  serviceDependencies: {
+    patroni: true,
+  },
+
   serviceLevelIndicators: {
     transactions: {
       userImpacting: true,

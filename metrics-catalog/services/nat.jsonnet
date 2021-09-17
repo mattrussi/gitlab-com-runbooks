@@ -9,6 +9,9 @@ metricsCatalog.serviceDefinition({
   monitoringThresholds: {
     // TODO: define thresholds for the NAT service
   },
+  serviceDependencies: {
+    frontend: true,
+  },
   provisioning: {
     kubernetes: false,
     vms: false,

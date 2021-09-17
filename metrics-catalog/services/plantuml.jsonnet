@@ -1,4 +1,5 @@
 local googleLoadBalancerComponents = import './lib/google_load_balancer_components.libsonnet';
+local maturityLevels = import 'service-maturity/levels.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 
 metricsCatalog.serviceDefinition({
@@ -30,4 +31,7 @@ metricsCatalog.serviceDefinition({
       projectId='gitlab-production',
     ),
   },
+  skippedMaturityCriteria: maturityLevels.getCriterias([
+    'Service exists in the dependency graph',
+  ]),
 })

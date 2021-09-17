@@ -11,6 +11,7 @@ metricsCatalog.serviceDefinition({
   serviceDependencies: {
     patroni: true,
     pgbouncer: true,
+    consul: true,
   },
   provisioning: {
     kubernetes: true,

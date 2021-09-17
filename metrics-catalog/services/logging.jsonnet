@@ -2,6 +2,7 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local rateMetric = metricsCatalog.rateMetric;
 local derivMetric = metricsCatalog.derivMetric;
 local googleLoadBalancerComponents = import './lib/google_load_balancer_components.libsonnet';
+local maturityLevels = import 'service-maturity/levels.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'logging',
@@ -168,4 +169,7 @@ metricsCatalog.serviceDefinition({
       serviceAggregation: false,
     },
   },
+  skippedMaturityCriteria: maturityLevels.getCriterias([
+    'Service exists in the dependency graph',
+  ]),
 })
