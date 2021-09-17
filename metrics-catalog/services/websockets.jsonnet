@@ -21,6 +21,7 @@ metricsCatalog.serviceDefinition({
     patroni: true,
     pgbouncer: true,
     praefect: true,
+    consul: true,
   },
   provisioning: {
     vms: false,

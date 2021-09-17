@@ -13,6 +13,9 @@ metricsCatalog.serviceDefinition({
     vms: false,
     kubernetes: true,
   },
+  serviceDependencies: {
+    api: true,
+  },
   kubeResources: {
     woodhouse: {
       kind: 'Deployment',

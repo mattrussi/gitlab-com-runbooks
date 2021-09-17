@@ -42,6 +42,9 @@ metricsCatalog.serviceDefinition({
     patroni: true,
     pgbouncer: true,
     praefect: true,
+    pvs: true,
+    search: true,
+    consul: true,
   },
   recordingRuleMetrics: [
     'http_requests_total',
