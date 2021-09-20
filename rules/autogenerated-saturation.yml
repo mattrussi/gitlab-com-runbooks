@@ -239,9 +239,9 @@ groups:
           clamp_max(
             (
               gcp_quota_usage{type="monitoring"}
-            )
             /
-            gcp_quota_limit{type="monitoring"}
+              gcp_quota_limit{type="monitoring"}
+            )
             ,
             1)
         ,
@@ -2491,7 +2491,7 @@ groups:
       gitlab_component_saturation:ratio{component="elastic_thread_pools"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="elastic_thread_pools"}
   - alert: component_saturation_slo_out_of_bounds
-    for: 10m
+    for: 15m
     annotations:
       title: The GCP Quota utilization per environment resource of the {{ $labels.type
         }} service ({{ $labels.stage }} stage), component has a saturation exceeding
@@ -2514,14 +2514,14 @@ groups:
       grafana_panel_id: "2585628061"
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, metric) (
+        max by(environment, tier, type, stage, metric, region) (
           clamp_min(
             clamp_max(
               (
                 gcp_quota_usage{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
-              )
               /
-              gcp_quota_limit{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+                gcp_quota_limit{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              )
               ,
               1)
           ,
