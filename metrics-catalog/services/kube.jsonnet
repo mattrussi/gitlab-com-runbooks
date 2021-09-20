@@ -2,6 +2,8 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
+local customRateQuery = metricsCatalog.customRateQuery;
+local maturityLevels = import 'service-maturity/levels.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'kube',
@@ -71,5 +73,65 @@ metricsCatalog.serviceDefinition({
         ),
       ],
     },
+
+    cluster_scaleups: {
+      userImpacting: false,
+      featureCategory: 'not_owned',
+      team: 'delivery',
+      ignoreTrafficCessation: true,
+      description: |||
+        We rely on the GKE Cluster Autoscaler (https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-autoscaler) to
+        automatically scale up and scale down our Kubernetes fleets.
+
+        Each decision by the cluster autoscaler to scale up is treated as an operation, and each cluster scaleup failure is
+        treated as an error.
+      |||,
+
+      staticLabels: {
+        tier: 'inf',
+        stage: 'main',
+      },
+
+      // Unfortunately Log-Based Metrics aren't counters, so we need to fill-in-the-gaps when
+      // events don't occur. We use the `group by` term for these cases.
+      requestRate: customRateQuery(|||
+        sum by (%(aggregationLabels)s) (
+          avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_scaleup_decisions[%(burnRate)s])
+        )
+        or
+        0 * group by (%(aggregationLabels)s) (
+          avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_scaleup_decisions[6h])
+        )
+      |||),
+
+      errorRate: customRateQuery(|||
+        sum by (%(aggregationLabels)s) (
+          avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_errors[%(burnRate)s])
+        )
+      |||),
+
+      significantLabels: ['cluster_name'],
+
+      toolingLinks: [
+        toolingLinks.stackdriverLogs(
+          'Kubernetes Autoscaler Logs',
+          queryHash={
+            'resource.type': 'k8s_cluster',
+            logName: 'projects/gitlab-production/logs/container.googleapis.com%2Fcluster-autoscaler-visibility',
+          },
+        ),
+        toolingLinks.stackdriverLogs(
+          'Kubernetes Autoscaler Errors',
+          queryHash={
+            'resource.type': 'k8s_cluster',
+            logName: 'projects/gitlab-production/logs/container.googleapis.com%2Fcluster-autoscaler-visibility',
+            'jsonPayload.resultInfo.results.errorMsg.messageId': { exists: true },
+          },
+        ),
+      ],
+    },
   },
+  skippedMaturityCriteria: maturityLevels.getCriterias([
+    'Service exists in the dependency graph',
+  ]),
 })

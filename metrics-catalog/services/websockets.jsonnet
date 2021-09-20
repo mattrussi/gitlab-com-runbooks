@@ -7,6 +7,9 @@ local perFeatureCategoryRecordingRules = (import './lib/puma-per-feature-categor
 metricsCatalog.serviceDefinition({
   type: 'websockets',
   tier: 'sv',
+
+  tags: ['golang'],
+
   monitoringThresholds: {
     errorRatio: 0.9995,
   },
@@ -18,6 +21,7 @@ metricsCatalog.serviceDefinition({
     patroni: true,
     pgbouncer: true,
     praefect: true,
+    consul: true,
   },
   provisioning: {
     vms: false,

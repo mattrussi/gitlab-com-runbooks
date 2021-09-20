@@ -40,7 +40,7 @@ require 'optparse'
 require 'uri'
 
 begin
-  require '/opt/gitlab/embedded/service/gitlab-rails/config/environment.rb'
+  require '/opt/gitlab/embedded/service/gitlab-rails/config/environment'
 rescue LoadError => e
   warn "WARNING: #{e.message}"
 end
@@ -117,9 +117,9 @@ module Storage
   # This module defines logging methods
   module Logging
     def initialize_log
-      STDOUT.sync = true
+      $stdout.sync = true
       timestamp_format = ::Storage::RepositoryAuditScript::LOG_TIMESTAMP_FORMAT
-      log = Logger.new STDOUT
+      log = Logger.new $stdout
       log.level = Logger::INFO
       log.formatter = proc do |level, t, _name, msg|
         fields = { timestamp: t.strftime(timestamp_format), level: level, msg: msg }
@@ -256,6 +256,7 @@ module Storage
     include ::Storage::Helpers
     include ::Storage::Logging
     attr_reader :options, :inventory_dir_path, :leftovers_file_path, :gitaly_address
+
     def initialize(options)
       @options = options
       log.level = @options[:log_level]
@@ -308,6 +309,7 @@ module Storage
         results = results.map { |line| line.sub(root_dir_pattern, '').sub(git_ext_pattern, '') }
         repositories = persist(results)
       end
+
       repositories
     end
 
@@ -325,6 +327,7 @@ module Storage
       if options[:rescan] || (inventory = load_latest_inventory).empty?
         inventory = scan_shard_repositories
       end
+
       log.info "Found #{inventory.length} known git repositories"
       inventory
     end
@@ -335,6 +338,7 @@ module Storage
         log.info "[Dry-run] Would have executed command: rm -rf #{inventory_dir_children_paths}"
         return
       end
+
       log.info "Executing command: rm -rf #{inventory_dir_children_paths}"
       FileUtils.rm_rf(Dir.glob(inventory_dir_children_paths))
     end
@@ -403,6 +407,7 @@ module Storage
         auditor.forget
         exit
       end
+
       auditor.audit_repositories(auditor.latest_inventory)
     rescue UserError => e
       log.error(e)

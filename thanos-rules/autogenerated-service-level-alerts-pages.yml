@@ -8,19 +8,17 @@ groups:
   - alert: PagesServiceLoadbalancerErrorSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The loadbalancer SLI of the pages service (`{{ $labels.stage }}` stage) has an error rate violating
-        SLO
+      title: The loadbalancer SLI of the pages service (`{{ $labels.stage }}` stage)
+        has an error rate violating SLO
       description: |
         This SLI models requests passing through the loadbalancer in front of the pages service. 5xx requests for unencrypted HTTP traffic, and connection errors (not 5xx requests) for HTTPS traffic are considered to be errors. The loadbalancer is unable to determine the status code of HTTPS traffic as it passes through the loadbalancer encrypted.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: pages-main/pages-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/pages-main/pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/pages-main/pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '3255520955'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3255520955"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -31,6 +29,7 @@ groups:
       runbook: docs/pages/README.md
     labels:
       aggregation: component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: pages
       pager: pagerduty
@@ -39,8 +38,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'no'
+      slo_alert: "yes"
+      user_impacting: "no"
     expr: |
       (
         (
@@ -70,19 +69,17 @@ groups:
   - alert: PagesServiceLoadbalancerTrafficCessation
     for: 5m
     annotations:
-      title: >-
-        The loadbalancer SLI of the pages service (`{{ $labels.stage }}` stage) has not received any traffic
-        in the past 30 minutes
+      title: The loadbalancer SLI of the pages service (`{{ $labels.stage }}` stage)
+        has not received any traffic in the past 30 minutes
       description: |
         This SLI models requests passing through the loadbalancer in front of the pages service. 5xx requests for unencrypted HTTP traffic, and connection errors (not 5xx requests) for HTTPS traffic are considered to be errors. The loadbalancer is unable to determine the status code of HTTPS traffic as it passes through the loadbalancer encrypted.
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: pages-main/pages-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/pages-main/pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/pages-main/pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '138982496'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "138982496"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -91,24 +88,24 @@ groups:
       runbook: docs/pages/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: pages
+      pager: pagerduty
       product_stage: release
       product_stage_group: release
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'no'
-    expr: >
-      gitlab_component_ops:rate_30m{type="pages", component="loadbalancer", stage="main", monitor="global"}
-      == 0
+      slo_alert: "no"
+      user_impacting: "no"
+    expr: |
+      gitlab_component_ops:rate_30m{type="pages", component="loadbalancer", stage="main", monitor="global"} == 0
   - alert: PagesServiceLoadbalancerTrafficAbsent
     for: 30m
     annotations:
-      title: >-
-        The loadbalancer SLI of the pages service (`{{ $labels.stage }}` stage) has not reported any traffic
-        in the past 30 minutes
+      title: The loadbalancer SLI of the pages service (`{{ $labels.stage }}` stage)
+        has not reported any traffic in the past 30 minutes
       description: |
         This SLI models requests passing through the loadbalancer in front of the pages service. 5xx requests for unencrypted HTTP traffic, and connection errors (not 5xx requests) for HTTPS traffic are considered to be errors. The loadbalancer is unable to determine the status code of HTTPS traffic as it passes through the loadbalancer encrypted.
 
@@ -116,11 +113,10 @@ groups:
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
       grafana_dashboard_id: pages-main/pages-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/pages-main/pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/pages-main/pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '138982496'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "138982496"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -129,15 +125,17 @@ groups:
       runbook: docs/pages/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: pages
+      pager: pagerduty
       product_stage: release
       product_stage_group: release
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'no'
+      slo_alert: "no"
+      user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_5m{type="pages", component="loadbalancer", stage="main", monitor="global"} offset 1h
       unless

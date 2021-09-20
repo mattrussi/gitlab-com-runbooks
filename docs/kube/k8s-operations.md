@@ -135,9 +135,22 @@ protoPayload.methodName="io.k8s.apps.v1.replicasets.create"
 
 ## Attaching to a running container
 
-### Using Docker
+Keep in mind that the below steps are operating on a production node and
+production container which may be servicing customer traffic.  Some
+troubleshooting may incur performance penalties or expose you and tooling to
+Red classified data.  Consider removing the Pod after your work is complete.
 
-Figure out what node/zone a Pod is running:
+### Using Docker/Containerd
+
+At the time of this writing some of our nodepools run containerd, but a few still run docker.  Due to this we'll use a combination of commands, either `docker` or `crictl`; while they are similar to an extent, both have a significantly different UX when performing the below troubleshooting.
+
+Regardless of runtime, we just need the following information:
+
+* target Pod
+* container we want to exploit
+* node it's running on
+
+Firstly, figure out what node/zone a Pod is running:
 
 ```
 kubectl get pods -n gitlab -o wide # get the node name
@@ -145,30 +158,53 @@ node_name=<NODE_NAME>
 zone=$(gcloud compute instances list --filter name=$node_name --format="value(zone)") # get the zone
 ```
 
+Determine the runtime of that node:
+
+```
+kubectl get node $node_name -o json | jq .metadata.labels.\"cloud.google.com/gke-container-runtime\"
+```
+
+If using the `containerd` runtime, we now need to figure out the container ID
+(for the docker runtime, we'll do this in a bit, for now, skip to ssh'ing into
+the node):
+
+```
+kubectl get pod $pod_name -o json | jq .status.containerStatuses
+```
+
+In the output, if there's multiple containers, find the one you want, followed
+by that objects' `containerID`.  This is a very long ID, and we may need it
+later.  Note that down, we'll need it later.
+
 SSH into the node:
 
 ```
-gcloud compute ssh $node_name --zone=$zone
+gcloud compute ssh $node_name --zone=$zone --tunnel-through-iap
 ```
 
-Discover which container we need to attach too
+If using the `docker` runtime, we now can get our container ID:
 
 ```
-docker ps | grep <KEYWORD>
+docker ps | grep 'websockets-57dbbcdcbd-crv2p'
 ```
 
-Example, we want to log into a specific sidekiq container:
+Note that the result will be at least two containers, one using the `pause` image, and others representing each container participating in our target Pod.  [The `pause` image is NOT the one you are looking for.](https://www.ianlewis.org/en/almighty-pause-container)
+
+If the container contains all the tools you need, you can simply exec into it:
 
 ```
-$ docker ps | grep sidekiq-export-966444c8-sbpj5
-56a476f72f30        4a879bb96135                                          "/scripts/entrypoint…"   6 hours ago         Up 6 hours                              k8s_sidekiq_gitlab-sidekiq-export-966444c8-sbpj5_gitlab_148e5cfb-21a2-11ea-b2f5-4201ac100006_0
-f66cb9d37ec6        k8s.gcr.io/pause:3.1                                  "/pause"                 6 hours ago         Up 6 hours                              k8s_POD_gitlab-sidekiq-export-966444c8-sbpj5_gitlab_148e5cfb-21a2-11ea-b2f5-4201ac100006_0
+# docker runtime:
+docker exec -it 7aa3c4ad2775c /bin/bash
+
+# containerd runtime:
+crictl exec -it 7aa3c4ad2775c /bin/bash
 ```
 
-You'll notice two containers are running, one using the `pause` image, and one that is executing the entry point script.
-[The `pause` image is NOT the one you are looking for.](https://www.ianlewis.org/en/almighty-pause-container)
-Determining which container you need will greatly depend on both the knowledge you have for the desired container and what information you are trying to get too.
-Knowing we need the first container listed, we can then attach a new container to it:
+Where `7aa3c4ad2775c` is the container id that you have already found.  If it doesn't have `/bin/bash`, try `/bin/sh` or just exec'ing `ls` to find what binaries are available.
+
+At this point we can install some tooling necessary and interrogate the best we can.  Remember that the container could be shutdown at any time by k8s, and any changes are very transient.
+
+If you need more when operating against the container, examples include needing a root shell or perhaps a tool you need does not exist on the image, you can attach another container to the same network/pid namespaces when running.  For nodes utilizing the `docker` runtime, you can utilize the below.  For runtimes using `containerd`, skip ahead.
 
 ```
 docker run \
@@ -180,12 +216,25 @@ docker run \
   ubuntu /bin/bash
 ```
 
-In the above example we attached an ubuntu container running `bash` to the desired
-sidekiq container we need.
+In the above example we attached an ubuntu container running `bash` to the sidekiq container.  This will be a read-only filesystem (unlike the `exec` case above)
 
-At this point we can install whatever tooling necessary and interrogate the best we can.
-Note that we are provided a read only file system using this troubleshooting method, so certain tooling may not properly work.
-In instances like this, we can try the `toolbox` documented [below](./#using-toolbox)
+For the `containerd` runtime we can pop directly onto the container as root:
+
+```
+runc --root /run/containerd/runc/k8s.io/ \
+  exec \
+  -t \
+  -u 0 \
+  $container_id \
+  /bin/bash
+```
+
+Or use whatever shell you know is readily available.  Note you need the entire
+container ID that you had found earlier, unlike docker who accepts shorter IDs,
+`runc` will toss you an error that the container does not exist if a shortened
+ID is utilized.  Note we are using `runc` here, as `crictl` does not provide us
+this capability.  `runc` is the underlying runtime, `containerd` is how
+Kubernetes interfaces with it.
 
 ### Using Toolbox
 
@@ -215,6 +264,8 @@ One way to workaround it is to investigate the container from the host. Below ar
 1. Alternatively, you can use nsenter: `nsenter -target <PID> -mount -uts -ipc -net -pid`
 
 #### Start a container that will use network and process namespaces of a pod
+
+Only available for docker, not containerd:
 
 1. Get container id from PID: `cat /proc/<PID>/cgroup`
 1. Get container name from container id: `docker inspect --format '{{.Name}}' "<containerId>" | sed 's/^\///'`

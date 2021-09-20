@@ -1,18 +1,44 @@
-local multiburn_factors = import './multiburn_factors.libsonnet';
 local aggregations = import 'promql/aggregations.libsonnet';
-local joins = import 'promql/joins.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local generator = import 'slo_expression_generator.libsonnet';
+local durationParser = import 'utils/duration-parser.libsonnet';
 local strings = import 'utils/strings.libsonnet';
+
+// Given minimumOperationRateForMonitoring xor minimumSamplesForMonitoring,
+// returns an actual minimumOperationRateForMonitoring.
+// For minimumSamplesForMonitoring, calculates what the minimum sample rate per second,
+// over the longWindow needs to be.
+local calculateMinimumOperationRateForMonitoring(
+  operationRateWindowDuration,
+  minimumOperationRateForMonitoring,
+  minimumSamplesForMonitoring,
+      ) =
+  if minimumOperationRateForMonitoring == null && minimumSamplesForMonitoring == null then
+    null
+  else if minimumOperationRateForMonitoring != null && minimumSamplesForMonitoring != null then
+    std.assertEqual('', { __assert: 'minimumOperationRateForMonitoring and minimumSamplesForMonitoring are exclusive. Please set at most one.' })
+  else if minimumOperationRateForMonitoring != null then
+    minimumOperationRateForMonitoring
+  else
+    minimumSamplesForMonitoring / durationParser.toSeconds(operationRateWindowDuration);
 
 local operationRateFilter(
   expression,
   operationRateMetric,
   operationRateAggregationLabels,
   operationRateSelectorHash,
-  minimumOperationRateForMonitoring
+  operationRateWindowDuration,
+  minimumOperationRateForMonitoring,
+  minimumSamplesForMonitoring
       ) =
-  if minimumOperationRateForMonitoring == null then
+
+  local requiredOpRate = calculateMinimumOperationRateForMonitoring(
+    operationRateWindowDuration=operationRateWindowDuration,
+    minimumOperationRateForMonitoring=minimumOperationRateForMonitoring,
+    minimumSamplesForMonitoring=minimumSamplesForMonitoring,
+  );
+
+  if requiredOpRate == null then
     expression
   else
     |||
@@ -21,12 +47,12 @@ local operationRateFilter(
       )
       and on(%(operationRateAggregationLabels)s)
       (
-        sum by(%(operationRateAggregationLabels)s) (%(operationRateMetric)s{%(operationRateSelector)s}) >= %(minimumOperationRateForMonitoring)g
+        sum by(%(operationRateAggregationLabels)s) (%(operationRateMetric)s{%(operationRateSelector)s}) >= %(requiredOpRate)g
       )
     ||| % {
       expression: strings.indent(expression, 2),
       operationRateMetric: operationRateMetric,
-      minimumOperationRateForMonitoring: minimumOperationRateForMonitoring,
+      requiredOpRate: requiredOpRate,
       operationRateSelector: selectors.serializeHash(operationRateSelectorHash),
       operationRateAggregationLabels: aggregations.serialize(operationRateAggregationLabels),
     };
@@ -41,13 +67,19 @@ local clampMaxHealthExpression(expression) =
     expression: strings.indent(expression, 2),
   };
 
+local defaultWindows = ['1h', '6h'];
+
 {
+  defaultWindows:: defaultWindows,
+
   // Generates a multi-window, multi-burn-rate error expression
   multiburnRateErrorExpression(
     aggregationSet,
     metricSelectorHash,  // Selectors for the error rate metrics
+    windows=defaultWindows,  // Sets of windows in this SLO expression, identified by longWindow duration
     thresholdSLOValue,  // Error budget float value (between 0 and 1)
     minimumOperationRateForMonitoring=null,  // minium operation rate vaue (in request-per-second)
+    minimumSamplesForMonitoring=null,  // minimum number of operations recorded, over the longWindow period, for monitoring
     operationRateWindowDuration='1h',  // Window over which to evaluate operation rate
   )::
     local mergedMetricSelectors = selectors.merge(aggregationSet.selector, metricSelectorHash);
@@ -55,6 +87,7 @@ local clampMaxHealthExpression(expression) =
     local preOperationRateExpr = generator.expressionGenerator(
       aggregationSet=aggregationSet,
       metricSelectorHash=metricSelectorHash,
+      windows=windows,
       termGenerator=generator.termGenerators.fixed(thresholdValue=thresholdSLOValue),
       metricLookup=generator.metricLookups.errorRate(),
       isApdexExpression=false,
@@ -65,7 +98,9 @@ local clampMaxHealthExpression(expression) =
       aggregationSet.getOpsRateMetricForBurnRate(operationRateWindowDuration, required=true),
       aggregationSet.labels,
       mergedMetricSelectors,
-      minimumOperationRateForMonitoring
+      operationRateWindowDuration=operationRateWindowDuration,
+      minimumOperationRateForMonitoring=minimumOperationRateForMonitoring,
+      minimumSamplesForMonitoring=minimumSamplesForMonitoring,
     ),
 
   // Generates a multi-window, multi-burn-rate apdex score expression
@@ -73,7 +108,9 @@ local clampMaxHealthExpression(expression) =
     aggregationSet,
     metricSelectorHash,  // Selectors for the error rate metrics
     thresholdSLOValue,  // Error budget float value (between 0 and 1)
+    windows=['1h', '6h'],  // Sets of windows in this SLO expression, identified by longWindow duration
     minimumOperationRateForMonitoring=null,  // minium operation rate vaue (in request-per-second)
+    minimumSamplesForMonitoring=null,  // minimum number of operations recorded, over the longWindow period, for monitoring
     operationRateWindowDuration='1h',  // Window over which to evaluate operation rate
   )::
     local mergedMetricSelectors = selectors.merge(aggregationSet.selector, metricSelectorHash);
@@ -81,6 +118,7 @@ local clampMaxHealthExpression(expression) =
     local preOperationRateExpr = generator.expressionGenerator(
       aggregationSet=aggregationSet,
       metricSelectorHash=metricSelectorHash,
+      windows=windows,
       termGenerator=generator.termGenerators.fixed(thresholdValue=thresholdSLOValue),
       metricLookup=generator.metricLookups.apdex(),
       isApdexExpression=true,
@@ -91,7 +129,9 @@ local clampMaxHealthExpression(expression) =
       aggregationSet.getOpsRateMetricForBurnRate(operationRateWindowDuration, required=true),
       aggregationSet.labels,
       mergedMetricSelectors,
-      minimumOperationRateForMonitoring
+      operationRateWindowDuration=operationRateWindowDuration,
+      minimumOperationRateForMonitoring=minimumOperationRateForMonitoring,
+      minimumSamplesForMonitoring=minimumSamplesForMonitoring,
     ),
 
   errorHealthExpression(

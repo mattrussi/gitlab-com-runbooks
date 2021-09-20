@@ -21,6 +21,7 @@
 * [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
 * [../kube/k8s-new-cluster.md](../kube/k8s-new-cluster.md)
 * [../kube/k8s-operations.md](../kube/k8s-operations.md)
+* [../kube/k8s-pvc-resize.md](../kube/k8s-pvc-resize.md)
 * [../license/license-gitlab-com.md](../license/license-gitlab-com.md)
 * [alertmanager-notification-failures.md](alertmanager-notification-failures.md)
 * [alerts_gke.md](alerts_gke.md)
@@ -45,6 +46,7 @@
 * [../spamcheck/index.md](../spamcheck/index.md)
 * [../uncategorized/access-gcp-hosts.md](../uncategorized/access-gcp-hosts.md)
 * [../uncategorized/job_completion.md](../uncategorized/job_completion.md)
+* [../uncategorized/osquery.md](../uncategorized/osquery.md)
 * [../uncategorized/packagecloud-infrastructure.md](../uncategorized/packagecloud-infrastructure.md)
 * [../uncategorized/subnet-allocations.md](../uncategorized/subnet-allocations.md)
 * [../version/version-gitlab-com.md](../version/version-gitlab-com.md)
@@ -404,6 +406,10 @@ certain public services (e.g. gitlab.com) are down to it, as a last line of
 defence.
 
 ## Architecture
+
+THIS IS WORK IN PROGRESS! IT IS LIKELY TO BE INACCURATE! IT WILL BE UPDATED IN THE NEAR FUTURE!
+
+![monitoring](./img/monitoring.png)
 
 ## Performance
 

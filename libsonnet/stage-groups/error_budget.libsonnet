@@ -1,6 +1,4 @@
-local slaTarget = (import '../../metrics-catalog/metrics-config.libsonnet').slaTarget;
-local durationParser = import 'utils/duration-parser.libsonnet';
-
+local slaTarget = (import 'gitlab-metrics-config.libsonnet').slaTarget;
 
 {
   /**

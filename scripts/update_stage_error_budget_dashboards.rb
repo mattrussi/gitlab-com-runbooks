@@ -28,7 +28,7 @@ class UpdateStageErrorBudgetDashboards
 
   attr_reader :dashboards_dir, :mapping_path, :output
 
-  def initialize(dashboards_dir: DEFAULT_DASHBOARDS_DIR, mapping_path: DEFAULT_MAPPING_PATH, output: STDOUT)
+  def initialize(dashboards_dir: DEFAULT_DASHBOARDS_DIR, mapping_path: DEFAULT_MAPPING_PATH, output: $stdout)
     @dashboards_dir = dashboards_dir
     @mapping_path = mapping_path
     @output = output

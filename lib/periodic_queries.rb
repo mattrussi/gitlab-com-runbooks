@@ -1,10 +1,11 @@
+# frozen_string_literal: true
 require 'fileutils'
 require_relative 'periodic_queries/prometheus_api'
 require_relative 'periodic_queries/topic'
 require_relative 'periodic_queries/storage'
 
 module PeriodicQueries
-  def self.perform_queries(sets, api, out = STDOUT)
+  def self.perform_queries(sets, api, out = $stdout)
     sets.each do |set|
       out.puts "Fetching results for #{set.name}"
       set.queries.each do |query|
@@ -15,7 +16,7 @@ module PeriodicQueries
     end
   end
 
-  def self.write_results(sets, target_directory, time, out = STDOUT)
+  def self.write_results(sets, target_directory, time, out = $stdout)
     timestamp = time.utc.strftime("%Y%m%d%H%M%S")
     directory = File.join(target_directory, timestamp)
 
@@ -30,7 +31,7 @@ module PeriodicQueries
     end
   end
 
-  def self.upload_results(directory, storage, out = STDOUT)
+  def self.upload_results(directory, storage, out = $stdout)
     directory = File.expand_path(directory)
     out.puts "Uploading results in #{directory}"
     Dir.glob(File.join(directory, '*/*.json')).each do |f|

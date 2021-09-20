@@ -1,3 +1,7 @@
+include:
+  # Import GL_ASDF_* variables to match versions declared in ASDF
+  - local: .gitlab-ci-asdf-versions.yml
+
 stages:
   - notify
   - images
@@ -8,7 +12,7 @@ stages:
 
 variables:
   BUNDLER_VERSION: 2.1.4
-  GOLANG_IMAGE: golang:1.15
+  GOLANG_IMAGE: golang:${GL_ASDF_GOLANG_VERSION}
 
 .matrix_production:
   parallel:
@@ -59,6 +63,9 @@ default:
 .avoid-stage-group-check: &avoid-stage-group-check-rule
   if: '$CHECK_STAGE_GROUPS == "1"'
   when: never
+.avoid-maturity-model-generate: &avoid-maturity-model-generate-rule
+  if: '$GENERATE_SERVICE_MATURITY_MANIFEST == "1"'
+  when: never
 .avoid-schedule: &avoid-schedule-rule
   if: '$CI_PIPELINE_SOURCE == "schedule"'
   when: never
@@ -72,6 +79,7 @@ default:
     # by default, don't create a job when triggered with `CHECK_STAGE_GROUPS` set
     # in this case we'll only want to run the `check-stage-groups` job.
   - *avoid-stage-group-check-rule
+  - *avoid-maturity-model-generate-rule
   - *avoid-schedule-rule
   - when: always
 
@@ -90,6 +98,7 @@ workflow:
   stage: deploy
   rules:
     - *avoid-stage-group-check-rule
+    - *avoid-maturity-model-generate-rule
     - *avoid-schedule-rule
     # Only run deploy rules from ops on the default branch
     - if: '$CI_API_V4_URL == "https://ops.gitlab.net/api/v4" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
@@ -109,6 +118,7 @@ workflow:
 .dashboards:
   rules:
     - *avoid-stage-group-check-rule
+    - *avoid-maturity-model-generate-rule
     - *avoid-schedule-rule
     - if: '$CI_PROJECT_URL !~ /^https:\/\/gitlab\.com\/.*/'
       when: never
@@ -237,6 +247,7 @@ ensure_generated_content_up_to_date:
 update_elastic_log_gprd_ilm:
   rules:
     - *avoid-stage-group-check-rule
+    - *avoid-maturity-model-generate-rule
     - *avoid-schedule-rule
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_LOG_GPRD_URL'
       changes:
@@ -248,6 +259,7 @@ update_elastic_log_gprd_ilm:
 update_elastic_log_gprd_watches:
   rules:
     - *avoid-stage-group-check-rule
+    - *avoid-maturity-model-generate-rule
     - *avoid-schedule-rule
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_LOG_GPRD_URL'
       changes:
@@ -260,6 +272,7 @@ update_elastic_log_gprd_index_templates:
   stage: deploy
   rules:
     - *avoid-stage-group-check-rule
+    - *avoid-maturity-model-generate-rule
     - *avoid-schedule-rule
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_LOG_GPRD_URL'
       changes:
@@ -275,6 +288,7 @@ update_elastic_log_gprd_cluster_settings:
   stage: deploy
   rules:
     - *avoid-stage-group-check-rule
+    - *avoid-maturity-model-generate-rule
     - *avoid-schedule-rule
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_LOG_GPRD_URL'
       changes:
@@ -297,6 +311,7 @@ update_elastic_nonprod-log_watches:
   stage: deploy
   rules:
     - *avoid-stage-group-check-rule
+    - *avoid-maturity-model-generate-rule
     - *avoid-schedule-rule
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_NONPROD_URL'
       changes:
@@ -308,6 +323,7 @@ update_elastic_nonprod-log_ilm:
   stage: deploy
   rules:
     - *avoid-stage-group-check-rule
+    - *avoid-maturity-model-generate-rule
     - *avoid-schedule-rule
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_NONPROD_URL'
       changes:
@@ -319,6 +335,7 @@ update_elastic_nonprod-log_index_templates:
   stage: deploy
   rules:
     - *avoid-stage-group-check-rule
+    - *avoid-maturity-model-generate-rule
     - *avoid-schedule-rule
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_NONPROD_URL'
       changes:
@@ -334,6 +351,7 @@ update_elastic_nonprod-log_cluster_settings:
   stage: deploy
   rules:
     - *avoid-stage-group-check-rule
+    - *avoid-maturity-model-generate-rule
     - *avoid-schedule-rule
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_NONPROD_URL'
       changes:
@@ -357,6 +375,7 @@ update_elastic_monitoring-es7_cluster_settings:
   stage: deploy
   rules:
     - *avoid-stage-group-check-rule
+    - *avoid-maturity-model-generate-rule
     - *avoid-schedule-rule
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_MONITORING_ES7_URL'
       changes:
@@ -368,6 +387,7 @@ update_elastic_monitoring-es7_ilm:
   stage: deploy
   rules:
     - *avoid-stage-group-check-rule
+    - *avoid-maturity-model-generate-rule
     - *avoid-schedule-rule
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_MONITORING_ES7_URL'
       changes:
@@ -437,6 +457,7 @@ deploy_dashboards:
   rules:
     # This will override all the rules from .dashboards, we only want to run this on master
     - *avoid-stage-group-check-rule
+    - *avoid-maturity-model-generate-rule
     - *avoid-schedule-rule
     - if: '$CI_PROJECT_URL !~ /^https:\/\/gitlab\.com\/.*/'
       when: never
@@ -449,9 +470,11 @@ deploy_dashboards:
     - dashboards/tag-unmanaged-dashboards.sh
 
 .docker_image_template:
-  image: docker:stable
+  image: docker:19.03.12
+  tags:
+    - gitlab-org-docker
   services:
-    - docker:dind
+    - docker:19.03.12-dind
   retry: 2
   variables:
     DOCKER_TLS_CERTDIR: ""
@@ -461,7 +484,12 @@ docker_image_test:
   extends: .docker_image_template
   stage: test
   script:
-    - docker build .
+    - docker build
+      --build-arg GL_ASDF_GO_JSONNET_VERSION=${GL_ASDF_GO_JSONNET_VERSION}
+      --build-arg GL_ASDF_JB_VERSION=${GL_ASDF_JB_VERSION}
+      --build-arg GL_ASDF_SHFMT_VERSION=${GL_ASDF_SHFMT_VERSION}
+      --build-arg GL_ASDF_JSONNET_TOOL_VERSION=${GL_ASDF_JSONNET_TOOL_VERSION}
+      .
   only:
     changes:
       - Dockerfile
@@ -477,7 +505,12 @@ docker_image_build:
   script:
     - export ci_image_tag=${CI_COMMIT_TAG:-$CI_COMMIT_SHORT_SHA}
     - echo ${CI_JOB_TOKEN} | docker login --password-stdin -u $CI_REGISTRY_USER $CI_REGISTRY
-    - docker build -t ${IMAGE}:$ci_image_tag -t ${IMAGE}:latest .
+    - docker build -t ${IMAGE}:$ci_image_tag -t ${IMAGE}:latest
+        --build-arg GL_ASDF_GO_JSONNET_VERSION=${GL_ASDF_GO_JSONNET_VERSION}
+        --build-arg GL_ASDF_JB_VERSION=${GL_ASDF_JB_VERSION}
+        --build-arg GL_ASDF_SHFMT_VERSION=${GL_ASDF_SHFMT_VERSION}
+        --build-arg GL_ASDF_JSONNET_TOOL_VERSION=${GL_ASDF_JSONNET_TOOL_VERSION}
+        .
     - docker push ${IMAGE}:latest
     - docker push ${IMAGE}:$ci_image_tag
   only:
@@ -486,7 +519,7 @@ docker_image_build:
     - schedules
 
 publish:
-  image: node:10
+  image: node:14
   stage: images
   before_script:
     - npm install -g semantic-release @semantic-release/gitlab
@@ -512,12 +545,7 @@ alertmanager_test:
   rules:
     - *avoid-schedule-rule
     - *avoid-stage-group-check-rule
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
-    - if: '$CI_COMMIT_TAG'
-    # only run for merge request changing alertmanager files
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      changes:
-        - alertmanager/*
+    - *avoid-maturity-model-generate-rule
   script:
     - make test-alertmanager
 
@@ -539,17 +567,41 @@ check-stage-groups:
     - scripts/update_stage_error_budget_dashboards.rb
     - git diff --exit-code
 
+generate_service_maturity_manifest:
+  stage: test
+  rules:
+    - *avoid-stage-group-check-rule
+    - if: '$GENERATE_SERVICE_MATURITY_MANIFEST == "1"'
+      when: always
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: always
+  script:
+    - ./scripts/bundler.sh # Install jsonnet bundles
+    - ./scripts/generate-jsonnet-rules.sh
+    - mkdir -p service-maturity-manifest
+    - ./scripts/compile_jsonnet.rb ./service-maturity/maturity.jsonnet > ./service-maturity-manifest/service_maturity.yml
+  artifacts:
+    expose_as: 'service maturity manifest'
+    expire_in: 1 day
+    paths:
+      - service-maturity-manifest/
+
 test-periodic-queries:
   rules:
     - *avoid-schedule-rule
     - *avoid-stage-group-check-rule
+    - *avoid-maturity-model-generate-rule
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       changes:
-        - periodic_queries/*
+        - periodic-thanos-queries/*
         - lib/periodic_queries.rb
         - lib/periodic_queries/**/*
       when: 'always'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: manual
+      allow_failure: true
   script:
+    - scripts/generate-service-catalog-json.sh
     - gem install bundler --no-document -v $BUNDLER_VERSION
     - bundle install
     - bundle exec scripts/perform-periodic-thanos-queries.rb --dry-run
@@ -564,6 +616,7 @@ publish-periodic-queries:
       when: manual
       allow_failure: true
   script:
+    - scripts/generate-service-catalog-json.sh
     - gem install bundler --no-document -v $BUNDLER_VERSION
     - bundle install
     - bundle exec scripts/perform-periodic-thanos-queries.rb
@@ -573,3 +626,28 @@ publish-periodic-queries:
       - periodic-query-results/
   tags:
     - k8s-workloads
+
+# Checks that the `.tool-versions` file is synced with .gitlab-ci-asdf-versions.yml,
+# that all the plugins are declared in `./scripts/install-asdf-plugins.sh`
+# and that ASDF is generally working
+verify-tool-versions:
+  stage: test
+  image: "ubuntu:21.04" # Don't use the runbooks image as it has busybox utils only
+  variables:
+    ASDF_DIR: /asdf
+  script:
+    - apt-get update && apt-get install -y jq curl git bash build-essential libssl-dev zlib1g-dev
+    - echo 'legacy_version_file = yes' >> ~/.asdfrc
+    - git clone https://github.com/asdf-vm/asdf.git "${ASDF_DIR}"
+    - bash --norc --noprofile ./scripts/verify-asdf-setup.sh
+  rules:
+    # This script can be quite slow (mostly due to the ruby install)
+    # so we only run it when there have been changes
+    - changes:
+        - scripts/verify-asdf-setup.sh
+        - scripts/install-asdf-plugins.sh
+        - update-asdf-version-variables
+        - .tool-versions
+        - .ruby-version
+        - .gitlab-ci-asdf-versions.yml
+

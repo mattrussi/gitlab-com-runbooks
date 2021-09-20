@@ -1,4 +1,4 @@
-local services = import './services/all.jsonnet';
+local services = (import 'gitlab-metrics-config.libsonnet').monitoredServices;
 local thresholds = import 'mwmbr/thresholds.libsonnet';
 local recordingRules = import 'recording-rules/recording-rules.libsonnet';
 local strings = import 'utils/strings.libsonnet';

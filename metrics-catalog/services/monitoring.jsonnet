@@ -3,10 +3,14 @@ local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local googleLoadBalancerComponents = import './lib/google_load_balancer_components.libsonnet';
+local maturityLevels = import 'service-maturity/levels.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'monitoring',
   tier: 'inf',
+
+  tags: ['golang'],
+
   monitoringThresholds: {
     apdexScore: 0.999,
     errorRatio: 0.999,
@@ -79,6 +83,7 @@ metricsCatalog.serviceDefinition({
         histogram='http_request_duration_seconds_bucket',
         selector=thanosQuerySelector,
         satisfiedThreshold=30,
+        metricsFormat='migrating'
       ),
 
       requestRate: rateMetric(
@@ -212,7 +217,8 @@ metricsCatalog.serviceDefinition({
         histogram='grpc_server_handling_seconds_bucket',
         selector=thanosStoreSelector,
         satisfiedThreshold=1,
-        toleratedThreshold=3
+        toleratedThreshold=3,
+        metricsFormat='migrating'
       ),
 
       requestRate: rateMetric(
@@ -486,6 +492,7 @@ metricsCatalog.serviceDefinition({
         histogram='thanos_memcached_operation_duration_seconds_bucket',
         satisfiedThreshold=1,
         selector=selector,
+        metricsFormat='migrating'
       ),
 
       requestRate: rateMetric(
@@ -506,4 +513,7 @@ metricsCatalog.serviceDefinition({
     memcached_thanos_qfe_query_range: thanosMemcachedSLI('memcached-thanos-qfe-query-range-metrics'),
     memcached_thanos_qfe_labels: thanosMemcachedSLI('memcached-thanos-qfe-labels-metrics'),
   },
+  skippedMaturityCriteria: maturityLevels.getCriterias([
+    'Service exists in the dependency graph',
+  ]),
 })

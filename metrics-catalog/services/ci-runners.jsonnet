@@ -124,7 +124,7 @@ metricsCatalog.serviceDefinition({
 
       requestRate: rateMetric(
         counter='sidekiq_jobs_completion_seconds_count',
-        selector='worker="ArchiveTraceWorker"'
+        selector='worker="Ci::ArchiveTraceWorker"'
       ),
 
       errorRate: rateMetric(
@@ -134,11 +134,11 @@ metricsCatalog.serviceDefinition({
       significantLabels: [],
 
       toolingLinks: [
-        toolingLinks.grafana(title='ArchiveTraceWorker Detail', dashboardUid='sidekiq-queue-detail', vars={ queue: 'pipeline_background:archive_trace' }),
+        toolingLinks.grafana(title='ArchiveTraceWorker Detail', dashboardUid='sidekiq-queue-detail', vars={ queue: 'pipeline_background:ci_archive_trace' }),
         toolingLinks.kibana(
           title='Sidekiq ArchiveTraceWorker',
           index='sidekiq',
-          matches={ 'json.class.keyword': 'ArchiveTraceWorker' }
+          matches={ 'json.class.keyword': 'Ci::ArchiveTraceWorker' }
         ),
       ],
     },

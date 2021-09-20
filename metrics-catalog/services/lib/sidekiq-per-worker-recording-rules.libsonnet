@@ -1,6 +1,9 @@
 local sidekiqHelpers = import './sidekiq-helpers.libsonnet';
 local aggregationSets = import 'aggregation-sets.libsonnet';
+local aggregations = import 'promql/aggregations.libsonnet';
+local selectors = import 'promql/selectors.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
+local strings = import 'utils/strings.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local combined = metricsCatalog.combined;
@@ -87,7 +90,20 @@ local executionRulesForBurnRate(aggregationSet, burnRate, staticLabels={}) =
         {  // Key metric: Errors per Second
           record: recordingNames.errorRate,
           labels: staticLabels,
-          expr: errorRate.aggregatedRateQuery(aggregationSet.labels, {}, burnRate),
+          expr: |||
+            %(errorRate)s
+            or
+            (
+              0 * group by (%(aggregationLabels)s) (
+                %(executionRate)s{%(staticLabels)s}
+              )
+            )
+          ||| % {
+            errorRate: strings.chomp(errorRate.aggregatedRateQuery(aggregationSet.labels, {}, burnRate)),
+            aggregationLabels: aggregations.serialize(aggregationSet.labels),
+            executionRate: recordingNames.opsRate,
+            staticLabels: selectors.serializeHash(staticLabels),
+          },
         },
         if std.objectHas(recordingNames, 'errorRatio') then
           {

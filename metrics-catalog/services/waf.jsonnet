@@ -1,14 +1,18 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local rateMetric = metricsCatalog.rateMetric;
+local maturityLevels = import 'service-maturity/levels.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'waf',
   tier: 'lb',
   monitoringThresholds: {
-    errorRatio: 0.999,
+    // Error SLO disabled as monitoring data is unreliable.
+    // See: https://gitlab.com/gitlab-com/gl-infra/production/-/issues/5465
+    //errorRatio: 0.999,
   },
   serviceDependencies: {
     frontend: true,
+    nat: true,
   },
   provisioning: {
     kubernetes: false,
@@ -64,4 +68,7 @@ metricsCatalog.serviceDefinition({
       significantLabels: [],
     },
   },
+  skippedMaturityCriteria: maturityLevels.getCriterias([
+    'Developer guides exist in developer documentation',
+  ]),
 })

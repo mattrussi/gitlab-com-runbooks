@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'net/http'
 require_relative './prometheus_api/response'
 

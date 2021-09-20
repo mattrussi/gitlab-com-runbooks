@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-require_relative '../scripts/storage_revert.rb'
+require_relative '../scripts/storage_revert'
 
 unless defined? Project
   # Define a dummy Project class
@@ -12,6 +12,7 @@ end
 
 describe ::Storage::Reverter do
   subject { described_class.new(options) }
+
   let(:test_project_id) { 1 }
   let(:dry_run) { true }
   let(:node_name) { 'nfs-file03' }
@@ -31,7 +32,7 @@ describe ::Storage::Reverter do
 
   describe '#revert' do
     let(:test_project) do
-      project = double('project')
+      project = instance_double('project')
       allow(project).to receive(:id).and_return(test_project_id)
       allow(project).to receive(:repository_storage).and_return('test')
       project
@@ -72,13 +73,14 @@ describe ::Storage::Reverter do
 end
 
 describe ::Storage::RevertScript do
-  subject { Object.new.extend(::Storage::RevertScript) }
+  subject { Object.new.extend(described_class) }
+
   let(:dry_run) { true }
   let(:node_configuration) { { 'nfs-file03': 'test://test' } }
   let(:args) { { original_file_server: 'nfs-file03', project_id: 1, dry_run: dry_run } }
   let(:defaults) { ::Storage::RevertScript::Config::DEFAULTS.dup.merge(args) }
   let(:options) { defaults }
-  let(:reverter) { double('::Registry::Reverter') }
+  let(:reverter) { instance_double('::Registry::Reverter') }
 
   describe '#main' do
     context 'when the dry-run option is true' do

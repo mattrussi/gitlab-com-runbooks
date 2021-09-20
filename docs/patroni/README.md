@@ -18,9 +18,11 @@
 
 * [../ci-runners/ci-apdex-violating-slo.md](../ci-runners/ci-apdex-violating-slo.md)
 * [../ci-runners/service-ci-runners.md](../ci-runners/service-ci-runners.md)
+* [../consul/interaction.md](../consul/interaction.md)
 * [../monitoring/prometheus-failing-rule-evaluations.md](../monitoring/prometheus-failing-rule-evaluations.md)
 * [../onboarding/kibana-diagnosis.md](../onboarding/kibana-diagnosis.md)
 * [check_wraparound.md](check_wraparound.md)
+* [database_peak_analysis.md](database_peak_analysis.md)
 * [gcs-snapshots.md](gcs-snapshots.md)
 * [geo-patroni-cluster.md](geo-patroni-cluster.md)
 * [gitlab-com-wale-backups.md](gitlab-com-wale-backups.md)
@@ -53,6 +55,7 @@
 * [../pgbouncer/pgbouncer-remove-instance.md](../pgbouncer/pgbouncer-remove-instance.md)
 * [../pgbouncer/service-pgbouncer.md](../pgbouncer/service-pgbouncer.md)
 * [../postgres-dr-delayed/postgres-dr-replicas.md](../postgres-dr-delayed/postgres-dr-replicas.md)
+* [../tutorials/how_to_use_flamegraphs_for_perf_profiling.md](../tutorials/how_to_use_flamegraphs_for_perf_profiling.md)
 * [../uncategorized/tracing-app-db-queries.md](../uncategorized/tracing-app-db-queries.md)
 <!-- END_MARKER -->
 

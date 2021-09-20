@@ -14,7 +14,6 @@ local missingMethods(config, route) =
   std.setDiff(requiredMethodsPerRoute, allMethodsForRoute(config, route));
 
 local routesMissingMethods(config) =
-  local routes = std.set(std.map(function(sli) sli.route, config));
   std.foldl(
     function(memo, sli)
       local missing = missingMethods(config, sli.route);

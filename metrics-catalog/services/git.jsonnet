@@ -11,6 +11,9 @@ local gitWorkhorseJobNameSelector = { job: { re: 'gitlab-workhorse|gitlab-workho
 metricsCatalog.serviceDefinition({
   type: 'git',
   tier: 'sv',
+
+  tags: ['golang'],
+
   contractualThresholds: {
     apdexRatio: 0.95,
     errorRatio: 0.005,
@@ -42,6 +45,8 @@ metricsCatalog.serviceDefinition({
     patroni: true,
     pgbouncer: true,
     praefect: true,
+    pvs: true,
+    consul: true,
   },
   provisioning: {
     vms: false,
@@ -112,7 +117,7 @@ metricsCatalog.serviceDefinition({
 
       local baseSelector = gitWorkhorseJobNameSelector {
         type: 'git',
-        route: [{ ne: '^/-/health$' }, { ne: '^/-/(readiness|liveness)$' }, { ne: '^/api/' }],
+        route: [{ ne: '^/-/health$' }, { ne: '^/-/(readiness|liveness)$' }, { ne: '^/api/' }, { ne: '\\\\A/api/v4/jobs/request\\\\z' }, { ne: '^/api/v4/jobs/request\\\\z' }],
       },
 
       apdex: histogramApdex(

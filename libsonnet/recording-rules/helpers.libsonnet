@@ -1,6 +1,5 @@
 local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
-local strings = import 'utils/strings.libsonnet';
 
 local upscalePromExpression = |||
   sum by (%(targetAggregationLabels)s) (
@@ -31,8 +30,10 @@ local aggregationFilterExpr(targetAggregationSet) =
   // in the service level aggregation.
   // These are defined in the SLI with `aggregateToService:false`
   joinExpr(targetAggregationSet) + if aggregationFilter != null then
-    ' and on(component, type) (gitlab_component_service:mapping{monitor="global", %(aggregationFilter)s_aggregation="yes"})' % {
-      aggregationFilter: aggregationFilter,
+    ' and on(component, type) (gitlab_component_service:mapping{%(selector)s})' % {
+      selector: selectors.serializeHash(targetAggregationSet.selector {
+        [aggregationFilter + '_aggregation']: 'yes',
+      }),
     }
   else
     '';
@@ -48,7 +49,6 @@ local selectorForUpscaling(sourceAggregationSet, burnRate) =
 
 
 local upscaledApdexRatioExpression(sourceAggregationSet, targetAggregationSet, burnRate) =
-  local targetAggregationLabels = aggregations.serialize(targetAggregationSet.labels);
   local sourceSelectorWithExtras = selectorForUpscaling(sourceAggregationSet, burnRate);
 
   upscalePromExpression % {
@@ -62,7 +62,6 @@ local upscaledApdexRatioExpression(sourceAggregationSet, targetAggregationSet, b
 
 
 local upscaledErrorRatioExpression(sourceAggregationSet, targetAggregationSet, burnRate) =
-  local targetAggregationLabels = aggregations.serialize(targetAggregationSet.labels);
   local sourceSelectorWithExtras = selectorForUpscaling(sourceAggregationSet, burnRate);
 
   upscalePromExpression % {

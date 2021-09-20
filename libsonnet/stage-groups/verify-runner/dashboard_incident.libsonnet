@@ -1,10 +1,8 @@
-local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
-local layout = import 'grafana/layout.libsonnet';
-
 local dashboardFilters = import './dashboard_filters.libsonnet';
 local dashboardHelpers = import './dashboard_helpers.libsonnet';
 local jobGraphs = import './job_graphs.libsonnet';
 local jobQueueGraphs = import './job_queue_graphs.libsonnet';
+local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 
 local incidentDashboard(incidentType, incidentTypeTag, description=null) =
   local descriptionPanel = if description != null then

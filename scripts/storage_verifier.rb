@@ -22,9 +22,9 @@ module Storage
   # This module defines logging methods
   module Logging
     def initialize_log
-      STDOUT.sync = true
+      $stdout.sync = true
       timestamp_format = ::Storage::VerifierScript::LOG_TIMESTAMP_FORMAT
-      log = Logger.new STDOUT
+      log = Logger.new $stdout
       log.level = Logger::INFO
       log.formatter = proc do |level, t, _name, msg|
         fields = { timestamp: t.strftime(timestamp_format), level: level, msg: msg }

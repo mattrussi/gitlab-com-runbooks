@@ -15,8 +15,10 @@
 
 ## Troubleshooting Pointers
 
+* [../redis/redis-sidekiq-catchall-workloads-reduction.md](../redis/redis-sidekiq-catchall-workloads-reduction.md)
 * [../redis/redis-survival-guide-for-sres.md](../redis/redis-survival-guide-for-sres.md)
 * [../redis/redis.md](../redis/redis.md)
+* [../sidekiq/queue-migration.md](../sidekiq/queue-migration.md)
 * [../sidekiq/sidekiq-survival-guide-for-sres.md](../sidekiq/sidekiq-survival-guide-for-sres.md)
 <!-- END_MARKER -->
 

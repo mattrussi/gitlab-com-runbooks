@@ -497,3 +497,92 @@ groups:
       *
       on(ingress) group_left(shard, stage, type, tier)
       topk by (ingress) (1, kube_ingress_labels:labeled)
+  - record: kube_deployment_labels:labeled
+    expr: |
+      group without(label_stage,label_tier,label_type,service_shard) (
+        label_replace(
+          label_replace(
+            label_replace(
+              label_replace(
+                topk by(label_type) (1, kube_deployment_labels),
+                "stage", "$0", "label_stage", ".*"
+              ),
+              "tier", "$0", "label_tier", ".*"
+            ),
+            "type", "$0", "label_type", ".*"
+          ),
+          "shard", "$0", "service_shard", ".*"
+        )
+      )
+  - record: kube_deployment_status_replicas_unavailable:labeled
+    expr: |
+      kube_deployment_status_replicas_unavailable
+      *
+      on(deployment) group_left(shard, stage, type, tier)
+      topk by (deployment) (1, kube_deployment_labels:labeled)
+  - record: kube_deployment_status_replicas_updated:labeled
+    expr: |
+      kube_deployment_status_replicas_updated
+      *
+      on(deployment) group_left(shard, stage, type, tier)
+      topk by (deployment) (1, kube_deployment_labels:labeled)
+  - record: kube_deployment_spec_paused:labeled
+    expr: |
+      kube_deployment_spec_paused
+      *
+      on(deployment) group_left(shard, stage, type, tier)
+      topk by (deployment) (1, kube_deployment_labels:labeled)
+  - record: kube_deployment_spec_replicas:labeled
+    expr: |
+      kube_deployment_spec_replicas
+      *
+      on(deployment) group_left(shard, stage, type, tier)
+      topk by (deployment) (1, kube_deployment_labels:labeled)
+  - record: kube_deployment_spec_strategy_rollingupdate_max_surge:labeled
+    expr: |
+      kube_deployment_spec_strategy_rollingupdate_max_surge
+      *
+      on(deployment) group_left(shard, stage, type, tier)
+      topk by (deployment) (1, kube_deployment_labels:labeled)
+  - record: kube_deployment_spec_strategy_rollingupdate_max_unavailable:labeled
+    expr: |
+      kube_deployment_spec_strategy_rollingupdate_max_unavailable
+      *
+      on(deployment) group_left(shard, stage, type, tier)
+      topk by (deployment) (1, kube_deployment_labels:labeled)
+  - record: kube_deployment_status_condition:labeled
+    expr: |
+      kube_deployment_status_condition
+      *
+      on(deployment) group_left(shard, stage, type, tier)
+      topk by (deployment) (1, kube_deployment_labels:labeled)
+  - record: kube_deployment_status_replicas_available:labeled
+    expr: |
+      kube_deployment_status_replicas_available
+      *
+      on(deployment) group_left(shard, stage, type, tier)
+      topk by (deployment) (1, kube_deployment_labels:labeled)
+  - record: kube_deployment_created:labeled
+    expr: |
+      kube_deployment_created
+      *
+      on(deployment) group_left(shard, stage, type, tier)
+      topk by (deployment) (1, kube_deployment_labels:labeled)
+  - record: kube_deployment_metadata_generation:labeled
+    expr: |
+      kube_deployment_metadata_generation
+      *
+      on(deployment) group_left(shard, stage, type, tier)
+      topk by (deployment) (1, kube_deployment_labels:labeled)
+  - record: kube_deployment_status_observed_generation:labeled
+    expr: |
+      kube_deployment_status_observed_generation
+      *
+      on(deployment) group_left(shard, stage, type, tier)
+      topk by (deployment) (1, kube_deployment_labels:labeled)
+  - record: kube_deployment_status_replicas:labeled
+    expr: |
+      kube_deployment_status_replicas
+      *
+      on(deployment) group_left(shard, stage, type, tier)
+      topk by (deployment) (1, kube_deployment_labels:labeled)

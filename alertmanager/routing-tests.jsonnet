@@ -36,6 +36,7 @@ generateTests([
   {
     name: 'pagerduty',
     labels: {
+      env: 'gprd',
       pager: 'pagerduty',
     },
     receivers: [
@@ -64,9 +65,8 @@ generateTests([
       env: 'gstg',
     },
     receivers: [
-      'non_prod_pagerduty',
       'slack_bridge-nonprod',
-      'nonprod_alerts_slack_channel',
+      'blackhole',
     ],
   },
   {
@@ -75,7 +75,6 @@ generateTests([
       pager: 'pagerduty',
     },
     receivers: [
-      'prod_pagerduty',
       'production_slack_channel',
     ],
   },
@@ -104,9 +103,8 @@ generateTests([
       env: 'gstg',
     },
     receivers: [
-      'non_prod_pagerduty',
       'slack_bridge-nonprod',
-      'nonprod_alerts_slack_channel',
+      'blackhole',
     ],
   },
   {
@@ -126,7 +124,7 @@ generateTests([
       env: 'gstg',
     },
     receivers: [
-      'nonprod_alerts_slack_channel',
+      'blackhole',
     ],
   },
   {
@@ -231,8 +229,7 @@ generateTests([
       stage: 'cny',
     },
     receivers: [
-      'non_prod_pagerduty',
-      'nonprod_alerts_slack_channel',
+      'blackhole',
     ],
   },
   {
@@ -313,5 +310,37 @@ generateTests([
       'production_slack_channel',
     ],
   },
-
+  {
+    name: 'gstg traffic anomaly service_ops_out_of_bounds_lower_5m alerts should go to blackhole',
+    labels: {
+      alertname: 'service_ops_out_of_bounds_lower_5m',
+      rules_domain: 'general',
+      env: 'gstg',
+    },
+    receivers: [
+      'blackhole',
+    ],
+  },
+  {
+    name: 'gstg traffic anomaly service_ops_out_of_bounds_upper_5m alerts should go to blackhole',
+    labels: {
+      alertname: 'service_ops_out_of_bounds_upper_5m',
+      rules_domain: 'general',
+      env: 'gstg',
+    },
+    receivers: [
+      'blackhole',
+    ],
+  },
+  {
+    name: 'gstg traffic_cessation alerts should go to blackhole',
+    labels: {
+      alert_class: 'traffic_cessation',
+      rules_domain: 'general',
+      env: 'gstg',
+    },
+    receivers: [
+      'blackhole',
+    ],
+  },
 ])

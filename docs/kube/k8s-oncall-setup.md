@@ -199,13 +199,18 @@ Alternatively, the [GKE console](https://console.cloud.google.com/kubernetes) pr
 
 ```bash
 $ kubectl get pods -o wide  # find the name of the node that you want to access
-$ gcloud compute --project "gitlab-production" ssh <node name>
+$ gcloud compute --project "gitlab-production" ssh <node name> --tunnel-through-iap
 ```
 
-* [ ] From the node you can list containers, and get shell access to a pod as root:
+* [ ] From the node you can list containers, and get shell access to a pod as root.  At this writing our nodepools run a mix of docker and containerd, but eventually we expect them to be all containerd.
+
+When using the code snippets below on docker nodes, change `crictl` to `docker`; they are functionally mostly equivalent for common basic tasks.
+
+To quickly see if a node is running docker without explicitly looking it up, run `docker ps`; any containers listed in the outpu means it is a docker node, and empty output means containerd
 
 ```bash
-$ docker exec -u root -it <container> /bin/bash
+$ crictl ps
+$ crictl exec -u root -it <container> /bin/bash
 ```
 
 * [ ] You shouldn't install anything on the GKE nodes. Instead, use toolbox to troubleshoot problems, for example run strace on a process running in one of the GitLab containers. You can install anything you want in the toolbox container.
@@ -217,7 +222,7 @@ $ toolbox
 
 for more documentation on toolbox see: https://cloud.google.com/container-optimized-os/docs/how-to/toolbox
 
-for more troubleshooting tips see also: https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/uncategorized/k8s-operations.md#attaching-to-a-running-container
+For more troubleshooting tips see also: [attach to a running container](./k8s-operations.md#attaching-to-a-running-container)
 
 ## Accessing a pod
 

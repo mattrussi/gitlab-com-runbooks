@@ -31,23 +31,6 @@ local fixture1 =
     },
   });
 
-local fixture2 =
-  aggregationSet.AggregationSet({
-    selector: { x: 'Y' },
-    labels: ['common_label_1', 'common_label_2'],
-    burnRates: {
-      '30s': {
-        apdexRatio: 'target_30m_apdex_ratio',
-      },
-      '1m': {
-        apdexRatio: 'target_1h_apdex_ratio',
-      },
-      '5m': {
-        apdexRatio: 'target_6h_apdex_ratio',
-      },
-    },
-  });
-
 
 test.suite({
   testGetApdexRatioMetricForBurnRate: {

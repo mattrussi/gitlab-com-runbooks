@@ -357,6 +357,54 @@ groups:
       )
   - record: gitlab_component_apdex:success:rate
     labels:
+      component: shard_quarantine
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (environment,stage) (
+        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="10",shard="quarantine",urgency="high"}, "_c", "0", "", "")
+        or
+        label_replace(sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{le="10",shard="quarantine",urgency="high"}, "_c", "1", "", "")
+      )
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: shard_quarantine
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (environment,stage) (
+        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="+Inf",shard="quarantine",urgency="high"}, "_c", "0", "", "")
+        or
+        label_replace(sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{le="+Inf",shard="quarantine",urgency="high"}, "_c", "1", "", "")
+      )
+  - record: gitlab_component_ops:rate
+    labels:
+      component: shard_quarantine
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="+Inf",shard="quarantine"}
+      )
+  - record: gitlab_component_errors:rate
+    labels:
+      component: shard_quarantine
+      tier: sv
+      type: sidekiq
+    expr: |
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate1m{shard="quarantine"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate{component="shard_quarantine",tier="sv",type="sidekiq"}
+        )
+      )
+  - record: gitlab_component_apdex:success:rate
+    labels:
       component: shard_urgent_cpu_bound
       tier: sv
       type: sidekiq
@@ -515,6 +563,12 @@ groups:
     expr: |
       sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
         sli_aggregations:sidekiq_jobs_failed_total_rate1m{}
+      )
+      or
+      (
+        0 * group by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
+          gitlab_background_jobs:execution:ops:rate_1m{}
+        )
       )
   - record: gitlab_background_jobs:execution:error:ratio_1m
     expr: |
@@ -877,6 +931,54 @@ groups:
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
+      component: shard_quarantine
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (environment,stage) (
+        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="10",shard="quarantine",urgency="high"}, "_c", "0", "", "")
+        or
+        label_replace(sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="10",shard="quarantine",urgency="high"}, "_c", "1", "", "")
+      )
+  - record: gitlab_component_apdex:weight:score_5m
+    labels:
+      component: shard_quarantine
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (environment,stage) (
+        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="quarantine",urgency="high"}, "_c", "0", "", "")
+        or
+        label_replace(sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",shard="quarantine",urgency="high"}, "_c", "1", "", "")
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: shard_quarantine
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="quarantine"}
+      )
+  - record: gitlab_component_errors:rate_5m
+    labels:
+      component: shard_quarantine
+      tier: sv
+      type: sidekiq
+    expr: |
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{shard="quarantine"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_5m{component="shard_quarantine",tier="sv",type="sidekiq"}
+        )
+      )
+  - record: gitlab_component_apdex:success:rate_5m
+    labels:
       component: shard_urgent_cpu_bound
       tier: sv
       type: sidekiq
@@ -1035,6 +1137,12 @@ groups:
     expr: |
       sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
         sli_aggregations:sidekiq_jobs_failed_total_rate5m{}
+      )
+      or
+      (
+        0 * group by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
+          gitlab_background_jobs:execution:ops:rate_5m{}
+        )
       )
   - record: gitlab_background_jobs:execution:error:ratio_5m
     expr: |
@@ -1397,6 +1505,54 @@ groups:
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
+      component: shard_quarantine
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (environment,stage) (
+        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="10",shard="quarantine",urgency="high"}, "_c", "0", "", "")
+        or
+        label_replace(sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="10",shard="quarantine",urgency="high"}, "_c", "1", "", "")
+      )
+  - record: gitlab_component_apdex:weight:score_30m
+    labels:
+      component: shard_quarantine
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (environment,stage) (
+        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="quarantine",urgency="high"}, "_c", "0", "", "")
+        or
+        label_replace(sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",shard="quarantine",urgency="high"}, "_c", "1", "", "")
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: shard_quarantine
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="quarantine"}
+      )
+  - record: gitlab_component_errors:rate_30m
+    labels:
+      component: shard_quarantine
+      tier: sv
+      type: sidekiq
+    expr: |
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate30m{shard="quarantine"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_30m{component="shard_quarantine",tier="sv",type="sidekiq"}
+        )
+      )
+  - record: gitlab_component_apdex:success:rate_30m
+    labels:
       component: shard_urgent_cpu_bound
       tier: sv
       type: sidekiq
@@ -1555,6 +1711,12 @@ groups:
     expr: |
       sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
         sli_aggregations:sidekiq_jobs_failed_total_rate30m{}
+      )
+      or
+      (
+        0 * group by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
+          gitlab_background_jobs:execution:ops:rate_30m{}
+        )
       )
   - record: gitlab_background_jobs:execution:error:ratio_30m
     expr: |
@@ -1917,6 +2079,54 @@ groups:
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
+      component: shard_quarantine
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (environment,stage) (
+        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="10",shard="quarantine",urgency="high"}, "_c", "0", "", "")
+        or
+        label_replace(sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="10",shard="quarantine",urgency="high"}, "_c", "1", "", "")
+      )
+  - record: gitlab_component_apdex:weight:score_1h
+    labels:
+      component: shard_quarantine
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (environment,stage) (
+        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="quarantine",urgency="high"}, "_c", "0", "", "")
+        or
+        label_replace(sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",shard="quarantine",urgency="high"}, "_c", "1", "", "")
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: shard_quarantine
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="quarantine"}
+      )
+  - record: gitlab_component_errors:rate_1h
+    labels:
+      component: shard_quarantine
+      tier: sv
+      type: sidekiq
+    expr: |
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate1h{shard="quarantine"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_1h{component="shard_quarantine",tier="sv",type="sidekiq"}
+        )
+      )
+  - record: gitlab_component_apdex:success:rate_1h
+    labels:
       component: shard_urgent_cpu_bound
       tier: sv
       type: sidekiq
@@ -2075,6 +2285,12 @@ groups:
     expr: |
       sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
         sli_aggregations:sidekiq_jobs_failed_total_rate1h{}
+      )
+      or
+      (
+        0 * group by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
+          gitlab_background_jobs:execution:ops:rate_1h{}
+        )
       )
   - record: gitlab_background_jobs:execution:error:ratio_1h
     expr: |
@@ -2437,6 +2653,54 @@ groups:
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
+      component: shard_quarantine
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (environment,stage) (
+        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate6h{le="10",shard="quarantine",urgency="high"}, "_c", "0", "", "")
+        or
+        label_replace(sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate6h{le="10",shard="quarantine",urgency="high"}, "_c", "1", "", "")
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: shard_quarantine
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (environment,stage) (
+        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate6h{le="+Inf",shard="quarantine",urgency="high"}, "_c", "0", "", "")
+        or
+        label_replace(sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate6h{le="+Inf",shard="quarantine",urgency="high"}, "_c", "1", "", "")
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: shard_quarantine
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate6h{le="+Inf",shard="quarantine"}
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: shard_quarantine
+      tier: sv
+      type: sidekiq
+    expr: |
+      (
+        sum by (environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate6h{shard="quarantine"}
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_6h{component="shard_quarantine",tier="sv",type="sidekiq"}
+        )
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
       component: shard_urgent_cpu_bound
       tier: sv
       type: sidekiq
@@ -2596,6 +2860,12 @@ groups:
       sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
         sli_aggregations:sidekiq_jobs_failed_total_rate6h{}
       )
+      or
+      (
+        0 * group by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
+          gitlab_background_jobs:execution:ops:rate_6h{}
+        )
+      )
   - record: gitlab_background_jobs:execution:error:ratio_6h
     expr: |
       gitlab_background_jobs:execution:error:rate_6h
@@ -2607,72 +2877,80 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: shard_catchall
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: sv
       type: sidekiq
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: shard_database_throttled
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: sv
       type: sidekiq
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: shard_elasticsearch
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: sv
       type: sidekiq
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: shard_gitaly_throttled
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: sv
       type: sidekiq
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: shard_imports
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: sv
       type: sidekiq
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: shard_low_urgency_cpu_bound
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: sv
       type: sidekiq
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: shard_memory_bound
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: sv
       type: sidekiq
-    expr: '1'
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: shard_quarantine
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: sv
+      type: sidekiq
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: shard_urgent_cpu_bound
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: sv
       type: sidekiq
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: shard_urgent_other
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: sv
       type: sidekiq
-    expr: '1'
+    expr: "1"

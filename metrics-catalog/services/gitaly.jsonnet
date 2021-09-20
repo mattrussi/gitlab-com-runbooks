@@ -4,7 +4,45 @@ local customApdex = metricsCatalog.customApdex;
 local combined = metricsCatalog.combined;
 local gitalyHelpers = import './lib/gitaly-helpers.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
-local histogramApdex = metricsCatalog.histogramApdex;
+
+// This is a list of unary GRPC methods that should not be included in measuring the apdex score
+// for the Gitaly service, since they're called from background jobs and the latency
+// does not reflect the overall latency of the Gitaly server
+local gitalyApdexIgnoredMethods = std.set([
+  'CalculateChecksum',
+  'CommitLanguages',
+  'CreateFork',
+  'CreateRepositoryFromURL',
+  'FetchInternalRemote',
+  'FetchRemote',
+  'FindRemoteRepository',
+  'FindRemoteRootRef',
+  'Fsck',
+  'GarbageCollect',
+  'RepackFull',
+  'RepackIncremental',
+  'ReplicateRepository',
+  'FetchIntoObjectPool',
+  'FetchSourceBranch',
+  'OptimizeRepository',
+  'CommitStats',  // https://gitlab.com/gitlab-org/gitlab/-/issues/337080
+
+  // PackObjectsHookWithSidechannel is used to serve 'git fetch' traffic.
+  // Its latency is proportional to the size of the size of the fetch and
+  // the download speed of the client.
+  'PackObjectsHookWithSidechannel',
+
+  // Excluding Hook RPCs, as these are dependent on the internal Rails API.
+  // Almost all time is spend there, once it's slow of failing it's usually not
+  // a Gitaly alert that should fire.
+  'PreReceiveHook',
+  'PostReceiveHook',
+  'UpdateHook',
+]);
+
+// local gitalyOpServiceApdexIgnoredMethods = std.set([]);
+local gitalyApdexIgnoredMethodsRegexp = std.join('|', gitalyApdexIgnoredMethods);
+// local gitalyOpServiceApdexIgnoredMethodsRegexp = std.join('|', gitalyOpServiceApdexIgnoredMethods);
 
 local gitalyGRPCErrorRate(baseSelector) =
   combined([
@@ -26,6 +64,12 @@ local gitalyGRPCErrorRate(baseSelector) =
 metricsCatalog.serviceDefinition({
   type: 'gitaly',
   tier: 'stor',
+
+  // disk_performance_monitoring requires disk utilisation metrics are currently reporting correctly for
+  // HDD volumes, see https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10248
+  // as such, we only record this utilisation metric on IO subset of the fleet for now.
+  tags: ['golang', 'disk_performance_monitoring'],
+
   // Since each Gitaly node is a SPOF for a subset of repositories, we need to ensure that
   // we have node-level monitoring on these hosts
   nodeLevelMonitoring: true,
@@ -51,7 +95,11 @@ metricsCatalog.serviceDefinition({
         job: 'gitaly',
         grpc_service: { ne: 'gitaly.OperationService' },
       },
-      apdex: gitalyHelpers.grpcServiceApdex(baseSelector),
+      local baseSelectorApdex = baseSelector {
+        grpc_method: { nre: gitalyApdexIgnoredMethodsRegexp },
+      },
+
+      apdex: gitalyHelpers.grpcServiceApdex(baseSelectorApdex),
 
       requestRate: rateMetric(
         counter='gitaly_service_client_requests_total',
@@ -84,14 +132,25 @@ metricsCatalog.serviceDefinition({
       |||,
 
       local baseSelector = { job: 'gitaly', grpc_service: 'gitaly.OperationService' },
-      apdex: histogramApdex(
-        histogram='grpc_server_handling_seconds_bucket',
-        selector=baseSelector {
-          grpc_type: 'unary',
-        },
-        satisfiedThreshold=10,
-        toleratedThreshold=30
-      ),
+      // The OperationService apdex is disabled primarily to deal with very slow
+      // operations producing a lot of alerts.
+      // Excluding those RPCs is not a very effective strategy, as OperationService
+      // is very low-traffic to begin with, and with every excluded RPC, we increase
+      // the sensitivity of the alerts. Thus, we opt to remove this SLO completely
+      // for the time being.
+      //
+      // Infradev issues addressing sources of latency:
+      // - https://gitlab.com/gitlab-com/gl-infra/production/-/issues/5311
+      //
+      //apdex: histogramApdex(
+      //  histogram='grpc_server_handling_seconds_bucket',
+      //  selector=baseSelector {
+      //    grpc_type: 'unary',
+      //    grpc_method: { nre: gitalyOpServiceApdexIgnoredMethodsRegexp },
+      //  },
+      //  satisfiedThreshold=10,
+      //  toleratedThreshold=30
+      //),
 
       requestRate: rateMetric(
         counter='gitaly_service_client_requests_total',
@@ -128,7 +187,7 @@ metricsCatalog.serviceDefinition({
           grpc_type: 'unary',
           grpc_service: { ne: 'gitaly.OperationService' },
           grpc_method: {
-            nre: gitalyHelpers.gitalyApdexIgnoredMethodsRegexp +
+            nre: gitalyApdexIgnoredMethodsRegexp +
                  '|GetLFSPointers|GetAllLFSPointers',  // Ignored because of https://gitlab.com/gitlab-org/gitaly/-/issues/3441
           },
         },

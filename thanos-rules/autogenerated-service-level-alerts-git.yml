@@ -8,19 +8,17 @@ groups:
   - alert: GitServiceGitlabShellTrafficCessation
     for: 5m
     annotations:
-      title: >-
-        The gitlab_shell SLI of the git service (`{{ $labels.stage }}` stage) has not received any traffic
-        in the past 30 minutes
+      title: The gitlab_shell SLI of the git service (`{{ $labels.stage }}` stage)
+        has not received any traffic in the past 30 minutes
       description: |
         We monitor GitLab shell, using HAProxy SSH connection information.
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: git-main/git-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '424944884'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "424944884"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -29,24 +27,24 @@ groups:
       runbook: docs/git/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
-    expr: >
-      gitlab_component_ops:rate_30m{type="git", component="gitlab_shell", stage="main", monitor="global"}
-      == 0
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{type="git", component="gitlab_shell", stage="main", monitor="global"} == 0
   - alert: GitServiceGitlabShellTrafficAbsent
     for: 30m
     annotations:
-      title: >-
-        The gitlab_shell SLI of the git service (`{{ $labels.stage }}` stage) has not reported any traffic
-        in the past 30 minutes
+      title: The gitlab_shell SLI of the git service (`{{ $labels.stage }}` stage)
+        has not reported any traffic in the past 30 minutes
       description: |
         We monitor GitLab shell, using HAProxy SSH connection information.
 
@@ -54,11 +52,10 @@ groups:
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
       grafana_dashboard_id: git-main/git-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '424944884'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "424944884"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -67,15 +64,17 @@ groups:
       runbook: docs/git/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
+      slo_alert: "no"
+      user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{type="git", component="gitlab_shell", stage="main", monitor="global"} offset 1h
       unless
@@ -83,23 +82,22 @@ groups:
   - alert: GitServiceLoadbalancerErrorSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The loadbalancer SLI of the git service (`{{ $labels.stage }}` stage) has an error rate violating
-        SLO
+      title: The loadbalancer SLI of the git service (`{{ $labels.stage }}` stage)
+        has an error rate violating SLO
       description: |
         Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: git-main/git-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '3255520955'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3255520955"
       grafana_variables: environment,stage
       runbook: docs/git/README.md
     labels:
       aggregation: component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -108,8 +106,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -139,41 +137,39 @@ groups:
   - alert: GitServiceLoadbalancerTrafficCessation
     for: 5m
     annotations:
-      title: >-
-        The loadbalancer SLI of the git service (`{{ $labels.stage }}` stage) has not received any traffic
-        in the past 30 minutes
+      title: The loadbalancer SLI of the git service (`{{ $labels.stage }}` stage)
+        has not received any traffic in the past 30 minutes
       description: |
         Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: git-main/git-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '138982496'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "138982496"
       grafana_variables: environment,stage
       runbook: docs/git/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
-    expr: >
-      gitlab_component_ops:rate_30m{type="git", component="loadbalancer", stage="main", monitor="global"}
-      == 0
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{type="git", component="loadbalancer", stage="main", monitor="global"} == 0
   - alert: GitServiceLoadbalancerTrafficAbsent
     for: 30m
     annotations:
-      title: >-
-        The loadbalancer SLI of the git service (`{{ $labels.stage }}` stage) has not reported any traffic
-        in the past 30 minutes
+      title: The loadbalancer SLI of the git service (`{{ $labels.stage }}` stage)
+        has not reported any traffic in the past 30 minutes
       description: |
         Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
 
@@ -181,24 +177,25 @@ groups:
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
       grafana_dashboard_id: git-main/git-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '138982496'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "138982496"
       grafana_variables: environment,stage
       runbook: docs/git/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
+      slo_alert: "no"
+      user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{type="git", component="loadbalancer", stage="main", monitor="global"} offset 1h
       unless
@@ -206,23 +203,22 @@ groups:
   - alert: GitServiceLoadbalancerSshErrorSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The loadbalancer_ssh SLI of the git service (`{{ $labels.stage }}` stage) has an error rate violating
-        SLO
+      title: The loadbalancer_ssh SLI of the git service (`{{ $labels.stage }}` stage)
+        has an error rate violating SLO
       description: |
         Measures aggregated L4 traffic through the HAProxy. Traffic is measured in TCP connections, with upstream TCP connection failures being treated as service-level failures.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: git-main/git-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2063210499'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2063210499"
       grafana_variables: environment,stage
       runbook: docs/git/README.md
     labels:
       aggregation: component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -231,8 +227,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -262,41 +258,39 @@ groups:
   - alert: GitServiceLoadbalancerSshTrafficCessation
     for: 5m
     annotations:
-      title: >-
-        The loadbalancer_ssh SLI of the git service (`{{ $labels.stage }}` stage) has not received any
-        traffic in the past 30 minutes
+      title: The loadbalancer_ssh SLI of the git service (`{{ $labels.stage }}` stage)
+        has not received any traffic in the past 30 minutes
       description: |
         Measures aggregated L4 traffic through the HAProxy. Traffic is measured in TCP connections, with upstream TCP connection failures being treated as service-level failures.
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: git-main/git-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '3437608064'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3437608064"
       grafana_variables: environment,stage
       runbook: docs/git/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
-    expr: >
-      gitlab_component_ops:rate_30m{type="git", component="loadbalancer_ssh", stage="main", monitor="global"}
-      == 0
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{type="git", component="loadbalancer_ssh", stage="main", monitor="global"} == 0
   - alert: GitServiceLoadbalancerSshTrafficAbsent
     for: 30m
     annotations:
-      title: >-
-        The loadbalancer_ssh SLI of the git service (`{{ $labels.stage }}` stage) has not reported any
-        traffic in the past 30 minutes
+      title: The loadbalancer_ssh SLI of the git service (`{{ $labels.stage }}` stage)
+        has not reported any traffic in the past 30 minutes
       description: |
         Measures aggregated L4 traffic through the HAProxy. Traffic is measured in TCP connections, with upstream TCP connection failures being treated as service-level failures.
 
@@ -304,24 +298,25 @@ groups:
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
       grafana_dashboard_id: git-main/git-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '3437608064'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3437608064"
       grafana_variables: environment,stage
       runbook: docs/git/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
+      slo_alert: "no"
+      user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{type="git", component="loadbalancer_ssh", stage="main", monitor="global"} offset 1h
       unless
@@ -329,18 +324,18 @@ groups:
   - alert: GitServicePumaApdexSLOViolation
     for: 2m
     annotations:
-      title: The puma SLI of the git service (`{{ $labels.stage }}` stage) has an apdex violating SLO
+      title: The puma SLI of the git service (`{{ $labels.stage }}` stage) has an
+        apdex violating SLO
       description: |
         Monitors Rails endpoints, running in the Git fleet, via the HTTP interface.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: git-main/git-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
-        $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '561966508'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "561966508"
       grafana_variables: environment,type,stage,component
       promql_template_1: |
         histogram_quantile(
@@ -352,6 +347,7 @@ groups:
       runbook: docs/git/README.md
     labels:
       aggregation: component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -360,8 +356,9 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: apdex
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
     expr: |
       (
         (
@@ -373,7 +370,51 @@ groups:
           gitlab_component_apdex:ratio_5m{component="puma",monitor="global",type="git"}
           < (1 - 14.4 * 0.002000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="puma",monitor="global",type="git"}) >= 1
+      )
+  - alert: GitServicePumaApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The puma SLI of the git service (`{{ $labels.stage }}` stage) has an
+        apdex violating SLO
+      description: |
+        Monitors Rails endpoints, running in the Git fleet, via the HTTP interface.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: git-main/git-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "561966508"
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="git"}[5m])
+          )
+        )
+      runbook: docs/git/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_apdex:ratio_6h{component="puma",monitor="global",type="git"}
           < (1 - 6 * 0.002000)
@@ -391,18 +432,18 @@ groups:
   - alert: GitServicePumaApdexSLOViolationRegional
     for: 2m
     annotations:
-      title: The puma SLI of the git service in region `{{ $labels.region }}` has an apdex violating SLO
+      title: The puma SLI of the git service in region `{{ $labels.region }}` has
+        an apdex violating SLO
       description: |
         Monitors Rails endpoints, running in the Git fleet, via the HTTP interface.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: alerts-regional_component_slo_apdex
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/alerts-regional_component_slo_apdex?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-region={{
-        $labels.region }}&var-component={{ $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '965700560'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-regional_component_slo_apdex?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-region={{ $labels.region }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "965700560"
       grafana_variables: environment,type,stage,region,component
       promql_template_1: |
         histogram_quantile(
@@ -414,6 +455,7 @@ groups:
       runbook: docs/git/README.md
     labels:
       aggregation: regional_component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -422,8 +464,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: apdex
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -453,18 +495,17 @@ groups:
   - alert: GitServicePumaErrorSLOViolation
     for: 2m
     annotations:
-      title: The puma SLI of the git service (`{{ $labels.stage }}` stage) has an error rate violating
-        SLO
+      title: The puma SLI of the git service (`{{ $labels.stage }}` stage) has an
+        error rate violating SLO
       description: |
         Monitors Rails endpoints, running in the Git fleet, via the HTTP interface.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: git-main/git-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2425637513'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2425637513"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -473,6 +514,7 @@ groups:
       runbook: docs/git/README.md
     labels:
       aggregation: component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -481,8 +523,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -512,8 +554,8 @@ groups:
   - alert: GitServicePumaErrorSLOViolationRegional
     for: 2m
     annotations:
-      title: The puma SLI of the git service in region `{{ $labels.region }}` has an error rate violating
-        SLO
+      title: The puma SLI of the git service in region `{{ $labels.region }}` has
+        an error rate violating SLO
       description: |
         Monitors Rails endpoints, running in the Git fleet, via the HTTP interface.
 
@@ -521,12 +563,11 @@ groups:
 
         Currently the apdex value for {{ $labels.region }} is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: alerts-regional_component_slo_error
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/alerts-regional_component_slo_error?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-region={{
-        $labels.region }}&var-component={{ $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '965700560'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-regional_component_slo_error?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-region={{ $labels.region }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "965700560"
       grafana_variables: environment,type,stage,region,component
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
@@ -535,6 +576,7 @@ groups:
       runbook: docs/git/README.md
     labels:
       aggregation: regional_component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -543,8 +585,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -574,19 +616,17 @@ groups:
   - alert: GitServicePumaTrafficCessation
     for: 5m
     annotations:
-      title: >-
-        The puma SLI of the git service (`{{ $labels.stage }}` stage) has not received any traffic in
-        the past 30 minutes
+      title: The puma SLI of the git service (`{{ $labels.stage }}` stage) has not
+        received any traffic in the past 30 minutes
       description: |
         Monitors Rails endpoints, running in the Git fleet, via the HTTP interface.
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: git-main/git-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '110019945'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "110019945"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -595,25 +635,24 @@ groups:
       runbook: docs/git/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
-    expr: 'gitlab_component_ops:rate_30m{type="git", component="puma", stage="main", monitor="global"}
-      == 0
-
-      '
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{type="git", component="puma", stage="main", monitor="global"} == 0
   - alert: GitServicePumaTrafficAbsent
     for: 30m
     annotations:
-      title: >-
-        The puma SLI of the git service (`{{ $labels.stage }}` stage) has not reported any traffic in
-        the past 30 minutes
+      title: The puma SLI of the git service (`{{ $labels.stage }}` stage) has not
+        reported any traffic in the past 30 minutes
       description: |
         Monitors Rails endpoints, running in the Git fleet, via the HTTP interface.
 
@@ -621,11 +660,10 @@ groups:
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
       grafana_dashboard_id: git-main/git-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '110019945'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "110019945"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -634,15 +672,17 @@ groups:
       runbook: docs/git/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
+      slo_alert: "no"
+      user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{type="git", component="puma", stage="main", monitor="global"} offset 1h
       unless
@@ -650,30 +690,30 @@ groups:
   - alert: GitServiceWorkhorseApdexSLOViolation
     for: 2m
     annotations:
-      title: The workhorse SLI of the git service (`{{ $labels.stage }}` stage) has an apdex violating
-        SLO
+      title: The workhorse SLI of the git service (`{{ $labels.stage }}` stage) has
+        an apdex violating SLO
       description: |
         Monitors the Workhorse instance running in the Git fleet, via the HTTP interface. This SLI excludes API requests, which have their own SLI with tigher latency thresholds. Websocket connections are excluded from the apdex score.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: git-main/git-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
-        $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2586818196'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2586818196"
       grafana_variables: environment,type,stage,component
       promql_template_1: |
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(gitlab_workhorse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-git",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="^/([^/]+/){1,}[^/]+/-/jobs/[0-9]+/terminal.ws\\z",route!="^/([^/]+/){1,}[^/]+/-/environments/[0-9]+/terminal.ws\\z",route!="^/-/cable\\z",stage="{{ $labels.stage }}",type="git"}[5m])
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-git",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/([^/]+/){1,}[^/]+/-/jobs/[0-9]+/terminal.ws\\z",route!="^/([^/]+/){1,}[^/]+/-/environments/[0-9]+/terminal.ws\\z",route!="^/-/cable\\z",stage="{{ $labels.stage }}",type="git"}[5m])
           )
         )
       runbook: docs/git/README.md
     labels:
       aggregation: component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -682,8 +722,9 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: apdex
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
     expr: |
       (
         (
@@ -695,7 +736,51 @@ groups:
           gitlab_component_apdex:ratio_5m{component="workhorse",monitor="global",type="git"}
           < (1 - 14.4 * 0.002000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="workhorse",monitor="global",type="git"}) >= 1
+      )
+  - alert: GitServiceWorkhorseApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The workhorse SLI of the git service (`{{ $labels.stage }}` stage) has
+        an apdex violating SLO
+      description: |
+        Monitors the Workhorse instance running in the Git fleet, via the HTTP interface. This SLI excludes API requests, which have their own SLI with tigher latency thresholds. Websocket connections are excluded from the apdex score.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: git-main/git-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2586818196"
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-git",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/([^/]+/){1,}[^/]+/-/jobs/[0-9]+/terminal.ws\\z",route!="^/([^/]+/){1,}[^/]+/-/environments/[0-9]+/terminal.ws\\z",route!="^/-/cable\\z",stage="{{ $labels.stage }}",type="git"}[5m])
+          )
+        )
+      runbook: docs/git/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_apdex:ratio_6h{component="workhorse",monitor="global",type="git"}
           < (1 - 6 * 0.002000)
@@ -713,30 +798,30 @@ groups:
   - alert: GitServiceWorkhorseApdexSLOViolationRegional
     for: 2m
     annotations:
-      title: The workhorse SLI of the git service in region `{{ $labels.region }}` has an apdex violating
-        SLO
+      title: The workhorse SLI of the git service in region `{{ $labels.region }}`
+        has an apdex violating SLO
       description: |
         Monitors the Workhorse instance running in the Git fleet, via the HTTP interface. This SLI excludes API requests, which have their own SLI with tigher latency thresholds. Websocket connections are excluded from the apdex score.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: alerts-regional_component_slo_apdex
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/alerts-regional_component_slo_apdex?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-region={{
-        $labels.region }}&var-component={{ $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '965700560'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-regional_component_slo_apdex?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-region={{ $labels.region }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "965700560"
       grafana_variables: environment,type,stage,region,component
       promql_template_1: |
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,region,le) (
-            rate(gitlab_workhorse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-git",region="{{ $labels.region }}",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="^/([^/]+/){1,}[^/]+/-/jobs/[0-9]+/terminal.ws\\z",route!="^/([^/]+/){1,}[^/]+/-/environments/[0-9]+/terminal.ws\\z",route!="^/-/cable\\z",stage="{{ $labels.stage }}",type="git"}[5m])
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-git",region="{{ $labels.region }}",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/([^/]+/){1,}[^/]+/-/jobs/[0-9]+/terminal.ws\\z",route!="^/([^/]+/){1,}[^/]+/-/environments/[0-9]+/terminal.ws\\z",route!="^/-/cable\\z",stage="{{ $labels.stage }}",type="git"}[5m])
           )
         )
       runbook: docs/git/README.md
     labels:
       aggregation: regional_component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -745,8 +830,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: apdex
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -776,26 +861,26 @@ groups:
   - alert: GitServiceWorkhorseErrorSLOViolation
     for: 2m
     annotations:
-      title: The workhorse SLI of the git service (`{{ $labels.stage }}` stage) has an error rate violating
-        SLO
+      title: The workhorse SLI of the git service (`{{ $labels.stage }}` stage) has
+        an error rate violating SLO
       description: |
         Monitors the Workhorse instance running in the Git fleet, via the HTTP interface. This SLI excludes API requests, which have their own SLI with tigher latency thresholds. Websocket connections are excluded from the apdex score.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: git-main/git-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2047984749'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2047984749"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-git",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",stage="{{ $labels.stage }}",type="git"}[5m])
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-git",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",stage="{{ $labels.stage }}",type="git"}[5m])
         )
       runbook: docs/git/README.md
     labels:
       aggregation: component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -804,8 +889,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -835,9 +920,8 @@ groups:
   - alert: GitServiceWorkhorseErrorSLOViolationRegional
     for: 2m
     annotations:
-      title: >-
-        The workhorse SLI of the git service in region `{{ $labels.region }}` has an error rate violating
-        SLO
+      title: The workhorse SLI of the git service in region `{{ $labels.region }}`
+        has an error rate violating SLO
       description: |
         Monitors the Workhorse instance running in the Git fleet, via the HTTP interface. This SLI excludes API requests, which have their own SLI with tigher latency thresholds. Websocket connections are excluded from the apdex score.
 
@@ -845,20 +929,20 @@ groups:
 
         Currently the apdex value for {{ $labels.region }} is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: alerts-regional_component_slo_error
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/alerts-regional_component_slo_error?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-region={{
-        $labels.region }}&var-component={{ $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '965700560'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-regional_component_slo_error?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-region={{ $labels.region }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "965700560"
       grafana_variables: environment,type,stage,region,component
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
-          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-git",region="{{ $labels.region }}",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",stage="{{ $labels.stage }}",type="git"}[5m])
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-git",region="{{ $labels.region }}",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",stage="{{ $labels.stage }}",type="git"}[5m])
         )
       runbook: docs/git/README.md
     labels:
       aggregation: regional_component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -867,8 +951,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -898,45 +982,43 @@ groups:
   - alert: GitServiceWorkhorseTrafficCessation
     for: 5m
     annotations:
-      title: >-
-        The workhorse SLI of the git service (`{{ $labels.stage }}` stage) has not received any traffic
-        in the past 30 minutes
+      title: The workhorse SLI of the git service (`{{ $labels.stage }}` stage) has
+        not received any traffic in the past 30 minutes
       description: |
         Monitors the Workhorse instance running in the Git fleet, via the HTTP interface. This SLI excludes API requests, which have their own SLI with tigher latency thresholds. Websocket connections are excluded from the apdex score.
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: git-main/git-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '831392945'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "831392945"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(gitlab_workhorse_http_requests_total{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-git",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",stage="{{ $labels.stage }}",type="git"}[5m])
+          rate(gitlab_workhorse_http_requests_total{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-git",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",stage="{{ $labels.stage }}",type="git"}[5m])
         )
       runbook: docs/git/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
-    expr: >
-      gitlab_component_ops:rate_30m{type="git", component="workhorse", stage="main", monitor="global"}
-      == 0
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{type="git", component="workhorse", stage="main", monitor="global"} == 0
   - alert: GitServiceWorkhorseTrafficAbsent
     for: 30m
     annotations:
-      title: >-
-        The workhorse SLI of the git service (`{{ $labels.stage }}` stage) has not reported any traffic
-        in the past 30 minutes
+      title: The workhorse SLI of the git service (`{{ $labels.stage }}` stage) has
+        not reported any traffic in the past 30 minutes
       description: |
         Monitors the Workhorse instance running in the Git fleet, via the HTTP interface. This SLI excludes API requests, which have their own SLI with tigher latency thresholds. Websocket connections are excluded from the apdex score.
 
@@ -944,28 +1026,29 @@ groups:
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
       grafana_dashboard_id: git-main/git-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '831392945'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "831392945"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(gitlab_workhorse_http_requests_total{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-git",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",stage="{{ $labels.stage }}",type="git"}[5m])
+          rate(gitlab_workhorse_http_requests_total{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-git",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",stage="{{ $labels.stage }}",type="git"}[5m])
         )
       runbook: docs/git/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
+      slo_alert: "no"
+      user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{type="git", component="workhorse", stage="main", monitor="global"} offset 1h
       unless
@@ -973,20 +1056,18 @@ groups:
   - alert: GitServiceWorkhorseAuthApiApdexSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The workhorse_auth_api SLI of the git service (`{{ $labels.stage }}` stage) has an apdex violating
-        SLO
+      title: The workhorse_auth_api SLI of the git service (`{{ $labels.stage }}`
+        stage) has an apdex violating SLO
       description: |
         Monitors Workhorse API endpoints, running in the Git fleet, via the HTTP interface. Workhorse API requests have much tigher latency requirements, as these requests originate in GitLab-Shell and are on the critical path for authentication of Git SSH commands.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: git-main/git-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
-        $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '3139093701'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3139093701"
       grafana_variables: environment,type,stage,component
       promql_template_1: |
         histogram_quantile(
@@ -998,6 +1079,7 @@ groups:
       runbook: docs/git/README.md
     labels:
       aggregation: component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -1006,8 +1088,9 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: apdex
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
     expr: |
       (
         (
@@ -1019,7 +1102,51 @@ groups:
           gitlab_component_apdex:ratio_5m{component="workhorse_auth_api",monitor="global",type="git"}
           < (1 - 14.4 * 0.002000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="workhorse_auth_api",monitor="global",type="git"}) >= 1
+      )
+  - alert: GitServiceWorkhorseAuthApiApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The workhorse_auth_api SLI of the git service (`{{ $labels.stage }}`
+        stage) has an apdex violating SLO
+      description: |
+        Monitors Workhorse API endpoints, running in the Git fleet, via the HTTP interface. Workhorse API requests have much tigher latency requirements, as these requests originate in GitLab-Shell and are on the critical path for authentication of Git SSH commands.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: git-main/git-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3139093701"
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"gitlab-workhorse|gitlab-workhorse-git",route="^/api/",stage="{{ $labels.stage }}",type="git"}[5m])
+          )
+        )
+      runbook: docs/git/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_apdex:ratio_6h{component="workhorse_auth_api",monitor="global",type="git"}
           < (1 - 6 * 0.002000)
@@ -1037,20 +1164,18 @@ groups:
   - alert: GitServiceWorkhorseAuthApiApdexSLOViolationRegional
     for: 2m
     annotations:
-      title: >-
-        The workhorse_auth_api SLI of the git service in region `{{ $labels.region }}` has an apdex violating
-        SLO
+      title: The workhorse_auth_api SLI of the git service in region `{{ $labels.region
+        }}` has an apdex violating SLO
       description: |
         Monitors Workhorse API endpoints, running in the Git fleet, via the HTTP interface. Workhorse API requests have much tigher latency requirements, as these requests originate in GitLab-Shell and are on the critical path for authentication of Git SSH commands.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: alerts-regional_component_slo_apdex
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/alerts-regional_component_slo_apdex?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-region={{
-        $labels.region }}&var-component={{ $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '965700560'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-regional_component_slo_apdex?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-region={{ $labels.region }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "965700560"
       grafana_variables: environment,type,stage,region,component
       promql_template_1: |
         histogram_quantile(
@@ -1062,6 +1187,7 @@ groups:
       runbook: docs/git/README.md
     labels:
       aggregation: regional_component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -1070,8 +1196,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: apdex
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -1101,19 +1227,17 @@ groups:
   - alert: GitServiceWorkhorseAuthApiErrorSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The workhorse_auth_api SLI of the git service (`{{ $labels.stage }}` stage) has an error rate
-        violating SLO
+      title: The workhorse_auth_api SLI of the git service (`{{ $labels.stage }}`
+        stage) has an error rate violating SLO
       description: |
         Monitors Workhorse API endpoints, running in the Git fleet, via the HTTP interface. Workhorse API requests have much tigher latency requirements, as these requests originate in GitLab-Shell and are on the critical path for authentication of Git SSH commands.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: git-main/git-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2715630864'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2715630864"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -1122,6 +1246,7 @@ groups:
       runbook: docs/git/README.md
     labels:
       aggregation: component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -1130,8 +1255,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -1161,9 +1286,8 @@ groups:
   - alert: GitServiceWorkhorseAuthApiErrorSLOViolationRegional
     for: 2m
     annotations:
-      title: >-
-        The workhorse_auth_api SLI of the git service in region `{{ $labels.region }}` has an error rate
-        violating SLO
+      title: The workhorse_auth_api SLI of the git service in region `{{ $labels.region
+        }}` has an error rate violating SLO
       description: |
         Monitors Workhorse API endpoints, running in the Git fleet, via the HTTP interface. Workhorse API requests have much tigher latency requirements, as these requests originate in GitLab-Shell and are on the critical path for authentication of Git SSH commands.
 
@@ -1171,12 +1295,11 @@ groups:
 
         Currently the apdex value for {{ $labels.region }} is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: alerts-regional_component_slo_error
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/alerts-regional_component_slo_error?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-region={{
-        $labels.region }}&var-component={{ $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '965700560'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-regional_component_slo_error?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-region={{ $labels.region }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "965700560"
       grafana_variables: environment,type,stage,region,component
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
@@ -1185,6 +1308,7 @@ groups:
       runbook: docs/git/README.md
     labels:
       aggregation: regional_component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -1193,8 +1317,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -1224,19 +1348,17 @@ groups:
   - alert: GitServiceWorkhorseAuthApiTrafficCessation
     for: 5m
     annotations:
-      title: >-
-        The workhorse_auth_api SLI of the git service (`{{ $labels.stage }}` stage) has not received any
-        traffic in the past 30 minutes
+      title: The workhorse_auth_api SLI of the git service (`{{ $labels.stage }}`
+        stage) has not received any traffic in the past 30 minutes
       description: |
         Monitors Workhorse API endpoints, running in the Git fleet, via the HTTP interface. Workhorse API requests have much tigher latency requirements, as these requests originate in GitLab-Shell and are on the critical path for authentication of Git SSH commands.
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: git-main/git-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '1588439617'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1588439617"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -1245,24 +1367,24 @@ groups:
       runbook: docs/git/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
-    expr: >
-      gitlab_component_ops:rate_30m{type="git", component="workhorse_auth_api", stage="main", monitor="global"}
-      == 0
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{type="git", component="workhorse_auth_api", stage="main", monitor="global"} == 0
   - alert: GitServiceWorkhorseAuthApiTrafficAbsent
     for: 30m
     annotations:
-      title: >-
-        The workhorse_auth_api SLI of the git service (`{{ $labels.stage }}` stage) has not reported any
-        traffic in the past 30 minutes
+      title: The workhorse_auth_api SLI of the git service (`{{ $labels.stage }}`
+        stage) has not reported any traffic in the past 30 minutes
       description: |
         Monitors Workhorse API endpoints, running in the Git fleet, via the HTTP interface. Workhorse API requests have much tigher latency requirements, as these requests originate in GitLab-Shell and are on the critical path for authentication of Git SSH commands.
 
@@ -1270,11 +1392,10 @@ groups:
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
       grafana_dashboard_id: git-main/git-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '1588439617'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1588439617"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -1283,15 +1404,17 @@ groups:
       runbook: docs/git/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
+      slo_alert: "no"
+      user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{type="git", component="workhorse_auth_api", stage="main", monitor="global"} offset 1h
       unless

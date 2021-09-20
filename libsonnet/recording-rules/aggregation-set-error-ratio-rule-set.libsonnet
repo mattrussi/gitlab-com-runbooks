@@ -9,10 +9,8 @@ local strings = import 'utils/strings.libsonnet';
     local targetErrorRatioMetric = targetAggregationSet.getErrorRatioMetricForBurnRate(burnRate);
     local targetOpsRateMetric = targetAggregationSet.getOpsRateMetricForBurnRate(burnRate);
     local targetErrorRateMetric = targetAggregationSet.getErrorRateMetricForBurnRate(burnRate);
-
     local targetAggregationLabels = aggregations.serialize(targetAggregationSet.labels);
     local sourceSelector = selectors.serializeHash(sourceAggregationSet.selector);
-    local aggregationFilter = targetAggregationSet.aggregationFilter;
 
     local formatConfig = {
       burnRate: burnRate,

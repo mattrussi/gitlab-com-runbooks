@@ -125,6 +125,7 @@ local indexCatalog = {
     defaultColumns: ['json.hostname', 'json.grpc.method', 'json.grpc.request.glProjectPath', 'json.grpc.code', 'json.grpc.time_ms'],
     defaultSeriesSplitField: 'json.grpc.method.keyword',
     failureFilter: [mustNot(matchFilter('json.grpc.code', 'OK')), existsFilter('json.grpc.code')],
+    slowRequestFilter: [matchFilter('json.msg', 'unary')],
     defaultLatencyField: 'json.grpc.time_ms',
     prometheusLabelMappings+: {
       fqdn: 'json.fqdn',
@@ -192,6 +193,7 @@ local indexCatalog = {
     defaultColumns: ['json.hostname', 'json.virtual_storage', 'json.grpc.method', 'json.relative_path', 'json.grpc.code', 'json.grpc.time_ms'],
     defaultSeriesSplitField: 'json.grpc.method.keyword',
     failureFilter: [mustNot(matchFilter('json.grpc.code', 'OK')), existsFilter('json.grpc.code')],
+    slowRequestFilter: [matchFilter('json.msg', 'unary')],
     defaultLatencyField: 'json.grpc.time_ms',
     latencyFieldUnitMultiplier: 1000,
   },
@@ -398,7 +400,7 @@ local buildElasticLineCountVizURL(index, filters, luceneQueries=[], splitSeries=
 
   indexCatalog[index].kibanaEndpoint + '#/visualize/create?type=line&indexPattern=' + indexCatalog[index].indexPattern + '&_a=' + rison.encode(applicationState) + globalState(timeRange);
 
-local splitDefinition(split) =
+local splitDefinition(split, orderById='1') =
   local defaults = {
     enabled: true,
     schema: 'bucket',
@@ -414,14 +416,14 @@ local splitDefinition(split) =
         missingBucketLabel: 'Missing',
         otherBucket: true,
         otherBucketLabel: 'Other',
-        orderBy: '1',
+        orderBy: orderById,
         order: 'desc',
         size: 5,
       },
     }
   else if std.isObject(split) then defaults + split;
 
-local buildElasticTableCountVizURL(index, filters, luceneQueries=[], splitSeries=false, timeRange=grafanaTimeRange) =
+local buildElasticTableCountVizURL(index, filters, luceneQueries=[], splitSeries=false, timeRange=grafanaTimeRange, extraAggs=[], orderById='1') =
   local ic = indexCatalog[index];
   local aggs =
     [
@@ -444,7 +446,7 @@ local buildElasticTableCountVizURL(index, filters, luceneQueries=[], splitSeries
             missingBucket: false,
             missingBucketLabel: 'Missing',
             order: 'desc',
-            orderBy: '1',
+            orderBy: orderById,
             otherBucket: true,
             otherBucketLabel: 'Other',
             size: 5,
@@ -453,10 +455,12 @@ local buildElasticTableCountVizURL(index, filters, luceneQueries=[], splitSeries
           type: 'terms',
         }]
       else if std.isArray(splitSeries) then
-        [splitDefinition(split) for split in splitSeries]
+        [splitDefinition(split, orderById) for split in splitSeries]
       else
         []
-    );
+    )
+    +
+    extraAggs;
 
   local applicationState = {
     filters: ic.defaultFilters + filters,
@@ -690,10 +694,11 @@ local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latency
   // Search for requests taking longer than the specified number of seconds
   buildElasticDiscoverSlowRequestSearchQueryURL(index, filters=[], luceneQueries=[], slowRequestSeconds, timeRange=grafanaTimeRange, extraColumns=[])::
     local ic = indexCatalog[index];
+    local slowRequestFilter = if std.objectHas(ic, 'slowRequestFilter') then ic.slowRequestFilter else [];
 
     buildElasticDiscoverSearchQueryURL(
       index=index,
-      filters=filters + [rangeFilter(ic.defaultLatencyField, gteValue=slowRequestSeconds * ic.latencyFieldUnitMultiplier, lteValue=null)],
+      filters=filters + slowRequestFilter + [rangeFilter(ic.defaultLatencyField, gteValue=slowRequestSeconds * ic.latencyFieldUnitMultiplier, lteValue=null)],
       timeRange=timeRange,
       sort=[[ic.defaultLatencyField, 'desc']],
       extraColumns=extraColumns

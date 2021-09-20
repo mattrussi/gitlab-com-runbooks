@@ -46,7 +46,7 @@ class UpdateStageGroupsFeatureCategories
           @logger.warn(msg)
         end
 
-        known_category_map.merge!(categories.map { |category| [category, group_key] }.to_h)
+        known_category_map.merge!(categories.to_h { |category| [category, group_key] })
 
         resulting_group_info[group_key] = {
           name: group_info['name'],

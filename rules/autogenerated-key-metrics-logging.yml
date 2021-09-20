@@ -652,72 +652,72 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: elasticsearch_indexing_cluster
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: inf
       type: logging
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: elasticsearch_indexing_index
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: inf
       type: logging
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: elasticsearch_searching_cluster
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: inf
       type: logging
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: elasticsearch_searching_index
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: inf
       type: logging
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: fluentd_log_output
-      regional_aggregation: 'no'
-      service_aggregation: 'no'
+      regional_aggregation: "no"
+      service_aggregation: "no"
       tier: inf
       type: logging
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: kibana_googlelb
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: inf
       type: logging
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: pubsub_subscriptions
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: inf
       type: logging
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: pubsub_topics
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: inf
       type: logging
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: stackdriver
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: inf
       type: logging
-    expr: '1'
+    expr: "1"

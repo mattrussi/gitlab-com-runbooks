@@ -15,6 +15,38 @@ groups:
       sum by (environment,tier,type,stage) (
         rate(cloudflare_zones_http_country_bytes_total{type="waf"}[1d])
       )
+  - record: gitlab_component_utilization:kube_node_cpu_requests_percent:1h
+    labels:
+      component: kube_node_cpu_requests
+      metrics_subsystem: utilization
+      resource_labels: type,shard
+      summaryType: aggregate
+      unit: percent
+    expr: |
+      avg by (environment,tier,type,stage,shard) (
+        sum by (environment,tier,type,stage,node) (
+          kube_pod_container_resource_requests_cpu_cores
+        )
+        / on (node) group_left(cluster,env,tier,type,stage,shard)
+        kube_node_status_allocatable:labeled{type=~"web|api|consul|git|kas|mailroom|monitoring|nginx|plantuml|registry|sidekiq|websockets|woodhouse",resource="cpu"}
+      )
+      * 100
+  - record: gitlab_component_utilization:kube_node_memory_requests_percent:1h
+    labels:
+      component: kube_node_memory_requests
+      metrics_subsystem: utilization
+      resource_labels: type,shard
+      summaryType: aggregate
+      unit: percent
+    expr: |
+      avg by (environment,tier,type,stage,shard) (
+        sum by (environment,tier,type,stage,node) (
+          kube_pod_container_resource_requests_memory_bytes
+        )
+        / on (node) group_left(cluster,env,tier,type,stage,shard)
+        kube_node_status_allocatable:labeled{type=~"web|api|consul|git|kas|mailroom|monitoring|nginx|plantuml|registry|sidekiq|websockets|woodhouse",resource="memory"}
+      )
+      * 100
   - record: gitlab_component_utilization:pg_dead_tup_rate_tuples:1h
     labels:
       component: pg_dead_tup_rate

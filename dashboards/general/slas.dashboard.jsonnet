@@ -1,14 +1,13 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
+local platformLinks = import 'gitlab-dashboards/platform_links.libsonnet';
+local metricsConfig = import 'gitlab-metrics-config.libsonnet';
 local grafanaCalHeatmap = import 'grafana-cal-heatmap-panel/panel.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
-local metricsConfig = import 'metrics-config.libsonnet';
-local platformLinks = import 'platform_links.libsonnet';
 local row = grafana.row;
 local selectors = import 'promql/selectors.libsonnet';
 local seriesOverrides = import 'grafana/series_overrides.libsonnet';
-local strings = import 'utils/strings.libsonnet';
-local thresholds = import 'thresholds.libsonnet';
+local thresholds = import 'gitlab-dashboards/thresholds.libsonnet';
 local generalServicesDashboard = import 'general-services-dashboard.libsonnet';
 
 // These charts have a very high interval factor, to create a wide trend line
@@ -29,54 +28,32 @@ local thresholdsValues = {
   ],
 };
 
-local systemWeightQueryTerm(service, selectorHash, rangeInterval) =
+// This graph shows a dynamic range: from the begining of last month to
+// yesterday. This means that error budget in minutes also changed
+// depending on $__range_ms. Since we cannot perform calculations in the
+// threshold specification of a stat-panel we don't know the the budget
+// in minutes to deduct thresholds.
+//
+// To avoid confusion, we'll show a single color as the background here.
+// https://github.com/grafana/grafana/issues/922
+local budgetMinutesColor = {
+  color: 'light-blue',
+  value: null,
+};
+
+local systemAvailabilityQuery(selectorHash, rangeInterval) =
   local defaultSelector = {
     env: { re: 'ops|$environment' },
     environment: '$environment',
     stage: 'main',
     monitor: { re: 'global|' },
-    type: service.name,
   };
 
   |||
-    avg without(type, slo) (avg_over_time(slo_observation_status{%(selector)s}[%(rangeInterval)s]) * %(serviceWeight)d)
+    avg_over_time(sla:gitlab:ratio{%(selectors)s}[%(rangeInterval)s])
   ||| % {
-    serviceWeight: service.business.SLA.overall_sla_weighting,
-    selector: selectors.serializeHash(defaultSelector + selectorHash),
+    selectors: selectors.serializeHash(defaultSelector + selectorHash),
     rangeInterval: rangeInterval,
-  };
-
-local systemAvailabilityQuery(selectorHash, rangeInterval) =
-
-  /**
-   TODO: after 2021-01-01 consider using the recording rule that we have for this:
-
-   ```
-    avg_over_time(sla:gitlab:ratio{%(selector)s}[%(rangeInterval)s)
-   ```
-
-   Unfortunately we cannot use this at present and need to rely on subqueries instead due to
-   the bug found in https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/11457.
-   This was fixed on 2020-09-28, so any SLA data forward of that date can use the recording rule.
-
-   In the mean time, we'll use this workaround:
-   */
-
-  local keyServicesWithWeights = std.filter(function(service) service.business.SLA.overall_sla_weighting > 0, generalServicesDashboard.keyServices);
-  local weightsQueryTerms = std.map(function(service) systemWeightQueryTerm(service, selectorHash, rangeInterval), keyServicesWithWeights);
-  local weightsQuery = std.join('\n+\n', weightsQueryTerms);
-  local totalWeight = std.foldl(function(memo, service) memo + service.business.SLA.overall_sla_weighting, keyServicesWithWeights, 0);
-
-  |||
-    (
-      %(weightsQuery)s
-    )
-    /
-    %(totalWeight)d
-  ||| % {
-    rangeInterval: rangeInterval,
-    weightsQuery: strings.indent(weightsQuery, 2),
-    totalWeight: totalWeight,
   };
 
 // NB: this query takes into account values recorded in Prometheus prior to
@@ -141,12 +118,6 @@ local serviceRow(service) =
       displayName=service.friendly_name,
       links=links,
     ),
-    grafanaCalHeatmap.heatmapCalendarPanel(
-      '',
-      query=serviceAvailabilityQuery({ type: service.name }, 'slo_observation_status', '1d'),
-      legendFormat='',
-      datasource='$PROMETHEUS_DS',
-    ),
     basic.slaStats(
       title='',
       query=serviceAvailabilityMillisecondsQuery({ type: service.name }, 'slo_observation_status'),
@@ -155,6 +126,14 @@ local serviceRow(service) =
       links=links,
       decimals=1,
       unit='ms',
+      colors=[budgetMinutesColor],
+      colorMode='value',
+    ),
+    grafanaCalHeatmap.heatmapCalendarPanel(
+      '',
+      query=serviceAvailabilityQuery({ type: service.name }, 'slo_observation_status', '1d'),
+      legendFormat='',
+      datasource='$PROMETHEUS_DS',
     ),
     basic.slaTimeseries(
       title='%s: SLA Trends ' % [service.friendly_name],
@@ -196,12 +175,6 @@ basic.dashboard(
       title='GitLab.com Availability',
       query=systemAvailabilityQuery({}, '$__range'),
     ),
-    grafanaCalHeatmap.heatmapCalendarPanel(
-      'Calendar',
-      query=systemAvailabilityQuery({}, '1d'),
-      legendFormat='',
-      datasource='$PROMETHEUS_DS',
-    ),
     basic.slaStats(
       title='',
       query=serviceAvailabilityMillisecondsQuery({}, 'sla:gitlab:ratio'),
@@ -209,6 +182,14 @@ basic.dashboard(
       displayName='Budget Spent',
       decimals=1,
       unit='ms',
+      colors=[budgetMinutesColor],
+      colorMode='value'
+    ),
+    grafanaCalHeatmap.heatmapCalendarPanel(
+      'Calendar',
+      query=systemAvailabilityQuery({}, '1d'),
+      legendFormat='',
+      datasource='$PROMETHEUS_DS',
     ),
     basic.slaTimeseries(
       title='Overall SLA over time period - gitlab.com',

@@ -17,6 +17,11 @@ test.suite({
     expect: "(name:'')",
   },
 
+  testStringWithQuotes: {
+    actual: rison.encode(["foo 'bar' \"baz\""]),
+    expect: "!('foo+!'bar!'+\"baz\"')",
+  },
+
   testNumber: {
     actual: rison.encode({ name: 1 }),
     expect: '(name:1)',

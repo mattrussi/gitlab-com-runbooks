@@ -13,9 +13,11 @@ local saturationTypes = [
   import 'elastic_single_node_cpu.libsonnet',
   import 'elastic_single_node_disk_space.libsonnet',
   import 'elastic_thread_pools.libsonnet',
+  import 'gitaly_total_disk_space.libsonnet',
   import 'go_memory.libsonnet',
   import 'kube_container_cpu.libsonnet',
   import 'kube_container_memory.libsonnet',
+  import 'kube_go_memory.libsonnet',
   import 'kube_hpa_desired_replicas.libsonnet',
   import 'kube_persistent_volume_claim_disk_space.libsonnet',
   import 'kube_persistent_volume_claim_inodes.libsonnet',
@@ -55,6 +57,7 @@ local saturationTypes = [
   import 'single_node_cpu.libsonnet',
   import 'single_node_puma_workers.libsonnet',
   import 'workhorse_image_scaling.libsonnet',
+  import 'gcp_quota_limit.libsonnet',
 ];
 
 std.foldl(

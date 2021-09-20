@@ -1,9 +1,16 @@
 local toolingLinkDefinition = (import './tooling_link_definition.libsonnet').toolingLinkDefinition({ tool:: 'stackdriver', type:: 'log' });
 local url = import 'github.com/jsonnet-libs/xtd/url.libsonnet';
 
+local safeQuotedString(string) =
+  {
+    safeQuotedString: string,
+  };
+
 local serializeQueryHashValue(value) =
   if std.isString(value) then
     '"%s"' % [value]
+  else if std.isObject(value) && std.objectHas(value, 'safeQuotedString') then
+    value.safeQuotedString
   else
     value;
 
@@ -46,6 +53,10 @@ local serializeQueryHashPair(key, value) =
     serializeQueryHashItem(key, '<', value.lt)
   else if std.objectHas(value, 'lte') then
     serializeQueryHashItem(key, '<=', value.lte)
+  else if std.objectHas(value, 'contains') then
+    serializeQueryHashItem(key, ':', value.contains)
+  else if std.objectHas(value, 'exists') then
+    serializeQueryHashItem(key, ':', safeQuotedString('*'), prefix=if value.exists then '' else '-')
   else if std.objectHas(value, 'one_of') then
     serializeOneOf(key, value.one_of)
   else

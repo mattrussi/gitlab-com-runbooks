@@ -12,33 +12,41 @@ local errorBudgetRatio(slaTarget, range, groupSelectors, aggregationLabels) =
       # Number of successful measurements
       sum by (%(aggregations)s)(
         # Reuest with satisfactory apdex
-        sum_over_time(
-          gitlab:component:stage_group:execution:apdex:success:rate_1h{%(selectorHash)s}[%(range)s]
-        ) or vector(0)
-        +
-        # Requests without error
-        (
+        label_replace(
           sum_over_time(
-            gitlab:component:stage_group:execution:ops:rate_1h{%(selectorHash)s}[%(range)s]
+            gitlab:component:stage_group:execution:apdex:success:rate_1h{%(selectorHash)s}[%(range)s]
+          ), 'sli_kind', 'apdex', '', '')
+        or
+        # Requests without error
+        label_replace(
+          sum by(%(aggregations)s) (
+            sum_over_time(
+              gitlab:component:stage_group:execution:ops:rate_1h{%(selectorHash)s}[%(range)s]
+            )
           )
           -
-          sum_over_time(
-            gitlab:component:stage_group:execution:error:rate_1h{%(selectorHash)s}[%(range)s]
-          ) or vector(0)
-        )
+          sum by(%(aggregations)s) (
+            sum_over_time(
+              gitlab:component:stage_group:execution:error:rate_1h{%(selectorHash)s}[%(range)s]
+            )
+          ), 'sli_kind', 'error', '', '')
       )
       /
       # Number of measurements
       sum by (%(aggregations)s)(
         # Apdex Measurements
-        sum_over_time(
-          gitlab:component:stage_group:execution:apdex:weight:score_1h{%(selectorHash)s}[%(range)s]
-        ) or vector(0)
-        +
+        label_replace(
+          sum_over_time(
+            gitlab:component:stage_group:execution:apdex:weight:score_1h{%(selectorHash)s}[%(range)s]
+          ),
+        'sli_kind', 'apdex', '', '')
+        or
         # Requests
-        sum_over_time(
-          gitlab:component:stage_group:execution:ops:rate_1h{%(selectorHash)s}[%(range)s]
-        )
+        label_replace(
+          sum_over_time(
+            gitlab:component:stage_group:execution:ops:rate_1h{%(selectorHash)s}[%(range)s]
+          ),
+        'sli_kind', 'error', '', '')
       ),
     1)
   ||| % {
@@ -100,16 +108,34 @@ local errorBudgetViolationRate(range, groupSelectors, aggregationLabels) =
       )
     )
   ||| % partsInterpolation;
+
+  // We're calculating an absolute number of failures from a failure rate
+  // this means we don't have an exact precision, but only a request per second
+  // number that we turn into an absolute number. To display a number of requests
+  // over multiple days, the decimals don't matter anymore, so we're rounding them
+  // up using `ceil`.
+  //
+  // The per-second-rates are sampled every minute, we assume that we continue
+  // to receive the same number of requests per second until the next sample.
+  // So we multiply the rate by the number of samples we don't have.
+  // For example: the last sample said we were processing 2RPS, next time we'll
+  // take a sample will be in 60s, so in that time we assume to process
+  // 60 * 2 = 120 requests.
+  // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1123
   |||
-    sum by (%(aggregationLabelsWithViolationType)s) (
-      %(apdexViolationRate)s
-      or
-      %(errorRate)s
+    ceil(
+      (
+        sum by (%(aggregationLabelsWithViolationType)s) (
+          %(apdexViolationRate)s
+          or
+          %(errorRate)s
+        ) > 0
+      ) * 60
     )
   ||| % {
     aggregationLabelsWithViolationType: aggregations.join(aggregationLabels),
-    apdexViolationRate: strings.indent(labels.addStaticLabel('violation_type', 'apdex', apdexViolationRate), 2),
-    errorRate: strings.indent(labels.addStaticLabel('violation_type', 'error', errorRate), 2),
+    apdexViolationRate: strings.indent(labels.addStaticLabel('violation_type', 'apdex', apdexViolationRate), 6),
+    errorRate: strings.indent(labels.addStaticLabel('violation_type', 'error', errorRate), 6),
   };
 
 {

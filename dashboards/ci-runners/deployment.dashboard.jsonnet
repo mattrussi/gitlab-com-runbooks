@@ -1,13 +1,10 @@
-local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
-local template = grafana.template;
-local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 
 local dashboardFilters = import 'stage-groups/verify-runner/dashboard_filters.libsonnet';
 local dashboardHelpers = import 'stage-groups/verify-runner/dashboard_helpers.libsonnet';
+local deploymentDetails = import 'stage-groups/verify-runner/deployment_details.libsonnet';
 local jobGraphs = import 'stage-groups/verify-runner/job_graphs.libsonnet';
 local jobQueueGraphs = import 'stage-groups/verify-runner/job_queue_graphs.libsonnet';
-local deploymentDetails = import 'stage-groups/verify-runner/deployment_details.libsonnet';
 
 dashboardHelpers.dashboard(
   'Deployment overview',

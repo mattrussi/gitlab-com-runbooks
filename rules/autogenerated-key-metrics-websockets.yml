@@ -662,24 +662,24 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: loadbalancer
-      regional_aggregation: 'no'
-      service_aggregation: 'no'
+      regional_aggregation: "no"
+      service_aggregation: "no"
       tier: sv
       type: websockets
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: puma
-      regional_aggregation: 'yes'
-      service_aggregation: 'yes'
+      regional_aggregation: "yes"
+      service_aggregation: "yes"
       tier: sv
       type: websockets
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: workhorse
-      regional_aggregation: 'yes'
-      service_aggregation: 'yes'
+      regional_aggregation: "yes"
+      service_aggregation: "yes"
       tier: sv
       type: websockets
-    expr: '1'
+    expr: "1"

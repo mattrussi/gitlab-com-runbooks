@@ -4,9 +4,14 @@ local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local haproxyComponents = import './lib/haproxy_components.libsonnet';
 
+local baseSelector = { type: 'web-pages' };
+
 metricsCatalog.serviceDefinition({
   type: 'web-pages',
   tier: 'sv',
+
+  tags: ['golang'],
+
   contractualThresholds: {
     apdexRatio: 0.95,
     errorRatio: 0.05,
@@ -48,14 +53,12 @@ metricsCatalog.serviceDefinition({
       description: |||
         Aggregation of most web requests into the GitLab Pages process.
       |||,
-      // 1 second satisfactory, 10 second tolerable thresholds are
-      // very poor for what is essentially a static site server
-      // we should investigate the poor performance
+      // GitLab Pages sometimes serves very large files which takes some reasonable time
+      // we have stricter server_headers SLI, so this threshold can be set higher
       apdex: histogramApdex(
         histogram='gitlab_pages_http_request_duration_seconds_bucket',
-        selector='type="web-pages"',
-        satisfiedThreshold=1,
-        toleratedThreshold=10
+        selector=baseSelector,
+        satisfiedThreshold=10
       ),
 
       requestRate: rateMetric(
@@ -75,6 +78,30 @@ metricsCatalog.serviceDefinition({
         toolingLinks.sentry(slug='gitlab/gitlab-pages'),
         toolingLinks.kibana(title='GitLab Pages', index='pages'),
       ],
+    },
+
+    server_headers: {
+      userImpacting: true,
+      featureCategory: 'pages',
+      description: |||
+        Response time can be slow due to large files served by pages.
+        This SLI tracks only time needed to finish writing headers.
+        It includes API requests to GitLab instance, scanning ZIP archive
+        for file entries, processing redirects, etc.
+        We use it as stricter SLI for pages as it's independent of served file size
+      |||,
+      apdex: histogramApdex(
+        histogram='gitlab_pages_http_time_to_write_header_seconds_bucket',
+        selector=baseSelector,
+        satisfiedThreshold=0.5
+      ),
+
+      requestRate: rateMetric(
+        counter='gitlab_pages_http_time_to_write_header_seconds_count',
+        selector=baseSelector
+      ),
+
+      significantLabels: ['fqdn'],
     },
   },
 })

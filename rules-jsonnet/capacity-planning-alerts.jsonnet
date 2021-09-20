@@ -1,7 +1,4 @@
 local alerts = import 'alerts/alerts.libsonnet';
-local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libsonnet';
-local aggregations = import 'promql/aggregations.libsonnet';
-local selectors = import 'promql/selectors.libsonnet';
 
 local rules = {
   groups: [

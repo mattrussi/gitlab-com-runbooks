@@ -52,4 +52,4 @@ def reorder_array(array)
 end
 
 doc = YAML.safe_load(ARGF.read)
-STDOUT.print reorder(doc).to_yaml(line_width: 100).gsub("---\n", '')
+$stdout.print reorder(doc).to_yaml(line_width: 100).gsub("---\n", '')

@@ -18,6 +18,7 @@
 ## Troubleshooting Pointers
 
 * [../cloudflare/managing-traffic.md](../cloudflare/managing-traffic.md)
+* [../consul/interaction.md](../consul/interaction.md)
 * [../frontend/ban-netblocks-on-haproxy.md](../frontend/ban-netblocks-on-haproxy.md)
 * [../frontend/haproxy.md](../frontend/haproxy.md)
 * [../kube/k8s-operations.md](../kube/k8s-operations.md)

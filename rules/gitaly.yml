@@ -20,23 +20,6 @@ groups:
         rate(grpc_server_handled_total{job="gitaly",grpc_code!="OK"}[1m])
       )
 
-  # Deprecated in favour of component/node aggregated SLO monitoring
-  # for the gitaly service
-  # Remove this alert after 15 August 2020
-  # See https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10934
-  - alert: GitalyInstanceErrorRateTooHigh
-    expr: gitaly:grpc_server_handled_total:instance_error_rate1m > 5
-    for: 5m
-    labels:
-      team: gitaly
-      severity: s4
-      alert_type: cause
-    annotations:
-      description: Gitaly error rate for the last 5 minutes is over 5 on {{$labels.instance}}.
-        Check Gitaly logs and consider disabling it on that host.
-      runbook: docs/gitaly/gitaly-error-rate.md
-      title: 'Gitaly error rate is too high: {{$value | printf "%.2f" }}'
-
 - name: Gitaly grpc server handling buckets
   interval: 1m
   rules:

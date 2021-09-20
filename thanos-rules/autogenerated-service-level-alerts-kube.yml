@@ -8,9 +8,8 @@ groups:
   - alert: KubeServiceApiserverTrafficCessation
     for: 5m
     annotations:
-      title: >-
-        The apiserver SLI of the kube service (`{{ $labels.stage }}` stage) has not received any traffic
-        in the past 30 minutes
+      title: The apiserver SLI of the kube service (`{{ $labels.stage }}` stage) has
+        not received any traffic in the past 30 minutes
       description: |
         The Kubernetes API server validates and configures data for the api objects which include pods, services, and others. The API Server services REST operations and provides the frontend to the cluster's shared state through which all other components interact.
 
@@ -18,11 +17,10 @@ groups:
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: kube-main/kube-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/kube-main/kube-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/kube-main/kube-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '3184144040'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3184144040"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -31,24 +29,24 @@ groups:
       runbook: docs/kube/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'no'
-    expr: >
-      gitlab_component_ops:rate_30m{type="kube", component="apiserver", stage="main", monitor="global"}
-      == 0
+      slo_alert: "no"
+      user_impacting: "no"
+    expr: |
+      gitlab_component_ops:rate_30m{type="kube", component="apiserver", stage="main", monitor="global"} == 0
   - alert: KubeServiceApiserverTrafficAbsent
     for: 30m
     annotations:
-      title: >-
-        The apiserver SLI of the kube service (`{{ $labels.stage }}` stage) has not reported any traffic
-        in the past 30 minutes
+      title: The apiserver SLI of the kube service (`{{ $labels.stage }}` stage) has
+        not reported any traffic in the past 30 minutes
       description: |
         The Kubernetes API server validates and configures data for the api objects which include pods, services, and others. The API Server services REST operations and provides the frontend to the cluster's shared state through which all other components interact.
 
@@ -58,11 +56,10 @@ groups:
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
       grafana_dashboard_id: kube-main/kube-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/kube-main/kube-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/kube-main/kube-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '3184144040'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3184144040"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -71,15 +68,17 @@ groups:
       runbook: docs/kube/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'no'
+      slo_alert: "no"
+      user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_5m{type="kube", component="apiserver", stage="main", monitor="global"} offset 1h
       unless

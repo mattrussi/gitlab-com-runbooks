@@ -1,11 +1,8 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
+local platformLinks = import 'gitlab-dashboards/platform_links.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
-local templates = import 'grafana/templates.libsonnet';
-local platformLinks = import 'platform_links.libsonnet';
-local serviceCatalog = import 'service_catalog.libsonnet';
-local dashboard = grafana.dashboard;
 local graphPanel = grafana.graphPanel;
 local link = grafana.link;
 
@@ -49,7 +46,7 @@ basic.dashboard(
 .addPanels(
   layout.grid([
     balanceChart(
-      title='Balacing',
+      title='Balancing',
       description='Balancing Ranking. Equal is better.',
       format='short',
       query=|||
@@ -170,7 +167,7 @@ basic.dashboard(
   ], cols=2, rowHeight=10, startRow=1000)
 )
 + {
-  links+: platformLinks.triage + serviceCatalog.getServiceLinks('gitaly') + platformLinks.services + [
+  links+: platformLinks.triage + platformLinks.services + [
     link.dashboards('ELK: Repository Utilization Report for Gitaly Rebalancing', '', type='link', keepTime=false, targetBlank=true, url='https://log.gprd.gitlab.net/goto/34aa59a70ff732505a88bf94d6e8beb1'),
   ],
 }

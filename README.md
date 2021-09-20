@@ -340,8 +340,7 @@ Selected logging documents and resources:
 ### Security
 
 * [Working with the CloudFlare WAF/CDN](howto/externalvendors/cloudflare.md)
-* [Uptycs osquery](docs/uncategorized/uptycs_osquery.md)
-* [Uptycs osquery troubleshooting](docs/uncategorized/uptycs_osqueryd.md)
+* [OSQuery](docs/uncategorized/osquery.md)
 
 ### Other
 * [Setup oauth2-proxy protection for web based application](docs/uncategorized/setup-oauth2-proxy-protected-application.md)
@@ -434,15 +433,14 @@ You can install most of them using `asdf` tool.
 
 ### Manage your dependencies using `asdf`
 
-Our `asdf` toolset uses the following plugins:
+Before using `asdf` for the first time, install all the plugins by running:
 
-* `golang`: `asdf plugin add golang`
-* `ruby`: `asdf plugin add ruby`
-* `go-jsonnet`: `asdf plugin add go-jsonnet`.
-* `jsonnet-bundler`: `asdf plugin add jb`.
+```console
+./scripts/install-asdf-plugins.sh
+```
 
-Once you have installed these plugins, run the following command to install the
-required versions.
+Once you have installed the plugins, run the following command to install the
+required versions of each tool.
 
 ```console
 $ asdf install
@@ -458,6 +456,19 @@ ruby           2.6.5    (set by ~/runbooks/.ruby-version)
 
 You don't need to use `asdf`, but in such case you will need install all
 dependencies manually and track their versions.
+
+### Keeping Versions in Sync between GitLab-CI and `asdf`.
+
+`asdf` (and `.tool-versions` generally) is the SSOT for tool versions used in this repository.
+To keep `.tool-versions` in sync with `.gitlab-ci.yml`, there is a helper script,
+`./scripts/update-asdf-version-variables`.
+
+#### Process for updating a tool version
+
+1. Update the version in `.tool-versions`
+1. Run `asdf install` to install latest version
+1. Run `./scripts/update-asdf-version-variables` to update a refresh of the `.gitlab-ci-asdf-versions.yml` file
+1. Commit the changes
 
 ### Go, Jsonnet
 
@@ -481,11 +492,117 @@ brew install go-jsonnet
 Or if you're using `asdf`, you can use [an asdf
 plugin](https://gitlab.com/craigfurman/asdf-go-jsonnet).
 
+### `jsonnet-tool`
+
+[`jsonnet-tool`](https://gitlab.com/gitlab-com/gl-infra/jsonnet-tool) is a small home-grown tool for
+generating configuration from Jsonnet files. The primary reason we use it is because it is much faster
+than the bash scripts we used to use for the task. Some tasks have gone from 20+ minutes to 2.5 minutes.
+
+We recommend using asdf to manage `jsonnet-tool`. The plugin can be installed with:
+
+```console
+# Install the plugin once
+asdf plugin add jsonnet-tool https://gitlab.com/gitlab-com/gl-infra/asdf-jsonnet-tool.git
+# Install the correct version of jsonnet-tool from `.tool-versions`
+asdf install
+````
+
 ### Ruby
 
 Additional to `adsf`, many developers use `rbenv`, `rvm` or other tooling, so, for convenience, we maintain
 the standard `.ruby-version` file for the Ruby version. ASDF needs to be configured using
 the `legacy_version_file = yes` setting described in the [parent section](#tool-versioning).
+
+## Test jsonnet files
+
+There are 2 approaches to write a test for a jsonnet file:
+- Use [`jsonnetunit`](https://github.com/yugui/jsonnetunit). This method is
+  simple and straight-forward. This approach is perfect for writing unit tests
+  that asserts the output of a particular method. The downside is that it
+  doesn't support jsonnet assertion and inspecting complicated result is not
+  trivial.
+- When a jsonnet file becomes more complicated, consists of multiple
+  conditional branches and chains of methods, we should think of writing
+  integration tests for it instead. Jsonnet Unit doesn't serve this purpose
+  very well. Instead, let's use Rspec. Note that we probably don't want to use
+  RSpec for testing small jsonnet functions, the idea would more be for testing
+  error cases or complicated scenarios where we need to be more expressive
+  about the output we expect
+
+We have two custom matchers for writing integration tests:
+
+```ruby
+expect(
+  <<~JSONNET
+  local grafana = import 'toolinglinks/grafana.libsonnet';
+
+  grafana.grafanaUid("bare-file.jsonnet")
+JSONNET
+).to reject_jsonnet(/invalid dashboard path/i)
+```
+
+```ruby
+expect(
+  <<~JSONNET
+  local grafana = import 'toolinglinks/grafana.libsonnet';
+
+  grafana.grafanaUid("stage-groups/code_review.dashboard.jsonnet")
+  JSONNET
+).to render_jsonnet('stage-groups-code_review')
+
+# Or a more complicated scenario
+
+expect(
+  <<~JSONNET
+  local stageGroupDashboards = import 'stage-groups/stage-group-dashboards.libsonnet';
+
+  stageGroupDashboards.dashboard('geo').stageGroupDashboardTrailer()
+  JSONNET
+).to render_jsonnet { |template|
+  expect(template['title']).to eql('Group dashboard: enablement (Geo)')
+
+  expect(template['links']).to match([
+    a_hash_including('title' => 'API Detail', 'type' => "dashboards", 'tags' => "type:api"),
+    a_hash_including('title' => 'Web Detail', 'type' => "dashboards", 'tags' => "type:web"),
+    a_hash_including('title' => 'Git Detail', 'type' => "dashboards", 'tags' => "type:git")
+  ])
+}
+
+# Or, if you are into matchers
+
+expect(
+  <<~JSONNET
+  local stageGroupDashboards = import 'stage-groups/stage-group-dashboards.libsonnet';
+
+  stageGroupDashboards.dashboard('geo').stageGroupDashboardTrailer()
+  JSONNET
+).to render_jsonnet(
+  a_hash_including(
+    'title' => eql('Group dashboard: enablement (Geo)'),
+    'links' => match([
+      a_hash_including('title' => 'API Detail', 'type' => "dashboards", 'tags' => "type:api"),
+      a_hash_including('title' => 'Web Detail', 'type' => "dashboards", 'tags' => "type:web"),
+      a_hash_including('title' => 'Git Detail', 'type' => "dashboards", 'tags' => "type:git")
+    ])
+  )
+)
+```
+
+### Location of test files
+
+- JsonnetUnit tests must stay in the same directory and have the same name as the jsonnet file being tested but ending in `_test.jsonnet`. Some examples:
+  + `services/stages.libsonnet`  -> `services/stages_test.jsonnet`
+  + `libsonnet/toolinglinks/sentry.libsonnet`  -> `libsonnet/toolinglinks/sentry_test.jsonnet`
+
+- RSpec tests replicates the directory structure of the Jsonnet files inside `spec` directory and must end in `_spec.rb` suffixes. Some example:
+  + `libsonnet/toolinglinks/grafana.libsonnet` -> `spec/libsonnet/toolinglinks/grafana_spec.rb`
+  + `dashboards/stage-groups/stage-group-dashboards.libsonnet` -> `spec/dashboards/stage-groups/stage-group-dashboards_spec.rb`
+
+### How to run tests?
+
+- Run the full Jsonnet test suite in your local environment with `make test-jsonnet && bundle exec rspec`
+- Run a particular Jsonnet unit test file with `scripts/jsonnet_test.sh periodic-thanos-queries/periodic-query_test.jsonnet`
+- Run a particular Jsonnet integration test file with `bundle exec rspec spec/libsonnet/toolinglinks/grafana_spec.rb`
 
 ## Contributing
 

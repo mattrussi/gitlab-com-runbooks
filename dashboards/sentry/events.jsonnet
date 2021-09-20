@@ -1,10 +1,7 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
-local dashboard = grafana.dashboard;
-local templates = import 'grafana/templates.libsonnet';
-local layout = import 'grafana/layout.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
+local layout = import 'grafana/layout.libsonnet';
 local row = grafana.row;
-local text = grafana.text;
 
 basic.dashboard(
   'Events',

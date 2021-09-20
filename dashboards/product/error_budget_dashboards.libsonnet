@@ -1,10 +1,7 @@
-local stages = import '../../services/stages.libsonnet';
-local stageGroupDashboards = import '../stage-groups/stage-group-dashboards.libsonnet';
-local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local prebuiltTemplates = import 'grafana/templates.libsonnet';
-local budgetUtils = import 'stage-groups/error-budget/utils.libsonnet';
+local stages = import 'service-catalog/stages.libsonnet';
 local errorBudget = import 'stage-groups/error_budget.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 

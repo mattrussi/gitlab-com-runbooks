@@ -52,6 +52,42 @@ groups:
           gitlab_component_ops:rate{component="apiserver",stage="main",tier="inf",type="kube"}
         )
       )
+  - record: gitlab_component_ops:rate
+    labels:
+      component: cluster_scaleups
+      stage: main
+      tier: inf
+      type: kube
+    expr: |
+      sum by (environment) (
+        sum by (environment) (
+          avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_scaleup_decisions[1m])
+        )
+        or
+        0 * group by (environment) (
+          avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_scaleup_decisions[6h])
+        )
+      )
+  - record: gitlab_component_errors:rate
+    labels:
+      component: cluster_scaleups
+      stage: main
+      tier: inf
+      type: kube
+    expr: |
+      (
+        sum by (environment) (
+          sum by (environment) (
+            avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_errors[1m])
+          )
+        )
+      )
+      or
+      (
+        0 * group by(environment) (
+          gitlab_component_ops:rate{component="cluster_scaleups",stage="main",tier="inf",type="kube"}
+        )
+      )
 - name: 'Component-Level SLIs: kube - 5m burn-rate'
   interval: 1m
   rules:
@@ -101,6 +137,42 @@ groups:
       (
         0 * group by(environment) (
           gitlab_component_ops:rate_5m{component="apiserver",stage="main",tier="inf",type="kube"}
+        )
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: cluster_scaleups
+      stage: main
+      tier: inf
+      type: kube
+    expr: |
+      sum by (environment) (
+        sum by (environment) (
+          avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_scaleup_decisions[5m])
+        )
+        or
+        0 * group by (environment) (
+          avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_scaleup_decisions[6h])
+        )
+      )
+  - record: gitlab_component_errors:rate_5m
+    labels:
+      component: cluster_scaleups
+      stage: main
+      tier: inf
+      type: kube
+    expr: |
+      (
+        sum by (environment) (
+          sum by (environment) (
+            avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_errors[5m])
+          )
+        )
+      )
+      or
+      (
+        0 * group by(environment) (
+          gitlab_component_ops:rate_5m{component="cluster_scaleups",stage="main",tier="inf",type="kube"}
         )
       )
 - name: 'Component-Level SLIs: kube - 30m burn-rate'
@@ -154,6 +226,42 @@ groups:
           gitlab_component_ops:rate_30m{component="apiserver",stage="main",tier="inf",type="kube"}
         )
       )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: cluster_scaleups
+      stage: main
+      tier: inf
+      type: kube
+    expr: |
+      sum by (environment) (
+        sum by (environment) (
+          avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_scaleup_decisions[30m])
+        )
+        or
+        0 * group by (environment) (
+          avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_scaleup_decisions[6h])
+        )
+      )
+  - record: gitlab_component_errors:rate_30m
+    labels:
+      component: cluster_scaleups
+      stage: main
+      tier: inf
+      type: kube
+    expr: |
+      (
+        sum by (environment) (
+          sum by (environment) (
+            avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_errors[30m])
+          )
+        )
+      )
+      or
+      (
+        0 * group by(environment) (
+          gitlab_component_ops:rate_30m{component="cluster_scaleups",stage="main",tier="inf",type="kube"}
+        )
+      )
 - name: 'Component-Level SLIs: kube - 1h burn-rate'
   interval: 1m
   rules:
@@ -203,6 +311,42 @@ groups:
       (
         0 * group by(environment) (
           gitlab_component_ops:rate_1h{component="apiserver",stage="main",tier="inf",type="kube"}
+        )
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: cluster_scaleups
+      stage: main
+      tier: inf
+      type: kube
+    expr: |
+      sum by (environment) (
+        sum by (environment) (
+          avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_scaleup_decisions[1h])
+        )
+        or
+        0 * group by (environment) (
+          avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_scaleup_decisions[6h])
+        )
+      )
+  - record: gitlab_component_errors:rate_1h
+    labels:
+      component: cluster_scaleups
+      stage: main
+      tier: inf
+      type: kube
+    expr: |
+      (
+        sum by (environment) (
+          sum by (environment) (
+            avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_errors[1h])
+          )
+        )
+      )
+      or
+      (
+        0 * group by(environment) (
+          gitlab_component_ops:rate_1h{component="cluster_scaleups",stage="main",tier="inf",type="kube"}
         )
       )
 - name: 'Component-Level SLIs: kube - 6h burn-rate'
@@ -256,14 +400,58 @@ groups:
           gitlab_component_ops:rate_6h{component="apiserver",stage="main",tier="inf",type="kube"}
         )
       )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: cluster_scaleups
+      stage: main
+      tier: inf
+      type: kube
+    expr: |
+      sum by (environment) (
+        sum by (environment) (
+          avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_scaleup_decisions[6h])
+        )
+        or
+        0 * group by (environment) (
+          avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_scaleup_decisions[6h])
+        )
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: cluster_scaleups
+      stage: main
+      tier: inf
+      type: kube
+    expr: |
+      (
+        sum by (environment) (
+          sum by (environment) (
+            avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_errors[6h])
+          )
+        )
+      )
+      or
+      (
+        0 * group by(environment) (
+          gitlab_component_ops:rate_6h{component="cluster_scaleups",stage="main",tier="inf",type="kube"}
+        )
+      )
 - name: 'Component mapping: kube'
   interval: 1m
   rules:
   - record: gitlab_component_service:mapping
     labels:
       component: apiserver
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: inf
       type: kube
-    expr: '1'
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: cluster_scaleups
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: inf
+      type: kube
+    expr: "1"

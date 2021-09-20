@@ -1,12 +1,8 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
+local platformLinks = import 'gitlab-dashboards/platform_links.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
-local templates = import 'grafana/templates.libsonnet';
-local platformLinks = import 'platform_links.libsonnet';
-local dashboard = grafana.dashboard;
 local row = grafana.row;
-local template = grafana.template;
-local template = grafana.template;
 local graphPanel = grafana.graphPanel;
 local promQuery = import 'grafana/prom_query.libsonnet';
 

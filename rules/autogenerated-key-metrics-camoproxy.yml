@@ -286,7 +286,7 @@ groups:
       component: server
       tier: sv
       type: camoproxy
-      upscale_source: 'yes'
+      upscale_source: "yes"
     expr: |
       (
         sum by (environment,stage) (
@@ -304,7 +304,7 @@ groups:
       component: server
       tier: sv
       type: camoproxy
-      upscale_source: 'yes'
+      upscale_source: "yes"
     expr: |
       sum by (environment,stage) (
         rate(camo_response_duration_seconds_bucket{le="+Inf"}[1h])
@@ -314,7 +314,7 @@ groups:
       component: server
       tier: sv
       type: camoproxy
-      upscale_source: 'yes'
+      upscale_source: "yes"
     expr: |
       sum by (environment,stage) (
         rate(camo_response_duration_seconds_bucket{le="+Inf"}[1h])
@@ -324,7 +324,7 @@ groups:
       component: server
       tier: sv
       type: camoproxy
-      upscale_source: 'yes'
+      upscale_source: "yes"
     expr: |
       (
         sum by (environment,stage) (
@@ -374,16 +374,16 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: loadbalancer
-      regional_aggregation: 'no'
-      service_aggregation: 'no'
+      regional_aggregation: "no"
+      service_aggregation: "no"
       tier: sv
       type: camoproxy
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: server
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: sv
       type: camoproxy
-    expr: '1'
+    expr: "1"

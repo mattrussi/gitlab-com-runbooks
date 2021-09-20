@@ -40,6 +40,9 @@
 * [../pgbouncer/pgbouncer-saturation.md](../pgbouncer/pgbouncer-saturation.md)
 * [../pgbouncer/service-pgbouncer.md](../pgbouncer/service-pgbouncer.md)
 * [../pubsub/pubsub-queing.md](../pubsub/pubsub-queing.md)
+* [../tutorials/example_tutorial_template.md](../tutorials/example_tutorial_template.md)
+* [../tutorials/overview_life_of_a_git_request.md](../tutorials/overview_life_of_a_git_request.md)
+* [../tutorials/overview_life_of_a_web_request.md](../tutorials/overview_life_of_a_web_request.md)
 * [../uncategorized/access-azure-test-subscription.md](../uncategorized/access-azure-test-subscription.md)
 * [../uncategorized/access-gcp-hosts.md](../uncategorized/access-gcp-hosts.md)
 * [../uncategorized/camoproxy.md](../uncategorized/camoproxy.md)
@@ -133,9 +136,9 @@ There are many entries missing from this list:
 | puma.stderr                   | /var/log/gitlab/puma/puma_stderr.log             | line regex       | pubsub-puma-inf         |
 | puma.stdout                   | /var/log/gitlab/puma/puma_stdout.log             | line regex       | pubsub-puma-inf         |
 | unstructured.production       | gitlab-rails/production.log                      | lines            | pubsub-unstructured-inf |
-| sidekiq                       | /var/log/gitlab/sidekiq-cluster/current          | JSON             | pubsub-sidekiq-inf      |
+| sidekiq                       | n/a                                              | JSON             | pubsub-sidekiq-inf      |
 | haproxy                       | /var/log/haproxy.log                             | syslog           | pubsub-haproxy-inf      |
-| nginx.access                  | /var/log/gitlab/nginx/gitlab\_access.log         | nginx            | pubsub-nginx-inf        |
+| nginx.error                   | n/a                                              | unstructured     | StackDriver             |
 | registry                      | n/a                                              | mix (lines/json) | pubsub-gke-inf          |
 | system.auth                   | /var/log/auth.log                                | syslog           | pubsub-system-inf       |
 | system.syslog                 | /var/log/syslog                                  | syslog           | pubsub-system-inf       |
@@ -383,7 +386,7 @@ Deployment: https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfile
 
 ### Historical notes
 
-haproxy logs and nginx logs are not sent to ElasticStack because it was overwhelming our cluster. Currently, these logs are only available through BigQuery.
+haproxy logs and nginx logs are not sent to ElasticStack because it was overwhelming our cluster. Currently, only HAProxy logs are only available through BigQuery.  NGINX logs via STDERR on Kubernetes can be found in StackDriver.  NGINX Access logs are completely ignored.
 
 Design document for migration to ES7: https://about.gitlab.com/handbook/engineering/infrastructure/design/logging-upgrade/
 

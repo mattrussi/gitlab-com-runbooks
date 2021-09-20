@@ -65,5 +65,22 @@ test.suite({
       b=("1" OR "2" OR "3")
     |||),
   },
-
+  testContains: {
+    actual: stackdriverLogs.serializeQueryHash({
+      a: { contains: ['sheep'] },
+    }),
+    expect: strings.chomp(|||
+      a:"sheep"
+    |||),
+  },
+  testExists: {
+    actual: stackdriverLogs.serializeQueryHash({
+      a: { exists: true },
+      b: { exists: false },
+    }),
+    expect: strings.chomp(|||
+      a:*
+      -b:*
+    |||),
+  },
 })

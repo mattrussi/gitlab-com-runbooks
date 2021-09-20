@@ -10,6 +10,9 @@ local defaultRegistrySLIProperties = registryHelpers.defaultRegistrySLIPropertie
 metricsCatalog.serviceDefinition({
   type: 'registry',
   tier: 'sv',
+
+  tags: ['golang'],
+
   contractualThresholds: {
     apdexRatio: 0.9,
     errorRatio: 0.005,
@@ -81,7 +84,7 @@ metricsCatalog.serviceDefinition({
         }
       ),
 
-      significantLabels: ['route', 'method'],
+      significantLabels: ['route', 'method', 'migration_path'],
 
       toolingLinks: [
         toolingLinks.gkeDeployment('gitlab-registry', type='registry', containerName='registry'),
@@ -107,7 +110,7 @@ metricsCatalog.serviceDefinition({
         counter='registry_storage_action_seconds_count',
       ),
 
-      significantLabels: ['action'],
+      significantLabels: ['action', 'migration_path'],
     },
 
     database: {

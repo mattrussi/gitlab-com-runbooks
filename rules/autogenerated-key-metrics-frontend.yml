@@ -762,24 +762,24 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: cnyHttpServices
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: lb
       type: frontend
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: mainHttpServices
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: lb
       type: frontend
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: sshServices
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: lb
       type: frontend
-    expr: '1'
+    expr: "1"

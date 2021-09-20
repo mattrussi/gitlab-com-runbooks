@@ -1,7 +1,9 @@
 # Set up bastions for Release managers
 
+:warning: **This will soon be superseded via [Teleport](../Teleport/Connect_to_Rails_Console_via_Teleport.md)** :warning:
+
 All SSH commands need to be proxied trough one of the bastion
-hosts. As part of the release manager onboarding, you should already
+hosts. As part of the release manager on-boarding, you should already
 have provided your SSH key to the infrastructure team, and they should
 have added that key to the required hosts.
 
@@ -36,17 +38,17 @@ Host *.gitlab-production.internal
 ```
 
 If everything is configured correctly, you should be able to SSH into
-different nodes, you could try that out by SSH'ing into a sidekiq
+different nodes, you could try that out by SSH'ing into a console
 node:
 
 For staging:
 
 ```
-ssh sidekiq-besteffort-01-sv-gstg.c.gitlab-staging-1.internal
+ssh console-01-sv-gstg.c.gitlab-staging-1.internal
 ```
 
 For production:
 
 ```
-ssh sidekiq-besteffort-01-sv-gprd.c.gitlab-production.internal
+ssh console-01-sv-gprd.c.gitlab-production.internal
 ```

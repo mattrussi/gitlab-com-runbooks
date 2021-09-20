@@ -1,18 +1,14 @@
-local stages = import '../../services/stages.libsonnet';
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
+local stages = (import 'service-catalog/stages.libsonnet');
 local template = grafana.template;
 local prebuiltTemplates = import 'grafana/templates.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
-local platformLinks = import '../platform_links.libsonnet';
-local singleMetricRow = import 'key-metric-panels/single-metric-row.libsonnet';
-local aggregationSets = import '../../metrics-catalog/aggregation-sets.libsonnet';
-local metricsCatalog = import '../../metrics-catalog/metrics-catalog.libsonnet';
+local platformLinks = import 'gitlab-dashboards/platform_links.libsonnet';
 local errorBudget = import 'stage-groups/error_budget.libsonnet';
-local budgetUtils = import 'stage-groups/error-budget/utils.libsonnet';
 local sidekiqHelpers = import 'services/lib/sidekiq-helpers.libsonnet';
-local thresholds = import 'thresholds.libsonnet';
+local thresholds = import 'gitlab-dashboards/thresholds.libsonnet';
 
 local actionLegend(type) =
   if type == 'api' then '{{action}}' else '{{controller}}#{{action}}';
@@ -148,20 +144,18 @@ local sqlQueriesPerAction(type, featureCategories, featureCategoriesSelector) =
       Average amount of SQL queries performed by a controller action.
     |||,
     query=|||
-      sum without (fqdn,instance) (
-        rate(
-          gitlab_sql_duration_seconds_count{
-            environment="$environment",
-            stage='$stage',
-            action=~"$action",
-            controller=~"$controller",
-            feature_category=~'(%(featureCategories)s)',
-            type='%(type)s'
-          }[$__interval]
-        )
+      sum by (controller, action) (
+        controller_action:gitlab_sql_duration_seconds_count:rate1m{
+          environment="$environment",
+          stage='$stage',
+          action=~"$action",
+          controller=~"$controller",
+          feature_category=~'(%(featureCategories)s)',
+          type='%(type)s'
+        }
       )
       /
-      avg_over_time(
+      sum by (controller, action) (
         controller_action:gitlab_transaction_duration_seconds_count:rate1m{
           environment="$environment",
           stage='$stage',
@@ -169,7 +163,7 @@ local sqlQueriesPerAction(type, featureCategories, featureCategoriesSelector) =
           controller=~"$controller",
           feature_category=~'(%(featureCategories)s)',
           type='%(type)s'
-        }[$__interval]
+        }
       )
     ||| % {
       type: type,
@@ -373,7 +367,6 @@ local dashboard(groupKey, components=defaultComponents, displayEmptyGuidance=fal
   local featureCategoriesSelector = std.join('|', featureCategories);
 
   local enabledRequestComponents = std.setInter(requestComponents, setComponents);
-  local typeSelector = std.join('|', enabledRequestComponents);
 
   local dashboard =
     basic

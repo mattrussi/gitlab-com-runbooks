@@ -1,12 +1,15 @@
-local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
-local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
+local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_point.libsonnet').resourceSaturationPoint;
 
 {
   go_memory: resourceSaturationPoint({
     title: 'Go Memory Utilization per Node',
     severity: 's4',
     horizontallyScalable: true,
-    appliesTo: ['gitaly', 'web-pages', 'monitoring', 'web', 'praefect', 'registry', 'api'],
+    appliesTo: std.setInter(
+      std.set(metricsCatalog.findServicesWithTag(tag='golang')),
+      std.set(metricsCatalog.findVMProvisionedServices())
+    ),
     description: |||
       Go's memory allocation strategy can make it look like a Go process is saturating memory when measured using RSS, when in fact
       the process is not at risk of memory saturation. For this reason, we measure Go processes using the `go_memstat_alloc_bytes`

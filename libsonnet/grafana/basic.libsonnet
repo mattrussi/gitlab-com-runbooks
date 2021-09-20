@@ -202,8 +202,8 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
             title='Source',
             mode='markdown',
             content=|||
-              Made with ❤️ and [Grafonnet](https://github.com/grafana/grafonnet-lib). [Contribute to this dashboard on GitLab.com](https://gitlab.com/gitlab-com/runbooks/blob/master/dashboards/%(filePath)s)
-            ||| % { filePath: std.extVar('dashboardPath') },
+              Made with ❤️ and [Grafonnet](https://github.com/grafana/grafonnet-lib). [Contribute to this dashboard on GitLab.com](https://gitlab.com/gitlab-com/runbooks/blob/master/dashboards)
+            |||,
           ),
           gridPos={
             x: 0,
@@ -856,6 +856,8 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
     decimals=2,
     invertColors=false,
     unit='percentunit',
+    colors=getDefaultAvailabilityColorScale(invertColors, if unit == 'percentunit' then 1 else 100),
+    colorMode='background',
   )::
     {
       datasource: '$PROMETHEUS_DS',
@@ -872,7 +874,7 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
           fields: '',
         },
         orientation: 'auto',
-        colorMode: 'background',
+        colorMode: colorMode,
         graphMode: 'none',
         justifyMode: 'auto',
       },
@@ -886,7 +888,7 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
           displayName: displayName,
           thresholds: {
             mode: 'absolute',
-            steps: getDefaultAvailabilityColorScale(invertColors, if unit == 'percentunit' then 1 else 100),
+            steps: colors,
           },
           mappings: [],
           links: links,

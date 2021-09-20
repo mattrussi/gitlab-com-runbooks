@@ -1,14 +1,18 @@
+local multiburnExpression = import 'mwmbr/expression.libsonnet';
 local serviceLevelIndicatorDefinition = import 'service_level_indicator_definition.libsonnet';
 
 // For now we assume that services are provisioned on vms and not kubernetes
 local provisioningDefaults = { vms: true, kubernetes: false };
 local serviceDefaults = {
+  tags: [],
   serviceIsStageless: false,  // Set to true for services that don't use stage labels
   autogenerateRecordingRules: true,
   disableOpsRatePrediction: false,
   nodeLevelMonitoring: false,  // By default we do not use node-level monitoring
   kubeResources: {},
   regional: false,  // By default we don't support regional monitoring for services
+  alertWindows: multiburnExpression.defaultWindows,
+  skippedMaturityCriteria: [],
 };
 
 // Convience method, will wrap a raw definition in a serviceLevelIndicatorDefinition if needed
@@ -37,6 +41,7 @@ local validateAndApplyServiceDefaults(service) =
   // If this service is provisioned on kubernetes we should include a kubernetes deployment map
   if serviceWithProvisioningDefaults.provisioning.kubernetes == (serviceWithProvisioningDefaults.kubeResources != {}) then
     serviceWithProvisioningDefaults {
+      tags: std.set(serviceWithProvisioningDefaults.tags),
       serviceLevelIndicators: {
         [sliName]: prepareComponent(service.serviceLevelIndicators[sliName]).initServiceLevelIndicatorWithName(sliName, sliInheritedDefaults)
         for sliName in std.objectFields(service.serviceLevelIndicators)

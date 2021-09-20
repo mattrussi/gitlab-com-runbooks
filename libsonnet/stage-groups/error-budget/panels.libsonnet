@@ -1,11 +1,9 @@
-local metricsCatalog = import '../../../metrics-catalog/metrics-catalog.libsonnet';
 local sidekiqHelpers = import '../../../metrics-catalog/services/lib/sidekiq-helpers.libsonnet';
 local utils = import './utils.libsonnet';
-local basic = import 'grafana/basic.libsonnet';
-local queries = import 'stage-groups/error-budget/queries.libsonnet';
-local durationParser = import 'utils/duration-parser.libsonnet';
-
 local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libsonnet';
+local basic = import 'grafana/basic.libsonnet';
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
+local durationParser = import 'utils/duration-parser.libsonnet';
 
 local baseSelector = {
   stage: '$stage',
@@ -220,30 +218,55 @@ local explanationPanel(slaTarget, range, group) =
 
 local violationRatePanel(queries, group) =
   basic.table(
-    title='Budget failure rates',
-    description='Number of failures per component per type',
+    title='Budget failures',
+    description='Number of failures contributing to the budget send per component and type ',
+    styles=null,  // https://github.com/grafana/grafonnet-lib/issues/240
     query=queries.errorBudgetViolationRate(
       baseSelector {
         stage_group: group,
       },
-      ['component', 'violation_type'],
+      ['component', 'violation_type', 'type'],
     ),
-    sort={ col: 2, desc: true },
     transformations=[
       {
         id: 'organize',
         options: {
+          excludeByName: {
+            Time: true,
+          },
           indexByName: {
             violation_type: 0,
-            component: 1,
-            Value: 2,
+            type: 1,
+            component: 2,
+            Value: 3,
+          },
+          renameByName: {
+            Value: 'failures past 28 days',
           },
         },
       },
     ],
-  )
-  .hideColumn('Time')
-  .addColumn('Value', { alias: 'failure rate' });
+  ) + {
+    options: {
+      sortBy: [{
+        displayName: 'failures past 28 days',
+        desc: true,
+      }],
+    },
+    fieldConfig+: {
+      overrides+: [{
+        matcher: { id: 'byName', options: 'type' },
+        properties: [{
+          id: 'links',
+          value: [{
+            targetBlank: true,
+            title: '${__value.text} overview: See ${__data.fields.component} SLI for details',
+            url: 'https://dashboards.gitlab.net/d/${__value.text}-main',
+          }],
+        }],
+      }],
+    },
+  };
 
 local violationRateExplanation =
   basic.text(
@@ -317,7 +340,7 @@ local sidekiqDurationTableFilters = std.map(
   function(filter)
     local duration = sidekiqDurationThresholdByFilter[filter];
     {
-      label: 'Jobs exeeding %is' % duration,
+      label: 'Jobs exceeding %is' % duration,
       input: {
         language: 'kuery',
         query: '%(filter)s AND json.duration_s > %(duration)i' % {
@@ -334,10 +357,37 @@ local logLinks(featureCategories) =
   });
   local timeFrame = elasticsearchLinks.timeRange('now-7d', 'now');
 
-  local pumaSlowRequestFilters = elasticsearchLinks.matchers({ 'json.duration_s': { gte: pumaThreshold } });
   local pumaSplitColumns = ['json.meta.caller_id.keyword'];
   local pumaApdexTable = elasticsearchLinks.buildElasticTableCountVizURL(
-    'rails', featureCategoryFilters + pumaSlowRequestFilters, splitSeries=pumaSplitColumns, timeRange=timeFrame
+    'rails',
+    featureCategoryFilters,
+    splitSeries=pumaSplitColumns,
+    timeRange=timeFrame,
+    extraAggs=[
+      {
+        enabled: true,
+        id: '3',
+        params: {
+          customLabel: 'Operations over threshold (%is)' % pumaThreshold,
+          field: 'json.duration_s',
+          json: '{"script": "doc[\'json.duration_s\'].value >= ' + pumaThreshold + ' ? 1 : 0"}',
+        },
+        schema: 'metric',
+        type: 'sum',
+      },
+      {
+        enabled: true,
+        id: '4',
+        params: {
+          customLabel: 'Operations over error budget threshold (5s)',
+          field: 'json.duration_s',
+          json: '{"script": "doc[\'json.duration_s\'].value >= ' + 5 + ' ? 1 : 0"}',
+        },
+        schema: 'metric',
+        type: 'sum',
+      },
+    ],
+    orderById='3',
   );
   local pumaErrorsTable = elasticsearchLinks.buildElasticTableFailureCountVizURL(
     'rails', featureCategoryFilters, splitSeries=pumaSplitColumns, timeRange=timeFrame
@@ -370,8 +420,8 @@ local logLinks(featureCategories) =
     content=|||
       ##### [Puma Apdex](%(pumaApdexLink)s): slow requests
 
-      This shows the number of requests exceeding %(pumaThreshold)is request
-      duration per endpoint over the past 7 days.
+      This shows the number of requests exceeding the request duration thresholds
+      per endpoint over the past 7 days.
 
       This is the only threshold at the moment. We're discussing making
       it configurable in [this issue](%(thresholdsCounterIssue)s). Let us know

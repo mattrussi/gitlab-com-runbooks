@@ -1,20 +1,15 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
+local platformLinks = import 'gitlab-dashboards/platform_links.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
-local commonAnnotations = import 'grafana/common_annotations.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local templates = import 'grafana/templates.libsonnet';
-local platformLinks = import 'platform_links.libsonnet';
-local dashboard = grafana.dashboard;
 local link = grafana.link;
 local template = grafana.template;
-local annotation = grafana.annotation;
-local serviceCatalog = import 'service_catalog.libsonnet';
-local promQuery = import 'grafana/prom_query.libsonnet';
 local sidekiqHelpers = import 'services/lib/sidekiq-helpers.libsonnet';
 local seriesOverrides = import 'grafana/series_overrides.libsonnet';
 local row = grafana.row;
 local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libsonnet';
-local issueSearch = import 'issue_search.libsonnet';
+local issueSearch = import 'gitlab-dashboards/issue_search.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 
 local selector = {
@@ -100,7 +95,7 @@ basic.dashboard(
 .addTemplate(template.new(
   'queue',
   '$PROMETHEUS_DS',
-  'label_values(sidekiq_jobs_completion_seconds_count{environment="$environment", type="sidekiq"}, queue)',
+  'label_values(gitlab_background_jobs:queue:apdex:weight:score_1h{environment="$environment", type="sidekiq"}, queue)',
   current='post_receive',
   refresh='load',
   sort=1,
@@ -319,6 +314,17 @@ basic.dashboard(
   layout.rowGrid('Enqueuing (rate of jobs enqueuing)', [
     enqueueCountTimeseries('Jobs Enqueued', aggregators='queue', legendFormat='{{ queue }}'),
     enqueueCountTimeseries('Jobs Enqueued per Service', aggregators='type, queue', legendFormat='{{ queue }} - {{ type }}'),
+    basic.timeseries(
+      stableId='enqueued-by-scheduling-type',
+      title='Jobs Enqueued by Schedule',
+      description='Enqueue events separated by immediate (destined for execution) vs delayed (destined for ScheduledSet) scheduling.',
+      query=|||
+        sum by (queue, scheduling) (
+          rate(sidekiq_enqueued_jobs_total{environment="$environment", stage="$stage", queue=~"$queue"}[$__interval])
+          )
+      |||,
+      legendFormat='{{ queue }} - {{ scheduling }}',
+    ),
     basic.queueLengthTimeseries(
       stableId='queue-length',
       title='Queue length',
@@ -454,7 +460,6 @@ basic.dashboard(
 + {
   links+:
     platformLinks.triage +
-    serviceCatalog.getServiceLinks('sidekiq') +
     platformLinks.services +
     [
       platformLinks.dynamicLinks('Sidekiq Detail', 'type:sidekiq'),

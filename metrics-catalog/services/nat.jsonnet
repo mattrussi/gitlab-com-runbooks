@@ -1,5 +1,4 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
-local rateMetric = metricsCatalog.rateMetric;
 local customRateQuery = metricsCatalog.customRateQuery;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
@@ -9,6 +8,9 @@ metricsCatalog.serviceDefinition({
   serviceIsStageless: true,  // nat does not have a cny stage
   monitoringThresholds: {
     // TODO: define thresholds for the NAT service
+  },
+  serviceDependencies: {
+    frontend: true,
   },
   provisioning: {
     kubernetes: false,

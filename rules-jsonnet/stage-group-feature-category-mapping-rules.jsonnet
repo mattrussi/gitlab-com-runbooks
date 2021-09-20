@@ -1,4 +1,4 @@
-local stages = import 'stages.libsonnet';
+local stages = import 'service-catalog/stages.libsonnet';
 
 local rules = std.map(
   function(featureCategory)

@@ -25,11 +25,23 @@ Here is the project repository behind about.gitlab.com: https://gitlab.com/gitla
 - The DNS is setup on Fastly. (You can get the Fastly login credentials from 1Password)
 
 # Availability Issues #
+
+### about.gitlab.com is down
 If an issue such as: https://gitlab.com/gitlab-com/gl-infra/production/-/issues/2087 occurs:
 
 1. Check the pipeline to see if there has been a recent deployment to which you can co-relate the issue you are seeing
 2. Check Fastly to see if there has been a recent change
 3. Check the GCS bucket to see if there is anything abnormal
+
+### Users experiencing 503 errors
+
+Example incident: https://gitlab.com/gitlab-com/gl-infra/production/-/issues/5230.
+
+Full error might appear as: `Error 503 No healthy IP available for the backend`
+
+1. Goto manage.fastly.com > about.gitlab.com > Stats
+1. Check the Errors dashboard.
+1. You can find which datacenters are affected by selecting 1 datacenter at a time from the dropdown menu that defaults to `All datacenters`.
 
 # Escalation #
 

@@ -1,13 +1,11 @@
-local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
-local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
-local saturationHelpers = import 'helpers/saturation_helpers.libsonnet';
-
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
+local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_point.libsonnet').resourceSaturationPoint;
 {
   kube_container_cpu: resourceSaturationPoint({
     title: 'Kube Container CPU Utilization',
     severity: 's4',
     horizontallyScalable: true,
-    appliesTo: saturationHelpers.kubeProvisionedServices,
+    appliesTo: metricsCatalog.findKubeProvisionedServices(first='web'),
     description: |||
       Kubernetes containers are allocated a share of CPU. When this is exhausted, the container may be thottled.
     |||,

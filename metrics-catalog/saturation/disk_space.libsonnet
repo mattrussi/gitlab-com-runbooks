@@ -1,13 +1,12 @@
-local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
-local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
-local saturationHelpers = import 'helpers/saturation_helpers.libsonnet';
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
+local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_point.libsonnet').resourceSaturationPoint;
 
 {
   disk_space: resourceSaturationPoint({
     title: 'Disk Space Utilization per Device per Node',
     severity: 's2',
     horizontallyScalable: true,
-    appliesTo: saturationHelpers.vmProvisionedServices(default='gitaly'),
+    appliesTo: metricsCatalog.findVMProvisionedServices(first='gitaly'),
     description: |||
       Disk space utilization per device per node.
     |||,

@@ -1,11 +1,10 @@
-local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
-local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
-local saturationHelpers = import 'helpers/saturation_helpers.libsonnet';
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
+local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_point.libsonnet').resourceSaturationPoint;
 
 {
   node_schedstat_waiting: resourceSaturationPoint({
     title: 'Node Scheduler Waiting Time',
-    appliesTo: saturationHelpers.vmProvisionedServices(default='patroni'),
+    appliesTo: metricsCatalog.findVMProvisionedServices(first='patroni'),
     severity: 's4',
     horizontallyScalable: true,
     description: |||

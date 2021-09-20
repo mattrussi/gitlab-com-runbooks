@@ -8,23 +8,22 @@ groups:
   - alert: WebPagesServiceLoadbalancerErrorSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The loadbalancer SLI of the web-pages service (`{{ $labels.stage }}` stage) has an error rate
-        violating SLO
+      title: The loadbalancer SLI of the web-pages service (`{{ $labels.stage }}`
+        stage) has an error rate violating SLO
       description: |
         Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: web-pages-main/web-pages-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '3255520955'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3255520955"
       grafana_variables: environment,stage
       runbook: docs/web-pages/README.md
     labels:
       aggregation: component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: pages
       pager: pagerduty
@@ -33,8 +32,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -64,41 +63,39 @@ groups:
   - alert: WebPagesServiceLoadbalancerTrafficCessation
     for: 5m
     annotations:
-      title: >-
-        The loadbalancer SLI of the web-pages service (`{{ $labels.stage }}` stage) has not received any
-        traffic in the past 30 minutes
+      title: The loadbalancer SLI of the web-pages service (`{{ $labels.stage }}`
+        stage) has not received any traffic in the past 30 minutes
       description: |
         Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: web-pages-main/web-pages-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '138982496'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "138982496"
       grafana_variables: environment,stage
       runbook: docs/web-pages/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: pages
+      pager: pagerduty
       product_stage: release
       product_stage_group: release
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
-    expr: >
-      gitlab_component_ops:rate_30m{type="web-pages", component="loadbalancer", stage="main", monitor="global"}
-      == 0
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{type="web-pages", component="loadbalancer", stage="main", monitor="global"} == 0
   - alert: WebPagesServiceLoadbalancerTrafficAbsent
     for: 30m
     annotations:
-      title: >-
-        The loadbalancer SLI of the web-pages service (`{{ $labels.stage }}` stage) has not reported any
-        traffic in the past 30 minutes
+      title: The loadbalancer SLI of the web-pages service (`{{ $labels.stage }}`
+        stage) has not reported any traffic in the past 30 minutes
       description: |
         Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
 
@@ -106,24 +103,25 @@ groups:
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
       grafana_dashboard_id: web-pages-main/web-pages-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '138982496'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "138982496"
       grafana_variables: environment,stage
       runbook: docs/web-pages/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: pages
+      pager: pagerduty
       product_stage: release
       product_stage_group: release
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
+      slo_alert: "no"
+      user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{type="web-pages", component="loadbalancer", stage="main", monitor="global"} offset 1h
       unless
@@ -131,23 +129,22 @@ groups:
   - alert: WebPagesServiceLoadbalancerHttpsErrorSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The loadbalancer_https SLI of the web-pages service (`{{ $labels.stage }}` stage) has an error
-        rate violating SLO
+      title: The loadbalancer_https SLI of the web-pages service (`{{ $labels.stage
+        }}` stage) has an error rate violating SLO
       description: |
         Measures aggregated L4 traffic through the HAProxy. Traffic is measured in TCP connections, with upstream TCP connection failures being treated as service-level failures.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: web-pages-main/web-pages-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2962826191'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2962826191"
       grafana_variables: environment,stage
       runbook: docs/web-pages/README.md
     labels:
       aggregation: component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: pages
       pager: pagerduty
@@ -156,8 +153,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -187,41 +184,39 @@ groups:
   - alert: WebPagesServiceLoadbalancerHttpsTrafficCessation
     for: 5m
     annotations:
-      title: >-
-        The loadbalancer_https SLI of the web-pages service (`{{ $labels.stage }}` stage) has not received
-        any traffic in the past 30 minutes
+      title: The loadbalancer_https SLI of the web-pages service (`{{ $labels.stage
+        }}` stage) has not received any traffic in the past 30 minutes
       description: |
         Measures aggregated L4 traffic through the HAProxy. Traffic is measured in TCP connections, with upstream TCP connection failures being treated as service-level failures.
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: web-pages-main/web-pages-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2234251543'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2234251543"
       grafana_variables: environment,stage
       runbook: docs/web-pages/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: pages
+      pager: pagerduty
       product_stage: release
       product_stage_group: release
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
-    expr: >
-      gitlab_component_ops:rate_30m{type="web-pages", component="loadbalancer_https", stage="main", monitor="global"}
-      == 0
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{type="web-pages", component="loadbalancer_https", stage="main", monitor="global"} == 0
   - alert: WebPagesServiceLoadbalancerHttpsTrafficAbsent
     for: 30m
     annotations:
-      title: >-
-        The loadbalancer_https SLI of the web-pages service (`{{ $labels.stage }}` stage) has not reported
-        any traffic in the past 30 minutes
+      title: The loadbalancer_https SLI of the web-pages service (`{{ $labels.stage
+        }}` stage) has not reported any traffic in the past 30 minutes
       description: |
         Measures aggregated L4 traffic through the HAProxy. Traffic is measured in TCP connections, with upstream TCP connection failures being treated as service-level failures.
 
@@ -229,24 +224,25 @@ groups:
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
       grafana_dashboard_id: web-pages-main/web-pages-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2234251543'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2234251543"
       grafana_variables: environment,stage
       runbook: docs/web-pages/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: pages
+      pager: pagerduty
       product_stage: release
       product_stage_group: release
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
+      slo_alert: "no"
+      user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{type="web-pages", component="loadbalancer_https", stage="main", monitor="global"} offset 1h
       unless
@@ -254,30 +250,30 @@ groups:
   - alert: WebPagesServiceServerApdexSLOViolation
     for: 2m
     annotations:
-      title: The server SLI of the web-pages service (`{{ $labels.stage }}` stage) has an apdex violating
-        SLO
+      title: The server SLI of the web-pages service (`{{ $labels.stage }}` stage)
+        has an apdex violating SLO
       description: |
         Aggregation of most web requests into the GitLab Pages process.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: web-pages-main/web-pages-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
-        $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2863319079'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2863319079"
       grafana_variables: environment,type,stage,component
       promql_template_1: |
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(gitlab_pages_http_request_duration_seconds_bucket{type="web-pages", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+            rate(gitlab_pages_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="web-pages"}[5m])
           )
         )
       runbook: docs/web-pages/README.md
     labels:
       aggregation: component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: pages
       pager: pagerduty
@@ -286,8 +282,9 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: apdex
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
     expr: |
       (
         (
@@ -299,7 +296,51 @@ groups:
           gitlab_component_apdex:ratio_5m{component="server",monitor="global",type="web-pages"}
           < (1 - 14.4 * 0.005000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="server",monitor="global",type="web-pages"}) >= 1
+      )
+  - alert: WebPagesServiceServerApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The server SLI of the web-pages service (`{{ $labels.stage }}` stage)
+        has an apdex violating SLO
+      description: |
+        Aggregation of most web requests into the GitLab Pages process.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: web-pages-main/web-pages-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2863319079"
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(gitlab_pages_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="web-pages"}[5m])
+          )
+        )
+      runbook: docs/web-pages/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: pages
+      pager: pagerduty
+      product_stage: release
+      product_stage_group: release
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_apdex:ratio_6h{component="server",monitor="global",type="web-pages"}
           < (1 - 6 * 0.005000)
@@ -317,19 +358,17 @@ groups:
   - alert: WebPagesServiceServerErrorSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The server SLI of the web-pages service (`{{ $labels.stage }}` stage) has an error rate violating
-        SLO
+      title: The server SLI of the web-pages service (`{{ $labels.stage }}` stage)
+        has an error rate violating SLO
       description: |
         Aggregation of most web requests into the GitLab Pages process.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: web-pages-main/web-pages-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '1631973137'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1631973137"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -338,6 +377,7 @@ groups:
       runbook: docs/web-pages/README.md
     labels:
       aggregation: component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: pages
       pager: pagerduty
@@ -346,8 +386,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
     expr: |
       (
         (
@@ -377,19 +417,17 @@ groups:
   - alert: WebPagesServiceServerTrafficCessation
     for: 5m
     annotations:
-      title: >-
-        The server SLI of the web-pages service (`{{ $labels.stage }}` stage) has not received any traffic
-        in the past 30 minutes
+      title: The server SLI of the web-pages service (`{{ $labels.stage }}` stage)
+        has not received any traffic in the past 30 minutes
       description: |
         Aggregation of most web requests into the GitLab Pages process.
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: web-pages-main/web-pages-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2414183688'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2414183688"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -398,24 +436,24 @@ groups:
       runbook: docs/web-pages/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: pages
+      pager: pagerduty
       product_stage: release
       product_stage_group: release
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
-    expr: >
-      gitlab_component_ops:rate_30m{type="web-pages", component="server", stage="main", monitor="global"}
-      == 0
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{type="web-pages", component="server", stage="main", monitor="global"} == 0
   - alert: WebPagesServiceServerTrafficAbsent
     for: 30m
     annotations:
-      title: >-
-        The server SLI of the web-pages service (`{{ $labels.stage }}` stage) has not reported any traffic
-        in the past 30 minutes
+      title: The server SLI of the web-pages service (`{{ $labels.stage }}` stage)
+        has not reported any traffic in the past 30 minutes
       description: |
         Aggregation of most web requests into the GitLab Pages process.
 
@@ -423,11 +461,10 @@ groups:
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
       grafana_dashboard_id: web-pages-main/web-pages-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2414183688'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2414183688"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -436,16 +473,200 @@ groups:
       runbook: docs/web-pages/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: pages
+      pager: pagerduty
       product_stage: release
       product_stage_group: release
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
+      slo_alert: "no"
+      user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{type="web-pages", component="server", stage="main", monitor="global"} offset 1h
       unless
       gitlab_component_ops:rate_5m{type="web-pages", component="server", stage="main", monitor="global"}
+  - alert: WebPagesServiceServerHeadersApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The server_headers SLI of the web-pages service (`{{ $labels.stage }}`
+        stage) has an apdex violating SLO
+      description: |
+        Response time can be slow due to large files served by pages. This SLI tracks only time needed to finish writing headers. It includes API requests to GitLab instance, scanning ZIP archive for file entries, processing redirects, etc. We use it as stricter SLI for pages as it's independent of served file size
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: web-pages-main/web-pages-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2237799391"
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(gitlab_pages_http_time_to_write_header_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="web-pages"}[5m])
+          )
+        )
+      runbook: docs/web-pages/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: pages
+      pager: pagerduty
+      product_stage: release
+      product_stage_group: release
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_1h{component="server_headers",monitor="global",type="web-pages"}
+          < (1 - 14.4 * 0.005000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_5m{component="server_headers",monitor="global",type="web-pages"}
+          < (1 - 14.4 * 0.005000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="server_headers",monitor="global",type="web-pages"}) >= 1
+      )
+  - alert: WebPagesServiceServerHeadersApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The server_headers SLI of the web-pages service (`{{ $labels.stage }}`
+        stage) has an apdex violating SLO
+      description: |
+        Response time can be slow due to large files served by pages. This SLI tracks only time needed to finish writing headers. It includes API requests to GitLab instance, scanning ZIP archive for file entries, processing redirects, etc. We use it as stricter SLI for pages as it's independent of served file size
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: web-pages-main/web-pages-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2237799391"
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(gitlab_pages_http_time_to_write_header_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="web-pages"}[5m])
+          )
+        )
+      runbook: docs/web-pages/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: pages
+      pager: pagerduty
+      product_stage: release
+      product_stage_group: release
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_6h{component="server_headers",monitor="global",type="web-pages"}
+          < (1 - 6 * 0.005000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_30m{component="server_headers",monitor="global",type="web-pages"}
+          < (1 - 6 * 0.005000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="server_headers",monitor="global",type="web-pages"}) >= 1
+      )
+  - alert: WebPagesServiceServerHeadersTrafficCessation
+    for: 5m
+    annotations:
+      title: The server_headers SLI of the web-pages service (`{{ $labels.stage }}`
+        stage) has not received any traffic in the past 30 minutes
+      description: |
+        Response time can be slow due to large files served by pages. This SLI tracks only time needed to finish writing headers. It includes API requests to GitLab instance, scanning ZIP archive for file entries, processing redirects, etc. We use it as stricter SLI for pages as it's independent of served file size
+
+        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+      grafana_dashboard_id: web-pages-main/web-pages-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3686204985"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(gitlab_pages_http_time_to_write_header_seconds_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="web-pages"}[5m])
+        )
+      runbook: docs/web-pages/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: pages
+      pager: pagerduty
+      product_stage: release
+      product_stage_group: release
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{type="web-pages", component="server_headers", stage="main", monitor="global"} == 0
+  - alert: WebPagesServiceServerHeadersTrafficAbsent
+    for: 30m
+    annotations:
+      title: The server_headers SLI of the web-pages service (`{{ $labels.stage }}`
+        stage) has not reported any traffic in the past 30 minutes
+      description: |
+        Response time can be slow due to large files served by pages. This SLI tracks only time needed to finish writing headers. It includes API requests to GitLab instance, scanning ZIP archive for file entries, processing redirects, etc. We use it as stricter SLI for pages as it's independent of served file size
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: web-pages-main/web-pages-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3686204985"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(gitlab_pages_http_time_to_write_header_seconds_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="web-pages"}[5m])
+        )
+      runbook: docs/web-pages/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: pages
+      pager: pagerduty
+      product_stage: release
+      product_stage_group: release
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_5m{type="web-pages", component="server_headers", stage="main", monitor="global"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{type="web-pages", component="server_headers", stage="main", monitor="global"}

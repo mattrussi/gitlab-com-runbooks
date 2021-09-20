@@ -2,10 +2,11 @@
 
 require 'spec_helper'
 
-require_relative '../scripts/uploads_cleanup.rb'
+require_relative '../scripts/uploads_cleanup'
 
 describe ::Uploads::Cleaner do
   subject { described_class.new(options) }
+
   let(:host) { options[:hostname] }
   let(:disk_path) { 'test/path' }
   let(:file) { 'test' }
@@ -25,6 +26,7 @@ describe ::Uploads::Cleaner do
         command: command
       )
     end
+
     let(:find_with_delete_command) do
       command = format(options[:find], path: path, minutes: options[:interval_minutes])
       command = command << " -#{operation}"
@@ -38,7 +40,7 @@ describe ::Uploads::Cleaner do
     context 'when the dry-run option is true' do
       it 'logs a dry-run informational message' do
         allow(subject).to receive(:get_non_empty_with_only_tmp_dir_files).with(host, path).and_return([found])
-        expect(subject).to receive(:options).at_least(1).times.and_return(options)
+        expect(subject).to receive(:options).at_least(:once).and_return(options)
         expect(subject.log).to receive(:info)
           .with("[Dry-run] Would have invoked command: #{find_with_delete_command}")
         expect(subject.clean).to be_nil
@@ -50,7 +52,7 @@ describe ::Uploads::Cleaner do
 
       it 'logs the operation and executes it' do
         allow(subject).to receive(:get_non_empty_with_only_tmp_dir_files).with(host, path).and_return([found])
-        expect(subject).to receive(:options).at_least(1).times.and_return(options)
+        expect(subject).to receive(:options).at_least(:once).and_return(options)
         expect(subject.log).to receive(:info)
           .with("Invoking command: #{find_with_delete_command}")
         expect(subject).to receive(:invoke).with(find_with_delete_command).and_return('')
@@ -61,11 +63,12 @@ describe ::Uploads::Cleaner do
 end
 
 describe ::Uploads::CleanupScript do
-  subject { Object.new.extend(::Uploads::CleanupScript) }
+  subject { Object.new.extend(described_class) }
+
   let(:args) { { operation: :delete } }
   let(:defaults) { ::Uploads::CleanupScript::Config::DEFAULTS.dup.merge(args) }
   let(:options) { defaults }
-  let(:cleanup) { double('::Uploads::Cleaner') }
+  let(:cleanup) { instance_double('::Uploads::Cleaner') }
 
   before do
     allow(subject).to receive(:parse).and_return(options)

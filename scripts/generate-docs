@@ -30,6 +30,7 @@ def replace_header(file, header)
   start = lines.find_index { |line| line.chomp == START_MARKER }
 
   throw "Unable to find start marker for #{file}" if start.nil?
+
   stop = lines.find_index { |line| line.chomp == STOP_MARKER }
   throw "Unable to find stop marker for #{file}" if stop.nil?
 
@@ -66,7 +67,7 @@ def generate_header(service, tier)
 
 ## Logging
 
-<%- service["technical"]["logging"].each do |logging_location| -%>
+<%- service.dig("technical", "logging")&.each do |logging_location| -%>
 * [<%= logging_location["name"] %>](<%= logging_location["permalink"] %>)
 <%- end -%>
 
@@ -141,9 +142,4 @@ def generate_docs
   # end
 end
 
-begin
-  generate_docs
-  # rescue StandardError => e
-  #   STDERR.puts "error: #{e.message}"
-  #   exit 1
-end
+generate_docs

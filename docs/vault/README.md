@@ -21,7 +21,6 @@
 * [../customers/api-key-rotation.md](../customers/api-key-rotation.md)
 * [../elastic/elastic-cloud.md](../elastic/elastic-cloud.md)
 * [../frontend/haproxy.md](../frontend/haproxy.md)
-* [../git/deploy-gitlab-rb-change.md](../git/deploy-gitlab-rb-change.md)
 * [../gitaly/gitaly-token-rotation.md](../gitaly/gitaly-token-rotation.md)
 * [../packaging/manage-package-signing-keys.md](../packaging/manage-package-signing-keys.md)
 * [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)

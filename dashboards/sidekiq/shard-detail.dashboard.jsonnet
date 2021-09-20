@@ -1,23 +1,14 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
+local nodeMetrics = import 'gitlab-dashboards/node_metrics.libsonnet';
+local platformLinks = import 'gitlab-dashboards/platform_links.libsonnet';
+local railsCommon = import 'gitlab-dashboards/rails_common_graphs.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
-local commonAnnotations = import 'grafana/common_annotations.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
-local promQuery = import 'grafana/prom_query.libsonnet';
-local seriesOverrides = import 'grafana/series_overrides.libsonnet';
 local templates = import 'grafana/templates.libsonnet';
-local keyMetrics = import 'key_metrics.libsonnet';
-local nodeMetrics = import 'node_metrics.libsonnet';
-local platformLinks = import 'platform_links.libsonnet';
-local railsCommon = import 'rails_common_graphs.libsonnet';
-local serviceCatalog = import 'service_catalog.libsonnet';
-local dashboard = grafana.dashboard;
 local row = grafana.row;
 local template = grafana.template;
-local graphPanel = grafana.graphPanel;
-local annotation = grafana.annotation;
-local sidekiq = import 'sidekiq.libsonnet';
-local saturationDetail = import 'saturation_detail.libsonnet';
-local thresholds = import 'thresholds.libsonnet';
+local saturationDetail = import 'gitlab-dashboards/saturation_detail.libsonnet';
+local thresholds = import 'gitlab-dashboards/thresholds.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
 local link = grafana.link;
 local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libsonnet';
@@ -39,7 +30,7 @@ local queueTimeLatencyTimeseries(title, aggregator) =
     title=title,
     description='Estimated queue time, between when the job is enqueued and executed. Lower is better.',
     query=|||
-      histogram_quantile(0.95, sum(rate(sidekiq_jobs_queue_duration_seconds_bucket{environment="$environment", shard=~"$shard"}[$__interval])) by (le, %s))
+      histogram_quantile(0.95, sum(sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="$environment", shard=~"$shard"}) by (le, %s))
     ||| % [aggregator],
     legendFormat='{{ %s }}' % [aggregator],
     format='s',
@@ -98,7 +89,7 @@ basic.dashboard(
           and on (queue)
           (
             max by (queue) (
-              rate(sidekiq_jobs_queue_duration_seconds_sum{environment="$environment", shard=~"$shard"}[$__range]) > 0
+              sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{environment="$environment", shard=~"$shard"} > 0
             )
           )
         )
@@ -124,7 +115,7 @@ basic.dashboard(
           and on (queue)
           (
             max by (queue) (
-              rate(sidekiq_jobs_queue_duration_seconds_sum{environment="$environment", shard=~"$shard"}[$__range]) > 0
+              sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{environment="$environment", shard=~"$shard"} > 0
             )
           )
         )
@@ -178,10 +169,10 @@ basic.dashboard(
           query: |||
             histogram_quantile(0.50,
               sum by (shard, le) (
-                rate(sidekiq_jobs_completion_seconds_bucket{
+                sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{
                   environment="$environment",
                   shard=~"$shard"
-                }[$__interval])
+                }
               )
             )
           |||,
@@ -191,10 +182,10 @@ basic.dashboard(
           query: |||
             histogram_quantile(0.95,
               sum by (shard, le) (
-                rate(sidekiq_jobs_completion_seconds_bucket{
+                sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{
                   environment="$environment",
                   shard=~"$shard"
-                }[$__interval])
+                }
               )
             )
           |||,
@@ -214,10 +205,10 @@ basic.dashboard(
       query=|||
         histogram_quantile(0.95,
           sum by (queue, le) (
-            rate(sidekiq_jobs_completion_seconds_bucket{
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{
               environment="$environment",
               shard=~"$shard"
-            }[$__interval])
+            }
           )
         )
       |||,
@@ -236,10 +227,10 @@ basic.dashboard(
       query=|||
         histogram_quantile(0.95,
           sum by (worker, le) (
-            rate(sidekiq_jobs_completion_seconds_bucket{
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{
               environment="$environment",
               shard=~"$shard"
-            }[$__interval])
+            }
           )
         )
       |||,
@@ -259,7 +250,7 @@ basic.dashboard(
       title='Sidekiq Total Execution Time for $shard Shard',
       description='The sum of job execution times',
       query=|||
-        sum(rate(sidekiq_jobs_completion_seconds_sum{environment="$environment", shard=~"$shard"}[$__interval])) by (shard)
+        sum(sidekiq_jobs_execution_time:1m{environment="$environment", shard=~"$shard"}) by (shard)
       |||,
       legendFormat='{{ shard }}',
       interval='1m',
@@ -317,9 +308,9 @@ basic.dashboard(
       'Shard Utilization',
       description='How heavily utilized is this shard? Ideally this should be around 33% plus minus 10%. If outside this range for long periods, consider scaling fleet appropriately.',
       query=|||
-        sum by (environment, stage, shard)  (rate(sidekiq_jobs_completion_seconds_sum{environment="$environment", shard=~"$shard"}[1h]))
+        sum by (shard, stage) (sidekiq_jobs_execution_time:1h{environment="$environment", shard=~"$shard"})
         /
-        sum by (environment, stage, shard)  (avg_over_time(sidekiq_concurrency{environment="$environment", shard=~"$shard"}[1h]))
+        sum by (stage, shard)  (avg_over_time(sidekiq_concurrency{environment="$environment", shard=~"$shard"}[1h]))
       |||,
       legendFormat='{{ shard }} utilization (per hour)',
       yAxisLabel='Percent',
@@ -336,9 +327,9 @@ basic.dashboard(
     .addTarget(
       promQuery.target(
         expr=|||
-          sum by (environment, stage, shard)  (rate(sidekiq_jobs_completion_seconds_sum{environment="$environment", shard=~"$shard"}[10m]))
+          sum by (shard, stage) (sidekiq_jobs_execution_time:10m{environment="$environment", shard=~"$shard"})
           /
-          sum by (environment, stage, shard)  (avg_over_time(sidekiq_concurrency{environment="$environment", shard=~"$shard"}[10m]))
+          sum by (stage, shard)  (avg_over_time(sidekiq_concurrency{environment="$environment", shard=~"$shard"}[10m]))
         |||,
         legendFormat='{{ shard }} utilization (per 10m)'
       )
@@ -346,9 +337,9 @@ basic.dashboard(
     .addTarget(
       promQuery.target(
         expr=|||
-          sum by (environment, stage, shard)  (rate(sidekiq_jobs_completion_seconds_sum{environment="$environment", shard=~"$shard"}[$__interval]))
+          sum by (shard, stage) (sidekiq_jobs_execution_time:1m{environment="$environment", shard=~"$shard"})
           /
-          sum by (environment, stage, shard)  (avg_over_time(sidekiq_concurrency{environment="$environment", shard=~"$shard"}[$__interval]))
+          sum by (stage, shard)  (avg_over_time(sidekiq_concurrency{environment="$environment", shard=~"$shard"}[1m]))
         |||,
         legendFormat='{{ shard }} utilization (instant)'
       )
@@ -382,7 +373,6 @@ basic.dashboard(
 + {
   links+:
     platformLinks.triage +
-    serviceCatalog.getServiceLinks('sidekiq') +
     platformLinks.services +
     [
       platformLinks.dynamicLinks('Sidekiq Detail', 'type:sidekiq'),

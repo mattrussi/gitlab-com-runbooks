@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'json'
 require 'net/http'
 
@@ -6,10 +7,10 @@ require 'net/http'
 # "Authorization: Bearer <your_access_token>"
 
 class GitLabAdminsUtil
-  USERS_API_TOKEN = '<CHANGE-ME>'.freeze
+  USERS_API_TOKEN = '<CHANGE-ME>'
   TOTAL_USERS = 2000
   PAGE_SIZE = 100
-  USERS_URI = 'https://dev.gitlab.org/api/v4/users'.freeze
+  USERS_URI = 'https://dev.gitlab.org/api/v4/users'
   REPORT_FIELDS = %w[
     id
     username

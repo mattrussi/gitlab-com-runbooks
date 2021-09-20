@@ -8,20 +8,18 @@ groups:
   - alert: FrontendServiceCnyHttpServicesApdexSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The cnyHttpServices SLI of the frontend service (`{{ $labels.stage }}` stage) has an apdex violating
-        SLO
+      title: The cnyHttpServices SLI of the frontend service (`{{ $labels.stage }}`
+        stage) has an apdex violating SLO
       description: |2
 
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: frontend-main/frontend-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/frontend-main/frontend-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
-        $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2527431809'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/frontend-main/frontend-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2527431809"
       grafana_variables: environment,type,stage,component
       promql_template_1: |
         histogram_quantile(
@@ -33,6 +31,7 @@ groups:
       runbook: docs/frontend/README.md
     labels:
       aggregation: component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -41,8 +40,9 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: apdex
-      slo_alert: 'yes'
-      user_impacting: 'no'
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 1h
     expr: |
       (
         (
@@ -54,7 +54,51 @@ groups:
           gitlab_component_apdex:ratio_5m{component="cnyHttpServices",monitor="global",type="frontend"}
           < (1 - 14.4 * 0.001000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="cnyHttpServices",monitor="global",type="frontend"}) >= 1
+      )
+  - alert: FrontendServiceCnyHttpServicesApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The cnyHttpServices SLI of the frontend service (`{{ $labels.stage }}`
+        stage) has an apdex violating SLO
+      description: |2
+
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: frontend-main/frontend-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/frontend-main/frontend-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2527431809"
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name=~"canary_.*", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          )
+        )
+      runbook: docs/frontend/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_apdex:ratio_6h{component="cnyHttpServices",monitor="global",type="frontend"}
           < (1 - 6 * 0.001000)
@@ -72,19 +116,17 @@ groups:
   - alert: FrontendServiceCnyHttpServicesErrorSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The cnyHttpServices SLI of the frontend service (`{{ $labels.stage }}` stage) has an error rate
-        violating SLO
+      title: The cnyHttpServices SLI of the frontend service (`{{ $labels.stage }}`
+        stage) has an error rate violating SLO
       description: |2
 
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: frontend-main/frontend-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/frontend-main/frontend-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/frontend-main/frontend-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '630378195'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "630378195"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -93,6 +135,7 @@ groups:
       runbook: docs/frontend/README.md
     labels:
       aggregation: component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -101,8 +144,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'no'
+      slo_alert: "yes"
+      user_impacting: "no"
     expr: |
       (
         (
@@ -132,19 +175,17 @@ groups:
   - alert: FrontendServiceCnyHttpServicesTrafficCessation
     for: 5m
     annotations:
-      title: >-
-        The cnyHttpServices SLI of the frontend service (`{{ $labels.stage }}` stage) has not received
-        any traffic in the past 30 minutes
+      title: The cnyHttpServices SLI of the frontend service (`{{ $labels.stage }}`
+        stage) has not received any traffic in the past 30 minutes
       description: |2
 
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: frontend-main/frontend-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/frontend-main/frontend-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/frontend-main/frontend-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '3678448088'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3678448088"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -153,24 +194,24 @@ groups:
       runbook: docs/frontend/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'no'
-    expr: >
-      gitlab_component_ops:rate_30m{type="frontend", component="cnyHttpServices", stage="main", monitor="global"}
-      == 0
+      slo_alert: "no"
+      user_impacting: "no"
+    expr: |
+      gitlab_component_ops:rate_30m{type="frontend", component="cnyHttpServices", stage="main", monitor="global"} == 0
   - alert: FrontendServiceCnyHttpServicesTrafficAbsent
     for: 30m
     annotations:
-      title: >-
-        The cnyHttpServices SLI of the frontend service (`{{ $labels.stage }}` stage) has not reported
-        any traffic in the past 30 minutes
+      title: The cnyHttpServices SLI of the frontend service (`{{ $labels.stage }}`
+        stage) has not reported any traffic in the past 30 minutes
       description: |2
 
 
@@ -178,11 +219,10 @@ groups:
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
       grafana_dashboard_id: frontend-main/frontend-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/frontend-main/frontend-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/frontend-main/frontend-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '3678448088'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3678448088"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -191,15 +231,17 @@ groups:
       runbook: docs/frontend/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'no'
+      slo_alert: "no"
+      user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_5m{type="frontend", component="cnyHttpServices", stage="main", monitor="global"} offset 1h
       unless
@@ -207,20 +249,18 @@ groups:
   - alert: FrontendServiceMainHttpServicesApdexSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The mainHttpServices SLI of the frontend service (`{{ $labels.stage }}` stage) has an apdex violating
-        SLO
+      title: The mainHttpServices SLI of the frontend service (`{{ $labels.stage }}`
+        stage) has an apdex violating SLO
       description: |2
 
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: frontend-main/frontend-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/frontend-main/frontend-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
-        $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '3744296237'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/frontend-main/frontend-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3744296237"
       grafana_variables: environment,type,stage,component
       promql_template_1: |
         histogram_quantile(
@@ -232,6 +272,7 @@ groups:
       runbook: docs/frontend/README.md
     labels:
       aggregation: component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -240,8 +281,9 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: apdex
-      slo_alert: 'yes'
-      user_impacting: 'no'
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 1h
     expr: |
       (
         (
@@ -253,7 +295,51 @@ groups:
           gitlab_component_apdex:ratio_5m{component="mainHttpServices",monitor="global",type="frontend"}
           < (1 - 14.4 * 0.001000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="mainHttpServices",monitor="global",type="frontend"}) >= 1
+      )
+  - alert: FrontendServiceMainHttpServicesApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The mainHttpServices SLI of the frontend service (`{{ $labels.stage }}`
+        stage) has an apdex violating SLO
+      description: |2
+
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: frontend-main/frontend-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/frontend-main/frontend-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3744296237"
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name!~"canary_.*", backend_name!="api_rate_limit", backend_name!="websockets", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          )
+        )
+      runbook: docs/frontend/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_apdex:ratio_6h{component="mainHttpServices",monitor="global",type="frontend"}
           < (1 - 6 * 0.001000)
@@ -271,19 +357,17 @@ groups:
   - alert: FrontendServiceMainHttpServicesErrorSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The mainHttpServices SLI of the frontend service (`{{ $labels.stage }}` stage) has an error rate
-        violating SLO
+      title: The mainHttpServices SLI of the frontend service (`{{ $labels.stage }}`
+        stage) has an error rate violating SLO
       description: |2
 
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: frontend-main/frontend-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/frontend-main/frontend-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/frontend-main/frontend-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '4222215115'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "4222215115"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -292,6 +376,7 @@ groups:
       runbook: docs/frontend/README.md
     labels:
       aggregation: component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -300,8 +385,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'no'
+      slo_alert: "yes"
+      user_impacting: "no"
     expr: |
       (
         (
@@ -331,19 +416,17 @@ groups:
   - alert: FrontendServiceMainHttpServicesTrafficCessation
     for: 5m
     annotations:
-      title: >-
-        The mainHttpServices SLI of the frontend service (`{{ $labels.stage }}` stage) has not received
-        any traffic in the past 30 minutes
+      title: The mainHttpServices SLI of the frontend service (`{{ $labels.stage }}`
+        stage) has not received any traffic in the past 30 minutes
       description: |2
 
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: frontend-main/frontend-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/frontend-main/frontend-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/frontend-main/frontend-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '739216244'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "739216244"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -352,24 +435,24 @@ groups:
       runbook: docs/frontend/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'no'
-    expr: >
-      gitlab_component_ops:rate_30m{type="frontend", component="mainHttpServices", stage="main", monitor="global"}
-      == 0
+      slo_alert: "no"
+      user_impacting: "no"
+    expr: |
+      gitlab_component_ops:rate_30m{type="frontend", component="mainHttpServices", stage="main", monitor="global"} == 0
   - alert: FrontendServiceMainHttpServicesTrafficAbsent
     for: 30m
     annotations:
-      title: >-
-        The mainHttpServices SLI of the frontend service (`{{ $labels.stage }}` stage) has not reported
-        any traffic in the past 30 minutes
+      title: The mainHttpServices SLI of the frontend service (`{{ $labels.stage }}`
+        stage) has not reported any traffic in the past 30 minutes
       description: |2
 
 
@@ -377,11 +460,10 @@ groups:
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
       grafana_dashboard_id: frontend-main/frontend-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/frontend-main/frontend-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/frontend-main/frontend-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '739216244'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "739216244"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -390,15 +472,17 @@ groups:
       runbook: docs/frontend/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'no'
+      slo_alert: "no"
+      user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_5m{type="frontend", component="mainHttpServices", stage="main", monitor="global"} offset 1h
       unless
@@ -406,19 +490,18 @@ groups:
   - alert: FrontendServiceSshServicesApdexSLOViolation
     for: 2m
     annotations:
-      title: The sshServices SLI of the frontend service (`{{ $labels.stage }}` stage) has an apdex violating
-        SLO
+      title: The sshServices SLI of the frontend service (`{{ $labels.stage }}` stage)
+        has an apdex violating SLO
       description: |2
 
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: frontend-main/frontend-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/frontend-main/frontend-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-component={{
-        $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2331021071'
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/frontend-main/frontend-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2331021071"
       grafana_variables: environment,type,stage,component
       promql_template_1: |
         histogram_quantile(
@@ -430,6 +513,7 @@ groups:
       runbook: docs/frontend/README.md
     labels:
       aggregation: component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -438,8 +522,9 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: apdex
-      slo_alert: 'yes'
-      user_impacting: 'no'
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 1h
     expr: |
       (
         (
@@ -451,7 +536,51 @@ groups:
           gitlab_component_apdex:ratio_5m{component="sshServices",monitor="global",type="frontend"}
           < (1 - 14.4 * 0.001000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="sshServices",monitor="global",type="frontend"}) >= 1
+      )
+  - alert: FrontendServiceSshServicesApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The sshServices SLI of the frontend service (`{{ $labels.stage }}` stage)
+        has an apdex violating SLO
+      description: |2
+
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: frontend-main/frontend-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/frontend-main/frontend-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2331021071"
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(haproxy_ssh_request_duration_seconds_bucket{type="frontend", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          )
+        )
+      runbook: docs/frontend/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_apdex:ratio_6h{component="sshServices",monitor="global",type="frontend"}
           < (1 - 6 * 0.001000)
@@ -469,19 +598,17 @@ groups:
   - alert: FrontendServiceSshServicesErrorSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The sshServices SLI of the frontend service (`{{ $labels.stage }}` stage) has an error rate violating
-        SLO
+      title: The sshServices SLI of the frontend service (`{{ $labels.stage }}` stage)
+        has an error rate violating SLO
       description: |2
 
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: frontend-main/frontend-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/frontend-main/frontend-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/frontend-main/frontend-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '4072293939'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "4072293939"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -490,6 +617,7 @@ groups:
       runbook: docs/frontend/README.md
     labels:
       aggregation: component
+      alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
@@ -498,8 +626,8 @@ groups:
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'no'
+      slo_alert: "yes"
+      user_impacting: "no"
     expr: |
       (
         (
@@ -529,19 +657,17 @@ groups:
   - alert: FrontendServiceSshServicesTrafficCessation
     for: 5m
     annotations:
-      title: >-
-        The sshServices SLI of the frontend service (`{{ $labels.stage }}` stage) has not received any
-        traffic in the past 30 minutes
+      title: The sshServices SLI of the frontend service (`{{ $labels.stage }}` stage)
+        has not received any traffic in the past 30 minutes
       description: |2
 
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: frontend-main/frontend-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/frontend-main/frontend-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/frontend-main/frontend-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '4075987050'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "4075987050"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -550,24 +676,24 @@ groups:
       runbook: docs/frontend/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'no'
-    expr: >
-      gitlab_component_ops:rate_30m{type="frontend", component="sshServices", stage="main", monitor="global"}
-      == 0
+      slo_alert: "no"
+      user_impacting: "no"
+    expr: |
+      gitlab_component_ops:rate_30m{type="frontend", component="sshServices", stage="main", monitor="global"} == 0
   - alert: FrontendServiceSshServicesTrafficAbsent
     for: 30m
     annotations:
-      title: >-
-        The sshServices SLI of the frontend service (`{{ $labels.stage }}` stage) has not reported any
-        traffic in the past 30 minutes
+      title: The sshServices SLI of the frontend service (`{{ $labels.stage }}` stage)
+        has not reported any traffic in the past 30 minutes
       description: |2
 
 
@@ -575,11 +701,10 @@ groups:
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
       grafana_dashboard_id: frontend-main/frontend-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/frontend-main/frontend-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/frontend-main/frontend-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '4075987050'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "4075987050"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -588,15 +713,17 @@ groups:
       runbook: docs/frontend/README.md
     labels:
       aggregation: component
+      alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       product_stage: not_owned
       product_stage_group: not_owned
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'no'
+      slo_alert: "no"
+      user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_5m{type="frontend", component="sshServices", stage="main", monitor="global"} offset 1h
       unless

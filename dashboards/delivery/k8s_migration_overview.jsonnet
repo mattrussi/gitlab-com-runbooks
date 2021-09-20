@@ -16,6 +16,7 @@ local services = [
   'sidekiq-memory-bound',
   'sidekiq-elasticsearch',
   'sidekiq-low-urgency-cpu-bound',
+  'sidekiq-quarantine',
   'sidekiq-urgent-other',
   'sidekiq-database-throttled',
   'sidekiq-gitaly-throttled',
@@ -164,45 +165,6 @@ local statPanel(
     },
     pluginVersion: '7.0.3',
     targets: [promQuery.target(query, legendFormat=legendFormat)],
-    title: title,
-    type: 'stat',
-  };
-
-
-local savingsStatPanel(
-  title,
-  query,
-      ) =
-  {
-    links: [],
-    options: {
-      graphMode: 'none',
-      colorMode: 'background',
-      justifyMode: 'auto',
-
-      fieldOptions: {
-        calcs: [
-          'lastNotNull',
-        ],
-        defaults: {
-          thresholds: {
-            mode: 'absolute',
-            steps: [
-              { color: 'orange', value: 0 },
-              { color: 'green', value: 10 },
-            ],
-          },
-          mappings: [],
-          title: title,
-          unit: '%',
-          decimals: 2,
-        },
-        overrides: [],
-      },
-      orientation: 'vertical',
-    },
-    pluginVersion: '6.6.1',
-    targets: [promQuery.target(query, legendFormat='')],
     title: title,
     type: 'stat',
   };

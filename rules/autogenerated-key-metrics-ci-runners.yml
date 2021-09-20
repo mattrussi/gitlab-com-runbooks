@@ -81,7 +81,7 @@ groups:
       type: ci-runners
     expr: |
       sum by (environment,stage) (
-        rate(sidekiq_jobs_completion_seconds_count{worker="ArchiveTraceWorker"}[1m])
+        rate(sidekiq_jobs_completion_seconds_count{worker="Ci::ArchiveTraceWorker"}[1m])
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -180,7 +180,7 @@ groups:
       type: ci-runners
     expr: |
       sum by (environment,stage) (
-        rate(sidekiq_jobs_completion_seconds_count{worker="ArchiveTraceWorker"}[5m])
+        rate(sidekiq_jobs_completion_seconds_count{worker="Ci::ArchiveTraceWorker"}[5m])
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -279,7 +279,7 @@ groups:
       type: ci-runners
     expr: |
       sum by (environment,stage) (
-        rate(sidekiq_jobs_completion_seconds_count{worker="ArchiveTraceWorker"}[30m])
+        rate(sidekiq_jobs_completion_seconds_count{worker="Ci::ArchiveTraceWorker"}[30m])
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -378,7 +378,7 @@ groups:
       type: ci-runners
     expr: |
       sum by (environment,stage) (
-        rate(sidekiq_jobs_completion_seconds_count{worker="ArchiveTraceWorker"}[1h])
+        rate(sidekiq_jobs_completion_seconds_count{worker="Ci::ArchiveTraceWorker"}[1h])
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -477,7 +477,7 @@ groups:
       type: ci-runners
     expr: |
       sum by (environment,stage) (
-        rate(sidekiq_jobs_completion_seconds_count{worker="ArchiveTraceWorker"}[6h])
+        rate(sidekiq_jobs_completion_seconds_count{worker="Ci::ArchiveTraceWorker"}[6h])
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -502,24 +502,24 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: polling
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: runners
       type: ci-runners
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: shared_runner_queues
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: runners
       type: ci-runners
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: trace_archiving_ci_jobs
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: runners
       type: ci-runners
-    expr: '1'
+    expr: "1"
