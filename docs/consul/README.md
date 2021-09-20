@@ -22,6 +22,7 @@
 * [../patroni/log_analysis.md](../patroni/log_analysis.md)
 * [../patroni/patroni-management.md](../patroni/patroni-management.md)
 * [../patroni/pg-ha.md](../patroni/pg-ha.md)
+* [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
 * [../patroni/scale-down-patroni.md](../patroni/scale-down-patroni.md)
 * [../patroni/scale-up-patroni.md](../patroni/scale-up-patroni.md)
 * [../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md](../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md)
