@@ -31,7 +31,7 @@ groups:
         clamp_min(
           clamp_max(
             1 - avg by (environment, tier, type, stage) (
-              rate(node_cpu_seconds_total{mode="idle", type=~"gitaly|camoproxy|ci-runners|consul|frontend|jaeger|monitoring|pages|patroni|patroni-registry|postgres-archive|pgbouncer|pgbouncer-registry|praefect|redis-cache|redis-sidekiq|redis-tracechunks|redis|registry|sentry|web-pages"}[5m])
+              rate(node_cpu_seconds_total{mode="idle", type=~"gitaly|camoproxy|ci-runners|consul|frontend|google-cloud-storage|jaeger|monitoring|pages|patroni|patroni-registry|postgres-archive|pgbouncer|pgbouncer-registry|praefect|redis-cache|redis-sidekiq|redis-tracechunks|redis|registry|sentry|web-pages"}[5m])
             )
             ,
             1)
@@ -46,9 +46,9 @@ groups:
         clamp_min(
           clamp_max(
             1 - (
-              node_filesystem_files_free{fstype=~"(ext.|xfs)", type=~"gitaly|camoproxy|ci-runners|consul|frontend|jaeger|monitoring|pages|patroni|patroni-registry|postgres-archive|pgbouncer|pgbouncer-registry|praefect|redis-cache|redis-sidekiq|redis-tracechunks|redis|registry|sentry|web-pages"}
+              node_filesystem_files_free{fstype=~"(ext.|xfs)", type=~"gitaly|camoproxy|ci-runners|consul|frontend|google-cloud-storage|jaeger|monitoring|pages|patroni|patroni-registry|postgres-archive|pgbouncer|pgbouncer-registry|praefect|redis-cache|redis-sidekiq|redis-tracechunks|redis|registry|sentry|web-pages"}
               /
-              node_filesystem_files{fstype=~"(ext.|xfs)", type=~"gitaly|camoproxy|ci-runners|consul|frontend|jaeger|monitoring|pages|patroni|patroni-registry|postgres-archive|pgbouncer|pgbouncer-registry|praefect|redis-cache|redis-sidekiq|redis-tracechunks|redis|registry|sentry|web-pages"}
+              node_filesystem_files{fstype=~"(ext.|xfs)", type=~"gitaly|camoproxy|ci-runners|consul|frontend|google-cloud-storage|jaeger|monitoring|pages|patroni|patroni-registry|postgres-archive|pgbouncer|pgbouncer-registry|praefect|redis-cache|redis-sidekiq|redis-tracechunks|redis|registry|sentry|web-pages"}
             )
             ,
             1)
@@ -63,7 +63,7 @@ groups:
         clamp_min(
           clamp_max(
             (
-              1 - instance:node_filesystem_avail:ratio{fstype=~"ext.|xfs", fqdn!="", type=~"gitaly|camoproxy|ci-runners|consul|frontend|jaeger|monitoring|pages|patroni|patroni-registry|postgres-archive|pgbouncer|pgbouncer-registry|praefect|redis-cache|redis-sidekiq|redis-tracechunks|redis|registry|sentry|web-pages"}
+              1 - instance:node_filesystem_avail:ratio{fstype=~"ext.|xfs", fqdn!="", type=~"gitaly|camoproxy|ci-runners|consul|frontend|google-cloud-storage|jaeger|monitoring|pages|patroni|patroni-registry|postgres-archive|pgbouncer|pgbouncer-registry|praefect|redis-cache|redis-sidekiq|redis-tracechunks|redis|registry|sentry|web-pages"}
             )
             ,
             1)
@@ -423,7 +423,7 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            instance:node_memory_utilization:ratio{fqdn!="", type=~"gitaly|camoproxy|ci-runners|consul|frontend|jaeger|monitoring|pages|patroni|patroni-registry|postgres-archive|pgbouncer|pgbouncer-registry|praefect|redis-cache|redis-sidekiq|redis-tracechunks|redis|registry|sentry|web-pages"}
+            instance:node_memory_utilization:ratio{fqdn!="", type=~"gitaly|camoproxy|ci-runners|consul|frontend|google-cloud-storage|jaeger|monitoring|pages|patroni|patroni-registry|postgres-archive|pgbouncer|pgbouncer-registry|praefect|redis-cache|redis-sidekiq|redis-tracechunks|redis|registry|sentry|web-pages"}
             ,
             1)
         ,
@@ -463,9 +463,9 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            max_over_time(node_nf_conntrack_entries{type=~"patroni|camoproxy|ci-runners|consul|frontend|gitaly|jaeger|monitoring|pages|patroni-registry|postgres-archive|pgbouncer|pgbouncer-registry|praefect|redis-cache|redis-sidekiq|redis-tracechunks|redis|registry|sentry|web-pages"}[1m])
+            max_over_time(node_nf_conntrack_entries{type=~"patroni|camoproxy|ci-runners|consul|frontend|google-cloud-storage|gitaly|jaeger|monitoring|pages|patroni-registry|postgres-archive|pgbouncer|pgbouncer-registry|praefect|redis-cache|redis-sidekiq|redis-tracechunks|redis|registry|sentry|web-pages"}[1m])
             /
-            node_nf_conntrack_entries_limit{type=~"patroni|camoproxy|ci-runners|consul|frontend|gitaly|jaeger|monitoring|pages|patroni-registry|postgres-archive|pgbouncer|pgbouncer-registry|praefect|redis-cache|redis-sidekiq|redis-tracechunks|redis|registry|sentry|web-pages"}
+            node_nf_conntrack_entries_limit{type=~"patroni|camoproxy|ci-runners|consul|frontend|google-cloud-storage|gitaly|jaeger|monitoring|pages|patroni-registry|postgres-archive|pgbouncer|pgbouncer-registry|praefect|redis-cache|redis-sidekiq|redis-tracechunks|redis|registry|sentry|web-pages"}
             ,
             1)
         ,
@@ -478,7 +478,7 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            avg without (cpu) (rate(node_schedstat_waiting_seconds_total{type=~"patroni|camoproxy|ci-runners|consul|frontend|gitaly|jaeger|monitoring|pages|patroni-registry|postgres-archive|pgbouncer|pgbouncer-registry|praefect|redis-cache|redis-sidekiq|redis-tracechunks|redis|registry|sentry|web-pages"}[1h]))
+            avg without (cpu) (rate(node_schedstat_waiting_seconds_total{type=~"patroni|camoproxy|ci-runners|consul|frontend|google-cloud-storage|gitaly|jaeger|monitoring|pages|patroni-registry|postgres-archive|pgbouncer|pgbouncer-registry|praefect|redis-cache|redis-sidekiq|redis-tracechunks|redis|registry|sentry|web-pages"}[1h]))
             ,
             1)
         ,
@@ -938,7 +938,7 @@ groups:
         clamp_min(
           clamp_max(
             1 - avg by (environment, tier, type, stage, shard) (
-              rate(node_cpu_seconds_total{mode="idle", type=~"gitaly|camoproxy|ci-runners|consul|frontend|jaeger|monitoring|pages|patroni|patroni-registry|postgres-archive|pgbouncer|pgbouncer-registry|praefect|redis-cache|redis-sidekiq|redis-tracechunks|redis|registry|sentry|web-pages"}[5m])
+              rate(node_cpu_seconds_total{mode="idle", type=~"gitaly|camoproxy|ci-runners|consul|frontend|google-cloud-storage|jaeger|monitoring|pages|patroni|patroni-registry|postgres-archive|pgbouncer|pgbouncer-registry|praefect|redis-cache|redis-sidekiq|redis-tracechunks|redis|registry|sentry|web-pages"}[5m])
             )
             ,
             1)
@@ -1008,7 +1008,7 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{fqdn!="", mode="idle", type=~"gitaly|camoproxy|ci-runners|consul|frontend|jaeger|monitoring|pages|patroni|patroni-registry|postgres-archive|pgbouncer|pgbouncer-registry|praefect|redis-cache|redis-sidekiq|redis-tracechunks|redis|registry|sentry|web-pages"}[5m]))
+            avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{fqdn!="", mode="idle", type=~"gitaly|camoproxy|ci-runners|consul|frontend|google-cloud-storage|jaeger|monitoring|pages|patroni|patroni-registry|postgres-archive|pgbouncer|pgbouncer-registry|praefect|redis-cache|redis-sidekiq|redis-tracechunks|redis|registry|sentry|web-pages"}[5m]))
             ,
             1)
         ,
