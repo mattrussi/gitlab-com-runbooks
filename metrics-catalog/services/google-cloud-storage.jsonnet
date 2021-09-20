@@ -80,5 +80,38 @@ metricsCatalog.serviceDefinition({
       significantLabels: [],
     },
 
+    pages_request_duration: {
+      userImpacting: true,
+      description: |||
+        Monitors the time it takes to get a response from an httprange. Resource hosted in object storage for a request made by the zip VFS.
+      |||,
+
+      apdex: histogramApdex(
+        histogram='gitlab_pages_httprange_requests_duration_bucket',
+        selector={ request_stage: 'httptrace.ClientTrace.GotFirstResponseByte' },
+        satisfiedThreshold=0.5
+      ),
+
+      requestRate: rateMetric(
+        counter='gitlab_pages_httprange_requests_duration_bucket',
+        selector={ request_stage: 'httptrace.ClientTrace.GotFirstResponseByte', le: '+Inf' },
+      ),
+
+      significantLabels: [],
+    },
+
+    pages_total_requests: {
+      userImpacting: true,
+      description: |||
+        The number of requests made by the zip VFS to a Resource with different status codes.
+        Could be bigger than the number of requests served.
+      |||,
+
+      requestRate: rateMetric(
+        counter='gitlab_pages_httprange_requests_total',
+        selector={}
+      ),
+      significantLabels: ['type'],
+    },
   },
 })

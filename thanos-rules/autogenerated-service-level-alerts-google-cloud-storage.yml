@@ -187,6 +187,262 @@ groups:
       gitlab_component_ops:rate_5m{type="google-cloud-storage", component="pages_range_requests", stage="main", monitor="global"} offset 1h
       unless
       gitlab_component_ops:rate_5m{type="google-cloud-storage", component="pages_range_requests", stage="main", monitor="global"}
+  - alert: GoogleCloudStorageServicePagesRequestDurationApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The pages_request_duration SLI of the google-cloud-storage service (`{{
+        $labels.stage }}` stage) has an apdex violating SLO
+      description: |
+        Monitors the time it takes to get a response from an httprange. Resource hosted in object storage for a request made by the zip VFS.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: google-cloud-storage-main/google-cloud-storage-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/google-cloud-storage-main/google-cloud-storage-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "250979464"
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(gitlab_pages_httprange_requests_duration_bucket{environment="{{ $labels.environment }}",request_stage="httptrace.ClientTrace.GotFirstResponseByte",stage="{{ $labels.stage }}"}[5m])
+          )
+        )
+      runbook: docs/google-cloud-storage/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_1h{component="pages_request_duration",monitor="global",type="google-cloud-storage"}
+          < (1 - 14.4 * 0.003000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_5m{component="pages_request_duration",monitor="global",type="google-cloud-storage"}
+          < (1 - 14.4 * 0.003000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="pages_request_duration",monitor="global",type="google-cloud-storage"}) >= 1
+      )
+  - alert: GoogleCloudStorageServicePagesRequestDurationApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The pages_request_duration SLI of the google-cloud-storage service (`{{
+        $labels.stage }}` stage) has an apdex violating SLO
+      description: |
+        Monitors the time it takes to get a response from an httprange. Resource hosted in object storage for a request made by the zip VFS.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: google-cloud-storage-main/google-cloud-storage-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/google-cloud-storage-main/google-cloud-storage-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "250979464"
+      grafana_variables: environment,type,stage,component
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(gitlab_pages_httprange_requests_duration_bucket{environment="{{ $labels.environment }}",request_stage="httptrace.ClientTrace.GotFirstResponseByte",stage="{{ $labels.stage }}"}[5m])
+          )
+        )
+      runbook: docs/google-cloud-storage/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_6h{component="pages_request_duration",monitor="global",type="google-cloud-storage"}
+          < (1 - 6 * 0.003000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_30m{component="pages_request_duration",monitor="global",type="google-cloud-storage"}
+          < (1 - 6 * 0.003000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="pages_request_duration",monitor="global",type="google-cloud-storage"}) >= 1
+      )
+  - alert: GoogleCloudStorageServicePagesRequestDurationTrafficCessation
+    for: 5m
+    annotations:
+      title: The pages_request_duration SLI of the google-cloud-storage service (`{{
+        $labels.stage }}` stage) has not received any traffic in the past 30 minutes
+      description: |
+        Monitors the time it takes to get a response from an httprange. Resource hosted in object storage for a request made by the zip VFS.
+
+        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+      grafana_dashboard_id: google-cloud-storage-main/google-cloud-storage-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/google-cloud-storage-main/google-cloud-storage-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3558887144"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(gitlab_pages_httprange_requests_duration_bucket{environment="{{ $labels.environment }}",le="+Inf",request_stage="httptrace.ClientTrace.GotFirstResponseByte",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/google-cloud-storage/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{type="google-cloud-storage", component="pages_request_duration", stage="main", monitor="global"} == 0
+  - alert: GoogleCloudStorageServicePagesRequestDurationTrafficAbsent
+    for: 30m
+    annotations:
+      title: The pages_request_duration SLI of the google-cloud-storage service (`{{
+        $labels.stage }}` stage) has not reported any traffic in the past 30 minutes
+      description: |
+        Monitors the time it takes to get a response from an httprange. Resource hosted in object storage for a request made by the zip VFS.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: google-cloud-storage-main/google-cloud-storage-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/google-cloud-storage-main/google-cloud-storage-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3558887144"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(gitlab_pages_httprange_requests_duration_bucket{environment="{{ $labels.environment }}",le="+Inf",request_stage="httptrace.ClientTrace.GotFirstResponseByte",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/google-cloud-storage/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_5m{type="google-cloud-storage", component="pages_request_duration", stage="main", monitor="global"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{type="google-cloud-storage", component="pages_request_duration", stage="main", monitor="global"}
+  - alert: GoogleCloudStorageServicePagesTotalRequestsTrafficCessation
+    for: 5m
+    annotations:
+      title: The pages_total_requests SLI of the google-cloud-storage service (`{{
+        $labels.stage }}` stage) has not received any traffic in the past 30 minutes
+      description: |
+        The number of requests made by the zip VFS to a Resource with different status codes. Could be bigger than the number of requests served.
+
+        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+      grafana_dashboard_id: google-cloud-storage-main/google-cloud-storage-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/google-cloud-storage-main/google-cloud-storage-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "316715522"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(gitlab_pages_httprange_requests_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/google-cloud-storage/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{type="google-cloud-storage", component="pages_total_requests", stage="main", monitor="global"} == 0
+  - alert: GoogleCloudStorageServicePagesTotalRequestsTrafficAbsent
+    for: 30m
+    annotations:
+      title: The pages_total_requests SLI of the google-cloud-storage service (`{{
+        $labels.stage }}` stage) has not reported any traffic in the past 30 minutes
+      description: |
+        The number of requests made by the zip VFS to a Resource with different status codes. Could be bigger than the number of requests served.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: google-cloud-storage-main/google-cloud-storage-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/google-cloud-storage-main/google-cloud-storage-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "316715522"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(gitlab_pages_httprange_requests_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/google-cloud-storage/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_5m{type="google-cloud-storage", component="pages_total_requests", stage="main", monitor="global"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{type="google-cloud-storage", component="pages_total_requests", stage="main", monitor="global"}
   - alert: GoogleCloudStorageServiceRegistryStorageApdexSLOViolation
     for: 2m
     annotations:

@@ -551,6 +551,22 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
+      component: pages_request_duration
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: stor
+      type: google-cloud-storage
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: pages_total_requests
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: stor
+      type: google-cloud-storage
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
       component: registry_storage
       regional_aggregation: "no"
       service_aggregation: "yes"
