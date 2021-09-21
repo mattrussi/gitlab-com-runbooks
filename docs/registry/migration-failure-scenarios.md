@@ -1,5 +1,8 @@
 ## Deployment/Migration Failure Scenarios
 
+[[_TOC_]]
+
+
 This document lists and describes all the identified possible failure scenarios when [deploying and migrating to the new version of the container registry for GitLab.com](https://gitlab.com/groups/gitlab-org/-/epics/5523).
 
 Please see the [architecture blueprint](https://docs.gitlab.com/ee/architecture/blueprints/container_registry_metadata_database/) and the [gradual migration plan](https://gitlab.com/gitlab-org/container-registry/-/issues/374) for additional context.
