@@ -34,6 +34,7 @@
 * [pgbouncer-remove-instance.md](pgbouncer-remove-instance.md)
 * [pgbouncer-saturation.md](pgbouncer-saturation.md)
 * [service-pgbouncer.md](service-pgbouncer.md)
+* [../registry/migration-failure-scenarios.md](../registry/migration-failure-scenarios.md)
 * [../sidekiq/large-pull-mirror-queue.md](../sidekiq/large-pull-mirror-queue.md)
 * [../tutorials/how_to_use_flamegraphs_for_perf_profiling.md](../tutorials/how_to_use_flamegraphs_for_perf_profiling.md)
 <!-- END_MARKER -->

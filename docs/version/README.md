@@ -45,6 +45,7 @@
 * [../praefect/praefect-read-only.md](../praefect/praefect-read-only.md)
 * [../redis-cache/remove-cache-entries.md](../redis-cache/remove-cache-entries.md)
 * [../redis/redis-sidekiq-catchall-workloads-reduction.md](../redis/redis-sidekiq-catchall-workloads-reduction.md)
+* [../registry/migration-failure-scenarios.md](../registry/migration-failure-scenarios.md)
 * [../uncategorized/about-gitlab-com.md](../uncategorized/about-gitlab-com.md)
 * [../uncategorized/aptly.md](../uncategorized/aptly.md)
 * [../uncategorized/auto-devops.md](../uncategorized/auto-devops.md)
