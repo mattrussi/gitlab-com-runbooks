@@ -84,11 +84,13 @@ API and GC resume operations normally. External intervention may be required.
 
 ##### Mitigation
 
-Increase connection pool limits on application/PGBouncer if it is due to a legitimate traffic increase. What if not?
+Increase connection pool limits on application/PGBouncer if it is due to a legitimate traffic increase.
 
 ##### Possible corrective actions
 
-Adjust connection pool limits on application/PGBouncer.
+- Adjust connection pool limits on application/PGBouncer.
+- Try to optimize slow queries.
+- Switch to a faster DB machine type.
 
 #### Excessive Latency
 
