@@ -72,5 +72,7 @@
 <!-- ## Security/Compliance -->
 
 <!-- ## Monitoring/Alerting -->
+## Monitoring/Alerting
 
+If you came here via `Firing 1 - The HPA Desired Replicas resource of the XX service (main stage), component has a saturation exceeding SLO and is close to its capacity limit.`, then head to https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/kube/kubernetes.md#hpascalecapability
 <!-- ## Links to further Documentation -->
