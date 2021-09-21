@@ -1618,7 +1618,7 @@ groups:
     labels:
       component: gcp_quota_limit
       horiz_scaling: "no"
-      severity: s4
+      severity: s2
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
@@ -2530,8 +2530,9 @@ groups:
       runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: cause
+      pager: pagerduty
       rules_domain: general
-      severity: s4
+      severity: s2
     expr: |
       gitlab_component_saturation:ratio{component="gcp_quota_limit"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="gcp_quota_limit"}

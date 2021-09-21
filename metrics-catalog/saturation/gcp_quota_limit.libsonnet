@@ -4,7 +4,7 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
 {
   gcp_quota_limit: resourceSaturationPoint({
     title: 'GCP Quota utilization per environment',
-    severity: 's4',
+    severity: 's2',
     horizontallyScalable: false,
     appliesTo: ['monitoring'],
     burnRatePeriod: '5m',
