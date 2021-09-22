@@ -8,11 +8,15 @@ REPO_DIR=$(
   pwd
 )
 
-# Check that jsonnet-tool is installed
-"${REPO_DIR}/scripts/ensure-jsonnet-tool.sh"
+SKIP_PREFLIGHT_STEPS=${SKIP_PREFLIGHT_STEPS:-0}
 
-# Convert the service catalog yaml into a JSON file in a format thats consumable by jsonnet
-"${REPO_DIR}/scripts/generate-service-catalog-json.sh"
+if [[ $SKIP_PREFLIGHT_STEPS == 0 ]]; then
+  # Check that jsonnet-tool is installed
+  "${REPO_DIR}/scripts/ensure-jsonnet-tool.sh"
+
+  # Convert the service catalog yaml into a JSON file in a format thats consumable by jsonnet
+  "${REPO_DIR}/scripts/generate-service-catalog-json.sh"
+fi
 
 function render_multi_jsonnet() {
   local dest_dir="$1"
@@ -36,12 +40,9 @@ function render_multi_jsonnet() {
 
 if [[ $# == 0 ]]; then
   cd "${REPO_DIR}"
-  for file in ./rules-jsonnet/*.jsonnet; do
-    render_multi_jsonnet "${REPO_DIR}/rules" "${file}"
-  done
-  for file in ./thanos-rules-jsonnet/*.jsonnet; do
-    render_multi_jsonnet "${REPO_DIR}/thanos-rules" "${file}"
-  done
+  export SKIP_PREFLIGHT_STEPS=1
+  find ./thanos-rules-jsonnet ./rules-jsonnet -name '*.jsonnet' -print0 |
+    xargs -0 -P 0 -n 1 ./scripts/generate-jsonnet-rules.sh
 else
   for file in "$@"; do
     source_dir=$(dirname "${file}")
