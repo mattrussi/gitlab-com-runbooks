@@ -2,6 +2,7 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local combined = metricsCatalog.combined;
+local maturityLevels = import 'service-maturity/levels.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'sentry',
@@ -89,4 +90,7 @@ metricsCatalog.serviceDefinition({
     },
 
   },
+  skippedMaturityCriteria: maturityLevels.getCriterias([
+    'Service exists in the dependency graph',
+  ]),
 })

@@ -53,14 +53,15 @@ local evaluateLevel(level, service) =
 local evaluate = function(service, levels) std.map(function(level) evaluateLevel(level, service), levels);
 
 local maxLevel(service, levelDefinitions) =
-  local levels = std.filter(
-    function(level) level.passed,
+  std.foldl(
+    function(acc, level)
+      if level.passed && acc.passed then
+        { passed: true, level: level.name }
+      else
+        { passed: false, level: acc.level },
     evaluate(service, levelDefinitions),
-  );
-  if std.length(levels) == 0 then
-    'Level 0'
-  else
-    levels[std.length(levels) - 1].name;
+    { passed: true, level: 'Level 0' }
+  ).level;
 
 {
   evaluate: evaluate,

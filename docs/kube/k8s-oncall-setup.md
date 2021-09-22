@@ -222,7 +222,7 @@ $ toolbox
 
 for more documentation on toolbox see: https://cloud.google.com/container-optimized-os/docs/how-to/toolbox
 
-for more troubleshooting tips see also: https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/uncategorized/k8s-operations.md#attaching-to-a-running-container
+For more troubleshooting tips see also: [attach to a running container](./k8s-operations.md#attaching-to-a-running-container)
 
 ## Accessing a pod
 

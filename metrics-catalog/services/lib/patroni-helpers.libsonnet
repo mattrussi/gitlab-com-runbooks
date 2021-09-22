@@ -7,6 +7,8 @@ local serviceDefinition(
   type='patroni',
   tags=[],
   additionalServiceLevelIndicators={},
+  serviceDependencies={},
+
       ) =
   metricsCatalog.serviceDefinition({
     type: type,
@@ -17,6 +19,7 @@ local serviceDefinition(
       apdexScore: 0.999,
       errorRatio: 0.999,
     },
+    serviceDependencies: serviceDependencies,
     // Use recordingRuleMetrics to specify a set of metrics with known high
     // cardinality. The metrics catalog will generate recording rules with
     // the appropriate aggregations based on this set.

@@ -17,6 +17,7 @@
 * [blackbox-git-exporter.md](blackbox-git-exporter.md)
 * [../license/license-gitlab-com.md](../license/license-gitlab-com.md)
 * [../patroni/postgres.md](../patroni/postgres.md)
+* [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
 * [../spamcheck/index.md](../spamcheck/index.md)
 * [../uncategorized/camoproxy.md](../uncategorized/camoproxy.md)
 * [../uncategorized/job_completion.md](../uncategorized/job_completion.md)

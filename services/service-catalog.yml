@@ -18,6 +18,12 @@ teams:
   engagement_policy:
   oncall_schedule: https://gitlab.pagerduty.com/schedules#P22HQSG
 
+- name: sre_reliability
+  url: https://about.gitlab.com/handbook/engineering/infrastructure/team/reliability/#core-infra
+  slack_channel: infrastructure_lounge
+  engagement_policy:
+  oncall_schedule: https://gitlab.pagerduty.com/schedules#P22HQSG
+
 - name: create
   url: https://about.gitlab.com/handbook/engineering/dev-backend/create/
   manager_slug: douwe
@@ -1023,17 +1029,17 @@ services:
       grafana_folder: N9YSt6Siz
       primary_grafana_dashboard: "frontend-main/frontend-overview"
 
-- name: gcs
+- name: google-cloud-storage
   tier: inf
   friendly_name: Google Cloud Storage
-  infra_owner: sre_coreinfra
-  label: Service:GCS
+  infra_owner: sre_reliability
+  label: Service:GoogleCloudStorage
   infrastructure:
     provider: gcp
   observability:
     monitors:
-      grafana_folder: gcs
-      primary_grafana_dashboard: "gcs-main/gcs-overview"
+      grafana_folder:
+      primary_grafana_dashboard:
 
 - name: git
   tier: sv
