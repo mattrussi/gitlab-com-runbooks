@@ -407,6 +407,8 @@ defence.
 
 ## Architecture
 
+Components diagram from Thanos docs: https://thanos.io/v0.15/thanos/quick-tutorial.md/#components
+
 THIS IS WORK IN PROGRESS! IT IS LIKELY TO BE INACCURATE! IT WILL BE UPDATED IN THE NEAR FUTURE!
 
 ![monitoring](./img/monitoring.png)
