@@ -22,7 +22,7 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
         gcp_quota_usage{%(selector)s}
       /
         gcp_quota_limit{%(selector)s}
-      )
+      ) > 0
     |||,
     slos: {
       soft: 0.85,
