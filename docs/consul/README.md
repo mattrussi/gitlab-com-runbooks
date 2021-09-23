@@ -165,14 +165,85 @@ our nodes auto-scale based on cluster demand.
 
 ## Availability
 
-
 ### Cluster Servers
 
 With 5 consul servers participating as servers, we can lose upwards of 2 before
 we lose the ability to have quorum.
 
 Diagnosing service failures on the cluster servers requires observing logs and
-taking action based on the failure scenario.
+taking action based on the failure scenario.  Regional outages may impact consul
+pending how many servers have been impacted.  Example, if a single zone goes
++completely offline, between 1 and 2 servers may be negatively impacted resulting
+in no harm as quorum will still be met with the remaining participants of the
+cluster.  Load will become mildly higher during this period as less nodes can
+respond to queries, and the servers will continue to try and reach the failed
+nodes of the cluster.
+
+#### Failure Recovery
+
+Consul operates very quickly in the face of failure.  When a cluster is
+restored, it takes just a few seconds for the quorum to be reached.
+
+Consul has [documented a set of common error
+messages](https://www.consul.io/docs/troubleshoot/common-errors).
+
+##### Split Brain
+
+Consul has the ability to be placed into a split brain state.  This may happen in
+cases where network connectivity between two availability zones is lost and
+later recovers and the election terms differ between the cluster servers.  We
+currently do not have the appropriate monitoring as the version of Consul
+utilized does not provide us the necessary metrics required to detect this
+situation.  Suffering a split brain may provide some servers improper data which
+may lead to application speaking to the wrong database servers.
+
+This can be found by logging into each of the consul servers and listing out the
+members as describe in [our Useful Commands](interaction#useful-commands).
+Recovery for this situation is documented by Hashicorp: [Recovery from a split
+brain](https://support.hashicorp.com/hc/en-us/articles/360058026733-Identifying-and-Recovering-from-a-Consul-Split-Brain)
+
+A summary of the document would be to perform the following:
+
+1. Identify which cluster is safe to utilize
+   * This is subjective and therefore unable to describe in this document
+1. Stop the consul service on nodes where we need to demote
+1. Move/Delete the data directory (defined into the `consul.json` config file)
+1. Start the consul service 1 at a time, validating each one joins the cluster
+   successfully
+
+#### Dependencies
+
+Consul has minimal dependencies to operate:
+
+* A healthy networking connection
+* Operating DNS
+* A healthy server
+
+Memory and Disk usage of consul is very minimal.  Disk usage primarily consists
+of state files that are stored in `/var/lib/consul` and for our environments,
+The largest file is going to be that of the `raft.db` which will vary in size,
+usually growing as we use this service more.  As of today we primarily use this
+to store which servers and services are healthy.  Production appears to utilize
+approximately 150MB of space.  This database uses BoltDB underneath Consul and
+is subject to growth until the next compaction is run.  All of this happens in
+the background of consul itself and shouldn't be a concern of our Engineers.
+These are configurable via two options:
+
+* [raft_snapshot_threshold](https://www.consul.io/docs/agent/options#_raft_snapshot_threshold)
+* [raft_snapshot_interval](https://www.consul.io/docs/agent/options#_raft_snapshot_interval)
+
+If we see excessive growth in Disk usage, we should first validate whether or not
+it is in use by Consul.  If yes, we then need to observe any behavioral changes
+to how we utilize Consul.  Example may be adding a new service or a set of
+servers that make a lot of changes to consul.  This could signify that we may
+need to expand consul if the usage is determined to be normal, or that a service
+is not properly behaving and we may be putting undue load on the consul cluster.
+
+If DNS is failing, consul may fail to properly resolve the addresses of clients
+and other consul servers.  This will effectively bring down a given node and
+potentially the cluster.  We currently do not provide any special DNS
+configurations on the consul servers and are subject to the resolves provided by
+our infrastructure.
 
 ### Consul Agents
 
@@ -190,12 +261,29 @@ impacted depends on the service.
 Diagnosing agent failures requires observing logs and taking action based on the
 failure scenario.
 
+Consul agents only depend on the ability to communicate to the consul servers.
+If this is disrupted for any reason, we must determine what causes said
+interruption.  The agents store very little data on disk, and their memory and
+CPU requirements are very low.
+
+### Recovery Time Objective
+
+We do not have a defined RTO for this service.  This is currently unobtainable
+due to the lack of frequent testing, lack of monitoring, and use of outdated
+versions of this service.
+
 ## Durability
 
 The data held within consul is dynamic but strongly agreed too as is the design
 of consul to have a [consensus](https://www.consul.io/docs/architecture/consensus) on the data it has knowledge of.
 
 We do not perform any backup of the data stored in consul.
+
+Should a single node have failed, we can safely bring it back into the cluster
+without needing to worry about data on disk.  As soon as a consul server is
+brought back into participation of the cluster, the raft database will sync
+enabling that server to begin participating in the cluster in a matter of a few
+seconds.
 
 ## Security/Compliance
 
