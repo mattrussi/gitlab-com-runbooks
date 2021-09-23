@@ -231,7 +231,6 @@
       'infrastructure_as_code',
       'kubernetes_management',
       'cluster_cost_management',
-      'serverless',
       'chatops',
       'secrets_management',
       'delivery_management',
@@ -367,11 +366,25 @@
       'sharding',
     ],
   },
-  infrastructure: {
-    name: 'Infrastructure',
-    stage: 'enablement',
+  delivery: {
+    name: 'Delivery',
+    stage: 'platforms',
     feature_categories: [
-      'infrastructure',
+      'delivery',
+    ],
+  },
+  scalability: {
+    name: 'Scalability',
+    stage: 'platforms',
+    feature_categories: [
+      'scalability',
+    ],
+  },
+  horse: {
+    name: 'Project Horse',
+    stage: 'platforms',
+    feature_categories: [
+      'horse',
     ],
   },
   applied_ml: {
