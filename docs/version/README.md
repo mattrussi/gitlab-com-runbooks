@@ -47,6 +47,7 @@
 * [../redis/redis-sidekiq-catchall-workloads-reduction.md](../redis/redis-sidekiq-catchall-workloads-reduction.md)
 * [../uncategorized/about-gitlab-com.md](../uncategorized/about-gitlab-com.md)
 * [../uncategorized/aptly.md](../uncategorized/aptly.md)
+* [../uncategorized/auto-devops.md](../uncategorized/auto-devops.md)
 * [../uncategorized/cloudsql-data-export.md](../uncategorized/cloudsql-data-export.md)
 * [../uncategorized/dev-environment.md](../uncategorized/dev-environment.md)
 * [../uncategorized/manage-chef.md](../uncategorized/manage-chef.md)
