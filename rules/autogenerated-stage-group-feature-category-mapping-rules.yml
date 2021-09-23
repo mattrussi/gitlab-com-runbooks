@@ -162,6 +162,12 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: delivery
+      product_stage: platforms
+      stage_group: delivery
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: delivery_management
       product_stage: configure
       stage_group: configure
@@ -318,6 +324,12 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: horse
+      product_stage: platforms
+      stage_group: horse
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: importers
       product_stage: manage
       stage_group: import
@@ -327,12 +339,6 @@ groups:
       feature_category: incident_management
       product_stage: monitor
       stage_group: monitor
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: infrastructure
-      product_stage: enablement
-      stage_group: infrastructure
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -582,6 +588,12 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: scalability
+      product_stage: platforms
+      stage_group: scalability
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: secret_detection
       product_stage: secure
       stage_group: static_analysis
@@ -609,12 +621,6 @@ groups:
       feature_category: self_monitoring
       product_stage: monitor
       stage_group: monitor
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: serverless
-      product_stage: configure
-      stage_group: configure
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
