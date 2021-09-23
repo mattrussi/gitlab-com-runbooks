@@ -241,7 +241,7 @@ groups:
               gcp_quota_usage{type="monitoring"}
             /
               gcp_quota_limit{type="monitoring"}
-            )
+            ) > 0
             ,
             1)
         ,
@@ -2521,7 +2521,7 @@ groups:
                 gcp_quota_usage{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
               /
                 gcp_quota_limit{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
-              )
+              ) > 0
               ,
               1)
           ,
