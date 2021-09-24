@@ -142,6 +142,9 @@ teams:
   product_stage_group: access
   send_slo_alerts_to_team_slack_channel: true
 
+- name: global_search
+  slack_alerts_channel: g_global_search
+
 tiers:
 - name: sv
 - name: lb
