@@ -11,7 +11,7 @@ groups:
       title: The primary_server SLI of the redis-ratelimiting service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30 minutes
       description: |
-        Operations on the Redis primary for GitLab's caching Redis instance.
+        Operations on the Redis primary for GitLab's rate-limiting Redis instance.
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: redis-ratelimiting-main/redis-ratelimiting-overview
@@ -46,7 +46,7 @@ groups:
       title: The primary_server SLI of the redis-ratelimiting service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30 minutes
       description: |
-        Operations on the Redis primary for GitLab's caching Redis instance.
+        Operations on the Redis primary for GitLab's rate-limiting Redis instance.
 
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 
