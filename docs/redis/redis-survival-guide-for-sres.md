@@ -28,7 +28,7 @@ For gitlab.com, as at September 2021, we have 5 sets of Redis instances, each ha
 | Sidekiq job queues      | redis-sidekiq-XX     | Puma workers, Sidekiq workers            | Yes (localhost)               | RDB dump every 900 seconds |
 | Persistent shared state | redis-XX             | Puma workers, Sidekiq workers, Workhorse | Yes (localhost)               | RDB dump every 900 seconds |
 | CI build trace chunks   | redis-tracechunks-XX | Puma workers (API), Sidekiq workers      | Yes (localhost)               | RDB dump every 900 seconds |
-| Ratelimiting (RackAttack/App) | redis-ratelimiting-XX | Puma workers (web)                | Yes (localhost)               | None |
+| Ratelimiting (RackAttack/App) | redis-ratelimiting-XX | Puma workers                      | Yes (localhost)               | None |
 
 We do not yet have a separate actioncable instance.
 

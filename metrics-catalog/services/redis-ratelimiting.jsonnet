@@ -44,7 +44,7 @@ metricsCatalog.serviceDefinition({
       featureCategory: 'not_owned',
       team: 'sre_observability',
       description: |||
-        Operations on the Redis primary for GitLab's caching Redis instance.
+        Operations on the Redis primary for GitLab's rate-limiting Redis instance.
       |||,
 
       requestRate: rateMetric(
