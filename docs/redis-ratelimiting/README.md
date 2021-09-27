@@ -20,7 +20,7 @@
 <!-- END_MARKER -->
 
 
-<!-- ## Summary -->
+## Summary
 
 The Ratelimiting Redis instances is a distinct Redis cluster used by RackAttack and Application Rate Limiting
 to store the transient rate-limiting counts (almost exclusively a one minute period).  Data has a very short applicable lifespan;
@@ -36,30 +36,30 @@ only have grown with traffic.
 As the cache cluster approached 95% saturation it was determined the best short-term approach was to split out the rate-limiting
 data storage to its own cluster before we go further with more horizontal scalability.
 
-<!-- ## Architecture -->
+## Architecture
 
 Redis is in the usual 3-node single-primary/two-replica VM configuration, with sentinels on the same VMs as Redis (as for persistent and sidekiq clusters)
 
 <!-- ## Performance -->
 
-<!-- ## Scalability -->
+## Scalability
 
-Single threaded CPU is the normal constraint for Redis, and will in particular be the case here.  It is CPU heavy, and *not* data 
+Single threaded CPU is the normal constraint for Redis, and will in particular be the case here.  It is CPU heavy, and *not* data
 heavy.  Analysis suggests data volumes are in the order of MBs, not GBs, and small numbers at that.
 
-<!-- ## Availability -->
+## Availability
 
 The usual redis availability expectations for our 3-node clusters apply (see https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/redis/redis-survival-guide-for-sres.md#high-availability )
 
-<!-- ## Durability -->
+## Durability
 Unimportant; data has a (almost exclusively) 1 minute useful period.  If we lost all data in this cluster, within 1 minute (at most) all effects would be passed, and at worst during that 1 minute some users might be able to access the system at up to double the usual rate-limit (an absolute upper limit, depending on which part of the minute the failure happened and the distribution of their requests during that period).
 
 <!-- ## Security/Compliance -->
 
-<!-- ## Monitoring/Alerting -->
+## Monitoring/Alerting
 
-Uses the same metrics-catalog definitions as for the other Redis clusters, 
+Uses the same metrics-catalog definitions as for the other Redis clusters.
 
-<!-- ## Links to further Documentation -->
+## Links to further Documentation
 
 * Implementation/migration epic: https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/526
