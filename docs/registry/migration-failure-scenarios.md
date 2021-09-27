@@ -34,7 +34,7 @@ Failure scenarios are broken down by category (database, application, migration,
 
 ##### Recovery definition
 
-Primary server is back online. Either the same instance or a promoted replica.
+The primary server is back online - either the same instance or a promoted replica.
 
 ##### Expected app behavior on recovery
 
@@ -130,13 +130,13 @@ This applies to both invalid migrations (should be impossible, as we test them b
 
 ##### Impact
 
-- Failed migration job (Charts) that preceeds the application upgrade;
+- Failed migration job (Charts) that precedes the application upgrade;
 
 - Blocked deployment due to the above.
 
 ##### Expected app behavior on failure
 
-Normal behaviour. Each migration is performed within a transaction and automatically rolled back in case of error. Due to the blocked deployment, the application version won't be updated and therefore there is no impact on user-facing behaviour.
+Normal behavior. Each migration is performed within a transaction and automatically rolled back in case of error. Due to the blocked deployment, the application version won't be updated, and therefore there is no impact on user-facing behavior.
 
 ##### Observability
 
@@ -149,7 +149,7 @@ failed to run database migrations: ERROR: column "stop_level_namespace_id" does 
 
 ##### Recovery definition
 
-Retrying the corresponding migration suceeds.
+Retrying the corresponding migration succeeds.
 
 ##### Expected app behavior on recovery
 
@@ -157,7 +157,7 @@ NA
 
 ##### Mitigation
 
-If due to an invalid migration, this needs to be fixed by development before retrying. If due to a timeout, we must determine why it's taking too long to complete and if there are any ongoing conflicting queries.
+If due to an invalid migration, this needs to be fixed by development before retrying. If due to a timeout, we must determine why it's taking too long to complete and any ongoing conflicting queries.
 
 ##### Possible corrective actions
 
@@ -172,7 +172,7 @@ If due to an invalid migration, this needs to be fixed by development before ret
 
 ##### Expected app behavior on failure
 
-- GC attempts to postpone review of the task to a future date. If failed, original review date remains unchanged, but this has little to no impact (ideally we should postpone the next review in case of error);
+- GC attempts to postpone the review of the task to a future date. If failed, the original review date remains unchanged, but this has little to no impact (ideally, we should postpone the following review in case of error);
 - The GC workers should backoff exponentially for every failed run, up to the maximum configured duration (24h by default).
 
 ##### Observability
@@ -194,7 +194,7 @@ NA
 
 ##### Possible corrective actions
 
-Escalation to development in case of  error unrelated with database/storage connection failures.
+Escalation to development in case of error unrelated to database/storage connection failures.
 
 #### False Positive
 
@@ -208,7 +208,7 @@ Download requests for the corresponding image will fail with a `404 Not Found`.
 
 ##### Observability
 
-It is not possible for us to identify this among all other `404 Not Found` responses, which happen quite frequently. Only end users are able to detect this problem, if it ever occurs. For example, they may have sucessfully pushed an image and then tried to pull it the day after but without success.
+It is not possible for us to identify this among all other `404 Not Found` responses, which happen pretty frequently. Only end users are able to detect this problem if it ever occurs. For example, they may have successfully pushed an image and then tried to pull it the day after but without success.
 
 ##### Recovery definition
 
@@ -220,13 +220,13 @@ Download requests for the corresponding image will succeed.
 
 ##### Mitigation
 
-If possible, the easiest mitigation is to rebuild the image from the *client side*. This can be for example, retrying the CI job that was responsible for building the image in the first place.
+If possible, the most straightforward mitigation is to rebuild the image from the *client side*. This can be, for example, retrying the CI job that was responsible for building the image in the first place.
 
-Alternatively, on the *server side*, once we know the corresponding repository and tag, we can look at the online GC logs to identify when the corresponding image manifest and/or layers where deleted and the reason why.
+Alternatively, on the *server side*, once we know the corresponding repository and tag, we can look at the online GC logs to identify when the corresponding image manifest and/or layers were deleted and the reason why.
 
 If proven to be a false positive, online GC should be disabled until further analysis. This can be done by setting [`gc.disabled`](https://gitlab.com/gitlab-org/container-registry/-/blob/e58e8c2f66c246fbdae7ace849238b08e7bfbb25/docs/configuration.md#gc) to `true` in the registry config. After that, we can attempt to recover the deleted manifest or blob.
 
-The registry bucket has a retention period for deleted objects (set to 30 days), which means we can recover deleted data from the bucket. Similarly, for the database, we can attempt to recover delete data from one of the delayed/archive replicas.
+The registry bucket has a retention period for deleted objects (set to 30 days), which means we can recover deleted data from the bucket. Similarly, we can attempt to recover deleted data from one of the delayed/archive replicas for the database.
 
 ##### Possible corrective actions
 
@@ -244,11 +244,11 @@ Download requests for the corresponding image will succeed.
 
 ##### Observability
 
-It is not possible for us to identify this. Only end users are able to detect this problem, if it ever occurs. For example, they may have deleted all tags for an image but the underlying manifest and layers remain available.
+It is not possible for us to identify this. Only end users are able to detect this problem, if it ever occurs. For example, they may have deleted all tags for an image, but the underlying manifest and layers remain available.
 
 ##### Recovery definition
 
-The manifest or blobs are garbage collected and no longer acessible.
+The manifest or blobs are garbage collected and no longer accessible.
 
 ##### Expected app behavior on recovery
 
@@ -258,7 +258,7 @@ Download requests for the corresponding image will fail with `404 Not Found`.
 
 This is considered low in criticality and priority. It should be escalated to the development team for analysis.
 
-Once we know the corresponding repository and manifest or blobs, we can look at the online GC logs to identify that the corresponding artifacts where already reviewed and the result was "not dangling". We should then look at the database to indentify any remaining references for the manifest (tags or other manifests) or blob (manifest).
+Once we know the corresponding repository and manifest or blobs, we can look at the online GC logs to identify that the corresponding artifacts were already reviewed and the result was "not dangling". We should then look at the database to identify any remaining references for the manifest (tags or other manifests) or blob (manifest).
 
 If proven to be a false negative, the bug on the online GC review process should be fixed and the corresponding manifest or blobs re-scheduled for review.
 
@@ -300,7 +300,7 @@ If no writes to the new path were made, read requests made against this reposito
 
 Write requests should succeed, writing data to the old code path.
 
-If data were written to the new code path, those images would no longer be visible in the UI or pullible.
+If data were written to the new code path, those images would no longer be visible in the UI or pullable.
 
 ##### Mitigation
 
@@ -314,7 +314,7 @@ This scenario represents a relatively serious situation, as serving repositories
 
 If this issue is a bug, it would need to be identified and patched by the registry development team.
 
-If there is an intermittent GCS issue, it's possible that an existing path would return `404 Not Found`, rather than a more appropriate error. This would cause a single repository old, but otherwise eligible, repository to flip over to the new side and flip back to the old side again, likely without our direct intervention, or possibly knowledge.
+If there is an intermittent GCS issue, it's possible that an existing path would return `404 Not Found`, rather than a more appropriate error. This would cause a single repository old, but otherwise eligible, repository to flip over to the new side and flip back to the old side again, likely without our direct intervention or possibly knowledge.
 
 #### Eligible New Repository Handled by Old Code Path
 
@@ -346,7 +346,7 @@ If no writes to the old path were made, read requests made against this reposito
 
 Write requests should succeed, writing data to the new code path.
 
-If data were written to the old code path, those images would no longer be visible in the UI or pullible.
+If data were written to the old code path, those images would no longer be visible in the UI or pullable.
 
 ##### Mitigation
 
@@ -356,9 +356,9 @@ If possible, newer images that were pushed during this scenario should be rebuil
 
 ##### Possible corrective actions
 
-For [Phase 1](https://gitlab.com/gitlab-org/container-registry/-/issues/374#phase-1-the-metadata-db-serves-new-repositories), it's possible that the `container_registry_migration_phase1_deny` feature flag was set for a repository what was previously eligible. This feature flag would need to be removed, and we **must** remove this repository and all of its images _from the old prefix on the GCS bucket_ — otherwise eligible repositories that are present on the old prefix, will always be served by the old code path during Phase 1.
+For [Phase 1](https://gitlab.com/gitlab-org/container-registry/-/issues/374#phase-1-the-metadata-db-serves-new-repositories), it's possible that the `container_registry_migration_phase1_deny` feature flag was set for a repository that was previously eligible. This feature flag would need to be removed, and we **must** remove this repository and all of its images _from the old prefix on the GCS bucket_ — otherwise eligible repositories that are present on the old prefix will always be served by the old code path during Phase 1.
 
-For [Phase 2](https://gitlab.com/gitlab-org/container-registry/-/issues/374#phase-2-migrate-existing-repositories), this likely indicates a bug in the container registry. Either in the logic to identify a new repository, or in the routing logic. This issue would need to investigated and fixed by the registry development team.
+For [Phase 2](https://gitlab.com/gitlab-org/container-registry/-/issues/374#phase-2-migrate-existing-repositories), this likely indicates a bug in the container registry. Either in the logic to identify a new repository or in the routing logic. This issue would need to be investigated and fixed by the registry development team.
 
 #### Non-Eligible New Repository Handled by New Code Path
 
@@ -378,7 +378,7 @@ For subsequent read requests, data written to the new path will be visible to th
 
 The logs in Kibana will always include `serving request in migration mode` for once for each request made in migration mode. This log entry will contain the path that the repository followed, but its presence is not a signal or alert for this scenario in particular.
 
-End users _will not_ observe this issue as this will only happen with new repositories and ll the data written to the repository will be on the new side, so there will be no data consistency issues for the duration of this incident.
+End users _will not_ observe this issue as this will only happen with new repositories. All the data written to the repository will be on the new side, so there will be no data consistency issues for the duration of this incident.
 
 ##### Recovery definition
 
@@ -388,18 +388,18 @@ This repository begins to be served by the old code path.
 
 Write requests should succeed, writing data to the old code path.
 
-This incident cannot occur in a meaningful way without data written to the new code path, those images would no longer be visible in the UI or pullible.
+This incident cannot occur in a meaningful way without data written to the new code path, those images would no longer be visible in the UI or pullable.
 
 ##### Mitigation
 
 On the server side during [Phase 1](https://gitlab.com/gitlab-org/container-registry/-/issues/374#phase-1-the-metadata-db-serves-new-repositories), data written to the database prefix on the GCS bucket **will not** cause future requests to be routed to the new code path, so we are not required to remove it to immediately resolve the issue. However, the data on the database and metadata on the new storage prefix should be removed afterward, as data on the database during [Phase 2](https://gitlab.com/gitlab-org/container-registry/-/issues/374#phase-2-migrate-existing-repositories) will cause future requests to be routed to the new code path.
 
-On the server side during Phase 2, data written to the database prefix on the GCS bucket **will** cause future requests to be routed to the new code path, so we must remove it to immediately resolve the issue. Metadata on the new storage prefix should be removed afterward, but this is not required to immediate resolve the issue.
+On the server side during Phase 2, data written to the database prefix on the GCS bucket **will** cause future requests to be routed to the new code path, so we must remove it to resolve the issue immediately. Metadata on the new storage prefix should be removed afterward, but this is not required to resolve the issue immediately.
 
 If possible, images that were pushed during this scenario should be rebuilt from the client side.
 
 ##### Possible corrective actions
 
-The most likely scenario for a single repository experiencing this issue that a `container_registry_migration_phase1_deny` feature flag is not being detected or honored by the registry auth service, so that the auth service is not populating the `migration.eligible` header appropriately.
+The most likely scenario for a single repository experiencing this issue is that a `container_registry_migration_phase1_deny` feature flag is not being detected or honored by the registry auth service so that the auth service is not populating the `migration.eligible` header appropriately.
 
-This issue would need to investigated and fixed by the registry development team.
+This issue would need to be investigated and fixed by the registry development team.
