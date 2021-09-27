@@ -226,7 +226,7 @@ Alternatively, on the *server side*, once we know the corresponding repository a
 
 If proven to be a false positive, online GC should be disabled until further analysis. This can be done by setting [`gc.disabled`](https://gitlab.com/gitlab-org/container-registry/-/blob/e58e8c2f66c246fbdae7ace849238b08e7bfbb25/docs/configuration.md#gc) to `true` in the registry config. After that, we can attempt to recover the deleted manifest or blob.
 
-**TODO:** Detail server side recovery mechanism. This probably deserves a separate section/doc. The raw idea would be: 1. Identify manifest and/or blob digests; 2. Restore blobs on the storage bucket (GCS deleted objects are retained for 30 days); 3. Restore database metadata from filesystem, which will be available as long as write mirroring is enabled (this metadata is not garbage collected).
+The registry bucket has a retention period for deleted objects (set to 30 days), which means we can recover deleted data from the bucket. Similarly, for the database, we can attempt to recover delete data from one of the delayed/archive replicas.
 
 ##### Possible corrective actions
 
@@ -262,7 +262,7 @@ Once we know the corresponding repository and manifest or blobs, we can look at 
 
 If proven to be a false negative, the bug on the online GC review process should be fixed and the corresponding manifest or blobs re-scheduled for review.
 
-**TODO:** Detail manual reschedule mechanism. This is likely an insert on the DB review queue tables.
+Manually re-reschedule a manifest or blob for review requires inserting a row for the corresponding artifacts in the `gc_manifest_review_queue` or `gc_blob_review_queue` tables, respectively.
 
 ##### Possible corrective actions
 
@@ -403,21 +403,3 @@ If possible, images that were pushed during this scenario should be rebuilt from
 The most likely scenario for a single repository experiencing this issue that a `container_registry_migration_phase1_deny` feature flag is not being detected or honored by the registry auth service, so that the auth service is not populating the `migration.eligible` header appropriately.
 
 This issue would need to investigated and fixed by the registry development team.
-
-### < Category >
-
-#### < Failure >
-
-##### Impact
-
-##### Expected app behavior on failure
-
-##### Observability
-
-##### Recovery definition
-
-##### Expected bpp behavior on recovery
-
-##### Mitigation
-
-##### Possible corrective actions
