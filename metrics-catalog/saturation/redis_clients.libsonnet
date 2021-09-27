@@ -6,7 +6,7 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
     title: 'Redis Client Utilization per Node',
     severity: 's3',
     horizontallyScalable: false,
-    appliesTo: ['redis', 'redis-sidekiq', 'redis-cache', 'redis-tracechunks'],
+    appliesTo: ['redis', 'redis-sidekiq', 'redis-cache', 'redis-tracechunks', 'redis-ratelimiting'],
     description: |||
       Redis client utilization per node.
 

@@ -6,7 +6,7 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
     title: 'Redis Memory Utilization per Node',
     severity: 's2',
     horizontallyScalable: false,
-    appliesTo: ['redis', 'redis-sidekiq', 'redis-cache'],
+    appliesTo: ['redis', 'redis-sidekiq', 'redis-cache', 'redis-ratelimiting'],
     description: |||
       Redis memory utilization per node.
 
