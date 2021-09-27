@@ -26,6 +26,7 @@
 * [../onboarding/gitlab.com_on_k8s.md](../onboarding/gitlab.com_on_k8s.md)
 * [../onboarding/kibana-diagnosis.md](../onboarding/kibana-diagnosis.md)
 * [gitlab-registry.md](gitlab-registry.md)
+* [migration-failure-scenarios.md](migration-failure-scenarios.md)
 * [../uncategorized/delete-projects-manually.md](../uncategorized/delete-projects-manually.md)
 * [../uncategorized/tweeting-guidelines.md](../uncategorized/tweeting-guidelines.md)
 * [../vault/vault.md](../vault/vault.md)
