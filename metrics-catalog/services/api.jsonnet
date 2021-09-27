@@ -36,6 +36,7 @@ metricsCatalog.serviceDefinition({
   },
   serviceDependencies: {
     gitaly: true,
+    kas: true,
     'redis-tracechunks': true,
     'redis-sidekiq': true,
     'redis-cache': true,

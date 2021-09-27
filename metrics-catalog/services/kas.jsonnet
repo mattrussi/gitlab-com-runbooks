@@ -15,6 +15,7 @@ metricsCatalog.serviceDefinition({
   serviceDependencies: {
     api: true,
     gitaly: true,
+    kas: true,
     praefect: true,
     redis: true,
   },
