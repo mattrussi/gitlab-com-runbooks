@@ -186,4 +186,4 @@ pgbouncer=# show clients;
  C    | gitlab    | gitlabhq_production | active | 10.220.4.33  | 33986 | 10.217.4.5 |       6432 | 2020-07-07 18:26:51 UTC | 2020-07-07 19:32:38 UTC |      0 |       0 |            0 | 0x7fefc1d43928 |          |          0 | 
  C    | gitlab    | gitlabhq_production | active | 10.220.8.6   | 46466 | 10.217.4.5 |       6432 | 2020-07-07 18:27:34 UTC | 2020-07-07 19:31:48 UTC |      0 |       0 |            0 | 0x7fefc1d47e40 |          |          0 | 
  C    | gitlab    | gitlabhq_production | active | 10.218.5.2   | 57862 | 10.217.4.5 |       6432 | 2020-07-07 18:27:44 UTC | 2020-07-07 18:27:44 UTC |      0 |       0 |           
-```
+

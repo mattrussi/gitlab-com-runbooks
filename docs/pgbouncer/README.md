@@ -25,6 +25,7 @@
 * [../patroni/pg_repack.md](../patroni/pg_repack.md)
 * [../patroni/postgres.md](../patroni/postgres.md)
 * [../patroni/postgresql-query-load-evaluation.md](../patroni/postgresql-query-load-evaluation.md)
+* [../patroni/provisioning_bench_env.md](../patroni/provisioning_bench_env.md)
 * [../patroni/rotating-rails-postgresql-password.md](../patroni/rotating-rails-postgresql-password.md)
 * [../patroni/user_grants_permission.md](../patroni/user_grants_permission.md)
 * [patroni-consul-postgres-pgbouncer-interactions.md](patroni-consul-postgres-pgbouncer-interactions.md)
