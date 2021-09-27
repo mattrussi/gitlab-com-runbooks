@@ -255,13 +255,19 @@ One way to workaround it is to investigate the container from the host. Below ar
 #### Run a command with the pod's network namespace
 
 1. Find the PID of any process running inside the pod, you can use the pause process for that (network namespace is shared by all processes/containers in a pod). There are many, many ways to get the PID, here are a few ideas:
-    1. get PIDs and hostnames of all containers: `docker ps -a | tail -n +2 | awk '{ print $1}' | xargs docker inspect -f '{{ .State.Pid }} {{ .Config.Hostname }}'`
-1. Once you have the PID, link its namespace where the `ip` command can find it (by default docker doesn't link network namespaces that it creates): `ln -sf /proc/<pid_you_found>/ns/net /var/run/netns/<your_custom_name>`
+    1. get PID of a process running in a `containerd` container:
+        1. List containers and get container ID: `crictl ps -a`
+        1. Get pid of a process in a container with a given ID: `crictl inspect <containerID>` search for `info.pid` field
+    1. get PIDs and hostnames of all containers running in docker: `docker ps -a | tail -n +2 | awk '{ print $1}' | xargs docker inspect -f '{{ .State.Pid }} {{ .Config.Hostname }}'`
 1. Run a command with the process' namespace
-    1. Enter toolbox: `toolbox`
-    1. List namespaces: `ip netns list`
-    1. Run your command with the desired network namespace: `ip netns exec <your_custom_name> ip a`
-1. Alternatively, you can use nsenter: `nsenter -target <PID> -mount -uts -ipc -net -pid`
+    1. Entire toolbox started with the given namespace
+        1. `toolbox --network-namespace-path=/proc/<container_pid>/ns/net`
+    1. Run a single command in toolbox with the given namespace
+        1. Once you have the PID, link its namespace where the `ip` command can find it (by default docker doesn't link network namespaces that it creates): `ln -sf /proc/<pid_you_found>/ns/net /var/run/netns/<your_custom_name>`
+        1. Enter toolbox: `toolbox`
+        1. List namespaces: `ip netns list`
+        1. Run your command with the desired network namespace: `ip netns exec <your_custom_name> ip a`
+    1. Alternatively, you can use nsenter on the GKE host (note: it proved difficult to run it with toolbox): `nsenter -target <PID> -mount -uts -ipc -net -pid`
 
 #### Start a container that will use network and process namespaces of a pod
 
