@@ -216,6 +216,14 @@ local explanationPanel(slaTarget, range, group) =
     },
   );
 
+local localUnitOverride(fieldName) = {
+  matcher: { id: 'byName', options: fieldName },
+  properties: [{
+    id: 'unit',
+    value: 'locale',
+  }],
+};
+
 local violationRatePanel(queries, group) =
   local selector = baseSelector {
     stage_group: group,
@@ -262,17 +270,22 @@ local violationRatePanel(queries, group) =
       }],
     },
     fieldConfig+: {
-      overrides+: [{
-        matcher: { id: 'byName', options: 'type' },
-        properties: [{
-          id: 'links',
-          value: [{
-            targetBlank: true,
-            title: '${__value.text} overview: See ${__data.fields.component} SLI for details',
-            url: 'https://dashboards.gitlab.net/d/${__value.text}-main',
+      overrides+: [
+        {
+          matcher: { id: 'byName', options: 'type' },
+          properties: [{
+            id: 'links',
+            value: [{
+              targetBlank: true,
+              title: '${__value.text} overview: See ${__data.fields.component} SLI for details',
+              url: 'https://dashboards.gitlab.net/d/${__value.text}-main',
+            }],
           }],
-        }],
-      }],
+        },
+      ] + [
+        localUnitOverride(fieldName)
+        for fieldName in ['failures past 28 days', 'measurements past 28 days']
+      ],
     },
   };
 
@@ -301,7 +314,7 @@ local violationRateExplanation =
 
       To find the endpoint that is attributing to the budget spend and a violation type
       we can use the logs over a 7 day range. Links for puma and sidekiq are available on the right.
-      These logs lists the endpoints that had the most violations over the past 7 days.
+      These logs list the endpoints that had the most violations over the past 7 days.
 
       The "Other" row is the sum of all the other violations excluding the top ones
       that are listed.
