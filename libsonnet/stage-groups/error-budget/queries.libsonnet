@@ -79,8 +79,8 @@ local errorBudgetTimeRemaining(slaTarget, range, selectors, aggregationLabels) =
     timeSpentQuery: errorBudgetTimeSpent(slaTarget, range, selectors, aggregationLabels),
   };
 
-local errorBudgetViolationRate(range, groupSelectors, aggregationLabels) =
-  local partsInterpolation = {
+local errorBudgetRateAggregationInterpolation(range, groupSelectors, aggregationLabels) =
+  {
     aggregationLabels: aggregations.join(
       std.filter(
         function(label) label != 'violation_type',
@@ -90,6 +90,9 @@ local errorBudgetViolationRate(range, groupSelectors, aggregationLabels) =
     selectors: selectors.serializeHash(groupSelectors),
     range: range,
   };
+
+local errorBudgetViolationRate(range, groupSelectors, aggregationLabels) =
+  local partsInterpolation = errorBudgetRateAggregationInterpolation(range, groupSelectors, aggregationLabels);
   local apdexViolationRate = |||
     sum by (%(aggregationLabels)s)(
       sum_over_time(
@@ -138,6 +141,39 @@ local errorBudgetViolationRate(range, groupSelectors, aggregationLabels) =
     errorRate: strings.indent(labels.addStaticLabel('violation_type', 'error', errorRate), 6),
   };
 
+local errorBudgetOperationRate(range, groupSelectors, aggregationLabels) =
+  local partsInterpolation = errorBudgetRateAggregationInterpolation(range, groupSelectors, aggregationLabels);
+  local apdexOperationRate = |||
+    sum by (%(aggregationLabels)s)(
+      sum_over_time(
+        gitlab:component:stage_group:execution:apdex:weight:score_1h{%(selectors)s}[%(range)s]
+      )
+    )
+  ||| % partsInterpolation;
+  local errorOperationRate = |||
+    sum by (%(aggregationLabels)s)(
+      sum_over_time(
+        gitlab:component:stage_group:execution:ops:rate_1h{%(selectors)s}[%(range)s]
+      )
+    )
+  ||| % partsInterpolation;
+  |||
+    ceil(
+      (
+        sum by (%(aggregationLabelsWithViolationType)s) (
+          %(apdexOperationRate)s
+          or
+          %(errorOperationRate)s
+        ) > 0
+      ) * 60
+    )
+  ||| % {
+    aggregationLabelsWithViolationType: aggregations.join(aggregationLabels),
+    apdexOperationRate: strings.indent(labels.addStaticLabel('violation_type', 'apdex', apdexOperationRate), 6),
+    errorOperationRate: strings.indent(labels.addStaticLabel('violation_type', 'error', errorOperationRate), 6),
+  };
+
+
 {
   init(slaTarget, range): {
     errorBudgetRatio(selectors, aggregationLabels=[]):
@@ -148,5 +184,8 @@ local errorBudgetViolationRate(range, groupSelectors, aggregationLabels) =
       errorBudgetTimeRemaining(slaTarget, range, selectors, aggregationLabels),
     errorBudgetViolationRate(selectors, aggregationLabels=[]):
       errorBudgetViolationRate(range, selectors, aggregationLabels),
+    errorBudgetOperationRate(selectors, aggregationLabels=[]):
+      errorBudgetOperationRate(range, selectors, aggregationLabels),
+
   },
 }

@@ -217,17 +217,22 @@ local explanationPanel(slaTarget, range, group) =
   );
 
 local violationRatePanel(queries, group) =
+  local selector = baseSelector {
+    stage_group: group,
+  };
+  local aggregationLabels = ['component', 'violation_type', 'type'];
   basic.table(
     title='Budget failures',
     description='Number of failures contributing to the budget send per component and type ',
     styles=null,  // https://github.com/grafana/grafonnet-lib/issues/240
-    query=queries.errorBudgetViolationRate(
-      baseSelector {
-        stage_group: group,
-      },
-      ['component', 'violation_type', 'type'],
-    ),
+    queries=[
+      queries.errorBudgetViolationRate(selector, aggregationLabels),
+      queries.errorBudgetOperationRate(selector, aggregationLabels),
+    ],
     transformations=[
+      {
+        id: 'merge',
+      },
       {
         id: 'organize',
         options: {
@@ -238,10 +243,13 @@ local violationRatePanel(queries, group) =
             violation_type: 0,
             type: 1,
             component: 2,
-            Value: 3,
+            'Value #A': 3,
+            'Value #B': 4,
           },
           renameByName: {
-            Value: 'failures past 28 days',
+            'Value #A': 'failures past 28 days',
+            'Value #B': 'measurements past 28 days',
+
           },
         },
       },
