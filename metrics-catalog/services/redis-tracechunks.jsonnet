@@ -26,19 +26,19 @@ metricsCatalog.serviceDefinition({
 
       apdex: histogramApdex(
         histogram='gitlab_redis_client_requests_duration_seconds_bucket',
-        selector={ storage: 'tracechunks' },
+        selector={ storage: 'trace_chunks' },
         satisfiedThreshold=0.5,
         toleratedThreshold=0.75,
       ),
 
       requestRate: rateMetric(
         counter='gitlab_redis_client_requests_total',
-        selector={ storage: 'tracechunks' },
+        selector={ storage: 'trace_chunks' },
       ),
 
       errorRate: rateMetric(
         counter='gitlab_redis_client_exceptions_total',
-        selector={ storage: 'tracechunks' },
+        selector={ storage: 'trace_chunks' },
       ),
     },
 

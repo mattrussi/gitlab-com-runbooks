@@ -25,11 +25,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.5",storage="tracechunks"}[5m])
+          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.5",storage="trace_chunks"}[5m])
         )
         +
         sum by (env,environment) (
-          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.75",storage="tracechunks"}[5m])
+          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.75",storage="trace_chunks"}[5m])
         )
       )
       /
@@ -43,7 +43,7 @@ groups:
       type: redis-tracechunks
     expr: |
       sum by (env,environment) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{le="+Inf",storage="tracechunks"}[5m])
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{le="+Inf",storage="trace_chunks"}[5m])
       )
   - record: gitlab:component:feature_category:execution:ops:rate_5m
     labels:
@@ -54,7 +54,7 @@ groups:
       type: redis-tracechunks
     expr: |
       sum by (env,environment) (
-        rate(gitlab_redis_client_requests_total{storage="tracechunks"}[5m])
+        rate(gitlab_redis_client_requests_total{storage="trace_chunks"}[5m])
       )
   - record: gitlab:component:feature_category:execution:error:rate_5m
     labels:
@@ -66,7 +66,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(gitlab_redis_client_exceptions_total{storage="tracechunks"}[5m])
+          rate(gitlab_redis_client_exceptions_total{storage="trace_chunks"}[5m])
         )
       )
       or
@@ -110,11 +110,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.5",storage="tracechunks"}[30m])
+          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.5",storage="trace_chunks"}[30m])
         )
         +
         sum by (env,environment) (
-          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.75",storage="tracechunks"}[30m])
+          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.75",storage="trace_chunks"}[30m])
         )
       )
       /
@@ -128,7 +128,7 @@ groups:
       type: redis-tracechunks
     expr: |
       sum by (env,environment) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{le="+Inf",storage="tracechunks"}[30m])
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{le="+Inf",storage="trace_chunks"}[30m])
       )
   - record: gitlab:component:feature_category:execution:ops:rate_30m
     labels:
@@ -139,7 +139,7 @@ groups:
       type: redis-tracechunks
     expr: |
       sum by (env,environment) (
-        rate(gitlab_redis_client_requests_total{storage="tracechunks"}[30m])
+        rate(gitlab_redis_client_requests_total{storage="trace_chunks"}[30m])
       )
   - record: gitlab:component:feature_category:execution:error:rate_30m
     labels:
@@ -151,7 +151,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(gitlab_redis_client_exceptions_total{storage="tracechunks"}[30m])
+          rate(gitlab_redis_client_exceptions_total{storage="trace_chunks"}[30m])
         )
       )
       or
@@ -195,11 +195,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.5",storage="tracechunks"}[1h])
+          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.5",storage="trace_chunks"}[1h])
         )
         +
         sum by (env,environment) (
-          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.75",storage="tracechunks"}[1h])
+          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.75",storage="trace_chunks"}[1h])
         )
       )
       /
@@ -213,7 +213,7 @@ groups:
       type: redis-tracechunks
     expr: |
       sum by (env,environment) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{le="+Inf",storage="tracechunks"}[1h])
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{le="+Inf",storage="trace_chunks"}[1h])
       )
   - record: gitlab:component:feature_category:execution:ops:rate_1h
     labels:
@@ -224,7 +224,7 @@ groups:
       type: redis-tracechunks
     expr: |
       sum by (env,environment) (
-        rate(gitlab_redis_client_requests_total{storage="tracechunks"}[1h])
+        rate(gitlab_redis_client_requests_total{storage="trace_chunks"}[1h])
       )
   - record: gitlab:component:feature_category:execution:error:rate_1h
     labels:
@@ -236,7 +236,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(gitlab_redis_client_exceptions_total{storage="tracechunks"}[1h])
+          rate(gitlab_redis_client_exceptions_total{storage="trace_chunks"}[1h])
         )
       )
       or
@@ -280,11 +280,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.5",storage="tracechunks"}[6h])
+          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.5",storage="trace_chunks"}[6h])
         )
         +
         sum by (env,environment) (
-          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.75",storage="tracechunks"}[6h])
+          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.75",storage="trace_chunks"}[6h])
         )
       )
       /
@@ -298,7 +298,7 @@ groups:
       type: redis-tracechunks
     expr: |
       sum by (env,environment) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{le="+Inf",storage="tracechunks"}[6h])
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{le="+Inf",storage="trace_chunks"}[6h])
       )
   - record: gitlab:component:feature_category:execution:ops:rate_6h
     labels:
@@ -309,7 +309,7 @@ groups:
       type: redis-tracechunks
     expr: |
       sum by (env,environment) (
-        rate(gitlab_redis_client_requests_total{storage="tracechunks"}[6h])
+        rate(gitlab_redis_client_requests_total{storage="trace_chunks"}[6h])
       )
   - record: gitlab:component:feature_category:execution:error:rate_6h
     labels:
@@ -321,7 +321,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(gitlab_redis_client_exceptions_total{storage="tracechunks"}[6h])
+          rate(gitlab_redis_client_exceptions_total{storage="trace_chunks"}[6h])
         )
       )
       or
