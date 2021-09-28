@@ -101,7 +101,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(gitlab_redis_client_requests_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",storage="tracechunks"}[5m])
+            rate(gitlab_redis_client_requests_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",storage="trace_chunks"}[5m])
           )
         )
       runbook: docs/redis-tracechunks/README.md
@@ -157,7 +157,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(gitlab_redis_client_requests_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",storage="tracechunks"}[5m])
+            rate(gitlab_redis_client_requests_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",storage="trace_chunks"}[5m])
           )
         )
       runbook: docs/redis-tracechunks/README.md
@@ -210,7 +210,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(gitlab_redis_client_exceptions_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",storage="tracechunks"}[5m])
+          rate(gitlab_redis_client_exceptions_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",storage="trace_chunks"}[5m])
         )
       runbook: docs/redis-tracechunks/README.md
     labels:
@@ -271,7 +271,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(gitlab_redis_client_requests_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",storage="tracechunks"}[5m])
+          rate(gitlab_redis_client_requests_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",storage="trace_chunks"}[5m])
         )
       runbook: docs/redis-tracechunks/README.md
     labels:
@@ -310,7 +310,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(gitlab_redis_client_requests_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",storage="tracechunks"}[5m])
+          rate(gitlab_redis_client_requests_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",storage="trace_chunks"}[5m])
         )
       runbook: docs/redis-tracechunks/README.md
     labels:
