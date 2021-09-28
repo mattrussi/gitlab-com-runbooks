@@ -16,6 +16,7 @@
 ## Troubleshooting Pointers
 
 * [../config_management/chef-guidelines.md](../config_management/chef-guidelines.md)
+* [haproxy-logging.md](haproxy-logging.md)
 * [haproxy.md](haproxy.md)
 * [../git/deploy-gitlab-rb-change.md](../git/deploy-gitlab-rb-change.md)
 * [../git/gitlab-hosted-codesandbox.md](../git/gitlab-hosted-codesandbox.md)

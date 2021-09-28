@@ -23,6 +23,8 @@
 * [../elastic/elastic-cloud.md](../elastic/elastic-cloud.md)
 * [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
 * [../elastic/kibana.md](../elastic/kibana.md)
+* [../frontend/haproxy-logging.md](../frontend/haproxy-logging.md)
+* [../frontend/haproxy.md](../frontend/haproxy.md)
 * [../frontend/ssh-maxstartups-breach.md](../frontend/ssh-maxstartups-breach.md)
 * [../git/purge-git-data.md](../git/purge-git-data.md)
 * [../kas/kubernetes-agent-basic-troubleshooting.md](../kas/kubernetes-agent-basic-troubleshooting.md)
