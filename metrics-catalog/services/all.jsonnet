@@ -31,6 +31,7 @@
   import 'redis-cache.jsonnet',
   import 'redis-sidekiq.jsonnet',
   import 'redis-tracechunks.jsonnet',
+  import 'redis-ratelimiting.jsonnet',
   import 'redis.jsonnet',
   import 'registry.jsonnet',
   import 'search.jsonnet',
