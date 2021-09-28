@@ -111,18 +111,21 @@ groups:
     labels:
       component: kube_pool_max_nodes
       horiz_scaling: "yes"
+      quantile: max
       severity: s3
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: pg_primary_cpu
       horiz_scaling: "no"
+      quantile: max
       severity: s2
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: pg_walsender_cpu
       horiz_scaling: "no"
+      quantile: max
       severity: s3
     expr: "1"
 - name: GitLab Component Saturation Statistics
