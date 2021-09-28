@@ -10,6 +10,8 @@ local environmentLabels = ['environment', 'tier', 'type', 'stage'];
 
 local sloValidator = validator.validator(function(v) v > 0 && v <= 1, 'SLO threshold should be in the range (0,1]');
 
+local quantileValidator = validator.validator(function(v) std.isNumber(v) && (v > 0 && v < 1) || v == 'max', 'value should be in the range (0,1) or the string "max"');
+
 local definitionValidor = validator.new({
   title: validator.string,
   severity: validator.setMember(severities),
@@ -19,6 +21,7 @@ local definitionValidor = validator.new({
   grafana_dashboard_uid: validator.string,
   resourceLabels: validator.array,
   query: validator.string,
+  quantileAggregation: quantileValidator,
   slos: {
     soft: sloValidator,
     hard: sloValidator,
@@ -42,12 +45,15 @@ local getServiceApplicator(appliesTo) =
   else
     getDisallowedServiceApplicator(appliesTo.allExcept);
 
+local defaults = {
+  queryFormatConfig: {},
+  alertRunbook: 'docs/{{ $labels.type }}/README.md',
+  dangerouslyThanosEvaluated: false,
+  quantileAggregation: 'max',
+};
+
 local validateAndApplyDefaults(definition) =
-  {
-    queryFormatConfig: {},
-    alertRunbook: 'docs/{{ $labels.type }}/README.md',
-    dangerouslyThanosEvaluated: false,
-  } + definitionValidor.assertValid(definition) + {
+  definitionValidor.assertValid(defaults + definition) + {
     slos: {
       alertTriggerDuration: '5m',
     } + definition.slos,
@@ -88,14 +94,27 @@ local resourceSaturationPoint = function(options)
         query: strings.indent(preaggregation, 4),
       };
 
-      |||
-        max by(%(maxAggregationLabels)s) (
-          %(quantileOverTimeQuery)s
-        )
-      ||| % {
-        quantileOverTimeQuery: strings.indent(clampedPreaggregation, 2),
-        maxAggregationLabels: std.join(', ', maxAggregationLabelsExcludingStaticLabels),
-      },
+      if definition.quantileAggregation == 'max' then
+        |||
+          max by(%(maxAggregationLabels)s) (
+            %(quantileOverTimeQuery)s
+          )
+        ||| % {
+          quantileOverTimeQuery: strings.indent(clampedPreaggregation, 2),
+          maxAggregationLabels: std.join(', ', maxAggregationLabelsExcludingStaticLabels),
+        }
+      else
+        |||
+          quantile by(%(maxAggregationLabels)s) (
+            %(quantileAggregation)g,
+            %(quantileOverTimeQuery)s
+          )
+        ||| % {
+          quantileAggregation: definition.quantileAggregation,
+          quantileOverTimeQuery: strings.indent(clampedPreaggregation, 2),
+          maxAggregationLabels: std.join(', ', maxAggregationLabelsExcludingStaticLabels),
+        }
+    ,
 
     getLegendFormat()::
       if std.length(definition.resourceLabels) > 0 then
@@ -163,6 +182,10 @@ local resourceSaturationPoint = function(options)
           component: componentName,
           horiz_scaling: if definition.horizontallyScalable then 'yes' else 'no',
           severity: definition.severity,
+          quantile: if std.isNumber(definition.quantileAggregation) then
+            '%g' % [definition.quantileAggregation]
+          else
+            definition.quantileAggregation,
         },
         expr: '1',
       },

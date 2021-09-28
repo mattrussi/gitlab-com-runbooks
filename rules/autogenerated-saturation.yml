@@ -921,7 +921,8 @@ groups:
     labels:
       component: ruby_thread_contention
     expr: |
-      max by(environment, tier, type, stage) (
+      quantile by(environment, tier, type, stage) (
+        0.99,
         clamp_min(
           clamp_max(
             rate(ruby_process_cpu_seconds_total{type=~"web|sidekiq|api|git|websockets"}[10m])
@@ -1534,360 +1535,420 @@ groups:
     labels:
       component: cgroup_memory
       horiz_scaling: "yes"
+      quantile: max
       severity: s4
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: cpu
       horiz_scaling: "yes"
+      quantile: max
       severity: s3
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: disk_inodes
       horiz_scaling: "yes"
+      quantile: max
       severity: s2
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: disk_space
       horiz_scaling: "yes"
+      quantile: max
       severity: s2
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: disk_sustained_read_iops
       horiz_scaling: "yes"
+      quantile: max
       severity: s3
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: disk_sustained_read_throughput
       horiz_scaling: "yes"
+      quantile: max
       severity: s3
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: disk_sustained_write_iops
       horiz_scaling: "yes"
+      quantile: max
       severity: s3
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: disk_sustained_write_throughput
       horiz_scaling: "yes"
+      quantile: max
       severity: s3
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: elastic_cpu
       horiz_scaling: "yes"
+      quantile: max
       severity: s4
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: elastic_disk_space
       horiz_scaling: "yes"
+      quantile: max
       severity: s3
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: elastic_jvm_heap_memory
       horiz_scaling: "yes"
+      quantile: max
       severity: s4
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: elastic_single_node_cpu
       horiz_scaling: "yes"
+      quantile: max
       severity: s4
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: elastic_single_node_disk_space
       horiz_scaling: "yes"
+      quantile: max
       severity: s4
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: elastic_thread_pools
       horiz_scaling: "yes"
+      quantile: max
       severity: s4
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: gcp_quota_limit
       horiz_scaling: "no"
+      quantile: max
       severity: s2
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: gitaly_total_disk_space
       horiz_scaling: "yes"
+      quantile: max
       severity: s3
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: go_memory
       horiz_scaling: "yes"
+      quantile: max
       severity: s4
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: kube_container_cpu
       horiz_scaling: "yes"
+      quantile: max
       severity: s4
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: kube_container_memory
       horiz_scaling: "yes"
+      quantile: max
       severity: s4
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: kube_go_memory
       horiz_scaling: "yes"
+      quantile: max
       severity: s4
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: kube_hpa_desired_replicas
       horiz_scaling: "yes"
+      quantile: max
       severity: s2
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: kube_persistent_volume_claim_disk_space
       horiz_scaling: "yes"
+      quantile: max
       severity: s2
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: kube_persistent_volume_claim_inodes
       horiz_scaling: "yes"
+      quantile: max
       severity: s2
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: kube_pool_cpu
       horiz_scaling: "yes"
+      quantile: max
       severity: s3
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: memory
       horiz_scaling: "yes"
+      quantile: max
       severity: s4
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: nat_gateway_port_allocation
       horiz_scaling: "no"
+      quantile: max
       severity: s2
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: nat_host_port_allocation
       horiz_scaling: "no"
+      quantile: max
       severity: s3
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: nf_conntrack_entries
       horiz_scaling: "yes"
+      quantile: max
       severity: s3
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: node_schedstat_waiting
       horiz_scaling: "yes"
+      quantile: max
       severity: s4
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: open_fds
       horiz_scaling: "yes"
+      quantile: max
       severity: s2
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: pg_active_db_connections_primary
       horiz_scaling: "no"
+      quantile: max
       severity: s3
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: pg_active_db_connections_replica
       horiz_scaling: "yes"
+      quantile: max
       severity: s3
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: pg_btree_bloat
       horiz_scaling: "no"
+      quantile: max
       severity: s3
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: pg_int4_id
       horiz_scaling: "no"
+      quantile: max
       severity: s1
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: pg_table_bloat
       horiz_scaling: "no"
+      quantile: max
       severity: s4
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: pg_vacuum_activity
       horiz_scaling: "yes"
+      quantile: max
       severity: s2
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: pg_xid_wraparound
       horiz_scaling: "no"
+      quantile: max
       severity: s1
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: pgbouncer_async_primary_pool
       horiz_scaling: "no"
+      quantile: max
       severity: s4
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: pgbouncer_async_replica_pool
       horiz_scaling: "yes"
+      quantile: max
       severity: s4
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: pgbouncer_client_conn
       horiz_scaling: "yes"
+      quantile: max
       severity: s2
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: pgbouncer_single_core
       horiz_scaling: "yes"
+      quantile: max
       severity: s2
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: pgbouncer_sync_primary_pool
       horiz_scaling: "no"
+      quantile: max
       severity: s3
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: pgbouncer_sync_replica_pool
       horiz_scaling: "yes"
+      quantile: max
       severity: s3
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: praefect_cloudsql_cpu
       horiz_scaling: "yes"
+      quantile: max
       severity: s4
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: private_runners
       horiz_scaling: "yes"
+      quantile: max
       severity: s4
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: pvs_cloudrun_container_instances
       horiz_scaling: "yes"
+      quantile: max
       severity: s3
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: rails_db_connection_pool
       horiz_scaling: "yes"
+      quantile: max
       severity: s4
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: redis_clients
       horiz_scaling: "no"
+      quantile: max
       severity: s3
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: redis_memory
       horiz_scaling: "no"
+      quantile: max
       severity: s2
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: redis_memory_tracechunks
       horiz_scaling: "no"
+      quantile: max
       severity: s2
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: redis_primary_cpu
       horiz_scaling: "no"
+      quantile: max
       severity: s1
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: redis_secondary_cpu
       horiz_scaling: "yes"
+      quantile: max
       severity: s4
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: ruby_thread_contention
       horiz_scaling: "yes"
+      quantile: "0.99"
       severity: s3
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: shard_cpu
       horiz_scaling: "yes"
+      quantile: max
       severity: s3
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: shared_runners
       horiz_scaling: "yes"
+      quantile: max
       severity: s4
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: shared_runners_gitlab
       horiz_scaling: "yes"
+      quantile: max
       severity: s4
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: sidekiq_shard_workers
       horiz_scaling: "yes"
+      quantile: max
       severity: s4
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: single_node_cpu
       horiz_scaling: "yes"
+      quantile: max
       severity: s4
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: single_node_puma_workers
       horiz_scaling: "yes"
+      quantile: max
       severity: s2
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       component: workhorse_image_scaling
       horiz_scaling: "yes"
+      quantile: max
       severity: s4
     expr: "1"
 - name: GitLab Component Saturation Statistics
@@ -4272,7 +4333,8 @@ groups:
       grafana_panel_id: "2359646072"
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, fqdn, pod) (
+        quantile by(environment, tier, type, stage, fqdn, pod) (
+          0.99,
           clamp_min(
             clamp_max(
               rate(ruby_process_cpu_seconds_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[10m])

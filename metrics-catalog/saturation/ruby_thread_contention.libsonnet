@@ -22,6 +22,7 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
     grafana_dashboard_uid: 'sat_ruby_thread_contention',
     resourceLabels: ['fqdn', 'pod'],  // We need both because `instance` is still an unreadable IP :|
     burnRatePeriod: '10m',
+    quantileAggregation: 0.99,
     query: |||
       rate(ruby_process_cpu_seconds_total{%(selector)s}[%(rangeInterval)s])
     |||,
