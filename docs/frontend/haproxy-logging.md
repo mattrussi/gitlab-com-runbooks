@@ -1,5 +1,5 @@
 # Frontend (HAProxy) Logging
-HAProxy logs are not indeed in Elastic due to the volume of content. You can
+HAProxy logs are not indexed in Elastic due to the volume of content. You can
 view logs for a single HAProxy VM by connecting and tailing local logs, but
 that may not be ideal when trying to investigate a site wide issue.
 
