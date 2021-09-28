@@ -22,6 +22,7 @@
 * [../config_management/chef-troubleshooting.md](../config_management/chef-troubleshooting.md)
 * [../config_management/chef-workflow.md](../config_management/chef-workflow.md)
 * [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
+* [../frontend/haproxy-logging.md](../frontend/haproxy-logging.md)
 * [../gitaly/find-project-from-hashed-storage.md](../gitaly/find-project-from-hashed-storage.md)
 * [../gitaly/gitaly-permission-denied.md](../gitaly/gitaly-permission-denied.md)
 * [../gitaly/gitaly-unusual-activity.md](../gitaly/gitaly-unusual-activity.md)

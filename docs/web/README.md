@@ -29,6 +29,7 @@
 * [../elastic/elastic-cloud.md](../elastic/elastic-cloud.md)
 * [../elastic/kibana.md](../elastic/kibana.md)
 * [../forum/discourse-forum.md](../forum/discourse-forum.md)
+* [../frontend/haproxy-logging.md](../frontend/haproxy-logging.md)
 * [../frontend/haproxy.md](../frontend/haproxy.md)
 * [../git/deploy-gitlab-rb-change.md](../git/deploy-gitlab-rb-change.md)
 * [../git/gitlab-hosted-codesandbox.md](../git/gitlab-hosted-codesandbox.md)

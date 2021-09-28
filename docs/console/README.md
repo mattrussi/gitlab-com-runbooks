@@ -28,6 +28,7 @@
 * [../cloudflare/logging.md](../cloudflare/logging.md)
 * [../customers/api-key-rotation.md](../customers/api-key-rotation.md)
 * [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
+* [../frontend/haproxy-logging.md](../frontend/haproxy-logging.md)
 * [../frontend/haproxy.md](../frontend/haproxy.md)
 * [../git/purge-git-data.md](../git/purge-git-data.md)
 * [../gitaly/find-project-from-hashed-storage.md](../gitaly/find-project-from-hashed-storage.md)
