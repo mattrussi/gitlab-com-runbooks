@@ -341,6 +341,7 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
     styles=[],
     columns=[],
     query='',
+    queries=null,
     instant=true,
     interval='1m',
     intervalFactor=3,
@@ -348,7 +349,8 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
     sort=null,
     transformations=[],
   )::
-    tablePanel.new(
+    local wrappedQueries = if queries == null then [query] else queries;
+    local panel = tablePanel.new(
       title,
       description=description,
       span=span,
@@ -357,9 +359,14 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
       styles=styles,
       columns=columns,
       sort=sort,
-    )
-    .addTarget(promQuery.target(query, instant=instant, format='table')) +
-    panelOverrides(stableId) + {
+    );
+    local populatedTablePanel = std.foldl(
+      function(table, query)
+        table.addTarget(promQuery.target(query, instant=instant, format='table')),
+      wrappedQueries,
+      panel
+    );
+    populatedTablePanel + panelOverrides(stableId) + {
       transformations: transformations,
     },
 
