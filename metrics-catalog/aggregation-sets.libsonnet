@@ -127,15 +127,6 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
       opsRate: 'gitlab_component_node_ops:rate_%s',
       errorRate: 'gitlab_component_node_errors:rate_%s',
     },
-    burnRates: {
-      '1h': {
-        apdexSuccessRate: 'gitlab_component_node_apdex:success:rate_1h',
-        apdexWeight: 'gitlab_component_node_apdex:weight:score_1h',
-        opsRate: 'gitlab_component_node_ops:rate_1h',
-        errorRate: 'gitlab_component_node_errors:rate_1h',
-        errorRatio: 'gitlab_component_node_errors:ratio_1h',
-      },
-    },
   }),
 
   /**
