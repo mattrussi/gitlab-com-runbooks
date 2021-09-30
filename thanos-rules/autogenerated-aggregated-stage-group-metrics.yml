@@ -107,6 +107,19 @@ groups:
       sum by (env,environment,tier,type,stage,component,stage_group,product_stage) (
         (gitlab:component:feature_category:execution:apdex:weight:score_1h{monitor="global"} >= 0) * on(feature_category) group_left(stage_group,product_stage) (group by (stage_group,product_stage,feature_category) (gitlab:feature_category:stage_group:mapping))
       )
+  - record: gitlab:component:stage_group:execution:ops:rate_6h
+    expr: |
+      (
+        sum by (env,environment,tier,type,stage,component,stage_group,product_stage) (
+          (gitlab:component:feature_category:execution:ops:rate_6h{monitor="global"} >= 0) * on(feature_category) group_left(stage_group,product_stage) (group by (stage_group,product_stage,feature_category) (gitlab:feature_category:stage_group:mapping))
+        )
+      )
+      or
+      (
+        sum by (env,environment,tier,type,stage,component,stage_group,product_stage) (
+          avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{monitor="global",upscale_source="yes"}[6h]) * on(feature_category) group_left(stage_group,product_stage) (group by (stage_group,product_stage,feature_category) (gitlab:feature_category:stage_group:mapping))
+        )
+      )
   - record: gitlab:component:stage_group:execution:error:ratio_6h
     expr: |
       (
@@ -114,9 +127,7 @@ groups:
           (gitlab:component:feature_category:execution:error:rate_6h{monitor="global"} >= 0) * on(feature_category) group_left(stage_group,product_stage) (group by (stage_group,product_stage,feature_category) (gitlab:feature_category:stage_group:mapping))
         )
         /
-        sum by (env,environment,tier,type,stage,component,stage_group,product_stage) (
-          (gitlab:component:feature_category:execution:ops:rate_6h{monitor="global"} >= 0) * on(feature_category) group_left(stage_group,product_stage) (group by (stage_group,product_stage,feature_category) (gitlab:feature_category:stage_group:mapping))
-        )
+        gitlab:component:stage_group:execution:ops:rate_6h{monitor="global"}
       )
       or
       (

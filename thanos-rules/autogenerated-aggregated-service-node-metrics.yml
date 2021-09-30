@@ -77,6 +77,19 @@ groups:
       sum by (env,environment,tier,type,stage,shard,fqdn) (
         (gitlab_component_node_apdex:weight:score_1h{monitor!="global"} >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
       )
+  - record: gitlab_service_node_ops:rate_6h
+    expr: |
+      (
+        sum by (env,environment,tier,type,stage,shard,fqdn) (
+          (gitlab_component_node_ops:rate_6h{monitor!="global"} >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
+        )
+      )
+      or
+      (
+        sum by (env,environment,tier,type,stage,shard,fqdn) (
+          avg_over_time(gitlab_component_node_ops:rate_1h{monitor!="global",upscale_source="yes"}[6h]) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
+        )
+      )
   - record: gitlab_service_node_errors:ratio_6h
     expr: |
       (
@@ -84,9 +97,7 @@ groups:
           (gitlab_component_node_errors:rate_6h{monitor!="global"} >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
         )
         /
-        sum by (env,environment,tier,type,stage,shard,fqdn) (
-          (gitlab_component_node_ops:rate_6h{monitor!="global"} >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
-        )
+        gitlab_service_node_ops:rate_6h{monitor="global"}
       )
       or
       (
@@ -118,6 +129,11 @@ groups:
         sum by (env,environment,tier,type,stage,shard,fqdn) (
           sum_over_time(gitlab_component_node_apdex:weight:score_1h{monitor!="global",upscale_source="yes"}[6h]) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
         )
+      )
+  - record: gitlab_service_node_ops:rate_3d
+    expr: |
+      sum by (env,environment,tier,type,stage,shard,fqdn) (
+        avg_over_time(gitlab_component_node_ops:rate_1h{monitor!="global"}[3d]) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
       )
   - record: gitlab_service_node_errors:ratio_3d
     expr: |

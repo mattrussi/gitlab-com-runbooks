@@ -54,18 +54,11 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     },
     burnRates: {
       '1m': {
+        // TODO: drop the 1m burn rate entirely
         apdexRatio: 'gitlab_component_apdex:ratio',
         opsRate: 'gitlab_component_ops:rate',
         errorRate: 'gitlab_component_errors:rate',
         errorRatio: 'gitlab_component_errors:ratio',
-      },
-      '6h': {
-        apdexRatio: 'gitlab_component_apdex:ratio_6h',
-        errorRatio: 'gitlab_component_errors:ratio_6h',
-      },
-      '3d': {
-        apdexRatio: 'gitlab_component_apdex:ratio_3d',
-        errorRatio: 'gitlab_component_errors:ratio_3d',
       },
     },
   }),
@@ -90,10 +83,12 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     burnRates: {
       '6h': {
         apdexRatio: 'gitlab_regional_sli_apdex:ratio_6h',
+        opsRate: 'gitlab_regional_sli_ops:rate_6h',
         errorRatio: 'gitlab_regional_sli_errors:ratio_6h',
       },
       '3d': {
         apdexRatio: 'gitlab_regional_sli_apdex:ratio_3d',
+        opsRate: 'gitlab_regional_sli_ops:rate_3d',
         errorRatio: 'gitlab_regional_sli_errors:ratio_3d',
       },
     },
@@ -154,6 +149,7 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
       },
       '3d': {
         apdexRatio: 'gitlab_component_node_apdex:ratio_3d',
+        opsRate: 'gitlab_component_node_ops:rate_3d',
         errorRatio: 'gitlab_component_node_errors:ratio_3d',
       },
     },
@@ -188,10 +184,12 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
       },
       '6h': {
         apdexRatio: 'gitlab_service_apdex:ratio_6h',
+        opsRate: 'gitlab_service_ops:rate_6h',
         errorRatio: 'gitlab_service_errors:ratio_6h',
       },
       '3d': {
         apdexRatio: 'gitlab_service_apdex:ratio_3d',
+        opsRate: 'gitlab_service_ops:rate_3d',
         errorRatio: 'gitlab_service_errors:ratio_3d',
       },
     },
@@ -221,10 +219,12 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     burnRates: {
       '6h': {
         apdexRatio: 'gitlab_service_node_apdex:ratio_6h',
+        opsRate: 'gitlab_service_node_ops:rate_6h',
         errorRatio: 'gitlab_service_node_errors:ratio_6h',
       },
       '3d': {
         apdexRatio: 'gitlab_service_node_apdex:ratio_3d',
+        opsRate: 'gitlab_service_node_ops:rate_3d',
         errorRatio: 'gitlab_service_node_errors:ratio_3d',
       },
     },
@@ -251,10 +251,12 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     burnRates: {
       '6h': {
         apdexRatio: 'gitlab_service_regional_apdex:ratio_6h',
+        opsRate: 'gitlab_service_regional_ops:rate_6h',
         errorRatio: 'gitlab_service_regional_errors:ratio_6h',
       },
       '3d': {
         apdexRatio: 'gitlab_service_regional_apdex:ratio_3d',
+        opsRate: 'gitlab_service_regional_ops:rate_3d',
         errorRatio: 'gitlab_service_regional_errors:ratio_3d',
       },
     },
@@ -346,6 +348,7 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     burnRates: {
       '3d': {
         apdexRatio: 'gitlab:component:feature_category:execution:apdex:ratio_3d',
+        opsRate: 'gitlab:component:feature_category:execution:ops:rate_3d',
         errorRatio: 'gitlab:component:feature_category:execution:error:ratio_3d',
       },
     },
@@ -374,6 +377,7 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     burnRates: {
       '6h': {
         apdexRatio: 'gitlab:component:stage_group:execution:apdex:ratio_6h',
+        opsRate: 'gitlab:component:stage_group:execution:ops:rate_6h',
         errorRatio: 'gitlab:component:stage_group:execution:error:ratio_6h',
       },
     },
