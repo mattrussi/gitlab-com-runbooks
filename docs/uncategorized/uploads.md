@@ -1,4 +1,3 @@
-
 # Uploads #
 
 ## Intro ##
@@ -45,6 +44,8 @@ URL of an upload that needs to be removed: https://gitlab.com/4dface/4dface-sdk/
 
 1. Get the upload's path on GCS:
 ```ruby
+> ActiveRecord::Base.connection.exec_query('set statement_timeout = 120000')
+
 > u = Upload.find_by_secret("f7a123bb72bfa73a2d0cf9c12cab99e1")
 > u.path
 ```
