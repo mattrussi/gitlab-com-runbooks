@@ -31,8 +31,38 @@ local fixture1 =
     },
   });
 
+local generatedFixture = aggregationSet.AggregationSet({
+  selector: { x: 'Y' },
+  labels: ['common_label_1', 'common_label_2'],
+  supportedBurnRates: ['1m', '5m'],
+  metricFormats: {
+    apdexSuccessRate: 'target_generated_%s_success_rate',
+    apdexRatio: 'target_generated_%s_apdex_ratio',
+    apdexWeight: 'target_generated_%s_apdex_weight',
+    opsRate: 'target_generated_%s_ops_rate',
+    errorRate: 'target_generated_%s_error_rate',
+    errorRatio: 'target_generated_%s_error_ratio',
+  },
+});
+
+local mixedFixture = aggregationSet.AggregationSet(fixture1 {
+  supportedBurnRates: ['17d'],
+  metricFormats: {
+    apdexRatio: 'target_generated_%s_apdex_ratio',
+  },
+});
 
 test.suite({
+  testDefaults: {
+    actual: fixture1.aggregationFilter,
+    expect: null,
+  },
+  testAggregationFilter: {
+    actual: aggregationSet.AggregationSet(fixture1 { aggregationFilter: 'regional' }).aggregationFilter,
+    expect: 'regional',
+  },
+
+  // Fixture with hardcoded metric names
   testGetApdexRatioMetricForBurnRate: {
     actual: fixture1.getApdexRatioMetricForBurnRate('1m'),
     expect: 'target_1m_apdex_ratio',
@@ -60,5 +90,49 @@ test.suite({
   testGetBurnRates: {
     actual: fixture1.getBurnRates(),
     expect: ['1m', '5m', '30m', '1h', '6h', '3d'],
+  },
+
+  // A fixture with generated metric names
+  testGetGeneratedApdexRatioMetricForBurnRate: {
+    actual: generatedFixture.getApdexRatioMetricForBurnRate('1m'),
+    expect: 'target_generated_1m_apdex_ratio',
+  },
+  testGetGenratedApdexWeightMetricForBurnRate: {
+    actual: generatedFixture.getApdexWeightMetricForBurnRate('5m'),
+    expect: 'target_generated_5m_apdex_weight',
+  },
+  testGetGeneratedOpsRateMetricForBurnRate: {
+    actual: generatedFixture.getOpsRateMetricForBurnRate('1m'),
+    expect: 'target_generated_1m_ops_rate',
+  },
+  testGetGeneratedErrorRateMetricForBurnRate: {
+    actual: generatedFixture.getErrorRateMetricForBurnRate('1m'),
+    expect: 'target_generated_1m_error_rate',
+  },
+  testGetGeneratedErrorRatioMetricForBurnRate: {
+    actual: generatedFixture.getErrorRatioMetricForBurnRate('1m'),
+    expect: 'target_generated_1m_error_ratio',
+  },
+  testMissingGeneratedErrorRatioMetricForBurnRate: {
+    actual: generatedFixture.getErrorRatioMetricForBurnRate('10m'),
+    expect: null,
+  },
+  testGetGeneratedBurnRates: {
+    actual: generatedFixture.getBurnRates(),
+    expect: ['1m', '5m'],
+  },
+
+  // Tests the edge cases for fixture with mixed hardcoded & generated metric names
+  testMixedGeneratedMetricForBurnRate: {
+    actual: mixedFixture.getApdexRatioMetricForBurnRate('17d'),
+    expect: 'target_generated_17d_apdex_ratio',
+  },
+  testMixedGeneratedOverriddenBurnRate: {
+    actual: mixedFixture.getApdexWeightMetricForBurnRate('5m'),
+    expect: null,
+  },
+  testMixedGeneratedGetBurnRates: {
+    actual: mixedFixture.getBurnRates(),
+    expect: ['1m', '5m', '30m', '1h', '6h', '3d', '17d'],
   },
 })
