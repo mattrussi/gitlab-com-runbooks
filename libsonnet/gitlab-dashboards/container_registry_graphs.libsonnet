@@ -130,7 +130,7 @@ local layout = import 'grafana/layout.libsonnet';
     basic.latencyTimeseries(
       title='Total Wait Time',
       description='The total time blocked waiting for a new connection. Lower is better.',
-      query='rate(wait_seconds_total{app="registry", cluster="$cluster", namespace="$namespace"}[$__interval])',
+      query='sum(rate(go_sql_dbstats_connections_wait_seconds_total{app="registry", cluster="$cluster", namespace="$namespace"}[$__interval]))',
       format='s',
       yAxisLabel='Latency',
       interval='1m',
