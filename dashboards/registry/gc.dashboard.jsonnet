@@ -9,6 +9,13 @@ local gaugePanel = grafana.gaugePanel;
 local promQuery = import 'grafana/prom_query.libsonnet';
 local colorScheme = import 'grafana/color_scheme.libsonnet';
 
+local queueSizeTresholds = [
+  { color: colorScheme.normalRangeColor, value: 0 },
+  { color: colorScheme.warningColor, value: 5000 },
+  { color: colorScheme.errorColor, value: 10000 },
+  { color: colorScheme.criticalColor, value: 50000 },
+];
+
 basic.dashboard(
   'Garbage Collection Detail',
   tags=['container registry', 'docker', 'registry'],
@@ -38,38 +45,28 @@ basic.dashboard(
   layout.grid([
     statPanel.new(
       title='Blob Queue Size',
-      description='Maximum blob queue size measured across instances.',
-      graphMode='area',
+      description='The most recent number of blob tasks queued for review.',
+      graphMode='none',
       decimals=0,
     )
     .addTarget(
       promQuery.target(
-        'max(registry_gc_queue_size{queue="gc_blob_review_queue", environment="$environment"})',
+        'avg(last_over_time(gitlab_database_rows{query_name="registry_gc_blob_review_queue", environment="$environment"}[$__interval]))',
       )
     )
-    .addThresholds([
-      { color: colorScheme.normalRangeColor, value: 0 },
-      { color: colorScheme.warningColor, value: 10 },
-      { color: colorScheme.errorColor, value: 50 },
-      { color: colorScheme.criticalColor, value: 100 },
-    ]),
+    .addThresholds(queueSizeTresholds),
     statPanel.new(
       title='Manifest Queue Size',
-      description='Maximum manifest queue size measured across instances.',
-      graphMode='area',
+      description='The most recent number of manifest tasks queued for review.',
+      graphMode='none',
       decimals=0,
     )
     .addTarget(
       promQuery.target(
-        'max(registry_gc_queue_size{queue="gc_manifest_review_queue", environment="$environment"})',
+        'avg(last_over_time(gitlab_database_rows{query_name="registry_gc_manifest_review_queue", environment="$environment"}[$__interval]))',
       )
     )
-    .addThresholds([
-      { color: colorScheme.normalRangeColor, value: 0 },
-      { color: colorScheme.warningColor, value: 10 },
-      { color: colorScheme.errorColor, value: 50 },
-      { color: colorScheme.criticalColor, value: 100 },
-    ]),
+    .addThresholds(queueSizeTresholds),
     statPanel.new(
       title='Recovered Storage Space',
       description='The number of bytes recovered by online GC.',
@@ -191,8 +188,8 @@ basic.dashboard(
     basic.timeseries(
       title='Pending Tasks',
       description='The number of tasks pending of review.',
-      query='sum by (queue) (registry_gc_queue_size{environment="$environment"})',
-      legendFormat='{{ queue }}',
+      query='avg by (query_name) (gitlab_database_rows{query_name=~"registry_gc_.*_review_queue", environment="$environment"})',
+      legendFormat='{{ query_name }}',
       intervalFactor=1,
       yAxisLabel='Count'
     ),
