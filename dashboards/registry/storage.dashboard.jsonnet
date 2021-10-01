@@ -6,7 +6,7 @@ local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 
 basic.dashboard(
-  'Storage Info',
+  'Storage Detail',
   tags=['container registry', 'docker', 'registry'],
 )
 .addTemplate(templates.gkeCluster)
@@ -53,4 +53,46 @@ basic.dashboard(
       legendFormat='{{ storage_class }}'
     ),
   ], cols=3, rowHeight=10, startRow=1)
+)
+.addPanels(
+  layout.grid([
+    basic.timeseries(
+      title='RPS (Overall)',
+      query='sum(rate(registry_storage_action_seconds_count{environment="$environment"}[$__interval]))'
+    ),
+    basic.timeseries(
+      title='RPS (Per Action)',
+      query=|||
+        sum by (action) (
+          rate(registry_storage_action_seconds_count{environment="$environment"}[$__interval])
+        )
+      |||,
+      legendFormat='{{ action }}'
+    ),
+    basic.timeseries(
+      title='Estimated p95 Latency (Overall)',
+      query=|||
+        histogram_quantile(
+          0.950000,
+          sum by (le) (
+            rate(registry_storage_action_seconds_bucket{environment="$environment"}[$__interval])
+          )
+        )
+      |||,
+      format='s'
+    ),
+    basic.timeseries(
+      title='Estimated p95 Latency (Per Action)',
+      query=|||
+        histogram_quantile(
+          0.950000,
+          sum by (action,le) (
+            rate(registry_storage_action_seconds_bucket{environment="$environment"}[$__interval])
+          )
+        )
+      |||,
+      format='s',
+      legendFormat='{{ action }}'
+    ),
+  ], cols=4, rowHeight=10, startRow=1001)
 )
