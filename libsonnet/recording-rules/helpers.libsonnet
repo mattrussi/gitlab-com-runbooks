@@ -49,55 +49,92 @@ local aggregationFilterExpr(targetAggregationSet) =
   else
     '';
 
-// Upscale an apdex RATIO from source metrics to target at the given target burnRate
-local upscaledApdexRatioExpression(sourceAggregationSet, targetAggregationSet, burnRate, extraSelectors={}) =
+// Upscale a RATIO from source metrics to target at the given target burnRate
+local upscaledRatioExpression(sourceAggregationSet, targetAggregationSet, burnRate, numeratorMetricName, denominatorMetricName, extraSelectors={}) =
   local sourceSelectorWithExtras = sourceAggregationSet.selector + extraSelectors;
 
   upscaleRatioPromExpression % {
     burnRate: burnRate,
     targetAggregationLabels: aggregations.serialize(targetAggregationSet.labels),
-    numeratorMetricName: sourceAggregationSet.getApdexSuccessRateMetricForBurnRate('1h', required=true),
-    denominatorMetricName: sourceAggregationSet.getApdexWeightMetricForBurnRate('1h', required=true),
+    numeratorMetricName: numeratorMetricName,
+    denominatorMetricName: denominatorMetricName,
     sourceSelectorWithExtras: selectors.serializeHash(sourceSelectorWithExtras),
     aggregationFilterExpr: aggregationFilterExpr(targetAggregationSet),
   };
+
+// Upscale a RATE from source metrics to target at the given target burnRate
+local upscaledRateExpression(sourceAggregationSet, targetAggregationSet, burnRate, metricName, extraSelectors={}) =
+  local sourceSelectorWithExtras = sourceAggregationSet.selector + extraSelectors;
+
+  upscaleRatePromExpression % {
+    burnRate: burnRate,
+    targetAggregationLabels: aggregations.serialize(targetAggregationSet.labels),
+    metricName: metricName,
+    sourceSelectorWithExtras: selectors.serializeHash(sourceSelectorWithExtras),
+    aggregationFilterExpr: aggregationFilterExpr(targetAggregationSet),
+  };
+
+// Upscale an apdex RATIO from source metrics to target at the given target burnRate
+local upscaledApdexRatioExpression(sourceAggregationSet, targetAggregationSet, burnRate, extraSelectors={}) =
+  upscaledRatioExpression(
+    sourceAggregationSet,
+    targetAggregationSet,
+    burnRate,
+    numeratorMetricName=sourceAggregationSet.getApdexSuccessRateMetricForBurnRate('1h', required=true),
+    denominatorMetricName=sourceAggregationSet.getApdexWeightMetricForBurnRate('1h', required=true),
+    extraSelectors=extraSelectors,
+  );
 
 // Upscale an error RATIO from source metrics to target at the given target burnRate
 local upscaledErrorRatioExpression(sourceAggregationSet, targetAggregationSet, burnRate, extraSelectors={}) =
-  local sourceSelectorWithExtras = sourceAggregationSet.selector + extraSelectors;
+  upscaledRatioExpression(
+    sourceAggregationSet,
+    targetAggregationSet,
+    burnRate,
+    numeratorMetricName=sourceAggregationSet.getErrorRateMetricForBurnRate('1h', required=true),
+    denominatorMetricName=sourceAggregationSet.getOpsRateMetricForBurnRate('1h', required=true),
+    extraSelectors=extraSelectors,
+  );
 
-  upscaleRatioPromExpression % {
-    burnRate: burnRate,
-    targetAggregationLabels: aggregations.serialize(targetAggregationSet.labels),
-    numeratorMetricName: sourceAggregationSet.getErrorRateMetricForBurnRate('1h', required=true),
-    denominatorMetricName: sourceAggregationSet.getOpsRateMetricForBurnRate('1h', required=true),
-    sourceSelectorWithExtras: selectors.serializeHash(sourceSelectorWithExtras),
-    aggregationFilterExpr: aggregationFilterExpr(targetAggregationSet),
-  };
+// Upscale an apdex success RATE from source metrics to target at the given target burnRate
+local upscaledApdexSuccessRateExpression(sourceAggregationSet, targetAggregationSet, burnRate, extraSelectors={}) =
+  upscaledRateExpression(
+    sourceAggregationSet,
+    targetAggregationSet,
+    burnRate,
+    metricName=sourceAggregationSet.getApdexSuccessRateMetricForBurnRate('1h', required=true),
+    extraSelectors=extraSelectors
+  );
+
+// Upscale an apdex total (weight) RATE from source metrics to target at the given target burnRate
+local upscaledApdexWeightExpression(sourceAggregationSet, targetAggregationSet, burnRate, extraSelectors={}) =
+  upscaledRateExpression(
+    sourceAggregationSet,
+    targetAggregationSet,
+    burnRate,
+    metricName=sourceAggregationSet.getApdexWeightMetricForBurnRate('1h', required=true),
+    extraSelectors=extraSelectors
+  );
 
 // Upscale an ops RATE from source metrics to target at the given target burnRate
 local upscaledOpsRateExpression(sourceAggregationSet, targetAggregationSet, burnRate, extraSelectors={}) =
-  local sourceSelectorWithExtras = sourceAggregationSet.selector + extraSelectors;
-
-  upscaleRatePromExpression % {
-    burnRate: burnRate,
-    targetAggregationLabels: aggregations.serialize(targetAggregationSet.labels),
-    metricName: sourceAggregationSet.getOpsRateMetricForBurnRate('1h', required=true),
-    sourceSelectorWithExtras: selectors.serializeHash(sourceSelectorWithExtras),
-    aggregationFilterExpr: aggregationFilterExpr(targetAggregationSet),
-  };
+  upscaledRateExpression(
+    sourceAggregationSet,
+    targetAggregationSet,
+    burnRate,
+    metricName=sourceAggregationSet.getOpsRateMetricForBurnRate('1h', required=true),
+    extraSelectors=extraSelectors
+  );
 
 // Upscale an error RATE from source metrics to target at the given target burnRate
 local upscaledErrorRateExpression(sourceAggregationSet, targetAggregationSet, burnRate, extraSelectors={}) =
-  local sourceSelectorWithExtras = sourceAggregationSet.selector + extraSelectors;
-
-  upscaleRatePromExpression % {
-    burnRate: burnRate,
-    targetAggregationLabels: aggregations.serialize(targetAggregationSet.labels),
-    metricName: sourceAggregationSet.getErrorRateMetricForBurnRate('1h', required=true),
-    sourceSelectorWithExtras: selectors.serializeHash(sourceSelectorWithExtras),
-    aggregationFilterExpr: aggregationFilterExpr(targetAggregationSet),
-  };
+  upscaledRateExpression(
+    sourceAggregationSet,
+    targetAggregationSet,
+    burnRate,
+    metricName=sourceAggregationSet.getErrorRateMetricForBurnRate('1h', required=true),
+    extraSelectors=extraSelectors
+  );
 
 // Generates a transformation expression that either uses direct, upscaled or
 // or combines both in cases where the source expression contains a mixture
@@ -154,8 +191,14 @@ local curry(upscaledExprType, upscaleExpressionFn) =
   aggregationFilterExpr:: aggregationFilterExpr,
 
   // These functions generate either a direct or a upscaled transformation, or a combined expression
+
+  // Ratios
   combinedApdexRatioExpression: curry('apdexRatio', upscaledApdexRatioExpression),
   combinedErrorRatioExpression: curry('errorRatio', upscaledErrorRatioExpression),
+
+  // Rates
+  combinedApdexSuccessRateExpression: curry('apdexSuccessRate', upscaledApdexSuccessRateExpression),
+  combinedApdexWeightExpression: curry('apdexWeight', upscaledApdexWeightExpression),
   combinedOpsRateExpression: curry('opsRate', upscaledOpsRateExpression),
   combinedErrorRateExpression: curry('errorRate', upscaledErrorRateExpression),
 }
