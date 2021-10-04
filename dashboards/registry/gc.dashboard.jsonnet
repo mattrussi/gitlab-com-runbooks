@@ -44,26 +44,27 @@ basic.dashboard(
 .addPanels(
   layout.grid([
     statPanel.new(
-      title='Blob Queue Size',
-      description='The most recent number of blob tasks queued for review.',
+      title='Queued Tasks',
+      description='The most recent number of tasks queued for review.',
       graphMode='none',
+      reducerFunction='last',
       decimals=0,
     )
     .addTarget(
       promQuery.target(
-        'avg(last_over_time(gitlab_database_rows{query_name="registry_gc_blob_review_queue", environment="$environment"}[$__interval]))',
+        'sum(avg by (query_name) (last_over_time(gitlab_database_rows{query_name=~"registry_gc_.*_review_queue", environment="$environment"}[$__interval])))',
       )
-    )
-    .addThresholds(queueSizeTresholds),
+    ),
     statPanel.new(
-      title='Manifest Queue Size',
-      description='The most recent number of manifest tasks queued for review.',
+      title='Pending Tasks',
+      description='The most recent number of tasks ready for review.',
       graphMode='none',
+      reducerFunction='last',
       decimals=0,
     )
     .addTarget(
       promQuery.target(
-        'avg(last_over_time(gitlab_database_rows{query_name="registry_gc_manifest_review_queue", environment="$environment"}[$__interval]))',
+        'sum(avg by (query_name) (last_over_time(gitlab_database_rows{query_name=~"registry_gc_.*_review_queue_overdue", environment="$environment"}[$__interval])))',
       )
     )
     .addThresholds(queueSizeTresholds),
@@ -71,11 +72,12 @@ basic.dashboard(
       title='Recovered Storage Space',
       description='The number of bytes recovered by online GC.',
       graphMode='none',
+      reducerFunction='sum',
       unit='bytes',
     )
     .addTarget(
       promQuery.target(
-        'sum(registry_gc_storage_deleted_bytes_total{environment="$environment"}) or vector(0)',
+        'sum(increase(registry_gc_storage_deleted_bytes_total{environment="$environment"}[$__interval]))',
       )
     ),
     statPanel.new(
@@ -105,7 +107,7 @@ basic.dashboard(
       { color: colorScheme.criticalColor, value: 0.1 },
     ]),
     statPanel.new(
-      title='Median Database Delete Latency',
+      title='Median Delete Latency (Database)',
       description='The aggregated P50 latency of the database delete queries.',
       graphMode='none',
       decimals=2,
@@ -128,7 +130,7 @@ basic.dashboard(
       { color: colorScheme.criticalColor, value: 0.1 },
     ]),
     statPanel.new(
-      title='Median Storage Delete Latency',
+      title='Median Delete Latency (Storage)',
       description='The aggregated P50 latency of the storage delete requests.',
       graphMode='none',
       decimals=2,
@@ -171,7 +173,7 @@ basic.dashboard(
       { color: colorScheme.warningColor, value: 95 },
       { color: colorScheme.normalRangeColor, value: 100 },
     ]),
-  ], cols=7, rowHeight=5, startRow=1)
+  ], cols=7, rowHeight=4, startRow=1)
 )
 
 .addPanel(
@@ -186,9 +188,17 @@ basic.dashboard(
 .addPanels(
   layout.grid([
     basic.timeseries(
-      title='Pending Tasks',
-      description='The number of tasks pending of review.',
+      title='Queued Tasks',
+      description='The number of tasks queued for review.',
       query='avg by (query_name) (gitlab_database_rows{query_name=~"registry_gc_.*_review_queue", environment="$environment"})',
+      legendFormat='{{ query_name }}',
+      intervalFactor=1,
+      yAxisLabel='Count'
+    ),
+    basic.timeseries(
+      title='Pending Tasks',
+      description='The number of tasks ready for review.',
+      query='avg by (query_name) (gitlab_database_rows{query_name=~"registry_gc_.*_review_queue_overdue", environment="$environment"})',
       legendFormat='{{ query_name }}',
       intervalFactor=1,
       yAxisLabel='Count'
@@ -218,7 +228,7 @@ basic.dashboard(
       legendFormat='{{ worker }}',
       format='s'
     ),
-  ], cols=3, rowHeight=7, startRow=1001)
+  ], cols=4, rowHeight=10, startRow=1001)
 )
 
 .addPanel(
@@ -273,7 +283,7 @@ basic.dashboard(
       legendFormat='{{ worker }}',
       format='ops'
     ),
-  ], cols=4, rowHeight=7, startRow=2001)
+  ], cols=4, rowHeight=10, startRow=2001)
 )
 
 .addPanel(
@@ -343,7 +353,7 @@ basic.dashboard(
       legendFormat='{{ worker }}',
       format='s'
     ),
-  ], cols=4, rowHeight=7, startRow=3001)
+  ], cols=4, rowHeight=10, startRow=3001)
 )
 
 .addPanel(
@@ -390,7 +400,7 @@ basic.dashboard(
       legendFormat='{{ backend }}',
       format='ops'
     ),
-  ], cols=3, rowHeight=7, startRow=4001)
+  ], cols=3, rowHeight=10, startRow=4001)
 )
 
 .addPanel(
@@ -446,5 +456,5 @@ basic.dashboard(
       legendFormat='{{ backend }}',
       format='s'
     ),
-  ], cols=3, rowHeight=7, startRow=5001)
+  ], cols=3, rowHeight=10, startRow=5001)
 )
