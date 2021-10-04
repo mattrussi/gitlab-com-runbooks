@@ -2194,17 +2194,7 @@ groups:
       )
 - name: 'Component-Level SLIs: sidekiq - 6h burn-rate'
   interval: 2m
-  rules:
-  - record: sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate6h
-    expr: |
-      sum by (environment,feature_category,le,queue,shard,stage,tier,type,urgency,worker) (
-        rate(sidekiq_jobs_completion_seconds_bucket[6h])
-      )
-  - record: sli_aggregations:sidekiq_jobs_failed_total_rate6h
-    expr: |
-      sum by (environment,feature_category,queue,shard,stage,tier,type,urgency,worker) (
-        rate(sidekiq_jobs_failed_total[6h])
-      )
+  rules: []
 - name: 'Component mapping: sidekiq'
   interval: 1m
   rules:
