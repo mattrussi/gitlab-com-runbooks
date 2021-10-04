@@ -36,21 +36,21 @@ basic.dashboard(
       title='Open',
       description='The total number of established connections both in use and idle.',
       yAxisLabel='Connections',
-      query='sum(max_over_time(go_sql_dbstats_connections_open{app="registry", cluster="$cluster", namespace="$namespace"}[$__interval]))',
+      query='sum(max_over_time(go_sql_dbstats_connections_open{app="registry", environment="$environment", cluster="$cluster", stage="$stage"}[$__interval]))',
       intervalFactor=5,
     ),
     basic.queueLengthTimeseries(
       title='In Use',
       description='The total number of connections currently in use.',
       yAxisLabel='Connections',
-      query='sum(max_over_time(go_sql_dbstats_connections_in_use{app="registry", cluster="$cluster", namespace="$namespace"}[$__interval]))',
+      query='sum(max_over_time(go_sql_dbstats_connections_in_use{app="registry", environment="$environment", cluster="$cluster", stage="$stage"}[$__interval]))',
       intervalFactor=5,
     ),
     basic.queueLengthTimeseries(
       title='Idle',
       description='The total aggregated number of idle connections.',
       yAxisLabel='Connections',
-      query='sum(max_over_time(go_sql_dbstats_connections_idle{app="registry", cluster="$cluster", namespace="$namespace"}[$__interval]))',
+      query='sum(max_over_time(go_sql_dbstats_connections_idle{app="registry", environment="$environment", cluster="$cluster", stage="$stage"}[$__interval]))',
       intervalFactor=5,
     ),
     basic.saturationTimeseries(
@@ -58,9 +58,9 @@ basic.dashboard(
       description='Saturation. Lower is better.',
       yAxisLabel='Utilization',
       query=|||
-        sum (go_sql_dbstats_connections_open{app="registry", cluster="$cluster", namespace="$namespace"})
+        sum (go_sql_dbstats_connections_open{app="registry", environment="$environment", cluster="$cluster", stage="$stage"})
         /
-        sum (go_sql_dbstats_connections_max_open{app="registry", cluster="$cluster", namespace="$namespace"})
+        sum (go_sql_dbstats_connections_max_open{app="registry", environment="$environment", cluster="$cluster", stage="$stage"})
       |||,
       interval='30s',
       intervalFactor=3,
@@ -68,7 +68,7 @@ basic.dashboard(
     basic.latencyTimeseries(
       title='Wait Time',
       description='The total aggregated time blocked waiting for a new connection. Lower is better.',
-      query='sum(rate(go_sql_dbstats_connections_wait_seconds_total{app="registry", cluster="$cluster", namespace="$namespace"}[$__interval]))',
+      query='sum(rate(go_sql_dbstats_connections_wait_seconds_total{app="registry", environment="$environment", cluster="$cluster", stage="$stage"}[$__interval]))',
       format='s',
       yAxisLabel='Latency',
       interval='1m',
@@ -78,28 +78,28 @@ basic.dashboard(
       title='Waits',
       description='The total number of connections waited for.',
       yAxisLabel='Connections',
-      query='sum(rate(go_sql_dbstats_connections_waits_total{app="registry", cluster="$cluster", namespace="$namespace"}[$__interval]))',
+      query='sum(rate(go_sql_dbstats_connections_waits_total{app="registry", environment="$environment", cluster="$cluster", stage="$stage"}[$__interval]))',
       intervalFactor=2,
     ),
     basic.timeseries(
       title='Closed (Max Idle Count)',
       description='The total number of connections closed due to the maximum idle count limit.',
       yAxisLabel='Connections',
-      query='sum(rate(go_sql_dbstats_connections_max_idle_closed_count_total{app="registry", cluster="$cluster", namespace="$namespace"}[$__interval]))',
+      query='sum(rate(go_sql_dbstats_connections_max_idle_closed_count_total{app="registry", environment="$environment", cluster="$cluster", stage="$stage"}[$__interval]))',
       intervalFactor=2,
     ),
     basic.timeseries(
       title='Closed (Max Idle Time)',
       description='The total number of connections closed due to the maximum idle time limit.',
       yAxisLabel='Connections',
-      query='sum(rate(go_sql_dbstats_connections_max_idle_time_closed_count_total{app="registry", cluster="$cluster", namespace="$namespace"}[$__interval]))',
+      query='sum(rate(go_sql_dbstats_connections_max_idle_time_closed_count_total{app="registry", environment="$environment", cluster="$cluster", stage="$stage"}[$__interval]))',
       intervalFactor=2,
     ),
     basic.timeseries(
       title='Closed (Max Lifetime)',
       description='The total number of connections closed due to the maximum lifetime limit.',
       yAxisLabel='Connections',
-      query='sum(rate(go_sql_dbstats_connections_max_lifetime_closed_count_total{app="registry", cluster="$cluster", namespace="$namespace"}[$__interval]))',
+      query='sum(rate(go_sql_dbstats_connections_max_lifetime_closed_count_total{app="registry", environment="$environment", cluster="$cluster", stage="$stage"}[$__interval]))',
       intervalFactor=2,
     ),
   ], cols=3, rowHeight=10, startRow=1),
@@ -119,7 +119,7 @@ basic.dashboard(
     basic.timeseries(
       title='Open',
       description='The number of established connections both in use and idle per pod.',
-      query='sum(rate(go_sql_dbstats_connections_open{app="registry", cluster="$cluster", namespace="$namespace"}[$__interval])) by (pod)',
+      query='sum(rate(go_sql_dbstats_connections_open{app="registry", environment="$environment", cluster="$cluster", stage="$stage"}[$__interval])) by (pod)',
       legendFormat='{{ pod }}',
       interval='1m',
       intervalFactor=2,
@@ -129,7 +129,7 @@ basic.dashboard(
     basic.timeseries(
       title='In Use',
       description='The number of connections currently in use per pod.',
-      query='sum(rate(go_sql_dbstats_connections_in_use{app="registry", cluster="$cluster", namespace="$namespace"}[$__interval])) by (pod)',
+      query='sum(rate(go_sql_dbstats_connections_in_use{app="registry", environment="$environment", cluster="$cluster", stage="$stage"}[$__interval])) by (pod)',
       legendFormat='{{ pod }}',
       interval='1m',
       intervalFactor=2,
@@ -139,7 +139,7 @@ basic.dashboard(
     basic.timeseries(
       title='Idle',
       description='The number of idle connections per pod.',
-      query='sum(rate(go_sql_dbstats_connections_idle{app="registry", cluster="$cluster", namespace="$namespace"}[$__interval])) by (pod)',
+      query='sum(rate(go_sql_dbstats_connections_idle{app="registry", environment="$environment", cluster="$cluster", stage="$stage"}[$__interval])) by (pod)',
       legendFormat='{{ pod }}',
       interval='1m',
       intervalFactor=2,
@@ -151,9 +151,9 @@ basic.dashboard(
       description='Saturation per pod. Lower is better.',
       yAxisLabel='Utilization',
       query=|||
-        sum by (pod) (go_sql_dbstats_connections_open{app="registry", cluster="$cluster", namespace="$namespace"})
+        sum by (pod) (go_sql_dbstats_connections_open{app="registry", environment="$environment", cluster="$cluster", stage="$stage"})
         /
-        sum by (pod) (go_sql_dbstats_connections_max_open{app="registry", cluster="$cluster", namespace="$namespace"})
+        sum by (pod) (go_sql_dbstats_connections_max_open{app="registry", environment="$environment", cluster="$cluster", stage="$stage"})
       |||,
       legendFormat='{{ pod }}',
       interval='30s',
@@ -162,7 +162,7 @@ basic.dashboard(
     basic.latencyTimeseries(
       title='Wait Time',
       description='The aggregated time blocked waiting for a new connection per pod. Lower is better.',
-      query='sum(rate(go_sql_dbstats_connections_wait_seconds_total{app="registry", cluster="$cluster", namespace="$namespace"}[$__interval])) by (pod)',
+      query='sum(rate(go_sql_dbstats_connections_wait_seconds_total{app="registry", environment="$environment", cluster="$cluster", stage="$stage"}[$__interval])) by (pod)',
       legendFormat='{{ pod }}',
       format='s',
       yAxisLabel='Latency',
@@ -172,7 +172,7 @@ basic.dashboard(
     basic.timeseries(
       title='Waits',
       description='The number of connections waited for per pod.',
-      query='sum(max_over_time(go_sql_dbstats_connections_waits_total{app="registry", cluster="$cluster", namespace="$namespace"}[$__interval])) by (pod)',
+      query='sum(max_over_time(go_sql_dbstats_connections_waits_total{app="registry", environment="$environment", cluster="$cluster", stage="$stage"}[$__interval])) by (pod)',
       legendFormat='{{ pod }}',
       interval='1m',
       intervalFactor=2,
