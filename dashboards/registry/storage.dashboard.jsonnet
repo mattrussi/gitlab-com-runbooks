@@ -58,13 +58,13 @@ basic.dashboard(
   layout.grid([
     basic.timeseries(
       title='RPS (Overall)',
-      query='sum(rate(registry_storage_action_seconds_count{environment="$environment"}[$__interval]))'
+      query='sum(rate(registry_storage_action_seconds_count{environment="$environment", cluster="$cluster", stage="$stage"}[$__interval]))'
     ),
     basic.timeseries(
       title='RPS (Per Action)',
       query=|||
         sum by (action) (
-          rate(registry_storage_action_seconds_count{environment="$environment"}[$__interval])
+          rate(registry_storage_action_seconds_count{environment="$environment", cluster="$cluster", stage="$stage"}[$__interval])
         )
       |||,
       legendFormat='{{ action }}'
@@ -75,7 +75,7 @@ basic.dashboard(
         histogram_quantile(
           0.950000,
           sum by (le) (
-            rate(registry_storage_action_seconds_bucket{environment="$environment"}[$__interval])
+            rate(registry_storage_action_seconds_bucket{environment="$environment", cluster="$cluster", stage="$stage"}[$__interval])
           )
         )
       |||,
@@ -87,7 +87,7 @@ basic.dashboard(
         histogram_quantile(
           0.950000,
           sum by (action,le) (
-            rate(registry_storage_action_seconds_bucket{environment="$environment"}[$__interval])
+            rate(registry_storage_action_seconds_bucket{environment="$environment", cluster="$cluster", stage="$stage"}[$__interval])
           )
         )
       |||,
