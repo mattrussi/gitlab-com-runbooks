@@ -3,6 +3,7 @@ local test = import 'github.com/yugui/jsonnetunit/jsonnetunit/test.libsonnet';
 
 local fixture1 =
   aggregationSet.AggregationSet({
+    intermediateSource: true,
     selector: { x: 'Y' },
     labels: ['common_label_1', 'common_label_2'],
     burnRates: {
@@ -33,6 +34,7 @@ local fixture1 =
 
 local generatedFixture = aggregationSet.AggregationSet({
   selector: { x: 'Y' },
+  intermediateSource: false,
   labels: ['common_label_1', 'common_label_2'],
   supportedBurnRates: ['1m', '5m'],
   metricFormats: {
@@ -56,6 +58,10 @@ test.suite({
   testDefaults: {
     actual: fixture1.aggregationFilter,
     expect: null,
+  },
+  testDefaultSupportedBurnRates: {
+    actual: fixture1.supportedBurnRates,
+    expect: ['5m', '30m', '1h'],
   },
   testAggregationFilter: {
     actual: aggregationSet.AggregationSet(fixture1 { aggregationFilter: 'regional' }).aggregationFilter,

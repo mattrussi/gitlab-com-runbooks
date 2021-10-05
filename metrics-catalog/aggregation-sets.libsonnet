@@ -18,7 +18,7 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     intermediateSource: true,  // Not intended for consumption in dashboards or alerts
     selector: { monitor: { ne: 'global' } },  // Not Thanos Ruler
     labels: ['environment', 'tier', 'type', 'stage'],
-    supportedBurnRates: ['1m', '5m', '30m', '1h', '6h'],
+    supportedBurnRates: ['1m', '5m', '30m', '1h', '6h'],  // Including 1m & 6h
     metricFormats: {
       apdexSuccessRate: 'gitlab_component_apdex:success:rate_%s',
       apdexWeight: 'gitlab_component_apdex:weight:score_%s',
@@ -46,7 +46,7 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     intermediateSource: false,  // Used in dashboards and alerts
     selector: { monitor: 'global' },  // Thanos Ruler
     labels: ['env', 'environment', 'tier', 'type', 'stage', 'component'],
-    supportedBurnRates: ['1m', '5m', '30m', '1h', '6h', '3d'],
+    supportedBurnRates: ['1m', '5m', '30m', '1h', '6h', '3d'],  // Including 1m
     metricFormats: {
       apdexRatio: 'gitlab_component_apdex:ratio_%s',
       opsRate: 'gitlab_component_ops:rate_%s',
@@ -74,7 +74,6 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     intermediateSource: false,  // Used in dashboards and alerts
     selector: { monitor: 'global' },  // Thanos Ruler
     labels: ['env', 'environment', 'tier', 'type', 'stage', 'region', 'component'],
-    supportedBurnRates: ['5m', '30m', '1h', '6h', '3d'],
     metricFormats: {
       apdexRatio: 'gitlab_regional_sli_apdex:ratio_%s',
       opsRate: 'gitlab_regional_sli_ops:rate_%s',
@@ -116,7 +115,7 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     intermediateSource: true,  // Not intended for consumption in dashboards or alerts
     selector: { monitor: { ne: 'global' } },  // Not Thanos Ruler
     labels: ['environment', 'tier', 'type', 'stage', 'shard', 'fqdn', 'component'],
-    supportedBurnRates: ['5m', '30m', '1h', '6h'],
+    supportedBurnRates: ['5m', '30m', '1h', '6h'],  // Including 6h
     metricFormats: {
       apdexSuccessRate: 'gitlab_component_node_apdex:success:rate_%s',
       apdexWeight: 'gitlab_component_node_apdex:weight:score_%s',
@@ -135,7 +134,6 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     intermediateSource: false,  // Used in dashboards and alerts
     selector: { monitor: 'global' },  // Thanos Ruler
     labels: ['env', 'environment', 'tier', 'type', 'stage', 'shard', 'fqdn', 'component'],
-    supportedBurnRates: ['5m', '30m', '1h', '6h', '3d'],
     metricFormats: {
       apdexRatio: 'gitlab_component_node_apdex:ratio_%s',
       opsRate: 'gitlab_component_node_ops:rate_%s',
@@ -169,7 +167,6 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     intermediateSource: false,  // Used in dashboards and alerts
     selector: { monitor: 'global' },  // Thanos Ruler
     labels: ['env', 'environment', 'tier', 'type', 'stage'],
-    supportedBurnRates: ['1m', '5m', '30m', '1h', '6h', '3d'],
     metricFormats: {
       apdexRatio: 'gitlab_service_apdex:ratio_%s',
       opsRate: 'gitlab_service_ops:rate_%s',
@@ -210,7 +207,6 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     intermediateSource: false,  // Used in dashboards and alerts
     selector: { monitor: 'global' },  // Thanos Ruler
     labels: ['env', 'environment', 'tier', 'type', 'stage', 'shard', 'fqdn'],
-    supportedBurnRates: ['5m', '30m', '1h', '6h', '3d'],
     metricFormats: {
       apdexRatio: 'gitlab_service_node_apdex:ratio_%s',
       opsRate: 'gitlab_service_node_ops:rate_%s',
@@ -242,7 +238,6 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     intermediateSource: false,  // Used in dashboards and alerts
     selector: { monitor: 'global' },  // Thanos Ruler
     labels: ['env', 'environment', 'tier', 'type', 'stage', 'region'],
-    supportedBurnRates: ['5m', '30m', '1h', '6h', '3d'],
     metricFormats: {
       apdexRatio: 'gitlab_service_regional_apdex:ratio_%s',
       opsRate: 'gitlab_service_regional_ops:rate_%s',
@@ -281,7 +276,6 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
       'urgency',
       'worker',
     ],
-    supportedBurnRates: ['5m', '30m', '1h'],
     metricFormats: {
       apdexSuccessRate: 'gitlab_background_jobs:execution:apdex:success:rate_%s',
       apdexWeight: 'gitlab_background_jobs:execution:apdex:weight:score_%s',
@@ -308,7 +302,6 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
       'urgency',
       'worker',
     ],
-    supportedBurnRates: ['5m', '30m', '1h', '6h', '3d'],
     metricFormats: {
       apdexWeight: 'gitlab_background_jobs:execution:apdex:weight:score_%s',
       apdexRatio: 'gitlab_background_jobs:execution:apdex:ratio_%s',
@@ -351,7 +344,6 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
       'urgency',
       'worker',
     ],
-    supportedBurnRates: ['5m', '30m', '1h'],
     metricFormats: {
       apdexSuccessRate: 'gitlab_background_jobs:queue:apdex:success:rate_%s',
       apdexWeight: 'gitlab_background_jobs:queue:apdex:weight:score_%s',
@@ -378,7 +370,6 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
       'urgency',
       'worker',
     ],
-    supportedBurnRates: ['5m', '30m', '1h', '6h', '3d'],
     metricFormats: {
       apdexRatio: 'gitlab_background_jobs:queue:apdex:ratio_%s',
       opsRate: 'gitlab_background_jobs:queue:ops:rate_%s',
@@ -391,7 +382,6 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     intermediateSource: true,  // Used in dashboards and alerts
     selector: { monitor: { ne: 'global' } },  // Not Thanos Ruler
     labels: ['env', 'environment', 'tier', 'type', 'stage', 'feature_category'],
-    supportedBurnRates: ['5m', '30m', '1h'],
     metricFormats: {
       apdexSuccessRate: 'gitlab:component:feature_category:execution:apdex:success:rate_%s',
       apdexWeight: 'gitlab:component:feature_category:execution:apdex:weight:score_%s',
@@ -406,7 +396,6 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     intermediateSource: false,  // Used in dashboards and alerts
     selector: { monitor: 'global' },  // Thanos Ruler
     labels: ['env', 'environment', 'tier', 'type', 'stage', 'component', 'feature_category'],
-    supportedBurnRates: ['5m', '30m', '1h', '6h', '3d'],
     metricFormats: {
       apdexSuccessRate: 'gitlab:component:feature_category:execution:apdex:success:rate_%s',
       apdexWeight: 'gitlab:component:feature_category:execution:apdex:weight:score_%s',
@@ -435,7 +424,7 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
       on: 'feature_category',
       labels: ['stage_group', 'product_stage'],
     },
-    supportedBurnRates: ['5m', '30m', '1h', '6h'],
+    supportedBurnRates: ['5m', '30m', '1h', '6h'],  // Excluding 3d
     metricFormats: {
       apdexSuccessRate: 'gitlab:component:stage_group:execution:apdex:success:rate_%s',
       apdexWeight: 'gitlab:component:stage_group:execution:apdex:weight:score_%s',
