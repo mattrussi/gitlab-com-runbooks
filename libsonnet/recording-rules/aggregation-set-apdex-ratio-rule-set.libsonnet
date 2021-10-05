@@ -27,6 +27,28 @@ local getDirectApdexRatioExpression(sourceAggregationSet, targetAggregationSet, 
     }
   else null;
 
+local getDirectRate(sourceAggregationSet, targetAggregationSet, burnRate, sourceMetric) =
+  if sourceMetric != null then
+    |||
+      sum by (%(targetAggregationLabels)s) (
+        (%(sourceMetric)s{%(sourceSelector)s} >= 0)%(aggregationFilterExpr)s
+      )
+    ||| % {
+      targetAggregationLabels: aggregations.serialize(targetAggregationSet.labels),
+      sourceSelector: selectors.serializeHash(sourceAggregationSet.selector),
+      aggregationFilterExpr: helpers.aggregationFilterExpr(targetAggregationSet),
+      sourceMetric: sourceMetric,
+    }
+  else null;
+
+local getApdexSuccessRateTransformExpression(sourceAggregationSet, targetAggregationSet, burnRate) =
+  local directExpr = getDirectRate(sourceAggregationSet, targetAggregationSet, burnRate, sourceMetric=sourceAggregationSet.getApdexSuccessRateMetricForBurnRate(burnRate, required=false));
+  helpers.combinedApdexSuccessRateExpression(sourceAggregationSet, targetAggregationSet, burnRate, directExpr);
+
+local getApdexWeightTransformExpression(sourceAggregationSet, targetAggregationSet, burnRate) =
+  local directExpr = getDirectRate(sourceAggregationSet, targetAggregationSet, burnRate, sourceMetric=sourceAggregationSet.getApdexWeightMetricForBurnRate(burnRate, required=false));
+  helpers.combinedApdexWeightExpression(sourceAggregationSet, targetAggregationSet, burnRate, directExpr);
+
 local getApdexRatioExpression(sourceAggregationSet, targetAggregationSet, burnRate) =
   local directExpr = getDirectApdexRatioExpression(sourceAggregationSet, targetAggregationSet, burnRate);
   helpers.combinedApdexRatioExpression(sourceAggregationSet, targetAggregationSet, burnRate, directExpr);
@@ -56,13 +78,7 @@ local getApdexRatioExpression(sourceAggregationSet, targetAggregationSet, burnRa
       else
         [{
           record: targetApdexWeightMetric,
-          expr: |||
-            sum by (%(targetAggregationLabels)s) (
-              (%(sourceApdexWeightMetric)s{%(sourceSelector)s} >= 0)%(aggregationFilterExpr)s
-            )
-          ||| % formatConfig {
-            sourceApdexWeightMetric: sourceAggregationSet.getApdexWeightMetricForBurnRate(burnRate, required=true),
-          },
+          expr: getApdexWeightTransformExpression(sourceAggregationSet, targetAggregationSet, burnRate),
         }]
     )
     +
@@ -72,13 +88,7 @@ local getApdexRatioExpression(sourceAggregationSet, targetAggregationSet, burnRa
       else
         [{
           record: targetApdexSuccessRateMetric,
-          expr: |||
-            sum by (%(targetAggregationLabels)s) (
-              (%(sourceApdexWeightMetric)s{%(sourceSelector)s} >= 0)%(aggregationFilterExpr)s
-            )
-          ||| % formatConfig {
-            sourceApdexWeightMetric: sourceAggregationSet.getApdexSuccessRateMetricForBurnRate(burnRate, required=true),
-          },
+          expr: getApdexSuccessRateTransformExpression(sourceAggregationSet, targetAggregationSet, burnRate),
         }]
     )
     +
