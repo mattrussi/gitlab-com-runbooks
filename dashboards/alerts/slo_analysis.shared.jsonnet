@@ -349,7 +349,7 @@ local multiburnRateAlertsDashboard(
 local aggregationSetsForSLOAnalysisDashboards =
   std.filter(
     function(aggregationSet)
-      !aggregationSet.intermediateSource,
+      aggregationSet.generateSLODashboards,
     std.objectValues(aggregationSets)
   );
 

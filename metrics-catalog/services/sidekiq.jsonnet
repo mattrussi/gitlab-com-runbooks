@@ -76,6 +76,7 @@ metricsCatalog.serviceDefinition({
       featureCategory: 'not_owned',
       team: 'scalability',
       ignoreTrafficCessation: shard.ignoreTrafficCessation,
+      upscaleLongerBurnRates: true,
 
       description: |||
         Aggregation of all jobs for the %(shard)s Sidekiq shard.

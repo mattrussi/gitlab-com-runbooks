@@ -3,24 +3,8 @@ local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 
-local errorRateVisitor = {
-  metricName(aggregationSet, burnRate, required=false)::
-    aggregationSet.getErrorRateMetricForBurnRate(burnRate, required),
-
-  upscalingExpression(sourceAggregationSet, targetAggregationSet, burnRate)::
-    helpers.upscaledErrorRateExpression(sourceAggregationSet, targetAggregationSet, burnRate),
-};
-
-local opsRateVisitor = {
-  metricName(aggregationSet, burnRate, required=false)::
-    aggregationSet.getOpsRateMetricForBurnRate(burnRate, required),
-
-  upscalingExpression(sourceAggregationSet, targetAggregationSet, burnRate)::
-    helpers.upscaledOpsRateExpression(sourceAggregationSet, targetAggregationSet, burnRate),
-};
-
-local getDirectRateExpression(sourceAggregationSet, targetAggregationSet, burnRate, required, visitor) =
-  local sourceMetricName = visitor.metricName(sourceAggregationSet, burnRate, required);
+local getDirectRateExpression(sourceAggregationSet, targetAggregationSet, burnRate, visitor) =
+  local sourceMetricName = visitor.metricName(sourceAggregationSet, burnRate, required=false);
   local targetAggregationLabels = aggregations.serialize(targetAggregationSet.labels);
   local sourceSelector = selectors.serializeHash(sourceAggregationSet.selector);
 
@@ -37,39 +21,23 @@ local getDirectRateExpression(sourceAggregationSet, targetAggregationSet, burnRa
     }
   else null;
 
-// Generates a rate expression, either as a direct aggregation from the source, or
-// an upscaling expression, or a combination of the two
-local getRateExpression(sourceAggregationSet, targetAggregationSet, burnRate, visitor) =
-  local upscaledExpr = visitor.upscalingExpression(sourceAggregationSet, targetAggregationSet, burnRate);
+local errorRateVisitor = {
+  metricName(aggregationSet, burnRate, required=false)::
+    aggregationSet.getErrorRateMetricForBurnRate(burnRate, required),
 
-  // For 6h burn rate, we'll use either a combination of upscaling and direct aggregation,
-  // or, if the source aggregations, don't exist, only use the upscaled metric
-  if burnRate == '6h' then
-    local directExpr = getDirectRateExpression(sourceAggregationSet, targetAggregationSet, burnRate, required=false, visitor=visitor);
+  getRateExpression(sourceAggregationSet, targetAggregationSet, burnRate)::
+    local directExpr = getDirectRateExpression(sourceAggregationSet, targetAggregationSet, burnRate, self);
+    helpers.combinedErrorRateExpression(sourceAggregationSet, targetAggregationSet, burnRate, directExpr),
+};
 
-    if directExpr != null then
-      |||
-        (
-          %(directExpr)s
-        )
-        or
-        (
-          %(upscaledExpr)s
-        )
-      ||| % {
-        directExpr: strings.indent(directExpr, 2),
-        upscaledExpr: strings.indent(upscaledExpr, 2),
-      }
-    else
-      // If we there is no source burnRate, use only upscaling
-      upscaledExpr
+local opsRateVisitor = {
+  metricName(aggregationSet, burnRate, required=false)::
+    aggregationSet.getOpsRateMetricForBurnRate(burnRate, required),
 
-  else if burnRate == '3d' then
-    // For 3d expressions, we always use upscaling
-    upscaledExpr
-  else
-    // In all other cases, we use the direct expression and raise an exception if the source burn rates do not exist
-    getDirectRateExpression(sourceAggregationSet, targetAggregationSet, burnRate, required=true, visitor=visitor);
+  getRateExpression(sourceAggregationSet, targetAggregationSet, burnRate)::
+    local directExpr = getDirectRateExpression(sourceAggregationSet, targetAggregationSet, burnRate, self);
+    helpers.combinedOpsRateExpression(sourceAggregationSet, targetAggregationSet, burnRate, directExpr),
+};
 
 // Generates the recording rule YAML when required. Returns an array of 0 or more definitions
 local getRecordingRuleDefinitions(sourceAggregationSet, targetAggregationSet, burnRate, visitor) =
@@ -80,7 +48,7 @@ local getRecordingRuleDefinitions(sourceAggregationSet, targetAggregationSet, bu
   else
     [{
       record: targetMetric,
-      expr: getRateExpression(sourceAggregationSet, targetAggregationSet, burnRate, visitor),
+      expr: visitor.getRateExpression(sourceAggregationSet, targetAggregationSet, burnRate),
     }];
 
 {

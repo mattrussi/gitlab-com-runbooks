@@ -3,11 +3,11 @@ local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 
-// Returns a direct apdex ratio expression, null if the source burn rate does not exist and required=false or
-// an exception if the source burn rate does not exist, and required=true
-local getDirectApdexRatioExpression(sourceAggregationSet, targetAggregationSet, burnRate, required) =
-  local sourceApdexSuccessRateMetric = sourceAggregationSet.getApdexSuccessRateMetricForBurnRate(burnRate, required=required);
-  local sourceApdexWeightMetric = sourceAggregationSet.getApdexWeightMetricForBurnRate(burnRate, required=required);
+// Returns a direct apdex ratio transformation expression or null if one cannot be generated because the source
+// does not contain the correct recording rules
+local getDirectApdexRatioExpression(sourceAggregationSet, targetAggregationSet, burnRate) =
+  local sourceApdexSuccessRateMetric = sourceAggregationSet.getApdexSuccessRateMetricForBurnRate(burnRate, required=false);
+  local sourceApdexWeightMetric = sourceAggregationSet.getApdexWeightMetricForBurnRate(burnRate, required=false);
 
   if sourceApdexSuccessRateMetric != null && sourceApdexWeightMetric != null then
     |||
@@ -28,36 +28,8 @@ local getDirectApdexRatioExpression(sourceAggregationSet, targetAggregationSet, 
   else null;
 
 local getApdexRatioExpression(sourceAggregationSet, targetAggregationSet, burnRate) =
-  local upscaledExpr = helpers.upscaledApdexRatioExpression(sourceAggregationSet, targetAggregationSet, burnRate);
-
-  // For 6h burn rate, we'll use either a combination of upscaling and direct aggregation,
-  // or, if the source aggregations, don't exist, only use the upscaled metric
-  if burnRate == '6h' then
-    local directExpr = getDirectApdexRatioExpression(sourceAggregationSet, targetAggregationSet, burnRate, required=false);
-
-    if directExpr != null then
-      |||
-        (
-          %(directExpr)s
-        )
-        or
-        (
-          %(upscaledExpr)s
-        )
-      ||| % {
-        directExpr: strings.indent(directExpr, 2),
-        upscaledExpr: strings.indent(upscaledExpr, 2),
-      }
-    else
-      // If we there is no source burnRate, use only upscaling
-      upscaledExpr
-
-  else if burnRate == '3d' then
-    // For 3d expressions, we always use upscaling
-    upscaledExpr
-  else
-    // In all other cases, we use the direct expression and raise an exception if the source burn rates do no exist
-    getDirectApdexRatioExpression(sourceAggregationSet, targetAggregationSet, burnRate, required=true);
+  local directExpr = getDirectApdexRatioExpression(sourceAggregationSet, targetAggregationSet, burnRate);
+  helpers.combinedApdexRatioExpression(sourceAggregationSet, targetAggregationSet, burnRate, directExpr);
 
 {
   // Aggregates apdex scores from one aggregation set to another. Intended to be used
