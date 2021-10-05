@@ -5,7 +5,7 @@ local durationHistogram = panels.heatmap(
   'Pending job queue duration histogram',
   |||
     sum by (le) (
-      rate(job_queue_duration_seconds_bucket{environment=~"$environment", jobs_running_for_project=~"$jobs_running_for_project"}[$__interval])
+      rate(job_queue_duration_seconds_bucket{environment=~"$environment", stage=~"$stage", jobs_running_for_project=~"$jobs_running_for_project"}[$__interval])
     )
   |||,
   intervalFactor=1,
@@ -23,7 +23,7 @@ local pendingSize =
       histogram_quantile(
         0.99,
         sum by (le, runner_type) (
-          increase(gitlab_ci_queue_size_total_bucket{environment=~"$environment"}[$__interval])
+          increase(gitlab_ci_queue_size_total_bucket{environment=~"$environment", stage=~"$stage"}[$__interval])
         )
       )
     |||,

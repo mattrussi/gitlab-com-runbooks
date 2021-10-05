@@ -28,7 +28,7 @@ local table(title, query, sortBy=[], transform_organize={}, transform_groupBy={}
 
 local versionsTable = table(
   title='GitLab Runner Versions',
-  query='gitlab_runner_version_info{instance=~"${runner_manager:pipe}"}',
+  query='gitlab_runner_version_info{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"}',
   sortBy=[{
     desc: true,
     displayName: 'version',
@@ -106,7 +106,7 @@ local versionsTable = table(
 
 local uptimeTable = table(
   'GitLab Runner Uptime',
-  query='time() - process_start_time_seconds{instance=~"${runner_manager:pipe}",job="runners-manager"}',
+  query='time() - process_start_time_seconds{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}",job="runners-manager"}',
   sortBy=[{
     asc: true,
     displayName: 'Uptime (last)',
