@@ -1,10 +1,26 @@
 local aggregationSets = import 'aggregation-sets.libsonnet';
 local aggregationSetTransformer = import 'servicemetrics/aggregation-set-transformer.libsonnet';
+local applicationSlis = (import 'gitlab-slis/library.libsonnet').all;
+local applicationSliAggregations = import 'gitlab-slis/aggregation-sets.libsonnet';
 
 local outputPromYaml(groups) =
   std.manifestYamlDoc({
     groups: groups,
   });
+
+local groupsForApplicationSli(sli) =
+  local targetAggregationSet = applicationSliAggregations.targetAggregationSet(sli);
+  local sourceAggregationSet = applicationSliAggregations.sourceAggregationSet(sli);
+  {
+    name: targetAggregationSet.name,
+    interval: '1m',
+    partial_response_strategy: 'warn',
+    rules: aggregationSetTransformer.generateRecordingRules(
+      sourceAggregationSet=sourceAggregationSet,
+      targetAggregationSet=targetAggregationSet,
+    ),
+  };
+
 
 /**
  * This file defines all the aggregation recording rules that will aggregate in Thanos to a single global view
@@ -131,4 +147,10 @@ local outputPromYaml(groups) =
       }]
     ),
 
+  // TODO: these can be removed when absorbed into service level indicators as part
+  // of https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1228
+  'aggregated-application-sli-metrics.yml':
+    outputPromYaml(
+      std.map(groupsForApplicationSli, applicationSlis),
+    ),
 }
