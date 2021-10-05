@@ -3,6 +3,10 @@ local validator = import 'utils/validator.libsonnet';
 
 local definitionDefaults = {
   aggregationFilter: null,
+
+  // By default we generate SLO Analysis dashboards when
+  // the aggregation set is not an intermediate source
+  generateSLODashboards: !self.intermediateSource,
 };
 
 local arrayOfStringsValidator = validator.validator(

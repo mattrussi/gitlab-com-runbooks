@@ -1,4 +1,6 @@
+local aggregationSets = import 'aggregation-sets.libsonnet';
 local alerts = import 'alerts/alerts.libsonnet';
+local aggregationSetTransformer = import 'servicemetrics/aggregation-set-transformer.libsonnet';
 local stableIds = import 'stable-ids/stable-ids.libsonnet';
 
 local sidekiqThanosAlerts = [
@@ -111,6 +113,22 @@ local sidekiqThanosAlerts = [
 
 local rules = {
   groups: [{
+    name: aggregationSets.sidekiqWorkerQueueSLIs.name,
+    interval: '1m',
+    partial_response_strategy: 'warn',
+    rules: aggregationSetTransformer.generateRecordingRules(
+      sourceAggregationSet=aggregationSets.sidekiqWorkerQueueSourceSLIs,
+      targetAggregationSet=aggregationSets.sidekiqWorkerQueueSLIs
+    ),
+  }, {
+    name: aggregationSets.sidekiqWorkerExecutionSLIs.name,
+    interval: '1m',
+    partial_response_strategy: 'warn',
+    rules: aggregationSetTransformer.generateRecordingRules(
+      sourceAggregationSet=aggregationSets.sidekiqWorkerExecutionSourceSLIs,
+      targetAggregationSet=aggregationSets.sidekiqWorkerExecutionSLIs
+    ),
+  }, {
     name: 'Sidekiq Aggregated Thanos Alerts',
     partial_response_strategy: 'warn',
     interval: '1m',

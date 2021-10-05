@@ -66,17 +66,10 @@ local executionRulesForBurnRate(aggregationSet, burnRate, staticLabels={}) =
         expr: expr,
       }];
 
-  // Key metric: Execution apdex (ratio)
+  // Key metric: Execution apdex success (rate)
   conditionalAppend(
     record=aggregationSet.getApdexSuccessRateMetricForBurnRate(burnRate, required=false),
     expr=combinedExecutionApdex.apdexSuccessRateQuery(aggregationSet.labels, {}, burnRate)
-  )
-  +
-  // Key metric: Execution apdex (ratio)
-  // TODO: we can probably DELETE THIS after the Sidekiq metrics work is complete
-  conditionalAppend(
-    record=aggregationSet.getApdexRatioMetricForBurnRate(burnRate, required=false),
-    expr=combinedExecutionApdex.apdexQuery(aggregationSet.labels, {}, burnRate)
   )
   +
   // Key metric: Execution apdex (weight score)
@@ -108,20 +101,6 @@ local executionRulesForBurnRate(aggregationSet, burnRate, staticLabels={}) =
       executionRate: aggregationSet.getOpsRateMetricForBurnRate(burnRate, required=true),
       staticLabels: selectors.serializeHash(staticLabels),
     }
-  )
-  +
-  // Key metric: Error Ratio
-  // TODO: we can probably DELETE THIS after the Sidekiq metrics work is complete
-  conditionalAppend(
-    record=aggregationSet.getErrorRatioMetricForBurnRate(burnRate, required=false),
-    expr=|||
-      %(errorRate)s
-      /
-      %(executionRate)s
-    ||| % {
-      errorRate: aggregationSet.getErrorRateMetricForBurnRate(burnRate, required=true),
-      executionRate: aggregationSet.getOpsRateMetricForBurnRate(burnRate, required=true),
-    },
   );
 
 local queueRulesForBurnRate(aggregationSet, burnRate, staticLabels={}) =
@@ -133,10 +112,10 @@ local queueRulesForBurnRate(aggregationSet, burnRate, staticLabels={}) =
         expr: expr,
       }];
 
-  // Key metric: Queueing apdex (ratio)
+  // Key metric: Queueing apdex success (rate)
   conditionalAppend(
-    record=aggregationSet.getApdexRatioMetricForBurnRate(burnRate, required=false),
-    expr=combinedQueueApdex.apdexQuery(aggregationSet.labels, staticLabels, burnRate)
+    record=aggregationSet.getApdexSuccessRateMetricForBurnRate(burnRate, required=false),
+    expr=combinedQueueApdex.apdexSuccessRateQuery(aggregationSet.labels, staticLabels, burnRate)
   )
   +
   // Key metric: Queueing apdex (weight score)
@@ -159,7 +138,7 @@ local queueRulesForBurnRate(aggregationSet, burnRate, staticLabels={}) =
   // for each worker, similar to how we record these for each
   // service
   perWorkerRecordingRules(rangeInterval)::
-    queueRulesForBurnRate(aggregationSets.sidekiqWorkerQueueSLIs, rangeInterval)
+    queueRulesForBurnRate(aggregationSets.sidekiqWorkerQueueSourceSLIs, rangeInterval)
     +
-    executionRulesForBurnRate(aggregationSets.sidekiqWorkerExecutionSLIs, rangeInterval),
+    executionRulesForBurnRate(aggregationSets.sidekiqWorkerExecutionSourceSLIs, rangeInterval),
 }

@@ -51,7 +51,7 @@ local strings = import 'utils/strings.libsonnet';
         else
           '%(targetOpsRateMetric)s{%(targetSelector)s}' % formatConfig;
 
-      local expr = |||
+      local directExpr = |||
         %(errorRateExpr)s
         /
         %(opsRateExpr)s
@@ -60,32 +60,8 @@ local strings = import 'utils/strings.libsonnet';
         opsRateExpr: opsRateExpr,
       };
 
-      local upscaledExpr = helpers.upscaledErrorRatioExpression(sourceAggregationSet, targetAggregationSet, burnRate);
-
       [{
         record: targetErrorRatioMetric,
-        expr:
-          /**
-           * For 6h burn rates for SLIs with `upscaleLongerBurnRates` set to true,
-           * we may not have 6h apdex components, so for those we calculate the 6h metric
-           * by upscaling 1h metrics
-           */
-          if burnRate == '6h' then
-            |||
-              (
-                %(expr)s
-              )
-              or
-              (
-                %(upscaledExpr)s
-              )
-            ||| % {
-              expr: strings.indent(expr, 2),
-              upscaledExpr: strings.indent(upscaledExpr, 2),
-            }
-          else if burnRate == '3d' then
-            upscaledExpr
-          else
-            expr,
+        expr: helpers.combinedErrorRatioExpression(sourceAggregationSet, targetAggregationSet, burnRate, directExpr),
       }],
 }
