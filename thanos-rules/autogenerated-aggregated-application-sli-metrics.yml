@@ -7,21 +7,21 @@ groups:
   rules:
   - record: gitlab_sli_aggregation:rails_request_apdex:apdex:weight:score_5m
     expr: |
-      sum by (environment,tier,type,stage,endpoint_id,feature_category) (
+      sum by (env,environment,tier,type,stage,endpoint_id,feature_category) (
         (gitlab_sli_aggregation:rails_request_apdex:apdex:weight:score_5m{monitor!="global"} >= 0)
       )
   - record: gitlab_sli_aggregation:rails_request_apdex:apdex:success:rate_5m
     expr: |
-      sum by (environment,tier,type,stage,endpoint_id,feature_category) (
+      sum by (env,environment,tier,type,stage,endpoint_id,feature_category) (
         (gitlab_sli_aggregation:rails_request_apdex:apdex:success:rate_5m{monitor!="global"} >= 0)
       )
   - record: gitlab_sli_aggregation:rails_request_apdex:apdex:weight:score_1h
     expr: |
-      sum by (environment,tier,type,stage,endpoint_id,feature_category) (
+      sum by (env,environment,tier,type,stage,endpoint_id,feature_category) (
         (gitlab_sli_aggregation:rails_request_apdex:apdex:weight:score_1h{monitor!="global"} >= 0)
       )
   - record: gitlab_sli_aggregation:rails_request_apdex:apdex:success:rate_1h
     expr: |
-      sum by (environment,tier,type,stage,endpoint_id,feature_category) (
+      sum by (env,environment,tier,type,stage,endpoint_id,feature_category) (
         (gitlab_sli_aggregation:rails_request_apdex:apdex:success:rate_1h{monitor!="global"} >= 0)
       )

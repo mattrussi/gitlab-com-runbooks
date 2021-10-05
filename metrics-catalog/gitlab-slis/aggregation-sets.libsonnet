@@ -1,6 +1,8 @@
 local sliDefinition = import 'gitlab-slis/sli-definition.libsonnet';
 local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
+
 local defaultLabels = ['environment', 'tier', 'type', 'stage'];
+local globalLabels = ['env'];
 
 local aggregationFormats(sli) =
   if sli.kind == sliDefinition.apdexKind then
@@ -28,8 +30,8 @@ local targetAggregationSet(sli) =
   aggregationSet.AggregationSet({
     id: 'global_application_sli_%s' % sli.name,
     name: 'Application Defined SLI Global metrics: %s' % sli.name,
-    labels: defaultLabels + sli.significantLabels,
-    intermediateSource: true,
+    labels: globalLabels + defaultLabels + sli.significantLabels,
+    intermediateSource: false,
     selector: { monitor: 'global' },
     supportedBurnRates: ['5m', '1h'],
     metricFormats: aggregationFormats(sli),
