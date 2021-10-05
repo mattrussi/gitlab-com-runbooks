@@ -46,7 +46,7 @@ WAL-G has 5 main commands:
 
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Command&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Purpose | How it is executed | Details |
 | :----------:     |  ------  | ------ | --------- |
-| `backup-list`   | Get the list of full backups currently stored in the archive   | Manually | It is helpful to see if there are "gaps" (missing full backups).<br/> Also, based on displayed LSNs, we can calculate the amount of WALs generated per day.<br/> Notice, there is no "wal-list" – this command would print too much information so it would be hard to use it, so neither WAL-E nor WAL-G implement it. |
+| `backup-list --detail`   | Get the list of full backups currently stored in the archive   | Manually | It is helpful to see if there are "gaps" (missing full backups).<br/> Also, based on displayed LSNs, we can calculate the amount of WALs generated per day.<br/> Notice, there is no "wal-list" – this command would print too much information so it would be hard to use it, so neither WAL-E nor WAL-G implement it. |
 | `backup-push`   | Create a full backup: archive PostgreSQL data directory fully   | Manually or automatically | Daily execution is configured in a cron record (see `crontab -l` under `gitlab-psql`, it has an entry running the script `/opt/wal-g/bin/backup.sh`, writing logs to `/var/log/wal-g/wal-g_backup_push.log[.1]`).<br/> At the moment, it is executed daily (at 00:00 UTC) on one of the secondaries (chosen using a lock in Consul), using WAL-G.<br/>  This operation is very IO-intensive, the expected speed: ~0.5-1 TiB/h for WAL-G, 1-2 TiB/h for WAL-G.<br/>    |
 | `wal-push`   | Archive WALs. Each WAL is 16 MiB by default    | Automatically (`archive_command`) | This command is usually used in `archive_command` (PostgreSQL configuration parameter) and automatically executed<br/>  by PostgreSQL on the primary node. As of June 2020, ~1.5-2 TiB of WAL files is archived each working day<br/>  (less on holidays and weekends).  |
 | <nobr>`backup-fetch`</nobr>   | Restore PostgreSQL data directory from a full backup  | Manually | Is it to executed manually a fresh restore from backups is needed. Also used in "gitlab-restore" for daily verification of backups<br/> (see https://ops.gitlab.net/gitlab-com/gl-infra/gitlab-restore/postgres-gprd/-/blob/master/bootstrap.sh).   |
@@ -186,7 +186,7 @@ After upgrades or reconfiguration check:
         ```
 1. Once a new full backup is created, check the list of full backups available:
     ```shell
-    sudo -u gitlab-psql /usr/bin/envdir /etc/wal-g.d/env /opt/wal-g/bin/wal-g backup-list
+    sudo -u gitlab-psql /usr/bin/envdir /etc/wal-g.d/env /opt/wal-g/bin/wal-g backup-list --detail
     ```
     (Important note: the output shows modification timestamps. In WAL-G versions prior 1.1, the list was ordered by modification time; since 1.1 it's ordered by creation time, which is important for our case, when we automatically move older backups to the Nearline storage class)
 1. After 1-2 days, check that verification jobs ("gitlab-restore" project) are not failing.
@@ -241,17 +241,28 @@ current chef configuration.
    several hours):
 
     ```bash
-    /usr/bin/envdir /etc/wal-e.d/env /opt/wal-e/bin/wal-e backup-list
+    /usr/bin/envdir /etc/wal-g.d/env /opt/wal-g/bin/wal-g backup-list --detail
+
     PGHOST=/var/opt/gitlab/postgresql/ PATH=/opt/gitlab/embedded/bin:/opt/gitlab/embedded/sbin:$PATH \
-      /usr/bin/envdir /etc/wal-e.d/env /opt/wal-e/bin/wal-e backup-fetch /var/opt/gitlab/postgresql/data <backup name from backup-list command>
+      /usr/bin/envdir /etc/wal-g.d/env /opt/wal-g/bin/wal-g backup-fetch /var/opt/gitlab/postgresql/data12 <backup name from backup-list command>
     ```
 
-    To restore latest backup you can use the following:
+    To restore latest backup you can use the following (Important note: that in our case use of `LATEST` [can lead to taking an old backup,
+    even with WAL-G 1.1](https://github.com/wal-g/wal-g/issues/694); `backup-list --detail` provides a correctly ordered list;
+    without `--detail`, we must [reorder it explicitly](https://ops.gitlab.net/gitlab-com/gl-infra/gitlab-restore/postgres-gprd/-/blob/master/bootstrap.sh#L191-196)):
 
     ```bash
-    /usr/bin/envdir /etc/wal-e.d/env /opt/wal-e/bin/wal-e backup-list
-    PGHOST=/var/opt/gitlab/postgresql/ PATH=/opt/gitlab/embedded/bin:/opt/gitlab/embedded/sbin:$PATH /usr/bin/envdir \
-      /etc/wal-e.d/env /opt/wal-e/bin/wal-e backup-fetch /var/opt/gitlab/postgresql/data LATEST
+    latest_backup_name="$( \
+      /usr/bin/envdir /etc/wal-g.d/env /opt/wal-g/bin/wal-g backup-list \
+      | grep base \
+      | sort -nk1 \
+      | tail -1 \
+      | awk '{print $1}' \
+    )" # reorder the list explicitly; alternatively, you can use "backup-list --detail" and take the last line
+
+    echo "Restoring backup ${latest_backup_name}"
+
+    /usr/bin/envdir /etc/wal-g.d/env /opt/wal-g/bin/wal-g backup-fetch /var/opt/gitlab/postgresql/data12 ${latest_backup_name}
     ```
 
 1. This command will output nothing if it is successful.
@@ -490,7 +501,7 @@ find an instance with the pipeline ID in instance name. SSH to it and check:
     values taking them from "Schedules" section (there is "Reveal" button
     there), and adding `NO_CLEANUP = 1` to preserve the instance.
     1. SSH to the instance after a few minutes, when it's up and running.
-    1. Before proceeding, use WAL-E's (WAL-G's) `backup-list` to see the
+    1. Before proceeding, use `wal-g backup-list --detail` to see the
     available backups. One of possible reasons of failure is lack of some daily
     basebackup. In such a case, you need to so to Postgres master node and
     analyze WAL-E (WAL-G) log (check `sudo -u postgres crontab -l`, it should
