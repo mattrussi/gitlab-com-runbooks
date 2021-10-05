@@ -1,12 +1,19 @@
 local durationParser = import 'utils/duration-parser.libsonnet';
 local validator = import 'utils/validator.libsonnet';
 
+local defaultSourceBurnRates = ['5m', '30m', '1h'];
+local defaultGlobalBurnRates = defaultSourceBurnRates + ['6h', '3d'];
+
 local definitionDefaults = {
   aggregationFilter: null,
 
   // By default we generate SLO Analysis dashboards when
   // the aggregation set is not an intermediate source
   generateSLODashboards: !self.intermediateSource,
+
+  supportedBurnRates: if self.intermediateSource then
+    defaultSourceBurnRates
+  else defaultGlobalBurnRates,
 };
 
 local arrayOfStringsValidator = validator.validator(
@@ -25,14 +32,17 @@ local buildValidator(definition) =
       {
         burnRates: validator.object,
       } else {};
-  local optionalGeneratedBurnRates =
-    if std.objectHas(definition, 'metricFormats') ||
-       std.objectHas(definition, 'supportedBurnRates') then
+  local optionalFormats =
+    if std.objectHas(definition, 'metricFormats') then
       {
         metricFormats: validator.object,
+      } else {};
+  local optionalSupportedBurnRates =
+    if std.objectHas(definition, 'supportedBurnRates') then
+      {
         supportedBurnRates: arrayOfStringsValidator,
       } else {};
-  validator.new(required + optionalBurnRates + optionalGeneratedBurnRates);
+  validator.new(required + optionalBurnRates + optionalFormats + optionalSupportedBurnRates);
 /**
  * An AggregationSet defines a matrix of aggregations across a series of different burn rates,
  * with a common set of aggregation labels and selectors.
