@@ -103,6 +103,7 @@ groups:
       stage: main
       tier: sv
       type: mailroom
+      upscale_source: "yes"
     expr: |
       sum by (environment) (
         sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",queue="email_receiver"}
@@ -113,6 +114,7 @@ groups:
       stage: main
       tier: sv
       type: mailroom
+      upscale_source: "yes"
     expr: |
       (
         sum by (environment) (
@@ -122,40 +124,12 @@ groups:
       or
       (
         0 * group by(environment) (
-          gitlab_component_ops:rate_1h{component="emailsProcessed",stage="main",tier="sv",type="mailroom"}
+          gitlab_component_ops:rate_1h{component="emailsProcessed",stage="main",tier="sv",type="mailroom",upscale_source="yes"}
         )
       )
 - name: 'Component-Level SLIs: mailroom - 6h burn-rate'
   interval: 2m
-  rules:
-  - record: gitlab_component_ops:rate_6h
-    labels:
-      component: emailsProcessed
-      stage: main
-      tier: sv
-      type: mailroom
-    expr: |
-      sum by (environment) (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate6h{le="+Inf",queue="email_receiver"}
-      )
-  - record: gitlab_component_errors:rate_6h
-    labels:
-      component: emailsProcessed
-      stage: main
-      tier: sv
-      type: mailroom
-    expr: |
-      (
-        sum by (environment) (
-          sli_aggregations:sidekiq_jobs_failed_total_rate6h{queue="email_receiver"}
-        )
-      )
-      or
-      (
-        0 * group by(environment) (
-          gitlab_component_ops:rate_6h{component="emailsProcessed",stage="main",tier="sv",type="mailroom"}
-        )
-      )
+  rules: []
 - name: 'Component mapping: mailroom'
   interval: 1m
   rules:
