@@ -288,7 +288,6 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     id: 'sidekiq_execution',
     name: 'Sidekiq execution source metrics per worker',
     intermediateSource: false,
-    generateSLODashboards: false,  // No need to generate SLO analysis dashboards
     selector: { monitor: 'global' },
     labels: [
       'env',
