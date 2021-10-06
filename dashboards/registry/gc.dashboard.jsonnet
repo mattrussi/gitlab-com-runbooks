@@ -95,7 +95,7 @@ basic.dashboard(
         |||
           histogram_quantile(0.5,
             sum by (le) (
-              rate(registry_database_query_duration_seconds_bucket{name=~"gc_.*_task_is_dangling", environment="$environment", stage="$stage"}[$__interval])
+              rate(registry_database_query_duration_seconds_bucket{name=~"gc_.*_task_is_dangling", environment="$environment", stage="$stage", cluster=~"$cluster"}[$__interval])
             )
           )
         |||,
@@ -118,7 +118,7 @@ basic.dashboard(
         |||
           histogram_quantile(0.5,
             sum by (le) (
-              rate(registry_gc_delete_duration_seconds_bucket{backend="database", error="false", environment="$environment", stage="$stage"}[$__interval])
+              rate(registry_gc_delete_duration_seconds_bucket{backend="database", error="false", environment="$environment", stage="$stage", cluster="$cluster"}[$__interval])
             )
           )
         |||,
@@ -141,7 +141,7 @@ basic.dashboard(
         |||
           histogram_quantile(0.5,
             sum by (le) (
-              rate(registry_gc_delete_duration_seconds_bucket{backend="storage", error="false", environment="$environment", stage="$stage"}[$__interval])
+              rate(registry_gc_delete_duration_seconds_bucket{backend="storage", error="false", environment="$environment", stage="$stage", cluster="$cluster"}[$__interval])
             )
           )
         |||,
@@ -160,9 +160,9 @@ basic.dashboard(
       promQuery.target(
         |||
           (
-            sum(rate(registry_gc_runs_total{error="false", environment="$environment", stage="$stage"}[$__interval]))
+            sum(rate(registry_gc_runs_total{error="false", environment="$environment", stage="$stage", cluster="$cluster"}[$__interval]))
             /
-            sum(rate(registry_gc_runs_total{environment="$environment", stage="$stage"}[$__interval]))
+            sum(rate(registry_gc_runs_total{environment="$environment", stage="$stage", cluster="$cluster"}[$__interval]))
           ) * 100
         |||,
       )
@@ -221,7 +221,7 @@ basic.dashboard(
       query=|||
         histogram_quantile(0.50,
           sum by (worker, le) (
-            rate(registry_gc_sleep_duration_seconds_bucket{environment="$environment", stage="$stage"}[$__interval])
+            rate(registry_gc_sleep_duration_seconds_bucket{environment="$environment", stage="$stage", cluster="$cluster"}[$__interval])
           )
         )
       |||,
@@ -245,7 +245,7 @@ basic.dashboard(
     basic.timeseries(
       title='Aggregate',
       description='The per-second rate of all online GC runs.',
-      query='sum by (worker) (rate(registry_gc_run_duration_seconds_count{environment="$environment", stage="$stage"}[$__interval]))',
+      query='sum by (worker) (rate(registry_gc_run_duration_seconds_count{environment="$environment", stage="$stage", cluster="$cluster"}[$__interval]))',
       legendFormat='{{ worker }}',
       format='ops'
     ),
@@ -255,7 +255,7 @@ basic.dashboard(
 
       query=|||
         sum by (worker) (
-          rate(registry_gc_run_duration_seconds_count{error="false", noop="false", environment="$environment", stage="$stage"}[$__interval])
+          rate(registry_gc_run_duration_seconds_count{error="false", noop="false", environment="$environment", stage="$stage", cluster="$cluster"}[$__interval])
         )
       |||,
       legendFormat='{{ worker }}',
@@ -266,7 +266,7 @@ basic.dashboard(
       description='The per-second rate of failed online GC runs.',
       query=|||
         sum by (worker) (
-          rate(registry_gc_run_duration_seconds_count{error="true", noop="false", environment="$environment", stage="$stage"}[$__interval])
+          rate(registry_gc_run_duration_seconds_count{error="true", noop="false", environment="$environment", stage="$stage", cluster="$cluster"}[$__interval])
         )
       |||,
       legendFormat='{{ worker }}',
@@ -277,7 +277,7 @@ basic.dashboard(
       description='The per-second rate of noop (no tasks available) online GC runs.',
       query=|||
         sum by (worker) (
-          rate(registry_gc_run_duration_seconds_count{error="false", noop="true", environment="$environment", stage="$stage"}[$__interval])
+          rate(registry_gc_run_duration_seconds_count{error="false", noop="true", environment="$environment", stage="$stage", cluster="$cluster"}[$__interval])
         )
       |||,
       legendFormat='{{ worker }}',
@@ -304,7 +304,7 @@ basic.dashboard(
         histogram_quantile(
           0.900000,
           sum by (worker, le) (
-            rate(registry_gc_run_duration_seconds_bucket{environment="$environment", stage="$stage"}[$__interval])
+            rate(registry_gc_run_duration_seconds_bucket{environment="$environment", stage="$stage", cluster="$cluster"}[$__interval])
           )
         )
       |||,
@@ -318,7 +318,7 @@ basic.dashboard(
         histogram_quantile(
           0.900000,
           sum by (worker, le) (
-            rate(registry_gc_run_duration_seconds_bucket{error="false", noop="false", environment="$environment", stage="$stage"}[$__interval])
+            rate(registry_gc_run_duration_seconds_bucket{error="false", noop="false", environment="$environment", stage="$stage", cluster="$cluster"}[$__interval])
           )
         )
       |||,
@@ -332,7 +332,7 @@ basic.dashboard(
         histogram_quantile(
           0.900000,
           sum by (worker, le) (
-            rate(registry_gc_run_duration_seconds_bucket{error="true", noop="false", environment="$environment", stage="$stage"}[$__interval])
+            rate(registry_gc_run_duration_seconds_bucket{error="true", noop="false", environment="$environment", stage="$stage", cluster="$cluster"}[$__interval])
           )
         )
       |||,
@@ -346,7 +346,7 @@ basic.dashboard(
         histogram_quantile(
           0.900000,
           sum by (worker, le) (
-            rate(registry_gc_run_duration_seconds_bucket{error="false", noop="true", environment="$environment", stage="$stage"}[$__interval])
+            rate(registry_gc_run_duration_seconds_bucket{error="false", noop="true", environment="$environment", stage="$stage", cluster="$cluster"}[$__interval])
           )
         )
       |||,
@@ -372,7 +372,7 @@ basic.dashboard(
       description='The per-second rate of all online GC deletions.',
       query=|||
         sum by (backend) (
-          rate(registry_gc_delete_duration_seconds_count{environment="$environment", stage="$stage"}[$__interval])
+          rate(registry_gc_delete_duration_seconds_count{environment="$environment", stage="$stage", cluster="$cluster"}[$__interval])
         )
       |||,
       legendFormat='{{ backend }}',
@@ -383,7 +383,7 @@ basic.dashboard(
       description='The per-second rate of online GC blob deletions.',
       query=|||
         sum by (backend) (
-          rate(registry_gc_delete_duration_seconds_count{artifact="blob", environment="$environment", stage="$stage"}[$__interval])
+          rate(registry_gc_delete_duration_seconds_count{artifact="blob", environment="$environment", stage="$stage", cluster="$cluster"}[$__interval])
         )
       |||,
       legendFormat='{{ backend }}',
@@ -394,7 +394,7 @@ basic.dashboard(
       description='The per-second rate of online GC manifest deletions.',
       query=|||
         sum by (backend) (
-          rate(registry_gc_delete_duration_seconds_count{artifact="manifest", environment="$environment", stage="$stage"}[$__interval])
+          rate(registry_gc_delete_duration_seconds_count{artifact="manifest", environment="$environment", stage="$stage", cluster="$cluster"}[$__interval])
         )
       |||,
       legendFormat='{{ backend }}',
@@ -421,7 +421,7 @@ basic.dashboard(
         histogram_quantile(
           0.900000,
           sum by (le) (
-            rate(registry_gc_delete_duration_seconds_bucket{environment="$environment", stage="$stage"}[$__interval])
+            rate(registry_gc_delete_duration_seconds_bucket{environment="$environment", stage="$stage", cluster="$cluster"}[$__interval])
           )
         )
       |||,
@@ -435,7 +435,7 @@ basic.dashboard(
         histogram_quantile(
           0.900000,
           sum by (backend, le) (
-            rate(registry_gc_delete_duration_seconds_bucket{artifact="blob", environment="$environment", stage="$stage"}[$__interval])
+            rate(registry_gc_delete_duration_seconds_bucket{artifact="blob", environment="$environment", stage="$stage", cluster="$cluster"}[$__interval])
           )
         )
       |||,
@@ -449,7 +449,7 @@ basic.dashboard(
         histogram_quantile(
           0.900000,
           sum by (backend, le) (
-            rate(registry_gc_delete_duration_seconds_bucket{artifact="manifest", environment="$environment", stage="$stage"}[$__interval])
+            rate(registry_gc_delete_duration_seconds_bucket{artifact="manifest", environment="$environment", stage="$stage", cluster="$cluster"}[$__interval])
           )
         )
       |||,
