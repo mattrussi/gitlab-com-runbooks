@@ -60,7 +60,9 @@ groups:
     expr: |
       histogram_quantile(
         0.90,
-        sum(rate(gitlab_workhorse_queueing_waiting_time_bucket{queue_name="ci_api_job_requests",job="gitlab-workhorse-api"}[5m])) by (le)
+        sum by(environment, tier, type, stage, shard, le) (
+          rate(gitlab_workhorse_queueing_waiting_time_bucket{queue_name="ci_api_job_requests",job="gitlab-workhorse"}[5m])
+        )
       ) >= 30
     for: 5m
     labels:
