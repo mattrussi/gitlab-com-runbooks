@@ -1,61 +1,6 @@
 groups:
 - name: gitlab-com-ci.rules
   rules:
-  - alert: CICDTooManyPendingBuildsOnSharedRunnerProject
-    expr: (ci_pending_builds{has_minutes="yes",shared_runners="yes"} > 500) and (topk(1,
-      predict_linear(ci_pending_builds{has_minutes="yes",shared_runners="yes"}[15m], 3600)) > 1000)
-    for: 5m
-    labels:
-      team: runner
-      severity: s4
-      alert_type: cause
-    annotations:
-      title: 'The number of pending builds for projects with shared runners will be
-        too high in 1h: {{$value | printf "%.2f" }}'
-      description: "The number of pending builds for projects with shared runners is
-        increasing and will be too high in 1h ({{$value}}). This may suggest problems
-        with auto-scaling provider or Runner stability. You should check Runner's
-        logs. Check http://dashboards.gitlab.net/dashboard/db/ci."
-
-  - alert: CICDTooManyPendingJobsPerNamespace
-    expr: max(ci_pending_builds{has_minutes="yes",namespace!="",namespace!="9970",shared_runners="yes"}) by (namespace) > 1000
-    for: 5m
-    labels:
-      team: runner
-      severity: s4
-      alert_type: cause
-    annotations:
-      title: 'Number of pending jobs per namespace too high: {{$value}}'
-      description: 'Number of pending jobs for namespace {{$labels.namespace}} is too high: {{$value}}.
-        Check https://dashboards.gitlab.net/dashboard/db/ci?panelId=33&fullscreen'
-      runbook: docs/ci-runners/ci_pending_builds.md#2-verify-graphs-and-potential-outcomes-out-of-the-graphs-as-described-in-ci-graphsci_graphsmd
-
-  - alert: CICDTooManyRunningJobsPerNamespaceOnSharedRunners
-    expr: max(sum(ci_running_builds{has_minutes="yes",namespace!="",namespace!="9970",shared_runner="yes",runner=~"40786|40788|44028|44949|380986|380987"}) by (fqdn,namespace)) by (namespace) > 350
-    for: 5m
-    labels:
-      team: runner
-      severity: s4
-      alert_type: cause
-    annotations:
-      title: 'Number of running jobs per namespace too high: {{$value}}'
-      description: 'Number of running jobs for namespace {{$labels.namespace}} running on regular Shared Runners is too high: {{$value}}.
-        Check https://dashboards.gitlab.net/dashboard/db/ci?panelId=60&fullscreen'
-      runbook: docs/ci-runners/ci_pending_builds.md#2-verify-graphs-and-potential-outcomes-out-of-the-graphs-as-described-in-ci-graphsci_graphsmd
-
-  - alert: CICDTooManyRunningJobsPerNamespaceOnSharedRunnersGitLabOrg
-    expr: max(sum(ci_running_builds{has_minutes="yes",namespace!="",namespace!="9970",shared_runner="yes",runner=~"37397|37398|157328|157329|380989|380990"}) by (fqdn,namespace)) by (namespace) > 350
-    for: 10m
-    labels:
-      team: runner
-      severity: s4
-      alert_type: cause
-    annotations:
-      title: 'Number of running jobs per namespace too high: {{$value}}'
-      description: 'Number of running jobs for namespace {{$labels.namespace}} running on gitlab-org Shared Runners is too high: {{$value}}.
-        Check https://dashboards.gitlab.net/dashboard/db/ci?panelId=60&fullscreen'
-      runbook: docs/ci-runners/ci_pending_builds.md#2-verify-graphs-and-potential-outcomes-out-of-the-graphs-as-described-in-ci-graphsci_graphsmd
-
   - alert: CICDNoJobsOnSharedRunners
     expr: sum(gitlab_runner_jobs{job="shared-runners"}) == 0
     for: 5m
@@ -153,24 +98,6 @@ groups:
         Quota usage of {{ $labels.quota }} in {{ $labels.region }} is at the level of {{ $value }} for more than 5 minutes.
         It's less than 5% to reach quota limits!
         See https://dashboards.gitlab.net/dashboard/db/ci-autoscaling-providers
-
-  - alert: CICDNamespaceWithConstantNumberOfLongRunningRepeatedJobs
-    expr: |
-      max(sum(ci_repeated_commands_builds{shared_runners="yes",has_minutes="yes",status="running"}) by (fqdn,  namespace)) by (namespace) > 5
-      and
-      sum(changes(ci_repeated_commands_builds{shared_runners="yes",has_minutes="yes",status="running"}[45m])) by (namespace) == 0
-    for: 45m
-    labels:
-      team: runner
-      severity: s4
-      alert_type: cause
-    annotations:
-      title: Namespace with constant number of long running jobs with repeated commands
-      description: >
-        Namespace {{ $labels.namespace }} is running a constant number of jobs with
-        repeated commands for more than 45 minutes.
-      runbook: docs/ci-runners/ci_constantnumberoflongrunningrepeatedjobs.md
-
 
   - alert: CICDWorkhorseQueuingUnderperformant
     expr: |
