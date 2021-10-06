@@ -74,6 +74,23 @@ groups:
       sum by (environment,stage) (
         rate(registry_gc_runs_total{type="registry"}[1m])
       )
+  - record: gitlab_component_errors:rate
+    labels:
+      component: garbagecollector
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(registry_gc_runs_total{error="true",type="registry"}[1m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate{component="garbagecollector",tier="sv",type="registry"}
+        )
+      )
   - record: gitlab_component_ops:rate
     labels:
       component: loadbalancer
@@ -324,6 +341,23 @@ groups:
     expr: |
       sum by (environment,stage) (
         rate(registry_gc_runs_total{type="registry"}[5m])
+      )
+  - record: gitlab_component_errors:rate_5m
+    labels:
+      component: garbagecollector
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(registry_gc_runs_total{error="true",type="registry"}[5m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_5m{component="garbagecollector",tier="sv",type="registry"}
+        )
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -576,6 +610,23 @@ groups:
       sum by (environment,stage) (
         rate(registry_gc_runs_total{type="registry"}[30m])
       )
+  - record: gitlab_component_errors:rate_30m
+    labels:
+      component: garbagecollector
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(registry_gc_runs_total{error="true",type="registry"}[30m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_30m{component="garbagecollector",tier="sv",type="registry"}
+        )
+      )
   - record: gitlab_component_ops:rate_30m
     labels:
       component: loadbalancer
@@ -827,6 +878,23 @@ groups:
       sum by (environment,stage) (
         rate(registry_gc_runs_total{type="registry"}[1h])
       )
+  - record: gitlab_component_errors:rate_1h
+    labels:
+      component: garbagecollector
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(registry_gc_runs_total{error="true",type="registry"}[1h])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_1h{component="garbagecollector",tier="sv",type="registry"}
+        )
+      )
   - record: gitlab_component_ops:rate_1h
     labels:
       component: loadbalancer
@@ -1077,6 +1145,23 @@ groups:
     expr: |
       sum by (environment,stage) (
         rate(registry_gc_runs_total{type="registry"}[6h])
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: garbagecollector
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(registry_gc_runs_total{error="true",type="registry"}[6h])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_6h{component="garbagecollector",tier="sv",type="registry"}
+        )
       )
   - record: gitlab_component_ops:rate_6h
     labels:

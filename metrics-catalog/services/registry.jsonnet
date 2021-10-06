@@ -109,7 +109,7 @@ metricsCatalog.serviceDefinition({
 
       requestRate: rateMetric(
         counter='registry_database_queries_total',
-        selector='type="registry"'
+        selector=registryBaseSelector
       ),
 
       significantLabels: ['name'],
@@ -132,7 +132,14 @@ metricsCatalog.serviceDefinition({
 
       requestRate: rateMetric(
         counter='registry_gc_runs_total',
-        selector='type="registry"'
+        selector=registryBaseSelector
+      ),
+
+      errorRate: rateMetric(
+        counter='registry_gc_runs_total',
+        selector=registryBaseSelector {
+          'error': 'true',
+        }
       ),
 
       significantLabels: ['worker'],

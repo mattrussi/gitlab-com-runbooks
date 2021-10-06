@@ -79,6 +79,24 @@ groups:
       sum by (env,environment,stage) (
         rate(registry_gc_runs_total{type="registry"}[5m])
       )
+  - record: gitlab:component:feature_category:execution:error:rate_5m
+    labels:
+      component: garbagecollector
+      feature_category: container_registry
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          rate(registry_gc_runs_total{error="true",type="registry"}[5m])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab:component:feature_category:execution:ops:rate_5m{component="garbagecollector",feature_category="container_registry",tier="sv",type="registry"}
+        )
+      )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_5m
     labels:
       component: server
@@ -289,6 +307,24 @@ groups:
       sum by (env,environment,stage) (
         rate(registry_gc_runs_total{type="registry"}[30m])
       )
+  - record: gitlab:component:feature_category:execution:error:rate_30m
+    labels:
+      component: garbagecollector
+      feature_category: container_registry
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          rate(registry_gc_runs_total{error="true",type="registry"}[30m])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab:component:feature_category:execution:ops:rate_30m{component="garbagecollector",feature_category="container_registry",tier="sv",type="registry"}
+        )
+      )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_30m
     labels:
       component: server
@@ -498,6 +534,24 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         rate(registry_gc_runs_total{type="registry"}[1h])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_1h
+    labels:
+      component: garbagecollector
+      feature_category: container_registry
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          rate(registry_gc_runs_total{error="true",type="registry"}[1h])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab:component:feature_category:execution:ops:rate_1h{component="garbagecollector",feature_category="container_registry",tier="sv",type="registry"}
+        )
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
     labels:
