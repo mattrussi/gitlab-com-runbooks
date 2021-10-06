@@ -49,4 +49,7 @@ local errorBudgetFactorFor(longWindow) =
    */
   apdexRatioThreshold(sla, windowDuration)::
     1 - errorBudgetFactorFor(windowDuration) * (1 - sla),
+
+  alertForDurationForLongThreshold(longWindowDuration)::
+    parameters[longWindowDuration].forDuration,
 }

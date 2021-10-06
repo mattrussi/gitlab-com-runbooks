@@ -34,6 +34,7 @@ groups:
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
+      window: 1h
     expr: |
       (
         (
@@ -45,7 +46,43 @@ groups:
           gitlab_component_errors:ratio_5m{component="loadbalancer",monitor="global",type="api"}
           > (14.4 * 0.001000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="loadbalancer",monitor="global",type="api"}) >= 1
+      )
+  - alert: ApiServiceLoadbalancerErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The loadbalancer SLI of the api service (`{{ $labels.stage }}` stage)
+        has an error rate violating SLO
+      description: |
+        Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: api-main/api-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3255520955"
+      grafana_variables: environment,stage
+      runbook: docs/api/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_errors:ratio_6h{component="loadbalancer",monitor="global",type="api"}
           > (6 * 0.001000)
@@ -58,7 +95,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="loadbalancer",monitor="global",type="api"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="loadbalancer",monitor="global",type="api"}) >= 1
       )
   - alert: ApiServiceLoadbalancerTrafficCessation
     for: 5m
@@ -159,6 +196,7 @@ groups:
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
+      window: 1h
     expr: |
       (
         (
@@ -170,7 +208,47 @@ groups:
           gitlab_component_errors:ratio_5m{component="nginx_ingress",monitor="global",type="api"}
           > (14.4 * 0.001000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="nginx_ingress",monitor="global",type="api"}) >= 1
+      )
+  - alert: ApiServiceNginxIngressErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The nginx_ingress SLI of the api service (`{{ $labels.stage }}` stage)
+        has an error rate violating SLO
+      description: |
+        nginx for api
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: api-main/api-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1425819584"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(nginx_ingress_controller_requests:labeled{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",status=~"^5.*",type="api"}[5m])
+        )
+      runbook: docs/api/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_errors:ratio_6h{component="nginx_ingress",monitor="global",type="api"}
           > (6 * 0.001000)
@@ -183,7 +261,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="nginx_ingress",monitor="global",type="api"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="nginx_ingress",monitor="global",type="api"}) >= 1
       )
   - alert: ApiServiceNginxIngressErrorSLOViolationRegional
     for: 2m
@@ -193,16 +271,15 @@ groups:
       description: |
         nginx for api
 
-        Since the api service is not fully redundant, SLI violations on a single node may represent a user-impacting service degradation.
+        Note that this alert is specific to the `{{ $labels.region }}` region.
 
-        Currently the apdex value for {{ $labels.region }} is {{ $value | humanizePercentage }}.
-      grafana_dashboard_id: alerts-regional_component_slo_error
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-regional_component_slo_error?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-region={{ $labels.region }}&var-component={{ $labels.component }}
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: api-main/api-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "965700560"
-      grafana_variables: environment,type,stage,region,component
+      grafana_panel_id: "1425819584"
+      grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
           rate(nginx_ingress_controller_requests:labeled{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status=~"^5.*",type="api"}[5m])
@@ -221,6 +298,7 @@ groups:
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
+      window: 1h
     expr: |
       (
         (
@@ -232,7 +310,49 @@ groups:
           gitlab_regional_sli_errors:ratio_5m{component="nginx_ingress",monitor="global",type="api"}
           > (14.4 * 0.001000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="nginx_ingress",monitor="global",type="api"}) >= 1
+      )
+  - alert: ApiServiceNginxIngressErrorSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The nginx_ingress SLI of the api service in region `{{ $labels.region
+        }}` has an error rate violating SLO
+      description: |
+        nginx for api
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: api-main/api-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1425819584"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region) (
+          rate(nginx_ingress_controller_requests:labeled{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status=~"^5.*",type="api"}[5m])
+        )
+      runbook: docs/api/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_regional_sli_errors:ratio_6h{component="nginx_ingress",monitor="global",type="api"}
           > (6 * 0.001000)
@@ -245,7 +365,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="nginx_ingress",monitor="global",type="api"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="nginx_ingress",monitor="global",type="api"}) >= 1
       )
   - alert: ApiServiceNginxIngressTrafficCessation
     for: 5m
@@ -332,11 +452,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "561966508"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -386,11 +505,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "561966508"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -427,7 +545,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="puma",monitor="global",type="api"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="puma",monitor="global",type="api"}) >= 1
       )
   - alert: ApiServicePumaApdexSLOViolationRegional
     for: 2m
@@ -437,14 +555,15 @@ groups:
       description: |
         This SLI monitors API traffic in aggregate, in the GitLab rails monolith, via its HTTP interface. 5xx responses are treated as failures.
 
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
         Currently the apdex value is {{ $value | humanizePercentage }}.
-      grafana_dashboard_id: alerts-regional_component_slo_apdex
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-regional_component_slo_apdex?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-region={{ $labels.region }}&var-component={{ $labels.component }}
+      grafana_dashboard_id: api-main/api-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "965700560"
-      grafana_variables: environment,type,stage,region,component
+      grafana_panel_id: "561966508"
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -466,6 +585,7 @@ groups:
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "yes"
+      window: 1h
     expr: |
       (
         (
@@ -477,7 +597,52 @@ groups:
           gitlab_regional_sli_apdex:ratio_5m{component="puma",monitor="global",type="api"}
           < (1 - 14.4 * 0.005000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="puma",monitor="global",type="api"}) >= 1
+      )
+  - alert: ApiServicePumaApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The puma SLI of the api service in region `{{ $labels.region }}` has
+        an apdex violating SLO
+      description: |
+        This SLI monitors API traffic in aggregate, in the GitLab rails monolith, via its HTTP interface. 5xx responses are treated as failures.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: api-main/api-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "561966508"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,region,le) (
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="api"}[5m])
+          )
+        )
+      runbook: docs/api/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_regional_sli_apdex:ratio_6h{component="puma",monitor="global",type="api"}
           < (1 - 6 * 0.005000)
@@ -490,7 +655,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="puma",monitor="global",type="api"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="puma",monitor="global",type="api"}) >= 1
       )
   - alert: ApiServicePumaErrorSLOViolation
     for: 2m
@@ -525,6 +690,7 @@ groups:
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
+      window: 1h
     expr: |
       (
         (
@@ -536,7 +702,47 @@ groups:
           gitlab_component_errors:ratio_5m{component="puma",monitor="global",type="api"}
           > (14.4 * 0.001000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="puma",monitor="global",type="api"}) >= 1
+      )
+  - alert: ApiServicePumaErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The puma SLI of the api service (`{{ $labels.stage }}` stage) has an
+        error rate violating SLO
+      description: |
+        This SLI monitors API traffic in aggregate, in the GitLab rails monolith, via its HTTP interface. 5xx responses are treated as failures.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: api-main/api-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2425637513"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:http_requests_total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",status=~"5..",type="api"}
+        )
+      runbook: docs/api/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_errors:ratio_6h{component="puma",monitor="global",type="api"}
           > (6 * 0.001000)
@@ -549,7 +755,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="puma",monitor="global",type="api"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="puma",monitor="global",type="api"}) >= 1
       )
   - alert: ApiServicePumaErrorSLOViolationRegional
     for: 2m
@@ -559,16 +765,15 @@ groups:
       description: |
         This SLI monitors API traffic in aggregate, in the GitLab rails monolith, via its HTTP interface. 5xx responses are treated as failures.
 
-        Since the api service is not fully redundant, SLI violations on a single node may represent a user-impacting service degradation.
+        Note that this alert is specific to the `{{ $labels.region }}` region.
 
-        Currently the apdex value for {{ $labels.region }} is {{ $value | humanizePercentage }}.
-      grafana_dashboard_id: alerts-regional_component_slo_error
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-regional_component_slo_error?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-region={{ $labels.region }}&var-component={{ $labels.component }}
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: api-main/api-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "965700560"
-      grafana_variables: environment,type,stage,region,component
+      grafana_panel_id: "2425637513"
+      grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
           rate(http_requests_total{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status=~"5..",type="api"}[5m])
@@ -587,6 +792,7 @@ groups:
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
+      window: 1h
     expr: |
       (
         (
@@ -598,7 +804,49 @@ groups:
           gitlab_regional_sli_errors:ratio_5m{component="puma",monitor="global",type="api"}
           > (14.4 * 0.001000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="puma",monitor="global",type="api"}) >= 1
+      )
+  - alert: ApiServicePumaErrorSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The puma SLI of the api service in region `{{ $labels.region }}` has
+        an error rate violating SLO
+      description: |
+        This SLI monitors API traffic in aggregate, in the GitLab rails monolith, via its HTTP interface. 5xx responses are treated as failures.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: api-main/api-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2425637513"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region) (
+          rate(http_requests_total{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status=~"5..",type="api"}[5m])
+        )
+      runbook: docs/api/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_regional_sli_errors:ratio_6h{component="puma",monitor="global",type="api"}
           > (6 * 0.001000)
@@ -611,7 +859,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="puma",monitor="global",type="api"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="puma",monitor="global",type="api"}) >= 1
       )
   - alert: ApiServicePumaTrafficCessation
     for: 5m
@@ -698,11 +946,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2586818196"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -752,11 +999,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2586818196"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -793,7 +1039,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="workhorse",monitor="global",type="api"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="workhorse",monitor="global",type="api"}) >= 1
       )
   - alert: ApiServiceWorkhorseApdexSLOViolationRegional
     for: 2m
@@ -803,14 +1049,15 @@ groups:
       description: |
         Aggregation of most web requests that pass through workhorse, monitored via the HTTP interface. Excludes health, readiness and liveness requests. Some known slow requests, such as HTTP uploads, are excluded from the apdex score.
 
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
         Currently the apdex value is {{ $value | humanizePercentage }}.
-      grafana_dashboard_id: alerts-regional_component_slo_apdex
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-regional_component_slo_apdex?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-region={{ $labels.region }}&var-component={{ $labels.component }}
+      grafana_dashboard_id: api-main/api-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "965700560"
-      grafana_variables: environment,type,stage,region,component
+      grafana_panel_id: "2586818196"
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -832,6 +1079,7 @@ groups:
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "yes"
+      window: 1h
     expr: |
       (
         (
@@ -843,7 +1091,52 @@ groups:
           gitlab_regional_sli_apdex:ratio_5m{component="workhorse",monitor="global",type="api"}
           < (1 - 14.4 * 0.005000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="workhorse",monitor="global",type="api"}) >= 1
+      )
+  - alert: ApiServiceWorkhorseApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The workhorse SLI of the api service in region `{{ $labels.region }}`
+        has an apdex violating SLO
+      description: |
+        Aggregation of most web requests that pass through workhorse, monitored via the HTTP interface. Excludes health, readiness and liveness requests. Some known slow requests, such as HTTP uploads, are excluded from the apdex score.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: api-main/api-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2586818196"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,region,le) (
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse-api|gitlab-workhorse", type="api", route!="\\A/api/v4/jobs/request\\z", route!="^/api/v4/jobs/request\\z", route!="^/-/health$", route!="^/-/(readiness|liveness)$", environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}"}[5m])
+          )
+        )
+      runbook: docs/api/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_regional_sli_apdex:ratio_6h{component="workhorse",monitor="global",type="api"}
           < (1 - 6 * 0.005000)
@@ -856,7 +1149,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="workhorse",monitor="global",type="api"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="workhorse",monitor="global",type="api"}) >= 1
       )
   - alert: ApiServiceWorkhorseErrorSLOViolation
     for: 2m
@@ -891,6 +1184,7 @@ groups:
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
+      window: 1h
     expr: |
       (
         (
@@ -902,7 +1196,47 @@ groups:
           gitlab_component_errors:ratio_5m{component="workhorse",monitor="global",type="api"}
           > (14.4 * 0.001000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="workhorse",monitor="global",type="api"}) >= 1
+      )
+  - alert: ApiServiceWorkhorseErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The workhorse SLI of the api service (`{{ $labels.stage }}` stage) has
+        an error rate violating SLO
+      description: |
+        Aggregation of most web requests that pass through workhorse, monitored via the HTTP interface. Excludes health, readiness and liveness requests. Some known slow requests, such as HTTP uploads, are excluded from the apdex score.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: api-main/api-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2047984749"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse-api|gitlab-workhorse", type="api", code=~"^5.*", route!="^/-/health$", route!="^/-/(readiness|liveness)$", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/api/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_errors:ratio_6h{component="workhorse",monitor="global",type="api"}
           > (6 * 0.001000)
@@ -915,7 +1249,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="workhorse",monitor="global",type="api"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="workhorse",monitor="global",type="api"}) >= 1
       )
   - alert: ApiServiceWorkhorseErrorSLOViolationRegional
     for: 2m
@@ -925,16 +1259,15 @@ groups:
       description: |
         Aggregation of most web requests that pass through workhorse, monitored via the HTTP interface. Excludes health, readiness and liveness requests. Some known slow requests, such as HTTP uploads, are excluded from the apdex score.
 
-        Since the api service is not fully redundant, SLI violations on a single node may represent a user-impacting service degradation.
+        Note that this alert is specific to the `{{ $labels.region }}` region.
 
-        Currently the apdex value for {{ $labels.region }} is {{ $value | humanizePercentage }}.
-      grafana_dashboard_id: alerts-regional_component_slo_error
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-regional_component_slo_error?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-region={{ $labels.region }}&var-component={{ $labels.component }}
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: api-main/api-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "965700560"
-      grafana_variables: environment,type,stage,region,component
+      grafana_panel_id: "2047984749"
+      grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
           rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse-api|gitlab-workhorse", type="api", code=~"^5.*", route!="^/-/health$", route!="^/-/(readiness|liveness)$", environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}"}[5m])
@@ -953,6 +1286,7 @@ groups:
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
+      window: 1h
     expr: |
       (
         (
@@ -964,7 +1298,49 @@ groups:
           gitlab_regional_sli_errors:ratio_5m{component="workhorse",monitor="global",type="api"}
           > (14.4 * 0.001000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="workhorse",monitor="global",type="api"}) >= 1
+      )
+  - alert: ApiServiceWorkhorseErrorSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The workhorse SLI of the api service in region `{{ $labels.region }}`
+        has an error rate violating SLO
+      description: |
+        Aggregation of most web requests that pass through workhorse, monitored via the HTTP interface. Excludes health, readiness and liveness requests. Some known slow requests, such as HTTP uploads, are excluded from the apdex score.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: api-main/api-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2047984749"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region) (
+          rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse-api|gitlab-workhorse", type="api", code=~"^5.*", route!="^/-/health$", route!="^/-/(readiness|liveness)$", environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/api/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_regional_sli_errors:ratio_6h{component="workhorse",monitor="global",type="api"}
           > (6 * 0.001000)
@@ -977,7 +1353,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="workhorse",monitor="global",type="api"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="workhorse",monitor="global",type="api"}) >= 1
       )
   - alert: ApiServiceWorkhorseTrafficCessation
     for: 5m

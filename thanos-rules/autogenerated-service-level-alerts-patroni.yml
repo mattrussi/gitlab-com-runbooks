@@ -40,6 +40,7 @@ groups:
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
+      window: 1h
     expr: |
       (
         (
@@ -51,7 +52,49 @@ groups:
           gitlab_component_errors:ratio_5m{component="pgbouncer",monitor="global",type="patroni"}
           > (14.4 * 0.001000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="pgbouncer",monitor="global",type="patroni"}) >= 1
+      )
+  - alert: PatroniServicePgbouncerErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The pgbouncer SLI of the patroni service (`{{ $labels.stage }}` stage)
+        has an error rate violating SLO
+      description: |
+        All transactions destined for the Postgres secondary instances are routed through the pgbouncer instances running on the patroni nodes themselves. This SLI models those transactions in aggregate.
+
+        Error rate uses mtail metrics from pgbouncer logs.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: patroni-main/patroni-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/patroni-main/patroni-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3935075118"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(pgbouncer_pooler_errors_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni"}[5m])
+        )
+      runbook: docs/patroni/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_errors:ratio_6h{component="pgbouncer",monitor="global",type="patroni"}
           > (6 * 0.001000)
@@ -64,7 +107,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="pgbouncer",monitor="global",type="patroni"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="pgbouncer",monitor="global",type="patroni"}) >= 1
       )
   - alert: PatroniServicePgbouncerTrafficCessation
     for: 5m
@@ -159,11 +202,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: patroni-main/patroni-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/patroni-main/patroni-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2409561530"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -213,11 +255,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: patroni-main/patroni-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/patroni-main/patroni-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2409561530"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -254,7 +295,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="rails_primary_sql",monitor="global",type="patroni"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="rails_primary_sql",monitor="global",type="patroni"}) >= 1
       )
   - alert: PatroniServiceRailsPrimarySqlTrafficCessation
     for: 5m
@@ -341,11 +382,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: patroni-main/patroni-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/patroni-main/patroni-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4242138551"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -395,11 +435,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: patroni-main/patroni-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/patroni-main/patroni-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4242138551"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -436,7 +475,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="rails_replica_sql",monitor="global",type="patroni"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="rails_replica_sql",monitor="global",type="patroni"}) >= 1
       )
   - alert: PatroniServiceRailsReplicaSqlTrafficCessation
     for: 5m
@@ -545,6 +584,7 @@ groups:
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
+      window: 1h
     expr: |
       (
         (
@@ -556,7 +596,47 @@ groups:
           gitlab_component_errors:ratio_5m{component="transactions_primary",monitor="global",type="patroni"}
           > (14.4 * 0.001000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="transactions_primary",monitor="global",type="patroni"}) >= 1
+      )
+  - alert: PatroniServiceTransactionsPrimaryErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The transactions_primary SLI of the patroni service (`{{ $labels.stage
+        }}` stage) has an error rate violating SLO
+      description: |
+        Represents all SQL transactions issued to the primary Postgres instance. Errors represent transaction rollbacks.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: patroni-main/patroni-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/patroni-main/patroni-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2278903563"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(pg_stat_database_xact_rollback{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni"}[5m]) and on (instance) (pg_replication_is_replica == 0)
+        )
+      runbook: docs/patroni/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_errors:ratio_6h{component="transactions_primary",monitor="global",type="patroni"}
           > (6 * 0.001000)
@@ -569,7 +649,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="transactions_primary",monitor="global",type="patroni"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="transactions_primary",monitor="global",type="patroni"}) >= 1
       )
   - alert: PatroniServiceTransactionsPrimaryTrafficCessation
     for: 5m
@@ -682,6 +762,7 @@ groups:
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
+      window: 1h
     expr: |
       (
         (
@@ -693,7 +774,47 @@ groups:
           gitlab_component_errors:ratio_5m{component="transactions_replica",monitor="global",type="patroni"}
           > (14.4 * 0.001000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="transactions_replica",monitor="global",type="patroni"}) >= 1
+      )
+  - alert: PatroniServiceTransactionsReplicaErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The transactions_replica SLI of the patroni service (`{{ $labels.stage
+        }}` stage) has an error rate violating SLO
+      description: |
+        Represents all SQL transactions issued to replica Postgres instances, in aggregate. Errors represent transaction rollbacks.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: patroni-main/patroni-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/patroni-main/patroni-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "438786388"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(pg_stat_database_xact_rollback{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="patroni"}[5m]) and on (instance) (pg_replication_is_replica == 1)
+        )
+      runbook: docs/patroni/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_errors:ratio_6h{component="transactions_replica",monitor="global",type="patroni"}
           > (6 * 0.001000)
@@ -706,7 +827,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="transactions_replica",monitor="global",type="patroni"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="transactions_replica",monitor="global",type="patroni"}) >= 1
       )
   - alert: PatroniServiceTransactionsReplicaTrafficCessation
     for: 5m

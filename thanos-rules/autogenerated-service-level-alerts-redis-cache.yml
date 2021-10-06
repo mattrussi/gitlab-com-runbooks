@@ -90,11 +90,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: redis-cache-main/redis-cache-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/redis-cache-main/redis-cache-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "775121815"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -144,11 +143,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: redis-cache-main/redis-cache-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/redis-cache-main/redis-cache-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "775121815"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -185,7 +183,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="rails_cache",monitor="global",type="redis-cache"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="rails_cache",monitor="global",type="redis-cache"}) >= 1
       )
   - alert: RedisCacheServiceRailsCacheTrafficCessation
     for: 5m
@@ -272,11 +270,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: redis-cache-main/redis-cache-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/redis-cache-main/redis-cache-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2248986914"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -326,11 +323,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: redis-cache-main/redis-cache-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/redis-cache-main/redis-cache-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2248986914"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -363,6 +359,56 @@ groups:
         (
           gitlab_component_apdex:ratio_30m{component="rails_redis_client",monitor="global",type="redis-cache"}
           < (1 - 6 * 0.000500)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="rails_redis_client",monitor="global",type="redis-cache"}) >= 1
+      )
+  - alert: RedisCacheServiceRailsRedisClientErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The rails_redis_client SLI of the redis-cache service (`{{ $labels.stage
+        }}` stage) has an error rate violating SLO
+      description: |
+        Aggregation of all Redis Cache operations issued from the Rails codebase.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: redis-cache-main/redis-cache-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/redis-cache-main/redis-cache-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "487497488"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(gitlab_redis_client_exceptions_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",storage="cache"}[5m])
+        )
+      runbook: docs/redis-cache/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_1h{component="rails_redis_client",monitor="global",type="redis-cache"}
+          > (14.4 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_5m{component="rails_redis_client",monitor="global",type="redis-cache"}
+          > (14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -402,18 +448,9 @@ groups:
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
+      window: 6h
     expr: |
       (
-        (
-          gitlab_component_errors:ratio_1h{component="rails_redis_client",monitor="global",type="redis-cache"}
-          > (14.4 * 0.001000)
-        )
-        and
-        (
-          gitlab_component_errors:ratio_5m{component="rails_redis_client",monitor="global",type="redis-cache"}
-          > (14.4 * 0.001000)
-        )
-        or
         (
           gitlab_component_errors:ratio_6h{component="rails_redis_client",monitor="global",type="redis-cache"}
           > (6 * 0.001000)
@@ -426,7 +463,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="rails_redis_client",monitor="global",type="redis-cache"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="rails_redis_client",monitor="global",type="redis-cache"}) >= 1
       )
   - alert: RedisCacheServiceRailsRedisClientTrafficCessation
     for: 5m

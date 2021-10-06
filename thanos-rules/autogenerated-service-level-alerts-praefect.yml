@@ -38,6 +38,7 @@ groups:
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
+      window: 1h
     expr: |
       (
         (
@@ -49,7 +50,47 @@ groups:
           gitlab_component_errors:ratio_5m{component="praefect_cloudsql",monitor="global",type="praefect"}
           > (14.4 * 0.000500)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="praefect_cloudsql",monitor="global",type="praefect"}) >= 1
+      )
+  - alert: PraefectServicePraefectCloudsqlErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The praefect_cloudsql SLI of the praefect service (`{{ $labels.stage
+        }}` stage) has an error rate violating SLO
+      description: |
+        Praefect uses a GCP CloudSQL instance. This SLI represents SQL transactions to that service.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: praefect-main/praefect-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/praefect-main/praefect-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2268999573"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database="praefect_production",environment="{{ $labels.environment }}",job="stackdriver",stage="{{ $labels.stage }}",transaction_type="rollback"}[5m])
+        )
+      runbook: docs/praefect/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: gitaly
+      pager: pagerduty
+      product_stage: create
+      product_stage_group: gitaly
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_errors:ratio_6h{component="praefect_cloudsql",monitor="global",type="praefect"}
           > (6 * 0.000500)
@@ -62,7 +103,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="praefect_cloudsql",monitor="global",type="praefect"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="praefect_cloudsql",monitor="global",type="praefect"}) >= 1
       )
   - alert: PraefectServicePraefectCloudsqlTrafficCessation
     for: 5m
@@ -149,11 +190,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: praefect-main/praefect-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/praefect-main/praefect-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2100325234"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -203,11 +243,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: praefect-main/praefect-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/praefect-main/praefect-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2100325234"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -240,6 +279,56 @@ groups:
         (
           gitlab_component_apdex:ratio_30m{component="proxy",monitor="global",type="praefect"}
           < (1 - 6 * 0.005000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="proxy",monitor="global",type="praefect"}) >= 1
+      )
+  - alert: PraefectServiceProxyErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The proxy SLI of the praefect service (`{{ $labels.stage }}` stage) has
+        an error rate violating SLO
+      description: |
+        All Gitaly operations pass through the Praefect proxy on the way to a Gitaly instance. This SLI monitors those operations in aggregate.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: praefect-main/praefect-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/praefect-main/praefect-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1178914866"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",grpc_code!~"^(OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|Canceled)$",job="praefect",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/praefect/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: gitaly
+      pager: pagerduty
+      product_stage: create
+      product_stage_group: gitaly
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_1h{component="proxy",monitor="global",type="praefect"}
+          > (14.4 * 0.000500)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_5m{component="proxy",monitor="global",type="praefect"}
+          > (14.4 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -279,18 +368,9 @@ groups:
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
+      window: 6h
     expr: |
       (
-        (
-          gitlab_component_errors:ratio_1h{component="proxy",monitor="global",type="praefect"}
-          > (14.4 * 0.000500)
-        )
-        and
-        (
-          gitlab_component_errors:ratio_5m{component="proxy",monitor="global",type="praefect"}
-          > (14.4 * 0.000500)
-        )
-        or
         (
           gitlab_component_errors:ratio_6h{component="proxy",monitor="global",type="praefect"}
           > (6 * 0.000500)
@@ -303,7 +383,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="proxy",monitor="global",type="praefect"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="proxy",monitor="global",type="praefect"}) >= 1
       )
   - alert: PraefectServiceProxyTrafficCessation
     for: 5m
@@ -390,11 +470,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: praefect-main/praefect-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/praefect-main/praefect-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "374957850"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -444,11 +523,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: praefect-main/praefect-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/praefect-main/praefect-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "374957850"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -485,7 +563,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="replicator_queue",monitor="global",type="praefect"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="replicator_queue",monitor="global",type="praefect"}) >= 1
       )
   - alert: PraefectServiceReplicatorQueueTrafficCessation
     for: 5m
