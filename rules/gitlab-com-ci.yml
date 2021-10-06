@@ -20,17 +20,6 @@ groups:
         the auto-scaling provider. Check https://dashboards.gitlab.net/d/ci-runners-incident-autoscaling/ci-runners-incident-support-autoscaling.'
       runbook: docs/ci-runners/linux/autoscaling.md
 
-  - alert: CICDPrometheusDown
-    expr: up{job="ci-node",fqdn=~"prometheus-.*us-east1-(c|d).*"} == 0
-    for: 5m
-    labels:
-      team: runner
-      severity: s4
-      alert_type: cause
-    annotations:
-      title: CI Prometheus server {{ $labels.instance }} is down
-      description: 'One or more of CI Prometheus servers is down: {{ $labels.instance }}.'
-
   - record: quota_region:quota_usage:ratio
     expr: |
       max by (quota, region) (
