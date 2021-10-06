@@ -36,8 +36,8 @@ groups:
       severity: s4
       alert_type: cause
     annotations:
-      title: GCP Quota usage may exceed capacity
-      description: >
+      title: 'GCP Quota usage may exceed capacity'
+      description: |
         Quota usage of {{ $labels.quota }} in {{ $labels.region }} is going to exceed capacity soon.
         Quota limit breach is coming!
         See https://dashboards.gitlab.net/dashboard/db/ci-autoscaling-providers
@@ -50,8 +50,8 @@ groups:
       severity: s3
       alert_type: cause
     annotations:
-      title: GCP Quota usage of is near limit
-      description: >
+      title: 'GCP Quota usage of is near limit'
+      description: |
         Quota usage of {{ $labels.quota }} in {{ $labels.region }} is at the level of {{ $value }} for more than 5 minutes.
         It's less than 5% to reach quota limits!
         See https://dashboards.gitlab.net/dashboard/db/ci-autoscaling-providers
@@ -68,8 +68,8 @@ groups:
       severity: s3
       alert_type: cause
     annotations:
-      title: 90% of request queued on Workhorse is longer than 30s
-      description: >
+      title: '90% of request queued on Workhorse is longer than 30s'
+      description: |
         90% of requests queued on Workhorse are longer than 30s for last 5 minutes.
 
         This should be considered as service degradation and the reason should be investigated.
@@ -84,7 +84,7 @@ groups:
       alert_type: cause
     annotations:
       title: 'Too big number of traces archiving failures: {{$value}}'
-      description: >
+      description: |
         Traces archiving keeps failing for more than 5 minutes.
         Plese check https://dashboards.gitlab.net/d/000000159/ci?refresh=5m&orgId=1&panelId=153&fullscreen,
         https://sentry.gitlab.net/gitlab/gitlabcom/?query=ArchiveTraceWorker, and
@@ -103,16 +103,18 @@ groups:
       alert_type: cause
     annotations:
       title: 'Sidekiq queues for CI/CD are growing: {{$value}}'
-      description: >
+      description: |
         Sidekiq queues for CI/CD are growing and are over 1000 for
         more than last 5 minutes.
         Please check https://dashboards.gitlab.net/d/ci-runners-incident-gitlab-application/ci-runners-incident-support-gitlab-application?viewPanel=20&orgId=1&refresh=1m&from=now-3h&to=now
 
   - alert: CICDJobsStuckInDockerPull
-    expr: >
-      (sum by (environment, tier, type, stage, shard) (gitlab_runner_jobs{executor_stage="docker_pulling_image"})
-      /
-      sum by (environment, tier, type, stage, shard) (gitlab_runner_jobs{executor_stage="docker_run"})) > 1
+    expr: |
+      (
+        sum by (environment, tier, type, stage, shard) (gitlab_runner_jobs{executor_stage="docker_pulling_image"})
+        /
+        sum by (environment, tier, type, stage, shard) (gitlab_runner_jobs{executor_stage="docker_run"})
+      ) > 1
     for: 5m
     labels:
       team: runner
@@ -120,14 +122,16 @@ groups:
       alert_type: cause
     annotations:
       title: 'More CI Jobs are in state docker_pulling_image than state docker_run'
-      description: >
+      description: |
         More CI Jobs are in state docker_pulling_image than are in state docker_run
         for over 5 minutes. This could mean connectivity to docker hub is broken.
         Plese check https://dashboards.gitlab.net/d/000000159/ci?refresh=5m&viewPanel=46&orgId=1&from=now-1h&to=now&fullscreen
 
   - alert: GitLabRailsRepoMasterArchiveIsStale
-    expr: >
-      (time() - probe_http_last_modified_timestamp_seconds{job="gitlab-ci-git-repo-cache-blackbox"}) > 86400 # 1 day
+    expr: |
+      (
+        time() - probe_http_last_modified_timestamp_seconds{job="gitlab-ci-git-repo-cache-blackbox"}
+      ) > 86400 # 1 day
     for: 3m
     labels:
       team: create
@@ -135,7 +139,7 @@ groups:
       alert_type: cause
     annotations:
       title: 'gitlab/gitlab-org repo master archive is stale'
-      description: >
+      description: |
         The repo archive has not been updated in GCS in one day so it could mean that
         the mechanism that uploads the archive is failing. The archive is used to speed up
         fetches for CI jobs and not to overload the Gitaly node that hosts the repo.
