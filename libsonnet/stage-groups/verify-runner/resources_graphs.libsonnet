@@ -9,7 +9,7 @@ local memoryUsage =
     fill=0,
     stack=false,
     query=|||
-      instance:node_memory_utilization:ratio{instance=~"${runner_manager:pipe}"}
+      instance:node_memory_utilization:ratio{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"}
     |||,
   );
 
@@ -22,7 +22,7 @@ local cpuUsage =
     fill=0,
     stack=false,
     query=|||
-      instance:node_cpu_utilization:ratio{instance=~"${runner_manager:pipe}"}
+      instance:node_cpu_utilization:ratio{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"}
     |||,
   );
 
@@ -35,9 +35,9 @@ local fdsUsage =
     fill=0,
     stack=false,
     query=|||
-      process_open_fds{instance=~"${runner_manager:pipe}",job="runners-manager"}
+      process_open_fds{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}",job="runners-manager"}
       /
-      process_max_fds{instance=~"${runner_manager:pipe}",job="runners-manager"}
+      process_max_fds{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}",job="runners-manager"}
     |||,
   );
 
@@ -50,7 +50,7 @@ local diskAvailable =
     fill=0,
     stack=false,
     query=|||
-      instance:node_filesystem_avail:ratio{instance=~"${runner_manager:pipe}",fstype="ext4"}
+      instance:node_filesystem_avail:ratio{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}",fstype="ext4"}
     |||,
   );
 
@@ -65,13 +65,13 @@ local iopsUtilization =
       {
         legendFormat: '{{instance}} - writes',
         query: |||
-          instance:node_disk_writes_completed:irate1m{instance=~"${runner_manager:pipe}"}
+          instance:node_disk_writes_completed:irate1m{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"}
         |||,
       },
       {
         legendFormat: '{{instance}} - reads',
         query: |||
-          instance:node_disk_reads_completed:irate1m{instance=~"${runner_manager:pipe}"}
+          instance:node_disk_reads_completed:irate1m{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"}
         |||,
       },
     ],
@@ -96,7 +96,7 @@ local networkUtilization =
         legendFormat: '{{instance}} - sent',
         query: |||
           sum by (instance) (
-            rate(node_network_transmit_bytes_total{instance=~"${runner_manager:pipe}"}[$__interval])
+            rate(node_network_transmit_bytes_total{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"}[$__interval])
           )
         |||,
       },
@@ -104,7 +104,7 @@ local networkUtilization =
         legendFormat: '{{instance}} - received',
         query: |||
           sum by (instance) (
-            rate(node_network_receive_bytes_total{instance=~"${runner_manager:pipe}"}[$__interval])
+            rate(node_network_receive_bytes_total{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"}[$__interval])
           )
         |||,
       },

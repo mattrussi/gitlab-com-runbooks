@@ -10,7 +10,7 @@ local vmStates =
     format='short',
     query=|||
       sum by(shard, state) (
-        gitlab_runner_autoscaling_machine_states{executor="docker+machine", instance=~"${runner_manager:pipe}"}
+        gitlab_runner_autoscaling_machine_states{environment=~"$environment", stage=~"$stage", executor="docker+machine", instance=~"${runner_manager:pipe}"}
       )
     |||,
   );
@@ -24,7 +24,7 @@ local vmOperationsRate =
     stack=true,
     query=|||
       sum by (shard, action) (
-        increase(gitlab_runner_autoscaling_actions_total{executor="docker+machine", instance=~"${runner_manager:pipe}"}[$__interval])
+        increase(gitlab_runner_autoscaling_actions_total{environment=~"$environment", stage=~"$stage", executor="docker+machine", instance=~"${runner_manager:pipe}"}[$__interval])
       )
     |||,
   );
@@ -34,7 +34,7 @@ local vmCreationTiming =
     'Autoscaled VMs creation timing',
     |||
       sum by (le) (
-        increase(gitlab_runner_autoscaling_machine_creation_duration_seconds_bucket{executor="docker+machine",instance=~"${runner_manager:pipe}"}[$__interval])
+        increase(gitlab_runner_autoscaling_machine_creation_duration_seconds_bucket{environment=~"$environment", stage=~"$stage", executor="docker+machine",instance=~"${runner_manager:pipe}"}[$__interval])
       )
     |||,
     color_cardColor='#96D98D',
@@ -50,9 +50,9 @@ local gcpRegionQuotas =
     query=|||
       sum by(project, region, quota) (
         (
-          gcp_exporter_region_quota_usage{instance=~"$gcp_exporter",project=~"${gcp_project:pipe}",region=~"${gcp_region:pipe}"}
+          gcp_exporter_region_quota_usage{environment=~"$environment", stage=~"$stage", instance=~"$gcp_exporter",project=~"${gcp_project:pipe}",region=~"${gcp_region:pipe}"}
           /
-          gcp_exporter_region_quota_limit{instance=~"$gcp_exporter",project=~"${gcp_project:pipe}",region=~"${gcp_region:pipe}"}
+          gcp_exporter_region_quota_limit{environment=~"$environment", stage=~"$stage", instance=~"$gcp_exporter",project=~"${gcp_project:pipe}",region=~"${gcp_region:pipe}"}
         ) > 0
       )
     |||,
@@ -83,7 +83,7 @@ local gcpInstances =
       sum by (zone, machine_type_short, runner_group) (
         label_replace(
           label_replace(
-            gcp_exporter_instances_count{instance=~"$gcp_exporter",project="${gcp_project:pipe}",zone=~"(${gcp_region:pipe}).*"},
+            gcp_exporter_instances_count{environment=~"$environment", stage=~"$stage", instance=~"$gcp_exporter",project="${gcp_project:pipe}",zone=~"(${gcp_region:pipe}).*"},
             "machine_type_short",
             "$1",
             "machine_type",
