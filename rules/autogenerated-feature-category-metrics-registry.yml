@@ -12,11 +12,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_database_query_duration_seconds_bucket{type="registry", le="1"}[5m])
+          rate(registry_database_query_duration_seconds_bucket{type="registry", le="0.6"}[5m])
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_database_query_duration_seconds_bucket{type="registry", le="2.5"}[5m])
+          rate(registry_database_query_duration_seconds_bucket{type="registry", le="0.9"}[5m])
         )
       )
       /
@@ -240,11 +240,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_database_query_duration_seconds_bucket{type="registry", le="1"}[30m])
+          rate(registry_database_query_duration_seconds_bucket{type="registry", le="0.6"}[30m])
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_database_query_duration_seconds_bucket{type="registry", le="2.5"}[30m])
+          rate(registry_database_query_duration_seconds_bucket{type="registry", le="0.9"}[30m])
         )
       )
       /
@@ -468,11 +468,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_database_query_duration_seconds_bucket{type="registry", le="1"}[1h])
+          rate(registry_database_query_duration_seconds_bucket{type="registry", le="0.6"}[1h])
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_database_query_duration_seconds_bucket{type="registry", le="2.5"}[1h])
+          rate(registry_database_query_duration_seconds_bucket{type="registry", le="0.9"}[1h])
         )
       )
       /
