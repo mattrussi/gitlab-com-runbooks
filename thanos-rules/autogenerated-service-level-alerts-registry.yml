@@ -193,7 +193,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(registry_database_queries_total{type="registry", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(registry_database_queries_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
@@ -230,7 +230,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(registry_database_queries_total{type="registry", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(registry_database_queries_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
@@ -421,6 +421,127 @@ groups:
       (
         sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="garbagecollector",monitor="global",type="registry"}) >= 1
       )
+  - alert: RegistryServiceGarbagecollectorErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The garbagecollector SLI of the registry service (`{{ $labels.stage }}`
+        stage) has an error rate violating SLO
+      description: |
+        Aggregation of all container registry online garbage collection operations.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "175676838"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(registry_gc_runs_total{environment="{{ $labels.environment }}",error="true",stage="{{ $labels.stage }}",type="registry"}[5m])
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: container_registry
+      pager: pagerduty
+      product_stage: package
+      product_stage_group: package
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "no"
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_1h{component="garbagecollector",monitor="global",type="registry"}
+          > (14.4 * 0.000100)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_5m{component="garbagecollector",monitor="global",type="registry"}
+          > (14.4 * 0.000100)
+        )
+        or
+        (
+          gitlab_component_errors:ratio_6h{component="garbagecollector",monitor="global",type="registry"}
+          > (6 * 0.000100)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_30m{component="garbagecollector",monitor="global",type="registry"}
+          > (6 * 0.000100)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="garbagecollector",monitor="global",type="registry"}) >= 1
+      )
+  - alert: RegistryServiceGarbagecollectorErrorSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The garbagecollector SLI of the registry service in region `{{ $labels.region
+        }}` has an error rate violating SLO
+      description: |
+        Aggregation of all container registry online garbage collection operations.
+
+        Since the registry service is not fully redundant, SLI violations on a single node may represent a user-impacting service degradation.
+
+        Currently the apdex value for {{ $labels.region }} is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: alerts-regional_component_slo_error
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-regional_component_slo_error?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}&var-region={{ $labels.region }}&var-component={{ $labels.component }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "965700560"
+      grafana_variables: environment,type,stage,region,component
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region) (
+          rate(registry_gc_runs_total{environment="{{ $labels.environment }}",error="true",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: container_registry
+      pager: pagerduty
+      product_stage: package
+      product_stage_group: package
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "no"
+    expr: |
+      (
+        (
+          gitlab_regional_sli_errors:ratio_1h{component="garbagecollector",monitor="global",type="registry"}
+          > (14.4 * 0.000100)
+        )
+        and
+        (
+          gitlab_regional_sli_errors:ratio_5m{component="garbagecollector",monitor="global",type="registry"}
+          > (14.4 * 0.000100)
+        )
+        or
+        (
+          gitlab_regional_sli_errors:ratio_6h{component="garbagecollector",monitor="global",type="registry"}
+          > (6 * 0.000100)
+        )
+        and
+        (
+          gitlab_regional_sli_errors:ratio_30m{component="garbagecollector",monitor="global",type="registry"}
+          > (6 * 0.000100)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="garbagecollector",monitor="global",type="registry"}) >= 1
+      )
   - alert: RegistryServiceGarbagecollectorTrafficCessation
     for: 5m
     annotations:
@@ -438,7 +559,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(registry_gc_runs_total{type="registry", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(registry_gc_runs_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
@@ -475,7 +596,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(registry_gc_runs_total{type="registry", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(registry_gc_runs_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
