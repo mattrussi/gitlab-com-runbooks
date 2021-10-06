@@ -73,6 +73,16 @@ configuration management code that puts it into place. Hopefully this allows
 those onboarding to understand what's happening without coupling the document to
 implementation details.
 
+## Backlog
+
+| Service | Description | Backlog |
+|---------|------------|---------|
+| ~"Service::Prometheus" | The multiple prometheus servers that we run. | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues?scope=all&state=opened&label_name[]=Service%3A%3APrometheus) |
+| ~"Service::Thanos" | Anything related to [thanos](https://thanos.io/). | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues?scope=all&state=opened&label_name[]=Service%3A%3AThanos) |
+| ~"Service::Grafana" | Anything related to <https://dashboards.gitlab.net/> | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues?scope=all&state=opened&label_name[]=Service%3A%3AGrafana)
+| ~"Service::PublicGrafana" | Anything related to <https://dashboards.gitlab.com/> | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues?scope=all&state=opened&label_name[]=Service%3A%3APublicGrafana)
+| ~"Service::Monitoring-Other" | The service we provide to engineers, this covers metrics, labels and anything else that doesn't belong in the services above. | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues?scope=all&state=opened&label_name[]=Service%3A%3AMonitoring-Other) |
+
 ## Querying
 
 Prefer [dashboards](https://dashboards.gitlab.net) to [ad-hoc
