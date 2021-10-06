@@ -2,8 +2,13 @@ groups:
 - name: gitlab-com-ci.rules
   rules:
   - alert: CICDRunnerMachineCreationRateHigh
-    expr: sum(gitlab_runner_autoscaling_machine_states{executor="docker+machine", state="creating"}) / (sum(gitlab_runner_autoscaling_machine_states{executor="docker+machine", state="idle"}) + 1) > 100
-    for: 1m
+    expr: |
+      (
+        sum by(environment, tier, type, stage, shard) (gitlab_runner_autoscaling_machine_states{executor="docker+machine", state="creating"})
+        /
+        sum by(environment, tier, type, stage, shard) (gitlab_runner_autoscaling_machine_states{executor="docker+machine", state="idle"})
+      ) > 1
+    for: 5m
     labels:
       team: runner
       severity: s3
