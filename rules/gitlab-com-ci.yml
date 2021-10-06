@@ -92,7 +92,10 @@ groups:
       runbook: docs/ci-runners/ci_too_many_archiving_trace_failures.md
 
   - alert: CICDSidekiqQueuesTooBig
-    expr: (sidekiq_queue_size{environment=~"gprd",name=~"pipeline.*"} and on (fqdn) gitlab:redis_master) > 1000
+    expr: |
+      sum by (environment, tier, type, stage, shard, worker) (
+        sidekiq_jobs_inflight:irate1m{feature_category=~"(continuous_integration|runner)"}
+      ) > 100
     for: 5m
     labels:
       team: runner
@@ -103,7 +106,7 @@ groups:
       description: >
         Sidekiq queues for CI/CD are growing and are over 1000 for
         more than last 5 minutes.
-        Plese check https://dashboards.gitlab.net/d/000000159/ci?refresh=5m&from=now-1h&to=now&orgId=1&panelId=85&fullscreen
+        Please check https://dashboards.gitlab.net/d/ci-runners-incident-gitlab-application/ci-runners-incident-support-gitlab-application?viewPanel=20&orgId=1&refresh=1m&from=now-3h&to=now
 
   - alert: CICDJobsStuckInDockerPull
     expr: >
