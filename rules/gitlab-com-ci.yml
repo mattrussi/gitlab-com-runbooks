@@ -78,7 +78,10 @@ groups:
       runbook: docs/ci-runners/ci_workhorse-queuing.md
 
   - alert: CICDTooManyArchivingTraceFailures
-    expr: (sum (rate(job_trace_archive_failed_total[5m])) by (job)) > 10
+    expr: |
+      sum by (environment, tier, type, stage, shard) (
+        rate(job_trace_archive_failed_total[5m])
+      ) > 10
     for: 5m
     labels:
       team: runner
