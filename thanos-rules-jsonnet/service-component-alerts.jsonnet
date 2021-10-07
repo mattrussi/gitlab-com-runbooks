@@ -95,8 +95,9 @@ local promQueryForSelector(serviceType, sli, aggregationSet, metricName) =
     else
       null;
 
-// For now, this is a bit of a hack, relying on a convention that service overview
-// dashboards will match this URL
+
+// By convention, we know that the Grafana UID will
+// be <service>-main/<service>-overview
 local dashboardForService(serviceType) =
   '%(serviceType)s-main/%(serviceType)s-overview' % {
     serviceType: serviceType,
