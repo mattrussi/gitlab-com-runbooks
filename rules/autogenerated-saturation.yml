@@ -708,7 +708,7 @@ groups:
           clamp_max(
             avg_over_time(pgbouncer_used_clients {type="patroni"}[5m])
             /
-            8192
+            9216
             ,
             1)
         ,
@@ -3814,7 +3814,7 @@ groups:
             clamp_max(
               avg_over_time(pgbouncer_used_clients {environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
               /
-              8192
+              9216
               ,
               1)
           ,
