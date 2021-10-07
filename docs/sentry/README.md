@@ -21,6 +21,7 @@
 * [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
 * [../patroni/rotating-rails-postgresql-password.md](../patroni/rotating-rails-postgresql-password.md)
 * [../praefect/praefect-startup.md](../praefect/praefect-startup.md)
+* [../registry/app-db-conn-pool-saturation.md](../registry/app-db-conn-pool-saturation.md)
 * [../registry/migration-failure-scenarios.md](../registry/migration-failure-scenarios.md)
 * [sentry-is-down.md](sentry-is-down.md)
 * [../sidekiq/large-pull-mirror-queue.md](../sidekiq/large-pull-mirror-queue.md)
