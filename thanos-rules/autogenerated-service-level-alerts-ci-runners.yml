@@ -33,8 +33,6 @@ groups:
       alert_type: symptom
       feature_category: runner
       pager: pagerduty
-      product_stage: verify
-      product_stage_group: runner
       rules_domain: general
       severity: s2
       sli_type: error
@@ -85,8 +83,6 @@ groups:
       alert_type: symptom
       feature_category: runner
       pager: pagerduty
-      product_stage: verify
-      product_stage_group: runner
       rules_domain: general
       severity: s2
       sli_type: error
@@ -137,8 +133,6 @@ groups:
       alert_type: cause
       feature_category: runner
       pager: pagerduty
-      product_stage: verify
-      product_stage_group: runner
       rules_domain: general
       severity: s2
       sli_type: ops
@@ -176,8 +170,6 @@ groups:
       alert_type: cause
       feature_category: runner
       pager: pagerduty
-      product_stage: verify
-      product_stage_group: runner
       rules_domain: general
       severity: s2
       sli_type: ops
@@ -220,8 +212,6 @@ groups:
       alert_type: symptom
       feature_category: runner
       pager: pagerduty
-      product_stage: verify
-      product_stage_group: runner
       rules_domain: general
       severity: s2
       sli_type: apdex
@@ -277,8 +267,6 @@ groups:
       alert_type: symptom
       feature_category: runner
       pager: pagerduty
-      product_stage: verify
-      product_stage_group: runner
       rules_domain: general
       severity: s2
       sli_type: apdex
@@ -331,8 +319,6 @@ groups:
       alert_type: symptom
       feature_category: runner
       pager: pagerduty
-      product_stage: verify
-      product_stage_group: runner
       rules_domain: general
       severity: s2
       sli_type: error
@@ -385,8 +371,6 @@ groups:
       alert_type: symptom
       feature_category: runner
       pager: pagerduty
-      product_stage: verify
-      product_stage_group: runner
       rules_domain: general
       severity: s2
       sli_type: error
@@ -439,8 +423,6 @@ groups:
       alert_type: cause
       feature_category: runner
       pager: pagerduty
-      product_stage: verify
-      product_stage_group: runner
       rules_domain: general
       severity: s2
       sli_type: ops
@@ -480,8 +462,6 @@ groups:
       alert_type: cause
       feature_category: runner
       pager: pagerduty
-      product_stage: verify
-      product_stage_group: runner
       rules_domain: general
       severity: s2
       sli_type: ops
@@ -517,8 +497,6 @@ groups:
       alert_type: symptom
       feature_category: continuous_integration
       pager: pagerduty
-      product_stage: verify
-      product_stage_group: pipeline execution
       rules_domain: general
       severity: s2
       sli_type: error
@@ -567,8 +545,6 @@ groups:
       alert_type: symptom
       feature_category: continuous_integration
       pager: pagerduty
-      product_stage: verify
-      product_stage_group: pipeline execution
       rules_domain: general
       severity: s2
       sli_type: error
@@ -617,8 +593,6 @@ groups:
       alert_type: cause
       feature_category: continuous_integration
       pager: pagerduty
-      product_stage: verify
-      product_stage_group: pipeline execution
       rules_domain: general
       severity: s2
       sli_type: ops
@@ -654,8 +628,6 @@ groups:
       alert_type: cause
       feature_category: continuous_integration
       pager: pagerduty
-      product_stage: verify
-      product_stage_group: pipeline execution
       rules_domain: general
       severity: s2
       sli_type: ops

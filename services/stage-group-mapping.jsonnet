@@ -94,8 +94,6 @@
       'live_preview',
       'wiki',
       'static_site_editor',
-      'gitlab_docs',
-      'navigation',
     ],
   },
   gitaly: {
@@ -117,6 +115,8 @@
     stage: 'ecosystem',
     feature_categories: [
       'foundations',
+      'navigation',
+      'gitlab_docs',
     ],
   },
   pipeline_execution: {

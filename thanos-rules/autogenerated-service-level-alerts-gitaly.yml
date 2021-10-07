@@ -34,8 +34,6 @@ groups:
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
-      product_stage: create
-      product_stage_group: gitaly
       rules_domain: general
       severity: s2
       sli_type: apdex
@@ -87,8 +85,6 @@ groups:
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
-      product_stage: create
-      product_stage_group: gitaly
       rules_domain: general
       severity: s2
       sli_type: apdex
@@ -142,8 +138,6 @@ groups:
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
-      product_stage: create
-      product_stage_group: gitaly
       rules_domain: general
       severity: s2
       sli_type: apdex
@@ -197,8 +191,6 @@ groups:
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
-      product_stage: create
-      product_stage_group: gitaly
       rules_domain: general
       severity: s2
       sli_type: apdex
@@ -247,8 +239,6 @@ groups:
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
-      product_stage: create
-      product_stage_group: gitaly
       rules_domain: general
       severity: s2
       sli_type: error
@@ -297,8 +287,6 @@ groups:
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
-      product_stage: create
-      product_stage_group: gitaly
       rules_domain: general
       severity: s2
       sli_type: error
@@ -349,8 +337,6 @@ groups:
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
-      product_stage: create
-      product_stage_group: gitaly
       rules_domain: general
       severity: s2
       sli_type: error
@@ -401,8 +387,6 @@ groups:
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
-      product_stage: create
-      product_stage_group: gitaly
       rules_domain: general
       severity: s2
       sli_type: error
@@ -451,8 +435,6 @@ groups:
       alert_type: cause
       feature_category: gitaly
       pager: pagerduty
-      product_stage: create
-      product_stage_group: gitaly
       rules_domain: general
       severity: s2
       sli_type: ops
@@ -488,8 +470,6 @@ groups:
       alert_type: cause
       feature_category: gitaly
       pager: pagerduty
-      product_stage: create
-      product_stage_group: gitaly
       rules_domain: general
       severity: s2
       sli_type: ops
@@ -528,8 +508,6 @@ groups:
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
-      product_stage: create
-      product_stage_group: gitaly
       rules_domain: general
       severity: s2
       sli_type: apdex
@@ -581,8 +559,6 @@ groups:
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
-      product_stage: create
-      product_stage_group: gitaly
       rules_domain: general
       severity: s2
       sli_type: apdex
@@ -636,8 +612,6 @@ groups:
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
-      product_stage: create
-      product_stage_group: gitaly
       rules_domain: general
       severity: s2
       sli_type: apdex
@@ -691,8 +665,6 @@ groups:
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
-      product_stage: create
-      product_stage_group: gitaly
       rules_domain: general
       severity: s2
       sli_type: apdex
@@ -743,8 +715,6 @@ groups:
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
-      product_stage: create
-      product_stage_group: gitaly
       rules_domain: general
       severity: s2
       sli_type: error
@@ -795,8 +765,6 @@ groups:
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
-      product_stage: create
-      product_stage_group: gitaly
       rules_domain: general
       severity: s2
       sli_type: error
@@ -849,8 +817,6 @@ groups:
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
-      product_stage: create
-      product_stage_group: gitaly
       rules_domain: general
       severity: s2
       sli_type: error
@@ -903,8 +869,6 @@ groups:
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
-      product_stage: create
-      product_stage_group: gitaly
       rules_domain: general
       severity: s2
       sli_type: error
@@ -953,8 +917,6 @@ groups:
       alert_type: cause
       feature_category: gitaly
       pager: pagerduty
-      product_stage: create
-      product_stage_group: gitaly
       rules_domain: general
       severity: s2
       sli_type: ops
@@ -990,8 +952,6 @@ groups:
       alert_type: cause
       feature_category: gitaly
       pager: pagerduty
-      product_stage: create
-      product_stage_group: gitaly
       rules_domain: general
       severity: s2
       sli_type: ops
@@ -1029,8 +989,6 @@ groups:
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
-      product_stage: create
-      product_stage_group: gitaly
       rules_domain: general
       severity: s2
       sli_type: error
@@ -1081,8 +1039,6 @@ groups:
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
-      product_stage: create
-      product_stage_group: gitaly
       rules_domain: general
       severity: s2
       sli_type: error
@@ -1135,8 +1091,6 @@ groups:
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
-      product_stage: create
-      product_stage_group: gitaly
       rules_domain: general
       severity: s2
       sli_type: error
@@ -1189,8 +1143,6 @@ groups:
       alert_type: symptom
       feature_category: gitaly
       pager: pagerduty
-      product_stage: create
-      product_stage_group: gitaly
       rules_domain: general
       severity: s2
       sli_type: error
@@ -1239,8 +1191,6 @@ groups:
       alert_type: cause
       feature_category: gitaly
       pager: pagerduty
-      product_stage: create
-      product_stage_group: gitaly
       rules_domain: general
       severity: s2
       sli_type: ops
@@ -1276,8 +1226,6 @@ groups:
       alert_type: cause
       feature_category: gitaly
       pager: pagerduty
-      product_stage: create
-      product_stage_group: gitaly
       rules_domain: general
       severity: s2
       sli_type: ops

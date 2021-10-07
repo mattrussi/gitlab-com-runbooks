@@ -27,8 +27,6 @@ groups:
       alert_type: symptom
       feature_category: pages
       pager: pagerduty
-      product_stage: release
-      product_stage_group: release
       rules_domain: general
       severity: s2
       sli_type: error
@@ -73,8 +71,6 @@ groups:
       alert_type: symptom
       feature_category: pages
       pager: pagerduty
-      product_stage: release
-      product_stage_group: release
       rules_domain: general
       severity: s2
       sli_type: error
@@ -119,8 +115,6 @@ groups:
       alert_type: cause
       feature_category: pages
       pager: pagerduty
-      product_stage: release
-      product_stage_group: release
       rules_domain: general
       severity: s2
       sli_type: ops
@@ -152,8 +146,6 @@ groups:
       alert_type: cause
       feature_category: pages
       pager: pagerduty
-      product_stage: release
-      product_stage_group: release
       rules_domain: general
       severity: s2
       sli_type: ops
@@ -185,8 +177,6 @@ groups:
       alert_type: symptom
       feature_category: pages
       pager: pagerduty
-      product_stage: release
-      product_stage_group: release
       rules_domain: general
       severity: s2
       sli_type: error
@@ -231,8 +221,6 @@ groups:
       alert_type: symptom
       feature_category: pages
       pager: pagerduty
-      product_stage: release
-      product_stage_group: release
       rules_domain: general
       severity: s2
       sli_type: error
@@ -277,8 +265,6 @@ groups:
       alert_type: cause
       feature_category: pages
       pager: pagerduty
-      product_stage: release
-      product_stage_group: release
       rules_domain: general
       severity: s2
       sli_type: ops
@@ -310,8 +296,6 @@ groups:
       alert_type: cause
       feature_category: pages
       pager: pagerduty
-      product_stage: release
-      product_stage_group: release
       rules_domain: general
       severity: s2
       sli_type: ops
@@ -350,8 +334,6 @@ groups:
       alert_type: symptom
       feature_category: pages
       pager: pagerduty
-      product_stage: release
-      product_stage_group: release
       rules_domain: general
       severity: s2
       sli_type: apdex
@@ -403,8 +385,6 @@ groups:
       alert_type: symptom
       feature_category: pages
       pager: pagerduty
-      product_stage: release
-      product_stage_group: release
       rules_domain: general
       severity: s2
       sli_type: apdex
@@ -453,8 +433,6 @@ groups:
       alert_type: symptom
       feature_category: pages
       pager: pagerduty
-      product_stage: release
-      product_stage_group: release
       rules_domain: general
       severity: s2
       sli_type: error
@@ -503,8 +481,6 @@ groups:
       alert_type: symptom
       feature_category: pages
       pager: pagerduty
-      product_stage: release
-      product_stage_group: release
       rules_domain: general
       severity: s2
       sli_type: error
@@ -553,8 +529,6 @@ groups:
       alert_type: cause
       feature_category: pages
       pager: pagerduty
-      product_stage: release
-      product_stage_group: release
       rules_domain: general
       severity: s2
       sli_type: ops
@@ -590,8 +564,6 @@ groups:
       alert_type: cause
       feature_category: pages
       pager: pagerduty
-      product_stage: release
-      product_stage_group: release
       rules_domain: general
       severity: s2
       sli_type: ops
@@ -630,8 +602,6 @@ groups:
       alert_type: symptom
       feature_category: pages
       pager: pagerduty
-      product_stage: release
-      product_stage_group: release
       rules_domain: general
       severity: s2
       sli_type: apdex
@@ -683,8 +653,6 @@ groups:
       alert_type: symptom
       feature_category: pages
       pager: pagerduty
-      product_stage: release
-      product_stage_group: release
       rules_domain: general
       severity: s2
       sli_type: apdex
@@ -733,8 +701,6 @@ groups:
       alert_type: cause
       feature_category: pages
       pager: pagerduty
-      product_stage: release
-      product_stage_group: release
       rules_domain: general
       severity: s2
       sli_type: ops
@@ -770,8 +736,6 @@ groups:
       alert_type: cause
       feature_category: pages
       pager: pagerduty
-      product_stage: release
-      product_stage_group: release
       rules_domain: general
       severity: s2
       sli_type: ops

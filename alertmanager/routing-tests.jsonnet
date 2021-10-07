@@ -343,4 +343,43 @@ generateTests([
       'blackhole',
     ],
   },
+  // Feature category tests.
+  // These tests rely on the feature categories from https://gitlab.com/gitlab-com/www-gitlab-com/blob/master/data/stages.yml
+  // After running ./scripts/update_stage_groups_feature_categories.rb, these may occassionally break,
+  // as feature_categories are moved between different stage groups.
+  {
+    name: 'feature_category="runner" alerts should be routed to team_runner_alerts_channel',
+    labels: {
+      feature_category: 'runner',
+      env: 'gprd',
+    },
+    receivers: [
+      'team_runner_alerts_channel',
+      'prod_alerts_slack_channel',
+    ],
+  },
+  {
+    name: 'feature_category="authentication_and_authorization" alerts should be routed to team_access_alerts_channel',
+    labels: {
+      feature_category: 'authentication_and_authorization',
+      env: 'gprd',
+    },
+    receivers: [
+      'team_access_alerts_channel',
+      'prod_alerts_slack_channel',
+    ],
+  },
+  {
+    name: 'high severity alerts should be routed to infrastructure and the appropriate team feature_category="authentication_and_authorization" alerts should be routed to team_access_alerts_channel',
+    labels: {
+      feature_category: 'authentication_and_authorization',
+      env: 'gprd',
+      pager: 'pagerduty',
+    },
+    receivers: [
+      'prod_pagerduty',
+      'team_access_alerts_channel',
+      'production_slack_channel',
+    ],
+  },
 ])

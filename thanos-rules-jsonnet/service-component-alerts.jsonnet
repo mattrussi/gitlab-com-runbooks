@@ -2,7 +2,6 @@ local aggregationSets = import 'aggregation-sets.libsonnet';
 local alerts = import 'alerts/alerts.libsonnet';
 local multiburnExpression = import 'mwmbr/expression.libsonnet';
 local serviceCatalog = import 'service-catalog/service-catalog.libsonnet';
-local stages = import 'service-catalog/stages.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local serviceLevelAlerts = import 'servicemetrics/service-level-alerts.libsonnet';
 local stableIds = import 'stable-ids/stable-ids.libsonnet';
@@ -26,8 +25,6 @@ local labelsForSLI(sli) =
   local labels = {
     user_impacting: if sli.userImpacting then 'yes' else 'no',
     feature_category: std.asciiLower(sli.featureCategory),
-    product_stage: std.asciiLower(stages.findStageNameForFeatureCategory(sli.featureCategory)),
-    product_stage_group: std.asciiLower(stages.findStageGroupNameForFeatureCategory(sli.featureCategory)),
   };
 
   local team = if sli.team != null then serviceCatalog.getTeam(sli.team) else null;

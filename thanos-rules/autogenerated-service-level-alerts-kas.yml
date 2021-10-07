@@ -29,8 +29,6 @@ groups:
       alert_type: symptom
       feature_category: kubernetes_management
       pager: pagerduty
-      product_stage: configure
-      product_stage_group: configure
       rules_domain: general
       severity: s2
       sli_type: error
@@ -77,8 +75,6 @@ groups:
       alert_type: symptom
       feature_category: kubernetes_management
       pager: pagerduty
-      product_stage: configure
-      product_stage_group: configure
       rules_domain: general
       severity: s2
       sli_type: error
@@ -127,8 +123,6 @@ groups:
       alert_type: cause
       feature_category: kubernetes_management
       pager: pagerduty
-      product_stage: configure
-      product_stage_group: configure
       rules_domain: general
       severity: s2
       sli_type: ops
@@ -164,8 +158,6 @@ groups:
       alert_type: cause
       feature_category: kubernetes_management
       pager: pagerduty
-      product_stage: configure
-      product_stage_group: configure
       rules_domain: general
       severity: s2
       sli_type: ops
