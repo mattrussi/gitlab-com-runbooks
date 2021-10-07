@@ -23,6 +23,7 @@
 * [../praefect/praefect-startup.md](../praefect/praefect-startup.md)
 * [../registry/app-db-conn-pool-saturation.md](../registry/app-db-conn-pool-saturation.md)
 * [../registry/migration-failure-scenarios.md](../registry/migration-failure-scenarios.md)
+* [../registry/online-gc-high-overdue-tasks.md](../registry/online-gc-high-overdue-tasks.md)
 * [sentry-is-down.md](sentry-is-down.md)
 * [../sidekiq/large-pull-mirror-queue.md](../sidekiq/large-pull-mirror-queue.md)
 * [../sidekiq/sidekiq_error_rate_high.md](../sidekiq/sidekiq_error_rate_high.md)

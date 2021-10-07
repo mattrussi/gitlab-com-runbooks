@@ -60,6 +60,7 @@
 * [../redis/redis-survival-guide-for-sres.md](../redis/redis-survival-guide-for-sres.md)
 * [../registry/app-db-conn-pool-saturation.md](../registry/app-db-conn-pool-saturation.md)
 * [../registry/migration-failure-scenarios.md](../registry/migration-failure-scenarios.md)
+* [../registry/online-gc-high-overdue-tasks.md](../registry/online-gc-high-overdue-tasks.md)
 * [../sidekiq/large-sidekiq-queue.md](../sidekiq/large-sidekiq-queue.md)
 * [../sidekiq/sidekiq-survival-guide-for-sres.md](../sidekiq/sidekiq-survival-guide-for-sres.md)
 * [../spamcheck/index.md](../spamcheck/index.md)
