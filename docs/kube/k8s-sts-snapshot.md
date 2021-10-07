@@ -6,6 +6,10 @@ Some questions that need to be answered before gaining more confidence:
 - Is there any other cleanup concerns we need to be aware of? Such as removing the snapshots afterwards?
 - Does this procedure confuse Helm? (for example, does help add some metadata to the StatefulSet objects)
 
+Examples of when this procedure might be useful:
+- regular backup and restore of StatefulSet Apps (e.g. Redis or Postgres)
+- prepare a rollback procedure for an update to a StatefulSet App (e.g. Prometheus)
+
 ## Procedure for taking snapshots of statefulsets
 
 1. Go to GCP console and take snapshot of all volumes
