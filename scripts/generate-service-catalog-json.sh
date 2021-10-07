@@ -19,10 +19,3 @@ generate() {
 }
 
 generate "service-catalog.yml" "service_catalog.json"
-
-# Next iteration will include stages.yml from www-gitlab-com
-# generate "stages.yml" "stages.json"
-
-# For now, we store stages.yml in this project,
-# in future we may import this file dynamically
-# curl --fail https://gitlab.com/gitlab-com/www-gitlab-com/-/raw/master/data/stages.yml -o stages.yml

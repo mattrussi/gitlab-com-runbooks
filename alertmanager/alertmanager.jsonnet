@@ -2,6 +2,7 @@
 local secrets = std.extVar('secrets_file');
 local serviceCatalog = import 'service-catalog/service-catalog.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
+local stages = import 'service-catalog/stages.libsonnet';
 
 // Where the alertmanager templates are deployed.
 local templateDir = '/etc/alertmanager/config';
@@ -163,6 +164,18 @@ local teamsWithProductStageGroups() =
     teamsWithAlertingSlackChannels()
   );
 
+local featureCategoriesWithTeams() =
+  local teams = teamsWithProductStageGroups();
+  std.flatMap(
+    function(team)
+      std.map(
+        function(featureCategory)
+          { teamName: team.name, featureCategory: featureCategory },
+        stages.categoriesForStageGroup(team.product_stage_group)
+      ),
+    teams
+  );
+
 local defaultGroupBy = [
   'env',
   'tier',
@@ -240,8 +253,8 @@ local SnitchRoute(channel) =
     continue=false
   );
 
-local receiverNameForTeamSlackChannel(team) =
-  'team_' + std.strReplace(team.name, '-', '_') + '_alerts_channel';
+local receiverNameForTeamSlackChannel(teamName) =
+  'team_' + std.strReplace(teamName, '-', '_') + '_alerts_channel';
 
 local routingTree = Route(
   continue=null,
@@ -327,7 +340,17 @@ local routingTree = Route(
     ),
   ] + [
     Route(
-      receiver=receiverNameForTeamSlackChannel(team),
+      receiver=receiverNameForTeamSlackChannel(featureCategoryTeam.teamName),
+      continue=true,
+      matchers={
+        env: 'gprd',  // For now we only send production channel alerts to teams
+        feature_category: featureCategoryTeam.featureCategory,
+      },
+    )
+    for featureCategoryTeam in featureCategoriesWithTeams()
+  ] + [
+    Route(
+      receiver=receiverNameForTeamSlackChannel(team.name),
       continue=true,
       matchers={
         env: 'gprd',  // For now we only send production channel alerts to teams
@@ -337,7 +360,7 @@ local routingTree = Route(
     for team in teamsWithProductStageGroups()
   ] + [
     Route(
-      receiver=receiverNameForTeamSlackChannel(team),
+      receiver=receiverNameForTeamSlackChannel(team.name),
       continue=true,
       matchers={
         env: 'gprd',  // For now we only send production channel alerts to teams
@@ -399,7 +422,7 @@ local receivers =
 
   // Generate receivers for each team that has a channel
   [SlackReceiver({
-    name: receiverNameForTeamSlackChannel(team),
+    name: receiverNameForTeamSlackChannel(team.name),
     channel: team.slack_alerts_channel,
   }) for team in teamsWithAlertingSlackChannels()] +
   [WebhookReceiver(c) for c in webhookChannels] +
