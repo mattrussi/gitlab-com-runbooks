@@ -37,6 +37,7 @@ They all have acronyms as well, which are indicated next to each name.
   - [windows-shared-runners-manager (WSRM)](#windows-shared-runners-manager-wsrm)
 - [Cost Factors](#cost-factors)
 - [Network Info](#network-info)
+- [Monitoring](#monitoring)
 - [Production Change Lock (PCL)](#production-change-lock-pcl)
 
 ## Runner Descriptions
@@ -86,46 +87,6 @@ runs. Below is a table that details the cost factor for each runner type.
 | gitlab-docker-shared-runners-manager (gsrm) | 0.0                   | 1.0                    |
 
 ## Network Info
-
-Below is the networking information for each project.
-
-### GCP projects
-
-#### gitlab-ci project
-
-| Network Name   | Subnet Name                 | CIDR            | Purpose                                                |
-| -------------- | --------------------------- | --------------- | ------------------------------------------------------ |
-| `default`      | `default`                   | `10.142.0.0/20` | all non-runner machines (managers, prometheus, etc.). In `us-east1` - we don't use this subnetwork in any other region. |
-| `default`      | `shared-runners`            | `10.0.32.0/20`  | shared runner (SRM) machines                           |
-| `default`      | `private-runners`           | `10.0.0.0/20`   | private runner (PRM) machines                          |
-| `default`      | `gitlab-shared-runners `    | `10.0.16.0/20`  | gitlab shared runner (GSRM) machines                   |
-| `ci`           | `bastion-ci`                | `10.1.4.0/24`   | Bastion network                                        |
-| `ci`           | `runner-managers`           | `10.1.5.0/24`   | Network for Runner Managers ([new ones](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/456))                 |
-| `ci`           | `ephemeral-runners-private` | `10.10.40.0/21` | Ephemeral runner machines for the new `private` shard. See [Ephemeral runner VMs networking](#ephemera-runner-vms-networking) bellow. |
-| `runners-gke`  | `runners-gke`               | `10.9.4.0/24`   | Primary; GKE nodes range      |
-| `runners-gke`  | `runners-gke`               | `10.8.0.0/16`   | Secondary; GKE pods range     |
-| `runners-gke`  | `runners-gke`               | `10.9.0.0/22`   | secondary; GKE services range |
-
-
-#### gitlab-org-ci project
-
-| Network Name   | Subnet Name               | CIDR          | Purpose                               |
-| -------------- | ------------------------- | ------------- | ------------------------------------- |
-| `org-ci`       | `manager`                 | `10.1.0.0/24` | Runner manager machines               |
-| `org-ci`       | `bastion-org-ci`          | `10.1.2.0/24` | Bastion network                       |
-| `org-ci`       | `gitlab-gke-org-ci`       | `10.1.3.0/24` | GKE network                           |
-| `org-ci`       | `gitlab-gke-org-ci`       | `10.3.0.0/16` | GKE network                           |
-| `org-ci`       | `gitlab-gke-org-ci`       | `10.1.8.0/23` | GKE network                           |
-| `org-ci`       | `shared-runner`           | `10.2.0.0/16` | Ephemeral runner machines             |
-
-#### gitlab-ci-windows project
-
-| Network Name   | Subnet Name          | CIDR          | Purpose                           |
-| -------------- | -------------------- | ------------- | --------------------------------- |
-| `windows-ci`   | `manager-subnet`     | `10.1.0.0/16` | Runner manager machines           |
-| `windows-ci`   | `executor-subnet`    | `10.2.0.0/16` | Ephemeral runner machines         |
-| `windows-ci`   | `runner-windows-ci`  | `10.3.0.0/24` | Runner network for ansible/packer |
-| `windows-ci`   | `bastion-windows-ci` | `10.3.1.0/24` | bastion network                   |
 
 ### Ephemeral runner VMs networking
 
@@ -410,6 +371,102 @@ Every new CIDR should start at directly after the previously reserved one ends.
 | `gitlab-ci-plan-free-4` | `ephemeral-runners/ephemeral-runners` | `10.10.24.0/21` |
 | `gitlab-ci-plan-free-3` | `ephemeral-runners/ephemeral-runners` | `10.10.32.0/21` |
 | `gitlab-ci`             | `ci/ephemeral-runners-private`        | `10.10.40.0/21` |
+
+### GCP projects
+
+Here you can find details about networking in different projects used by CI Runners service.
+
+#### gitlab-ci project
+
+| Network Name   | Subnet Name                 | CIDR            | Purpose                                                |
+| -------------- | --------------------------- | --------------- | ------------------------------------------------------ |
+| `default`      | `default`                   | `10.142.0.0/20` | all non-runner machines (managers, prometheus, etc.). In `us-east1` - we don't use this subnetwork in any other region. |
+| `default`      | `shared-runners`            | `10.0.32.0/20`  | shared runner (SRM) machines                           |
+| `default`      | `private-runners`           | `10.0.0.0/20`   | private runner (PRM) machines                          |
+| `default`      | `gitlab-shared-runners `    | `10.0.16.0/20`  | gitlab shared runner (GSRM) machines                   |
+| `ci`           | `bastion-ci`                | `10.1.4.0/24`   | Bastion network                                        |
+| `ci`           | `runner-managers`           | `10.1.5.0/24`   | Network for Runner Managers ([new ones](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/456))                 |
+| `ci`           | `ephemeral-runners-private` | `10.10.40.0/21` | Ephemeral runner machines for the new `private` shard. See [Ephemeral runner VMs networking](#ephemera-runner-vms-networking) bellow. |
+| `runners-gke`  | `runners-gke`               | `10.9.4.0/24`   | Primary; GKE nodes range      |
+| `runners-gke`  | `runners-gke`               | `10.8.0.0/16`   | Secondary; GKE pods range     |
+| `runners-gke`  | `runners-gke`               | `10.9.0.0/22`   | secondary; GKE services range |
+
+The `default` network will be removed once we will move all of the runner managers to a new
+infrastructure, which is being tracked [by this epic](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/456).
+
+The `ci` network will be getting new subnetworks for `ephemeral-runners-X` while working on
+[this epic]((https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/456)).
+
+The `runners-gke` network, at least for now, is in the expected state.
+
+#### gitlab-org-ci project
+
+| Network Name   | Subnet Name               | CIDR          | Purpose                               |
+| -------------- | ------------------------- | ------------- | ------------------------------------- |
+| `org-ci`       | `manager`                 | `10.1.0.0/24` | Runner manager machines               |
+| `org-ci`       | `bastion-org-ci`          | `10.1.2.0/24` | Bastion network                       |
+| `org-ci`       | `gitlab-gke-org-ci`       | `10.1.3.0/24` | GKE network                           |
+| `org-ci`       | `gitlab-gke-org-ci`       | `10.3.0.0/16` | GKE network                           |
+| `org-ci`       | `gitlab-gke-org-ci`       | `10.1.8.0/23` | GKE network                           |
+| `org-ci`       | `shared-runner`           | `10.2.0.0/16` | Ephemeral runner machines             |
+
+We are considering removing this environment at all when the
+[Linux CI Runners Continuous Delivery](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/456) will be done.
+Our current plan is to add the `gitlab-docker-shared-runners-manager` as another entry in the `shared-gitlab-org`
+runner managers. Since we've moved a lot of load from the `ci` project to the `ci-plan-free-X` projects, it should
+have a lot of space for load currently handled by `gitlab-org-ci` project. Removing it will make our configuration
+a little more simple.
+
+#### gitlab-ci-windows project
+
+| Network Name   | Subnet Name          | CIDR          | Purpose                           |
+| -------------- | -------------------- | ------------- | --------------------------------- |
+| `windows-ci`   | `manager-subnet`     | `10.1.0.0/16` | Runner manager machines           |
+| `windows-ci`   | `executor-subnet`    | `10.2.0.0/16` | Ephemeral runner machines         |
+| `windows-ci`   | `runner-windows-ci`  | `10.3.0.0/24` | Runner network for ansible/packer |
+| `windows-ci`   | `bastion-windows-ci` | `10.3.1.0/24` | bastion network                   |
+
+Windows project will most probably get the `runners-gke` network and GKE based monitoring in the future. This
+is however not yet scheduled.
+
+## Monitoring
+
+![CI Runners monitoring stack design](./img/ci-runners-monitoring.png)
+
+Monitoring is be defined in almost the same configuration in all CI related projects. It is deployed using GKE and
+a cluster created by terraform. For that
+[a dedicated terraform module](https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/tree/master/modules/ci-runners/gke)
+was created. For it's purpose the GKE cluster is using the `runners-gke` network defined above.
+
+Prometheus is deployed in at least two replicas. Both have a Thanos Sidecar running alongside. Sidecar's gRPC
+endpoint is exposed as publicly accessible (we don't want to peer the `ops` or `gprd` network here) and the GCP Firewall
+limits access to it to only Thanos Query public IPs. This service uses TCP port `10901`.
+
+Long-term metrics storage is handled by using a dedicated GCS bucket created by the terraform module alongside
+the cluster. Thanos Sidecar is configured with write access to this bucket.
+
+Apart from the Sidecar we also have Thanos Store Gateway and Thanos Compact deployed and configured to use the same
+GCS bucket. Store Gateway's gRPC endpoint is exposed similarly to the Sidecar's one. This service uses TCP port `10903`.
+
+[Traefik](https://traefik.io/) is used as the ingress and load-balancing mechanism. It exposes gRPC services on given
+ports (using TCP routing), Prometheus UI and own dashboard. HTTP endpoints are automatically redirected to HTTPS,
+and Let's Encrypt certificates are used for TLS.
+
+For external access each project where monitoring is deployed is using a reserved public IP address. This address
+is bound to two DNS A records:
+
+- `monitoring-lb.[ENVIRONMENT].ci-runners.gitlab.net` - which is used for Thanos Query store DNS discovery and
+  to access Traefik dashboard in the browser. Access to the Dashboard is limited by oAuth, using Google as the Identity
+  Provider allowing `@gitlab.com` accounts. Consent screen and oAuth2 secrets are defined in the `gitlab-ci-155816`
+  project and should be used for all deployments of this monitoring stack (**remember:** new deploys will use new
+  domains for the redirection URLs, which should be added to the oAuth2 credentials configuration; unfortunately this
+  can't be managed by terraform).
+- `prometheus.[ENVIRONMENT].ci-runners.gitlab.net` - which is used to access directly the Prometheus deployment. As with
+  the Traefik dashboard, access is limited by oAuth2 with the same configuration.
+
+K8S deployment configuration is managed fully from CI. [A dedicated
+project](https://gitlab.com/gitlab-com/gl-infra/ci-runners/k8s-workloads) covers all monitoring clusters in different
+CI projects that we maintain.
 
 ## Production Change Lock (PCL)
 
