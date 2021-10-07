@@ -686,12 +686,27 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
-      component: pgbouncer_client_conn
+      component: pgbouncer_client_conn_primary
     expr: |
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            avg_over_time(pgbouncer_used_clients {type=~"patroni|pgbouncer"}[5m])
+            avg_over_time(pgbouncer_used_clients {type="pgbouncer"}[5m])
+            /
+            8192
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
+      component: pgbouncer_client_conn_replicas
+    expr: |
+      max by(environment, tier, type, stage) (
+        clamp_min(
+          clamp_max(
+            avg_over_time(pgbouncer_used_clients {type="patroni"}[5m])
             /
             8192
             ,
@@ -1362,11 +1377,19 @@ groups:
     expr: "0.95"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
-      component: pgbouncer_client_conn
+      component: pgbouncer_client_conn_primary
     expr: "0.8"
   - record: slo:max:hard:gitlab_component_saturation:ratio
     labels:
-      component: pgbouncer_client_conn
+      component: pgbouncer_client_conn_primary
+    expr: "0.85"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: pgbouncer_client_conn_replicas
+    expr: "0.8"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: pgbouncer_client_conn_replicas
     expr: "0.85"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
@@ -1806,7 +1829,14 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
-      component: pgbouncer_client_conn
+      component: pgbouncer_client_conn_primary
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s2
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      component: pgbouncer_client_conn_replicas
       horiz_scaling: "yes"
       quantile: max
       severity: s2
@@ -3710,27 +3740,27 @@ groups:
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
-      title: The PGBouncer Client Connections per Process resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+      title: The PGBouncer Client Connections per Process (Primary) resource of the
+        {{ $labels.type }} service ({{ $labels.stage }} stage), component has a saturation
+        exceeding SLO and is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
-        Details of the PGBouncer Client Connections per Process resource:
+        Details of the PGBouncer Client Connections per Process (Primary) resource:
 
-        Client connections per pgbouncer process.
+        Client connections per pgbouncer process for Primary connections.
 
         pgbouncer is configured to use a `max_client_conn` setting. This limits the total number of client connections per pgbouncer.
 
         When this limit is reached, client connections may be refused, and `max_client_conn` errors may appear in the pgbouncer logs.
 
         This could affect users as Rails clients are left unable to connect to the database. Another potential knock-on effect is that Rails clients could fail their readiness checks for extended periods during a deployment, leading to saturation of the older nodes.
-      grafana_dashboard_id: alerts-sat_pgbouncer_client_conn
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_pgbouncer_client_conn?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_id: alerts-sat_pgb_client_conn_primary
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_pgb_client_conn_primary?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "1258049746"
+      grafana_panel_id: "1712365426"
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, tier, type, stage, fqdn) (
@@ -3751,8 +3781,54 @@ groups:
       rules_domain: general
       severity: s2
     expr: |
-      gitlab_component_saturation:ratio{component="pgbouncer_client_conn"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="pgbouncer_client_conn"}
+      gitlab_component_saturation:ratio{component="pgbouncer_client_conn_primary"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="pgbouncer_client_conn_primary"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: The PGBouncer Client Connections per Process (Replicas) resource of the
+        {{ $labels.type }} service ({{ $labels.stage }} stage), component has a saturation
+        exceeding SLO and is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the PGBouncer Client Connections per Process (Replicas) resource:
+
+        Client connections per pgbouncer process for Replicas connections.
+
+        pgbouncer is configured to use a `max_client_conn` setting. This limits the total number of client connections per pgbouncer.
+
+        When this limit is reached, client connections may be refused, and `max_client_conn` errors may appear in the pgbouncer logs.
+
+        This could affect users as Rails clients are left unable to connect to the database. Another potential knock-on effect is that Rails clients could fail their readiness checks for extended periods during a deployment, leading to saturation of the older nodes.
+      grafana_dashboard_id: alerts-sat_pgb_client_conn_replicas
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_pgb_client_conn_replicas?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3093058894"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, fqdn) (
+          clamp_min(
+            clamp_max(
+              avg_over_time(pgbouncer_used_clients {environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
+              /
+              8192
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+    expr: |
+      gitlab_component_saturation:ratio{component="pgbouncer_client_conn_replicas"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="pgbouncer_client_conn_replicas"}
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
