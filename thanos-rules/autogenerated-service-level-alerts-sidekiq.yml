@@ -16,11 +16,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4125397901"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -82,11 +81,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4125397901"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -135,6 +133,56 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_catchall",monitor="global",type="sidekiq"}) >= 1
+      )
+  - alert: SidekiqServiceShardCatchallErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The shard_catchall SLI of the sidekiq service (`{{ $labels.stage }}`
+        stage) has an error rate violating SLO
+      description: |
+        Aggregation of all jobs for the catchall Sidekiq shard.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "532783926"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{environment="{{ $labels.environment }}",shard="catchall",stage="{{ $labels.stage }}"}
+        )
+      runbook: docs/sidekiq/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_1h{component="shard_catchall",monitor="global",type="sidekiq"}
+          > (14.4 * 0.005000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_5m{component="shard_catchall",monitor="global",type="sidekiq"}
+          > (14.4 * 0.005000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_catchall",monitor="global",type="sidekiq"}) >= 1
       )
   - alert: SidekiqServiceShardCatchallErrorSLOViolation
@@ -170,18 +218,9 @@ groups:
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
+      window: 6h
     expr: |
       (
-        (
-          gitlab_component_errors:ratio_1h{component="shard_catchall",monitor="global",type="sidekiq"}
-          > (14.4 * 0.005000)
-        )
-        and
-        (
-          gitlab_component_errors:ratio_5m{component="shard_catchall",monitor="global",type="sidekiq"}
-          > (14.4 * 0.005000)
-        )
-        or
         (
           gitlab_component_errors:ratio_6h{component="shard_catchall",monitor="global",type="sidekiq"}
           > (6 * 0.005000)
@@ -194,7 +233,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_catchall",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_catchall",monitor="global",type="sidekiq"}) >= 1
       )
   - alert: SidekiqServiceShardCatchallTrafficCessation
     for: 5m
@@ -281,11 +320,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "564185305"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -335,11 +373,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "564185305"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -372,6 +409,56 @@ groups:
         (
           gitlab_component_apdex:ratio_30m{component="shard_database_throttled",monitor="global",type="sidekiq"}
           < (1 - 6 * 0.005000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_database_throttled",monitor="global",type="sidekiq"}) >= 1
+      )
+  - alert: SidekiqServiceShardDatabaseThrottledErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The shard_database_throttled SLI of the sidekiq service (`{{ $labels.stage
+        }}` stage) has an error rate violating SLO
+      description: |
+        Aggregation of all jobs for the database-throttled Sidekiq shard.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1659464052"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{environment="{{ $labels.environment }}",shard="database-throttled",stage="{{ $labels.stage }}"}
+        )
+      runbook: docs/sidekiq/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_1h{component="shard_database_throttled",monitor="global",type="sidekiq"}
+          > (14.4 * 0.005000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_5m{component="shard_database_throttled",monitor="global",type="sidekiq"}
+          > (14.4 * 0.005000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -411,18 +498,9 @@ groups:
       sli_type: error
       slo_alert: "yes"
       user_impacting: "no"
+      window: 6h
     expr: |
       (
-        (
-          gitlab_component_errors:ratio_1h{component="shard_database_throttled",monitor="global",type="sidekiq"}
-          > (14.4 * 0.005000)
-        )
-        and
-        (
-          gitlab_component_errors:ratio_5m{component="shard_database_throttled",monitor="global",type="sidekiq"}
-          > (14.4 * 0.005000)
-        )
-        or
         (
           gitlab_component_errors:ratio_6h{component="shard_database_throttled",monitor="global",type="sidekiq"}
           > (6 * 0.005000)
@@ -435,7 +513,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_database_throttled",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_database_throttled",monitor="global",type="sidekiq"}) >= 1
       )
   - alert: SidekiqServiceShardElasticsearchApdexSLOViolation
     for: 2m
@@ -448,11 +526,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2299339214"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -502,11 +579,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2299339214"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -539,6 +615,56 @@ groups:
         (
           gitlab_component_apdex:ratio_30m{component="shard_elasticsearch",monitor="global",type="sidekiq"}
           < (1 - 6 * 0.005000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_elasticsearch",monitor="global",type="sidekiq"}) >= 1
+      )
+  - alert: SidekiqServiceShardElasticsearchErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The shard_elasticsearch SLI of the sidekiq service (`{{ $labels.stage
+        }}` stage) has an error rate violating SLO
+      description: |
+        Aggregation of all jobs for the elasticsearch Sidekiq shard.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "389908901"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{environment="{{ $labels.environment }}",shard="elasticsearch",stage="{{ $labels.stage }}"}
+        )
+      runbook: docs/sidekiq/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_1h{component="shard_elasticsearch",monitor="global",type="sidekiq"}
+          > (14.4 * 0.005000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_5m{component="shard_elasticsearch",monitor="global",type="sidekiq"}
+          > (14.4 * 0.005000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -578,18 +704,9 @@ groups:
       sli_type: error
       slo_alert: "yes"
       user_impacting: "no"
+      window: 6h
     expr: |
       (
-        (
-          gitlab_component_errors:ratio_1h{component="shard_elasticsearch",monitor="global",type="sidekiq"}
-          > (14.4 * 0.005000)
-        )
-        and
-        (
-          gitlab_component_errors:ratio_5m{component="shard_elasticsearch",monitor="global",type="sidekiq"}
-          > (14.4 * 0.005000)
-        )
-        or
         (
           gitlab_component_errors:ratio_6h{component="shard_elasticsearch",monitor="global",type="sidekiq"}
           > (6 * 0.005000)
@@ -602,7 +719,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_elasticsearch",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_elasticsearch",monitor="global",type="sidekiq"}) >= 1
       )
   - alert: SidekiqServiceShardGitalyThrottledApdexSLOViolation
     for: 2m
@@ -615,11 +732,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1517683275"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -669,11 +785,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1517683275"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -706,6 +821,56 @@ groups:
         (
           gitlab_component_apdex:ratio_30m{component="shard_gitaly_throttled",monitor="global",type="sidekiq"}
           < (1 - 6 * 0.005000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_gitaly_throttled",monitor="global",type="sidekiq"}) >= 1
+      )
+  - alert: SidekiqServiceShardGitalyThrottledErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The shard_gitaly_throttled SLI of the sidekiq service (`{{ $labels.stage
+        }}` stage) has an error rate violating SLO
+      description: |
+        Aggregation of all jobs for the gitaly-throttled Sidekiq shard.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "4031214920"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{environment="{{ $labels.environment }}",shard="gitaly-throttled",stage="{{ $labels.stage }}"}
+        )
+      runbook: docs/sidekiq/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_1h{component="shard_gitaly_throttled",monitor="global",type="sidekiq"}
+          > (14.4 * 0.005000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_5m{component="shard_gitaly_throttled",monitor="global",type="sidekiq"}
+          > (14.4 * 0.005000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -745,18 +910,9 @@ groups:
       sli_type: error
       slo_alert: "yes"
       user_impacting: "no"
+      window: 6h
     expr: |
       (
-        (
-          gitlab_component_errors:ratio_1h{component="shard_gitaly_throttled",monitor="global",type="sidekiq"}
-          > (14.4 * 0.005000)
-        )
-        and
-        (
-          gitlab_component_errors:ratio_5m{component="shard_gitaly_throttled",monitor="global",type="sidekiq"}
-          > (14.4 * 0.005000)
-        )
-        or
         (
           gitlab_component_errors:ratio_6h{component="shard_gitaly_throttled",monitor="global",type="sidekiq"}
           > (6 * 0.005000)
@@ -769,7 +925,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_gitaly_throttled",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_gitaly_throttled",monitor="global",type="sidekiq"}) >= 1
       )
   - alert: SidekiqServiceShardImportsApdexSLOViolation
     for: 2m
@@ -782,11 +938,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3422932483"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -836,11 +991,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3422932483"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -873,6 +1027,56 @@ groups:
         (
           gitlab_component_apdex:ratio_30m{component="shard_imports",monitor="global",type="sidekiq"}
           < (1 - 6 * 0.005000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_imports",monitor="global",type="sidekiq"}) >= 1
+      )
+  - alert: SidekiqServiceShardImportsErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The shard_imports SLI of the sidekiq service (`{{ $labels.stage }}` stage)
+        has an error rate violating SLO
+      description: |
+        Aggregation of all jobs for the imports Sidekiq shard.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1270469885"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{environment="{{ $labels.environment }}",shard="imports",stage="{{ $labels.stage }}"}
+        )
+      runbook: docs/sidekiq/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_1h{component="shard_imports",monitor="global",type="sidekiq"}
+          > (14.4 * 0.005000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_5m{component="shard_imports",monitor="global",type="sidekiq"}
+          > (14.4 * 0.005000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -912,18 +1116,9 @@ groups:
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
+      window: 6h
     expr: |
       (
-        (
-          gitlab_component_errors:ratio_1h{component="shard_imports",monitor="global",type="sidekiq"}
-          > (14.4 * 0.005000)
-        )
-        and
-        (
-          gitlab_component_errors:ratio_5m{component="shard_imports",monitor="global",type="sidekiq"}
-          > (14.4 * 0.005000)
-        )
-        or
         (
           gitlab_component_errors:ratio_6h{component="shard_imports",monitor="global",type="sidekiq"}
           > (6 * 0.005000)
@@ -936,7 +1131,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_imports",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_imports",monitor="global",type="sidekiq"}) >= 1
       )
   - alert: SidekiqServiceShardLowUrgencyCpuBoundApdexSLOViolation
     for: 2m
@@ -949,11 +1144,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1949742512"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -1005,11 +1199,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1949742512"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -1044,6 +1237,56 @@ groups:
         (
           gitlab_component_apdex:ratio_30m{component="shard_low_urgency_cpu_bound",monitor="global",type="sidekiq"}
           < (1 - 6 * 0.005000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_low_urgency_cpu_bound",monitor="global",type="sidekiq"}) >= 1
+      )
+  - alert: SidekiqServiceShardLowUrgencyCpuBoundErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The shard_low_urgency_cpu_bound SLI of the sidekiq service (`{{ $labels.stage
+        }}` stage) has an error rate violating SLO
+      description: |
+        Aggregation of all jobs for the low-urgency-cpu-bound Sidekiq shard.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "230682702"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{environment="{{ $labels.environment }}",shard="low-urgency-cpu-bound",stage="{{ $labels.stage }}"}
+        )
+      runbook: docs/sidekiq/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_1h{component="shard_low_urgency_cpu_bound",monitor="global",type="sidekiq"}
+          > (14.4 * 0.005000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_5m{component="shard_low_urgency_cpu_bound",monitor="global",type="sidekiq"}
+          > (14.4 * 0.005000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -1083,18 +1326,9 @@ groups:
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
+      window: 6h
     expr: |
       (
-        (
-          gitlab_component_errors:ratio_1h{component="shard_low_urgency_cpu_bound",monitor="global",type="sidekiq"}
-          > (14.4 * 0.005000)
-        )
-        and
-        (
-          gitlab_component_errors:ratio_5m{component="shard_low_urgency_cpu_bound",monitor="global",type="sidekiq"}
-          > (14.4 * 0.005000)
-        )
-        or
         (
           gitlab_component_errors:ratio_6h{component="shard_low_urgency_cpu_bound",monitor="global",type="sidekiq"}
           > (6 * 0.005000)
@@ -1107,7 +1341,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_low_urgency_cpu_bound",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_low_urgency_cpu_bound",monitor="global",type="sidekiq"}) >= 1
       )
   - alert: SidekiqServiceShardLowUrgencyCpuBoundTrafficCessation
     for: 5m
@@ -1194,11 +1428,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "546338609"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -1248,11 +1481,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "546338609"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -1285,6 +1517,56 @@ groups:
         (
           gitlab_component_apdex:ratio_30m{component="shard_memory_bound",monitor="global",type="sidekiq"}
           < (1 - 6 * 0.005000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_memory_bound",monitor="global",type="sidekiq"}) >= 1
+      )
+  - alert: SidekiqServiceShardMemoryBoundErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The shard_memory_bound SLI of the sidekiq service (`{{ $labels.stage
+        }}` stage) has an error rate violating SLO
+      description: |
+        Aggregation of all jobs for the memory-bound Sidekiq shard.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2190820353"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{environment="{{ $labels.environment }}",shard="memory-bound",stage="{{ $labels.stage }}"}
+        )
+      runbook: docs/sidekiq/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_1h{component="shard_memory_bound",monitor="global",type="sidekiq"}
+          > (14.4 * 0.005000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_5m{component="shard_memory_bound",monitor="global",type="sidekiq"}
+          > (14.4 * 0.005000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -1324,18 +1606,9 @@ groups:
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
+      window: 6h
     expr: |
       (
-        (
-          gitlab_component_errors:ratio_1h{component="shard_memory_bound",monitor="global",type="sidekiq"}
-          > (14.4 * 0.005000)
-        )
-        and
-        (
-          gitlab_component_errors:ratio_5m{component="shard_memory_bound",monitor="global",type="sidekiq"}
-          > (14.4 * 0.005000)
-        )
-        or
         (
           gitlab_component_errors:ratio_6h{component="shard_memory_bound",monitor="global",type="sidekiq"}
           > (6 * 0.005000)
@@ -1348,7 +1621,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_memory_bound",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_memory_bound",monitor="global",type="sidekiq"}) >= 1
       )
   - alert: SidekiqServiceShardMemoryBoundTrafficCessation
     for: 5m
@@ -1435,11 +1708,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "838516108"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -1491,11 +1763,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "838516108"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -1530,6 +1801,56 @@ groups:
         (
           gitlab_component_apdex:ratio_30m{component="shard_quarantine",monitor="global",type="sidekiq"}
           < (1 - 6 * 0.005000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_quarantine",monitor="global",type="sidekiq"}) >= 1
+      )
+  - alert: SidekiqServiceShardQuarantineErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The shard_quarantine SLI of the sidekiq service (`{{ $labels.stage }}`
+        stage) has an error rate violating SLO
+      description: |
+        Aggregation of all jobs for the quarantine Sidekiq shard.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2307979617"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{environment="{{ $labels.environment }}",shard="quarantine",stage="{{ $labels.stage }}"}
+        )
+      runbook: docs/sidekiq/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_1h{component="shard_quarantine",monitor="global",type="sidekiq"}
+          > (14.4 * 0.005000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_5m{component="shard_quarantine",monitor="global",type="sidekiq"}
+          > (14.4 * 0.005000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -1569,18 +1890,9 @@ groups:
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
+      window: 6h
     expr: |
       (
-        (
-          gitlab_component_errors:ratio_1h{component="shard_quarantine",monitor="global",type="sidekiq"}
-          > (14.4 * 0.005000)
-        )
-        and
-        (
-          gitlab_component_errors:ratio_5m{component="shard_quarantine",monitor="global",type="sidekiq"}
-          > (14.4 * 0.005000)
-        )
-        or
         (
           gitlab_component_errors:ratio_6h{component="shard_quarantine",monitor="global",type="sidekiq"}
           > (6 * 0.005000)
@@ -1593,7 +1905,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_quarantine",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_quarantine",monitor="global",type="sidekiq"}) >= 1
       )
   - alert: SidekiqServiceShardUrgentCpuBoundApdexSLOViolation
     for: 2m
@@ -1606,11 +1918,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "627077500"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -1662,11 +1973,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "627077500"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -1701,6 +2011,56 @@ groups:
         (
           gitlab_component_apdex:ratio_30m{component="shard_urgent_cpu_bound",monitor="global",type="sidekiq"}
           < (1 - 6 * 0.005000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_urgent_cpu_bound",monitor="global",type="sidekiq"}) >= 1
+      )
+  - alert: SidekiqServiceShardUrgentCpuBoundErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The shard_urgent_cpu_bound SLI of the sidekiq service (`{{ $labels.stage
+        }}` stage) has an error rate violating SLO
+      description: |
+        Aggregation of all jobs for the urgent-cpu-bound Sidekiq shard.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "953665318"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{environment="{{ $labels.environment }}",shard="urgent-cpu-bound",stage="{{ $labels.stage }}"}
+        )
+      runbook: docs/sidekiq/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_1h{component="shard_urgent_cpu_bound",monitor="global",type="sidekiq"}
+          > (14.4 * 0.005000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_5m{component="shard_urgent_cpu_bound",monitor="global",type="sidekiq"}
+          > (14.4 * 0.005000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -1740,18 +2100,9 @@ groups:
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
+      window: 6h
     expr: |
       (
-        (
-          gitlab_component_errors:ratio_1h{component="shard_urgent_cpu_bound",monitor="global",type="sidekiq"}
-          > (14.4 * 0.005000)
-        )
-        and
-        (
-          gitlab_component_errors:ratio_5m{component="shard_urgent_cpu_bound",monitor="global",type="sidekiq"}
-          > (14.4 * 0.005000)
-        )
-        or
         (
           gitlab_component_errors:ratio_6h{component="shard_urgent_cpu_bound",monitor="global",type="sidekiq"}
           > (6 * 0.005000)
@@ -1764,7 +2115,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_urgent_cpu_bound",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_urgent_cpu_bound",monitor="global",type="sidekiq"}) >= 1
       )
   - alert: SidekiqServiceShardUrgentCpuBoundTrafficCessation
     for: 5m
@@ -1851,11 +2202,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "203761782"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -1907,11 +2257,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "203761782"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -1946,6 +2295,56 @@ groups:
         (
           gitlab_component_apdex:ratio_30m{component="shard_urgent_other",monitor="global",type="sidekiq"}
           < (1 - 6 * 0.005000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_urgent_other",monitor="global",type="sidekiq"}) >= 1
+      )
+  - alert: SidekiqServiceShardUrgentOtherErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The shard_urgent_other SLI of the sidekiq service (`{{ $labels.stage
+        }}` stage) has an error rate violating SLO
+      description: |
+        Aggregation of all jobs for the urgent-other Sidekiq shard.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2399846707"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{environment="{{ $labels.environment }}",shard="urgent-other",stage="{{ $labels.stage }}"}
+        )
+      runbook: docs/sidekiq/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      product_stage: not_owned
+      product_stage_group: not_owned
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_1h{component="shard_urgent_other",monitor="global",type="sidekiq"}
+          > (14.4 * 0.005000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_5m{component="shard_urgent_other",monitor="global",type="sidekiq"}
+          > (14.4 * 0.005000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -1985,18 +2384,9 @@ groups:
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
+      window: 6h
     expr: |
       (
-        (
-          gitlab_component_errors:ratio_1h{component="shard_urgent_other",monitor="global",type="sidekiq"}
-          > (14.4 * 0.005000)
-        )
-        and
-        (
-          gitlab_component_errors:ratio_5m{component="shard_urgent_other",monitor="global",type="sidekiq"}
-          > (14.4 * 0.005000)
-        )
-        or
         (
           gitlab_component_errors:ratio_6h{component="shard_urgent_other",monitor="global",type="sidekiq"}
           > (6 * 0.005000)
@@ -2009,7 +2399,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_urgent_other",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_urgent_other",monitor="global",type="sidekiq"}) >= 1
       )
   - alert: SidekiqServiceShardUrgentOtherTrafficCessation
     for: 5m

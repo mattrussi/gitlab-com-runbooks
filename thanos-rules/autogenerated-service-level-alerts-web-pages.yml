@@ -34,6 +34,7 @@ groups:
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
+      window: 1h
     expr: |
       (
         (
@@ -45,7 +46,43 @@ groups:
           gitlab_component_errors:ratio_5m{component="loadbalancer",monitor="global",type="web-pages"}
           > (14.4 * 0.000500)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="loadbalancer",monitor="global",type="web-pages"}) >= 1
+      )
+  - alert: WebPagesServiceLoadbalancerErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The loadbalancer SLI of the web-pages service (`{{ $labels.stage }}`
+        stage) has an error rate violating SLO
+      description: |
+        Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: web-pages-main/web-pages-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3255520955"
+      grafana_variables: environment,stage
+      runbook: docs/web-pages/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: pages
+      pager: pagerduty
+      product_stage: release
+      product_stage_group: release
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_errors:ratio_6h{component="loadbalancer",monitor="global",type="web-pages"}
           > (6 * 0.000500)
@@ -58,7 +95,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="loadbalancer",monitor="global",type="web-pages"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="loadbalancer",monitor="global",type="web-pages"}) >= 1
       )
   - alert: WebPagesServiceLoadbalancerTrafficCessation
     for: 5m
@@ -155,6 +192,7 @@ groups:
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
+      window: 1h
     expr: |
       (
         (
@@ -166,7 +204,43 @@ groups:
           gitlab_component_errors:ratio_5m{component="loadbalancer_https",monitor="global",type="web-pages"}
           > (14.4 * 0.000500)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="loadbalancer_https",monitor="global",type="web-pages"}) >= 1
+      )
+  - alert: WebPagesServiceLoadbalancerHttpsErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The loadbalancer_https SLI of the web-pages service (`{{ $labels.stage
+        }}` stage) has an error rate violating SLO
+      description: |
+        Measures aggregated L4 traffic through the HAProxy. Traffic is measured in TCP connections, with upstream TCP connection failures being treated as service-level failures.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: web-pages-main/web-pages-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2962826191"
+      grafana_variables: environment,stage
+      runbook: docs/web-pages/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: pages
+      pager: pagerduty
+      product_stage: release
+      product_stage_group: release
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_errors:ratio_6h{component="loadbalancer_https",monitor="global",type="web-pages"}
           > (6 * 0.000500)
@@ -179,7 +253,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="loadbalancer_https",monitor="global",type="web-pages"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="loadbalancer_https",monitor="global",type="web-pages"}) >= 1
       )
   - alert: WebPagesServiceLoadbalancerHttpsTrafficCessation
     for: 5m
@@ -258,11 +332,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: web-pages-main/web-pages-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2863319079"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -312,11 +385,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: web-pages-main/web-pages-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2863319079"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -349,6 +421,56 @@ groups:
         (
           gitlab_component_apdex:ratio_30m{component="server",monitor="global",type="web-pages"}
           < (1 - 6 * 0.005000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="server",monitor="global",type="web-pages"}) >= 1
+      )
+  - alert: WebPagesServiceServerErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The server SLI of the web-pages service (`{{ $labels.stage }}` stage)
+        has an error rate violating SLO
+      description: |
+        Aggregation of most web requests into the GitLab Pages process.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: web-pages-main/web-pages-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1631973137"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(gitlab_pages_http_requests_total{code=~"5..", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/web-pages/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: pages
+      pager: pagerduty
+      product_stage: release
+      product_stage_group: release
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_1h{component="server",monitor="global",type="web-pages"}
+          > (14.4 * 0.000500)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_5m{component="server",monitor="global",type="web-pages"}
+          > (14.4 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -388,18 +510,9 @@ groups:
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
+      window: 6h
     expr: |
       (
-        (
-          gitlab_component_errors:ratio_1h{component="server",monitor="global",type="web-pages"}
-          > (14.4 * 0.000500)
-        )
-        and
-        (
-          gitlab_component_errors:ratio_5m{component="server",monitor="global",type="web-pages"}
-          > (14.4 * 0.000500)
-        )
-        or
         (
           gitlab_component_errors:ratio_6h{component="server",monitor="global",type="web-pages"}
           > (6 * 0.000500)
@@ -412,7 +525,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="server",monitor="global",type="web-pages"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="server",monitor="global",type="web-pages"}) >= 1
       )
   - alert: WebPagesServiceServerTrafficCessation
     for: 5m
@@ -499,11 +612,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: web-pages-main/web-pages-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2237799391"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -553,11 +665,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: web-pages-main/web-pages-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2237799391"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -594,7 +705,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="server_headers",monitor="global",type="web-pages"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="server_headers",monitor="global",type="web-pages"}) >= 1
       )
   - alert: WebPagesServiceServerHeadersTrafficCessation
     for: 5m

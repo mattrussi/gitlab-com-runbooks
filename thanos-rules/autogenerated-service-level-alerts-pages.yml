@@ -40,6 +40,7 @@ groups:
       sli_type: error
       slo_alert: "yes"
       user_impacting: "no"
+      window: 1h
     expr: |
       (
         (
@@ -51,7 +52,49 @@ groups:
           gitlab_component_errors:ratio_5m{component="loadbalancer",monitor="global",type="pages"}
           > (14.4 * 0.000100)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="loadbalancer",monitor="global",type="pages"}) >= 1
+      )
+  - alert: PagesServiceLoadbalancerErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The loadbalancer SLI of the pages service (`{{ $labels.stage }}` stage)
+        has an error rate violating SLO
+      description: |
+        This SLI models requests passing through the loadbalancer in front of the pages service. 5xx requests for unencrypted HTTP traffic, and connection errors (not 5xx requests) for HTTPS traffic are considered to be errors. The loadbalancer is unable to determine the status code of HTTPS traffic as it passes through the loadbalancer encrypted.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: pages-main/pages-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/pages-main/pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3255520955"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          label_replace(rate(haproxy_backend_http_responses_total{type="pages",job="haproxy",code="5xx", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]), "_c", "0", "", "")
+          or
+          label_replace(rate(haproxy_server_connection_errors_total{type="pages", job="haproxy", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]), "_c", "1", "", "")
+        )
+      runbook: docs/pages/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: pages
+      pager: pagerduty
+      product_stage: release
+      product_stage_group: release
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_errors:ratio_6h{component="loadbalancer",monitor="global",type="pages"}
           > (6 * 0.000100)
@@ -64,7 +107,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="loadbalancer",monitor="global",type="pages"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="loadbalancer",monitor="global",type="pages"}) >= 1
       )
   - alert: PagesServiceLoadbalancerTrafficCessation
     for: 5m
