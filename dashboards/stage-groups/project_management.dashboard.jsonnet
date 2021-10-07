@@ -62,19 +62,42 @@ local banzaiRequestCount() =
   );
 
 local banzaiAvgRenderingDuration() =
-  basic.timeseries(
-    title='Avg Rendering Time',
+  basic.multiTimeseries(
+    title='Rendering Time',
     decimals=2,
     format='s',
     yAxisLabel='',
     description=|||
-      Average time of Banzai pipeline rendering
+      Duration of Banzai pipeline rendering
     |||,
-    query=|||
-      sum(rate(gitlab_banzai_cacheless_render_real_duration_seconds_sum[1m]))
-      /
-      sum(rate(gitlab_banzai_cacheless_render_real_duration_seconds_count[1m]))
-    |||,
+    queries=[{
+      query: |||
+        sum(rate(gitlab_banzai_cacheless_render_real_duration_seconds_sum[1m]))
+        /
+        sum(rate(gitlab_banzai_cacheless_render_real_duration_seconds_count[1m]))
+      |||,
+      legendFormat: 'Average',
+    }, {
+      query: |||
+        histogram_quantile(
+          0.95, 
+          sum(
+            rate(gitlab_banzai_cacheless_render_real_duration_seconds_bucket[1m])
+          ) by (le)
+        )
+      |||,
+      legendFormat: '95th Percentile',
+    }, {
+      query: |||
+        histogram_quantile(
+          0.99, 
+          sum(
+            rate(gitlab_banzai_cacheless_render_real_duration_seconds_bucket[1m])
+          ) by (le)
+        )
+      |||,
+      legendFormat: '99th Percentile',
+    }]
   );
 
 stageGroupDashboards
