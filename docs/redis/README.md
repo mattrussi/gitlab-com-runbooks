@@ -20,6 +20,7 @@
 * [../config_management/chef-guidelines.md](../config_management/chef-guidelines.md)
 * [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
 * [../kas/kubernetes-agent-disable-integrations.md](../kas/kubernetes-agent-disable-integrations.md)
+* [../kube/k8s-sts-snapshot.md](../kube/k8s-sts-snapshot.md)
 * [../monitoring/definition-service-apdex.md](../monitoring/definition-service-apdex.md)
 * [../onboarding/architecture.md](../onboarding/architecture.md)
 * [../onboarding/kibana-diagnosis.md](../onboarding/kibana-diagnosis.md)
