@@ -46,5 +46,5 @@ local pgbouncer_client_conn(maxClientConns, name, appliesToServiceType) =
 
 {
   pgbouncer_client_conn_primary: pgbouncer_client_conn(maxClientConns=8192, name='Primary', appliesToServiceType='pgbouncer'),
-  pgbouncer_client_conn_replicas: pgbouncer_client_conn(maxClientConns=8192, name='Replicas', appliesToServiceType='patroni'),
+  pgbouncer_client_conn_replicas: pgbouncer_client_conn(maxClientConns=9216, name='Replicas', appliesToServiceType='patroni'),
 }
