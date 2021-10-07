@@ -40,6 +40,7 @@
 * [../kube/k8s-oncall-setup.md](../kube/k8s-oncall-setup.md)
 * [../kube/k8s-operations.md](../kube/k8s-operations.md)
 * [../kube/k8s-pvc-resize.md](../kube/k8s-pvc-resize.md)
+* [../kube/k8s-sts-snapshot.md](../kube/k8s-sts-snapshot.md)
 * [../kube/kubernetes.md](../kube/kubernetes.md)
 * [../license/license-gitlab-com.md](../license/license-gitlab-com.md)
 * [../logging/logging_gcs_archive_bigquery.md](../logging/logging_gcs_archive_bigquery.md)
