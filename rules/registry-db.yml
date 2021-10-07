@@ -17,3 +17,4 @@ groups:
       title: 'The Container Registry database connection pool saturation is too high'
       description: 'The average application-side database connection pool saturation in env {{ $labels.environment }} {{ $labels.stage }} stage has been above 70% for the last 30 minutes.'
       grafana_dashboard_id: registry-database/registry-database-detail
+      runbook: docs/registry/app-db-conn-pool-saturation.md
