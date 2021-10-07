@@ -7,7 +7,7 @@ local row = grafana.row;
 local basic = import 'grafana/basic.libsonnet';
 
 basic.dashboard(
-  'Application Info',
+  'Application Detail',
   tags=['container registry', 'docker', 'registry'],
 )
 .addTemplate(templates.gkeCluster)
