@@ -107,11 +107,17 @@ ARGV.each do |idx_filename|
           keys = []
         when "ping"
           keys = []
+        when "client"
+          keys = []
         when "sismember"
           keys = [args[1]]
         when "incr"
           keys = [args[1]]
         when "incrby"
+          keys = [args[1]]
+        when "incrbyfloat"
+          keys = [args[1]]
+        when "hincrby"
           keys = [args[1]]
         when "setex"
           keys = [args[1]]
