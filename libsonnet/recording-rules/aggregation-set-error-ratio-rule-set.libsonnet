@@ -36,7 +36,11 @@ local strings = import 'utils/strings.libsonnet';
             sourceErrorRateMetric: sourceErrorRateMetric,
           }
         else
-          '%(targetErrorRateMetric)s{%(targetSelector)s}' % formatConfig;
+          |||
+            sum by (%(targetAggregationLabels)s) (
+              %(targetErrorRateMetric)s{%(targetSelector)s}
+            )
+          ||| % formatConfig;
 
       local opsRateExpr =
         if targetOpsRateMetric == null then
@@ -49,15 +53,19 @@ local strings = import 'utils/strings.libsonnet';
             sourceOpsRateMetric: sourceOpsRateMetric,
           }
         else
-          '%(targetOpsRateMetric)s{%(targetSelector)s}' % formatConfig;
+          |||
+            sum by (%(targetAggregationLabels)s) (
+              %(targetOpsRateMetric)s{%(targetSelector)s}
+            )
+          ||| % formatConfig;
 
       local directExpr = |||
         %(errorRateExpr)s
         /
         %(opsRateExpr)s
       ||| % {
-        errorRateExpr: errorRateExpr,
-        opsRateExpr: opsRateExpr,
+        errorRateExpr: strings.chomp(errorRateExpr),
+        opsRateExpr: strings.chomp(opsRateExpr),
       };
 
       [{

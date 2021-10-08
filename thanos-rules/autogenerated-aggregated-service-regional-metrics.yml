@@ -17,9 +17,13 @@ groups:
       )
   - record: gitlab_service_regional_errors:ratio_5m
     expr: |
-      gitlab_service_regional_errors:rate_5m{monitor="global"}
+      sum by (env,environment,tier,type,stage,region) (
+        gitlab_service_regional_errors:rate_5m{monitor="global"}
+      )
       /
-      gitlab_service_regional_ops:rate_5m{monitor="global"}
+      sum by (env,environment,tier,type,stage,region) (
+        gitlab_service_regional_ops:rate_5m{monitor="global"}
+      )
   - record: gitlab_service_regional_apdex:ratio_5m
     expr: |
       sum by (env,environment,tier,type,stage,region) (
@@ -41,9 +45,13 @@ groups:
       )
   - record: gitlab_service_regional_errors:ratio_30m
     expr: |
-      gitlab_service_regional_errors:rate_30m{monitor="global"}
+      sum by (env,environment,tier,type,stage,region) (
+        gitlab_service_regional_errors:rate_30m{monitor="global"}
+      )
       /
-      gitlab_service_regional_ops:rate_30m{monitor="global"}
+      sum by (env,environment,tier,type,stage,region) (
+        gitlab_service_regional_ops:rate_30m{monitor="global"}
+      )
   - record: gitlab_service_regional_apdex:ratio_30m
     expr: |
       sum by (env,environment,tier,type,stage,region) (
@@ -65,9 +73,13 @@ groups:
       )
   - record: gitlab_service_regional_errors:ratio_1h
     expr: |
-      gitlab_service_regional_errors:rate_1h{monitor="global"}
+      sum by (env,environment,tier,type,stage,region) (
+        gitlab_service_regional_errors:rate_1h{monitor="global"}
+      )
       /
-      gitlab_service_regional_ops:rate_1h{monitor="global"}
+      sum by (env,environment,tier,type,stage,region) (
+        gitlab_service_regional_ops:rate_1h{monitor="global"}
+      )
   - record: gitlab_service_regional_apdex:ratio_1h
     expr: |
       sum by (env,environment,tier,type,stage,region) (
@@ -97,7 +109,9 @@ groups:
           (gitlab_component_errors:rate_6h{monitor!="global"} >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",regional_aggregation="yes"})
         )
         /
-        gitlab_service_regional_ops:rate_6h{monitor="global"}
+        sum by (env,environment,tier,type,stage,region) (
+          gitlab_service_regional_ops:rate_6h{monitor="global"}
+        )
       )
       or
       (
