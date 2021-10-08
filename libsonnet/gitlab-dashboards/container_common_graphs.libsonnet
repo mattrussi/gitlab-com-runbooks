@@ -20,18 +20,38 @@ local layout = import 'grafana/layout.libsonnet';
     layout.grid([
       basic.timeseries(
         title='Process CPU Time',
-        query='rate(process_cpu_seconds_total{service=~"^$Deployment.*", cluster="$cluster", namespace="$namespace"}[$__interval])',
+        query='rate(process_cpu_seconds_total{service=~"^$Deployment.*", cluster=~"$cluster", namespace="$namespace"}[$__interval])',
         legendFormat='{{ pod }}',
+        format='percentunit',
       ),
       basic.timeseries(
         title='Resident Memory Usage',
-        query='process_resident_memory_bytes{service=~"^$Deployment.*", cluster="$cluster", namespace="$namespace"}',
+        query='process_resident_memory_bytes{service=~"^$Deployment.*", cluster=~"$cluster", namespace="$namespace"}',
         legendFormat='{{ pod }}',
+        format='bytes',
       ),
       basic.timeseries(
         title='Open File Descriptors',
-        query='process_open_fds{service=~"^$Deployment.*", cluster="$cluster", namespace="$namespace"}',
+        query='process_open_fds{service=~"^$Deployment.*", cluster=~"$cluster", namespace="$namespace"}',
         legendFormat='{{ pod }}',
+      ),
+    ], cols=3, rowHeight=10, startRow=startRow),
+
+  averageGeneralCounters(startRow)::
+    layout.grid([
+      basic.timeseries(
+        title='Process CPU Time',
+        query='avg(rate(process_cpu_seconds_total{service=~"^$Deployment.*", cluster=~"$cluster", namespace="$namespace"}[$__interval]))',
+        format='percentunit',
+      ),
+      basic.timeseries(
+        title='Resident Memory Usage',
+        query='avg(process_resident_memory_bytes{service=~"^$Deployment.*", cluster=~"$cluster", namespace="$namespace"})',
+        format='bytes',
+      ),
+      basic.timeseries(
+        title='Open File Descriptors',
+        query='avg(process_open_fds{service=~"^$Deployment.*", cluster=~"$cluster", namespace="$namespace"})',
       ),
     ], cols=3, rowHeight=10, startRow=startRow),
 

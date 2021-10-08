@@ -21,9 +21,20 @@ basic.dashboard(
     hide='variable',
   )
 )
+.addTemplate(template.new(
+  'cluster',
+  '$PROMETHEUS_DS',
+  'label_values(registry_storage_action_seconds_count{environment="$environment"}, cluster)',
+  current=null,
+  refresh='load',
+  sort=true,
+  multi=true,
+  includeAll=true,
+  allValues='.*',
+))
 .addPanel(
 
-  row.new(title='Build Info'),
+  row.new(title='Version'),
   gridPos={
     x: 0,
     y: 0,
@@ -34,7 +45,7 @@ basic.dashboard(
 .addPanels(crCommon.version(startRow=1))
 .addPanel(
 
-  row.new(title='Stackdriver Metrics'),
+  row.new(title='Host Resources Usage (Aggregate)'),
   gridPos={
     x: 0,
     y: 1000,
@@ -42,10 +53,10 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(common.logMessages(startRow=1001))
+.addPanels(common.averageGeneralCounters(startRow=1001))
 .addPanel(
 
-  row.new(title='General Counters'),
+  row.new(title='Host Resources Usage (Per Pod)'),
   gridPos={
     x: 0,
     y: 2000,
@@ -56,7 +67,7 @@ basic.dashboard(
 .addPanels(common.generalCounters(startRow=2001))
 .addPanel(
 
-  row.new(title='Data'),
+  row.new(title='HTTP API'),
   gridPos={
     x: 0,
     y: 3000,
@@ -64,10 +75,10 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(crCommon.data(startRow=3001))
+.addPanels(crCommon.http(startRow=3001))
 .addPanel(
 
-  row.new(title='Handler Latencies'),
+  row.new(title='Storage Drivers'),
   gridPos={
     x: 0,
     y: 4000,
@@ -75,4 +86,15 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(crCommon.latencies(startRow=4001))
+.addPanels(crCommon.storageDrivers(startRow=4001))
+.addPanel(
+
+  row.new(title='Cache'),
+  gridPos={
+    x: 0,
+    y: 5000,
+    w: 24,
+    h: 1,
+  }
+)
+.addPanels(crCommon.cache(startRow=5001))
