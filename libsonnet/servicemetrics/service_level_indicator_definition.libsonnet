@@ -71,6 +71,12 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
     hasApdexSLO():: std.objectHas(self, 'monitoringThresholds') &&
                     std.objectHas(self.monitoringThresholds, 'apdexScore'),
     hasApdex():: std.objectHas(serviceLevelIndicator, 'apdex'),
+    hasHistogramApdex()::
+      // Only apdex SLIs using a histogram can generate a histogram_quantile graph
+      // in alerts
+      self.hasApdex() &&
+      std.objectHasAll(serviceLevelIndicator.apdex, 'percentileLatencyQuery'),
+
     hasRequestRate():: true,  // requestRate is mandatory
     hasAggregatableRequestRate():: std.objectHasAll(serviceLevelIndicator.requestRate, 'aggregatedRateQuery'),
     hasErrorRateSLO()::
