@@ -37,6 +37,7 @@ local genericApdexPanel(
   sort='increasing',
   legend_show=null,
   expectMultipleSeries=false,
+  selectorHash,
       ) =
   generalGraphPanel(
     title,
@@ -54,14 +55,14 @@ local genericApdexPanel(
   )
   .addTarget(  // Min apdex score SLO for gitlab_service_errors:ratio metric
     promQuery.target(
-      sliPromQL.apdex.serviceApdexDegradationSLOQuery(serviceType),
+      sliPromQL.apdex.serviceApdexDegradationSLOQuery(selectorHash),
       interval='5m',
       legendFormat='6h Degradation SLO (5% of monthly error budget)',
     ),
   )
   .addTarget(  // Double apdex SLO is Outage-level SLO
     promQuery.target(
-      sliPromQL.apdex.serviceApdexOutageSLOQuery(serviceType),
+      sliPromQL.apdex.serviceApdexOutageSLOQuery(selectorHash),
       interval='5m',
       legendFormat='1h Outage SLO (2% of monthly error budget)',
     ),
@@ -102,7 +103,8 @@ local apdexPanel(
     primaryQueryExpr=sliPromQL.apdexQuery(aggregationSet, null, selectorHashWithExtras, '$__interval', worstCase=true),
     legendFormat=legendFormat,
     serviceType=serviceType,
-    linewidth=if expectMultipleSeries then 1 else 2
+    linewidth=if expectMultipleSeries then 1 else 2,
+    selectorHash=selectorHashWithExtras,
   );
 
   local panelWithAverage = if !expectMultipleSeries then
@@ -126,7 +128,7 @@ local apdexPanel(
           selectorHashWithExtras,
           range=null,
           offset='1w',
-          clampToExpression=sliPromQL.apdex.serviceApdexOutageSLOQuery(serviceType)
+          clampToExpression=sliPromQL.apdex.serviceApdexOutageSLOQuery(selectorHash)
         ),
         legendFormat='last week',
       )

@@ -114,19 +114,32 @@ local errorRatioQuery(aggregationSet, aggregationLabels, selectorHash, range=nul
     )
   ||| % [expr, clampMaxExpressionWithDefault];
 
-local getApdexThresholdExpressionForWindow(type, windowDuration) =
+local sloLabels(selectorHash) =
+  local supportedStaticLabels = std.set(['component', 'tier', 'type']);
+  local supportedSelector = std.foldl(
+    function(memo, labelName)
+      if std.setMember(labelName, supportedStaticLabels) then
+        memo { [labelName]: selectorHash[labelName] }
+      else
+        memo,
+    std.objectFields(selectorHash),
+    {}
+  );
+  supportedSelector { monitor: 'global' };
+
+local getApdexThresholdExpressionForWindow(selectorHash, windowDuration) =
   |||
     (1 - %(factor)g * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{%(selectors)s})))
   ||| % {
-    selectors: selectors.serializeHash({ type: type, monitor: 'global' }),
+    selectors: selectors.serializeHash(sloLabels(selectorHash)),
     factor: multiburnFactors.errorBudgetFactorFor(windowDuration),
   };
 
-local getErrorRateThresholdExpressionForWindow(type, windowDuration) =
+local getErrorRateThresholdExpressionForWindow(selectorHash, windowDuration) =
   |||
     (%(factor)g * avg(slo:max:events:gitlab_service_errors:ratio{%(selectors)s}))
   ||| % {
-    selectors: selectors.serializeHash({ type: type, monitor: 'global' }),
+    selectors: selectors.serializeHash(sloLabels(selectorHash)),
     factor: multiburnFactors.errorBudgetFactorFor(windowDuration),
   };
 
@@ -141,11 +154,11 @@ local getErrorRateThresholdExpressionForWindow(type, windowDuration) =
      *
      * @return a string representation of the PromQL query
      */
-    serviceApdexDegradationSLOQuery(type)::
-      getApdexThresholdExpressionForWindow(type, '6h'),
+    serviceApdexDegradationSLOQuery(selectorHash)::
+      getApdexThresholdExpressionForWindow(selectorHash, '6h'),
 
-    serviceApdexOutageSLOQuery(type)::
-      getApdexThresholdExpressionForWindow(type, '1h'),
+    serviceApdexOutageSLOQuery(selectorHash)::
+      getApdexThresholdExpressionForWindow(selectorHash, '1h'),
   },
 
   opsRate:: {

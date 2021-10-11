@@ -16,6 +16,7 @@ local genericErrorPanel(
   serviceType,
   sort='decreasing',
   legend_show=null,
+  selectorHash,
       ) =
   basic.graphPanel(
     title,
@@ -36,14 +37,14 @@ local genericErrorPanel(
   )
   .addTarget(  // Maximum error rate SLO for gitlab_service_errors:ratio metric
     promQuery.target(
-      sliPromQL.errorRate.serviceErrorRateDegradationSLOQuery(serviceType),
+      sliPromQL.errorRate.serviceErrorRateDegradationSLOQuery(selectorHash),
       interval='5m',
       legendFormat='6h Degradation SLO (5% of monthly error budget)',
     ),
   )
   .addTarget(  // Outage level SLO
     promQuery.target(
-      sliPromQL.errorRate.serviceErrorRateOutageSLOQuery(serviceType),
+      sliPromQL.errorRate.serviceErrorRateOutageSLOQuery(selectorHash),
       interval='5m',
       legendFormat='1h Outage SLO (2% of monthly error budget)',
     ),
@@ -82,7 +83,8 @@ local errorRatioPanel(
       primaryQueryExpr=sliPromQL.errorRatioQuery(aggregationSet, null, selectorHashWithExtras, '$__interval', worstCase=true),
       legendFormat=legendFormat,
       serviceType=serviceType,
-      linewidth=if expectMultipleSeries then 1 else 2
+      linewidth=if expectMultipleSeries then 1 else 2,
+      selectorHash=selectorHashWithExtras
     );
 
   local panelWithAverage = if !expectMultipleSeries then
@@ -106,7 +108,7 @@ local errorRatioPanel(
           selectorHashWithExtras,
           null,
           offset='1w',
-          clampToExpression=sliPromQL.errorRate.serviceErrorRateOutageSLOQuery(serviceType)
+          clampToExpression=sliPromQL.errorRate.serviceErrorRateOutageSLOQuery(selectorHashWithExtras)
         ),
         legendFormat='last week',
       )
