@@ -33,8 +33,15 @@ local groupForSli(sli) =
     rules: rulesForSli(sli, sourceSet),
   };
 
+// Avoiding rules that would already be generated as part of the sli_aggregations.
+// See thanos-rules-jsonnet/aggregation-set-recording-rules.jsonnet for more information.
 local rules = {
-  groups: std.map(groupForSli, library.all),
+  groups: std.filterMap(
+    function(sli)
+      !sli.inRecordingRuleRegistry,
+    groupForSli,
+    library.all
+  ),
 };
 
 {
