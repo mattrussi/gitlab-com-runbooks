@@ -165,6 +165,16 @@ groups:
       tier: sv
       type: kas
     expr: "0.000500"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      tier: inf
+      type: kube
+    expr: "0.999500"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      tier: inf
+      type: kube
+    expr: "0.000500"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       tier: inf
@@ -450,6 +460,11 @@ groups:
       tier: sv
       type: woodhouse
     expr: "0.001000"
+  - record: gitlab_service:mapping:disable_ops_rate_prediction
+    labels:
+      tier: inf
+      type: kube
+    expr: "1"
   - record: gitlab_service:mapping:disable_ops_rate_prediction
     labels:
       tier: inf

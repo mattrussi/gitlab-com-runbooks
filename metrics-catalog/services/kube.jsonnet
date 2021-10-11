@@ -10,10 +10,15 @@ metricsCatalog.serviceDefinition({
   tier: 'inf',
   serviceIsStageless: true,  // kube does not have a cny stage
   monitoringThresholds: {
-    // TODO: add monitoring thresholds
-    // apdexScore: 0.99,
-    // errorRatio: 0.99,
+    apdexScore: 0.9995,
+    errorRatio: 0.9995,
   },
+  /*
+   * Our anomaly detection uses normal distributions and the monitoring service
+   * is prone to spikes that lead to a non-normal distribution. For that reason,
+   * disable ops-rate anomaly detection on this service.
+   */
+  disableOpsRatePrediction: true,
   serviceDependencies: {
   },
   provisioning: {
