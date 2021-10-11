@@ -1249,13 +1249,3 @@ groups:
       tier: stor
       type: gitaly
     expr: "1"
-  - record: slo:min:events:gitlab_component_node_apdex:ratio
-    labels:
-      tier: stor
-      type: gitaly
-    expr: "0.999000"
-  - record: slo:max:events:gitlab_component_node_errors:ratio
-    labels:
-      tier: stor
-      type: gitaly
-    expr: "0.000500"
