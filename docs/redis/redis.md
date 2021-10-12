@@ -438,6 +438,36 @@ For example, count per key pattern:
 $ cat trace.txt | awk '{ print $5 } | sort -n | uniq -c | sort -nr'
 ```
 
+##### key size estimation #####
+
+The following commands are meant to be run on a replica instance.
+
+In this example, we're filtering the dump output for `Class:merge_requests`, replace this with your keyname.
+
+```shell
+$ sudo gitlab-redis-cli bgsave
+
+# Get the `dump` binary via docker
+$ docker run -it -v $(pwd)/redis-data:/mnt:ro igorwgitlab/cupcake-rdb:latest /mnt/dump.rdb
+
+# Alternatively you can build the `dump` binary yourself by
+###  1. Clone https://github.com/igorwwwwwwwwwwwwwwwwwwww/rdb/tree/version-9
+###  2. Checkout `version-9` branch
+###  3. GOOS=linux GOARCH=amd64 go build
+
+$ sudo ./dump /var/opt/gitlab/redis/dump.rdb | awk -F'\t' '$1 ~ /Class:merge_requests/ { sum1 += $3; sum2 += $4 } END { print sum1, sum2 }'
+# The two values you get from this represent estimates in bytes used for values and keys+values respectively.
+6039116565 6549803309
+
+# Convert to GiB
+$ echo $((6039116565.0/(1024.0**3.0)))
+5.6243655877187848
+```
+
+The values presented are an optimistic estimate, as redis will require some more memory for its datastructures. Generally, the key size will be on that order of magnitude.
+
+The current `maxmemory` in Redis-cache is set to `60 GiB`. Depending on the numbers you get, the ratio of each compared to the `maxmemory` can give you an idea of how significant of an impact your change might introduce.
+
 #### Please remember to delete the `pcap` file immediately after performing the analysis ####
 
 ### CPU profiling ###
