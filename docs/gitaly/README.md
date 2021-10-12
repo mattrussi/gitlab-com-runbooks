@@ -22,6 +22,7 @@
 * [../git/deploy-gitlab-rb-change.md](../git/deploy-gitlab-rb-change.md)
 * [../git/workhorse-git-session-alerts.md](../git/workhorse-git-session-alerts.md)
 * [find-project-from-hashed-storage.md](find-project-from-hashed-storage.md)
+* [git-copy-by-hand.md](git-copy-by-hand.md)
 * [git-high-cpu-and-memory-usage.md](git-high-cpu-and-memory-usage.md)
 * [gitaly-debugging-tool.md](gitaly-debugging-tool.md)
 * [gitaly-down.md](gitaly-down.md)
