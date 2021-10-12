@@ -4,6 +4,7 @@ local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local haproxyComponents = import './lib/haproxy_components.libsonnet';
 local perFeatureCategoryRecordingRules = (import './lib/puma-per-feature-category-recording-rules.libsonnet').perFeatureCategoryRecordingRules;
+local sliLibrary = import 'gitlab-slis/library.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'web',
@@ -49,7 +50,7 @@ metricsCatalog.serviceDefinition({
   },
   recordingRuleMetrics: [
     'http_requests_total',
-  ],
+  ] + sliLibrary.get('rails_request_apdex').recordingRuleMetrics,
   provisioning: {
     vms: false,
     kubernetes: true,
@@ -158,6 +159,7 @@ metricsCatalog.serviceDefinition({
       ],
     },
 
+    local railsSelector = { job: 'gitlab-rails', type: 'web' },
     puma: {
       userImpacting: true,
       featureCategory: 'not_owned',
@@ -167,22 +169,21 @@ metricsCatalog.serviceDefinition({
         Healthchecks are excluded.
       |||,
 
-      local baseSelector = { job: 'gitlab-rails', type: 'web' },
       apdex: histogramApdex(
         histogram='http_request_duration_seconds_bucket',
-        selector=baseSelector,
+        selector=railsSelector,
         satisfiedThreshold=1,
         toleratedThreshold=10
       ),
 
       requestRate: rateMetric(
         counter='http_requests_total',
-        selector=baseSelector,
+        selector=railsSelector,
       ),
 
       errorRate: rateMetric(
         counter='http_requests_total',
-        selector=baseSelector { status: { re: '5..' } }
+        selector=railsSelector { status: { re: '5..' } }
       ),
 
       significantLabels: ['fqdn', 'method', 'feature_category'],
@@ -193,6 +194,13 @@ metricsCatalog.serviceDefinition({
         toolingLinks.kibana(title='Rails', index='rails', type='web', slowRequestSeconds=10),
       ],
     },
+
+    rails_requests:
+      sliLibrary.get('rails_request_apdex').generateServiceLevelIndicator(railsSelector) {
+        monitoringThresholds+: {
+          apdexScore: 0.992,
+        },
+      },
   },
   // Special per-feature-category recording rules
   extraRecordingRulesPerBurnRate: [

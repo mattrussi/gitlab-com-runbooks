@@ -147,10 +147,19 @@ local groupsForApplicationSli(sli) =
       }]
     ),
 
-  // TODO: these can be removed when absorbed into service level indicators as part
-  // of https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1228
+  // Application SLIs not used in the service catalog  will be aggregated here.
+  // These aggregations allow us to see what the metrics look like before adding
+  // an them, so we can validate they would not trigger alerts.
+  // If the application SLI is added to the service catalog, it will automatically
+  // generate `sli_aggregation:` recordings that can be reused everywhere. So no
+  // real need to duplicate them.
   'aggregated-application-sli-metrics.yml':
     outputPromYaml(
-      std.map(groupsForApplicationSli, applicationSlis),
+      std.filterMap(
+        function(sli)
+          !sli.inRecordingRuleRegistry,
+        groupsForApplicationSli,
+        applicationSlis
+      ),
     ),
 }

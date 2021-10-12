@@ -70,7 +70,7 @@ local promQueryForSelector(serviceType, sli, aggregationSet, metricName) =
   if !sli.supportsDetails() then
     null
   else
-    if sli.hasApdex() && metricName == 'apdex' then
+    if sli.hasHistogramApdex() && metricName == 'apdex' then
       sli.apdex.percentileLatencyQuery(
         percentile=0.95,
         aggregationLabels=aggregationLabels,

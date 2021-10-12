@@ -1,5 +1,7 @@
 local validator = import 'utils/validator.libsonnet';
 local rateMetric = (import 'servicemetrics/rate.libsonnet').rateMetric;
+local rateApdex = (import 'servicemetrics/rate_apdex.libsonnet').rateApdex;
+local recordingRuleRegistry = import 'servicemetrics/recording-rule-registry.libsonnet';
 
 // We might add `success` and `error` in the future
 // When adding support for these, please update the metrics catalog to add
@@ -9,6 +11,7 @@ local apdexKind = 'apdex';
 local sliValidator = validator.new({
   name: validator.string,
   significantLabels: validator.array,
+  description: validator.string,
   kind: validator.validator(function(value) value == apdexKind, 'only %s is supported' % apdexKind),
 });
 
@@ -18,19 +21,41 @@ local successRate(definition, selector) =
   rateMetric(definition.successCounterName);
 
 local validateAndApplyDefaults(definition) =
-  sliValidator.assertValid(definition) {
+  local sli = sliValidator.assertValid(definition) {
     totalCounterName: 'gitlab_sli:%s:total' % [definition.name],
     successCounterName: 'gitlab_sli:%s:success_total' % [definition.name],
+  };
 
-    operationRate(selector={}):: operationRate(self, selector),
-    successRate(selector={}):: successRate(self, selector),
-
+  sli {
     aggregatedOperationRateQuery(selector={}, aggregationLabels=[], rangeInterval)::
       local labels = std.set(aggregationLabels + self.significantLabels);
-      self.operationRate().aggregatedRateQuery(labels, selector, rangeInterval),
+      operationRate(self, selector).aggregatedRateQuery(labels, selector, rangeInterval),
     aggregatedSuccessRateQuery(selector={}, aggregationLabels=[], rangeInterval)::
       local labels = std.set(aggregationLabels + self.significantLabels);
-      self.successRate().aggregatedRateQuery(labels, selector, rangeInterval),
+      successRate(self, selector).aggregatedRateQuery(labels, selector, rangeInterval),
+    recordingRuleMetrics: [sli.totalCounterName, sli.successCounterName],
+
+    inRecordingRuleRegistry: std.foldl(
+      function(memo, metricName) memo && recordingRuleRegistry.resolveRecordingRuleFor(metricName=metricName) != null,
+      self.recordingRuleMetrics,
+      true
+    ),
+
+    generateServiceLevelIndicator(extraSelector):: {
+      userImpacting: true,
+      // We will make the feature category smarter in
+      // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1229
+      featureCategory: 'not_owned',
+      description: sli.description,
+
+      requestRate: operationRate(sli, extraSelector),
+      significantLabels: sli.significantLabels,
+
+      apdex: if sli.kind == apdexKind then
+        rateApdex(sli.successCounterName, sli.totalCounterName, extraSelector)
+      else
+        null,
+    },
   };
 
 {
