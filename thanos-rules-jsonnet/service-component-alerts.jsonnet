@@ -121,8 +121,8 @@ local commonAnnotationsForSLI(serviceType, sli, aggregationSet, metricName) =
   };
 
 // Generates an apdex alert for an SLI
-local apdexAlertsForSLI(service, sli) =
-  local apdexScoreSLO = service.monitoringThresholds.apdexScore;
+local apdexAlertForSLI(service, sli) =
+  local apdexScoreSLO = sli.monitoringThresholds.apdexScore;
   local formatConfig = {
     sliName: sli.name,
     serviceType: service.type,
@@ -192,7 +192,7 @@ local apdexAlertsForSLI(service, sli) =
 
 // Generates an error rate alert for an SLI
 local errorRateAlertForSLI(service, sli) =
-  local errorRateSLO = service.monitoringThresholds.errorRatio;
+  local errorRateSLO = sli.monitoringThresholds.errorRatio;
   local formatConfig = {
     sliName: sli.name,
     serviceType: service.type,
@@ -324,21 +324,18 @@ local trafficCessationAlert(service, sli) =
 
 local alertsForService(service) =
   local slis = service.listServiceLevelIndicators();
-  local hasMonitoringThresholds = std.objectHas(service, 'monitoringThresholds');
-  local hasApdexSLO = hasMonitoringThresholds && std.objectHas(service.monitoringThresholds, 'apdexScore');
-  local hasErrorRateSLO = hasMonitoringThresholds && std.objectHas(service.monitoringThresholds, 'errorRatio');
 
   local rules = std.flatMap(
     function(sli)
       (
-        if hasApdexSLO && sli.hasApdex() then
-          apdexAlertsForSLI(service, sli)
+        if sli.hasApdexSLO() && sli.hasApdex() then
+          apdexAlertForSLI(service, sli)
         else
           []
       )
       +
       (
-        if hasErrorRateSLO && sli.hasErrorRate() then
+        if sli.hasErrorRateSLO() && sli.hasErrorRate() then
           errorRateAlertForSLI(service, sli)
         else
           []

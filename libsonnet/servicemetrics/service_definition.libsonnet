@@ -36,6 +36,13 @@ local validateAndApplyServiceDefaults(service) =
         { staticLabels+: { stage: 'main' } }
       else
         {}
+    )
+    +
+    (
+      if std.objectHas(serviceWithProvisioningDefaults, 'monitoringThresholds') then
+        { monitoringThresholds: serviceWithProvisioningDefaults.monitoringThresholds }
+      else
+        {}
     );
 
   // If this service is provisioned on kubernetes we should include a kubernetes deployment map

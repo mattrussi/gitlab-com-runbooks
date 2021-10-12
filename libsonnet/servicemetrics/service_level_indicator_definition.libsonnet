@@ -68,9 +68,14 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
     // this is not the case for combined serviceLevelIndicator definitions
     supportsDetails(): true,
 
+    hasApdexSLO():: std.objectHas(self, 'monitoringThresholds') &&
+                    std.objectHas(self.monitoringThresholds, 'apdexScore'),
     hasApdex():: std.objectHas(serviceLevelIndicator, 'apdex'),
     hasRequestRate():: true,  // requestRate is mandatory
     hasAggregatableRequestRate():: std.objectHasAll(serviceLevelIndicator.requestRate, 'aggregatedRateQuery'),
+    hasErrorRateSLO()::
+      std.objectHas(serviceLevelIndicator, 'monitoringThresholds') &&
+      std.objectHas(serviceLevelIndicator.monitoringThresholds, 'errorRatio'),
     hasErrorRate():: std.objectHas(serviceLevelIndicator, 'errorRate'),
 
     hasToolingLinks()::

@@ -44,9 +44,18 @@ local combinedServiceLevelIndicatorDefinition(
         // this is not the case for combined component definitions
         supportsDetails(): false,
 
+        // Combined SLIs should always use the thresholds specified on the service
+        monitoringThresholds:
+          if std.objectHas(inheritedDefaults, 'monitoringThresholds') then
+            inheritedDefaults.monitoringThresholds
+          else
+            {},
+
+        hasApdexSLO():: std.objectHas(self.monitoringThresholds, 'apdexScore'),
         hasApdex():: componentsInitialised[0].hasApdex(),
         hasRequestRate():: componentsInitialised[0].hasRequestRate(),
         hasAggregatableRequestRate():: componentsInitialised[0].hasAggregatableRequestRate(),
+        hasErrorRateSLO():: std.objectHas(self.monitoringThresholds, 'errorRatio'),
         hasErrorRate():: componentsInitialised[0].hasErrorRate(),
 
         hasToolingLinks()::
