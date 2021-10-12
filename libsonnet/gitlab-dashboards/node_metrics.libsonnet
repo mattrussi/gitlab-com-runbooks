@@ -12,7 +12,7 @@ local nodeLoadForDuration(duration, nodeSelector) =
   assert (duration == 1 || duration == 5 || duration == 15) : 'Load duration needs to be 1, 5 or 15';
   local formatConfigWithDuration = {
     duration: duration,
-    nodeSelector: nodeSelector,
+    nodeSelector: selectors.serializeHash(nodeSelector),
   };
   basic.timeseries(
     title='loadavg%(duration)d per core' % formatConfigWithDuration,
