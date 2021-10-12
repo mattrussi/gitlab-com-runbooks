@@ -5,7 +5,8 @@ local processExporter = import './process_exporter.libsonnet';
 local serviceDashboard = import './service_dashboard.libsonnet';
 
 local patroni(
-  type='patroni'
+  type='patroni',
+  user='gitlab'
       ) =
   serviceDashboard.overview(type)
   .addPanel(
@@ -27,7 +28,7 @@ local patroni(
       h: 1,
     }
   )
-  .addPanels(pgbouncerCommonGraphs.connectionPoolingPanels(type, 2001))
+  .addPanels(pgbouncerCommonGraphs.connectionPoolingPanels(type, user, 2001))
   .addPanel(
     row.new(title='pgbouncer Network', collapse=false),
     gridPos={

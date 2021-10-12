@@ -4,7 +4,8 @@ local row = grafana.row;
 local serviceDashboard = import './service_dashboard.libsonnet';
 
 local pgbouncer(
-  type='pgbouncer'
+  type='pgbouncer',
+  user='gitlab'
       ) =
   serviceDashboard.overview(type)
   .addPanel(
@@ -26,7 +27,7 @@ local pgbouncer(
       h: 1,
     }
   )
-  .addPanels(pgbouncerCommonGraphs.connectionPoolingPanels(type, 3001))
+  .addPanels(pgbouncerCommonGraphs.connectionPoolingPanels(type, user, 3001))
   .addPanel(
     row.new(title='pgbouncer Network'),
     gridPos={
