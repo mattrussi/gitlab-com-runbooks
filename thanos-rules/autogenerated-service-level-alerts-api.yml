@@ -895,6 +895,268 @@ groups:
       gitlab_component_ops:rate_5m{type="api", component="puma", stage="main", monitor="global"} offset 1h
       unless
       gitlab_component_ops:rate_5m{type="api", component="puma", stage="main", monitor="global"}
+  - alert: ApiServiceRailsRequestsApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The rails_requests SLI of the api service (`{{ $labels.stage }}` stage)
+        has an apdex violating SLO
+      description: |
+        The number of requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 1s. But this can be adjusted by endpoint.
+
+        Read more about this in the [documentation](https://docs.gitlab.com/ee/development/application_slis/rails_request_apdex.html).
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: api-main/api-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3831968369"
+      grafana_variables: environment,stage
+      runbook: docs/api/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_1h{component="rails_requests",monitor="global",type="api"}
+          < (1 - 14.4 * 0.015000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_5m{component="rails_requests",monitor="global",type="api"}
+          < (1 - 14.4 * 0.015000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="rails_requests",monitor="global",type="api"}) >= 1
+      )
+  - alert: ApiServiceRailsRequestsApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The rails_requests SLI of the api service (`{{ $labels.stage }}` stage)
+        has an apdex violating SLO
+      description: |
+        The number of requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 1s. But this can be adjusted by endpoint.
+
+        Read more about this in the [documentation](https://docs.gitlab.com/ee/development/application_slis/rails_request_apdex.html).
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: api-main/api-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3831968369"
+      grafana_variables: environment,stage
+      runbook: docs/api/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_6h{component="rails_requests",monitor="global",type="api"}
+          < (1 - 6 * 0.015000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_30m{component="rails_requests",monitor="global",type="api"}
+          < (1 - 6 * 0.015000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="rails_requests",monitor="global",type="api"}) >= 1
+      )
+  - alert: ApiServiceRailsRequestsApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The rails_requests SLI of the api service in region `{{ $labels.region
+        }}` has an apdex violating SLO
+      description: |
+        The number of requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 1s. But this can be adjusted by endpoint.
+
+        Read more about this in the [documentation](https://docs.gitlab.com/ee/development/application_slis/rails_request_apdex.html).
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: api-main/api-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3831968369"
+      grafana_variables: environment,stage
+      runbook: docs/api/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_apdex:ratio_1h{component="rails_requests",monitor="global",type="api"}
+          < (1 - 14.4 * 0.015000)
+        )
+        and
+        (
+          gitlab_regional_sli_apdex:ratio_5m{component="rails_requests",monitor="global",type="api"}
+          < (1 - 14.4 * 0.015000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="rails_requests",monitor="global",type="api"}) >= 1
+      )
+  - alert: ApiServiceRailsRequestsApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The rails_requests SLI of the api service in region `{{ $labels.region
+        }}` has an apdex violating SLO
+      description: |
+        The number of requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 1s. But this can be adjusted by endpoint.
+
+        Read more about this in the [documentation](https://docs.gitlab.com/ee/development/application_slis/rails_request_apdex.html).
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: api-main/api-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3831968369"
+      grafana_variables: environment,stage
+      runbook: docs/api/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_apdex:ratio_6h{component="rails_requests",monitor="global",type="api"}
+          < (1 - 6 * 0.015000)
+        )
+        and
+        (
+          gitlab_regional_sli_apdex:ratio_30m{component="rails_requests",monitor="global",type="api"}
+          < (1 - 6 * 0.015000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="rails_requests",monitor="global",type="api"}) >= 1
+      )
+  - alert: ApiServiceRailsRequestsTrafficCessation
+    for: 5m
+    annotations:
+      title: The rails_requests SLI of the api service (`{{ $labels.stage }}` stage)
+        has not received any traffic in the past 30 minutes
+      description: |
+        The number of requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 1s. But this can be adjusted by endpoint.
+
+        Read more about this in the [documentation](https://docs.gitlab.com/ee/development/application_slis/rails_request_apdex.html).
+
+        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+      grafana_dashboard_id: api-main/api-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "164190586"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:gitlab_sli:rails_request_apdex:total_rate5m{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}
+        )
+      runbook: docs/api/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{type="api", component="rails_requests", stage="main", monitor="global"} == 0
+  - alert: ApiServiceRailsRequestsTrafficAbsent
+    for: 30m
+    annotations:
+      title: The rails_requests SLI of the api service (`{{ $labels.stage }}` stage)
+        has not reported any traffic in the past 30 minutes
+      description: |
+        The number of requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 1s. But this can be adjusted by endpoint.
+
+        Read more about this in the [documentation](https://docs.gitlab.com/ee/development/application_slis/rails_request_apdex.html).
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: api-main/api-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "164190586"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:gitlab_sli:rails_request_apdex:total_rate5m{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}
+        )
+      runbook: docs/api/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_5m{type="api", component="rails_requests", stage="main", monitor="global"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{type="api", component="rails_requests", stage="main", monitor="global"}
   - alert: ApiServiceWorkhorseApdexSLOViolation
     for: 2m
     annotations:

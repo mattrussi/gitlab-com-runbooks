@@ -5,6 +5,7 @@ local customRateQuery = metricsCatalog.customRateQuery;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local haproxyComponents = import './lib/haproxy_components.libsonnet';
 local perFeatureCategoryRecordingRules = (import './lib/puma-per-feature-category-recording-rules.libsonnet').perFeatureCategoryRecordingRules;
+local sliLibrary = import 'gitlab-slis/library.libsonnet';
 
 local gitWorkhorseJobNameSelector = { job: { re: 'gitlab-workhorse|gitlab-workhorse-git' } };
 
@@ -205,7 +206,7 @@ metricsCatalog.serviceDefinition({
       ],
     },
 
-
+    local railsSelector = { job: 'gitlab-rails', type: 'git' },
     puma: {
       userImpacting: true,
       featureCategory: 'not_owned',
@@ -214,22 +215,21 @@ metricsCatalog.serviceDefinition({
         Monitors Rails endpoints, running in the Git fleet, via the HTTP interface.
       |||,
 
-      local baseSelector = { job: 'gitlab-rails', type: 'git' },
       apdex: histogramApdex(
         histogram='http_request_duration_seconds_bucket',
-        selector=baseSelector,
+        selector=railsSelector,
         satisfiedThreshold=1,
         toleratedThreshold=10
       ),
 
       requestRate: rateMetric(
         counter='http_requests_total',
-        selector=baseSelector,
+        selector=railsSelector,
       ),
 
       errorRate: rateMetric(
         counter='http_requests_total',
-        selector=baseSelector { status: { re: '5..' } }
+        selector=railsSelector { status: { re: '5..' } }
       ),
 
       significantLabels: ['fqdn', 'method', 'feature_category'],
@@ -266,6 +266,13 @@ metricsCatalog.serviceDefinition({
         toolingLinks.kibana(title='GitLab Shell', index='shell'),
       ],
     },
+
+    rails_requests:
+      sliLibrary.get('rails_request_apdex').generateServiceLevelIndicator(railsSelector) {
+        monitoringThresholds+: {
+          apdexScore: 0.997,
+        },
+      },
   },
   extraRecordingRulesPerBurnRate: [
     // Adds per-feature-category plus error rates across multiple burn rates

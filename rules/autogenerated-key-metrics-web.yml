@@ -9,6 +9,16 @@ groups:
       sum by (code,environment,feature_category,fqdn,job,method,shard,stage,status,tier,type) (
         rate(http_requests_total[1m])
       )
+  - record: sli_aggregations:gitlab_sli:rails_request_apdex:total_rate1m
+    expr: |
+      sum by (endpoint_id,environment,feature_category,job,shard,stage,tier,type) (
+        rate(gitlab_sli:rails_request_apdex:total[1m])
+      )
+  - record: sli_aggregations:gitlab_sli:rails_request_apdex:success_total_rate1m
+    expr: |
+      sum by (endpoint_id,environment,feature_category,job,shard,stage,tier,type) (
+        rate(gitlab_sli:rails_request_apdex:success_total[1m])
+      )
   - record: gitlab_component_apdex:success:rate
     labels:
       component: imagescaler
@@ -154,6 +164,33 @@ groups:
       )
   - record: gitlab_component_apdex:success:rate
     labels:
+      component: rails_requests
+      tier: sv
+      type: web
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:gitlab_sli:rails_request_apdex:success_total_rate1m{job="gitlab-rails",type="web"}
+      )
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: rails_requests
+      tier: sv
+      type: web
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:gitlab_sli:rails_request_apdex:total_rate1m{job="gitlab-rails",type="web"}
+      )
+  - record: gitlab_component_ops:rate
+    labels:
+      component: rails_requests
+      tier: sv
+      type: web
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:gitlab_sli:rails_request_apdex:total_rate1m{}
+      )
+  - record: gitlab_component_apdex:success:rate
+    labels:
       component: workhorse
       tier: sv
       type: web
@@ -245,6 +282,16 @@ groups:
     expr: |
       sum by (code,environment,feature_category,fqdn,job,method,shard,stage,status,tier,type) (
         rate(http_requests_total[5m])
+      )
+  - record: sli_aggregations:gitlab_sli:rails_request_apdex:total_rate5m
+    expr: |
+      sum by (endpoint_id,environment,feature_category,job,shard,stage,tier,type) (
+        rate(gitlab_sli:rails_request_apdex:total[5m])
+      )
+  - record: sli_aggregations:gitlab_sli:rails_request_apdex:success_total_rate5m
+    expr: |
+      sum by (endpoint_id,environment,feature_category,job,shard,stage,tier,type) (
+        rate(gitlab_sli:rails_request_apdex:success_total[5m])
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
@@ -391,6 +438,33 @@ groups:
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
+      component: rails_requests
+      tier: sv
+      type: web
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:gitlab_sli:rails_request_apdex:success_total_rate5m{job="gitlab-rails",type="web"}
+      )
+  - record: gitlab_component_apdex:weight:score_5m
+    labels:
+      component: rails_requests
+      tier: sv
+      type: web
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:gitlab_sli:rails_request_apdex:total_rate5m{job="gitlab-rails",type="web"}
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: rails_requests
+      tier: sv
+      type: web
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:gitlab_sli:rails_request_apdex:total_rate5m{}
+      )
+  - record: gitlab_component_apdex:success:rate_5m
+    labels:
       component: workhorse
       tier: sv
       type: web
@@ -482,6 +556,16 @@ groups:
     expr: |
       sum by (code,environment,feature_category,fqdn,job,method,shard,stage,status,tier,type) (
         rate(http_requests_total[30m])
+      )
+  - record: sli_aggregations:gitlab_sli:rails_request_apdex:total_rate30m
+    expr: |
+      sum by (endpoint_id,environment,feature_category,job,shard,stage,tier,type) (
+        rate(gitlab_sli:rails_request_apdex:total[30m])
+      )
+  - record: sli_aggregations:gitlab_sli:rails_request_apdex:success_total_rate30m
+    expr: |
+      sum by (endpoint_id,environment,feature_category,job,shard,stage,tier,type) (
+        rate(gitlab_sli:rails_request_apdex:success_total[30m])
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
@@ -628,6 +712,33 @@ groups:
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
+      component: rails_requests
+      tier: sv
+      type: web
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:gitlab_sli:rails_request_apdex:success_total_rate30m{job="gitlab-rails",type="web"}
+      )
+  - record: gitlab_component_apdex:weight:score_30m
+    labels:
+      component: rails_requests
+      tier: sv
+      type: web
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:gitlab_sli:rails_request_apdex:total_rate30m{job="gitlab-rails",type="web"}
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: rails_requests
+      tier: sv
+      type: web
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:gitlab_sli:rails_request_apdex:total_rate30m{}
+      )
+  - record: gitlab_component_apdex:success:rate_30m
+    labels:
       component: workhorse
       tier: sv
       type: web
@@ -719,6 +830,16 @@ groups:
     expr: |
       sum by (code,environment,feature_category,fqdn,job,method,shard,stage,status,tier,type) (
         rate(http_requests_total[1h])
+      )
+  - record: sli_aggregations:gitlab_sli:rails_request_apdex:total_rate1h
+    expr: |
+      sum by (endpoint_id,environment,feature_category,job,shard,stage,tier,type) (
+        rate(gitlab_sli:rails_request_apdex:total[1h])
+      )
+  - record: sli_aggregations:gitlab_sli:rails_request_apdex:success_total_rate1h
+    expr: |
+      sum by (endpoint_id,environment,feature_category,job,shard,stage,tier,type) (
+        rate(gitlab_sli:rails_request_apdex:success_total[1h])
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
@@ -865,6 +986,33 @@ groups:
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
+      component: rails_requests
+      tier: sv
+      type: web
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:gitlab_sli:rails_request_apdex:success_total_rate1h{job="gitlab-rails",type="web"}
+      )
+  - record: gitlab_component_apdex:weight:score_1h
+    labels:
+      component: rails_requests
+      tier: sv
+      type: web
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:gitlab_sli:rails_request_apdex:total_rate1h{job="gitlab-rails",type="web"}
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: rails_requests
+      tier: sv
+      type: web
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:gitlab_sli:rails_request_apdex:total_rate1h{}
+      )
+  - record: gitlab_component_apdex:success:rate_1h
+    labels:
       component: workhorse
       tier: sv
       type: web
@@ -956,6 +1104,16 @@ groups:
     expr: |
       sum by (code,environment,feature_category,fqdn,job,method,shard,stage,status,tier,type) (
         rate(http_requests_total[6h])
+      )
+  - record: sli_aggregations:gitlab_sli:rails_request_apdex:total_rate6h
+    expr: |
+      sum by (endpoint_id,environment,feature_category,job,shard,stage,tier,type) (
+        rate(gitlab_sli:rails_request_apdex:total[6h])
+      )
+  - record: sli_aggregations:gitlab_sli:rails_request_apdex:success_total_rate6h
+    expr: |
+      sum by (endpoint_id,environment,feature_category,job,shard,stage,tier,type) (
+        rate(gitlab_sli:rails_request_apdex:success_total[6h])
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
@@ -1102,6 +1260,33 @@ groups:
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
+      component: rails_requests
+      tier: sv
+      type: web
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:gitlab_sli:rails_request_apdex:success_total_rate6h{job="gitlab-rails",type="web"}
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: rails_requests
+      tier: sv
+      type: web
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:gitlab_sli:rails_request_apdex:total_rate6h{job="gitlab-rails",type="web"}
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: rails_requests
+      tier: sv
+      type: web
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:gitlab_sli:rails_request_apdex:total_rate6h{}
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
       component: workhorse
       tier: sv
       type: web
@@ -1208,6 +1393,14 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: puma
+      regional_aggregation: "yes"
+      service_aggregation: "yes"
+      tier: sv
+      type: web
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: rails_requests
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
