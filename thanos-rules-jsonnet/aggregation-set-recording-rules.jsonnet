@@ -141,7 +141,7 @@ local groupsForApplicationSli(sli) =
         interval: '1m',
         partial_response_strategy: 'warn',
         rules: aggregationSetTransformer.generateRecordingRules(
-          sourceAggregationSet=aggregationSets.featureCategorySLIs,
+          sourceAggregationSet=aggregationSets.featureCategorySourceSLIs,
           targetAggregationSet=aggregationSets.stageGroupSLIs
         ),
       }]

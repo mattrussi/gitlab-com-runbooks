@@ -378,8 +378,8 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
   featureCategorySourceSLIs: aggregationSet.AggregationSet({
     id: 'source_feature_category',
     name: 'Prometheus Source Feature Category Metrics',
-    intermediateSource: true,  // Used in dashboards and alerts
-    selector: { monitor: { ne: 'global' } },  // Not Thanos Ruler
+    intermediateSource: true,
+    selector: { monitor: { ne: 'global' } },
     labels: ['env', 'environment', 'tier', 'type', 'stage', 'feature_category'],
     metricFormats: {
       apdexSuccessRate: 'gitlab:component:feature_category:execution:apdex:success:rate_%s',
@@ -392,8 +392,8 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
   featureCategorySLIs: aggregationSet.AggregationSet({
     id: 'feature_category',
     name: 'Feature Category Metrics',
-    intermediateSource: false,  // Used in dashboards and alerts
-    selector: { monitor: 'global' },  // Thanos Ruler
+    intermediateSource: false,
+    selector: { monitor: 'global' },
     labels: ['env', 'environment', 'tier', 'type', 'stage', 'component', 'feature_category'],
     metricFormats: {
       apdexSuccessRate: 'gitlab:component:feature_category:execution:apdex:success:rate_%s',
@@ -402,13 +402,6 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
       opsRate: 'gitlab:component:feature_category:execution:ops:rate_%s',
       errorRate: 'gitlab:component:feature_category:execution:error:rate_%s',
       errorRatio: 'gitlab:component:feature_category:execution:error:ratio_%s',
-    },
-    burnRates: {
-      '3d': {
-        apdexRatio: 'gitlab:component:feature_category:execution:apdex:ratio_3d',
-        opsRate: 'gitlab:component:feature_category:execution:ops:rate_3d',
-        errorRatio: 'gitlab:component:feature_category:execution:error:ratio_3d',
-      },
     },
   }),
 
@@ -423,7 +416,6 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
       on: 'feature_category',
       labels: ['stage_group', 'product_stage'],
     },
-    supportedBurnRates: ['5m', '30m', '1h', '6h'],  // Excluding 3d
     metricFormats: {
       apdexSuccessRate: 'gitlab:component:stage_group:execution:apdex:success:rate_%s',
       apdexWeight: 'gitlab:component:stage_group:execution:apdex:weight:score_%s',
@@ -431,13 +423,6 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
       opsRate: 'gitlab:component:stage_group:execution:ops:rate_%s',
       errorRate: 'gitlab:component:stage_group:execution:error:rate_%s',
       errorRatio: 'gitlab:component:stage_group:execution:error:ratio_%s',
-    },
-    burnRates: {
-      '6h': {
-        apdexRatio: 'gitlab:component:stage_group:execution:apdex:ratio_6h',
-        opsRate: 'gitlab:component:stage_group:execution:ops:rate_6h',
-        errorRatio: 'gitlab:component:stage_group:execution:error:ratio_6h',
-      },
     },
   }),
 }
