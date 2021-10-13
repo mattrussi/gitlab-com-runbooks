@@ -35,6 +35,7 @@ local saturationTypes = [
   import 'pg_int4_id.libsonnet',
   import 'pg_primary_cpu.libsonnet',
   import 'pg_table_bloat.libsonnet',
+  import 'pg_txid_vacuum_to_wraparound.libsonnet',
   import 'pg_txid_wraparound.libsonnet',
   import 'pg_vacuum_activity.libsonnet',
   import 'pg_walsender_cpu.libsonnet',
