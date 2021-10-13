@@ -25,7 +25,7 @@ groups:
         error. Check the syslog of the failing hosts to see the reasons
       grafana_dashboard_id: "000000231/chef-client"
       runbook: docs/config_management/chef-troubleshooting.md
-      title: Chef client failures have reached critical levels
+      title: Chef client is failing on over 10% of hosts of type {{ $labels.type }}
   - alert: ChefClientStale
     expr: (time() - chef_client_last_run_timestamp_seconds > 5 * 3600) and on (instance) (chef_client_enabled == 1)
     labels:
