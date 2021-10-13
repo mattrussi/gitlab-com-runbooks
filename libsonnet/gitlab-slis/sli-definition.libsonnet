@@ -2,6 +2,7 @@ local validator = import 'utils/validator.libsonnet';
 local rateMetric = (import 'servicemetrics/rate.libsonnet').rateMetric;
 local rateApdex = (import 'servicemetrics/rate_apdex.libsonnet').rateApdex;
 local recordingRuleRegistry = import 'servicemetrics/recording-rule-registry.libsonnet';
+local misc = import 'utils/misc.libsonnet';
 
 // We might add `success` and `error` in the future
 // When adding support for these, please update the metrics catalog to add
@@ -35,10 +36,10 @@ local validateAndApplyDefaults(definition) =
       successRate(self, selector).aggregatedRateQuery(labels, selector, rangeInterval),
     recordingRuleMetrics: [sli.totalCounterName, sli.successCounterName],
 
-    inRecordingRuleRegistry: std.foldl(
-      function(memo, metricName) memo && recordingRuleRegistry.resolveRecordingRuleFor(metricName=metricName) != null,
+    inRecordingRuleRegistry: misc.all(
+      function(metricName)
+        recordingRuleRegistry.resolveRecordingRuleFor(metricName=metricName) != null,
       self.recordingRuleMetrics,
-      true
     ),
 
     generateServiceLevelIndicator(extraSelector):: {
