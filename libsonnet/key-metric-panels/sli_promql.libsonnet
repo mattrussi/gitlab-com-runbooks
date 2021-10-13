@@ -115,6 +115,8 @@ local errorRatioQuery(aggregationSet, aggregationLabels, selectorHash, range=nul
   ||| % [expr, clampMaxExpressionWithDefault];
 
 local sloLabels(selectorHash) =
+  // An `component=''` will result in the overal service SLO recording, not a component specific one
+  local defaults = { monitor: 'global', component: '' };
   local supportedStaticLabels = std.set(['component', 'tier', 'type']);
   local supportedSelector = std.foldl(
     function(memo, labelName)
@@ -125,7 +127,7 @@ local sloLabels(selectorHash) =
     std.objectFields(selectorHash),
     {}
   );
-  supportedSelector { monitor: 'global' };
+  defaults + supportedSelector;
 
 local getApdexThresholdExpressionForWindow(selectorHash, windowDuration) =
   |||
@@ -147,6 +149,7 @@ local getErrorRateThresholdExpressionForWindow(selectorHash, windowDuration) =
   apdexQuery:: apdexQuery,
   opsRateQuery:: opsRateQuery,
   errorRatioQuery:: errorRatioQuery,
+  sloLabels:: sloLabels,
 
   apdex:: {
     /**
