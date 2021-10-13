@@ -297,7 +297,7 @@ groups:
         $labels.environment }}&var-stage={{ $labels.stage }}&var-queue={{ $labels.queue
         }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "3168042924"
+      grafana_panel_id: "2633741645"
       grafana_variables: environment,stage,queue
       promql_template_1: gitlab_background_jobs:execution:ops:rate_6h{environment="$environment",
         queue="$queue"}
@@ -324,7 +324,7 @@ groups:
         $labels.environment }}&var-stage={{ $labels.stage }}&var-worker={{ $labels.worker
         }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "3168042924"
+      grafana_panel_id: "2633741645"
       grafana_variables: environment,stage,worker
       promql_template_1: gitlab_background_jobs:execution:ops:rate_6h{environment="$environment",
         worker="$worker"}
