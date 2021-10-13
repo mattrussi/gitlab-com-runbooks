@@ -149,6 +149,7 @@ local getErrorRateThresholdExpressionForWindow(selectorHash, windowDuration) =
   apdexQuery:: apdexQuery,
   opsRateQuery:: opsRateQuery,
   errorRatioQuery:: errorRatioQuery,
+  sloLabels:: sloLabels,
 
   apdex:: {
     /**

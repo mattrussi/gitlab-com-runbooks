@@ -1,3 +1,4 @@
+local sliPromql = import './sli_promql.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
 local multiburnFactors = import 'mwmbr/multiburn_factors.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
@@ -90,7 +91,7 @@ local apdexStatusQuery(selectorHash, type, aggregationSet) =
   local metric5m = aggregationSet.getApdexRatioMetricForBurnRate('5m', required=true);
   local metric6h = aggregationSet.getApdexRatioMetricForBurnRate('6h', required=true);
   local metric30m = aggregationSet.getApdexRatioMetricForBurnRate('30m', required=true);
-
+  local allSelectors = selectorHash + aggregationSet.selector;
   |||
     sum(
       label_replace(
@@ -120,8 +121,9 @@ local apdexStatusQuery(selectorHash, type, aggregationSet) =
     )
   ||| %
   ({
-     selector: selectors.serializeHash(selectorHash + aggregationSet.selector),
-     slaSelector: selectors.serializeHash({ monitor: 'global', type: type }),
+
+     selector: selectors.serializeHash(allSelectors),
+     slaSelector: selectors.serializeHash(sliPromql.sloLabels(allSelectors)),
      metric1h: metric1h,
      metric5m: metric5m,
      metric6h: metric6h,
@@ -135,6 +137,7 @@ local errorRateStatusQuery(selectorHash, type, aggregationSet) =
   local metric5m = aggregationSet.getErrorRatioMetricForBurnRate('5m', required=true);
   local metric6h = aggregationSet.getErrorRatioMetricForBurnRate('6h', required=true);
   local metric30m = aggregationSet.getErrorRatioMetricForBurnRate('30m', required=true);
+  local allSelectors = selectorHash + aggregationSet.selector;
 
   |||
     sum (
@@ -165,8 +168,8 @@ local errorRateStatusQuery(selectorHash, type, aggregationSet) =
     )
   ||| %
   ({
-     selector: selectors.serializeHash(selectorHash + aggregationSet.selector),
-     slaSelector: selectors.serializeHash({ monitor: 'global', type: type }),
+     selector: selectors.serializeHash(allSelectors),
+     slaSelector: selectors.serializeHash(sliPromql.sloLabels(allSelectors)),
      metric1h: metric1h,
      metric5m: metric5m,
      metric6h: metric6h,
