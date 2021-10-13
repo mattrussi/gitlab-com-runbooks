@@ -16,7 +16,7 @@ groups:
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
       grafana_min_zoom_hours: "12"
-      grafana_panel_id: "3168042924"
+      grafana_panel_id: "2633741645"
       grafana_variables: environment,type,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/monitoring/definition-service-ops-rate.md
@@ -52,7 +52,7 @@ groups:
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
       grafana_min_zoom_hours: "12"
-      grafana_panel_id: "3168042924"
+      grafana_panel_id: "2633741645"
       grafana_variables: environment,type,stage
       link1_title: Definition
       link1_url: https://gitlab.com/gitlab-com/runbooks/blob/master/docs/monitoring/definition-service-ops-rate.md
