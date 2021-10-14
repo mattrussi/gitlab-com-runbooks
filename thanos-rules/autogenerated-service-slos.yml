@@ -250,7 +250,7 @@ groups:
       component: sshServices
       tier: lb
       type: frontend
-    expr: "0.000100"
+    expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       tier: stor
