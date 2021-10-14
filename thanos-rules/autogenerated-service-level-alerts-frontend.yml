@@ -657,12 +657,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_1h{component="sshServices",monitor="global",type="frontend"}
-          > (14.4 * 0.000100)
+          > (14.4 * 0.001000)
         )
         and
         (
           gitlab_component_errors:ratio_5m{component="sshServices",monitor="global",type="frontend"}
-          > (14.4 * 0.000100)
+          > (14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -703,12 +703,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_6h{component="sshServices",monitor="global",type="frontend"}
-          > (6 * 0.000100)
+          > (6 * 0.001000)
         )
         and
         (
           gitlab_component_errors:ratio_30m{component="sshServices",monitor="global",type="frontend"}
-          > (6 * 0.000100)
+          > (6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
