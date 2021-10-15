@@ -64,11 +64,11 @@
           text: ':postgres: {{ctx.payload.hits.total}} new transaction/s using subtransactions detected in the logs collected in the last 30 minutes!',
           attachments: [
             {
-              title: ':spiral_note_book: Subtransactions in Rails logs:',
+              title: ':spiral_note_pad: Subtransactions in Rails logs:',
               text: 'https://log.gprd.gitlab.net/goto/ef66c78edf65016ffeb7caf0fb3912a7',
             },
             {
-              title: ':spiral_note_book: Subtransactions in Sidekiq logs:',
+              title: ':spiral_note_pad: Subtransactions in Sidekiq logs:',
               text: 'https://log.gprd.gitlab.net/goto/cfc096f18757764fcf6c2e44b3af1c66',
             },
             {
