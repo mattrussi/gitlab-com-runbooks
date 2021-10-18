@@ -15,7 +15,7 @@ local sidekiqHelpers = import './services/lib/sidekiq-helpers.libsonnet';
       The HPA has a configured upper maximum. When this limit is reached, the HPA will not increase the number of pods and
       other resource saturation (eg, CPU, memory) may occur.
     |||,
-    runbook: 'docs/kube/kubernetes.md#hpascalecapability',
+    alertRunbook: 'docs/kube/kubernetes.md#hpascalecapability',
     grafana_dashboard_uid: 'sat_kube_hpa_instances',
     resourceLabels: ['hpa', 'shard'],
     query: |||

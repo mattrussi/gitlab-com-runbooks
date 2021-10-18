@@ -3072,7 +3072,7 @@ groups:
           ,
           0)
         )
-      runbook: docs/{{ $labels.type }}/README.md
+      runbook: docs/kube/kubernetes.md#hpascalecapability
     labels:
       alert_type: cause
       pager: pagerduty
