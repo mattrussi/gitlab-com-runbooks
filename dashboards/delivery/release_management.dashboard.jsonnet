@@ -319,7 +319,7 @@ basic.dashboard(
         },
       ),
     ],
-  ], cellHeights=[3, 3, 3], startRow=1)
+  ], cellHeights=[3 for x in environments], startRow=1)
 )
 .addPanels(
   std.flattenArrays(
