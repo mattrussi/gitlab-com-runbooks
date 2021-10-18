@@ -30,6 +30,15 @@ local levels = [
             std.objectValues(service.serviceLevelIndicators)
           ),
       },
+      {
+        name: 'Service exists in the dependency graph',
+        evidence: function(service)
+          local serviceGraph = serviceCatalog.serviceGraph;
+          if std.length(serviceGraph[service.type].inward) > 0 || std.length(serviceGraph[service.type].outward) > 0 then
+            [diagramDashboardLink]
+          else
+            false,
+      },
     ],
   },
   {
@@ -56,15 +65,6 @@ local levels = [
         evidence: function(service)
           if miscUtils.any(function(sli) std.objectHas(sli, 'requestRate'), std.objectValues(service.serviceLevelIndicators)) then
             metricsDashboardLink(service.type)
-          else
-            false,
-      },
-      {
-        name: 'Service exists in the dependency graph',
-        evidence: function(service)
-          local serviceGraph = serviceCatalog.serviceGraph;
-          if std.length(serviceGraph[service.type].inward) > 0 || std.length(serviceGraph[service.type].outward) > 0 then
-            [diagramDashboardLink]
           else
             false,
       },
