@@ -380,7 +380,7 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     name: 'Prometheus Source Feature Category Metrics',
     intermediateSource: true,
     selector: { monitor: { ne: 'global' } },
-    labels: ['env', 'environment', 'tier', 'type', 'stage', 'feature_category'],
+    labels: ['env', 'environment', 'tier', 'type', 'stage', 'component', 'feature_category'],
     metricFormats: {
       apdexSuccessRate: 'gitlab:component:feature_category:execution:apdex:success:rate_%s',
       apdexWeight: 'gitlab:component:feature_category:execution:apdex:weight:score_%s',
