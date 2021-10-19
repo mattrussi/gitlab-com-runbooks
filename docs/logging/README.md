@@ -42,6 +42,7 @@
 * [../pgbouncer/pgbouncer-saturation.md](../pgbouncer/pgbouncer-saturation.md)
 * [../pgbouncer/service-pgbouncer.md](../pgbouncer/service-pgbouncer.md)
 * [../pubsub/pubsub-queing.md](../pubsub/pubsub-queing.md)
+* [../registry/gitlab-registry.md](../registry/gitlab-registry.md)
 * [../tutorials/example_tutorial_template.md](../tutorials/example_tutorial_template.md)
 * [../tutorials/overview_life_of_a_git_request.md](../tutorials/overview_life_of_a_git_request.md)
 * [../tutorials/overview_life_of_a_web_request.md](../tutorials/overview_life_of_a_web_request.md)
