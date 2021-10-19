@@ -24,6 +24,7 @@
 * [k8s-sts-snapshot.md](k8s-sts-snapshot.md)
 * [kubernetes.md](kubernetes.md)
 * [../license/license-gitlab-com.md](../license/license-gitlab-com.md)
+* [../registry/gitlab-registry.md](../registry/gitlab-registry.md)
 * [../version/version-gitlab-com.md](../version/version-gitlab-com.md)
 <!-- END_MARKER -->
 
