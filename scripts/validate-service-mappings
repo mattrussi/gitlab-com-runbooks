@@ -1,12 +1,12 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
-require 'yaml'
+require 'json'
 
 # rubocop:disable Metrics/PerceivedComplexity
 # rubocop:disable Metrics/CyclomaticComplexity
 # rubocop:disable Metrics/AbcSize
 def validate(service_catalog_path)
-  service_catalog_yaml = YAML.load_file(service_catalog_path)
+  service_catalog_yaml = JSON.parse(File.read(service_catalog_path))
   teams = service_catalog_yaml["teams"]
   tiers = service_catalog_yaml["tiers"]
   services = service_catalog_yaml["services"]
@@ -239,7 +239,7 @@ end
 # rubocop:enable Metrics/AbcSize
 
 begin
-  validate(File.join(__dir__, "..", "services", "service-catalog.yml"))
+  validate(File.join(__dir__, "..", "services", "service_catalog.json"))
 rescue StandardError => e
   warn "error: #{e.stack}"
   exit 1

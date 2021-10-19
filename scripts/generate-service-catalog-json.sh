@@ -9,13 +9,8 @@ IFS=$'\n\t'
 cd "$(dirname "${BASH_SOURCE[0]}")/../services"
 
 generate() {
-  source=$1
-  target=$2
-
-  if [[ ! -f "${target}" ]] || [[ ! -s "${target}" ]] || [[ "${source}" -nt "${target}" ]]; then
-    # Update the service catalog
-    ruby -rjson -ryaml -e "puts YAML.load(ARGF.read).to_json" "${source}" >"${target}"
-  fi
+  # output the service catalog files
+  ruby -rjson -ryaml -e "puts YAML.load(ARGF.read).to_json" "$@"
 }
 
-generate "service-catalog.yml" "service_catalog.json"
+generate "service-catalog.yml" "teams.yml" >"service_catalog.json"
