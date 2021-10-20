@@ -22,16 +22,17 @@ stageGroupDashboards.dashboard('pipeline_execution')
         These panels show basic metrics for CI/CD build logs.
 
         You can read more about what each individual operation (like `streamed`,
-        `corrupted`) means by looking at the definition of these metrics in
+        `chunks_invalid_size`) means by looking at the definition of these metrics in
         [gitlab/trace/metrics.rb][metrics-definition] file.
 
-        The key metric here is `corrupted` build logs detected. This should be
-        0, anything more than zero indicates problems.
+        The key metrics for build logs here are `chunks_invalid_size` and 
+        `archive_invalid_checksum`. These should be 0, anything more than zero
+        indicates problems.
 
         Rate of `streamed` events should correspond with `PATCH /api/jobs/:id/trace`
         requests rate.
 
-        It is expected to see some `invalid` build logs on these graphs. A significant
+        It is expected to see some `chunks_invalid_checksum` build logs on these graphs. A significant
         increase over time might indicate a problem with the correctness of build logs.
 
         [metrics-definition]: https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/trace/metrics.rb#L9
@@ -60,15 +61,15 @@ stageGroupDashboards.dashboard('pipeline_execution')
       query=|||
         sum(
           rate(
-            gitlab_ci_trace_operations_total{
+            gitlab_ci_build_trace_errors_total{
               environment="$environment",
               stage="$stage",
-              operation="invalid"
+              error_reason="chunks_invalid_checksum"
             }[$__interval]
           )
-        ) by (operation)
+        ) by (error_reason)
       |||,
-      legendFormat='{{ operation }} build logs',
+      legendFormat='{{ error_reason }} build logs',
       yAxisLabel='Rate per second',
     ),
     basic.timeseries(
@@ -77,19 +78,36 @@ stageGroupDashboards.dashboard('pipeline_execution')
       query=|||
         sum(
           rate(
-            gitlab_ci_trace_operations_total{
+            gitlab_ci_build_trace_errors_total{
               environment="$environment",
               stage="$stage",
-              operation="corrupted",
+              error_reason="chunks_invalid_size",
             }[$__interval]
           )
-        ) by (operation)
+        ) by (error_reason)
       |||,
-      legendFormat='{{ operation }} build logs',
+      legendFormat='{{ error_reason }} build logs',
       yAxisLabel='Rate per second',
     ),
     basic.timeseries(
-      title='All metrics for build logs',
+      title='Rate of corrupted build log uploads detected',
+      description='The total rate of corrupted build log uploads detected',
+      query=|||
+        sum(
+          rate(
+            gitlab_ci_build_trace_errors_total{
+              environment="$environment",
+              stage="$stage",
+              error_reason="archive_invalid_checksum",
+            }[$__interval]
+          )
+        ) by (error_reason)
+      |||,
+      legendFormat='{{ error_reason }} build logs',
+      yAxisLabel='Rate per second',
+    ),
+    basic.timeseries(
+      title='All operation metrics for build logs',
       description='The rate of different operations happening related to build logs',
       query=|||
         sum(
