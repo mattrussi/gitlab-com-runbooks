@@ -101,6 +101,7 @@ test.suite({
       product_stage_group: 'access',
       send_slo_alerts_to_team_slack_channel: true,
       slack_alerts_channel: 'feed_alerts_access',
+      ignored_components: ['rails_requests'],
     },
     testLookupNonExistingTeamForStageGroup: {
       actual: serviceCatalog.lookupTeamForStageGroup('huzzah'),
