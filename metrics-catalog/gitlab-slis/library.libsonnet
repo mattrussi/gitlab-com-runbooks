@@ -4,7 +4,7 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
 local list = [
   sliDefinition.new({
     name: 'rails_request_apdex',
-    significantLabels: ['endpoint_id', 'feature_category'],
+    significantLabels: ['endpoint_id', 'feature_category', 'request_urgency'],
     kind: sliDefinition.apdexKind,
     description: |||
       The number of requests meeting their duration target based on the urgency
