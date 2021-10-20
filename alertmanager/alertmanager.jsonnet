@@ -293,6 +293,7 @@ local routingTree = Route(
       /* must be less than the 6h auto-resolve in PagerDuty */
       repeat_interval='2h',
       when=[
+        { matchers: { type: 'gitaly' }, receiver: 'pagerduty_gitaly' },
         { matchers: { slo_alert: 'yes', env: 'gprd', stage: 'cny' }, receiver: 'slo_gprd_cny' },
         { matchers: { slo_alert: 'yes', env: 'gprd', stage: 'main' }, receiver: 'slo_gprd_main' },
         { matchers: { slo_alert: 'yes', env: 'gprd', stage: 'main' }, receiver: 'slo_gprd_main' },
