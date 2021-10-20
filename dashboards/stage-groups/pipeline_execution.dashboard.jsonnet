@@ -427,6 +427,48 @@ stageGroupDashboards.dashboard('pipeline_execution')
       format='s',
     ),
     basic.multiTimeseries(
+      stableId='pipeline-scoped-variables-duration-p50',
+      title='Duration of scoped variables calculation (p50)',
+      queries=[{
+        query: |||
+          histogram_quantile(
+             0.50,
+             sum by (step, le) (pipeline_builder_scoped_variables_duration_bucket:le_step:rate1m{env="$environment", stage="$stage"})
+          )
+        |||,
+        legendFormat: '{{ step }} duration - p50',
+      }],
+      format='s',
+    ),
+    basic.multiTimeseries(
+      stableId='pipeline-scoped-variables-duration-p90',
+      title='Duration of scoped variables calculation(p90)',
+      queries=[{
+        query: |||
+          histogram_quantile(
+             0.90,
+             sum by (step, le) (pipeline_builder_scoped_variables_duration_bucket:le_step:rate1m{env="$environment", stage="$stage"})
+          )
+        |||,
+        legendFormat: '{{ step }} duration - p90',
+      }],
+      format='s',
+    ),
+    basic.multiTimeseries(
+      stableId='pipeline-scoped-variables-duration-p99',
+      title='Duration of scoped variables calculation (p99)',
+      queries=[{
+        query: |||
+          histogram_quantile(
+             0.99,
+             sum by (step, le) (pipeline_builder_scoped_variables_duration_bucket:le_step:rate1m{env="$environment", stage="$stage"})
+          )
+        |||,
+        legendFormat: '{{ step }} duration - p99',
+      }],
+      format='s',
+    ),
+    basic.multiTimeseries(
       stableId='pipeline-size',
       title='Pipeline size by pipeline source',
       queries=[{
