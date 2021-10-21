@@ -12,7 +12,7 @@ local serviceDefaults = {
   kubeResources: {},
   regional: false,  // By default we don't support regional monitoring for services
   alertWindows: multiburnExpression.defaultWindows,
-  skippedMaturityCriteria: [],
+  skippedMaturityCriteria: {},
 };
 
 // Convience method, will wrap a raw definition in a serviceLevelIndicatorDefinition if needed

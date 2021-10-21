@@ -169,7 +169,7 @@ metricsCatalog.serviceDefinition({
       serviceAggregation: false,
     },
   },
-  skippedMaturityCriteria: maturityLevels.getCriterias([
-    'Service exists in the dependency graph',
-  ]),
+  skippedMaturityCriteria: maturityLevels.skip({
+    'Service exists in the dependency graph': 'The logging platform consumes logs via fluentd, but does not interact directly with any other services',
+  }),
 })

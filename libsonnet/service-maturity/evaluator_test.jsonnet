@@ -4,10 +4,10 @@ local evaluator = import 'service-maturity/evaluator.libsonnet';
 local mockService = {
   type: 'mock',
   tier: 'test',
-  skippedMaturityCriteria: [
-    { name: 'Skipped Criteria 1', level: 'Level 1' },
-    { name: 'Skipped Criteria 2', level: 'Level 2' },
-  ],
+  skippedMaturityCriteria: {
+    'Skipped Criteria 1': 'Reason A',
+    'Skipped Criteria 2': 'Reason B',
+  },
 };
 local levels = [
   {
@@ -104,8 +104,8 @@ test.suite({
         name: 'All skipped',
         passed: true,
         criteria: [
-          { name: 'Skipped Criteria 1', evidence: null, result: 'skipped' },
-          { name: 'Skipped Criteria 2', evidence: null, result: 'skipped' },
+          { name: 'Skipped Criteria 1', evidence: 'Reason A', result: 'skipped' },
+          { name: 'Skipped Criteria 2', evidence: 'Reason B', result: 'skipped' },
         ],
       },
       {
@@ -129,9 +129,9 @@ test.suite({
         name: '2 skipped, 1 passed',
         passed: true,
         criteria: [
-          { name: 'Skipped Criteria 1', evidence: null, result: 'skipped' },
+          { name: 'Skipped Criteria 1', evidence: 'Reason A', result: 'skipped' },
           { name: 'Criteria 1', evidence: 'evidence', result: 'passed' },
-          { name: 'Skipped Criteria 2', evidence: null, result: 'skipped' },
+          { name: 'Skipped Criteria 2', evidence: 'Reason B', result: 'skipped' },
         ],
       },
       {
@@ -140,7 +140,7 @@ test.suite({
         criteria: [
           { name: 'Criteria 1', evidence: false, result: 'failed' },
           { name: 'Criteria 2', evidence: null, result: 'unimplemented' },
-          { name: 'Skipped Criteria 1', evidence: null, result: 'skipped' },
+          { name: 'Skipped Criteria 1', evidence: 'Reason A', result: 'skipped' },
           { name: 'Criteria 3', evidence: 'evidence', result: 'passed' },
         ],
       },

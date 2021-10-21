@@ -513,7 +513,8 @@ metricsCatalog.serviceDefinition({
     memcached_thanos_qfe_query_range: thanosMemcachedSLI('memcached-thanos-qfe-query-range-metrics'),
     memcached_thanos_qfe_labels: thanosMemcachedSLI('memcached-thanos-qfe-labels-metrics'),
   },
-  skippedMaturityCriteria: maturityLevels.getCriterias([
-    'Service exists in the dependency graph',
-  ]),
+
+  skippedMaturityCriteria: maturityLevels.skip({
+    'Service exists in the dependency graph': 'Thanos is an independent internal observability tool. It fetches metrics from other services, but does not interact with them, functionally',
+  }),
 })

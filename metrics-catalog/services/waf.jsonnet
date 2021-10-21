@@ -68,7 +68,7 @@ metricsCatalog.serviceDefinition({
       significantLabels: [],
     },
   },
-  skippedMaturityCriteria: maturityLevels.getCriterias([
-    'Developer guides exist in developer documentation',
-  ]),
+  skippedMaturityCriteria: maturityLevels.skip({
+    'Developer guides exist in developer documentation': 'WAF is an infrastructure component, powered by Cloudflare',
+  }),
 })

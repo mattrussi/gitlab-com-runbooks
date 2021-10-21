@@ -68,7 +68,7 @@ metricsCatalog.serviceDefinition({
       significantLabels: ['fqdn', 'pod'],
     },
   },
-  skippedMaturityCriteria: maturityLevels.getCriterias([
-    'Service exists in the dependency graph',
-  ]),
+  skippedMaturityCriteria: maturityLevels.skip({
+    'Service exists in the dependency graph': 'Jaeger is an independent internal observability tool',
+  }),
 })

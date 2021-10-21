@@ -176,10 +176,21 @@ local getCriteria(criteriaName) =
          'Criteria not found %s' % criteriaName;
   criteria[0];
 
-local getCriterias(criterias) = std.map(getCriteria, criterias);
+local skip(skipHash) =
+  assert std.type(skipHash) == 'object' :
+         'Maturity skip list must be a hash of criteria names and reasons';
+  std.foldl(
+    function(memo, key)
+      assert std.type(skipHash[key]) != 'null' :
+             'Maturity skip reason must be a string';
+      memo {
+        [getCriteria(key).name]: skipHash[key],
+      },
+    std.objectFields(skipHash),
+    {}
+  );
 
 {
   getLevels():: levels,
-  getCriteria: getCriteria,
-  getCriterias: getCriterias,
+  skip: skip,
 }

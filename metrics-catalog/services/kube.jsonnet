@@ -136,7 +136,7 @@ metricsCatalog.serviceDefinition({
       ],
     },
   },
-  skippedMaturityCriteria: maturityLevels.getCriterias([
-    'Service exists in the dependency graph',
-  ]),
+  skippedMaturityCriteria: maturityLevels.skip({
+    'Service exists in the dependency graph': 'This service is managed by GKE at the moment. It does not interfact directly with any other services',
+  }),
 })
