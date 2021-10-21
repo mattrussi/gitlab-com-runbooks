@@ -90,7 +90,7 @@ metricsCatalog.serviceDefinition({
     },
 
   },
-  skippedMaturityCriteria: maturityLevels.getCriterias([
-    'Service exists in the dependency graph',
-  ]),
+  skippedMaturityCriteria: maturityLevels.skip({
+    'Service exists in the dependency graph': 'Sentry is an independent internal observability tool',
+  }),
 })

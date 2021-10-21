@@ -24,6 +24,10 @@ Dir[File.join(File.dirname(__FILE__), "/helpers/**.rb")].each do |helper_file|
   require File.expand_path(helper_file)
 end
 
+def join_root_path(file)
+  File.expand_path(File.join(File.dirname(__FILE__), "../#{file}"))
+end
+
 def file_fixture(file)
   File.read(
     File.expand_path(File.join(File.dirname(__FILE__), "./fixtures/#{file}"))

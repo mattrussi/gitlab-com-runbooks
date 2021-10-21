@@ -1,18 +1,23 @@
 local misc = import 'utils/misc.libsonnet';
 
-local skippedCrition(criterion, service) =
+local checkSkippedCrition(criterion, service) =
   if std.objectHas(service, 'skippedMaturityCriteria') then
-    local names = std.map(function(c) c.name, service.skippedMaturityCriteria);
-    std.member(names, criterion.name)
+    assert std.type(service.skippedMaturityCriteria) == 'object' :
+           'Maturity skip list must be a hash of criteria names and reasons';
+    if std.objectHas(service.skippedMaturityCriteria, criterion.name) then
+      service.skippedMaturityCriteria[criterion.name]
+    else
+      null
   else
-    false;
+    null;
 
 local evaluateCriterion(criterion, service) =
-  if skippedCrition(criterion, service) then
+  local skippedReason = checkSkippedCrition(criterion, service);
+  if skippedReason != null then
     {
       name: criterion.name,
       result: 'skipped',
-      evidence: null,
+      evidence: skippedReason,
     }
   else
     local evidence = criterion.evidence(service);
