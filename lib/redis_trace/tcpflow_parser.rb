@@ -113,7 +113,8 @@ module RedisTrace
     end
 
     def parse_response_line(line, response_file)
-      if ['+OK', '+QUEUED'].include?(line)
+      # https://github.com/redis/redis/blob/cf860df59921efcc74be410bdf165abd784df502/src/server.c#L3492
+      if ['+OK', '+QUEUED', '+PONG'].include?(line)
         line
       elsif line == '$-1'
         nil
@@ -126,7 +127,7 @@ module RedisTrace
         response_file.read(2) # \r\n
         str
       else
-        raise "Unknown signal: #{line}"
+        raise "Unknown response: #{line}"
       end
     end
   end
