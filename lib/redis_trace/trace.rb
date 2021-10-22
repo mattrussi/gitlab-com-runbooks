@@ -5,7 +5,7 @@ require_relative './key_pattern'
 # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
 module RedisTrace
   class Trace
-    attr_accessor :timestamp, :request, :cmd, :keys, :value, :value_type, :other_args, :successful, :response
+    attr_accessor :timestamp, :request, :cmd, :keys, :key_patterns, :value, :args, :response, :successful
 
     def initialize(timestamp, request)
       @timestamp = timestamp
@@ -14,12 +14,12 @@ module RedisTrace
       @response = []
     end
 
-    def request_size
-      @request.reject(&:nil?).map(&:size).reduce(&:+) / 1024
+    def value_size
+      @value.to_s.size
     end
 
     def response_size
-      @response.reject(&:nil?).map { |r| t.to_s.size }.reduce(&:+) / 1024
+      @response.compact.map { |r| r.to_s.size }.sum
     end
 
     def to_s
@@ -30,33 +30,33 @@ module RedisTrace
     private
 
     def parse_request(request)
-      @cmd = request[0].downcase
-
-      @other_args = nil
-      @value_type = nil
+      @args = request.dup
+      @cmd = @args.shift.downcase
+      @keys = []
       @value = nil
 
       case @cmd
       when "get"
-        @keys = [request[1]]
+        @keys = [@args.shift]
       when "exists"
-        @keys = request[1..]
+        @keys = @args
+        @args = []
       when "expire"
-        @keys = [request[1]]
-        @other_args = request[2..]
+        @keys = [@args.shift]
       when "pexpire"
-        @keys = [request[1]]
-        @other_args = request[2..]
+        @keys = [@args.shift]
       when "del"
-        @keys = request[1..]
+        @keys = @args
+        @args = []
       when "mget"
-        @keys = request[1..]
+        @keys = @args
+        @args = []
       when "set"
-        @keys = [request[1]]
-        @other_args = request[2..]
-        @value = request[2]
+        @keys = [@args.shift]
+        @value = @args.join(" ")
+        @args = []
       when "smembers"
-        @keys = [request[1]]
+        @keys = [@args.shift]
       when "multi"
         @keys = []
       when "exec"
@@ -67,120 +67,102 @@ module RedisTrace
         @keys = []
       when "info"
         @keys = []
-        @other_args = [request[1]]
       when "memory"
         # MEMORY USAGE key [SAMPLES count]
-        @keys = [request[2]]
-        @other_args = [request[3..]]
+        @keys = [@args.shift]
       when "replconf"
         @keys = []
       when "ping"
         @keys = []
-        @other_args = [request[1]]
       when "client"
         @keys = []
       when "sismember"
-        @keys = [request[1]]
-        @other_args = request[2..]
+        @keys = [@args.shift]
       when "incr"
-        @keys = [request[1]]
+        @keys = [@args.shift]
       when "incrby"
-        @keys = [request[1]]
-        @value = request[2]
+        @keys = [@args.shift]
+        @value = @args.shift
       when "incrbyfloat"
-        @keys = [request[1]]
-        @value = request[2]
+        @keys = [@args.shift]
+        @value = @args.shift
         @value_type = "float"
       when "hincrby"
-        @keys = [request[1]]
-        @other_args = request[2..]
-        @value = request[3]
+        @keys = [@args.shift]
+        @value = @args.shift
       when "hdel"
-        @keys = [request[1]]
-        @other_args = request[2..]
+        @keys = [@args.shift]
       when "setex"
-        @keys = [request[1]]
-        @other_args = request[2..]
-        @value = request[3]
+        @keys = [@args.shift]
+        @value = @args.shift
       when "hmget"
-        @keys = [request[1]]
-        @other_args = request[2..]
+        @keys = [@args.shift]
       when "hmset"
-        @keys = [request[1]]
-        @other_args = request[2..]
+        @keys = [@args.shift]
         # Technically there could be an array of field names and @values ( HMSET key field @value [field @value ...] )
         # but GitLab doesn't use it AFAICT so i'm going to ignore that and hope.
-        @value = request[3]
+        @value = @args.shift
       when "unlink"
-        @keys = request[1..]
+        @keys = @args
+        @args = []
       when "ttl"
-        @keys = [request[1]]
+        @keys = [@args.shift]
       when "sadd"
-        @keys = [request[1]]
+        @keys = [@args.shift]
         # Could be more than one; let's just grab the first, we only seem to use a single key in GitLab
-        @other_args = request[2..]
-        @value = request[2]
+        @value = @args.shift
       when "hset"
-        @keys = [request[1]]
-        @other_args = request[2..]
-        @value = request[3]
+        @keys = [@args.shift]
+        @value = @args.shift
       when "publish"
-        @keys = [request[1]]
-        @other_args = request[2..]
-        @value = request[3]
+        @keys = [@args.shift]
+        @value = @args.shift
       when "eval"
         @keys = []
-        @other_args = request[2..]
         # Could be more than one key though
-        @value = request[3]
+        @value = @args.shift
       when "strlen"
-        @keys = [request[1]]
+        @keys = [@args.shift]
       when "pfadd"
-        @keys = [request[1]]
-        @other_args = request[2..]
+        @keys = [@args.shift]
       when "srem"
-        @keys = [request[1]]
-        @other_args = request[2..]
+        @keys = [@args.shift]
       when "hget"
-        @keys = [request[1]]
-        @other_args = request[2..]
+        @keys = [@args.shift]
       when "zadd"
-        @keys = [request[1]]
-        @other_args = request[2..]
+        @keys = [@args.shift]
         # well, "member" but that's sort of relevant
-        @value = request[-1]
+        @value = @args[-1]
       when "zcard"
-        @keys = [request[1]]
+        @keys = [@args.shift]
       when "decr"
-        @keys = [request[1]]
+        @keys = [@args.shift]
       when "scard"
-        @keys = [request[1]]
+        @keys = [@args.shift]
       when "subscribe"
-        @keys = request[1..]
+        @keys = @args
+        @args = []
       when "unsubscribe"
-        @keys = request[1..]
+        @keys = @args
+        @args = []
       when "zrangebyscore"
-        @keys = [request[1]]
-        @other_args = request[2..]
+        @keys = [@args.shift]
       when "zrevrange"
-        @keys = [request[1]]
-        @other_args = request[2..]
+        @keys = [@args.shift]
       when "zremrangebyrank"
-        @keys = [request[1]]
-        @other_args = request[2..]
+        @keys = [@args.shift]
       when "zremrangebyscore"
-        @keys = [request[1]]
-        @other_args = request[2..]
+        @keys = [@args.shift]
       when "blpop"
-        @keys = request[1..-2]
-        @value = request[-1]
+        @keys = @args[0..-2]
+        @value = @args[-1]
       when "hgetall"
-        @keys = [request[1]]
+        @keys = [@args.shift]
       when "lpush"
-        @keys = [request[1]]
+        @keys = [@args.shift]
       else
         # Best guess
-        @keys = [request[1]]
+        @keys = [@args.shift]
       end
 
       @value_type = @value.match(/^[0-9]+$/) ? "int" : "string" if @value && !@value_type
