@@ -1,11 +1,12 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 require 'json'
+require_relative '../lib/jsonnet_wrapper'
 
 # rubocop:disable Metrics/PerceivedComplexity
 # rubocop:disable Metrics/CyclomaticComplexity
 # rubocop:disable Metrics/AbcSize
-def validate(service_catalog_path)
+def validate(service_catalog_path, known_stage_groups)
   service_catalog_yaml = JSON.parse(File.read(service_catalog_path))
   teams = service_catalog_yaml["teams"]
   tiers = service_catalog_yaml["tiers"]
@@ -27,6 +28,9 @@ def validate(service_catalog_path)
       raise "'#{team_name}' | slack_alerts_channel must be a string" unless slack_alerts_channel.is_a? String
       raise "'#{team_name}' | slack_alerts_channel must not start with a hash" if slack_alerts_channel.start_with?("#")
     end
+
+    stage_group = team["product_stage_group"]
+    raise "'#{team_name}' | '#{stage_group}' is not a known stage group" if stage_group && !known_stage_groups.include?(stage_group)
   end
 
   services.each do |service|
@@ -239,8 +243,10 @@ end
 # rubocop:enable Metrics/AbcSize
 
 begin
-  validate(File.join(__dir__, "..", "services", "service_catalog.json"))
+  known_stage_groups = JsonnetWrapper.new.parse(File.join(__dir__, "..", "services", "stage-group-mapping.jsonnet")).keys
+
+  validate(File.join(__dir__, "..", "services", "service_catalog.json"), known_stage_groups)
 rescue StandardError => e
-  warn "error: #{e.stack}"
+  warn [e.message, *e.backtrace].join("\n")
   exit 1
 end
