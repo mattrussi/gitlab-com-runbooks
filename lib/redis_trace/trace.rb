@@ -2,9 +2,10 @@
 
 require_relative './key_pattern'
 
+# rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
 module RedisTrace
   class Trace
-    attr_accessor :timestamp, :command, :keys, :value, :value_type, :other_args, :successful, :response
+    attr_accessor :timestamp, :request, :cmd, :keys, :value, :value_type, :other_args, :successful, :response
 
     def initialize(timestamp, request)
       @timestamp = timestamp
@@ -17,13 +18,13 @@ module RedisTrace
       @request.reject(&:nil?).map(&:size).reduce(&:+) / 1024
     end
 
-    def request_size
+    def response_size
       @response.reject(&:nil?).map { |r| t.to_s.size }.reduce(&:+) / 1024
     end
 
     def to_s
       success = @successful ? '[SUCCESSFUL]' : '[ERROR]'
-      "#{@timestamp} #{@request.join(" ")}\n#{success} #{@response.map(&:to_s).join(" ")}"
+      "#{@timestamp} #{@request.join(' ')}\n#{success} #{@response.map(&:to_s).join(' ')}"
     end
 
     private
@@ -33,7 +34,7 @@ module RedisTrace
 
       @other_args = nil
       @value_type = nil
-      @@value = nil
+      @value = nil
 
       case @cmd
       when "get"
@@ -188,10 +189,9 @@ module RedisTrace
       end
     end
 
-    private
-
     def patternize(key)
       RedisTrace::KeyPattern.filter_key(key)
     end
   end
 end
+# rubocop:enable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity

@@ -12,7 +12,8 @@ module RedisTrace
       parse_idx_file
 
       request_filename = @idx_filename.gsub(/\.findx$/, "")
-      raise unless File.basename(request_filename).match(/^([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)\.([0-9]+)-([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)\.([0-9]+)$/)
+      raise "Invalid file name #{request_filename}" unless File.basename(request_filename).match(/^([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)\.([0-9]+)-([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)\.([0-9]+)$/)
+
       request_file = File.open(request_filename, 'r:ASCII-8BIT')
 
       response_filename = File.join(
@@ -31,8 +32,8 @@ module RedisTrace
         yield trace if block_given?
       end
     ensure
-      request_file.close  if request_file
-      response_file.close if response_file
+      request_file&.close
+      response_file&.close
     end
 
     private
@@ -49,7 +50,7 @@ module RedisTrace
       end
     end
 
-    def timestamp(offset)
+    def request_timestamp(offset)
       i = @index_keys.bsearch_index { |v| v >= offset }
       if i.nil?
         i = @index_keys.size - 1
@@ -57,7 +58,8 @@ module RedisTrace
         # bsearch rounds up, we want to round down
         i -= 1
       end
-      ts = Time.at(@index_vals[i]).to_datetime.new_offset(0)
+
+      Time.at(@index_vals[i]).to_datetime.new_offset(0)
     end
 
     def parse_next_request(request_file)
@@ -71,7 +73,7 @@ module RedisTrace
       argc = Regexp.last_match(1).to_i
       argc.times do
         line = request_file.readline.strip
-        raise unless line.match(/^\$([0-9]+)$/)
+        raise "Invalid line: #{line}" unless line.match(/^\$([0-9]+)$/)
 
         len = Regexp.last_match(1).to_i
         request << request_file.read(len)
@@ -79,9 +81,9 @@ module RedisTrace
       end
 
       # Search index file for timestamps
-      timestamp = timestamp(offset)
+      timestamp = request_timestamp(offset)
 
-      return Trace.new(timestamp, request)
+      Trace.new(timestamp, request)
     rescue EOFError
       nil
     end
@@ -91,7 +93,7 @@ module RedisTrace
       line = nil
       loop do
         line = response_file.readline.strip
-        break if line.match(/^[\*:\-\+\$].*/)
+        break if line.match(/^[*:\-+$].*/)
       end
 
       if line.match(/^\*([0-9]+)$/)
@@ -103,7 +105,7 @@ module RedisTrace
         return [true, response]
       end
 
-      return [false, [Regexp.last_match(1)]] if line.match(/^\-(.*)$/)
+      return [false, [Regexp.last_match(1)]] if line.match(/^-(.*)$/)
 
       [true, [parse_response_line(line, response_file)]]
     rescue EOFError
@@ -115,7 +117,7 @@ module RedisTrace
         line
       elsif line == '$-1'
         nil
-      elsif line.match(/^\:([0-9]+)$/)
+      elsif line.match(/^:([0-9]+)$/)
         Regexp.last_match(1).to_i
       elsif line.match(/^\$([0-9]+)$/)
         len = Regexp.last_match(1).to_i
