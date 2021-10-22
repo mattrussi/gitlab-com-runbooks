@@ -9,7 +9,7 @@ module RedisTrace
     end
 
     def call
-      parse_idx_file
+      request_index_keys, request_index_vals = parse_idx_file(@idx_filename)
 
       request_filename = @idx_filename.gsub(/\.findx$/, "")
       raise "Invalid file name #{request_filename}" unless File.basename(request_filename).match(/^([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)\.([0-9]+)-([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)\.([0-9]+)$/)
@@ -20,13 +20,14 @@ module RedisTrace
         File.dirname(request_filename),
         File.basename(request_filename).split("-").reverse.join("-")
       )
+      response_index_keys, response_index_vals = parse_idx_file("#{response_filename}.findx")
       response_file = File.open(response_filename, 'r:ASCII-8BIT')
 
       until request_file.eof?
-        trace = parse_next_request(request_file)
+        trace = parse_next_request(request_file, request_index_keys, request_index_vals)
         next if trace.nil?
 
-        successful, response = parse_next_response(response_file)
+        successful, response = parse_next_response(trace.timestamp, response_file, response_index_keys, response_index_vals)
         trace.successful = successful
         trace.response = response
         yield trace if block_given?
@@ -38,31 +39,32 @@ module RedisTrace
 
     private
 
-    def parse_idx_file
-      @index_keys = []
-      @index_vals = []
+    def parse_idx_file(file)
+      index_keys = []
+      index_vals = []
 
-      File.readlines(@idx_filename).each do |line|
+      File.readlines(file).each do |line|
         offset, timestamp, _length = line.strip.split("|")
 
-        @index_keys << offset.to_i
-        @index_vals << timestamp.to_f
+        index_keys << offset.to_i
+        index_vals << timestamp.to_f
       end
+      [index_keys, index_vals]
     end
 
-    def request_timestamp(offset)
-      i = @index_keys.bsearch_index { |v| v >= offset }
+    def request_timestamp(offset, index_keys, index_vals)
+      i = index_keys.bsearch_index { |v| v >= offset }
       if i.nil?
-        i = @index_keys.size - 1
-      elsif i.positive? && @index_keys[i] != offset
+        i = index_keys.size - 1
+      elsif i.positive? && index_keys[i] != offset
         # bsearch rounds up, we want to round down
         i -= 1
       end
 
-      Time.at(@index_vals[i]).to_datetime.new_offset(0)
+      Time.at(index_vals[i]).to_datetime.new_offset(0)
     end
 
-    def parse_next_request(request_file)
+    def parse_next_request(request_file, index_keys, index_vals)
       offset = request_file.tell
       line = request_file.readline.strip
 
@@ -81,19 +83,23 @@ module RedisTrace
       end
 
       # Search index file for timestamps
-      timestamp = request_timestamp(offset)
+      timestamp = request_timestamp(offset, index_keys, index_vals)
 
       Trace.new(timestamp, request)
     rescue EOFError
       nil
     end
 
-    def parse_next_response(response_file)
+    def parse_next_response(timestamp, response_file, index_keys, index_vals)
       # https://redis.io/topics/protocol
       line = nil
       loop do
         line = response_file.readline.strip
-        break if line.match(/^[*:\-+$].*/)
+        next unless line.match(/^[*:\-+$].*/)
+
+        offset = response_file.tell
+        response_timestamp = request_timestamp(offset, index_keys, index_vals)
+        break if response_timestamp >= timestamp
       end
 
       if line.match(/^\*([0-9]+)$/)
