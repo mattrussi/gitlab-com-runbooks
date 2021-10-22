@@ -33,6 +33,7 @@
 * [../onboarding/kibana-diagnosis.md](../onboarding/kibana-diagnosis.md)
 * [../patroni/check_wraparound.md](../patroni/check_wraparound.md)
 * [../patroni/log_analysis.md](../patroni/log_analysis.md)
+* [../patroni/mapping_statements.md](../patroni/mapping_statements.md)
 * [../patroni/pg_repack.md](../patroni/pg_repack.md)
 * [../patroni/postgres-checkup.md](../patroni/postgres-checkup.md)
 * [../patroni/postgresql-locking.md](../patroni/postgresql-locking.md)
