@@ -20,4 +20,5 @@ group :development, :test do
   gem 'bigdecimal'
   gem 'webmock'
   gem 'super_diff'
+  gem 'byebug'
 end
