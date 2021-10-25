@@ -153,6 +153,10 @@ teams:
   slack_alerts_channel: f_pipeline_validation_service
   send_slo_alerts_to_team_slack_channel: true
 
+- name: subtransactions_troubleshooting
+  slack_alerts_channel: subtransactions_troubleshooting
+  send_slo_alerts_to_team_slack_channel: true
+
 - name: configure
   product_stage_group: configure
   slack_alerts_channel: feed_alerts_configure

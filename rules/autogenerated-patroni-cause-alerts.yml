@@ -122,6 +122,24 @@ groups:
             pg_replication_is_replica == 0
         )
       ) > 0.05
+  - alert: PatroniSubtransControlLocksDetected
+    for: 5m
+    annotations:
+      title: Subtransactions wait events have been detected in the database in the
+        last 5 minutes
+      description: |
+        Wait events related to subtransactions locking have been detected in the database in the last 5 minutes.
+
+        This can eventually saturate entire database cluster if this sitation continues for a longer period of time.
+    labels:
+      alert_type: cause
+      runbook: docs/patroni/postgresql-subtransactions.md
+      severity: s3
+      team: subtransactions_troubleshooting
+    expr: |
+      sum by (environment) (
+        sum_over_time(pg_stat_activity_marginalia_sampler_active_count{wait_event=~"[Ss]ubtrans.*"}[10m])
+      ) > 10
   - alert: PatroniLongRunningTransactionDetected
     for: 1m
     annotations:

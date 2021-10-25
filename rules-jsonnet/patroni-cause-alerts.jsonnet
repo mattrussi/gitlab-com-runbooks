@@ -146,6 +146,31 @@ local rules = {
           },
         }),
 
+        // Subtransactions wait events alert
+        alerts.processAlertRule({
+          alert: 'PatroniSubtransControlLocksDetected',
+          expr: |||
+            sum by (environment) (
+              sum_over_time(pg_stat_activity_marginalia_sampler_active_count{wait_event=~"[Ss]ubtrans.*"}[10m])
+            ) > 10
+          |||,
+          'for': '5m',
+          labels: {
+            team: 'subtransactions_troubleshooting',
+            severity: 's3',
+            alert_type: 'cause',
+            runbook: 'docs/patroni/postgresql-subtransactions.md',
+          },
+          annotations: {
+            title: 'Subtransactions wait events have been detected in the database in the last 5 minutes',
+            description: |||
+              Wait events related to subtransactions locking have been detected in the database in the last 5 minutes.
+
+              This can eventually saturate entire database cluster if this sitation continues for a longer period of time.
+            |||,
+          },
+        }),
+
         // Long running transaction alert
         alerts.processAlertRule({
           alert: 'PatroniLongRunningTransactionDetected',
