@@ -76,7 +76,7 @@ As an IMOC, on roughly these times, you can ask yourself these questions:
   5. Do we need a [CMOC](https://about.gitlab.com/handbook/engineering/infrastructure/incident-management/#how-to-engage-the-cmoc-only-during-weekdays)?  Is this customer facing?  Default to yes, but if deploy blocker - probably no.
   6. Regularly check on the EOC. EOC is in a highly stressful situation, pager is going off every few minutes and they are asked to try and deduct what is happening. As IMOC, you need to support the EOC. 
   7. 10-15 minutes in.  Make sure there is an executive summary somewhere.  Most times at the top of the prod issue description.  If hard down, make sure gdoc exists with this summary.  Make sure the gdoc is shared in slack so people see it.
-  8. Help the EOC keep the timeline in the incident up to date.  Usually done in the description of the issue.  If you are collecitng things, use issue comments, then edit teh description later.
+  8. Help the EOC keep the timeline in the incident up to date.  Usually done in the description of the issue.  If you are collecting things, use issue comments, then edit the description later.
 
 ### Handling S3/S4
 If not on full alert, now in the realm of judgement related to next steps
