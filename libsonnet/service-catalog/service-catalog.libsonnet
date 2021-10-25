@@ -25,7 +25,7 @@ local teamMap = std.foldl(
 local teamGroupMap = std.foldl(
   function(result, team)
     if std.objectHas(team, 'product_stage_group') && team.product_stage_group != null then
-      assert std.objectHas(stageGroupMapping, team.product_stage_group) : '%s has an unknown stage group %s' % [team.name, team.product_stage_group];
+      assert std.objectHas(stageGroupMapping, team.product_stage_group) : 'team %s has an unknown stage group %s' % [team.name, team.product_stage_group];
       assert !std.objectHas(result, team.product_stage_group) : 'team %s already has a team with stage group %s' % [team.name, team.product_stage_group];
       result { [team.product_stage_group]: team }
     else
