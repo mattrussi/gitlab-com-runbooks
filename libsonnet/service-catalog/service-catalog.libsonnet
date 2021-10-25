@@ -1,5 +1,7 @@
-local serviceCatalog = (import 'gitlab-metrics-config.libsonnet').serviceCatalog;
-local allServices = (import 'gitlab-metrics-config.libsonnet').monitoredServices;
+local metricsConfig = import 'gitlab-metrics-config.libsonnet';
+local serviceCatalog = metricsConfig.serviceCatalog;
+local allServices = metricsConfig.monitoredServices;
+local stageGroupMapping = metricsConfig.stageGroupMapping;
 local miscUtils = import 'utils/misc.libsonnet';
 
 local serviceMap = {
@@ -11,6 +13,26 @@ local teamDefaults = {
   issue_tracker: null,
   send_slo_alerts_to_team_slack_channel: false,
 };
+
+local teamMap = std.foldl(
+  function(result, team)
+    assert !std.objectHas(result, team.name) : 'Duplicate definition for team: %s' % [team.name];
+    result { [team.name]: teamDefaults + team },
+  serviceCatalog.teams,
+  {}
+);
+
+local teamGroupMap = std.foldl(
+  function(result, team)
+    if std.objectHas(team, 'product_stage_group') && team.product_stage_group != null then
+      assert std.objectHas(stageGroupMapping, team.product_stage_group) : 'team %s has an unknown stage group %s' % [team.name, team.product_stage_group];
+      assert !std.objectHas(result, team.product_stage_group) : 'team %s already has a team with stage group %s' % [team.name, team.product_stage_group];
+      result { [team.product_stage_group]: team }
+    else
+      result,
+  std.objectValues(teamMap),
+  {}
+);
 
 local buildServiceGraph(services) =
   std.foldl(
@@ -51,12 +73,13 @@ local buildServiceGraph(services) =
   serviceGraph:: buildServiceGraph(allServices),
 
   getTeams()::
-    serviceCatalog.teams,
+    std.objectValues(teamMap),
+
+  lookupTeamForStageGroup(name)::
+    if std.objectHas(teamGroupMap, name) then teamGroupMap[name] else {},
 
   getTeam(teamName)::
-    local team = std.filter(function(team) team.name == teamName, self.getTeams());
-    assert std.length(team) == 1;
-    teamDefaults + team[0],
+    teamMap[teamName],
 
   findServices(filterFunc)::
     std.filter(filterFunc, serviceCatalog.services),

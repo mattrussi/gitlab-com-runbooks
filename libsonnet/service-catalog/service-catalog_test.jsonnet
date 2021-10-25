@@ -69,4 +69,43 @@ test.suite({
       woodhouse: { inward: [], outward: [] },  // forever alone
     },
   },
+  testGetTeam: {
+    actual: serviceCatalog.getTeam('sre_coreinfra'),
+    expect: {
+      name: 'sre_coreinfra',
+      url: 'https://about.gitlab.com/handbook/engineering/infrastructure/team/reliability/#core-infra',
+      slack_channel: 'sre_coreinfra',
+      engagement_policy: null,
+      oncall_schedule: 'https://gitlab.pagerduty.com/schedules#P22HQSG',
+      issue_tracker: null,
+      send_slo_alerts_to_team_slack_channel: false,
+    },
+  },
+  testTeams: {
+    // Filtering in order not to have a test that fails every time someone adds
+    // a team
+    actual: std.set(
+      std.filterMap(
+        function(team) team.name == 'sre_coreinfra' || team.name == 'scalability',
+        function(team) team.name,
+        serviceCatalog.getTeams()
+      )
+    ),
+    expect: std.set(['sre_coreinfra', 'scalability']),
+  },
+  testLookupExistingTeamForStageGroup: {
+    actual: serviceCatalog.lookupTeamForStageGroup('access'),
+    expect: {
+      issue_tracker: null,
+      name: 'access',
+      product_stage_group: 'access',
+      send_slo_alerts_to_team_slack_channel: true,
+      slack_alerts_channel: 'feed_alerts_access',
+      ignored_components: ['rails_requests'],
+    },
+    testLookupNonExistingTeamForStageGroup: {
+      actual: serviceCatalog.lookupTeamForStageGroup('huzzah'),
+      expect: {},
+    },
+  },
 })
