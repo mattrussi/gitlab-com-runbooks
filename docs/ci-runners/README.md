@@ -363,14 +363,15 @@ Every new CIDR should start at directly after the previously reserved one ends.
 
 **Please consult every new range with it and keep this list up-to-date!**
 
-| GCP project             | Network "$VPC/$SUBNETWORK"            | CIDR            |
-| ----------------------- | ------------------------------------- | --------------- |
-| `gitlab-ci-plan-free-7` | `ephemeral-runners/ephemeral-runners` | `10.10.0.0/21`  |
-| `gitlab-ci-plan-free-6` | `ephemeral-runners/ephemeral-runners` | `10.10.8.0/21`  |
-| `gitlab-ci-plan-free-5` | `ephemeral-runners/ephemeral-runners` | `10.10.16.0/21` |
-| `gitlab-ci-plan-free-4` | `ephemeral-runners/ephemeral-runners` | `10.10.24.0/21` |
-| `gitlab-ci-plan-free-3` | `ephemeral-runners/ephemeral-runners` | `10.10.32.0/21` |
-| `gitlab-ci`             | `ci/ephemeral-runners-private`        | `10.10.40.0/21` |
+| GCP project             | Network "$VPC/$SUBNETWORK"               | CIDR            |
+| ----------------------- | ---------------------------------------- | --------------- |
+| `gitlab-ci-plan-free-7` | `ephemeral-runners/ephemeral-runners`    | `10.10.0.0/21`  |
+| `gitlab-ci-plan-free-6` | `ephemeral-runners/ephemeral-runners`    | `10.10.8.0/21`  |
+| `gitlab-ci-plan-free-5` | `ephemeral-runners/ephemeral-runners`    | `10.10.16.0/21` |
+| `gitlab-ci-plan-free-4` | `ephemeral-runners/ephemeral-runners`    | `10.10.24.0/21` |
+| `gitlab-ci-plan-free-3` | `ephemeral-runners/ephemeral-runners`    | `10.10.32.0/21` |
+| `gitlab-ci`             | `ci/ephemeral-runners-private`           | `10.10.40.0/21` |
+| `gitlab-ci`             | `ci/ephemeral-runners-shared-gitlab-org` | `10.10.48.0/21` |
 
 ### GCP projects
 
@@ -386,7 +387,8 @@ Here you can find details about networking in different projects used by CI Runn
 | `default`      | `gitlab-shared-runners `    | `10.0.16.0/20`  | gitlab shared runner (GSRM) machines                   |
 | `ci`           | `bastion-ci`                | `10.1.4.0/24`   | Bastion network                                        |
 | `ci`           | `runner-managers`           | `10.1.5.0/24`   | Network for Runner Managers ([new ones](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/456))                 |
-| `ci`           | `ephemeral-runners-private` | `10.10.40.0/21` | Ephemeral runner machines for the new `private` shard. See [Ephemeral runner VMs networking](#ephemera-runner-vms-networking) bellow. |
+| `ci`           | `ephemeral-runners-private` | `10.10.40.0/21` | Ephemeral runner machines for the new `private` shard. See [`ephemeral-runnes` unique CIDRs list](#ephemeral-runners-unique-cidrs-list) above |
+| `ci`           | `ephemeral-runners-shared-gitlab-org` | `10.10.48.0/21` | Ephemeral runner machines for the new `shared-gitlab-org` shard. See [`ephemeral-runners` unique CIDRs list](#ephemeral-runners-unique-cidrs-list) above |
 | `runners-gke`  | `runners-gke`               | `10.9.4.0/24`   | Primary; GKE nodes range      |
 | `runners-gke`  | `runners-gke`               | `10.8.0.0/16`   | Secondary; GKE pods range     |
 | `runners-gke`  | `runners-gke`               | `10.9.0.0/22`   | secondary; GKE services range |
