@@ -139,6 +139,22 @@ stageGroupDashboards.dashboard('pipeline_execution')
       legendFormat='build logs received',
       yAxisLabel='Bytes received per second',
     ),
+    basic.timeseries(
+      title='All error metrics for build logs',
+      description='The rate of different errors related to processing build logs',
+      query=|||
+        sum(
+          rate(
+            gitlab_ci_build_trace_errors_total{
+              environment="$environment",
+              stage="$stage"
+            }[$__interval]
+          )
+        ) by (error_reason)
+      |||,
+      legendFormat='{{ error_reason }} error reason',
+      yAxisLabel='Rate per second',
+    ),
   ], cols=2, startRow=1001)
 )
 .addPanel(
