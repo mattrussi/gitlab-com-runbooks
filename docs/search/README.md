@@ -33,6 +33,7 @@
 * [../patroni/mapping_statements.md](../patroni/mapping_statements.md)
 * [../patroni/performance-degradation-troubleshooting.md](../patroni/performance-degradation-troubleshooting.md)
 * [../patroni/pg_collect_query_data.md](../patroni/pg_collect_query_data.md)
+* [../patroni/pg_xid_xmin_age_alert.md](../patroni/pg_xid_xmin_age_alert.md)
 * [../patroni/postgresql-role-credential-rotation.md](../patroni/postgresql-role-credential-rotation.md)
 * [../patroni/rails-sql-apdex-slow.md](../patroni/rails-sql-apdex-slow.md)
 * [../praefect/praefect-error-rate.md](../praefect/praefect-error-rate.md)
