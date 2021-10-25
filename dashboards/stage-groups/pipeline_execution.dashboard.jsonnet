@@ -56,57 +56,6 @@ stageGroupDashboards.dashboard('pipeline_execution')
       yAxisLabel='Rate per second',
     ),
     basic.timeseries(
-      title='Rate of invalid build logs detected',
-      description='The total rate of invalid build logs detected (including mutated ones)',
-      query=|||
-        sum(
-          rate(
-            gitlab_ci_build_trace_errors_total{
-              environment="$environment",
-              stage="$stage",
-              error_reason="chunks_invalid_checksum"
-            }[$__interval]
-          )
-        ) by (error_reason)
-      |||,
-      legendFormat='{{ error_reason }} build logs',
-      yAxisLabel='Rate per second',
-    ),
-    basic.timeseries(
-      title='Rate of corrupted build logs detected',
-      description='The total rate of corrupted build logs detected',
-      query=|||
-        sum(
-          rate(
-            gitlab_ci_build_trace_errors_total{
-              environment="$environment",
-              stage="$stage",
-              error_reason="chunks_invalid_size",
-            }[$__interval]
-          )
-        ) by (error_reason)
-      |||,
-      legendFormat='{{ error_reason }} build logs',
-      yAxisLabel='Rate per second',
-    ),
-    basic.timeseries(
-      title='Rate of corrupted build log uploads detected',
-      description='The total rate of corrupted build log uploads detected',
-      query=|||
-        sum(
-          rate(
-            gitlab_ci_build_trace_errors_total{
-              environment="$environment",
-              stage="$stage",
-              error_reason="archive_invalid_checksum",
-            }[$__interval]
-          )
-        ) by (error_reason)
-      |||,
-      legendFormat='{{ error_reason }} build logs',
-      yAxisLabel='Rate per second',
-    ),
-    basic.timeseries(
       title='All operation metrics for build logs',
       description='The rate of different operations happening related to build logs',
       query=|||
@@ -138,6 +87,22 @@ stageGroupDashboards.dashboard('pipeline_execution')
       format='Bps',
       legendFormat='build logs received',
       yAxisLabel='Bytes received per second',
+    ),
+    basic.timeseries(
+      title='All error metrics for build logs',
+      description='The rate of different errors related to processing build logs',
+      query=|||
+        sum(
+          rate(
+            gitlab_ci_build_trace_errors_total{
+              environment="$environment",
+              stage="$stage"
+            }[$__interval]
+          )
+        ) by (error_reason)
+      |||,
+      legendFormat='{{ error_reason }} error reason',
+      yAxisLabel='Rate per second',
     ),
   ], cols=2, startRow=1001)
 )
