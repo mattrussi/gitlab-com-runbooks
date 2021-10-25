@@ -69,7 +69,9 @@ module RedisTrace
         @keys = []
       when "memory"
         # MEMORY USAGE key [SAMPLES count]
-        @keys = [@args.shift]
+        @args.shift
+        @keys = @args
+        @args = []
       when "replconf"
         @keys = []
       when "ping"

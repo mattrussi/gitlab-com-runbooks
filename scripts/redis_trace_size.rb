@@ -7,6 +7,7 @@
 require 'time'
 require 'json'
 require_relative '../lib/redis_trace/tcpflow_parser'
+require 'etc'
 
 raise 'no input folder provided' if ARGV.empty?
 
@@ -40,21 +41,35 @@ class KeyPatternData
   end
 end
 
+mutex = Mutex.new
 key_patterns = Hash.new do |h1, k1|
   h1[k1] = Hash.new do |h2, k2|
     h2[k2] = KeyPatternData.new
   end
 end
 
-Dir.glob(File.join(ARGV[0] || "./", '*.06379.findx')).each do |idx_filename|
-  parser = RedisTrace::TcpflowParser.new(idx_filename)
-  parser.call do |trace|
-    trace.key_patterns.each do |key|
-      key_patterns[trace.cmd][key].record_value_size(trace.value_size)
-      key_patterns[trace.cmd][key].record_response_size(trace.response_size)
+idx_files = Queue.new
+Dir.glob(File.join(ARGV[0] || "./", '*.06379.findx')).each { |f| idx_files << f }
+
+Thread.abort_on_exception = true
+Thread.report_on_exception = true
+worker_threads = Etc.nprocessors.times.map do
+  Thread.new do
+    until idx_files.empty?
+      idx_filename = idx_files.pop
+      parser = RedisTrace::TcpflowParser.new(idx_filename)
+      parser.call do |trace|
+        trace.key_patterns.each do |key|
+          mutex.synchronize do
+            key_patterns[trace.cmd][key].record_value_size(trace.value_size)
+            key_patterns[trace.cmd][key].record_response_size(trace.response_size)
+          end
+        end
+      end
     end
   end
 end
+worker_threads.map(&:join)
 
 output = {}
 key_patterns.each do |cmd, cmd_key_patterns|
