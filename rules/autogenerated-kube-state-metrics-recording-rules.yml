@@ -114,27 +114,15 @@ groups:
       *
       on(pod) group_left(tier, type, stage, shard, deployment)
       topk by (pod) (1, kube_pod_labels:labeled{type!=""})
-  - record: kube_pod_container_resource_limits_cpu_cores:labeled
+  - record: kube_pod_container_resource_limits:labeled
     expr: |
-      kube_pod_container_resource_limits_cpu_cores
+      kube_pod_container_resource_limits
       *
       on(pod) group_left(tier, type, stage, shard, deployment)
       topk by (pod) (1, kube_pod_labels:labeled{type!=""})
-  - record: kube_pod_container_resource_limits_memory_bytes:labeled
+  - record: kube_pod_container_resource_requests:labeled
     expr: |
-      kube_pod_container_resource_limits_memory_bytes
-      *
-      on(pod) group_left(tier, type, stage, shard, deployment)
-      topk by (pod) (1, kube_pod_labels:labeled{type!=""})
-  - record: kube_pod_container_resource_requests_cpu_cores:labeled
-    expr: |
-      kube_pod_container_resource_requests_cpu_cores
-      *
-      on(pod) group_left(tier, type, stage, shard, deployment)
-      topk by (pod) (1, kube_pod_labels:labeled{type!=""})
-  - record: kube_pod_container_resource_requests_memory_bytes:labeled
-    expr: |
-      kube_pod_container_resource_requests_memory_bytes
+      kube_pod_container_resource_requests
       *
       on(pod) group_left(tier, type, stage, shard, deployment)
       topk by (pod) (1, kube_pod_labels:labeled{type!=""})

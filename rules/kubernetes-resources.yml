@@ -8,7 +8,7 @@ groups:
           description: Cluster has overcommitted CPU resource requests for Pods and cannot tolerate node failure.
           runbook: docs/kube/kubernetes.md
         expr: |-
-          sum(namespace_name:kube_pod_container_resource_requests_cpu_cores:sum)
+          sum(namespace:kube_pod_container_resource_requests:sum{resource="cpu", unit="core"})
             /
           sum(node:node_num_cpu:sum)
             >
@@ -26,7 +26,7 @@ groups:
           description: Cluster has overcommitted memory resource requests for Pods and cannot tolerate node failure.
           runbook: docs/kube/kubernetes.md
         expr: |-
-          sum(namespace_name:kube_pod_container_resource_requests_memory_bytes:sum)
+          sum(namespace:kube_pod_container_resource_requests:sum{resource="memory", unit="byte"})
             /
           sum(node_memory_MemTotal_bytes)
             >
