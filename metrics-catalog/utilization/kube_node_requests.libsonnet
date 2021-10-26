@@ -16,7 +16,7 @@ local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
     query: |||
       avg by (%(aggregationLabels)s,shard) (
         sum by (%(aggregationLabels)s,node) (
-          kube_pod_container_resource_requests_cpu_cores
+          kube_pod_container_resource_requests{resource="cpu", unit="core"}
         )
         / on (node) group_left(cluster,env,tier,type,stage,shard)
         kube_node_status_allocatable:labeled{%(selector)s,resource="cpu"}
@@ -39,7 +39,7 @@ local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
     query: |||
       avg by (%(aggregationLabels)s,shard) (
         sum by (%(aggregationLabels)s,node) (
-          kube_pod_container_resource_requests_memory_bytes
+          kube_pod_container_resource_requests{resource="memory", unit="byte"}
         )
         / on (node) group_left(cluster,env,tier,type,stage,shard)
         kube_node_status_allocatable:labeled{%(selector)s,resource="memory"}

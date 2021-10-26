@@ -25,7 +25,7 @@ groups:
     expr: |
       avg by (environment,tier,type,stage,shard) (
         sum by (environment,tier,type,stage,node) (
-          kube_pod_container_resource_requests_cpu_cores
+          kube_pod_container_resource_requests{resource="cpu", unit="core"}
         )
         / on (node) group_left(cluster,env,tier,type,stage,shard)
         kube_node_status_allocatable:labeled{type=~"web|api|consul|git|kas|mailroom|monitoring|nginx|plantuml|registry|sidekiq|websockets|woodhouse",resource="cpu"}
@@ -41,7 +41,7 @@ groups:
     expr: |
       avg by (environment,tier,type,stage,shard) (
         sum by (environment,tier,type,stage,node) (
-          kube_pod_container_resource_requests_memory_bytes
+          kube_pod_container_resource_requests{resource="memory", unit="byte"}
         )
         / on (node) group_left(cluster,env,tier,type,stage,shard)
         kube_node_status_allocatable:labeled{type=~"web|api|consul|git|kas|mailroom|monitoring|nginx|plantuml|registry|sidekiq|websockets|woodhouse",resource="memory"}

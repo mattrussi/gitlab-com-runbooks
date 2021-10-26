@@ -30,10 +30,8 @@ local cadvisorMetrics = [
 
 local kubePodContainerMetrics = [
   'kube_pod_container_status_running',
-  'kube_pod_container_resource_limits_cpu_cores',
-  'kube_pod_container_resource_limits_memory_bytes',
-  'kube_pod_container_resource_requests_cpu_cores',
-  'kube_pod_container_resource_requests_memory_bytes',
+  'kube_pod_container_resource_limits',
+  'kube_pod_container_resource_requests',
 
   // Kube pod status metrics, useful for measuring pod lifecycles
   'kube_pod_container_status_last_terminated_reason',
