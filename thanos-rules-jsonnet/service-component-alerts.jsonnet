@@ -24,12 +24,21 @@ local nodeAlertWaitPeriod = '10m';
 local labelsForSLI(sli) =
   local labels = {
     user_impacting: if sli.userImpacting then 'yes' else 'no',
-    feature_category: std.asciiLower(sli.featureCategory),
   };
 
   local team = if sli.team != null then serviceCatalog.getTeam(sli.team) else null;
+  local featureCategoryLabels = if sli.hasStaticFeatureCategory() then
+    sli.staticFeatureCategoryLabels()
+  else if sli.hasFeatureCategoryFromSourceMetrics() then
+    // This indicates that there might be multiple
+    // feature categories contributing to the component
+    // that is alerting. This is not nescessarily
+    // caused by a single feature category
+    { feature_category: 'in_source_metrics' }
+  else if !sli.hasFeatureCategory() then
+    { feature_category: 'not_owned' };
 
-  labels + (
+  labels + featureCategoryLabels + (
     if team != null && team.issue_tracker != null then
       { incident_project: team.issue_tracker }
     else

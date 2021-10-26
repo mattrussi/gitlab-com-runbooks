@@ -4,10 +4,13 @@ local stages = import 'service-catalog/stages.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 
+local featureCategoryFromSourceMetrics = 'featureCategoryFromSourceMetrics';
+local featureCategoryNotOwned = stages.notOwned.key;
+
 // For now we assume that services are provisioned on vms and not kubernetes
 // Please consult the README.md file for details of team and feature_category
 local serviceLevelIndicatorDefaults = {
-  featureCategory: stages.notOwned.key,
+  featureCategory: featureCategoryNotOwned,
   team: null,
   description: '',
   staticLabels+: {},  // by default, no static labels
@@ -23,18 +26,23 @@ local validateHasField(object, field, message) =
   else
     std.assertEqual(true, { __assert: message });
 
-local validateFeatureCategory(object, message) =
-  if !std.objectHas(object, 'featureCategory') || std.objectHas(stages.featureCategoryMap, object.featureCategory) then
+local validateFeatureCategory(object, sliName) =
+  if std.objectHas(stages.featureCategoryMap, object.featureCategory) then
+    object
+  else if object.featureCategory == featureCategoryFromSourceMetrics then
+    assert std.member(object.significantLabels, 'feature_category') : 'feature_category needs to be a significant label for %s' % [sliName];
+    object
+  else if object.featureCategory == featureCategoryNotOwned then
     object
   else
-    std.assertEqual(true, { __assert: message });
+    assert false : 'feature category: %s is not a valid category for %s' % [object.featureCategory, sliName];
+    {};
 
 local validateSeverity(object, message) =
   if std.objectHas(object, 'severity') && std.member(['s1', 's2', 's3', 's4'], object.severity) then
     object
   else
     std.assertEqual(true, { __assert: message });
-
 
 local validateAndApplySLIDefaults(sliName, component, inheritedDefaults) =
   local withDefaults = serviceLevelIndicatorDefaults + inheritedDefaults + component;
@@ -50,6 +58,7 @@ local validateAndApplySLIDefaults(sliName, component, inheritedDefaults) =
   +
   validateSeverity(withDefaults, '%s does not have a valid severity, must be s1-s4' % [sliName])
   +
+  validateFeatureCategory(withDefaults, sliName)
   {
     name: sliName,
   };
@@ -104,11 +113,20 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
     renderToolingLinks()::
       toolingLinks.renderLinks(self.getToolingLinks()),
 
-    hasFeatureCategory()::
-      std.objectHas(serviceLevelIndicator, 'featureCategory') && serviceLevelIndicator.featureCategory != stages.notOwned.key,
+    hasFeatureCategoryFromSourceMetrics()::
+      std.objectHas(serviceLevelIndicator, 'featureCategory') &&
+      serviceLevelIndicator.featureCategory == featureCategoryFromSourceMetrics,
 
-    featureCategoryLabels()::
-      if self.hasFeatureCategory() then
+    hasStaticFeatureCategory()::
+      std.objectHas(serviceLevelIndicator, 'featureCategory') &&
+      serviceLevelIndicator.featureCategory != featureCategoryNotOwned &&
+      !self.hasFeatureCategoryFromSourceMetrics(),
+
+    hasFeatureCategory()::
+      self.hasStaticFeatureCategory() || self.hasFeatureCategoryFromSourceMetrics(),
+
+    staticFeatureCategoryLabels()::
+      if self.hasStaticFeatureCategory() then
         { feature_category: serviceLevelIndicator.featureCategory }
       else
         {},
@@ -223,4 +241,6 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
       initServiceLevelIndicatorWithName(sliName, inheritedDefaults)::
         serviceLevelIndicatorDefinition(sliName, validateAndApplySLIDefaults(sliName, serviceLevelIndicator, inheritedDefaults)),
     },
+  featureCategoryFromSourceMetrics: featureCategoryFromSourceMetrics,
+  featureCategoryNotOwned: featureCategoryNotOwned,
 }

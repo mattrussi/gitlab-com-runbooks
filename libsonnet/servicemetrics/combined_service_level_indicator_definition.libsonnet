@@ -3,6 +3,7 @@
 // a single SLI unless you are sure you know what you are doing
 
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
+local misc = import 'utils/misc.libsonnet';
 
 // Combined component definitions are a specialisation of the service-component.
 // They allow multiple components to be combined under a single name, but with different
@@ -38,8 +39,11 @@ local combinedServiceLevelIndicatorDefinition(
 
         serviceAggregation: serviceAggregation,
 
-        hasFeatureCategory():: false,
-        featureCategoryLabels():: {},
+        hasFeatureCategoryFromSourceMetrics()::
+          misc.all(function(component) component.hasFeatureCategoryFromSourceMetrics(), componentsInitialised),
+        hasStaticFeatureCategory():: featureCategory != null && featureCategory != 'not_owned',
+        hasFeatureCategory():: self.hasStaticFeatureCategory() || self.hasFeatureCategoryFromSourceMetrics(),
+        staticFeatureCategoryLabels():: { feature_category: featureCategory },
 
         // Returns true if this component allows detailed breakdowns
         // this is not the case for combined component definitions
