@@ -5,7 +5,7 @@ local sidekiqHelpers = import './services/lib/sidekiq-helpers.libsonnet';
 {
   kube_horizontalpodautoscaler_desired_replicas: resourceSaturationPoint({
     title: 'Horizontal Pod Autoscaler Desired Replicas',
-    severity: 's4',
+    severity: 's2',
     horizontallyScalable: true,
     appliesTo: metricsCatalog.findKubeProvisionedServices(first='web'),
     description: |||
