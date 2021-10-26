@@ -245,6 +245,65 @@ groups:
       *
       on(hpa) group_left(tier, type, stage, shard)
       topk by (hpa) (1, kube_hpa_labels:labeled{type!=""})
+  - record: kube_horizontalpodautoscaler_labels:labeled
+    expr: |
+      group without(label_shard,label_stage,label_tier,label_type) (
+        label_replace(
+          label_replace(
+            label_replace(
+              label_replace(
+                topk by (horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels{}),
+                "shard", "$0", "label_shard", ".*"
+              ),
+              "stage", "$0", "label_stage", ".*"
+            ),
+            "tier", "$0", "label_tier", ".*"
+          ),
+          "type", "$0", "label_type", ".*"
+        )
+      )
+  - record: kube_horizontalpodautoscaler_spec_target_metric:labeled
+    expr: |
+      kube_horizontalpodautoscaler_spec_target_metric
+      *
+      on(horizontalpodautoscaler) group_left(tier, type, stage, shard)
+      topk by (horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels:labeled{type!=""})
+  - record: kube_horizontalpodautoscaler_status_condition:labeled
+    expr: |
+      kube_horizontalpodautoscaler_status_condition
+      *
+      on(horizontalpodautoscaler) group_left(tier, type, stage, shard)
+      topk by (horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels:labeled{type!=""})
+  - record: kube_horizontalpodautoscaler_status_current_replicas:labeled
+    expr: |
+      kube_horizontalpodautoscaler_status_current_replicas
+      *
+      on(horizontalpodautoscaler) group_left(tier, type, stage, shard)
+      topk by (horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels:labeled{type!=""})
+  - record: kube_horizontalpodautoscaler_status_desired_replicas:labeled
+    expr: |
+      kube_horizontalpodautoscaler_status_desired_replicas
+      *
+      on(horizontalpodautoscaler) group_left(tier, type, stage, shard)
+      topk by (horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels:labeled{type!=""})
+  - record: kube_horizontalpodautoscaler_metadata_generation:labeled
+    expr: |
+      kube_horizontalpodautoscaler_metadata_generation
+      *
+      on(horizontalpodautoscaler) group_left(tier, type, stage, shard)
+      topk by (horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels:labeled{type!=""})
+  - record: kube_horizontalpodautoscaler_spec_max_replicas:labeled
+    expr: |
+      kube_horizontalpodautoscaler_spec_max_replicas
+      *
+      on(horizontalpodautoscaler) group_left(tier, type, stage, shard)
+      topk by (horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels:labeled{type!=""})
+  - record: kube_horizontalpodautoscaler_spec_min_replicas:labeled
+    expr: |
+      kube_horizontalpodautoscaler_spec_min_replicas
+      *
+      on(horizontalpodautoscaler) group_left(tier, type, stage, shard)
+      topk by (horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels:labeled{type!=""})
   - record: kube_node_labels:labeled
     expr: |
       group without(service_shard,service_stage,service_tier,service_type) (

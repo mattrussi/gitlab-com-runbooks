@@ -56,6 +56,18 @@ local kubeHPAMetrics = [
   'kube_hpa_spec_min_replicas',
 ];
 
+// kube-state-metrics v2.x.x renamed this to kube_horizontalpodautoscaler_*
+// https://github.com/kubernetes/kube-state-metrics/pull/1003
+local kubeHorizontalPodAutoscalerMetrics = [
+  'kube_horizontalpodautoscaler_spec_target_metric',
+  'kube_horizontalpodautoscaler_status_condition',
+  'kube_horizontalpodautoscaler_status_current_replicas',
+  'kube_horizontalpodautoscaler_status_desired_replicas',
+  'kube_horizontalpodautoscaler_metadata_generation',
+  'kube_horizontalpodautoscaler_spec_max_replicas',
+  'kube_horizontalpodautoscaler_spec_min_replicas',
+];
+
 local kubeNodeMetrics = [
   'kube_node_status_capacity',
   'kube_node_status_allocatable',
@@ -129,6 +141,16 @@ local kubeHPALabelJoinExpression(expression) =
     *
     on(hpa) group_left(tier, type, stage, shard)
     topk by (hpa) (1, kube_hpa_labels:labeled{type!=""})
+  ||| % {
+    expression: expression,
+  };
+
+local kubeHorizontalPodAutoscalerLabelJoinExpression(expression) =
+  |||
+    %(expression)s
+    *
+    on(horizontalpodautoscaler) group_left(tier, type, stage, shard)
+    topk by (horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels:labeled{type!=""})
   ||| % {
     expression: expression,
   };
@@ -248,6 +270,24 @@ local rules = {
       /* kube_hpa_* recording rules */
       recordingRuleFor(metricName, kubeHPALabelJoinExpression(metricName))
       for metricName in kubeHPAMetrics
+    ] + [
+      // Relabel:kube_horizontalpodautoscaler_labels
+      recordingRuleFor(
+        'kube_horizontalpodautoscaler_labels',
+        relabel(
+          'topk by (horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels{})',
+          {
+            label_tier: 'tier',
+            label_type: 'type',
+            label_stage: 'stage',
+            label_shard: 'shard',
+          }
+        )
+      ),
+    ] + [
+      /* kube_horizontalpodautoscaler_* recording rules */
+      recordingRuleFor(metricName, kubeHorizontalPodAutoscalerLabelJoinExpression(metricName))
+      for metricName in kubeHorizontalPodAutoscalerMetrics
     ] + [
       // Relabel: kube_node_labels
       recordingRuleFor(
