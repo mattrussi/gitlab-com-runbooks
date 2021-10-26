@@ -44,18 +44,6 @@ local kubePodContainerMetrics = [
   'kube_pod_container_status_waiting_reason',
 ];
 
-local kubeHPAMetrics = [
-  'kube_hpa_spec_target_metric',
-  'kube_hpa_status_condition',
-  'kube_hpa_status_current_replicas',
-  'kube_hpa_status_desired_replicas',
-  'kube_hpa_metadata_generation',
-  'kube_hpa_spec_max_replicas',
-  'kube_hpa_spec_min_replicas',
-];
-
-// kube-state-metrics v2.x.x renamed this to kube_horizontalpodautoscaler_*
-// https://github.com/kubernetes/kube-state-metrics/pull/1003
 local kubeHorizontalPodAutoscalerMetrics = [
   'kube_horizontalpodautoscaler_spec_target_metric',
   'kube_horizontalpodautoscaler_status_condition',
@@ -129,16 +117,6 @@ local podLabelJoinExpression(expression) =
     *
     on(pod) group_left(tier, type, stage, shard, deployment)
     topk by (pod) (1, kube_pod_labels:labeled{type!=""})
-  ||| % {
-    expression: expression,
-  };
-
-local kubeHPALabelJoinExpression(expression) =
-  |||
-    %(expression)s
-    *
-    on(hpa) group_left(tier, type, stage, shard)
-    topk by (hpa) (1, kube_hpa_labels:labeled{type!=""})
   ||| % {
     expression: expression,
   };
@@ -250,24 +228,6 @@ local rules = {
       /* kube_pod_container_* recording rules */
       recordingRuleFor(metricName, podLabelJoinExpression(metricName))
       for metricName in kubePodContainerMetrics
-    ] + [
-      // Relabel: kube_hpa_labels
-      recordingRuleFor(
-        'kube_hpa_labels',
-        relabel(
-          'topk by (hpa) (1, kube_hpa_labels{})',
-          {
-            label_tier: 'tier',
-            label_type: 'type',
-            label_stage: 'stage',
-            label_shard: 'shard',
-          }
-        )
-      ),
-    ] + [
-      /* kube_hpa_* recording rules */
-      recordingRuleFor(metricName, kubeHPALabelJoinExpression(metricName))
-      for metricName in kubeHPAMetrics
     ] + [
       // Relabel:kube_horizontalpodautoscaler_labels
       recordingRuleFor(

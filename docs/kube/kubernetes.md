@@ -138,7 +138,7 @@ haven't noticed over time, or if there's a problem processing requests which led
 to an undesired effect of scaling upwards out of normal.
 
 Utilize the dashboard
-https://dashboards.gitlab.net/d/alerts-sat_kube_hpa_instances/alerts-kube_hpa_desired_replicas-saturation-detail
+https://dashboards.gitlab.net/d/alerts-sat_kube_horizontalpodautoscaler/alerts-kube_horizontalpodautoscaler_desired_replicas-saturation-detail
 and observe the Saturation over the course of time to take into account how many
 Pods we've been scaling.  Normally we scale with traffic, but how this is
 derived differs between services.  If we've been scaling up over a lengthy
