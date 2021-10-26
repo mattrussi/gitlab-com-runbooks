@@ -15,23 +15,67 @@ class KeyPatternData
   def initialize
     @values = []
     @responses = []
+    @keys = Hash.new(0)
+    @key_freq = nil
   end
 
-  def record_value_size(size)
-    @values.append(size)
+  def record(value_size, response_size, seen_keys)
+    @values.append(value_size)
+    @responses.append(response_size)
+    seen_keys.each do |key|
+      @keys[key] += 1
+    end
+  end
+
+  # Number of usages recorded
+  def usages
+    # A suitable proxy
+    @values.size
   end
 
   def value_size_histogram
     histogram(@values)
   end
 
-  def record_response_size(size)
-    @responses.append(size)
-  end
-
   def response_size_histogram
     histogram(@responses)
   end
+
+  # Histogram/percentiles of number of unique keys contributing to usage
+  # of this pattern, e.g. with 2 buckets returns an array of two values
+  # the first being the number of unique keys with the lowest usage counts
+  # that were responsible for 50% of usage.
+  # With 10 buckets, each of the 10 buckets represents 10% of usage.
+  #
+  # So if some keys are more frequent than others, they'll count in the
+  # later/higher percentile buckets and result in lower values, with
+  # the bulk (lots of unique keys with low per-key usage) will count in the
+  # earlier buckets with higher values.
+  # Or, if the usage is well distributed, each bucket will have about the same
+  # number.
+  # To use: probably take the *
+  def unique_key_freq_percentiles(buckets)
+    counts = @keys.values.sort
+
+    totals = []
+
+    min = counts.min
+    interval = counts.sum/buckets.to_f
+
+    bucket_sum = key_count = key_index = 0
+
+    (1..buckets).each do |bucket|
+      while bucket_sum < (interval * bucket) && key_index < counts.size do
+        bucket_sum += counts[key_index]
+        key_count += 1
+        key_index += 1
+      end
+      totals.append(key_count)
+      key_count = 0
+    end
+
+    totals
+end
 
   private
 
@@ -48,6 +92,10 @@ key_patterns = Hash.new do |h1, k1|
   end
 end
 
+key_distributions = Hash.new do |h1, k1|
+  h1[k1] = KeyFrequencyData.new
+end
+
 idx_files = Queue.new
 Dir.glob(File.join(ARGV[0] || "./", '*.06379.findx')).each { |f| idx_files << f }
 
@@ -59,10 +107,13 @@ worker_threads = Etc.nprocessors.times.map do
       idx_filename = idx_files.pop
       parser = RedisTrace::TcpflowParser.new(idx_filename)
       parser.call do |trace|
-        trace.key_patterns.each do |key|
+        trace.key_patterns.each do |pattern, keys|
           mutex.synchronize do
-            key_patterns[trace.cmd][key].record_value_size(trace.value_size)
-            key_patterns[trace.cmd][key].record_response_size(trace.response_size)
+            key_patterns[trace.cmd][pattern].record(
+              trace.value_size,
+              trace.response_size,
+              keys
+            )
           end
         end
       end
@@ -75,7 +126,12 @@ output = {}
 key_patterns.each do |cmd, cmd_key_patterns|
   # rubocop:disable Style/HashTransformValues
   output[cmd] = cmd_key_patterns.to_h do |k, v|
-    [k, { value_size: v.value_size_histogram, response_size: v.response_size_histogram }]
+    [k, {
+      value_size: v.value_size_histogram,
+      response_size: v.response_size_histogram,
+      unique_key_freq_percentiles: v.unique_key_freq_percentiles(10),
+      usages: v.usages, # Can be inferred; a convenience
+    }]
   end
   # rubocop:enable Style/HashTransformValues
 end
