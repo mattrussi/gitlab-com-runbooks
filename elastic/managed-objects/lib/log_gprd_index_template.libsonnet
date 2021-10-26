@@ -1,6 +1,7 @@
 local mappings = {
   camoproxy: import './index_mappings/camoproxy.jsonnet',
   consul: import './index_mappings/consul.jsonnet',
+  fluentd: import './index_mappings/fluentd.jsonnet',
   gitaly: import './index_mappings/gitaly.jsonnet',
   gcs: import './index_mappings/gcs.jsonnet',
   'gke-audit': import './index_mappings/gke-audit.jsonnet',
