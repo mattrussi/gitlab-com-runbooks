@@ -16,8 +16,8 @@ basic.dashboard(
 .addTemplate(
   template.custom(
     'Deployment',
-    'gitlab-registry,',
-    'gitlab-registry',
+    'gitlab-(cny-)?registry,',
+    'gitlab-(cny-)?registry',
     hide='variable',
   )
 )
