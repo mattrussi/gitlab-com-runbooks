@@ -12,8 +12,8 @@ metricsCatalog.serviceDefinition({
   tags: ['golang'],
 
   monitoringThresholds: {
-    apdexScore: 0.999,
-    errorRatio: 0.999,
+    apdexScore: 0.95,
+    errorRatio: 0.95,
   },
   /*
    * Our anomaly detection uses normal distributions and the monitoring service
