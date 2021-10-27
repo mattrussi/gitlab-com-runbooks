@@ -19,7 +19,7 @@ local runnerManager = template.new(
   'runner_manager',
   '$PROMETHEUS_DS',
   query=|||
-    query_result(label_replace(gitlab_runner_version_info{environment=~"$environment",stage=~"$stage",shard=~"$shard"}, "fqdn", "$1.*", "instance", "(.*):[0-9]+$"))
+    query_result(label_replace(gitlab_runner_version_info{environment=~"$environment",stage=~"$stage",shard=~"$shard"}, "fqdn", "$1.*", "instance", "([^:]*)(:[0-9]+)?$"))
   |||,
   regex='/fqdn="([^"]+)"/',
   current=null,
