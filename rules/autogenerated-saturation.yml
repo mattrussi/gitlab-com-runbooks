@@ -1872,7 +1872,7 @@ groups:
       component: kube_horizontalpodautoscaler_desired_replicas
       horiz_scaling: "yes"
       quantile: max
-      severity: s4
+      severity: s2
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
@@ -3105,8 +3105,9 @@ groups:
       runbook: docs/kube/kubernetes.md#hpascalecapability
     labels:
       alert_type: cause
+      pager: pagerduty
       rules_domain: general
-      severity: s4
+      severity: s2
     expr: |
       gitlab_component_saturation:ratio{component="kube_horizontalpodautoscaler_desired_replicas"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="kube_horizontalpodautoscaler_desired_replicas"}

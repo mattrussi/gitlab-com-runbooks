@@ -12,7 +12,7 @@ groups:
         labels:
           tier: inf
           type: kube
-          severity: s4
+          severity: s3
           alert_type: cause
 
       - alert: HorizontalPodAutoscalerMetricsAvailability
@@ -25,5 +25,5 @@ groups:
         labels:
           tier: inf
           type: kube
-          severity: s4
+          severity: s3
           alert_type: cause
