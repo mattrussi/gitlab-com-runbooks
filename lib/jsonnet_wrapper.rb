@@ -10,8 +10,9 @@ class JsonnetWrapper
 
   DEFAULT_LIBS = %w[libsonnet vendor dashboards services metrics-catalog].map { |dir| File.join(REPO_DIR, dir) }.freeze
 
-  def initialize(libs: DEFAULT_LIBS, executable_name: JSONNET_EXECUTABLE)
+  def initialize(libs: DEFAULT_LIBS, executable_name: JSONNET_EXECUTABLE, ext_str: {})
     @libs = libs
+    @ext_str = ext_str
     @executable = find_jsonnet_executable(executable_name)
   end
 
@@ -30,12 +31,13 @@ class JsonnetWrapper
 
   private
 
-  attr_reader :executable, :libs
+  attr_reader :executable, :libs, :ext_str
 
   def build_command
     [
       executable,
-      *libs.map { |dir| ["-J", dir] }.flatten
+      *libs.map { |dir| ["-J", dir] }.flatten,
+      *ext_str.map { |name, value| ['--ext-str', "#{name}=#{value}"] }.flatten
     ]
   end
 
