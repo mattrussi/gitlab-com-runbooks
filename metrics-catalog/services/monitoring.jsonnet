@@ -12,8 +12,8 @@ metricsCatalog.serviceDefinition({
   tags: ['golang'],
 
   monitoringThresholds: {
-    apdexScore: 0.95,
-    errorRatio: 0.95,
+    apdexScore: 0.999,
+    errorRatio: 0.999,
   },
   /*
    * Our anomaly detection uses normal distributions and the monitoring service
@@ -65,6 +65,10 @@ metricsCatalog.serviceDefinition({
   },
   serviceLevelIndicators: {
     thanos_query: {
+      monitoringThresholds: {
+        apdexScore: 0.95,
+        errorRatio: 0.95,
+      },
       userImpacting: false,
       featureCategory: 'not_owned',
       team: 'sre_observability',
@@ -195,6 +199,10 @@ metricsCatalog.serviceDefinition({
     },
 
     thanos_store: {
+      monitoringThresholds: {
+        apdexScore: 0.95,
+        errorRatio: 0.95,
+      },
       userImpacting: false,
       featureCategory: 'not_owned',
       team: 'sre_observability',
@@ -336,6 +344,10 @@ metricsCatalog.serviceDefinition({
     },
 
     grafana: {
+      monitoringThresholds: {
+        apdexScore: 0.95,
+        errorRatio: 0.95,
+      },
       userImpacting: true,
       featureCategory: 'not_owned',
       team: 'sre_observability',
