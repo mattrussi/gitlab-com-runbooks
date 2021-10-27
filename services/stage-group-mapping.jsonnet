@@ -46,9 +46,7 @@
     name: 'Project Management',
     stage: 'plan',
     feature_categories: [
-      'issue_tracking',
-      'boards',
-      'time_tracking',
+      'team_planning',
       'planning_analytics',
     ],
   },
@@ -56,8 +54,7 @@
     name: 'Product Planning',
     stage: 'plan',
     feature_categories: [
-      'epics',
-      'roadmaps',
+      'portfolio_management',
       'design_management',
     ],
   },
@@ -343,6 +340,7 @@
     stage: 'enablement',
     feature_categories: [
       'memory',
+      'redis',
     ],
   },
   global_search: {

@@ -54,12 +54,6 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: boards
-      product_stage: plan
-      stage_group: project_management
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: build_artifacts
       product_stage: verify
       stage_group: testing
@@ -228,12 +222,6 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: epics
-      product_stage: plan
-      stage_group: product_planning
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: error_tracking
       product_stage: monitor
       stage_group: monitor
@@ -378,12 +366,6 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: issue_tracking
-      product_stage: plan
-      stage_group: project_management
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: jenkins_importer
       product_stage: verify
       stage_group: pipeline_authoring
@@ -516,6 +498,12 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: portfolio_management
+      product_stage: plan
+      stage_group: product_planning
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: privacy_control_center
       product_stage: growth
       stage_group: product_intelligence
@@ -546,6 +534,12 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: redis
+      product_stage: enablement
+      stage_group: memory
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: release_evidence
       product_stage: release
       stage_group: release
@@ -567,12 +561,6 @@ groups:
       feature_category: review_apps
       product_stage: verify
       stage_group: testing
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: roadmaps
-      product_stage: plan
-      stage_group: product_planning
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -678,7 +666,7 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: time_tracking
+      feature_category: team_planning
       product_stage: plan
       stage_group: project_management
     expr: "1"
