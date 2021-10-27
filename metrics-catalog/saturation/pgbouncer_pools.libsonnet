@@ -85,6 +85,6 @@ local pgbouncerSyncPool(serviceType, role, user, database, grafanaSuffix='') =
   pgbouncer_async_replica_pool: pgbouncerAsyncPool('patroni', 'replica'),
   pgbouncer_sync_primary_pool: pgbouncerSyncPool('pgbouncer', 'primary', 'gitlab', 'gitlabhq_production'),
   pgbouncer_sync_replica_pool: pgbouncerSyncPool('patroni', 'replica', 'gitlab', 'gitlabhq_production'),
-  pgbouncer_registry_sync_primary_pool: pgbouncerSyncPool('pgbouncer-registry', 'primary', 'gitlab-registry', 'gitlabhq_registry', '_reg'),
-  pgbouncer_registry_sync_replica_pool: pgbouncerSyncPool('patroni-registry', 'replica', 'gitlab-registry', 'gitlabhq_registry', '_reg'),
+  pgbouncer_reg_sync_primary_pool: pgbouncerSyncPool('pgbouncer-registry', 'primary', 'gitlab-registry', 'gitlabhq_registry', '_reg'),
+  pgbouncer_reg_sync_replica_pool: pgbouncerSyncPool('patroni-registry', 'replica', 'gitlab-registry', 'gitlabhq_registry', '_reg'),
 }

@@ -3,7 +3,7 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
 local sidekiqHelpers = import './services/lib/sidekiq-helpers.libsonnet';
 
 {
-  kube_horizontalpodautoscaler_desired_replicas: resourceSaturationPoint({
+  kube_hpa_desired_replicas: resourceSaturationPoint({
     title: 'Horizontal Pod Autoscaler Desired Replicas',
     severity: 's2',
     horizontallyScalable: true,

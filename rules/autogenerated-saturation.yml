@@ -352,7 +352,7 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
-      component: kube_horizontalpodautoscaler_desired_replicas
+      component: kube_hpa_desired_replicas
     expr: |
       max by(environment, tier, type, stage) (
         clamp_min(
@@ -367,7 +367,22 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
-      component: kube_persistent_volume_claim_disk_space
+      component: kube_pool_cpu
+    expr: |
+      max by(environment, tier, type, stage) (
+        clamp_min(
+          clamp_max(
+            1 - avg by (environment, tier, type, stage) (
+              rate(node_cpu_seconds_total:labeled{mode="idle", type=~"kube|git|registry|ci-runners|sidekiq|kas|api|websocket"}[5m])
+            )
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
+      component: kube_pvc_disk_space
       stage: main
       tier: inf
       type: kube
@@ -385,7 +400,7 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
-      component: kube_persistent_volume_claim_inodes
+      component: kube_pvc_inodes
       stage: main
       tier: inf
       type: kube
@@ -396,21 +411,6 @@ groups:
             kubelet_volume_stats_inodes_used
             /
             kubelet_volume_stats_inodes
-            ,
-            1)
-        ,
-        0)
-      )
-  - record: gitlab_component_saturation:ratio
-    labels:
-      component: kube_pool_cpu
-    expr: |
-      max by(environment, tier, type, stage) (
-        clamp_min(
-          clamp_max(
-            1 - avg by (environment, tier, type, stage) (
-              rate(node_cpu_seconds_total:labeled{mode="idle", type=~"kube|git|registry|ci-runners|sidekiq|kas|api|websocket"}[5m])
-            )
             ,
             1)
         ,
@@ -509,7 +509,7 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
-      component: pg_active_db_connections_primary
+      component: pg_active_db_conn_primary
     expr: |
       max by(environment, tier, type, stage) (
         clamp_min(
@@ -526,7 +526,7 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
-      component: pg_active_db_connections_replica
+      component: pg_active_db_conn_replica
     expr: |
       max by(environment, tier, type, stage) (
         clamp_min(
@@ -748,7 +748,7 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
-      component: pgbouncer_registry_sync_primary_pool
+      component: pgbouncer_reg_sync_primary_pool
     expr: |
       max by(environment, tier, type, stage) (
         clamp_min(
@@ -770,7 +770,7 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
-      component: pgbouncer_registry_sync_replica_pool
+      component: pgbouncer_reg_sync_replica_pool
     expr: |
       max by(environment, tier, type, stage) (
         clamp_min(
@@ -1010,7 +1010,7 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
-      component: registry_pg_active_db_connections_primary
+      component: reg_pg_active_db_conn_primary
     expr: |
       max by(environment, tier, type, stage) (
         clamp_min(
@@ -1027,7 +1027,7 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
-      component: registry_pg_active_db_connections_replica
+      component: reg_pg_active_db_conn_replica
     expr: |
       max by(environment, tier, type, stage) (
         clamp_min(
@@ -1335,27 +1335,11 @@ groups:
     expr: "0.98"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
-      component: kube_horizontalpodautoscaler_desired_replicas
+      component: kube_hpa_desired_replicas
     expr: "0.95"
   - record: slo:max:hard:gitlab_component_saturation:ratio
     labels:
-      component: kube_horizontalpodautoscaler_desired_replicas
-    expr: "0.9"
-  - record: slo:max:soft:gitlab_component_saturation:ratio
-    labels:
-      component: kube_persistent_volume_claim_disk_space
-    expr: "0.85"
-  - record: slo:max:hard:gitlab_component_saturation:ratio
-    labels:
-      component: kube_persistent_volume_claim_disk_space
-    expr: "0.9"
-  - record: slo:max:soft:gitlab_component_saturation:ratio
-    labels:
-      component: kube_persistent_volume_claim_inodes
-    expr: "0.85"
-  - record: slo:max:hard:gitlab_component_saturation:ratio
-    labels:
-      component: kube_persistent_volume_claim_inodes
+      component: kube_hpa_desired_replicas
     expr: "0.9"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
@@ -1364,6 +1348,22 @@ groups:
   - record: slo:max:hard:gitlab_component_saturation:ratio
     labels:
       component: kube_pool_cpu
+    expr: "0.9"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: kube_pvc_disk_space
+    expr: "0.85"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: kube_pvc_disk_space
+    expr: "0.9"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: kube_pvc_inodes
+    expr: "0.85"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: kube_pvc_inodes
     expr: "0.9"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
@@ -1415,19 +1415,19 @@ groups:
     expr: "0.9"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
-      component: pg_active_db_connections_primary
+      component: pg_active_db_conn_primary
     expr: "0.7"
   - record: slo:max:hard:gitlab_component_saturation:ratio
     labels:
-      component: pg_active_db_connections_primary
+      component: pg_active_db_conn_primary
     expr: "0.8"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
-      component: pg_active_db_connections_replica
+      component: pg_active_db_conn_replica
     expr: "0.8"
   - record: slo:max:hard:gitlab_component_saturation:ratio
     labels:
-      component: pg_active_db_connections_replica
+      component: pg_active_db_conn_replica
     expr: "0.9"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
@@ -1511,19 +1511,19 @@ groups:
     expr: "0.85"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
-      component: pgbouncer_registry_sync_primary_pool
+      component: pgbouncer_reg_sync_primary_pool
     expr: "0.85"
   - record: slo:max:hard:gitlab_component_saturation:ratio
     labels:
-      component: pgbouncer_registry_sync_primary_pool
+      component: pgbouncer_reg_sync_primary_pool
     expr: "0.95"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
-      component: pgbouncer_registry_sync_replica_pool
+      component: pgbouncer_reg_sync_replica_pool
     expr: "0.85"
   - record: slo:max:hard:gitlab_component_saturation:ratio
     labels:
-      component: pgbouncer_registry_sync_replica_pool
+      component: pgbouncer_reg_sync_replica_pool
     expr: "0.95"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
@@ -1623,19 +1623,19 @@ groups:
     expr: "0.95"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
-      component: registry_pg_active_db_connections_primary
+      component: reg_pg_active_db_conn_primary
     expr: "0.7"
   - record: slo:max:hard:gitlab_component_saturation:ratio
     labels:
-      component: registry_pg_active_db_connections_primary
+      component: reg_pg_active_db_conn_primary
     expr: "0.8"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
-      component: registry_pg_active_db_connections_replica
+      component: reg_pg_active_db_conn_replica
     expr: "0.8"
   - record: slo:max:hard:gitlab_component_saturation:ratio
     labels:
-      component: registry_pg_active_db_connections_replica
+      component: reg_pg_active_db_conn_replica
     expr: "0.9"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
@@ -1846,21 +1846,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
-      component: kube_horizontalpodautoscaler_desired_replicas
-      horiz_scaling: "yes"
-      quantile: max
-      severity: s2
-    expr: "1"
-  - record: gitlab_component_saturation_info
-    labels:
-      component: kube_persistent_volume_claim_disk_space
-      horiz_scaling: "yes"
-      quantile: max
-      severity: s2
-    expr: "1"
-  - record: gitlab_component_saturation_info
-    labels:
-      component: kube_persistent_volume_claim_inodes
+      component: kube_hpa_desired_replicas
       horiz_scaling: "yes"
       quantile: max
       severity: s2
@@ -1871,6 +1857,20 @@ groups:
       horiz_scaling: "yes"
       quantile: max
       severity: s3
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      component: kube_pvc_disk_space
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s2
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      component: kube_pvc_inodes
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s2
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
@@ -1916,14 +1916,14 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
-      component: pg_active_db_connections_primary
+      component: pg_active_db_conn_primary
       horiz_scaling: "no"
       quantile: max
       severity: s3
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
-      component: pg_active_db_connections_replica
+      component: pg_active_db_conn_replica
       horiz_scaling: "yes"
       quantile: max
       severity: s3
@@ -2000,14 +2000,14 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
-      component: pgbouncer_registry_sync_primary_pool
+      component: pgbouncer_reg_sync_primary_pool
       horiz_scaling: "no"
       quantile: max
       severity: s3
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
-      component: pgbouncer_registry_sync_replica_pool
+      component: pgbouncer_reg_sync_replica_pool
       horiz_scaling: "yes"
       quantile: max
       severity: s3
@@ -2098,14 +2098,14 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
-      component: registry_pg_active_db_connections_primary
+      component: reg_pg_active_db_conn_primary
       horiz_scaling: "no"
       quantile: max
       severity: s3
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
-      component: registry_pg_active_db_connections_replica
+      component: reg_pg_active_db_conn_replica
       horiz_scaling: "yes"
       quantile: max
       severity: s3
@@ -3058,7 +3058,7 @@ groups:
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "351198712"
+      grafana_panel_id: "3178132663"
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, tier, type, stage, horizontalpodautoscaler, shard) (
@@ -3079,88 +3079,8 @@ groups:
       rules_domain: general
       severity: s2
     expr: |
-      gitlab_component_saturation:ratio{component="kube_horizontalpodautoscaler_desired_replicas"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_horizontalpodautoscaler_desired_replicas"}
-  - alert: component_saturation_slo_out_of_bounds
-    for: 5m
-    annotations:
-      title: The Kube Persistent Volume Claim Space Utilisation resource of the {{
-        $labels.type }} service ({{ $labels.stage }} stage), component has a saturation
-        exceeding SLO and is close to its capacity limit.
-      description: |
-        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
-
-        Details of the Kube Persistent Volume Claim Space Utilisation resource:
-
-        disk space utilization on persistent volume claims.
-      grafana_dashboard_id: alerts-sat_kube_pvc_disk_space
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_kube_pvc_disk_space?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "4167694322"
-      grafana_variables: environment,type,stage
-      promql_query: |
-        max by(environment, cluster, namespace, persistentvolumeclaim) (
-          clamp_min(
-            clamp_max(
-              kubelet_volume_stats_used_bytes
-              /
-              kubelet_volume_stats_capacity_bytes
-              ,
-              1)
-          ,
-          0)
-        )
-      runbook: docs/{{ $labels.type }}/README.md
-    labels:
-      alert_type: cause
-      pager: pagerduty
-      rules_domain: general
-      severity: s2
-    expr: |
-      gitlab_component_saturation:ratio{component="kube_persistent_volume_claim_disk_space"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_persistent_volume_claim_disk_space"}
-  - alert: component_saturation_slo_out_of_bounds
-    for: 5m
-    annotations:
-      title: The Kube Persistent Volume Claim inode Utilisation resource of the {{
-        $labels.type }} service ({{ $labels.stage }} stage), component has a saturation
-        exceeding SLO and is close to its capacity limit.
-      description: |
-        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
-
-        Details of the Kube Persistent Volume Claim inode Utilisation resource:
-
-        inode utilization on persistent volume claims.
-      grafana_dashboard_id: alerts-sat_kube_pvc_inodes
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_kube_pvc_inodes?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "3153876074"
-      grafana_variables: environment,type,stage
-      promql_query: |
-        max by(environment, persistentvolumeclaim) (
-          clamp_min(
-            clamp_max(
-              kubelet_volume_stats_inodes_used
-              /
-              kubelet_volume_stats_inodes
-              ,
-              1)
-          ,
-          0)
-        )
-      runbook: docs/{{ $labels.type }}/README.md
-    labels:
-      alert_type: cause
-      pager: pagerduty
-      rules_domain: general
-      severity: s2
-    expr: |
-      gitlab_component_saturation:ratio{component="kube_persistent_volume_claim_inodes"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_persistent_volume_claim_inodes"}
+      gitlab_component_saturation:ratio{component="kube_hpa_desired_replicas"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_hpa_desired_replicas"}
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
@@ -3202,6 +3122,86 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="kube_pool_cpu"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="kube_pool_cpu"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: The Kube Persistent Volume Claim Space Utilisation resource of the {{
+        $labels.type }} service ({{ $labels.stage }} stage), component has a saturation
+        exceeding SLO and is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Kube Persistent Volume Claim Space Utilisation resource:
+
+        disk space utilization on persistent volume claims.
+      grafana_dashboard_id: alerts-sat_kube_pvc_disk_space
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_kube_pvc_disk_space?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "700920242"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, cluster, namespace, persistentvolumeclaim) (
+          clamp_min(
+            clamp_max(
+              kubelet_volume_stats_used_bytes
+              /
+              kubelet_volume_stats_capacity_bytes
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+    expr: |
+      gitlab_component_saturation:ratio{component="kube_pvc_disk_space"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_pvc_disk_space"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: The Kube Persistent Volume Claim inode Utilisation resource of the {{
+        $labels.type }} service ({{ $labels.stage }} stage), component has a saturation
+        exceeding SLO and is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Kube Persistent Volume Claim inode Utilisation resource:
+
+        inode utilization on persistent volume claims.
+      grafana_dashboard_id: alerts-sat_kube_pvc_inodes
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_kube_pvc_inodes?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "441871084"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, persistentvolumeclaim) (
+          clamp_min(
+            clamp_max(
+              kubelet_volume_stats_inodes_used
+              /
+              kubelet_volume_stats_inodes
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+    expr: |
+      gitlab_component_saturation:ratio{component="kube_pvc_inodes"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_pvc_inodes"}
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
@@ -3511,7 +3511,7 @@ groups:
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "1954311497"
+      grafana_panel_id: "2128695662"
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, tier, type, stage, fqdn) (
@@ -3533,8 +3533,8 @@ groups:
       rules_domain: general
       severity: s3
     expr: |
-      gitlab_component_saturation:ratio{component="pg_active_db_connections_primary"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="pg_active_db_connections_primary"}
+      gitlab_component_saturation:ratio{component="pg_active_db_conn_primary"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="pg_active_db_conn_primary"}
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
@@ -3554,7 +3554,7 @@ groups:
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "3266646533"
+      grafana_panel_id: "1087503210"
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, tier, type, stage, fqdn) (
@@ -3576,8 +3576,8 @@ groups:
       rules_domain: general
       severity: s3
     expr: |
-      gitlab_component_saturation:ratio{component="pg_active_db_connections_replica"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="pg_active_db_connections_replica"}
+      gitlab_component_saturation:ratio{component="pg_active_db_conn_replica"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="pg_active_db_conn_replica"}
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
@@ -4100,7 +4100,7 @@ groups:
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "2889343331"
+      grafana_panel_id: "3361195890"
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, tier, type, stage, fqdn, instance) (
@@ -4127,8 +4127,8 @@ groups:
       rules_domain: general
       severity: s3
     expr: |
-      gitlab_component_saturation:ratio{component="pgbouncer_registry_sync_primary_pool"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="pgbouncer_registry_sync_primary_pool"}
+      gitlab_component_saturation:ratio{component="pgbouncer_reg_sync_primary_pool"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="pgbouncer_reg_sync_primary_pool"}
   - alert: component_saturation_slo_out_of_bounds
     for: 10m
     annotations:
@@ -4150,7 +4150,7 @@ groups:
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "559230970"
+      grafana_panel_id: "3549453369"
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, tier, type, stage, fqdn, instance) (
@@ -4177,8 +4177,8 @@ groups:
       rules_domain: general
       severity: s3
     expr: |
-      gitlab_component_saturation:ratio{component="pgbouncer_registry_sync_replica_pool"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="pgbouncer_registry_sync_replica_pool"}
+      gitlab_component_saturation:ratio{component="pgbouncer_reg_sync_replica_pool"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="pgbouncer_reg_sync_replica_pool"}
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
@@ -4754,7 +4754,7 @@ groups:
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "3322850670"
+      grafana_panel_id: "2325497030"
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, tier, type, stage, fqdn) (
@@ -4776,8 +4776,8 @@ groups:
       rules_domain: general
       severity: s3
     expr: |
-      gitlab_component_saturation:ratio{component="registry_pg_active_db_connections_primary"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="registry_pg_active_db_connections_primary"}
+      gitlab_component_saturation:ratio{component="reg_pg_active_db_conn_primary"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="reg_pg_active_db_conn_primary"}
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
@@ -4797,7 +4797,7 @@ groups:
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "1047392660"
+      grafana_panel_id: "3176692240"
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, tier, type, stage, fqdn) (
@@ -4819,8 +4819,8 @@ groups:
       rules_domain: general
       severity: s3
     expr: |
-      gitlab_component_saturation:ratio{component="registry_pg_active_db_connections_replica"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="registry_pg_active_db_connections_replica"}
+      gitlab_component_saturation:ratio{component="reg_pg_active_db_conn_replica"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="reg_pg_active_db_conn_replica"}
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:

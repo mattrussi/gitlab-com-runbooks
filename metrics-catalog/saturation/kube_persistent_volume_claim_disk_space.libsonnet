@@ -2,7 +2,7 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
 
 {
-  kube_persistent_volume_claim_disk_space: resourceSaturationPoint({
+  kube_pvc_disk_space: resourceSaturationPoint({
     title: 'Kube Persistent Volume Claim Space Utilisation',
     severity: 's2',
     horizontallyScalable: true,

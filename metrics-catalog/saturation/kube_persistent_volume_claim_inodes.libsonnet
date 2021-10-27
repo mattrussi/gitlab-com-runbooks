@@ -2,7 +2,7 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
 
 {
-  kube_persistent_volume_claim_inodes: resourceSaturationPoint({
+  kube_pvc_inodes: resourceSaturationPoint({
     title: 'Kube Persistent Volume Claim inode Utilisation',
     severity: 's2',
     horizontallyScalable: true,

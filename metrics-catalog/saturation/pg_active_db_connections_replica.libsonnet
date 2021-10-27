@@ -32,6 +32,6 @@ local pgActiveDBConnectionsReplica(database, grafanaSuffix='') =
   });
 
 {
-  pg_active_db_connections_replica: pgActiveDBConnectionsReplica('gitlabhq_production'),
-  registry_pg_active_db_connections_replica: pgActiveDBConnectionsReplica('gitlabhq_registry', '_reg'),
+  pg_active_db_conn_replica: pgActiveDBConnectionsReplica('gitlabhq_production'),
+  reg_pg_active_db_conn_replica: pgActiveDBConnectionsReplica('gitlabhq_registry', '_reg'),
 }

@@ -32,6 +32,6 @@ local pgActiveDBConnectionsPrimary(database, grafanaSuffix='') =
   });
 
 {
-  pg_active_db_connections_primary: pgActiveDBConnectionsPrimary('gitlabhq_production'),
-  registry_pg_active_db_connections_primary: pgActiveDBConnectionsPrimary('gitlabhq_registry', '_reg'),
+  pg_active_db_conn_primary: pgActiveDBConnectionsPrimary('gitlabhq_production'),
+  reg_pg_active_db_conn_primary: pgActiveDBConnectionsPrimary('gitlabhq_registry', '_reg'),
 }
