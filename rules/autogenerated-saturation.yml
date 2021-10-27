@@ -367,21 +367,6 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
-      component: kube_hpa_desired_replicas
-    expr: |
-      max by(environment, tier, type, stage) (
-        clamp_min(
-          clamp_max(
-            kube_hpa_status_desired_replicas:labeled{type=~"web|api|consul|git|kas|mailroom|monitoring|nginx|plantuml|registry|sidekiq|websockets|woodhouse", shard!~"database-throttled|elasticsearch|gitaly-throttled|imports|memory-bound|urgent-other"}
-            /
-            kube_hpa_spec_max_replicas:labeled{type=~"web|api|consul|git|kas|mailroom|monitoring|nginx|plantuml|registry|sidekiq|websockets|woodhouse", shard!~"database-throttled|elasticsearch|gitaly-throttled|imports|memory-bound|urgent-other"}
-            ,
-            1)
-        ,
-        0)
-      )
-  - record: gitlab_component_saturation:ratio
-    labels:
       component: kube_persistent_volume_claim_disk_space
       stage: main
       tier: inf
@@ -1358,14 +1343,6 @@ groups:
     expr: "0.9"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
-      component: kube_hpa_desired_replicas
-    expr: "0.95"
-  - record: slo:max:hard:gitlab_component_saturation:ratio
-    labels:
-      component: kube_hpa_desired_replicas
-    expr: "0.9"
-  - record: slo:max:soft:gitlab_component_saturation:ratio
-    labels:
       component: kube_persistent_volume_claim_disk_space
     expr: "0.85"
   - record: slo:max:hard:gitlab_component_saturation:ratio
@@ -1870,13 +1847,6 @@ groups:
   - record: gitlab_component_saturation_info
     labels:
       component: kube_horizontalpodautoscaler_desired_replicas
-      horiz_scaling: "yes"
-      quantile: max
-      severity: s2
-    expr: "1"
-  - record: gitlab_component_saturation_info
-    labels:
-      component: kube_hpa_desired_replicas
       horiz_scaling: "yes"
       quantile: max
       severity: s2
@@ -3111,48 +3081,6 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="kube_horizontalpodautoscaler_desired_replicas"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="kube_horizontalpodautoscaler_desired_replicas"}
-  - alert: component_saturation_slo_out_of_bounds
-    for: 25m
-    annotations:
-      title: The HPA Desired Replicas resource of the {{ $labels.type }} service ({{
-        $labels.stage }} stage), component has a saturation exceeding SLO and is close
-        to its capacity limit.
-      description: |
-        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
-
-        Details of the HPA Desired Replicas resource:
-
-        The HPA is the [Horizontal Pod Autoscaler](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/). It automatically scales the number of Pods in a deployment based on metrics.
-
-        The HPA has a configured upper maximum. When this limit is reached, the HPA will not increase the number of pods and other resource saturation (eg, CPU, memory) may occur.
-      grafana_dashboard_id: alerts-sat_kube_hpa_instances
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_kube_hpa_instances?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "3178132663"
-      grafana_variables: environment,type,stage
-      promql_query: |
-        max by(environment, tier, type, stage, hpa, shard) (
-          clamp_min(
-            clamp_max(
-              kube_hpa_status_desired_replicas:labeled{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", shard!~"database-throttled|elasticsearch|gitaly-throttled|imports|memory-bound|urgent-other"}
-              /
-              kube_hpa_spec_max_replicas:labeled{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", shard!~"database-throttled|elasticsearch|gitaly-throttled|imports|memory-bound|urgent-other"}
-              ,
-              1)
-          ,
-          0)
-        )
-      runbook: docs/kube/kubernetes.md#hpascalecapability
-    labels:
-      alert_type: cause
-      pager: pagerduty
-      rules_domain: general
-      severity: s2
-    expr: |
-      gitlab_component_saturation:ratio{component="kube_hpa_desired_replicas"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_hpa_desired_replicas"}
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
