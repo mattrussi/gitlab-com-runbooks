@@ -169,14 +169,14 @@ module RedisTrace
 
       @value_type = @value.match(/^[0-9]+$/) ? "int" : "string" if @value && !@value_type
 
-      @key_patterns = Hash.new { |h,k| h[k] = [] }
-      @keys.each do |key|
+      @key_patterns = Hash.new { |h, k| h[k] = [] }
+      @keys.compact.each do |key|
         @key_patterns[patternize(key)].append(key)
       end
     end
 
     def patternize(key)
-      RedisTrace::KeyPattern.filter_key(key).gsub(' ' , '_')
+      RedisTrace::KeyPattern.filter_key(key).gsub(' ', '_')
     end
   end
 end

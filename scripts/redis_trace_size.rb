@@ -59,13 +59,12 @@ class KeyPatternData
 
     totals = []
 
-    min = counts.min
-    interval = counts.sum/buckets.to_f
+    interval = counts.sum / buckets.to_f
 
     bucket_sum = key_count = key_index = 0
 
     (1..buckets).each do |bucket|
-      while bucket_sum < (interval * bucket) && key_index < counts.size do
+      while bucket_sum < (interval * bucket) && key_index < counts.size
         bucket_sum += counts[key_index]
         key_count += 1
         key_index += 1
@@ -75,7 +74,7 @@ class KeyPatternData
     end
 
     totals
-end
+  end
 
   private
 
@@ -90,10 +89,6 @@ key_patterns = Hash.new do |h1, k1|
   h1[k1] = Hash.new do |h2, k2|
     h2[k2] = KeyPatternData.new
   end
-end
-
-key_distributions = Hash.new do |h1, k1|
-  h1[k1] = KeyFrequencyData.new
 end
 
 idx_files = Queue.new
@@ -130,7 +125,7 @@ key_patterns.each do |cmd, cmd_key_patterns|
       value_size: v.value_size_histogram,
       response_size: v.response_size_histogram,
       unique_key_freq_percentiles: v.unique_key_freq_percentiles(10),
-      usages: v.usages, # Can be inferred; a convenience
+      usages: v.usages # Can be inferred; just a convenience
     }]
   end
   # rubocop:enable Style/HashTransformValues

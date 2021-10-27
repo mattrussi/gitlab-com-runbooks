@@ -26,7 +26,6 @@ module RedisTrace
       response_index_keys, response_index_vals = parse_idx_file("#{response_filename}.findx")
       response_file = File.open(response_filename, 'r:ASCII-8BIT')
 
-
       until request_file.eof?
         trace = parse_next_request(request_file, request_index_keys, request_index_vals)
         next if trace.nil?
@@ -106,9 +105,7 @@ module RedisTrace
         break if response_timestamp >= timestamp
       end
 
-      if line.match(/^\*([0-9]+)$/)
-        return [true, parse_array(Regexp.last_match(1).to_i, response_file)]
-      end
+      return [true, parse_array(Regexp.last_match(1).to_i, response_file)] if line.match(/^\*([0-9]+)$/)
 
       return [false, [Regexp.last_match(1)]] if line.match(/^-(.*)$/)
 
@@ -118,11 +115,10 @@ module RedisTrace
     end
 
     def parse_array(argc, response_file)
-        response = argc.times.map do
-          line = response_file.readline.strip
-          parse_response_line(line, response_file)
-        end
-        return response
+      argc.times.map do
+        line = response_file.readline.strip
+        parse_response_line(line, response_file)
+      end
     end
 
     def parse_response_line(line, response_file)
