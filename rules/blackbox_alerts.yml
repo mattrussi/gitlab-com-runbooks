@@ -76,13 +76,13 @@ groups:
       description: staging.gitlab.com is down for 30 minutes
       runbook: docs/frontend/gitlab-com-is-down.md
       title: staging.gitlab.com is down for 30 minutes
-- alert: Blackbox status.gitlab.com
-  expr: avg_over_time(probe_success{job="blackbox", instance=~"https?://status.gitlab.com"}[1h]) * 100 < 75
-  labels:
-    pager: pagerduty
-    severity: s1
-    alert_type: symptom
-  annotations:
-    description: blackbox probe availability {{ $labels.instance }} is less than {{ $value | printf "%.2f" }}% for the last 10 minutes.
-    runbook: docs/blackbox/README.md
-    title: Blackbox probes for {{ $labels.instance }} are failing.
+  - alert: Blackbox status.gitlab.com
+    expr: avg_over_time(probe_success{job="blackbox", instance=~"https?://status.gitlab.com"}[1h]) * 100 < 75
+    labels:
+      pager: pagerduty
+      severity: s1
+      alert_type: symptom
+    annotations:
+      description: blackbox probe availability {{ $labels.instance }} is less than {{ $value | printf "%.2f" }}% for the last 10 minutes.
+      runbook: docs/blackbox/README.md
+      title: Blackbox probes for {{ $labels.instance }} are failing.
