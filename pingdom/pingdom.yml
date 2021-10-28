@@ -300,11 +300,3 @@ checks:
     teams:
     - People Group Engineering
 
-  - url: https://assessment.gitlab.net/about
-    timeout_ms: 30000
-    resolution_minutes: 5
-    notify_when_restored: true
-    tags:
-    - people-engineering
-    teams:
-    - People Group Engineering
