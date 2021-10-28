@@ -76,7 +76,9 @@ groups:
       description: staging.gitlab.com is down for 30 minutes
       runbook: docs/frontend/gitlab-com-is-down.md
       title: staging.gitlab.com is down for 30 minutes
-  - alert: Blackbox status.gitlab.com
+- name: Blackbox status.gitlab.com
+  rules:
+  - alert: StatusGitlabComDown
     expr: avg_over_time(probe_success{job="blackbox", instance=~"https?://status.gitlab.com"}[1h]) * 100 < 75
     labels:
       pager: pagerduty
