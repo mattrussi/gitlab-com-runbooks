@@ -57,6 +57,12 @@ local errorRate = rateMetric(
 );
 
 local executionRulesForBurnRate(aggregationSet, burnRate, staticLabels={}) =
+  local aggregationLabelsWithoutStaticLabels = std.filter(
+    function(label)
+      !std.objectHas(staticLabels, label),
+    aggregationSet.labels
+  );
+
   local conditionalAppend(record, expr) =
     if record == null then []
     else
@@ -69,19 +75,19 @@ local executionRulesForBurnRate(aggregationSet, burnRate, staticLabels={}) =
   // Key metric: Execution apdex success (rate)
   conditionalAppend(
     record=aggregationSet.getApdexSuccessRateMetricForBurnRate(burnRate, required=false),
-    expr=combinedExecutionApdex.apdexSuccessRateQuery(aggregationSet.labels, {}, burnRate)
+    expr=combinedExecutionApdex.apdexSuccessRateQuery(aggregationLabelsWithoutStaticLabels, {}, burnRate)
   )
   +
   // Key metric: Execution apdex (weight score)
   conditionalAppend(
     record=aggregationSet.getApdexWeightMetricForBurnRate(burnRate, required=false),
-    expr=combinedExecutionApdex.apdexWeightQuery(aggregationSet.labels, {}, burnRate),
+    expr=combinedExecutionApdex.apdexWeightQuery(aggregationLabelsWithoutStaticLabels, {}, burnRate),
   )
   +
   // Key metric: QPS
   conditionalAppend(
     record=aggregationSet.getOpsRateMetricForBurnRate(burnRate, required=false),
-    expr=requestRate.aggregatedRateQuery(aggregationSet.labels, {}, burnRate)
+    expr=requestRate.aggregatedRateQuery(aggregationLabelsWithoutStaticLabels, {}, burnRate)
   )
   +
   // Key metric: Errors per Second
@@ -96,8 +102,8 @@ local executionRulesForBurnRate(aggregationSet, burnRate, staticLabels={}) =
         )
       )
     ||| % {
-      errorRate: strings.chomp(errorRate.aggregatedRateQuery(aggregationSet.labels, {}, burnRate)),
-      aggregationLabels: aggregations.serialize(aggregationSet.labels),
+      errorRate: strings.chomp(errorRate.aggregatedRateQuery(aggregationLabelsWithoutStaticLabels, {}, burnRate)),
+      aggregationLabels: aggregations.serialize(aggregationLabelsWithoutStaticLabels),
       executionRate: aggregationSet.getOpsRateMetricForBurnRate(burnRate, required=true),
       staticLabels: selectors.serializeHash(staticLabels),
     }
