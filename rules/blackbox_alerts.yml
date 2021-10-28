@@ -73,7 +73,7 @@ groups:
       severity: s1
       alert_type: symptom
     annotations:
-      description: staging.gitlab.com is down for 30 minutes
+      description: blackbox probe availability {{ $labels.instance }} is less than {{ $value | printf "%.2f" }}% for the last 30 minutes.
       runbook: docs/frontend/gitlab-com-is-down.md
       title: staging.gitlab.com is down for 30 minutes
 - name: Blackbox status.gitlab.com
@@ -85,6 +85,6 @@ groups:
       severity: s1
       alert_type: symptom
     annotations:
-      description: blackbox probe availability {{ $labels.instance }} is less than {{ $value | printf "%.2f" }}% for the last 10 minutes.
+      description: blackbox probe availability {{ $labels.instance }} is less than {{ $value | printf "%.2f" }}% for the last hour.
       runbook: docs/blackbox/README.md
       title: Blackbox probes for {{ $labels.instance }} are failing.
