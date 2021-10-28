@@ -3,7 +3,7 @@ groups:
 - name: Blackbox Generic Probes
   rules:
   - alert: BlackboxProbeFailures
-    expr: avg_over_time(probe_success{job="blackbox", instance!~"(https://ops.gitlab.net/users/sign_in|https://dev.gitlab.org.*|https://pre.gitlab.com|https://release.gitlab.net)"}[10m]) * 100 < 75
+    expr: avg_over_time(probe_success{job="blackbox", instance!~"(https://ops.gitlab.net/users/sign_in|https://dev.gitlab.org.*|https://pre.gitlab.com|https://release.gitlab.net|https?://status.gitlab.com)"}[10m]) * 100 < 75
     labels:
       pager: pagerduty
       severity: s1
@@ -73,6 +73,16 @@ groups:
       severity: s1
       alert_type: symptom
     annotations:
-      description: GitLab.com is down for more than 30 minutes!
+      description: staging.gitlab.com is down for 30 minutes
       runbook: docs/frontend/gitlab-com-is-down.md
-      title: staging.GitLab.com is down for 30 minutes
+      title: staging.gitlab.com is down for 30 minutes
+- alert: Blackbox status.gitlab.com
+  expr: avg_over_time(probe_success{job="blackbox", instance=~"https?://status.gitlab.com"}[1h]) * 100 < 75
+  labels:
+    pager: pagerduty
+    severity: s1
+    alert_type: symptom
+  annotations:
+    description: blackbox probe availability {{ $labels.instance }} is less than {{ $value | printf "%.2f" }}% for the last 10 minutes.
+    runbook: docs/blackbox/README.md
+    title: Blackbox probes for {{ $labels.instance }} are failing.
