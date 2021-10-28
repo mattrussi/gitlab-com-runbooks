@@ -20,6 +20,9 @@ module RedisTrace
         File.dirname(request_filename),
         File.basename(request_filename).split("-").reverse.join("-")
       )
+      # Not ideal, but if we can't find the response file, give up (the original tcpdump probably just missed some packets, perhaps when shutting down)
+      return unless File.exist?(response_filename)
+
       response_index_keys, response_index_vals = parse_idx_file("#{response_filename}.findx")
       response_file = File.open(response_filename, 'r:ASCII-8BIT')
 
@@ -102,14 +105,7 @@ module RedisTrace
         break if response_timestamp >= timestamp
       end
 
-      if line.match(/^\*([0-9]+)$/)
-        argc = Regexp.last_match(1).to_i
-        response = argc.times.map do
-          line = response_file.readline.strip
-          parse_response_line(line, response_file)
-        end
-        return [true, response]
-      end
+      return [true, parse_array(Regexp.last_match(1).to_i, response_file)] if line.match(/^\*([0-9]+)$/)
 
       return [false, [Regexp.last_match(1)]] if line.match(/^-(.*)$/)
 
@@ -118,13 +114,20 @@ module RedisTrace
       [true, []]
     end
 
+    def parse_array(argc, response_file)
+      argc.times.map do
+        line = response_file.readline.strip
+        parse_response_line(line, response_file)
+      end
+    end
+
     def parse_response_line(line, response_file)
       # https://github.com/redis/redis/blob/cf860df59921efcc74be410bdf165abd784df502/src/server.c#L3492
       if ['+OK', '+QUEUED', '+PONG'].include?(line)
         line
       elsif line == '$-1'
         nil
-      elsif line.match(/^:([0-9]+)$/)
+      elsif line.match(/^:(-?[0-9]+)$/)
         Regexp.last_match(1).to_i
       elsif line.match(/^\$([0-9]+)$/)
         len = Regexp.last_match(1).to_i
@@ -132,8 +135,10 @@ module RedisTrace
         str = response_file.read(len)
         response_file.read(2) # \r\n
         str
+      elsif line.match(/\*([0-9]+)$/)
+        parse_array(Regexp.last_match(1).to_i, response_file)
       else
-        raise "Unknown response: #{line}"
+        raise "Unknown response: #{line} in #{response_file.path}"
       end
     end
   end
