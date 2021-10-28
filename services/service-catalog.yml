@@ -2504,6 +2504,69 @@ services:
     monitors:
       primary_grafana_dashboard: "wccEP9Imk/redis"
 
+- name: redis-ratelimiting
+  tier: db
+  friendly_name: Redis RateLimiting
+  infra_owner: sre_observability
+  label: Service:Redis
+  business:
+    requirement: |
+      Redis-RateLimiting is used as a fast persistent key-value store for rate-limiting state (RackAttack and Application Rate Limiter)
+    customers:
+      - GitLab.com customers
+    business_value: |
+      Redis-RateLimiting allows the application to protect itself against excessive (malicious or accidental) short term usage by individual IPs or users, contributing to ensuring uptime/availability for all customers.
+    SLA:
+      availability:
+      response_time:
+  technical:
+    project:
+      - https://github.com/antirez/redis/
+    slx:
+    documents:
+      design:
+      architecture:
+      readiness_review:
+      service:
+        - https://redis.io/documentation
+        - https://docs.gitlab.com/omnibus/settings/redis.html
+      security:
+    dependencies:
+      - service:
+    configurations:
+      - config_name: redis.conf
+        location: /var/opt/gitlab/redis/redis.conf
+    chef_roles:
+      - gstg-base-db-redis-server-ratelimiting
+      - gprd-base-db-redis-server-ratelimiting
+    scalability:
+      bound: cpu
+      scalable: vertical
+    security:
+      security_reviewed:
+      data_classification: orange
+      security_incidents:
+    logging:
+      - name: system
+        permalink: https://log.gprd.gitlab.net/goto/b0f9e5bad8ac43431efaf9f350e3a975
+  infrastructure:
+    provider: gcp
+    architecture: https://drive.google.com/open?id=1H5s5EonMX0Mzz6jahAotMOb349TNO7YK
+    provisioning: terraform
+    accesses:
+      - account_name:
+        access_type:
+        reviewed:
+  operations:
+    maintenance:
+    runbooks:
+    playbooks:
+      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/redis/README.md
+    error_budget:
+  observability:
+    monitors:
+      primary_grafana_dashboard: "redis-ratelimiting-main/redis-ratelimiting-overview"
+
 - name: redis-sidekiq
   tier: db
   friendly_name: Redis Sidekiq
