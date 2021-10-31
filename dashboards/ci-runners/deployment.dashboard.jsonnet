@@ -14,13 +14,20 @@ dashboardHelpers.dashboard(
 .addOverviewPanels()
 .addGrid(
   startRow=2000,
-  rowHeight=8,
+  rowHeight=7,
   panels=[
     jobGraphs.running(['instance']),
     jobGraphs.failures(['instance']),
     jobQueueGraphs.pendingSize,
     deploymentDetails.notes,
   ],
+)
+.addGrid(
+  panels=[
+    deploymentDetails.runnerManagersCounter,
+  ],
+  startRow=3001,
+  rowHeight=5,
 )
 .addPanels(
   layout.splitColumnGrid(
@@ -29,7 +36,7 @@ dashboardHelpers.dashboard(
       [deploymentDetails.uptime],
     ],
     cellHeights=[7, 1],
-    startRow=3001,
+    startRow=4001,
     columnWidths=[15, 9],
   )
 )
