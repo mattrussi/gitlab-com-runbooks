@@ -15,7 +15,7 @@ When a useless alert comes in, and you still have the mental capacity and energy
     - **Action:** 📎 Convert paging alert into auto-created issue.
     - **Reason:** These alerts are usually not immediately actionable. We do not want to get paged for them at the weekend. Unless we reach a critical threshold, we can deal with them 1-2 days later.
     - **Example:** [Route SSLCertExpiresSoon alert to issue tracker](https://gitlab.com/gitlab-com/runbooks/-/merge_requests/4047)
-1. Does it point to an actual user-impacting problem, is it actionable?
+1. Is this alert unactionable, not actually pointing to a user-facing problem?
     - Common examples include cause based alerts that highlight some behaviour but aren't actually impacting availability. Error rates may be including client-side errors or rate-limited requests. Or alerting may be pointing at non-production environments, or upstream services we don't control.
     - **Action:** 🔥 Delete.
     - **Reason:** Alerts that don't point to an actual problem are worse than worthless. They make on-call a bad experience, and we should not tolerate them.
