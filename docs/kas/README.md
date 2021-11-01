@@ -19,6 +19,7 @@
 * [kubernetes-agent-disable-integrations.md](kubernetes-agent-disable-integrations.md)
 * [../onboarding/gitlab.com_on_k8s.md](../onboarding/gitlab.com_on_k8s.md)
 * [../onboarding/kibana-diagnosis.md](../onboarding/kibana-diagnosis.md)
+* [../uncategorized/deleting-alerts.md](../uncategorized/deleting-alerts.md)
 <!-- END_MARKER -->
 
 # Summary

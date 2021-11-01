@@ -51,6 +51,7 @@
 * [../tutorials/overview_life_of_a_git_request.md](../tutorials/overview_life_of_a_git_request.md)
 * [../tutorials/overview_life_of_a_web_request.md](../tutorials/overview_life_of_a_web_request.md)
 * [../uncategorized/deleted-project-restore.md](../uncategorized/deleted-project-restore.md)
+* [../uncategorized/deleting-alerts.md](../uncategorized/deleting-alerts.md)
 * [../uncategorized/namespace-restore.md](../uncategorized/namespace-restore.md)
 * [../uncategorized/pingdom.md](../uncategorized/pingdom.md)
 * [../uncategorized/project-export.md](../uncategorized/project-export.md)
