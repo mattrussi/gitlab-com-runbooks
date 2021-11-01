@@ -40,7 +40,7 @@ groups:
         label_replace(probe_ssl_earliest_cert_expiry, "domain", "$1", "instance", "https://(([a-zA-Z0-9][a-zA-Z0-9-]{1,61}\\.?)+\\.[a-zA-Z]{2,})/.*")
       )
   - alert: SSLCertExpiresVerySoon
-    expr: probe_ssl_earliest_cert_expiry - time() < 7 * 86400
+    expr: probe_ssl_earliest_cert_expiry - time() < 3 * 86400
     for: 30m
     labels:
       severity: s2
@@ -52,11 +52,12 @@ groups:
       title: SSL certificate for {{ $labels.instance }} expires in {{ $value | humanizeDuration
         }}
   - alert: SSLCertExpiresSoon
-    expr: probe_ssl_earliest_cert_expiry - time() < 14 * 86400
+    expr: probe_ssl_earliest_cert_expiry - time() < 7 * 86400
     for: 30m
     labels:
       severity: s3
       alert_type: cause
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
     annotations:
       description: Check SSL for specified nodes and consider reissuing certificate.
       runbook: docs/frontend/ssl_cert.md
