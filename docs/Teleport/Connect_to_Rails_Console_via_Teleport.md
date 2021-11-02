@@ -7,6 +7,10 @@ We have a new way to access our Rails consoles in Staging/Production - via Gravi
 - Teleport's goal is to provide a Unified Access Plane for all our infrastructure. [Here](https://goteleport.com/teleport/docs/#why-use-teleport) you can find some of the most popular use cases for Teleport.
 - We evaluated Teleport thoroughly (see this [issue](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/11568)) and found it to comply with most of our infrastructure access requirements, unlike some of its competitors ([Okta-ASA](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/12042), [Hashicorp Boundary](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/11666) and others).
 
+### Access Request
+
+Before you start using Teleport, you must be assigned the app in Okta which may not be a part of your role's baseline assignment. If you do not have access to the Teleport app in Okta, open an [access request](https://about.gitlab.com/handbook/business-technology/team-member-enablement/onboarding-access-requests/access-requests/) following the appropriate approval methods. 
+
 ## How to use Teleport to connect to Rails console
 There are two ways to use to Teleport to connect to a Rails console:
 1. Installing [**tsh**](https://goteleport.com/teleport/docs/cli-docs/#tsh), the Teleport CLI client. This is the recommended way.
