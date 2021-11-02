@@ -36,77 +36,90 @@ local runnerServiceDashboardsLinks = [
   platformLinks.dynamicLinks('%s Incident Dashboards' % runnerServiceType, '%s:incident-support' % runnerServiceType),
 ];
 
-local dashboard(title, tags=[], time_from='now-3h/m', includeStandardEnvironmentAnnotations=true) =
-  basic.dashboard(
+local dashboard =
+  function(
     title,
-    tags=[
-      'type:%s' % runnerServiceType,
-      'managed',
-    ] + tags,
-    time_from=time_from,
-    time_to='now/m',
-    refresh='1m',
-    graphTooltip='shared_crosshair',
-    includeStandardEnvironmentAnnotations=includeStandardEnvironmentAnnotations,
-    includeEnvironmentTemplate=true,
+    tags=[],
+    time_from='now-3h/m',
+    includeStandardEnvironmentAnnotations=true,
+    includeCommonFilters=true,
   )
-  .addTemplate(prebuiltTemplates.stage)
-  .addTemplates(commonFilters)
-  .trailer() + {
-    links+: runnerServiceDashboardsLinks,
-    addOverviewPanels(
-      startRow=1000,
-      showApdex=true,
-      showErrorRatio=true,
-      showOpsRate=false,
-      showSaturationCell=true,
-      showDashboardListPanel=false,
-      compact=true,
-      rowHeight=6,
-    ):: self.addPanels(
-      keyMetrics.headlineMetricsRow(
-        runnerServiceType,
-        startRow=startRow,
-        selectorHash=dashboardFilters.selectorHash,
-        showApdex=showApdex,
-        showErrorRatio=showErrorRatio,
-        showOpsRate=showOpsRate,
-        showSaturationCell=showSaturationCell,
-        showDashboardListPanel=showDashboardListPanel,
-        compact=compact,
-        rowHeight=rowHeight,
-        rowTitle=null,
-      )
-    ),
-    addRowGrid(
+    basic.dashboard(
       title,
-      startRow,
-      collapse=false,
-      panels=[],
-    ):: self.addPanels(
-      layout.rowGrid(
+      tags=[
+        'type:%s' % runnerServiceType,
+        'managed',
+      ] + tags,
+      time_from=time_from,
+      time_to='now/m',
+      refresh='1m',
+      graphTooltip='shared_crosshair',
+      includeStandardEnvironmentAnnotations=includeStandardEnvironmentAnnotations,
+      includeEnvironmentTemplate=true,
+    )
+    .addTemplate(prebuiltTemplates.stage)
+    .addTemplates(
+      if includeCommonFilters then
+        commonFilters
+      else
+        []
+    )
+    .trailer() + {
+      links+: runnerServiceDashboardsLinks,
+      addOverviewPanels(
+        startRow=1000,
+        showApdex=true,
+        showErrorRatio=true,
+        showOpsRate=false,
+        showSaturationCell=true,
+        showDashboardListPanel=false,
+        compact=true,
+        rowHeight=6,
+      ):: self.addPanels(
+        keyMetrics.headlineMetricsRow(
+          runnerServiceType,
+          startRow=startRow,
+          selectorHash=dashboardFilters.selectorHash,
+          showApdex=showApdex,
+          showErrorRatio=showErrorRatio,
+          showOpsRate=showOpsRate,
+          showSaturationCell=showSaturationCell,
+          showDashboardListPanel=showDashboardListPanel,
+          compact=compact,
+          rowHeight=rowHeight,
+          rowTitle=null,
+        )
+      ),
+      addRowGrid(
         title,
+        startRow,
+        collapse=false,
+        panels=[],
+      ):: self.addPanels(
+        layout.rowGrid(
+          title,
+          panels,
+          startRow=startRow,
+          collapse=collapse,
+        )
+      ),
+      addGrid(
         panels,
-        startRow=startRow,
-        collapse=collapse,
-      )
-    ),
-    addGrid(
-      panels,
-      startRow,
-      rowHeight=6,
-    ):: self.addPanels(
-      layout.grid(
-        panels=panels,
-        cols=std.length(panels),
-        startRow=startRow,
-        rowHeight=rowHeight,
-      )
-    ),
-    addUnderConstructionNote():: self.addPanels(
-      underConstructionNote
-    ),
-  };
+        startRow,
+        rowHeight=6,
+      ):: self.addPanels(
+        layout.grid(
+          panels=panels,
+          cols=std.length(panels),
+          startRow=startRow,
+          rowHeight=rowHeight,
+        )
+      ),
+      addUnderConstructionNote():: self.addPanels(
+        underConstructionNote
+      ),
+    };
+
 
 {
   dashboard:: dashboard,
