@@ -12,6 +12,20 @@ metricsCatalog.serviceDefinition({
     patroni: true,
   },
 
+  tags: [
+    // postgres tag implies the service is monitored with the postgres_exporter recipe from
+    // https://gitlab.com/gitlab-cookbooks/gitlab-exporters
+    'postgres',
+
+    // postgres_with_replicas tag implies the service has replicas.
+    // this is not the case for sentry instances
+    'postgres_with_replicas',
+
+    // gitlab_monitor_bloat implies the service is monitoring bloat with
+    // a job="gitlab-monitor-database-bloat" instance of GitLab Monitor
+    'gitlab_monitor_bloat',
+  ],
+
   serviceLevelIndicators: {
     transactions: {
       userImpacting: true,

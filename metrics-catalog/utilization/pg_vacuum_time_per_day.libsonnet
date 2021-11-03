@@ -1,11 +1,11 @@
-local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
-local utilizationMetric = metricsCatalog.utilizationMetric;
+local utilizationMetric = (import 'servicemetrics/utilization_metric.libsonnet').utilizationMetric;
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 
 {
   pg_vacuum_time_per_day: utilizationMetric({
     title: 'Postgres Total Daily Vacuum Time',
     unit: 'seconds',
-    appliesTo: ['patroni'],
+    appliesTo: metricsCatalog.findServicesWithTag(tag='postgres_with_primaries'),
     description: |||
       Measures the total time spent on vacuum operations per day.
     |||,

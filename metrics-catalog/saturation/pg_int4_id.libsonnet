@@ -1,12 +1,12 @@
-local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
-local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
+local resourceSaturationPoint = (import 'servicemetrics/metrics.libsonnet').resourceSaturationPoint;
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 
 {
   pg_int4_id: resourceSaturationPoint({
     title: 'Postgres int4 ID capacity',
     severity: 's1',
     horizontallyScalable: false,
-    appliesTo: ['patroni'],
+    appliesTo: ['patroni', 'patroni-ci'],  // No point in using tags here: see https://gitlab.com/groups/gitlab-org/-/epics/4785
     description: |||
       This measures used int4 primary key capacity in selected postgres tables. It is critically important that we do not reach
       saturation on this as GitLab will stop to work at this point.

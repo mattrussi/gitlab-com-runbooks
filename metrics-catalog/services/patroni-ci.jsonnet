@@ -5,4 +5,6 @@ patroniHelpers.serviceDefinition(
   serviceDependencies={
     patroni: true,
   },
+
+  extraTags=[],
 )

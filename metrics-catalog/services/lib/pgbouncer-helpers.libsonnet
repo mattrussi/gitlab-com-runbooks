@@ -4,11 +4,22 @@ local combined = metricsCatalog.combined;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
 local serviceDefinition(
-  type='pgbouncer'
+  type,
+  extraTags=[],
       ) =
   metricsCatalog.serviceDefinition({
     type: type,
     tier: 'db',
+
+    tags: [
+      // pgbouncer_primary indicates that the service runs pgbouncer in front of a primary
+      'pgbouncer_primary',
+
+      // pgbouncer tag implies that this server runs either pgbouncer in
+      // front of a primary, or a replica
+      'pgbouncer',
+    ] + extraTags,
+
     // pgbouncer doesn't have a `cny` stage
     serviceIsStageless: true,
     serviceDependencies: {

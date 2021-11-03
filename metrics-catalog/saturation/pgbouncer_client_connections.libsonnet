@@ -1,7 +1,7 @@
-local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
-local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
+local resourceSaturationPoint = (import 'servicemetrics/metrics.libsonnet').resourceSaturationPoint;
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 
-local pgbouncer_client_conn(maxClientConns, name, appliesToServiceType) =
+local pgbouncer_client_conn(maxClientConns, name, appliesToServiceTypes) =
   local formatConfig = {
     name: name,
     nameLower: std.asciiLower(name),
@@ -11,7 +11,7 @@ local pgbouncer_client_conn(maxClientConns, name, appliesToServiceType) =
     title: 'PGBouncer Client Connections per Process (%(name)s)' % formatConfig,
     severity: 's2',
     horizontallyScalable: true,  // Add more pgbouncer processes
-    appliesTo: [appliesToServiceType],
+    appliesTo: appliesToServiceTypes,
     description: |||
       Client connections per pgbouncer process for %(name)s connections.
 
@@ -31,7 +31,7 @@ local pgbouncer_client_conn(maxClientConns, name, appliesToServiceType) =
       maxClientConns: maxClientConns,
     },
     query: |||
-      avg_over_time(pgbouncer_used_clients {%(selector)s}[%(rangeInterval)s])
+      avg_over_time(pgbouncer_used_clients{%(selector)s}[%(rangeInterval)s])
       /
       %(maxClientConns)g
     |||,
@@ -45,6 +45,6 @@ local pgbouncer_client_conn(maxClientConns, name, appliesToServiceType) =
   });
 
 {
-  pgbouncer_client_conn_primary: pgbouncer_client_conn(maxClientConns=8192, name='Primary', appliesToServiceType='pgbouncer'),
-  pgbouncer_client_conn_replicas: pgbouncer_client_conn(maxClientConns=9216, name='Replicas', appliesToServiceType='patroni'),
+  pgbouncer_client_conn_primary: pgbouncer_client_conn(maxClientConns=8192, name='Primary', appliesToServiceTypes=metricsCatalog.findServicesWithTag(tag='pgbouncer')),
+  pgbouncer_client_conn_replicas: pgbouncer_client_conn(maxClientConns=9216, name='Replicas', appliesToServiceTypes=metricsCatalog.findServicesWithTag(tag='patroni')),
 }

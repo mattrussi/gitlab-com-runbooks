@@ -1,12 +1,12 @@
-local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
-local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
+local resourceSaturationPoint = (import 'servicemetrics/metrics.libsonnet').resourceSaturationPoint;
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 
 {
   pg_table_bloat: resourceSaturationPoint({
     title: 'Postgres Table Bloat',
     severity: 's4',
     horizontallyScalable: false,
-    appliesTo: ['patroni', 'postgres-archive'],
+    appliesTo: metricsCatalog.findServicesWithTag(tag='gitlab_monitor_bloat'),
     description: |||
       This measures the total bloat in Postgres Table pages, as a percentage of total size. This includes bloat in TOAST tables,
       and excludes extra space reserved due to fillfactor.
