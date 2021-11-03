@@ -162,6 +162,23 @@ local uptimeTable = table(
   },
 };
 
+local runnerManagersCounter =
+  basic.statPanel(
+    title=null,
+    panelTitle='Runner managers count',
+    color='green',
+    query='count by(shard) (gitlab_runner_version_info{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"})',
+    legendFormat='{{shard}}',
+    unit='short',
+    decimals=0,
+    colorMode='value',
+    instant=false,
+    interval='1d',
+    intevalFactor=1,
+    calcs=['last'],
+    justifyMode='center',
+  );
+
 local notes = text.new(
   title='Notes',
   mode='markdown',
@@ -176,4 +193,5 @@ local notes = text.new(
   versions:: versionsTable,
   uptime:: uptimeTable,
   notes:: notes,
+  runnerManagersCounter:: runnerManagersCounter,
 }
