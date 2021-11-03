@@ -74,6 +74,19 @@ local canRollback(environment) =
     format='time_series',
   );
 
+local numberOfRollbacks(environment) =
+  prometheus.target(
+    |||
+      sum(
+        increase(
+          delivery_deployment_rollbacks_started_total{target_env="%(env)s"}[$__range]
+        )
+      )
+    ||| % { env: environment.role },
+    instant=true,
+    format='time_series',
+  );
+
 basic.dashboard(
   'Rollback information',
   tags=['release'],
@@ -151,4 +164,46 @@ basic.dashboard(
       ),
     ],
   ], cellHeights=[4 for x in environments], startRow=1)
+)
+
+// Row 2: Number of rollbacks performed in each env
+.addPanel(
+  row.new(title='Number of rollbacks performed'),
+  gridPos={ x: 0, y: 1000, w: 24, h: 8 },
+)
+.addPanels(
+  layout.splitColumnGrid([
+    // Column 1: Single stats of number of rollbacks performed
+    [
+      statPanel.new(
+        title='%s %s' % [environment.icon, environment.id],
+        description='Number of rollbacks performed in %s over the selected time range.' % [environment.name],
+      )
+      .addTarget(numberOfRollbacks(environment))
+      for environment in environments
+    ],
+    // Column 2: Graph of number of rollbacks performed
+    [
+      graphPanel.new(
+        'Number of rollbacks',
+        description='Number of rollbacks performed per day.',
+        decimals=0,
+        legend_current=true,
+        legend_alignAsTable=true,
+        legend_values=true,
+      )
+      .addTarget(
+        prometheus.target(
+          |||
+            sum(
+              increase(
+                delivery_deployment_rollbacks_started_total{target_env=~"%(env)s"}[$__range]
+              )
+            ) by (target_env)
+          ||| % { env: std.join('|', [env.role for env in environments]) },
+          legendFormat='{{target_env}}',
+        ),
+      ),
+    ],
+  ], cellHeights=[4 for x in environments], startRow=1000)
 )
