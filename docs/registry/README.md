@@ -30,6 +30,7 @@
 * [migration-failure-scenarios.md](migration-failure-scenarios.md)
 * [online-gc-high-overdue-tasks.md](online-gc-high-overdue-tasks.md)
 * [../uncategorized/delete-projects-manually.md](../uncategorized/delete-projects-manually.md)
+* [../uncategorized/deleting-alerts.md](../uncategorized/deleting-alerts.md)
 * [../uncategorized/tweeting-guidelines.md](../uncategorized/tweeting-guidelines.md)
 * [../vault/vault.md](../vault/vault.md)
 <!-- END_MARKER -->
