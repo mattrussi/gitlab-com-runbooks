@@ -12,6 +12,7 @@ local serviceMap = {
 local teamDefaults = {
   issue_tracker: null,
   send_slo_alerts_to_team_slack_channel: false,
+  ignored_components: [],
 };
 
 local teamMap = std.foldl(
@@ -76,7 +77,7 @@ local buildServiceGraph(services) =
     std.objectValues(teamMap),
 
   lookupTeamForStageGroup(name)::
-    if std.objectHas(teamGroupMap, name) then teamGroupMap[name] else {},
+    if std.objectHas(teamGroupMap, name) then teamGroupMap[name] else teamDefaults,
 
   getTeam(teamName)::
     teamMap[teamName],

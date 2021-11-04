@@ -2,7 +2,7 @@ local stageGroupMapping = (import 'gitlab-metrics-config.libsonnet').stageGroupM
 local serviceCatalog = import './service-catalog.libsonnet';
 
 /* This is a special pseudo-stage group for the feature_category of `not_owned` */
-local notOwnedGroup = {
+local notOwnedGroup = serviceCatalog.lookupTeamForStageGroup('not_owned') + {
   key: 'not_owned',
   name: 'not_owned',
   stage: 'not_owned',
@@ -97,4 +97,9 @@ local groupsForStage(stageName) = std.filter(
    * Return all the groups of a stage
    */
   groupsForStage: groupsForStage,
+
+  /**
+   * Return all stage groups
+   */
+  stageGroups: stageGroups,
 }
