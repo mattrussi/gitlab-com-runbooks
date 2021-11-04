@@ -7,6 +7,12 @@ metricsCatalog.serviceDefinition({
   type: 'redis-sidekiq',
   tier: 'db',
   serviceIsStageless: true,  // redis-sidekiq does not have a cny stage
+
+  tags: [
+    // redis tag signifies that this service has redis-exporter
+    'redis',
+  ],
+
   monitoringThresholds: {
     apdexScore: 0.9999,
     errorRatio: 0.999,

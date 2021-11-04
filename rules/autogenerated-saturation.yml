@@ -879,9 +879,9 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            max_over_time(redis_connected_clients{type=~"redis|redis-sidekiq|redis-cache|redis-tracechunks|redis-ratelimiting"}[1m])
+            max_over_time(redis_connected_clients{type=~"redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis"}[1m])
             /
-            redis_config_maxclients{type=~"redis|redis-sidekiq|redis-cache|redis-tracechunks|redis-ratelimiting"}
+            redis_config_maxclients{type=~"redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis"}
             ,
             1)
         ,
@@ -895,13 +895,13 @@ groups:
         clamp_min(
           clamp_max(
             max by (environment, tier, type, stage, fqdn) (
-              label_replace(redis_memory_used_rss_bytes{type=~"redis|redis-sidekiq|redis-cache|redis-ratelimiting"}, "memtype", "rss","","")
+              label_replace(redis_memory_used_rss_bytes{type=~"redis-cache|redis-sidekiq|redis-ratelimiting|redis"}, "memtype", "rss","","")
               or
-              label_replace(redis_memory_used_bytes{type=~"redis|redis-sidekiq|redis-cache|redis-ratelimiting"}, "memtype", "used","","")
+              label_replace(redis_memory_used_bytes{type=~"redis-cache|redis-sidekiq|redis-ratelimiting|redis"}, "memtype", "used","","")
             )
             /
             avg by (environment, tier, type, stage, fqdn) (
-              node_memory_MemTotal_bytes{type=~"redis|redis-sidekiq|redis-cache|redis-ratelimiting"}
+              node_memory_MemTotal_bytes{type=~"redis-cache|redis-sidekiq|redis-ratelimiting|redis"}
             )
             ,
             1)
@@ -938,7 +938,7 @@ groups:
           clamp_max(
             sum by (environment, tier, type, stage, fqdn) (
               rate(
-                namedprocess_namegroup_thread_cpu_seconds_total{type=~"redis|redis-sidekiq|redis-cache|redis-tracechunks|redis-ratelimiting", groupname="redis-server", threadname="redis-server"}[1m])
+                namedprocess_namegroup_thread_cpu_seconds_total{type=~"redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis", groupname="redis-server", threadname="redis-server"}[1m])
             )
             and on (fqdn) redis_instance_info{role="master"}
             ,
@@ -954,9 +954,9 @@ groups:
         clamp_min(
           clamp_max(
             (
-              rate(redis_cpu_user_seconds_total{type=~"redis|redis-sidekiq|redis-cache|redis-tracechunks|redis-ratelimiting"}[1m])
+              rate(redis_cpu_user_seconds_total{type=~"redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis"}[1m])
               +
-              rate(redis_cpu_sys_seconds_total{type=~"redis|redis-sidekiq|redis-cache|redis-tracechunks|redis-ratelimiting"}[1m])
+              rate(redis_cpu_sys_seconds_total{type=~"redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis"}[1m])
             )
             and on (instance) redis_instance_info{role!="master"}
             ,
