@@ -604,6 +604,9 @@ expect(
 - Run a particular Jsonnet unit test file with `scripts/jsonnet_test.sh periodic-thanos-queries/periodic-query_test.jsonnet`
 - Run a particular Jsonnet integration test file with `bundle exec rspec spec/libsonnet/toolinglinks/grafana_spec.rb`
 
+*Note*: Verify that you have all the jsonnet dependencies downloaded  before attempting to run the tests, you can
+automatically download the necessary dependencies by running `make jsonnet-bundle`.
+
 ## Contributing
 
 Please see the [contribution guidelines](CONTRIBUTING.md)
