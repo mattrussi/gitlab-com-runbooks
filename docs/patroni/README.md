@@ -35,6 +35,7 @@
 * [pg_collect_query_data.md](pg_collect_query_data.md)
 * [pg_repack.md](pg_repack.md)
 * [pgbadger_report.md](pgbadger_report.md)
+* [postgres-automatic-reindexing.md](postgres-automatic-reindexing.md)
 * [postgres-backups-verification-failures.md](postgres-backups-verification-failures.md)
 * [postgres-checkup.md](postgres-checkup.md)
 * [postgres-data-corruption.md](postgres-data-corruption.md)
