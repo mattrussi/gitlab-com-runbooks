@@ -9,7 +9,7 @@ We have a new way to access our Rails consoles in Staging/Production - via Gravi
 
 ### Access Request
 
-Before you start using Teleport, you must be assigned the app in Okta which may not be a part of your role's baseline assignment. If you do not have access to the Teleport app in Okta, open an [access request](https://about.gitlab.com/handbook/business-technology/team-member-enablement/onboarding-access-requests/access-requests/) following the appropriate approval methods. 
+Before you start using Teleport, you must be assigned the app in Okta which may not be a part of your role's baseline assignment. If you do not have access to the Teleport app in Okta, open an [access request](https://about.gitlab.com/handbook/business-technology/team-member-enablement/onboarding-access-requests/access-requests/) following the appropriate approval methods.
 
 ## How to use Teleport to connect to Rails console
 There are two ways to use to Teleport to connect to a Rails console:
@@ -45,7 +45,14 @@ This command will pause while it waits for the approver to approve your request.
 
 #### Access approval
 
-Approvers will get your request via an automated notification in Slack. This posts a notification into the `#infrastructure-lounge` channel.  If you have additional context, or need to expedite an approval, please comment as a thread under that message.  If the request is urgent, you can ping `@sre-oncall`, but to spread out the workload please try to allow some time for others to review first if possible.
+Approvers will get your request via an automated notification in Slack. This
+posts a notification into the `#infrastructure-lounge` channel.  If you have
+additional context, or need to expedite an approval, please comment as a thread
+under that message.  If the request is urgent, you can ping `@sre-oncall`, but
+to spread out the workload please try to allow some time for others to review
+first if possible. If the approval request **doesn't show up** in
+`#infrastructure-lounge` feel free to ask in that channel to take a look at
+your request.
 
 Approvers will review the issue URL in the request and if console access seems like a reasonable step to address that issue, they will approve it.
 
@@ -88,4 +95,3 @@ tsh login --proxy=teleport.gstg.gitlab.net --request-roles=rails-ro --request-re
 ````
 
 Each request requires a reason, and it's best to include the URL of the issue or incident that this relates to.
-
