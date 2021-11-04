@@ -149,6 +149,19 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
     rangeInterval: rangeInterval,
   };
 
+/* Validates each tag on a dashboard */
+local validateTag(tag) =
+  if !std.isString(tag) then error 'dashboard tags must be strings, got %s' % [tag]
+  else if tag == '' then error 'dashboard tag cannot be empty'
+  else if std.length(tag) > 50 then error 'dashboard tag cannot exceed 50 characters in length: %s' % [tag]
+  else tag;
+
+local validateTags(tags) =
+  [
+    validateTag(tag)
+    for tag in tags
+  ];
+
 {
   dashboard(
     title,
@@ -169,7 +182,7 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
         title,
         style='light',
         schemaVersion=16,
-        tags=tags,
+        tags=validateTags(tags),
         timezone='utc',
         graphTooltip=graphTooltip,
         editable=editable,

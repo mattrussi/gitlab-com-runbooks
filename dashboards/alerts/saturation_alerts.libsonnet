@@ -23,7 +23,6 @@ local selector = { env: '$environment', type: '$type', stage: '$stage' };
       tags=[
         'alert-target',
         'saturationdetail',
-        if component != '$component' then 'saturationdetail:' + component else 'saturationdetail:general',
       ],
     )
     .addTemplate(
