@@ -79,6 +79,7 @@ test.suite({
       oncall_schedule: 'https://gitlab.pagerduty.com/schedules#P22HQSG',
       issue_tracker: null,
       send_slo_alerts_to_team_slack_channel: false,
+      ignored_components: [],
     },
   },
   testTeams: {
