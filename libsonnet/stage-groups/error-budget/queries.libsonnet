@@ -5,7 +5,7 @@ local selectors = import 'promql/selectors.libsonnet';
 local durationParser = import 'utils/duration-parser.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 
-local errorBudgetRatio(slaTarget, range, groupSelectors, aggregationLabels) =
+local errorBudgetRatio(range, groupSelectors, aggregationLabels) =
   |||
     # Account for missing metrics that are turned into 0 by `vector(0)`.
     clamp_max(
@@ -55,7 +55,7 @@ local errorBudgetRatio(slaTarget, range, groupSelectors, aggregationLabels) =
     aggregations: aggregations.serialize(aggregationLabels),
   };
 
-local errorBudgetTimeSpent(slaTarget, range, selectors, aggregationLabels) =
+local errorBudgetTimeSpent(range, selectors, aggregationLabels) =
   |||
     (
       (
@@ -63,7 +63,7 @@ local errorBudgetTimeSpent(slaTarget, range, selectors, aggregationLabels) =
       ) * %(rangeInSeconds)i
     )
   ||| % {
-    ratioQuery: errorBudgetRatio(slaTarget, range, selectors, aggregationLabels),
+    ratioQuery: errorBudgetRatio(range, selectors, aggregationLabels),
     rangeInSeconds: durationParser.toSeconds(range),
   };
 
@@ -76,7 +76,7 @@ local errorBudgetTimeRemaining(slaTarget, range, selectors, aggregationLabels) =
   ||| % {
     range: range,
     budgetSeconds: utils.budgetSeconds(slaTarget, range),
-    timeSpentQuery: errorBudgetTimeSpent(slaTarget, range, selectors, aggregationLabels),
+    timeSpentQuery: errorBudgetTimeSpent(range, selectors, aggregationLabels),
   };
 
 local errorBudgetRateAggregationInterpolation(range, groupSelectors, aggregationLabels) =
@@ -177,9 +177,9 @@ local errorBudgetOperationRate(range, groupSelectors, aggregationLabels) =
 {
   init(slaTarget, range): {
     errorBudgetRatio(selectors, aggregationLabels=[]):
-      errorBudgetRatio(slaTarget, range, selectors, aggregationLabels),
+      errorBudgetRatio(range, selectors, aggregationLabels),
     errorBudgetTimeSpent(selectors, aggregationLabels=[]):
-      errorBudgetTimeSpent(slaTarget, range, selectors, aggregationLabels),
+      errorBudgetTimeSpent(range, selectors, aggregationLabels),
     errorBudgetTimeRemaining(selectors, aggregationLabels=[]):
       errorBudgetTimeRemaining(slaTarget, range, selectors, aggregationLabels),
     errorBudgetViolationRate(selectors, aggregationLabels=[]):
