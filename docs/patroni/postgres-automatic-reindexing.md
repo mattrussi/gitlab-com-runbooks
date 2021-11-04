@@ -17,6 +17,49 @@ From a workflow perspective, when the reindexing kicks off, it estimates index b
 
 The schedule is configured through [Chef](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/-/blob/master/roles/gprd-base-deploy-node.json#L112). The cronjob executes on the deploy-node.
 
+## How automation picks indexes
+
+In order to pick relevant indexes for reindexing, the job uses a bloat heuristic to determine bloat levels for all indexes. Any run of the job picks the 2 most bloated indexes by their relative bloat level.
+
+The bloat heuristic is only available for btree and GiST indexes, GIN indexes are not supported.
+
+Overall, the following limitations apply currently:
+
+1. Type: Only btree and GiST indexes
+1. Maximum size: Automatic reindexing only for indexes < 100 GB current size.
+
+### Explicit reindexing queue
+
+In order to schedule specific reindexes for a rebuild, we can enqueue those indexes in the "reindexing queue". This queue is consumed and emptied before any indexes are being picked from the bloat heuristic described above. This can be handy for indexes that are not supported, e.g. GIN indexes or indexes beyond a certain size (see above).
+
+As an example, let's schedule `public.index_merge_request_diff_commits_on_sha` for a rebuild:
+
+```ruby
+$ gitlab-rake gitlab:db:enqueue_reindexing_action[public.index_merge_request_diff_commits_on_sha]
+
+Queued reindexing action: queued action [ id = 1, index: public.index_merge_request_diff_commits_on_sha ]
+There are 1 queued actions in total.
+```
+
+After having enqueued the index for a rebuild, the subsequent run of `gitlab-rake gitlab:db:reindex` is going to execute the rebuild for this and other queued indexes, if any (up to 2 indexes in total per execution). If the queue is empty, we fall back to picking indexes automatically.
+
+The queue can be examined, for example:
+
+```sql
+gitlabhq_production=# select * from postgres_reindex_queued_actions WHERE state = 0;
+ id |                       index_identifier                        | state |          created_at           |          updated_at
+----+---------------------------------------------------------------+-------+-------------------------------+-------------------------------
+  1 | public.index_merge_request_diff_commits_on_sha                |     0 | 2021-11-04 10:35:05.396064+00 | 2021-11-04 10:35:05.396064+00
+```
+
+States for these queued actions include:
+
+```
+state = 0: queued
+state = 1: done
+state = 2: failed
+```
+
 ## How to monitor
 
 Grafana gets annotations for any reindexing action that is happening. As an example, the [PostgreSQL Overview](https://dashboards.gitlab.net/d/000000144/postgresql-overview?orgId=1) has those enabled for production. Annotations have tags `reindex` and `gprd` or `gstg` among others, so this can be filtered upon.
@@ -66,3 +109,7 @@ Log into the deploy host and terminate the reindexing process: `pgrep -f gitlab:
 
 1. [Omnibus docs](https://docs.gitlab.com/omnibus/settings/database.html#automatic-database-reindexing)
 1. [GitLab docs (draft)](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/50369)
+
+## Metrics
+
+1. [Long-term tamland forecast](https://gitlab-com.gitlab.io/gl-infra/tamland/patroni.html#patroni-service-pg_btree_bloat-resource-saturation) (internal link)
