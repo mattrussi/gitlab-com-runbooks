@@ -10,6 +10,13 @@ metricsCatalog.serviceDefinition({
     errorRatio: 0.9999,
   },
   regional: false,
+
+  // Google Cloud Storage is a Cloud Service. No VMs, no Kubernetes
+  provisioning: {
+    vms: false,
+    kubernetes: false,
+  },
+
   serviceLevelIndicators: {
     registry_storage: {
       userImpacting: true,
