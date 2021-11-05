@@ -7,6 +7,17 @@ local maturityLevels = import 'service-maturity/levels.libsonnet';
 metricsCatalog.serviceDefinition({
   type: 'sentry',
   tier: 'inf',
+
+  tags: [
+    // postgres tag implies the service is monitored with the postgres_exporter recipe from
+    // https://gitlab.com/gitlab-cookbooks/gitlab-exporters
+    'postgres',
+
+    // postgres_with_primaries tags implies the service has primaries.
+    // this is not the case for -archive and -delayed instances.
+    'postgres_with_primaries',
+  ],
+
   monitoringThresholds: {
     apdexScore: 0.99,
     // Setting the Error SLO at 99% because we see high transaction rollback rates

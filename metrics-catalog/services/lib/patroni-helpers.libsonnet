@@ -5,15 +5,40 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
 local serviceDefinition(
   type='patroni',
-  tags=[],
+  extraTags=[],
   additionalServiceLevelIndicators={},
   serviceDependencies={},
-
       ) =
   metricsCatalog.serviceDefinition({
     type: type,
     tier: 'db',
-    tags: tags,
+    tags: [
+      // postgres tag implies the service is monitored with the postgres_exporter recipe from
+      // https://gitlab.com/gitlab-cookbooks/gitlab-exporters
+      'postgres',
+
+      // patroni tag implies that this cluster uses patroni replication
+      //
+      // Some services (postgres-archive, postgres-delayed) run postgres in a
+      // replica mode only (no primary), so should not have the patroni tag
+      'patroni',
+
+      // postgres_with_primaries tags implies the service has primaries.
+      // this is not the case for -archive and -delayed instances.
+      'postgres_with_primaries',
+
+      // postgres_with_replicas tag implies the service has replicas.
+      // this is not the case for sentry instances
+      'postgres_with_replicas',
+
+      // gitlab_monitor_bloat implies the service is monitoring bloat with
+      // a job="gitlab-monitor-database-bloat" instance of GitLab Monitor
+      'gitlab_monitor_bloat',
+
+      // pgbouncer tag implies that this server runs either pgbouncer in
+      // front of a primary, or a replica
+      'pgbouncer',
+    ] + extraTags,
     serviceIsStageless: true,
     monitoringThresholds: {
       apdexScore: 0.999,

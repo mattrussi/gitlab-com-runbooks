@@ -6,10 +6,21 @@ local patroniHelpers = import './lib/patroni-helpers.libsonnet';
 patroniHelpers.serviceDefinition(
   'patroni',
 
-  // disk_performance_monitoring requires disk utilisation metrics are currently reporting correctly for
-  // HDD volumes, see https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10248
-  // as such, we only record this utilisation metric on IO subset of the fleet for now.
-  tags=['disk_performance_monitoring'],
+  extraTags=[
+    // disk_performance_monitoring requires disk utilisation metrics are currently reporting correctly for
+    // HDD volumes, see https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10248
+    // as such, we only record this utilisation metric on IO subset of the fleet for now.
+    'disk_performance_monitoring',
+
+    // pgbouncer_async_replica implies that this service is running a pgbouncer for sidekiq clients
+    // in front of a postgres replica
+    'pgbouncer_async_replica',
+
+    // postgres_fluent_csvlog_monitoring implies that this service is running fluent-csvlog with vacuum parsing.
+    // In future, this should be something we can fold into postgres_with_primaries, but not all postgres instances
+    // handle this at present.
+    'postgres_fluent_csvlog_monitoring',
+  ],
 
   additionalServiceLevelIndicators={
     // Sidekiq has a distinct usage profile; this is used to select 'the others' which

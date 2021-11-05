@@ -1,3 +1,3 @@
 local pgbouncerHelpers = import './lib/pgbouncer-helpers.libsonnet';
 
-pgbouncerHelpers.serviceDefinition('pgbouncer-ci')
+pgbouncerHelpers.serviceDefinition(type='pgbouncer-ci')
