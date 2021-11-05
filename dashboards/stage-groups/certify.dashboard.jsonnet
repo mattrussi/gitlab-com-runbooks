@@ -3,7 +3,7 @@ local layout = import 'grafana/layout.libsonnet';
 
 local stageGroupDashboards = import './stage-group-dashboards.libsonnet';
 
-local serviceDeskReceivedEmails() =
+local serviceDeskReceivedEmails =
   basic.timeseries(
     stableId='service_desk_received_emails',
     title='Service Desk Received Emails',
@@ -14,17 +14,17 @@ local serviceDeskReceivedEmails() =
     |||,
     query=|||
       sum(
-          rate(
-            gitlab_transaction_event_receive_email_service_desk_total{
-              environment="$environment",
-              stage='$stage',
-            }[$__interval]
-          )
+        rate(
+          gitlab_transaction_event_receive_email_service_desk_total{
+            environment="$environment",
+            stage='$stage',
+          }[$__interval]
+        )
       )
     |||,
   );
 
-local serviceDeskThankYouEmails() =
+local serviceDeskThankYouEmails =
   basic.timeseries(
     stableId='service_desk_thank_you_email',
     title='Service Desk Outgoing Emails (New Issue)',
@@ -35,17 +35,17 @@ local serviceDeskThankYouEmails() =
     |||,
     query=|||
       sum(
-          rate(
-            gitlab_transaction_event_service_desk_thank_you_email_total{
-              environment="$environment",
-              stage='$stage',
-            }[$__interval]
-          )
+        rate(
+          gitlab_transaction_event_service_desk_thank_you_email_total{
+            environment="$environment",
+            stage='$stage',
+          }[$__interval]
+        )
       )
     |||,
   );
 
-local serviceDeskNewNoteEmails() =
+local serviceDeskNewNoteEmails =
   basic.timeseries(
     stableId='service_desk_new_note_email',
     title='Service Desk Outgoing Emails (New Comment)',
@@ -56,12 +56,33 @@ local serviceDeskNewNoteEmails() =
     |||,
     query=|||
       sum(
-          rate(
-            gitlab_transaction_event_service_desk_new_note_email_total{
-              environment="$environment",
-              stage='$stage',
-            }[$__interval]
-          )
+        rate(
+          gitlab_transaction_event_service_desk_new_note_email_total{
+            environment="$environment",
+            stage='$stage',
+          }[$__interval]
+        )
+      )
+    |||,
+  );
+
+local emailReceiverErrors =
+  basic.timeseries(
+    stableId='email_receiver_error',
+    title='All Email Receiver Errors (not only Service Desk)',
+    decimals=2,
+    yAxisLabel='Errors',
+    description=|||
+      Number of received emails which could not be processed.
+    |||,
+    query=|||
+      sum by (error) (
+        rate(
+          gitlab_transaction_event_email_receiver_error_total{
+            environment="$environment",
+            stage='$stage',
+          }[$__interval]
+        )
       )
     |||,
   );
@@ -71,9 +92,10 @@ stageGroupDashboards.dashboard('certify', ['web', 'sidekiq'])
   layout.rowGrid(
     'Service Desk Emails',
     [
-      serviceDeskReceivedEmails(),
-      serviceDeskThankYouEmails(),
-      serviceDeskNewNoteEmails(),
+      serviceDeskReceivedEmails,
+      serviceDeskThankYouEmails,
+      serviceDeskNewNoteEmails,
+      emailReceiverErrors,
     ],
     startRow=1001
   ),
