@@ -371,6 +371,35 @@ Selected logging documents and resources:
   * Post-checks - how can I be 100% sure that it is solved
   * Rollback - optional, how can I undo my fix
 
+# Running helper scipts from runbook
+
+Inside of the [bin](bin) directory you can find a list of scripts that can help
+running repetative commands or setting up your machine to debug the
+infrastructure. These scripts can be bash, ruby, python or any other executable.
+
+`glsh` in the single entrypoint to interect with the [`bin`](bin) directory. For
+example if you can `glsh hello` it will check if `hello` file exists inside of
+[`bin`](bin) directory and execute it. You can also pass multiple arguments, that the
+script will have access to.
+
+```
+glsh hello arg1 arg2
+```
+
+## Install
+
+```
+git clone git@gitlab.com:gitlab-com/runbooks.git
+cd runbooks
+make glsh-install
+```
+
+## Update
+
+```
+glsh update
+```
+
 # Developing in this repo
 
 ## Generating a new runbooks image
