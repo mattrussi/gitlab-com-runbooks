@@ -14,6 +14,7 @@ local serviceLevelIndicatorDefaults = {
   serviceAggregation: true,  // by default, requestRate is aggregated up to the service level
   ignoreTrafficCessation: false,  // Override to true to disable alerting when SLI is zero or absent
   upscaleLongerBurnRates: false,  // When true, long-term burn rates will be upscaled from shorter burn rates, to optimize for high cardinality metrics
+  severity: 's2',
 };
 
 local validateHasField(object, field, message) =
@@ -28,20 +29,27 @@ local validateFeatureCategory(object, message) =
   else
     std.assertEqual(true, { __assert: message });
 
+local validateSeverity(object, message) =
+  if std.objectHas(object, 'severity') && std.member(['s1', 's2', 's3', 's4'], object.severity) then
+    object
+  else
+    std.assertEqual(true, { __assert: message });
+
+
 local validateAndApplySLIDefaults(sliName, component, inheritedDefaults) =
-  serviceLevelIndicatorDefaults
-  +
-  inheritedDefaults
-  +
+  local withDefaults = serviceLevelIndicatorDefaults + inheritedDefaults + component;
   // All components must have a requestRate measurement, since
   // we filter out low-RPS alerts for apdex monitoring and require the RPS for error ratios
-  validateHasField(component, 'requestRate', '%s component requires a requestRate measurement' % [sliName])
+  validateHasField(withDefaults, 'requestRate', '%s component requires a requestRate measurement' % [sliName])
   +
-  validateHasField(component, 'significantLabels', '%s component requires a significantLabels attribute' % [sliName])
+  validateHasField(withDefaults, 'significantLabels', '%s component requires a significantLabels attribute' % [sliName])
   +
-  validateHasField(component, 'userImpacting', '%s component requires a userImpacting attribute' % [sliName])
+  validateHasField(withDefaults, 'userImpacting', '%s component requires a userImpacting attribute' % [sliName])
   +
-  validateFeatureCategory(component, '%s is not a valid feature category for %s' % [component.featureCategory, sliName])
+  validateFeatureCategory(withDefaults, '%s is not a valid feature category for %s' % [withDefaults.featureCategory, sliName])
+  +
+  validateSeverity(withDefaults, '%s does not have a valid severity, must be s1-s4' % [sliName])
+  +
   {
     name: sliName,
   };

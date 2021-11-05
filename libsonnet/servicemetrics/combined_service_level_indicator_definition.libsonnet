@@ -34,6 +34,7 @@ local combinedServiceLevelIndicatorDefinition(
         team: team,
         ignoreTrafficCessation: ignoreTrafficCessation,
         regional: if regional != null then regional else inheritedDefaults.regional,
+        severity: componentsInitialised[0].severity,
 
         serviceAggregation: serviceAggregation,
 

@@ -133,7 +133,7 @@ local apdexAlertForSLI(service, sli) =
     alertTitle='The %(sliName)s SLI of the %(serviceType)s service (`{{ $labels.stage }}` stage) has an apdex violating SLO' % formatConfig,
     alertDescriptionLines=[sli.description],
     serviceType=service.type,
-    severity='s2',
+    severity=sli.severity,
     thresholdSLOValue=apdexScoreSLO,
     aggregationSet=aggregationSets.componentSLIs,
     windows=service.alertWindows,
@@ -153,7 +153,7 @@ local apdexAlertForSLI(service, sli) =
           'Since the `{{ $labels.type }}` service is not fully redundant, SLI violations on a single node may represent a user-impacting service degradation.',
         ],
         serviceType=service.type,
-        severity='s2',
+        severity=sli.severity,
         thresholdSLOValue=apdexScoreSLO,
         aggregationSet=aggregationSets.nodeComponentSLIs,
         windows=service.alertWindows,
@@ -177,7 +177,7 @@ local apdexAlertForSLI(service, sli) =
           'Note that this alert is specific to the `{{ $labels.region }}` region.',
         ],
         serviceType=service.type,
-        severity='s2',
+        severity=sli.severity,
         thresholdSLOValue=apdexScoreSLO,
         aggregationSet=aggregationSets.regionalComponentSLIs,
         windows=service.alertWindows,
@@ -203,7 +203,7 @@ local errorRateAlertForSLI(service, sli) =
     alertTitle='The %(sliName)s SLI of the %(serviceType)s service (`{{ $labels.stage }}` stage) has an error rate violating SLO' % formatConfig,
     alertDescriptionLines=[sli.description],
     serviceType=service.type,
-    severity='s2',
+    severity=sli.severity,
     thresholdSLOValue=errorRateSLO,
     aggregationSet=aggregationSets.componentSLIs,
     windows=service.alertWindows,
@@ -223,7 +223,7 @@ local errorRateAlertForSLI(service, sli) =
           'Since the `{{ $labels.type }}` service is not fully redundant, SLI violations on a single node may represent a user-impacting service degradation.',
         ],
         serviceType=service.type,
-        severity='s2',
+        severity=sli.severity,
         thresholdSLOValue=errorRateSLO,
         aggregationSet=aggregationSets.nodeComponentSLIs,
         windows=service.alertWindows,
@@ -247,7 +247,7 @@ local errorRateAlertForSLI(service, sli) =
           'Note that this alert is specific to the `{{ $labels.region }}` region.',
         ],
         serviceType=service.type,
-        severity='s2',
+        severity=sli.severity,
         thresholdSLOValue=errorRateSLO,
         aggregationSet=aggregationSets.regionalComponentSLIs,
         windows=service.alertWindows,
@@ -275,7 +275,7 @@ local trafficCessationAlert(service, sli) =
       ||| % formatConfig,
       'for': '5m',
       labels:
-        serviceLevelAlerts.labelsForAlert('s2', aggregationSets.componentSLIs, 'ops', 'traffic_cessation', windowDuration=null)
+        serviceLevelAlerts.labelsForAlert(sli.severity, aggregationSets.componentSLIs, 'ops', 'traffic_cessation', windowDuration=null)
         +
         labelsForSLI(sli),
       annotations:
@@ -300,7 +300,7 @@ local trafficCessationAlert(service, sli) =
       ||| % formatConfig,
       'for': '30m',
       labels:
-        serviceLevelAlerts.labelsForAlert('s2', aggregationSets.componentSLIs, 'ops', 'traffic_cessation', windowDuration=null)
+        serviceLevelAlerts.labelsForAlert(sli.severity, aggregationSets.componentSLIs, 'ops', 'traffic_cessation', windowDuration=null)
         +
         labelsForSLI(sli),
       annotations:

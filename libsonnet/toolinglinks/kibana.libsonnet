@@ -8,6 +8,7 @@ local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libson
     type=null,
     tag=null,
     shard=null,
+    message=null,
     slowRequestSeconds=null,
     matches={},
     includeMatchersForPrometheusSelector=true
@@ -36,6 +37,13 @@ local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libson
             []
           else
             [elasticsearchLinks.matchFilter('json.shard.keyword', shard)]
+        )
+        +
+        (
+          if message == null then
+            []
+          else
+            [elasticsearchLinks.matchFilter('json.message.keyword', message)]
         )
         +
         elasticsearchLinks.matchers(matches)
