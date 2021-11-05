@@ -7,6 +7,12 @@ metricsCatalog.serviceDefinition({
   type: 'redis-tracechunks',
   tier: 'db',
   serviceIsStageless: true,  // redis-tracechunks does not have a cny stage
+
+  tags: [
+    // redis tag signifies that this service has redis-exporter
+    'redis',
+  ],
+
   monitoringThresholds: {
     apdexScore: 0.9999,
     errorRatio: 0.999,
@@ -20,7 +26,7 @@ metricsCatalog.serviceDefinition({
         Aggregation of all Redis operations issued to the Redis Tracechunks service from the Rails codebase.
 
         If this SLI is experiencing a degradation then the output of CI jobs may be delayed in becoming visible
-        or in severe situations the data may be lost 
+        or in severe situations the data may be lost
       |||,
       significantLabels: ['type'],
 

@@ -1,12 +1,12 @@
-local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
-local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
+local resourceSaturationPoint = (import 'servicemetrics/metrics.libsonnet').resourceSaturationPoint;
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 
 {
   redis_primary_cpu: resourceSaturationPoint({
     title: 'Redis Primary CPU Utilization per Node',
     severity: 's1',
     horizontallyScalable: false,
-    appliesTo: ['redis', 'redis-sidekiq', 'redis-cache', 'redis-tracechunks', 'redis-ratelimiting'],
+    appliesTo: metricsCatalog.findServicesWithTag(tag='redis'),
     description: |||
       Redis Primary CPU Utilization per Node.
 

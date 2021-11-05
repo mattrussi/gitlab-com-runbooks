@@ -7,6 +7,12 @@ metricsCatalog.serviceDefinition({
   type: 'redis-ratelimiting',
   tier: 'db',
   serviceIsStageless: true,  // redis-ratelimiting does not have a cny stage
+
+  tags: [
+    // redis tag signifies that this service has redis-exporter
+    'redis',
+  ],
+
   monitoringThresholds: {
     apdexScore: 0.9995,
     errorRatio: 0.999,
