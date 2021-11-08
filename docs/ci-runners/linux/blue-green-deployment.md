@@ -26,6 +26,27 @@ process documented so that we know what we need to automate.
 - `deployment`: Referring if `blue` or `green` is active, it can also be
   both.
 
+# Chef roles
+
+```
+runners-manager-private-blue-X.json
+runners-manager-private-blue.json
+runners-manager-private-green-X.json
+runners-manager-private-green.json
+runners-manager-private.json
+runners-manager-shared-gitlab-org-blue-X.json
+runners-manager-shared-gitlab-org-blue.json
+runners-manager-shared-gitlab-org-green-X.json
+runners-manager-shared-gitlab-org-green.json
+runners-manager-shared-gitlab-org.json
+runners-manager-shared-blue-X.json
+runners-manager-shared-blue.json
+runners-manager-shared-green-X.json
+runners-manager-shared-green.json
+runners-manager-shared.json
+runners-manager.json
+```
+
 ## Deployment Example
 
 We will give an example of how to deploy from `v14.1.0-rc1` to `v14.1.0` on
