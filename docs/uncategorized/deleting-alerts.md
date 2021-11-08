@@ -34,3 +34,9 @@ When a useless alert comes in, and you still have the mental capacity and energy
 1. Is the alert legit?
     - If the alert points towards an actual user- and SLO impacting problem in a production environment that needs immediate attention, then it's probably legit.
     - **Action:** 🚒 Actually investigate the alert, focus on mitigation first, then drive improvements via "corrective actions" and [the infradev process](https://about.gitlab.com/handbook/engineering/workflow/#a-guide-to-creating-effective-infradev-issues).
+
+## Resources
+
+- [Tackling Alert Fatigue - Caitie McCaffrey](https://vimeo.com/173704290)
+- [Applying cardiac alarm management techniques to your on-call - Lindsay Holmwood](https://fractio.nl/2014/08/26/cardiac-alarms-and-ops/)
+- [Want to Solve Over-Monitoring and Alert Fatigue? Create the Right Incentives! - Kishore Jalleda](https://www.usenix.org/conference/srecon17europe/program/presentation/jalleda)
