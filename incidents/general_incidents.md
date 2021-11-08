@@ -68,7 +68,7 @@ Reasons that we are careful about hot patches:
 ### Timers/Mental checks 
 As an IMOC, on roughly these times, you can ask yourself these questions:
   1. Do we have the right people in the incident room? (every 5 min early on)
-  2. Do we need [DB team help](https://about.gitlab.com/handbook/engineering/infrastructure/database/#ongres-third-party-support)? (if postgres related, have we engaged Ongres/Jose or the Database team?)  
+  2. Do we need [DB team help](https://about.gitlab.com/handbook/engineering/infrastructure/database/)? (if postgres related, have we engaged Jose or the Database team?)  
   3. Do we understand what is going on? (first 10 min frequently - every 2-3 min)
     * If not sev1/down, a little more relaxed - say every 10  min
   4. Do we understand what to do to resolve or mitigate the problem? (first 10 min frequently after we have identified the issue- every 2-3 min)
