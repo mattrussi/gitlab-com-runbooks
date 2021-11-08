@@ -16,6 +16,11 @@ module RedisTrace
           .gsub(%r{^cache:gitlab:projects/[0-9]+/(content|last_commits)/[0-9a-f]{40}/(.+)}, 'cache:gitlab:projects/$NUMBER/\1/$LONGHASH/$PATTERN')
           .gsub(%r{^cache:gitlab:projects/[0-9-]+/(branches/users|projects)/(.+)}, 'cache:gitlab:projects/$NUMBER/\1/$LONGHASH/$PATTERN')
           .gsub(/^container_repository:\{[0-9]+\}:tag:(.+)/, 'container_repository/{$NUMBER}:tag:$PATTERN')
+      when 'ratelimiting'
+        key = key
+          .gsub(%r{^(application_rate_limiter:show_raw_controller:project):[0-9]+:(.+)}, '\1:$NUMBER:$PATTERN')
+          .gsub(%r{^(cache:gitlab:rack::attack:allow2ban:ban):(.+)}, '\1:$PATTERN')
+          .gsub(%r{^(cache:gitlab:rack::attack:[0-9]+:(allow2ban:count|throttle_[^:]+)):(.+)}, '\1:$PATTERN')
       end
 
       # Generic replacements
