@@ -28,7 +28,6 @@
 * [../frontend/ssh-maxstartups-breach.md](../frontend/ssh-maxstartups-breach.md)
 * [../git/purge-git-data.md](../git/purge-git-data.md)
 * [../kas/kubernetes-agent-basic-troubleshooting.md](../kas/kubernetes-agent-basic-troubleshooting.md)
-* [../kube/k8s-oncall-setup.md](../kube/k8s-oncall-setup.md)
 * [../kube/kubernetes.md](../kube/kubernetes.md)
 * [../license/license-gitlab-com.md](../license/license-gitlab-com.md)
 * [logging_gcs_archive_bigquery.md](logging_gcs_archive_bigquery.md)
