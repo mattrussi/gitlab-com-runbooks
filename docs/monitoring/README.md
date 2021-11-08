@@ -47,6 +47,7 @@
 * [../sidekiq/sidekiq-survival-guide-for-sres.md](../sidekiq/sidekiq-survival-guide-for-sres.md)
 * [../spamcheck/index.md](../spamcheck/index.md)
 * [../uncategorized/access-gcp-hosts.md](../uncategorized/access-gcp-hosts.md)
+* [../uncategorized/deleting-alerts.md](../uncategorized/deleting-alerts.md)
 * [../uncategorized/job_completion.md](../uncategorized/job_completion.md)
 * [../uncategorized/osquery.md](../uncategorized/osquery.md)
 * [../uncategorized/packagecloud-infrastructure.md](../uncategorized/packagecloud-infrastructure.md)
