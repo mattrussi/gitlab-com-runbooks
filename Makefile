@@ -116,3 +116,6 @@ ensure-generated-content-up-to-date: generate
 # then install `pip install diagrams`
 diagrams:
 	./scripts/make-diagrams
+
+glsh-install:
+	ln -s $$PWD/glsh.sh /usr/local/bin/glsh
