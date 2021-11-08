@@ -13,6 +13,8 @@ process documented so that we know what we need to automate.
 ## Supported shards
 
 - `private`
+- `gitlab-org-shared`
+- `shared` (once https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/14518 is completed)
 
 ## Glossary
 
@@ -31,10 +33,6 @@ the `private` shard. This isn't meant to be a checklist because it will
 change very friendly so sticking to an example might be easier to follow
 and document for now.
 
-*Note: All `knife` commands should be executed in
-`lb-bastion.ci.gitlab.com` with a tmux/screen session since they are
-long running process.*
-
 1. `blue` deployment is [active](https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/blob/84c9b3cdfd76e108243f57910d5ac59971038538/environments/ci/runner-managers.tf#L82-83)
   via `terraform`, and running [`v14.1.0-rc1`](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/blob/dfb57033011ced4fea6fc7210331be72a0e1c75c/roles/runners-manager-private-blue.json#L12-13) configured by `chef-repo`.
 1. Open a merge request to `chef-repo` to update the version for the
@@ -42,17 +40,12 @@ long running process.*
     1. Make sure the merge request has the `~deploy` and
     `~group::runner` labels.
     1. Get the [merge request](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests/364) merged.
-1. Run `chef-client` on the `green` deployment to install `v14.1.0`: `knife ssh -afqdn 'roles:runners-manager-private-green' -- 'sudo -i chef-client-enable && sudo -i chef-client'`.
+1. Execute the chatops command in the `#production` channel: `/runner run start private green`. This will enable and execute `chef-client` on the `green` deployment to install `v14.1.0` and start the `gitlab-runner` service
 1. When `green` deployment is active and healthy trigger a graceful
   shutdown to the `blue` deployment to stop the `gitlab-runner` process
-  and wait for all jobs to finish:
-      1. `knife ssh -afqdn 'roles:runners-manager-private-blue' -- 'sudo -i chef-client-disable "Disable chef until the next deployment"'`.
-      1. `knife ssh -afqdn 'roles:runners-manager-private-blue' -- 'sudo -i systemctl stop gitlab-runner'`. This will start draining the runner and deleting the machines so this command will take a while to run!
-      1. `knife ssh -afqdn 'roles:runners-manager-private-blue' -- 'sudo -i systemctl disable gitlab-runner'`.
+  and wait for all jobs to finish. To do this, execute the chatops command in the `#production` channel: `/runner run stop private blue` This will start draining the runner and deleting the machines so this command will take a while to run!
 
 ### Deficiencies
 
-1. We still depend on the engineers laptop to run knife commands:
-    1. Destroy deactivated deployment :point_right: https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/13795
-    1. Automate shutdown command inside of GitLab CI pipeline :point_right: https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/13803
+1. Deactivated deployment instances stay around. Destroy deactivated deployment :point_right: https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/13795
 1. Remove double concurrency window during deployment :point_right: https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/13844
