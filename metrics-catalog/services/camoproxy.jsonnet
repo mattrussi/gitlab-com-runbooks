@@ -18,7 +18,6 @@ metricsCatalog.serviceDefinition({
   serviceLevelIndicators: {
     loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
       userImpacting=true,
-      featureCategory='not_owned',
       team='sre_coreinfra',
       stageMappings={
         main: { backends: ['camoproxy'], toolingLinks: [] },

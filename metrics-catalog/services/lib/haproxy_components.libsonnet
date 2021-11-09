@@ -72,10 +72,10 @@ local singleL4Component(stage, selector, definition, userImpacting) =
   });
 
 local combinedBackendCurry(generator, defaultSLIDescription, ignoreTrafficCessation) =
-  function(userImpacting, stageMappings, selector, featureCategory, team=null, description=defaultSLIDescription, regional=null)
+  function(userImpacting, stageMappings, selector, team=null, description=defaultSLIDescription, regional=null)
     metricsCatalog.combinedServiceLevelIndicatorDefinition(
       userImpacting=userImpacting,
-      featureCategory=featureCategory,
+      featureCategory='not_owned',
       team=team,
       description=description,
       ignoreTrafficCessation=ignoreTrafficCessation,

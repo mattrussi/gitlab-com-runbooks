@@ -68,7 +68,6 @@ metricsCatalog.serviceDefinition({
   serviceLevelIndicators: {
     loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
       userImpacting=true,
-      featureCategory='not_owned',
       team='sre_coreinfra',
       stageMappings={
         main: { backends: ['web'], toolingLinks: [] },  // What to do with `429_slow_down`?

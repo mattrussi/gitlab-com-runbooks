@@ -73,7 +73,6 @@ metricsCatalog.serviceDefinition({
   serviceLevelIndicators: {
     loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
       userImpacting=true,
-      featureCategory='not_owned',
       team='sre_datastores',
       stageMappings={
         main: { backends: ['https_git'], toolingLinks: [
@@ -90,7 +89,6 @@ metricsCatalog.serviceDefinition({
 
     loadbalancer_ssh: haproxyComponents.haproxyL4LoadBalancer(
       userImpacting=true,
-      featureCategory='not_owned',
       team='sre_datastores',
       stageMappings={
         main: {

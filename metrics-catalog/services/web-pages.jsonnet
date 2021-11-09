@@ -29,7 +29,7 @@ metricsCatalog.serviceDefinition({
   serviceLevelIndicators: {
     loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
       userImpacting=true,
-      featureCategory='pages',
+      team='sre_coreinfra',
       stageMappings={
         main: { backends: ['pages_http'], toolingLinks: [] },
         // TODO: cny stage for pages?
@@ -39,7 +39,7 @@ metricsCatalog.serviceDefinition({
 
     loadbalancer_https: haproxyComponents.haproxyL4LoadBalancer(
       userImpacting=true,
-      featureCategory='pages',
+      team='sre_coreinfra',
       stageMappings={
         main: { backends: ['pages_https'], toolingLinks: [] },
         // TODO: cny stage for pages?

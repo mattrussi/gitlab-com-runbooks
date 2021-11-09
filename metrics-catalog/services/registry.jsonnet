@@ -56,7 +56,7 @@ metricsCatalog.serviceDefinition({
   serviceLevelIndicators: {
     loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
       userImpacting=true,
-      featureCategory='container_registry',
+      team='sre_coreinfra',
       stageMappings={
         main: { backends: ['registry'], toolingLinks: [] },
         cny: { backends: ['canary_registry'], toolingLinks: [] },
