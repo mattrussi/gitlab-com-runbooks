@@ -929,7 +929,7 @@ groups:
       aggregation: component
       alert_class: slo_violation
       alert_type: symptom
-      feature_category: not_owned
+      feature_category: in_source_metrics
       pager: pagerduty
       rules_domain: general
       severity: s2
@@ -975,7 +975,7 @@ groups:
       aggregation: component
       alert_class: slo_violation
       alert_type: symptom
-      feature_category: not_owned
+      feature_category: in_source_metrics
       pager: pagerduty
       rules_domain: general
       severity: s2
@@ -1023,7 +1023,7 @@ groups:
       aggregation: regional_component
       alert_class: slo_violation
       alert_type: symptom
-      feature_category: not_owned
+      feature_category: in_source_metrics
       pager: pagerduty
       rules_domain: general
       severity: s2
@@ -1071,7 +1071,7 @@ groups:
       aggregation: regional_component
       alert_class: slo_violation
       alert_type: symptom
-      feature_category: not_owned
+      feature_category: in_source_metrics
       pager: pagerduty
       rules_domain: general
       severity: s2
@@ -1121,7 +1121,7 @@ groups:
       aggregation: component
       alert_class: traffic_cessation
       alert_type: cause
-      feature_category: not_owned
+      feature_category: in_source_metrics
       pager: pagerduty
       rules_domain: general
       severity: s2
@@ -1158,7 +1158,7 @@ groups:
       aggregation: component
       alert_class: traffic_cessation
       alert_type: cause
-      feature_category: not_owned
+      feature_category: in_source_metrics
       pager: pagerduty
       rules_domain: general
       severity: s2

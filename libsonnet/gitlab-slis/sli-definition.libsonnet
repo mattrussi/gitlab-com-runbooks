@@ -2,6 +2,7 @@ local validator = import 'utils/validator.libsonnet';
 local rateMetric = (import 'servicemetrics/rate.libsonnet').rateMetric;
 local rateApdex = (import 'servicemetrics/rate_apdex.libsonnet').rateApdex;
 local recordingRuleRegistry = import 'servicemetrics/recording-rule-registry.libsonnet';
+local serviceLevelIndicatorDefinition = import 'servicemetrics/service_level_indicator_definition.libsonnet';
 local misc = import 'utils/misc.libsonnet';
 
 // We might add `success` and `error` in the future
@@ -44,9 +45,13 @@ local validateAndApplyDefaults(definition) =
 
     generateServiceLevelIndicator(extraSelector):: {
       userImpacting: true,
-      // We will make the feature category smarter in
-      // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1229
-      featureCategory: 'not_owned',
+      featureCategory: if std.objectHas(sli, 'featureCategory') && sli.featureCategory != serviceLevelIndicatorDefinition.featureCategoryNotOwned then
+        sli.featureCategory
+      else if std.setMember('feature_category', sli.significantLabels) then
+        serviceLevelIndicatorDefinition.featureCategoryFromSourceMetrics
+      else
+        serviceLevelIndicatorDefinition.featureCategoryNotOwned,
+
       description: sli.description,
 
       requestRate: operationRate(sli, extraSelector),
