@@ -45,7 +45,7 @@ basic.dashboard(
 .addPanels(crCommon.version(startRow=1))
 .addPanel(
 
-  row.new(title='Host Resources Usage (Aggregate)'),
+  row.new(title='Host Resources Usage'),
   gridPos={
     x: 0,
     y: 1000,
@@ -53,10 +53,10 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(common.averageGeneralCounters(startRow=1001))
+.addPanels(common.generalCounters(startRow=1001))
 .addPanel(
 
-  row.new(title='Host Resources Usage (Per Pod)'),
+  row.new(title='HTTP API'),
   gridPos={
     x: 0,
     y: 2000,
@@ -64,10 +64,10 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(common.generalCounters(startRow=2001))
+.addPanels(crCommon.http(startRow=2001))
 .addPanel(
 
-  row.new(title='HTTP API'),
+  row.new(title='Storage Drivers'),
   gridPos={
     x: 0,
     y: 3000,
@@ -75,10 +75,10 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(crCommon.http(startRow=3001))
+.addPanels(crCommon.storageDrivers(startRow=3001))
 .addPanel(
 
-  row.new(title='Storage Drivers'),
+  row.new(title='Cache'),
   gridPos={
     x: 0,
     y: 4000,
@@ -86,15 +86,4 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(crCommon.storageDrivers(startRow=4001))
-.addPanel(
-
-  row.new(title='Cache'),
-  gridPos={
-    x: 0,
-    y: 5000,
-    w: 24,
-    h: 1,
-  }
-)
-.addPanels(crCommon.cache(startRow=5001))
+.addPanels(crCommon.cache(startRow=4001))
