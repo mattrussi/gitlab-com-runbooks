@@ -11,7 +11,7 @@ groups:
       title: The primary_server SLI of the redis-sidekiq service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30 minutes
       description: |
-        Operations on the Redis primary for GitLab's persistent Redis instance.
+        Operations on the Redis primary for Redis Sidekiq instance.
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: redis-sidekiq-main/redis-sidekiq-overview
@@ -22,7 +22,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(redis_commands_processed_total{type="redis-sidekiq", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]) and on (instance) redis_instance_info{role="master"}
+          rate(redis_commands_processed_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="redis-sidekiq"}[5m]) and on (instance) redis_instance_info{role="master"}
         )
       runbook: docs/redis-sidekiq/README.md
     labels:
@@ -44,7 +44,7 @@ groups:
       title: The primary_server SLI of the redis-sidekiq service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30 minutes
       description: |
-        Operations on the Redis primary for GitLab's persistent Redis instance.
+        Operations on the Redis primary for Redis Sidekiq instance.
 
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 
@@ -57,7 +57,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(redis_commands_processed_total{type="redis-sidekiq", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]) and on (instance) redis_instance_info{role="master"}
+          rate(redis_commands_processed_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="redis-sidekiq"}[5m]) and on (instance) redis_instance_info{role="master"}
         )
       runbook: docs/redis-sidekiq/README.md
     labels:
@@ -373,7 +373,7 @@ groups:
       title: The secondary_servers SLI of the redis-sidekiq service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30 minutes
       description: |
-        Operations on the Redis secondaries for GitLab's persistent Redis instance.
+        Operations on the Redis secondaries for the Redis Sidekiq instance.
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: redis-sidekiq-main/redis-sidekiq-overview
@@ -384,7 +384,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(redis_commands_processed_total{type="redis-sidekiq", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]) and on (instance) redis_instance_info{role="slave"}
+          rate(redis_commands_processed_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="redis-sidekiq"}[5m]) and on (instance) redis_instance_info{role="slave"}
         )
       runbook: docs/redis-sidekiq/README.md
     labels:
@@ -406,7 +406,7 @@ groups:
       title: The secondary_servers SLI of the redis-sidekiq service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30 minutes
       description: |
-        Operations on the Redis secondaries for GitLab's persistent Redis instance.
+        Operations on the Redis secondaries for the Redis Sidekiq instance.
 
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 
@@ -419,7 +419,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(redis_commands_processed_total{type="redis-sidekiq", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]) and on (instance) redis_instance_info{role="slave"}
+          rate(redis_commands_processed_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="redis-sidekiq"}[5m]) and on (instance) redis_instance_info{role="slave"}
         )
       runbook: docs/redis-sidekiq/README.md
     labels:

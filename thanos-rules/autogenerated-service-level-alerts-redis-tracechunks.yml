@@ -11,7 +11,7 @@ groups:
       title: The primary_server SLI of the redis-tracechunks service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30 minutes
       description: |
-        Operations on the Redis primary for GitLab's Redis Tracechunks instance.
+        Operations on the Redis primary for Redis Tracechunks instance.
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: redis-tracechunks-main/redis-tracechunks-overview
@@ -22,7 +22,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(redis_commands_processed_total{type="redis-tracechunks", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]) and on (instance) redis_instance_info{role="master"}
+          rate(redis_commands_processed_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="redis-tracechunks"}[5m]) and on (instance) redis_instance_info{role="master"}
         )
       runbook: docs/redis-tracechunks/README.md
     labels:
@@ -44,7 +44,7 @@ groups:
       title: The primary_server SLI of the redis-tracechunks service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30 minutes
       description: |
-        Operations on the Redis primary for GitLab's Redis Tracechunks instance.
+        Operations on the Redis primary for Redis Tracechunks instance.
 
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 
@@ -57,7 +57,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(redis_commands_processed_total{type="redis-tracechunks", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]) and on (instance) redis_instance_info{role="master"}
+          rate(redis_commands_processed_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="redis-tracechunks"}[5m]) and on (instance) redis_instance_info{role="master"}
         )
       runbook: docs/redis-tracechunks/README.md
     labels:
@@ -81,9 +81,9 @@ groups:
       title: The rails_redis_client SLI of the redis-tracechunks service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
-        Aggregation of all Redis operations issued to the Redis Tracechunks service from the Rails codebase.
+        Aggregation of all Redis Tracechunks operations issued from the Rails codebase.
 
-        If this SLI is experiencing a degradation then the output of CI jobs may be delayed in becoming visible or in severe situations the data may be lost
+        If this SLI is experiencing a degradation then the output of CI jobs may be delayed in becoming visible or in severe situations the data may be lost.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: redis-tracechunks-main/redis-tracechunks-overview
@@ -134,9 +134,9 @@ groups:
       title: The rails_redis_client SLI of the redis-tracechunks service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
-        Aggregation of all Redis operations issued to the Redis Tracechunks service from the Rails codebase.
+        Aggregation of all Redis Tracechunks operations issued from the Rails codebase.
 
-        If this SLI is experiencing a degradation then the output of CI jobs may be delayed in becoming visible or in severe situations the data may be lost
+        If this SLI is experiencing a degradation then the output of CI jobs may be delayed in becoming visible or in severe situations the data may be lost.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: redis-tracechunks-main/redis-tracechunks-overview
@@ -187,9 +187,9 @@ groups:
       title: The rails_redis_client SLI of the redis-tracechunks service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
-        Aggregation of all Redis operations issued to the Redis Tracechunks service from the Rails codebase.
+        Aggregation of all Redis Tracechunks operations issued from the Rails codebase.
 
-        If this SLI is experiencing a degradation then the output of CI jobs may be delayed in becoming visible or in severe situations the data may be lost
+        If this SLI is experiencing a degradation then the output of CI jobs may be delayed in becoming visible or in severe situations the data may be lost.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: redis-tracechunks-main/redis-tracechunks-overview
@@ -237,9 +237,9 @@ groups:
       title: The rails_redis_client SLI of the redis-tracechunks service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
-        Aggregation of all Redis operations issued to the Redis Tracechunks service from the Rails codebase.
+        Aggregation of all Redis Tracechunks operations issued from the Rails codebase.
 
-        If this SLI is experiencing a degradation then the output of CI jobs may be delayed in becoming visible or in severe situations the data may be lost
+        If this SLI is experiencing a degradation then the output of CI jobs may be delayed in becoming visible or in severe situations the data may be lost.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: redis-tracechunks-main/redis-tracechunks-overview
@@ -287,9 +287,9 @@ groups:
       title: The rails_redis_client SLI of the redis-tracechunks service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30 minutes
       description: |
-        Aggregation of all Redis operations issued to the Redis Tracechunks service from the Rails codebase.
+        Aggregation of all Redis Tracechunks operations issued from the Rails codebase.
 
-        If this SLI is experiencing a degradation then the output of CI jobs may be delayed in becoming visible or in severe situations the data may be lost
+        If this SLI is experiencing a degradation then the output of CI jobs may be delayed in becoming visible or in severe situations the data may be lost.
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: redis-tracechunks-main/redis-tracechunks-overview
@@ -322,9 +322,9 @@ groups:
       title: The rails_redis_client SLI of the redis-tracechunks service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30 minutes
       description: |
-        Aggregation of all Redis operations issued to the Redis Tracechunks service from the Rails codebase.
+        Aggregation of all Redis Tracechunks operations issued from the Rails codebase.
 
-        If this SLI is experiencing a degradation then the output of CI jobs may be delayed in becoming visible or in severe situations the data may be lost
+        If this SLI is experiencing a degradation then the output of CI jobs may be delayed in becoming visible or in severe situations the data may be lost.
 
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 
@@ -361,7 +361,7 @@ groups:
       title: The secondary_servers SLI of the redis-tracechunks service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30 minutes
       description: |
-        Operations on the Redis secondaries for GitLab's Redis Tracechunks instance.
+        Operations on the Redis secondaries for the Redis Tracechunks instance.
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: redis-tracechunks-main/redis-tracechunks-overview
@@ -372,7 +372,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(redis_commands_processed_total{type="redis-tracechunks", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]) and on (instance) redis_instance_info{role="slave"}
+          rate(redis_commands_processed_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="redis-tracechunks"}[5m]) and on (instance) redis_instance_info{role="slave"}
         )
       runbook: docs/redis-tracechunks/README.md
     labels:
@@ -394,7 +394,7 @@ groups:
       title: The secondary_servers SLI of the redis-tracechunks service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30 minutes
       description: |
-        Operations on the Redis secondaries for GitLab's Redis Tracechunks instance.
+        Operations on the Redis secondaries for the Redis Tracechunks instance.
 
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 
@@ -407,7 +407,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(redis_commands_processed_total{type="redis-tracechunks", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]) and on (instance) redis_instance_info{role="slave"}
+          rate(redis_commands_processed_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="redis-tracechunks"}[5m]) and on (instance) redis_instance_info{role="slave"}
         )
       runbook: docs/redis-tracechunks/README.md
     labels:

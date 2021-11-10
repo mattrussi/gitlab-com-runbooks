@@ -11,7 +11,7 @@ groups:
       title: The primary_server SLI of the redis-cache service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30 minutes
       description: |
-        Operations on the Redis primary for GitLab's caching Redis instance.
+        Operations on the Redis primary for Redis Cache instance.
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: redis-cache-main/redis-cache-overview
@@ -22,7 +22,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(redis_commands_processed_total{type="redis-cache", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]) and on (instance) redis_instance_info{role="master"}
+          rate(redis_commands_processed_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="redis-cache"}[5m]) and on (instance) redis_instance_info{role="master"}
         )
       runbook: docs/redis-cache/README.md
     labels:
@@ -44,7 +44,7 @@ groups:
       title: The primary_server SLI of the redis-cache service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30 minutes
       description: |
-        Operations on the Redis primary for GitLab's caching Redis instance.
+        Operations on the Redis primary for Redis Cache instance.
 
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 
@@ -57,7 +57,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(redis_commands_processed_total{type="redis-cache", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]) and on (instance) redis_instance_info{role="master"}
+          rate(redis_commands_processed_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="redis-cache"}[5m]) and on (instance) redis_instance_info{role="master"}
         )
       runbook: docs/redis-cache/README.md
     labels:
@@ -521,7 +521,7 @@ groups:
       title: The secondary_servers SLI of the redis-cache service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30 minutes
       description: |
-        Operations on the Redis secondaries for GitLab's caching Redis instance.
+        Operations on the Redis secondaries for the Redis Cache instance.
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: redis-cache-main/redis-cache-overview
@@ -532,7 +532,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(redis_commands_processed_total{type="redis-cache", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]) and on (instance) redis_instance_info{role="slave"}
+          rate(redis_commands_processed_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="redis-cache"}[5m]) and on (instance) redis_instance_info{role="slave"}
         )
       runbook: docs/redis-cache/README.md
     labels:
@@ -554,7 +554,7 @@ groups:
       title: The secondary_servers SLI of the redis-cache service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30 minutes
       description: |
-        Operations on the Redis secondaries for GitLab's caching Redis instance.
+        Operations on the Redis secondaries for the Redis Cache instance.
 
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 
@@ -567,7 +567,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(redis_commands_processed_total{type="redis-cache", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]) and on (instance) redis_instance_info{role="slave"}
+          rate(redis_commands_processed_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="redis-cache"}[5m]) and on (instance) redis_instance_info{role="slave"}
         )
       runbook: docs/redis-cache/README.md
     labels:
