@@ -21,6 +21,43 @@ local rate(operation, objectType) =
 local sum(metric) =
   ('(sum(%s) or vector(0))' % metric);
 
+local projectsCountGraph() =
+  basic.graphPanel(
+    datasource='$PROMETHEUS_DS',
+    title='Projects successfully imported',
+    decimals=0,
+    legend_min=false,
+    legend_max=false,
+    legend_current=false,
+    legend_total=true
+  )
+  .addTarget(
+    promQuery.target(
+      sum('github_importer_imported_projects_total'),
+      legendFormat='Projects successfully imported'
+    )
+  );
+
+local durationGraph() =
+  basic.multiTimeseries(
+    title='Import Duration',
+    description='Lower is better.',
+    format='s',
+    yAxisLabel='Duration',
+    legend_show=true,
+    queries=std.map(
+      function(p)
+        {
+          query: 'histogram_quantile(%(p)s, %(sum)s)' % {
+            p: std.format('%.2f', p / 100),
+            sum: ('sum(%s) by (le, environment)' % rate('total', 'duration_seconds_bucket')),
+          },
+          legendFormat: 'p%s' % p,
+        },
+      [50, 90, 95, 99]
+    )
+  );
+
 local objectCounterGraph(title, queries) =
   basic.graphPanel(
     datasource='$PROMETHEUS_DS',
@@ -80,7 +117,7 @@ local githubObjectCounter(objectType) =
   });
 
 local totalGithubObjectCounter() =
-  objectCounterGraph('Total', {
+  objectCounterGraph('Total Objects', {
     fetched: {
       title: 'fetched',
       value: std.join(' + ', std.map(
@@ -99,9 +136,9 @@ local totalGithubObjectCounter() =
     },
   });
 
-basic
-.dashboard(
+basic.dashboard(
   'Github Importer',
+  graphTooltip='shared_tooltip',
   tags=[
     'sidekiq',
     'managed',
@@ -109,14 +146,25 @@ basic
   ]
 )
 .addPanel(
-  totalGithubObjectCounter(),
-  gridPos={ x: 0, y: 0, w: 24, h: 10 }
+  durationGraph(),
+  gridPos={ x: 0, y: 0, w: 24, h: 13 }
+)
+.addPanels(
+  layout.grid(
+    [
+      projectsCountGraph(),
+      totalGithubObjectCounter(),
+    ],
+    cols=1,
+    rowHeight=10,
+    startRow=1
+  )
 )
 .addPanels(
   layout.grid(
     std.map(githubObjectCounter, githubObjectTypes),
     cols=2,
     rowHeight=10,
-    startRow=1
+    startRow=3
   )
 )
