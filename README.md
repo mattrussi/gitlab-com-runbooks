@@ -371,7 +371,7 @@ Selected logging documents and resources:
   * Post-checks - how can I be 100% sure that it is solved
   * Rollback - optional, how can I undo my fix
 
-# Running helper scipts from runbook
+# Running helper scripts from runbook
 
 Inside of the [bin](bin) directory you can find a list of scripts that can help
 running repetative commands or setting up your machine to debug the
