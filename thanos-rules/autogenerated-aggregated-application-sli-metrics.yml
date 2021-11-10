@@ -25,3 +25,27 @@ groups:
       sum by (env,environment,tier,type,stage,endpoint_id,feature_category,request_urgency) (
         (sli_aggregations:gitlab_sli:rails_request_apdex:success_total_rate1h{monitor!="global"} >= 0)
       )
+- name: 'Application Defined SLI Global metrics: graphql_query_apdex'
+  interval: 1m
+  partial_response_strategy: warn
+  rules:
+  - record: application_sli_aggregation:graphql_query_apdex:apdex:weight:score_5m
+    expr: |
+      sum by (env,environment,tier,type,stage,endpoint_id,feature_category,query_urgency) (
+        (application_sli_aggregation:graphql_query_apdex:apdex:weight:score_5m{monitor!="global"} >= 0)
+      )
+  - record: application_sli_aggregation:graphql_query_apdex:apdex:success:rate_5m
+    expr: |
+      sum by (env,environment,tier,type,stage,endpoint_id,feature_category,query_urgency) (
+        (application_sli_aggregation:graphql_query_apdex:apdex:success:rate_5m{monitor!="global"} >= 0)
+      )
+  - record: application_sli_aggregation:graphql_query_apdex:apdex:weight:score_1h
+    expr: |
+      sum by (env,environment,tier,type,stage,endpoint_id,feature_category,query_urgency) (
+        (application_sli_aggregation:graphql_query_apdex:apdex:weight:score_1h{monitor!="global"} >= 0)
+      )
+  - record: application_sli_aggregation:graphql_query_apdex:apdex:success:rate_1h
+    expr: |
+      sum by (env,environment,tier,type,stage,endpoint_id,feature_category,query_urgency) (
+        (application_sli_aggregation:graphql_query_apdex:apdex:success:rate_1h{monitor!="global"} >= 0)
+      )
