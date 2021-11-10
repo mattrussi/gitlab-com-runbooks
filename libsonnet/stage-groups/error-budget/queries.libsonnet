@@ -24,13 +24,13 @@ local errorBudgetRatio(range, groupSelectors, aggregationLabels, ignoreComponent
           )
           or
           label_replace(
-            sum by(%(aggregations)s) (
+            sum by(%(aggregationsIncludingComponent)s) (
               sum_over_time(
                 gitlab:component:stage_group:execution:ops:rate_1h{%(selectorHash)s}[%(range)s]
               )
             )
             -
-            sum by(%(aggregations)s) (
+            sum by(%(aggregationsIncludingComponent)s) (
               sum_over_time(
                 gitlab:component:stage_group:execution:error:rate_1h{%(selectorHash)s}[%(range)s]
               )
