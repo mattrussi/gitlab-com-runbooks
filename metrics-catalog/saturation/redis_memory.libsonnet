@@ -1,7 +1,9 @@
 local resourceSaturationPoint = (import 'servicemetrics/metrics.libsonnet').resourceSaturationPoint;
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 
-local commonDefition = {
+// How much of the entire node's memory is Redis using; relevant in the context of OOM kills
+// and system constraints
+local commonDefinition = {
   title: 'Redis Memory Utilization per Node',
   severity: 's2',
   horizontallyScalable: false,
@@ -19,9 +21,30 @@ local commonDefition = {
   |||,
 };
 
+// How much of maxmemory (if configured) Redis is using; relevant
+// for special cases like sessions which have both maxmemory and eviction, but
+// don't want to actually reach that and start evicting under normal circumstances
+local maxMemoryDefinition = {
+  title: 'Redis Memory Utilization of Max Memory',
+  severity: 's2',
+  horizontallyScalable: false,
+  resourceLabels: ['fqdn'],
+  query: |||
+    (
+      max by (%(aggregationLabels)s) (
+        redis_memory_used_bytes{%(selector)s}
+      )
+      /
+      avg by (%(aggregationLabels)s) (
+        redis_memory_max_bytes{%(selector)s}
+      )
+    ) and on (fqdn) redis_memory_max_bytes{%(selector)s} != 0
+  |||,
+};
+
 {
-  redis_memory: resourceSaturationPoint(commonDefition {
-    appliesTo: std.filter(function(s) s != 'redis-tracechunks', metricsCatalog.findServicesWithTag(tag='redis')),  // All the redis except redis-tracechunks
+  redis_memory: resourceSaturationPoint(commonDefinition {
+    appliesTo: std.filter(function(s) s != 'redis-tracechunks', metricsCatalog.findServicesWithTag(tag='redis')),  // All the redis except redis-tracechunks; includes sessions as well as the other sessions-specific metric below, as this measures something subtly different and distinctly valid
     description: |||
       Redis memory utilization per node.
 
@@ -45,7 +68,7 @@ local commonDefition = {
     },
   }),
 
-  redis_memory_tracechunks: resourceSaturationPoint(commonDefition {
+  redis_memory_tracechunks: resourceSaturationPoint(commonDefinition {
     appliesTo: ['redis-tracechunks'],  // No need for tags, this is specifically targeted
     description: |||
       Redis memory utilization per node.
@@ -69,4 +92,22 @@ local commonDefition = {
       hard: 0.50,
     },
   }),
+
+  redis_memory_sessions: resourceSaturationPoint(maxMemoryDefinition {
+    appliesTo: ['redis-sessions'],  // No need for tags, this is specifically targeted
+    description: |||
+      Redis maxmemory utilization per node
+
+      On the sessions Redis we have maxmemory and an eviction policy as a safety-valve, but
+      do not want or expect to reach that limit under normal circumstances; if we start
+      evicting we will start logging out users slightly early (although only the longest
+      inactive sessions), so we want to be alerted some time before that happens.
+    |||,
+    grafana_dashboard_uid: 'sat_redis_memory_sessions',
+    slos: {
+      soft: 0.70,
+      hard: 0.75,
+    },
+  }),
+
 }

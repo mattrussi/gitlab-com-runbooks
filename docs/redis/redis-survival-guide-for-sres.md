@@ -29,6 +29,7 @@ For gitlab.com, as at September 2021, we have 5 sets of Redis instances, each ha
 | Persistent shared state | redis-XX             | Puma workers, Sidekiq workers, Workhorse | Yes (localhost)               | RDB dump every 900 seconds |
 | CI build trace chunks   | redis-tracechunks-XX | Puma workers (API), Sidekiq workers      | Yes (localhost)               | RDB dump every 900 seconds |
 | Ratelimiting (RackAttack/App) | redis-ratelimiting-XX | Puma workers                      | Yes (localhost)               | None |
+| Sessions        |       | redis-sessions-XX    | Puma workers                             | Yes (localhost)               | RDB dump every 900 seconds, but also an eviction policy |
 
 We do not yet have a separate actioncable instance.
 
@@ -50,6 +51,10 @@ When we split out Ratelimiting (latter-half of 2021) this was for CPU saturation
 90% CPU, and we knew from when we [enabled RackAttack in November 2020](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/3034)
 that it is responsible for at least 25% (absolute) of the CPU utilization, so splitting this out gives the cache instance room
 to breath.  Note that the [data usage](https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1246#sizing) is tiny.
+
+When we split out Sessions (very late 2021), this was for CPU saturation (antipicated something like 20% absolute savings)
+and also to separate a workload that may be problematic for Redis Cluster, unblocking perhaps moving the persistent Redis
+to Cluster in the future.
 
 ### CPUs
 Redis VMs were the first nodes we switched to from N1 to '[C2](https://cloud.google.com/compute/docs/machine-types#c2_machine_types)'
@@ -187,6 +192,8 @@ cases projects) and activities, with the value being the count of usage in the c
 into the key name).  TTLs are used to expire these automatically so there's no manual cleanup by clients, it is automatic
 and internal to Redis.
 
+The data in the sessions instance is exclusively that related to web sessions.
+
 ## Clients
 
 Most of the clients are Ruby, specifically Rails code on the web, api, git, and sidekiq nodes.  Workhorse (in Go) also
@@ -229,6 +236,7 @@ There is 1 core dashboard for redis, with a variant for each cluster:
 * [Sidekiq](https://dashboards.gitlab.net/d/redis-sidekiq-main/redis-sidekiq-overview?orgId=1)
 * [Tracechunks](https://dashboards.gitlab.net/d/redis-tracechunks-main/redis-tracechunks-overview?orgId=1)
 * [Ratelimiting](https://dashboards.gitlab.net/d/redis-ratelimiting-main/redis-ratelimiting-overview?orgId=1)
+* [Sessions](https://dashboards.gitlab.net/d/redis-sessions-main/redis-sessions-overview?orgId=1)
 
 Note that many of the panels are have both Primary and Secondary variants; because only the primary is active, usually
 only the primary graphs matter *and* the secondaries should be pretty quiet (other than some housekeeping/analysis
@@ -292,8 +300,9 @@ to redis usage.  These are:
 * write_bytes
 
 There is one set for each of the clusters, with a different prefix e.g. `redis` (persistent), `redis_cache_`,
-`redis_queues` (sidekiq), `redis_tracechunks` and `redis_ratelimiting`.  You can perform the usual sort of visualizations
-and explorations that you might on other numeric fields, e.g. to find the top 20 Controllers by average number of calls to Redis.
+`redis_queues` (sidekiq), `redis_tracechunks`, `redis_ratelimiting` and `redis_sessions`.  You can perform
+the usual sort of visualizations and explorations that you might on other numeric fields, e.g. to find the
+top 20 Controllers by average number of calls to Redis.
 
 This would be an excellent approach to diagnosing the source of changes in Redis usage, although if the change was beyond
 our log retention (7 days) you can only really reason about the current state (looking for outliers), which constrains

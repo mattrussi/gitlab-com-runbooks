@@ -93,6 +93,7 @@ Grafana dashboards:
 - [redis-sidekiq](https://dashboards.gitlab.net/d/redis-sidekiq-main/redis-sidekiq-overview?orgId=1&from=now-6h&to=now)
 - [redis-tracechunks](https://dashboards.gitlab.net/d/redis-tracechunks-main/redis-tracechunks-overview?orgId=1&from=now-6h&to=now)
 - [redis-ratelimiting](https://dashboards.gitlab.net/d/redis-ratelimiting-main/redis-ratelimiting-overview?orgId=1&from=now-6h&to=now)
+- [redis-sessions](https://dashboards.gitlab.net/d/redis-sessions-main/redis-sessions-overview?orgId=1&from=now-6h&to=now)
 
 
 For example, there is a Grafana chart showing number of slowlog events in redis-sidekiq (not linking it here because the panel ID changes when Grafana dashboards are deployed).
@@ -509,8 +510,8 @@ instantiate a Ruby Redis client for a secondary:
 redis = Redis.new(Gitlab::Redis::SharedState.params.merge(role: :slave))
 ```
 
-Substitute `Cache`,`Queues`, `TraceChunks` or `RateLimiting` to get a client
-for the cache, sidekiq, tracechunks, or ratelimiting  Redis instances, respectively.
+Substitute `Cache`,`Queues`, `TraceChunks`, `RateLimiting`, or `Sessions` for 'SharedState' to get a client
+for the respective Redis instance.
 
 ### packetbeat
 
@@ -775,7 +776,7 @@ NOTE: This should have no visible negative impact on the GitLab application.
 
 NOTE: There is no authentication required for interacting with Sentinel.
 
-1. Get current Redis master. On one of the nodes running the redis sentinel (varies by cluster; redis, redis-sidekiq, redis-tracechunks, and redis-ratelimiting run sentinel on the main redis nodes, redis-cache has its own set of sentinel servers, and this may change in future):
+1. Get current Redis master. On one of the nodes running the redis sentinel (varies by cluster; redis-cache has its own set of sentinel servers, and all the rest run sentinel on the main redis nodes; and this may change in future):
 
 ```shell
 $ /opt/gitlab/embedded/bin/redis-cli -p 26379 SENTINEL masters
@@ -825,7 +826,7 @@ $ /opt/gitlab/embedded/bin/redis-cli -p 26379 SENTINEL masters
 ```shell
 /opt/gitlab/embedded/bin/redis-cli -p 26379 SENTINEL failover CLUSTER_NAME
 ```
-CLUSTER_NAME is one of `gprd-redis` (main persistent cluster), `gprd-redis-cache` (primary transient cache), `gprd-redis-sidekiq` (sidekiq specific persistent cluster), `gprd-redis-tracechunks` (CI build tracechunks persistent cluster), or gprd-redis-ratelimiting (RackAttack/App Rate limiting cluster)
+CLUSTER_NAME is one of `gprd-redis` (main persistent cluster), `gprd-redis-cache` (primary transient cache), `gprd-redis-sidekiq` (sidekiq specific persistent cluster), `gprd-redis-tracechunks` (CI build tracechunks persistent cluster), gprd-redis-ratelimiting (RackAttack/App Rate limiting cluster), or `gprd-sessions` (Web sessions)
 
 ## Replication flapping
 
