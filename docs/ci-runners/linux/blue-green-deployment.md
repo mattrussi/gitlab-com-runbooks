@@ -13,7 +13,7 @@ process documented so that we know what we need to automate.
 ## Supported shards
 
 - `private`
-- `gitlab-org-shared`
+- `shared-gitlab-org`
 - `shared` (once https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/14518 is completed)
 
 ## Glossary
@@ -61,10 +61,24 @@ and document for now.
     1. Make sure the merge request has the `~deploy` and
     `~group::runner` labels.
     1. Get the [merge request](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests/364) merged.
-1. Execute the chatops command in the `#production` channel: `/runner run start private green`. This will enable and execute `chef-client` on the `green` deployment to install `v14.1.0` and start the `gitlab-runner` service
+1. Execute the chatops command in the `#production` channel:
+
+    ```
+    /runner run start private green
+    ```
+
+    This will enable and execute `chef-client` on the `green` deployment to install `v14.1.0` and start the `gitlab-runner` service
 1. When `green` deployment is active and healthy trigger a graceful
   shutdown to the `blue` deployment to stop the `gitlab-runner` process
-  and wait for all jobs to finish. To do this, execute the chatops command in the `#production` channel: `/runner run stop private blue` This will start draining the runner and deleting the machines so this command will take a while to run!
+  and wait for all jobs to finish.
+
+    To do this, execute the chatops command in the `#production` channel:
+
+    ```
+    /runner run stop private blue
+    ```
+
+    This will start draining the runner and deleting the machines so this command will take a while to run!
 
 ### Deficiencies
 
