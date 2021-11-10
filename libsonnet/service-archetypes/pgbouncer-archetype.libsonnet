@@ -3,11 +3,11 @@ local rateMetric = metricsCatalog.rateMetric;
 local combined = metricsCatalog.combined;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
-local serviceDefinition(
+function(
   type,
   extraTags=[],
-      ) =
-  metricsCatalog.serviceDefinition({
+)
+  {
     type: type,
     tier: 'db',
 
@@ -22,9 +22,7 @@ local serviceDefinition(
 
     // pgbouncer doesn't have a `cny` stage
     serviceIsStageless: true,
-    serviceDependencies: {
-      patroni: true,
-    },
+
     serviceLevelIndicators: {
       local baseSelector = {
         type: type,
@@ -64,8 +62,4 @@ local serviceDefinition(
         ],
       },
     },
-  });
-
-{
-  serviceDefinition:: serviceDefinition,
-}
+  }

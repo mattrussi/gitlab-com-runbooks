@@ -1,6 +1,16 @@
-local pgbouncerHelpers = import './lib/pgbouncer-helpers.libsonnet';
+local pgbouncerArchetype = import 'service-archetypes/pgbouncer-archetype.libsonnet';
+local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 
-pgbouncerHelpers.serviceDefinition(
-  type='pgbouncer',
-  extraTags=['pgbouncer_async_primary'],
+metricsCatalog.serviceDefinition(
+  pgbouncerArchetype(
+    type='pgbouncer',
+    extraTags=[
+      'pgbouncer_async_primary',
+    ],
+  )
+  {
+    serviceDependencies: {
+      patroni: true,
+    },
+  }
 )
