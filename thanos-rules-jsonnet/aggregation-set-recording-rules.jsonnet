@@ -155,9 +155,7 @@ local groupsForApplicationSli(sli) =
   // real need to duplicate them.
   'aggregated-application-sli-metrics.yml':
     outputPromYaml(
-      std.filterMap(
-        function(sli)
-          !sli.inRecordingRuleRegistry,
+      std.map(
         groupsForApplicationSli,
         applicationSlis
       ),
