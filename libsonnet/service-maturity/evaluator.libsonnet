@@ -51,6 +51,7 @@ local evaluateLevel(level, service) =
 
   {
     name: level.name,
+    number: level.number,
     passed: levelPassed(criteria),
     criteria: criteria,
   };
@@ -58,15 +59,16 @@ local evaluateLevel(level, service) =
 local evaluate = function(service, levels) std.map(function(level) evaluateLevel(level, service), levels);
 
 local maxLevel(service, levelDefinitions) =
-  std.foldl(
+  local max = std.foldl(
     function(acc, level)
       if level.passed && acc.passed then
-        { passed: true, level: level.name }
+        { passed: true, name: level.name, number: level.number }
       else
-        { passed: false, level: acc.level },
+        { passed: false, name: acc.name, number: acc.number },
     evaluate(service, levelDefinitions),
-    { passed: true, level: 'Level 0' }
-  ).level;
+    { passed: true, name: 'Level 0', number: 0 }
+  );
+  { name: max.name, number: max.number };
 
 {
   evaluate: evaluate,

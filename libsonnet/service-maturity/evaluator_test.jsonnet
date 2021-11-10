@@ -12,6 +12,7 @@ local mockService = {
 local levels = [
   {
     name: 'All passed',
+    number: 1,
     criteria: [
       { name: 'Criteria 1', evidence: function(service) 'evidence 1' },
       { name: 'Criteria 2', evidence: function(service) ['evidence 2', 'evidence 3'] },
@@ -19,6 +20,7 @@ local levels = [
   },
   {
     name: 'All failed',
+    number: 2,
     criteria: [
       { name: 'Criteria 1', evidence: function(service) false },
       { name: 'Criteria 2', evidence: function(service) false },
@@ -26,6 +28,7 @@ local levels = [
   },
   {
     name: 'All unimplemented',
+    number: 3,
     criteria: [
       { name: 'Criteria 1', evidence: function(service) null },
       { name: 'Criteria 2', evidence: function(service) null },
@@ -33,6 +36,7 @@ local levels = [
   },
   {
     name: 'All skipped',
+    number: 4,
     criteria: [
       { name: 'Skipped Criteria 1', evidence: function(service) null },
       { name: 'Skipped Criteria 2', evidence: function(service) null },
@@ -40,6 +44,7 @@ local levels = [
   },
   {
     name: '1 failed, 1 passed',
+    number: 5,
     criteria: [
       { name: 'Criteria 1', evidence: function(service) false },
       { name: 'Criteria 2', evidence: function(service) 'evidence' },
@@ -47,6 +52,7 @@ local levels = [
   },
   {
     name: '2 unimplemented, 1 passed',
+    number: 6,
     criteria: [
       { name: 'Criteria 1', evidence: function(service) 'evidence' },
       { name: 'Criteria 2', evidence: function(service) null },
@@ -55,6 +61,7 @@ local levels = [
   },
   {
     name: '2 skipped, 1 passed',
+    number: 7,
     criteria: [
       { name: 'Skipped Criteria 1', evidence: function(service) false },
       { name: 'Criteria 1', evidence: function(service) 'evidence' },
@@ -63,6 +70,7 @@ local levels = [
   },
   {
     name: '1 skipped, 1 unimplemented, 1 failed, 1 passed',
+    number: 8,
     criteria: [
       { name: 'Criteria 1', evidence: function(service) false },
       { name: 'Criteria 2', evidence: function(service) null },
@@ -79,6 +87,7 @@ test.suite({
       {
         name: 'All passed',
         passed: true,
+        number: 1,
         criteria: [
           { name: 'Criteria 1', evidence: 'evidence 1', result: 'passed' },
           { name: 'Criteria 2', evidence: ['evidence 2', 'evidence 3'], result: 'passed' },
@@ -87,6 +96,7 @@ test.suite({
       {
         name: 'All failed',
         passed: false,
+        number: 2,
         criteria: [
           { name: 'Criteria 1', evidence: false, result: 'failed' },
           { name: 'Criteria 2', evidence: false, result: 'failed' },
@@ -95,6 +105,7 @@ test.suite({
       {
         name: 'All unimplemented',
         passed: false,
+        number: 3,
         criteria: [
           { name: 'Criteria 1', evidence: null, result: 'unimplemented' },
           { name: 'Criteria 2', evidence: null, result: 'unimplemented' },
@@ -103,6 +114,7 @@ test.suite({
       {
         name: 'All skipped',
         passed: true,
+        number: 4,
         criteria: [
           { name: 'Skipped Criteria 1', evidence: 'Reason A', result: 'skipped' },
           { name: 'Skipped Criteria 2', evidence: 'Reason B', result: 'skipped' },
@@ -111,6 +123,7 @@ test.suite({
       {
         name: '1 failed, 1 passed',
         passed: false,
+        number: 5,
         criteria: [
           { name: 'Criteria 1', evidence: false, result: 'failed' },
           { name: 'Criteria 2', evidence: 'evidence', result: 'passed' },
@@ -119,6 +132,7 @@ test.suite({
       {
         name: '2 unimplemented, 1 passed',
         passed: true,
+        number: 6,
         criteria: [
           { name: 'Criteria 1', evidence: 'evidence', result: 'passed' },
           { name: 'Criteria 2', evidence: null, result: 'unimplemented' },
@@ -128,6 +142,7 @@ test.suite({
       {
         name: '2 skipped, 1 passed',
         passed: true,
+        number: 7,
         criteria: [
           { name: 'Skipped Criteria 1', evidence: 'Reason A', result: 'skipped' },
           { name: 'Criteria 1', evidence: 'evidence', result: 'passed' },
@@ -137,6 +152,7 @@ test.suite({
       {
         name: '1 skipped, 1 unimplemented, 1 failed, 1 passed',
         passed: false,
+        number: 8,
         criteria: [
           { name: 'Criteria 1', evidence: false, result: 'failed' },
           { name: 'Criteria 2', evidence: null, result: 'unimplemented' },
@@ -152,15 +168,17 @@ test.suite({
       [
         {
           name: 'Level 1',
+          number: 1,
           criteria: [{ name: 'Criteria 1', evidence: function(service) false }],
         },
         {
           name: 'Level 2',
+          number: 2,
           criteria: [{ name: 'Criteria 1', evidence: function(service) false }],
         },
       ]
     ),
-    expect: 'Level 0',
+    expect: { name: 'Level 0', number: 0 },
   },
   testMaxLevelMax: {
     actual: evaluator.maxLevel(
@@ -168,19 +186,22 @@ test.suite({
       [
         {
           name: 'Level 1',
+          number: 1,
           criteria: [{ name: 'Criteria 1', evidence: function(service) '123' }],
         },
         {
           name: 'Level 2',
+          number: 2,
           criteria: [{ name: 'Criteria 1', evidence: function(service) '456' }],
         },
         {
           name: 'Level 3',
+          number: 3,
           criteria: [{ name: 'Criteria 1', evidence: function(service) '789' }],
         },
       ]
     ),
-    expect: 'Level 3',
+    expect: { name: 'Level 3', number: 3 },
   },
   testMaxLevelPassHigherLevelButFailedLowerOne: {
     actual: evaluator.maxLevel(
@@ -188,18 +209,21 @@ test.suite({
       [
         {
           name: 'Level 1',
+          number: 1,
           criteria: [{ name: 'Criteria 1', evidence: function(service) '123' }],
         },
         {
           name: 'Level 2',
+          number: 2,
           criteria: [{ name: 'Criteria 1', evidence: function(service) false }],
         },
         {
           name: 'Level 3',
+          number: 3,
           criteria: [{ name: 'Criteria 1', evidence: function(service) '789' }],
         },
       ]
     ),
-    expect: 'Level 1',
+    expect: { name: 'Level 1', number: 1 },
   },
 })

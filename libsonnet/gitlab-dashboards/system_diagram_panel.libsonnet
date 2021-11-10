@@ -192,7 +192,7 @@ local maturityDiagram(services, diagramOptions={}) =
         service {
           type: '%(service)s["%(serviceLabel)s"]' % {
             service: service.type,
-            serviceLabel: '%s (%s)' % [service.type, level],
+            serviceLabel: '%s (%s)' % [service.type, level.name],
           },
         },
       services
