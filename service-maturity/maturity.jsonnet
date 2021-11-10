@@ -3,8 +3,10 @@ local levels = import 'service-maturity/levels.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 
 local serviceMaturityManifest(service) =
+  local level = evaluator.maxLevel(service, levels.getLevels());
   {
-    level: evaluator.maxLevel(service, levels.getLevels()),
+    level: level.name,
+    levelNumber: level.number,
     details: evaluator.evaluate(service, levels.getLevels()),
   };
 

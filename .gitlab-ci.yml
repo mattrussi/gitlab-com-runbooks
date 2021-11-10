@@ -244,6 +244,17 @@ ensure_generated_content_up_to_date:
   script:
     - make ensure-generated-content-up-to-date
 
+ensure_maturity_model_minimum_level:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: always
+      allow_failure: true
+  stage: test
+  script:
+    - scripts/bundler.sh # Install jsonnet bundles
+    - scripts/generate-jsonnet-rules.sh
+    - scripts/validate-maturity-model
+
 # log.gprd.gitlab.net
 ################################################################################
 update_elastic_log_gprd_ilm:
