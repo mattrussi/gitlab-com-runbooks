@@ -64,6 +64,7 @@ local elasticsearchExternalHTTPLink(type) = function(options)
           legendFormat='{{ action }}',
           format='ops',
           yAxisLabel='Requests per Second',
+          decimals=1,
         ).addDataLink(elasticsearchLogSearchDataLink(type)),
         basic.multiTimeseries(
           stableId='latency',
@@ -91,6 +92,7 @@ local elasticsearchExternalHTTPLink(type) = function(options)
           stableId='total-sql-queries-rate',
           title='Total SQL Queries Rate',
           format='ops',
+          decimals=1,
           queries=[
             {
               query: |||
@@ -139,6 +141,7 @@ local elasticsearchExternalHTTPLink(type) = function(options)
             )
           ||| % { selector: selectorString },
           legendFormat='{{ action }}',
+          decimals=1,
         ),
         basic.timeseries(
           stableId='sql-latency-per-controller-request',
@@ -178,6 +181,7 @@ local elasticsearchExternalHTTPLink(type) = function(options)
             )
           ||| % { selector: selectorString },
           legendFormat='{{ action }}',
+          decimals=1,
         ),
         basic.timeseries(
           stableId='avg-duration-per-sql-transaction',
@@ -202,6 +206,7 @@ local elasticsearchExternalHTTPLink(type) = function(options)
             )
           ||| % { selector: selectorString },
           legendFormat='{{ action }} - {{ operation }}',
+          decimals=1,
         ),
       ], startRow=401)
       +
@@ -220,6 +225,7 @@ local elasticsearchExternalHTTPLink(type) = function(options)
           ||| % { selector: selectorString },
           legendFormat='{{ action }} - {{ code }}',
           format='ops',
+          decimals=1,
         ),
         basic.multiTimeseries(
           stableId='external-http-latency',
