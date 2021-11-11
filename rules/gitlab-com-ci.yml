@@ -91,7 +91,7 @@ groups:
       title: 'Too big number of traces archiving failures: {{$value}}'
       description: |
         Traces archiving keeps failing for more than 5 minutes.
-        Plese check https://dashboards.gitlab.net/d/000000159/ci?refresh=5m&orgId=1&panelId=153&fullscreen,
+        Plese check https://dashboards.gitlab.net/d/000000159/ci?&orgId=1&panelId=153&fullscreen,
         https://sentry.gitlab.net/gitlab/gitlabcom/?query=ArchiveTraceWorker, and
         https://sentry.gitlab.net/gitlab/gitlabcom/?query=ArchiveTracesCronWorker to find out more details
       runbook: docs/ci-runners/ci_too_many_archiving_trace_failures.md
@@ -111,7 +111,7 @@ groups:
       description: |
         Sidekiq queues for CI/CD are growing and are over 1000 for
         more than last 5 minutes.
-        Please check https://dashboards.gitlab.net/d/ci-runners-incident-gitlab-application/ci-runners-incident-support-gitlab-application?viewPanel=20&orgId=1&refresh=1m&from=now-3h&to=now
+        Please check https://dashboards.gitlab.net/d/ci-runners-incident-gitlab-application/ci-runners-incident-support-gitlab-application?viewPanel=20&orgId=1&from=now-3h&to=now
 
   - alert: CICDJobsStuckInDockerPull
     expr: |
@@ -130,7 +130,7 @@ groups:
       description: |
         More CI Jobs are in state docker_pulling_image than are in state docker_run
         for over 5 minutes. This could mean connectivity to docker hub is broken.
-        Plese check https://dashboards.gitlab.net/d/000000159/ci?refresh=5m&viewPanel=46&orgId=1&from=now-1h&to=now&fullscreen
+        Plese check https://dashboards.gitlab.net/d/000000159/ci?viewPanel=46&orgId=1&from=now-1h&to=now&fullscreen
 
   - alert: GitLabRailsRepoMasterArchiveIsStale
     expr: |

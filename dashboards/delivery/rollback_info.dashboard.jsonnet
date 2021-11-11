@@ -91,7 +91,6 @@ basic.dashboard(
   'Rollback information',
   tags=['release'],
   editable=true,
-  refresh='1h',
   includeStandardEnvironmentAnnotations=false,
   includeEnvironmentTemplate=false,
   time_from='now-30d'

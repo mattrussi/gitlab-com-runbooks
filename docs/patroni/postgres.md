@@ -36,9 +36,9 @@ Some relevant dashboards:
 
 * [PostgreSQL Overview](https://dashboards.gitlab.net/d/000000144/postgresql-overview?orgId=1&var-environment=gprd&var-prometheus=prometheus-01-inf-gprd&var-type=patroni)
 
-* [Tuple Statistics](https://dashboards.gitlab.net/d/000000167/postgresql-tuple-statistics?refresh=1m&orgId=1&var-environment=gprd&var-prometheus=prometheus-01-inf-gprd&var-instance=patroni-01-db-gprd.c.gitlab-production.internal)
+* [Tuple Statistics](https://dashboards.gitlab.net/d/000000167/postgresql-tuple-statistics?orgId=1&var-environment=gprd&var-prometheus=prometheus-01-inf-gprd&var-instance=patroni-01-db-gprd.c.gitlab-production.internal)
 
-* [Postgres Queries](https://dashboards.gitlab.net/d/000000153/postgresql-queries?refresh=1m&orgId=1&var-environment=gprd&var-type=patroni&var-fqdn=patroni-01-db-gprd.c.gitlab-production.internal&var-prometheus=prometheus-01-inf-gprd)
+* [Postgres Queries](https://dashboards.gitlab.net/d/000000153/postgresql-queries?orgId=1&var-environment=gprd&var-type=patroni&var-fqdn=patroni-01-db-gprd.c.gitlab-production.internal&var-prometheus=prometheus-01-inf-gprd)
 
 ## Availability
 
@@ -198,7 +198,7 @@ As well there are a few alerts that are intended to detect problems that could *
 * If a replica is falling behind, the primary might keep WAL files around that
   are needed to catch up. This can lead to running out of disk space pretty
   fast! If things don't resolve, remove the replication slot on the primary (see
-  [below](#replication-slots)) 
+  [below](#replication-slots))
 
 ### Resolution
 
@@ -264,7 +264,7 @@ conditions which will lead to dead tuple bloat:
 
 ### Possible Checks
 
-Check on [Grafana dashboards](https://dashboards.gitlab.net/d/000000167/postgresql-tuple-statistics?orgId=1&refresh=1m), in
+Check on [Grafana dashboards](https://dashboards.gitlab.net/d/000000167/postgresql-tuple-statistics?orgId=1), in
 particular the "PostgreSQL Tuple Statistics" and the "Vacumming"
 and "Dead Tuples" tabs. Note that this is currently only visible
 on the internal dashboards
@@ -428,4 +428,3 @@ If this is an alert for any other error you're on your own. But be
 aware that it could be caused by something mundane such as an admin
 typing commands at the console generating "invalid command" errors or
 the database server restarting or clients dying.
-

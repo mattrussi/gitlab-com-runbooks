@@ -42,7 +42,6 @@ basic.dashboard(
   'Deployment SLO',
   tags=['release'],
   editable=true,
-  refresh='5m',
   time_from='now-30d',
   time_to='now',
   includeStandardEnvironmentAnnotations=false,

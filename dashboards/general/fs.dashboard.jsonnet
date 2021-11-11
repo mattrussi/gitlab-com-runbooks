@@ -188,7 +188,6 @@ local totalZfsFsUtilizationPanel =
 basic.dashboard(
   'Filesystems',
   tags=['general'],
-  refresh='30s',
 )
 .addTemplate(templates.type)
 .addPanels(layout.grid([

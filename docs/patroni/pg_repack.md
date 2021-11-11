@@ -17,7 +17,7 @@ Both tables and indexes can be bloated. Two negative effects of the growing bloa
 
 ## How to see estimated bloat for tables and indexes
 
-- In monitoring: [PostgreSQL Bloat Dashboard](https://dashboards.gitlab.net/d/000000224/postgresql-bloat?orgId=1&refresh=5m)
+- In monitoring: [PostgreSQL Bloat Dashboard](https://dashboards.gitlab.net/d/000000224/postgresql-bloat?orgId=1)
 - [postgres-checkup reports](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues?label_name%5B%5D=postgres-checkup) – see reports `F004 Autovacuum: Heap Bloat (Estimated)` and `F005 Autovacuum: Btree Index Bloat (Estimated)`. See [Checking PostgreSQL health with postgres-checkup](docs/patroni/postgres-checkup.md) for more information.
 
 ## What to repack
@@ -95,7 +95,7 @@ The below command outputs both tables and indexes that will require repacking:
 /var/opt/gitlab/postgresql/gitlab-pgrepack/bin/gitlab-pgrepack estimate
 ```
 
-Depending on the values of 
+Depending on the values of
 
 - `ratio_threshold`, and
 - `real_size_threshold`
@@ -218,14 +218,14 @@ usesysid         | 10
 usename          | postgres
 application_name | pg_repack
 client_addr      | 127.0.0.1
-client_hostname  | 
+client_hostname  |
 client_port      | 54102
 backend_start    | 2020-06-16 11:24:34.604791-03
 xact_start       | 2020-06-16 11:25:35.270385-03
 query_start      | 2020-06-16 11:25:35.27519-03
 state_change     | 2020-06-16 11:25:35.275191-03
-wait_event_type  | 
-wait_event       | 
+wait_event_type  |
+wait_event       |
 state            | active
 backend_xid      | 2481299
 backend_xmin     | 2481299
@@ -242,11 +242,11 @@ Under some circumstances (e.g., if your session crushes), pg_repack may not have
 ```
 pgrepack_test=# \d test
                                       Table "public.test"
- Column |            Type             | Collation | Nullable |             Default              
+ Column |            Type             | Collation | Nullable |             Default
 --------+-----------------------------+-----------+----------+----------------------------------
  id     | integer                     |           | not null | nextval('test_id_seq'::regclass)
- time   | timestamp without time zone |           |          | 
- data   | text                        |           |          | 
+ time   | timestamp without time zone |           |          |
+ data   | text                        |           |          |
 Indexes:
     "test_pkey" PRIMARY KEY, btree (id)
 Triggers firing always:
@@ -264,7 +264,7 @@ drop trigger repack_trigger ON test;
 ```
 pgrepack_test=# \dt repack.
            List of relations
- Schema |    Name    | Type  |  Owner   
+ Schema |    Name    | Type  |  Owner
 --------+------------+-------+----------
  repack | log_241537 | table | postgres
 (1 row)

@@ -37,7 +37,7 @@ issues.
 
 ### Useful Dashboard to keep open
 
-- [GitLab Triage](https://dashboards.gitlab.net/d/RZmbBr7mk/gitlab-triage?orgId=1&refresh=30s)
+- [GitLab Triage](https://dashboards.gitlab.net/d/RZmbBr7mk/gitlab-triage?orgId=1)
 
 ### Alerts
 

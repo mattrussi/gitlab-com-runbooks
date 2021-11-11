@@ -68,7 +68,6 @@ local panelsForService(index, serviceType) =
     basic.dashboard(
       'Triage Playlist: ' + playlist.title,
       tags=['general'],
-      refresh='30s',
     )
     .addPanels(panels)
     .trailer()

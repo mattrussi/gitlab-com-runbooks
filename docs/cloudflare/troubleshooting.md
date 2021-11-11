@@ -2,7 +2,7 @@
 
 ## Links
 
-- [Cloudflare Grafana Dashboard](https://dashboards.gitlab.net/d/sPqgMv9Zk/cloudflare-traffic-overview?orgId=1&refresh=30s)
+- [Cloudflare Grafana Dashboard](https://dashboards.gitlab.net/d/sPqgMv9Zk/cloudflare-traffic-overview?orgId=1)
 - [Cloudflare Dashboard](https://dash.cloudflare.net)
 - [GitLab.com Firewall Overview](https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/gitlab.com/firewall)
 
@@ -46,7 +46,7 @@ on GitLab.com while still getting some benefit from the Cloudflare WAF product.
 
 ### Confirming Cloudflare and other service Connectivity
 
-1. Inspect [Cloudflare Grafana Dashboard](https://dashboards.gitlab.net/d/sPqgMv9Zk/cloudflare-traffic-overview?orgId=1&refresh=30s) the for any major discrepancies in the returns codes between Cloudflare
+1. Inspect [Cloudflare Grafana Dashboard](https://dashboards.gitlab.net/d/sPqgMv9Zk/cloudflare-traffic-overview?orgId=1) the for any major discrepancies in the returns codes between Cloudflare
    and `haproxy`.
 1. Log in to [https://dash.cloudflare.com](https://dash.cloudflare.com) and search
    for the requests which are not working as expected. Are they being blocked

@@ -109,7 +109,6 @@ basic.dashboard(
   'Network Ingress/Egress Overview',
   tags=['general'],
   editable=true,
-  refresh='5m',
   includeStandardEnvironmentAnnotations=false,
   includeEnvironmentTemplate=false,
   time_from='now-30d',
