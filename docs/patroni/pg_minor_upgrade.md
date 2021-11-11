@@ -1,4 +1,4 @@
-Postgresql minor upgrade 
+# Postgresql minor upgrade 
 
 This runbook describes all the steps to execute a Postgresql minor upgrade. 
 
@@ -8,20 +8,22 @@ Those changes are automated on the following playbook:
 
 Aaa.yml
 
+## The main steps
 The main steps on the read onlies replicas, one by one:
 
 Stop chef.
 Add the tags of no failover and no-load balance in Patroni.
-Pre checks:
+
+### Pre checks:
 Wait until the traffic is drained.
 Execute a checkpoint
 Shutdown PostgreSQL
-Main actions:
+
+### Main actions:
 Update the binaries and extensions by the commands:
-
-
 Start PostgreSQL
-Post checks
+
+### Post checks
 Check connectivity 
 Verify the version
 Check logs
