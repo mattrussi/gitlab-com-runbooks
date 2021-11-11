@@ -173,7 +173,6 @@ basic.dashboard(
   'Kubernetes Migration Overview',
   tags=['release'],
   editable=true,
-  refresh='5m',
   includeStandardEnvironmentAnnotations=false,
   includeEnvironmentTemplate=false,
 )

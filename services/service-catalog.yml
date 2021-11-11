@@ -485,7 +485,7 @@ services:
   observability:
     monitors:
       grafana_folder:
-      primary_grafana_dashboard: https://dashboards.gitlab.net/d/bd2Kl9Imk/host-stats?orgId=1&refresh=1m&var-environment=ops&var-node=forum.gitlab.com
+      primary_grafana_dashboard: https://dashboards.gitlab.net/d/bd2Kl9Imk/host-stats?orgId=1&var-environment=ops&var-node=forum.gitlab.com
       sentry_slug:
 
 - name: kube

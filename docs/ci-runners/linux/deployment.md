@@ -150,8 +150,8 @@ Or it can be done for whatever other reason, for example a rollback after introd
     knife ssh -afqdn 'roles:gitlab-runner-prm' -- gitlab-runner --version
     ```
 
-   You can also check the [uptime](https://dashboards.gitlab.net/d/000000159/ci?orgId=1&refresh=5m&viewPanel=18)
-   and [version](https://dashboards.gitlab.net/d/000000159/ci?viewPanel=163&orgId=1&refresh=5m) on
+   You can also check the [uptime](https://dashboards.gitlab.net/d/000000159/ci?orgId=1&viewPanel=18)
+   and [version](https://dashboards.gitlab.net/d/000000159/ci?viewPanel=163&orgId=1) on
    CI dashboard.
 
 ### Upgrade of whole GitLab.com Runners fleet at once

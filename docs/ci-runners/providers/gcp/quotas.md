@@ -13,7 +13,7 @@ To read about this you can look at GCP quotas:
 ## Dashboard
 
 There is a specific quota usage dashboard which can be found in:
-<https://dashboards.gitlab.net/d/sXVh89Imk/ci-autoscaling-providers?viewPanel=8&orgId=1&refresh=5m&var-gcp_exporter=shared-runners-manager-3.gitlab.com:9393&var-gcp_region=All>.
+<https://dashboards.gitlab.net/d/sXVh89Imk/ci-autoscaling-providers?viewPanel=8&orgId=1&var-gcp_exporter=shared-runners-manager-3.gitlab.com:9393&var-gcp_region=All>.
 This doesn't cover the API quota because they aren't exported yet.
 
 ## Runner logs
@@ -25,4 +25,3 @@ by searching in the `pubsub-runner-inf-gprd` index in
 ![resource quota exceeded example](./img/quota_exceeded_resource.png)
 ![api quota exceeded example](./img/quota_exceeded_api.png)
 ![api quota exceeded example](./img/quota_exceeded_operation.png)
-

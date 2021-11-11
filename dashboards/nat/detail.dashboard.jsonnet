@@ -47,7 +47,6 @@ local errorsPerHostPanel =
 basic.dashboard(
   'Cloud NAT Detail',
   tags=['general'],
-  refresh='30s',
 )
 .addTemplate(gatewayNameTemplate)
 .addPanels(layout.grid([

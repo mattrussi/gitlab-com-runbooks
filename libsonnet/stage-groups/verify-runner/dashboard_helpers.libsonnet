@@ -45,7 +45,6 @@ local dashboard(title, tags=[], time_from='now-3h/m', includeStandardEnvironment
     ] + tags,
     time_from=time_from,
     time_to='now/m',
-    refresh='1m',
     graphTooltip='shared_crosshair',
     includeStandardEnvironmentAnnotations=includeStandardEnvironmentAnnotations,
     includeEnvironmentTemplate=true,

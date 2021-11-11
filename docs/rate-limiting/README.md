@@ -154,7 +154,7 @@ is overwritten.
 See also related docs in [../frontend](../frontend/) for other information on blocking and haproxy config.
 
 Graphs for HAProxy can be found at the [HAProxy
-page](https://dashboards.gitlab.net/d/ZOOh_aNik/haproxy?orgId=1&refresh=5m) and you can look for 429 rates to get an
+page](https://dashboards.gitlab.net/d/ZOOh_aNik/haproxy?orgId=1) and you can look for 429 rates to get an
 idea on what is being rate limited at this level, though note that some may also be coming from the application.
 
 In the long run, these may be replaced by either rate limits in GitLab (below) or
@@ -245,7 +245,7 @@ paid groups/users and permanent identities of customers.
 ### Application (ApplicationRateLimiter)
 
 The application has simple rate limit logic that can be used to throttle certain actions which is used when we need more
-flexibility than what Rack Attack can provide, since it can throttle at the controller or API level.  The scope is up to the individual limit 
+flexibility than what Rack Attack can provide, since it can throttle at the controller or API level.  The scope is up to the individual limit
 implementation and can be any ActiveRecord object or combination of multiple.  It is commonly per-user or per-project (or both), but it can be anything, e.g. the [RawController](https://gitlab.com/gitlab-org/gitlab/-/blob/1b86edced6397495fd2a61f2a312573dbc044aa6/app/controllers/projects/raw_controller.rb#L37) limits by project and *path*.
 
 These rate limits are set configured in [application_rate_limiter.rb](https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/application_rate_limiter.rb)

@@ -13,7 +13,7 @@ This runbook covers some of the topics that were discussed in the [EOC Firedrill
 
 - Check the [GitLab general overview](https://dashboards.gitlab.com/d/general-public-splashscreen/general-gitlab-dashboards?orgId=1&from=now-30m&to=now) for service degradation
 - Check the [Patroni overview](https://dashboards.gitlab.net/d/patroni-main/patroni-overview?orgId=1&from=now-1h&to=now&var-PROMETHEUS_DS=Global&var-environment=gprd) for the current status of Patroni.
-- Look for unusual usage patterns in [tuple statistics](https://dashboards.gitlab.net/d/000000167/postgresql-tuple-statistics?orgId=1&refresh=1m)
+- Look for unusual usage patterns in [tuple statistics](https://dashboards.gitlab.net/d/000000167/postgresql-tuple-statistics?orgId=1)
 - Look for outliers in the [marginalia sampler dashboard](https://dashboards.gitlab.net/d/patroni-marginalia-sampler/patroni-marginalia-sampler?orgId=1&from=now-1h&to=now&var-PROMETHEUS_DS=Global&var-environment=gprd&var-fqdn=patroni-03-db-gprd.c.gitlab-production.internal&var-application=All&var-endpoint=All&var-state=All&var-wait_event_type=All)
 
 ### Metric queries
@@ -24,7 +24,7 @@ This runbook covers some of the topics that were discussed in the [EOC Firedrill
 
 - [Primary queries by endpoint_id if it exists](https://log.gprd.gitlab.net/goto/c9386085d6722f2b05cc3cc251cca1ea)
     - Grab the first `endpoint_id`, search [the logs](https://log.gprd.gitlab.net/goto/07606a8985e78fa0a4f83e07f043c7d5) by setting  `json.meta.caller_id` to the `endpoint_id` and try to find a common denominator, for example, `json.meta.root_namespace`.
-    - If you don't find a common denominator, try adding the filter `json.job_status: fail`, [example](https://log.gprd.gitlab.net/goto/988a7e9fa3fa48a7a8fb71f47631d0d4); This can remove noise in some cases and help find the offender. 
+    - If you don't find a common denominator, try adding the filter `json.job_status: fail`, [example](https://log.gprd.gitlab.net/goto/988a7e9fa3fa48a7a8fb71f47631d0d4); This can remove noise in some cases and help find the offender.
 - [Slow queries on the primary](https://log.gprd.gitlab.net/goto/7648f3995aa30dd1681fd9f4af2c13c0)
 - [Statement timeouts on the primary](https://log.gprd.gitlab.net/goto/cf201d6e014b00e4eef016a026c7228f)
 - [Locks on the primary](https://log.gprd.gitlab.net/goto/cbf49fde89fe33c78d57d9a6a2bc2916)
