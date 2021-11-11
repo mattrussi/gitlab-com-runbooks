@@ -126,6 +126,9 @@ local buildValidator(definition) =
       getErrorRateMetricForBurnRate(burnRate, required=false)::
         getMetricNameForBurnRate(burnRate, 'errorRate', required),
 
+      getSuccessRateMetricForBurnRate(burnRate, required=false)::
+        getMetricNameForBurnRate(burnRate, 'successRate', required),
+
       // Returns the errorRatio metric name, null if not required, or fails if missing and required
       getErrorRatioMetricForBurnRate(burnRate, required=false)::
         getMetricNameForBurnRate(burnRate, 'errorRatio', required),
