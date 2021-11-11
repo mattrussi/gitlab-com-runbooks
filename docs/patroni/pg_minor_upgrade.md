@@ -6,12 +6,17 @@ Considering the database of the most critical components from our infrastructure
 
 Those changes are automated on the following playbook:
 
-Aaa.yml
+```
+..\pg_minor_upgrade.yml
+```
 
 ## The main steps
 The main steps on the read onlies replicas, one by one:
 
-Stop chef.
+* Disable chef-client.
+
+ - Execute the command: `chef-client-disable`
+
 Add the tags of no failover and no-load balance in Patroni.
 
 ### Pre checks:
