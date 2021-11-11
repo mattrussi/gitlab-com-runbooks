@@ -25,8 +25,34 @@ Execute a checkpoint
 Shutdown PostgreSQL
 
 ### Main actions:
-Update the binaries and extensions by the commands:
+Update the binaries:
+
+```
+# get a list of installed packages
+sudo dpkg -l | grep postgres
+# retrieve new lists of packages
+sudo apt-get update -y
+# update postgresql packages:
+sudo apt-get install -y postgresql-client-12 postgresql-12 postgresql-server-dev-12 --only-upgrade
+# update extensions packages:
+sudo apt-get install -y postgresql-12-repack --only-upgrade
+​# optional:
+sudo apt-get install -y postgresql-common postgresql-client-common --only-upgrade
+```
 Start PostgreSQL
+
+Update extensions:
+```
+-- Get a list of installed and available versions of extensions in the current database: 
+select ae.name, installed_version, default_version,
+case when installed_version <> default_version then 'OLD' end as is_old
+from pg_extension e
+join pg_available_extensions ae on extname = ae.name
+order by ae.name;
+
+-- Update 'OLD' extensions (example):
+ALTER EXTENSION pg_stat_statements UPDATE;
+```
 
 ### Post checks
 Check connectivity 
