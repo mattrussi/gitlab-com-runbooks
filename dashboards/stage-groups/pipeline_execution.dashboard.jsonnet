@@ -22,16 +22,17 @@ stageGroupDashboards.dashboard('pipeline_execution')
         These panels show basic metrics for CI/CD build logs.
 
         You can read more about what each individual operation (like `streamed`,
-        `corrupted`) means by looking at the definition of these metrics in
+        `chunks_invalid_size`) means by looking at the definition of these metrics in
         [gitlab/trace/metrics.rb][metrics-definition] file.
 
-        The key metric here is `corrupted` build logs detected. This should be
-        0, anything more than zero indicates problems.
+        The key metrics for build logs here are `chunks_invalid_size` and 
+        `archive_invalid_checksum`. These should be 0, anything more than zero
+        indicates problems.
 
         Rate of `streamed` events should correspond with `PATCH /api/jobs/:id/trace`
         requests rate.
 
-        It is expected to see some `invalid` build logs on these graphs. A significant
+        It is expected to see some `chunks_invalid_checksum` build logs on these graphs. A significant
         increase over time might indicate a problem with the correctness of build logs.
 
         [metrics-definition]: https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/trace/metrics.rb#L9
@@ -55,41 +56,7 @@ stageGroupDashboards.dashboard('pipeline_execution')
       yAxisLabel='Rate per second',
     ),
     basic.timeseries(
-      title='Rate of invalid build logs detected',
-      description='The total rate of invalid build logs detected (including mutated ones)',
-      query=|||
-        sum(
-          rate(
-            gitlab_ci_trace_operations_total{
-              environment="$environment",
-              stage="$stage",
-              operation="invalid"
-            }[$__interval]
-          )
-        ) by (operation)
-      |||,
-      legendFormat='{{ operation }} build logs',
-      yAxisLabel='Rate per second',
-    ),
-    basic.timeseries(
-      title='Rate of corrupted build logs detected',
-      description='The total rate of corrupted build logs detected',
-      query=|||
-        sum(
-          rate(
-            gitlab_ci_trace_operations_total{
-              environment="$environment",
-              stage="$stage",
-              operation="corrupted",
-            }[$__interval]
-          )
-        ) by (operation)
-      |||,
-      legendFormat='{{ operation }} build logs',
-      yAxisLabel='Rate per second',
-    ),
-    basic.timeseries(
-      title='All metrics for build logs',
+      title='All operation metrics for build logs',
       description='The rate of different operations happening related to build logs',
       query=|||
         sum(
@@ -120,6 +87,22 @@ stageGroupDashboards.dashboard('pipeline_execution')
       format='Bps',
       legendFormat='build logs received',
       yAxisLabel='Bytes received per second',
+    ),
+    basic.timeseries(
+      title='All error metrics for build logs',
+      description='The rate of different errors related to processing build logs',
+      query=|||
+        sum(
+          rate(
+            gitlab_ci_build_trace_errors_total{
+              environment="$environment",
+              stage="$stage"
+            }[$__interval]
+          )
+        ) by (error_reason)
+      |||,
+      legendFormat='{{ error_reason }} error reason',
+      yAxisLabel='Rate per second',
     ),
   ], cols=2, startRow=1001)
 )
@@ -402,6 +385,48 @@ stageGroupDashboards.dashboard('pipeline_execution')
           histogram_quantile(
              0.99,
              sum by (step, le) (pipeline_creation_step_duration_bucket:le_step:rate1m{env="$environment", stage="$stage"})
+          )
+        |||,
+        legendFormat: '{{ step }} duration - p99',
+      }],
+      format='s',
+    ),
+    basic.multiTimeseries(
+      stableId='pipeline-scoped-variables-duration-p50',
+      title='Duration of scoped variables calculation (p50)',
+      queries=[{
+        query: |||
+          histogram_quantile(
+             0.50,
+             sum by (step, le) (pipeline_builder_scoped_variables_duration_bucket:le_step:rate1m{env="$environment", stage="$stage"})
+          )
+        |||,
+        legendFormat: '{{ step }} duration - p50',
+      }],
+      format='s',
+    ),
+    basic.multiTimeseries(
+      stableId='pipeline-scoped-variables-duration-p90',
+      title='Duration of scoped variables calculation(p90)',
+      queries=[{
+        query: |||
+          histogram_quantile(
+             0.90,
+             sum by (step, le) (pipeline_builder_scoped_variables_duration_bucket:le_step:rate1m{env="$environment", stage="$stage"})
+          )
+        |||,
+        legendFormat: '{{ step }} duration - p90',
+      }],
+      format='s',
+    ),
+    basic.multiTimeseries(
+      stableId='pipeline-scoped-variables-duration-p99',
+      title='Duration of scoped variables calculation (p99)',
+      queries=[{
+        query: |||
+          histogram_quantile(
+             0.99,
+             sum by (step, le) (pipeline_builder_scoped_variables_duration_bucket:le_step:rate1m{env="$environment", stage="$stage"})
           )
         |||,
         legendFormat: '{{ step }} duration - p99',

@@ -81,7 +81,7 @@ groups:
   rules:
   - alert: GitalyFileServerDown
     expr: up{job="gitaly",tier="stor",type="gitaly"} == 0
-    for: 1m
+    for: 15m
     labels:
       team: gitaly
       pager: pagerduty
@@ -141,4 +141,3 @@ groups:
         There are less than 10 Gitaly shards that actively receive new project, this could cause them to fill up quickly and put more
         stress on them. Consider adding a new Gitaly shard
         https://gitlab.com/gitlab-com/gl-infra/production/-/issues/new?issuable_template=storage_shard_creation
-

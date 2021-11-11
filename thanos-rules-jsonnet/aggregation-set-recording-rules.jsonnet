@@ -1,10 +1,26 @@
 local aggregationSets = import 'aggregation-sets.libsonnet';
 local aggregationSetTransformer = import 'servicemetrics/aggregation-set-transformer.libsonnet';
+local applicationSlis = (import 'gitlab-slis/library.libsonnet').all;
+local applicationSliAggregations = import 'gitlab-slis/aggregation-sets.libsonnet';
 
 local outputPromYaml(groups) =
   std.manifestYamlDoc({
     groups: groups,
   });
+
+local groupsForApplicationSli(sli) =
+  local targetAggregationSet = applicationSliAggregations.targetAggregationSet(sli);
+  local sourceAggregationSet = applicationSliAggregations.sourceAggregationSet(sli);
+  {
+    name: targetAggregationSet.name,
+    interval: '1m',
+    partial_response_strategy: 'warn',
+    rules: aggregationSetTransformer.generateRecordingRules(
+      sourceAggregationSet=sourceAggregationSet,
+      targetAggregationSet=targetAggregationSet,
+    ),
+  };
+
 
 /**
  * This file defines all the aggregation recording rules that will aggregate in Thanos to a single global view
@@ -125,10 +141,25 @@ local outputPromYaml(groups) =
         interval: '1m',
         partial_response_strategy: 'warn',
         rules: aggregationSetTransformer.generateRecordingRules(
-          sourceAggregationSet=aggregationSets.featureCategorySLIs,
+          sourceAggregationSet=aggregationSets.featureCategorySourceSLIs,
           targetAggregationSet=aggregationSets.stageGroupSLIs
         ),
       }]
     ),
 
+  // Application SLIs not used in the service catalog  will be aggregated here.
+  // These aggregations allow us to see what the metrics look like before adding
+  // an them, so we can validate they would not trigger alerts.
+  // If the application SLI is added to the service catalog, it will automatically
+  // generate `sli_aggregation:` recordings that can be reused everywhere. So no
+  // real need to duplicate them.
+  'aggregated-application-sli-metrics.yml':
+    outputPromYaml(
+      std.filterMap(
+        function(sli)
+          !sli.inRecordingRuleRegistry,
+        groupsForApplicationSli,
+        applicationSlis
+      ),
+    ),
 }

@@ -22,6 +22,10 @@ test.suite({
     actual: stages.stageGroup('access').key,
     expect: 'access',
   },
+  testStageGroupAddsTeam: {
+    actual: stages.stageGroup('access').slack_alerts_channel,
+    expect: 'feed_alerts_access',
+  },
   testFeatureCategoryMapCategories: {
     actual: std.objectFields(stages.featureCategoryMap),
     expectThat: {

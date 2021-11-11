@@ -1,5 +1,5 @@
-local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
-local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
+local resourceSaturationPoint = (import 'servicemetrics/metrics.libsonnet').resourceSaturationPoint;
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 
 {
   pg_walsender_cpu: resourceSaturationPoint({
@@ -11,8 +11,7 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
     // and postgres_exporter data from the prometheus-db shards, so we need to evaluate it in Thanos
     // which is not ideal.
     dangerouslyThanosEvaluated: true,
-
-    appliesTo: ['patroni'],
+    appliesTo: metricsCatalog.findServicesWithTag(tag='patroni'),
     description: |||
       This saturation metric measures the total amount of time that the primary postgres instance is spending sending WAL segments
       to replicas. It is expressed as a percentage of all CPU available on the primary postgres instance.

@@ -1,11 +1,11 @@
-local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
-local utilizationMetric = metricsCatalog.utilizationMetric;
+local utilizationMetric = (import 'servicemetrics/utilization_metric.libsonnet').utilizationMetric;
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 
 {
   pg_table_size: utilizationMetric({
     title: 'Tracks the biggest tables in Postgres',
     unit: 'bytes',
-    appliesTo: ['patroni', 'sentry'],
+    appliesTo: metricsCatalog.findServicesWithTag(tag='postgres'),
     description: |||
       Monitors the size of the biggest tables in Postgres
     |||,

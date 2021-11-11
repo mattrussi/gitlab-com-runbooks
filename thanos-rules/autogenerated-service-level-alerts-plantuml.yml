@@ -10,9 +10,7 @@ groups:
     annotations:
       title: The loadbalancer SLI of the plantuml service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
-      description: |2
-
-
+      description: |
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: plantuml-main/plantuml-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/plantuml-main/plantuml-overview?from=now-6h/m&to=now-1m/m&var-environment={{
@@ -31,13 +29,12 @@ groups:
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
-      product_stage: not_owned
-      product_stage_group: not_owned
       rules_domain: general
       severity: s2
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
+      window: 1h
     expr: |
       (
         (
@@ -49,7 +46,43 @@ groups:
           gitlab_component_errors:ratio_5m{component="loadbalancer",monitor="global",type="plantuml"}
           > (14.4 * 0.001000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="loadbalancer",monitor="global",type="plantuml"}) >= 1
+      )
+  - alert: PlantumlServiceLoadbalancerErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The loadbalancer SLI of the plantuml service (`{{ $labels.stage }}` stage)
+        has an error rate violating SLO
+      description: |
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: plantuml-main/plantuml-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/plantuml-main/plantuml-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3255520955"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id="gitlab-production",response_code_class="500",stage="{{ $labels.stage }}",target_proxy_name="k8s-tps-plantuml-plantuml--58df01f69d082883"}[5m])
+        )
+      runbook: docs/plantuml/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_errors:ratio_6h{component="loadbalancer",monitor="global",type="plantuml"}
           > (6 * 0.001000)
@@ -62,7 +95,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="loadbalancer",monitor="global",type="plantuml"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="loadbalancer",monitor="global",type="plantuml"}) >= 1
       )
   - alert: PlantumlServiceLoadbalancerTrafficCessation
     for: 5m
@@ -90,8 +123,6 @@ groups:
       alert_type: cause
       feature_category: not_owned
       pager: pagerduty
-      product_stage: not_owned
-      product_stage_group: not_owned
       rules_domain: general
       severity: s2
       sli_type: ops
@@ -127,8 +158,6 @@ groups:
       alert_type: cause
       feature_category: not_owned
       pager: pagerduty
-      product_stage: not_owned
-      product_stage_group: not_owned
       rules_domain: general
       severity: s2
       sli_type: ops

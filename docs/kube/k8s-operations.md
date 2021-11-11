@@ -255,13 +255,19 @@ One way to workaround it is to investigate the container from the host. Below ar
 #### Run a command with the pod's network namespace
 
 1. Find the PID of any process running inside the pod, you can use the pause process for that (network namespace is shared by all processes/containers in a pod). There are many, many ways to get the PID, here are a few ideas:
-    1. get PIDs and hostnames of all containers: `docker ps -a | tail -n +2 | awk '{ print $1}' | xargs docker inspect -f '{{ .State.Pid }} {{ .Config.Hostname }}'`
-1. Once you have the PID, link its namespace where the `ip` command can find it (by default docker doesn't link network namespaces that it creates): `ln -sf /proc/<pid_you_found>/ns/net /var/run/netns/<your_custom_name>`
+    1. get PID of a process running in a `containerd` container:
+        1. List containers and get container ID: `crictl ps -a`
+        1. Get pid of a process in a container with a given ID: `crictl inspect <containerID>` search for `info.pid` field
+    1. get PIDs and hostnames of all containers running in docker: `docker ps -a | tail -n +2 | awk '{ print $1}' | xargs docker inspect -f '{{ .State.Pid }} {{ .Config.Hostname }}'`
 1. Run a command with the process' namespace
-    1. Enter toolbox: `toolbox`
-    1. List namespaces: `ip netns list`
-    1. Run your command with the desired network namespace: `ip netns exec <your_custom_name> ip a`
-1. Alternatively, you can use nsenter: `nsenter -target <PID> -mount -uts -ipc -net -pid`
+    1. Entire toolbox started with the given namespace
+        1. `toolbox --network-namespace-path=/proc/<container_pid>/ns/net`
+    1. Run a single command in toolbox with the given namespace
+        1. Once you have the PID, link its namespace where the `ip` command can find it (by default docker doesn't link network namespaces that it creates): `ln -sf /proc/<pid_you_found>/ns/net /var/run/netns/<your_custom_name>`
+        1. Enter toolbox: `toolbox`
+        1. List namespaces: `ip netns list`
+        1. Run your command with the desired network namespace: `ip netns exec <your_custom_name> ip a`
+    1. Alternatively, you can use nsenter on the GKE host (note: it proved difficult to run it with toolbox): `nsenter -target <PID> -mount -uts -ipc -net -pid`
 
 #### Start a container that will use network and process namespaces of a pod
 
@@ -323,29 +329,33 @@ Kubernetes Resource Management: https://kubernetes.io/docs/concepts/configuratio
 
 ## Profiling in kubernetes
 
-### SSH to a GKE node
+### Get ContainerID and node name
 
 ```bash
-$ kubectl -n pubsubbeat get pods -o wide  # find the node hosting the pod with the container you want to profile
-pubsubbeat-pubsub-praefect-inf-gprd-d6ddcf5bb-7lrgv               3/3     Running   0          20m   10.222.56.148   gke-gprd-gitlab-gke-git-https-1-29f46e3d-4fmr         <none>           <none>
-pubsubbeat-pubsub-puma-inf-gprd-68dcc4fc7-ddwcb                   3/3     Running   0          20m   10.222.5.110    gke-gprd-gitlab-gke-sidekiq-urgent-ot-9be5be8a-ptgj   <none>           <none>
-pubsubbeat-pubsub-rails-inf-gprd-788c4c5f59-p74rk                 3/3     Running   0          19m   10.222.8.89     gke-gprd-gitlab-gke-sidekiq-urgent-ot-9be5be8a-o05q   <none>           <none>
-(...)
-$ gcloud beta compute ssh --zone "us-east1-c" "gke-gprd-gitlab-gke-sidekiq-urgent-ot-9be5be8a-o05q" --project "gitlab-production"  # ssh to the GKE node
+$ kubectl -n pubsubbeat get po pubsubbeat-pubsub-sidekiq-inf-gstg-669679fcbd-hhb2m -o json | jq .status.containerStatuses # All containers returned, save ID of the one you are interested in
+$ NODE_NAME=$(kubectl -n pubsubbeat get po pubsubbeat-pubsub-sidekiq-inf-gstg-669679fcbd-hhb2m -o json | jq -r .spec.nodeName) # Get node name
+$ ZONE=$(gcloud compute instances list --filter name=$node_name --format="value(zone)") # get the zone
+$ gcloud compute ssh --zone $ZONE $NODE_NAME --project "gitlab-production"  # ssh to the GKE node
+```
+
+### Prepare toolbox
+
+```bash
+$ toolbox apt install -y jq file
 ```
 
 ### Check for presence of symbols
 
 ```bash
-$ CONTAINER_ID=$(docker ps | grep pubsubbeat_pubsubbeat-pubsub-rails | awk '{print $1}')  # Find the ContainerID of the container you want to profile
-$ docker container top $CONTAINER_ID  # list processes in the container and find the path of the binary
+$ CONTAINER_ID=3e97fd097b8eb9c2d71fdf9641dfa1cba189f4b110a57c939de59292912b5afd  # Set the value taken from previous `kubectl get po` command.
+$ crictl exec -it $CONTAINER_ID top -c  # list processes in the container and find the path of the binary
 UID                 PID                 PPID                C                   STIME               TTY                 TIME                CMD
 root                2932207             2932188             0                   14:28               ?                   00:00:00            /bin/sh -c /bin/pubsubbeat -c /etc/configmap/pubsubbeat.yml -e 2>&1 | /usr/bin/rotatelogs -e /volumes/emptydir/pubsubbeat.log 50M
 root                2932237             2932207             99                  14:28               ?                   03:05:29            /bin/pubsubbeat -c /etc/configmap/pubsubbeat.yml -e
 root                2932238             2932207             0                   14:28               ?                   00:00:00            /usr/bin/rotatelogs -e /volumes/emptydir/pubsubbeat.log 50M
-$ CONTAINER_ROOTFS="$(docker inspect --format="{{ .GraphDriver.Data.MergedDir }}" $CONTAINER_ID)"  # find the path to the root fs of the container
-$ sudo file "$CONTAINER_ROOTFS/bin/pubsubbeat"  # check if the binary contains symbols, the last column should say: "not stripped"
-/var/lib/docker/overlay2/2d9bc0cc996455ae6adc02b8681d4136135ab3fc93a89514bb6aa204e1d63233/merged/bin/pubsubbeat: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), statically linked, Go BuildID=dj2P7xQg9cLDu7_yJhYO/nEBeM2i2MX7nGA4gEyTu/oWmkQmXlToiIjtBSa6lZ/eWGiKNvzpYh2Ftm14MGU, not stripped
+$ CONTAINER_ROOTFS="$(sudo cat /run/containerd/runc/k8s.io/$CONTAINER_ID/state.json | toolbox -q jq -r .config.rootfs)"  # find the path to the root fs of the container
+$ toolbox -q file "/media/root$CONTAINER_ROOTFS/bin/pubsubbeat"  # check if the binary contains symbols, the last column should say: "not stripped"
+/media/root/run/containerd/io.containerd.runtime.v2.task/k8s.io/6c2efcce756520ee87d44fcef240e784bc1fb19c67ea1b27a5a6e198620f0651/rootfs/bin/pubsubbeat: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), statically linked, Go BuildID=mocZaRlBkbCciCWvbae0/jd2tWQJoTiGknHio9Lgw/8XHiDaWStpC9onSk_TwM/82Iaw_TMpLExCoau_B1N, not stripped
 ```
 
 ### Collect `perf record` data
@@ -361,8 +371,8 @@ $ sudo perf record -a -g -e cpu-cycles --freq 99 -- sleep 60
 If the binary running in the container doesn't contain symbols, the data you collect will include empty function names (will not provide a lot of value).
 
 ```bash
-$ CONTAINER_ID=$(docker ps | grep pubsubbeat_pubsubbeat-pubsub-rails | awk '{print $1}')  # Find the ContainerID of the container you want to profile
-$ CONTAINER_CGROUP=$(docker inspect --format='{{ .HostConfig.CgroupParent }}' $CONTAINER_ID)  # Find the cgroup of the container
+$ CONTAINER_ID=$(crictl ps -q --name pubsubbeat_pubsubbeat-pubsub-rails)  # Find the ContainerID of the container you want to profile
+$ CONTAINER_CGROUP=$(crictl inspect $CONTAINER_ID | toolbox -q jq -r .info.runtimeSpec.linux.cgroupsPath)  # Find the cgroup of the container
 $ sudo perf record -a -g -e cpu-cycles --freq 99 --cgroup $CONTAINER_CGROUP -- sleep 60
 ```
 
@@ -378,7 +388,7 @@ So that we avoid installing additional tooling on the GKE node.
 
 On your localhost:
 ```bash
-$ gcloud beta compute scp --zone "us-east1-c" "gke-gprd-gitlab-gke-sidekiq-urgent-ot-9be5be8a-o05q:stacks.gke-gprd-gitlab-gke-sidekiq-urgent-ot-9be5be8a-o05q.2021-03-05_173617.gz" --project "gitlab-production" .
+$ gcloud compute scp --zone "us-east1-c" "gke-gprd-gitlab-gke-sidekiq-urgent-ot-9be5be8a-o05q:stacks.gke-gprd-gitlab-gke-sidekiq-urgent-ot-9be5be8a-o05q.2021-03-05_173617.gz" --project "gitlab-production" .
 $ gunzip stacks.gke-gprd-gitlab-gke-sidekiq-urgent-ot-9be5be8a-o05q.2021-03-05_173617.gz
 ```
 

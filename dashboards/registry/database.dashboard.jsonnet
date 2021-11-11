@@ -7,7 +7,7 @@ local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 
 basic.dashboard(
-  'Database Info',
+  'Database Detail',
   tags=['container registry', 'docker', 'registry'],
 )
 .addTemplate(templates.gkeCluster)
@@ -21,8 +21,19 @@ basic.dashboard(
     hide='variable',
   )
 )
+.addTemplate(template.new(
+  'cluster',
+  '$PROMETHEUS_DS',
+  'label_values(go_sql_dbstats_connections_in_use{app="registry", environment="$environment"}, cluster)',
+  current=null,
+  refresh='load',
+  sort=true,
+  multi=true,
+  includeAll=true,
+  allValues='.*',
+))
 .addPanel(
-  row.new(title='Connection Pool'),
+  row.new(title='Connection Pool (Aggregate)'),
   gridPos={
     x: 0,
     y: 0,
@@ -30,13 +41,86 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(crCommon.dbConnPool(startRow=1))
+.addPanels(
+  layout.grid([
+    basic.queueLengthTimeseries(
+      title='Open',
+      description='The total number of established connections both in use and idle.',
+      yAxisLabel='Connections',
+      query='sum(max_over_time(go_sql_dbstats_connections_open{app="registry", environment="$environment", cluster=~"$cluster", stage="$stage"}[$__interval]))',
+      intervalFactor=5,
+    ),
+    basic.queueLengthTimeseries(
+      title='In Use',
+      description='The total number of connections currently in use.',
+      yAxisLabel='Connections',
+      query='sum(max_over_time(go_sql_dbstats_connections_in_use{app="registry", environment="$environment", cluster=~"$cluster", stage="$stage"}[$__interval]))',
+      intervalFactor=5,
+    ),
+    basic.queueLengthTimeseries(
+      title='Idle',
+      description='The total aggregated number of idle connections.',
+      yAxisLabel='Connections',
+      query='sum(max_over_time(go_sql_dbstats_connections_idle{app="registry", environment="$environment", cluster=~"$cluster", stage="$stage"}[$__interval]))',
+      intervalFactor=5,
+    ),
+    basic.saturationTimeseries(
+      title='Saturation',
+      description='Saturation. Lower is better.',
+      yAxisLabel='Utilization',
+      query=|||
+        sum (go_sql_dbstats_connections_open{app="registry", environment="$environment", cluster=~"$cluster", stage="$stage"})
+        /
+        sum (go_sql_dbstats_connections_max_open{app="registry", environment="$environment", cluster=~"$cluster", stage="$stage"})
+      |||,
+      interval='30s',
+      intervalFactor=3,
+    ),
+    basic.latencyTimeseries(
+      title='Wait Time',
+      description='The total aggregated time blocked waiting for a new connection. Lower is better.',
+      query='sum(rate(go_sql_dbstats_connections_wait_seconds_total{app="registry", environment="$environment", cluster=~"$cluster", stage="$stage"}[$__interval]))',
+      format='s',
+      yAxisLabel='Latency',
+      interval='1m',
+      intervalFactor=1,
+    ),
+    basic.timeseries(
+      title='Waits',
+      description='The total number of connections waited for.',
+      yAxisLabel='Connections',
+      query='sum(rate(go_sql_dbstats_connections_waits_total{app="registry", environment="$environment", cluster=~"$cluster", stage="$stage"}[$__interval]))',
+      intervalFactor=2,
+    ),
+    basic.timeseries(
+      title='Closed (Max Idle Count)',
+      description='The total number of connections closed due to the maximum idle count limit.',
+      yAxisLabel='Connections',
+      query='sum(rate(go_sql_dbstats_connections_max_idle_closed_count_total{app="registry", environment="$environment", cluster=~"$cluster", stage="$stage"}[$__interval]))',
+      intervalFactor=2,
+    ),
+    basic.timeseries(
+      title='Closed (Max Idle Time)',
+      description='The total number of connections closed due to the maximum idle time limit.',
+      yAxisLabel='Connections',
+      query='sum(rate(go_sql_dbstats_connections_max_idle_time_closed_count_total{app="registry", environment="$environment", cluster=~"$cluster", stage="$stage"}[$__interval]))',
+      intervalFactor=2,
+    ),
+    basic.timeseries(
+      title='Closed (Max Lifetime)',
+      description='The total number of connections closed due to the maximum lifetime limit.',
+      yAxisLabel='Connections',
+      query='sum(rate(go_sql_dbstats_connections_max_lifetime_closed_count_total{app="registry", environment="$environment", cluster=~"$cluster", stage="$stage"}[$__interval]))',
+      intervalFactor=2,
+    ),
+  ], cols=3, rowHeight=10, startRow=1),
+)
 
 .addPanel(
-  row.new(title='CloudSQL (pre only)'),
+  row.new(title='Connection Pool (Per Pod)'),
   gridPos={
     x: 0,
-    y: 500,
+    y: 1000,
     w: 24,
     h: 1,
   }
@@ -44,55 +128,131 @@ basic.dashboard(
 .addPanels(
   layout.grid([
     basic.timeseries(
-      title='CPU Utilization',
-      description=|||
-        CPU utilization.
-
-        See https://cloud.google.com/monitoring/api/metrics_gcp#gcp-cloudsql for
-        more details.
-      |||,
-      query='stackdriver_cloudsql_database_cloudsql_googleapis_com_database_cpu_utilization{database_id=~".+:registry-db.+", environment="$environment"}',
-      legendFormat='{{ database_id }}',
-      format='percent'
+      title='Open',
+      description='The number of established connections both in use and idle per pod.',
+      query='sum(go_sql_dbstats_connections_open{app="registry", environment="$environment", cluster=~"$cluster", stage="$stage"}) by (pod)',
+      legendFormat='{{ pod }}',
+      interval='1m',
+      intervalFactor=2,
+      yAxisLabel='Connections',
+      linewidth=1
     ),
     basic.timeseries(
-      title='Memory Utilization',
-      description=|||
-        Memory utilization.
-
-        See https://cloud.google.com/monitoring/api/metrics_gcp#gcp-cloudsql for
-        more details.
-      |||,
-      query='stackdriver_cloudsql_database_cloudsql_googleapis_com_database_memory_utilization{database_id=~".+:registry-db.+", environment="$environment"}',
-      legendFormat='{{ database_id }}',
-      format='percent'
+      title='In Use',
+      description='The number of connections currently in use per pod.',
+      query='sum(go_sql_dbstats_connections_in_use{app="registry", environment="$environment", cluster=~"$cluster", stage="$stage"}) by (pod)',
+      legendFormat='{{ pod }}',
+      interval='1m',
+      intervalFactor=2,
+      yAxisLabel='Connections',
+      linewidth=1
     ),
     basic.timeseries(
-      title='Disk Utilization',
-      description=|||
-        Data utilization in bytes.
-
-        See https://cloud.google.com/monitoring/api/metrics_gcp#gcp-cloudsql for
-        more details.
-      |||,
-      query='stackdriver_cloudsql_database_cloudsql_googleapis_com_database_disk_bytes_used{database_id=~".+:registry-db.+", environment="$environment"}',
-      legendFormat='{{ database_id }}',
-      format='bytes'
+      title='Idle',
+      description='The number of idle connections per pod.',
+      query='sum(go_sql_dbstats_connections_idle{app="registry", environment="$environment", cluster=~"$cluster", stage="$stage"}) by (pod)',
+      legendFormat='{{ pod }}',
+      interval='1m',
+      intervalFactor=2,
+      yAxisLabel='Connections',
+      linewidth=1
     ),
-    basic.timeseries(
-      title='Transactions',
-      description=|||
-        Delta count of number of transactions. Sampled every 60 seconds.
-
-        See https://cloud.google.com/monitoring/api/metrics_gcp#gcp-cloudsql for
-        more details.
-      |||,
+    basic.saturationTimeseries(
+      title='Saturation',
+      description='Saturation per pod. Lower is better.',
+      yAxisLabel='Utilization',
       query=|||
-        sum by (database_id) (
-          avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database_id=~".+:registry-db.+", environment="$environment"}[$__interval])
-        )
+        sum by (pod) (go_sql_dbstats_connections_open{app="registry", environment="$environment", cluster=~"$cluster", stage="$stage"})
+        /
+        sum by (pod) (go_sql_dbstats_connections_max_open{app="registry", environment="$environment", cluster=~"$cluster", stage="$stage"})
       |||,
-      legendFormat='{{ database_id }}',
+      legendFormat='{{ pod }}',
+      interval='30s',
+      intervalFactor=3,
     ),
-  ], cols=3, rowHeight=10, startRow=501)
+    basic.latencyTimeseries(
+      title='Wait Time',
+      description='The aggregated time blocked waiting for a new connection per pod. Lower is better.',
+      query='sum(rate(go_sql_dbstats_connections_wait_seconds_total{app="registry", environment="$environment", cluster=~"$cluster", stage="$stage"}[$__interval])) by (pod)',
+      legendFormat='{{ pod }}',
+      format='s',
+      yAxisLabel='Latency',
+      interval='1m',
+      intervalFactor=1,
+    ),
+    basic.timeseries(
+      title='Waits',
+      description='The number of connections waited for per pod.',
+      query='sum(max_over_time(go_sql_dbstats_connections_waits_total{app="registry", environment="$environment", cluster=~"$cluster", stage="$stage"}[$__interval])) by (pod)',
+      legendFormat='{{ pod }}',
+      interval='1m',
+      intervalFactor=2,
+      yAxisLabel='Connections',
+    ),
+  ], cols=3, rowHeight=10, startRow=1001),
+)
+
+.addPanel(
+  row.new(title='CloudSQL (pre only)', collapse=true)
+  .addPanels(
+    layout.grid([
+      basic.timeseries(
+        title='CPU Utilization',
+        description=|||
+          CPU utilization.
+
+          See https://cloud.google.com/monitoring/api/metrics_gcp#gcp-cloudsql for
+          more details.
+        |||,
+        query='stackdriver_cloudsql_database_cloudsql_googleapis_com_database_cpu_utilization{database_id=~".+:registry-db.+", environment="$environment"}',
+        legendFormat='{{ database_id }}',
+        format='percent'
+      ),
+      basic.timeseries(
+        title='Memory Utilization',
+        description=|||
+          Memory utilization.
+
+          See https://cloud.google.com/monitoring/api/metrics_gcp#gcp-cloudsql for
+          more details.
+        |||,
+        query='stackdriver_cloudsql_database_cloudsql_googleapis_com_database_memory_utilization{database_id=~".+:registry-db.+", environment="$environment"}',
+        legendFormat='{{ database_id }}',
+        format='percent'
+      ),
+      basic.timeseries(
+        title='Disk Utilization',
+        description=|||
+          Data utilization in bytes.
+
+          See https://cloud.google.com/monitoring/api/metrics_gcp#gcp-cloudsql for
+          more details.
+        |||,
+        query='stackdriver_cloudsql_database_cloudsql_googleapis_com_database_disk_bytes_used{database_id=~".+:registry-db.+", environment="$environment"}',
+        legendFormat='{{ database_id }}',
+        format='bytes'
+      ),
+      basic.timeseries(
+        title='Transactions',
+        description=|||
+          Delta count of number of transactions. Sampled every 60 seconds.
+
+          See https://cloud.google.com/monitoring/api/metrics_gcp#gcp-cloudsql for
+          more details.
+        |||,
+        query=|||
+          sum by (database_id) (
+            avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database_id=~".+:registry-db.+", environment="$environment"}[$__interval])
+          )
+        |||,
+        legendFormat='{{ database_id }}',
+      ),
+    ], cols=3, rowHeight=10, startRow=2001)
+  ),
+  gridPos={
+    x: 0,
+    y: 2000,
+    w: 24,
+    h: 1,
+  },
 )

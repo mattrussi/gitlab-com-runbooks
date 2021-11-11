@@ -12,7 +12,7 @@ local serviceDefaults = {
   kubeResources: {},
   regional: false,  // By default we don't support regional monitoring for services
   alertWindows: multiburnExpression.defaultWindows,
-  skippedMaturityCriteria: [],
+  skippedMaturityCriteria: {},
 };
 
 // Convience method, will wrap a raw definition in a serviceLevelIndicatorDefinition if needed
@@ -34,6 +34,13 @@ local validateAndApplyServiceDefaults(service) =
       // to the main stage
       if serviceWithProvisioningDefaults.serviceIsStageless then
         { staticLabels+: { stage: 'main' } }
+      else
+        {}
+    )
+    +
+    (
+      if std.objectHas(serviceWithProvisioningDefaults, 'monitoringThresholds') then
+        { monitoringThresholds: serviceWithProvisioningDefaults.monitoringThresholds }
       else
         {}
     );

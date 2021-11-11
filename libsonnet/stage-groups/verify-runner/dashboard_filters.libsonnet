@@ -6,7 +6,7 @@ local shard = template.new(
   'shard',
   '$PROMETHEUS_DS',
   query=|||
-    label_values(gitlab_runner_version_info{job=~".*",job!~"omnibus-runners|gprd-runner",shard!="default"}, shard)
+    label_values(gitlab_runner_version_info{environment=~"$environment",stage=~"$stage",job=~".*",job!~"omnibus-runners|gprd-runner",shard!="default"}, shard)
   |||,
   current=null,
   refresh='load',
@@ -19,7 +19,7 @@ local runnerManager = template.new(
   'runner_manager',
   '$PROMETHEUS_DS',
   query=|||
-    query_result(label_replace(gitlab_runner_version_info{shard=~"$shard"}, "fqdn", "$1.*", "instance", "(.*):[0-9]+$"))
+    query_result(label_replace(gitlab_runner_version_info{environment=~"$environment",stage=~"$stage",shard=~"$shard"}, "fqdn", "$1.*", "instance", "([^:]*)(:[0-9]+)?$"))
   |||,
   regex='/fqdn="([^"]+)"/',
   current=null,
@@ -33,7 +33,7 @@ local runnerJobFailureReason = template.new(
   'runner_job_failure_reason',
   '$PROMETHEUS_DS',
   query=|||
-    label_values(gitlab_runner_failed_jobs_total, failure_reason)
+    label_values(gitlab_runner_failed_jobs_total{environment=~"$environment",stage=~"$stage"}, failure_reason)
   |||,
   refresh='load',
   sort=true,
@@ -45,7 +45,7 @@ local jobsRunningForProject = template.new(
   'jobs_running_for_project',
   '$PROMETHEUS_DS',
   query=|||
-    label_values(job_queue_duration_seconds_sum, jobs_running_for_project)
+    label_values(job_queue_duration_seconds_sum{environment=~"$environment",stage=~"$stage"}, jobs_running_for_project)
   |||,
   current='0',
   refresh='load',
@@ -58,7 +58,7 @@ local gcpExporter = template.new(
   'gcp_exporter',
   '$PROMETHEUS_DS',
   query=|||
-    label_values(gcp_exporter_region_quota_limit, instance)
+    label_values(gcp_exporter_region_quota_limit{environment=~"$environment",stage=~"$stage"}, instance)
   |||,
   refresh='load',
   sort=true,
@@ -70,7 +70,7 @@ local gcpProject = template.new(
   'gcp_project',
   '$PROMETHEUS_DS',
   query=|||
-    label_values(gcp_exporter_region_quota_limit, project)
+    label_values(gcp_exporter_region_quota_limit{environment=~"$environment",stage=~"$stage"}, project)
   |||,
   refresh='load',
   sort=true,
@@ -82,7 +82,7 @@ local gcpRegion = template.new(
   'gcp_region',
   '$PROMETHEUS_DS',
   query=|||
-    label_values(gcp_exporter_region_quota_usage, region)
+    label_values(gcp_exporter_region_quota_usage{environment=~"$environment",stage=~"$stage"}, region)
   |||,
   refresh='load',
   sort=true,
@@ -94,7 +94,7 @@ local dbInstance = template.new(
   'db_instance',
   '$PROMETHEUS_DS',
   query=|||
-    query_result(pg_replication_is_replica{environment="$environment"} == 0)
+    query_result(pg_replication_is_replica{environment=~"$environment",stage=~"$stage"} == 0)
   |||,
   regex='/.*fqdn="(.*?)".*/',
   refresh='load',
@@ -108,7 +108,7 @@ local dbInstances = template.new(
   'db_instances',
   '$PROMETHEUS_DS',
   query=|||
-    label_values(pg_slow_queries{environment="$environment"},fqdn)
+    label_values(pg_slow_queries{environment=~"$environment",stage=~"$stage"},fqdn)
   |||,
   refresh='load',
   hide='all',
@@ -120,7 +120,7 @@ local dbDatabase = template.new(
   'db_database',
   '$PROMETHEUS_DS',
   query=|||
-    label_values(pg_stat_database_tup_deleted{env="$environment",fqdn="$db_instance"}, datname)
+    label_values(pg_stat_database_tup_deleted{environment=~"$environment",stage=~"$stage",fqdn="$db_instance"}, datname)
   |||,
   regex='/gitlabhq_.*/',
   refresh='load',
@@ -134,7 +134,7 @@ local dbTopDeadTuples = template.new(
   'db_top_dead_tup',
   '$PROMETHEUS_DS',
   query=|||
-    query_result(topk(20, max_over_time(pg_stat_user_tables_n_dead_tup{env="$environment",fqdn="$db_instance",datname="$db_database"}[${__range_s}s])))
+    query_result(topk(20, max_over_time(pg_stat_user_tables_n_dead_tup{environment=~"$environment",stage=~"$stage",fqdn="$db_instance",datname="$db_database"}[${__range_s}s])))
   |||,
   regex='/.*relname="(.*?)".*/',
   refresh='load',

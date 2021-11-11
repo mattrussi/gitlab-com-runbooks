@@ -65,6 +65,10 @@ metricsCatalog.serviceDefinition({
   },
   serviceLevelIndicators: {
     thanos_query: {
+      monitoringThresholds: {
+        apdexScore: 0.95,
+        errorRatio: 0.95,
+      },
       userImpacting: false,
       featureCategory: 'not_owned',
       team: 'sre_observability',
@@ -195,6 +199,10 @@ metricsCatalog.serviceDefinition({
     },
 
     thanos_store: {
+      monitoringThresholds: {
+        apdexScore: 0.95,
+        errorRatio: 0.95,
+      },
       userImpacting: false,
       featureCategory: 'not_owned',
       team: 'sre_observability',
@@ -336,6 +344,10 @@ metricsCatalog.serviceDefinition({
     },
 
     grafana: {
+      monitoringThresholds: {
+        apdexScore: 0.95,
+        errorRatio: 0.95,
+      },
       userImpacting: true,
       featureCategory: 'not_owned',
       team: 'sre_observability',
@@ -513,7 +525,8 @@ metricsCatalog.serviceDefinition({
     memcached_thanos_qfe_query_range: thanosMemcachedSLI('memcached-thanos-qfe-query-range-metrics'),
     memcached_thanos_qfe_labels: thanosMemcachedSLI('memcached-thanos-qfe-labels-metrics'),
   },
-  skippedMaturityCriteria: maturityLevels.getCriterias([
-    'Service exists in the dependency graph',
-  ]),
+
+  skippedMaturityCriteria: maturityLevels.skip({
+    'Service exists in the dependency graph': 'Thanos is an independent internal observability tool. It fetches metrics from other services, but does not interact with them, functionally',
+  }),
 })

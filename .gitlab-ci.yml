@@ -169,6 +169,8 @@ rspec:
   extends: .default-job-rules
   stage: test
   script:
+    - ./scripts/bundler.sh # Install jsonnet bundles
+    - ./scripts/generate-service-catalog-json.sh # For integration tests
     - gem install bundler --no-document -v $BUNDLER_VERSION
     - bundle install --with=test
     - bundle exec rspec
@@ -241,6 +243,17 @@ ensure_generated_content_up_to_date:
   stage: test
   script:
     - make ensure-generated-content-up-to-date
+
+ensure_maturity_model_minimum_level:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: always
+      allow_failure: true
+  stage: test
+  script:
+    - scripts/bundler.sh # Install jsonnet bundles
+    - scripts/generate-jsonnet-rules.sh
+    - scripts/validate-maturity-model
 
 # log.gprd.gitlab.net
 ################################################################################
@@ -650,4 +663,3 @@ verify-tool-versions:
         - .tool-versions
         - .ruby-version
         - .gitlab-ci-asdf-versions.yml
-

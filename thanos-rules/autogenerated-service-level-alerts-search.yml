@@ -31,8 +31,6 @@ groups:
       alert_type: cause
       feature_category: global_search
       pager: pagerduty
-      product_stage: enablement
-      product_stage_group: global search
       rules_domain: general
       severity: s2
       sli_type: ops
@@ -68,8 +66,6 @@ groups:
       alert_type: cause
       feature_category: global_search
       pager: pagerduty
-      product_stage: enablement
-      product_stage_group: global search
       rules_domain: general
       severity: s2
       sli_type: ops
@@ -105,8 +101,6 @@ groups:
       alert_type: cause
       feature_category: global_search
       pager: pagerduty
-      product_stage: enablement
-      product_stage_group: global search
       rules_domain: general
       severity: s2
       sli_type: ops
@@ -142,8 +136,6 @@ groups:
       alert_type: cause
       feature_category: global_search
       pager: pagerduty
-      product_stage: enablement
-      product_stage_group: global search
       rules_domain: general
       severity: s2
       sli_type: ops

@@ -2,13 +2,15 @@
 
 require_relative '../jsonnet_wrapper'
 require_relative './query'
+require 'time'
 
 module PeriodicQueries
   class Topic
     EXT = '.queries.jsonnet'
 
     def self.parse!(file_path)
-      new(file_path, JsonnetWrapper.new.parse(file_path))
+      parsed = JsonnetWrapper.new(ext_str: { current_time: Time.now.utc.to_datetime.rfc3339 }).parse(file_path)
+      new(file_path, parsed)
     end
 
     attr_reader :queries, :name

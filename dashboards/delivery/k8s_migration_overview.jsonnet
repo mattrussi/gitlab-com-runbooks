@@ -174,7 +174,6 @@ basic.dashboard(
   tags=['release'],
   editable=true,
   refresh='5m',
-  timepicker=timepickerlib.new(refresh_intervals=['1m', '5m', '10m', '30m']),
   includeStandardEnvironmentAnnotations=false,
   includeEnvironmentTemplate=false,
 )

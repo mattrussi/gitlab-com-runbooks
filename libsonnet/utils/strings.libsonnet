@@ -65,6 +65,21 @@ local urlEncode(string, replacements=defaultReplacements) =
     string
   );
 
+// Composes a series of markdown paragraphs from a set of lines,
+local markdownParagraphs(lines) =
+  local cleaned = std.map(function(l) chomp(l), lines);
+  local filtered = std.filter(function(l) l != '', cleaned);
+  std.join('\n\n', filtered) + '\n';
+
+
+local toCamelCase(str, splitChars='-_') =
+  std.join(
+    '',
+    std.map(
+      capitalizeFirstLetter,
+      splitOnChars(str, '-_')
+    )
+  );
 
 {
   removeBlankLines(str):: removeBlankLines(str),
@@ -81,4 +96,14 @@ local urlEncode(string, replacements=defaultReplacements) =
   // (very) partial implementation of URL encode
   // aka, enough to get by
   urlEncode: urlEncode,
+
+  markdownParagraphs:: markdownParagraphs,
+
+  // toCamelCase will convert a string to CamelCase, splitting the words on `splitChars`
+  // by default `splitChars` is `_-`.
+  // Examples:
+  // this-is-a-string -> ThisIsAString
+  // this_is_a_string -> ThisIsAString
+  // this-is_a_string -> ThisIsAString
+  toCamelCase: toCamelCase,
 }

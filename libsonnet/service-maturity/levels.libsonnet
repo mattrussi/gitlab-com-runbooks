@@ -12,6 +12,7 @@ local diagramDashboardLink = 'https://dashboards.gitlab.net/d/%(uuid)s' % {
 local levels = [
   {
     name: 'Level 1',
+    number: 1,
     criteria: [
       {
         name: 'Exists in the service catalog',
@@ -30,10 +31,20 @@ local levels = [
             std.objectValues(service.serviceLevelIndicators)
           ),
       },
+      {
+        name: 'Service exists in the dependency graph',
+        evidence: function(service)
+          local serviceGraph = serviceCatalog.serviceGraph;
+          if std.length(serviceGraph[service.type].inward) > 0 || std.length(serviceGraph[service.type].outward) > 0 then
+            [diagramDashboardLink]
+          else
+            false,
+      },
     ],
   },
   {
     name: 'Level 2',
+    number: 2,
     criteria: [
       {
         name: 'SLO monitoring: apdex',
@@ -59,19 +70,11 @@ local levels = [
           else
             false,
       },
-      {
-        name: 'Service exists in the dependency graph',
-        evidence: function(service)
-          local serviceGraph = serviceCatalog.serviceGraph;
-          if std.length(serviceGraph[service.type].inward) > 0 || std.length(serviceGraph[service.type].outward) > 0 then
-            [diagramDashboardLink]
-          else
-            false,
-      },
     ],
   },
   {
     name: 'Level 3',
+    number: 3,
     criteria: [
       {
         // TODO: https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/830
@@ -122,6 +125,7 @@ local levels = [
   {
     // TODO: https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/834
     name: 'Level 4',
+    number: 4,
     criteria: [
       {
         name: 'Prepared Kibana dashboards',
@@ -140,6 +144,7 @@ local levels = [
   {
     // TODO: https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/835
     name: 'Level 5',
+    number: 5,
     criteria: [
       {
         name: 'Long-term forecasting utilization and usage',
@@ -176,10 +181,21 @@ local getCriteria(criteriaName) =
          'Criteria not found %s' % criteriaName;
   criteria[0];
 
-local getCriterias(criterias) = std.map(getCriteria, criterias);
+local skip(skipHash) =
+  assert std.type(skipHash) == 'object' :
+         'Maturity skip list must be a hash of criteria names and reasons';
+  std.foldl(
+    function(memo, key)
+      assert std.type(skipHash[key]) != 'null' :
+             'Maturity skip reason must be a string';
+      memo {
+        [getCriteria(key).name]: skipHash[key],
+      },
+    std.objectFields(skipHash),
+    {}
+  );
 
 {
   getLevels():: levels,
-  getCriteria: getCriteria,
-  getCriterias: getCriterias,
+  skip: skip,
 }

@@ -69,9 +69,9 @@ local es_query = {
         message: {
           from: 'ElasticCloud Watcher: Sidekiq job rejected',
           to: [
-            '#scalability-490-sidekiq-job-limits',
+            '#g_scalability',
           ],
-          text: 'Sidekiq jobs with a compressed payload > 5MB are being rejected. Please investigate this further. See https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/490 and https://log.gprd.gitlab.net/goto/558fbc0dd1e5c53b69f9e95c542b36b1',
+          text: 'Sidekiq jobs with a compressed payload > 5MB are being rejected. Please investigate this further. See https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1349 and https://log.gprd.gitlab.net/goto/558fbc0dd1e5c53b69f9e95c542b36b1',
         },
       },
     },

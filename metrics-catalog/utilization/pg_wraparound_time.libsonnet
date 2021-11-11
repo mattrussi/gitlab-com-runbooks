@@ -1,11 +1,11 @@
-local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
-local utilizationMetric = metricsCatalog.utilizationMetric;
+local utilizationMetric = (import 'servicemetrics/utilization_metric.libsonnet').utilizationMetric;
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 
 {
   pg_wraparound_time: utilizationMetric({
     title: 'Postgres XID Wraparound Time',
     unit: 'seconds',
-    appliesTo: ['patroni', 'sentry'],
+    appliesTo: metricsCatalog.findServicesWithTag(tag='postgres'),
     description: |||
       Given the current transaction (write) rate (over an averaged 24h period) on the primary database instance, measures the
       time it will take for a full XID wraparound cycle to occur. The more transactions/higher the transaction rate, the

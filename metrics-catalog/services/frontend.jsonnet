@@ -80,6 +80,10 @@ metricsCatalog.serviceDefinition({
     },
 
     sshServices: {
+      monitoringThresholds+: {
+        errorRatio: 0.999,
+      },
+
       userImpacting: false,  // HAproxy backends are monitored alongside their respective services, so here we keep as not user impacting
       apdex: histogramApdex(
         histogram='haproxy_ssh_request_duration_seconds_bucket',

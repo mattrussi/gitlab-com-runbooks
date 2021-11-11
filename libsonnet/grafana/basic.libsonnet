@@ -149,6 +149,19 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
     rangeInterval: rangeInterval,
   };
 
+/* Validates each tag on a dashboard */
+local validateTag(tag) =
+  if !std.isString(tag) then error 'dashboard tags must be strings, got %s' % [tag]
+  else if tag == '' then error 'dashboard tag cannot be empty'
+  else if std.length(tag) > 50 then error 'dashboard tag cannot exceed 50 characters in length: %s' % [tag]
+  else tag;
+
+local validateTags(tags) =
+  [
+    validateTag(tag)
+    for tag in tags
+  ];
+
 {
   dashboard(
     title,
@@ -157,7 +170,6 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
     time_from='now-6h/m',
     time_to='now/m',
     refresh='',
-    timepicker=timepickerlib.new(),
     graphTooltip='shared_crosshair',
     hideControls=false,
     description=null,
@@ -169,11 +181,12 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
         title,
         style='light',
         schemaVersion=16,
-        tags=tags,
+        tags=validateTags(tags),
         timezone='utc',
         graphTooltip=graphTooltip,
         editable=editable,
         refresh=refresh,
+        timepicker=timepickerlib.new(refresh_intervals=['1m', '5m', '10m', '15m', '30m']),
         hideControls=false,
         description=null,
         time_from=time_from,
@@ -341,6 +354,7 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
     styles=[],
     columns=[],
     query='',
+    queries=null,
     instant=true,
     interval='1m',
     intervalFactor=3,
@@ -348,7 +362,8 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
     sort=null,
     transformations=[],
   )::
-    tablePanel.new(
+    local wrappedQueries = if queries == null then [query] else queries;
+    local panel = tablePanel.new(
       title,
       description=description,
       span=span,
@@ -357,9 +372,14 @@ local latencyHistogramQuery(percentile, bucketMetric, selector, aggregator, rang
       styles=styles,
       columns=columns,
       sort=sort,
-    )
-    .addTarget(promQuery.target(query, instant=instant, format='table')) +
-    panelOverrides(stableId) + {
+    );
+    local populatedTablePanel = std.foldl(
+      function(table, query)
+        table.addTarget(promQuery.target(query, instant=instant, format='table')),
+      wrappedQueries,
+      panel
+    );
+    populatedTablePanel + panelOverrides(stableId) + {
       transformations: transformations,
     },
 

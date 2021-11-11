@@ -9,6 +9,13 @@ local gaugePanel = grafana.gaugePanel;
 local promQuery = import 'grafana/prom_query.libsonnet';
 local colorScheme = import 'grafana/color_scheme.libsonnet';
 
+local queueSizeTresholds = [
+  { color: colorScheme.normalRangeColor, value: 0 },
+  { color: colorScheme.warningColor, value: 5000 },
+  { color: colorScheme.errorColor, value: 10000 },
+  { color: colorScheme.criticalColor, value: 50000 },
+];
+
 basic.dashboard(
   'Garbage Collection Detail',
   tags=['container registry', 'docker', 'registry'],
@@ -24,7 +31,17 @@ basic.dashboard(
     hide='variable',
   )
 )
-
+.addTemplate(template.new(
+  'cluster',
+  '$PROMETHEUS_DS',
+  'label_values(registry_gc_runs_total{environment="$environment"}, cluster)',
+  current=null,
+  refresh='load',
+  sort=true,
+  multi=true,
+  includeAll=true,
+  allValues='.*',
+))
 .addPanel(
   row.new(title='Overview'),
   gridPos={
@@ -37,48 +54,66 @@ basic.dashboard(
 .addPanels(
   layout.grid([
     statPanel.new(
-      title='Blob Queue Size',
-      description='Maximum blob queue size measured across instances.',
-      graphMode='area',
+      title='Queued Tasks',
+      description='The most recent number of tasks queued for review.',
+      graphMode='none',
+      reducerFunction='last',
       decimals=0,
     )
     .addTarget(
       promQuery.target(
-        'max(registry_gc_queue_size{queue="gc_blob_review_queue", environment="$environment"})',
+        'sum(avg by (query_name) (last_over_time(gitlab_database_rows{query_name=~"registry_gc_.*_review_queue", environment="$environment"}[$__interval])))',
       )
-    )
-    .addThresholds([
-      { color: colorScheme.normalRangeColor, value: 0 },
-      { color: colorScheme.warningColor, value: 10 },
-      { color: colorScheme.errorColor, value: 50 },
-      { color: colorScheme.criticalColor, value: 100 },
-    ]),
+    ),
     statPanel.new(
-      title='Manifest Queue Size',
-      description='Maximum manifest queue size measured across instances.',
-      graphMode='area',
+      title='Pending Tasks',
+      description='The most recent number of tasks ready for review.',
+      graphMode='none',
+      reducerFunction='last',
       decimals=0,
     )
     .addTarget(
       promQuery.target(
-        'max(registry_gc_queue_size{queue="gc_manifest_review_queue", environment="$environment"})',
+        'sum(avg by (query_name) (last_over_time(gitlab_database_rows{query_name=~"registry_gc_.*_review_queue_overdue", environment="$environment"}[$__interval])))',
       )
     )
-    .addThresholds([
-      { color: colorScheme.normalRangeColor, value: 0 },
-      { color: colorScheme.warningColor, value: 10 },
-      { color: colorScheme.errorColor, value: 50 },
-      { color: colorScheme.criticalColor, value: 100 },
-    ]),
+    .addThresholds(queueSizeTresholds),
+    statPanel.new(
+      title='Processed Tasks',
+      description='The total number of processed tasks.',
+      graphMode='none',
+      reducerFunction='sum',
+      unit='short',
+      decimals=0,
+    )
+    .addTarget(
+      promQuery.target(
+        'sum(increase(registry_gc_runs_total{environment="$environment", stage="$stage", cluster=~"$cluster"}[$__interval]))',
+      )
+    ),
+    statPanel.new(
+      title='Deletions',
+      description='The total number of deletions (manifests and blobs).',
+      graphMode='none',
+      reducerFunction='sum',
+      unit='short',
+      decimals=0,
+    )
+    .addTarget(
+      promQuery.target(
+        'sum(increase(registry_gc_deletes_total{environment="$environment", stage="$stage", cluster=~"$cluster"}[$__interval]))',
+      )
+    ),
     statPanel.new(
       title='Recovered Storage Space',
       description='The number of bytes recovered by online GC.',
       graphMode='none',
+      reducerFunction='sum',
       unit='bytes',
     )
     .addTarget(
       promQuery.target(
-        'sum(registry_gc_storage_deleted_bytes_total{environment="$environment"}) or vector(0)',
+        'sum(increase(registry_gc_storage_deleted_bytes_total{environment="$environment", stage="$stage"}[$__interval]))',
       )
     ),
     statPanel.new(
@@ -96,7 +131,7 @@ basic.dashboard(
         |||
           histogram_quantile(0.5,
             sum by (le) (
-              rate(registry_database_query_duration_seconds_bucket{name=~"gc_.*_task_is_dangling", environment="$environment"}[$__interval])
+              rate(registry_database_query_duration_seconds_bucket{name=~"gc_.*_task_is_dangling", environment="$environment", stage="$stage", cluster=~"$cluster"}[$__interval])
             )
           )
         |||,
@@ -108,7 +143,7 @@ basic.dashboard(
       { color: colorScheme.criticalColor, value: 0.1 },
     ]),
     statPanel.new(
-      title='Median Database Delete Latency',
+      title='Median Delete Latency (Database)',
       description='The aggregated P50 latency of the database delete queries.',
       graphMode='none',
       decimals=2,
@@ -119,7 +154,7 @@ basic.dashboard(
         |||
           histogram_quantile(0.5,
             sum by (le) (
-              rate(registry_gc_delete_duration_seconds_bucket{backend="database", error="false", environment="$environment"}[$__interval])
+              rate(registry_gc_delete_duration_seconds_bucket{backend="database", error="false", environment="$environment", stage="$stage", cluster=~"$cluster"}[$__interval])
             )
           )
         |||,
@@ -131,7 +166,7 @@ basic.dashboard(
       { color: colorScheme.criticalColor, value: 0.1 },
     ]),
     statPanel.new(
-      title='Median Storage Delete Latency',
+      title='Median Delete Latency (Storage)',
       description='The aggregated P50 latency of the storage delete requests.',
       graphMode='none',
       decimals=2,
@@ -142,7 +177,7 @@ basic.dashboard(
         |||
           histogram_quantile(0.5,
             sum by (le) (
-              rate(registry_gc_delete_duration_seconds_bucket{backend="storage", error="false", environment="$environment"}[$__interval])
+              rate(registry_gc_delete_duration_seconds_bucket{backend="storage", error="false", environment="$environment", stage="$stage", cluster=~"$cluster"}[$__interval])
             )
           )
         |||,
@@ -161,9 +196,9 @@ basic.dashboard(
       promQuery.target(
         |||
           (
-            sum(rate(registry_gc_runs_total{error="false", environment="$environment"}[$__interval]))
+            sum(rate(registry_gc_runs_total{error="false", environment="$environment", stage="$stage", cluster=~"$cluster"}[$__interval]))
             /
-            sum(rate(registry_gc_runs_total{environment="$environment"}[$__interval]))
+            sum(rate(registry_gc_runs_total{environment="$environment", stage="$stage", cluster=~"$cluster"}[$__interval]))
           ) * 100
         |||,
       )
@@ -174,7 +209,7 @@ basic.dashboard(
       { color: colorScheme.warningColor, value: 95 },
       { color: colorScheme.normalRangeColor, value: 100 },
     ]),
-  ], cols=7, rowHeight=5, startRow=1)
+  ], cols=9, rowHeight=4, startRow=1)
 )
 
 .addPanel(
@@ -189,10 +224,18 @@ basic.dashboard(
 .addPanels(
   layout.grid([
     basic.timeseries(
+      title='Queued Tasks',
+      description='The number of tasks queued for review.',
+      query='avg by (query_name) (gitlab_database_rows{query_name=~"registry_gc_.*_review_queue", environment="$environment"})',
+      legendFormat='{{ query_name }}',
+      intervalFactor=1,
+      yAxisLabel='Count'
+    ),
+    basic.timeseries(
       title='Pending Tasks',
-      description='The number of tasks pending of review.',
-      query='sum by (queue) (registry_gc_queue_size{environment="$environment"})',
-      legendFormat='{{ queue }}',
+      description='The number of tasks ready for review.',
+      query='avg by (query_name) (gitlab_database_rows{query_name=~"registry_gc_.*_review_queue_overdue", environment="$environment"})',
+      legendFormat='{{ query_name }}',
       intervalFactor=1,
       yAxisLabel='Count'
     ),
@@ -214,14 +257,14 @@ basic.dashboard(
       query=|||
         histogram_quantile(0.50,
           sum by (worker, le) (
-            rate(registry_gc_sleep_duration_seconds_bucket{environment="$environment"}[$__interval])
+            rate(registry_gc_sleep_duration_seconds_bucket{environment="$environment", stage="$stage", cluster=~"$cluster"}[$__interval])
           )
         )
       |||,
       legendFormat='{{ worker }}',
       format='s'
     ),
-  ], cols=3, rowHeight=7, startRow=1001)
+  ], cols=4, rowHeight=10, startRow=1001)
 )
 
 .addPanel(
@@ -238,7 +281,7 @@ basic.dashboard(
     basic.timeseries(
       title='Aggregate',
       description='The per-second rate of all online GC runs.',
-      query='sum by (worker) (rate(registry_gc_run_duration_seconds_count{environment="$environment"}[$__interval]))',
+      query='sum by (worker) (rate(registry_gc_run_duration_seconds_count{environment="$environment", stage="$stage", cluster=~"$cluster"}[$__interval]))',
       legendFormat='{{ worker }}',
       format='ops'
     ),
@@ -248,7 +291,7 @@ basic.dashboard(
 
       query=|||
         sum by (worker) (
-          rate(registry_gc_run_duration_seconds_count{error="false", noop="false", environment="$environment"}[$__interval])
+          rate(registry_gc_run_duration_seconds_count{error="false", noop="false", environment="$environment", stage="$stage", cluster=~"$cluster"}[$__interval])
         )
       |||,
       legendFormat='{{ worker }}',
@@ -259,7 +302,7 @@ basic.dashboard(
       description='The per-second rate of failed online GC runs.',
       query=|||
         sum by (worker) (
-          rate(registry_gc_run_duration_seconds_count{error="true", noop="false", environment="$environment"}[$__interval])
+          rate(registry_gc_run_duration_seconds_count{error="true", noop="false", environment="$environment", stage="$stage", cluster=~"$cluster"}[$__interval])
         )
       |||,
       legendFormat='{{ worker }}',
@@ -270,13 +313,13 @@ basic.dashboard(
       description='The per-second rate of noop (no tasks available) online GC runs.',
       query=|||
         sum by (worker) (
-          rate(registry_gc_run_duration_seconds_count{error="false", noop="true", environment="$environment"}[$__interval])
+          rate(registry_gc_run_duration_seconds_count{error="false", noop="true", environment="$environment", stage="$stage", cluster=~"$cluster"}[$__interval])
         )
       |||,
       legendFormat='{{ worker }}',
       format='ops'
     ),
-  ], cols=4, rowHeight=7, startRow=2001)
+  ], cols=4, rowHeight=10, startRow=2001)
 )
 
 .addPanel(
@@ -297,7 +340,7 @@ basic.dashboard(
         histogram_quantile(
           0.900000,
           sum by (worker, le) (
-            rate(registry_gc_run_duration_seconds_bucket{environment="$environment"}[$__interval])
+            rate(registry_gc_run_duration_seconds_bucket{environment="$environment", stage="$stage", cluster=~"$cluster"}[$__interval])
           )
         )
       |||,
@@ -311,7 +354,7 @@ basic.dashboard(
         histogram_quantile(
           0.900000,
           sum by (worker, le) (
-            rate(registry_gc_run_duration_seconds_bucket{error="false", noop="false", environment="$environment"}[$__interval])
+            rate(registry_gc_run_duration_seconds_bucket{error="false", noop="false", environment="$environment", stage="$stage", cluster=~"$cluster"}[$__interval])
           )
         )
       |||,
@@ -325,7 +368,7 @@ basic.dashboard(
         histogram_quantile(
           0.900000,
           sum by (worker, le) (
-            rate(registry_gc_run_duration_seconds_bucket{error="true", noop="false", environment="$environment"}[$__interval])
+            rate(registry_gc_run_duration_seconds_bucket{error="true", noop="false", environment="$environment", stage="$stage", cluster=~"$cluster"}[$__interval])
           )
         )
       |||,
@@ -339,14 +382,14 @@ basic.dashboard(
         histogram_quantile(
           0.900000,
           sum by (worker, le) (
-            rate(registry_gc_run_duration_seconds_bucket{error="false", noop="true", environment="$environment"}[$__interval])
+            rate(registry_gc_run_duration_seconds_bucket{error="false", noop="true", environment="$environment", stage="$stage", cluster=~"$cluster"}[$__interval])
           )
         )
       |||,
       legendFormat='{{ worker }}',
       format='s'
     ),
-  ], cols=4, rowHeight=7, startRow=3001)
+  ], cols=4, rowHeight=10, startRow=3001)
 )
 
 .addPanel(
@@ -365,7 +408,7 @@ basic.dashboard(
       description='The per-second rate of all online GC deletions.',
       query=|||
         sum by (backend) (
-          rate(registry_gc_delete_duration_seconds_count{environment="$environment"}[$__interval])
+          rate(registry_gc_delete_duration_seconds_count{environment="$environment", stage="$stage", cluster=~"$cluster"}[$__interval])
         )
       |||,
       legendFormat='{{ backend }}',
@@ -376,7 +419,7 @@ basic.dashboard(
       description='The per-second rate of online GC blob deletions.',
       query=|||
         sum by (backend) (
-          rate(registry_gc_delete_duration_seconds_count{artifact="blob", environment="$environment"}[$__interval])
+          rate(registry_gc_delete_duration_seconds_count{artifact="blob", environment="$environment", stage="$stage", cluster=~"$cluster"}[$__interval])
         )
       |||,
       legendFormat='{{ backend }}',
@@ -387,13 +430,13 @@ basic.dashboard(
       description='The per-second rate of online GC manifest deletions.',
       query=|||
         sum by (backend) (
-          rate(registry_gc_delete_duration_seconds_count{environment="$environment", artifact="manifest"}[$__interval])
+          rate(registry_gc_delete_duration_seconds_count{artifact="manifest", environment="$environment", stage="$stage", cluster=~"$cluster"}[$__interval])
         )
       |||,
       legendFormat='{{ backend }}',
       format='ops'
     ),
-  ], cols=3, rowHeight=7, startRow=4001)
+  ], cols=3, rowHeight=10, startRow=4001)
 )
 
 .addPanel(
@@ -414,7 +457,7 @@ basic.dashboard(
         histogram_quantile(
           0.900000,
           sum by (le) (
-            rate(registry_gc_delete_duration_seconds_bucket{environment="$environment"}[$__interval])
+            rate(registry_gc_delete_duration_seconds_bucket{environment="$environment", stage="$stage", cluster=~"$cluster"}[$__interval])
           )
         )
       |||,
@@ -428,7 +471,7 @@ basic.dashboard(
         histogram_quantile(
           0.900000,
           sum by (backend, le) (
-            rate(registry_gc_delete_duration_seconds_bucket{artifact="blob", environment="$environment"}[$__interval])
+            rate(registry_gc_delete_duration_seconds_bucket{artifact="blob", environment="$environment", stage="$stage", cluster=~"$cluster"}[$__interval])
           )
         )
       |||,
@@ -442,12 +485,12 @@ basic.dashboard(
         histogram_quantile(
           0.900000,
           sum by (backend, le) (
-            rate(registry_gc_delete_duration_seconds_bucket{artifact="manifest", environment="$environment"}[$__interval])
+            rate(registry_gc_delete_duration_seconds_bucket{artifact="manifest", environment="$environment", stage="$stage", cluster=~"$cluster"}[$__interval])
           )
         )
       |||,
       legendFormat='{{ backend }}',
       format='s'
     ),
-  ], cols=3, rowHeight=7, startRow=5001)
+  ], cols=3, rowHeight=10, startRow=5001)
 )

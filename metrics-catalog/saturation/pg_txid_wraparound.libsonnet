@@ -1,12 +1,16 @@
-local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
-local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
+local resourceSaturationPoint = (import 'servicemetrics/metrics.libsonnet').resourceSaturationPoint;
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 
 {
   pg_xid_wraparound: resourceSaturationPoint({
     title: 'Transaction ID Wraparound',
     severity: 's1',
     horizontallyScalable: false,
-    appliesTo: ['patroni'],
+
+    // Use patroni tag, not postgres since we only want clusters that have primaries
+    // not postgres-archive, or postgres-delayed nodes for example
+    appliesTo: metricsCatalog.findServicesWithTag(tag='postgres_with_primaries'),
+
     alertRunbook: 'docs/patroni/pg_xid_wraparound_alert.md',
     description: |||
       Risk of DB shutdown in the near future, approaching transaction ID wraparound.

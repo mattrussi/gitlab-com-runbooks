@@ -204,7 +204,6 @@ basic.dashboard(
   tags=['release'],
   editable=true,
   refresh='5m',
-  timepicker=timepickerlib.new(refresh_intervals=['1m', '5m', '10m', '30m']),
   includeStandardEnvironmentAnnotations=false,
   includeEnvironmentTemplate=false,
 )
@@ -319,7 +318,7 @@ basic.dashboard(
         },
       ),
     ],
-  ], cellHeights=[3, 3, 3], startRow=1)
+  ], cellHeights=[3 for x in environments], startRow=1)
 )
 .addPanels(
   std.flattenArrays(

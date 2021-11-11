@@ -26,6 +26,11 @@ CodeReuse/ActiveRecord:
 Layout/LineLength:
   Enabled: false
 
+# In many cases, indentation following the first argument makes it harder to
+# read.
+Layout/FirstArgumentIndentation:
+  Enabled: false
+
 Lint/HashCompareByIdentity: # (new in 0.93)
   Enabled: true
 Lint/RedundantSafeNavigation: # (new in 0.93)

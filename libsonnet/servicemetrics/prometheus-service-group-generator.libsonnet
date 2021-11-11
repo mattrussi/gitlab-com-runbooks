@@ -51,7 +51,6 @@ local featureCategoryRecordingRuleGroupsForService(serviceDefinition, aggregatio
    */
   recordingRuleGroupsForService(serviceDefinition, componentAggregationSet, nodeAggregationSet)::
     local componentMappingRuleSetGenerator = recordingRules.componentMappingRuleSetGenerator();
-    local componentNodeSLORuleSetGenerator = recordingRules.componentNodeSLORuleSetGenerator();
 
     local burnRates = componentAggregationSet.getBurnRates();
 
@@ -67,9 +66,7 @@ local featureCategoryRecordingRuleGroupsForService(serviceDefinition, aggregatio
       name: 'Component mapping: %s' % [serviceDefinition.type],
       interval: '1m',  // TODO: we could probably extend this out to 5m
       rules:
-        componentMappingRuleSetGenerator.generateRecordingRulesForService(serviceDefinition)
-        +
-        componentNodeSLORuleSetGenerator.generateRecordingRulesForService(serviceDefinition),
+        componentMappingRuleSetGenerator.generateRecordingRulesForService(serviceDefinition),
     }],
 
   featureCategoryRecordingRuleGroupsForService(serviceDefinition, aggregationSet)::

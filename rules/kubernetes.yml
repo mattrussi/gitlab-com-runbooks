@@ -80,18 +80,19 @@ groups:
       - alert: KubeStatefulSetReplicasMismatch
         annotations:
           title: StatefulSet Replicas Mismatch
-          description: StatefulSet {{ $labels.namespace }}/{{ $labels.statefulset }} has not matched the expected number of replicas for longer than 15 minutes.
+          description: StatefulSet {{ $labels.namespace }}/{{ $labels.statefulset }} has not matched the expected number of replicas for longer than 12 hours.
           runbook: docs/kube/kubernetes.md
         expr: |-
           kube_statefulset_status_replicas_ready{job="kube-state-metrics"}
             !=
           kube_statefulset_status_replicas{job="kube-state-metrics"}
-        for: 15m
+        for: 12h
         labels:
           tier: inf
           type: kube
           severity: s3
           alert_type: cause
+          incident_project: gitlab.com/gitlab-com/gl-infra/production
 
       - alert: KubeStatefulSetGenerationMismatch
         annotations:

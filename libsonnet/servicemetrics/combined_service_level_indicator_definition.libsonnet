@@ -3,6 +3,7 @@
 // a single SLI unless you are sure you know what you are doing
 
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
+local misc = import 'utils/misc.libsonnet';
 
 // Combined component definitions are a specialisation of the service-component.
 // They allow multiple components to be combined under a single name, but with different
@@ -34,19 +35,32 @@ local combinedServiceLevelIndicatorDefinition(
         team: team,
         ignoreTrafficCessation: ignoreTrafficCessation,
         regional: if regional != null then regional else inheritedDefaults.regional,
+        severity: componentsInitialised[0].severity,
 
         serviceAggregation: serviceAggregation,
 
-        hasFeatureCategory():: false,
-        featureCategoryLabels():: {},
+        hasFeatureCategoryFromSourceMetrics()::
+          misc.all(function(component) component.hasFeatureCategoryFromSourceMetrics(), componentsInitialised),
+        hasStaticFeatureCategory():: featureCategory != null && featureCategory != 'not_owned',
+        hasFeatureCategory():: self.hasStaticFeatureCategory() || self.hasFeatureCategoryFromSourceMetrics(),
+        staticFeatureCategoryLabels():: { feature_category: featureCategory },
 
         // Returns true if this component allows detailed breakdowns
         // this is not the case for combined component definitions
         supportsDetails(): false,
 
+        // Combined SLIs should always use the thresholds specified on the service
+        monitoringThresholds:
+          if std.objectHas(inheritedDefaults, 'monitoringThresholds') then
+            inheritedDefaults.monitoringThresholds
+          else
+            {},
+
+        hasApdexSLO():: std.objectHas(self.monitoringThresholds, 'apdexScore'),
         hasApdex():: componentsInitialised[0].hasApdex(),
         hasRequestRate():: componentsInitialised[0].hasRequestRate(),
         hasAggregatableRequestRate():: componentsInitialised[0].hasAggregatableRequestRate(),
+        hasErrorRateSLO():: std.objectHas(self.monitoringThresholds, 'errorRatio'),
         hasErrorRate():: componentsInitialised[0].hasErrorRate(),
 
         hasToolingLinks()::

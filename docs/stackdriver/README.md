@@ -15,7 +15,6 @@
 
 ## Troubleshooting Pointers
 
-* [../frontend/haproxy.md](../frontend/haproxy.md)
 * [../gitaly/gitaly-down.md](../gitaly/gitaly-down.md)
 * [../kube/k8s-operations.md](../kube/k8s-operations.md)
 * [../kube/kubernetes.md](../kube/kubernetes.md)

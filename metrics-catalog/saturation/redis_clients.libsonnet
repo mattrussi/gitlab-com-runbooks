@@ -1,12 +1,12 @@
-local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
-local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
+local resourceSaturationPoint = (import 'servicemetrics/metrics.libsonnet').resourceSaturationPoint;
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 
 {
   redis_clients: resourceSaturationPoint({
     title: 'Redis Client Utilization per Node',
     severity: 's3',
     horizontallyScalable: false,
-    appliesTo: ['redis', 'redis-sidekiq', 'redis-cache', 'redis-tracechunks'],
+    appliesTo: metricsCatalog.findServicesWithTag(tag='redis'),
     description: |||
       Redis client utilization per node.
 

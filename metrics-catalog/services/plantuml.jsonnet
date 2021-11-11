@@ -31,7 +31,7 @@ metricsCatalog.serviceDefinition({
       projectId='gitlab-production',
     ),
   },
-  skippedMaturityCriteria: maturityLevels.getCriterias([
-    'Service exists in the dependency graph',
-  ]),
+  skippedMaturityCriteria: maturityLevels.skip({
+    'Service exists in the dependency graph': 'Platuml is a is a stateless web application that generates UML diagrams on the fly. The rendered markdown points to the platuml server in the frontends. It does not interact with any declared services',
+  }),
 })

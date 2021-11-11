@@ -4,7 +4,6 @@
   aggregationSetRateRuleSet: (import 'aggregation-set-rate-rule-set.libsonnet').aggregationSetRateRuleSet,
   componentMappingRuleSetGenerator: (import 'component-mapping-rule-set-generator.libsonnet').componentMappingRuleSetGenerator,
   componentMetricsRuleSetGenerator: (import 'component-metrics-rule-set-generator.libsonnet').componentMetricsRuleSetGenerator,
-  componentNodeSLORuleSetGenerator: (import 'component-node-slo-rule-set-generator.libsonnet').componentNodeSLORuleSetGenerator,
   extraRecordingRuleSetGenerator: (import 'extra-recording-rule-set-generator.libsonnet').extraRecordingRuleSetGenerator,
   serviceMappingRuleSetGenerator: (import 'service-mapping-rule-set-generator.libsonnet').serviceMappingRuleSetGenerator,
   serviceSLORuleSetGenerator: (import 'service-slo-rule-set-generator.libsonnet').serviceSLORuleSetGenerator,

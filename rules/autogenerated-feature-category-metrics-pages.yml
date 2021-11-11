@@ -103,37 +103,3 @@ groups:
           gitlab:component:feature_category:execution:ops:rate_1h{component="loadbalancer",feature_category="pages",stage="main",tier="lb",type="pages"}
         )
       )
-- name: 'Prometheus Intermediate Metrics per feature: pages - burn-rate 6h'
-  rules:
-  - record: gitlab:component:feature_category:execution:ops:rate_6h
-    labels:
-      component: loadbalancer
-      feature_category: pages
-      stage: main
-      tier: lb
-      type: pages
-    expr: |
-      sum by (env,environment) (
-        rate(haproxy_server_sessions_total{type="pages", backend=~"pages_https|pages_http"}[6h])
-      )
-  - record: gitlab:component:feature_category:execution:error:rate_6h
-    labels:
-      component: loadbalancer
-      feature_category: pages
-      stage: main
-      tier: lb
-      type: pages
-    expr: |
-      (
-        sum by (env,environment) (
-          label_replace(rate(haproxy_backend_http_responses_total{type="pages",job="haproxy",code="5xx"}[6h]), "_c", "0", "", "")
-          or
-          label_replace(rate(haproxy_server_connection_errors_total{type="pages", job="haproxy"}[6h]), "_c", "1", "", "")
-        )
-      )
-      or
-      (
-        0 * group by(env,environment) (
-          gitlab:component:feature_category:execution:ops:rate_6h{component="loadbalancer",feature_category="pages",stage="main",tier="lb",type="pages"}
-        )
-      )

@@ -31,8 +31,6 @@ groups:
       alert_type: cause
       feature_category: not_owned
       pager: pagerduty
-      product_stage: not_owned
-      product_stage_group: not_owned
       rules_domain: general
       severity: s2
       sli_type: ops
@@ -68,8 +66,6 @@ groups:
       alert_type: cause
       feature_category: not_owned
       pager: pagerduty
-      product_stage: not_owned
-      product_stage_group: not_owned
       rules_domain: general
       severity: s2
       sli_type: ops
@@ -105,8 +101,6 @@ groups:
       alert_type: cause
       feature_category: not_owned
       pager: pagerduty
-      product_stage: not_owned
-      product_stage_group: not_owned
       rules_domain: general
       severity: s2
       sli_type: ops
@@ -142,8 +136,6 @@ groups:
       alert_type: cause
       feature_category: not_owned
       pager: pagerduty
-      product_stage: not_owned
-      product_stage_group: not_owned
       rules_domain: general
       severity: s2
       sli_type: ops
@@ -179,8 +171,6 @@ groups:
       alert_type: cause
       feature_category: not_owned
       pager: pagerduty
-      product_stage: not_owned
-      product_stage_group: not_owned
       rules_domain: general
       severity: s2
       sli_type: ops
@@ -216,8 +206,6 @@ groups:
       alert_type: cause
       feature_category: not_owned
       pager: pagerduty
-      product_stage: not_owned
-      product_stage_group: not_owned
       rules_domain: general
       severity: s2
       sli_type: ops
@@ -253,8 +241,6 @@ groups:
       alert_type: cause
       feature_category: not_owned
       pager: pagerduty
-      product_stage: not_owned
-      product_stage_group: not_owned
       rules_domain: general
       severity: s2
       sli_type: ops
@@ -290,8 +276,6 @@ groups:
       alert_type: cause
       feature_category: not_owned
       pager: pagerduty
-      product_stage: not_owned
-      product_stage_group: not_owned
       rules_domain: general
       severity: s2
       sli_type: ops
@@ -327,13 +311,12 @@ groups:
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
-      product_stage: not_owned
-      product_stage_group: not_owned
       rules_domain: general
       severity: s2
       sli_type: error
       slo_alert: "yes"
       user_impacting: "no"
+      window: 1h
     expr: |
       (
         (
@@ -345,7 +328,45 @@ groups:
           gitlab_component_errors:ratio_5m{component="fluentd_log_output",monitor="global",type="logging"}
           > (14.4 * 0.001000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="fluentd_log_output",monitor="global",type="logging"}) >= 1
+      )
+  - alert: LoggingServiceFluentdLogOutputErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The fluentd_log_output SLI of the logging service (`{{ $labels.stage
+        }}` stage) has an error rate violating SLO
+      description: |
+        This SLI monitors fluentd log output and the number of output errors in fluentd.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: logging-main/logging-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/logging-main/logging-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3405007546"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(fluentd_output_status_num_errors{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/logging/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_errors:ratio_6h{component="fluentd_log_output",monitor="global",type="logging"}
           > (6 * 0.001000)
@@ -358,7 +379,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="fluentd_log_output",monitor="global",type="logging"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="fluentd_log_output",monitor="global",type="logging"}) >= 1
       )
   - alert: LoggingServiceFluentdLogOutputTrafficCessation
     for: 5m
@@ -386,8 +407,6 @@ groups:
       alert_type: cause
       feature_category: not_owned
       pager: pagerduty
-      product_stage: not_owned
-      product_stage_group: not_owned
       rules_domain: general
       severity: s2
       sli_type: ops
@@ -423,8 +442,6 @@ groups:
       alert_type: cause
       feature_category: not_owned
       pager: pagerduty
-      product_stage: not_owned
-      product_stage_group: not_owned
       rules_domain: general
       severity: s2
       sli_type: ops
@@ -439,9 +456,7 @@ groups:
     annotations:
       title: The kibana_googlelb SLI of the logging service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
-      description: |2
-
-
+      description: |
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: logging-main/logging-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/logging-main/logging-overview?from=now-6h/m&to=now-1m/m&var-environment={{
@@ -460,13 +475,12 @@ groups:
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
-      product_stage: not_owned
-      product_stage_group: not_owned
       rules_domain: general
       severity: s2
       sli_type: error
       slo_alert: "yes"
       user_impacting: "no"
+      window: 1h
     expr: |
       (
         (
@@ -478,7 +492,43 @@ groups:
           gitlab_component_errors:ratio_5m{component="kibana_googlelb",monitor="global",type="logging"}
           > (14.4 * 0.001000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="kibana_googlelb",monitor="global",type="logging"}) >= 1
+      )
+  - alert: LoggingServiceKibanaGooglelbErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The kibana_googlelb SLI of the logging service (`{{ $labels.stage }}`
+        stage) has an error rate violating SLO
+      description: |
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: logging-main/logging-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/logging-main/logging-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1918266605"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id="gitlab-ops",response_code_class="500",stage="{{ $labels.stage }}",target_proxy_name="ops-prod-proxy"}[5m])
+        )
+      runbook: docs/logging/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_errors:ratio_6h{component="kibana_googlelb",monitor="global",type="logging"}
           > (6 * 0.001000)
@@ -491,7 +541,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="kibana_googlelb",monitor="global",type="logging"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="kibana_googlelb",monitor="global",type="logging"}) >= 1
       )
   - alert: LoggingServicePubsubSubscriptionsTrafficCessation
     for: 5m
@@ -519,8 +569,6 @@ groups:
       alert_type: cause
       feature_category: not_owned
       pager: pagerduty
-      product_stage: not_owned
-      product_stage_group: not_owned
       rules_domain: general
       severity: s2
       sli_type: ops
@@ -556,8 +604,6 @@ groups:
       alert_type: cause
       feature_category: not_owned
       pager: pagerduty
-      product_stage: not_owned
-      product_stage_group: not_owned
       rules_domain: general
       severity: s2
       sli_type: ops
@@ -593,8 +639,6 @@ groups:
       alert_type: cause
       feature_category: not_owned
       pager: pagerduty
-      product_stage: not_owned
-      product_stage_group: not_owned
       rules_domain: general
       severity: s2
       sli_type: ops
@@ -630,8 +674,6 @@ groups:
       alert_type: cause
       feature_category: not_owned
       pager: pagerduty
-      product_stage: not_owned
-      product_stage_group: not_owned
       rules_domain: general
       severity: s2
       sli_type: ops

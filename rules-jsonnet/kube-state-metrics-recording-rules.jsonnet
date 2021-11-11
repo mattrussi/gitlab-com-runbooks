@@ -30,10 +30,8 @@ local cadvisorMetrics = [
 
 local kubePodContainerMetrics = [
   'kube_pod_container_status_running',
-  'kube_pod_container_resource_limits_cpu_cores',
-  'kube_pod_container_resource_limits_memory_bytes',
-  'kube_pod_container_resource_requests_cpu_cores',
-  'kube_pod_container_resource_requests_memory_bytes',
+  'kube_pod_container_resource_limits',
+  'kube_pod_container_resource_requests',
 
   // Kube pod status metrics, useful for measuring pod lifecycles
   'kube_pod_container_status_last_terminated_reason',
@@ -46,14 +44,14 @@ local kubePodContainerMetrics = [
   'kube_pod_container_status_waiting_reason',
 ];
 
-local kubeHPAMetrics = [
-  'kube_hpa_spec_target_metric',
-  'kube_hpa_status_condition',
-  'kube_hpa_status_current_replicas',
-  'kube_hpa_status_desired_replicas',
-  'kube_hpa_metadata_generation',
-  'kube_hpa_spec_max_replicas',
-  'kube_hpa_spec_min_replicas',
+local kubeHorizontalPodAutoscalerMetrics = [
+  'kube_horizontalpodautoscaler_spec_target_metric',
+  'kube_horizontalpodautoscaler_status_condition',
+  'kube_horizontalpodautoscaler_status_current_replicas',
+  'kube_horizontalpodautoscaler_status_desired_replicas',
+  'kube_horizontalpodautoscaler_metadata_generation',
+  'kube_horizontalpodautoscaler_spec_max_replicas',
+  'kube_horizontalpodautoscaler_spec_min_replicas',
 ];
 
 local kubeNodeMetrics = [
@@ -123,12 +121,12 @@ local podLabelJoinExpression(expression) =
     expression: expression,
   };
 
-local kubeHPALabelJoinExpression(expression) =
+local kubeHorizontalPodAutoscalerLabelJoinExpression(expression) =
   |||
     %(expression)s
     *
-    on(hpa) group_left(tier, type, stage, shard)
-    topk by (hpa) (1, kube_hpa_labels:labeled{type!=""})
+    on(horizontalpodautoscaler) group_left(tier, type, stage, shard)
+    topk by (horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels:labeled{type!=""})
   ||| % {
     expression: expression,
   };
@@ -231,11 +229,11 @@ local rules = {
       recordingRuleFor(metricName, podLabelJoinExpression(metricName))
       for metricName in kubePodContainerMetrics
     ] + [
-      // Relabel: kube_hpa_labels
+      // Relabel:kube_horizontalpodautoscaler_labels
       recordingRuleFor(
-        'kube_hpa_labels',
+        'kube_horizontalpodautoscaler_labels',
         relabel(
-          'topk by (hpa) (1, kube_hpa_labels{})',
+          'topk by (horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels{})',
           {
             label_tier: 'tier',
             label_type: 'type',
@@ -245,9 +243,9 @@ local rules = {
         )
       ),
     ] + [
-      /* kube_hpa_* recording rules */
-      recordingRuleFor(metricName, kubeHPALabelJoinExpression(metricName))
-      for metricName in kubeHPAMetrics
+      /* kube_horizontalpodautoscaler_* recording rules */
+      recordingRuleFor(metricName, kubeHorizontalPodAutoscalerLabelJoinExpression(metricName))
+      for metricName in kubeHorizontalPodAutoscalerMetrics
     ] + [
       // Relabel: kube_node_labels
       recordingRuleFor(

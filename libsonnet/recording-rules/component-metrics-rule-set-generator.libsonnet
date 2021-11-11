@@ -7,8 +7,8 @@ local staticLabelsForAggregation(serviceDefinition, sliDefinition, aggregationLa
     type: serviceDefinition.type,
     component: sliDefinition.name,
   };
-  if sliDefinition.hasFeatureCategory() && std.member(aggregationLabels, 'feature_category')
-  then baseLabels + sliDefinition.featureCategoryLabels()
+  if sliDefinition.hasStaticFeatureCategory() && std.member(aggregationLabels, 'feature_category')
+  then baseLabels + sliDefinition.staticFeatureCategoryLabels()
   else baseLabels;
 
 // Generates apdex weight recording rules for a component definition

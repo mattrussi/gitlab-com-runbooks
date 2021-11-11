@@ -44,7 +44,7 @@ metricsCatalog.serviceDefinition({
 
 ## My non-stage-group group would like to receive Slack alerts
 
-Step 1: Update the `teams` section in the [`service-catalog.yml`](https://gitlab.com/gitlab-com/runbooks/blob/master/services/service-catalog.yml) file, with a new `team` entry, as follows:
+Step 1: Update the [`teams.yml`](https://gitlab.com/gitlab-com/runbooks/blob/master/services/teams.yml) file, with a new `team` entry, as follows:
 
 ```yaml
 teams:

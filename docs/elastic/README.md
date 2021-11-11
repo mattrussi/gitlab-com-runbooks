@@ -32,19 +32,82 @@ TODO: link here design docs once they are ready
 
 ## Upgrade checklist
 
-This is an early-stage placeholder for tasks required for an Elasticsearch upgrade.
+### Pre-flight
 
-Pre-flight:
+* Upgrade the [version of Elasticsearch in CI](https://gitlab.com/gitlab-org/gitlab/-/blob/master/.gitlab/ci/global.gitlab-ci.yml)
+* Upgrade the [version of Elasticsearch used in `gitlab-qa` nightly builds](https://gitlab.com/gitlab-org/quality/nightly/-/blob/master/.gitlab-ci.yml#L332) (we currently support latest version plus 1 older supported version)
+* Upgrade the [version of Elasticsearch used in GDK](https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/lib/gdk/config.rb#L404)
+* Verify that there are no errors in the **Staging** or in the **Production** cluster and that both are healthy
+* Verify that there are no alerts firing for the Advanced Search feature, Elasticsearch, Sidekiq workers, or redis
 
-* TBD
+### Upgrade Staging
 
-Upgrade:
+* Confirm new Elasticsearch version works in CI with passing pipeline
+* Pause indexing in **Staging** `GitLab > Admin > Settings -> General > Advanced Search` or through the console `::Gitlab::CurrentSettings.update!(elasticsearch_pause_indexing: true)`
+* Wait 2 mins for [queues in redis to drain and for inflight jobs to finish](https://dashboards.gitlab.net/d/sidekiq-shard-detail/sidekiq-shard-detail?orgId=1&from=now-30m&to=now&var-PROMETHEUS_DS=Global&var-environment=gstg&var-stage=main&var-shard=elasticsearch)
+* Add a new comment to an issue and verify that the [Elasticsearch queue increases in the graph](https://dashboards.gitlab.net/d/stage-groups-global_search/stage-groups-group-dashboard-enablement-global-search?orgId=1&var-PROMETHEUS_DS=Global&var-environment=gstg&var-stage=main&var-controller=All&var-action=All&from=now-5m&to=now)
+* In the Elastic Cloud UI, take a snapshot of the **Staging** cluster and note the snapshot name
+* In Elastic Cloud UI, upgrade the **Staging** cluster to the desired version
+* Wait until the rolling upgrade is complete
+* Verify that the [Elasticsearch cluster is healthy](#how-to-verify-the-elasticsearch-cluster-is-healthy) in **Staging**
+* Go to GitLab.com **Staging** and test that [searches across all scopes in the `gitlab-org` group](https://staging.gitlab.com/search?utf8=%E2%9C%93&snippets=false&scope=issues&repository_ref=&search=*&group_id=9970) still work and return results. *Note: We should not unpause indexing since that could result in data loss*
+* Once all search scopes are verified, unpause indexing in **Staging** `GitLab > Admin > Settings -> General > Advanced Search` or through the console `::Gitlab::CurrentSettings.update!(elasticsearch_pause_indexing: false)`
+* Wait until the [Sidekiq Queues (Global Search)](https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?orgId=1) have caught up
+* Verify that the [Advanced Search feature is working](#how-to-verify-that-the-advanced-search-feature-is-working) in **Staging**
 
-* TBD
+### Upgrade Production
 
-After the upgrade:
+* Add a silence via https://alerts.gitlab.net/#/silences/new with a matcher on alert name:  `alertname="SearchServiceElasticsearchIndexingTrafficAbsent"`. Link the comment field back to the Change Request Issue.
+* Pause indexing in **Production** `GitLab > Admin > Settings -> General > Advanced Search` or through the console `::Gitlab::CurrentSettings.update!(elasticsearch_pause_indexing: true)`
+* Wait 2 mins for [queues in redis to drain and for inflight jobs to finish](https://dashboards.gitlab.net/d/sidekiq-shard-detail/sidekiq-shard-detail?orgId=1&from=now-30m&to=now&var-PROMETHEUS_DS=Global&var-environment=gprd&var-stage=main&var-shard=elasticsearch)
+* Verify that the [Elasticsearch queue increases in the graph](https://dashboards.gitlab.net/d/stage-groups-global_search/stage-groups-group-dashboard-enablement-global-search?orgId=1&var-PROMETHEUS_DS=Global&var-environment=gprd&var-stage=main&var-controller=All&var-action=All&from=now-5m&to=now)
+* In the Elastic Cloud UI, take a snapshot of the **Production** cluster and note the snapshot name
+* In Elastic Cloud UI, upgrade the **Production** cluster to the desired version
+* Wait until the rolling upgrade is complete
+* Verify that the [Elasticsearch cluster is healthy](#how-to-verify-the-elasticsearch-cluster-is-healthy) in **Production**
+* Go to GitLab.com **Production** and test that [searches across all scopes in the `gitlab-org` group](https://gitlab.com/search?utf8=%E2%9C%93&snippets=false&scope=issues&repository_ref=&search=*&group_id=9970) still work and return results. *Note: We should not unpause indexing since that could result in data loss*
+* Once all search scopes are verified, unpause indexing in **Production** `GitLab > Admin > Settings -> General > Advanced Search` or through the console `::Gitlab::CurrentSettings.update!(elasticsearch_pause_indexing: false)`
+* Wait until the [Sidekiq Queues (Global Search)](https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?orgId=1) have caught up
+* Verify that the [Advanced Search feature is working](#how-to-verify-that-the-advanced-search-feature-is-working) in **Production**
 
-* TBD
+### Rollback steps
+
+* If the upgrade completed but something is not working, create a new cluster and restore an older version of Elasticsearch from the snapshot captured above. Then update the credentials in `GitLab > Admin > Settings > General > Advanced Search` to point to this new cluster. The original cluster should be kept for root cause analysis. Keep in mind that this is a last resort and will result in data loss.
+
+### How to verify the Elasticsearch cluster is healthy
+
+* Verify the cluster is in a healthy state and that there are no errors in the [Kibana cluster monitoring logs](https://00a4ef3362214c44a044feaa539b4686.us-central1.gcp.cloud.es.io:9243/app/monitoring#/elasticsearch?_g=(cluster_uuid:HdF5sKvcT5WQHHyYR_EDcw))
+* Verify that the [`elasticsearch_exporter`](https://thanos.gitlab.net/graph?g0.expr=gitlab_component_ops%3Arate_5m%7Bcomponent%3D%22elasticsearch_searching%22%2Ctype%3D%22search%22%7D&g0.tab=0&g0.stacked=0&g0.range_input=30m&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D) continues to export metrics
+
+### How to verify that the Advanced Search feature is working
+
+*  Add a comment to an issue and then search for that comment. *Note: that  before the results show up, all jobs in the queue need to be processed and this can take a few minutes. In addition, refreshing of the Elasticsearch index can take another 30s (if there were no search requests in the last 30s).*
+* Search for a commit that was added after indexing was paused
+
+### Monitoring
+
+#### Metric: Search overview metrics
+
+* Location: https://dashboards.gitlab.net/d/search-main/search-overview?orgId=1   
+* What changes to this metric should prompt a rollback: Flatline of RPS
+
+#### Metric: Search controller performance
+
+* Location: https://dashboards.gitlab.net/d/web-rails-controller/web-rails-controller?orgId=1&var-PROMETHEUS_DS=Global&var-environment=gprd&var-stage=main&var-controller=SearchController&var-action=show          
+* What changes to this metric should prompt a rollback: Massive spike in latency
+
+#### Metric: Search sidekiq indexing queues (Sidekiq Queues (Global Search))
+* Location: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?orgId=1   
+* What changes to this metric should prompt a rollback: Queues not draining
+
+#### Metric: Search sidekiq in flight jobs
+
+* Location: https://dashboards.gitlab.net/d/sidekiq-shard-detail/sidekiq-shard-detail?orgId=1&from=now-30m&to=now&var-PROMETHEUS_DS=Global&var-environment=gprd&var-stage=main&var-shard=elasticsearch   
+* What changes to this metric should prompt a rollback: No jobs in flight
+
+#### Metric: Elastic Cloud outages
+* Location: https://status.elastic.co/#past-incidents
+* What changes to this metric should prompt a rollback: Incidents which prevent upgrade of the cluster
 
 ## Performing operations on the Elastic cluster ##
 

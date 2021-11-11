@@ -4,6 +4,7 @@ local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local haproxyComponents = import './lib/haproxy_components.libsonnet';
 local perFeatureCategoryRecordingRules = (import './lib/puma-per-feature-category-recording-rules.libsonnet').perFeatureCategoryRecordingRules;
+local sliLibrary = import 'gitlab-slis/library.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'api',
@@ -36,6 +37,8 @@ metricsCatalog.serviceDefinition({
   },
   serviceDependencies: {
     gitaly: true,
+    kas: true,
+    'redis-ratelimiting': true,
     'redis-tracechunks': true,
     'redis-sidekiq': true,
     'redis-cache': true,
@@ -148,6 +151,7 @@ metricsCatalog.serviceDefinition({
       ],
     },
 
+    local railsSelector = { job: 'gitlab-rails', type: 'api' },
     puma: {
       userImpacting: true,
       featureCategory: 'not_owned',
@@ -157,22 +161,21 @@ metricsCatalog.serviceDefinition({
         HTTP interface. 5xx responses are treated as failures.
       |||,
 
-      local baseSelector = { job: 'gitlab-rails', type: 'api' },
       apdex: histogramApdex(
         histogram='http_request_duration_seconds_bucket',
-        selector=baseSelector,
+        selector=railsSelector,
         satisfiedThreshold=1,
         toleratedThreshold=10
       ),
 
       requestRate: rateMetric(
         counter='http_requests_total',
-        selector=baseSelector,
+        selector=railsSelector,
       ),
 
       errorRate: rateMetric(
         counter='http_requests_total',
-        selector=baseSelector { status: { re: '5..' } }
+        selector=railsSelector { status: { re: '5..' } }
       ),
 
       significantLabels: ['fqdn', 'method', 'feature_category'],
@@ -182,6 +185,13 @@ metricsCatalog.serviceDefinition({
         toolingLinks.kibana(title='Rails', index='rails_api', type='api', slowRequestSeconds=10),
       ],
     },
+
+    rails_requests:
+      sliLibrary.get('rails_request_apdex').generateServiceLevelIndicator(railsSelector) {
+        monitoringThresholds+: {
+          apdexScore: 0.985,
+        },
+      },
   },
   extraRecordingRulesPerBurnRate: [
     // Adds per-feature-category plus error rates across multiple burn rates

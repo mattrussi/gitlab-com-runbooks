@@ -1,12 +1,27 @@
-local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
-local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
+local resourceSaturationPoint = (import 'servicemetrics/metrics.libsonnet').resourceSaturationPoint;
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
+
+local commonDefition = {
+  title: 'Redis Memory Utilization per Node',
+  severity: 's2',
+  horizontallyScalable: false,
+  resourceLabels: ['fqdn'],
+  query: |||
+    max by (%(aggregationLabels)s) (
+      label_replace(redis_memory_used_rss_bytes{%(selector)s}, "memtype", "rss","","")
+      or
+      label_replace(redis_memory_used_bytes{%(selector)s}, "memtype", "used","","")
+    )
+    /
+    avg by (%(aggregationLabels)s) (
+      node_memory_MemTotal_bytes{%(selector)s}
+    )
+  |||,
+};
 
 {
-  redis_memory: resourceSaturationPoint({
-    title: 'Redis Memory Utilization per Node',
-    severity: 's2',
-    horizontallyScalable: false,
-    appliesTo: ['redis', 'redis-sidekiq', 'redis-cache'],
+  redis_memory: resourceSaturationPoint(commonDefition {
+    appliesTo: std.filter(function(s) s != 'redis-tracechunks', metricsCatalog.findServicesWithTag(tag='redis')),  // All the redis except redis-tracechunks
     description: |||
       Redis memory utilization per node.
 
@@ -21,18 +36,6 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
       rate-of-change is low.
     |||,
     grafana_dashboard_uid: 'sat_redis_memory',
-    resourceLabels: ['fqdn'],
-    query: |||
-      max by (%(aggregationLabels)s) (
-        label_replace(redis_memory_used_rss_bytes{%(selector)s}, "memtype", "rss","","")
-        or
-        label_replace(redis_memory_used_bytes{%(selector)s}, "memtype", "used","","")
-      )
-      /
-      avg by (%(aggregationLabels)s) (
-        node_memory_MemTotal_bytes{%(selector)s}
-      )
-    |||,
     slos: {
       soft: 0.65,
       // Keep this low, since processes like the Redis RDB snapshot can put sort-term memory pressure
@@ -41,11 +44,9 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
       hard: 0.70,
     },
   }),
-  redis_memory_tracechunks: resourceSaturationPoint({
-    title: 'Redis Memory Utilization per Node',
-    severity: 's2',
-    horizontallyScalable: false,
-    appliesTo: ['redis-tracechunks'],
+
+  redis_memory_tracechunks: resourceSaturationPoint(commonDefition {
+    appliesTo: ['redis-tracechunks'],  // No need for tags, this is specifically targeted
     description: |||
       Redis memory utilization per node.
 
@@ -62,18 +63,6 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
       non-trivial storage occurring
     |||,
     grafana_dashboard_uid: 'sat_redis_memory_tracechunks',
-    resourceLabels: ['fqdn'],
-    query: |||
-      max by (%(aggregationLabels)s) (
-        label_replace(redis_memory_used_rss_bytes{%(selector)s}, "memtype", "rss","","")
-        or
-        label_replace(redis_memory_used_bytes{%(selector)s}, "memtype", "used","","")
-      )
-      /
-      avg by (%(aggregationLabels)s) (
-        node_memory_MemTotal_bytes{%(selector)s}
-      )
-    |||,
     slos: {
       // Intentionally very low, maybe able to go lower.  See description above
       soft: 0.40,

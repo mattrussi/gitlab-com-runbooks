@@ -1,11 +1,10 @@
-local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
-local utilizationMetric = metricsCatalog.utilizationMetric;
-
+local utilizationMetric = (import 'servicemetrics/utilization_metric.libsonnet').utilizationMetric;
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 {
   pg_dead_tup_rate: utilizationMetric({
     title: 'Tracks the rate of dead tuple generation',
     unit: 'tuples',
-    appliesTo: ['patroni', 'sentry'],
+    appliesTo: metricsCatalog.findServicesWithTag(tag='postgres'),
     description: |||
       Monitors the total rate at which dead tuples are being generated across all tables on the postgres instance.
     |||,

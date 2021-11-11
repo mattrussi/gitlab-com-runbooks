@@ -1,101 +1,14 @@
 groups:
 - name: gitlab-com-ci.rules
   rules:
-  - alert: CICDTooManyPendingBuildsOnSharedRunnerProject
-    expr: (ci_pending_builds{has_minutes="yes",shared_runners="yes"} > 500) and (topk(1,
-      predict_linear(ci_pending_builds{has_minutes="yes",shared_runners="yes"}[15m], 3600)) > 1000)
-    for: 5m
-    labels:
-      team: runner
-      severity: s4
-      alert_type: cause
-    annotations:
-      title: 'The number of pending builds for projects with shared runners will be
-        too high in 1h: {{$value | printf "%.2f" }}'
-      description: "The number of pending builds for projects with shared runners is
-        increasing and will be too high in 1h ({{$value}}). This may suggest problems
-        with auto-scaling provider or Runner stability. You should check Runner's
-        logs. Check http://dashboards.gitlab.net/dashboard/db/ci."
-
-  - alert: CICDTooManyPendingJobsPerNamespace
-    expr: max(ci_pending_builds{has_minutes="yes",namespace!="",namespace!="9970",shared_runners="yes"}) by (namespace) > 1000
-    for: 5m
-    labels:
-      team: runner
-      severity: s4
-      alert_type: cause
-    annotations:
-      title: 'Number of pending jobs per namespace too high: {{$value}}'
-      description: 'Number of pending jobs for namespace {{$labels.namespace}} is too high: {{$value}}.
-        Check https://dashboards.gitlab.net/dashboard/db/ci?panelId=33&fullscreen'
-      runbook: docs/ci-runners/ci_pending_builds.md#2-verify-graphs-and-potential-outcomes-out-of-the-graphs-as-described-in-ci-graphsci_graphsmd
-
-  - alert: CICDTooManyRunningJobsPerNamespaceOnSharedRunners
-    expr: max(sum(ci_running_builds{has_minutes="yes",namespace!="",namespace!="9970",shared_runner="yes",runner=~"40786|40788|44028|44949|380986|380987"}) by (fqdn,namespace)) by (namespace) > 350
-    for: 5m
-    labels:
-      team: runner
-      severity: s4
-      alert_type: cause
-    annotations:
-      title: 'Number of running jobs per namespace too high: {{$value}}'
-      description: 'Number of running jobs for namespace {{$labels.namespace}} running on regular Shared Runners is too high: {{$value}}.
-        Check https://dashboards.gitlab.net/dashboard/db/ci?panelId=60&fullscreen'
-      runbook: docs/ci-runners/ci_pending_builds.md#2-verify-graphs-and-potential-outcomes-out-of-the-graphs-as-described-in-ci-graphsci_graphsmd
-
-  - alert: CICDTooManyRunningJobsPerNamespaceOnSharedRunnersGitLabOrg
-    expr: max(sum(ci_running_builds{has_minutes="yes",namespace!="",namespace!="9970",shared_runner="yes",runner=~"37397|37398|157328|157329|380989|380990"}) by (fqdn,namespace)) by (namespace) > 350
-    for: 10m
-    labels:
-      team: runner
-      severity: s4
-      alert_type: cause
-    annotations:
-      title: 'Number of running jobs per namespace too high: {{$value}}'
-      description: 'Number of running jobs for namespace {{$labels.namespace}} running on gitlab-org Shared Runners is too high: {{$value}}.
-        Check https://dashboards.gitlab.net/dashboard/db/ci?panelId=60&fullscreen'
-      runbook: docs/ci-runners/ci_pending_builds.md#2-verify-graphs-and-potential-outcomes-out-of-the-graphs-as-described-in-ci-graphsci_graphsmd
-
-  - alert: CICDNoJobsOnSharedRunners
-    expr: sum(gitlab_runner_jobs{job="shared-runners"}) == 0
-    for: 5m
-    labels:
-      team: runner
-      severity: s4
-      alert_type: cause
-    annotations:
-      title: 'Number of builds running on shared runners is too low: {{$value}}'
-      description: "Number of builds running on shared runners for the last 5 minutes
-        is 0. This may suggest problems with auto-scaling provider or Runner stability.
-        You should check Runner's logs. Check http://dashboards.gitlab.net/dashboard/db/ci."
-
-  - alert: CICDRunnersConcurrentLimitHigh
-    expr: (sum(gitlab_runner_jobs) by (job) / sum(gitlab_runner_concurrent) by (job)) > 0.85
-    for: 5m
-    labels:
-      team: runner
-      severity: s4
-      alert_type: cause
-    annotations:
-      title: "{{ $labels.job }} runners are using 85% of concurrent limit for more than 5 minutes."
-      description: 'This may suggest problems with our autoscaled machines fleet OR
-        abusive usage of Runners. Check https://dashboards.gitlab.net/dashboard/db/ci'
-
-  - alert: CICDRunnersConcurrentLimitCritical
-    expr: (sum(gitlab_runner_jobs) by (job) / sum(gitlab_runner_concurrent) by (job)) > 0.95
-    for: 5m
-    labels:
-      team: runner
-      severity: s3
-      alert_type: cause
-    annotations:
-      title: "{{ $labels.job }} runners are using 95% of concurrent limit for more than 5 minutes."
-      description: 'This may suggest problems with our autoscaled machines fleet OR
-        abusive usage of Runners. Check https://dashboards.gitlab.net/dashboard/db/ci'
-
   - alert: CICDRunnerMachineCreationRateHigh
-    expr: sum(gitlab_runner_autoscaling_machine_states{executor="docker+machine", state="creating"}) / (sum(gitlab_runner_autoscaling_machine_states{executor="docker+machine", state="idle"}) + 1) > 100
-    for: 1m
+    expr: |
+      (
+        sum by(environment, tier, type, stage, shard) (gitlab_runner_autoscaling_machine_states{executor="docker+machine", state="creating"})
+        /
+        sum by(environment, tier, type, stage, shard) (gitlab_runner_autoscaling_machine_states{executor="docker+machine", state="idle"})
+      ) > 1
+    for: 5m
     labels:
       team: runner
       severity: s3
@@ -106,17 +19,6 @@ groups:
         times greater than machines idle rate. This may by a symptom of problems with
         the auto-scaling provider. Check https://dashboards.gitlab.net/d/ci-runners-incident-autoscaling/ci-runners-incident-support-autoscaling.'
       runbook: docs/ci-runners/linux/autoscaling.md
-
-  - alert: CICDPrometheusDown
-    expr: up{job="ci-node",fqdn=~"prometheus-.*us-east1-(c|d).*"} == 0
-    for: 5m
-    labels:
-      team: runner
-      severity: s4
-      alert_type: cause
-    annotations:
-      title: CI Prometheus server {{ $labels.instance }} is down
-      description: 'One or more of CI Prometheus servers is down: {{ $labels.instance }}.'
 
   - record: quota_region:quota_usage:ratio
     expr: |
@@ -134,8 +36,8 @@ groups:
       severity: s4
       alert_type: cause
     annotations:
-      title: GCP Quota usage may exceed capacity
-      description: >
+      title: 'GCP Quota usage may exceed capacity'
+      description: |
         Quota usage of {{ $labels.quota }} in {{ $labels.region }} is going to exceed capacity soon.
         Quota limit breach is coming!
         See https://dashboards.gitlab.net/dashboard/db/ci-autoscaling-providers
@@ -148,35 +50,19 @@ groups:
       severity: s3
       alert_type: cause
     annotations:
-      title: GCP Quota usage of is near limit
-      description: >
+      title: 'GCP Quota usage of is near limit'
+      description: |
         Quota usage of {{ $labels.quota }} in {{ $labels.region }} is at the level of {{ $value }} for more than 5 minutes.
         It's less than 5% to reach quota limits!
         See https://dashboards.gitlab.net/dashboard/db/ci-autoscaling-providers
-
-  - alert: CICDNamespaceWithConstantNumberOfLongRunningRepeatedJobs
-    expr: |
-      max(sum(ci_repeated_commands_builds{shared_runners="yes",has_minutes="yes",status="running"}) by (fqdn,  namespace)) by (namespace) > 5
-      and
-      sum(changes(ci_repeated_commands_builds{shared_runners="yes",has_minutes="yes",status="running"}[45m])) by (namespace) == 0
-    for: 45m
-    labels:
-      team: runner
-      severity: s4
-      alert_type: cause
-    annotations:
-      title: Namespace with constant number of long running jobs with repeated commands
-      description: >
-        Namespace {{ $labels.namespace }} is running a constant number of jobs with
-        repeated commands for more than 45 minutes.
-      runbook: docs/ci-runners/ci_constantnumberoflongrunningrepeatedjobs.md
-
 
   - alert: CICDWorkhorseQueuingUnderperformant
     expr: |
       histogram_quantile(
         0.90,
-        sum(rate(gitlab_workhorse_queueing_waiting_time_bucket{queue_name="ci_api_job_requests",job="gitlab-workhorse-api"}[5m])) by (le)
+        sum by(environment, tier, type, stage, shard, le) (
+          rate(gitlab_workhorse_queueing_waiting_time_bucket{queue_name="ci_api_job_requests",job="gitlab-workhorse"}[5m])
+        )
       ) >= 30
     for: 5m
     labels:
@@ -184,15 +70,18 @@ groups:
       severity: s3
       alert_type: cause
     annotations:
-      title: 90% of request queued on Workhorse is longer than 30s
-      description: >
+      title: '90% of request queued on Workhorse is longer than 30s'
+      description: |
         90% of requests queued on Workhorse are longer than 30s for last 5 minutes.
 
         This should be considered as service degradation and the reason should be investigated.
       runbook: docs/ci-runners/ci_workhorse-queuing.md
 
   - alert: CICDTooManyArchivingTraceFailures
-    expr: (sum (rate(job_trace_archive_failed_total[5m])) by (job)) > 10
+    expr: |
+      sum by (environment, tier, type, stage, shard) (
+        rate(job_trace_archive_failed_total[5m])
+      ) > 10
     for: 5m
     labels:
       team: runner
@@ -200,7 +89,7 @@ groups:
       alert_type: cause
     annotations:
       title: 'Too big number of traces archiving failures: {{$value}}'
-      description: >
+      description: |
         Traces archiving keeps failing for more than 5 minutes.
         Plese check https://dashboards.gitlab.net/d/000000159/ci?refresh=5m&orgId=1&panelId=153&fullscreen,
         https://sentry.gitlab.net/gitlab/gitlabcom/?query=ArchiveTraceWorker, and
@@ -208,7 +97,10 @@ groups:
       runbook: docs/ci-runners/ci_too_many_archiving_trace_failures.md
 
   - alert: CICDSidekiqQueuesTooBig
-    expr: (sidekiq_queue_size{environment=~"gprd",name=~"pipeline.*"} and on (fqdn) gitlab:redis_master) > 1000
+    expr: |
+      sum by (environment, tier, type, stage, shard, worker) (
+        sidekiq_jobs_inflight:irate1m{feature_category=~"(continuous_integration|runner)"}
+      ) > 100
     for: 5m
     labels:
       team: runner
@@ -216,16 +108,18 @@ groups:
       alert_type: cause
     annotations:
       title: 'Sidekiq queues for CI/CD are growing: {{$value}}'
-      description: >
+      description: |
         Sidekiq queues for CI/CD are growing and are over 1000 for
         more than last 5 minutes.
-        Plese check https://dashboards.gitlab.net/d/000000159/ci?refresh=5m&from=now-1h&to=now&orgId=1&panelId=85&fullscreen
+        Please check https://dashboards.gitlab.net/d/ci-runners-incident-gitlab-application/ci-runners-incident-support-gitlab-application?viewPanel=20&orgId=1&refresh=1m&from=now-3h&to=now
 
   - alert: CICDJobsStuckInDockerPull
-    expr: >
-      (sum by (environment, tier, type, stage, shard) (gitlab_runner_jobs{executor_stage="docker_pulling_image"})
-      /
-      sum by (environment, tier, type, stage, shard) (gitlab_runner_jobs{executor_stage="docker_run"})) > 1
+    expr: |
+      (
+        sum by (environment, tier, type, stage, shard) (gitlab_runner_jobs{executor_stage="docker_pulling_image"})
+        /
+        sum by (environment, tier, type, stage, shard) (gitlab_runner_jobs{executor_stage="docker_run"})
+      ) > 1
     for: 5m
     labels:
       team: runner
@@ -233,14 +127,16 @@ groups:
       alert_type: cause
     annotations:
       title: 'More CI Jobs are in state docker_pulling_image than state docker_run'
-      description: >
+      description: |
         More CI Jobs are in state docker_pulling_image than are in state docker_run
         for over 5 minutes. This could mean connectivity to docker hub is broken.
         Plese check https://dashboards.gitlab.net/d/000000159/ci?refresh=5m&viewPanel=46&orgId=1&from=now-1h&to=now&fullscreen
 
   - alert: GitLabRailsRepoMasterArchiveIsStale
-    expr: >
-      (time() - probe_http_last_modified_timestamp_seconds{job="gitlab-ci-git-repo-cache-blackbox"}) > 86400 # 1 day
+    expr: |
+      (
+        time() - probe_http_last_modified_timestamp_seconds{job="gitlab-ci-git-repo-cache-blackbox"}
+      ) > 86400 # 1 day
     for: 3m
     labels:
       team: create
@@ -248,7 +144,7 @@ groups:
       alert_type: cause
     annotations:
       title: 'gitlab/gitlab-org repo master archive is stale'
-      description: >
+      description: |
         The repo archive has not been updated in GCS in one day so it could mean that
         the mechanism that uploads the archive is failing. The archive is used to speed up
         fetches for CI jobs and not to overload the Gitaly node that hosts the repo.

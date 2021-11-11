@@ -16,6 +16,14 @@ metricsCatalog.serviceDefinition({
     apdexRatio: 0.95,
     errorRatio: 0.05,
   },
+  kubeResources: {
+    'gitlab-gitlab-pages': {
+      kind: 'Deployment',
+      containers: [
+        'gitlab-pages',
+      ],
+    },
+  },
   monitoringThresholds: {
     apdexScore: 0.995,
     errorRatio: 0.9995,
@@ -26,6 +34,11 @@ metricsCatalog.serviceDefinition({
       errorRatio: 0.9999,
     },
   },
+  provisioning: {
+    vms: true,
+    kubernetes: true,
+  },
+  regional: true,
   serviceLevelIndicators: {
     loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
       userImpacting=true,

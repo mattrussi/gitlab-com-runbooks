@@ -107,4 +107,45 @@ test.suite({
     actual: strings.urlEncode('type:git feature_category:groups', [[' ', '+']]),
     expect: 'type:git+feature_category:groups',
   },
+
+  testMarkdownParagraphsTrivial: {
+    actual: strings.markdownParagraphs([]),
+    expect: '\n',
+  },
+
+  testMarkdownParagraphsSingle: {
+    actual: strings.markdownParagraphs(['single']),
+    expect: 'single\n',
+  },
+
+  testMarkdownParagraphsFilter: {
+    actual: strings.markdownParagraphs(['p1', '', 'p2']),
+    expect: 'p1\n\np2\n',
+  },
+
+  testMarkdownParagraphsFilterChomp: {
+    actual: strings.markdownParagraphs(['\n\n\n\n', '', 'p2']),
+    expect: 'p2\n',
+  },
+
+  testToCamelCaseTrivial: {
+    actual: strings.toCamelCase(''),
+    expect: '',
+  },
+
+  testToCamelCaseDashes: {
+    actual: strings.toCamelCase('this-is-a-string'),
+    expect: 'ThisIsAString',
+  },
+
+  testToCamelCaseUnderscores: {
+    actual: strings.toCamelCase('this_is_a_string'),
+    expect: 'ThisIsAString',
+  },
+
+  testToCamelCaseMixed: {
+    actual: strings.toCamelCase('this-is_a-string'),
+    expect: 'ThisIsAString',
+  },
+
 })

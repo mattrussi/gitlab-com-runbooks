@@ -24,7 +24,6 @@
 * [../praefect/praefect-error-rate.md](../praefect/praefect-error-rate.md)
 * [pubsub-queing.md](pubsub-queing.md)
 * [../redis/redis-survival-guide-for-sres.md](../redis/redis-survival-guide-for-sres.md)
-* [../registry/gitlab-registry.md](../registry/gitlab-registry.md)
 * [../sidekiq/sidekiq-survival-guide-for-sres.md](../sidekiq/sidekiq-survival-guide-for-sres.md)
 * [../tutorials/overview_life_of_a_git_request.md](../tutorials/overview_life_of_a_git_request.md)
 * [../uncategorized/camoproxy.md](../uncategorized/camoproxy.md)

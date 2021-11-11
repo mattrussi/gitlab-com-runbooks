@@ -24,7 +24,7 @@ describe PeriodicQueries::Topic do
     it 'initializes an instances by evaluating jsonnet' do
       wrapper = instance_double(JsonnetWrapper)
 
-      expect(JsonnetWrapper).to receive(:new).and_return(wrapper)
+      expect(JsonnetWrapper).to receive(:new).with(ext_str: a_hash_including(current_time: an_instance_of(String))).and_return(wrapper)
       expect(wrapper).to receive(:parse).with(path).and_return({})
 
       expect(described_class.parse!(path)).to be_a(described_class)

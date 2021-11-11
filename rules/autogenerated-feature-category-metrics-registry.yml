@@ -12,11 +12,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_database_query_duration_seconds_bucket{type="registry", le="1"}[5m])
+          rate(registry_database_query_duration_seconds_bucket{type="registry", le="0.5"}[5m])
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_database_query_duration_seconds_bucket{type="registry", le="2.5"}[5m])
+          rate(registry_database_query_duration_seconds_bucket{type="registry", le="1"}[5m])
         )
       )
       /
@@ -50,11 +50,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_gc_run_duration_seconds_bucket{type="registry", le="1"}[5m])
+          rate(registry_gc_run_duration_seconds_bucket{type="registry", le="0.5"}[5m])
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_gc_run_duration_seconds_bucket{type="registry", le="2"}[5m])
+          rate(registry_gc_run_duration_seconds_bucket{type="registry", le="1"}[5m])
         )
       )
       /
@@ -78,6 +78,84 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         rate(registry_gc_runs_total{type="registry"}[5m])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_5m
+    labels:
+      component: garbagecollector
+      feature_category: container_registry
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          rate(registry_gc_runs_total{error="true",type="registry"}[5m])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab:component:feature_category:execution:ops:rate_5m{component="garbagecollector",feature_category="container_registry",tier="sv",type="registry"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_5m
+    labels:
+      component: loadbalancer
+      feature_category: container_registry
+      stage: cny
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment) (
+        rate(haproxy_backend_http_responses_total{backend="canary_registry",type="registry"}[5m])
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_5m
+    labels:
+      component: loadbalancer
+      feature_category: container_registry
+      stage: main
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment) (
+        rate(haproxy_backend_http_responses_total{backend="registry",type="registry"}[5m])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_5m
+    labels:
+      component: loadbalancer
+      feature_category: container_registry
+      stage: cny
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(haproxy_backend_http_responses_total{backend="canary_registry",code="5xx",type="registry"}[5m])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment) (
+          gitlab:component:feature_category:execution:ops:rate_5m{component="loadbalancer",feature_category="container_registry",stage="cny",tier="sv",type="registry"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_5m
+    labels:
+      component: loadbalancer
+      feature_category: container_registry
+      stage: main
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(haproxy_backend_http_responses_total{backend="registry",code="5xx",type="registry"}[5m])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment) (
+          gitlab:component:feature_category:execution:ops:rate_5m{component="loadbalancer",feature_category="container_registry",stage="main",tier="sv",type="registry"}
+        )
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_5m
     labels:
@@ -211,36 +289,6 @@ groups:
       sum by (env,environment,stage) (
         rate(registry_http_request_duration_seconds_count{method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}"}[5m])
       )
-  - record: gitlab:component:feature_category:execution:apdex:success:rate_5m
-    labels:
-      component: storage
-      feature_category: container_registry
-      tier: sv
-      type: registry
-    expr: |
-      sum by (env,environment,stage) (
-        rate(registry_storage_action_seconds_bucket{le="1"}[5m])
-      )
-  - record: gitlab:component:feature_category:execution:apdex:weight:score_5m
-    labels:
-      component: storage
-      feature_category: container_registry
-      tier: sv
-      type: registry
-    expr: |
-      sum by (env,environment,stage) (
-        rate(registry_storage_action_seconds_bucket{le="+Inf"}[5m])
-      )
-  - record: gitlab:component:feature_category:execution:ops:rate_5m
-    labels:
-      component: storage
-      feature_category: container_registry
-      tier: sv
-      type: registry
-    expr: |
-      sum by (env,environment,stage) (
-        rate(registry_storage_action_seconds_count{}[5m])
-      )
 - name: 'Prometheus Intermediate Metrics per feature: registry - burn-rate 30m'
   rules:
   - record: gitlab:component:feature_category:execution:apdex:success:rate_30m
@@ -252,11 +300,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_database_query_duration_seconds_bucket{type="registry", le="1"}[30m])
+          rate(registry_database_query_duration_seconds_bucket{type="registry", le="0.5"}[30m])
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_database_query_duration_seconds_bucket{type="registry", le="2.5"}[30m])
+          rate(registry_database_query_duration_seconds_bucket{type="registry", le="1"}[30m])
         )
       )
       /
@@ -290,11 +338,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_gc_run_duration_seconds_bucket{type="registry", le="1"}[30m])
+          rate(registry_gc_run_duration_seconds_bucket{type="registry", le="0.5"}[30m])
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_gc_run_duration_seconds_bucket{type="registry", le="2"}[30m])
+          rate(registry_gc_run_duration_seconds_bucket{type="registry", le="1"}[30m])
         )
       )
       /
@@ -318,6 +366,84 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         rate(registry_gc_runs_total{type="registry"}[30m])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_30m
+    labels:
+      component: garbagecollector
+      feature_category: container_registry
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          rate(registry_gc_runs_total{error="true",type="registry"}[30m])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab:component:feature_category:execution:ops:rate_30m{component="garbagecollector",feature_category="container_registry",tier="sv",type="registry"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_30m
+    labels:
+      component: loadbalancer
+      feature_category: container_registry
+      stage: cny
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment) (
+        rate(haproxy_backend_http_responses_total{backend="canary_registry",type="registry"}[30m])
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_30m
+    labels:
+      component: loadbalancer
+      feature_category: container_registry
+      stage: main
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment) (
+        rate(haproxy_backend_http_responses_total{backend="registry",type="registry"}[30m])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_30m
+    labels:
+      component: loadbalancer
+      feature_category: container_registry
+      stage: cny
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(haproxy_backend_http_responses_total{backend="canary_registry",code="5xx",type="registry"}[30m])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment) (
+          gitlab:component:feature_category:execution:ops:rate_30m{component="loadbalancer",feature_category="container_registry",stage="cny",tier="sv",type="registry"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_30m
+    labels:
+      component: loadbalancer
+      feature_category: container_registry
+      stage: main
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(haproxy_backend_http_responses_total{backend="registry",code="5xx",type="registry"}[30m])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment) (
+          gitlab:component:feature_category:execution:ops:rate_30m{component="loadbalancer",feature_category="container_registry",stage="main",tier="sv",type="registry"}
+        )
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_30m
     labels:
@@ -451,36 +577,6 @@ groups:
       sum by (env,environment,stage) (
         rate(registry_http_request_duration_seconds_count{method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}"}[30m])
       )
-  - record: gitlab:component:feature_category:execution:apdex:success:rate_30m
-    labels:
-      component: storage
-      feature_category: container_registry
-      tier: sv
-      type: registry
-    expr: |
-      sum by (env,environment,stage) (
-        rate(registry_storage_action_seconds_bucket{le="1"}[30m])
-      )
-  - record: gitlab:component:feature_category:execution:apdex:weight:score_30m
-    labels:
-      component: storage
-      feature_category: container_registry
-      tier: sv
-      type: registry
-    expr: |
-      sum by (env,environment,stage) (
-        rate(registry_storage_action_seconds_bucket{le="+Inf"}[30m])
-      )
-  - record: gitlab:component:feature_category:execution:ops:rate_30m
-    labels:
-      component: storage
-      feature_category: container_registry
-      tier: sv
-      type: registry
-    expr: |
-      sum by (env,environment,stage) (
-        rate(registry_storage_action_seconds_count{}[30m])
-      )
 - name: 'Prometheus Intermediate Metrics per feature: registry - burn-rate 1h'
   rules:
   - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
@@ -492,11 +588,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_database_query_duration_seconds_bucket{type="registry", le="1"}[1h])
+          rate(registry_database_query_duration_seconds_bucket{type="registry", le="0.5"}[1h])
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_database_query_duration_seconds_bucket{type="registry", le="2.5"}[1h])
+          rate(registry_database_query_duration_seconds_bucket{type="registry", le="1"}[1h])
         )
       )
       /
@@ -530,11 +626,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_gc_run_duration_seconds_bucket{type="registry", le="1"}[1h])
+          rate(registry_gc_run_duration_seconds_bucket{type="registry", le="0.5"}[1h])
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_gc_run_duration_seconds_bucket{type="registry", le="2"}[1h])
+          rate(registry_gc_run_duration_seconds_bucket{type="registry", le="1"}[1h])
         )
       )
       /
@@ -558,6 +654,84 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         rate(registry_gc_runs_total{type="registry"}[1h])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_1h
+    labels:
+      component: garbagecollector
+      feature_category: container_registry
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          rate(registry_gc_runs_total{error="true",type="registry"}[1h])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab:component:feature_category:execution:ops:rate_1h{component="garbagecollector",feature_category="container_registry",tier="sv",type="registry"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_1h
+    labels:
+      component: loadbalancer
+      feature_category: container_registry
+      stage: cny
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment) (
+        rate(haproxy_backend_http_responses_total{backend="canary_registry",type="registry"}[1h])
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_1h
+    labels:
+      component: loadbalancer
+      feature_category: container_registry
+      stage: main
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment) (
+        rate(haproxy_backend_http_responses_total{backend="registry",type="registry"}[1h])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_1h
+    labels:
+      component: loadbalancer
+      feature_category: container_registry
+      stage: cny
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(haproxy_backend_http_responses_total{backend="canary_registry",code="5xx",type="registry"}[1h])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment) (
+          gitlab:component:feature_category:execution:ops:rate_1h{component="loadbalancer",feature_category="container_registry",stage="cny",tier="sv",type="registry"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_1h
+    labels:
+      component: loadbalancer
+      feature_category: container_registry
+      stage: main
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(haproxy_backend_http_responses_total{backend="registry",code="5xx",type="registry"}[1h])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment) (
+          gitlab:component:feature_category:execution:ops:rate_1h{component="loadbalancer",feature_category="container_registry",stage="main",tier="sv",type="registry"}
+        )
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
     labels:
@@ -690,274 +864,4 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         rate(registry_http_request_duration_seconds_count{method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}"}[1h])
-      )
-  - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
-    labels:
-      component: storage
-      feature_category: container_registry
-      tier: sv
-      type: registry
-    expr: |
-      sum by (env,environment,stage) (
-        rate(registry_storage_action_seconds_bucket{le="1"}[1h])
-      )
-  - record: gitlab:component:feature_category:execution:apdex:weight:score_1h
-    labels:
-      component: storage
-      feature_category: container_registry
-      tier: sv
-      type: registry
-    expr: |
-      sum by (env,environment,stage) (
-        rate(registry_storage_action_seconds_bucket{le="+Inf"}[1h])
-      )
-  - record: gitlab:component:feature_category:execution:ops:rate_1h
-    labels:
-      component: storage
-      feature_category: container_registry
-      tier: sv
-      type: registry
-    expr: |
-      sum by (env,environment,stage) (
-        rate(registry_storage_action_seconds_count{}[1h])
-      )
-- name: 'Prometheus Intermediate Metrics per feature: registry - burn-rate 6h'
-  rules:
-  - record: gitlab:component:feature_category:execution:apdex:success:rate_6h
-    labels:
-      component: database
-      feature_category: container_registry
-      tier: sv
-      type: registry
-    expr: |
-      (
-        sum by (env,environment,stage) (
-          rate(registry_database_query_duration_seconds_bucket{type="registry", le="1"}[6h])
-        )
-        +
-        sum by (env,environment,stage) (
-          rate(registry_database_query_duration_seconds_bucket{type="registry", le="2.5"}[6h])
-        )
-      )
-      /
-      2
-  - record: gitlab:component:feature_category:execution:apdex:weight:score_6h
-    labels:
-      component: database
-      feature_category: container_registry
-      tier: sv
-      type: registry
-    expr: |
-      sum by (env,environment,stage) (
-        rate(registry_database_query_duration_seconds_bucket{type="registry", le="+Inf"}[6h])
-      )
-  - record: gitlab:component:feature_category:execution:ops:rate_6h
-    labels:
-      component: database
-      feature_category: container_registry
-      tier: sv
-      type: registry
-    expr: |
-      sum by (env,environment,stage) (
-        rate(registry_database_queries_total{type="registry"}[6h])
-      )
-  - record: gitlab:component:feature_category:execution:apdex:success:rate_6h
-    labels:
-      component: garbagecollector
-      feature_category: container_registry
-      tier: sv
-      type: registry
-    expr: |
-      (
-        sum by (env,environment,stage) (
-          rate(registry_gc_run_duration_seconds_bucket{type="registry", le="1"}[6h])
-        )
-        +
-        sum by (env,environment,stage) (
-          rate(registry_gc_run_duration_seconds_bucket{type="registry", le="2"}[6h])
-        )
-      )
-      /
-      2
-  - record: gitlab:component:feature_category:execution:apdex:weight:score_6h
-    labels:
-      component: garbagecollector
-      feature_category: container_registry
-      tier: sv
-      type: registry
-    expr: |
-      sum by (env,environment,stage) (
-        rate(registry_gc_run_duration_seconds_bucket{type="registry", le="+Inf"}[6h])
-      )
-  - record: gitlab:component:feature_category:execution:ops:rate_6h
-    labels:
-      component: garbagecollector
-      feature_category: container_registry
-      tier: sv
-      type: registry
-    expr: |
-      sum by (env,environment,stage) (
-        rate(registry_gc_runs_total{type="registry"}[6h])
-      )
-  - record: gitlab:component:feature_category:execution:apdex:success:rate_6h
-    labels:
-      component: server
-      feature_category: container_registry
-      tier: sv
-      type: registry
-    expr: |
-      (
-        sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",route!~"/v2/{name}/manifests/{reference}",type="registry"}[6h])
-        )
-        +
-        sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="25",route!~"/v2/{name}/manifests/{reference}",type="registry"}[6h])
-        )
-      )
-      /
-      2
-  - record: gitlab:component:feature_category:execution:apdex:weight:score_6h
-    labels:
-      component: server
-      feature_category: container_registry
-      tier: sv
-      type: registry
-    expr: |
-      sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",route!~"/v2/{name}/manifests/{reference}",type="registry"}[6h])
-      )
-  - record: gitlab:component:feature_category:execution:ops:rate_6h
-    labels:
-      component: server
-      feature_category: container_registry
-      tier: sv
-      type: registry
-    expr: |
-      sum by (env,environment,stage) (
-        rate(registry_http_requests_total{type="registry"}[6h])
-      )
-  - record: gitlab:component:feature_category:execution:error:rate_6h
-    labels:
-      component: server
-      feature_category: container_registry
-      tier: sv
-      type: registry
-    expr: |
-      (
-        sum by (env,environment,stage) (
-          rate(registry_http_requests_total{code=~"5..",type="registry"}[6h])
-        )
-      )
-      or
-      (
-        0 * group by(env,environment,stage) (
-          gitlab:component:feature_category:execution:ops:rate_6h{component="server",feature_category="container_registry",tier="sv",type="registry"}
-        )
-      )
-  - record: gitlab:component:feature_category:execution:apdex:success:rate_6h
-    labels:
-      component: server_route_manifest_reads
-      feature_category: container_registry
-      tier: sv
-      type: registry
-    expr: |
-      (
-        sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[6h])
-        )
-        +
-        sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[6h])
-        )
-      )
-      /
-      2
-  - record: gitlab:component:feature_category:execution:apdex:weight:score_6h
-    labels:
-      component: server_route_manifest_reads
-      feature_category: container_registry
-      tier: sv
-      type: registry
-    expr: |
-      sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[6h])
-      )
-  - record: gitlab:component:feature_category:execution:ops:rate_6h
-    labels:
-      component: server_route_manifest_reads
-      feature_category: container_registry
-      tier: sv
-      type: registry
-    expr: |
-      sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/manifests/{reference}"}[6h])
-      )
-  - record: gitlab:component:feature_category:execution:apdex:success:rate_6h
-    labels:
-      component: server_route_manifest_writes
-      feature_category: container_registry
-      tier: sv
-      type: registry
-    expr: |
-      (
-        sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="10",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[6h])
-        )
-        +
-        sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[6h])
-        )
-      )
-      /
-      2
-  - record: gitlab:component:feature_category:execution:apdex:weight:score_6h
-    labels:
-      component: server_route_manifest_writes
-      feature_category: container_registry
-      tier: sv
-      type: registry
-    expr: |
-      sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[6h])
-      )
-  - record: gitlab:component:feature_category:execution:ops:rate_6h
-    labels:
-      component: server_route_manifest_writes
-      feature_category: container_registry
-      tier: sv
-      type: registry
-    expr: |
-      sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_count{method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}"}[6h])
-      )
-  - record: gitlab:component:feature_category:execution:apdex:success:rate_6h
-    labels:
-      component: storage
-      feature_category: container_registry
-      tier: sv
-      type: registry
-    expr: |
-      sum by (env,environment,stage) (
-        rate(registry_storage_action_seconds_bucket{le="1"}[6h])
-      )
-  - record: gitlab:component:feature_category:execution:apdex:weight:score_6h
-    labels:
-      component: storage
-      feature_category: container_registry
-      tier: sv
-      type: registry
-    expr: |
-      sum by (env,environment,stage) (
-        rate(registry_storage_action_seconds_bucket{le="+Inf"}[6h])
-      )
-  - record: gitlab:component:feature_category:execution:ops:rate_6h
-    labels:
-      component: storage
-      feature_category: container_registry
-      tier: sv
-      type: registry
-    expr: |
-      sum by (env,environment,stage) (
-        rate(registry_storage_action_seconds_count{}[6h])
       )

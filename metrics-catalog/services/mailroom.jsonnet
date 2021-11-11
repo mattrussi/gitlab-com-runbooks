@@ -31,6 +31,10 @@ metricsCatalog.serviceDefinition({
       userImpacting: true,
       featureCategory: 'not_owned',
       team: 'sre_coreinfra',
+
+      // Avoid long burn rates on Sidekiq metrics...
+      upscaleLongerBurnRates: true,
+
       description: |||
         Monitors incoming emails delivered from the imap inbox and processed through Sidekiq's `email_receiver` queue.
         Note that since Mailroom has poor observability, we use Sidekiq metrics for this, and this could lead to certain Sidekiq problems

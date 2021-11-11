@@ -102,7 +102,7 @@ local panelsForRequestsUtilization(serviceType, selectorHash) =
       |||,
       query=|||
         sum by (node) (
-          kube_pod_container_resource_requests_cpu_cores
+          kube_pod_container_resource_requests{resource="cpu", unit="core"}
         )
         / on (node) group_left()
         kube_node_status_allocatable:labeled{%(nodeSelector)s,resource="cpu"}
@@ -121,7 +121,7 @@ local panelsForRequestsUtilization(serviceType, selectorHash) =
       |||,
       query=|||
         sum by (node) (
-          kube_pod_container_resource_requests_memory_bytes
+          kube_pod_container_resource_requests{resource="memory", unit="byte"}
         )
         / on (node) group_left()
         kube_node_status_allocatable:labeled{%(nodeSelector)s,resource="memory"}

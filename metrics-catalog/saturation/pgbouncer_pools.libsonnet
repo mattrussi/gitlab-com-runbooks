@@ -1,13 +1,12 @@
-local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
-local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
+local resourceSaturationPoint = (import 'servicemetrics/metrics.libsonnet').resourceSaturationPoint;
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 
-
-local pgbouncerAsyncPool(serviceType, role) =
+local pgbouncerAsyncPool(tag, role) =
   resourceSaturationPoint({
     title: 'Postgres Async (Sidekiq) %s Connection Pool Utilization per Node' % [role],
     severity: 's4',
     horizontallyScalable: role == 'replica',  // Replicas can be scaled horizontally, primary cannot
-    appliesTo: [serviceType],
+    appliesTo: metricsCatalog.findServicesWithTag(tag=tag),
     description: |||
       pgbouncer async connection pool utilization per database node, for %(role)s database connections.
 
@@ -36,12 +35,12 @@ local pgbouncerAsyncPool(serviceType, role) =
     },
   });
 
-local pgbouncerSyncPool(serviceType, role) =
+local pgbouncerSyncPool(tag, role) =
   resourceSaturationPoint({
     title: 'Postgres Sync (Web/API/Git) %s Connection Pool Utilization per Node' % [role],
     severity: 's3',
     horizontallyScalable: role == 'replica',  // Replicas can be scaled horizontally, primary cannot
-    appliesTo: [serviceType],
+    appliesTo: metricsCatalog.findServicesWithTag(tag=tag),
     description: |||
       pgbouncer sync connection pool Saturation per database node, for %(role)s database connections.
 
@@ -50,19 +49,19 @@ local pgbouncerSyncPool(serviceType, role) =
       When this resource is saturated, web/api database operations may queue, leading to rails worker
       saturation and 503 errors in the web.
     ||| % { role: role },
-    grafana_dashboard_uid: 'sat_pgbouncer_sync_pool_' + role,
+    grafana_dashboard_uid: 'sat_pgb_sync_pool_' + role,
     resourceLabels: ['fqdn', 'instance'],
     burnRatePeriod: '5m',
     query: |||
       (
-        avg_over_time(pgbouncer_pools_server_active_connections{user="gitlab", database="gitlabhq_production", %(selector)s}[%(rangeInterval)s]) +
-        avg_over_time(pgbouncer_pools_server_testing_connections{user="gitlab", database="gitlabhq_production", %(selector)s}[%(rangeInterval)s]) +
-        avg_over_time(pgbouncer_pools_server_used_connections{user="gitlab", database="gitlabhq_production", %(selector)s}[%(rangeInterval)s]) +
-        avg_over_time(pgbouncer_pools_server_login_connections{user="gitlab", database="gitlabhq_production", %(selector)s}[%(rangeInterval)s])
+        avg_over_time(pgbouncer_pools_server_active_connections{user=~"gitlab|gitlab-registry", database=~"gitlabhq_registry|gitlabhq_production", %(selector)s}[%(rangeInterval)s]) +
+        avg_over_time(pgbouncer_pools_server_testing_connections{user=~"gitlab|gitlab-registry", database=~"gitlabhq_registry|gitlabhq_production", %(selector)s}[%(rangeInterval)s]) +
+        avg_over_time(pgbouncer_pools_server_used_connections{user=~"gitlab|gitlab-registry", database=~"gitlabhq_registry|gitlabhq_production", %(selector)s}[%(rangeInterval)s]) +
+        avg_over_time(pgbouncer_pools_server_login_connections{user=~"gitlab|gitlab-registry", database=~"gitlabhq_registry|gitlabhq_production", %(selector)s}[%(rangeInterval)s])
       )
       / on(%(aggregationLabels)s) group_left()
       sum by (%(aggregationLabels)s) (
-        avg_over_time(pgbouncer_databases_pool_size{name="gitlabhq_production", %(selector)s}[%(rangeInterval)s])
+        avg_over_time(pgbouncer_databases_pool_size{name=~"gitlabhq_registry|gitlabhq_production", %(selector)s}[%(rangeInterval)s])
       )
     |||,
     slos: {
@@ -74,11 +73,8 @@ local pgbouncerSyncPool(serviceType, role) =
 
 
 {
-  pgbouncer_async_primary_pool: pgbouncerAsyncPool('pgbouncer', 'primary'),
-
-  // Note that this pool is currently not used, but may be added in the medium
-  // term
-  pgbouncer_async_replica_pool: pgbouncerAsyncPool('patroni', 'replica'),
-  pgbouncer_sync_primary_pool: pgbouncerSyncPool('pgbouncer', 'primary'),
+  pgbouncer_async_primary_pool: pgbouncerAsyncPool('pgbouncer_async_primary', 'primary'),
+  pgbouncer_async_replica_pool: pgbouncerAsyncPool('pgbouncer_async_replica', 'replica'),
+  pgbouncer_sync_primary_pool: pgbouncerSyncPool('pgbouncer_primary', 'primary'),
   pgbouncer_sync_replica_pool: pgbouncerSyncPool('patroni', 'replica'),
 }

@@ -93,26 +93,6 @@ metricsCatalog.serviceDefinition({
       ],
     },
 
-    storage: {
-      userImpacting: true,
-      featureCategory: 'container_registry',
-      description: |||
-        Aggregation of all container registry GCS storage operations.
-      |||,
-
-      apdex: histogramApdex(
-        histogram='registry_storage_action_seconds_bucket',
-        selector='',
-        satisfiedThreshold=1
-      ),
-
-      requestRate: rateMetric(
-        counter='registry_storage_action_seconds_count',
-      ),
-
-      significantLabels: ['action', 'migration_path'],
-    },
-
     database: {
       userImpacting: true,
       featureCategory: 'container_registry',
@@ -123,13 +103,13 @@ metricsCatalog.serviceDefinition({
       apdex: histogramApdex(
         histogram='registry_database_query_duration_seconds_bucket',
         selector='type="registry"',
-        satisfiedThreshold=1,
-        toleratedThreshold=2.5
+        satisfiedThreshold=0.5,
+        toleratedThreshold=1
       ),
 
       requestRate: rateMetric(
         counter='registry_database_queries_total',
-        selector='type="registry"'
+        selector=registryBaseSelector
       ),
 
       significantLabels: ['name'],
@@ -146,13 +126,20 @@ metricsCatalog.serviceDefinition({
       apdex: histogramApdex(
         histogram='registry_gc_run_duration_seconds_bucket',
         selector='type="registry"',
-        satisfiedThreshold=1,
-        toleratedThreshold=2
+        satisfiedThreshold=0.5,
+        toleratedThreshold=1
       ),
 
       requestRate: rateMetric(
         counter='registry_gc_runs_total',
-        selector='type="registry"'
+        selector=registryBaseSelector
+      ),
+
+      errorRate: rateMetric(
+        counter='registry_gc_runs_total',
+        selector=registryBaseSelector {
+          'error': 'true',
+        }
       ),
 
       significantLabels: ['worker'],

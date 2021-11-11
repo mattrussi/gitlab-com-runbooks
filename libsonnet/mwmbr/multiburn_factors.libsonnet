@@ -6,9 +6,9 @@ local hoursPerMonth = 24 * 30;
 
 /* MWMBR parameters, indexed by long window */
 local parameters = std.foldl(function(memo, f) memo { [f.longWindow]: f { longWindowHours: durationParser.toSeconds(f.longWindow) / 3600 } }, [
-  { longWindow: '1h', shortWindow: '5m', forDuration: '2m', budgetThresholdForPeriod: 0.02/* 2% */, notification: 'pager' },
-  { longWindow: '6h', shortWindow: '30m', forDuration: '10m', budgetThresholdForPeriod: 0.05/* 5% */, notification: 'pager' },
-  { longWindow: '3d', shortWindow: '6h', forDuration: '1h', budgetThresholdForPeriod: 0.1/* 10% */, notification: 'issue' },
+  { longWindow: '1h', shortWindow: '5m', forDuration: '2m', budgetThresholdForPeriod: 0.02 /* 2% */ },
+  { longWindow: '6h', shortWindow: '30m', forDuration: '10m', budgetThresholdForPeriod: 0.05 /* 5% */ },
+  { longWindow: '3d', shortWindow: '6h', forDuration: '1h', budgetThresholdForPeriod: 0.1 /* 10% */ },
 ], {});
 
 local errorBudgetFactorFor(longWindow) =
@@ -49,4 +49,7 @@ local errorBudgetFactorFor(longWindow) =
    */
   apdexRatioThreshold(sla, windowDuration)::
     1 - errorBudgetFactorFor(windowDuration) * (1 - sla),
+
+  alertForDurationForLongThreshold(longWindowDuration)::
+    parameters[longWindowDuration].forDuration,
 }

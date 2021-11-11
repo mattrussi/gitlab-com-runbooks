@@ -11,6 +11,12 @@ metricsCatalog.serviceDefinition({
     apdexScore: 0.9999,
     errorRatio: 0.999,
   },
+
+  tags: [
+    // redis tag signifies that this service has redis-exporter
+    'redis',
+  ],
+
   serviceLevelIndicators: {
     rails_redis_client: {
       userImpacting: true,

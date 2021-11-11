@@ -4,6 +4,7 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
 
 local testAggregationSet = aggregationSet.AggregationSet({
   name: 'Test',
+  intermediateSource: false,
   selector: { monitor: 'global' },  // Not Thanos Ruler
   labels: ['environment', 'tier', 'type', 'stage'],
   burnRates: {

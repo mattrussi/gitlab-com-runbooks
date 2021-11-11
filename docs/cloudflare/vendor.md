@@ -43,26 +43,7 @@ Interim documentation: https://ops.gitlab.net/gitlab-com/gl-infra/terraform-modu
 
 Should we need to call Cloudflare, we were given these numbers to reach out to for help.
 
-There are a few noted with a # that can only be called from the country specified.
-
-Local Enterprise phone numbers for each country:
-
-- United States: +1 650-353-5922
-- United Kingdom: +44 808-169-9540
-- India Toll-Free Number: 0008000501934 #
-- South Korea Toll-Free Number:  00798 142030193 #
-- Taiwan Toll-Free Number: +886 (80) 1491362  (To dial from within Taiwan: 00801-491-362)
-- Australia Toll-Free Number: +61 (1800) 491698
-- New Zealand Toll-Free Number: +64 (80) 0758909
-- Japan: +81 503-196-5771
-- Brazil: +55 114-950-8998, +55-11-4949-5922
-- Canada: +1 647-360-8385
-- Mexico +52-155-4169-5968
-- Chile +56-2-2666-5928
-- Singapore +65 800-321-1182 #
-- China +86 (10) 85241784
-- Portugal +351 (21) 1230925
-- Germany +49 89 2555 2787
+Those numbers are documented in https://gitlab.com/gitlab-com/gl-security/runbooks/-/blob/master/sirt/infrastructure/cloudflare.md
 
 # Other References
 

@@ -12,19 +12,19 @@ local algorithmVisualisation =
     queries=[
       {
         legendFormat: 'Number of running jobs',
-        query: 'sum(gitlab_runner_jobs{instance=~"${runner_manager:pipe}"})',
+        query: 'sum(gitlab_runner_jobs{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"})',
       },
       {
         legendFormat: 'Number of {{state}} machines',
-        query: 'sum by (state) (gitlab_runner_autoscaling_machine_states{state=~"idle|used|creating|removing", executor="docker+machine", instance=~"${runner_manager:pipe}"})',
+        query: 'sum by (state) (gitlab_runner_autoscaling_machine_states{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}", state=~"idle|used|creating|removing", executor="docker+machine"})',
       },
       {
         legendFormat: 'Number of existing machines',
-        query: 'sum(gitlab_runner_autoscaling_machine_states{state=~"idle|used|creating|removing", executor="docker+machine", instance=~"${runner_manager:pipe}"})',
+        query: 'sum(gitlab_runner_autoscaling_machine_states{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}", state=~"idle|used|creating|removing", executor="docker+machine"})',
       },
       {
         legendFormat: 'Limit utilization',
-        query: 'sum(gitlab_runner_jobs{instance=~"${runner_manager:pipe}"}) / sum(gitlab_runner_limit{instance=~"${runner_manager:pipe}"}) ',
+        query: 'sum(gitlab_runner_jobs{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}) / sum(gitlab_runner_limit{instance=~"${runner_manager:pipe}"}) ',
       },
     ],
   )

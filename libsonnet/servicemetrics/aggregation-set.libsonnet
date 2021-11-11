@@ -1,9 +1,48 @@
 local durationParser = import 'utils/duration-parser.libsonnet';
+local validator = import 'utils/validator.libsonnet';
+
+local defaultSourceBurnRates = ['5m', '30m', '1h'];
+local defaultGlobalBurnRates = defaultSourceBurnRates + ['6h', '3d'];
 
 local definitionDefaults = {
   aggregationFilter: null,
+
+  // By default we generate SLO Analysis dashboards when
+  // the aggregation set is not an intermediate source
+  generateSLODashboards: !self.intermediateSource,
+
+  supportedBurnRates: if self.intermediateSource then
+    defaultSourceBurnRates
+  else defaultGlobalBurnRates,
 };
 
+local arrayOfStringsValidator = validator.validator(
+  function(v)
+    std.isArray(v) && std.foldl(function(memo, e) memo && std.isString(e), v, true),
+  'not an array of strings'
+);
+
+local buildValidator(definition) =
+  local required = {
+    selector: validator.object,
+    labels: arrayOfStringsValidator,
+  };
+  local optionalBurnRates =
+    if std.objectHas(definition, 'burnRates') then
+      {
+        burnRates: validator.object,
+      } else {};
+  local optionalFormats =
+    if std.objectHas(definition, 'metricFormats') then
+      {
+        metricFormats: validator.object,
+      } else {};
+  local optionalSupportedBurnRates =
+    if std.objectHas(definition, 'supportedBurnRates') then
+      {
+        supportedBurnRates: arrayOfStringsValidator,
+      } else {};
+  validator.new(required + optionalBurnRates + optionalFormats + optionalSupportedBurnRates);
 /**
  * An AggregationSet defines a matrix of aggregations across a series of different burn rates,
  * with a common set of aggregation labels and selectors.
@@ -32,7 +71,26 @@ local definitionDefaults = {
 
 {
   AggregationSet(definition)::
-    local definitionWithDefaults = definitionDefaults + definition;
+    local unvalidatedDefinition = definitionDefaults + definition;
+    local definitionWithDefaults = buildValidator(unvalidatedDefinition).assertValid(unvalidatedDefinition);
+
+    local generateMetricNamesForBurnRate(burnRate) =
+      if std.objectHas(definitionWithDefaults, 'metricFormats') &&
+         std.objectHas(definitionWithDefaults, 'supportedBurnRates') &&
+         std.member(definitionWithDefaults.supportedBurnRates, burnRate) then
+        std.foldl(
+          function(memo, metricKey)
+            memo { [metricKey]: definitionWithDefaults.metricFormats[metricKey] % [burnRate] },
+          std.objectFields(definitionWithDefaults.metricFormats),
+          {}
+        ) else {};
+
+    local getBurnRateMetrics(burnRate) =
+      if std.objectHas(definitionWithDefaults, 'burnRates') &&
+         std.objectHas(definitionWithDefaults.burnRates, burnRate) then
+        definitionWithDefaults.burnRates[burnRate]
+      else
+        generateMetricNamesForBurnRate(burnRate);
 
     local getMetricNameForBurnRate(burnRate, metricName, required) =
       local nullOrFail() =
@@ -41,12 +99,9 @@ local definitionDefaults = {
         else
           null;
 
-      if std.objectHas(definitionWithDefaults.burnRates, burnRate) then
-        local burnDef = definitionWithDefaults.burnRates[burnRate];
-        if std.objectHas(burnDef, metricName) then
-          burnDef[metricName]
-        else
-          nullOrFail()
+      local burnRateMetrics = getBurnRateMetrics(burnRate);
+      if std.objectHas(burnRateMetrics, metricName) then
+        burnRateMetrics[metricName]
       else
         nullOrFail();
 
@@ -78,6 +133,10 @@ local definitionDefaults = {
       // Returns a set of burn rates for the aggregation set,
       // ordered by duration ascending
       getBurnRates()::
-        std.set(std.objectFields(definitionWithDefaults.burnRates), durationParser.toSeconds),
+        local supportedBurnRates = if std.objectHas(self, 'supportedBurnRates') then self.supportedBurnRates else [];
+        local definedBurnRates = if std.objectHas(self, 'burnRates') then
+          std.objectFields(definitionWithDefaults.burnRates)
+        else [];
+        std.set(definedBurnRates + supportedBurnRates, durationParser.toSeconds),
     },
 }

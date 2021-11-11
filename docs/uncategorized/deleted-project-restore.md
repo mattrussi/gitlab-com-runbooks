@@ -1,5 +1,13 @@
 # Deleted Project Restoration
 
+# You should not perform this action!
+
+As a general policy, we do not perform these restores. You should refuse to perform this restore unless the request is escalated to an Infrastructure manager.
+
+Plan on two or three days of effort over a five day time period for a successful restore. And even then, there is no guarantee of full recovery.
+
+## Introduction
+
 As long as we have the database and Gitaly backups, we can restore deleted GitLab
 projects.
 
@@ -260,3 +268,15 @@ If the filesystem-level fsck we ran on the Gitaly shard succeeded, then the
 result of `git fsck` doesn't matter that much: the repository might already have
 been corrupted, and that's not necessarily our fault. However, if both `fsck`s
 failed, we can't know whether the corruption predated the snapshot or not.
+
+# Troubleshooting
+
+## Rails console errors out with a stacktrace
+You may need to copy the production `db_key_base` key into the restore node. You can find the key in `/etc/gitlab/gitlab-secrets.json`.
+
+## Gitlab reconfigure fails
+You may need to edit the `/etc/gitlab/gitlab.rb` file and disable object_store like this: `gitlab_rails['object_store']['enabled'] = false`
+
+## Copying the Git repository results in a bad fsck or non-working repository
+You may be recovering a repository with objects in a shared pool. Try to
+re-copy using [these instructions](../gitaly/git-copy-by-hand.md).

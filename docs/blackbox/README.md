@@ -20,6 +20,7 @@
 * [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
 * [../spamcheck/index.md](../spamcheck/index.md)
 * [../uncategorized/camoproxy.md](../uncategorized/camoproxy.md)
+* [../uncategorized/deleting-alerts.md](../uncategorized/deleting-alerts.md)
 * [../uncategorized/job_completion.md](../uncategorized/job_completion.md)
 * [../version/version-gitlab-com.md](../version/version-gitlab-com.md)
 <!-- END_MARKER -->

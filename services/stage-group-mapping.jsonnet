@@ -46,9 +46,7 @@
     name: 'Project Management',
     stage: 'plan',
     feature_categories: [
-      'issue_tracking',
-      'boards',
-      'time_tracking',
+      'team_planning',
       'planning_analytics',
     ],
   },
@@ -56,8 +54,7 @@
     name: 'Product Planning',
     stage: 'plan',
     feature_categories: [
-      'epics',
-      'roadmaps',
+      'portfolio_management',
       'design_management',
     ],
   },
@@ -94,8 +91,6 @@
       'live_preview',
       'wiki',
       'static_site_editor',
-      'gitlab_docs',
-      'navigation',
     ],
   },
   gitaly: {
@@ -117,6 +112,8 @@
     stage: 'ecosystem',
     feature_categories: [
       'foundations',
+      'navigation',
+      'gitlab_docs',
     ],
   },
   pipeline_execution: {
@@ -231,7 +228,6 @@
       'infrastructure_as_code',
       'kubernetes_management',
       'cluster_cost_management',
-      'serverless',
       'chatops',
       'secrets_management',
       'delivery_management',
@@ -344,6 +340,7 @@
     stage: 'enablement',
     feature_categories: [
       'memory',
+      'redis',
     ],
   },
   global_search: {
@@ -367,11 +364,25 @@
       'sharding',
     ],
   },
-  infrastructure: {
-    name: 'Infrastructure',
-    stage: 'enablement',
+  delivery: {
+    name: 'Delivery',
+    stage: 'platforms',
     feature_categories: [
-      'infrastructure',
+      'delivery',
+    ],
+  },
+  scalability: {
+    name: 'Scalability',
+    stage: 'platforms',
+    feature_categories: [
+      'scalability',
+    ],
+  },
+  horse: {
+    name: 'Project Horse',
+    stage: 'platforms',
+    feature_categories: [
+      'horse',
     ],
   },
   applied_ml: {

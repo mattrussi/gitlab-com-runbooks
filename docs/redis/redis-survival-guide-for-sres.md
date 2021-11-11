@@ -20,7 +20,7 @@ bottlenecks (or single points of failure)  This can also save time in the web ti
 as a side-effect than the direct reason.
 
 ## Architecture
-For gitlab.com, as at September 2020, we have 3 distinct sets of Redis instances, each handling a distinct use case:
+For gitlab.com, as at September 2021, we have 5 sets of Redis instances, each handling a distinct use case:
 
 | Role                    | Nodes                | Clients                                  | Sentinel?                     | Persistence?               |
 | ----------------------- | -------------------- | ---------------------------------------- | ----------------------------- | -------------------------- |
@@ -28,6 +28,7 @@ For gitlab.com, as at September 2020, we have 3 distinct sets of Redis instances
 | Sidekiq job queues      | redis-sidekiq-XX     | Puma workers, Sidekiq workers            | Yes (localhost)               | RDB dump every 900 seconds |
 | Persistent shared state | redis-XX             | Puma workers, Sidekiq workers, Workhorse | Yes (localhost)               | RDB dump every 900 seconds |
 | CI build trace chunks   | redis-tracechunks-XX | Puma workers (API), Sidekiq workers      | Yes (localhost)               | RDB dump every 900 seconds |
+| Ratelimiting (RackAttack/App) | redis-ratelimiting-XX | Puma workers                      | Yes (localhost)               | None |
 
 We do not yet have a separate actioncable instance.
 
@@ -44,6 +45,11 @@ infrastructure is also down or badly affected).
 At the time (mid 2021) we chose to split CI build trace chunks into it's own instance, CI trace chunks were responsible for roughly 60% of the
 data throughput into/out of the shared state redis, and 16% of Redis calls (see https://gitlab.com/gitlab-org/gitlab/-/issues/327469#note_556531587)
 which was sufficient reason for the split, along with the distinctive usage profile (transient data on its way to permanent storage).
+
+When we split out Ratelimiting (latter-half of 2021) this was for CPU saturation; the cache instance was peaking at a little over
+90% CPU, and we knew from when we [enabled RackAttack in November 2020](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/3034)
+that it is responsible for at least 25% (absolute) of the CPU utilization, so splitting this out gives the cache instance room
+to breath.  Note that the [data usage](https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1246#sizing) is tiny.
 
 ### CPUs
 Redis VMs were the first nodes we switched to from N1 to '[C2](https://cloud.google.com/compute/docs/machine-types#c2_machine_types)'
@@ -155,7 +161,8 @@ On the non-cache clusters, the data is saved to disk (RDB format) every 900 seco
 
 As noted elsewhere in this document, the cache clusters do not regularly write to disk (only indirectly as part of a
 replication resynchronization).  If all 3 nodes fail at once, the entire cache will be wiped; this is not ideal but
-acceptable as it will be refilled on demand.
+acceptable as it will be refilled on demand.  For ratelimiting, the data has only short term usefulness anyway (generally
+1 minute, with some up to 3 minutes) so complete loss is not significant.
 
 ## What do we store?
 
@@ -174,6 +181,11 @@ of data in this instance.  Any such build up implies a problem (Sidekiq not proc
 particularly low alert thresholds for memory saturation on this instance.  At the time we chose to split this instance
 from the primary persistent (shared state) instance (mid 2021), CI trace chunks were responsible for roughly 60% of the
 data throughput into/out of the shared state redis, and 16% of Redis calls.
+
+The data in the ratelimiting instance is a set of keys identifying actors (typically users, IP addresses, or in some
+cases projects) and activities, with the value being the count of usage in the current period (the period is also encoded
+into the key name).  TTLs are used to expire these automatically so there's no manual cleanup by clients, it is automatic
+and internal to Redis.
 
 ## Clients
 
@@ -216,6 +228,7 @@ There is 1 core dashboard for redis, with a variant for each cluster:
 * [Cache](https://dashboards.gitlab.net/d/redis-cache-main/redis-cache-overview?orgId=1)
 * [Sidekiq](https://dashboards.gitlab.net/d/redis-sidekiq-main/redis-sidekiq-overview?orgId=1)
 * [Tracechunks](https://dashboards.gitlab.net/d/redis-tracechunks-main/redis-tracechunks-overview?orgId=1)
+* [Ratelimiting](https://dashboards.gitlab.net/d/redis-ratelimiting-main/redis-ratelimiting-overview?orgId=1)
 
 Note that many of the panels are have both Primary and Secondary variants; because only the primary is active, usually
 only the primary graphs matter *and* the secondaries should be pretty quiet (other than some housekeeping/analysis
@@ -279,8 +292,8 @@ to redis usage.  These are:
 * write_bytes
 
 There is one set for each of the clusters, with a different prefix e.g. `redis` (persistent), `redis_cache_`,
-`redis_queues` (sidekiq), and `redis_tracechunks`.  You can perform the usual sort of visualizations and explorations
-that you might on other numeric fields, e.g. to find the top 20 Controllers by average number of calls to Redis.
+`redis_queues` (sidekiq), `redis_tracechunks` and `redis_ratelimiting`.  You can perform the usual sort of visualizations
+and explorations that you might on other numeric fields, e.g. to find the top 20 Controllers by average number of calls to Redis.
 
 This would be an excellent approach to diagnosing the source of changes in Redis usage, although if the change was beyond
 our log retention (7 days) you can only really reason about the current state (looking for outliers), which constrains

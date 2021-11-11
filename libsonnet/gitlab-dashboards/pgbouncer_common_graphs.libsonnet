@@ -64,7 +64,7 @@ local saturationQuery(aggregationLabels, nodeSelector, poolSelector) =
         title='Total Time in Queries per Node',
         description='Total number of seconds spent by pgbouncer when actively connected to PostgreSQL, executing queries - stats.total_query_time',
         query=|||
-          sum(rate(pgbouncer_stats_queries_duration_seconds{type="%(serviceType)s", environment="$environment"}[$__interval])) by (fqdn)
+          sum(rate(pgbouncer_stats_queries_duration_seconds_total{type="%(serviceType)s", environment="$environment"}[$__interval])) by (fqdn)
         ||| % formatConfig,
         legendFormat='{{ fqdn }}',
         format='ops',
@@ -92,7 +92,7 @@ local saturationQuery(aggregationLabels, nodeSelector, poolSelector) =
         title='Time in Transaction per Server',
         description='Total number of seconds spent by pgbouncer when connected to PostgreSQL in a transaction, either idle in transaction or executing queries - stats.total_xact_time',
         query=|||
-          sum(rate(pgbouncer_stats_server_in_transaction_seconds{type="%(serviceType)s", environment="$environment"}[$__interval])) by (fqdn)
+          sum(rate(pgbouncer_stats_server_in_transaction_seconds_total{type="%(serviceType)s", environment="$environment"}[$__interval])) by (fqdn)
         ||| % formatConfig,
         legendFormat='{{ fqdn }}',
         format='s',
@@ -141,9 +141,9 @@ local saturationQuery(aggregationLabels, nodeSelector, poolSelector) =
       ),
 
     ], cols=2, rowHeight=10, startRow=startRow),
-  connectionPoolingPanels(serviceType, startRow)::
+  connectionPoolingPanels(serviceType, user, startRow)::
     local nodeSelector = 'type="%(serviceType)s", environment="$environment"' % { serviceType: serviceType };
-    local poolSelector = '%(nodeSelector)s, user="gitlab", database!="pgbouncer"' % { nodeSelector: nodeSelector };
+    local poolSelector = '%(nodeSelector)s, user="%(user)s", database!="pgbouncer"' % { nodeSelector: nodeSelector, user: user };
 
     local formatConfig = {
       serviceType: serviceType,
@@ -198,7 +198,7 @@ local saturationQuery(aggregationLabels, nodeSelector, poolSelector) =
         title='Total Connection Wait Time',
         description='Total aggregated time spend waiting for a backend connection. Lower is better',
         query=|||
-          sum by (database, environment, type) (rate(pgbouncer_stats_client_wait_seconds{%(nodeSelector)s, database!="pgbouncer"}[$__interval]) / on() group_left() %(WAIT_TIME_CORRECTION_FACTOR)s)
+          sum by (database, environment, type) (rate(pgbouncer_stats_client_wait_seconds_total{%(nodeSelector)s, database!="pgbouncer"}[$__interval]) / on() group_left() %(WAIT_TIME_CORRECTION_FACTOR)s)
         ||| % formatConfig,
         legendFormat='{{ database }}',
         format='s',
@@ -210,7 +210,7 @@ local saturationQuery(aggregationLabels, nodeSelector, poolSelector) =
         title='Average Wait Time per SQL Transaction',
         description='Average time spent waiting for a backend connection from the pool. Lower is better',
         query=|||
-          sum by (database, environment, type, fqdn, job) (rate(pgbouncer_stats_client_wait_seconds{%(nodeSelector)s, database!="pgbouncer"}[$__interval]) / on() group_left() %(WAIT_TIME_CORRECTION_FACTOR)s)
+          sum by (database, environment, type, fqdn, job) (rate(pgbouncer_stats_client_wait_seconds_total{%(nodeSelector)s, database!="pgbouncer"}[$__interval]) / on() group_left() %(WAIT_TIME_CORRECTION_FACTOR)s)
           /
           sum by (database, environment, type, fqdn, job) (rate(pgbouncer_stats_sql_transactions_pooled_total{%(nodeSelector)s, database!="pgbouncer"}[$__interval]))
         ||| % formatConfig,

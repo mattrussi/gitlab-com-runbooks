@@ -54,12 +54,6 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: boards
-      product_stage: plan
-      stage_group: project_management
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: build_artifacts
       product_stage: verify
       stage_group: testing
@@ -162,6 +156,12 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: delivery
+      product_stage: platforms
+      stage_group: delivery
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: delivery_management
       product_stage: configure
       stage_group: configure
@@ -219,12 +219,6 @@ groups:
       feature_category: environment_management
       product_stage: release
       stage_group: release
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: epics
-      product_stage: plan
-      stage_group: product_planning
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -301,8 +295,8 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: gitlab_docs
-      product_stage: create
-      stage_group: editor
+      product_stage: ecosystem
+      stage_group: foundations
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -318,6 +312,12 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: horse
+      product_stage: platforms
+      stage_group: horse
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: importers
       product_stage: manage
       stage_group: import
@@ -327,12 +327,6 @@ groups:
       feature_category: incident_management
       product_stage: monitor
       stage_group: monitor
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: infrastructure
-      product_stage: enablement
-      stage_group: infrastructure
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -369,12 +363,6 @@ groups:
       feature_category: internationalization
       product_stage: manage
       stage_group: import
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: issue_tracking
-      product_stage: plan
-      stage_group: project_management
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -445,8 +433,8 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: navigation
-      product_stage: create
-      stage_group: editor
+      product_stage: ecosystem
+      stage_group: foundations
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -510,6 +498,12 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: portfolio_management
+      product_stage: plan
+      stage_group: product_planning
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: privacy_control_center
       product_stage: growth
       stage_group: product_intelligence
@@ -540,6 +534,12 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: redis
+      product_stage: enablement
+      stage_group: memory
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: release_evidence
       product_stage: release
       stage_group: release
@@ -564,12 +564,6 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: roadmaps
-      product_stage: plan
-      stage_group: product_planning
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: runbooks
       product_stage: monitor
       stage_group: monitor
@@ -579,6 +573,12 @@ groups:
       feature_category: runner
       product_stage: verify
       stage_group: runner
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: scalability
+      product_stage: platforms
+      stage_group: scalability
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -609,12 +609,6 @@ groups:
       feature_category: self_monitoring
       product_stage: monitor
       stage_group: monitor
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: serverless
-      product_stage: configure
-      stage_group: configure
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -672,7 +666,7 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: time_tracking
+      feature_category: team_planning
       product_stage: plan
       stage_group: project_management
     expr: "1"

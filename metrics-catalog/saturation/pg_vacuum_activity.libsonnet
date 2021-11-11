@@ -1,12 +1,16 @@
-local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
-local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
+local resourceSaturationPoint = (import 'servicemetrics/metrics.libsonnet').resourceSaturationPoint;
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 
 {
   pg_vacuum_activity: resourceSaturationPoint({
     title: 'Postgres Autovacuum Activity',
     severity: 's2',
     horizontallyScalable: true,  // We can add more vacuum workers, but at a resource utilization cost
-    appliesTo: ['patroni', 'sentry'],
+
+    // Use patroni tag, not postgres since we only want clusters that have primaries
+    // not postgres-archive, or postgres-delayed nodes for example
+    appliesTo: metricsCatalog.findServicesWithTag(tag='postgres_with_primaries'),
+
     description: |||
       Measures the number of active autovacuum workers, as a percentage of the maximum, configured
       via the `autovacuum_max_workers` setting.

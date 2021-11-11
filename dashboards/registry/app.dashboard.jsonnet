@@ -7,7 +7,7 @@ local row = grafana.row;
 local basic = import 'grafana/basic.libsonnet';
 
 basic.dashboard(
-  'Application Info',
+  'Application Detail',
   tags=['container registry', 'docker', 'registry'],
 )
 .addTemplate(templates.gkeCluster)
@@ -16,14 +16,25 @@ basic.dashboard(
 .addTemplate(
   template.custom(
     'Deployment',
-    'gitlab-registry,',
-    'gitlab-registry',
+    'gitlab-(cny-)?registry,',
+    'gitlab-(cny-)?registry',
     hide='variable',
   )
 )
+.addTemplate(template.new(
+  'cluster',
+  '$PROMETHEUS_DS',
+  'label_values(registry_storage_action_seconds_count{environment="$environment"}, cluster)',
+  current=null,
+  refresh='load',
+  sort=true,
+  multi=true,
+  includeAll=true,
+  allValues='.*',
+))
 .addPanel(
 
-  row.new(title='Build Info'),
+  row.new(title='Version'),
   gridPos={
     x: 0,
     y: 0,
@@ -34,7 +45,7 @@ basic.dashboard(
 .addPanels(crCommon.version(startRow=1))
 .addPanel(
 
-  row.new(title='Stackdriver Metrics'),
+  row.new(title='Host Resources Usage'),
   gridPos={
     x: 0,
     y: 1000,
@@ -42,10 +53,10 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(common.logMessages(startRow=1001))
+.addPanels(common.generalCounters(startRow=1001))
 .addPanel(
 
-  row.new(title='General Counters'),
+  row.new(title='HTTP API'),
   gridPos={
     x: 0,
     y: 2000,
@@ -53,10 +64,10 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(common.generalCounters(startRow=2001))
+.addPanels(crCommon.http(startRow=2001))
 .addPanel(
 
-  row.new(title='Data'),
+  row.new(title='Storage Drivers'),
   gridPos={
     x: 0,
     y: 3000,
@@ -64,10 +75,10 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(crCommon.data(startRow=3001))
+.addPanels(crCommon.storageDrivers(startRow=3001))
 .addPanel(
 
-  row.new(title='Handler Latencies'),
+  row.new(title='Cache'),
   gridPos={
     x: 0,
     y: 4000,
@@ -75,4 +86,4 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(crCommon.latencies(startRow=4001))
+.addPanels(crCommon.cache(startRow=4001))

@@ -72,6 +72,28 @@ local otherRules(serviceDefinition, labels) =
     )
   else [];
 
+local monitoringSLOsPerSLIsForService(serviceDefinition, serviceLabels) =
+  std.flatMap(
+    function(sli)
+      local labels = serviceLabels { component: sli.name };
+      [
+        if sli.hasApdexSLO() then
+          minApdexMonitoringSLO(
+            labels=labels,
+            expr='%f' % [sli.monitoringThresholds.apdexScore],
+          )
+        else
+          null,
+        if sli.hasErrorRateSLO() then
+          maxErrorsMonitoringSLO(
+            labels=labels,
+            expr='%f' % [1 - sli.monitoringThresholds.errorRatio],
+          )
+        else
+          null,
+      ],
+    serviceDefinition.listServiceLevelIndicators()
+  );
 
 local generateServiceSLORules(serviceDefinition) =
   local hasContractualThresholds = std.objectHas(serviceDefinition, 'contractualThresholds');
@@ -105,6 +127,13 @@ local generateServiceSLORules(serviceDefinition) =
       )
     else null,
 
+    // We record an SLO per service and per component:
+    //
+    // The SLO per service, without a component label is used by some (deprecated)
+    // general service alerts in `thanos-rules-jsonnet/service-alerts.jsonnet` and
+    // for the Aggregated SLI panels in the service overview dashboard
+    //
+    // The SLO per component is used by the SLI specific panels in the service overviews
     // Min apdex SLO (multiburn)
     if hasMonitoringThresholds && std.objectHas(serviceDefinition.monitoringThresholds, 'apdexScore') then
       minApdexMonitoringSLO(
@@ -120,7 +149,7 @@ local generateServiceSLORules(serviceDefinition) =
         expr='%f' % [1 - serviceDefinition.monitoringThresholds.errorRatio],
       )
     else null,
-  ];
+  ] + monitoringSLOsPerSLIsForService(serviceDefinition, labels);
 
   std.prune(defaultRules + otherRules(serviceDefinition, labels));
 

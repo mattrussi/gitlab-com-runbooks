@@ -238,7 +238,7 @@ local sliDetailErrorRatePanel(
             layout.singleRow(
               std.prune(
                 [
-                  if sli.hasApdex() then
+                  if sli.hasHistogramApdex() then
                     sliDetailLatencyPanel(
                       title='Estimated %(percentile_humanized)s ' + sliName + ' Latency - ' + aggregationSet.title,
                       serviceType=serviceType,

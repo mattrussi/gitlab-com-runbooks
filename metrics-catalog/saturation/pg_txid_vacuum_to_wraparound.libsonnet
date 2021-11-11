@@ -1,12 +1,12 @@
-local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
-local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
+local resourceSaturationPoint = (import 'servicemetrics/metrics.libsonnet').resourceSaturationPoint;
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 
 {
   pg_txid_vacuum_to_wraparound: resourceSaturationPoint({
     title: 'Total autovacuum time to TXID wraparound horizon',
     severity: 's1',
     horizontallyScalable: false,
-    appliesTo: ['patroni'],
+    appliesTo: metricsCatalog.findServicesWithTag(tag='postgres_fluent_csvlog_monitoring'),
     description: |||
       This saturation metric measures the capacity of the Postgres primary instance to perform autovacuum operations
       on all tables.

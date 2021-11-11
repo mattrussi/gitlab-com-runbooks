@@ -122,8 +122,7 @@ do the following:
       FROM \`gitlab-production.${WORKSPACE}.${TABLE_NAME}_pre\`
     EOF
 
-    bq --project_id "$GCP_
-      query --nouse_legacy_sql "$query"
+    bq --project_id "$GCP_PROJECT" query --nouse_legacy_sql "$query"
     ```
 3. The table with the `_pre` suffix can now be deleted.
 

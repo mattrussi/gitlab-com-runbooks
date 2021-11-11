@@ -25,6 +25,7 @@
 * [../patroni/pg_repack.md](../patroni/pg_repack.md)
 * [../patroni/postgres.md](../patroni/postgres.md)
 * [../patroni/postgresql-query-load-evaluation.md](../patroni/postgresql-query-load-evaluation.md)
+* [../patroni/provisioning_bench_env.md](../patroni/provisioning_bench_env.md)
 * [../patroni/rotating-rails-postgresql-password.md](../patroni/rotating-rails-postgresql-password.md)
 * [../patroni/user_grants_permission.md](../patroni/user_grants_permission.md)
 * [patroni-consul-postgres-pgbouncer-interactions.md](patroni-consul-postgres-pgbouncer-interactions.md)
@@ -34,6 +35,8 @@
 * [pgbouncer-remove-instance.md](pgbouncer-remove-instance.md)
 * [pgbouncer-saturation.md](pgbouncer-saturation.md)
 * [service-pgbouncer.md](service-pgbouncer.md)
+* [../registry/app-db-conn-pool-saturation.md](../registry/app-db-conn-pool-saturation.md)
+* [../registry/migration-failure-scenarios.md](../registry/migration-failure-scenarios.md)
 * [../sidekiq/large-pull-mirror-queue.md](../sidekiq/large-pull-mirror-queue.md)
 * [../tutorials/how_to_use_flamegraphs_for_perf_profiling.md](../tutorials/how_to_use_flamegraphs_for_perf_profiling.md)
 <!-- END_MARKER -->

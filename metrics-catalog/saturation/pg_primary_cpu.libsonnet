@@ -1,5 +1,5 @@
-local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
-local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
+local resourceSaturationPoint = (import 'servicemetrics/metrics.libsonnet').resourceSaturationPoint;
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 
 {
   pg_primary_cpu: resourceSaturationPoint({
@@ -12,7 +12,7 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
     // which is not ideal.
     dangerouslyThanosEvaluated: true,
 
-    appliesTo: ['patroni'],
+    appliesTo: metricsCatalog.findServicesWithTag(tag='postgres'),
     description: |||
       Average CPU utilization across all cores on the Postgres primary instance.
     |||,

@@ -343,4 +343,77 @@ generateTests([
       'blackhole',
     ],
   },
+  // Feature category tests.
+  // These tests rely on the feature categories from https://gitlab.com/gitlab-com/www-gitlab-com/blob/master/data/stages.yml
+  // After running ./scripts/update_stage_groups_feature_categories.rb, these may occassionally break,
+  // as feature_categories are moved between different stage groups.
+  {
+    name: 'feature_category="runner" alerts should be routed to team_runner_alerts_channel',
+    labels: {
+      feature_category: 'runner',
+      env: 'gprd',
+    },
+    receivers: [
+      'team_runner_alerts_channel',
+      'prod_alerts_slack_channel',
+    ],
+  },
+  {
+    name: 'feature_category="authentication_and_authorization" alerts should be routed to team_access_alerts_channel',
+    labels: {
+      feature_category: 'authentication_and_authorization',
+      env: 'gprd',
+    },
+    receivers: [
+      'team_access_alerts_channel',
+      'prod_alerts_slack_channel',
+    ],
+  },
+  {
+    name: 'high severity alerts should be routed to infrastructure and the appropriate team feature_category="authentication_and_authorization" alerts should be routed to team_access_alerts_channel',
+    labels: {
+      feature_category: 'authentication_and_authorization',
+      env: 'gprd',
+      pager: 'pagerduty',
+    },
+    receivers: [
+      'prod_pagerduty',
+      'team_access_alerts_channel',
+      'production_slack_channel',
+    ],
+  },
+  // t4cc0re pointed out that this alert did not page
+  // so we added a test case
+  {
+    name: 'PVS alerts',
+    labels: {
+      alertname: 'PvsServiceHttpApdexSLOViolation',
+      aggregation: 'component',
+      alert_class: 'slo_violation',
+      alert_type: 'symptom',
+      component: 'http',
+      env: 'gprd',
+      environment: 'gprd',
+      feature_category: 'not_owned',
+      monitor: 'global',
+      pager: 'pagerduty',
+      rules_domain: 'general',
+      severity: 's2',
+      sli_type: 'apdex',
+      slo_alert: 'yes',
+      stage: 'main',
+      team: 'pipeline_validation',
+      tier: 'sv',
+      type: 'pvs',
+      user_impacting: 'yes',
+      window: '6h',
+    },
+    receivers: [
+      'slo_gprd_main',
+      'slack_bridge-prod',
+      'team_pipeline_validation_alerts_channel',
+      'production_slack_channel',
+    ],
+  },
+
 ])

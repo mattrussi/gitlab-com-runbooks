@@ -33,10 +33,12 @@
 * [../onboarding/kibana-diagnosis.md](../onboarding/kibana-diagnosis.md)
 * [../patroni/check_wraparound.md](../patroni/check_wraparound.md)
 * [../patroni/log_analysis.md](../patroni/log_analysis.md)
+* [../patroni/mapping_statements.md](../patroni/mapping_statements.md)
 * [../patroni/pg_repack.md](../patroni/pg_repack.md)
 * [../patroni/postgres-checkup.md](../patroni/postgres-checkup.md)
 * [../patroni/postgresql-locking.md](../patroni/postgresql-locking.md)
 * [../patroni/postgresql-query-load-evaluation.md](../patroni/postgresql-query-load-evaluation.md)
+* [../patroni/provisioning_bench_env.md](../patroni/provisioning_bench_env.md)
 * [../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md](../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md)
 * [../pgbouncer/pgbouncer-add-instance.md](../pgbouncer/pgbouncer-add-instance.md)
 * [../pgbouncer/pgbouncer-connections.md](../pgbouncer/pgbouncer-connections.md)
@@ -45,6 +47,7 @@
 * [../sidekiq/sidekiq-survival-guide-for-sres.md](../sidekiq/sidekiq-survival-guide-for-sres.md)
 * [../spamcheck/index.md](../spamcheck/index.md)
 * [../uncategorized/access-gcp-hosts.md](../uncategorized/access-gcp-hosts.md)
+* [../uncategorized/deleting-alerts.md](../uncategorized/deleting-alerts.md)
 * [../uncategorized/job_completion.md](../uncategorized/job_completion.md)
 * [../uncategorized/osquery.md](../uncategorized/osquery.md)
 * [../uncategorized/packagecloud-infrastructure.md](../uncategorized/packagecloud-infrastructure.md)
@@ -71,6 +74,16 @@ service discovery configuration we use without actually pointing to the
 configuration management code that puts it into place. Hopefully this allows
 those onboarding to understand what's happening without coupling the document to
 implementation details.
+
+## Backlog
+
+| Service | Description | Backlog |
+|---------|------------|---------|
+| ~"Service::Prometheus" | The multiple prometheus servers that we run. | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues?scope=all&state=opened&label_name[]=Service%3A%3APrometheus) |
+| ~"Service::Thanos" | Anything related to [thanos](https://thanos.io/). | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues?scope=all&state=opened&label_name[]=Service%3A%3AThanos) |
+| ~"Service::Grafana" | Anything related to <https://dashboards.gitlab.net/> | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues?scope=all&state=opened&label_name[]=Service%3A%3AGrafana)
+| ~"Service::PublicGrafana" | Anything related to <https://dashboards.gitlab.com/> | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues?scope=all&state=opened&label_name[]=Service%3A%3APublicGrafana)
+| ~"Service::Monitoring-Other" | The service we provide to engineers, this covers metrics, labels and anything else that doesn't belong in the services above. | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues?scope=all&state=opened&label_name[]=Service%3A%3AMonitoring-Other) |
 
 ## Querying
 
@@ -406,6 +419,8 @@ certain public services (e.g. gitlab.com) are down to it, as a last line of
 defence.
 
 ## Architecture
+
+Components diagram from Thanos docs: https://thanos.io/v0.15/thanos/quick-tutorial.md/#components
 
 THIS IS WORK IN PROGRESS! IT IS LIKELY TO BE INACCURATE! IT WILL BE UPDATED IN THE NEAR FUTURE!
 

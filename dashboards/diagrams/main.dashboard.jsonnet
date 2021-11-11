@@ -27,7 +27,7 @@ local dependencyCell(dependencies) =
         local dependency = metricsCatalog.getService(dependencyName);
         '[%(name)s (%(level)s)](%(link)s)' % {
           name: dependencyName,
-          level: evaluator.maxLevel(dependency, levels.getLevels()),
+          level: evaluator.maxLevel(dependency, levels.getLevels()).name,
           link: linkToServiceDashboard(dependencyName),
         },
       std.sort(dependencies)
@@ -41,7 +41,7 @@ local maturityDependencyTable =
         local service = metricsCatalog.getService(serviceName);
         [
           '[%s](%s)' % [serviceName, linkToServiceDashboard(serviceName)],
-          evaluator.maxLevel(service, levels.getLevels()),
+          evaluator.maxLevel(service, levels.getLevels()).name,
           dependencyCell(serviceCatalog.serviceGraph[service.type].outward),
           dependencyCell(serviceCatalog.serviceGraph[service.type].inward),
         ],

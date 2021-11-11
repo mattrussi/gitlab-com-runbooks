@@ -17,9 +17,13 @@ groups:
       )
   - record: gitlab_service_node_errors:ratio_5m
     expr: |
-      gitlab_service_node_errors:rate_5m{monitor="global"}
+      sum by (env,environment,tier,type,stage,shard,fqdn) (
+        gitlab_service_node_errors:rate_5m{monitor="global"}
+      )
       /
-      gitlab_service_node_ops:rate_5m{monitor="global"}
+      sum by (env,environment,tier,type,stage,shard,fqdn) (
+        gitlab_service_node_ops:rate_5m{monitor="global"}
+      )
   - record: gitlab_service_node_apdex:ratio_5m
     expr: |
       sum by (env,environment,tier,type,stage,shard,fqdn) (
@@ -41,9 +45,13 @@ groups:
       )
   - record: gitlab_service_node_errors:ratio_30m
     expr: |
-      gitlab_service_node_errors:rate_30m{monitor="global"}
+      sum by (env,environment,tier,type,stage,shard,fqdn) (
+        gitlab_service_node_errors:rate_30m{monitor="global"}
+      )
       /
-      gitlab_service_node_ops:rate_30m{monitor="global"}
+      sum by (env,environment,tier,type,stage,shard,fqdn) (
+        gitlab_service_node_ops:rate_30m{monitor="global"}
+      )
   - record: gitlab_service_node_apdex:ratio_30m
     expr: |
       sum by (env,environment,tier,type,stage,shard,fqdn) (
@@ -65,9 +73,13 @@ groups:
       )
   - record: gitlab_service_node_errors:ratio_1h
     expr: |
-      gitlab_service_node_errors:rate_1h{monitor="global"}
+      sum by (env,environment,tier,type,stage,shard,fqdn) (
+        gitlab_service_node_errors:rate_1h{monitor="global"}
+      )
       /
-      gitlab_service_node_ops:rate_1h{monitor="global"}
+      sum by (env,environment,tier,type,stage,shard,fqdn) (
+        gitlab_service_node_ops:rate_1h{monitor="global"}
+      )
   - record: gitlab_service_node_apdex:ratio_1h
     expr: |
       sum by (env,environment,tier,type,stage,shard,fqdn) (
@@ -77,6 +89,19 @@ groups:
       sum by (env,environment,tier,type,stage,shard,fqdn) (
         (gitlab_component_node_apdex:weight:score_1h{monitor!="global"} >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
       )
+  - record: gitlab_service_node_ops:rate_6h
+    expr: |
+      (
+        sum by (env,environment,tier,type,stage,shard,fqdn) (
+          (gitlab_component_node_ops:rate_6h{monitor!="global"} >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
+        )
+      )
+      or
+      (
+        sum by (env,environment,tier,type,stage,shard,fqdn) (
+          avg_over_time(gitlab_component_node_ops:rate_1h{monitor!="global",upscale_source="yes"}[6h]) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
+        )
+      )
   - record: gitlab_service_node_errors:ratio_6h
     expr: |
       (
@@ -85,7 +110,7 @@ groups:
         )
         /
         sum by (env,environment,tier,type,stage,shard,fqdn) (
-          (gitlab_component_node_ops:rate_6h{monitor!="global"} >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
+          gitlab_service_node_ops:rate_6h{monitor="global"}
         )
       )
       or
@@ -118,6 +143,11 @@ groups:
         sum by (env,environment,tier,type,stage,shard,fqdn) (
           sum_over_time(gitlab_component_node_apdex:weight:score_1h{monitor!="global",upscale_source="yes"}[6h]) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
         )
+      )
+  - record: gitlab_service_node_ops:rate_3d
+    expr: |
+      sum by (env,environment,tier,type,stage,shard,fqdn) (
+        avg_over_time(gitlab_component_node_ops:rate_1h{monitor!="global"}[3d]) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
       )
   - record: gitlab_service_node_errors:ratio_3d
     expr: |

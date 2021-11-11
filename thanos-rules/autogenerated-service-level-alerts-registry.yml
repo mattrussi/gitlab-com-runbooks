@@ -16,11 +16,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: registry-main/registry-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3734296734"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -35,8 +34,6 @@ groups:
       alert_type: symptom
       feature_category: container_registry
       pager: pagerduty
-      product_stage: package
-      product_stage_group: package
       rules_domain: general
       severity: s2
       sli_type: apdex
@@ -70,11 +67,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: registry-main/registry-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3734296734"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -89,8 +85,6 @@ groups:
       alert_type: symptom
       feature_category: container_registry
       pager: pagerduty
-      product_stage: package
-      product_stage_group: package
       rules_domain: general
       severity: s2
       sli_type: apdex
@@ -111,7 +105,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="database",monitor="global",type="registry"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="database",monitor="global",type="registry"}) >= 1
       )
   - alert: RegistryServiceDatabaseApdexSLOViolationRegional
     for: 2m
@@ -121,14 +115,15 @@ groups:
       description: |
         Aggregation of all container registry database operations.
 
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
         Currently the apdex value is {{ $value | humanizePercentage }}.
-      grafana_dashboard_id: alerts-regional_component_slo_apdex
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-regional_component_slo_apdex?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-region={{ $labels.region }}&var-component={{ $labels.component }}
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "965700560"
-      grafana_variables: environment,type,stage,region,component
+      grafana_panel_id: "3734296734"
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -143,13 +138,12 @@ groups:
       alert_type: symptom
       feature_category: container_registry
       pager: pagerduty
-      product_stage: package
-      product_stage_group: package
       rules_domain: general
       severity: s2
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "yes"
+      window: 1h
     expr: |
       (
         (
@@ -161,7 +155,50 @@ groups:
           gitlab_regional_sli_apdex:ratio_5m{component="database",monitor="global",type="registry"}
           < (1 - 14.4 * 0.003000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="database",monitor="global",type="registry"}) >= 1
+      )
+  - alert: RegistryServiceDatabaseApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The database SLI of the registry service in region `{{ $labels.region
+        }}` has an apdex violating SLO
+      description: |
+        Aggregation of all container registry database operations.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3734296734"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,region,le) (
+            rate(registry_database_query_duration_seconds_bucket{type="registry", environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}"}[5m])
+          )
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_regional_sli_apdex:ratio_6h{component="database",monitor="global",type="registry"}
           < (1 - 6 * 0.003000)
@@ -174,7 +211,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="database",monitor="global",type="registry"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="database",monitor="global",type="registry"}) >= 1
       )
   - alert: RegistryServiceDatabaseTrafficCessation
     for: 5m
@@ -193,7 +230,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(registry_database_queries_total{type="registry", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(registry_database_queries_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
@@ -202,8 +239,6 @@ groups:
       alert_type: cause
       feature_category: container_registry
       pager: pagerduty
-      product_stage: package
-      product_stage_group: package
       rules_domain: general
       severity: s2
       sli_type: ops
@@ -230,7 +265,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(registry_database_queries_total{type="registry", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(registry_database_queries_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
@@ -239,8 +274,6 @@ groups:
       alert_type: cause
       feature_category: container_registry
       pager: pagerduty
-      product_stage: package
-      product_stage_group: package
       rules_domain: general
       severity: s2
       sli_type: ops
@@ -261,11 +294,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: registry-main/registry-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2354862550"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -280,8 +312,6 @@ groups:
       alert_type: symptom
       feature_category: container_registry
       pager: pagerduty
-      product_stage: package
-      product_stage_group: package
       rules_domain: general
       severity: s2
       sli_type: apdex
@@ -315,11 +345,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: registry-main/registry-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2354862550"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -334,8 +363,6 @@ groups:
       alert_type: symptom
       feature_category: container_registry
       pager: pagerduty
-      product_stage: package
-      product_stage_group: package
       rules_domain: general
       severity: s2
       sli_type: apdex
@@ -356,7 +383,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="garbagecollector",monitor="global",type="registry"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="garbagecollector",monitor="global",type="registry"}) >= 1
       )
   - alert: RegistryServiceGarbagecollectorApdexSLOViolationRegional
     for: 2m
@@ -366,14 +393,15 @@ groups:
       description: |
         Aggregation of all container registry online garbage collection operations.
 
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
         Currently the apdex value is {{ $value | humanizePercentage }}.
-      grafana_dashboard_id: alerts-regional_component_slo_apdex
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-regional_component_slo_apdex?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-region={{ $labels.region }}&var-component={{ $labels.component }}
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "965700560"
-      grafana_variables: environment,type,stage,region,component
+      grafana_panel_id: "2354862550"
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -388,13 +416,12 @@ groups:
       alert_type: symptom
       feature_category: container_registry
       pager: pagerduty
-      product_stage: package
-      product_stage_group: package
       rules_domain: general
       severity: s2
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "no"
+      window: 1h
     expr: |
       (
         (
@@ -406,7 +433,50 @@ groups:
           gitlab_regional_sli_apdex:ratio_5m{component="garbagecollector",monitor="global",type="registry"}
           < (1 - 14.4 * 0.003000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="garbagecollector",monitor="global",type="registry"}) >= 1
+      )
+  - alert: RegistryServiceGarbagecollectorApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The garbagecollector SLI of the registry service in region `{{ $labels.region
+        }}` has an apdex violating SLO
+      description: |
+        Aggregation of all container registry online garbage collection operations.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2354862550"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,region,le) (
+            rate(registry_gc_run_duration_seconds_bucket{type="registry", environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}"}[5m])
+          )
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_regional_sli_apdex:ratio_6h{component="garbagecollector",monitor="global",type="registry"}
           < (1 - 6 * 0.003000)
@@ -419,7 +489,203 @@ groups:
       )
       and on(env,environment,tier,type,stage,region,component)
       (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="garbagecollector",monitor="global",type="registry"}) >= 1
+      )
+  - alert: RegistryServiceGarbagecollectorErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The garbagecollector SLI of the registry service (`{{ $labels.stage }}`
+        stage) has an error rate violating SLO
+      description: |
+        Aggregation of all container registry online garbage collection operations.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "175676838"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(registry_gc_runs_total{environment="{{ $labels.environment }}",error="true",stage="{{ $labels.stage }}",type="registry"}[5m])
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_1h{component="garbagecollector",monitor="global",type="registry"}
+          > (14.4 * 0.000100)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_5m{component="garbagecollector",monitor="global",type="registry"}
+          > (14.4 * 0.000100)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="garbagecollector",monitor="global",type="registry"}) >= 1
+      )
+  - alert: RegistryServiceGarbagecollectorErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The garbagecollector SLI of the registry service (`{{ $labels.stage }}`
+        stage) has an error rate violating SLO
+      description: |
+        Aggregation of all container registry online garbage collection operations.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "175676838"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(registry_gc_runs_total{environment="{{ $labels.environment }}",error="true",stage="{{ $labels.stage }}",type="registry"}[5m])
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_6h{component="garbagecollector",monitor="global",type="registry"}
+          > (6 * 0.000100)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_30m{component="garbagecollector",monitor="global",type="registry"}
+          > (6 * 0.000100)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="garbagecollector",monitor="global",type="registry"}) >= 1
+      )
+  - alert: RegistryServiceGarbagecollectorErrorSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The garbagecollector SLI of the registry service in region `{{ $labels.region
+        }}` has an error rate violating SLO
+      description: |
+        Aggregation of all container registry online garbage collection operations.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "175676838"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region) (
+          rate(registry_gc_runs_total{environment="{{ $labels.environment }}",error="true",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_errors:ratio_1h{component="garbagecollector",monitor="global",type="registry"}
+          > (14.4 * 0.000100)
+        )
+        and
+        (
+          gitlab_regional_sli_errors:ratio_5m{component="garbagecollector",monitor="global",type="registry"}
+          > (14.4 * 0.000100)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
         sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="garbagecollector",monitor="global",type="registry"}) >= 1
+      )
+  - alert: RegistryServiceGarbagecollectorErrorSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The garbagecollector SLI of the registry service in region `{{ $labels.region
+        }}` has an error rate violating SLO
+      description: |
+        Aggregation of all container registry online garbage collection operations.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "175676838"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region) (
+          rate(registry_gc_runs_total{environment="{{ $labels.environment }}",error="true",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_errors:ratio_6h{component="garbagecollector",monitor="global",type="registry"}
+          > (6 * 0.000100)
+        )
+        and
+        (
+          gitlab_regional_sli_errors:ratio_30m{component="garbagecollector",monitor="global",type="registry"}
+          > (6 * 0.000100)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="garbagecollector",monitor="global",type="registry"}) >= 1
       )
   - alert: RegistryServiceGarbagecollectorTrafficCessation
     for: 5m
@@ -438,7 +704,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(registry_gc_runs_total{type="registry", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(registry_gc_runs_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
@@ -447,8 +713,6 @@ groups:
       alert_type: cause
       feature_category: container_registry
       pager: pagerduty
-      product_stage: package
-      product_stage_group: package
       rules_domain: general
       severity: s2
       sli_type: ops
@@ -475,7 +739,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(registry_gc_runs_total{type="registry", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(registry_gc_runs_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
@@ -484,8 +748,6 @@ groups:
       alert_type: cause
       feature_category: container_registry
       pager: pagerduty
-      product_stage: package
-      product_stage_group: package
       rules_domain: general
       severity: s2
       sli_type: ops
@@ -517,13 +779,12 @@ groups:
       alert_type: symptom
       feature_category: container_registry
       pager: pagerduty
-      product_stage: package
-      product_stage_group: package
       rules_domain: general
       severity: s2
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
+      window: 1h
     expr: |
       (
         (
@@ -535,7 +796,41 @@ groups:
           gitlab_component_errors:ratio_5m{component="loadbalancer",monitor="global",type="registry"}
           > (14.4 * 0.000100)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="loadbalancer",monitor="global",type="registry"}) >= 1
+      )
+  - alert: RegistryServiceLoadbalancerErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The loadbalancer SLI of the registry service (`{{ $labels.stage }}` stage)
+        has an error rate violating SLO
+      description: |
+        Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3255520955"
+      grafana_variables: environment,stage
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_errors:ratio_6h{component="loadbalancer",monitor="global",type="registry"}
           > (6 * 0.000100)
@@ -548,7 +843,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="loadbalancer",monitor="global",type="registry"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="loadbalancer",monitor="global",type="registry"}) >= 1
       )
   - alert: RegistryServiceLoadbalancerTrafficCessation
     for: 5m
@@ -572,8 +867,6 @@ groups:
       alert_type: cause
       feature_category: container_registry
       pager: pagerduty
-      product_stage: package
-      product_stage_group: package
       rules_domain: general
       severity: s2
       sli_type: ops
@@ -605,8 +898,6 @@ groups:
       alert_type: cause
       feature_category: container_registry
       pager: pagerduty
-      product_stage: package
-      product_stage_group: package
       rules_domain: general
       severity: s2
       sli_type: ops
@@ -627,11 +918,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: registry-main/registry-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2863319079"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -646,8 +936,6 @@ groups:
       alert_type: symptom
       feature_category: container_registry
       pager: pagerduty
-      product_stage: package
-      product_stage_group: package
       rules_domain: general
       severity: s2
       sli_type: apdex
@@ -681,11 +969,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: registry-main/registry-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2863319079"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -700,8 +987,6 @@ groups:
       alert_type: symptom
       feature_category: container_registry
       pager: pagerduty
-      product_stage: package
-      product_stage_group: package
       rules_domain: general
       severity: s2
       sli_type: apdex
@@ -722,7 +1007,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="server",monitor="global",type="registry"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="server",monitor="global",type="registry"}) >= 1
       )
   - alert: RegistryServiceServerApdexSLOViolationRegional
     for: 2m
@@ -732,14 +1017,15 @@ groups:
       description: |
         Aggregation of all registry requests.
 
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
         Currently the apdex value is {{ $value | humanizePercentage }}.
-      grafana_dashboard_id: alerts-regional_component_slo_apdex
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-regional_component_slo_apdex?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-region={{ $labels.region }}&var-component={{ $labels.component }}
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "965700560"
-      grafana_variables: environment,type,stage,region,component
+      grafana_panel_id: "2863319079"
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -754,13 +1040,12 @@ groups:
       alert_type: symptom
       feature_category: container_registry
       pager: pagerduty
-      product_stage: package
-      product_stage_group: package
       rules_domain: general
       severity: s2
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "yes"
+      window: 1h
     expr: |
       (
         (
@@ -772,7 +1057,50 @@ groups:
           gitlab_regional_sli_apdex:ratio_5m{component="server",monitor="global",type="registry"}
           < (1 - 14.4 * 0.003000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="server",monitor="global",type="registry"}) >= 1
+      )
+  - alert: RegistryServiceServerApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The server SLI of the registry service in region `{{ $labels.region }}`
+        has an apdex violating SLO
+      description: |
+        Aggregation of all registry requests.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2863319079"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,region,le) (
+            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",region="{{ $labels.region }}",route!~"/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
+          )
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_regional_sli_apdex:ratio_6h{component="server",monitor="global",type="registry"}
           < (1 - 6 * 0.003000)
@@ -785,7 +1113,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="server",monitor="global",type="registry"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="server",monitor="global",type="registry"}) >= 1
       )
   - alert: RegistryServiceServerErrorSLOViolation
     for: 2m
@@ -813,13 +1141,12 @@ groups:
       alert_type: symptom
       feature_category: container_registry
       pager: pagerduty
-      product_stage: package
-      product_stage_group: package
       rules_domain: general
       severity: s2
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
+      window: 1h
     expr: |
       (
         (
@@ -831,7 +1158,45 @@ groups:
           gitlab_component_errors:ratio_5m{component="server",monitor="global",type="registry"}
           > (14.4 * 0.000100)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="server",monitor="global",type="registry"}) >= 1
+      )
+  - alert: RegistryServiceServerErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The server SLI of the registry service (`{{ $labels.stage }}` stage)
+        has an error rate violating SLO
+      description: |
+        Aggregation of all registry requests.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1631973137"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(registry_http_requests_total{code=~"5..",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_errors:ratio_6h{component="server",monitor="global",type="registry"}
           > (6 * 0.000100)
@@ -844,7 +1209,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="server",monitor="global",type="registry"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="server",monitor="global",type="registry"}) >= 1
       )
   - alert: RegistryServiceServerErrorSLOViolationRegional
     for: 2m
@@ -854,16 +1219,15 @@ groups:
       description: |
         Aggregation of all registry requests.
 
-        Since the registry service is not fully redundant, SLI violations on a single node may represent a user-impacting service degradation.
+        Note that this alert is specific to the `{{ $labels.region }}` region.
 
-        Currently the apdex value for {{ $labels.region }} is {{ $value | humanizePercentage }}.
-      grafana_dashboard_id: alerts-regional_component_slo_error
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-regional_component_slo_error?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-region={{ $labels.region }}&var-component={{ $labels.component }}
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "965700560"
-      grafana_variables: environment,type,stage,region,component
+      grafana_panel_id: "1631973137"
+      grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
           rate(registry_http_requests_total{code=~"5..",environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
@@ -875,13 +1239,12 @@ groups:
       alert_type: symptom
       feature_category: container_registry
       pager: pagerduty
-      product_stage: package
-      product_stage_group: package
       rules_domain: general
       severity: s2
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
+      window: 1h
     expr: |
       (
         (
@@ -893,7 +1256,47 @@ groups:
           gitlab_regional_sli_errors:ratio_5m{component="server",monitor="global",type="registry"}
           > (14.4 * 0.000100)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="server",monitor="global",type="registry"}) >= 1
+      )
+  - alert: RegistryServiceServerErrorSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The server SLI of the registry service in region `{{ $labels.region }}`
+        has an error rate violating SLO
+      description: |
+        Aggregation of all registry requests.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1631973137"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region) (
+          rate(registry_http_requests_total{code=~"5..",environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_regional_sli_errors:ratio_6h{component="server",monitor="global",type="registry"}
           > (6 * 0.000100)
@@ -906,7 +1309,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="server",monitor="global",type="registry"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="server",monitor="global",type="registry"}) >= 1
       )
   - alert: RegistryServiceServerTrafficCessation
     for: 5m
@@ -934,8 +1337,6 @@ groups:
       alert_type: cause
       feature_category: container_registry
       pager: pagerduty
-      product_stage: package
-      product_stage_group: package
       rules_domain: general
       severity: s2
       sli_type: ops
@@ -971,8 +1372,6 @@ groups:
       alert_type: cause
       feature_category: container_registry
       pager: pagerduty
-      product_stage: package
-      product_stage_group: package
       rules_domain: general
       severity: s2
       sli_type: ops
@@ -993,11 +1392,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: registry-main/registry-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2850495079"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -1012,8 +1410,6 @@ groups:
       alert_type: symptom
       feature_category: container_registry
       pager: pagerduty
-      product_stage: package
-      product_stage_group: package
       rules_domain: general
       severity: s2
       sli_type: apdex
@@ -1047,11 +1443,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: registry-main/registry-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2850495079"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -1066,8 +1461,6 @@ groups:
       alert_type: symptom
       feature_category: container_registry
       pager: pagerduty
-      product_stage: package
-      product_stage_group: package
       rules_domain: general
       severity: s2
       sli_type: apdex
@@ -1088,7 +1481,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="server_route_manifest_reads",monitor="global",type="registry"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="server_route_manifest_reads",monitor="global",type="registry"}) >= 1
       )
   - alert: RegistryServiceServerRouteManifestReadsApdexSLOViolationRegional
     for: 2m
@@ -1098,14 +1491,15 @@ groups:
       description: |
         All read-requests (HEAD or GET) for the manifest endpoints on the registry. Fetch the manifest identified by name and reference where reference can be a tag or digest. A HEAD request can also be issued to this endpoint to obtain resource information without receiving all data.
 
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
         Currently the apdex value is {{ $value | humanizePercentage }}.
-      grafana_dashboard_id: alerts-regional_component_slo_apdex
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-regional_component_slo_apdex?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-region={{ $labels.region }}&var-component={{ $labels.component }}
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "965700560"
-      grafana_variables: environment,type,stage,region,component
+      grafana_panel_id: "2850495079"
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -1120,13 +1514,12 @@ groups:
       alert_type: symptom
       feature_category: container_registry
       pager: pagerduty
-      product_stage: package
-      product_stage_group: package
       rules_domain: general
       severity: s2
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "yes"
+      window: 1h
     expr: |
       (
         (
@@ -1138,7 +1531,50 @@ groups:
           gitlab_regional_sli_apdex:ratio_5m{component="server_route_manifest_reads",monitor="global",type="registry"}
           < (1 - 14.4 * 0.003000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="server_route_manifest_reads",monitor="global",type="registry"}) >= 1
+      )
+  - alert: RegistryServiceServerRouteManifestReadsApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The server_route_manifest_reads SLI of the registry service in region
+        `{{ $labels.region }}` has an apdex violating SLO
+      description: |
+        All read-requests (HEAD or GET) for the manifest endpoints on the registry. Fetch the manifest identified by name and reference where reference can be a tag or digest. A HEAD request can also be issued to this endpoint to obtain resource information without receiving all data.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2850495079"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,region,le) (
+            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"get|head",region="{{ $labels.region }}",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
+          )
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_regional_sli_apdex:ratio_6h{component="server_route_manifest_reads",monitor="global",type="registry"}
           < (1 - 6 * 0.003000)
@@ -1151,7 +1587,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="server_route_manifest_reads",monitor="global",type="registry"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="server_route_manifest_reads",monitor="global",type="registry"}) >= 1
       )
   - alert: RegistryServiceServerRouteManifestReadsTrafficCessation
     for: 5m
@@ -1179,8 +1615,6 @@ groups:
       alert_type: cause
       feature_category: container_registry
       pager: pagerduty
-      product_stage: package
-      product_stage_group: package
       rules_domain: general
       severity: s2
       sli_type: ops
@@ -1216,8 +1650,6 @@ groups:
       alert_type: cause
       feature_category: container_registry
       pager: pagerduty
-      product_stage: package
-      product_stage_group: package
       rules_domain: general
       severity: s2
       sli_type: ops
@@ -1242,11 +1674,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: registry-main/registry-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1201783796"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -1261,8 +1692,6 @@ groups:
       alert_type: symptom
       feature_category: container_registry
       pager: pagerduty
-      product_stage: package
-      product_stage_group: package
       rules_domain: general
       severity: s2
       sli_type: apdex
@@ -1300,11 +1729,10 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: registry-main/registry-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1201783796"
-      grafana_variables: environment,type,stage,component
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -1319,8 +1747,6 @@ groups:
       alert_type: symptom
       feature_category: container_registry
       pager: pagerduty
-      product_stage: package
-      product_stage_group: package
       rules_domain: general
       severity: s2
       sli_type: apdex
@@ -1341,7 +1767,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="server_route_manifest_writes",monitor="global",type="registry"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="server_route_manifest_writes",monitor="global",type="registry"}) >= 1
       )
   - alert: RegistryServiceServerRouteManifestWritesApdexSLOViolationRegional
     for: 2m
@@ -1355,14 +1781,15 @@ groups:
 
         Delete the manifest identified by name and reference. Note that a manifest can only be deleted by digest.
 
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
         Currently the apdex value is {{ $value | humanizePercentage }}.
-      grafana_dashboard_id: alerts-regional_component_slo_apdex
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-regional_component_slo_apdex?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-region={{ $labels.region }}&var-component={{ $labels.component }}
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "965700560"
-      grafana_variables: environment,type,stage,region,component
+      grafana_panel_id: "1201783796"
+      grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -1377,13 +1804,12 @@ groups:
       alert_type: symptom
       feature_category: container_registry
       pager: pagerduty
-      product_stage: package
-      product_stage_group: package
       rules_domain: general
       severity: s2
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "yes"
+      window: 1h
     expr: |
       (
         (
@@ -1395,7 +1821,54 @@ groups:
           gitlab_regional_sli_apdex:ratio_5m{component="server_route_manifest_writes",monitor="global",type="registry"}
           < (1 - 14.4 * 0.003000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="server_route_manifest_writes",monitor="global",type="registry"}) >= 1
+      )
+  - alert: RegistryServiceServerRouteManifestWritesApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The server_route_manifest_writes SLI of the registry service in region
+        `{{ $labels.region }}` has an apdex violating SLO
+      description: |
+        All write-requests (put, delete) for the manifest endpoints on the registry.
+
+        Put the manifest identified by name and reference where reference can be a tag or digest.
+
+        Delete the manifest identified by name and reference. Note that a manifest can only be deleted by digest.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1201783796"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,region,le) (
+            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"put|delete|post|patch",region="{{ $labels.region }}",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
+          )
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_regional_sli_apdex:ratio_6h{component="server_route_manifest_writes",monitor="global",type="registry"}
           < (1 - 6 * 0.003000)
@@ -1408,7 +1881,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="server_route_manifest_writes",monitor="global",type="registry"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="server_route_manifest_writes",monitor="global",type="registry"}) >= 1
       )
   - alert: RegistryServiceServerRouteManifestWritesTrafficCessation
     for: 5m
@@ -1440,8 +1913,6 @@ groups:
       alert_type: cause
       feature_category: container_registry
       pager: pagerduty
-      product_stage: package
-      product_stage_group: package
       rules_domain: general
       severity: s2
       sli_type: ops
@@ -1481,8 +1952,6 @@ groups:
       alert_type: cause
       feature_category: container_registry
       pager: pagerduty
-      product_stage: package
-      product_stage_group: package
       rules_domain: general
       severity: s2
       sli_type: ops
@@ -1492,248 +1961,3 @@ groups:
       gitlab_component_ops:rate_5m{type="registry", component="server_route_manifest_writes", stage="main", monitor="global"} offset 1h
       unless
       gitlab_component_ops:rate_5m{type="registry", component="server_route_manifest_writes", stage="main", monitor="global"}
-  - alert: RegistryServiceStorageApdexSLOViolation
-    for: 2m
-    annotations:
-      title: The storage SLI of the registry service (`{{ $labels.stage }}` stage)
-        has an apdex violating SLO
-      description: |
-        Aggregation of all container registry GCS storage operations.
-
-        Currently the apdex value is {{ $value | humanizePercentage }}.
-      grafana_dashboard_id: registry-main/registry-overview
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "695776990"
-      grafana_variables: environment,type,stage,component
-      promql_template_1: |
-        histogram_quantile(
-          0.950000,
-          sum by (env,environment,tier,stage,le) (
-            rate(registry_storage_action_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
-          )
-        )
-      runbook: docs/registry/README.md
-    labels:
-      aggregation: component
-      alert_class: slo_violation
-      alert_type: symptom
-      feature_category: container_registry
-      pager: pagerduty
-      product_stage: package
-      product_stage_group: package
-      rules_domain: general
-      severity: s2
-      sli_type: apdex
-      slo_alert: "yes"
-      user_impacting: "yes"
-      window: 1h
-    expr: |
-      (
-        (
-          gitlab_component_apdex:ratio_1h{component="storage",monitor="global",type="registry"}
-          < (1 - 14.4 * 0.003000)
-        )
-        and
-        (
-          gitlab_component_apdex:ratio_5m{component="storage",monitor="global",type="registry"}
-          < (1 - 14.4 * 0.003000)
-        )
-      )
-      and on(env,environment,tier,type,stage,component)
-      (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="storage",monitor="global",type="registry"}) >= 1
-      )
-  - alert: RegistryServiceStorageApdexSLOViolation
-    for: 2m
-    annotations:
-      title: The storage SLI of the registry service (`{{ $labels.stage }}` stage)
-        has an apdex violating SLO
-      description: |
-        Aggregation of all container registry GCS storage operations.
-
-        Currently the apdex value is {{ $value | humanizePercentage }}.
-      grafana_dashboard_id: registry-main/registry-overview
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-component={{ $labels.component }}
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "695776990"
-      grafana_variables: environment,type,stage,component
-      promql_template_1: |
-        histogram_quantile(
-          0.950000,
-          sum by (env,environment,tier,stage,le) (
-            rate(registry_storage_action_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
-          )
-        )
-      runbook: docs/registry/README.md
-    labels:
-      aggregation: component
-      alert_class: slo_violation
-      alert_type: symptom
-      feature_category: container_registry
-      pager: pagerduty
-      product_stage: package
-      product_stage_group: package
-      rules_domain: general
-      severity: s2
-      sli_type: apdex
-      slo_alert: "yes"
-      user_impacting: "yes"
-      window: 6h
-    expr: |
-      (
-        (
-          gitlab_component_apdex:ratio_6h{component="storage",monitor="global",type="registry"}
-          < (1 - 6 * 0.003000)
-        )
-        and
-        (
-          gitlab_component_apdex:ratio_30m{component="storage",monitor="global",type="registry"}
-          < (1 - 6 * 0.003000)
-        )
-      )
-      and on(env,environment,tier,type,stage,component)
-      (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="storage",monitor="global",type="registry"}) >= 1
-      )
-  - alert: RegistryServiceStorageApdexSLOViolationRegional
-    for: 2m
-    annotations:
-      title: The storage SLI of the registry service in region `{{ $labels.region
-        }}` has an apdex violating SLO
-      description: |
-        Aggregation of all container registry GCS storage operations.
-
-        Currently the apdex value is {{ $value | humanizePercentage }}.
-      grafana_dashboard_id: alerts-regional_component_slo_apdex
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-regional_component_slo_apdex?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}&var-region={{ $labels.region }}&var-component={{ $labels.component }}
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "965700560"
-      grafana_variables: environment,type,stage,region,component
-      promql_template_1: |
-        histogram_quantile(
-          0.950000,
-          sum by (env,environment,tier,stage,region,le) (
-            rate(registry_storage_action_seconds_bucket{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}"}[5m])
-          )
-        )
-      runbook: docs/registry/README.md
-    labels:
-      aggregation: regional_component
-      alert_class: slo_violation
-      alert_type: symptom
-      feature_category: container_registry
-      pager: pagerduty
-      product_stage: package
-      product_stage_group: package
-      rules_domain: general
-      severity: s2
-      sli_type: apdex
-      slo_alert: "yes"
-      user_impacting: "yes"
-    expr: |
-      (
-        (
-          gitlab_regional_sli_apdex:ratio_1h{component="storage",monitor="global",type="registry"}
-          < (1 - 14.4 * 0.003000)
-        )
-        and
-        (
-          gitlab_regional_sli_apdex:ratio_5m{component="storage",monitor="global",type="registry"}
-          < (1 - 14.4 * 0.003000)
-        )
-        or
-        (
-          gitlab_regional_sli_apdex:ratio_6h{component="storage",monitor="global",type="registry"}
-          < (1 - 6 * 0.003000)
-        )
-        and
-        (
-          gitlab_regional_sli_apdex:ratio_30m{component="storage",monitor="global",type="registry"}
-          < (1 - 6 * 0.003000)
-        )
-      )
-      and on(env,environment,tier,type,stage,region,component)
-      (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="storage",monitor="global",type="registry"}) >= 1
-      )
-  - alert: RegistryServiceStorageTrafficCessation
-    for: 5m
-    annotations:
-      title: The storage SLI of the registry service (`{{ $labels.stage }}` stage)
-        has not received any traffic in the past 30 minutes
-      description: |
-        Aggregation of all container registry GCS storage operations.
-
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
-      grafana_dashboard_id: registry-main/registry-overview
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "1582946156"
-      grafana_variables: environment,stage
-      promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          rate(registry_storage_action_seconds_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
-        )
-      runbook: docs/registry/README.md
-    labels:
-      aggregation: component
-      alert_class: traffic_cessation
-      alert_type: cause
-      feature_category: container_registry
-      pager: pagerduty
-      product_stage: package
-      product_stage_group: package
-      rules_domain: general
-      severity: s2
-      sli_type: ops
-      slo_alert: "no"
-      user_impacting: "yes"
-    expr: |
-      gitlab_component_ops:rate_30m{type="registry", component="storage", stage="main", monitor="global"} == 0
-  - alert: RegistryServiceStorageTrafficAbsent
-    for: 30m
-    annotations:
-      title: The storage SLI of the registry service (`{{ $labels.stage }}` stage)
-        has not reported any traffic in the past 30 minutes
-      description: |
-        Aggregation of all container registry GCS storage operations.
-
-        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
-
-        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
-      grafana_dashboard_id: registry-main/registry-overview
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "1582946156"
-      grafana_variables: environment,stage
-      promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          rate(registry_storage_action_seconds_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
-        )
-      runbook: docs/registry/README.md
-    labels:
-      aggregation: component
-      alert_class: traffic_cessation
-      alert_type: cause
-      feature_category: container_registry
-      pager: pagerduty
-      product_stage: package
-      product_stage_group: package
-      rules_domain: general
-      severity: s2
-      sli_type: ops
-      slo_alert: "no"
-      user_impacting: "yes"
-    expr: |
-      gitlab_component_ops:rate_5m{type="registry", component="storage", stage="main", monitor="global"} offset 1h
-      unless
-      gitlab_component_ops:rate_5m{type="registry", component="storage", stage="main", monitor="global"}

@@ -8,8 +8,6 @@ local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local combined = metricsCatalog.combined;
 
-local executionAggregationSet = aggregationSets.sidekiqWorkerExecutionSLIs;
-local aggregationLabels = executionAggregationSet.labels;
 
 // This is used to calculate the queue apdex across all queues
 local combinedQueueApdex = combined([
@@ -59,65 +57,84 @@ local errorRate = rateMetric(
 );
 
 local executionRulesForBurnRate(aggregationSet, burnRate, staticLabels={}) =
-  local recordings =
-    if std.objectHas(aggregationSet.burnRates, burnRate) then
-      local recordingNames = aggregationSet.burnRates[burnRate];
-      [
-        if std.objectHas(recordingNames, 'apdexSuccessRate') then
-          {  // Key metric: Execution apdex (ratio)
-            record: recordingNames.apdexSuccessRate,
-            labels: staticLabels,
-            expr: combinedExecutionApdex.apdexSuccessRateQuery(aggregationSet.labels, {}, burnRate),
-          }
-        else {},
-        if std.objectHas(recordingNames, 'apdexRatio') then
-          {  // Key metric: Execution apdex (ratio)
-            record: recordingNames.apdexRatio,
-            labels: staticLabels,
-            expr: combinedExecutionApdex.apdexQuery(aggregationSet.labels, {}, burnRate),
-          }
-        else {},
-        {  // Key metric: Execution apdex (weight score)
-          record: recordingNames.apdexWeight,
-          labels: staticLabels,
-          expr: combinedExecutionApdex.apdexWeightQuery(aggregationSet.labels, {}, burnRate),
-        },
-        {  // Key metric: QPS
-          record: recordingNames.opsRate,
-          labels: staticLabels,
-          expr: requestRate.aggregatedRateQuery(aggregationSet.labels, {}, burnRate),
-        },
-        {  // Key metric: Errors per Second
-          record: recordingNames.errorRate,
-          labels: staticLabels,
-          expr: |||
-            %(errorRate)s
-            or
-            (
-              0 * group by (%(aggregationLabels)s) (
-                %(executionRate)s{%(staticLabels)s}
-              )
-            )
-          ||| % {
-            errorRate: strings.chomp(errorRate.aggregatedRateQuery(aggregationSet.labels, {}, burnRate)),
-            aggregationLabels: aggregations.serialize(aggregationSet.labels),
-            executionRate: recordingNames.opsRate,
-            staticLabels: selectors.serializeHash(staticLabels),
-          },
-        },
-        if std.objectHas(recordingNames, 'errorRatio') then
-          {
-            record: recordingNames.errorRatio,
-            labels: staticLabels,
-            expr: |||
-              %(errorRate)s
-              /
-              %(executionRate)s
-            ||| % { executionRate: recordingNames.opsRate, errorRate: recordingNames.errorRate },
-          }
-        else {},
-      ] else [];
-  std.prune(recordings);
+  local aggregationLabelsWithoutStaticLabels = std.filter(
+    function(label)
+      !std.objectHas(staticLabels, label),
+    aggregationSet.labels
+  );
+
+  local conditionalAppend(record, expr) =
+    if record == null then []
+    else
+      [{
+        record: record,
+        [if staticLabels != {} then 'labels']: staticLabels,
+        expr: expr,
+      }];
+
+  // Key metric: Execution apdex success (rate)
+  conditionalAppend(
+    record=aggregationSet.getApdexSuccessRateMetricForBurnRate(burnRate, required=false),
+    expr=combinedExecutionApdex.apdexSuccessRateQuery(aggregationLabelsWithoutStaticLabels, {}, burnRate)
+  )
+  +
+  // Key metric: Execution apdex (weight score)
+  conditionalAppend(
+    record=aggregationSet.getApdexWeightMetricForBurnRate(burnRate, required=false),
+    expr=combinedExecutionApdex.apdexWeightQuery(aggregationLabelsWithoutStaticLabels, {}, burnRate),
+  )
+  +
+  // Key metric: QPS
+  conditionalAppend(
+    record=aggregationSet.getOpsRateMetricForBurnRate(burnRate, required=false),
+    expr=requestRate.aggregatedRateQuery(aggregationLabelsWithoutStaticLabels, {}, burnRate)
+  )
+  +
+  // Key metric: Errors per Second
+  conditionalAppend(
+    record=aggregationSet.getErrorRateMetricForBurnRate(burnRate, required=false),
+    expr=|||
+      %(errorRate)s
+      or
+      (
+        0 * group by (%(aggregationLabels)s) (
+          %(executionRate)s{%(staticLabels)s}
+        )
+      )
+    ||| % {
+      errorRate: strings.chomp(errorRate.aggregatedRateQuery(aggregationLabelsWithoutStaticLabels, {}, burnRate)),
+      aggregationLabels: aggregations.serialize(aggregationLabelsWithoutStaticLabels),
+      executionRate: aggregationSet.getOpsRateMetricForBurnRate(burnRate, required=true),
+      staticLabels: selectors.serializeHash(staticLabels),
+    }
+  );
+
+local queueRulesForBurnRate(aggregationSet, burnRate, staticLabels={}) =
+  local conditionalAppend(record, expr) =
+    if record == null then []
+    else
+      [{
+        record: record,
+        expr: expr,
+      }];
+
+  // Key metric: Queueing apdex success (rate)
+  conditionalAppend(
+    record=aggregationSet.getApdexSuccessRateMetricForBurnRate(burnRate, required=false),
+    expr=combinedQueueApdex.apdexSuccessRateQuery(aggregationSet.labels, staticLabels, burnRate)
+  )
+  +
+  // Key metric: Queueing apdex (weight score)
+  conditionalAppend(
+    record=aggregationSet.getApdexWeightMetricForBurnRate(burnRate, required=false),
+    expr=combinedQueueApdex.apdexWeightQuery(aggregationSet.labels, staticLabels, burnRate)
+  )
+  +
+  // Key metric: Queueing operations/second
+  conditionalAppend(
+    record=aggregationSet.getOpsRateMetricForBurnRate(burnRate, required=false),
+    expr=queueRate.aggregatedRateQuery(aggregationSet.labels, staticLabels, burnRate)
+  );
 
 {
   perWorkerRecordingRulesForAggregationSet(aggregationSet, staticLabels={})::
@@ -127,18 +144,7 @@ local executionRulesForBurnRate(aggregationSet, burnRate, staticLabels={}) =
   // for each worker, similar to how we record these for each
   // service
   perWorkerRecordingRules(rangeInterval)::
-    [
-      {  // Key metric: Queueing apdex (ratio)
-        record: 'gitlab_background_jobs:queue:apdex:ratio_%s' % [rangeInterval],
-        expr: combinedQueueApdex.apdexQuery(aggregationLabels, {}, rangeInterval),
-      },
-      {  // Key metric: Queueing apdex (weight score)
-        record: 'gitlab_background_jobs:queue:apdex:weight:score_%s' % [rangeInterval],
-        expr: combinedQueueApdex.apdexWeightQuery(aggregationLabels, {}, rangeInterval),
-      },
-      {  // Key metric: Queueing operations/second
-        record: 'gitlab_background_jobs:queue:ops:rate_%s' % [rangeInterval],
-        expr: queueRate.aggregatedRateQuery(aggregationLabels, {}, rangeInterval),
-      },
-    ] + executionRulesForBurnRate(executionAggregationSet, rangeInterval),
+    queueRulesForBurnRate(aggregationSets.sidekiqWorkerQueueSourceSLIs, rangeInterval)
+    +
+    executionRulesForBurnRate(aggregationSets.sidekiqWorkerExecutionSourceSLIs, rangeInterval),
 }

@@ -1,0 +1,156 @@
+#!/usr/bin/env bash
+
+set -efo pipefail
+
+print_help() {
+  echo >&2 "\"kube\" is used to help you setup and interect with our kubernetes clusters"
+  echo >&2 "USAGE:"
+  echo >&2 "    glsh kube [SUBCOMMAND]"
+  echo >&2
+  echo >&2 "SUBCOMMANDS:"
+  echo >&2 "    setup: Configure the local machine with all cluster contexts"
+  echo >&2 "    use-cluster: Specify which cluster to use"
+}
+
+print_use_cluster_help() {
+  echo >&2 "Choose one of the following clusters:"
+  echo >&2 "    gstg"
+  echo >&2 "    gstg-us-east1-b"
+  echo >&2 "    gstg-us-east1-c"
+  echo >&2 "    gstg-us-east1-d"
+  echo >&2 "    gprd"
+  echo >&2 "    gprd-us-east1-b"
+  echo >&2 "    gprd-us-east1-c"
+  echo >&2 "    gprd-us-east1-d"
+  echo >&2 "    pre"
+  echo >&2 "    ops"
+  echo >&2 "    org-ci"
+}
+
+setup() {
+  echo "Running gcloud commands to create kube contexts"
+  gcloud container clusters get-credentials gstg-gitlab-gke --region us-east1 --project gitlab-staging-1
+  gcloud container clusters get-credentials gstg-us-east1-b --region us-east1-b --project gitlab-staging-1
+  gcloud container clusters get-credentials gstg-us-east1-c --region us-east1-c --project gitlab-staging-1
+  gcloud container clusters get-credentials gstg-us-east1-d --region us-east1-d --project gitlab-staging-1
+
+  gcloud container clusters get-credentials gprd-gitlab-gke --region us-east1 --project gitlab-production
+  gcloud container clusters get-credentials gprd-us-east1-b --region us-east1-b --project gitlab-production
+  gcloud container clusters get-credentials gprd-us-east1-c --region us-east1-c --project gitlab-production
+  gcloud container clusters get-credentials gprd-us-east1-d --region us-east1-d --project gitlab-production
+
+  gcloud container clusters get-credentials pre-gitlab-gke --region us-east1 --project gitlab-pre
+  gcloud container clusters get-credentials ops-gitlab-gke --region us-east1 --project gitlab-ops
+  gcloud container clusters get-credentials org-ci-gitlab-gke --region us-east1 --project gitlab-org-ci-0d24e2
+}
+
+use_cluster() {
+  if [[ -z "$1" ]]; then
+    print_use_cluster_help
+    exit 1
+  fi
+
+  case $1 in
+    gstg)
+      kubectx gke_gitlab-staging-1_us-east1_gstg-gitlab-gke
+      api_ip=$(get_cluster_ip gke_gitlab-staging-1_us-east1_gstg-gitlab-gke)
+      sshuttle -r console-01-sv-gstg.c.gitlab-staging-1.internal "${api_ip}/32"
+      ;;
+    gstg-us-east1-b)
+      kubectx gke_gitlab-staging-1_us-east1-b_gstg-us-east1-b
+      api_ip=$(get_cluster_ip gke_gitlab-staging-1_us-east1-b_gstg-us-east1-b)
+      sshuttle -r console-01-sv-gstg.c.gitlab-staging-1.internal "${api_ip}/32"
+      ;;
+    gstg-us-east1-c)
+      kubectx gke_gitlab-staging-1_us-east1-c_gstg-us-east1-c
+      api_ip=$(get_cluster_ip gke_gitlab-staging-1_us-east1-c_gstg-us-east1-c)
+      sshuttle -r console-01-sv-gstg.c.gitlab-staging-1.internal "${api_ip}/32"
+      ;;
+    gstg-us-east1-d)
+      kubectx gke_gitlab-staging-1_us-east1-d_gstg-us-east1-d
+      api_ip=$(get_cluster_ip gke_gitlab-staging-1_us-east1-d_gstg-us-east1-d)
+      sshuttle -r console-01-sv-gstg.c.gitlab-staging-1.internal "${api_ip}/32"
+      ;;
+    gprd)
+      kubectx gke_gitlab-production_us-east1_gprd-gitlab-gke
+      api_ip=$(get_cluster_ip gke_gitlab-production_us-east1_gprd-gitlab-gke)
+      sshuttle -r console-01-sv-gprd.c.gitlab-production.internal "${api_ip}/32"
+      ;;
+    gprd-us-east1-b)
+      kubectx gke_gitlab-production_us-east1-b_gprd-us-east1-b
+      api_ip=$(get_cluster_ip gke_gitlab-production_us-east1-b_gprd-us-east1-b)
+      sshuttle -r console-01-sv-gprd.c.gitlab-production.internal "${api_ip}/32"
+      ;;
+    gprd-us-east1-c)
+      kubectx gke_gitlab-production_us-east1-c_gprd-us-east1-c
+      api_ip=$(get_cluster_ip gke_gitlab-production_us-east1-c_gprd-us-east1-c)
+      sshuttle -r console-01-sv-gprd.c.gitlab-production.internal "${api_ip}/32"
+      ;;
+    gprd-us-east1-d)
+      kubectx gke_gitlab-production_us-east1-d_gprd-us-east1-d
+      api_ip=$(get_cluster_ip gke_gitlab-production_us-east1-d_gprd-us-east1-d)
+      sshuttle -r console-01-sv-gprd.c.gitlab-production.internal "${api_ip}/32"
+      ;;
+    pre)
+      kubectx gke_gitlab-pre_us-east1_pre-gitlab-gke
+      api_ip=$(get_cluster_ip gke_gitlab-pre_us-east1_pre-gitlab-gke)
+      sshuttle -r console-01-sv-pre.c.gitlab-pre.internal "${api_ip}/32"
+      ;;
+    ops)
+      kubectx gke_gitlab-ops_us-east1_ops-gitlab-gke
+      api_ip=$(get_cluster_ip gke_gitlab-ops_us-east1_ops-gitlab-gke)
+      sshuttle -r bastion-01-inf-ops.c.gitlab-ops.internal "${api_ip}/32"
+      ;;
+    org-ci)
+      kubectx gke_gitlab-org-ci-0d24e2_us-east1_org-ci-gitlab-gke
+      api_ip=$(get_cluster_ip gke_gitlab-org-ci-0d24e2_us-east1_org-ci-gitlab-gke)
+      sshuttle -r bastion-01-inf-org-ci.c.gitlab-org-ci-0d24e2.internal "${api_ip}/32"
+      ;;
+    *)
+      print_use_cluster_help
+      exit 1
+      ;;
+  esac
+}
+
+get_cluster_ip() {
+  kubectl config view -o jsonpath="{.clusters[?(@.name == \"$1\")].cluster.server}" | sed 's/https:\/\///g'
+}
+
+if [[ ! $(command -v kubectl) ]]; then
+  echo >&2 "glsh: \"kubectl\" could not be found follow https://kubernetes.io/docs/tasks/tools/"
+  exit 1
+fi
+
+if [[ ! $(command -v kubectx) ]]; then
+  echo >&2 "glsh: \"kubectx\" could not be found follow https://github.com/ahmetb/kubectx#installation"
+  exit 1
+fi
+
+if [[ ! $(command -v gcloud) ]]; then
+  echo >&2 "glsh: \"gcloud\" could not be found follow https://cloud.google.com/sdk/docs/install"
+  exit 1
+fi
+
+if [[ ! $(command -v sshuttle) ]]; then
+  echo >&2 "glsh: \"sshuttle\" could not be found follow https://github.com/sshuttle/sshuttle#obtaining-sshuttle"
+  exit 1
+fi
+
+if [[ -z "$1" ]]; then
+  print_help
+  exit 1
+fi
+
+case $1 in
+  setup)
+    setup
+    ;;
+  use-cluster)
+    use_cluster "$2"
+    ;;
+  *)
+    print_help
+    exit 1
+    ;;
+esac

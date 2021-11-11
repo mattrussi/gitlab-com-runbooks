@@ -27,10 +27,12 @@ local gitalyApdexIgnoredMethods = std.set([
   'OptimizeRepository',
   'CommitStats',  // https://gitlab.com/gitlab-org/gitlab/-/issues/337080
 
-  // PackObjectsHookWithSidechannel is used to serve 'git fetch' traffic.
-  // Its latency is proportional to the size of the size of the fetch and
-  // the download speed of the client.
+  // PackObjectsHookWithSidechannel and PostUploadPackWithSidechannel are
+  // used to serve 'git fetch' traffic. Their latency is proportional to
+  // the size of the size of the fetch and the download speed of the
+  // client.
   'PackObjectsHookWithSidechannel',
+  'PostUploadPackWithSidechannel',
 
   // Excluding Hook RPCs, as these are dependent on the internal Rails API.
   // Almost all time is spend there, once it's slow of failing it's usually not
@@ -49,7 +51,7 @@ local gitalyGRPCErrorRate(baseSelector) =
     rateMetric(
       counter='gitaly_service_client_requests_total',
       selector=baseSelector {
-        grpc_code: { nre: 'OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded|Canceled' },
+        grpc_code: { nre: 'OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded|Canceled|InvalidArgument' },
       }
     ),
     rateMetric(

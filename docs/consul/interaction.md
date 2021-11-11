@@ -60,3 +60,17 @@ below to access the full catalog of consul using their UI:
 1. `ssh -L 8500:localhost:8500 <consul_hostname>`
 1. Open a browser and point it to `http://localhost:8500`
 1. Enjoy
+
+## Consul Server Maintenance
+
+When needing to perform maintenance on consul, it would be wise to gracefully
+remove the node from the cluster to prevent as much disruption as possible.
+Removing a node from the cluster prevents any node from connecting to it and
+brings down the service preventing failover to that node.
+
+1. On the consul server `consul leave` - This will gracefully leave and shutdown
+   the consul service
+1. Prior to starting consul, one may need to remove any snapshots located inside
+   of the data directory
++1. Start consul - `systemctl start consul`
++1. Validate that it is has joined the cluster as a follower

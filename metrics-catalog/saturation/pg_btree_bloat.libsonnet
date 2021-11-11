@@ -1,12 +1,12 @@
-local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
-local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
+local resourceSaturationPoint = (import 'servicemetrics/metrics.libsonnet').resourceSaturationPoint;
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 
 {
   pg_btree_bloat: resourceSaturationPoint({
     title: 'Postgres btree bloat',
     severity: 's3',
     horizontallyScalable: false,
-    appliesTo: ['patroni', 'postgres-archive'],
+    appliesTo: metricsCatalog.findServicesWithTag(tag='gitlab_monitor_bloat'),
     description: |||
       This measures the total bloat in Postgres Btree indexes, as a percentage of total index size.
 
