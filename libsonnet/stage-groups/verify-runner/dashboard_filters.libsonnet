@@ -2,6 +2,19 @@ local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libso
 local template = grafana.template;
 local runnersService = (import 'servicemetrics/metrics-catalog.libsonnet').getService('ci-runners');
 
+local ciEnvironment = template.new(
+  'ci_environment',
+  '$PROMETHEUS_DS',
+  query=|||
+    label_values(node_uname_info{job="gke-node"}, ci_environment)
+  |||,
+  current=null,
+  refresh='load',
+  sort=true,
+  multi=true,
+  includeAll=true,
+);
+
 local shard = template.new(
   'shard',
   '$PROMETHEUS_DS',
@@ -152,6 +165,7 @@ local selectorHash = {
 };
 
 {
+  ciEnvironment:: ciEnvironment,
   shard:: shard,
   runnerManager:: runnerManager,
   runnerJobFailureReason:: runnerJobFailureReason,
