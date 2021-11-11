@@ -11,7 +11,7 @@ Those changes are automated on the following playbook:
 ```
 
 ## The main steps
-The main steps on the read onlies replicas, one by one:
+The main steps on the read-only replicas, one by one:
 
 * Disable chef-client.
 
