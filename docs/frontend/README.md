@@ -15,19 +15,19 @@
 
 ## Troubleshooting Pointers
 
-* [../config_management/chef-guidelines.md](../config_management/chef-guidelines.md)
-* [haproxy-logging.md](haproxy-logging.md)
-* [haproxy.md](haproxy.md)
-* [../git/deploy-gitlab-rb-change.md](../git/deploy-gitlab-rb-change.md)
-* [../git/gitlab-hosted-codesandbox.md](../git/gitlab-hosted-codesandbox.md)
-* [../gitaly/gitaly-latency.md](../gitaly/gitaly-latency.md)
-* [../gitaly/gitaly-permission-denied.md](../gitaly/gitaly-permission-denied.md)
+* [Chef Guidlines](../config_management/chef-guidelines.md)
+* [Frontend (HAProxy) Logging](haproxy-logging.md)
+* [HAProxy management at GitLab](haproxy.md)
+* [Deploying a change to gitlab.rb](../git/deploy-gitlab-rb-change.md)
+* [GitLab Hosted CodeSandbox](../git/gitlab-hosted-codesandbox.md)
+* [Gitaly latency is too high](../gitaly/gitaly-latency.md)
+* [Gitaly PermissionDenied alert](../gitaly/gitaly-permission-denied.md)
 * [../pgbouncer/service-pgbouncer.md](../pgbouncer/service-pgbouncer.md)
 * [../registry/gitlab-registry.md](../registry/gitlab-registry.md)
-* [../sentry/sentry-is-down.md](../sentry/sentry-is-down.md)
-* [../tutorials/overview_life_of_a_web_request.md](../tutorials/overview_life_of_a_web_request.md)
-* [../uncategorized/alert-for-ssl-certificate-expiration.md](../uncategorized/alert-for-ssl-certificate-expiration.md)
-* [../uncategorized/deleting-alerts.md](../uncategorized/deleting-alerts.md)
+* [Sentry is down and gives error 500](../sentry/sentry-is-down.md)
+* [Life of a Web Request](../tutorials/overview_life_of_a_web_request.md)
+* [Alert about SSL certificate expiration](../uncategorized/alert-for-ssl-certificate-expiration.md)
+* [An impatient SRE's guide to deleting alerts](../uncategorized/deleting-alerts.md)
 <!-- END_MARKER -->
 
 

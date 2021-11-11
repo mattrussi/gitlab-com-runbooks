@@ -15,7 +15,7 @@
 
 ## Troubleshooting Pointers
 
-* [../onboarding/kibana-diagnosis.md](../onboarding/kibana-diagnosis.md)
+* [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->

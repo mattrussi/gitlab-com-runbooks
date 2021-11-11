@@ -15,20 +15,20 @@
 
 ## Troubleshooting Pointers
 
-* [../frontend/high-error-rate.md](../frontend/high-error-rate.md)
-* [../gitaly/gitaly-down.md](../gitaly/gitaly-down.md)
-* [../patroni/pg_xid_wraparound_alert.md](../patroni/pg_xid_wraparound_alert.md)
+* [Increased Error Rate](../frontend/high-error-rate.md)
+* [Gitaly is down](../gitaly/gitaly-down.md)
+* [`pg_xid_wraparound` Saturation Alert](../patroni/pg_xid_wraparound_alert.md)
 * [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
-* [../patroni/rotating-rails-postgresql-password.md](../patroni/rotating-rails-postgresql-password.md)
-* [../praefect/praefect-startup.md](../praefect/praefect-startup.md)
-* [../registry/app-db-conn-pool-saturation.md](../registry/app-db-conn-pool-saturation.md)
+* [Rotating Rails' PostgreSQL password](../patroni/rotating-rails-postgresql-password.md)
+* [Praefect is down](../praefect/praefect-startup.md)
+* [Database Connection Pool Saturation](../registry/app-db-conn-pool-saturation.md)
 * [../registry/migration-failure-scenarios.md](../registry/migration-failure-scenarios.md)
-* [../registry/online-gc-high-overdue-tasks.md](../registry/online-gc-high-overdue-tasks.md)
-* [sentry-is-down.md](sentry-is-down.md)
-* [../sidekiq/large-pull-mirror-queue.md](../sidekiq/large-pull-mirror-queue.md)
+* [High Number of Overdue Online GC Tasks](../registry/online-gc-high-overdue-tasks.md)
+* [Sentry is down and gives error 500](sentry-is-down.md)
+* [Pull mirror overdue queue is too large](../sidekiq/large-pull-mirror-queue.md)
 * [../sidekiq/sidekiq_error_rate_high.md](../sidekiq/sidekiq_error_rate_high.md)
-* [../uncategorized/project-export.md](../uncategorized/project-export.md)
-* [../web/static-objects-caching.md](../web/static-objects-caching.md)
+* [Project exports](../uncategorized/project-export.md)
+* [Static objects caching](../web/static-objects-caching.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->

@@ -17,8 +17,8 @@
 
 * [ci-apdex-violating-slo.md](ci-apdex-violating-slo.md)
 * [service-ci-runners.md](service-ci-runners.md)
-* [../patroni/rails-sql-apdex-slow.md](../patroni/rails-sql-apdex-slow.md)
-* [../uncategorized/alert-routing.md](../uncategorized/alert-routing.md)
+* [Rails SQL Apdex alerts](../patroni/rails-sql-apdex-slow.md)
+* [Alert Routing Howto](../uncategorized/alert-routing.md)
 <!-- END_MARKER -->
 
 # CI Runner Overview

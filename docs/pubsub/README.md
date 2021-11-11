@@ -16,17 +16,17 @@
 
 ## Troubleshooting Pointers
 
-* [../gitaly/find-project-from-hashed-storage.md](../gitaly/find-project-from-hashed-storage.md)
+* [Find a project from its hashed storage path](../gitaly/find-project-from-hashed-storage.md)
 * [../kube/k8s-operations.md](../kube/k8s-operations.md)
-* [../onboarding/kibana-diagnosis.md](../onboarding/kibana-diagnosis.md)
+* [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
 * [../patroni/pg_collect_query_data.md](../patroni/pg_collect_query_data.md)
 * [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
-* [../praefect/praefect-error-rate.md](../praefect/praefect-error-rate.md)
-* [pubsub-queing.md](pubsub-queing.md)
-* [../redis/redis-survival-guide-for-sres.md](../redis/redis-survival-guide-for-sres.md)
-* [../sidekiq/sidekiq-survival-guide-for-sres.md](../sidekiq/sidekiq-survival-guide-for-sres.md)
-* [../tutorials/overview_life_of_a_git_request.md](../tutorials/overview_life_of_a_git_request.md)
-* [../uncategorized/camoproxy.md](../uncategorized/camoproxy.md)
+* [Praefect error rate is too high](../praefect/praefect-error-rate.md)
+* [PubSub Queuing Rate Increasing](pubsub-queing.md)
+* [A survival guide for SREs to working with Redis at GitLab](../redis/redis-survival-guide-for-sres.md)
+* [A survival guide for SREs to working with Sidekiq at GitLab](../sidekiq/sidekiq-survival-guide-for-sres.md)
+* [Life of a Git Request](../tutorials/overview_life_of_a_git_request.md)
+* [Camoproxy troubleshooting](../uncategorized/camoproxy.md)
 <!-- END_MARKER -->
 
 

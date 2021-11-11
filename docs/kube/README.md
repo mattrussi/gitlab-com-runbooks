@@ -17,15 +17,15 @@
 
 * [../elastic/kibana.md](../elastic/kibana.md)
 * [../git/gitlab-review-app-certs.md](../git/gitlab-review-app-certs.md)
-* [../kas/kubernetes-agent-basic-troubleshooting.md](../kas/kubernetes-agent-basic-troubleshooting.md)
+* [Kubernetes-Agent Basic Troubleshooting](../kas/kubernetes-agent-basic-troubleshooting.md)
 * [k8s-oncall-setup.md](k8s-oncall-setup.md)
 * [k8s-operations.md](k8s-operations.md)
-* [k8s-pvc-resize.md](k8s-pvc-resize.md)
-* [k8s-sts-snapshot.md](k8s-sts-snapshot.md)
-* [kubernetes.md](kubernetes.md)
-* [../license/license-gitlab-com.md](../license/license-gitlab-com.md)
+* [How to resize Persistent Volumes in Kubernetes](k8s-pvc-resize.md)
+* [How to take a snapshot of an application running in a StatefulSet](k8s-sts-snapshot.md)
+* [Kubernetes](kubernetes.md)
+* [license.gitlab.com Runbook](../license/license-gitlab-com.md)
 * [../registry/gitlab-registry.md](../registry/gitlab-registry.md)
-* [../version/version-gitlab-com.md](../version/version-gitlab-com.md)
+* [version.gitlab.com Runbook](../version/version-gitlab-com.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->

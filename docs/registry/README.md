@@ -17,22 +17,22 @@
 
 ## Troubleshooting Pointers
 
-* [../cloudflare/managing-traffic.md](../cloudflare/managing-traffic.md)
-* [../consul/interaction.md](../consul/interaction.md)
-* [../frontend/ban-netblocks-on-haproxy.md](../frontend/ban-netblocks-on-haproxy.md)
-* [../frontend/haproxy.md](../frontend/haproxy.md)
+* [Cloudflare: Managing Traffic](../cloudflare/managing-traffic.md)
+* [Interacting with Consul](../consul/interaction.md)
+* [Blocking individual IPs and Net Blocks on HA Proxy](../frontend/ban-netblocks-on-haproxy.md)
+* [HAProxy management at GitLab](../frontend/haproxy.md)
 * [../kube/k8s-operations.md](../kube/k8s-operations.md)
-* [../kube/kubernetes.md](../kube/kubernetes.md)
-* [../onboarding/gitlab.com_on_k8s.md](../onboarding/gitlab.com_on_k8s.md)
-* [../onboarding/kibana-diagnosis.md](../onboarding/kibana-diagnosis.md)
-* [app-db-conn-pool-saturation.md](app-db-conn-pool-saturation.md)
+* [Kubernetes](../kube/kubernetes.md)
+* [Gitlab.com on Kubernetes](../onboarding/gitlab.com_on_k8s.md)
+* [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
+* [Database Connection Pool Saturation](app-db-conn-pool-saturation.md)
 * [gitlab-registry.md](gitlab-registry.md)
 * [migration-failure-scenarios.md](migration-failure-scenarios.md)
-* [online-gc-high-overdue-tasks.md](online-gc-high-overdue-tasks.md)
-* [../uncategorized/delete-projects-manually.md](../uncategorized/delete-projects-manually.md)
-* [../uncategorized/deleting-alerts.md](../uncategorized/deleting-alerts.md)
-* [../uncategorized/tweeting-guidelines.md](../uncategorized/tweeting-guidelines.md)
-* [../vault/vault.md](../vault/vault.md)
+* [High Number of Overdue Online GC Tasks](online-gc-high-overdue-tasks.md)
+* [Deleting a project manually](../uncategorized/delete-projects-manually.md)
+* [An impatient SRE's guide to deleting alerts](../uncategorized/deleting-alerts.md)
+* [Tweeting Guidelines](../uncategorized/tweeting-guidelines.md)
+* [Gitlab Vault](../vault/vault.md)
 <!-- END_MARKER -->
 
 

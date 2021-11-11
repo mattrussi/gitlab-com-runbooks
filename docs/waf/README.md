@@ -15,10 +15,10 @@
 
 ## Troubleshooting Pointers
 
-* [../cloudflare/managing-traffic.md](../cloudflare/managing-traffic.md)
-* [../cloudflare/oncall.md](../cloudflare/oncall.md)
-* [../cloudflare/terraform.md](../cloudflare/terraform.md)
-* [../cloudflare/troubleshooting.md](../cloudflare/troubleshooting.md)
+* [Cloudflare: Managing Traffic](../cloudflare/managing-traffic.md)
+* [Cloudflare for the on-call](../cloudflare/oncall.md)
+* [Cloudflare: Terraform Configuration](../cloudflare/terraform.md)
+* [CloudFlare Troubleshooting](../cloudflare/troubleshooting.md)
 <!-- END_MARKER -->
 
 

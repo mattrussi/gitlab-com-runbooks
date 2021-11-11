@@ -15,7 +15,7 @@
 ## Troubleshooting Pointers
 
 * [../kube/k8s-operations.md](../kube/k8s-operations.md)
-* [../tutorials/overview_life_of_a_git_request.md](../tutorials/overview_life_of_a_git_request.md)
+* [Life of a Git Request](../tutorials/overview_life_of_a_git_request.md)
 <!-- END_MARKER -->
 
 

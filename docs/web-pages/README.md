@@ -18,8 +18,8 @@
 
 ## Troubleshooting Pointers
 
-* [../frontend/haproxy.md](../frontend/haproxy.md)
-* [../uncategorized/deploycmd.md](../uncategorized/deploycmd.md)
+* [HAProxy management at GitLab](../frontend/haproxy.md)
+* [Deploy Cmd for Chatops](../uncategorized/deploycmd.md)
 <!-- END_MARKER -->
 
 

@@ -16,7 +16,7 @@
 
 ## Troubleshooting Pointers
 
-* [../consul/interaction.md](../consul/interaction.md)
+* [Interacting with Consul](../consul/interaction.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->
