@@ -11,17 +11,19 @@ Those changes are automated on the following playbook:
 ```
 
 ## The main steps
-The main steps on the read-only replicas, one by one:
+
+The main steps on the read-only replicas, are:
 
 * Disable chef-client.
 
  - Execute the command: `chef-client-disable`
 
-Add the `no-failover` and `no-loadbalance` tags in Patroni.
+Add the `no-failover` and `no-loadbalance` tags in Patroni ( in the config file patroni.yml).
 
 ### Pre checks:
-Wait until the traffic is drained.
-Execute a checkpoint
+Wait until the traffic is drained. 
+Execute a checkpoint. Command: `gitlab-psql -c "checkpoint;"`
+
 Shutdown PostgreSQL
 
 ### Main actions:
