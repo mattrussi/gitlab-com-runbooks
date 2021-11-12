@@ -1,6 +1,23 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
+local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
+local maturityLevels = import 'service-maturity/levels.libsonnet';
+
+local woodhouseLogs = [
+  toolingLinks.stackdriverLogs(
+    'Woodhouse Container Logs',
+    queryHash={
+      'resource.type': 'k8s_container',
+      'resource.labels.cluster_name': 'ops-gitlab-gke',
+      'resource.labels.namespace_name': 'woodhouse',
+      'resource.labels.container_name': 'woodhouse',
+    },
+    project='gitlab-ops',
+    // Long, but usually very quiet so give a good chance to see something to frame events
+    timeRange='PT6H',
+  ),
+];
 
 metricsCatalog.serviceDefinition({
   type: 'woodhouse',
@@ -55,7 +72,7 @@ metricsCatalog.serviceDefinition({
       ),
       significantLabels: [],
 
-      toolingLinks: [],  // TODO
+      toolingLinks: woodhouseLogs,
     },
 
     async_jobs: {
@@ -84,7 +101,10 @@ metricsCatalog.serviceDefinition({
       ),
       significantLabels: ['job_name'],
 
-      toolingLinks: [],  // TODO
+      toolingLinks: woodhouseLogs,
     },
   },
+  skippedMaturityCriteria: maturityLevels.skip({
+    'Structured logs available in Kibana': 'Log volume is very low; tooling links to StackDriver provided which is sufficient for the purposes',
+  }),
 })
