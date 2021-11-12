@@ -1114,7 +1114,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:gitlab_sli:rails_request_apdex:total_rate5m{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}
+          sli_aggregations:gitlab_sli:rails_request_apdex:total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="web"}
         )
       runbook: docs/web/README.md
     labels:
@@ -1151,7 +1151,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:gitlab_sli:rails_request_apdex:total_rate5m{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}
+          sli_aggregations:gitlab_sli:rails_request_apdex:total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="web"}
         )
       runbook: docs/web/README.md
     labels:

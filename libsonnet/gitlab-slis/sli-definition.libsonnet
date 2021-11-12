@@ -18,9 +18,9 @@ local sliValidator = validator.new({
 });
 
 local operationRate(definition, selector) =
-  rateMetric(definition.totalCounterName);
+  rateMetric(definition.totalCounterName, selector);
 local successRate(definition, selector) =
-  rateMetric(definition.successCounterName);
+  rateMetric(definition.successCounterName, selector);
 
 local validateAndApplyDefaults(definition) =
   local sli = sliValidator.assertValid(definition) {
