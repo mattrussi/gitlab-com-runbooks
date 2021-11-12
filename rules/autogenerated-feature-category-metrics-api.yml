@@ -28,7 +28,7 @@ groups:
       type: api
     expr: |
       sum by (env,environment,stage,feature_category) (
-        sli_aggregations:gitlab_sli:rails_request_apdex:total_rate5m{}
+        sli_aggregations:gitlab_sli:rails_request_apdex:total_rate5m{job="gitlab-rails",type="api"}
       )
 - name: 'Prometheus Intermediate Metrics per feature: api - burn-rate 30m'
   rules:
@@ -57,7 +57,7 @@ groups:
       type: api
     expr: |
       sum by (env,environment,stage,feature_category) (
-        sli_aggregations:gitlab_sli:rails_request_apdex:total_rate30m{}
+        sli_aggregations:gitlab_sli:rails_request_apdex:total_rate30m{job="gitlab-rails",type="api"}
       )
 - name: 'Prometheus Intermediate Metrics per feature: api - burn-rate 1h'
   rules:
@@ -86,5 +86,5 @@ groups:
       type: api
     expr: |
       sum by (env,environment,stage,feature_category) (
-        sli_aggregations:gitlab_sli:rails_request_apdex:total_rate1h{}
+        sli_aggregations:gitlab_sli:rails_request_apdex:total_rate1h{job="gitlab-rails",type="api"}
       )
