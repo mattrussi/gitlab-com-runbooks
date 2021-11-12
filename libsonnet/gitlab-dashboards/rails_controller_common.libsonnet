@@ -60,25 +60,26 @@ local elasticsearchExternalHTTPLink(type) = function(options)
         basic.timeseries(
           stableId='request-rate',
           title='Request Rate',
-          query='avg_over_time(controller_action:gitlab_transaction_duration_seconds_count:rate1m{%s}[$__interval])' % selectorString,
+          query='sum by (controller, action) (avg_over_time(controller_action:gitlab_transaction_duration_seconds_count:rate1m{%s}[$__interval]))' % selectorString,
           legendFormat='{{ action }}',
           format='ops',
           yAxisLabel='Requests per Second',
+          decimals=1,
         ).addDataLink(elasticsearchLogSearchDataLink(type)),
         basic.multiTimeseries(
           stableId='latency',
           title='Latency',
           queries=[{
-            query: 'avg_over_time(controller_action:gitlab_transaction_duration_seconds:p99{%s}[$__interval])' % selectorString,
+            query: 'avg by (controller, action) (avg_over_time(controller_action:gitlab_transaction_duration_seconds:p99{%s}[$__interval]))' % selectorString,
             legendFormat: '{{ action }} - p99',
           }, {
-            query: 'avg_over_time(controller_action:gitlab_transaction_duration_seconds:p95{%s}[$__interval])' % selectorString,
+            query: 'avg by (controller, action) (avg_over_time(controller_action:gitlab_transaction_duration_seconds:p95{%s}[$__interval]))' % selectorString,
             legendFormat: '{{ action }} - p95',
           }, {
             query: |||
-              avg_over_time(controller_action:gitlab_transaction_duration_seconds_sum:rate1m{%(selector)s}[$__interval])
+              sum by (controller, action) (avg_over_time(controller_action:gitlab_transaction_duration_seconds_sum:rate1m{%(selector)s}[$__interval]))
               /
-              avg_over_time(controller_action:gitlab_transaction_duration_seconds_count:rate1m{%(selector)s}[$__interval])
+              sum by (controller, action) (avg_over_time(controller_action:gitlab_transaction_duration_seconds_count:rate1m{%(selector)s}[$__interval]))
             ||| % { selector: selectorString },
             legendFormat: '{{ action }} - mean',
           }],
@@ -91,6 +92,7 @@ local elasticsearchExternalHTTPLink(type) = function(options)
           stableId='total-sql-queries-rate',
           title='Total SQL Queries Rate',
           format='ops',
+          decimals=1,
           queries=[
             {
               query: |||
@@ -139,14 +141,15 @@ local elasticsearchExternalHTTPLink(type) = function(options)
             )
           ||| % { selector: selectorString },
           legendFormat='{{ action }}',
+          decimals=1,
         ),
         basic.timeseries(
           stableId='sql-latency-per-controller-request',
           title='SQL Latency per Controller Request',
           query=|||
-            avg_over_time(controller_action:gitlab_sql_duration_seconds_sum:rate1m{%(selector)s}[$__interval])
+            sum by (controller, action) (avg_over_time(controller_action:gitlab_sql_duration_seconds_sum:rate1m{%(selector)s}[$__interval]))
             /
-            avg_over_time(controller_action:gitlab_transaction_duration_seconds_count:rate1m{%(selector)s}[$__interval])
+            sum by (controller, action) (avg_over_time(controller_action:gitlab_transaction_duration_seconds_count:rate1m{%(selector)s}[$__interval]))
           ||| % { selector: selectorString },
           legendFormat='{{ action }}',
           format='s'
@@ -178,6 +181,7 @@ local elasticsearchExternalHTTPLink(type) = function(options)
             )
           ||| % { selector: selectorString },
           legendFormat='{{ action }}',
+          decimals=1,
         ),
         basic.timeseries(
           stableId='avg-duration-per-sql-transaction',
@@ -202,6 +206,7 @@ local elasticsearchExternalHTTPLink(type) = function(options)
             )
           ||| % { selector: selectorString },
           legendFormat='{{ action }} - {{ operation }}',
+          decimals=1,
         ),
       ], startRow=401)
       +
@@ -220,6 +225,7 @@ local elasticsearchExternalHTTPLink(type) = function(options)
           ||| % { selector: selectorString },
           legendFormat='{{ action }} - {{ code }}',
           format='ops',
+          decimals=1,
         ),
         basic.multiTimeseries(
           stableId='external-http-latency',
