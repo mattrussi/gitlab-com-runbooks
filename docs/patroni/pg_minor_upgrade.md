@@ -2,7 +2,7 @@
 
 This runbook describes all the steps to execute a Postgresql minor upgrade. 
 
-Considering the database of the most critical components from our infrastructure, we want to execute the upgrade node by node, having tests and monitoring the performance and behavior after the upgrade in each node.
+Considering the database, one of the most critical components from our infrastructure, we want to execute the upgrade node by node by executing tests, monitoring the performance and behavior after the upgrade in each node.
 
 Those changes are automated on the following playbook:
 
@@ -17,7 +17,7 @@ The main steps on the read-only replicas, one by one:
 
  - Execute the command: `chef-client-disable`
 
-Add the tags of no failover and no-load balance in Patroni.
+Add the `no-failover` and `no-loadbalance` tags in Patroni.
 
 ### Pre checks:
 Wait until the traffic is drained.
@@ -58,9 +58,9 @@ ALTER EXTENSION pg_stat_statements UPDATE;
 Check connectivity 
 Verify the version
 Check logs
-Restore the traffic by starting chef that will remove the tags on the node.
+Restore the traffic by starting chef, which will remove the tags on the node.
 
 
-After restoring the traffic monitor for 30 min the performance from the node and the logs.
+After restoring the traffic, monitor the performance for 30 minutes from the node and the logs.
 
-After executing the process above, to upgrade the primary we could execute a switchover
+After executing the above process, to upgrade the primary node we could execute a switchover first.
