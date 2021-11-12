@@ -30,12 +30,17 @@ local errorBudgetRatio(range, groupSelectors, aggregationLabels, ignoreComponent
               )
             )
             -
-            sum by(%(aggregationsIncludingComponent)s) (
-              sum_over_time(
-                gitlab:component:stage_group:execution:error:rate_1h{%(selectorHash)s}[%(range)s]
+            (
+              sum by(%(aggregationsIncludingComponent)s) (
+                sum_over_time(
+                  gitlab:component:stage_group:execution:error:rate_1h{%(selectorHash)s}[%(range)s]
+                )
               )
-            ), 'sli_kind', 'error', '', ''
-          )
+              or
+              sum by (%(aggregationsIncludingComponent)s) (
+                0 * gitlab:component:stage_group:execution:ops:rate_1h{%(selectorHash)s}
+              )
+            ), 'sli_kind', 'error', '', '')
         ) %(ignoreCondition)s
       )
       /
