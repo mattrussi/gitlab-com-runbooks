@@ -31,7 +31,8 @@ local row(
   expectMultipleSeries=false,
   compact=false,
       ) =
-  local selectorHashWithExtras = selectorHash { type: serviceType };
+  local typeSelector = if serviceType == null then {} else { type: serviceType };
+  local selectorHashWithExtras = selectorHash + typeSelector;
   local formatConfig = {
     titlePrefix: titlePrefix,
     legendFormatPrefix: legendFormatPrefix,
@@ -48,7 +49,6 @@ local row(
           apdexPanel.panel(
             title='%(titlePrefix)s Apdex' % formatConfig,
             aggregationSet=aggregationSet,
-            serviceType=serviceType,
             selectorHash=selectorHashWithExtras,
             stableId='%(stableIdPrefix)s-apdex' % formatConfig,
             legendFormat='%(legendFormatPrefix)s apdex' % formatConfig,
@@ -82,7 +82,6 @@ local row(
           errorRatioPanel.panel(
             '%(titlePrefix)s Error Ratio' % formatConfig,
             aggregationSet=aggregationSet,
-            serviceType=serviceType,
             selectorHash=selectorHashWithExtras,
             stableId='%(stableIdPrefix)s-error-rate' % formatConfig,
             legendFormat='%(legendFormatPrefix)s error ratio' % formatConfig,

@@ -56,9 +56,10 @@ local sliOverviewMatrixRow(
   selectorHash,
   aggregationSet,
   legendFormatPrefix,
-  expectMultipleSeries
+  expectMultipleSeries,
       ) =
-  local selectorHashWithExtras = selectorHash { type: serviceType, component: sli.name };
+  local typeSelector = if serviceType == null then {} else { type: serviceType };
+  local selectorHashWithExtras = selectorHash { component: sli.name } + typeSelector;
   local formatConfig = {
     serviceType: serviceType,
     sliName: sli.name,

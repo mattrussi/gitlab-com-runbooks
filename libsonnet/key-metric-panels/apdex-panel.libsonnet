@@ -33,7 +33,6 @@ local genericApdexPanel(
   primaryQueryExpr,
   legendFormat,
   linewidth=null,
-  serviceType,
   sort='increasing',
   legend_show=null,
   expectMultipleSeries=false,
@@ -83,7 +82,6 @@ local genericApdexPanel(
 local apdexPanel(
   title,
   aggregationSet,
-  serviceType,
   selectorHash,
   description=null,
   stableId,
@@ -93,7 +91,7 @@ local apdexPanel(
   includeLastWeek=true,
   expectMultipleSeries=false
       ) =
-  local selectorHashWithExtras = selectorHash + aggregationSet.selector { type: serviceType };
+  local selectorHashWithExtras = selectorHash + aggregationSet.selector;
 
   local panel = genericApdexPanel(
     title,
@@ -102,7 +100,6 @@ local apdexPanel(
     stableId=stableId,
     primaryQueryExpr=sliPromQL.apdexQuery(aggregationSet, null, selectorHashWithExtras, '$__interval', worstCase=true),
     legendFormat=legendFormat,
-    serviceType=serviceType,
     linewidth=if expectMultipleSeries then 1 else 2,
     selectorHash=selectorHashWithExtras,
   );

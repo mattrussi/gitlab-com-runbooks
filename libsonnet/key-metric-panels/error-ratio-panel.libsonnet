@@ -13,7 +13,6 @@ local genericErrorPanel(
   primaryQueryExpr,
   legendFormat,
   linewidth=null,
-  serviceType,
   sort='decreasing',
   legend_show=null,
   selectorHash,
@@ -65,7 +64,6 @@ local genericErrorPanel(
 local errorRatioPanel(
   title,
   aggregationSet,
-  serviceType,
   selectorHash,
   stableId,
   legendFormat=null,
@@ -73,7 +71,7 @@ local errorRatioPanel(
   includeLastWeek=true,
   expectMultipleSeries=false
       ) =
-  local selectorHashWithExtras = selectorHash + aggregationSet.selector { type: serviceType };
+  local selectorHashWithExtras = selectorHash + aggregationSet.selector;
 
   local panel =
     genericErrorPanel(
@@ -82,7 +80,6 @@ local errorRatioPanel(
       stableId=stableId,
       primaryQueryExpr=sliPromQL.errorRatioQuery(aggregationSet, null, selectorHashWithExtras, '$__interval', worstCase=true),
       legendFormat=legendFormat,
-      serviceType=serviceType,
       linewidth=if expectMultipleSeries then 1 else 2,
       selectorHash=selectorHashWithExtras
     );
