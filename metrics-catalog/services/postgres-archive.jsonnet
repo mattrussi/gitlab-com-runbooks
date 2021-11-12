@@ -1,6 +1,7 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local rateMetric = metricsCatalog.rateMetric;
 local combined = metricsCatalog.combined;
+local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
 local selector = { type: 'postgres-archive', tier: 'db' };
 
@@ -55,6 +56,7 @@ metricsCatalog.serviceDefinition({
       significantLabels: [],
 
       toolingLinks: [
+        toolingLinks.kibana(title='Postgres', index='postgres', type='postgres-archive', tag='postgres.postgres'),
       ],
     },
   },
