@@ -69,7 +69,6 @@ metricsCatalog.serviceDefinition({
     loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
       userImpacting=true,
       featureCategory='not_owned',
-      team='sre_coreinfra',
       stageMappings={
         main: { backends: ['web'], toolingLinks: [] },  // What to do with `429_slow_down`?
         cny: { backends: ['canary_web'], toolingLinks: [] },
@@ -163,7 +162,6 @@ metricsCatalog.serviceDefinition({
     puma: {
       userImpacting: true,
       featureCategory: 'not_owned',
-      team: 'sre_coreinfra',
       description: |||
         Aggregation of most web requests that pass through the puma to the GitLab rails monolith.
         Healthchecks are excluded.

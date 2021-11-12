@@ -1,22 +1,4 @@
 teams:
-- name: sre_datastores
-  url: https://about.gitlab.com/handbook/engineering/infrastructure/team/reliability/#datastores
-  slack_channel: sre_datastores
-  engagement_policy:
-  oncall_schedule: https://gitlab.pagerduty.com/services/PZ6SJXH
-
-- name: sre_observability
-  url: https://about.gitlab.com/handbook/engineering/infrastructure/team/reliability/#observability
-  slack_channel: sre_observability
-  engagement_policy:
-  oncall_schedule: https://gitlab.pagerduty.com/schedules#P22HQSG
-
-- name: sre_coreinfra
-  url: https://about.gitlab.com/handbook/engineering/infrastructure/team/reliability/#core-infra
-  slack_channel: sre_coreinfra
-  engagement_policy:
-  oncall_schedule: https://gitlab.pagerduty.com/schedules#P22HQSG
-
 - name: sre_reliability
   url: https://about.gitlab.com/handbook/engineering/infrastructure/team/reliability/#core-infra
   slack_channel: infrastructure_lounge

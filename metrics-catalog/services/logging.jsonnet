@@ -20,7 +20,6 @@ metricsCatalog.serviceDefinition({
     elasticsearch_searching_cluster: {
       userImpacting: false,
       featureCategory: 'not_owned',
-      team: 'sre_observability',
       description: |||
         This cluster SLI monitors searches issued to GitLab's logging ELK instance.
       |||,
@@ -37,7 +36,6 @@ metricsCatalog.serviceDefinition({
     elasticsearch_indexing_cluster: {
       userImpacting: false,
       featureCategory: 'not_owned',
-      team: 'sre_observability',
       description: |||
         This cluster SLI monitors log index operations to GitLab's logging ELK instance.
       |||,
@@ -54,7 +52,6 @@ metricsCatalog.serviceDefinition({
     elasticsearch_searching_index: {
       userImpacting: false,
       featureCategory: 'not_owned',
-      team: 'sre_observability',
       description: |||
         This index SLI monitors searches issued to GitLab's logging ELK instance.
       |||,
@@ -71,7 +68,6 @@ metricsCatalog.serviceDefinition({
     elasticsearch_indexing_index: {
       userImpacting: false,
       featureCategory: 'not_owned',
-      team: 'sre_observability',
       description: |||
         This index SLI monitors log index operations to GitLab's logging ELK instance.
       |||,
@@ -101,7 +97,6 @@ metricsCatalog.serviceDefinition({
     stackdriver: {
       userImpacting: false,
       featureCategory: 'not_owned',
-      team: 'sre_observability',
       ignoreTrafficCessation: true,
 
       description: |||
@@ -118,7 +113,6 @@ metricsCatalog.serviceDefinition({
     pubsub_topics: {
       userImpacting: false,
       featureCategory: 'not_owned',
-      team: 'sre_observability',
       description: |||
         This SLI monitors pubsub topics.
       |||,
@@ -134,7 +128,6 @@ metricsCatalog.serviceDefinition({
     pubsub_subscriptions: {
       userImpacting: false,
       featureCategory: 'not_owned',
-      team: 'sre_observability',
       description: |||
         This SLI monitors pubsub subscriptions.
       |||,
@@ -152,7 +145,6 @@ metricsCatalog.serviceDefinition({
     fluentd_log_output: {
       userImpacting: false,
       featureCategory: 'not_owned',
-      team: 'sre_observability',
       description: |||
         This SLI monitors fluentd log output and the number of output errors in fluentd.
       |||,

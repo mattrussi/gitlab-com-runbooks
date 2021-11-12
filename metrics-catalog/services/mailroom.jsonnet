@@ -30,7 +30,6 @@ metricsCatalog.serviceDefinition({
       local queueSelector = { queue: 'email_receiver' },
       userImpacting: true,
       featureCategory: 'not_owned',
-      team: 'sre_coreinfra',
 
       // Avoid long burn rates on Sidekiq metrics...
       upscaleLongerBurnRates: true,

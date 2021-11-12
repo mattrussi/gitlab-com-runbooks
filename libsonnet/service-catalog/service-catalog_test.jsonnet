@@ -70,16 +70,14 @@ test.suite({
     },
   },
   testGetTeam: {
-    actual: serviceCatalog.getTeam('sre_coreinfra'),
+    actual: serviceCatalog.getTeam('scalability'),
     expect: {
-      name: 'sre_coreinfra',
-      url: 'https://about.gitlab.com/handbook/engineering/infrastructure/team/reliability/#core-infra',
-      slack_channel: 'sre_coreinfra',
-      engagement_policy: null,
-      oncall_schedule: 'https://gitlab.pagerduty.com/schedules#P22HQSG',
+      ignored_components: ['rails_requests'],
       issue_tracker: null,
+      name: 'scalability',
+      product_stage_group: 'scalability',
       send_slo_alerts_to_team_slack_channel: false,
-      ignored_components: [],
+      slack_alerts_channel: 'g_scalability',
     },
   },
   testTeams: {
@@ -87,12 +85,12 @@ test.suite({
     // a team
     actual: std.set(
       std.filterMap(
-        function(team) team.name == 'sre_coreinfra' || team.name == 'scalability',
+        function(team) team.name == 'package' || team.name == 'scalability',
         function(team) team.name,
         serviceCatalog.getTeams()
       )
     ),
-    expect: std.set(['sre_coreinfra', 'scalability']),
+    expect: std.set(['package', 'scalability']),
   },
   testLookupExistingTeamForStageGroup: {
     actual: serviceCatalog.lookupTeamForStageGroup('access'),

@@ -41,7 +41,6 @@ metricsCatalog.serviceDefinition({
     loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
       userImpacting=true,
       featureCategory='not_owned',
-      team='sre_datastores',
       stageMappings={
         main: { backends: ['websockets'], toolingLinks: [] },
         cny: { backends: ['canary_websockets'], toolingLinks: [] },
@@ -90,7 +89,6 @@ metricsCatalog.serviceDefinition({
     puma: {
       userImpacting: true,
       featureCategory: 'not_owned',
-      team: 'sre_datastores',
       description: |||
         Monitors Rails endpoints, running in the Git fleet, via the HTTP interface.
       |||,

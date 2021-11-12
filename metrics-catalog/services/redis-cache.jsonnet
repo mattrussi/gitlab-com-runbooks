@@ -21,7 +21,6 @@ metricsCatalog.serviceDefinition({
     rails_redis_client: {
       userImpacting: true,
       featureCategory: 'not_owned',
-      team: 'sre_observability',
       description: |||
         Aggregation of all Redis Cache operations issued from the Rails codebase.
       |||,
@@ -48,7 +47,6 @@ metricsCatalog.serviceDefinition({
     primary_server: {
       userImpacting: true,
       featureCategory: 'not_owned',
-      team: 'sre_observability',
       description: |||
         Operations on the Redis primary for GitLab's caching Redis instance.
       |||,
@@ -70,7 +68,6 @@ metricsCatalog.serviceDefinition({
     secondary_servers: {
       userImpacting: true,  // userImpacting for data redundancy reasons
       featureCategory: 'not_owned',
-      team: 'sre_observability',
       description: |||
         Operations on the Redis secondaries for GitLab's caching Redis instance.
       |||,
@@ -91,7 +88,6 @@ metricsCatalog.serviceDefinition({
     rails_cache: {
       userImpacting: true,
       featureCategory: 'not_owned',
-      team: 'sre_observability',
       description: |||
         Rails ActiveSupport Cache operations against the Redis Cache
       |||,

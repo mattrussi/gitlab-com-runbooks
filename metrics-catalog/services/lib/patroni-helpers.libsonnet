@@ -63,7 +63,6 @@ local serviceDefinition(
       transactions_primary: {
         userImpacting: true,
         featureCategory: 'not_owned',
-        team: 'sre_datastores',
         description: |||
           Represents all SQL transactions issued to the primary Postgres instance.
           Errors represent transaction rollbacks.
@@ -98,7 +97,6 @@ local serviceDefinition(
       transactions_replica: {
         userImpacting: true,
         featureCategory: 'not_owned',
-        team: 'sre_datastores',
         description: |||
           Represents all SQL transactions issued to replica Postgres instances, in aggregate.
           Errors represent transaction rollbacks.
@@ -134,7 +132,6 @@ local serviceDefinition(
       pgbouncer: {
         userImpacting: true,
         featureCategory: 'not_owned',
-        team: 'sre_datastores',
         description: |||
           All transactions destined for the Postgres secondary instances are routed through the pgbouncer instances
           running on the patroni nodes themselves. This SLI models those transactions in aggregate.

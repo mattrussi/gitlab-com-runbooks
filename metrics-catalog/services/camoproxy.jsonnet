@@ -19,7 +19,6 @@ metricsCatalog.serviceDefinition({
     loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
       userImpacting=true,
       featureCategory='not_owned',
-      team='sre_coreinfra',
       stageMappings={
         main: { backends: ['camoproxy'], toolingLinks: [] },
       },
@@ -29,7 +28,6 @@ metricsCatalog.serviceDefinition({
     server: {
       userImpacting: true,
       featureCategory: 'not_owned',
-      team: 'sre_coreinfra',
       upscaleLongerBurnRates: true,  // TODO: enabling this here to test that this approach works
       description: |||
         This SLI monitors the camoproxy server via its HTTP interface.

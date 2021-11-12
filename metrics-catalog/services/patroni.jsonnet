@@ -35,7 +35,6 @@ patroniHelpers.serviceDefinition(
     rails_primary_sql: {
       userImpacting: true,
       featureCategory: 'not_owned',
-      team: 'sre_datastores',
       upscaleLongerBurnRates: true,
       description: |||
         Represents all SQL transactions issued through ActiveRecord from the Rails monolith (web, api, websockets, but not sidekiq) to the Postgres primary.
@@ -61,7 +60,6 @@ patroniHelpers.serviceDefinition(
     rails_replica_sql: {
       userImpacting: true,
       featureCategory: 'not_owned',
-      team: 'sre_datastores',
       upscaleLongerBurnRates: true,
       description: |||
         Represents all SQL transactions issued through ActiveRecord from the Rails monolith (web, api, websockets, but not sidekiq) to Postgres replicas.

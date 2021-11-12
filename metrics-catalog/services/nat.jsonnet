@@ -20,7 +20,6 @@ metricsCatalog.serviceDefinition({
     sent_tcp_packets: {
       userImpacting: true,
       featureCategory: 'not_owned',
-      team: 'sre_coreinfra',
 
       description: |||
         Monitors GCP Cloud NAT TCP packets sent.
@@ -63,7 +62,6 @@ metricsCatalog.serviceDefinition({
     received_tcp_packets: {
       userImpacting: true,
       featureCategory: 'not_owned',
-      team: 'sre_coreinfra',
 
       description: |||
         Monitors GCP Cloud NAT TCP packets received.

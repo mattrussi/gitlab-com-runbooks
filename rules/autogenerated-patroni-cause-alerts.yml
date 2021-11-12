@@ -161,7 +161,6 @@ groups:
       pager: pagerduty
       runbook: docs/patroni/postgres.md#tables-with-a-large-amount-of-dead-tuples
       severity: s2
-      team: sre_datastores
     expr: |
       topk by (environment, type, stage, shard) (1,
         max by (environment, type, stage, shard, application, endpoint, fqdn) (
