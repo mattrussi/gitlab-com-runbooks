@@ -283,6 +283,13 @@ local routingTree = Route(
     for issueChannel in secrets.issueChannels
     for env in ['gprd', 'ops']
   ] + [
+    /* silence alerts for file-43 while still retaining the ALERTS metric in prometheus */
+    Route(
+      receiver='blackhole',
+      matchers={ env: 'gprd', alertname: 'GitalyServiceGoserverApdexSLOViolationSingleNode', fqdn: 'file-43-stor-gprd.c.gitlab-production.internal' },
+      continue=false,
+    ),
+  ] + [
     /* pager=pagerduty alerts do continue */
     RouteCase(
       matchers={
