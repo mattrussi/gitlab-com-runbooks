@@ -33,6 +33,7 @@
 * [performance-degradation-troubleshooting.md](performance-degradation-troubleshooting.md)
 * [pg-ha.md](pg-ha.md)
 * [pg_collect_query_data.md](pg_collect_query_data.md)
+* [pg_minor_upgrade.md](pg_minor_upgrade.md)
 * [pg_repack.md](pg_repack.md)
 * [pgbadger_report.md](pgbadger_report.md)
 * [postgres-automatic-reindexing.md](postgres-automatic-reindexing.md)

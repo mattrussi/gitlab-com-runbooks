@@ -37,6 +37,7 @@
 * [../patroni/database_peak_analysis.md](../patroni/database_peak_analysis.md)
 * [../patroni/geo-patroni-cluster.md](../patroni/geo-patroni-cluster.md)
 * [../patroni/patroni-management.md](../patroni/patroni-management.md)
+* [../patroni/pg_minor_upgrade.md](../patroni/pg_minor_upgrade.md)
 * [../patroni/postgres-checkup.md](../patroni/postgres-checkup.md)
 * [../patroni/postgres_exporter.md](../patroni/postgres_exporter.md)
 * [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
