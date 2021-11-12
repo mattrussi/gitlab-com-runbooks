@@ -1,2 +1,12 @@
 local serviceDashboard = import 'gitlab-dashboards/service_dashboard.libsonnet';
-serviceDashboard.overview('woodhouse').overviewTrailer()
+
+local environmentSelector = {
+  environment: 'ops',
+  env: 'ops',
+};
+
+serviceDashboard.overview(
+  'woodhouse',
+  environmentSelectorHash=environmentSelector,
+)
+.overviewTrailer()
