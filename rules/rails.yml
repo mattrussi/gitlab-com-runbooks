@@ -3,20 +3,20 @@ groups:
   interval: 1m
   rules:
   - record: verb:rails_requests_started:rate1m
-    expr: sum without (fqdn,instance,node,pod) (rate(rails_requests_started[1m]))
+    expr: sum without (fqdn,instance,node,pod,pod_template_hash) (rate(rails_requests_started[1m]))
   - record: instance:rails_requests_started:rate1m
     expr: sum(rate(rails_requests_started[1m])) without (verb)
   - record: status:rails_requests_completed:rate1m
-    expr: sum without (fqdn,instance,node,pod) (rate(rails_requests_completed[1m]))
+    expr: sum without (fqdn,instance,node,pod,pod_template_hash) (rate(rails_requests_completed[1m]))
   - record: status:rails_requests_completed:rate1m
-    expr: sum without (fqdn,instance,node,pod) (rate(rails_requests_completed_seconds_count[1m]))
+    expr: sum without (fqdn,instance,node,pod,pod_template_hash) (rate(rails_requests_completed_seconds_count[1m]))
   - record: instance:rails_requests_completed:rate1m
     expr: sum(rate(rails_requests_completed[1m])) without (status)
   - record: instance:rails_requests_completed:rate1m
     expr: sum(rate(rails_requests_completed_seconds_count[1m])) without (status)
   - record: job:rails_requests_completed_seconds_bucket:rate1m
     expr: >
-      sum without (fqdn,instance,node,pod) (
+      sum without (fqdn,instance,node,pod,pod_template_hash) (
         rate(rails_requests_completed_seconds_bucket[1m])
       )
   - record: status:rails_requests_completed_seconds:p50
@@ -41,7 +41,7 @@ groups:
   - record: instance:rails_no_repository_for_path:rate1m
     expr: rate(rails_git_no_repository_for_such_path[1m])
   - record: type:rails_no_repository_for_path:rate1m
-    expr: sum without (fqdn,instance,node,pod) (instance:rails_no_repository_for_path:rate1m)
+    expr: sum without (fqdn,instance,node,pod,pod_template_hash) (instance:rails_no_repository_for_path:rate1m)
 
 - name: Rails Redis Cache
   interval: 1m
@@ -123,17 +123,17 @@ groups:
   # Request data, per controller/action.
   - record: controller_action:gitlab_transaction_duration_seconds_count:rate1m
     expr: >
-      sum without (fqdn,instance,node,pod) (
+      sum without (fqdn,instance,node,pod,pod_template_hash) (
         rate(gitlab_transaction_duration_seconds_count[1m])
       )
   - record: controller_action:gitlab_transaction_duration_seconds_sum:rate1m
     expr: >
-      sum without (fqdn,instance,node,pod) (
+      sum without (fqdn,instance,node,pod,pod_template_hash) (
         rate(gitlab_transaction_duration_seconds_sum[1m])
       )
   - record: controller_action:gitlab_transaction_duration_seconds_bucket:rate1m
     expr: >
-      sum without (fqdn,instance,node,pod) (
+      sum without (fqdn,instance,node,pod,pod_template_hash) (
          rate(gitlab_transaction_duration_seconds_bucket[1m])
       )
   - record: controller_action:gitlab_transaction_latency_seconds:rate1m
@@ -176,17 +176,17 @@ groups:
   rules:
   # Request data, per controller/action.
   - record: controller_action:gitlab_transaction_duration_seconds_count:rate5m
-    expr: sum(rate(gitlab_transaction_duration_seconds_count[5m])) without (fqdn,instance,node,pod)
+    expr: sum(rate(gitlab_transaction_duration_seconds_count[5m])) without (fqdn,instance,node,pod,pod_template_hash)
 
   - record: controller_action:gitlab_transaction_duration_seconds_sum:rate5m
-    expr: sum(rate(gitlab_transaction_duration_seconds_sum[5m])) without (fqdn,instance,node,pod)
+    expr: sum(rate(gitlab_transaction_duration_seconds_sum[5m])) without (fqdn,instance,node,pod,pod_template_hash)
 
   - record: controller_action:gitlab_transaction_duration_seconds_bucket:rate5m
-    expr: sum without (fqdn,instance,node,pod) (rate(gitlab_transaction_duration_seconds_bucket{type="api"}[5m]))
+    expr: sum without (fqdn,instance,node,pod,pod_template_hash) (rate(gitlab_transaction_duration_seconds_bucket{type="api"}[5m]))
   - record: controller_action:gitlab_transaction_duration_seconds_bucket:rate5m
-    expr: sum without (fqdn,instance,node,pod) (rate(gitlab_transaction_duration_seconds_bucket{type="git"}[5m]))
+    expr: sum without (fqdn,instance,node,pod,pod_template_hash) (rate(gitlab_transaction_duration_seconds_bucket{type="git"}[5m]))
   - record: controller_action:gitlab_transaction_duration_seconds_bucket:rate5m
-    expr: sum without (fqdn,instance,node,pod) (rate(gitlab_transaction_duration_seconds_bucket{type="web"}[5m]))
+    expr: sum without (fqdn,instance,node,pod,pod_template_hash) (rate(gitlab_transaction_duration_seconds_bucket{type="web"}[5m]))
 
   - record: controller_action:gitlab_transaction_latency_seconds:rate5m
     expr: >
@@ -228,17 +228,17 @@ groups:
   # SQL data, per controller/action.
   - record: controller_action:gitlab_sql_duration_seconds_count:rate1m
     expr: >
-      sum without (fqdn,instance,node,pod) (
+      sum without (fqdn,instance,node,pod,pod_template_hash) (
         rate(gitlab_sql_duration_seconds_count[1m])
       )
   - record: controller_action:gitlab_sql_duration_seconds_sum:rate1m
     expr: >
-      sum without (fqdn,instance,node,pod) (
+      sum without (fqdn,instance,node,pod,pod_template_hash) (
         rate(gitlab_sql_duration_seconds_sum[1m])
       )
   - record: controller_action:gitlab_sql_duration_seconds_bucket:rate1m
     expr: >
-      sum without (fqdn,instance,node,pod) (
+      sum without (fqdn,instance,node,pod,pod_template_hash) (
         rate(gitlab_sql_duration_seconds_bucket[1m])
       )
   - record: controller_action:gitlab_sql_latency_seconds:rate1m
@@ -281,17 +281,17 @@ groups:
   rules:
   # SQL data, per controller/action.
   - record: controller_action:gitlab_sql_duration_seconds_count:rate5m
-    expr: sum(rate(gitlab_sql_duration_seconds_count[5m])) without (fqdn,instance,node,pod)
+    expr: sum(rate(gitlab_sql_duration_seconds_count[5m])) without (fqdn,instance,node,pod,pod_template_hash)
 
   - record: controller_action:gitlab_sql_duration_seconds_sum:rate5m
-    expr: sum(rate(gitlab_sql_duration_seconds_sum[5m])) without (fqdn,instance,node,pod)
+    expr: sum(rate(gitlab_sql_duration_seconds_sum[5m])) without (fqdn,instance,node,pod,pod_template_hash)
 
   - record: controller_action:gitlab_sql_duration_seconds_bucket:rate5m
-    expr: sum(rate(gitlab_sql_duration_seconds_bucket{type="api"}[5m])) without (fqdn,instance,node,pod)
+    expr: sum(rate(gitlab_sql_duration_seconds_bucket{type="api"}[5m])) without (fqdn,instance,node,pod,pod_template_hash)
   - record: controller_action:gitlab_sql_duration_seconds_bucket:rate5m
-    expr: sum(rate(gitlab_sql_duration_seconds_bucket{type="git"}[5m])) without (fqdn,instance,node,pod)
+    expr: sum(rate(gitlab_sql_duration_seconds_bucket{type="git"}[5m])) without (fqdn,instance,node,pod,pod_template_hash)
   - record: controller_action:gitlab_sql_duration_seconds_bucket:rate5m
-    expr: sum(rate(gitlab_sql_duration_seconds_bucket{type="web"}[5m])) without (fqdn,instance,node,pod)
+    expr: sum(rate(gitlab_sql_duration_seconds_bucket{type="web"}[5m])) without (fqdn,instance,node,pod,pod_template_hash)
 
   - record: controller_action:gitlab_sql_latency_seconds:rate5m
     expr: >
