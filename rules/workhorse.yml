@@ -4,7 +4,7 @@ groups:
   rules:
   - record: code_method:gitlab_workhorse_http_requests_total:rate1m
     expr: >
-      sum without (fqdn,instance,node,pod) (
+      sum without (fqdn,instance,node,pod,pod_template_hash) (
         rate(gitlab_workhorse_http_requests_total[1m])
       )
   - record: job:gitlab_workhorse_http_requests_total:rate1m
@@ -94,46 +94,46 @@ groups:
   rules:
   - record: job:gitlab_workhorse_http_time_to_write_header_seconds_count:rate1m
     expr: >
-      sum without (fqdn,instance,node,pod) (
+      sum without (fqdn,instance,node,pod,pod_template_hash) (
         rate(gitlab_workhorse_http_time_to_write_header_seconds_count[1m])
       )
   - record: job:gitlab_workhorse_http_time_to_write_header_seconds_sum:rate1m
     expr: >
-      sum without (fqdn,instance,node,pod) (
+      sum without (fqdn,instance,node,pod,pod_template_hash) (
         rate(gitlab_workhorse_http_time_to_write_header_seconds_sum[1m])
       )
   - record: job:gitlab_workhorse_http_time_to_write_header_seconds_bucket:rate1m
     expr: >
-      sum without (fqdn,instance,node,pod) (
+      sum without (fqdn,instance,node,pod,pod_template_hash) (
         rate(gitlab_workhorse_http_time_to_write_header_seconds_bucket[1m])
       )
   - record: job:gitlab_workhorse_http_request_size_bytes_count:rate1m
     expr: >
-      sum without (fqdn,instance,node,pod) (
+      sum without (fqdn,instance,node,pod,pod_template_hash) (
         rate(gitlab_workhorse_http_request_size_bytes_count[1m])
       )
   - record: job:gitlab_workhorse_http_request_size_bytes_sum:rate1m
     expr: >
-      sum without (fqdn,instance,node,pod) (
+      sum without (fqdn,instance,node,pod,pod_template_hash) (
         rate(gitlab_workhorse_http_request_size_bytes_sum[1m])
       )
   - record: job:gitlab_workhorse_http_request_size_bytes_bucket:rate1m
     expr: >
-      sum without (fqdn,instance,node,pod) (
+      sum without (fqdn,instance,node,pod,pod_template_hash) (
         rate(gitlab_workhorse_http_request_size_bytes_bucket[1m])
       )
   - record: job:gitlab_workhorse_http_request_duration_seconds_count:rate1m
     expr: >
-      sum without (fqdn,instance,node,pod) (
+      sum without (fqdn,instance,node,pod,pod_template_hash) (
         rate(gitlab_workhorse_http_request_duration_seconds_count[1m])
       )
   - record: job:gitlab_workhorse_http_request_duration_seconds_sum:rate1m
     expr: >
-      sum without (fqdn,instance,node,pod) (
+      sum without (fqdn,instance,node,pod,pod_template_hash) (
         rate(gitlab_workhorse_http_request_duration_seconds_sum[1m])
       )
   - record: job:gitlab_workhorse_http_request_duration_seconds_bucket:rate1m
     expr: >
-      sum without (fqdn,instance,node,pod) (
+      sum without (fqdn,instance,node,pod,pod_template_hash) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket[1m])
       )

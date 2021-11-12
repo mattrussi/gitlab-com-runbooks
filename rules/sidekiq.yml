@@ -3,7 +3,7 @@ groups:
   rules:
   - record: queue:sidekiq_jobs_completion:rate1m
     expr: >
-      sum without (fqdn,instance,node,pod) (
+      sum without (fqdn,instance,node,pod,pod_template_hash) (
         rate(sidekiq_jobs_completion_seconds_count[1m])
       )
   - record: sidekiq_jobs_inflight:irate1m
