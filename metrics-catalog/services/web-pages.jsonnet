@@ -17,7 +17,7 @@ metricsCatalog.serviceDefinition({
     errorRatio: 0.05,
   },
   kubeResources: {
-    'gitlab-gitlab-pages': {
+    'web-pages': {
       kind: 'Deployment',
       containers: [
         'gitlab-pages',

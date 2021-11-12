@@ -52,6 +52,15 @@ groups:
   - record: gitlab:kube_node_pool_labels
     labels:
       cluster: gprd-us-east1-d
+      label_type: web-pages
+      service_shard: default
+      service_stage: main
+      service_tier: sv
+      service_type: pages
+    expr: "1"
+  - record: gitlab:kube_node_pool_labels
+    labels:
+      cluster: gprd-us-east1-d
       label_type: websockets
       service_shard: default
       service_stage: main
