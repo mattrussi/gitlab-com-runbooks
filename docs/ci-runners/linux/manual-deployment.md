@@ -161,8 +161,8 @@ inside of your local copy of [`chef-repo`](https://ops.gitlab.net/gitlab-cookboo
 
 ```shell
 # Suspend chef-client on all deployed nodes
-knife ssh -afqdn 'roles:runners-manager' -- 'sudo -i /root/runner_upgrade.sh stop_chef'
-knife ssh -afqdn 'roles:runners-manager' -- systemctl is-active chef-client
+knife ssh -afqdn 'roles:runners-manager-private-blue OR roles:runners-manager-shared-gitlab-org-blue OR roles:runners-manager-shared-blue' -- 'sudo -i /root/runner_upgrade.sh stop_chef'
+knife ssh -afqdn 'roles:runners-manager-private-blue OR roles:runners-manager-shared-gitlab-org-blue OR roles:runners-manager-shared-blue' -- systemctl is-active chef-client
 
 # Update configuration in roles definition and secrets
 git checkout master && git pull
@@ -184,9 +184,9 @@ You can continue **after the changes are uploaded to Chef Server** by the `apply
 
 ```shell
 # Upgrade Runner's version and configuration on nodes
-knife ssh -C1 -afqdn 'roles:runners-manager-shared-gitlab-org' -- sudo /root/runner_upgrade.sh &
-knife ssh -C1 -afqdn 'roles:runners-manager-private' -- sudo /root/runner_upgrade.sh &
-knife ssh -C1 -afqdn 'roles:runners-manager-shared' -- sudo /root/runner_upgrade.sh &
+knife ssh -C1 -afqdn 'roles:runners-manager-shared-gitlab-org-blue' -- sudo /root/runner_upgrade.sh &
+knife ssh -C1 -afqdn 'roles:runners-manager-private-blue' -- sudo /root/runner_upgrade.sh &
+knife ssh -C1 -afqdn 'roles:runners-manager-shared-blue' -- sudo /root/runner_upgrade.sh &
 time wait
 ```
 
