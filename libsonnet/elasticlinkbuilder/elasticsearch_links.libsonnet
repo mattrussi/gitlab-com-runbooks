@@ -264,6 +264,15 @@ local indexCatalog = {
     latencyFieldUnitMultiplier: 1000000000,  // nanoseconds, ah yeah
   },
 
+  search: indexDefaults {
+    kibanaEndpoint: 'https://00a4ef3362214c44a044feaa539b4686.us-central1.gcp.cloud.es.io:9243/app/kibana',
+    timestamp: '@timestamp',
+    indexPattern: '3fdde960-1f73-11eb-9ead-c594f004ece2',
+    defaultFilters: [matchFilter('service.name', 'prod-gitlab-com indexing-20200330')],
+    defaultColumns: ['elasticsearch.component', 'event.dataset', 'message'],
+    requestsNotSupported: true,
+  },
+
   shell: indexDefaults {
     timestamp: 'json.time',
     indexPattern: 'AWORyp9K1NBBQZg_dXA9',
@@ -739,6 +748,10 @@ local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latency
     else
       field;
     buildElasticLinePercentileVizURL(index, filters, luceneQueries, fieldWithDefault, splitSeries=splitSeries),
+
+  // Returns true iff the named index supports request graphs (some do not have a concept of 'requests')
+  indexSupportsRequestGraphs(index)::
+    !std.objectHas(indexCatalog[index], 'requestsNotSupported'),
 
   // Returns true iff the named index supports failure queries
   indexSupportsFailureQueries(index)::

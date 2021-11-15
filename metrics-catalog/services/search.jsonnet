@@ -1,5 +1,6 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local derivMetric = metricsCatalog.derivMetric;
+local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'search',
@@ -30,6 +31,10 @@ metricsCatalog.serviceDefinition({
       ),
 
       significantLabels: ['name'],
+
+      toolingLinks: [
+        toolingLinks.kibana(title='Elasticsearch', index='search', includeMatchersForPrometheusSelector=false),
+      ],
     },
 
     elasticsearch_indexing: {
@@ -46,6 +51,10 @@ metricsCatalog.serviceDefinition({
       ),
 
       significantLabels: ['name'],
+
+      toolingLinks: [
+        toolingLinks.kibana(title='Elasticsearch', index='search', includeMatchersForPrometheusSelector=false),
+      ],
     },
   },
 })
