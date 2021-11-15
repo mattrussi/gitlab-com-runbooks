@@ -2,6 +2,7 @@ local apdexPanel = import './apdex-panel.libsonnet';
 local errorRatioPanel = import './error-ratio-panel.libsonnet';
 local operationRatePanel = import './operation-rate-panel.libsonnet';
 local statusDescription = import './status_description.libsonnet';
+local errorBudget = import 'stage-groups/error_budget.libsonnet';
 
 local selectorToGrafanaURLParams(selectorHash) =
   local pairs = std.foldl(
@@ -31,6 +32,7 @@ local row(
   expectMultipleSeries=false,
   compact=false,
       ) =
+  local fixedThreshold = if serviceType == null then errorBudget.slaTarget else null;
   local typeSelector = if serviceType == null then {} else { type: serviceType };
   local selectorHashWithExtras = selectorHash + typeSelector;
   local formatConfig = {
@@ -55,6 +57,7 @@ local row(
             description=apdexDescription,
             expectMultipleSeries=expectMultipleSeries,
             compact=compact,
+            fixedThreshold=fixedThreshold,
           )
           .addDataLink({
             url: '/d/alerts-%(aggregationId)s_slo_apdex?${__url_time_range}&${__all_variables}&%(grafanaURLPairs)s' % formatConfig {},
@@ -87,6 +90,7 @@ local row(
             legendFormat='%(legendFormatPrefix)s error ratio' % formatConfig,
             expectMultipleSeries=expectMultipleSeries,
             compact=compact,
+            fixedThreshold=fixedThreshold,
           )
           .addDataLink({
             url: '/d/alerts-%(aggregationId)s_slo_error?${__url_time_range}&${__all_variables}&%(grafanaURLPairs)s' % formatConfig,

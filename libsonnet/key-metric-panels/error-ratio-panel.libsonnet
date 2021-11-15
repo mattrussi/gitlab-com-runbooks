@@ -16,6 +16,7 @@ local genericErrorPanel(
   sort='decreasing',
   legend_show=null,
   selectorHash,
+  fixedThreshold=null,
       ) =
   basic.graphPanel(
     title,
@@ -36,14 +37,14 @@ local genericErrorPanel(
   )
   .addTarget(  // Maximum error rate SLO for gitlab_service_errors:ratio metric
     promQuery.target(
-      sliPromQL.errorRate.serviceErrorRateDegradationSLOQuery(selectorHash),
+      sliPromQL.errorRate.serviceErrorRateDegradationSLOQuery(selectorHash, fixedThreshold),
       interval='5m',
       legendFormat='6h Degradation SLO (5% of monthly error budget)',
     ),
   )
   .addTarget(  // Outage level SLO
     promQuery.target(
-      sliPromQL.errorRate.serviceErrorRateOutageSLOQuery(selectorHash),
+      sliPromQL.errorRate.serviceErrorRateOutageSLOQuery(selectorHash, fixedThreshold),
       interval='5m',
       legendFormat='1h Outage SLO (2% of monthly error budget)',
     ),
@@ -69,7 +70,8 @@ local errorRatioPanel(
   legendFormat=null,
   compact=false,
   includeLastWeek=true,
-  expectMultipleSeries=false
+  expectMultipleSeries=false,
+  fixedThreshold=null,
       ) =
   local selectorHashWithExtras = selectorHash + aggregationSet.selector;
 
@@ -81,7 +83,8 @@ local errorRatioPanel(
       primaryQueryExpr=sliPromQL.errorRatioQuery(aggregationSet, null, selectorHashWithExtras, '$__interval', worstCase=true),
       legendFormat=legendFormat,
       linewidth=if expectMultipleSeries then 1 else 2,
-      selectorHash=selectorHashWithExtras
+      selectorHash=selectorHashWithExtras,
+      fixedThreshold=fixedThreshold,
     );
 
   local panelWithAverage = if !expectMultipleSeries then
@@ -105,7 +108,7 @@ local errorRatioPanel(
           selectorHashWithExtras,
           null,
           offset='1w',
-          clampToExpression=sliPromQL.errorRate.serviceErrorRateOutageSLOQuery(selectorHashWithExtras)
+          clampToExpression=sliPromQL.errorRate.serviceErrorRateOutageSLOQuery(selectorHashWithExtras, fixedThreshold)
         ),
         legendFormat='last week',
       )
