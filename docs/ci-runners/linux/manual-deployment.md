@@ -56,7 +56,7 @@ Or it can be done for whatever other reason, for example a rollback after introd
 
 1. **Suspend `chef-client` process on managers being updated**
 
-   For example, to shutdown `chef-client` on `private-runners-manager-X.gitlab.com`, you can execute:
+   For example, to shutdown `chef-client` on `runners-manager-private-blue-X`, you can execute:
 
     ```shell
     knife ssh -afqdn 'roles:runners-manager-private' -- 'sudo -i /root/runner_upgrade.sh stop_chef'
