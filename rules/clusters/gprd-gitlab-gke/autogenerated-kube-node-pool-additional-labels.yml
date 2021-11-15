@@ -70,6 +70,15 @@ groups:
   - record: gitlab:kube_node_pool_labels
     labels:
       cluster: gprd-gitlab-gke
+      label_type: pages
+      service_shard: default
+      service_stage: cny
+      service_tier: sv
+      service_type: pages
+    expr: "1"
+  - record: gitlab:kube_node_pool_labels
+    labels:
+      cluster: gprd-gitlab-gke
       label_type: registry
       service_shard: default
       service_stage: main
@@ -102,15 +111,6 @@ groups:
       service_stage: main
       service_tier: sv
       service_type: sidekiq
-    expr: "1"
-  - record: gitlab:kube_node_pool_labels
-    labels:
-      cluster: gprd-gitlab-gke
-      label_type: web-pages
-      service_shard: default
-      service_stage: cny
-      service_tier: sv
-      service_type: pages
     expr: "1"
   - record: gitlab:kube_node_pool_labels
     labels:
