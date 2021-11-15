@@ -49,6 +49,8 @@ runners-manager.json
 
 ## Deployment Example
 
+**WARNING: NEVER DEPLOY THE WHOLE RUNNER FLEET AT ONCE, ONLY DEPLOY EITHER THE BLUE OR THE GREEN**
+
 We will give an example of how to deploy from `v14.1.0-rc1` to `v14.1.0` on
 the `private` shard. This isn't meant to be a checklist because it will
 change very friendly so sticking to an example might be easier to follow
