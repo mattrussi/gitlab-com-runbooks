@@ -14,6 +14,7 @@ local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libson
     includeMatchersForPrometheusSelector=true
   )::
     function(options)
+      local supportsRequests = elasticsearchLinks.indexSupportsRequestGraphs(index);
       local supportsFailures = elasticsearchLinks.indexSupportsFailureQueries(index);
       local supportsLatencies = elasticsearchLinks.indexSupportsLatencyQueries(index);
 
@@ -85,14 +86,18 @@ local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libson
           []
       )
       +
-      [
-        toolingLinkDefinition({
-          title: '📈 Kibana: ' + title + ' requests',
-          url: elasticsearchLinks.buildElasticLineCountVizURL(index, filters),
-          type:: 'chart',
-        }),
-
-      ]
+      (
+        if supportsRequests then
+          [
+            toolingLinkDefinition({
+              title: '📈 Kibana: ' + title + ' requests',
+              url: elasticsearchLinks.buildElasticLineCountVizURL(index, filters),
+              type:: 'chart',
+            }),
+          ]
+        else
+          []
+      )
       +
       (
         if supportsFailures then
