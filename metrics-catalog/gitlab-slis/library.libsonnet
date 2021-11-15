@@ -14,6 +14,22 @@ local list = [
       Read more about this in the [documentation](https://docs.gitlab.com/ee/development/application_slis/rails_request_apdex.html).
     |||,
   }),
+  sliDefinition.new({
+    name: 'graphql_query_apdex',
+    significantLabels: ['endpoint_id', 'feature_category', 'query_urgency'],
+    kind: sliDefinition.apdexKind,
+    description: |||
+      The number of GraphQL queries meeting their duration target based on the urgency
+      of the endpoint. By default, a query should take no more than 1s. But
+      this can be adjusted per query.
+
+      Mutliple queries could be batched inside a single request.
+
+      This SLI is currently not used in the service catalog, `feature_category` and
+      `query_urgency` is being worked on in [this epic](https://gitlab.com/groups/gitlab-org/-/epics/5841)
+    |||,
+
+  }),
 ];
 
 local definitionsByName = std.foldl(
