@@ -1,4 +1,6 @@
-# Linux CI/CD Runners fleet deployments
+# Linux CI/CD Runners fleet deployments when Ops/Deployer is down
+
+Please refer to [Blue/Green deployment](./blue-green-deployment.md) if `ops` and `deployer` are available.
 
 ## Recent Deployments
 
@@ -54,16 +56,16 @@ Or it can be done for whatever other reason, for example a rollback after introd
 
 1. **Suspend `chef-client` process on managers being updated**
 
-   For example, to shutdown `chef-client` on `private-runners-manager-X.gitlab.com`, you can execute:
+   For example, to shutdown chef-client on all `runners-manager-private-blue-*` runner managers, you can execute:
 
     ```shell
-    knife ssh -afqdn 'roles:gitlab-runner-prm' -- 'sudo -i /root/runner_upgrade.sh stop_chef'
+    knife ssh -afqdn 'roles:runners-manager-private-blue' -- 'sudo -i /root/runner_upgrade.sh stop_chef'
     ```
 
    To be sure that `chef-cilent` process is terminated you can execute:
 
     ```shell
-    knife ssh -afqdn 'roles:gitlab-runner-prm' -- systemctl is-active chef-client
+    knife ssh -afqdn 'roles:runners-manager-private-blue' -- systemctl is-active chef-client
     ```
 
    Running `/root/runner_upgrade.sh stop_chef` will stop the service and any altering that monitors
@@ -75,10 +77,10 @@ Or it can be done for whatever other reason, for example a rollback after introd
    In `chef-repo` directory execute:
 
     ```shell
-    $EDITOR roles/gitlab-runner-prm.json
+    $EDITOR roles/runners-manager-private-blue.json
     ```
 
-   where `gitlab-runner-prm` is a role used by nodes that you are updating.
+   where `runners-manager-private-blue` is a role used by nodes that you are updating.
 
    In attributes list look for `cookbook-gitlab-runner:gitlab-runner:version` and change it to a version that you want
    to update. It should look like:
@@ -98,17 +100,13 @@ Or it can be done for whatever other reason, for example a rollback after introd
    If you want to install a Stable version of the Runner, you should set the `repository` value to
    `gitlab-runner`.
 
-   As the default version is set in the base role (`gitlab-runner-base`), in the specific roles you should look inside
-   of the `override_attributes` section. The exception is `org-ci-base-runner`, as it's not part of the main roles
-   structure.
-
 1. Commit and push changes to the remote repository:
 
     ```shell
     git checkout master && \
         git pull && \
         git checkout -b origin update-prmx-to-13-9-0 && \
-        git add roles/gitlab-runner-prm.json && \
+        git add roles/runners-manager-private-blue.json && \
         git commit -m "Update prmX runners to 13.9.0" && \
         git push -u origin update-prmx-to-13-9-0 -o merge_request.create -o merge_request.label="deploy" -o merge_request.label="group::runner"
     ```
@@ -124,7 +122,7 @@ Or it can be done for whatever other reason, for example a rollback after introd
    To upgrade chosen Runners manager, execute the command:
 
     ```shell
-    knife ssh -C1 -afqdn 'roles:gitlab-runner-prm' -- sudo /root/runner_upgrade.sh
+    knife ssh -C1 -afqdn 'roles:runners-manager-private-blue' -- sudo /root/runner_upgrade.sh
     ```
 
    This will send a stop signal to the Runner. The process will wait until all handled jobs are finished,
@@ -147,7 +145,7 @@ Or it can be done for whatever other reason, for example a rollback after introd
    If you want to check which version of Runner is installed, execute the following command:
 
     ```shell
-    knife ssh -afqdn 'roles:gitlab-runner-prm' -- gitlab-runner --version
+    knife ssh -afqdn 'roles:runners-manager-private-blue' -- gitlab-runner --version
     ```
 
    You can also check the [uptime](https://dashboards.gitlab.net/d/000000159/ci?orgId=1&viewPanel=18)
@@ -156,24 +154,21 @@ Or it can be done for whatever other reason, for example a rollback after introd
 
 ### Upgrade of whole GitLab.com Runners fleet at once
 
-We're in the process of refactoring configuration of GitLab.com's Runners. Currently, if you want to update
-the version on all Runners, it's easiest to edit `gitlab-runner-base` or  `org-ci-base-runner` role. If you want
-to update only selected Runner, then you should edit a related role, and set chosen version with `override_attributes`.
+**WARNING: NEVER DEPLOY THE WHOLE RUNNER FLEET AT ONCE, ONLY DEPLOY EITHER THE BLUE OR THE GREEN**
 
 If you want to upgrade all Runners of GitLab.com fleet at the same time, then you can use the following script, working
 inside of your local copy of [`chef-repo`](https://ops.gitlab.net/gitlab-cookbooks/chef-repo):
 
 ```shell
 # Suspend chef-client on all deployed nodes
-knife ssh -afqdn 'roles:gitlab-runner-base OR roles:org-ci-base-runner' -- 'sudo -i /root/runner_upgrade.sh stop_chef'
-knife ssh -afqdn 'roles:gitlab-runner-base OR roles:org-ci-base-runner' -- systemctl is-active chef-client
+knife ssh -afqdn 'roles:runners-manager-private-blue OR roles:runners-manager-shared-gitlab-org-blue OR roles:runners-manager-shared-blue' -- 'sudo -i /root/runner_upgrade.sh stop_chef'
+knife ssh -afqdn 'roles:runners-manager-private-blue OR roles:runners-manager-shared-gitlab-org-blue OR roles:runners-manager-shared-blue' -- systemctl is-active chef-client
 
 # Update configuration in roles definition and secrets
 git checkout master && git pull
 git checkout -b update-runners-fleet
-$EDITOR roles/gitlab-runner-base.json
-$EDITOR roles/org-ci-base-runner.json
-git add roles/gitlab-runner-base.json roles/org-ci-base-runner.json && git commit -m "Update runners fleet to [X.Y.Z-...]"
+$EDITOR roles/runners-manager.json
+git add roles/runners-manager.json && git commit -m "Change runners fleet configuration setting"
 git push -u origin update-runners-fleet -o merge_request.create -o merge_request.label="deploy" -o merge_request.label="group::runner"
 ```
 
@@ -189,10 +184,9 @@ You can continue **after the changes are uploaded to Chef Server** by the `apply
 
 ```shell
 # Upgrade Runner's version and configuration on nodes
-knife ssh -C1 -afqdn 'roles:roles:org-ci-base-runner' -- sudo /root/runner_upgrade.sh &
-knife ssh -C1 -afqdn 'roles:gitlab-runner-gsrm' -- sudo /root/runner_upgrade.sh &
-knife ssh -C1 -afqdn 'roles:gitlab-runner-prm' -- sudo /root/runner_upgrade.sh &
-knife ssh -C1 -afqdn 'roles:gitlab-runner-srm' -- sudo /root/runner_upgrade.sh &
+knife ssh -C1 -afqdn 'roles:runners-manager-shared-gitlab-org-blue' -- sudo /root/runner_upgrade.sh &
+knife ssh -C1 -afqdn 'roles:runners-manager-private-blue' -- sudo /root/runner_upgrade.sh &
+knife ssh -C1 -afqdn 'roles:runners-manager-shared-blue' -- sudo /root/runner_upgrade.sh &
 time wait
 ```
 
