@@ -1,4 +1,4 @@
-# Summary
+# When GitLab.com is down
 
 When GitLab.com is down it may not be possible to open incidents, make configuration changes, or deploy changes.
 

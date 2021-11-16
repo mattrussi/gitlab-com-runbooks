@@ -15,7 +15,7 @@
 
 ## Troubleshooting Pointers
 
-* [cloud-nat.md](cloud-nat.md)
+* [Cloud NAT Troubleshooting](cloud-nat.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->

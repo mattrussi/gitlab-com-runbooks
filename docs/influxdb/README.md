@@ -14,8 +14,8 @@
 
 ## Troubleshooting Pointers
 
-* [manage-influxdb.md](manage-influxdb.md)
-* [../monitoring/filesystem_alerts.md](../monitoring/filesystem_alerts.md)
+* [InfluxDB](manage-influxdb.md)
+* [Filesystem errors are reported in LOG files](../monitoring/filesystem_alerts.md)
 <!-- END_MARKER -->
 
 

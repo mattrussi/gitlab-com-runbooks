@@ -15,9 +15,9 @@
 
 ## Troubleshooting Pointers
 
-* [../onboarding/gitlab.com_on_k8s.md](../onboarding/gitlab.com_on_k8s.md)
-* [../onboarding/kibana-diagnosis.md](../onboarding/kibana-diagnosis.md)
-* [../sidekiq/sidekiq-survival-guide-for-sres.md](../sidekiq/sidekiq-survival-guide-for-sres.md)
+* [Gitlab.com on Kubernetes](../onboarding/gitlab.com_on_k8s.md)
+* [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
+* [A survival guide for SREs to working with Sidekiq at GitLab](../sidekiq/sidekiq-survival-guide-for-sres.md)
 <!-- END_MARKER -->
 
 ## Operations

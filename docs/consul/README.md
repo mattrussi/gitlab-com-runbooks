@@ -16,19 +16,19 @@
 
 ## Troubleshooting Pointers
 
-* [interaction.md](interaction.md)
-* [../onboarding/kibana-diagnosis.md](../onboarding/kibana-diagnosis.md)
-* [../patroni/geo-patroni-cluster.md](../patroni/geo-patroni-cluster.md)
-* [../patroni/log_analysis.md](../patroni/log_analysis.md)
-* [../patroni/patroni-management.md](../patroni/patroni-management.md)
-* [../patroni/pg-ha.md](../patroni/pg-ha.md)
+* [Interacting with Consul](interaction.md)
+* [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
+* [Geo Patroni Cluster Management](../patroni/geo-patroni-cluster.md)
+* [Log analysis on PostgreSQL, Pgbouncer, Patroni and consul Runbook](../patroni/log_analysis.md)
+* [Patroni](../patroni/patroni-management.md)
+* [PostgreSQL HA](../patroni/pg-ha.md)
 * [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
-* [../patroni/provisioning_bench_env.md](../patroni/provisioning_bench_env.md)
-* [../patroni/scale-down-patroni.md](../patroni/scale-down-patroni.md)
-* [../patroni/scale-up-patroni.md](../patroni/scale-up-patroni.md)
+* [How to provision the benchmark environment](../patroni/provisioning_bench_env.md)
+* [Patroni](../patroni/scale-down-patroni.md)
+* [Patroni](../patroni/scale-up-patroni.md)
 * [../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md](../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md)
-* [../pgbouncer/pgbouncer-connections.md](../pgbouncer/pgbouncer-connections.md)
-* [../pgbouncer/pgbouncer-remove-instance.md](../pgbouncer/pgbouncer-remove-instance.md)
+* [PgBouncer connection management and troubleshooting](../pgbouncer/pgbouncer-connections.md)
+* [Removing a PgBouncer instance](../pgbouncer/pgbouncer-remove-instance.md)
 * [../pgbouncer/service-pgbouncer.md](../pgbouncer/service-pgbouncer.md)
 <!-- END_MARKER -->
 

@@ -15,8 +15,8 @@
 
 ## Troubleshooting Pointers
 
-* [../kube/kubernetes.md](../kube/kubernetes.md)
-* [readiness.md](readiness.md)
+* [Kubernetes](../kube/kubernetes.md)
+* [PlantUML](readiness.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->

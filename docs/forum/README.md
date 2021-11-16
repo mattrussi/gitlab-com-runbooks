@@ -15,7 +15,7 @@
 
 ## Troubleshooting Pointers
 
-* [discourse-forum.md](discourse-forum.md)
+* [Management for forum.gitlab.com](discourse-forum.md)
 <!-- END_MARKER -->
 
 
