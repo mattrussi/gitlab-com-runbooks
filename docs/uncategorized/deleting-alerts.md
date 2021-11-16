@@ -33,7 +33,7 @@ When a useless alert comes in, and you still have the mental capacity and energy
       - [Loosen frontend sshService errorRatio SLO from 0.9999 to 0.999](https://gitlab.com/gitlab-com/runbooks/-/merge_requests/3997)
 1. Is the alert legit?
     - If the alert points towards an actual user- and SLO impacting problem in a production environment that needs immediate attention, then it's probably legit.
-    - **Action:** 🚒 Actually investigate the alert, focus on mitigation first, then drive improvements via "corrective actions" and [the infradev process](https://about.gitlab.com/handbook/engineering/workflow/#a-guide-to-creating-effective-infradev-issues).
+    - **Action:** 🚒 Actually investigate the alert, focus on mitigation first, then drive improvements via capacity planning, rate limiting, "corrective actions", and [the infradev process](https://about.gitlab.com/handbook/engineering/workflow/#a-guide-to-creating-effective-infradev-issues).
 
 ## Resources
 
