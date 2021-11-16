@@ -58,7 +58,6 @@ function(
         significantLabels: ['fqdn', 'error'],
 
         toolingLinks: [
-          toolingLinks.kibana(title='pgbouncer', index='postgres_pgbouncer', type='pgbouncer', tag='postgres.pgbouncer'),
         ],
       },
     },
