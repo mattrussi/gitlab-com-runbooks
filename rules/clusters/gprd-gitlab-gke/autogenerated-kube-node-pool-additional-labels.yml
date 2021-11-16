@@ -74,7 +74,7 @@ groups:
       service_shard: default
       service_stage: cny
       service_tier: sv
-      service_type: pages
+      service_type: web-pages
     expr: "1"
   - record: gitlab:kube_node_pool_labels
     labels:
