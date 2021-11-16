@@ -34,15 +34,6 @@ groups:
   - record: gitlab:kube_node_pool_labels
     labels:
       cluster: gprd-us-east1-b
-      label_type: pages
-      service_shard: default
-      service_stage: main
-      service_tier: sv
-      service_type: web-pages
-    expr: "1"
-  - record: gitlab:kube_node_pool_labels
-    labels:
-      cluster: gprd-us-east1-b
       label_type: registry
       service_shard: default
       service_stage: main
@@ -57,6 +48,15 @@ groups:
       service_stage: main
       service_tier: sv
       service_type: git
+    expr: "1"
+  - record: gitlab:kube_node_pool_labels
+    labels:
+      cluster: gprd-us-east1-b
+      label_type: web-pages
+      service_shard: default
+      service_stage: main
+      service_tier: sv
+      service_type: web-pages
     expr: "1"
   - record: gitlab:kube_node_pool_labels
     labels:
