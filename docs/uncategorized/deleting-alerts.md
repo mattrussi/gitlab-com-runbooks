@@ -34,6 +34,7 @@ When a useless alert comes in, and you still have the mental capacity and energy
 1. Is the alert legit?
     - If the alert points towards an actual user- and SLO impacting problem in a production environment that needs immediate attention, then it's probably legit.
     - **Action:** 🚒 Actually investigate the alert, focus on mitigation first, then drive improvements via "corrective actions" and [the infradev process](https://about.gitlab.com/handbook/engineering/workflow/#a-guide-to-creating-effective-infradev-issues).
+    - If there's no actionable mitigation available to SREs nor any fix in the pipeline, you may consider redirecting the alert receiver to the "blackhole" router (example: [Blackhole Gitaly SLO alerts for file-43](https://gitlab.com/gitlab-com/runbooks/-/merge_requests/4100)). This differs from a silence in that we can still get metrics the alert triggering, but doesn't pollute our incident workflow, to give breathing room to the oncall while the underlying issue is addressed.
 
 ## Resources
 
