@@ -95,7 +95,7 @@ local additionalLabelsForNodePoolTypes = {
           service_stage: 'main',
           service_shard: 'catchall',
         },
-        pages: {
+        'web-pages': {
           service_type: 'web-pages',
           service_tier: 'sv',
           service_stage: 'cny',
@@ -143,7 +143,7 @@ local additionalLabelsForNodePoolTypes = {
           service_stage: 'main',
           service_shard: 'default',
         },
-        pages: {
+        'web-pages': {
           service_type: 'web-pages',
           service_tier: 'sv',
           service_stage: 'main',
@@ -211,7 +211,7 @@ local additionalLabelsForNodePoolTypes = {
           service_stage: 'main',
           service_shard: 'catchall',
         },
-        pages: {
+        'web-pages': {
           service_type: 'web-pages',
           service_tier: 'sv',
           service_stage: 'cny',
@@ -259,7 +259,7 @@ local additionalLabelsForNodePoolTypes = {
           service_stage: 'main',
           service_shard: 'default',
         },
-        pages: {
+        'web-pages': {
           service_type: 'web-pages',
           service_tier: 'sv',
           service_stage: 'cny',
