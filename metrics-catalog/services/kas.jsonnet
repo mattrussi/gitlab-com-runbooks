@@ -35,7 +35,6 @@ metricsCatalog.serviceDefinition({
     grpc_requests: {
       userImpacting: true,
       featureCategory: 'kubernetes_management',
-      team: 'sre_coreinfra',
       local baseSelector = {
         job: 'gitlab-kas',
       },

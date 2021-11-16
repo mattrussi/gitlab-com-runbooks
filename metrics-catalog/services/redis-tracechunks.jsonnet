@@ -21,7 +21,6 @@ metricsCatalog.serviceDefinition({
     rails_redis_client: {
       userImpacting: true,
       featureCategory: 'continuous_integration',
-      team: 'sre_observability',
       description: |||
         Aggregation of all Redis operations issued to the Redis Tracechunks service from the Rails codebase.
 
@@ -51,7 +50,6 @@ metricsCatalog.serviceDefinition({
     primary_server: {
       userImpacting: true,
       featureCategory: 'continuous_integration',
-      team: 'sre_observability',
       description: |||
         Operations on the Redis primary for GitLab's Redis Tracechunks instance.
       |||,
@@ -71,7 +69,6 @@ metricsCatalog.serviceDefinition({
     secondary_servers: {
       userImpacting: true,  // userImpacting for data redundancy reasons
       featureCategory: 'continuous_integration',
-      team: 'sre_observability',
       description: |||
         Operations on the Redis secondaries for GitLab's Redis Tracechunks instance.
       |||,

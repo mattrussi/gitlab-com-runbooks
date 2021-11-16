@@ -22,7 +22,6 @@ metricsCatalog.serviceDefinition({
     proxy: {
       userImpacting: true,
       featureCategory: 'gitaly',
-      team: 'sre_datastores',
       description: |||
         All Gitaly operations pass through the Praefect proxy on the way to a Gitaly instance. This SLI monitors
         those operations in aggregate.
@@ -60,7 +59,6 @@ metricsCatalog.serviceDefinition({
     replicator_queue: {
       userImpacting: false,
       featureCategory: 'gitaly',
-      team: 'sre_datastores',
       description: |||
         Praefect replication operations. Latency represents the queuing delay before replication is carried out.
       |||,
@@ -83,7 +81,6 @@ metricsCatalog.serviceDefinition({
     praefect_cloudsql: {
       userImpacting: true,
       featureCategory: 'gitaly',
-      team: 'sre_datastores',
       description: |||
         Praefect uses a GCP CloudSQL instance. This SLI represents SQL transactions to that service.
       |||,

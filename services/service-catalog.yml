@@ -16,7 +16,6 @@ services:
     - gitaly
     - manage
     - plan
-  infra_owner: sre_coreinfra
   label: Service:API
   business:
     requirement: |
@@ -99,7 +98,6 @@ services:
 - name: blackbox
   tier: inf
   friendly_name: Blackbox Exporters
-  infra_owner: sre_observability
   label: Service:Blackbox
   business:
     requirement: |
@@ -162,7 +160,6 @@ services:
 - name: camoproxy
   tier: sv
   friendly_name: Camoproxy
-  infra_owner: sre_coreinfra
   label: Service:Camoproxy
   business:
     requirement:
@@ -221,7 +218,6 @@ services:
 - name: console
   tier: sv
   friendly_name: Console Access
-  infra_owner: sre_coreinfra
   label: Service:Console
   business:
     requirement: |
@@ -299,7 +295,6 @@ services:
 - name: consul
   tier: inf
   friendly_name: Consul
-  infra_owner: sre_coreinfra
   label: Service:Consul
   business:
     requirement: |
@@ -370,7 +365,6 @@ services:
   friendly_name: contributors.gitlab.com
   teams:
     - verify # The service is maintained by Matija Čupić who is part of the Verify team
-  infra_owner: infrastructure-businessops
   label: Service:Contributors
   business:
     requirement: It allows giving credits to GitLab CE contributors.
@@ -430,7 +424,6 @@ services:
   friendly_name: forum.gitlab.com
   teams:
     - support
-  infra_owner: infrastructure-businessops
   label: forum.gitlab.com
   business:
     requirement: |
@@ -491,7 +484,6 @@ services:
 - name: kube
   tier: inf
   friendly_name: Kubernetes
-  infra_owner: delivery
   label: Service:Kubernetes
   technical:
     project:
@@ -529,7 +521,6 @@ services:
 - name: logging
   tier: inf
   friendly_name: Logging
-  infra_owner: sre_observability
   label: Service:Logging
   business:
     requirement: We are required to keep logs, both on legal terms as well as for debugging production issues
@@ -624,7 +615,6 @@ services:
   tier: sv
   teams:
     - distribution
-  infra_owner: sre_coreinfra
   label: Service:NGINX
   business:
     requirement: |
@@ -684,7 +674,6 @@ services:
 - name: search
   tier: inf
   friendly_name: Global Search
-  infra_owner: sre_observability
   label: Service:Elasticsearch
   business:
     requirement: Repository index and search with Elasticsearch.
@@ -747,7 +736,6 @@ services:
     - gitaly
     - manage
     - plan
-  infra_owner: sre_coreinfra
   label: Service:Web
   business:
     requirement: |
@@ -820,7 +808,6 @@ services:
 - name: frontend
   tier: lb
   friendly_name: HAProxy Frontend
-  infra_owner: sre_coreinfra
   label: Service:HAProxy
   business:
     requirement: |
@@ -888,7 +875,6 @@ services:
 - name: google-cloud-storage
   tier: inf
   friendly_name: Google Cloud Storage
-  infra_owner: sre_reliability
   label: Service:GoogleCloudStorage
   infrastructure:
     provider: gcp
@@ -907,7 +893,6 @@ services:
     - gitaly
     - manage
     - plan
-  infra_owner: sre_datastores
   label: Service:Git
   business:
     requirement: |
@@ -992,7 +977,6 @@ services:
   friendly_name: Gitaly
   teams:
     - gitaly
-  infra_owner: sre_datastores
   label: Service:Gitaly
   business:
     requirement: |
@@ -1078,7 +1062,6 @@ services:
 - name: influxdb
   tier: inf
   friendly_name: InfluxDB (deprecated)
-  infra_owner: sre_observability
   label: Service:Influxdb
   business:
     requirement: |
@@ -1146,7 +1129,6 @@ services:
   friendly_name: Praefect
   teams:
     - gitaly
-  infra_owner: reliability-engineering-dev--ops
   label: Service:Praefect
   business:
     requirement: |
@@ -1213,7 +1195,6 @@ services:
   friendly_name: Pipeline Validation Service
   teams:
     - trust_and_safety
-  infra_owner: sre_coreinfra
   label: Service:PVS
   business:
     requirement: |
@@ -1273,7 +1254,6 @@ services:
     - gitaly
     - manage
     - plan
-  infra_owner: sre_coreinfra
   label: Service:Mailroom
   business:
     requirement: It is needed to allow responding to issues/MR through email replies.
@@ -1333,7 +1313,6 @@ services:
   friendly_name: HAProxy Pages Frontend
   teams:
     - release-management
-  infra_owner: sre_coreinfra
   label: Service:Pages
   business:
     requirement: |
@@ -1390,7 +1369,6 @@ services:
 - name: web-pages
   tier: sv
   friendly_name: GitLab Pages
-  infra_owner: sre_coreinfra
   label: Service:Pages
   business:
     requirement: |
@@ -1460,7 +1438,6 @@ services:
 - name: pgbouncer
   tier: db
   friendly_name: PGBouncer Primary Database Pool
-  infra_owner: sre_datastores
   label: Service:pgbouncer
   business:
     requirement:  We use PgBouncer as the connection pooler for PostgreSQL
@@ -1530,7 +1507,6 @@ services:
 - name: pgbouncer-registry
   tier: db
   friendly_name: Registry PGBouncer Primary Database Pool
-  infra_owner: sre_datastores
   label: Service:pgbouncer
   business:
     requirement:  We use PgBouncer as the connection pooler for PostgreSQL
@@ -1602,7 +1578,6 @@ services:
 - name: pgbouncer-ci
   tier: db
   friendly_name: CI PGBouncer Primary Database Pool
-  infra_owner: sre_datastores
   label: Service:pgbouncer
   business:
     requirement:  We use PgBouncer as the connection pooler for PostgreSQL
@@ -1674,7 +1649,6 @@ services:
 - name: patroni
   tier: db
   friendly_name: Postgres (Patroni)
-  infra_owner: sre_datastores
   label: Service:Postgres
   business:
     requirement:  We use Postgres as our backend database.
@@ -1761,7 +1735,6 @@ services:
 - name: patroni-registry
   tier: db
   friendly_name: Registry Postgres (Patroni)
-  infra_owner: sre_datastores
   label: Service:Postgres
   business:
     requirement:  We use Postgres as our backend database.
@@ -1848,7 +1821,6 @@ services:
 - name: patroni-ci
   tier: db
   friendly_name: CI Postgres (Patroni)
-  infra_owner: sre_datastores
   label: Service:Postgres
   business:
     requirement:  We use Postgres as our backend database.
@@ -1935,7 +1907,6 @@ services:
 - name: plantuml
   tier: sv
   friendly_name: PlantUML
-  infra_owner: sre_coreinfra
   label: Service:PlantUML
   business:
     requirement: PlantUML is used to render UML diagrams in the GitLab application
@@ -1991,7 +1962,6 @@ services:
 - name: postgres-archive
   tier: db
   friendly_name: Postgres DR Archive
-  infra_owner: sre_datastores
   label: Service:PostgresArchive
   business:
     requirement: |
@@ -2078,7 +2048,6 @@ services:
 - name: postgres-dr-delayed
   tier: db
   friendly_name: Postgres DR Delayed Replica
-  infra_owner: sre_datastores
   label: Service:PostgresDelayed
   business:
     requirement: |
@@ -2159,7 +2128,6 @@ services:
 - name: psql-timings
   tier: inf
   friendly_name: PSQL Timings
-  infra_owner: sre_observability
   label: Service:PsqlTimings
   business:
     requirement: |
@@ -2224,7 +2192,6 @@ services:
 - name: monitoring
   tier: inf
   friendly_name: Monitoring
-  infra_owner: sre_observability
   label: Service:Prometheus
   business:
     requirement: |
@@ -2316,7 +2283,6 @@ services:
 - name: redis
   tier: db
   friendly_name: Persistent Redis
-  infra_owner: sre_observability
   label: Service:Redis
   business:
     requirement: |
@@ -2383,7 +2349,6 @@ services:
 - name: redis-cache
   tier: db
   friendly_name: Redis Cache
-  infra_owner: sre_observability
   label: Service:RedisCache
   business:
     requirement: |
@@ -2446,7 +2411,6 @@ services:
 - name: redis-cache-sentinel
   tier: db
   friendly_name: Redis Cache Sentinel
-  infra_owner: sre_observability
   label: Service:RedisCacheSentinel
   business:
     requirement: |
@@ -2509,7 +2473,6 @@ services:
 - name: redis-ratelimiting
   tier: db
   friendly_name: Redis RateLimiting
-  infra_owner: sre_observability
   label: Service:Redis
   business:
     requirement: |
@@ -2572,7 +2535,6 @@ services:
 - name: redis-sidekiq
   tier: db
   friendly_name: Redis Sidekiq
-  infra_owner: sre_observability
   label: Service:RedisSidekiq
   business:
     requirement: |
@@ -2635,7 +2597,6 @@ services:
 - name: redis-tracechunks
   tier: db
   friendly_name: Redis TraceChunks
-  infra_owner: sre_observability
   label: Service:Redis
   business:
     requirement: |
@@ -2700,7 +2661,6 @@ services:
   friendly_name: Container Registry
   teams:
     - package
-  infra_owner: sre_observability
   label: Service:Registry
   business:
     requirement: |
@@ -2767,7 +2727,6 @@ services:
 - name: nat
   tier: inf
   friendly_name: NAT
-  infra_owner: sre_coreinfra
   label: Service:NAT
   business:
     requirement: |
@@ -2813,7 +2772,6 @@ services:
 - name: sentry
   tier: inf
   friendly_name: Monitoring
-  infra_owner: sre_observability
   label: Service:Sentry
   business:
     requirement: |
@@ -2883,7 +2841,6 @@ services:
     - gitaly
     - manage
     - plan
-  infra_owner: sre_observability
   label: Service:Sidekiq
   business:
     requirement: |
@@ -2965,7 +2922,6 @@ services:
 - name: license
   tier: sv
   friendly_name: license.gitlab.com
-  infra_owner: infrastructure-businessops
   label: Service:License
   business:
     requirement: |
@@ -3032,7 +2988,6 @@ services:
 - name: version
   tier: sv
   friendly_name: version.gitlab.com
-  infra_owner: infrastructure-businessops
   label: Service:Version
   business:
     requirement: |
@@ -3101,7 +3056,6 @@ services:
 - name: pubsub
   tier: inf
   friendly_name: Pubsub for Logging
-  infra_owner: sre_observability
   label: Service:PubSub
   business:
     requirement: |
@@ -3189,7 +3143,6 @@ services:
 - name: ci-runners
   tier: sv
   friendly_name: CI Runners
-  infra_owner: sre_observability
   label: Service:CI Runner
   business:
     requirement: |
@@ -3270,7 +3223,6 @@ services:
 - name: stackdriver
   tier: inf
   friendly_name: Stackdriver Metrics
-  infra_owner: sre_observability
   label: Service:Stackdriver
   business:
     requirement: |
@@ -3331,7 +3283,6 @@ services:
 - name: waf
   tier: lb
   friendly_name: Cloudflare Web Application Firewall
-  infra_owner: sre_coreinfra
   label: Service:WAF
   business:
     requirement: |
@@ -3387,7 +3338,6 @@ services:
 - name: vault
   tier: inf
   friendly_name: Infrastructure Vault
-  infra_owner: sre_coreinfra
   label: Service:Vault
   business:
     requirement: |
@@ -3443,7 +3393,6 @@ services:
 - name: jaeger
   tier: inf
   friendly_name: Jaeger
-  infra_owner: sre_observability
   label: Service:Jaeger
   business:
     requirement: |
@@ -3506,7 +3455,6 @@ services:
 - name: woodhouse
   tier: sv
   friendly_name: Woodhouse
-  infra_owner: sre_observability
   label: Service:Woodhouse
   business:
     requirement: |
@@ -3564,7 +3512,6 @@ services:
 - name: kas
   tier: sv
   friendly_name: Kubernetes Agent
-  infra_owner: sre_coreinfra
   label: Service:kas
   business:
     requirement: |
@@ -3631,7 +3578,6 @@ services:
 - name: websockets
   tier: sv
   friendly_name: Websockets
-  infra_owner: sre_coreinfra
   label: Service:Websockets
   business:
     requirement: |

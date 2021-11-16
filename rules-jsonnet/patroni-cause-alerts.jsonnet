@@ -192,7 +192,6 @@ local rules = {
           |||,
           'for': '1m',
           labels: {
-            team: 'sre_datastores',
             severity: 's2',
             alert_type: 'cause',
             pager: 'pagerduty',

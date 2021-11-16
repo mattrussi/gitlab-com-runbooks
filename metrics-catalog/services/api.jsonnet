@@ -68,7 +68,6 @@ metricsCatalog.serviceDefinition({
     loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
       userImpacting=true,
       featureCategory='not_owned',
-      team='sre_coreinfra',
       stageMappings={
         main: {
           backends: ['api', 'api_rate_limit'],
@@ -85,7 +84,6 @@ metricsCatalog.serviceDefinition({
     nginx_ingress: {
       userImpacting: true,
       featureCategory: 'not_owned',
-      team: 'sre_datastores',
       description: |||
         nginx for api
       |||,
@@ -155,7 +153,6 @@ metricsCatalog.serviceDefinition({
     puma: {
       userImpacting: true,
       featureCategory: 'not_owned',
-      team: 'sre_coreinfra',
       description: |||
         This SLI monitors API traffic in aggregate, in the GitLab rails monolith, via its
         HTTP interface. 5xx responses are treated as failures.

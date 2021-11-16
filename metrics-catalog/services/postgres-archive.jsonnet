@@ -30,7 +30,6 @@ metricsCatalog.serviceDefinition({
     transactions: {
       userImpacting: true,
       featureCategory: 'not_owned',
-      team: 'sre_datastores',
       description: |||
         Represents all SQL transactions issued to the primary Postgres instance.
         Errors represent transaction rollbacks.

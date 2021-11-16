@@ -38,7 +38,6 @@ metricsCatalog.serviceDefinition({
     sentry_events: {
       userImpacting: false,
       featureCategory: 'not_owned',
-      team: 'sre_observability',
       description: |||
         Sentry is an application monitoring platform.
          This SLI monitors the sentry API. 5xx responses are considered failures.
@@ -72,7 +71,6 @@ metricsCatalog.serviceDefinition({
       userImpacting: false,
       serviceAggregation: false,
       featureCategory: 'not_owned',
-      team: 'sre_observability',
       description: |||
         Represents all SQL transactions issued to the sentry Postgres instance.
         Errors represent transaction rollbacks.

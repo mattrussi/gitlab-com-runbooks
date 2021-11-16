@@ -45,7 +45,6 @@ metricsCatalog.serviceDefinition({
     http: {
       userImpacting: false,
       feature_category: 'not_owned',
-      team: 'sre_observability',
       ignoreTrafficCessation: true,
 
       description: |||
@@ -78,7 +77,6 @@ metricsCatalog.serviceDefinition({
     async_jobs: {
       userImpacting: false,
       feature_category: 'not_owned',
-      team: 'sre_observability',
       ignoreTrafficCessation: true,
 
       description: |||
