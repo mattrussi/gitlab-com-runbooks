@@ -1,5 +1,6 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
+local gaugeMetric = metricsCatalog.gaugeMetric;
 local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local googleLoadBalancerComponents = import './lib/google_load_balancer_components.libsonnet';
@@ -9,7 +10,7 @@ metricsCatalog.serviceDefinition({
   type: 'monitoring',
   tier: 'inf',
 
-  tags: ['golang'],
+  tags: ['golang', 'grafana', 'prometheus', 'thanos'],
 
   monitoringThresholds: {
     apdexScore: 0.999,
@@ -26,6 +27,18 @@ metricsCatalog.serviceDefinition({
     vms: true,
   },
   kubeResources: {
+    grafana: {
+      kind: 'Deployment',
+      containers: [
+        'grafana',
+      ],
+    },
+    'grafana-image-renderer': {
+      kind: 'Deployment',
+      containers: [
+        'grafana-image-renderer',
+      ],
+    },
     'thanos-query-frontend': {
       kind: 'Deployment',
       containers: [
@@ -374,9 +387,20 @@ metricsCatalog.serviceDefinition({
 
     // This component represents the Google Load Balancer in front
     // of the public Grafana instance at dashboards.gitlab.com
-    public_grafana_googlelb: googleLoadBalancerComponents.googleLoadBalancer(
+    public_grafana_google_lb: googleLoadBalancerComponents.googleLoadBalancer(
       userImpacting=false,
       loadBalancerName='ops-dashboards-com',
+      projectId='gitlab-ops',
+      ignoreTrafficCessation=true
+    ),
+
+    // This component represents the Google Load Balancer in front
+    // of the internal Grafana instance at dashboards.gitlab.net
+    grafana_google_lb: googleLoadBalancerComponents.googleLoadBalancer(
+      userImpacting=false,
+      // LB automatically created by the k8s ingress
+      loadBalancerName='k8s1-08811ce6-monitoring-grafana-80-013c5091',
+      targetProxyName='k8s2-ts-4zodnh0s-monitoring-grafana-lhbkv8d3',
       projectId='gitlab-ops',
       ignoreTrafficCessation=true
     ),
@@ -512,6 +536,40 @@ metricsCatalog.serviceDefinition({
     memcached_thanos_store_bucket: thanosMemcachedSLI('memcached-thanos-bucket-cache-metrics'),
     memcached_thanos_qfe_query_range: thanosMemcachedSLI('memcached-thanos-qfe-query-range-metrics'),
     memcached_thanos_qfe_labels: thanosMemcachedSLI('memcached-thanos-qfe-labels-metrics'),
+
+    grafana_cloudsql: {
+      userImpacting: true,
+      featureCategory: 'not_owned',
+      description: |||
+        Grafana uses a GCP CloudSQL instance. This SLI represents SQL transactions to that service.
+      |||,
+
+      local baseSelector = { job: 'stackdriver', database: 'grafana' },
+
+      staticLabels: {
+        tier: 'inf',
+        type: 'monitoring',
+      },
+
+      requestRate: gaugeMetric(
+        gauge='stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count',
+        selector=baseSelector
+      ),
+
+      errorRate: gaugeMetric(
+        gauge='stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count',
+        selector=baseSelector {
+          transaction_type: 'rollback',
+        }
+      ),
+
+      significantLabels: [],
+      serviceAggregation: false,
+      toolingLinks: [
+        toolingLinks.cloudSQL('grafana-internal-f534', project='gitlab-ops'),
+        toolingLinks.cloudSQL('grafana-pre-2718', project='gitlab-pre'),
+      ],
+    },
   },
 
   skippedMaturityCriteria: maturityLevels.skip({

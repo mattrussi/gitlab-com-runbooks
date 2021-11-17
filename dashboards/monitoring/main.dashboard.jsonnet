@@ -8,6 +8,70 @@ local thresholds = import 'gitlab-dashboards/thresholds.libsonnet';
 
 serviceDashboard.overview('monitoring')
 .addPanel(
+  row.new(title='Grafana CloudSQL', collapse=true)
+  .addPanels(
+    layout.grid([
+      basic.timeseries(
+        title='CPU Utilization',
+        description=|||
+          CPU utilization.
+
+          See https://cloud.google.com/monitoring/api/metrics_gcp#gcp-cloudsql for
+          more details.
+        |||,
+        query='stackdriver_cloudsql_database_cloudsql_googleapis_com_database_cpu_utilization{database_id=~".+:grafana-(pre|internal)-.+", environment="$environment"}',
+        legendFormat='{{ database_id }}',
+        format='percent'
+      ),
+      basic.timeseries(
+        title='Memory Utilization',
+        description=|||
+          Memory utilization.
+
+          See https://cloud.google.com/monitoring/api/metrics_gcp#gcp-cloudsql for
+          more details.
+        |||,
+        query='stackdriver_cloudsql_database_cloudsql_googleapis_com_database_memory_utilization{database_id=~".+:grafana-(pre|internal)-.+", environment="$environment"}',
+        legendFormat='{{ database_id }}',
+        format='percent'
+      ),
+      basic.timeseries(
+        title='Disk Utilization',
+        description=|||
+          Data utilization in bytes.
+
+          See https://cloud.google.com/monitoring/api/metrics_gcp#gcp-cloudsql for
+          more details.
+        |||,
+        query='stackdriver_cloudsql_database_cloudsql_googleapis_com_database_disk_bytes_used{database_id=~".+:grafana-(pre|internal)-.+", environment="$environment"}',
+        legendFormat='{{ database_id }}',
+        format='bytes'
+      ),
+      basic.timeseries(
+        title='Transactions',
+        description=|||
+          Delta count of number of transactions. Sampled every 60 seconds.
+
+          See https://cloud.google.com/monitoring/api/metrics_gcp#gcp-cloudsql for
+          more details.
+        |||,
+        query=|||
+          sum by (database_id) (
+            avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database_id=~".+:grafana-(pre|internal)-.+", environment="$environment"}[$__interval])
+          )
+        |||,
+        legendFormat='{{ database_id }}',
+      ),
+    ], cols=3, rowHeight=10, startRow=2001)
+  ),
+  gridPos={
+    x: 0,
+    y: 2000,
+    w: 24,
+    h: 1,
+  },
+)
+.addPanel(
   row.new(title='Grafana Latencies'),
   gridPos={
     x: 0,
@@ -24,7 +88,7 @@ serviceDashboard.overview('monitoring')
     query=|||
       grafana_api_dataproxy_request_all_milliseconds{environment="ops", quantile="0.5"}
     |||,
-    legendFormat='p50 {{ fqdn }}',
+    legendFormat='p50 {{ pod }}',
     intervalFactor=2,
     logBase=10,
     min=10
@@ -34,7 +98,7 @@ serviceDashboard.overview('monitoring')
       |||
         grafana_api_dataproxy_request_all_milliseconds{environment="ops", quantile="0.9"}
       |||,
-      legendFormat='p90 {{ fqdn }}',
+      legendFormat='p90 {{ pod }}',
       intervalFactor=2,
     )
   )
@@ -43,7 +107,7 @@ serviceDashboard.overview('monitoring')
       |||
         grafana_api_dataproxy_request_all_milliseconds{environment="ops", quantile="0.99"}
       |||,
-      legendFormat='p99 {{ fqdn }}',
+      legendFormat='p99 {{ pod }}',
       intervalFactor=2,
     )
   ) + {

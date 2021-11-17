@@ -171,6 +171,264 @@ groups:
       gitlab_component_ops:rate_5m{type="monitoring", component="grafana", stage="main", monitor="global"} offset 1h
       unless
       gitlab_component_ops:rate_5m{type="monitoring", component="grafana", stage="main", monitor="global"}
+  - alert: MonitoringServiceGrafanaCloudsqlErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The grafana_cloudsql SLI of the monitoring service (`{{ $labels.stage
+        }}` stage) has an error rate violating SLO
+      description: |
+        Grafana uses a GCP CloudSQL instance. This SLI represents SQL transactions to that service.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: monitoring-main/monitoring-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "738880335"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database="grafana",environment="{{ $labels.environment }}",job="stackdriver",stage="{{ $labels.stage }}",transaction_type="rollback"}[5m])
+        )
+      runbook: docs/monitoring/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_1h{component="grafana_cloudsql",monitor="global",type="monitoring"}
+          > (14.4 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_5m{component="grafana_cloudsql",monitor="global",type="monitoring"}
+          > (14.4 * 0.001000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="grafana_cloudsql",monitor="global",type="monitoring"}) >= 1
+      )
+  - alert: MonitoringServiceGrafanaCloudsqlErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The grafana_cloudsql SLI of the monitoring service (`{{ $labels.stage
+        }}` stage) has an error rate violating SLO
+      description: |
+        Grafana uses a GCP CloudSQL instance. This SLI represents SQL transactions to that service.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: monitoring-main/monitoring-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "738880335"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database="grafana",environment="{{ $labels.environment }}",job="stackdriver",stage="{{ $labels.stage }}",transaction_type="rollback"}[5m])
+        )
+      runbook: docs/monitoring/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_6h{component="grafana_cloudsql",monitor="global",type="monitoring"}
+          > (6 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_30m{component="grafana_cloudsql",monitor="global",type="monitoring"}
+          > (6 * 0.001000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="grafana_cloudsql",monitor="global",type="monitoring"}) >= 1
+      )
+  - alert: MonitoringServiceGrafanaCloudsqlTrafficCessation
+    for: 5m
+    annotations:
+      title: The grafana_cloudsql SLI of the monitoring service (`{{ $labels.stage
+        }}` stage) has not received any traffic in the past 30 minutes
+      description: |
+        Grafana uses a GCP CloudSQL instance. This SLI represents SQL transactions to that service.
+
+        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+      grafana_dashboard_id: monitoring-main/monitoring-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "159285256"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database="grafana",environment="{{ $labels.environment }}",job="stackdriver",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/monitoring/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{type="monitoring", component="grafana_cloudsql", stage="main", monitor="global"} == 0
+  - alert: MonitoringServiceGrafanaCloudsqlTrafficAbsent
+    for: 30m
+    annotations:
+      title: The grafana_cloudsql SLI of the monitoring service (`{{ $labels.stage
+        }}` stage) has not reported any traffic in the past 30 minutes
+      description: |
+        Grafana uses a GCP CloudSQL instance. This SLI represents SQL transactions to that service.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: monitoring-main/monitoring-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "159285256"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database="grafana",environment="{{ $labels.environment }}",job="stackdriver",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/monitoring/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_5m{type="monitoring", component="grafana_cloudsql", stage="main", monitor="global"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{type="monitoring", component="grafana_cloudsql", stage="main", monitor="global"}
+  - alert: MonitoringServiceGrafanaGoogleLbErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The grafana_google_lb SLI of the monitoring service (`{{ $labels.stage
+        }}` stage) has an error rate violating SLO
+      description: |
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: monitoring-main/monitoring-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "665917726"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id="gitlab-ops",response_code_class="500",stage="{{ $labels.stage }}",target_proxy_name="k8s2-ts-4zodnh0s-monitoring-grafana-lhbkv8d3"}[5m])
+        )
+      runbook: docs/monitoring/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_1h{component="grafana_google_lb",monitor="global",type="monitoring"}
+          > (14.4 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_5m{component="grafana_google_lb",monitor="global",type="monitoring"}
+          > (14.4 * 0.001000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="grafana_google_lb",monitor="global",type="monitoring"}) >= 1
+      )
+  - alert: MonitoringServiceGrafanaGoogleLbErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The grafana_google_lb SLI of the monitoring service (`{{ $labels.stage
+        }}` stage) has an error rate violating SLO
+      description: |
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: monitoring-main/monitoring-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "665917726"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id="gitlab-ops",response_code_class="500",stage="{{ $labels.stage }}",target_proxy_name="k8s2-ts-4zodnh0s-monitoring-grafana-lhbkv8d3"}[5m])
+        )
+      runbook: docs/monitoring/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_6h{component="grafana_google_lb",monitor="global",type="monitoring"}
+          > (6 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_30m{component="grafana_google_lb",monitor="global",type="monitoring"}
+          > (6 * 0.001000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="grafana_google_lb",monitor="global",type="monitoring"}) >= 1
+      )
   - alert: MonitoringServiceMemcachedThanosQfeLabelsApdexSLOViolation
     for: 2m
     annotations:
@@ -1595,10 +1853,10 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="public_dashboards_thanos_query",monitor="global",type="monitoring"}) >= 1
       )
-  - alert: MonitoringServicePublicGrafanaGooglelbErrorSLOViolation
+  - alert: MonitoringServicePublicGrafanaGoogleLbErrorSLOViolation
     for: 2m
     annotations:
-      title: The public_grafana_googlelb SLI of the monitoring service (`{{ $labels.stage
+      title: The public_grafana_google_lb SLI of the monitoring service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
         Currently the error-rate is {{ $value | humanizePercentage }}.
@@ -1606,7 +1864,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "477814813"
+      grafana_panel_id: "327759237"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -1628,23 +1886,23 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="public_grafana_googlelb",monitor="global",type="monitoring"}
+          gitlab_component_errors:ratio_1h{component="public_grafana_google_lb",monitor="global",type="monitoring"}
           > (14.4 * 0.001000)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="public_grafana_googlelb",monitor="global",type="monitoring"}
+          gitlab_component_errors:ratio_5m{component="public_grafana_google_lb",monitor="global",type="monitoring"}
           > (14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="public_grafana_googlelb",monitor="global",type="monitoring"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="public_grafana_google_lb",monitor="global",type="monitoring"}) >= 1
       )
-  - alert: MonitoringServicePublicGrafanaGooglelbErrorSLOViolation
+  - alert: MonitoringServicePublicGrafanaGoogleLbErrorSLOViolation
     for: 2m
     annotations:
-      title: The public_grafana_googlelb SLI of the monitoring service (`{{ $labels.stage
+      title: The public_grafana_google_lb SLI of the monitoring service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
         Currently the error-rate is {{ $value | humanizePercentage }}.
@@ -1652,7 +1910,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "477814813"
+      grafana_panel_id: "327759237"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -1674,18 +1932,18 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="public_grafana_googlelb",monitor="global",type="monitoring"}
+          gitlab_component_errors:ratio_6h{component="public_grafana_google_lb",monitor="global",type="monitoring"}
           > (6 * 0.001000)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="public_grafana_googlelb",monitor="global",type="monitoring"}
+          gitlab_component_errors:ratio_30m{component="public_grafana_google_lb",monitor="global",type="monitoring"}
           > (6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="public_grafana_googlelb",monitor="global",type="monitoring"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="public_grafana_google_lb",monitor="global",type="monitoring"}) >= 1
       )
   - alert: MonitoringServiceRuleEvaluationErrorSLOViolation
     for: 2m

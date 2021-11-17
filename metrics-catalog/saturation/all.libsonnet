@@ -13,8 +13,10 @@ local saturationTypes = [
   import 'elastic_single_node_cpu.libsonnet',
   import 'elastic_single_node_disk_space.libsonnet',
   import 'elastic_thread_pools.libsonnet',
+  import 'gcp_quota_limit.libsonnet',
   import 'gitaly_total_disk_space.libsonnet',
   import 'go_memory.libsonnet',
+  import 'grafana_cloudsql_cpu.libsonnet',
   import 'kube_container_cpu.libsonnet',
   import 'kube_container_memory.libsonnet',
   import 'kube_go_memory.libsonnet',
@@ -52,13 +54,12 @@ local saturationTypes = [
   import 'redis_secondary_cpu.libsonnet',
   import 'ruby_thread_contention.libsonnet',
   import 'shard_cpu.libsonnet',
-  import 'shared_runners_gitlab.libsonnet',
   import 'shared_runners.libsonnet',
+  import 'shared_runners_gitlab.libsonnet',
   import 'sidekiq_shard_workers.libsonnet',
   import 'single_node_cpu.libsonnet',
   import 'single_node_puma_workers.libsonnet',
   import 'workhorse_image_scaling.libsonnet',
-  import 'gcp_quota_limit.libsonnet',
 ];
 
 std.foldl(
