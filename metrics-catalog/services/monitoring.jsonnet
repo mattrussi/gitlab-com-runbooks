@@ -349,42 +349,6 @@ metricsCatalog.serviceDefinition({
       ],
     },
 
-    grafana: {
-      monitoringThresholds: {
-        apdexScore: 0.95,
-        errorRatio: 0.95,
-      },
-      userImpacting: true,
-      featureCategory: 'not_owned',
-      description: |||
-        This SLI monitors the internal Grafana instance, via the HTTP interface.
-        5xx responses are considered errors.
-      |||,
-
-      local grafanaSelector = {
-        job: 'grafana',
-      },
-
-      requestRate: rateMetric(
-        counter='http_request_total',
-        selector=grafanaSelector
-      ),
-
-      errorRate: rateMetric(
-        counter='http_request_total',
-        selector=grafanaSelector { statuscode: { re: '^5.*' } }
-      ),
-
-      significantLabels: ['fqdn'],
-
-      toolingLinks: [
-        toolingLinks.googleLoadBalancer(
-          instanceId='ops-dashboards',
-          project='gitlab-ops',
-        ),
-      ],
-    },
-
     // This component represents the Google Load Balancer in front
     // of the public Grafana instance at dashboards.gitlab.com
     public_grafana_google_lb: googleLoadBalancerComponents.googleLoadBalancer(
