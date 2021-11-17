@@ -422,6 +422,7 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
       apdexRatio: 'gitlab:component:stage_group:execution:apdex:ratio_%s',
       opsRate: 'gitlab:component:stage_group:execution:ops:rate_%s',
       errorRate: 'gitlab:component:stage_group:execution:error:rate_%s',
+      successRate: 'gitlab:component:stage_group:execution:success:rate_%s',
       errorRatio: 'gitlab:component:stage_group:execution:error:ratio_%s',
     },
   }),
