@@ -57,7 +57,9 @@ TODO: link here design docs once they are ready
 
 ### Upgrade Production
 
-* Add a silence via https://alerts.gitlab.net/#/silences/new with a matcher on alert name:  `alertname="SearchServiceElasticsearchIndexingTrafficAbsent"`. Link the comment field back to the Change Request Issue.
+* Add a silence via https://alerts.gitlab.net/#/silences/new with a matcher on the following alert names (link the comment field in each silence back to the Change Request Issue URL)
+  * `alertname="SearchServiceElasticsearchIndexingTrafficAbsent"`
+  * `alertname="gitlab_search_indexing_queue_backing_up"`
 * Pause indexing in **Production** `GitLab > Admin > Settings -> General > Advanced Search` or through the console `::Gitlab::CurrentSettings.update!(elasticsearch_pause_indexing: true)`
 * Wait 2 mins for [queues in redis to drain and for inflight jobs to finish](https://dashboards.gitlab.net/d/sidekiq-shard-detail/sidekiq-shard-detail?orgId=1&from=now-30m&to=now&var-PROMETHEUS_DS=Global&var-environment=gprd&var-stage=main&var-shard=elasticsearch)
 * Verify that the [Elasticsearch queue increases in the graph](https://dashboards.gitlab.net/d/stage-groups-global_search/stage-groups-group-dashboard-enablement-global-search?orgId=1&var-PROMETHEUS_DS=Global&var-environment=gprd&var-stage=main&var-controller=All&var-action=All&from=now-5m&to=now)
