@@ -24,7 +24,7 @@ local graphite = grafana.graphite;
 
   pageDetail(title, page_alias, url)::
 
-    local graphite_datasource = 'sitespeed new';
+    local graphite_datasource = 'sitespeed';
 
     graphPanel.new(
       title,
