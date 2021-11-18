@@ -84,7 +84,13 @@ implementation details.
 | ~"Service::Thanos" | Anything related to [thanos](https://thanos.io/). | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues?scope=all&state=opened&label_name[]=Service%3A%3AThanos) |
 | ~"Service::Grafana" | Anything related to <https://dashboards.gitlab.net/> | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues?scope=all&state=opened&label_name[]=Service%3A%3AGrafana)
 | ~"Service::PublicGrafana" | Anything related to <https://dashboards.gitlab.com/> | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues?scope=all&state=opened&label_name[]=Service%3A%3APublicGrafana)
+| ~"Service::AlertManager" | Anything related to AlertManager | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues?scope=all&state=opened&label_name[]=Service%3A%3AAlertManager)
 | ~"Service::Monitoring-Other" | The service we provide to engineers, this covers metrics, labels and anything else that doesn't belong in the services above. | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues?scope=all&state=opened&label_name[]=Service%3A%3AMonitoring-Other) |
+
+Some of the issues in the backlog also belong in epics part of the
+[Observability Work Queue
+Epic](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/530) to group
+issues around a large project that needs to be addressed.
 
 ## Querying
 
