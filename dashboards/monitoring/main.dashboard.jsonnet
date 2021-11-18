@@ -82,11 +82,11 @@ serviceDashboard.overview('monitoring')
 )
 .addPanels(layout.grid([
   basic.latencyTimeseries(
-    title='Grafana API Dataproxy (logn scale)',
+    title='Grafana API Dataproxy Request Duration (logn scale)',
     legend_show=false,
     format='ms',
     query=|||
-      grafana_api_dataproxy_request_all_milliseconds{environment="ops", quantile="0.5"}
+      grafana_api_dataproxy_request_all_milliseconds{environment="$environment", quantile="0.5"}
     |||,
     legendFormat='p50 {{ pod }}',
     intervalFactor=2,
@@ -96,7 +96,7 @@ serviceDashboard.overview('monitoring')
   .addTarget(
     promQuery.target(
       |||
-        grafana_api_dataproxy_request_all_milliseconds{environment="ops", quantile="0.9"}
+        grafana_api_dataproxy_request_all_milliseconds{environment="$environment", quantile="0.9"}
       |||,
       legendFormat='p90 {{ pod }}',
       intervalFactor=2,
@@ -105,7 +105,7 @@ serviceDashboard.overview('monitoring')
   .addTarget(
     promQuery.target(
       |||
-        grafana_api_dataproxy_request_all_milliseconds{environment="ops", quantile="0.99"}
+        grafana_api_dataproxy_request_all_milliseconds{environment="$environment", quantile="0.99"}
       |||,
       legendFormat='p99 {{ pod }}',
       intervalFactor=2,
@@ -117,4 +117,33 @@ serviceDashboard.overview('monitoring')
     ],
   },
 ], cols=1, rowHeight=10, startRow=1001))
+.addPanels(layout.grid([
+  basic.timeseries(
+    title='Grafana Datasource Requests',
+    legend_show=false,
+    query=|||
+      sum(rate(grafana_datasource_request_total{environment="$environment"}[$__interval])) by (datasource)
+    |||,
+    legendFormat='{{ datasource }}',
+    intervalFactor=2,
+  ),
+], cols=1, rowHeight=10, startRow=1002))
+.addPanels(layout.grid([
+  basic.latencyTimeseries(
+    title='Grafana Datasource Request Duration (logn scale)',
+    legend_show=false,
+    format='s',
+    query=|||
+      avg(grafana_datasource_request_duration_seconds{environment="$environment"} >= 0) by (datasource)
+    |||,
+    legendFormat='{{ datasource }}',
+    intervalFactor=2,
+    logBase=10,
+  ) + {
+    thresholds: [
+      thresholds.warningLevel('gt', 10),
+      thresholds.errorLevel('gt', 30),
+    ],
+  },
+], cols=1, rowHeight=10, startRow=1003))
 .overviewTrailer()
