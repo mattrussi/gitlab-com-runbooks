@@ -111,7 +111,7 @@ metricsCatalog.serviceDefinition({
 
       errorRate: customRateQuery(|||
         sum by (%(aggregationLabels)s) (
-          avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_errors[%(burnRate)s])
+          avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_scaleup_errors[%(burnRate)s])
         )
       |||),
 

@@ -305,7 +305,7 @@ groups:
       promql_template_1: |
         sum by (env,environment,tier,stage) (
           sum by (env,environment,tier,stage) (
-            avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_errors[5m])
+            avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_scaleup_errors[5m])
           )
         )
       runbook: docs/kube/README.md
@@ -357,7 +357,7 @@ groups:
       promql_template_1: |
         sum by (env,environment,tier,stage) (
           sum by (env,environment,tier,stage) (
-            avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_errors[5m])
+            avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_scaleup_errors[5m])
           )
         )
       runbook: docs/kube/README.md
