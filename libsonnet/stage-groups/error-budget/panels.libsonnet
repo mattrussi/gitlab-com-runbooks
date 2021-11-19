@@ -52,16 +52,21 @@ local thresholds(slaTarget, range) =
       function(definition) thresholdStep(definition.color, definition[type].from),
       std.sort(definitions, function(definition) definition[type].from)
     );
-  local mapping(color, from, to, text) = {
-    from: from,
-    to: to,
-    color: color,
-    text: text,
-    type: 2,  // Range: https://grafana.com/docs/grafana/latest/packages_api/data/mappingtype/
+  local mapping(color, from, to, text, index) = {
+    type: 'range',
+    options: {
+      from: from,
+      to: to,
+      result: {
+        color: color,
+        index: index,
+        text: text,
+      },
+    },
   };
   local mappings(type) =
-    std.map(
-      function(definition) mapping(definition.color, definition[type].from, definition[type].to, definition.text),
+    std.mapWithIndex(
+      function(index, definition) mapping(definition.color, definition[type].from, definition[type].to, definition.text, index),
       definitions
     );
 
