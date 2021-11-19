@@ -2,86 +2,87 @@ local sliPromql = import './sli_promql.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
 local multiburnFactors = import 'mwmbr/multiburn_factors.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
+local objects = import 'utils/objects.libsonnet';
 
 local descriptionMappings = [
   /* 0 */
   {
-    name: 'Healthy',
+    text: 'Healthy',
     color: 'black',
   },
   /* 1 */
   {
-    name: 'Warning 🔥',
+    text: 'Warning 🔥',
     color: 'orange',
   },
   /* 2 */
   {
-    name: 'Warning 🔥',
+    text: 'Warning 🔥',
     color: 'orange',
   },
   /* 3 */
   {
-    name: 'Degraded 🔥',
+    text: 'Degraded 🔥',
     color: 'red',
   },
   /* 4 */
   {
-    name: 'Warning 🥵',
+    text: 'Warning 🥵',
     color: 'orange',
   },
   /* 5 */
   {
-    name: 'Warning 🔥🥵',
+    text: 'Warning 🔥🥵',
     color: 'orange',
   },
   /* 6 */
   {
-    name: 'Warning 🔥🥵',
+    text: 'Warning 🔥🥵',
     color: 'orange',
   },
   /* 7 */
   {
-    name: 'Degraded 🔥🥵',
+    text: 'Degraded 🔥🥵',
     color: 'red',
   },
   /* 8 */
   {
-    name: 'Warning 🥵',
+    text: 'Warning 🥵',
     color: 'orange',
   },
   /* 9 */
   {
-    name: 'Warning 🔥🥵',
+    text: 'Warning 🔥🥵',
     color: 'orange',
   },
   /* 10 */
   {
-    name: 'Warning 🔥🥵',
+    text: 'Warning 🔥🥵',
     color: 'orange',
   },
   /* 11 */
   {
-    name: 'Degraded 🔥🥵',
+    text: 'Degraded 🔥🥵',
     color: 'red',
   },
   /* 12 */
   {
-    name: 'Degraded 🥵',
+    text: 'Degraded 🥵',
     color: 'red',
   },
   /* 13 */
   {
-    name: 'Degraded 🔥🥵',
+    text: 'Degraded 🔥🥵',
     color: 'red',
   },
   /* 14 */
   {
-    name: 'Degraded 🔥🥵',
+    text: 'Degraded 🔥🥵',
     color: 'red',
   },
   /* 15 */
   {
-    name: 'Degraded 🔥🥵',
+    text: 'Degraded 🔥🥵',
     color: 'red',
   },
 ];
@@ -207,18 +208,18 @@ local statusDescriptionPanel(legendFormat, query) =
               descriptionMappings
             ),
           },
-          mappings: std.mapWithIndex(
-            function(index, v)
-              {
-                from: '' + index,
-                id: index,
-                op: '=',
-                text: v.name,
-                to: '' + index,
-                type: 2,
-                value: '' + index,
-              }, descriptionMappings
-          ),
+          mappings: [
+            {
+              type: 'value',
+              options: objects.toObject(
+                std.mapWithIndex(
+                  function(index, v)
+                    [index, v { index: index }]
+                  , descriptionMappings
+                )
+              ),
+            },
+          ],
           unit: 'none',
           nullValueMode: 'connected',
           title: 'Status',
