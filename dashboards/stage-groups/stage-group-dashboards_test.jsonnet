@@ -52,6 +52,7 @@ test.suite({
       'stage',
       'controller',
       'action',
+      'stage_group',
     ],
   },
 
@@ -168,6 +169,27 @@ test.suite({
       'PROMETHEUS_DS',
       'environment',
       'stage',
+      'stage_group',
+    ],
+  },
+
+  testErrorBudgetDetailDashboard: {
+    actual: panelTitles(stageGroupDashboards.errorBudgetDetailDashboard()),
+    expect: [
+      'Error Budget (past 28 days)',
+      'Availability',
+      'Budget remaining',
+      'Budget spent',
+      'Info',
+      'Budget spend attribution',
+      '🔬 Service Level Indicators',
+      'puma SLI Apdex',
+      'puma SLI Error Ratio',
+      'puma SLI RPS - Requests per Second',
+      'Details',
+      'rails_requests SLI Apdex',
+      'rails_requests SLI RPS - Requests per Second',
+      'Details',
     ],
   },
 })
