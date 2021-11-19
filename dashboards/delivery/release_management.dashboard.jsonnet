@@ -235,7 +235,15 @@ basic.dashboard(
         description='Package running on %s.' % [environment.name],
         valueFontSize='50%',
       )
-      .addTarget(packageVersion(environment))
+      .addTarget(packageVersion(environment)) + {
+        options: {
+          reduceOptions: {
+            values: false,
+            calcs: ['lastNotNull'],
+            fields: '/^version$/',
+          },
+        },
+      }
       for environment in environments
     ],
     // Column 3: auto-deploy pressure
