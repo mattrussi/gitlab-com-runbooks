@@ -100,6 +100,12 @@ Whatever it is. Create an issue [**in the Firewall tracker**](https://gitlab.com
 
 What to consider repeated abuse?
 
+### Geo-blocking
+
+For geo-political reasons outside our control, and to remain in compliance with applicable law, we must from time to time block access to our services from specific geographical locations.
+
+CloudFlare's firewall rules support doing this using the `ip.geoip` filter; we currently use `country` and `subdivision_1_iso_code` below that, although there are a few other options as well (see https://developers.cloudflare.com/firewall/cf-firewall-language/fields).  The implementation of this is apparently built on the MaxMind GeoIP database; in the event of questions about classification (the topic is tricky, shifting, and occasionally fraught) https://www.maxmind.com/en/geoip2-precision-demo can be used to confirm the classification from MaxMind, and in the event that it needs to be disputed, https://support.maxmind.com/geoip-data-correction-request/ can be used to submit a correction.  However, unless we have first-hand positive knowledge regarding the location of the IP address we should usually leave that to the affected parties who can be expected to have access to any required proof.
+
 ## Rule management
 
 Each block/allowlist in the Cloudflare firewall is to be accompanied by an issue in the [Firewall issue tracker](https://gitlab.com/gitlab-com/gl-infra/cloudflare-firewall).
