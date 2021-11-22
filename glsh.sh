@@ -8,8 +8,17 @@ else
   RUNBOOK_PATH=$(dirname "$(readlink -f "$0")")
 fi
 
-BIN_DIR="$RUNBOOK_PATH/bin/"
-EXEC_PATH="$BIN_DIR$1"
+BIN_DIR="$RUNBOOK_PATH/bin"
+
+if [[ $# -eq 0 ]]; then
+  SUBCMD="help"
+else
+  # Remove the first paramater so we can send the rest to the executable
+  SUBCMD="$1"
+  shift
+fi
+
+EXEC_PATH="$BIN_DIR/$SUBCMD"
 
 if [[ ! -f "$EXEC_PATH" ]]; then
   echo >&2 "glsh: executable path not found: $EXEC_PATH "
@@ -21,5 +30,4 @@ if [[ ! -x "$EXEC_PATH" ]]; then
   exit 1
 fi
 
-shift # Remove the first paramater so we can send the rest to the executable
 exec "$EXEC_PATH" "$@"
