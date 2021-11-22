@@ -402,6 +402,22 @@ glsh update
 
 # Developing in this repo
 
+## Summary
+
+Usually, following a change to the rules, you can test your new additions using:
+
+```shell
+make verify
+```
+
+Then, regenerate the rules using:
+
+```shell
+make generate
+```
+
+If you get errors while doing any of these steps, then read on for more details on how to set up your local environment.
+
 ## Generating a new runbooks image
 
 To generate a new image you must follow the git commit guidelines below, this
