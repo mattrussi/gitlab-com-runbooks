@@ -2,12 +2,7 @@
 
 set -efo pipefail
 
-if [[ $(uname -s) = "Darwin" ]]; then
-  RUNBOOK_PATH=$(dirname "$(readlink "$0")")
-else
-  RUNBOOK_PATH=$(dirname "$(readlink -f "$0")")
-fi
-
+# RUNBOOK_PATH is exported by glsh.sh
 BIN_DIR="$RUNBOOK_PATH/bin"
 
 ls "$BIN_DIR"

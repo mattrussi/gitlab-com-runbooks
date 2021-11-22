@@ -2,6 +2,7 @@
 
 set -eufo pipefail
 
+export RUNBOOK_PATH
 if [[ $(uname -s) = "Darwin" ]]; then
   RUNBOOK_PATH=$(dirname "$(readlink "$0")")
 else
