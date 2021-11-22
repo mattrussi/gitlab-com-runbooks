@@ -58,7 +58,7 @@ ALTER EXTENSION pg_stat_statements UPDATE;
 
 ### Post checks
 Check connectivity with the command: `gitlab-psql -c "select pg_is_in_recovery();"`
-Verify the version with the command: `gitlab-psql -c "select pg_version();"`
+Verify the version with the command: `gitlab-psql -c "select version();"`
 Check logs
 Restore the traffic by starting chef, which will remove the tags on the node.
 
