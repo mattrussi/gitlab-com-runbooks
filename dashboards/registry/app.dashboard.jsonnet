@@ -5,6 +5,9 @@ local template = grafana.template;
 local templates = import 'grafana/templates.libsonnet';
 local row = grafana.row;
 local basic = import 'grafana/basic.libsonnet';
+local layout = import 'grafana/layout.libsonnet';
+local promQuery = import 'grafana/prom_query.libsonnet';
+local statPanel = grafana.statPanel;
 
 basic.dashboard(
   'Application Detail',
@@ -87,3 +90,38 @@ basic.dashboard(
   }
 )
 .addPanels(crCommon.cache(startRow=4001))
+.addPanel(
+  row.new(title='Network'),
+  gridPos={
+    x: 0,
+    y: 5000,
+    w: 24,
+    h: 1,
+  }
+)
+.addPanels(
+  layout.grid([
+    statPanel.new(
+      title='Uploaded Bytes',
+      description='The number of bytes uploaded to the registry.',
+      reducerFunction='sum',
+      unit='bytes',
+    )
+    .addTarget(
+      promQuery.target(
+        'sum(increase(registry_storage_blob_upload_bytes_sum{environment="$environment", stage="$stage"}[$__interval]))',
+      )
+    ),
+    statPanel.new(
+      title='Downloaded Bytes',
+      description='The number of bytes downloaded from the registry.',
+      reducerFunction='sum',
+      unit='bytes',
+    )
+    .addTarget(
+      promQuery.target(
+        'sum(increase(registry_storage_blob_download_bytes_sum{environment="$environment", stage="$stage"}[$__interval]))',
+      )
+    ),
+  ], cols=2, rowHeight=8, startRow=5001),
+)
