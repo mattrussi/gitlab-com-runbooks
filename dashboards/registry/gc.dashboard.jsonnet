@@ -105,6 +105,18 @@ basic.dashboard(
       )
     ),
     statPanel.new(
+      title='Uploaded Bytes',
+      description='The number of bytes uploaded to the new code path.',
+      graphMode='none',
+      reducerFunction='sum',
+      unit='bytes',
+    )
+    .addTarget(
+      promQuery.target(
+        'sum(increase(registry_storage_blob_upload_bytes_sum{environment="$environment", stage="$stage", migration_path="new"}[$__interval]))',
+      )
+    ),
+    statPanel.new(
       title='Recovered Storage Space',
       description='The number of bytes recovered by online GC.',
       graphMode='none',
@@ -209,7 +221,7 @@ basic.dashboard(
       { color: colorScheme.warningColor, value: 95 },
       { color: colorScheme.normalRangeColor, value: 100 },
     ]),
-  ], cols=9, rowHeight=4, startRow=1)
+  ], cols=10, rowHeight=4, startRow=1)
 )
 
 .addPanel(
