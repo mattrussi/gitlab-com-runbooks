@@ -2,7 +2,7 @@
 # YOUR CHANGES WILL BE OVERRIDDEN
 groups:
 - name: Stage Group metrics
-  interval: 1m
+  interval: 3m
   partial_response_strategy: warn
   rules:
   - record: gitlab:component:stage_group:execution:error:rate_5m

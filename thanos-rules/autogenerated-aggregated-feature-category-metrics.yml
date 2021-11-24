@@ -2,7 +2,7 @@
 # YOUR CHANGES WILL BE OVERRIDDEN
 groups:
 - name: Feature Category Metrics
-  interval: 1m
+  interval: 3m
   partial_response_strategy: warn
   rules:
   - record: gitlab:component:feature_category:execution:error:rate_5m

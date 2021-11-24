@@ -13,7 +13,7 @@ local groupsForApplicationSli(sli) =
   local sourceAggregationSet = applicationSliAggregations.sourceAggregationSet(sli);
   {
     name: targetAggregationSet.name,
-    interval: '1m',
+    interval: '3m',
     partial_response_strategy: 'warn',
     rules: aggregationSetTransformer.generateRecordingRules(
       sourceAggregationSet=sourceAggregationSet,
@@ -125,7 +125,7 @@ local groupsForApplicationSli(sli) =
     outputPromYaml(
       [{
         name: aggregationSets.featureCategorySLIs.name,
-        interval: '1m',
+        interval: '3m',
         partial_response_strategy: 'warn',
         rules: aggregationSetTransformer.generateRecordingRules(
           sourceAggregationSet=aggregationSets.featureCategorySourceSLIs,
@@ -138,7 +138,7 @@ local groupsForApplicationSli(sli) =
     outputPromYaml(
       [{
         name: aggregationSets.stageGroupSLIs.name,
-        interval: '1m',
+        interval: '3m',
         partial_response_strategy: 'warn',
         rules: aggregationSetTransformer.generateRecordingRules(
           sourceAggregationSet=aggregationSets.featureCategorySourceSLIs,

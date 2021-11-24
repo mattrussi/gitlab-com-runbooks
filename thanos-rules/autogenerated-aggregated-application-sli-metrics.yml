@@ -2,7 +2,7 @@
 # YOUR CHANGES WILL BE OVERRIDDEN
 groups:
 - name: 'Application Defined SLI Global metrics: rails_request_apdex'
-  interval: 1m
+  interval: 3m
   partial_response_strategy: warn
   rules:
   - record: application_sli_aggregation:rails_request_apdex:apdex:weight:score_5m
@@ -26,7 +26,7 @@ groups:
         (sli_aggregations:gitlab_sli:rails_request_apdex:success_total_rate1h{monitor!="global"} >= 0)
       )
 - name: 'Application Defined SLI Global metrics: graphql_query_apdex'
-  interval: 1m
+  interval: 3m
   partial_response_strategy: warn
   rules:
   - record: application_sli_aggregation:graphql_query_apdex:apdex:weight:score_5m
