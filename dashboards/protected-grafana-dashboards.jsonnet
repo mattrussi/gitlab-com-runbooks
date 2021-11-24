@@ -49,6 +49,8 @@ local union(sets) = std.foldl(function(memo, a) std.setUnion(std.set(a), memo), 
       ],
       // Dashboards that people have requested we save (for now!)
       [
+        // ahegyi: loose foreign keys monitoring dashboard (WIP)
+        'RKrvPFp7k',
         // mkaeppler: https://gitlab.com/gitlab-com/runbooks/-/merge_requests/2345#note_358065560
         'IGBZ5H_Zz',
         // hphilipps: osquery dashboard: https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10504
