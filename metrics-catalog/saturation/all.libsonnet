@@ -17,6 +17,7 @@ local saturationTypes = [
   import 'gitaly_total_disk_space.libsonnet',
   import 'go_memory.libsonnet',
   import 'grafana_cloudsql_cpu.libsonnet',
+  import 'grafana_trickster.libsonnet',
   import 'kube_container_cpu.libsonnet',
   import 'kube_container_memory.libsonnet',
   import 'kube_go_memory.libsonnet',

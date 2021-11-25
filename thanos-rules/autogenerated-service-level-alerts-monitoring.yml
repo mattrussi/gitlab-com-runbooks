@@ -263,6 +263,204 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="grafana_google_lb",monitor="global",type="monitoring"}) >= 1
       )
+  - alert: MonitoringServiceGrafanaTricksterApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The grafana_trickster SLI of the monitoring service (`{{ $labels.stage
+        }}` stage) has an apdex violating SLO
+      description: |
+        This SLI monitors the Trickster HTTP interface.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: monitoring-main/monitoring-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "688495388"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(trickster_frontend_requests_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          )
+        )
+      runbook: docs/monitoring/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_1h{component="grafana_trickster",monitor="global",type="monitoring"}
+          < (1 - 14.4 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_5m{component="grafana_trickster",monitor="global",type="monitoring"}
+          < (1 - 14.4 * 0.001000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="grafana_trickster",monitor="global",type="monitoring"}) >= 1
+      )
+  - alert: MonitoringServiceGrafanaTricksterApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The grafana_trickster SLI of the monitoring service (`{{ $labels.stage
+        }}` stage) has an apdex violating SLO
+      description: |
+        This SLI monitors the Trickster HTTP interface.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: monitoring-main/monitoring-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "688495388"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(trickster_frontend_requests_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          )
+        )
+      runbook: docs/monitoring/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_6h{component="grafana_trickster",monitor="global",type="monitoring"}
+          < (1 - 6 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_30m{component="grafana_trickster",monitor="global",type="monitoring"}
+          < (1 - 6 * 0.001000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="grafana_trickster",monitor="global",type="monitoring"}) >= 1
+      )
+  - alert: MonitoringServiceGrafanaTricksterErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The grafana_trickster SLI of the monitoring service (`{{ $labels.stage
+        }}` stage) has an error rate violating SLO
+      description: |
+        This SLI monitors the Trickster HTTP interface.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: monitoring-main/monitoring-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2991348750"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(trickster_frontend_requests_total{environment="{{ $labels.environment }}",http_status=~"5.*",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/monitoring/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_1h{component="grafana_trickster",monitor="global",type="monitoring"}
+          > (14.4 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_5m{component="grafana_trickster",monitor="global",type="monitoring"}
+          > (14.4 * 0.001000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="grafana_trickster",monitor="global",type="monitoring"}) >= 1
+      )
+  - alert: MonitoringServiceGrafanaTricksterErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The grafana_trickster SLI of the monitoring service (`{{ $labels.stage
+        }}` stage) has an error rate violating SLO
+      description: |
+        This SLI monitors the Trickster HTTP interface.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: monitoring-main/monitoring-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2991348750"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(trickster_frontend_requests_total{environment="{{ $labels.environment }}",http_status=~"5.*",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/monitoring/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_6h{component="grafana_trickster",monitor="global",type="monitoring"}
+          > (6 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_30m{component="grafana_trickster",monitor="global",type="monitoring"}
+          > (6 * 0.001000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="grafana_trickster",monitor="global",type="monitoring"}) >= 1
+      )
   - alert: MonitoringServiceMemcachedThanosQfeLabelsApdexSLOViolation
     for: 2m
     annotations:
@@ -3011,201 +3209,3 @@ groups:
       gitlab_component_ops:rate_5m{type="monitoring", component="thanos_store", stage="main", monitor="global"} offset 1h
       unless
       gitlab_component_ops:rate_5m{type="monitoring", component="thanos_store", stage="main", monitor="global"}
-  - alert: MonitoringServiceTricksterApdexSLOViolation
-    for: 2m
-    annotations:
-      title: The trickster SLI of the monitoring service (`{{ $labels.stage }}` stage)
-        has an apdex violating SLO
-      description: |
-        This SLI monitors the Trickster HTTP interface.
-
-        Currently the apdex value is {{ $value | humanizePercentage }}.
-      grafana_dashboard_id: monitoring-main/monitoring-overview
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "135884220"
-      grafana_variables: environment,stage
-      promql_template_1: |
-        histogram_quantile(
-          0.950000,
-          sum by (env,environment,tier,stage,le) (
-            rate(trickster_frontend_requests_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
-          )
-        )
-      runbook: docs/monitoring/README.md
-    labels:
-      aggregation: component
-      alert_class: slo_violation
-      alert_type: symptom
-      feature_category: not_owned
-      pager: pagerduty
-      rules_domain: general
-      severity: s2
-      sli_type: apdex
-      slo_alert: "yes"
-      user_impacting: "no"
-      window: 1h
-    expr: |
-      (
-        (
-          gitlab_component_apdex:ratio_1h{component="trickster",monitor="global",type="monitoring"}
-          < (1 - 14.4 * 0.001000)
-        )
-        and
-        (
-          gitlab_component_apdex:ratio_5m{component="trickster",monitor="global",type="monitoring"}
-          < (1 - 14.4 * 0.001000)
-        )
-      )
-      and on(env,environment,tier,type,stage,component)
-      (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="trickster",monitor="global",type="monitoring"}) >= 1
-      )
-  - alert: MonitoringServiceTricksterApdexSLOViolation
-    for: 2m
-    annotations:
-      title: The trickster SLI of the monitoring service (`{{ $labels.stage }}` stage)
-        has an apdex violating SLO
-      description: |
-        This SLI monitors the Trickster HTTP interface.
-
-        Currently the apdex value is {{ $value | humanizePercentage }}.
-      grafana_dashboard_id: monitoring-main/monitoring-overview
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "135884220"
-      grafana_variables: environment,stage
-      promql_template_1: |
-        histogram_quantile(
-          0.950000,
-          sum by (env,environment,tier,stage,le) (
-            rate(trickster_frontend_requests_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
-          )
-        )
-      runbook: docs/monitoring/README.md
-    labels:
-      aggregation: component
-      alert_class: slo_violation
-      alert_type: symptom
-      feature_category: not_owned
-      pager: pagerduty
-      rules_domain: general
-      severity: s2
-      sli_type: apdex
-      slo_alert: "yes"
-      user_impacting: "no"
-      window: 6h
-    expr: |
-      (
-        (
-          gitlab_component_apdex:ratio_6h{component="trickster",monitor="global",type="monitoring"}
-          < (1 - 6 * 0.001000)
-        )
-        and
-        (
-          gitlab_component_apdex:ratio_30m{component="trickster",monitor="global",type="monitoring"}
-          < (1 - 6 * 0.001000)
-        )
-      )
-      and on(env,environment,tier,type,stage,component)
-      (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="trickster",monitor="global",type="monitoring"}) >= 1
-      )
-  - alert: MonitoringServiceTricksterErrorSLOViolation
-    for: 2m
-    annotations:
-      title: The trickster SLI of the monitoring service (`{{ $labels.stage }}` stage)
-        has an error rate violating SLO
-      description: |
-        This SLI monitors the Trickster HTTP interface.
-
-        Currently the error-rate is {{ $value | humanizePercentage }}.
-      grafana_dashboard_id: monitoring-main/monitoring-overview
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "3348294780"
-      grafana_variables: environment,stage
-      promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          rate(trickster_frontend_requests_total{environment="{{ $labels.environment }}",http_status=~"5.*",stage="{{ $labels.stage }}"}[5m])
-        )
-      runbook: docs/monitoring/README.md
-    labels:
-      aggregation: component
-      alert_class: slo_violation
-      alert_type: symptom
-      feature_category: not_owned
-      pager: pagerduty
-      rules_domain: general
-      severity: s2
-      sli_type: error
-      slo_alert: "yes"
-      user_impacting: "no"
-      window: 1h
-    expr: |
-      (
-        (
-          gitlab_component_errors:ratio_1h{component="trickster",monitor="global",type="monitoring"}
-          > (14.4 * 0.001000)
-        )
-        and
-        (
-          gitlab_component_errors:ratio_5m{component="trickster",monitor="global",type="monitoring"}
-          > (14.4 * 0.001000)
-        )
-      )
-      and on(env,environment,tier,type,stage,component)
-      (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="trickster",monitor="global",type="monitoring"}) >= 1
-      )
-  - alert: MonitoringServiceTricksterErrorSLOViolation
-    for: 2m
-    annotations:
-      title: The trickster SLI of the monitoring service (`{{ $labels.stage }}` stage)
-        has an error rate violating SLO
-      description: |
-        This SLI monitors the Trickster HTTP interface.
-
-        Currently the error-rate is {{ $value | humanizePercentage }}.
-      grafana_dashboard_id: monitoring-main/monitoring-overview
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "3348294780"
-      grafana_variables: environment,stage
-      promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          rate(trickster_frontend_requests_total{environment="{{ $labels.environment }}",http_status=~"5.*",stage="{{ $labels.stage }}"}[5m])
-        )
-      runbook: docs/monitoring/README.md
-    labels:
-      aggregation: component
-      alert_class: slo_violation
-      alert_type: symptom
-      feature_category: not_owned
-      pager: pagerduty
-      rules_domain: general
-      severity: s2
-      sli_type: error
-      slo_alert: "yes"
-      user_impacting: "no"
-      window: 6h
-    expr: |
-      (
-        (
-          gitlab_component_errors:ratio_6h{component="trickster",monitor="global",type="monitoring"}
-          > (6 * 0.001000)
-        )
-        and
-        (
-          gitlab_component_errors:ratio_30m{component="trickster",monitor="global",type="monitoring"}
-          > (6 * 0.001000)
-        )
-      )
-      and on(env,environment,tier,type,stage,component)
-      (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="trickster",monitor="global",type="monitoring"}) >= 1
-      )

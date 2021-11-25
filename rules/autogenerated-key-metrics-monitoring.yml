@@ -60,6 +60,58 @@ groups:
       )
   - record: gitlab_component_apdex:success:rate
     labels:
+      component: grafana_trickster
+      tier: inf
+      type: monitoring
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(trickster_frontend_requests_duration_seconds_bucket{le="5"}[1m])
+        )
+        +
+        sum by (environment,stage) (
+          rate(trickster_frontend_requests_duration_seconds_bucket{le="20"}[1m])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: grafana_trickster
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(trickster_frontend_requests_duration_seconds_bucket{le="+Inf"}[1m])
+      )
+  - record: gitlab_component_ops:rate
+    labels:
+      component: grafana_trickster
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(trickster_frontend_requests_total{}[1m])
+      )
+  - record: gitlab_component_errors:rate
+    labels:
+      component: grafana_trickster
+      tier: inf
+      type: monitoring
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(trickster_frontend_requests_total{http_status=~"5.*"}[1m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate{component="grafana_trickster",tier="inf",type="monitoring"}
+        )
+      )
+  - record: gitlab_component_apdex:success:rate
+    labels:
       component: memcached_thanos_qfe_labels
       tier: inf
       type: monitoring
@@ -602,58 +654,6 @@ groups:
           gitlab_component_ops:rate{component="thanos_store",tier="inf",type="monitoring"}
         )
       )
-  - record: gitlab_component_apdex:success:rate
-    labels:
-      component: trickster
-      tier: inf
-      type: monitoring
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(trickster_frontend_requests_duration_seconds_bucket{le="5"}[1m])
-        )
-        +
-        sum by (environment,stage) (
-          rate(trickster_frontend_requests_duration_seconds_bucket{le="20"}[1m])
-        )
-      )
-      /
-      2
-  - record: gitlab_component_apdex:weight:score
-    labels:
-      component: trickster
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(trickster_frontend_requests_duration_seconds_bucket{le="+Inf"}[1m])
-      )
-  - record: gitlab_component_ops:rate
-    labels:
-      component: trickster
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(trickster_frontend_requests_total{}[1m])
-      )
-  - record: gitlab_component_errors:rate
-    labels:
-      component: trickster
-      tier: inf
-      type: monitoring
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(trickster_frontend_requests_total{http_status=~"5.*"}[1m])
-        )
-      )
-      or
-      (
-        0 * group by(environment,stage) (
-          gitlab_component_ops:rate{component="trickster",tier="inf",type="monitoring"}
-        )
-      )
 - name: 'Component-Level SLIs: monitoring - 5m burn-rate'
   interval: 1m
   rules:
@@ -709,6 +709,58 @@ groups:
       (
         0 * group by(environment) (
           gitlab_component_ops:rate_5m{component="grafana_google_lb",stage="main",tier="inf",type="monitoring"}
+        )
+      )
+  - record: gitlab_component_apdex:success:rate_5m
+    labels:
+      component: grafana_trickster
+      tier: inf
+      type: monitoring
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(trickster_frontend_requests_duration_seconds_bucket{le="5"}[5m])
+        )
+        +
+        sum by (environment,stage) (
+          rate(trickster_frontend_requests_duration_seconds_bucket{le="20"}[5m])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_5m
+    labels:
+      component: grafana_trickster
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(trickster_frontend_requests_duration_seconds_bucket{le="+Inf"}[5m])
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: grafana_trickster
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(trickster_frontend_requests_total{}[5m])
+      )
+  - record: gitlab_component_errors:rate_5m
+    labels:
+      component: grafana_trickster
+      tier: inf
+      type: monitoring
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(trickster_frontend_requests_total{http_status=~"5.*"}[5m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_5m{component="grafana_trickster",tier="inf",type="monitoring"}
         )
       )
   - record: gitlab_component_apdex:success:rate_5m
@@ -1255,58 +1307,6 @@ groups:
           gitlab_component_ops:rate_5m{component="thanos_store",tier="inf",type="monitoring"}
         )
       )
-  - record: gitlab_component_apdex:success:rate_5m
-    labels:
-      component: trickster
-      tier: inf
-      type: monitoring
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(trickster_frontend_requests_duration_seconds_bucket{le="5"}[5m])
-        )
-        +
-        sum by (environment,stage) (
-          rate(trickster_frontend_requests_duration_seconds_bucket{le="20"}[5m])
-        )
-      )
-      /
-      2
-  - record: gitlab_component_apdex:weight:score_5m
-    labels:
-      component: trickster
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(trickster_frontend_requests_duration_seconds_bucket{le="+Inf"}[5m])
-      )
-  - record: gitlab_component_ops:rate_5m
-    labels:
-      component: trickster
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(trickster_frontend_requests_total{}[5m])
-      )
-  - record: gitlab_component_errors:rate_5m
-    labels:
-      component: trickster
-      tier: inf
-      type: monitoring
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(trickster_frontend_requests_total{http_status=~"5.*"}[5m])
-        )
-      )
-      or
-      (
-        0 * group by(environment,stage) (
-          gitlab_component_ops:rate_5m{component="trickster",tier="inf",type="monitoring"}
-        )
-      )
 - name: 'Component-Level SLIs: monitoring - 30m burn-rate'
   interval: 2m
   rules:
@@ -1362,6 +1362,58 @@ groups:
       (
         0 * group by(environment) (
           gitlab_component_ops:rate_30m{component="grafana_google_lb",stage="main",tier="inf",type="monitoring"}
+        )
+      )
+  - record: gitlab_component_apdex:success:rate_30m
+    labels:
+      component: grafana_trickster
+      tier: inf
+      type: monitoring
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(trickster_frontend_requests_duration_seconds_bucket{le="5"}[30m])
+        )
+        +
+        sum by (environment,stage) (
+          rate(trickster_frontend_requests_duration_seconds_bucket{le="20"}[30m])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_30m
+    labels:
+      component: grafana_trickster
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(trickster_frontend_requests_duration_seconds_bucket{le="+Inf"}[30m])
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: grafana_trickster
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(trickster_frontend_requests_total{}[30m])
+      )
+  - record: gitlab_component_errors:rate_30m
+    labels:
+      component: grafana_trickster
+      tier: inf
+      type: monitoring
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(trickster_frontend_requests_total{http_status=~"5.*"}[30m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_30m{component="grafana_trickster",tier="inf",type="monitoring"}
         )
       )
   - record: gitlab_component_apdex:success:rate_30m
@@ -1908,58 +1960,6 @@ groups:
           gitlab_component_ops:rate_30m{component="thanos_store",tier="inf",type="monitoring"}
         )
       )
-  - record: gitlab_component_apdex:success:rate_30m
-    labels:
-      component: trickster
-      tier: inf
-      type: monitoring
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(trickster_frontend_requests_duration_seconds_bucket{le="5"}[30m])
-        )
-        +
-        sum by (environment,stage) (
-          rate(trickster_frontend_requests_duration_seconds_bucket{le="20"}[30m])
-        )
-      )
-      /
-      2
-  - record: gitlab_component_apdex:weight:score_30m
-    labels:
-      component: trickster
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(trickster_frontend_requests_duration_seconds_bucket{le="+Inf"}[30m])
-      )
-  - record: gitlab_component_ops:rate_30m
-    labels:
-      component: trickster
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(trickster_frontend_requests_total{}[30m])
-      )
-  - record: gitlab_component_errors:rate_30m
-    labels:
-      component: trickster
-      tier: inf
-      type: monitoring
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(trickster_frontend_requests_total{http_status=~"5.*"}[30m])
-        )
-      )
-      or
-      (
-        0 * group by(environment,stage) (
-          gitlab_component_ops:rate_30m{component="trickster",tier="inf",type="monitoring"}
-        )
-      )
 - name: 'Component-Level SLIs: monitoring - 1h burn-rate'
   interval: 1m
   rules:
@@ -2015,6 +2015,58 @@ groups:
       (
         0 * group by(environment) (
           gitlab_component_ops:rate_1h{component="grafana_google_lb",stage="main",tier="inf",type="monitoring"}
+        )
+      )
+  - record: gitlab_component_apdex:success:rate_1h
+    labels:
+      component: grafana_trickster
+      tier: inf
+      type: monitoring
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(trickster_frontend_requests_duration_seconds_bucket{le="5"}[1h])
+        )
+        +
+        sum by (environment,stage) (
+          rate(trickster_frontend_requests_duration_seconds_bucket{le="20"}[1h])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_1h
+    labels:
+      component: grafana_trickster
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(trickster_frontend_requests_duration_seconds_bucket{le="+Inf"}[1h])
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: grafana_trickster
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(trickster_frontend_requests_total{}[1h])
+      )
+  - record: gitlab_component_errors:rate_1h
+    labels:
+      component: grafana_trickster
+      tier: inf
+      type: monitoring
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(trickster_frontend_requests_total{http_status=~"5.*"}[1h])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_1h{component="grafana_trickster",tier="inf",type="monitoring"}
         )
       )
   - record: gitlab_component_apdex:success:rate_1h
@@ -2561,58 +2613,6 @@ groups:
           gitlab_component_ops:rate_1h{component="thanos_store",tier="inf",type="monitoring"}
         )
       )
-  - record: gitlab_component_apdex:success:rate_1h
-    labels:
-      component: trickster
-      tier: inf
-      type: monitoring
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(trickster_frontend_requests_duration_seconds_bucket{le="5"}[1h])
-        )
-        +
-        sum by (environment,stage) (
-          rate(trickster_frontend_requests_duration_seconds_bucket{le="20"}[1h])
-        )
-      )
-      /
-      2
-  - record: gitlab_component_apdex:weight:score_1h
-    labels:
-      component: trickster
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(trickster_frontend_requests_duration_seconds_bucket{le="+Inf"}[1h])
-      )
-  - record: gitlab_component_ops:rate_1h
-    labels:
-      component: trickster
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(trickster_frontend_requests_total{}[1h])
-      )
-  - record: gitlab_component_errors:rate_1h
-    labels:
-      component: trickster
-      tier: inf
-      type: monitoring
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(trickster_frontend_requests_total{http_status=~"5.*"}[1h])
-        )
-      )
-      or
-      (
-        0 * group by(environment,stage) (
-          gitlab_component_ops:rate_1h{component="trickster",tier="inf",type="monitoring"}
-        )
-      )
 - name: 'Component-Level SLIs: monitoring - 6h burn-rate'
   interval: 2m
   rules:
@@ -2668,6 +2668,58 @@ groups:
       (
         0 * group by(environment) (
           gitlab_component_ops:rate_6h{component="grafana_google_lb",stage="main",tier="inf",type="monitoring"}
+        )
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: grafana_trickster
+      tier: inf
+      type: monitoring
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(trickster_frontend_requests_duration_seconds_bucket{le="5"}[6h])
+        )
+        +
+        sum by (environment,stage) (
+          rate(trickster_frontend_requests_duration_seconds_bucket{le="20"}[6h])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: grafana_trickster
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(trickster_frontend_requests_duration_seconds_bucket{le="+Inf"}[6h])
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: grafana_trickster
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(trickster_frontend_requests_total{}[6h])
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: grafana_trickster
+      tier: inf
+      type: monitoring
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(trickster_frontend_requests_total{http_status=~"5.*"}[6h])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_6h{component="grafana_trickster",tier="inf",type="monitoring"}
         )
       )
   - record: gitlab_component_apdex:success:rate_6h
@@ -3214,58 +3266,6 @@ groups:
           gitlab_component_ops:rate_6h{component="thanos_store",tier="inf",type="monitoring"}
         )
       )
-  - record: gitlab_component_apdex:success:rate_6h
-    labels:
-      component: trickster
-      tier: inf
-      type: monitoring
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(trickster_frontend_requests_duration_seconds_bucket{le="5"}[6h])
-        )
-        +
-        sum by (environment,stage) (
-          rate(trickster_frontend_requests_duration_seconds_bucket{le="20"}[6h])
-        )
-      )
-      /
-      2
-  - record: gitlab_component_apdex:weight:score_6h
-    labels:
-      component: trickster
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(trickster_frontend_requests_duration_seconds_bucket{le="+Inf"}[6h])
-      )
-  - record: gitlab_component_ops:rate_6h
-    labels:
-      component: trickster
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(trickster_frontend_requests_total{}[6h])
-      )
-  - record: gitlab_component_errors:rate_6h
-    labels:
-      component: trickster
-      tier: inf
-      type: monitoring
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(trickster_frontend_requests_total{http_status=~"5.*"}[6h])
-        )
-      )
-      or
-      (
-        0 * group by(environment,stage) (
-          gitlab_component_ops:rate_6h{component="trickster",tier="inf",type="monitoring"}
-        )
-      )
 - name: 'Component mapping: monitoring'
   interval: 1m
   rules:
@@ -3280,6 +3280,14 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: grafana_google_lb
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: inf
+      type: monitoring
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: grafana_trickster
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -3392,14 +3400,6 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: thanos_store
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: inf
-      type: monitoring
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: trickster
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf

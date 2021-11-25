@@ -305,6 +305,23 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
+      component: grafana_trickster_cache_usage
+    expr: |
+      max by(environment, tier, type, stage) (
+        clamp_min(
+          clamp_max(
+            (
+              trickster_cache_usage_bytes{type="monitoring"}
+            /
+              trickster_cache_max_usage_bytes{type="monitoring"}
+            ) > 0
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
       component: kube_container_cpu
     expr: |
       max by(environment, tier, type, stage) (
@@ -1278,6 +1295,14 @@ groups:
     expr: "0.9"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
+      component: grafana_trickster_cache_usage
+    expr: "0.85"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: grafana_trickster_cache_usage
+    expr: "0.95"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
       component: kube_container_cpu
     expr: "0.9"
   - record: slo:max:hard:gitlab_component_saturation:ratio
@@ -1772,6 +1797,13 @@ groups:
       horiz_scaling: "yes"
       quantile: max
       severity: s4
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      component: grafana_trickster_cache_usage
+      horiz_scaling: "no"
+      quantile: max
+      severity: s3
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
@@ -2872,6 +2904,51 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="grafana_cloudsql_cpu"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="grafana_cloudsql_cpu"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 15m
+    annotations:
+      title: The Grafana Trickster cache usage resource of the {{ $labels.type }}
+        service ({{ $labels.stage }} stage), component has a saturation exceeding
+        SLO and is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Grafana Trickster cache usage resource:
+
+        Trickster cache usage / limit ratio
+
+        Saturation of the Trickster cache may performance issues when displaying dashboards in Grafana.
+
+        To fix, we can tune the cached objects TTL or eviction method, or increase the cache size.
+      grafana_dashboard_id: alerts-grafana_trickster_cache_usage
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-grafana_trickster_cache_usage?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2145675646"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, pod) (
+          clamp_min(
+            clamp_max(
+              (
+                trickster_cache_usage_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              /
+                trickster_cache_max_usage_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              ) > 0
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s3
+    expr: |
+      gitlab_component_saturation:ratio{component="grafana_trickster_cache_usage"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="grafana_trickster_cache_usage"}
   - alert: component_saturation_slo_out_of_bounds
     for: 15m
     annotations:

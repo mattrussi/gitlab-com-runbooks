@@ -39,6 +39,12 @@ metricsCatalog.serviceDefinition({
         'grafana-image-renderer',
       ],
     },
+    'grafana-trickster': {
+      kind: 'Deployment',
+      containers: [
+        'grafana-trickster',
+      ],
+    },
     'thanos-query-frontend': {
       kind: 'Deployment',
       containers: [
@@ -433,8 +439,8 @@ metricsCatalog.serviceDefinition({
     },
 
     // Trickster is a prometheus caching layer that serves requests to our
-    // public Grafana instance
-    trickster: {
+    // Grafana instances
+    grafana_trickster: {
       userImpacting: false,
       featureCategory: 'not_owned',
       ignoreTrafficCessation: true,
@@ -458,7 +464,7 @@ metricsCatalog.serviceDefinition({
         selector={ http_status: { re: '5.*' } }
       ),
 
-      significantLabels: ['fqdn'],
+      significantLabels: ['pod'],
     },
 
     local thanosMemcachedSLI(job) = {
