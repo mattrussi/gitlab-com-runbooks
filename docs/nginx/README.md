@@ -15,6 +15,7 @@
 
 ## Troubleshooting Pointers
 
+* [Disk space alerts (production)](../customers/disk-space.md)
 * [Management for forum.gitlab.com](../forum/discourse-forum.md)
 * [HAProxy management at GitLab](../frontend/haproxy.md)
 * [license.gitlab.com Runbook](../license/license-gitlab-com.md)
