@@ -665,6 +665,18 @@ groups:
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      component: grafana_trickster
+      tier: inf
+      type: monitoring
+    expr: "0.999000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: grafana_trickster
+      tier: inf
+      type: monitoring
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
       component: memcached_thanos_qfe_labels
       tier: inf
       type: monitoring
@@ -831,18 +843,6 @@ groups:
       tier: inf
       type: monitoring
     expr: "0.050000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: trickster
-      tier: inf
-      type: monitoring
-    expr: "0.999000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: trickster
-      tier: inf
-      type: monitoring
-    expr: "0.001000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       tier: lb
@@ -2306,6 +2306,14 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
+      component: grafana_trickster
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: inf
+      type: monitoring
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
       component: memcached_thanos_qfe_labels
       regional_aggregation: "no"
       service_aggregation: "yes"
@@ -2411,14 +2419,6 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: thanos_store
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: inf
-      type: monitoring
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: trickster
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
