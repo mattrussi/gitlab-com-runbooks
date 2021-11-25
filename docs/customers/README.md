@@ -16,19 +16,21 @@ instance running locally in the VM) via:
 (only superusers have access to the DB. We are improving this soon)
 
 ### Staging
-The staging node is an Azure virtual machine running in the `East US 2` zone.
-It can be connected to via SSH directly as `customers.stg.gitlab.com`.
+The staging node is a GCP machine.
+It can be connected to via SSH using the [configuration stated in the CustomersDot repository](https://gitlab.com/gitlab-org/customers-gitlab-com/-/blob/staging/doc/testing/staging.md#ssh-config).
 
 ### Change Management
-Chef is used to manage both the staging and production virtual machines. Chef
-is also used to deploy the latest code to staging and production.
+Chef is used to manage the production virtual machine. Chef
+is also used to deploy the latest code to production.
+
+[Ansible](https://gitlab.com/gitlab-com/gl-infra/customersdot-ansible-poc/) is used to deploy the latest code to staging.
 
 #### Chef
 [cookbook-customers-gitlab-com](https://gitlab.com/gitlab-cookbooks/cookbook-customers-gitlab-com)
 is the Chef cookbook that configures the production and staging virtual
 machines and deploys the staging and production builds of the application.
 
-The staging Chef environment is `stg` and the production Chef environment is
+The old staging Chef environment is `stg` and the production Chef environment is
 `_default`. Like our other Chef promotion workflows, the
 [`stg` Chef environment](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/-/blob/master/environments/stg.json)
 is used to pin versions of recipes. Since the `_default` Chef environment
