@@ -7,6 +7,7 @@ local singleMetricRow = import 'key-metric-panels/single-metric-row.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
+local objects = import 'utils/objects.libsonnet';
 
 local row = grafana.row;
 
@@ -56,9 +57,10 @@ local sliOverviewMatrixRow(
   selectorHash,
   aggregationSet,
   legendFormatPrefix,
-  expectMultipleSeries
+  expectMultipleSeries,
       ) =
-  local selectorHashWithExtras = selectorHash { type: serviceType, component: sli.name };
+  local typeSelector = if serviceType == null then {} else { type: serviceType };
+  local selectorHashWithExtras = selectorHash { component: sli.name } + typeSelector;
   local formatConfig = {
     serviceType: serviceType,
     sliName: sli.name,
@@ -207,6 +209,52 @@ local sliDetailErrorRatePanel(
               legendFormatPrefix=legendFormatPrefix,
               expectMultipleSeries=expectMultipleSeries,
             ), std.objectFields(service.serviceLevelIndicators)
+        )
+      )
+    ),
+
+  sliMatrixAcrossServices(
+    title,
+    serviceTypes,
+    aggregationSet,
+    startRow,
+    selectorHash,
+    legendFormatPrefix='',
+    expectMultipleSeries=false,
+    sliFilter=function(x) x,
+  )::
+    local toA(object) = std.map(function(key) [key, object[key]], std.objectFields(object));
+    local slis = objects.fromPairs(
+      std.flattenArrays(
+        std.map(
+          function(serviceType) toA(metricsCatalog.getService(serviceType).serviceLevelIndicators),
+          serviceTypes
+        )
+      ),
+    );
+
+    [
+      row.new(title=title, collapse=false) { gridPos: { x: 0, y: startRow, w: 24, h: 1 } },
+    ] +
+    std.prune(
+      std.flattenArrays(
+        std.mapWithIndex(
+          function(i, sliName)
+            local sli = slis[sliName];
+
+            if sliFilter(sli) then
+              sliOverviewMatrixRow(
+                serviceType=null,
+                aggregationSet=aggregationSet,
+                sli=sli,
+                selectorHash=selectorHash { component: sliName },
+                startRow=startRow + 1 + i * 10,
+                legendFormatPrefix=legendFormatPrefix,
+                expectMultipleSeries=expectMultipleSeries,
+              )
+            else
+              [],
+          std.objectFields(slis)
         )
       )
     ),

@@ -211,7 +211,7 @@ local statusDescriptionPanel(legendFormat, query) =
           mappings: [
             {
               type: 'value',
-              options: objects.toObject(
+              options: objects.fromPairs(
                 std.mapWithIndex(
                   function(index, v)
                     [index, v { index: index }]

@@ -129,19 +129,32 @@ local sloLabels(selectorHash) =
   );
   defaults + supportedSelector;
 
-local getApdexThresholdExpressionForWindow(selectorHash, windowDuration) =
+local thresholdExpressionFor(metric, selectorHash, fixedThreshold) =
+  if fixedThreshold == null then
+    |||
+      avg(%(metric)s{%(selectors)s})))
+    ||| % {
+      metric: metric,
+      selectors: selectors.serializeHash(sloLabels(selectorHash)),
+    }
+  else
+    '%g' % [fixedThreshold];
+
+local getApdexThresholdExpressionForWindow(selectorHash, windowDuration, fixedThreshold) =
   |||
-    (1 - %(factor)g * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{%(selectors)s})))
+    (1 - %(factor)g * (1 - %(expression)s))
   ||| % {
-    selectors: selectors.serializeHash(sloLabels(selectorHash)),
+    expression: thresholdExpressionFor('slo:min:events:gitlab_service_apdex:ratio', selectorHash, fixedThreshold),
     factor: multiburnFactors.errorBudgetFactorFor(windowDuration),
   };
 
-local getErrorRateThresholdExpressionForWindow(selectorHash, windowDuration) =
+local getErrorRateThresholdExpressionForWindow(selectorHash, windowDuration, fixedThreshold) =
+  local threshold = if fixedThreshold == null then fixedThreshold else 1 - fixedThreshold;
+
   |||
-    (%(factor)g * avg(slo:max:events:gitlab_service_errors:ratio{%(selectors)s}))
+    (%(factor)g * %(expression)s)
   ||| % {
-    selectors: selectors.serializeHash(sloLabels(selectorHash)),
+    expression: thresholdExpressionFor('slo:max:events:gitlab_service_errors:ratio', selectorHash, threshold),
     factor: multiburnFactors.errorBudgetFactorFor(windowDuration),
   };
 
@@ -157,11 +170,11 @@ local getErrorRateThresholdExpressionForWindow(selectorHash, windowDuration) =
      *
      * @return a string representation of the PromQL query
      */
-    serviceApdexDegradationSLOQuery(selectorHash)::
-      getApdexThresholdExpressionForWindow(selectorHash, '6h'),
+    serviceApdexDegradationSLOQuery(selectorHash, fixedThreshold=null)::
+      getApdexThresholdExpressionForWindow(selectorHash, '6h', fixedThreshold),
 
-    serviceApdexOutageSLOQuery(selectorHash)::
-      getApdexThresholdExpressionForWindow(selectorHash, '1h'),
+    serviceApdexOutageSLOQuery(selectorHash, fixedThreshold=null)::
+      getApdexThresholdExpressionForWindow(selectorHash, '1h', fixedThreshold),
   },
 
   opsRate:: {
@@ -182,10 +195,10 @@ local getErrorRateThresholdExpressionForWindow(selectorHash, windowDuration) =
   },
 
   errorRate:: {
-    serviceErrorRateDegradationSLOQuery(type)::
-      getErrorRateThresholdExpressionForWindow(type, '6h'),
+    serviceErrorRateDegradationSLOQuery(type, fixedThreshold=null)::
+      getErrorRateThresholdExpressionForWindow(type, '6h', fixedThreshold),
 
-    serviceErrorRateOutageSLOQuery(type)::
-      getErrorRateThresholdExpressionForWindow(type, '1h'),
+    serviceErrorRateOutageSLOQuery(type, fixedThreshold=null)::
+      getErrorRateThresholdExpressionForWindow(type, '1h', fixedThreshold),
   },
 }
