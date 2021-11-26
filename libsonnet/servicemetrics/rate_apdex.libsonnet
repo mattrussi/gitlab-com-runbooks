@@ -1,6 +1,7 @@
 local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local recordingRuleRegistry = import 'recording-rule-registry.libsonnet';
+local strings = import 'utils/strings.libsonnet';
 
 local resolveRateQuery(metricName, selector, rangeInterval, aggregationFunction=null, aggregationLabels=[]) =
   local recordedRate = recordingRuleRegistry.resolveRecordingRuleFor(
@@ -49,10 +50,10 @@ local generateApdexAttributionQuery(rateApdex, aggregationLabel, selector, range
       )
     )
   ||| % {
-    splitTotalQuery: rateApdex.apdexWeightQuery([aggregationLabel], selector, rangeInterval),
-    splitSuccessRateQuery: rateApdex.apdexSuccessRateQuery([aggregationLabel], selector, rangeInterval),
+    splitTotalQuery: strings.indent(rateApdex.apdexWeightQuery([aggregationLabel], selector, rangeInterval), 4),
+    splitSuccessRateQuery: strings.indent(rateApdex.apdexSuccessRateQuery([aggregationLabel], selector, rangeInterval), 4),
     aggregationLabel: aggregationLabel,
-    aggregatedTotalQuery: rateApdex.apdexWeightQuery([], selector, rangeInterval),
+    aggregatedTotalQuery: strings.indent(rateApdex.apdexWeightQuery([], selector, rangeInterval), 4),
   };
 {
   rateApdex(successRateMetric, operationRateMetric, selector=''):: {
