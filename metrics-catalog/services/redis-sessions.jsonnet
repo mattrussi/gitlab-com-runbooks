@@ -19,5 +19,5 @@ metricsCatalog.serviceDefinition(
       },
     },
   }
-  + redisHelpers.gitlabcomObservabilityToolingForRedis('redis-sessoins')
+  + redisHelpers.gitlabcomObservabilityToolingForRedis('redis-sessions')
 )
