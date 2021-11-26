@@ -223,11 +223,10 @@ local sliDetailErrorRatePanel(
     expectMultipleSeries=false,
     sliFilter=function(x) x,
   )::
-    local toA(object) = std.map(function(key) [key, object[key]], std.objectFields(object));
     local slis = objects.fromPairs(
       std.flattenArrays(
         std.map(
-          function(serviceType) toA(metricsCatalog.getService(serviceType).serviceLevelIndicators),
+          function(serviceType) objects.toPairs(metricsCatalog.getService(serviceType).serviceLevelIndicators),
           serviceTypes
         )
       ),

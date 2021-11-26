@@ -1,5 +1,5 @@
 {
-  fromPairs: function(items)
+  fromPairs(items):
     std.foldl(
       function(object, item)
         local key = '' + item[0];
@@ -19,5 +19,10 @@
           result { [fieldName]:: object[fieldName] },
       std.objectFieldsAll(object),
       {},
+    ),
+  toPairs(object):
+    std.map(
+      function(key) [key, object[key]],
+      std.objectFields(object)
     ),
 }
