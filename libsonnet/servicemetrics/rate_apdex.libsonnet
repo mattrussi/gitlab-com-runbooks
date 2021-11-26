@@ -38,9 +38,11 @@ local generateApdexRatio(rateApdex, aggregationLabels, additionalSelectors, rang
 local generateApdexAttributionQuery(rateApdex, aggregationLabel, selector, rangeInterval) =
   |||
     (
-      %(splitTotalQuery)s
-      -
-      %(splitSuccessRateQuery)s
+      (
+        %(splitTotalQuery)s
+        -
+        %(splitSuccessRateQuery)s
+      )
       / ignoring (%(aggregationLabel)s) group_left()
       (
         %(aggregatedTotalQuery)s
