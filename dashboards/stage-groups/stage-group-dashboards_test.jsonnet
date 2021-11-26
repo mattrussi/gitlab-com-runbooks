@@ -190,6 +190,8 @@ test.suite({
       'rails_requests SLI Apdex',
       'rails_requests SLI RPS - Requests per Second',
       'Details',
+      '🔬 puma Service Level Indicator Detail',
+      '🔬 rails_requests Service Level Indicator Detail',
     ],
   },
 })

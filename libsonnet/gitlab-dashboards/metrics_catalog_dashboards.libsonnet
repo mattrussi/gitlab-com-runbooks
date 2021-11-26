@@ -11,7 +11,9 @@ local objects = import 'utils/objects.libsonnet';
 
 local row = grafana.row;
 
-local getLatencyPercentileForService(service) =
+local getLatencyPercentileForService(serviceType) =
+  local service = if serviceType == null then {} else metricsCatalog.getService(serviceType);
+
   if std.objectHas(service, 'contractualThresholds') && std.objectHas(service.contractualThresholds, 'apdexRatio') then
     service.contractualThresholds.apdexRatio
   else
@@ -100,8 +102,8 @@ local sliOverviewMatrixRow(
 
 local sliDetailLatencyPanel(
   title=null,
+  sli=null,
   serviceType=null,
-  sliName=null,
   selector=null,
   aggregationLabels='',
   logBase=10,
@@ -109,13 +111,11 @@ local sliDetailLatencyPanel(
   min=0.01,
   intervalFactor=2,
       ) =
-  local service = metricsCatalog.getService(serviceType);
-  local sli = service.serviceLevelIndicators[sliName];
-  local percentile = getLatencyPercentileForService(service);
-  local formatConfig = { percentile_humanized: 'p%g' % [percentile * 100], sliName: sliName };
+  local percentile = getLatencyPercentileForService(serviceType);
+  local formatConfig = { percentile_humanized: 'p%g' % [percentile * 100], sliName: sli.name };
 
   basic.latencyTimeseries(
-    title=(if title == null then 'Estimated %(percentile_humanized)s latency for %(sliName)s' + sliName else title) % formatConfig,
+    title=(if title == null then 'Estimated %(percentile_humanized)s latency for %(sliName)s' + sli.name else title) % formatConfig,
     query=sli.apdex.percentileLatencyQuery(
       percentile=percentile,
       aggregationLabels=aggregationLabels,
@@ -136,47 +136,42 @@ local sliDetailLatencyPanel(
 local sliDetailOpsRatePanel(
   title=null,
   serviceType=null,
-  sliName=null,
+  sli=null,
   selector=null,
   aggregationLabels='',
   legendFormat='%(sliName)s errors',
   intervalFactor=2,
       ) =
-  local service = metricsCatalog.getService(serviceType);
-  local sli = service.serviceLevelIndicators[sliName];
 
   basic.timeseries(
-    title=if title == null then 'RPS for ' + sliName else title,
+    title=if title == null then 'RPS for ' + sli.name else title,
     query=sli.requestRate.aggregatedRateQuery(
       aggregationLabels=aggregationLabels,
       selector=selector,
       rangeInterval='$__interval',
     ),
-    legendFormat=legendFormat % { sliName: sliName },
+    legendFormat=legendFormat % { sliName: sli.name },
     intervalFactor=intervalFactor,
     yAxisLabel='Requests per Second'
   );
 
 local sliDetailErrorRatePanel(
   title=null,
-  serviceType=null,
-  sliName=null,
+  sli=null,
   selector=null,
   aggregationLabels='',
   legendFormat='%(sliName)s errors',
   intervalFactor=2,
       ) =
-  local service = metricsCatalog.getService(serviceType);
-  local sli = service.serviceLevelIndicators[sliName];
 
   basic.timeseries(
-    title=if title == null then 'Errors for ' + sliName else title,
+    title=if title == null then 'Errors for ' + sli.name else title,
     query=sli.errorRate.aggregatedRateQuery(
       aggregationLabels=aggregationLabels,
       selector=selector,
       rangeInterval='$__interval',
     ),
-    legendFormat=legendFormat % { sliName: sliName },
+    legendFormat=legendFormat % { sliName: sli.name },
     intervalFactor=intervalFactor,
     yAxisLabel='Errors',
     decimals=2,
@@ -289,7 +284,7 @@ local sliDetailErrorRatePanel(
                     sliDetailLatencyPanel(
                       title='Estimated %(percentile_humanized)s ' + sliName + ' Latency - ' + aggregationSet.title,
                       serviceType=serviceType,
-                      sliName=sliName,
+                      sli=sli,
                       selector=filteredSelectorHash,
                       legendFormat='%(percentile_humanized)s ' + aggregationSet.legendFormat,
                       aggregationLabels=aggregationSet.aggregationLabels,
@@ -321,8 +316,7 @@ local sliDetailErrorRatePanel(
                   if sli.hasErrorRate() then
                     sliDetailErrorRatePanel(
                       title=sliName + ' Errors - ' + aggregationSet.title,
-                      serviceType=serviceType,
-                      sliName=sliName,
+                      sli=sli,
                       legendFormat=aggregationSet.legendFormat,
                       aggregationLabels=aggregationSet.aggregationLabels,
                       selector=filteredSelectorHash,
@@ -333,8 +327,92 @@ local sliDetailErrorRatePanel(
                   if sli.hasAggregatableRequestRate() then
                     sliDetailOpsRatePanel(
                       title=sliName + ' RPS - ' + aggregationSet.title,
-                      serviceType=serviceType,
-                      sliName=sliName,
+                      sli=sli,
+                      selector=filteredSelectorHash,
+                      legendFormat=aggregationSet.legendFormat,
+                      aggregationLabels=aggregationSet.aggregationLabels
+                    )
+                  else
+                    null,
+                ]
+              ),
+              startRow=index * 10
+            ),
+          aggregationSets
+        )
+      )
+    ),
+
+  sliDetailMatrixAcrossServices(
+    sli,
+    selectorHash,
+    aggregationSets,
+    minLatency=0.01
+  )::
+    local staticLabelNames = if std.objectHas(sli, 'staticLabels') then std.objectFields(sli.staticLabels) else [];
+
+    // Note that we always want to ignore `type` filters, since the metricsCatalog selectors will
+    // already have correctly filtered labels to ensure the right values, and if we inject the type
+    // we may lose metrics 'proxied' from nodes with other types
+    local filteredSelectorHash = selectors.without(selectorHash, [
+      'type',
+    ] + staticLabelNames);
+
+    row.new(title='🔬 %(sliName)s Service Level Indicator Detail' % { sliName: sli.name }, collapse=true)
+    .addPanels(
+      std.flattenArrays(
+        std.mapWithIndex(
+          function(index, aggregationSet)
+            layout.singleRow(
+              std.prune(
+                [
+                  if sli.hasHistogramApdex() then
+                    sliDetailLatencyPanel(
+                      title='Estimated %(percentile_humanized)s ' + sli.name + ' Latency - ' + aggregationSet.title,
+                      sli=sli,
+                      selector=filteredSelectorHash,
+                      legendFormat='%(percentile_humanized)s ' + aggregationSet.legendFormat,
+                      aggregationLabels=aggregationSet.aggregationLabels,
+                      min=minLatency,
+                    )
+                  else
+                    null,
+
+                  if aggregationSet.aggregationLabels != '' && sli.hasApdex() && std.objectHasAll(sli.apdex, 'apdexAttribution') then
+                    basic.percentageTimeseries(
+                      title='Apdex attribution for ' + sli.name + ' Latency - ' + aggregationSet.title,
+                      description='Attributes apdex downscoring',
+                      query=sli.apdex.apdexAttribution(
+                        aggregationLabel=aggregationSet.aggregationLabels,
+                        selector=filteredSelectorHash,
+                        rangeInterval='$__interval',
+                      ),
+                      legendFormat=aggregationSet.legendFormat % { sliName: sli.name },
+                      intervalFactor=3,
+                      decimals=2,
+                      linewidth=1,
+                      fill=4,
+                      stack=true,
+                    )
+                    .addSeriesOverride(seriesOverrides.negativeY)
+                  else
+                    null,
+
+                  if sli.hasErrorRate() then
+                    sliDetailErrorRatePanel(
+                      title=sli.name + ' Errors - ' + aggregationSet.title,
+                      sli=sli,
+                      legendFormat=aggregationSet.legendFormat,
+                      aggregationLabels=aggregationSet.aggregationLabels,
+                      selector=filteredSelectorHash,
+                    )
+                  else
+                    null,
+
+                  if sli.hasAggregatableRequestRate() then
+                    sliDetailOpsRatePanel(
+                      title=sli.name + ' RPS - ' + aggregationSet.title,
+                      sli=sli,
                       selector=filteredSelectorHash,
                       legendFormat=aggregationSet.legendFormat,
                       aggregationLabels=aggregationSet.aggregationLabels
@@ -367,6 +445,42 @@ local sliDetailErrorRatePanel(
 
           s.sliDetailMatrix(serviceType, sli.name, selectorHash, aggregationSets),
         serviceLevelIndicatorsFiltered
+      )
+      , cols=1, startRow=startRow
+    ),
+
+  autoDetailRowsAcrossServices(
+    serviceTypes,
+    selectorHash,
+    startRow,
+    sliFilter=function(x) x,
+  )::
+    local s = self;
+    local slis = objects.fromPairs(
+      std.filter(
+        function(pair) pair[1].supportsDetails() && sliFilter(pair[1]),
+        std.flattenArrays(
+          std.map(
+            function(serviceType) objects.toPairs(metricsCatalog.getService(serviceType).serviceLevelIndicators),
+            serviceTypes
+          ),
+        ),
+      ),
+    );
+
+    layout.grid(
+      std.mapWithIndex(
+        function(i, sliName)
+          local sli = slis[sliName];
+
+          local aggregationSets =
+            [
+              { title: 'Overall', aggregationLabels: '', legendFormat: 'overall' },
+            ] +
+            std.map(function(c) { title: 'per ' + c, aggregationLabels: c, legendFormat: '{{' + c + '}}' }, sli.significantLabels);
+
+          s.sliDetailMatrixAcrossServices(sli, selectorHash, aggregationSets),
+        std.objectFields(slis)
       )
       , cols=1, startRow=startRow
     ),

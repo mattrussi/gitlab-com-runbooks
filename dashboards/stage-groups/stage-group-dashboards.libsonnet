@@ -639,6 +639,20 @@ local errorBudgetDetailDashboard() =
         // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1230
         sliFilter=function(sli) std.member(sli.significantLabels, 'feature_category')
       )
+    )
+    .addPanels(
+      metricsCatalogDashboards.autoDetailRowsAcrossServices(
+        serviceTypes=requestComponents,
+        selectorHash={
+          environment: '$environment',
+          stage: '$stage',
+          // TODO: fix this once we have a dashboard per stage group:
+          // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1365
+          feature_category: { re: 'team_planning|planning_analytics' },
+        },
+        startRow=1200,
+        sliFilter=function(sli) std.member(sli.significantLabels, 'feature_category')
+      )
     );
 
   dashboard {
