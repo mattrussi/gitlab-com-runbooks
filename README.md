@@ -382,6 +382,8 @@ example if you can `glsh hello` it will check if `hello` file exists inside of
 [`bin`](bin) directory and execute it. You can also pass multiple arguments, that the
 script will have access to.
 
+Demo: https://youtu.be/RsGgxm55YBg
+
 ```
 glsh hello arg1 arg2
 ```
