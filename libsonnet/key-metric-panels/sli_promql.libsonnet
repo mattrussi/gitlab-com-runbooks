@@ -132,7 +132,7 @@ local sloLabels(selectorHash) =
 local thresholdExpressionFor(metric, selectorHash, fixedThreshold) =
   if fixedThreshold == null then
     |||
-      avg(%(metric)s{%(selectors)s})))
+      avg(%(metric)s{%(selectors)s})
     ||| % {
       metric: metric,
       selectors: selectors.serializeHash(sloLabels(selectorHash)),
