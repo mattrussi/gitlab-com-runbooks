@@ -400,6 +400,20 @@ make glsh-install
 glsh update
 ```
 
+## Create a new command
+
+1. Create a new file inside of [`bin`](bin) directory: `touch bin/hello`
+1. Populate the file with the contents that you want. The command below updates the file with a simple `echo` command.
+    ```
+    cat > bin/hello <<EOF
+    #!/usr/bin/env bash
+
+    echo "Hello from glsh"
+    EOF
+    ```
+1. Make it executable: `chmod +x bin/hello`
+1. Run it: `glsh hello`
+
 # Developing in this repo
 
 ## Summary
