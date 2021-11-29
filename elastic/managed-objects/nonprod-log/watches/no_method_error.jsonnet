@@ -90,7 +90,7 @@ local es_query = {
           to: [
             '#staging',
           ],
-          text: 'NoMethodError: {{ctx.payload.hits.total}} errors detected! Please investigate',
+          text: 'NoMethodError: {{ctx.payload.hits.total}} errors detected! Please investigate. See https://gitlab.com/gitlab-org/gitlab/-/issues/345957 and https://nonprod-log.gitlab.net/goto/86a259d07d53400c9b4526f1dcf66fec',
         },
       },
     },
