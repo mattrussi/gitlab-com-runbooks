@@ -106,3 +106,71 @@ groups:
       sum by (env,environment,tier,type,stage,feature_category) (
         rate(gitlab_transaction_duration_seconds_bucket{job="gitlab-rails",le="5.0"}[1h])
       )
+  - record: gitlab:component:feature_category:execution:ops:rate_6h
+    labels:
+      component: puma
+    expr: |
+      sum by (env,environment,tier,type,stage,feature_category) (
+        sli_aggregations:http_requests_total_rate6h{job="gitlab-rails"}
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_6h
+    labels:
+      component: puma
+    expr: |
+      sum by (env,environment,tier,type,stage,feature_category) (
+        sli_aggregations:http_requests_total_rate6h{job="gitlab-rails",status=~"5.."}
+      )
+      or
+      (
+        0 * group by (env,environment,tier,type,stage,feature_category) (
+          gitlab:component:feature_category:execution:ops:rate_6h{component="puma"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_6h
+    labels:
+      component: puma
+    expr: |
+      sum by (env,environment,tier,type,stage,feature_category) (
+        rate(gitlab_transaction_duration_seconds_bucket{job="gitlab-rails",le="+Inf"}[6h])
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_6h
+    labels:
+      component: puma
+    expr: |
+      sum by (env,environment,tier,type,stage,feature_category) (
+        rate(gitlab_transaction_duration_seconds_bucket{job="gitlab-rails",le="5.0"}[6h])
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_3d
+    labels:
+      component: puma
+    expr: |
+      sum by (env,environment,tier,type,stage,feature_category) (
+        rate(http_requests_total{job="gitlab-rails"}[3d])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_3d
+    labels:
+      component: puma
+    expr: |
+      sum by (env,environment,tier,type,stage,feature_category) (
+        rate(http_requests_total{job="gitlab-rails",status=~"5.."}[3d])
+      )
+      or
+      (
+        0 * group by (env,environment,tier,type,stage,feature_category) (
+          gitlab:component:feature_category:execution:ops:rate_3d{component="puma"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_3d
+    labels:
+      component: puma
+    expr: |
+      sum by (env,environment,tier,type,stage,feature_category) (
+        rate(gitlab_transaction_duration_seconds_bucket{job="gitlab-rails",le="+Inf"}[3d])
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_3d
+    labels:
+      component: puma
+    expr: |
+      sum by (env,environment,tier,type,stage,feature_category) (
+        rate(gitlab_transaction_duration_seconds_bucket{job="gitlab-rails",le="5.0"}[3d])
+      )

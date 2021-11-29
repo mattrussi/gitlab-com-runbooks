@@ -78,6 +78,7 @@ groups:
       stage: main
       tier: lb
       type: pages
+      upscale_source: "yes"
     expr: |
       sum by (env,environment) (
         rate(haproxy_server_sessions_total{type="pages", backend=~"pages_https|pages_http"}[1h])
@@ -89,6 +90,7 @@ groups:
       stage: main
       tier: lb
       type: pages
+      upscale_source: "yes"
     expr: |
       (
         sum by (env,environment) (
@@ -100,6 +102,54 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab:component:feature_category:execution:ops:rate_1h{component="loadbalancer",feature_category="pages",stage="main",tier="lb",type="pages"}
+          gitlab:component:feature_category:execution:ops:rate_1h{component="loadbalancer",feature_category="pages",stage="main",tier="lb",type="pages",upscale_source="yes"}
         )
+      )
+- name: 'Prometheus Intermediate Metrics per feature: pages - burn-rate 6h'
+  rules:
+  - record: gitlab:component:feature_category:execution:ops:rate_6h
+    labels:
+      component: loadbalancer
+      feature_category: pages
+      stage: main
+      tier: lb
+      type: pages
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="loadbalancer",feature_category="pages",monitor!="global",stage="main",tier="lb",type="pages"}[6h])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_6h
+    labels:
+      component: loadbalancer
+      feature_category: pages
+      stage: main
+      tier: lb
+      type: pages
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="loadbalancer",feature_category="pages",monitor!="global",stage="main",tier="lb",type="pages"}[6h])
+      )
+- name: 'Prometheus Intermediate Metrics per feature: pages - burn-rate 3d'
+  rules:
+  - record: gitlab:component:feature_category:execution:ops:rate_3d
+    labels:
+      component: loadbalancer
+      feature_category: pages
+      stage: main
+      tier: lb
+      type: pages
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="loadbalancer",feature_category="pages",monitor!="global",stage="main",tier="lb",type="pages"}[3d])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_3d
+    labels:
+      component: loadbalancer
+      feature_category: pages
+      stage: main
+      tier: lb
+      type: pages
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="loadbalancer",feature_category="pages",monitor!="global",stage="main",tier="lb",type="pages"}[3d])
       )

@@ -241,6 +241,7 @@ groups:
       feature_category: gitaly
       tier: stor
       type: praefect
+      upscale_source: "yes"
     expr: |
       sum by (env,environment,stage) (
         avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database="praefect_production",job="stackdriver"}[1h])
@@ -251,6 +252,7 @@ groups:
       feature_category: gitaly
       tier: stor
       type: praefect
+      upscale_source: "yes"
     expr: |
       (
         sum by (env,environment,stage) (
@@ -260,7 +262,7 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab:component:feature_category:execution:ops:rate_1h{component="praefect_cloudsql",feature_category="gitaly",tier="stor",type="praefect"}
+          gitlab:component:feature_category:execution:ops:rate_1h{component="praefect_cloudsql",feature_category="gitaly",tier="stor",type="praefect",upscale_source="yes"}
         )
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
@@ -269,6 +271,7 @@ groups:
       feature_category: gitaly
       tier: stor
       type: praefect
+      upscale_source: "yes"
     expr: |
       (
         sum by (env,environment,stage) (
@@ -287,6 +290,7 @@ groups:
       feature_category: gitaly
       tier: stor
       type: praefect
+      upscale_source: "yes"
     expr: |
       sum by (env,environment,stage) (
         rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="+Inf"}[1h])
@@ -297,6 +301,7 @@ groups:
       feature_category: gitaly
       tier: stor
       type: praefect
+      upscale_source: "yes"
     expr: |
       sum by (env,environment,stage) (
         rate(grpc_server_handled_total{job="praefect"}[1h])
@@ -307,6 +312,7 @@ groups:
       feature_category: gitaly
       tier: stor
       type: praefect
+      upscale_source: "yes"
     expr: |
       (
         sum by (env,environment,stage) (
@@ -316,7 +322,7 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab:component:feature_category:execution:ops:rate_1h{component="proxy",feature_category="gitaly",tier="stor",type="praefect"}
+          gitlab:component:feature_category:execution:ops:rate_1h{component="proxy",feature_category="gitaly",tier="stor",type="praefect",upscale_source="yes"}
         )
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
@@ -325,6 +331,7 @@ groups:
       feature_category: gitaly
       tier: stor
       type: praefect
+      upscale_source: "yes"
     expr: |
       sum by (env,environment,stage) (
         rate(gitaly_praefect_replication_delay_bucket{job="praefect",le="300"}[1h])
@@ -335,6 +342,7 @@ groups:
       feature_category: gitaly
       tier: stor
       type: praefect
+      upscale_source: "yes"
     expr: |
       sum by (env,environment,stage) (
         rate(gitaly_praefect_replication_delay_bucket{job="praefect",le="+Inf"}[1h])
@@ -345,7 +353,192 @@ groups:
       feature_category: gitaly
       tier: stor
       type: praefect
+      upscale_source: "yes"
     expr: |
       sum by (env,environment,stage) (
         rate(gitaly_praefect_replication_delay_bucket{job="praefect",le="+Inf"}[1h])
+      )
+- name: 'Prometheus Intermediate Metrics per feature: praefect - burn-rate 6h'
+  rules:
+  - record: gitlab:component:feature_category:execution:ops:rate_6h
+    labels:
+      component: praefect_cloudsql
+      feature_category: gitaly
+      tier: stor
+      type: praefect
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="praefect_cloudsql",feature_category="gitaly",monitor!="global",tier="stor",type="praefect"}[6h])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_6h
+    labels:
+      component: praefect_cloudsql
+      feature_category: gitaly
+      tier: stor
+      type: praefect
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="praefect_cloudsql",feature_category="gitaly",monitor!="global",tier="stor",type="praefect"}[6h])
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_6h
+    labels:
+      component: proxy
+      feature_category: gitaly
+      tier: stor
+      type: praefect
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="proxy",feature_category="gitaly",monitor!="global",tier="stor",type="praefect"}[6h])
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_6h
+    labels:
+      component: proxy
+      feature_category: gitaly
+      tier: stor
+      type: praefect
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="proxy",feature_category="gitaly",monitor!="global",tier="stor",type="praefect"}[6h])
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_6h
+    labels:
+      component: proxy
+      feature_category: gitaly
+      tier: stor
+      type: praefect
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="proxy",feature_category="gitaly",monitor!="global",tier="stor",type="praefect"}[6h])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_6h
+    labels:
+      component: proxy
+      feature_category: gitaly
+      tier: stor
+      type: praefect
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="proxy",feature_category="gitaly",monitor!="global",tier="stor",type="praefect"}[6h])
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_6h
+    labels:
+      component: replicator_queue
+      feature_category: gitaly
+      tier: stor
+      type: praefect
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="replicator_queue",feature_category="gitaly",monitor!="global",tier="stor",type="praefect"}[6h])
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_6h
+    labels:
+      component: replicator_queue
+      feature_category: gitaly
+      tier: stor
+      type: praefect
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="replicator_queue",feature_category="gitaly",monitor!="global",tier="stor",type="praefect"}[6h])
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_6h
+    labels:
+      component: replicator_queue
+      feature_category: gitaly
+      tier: stor
+      type: praefect
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="replicator_queue",feature_category="gitaly",monitor!="global",tier="stor",type="praefect"}[6h])
+      )
+- name: 'Prometheus Intermediate Metrics per feature: praefect - burn-rate 3d'
+  rules:
+  - record: gitlab:component:feature_category:execution:ops:rate_3d
+    labels:
+      component: praefect_cloudsql
+      feature_category: gitaly
+      tier: stor
+      type: praefect
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="praefect_cloudsql",feature_category="gitaly",monitor!="global",tier="stor",type="praefect"}[3d])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_3d
+    labels:
+      component: praefect_cloudsql
+      feature_category: gitaly
+      tier: stor
+      type: praefect
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="praefect_cloudsql",feature_category="gitaly",monitor!="global",tier="stor",type="praefect"}[3d])
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_3d
+    labels:
+      component: proxy
+      feature_category: gitaly
+      tier: stor
+      type: praefect
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="proxy",feature_category="gitaly",monitor!="global",tier="stor",type="praefect"}[3d])
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_3d
+    labels:
+      component: proxy
+      feature_category: gitaly
+      tier: stor
+      type: praefect
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="proxy",feature_category="gitaly",monitor!="global",tier="stor",type="praefect"}[3d])
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_3d
+    labels:
+      component: proxy
+      feature_category: gitaly
+      tier: stor
+      type: praefect
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="proxy",feature_category="gitaly",monitor!="global",tier="stor",type="praefect"}[3d])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_3d
+    labels:
+      component: proxy
+      feature_category: gitaly
+      tier: stor
+      type: praefect
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="proxy",feature_category="gitaly",monitor!="global",tier="stor",type="praefect"}[3d])
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_3d
+    labels:
+      component: replicator_queue
+      feature_category: gitaly
+      tier: stor
+      type: praefect
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="replicator_queue",feature_category="gitaly",monitor!="global",tier="stor",type="praefect"}[3d])
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_3d
+    labels:
+      component: replicator_queue
+      feature_category: gitaly
+      tier: stor
+      type: praefect
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="replicator_queue",feature_category="gitaly",monitor!="global",tier="stor",type="praefect"}[3d])
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_3d
+    labels:
+      component: replicator_queue
+      feature_category: gitaly
+      tier: stor
+      type: praefect
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="replicator_queue",feature_category="gitaly",monitor!="global",tier="stor",type="praefect"}[3d])
       )

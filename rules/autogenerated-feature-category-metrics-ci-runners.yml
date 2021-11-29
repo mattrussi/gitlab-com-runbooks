@@ -281,6 +281,7 @@ groups:
       feature_category: runner
       tier: runners
       type: ci-runners
+      upscale_source: "yes"
     expr: |
       sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_requests_total{route="^/api/v4/jobs/request\\z"}[1h])
@@ -291,6 +292,7 @@ groups:
       feature_category: runner
       tier: runners
       type: ci-runners
+      upscale_source: "yes"
     expr: |
       (
         sum by (env,environment,stage) (
@@ -300,7 +302,7 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab:component:feature_category:execution:ops:rate_1h{component="polling",feature_category="runner",tier="runners",type="ci-runners"}
+          gitlab:component:feature_category:execution:ops:rate_1h{component="polling",feature_category="runner",tier="runners",type="ci-runners",upscale_source="yes"}
         )
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
@@ -309,6 +311,7 @@ groups:
       feature_category: continuous_integration_scaling
       tier: runners
       type: ci-runners
+      upscale_source: "yes"
     expr: |
       sum by (env,environment,stage) (
         rate(gitlab_ci_queue_retrieval_duration_seconds_bucket{le="0.5"}[1h])
@@ -319,6 +322,7 @@ groups:
       feature_category: continuous_integration_scaling
       tier: runners
       type: ci-runners
+      upscale_source: "yes"
     expr: |
       sum by (env,environment,stage) (
         rate(gitlab_ci_queue_retrieval_duration_seconds_bucket{le="+Inf"}[1h])
@@ -329,6 +333,7 @@ groups:
       feature_category: continuous_integration_scaling
       tier: runners
       type: ci-runners
+      upscale_source: "yes"
     expr: |
       sum by (env,environment,stage) (
         rate(gitlab_ci_queue_retrieval_duration_seconds_count{}[1h])
@@ -339,6 +344,7 @@ groups:
       feature_category: runner
       tier: runners
       type: ci-runners
+      upscale_source: "yes"
     expr: |
       sum by (env,environment,stage) (
         rate(job_queue_duration_seconds_bucket{shared_runner="true", jobs_running_for_project=~"^(0|1|2|3|4)$", le="60"}[1h])
@@ -349,6 +355,7 @@ groups:
       feature_category: runner
       tier: runners
       type: ci-runners
+      upscale_source: "yes"
     expr: |
       sum by (env,environment,stage) (
         rate(job_queue_duration_seconds_bucket{shared_runner="true", jobs_running_for_project=~"^(0|1|2|3|4)$", le="+Inf"}[1h])
@@ -359,6 +366,7 @@ groups:
       feature_category: runner
       tier: runners
       type: ci-runners
+      upscale_source: "yes"
     expr: |
       sum by (env,environment,stage) (
         rate(gitlab_runner_jobs_total{job="runners-manager",shard="shared"}[1h])
@@ -369,6 +377,7 @@ groups:
       feature_category: runner
       tier: runners
       type: ci-runners
+      upscale_source: "yes"
     expr: |
       (
         sum by (env,environment,stage) (
@@ -378,7 +387,7 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab:component:feature_category:execution:ops:rate_1h{component="shared_runner_queues",feature_category="runner",tier="runners",type="ci-runners"}
+          gitlab:component:feature_category:execution:ops:rate_1h{component="shared_runner_queues",feature_category="runner",tier="runners",type="ci-runners",upscale_source="yes"}
         )
       )
   - record: gitlab:component:feature_category:execution:ops:rate_1h
@@ -387,6 +396,7 @@ groups:
       feature_category: continuous_integration
       tier: runners
       type: ci-runners
+      upscale_source: "yes"
     expr: |
       sum by (env,environment,stage) (
         rate(sidekiq_jobs_completion_seconds_count{worker="Ci::ArchiveTraceWorker"}[1h])
@@ -397,6 +407,7 @@ groups:
       feature_category: continuous_integration
       tier: runners
       type: ci-runners
+      upscale_source: "yes"
     expr: |
       (
         sum by (env,environment,stage) (
@@ -406,6 +417,230 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab:component:feature_category:execution:ops:rate_1h{component="trace_archiving_ci_jobs",feature_category="continuous_integration",tier="runners",type="ci-runners"}
+          gitlab:component:feature_category:execution:ops:rate_1h{component="trace_archiving_ci_jobs",feature_category="continuous_integration",tier="runners",type="ci-runners",upscale_source="yes"}
         )
+      )
+- name: 'Prometheus Intermediate Metrics per feature: ci-runners - burn-rate 6h'
+  rules:
+  - record: gitlab:component:feature_category:execution:ops:rate_6h
+    labels:
+      component: polling
+      feature_category: runner
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="polling",feature_category="runner",monitor!="global",tier="runners",type="ci-runners"}[6h])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_6h
+    labels:
+      component: polling
+      feature_category: runner
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="polling",feature_category="runner",monitor!="global",tier="runners",type="ci-runners"}[6h])
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_6h
+    labels:
+      component: queuing_queries_duration
+      feature_category: continuous_integration_scaling
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="queuing_queries_duration",feature_category="continuous_integration_scaling",monitor!="global",tier="runners",type="ci-runners"}[6h])
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_6h
+    labels:
+      component: queuing_queries_duration
+      feature_category: continuous_integration_scaling
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="queuing_queries_duration",feature_category="continuous_integration_scaling",monitor!="global",tier="runners",type="ci-runners"}[6h])
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_6h
+    labels:
+      component: queuing_queries_duration
+      feature_category: continuous_integration_scaling
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="queuing_queries_duration",feature_category="continuous_integration_scaling",monitor!="global",tier="runners",type="ci-runners"}[6h])
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_6h
+    labels:
+      component: shared_runner_queues
+      feature_category: runner
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="shared_runner_queues",feature_category="runner",monitor!="global",tier="runners",type="ci-runners"}[6h])
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_6h
+    labels:
+      component: shared_runner_queues
+      feature_category: runner
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="shared_runner_queues",feature_category="runner",monitor!="global",tier="runners",type="ci-runners"}[6h])
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_6h
+    labels:
+      component: shared_runner_queues
+      feature_category: runner
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="shared_runner_queues",feature_category="runner",monitor!="global",tier="runners",type="ci-runners"}[6h])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_6h
+    labels:
+      component: shared_runner_queues
+      feature_category: runner
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="shared_runner_queues",feature_category="runner",monitor!="global",tier="runners",type="ci-runners"}[6h])
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_6h
+    labels:
+      component: trace_archiving_ci_jobs
+      feature_category: continuous_integration
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="trace_archiving_ci_jobs",feature_category="continuous_integration",monitor!="global",tier="runners",type="ci-runners"}[6h])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_6h
+    labels:
+      component: trace_archiving_ci_jobs
+      feature_category: continuous_integration
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="trace_archiving_ci_jobs",feature_category="continuous_integration",monitor!="global",tier="runners",type="ci-runners"}[6h])
+      )
+- name: 'Prometheus Intermediate Metrics per feature: ci-runners - burn-rate 3d'
+  rules:
+  - record: gitlab:component:feature_category:execution:ops:rate_3d
+    labels:
+      component: polling
+      feature_category: runner
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="polling",feature_category="runner",monitor!="global",tier="runners",type="ci-runners"}[3d])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_3d
+    labels:
+      component: polling
+      feature_category: runner
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="polling",feature_category="runner",monitor!="global",tier="runners",type="ci-runners"}[3d])
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_3d
+    labels:
+      component: queuing_queries_duration
+      feature_category: continuous_integration_scaling
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="queuing_queries_duration",feature_category="continuous_integration_scaling",monitor!="global",tier="runners",type="ci-runners"}[3d])
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_3d
+    labels:
+      component: queuing_queries_duration
+      feature_category: continuous_integration_scaling
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="queuing_queries_duration",feature_category="continuous_integration_scaling",monitor!="global",tier="runners",type="ci-runners"}[3d])
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_3d
+    labels:
+      component: queuing_queries_duration
+      feature_category: continuous_integration_scaling
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="queuing_queries_duration",feature_category="continuous_integration_scaling",monitor!="global",tier="runners",type="ci-runners"}[3d])
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_3d
+    labels:
+      component: shared_runner_queues
+      feature_category: runner
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="shared_runner_queues",feature_category="runner",monitor!="global",tier="runners",type="ci-runners"}[3d])
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_3d
+    labels:
+      component: shared_runner_queues
+      feature_category: runner
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="shared_runner_queues",feature_category="runner",monitor!="global",tier="runners",type="ci-runners"}[3d])
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_3d
+    labels:
+      component: shared_runner_queues
+      feature_category: runner
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="shared_runner_queues",feature_category="runner",monitor!="global",tier="runners",type="ci-runners"}[3d])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_3d
+    labels:
+      component: shared_runner_queues
+      feature_category: runner
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="shared_runner_queues",feature_category="runner",monitor!="global",tier="runners",type="ci-runners"}[3d])
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_3d
+    labels:
+      component: trace_archiving_ci_jobs
+      feature_category: continuous_integration
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="trace_archiving_ci_jobs",feature_category="continuous_integration",monitor!="global",tier="runners",type="ci-runners"}[3d])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_3d
+    labels:
+      component: trace_archiving_ci_jobs
+      feature_category: continuous_integration
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="trace_archiving_ci_jobs",feature_category="continuous_integration",monitor!="global",tier="runners",type="ci-runners"}[3d])
       )

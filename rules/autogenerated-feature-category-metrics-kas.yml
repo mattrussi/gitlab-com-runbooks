@@ -69,6 +69,7 @@ groups:
       feature_category: kubernetes_management
       tier: sv
       type: kas
+      upscale_source: "yes"
     expr: |
       sum by (env,environment,stage) (
         rate(grpc_server_handled_total{job="gitlab-kas"}[1h])
@@ -79,6 +80,7 @@ groups:
       feature_category: kubernetes_management
       tier: sv
       type: kas
+      upscale_source: "yes"
     expr: |
       (
         sum by (env,environment,stage) (
@@ -88,6 +90,50 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab:component:feature_category:execution:ops:rate_1h{component="grpc_requests",feature_category="kubernetes_management",tier="sv",type="kas"}
+          gitlab:component:feature_category:execution:ops:rate_1h{component="grpc_requests",feature_category="kubernetes_management",tier="sv",type="kas",upscale_source="yes"}
         )
+      )
+- name: 'Prometheus Intermediate Metrics per feature: kas - burn-rate 6h'
+  rules:
+  - record: gitlab:component:feature_category:execution:ops:rate_6h
+    labels:
+      component: grpc_requests
+      feature_category: kubernetes_management
+      tier: sv
+      type: kas
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="grpc_requests",feature_category="kubernetes_management",monitor!="global",tier="sv",type="kas"}[6h])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_6h
+    labels:
+      component: grpc_requests
+      feature_category: kubernetes_management
+      tier: sv
+      type: kas
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="grpc_requests",feature_category="kubernetes_management",monitor!="global",tier="sv",type="kas"}[6h])
+      )
+- name: 'Prometheus Intermediate Metrics per feature: kas - burn-rate 3d'
+  rules:
+  - record: gitlab:component:feature_category:execution:ops:rate_3d
+    labels:
+      component: grpc_requests
+      feature_category: kubernetes_management
+      tier: sv
+      type: kas
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="grpc_requests",feature_category="kubernetes_management",monitor!="global",tier="sv",type="kas"}[3d])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_3d
+    labels:
+      component: grpc_requests
+      feature_category: kubernetes_management
+      tier: sv
+      type: kas
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="grpc_requests",feature_category="kubernetes_management",monitor!="global",tier="sv",type="kas"}[3d])
       )

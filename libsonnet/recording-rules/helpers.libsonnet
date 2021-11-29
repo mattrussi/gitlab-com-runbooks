@@ -185,11 +185,11 @@ local upscaledSuccessRateExpression(sourceAggregationSet, targetAggregationSet, 
 
 // Generates a transformation expression that either uses direct, upscaled or
 // or combines both in cases where the source expression contains a mixture
-local combineUpscaleAndDirectTransformationExpressions(upscaledExprType, upscaleExpressionFn, sourceAggregationSet, targetAggregationSet, burnRate, directExpr) =
+local combineUpscaleAndDirectTransformationExpressions(upscaledExprType, upscaleExpressionFn, sourceAggregationSet, targetAggregationSet, burnRate, directExpr, extraSelector) =
   // For 6h burn rate, we'll use either a combination of upscaling and direct aggregation,
   // or, if the source aggregations, don't exist, only use the upscaled metric
   if burnRate == '6h' then
-    local upscaledExpr = upscaleExpressionFn(sourceAggregationSet, targetAggregationSet, burnRate, extraSelectors={ upscale_source: 'yes' });
+    local upscaledExpr = upscaleExpressionFn(sourceAggregationSet, targetAggregationSet, burnRate, extraSelectors={ upscale_source: 'yes' } + extraSelector);
 
     if directExpr != null then
       |||
@@ -206,11 +206,11 @@ local combineUpscaleAndDirectTransformationExpressions(upscaledExprType, upscale
       }
     else
       // If we there is no source burnRate, use only upscaling
-      upscaleExpressionFn(sourceAggregationSet, targetAggregationSet, burnRate)
+      upscaleExpressionFn(sourceAggregationSet, targetAggregationSet, burnRate, extraSelectors=extraSelector)
 
   else if burnRate == '3d' then
     // For 3d expressions, we always use upscaling
-    upscaleExpressionFn(sourceAggregationSet, targetAggregationSet, burnRate)
+    upscaleExpressionFn(sourceAggregationSet, targetAggregationSet, burnRate, extraSelectors=extraSelector)
   else
     // For other burn rates, the direct expression must be used, so if it doesn't exist
     // there is a problem
@@ -224,14 +224,15 @@ local combineUpscaleAndDirectTransformationExpressions(upscaledExprType, upscale
       directExpr;
 
 local curry(upscaledExprType, upscaleExpressionFn) =
-  function(sourceAggregationSet, targetAggregationSet, burnRate, directExpr)
+  function(sourceAggregationSet, targetAggregationSet, burnRate, directExpr, extraSelector={})
     combineUpscaleAndDirectTransformationExpressions(
       upscaledExprType,
       upscaleExpressionFn,
       sourceAggregationSet,
       targetAggregationSet,
       burnRate,
-      directExpr
+      directExpr,
+      extraSelector,
     );
 
 {

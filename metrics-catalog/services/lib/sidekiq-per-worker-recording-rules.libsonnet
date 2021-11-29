@@ -7,7 +7,7 @@ local strings = import 'utils/strings.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local combined = metricsCatalog.combined;
-
+local recordingRuleHelpers = import 'recording-rules/helpers.libsonnet';
 
 // This is used to calculate the queue apdex across all queues
 local combinedQueueApdex = combined([
@@ -62,52 +62,80 @@ local executionRulesForBurnRate(aggregationSet, burnRate, staticLabels={}) =
       !std.objectHas(staticLabels, label),
     aggregationSet.labels
   );
+  local staticLabelsWithUpscaling = if aggregationSet.upscaleLongerBurnRates && burnRate == '1h' then
+    staticLabels { upscale_source: 'yes' }
+  else staticLabels;
 
   local conditionalAppend(record, expr) =
     if record == null then []
     else
       [{
         record: record,
-        [if staticLabels != {} then 'labels']: staticLabels,
+        [if staticLabelsWithUpscaling != {} then 'labels']: staticLabelsWithUpscaling,
         expr: expr,
       }];
 
-  // Key metric: Execution apdex success (rate)
-  conditionalAppend(
-    record=aggregationSet.getApdexSuccessRateMetricForBurnRate(burnRate, required=false),
-    expr=combinedExecutionApdex.apdexSuccessRateQuery(aggregationLabelsWithoutStaticLabels, {}, burnRate)
-  )
-  +
-  // Key metric: Execution apdex (weight score)
-  conditionalAppend(
-    record=aggregationSet.getApdexWeightMetricForBurnRate(burnRate, required=false),
-    expr=combinedExecutionApdex.apdexWeightQuery(aggregationLabelsWithoutStaticLabels, {}, burnRate),
-  )
-  +
-  // Key metric: QPS
-  conditionalAppend(
-    record=aggregationSet.getOpsRateMetricForBurnRate(burnRate, required=false),
-    expr=requestRate.aggregatedRateQuery(aggregationLabelsWithoutStaticLabels, {}, burnRate)
-  )
-  +
-  // Key metric: Errors per Second
-  conditionalAppend(
-    record=aggregationSet.getErrorRateMetricForBurnRate(burnRate, required=false),
-    expr=|||
-      %(errorRate)s
-      or
-      (
-        0 * group by (%(aggregationLabels)s) (
-          %(executionRate)s{%(staticLabels)s}
+  if aggregationSet.upscaleBurnRate(burnRate) then
+    // Key metric: Execution apdex success (rate)
+    conditionalAppend(
+      record=aggregationSet.getApdexSuccessRateMetricForBurnRate(burnRate, required=false),
+      expr=recordingRuleHelpers.combinedApdexSuccessRateExpression(aggregationSet, aggregationSet, burnRate, null, staticLabels)
+    )
+    +
+    // Key metric: Execution apdex (weight score)
+    conditionalAppend(
+      record=aggregationSet.getApdexWeightMetricForBurnRate(burnRate, required=false),
+      expr=recordingRuleHelpers.combinedApdexWeightExpression(aggregationSet, aggregationSet, burnRate, null, staticLabels)
+    )
+    +
+    // Key metric: QPS
+    conditionalAppend(
+      record=aggregationSet.getOpsRateMetricForBurnRate(burnRate, required=false),
+      expr=recordingRuleHelpers.combinedOpsRateExpression(aggregationSet, aggregationSet, burnRate, null, staticLabels)
+    )
+    +
+    // Key metric: Errors per Second
+    conditionalAppend(
+      record=aggregationSet.getErrorRateMetricForBurnRate(burnRate, required=false),
+      expr=recordingRuleHelpers.combinedErrorRateExpression(aggregationSet, aggregationSet, burnRate, null, staticLabels)
+    )
+  else
+    // Key metric: Execution apdex success (rate)
+    conditionalAppend(
+      record=aggregationSet.getApdexSuccessRateMetricForBurnRate(burnRate, required=false),
+      expr=combinedExecutionApdex.apdexSuccessRateQuery(aggregationLabelsWithoutStaticLabels, {}, burnRate)
+    )
+    +
+    // Key metric: Execution apdex (weight score)
+    conditionalAppend(
+      record=aggregationSet.getApdexWeightMetricForBurnRate(burnRate, required=false),
+      expr=combinedExecutionApdex.apdexWeightQuery(aggregationLabelsWithoutStaticLabels, {}, burnRate),
+    )
+    +
+    // Key metric: QPS
+    conditionalAppend(
+      record=aggregationSet.getOpsRateMetricForBurnRate(burnRate, required=false),
+      expr=requestRate.aggregatedRateQuery(aggregationLabelsWithoutStaticLabels, {}, burnRate)
+    )
+    +
+    // Key metric: Errors per Second
+    conditionalAppend(
+      record=aggregationSet.getErrorRateMetricForBurnRate(burnRate, required=false),
+      expr=|||
+        %(errorRate)s
+        or
+        (
+          0 * group by (%(aggregationLabels)s) (
+            %(executionRate)s{%(staticLabels)s}
+          )
         )
-      )
-    ||| % {
-      errorRate: strings.chomp(errorRate.aggregatedRateQuery(aggregationLabelsWithoutStaticLabels, {}, burnRate)),
-      aggregationLabels: aggregations.serialize(aggregationLabelsWithoutStaticLabels),
-      executionRate: aggregationSet.getOpsRateMetricForBurnRate(burnRate, required=true),
-      staticLabels: selectors.serializeHash(staticLabels),
-    }
-  );
+      ||| % {
+        errorRate: strings.chomp(errorRate.aggregatedRateQuery(aggregationLabelsWithoutStaticLabels, {}, burnRate)),
+        aggregationLabels: aggregations.serialize(aggregationLabelsWithoutStaticLabels),
+        executionRate: aggregationSet.getOpsRateMetricForBurnRate(burnRate, required=true),
+        staticLabels: selectors.serializeHash(staticLabels),
+      }
+    );
 
 local queueRulesForBurnRate(aggregationSet, burnRate, staticLabels={}) =
   local conditionalAppend(record, expr) =

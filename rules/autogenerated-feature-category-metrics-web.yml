@@ -143,6 +143,7 @@ groups:
       feature_category: users
       tier: sv
       type: web
+      upscale_source: "yes"
     expr: |
       (
         sum by (env,environment,stage) (
@@ -161,6 +162,7 @@ groups:
       feature_category: users
       tier: sv
       type: web
+      upscale_source: "yes"
     expr: |
       sum by (env,environment,stage) (
         rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web", le="+Inf"}[1h])
@@ -171,6 +173,7 @@ groups:
       feature_category: users
       tier: sv
       type: web
+      upscale_source: "yes"
     expr: |
       sum by (env,environment,stage) (
         rate(gitlab_workhorse_image_resize_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web"}[1h])
@@ -180,6 +183,7 @@ groups:
       component: rails_requests
       tier: sv
       type: web
+      upscale_source: "yes"
     expr: |
       sum by (env,environment,stage,feature_category) (
         sli_aggregations:gitlab_sli:rails_request_apdex:success_total_rate1h{job="gitlab-rails",type="web"}
@@ -189,6 +193,7 @@ groups:
       component: rails_requests
       tier: sv
       type: web
+      upscale_source: "yes"
     expr: |
       sum by (env,environment,stage,feature_category) (
         sli_aggregations:gitlab_sli:rails_request_apdex:total_rate1h{job="gitlab-rails",type="web"}
@@ -198,7 +203,126 @@ groups:
       component: rails_requests
       tier: sv
       type: web
+      upscale_source: "yes"
     expr: |
       sum by (env,environment,stage,feature_category) (
         sli_aggregations:gitlab_sli:rails_request_apdex:total_rate1h{job="gitlab-rails",type="web"}
+      )
+- name: 'Prometheus Intermediate Metrics per feature: web - burn-rate 6h'
+  rules:
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_6h
+    labels:
+      component: imagescaler
+      feature_category: users
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="imagescaler",feature_category="users",monitor!="global",tier="sv",type="web"}[6h])
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_6h
+    labels:
+      component: imagescaler
+      feature_category: users
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="imagescaler",feature_category="users",monitor!="global",tier="sv",type="web"}[6h])
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_6h
+    labels:
+      component: imagescaler
+      feature_category: users
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="imagescaler",feature_category="users",monitor!="global",tier="sv",type="web"}[6h])
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_6h
+    labels:
+      component: rails_requests
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="rails_requests",monitor!="global",tier="sv",type="web"}[6h])
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_6h
+    labels:
+      component: rails_requests
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="rails_requests",monitor!="global",tier="sv",type="web"}[6h])
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_6h
+    labels:
+      component: rails_requests
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="rails_requests",monitor!="global",tier="sv",type="web"}[6h])
+      )
+- name: 'Prometheus Intermediate Metrics per feature: web - burn-rate 3d'
+  rules:
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_3d
+    labels:
+      component: imagescaler
+      feature_category: users
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="imagescaler",feature_category="users",monitor!="global",tier="sv",type="web"}[3d])
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_3d
+    labels:
+      component: imagescaler
+      feature_category: users
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="imagescaler",feature_category="users",monitor!="global",tier="sv",type="web"}[3d])
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_3d
+    labels:
+      component: imagescaler
+      feature_category: users
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="imagescaler",feature_category="users",monitor!="global",tier="sv",type="web"}[3d])
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_3d
+    labels:
+      component: rails_requests
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="rails_requests",monitor!="global",tier="sv",type="web"}[3d])
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_3d
+    labels:
+      component: rails_requests
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="rails_requests",monitor!="global",tier="sv",type="web"}[3d])
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_3d
+    labels:
+      component: rails_requests
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="rails_requests",monitor!="global",tier="sv",type="web"}[3d])
       )

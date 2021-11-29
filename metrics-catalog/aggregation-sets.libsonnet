@@ -379,6 +379,8 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     id: 'source_feature_category',
     name: 'Prometheus Source Feature Category Metrics',
     intermediateSource: true,
+    supportedBurnRates+: ['6h', '3d'],
+    upscaleLongerBurnRates: true,
     selector: { monitor: { ne: 'global' } },
     labels: ['env', 'environment', 'tier', 'type', 'stage', 'component', 'feature_category'],
     metricFormats: {

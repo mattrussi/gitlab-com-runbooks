@@ -66,6 +66,7 @@ groups:
       component: rails_requests
       tier: sv
       type: git
+      upscale_source: "yes"
     expr: |
       sum by (env,environment,stage,feature_category) (
         sli_aggregations:gitlab_sli:rails_request_apdex:success_total_rate1h{job="gitlab-rails",type="git"}
@@ -75,6 +76,7 @@ groups:
       component: rails_requests
       tier: sv
       type: git
+      upscale_source: "yes"
     expr: |
       sum by (env,environment,stage,feature_category) (
         sli_aggregations:gitlab_sli:rails_request_apdex:total_rate1h{job="gitlab-rails",type="git"}
@@ -84,7 +86,66 @@ groups:
       component: rails_requests
       tier: sv
       type: git
+      upscale_source: "yes"
     expr: |
       sum by (env,environment,stage,feature_category) (
         sli_aggregations:gitlab_sli:rails_request_apdex:total_rate1h{job="gitlab-rails",type="git"}
+      )
+- name: 'Prometheus Intermediate Metrics per feature: git - burn-rate 6h'
+  rules:
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_6h
+    labels:
+      component: rails_requests
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="rails_requests",monitor!="global",tier="sv",type="git"}[6h])
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_6h
+    labels:
+      component: rails_requests
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="rails_requests",monitor!="global",tier="sv",type="git"}[6h])
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_6h
+    labels:
+      component: rails_requests
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="rails_requests",monitor!="global",tier="sv",type="git"}[6h])
+      )
+- name: 'Prometheus Intermediate Metrics per feature: git - burn-rate 3d'
+  rules:
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_3d
+    labels:
+      component: rails_requests
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="rails_requests",monitor!="global",tier="sv",type="git"}[3d])
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_3d
+    labels:
+      component: rails_requests
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="rails_requests",monitor!="global",tier="sv",type="git"}[3d])
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_3d
+    labels:
+      component: rails_requests
+      tier: sv
+      type: git
+    expr: |
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="rails_requests",monitor!="global",tier="sv",type="git"}[3d])
       )
