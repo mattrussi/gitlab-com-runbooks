@@ -31,7 +31,7 @@ local rules = {
               * 0.5
             )
           |||,
-          'for': '5m',
+          'for': '20m',
           labels: {
             team: 'delivery',
             severity: 's2',
