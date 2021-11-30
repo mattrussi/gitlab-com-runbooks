@@ -32,6 +32,33 @@ groups:
       )
   - record: gitlab_component_apdex:success:rate
     labels:
+      component: queuing_queries_duration
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_ci_queue_retrieval_duration_seconds_bucket{le="0.5"}[1m])
+      )
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: queuing_queries_duration
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_ci_queue_retrieval_duration_seconds_bucket{le="+Inf"}[1m])
+      )
+  - record: gitlab_component_ops:rate
+    labels:
+      component: queuing_queries_duration
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_ci_queue_retrieval_duration_seconds_count{}[1m])
+      )
+  - record: gitlab_component_apdex:success:rate
+    labels:
       component: shared_runner_queues
       tier: runners
       type: ci-runners
@@ -128,6 +155,33 @@ groups:
         0 * group by(environment,stage) (
           gitlab_component_ops:rate_5m{component="polling",tier="runners",type="ci-runners"}
         )
+      )
+  - record: gitlab_component_apdex:success:rate_5m
+    labels:
+      component: queuing_queries_duration
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_ci_queue_retrieval_duration_seconds_bucket{le="0.5"}[5m])
+      )
+  - record: gitlab_component_apdex:weight:score_5m
+    labels:
+      component: queuing_queries_duration
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_ci_queue_retrieval_duration_seconds_bucket{le="+Inf"}[5m])
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: queuing_queries_duration
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_ci_queue_retrieval_duration_seconds_count{}[5m])
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
@@ -230,6 +284,33 @@ groups:
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
+      component: queuing_queries_duration
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_ci_queue_retrieval_duration_seconds_bucket{le="0.5"}[30m])
+      )
+  - record: gitlab_component_apdex:weight:score_30m
+    labels:
+      component: queuing_queries_duration
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_ci_queue_retrieval_duration_seconds_bucket{le="+Inf"}[30m])
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: queuing_queries_duration
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_ci_queue_retrieval_duration_seconds_count{}[30m])
+      )
+  - record: gitlab_component_apdex:success:rate_30m
+    labels:
       component: shared_runner_queues
       tier: runners
       type: ci-runners
@@ -326,6 +407,33 @@ groups:
         0 * group by(environment,stage) (
           gitlab_component_ops:rate_1h{component="polling",tier="runners",type="ci-runners"}
         )
+      )
+  - record: gitlab_component_apdex:success:rate_1h
+    labels:
+      component: queuing_queries_duration
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_ci_queue_retrieval_duration_seconds_bucket{le="0.5"}[1h])
+      )
+  - record: gitlab_component_apdex:weight:score_1h
+    labels:
+      component: queuing_queries_duration
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_ci_queue_retrieval_duration_seconds_bucket{le="+Inf"}[1h])
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: queuing_queries_duration
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_ci_queue_retrieval_duration_seconds_count{}[1h])
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
@@ -428,6 +536,33 @@ groups:
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
+      component: queuing_queries_duration
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_ci_queue_retrieval_duration_seconds_bucket{le="0.5"}[6h])
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: queuing_queries_duration
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_ci_queue_retrieval_duration_seconds_bucket{le="+Inf"}[6h])
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: queuing_queries_duration
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_ci_queue_retrieval_duration_seconds_count{}[6h])
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
       component: shared_runner_queues
       tier: runners
       type: ci-runners
@@ -502,6 +637,14 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: polling
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: runners
+      type: ci-runners
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: queuing_queries_duration
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: runners

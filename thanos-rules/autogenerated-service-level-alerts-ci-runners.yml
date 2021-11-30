@@ -179,6 +179,190 @@ groups:
       gitlab_component_ops:rate_5m{type="ci-runners", component="polling", stage="main", monitor="global"} offset 1h
       unless
       gitlab_component_ops:rate_5m{type="ci-runners", component="polling", stage="main", monitor="global"}
+  - alert: CiRunnersServiceQueuingQueriesDurationApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The queuing_queries_duration SLI of the ci-runners service (`{{ $labels.stage
+        }}` stage) has an apdex violating SLO
+      description: |
+        This SLI monitors the queuing queries duration. Everything above 1 second is considered to be unexpected and needs investigation.
+
+        These database queries are executed in the Rails application when a runner requests a new build to process in `POST /api/v4/jobs/request`.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: ci-runners-main/ci-runners-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "4172966397"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(gitlab_ci_queue_retrieval_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          )
+        )
+      runbook: docs/ci-runners/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: continuous_integration_scaling
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      team: pipeline_execution
+      user_impacting: "no"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_1h{component="queuing_queries_duration",monitor="global",type="ci-runners"}
+          < (1 - 14.4 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_5m{component="queuing_queries_duration",monitor="global",type="ci-runners"}
+          < (1 - 14.4 * 0.001000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="queuing_queries_duration",monitor="global",type="ci-runners"}) >= 1
+      )
+  - alert: CiRunnersServiceQueuingQueriesDurationApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The queuing_queries_duration SLI of the ci-runners service (`{{ $labels.stage
+        }}` stage) has an apdex violating SLO
+      description: |
+        This SLI monitors the queuing queries duration. Everything above 1 second is considered to be unexpected and needs investigation.
+
+        These database queries are executed in the Rails application when a runner requests a new build to process in `POST /api/v4/jobs/request`.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: ci-runners-main/ci-runners-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "4172966397"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(gitlab_ci_queue_retrieval_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          )
+        )
+      runbook: docs/ci-runners/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: continuous_integration_scaling
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      team: pipeline_execution
+      user_impacting: "no"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_6h{component="queuing_queries_duration",monitor="global",type="ci-runners"}
+          < (1 - 6 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_30m{component="queuing_queries_duration",monitor="global",type="ci-runners"}
+          < (1 - 6 * 0.001000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="queuing_queries_duration",monitor="global",type="ci-runners"}) >= 1
+      )
+  - alert: CiRunnersServiceQueuingQueriesDurationTrafficCessation
+    for: 5m
+    annotations:
+      title: The queuing_queries_duration SLI of the ci-runners service (`{{ $labels.stage
+        }}` stage) has not received any traffic in the past 30 minutes
+      description: |
+        This SLI monitors the queuing queries duration. Everything above 1 second is considered to be unexpected and needs investigation.
+
+        These database queries are executed in the Rails application when a runner requests a new build to process in `POST /api/v4/jobs/request`.
+
+        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+      grafana_dashboard_id: ci-runners-main/ci-runners-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "462690019"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(gitlab_ci_queue_retrieval_duration_seconds_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/ci-runners/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: continuous_integration_scaling
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      team: pipeline_execution
+      user_impacting: "no"
+    expr: |
+      gitlab_component_ops:rate_30m{type="ci-runners", component="queuing_queries_duration", stage="main", monitor="global"} == 0
+  - alert: CiRunnersServiceQueuingQueriesDurationTrafficAbsent
+    for: 30m
+    annotations:
+      title: The queuing_queries_duration SLI of the ci-runners service (`{{ $labels.stage
+        }}` stage) has not reported any traffic in the past 30 minutes
+      description: |
+        This SLI monitors the queuing queries duration. Everything above 1 second is considered to be unexpected and needs investigation.
+
+        These database queries are executed in the Rails application when a runner requests a new build to process in `POST /api/v4/jobs/request`.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: ci-runners-main/ci-runners-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "462690019"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(gitlab_ci_queue_retrieval_duration_seconds_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/ci-runners/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: continuous_integration_scaling
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      team: pipeline_execution
+      user_impacting: "no"
+    expr: |
+      gitlab_component_ops:rate_5m{type="ci-runners", component="queuing_queries_duration", stage="main", monitor="global"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{type="ci-runners", component="queuing_queries_duration", stage="main", monitor="global"}
   - alert: CiRunnersServiceSharedRunnerQueuesApdexSLOViolation
     for: 2m
     annotations:
