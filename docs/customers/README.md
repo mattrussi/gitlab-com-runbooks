@@ -15,6 +15,8 @@ instance running locally in the VM) via:
 
 (only superusers have access to the DB. We are improving this soon)
 
+See [this instructions](https://gitlab.com/gitlab-org/customers-gitlab-com/#accessing-production-as-an-admin-and-logs-and-console) to SSH the production box. The IP address can be found in [Cloudflare](https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/gitlab.com/dns?recordsSearchSearch=customers).
+
 ### Staging
 The staging node is a GCP machine.
 It can be connected to via SSH using the [configuration stated in the CustomersDot repository](https://gitlab.com/gitlab-org/customers-gitlab-com/-/blob/staging/doc/testing/staging.md#ssh-config).
