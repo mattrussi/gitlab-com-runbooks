@@ -4,7 +4,7 @@ groups:
 - name: kube_cause_alerts
   rules:
   - alert: KubeContainersWaitingInError
-    for: 5m
+    for: 20m
     annotations:
       title: Containers for the `{{ $labels.type }}` service, `{{ $labels.stage }}`
         are unable to unable to start.
