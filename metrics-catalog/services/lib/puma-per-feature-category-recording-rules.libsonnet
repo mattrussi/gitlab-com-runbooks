@@ -7,8 +7,12 @@ local strings = import 'utils/strings.libsonnet';
 local aggregationSets = import 'aggregation-sets.libsonnet';
 local aggregationSet = aggregationSets.featureCategorySourceSLIs;
 
-local aggregationLabels = aggregationSet.labels;
 local staticLabels = { component: 'puma' };
+local aggregationLabels = std.filter(
+  function(label)
+    !std.objectHas(staticLabels, label),
+  aggregationSet.labels
+);
 
 local requestRate = rateMetric(
   counter='http_requests_total',
