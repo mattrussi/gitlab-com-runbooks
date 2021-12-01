@@ -18,6 +18,12 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: api_security
+      product_stage: secure
+      stage_group: dynamic_analysis
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: attack_emulation
       product_stage: secure
       stage_group: dynamic_analysis
@@ -54,6 +60,12 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: build
+      product_stage: enablement
+      stage_group: distribution_build
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: build_artifacts
       product_stage: verify
       stage_group: testing
@@ -68,7 +80,7 @@ groups:
     labels:
       feature_category: cloud_native_installation
       product_stage: enablement
-      stage_group: distribution
+      stage_group: distribution_deploy
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -162,12 +174,6 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: delivery_management
-      product_stage: configure
-      stage_group: configure
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: dependency_firewall
       product_stage: package
       stage_group: package
@@ -186,9 +192,21 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: deployment_management
+      product_stage: configure
+      stage_group: configure
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: design_management
       product_stage: plan
       stage_group: product_planning
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: design_system
+      product_stage: ecosystem
+      stage_group: foundations
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -219,6 +237,12 @@ groups:
       feature_category: environment_management
       product_stage: release
       stage_group: release
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: error_budgets
+      product_stage: platforms
+      stage_group: scalability
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -261,12 +285,6 @@ groups:
       feature_category: five_minute_production_app
       product_stage: deploy
       stage_group: 5-min-app
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: foundations
-      product_stage: ecosystem
-      stage_group: foundations
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -338,7 +356,13 @@ groups:
     labels:
       feature_category: insider_threat
       product_stage: ModelOps
-      stage_group: applied_ml
+      stage_group: anti_abuse
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: instance_resiliency
+      product_stage: ModelOps
+      stage_group: anti_abuse
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -446,7 +470,7 @@ groups:
     labels:
       feature_category: omnibus_package
       product_stage: enablement
-      stage_group: distribution
+      stage_group: distribution_deploy
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -477,12 +501,6 @@ groups:
       feature_category: performance_testing
       product_stage: verify
       stage_group: testing
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: pipeline_abuse_prevention
-      product_stage: verify
-      stage_group: pipeline_execution
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:

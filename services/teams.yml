@@ -13,13 +13,13 @@ teams:
                      # and escalation policy
   oncall_schedule:   # Link to pagerduty oncall schedule
 
-- name: distribution
+- name: distribution_deploy
   url: https://about.gitlab.com/handbook/engineering/dev-backend/distribution/
-  slack_channel: distribution
+  slack_channel: g_distribution
   engagement_policy: # Link to doc that talks about engagement
                      # and escalation policy
   oncall_schedule:   # Link to pagerduty oncall schedule
-  product_stage_group: distribution
+  product_stage_group: distribution_deploy
   ignored_components:
   - rails_requests
 

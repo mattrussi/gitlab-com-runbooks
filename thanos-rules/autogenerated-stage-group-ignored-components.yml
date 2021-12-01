@@ -151,7 +151,7 @@ groups:
       product_stage: platforms
       stage_group: delivery
     expr: "1"
-- name: 'Stage group Ignored components: enablement - Distribution'
+- name: 'Stage group Ignored components: enablement - Distribution:Deploy'
   interval: 1m
   partial_response_strategy: warn
   rules:
@@ -159,7 +159,7 @@ groups:
     labels:
       component: rails_requests
       product_stage: enablement
-      stage_group: distribution
+      stage_group: distribution_deploy
     expr: "1"
 - name: 'Stage group Ignored components: secure - Dynamic Analysis'
   interval: 1m
