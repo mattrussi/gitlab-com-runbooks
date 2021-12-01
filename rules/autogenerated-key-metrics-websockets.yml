@@ -112,26 +112,6 @@ groups:
           gitlab_component_ops:rate{component="workhorse",tier="sv",type="websockets"}
         )
       )
-  - record: gitlab:component:feature_category:execution:ops:rate_1m
-    labels:
-      component: puma
-    expr: |
-      sum by (environment,tier,type,stage,feature_category) (
-        sli_aggregations:http_requests_total_rate1m{job="gitlab-rails",type="websockets"}
-      )
-  - record: gitlab:component:feature_category:execution:error:rate_1m
-    labels:
-      component: puma
-    expr: |
-      sum by (environment,tier,type,stage,feature_category) (
-        sli_aggregations:http_requests_total_rate1m{job="gitlab-rails",status=~"5..",type="websockets"}
-      )
-      or
-      (
-        0 * group by (environment,tier,type,stage,feature_category) (
-          gitlab:component:feature_category:execution:ops:rate_1m{component="puma",type="websockets"}
-        )
-      )
 - name: 'Component-Level SLIs: websockets - 5m burn-rate'
   interval: 1m
   rules:
@@ -241,26 +221,6 @@ groups:
       (
         0 * group by(environment,stage) (
           gitlab_component_ops:rate_5m{component="workhorse",tier="sv",type="websockets"}
-        )
-      )
-  - record: gitlab:component:feature_category:execution:ops:rate_5m
-    labels:
-      component: puma
-    expr: |
-      sum by (environment,tier,type,stage,feature_category) (
-        sli_aggregations:http_requests_total_rate5m{job="gitlab-rails",type="websockets"}
-      )
-  - record: gitlab:component:feature_category:execution:error:rate_5m
-    labels:
-      component: puma
-    expr: |
-      sum by (environment,tier,type,stage,feature_category) (
-        sli_aggregations:http_requests_total_rate5m{job="gitlab-rails",status=~"5..",type="websockets"}
-      )
-      or
-      (
-        0 * group by (environment,tier,type,stage,feature_category) (
-          gitlab:component:feature_category:execution:ops:rate_5m{component="puma",type="websockets"}
         )
       )
 - name: 'Component-Level SLIs: websockets - 30m burn-rate'
@@ -374,26 +334,6 @@ groups:
           gitlab_component_ops:rate_30m{component="workhorse",tier="sv",type="websockets"}
         )
       )
-  - record: gitlab:component:feature_category:execution:ops:rate_30m
-    labels:
-      component: puma
-    expr: |
-      sum by (environment,tier,type,stage,feature_category) (
-        sli_aggregations:http_requests_total_rate30m{job="gitlab-rails",type="websockets"}
-      )
-  - record: gitlab:component:feature_category:execution:error:rate_30m
-    labels:
-      component: puma
-    expr: |
-      sum by (environment,tier,type,stage,feature_category) (
-        sli_aggregations:http_requests_total_rate30m{job="gitlab-rails",status=~"5..",type="websockets"}
-      )
-      or
-      (
-        0 * group by (environment,tier,type,stage,feature_category) (
-          gitlab:component:feature_category:execution:ops:rate_30m{component="puma",type="websockets"}
-        )
-      )
 - name: 'Component-Level SLIs: websockets - 1h burn-rate'
   interval: 1m
   rules:
@@ -505,26 +445,6 @@ groups:
           gitlab_component_ops:rate_1h{component="workhorse",tier="sv",type="websockets"}
         )
       )
-  - record: gitlab:component:feature_category:execution:ops:rate_1h
-    labels:
-      component: puma
-    expr: |
-      sum by (environment,tier,type,stage,feature_category) (
-        sli_aggregations:http_requests_total_rate1h{job="gitlab-rails",type="websockets"}
-      )
-  - record: gitlab:component:feature_category:execution:error:rate_1h
-    labels:
-      component: puma
-    expr: |
-      sum by (environment,tier,type,stage,feature_category) (
-        sli_aggregations:http_requests_total_rate1h{job="gitlab-rails",status=~"5..",type="websockets"}
-      )
-      or
-      (
-        0 * group by (environment,tier,type,stage,feature_category) (
-          gitlab:component:feature_category:execution:ops:rate_1h{component="puma",type="websockets"}
-        )
-      )
 - name: 'Component-Level SLIs: websockets - 6h burn-rate'
   interval: 2m
   rules:
@@ -634,26 +554,6 @@ groups:
       (
         0 * group by(environment,stage) (
           gitlab_component_ops:rate_6h{component="workhorse",tier="sv",type="websockets"}
-        )
-      )
-  - record: gitlab:component:feature_category:execution:ops:rate_6h
-    labels:
-      component: puma
-    expr: |
-      sum by (environment,tier,type,stage,feature_category) (
-        sli_aggregations:http_requests_total_rate6h{job="gitlab-rails",type="websockets"}
-      )
-  - record: gitlab:component:feature_category:execution:error:rate_6h
-    labels:
-      component: puma
-    expr: |
-      sum by (environment,tier,type,stage,feature_category) (
-        sli_aggregations:http_requests_total_rate6h{job="gitlab-rails",status=~"5..",type="websockets"}
-      )
-      or
-      (
-        0 * group by (environment,tier,type,stage,feature_category) (
-          gitlab:component:feature_category:execution:ops:rate_6h{component="puma",type="websockets"}
         )
       )
 - name: 'Component mapping: websockets'

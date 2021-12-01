@@ -2,7 +2,6 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local haproxyComponents = import './lib/haproxy_components.libsonnet';
-local perFeatureCategoryRecordingRules = (import './lib/puma-per-feature-category-recording-rules.libsonnet').perFeatureCategoryRecordingRules;
 
 metricsCatalog.serviceDefinition({
   type: 'websockets',
@@ -113,8 +112,4 @@ metricsCatalog.serviceDefinition({
       ],
     },
   },
-  extraRecordingRulesPerBurnRate: [
-    // Adds per-feature-category plus error rates across multiple burn rates
-    perFeatureCategoryRecordingRules({ type: 'websockets' }),
-  ],
 })
