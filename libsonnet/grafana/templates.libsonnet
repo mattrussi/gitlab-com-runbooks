@@ -188,4 +188,24 @@ local defaultPrometheusDatasource = (import 'gitlab-metrics-config.libsonnet').d
       refresh='load',
       sort=1,
     ),
+  productStage(multi=true)::
+    template.new(
+      'product_stage',
+      '$PROMETHEUS_DS',
+      'label_values(gitlab:feature_category:stage_group:mapping, product_stage)',
+      multi=multi,
+      refresh='load',
+      includeAll=true,
+      allValues='.*',
+    ),
+  stageGroup(multi=true)::
+    template.new(
+      'stage_group',
+      '$PROMETHEUS_DS',
+      'label_values(gitlab:feature_category:stage_group:mapping{product_stage=~"$product_stage"}, stage_group)',
+      multi=multi,
+      refresh='load',
+      includeAll=true,
+      allValues='.*',
+    ),
 }
