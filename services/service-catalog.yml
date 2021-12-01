@@ -11,7 +11,7 @@ services:
   tier: sv
   teams:
     - create
-    - distribution
+    - distribution_deploy
     - geo
     - gitaly
     - manage
@@ -614,7 +614,7 @@ services:
   friendly_name: NGINX
   tier: sv
   teams:
-    - distribution
+    - distribution_deploy
   label: Service:NGINX
   business:
     requirement: |
@@ -731,7 +731,7 @@ services:
   friendly_name: GitLab.com Web
   teams:
     - create
-    - distribution
+    - distribution_deploy
     - geo
     - gitaly
     - manage
@@ -888,7 +888,7 @@ services:
   friendly_name: Git Access
   teams:
     - create
-    - distribution
+    - distribution_deploy
     - geo
     - gitaly
     - manage
@@ -1249,7 +1249,7 @@ services:
   friendly_name: Mailroom Incoming Mail Service
   teams:
     - create
-    - distribution
+    - distribution_deploy
     - geo
     - gitaly
     - manage
@@ -2899,7 +2899,7 @@ services:
   friendly_name: Sidekiq Background Jobs
   teams:
     - create
-    - distribution
+    - distribution_deploy
     - geo
     - gitaly
     - manage

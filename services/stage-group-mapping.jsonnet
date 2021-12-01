@@ -111,7 +111,7 @@
     name: 'Foundations',
     stage: 'ecosystem',
     feature_categories: [
-      'foundations',
+      'design_system',
       'navigation',
       'gitlab_docs',
     ],
@@ -123,7 +123,6 @@
       'continuous_integration',
       'merge_trains',
       'continuous_integration_scaling',
-      'pipeline_abuse_prevention',
     ],
   },
   pipeline_authoring: {
@@ -179,9 +178,10 @@
     stage: 'secure',
     feature_categories: [
       'dynamic_application_security_testing',
+      'fuzz_testing',
+      'api_security',
       'interactive_application_security_testing',
       'attack_emulation',
-      'fuzz_testing',
     ],
   },
   composition_analysis: {
@@ -230,7 +230,7 @@
       'cluster_cost_management',
       'chatops',
       'secrets_management',
-      'delivery_management',
+      'deployment_management',
     ],
   },
   monitor: {
@@ -318,8 +318,15 @@
       'privacy_control_center',
     ],
   },
-  distribution: {
-    name: 'Distribution',
+  distribution_build: {
+    name: 'Distribution:Build',
+    stage: 'enablement',
+    feature_categories: [
+      'build',
+    ],
+  },
+  distribution_deploy: {
+    name: 'Distribution:Deploy',
     stage: 'enablement',
     feature_categories: [
       'omnibus_package',
@@ -376,6 +383,7 @@
     stage: 'platforms',
     feature_categories: [
       'scalability',
+      'error_budgets',
     ],
   },
   horse: {
@@ -390,8 +398,15 @@
     stage: 'ModelOps',
     feature_categories: [
       'workflow_automation',
-      'insider_threat',
       'intel_code_security',
+    ],
+  },
+  anti_abuse: {
+    name: 'Anti-Abuse',
+    stage: 'ModelOps',
+    feature_categories: [
+      'instance_resiliency',
+      'insider_threat',
     ],
   },
   mlops: {
