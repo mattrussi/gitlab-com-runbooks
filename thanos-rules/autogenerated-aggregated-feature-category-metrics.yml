@@ -121,29 +121,13 @@ groups:
       )
   - record: gitlab:component:feature_category:execution:error:rate_6h
     expr: |
-      (
-        sum by (env,environment,tier,type,stage,component,feature_category) (
-          (gitlab:component:feature_category:execution:error:rate_6h{monitor!="global"} >= 0)
-        )
-      )
-      or
-      (
-        sum by (env,environment,tier,type,stage,component,feature_category) (
-          avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{monitor!="global",upscale_source="yes"}[6h])
-        )
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{monitor!="global"}[6h])
       )
   - record: gitlab:component:feature_category:execution:ops:rate_6h
     expr: |
-      (
-        sum by (env,environment,tier,type,stage,component,feature_category) (
-          (gitlab:component:feature_category:execution:ops:rate_6h{monitor!="global"} >= 0)
-        )
-      )
-      or
-      (
-        sum by (env,environment,tier,type,stage,component,feature_category) (
-          avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{monitor!="global",upscale_source="yes"}[6h])
-        )
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{monitor!="global"}[6h])
       )
   - record: gitlab:component:feature_category:execution:error:ratio_6h
     expr: |
@@ -168,50 +152,22 @@ groups:
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_6h
     expr: |
-      (
-        sum by (env,environment,tier,type,stage,component,feature_category) (
-          (gitlab:component:feature_category:execution:apdex:weight:score_6h{monitor!="global"} >= 0)
-        )
-      )
-      or
-      (
-        sum by (env,environment,tier,type,stage,component,feature_category) (
-          avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{monitor!="global",upscale_source="yes"}[6h])
-        )
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{monitor!="global"}[6h])
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_6h
     expr: |
-      (
-        sum by (env,environment,tier,type,stage,component,feature_category) (
-          (gitlab:component:feature_category:execution:apdex:success:rate_6h{monitor!="global"} >= 0)
-        )
-      )
-      or
-      (
-        sum by (env,environment,tier,type,stage,component,feature_category) (
-          avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{monitor!="global",upscale_source="yes"}[6h])
-        )
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{monitor!="global"}[6h])
       )
   - record: gitlab:component:feature_category:execution:apdex:ratio_6h
     expr: |
-      (
-        sum by (env,environment,tier,type,stage,component,feature_category) (
-          (gitlab:component:feature_category:execution:apdex:success:rate_6h{monitor!="global"} >= 0)
-        )
-        /
-        sum by (env,environment,tier,type,stage,component,feature_category) (
-          (gitlab:component:feature_category:execution:apdex:weight:score_6h{monitor!="global"} >= 0)
-        )
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        sum_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{monitor!="global"}[6h])
       )
-      or
-      (
-        sum by (env,environment,tier,type,stage,component,feature_category) (
-          sum_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{monitor!="global",upscale_source="yes"}[6h])
-        )
-        /
-        sum by (env,environment,tier,type,stage,component,feature_category) (
-          sum_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{monitor!="global",upscale_source="yes"}[6h])
-        )
+      /
+      sum by (env,environment,tier,type,stage,component,feature_category) (
+        sum_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{monitor!="global"}[6h])
       )
   - record: gitlab:component:feature_category:execution:error:rate_3d
     expr: |

@@ -301,7 +301,6 @@ groups:
       feature_category: gitaly
       tier: stor
       type: gitaly
-      upscale_source: "yes"
     expr: |
       (
         sum by (env,environment,stage) (
@@ -320,7 +319,6 @@ groups:
       feature_category: gitaly
       tier: stor
       type: gitaly
-      upscale_source: "yes"
     expr: |
       sum by (env,environment,stage) (
         rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook|GetLFSPointers|GetAllLFSPointers",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf"}[1h]) and on(grpc_service,grpc_method) grpc_client_handled_total{job="gitaly"}
@@ -331,7 +329,6 @@ groups:
       feature_category: gitaly
       tier: stor
       type: gitaly
-      upscale_source: "yes"
     expr: |
       sum by (env,environment,stage) (
         rate(grpc_client_handled_total{job="gitaly"}[1h])
@@ -342,7 +339,6 @@ groups:
       feature_category: gitaly
       tier: stor
       type: gitaly
-      upscale_source: "yes"
     expr: |
       (
         sum by (env,environment,stage) (
@@ -352,7 +348,7 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab:component:feature_category:execution:ops:rate_1h{component="gitalyruby",feature_category="gitaly",tier="stor",type="gitaly",upscale_source="yes"}
+          gitlab:component:feature_category:execution:ops:rate_1h{component="gitalyruby",feature_category="gitaly",tier="stor",type="gitaly"}
         )
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
@@ -361,7 +357,6 @@ groups:
       feature_category: gitaly
       tier: stor
       type: gitaly
-      upscale_source: "yes"
     expr: |
       (
         sum by (env,environment,stage) (
@@ -380,7 +375,6 @@ groups:
       feature_category: gitaly
       tier: stor
       type: gitaly
-      upscale_source: "yes"
     expr: |
       sum by (env,environment,stage) (
         rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf"}[1h])
@@ -391,7 +385,6 @@ groups:
       feature_category: gitaly
       tier: stor
       type: gitaly
-      upscale_source: "yes"
     expr: |
       sum by (env,environment,stage) (
         rate(gitaly_service_client_requests_total{grpc_service!="gitaly.OperationService",job="gitaly"}[1h])
@@ -402,7 +395,6 @@ groups:
       feature_category: gitaly
       tier: stor
       type: gitaly
-      upscale_source: "yes"
     expr: |
       (
         sum by (env,environment,stage) (
@@ -414,7 +406,7 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab:component:feature_category:execution:ops:rate_1h{component="goserver",feature_category="gitaly",tier="stor",type="gitaly",upscale_source="yes"}
+          gitlab:component:feature_category:execution:ops:rate_1h{component="goserver",feature_category="gitaly",tier="stor",type="gitaly"}
         )
       )
   - record: gitlab:component:feature_category:execution:ops:rate_1h
@@ -423,7 +415,6 @@ groups:
       feature_category: gitaly
       tier: stor
       type: gitaly
-      upscale_source: "yes"
     expr: |
       sum by (env,environment,stage) (
         rate(gitaly_service_client_requests_total{grpc_service="gitaly.OperationService",job="gitaly"}[1h])
@@ -434,7 +425,6 @@ groups:
       feature_category: gitaly
       tier: stor
       type: gitaly
-      upscale_source: "yes"
     expr: |
       (
         sum by (env,environment,stage) (
@@ -446,210 +436,6 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab:component:feature_category:execution:ops:rate_1h{component="goserver_op_service",feature_category="gitaly",tier="stor",type="gitaly",upscale_source="yes"}
+          gitlab:component:feature_category:execution:ops:rate_1h{component="goserver_op_service",feature_category="gitaly",tier="stor",type="gitaly"}
         )
-      )
-- name: 'Prometheus Intermediate Metrics per feature: gitaly - burn-rate 6h'
-  rules:
-  - record: gitlab:component:feature_category:execution:apdex:success:rate_6h
-    labels:
-      component: gitalyruby
-      feature_category: gitaly
-      tier: stor
-      type: gitaly
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="gitalyruby",feature_category="gitaly",monitor!="global",tier="stor",type="gitaly"}[6h])
-      )
-  - record: gitlab:component:feature_category:execution:apdex:weight:score_6h
-    labels:
-      component: gitalyruby
-      feature_category: gitaly
-      tier: stor
-      type: gitaly
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="gitalyruby",feature_category="gitaly",monitor!="global",tier="stor",type="gitaly"}[6h])
-      )
-  - record: gitlab:component:feature_category:execution:ops:rate_6h
-    labels:
-      component: gitalyruby
-      feature_category: gitaly
-      tier: stor
-      type: gitaly
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="gitalyruby",feature_category="gitaly",monitor!="global",tier="stor",type="gitaly"}[6h])
-      )
-  - record: gitlab:component:feature_category:execution:error:rate_6h
-    labels:
-      component: gitalyruby
-      feature_category: gitaly
-      tier: stor
-      type: gitaly
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="gitalyruby",feature_category="gitaly",monitor!="global",tier="stor",type="gitaly"}[6h])
-      )
-  - record: gitlab:component:feature_category:execution:apdex:success:rate_6h
-    labels:
-      component: goserver
-      feature_category: gitaly
-      tier: stor
-      type: gitaly
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="goserver",feature_category="gitaly",monitor!="global",tier="stor",type="gitaly"}[6h])
-      )
-  - record: gitlab:component:feature_category:execution:apdex:weight:score_6h
-    labels:
-      component: goserver
-      feature_category: gitaly
-      tier: stor
-      type: gitaly
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="goserver",feature_category="gitaly",monitor!="global",tier="stor",type="gitaly"}[6h])
-      )
-  - record: gitlab:component:feature_category:execution:ops:rate_6h
-    labels:
-      component: goserver
-      feature_category: gitaly
-      tier: stor
-      type: gitaly
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="goserver",feature_category="gitaly",monitor!="global",tier="stor",type="gitaly"}[6h])
-      )
-  - record: gitlab:component:feature_category:execution:error:rate_6h
-    labels:
-      component: goserver
-      feature_category: gitaly
-      tier: stor
-      type: gitaly
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="goserver",feature_category="gitaly",monitor!="global",tier="stor",type="gitaly"}[6h])
-      )
-  - record: gitlab:component:feature_category:execution:ops:rate_6h
-    labels:
-      component: goserver_op_service
-      feature_category: gitaly
-      tier: stor
-      type: gitaly
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="goserver_op_service",feature_category="gitaly",monitor!="global",tier="stor",type="gitaly"}[6h])
-      )
-  - record: gitlab:component:feature_category:execution:error:rate_6h
-    labels:
-      component: goserver_op_service
-      feature_category: gitaly
-      tier: stor
-      type: gitaly
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="goserver_op_service",feature_category="gitaly",monitor!="global",tier="stor",type="gitaly"}[6h])
-      )
-- name: 'Prometheus Intermediate Metrics per feature: gitaly - burn-rate 3d'
-  rules:
-  - record: gitlab:component:feature_category:execution:apdex:success:rate_3d
-    labels:
-      component: gitalyruby
-      feature_category: gitaly
-      tier: stor
-      type: gitaly
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="gitalyruby",feature_category="gitaly",monitor!="global",tier="stor",type="gitaly"}[3d])
-      )
-  - record: gitlab:component:feature_category:execution:apdex:weight:score_3d
-    labels:
-      component: gitalyruby
-      feature_category: gitaly
-      tier: stor
-      type: gitaly
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="gitalyruby",feature_category="gitaly",monitor!="global",tier="stor",type="gitaly"}[3d])
-      )
-  - record: gitlab:component:feature_category:execution:ops:rate_3d
-    labels:
-      component: gitalyruby
-      feature_category: gitaly
-      tier: stor
-      type: gitaly
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="gitalyruby",feature_category="gitaly",monitor!="global",tier="stor",type="gitaly"}[3d])
-      )
-  - record: gitlab:component:feature_category:execution:error:rate_3d
-    labels:
-      component: gitalyruby
-      feature_category: gitaly
-      tier: stor
-      type: gitaly
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="gitalyruby",feature_category="gitaly",monitor!="global",tier="stor",type="gitaly"}[3d])
-      )
-  - record: gitlab:component:feature_category:execution:apdex:success:rate_3d
-    labels:
-      component: goserver
-      feature_category: gitaly
-      tier: stor
-      type: gitaly
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="goserver",feature_category="gitaly",monitor!="global",tier="stor",type="gitaly"}[3d])
-      )
-  - record: gitlab:component:feature_category:execution:apdex:weight:score_3d
-    labels:
-      component: goserver
-      feature_category: gitaly
-      tier: stor
-      type: gitaly
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="goserver",feature_category="gitaly",monitor!="global",tier="stor",type="gitaly"}[3d])
-      )
-  - record: gitlab:component:feature_category:execution:ops:rate_3d
-    labels:
-      component: goserver
-      feature_category: gitaly
-      tier: stor
-      type: gitaly
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="goserver",feature_category="gitaly",monitor!="global",tier="stor",type="gitaly"}[3d])
-      )
-  - record: gitlab:component:feature_category:execution:error:rate_3d
-    labels:
-      component: goserver
-      feature_category: gitaly
-      tier: stor
-      type: gitaly
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="goserver",feature_category="gitaly",monitor!="global",tier="stor",type="gitaly"}[3d])
-      )
-  - record: gitlab:component:feature_category:execution:ops:rate_3d
-    labels:
-      component: goserver_op_service
-      feature_category: gitaly
-      tier: stor
-      type: gitaly
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="goserver_op_service",feature_category="gitaly",monitor!="global",tier="stor",type="gitaly"}[3d])
-      )
-  - record: gitlab:component:feature_category:execution:error:rate_3d
-    labels:
-      component: goserver_op_service
-      feature_category: gitaly
-      tier: stor
-      type: gitaly
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="goserver_op_service",feature_category="gitaly",monitor!="global",tier="stor",type="gitaly"}[3d])
       )

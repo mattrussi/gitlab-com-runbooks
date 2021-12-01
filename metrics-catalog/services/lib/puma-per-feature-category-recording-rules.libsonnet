@@ -6,6 +6,8 @@ local selectors = import 'promql/selectors.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 local aggregationSets = import 'aggregation-sets.libsonnet';
 local aggregationSet = aggregationSets.featureCategorySourceSLIs;
+local recordingRuleHelpers = import 'recording-rules/helpers.libsonnet';
+local upscaleLabels = (import 'servicemetrics/service_level_indicator_definition.libsonnet').upscaleLabels;
 
 local staticLabels = { component: 'puma' };
 local aggregationLabels = std.filter(
@@ -13,6 +15,10 @@ local aggregationLabels = std.filter(
     !std.objectHas(staticLabels, label),
   aggregationSet.labels
 );
+
+local staticLabelsForBurnRate(burnRate) = if aggregationSet.upscaleBurnRate(burnRate) && burnRate == '1h' then
+  upscaleLabels + staticLabels
+else staticLabels;
 
 local requestRate = rateMetric(
   counter='http_requests_total',
@@ -46,13 +52,50 @@ local latencyApdexRateRules(rangeInterval) =
   [
     {
       record: aggregationSet.getApdexWeightMetricForBurnRate(rangeInterval),
-      labels: staticLabels,
-      expr: latencyApdex.apdexWeightQuery(aggregationLabels, {}, rangeInterval),
+      labels: staticLabelsForBurnRate(rangeInterval),
+      expr: if aggregationSet.upscaleBurnRate(rangeInterval) then
+        recordingRuleHelpers.combinedApdexWeightExpression(aggregationSet, aggregationSet, rangeInterval, null, staticLabels + upscaleLabels)
+      else latencyApdex.apdexWeightQuery(aggregationLabels, {}, rangeInterval),
     },
     {
       record: aggregationSet.getApdexSuccessRateMetricForBurnRate(rangeInterval),
+      labels: staticLabelsForBurnRate(rangeInterval),
+      expr: if aggregationSet.upscaleBurnRate(rangeInterval) then
+        recordingRuleHelpers.combinedApdexSuccessRateExpression(aggregationSet, aggregationSet, rangeInterval, null, staticLabels + upscaleLabels)
+      else latencyApdex.apdexSuccessRateQuery(aggregationLabels, {}, rangeInterval),
+    },
+  ];
+
+local errorRateRules(rangeInterval) =
+  [
+    {
+      record: aggregationSet.getOpsRateMetricForBurnRate(rangeInterval),
       labels: staticLabels,
-      expr: latencyApdex.apdexSuccessRateQuery(aggregationLabels, {}, rangeInterval),
+      expr: if aggregationSet.upscaleBurnRate(rangeInterval) then
+        recordingRuleHelpers.combinedOpsRateExpression(aggregationSet, aggregationSet, rangeInterval, null, staticLabels + upscaleLabels)
+      else requestRate.aggregatedRateQuery(aggregationLabels, {}, rangeInterval),
+    },
+    {
+      record: aggregationSet.getErrorRateMetricForBurnRate(rangeInterval),
+      labels: staticLabels,
+      expr: if aggregationSet.upscaleBurnRate(rangeInterval) then
+        recordingRuleHelpers.combinedErrorRateExpression(aggregationSet, aggregationSet, rangeInterval, null, staticLabels + upscaleLabels)
+      else
+        |||
+          %(errorRate)s
+          or
+          (
+            0 * group by (%(aggregationLabels)s) (
+              %(operationRateName)s{%(staticLabels)s}
+            )
+          )
+        ||| % {
+          errorRate: strings.chomp(errorRate.aggregatedRateQuery(aggregationLabels, {}, rangeInterval)),
+          rangeInterval: rangeInterval,
+          aggregationLabels: aggregations.serialize(aggregationLabels),
+          operationRateName: aggregationSet.getOpsRateMetricForBurnRate(rangeInterval),
+          staticLabels: selectors.serializeHash(staticLabels),
+        },
     },
   ];
 
@@ -61,32 +104,7 @@ local latencyApdexRateRules(rangeInterval) =
   perFeatureCategoryRecordingRules::
     std.flatMap(
       function(rangeInterval)
-        [
-          {
-            record: aggregationSet.getOpsRateMetricForBurnRate(rangeInterval),
-            labels: staticLabels,
-            expr: requestRate.aggregatedRateQuery(aggregationLabels, {}, rangeInterval),
-          },
-          {
-            record: aggregationSet.getErrorRateMetricForBurnRate(rangeInterval),
-            labels: staticLabels,
-            expr: |||
-              %(errorRate)s
-              or
-              (
-                0 * group by (%(aggregationLabels)s) (
-                  %(operationRateName)s{%(staticLabels)s}
-                )
-              )
-            ||| % {
-              errorRate: strings.chomp(errorRate.aggregatedRateQuery(aggregationLabels, {}, rangeInterval)),
-              rangeInterval: rangeInterval,
-              aggregationLabels: aggregations.serialize(aggregationLabels),
-              operationRateName: aggregationSet.getOpsRateMetricForBurnRate(rangeInterval),
-              staticLabels: selectors.serializeHash(staticLabels),
-            },
-          },
-        ] + latencyApdexRateRules(rangeInterval),
+        errorRateRules(rangeInterval) + latencyApdexRateRules(rangeInterval),
       aggregationSet.getBurnRates()
     ),
 }

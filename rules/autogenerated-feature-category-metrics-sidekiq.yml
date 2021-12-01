@@ -91,7 +91,6 @@ groups:
   - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
     labels:
       component: sidekiq_execution
-      upscale_source: "yes"
     expr: |
       sum by (env,environment,tier,type,stage,feature_category) (
         label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="10",urgency="high"}, "_c", "0", "", "")
@@ -103,7 +102,6 @@ groups:
   - record: gitlab:component:feature_category:execution:apdex:weight:score_1h
     labels:
       component: sidekiq_execution
-      upscale_source: "yes"
     expr: |
       sum by (env,environment,tier,type,stage,feature_category) (
         label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",urgency="high"}, "_c", "0", "", "")
@@ -115,7 +113,6 @@ groups:
   - record: gitlab:component:feature_category:execution:ops:rate_1h
     labels:
       component: sidekiq_execution
-      upscale_source: "yes"
     expr: |
       sum by (env,environment,tier,type,stage,feature_category) (
         sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf"}
@@ -123,7 +120,6 @@ groups:
   - record: gitlab:component:feature_category:execution:error:rate_1h
     labels:
       component: sidekiq_execution
-      upscale_source: "yes"
     expr: |
       sum by (env,environment,tier,type,stage,feature_category) (
         sli_aggregations:sidekiq_jobs_failed_total_rate1h{}
@@ -133,60 +129,4 @@ groups:
         0 * group by (env,environment,tier,type,stage,feature_category) (
           gitlab:component:feature_category:execution:ops:rate_1h{component="sidekiq_execution"}
         )
-      )
-  - record: gitlab:component:feature_category:execution:apdex:success:rate_6h
-    labels:
-      component: sidekiq_execution
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="sidekiq_execution",monitor!="global"}[6h])
-      )
-  - record: gitlab:component:feature_category:execution:apdex:weight:score_6h
-    labels:
-      component: sidekiq_execution
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="sidekiq_execution",monitor!="global"}[6h])
-      )
-  - record: gitlab:component:feature_category:execution:ops:rate_6h
-    labels:
-      component: sidekiq_execution
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="sidekiq_execution",monitor!="global"}[6h])
-      )
-  - record: gitlab:component:feature_category:execution:error:rate_6h
-    labels:
-      component: sidekiq_execution
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="sidekiq_execution",monitor!="global"}[6h])
-      )
-  - record: gitlab:component:feature_category:execution:apdex:success:rate_3d
-    labels:
-      component: sidekiq_execution
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="sidekiq_execution",monitor!="global"}[3d])
-      )
-  - record: gitlab:component:feature_category:execution:apdex:weight:score_3d
-    labels:
-      component: sidekiq_execution
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="sidekiq_execution",monitor!="global"}[3d])
-      )
-  - record: gitlab:component:feature_category:execution:ops:rate_3d
-    labels:
-      component: sidekiq_execution
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="sidekiq_execution",monitor!="global"}[3d])
-      )
-  - record: gitlab:component:feature_category:execution:error:rate_3d
-    labels:
-      component: sidekiq_execution
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="sidekiq_execution",monitor!="global"}[3d])
       )

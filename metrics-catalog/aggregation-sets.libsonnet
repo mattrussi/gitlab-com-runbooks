@@ -379,8 +379,6 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     id: 'source_feature_category',
     name: 'Prometheus Source Feature Category Metrics',
     intermediateSource: true,
-    supportedBurnRates+: ['6h', '3d'],
-    upscaleLongerBurnRates: true,
     selector: { monitor: { ne: 'global' } },
     labels: ['env', 'environment', 'tier', 'type', 'stage', 'component', 'feature_category'],
     metricFormats: {
@@ -397,6 +395,7 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     intermediateSource: false,
     selector: { monitor: 'global' },
     labels: ['env', 'environment', 'tier', 'type', 'stage', 'component', 'feature_category'],
+    upscaleLongerBurnRates: true,
     metricFormats: {
       apdexSuccessRate: 'gitlab:component:feature_category:execution:apdex:success:rate_%s',
       apdexWeight: 'gitlab:component:feature_category:execution:apdex:weight:score_%s',
@@ -418,6 +417,7 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
       on: ['feature_category', 'env'],
       labels: ['stage_group', 'product_stage'],
     },
+    upscaleLongerBurnRates: true,
     metricFormats: {
       apdexSuccessRate: 'gitlab:component:stage_group:execution:apdex:success:rate_%s',
       apdexWeight: 'gitlab:component:stage_group:execution:apdex:weight:score_%s',

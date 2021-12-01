@@ -1,6 +1,7 @@
 local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local strings = import 'utils/strings.libsonnet';
+local upscaleLabels = (import 'servicemetrics/service_level_indicator_definition.libsonnet').upscaleLabels;
 
 // Expression for upscaling an ratio
 local upscaleRatioPromExpression = |||
@@ -57,13 +58,21 @@ local aggregationFilterExpr(targetAggregationSet) =
   else
     '';
 
+local filterStaticLabelsFromAggregationLabels(aggregationLabels, staticLabels) =
+  std.filter(
+    function(label)
+      !std.objectHas(staticLabels, label),
+    aggregationLabels,
+  );
+
 // Upscale a RATIO from source metrics to target at the given target burnRate
-local upscaledRatioExpression(sourceAggregationSet, targetAggregationSet, burnRate, numeratorMetricName, denominatorMetricName, extraSelectors={}) =
-  local sourceSelectorWithExtras = sourceAggregationSet.selector + extraSelectors;
+local upscaledRatioExpression(sourceAggregationSet, targetAggregationSet, burnRate, numeratorMetricName, denominatorMetricName, staticLabels) =
+  local sourceSelectorWithExtras = sourceAggregationSet.selector + staticLabels;
+  local filteredAggregationLabels = filterStaticLabelsFromAggregationLabels(targetAggregationSet.labels, staticLabels);
 
   upscaleRatioPromExpression % {
     burnRate: burnRate,
-    targetAggregationLabels: aggregations.serialize(targetAggregationSet.labels),
+    targetAggregationLabels: aggregations.serialize(filteredAggregationLabels),
     numeratorMetricName: numeratorMetricName,
     denominatorMetricName: denominatorMetricName,
     sourceSelectorWithExtras: selectors.serializeHash(sourceSelectorWithExtras),
@@ -71,80 +80,80 @@ local upscaledRatioExpression(sourceAggregationSet, targetAggregationSet, burnRa
   };
 
 // Upscale a RATE from source metrics to target at the given target burnRate
-local upscaledRateExpression(sourceAggregationSet, targetAggregationSet, burnRate, metricName, extraSelectors={}) =
-  local sourceSelectorWithExtras = sourceAggregationSet.selector + extraSelectors;
-
+local upscaledRateExpression(sourceAggregationSet, targetAggregationSet, burnRate, metricName, staticLabels) =
+  local sourceSelectorWithExtras = sourceAggregationSet.selector + staticLabels;
+  local filteredAggregationLabels = filterStaticLabelsFromAggregationLabels(targetAggregationSet.labels, staticLabels);
   upscaleRatePromExpression % {
     burnRate: burnRate,
-    targetAggregationLabels: aggregations.serialize(targetAggregationSet.labels),
+    targetAggregationLabels: aggregations.serialize(filteredAggregationLabels),
     metricName: metricName,
     sourceSelectorWithExtras: selectors.serializeHash(sourceSelectorWithExtras),
     aggregationFilterExpr: aggregationFilterExpr(targetAggregationSet),
   };
 
 // Upscale an apdex RATIO from source metrics to target at the given target burnRate
-local upscaledApdexRatioExpression(sourceAggregationSet, targetAggregationSet, burnRate, extraSelectors={}) =
+local upscaledApdexRatioExpression(sourceAggregationSet, targetAggregationSet, burnRate, staticLabels) =
   upscaledRatioExpression(
     sourceAggregationSet,
     targetAggregationSet,
     burnRate,
     numeratorMetricName=sourceAggregationSet.getApdexSuccessRateMetricForBurnRate('1h', required=true),
     denominatorMetricName=sourceAggregationSet.getApdexWeightMetricForBurnRate('1h', required=true),
-    extraSelectors=extraSelectors,
+    staticLabels=staticLabels,
   );
 
 // Upscale an error RATIO from source metrics to target at the given target burnRate
-local upscaledErrorRatioExpression(sourceAggregationSet, targetAggregationSet, burnRate, extraSelectors={}) =
+local upscaledErrorRatioExpression(sourceAggregationSet, targetAggregationSet, burnRate, staticLabels) =
   upscaledRatioExpression(
     sourceAggregationSet,
     targetAggregationSet,
     burnRate,
     numeratorMetricName=sourceAggregationSet.getErrorRateMetricForBurnRate('1h', required=true),
     denominatorMetricName=sourceAggregationSet.getOpsRateMetricForBurnRate('1h', required=true),
-    extraSelectors=extraSelectors,
+    staticLabels=staticLabels,
   );
 
 // Upscale an apdex success RATE from source metrics to target at the given target burnRate
-local upscaledApdexSuccessRateExpression(sourceAggregationSet, targetAggregationSet, burnRate, extraSelectors={}) =
+local upscaledApdexSuccessRateExpression(sourceAggregationSet, targetAggregationSet, burnRate, staticLabels) =
   upscaledRateExpression(
     sourceAggregationSet,
     targetAggregationSet,
     burnRate,
     metricName=sourceAggregationSet.getApdexSuccessRateMetricForBurnRate('1h', required=true),
-    extraSelectors=extraSelectors
+    staticLabels=staticLabels
   );
 
 // Upscale an apdex total (weight) RATE from source metrics to target at the given target burnRate
-local upscaledApdexWeightExpression(sourceAggregationSet, targetAggregationSet, burnRate, extraSelectors={}) =
+local upscaledApdexWeightExpression(sourceAggregationSet, targetAggregationSet, burnRate, staticLabels) =
   upscaledRateExpression(
     sourceAggregationSet,
     targetAggregationSet,
     burnRate,
     metricName=sourceAggregationSet.getApdexWeightMetricForBurnRate('1h', required=true),
-    extraSelectors=extraSelectors
+    staticLabels=staticLabels
   );
 
 // Upscale an ops RATE from source metrics to target at the given target burnRate
-local upscaledOpsRateExpression(sourceAggregationSet, targetAggregationSet, burnRate, extraSelectors={}) =
+local upscaledOpsRateExpression(sourceAggregationSet, targetAggregationSet, burnRate, staticLabels) =
   upscaledRateExpression(
     sourceAggregationSet,
     targetAggregationSet,
     burnRate,
     metricName=sourceAggregationSet.getOpsRateMetricForBurnRate('1h', required=true),
-    extraSelectors=extraSelectors
+    staticLabels=staticLabels,
   );
 
 // Upscale an error RATE from source metrics to target at the given target burnRate
-local upscaledErrorRateExpression(sourceAggregationSet, targetAggregationSet, burnRate, extraSelectors={}) =
+local upscaledErrorRateExpression(sourceAggregationSet, targetAggregationSet, burnRate, staticLabels) =
   upscaledRateExpression(
     sourceAggregationSet,
     targetAggregationSet,
     burnRate,
     metricName=sourceAggregationSet.getErrorRateMetricForBurnRate('1h', required=true),
-    extraSelectors=extraSelectors
+    staticLabels=staticLabels,
   );
 
-local upscaledSuccessRateExpression(sourceAggregationSet, targetAggregationSet, burnRate, extraSelectors={}) =
+local upscaledSuccessRateExpression(sourceAggregationSet, targetAggregationSet, burnRate, staticLabels) =
   local sourceMetricName = sourceAggregationSet.getSuccessRateMetricForBurnRate('1h', required=false);
   if sourceMetricName != null then
     upscaledRateExpression(
@@ -152,7 +161,7 @@ local upscaledSuccessRateExpression(sourceAggregationSet, targetAggregationSet, 
       targetAggregationSet,
       burnRate,
       metricName=sourceMetricName,
-      extraSelectors=extraSelectors
+      staticLabels=staticLabels
     )
   else
     local upscaledOpsRate = strings.chomp(upscaledRateExpression(
@@ -160,14 +169,14 @@ local upscaledSuccessRateExpression(sourceAggregationSet, targetAggregationSet, 
       targetAggregationSet,
       burnRate,
       metricName=sourceAggregationSet.getOpsRateMetricForBurnRate('1h', required=true),
-      extraSelectors=extraSelectors,
+      staticLabels=staticLabels,
     ));
     local upscaledErrorRate = strings.chomp(upscaledRateExpression(
       sourceAggregationSet,
       targetAggregationSet,
       burnRate,
       metricName=sourceAggregationSet.getErrorRateMetricForBurnRate('1h', required=true),
-      extraSelectors=extraSelectors,
+      staticLabels=staticLabels,
     ));
     |||
       %(upscaledOpsRate)s
@@ -185,11 +194,14 @@ local upscaledSuccessRateExpression(sourceAggregationSet, targetAggregationSet, 
 
 // Generates a transformation expression that either uses direct, upscaled or
 // or combines both in cases where the source expression contains a mixture
-local combineUpscaleAndDirectTransformationExpressions(upscaledExprType, upscaleExpressionFn, sourceAggregationSet, targetAggregationSet, burnRate, directExpr, extraSelector) =
+local combineUpscaleAndDirectTransformationExpressions(upscaledExprType, upscaleExpressionFn, sourceAggregationSet, targetAggregationSet, burnRate, directExpr, staticLabels) =
+  // If the source is already upscaled, we can just aggregate that
+  if sourceAggregationSet.upscaleBurnRate(burnRate) && directExpr != null then
+    directExpr
   // For 6h burn rate, we'll use either a combination of upscaling and direct aggregation,
   // or, if the source aggregations, don't exist, only use the upscaled metric
-  if burnRate == '6h' then
-    local upscaledExpr = upscaleExpressionFn(sourceAggregationSet, targetAggregationSet, burnRate, extraSelectors={ upscale_source: 'yes' } + extraSelector);
+  else if burnRate == '6h' then
+    local upscaledExpr = upscaleExpressionFn(sourceAggregationSet, targetAggregationSet, burnRate, staticLabels + upscaleLabels);
 
     if directExpr != null then
       |||
@@ -206,11 +218,11 @@ local combineUpscaleAndDirectTransformationExpressions(upscaledExprType, upscale
       }
     else
       // If we there is no source burnRate, use only upscaling
-      upscaleExpressionFn(sourceAggregationSet, targetAggregationSet, burnRate, extraSelectors=extraSelector)
+      upscaleExpressionFn(sourceAggregationSet, targetAggregationSet, burnRate, staticLabels)
 
   else if burnRate == '3d' then
     // For 3d expressions, we always use upscaling
-    upscaleExpressionFn(sourceAggregationSet, targetAggregationSet, burnRate, extraSelectors=extraSelector)
+    upscaleExpressionFn(sourceAggregationSet, targetAggregationSet, burnRate, staticLabels)
   else
     // For other burn rates, the direct expression must be used, so if it doesn't exist
     // there is a problem
@@ -224,7 +236,7 @@ local combineUpscaleAndDirectTransformationExpressions(upscaledExprType, upscale
       directExpr;
 
 local curry(upscaledExprType, upscaleExpressionFn) =
-  function(sourceAggregationSet, targetAggregationSet, burnRate, directExpr, extraSelector={})
+  function(sourceAggregationSet, targetAggregationSet, burnRate, directExpr, staticLabels={})
     combineUpscaleAndDirectTransformationExpressions(
       upscaledExprType,
       upscaleExpressionFn,
@@ -232,7 +244,7 @@ local curry(upscaledExprType, upscaleExpressionFn) =
       targetAggregationSet,
       burnRate,
       directExpr,
-      extraSelector,
+      staticLabels
     );
 
 {

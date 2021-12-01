@@ -7,6 +7,7 @@ local strings = import 'utils/strings.libsonnet';
 
 local featureCategoryFromSourceMetrics = 'featureCategoryFromSourceMetrics';
 local featureCategoryNotOwned = stages.notOwned.key;
+local upscaleLabels = { upscale_source: 'yes' };
 
 // For now we assume that services are provisioned on vms and not kubernetes
 // Please consult the README.md file for details of team and feature_category
@@ -71,7 +72,7 @@ local filterStaticLabelsFromAggregationLabels(aggregationLabels, staticLabelsHas
 // Currently, we use 1h metrics for upscaling source
 local getUpscaleLabels(sli, aggregationSet, burnRate) =
   if (sli.upscaleLongerBurnRates || aggregationSet.upscaleLongerBurnRates) && burnRate == '1h' then
-    { upscale_source: 'yes' }
+    upscaleLabels
   else
     {};
 
@@ -268,4 +269,5 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
     },
   featureCategoryFromSourceMetrics: featureCategoryFromSourceMetrics,
   featureCategoryNotOwned: featureCategoryNotOwned,
+  upscaleLabels: upscaleLabels,
 }

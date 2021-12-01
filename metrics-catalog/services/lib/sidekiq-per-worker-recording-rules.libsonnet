@@ -7,6 +7,7 @@ local strings = import 'utils/strings.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local combined = metricsCatalog.combined;
+local upscaleLabels = (import 'servicemetrics/service_level_indicator_definition.libsonnet').upscaleLabels;
 local recordingRuleHelpers = import 'recording-rules/helpers.libsonnet';
 
 // This is used to calculate the queue apdex across all queues
@@ -63,7 +64,7 @@ local executionRulesForBurnRate(aggregationSet, burnRate, staticLabels={}) =
     aggregationSet.labels
   );
   local staticLabelsWithUpscaling = if aggregationSet.upscaleLongerBurnRates && burnRate == '1h' then
-    staticLabels { upscale_source: 'yes' }
+    staticLabels + upscaleLabels
   else staticLabels;
 
   local conditionalAppend(record, expr) =

@@ -76,7 +76,6 @@ groups:
       feature_category: container_registry
       tier: stor
       type: google-cloud-storage
-      upscale_source: "yes"
     expr: |
       sum by (env,environment,stage) (
         rate(registry_storage_action_seconds_bucket{le="1"}[1h])
@@ -87,7 +86,6 @@ groups:
       feature_category: container_registry
       tier: stor
       type: google-cloud-storage
-      upscale_source: "yes"
     expr: |
       sum by (env,environment,stage) (
         rate(registry_storage_action_seconds_bucket{le="+Inf"}[1h])
@@ -98,74 +96,7 @@ groups:
       feature_category: container_registry
       tier: stor
       type: google-cloud-storage
-      upscale_source: "yes"
     expr: |
       sum by (env,environment,stage) (
         rate(registry_storage_action_seconds_count{}[1h])
-      )
-- name: 'Prometheus Intermediate Metrics per feature: google-cloud-storage - burn-rate
-    6h'
-  rules:
-  - record: gitlab:component:feature_category:execution:apdex:success:rate_6h
-    labels:
-      component: registry_storage
-      feature_category: container_registry
-      tier: stor
-      type: google-cloud-storage
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="registry_storage",feature_category="container_registry",monitor!="global",tier="stor",type="google-cloud-storage"}[6h])
-      )
-  - record: gitlab:component:feature_category:execution:apdex:weight:score_6h
-    labels:
-      component: registry_storage
-      feature_category: container_registry
-      tier: stor
-      type: google-cloud-storage
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="registry_storage",feature_category="container_registry",monitor!="global",tier="stor",type="google-cloud-storage"}[6h])
-      )
-  - record: gitlab:component:feature_category:execution:ops:rate_6h
-    labels:
-      component: registry_storage
-      feature_category: container_registry
-      tier: stor
-      type: google-cloud-storage
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="registry_storage",feature_category="container_registry",monitor!="global",tier="stor",type="google-cloud-storage"}[6h])
-      )
-- name: 'Prometheus Intermediate Metrics per feature: google-cloud-storage - burn-rate
-    3d'
-  rules:
-  - record: gitlab:component:feature_category:execution:apdex:success:rate_3d
-    labels:
-      component: registry_storage
-      feature_category: container_registry
-      tier: stor
-      type: google-cloud-storage
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="registry_storage",feature_category="container_registry",monitor!="global",tier="stor",type="google-cloud-storage"}[3d])
-      )
-  - record: gitlab:component:feature_category:execution:apdex:weight:score_3d
-    labels:
-      component: registry_storage
-      feature_category: container_registry
-      tier: stor
-      type: google-cloud-storage
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="registry_storage",feature_category="container_registry",monitor!="global",tier="stor",type="google-cloud-storage"}[3d])
-      )
-  - record: gitlab:component:feature_category:execution:ops:rate_3d
-    labels:
-      component: registry_storage
-      feature_category: container_registry
-      tier: stor
-      type: google-cloud-storage
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="registry_storage",feature_category="container_registry",monitor!="global",tier="stor",type="google-cloud-storage"}[3d])
       )

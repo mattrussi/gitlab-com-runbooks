@@ -290,7 +290,6 @@ groups:
       stage: main
       tier: sv
       type: web-pages
-      upscale_source: "yes"
     expr: |
       sum by (env,environment) (
         rate(haproxy_backend_http_responses_total{backend="pages_http",type="pages"}[1h])
@@ -302,7 +301,6 @@ groups:
       stage: main
       tier: sv
       type: web-pages
-      upscale_source: "yes"
     expr: |
       (
         sum by (env,environment) (
@@ -312,7 +310,7 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab:component:feature_category:execution:ops:rate_1h{component="loadbalancer",feature_category="pages",stage="main",tier="sv",type="web-pages",upscale_source="yes"}
+          gitlab:component:feature_category:execution:ops:rate_1h{component="loadbalancer",feature_category="pages",stage="main",tier="sv",type="web-pages"}
         )
       )
   - record: gitlab:component:feature_category:execution:ops:rate_1h
@@ -322,7 +320,6 @@ groups:
       stage: main
       tier: sv
       type: web-pages
-      upscale_source: "yes"
     expr: |
       sum by (env,environment) (
         rate(haproxy_server_sessions_total{backend="pages_https",type="pages"}[1h])
@@ -334,7 +331,6 @@ groups:
       stage: main
       tier: sv
       type: web-pages
-      upscale_source: "yes"
     expr: |
       (
         sum by (env,environment) (
@@ -344,7 +340,7 @@ groups:
       or
       (
         0 * group by(env,environment) (
-          gitlab:component:feature_category:execution:ops:rate_1h{component="loadbalancer_https",feature_category="pages",stage="main",tier="sv",type="web-pages",upscale_source="yes"}
+          gitlab:component:feature_category:execution:ops:rate_1h{component="loadbalancer_https",feature_category="pages",stage="main",tier="sv",type="web-pages"}
         )
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
@@ -353,7 +349,6 @@ groups:
       feature_category: pages
       tier: sv
       type: web-pages
-      upscale_source: "yes"
     expr: |
       sum by (env,environment,stage) (
         rate(gitlab_pages_http_request_duration_seconds_bucket{le="10",type="web-pages"}[1h])
@@ -364,7 +359,6 @@ groups:
       feature_category: pages
       tier: sv
       type: web-pages
-      upscale_source: "yes"
     expr: |
       sum by (env,environment,stage) (
         rate(gitlab_pages_http_request_duration_seconds_bucket{le="+Inf",type="web-pages"}[1h])
@@ -375,7 +369,6 @@ groups:
       feature_category: pages
       tier: sv
       type: web-pages
-      upscale_source: "yes"
     expr: |
       sum by (env,environment,stage) (
         rate(gitlab_pages_http_requests_total{}[1h])
@@ -386,7 +379,6 @@ groups:
       feature_category: pages
       tier: sv
       type: web-pages
-      upscale_source: "yes"
     expr: |
       (
         sum by (env,environment,stage) (
@@ -396,7 +388,7 @@ groups:
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab:component:feature_category:execution:ops:rate_1h{component="server",feature_category="pages",tier="sv",type="web-pages",upscale_source="yes"}
+          gitlab:component:feature_category:execution:ops:rate_1h{component="server",feature_category="pages",tier="sv",type="web-pages"}
         )
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
@@ -405,7 +397,6 @@ groups:
       feature_category: pages
       tier: sv
       type: web-pages
-      upscale_source: "yes"
     expr: |
       sum by (env,environment,stage) (
         rate(gitlab_pages_http_time_to_write_header_seconds_bucket{le="0.5",type="web-pages"}[1h])
@@ -416,7 +407,6 @@ groups:
       feature_category: pages
       tier: sv
       type: web-pages
-      upscale_source: "yes"
     expr: |
       sum by (env,environment,stage) (
         rate(gitlab_pages_http_time_to_write_header_seconds_bucket{le="+Inf",type="web-pages"}[1h])
@@ -427,240 +417,7 @@ groups:
       feature_category: pages
       tier: sv
       type: web-pages
-      upscale_source: "yes"
     expr: |
       sum by (env,environment,stage) (
         rate(gitlab_pages_http_time_to_write_header_seconds_count{type="web-pages"}[1h])
-      )
-- name: 'Prometheus Intermediate Metrics per feature: web-pages - burn-rate 6h'
-  rules:
-  - record: gitlab:component:feature_category:execution:ops:rate_6h
-    labels:
-      component: loadbalancer
-      feature_category: pages
-      stage: main
-      tier: sv
-      type: web-pages
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="loadbalancer",feature_category="pages",monitor!="global",stage="main",tier="sv",type="web-pages"}[6h])
-      )
-  - record: gitlab:component:feature_category:execution:error:rate_6h
-    labels:
-      component: loadbalancer
-      feature_category: pages
-      stage: main
-      tier: sv
-      type: web-pages
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="loadbalancer",feature_category="pages",monitor!="global",stage="main",tier="sv",type="web-pages"}[6h])
-      )
-  - record: gitlab:component:feature_category:execution:ops:rate_6h
-    labels:
-      component: loadbalancer_https
-      feature_category: pages
-      stage: main
-      tier: sv
-      type: web-pages
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="loadbalancer_https",feature_category="pages",monitor!="global",stage="main",tier="sv",type="web-pages"}[6h])
-      )
-  - record: gitlab:component:feature_category:execution:error:rate_6h
-    labels:
-      component: loadbalancer_https
-      feature_category: pages
-      stage: main
-      tier: sv
-      type: web-pages
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="loadbalancer_https",feature_category="pages",monitor!="global",stage="main",tier="sv",type="web-pages"}[6h])
-      )
-  - record: gitlab:component:feature_category:execution:apdex:success:rate_6h
-    labels:
-      component: server
-      feature_category: pages
-      tier: sv
-      type: web-pages
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="server",feature_category="pages",monitor!="global",tier="sv",type="web-pages"}[6h])
-      )
-  - record: gitlab:component:feature_category:execution:apdex:weight:score_6h
-    labels:
-      component: server
-      feature_category: pages
-      tier: sv
-      type: web-pages
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="server",feature_category="pages",monitor!="global",tier="sv",type="web-pages"}[6h])
-      )
-  - record: gitlab:component:feature_category:execution:ops:rate_6h
-    labels:
-      component: server
-      feature_category: pages
-      tier: sv
-      type: web-pages
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="server",feature_category="pages",monitor!="global",tier="sv",type="web-pages"}[6h])
-      )
-  - record: gitlab:component:feature_category:execution:error:rate_6h
-    labels:
-      component: server
-      feature_category: pages
-      tier: sv
-      type: web-pages
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="server",feature_category="pages",monitor!="global",tier="sv",type="web-pages"}[6h])
-      )
-  - record: gitlab:component:feature_category:execution:apdex:success:rate_6h
-    labels:
-      component: server_headers
-      feature_category: pages
-      tier: sv
-      type: web-pages
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="server_headers",feature_category="pages",monitor!="global",tier="sv",type="web-pages"}[6h])
-      )
-  - record: gitlab:component:feature_category:execution:apdex:weight:score_6h
-    labels:
-      component: server_headers
-      feature_category: pages
-      tier: sv
-      type: web-pages
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="server_headers",feature_category="pages",monitor!="global",tier="sv",type="web-pages"}[6h])
-      )
-  - record: gitlab:component:feature_category:execution:ops:rate_6h
-    labels:
-      component: server_headers
-      feature_category: pages
-      tier: sv
-      type: web-pages
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="server_headers",feature_category="pages",monitor!="global",tier="sv",type="web-pages"}[6h])
-      )
-- name: 'Prometheus Intermediate Metrics per feature: web-pages - burn-rate 3d'
-  rules:
-  - record: gitlab:component:feature_category:execution:ops:rate_3d
-    labels:
-      component: loadbalancer
-      feature_category: pages
-      stage: main
-      tier: sv
-      type: web-pages
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="loadbalancer",feature_category="pages",monitor!="global",stage="main",tier="sv",type="web-pages"}[3d])
-      )
-  - record: gitlab:component:feature_category:execution:error:rate_3d
-    labels:
-      component: loadbalancer
-      feature_category: pages
-      stage: main
-      tier: sv
-      type: web-pages
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="loadbalancer",feature_category="pages",monitor!="global",stage="main",tier="sv",type="web-pages"}[3d])
-      )
-  - record: gitlab:component:feature_category:execution:ops:rate_3d
-    labels:
-      component: loadbalancer_https
-      feature_category: pages
-      stage: main
-      tier: sv
-      type: web-pages
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="loadbalancer_https",feature_category="pages",monitor!="global",stage="main",tier="sv",type="web-pages"}[3d])
-      )
-  - record: gitlab:component:feature_category:execution:error:rate_3d
-    labels:
-      component: loadbalancer_https
-      feature_category: pages
-      stage: main
-      tier: sv
-      type: web-pages
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="loadbalancer_https",feature_category="pages",monitor!="global",stage="main",tier="sv",type="web-pages"}[3d])
-      )
-  - record: gitlab:component:feature_category:execution:apdex:success:rate_3d
-    labels:
-      component: server
-      feature_category: pages
-      tier: sv
-      type: web-pages
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="server",feature_category="pages",monitor!="global",tier="sv",type="web-pages"}[3d])
-      )
-  - record: gitlab:component:feature_category:execution:apdex:weight:score_3d
-    labels:
-      component: server
-      feature_category: pages
-      tier: sv
-      type: web-pages
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="server",feature_category="pages",monitor!="global",tier="sv",type="web-pages"}[3d])
-      )
-  - record: gitlab:component:feature_category:execution:ops:rate_3d
-    labels:
-      component: server
-      feature_category: pages
-      tier: sv
-      type: web-pages
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="server",feature_category="pages",monitor!="global",tier="sv",type="web-pages"}[3d])
-      )
-  - record: gitlab:component:feature_category:execution:error:rate_3d
-    labels:
-      component: server
-      feature_category: pages
-      tier: sv
-      type: web-pages
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:error:rate_1h{component="server",feature_category="pages",monitor!="global",tier="sv",type="web-pages"}[3d])
-      )
-  - record: gitlab:component:feature_category:execution:apdex:success:rate_3d
-    labels:
-      component: server_headers
-      feature_category: pages
-      tier: sv
-      type: web-pages
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:success:rate_1h{component="server_headers",feature_category="pages",monitor!="global",tier="sv",type="web-pages"}[3d])
-      )
-  - record: gitlab:component:feature_category:execution:apdex:weight:score_3d
-    labels:
-      component: server_headers
-      feature_category: pages
-      tier: sv
-      type: web-pages
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:apdex:weight:score_1h{component="server_headers",feature_category="pages",monitor!="global",tier="sv",type="web-pages"}[3d])
-      )
-  - record: gitlab:component:feature_category:execution:ops:rate_3d
-    labels:
-      component: server_headers
-      feature_category: pages
-      tier: sv
-      type: web-pages
-    expr: |
-      sum by (env,environment,tier,type,stage,component,feature_category) (
-        avg_over_time(gitlab:component:feature_category:execution:ops:rate_1h{component="server_headers",feature_category="pages",monitor!="global",tier="sv",type="web-pages"}[3d])
       )
