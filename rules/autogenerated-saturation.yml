@@ -756,7 +756,7 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            avg_over_time(pgbouncer_used_clients{type=~"patroni|patroni-registry|patroni-ci|pgbouncer|pgbouncer-registry|pgbouncer-ci"}[5m])
+            avg_over_time(pgbouncer_used_clients{type=~"pgbouncer|pgbouncer-registry|pgbouncer-ci"}[5m])
             /
             8192
             ,

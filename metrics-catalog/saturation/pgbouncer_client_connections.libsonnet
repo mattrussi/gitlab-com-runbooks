@@ -45,6 +45,6 @@ local pgbouncer_client_conn(maxClientConns, name, appliesToServiceTypes) =
   });
 
 {
-  pgbouncer_client_conn_primary: pgbouncer_client_conn(maxClientConns=8192, name='Primary', appliesToServiceTypes=metricsCatalog.findServicesWithTag(tag='pgbouncer')),
-  pgbouncer_client_conn_replicas: pgbouncer_client_conn(maxClientConns=12288, name='Replicas', appliesToServiceTypes=metricsCatalog.findServicesWithTag(tag='patroni')),
+  pgbouncer_client_conn_primary: pgbouncer_client_conn(maxClientConns=8192, name='Primary', appliesToServiceTypes=['pgbouncer','pgbouncer-registry','pgbouncer-ci']),
+  pgbouncer_client_conn_replicas: pgbouncer_client_conn(maxClientConns=12288, name='Replicas', appliesToServiceTypes=['patroni','patroni-registry','patroni-ci']),
 }
