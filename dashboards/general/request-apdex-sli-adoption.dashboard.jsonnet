@@ -83,7 +83,7 @@ local endpointCountForUrgency(urgency) =
 
 local endpointsForUrgency(urgency) =
   basic.table(
-    title='Endpoints ordered by request rate',
+    title='%s urgency endpoints ordered by request rate' % [urgency],
     styles=null,
     queries=[topEndpoints({ request_urgency: urgency })],
     transformations=[
@@ -148,7 +148,6 @@ local trafficForUrgencyPanels(urgency) =
   [
     trafficForUrgency(urgency),
     endpointCountForUrgency(urgency),
-    endpointsForUrgency(urgency),
   ];
 
 local groupOptedOut = |||
@@ -366,21 +365,32 @@ basic.dashboard(
 .addTemplate(prebuiltTemplates.stageGroup())
 .addPanels(
   layout.splitColumnGrid(
-    [
-      [optOutGroupsTable],
-      [optOutTrafficShare],
-    ],
-    cellHeights=[5, 5],
-    columnWidths=[15, 9],
-    title='Opted in traffic',
+    std.map(trafficForUrgencyPanels, knownUrgencies),
+    title='Traffic by urgency (over the last 6h)',
     startRow=0,
+    cellHeights=[4, 2],
   )
 )
 .addPanels(
-  layout.splitColumnGrid(
-    std.map(trafficForUrgencyPanels, knownUrgencies),
-    title='Traffic by urgency (over the last 6h)',
+  layout.rowGrid(
+    'Endpoints by urgency (over the last 6h)',
+    std.map(endpointsForUrgency, knownUrgencies),
+    collapse=true,
     startRow=100,
-    cellHeights=[4, 2, 8],
+  )
+)
+.addPanels(
+  layout.rowGrid(
+    'Opted in groups',
+    [optOutGroupsTable],
+    rowHeight=10,
+    startRow=200,
+  )
+).addPanels(
+  layout.rowGrid(
+    'Opted in traffic over time',
+    [optOutTrafficShare],
+    rowHeight=10,
+    startRow=300,
   )
 )
