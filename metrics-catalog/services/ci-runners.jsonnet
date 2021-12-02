@@ -107,6 +107,35 @@ metricsCatalog.serviceDefinition({
       ],
     },
 
+    queuing_queries_duration: {
+      userImpacting: false,
+      featureCategory: 'continuous_integration_scaling',
+      team: 'pipeline_execution',
+      description: |||
+        This SLI monitors the queuing queries duration. Everything above 1
+        second is considered to be unexpected and needs investigation.
+
+        These database queries are executed in the Rails application when a
+        runner requests a new build to process in `POST /api/v4/jobs/request`.
+      |||,
+
+      apdex: histogramApdex(
+        histogram='gitlab_ci_queue_retrieval_duration_seconds_bucket',
+        satisfiedThreshold=0.5,
+      ),
+
+      requestRate: rateMetric(
+        counter='gitlab_ci_queue_retrieval_duration_seconds_count',
+      ),
+
+      monitoringThresholds+: {
+        apdexScore: 0.999,
+      },
+
+      significantLabels: ['runner_type'],
+      toolingLinks: [],
+    },
+
     // Trace archive jobs do not mark themselves as failed
     // when a job fails, instead they increment the job_trace_archive_failed_total counter
     // For this reason, our normal Sidekiq job monitoring doesn't alert us to these failures.
