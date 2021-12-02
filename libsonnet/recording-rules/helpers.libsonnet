@@ -36,9 +36,9 @@ local joinExpr(targetAggregationSet) =
   else
     local requiredLabelsFromJoin = targetAggregationSet.joinSource.labels + targetAggregationSet.joinSource.on;
     ' * on(%(joinOn)s) group_left(%(labels)s) (group by (%(aggregatedLabels)s) (%(metric)s))' % {
-      joinOn: aggregations.serialize(targetAggregationSet.joinSource.on),
-      labels: aggregations.serialize(targetAggregationSet.joinSource.labels),
-      aggregatedLabels: aggregations.serialize(requiredLabelsFromJoin),
+      joinOn: aggregations.serialize(std.set(targetAggregationSet.joinSource.on)),
+      labels: aggregations.serialize(std.set(targetAggregationSet.joinSource.labels)),
+      aggregatedLabels: aggregations.serialize(std.set(requiredLabelsFromJoin)),
       metric: targetAggregationSet.joinSource.metric,
     };
 

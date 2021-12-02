@@ -15,6 +15,10 @@ local groupSelector = {
   stage_group: { re: '$stage_group' },
 };
 
+local mappingSelector = {
+  env: '$environment',
+};
+
 local knownEndpointsSelector = { endpoint_id: { ne: 'unknown' } };
 local componentSelector = { component: 'rails_requests' };
 local stageGroupAggregationLabels = ['product_stage', 'stage_group'];
@@ -37,7 +41,7 @@ local percentageOfTrafficByUrgency(urgencySelector) =
   ||| % {
     numeratorSelector: selectors.serializeHash(baseSelector + knownEndpointsSelector + urgencySelector),
     denominatorSelector: selectors.serializeHash(baseSelector + knownEndpointsSelector),
-    stageGroupSelector: selectors.serializeHash(groupSelector),
+    stageGroupSelector: selectors.serializeHash(groupSelector + mappingSelector),
   };
 
 local numberOfEndpointsPromQL(selector) = |||
@@ -48,7 +52,7 @@ local numberOfEndpointsPromQL(selector) = |||
   )
 ||| % {
   selector: selectors.serializeHash(baseSelector + knownEndpointsSelector + selector),
-  stageGroupSelector: selectors.serializeHash(groupSelector),
+  stageGroupSelector: selectors.serializeHash(groupSelector + mappingSelector),
 };
 
 local topEndpoints(selector) = |||
@@ -59,7 +63,7 @@ local topEndpoints(selector) = |||
   )
 ||| % {
   selector: selectors.serializeHash(baseSelector + knownEndpointsSelector + selector),
-  stageGroupSelector: selectors.serializeHash(groupSelector),
+  stageGroupSelector: selectors.serializeHash(groupSelector + mappingSelector),
 };
 
 local trafficForUrgency(urgency) =
