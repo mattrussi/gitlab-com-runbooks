@@ -1,4 +1,4 @@
-local schedule_mins = 5;  // Run this watch at this frequency, in minutes
+local schedule_mins = 15;  // Run this watch at this frequency, in minutes
 local query_period = schedule_mins + 2;
 local alert_threshold = 0;
 
