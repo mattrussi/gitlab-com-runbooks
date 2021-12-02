@@ -413,7 +413,7 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     labels: ['env', 'environment', 'tier', 'type', 'stage', 'component', 'stage_group', 'product_stage'],
     joinSource: {
       metric: 'gitlab:feature_category:stage_group:mapping',
-      on: 'feature_category',
+      on: ['feature_category', 'env'],
       labels: ['stage_group', 'product_stage'],
     },
     metricFormats: {
