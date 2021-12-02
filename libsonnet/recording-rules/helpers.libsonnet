@@ -34,7 +34,7 @@ local joinExpr(targetAggregationSet) =
   if !std.objectHas(targetAggregationSet, 'joinSource') then
     ''
   else
-    local requiredLabelsFromJoin = targetAggregationSet.joinSource.labels + [targetAggregationSet.joinSource.on];
+    local requiredLabelsFromJoin = targetAggregationSet.joinSource.labels + targetAggregationSet.joinSource.on;
     ' * on(%(joinOn)s) group_left(%(labels)s) (group by (%(aggregatedLabels)s) (%(metric)s))' % {
       joinOn: aggregations.serialize(targetAggregationSet.joinSource.on),
       labels: aggregations.serialize(targetAggregationSet.joinSource.labels),
