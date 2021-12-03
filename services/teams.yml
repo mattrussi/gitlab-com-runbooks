@@ -135,8 +135,8 @@ teams:
   slack_alerts_channel: f_pipeline_validation_service
   send_slo_alerts_to_team_slack_channel: true
 
-- name: subtransactions_troubleshooting
-  slack_alerts_channel: subtransactions_troubleshooting
+- name: subtransaction_troubleshooting
+  slack_alerts_channel: subtransaction_troubleshooting
   send_slo_alerts_to_team_slack_channel: true
 
 - name: configure

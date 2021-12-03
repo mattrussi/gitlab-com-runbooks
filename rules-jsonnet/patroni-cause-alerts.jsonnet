@@ -156,7 +156,7 @@ local rules = {
           |||,
           'for': '5m',
           labels: {
-            team: 'subtransactions_troubleshooting',
+            team: 'subtransaction_troubleshooting',
             severity: 's3',
             alert_type: 'cause',
             runbook: 'docs/patroni/postgresql-subtransactions.md',
