@@ -40,7 +40,7 @@ Snapshots preserve the state of the repository. Include the date so that multipl
 
 ```
 user@aptly:~$ sudo su - aptly
-aptly@aptly:~$ aptly snapshot create gitlab-utils-stable-20161221 from repo gitlab-utils
+aptly@aptly:~$ aptly snapshot create gitlab-utils-stable-$(date +"%Y%m%d") from repo gitlab-utils
 
 Snapshot gitlab-utils-stable-20161221 successfully created.
 You can run 'aptly publish snapshot gitlab-utils-stable-20161221' to publish snapshot as Debian repository.
@@ -51,7 +51,7 @@ Now we must replace the currently published snapshot with the newly created snap
 
 ```
 user@aptly:~$ sudo su - aptly
-aptly@aptly:~$ aptly publish switch xenial gitlab-utils-stable-20161221
+aptly@aptly:~$ aptly publish switch xenial gitlab-utils gitlab-utils-stable-$(date +"%Y%m%d")
 Loading packages...
 Generating metadata files and linking package files...
 Finalizing metadata files...
@@ -105,7 +105,7 @@ Just use current date in name so we know from when the repository was updated.
 
 ```
 user@aptly:~$ sudo su - aptly
-aptly@aptly:~$ aptly snapshot create ceph-jewel-2016-11-07 from mirror ceph-jewel
+aptly@aptly:~$ aptly snapshot create ceph-jewel-$(date +"%Y%m%d") from mirror ceph-jewel
 
 Snapshot ceph-jewel-2016-11-07 successfully created.
 ```
@@ -114,7 +114,7 @@ Snapshot ceph-jewel-2016-11-07 successfully created.
 
 ```
 user@aptly:~$ sudo su - aptly
-aptly@aptly:~$ aptly publish switch xenial ceph-jewel-2016-11-07
+aptly@aptly:~$ aptly publish switch xenial ceph-jewel-$(date +"%Y%m%d")
 Loading packages...
 Generating metadata files and linking package files...
 Finalizing metadata files...
