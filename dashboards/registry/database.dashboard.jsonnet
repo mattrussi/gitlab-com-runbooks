@@ -5,6 +5,8 @@ local templates = import 'grafana/templates.libsonnet';
 local row = grafana.row;
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
+local graphPanel = grafana.graphPanel;
+local promQuery = import 'grafana/prom_query.libsonnet';
 
 basic.dashboard(
   'Database Detail',
@@ -26,6 +28,17 @@ basic.dashboard(
   '$PROMETHEUS_DS',
   'label_values(go_sql_dbstats_connections_in_use{app="registry", environment="$environment"}, cluster)',
   current=null,
+  refresh='load',
+  sort=true,
+  multi=true,
+  includeAll=true,
+  allValues='.*',
+))
+.addTemplate(template.new(
+  'shard',
+  '$PROMETHEUS_DS',
+  'label_values(gitlab_database_bloat_btree_bloat_size{type="patroni-registry", environment="$environment"}, shard)',
+  current='default',
   refresh='load',
   sort=true,
   multi=true,
@@ -193,6 +206,210 @@ basic.dashboard(
 )
 
 .addPanel(
+  row.new(title='Table Bloat'),
+  gridPos={
+    x: 0,
+    y: 2000,
+    w: 24,
+    h: 1,
+  }
+)
+.addPanels(
+  layout.grid([
+    basic.saturationTimeseries(
+      title='Saturation (Aggregate)',
+      description='The aggregate table bloat saturation.',
+      query=|||
+        max_over_time(
+          gitlab_component_saturation:ratio{type="patroni-registry", environment="$environment", component="pg_table_bloat"}[$__interval]
+        )
+      |||,
+      legend_show=false
+    ),
+    graphPanel.new(
+      'Saturation (Per Table)',
+      description='The table bloat saturation. Limited to the top 20 entries.',
+      format='percent',
+      linewidth=1,
+      nullPointMode='connected',
+      fill=0,
+      legend_alignAsTable=true,
+      legend_values=true,
+      legend_min=true,
+      legend_max=true,
+      legend_current=true,
+      legend_sort='current',
+      legend_sortDesc=true,
+    )
+    .addTarget(
+      promQuery.target(
+        |||
+          topk (
+            20,
+            max by (query_name) (gitlab_database_bloat_table_bloat_ratio{type="patroni-registry", environment="$environment", shard=~"$shard", query_name!~"pg_.*"})
+          )
+        |||,
+        legendFormat='{{ query_name }}',
+      )
+    ),
+    graphPanel.new(
+      'Bloat Size',
+      description='The table bloat size. Limited to the top 20 entries.',
+      format='bytes',
+      linewidth=1,
+      nullPointMode='connected',
+      fill=0,
+      legend_alignAsTable=true,
+      legend_values=true,
+      legend_min=true,
+      legend_max=true,
+      legend_current=true,
+      legend_sort='current',
+      legend_sortDesc=true,
+    )
+    .addTarget(
+      promQuery.target(
+        |||
+          topk (
+            20,
+            max by (query_name) (gitlab_database_bloat_table_bloat_size{type="patroni-registry", environment="$environment", shard=~"$shard", query_name!~"pg_.*"})
+          )
+        |||,
+        legendFormat='{{ query_name }}',
+      )
+    ),
+    graphPanel.new(
+      'Real Size',
+      description='The table real size. Limited to the top 20 entries.',
+      format='bytes',
+      linewidth=1,
+      nullPointMode='connected',
+      fill=0,
+      legend_alignAsTable=true,
+      legend_values=true,
+      legend_min=true,
+      legend_max=true,
+      legend_current=true,
+      legend_sort='current',
+      legend_sortDesc=true,
+    )
+    .addTarget(
+      promQuery.target(
+        |||
+          topk (
+            20,
+            max by (query_name) (gitlab_database_bloat_table_real_size{type="patroni-registry", environment="$environment", shard=~"$shard", query_name!~"pg_.*"})
+          )
+        |||,
+        legendFormat='{{ query_name }}',
+      )
+    ),
+  ], cols=4, rowHeight=13, startRow=2001),
+)
+
+.addPanel(
+  row.new(title='B-tree Bloat'),
+  gridPos={
+    x: 0,
+    y: 3000,
+    w: 24,
+    h: 1,
+  }
+)
+.addPanels(
+  layout.grid([
+    basic.saturationTimeseries(
+      title='Saturation (Aggregate)',
+      description='The aggregate B-tree bloat saturation.',
+      query=|||
+        max_over_time(
+          gitlab_component_saturation:ratio{type="patroni-registry", environment="$environment", component="pg_btree_bloat"}[$__interval]
+        )
+      |||,
+      legend_show=false
+    ),
+    graphPanel.new(
+      'Saturation (Per Index)',
+      description='The B-tree bloat saturation per index. Limited to the top 20 entries.',
+      format='percent',
+      linewidth=1,
+      nullPointMode='connected',
+      fill=0,
+      legend_alignAsTable=true,
+      legend_values=true,
+      legend_min=true,
+      legend_max=true,
+      legend_current=true,
+      legend_sort='current',
+      legend_sortDesc=true,
+    )
+    .addTarget(
+      promQuery.target(
+        |||
+          topk (
+            20,
+            max by (query_name) (gitlab_database_bloat_btree_bloat_ratio{type="patroni-registry", environment="$environment", shard=~"$shard", query_name!~"pg_.*"})
+          )
+        |||,
+        legendFormat='{{ query_name }}',
+      )
+    ),
+    graphPanel.new(
+      'Bloat Size',
+      description='The B-tree bloat size per index. Limited to the top 20 entries.',
+      format='bytes',
+      linewidth=1,
+      nullPointMode='connected',
+      fill=0,
+      legend_alignAsTable=true,
+      legend_values=true,
+      legend_min=true,
+      legend_max=true,
+      legend_current=true,
+      legend_sort='current',
+      legend_sortDesc=true,
+    )
+    .addTarget(
+      promQuery.target(
+        |||
+          topk (
+            20,
+            max by (query_name) (gitlab_database_bloat_btree_bloat_size{type="patroni-registry", environment="$environment", shard=~"$shard", query_name!~"pg_.*"})
+          )
+        |||,
+        legendFormat='{{ query_name }}',
+      )
+    ),
+    graphPanel.new(
+      'Real Size',
+      description='The B-tree real size per index. Limited to the top 20 entries.',
+      format='bytes',
+      linewidth=1,
+      nullPointMode='connected',
+      fill=0,
+      legend_alignAsTable=true,
+      legend_values=true,
+      legend_min=true,
+      legend_max=true,
+      legend_current=true,
+      legend_sort='current',
+      legend_sortDesc=true,
+    )
+    .addTarget(
+      promQuery.target(
+        |||
+          topk (
+            20,
+            max by (query_name) (gitlab_database_bloat_btree_real_size{type="patroni-registry", environment="$environment", shard=~"$shard", query_name!~"pg_.*"})
+          )
+        |||,
+        legendFormat='{{ query_name }}',
+      )
+    ),
+  ], cols=4, rowHeight=13, startRow=3001),
+)
+
+.addPanel(
   row.new(title='CloudSQL (pre only)', collapse=true)
   .addPanels(
     layout.grid([
@@ -247,11 +464,11 @@ basic.dashboard(
         |||,
         legendFormat='{{ database_id }}',
       ),
-    ], cols=3, rowHeight=10, startRow=2001)
+    ], cols=3, rowHeight=10, startRow=4001)
   ),
   gridPos={
     x: 0,
-    y: 2000,
+    y: 4000,
     w: 24,
     h: 1,
   },
