@@ -1,5 +1,6 @@
 local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
+local objects = import 'utils/objects.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 
 // Expression for upscaling an ratio
@@ -186,9 +187,16 @@ local upscaledSuccessRateExpression(sourceAggregationSet, targetAggregationSet, 
 // Generates a transformation expression that either uses direct, upscaled or
 // or combines both in cases where the source expression contains a mixture
 local combineUpscaleAndDirectTransformationExpressions(upscaledExprType, upscaleExpressionFn, sourceAggregationSet, targetAggregationSet, burnRate, directExpr) =
+  // If the target aggregation set is allowed to be upscaled from itself, we'll
+  // use the 1h burnrate to upscale to 6h and 3d.
+  if targetAggregationSet.upscaleBurnRate(burnRate) then
+    // Since we aren't going to join the source, we need to remove the joinSource
+    // key so we don't add the join
+    local aggregationSetWithoutJoin = objects.objectWithout(targetAggregationSet, 'joinSource');
+    upscaleExpressionFn(aggregationSetWithoutJoin, aggregationSetWithoutJoin, burnRate)
   // For 6h burn rate, we'll use either a combination of upscaling and direct aggregation,
   // or, if the source aggregations, don't exist, only use the upscaled metric
-  if burnRate == '6h' then
+  else if burnRate == '6h' then
     local upscaledExpr = upscaleExpressionFn(sourceAggregationSet, targetAggregationSet, burnRate, extraSelectors={ upscale_source: 'yes' });
 
     if directExpr != null then

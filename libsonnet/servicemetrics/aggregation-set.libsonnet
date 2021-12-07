@@ -3,9 +3,12 @@ local validator = import 'utils/validator.libsonnet';
 
 local defaultSourceBurnRates = ['5m', '30m', '1h'];
 local defaultGlobalBurnRates = defaultSourceBurnRates + ['6h', '3d'];
+local upscaledBurnRates = ['6h', '3d'];
 
 local definitionDefaults = {
   aggregationFilter: null,
+
+  upscaleLongerBurnRates: false,
 
   // By default we generate SLO Analysis dashboards when
   // the aggregation set is not an intermediate source
@@ -26,6 +29,7 @@ local buildValidator(definition) =
   local required = {
     selector: validator.object,
     labels: arrayOfStringsValidator,
+    upscaleLongerBurnRates: validator.boolean,
   };
   local optionalBurnRates =
     if std.objectHas(definition, 'burnRates') then
@@ -133,6 +137,8 @@ local buildValidator(definition) =
       getErrorRatioMetricForBurnRate(burnRate, required=false)::
         getMetricNameForBurnRate(burnRate, 'errorRatio', required),
 
+      upscaleBurnRate(burnRate)::
+        self.upscaleLongerBurnRates && std.member(upscaledBurnRates, burnRate),
       // Returns a set of burn rates for the aggregation set,
       // ordered by duration ascending
       getBurnRates()::

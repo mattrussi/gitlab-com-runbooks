@@ -95,6 +95,7 @@ This definition is used to generate several different configurations, including:
 1. **Aggregation recording rules**, defined as "aggregation sets".
    1. These are evaluated in [Thanos Ruler](https://github.com/thanos-io/thanos/blob/master/docs/components/rule.md) and consume the source recording rules.
    1. Thanos Ruler reads the source recording rules from Prometheus, and aggregates them into globally aggregated view of the metrics.
+   1. It is possible to upscale aggregation sets for high cardinality metrics: This avoids loading many hours of high cardinality data from the source aggregation, but insteads uses the lower cardinality recording of a lower burn rate to scale up.
 1. **SLO violation alerts** for each SLI for apdex and error ratios
 1. **Weighted Average SLA** caclulation as described in https://about.gitlab.com/handbook/engineering/monitoring/
 1. **Grafana Dashboards** for each service with SLI overview panels and detailed drilldown panels. See https://dashboards.gitlab.com/d/web-main for an example
