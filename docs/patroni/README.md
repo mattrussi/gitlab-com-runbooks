@@ -22,6 +22,7 @@
 * [../monitoring/prometheus-failing-rule-evaluations.md](../monitoring/prometheus-failing-rule-evaluations.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
 * [Check the status of transaction wraparound Runbook](check_wraparound.md)
+* [Custom PostgreSQL Package Build Process for Ubuntu Xenial 16.04](custom_postgres_packages.md)
 * [database_peak_analysis.md](database_peak_analysis.md)
 * [Patroni GCS Snapshots](gcs-snapshots.md)
 * [Geo Patroni Cluster Management](geo-patroni-cluster.md)

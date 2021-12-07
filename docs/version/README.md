@@ -34,6 +34,7 @@
 * [Thanos Compact](../monitoring/thanos-compact.md)
 * [Session: Application architecture](../onboarding/architecture.md)
 * [GPG Keys for Package Signing](../packaging/manage-package-signing-keys.md)
+* [Custom PostgreSQL Package Build Process for Ubuntu Xenial 16.04](../patroni/custom_postgres_packages.md)
 * [../patroni/database_peak_analysis.md](../patroni/database_peak_analysis.md)
 * [Geo Patroni Cluster Management](../patroni/geo-patroni-cluster.md)
 * [Patroni](../patroni/patroni-management.md)
