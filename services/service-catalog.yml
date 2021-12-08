@@ -1316,12 +1316,12 @@ services:
   label: Service:Pages
   business:
     requirement: |
-      HAProxy load balancer service in front of the web-pages service running GitLab pages
+      HAProxy load balancer service in front of the web-pages service running GitLab Pages
     customers:
       - GitLab.com customers
       - Internally for sites like docs.gitlab.com and design.gitlab.com
     business_value: |
-      It acts as a load-balancer in front of our pages service
+      It acts as a load-balancer in front of our Pages service
     SLA:
       availability:
       response_time:
@@ -1397,9 +1397,6 @@ services:
       security:
     dependencies:
     configurations:
-    chef_roles:
-      - gstg-base-fe-web-pages
-      - gprd-base-fe-web-pages
     scalability:
       bound: cpu
       scalable: horizontal

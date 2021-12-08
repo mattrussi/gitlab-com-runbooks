@@ -138,8 +138,8 @@ basic.dashboard(
         * Fleet
           * git (K8s): git-https, git-ssh, websockets
           * api (K8s): gitlab.com public api, gitlab.com/v4/api/*
-          * web (VMs): gitlab.com web traffic, anything that is not gitlab.com/v4/api/*
-          * web-pages (VMs): *.gitlab.io pages traffic
+          * web (K8s): gitlab.com web traffic, anything that is not gitlab.com/v4/api/*
+          * web-pages (K8s): *.gitlab.io pages traffic
         * Storage
           * file: All projects/wikis from local disk, this is where gitaly runs
           * pages: NFS server for *.gitlab.io gitlab pages
@@ -272,8 +272,8 @@ basic.dashboard(
   layout.grid([
     networkPanelK8s('Git Data Transfer / 24h', 'type="git"'),
     networkPanelK8s('API Data Transfer / 24h', 'type="api"'),
-    networkPanel('Web Data Transfer / 24h', 'type="web"'),
-    networkPanel('Web Pages Transfer / 24h', 'type="web-pages"'),
+    networkPanelK8s('Web Data Transfer / 24h', 'type="web"'),
+    networkPanelK8s('Web Pages Transfer / 24h', 'type="web-pages"'),
   ], cols=4, rowHeight=7, startRow=5)
 )
 .addPanel(
