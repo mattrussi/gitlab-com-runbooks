@@ -41,7 +41,7 @@ sudo apt-get install -y postgresql-12-repack --only-upgrade
 ​# optional:
 sudo apt-get install -y postgresql-common postgresql-client-common --only-upgrade
 ```
-Start PostgreSQL
+Start PostgreSQL. Command: `sudo systemctl start patroni && sudo systemctl status patroni`
 
 Update extensions:
 ```
