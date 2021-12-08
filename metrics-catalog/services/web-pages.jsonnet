@@ -35,7 +35,7 @@ metricsCatalog.serviceDefinition({
     },
   },
   provisioning: {
-    vms: true,
+    vms: false,
     kubernetes: true,
   },
   regional: true,

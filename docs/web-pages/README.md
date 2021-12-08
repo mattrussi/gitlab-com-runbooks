@@ -16,10 +16,6 @@
 * [system](https://log.gprd.gitlab.net/goto/3384c89c5a828db866d2fa8ec86cd97f)
 * [Kubernetes](https://log.gprd.gitlab.net/goto/f12db328608ead73063861ce1a53822b)
 
-## Troubleshooting Pointers
-
-* [HAProxy management at GitLab](../frontend/haproxy.md)
-* [Deploy Cmd for Chatops](../uncategorized/deploycmd.md)
 <!-- END_MARKER -->
 
 

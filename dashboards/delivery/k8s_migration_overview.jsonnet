@@ -8,6 +8,7 @@ local templates = import 'grafana/templates.libsonnet';
 local graphPanel = grafana.graphPanel;
 
 local services = [
+  'gitlab-pages',
   'gitlab-shell',
   'registry',
   'mailroom',
@@ -220,14 +221,14 @@ basic.dashboard(
       statPanel(
         'Available cores',
         description='Total number of cores',
-        query='sum(instance:node_cpus:count{env="$environment",type!~"web-pages|praefect|camoproxy"})',
+        query='sum(instance:node_cpus:count{env="$environment",type!~"praefect|camoproxy"})',
       ),
     ],
     // CPU utilization
     [
       basic.singlestat(
         title='CPU utilization',
-        query='avg(instance:node_cpu_utilization:ratio{type!~"web-pages|praefect|camoproxy"})',
+        query='avg(instance:node_cpu_utilization:ratio{type!~"praefect|camoproxy"})',
         gaugeMaxValue=1,
         gaugeShow=true,
       ),
@@ -237,7 +238,7 @@ basic.dashboard(
       statPanel(
         'Available Memory',
         description='Total memory',
-        query='sum(node_memory_MemTotal_bytes{type!~"web-pages|praefect|camoproxy", env="$environment"})',
+        query='sum(node_memory_MemTotal_bytes{type!~"praefect|camoproxy", env="$environment"})',
         unit='bytes',
       ),
     ],
@@ -245,7 +246,7 @@ basic.dashboard(
     [
       basic.singlestat(
         title='Avg Memory Utilization',
-        query='avg(instance:node_memory_utilization:ratio{type!~"web-pages|praefect|camoproxy", env="$environment"})',
+        query='avg(instance:node_memory_utilization:ratio{type!~"praefect|camoproxy", env="$environment"})',
         gaugeMaxValue=1,
         gaugeShow=true,
       ),

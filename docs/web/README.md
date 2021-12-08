@@ -69,7 +69,6 @@
 * [Life of a Web Request](../tutorials/overview_life_of_a_web_request.md)
 * [Blocked user login attempts are high](../uncategorized/blocked-user-logins.md)
 * [Debug failed chef provisioning](../uncategorized/debug-failed-chef-provisioning.md)
-* [Deploy Cmd for Chatops](../uncategorized/deploycmd.md)
 * [Domain Registration](../uncategorized/domain-registration.md)
 * [Gemnasium is down](../uncategorized/gemnasium_is_down.md)
 * [Project exports](../uncategorized/project-export.md)
