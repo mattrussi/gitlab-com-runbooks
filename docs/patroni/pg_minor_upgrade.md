@@ -29,7 +29,7 @@ Shutdown PostgreSQL. Command: `sudo systemctl stop patroni`
 ### Main actions:
 Update the binaries:
 
-```
+```shell
 # get a list of installed packages
 sudo dpkg -l | grep postgres
 # retrieve new lists of packages
@@ -40,7 +40,6 @@ sudo apt-get install -y postgresql-client-12 postgresql-12 postgresql-server-dev
 sudo apt-get install -y postgresql-12-repack --only-upgrade
 ​# optional:
 sudo apt-get install -y postgresql-common postgresql-client-common --only-upgrade
-```
 Start PostgreSQL. Command: `sudo systemctl start patroni && sudo systemctl status patroni`
 
 Update extensions:
