@@ -57,10 +57,11 @@ ALTER EXTENSION pg_stat_statements UPDATE;
 ```
 
 ### Post checks
-Check connectivity with the command: `gitlab-psql -c "select pg_is_in_recovery();"`
-Verify the version with the command: `gitlab-psql -c "select version();"`
-Check logs
-Restore the traffic by starting chef, which will remove the tags on the node.
+1. Check connectivity with the command: `gitlab-psql -c "select pg_is_in_recovery();"`
+2. Verify the version with the command: `gitlab-psql -c "select version();"`
+3. Check Patroni and PostgreSQL logs
+4. Verify replication lag is < 100 MB. Command: `sudo gitlab-patronictl list -t -W`
+5. Restore the traffic by starting chef, which will remove the tags on the node.
 
 
 After restoring the traffic, monitor the performance for 30 minutes from the node and the logs.
