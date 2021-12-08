@@ -2,6 +2,8 @@
 
 This runbook describes all the steps to execute a Postgresql minor upgrade. 
 
+**Important!** Please read the release notes before getting started (for all minor versions after the current version of postgresql) - https://www.postgresql.org/docs/12/release.html
+
 Considering the database, one of the most critical components from our infrastructure, we want to execute the upgrade node by node by executing tests, monitoring the performance and behavior after the upgrade in each node.
 
 Those changes are automated on the following playbook:
