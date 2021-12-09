@@ -8,12 +8,12 @@ groups:
   - record: gitlab:component:stage_group:execution:error:rate_5m
     expr: |
       sum by (env,environment,tier,type,stage,component,stage_group,product_stage) (
-        (gitlab:component:feature_category:execution:error:rate_5m{monitor!="global"} >= 0) * on(env,feature_category) group_left(product_stage,stage_group) (group by (env,feature_category,product_stage,stage_group) (gitlab:feature_category:stage_group:mapping))
+        (gitlab:component:feature_category:execution:error:rate_5m{monitor!="global"} >= 0) * on(feature_category) group_left(product_stage,stage_group) (group by (feature_category,product_stage,stage_group) (gitlab:feature_category:stage_group:mapping{monitor="global"}))
       )
   - record: gitlab:component:stage_group:execution:ops:rate_5m
     expr: |
       sum by (env,environment,tier,type,stage,component,stage_group,product_stage) (
-        (gitlab:component:feature_category:execution:ops:rate_5m{monitor!="global"} >= 0) * on(env,feature_category) group_left(product_stage,stage_group) (group by (env,feature_category,product_stage,stage_group) (gitlab:feature_category:stage_group:mapping))
+        (gitlab:component:feature_category:execution:ops:rate_5m{monitor!="global"} >= 0) * on(feature_category) group_left(product_stage,stage_group) (group by (feature_category,product_stage,stage_group) (gitlab:feature_category:stage_group:mapping{monitor="global"}))
       )
   - record: gitlab:component:stage_group:execution:success:rate_5m
     expr: |
@@ -22,7 +22,7 @@ groups:
           gitlab:component:feature_category:execution:ops:rate_5m{monitor!="global"}
           -
           (gitlab:component:feature_category:execution:error:rate_5m{monitor!="global"} or (0 * gitlab:component:feature_category:execution:ops:rate_5m{monitor!="global"}))
-        ) * on(env,feature_category) group_left(product_stage,stage_group) (group by (env,feature_category,product_stage,stage_group) (gitlab:feature_category:stage_group:mapping))
+        ) * on(feature_category) group_left(product_stage,stage_group) (group by (feature_category,product_stage,stage_group) (gitlab:feature_category:stage_group:mapping{monitor="global"}))
       )
   - record: gitlab:component:stage_group:execution:error:ratio_5m
     expr: |
@@ -36,31 +36,31 @@ groups:
   - record: gitlab:component:stage_group:execution:apdex:weight:score_5m
     expr: |
       sum by (env,environment,tier,type,stage,component,stage_group,product_stage) (
-        (gitlab:component:feature_category:execution:apdex:weight:score_5m{monitor!="global"} >= 0) * on(env,feature_category) group_left(product_stage,stage_group) (group by (env,feature_category,product_stage,stage_group) (gitlab:feature_category:stage_group:mapping))
+        (gitlab:component:feature_category:execution:apdex:weight:score_5m{monitor!="global"} >= 0) * on(feature_category) group_left(product_stage,stage_group) (group by (feature_category,product_stage,stage_group) (gitlab:feature_category:stage_group:mapping{monitor="global"}))
       )
   - record: gitlab:component:stage_group:execution:apdex:success:rate_5m
     expr: |
       sum by (env,environment,tier,type,stage,component,stage_group,product_stage) (
-        (gitlab:component:feature_category:execution:apdex:success:rate_5m{monitor!="global"} >= 0) * on(env,feature_category) group_left(product_stage,stage_group) (group by (env,feature_category,product_stage,stage_group) (gitlab:feature_category:stage_group:mapping))
+        (gitlab:component:feature_category:execution:apdex:success:rate_5m{monitor!="global"} >= 0) * on(feature_category) group_left(product_stage,stage_group) (group by (feature_category,product_stage,stage_group) (gitlab:feature_category:stage_group:mapping{monitor="global"}))
       )
   - record: gitlab:component:stage_group:execution:apdex:ratio_5m
     expr: |
       sum by (env,environment,tier,type,stage,component,stage_group,product_stage) (
-        (gitlab:component:feature_category:execution:apdex:success:rate_5m{monitor!="global"} >= 0) * on(env,feature_category) group_left(product_stage,stage_group) (group by (env,feature_category,product_stage,stage_group) (gitlab:feature_category:stage_group:mapping))
+        (gitlab:component:feature_category:execution:apdex:success:rate_5m{monitor!="global"} >= 0) * on(feature_category) group_left(product_stage,stage_group) (group by (feature_category,product_stage,stage_group) (gitlab:feature_category:stage_group:mapping{monitor="global"}))
       )
       /
       sum by (env,environment,tier,type,stage,component,stage_group,product_stage) (
-        (gitlab:component:feature_category:execution:apdex:weight:score_5m{monitor!="global"} >= 0) * on(env,feature_category) group_left(product_stage,stage_group) (group by (env,feature_category,product_stage,stage_group) (gitlab:feature_category:stage_group:mapping))
+        (gitlab:component:feature_category:execution:apdex:weight:score_5m{monitor!="global"} >= 0) * on(feature_category) group_left(product_stage,stage_group) (group by (feature_category,product_stage,stage_group) (gitlab:feature_category:stage_group:mapping{monitor="global"}))
       )
   - record: gitlab:component:stage_group:execution:error:rate_30m
     expr: |
       sum by (env,environment,tier,type,stage,component,stage_group,product_stage) (
-        (gitlab:component:feature_category:execution:error:rate_30m{monitor!="global"} >= 0) * on(env,feature_category) group_left(product_stage,stage_group) (group by (env,feature_category,product_stage,stage_group) (gitlab:feature_category:stage_group:mapping))
+        (gitlab:component:feature_category:execution:error:rate_30m{monitor!="global"} >= 0) * on(feature_category) group_left(product_stage,stage_group) (group by (feature_category,product_stage,stage_group) (gitlab:feature_category:stage_group:mapping{monitor="global"}))
       )
   - record: gitlab:component:stage_group:execution:ops:rate_30m
     expr: |
       sum by (env,environment,tier,type,stage,component,stage_group,product_stage) (
-        (gitlab:component:feature_category:execution:ops:rate_30m{monitor!="global"} >= 0) * on(env,feature_category) group_left(product_stage,stage_group) (group by (env,feature_category,product_stage,stage_group) (gitlab:feature_category:stage_group:mapping))
+        (gitlab:component:feature_category:execution:ops:rate_30m{monitor!="global"} >= 0) * on(feature_category) group_left(product_stage,stage_group) (group by (feature_category,product_stage,stage_group) (gitlab:feature_category:stage_group:mapping{monitor="global"}))
       )
   - record: gitlab:component:stage_group:execution:success:rate_30m
     expr: |
@@ -69,7 +69,7 @@ groups:
           gitlab:component:feature_category:execution:ops:rate_30m{monitor!="global"}
           -
           (gitlab:component:feature_category:execution:error:rate_30m{monitor!="global"} or (0 * gitlab:component:feature_category:execution:ops:rate_30m{monitor!="global"}))
-        ) * on(env,feature_category) group_left(product_stage,stage_group) (group by (env,feature_category,product_stage,stage_group) (gitlab:feature_category:stage_group:mapping))
+        ) * on(feature_category) group_left(product_stage,stage_group) (group by (feature_category,product_stage,stage_group) (gitlab:feature_category:stage_group:mapping{monitor="global"}))
       )
   - record: gitlab:component:stage_group:execution:error:ratio_30m
     expr: |
@@ -83,31 +83,31 @@ groups:
   - record: gitlab:component:stage_group:execution:apdex:weight:score_30m
     expr: |
       sum by (env,environment,tier,type,stage,component,stage_group,product_stage) (
-        (gitlab:component:feature_category:execution:apdex:weight:score_30m{monitor!="global"} >= 0) * on(env,feature_category) group_left(product_stage,stage_group) (group by (env,feature_category,product_stage,stage_group) (gitlab:feature_category:stage_group:mapping))
+        (gitlab:component:feature_category:execution:apdex:weight:score_30m{monitor!="global"} >= 0) * on(feature_category) group_left(product_stage,stage_group) (group by (feature_category,product_stage,stage_group) (gitlab:feature_category:stage_group:mapping{monitor="global"}))
       )
   - record: gitlab:component:stage_group:execution:apdex:success:rate_30m
     expr: |
       sum by (env,environment,tier,type,stage,component,stage_group,product_stage) (
-        (gitlab:component:feature_category:execution:apdex:success:rate_30m{monitor!="global"} >= 0) * on(env,feature_category) group_left(product_stage,stage_group) (group by (env,feature_category,product_stage,stage_group) (gitlab:feature_category:stage_group:mapping))
+        (gitlab:component:feature_category:execution:apdex:success:rate_30m{monitor!="global"} >= 0) * on(feature_category) group_left(product_stage,stage_group) (group by (feature_category,product_stage,stage_group) (gitlab:feature_category:stage_group:mapping{monitor="global"}))
       )
   - record: gitlab:component:stage_group:execution:apdex:ratio_30m
     expr: |
       sum by (env,environment,tier,type,stage,component,stage_group,product_stage) (
-        (gitlab:component:feature_category:execution:apdex:success:rate_30m{monitor!="global"} >= 0) * on(env,feature_category) group_left(product_stage,stage_group) (group by (env,feature_category,product_stage,stage_group) (gitlab:feature_category:stage_group:mapping))
+        (gitlab:component:feature_category:execution:apdex:success:rate_30m{monitor!="global"} >= 0) * on(feature_category) group_left(product_stage,stage_group) (group by (feature_category,product_stage,stage_group) (gitlab:feature_category:stage_group:mapping{monitor="global"}))
       )
       /
       sum by (env,environment,tier,type,stage,component,stage_group,product_stage) (
-        (gitlab:component:feature_category:execution:apdex:weight:score_30m{monitor!="global"} >= 0) * on(env,feature_category) group_left(product_stage,stage_group) (group by (env,feature_category,product_stage,stage_group) (gitlab:feature_category:stage_group:mapping))
+        (gitlab:component:feature_category:execution:apdex:weight:score_30m{monitor!="global"} >= 0) * on(feature_category) group_left(product_stage,stage_group) (group by (feature_category,product_stage,stage_group) (gitlab:feature_category:stage_group:mapping{monitor="global"}))
       )
   - record: gitlab:component:stage_group:execution:error:rate_1h
     expr: |
       sum by (env,environment,tier,type,stage,component,stage_group,product_stage) (
-        (gitlab:component:feature_category:execution:error:rate_1h{monitor!="global"} >= 0) * on(env,feature_category) group_left(product_stage,stage_group) (group by (env,feature_category,product_stage,stage_group) (gitlab:feature_category:stage_group:mapping))
+        (gitlab:component:feature_category:execution:error:rate_1h{monitor!="global"} >= 0) * on(feature_category) group_left(product_stage,stage_group) (group by (feature_category,product_stage,stage_group) (gitlab:feature_category:stage_group:mapping{monitor="global"}))
       )
   - record: gitlab:component:stage_group:execution:ops:rate_1h
     expr: |
       sum by (env,environment,tier,type,stage,component,stage_group,product_stage) (
-        (gitlab:component:feature_category:execution:ops:rate_1h{monitor!="global"} >= 0) * on(env,feature_category) group_left(product_stage,stage_group) (group by (env,feature_category,product_stage,stage_group) (gitlab:feature_category:stage_group:mapping))
+        (gitlab:component:feature_category:execution:ops:rate_1h{monitor!="global"} >= 0) * on(feature_category) group_left(product_stage,stage_group) (group by (feature_category,product_stage,stage_group) (gitlab:feature_category:stage_group:mapping{monitor="global"}))
       )
   - record: gitlab:component:stage_group:execution:success:rate_1h
     expr: |
@@ -116,7 +116,7 @@ groups:
           gitlab:component:feature_category:execution:ops:rate_1h{monitor!="global"}
           -
           (gitlab:component:feature_category:execution:error:rate_1h{monitor!="global"} or (0 * gitlab:component:feature_category:execution:ops:rate_1h{monitor!="global"}))
-        ) * on(env,feature_category) group_left(product_stage,stage_group) (group by (env,feature_category,product_stage,stage_group) (gitlab:feature_category:stage_group:mapping))
+        ) * on(feature_category) group_left(product_stage,stage_group) (group by (feature_category,product_stage,stage_group) (gitlab:feature_category:stage_group:mapping{monitor="global"}))
       )
   - record: gitlab:component:stage_group:execution:error:ratio_1h
     expr: |
@@ -130,21 +130,21 @@ groups:
   - record: gitlab:component:stage_group:execution:apdex:weight:score_1h
     expr: |
       sum by (env,environment,tier,type,stage,component,stage_group,product_stage) (
-        (gitlab:component:feature_category:execution:apdex:weight:score_1h{monitor!="global"} >= 0) * on(env,feature_category) group_left(product_stage,stage_group) (group by (env,feature_category,product_stage,stage_group) (gitlab:feature_category:stage_group:mapping))
+        (gitlab:component:feature_category:execution:apdex:weight:score_1h{monitor!="global"} >= 0) * on(feature_category) group_left(product_stage,stage_group) (group by (feature_category,product_stage,stage_group) (gitlab:feature_category:stage_group:mapping{monitor="global"}))
       )
   - record: gitlab:component:stage_group:execution:apdex:success:rate_1h
     expr: |
       sum by (env,environment,tier,type,stage,component,stage_group,product_stage) (
-        (gitlab:component:feature_category:execution:apdex:success:rate_1h{monitor!="global"} >= 0) * on(env,feature_category) group_left(product_stage,stage_group) (group by (env,feature_category,product_stage,stage_group) (gitlab:feature_category:stage_group:mapping))
+        (gitlab:component:feature_category:execution:apdex:success:rate_1h{monitor!="global"} >= 0) * on(feature_category) group_left(product_stage,stage_group) (group by (feature_category,product_stage,stage_group) (gitlab:feature_category:stage_group:mapping{monitor="global"}))
       )
   - record: gitlab:component:stage_group:execution:apdex:ratio_1h
     expr: |
       sum by (env,environment,tier,type,stage,component,stage_group,product_stage) (
-        (gitlab:component:feature_category:execution:apdex:success:rate_1h{monitor!="global"} >= 0) * on(env,feature_category) group_left(product_stage,stage_group) (group by (env,feature_category,product_stage,stage_group) (gitlab:feature_category:stage_group:mapping))
+        (gitlab:component:feature_category:execution:apdex:success:rate_1h{monitor!="global"} >= 0) * on(feature_category) group_left(product_stage,stage_group) (group by (feature_category,product_stage,stage_group) (gitlab:feature_category:stage_group:mapping{monitor="global"}))
       )
       /
       sum by (env,environment,tier,type,stage,component,stage_group,product_stage) (
-        (gitlab:component:feature_category:execution:apdex:weight:score_1h{monitor!="global"} >= 0) * on(env,feature_category) group_left(product_stage,stage_group) (group by (env,feature_category,product_stage,stage_group) (gitlab:feature_category:stage_group:mapping))
+        (gitlab:component:feature_category:execution:apdex:weight:score_1h{monitor!="global"} >= 0) * on(feature_category) group_left(product_stage,stage_group) (group by (feature_category,product_stage,stage_group) (gitlab:feature_category:stage_group:mapping{monitor="global"}))
       )
   - record: gitlab:component:stage_group:execution:error:rate_6h
     expr: |

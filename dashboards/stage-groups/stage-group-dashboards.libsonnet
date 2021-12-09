@@ -45,7 +45,7 @@ local groupFilter(hide=false, current='project_management') =
   template.new(
     'stage_group',
     '$PROMETHEUS_DS',
-    "label_values(gitlab:feature_category:stage_group:mapping{environment='$environment'}, stage_group)",
+    "label_values(gitlab:feature_category:stage_group:mapping{monitor='global'}, stage_group)",
     current='project_management',
     refresh='load',
     sort=1,
