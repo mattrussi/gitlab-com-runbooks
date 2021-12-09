@@ -49,9 +49,11 @@ sudo apt-get install -y postgresql-12-repack --only-upgrade
 ​# optional:
 sudo apt-get install -y postgresql-common postgresql-client-common --only-upgrade
 Start PostgreSQL. Command: `sudo systemctl start patroni && sudo systemctl status patroni`
+```
 
 Update extensions, on the primary database node:
 
+```shell
 `sudo gitlab-psql`
 ```sql
 -- Get a list of installed and available versions of extensions in the current database: 
