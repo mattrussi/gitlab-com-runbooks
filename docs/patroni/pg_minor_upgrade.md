@@ -18,9 +18,11 @@ The main steps on the read-only replicas, are:
 
 * Disable chef-client.
 
- - Execute the command: `chef-client-disable`
+ - Execute the command: `sudo chef-client-disable`
 
 Add the `no-failover` and `no-loadbalance` tags in Patroni ( in the config file patroni.yml).
+
+* Reload patroni: `sudo systemctl reload patroni`
 
 ### Pre checks:
 Wait until the traffic is drained. 
@@ -63,6 +65,7 @@ ALTER EXTENSION pg_stat_statements UPDATE;
 3. Check Patroni and PostgreSQL logs
 4. Verify replication lag is < 100 MB. Command: `sudo gitlab-patronictl list -t -W`
 5. Restore the traffic by starting chef, which will remove the tags on the node.
+
 
 
 After restoring the traffic, monitor the performance for 30 minutes from the node and the logs.
