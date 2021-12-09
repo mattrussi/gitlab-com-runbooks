@@ -29,7 +29,7 @@ local es_query = {
                   bool: {
                     must: {
                       match_phrase: {
-                        'json.exception.class': 'NoMethodError',
+                        'json.exception.message': 'undefined method',
                       },
                     },
                     must_not: {
@@ -43,7 +43,7 @@ local es_query = {
                   bool: {
                     must: {
                       match_phrase: {
-                        'json.error_class': 'NoMethodError',
+                        'json.error_message': 'undefined method',
                       },
                     },
                     must_not: {
@@ -90,7 +90,7 @@ local es_query = {
           to: [
             '#staging',
           ],
-          text: 'NoMethodError: {{ctx.payload.hits.total}} errors detected! Please investigate. See https://gitlab.com/gitlab-org/gitlab/-/issues/345957 and https://nonprod-log.gitlab.net/goto/86a259d07d53400c9b4526f1dcf66fec',
+          text: 'NoMethodError: {{ctx.payload.hits.total}} errors detected! Please investigate. See https://gitlab.com/gitlab-org/gitlab/-/issues/345957 and https://nonprod-log.gitlab.net/goto/519d702153ace63726c53c006469bbc5',
         },
       },
     },
