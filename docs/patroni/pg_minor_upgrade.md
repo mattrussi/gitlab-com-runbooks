@@ -26,6 +26,10 @@ Add the `no-failover` and `no-loadbalance` tags in Patroni ( in the config file 
 
 ### Pre checks:
 Wait until the traffic is drained. 
+
+* Verify the connection status with the commad on pg_stat_activity:
+`select count(*) from pg_stat_activity where backend_type = 'client backend' and state <> 'idle';`
+
 Execute a checkpoint. Command: `gitlab-psql -c "checkpoint;"`
 
 Shutdown PostgreSQL. Command: `sudo systemctl stop patroni`
