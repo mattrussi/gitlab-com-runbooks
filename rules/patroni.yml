@@ -35,7 +35,7 @@ groups:
           runbook: docs/patroni/pg_xid_xmin_age_alert.md
       - alert: PatroniXminAgeTooLargeError
         expr: pg_txid_xmin_age > 500000
-        for: 5m
+        for: 25m
         labels:
           pager: pagerduty
           severity: s1
