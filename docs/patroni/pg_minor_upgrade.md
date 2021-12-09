@@ -64,7 +64,7 @@ ALTER EXTENSION pg_stat_statements UPDATE;
 2. Verify the version with the command: `gitlab-psql -c "select version();"`
 3. Check Patroni and PostgreSQL logs
 4. Verify replication lag is < 100 MB. Command: `sudo gitlab-patronictl list -t -W`
-5. Restore the traffic by starting chef, which will remove the tags on the node.
+5. Restore the traffic by starting chef, which will remove the tags on the node, with the command: `sudo chef-client-enable`
 
 
 
