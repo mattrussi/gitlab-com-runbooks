@@ -3,7 +3,7 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
 
 // HACK: containers running Go
 // Ideally we shouldn't need to keep this updated manually
-local goContainers = ['gitlab-workhorse', 'kas', 'registry', 'thanos-store'];
+local goContainers = ['gitlab-pages', 'gitlab-workhorse', 'kas', 'registry', 'thanos-store'];
 
 {
   kube_go_memory: resourceSaturationPoint({
