@@ -16,7 +16,7 @@ local groupSelector = {
 };
 
 local mappingSelector = {
-  env: '$environment',
+  monitor: 'global',
 };
 
 local knownEndpointsSelector = { endpoint_id: { ne: 'unknown' } };
