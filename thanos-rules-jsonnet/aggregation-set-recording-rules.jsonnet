@@ -151,13 +151,13 @@ local groupsForApplicationSli(sli) =
     outputPromYaml(
       [
         {
-          name: aggregationSets.stageGroupSLIs.name + ' (Short window)',
+          name: aggregationSets.componentStageGroupSLIs.name + ' (Short window)',
           interval: '1m',
           partial_response_strategy: 'warn',
           rules: aggregationSetTransformer.generateRecordingRules(
             sourceAggregationSet=aggregationSets.featureCategorySourceSLIs,
-            targetAggregationSet=aggregationSets.stageGroupSLIs,
-            burnRates=aggregationSets.stageGroupSLIs.getShortWindowBurnRates(),
+            targetAggregationSet=aggregationSets.componentStageGroupSLIs,
+            burnRates=aggregationSets.componentStageGroupSLIs.getShortWindowBurnRates(),
           ),
         },
         {
@@ -166,11 +166,24 @@ local groupsForApplicationSli(sli) =
           partial_response_strategy: 'warn',
           rules: aggregationSetTransformer.generateRecordingRules(
             sourceAggregationSet=aggregationSets.featureCategorySourceSLIs,
-            targetAggregationSet=aggregationSets.stageGroupSLIs,
-            burnRates=aggregationSets.stageGroupSLIs.getLongWindowBurnRates(),
+            targetAggregationSet=aggregationSets.componentStageGroupSLIs,
+            burnRates=aggregationSets.componentStageGroupSLIs.getLongWindowBurnRates(),
           ),
         },
       ]
+    ),
+
+  'aggregated-stage-group-metrics-without-component.yml':
+    outputPromYaml(
+      [{
+        name: aggregationSets.stageGroupSLIs.name,
+        interval: '1m',
+        partial_response_strategy: 'warn',
+        rules: aggregationSetTransformer.generateRecordingRules(
+          sourceAggregationSet=aggregationSets.featureCategorySourceSLIs,
+          targetAggregationSet=aggregationSets.stageGroupSLIs,
+        ),
+      }]
     ),
 
   // Application SLIs not used in the service catalog  will be aggregated here.
