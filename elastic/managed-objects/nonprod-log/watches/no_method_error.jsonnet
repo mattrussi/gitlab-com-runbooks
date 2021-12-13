@@ -90,7 +90,21 @@ local es_query = {
           to: [
             '#staging',
           ],
-          text: 'NoMethodError: {{ctx.payload.hits.total}} errors detected! Please investigate. See https://gitlab.com/gitlab-org/gitlab/-/issues/345957 and https://nonprod-log.gitlab.net/goto/519d702153ace63726c53c006469bbc5',
+          text: 'NoMethodError: {{ctx.payload.hits.total}} errors detected!',
+          attachments: [
+            {
+              title: ':spiral_note_pad: NoMethodError in Rails logs:',
+              text: 'https://nonprod-log.gitlab.net/goto/519d702153ace63726c53c006469bbc5',
+            },
+            {
+              title: ':spiral_note_pad: NoMethodError in Sidekiq logs:',
+              text: 'https://nonprod-log.gitlab.net/goto/f9121db72183cf50d161b806f96ddb0b',
+            },
+            {
+              title: ':runbooks: Runbook:',
+              text: 'https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/uncategorized/staging-environment.md#elasticcloud-watcher-nomethoderror',
+            },
+          ],
         },
       },
     },
