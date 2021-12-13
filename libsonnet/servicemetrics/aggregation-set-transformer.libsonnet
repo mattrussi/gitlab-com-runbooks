@@ -1,8 +1,6 @@
 local recordingRules = import 'recording-rules/recording-rules.libsonnet';
 
-local generateRecordingRules(sourceAggregationSet, targetAggregationSet) =
-  local burnRates = targetAggregationSet.getBurnRates();
-
+local generateRecordingRules(sourceAggregationSet, targetAggregationSet, burnRates=targetAggregationSet.getBurnRates()) =
   std.flatMap(
     function(burnRate)
       // Operation rate and Error Rate

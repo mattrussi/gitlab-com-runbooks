@@ -123,28 +123,54 @@ local groupsForApplicationSli(sli) =
 
   'aggregated-feature-category-metrics.yml':
     outputPromYaml(
-      [{
-        name: aggregationSets.featureCategorySLIs.name,
-        interval: '1m',
-        partial_response_strategy: 'warn',
-        rules: aggregationSetTransformer.generateRecordingRules(
-          sourceAggregationSet=aggregationSets.featureCategorySourceSLIs,
-          targetAggregationSet=aggregationSets.featureCategorySLIs
-        ),
-      }]
+      [
+        {
+          name: aggregationSets.featureCategorySLIs.name + ' (Short window)',
+          interval: '1m',
+          partial_response_strategy: 'warn',
+          rules: aggregationSetTransformer.generateRecordingRules(
+            sourceAggregationSet=aggregationSets.featureCategorySourceSLIs,
+            targetAggregationSet=aggregationSets.featureCategorySLIs,
+            burnRates=aggregationSets.featureCategorySLIs.getShortWindowBurnRates(),
+          ),
+        },
+        {
+          name: aggregationSets.featureCategorySLIs.name + ' (Long window)',
+          interval: '1m',
+          partial_response_strategy: 'warn',
+          rules: aggregationSetTransformer.generateRecordingRules(
+            sourceAggregationSet=aggregationSets.featureCategorySourceSLIs,
+            targetAggregationSet=aggregationSets.featureCategorySLIs,
+            burnRates=aggregationSets.featureCategorySLIs.getLongWindowBurnRates(),
+          ),
+        },
+      ]
     ),
 
   'aggregated-stage-group-metrics.yml':
     outputPromYaml(
-      [{
-        name: aggregationSets.stageGroupSLIs.name,
-        interval: '1m',
-        partial_response_strategy: 'warn',
-        rules: aggregationSetTransformer.generateRecordingRules(
-          sourceAggregationSet=aggregationSets.featureCategorySourceSLIs,
-          targetAggregationSet=aggregationSets.stageGroupSLIs
-        ),
-      }]
+      [
+        {
+          name: aggregationSets.stageGroupSLIs.name + ' (Short window)',
+          interval: '1m',
+          partial_response_strategy: 'warn',
+          rules: aggregationSetTransformer.generateRecordingRules(
+            sourceAggregationSet=aggregationSets.featureCategorySourceSLIs,
+            targetAggregationSet=aggregationSets.stageGroupSLIs,
+            burnRates=aggregationSets.stageGroupSLIs.getShortWindowBurnRates(),
+          ),
+        },
+        {
+          name: aggregationSets.stageGroupSLIs.name + ' (Long window)',
+          interval: '1m',
+          partial_response_strategy: 'warn',
+          rules: aggregationSetTransformer.generateRecordingRules(
+            sourceAggregationSet=aggregationSets.featureCategorySourceSLIs,
+            targetAggregationSet=aggregationSets.stageGroupSLIs,
+            burnRates=aggregationSets.stageGroupSLIs.getLongWindowBurnRates(),
+          ),
+        },
+      ]
     ),
 
   // Application SLIs not used in the service catalog  will be aggregated here.
