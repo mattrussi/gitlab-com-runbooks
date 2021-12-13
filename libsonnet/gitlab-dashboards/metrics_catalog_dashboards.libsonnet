@@ -7,6 +7,7 @@ local singleMetricRow = import 'key-metric-panels/single-metric-row.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
+local misc = import 'utils/misc.libsonnet';
 local objects = import 'utils/objects.libsonnet';
 
 local row = grafana.row;
@@ -293,7 +294,7 @@ local sliDetailErrorRatePanel(
                   else
                     null,
 
-                  if aggregationSet.aggregationLabels != '' && sli.hasApdex() && std.objectHasAll(sli.apdex, 'apdexAttribution') then
+                  if misc.isPresent(aggregationSet.aggregationLabels) && sli.hasApdex() && std.objectHasAll(sli.apdex, 'apdexAttribution') then
                     basic.percentageTimeseries(
                       title='Apdex attribution for ' + sliName + ' Latency - ' + aggregationSet.title,
                       description='Attributes apdex downscoring',
@@ -378,7 +379,7 @@ local sliDetailErrorRatePanel(
                   else
                     null,
 
-                  if aggregationSet.aggregationLabels != '' && sli.hasApdex() && std.objectHasAll(sli.apdex, 'apdexAttribution') then
+                  if misc.isPresent(aggregationSet.aggregationLabels) && sli.hasApdex() && std.objectHasAll(sli.apdex, 'apdexAttribution') then
                     basic.percentageTimeseries(
                       title='Apdex attribution for ' + sli.name + ' Latency - ' + aggregationSet.title,
                       description='Attributes apdex downscoring',
