@@ -53,6 +53,7 @@
 * [sidekiq_stats_no_longer_showing.md](sidekiq_stats_no_longer_showing.md)
 * [Debug failed chef provisioning](../uncategorized/debug-failed-chef-provisioning.md)
 * [Ruby profiling](../uncategorized/ruby-profiling.md)
+* [GitLab staging environment](../uncategorized/staging-environment.md)
 * [Application Database Queries](../uncategorized/tracing-app-db-queries.md)
 * [Tweeting Guidelines](../uncategorized/tweeting-guidelines.md)
 <!-- END_MARKER -->
