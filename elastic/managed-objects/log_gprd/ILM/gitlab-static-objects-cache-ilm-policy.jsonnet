@@ -23,8 +23,8 @@
           set_priority: {
             priority: 50,
           },
-          "shrink" : {
-            "number_of_shards": 6
+          shrink: {
+            number_of_shards: 6
           }
         },
       },
