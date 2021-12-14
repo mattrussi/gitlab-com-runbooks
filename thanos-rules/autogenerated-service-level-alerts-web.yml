@@ -941,12 +941,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_1h{component="rails_requests",monitor="global",type="web"}
-          < (1 - 14.4 * 0.008000)
+          < (1 - 14.4 * 0.002000)
         )
         and
         (
           gitlab_component_apdex:ratio_5m{component="rails_requests",monitor="global",type="web"}
-          < (1 - 14.4 * 0.008000)
+          < (1 - 14.4 * 0.002000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -987,12 +987,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_6h{component="rails_requests",monitor="global",type="web"}
-          < (1 - 6 * 0.008000)
+          < (1 - 6 * 0.002000)
         )
         and
         (
           gitlab_component_apdex:ratio_30m{component="rails_requests",monitor="global",type="web"}
-          < (1 - 6 * 0.008000)
+          < (1 - 6 * 0.002000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -1035,12 +1035,12 @@ groups:
       (
         (
           gitlab_regional_sli_apdex:ratio_1h{component="rails_requests",monitor="global",type="web"}
-          < (1 - 14.4 * 0.008000)
+          < (1 - 14.4 * 0.002000)
         )
         and
         (
           gitlab_regional_sli_apdex:ratio_5m{component="rails_requests",monitor="global",type="web"}
-          < (1 - 14.4 * 0.008000)
+          < (1 - 14.4 * 0.002000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
@@ -1083,12 +1083,12 @@ groups:
       (
         (
           gitlab_regional_sli_apdex:ratio_6h{component="rails_requests",monitor="global",type="web"}
-          < (1 - 6 * 0.008000)
+          < (1 - 6 * 0.002000)
         )
         and
         (
           gitlab_regional_sli_apdex:ratio_30m{component="rails_requests",monitor="global",type="web"}
-          < (1 - 6 * 0.008000)
+          < (1 - 6 * 0.002000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)

@@ -185,7 +185,7 @@ metricsCatalog.serviceDefinition({
     rails_requests:
       sliLibrary.get('rails_request_apdex').generateServiceLevelIndicator(railsSelector) {
         monitoringThresholds+: {
-          apdexScore: 0.985,
+          apdexScore: 0.99,
         },
       },
   },
