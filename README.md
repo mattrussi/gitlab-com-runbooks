@@ -487,7 +487,7 @@ Following tools and libraries are required to develop dashboards locally:
 * Go programming langugage
 * Ruby programming language
 * `go-jsonnet` - Jsonnet implementation written in Go
-* `jsonnet-bunder` - package manager for Jsonnet
+* `jsonnet-bundler` - package manager for Jsonnet
 * `jq` - command line JSON processor
 
 You can install most of them using `asdf` tool.
