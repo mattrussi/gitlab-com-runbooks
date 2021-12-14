@@ -89,7 +89,7 @@ implementation details.
 
 Some of the issues in the backlog also belong in epics part of the
 [Observability Work Queue
-Epic](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/530) to group
+Epic](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/628) to group
 issues around a large project that needs to be addressed.
 
 ## Querying
