@@ -111,6 +111,7 @@ local sliDetailLatencyPanel(
   legendFormat='%(percentile_humanized)s %(sliName)s',
   min=0.01,
   intervalFactor=2,
+  withoutLabels=[],
       ) =
   local percentile = getLatencyPercentileForService(serviceType);
   local formatConfig = { percentile_humanized: 'p%g' % [percentile * 100], sliName: sli.name };
@@ -122,6 +123,7 @@ local sliDetailLatencyPanel(
       aggregationLabels=aggregationLabels,
       selector=selector,
       rangeInterval='$__interval',
+      withoutLabels=withoutLabels,
     ),
     logBase=logBase,
     legendFormat=legendFormat % formatConfig,
@@ -140,8 +142,9 @@ local sliDetailOpsRatePanel(
   sli=null,
   selector=null,
   aggregationLabels='',
-  legendFormat='%(sliName)s errors',
+  legendFormat='%(sliName)s operations',
   intervalFactor=2,
+  withoutLabels=[],
       ) =
 
   basic.timeseries(
@@ -150,6 +153,7 @@ local sliDetailOpsRatePanel(
       aggregationLabels=aggregationLabels,
       selector=selector,
       rangeInterval='$__interval',
+      withoutLabels=withoutLabels,
     ),
     legendFormat=legendFormat % { sliName: sli.name },
     intervalFactor=intervalFactor,
@@ -163,6 +167,7 @@ local sliDetailErrorRatePanel(
   aggregationLabels='',
   legendFormat='%(sliName)s errors',
   intervalFactor=2,
+  withoutLabels=[],
       ) =
 
   basic.timeseries(
@@ -171,6 +176,7 @@ local sliDetailErrorRatePanel(
       aggregationLabels=aggregationLabels,
       selector=selector,
       rangeInterval='$__interval',
+      withoutLabels=withoutLabels,
     ),
     legendFormat=legendFormat % { sliName: sli.name },
     intervalFactor=intervalFactor,
@@ -289,7 +295,7 @@ local sliDetailErrorRatePanel(
                       selector=filteredSelectorHash,
                       legendFormat='%(percentile_humanized)s ' + aggregationSet.legendFormat,
                       aggregationLabels=aggregationSet.aggregationLabels,
-                      min=minLatency,
+                      min=minLatency
                     )
                   else
                     null,
@@ -350,14 +356,12 @@ local sliDetailErrorRatePanel(
     aggregationSets,
     minLatency=0.01
   )::
-    local staticLabelNames = if std.objectHas(sli, 'staticLabels') then std.objectFields(sli.staticLabels) else [];
-
     // Note that we always want to ignore `type` filters, since the metricsCatalog selectors will
     // already have correctly filtered labels to ensure the right values, and if we inject the type
     // we may lose metrics 'proxied' from nodes with other types
-    local filteredSelectorHash = selectors.without(selectorHash, [
-      'type',
-    ] + staticLabelNames);
+    local staticLabelNames = if std.objectHas(sli, 'staticLabels') then std.objectFields(sli.staticLabels) else [];
+    local withoutLabels = ['type'] + staticLabelNames;
+    local filteredSelectorHash = selectors.without(selectorHash, withoutLabels);
 
     row.new(title='🔬 %(sliName)s Service Level Indicator Detail' % { sliName: sli.name }, collapse=true)
     .addPanels(
@@ -374,6 +378,7 @@ local sliDetailErrorRatePanel(
                       selector=filteredSelectorHash,
                       legendFormat='%(percentile_humanized)s ' + aggregationSet.legendFormat,
                       aggregationLabels=aggregationSet.aggregationLabels,
+                      withoutLabels=withoutLabels,
                       min=minLatency,
                     )
                   else
@@ -387,6 +392,7 @@ local sliDetailErrorRatePanel(
                         aggregationLabel=aggregationSet.aggregationLabels,
                         selector=filteredSelectorHash,
                         rangeInterval='$__interval',
+                        withoutLabels=withoutLabels,
                       ),
                       legendFormat=aggregationSet.legendFormat % { sliName: sli.name },
                       intervalFactor=3,
@@ -406,6 +412,7 @@ local sliDetailErrorRatePanel(
                       legendFormat=aggregationSet.legendFormat,
                       aggregationLabels=aggregationSet.aggregationLabels,
                       selector=filteredSelectorHash,
+                      withoutLabels=withoutLabels,
                     )
                   else
                     null,
@@ -416,7 +423,8 @@ local sliDetailErrorRatePanel(
                       sli=sli,
                       selector=filteredSelectorHash,
                       legendFormat=aggregationSet.legendFormat,
-                      aggregationLabels=aggregationSet.aggregationLabels
+                      aggregationLabels=aggregationSet.aggregationLabels,
+                      withoutLabels=withoutLabels,
                     )
                   else
                     null,

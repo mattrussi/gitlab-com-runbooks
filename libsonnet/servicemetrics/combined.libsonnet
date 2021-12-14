@@ -24,21 +24,21 @@ local wrapForUniqueness(index, query) =
     index: index,
   };
 
-local generateRateQuery(c, selector, rangeInterval) =
-  local rateQueries = std.mapWithIndex(function(index, metric) wrapForUniqueness(index, metric.rateQuery(selector, rangeInterval)), c.metrics);
+local generateRateQuery(c, selector, rangeInterval, withoutLabels) =
+  local rateQueries = std.mapWithIndex(function(index, metric) wrapForUniqueness(index, metric.rateQuery(selector, rangeInterval, withoutLabels=withoutLabels)), c.metrics);
   orJoin(rateQueries);
 
-local generateIncreaseQuery(c, selector, rangeInterval) =
-  local increaseQueries = std.mapWithIndex(function(index, metric) wrapForUniqueness(index, metric.increaseQuery(selector, rangeInterval)), c.metrics);
+local generateIncreaseQuery(c, selector, rangeInterval, withoutLabels) =
+  local increaseQueries = std.mapWithIndex(function(index, metric) wrapForUniqueness(index, metric.increaseQuery(selector, rangeInterval, withoutLabels=withoutLabels)), c.metrics);
   orJoin(increaseQueries);
 
-local generateApdexNumeratorQuery(c, aggregationLabels, selector, rangeInterval) =
-  local numeratorQueries = std.mapWithIndex(function(index, metric) wrapForUniqueness(index, metric.apdexNumerator(selector, rangeInterval)), c.metrics);
+local generateApdexNumeratorQuery(c, aggregationLabels, selector, rangeInterval, withoutLabels) =
+  local numeratorQueries = std.mapWithIndex(function(index, metric) wrapForUniqueness(index, metric.apdexNumerator(selector, rangeInterval, withoutLabels=withoutLabels)), c.metrics);
   aggregations.aggregateOverQuery('sum', aggregationLabels, orJoin(numeratorQueries));
 
-local generateApdexQuery(c, aggregationLabels, selector, rangeInterval) =
-  local aggregatedNumerators = generateApdexNumeratorQuery(c, aggregationLabels, selector, rangeInterval);
-  local denominatorQueries = std.mapWithIndex(function(index, metric) wrapForUniqueness(index, metric.apdexDenominator(selector, rangeInterval)), c.metrics);
+local generateApdexQuery(c, aggregationLabels, selector, rangeInterval, withoutLabels) =
+  local aggregatedNumerators = generateApdexNumeratorQuery(c, aggregationLabels, selector, rangeInterval, withoutLabels=withoutLabels);
+  local denominatorQueries = std.mapWithIndex(function(index, metric) wrapForUniqueness(index, metric.apdexDenominator(selector, rangeInterval, withoutLabels=withoutLabels)), c.metrics);
 
   local aggregatedDenominators = aggregations.aggregateOverQuery('sum', aggregationLabels, orJoin(denominatorQueries));
 
@@ -53,12 +53,12 @@ local generateApdexQuery(c, aggregationLabels, selector, rangeInterval) =
     aggregatedDenominators: strings.indent(strings.chomp(aggregatedDenominators), 2),
   };
 
-local generateApdexWeightQuery(c, aggregationLabels, selector, rangeInterval) =
-  local apdexWeightQueries = std.mapWithIndex(function(index, metric) wrapForUniqueness(index, metric.apdexDenominator(selector, rangeInterval)), c.metrics);
+local generateApdexWeightQuery(c, aggregationLabels, selector, rangeInterval, withoutLabels) =
+  local apdexWeightQueries = std.mapWithIndex(function(index, metric) wrapForUniqueness(index, metric.apdexDenominator(selector, rangeInterval, withoutLabels=withoutLabels)), c.metrics);
   aggregations.aggregateOverQuery('sum', aggregationLabels, orJoin(apdexWeightQueries));
 
-local generateApdexPercentileLatencyQuery(c, percentile, aggregationLabels, selector, rangeInterval) =
-  local rateQueries = std.map(function(i) i.apdexNumerator(selector, rangeInterval, histogramRates=true), c.metrics);
+local generateApdexPercentileLatencyQuery(c, percentile, aggregationLabels, selector, rangeInterval, withoutLabels) =
+  local rateQueries = std.map(function(i) i.apdexNumerator(selector, rangeInterval, histogramRates=true, withoutLabels=withoutLabels), c.metrics);
   local aggregationLabelsWithLe = aggregationLabels + ['le'];
   local aggregatedRateQueries = aggregations.aggregateOverQuery('sum', aggregationLabelsWithLe, orJoin(rateQueries));
 
@@ -88,38 +88,38 @@ local generateApdexPercentileLatencyQuery(c, percentile, aggregationLabels, sele
 
         // This creates a rate query of the form
         // rate(....{<selector>}[<rangeInterval>])
-        rateQuery(selector, rangeInterval)::
-          generateRateQuery(self, selector, rangeInterval),
+        rateQuery(selector, rangeInterval, withoutLabels=[])::
+          generateRateQuery(self, selector, rangeInterval, withoutLabels=withoutLabels),
 
         // This creates a increase query of the form
         // rate(....{<selector>}[<rangeInterval>])
-        increaseQuery(selector, rangeInterval)::
-          generateIncreaseQuery(self, selector, rangeInterval),
+        increaseQuery(selector, rangeInterval, withoutLabels=[])::
+          generateIncreaseQuery(self, selector, rangeInterval, withoutLabels=withoutLabels),
 
         // This creates an aggregated rate query of the form
         // sum by(<aggregationLabels>) (...)
-        aggregatedRateQuery(aggregationLabels, selector, rangeInterval)::
-          local query = generateRateQuery(self, selector, rangeInterval);
+        aggregatedRateQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[])::
+          local query = generateRateQuery(self, selector, rangeInterval, withoutLabels=withoutLabels);
           aggregations.aggregateOverQuery('sum', aggregationLabels, query),
 
         // This creates an aggregated increase query of the form
         // sum by(<aggregationLabels>) (...)
-        aggregatedIncreaseQuery(aggregationLabels, selector, rangeInterval)::
-          local query = generateIncreaseQuery(self, selector, rangeInterval);
+        aggregatedIncreaseQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[])::
+          local query = generateIncreaseQuery(self, selector, rangeInterval, withoutLabels=withoutLabels);
           aggregations.aggregateOverQuery('sum', aggregationLabels, query),
 
         /* apdexSuccessRateQuery measures the rate at which apdex violations occur */
-        apdexSuccessRateQuery(aggregationLabels, selector, rangeInterval)::
-          generateApdexNumeratorQuery(self, aggregationLabels, selector, rangeInterval),
+        apdexSuccessRateQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[])::
+          generateApdexNumeratorQuery(self, aggregationLabels, selector, rangeInterval, withoutLabels=withoutLabels),
 
-        apdexQuery(aggregationLabels, selector, rangeInterval)::
-          generateApdexQuery(self, aggregationLabels, selector, rangeInterval),
+        apdexQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[])::
+          generateApdexQuery(self, aggregationLabels, selector, rangeInterval, withoutLabels=withoutLabels),
 
-        apdexWeightQuery(aggregationLabels, selector, rangeInterval)::
-          generateApdexWeightQuery(self, aggregationLabels, selector, rangeInterval),
+        apdexWeightQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[])::
+          generateApdexWeightQuery(self, aggregationLabels, selector, rangeInterval, withoutLabels=withoutLabels),
 
-        percentileLatencyQuery(percentile, aggregationLabels, selector, rangeInterval)::
-          generateApdexPercentileLatencyQuery(self, percentile, aggregationLabels, selector, rangeInterval),
+        percentileLatencyQuery(percentile, aggregationLabels, selector, rangeInterval, withoutLabels=[])::
+          generateApdexPercentileLatencyQuery(self, percentile, aggregationLabels, selector, rangeInterval, withoutLabels=withoutLabels),
 
         // Forward the below methods and fields to the first metric for
         // apdex scores, which is wrong but hopefully not catastrophic.

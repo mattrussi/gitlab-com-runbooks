@@ -2,27 +2,27 @@ local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 
-local generateQuery(rateQueryTemplate, selector, rangeInterval) =
-  local s = if selector == '' then '__name__!=""' else selector;
+local generateQuery(rateQueryTemplate, selector, rangeInterval, withoutLabels) =
+  local s = if selector == '' then '__name__!=""' else selectors.without(selector, withoutLabels);
 
   rateQueryTemplate % {
     selector: selectors.serializeHash(s),
     rangeInterval: rangeInterval,
   };
 
-local generateSingleNumeratorClause(customApdex, aggregationLabels, additionalSelectors, duration) =
+local generateSingleNumeratorClause(customApdex, aggregationLabels, additionalSelectors, duration, withoutLabels) =
   local selector = selectors.merge(customApdex.selector, additionalSelectors);
   local satisfiedSelector = selectors.merge(selector, { le: customApdex.satisfiedThreshold });
-  local satisfiedRateQuery = generateQuery(customApdex.rateQueryTemplate, satisfiedSelector, duration);
+  local satisfiedRateQuery = generateQuery(customApdex.rateQueryTemplate, satisfiedSelector, duration, withoutLabels);
 
   aggregations.aggregateOverQuery('sum', aggregationLabels, satisfiedRateQuery);
 
-local generateDoubleNumeratorClause(customApdex, aggregationLabels, additionalSelectors, duration) =
+local generateDoubleNumeratorClause(customApdex, aggregationLabels, additionalSelectors, duration, withoutLabels) =
   local selector = selectors.merge(customApdex.selector, additionalSelectors);
   local satisfiedSelector = selectors.merge(selector, { le: customApdex.satisfiedThreshold });
   local toleratedSelector = selectors.merge(selector, { le: customApdex.toleratedThreshold });
-  local satisfiedRateQuery = generateQuery(customApdex.rateQueryTemplate, satisfiedSelector, duration);
-  local toleratedRateQuery = generateQuery(customApdex.rateQueryTemplate, toleratedSelector, duration);
+  local satisfiedRateQuery = generateQuery(customApdex.rateQueryTemplate, satisfiedSelector, duration, withoutLabels);
+  local toleratedRateQuery = generateQuery(customApdex.rateQueryTemplate, toleratedSelector, duration, withoutLabels);
 
   |||
     (
@@ -37,22 +37,22 @@ local generateDoubleNumeratorClause(customApdex, aggregationLabels, additionalSe
     toleratedAggregation: strings.indent(aggregations.aggregateOverQuery('sum', aggregationLabels, toleratedRateQuery), 2),
   };
 
-local generateNumeratorClause(customApdex, aggregationLabels, additionalSelectors, duration) =
+local generateNumeratorClause(customApdex, aggregationLabels, additionalSelectors, duration, withoutLabels) =
   if customApdex.toleratedThreshold == null then
-    generateSingleNumeratorClause(customApdex, aggregationLabels, additionalSelectors, duration)
+    generateSingleNumeratorClause(customApdex, aggregationLabels, additionalSelectors, duration, withoutLabels=withoutLabels)
   else
-    generateDoubleNumeratorClause(customApdex, aggregationLabels, additionalSelectors, duration);
+    generateDoubleNumeratorClause(customApdex, aggregationLabels, additionalSelectors, duration, withoutLabels=withoutLabels);
 
 
 // A single threshold apdex score only has a SATISFACTORY threshold, no TOLERABLE threshold
-local generateApdexScoreQuery(customApdex, aggregationLabels, additionalSelectors, duration) =
+local generateApdexScoreQuery(customApdex, aggregationLabels, additionalSelectors, duration, withoutLabels) =
   local selector = selectors.merge(customApdex.selector, additionalSelectors);
 
   local totalSelector = selectors.merge(selector, { le: '+Inf' });
-  local totalRateQuery = generateQuery(customApdex.rateQueryTemplate, totalSelector, duration);
+  local totalRateQuery = generateQuery(customApdex.rateQueryTemplate, totalSelector, duration, withoutLabels);
   local denominatorAggregation = aggregations.aggregateOverQuery('sum', aggregationLabels, totalRateQuery);
 
-  local numeratorAggregation = generateNumeratorClause(customApdex, aggregationLabels, additionalSelectors, duration);
+  local numeratorAggregation = generateNumeratorClause(customApdex, aggregationLabels, additionalSelectors, duration, withoutLabels);
   |||
     %(numeratorAggregation)s
     /
@@ -64,9 +64,9 @@ local generateApdexScoreQuery(customApdex, aggregationLabels, additionalSelector
     denominatorAggregation: strings.indent(denominatorAggregation, 2),
   };
 
-local generatePercentileLatencyQuery(customApdex, percentile, aggregationLabels, additionalSelectors, duration) =
+local generatePercentileLatencyQuery(customApdex, percentile, aggregationLabels, additionalSelectors, duration, withoutLabels) =
   local aggregationLabelsWithLe = aggregationLabels + ['le'];
-  local rateQuery = generateQuery(customApdex.rateQueryTemplate, additionalSelectors, duration);
+  local rateQuery = generateQuery(customApdex.rateQueryTemplate, additionalSelectors, duration, withoutLabels);
 
   |||
     histogram_quantile(
@@ -78,15 +78,18 @@ local generatePercentileLatencyQuery(customApdex, percentile, aggregationLabels,
     aggregatedRateQuery: strings.indent(aggregations.aggregateOverQuery('sum', aggregationLabelsWithLe, rateQuery), 2),
   };
 
-local generateApdexWeightScoreQuery(customApdex, aggregationLabels, additionalSelectors, duration) =
+local generateApdexWeightScoreQuery(customApdex, aggregationLabels, additionalSelectors, duration, withoutLabels) =
   local selectorsWithAdditional = selectors.merge(customApdex.selector, additionalSelectors);
   local selectorsWithAdditionalAndLe = selectors.merge(selectorsWithAdditional, { le: '+Inf' });
-  local totalRateQuery = generateQuery(customApdex.rateQueryTemplate, selectorsWithAdditionalAndLe, duration);
+  local totalRateQuery = generateQuery(customApdex.rateQueryTemplate,
+                                       selectors.without(selectorsWithAdditionalAndLe, withoutLabels),
+                                       duration,
+                                       withoutLabels);
 
   aggregations.aggregateOverQuery('sum', aggregationLabels, totalRateQuery);
 
-local generateApdexAttributionQuery(customApdex, selector, rangeInterval, aggregationLabel) =
-  local numeratorQuery = generateNumeratorClause(customApdex, aggregationLabel, selector, rangeInterval);
+local generateApdexAttributionQuery(customApdex, selector, rangeInterval, aggregationLabel, withoutLabels) =
+  local numeratorQuery = generateNumeratorClause(customApdex, aggregationLabel, selector, rangeInterval, withoutLabels=withoutLabels);
 
   |||
     (
@@ -100,12 +103,11 @@ local generateApdexAttributionQuery(customApdex, selector, rangeInterval, aggreg
     (
       %(aggregatedTotalQuery)s
     )
-
   ||| % {
-    splitTotalQuery: generateApdexWeightScoreQuery(customApdex, aggregationLabel, selector, rangeInterval),
+    splitTotalQuery: generateApdexWeightScoreQuery(customApdex, aggregationLabel, selector, rangeInterval, withoutLabels=withoutLabels),
     numeratorQuery: numeratorQuery,
     aggregationLabel: aggregationLabel,
-    aggregatedTotalQuery: generateApdexWeightScoreQuery(customApdex, '', selector, rangeInterval),
+    aggregatedTotalQuery: generateApdexWeightScoreQuery(customApdex, '', selector, rangeInterval, withoutLabels=withoutLabels),
   };
 
 {
@@ -121,20 +123,20 @@ local generateApdexAttributionQuery(customApdex, selector, rangeInterval, aggreg
     toleratedThreshold: toleratedThreshold,
 
     /* apdexSuccessRateQuery measures the rate at which apdex violations occur */
-    apdexSuccessRateQuery(aggregationLabels, selector, rangeInterval)::
-      generateNumeratorClause(self, aggregationLabels, selector, rangeInterval),
+    apdexSuccessRateQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[])::
+      generateNumeratorClause(self, aggregationLabels, selector, rangeInterval, withoutLabels=withoutLabels),
 
-    apdexQuery(aggregationLabels, selector, rangeInterval)::
+    apdexQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[])::
       local s = self;
-      generateApdexScoreQuery(s, aggregationLabels, selector, rangeInterval),
+      generateApdexScoreQuery(s, aggregationLabels, selector, rangeInterval, withoutLabels=withoutLabels),
 
-    apdexWeightQuery(aggregationLabels, selector, rangeInterval)::
+    apdexWeightQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[])::
       local s = self;
-      generateApdexWeightScoreQuery(s, aggregationLabels, selector, rangeInterval),
+      generateApdexWeightScoreQuery(s, aggregationLabels, selector, rangeInterval, withoutLabels=withoutLabels),
 
-    percentileLatencyQuery(percentile, aggregationLabels, selector, rangeInterval)::
+    percentileLatencyQuery(percentile, aggregationLabels, selector, rangeInterval, withoutLabels=[])::
       local s = self;
-      generatePercentileLatencyQuery(s, percentile, aggregationLabels, selector, rangeInterval),
+      generatePercentileLatencyQuery(s, percentile, aggregationLabels, selector, rangeInterval, withoutLabels=withoutLabels),
 
     describe()::
       local s = self;
@@ -145,8 +147,8 @@ local generateApdexAttributionQuery(customApdex, selector, rangeInterval, aggreg
         '%gs/%gs' % [s.satisfiedThreshold, s.toleratedThreshold],
 
 
-    apdexAttribution(aggregationLabel, selector, rangeInterval)::
-      generateApdexAttributionQuery(self, selector, rangeInterval, aggregationLabel=aggregationLabel),
+    apdexAttribution(aggregationLabel, selector, rangeInterval, withoutLabels=[])::
+      generateApdexAttributionQuery(self, selector, rangeInterval, aggregationLabel=aggregationLabel, withoutLabels=withoutLabels),
 
   },
 }
