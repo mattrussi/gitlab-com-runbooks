@@ -131,21 +131,3 @@ groups:
         More CI Jobs are in state docker_pulling_image than are in state docker_run
         for over 5 minutes. This could mean connectivity to docker hub is broken.
         Plese check https://dashboards.gitlab.net/d/000000159/ci?viewPanel=46&orgId=1&from=now-1h&to=now&fullscreen
-
-  - alert: GitLabRailsRepoMasterArchiveIsStale
-    expr: |
-      (
-        time() - probe_http_last_modified_timestamp_seconds{job="gitlab-ci-git-repo-cache-blackbox"}
-      ) > 86400 # 1 day
-    for: 3m
-    labels:
-      team: create
-      severity: s3
-      alert_type: cause
-    annotations:
-      title: 'gitlab/gitlab-org repo master archive is stale'
-      description: |
-        The repo archive has not been updated in GCS in one day so it could mean that
-        the mechanism that uploads the archive is failing. The archive is used to speed up
-        fetches for CI jobs and not to overload the Gitaly node that hosts the repo.
-        Try reaching out to the backend team to check the correctness of the upload mechanism.
