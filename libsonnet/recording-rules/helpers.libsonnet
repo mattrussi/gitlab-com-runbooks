@@ -4,6 +4,22 @@ local objects = import 'utils/objects.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 
 // Expression for upscaling an ratio
+//
+// The number we want to calculate is (increase of numerator during burn
+// rate window) / (increase of demominator during burn rate window). But
+// we only have rate metrics for the numerator and the denominator. If we
+// know how long the interval between successive data points is, we can
+// approximate the increase of a rate metric foo_rate over period
+// burn_window as "metrics_interval *
+// sum_over_time(foo_rate[burn_window])". Furthermore, if we know that
+// the numerator and denominator have the same metrics interval, then we
+// can skip multiplying by metrics_interval. If you put all this together
+// you see that "sum_over_time(numerator_metric[burn_window]) /
+// sum_over_time(denominator[burn_window])" is an approximation of the
+// ratio of the increases over the burn window. For more discussion, also
+// see
+// https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1123#note_599272081.
+//
 local upscaleRatioPromExpression = |||
   sum by (%(targetAggregationLabels)s) (
     sum_over_time(%(numeratorMetricName)s{%(sourceSelectorWithExtras)s}[%(burnRate)s])%(aggregationFilterExpr)s
