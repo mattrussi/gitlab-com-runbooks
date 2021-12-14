@@ -339,7 +339,7 @@ Selected logging documents and resources:
 
 ### Security
 
-* [Working with the CloudFlare WAF/CDN](howto/externalvendors/cloudflare.md)
+* [Working with the CloudFlare WAF/CDN](docs/cloudflare/README.md)
 * [OSQuery](docs/uncategorized/osquery.md)
 
 ### Other
