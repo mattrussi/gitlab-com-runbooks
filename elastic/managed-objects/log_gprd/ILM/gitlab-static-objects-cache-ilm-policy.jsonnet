@@ -25,7 +25,7 @@
           },
           shrink: {
             number_of_shards: 6
-          }
+          },
         },
       },
       delete: {
