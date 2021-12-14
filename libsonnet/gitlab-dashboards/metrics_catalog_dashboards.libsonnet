@@ -12,6 +12,8 @@ local objects = import 'utils/objects.libsonnet';
 
 local row = grafana.row;
 
+local ignoreZero(query) = '%s > 0' % [query];
+
 local getLatencyPercentileForService(serviceType) =
   local service = if serviceType == null then {} else metricsCatalog.getService(serviceType);
 
@@ -118,13 +120,13 @@ local sliDetailLatencyPanel(
 
   basic.latencyTimeseries(
     title=(if title == null then 'Estimated %(percentile_humanized)s latency for %(sliName)s' + sli.name else title) % formatConfig,
-    query=sli.apdex.percentileLatencyQuery(
+    query=ignoreZero(sli.apdex.percentileLatencyQuery(
       percentile=percentile,
       aggregationLabels=aggregationLabels,
       selector=selector,
       rangeInterval='$__interval',
       withoutLabels=withoutLabels,
-    ),
+    )),
     logBase=logBase,
     legendFormat=legendFormat % formatConfig,
     min=min,
@@ -149,12 +151,12 @@ local sliDetailOpsRatePanel(
 
   basic.timeseries(
     title=if title == null then 'RPS for ' + sli.name else title,
-    query=sli.requestRate.aggregatedRateQuery(
+    query=ignoreZero(sli.requestRate.aggregatedRateQuery(
       aggregationLabels=aggregationLabels,
       selector=selector,
       rangeInterval='$__interval',
       withoutLabels=withoutLabels,
-    ),
+    )),
     legendFormat=legendFormat % { sliName: sli.name },
     intervalFactor=intervalFactor,
     yAxisLabel='Requests per Second'
@@ -172,12 +174,12 @@ local sliDetailErrorRatePanel(
 
   basic.timeseries(
     title=if title == null then 'Errors for ' + sli.name else title,
-    query=sli.errorRate.aggregatedRateQuery(
+    query=ignoreZero(sli.errorRate.aggregatedRateQuery(
       aggregationLabels=aggregationLabels,
       selector=selector,
       rangeInterval='$__interval',
       withoutLabels=withoutLabels,
-    ),
+    )),
     legendFormat=legendFormat % { sliName: sli.name },
     intervalFactor=intervalFactor,
     yAxisLabel='Errors',

@@ -93,16 +93,18 @@ local generateApdexAttributionQuery(customApdex, selector, rangeInterval, aggreg
 
   |||
     (
-      %(splitTotalQuery)s
-      -
       (
-        %(numeratorQuery)s
+        %(splitTotalQuery)s
+        -
+        (
+          %(numeratorQuery)s
+        )
       )
-    )
-    / ignoring(%(aggregationLabel)s) group_left()
-    (
-      %(aggregatedTotalQuery)s
-    )
+      / ignoring(%(aggregationLabel)s) group_left()
+      (
+        %(aggregatedTotalQuery)s
+      )
+    ) > 0
   ||| % {
     splitTotalQuery: generateApdexWeightScoreQuery(customApdex, aggregationLabel, selector, rangeInterval, withoutLabels=withoutLabels),
     numeratorQuery: numeratorQuery,

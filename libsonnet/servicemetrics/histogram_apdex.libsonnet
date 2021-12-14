@@ -136,16 +136,18 @@ local generatePercentileLatencyQuery(histogram, percentile, aggregationLabels, a
 local generateApdexAttributionQuery(histogram, selector, rangeInterval, aggregationLabel, withoutLabels=[]) =
   |||
     (
-      %(splitTotalQuery)s
-      -
       (
-        %(numeratorQuery)s
+        %(splitTotalQuery)s
+        -
+        (
+          %(numeratorQuery)s
+        )
       )
-    )
-    / ignoring(%(aggregationLabel)s) group_left()
-    (
-      %(aggregatedTotalQuery)s
-    )
+      / ignoring(%(aggregationLabel)s) group_left()
+      (
+        %(aggregatedTotalQuery)s
+      )
+    ) > 0
   ||| % {
     splitTotalQuery: generateApdexComponentRateQuery(histogram, selector, rangeInterval, { le: '+Inf' }, aggregationFunction='sum', aggregationLabels=[aggregationLabel], withoutLabels=withoutLabels),
     numeratorQuery: generateApdexNumeratorQuery(histogram, selector, rangeInterval, aggregationFunction='sum', aggregationLabels=[aggregationLabel], withoutLabels=withoutLabels),

@@ -48,7 +48,7 @@ local generateApdexAttributionQuery(rateApdex, aggregationLabel, selector, range
       (
         %(aggregatedTotalQuery)s
       )
-    )
+    ) > 0
   ||| % {
     splitTotalQuery: strings.indent(rateApdex.apdexWeightQuery([aggregationLabel], selector, rangeInterval, withoutLabels=withoutLabels), 4),
     splitSuccessRateQuery: strings.indent(rateApdex.apdexSuccessRateQuery([aggregationLabel], selector, rangeInterval, withoutLabels=withoutLabels), 4),
