@@ -142,7 +142,7 @@ Red classified data.  Consider removing the Pod after your work is complete.
 
 ### Using Docker/Containerd
 
-At the time of this writing some of our nodepools run containerd, but a few still run docker.  Due to this we'll use a combination of commands, either `docker` or `crictl`; while they are similar to an extent, both have a significantly different UX when performing the below troubleshooting.
+**Note**: Most of our nodepools run containerd, but a few still run docker.  Due to this we'll use a combination of commands, either `docker` or `crictl`; while they are similar to an extent, both have a significantly different UX when performing the below troubleshooting.
 
 Regardless of runtime, we just need the following information:
 
@@ -182,10 +182,14 @@ SSH into the node:
 gcloud compute ssh $node_name --zone=$zone --tunnel-through-iap
 ```
 
-If using the `docker` runtime, we now can get our container ID:
+Get the container ID:
 
 ```
+# docker runtime
 docker ps | grep 'websockets-57dbbcdcbd-crv2p'
+
+# containerd runtime
+crictl ps | grep 'websockets-57dbbcdcbd-crv2p'
 ```
 
 Note that the result will be at least two containers, one using the `pause` image, and others representing each container participating in our target Pod.  [The `pause` image is NOT the one you are looking for.](https://www.ianlewis.org/en/almighty-pause-container)
