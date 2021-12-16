@@ -112,7 +112,7 @@ local railsErrorRate(type, featureCategories, featureCategoriesSelector) =
     yAxisLabel='Requests per Second',
     query=|||
       sum by (component) (
-        gitlab:component:feature_category:execution:error:rate_1m{
+        gitlab:component:feature_category:execution:error:rate_5m{
           environment='$environment',
           stage='$stage',
           feature_category=~'(%(featureCategories)s)',
