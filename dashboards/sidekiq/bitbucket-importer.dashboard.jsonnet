@@ -7,23 +7,35 @@ basic.dashboard(
 )
 .addPanels(
   layout.grid([
-    basic.singlestat(
-      title='Total Imported Projects',
+    basic.statPanel(
+      '',
+      'Total Imported Projects',
+      color='',
       query='sum(increase(bitbucket_importer_imported_projects_total{env="$environment"}[$__interval]))',
-      format='locale',
-      valueName='total'
+      instant=false,
+      reducerFunction='sum',
+      colorMode='none',
+      unit='locale',
     ),
-    basic.singlestat(
-      title='Total Imported Merge (Pull) Requests',
+    basic.statPanel(
+      '',
+      'Total Imported Merge (Pull) Requests',
+      color='',
       query='sum(increase(bitbucket_importer_imported_merge_requests_total{env="$environment"}[$__interval]))',
-      format='locale',
-      valueName='total'
+      instant=false,
+      reducerFunction='sum',
+      colorMode='none',
+      unit='locale',
     ),
-    basic.singlestat(
-      title='Total Imported Issues',
+    basic.statPanel(
+      '',
+      'Total Imported Issues',
+      color='',
       query='sum(increase(bitbucket_importer_imported_issues_total{env="$environment"}[$__interval]))',
-      format='locale',
-      valueName='total'
+      instant=false,
+      reducerFunction='sum',
+      colorMode='none',
+      unit='locale',
     ),
   ], cols=3, rowHeight=5, startRow=1)
 )

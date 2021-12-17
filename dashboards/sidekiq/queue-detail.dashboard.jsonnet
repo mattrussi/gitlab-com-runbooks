@@ -115,8 +115,7 @@ basic.dashboard(
         label: attribute.label,
         default: attribute.default,
       },
-      title=attribute.title,
-      panelTitle='Queue Attribute: ' + attribute.title,
+      title='Queue Attribute: ' + attribute.title,
       color=attribute.color,
       legendFormat='{{ %s }} ({{ queue }})' % [attribute.label],
       links=attribute.links

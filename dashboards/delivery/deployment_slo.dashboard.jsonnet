@@ -4,7 +4,6 @@ local layout = import 'grafana/layout.libsonnet';
 local prometheus = grafana.prometheus;
 local template = grafana.template;
 local graphPanel = grafana.graphPanel;
-local statPanel = grafana.statPanel;
 
 local sloQuery = |||
   sum(rate(delivery_deployment_duration_seconds_bucket{job="delivery-metrics",status="success",le="$target_slo"}[$__range]))
@@ -82,20 +81,19 @@ basic.dashboard(
       { color: 'green', value: 1 },
     ]
   ),
-  statPanel.new(
+  basic.statPanel(
+    '',
     'Target SLO',
+    color='',
+    query='topk(1, count(delivery_deployment_duration_seconds_bucket{job="delivery-metrics",le="$target_slo"}) by (le))',
+    instant=false,
+    legendFormat='{{le}}',
+    format='table',
     unit='s',
-    reducerFunction='lastNotNull',
     fields='/^le$/',
     colorMode='none',
-    graphMode='none',
     textMode='value',
-  ).addTarget(prometheus.target(
-    'topk(1, count(delivery_deployment_duration_seconds_bucket{job="delivery-metrics",le="$target_slo"}) by (le))',
-    instant=false,
-    format='table',
-    legendFormat='{{le}}',
-  )),
+  ),
   basic.statPanel(
     title='',
     panelTitle='Apdex score',

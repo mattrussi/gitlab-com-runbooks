@@ -5,7 +5,8 @@ local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libso
 local heatmapPanel = grafana.heatmapPanel;
 local text = grafana.text;
 local seriesOverrides = import 'grafana/series_overrides.libsonnet';
-local singlestatPanel = grafana.singlestat;
+local gaugePanel = grafana.gaugePanel;
+local statPanel = grafana.statPanel;
 local tablePanel = grafana.tablePanel;
 local timepickerlib = import 'github.com/grafana/grafonnet-lib/grafonnet/timepicker.libsonnet';
 local templates = import 'grafana/templates.libsonnet';
@@ -304,46 +305,6 @@ local validateTags(tags) =
     )
     .addTarget(promQuery.target(query, legendFormat=legendFormat, interval=interval, intervalFactor=intervalFactor))
     + panelOverrides(stableId),
-
-  singlestat(
-    title='SingleStat',
-    description='',
-    query='',
-    colors=[
-      '#299c46',
-      'rgba(237, 129, 40, 0.89)',
-      '#d44a3a',
-    ],
-    legendFormat='',
-    format='percentunit',
-    gaugeMinValue=0,
-    gaugeMaxValue=100,
-    gaugeShow=false,
-    instant=true,
-    interval='1m',
-    intervalFactor=3,
-    postfix=null,
-    thresholds='',
-    yAxisLabel='',
-    legend_show=true,
-    linewidth=2,
-    valueName='current',
-    stableId=null,
-  )::
-    singlestatPanel.new(
-      title,
-      description=description,
-      datasource='$PROMETHEUS_DS',
-      colors=colors,
-      format=format,
-      gaugeMaxValue=gaugeMaxValue,
-      gaugeShow=gaugeShow,
-      postfix=postfix,
-      thresholds=thresholds,
-      valueName=valueName,
-    )
-    .addTarget(promQuery.target(query, instant)) +
-    panelOverrides(stableId),
 
   table(
     title='Table',
@@ -867,7 +828,6 @@ local validateTags(tags) =
     title,
     description='Availability',
     query=null,
-    fieldTitle='',
     legendFormat='',
     displayName=null,
     links=[],
@@ -878,169 +838,198 @@ local validateTags(tags) =
     colors=getDefaultAvailabilityColorScale(invertColors, if unit == 'percentunit' then 1 else 100),
     colorMode='background',
   )::
-    {
-      datasource: '$PROMETHEUS_DS',
-      targets: [promQuery.target(query, legendFormat=legendFormat, instant=true)],
-      title: title,
-      type: 'stat',
-      pluginVersion: '7.0.3',
-      options: {
-        reduceOptions: {
-          values: true,
-          calcs: [
-            'last',
-          ],
-          fields: '',
-        },
-        orientation: 'auto',
-        colorMode: colorMode,
-        graphMode: 'none',
-        justifyMode: 'auto',
-      },
-      fieldConfig: {
-        defaults: {
-          custom: {},
-          unit: unit,
-          min: 0,
-          max: 1,
-          decimals: decimals,
-          displayName: displayName,
-          thresholds: {
-            mode: 'absolute',
-            steps: colors,
-          },
-          mappings: [],
-          links: links,
-          color: {
-            mode: 'thresholds',
-          },
-        },
-        overrides: [],
-      },
-    } +
-    panelOverrides(stableId),
+    statPanel.new(
+      title,
+      description=description,
+      datasource='$PROMETHEUS_DS',
+      reducerFunction='last',
+      allValues=true,
+      orientation='auto',
+      colorMode=colorMode,
+      graphMode='none',
+      justifyMode='auto',
+      unit=unit,
+      min=0,
+      max=1,
+      decimals=decimals,
+      displayName=displayName,
+      thresholdsMode='absolute',
+    )
+    .addLinks(links)
+    .addThresholds(colors)
+    .addTarget(
+      promQuery.target(
+        query,
+        legendFormat=legendFormat,
+        instant=true
+      )
+    )
+    + panelOverrides(stableId),
 
   // This is a useful hack for displaying a label value in a stat panel
   labelStat(
     query,
     title,
-    panelTitle,
     color,
     legendFormat,
     links=[],
     stableId=null,
   )::
-    {
-      type: 'stat',
-      title: panelTitle,
-      targets: [promQuery.target(query, legendFormat=legendFormat, instant=true)],
-      pluginVersion: '6.6.1',
-      links: [],
-      options: {
-        graphMode: 'none',
-        colorMode: 'background',
-        justifyMode: 'auto',
-        fieldOptions: {
-          values: false,
-          calcs: [
-            'lastNotNull',
-          ],
-          defaults: {
-            thresholds: {
-              mode: 'absolute',
-              steps: [
-                {
-                  value: null,
-                  color: color,
-                },
-              ],
-            },
-            mappings: [
-              {
-                value: 'null',
-                op: '=',
-                text: title,
-                id: 0,
-                type: 2,
-                from: '-10000000',
-                to: '10000000',
-              },
-            ],
-            unit: 'none',
-            nullValueMode: 'connected',
-            title: '${__series.name}',
-            links: links,
-          },
-          overrides: [],
-        },
-        orientation: 'vertical',
-      },
-    } + panelOverrides(stableId),
+    statPanel.new(
+      title,
+      allValues=false,
+      reducerFunction='lastNotNull',
+      graphMode='none',
+      colorMode='background',
+      justifyMode='auto',
+      thresholdsMode='absolute',
+      unit='none',
+      displayName='${__series.name}',
+      orientation='vertical',
+    )
+    .addLinks(links)
+    .addThreshold({
+      value: null,
+      color: color,
+    })
+    .addTarget(
+      promQuery.target(
+        query,
+        legendFormat=legendFormat,
+        instant=true
+      )
+    )
+    + panelOverrides(stableId),
 
   statPanel(
     title,
     panelTitle,
     color,
     query,
-    legendFormat,
+    legendFormat='',
+    format='time_series',
+    description='',
     unit='',
-    colorMode='background',
     decimals=0,
+    min=null,
+    max=null,
     instant=true,
     interval='1m',
-    intevalFactor=3,
-    calcs=[
-      'lastNotNull',
-    ],
+    intervalFactor=3,
+    allValues=false,
+    reducerFunction='lastNotNull',
+    fields='',
     mappings=[],
+    colorMode='background',
+    graphMode='none',
     justifyMode='auto',
+    textMode='auto',
+    thresholdsMode='absolute',
+    orientation='vertical',
     noValue=null,
     links=[],
+    stableId=null,
   )::
-    local steps = if std.type(color) == 'string' then
-      [
-        {
-          color: color,
-          value: null,
-        },
-      ] else
-      color;
-    {
-      links: [],
-      options: {
-        graphMode: 'none',
-        colorMode: colorMode,
-        justifyMode: justifyMode,
-        fieldOptions: {
-          values: false,
-          calcs: calcs,
-          defaults: {
-            thresholds: {
-              mode: 'absolute',
-              steps: steps,
-            },
-            mappings: mappings,
-            title: title,
-            unit: unit,
-            decimals: decimals,
-            [if noValue != null then 'noValue']: noValue,
-            links: links,
-          },
-          overrides: [],
-        },
-        orientation: 'vertical',
-      },
-      pluginVersion: '6.6.1',
-      targets: [promQuery.target(
+    local steps =
+      if std.type(color) == 'string' then
+        [{ color: color, value: null }]
+      else
+        color;
+    statPanel.new(
+      panelTitle,
+      description=description,
+      allValues=allValues,
+      reducerFunction=reducerFunction,
+      fields=fields,
+      graphMode=graphMode,
+      colorMode=colorMode,
+      justifyMode=justifyMode,
+      textMode=textMode,
+      thresholdsMode=thresholdsMode,
+      unit=unit,
+      decimals=decimals,
+      min=min,
+      max=max,
+      noValue=noValue,
+      displayName=title,
+      orientation=orientation,
+    )
+    .addMappings(mappings)
+    .addThresholds(steps)
+    .addLinks(links)
+    .addTarget(
+      promQuery.target(
         query,
         legendFormat=legendFormat,
+        format=format,
         instant=instant,
         interval=interval,
-        intervalFactor=intevalFactor,
-      )],
-      title: panelTitle,
-      type: 'stat',
-    },
+        intervalFactor=intervalFactor,
+      )
+    )
+    + panelOverrides(stableId),
 
+  gaugePanel(
+    title,
+    query,
+    legendFormat='',
+    format='time_series',
+    description='',
+    color='green',
+    unit='percent',
+    min=0,
+    max=100,
+    decimals=null,
+    instant=true,
+    interval='1m',
+    intervalFactor=3,
+    reducerFunction='lastNotNull',
+    mappings=[],
+    thresholdsMode='absolute',
+    colorMode='thresholds',
+    noValue=null,
+    links=[],
+    stableId=null,
+  )::
+    local steps =
+      if std.type(color) == 'string' then
+        [{ color: color, value: null }]
+      else
+        color;
+    gaugePanel.new(
+      title,
+      description=description,
+      allValues=false,
+      reducerFunction=reducerFunction,
+      thresholdsMode=thresholdsMode,
+      min=min,
+      max=max,
+      unit=unit,
+      decimals=decimals,
+      noValue=noValue,
+    )
+    .addMappings(mappings)
+    .addThresholds(steps)
+    .addLinks(links)
+    .addTarget(
+      promQuery.target(
+        query,
+        legendFormat=legendFormat,
+        format=format,
+        instant=instant,
+        interval=interval,
+        intervalFactor=intervalFactor,
+      )
+    )
+    + {
+      fieldConfig+: {
+        defaults+: {
+          color+: {
+            mode: colorMode,
+          },
+        },
+      },
+    }
+    + panelOverrides(stableId),
   text:: text.new,
 }

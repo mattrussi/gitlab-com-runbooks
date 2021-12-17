@@ -83,8 +83,8 @@ local startedJobsCounter =
     colorMode='value',
     instant=false,
     interval='1d',
-    intevalFactor=1,
-    calcs=['sum'],
+    intervalFactor=1,
+    reducerFunction='sum',
     justifyMode='center',
   );
 
@@ -154,8 +154,8 @@ local finishedJobsMinutesIncreaseCounter =
     colorMode='value',
     instant=false,
     interval='1d',
-    intevalFactor=1,
-    calcs=['sum'],
+    intervalFactor=1,
+    reducerFunction='sum',
     justifyMode='center',
   );
 

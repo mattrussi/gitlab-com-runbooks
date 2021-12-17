@@ -122,8 +122,7 @@ basic.dashboard(
         label: attribute.label,
         default: attribute.default,
       },
-      title=attribute.title,
-      panelTitle='Worker Attribute: ' + attribute.title,
+      title='Worker Attribute: ' + attribute.title,
       color=attribute.color,
       legendFormat='{{ %s }} ({{ worker }})' % [attribute.label],
       links=attribute.links
