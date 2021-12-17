@@ -35,17 +35,16 @@ local layout = import 'grafana/layout.libsonnet';
         legend_show=false,
         format='ops'
       ),
-      basic.singlestat(
-        title='Hit %',
+      basic.gaugePanel(
+        'Hit %',
         query='sum(rate(registry_storage_cache_total{cluster=~"$cluster", environment="$environment", namespace="$namespace", stage="$stage", exported_type="Hit"}[$__interval])) / sum(rate(registry_storage_cache_total{cluster=~"$cluster", environment="$environment", namespace="$namespace", stage="$stage", exported_type="Request"}[$__interval]))',
-        colors=[
-          colorScheme.criticalColor,
-          colorScheme.errorColor,
-          colorScheme.normalRangeColor,
+        max=1,
+        unit='percentunit',
+        color=[
+          { color: colorScheme.criticalColor, value: null },
+          { color: colorScheme.errorColor, value: 0.5 },
+          { color: colorScheme.normalRangeColor, value: 0.75 },
         ],
-        gaugeMaxValue=1,
-        gaugeShow=true,
-        thresholds='0.5,0.75',
       ),
     ], cols=3, rowHeight=10, startRow=startRow),
 

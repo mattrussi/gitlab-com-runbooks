@@ -174,8 +174,8 @@ local runnerManagersCounter =
     colorMode='value',
     instant=true,
     interval='1d',
-    intevalFactor=1,
-    calcs=['last'],
+    intervalFactor=1,
+    reducerFunction='last',
     justifyMode='center',
   );
 

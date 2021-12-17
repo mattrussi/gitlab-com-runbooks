@@ -129,46 +129,30 @@ local serviceRow(service) =
 local serviceRows = std.map(serviceRow, services);
 
 // Stat panel used by top-level Auto-deploy Pressure and New Sentry issues
-local statPanel(
-  title,
-  description='',
-  query='',
-  legendFormat='',
-  max_value=10000,
-  thresholds={
-    mode: 'absolute',
-    steps: [
-      { color: 'green', value: null },
-    ],
-  },
-  links=[],
-  unit=''
-      ) =
-  {
-    description: description,
-    fieldConfig: {
-      values: false,
-      defaults: {
-        decimals: 0,
-        mappings: [],
-        min: 0,
-        thresholds: thresholds,
-        unit: unit,
-      },
-    },
-    links: links,
-    options: {
-      colorMode: 'value',
-      graphMode: 'area',
-      justifyMode: 'auto',
-      orientation: 'horizontal',
-      reduceOptions: { calcs: ['lastNotNull'] },
-    },
-    pluginVersion: '7.0.3',
-    targets: [promQuery.target(query, legendFormat=legendFormat)],
-    title: title,
-    type: 'stat',
-  };
+local
+  statPanel(
+    title,
+    description='',
+    query='',
+    legendFormat='',
+    links=[],
+    unit=''
+  ) =
+    basic.statPanel(
+      '',
+      title,
+      description=description,
+      query=query,
+      instant=false,
+      color='green',
+      decimals=0,
+      min=0,
+      colorMode='value',
+      graphMode='area',
+      orientation='horizontal',
+      unit=unit,
+      links=links,
+    );
 
 basic.dashboard(
   'Kubernetes Migration Overview',
@@ -226,11 +210,12 @@ basic.dashboard(
     ],
     // CPU utilization
     [
-      basic.singlestat(
-        title='CPU utilization',
+      basic.gaugePanel(
+        'CPU utilization',
+        description='Average CPU utilization',
         query='avg(instance:node_cpu_utilization:ratio{type!~"praefect|camoproxy"})',
-        gaugeMaxValue=1,
-        gaugeShow=true,
+        max=1,
+        unit='percentunit',
       ),
     ],
     [
@@ -244,11 +229,12 @@ basic.dashboard(
     ],
     // Memory utilization
     [
-      basic.singlestat(
-        title='Avg Memory Utilization',
+      basic.gaugePanel(
+        title='Memory utilization',
+        description='Average memory utilization',
         query='avg(instance:node_memory_utilization:ratio{type!~"praefect|camoproxy", env="$environment"})',
-        gaugeMaxValue=1,
-        gaugeShow=true,
+        max=1,
+        unit='percentunit',
       ),
     ],
 
@@ -261,7 +247,7 @@ basic.dashboard(
 // ----------------------------------------------------------------------------
 
 .addPanel(
-  row.new(title='☸️Kubernetes Cluster'),
+  row.new(title='☸️ Kubernetes Cluster'),
   gridPos={ x: 0, y: 2, w: 24, h: 12 },
 )
 .addPanels(
@@ -277,11 +263,12 @@ basic.dashboard(
 
     // CPU Utilization
     [
-      basic.singlestat(
-        title='Avg CPU utilization',
+      basic.gaugePanel(
+        'CPU utilization',
+        description='Average CPU utilization',
         query='avg(instance:node_cpu_utilization:ratio{cluster!="", env="$environment"})',
-        gaugeMaxValue=1,
-        gaugeShow=true,
+        max=1,
+        unit='percentunit',
       ),
     ],
     [
@@ -295,11 +282,12 @@ basic.dashboard(
     ],
     // Memory utilization
     [
-      basic.singlestat(
-        title='Avg Memory Utilization',
+      basic.gaugePanel(
+        'Memory utilization',
+        description='Average memory utilization',
         query='avg(instance:node_memory_utilization:ratio{cluster!="", env="$environment"})',
-        gaugeMaxValue=1,
-        gaugeShow=true,
+        max=1,
+        unit='percentunit',
       ),
     ],
 
@@ -312,7 +300,7 @@ basic.dashboard(
 // ----------------------------------------------------------------------------
 
 .addPanel(
-  row.new(title='☸️Pods: replicas, CPUs and Memory in use by Service'),
+  row.new(title='☸️ Pods: replicas, CPUs and Memory in use by Service'),
   gridPos={ x: 0, y: 3, w: 24, h: 1 }
 )
 .addPanels(

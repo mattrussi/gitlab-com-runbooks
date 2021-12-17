@@ -1,8 +1,10 @@
 local sliPromql = import './sli_promql.libsonnet';
+local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
 local multiburnFactors = import 'mwmbr/multiburn_factors.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local objects = import 'utils/objects.libsonnet';
+local statPanel = grafana.statPanel;
 
 local descriptionMappings = [
   /* 0 */
@@ -181,55 +183,47 @@ local errorRateStatusQuery(selectorHash, type, aggregationSet) =
 
 
 local statusDescriptionPanel(legendFormat, query) =
-  {
-    type: 'stat',
-    title: '',
-    targets: [promQuery.target(query, legendFormat=legendFormat, instant=true)],
-    pluginVersion: '6.6.1',
-    links: [],
-    options: {
-      graphMode: 'none',
-      colorMode: 'background',
-      justifyMode: 'auto',
-      fieldOptions: {
-        values: false,
-        calcs: [
-          'lastNotNull',
-        ],
-        defaults: {
-          thresholds: {
-            mode: 'absolute',
-            steps: std.mapWithIndex(
-              function(index, v)
-                {
-                  value: index,
-                  color: v.color,
-                },
-              descriptionMappings
-            ),
-          },
-          mappings: [
-            {
-              type: 'value',
-              options: objects.fromPairs(
-                std.mapWithIndex(
-                  function(index, v)
-                    [index, v { index: index }]
-                  , descriptionMappings
-                )
-              ),
-            },
-          ],
-          unit: 'none',
-          nullValueMode: 'connected',
-          title: 'Status',
-          links: [],
+  statPanel.new(
+    '',
+    allValues=false,
+    reducerFunction='lastNotNull',
+    graphMode='none',
+    colorMode='background',
+    justifyMode='auto',
+    thresholdsMode='absolute',
+    unit='none',
+    displayName='Status',
+    orientation='vertical',
+  )
+  .addMapping(
+    {
+      type: 'value',
+      options: objects.fromPairs(
+        std.mapWithIndex(
+          function(index, v)
+            [index, v { index: index }],
+          descriptionMappings
+        )
+      ),
+    }
+  )
+  .addThresholds(
+    std.mapWithIndex(
+      function(index, v)
+        {
+          value: index,
+          color: v.color,
         },
-        overrides: [],
-      },
-      orientation: 'vertical',
-    },
-  };
+      descriptionMappings
+    ),
+  )
+  .addTarget(
+    promQuery.target(
+      query,
+      legendFormat=legendFormat,
+      instant=true
+    )
+  );
 
 {
   apdexStatusDescriptionPanel(name, selectorHash, aggregationSet)::

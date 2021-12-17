@@ -271,7 +271,6 @@ local multiburnRateAlertsDashboard(
           description='Availability',
           query=slaQuery,
           legendFormat='{{ type }} service monitoring SLO',
-          fieldTitle='SLO for the $type service'
         ),
         grafana.text.new(
           title='Help',

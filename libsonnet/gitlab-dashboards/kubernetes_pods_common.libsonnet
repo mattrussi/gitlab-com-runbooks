@@ -55,64 +55,100 @@ local generalGraphPanel(
 
   deployment(startRow, deploymentKind='Deployment')::
     layout.grid([
-      basic.singlestat(
-        title='Deployment Memory Usage',
+      basic.gaugePanel(
+        'Deployment Memory Usage',
         query='sum (container_memory_working_set_bytes{env=~"$environment", pod=~"^$' + deploymentKind + '.*$", kubernetes_io_hostname=~"^$Node$", pod!="", cluster="$cluster", namespace="$namespace"}) / sum (kube_node_status_allocatable{resource="memory", unit= "byte", env=~"$environment", node=~"^$Node.*$"}) * 100',
-        format='percent',
-        gaugeShow=true,
-        thresholds='65,90',
+        instant=false,
+        unit='percent',
+        color=[
+          { color: 'green', value: null },
+          { color: 'orange', value: 65 },
+          { color: 'red', value: 90 },
+        ],
       ),
-      basic.singlestat(
-        title='Deployment CPU Usage',
+      basic.gaugePanel(
+        'Deployment CPU Usage',
         query='sum (rate (container_cpu_usage_seconds_total{env=~"$environment", pod=~"^$' + deploymentKind + '.*$", cluster="$cluster", kubernetes_io_hostname=~"^$Node$"}[2m])) / sum (machine_cpu_cores{env=~"$environment", cluster="$cluster", kubernetes_io_hostname=~"^$Node$"}) * 100',
-        format='percentunit',
-        gaugeMaxValue=1,
-        gaugeShow=true,
-        thresholds='.65,.90',
+        instant=false,
+        unit='percentunit',
+        max=1,
+        color=[
+          { color: 'green', value: null },
+          { color: 'orange', value: 0.65 },
+          { color: 'red', value: 0.90 },
+        ],
       ),
-      basic.singlestat(
-        title='Unavailable Replicas',
-        query='((sum(kube_deployment_status_replicas{env=~"$environment", deployment=~".*$Deployment", cluster="$cluster", namespace="$namespace"}) or vector(0)) - ((sum(kube_deployment_status_replicas_available{env=~"$environment", deployment=~".*$Deployment", cluster="$cluster", namespace="$namespace"}) or vector(0)))) / (sum(kube_deployment_status_replicas{env=~"$environment", deployment=~".*$Deployment", cluster="$cluster", namespace="$namespace"}) or vector(0))',
-        gaugeShow=true,
-        thresholds='1,30',
+      basic.gaugePanel(
+        'Unavailable Replicas',
+        query='((sum(kube_deployment_status_replicas{env=~"$environment", deployment=~"$Deployment.*", cluster="$cluster", namespace="$namespace"}) or vector(0)) - ((sum(kube_deployment_status_replicas_available{env=~"$environment", deployment=~"$Deployment.*", cluster="$cluster", namespace="$namespace"}) or vector(0)))) / (sum(kube_deployment_status_replicas{env=~"$environment", deployment=~"$Deployment.*", cluster="$cluster", namespace="$namespace"}) or vector(0))',
+        instant=false,
+        unit='none',
+        decimals=0,
+        color=[
+          { color: 'green', value: null },
+          { color: 'orange', value: 1 },
+          { color: 'red', value: 30 },
+        ],
       ),
     ], cols=3, rowHeight=5, startRow=startRow),
 
   status(startRow, deploymentKind='Deployment')::
     layout.grid([
-      basic.singlestat(
-        title='Memory Used',
+      basic.statPanel(
+        '',
+        'Memory Used',
+        color='',
         query='sum (container_memory_working_set_bytes{env=~"$environment", pod=~"^$' + deploymentKind + '.*$", kubernetes_io_hostname=~"^$Node$", pod!="", cluster="$cluster", namespace="$namespace"})',
-        format='bytes',
+        instant=false,
+        unit='bytes',
+        decimals=2,
+        colorMode='none',
       ),
-      basic.singlestat(
-        title='Memory Total (cluster)',
+      basic.statPanel(
+        '',
+        'Memory Total (cluster)',
+        color='',
         query='sum (kube_node_status_allocatable{resource="memory", unit="byte", env=~"$environment", cluster="$cluster", node=~"^$Node.*$"})',
-        format='bytes',
+        instant=false,
+        unit='bytes',
+        decimals=2,
+        colorMode='none',
       ),
-      basic.singlestat(
-        title='CPU Used',
+      basic.statPanel(
+        '',
+        'CPU Cores Used',
+        color='',
         query='sum (rate (container_cpu_usage_seconds_total{env=~"$environment", pod=~"^$' + deploymentKind + '.*$", kubernetes_io_hostname=~"^$Node$", cluster="$cluster", namespace="$namespace"}[1m]))',
-        format='none',
-        postfix='cores',
+        instant=false,
+        unit='none',
+        colorMode='none'
       ),
-      basic.singlestat(
-        title='CPU Total (cluster)',
+      basic.statPanel(
+        '',
+        'CPU Cores Total (cluster)',
+        color='',
         query='sum (machine_cpu_cores{env=~"$environment", cluster="$cluster", kubernetes_io_hostname=~"^$Node$"})',
-        format='none',
-        postfix='cores',
+        instant=false,
+        unit='none',
+        colorMode='none',
       ),
-      basic.singlestat(
-        title='Available (cluster)',
-        query='sum(kube_deployment_status_replicas_available{env=~"$environment", deployment=~".*$Deployment", cluster="$cluster", namespace="$namespace"})',
-        format='none',
-        postfix='Pods',
+      basic.statPanel(
+        '',
+        'Pods available (cluster)',
+        color='',
+        query='sum(kube_deployment_status_replicas_available{env=~"$environment", deployment=~"$Deployment.*", cluster="$cluster", namespace="$namespace"})',
+        instant=false,
+        unit='none',
+        colorMode='none',
       ),
-      basic.singlestat(
-        title='Total (cluster)',
-        query='sum(kube_deployment_status_replicas{env=~"$environment", deployment=~".*$Deployment", cluster="$cluster", namespace="$namespace"})',
-        format='none',
-        postfix='Pods',
+      basic.statPanel(
+        '',
+        'Pods total (cluster)',
+        color='',
+        query='sum(kube_deployment_status_replicas{env=~"$environment", deployment=~"$Deployment.*", cluster="$cluster", namespace="$namespace"})',
+        instant=false,
+        unit='none',
+        colorMode='none',
       ),
     ], cols=6, rowHeight=3, startRow=startRow + 1),
 
@@ -190,21 +226,21 @@ local generalGraphPanel(
       )
       .addTarget(
         promQuery.target(
-          'sum(label_replace(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate{env=~"$environment"}, "pod", "$1", "pod", "(.*)") * on(namespace,pod) group_left(workload) mixin_pod_workload{env=~"$environment", workload=~"^$' + deploymentKind + '", cluster="$cluster", namespace="$namespace"}) by (pod)',
+          'sum(label_replace(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate{env=~"$environment"}, "pod", "$1", "pod", "(.*)") * on(namespace,pod) group_left(workload) mixin_pod_workload{env=~"$environment", workload=~"^$' + deploymentKind + '.*", cluster="$cluster", namespace="$namespace"}) by (pod)',
           format='table',
           instant=true,
         )
       )
       .addTarget(
         promQuery.target(
-          'sum(kube_pod_container_resource_requests{resource="cpu", unit="core", env=~"$environment"} * on(namespace,pod) group_left(workload) mixin_pod_workload{env=~"$environment", workload=~"^$' + deploymentKind + '", cluster="$cluster", namespace="$namespace"}) by (pod)',
+          'sum(kube_pod_container_resource_requests{resource="cpu", unit="core", env=~"$environment"} * on(namespace,pod) group_left(workload) mixin_pod_workload{env=~"$environment", workload=~"^$' + deploymentKind + '.*", cluster="$cluster", namespace="$namespace"}) by (pod)',
           format='table',
           instant=true,
         )
       )
       .addTarget(
         promQuery.target(
-          'sum(label_replace(namespace_pod_container:container_cpu_usage_seconds_total:sum_rate{env=~"$environment"}, "pod", "$1", "pod", "(.*)") * on(pod) group_left(workload) mixin_pod_workload{env=~"$environment", workload=~"^$' + deploymentKind + '", cluster="$cluster", namespace="$namespace"}) by (pod) / sum(kube_pod_container_resource_requests{resource="cpu", unit="core", env=~"$environment"} * on(pod) group_left(workload) mixin_pod_workload{env=~"$environment", workload=~"^$' + deploymentKind + '", cluster="$cluster", namespace="$namespace"}) by (pod)',
+          'sum(label_replace(namespace_pod_container:container_cpu_usage_seconds_total:sum_rate{env=~"$environment"}, "pod", "$1", "pod", "(.*)") * on(pod) group_left(workload) mixin_pod_workload{env=~"$environment", workload=~"^$' + deploymentKind + '.*", cluster="$cluster", namespace="$namespace"}) by (pod) / sum(kube_pod_container_resource_requests{resource="cpu", unit="core", env=~"$environment"} * on(pod) group_left(workload) mixin_pod_workload{env=~"$environment", workload=~"^$' + deploymentKind + '.*", cluster="$cluster", namespace="$namespace"}) by (pod)',
           format='table',
           instant=true,
         )
@@ -269,21 +305,21 @@ local generalGraphPanel(
       )
       .addTarget(
         promQuery.target(
-          'sum(label_replace(container_memory_usage_bytes{env=~"$environment", container!=""}, "pod", "$1", "pod", "(.*)") * on(pod) group_left(workload) mixin_pod_workload{env=~"$environment", workload=~"^$' + deploymentKind + '", cluster="$cluster", namespace="$namespace"}) by (pod)',
+          'sum(label_replace(container_memory_usage_bytes{env=~"$environment", container!=""}, "pod", "$1", "pod", "(.*)") * on(pod) group_left(workload) mixin_pod_workload{env=~"$environment", workload=~"^$' + deploymentKind + '.*", cluster="$cluster", namespace="$namespace"}) by (pod)',
           format='table',
           instant=true,
         )
       )
       .addTarget(
         promQuery.target(
-          'sum(kube_pod_container_resource_requests{resource="memory", unit="byte", env=~"$environment"} * on(pod) group_left(workload) mixin_pod_workload{env=~"$environment", workload=~"^$' + deploymentKind + '", cluster="$cluster", namespace="$namespace"}) by (pod)',
+          'sum(kube_pod_container_resource_requests{resource="memory", unit="byte", env=~"$environment"} * on(pod) group_left(workload) mixin_pod_workload{env=~"$environment", workload=~"^$' + deploymentKind + '.*", cluster="$cluster", namespace="$namespace"}) by (pod)',
           format='table',
           instant=true,
         )
       )
       .addTarget(
         promQuery.target(
-          'sum(label_replace(container_memory_usage_bytes{env=~"$environment", container!=""}, "pod", "$1", "pod", "(.*)") * on(pod) group_left(workload) mixin_pod_workload{env=~"$environment", workload=~"^$' + deploymentKind + '", cluster="$cluster", namespace="$namespace"}) by (pod) /sum(kube_pod_container_resource_requests{resource="memory", unit="byte", env=~"$environment", } * on(pod) group_left(workload) mixin_pod_workload{env=~"$environment", workload=~"^$' + deploymentKind + '", cluster="$cluster", namespace="$namespace"}) by (pod)',
+          'sum(label_replace(container_memory_usage_bytes{env=~"$environment", container!=""}, "pod", "$1", "pod", "(.*)") * on(pod) group_left(workload) mixin_pod_workload{env=~"$environment", workload=~"^$' + deploymentKind + '.*", cluster="$cluster", namespace="$namespace"}) by (pod) /sum(kube_pod_container_resource_requests{resource="memory", unit="byte", env=~"$environment", } * on(pod) group_left(workload) mixin_pod_workload{env=~"$environment", workload=~"^$' + deploymentKind + '.*", cluster="$cluster", namespace="$namespace"}) by (pod)',
           format='table',
           instant=true,
         )
