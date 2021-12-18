@@ -2,6 +2,17 @@
 
 set -efo pipefail
 
+trap ctl_c INT
+
+ctl_c() {
+  echo "Tunnel is now closed, switching to empty context..."
+  kubectl config use-context empty
+}
+
+notify_shell() {
+  echo "Spinning up a tunnel, this will NOT drop you into a shell prompt, open a new terminal after connection is made..."
+}
+
 print_help() {
   echo >&2 "\"kube\" is used to help you setup and interect with our kubernetes clusters"
   echo >&2 "USAGE:"
@@ -42,6 +53,9 @@ setup() {
   gcloud container clusters get-credentials pre-gitlab-gke --region us-east1 --project gitlab-pre
   gcloud container clusters get-credentials ops-gitlab-gke --region us-east1 --project gitlab-ops
   gcloud container clusters get-credentials org-ci-gitlab-gke --region us-east1 --project gitlab-org-ci-0d24e2
+
+  echo "Creating empty cluster context for fallback purposes"
+  kubectl config set-context empty
 }
 
 use_cluster() {
@@ -54,56 +68,67 @@ use_cluster() {
     gstg)
       kubectx gke_gitlab-staging-1_us-east1_gstg-gitlab-gke
       api_ip=$(get_cluster_ip gke_gitlab-staging-1_us-east1_gstg-gitlab-gke)
+      notify_shell
       sshuttle -r console-01-sv-gstg.c.gitlab-staging-1.internal "${api_ip}/32"
       ;;
     gstg-us-east1-b)
       kubectx gke_gitlab-staging-1_us-east1-b_gstg-us-east1-b
       api_ip=$(get_cluster_ip gke_gitlab-staging-1_us-east1-b_gstg-us-east1-b)
+      notify_shell
       sshuttle -r console-01-sv-gstg.c.gitlab-staging-1.internal "${api_ip}/32"
       ;;
     gstg-us-east1-c)
       kubectx gke_gitlab-staging-1_us-east1-c_gstg-us-east1-c
       api_ip=$(get_cluster_ip gke_gitlab-staging-1_us-east1-c_gstg-us-east1-c)
+      notify_shell
       sshuttle -r console-01-sv-gstg.c.gitlab-staging-1.internal "${api_ip}/32"
       ;;
     gstg-us-east1-d)
       kubectx gke_gitlab-staging-1_us-east1-d_gstg-us-east1-d
       api_ip=$(get_cluster_ip gke_gitlab-staging-1_us-east1-d_gstg-us-east1-d)
+      notify_shell
       sshuttle -r console-01-sv-gstg.c.gitlab-staging-1.internal "${api_ip}/32"
       ;;
     gprd)
       kubectx gke_gitlab-production_us-east1_gprd-gitlab-gke
       api_ip=$(get_cluster_ip gke_gitlab-production_us-east1_gprd-gitlab-gke)
+      notify_shell
       sshuttle -r console-01-sv-gprd.c.gitlab-production.internal "${api_ip}/32"
       ;;
     gprd-us-east1-b)
       kubectx gke_gitlab-production_us-east1-b_gprd-us-east1-b
       api_ip=$(get_cluster_ip gke_gitlab-production_us-east1-b_gprd-us-east1-b)
+      notify_shell
       sshuttle -r console-01-sv-gprd.c.gitlab-production.internal "${api_ip}/32"
       ;;
     gprd-us-east1-c)
       kubectx gke_gitlab-production_us-east1-c_gprd-us-east1-c
       api_ip=$(get_cluster_ip gke_gitlab-production_us-east1-c_gprd-us-east1-c)
+      notify_shell
       sshuttle -r console-01-sv-gprd.c.gitlab-production.internal "${api_ip}/32"
       ;;
     gprd-us-east1-d)
       kubectx gke_gitlab-production_us-east1-d_gprd-us-east1-d
       api_ip=$(get_cluster_ip gke_gitlab-production_us-east1-d_gprd-us-east1-d)
+      notify_shell
       sshuttle -r console-01-sv-gprd.c.gitlab-production.internal "${api_ip}/32"
       ;;
     pre)
       kubectx gke_gitlab-pre_us-east1_pre-gitlab-gke
       api_ip=$(get_cluster_ip gke_gitlab-pre_us-east1_pre-gitlab-gke)
+      notify_shell
       sshuttle -r console-01-sv-pre.c.gitlab-pre.internal "${api_ip}/32"
       ;;
     ops)
       kubectx gke_gitlab-ops_us-east1_ops-gitlab-gke
       api_ip=$(get_cluster_ip gke_gitlab-ops_us-east1_ops-gitlab-gke)
+      notify_shell
       sshuttle -r bastion-01-inf-ops.c.gitlab-ops.internal "${api_ip}/32"
       ;;
     org-ci)
       kubectx gke_gitlab-org-ci-0d24e2_us-east1_org-ci-gitlab-gke
       api_ip=$(get_cluster_ip gke_gitlab-org-ci-0d24e2_us-east1_org-ci-gitlab-gke)
+      notify_shell
       sshuttle -r bastion-01-inf-org-ci.c.gitlab-org-ci-0d24e2.internal "${api_ip}/32"
       ;;
     *)
