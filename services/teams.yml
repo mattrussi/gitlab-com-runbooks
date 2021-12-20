@@ -264,8 +264,6 @@ teams:
   - rails_requests
 - name: pipeline_authoring
   product_stage_group: pipeline_authoring
-  ignored_components:
-  - rails_requests
 - name: pipeline_execution
   product_stage_group: pipeline_execution
   slack_channel: g_pipeline-execution

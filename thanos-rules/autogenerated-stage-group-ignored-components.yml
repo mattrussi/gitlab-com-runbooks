@@ -331,16 +331,6 @@ groups:
       product_stage: package
       stage_group: package
     expr: "1"
-- name: 'Stage group Ignored components: verify - Pipeline Authoring'
-  interval: 1m
-  partial_response_strategy: warn
-  rules:
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: rails_requests
-      product_stage: verify
-      stage_group: pipeline_authoring
-    expr: "1"
 - name: 'Stage group Ignored components: verify - Pipeline Execution'
   interval: 1m
   partial_response_strategy: warn
