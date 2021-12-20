@@ -10,64 +10,64 @@ basic.dashboard(
   time_from='now-7d',
 )
 .addPanel(
-   row.new(title='Snowplow'),
-    gridPos={
-      x: 0,
-      y: 0,
-      w: 24,
-      h: 1,
-    },
- )
- .addPanel(
-    basic.timeseries(
-      title='GitLab.com Backend sucessful events ratio 1h',
-      legendFormat='$environment',
-      format='percentunit',
-      max=1.2,
-      query=|||
-        sum(rate(gitlab_snowplow_successful_events_total{env="$environment"}[1h])) / sum(rate(gitlab_snowplow_events_total{env="$environment"}[1h]))
-      |||
-    ),
-    gridPos={
-      x: 0,
-      y: 0,
-      w: 12,
-      h: 15,
-    }
- )
- .addPanel(
-   basic.multiTimeseries(
-     title='GitLab.com Backend Events total 1h',
-     queries=[
-               {
-                 legendFormat: 'All',
-                 query: 'sum(increase(gitlab_snowplow_events_total{env="$environment"}[1h]))',
-               },
-               {
-                 legendFormat: 'Successfull',
-                 query: 'sum(increase(gitlab_snowplow_successful_events_total{env="$environment"}[1h]))',
-               },
-               {
-                 legendFormat: 'Failed',
-                 query: 'sum(increase(gitlab_snowplow_failed_events_total{env="$environment"}[1h]))',
-               }
-             ]
-   ),
-   gridPos={
-     x: 12,
-     y: 0,
-     w: 12,
-     h: 15,
-   }
+  row.new(title='Snowplow'),
+  gridPos={
+    x: 0,
+    y: 0,
+    w: 24,
+    h: 1,
+  },
+)
+.addPanel(
+  basic.timeseries(
+    title='GitLab.com Backend sucessful events ratio 1h',
+    legendFormat='$environment',
+    format='percentunit',
+    max=1.2,
+    query=|||
+      sum(rate(gitlab_snowplow_successful_events_total{env="$environment"}[1h])) / sum(rate(gitlab_snowplow_events_total{env="$environment"}[1h]))
+    |||
+  ),
+  gridPos={
+    x: 0,
+    y: 0,
+    w: 12,
+    h: 15,
+  }
+)
+.addPanel(
+  basic.multiTimeseries(
+    title='GitLab.com Backend Events total 1h',
+    queries=[
+      {
+        legendFormat: 'All',
+        query: 'sum(increase(gitlab_snowplow_events_total{env="$environment"}[1h]))',
+      },
+      {
+        legendFormat: 'Successfull',
+        query: 'sum(increase(gitlab_snowplow_successful_events_total{env="$environment"}[1h]))',
+      },
+      {
+        legendFormat: 'Failed',
+        query: 'sum(increase(gitlab_snowplow_failed_events_total{env="$environment"}[1h]))',
+      },
+    ]
+  ),
+  gridPos={
+    x: 12,
+    y: 0,
+    w: 12,
+    h: 15,
+  }
 )
 .addPanel(
   row.new(title='Redis Hll'),
-   gridPos={
-     x: 0,
-     y: 0,
-     w: 24,
-     h: 1,
-   },
+  gridPos={
+    x: 0,
+    y: 0,
+    w: 24,
+    h: 1,
+  },
 ).addPanel(
   basic.timeseries(
     title='GitLab.com events fired 1h',
