@@ -27,11 +27,18 @@ local es_query = {
               should: [
                 {
                   bool: {
-                    must: {
-                      match_phrase: {
-                        'json.exception.message': 'undefined method',
+                    should: [
+                      {
+                        match_phrase: {
+                          'json.exception.message': 'undefined method',
+                        },
                       },
-                    },
+                      {
+                        match_phrase: {
+                          'json.exception.message': 'undefined local variable',
+                        },
+                      },
+                    ],
                     must_not: {
                       match_phrase: {
                         'json.exception.message': '"nil:NilClass"',
@@ -41,11 +48,18 @@ local es_query = {
                 },
                 {
                   bool: {
-                    must: {
-                      match_phrase: {
-                        'json.error_message': 'undefined method',
+                    should: [
+                      {
+                        match_phrase: {
+                          'json.error_message': 'undefined method',
+                        },
                       },
-                    },
+                      {
+                        match_phrase: {
+                          'json.error_message': 'undefined local variable',
+                        },
+                      },
+                    ],
                     must_not: {
                       match_phrase: {
                         'json.error_message': '"nil:NilClass"',
@@ -94,11 +108,11 @@ local es_query = {
           attachments: [
             {
               title: ':spiral_note_pad: NoMethodError in Rails logs:',
-              text: 'https://nonprod-log.gitlab.net/goto/519d702153ace63726c53c006469bbc5',
+              text: 'https://nonprod-log.gitlab.net/goto/28345690-61e0-11ec-aec7-f387696fcb42',
             },
             {
               title: ':spiral_note_pad: NoMethodError in Sidekiq logs:',
-              text: 'https://nonprod-log.gitlab.net/goto/f9121db72183cf50d161b806f96ddb0b',
+              text: 'https://nonprod-log.gitlab.net/goto/3e0b0180-61e0-11ec-aec7-f387696fcb42',
             },
             {
               title: ':runbooks: Runbook:',
