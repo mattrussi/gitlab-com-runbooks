@@ -22,7 +22,7 @@ groups:
       type: api
     expr: |
       sum by (environment) (
-        rate(haproxy_backend_http_responses_total{backend=~"api|api_rate_limit",type="frontend"}[1m])
+        rate(haproxy_backend_http_responses_total{backend=~"api|api_rate_limit|main_api",type="frontend"}[1m])
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -51,7 +51,7 @@ groups:
     expr: |
       (
         sum by (environment) (
-          rate(haproxy_backend_http_responses_total{backend=~"api|api_rate_limit",code="5xx",type="frontend"}[1m])
+          rate(haproxy_backend_http_responses_total{backend=~"api|api_rate_limit|main_api",code="5xx",type="frontend"}[1m])
         )
       )
       or
@@ -238,7 +238,7 @@ groups:
       type: api
     expr: |
       sum by (environment) (
-        rate(haproxy_backend_http_responses_total{backend=~"api|api_rate_limit",type="frontend"}[5m])
+        rate(haproxy_backend_http_responses_total{backend=~"api|api_rate_limit|main_api",type="frontend"}[5m])
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -267,7 +267,7 @@ groups:
     expr: |
       (
         sum by (environment) (
-          rate(haproxy_backend_http_responses_total{backend=~"api|api_rate_limit",code="5xx",type="frontend"}[5m])
+          rate(haproxy_backend_http_responses_total{backend=~"api|api_rate_limit|main_api",code="5xx",type="frontend"}[5m])
         )
       )
       or
@@ -454,7 +454,7 @@ groups:
       type: api
     expr: |
       sum by (environment) (
-        rate(haproxy_backend_http_responses_total{backend=~"api|api_rate_limit",type="frontend"}[30m])
+        rate(haproxy_backend_http_responses_total{backend=~"api|api_rate_limit|main_api",type="frontend"}[30m])
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -483,7 +483,7 @@ groups:
     expr: |
       (
         sum by (environment) (
-          rate(haproxy_backend_http_responses_total{backend=~"api|api_rate_limit",code="5xx",type="frontend"}[30m])
+          rate(haproxy_backend_http_responses_total{backend=~"api|api_rate_limit|main_api",code="5xx",type="frontend"}[30m])
         )
       )
       or
@@ -670,7 +670,7 @@ groups:
       type: api
     expr: |
       sum by (environment) (
-        rate(haproxy_backend_http_responses_total{backend=~"api|api_rate_limit",type="frontend"}[1h])
+        rate(haproxy_backend_http_responses_total{backend=~"api|api_rate_limit|main_api",type="frontend"}[1h])
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -699,7 +699,7 @@ groups:
     expr: |
       (
         sum by (environment) (
-          rate(haproxy_backend_http_responses_total{backend=~"api|api_rate_limit",code="5xx",type="frontend"}[1h])
+          rate(haproxy_backend_http_responses_total{backend=~"api|api_rate_limit|main_api",code="5xx",type="frontend"}[1h])
         )
       )
       or
@@ -886,7 +886,7 @@ groups:
       type: api
     expr: |
       sum by (environment) (
-        rate(haproxy_backend_http_responses_total{backend=~"api|api_rate_limit",type="frontend"}[6h])
+        rate(haproxy_backend_http_responses_total{backend=~"api|api_rate_limit|main_api",type="frontend"}[6h])
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -915,7 +915,7 @@ groups:
     expr: |
       (
         sum by (environment) (
-          rate(haproxy_backend_http_responses_total{backend=~"api|api_rate_limit",code="5xx",type="frontend"}[6h])
+          rate(haproxy_backend_http_responses_total{backend=~"api|api_rate_limit|main_api",code="5xx",type="frontend"}[6h])
         )
       )
       or
