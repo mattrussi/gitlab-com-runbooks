@@ -51,11 +51,11 @@ groups:
       expr: |
         sum by (subscription_id) (
           avg_over_time(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_oldest_unacked_message_age[30m])
-        ) > 60
+        ) > 300
       for: 5m
       labels:
-        severity: s4
-        alert_type: cause
+        severity: s3
+        alert_type: symptom
       annotations:
         description: >
           PubSub messages are queuing up.  Messages in {{ $labels.subscription_id }} have been
