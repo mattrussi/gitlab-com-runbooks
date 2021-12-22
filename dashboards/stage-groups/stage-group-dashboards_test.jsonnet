@@ -186,7 +186,6 @@ test.suite({
       'graphql_queries SLI Apdex',
       'graphql_queries SLI RPS - Requests per Second',
       'Details',
-      'puma SLI Apdex',
       'puma SLI Error Ratio',
       'puma SLI RPS - Requests per Second',
       'Details',

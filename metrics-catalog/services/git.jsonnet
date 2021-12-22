@@ -211,13 +211,6 @@ metricsCatalog.serviceDefinition({
         Monitors Rails endpoints, running in the Git fleet, via the HTTP interface.
       |||,
 
-      apdex: histogramApdex(
-        histogram='http_request_duration_seconds_bucket',
-        selector=railsSelector,
-        satisfiedThreshold=1,
-        toleratedThreshold=10
-      ),
-
       requestRate: rateMetric(
         counter='http_requests_total',
         selector=railsSelector,
@@ -233,7 +226,6 @@ metricsCatalog.serviceDefinition({
       toolingLinks: [
         // Improve sentry link once https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/532 arrives
         toolingLinks.sentry(slug='gitlab/gitlabcom', type='git', variables=['environment', 'stage']),
-        toolingLinks.kibana(title='Rails', index='rails', type='git', slowRequestSeconds=10),
       ],
     },
 
@@ -267,6 +259,13 @@ metricsCatalog.serviceDefinition({
         monitoringThresholds+: {
           apdexScore: 0.997,
         },
+
+        toolingLinks: [
+          // TODO: These need to be defined in the appliation SLI and built using
+          // selectors using the appropriate fields
+          // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1411
+          toolingLinks.kibana(title='Rails', index='rails', type='git', slowRequestSeconds=1),
+        ],
       },
   },
 })
