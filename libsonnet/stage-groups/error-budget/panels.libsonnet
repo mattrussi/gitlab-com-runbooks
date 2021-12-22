@@ -326,27 +326,6 @@ local violationRateExplanation =
     |||,
   );
 
-local pumaThreshold =
-  local pumaServices = std.filter(
-    function(service)
-      std.objectHas(service.serviceLevelIndicators, 'puma') &&
-      std.objectHas(service.serviceLevelIndicators.puma, 'apdex'),
-    metricsCatalog.services
-  );
-  local pumaThresholds = std.map(
-    function(service)
-      service.serviceLevelIndicators.puma.apdex.satisfiedThreshold,
-    pumaServices,
-  );
-  local uniqueThresholds = std.set(pumaThresholds);
-  assert std.length(uniqueThresholds) == 1 :
-         |||
-    Multiple puma request thresholds not supported, please update the Kibana
-    visualisation for requests not meeting the apdex threshold. Perhaps
-    split up the table by json.type.
-  |||;
-  uniqueThresholds[0];
-
 local sidekiqDurationThresholdByFilter =
   local knownDurationThresholds = std.map(
     function(sloName)
@@ -394,9 +373,9 @@ local logLinks(featureCategories) =
         enabled: true,
         id: '3',
         params: {
-          customLabel: 'Operations over threshold (%is)' % pumaThreshold,
+          customLabel: 'Operations over threshold (1s)',
           field: 'json.duration_s',
-          json: '{"script": "doc[\'json.duration_s\'].value >= ' + pumaThreshold + ' ? 1 : 0"}',
+          json: '{"script": "doc[\'json.duration_s\'].value >= 1 ? 1 : 0"}',
         },
         schema: 'metric',
         type: 'sum',
@@ -407,7 +386,7 @@ local logLinks(featureCategories) =
         params: {
           customLabel: 'Operations over error budget threshold (5s)',
           field: 'json.duration_s',
-          json: '{"script": "doc[\'json.duration_s\'].value >= ' + 5 + ' ? 1 : 0"}',
+          json: '{"script": "doc[\'json.duration_s\'].value >= 5 ? 1 : 0"}',
         },
         schema: 'metric',
         type: 'sum',
@@ -449,9 +428,9 @@ local logLinks(featureCategories) =
       This shows the number of requests exceeding the request duration thresholds
       per endpoint over the past 7 days.
 
-      This is the only threshold at the moment. We're discussing making
-      it configurable in [this issue](%(thresholdsCounterIssue)s). Let us know
-      if you know of an endpoint that would need this kind of customization.
+      This shows all requests exceeding 1s and 5s durations. We will make this
+      take the configured [request urgency](%(requestUrgencyLink)s) into account in
+      [this issue](%(scalability1478)s).
 
       ##### [Puma Errors](%(pumaErrorsLink)s): failing requests
 
@@ -472,11 +451,11 @@ local logLinks(featureCategories) =
       its retries, this counts as 3 failures towards the budget.
     ||| % {
       pumaApdexLink: pumaApdexTable,
+      requestUrgencyLink: 'https://docs.gitlab.com/ee/development/application_slis/rails_request_apdex.html#adjusting-request-urgency',
+      scalability1478: 'https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1478',
       pumaErrorsLink: pumaErrorsTable,
       sidekiqErrorsLink: sidekiqErrorsTable,
       sidekiqApdexLink: sidekiqApdexTables,
-      pumaThreshold: pumaThreshold,
-      thresholdsCounterIssue: 'https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1099',
       sidekiqUrgentThreshold: sidekiqHelpers.slos.urgent.executionDurationSeconds,
       sidekiqNormalThreshold: sidekiqHelpers.slos.lowUrgency.executionDurationSeconds,
     },
