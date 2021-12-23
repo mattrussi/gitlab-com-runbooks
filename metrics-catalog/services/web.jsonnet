@@ -69,7 +69,7 @@ metricsCatalog.serviceDefinition({
       userImpacting=true,
       featureCategory='not_owned',
       stageMappings={
-        main: { backends: ['web'], toolingLinks: [] },  // What to do with `429_slow_down`?
+        main: { backends: ['web', 'main_web'], toolingLinks: [] },  // What to do with `429_slow_down`?
         cny: { backends: ['canary_web'], toolingLinks: [] },
       },
       selector={ type: 'frontend' },

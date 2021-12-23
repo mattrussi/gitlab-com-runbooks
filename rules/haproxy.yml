@@ -57,8 +57,8 @@ groups:
       )
 
   - alert: HighWebErrorRate
-    expr: sum(backend_code:haproxy_server_http_responses_total:irate1m{backend="web",code="5xx",tier="lb"}) by (environment)
-      - sum(backend_code:haproxy_server_http_responses_total:irate1m{backend="web",code!="5xx",tier="lb"}) by (environment)
+    expr: sum(backend_code:haproxy_server_http_responses_total:irate1m{backend=~"web|main_web",code="5xx",tier="lb"}) by (environment)
+      - sum(backend_code:haproxy_server_http_responses_total:irate1m{backend=~"web|main_web",code!="5xx",tier="lb"}) by (environment)
       > 0
     for: 15s
     labels:

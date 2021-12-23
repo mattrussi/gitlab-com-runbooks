@@ -69,7 +69,7 @@ metricsCatalog.serviceDefinition({
       featureCategory='not_owned',
       stageMappings={
         main: {
-          backends: ['api', 'api_rate_limit'],
+          backends: ['api', 'api_rate_limit', 'main_api'],
           toolingLinks: [
             toolingLinks.bigquery(title='Main-stage: top paths for 5xx errors', savedQuery='805818759045:342973e81d4a481d8055b43564d09728'),
           ],
