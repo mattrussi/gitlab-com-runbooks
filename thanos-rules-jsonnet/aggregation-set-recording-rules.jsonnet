@@ -147,7 +147,7 @@ local groupsForApplicationSli(sli) =
       ]
     ),
 
-  'aggregated-stage-group-metrics.yml':
+  'aggregated-component-stage-group-metrics.yml':
     outputPromYaml(
       [
         {
@@ -173,7 +173,7 @@ local groupsForApplicationSli(sli) =
       ]
     ),
 
-  'aggregated-stage-group-metrics-without-component.yml':
+  'aggregated-stage-group-metrics.yml':
     outputPromYaml(
       [{
         name: aggregationSets.stageGroupSLIs.name,
