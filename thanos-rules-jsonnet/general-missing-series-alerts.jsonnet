@@ -112,7 +112,7 @@ local rules = [
       {
         name: 'missing_series_alerts.rules',
         partial_response_strategy: 'warn',
-        rules: [alerts.processAlertRules(rules)],
+        rules: alerts.processAlertRules(rules),
       },
     ],
   }),
