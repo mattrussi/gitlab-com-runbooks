@@ -82,5 +82,24 @@ test.suite({
     actual: selectors.merge({ a: 1 }, { b: '2' }),
     expect: { a: 1, b: '2' },
   },
-
+  testWithout: {
+    actual: selectors.without({ a: 1, b: 2 }, ['b']),
+    expect: { a: 1 },
+  },
+  testWithoutEmptyArray: {
+    actual: selectors.without({ a: 1, b: 2 }, []),
+    expect: { a: 1, b: 2 },
+  },
+  testWithoutEmptyObject: {
+    actual: selectors.without({}, ['c', 'd']),
+    expect: {},
+  },
+  testWithoutNull: {
+    actual: selectors.without(null, ['c', 'd']),
+    expect: null,
+  },
+  testWithoutStringAndEmpty: {
+    actual: selectors.without('some string', []),
+    expect: 'some string',
+  },
 })

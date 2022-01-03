@@ -26,17 +26,17 @@ local resolveRateQuery(metricName, selector, rangeInterval, aggregationFunction=
     else
       aggregations.aggregateOverQuery(aggregationFunction, aggregationLabels, query);
 
-local generateApdexRatio(rateApdex, aggregationLabels, additionalSelectors, rangeInterval) =
+local generateApdexRatio(rateApdex, aggregationLabels, additionalSelectors, rangeInterval, withoutLabels=[]) =
   |||
     %(successRateQuery)s
     /
     %(weightQuery)s
   ||| % {
-    successRateQuery: rateApdex.successRateQuery(aggregationLabels, additionalSelectors, rangeInterval),
-    weightQuery: rateApdex.apdexWeightQuery(aggregationLabels, additionalSelectors, rangeInterval),
+    successRateQuery: rateApdex.successRateQuery(aggregationLabels, additionalSelectors, rangeInterval, withoutLabels=withoutLabels),
+    weightQuery: rateApdex.apdexWeightQuery(aggregationLabels, additionalSelectors, rangeInterval, withoutLabels=withoutLabels),
   };
 
-local generateApdexAttributionQuery(rateApdex, aggregationLabel, selector, rangeInterval) =
+local generateApdexAttributionQuery(rateApdex, aggregationLabel, selector, rangeInterval, withoutLabels) =
   |||
     (
       (
@@ -48,12 +48,12 @@ local generateApdexAttributionQuery(rateApdex, aggregationLabel, selector, range
       (
         %(aggregatedTotalQuery)s
       )
-    )
+    ) > 0
   ||| % {
-    splitTotalQuery: strings.indent(rateApdex.apdexWeightQuery([aggregationLabel], selector, rangeInterval), 4),
-    splitSuccessRateQuery: strings.indent(rateApdex.apdexSuccessRateQuery([aggregationLabel], selector, rangeInterval), 4),
+    splitTotalQuery: strings.indent(rateApdex.apdexWeightQuery([aggregationLabel], selector, rangeInterval, withoutLabels=withoutLabels), 4),
+    splitSuccessRateQuery: strings.indent(rateApdex.apdexSuccessRateQuery([aggregationLabel], selector, rangeInterval, withoutLabels=withoutLabels), 4),
     aggregationLabel: aggregationLabel,
-    aggregatedTotalQuery: strings.indent(rateApdex.apdexWeightQuery([], selector, rangeInterval), 4),
+    aggregatedTotalQuery: strings.indent(rateApdex.apdexWeightQuery([], selector, rangeInterval, withoutLabels=withoutLabels), 4),
   };
 {
   rateApdex(successRateMetric, operationRateMetric, selector=''):: {
@@ -61,41 +61,41 @@ local generateApdexAttributionQuery(rateApdex, aggregationLabel, selector, range
     operationRateMetric: operationRateMetric,
     selector: selector,
 
-    apdexSuccessRateQuery(aggregationLabels, selector, rangeInterval)::
+    apdexSuccessRateQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[])::
       resolveRateQuery(
         self.successRateMetric,
-        selectors.merge(self.selector, selector),
+        selectors.without(selectors.merge(self.selector, selector), withoutLabels),
         rangeInterval,
         aggregationLabels=aggregationLabels,
         aggregationFunction='sum',
       ),
-    apdexWeightQuery(aggregationLabels, selector, rangeInterval)::
+    apdexWeightQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[])::
       resolveRateQuery(
         self.operationRateMetric,
-        selectors.merge(self.selector, selector),
+        selectors.without(selectors.merge(self.selector, selector), withoutLabels),
         rangeInterval,
         aggregationLabels=aggregationLabels,
         aggregationFunction='sum'
       ),
-    apdexQuery(aggregationLabels, selector, rangeInterval)::
-      generateApdexRatio(self, aggregationLabels, selector, rangeInterval),
+    apdexQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[])::
+      generateApdexRatio(self, aggregationLabels, selector, rangeInterval, withoutLabels=withoutLabels),
 
-    apdexNumerator(selector, rangeInterval)::
+    apdexNumerator(selector, rangeInterval, withoutLabels=[])::
       resolveRateQuery(
         self.successRateMetric,
-        selectors.merge(self.selector, selector),
+        selectors.without(selectors.merge(self.selector, selector), withoutLabels),
         rangeInterval,
       ),
 
-    apdexDenominator(selector, rangeInterval)::
+    apdexDenominator(selector, rangeInterval, withoutLabels=[])::
       resolveRateQuery(
         self.operationRateMetric,
-        selectors.merge(self.selector, selector),
+        selectors.without(selectors.merge(self.selector, selector), withoutLabels),
         rangeInterval,
       ),
 
-    apdexAttribution(aggregationLabel, selector, rangeInterval)::
-      generateApdexAttributionQuery(self, aggregationLabel, selector, rangeInterval),
+    apdexAttribution(aggregationLabel, selector, rangeInterval, withoutLabels=[])::
+      generateApdexAttributionQuery(self, aggregationLabel, selector, rangeInterval, withoutLabels),
 
     // Only support reflection on hash selectors
     [if std.isObject(selector) then 'supportsReflection']():: {

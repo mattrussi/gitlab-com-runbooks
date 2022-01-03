@@ -10,13 +10,14 @@ local generateInstanceFilterQuery(instanceFilter) =
 
 
 // Generates a range-vector function using the provided functions
-local generateRangeFunctionQuery(rate, rangeFunction, additionalSelectors, rangeInterval) =
+local generateRangeFunctionQuery(rate, rangeFunction, additionalSelectors, rangeInterval, withoutLabels) =
   local selector = selectors.merge(rate.selector, additionalSelectors);
+  local selectorWithout = selectors.without(selector, withoutLabels);
 
   '%(rangeFunction)s(%(counter)s{%(selector)s}[%(rangeInterval)s])%(instanceFilterQuery)s' % {
     rangeFunction: rangeFunction,
     counter: rate.counter,
-    selector: selectors.serializeHash(selector),
+    selector: selectors.serializeHash(selectorWithout),
     rangeInterval: rangeInterval,
     instanceFilterQuery: generateInstanceFilterQuery(rate.instanceFilter),
   };
@@ -33,18 +34,18 @@ local generateRangeFunctionQuery(rate, rangeFunction, additionalSelectors, range
 
     // This creates a rate query of the form
     // rate(....{<selector>}[<rangeInterval>])
-    rateQuery(selector, rangeInterval)::
-      generateRangeFunctionQuery(self, 'rate', selector, rangeInterval),
+    rateQuery(selector, rangeInterval, withoutLabels=[])::
+      generateRangeFunctionQuery(self, 'rate', selector, rangeInterval, withoutLabels=withoutLabels),
 
     // This creates a increase query of the form
     // increase(....{<selector>}[<rangeInterval>])
-    increaseQuery(selector, rangeInterval)::
-      generateRangeFunctionQuery(self, 'increase', selector, rangeInterval),
+    increaseQuery(selector, rangeInterval, withoutLabels=[])::
+      generateRangeFunctionQuery(self, 'increase', selector, rangeInterval, withoutLabels=withoutLabels),
 
     // This creates an aggregated rate query of the form
     // sum by(<aggregationLabels>) (rate(....{<selector>}[<rangeInterval>]))
-    aggregatedRateQuery(aggregationLabels, selector, rangeInterval)::
-      local combinedSelector = selectors.merge(self.selector, selector);
+    aggregatedRateQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[])::
+      local combinedSelector = selectors.without(selectors.merge(self.selector, selector), withoutLabels);
 
       local resolvedRecordingRule = recordingRuleRegistry.resolveRecordingRuleFor(
         aggregationFunction='sum',
@@ -56,15 +57,15 @@ local generateRangeFunctionQuery(rate, rangeFunction, additionalSelectors, range
       );
 
       if resolvedRecordingRule == null then
-        local query = generateRangeFunctionQuery(self, 'rate', selector, rangeInterval);
+        local query = generateRangeFunctionQuery(self, 'rate', selector, rangeInterval, withoutLabels);
         aggregations.aggregateOverQuery('sum', aggregationLabels, query)
       else
         resolvedRecordingRule,
 
     // This creates an aggregated increase query of the form
     // sum by(<aggregationLabels>) (increase(....{<selector>}[<rangeInterval>]))
-    aggregatedIncreaseQuery(aggregationLabels, selector, rangeInterval)::
-      local query = generateRangeFunctionQuery(self, 'increase', selector, rangeInterval);
+    aggregatedIncreaseQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[])::
+      local query = generateRangeFunctionQuery(self, 'increase', selector, rangeInterval, withoutLabels=withoutLabels);
       aggregations.aggregateOverQuery('sum', aggregationLabels, query),
 
     // Only support reflection on hash selectors
@@ -97,8 +98,8 @@ local generateRangeFunctionQuery(rate, rangeFunction, additionalSelectors, range
 
     // This creates a rate query of the form
     // deriv(....{<selector>}[<rangeInterval>])
-    rateQuery(selector, rangeInterval)::
-      local query = generateRangeFunctionQuery(self, 'deriv', selector, rangeInterval);
+    rateQuery(selector, rangeInterval, withoutLabels=[])::
+      local query = generateRangeFunctionQuery(self, 'deriv', selector, rangeInterval, withoutLabels=withoutLabels);
       if self.clampMinZero then
         'clamp_min(%(query)s, 0)' % { query: query }
       else
@@ -106,13 +107,13 @@ local generateRangeFunctionQuery(rate, rangeFunction, additionalSelectors, range
 
     // This creates a increase query of the form
     // increase(....{<selector>}[<rangeInterval>])
-    increaseQuery(selector, rangeInterval)::
-      generateRangeFunctionQuery(self, 'increase', selector, rangeInterval),
+    increaseQuery(selector, rangeInterval, withoutLabels=[])::
+      generateRangeFunctionQuery(self, 'increase', selector, rangeInterval, withoutLabels=withoutLabels),
 
     // This creates an aggregated rate query of the form
     // sum by(<aggregationLabels>) (deriv(....{<selector>}[<rangeInterval>]))
-    aggregatedRateQuery(aggregationLabels, selector, rangeInterval)::
-      local query = generateRangeFunctionQuery(self, 'deriv', selector, rangeInterval);
+    aggregatedRateQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[])::
+      local query = generateRangeFunctionQuery(self, 'deriv', selector, rangeInterval, withoutLabels=withoutLabels);
       local clampedQuery = if self.clampMinZero then
         'clamp_min(%(query)s, 0)' % { query: query }
       else
@@ -121,8 +122,8 @@ local generateRangeFunctionQuery(rate, rangeFunction, additionalSelectors, range
 
     // This creates an aggregated increase query of the form
     // sum by(<aggregationLabels>) (increase(....{<selector>}[<rangeInterval>]))
-    aggregatedIncreaseQuery(aggregationLabels, selector, rangeInterval)::
-      local query = generateRangeFunctionQuery(self, 'increase', selector, rangeInterval);
+    aggregatedIncreaseQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[])::
+      local query = generateRangeFunctionQuery(self, 'increase', selector, rangeInterval, withoutLabels=withoutLabels);
       aggregations.aggregateOverQuery('sum', aggregationLabels, query),
 
     // Only support reflection on hash selectors

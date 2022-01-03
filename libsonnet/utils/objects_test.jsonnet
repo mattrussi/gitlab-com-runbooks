@@ -23,4 +23,16 @@ test.suite({
     actual: objects.objectWithout(testThing { foo: 'bar' }, 'foo').hello('world'),
     expect: ['world'],
   },
+  testFromPairsRoundTrip: {
+    actual: objects.fromPairs(objects.toPairs({ '1': 1, '2': [2, 3], '3': { d: 4 } })),
+    expect: { '1': 1, '2': [2, 3], '3': { d: 4 } },
+  },
+  testToPairs: {
+    actual: objects.toPairs({ a: 1, b: [2, 3], c: { d: 4 } }),
+    expect: [['a', 1], ['b', [2, 3]], ['c', { d: 4 }]],
+  },
+  testToPairsRoundTrip: {
+    actual: objects.toPairs(objects.fromPairs([['a', 1], ['b', [2, 3]], ['c', { d: 4 }]])),
+    expect: [['a', 1], ['b', [2, 3]], ['c', { d: 4 }]],
+  },
 })
