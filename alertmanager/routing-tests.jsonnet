@@ -415,5 +415,9 @@ generateTests([
       'production_slack_channel',
     ],
   },
-
+  {
+    name: 'slo_alert=yes, env=staging',
+    labels: { env: 'gstg', slo_alert: 'yes' },
+    receivers: ['feed_alerts_staging', 'blackhole'],
+  },
 ])

@@ -16,6 +16,7 @@ local slackChannels = [
   { name: 'prod_alerts_slack_channel', channel: 'alerts' },
   { name: 'production_slack_channel', channel: 'production', sendResolved: false },
   { name: 'nonprod_alerts_slack_channel', channel: 'alerts-nonprod' },
+  { name: 'feed_alerts_staging', channel: 'feed_alerts_staging', sendResolved: false },
 ];
 
 local SnitchReceiver(channel) =
@@ -368,7 +369,16 @@ local routingTree = Route(
       },
     )
     for team in teamsWithAlertingSlackChannels()
-  ] + [
+  ] +
+  [
+    // Route SLO alerts for staging to `feed_alerts_staging`
+    Route(
+      receiver='feed_alerts_staging',
+      continue=true,
+      matchers={ env: 'gstg', slo_alert: 'yes' },
+    ),
+  ]
+  + [
     // Terminators go last
     Route(
       receiver='blackhole',
