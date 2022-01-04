@@ -7,6 +7,12 @@ groups:
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
+      component: graphql_queries
+      product_stage: deploy
+      stage_group: 5-min-app
+    expr: "1"
+  - record: gitlab:ignored_component:stage_group
+    labels:
       component: rails_requests
       product_stage: deploy
       stage_group: 5-min-app
@@ -15,6 +21,12 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
+  - record: gitlab:ignored_component:stage_group
+    labels:
+      component: graphql_queries
+      product_stage: manage
+      stage_group: access
+    expr: "1"
   - record: gitlab:ignored_component:stage_group
     labels:
       component: rails_requests
@@ -27,6 +39,12 @@ groups:
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
+      component: graphql_queries
+      product_stage: growth
+      stage_group: activation
+    expr: "1"
+  - record: gitlab:ignored_component:stage_group
+    labels:
       component: rails_requests
       product_stage: growth
       stage_group: activation
@@ -35,6 +53,12 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
+  - record: gitlab:ignored_component:stage_group
+    labels:
+      component: graphql_queries
+      product_stage: growth
+      stage_group: adoption
+    expr: "1"
   - record: gitlab:ignored_component:stage_group
     labels:
       component: rails_requests
@@ -47,6 +71,12 @@ groups:
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
+      component: graphql_queries
+      product_stage: ModelOps
+      stage_group: applied_ml
+    expr: "1"
+  - record: gitlab:ignored_component:stage_group
+    labels:
       component: rails_requests
       product_stage: ModelOps
       stage_group: applied_ml
@@ -55,6 +85,12 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
+  - record: gitlab:ignored_component:stage_group
+    labels:
+      component: graphql_queries
+      product_stage: plan
+      stage_group: certify
+    expr: "1"
   - record: gitlab:ignored_component:stage_group
     labels:
       component: rails_requests
@@ -67,6 +103,12 @@ groups:
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
+      component: graphql_queries
+      product_stage: create
+      stage_group: code_review
+    expr: "1"
+  - record: gitlab:ignored_component:stage_group
+    labels:
       component: rails_requests
       product_stage: create
       stage_group: code_review
@@ -75,6 +117,12 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
+  - record: gitlab:ignored_component:stage_group
+    labels:
+      component: graphql_queries
+      product_stage: manage
+      stage_group: compliance
+    expr: "1"
   - record: gitlab:ignored_component:stage_group
     labels:
       component: rails_requests
@@ -87,6 +135,12 @@ groups:
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
+      component: graphql_queries
+      product_stage: secure
+      stage_group: composition_analysis
+    expr: "1"
+  - record: gitlab:ignored_component:stage_group
+    labels:
       component: rails_requests
       product_stage: secure
       stage_group: composition_analysis
@@ -95,6 +149,12 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
+  - record: gitlab:ignored_component:stage_group
+    labels:
+      component: graphql_queries
+      product_stage: configure
+      stage_group: configure
+    expr: "1"
   - record: gitlab:ignored_component:stage_group
     labels:
       component: rails_requests
@@ -107,6 +167,12 @@ groups:
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
+      component: graphql_queries
+      product_stage: protect
+      stage_group: container_security
+    expr: "1"
+  - record: gitlab:ignored_component:stage_group
+    labels:
       component: rails_requests
       product_stage: protect
       stage_group: container_security
@@ -115,6 +181,12 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
+  - record: gitlab:ignored_component:stage_group
+    labels:
+      component: graphql_queries
+      product_stage: growth
+      stage_group: conversion
+    expr: "1"
   - record: gitlab:ignored_component:stage_group
     labels:
       component: rails_requests
@@ -127,6 +199,12 @@ groups:
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
+      component: graphql_queries
+      product_stage: enablement
+      stage_group: database
+    expr: "1"
+  - record: gitlab:ignored_component:stage_group
+    labels:
       component: rails_requests
       product_stage: enablement
       stage_group: database
@@ -135,6 +213,12 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
+  - record: gitlab:ignored_component:stage_group
+    labels:
+      component: graphql_queries
+      product_stage: ModelOps
+      stage_group: dataops
+    expr: "1"
   - record: gitlab:ignored_component:stage_group
     labels:
       component: rails_requests
@@ -147,6 +231,12 @@ groups:
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
+      component: graphql_queries
+      product_stage: platforms
+      stage_group: delivery
+    expr: "1"
+  - record: gitlab:ignored_component:stage_group
+    labels:
       component: rails_requests
       product_stage: platforms
       stage_group: delivery
@@ -155,6 +245,12 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
+  - record: gitlab:ignored_component:stage_group
+    labels:
+      component: graphql_queries
+      product_stage: enablement
+      stage_group: distribution_deploy
+    expr: "1"
   - record: gitlab:ignored_component:stage_group
     labels:
       component: rails_requests
@@ -167,6 +263,12 @@ groups:
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
+      component: graphql_queries
+      product_stage: secure
+      stage_group: dynamic_analysis
+    expr: "1"
+  - record: gitlab:ignored_component:stage_group
+    labels:
       component: rails_requests
       product_stage: secure
       stage_group: dynamic_analysis
@@ -175,6 +277,12 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
+  - record: gitlab:ignored_component:stage_group
+    labels:
+      component: graphql_queries
+      product_stage: create
+      stage_group: editor
+    expr: "1"
   - record: gitlab:ignored_component:stage_group
     labels:
       component: rails_requests
@@ -187,6 +295,12 @@ groups:
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
+      component: graphql_queries
+      product_stage: growth
+      stage_group: expansion
+    expr: "1"
+  - record: gitlab:ignored_component:stage_group
+    labels:
       component: rails_requests
       product_stage: growth
       stage_group: expansion
@@ -195,6 +309,12 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
+  - record: gitlab:ignored_component:stage_group
+    labels:
+      component: graphql_queries
+      product_stage: ecosystem
+      stage_group: foundations
+    expr: "1"
   - record: gitlab:ignored_component:stage_group
     labels:
       component: rails_requests
@@ -207,6 +327,12 @@ groups:
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
+      component: graphql_queries
+      product_stage: enablement
+      stage_group: geo
+    expr: "1"
+  - record: gitlab:ignored_component:stage_group
+    labels:
       component: rails_requests
       product_stage: enablement
       stage_group: geo
@@ -215,6 +341,12 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
+  - record: gitlab:ignored_component:stage_group
+    labels:
+      component: graphql_queries
+      product_stage: create
+      stage_group: gitaly
+    expr: "1"
   - record: gitlab:ignored_component:stage_group
     labels:
       component: rails_requests
@@ -227,6 +359,12 @@ groups:
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
+      component: graphql_queries
+      product_stage: enablement
+      stage_group: global_search
+    expr: "1"
+  - record: gitlab:ignored_component:stage_group
+    labels:
       component: rails_requests
       product_stage: enablement
       stage_group: global_search
@@ -235,6 +373,12 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
+  - record: gitlab:ignored_component:stage_group
+    labels:
+      component: graphql_queries
+      product_stage: platforms
+      stage_group: horse
+    expr: "1"
   - record: gitlab:ignored_component:stage_group
     labels:
       component: rails_requests
@@ -247,6 +391,12 @@ groups:
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
+      component: graphql_queries
+      product_stage: manage
+      stage_group: import
+    expr: "1"
+  - record: gitlab:ignored_component:stage_group
+    labels:
       component: rails_requests
       product_stage: manage
       stage_group: import
@@ -255,6 +405,12 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
+  - record: gitlab:ignored_component:stage_group
+    labels:
+      component: graphql_queries
+      product_stage: ecosystem
+      stage_group: integrations
+    expr: "1"
   - record: gitlab:ignored_component:stage_group
     labels:
       component: rails_requests
@@ -267,6 +423,12 @@ groups:
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
+      component: graphql_queries
+      product_stage: fulfillment
+      stage_group: license
+    expr: "1"
+  - record: gitlab:ignored_component:stage_group
+    labels:
       component: rails_requests
       product_stage: fulfillment
       stage_group: license
@@ -275,6 +437,12 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
+  - record: gitlab:ignored_component:stage_group
+    labels:
+      component: graphql_queries
+      product_stage: enablement
+      stage_group: memory
+    expr: "1"
   - record: gitlab:ignored_component:stage_group
     labels:
       component: rails_requests
@@ -287,6 +455,12 @@ groups:
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
+      component: graphql_queries
+      product_stage: ModelOps
+      stage_group: mlops
+    expr: "1"
+  - record: gitlab:ignored_component:stage_group
+    labels:
       component: rails_requests
       product_stage: ModelOps
       stage_group: mlops
@@ -295,6 +469,12 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
+  - record: gitlab:ignored_component:stage_group
+    labels:
+      component: graphql_queries
+      product_stage: mobile
+      stage_group: moble_devops
+    expr: "1"
   - record: gitlab:ignored_component:stage_group
     labels:
       component: rails_requests
@@ -307,6 +487,12 @@ groups:
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
+      component: graphql_queries
+      product_stage: monitor
+      stage_group: monitor
+    expr: "1"
+  - record: gitlab:ignored_component:stage_group
+    labels:
       component: rails_requests
       product_stage: monitor
       stage_group: monitor
@@ -315,6 +501,12 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
+  - record: gitlab:ignored_component:stage_group
+    labels:
+      component: graphql_queries
+      product_stage: manage
+      stage_group: optimize
+    expr: "1"
   - record: gitlab:ignored_component:stage_group
     labels:
       component: rails_requests
@@ -327,14 +519,36 @@ groups:
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
+      component: graphql_queries
+      product_stage: package
+      stage_group: package
+    expr: "1"
+  - record: gitlab:ignored_component:stage_group
+    labels:
       component: rails_requests
       product_stage: package
       stage_group: package
+    expr: "1"
+- name: 'Stage group Ignored components: verify - Pipeline Authoring'
+  interval: 1m
+  partial_response_strategy: warn
+  rules:
+  - record: gitlab:ignored_component:stage_group
+    labels:
+      component: graphql_queries
+      product_stage: verify
+      stage_group: pipeline_authoring
     expr: "1"
 - name: 'Stage group Ignored components: verify - Pipeline Execution'
   interval: 1m
   partial_response_strategy: warn
   rules:
+  - record: gitlab:ignored_component:stage_group
+    labels:
+      component: graphql_queries
+      product_stage: verify
+      stage_group: pipeline_execution
+    expr: "1"
   - record: gitlab:ignored_component:stage_group
     labels:
       component: rails_requests
@@ -347,6 +561,12 @@ groups:
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
+      component: graphql_queries
+      product_stage: growth
+      stage_group: product_intelligence
+    expr: "1"
+  - record: gitlab:ignored_component:stage_group
+    labels:
       component: rails_requests
       product_stage: growth
       stage_group: product_intelligence
@@ -355,6 +575,12 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
+  - record: gitlab:ignored_component:stage_group
+    labels:
+      component: graphql_queries
+      product_stage: plan
+      stage_group: product_planning
+    expr: "1"
   - record: gitlab:ignored_component:stage_group
     labels:
       component: rails_requests
@@ -367,6 +593,12 @@ groups:
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
+      component: graphql_queries
+      product_stage: plan
+      stage_group: project_management
+    expr: "1"
+  - record: gitlab:ignored_component:stage_group
+    labels:
       component: rails_requests
       product_stage: plan
       stage_group: project_management
@@ -375,6 +607,12 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
+  - record: gitlab:ignored_component:stage_group
+    labels:
+      component: graphql_queries
+      product_stage: fulfillment
+      stage_group: purchase
+    expr: "1"
   - record: gitlab:ignored_component:stage_group
     labels:
       component: rails_requests
@@ -387,6 +625,12 @@ groups:
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
+      component: graphql_queries
+      product_stage: release
+      stage_group: release
+    expr: "1"
+  - record: gitlab:ignored_component:stage_group
+    labels:
       component: rails_requests
       product_stage: release
       stage_group: release
@@ -395,6 +639,12 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
+  - record: gitlab:ignored_component:stage_group
+    labels:
+      component: graphql_queries
+      product_stage: verify
+      stage_group: runner
+    expr: "1"
   - record: gitlab:ignored_component:stage_group
     labels:
       component: rails_requests
@@ -407,6 +657,12 @@ groups:
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
+      component: graphql_queries
+      product_stage: platforms
+      stage_group: scalability
+    expr: "1"
+  - record: gitlab:ignored_component:stage_group
+    labels:
       component: rails_requests
       product_stage: platforms
       stage_group: scalability
@@ -415,6 +671,12 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
+  - record: gitlab:ignored_component:stage_group
+    labels:
+      component: graphql_queries
+      product_stage: enablement
+      stage_group: sharding
+    expr: "1"
   - record: gitlab:ignored_component:stage_group
     labels:
       component: rails_requests
@@ -427,6 +689,12 @@ groups:
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
+      component: graphql_queries
+      product_stage: create
+      stage_group: source_code
+    expr: "1"
+  - record: gitlab:ignored_component:stage_group
+    labels:
       component: rails_requests
       product_stage: create
       stage_group: source_code
@@ -435,6 +703,12 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
+  - record: gitlab:ignored_component:stage_group
+    labels:
+      component: graphql_queries
+      product_stage: secure
+      stage_group: static_analysis
+    expr: "1"
   - record: gitlab:ignored_component:stage_group
     labels:
       component: rails_requests
@@ -447,6 +721,12 @@ groups:
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
+      component: graphql_queries
+      product_stage: verify
+      stage_group: testing
+    expr: "1"
+  - record: gitlab:ignored_component:stage_group
+    labels:
       component: rails_requests
       product_stage: verify
       stage_group: testing
@@ -455,6 +735,12 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
+  - record: gitlab:ignored_component:stage_group
+    labels:
+      component: graphql_queries
+      product_stage: secure
+      stage_group: threat_insights
+    expr: "1"
   - record: gitlab:ignored_component:stage_group
     labels:
       component: rails_requests
@@ -467,6 +753,12 @@ groups:
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
+      component: graphql_queries
+      product_stage: fulfillment
+      stage_group: utilization
+    expr: "1"
+  - record: gitlab:ignored_component:stage_group
+    labels:
       component: rails_requests
       product_stage: fulfillment
       stage_group: utilization
@@ -477,6 +769,12 @@ groups:
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
+      component: graphql_queries
+      product_stage: secure
+      stage_group: vulnerability_research
+    expr: "1"
+  - record: gitlab:ignored_component:stage_group
+    labels:
       component: rails_requests
       product_stage: secure
       stage_group: vulnerability_research
@@ -485,6 +783,12 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
+  - record: gitlab:ignored_component:stage_group
+    labels:
+      component: graphql_queries
+      product_stage: manage
+      stage_group: workspace
+    expr: "1"
   - record: gitlab:ignored_component:stage_group
     labels:
       component: rails_requests
