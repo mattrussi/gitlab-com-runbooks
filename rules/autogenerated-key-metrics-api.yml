@@ -4,6 +4,43 @@ groups:
 - name: 'Component-Level SLIs: api - 1m burn-rate'
   interval: 1m
   rules:
+  - record: sli_aggregations:gitlab_sli:graphql_query_apdex:total_rate1m
+    expr: |
+      sum by (endpoint_id,environment,feature_category,job,query_urgency,shard,stage,tier,type) (
+        rate(gitlab_sli:graphql_query_apdex:total[1m])
+      )
+  - record: sli_aggregations:gitlab_sli:graphql_query_apdex:success_total_rate1m
+    expr: |
+      sum by (endpoint_id,environment,feature_category,job,query_urgency,shard,stage,tier,type) (
+        rate(gitlab_sli:graphql_query_apdex:success_total[1m])
+      )
+  - record: gitlab_component_apdex:success:rate
+    labels:
+      component: graphql_queries
+      tier: sv
+      type: api
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:gitlab_sli:graphql_query_apdex:success_total_rate1m{job="gitlab-rails",type="api"}
+      )
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: graphql_queries
+      tier: sv
+      type: api
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:gitlab_sli:graphql_query_apdex:total_rate1m{job="gitlab-rails",type="api"}
+      )
+  - record: gitlab_component_ops:rate
+    labels:
+      component: graphql_queries
+      tier: sv
+      type: api
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:gitlab_sli:graphql_query_apdex:total_rate1m{job="gitlab-rails",type="api"}
+      )
   - record: gitlab_component_ops:rate
     labels:
       component: loadbalancer
@@ -220,6 +257,43 @@ groups:
 - name: 'Component-Level SLIs: api - 5m burn-rate'
   interval: 1m
   rules:
+  - record: sli_aggregations:gitlab_sli:graphql_query_apdex:total_rate5m
+    expr: |
+      sum by (endpoint_id,environment,feature_category,job,query_urgency,shard,stage,tier,type) (
+        rate(gitlab_sli:graphql_query_apdex:total[5m])
+      )
+  - record: sli_aggregations:gitlab_sli:graphql_query_apdex:success_total_rate5m
+    expr: |
+      sum by (endpoint_id,environment,feature_category,job,query_urgency,shard,stage,tier,type) (
+        rate(gitlab_sli:graphql_query_apdex:success_total[5m])
+      )
+  - record: gitlab_component_apdex:success:rate_5m
+    labels:
+      component: graphql_queries
+      tier: sv
+      type: api
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:gitlab_sli:graphql_query_apdex:success_total_rate5m{job="gitlab-rails",type="api"}
+      )
+  - record: gitlab_component_apdex:weight:score_5m
+    labels:
+      component: graphql_queries
+      tier: sv
+      type: api
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:gitlab_sli:graphql_query_apdex:total_rate5m{job="gitlab-rails",type="api"}
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: graphql_queries
+      tier: sv
+      type: api
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:gitlab_sli:graphql_query_apdex:total_rate5m{job="gitlab-rails",type="api"}
+      )
   - record: gitlab_component_ops:rate_5m
     labels:
       component: loadbalancer
@@ -436,6 +510,43 @@ groups:
 - name: 'Component-Level SLIs: api - 30m burn-rate'
   interval: 2m
   rules:
+  - record: sli_aggregations:gitlab_sli:graphql_query_apdex:total_rate30m
+    expr: |
+      sum by (endpoint_id,environment,feature_category,job,query_urgency,shard,stage,tier,type) (
+        rate(gitlab_sli:graphql_query_apdex:total[30m])
+      )
+  - record: sli_aggregations:gitlab_sli:graphql_query_apdex:success_total_rate30m
+    expr: |
+      sum by (endpoint_id,environment,feature_category,job,query_urgency,shard,stage,tier,type) (
+        rate(gitlab_sli:graphql_query_apdex:success_total[30m])
+      )
+  - record: gitlab_component_apdex:success:rate_30m
+    labels:
+      component: graphql_queries
+      tier: sv
+      type: api
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:gitlab_sli:graphql_query_apdex:success_total_rate30m{job="gitlab-rails",type="api"}
+      )
+  - record: gitlab_component_apdex:weight:score_30m
+    labels:
+      component: graphql_queries
+      tier: sv
+      type: api
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:gitlab_sli:graphql_query_apdex:total_rate30m{job="gitlab-rails",type="api"}
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: graphql_queries
+      tier: sv
+      type: api
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:gitlab_sli:graphql_query_apdex:total_rate30m{job="gitlab-rails",type="api"}
+      )
   - record: gitlab_component_ops:rate_30m
     labels:
       component: loadbalancer
@@ -652,6 +763,43 @@ groups:
 - name: 'Component-Level SLIs: api - 1h burn-rate'
   interval: 1m
   rules:
+  - record: sli_aggregations:gitlab_sli:graphql_query_apdex:total_rate1h
+    expr: |
+      sum by (endpoint_id,environment,feature_category,job,query_urgency,shard,stage,tier,type) (
+        rate(gitlab_sli:graphql_query_apdex:total[1h])
+      )
+  - record: sli_aggregations:gitlab_sli:graphql_query_apdex:success_total_rate1h
+    expr: |
+      sum by (endpoint_id,environment,feature_category,job,query_urgency,shard,stage,tier,type) (
+        rate(gitlab_sli:graphql_query_apdex:success_total[1h])
+      )
+  - record: gitlab_component_apdex:success:rate_1h
+    labels:
+      component: graphql_queries
+      tier: sv
+      type: api
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:gitlab_sli:graphql_query_apdex:success_total_rate1h{job="gitlab-rails",type="api"}
+      )
+  - record: gitlab_component_apdex:weight:score_1h
+    labels:
+      component: graphql_queries
+      tier: sv
+      type: api
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:gitlab_sli:graphql_query_apdex:total_rate1h{job="gitlab-rails",type="api"}
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: graphql_queries
+      tier: sv
+      type: api
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:gitlab_sli:graphql_query_apdex:total_rate1h{job="gitlab-rails",type="api"}
+      )
   - record: gitlab_component_ops:rate_1h
     labels:
       component: loadbalancer
@@ -868,6 +1016,43 @@ groups:
 - name: 'Component-Level SLIs: api - 6h burn-rate'
   interval: 2m
   rules:
+  - record: sli_aggregations:gitlab_sli:graphql_query_apdex:total_rate6h
+    expr: |
+      sum by (endpoint_id,environment,feature_category,job,query_urgency,shard,stage,tier,type) (
+        rate(gitlab_sli:graphql_query_apdex:total[6h])
+      )
+  - record: sli_aggregations:gitlab_sli:graphql_query_apdex:success_total_rate6h
+    expr: |
+      sum by (endpoint_id,environment,feature_category,job,query_urgency,shard,stage,tier,type) (
+        rate(gitlab_sli:graphql_query_apdex:success_total[6h])
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: graphql_queries
+      tier: sv
+      type: api
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:gitlab_sli:graphql_query_apdex:success_total_rate6h{job="gitlab-rails",type="api"}
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: graphql_queries
+      tier: sv
+      type: api
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:gitlab_sli:graphql_query_apdex:total_rate6h{job="gitlab-rails",type="api"}
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: graphql_queries
+      tier: sv
+      type: api
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:gitlab_sli:graphql_query_apdex:total_rate6h{job="gitlab-rails",type="api"}
+      )
   - record: gitlab_component_ops:rate_6h
     labels:
       component: loadbalancer
@@ -1084,6 +1269,14 @@ groups:
 - name: 'Component mapping: api'
   interval: 1m
   rules:
+  - record: gitlab_component_service:mapping
+    labels:
+      component: graphql_queries
+      regional_aggregation: "yes"
+      service_aggregation: "yes"
+      tier: sv
+      type: api
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: loadbalancer
