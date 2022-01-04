@@ -3,7 +3,7 @@
 The following setup enables us to use the YubiKey with OpenPGP, and the Authentication subkey [as an SSH key](https://developers.yubico.com/PGP/SSH_authentication/).
 
 ## Initial configuration
-
+#test
 If you find any problems during the setup, take a look at the [troubleshooting](#troubleshooting) section at the end
 of this document.
 
