@@ -39,7 +39,8 @@ groups:
         ) < -2
       for: 5m
       labels:
-        severity: s3
+        severity: s2
+        pager: 'pagerduty'
         alert_type: cause
       annotations:
         description: >
