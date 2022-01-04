@@ -143,6 +143,10 @@ teams:
   slack_alerts_channel: f_pipeline_validation_service
   send_slo_alerts_to_team_slack_channel: true
 
+- name: anti_abuse
+  slack_alerts_channel: feed_pipeline_abuse_alerts
+  send_slo_alerts_to_team_slack_channel: true
+
 - name: subtransaction_troubleshooting
   slack_alerts_channel: subtransaction_troubleshooting
   send_slo_alerts_to_team_slack_channel: true
