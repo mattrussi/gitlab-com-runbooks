@@ -92,6 +92,24 @@ basic.dashboard(
       )
     ),
     statPanel.new(
+      title='Dangling',
+      description='The percentage of tasks that target a dangling artifact.',
+      graphMode='none',
+      unit='percentunit',
+      decimals=0,
+    )
+    .addTarget(
+      promQuery.target(
+        |||
+          (
+            sum(rate(registry_gc_runs_total{environment="$environment", stage="$stage", cluster=~"$cluster", error="false", noop="false", dangling="true"}[$__interval]))
+            /
+            sum(rate(registry_gc_runs_total{environment="$environment", stage="$stage", cluster=~"$cluster", error="false", noop="false"}[$__interval]))
+          )
+        |||,
+      )
+    ),
+    statPanel.new(
       title='Deletions',
       description='The total number of deletions (manifests and blobs).',
       graphMode='none',
@@ -221,7 +239,7 @@ basic.dashboard(
       { color: colorScheme.warningColor, value: 95 },
       { color: colorScheme.normalRangeColor, value: 100 },
     ]),
-  ], cols=10, rowHeight=4, startRow=1)
+  ], cols=11, rowHeight=4, startRow=1)
 )
 
 .addPanel(
@@ -505,4 +523,40 @@ basic.dashboard(
       format='s'
     ),
   ], cols=3, rowHeight=10, startRow=5001)
+)
+
+.addPanel(
+  row.new(title='Events'),
+  gridPos={
+    x: 0,
+    y: 6000,
+    w: 24,
+    h: 1,
+  }
+)
+.addPanels(
+  layout.grid([
+    basic.timeseries(
+      title='Queueing Rate',
+      description='The per-second rate of online GC tasks queued, broken by triggering event.',
+      query=|||
+        sum by (event) (
+          rate(registry_gc_runs_total{environment="$environment", stage="$stage", cluster=~"$cluster", event!=""}[$__interval])
+        )
+      |||,
+      legendFormat='{{ event }}',
+      format='ops'
+    ),
+    basic.timeseries(
+      title='Deletion Rate',
+      description='The per-second rate of online GC tasks that result in a deletion, broken down by triggering event.',
+      query=|||
+        sum by (event) (
+          rate(registry_gc_runs_total{environment="$environment", stage="$stage", cluster=~"$cluster", event!="", noop="false", dangling="true"}[$__interval])
+        )
+      |||,
+      legendFormat='{{ event }}',
+      format='ops'
+    ),
+  ], cols=2, rowHeight=12, startRow=6001)
 )
