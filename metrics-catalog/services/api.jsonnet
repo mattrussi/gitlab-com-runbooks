@@ -191,6 +191,10 @@ metricsCatalog.serviceDefinition({
       },
 
     graphql_queries:
-      sliLibrary.get('graphql_query_apdex').generateServiceLevelIndicator(railsSelector),
+      sliLibrary.get('graphql_query_apdex').generateServiceLevelIndicator(railsSelector) {
+        toolingLinks: [
+          toolingLinks.kibana(title='Rails', index='rails_graphql', type='api', slowRequestSeconds=1),
+        ],
+      },
   },
 })

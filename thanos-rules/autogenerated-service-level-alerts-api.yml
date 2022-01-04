@@ -11,11 +11,9 @@ groups:
       title: The graphql_queries SLI of the api service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
-        The number of GraphQL queries meeting their duration target based on the urgency of the endpoint. By default, a query should take no more than 1s. But this can be adjusted per query.
+        The number of GraphQL queries meeting their duration target based on the urgency of the endpoint. By default, a query should take no more than 1s. We're working on making the urgency customizable in [this epic](https://gitlab.com/groups/gitlab-org/-/epics/5841).
 
         Mutliple queries could be batched inside a single request.
-
-        This SLI is currently not used in the service catalog, `feature_category` and `query_urgency` is being worked on in [this epic](https://gitlab.com/groups/gitlab-org/-/epics/5841)
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: api-main/api-overview
@@ -59,11 +57,9 @@ groups:
       title: The graphql_queries SLI of the api service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
-        The number of GraphQL queries meeting their duration target based on the urgency of the endpoint. By default, a query should take no more than 1s. But this can be adjusted per query.
+        The number of GraphQL queries meeting their duration target based on the urgency of the endpoint. By default, a query should take no more than 1s. We're working on making the urgency customizable in [this epic](https://gitlab.com/groups/gitlab-org/-/epics/5841).
 
         Mutliple queries could be batched inside a single request.
-
-        This SLI is currently not used in the service catalog, `feature_category` and `query_urgency` is being worked on in [this epic](https://gitlab.com/groups/gitlab-org/-/epics/5841)
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: api-main/api-overview
@@ -107,11 +103,9 @@ groups:
       title: The graphql_queries SLI of the api service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
-        The number of GraphQL queries meeting their duration target based on the urgency of the endpoint. By default, a query should take no more than 1s. But this can be adjusted per query.
+        The number of GraphQL queries meeting their duration target based on the urgency of the endpoint. By default, a query should take no more than 1s. We're working on making the urgency customizable in [this epic](https://gitlab.com/groups/gitlab-org/-/epics/5841).
 
         Mutliple queries could be batched inside a single request.
-
-        This SLI is currently not used in the service catalog, `feature_category` and `query_urgency` is being worked on in [this epic](https://gitlab.com/groups/gitlab-org/-/epics/5841)
 
         Note that this alert is specific to the `{{ $labels.region }}` region.
 
@@ -157,11 +151,9 @@ groups:
       title: The graphql_queries SLI of the api service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
-        The number of GraphQL queries meeting their duration target based on the urgency of the endpoint. By default, a query should take no more than 1s. But this can be adjusted per query.
+        The number of GraphQL queries meeting their duration target based on the urgency of the endpoint. By default, a query should take no more than 1s. We're working on making the urgency customizable in [this epic](https://gitlab.com/groups/gitlab-org/-/epics/5841).
 
         Mutliple queries could be batched inside a single request.
-
-        This SLI is currently not used in the service catalog, `feature_category` and `query_urgency` is being worked on in [this epic](https://gitlab.com/groups/gitlab-org/-/epics/5841)
 
         Note that this alert is specific to the `{{ $labels.region }}` region.
 
@@ -207,11 +199,9 @@ groups:
       title: The graphql_queries SLI of the api service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30 minutes
       description: |
-        The number of GraphQL queries meeting their duration target based on the urgency of the endpoint. By default, a query should take no more than 1s. But this can be adjusted per query.
+        The number of GraphQL queries meeting their duration target based on the urgency of the endpoint. By default, a query should take no more than 1s. We're working on making the urgency customizable in [this epic](https://gitlab.com/groups/gitlab-org/-/epics/5841).
 
         Mutliple queries could be batched inside a single request.
-
-        This SLI is currently not used in the service catalog, `feature_category` and `query_urgency` is being worked on in [this epic](https://gitlab.com/groups/gitlab-org/-/epics/5841)
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: api-main/api-overview
@@ -244,11 +234,9 @@ groups:
       title: The graphql_queries SLI of the api service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30 minutes
       description: |
-        The number of GraphQL queries meeting their duration target based on the urgency of the endpoint. By default, a query should take no more than 1s. But this can be adjusted per query.
+        The number of GraphQL queries meeting their duration target based on the urgency of the endpoint. By default, a query should take no more than 1s. We're working on making the urgency customizable in [this epic](https://gitlab.com/groups/gitlab-org/-/epics/5841).
 
         Mutliple queries could be batched inside a single request.
-
-        This SLI is currently not used in the service catalog, `feature_category` and `query_urgency` is being worked on in [this epic](https://gitlab.com/groups/gitlab-org/-/epics/5841)
 
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 
