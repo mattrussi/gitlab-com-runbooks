@@ -39,8 +39,6 @@ groups:
         ) < -2
       for: 5m
       labels:
-        severity: s2
-        pager: 'pagerduty'
         alert_type: cause
       annotations:
         description: >
@@ -50,12 +48,11 @@ groups:
 
     - alert: LoggingVisibilityDiminished
       expr: |
-        sum by (subscription_id) (
-          avg_over_time(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_oldest_unacked_message_age[30m])
-        ) > 300
+        avg_over_time(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_oldest_unacked_message_age[30m]) > 300
       for: 5m
       labels:
-        severity: s3
+        severity: s2
+        pager: 'pagerduty'
         alert_type: symptom
       annotations:
         description: >
