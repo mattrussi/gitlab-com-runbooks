@@ -393,7 +393,7 @@ glsh hello arg1 arg2
 ```
 git clone git@gitlab.com:gitlab-com/runbooks.git
 cd runbooks
-make glsh-install
+sudo make glsh-install
 ```
 
 ## Update
