@@ -10,9 +10,9 @@ https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com
 
 ## Application Upgrading
 
-* [CHART_VERSION](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/tree/master#setting-chart-version)
+- [CHART_VERSION](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/tree/master#setting-chart-version)
   sets the version of the GitLab helm chart
-* For individual services see the project [README](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/#services)
+- For individual services see the project [README](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/#services)
 
 ## Creating a new node pool
 
@@ -27,9 +27,9 @@ OLD_NODE_POOL=<name of old pool>
 NEW_NODE_POOL=<name of new pool>
 ```
 
-* Add the new node pool to Terraform by creating a new entry in the relevant TF environment, for example for staging you'd add an entry [here](https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/blob/master/environments/gstg/gke-zonal.tf#L47).
-* Apply the change and confirm the new node pool is created
-* Cordon the existing node pool
+- Add the new node pool to Terraform by creating a new entry in the relevant TF environment, for example for staging you'd add an entry [here](https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/blob/master/environments/gstg/gke-zonal.tf#L47).
+- Apply the change and confirm the new node pool is created
+- Cordon the existing node pool
 
 ```bash
 for node in $(kubectl get nodes -l cloud.google.com/gke-nodepool=$OLD_NODE_POOL -o=name); do \
@@ -39,7 +39,7 @@ done
 
 ```
 
-* Evict pods from the old node pool
+- Evict pods from the old node pool
 
 ```bash
 for node in $(kubectl get nodes -l cloud.google.com/gke-nodepool=$OLD_NODE_POOL -o=name); do \
@@ -48,15 +48,15 @@ for node in $(kubectl get nodes -l cloud.google.com/gke-nodepool=$OLD_NODE_POOL 
 done
 ```
 
-* Delete the old node pool manually (in GCP console or on the command line)
-* Remove all node pools from the Terraform state
+- Delete the old node pool manually (in GCP console or on the command line)
+- Remove all node pools from the Terraform state
 
 ```bash
 tf state rm module.gitlab-gke.google_container_node_pool.node_pool[0]
 tf state rm module.gitlab-gke.google_container_node_pool.node_pool[1]
 ```
 
-* Import the new node pool into Terraform
+- Import the new node pool into Terraform
 
 ```
 tf import module.gitlab-gke.google_container_node_pool.node_pool[0] gitlab-production/us-east1/gprd-gitlab-gke/$NEW_NODE_POOL
@@ -83,10 +83,10 @@ kubectl scale deployments/gitlab-sidekiq-memory-bound-v1 --replicas=0
 ```
 
 The `DEPLOYMENT_NAME` represents the Deployment associated and managing the Pods
-that are running.  `X` represents the desired number of Pods you wish to run.
+that are running. `X` represents the desired number of Pods you wish to run.
 
 After an event is over, the HPA will need at least 1 Pod running in order to
-perform its task of autoscaling the Deployment.  For this, we can rerun a
+perform its task of autoscaling the Deployment. For this, we can rerun a
 similar command above, using the below as an example:
 
 ```
@@ -94,8 +94,9 @@ kubectl scale deployments/gitlab-sidekiq-memory-bound-v1 --replicas=1
 ```
 
 Refer to existing Kubernetes documentation for reference and further details:
-* https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-* https://github.com/kubernetes/community/blob/master/contributors/design-proposals/autoscaling/horizontal-pod-autoscaler.md
+
+- https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+- https://github.com/kubernetes/community/blob/master/contributors/design-proposals/autoscaling/horizontal-pod-autoscaler.md
 
 ## Deployment lifecycle
 
@@ -106,6 +107,7 @@ The most complete source of information about changes in kubernetes clusters is 
 ### diff between deployment versions
 
 An example of how you can get a diff between different deployment versions using rollout history (revisions have to exist in the cluster)
+
 ```
 $ kubectl -n gitlab rollout history deployment/gitlab-gitlab-shell  # get all deployment revisions
 $ kubectl -n gitlab rollout history deployment/gitlab-gitlab-shell --revision 22 > ~/deployment_rev22  # get deployment yaml at rev 22
@@ -113,6 +115,7 @@ $ kubectl -n gitlab rollout history deployment/gitlab-gitlab-shell --revision 21
 ```
 
 You can also find the diff in the body of the patch request sent to the apiserver. These are logged in the audit logs. You can find these events with this search:
+
 ```
 protoPayload.methodName="io.k8s.apps.v1.deployments.patch"
 ```
@@ -124,11 +127,13 @@ Check our deployment pipelines on the ops instance, in the projects holding kube
 If the ReplicaSet objects still exist, you can look at their creation timestamp in their definition.
 
 Audit log also contains a lot of useful information. For example, deployment patching events (e.g. on image update):
+
 ```
 protoPayload.methodName="io.k8s.apps.v1.deployments.patch"
 ```
 
 Replicaset creation (e.g. on image update):
+
 ```
 protoPayload.methodName="io.k8s.apps.v1.replicasets.create"
 ```
@@ -136,19 +141,19 @@ protoPayload.methodName="io.k8s.apps.v1.replicasets.create"
 ## Attaching to a running container
 
 Keep in mind that the below steps are operating on a production node and
-production container which may be servicing customer traffic.  Some
+production container which may be servicing customer traffic. Some
 troubleshooting may incur performance penalties or expose you and tooling to
-Red classified data.  Consider removing the Pod after your work is complete.
+Red classified data. Consider removing the Pod after your work is complete.
 
 ### Using Docker/Containerd
 
-**Note**: Most of our nodepools run containerd, but a few still run docker.  Due to this we'll use a combination of commands, either `docker` or `crictl`; while they are similar to an extent, both have a significantly different UX when performing the below troubleshooting.
+**Note**: Most of our nodepools run containerd, but a few still run docker. Due to this we'll use a combination of commands, either `docker` or `crictl`; while they are similar to an extent, both have a significantly different UX when performing the below troubleshooting.
 
 Regardless of runtime, we just need the following information:
 
-* target Pod
-* container we want to exploit
-* node it's running on
+- target Pod
+- container we want to exploit
+- node it's running on
 
 Firstly, figure out what node/zone a Pod is running:
 
@@ -173,8 +178,8 @@ kubectl get pod $pod_name -o json | jq .status.containerStatuses
 ```
 
 In the output, if there's multiple containers, find the one you want, followed
-by that objects' `containerID`.  This is a very long ID, and we may need it
-later.  Note that down, we'll need it later.
+by that objects' `containerID`. This is a very long ID, and we may need it
+later. Note that down, we'll need it later.
 
 SSH into the node:
 
@@ -192,7 +197,7 @@ docker ps | grep 'websockets-57dbbcdcbd-crv2p'
 crictl ps | grep 'websockets-57dbbcdcbd-crv2p'
 ```
 
-Note that the result will be at least two containers, one using the `pause` image, and others representing each container participating in our target Pod.  [The `pause` image is NOT the one you are looking for.](https://www.ianlewis.org/en/almighty-pause-container)
+- Note that in `docker` runtime the result will be at least two containers, one using the `pause` image, and others representing each container participating in our target Pod. [The `pause` image is NOT the one you are looking for.](https://www.ianlewis.org/en/almighty-pause-container)
 
 If the container contains all the tools you need, you can simply exec into it:
 
@@ -204,13 +209,15 @@ docker exec -it 7aa3c4ad2775c /bin/bash
 crictl exec -it 7aa3c4ad2775c /bin/bash
 ```
 
-Where `7aa3c4ad2775c` is the container id that you have already found.  If it doesn't have `/bin/bash`, try `/bin/sh` or just exec'ing `ls` to find what binaries are available.
+Where `7aa3c4ad2775c` is the container id that you have already found. If it doesn't have `/bin/bash`, try `/bin/sh` or just execing `ls` to find what binaries are available.
 
-At this point we can install some tooling necessary and interrogate the best we can.  Remember that the container could be shutdown at any time by k8s, and any changes are very transient.
+At this point we can install some tooling necessary and interrogate the best we can. Remember that the container could be shutdown at any time by k8s, and any changes are very transient.
 
-If you need more when operating against the container, examples include needing a root shell or perhaps a tool you need does not exist on the image, you can attach another container to the same network/pid namespaces when running.  For nodes utilizing the `docker` runtime, you can utilize the below.  For runtimes using `containerd`, skip ahead.
+If you need higher permissions or more tooling in the container, examples include needing a root shell or perhaps a tool you need does not exist on the image, you can attach another container to the same network/pid namespaces when running.
 
-```
+- For `docker` runtime, you can utilize the below.
+
+```sh
 docker run \
   -it \
   --pid=container:k8s_sidekiq_gitlab-sidekiq-export-966444c8-sbpj5_gitlab_148e5cfb-21a2-11ea-b2f5-4201ac100006_0 \
@@ -220,11 +227,11 @@ docker run \
   ubuntu /bin/bash
 ```
 
-In the above example we attached an ubuntu container running `bash` to the sidekiq container.  This will be a read-only filesystem (unlike the `exec` case above)
+In the above example we attached an ubuntu container running `bash` to the sidekiq container. This will be a read-only filesystem (unlike the `exec` case above)
 
-For the `containerd` runtime we can pop directly onto the container as root:
+- For `containerd` runtime we can pop directly onto the container as root:
 
-```
+```sh
 runc --root /run/containerd/runc/k8s.io/ \
   exec \
   -t \
@@ -233,11 +240,11 @@ runc --root /run/containerd/runc/k8s.io/ \
   /bin/bash
 ```
 
-Or use whatever shell you know is readily available.  Note you need the entire
+Or use whatever shell you know is readily available. Note you need the entire
 container ID that you had found earlier, unlike docker who accepts shorter IDs,
 `runc` will toss you an error that the container does not exist if a shortened
-ID is utilized.  Note we are using `runc` here, as `crictl` does not provide us
-this capability.  `runc` is the underlying runtime, `containerd` is how
+ID is utilized. Note we are using `runc` here, as `crictl` does not provide us
+this capability. `runc` is the underlying runtime, `containerd` is how
 Kubernetes interfaces with it.
 
 ### Using Toolbox
@@ -259,19 +266,16 @@ One way to workaround it is to investigate the container from the host. Below ar
 #### Run a command with the pod's network namespace
 
 1. Find the PID of any process running inside the pod, you can use the pause process for that (network namespace is shared by all processes/containers in a pod). There are many, many ways to get the PID, here are a few ideas:
-    1. get PID of a process running in a `containerd` container:
-        1. List containers and get container ID: `crictl ps -a`
-        1. Get pid of a process in a container with a given ID: `crictl inspect <containerID>` search for `info.pid` field
-    1. get PIDs and hostnames of all containers running in docker: `docker ps -a | tail -n +2 | awk '{ print $1}' | xargs docker inspect -f '{{ .State.Pid }} {{ .Config.Hostname }}'`
-1. Run a command with the process' namespace
-    1. Entire toolbox started with the given namespace
-        1. `toolbox --network-namespace-path=/proc/<container_pid>/ns/net`
-    1. Run a single command in toolbox with the given namespace
-        1. Once you have the PID, link its namespace where the `ip` command can find it (by default docker doesn't link network namespaces that it creates): `ln -sf /proc/<pid_you_found>/ns/net /var/run/netns/<your_custom_name>`
-        1. Enter toolbox: `toolbox`
-        1. List namespaces: `ip netns list`
-        1. Run your command with the desired network namespace: `ip netns exec <your_custom_name> ip a`
-    1. Alternatively, you can use nsenter on the GKE host (note: it proved difficult to run it with toolbox): `nsenter -target <PID> -mount -uts -ipc -net -pid`
+   - `containerd` Get PID of a process running in a container:
+     1. List containers and get container ID: `crictl ps -a`
+     1. Get pid of a process in a container with a given ID: `crictl inspect <containerID>` search for `info.pid` field
+   - `docker` Get PIDs and hostnames of all containers running:
+     - `docker ps -a | tail -n +2 | awk '{ print $1}' | xargs docker inspect -f '{{ .State.Pid }} {{ .Config.Hostname }}'`
+1. Run a command with the network namespace
+   - Entire toolbox started with the given namespace:
+     - `toolbox --network-namespace-path=/proc/<container_pid>/ns/net`
+   - Alternatively, you can use nsenter on the GKE host (note: it might not be available, toolbox is a safer approach):
+     - `nsenter -target <PID> -mount -uts -ipc -net -pid`
 
 #### Start a container that will use network and process namespaces of a pod
 
@@ -282,20 +286,31 @@ Only available for docker, not containerd:
 1. Create a container on the host: `docker run --rm -ti --net=container:<container_name> --pid=container:<container_name> --name ubuntu ubuntu bash`
 
 For example:
+
 ```
 $ docker run --rm --name pause --hostname pause gcr.io/google_containers/pause-amd64:3.0   # this is an example, it will run a simple container which you will connect to in a moment
 $ docker run --rm -ti --net=container:pause --pid=container:pause -v /:/media/root:ro --name ubuntu ubuntu bash  # this will run an ubuntu container with network and process namespaces from the pause container and host's root file system mounted under /media/root
 ```
 
+#### Add an ephemeral debug container (Kubernetes >= 1.23)
+
+https://kubernetes.io/docs/tasks/debug-application-cluster/debug-running-pod/#ephemeral-container
+
+This adds a new container inside the pod sharing the same process namespace.
+
+```
+kubectl debug -it mypod --image=busybox --target=mypod
+```
+
 #### Share process namespace between containers in a pod
 
-Share process namespace between containers in a pod: https://kubernetes.io/docs/tasks/configure-pod-container/share-process-namespace/
+https://kubernetes.io/docs/tasks/configure-pod-container/share-process-namespace/
 
 ## Auto-scaling, Eviction and Quota
 
 ### Nodes
 
-* Node auto-scaling: https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-autoscaler
+- Node auto-scaling: https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-autoscaler
 
 Node auto-scaling is part of GKE's cluster auto-scaler, new nodes will be added
 to the cluster if there is not enough capacity to run pods.
@@ -305,7 +320,7 @@ The maximum node count is set as part of the cluster configuration for the
 
 ### Pods
 
-* Pod auto-scaling: https://cloud.google.com/kubernetes-engine/docs/how-to/scaling-apps
+- Pod auto-scaling: https://cloud.google.com/kubernetes-engine/docs/how-to/scaling-apps
 
 Pods are configured to scale by CPU utilization, targeted at `75%`
 
@@ -391,6 +406,7 @@ $ sudo perf script --header | gzip > stacks.$(hostname).$(date +'%Y-%m-%d_%H%M%S
 So that we avoid installing additional tooling on the GKE node.
 
 On your localhost:
+
 ```bash
 $ gcloud compute scp --zone "us-east1-c" "gke-gprd-gitlab-gke-sidekiq-urgent-ot-9be5be8a-o05q:stacks.gke-gprd-gitlab-gke-sidekiq-urgent-ot-9be5be8a-o05q.2021-03-05_173617.gz" --project "gitlab-production" .
 $ gunzip stacks.gke-gprd-gitlab-gke-sidekiq-urgent-ot-9be5be8a-o05q.2021-03-05_173617.gz
