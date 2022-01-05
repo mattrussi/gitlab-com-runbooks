@@ -123,32 +123,6 @@ groups:
           gitlab_component_ops:rate{component="nginx_ingress",tier="sv",type="api"}
         )
       )
-  - record: gitlab_component_apdex:success:rate
-    labels:
-      component: puma
-      tier: sv
-      type: api
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(http_request_duration_seconds_bucket{job="gitlab-rails",le="1",type="api"}[1m])
-        )
-        +
-        sum by (environment,stage) (
-          rate(http_request_duration_seconds_bucket{job="gitlab-rails",le="10",type="api"}[1m])
-        )
-      )
-      /
-      2
-  - record: gitlab_component_apdex:weight:score
-    labels:
-      component: puma
-      tier: sv
-      type: api
-    expr: |
-      sum by (environment,stage) (
-        rate(http_request_duration_seconds_bucket{job="gitlab-rails",le="+Inf",type="api"}[1m])
-      )
   - record: gitlab_component_ops:rate
     labels:
       component: puma
@@ -375,32 +349,6 @@ groups:
         0 * group by(environment,stage) (
           gitlab_component_ops:rate_5m{component="nginx_ingress",tier="sv",type="api"}
         )
-      )
-  - record: gitlab_component_apdex:success:rate_5m
-    labels:
-      component: puma
-      tier: sv
-      type: api
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(http_request_duration_seconds_bucket{job="gitlab-rails",le="1",type="api"}[5m])
-        )
-        +
-        sum by (environment,stage) (
-          rate(http_request_duration_seconds_bucket{job="gitlab-rails",le="10",type="api"}[5m])
-        )
-      )
-      /
-      2
-  - record: gitlab_component_apdex:weight:score_5m
-    labels:
-      component: puma
-      tier: sv
-      type: api
-    expr: |
-      sum by (environment,stage) (
-        rate(http_request_duration_seconds_bucket{job="gitlab-rails",le="+Inf",type="api"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -629,32 +577,6 @@ groups:
           gitlab_component_ops:rate_30m{component="nginx_ingress",tier="sv",type="api"}
         )
       )
-  - record: gitlab_component_apdex:success:rate_30m
-    labels:
-      component: puma
-      tier: sv
-      type: api
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(http_request_duration_seconds_bucket{job="gitlab-rails",le="1",type="api"}[30m])
-        )
-        +
-        sum by (environment,stage) (
-          rate(http_request_duration_seconds_bucket{job="gitlab-rails",le="10",type="api"}[30m])
-        )
-      )
-      /
-      2
-  - record: gitlab_component_apdex:weight:score_30m
-    labels:
-      component: puma
-      tier: sv
-      type: api
-    expr: |
-      sum by (environment,stage) (
-        rate(http_request_duration_seconds_bucket{job="gitlab-rails",le="+Inf",type="api"}[30m])
-      )
   - record: gitlab_component_ops:rate_30m
     labels:
       component: puma
@@ -882,32 +804,6 @@ groups:
           gitlab_component_ops:rate_1h{component="nginx_ingress",tier="sv",type="api"}
         )
       )
-  - record: gitlab_component_apdex:success:rate_1h
-    labels:
-      component: puma
-      tier: sv
-      type: api
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(http_request_duration_seconds_bucket{job="gitlab-rails",le="1",type="api"}[1h])
-        )
-        +
-        sum by (environment,stage) (
-          rate(http_request_duration_seconds_bucket{job="gitlab-rails",le="10",type="api"}[1h])
-        )
-      )
-      /
-      2
-  - record: gitlab_component_apdex:weight:score_1h
-    labels:
-      component: puma
-      tier: sv
-      type: api
-    expr: |
-      sum by (environment,stage) (
-        rate(http_request_duration_seconds_bucket{job="gitlab-rails",le="+Inf",type="api"}[1h])
-      )
   - record: gitlab_component_ops:rate_1h
     labels:
       component: puma
@@ -1134,32 +1030,6 @@ groups:
         0 * group by(environment,stage) (
           gitlab_component_ops:rate_6h{component="nginx_ingress",tier="sv",type="api"}
         )
-      )
-  - record: gitlab_component_apdex:success:rate_6h
-    labels:
-      component: puma
-      tier: sv
-      type: api
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(http_request_duration_seconds_bucket{job="gitlab-rails",le="1",type="api"}[6h])
-        )
-        +
-        sum by (environment,stage) (
-          rate(http_request_duration_seconds_bucket{job="gitlab-rails",le="10",type="api"}[6h])
-        )
-      )
-      /
-      2
-  - record: gitlab_component_apdex:weight:score_6h
-    labels:
-      component: puma
-      tier: sv
-      type: api
-    expr: |
-      sum by (environment,stage) (
-        rate(http_request_duration_seconds_bucket{job="gitlab-rails",le="+Inf",type="api"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
     labels:

@@ -158,13 +158,6 @@ metricsCatalog.serviceDefinition({
         HTTP interface. 5xx responses are treated as failures.
       |||,
 
-      apdex: histogramApdex(
-        histogram='http_request_duration_seconds_bucket',
-        selector=railsSelector,
-        satisfiedThreshold=1,
-        toleratedThreshold=10
-      ),
-
       requestRate: rateMetric(
         counter='http_requests_total',
         selector=railsSelector,
@@ -188,6 +181,13 @@ metricsCatalog.serviceDefinition({
         monitoringThresholds+: {
           apdexScore: 0.99,
         },
+
+        toolingLinks: [
+          // TODO: These need to be defined in the appliation SLI and built using
+          // selectors using the appropriate fields
+          // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1411
+          toolingLinks.kibana(title='Rails', index='rails_api', type='api', slowRequestSeconds=5),
+        ],
       },
 
     graphql_queries:

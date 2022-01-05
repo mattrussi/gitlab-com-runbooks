@@ -166,13 +166,6 @@ metricsCatalog.serviceDefinition({
         Healthchecks are excluded.
       |||,
 
-      apdex: histogramApdex(
-        histogram='http_request_duration_seconds_bucket',
-        selector=railsSelector,
-        satisfiedThreshold=1,
-        toleratedThreshold=10
-      ),
-
       requestRate: rateMetric(
         counter='http_requests_total',
         selector=railsSelector,
@@ -186,13 +179,18 @@ metricsCatalog.serviceDefinition({
       significantLabels: ['fqdn', 'method', 'feature_category'],
 
       toolingLinks: [
-        // Improve sentry link once https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/532 arrives
         toolingLinks.sentry(slug='gitlab/gitlabcom', type='web', variables=['environment', 'stage']),
-        toolingLinks.kibana(title='Rails', index='rails', type='web', slowRequestSeconds=10),
       ],
     },
 
     rails_requests:
-      sliLibrary.get('rails_request_apdex').generateServiceLevelIndicator(railsSelector),
+      sliLibrary.get('rails_request_apdex').generateServiceLevelIndicator(railsSelector) {
+        toolingLinks: [
+          // TODO: These need to be defined in the appliation SLI and built using
+          // selectors using the appropriate fields
+          // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1411
+          toolingLinks.kibana(title='Rails', index='rails', type='web', slowRequestSeconds=5),
+        ],
+      },
   },
 })
