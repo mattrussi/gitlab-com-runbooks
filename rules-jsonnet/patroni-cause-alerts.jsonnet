@@ -125,7 +125,7 @@ local rules = {
           ),
           'for': '1h',
           labels: {
-            team: 'access',
+            team: 'authentication_and_authorization',
             severity: 's4',
             alert_type: 'cause',
             runbook: 'docs/patroni/rails-sql-apdex-slow.md',
@@ -137,7 +137,7 @@ local rules = {
 
               This work was previously addressed through the epic https://gitlab.com/groups/gitlab-org/-/epics/3343#note_652970688.
 
-              The Access team should work to understand why this is happening and look to address the problem.
+              The Authentication and authorization team should work to understand why this is happening and look to address the problem.
             |||,
             grafana_dashboard_id: 'alerts-pg_user_tables_primary/alerts-pg-user-table-alerts-primary',
             grafana_min_zoom_hours: '24',

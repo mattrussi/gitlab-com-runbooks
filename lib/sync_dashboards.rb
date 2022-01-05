@@ -59,4 +59,11 @@ module SyncDashboards
     # Remove whitespaces, empty lines and stuff to prevent trivial differences
     content.to_s.split("\n").map(&:strip).reject(&:empty?).join("\n")
   end
+
+  def trim_dashboard_file(group)
+    # Grafana's UID is generated based a dashboard's folder and file name.
+    # Unfortunately, Grafana limits the max length to 40 characters. So, the
+    # remaining length should be a bit shorter.
+    group[0..(40 - self.class::DASHBOARDS_FOLDER.length - 2)]
+  end
 end

@@ -19,11 +19,11 @@ test.suite({
     expect: 'not_owned',
   },
   testStageGroupAddsKey: {
-    actual: stages.stageGroup('access').key,
-    expect: 'access',
+    actual: stages.stageGroup('authentication_and_authorization').key,
+    expect: 'authentication_and_authorization',
   },
   testStageGroupAddsTeam: {
-    actual: stages.stageGroup('access').slack_alerts_channel,
+    actual: stages.stageGroup('authentication_and_authorization').slack_alerts_channel,
     expect: 'feed_alerts_access',
   },
   testFeatureCategoryMapCategories: {

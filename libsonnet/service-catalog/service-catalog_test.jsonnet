@@ -93,11 +93,11 @@ test.suite({
     expect: std.set(['package', 'scalability']),
   },
   testLookupExistingTeamForStageGroup: {
-    actual: serviceCatalog.lookupTeamForStageGroup('access'),
+    actual: serviceCatalog.lookupTeamForStageGroup('authentication_and_authorization'),
     expect: {
       issue_tracker: null,
-      name: 'access',
-      product_stage_group: 'access',
+      name: 'authentication_and_authorization',
+      product_stage_group: 'authentication_and_authorization',
       send_slo_alerts_to_team_slack_channel: true,
       slack_alerts_channel: 'feed_alerts_access',
       ignored_components: ['graphql_queries', 'rails_requests'],

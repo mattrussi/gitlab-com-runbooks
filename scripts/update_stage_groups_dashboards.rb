@@ -12,10 +12,6 @@ class UpdateStageGroupsDashboard
   DASHBOARDS_FOLDER = "stage-groups"
   DEFAULT_DASHBOARDS_DIR = File.expand_path(File.join(File.dirname(__FILE__), "../dashboards/#{DASHBOARDS_FOLDER}/"))
   DEFAULT_MAPPING_PATH = File.expand_path(File.join(File.dirname(__FILE__), '../services/stage-group-mapping.jsonnet'))
-  # Grafana's UID is generated based a dashboard's folder and file name.
-  # Unfortunately, Grafana limits the max length to 40 characters. So, the
-  # remaining length should be a bit shorter.
-  MAX_GROUP_FILE_LENGTH = 40 - DASHBOARDS_FOLDER.length - 1
 
   def self.render_template(group)
     raise 'Group key is empty' if group.nil? || group.empty?
@@ -58,10 +54,6 @@ class UpdateStageGroupsDashboard
 
   def render_template(group)
     self.class.render_template(group)
-  end
-
-  def trim_dashboard_file(group)
-    group[0..MAX_GROUP_FILE_LENGTH - 1]
   end
 end
 
