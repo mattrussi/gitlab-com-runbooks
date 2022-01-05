@@ -69,6 +69,9 @@ describe UpdateStageGroupsDashboard do
       let(:project_management_file) { "#{dashboard_dir}/project-management.dashboard.jsonnet" }
       let(:project_management_template) { described_class.render_template('project-management') }
 
+      let(:long_file) { "#{dashboard_dir}/this-is-really-long-long-lo.dashboard.jsonnet" }
+      let(:long_template) { described_class.render_template('this-is-really-long-long-long-long-long-long-stage') }
+
       before do
         File.write(mapping_path, groups_jsonnet)
 
@@ -95,6 +98,9 @@ describe UpdateStageGroupsDashboard do
 
         expect(File.exist?(project_management_file)).to be(true)
         expect(File.read(project_management_file)).to eql(project_management_template)
+
+        expect(File.exist?(long_file)).to be(true)
+        expect(File.read(long_file)).to eql(long_template)
       end
     end
   end
