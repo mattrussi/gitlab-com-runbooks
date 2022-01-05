@@ -32,20 +32,20 @@ groups:
   - record: application_sli_aggregation:graphql_query_apdex:apdex:weight:score_5m
     expr: |
       sum by (env,environment,tier,type,stage,endpoint_id,feature_category,query_urgency) (
-        (application_sli_aggregation:graphql_query_apdex:apdex:weight:score_5m{monitor!="global"} >= 0)
+        (sli_aggregations:gitlab_sli:graphql_query_apdex:total_rate5m{monitor!="global"} >= 0)
       )
   - record: application_sli_aggregation:graphql_query_apdex:apdex:success:rate_5m
     expr: |
       sum by (env,environment,tier,type,stage,endpoint_id,feature_category,query_urgency) (
-        (application_sli_aggregation:graphql_query_apdex:apdex:success:rate_5m{monitor!="global"} >= 0)
+        (sli_aggregations:gitlab_sli:graphql_query_apdex:success_total_rate5m{monitor!="global"} >= 0)
       )
   - record: application_sli_aggregation:graphql_query_apdex:apdex:weight:score_1h
     expr: |
       sum by (env,environment,tier,type,stage,endpoint_id,feature_category,query_urgency) (
-        (application_sli_aggregation:graphql_query_apdex:apdex:weight:score_1h{monitor!="global"} >= 0)
+        (sli_aggregations:gitlab_sli:graphql_query_apdex:total_rate1h{monitor!="global"} >= 0)
       )
   - record: application_sli_aggregation:graphql_query_apdex:apdex:success:rate_1h
     expr: |
       sum by (env,environment,tier,type,stage,endpoint_id,feature_category,query_urgency) (
-        (application_sli_aggregation:graphql_query_apdex:apdex:success:rate_1h{monitor!="global"} >= 0)
+        (sli_aggregations:gitlab_sli:graphql_query_apdex:success_total_rate1h{monitor!="global"} >= 0)
       )

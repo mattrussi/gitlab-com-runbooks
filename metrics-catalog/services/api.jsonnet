@@ -53,6 +53,7 @@ metricsCatalog.serviceDefinition({
     vms: false,
     kubernetes: true,
   },
+  recordingRuleMetrics: sliLibrary.get('graphql_query_apdex').recordingRuleMetrics,
   regional: true,
   kubeResources: {
     api: {
@@ -187,6 +188,13 @@ metricsCatalog.serviceDefinition({
         monitoringThresholds+: {
           apdexScore: 0.99,
         },
+      },
+
+    graphql_queries:
+      sliLibrary.get('graphql_query_apdex').generateServiceLevelIndicator(railsSelector) {
+        toolingLinks: [
+          toolingLinks.kibana(title='Rails', index='rails_graphql', type='api', slowRequestSeconds=1),
+        ],
       },
   },
 })

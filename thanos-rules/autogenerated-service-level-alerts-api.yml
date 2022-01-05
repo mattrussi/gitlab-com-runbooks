@@ -5,6 +5,268 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
+  - alert: ApiServiceGraphqlQueriesApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The graphql_queries SLI of the api service (`{{ $labels.stage }}` stage)
+        has an apdex violating SLO
+      description: |
+        The number of GraphQL queries meeting their duration target based on the urgency of the endpoint. By default, a query should take no more than 1s. We're working on making the urgency customizable in [this epic](https://gitlab.com/groups/gitlab-org/-/epics/5841).
+
+        Mutliple queries could be batched inside a single request.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: api-main/api-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2613733144"
+      grafana_variables: environment,stage
+      runbook: docs/api/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: in_source_metrics
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_1h{component="graphql_queries",monitor="global",type="api"}
+          < (1 - 14.4 * 0.005000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_5m{component="graphql_queries",monitor="global",type="api"}
+          < (1 - 14.4 * 0.005000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="graphql_queries",monitor="global",type="api"}) >= 1
+      )
+  - alert: ApiServiceGraphqlQueriesApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The graphql_queries SLI of the api service (`{{ $labels.stage }}` stage)
+        has an apdex violating SLO
+      description: |
+        The number of GraphQL queries meeting their duration target based on the urgency of the endpoint. By default, a query should take no more than 1s. We're working on making the urgency customizable in [this epic](https://gitlab.com/groups/gitlab-org/-/epics/5841).
+
+        Mutliple queries could be batched inside a single request.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: api-main/api-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2613733144"
+      grafana_variables: environment,stage
+      runbook: docs/api/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: in_source_metrics
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_6h{component="graphql_queries",monitor="global",type="api"}
+          < (1 - 6 * 0.005000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_30m{component="graphql_queries",monitor="global",type="api"}
+          < (1 - 6 * 0.005000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="graphql_queries",monitor="global",type="api"}) >= 1
+      )
+  - alert: ApiServiceGraphqlQueriesApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The graphql_queries SLI of the api service in region `{{ $labels.region
+        }}` has an apdex violating SLO
+      description: |
+        The number of GraphQL queries meeting their duration target based on the urgency of the endpoint. By default, a query should take no more than 1s. We're working on making the urgency customizable in [this epic](https://gitlab.com/groups/gitlab-org/-/epics/5841).
+
+        Mutliple queries could be batched inside a single request.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: api-main/api-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2613733144"
+      grafana_variables: environment,stage
+      runbook: docs/api/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: in_source_metrics
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_apdex:ratio_1h{component="graphql_queries",monitor="global",type="api"}
+          < (1 - 14.4 * 0.005000)
+        )
+        and
+        (
+          gitlab_regional_sli_apdex:ratio_5m{component="graphql_queries",monitor="global",type="api"}
+          < (1 - 14.4 * 0.005000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="graphql_queries",monitor="global",type="api"}) >= 1
+      )
+  - alert: ApiServiceGraphqlQueriesApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The graphql_queries SLI of the api service in region `{{ $labels.region
+        }}` has an apdex violating SLO
+      description: |
+        The number of GraphQL queries meeting their duration target based on the urgency of the endpoint. By default, a query should take no more than 1s. We're working on making the urgency customizable in [this epic](https://gitlab.com/groups/gitlab-org/-/epics/5841).
+
+        Mutliple queries could be batched inside a single request.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: api-main/api-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2613733144"
+      grafana_variables: environment,stage
+      runbook: docs/api/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: in_source_metrics
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_apdex:ratio_6h{component="graphql_queries",monitor="global",type="api"}
+          < (1 - 6 * 0.005000)
+        )
+        and
+        (
+          gitlab_regional_sli_apdex:ratio_30m{component="graphql_queries",monitor="global",type="api"}
+          < (1 - 6 * 0.005000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="graphql_queries",monitor="global",type="api"}) >= 1
+      )
+  - alert: ApiServiceGraphqlQueriesTrafficCessation
+    for: 5m
+    annotations:
+      title: The graphql_queries SLI of the api service (`{{ $labels.stage }}` stage)
+        has not received any traffic in the past 30 minutes
+      description: |
+        The number of GraphQL queries meeting their duration target based on the urgency of the endpoint. By default, a query should take no more than 1s. We're working on making the urgency customizable in [this epic](https://gitlab.com/groups/gitlab-org/-/epics/5841).
+
+        Mutliple queries could be batched inside a single request.
+
+        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+      grafana_dashboard_id: api-main/api-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1423714754"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:gitlab_sli:graphql_query_apdex:total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="api"}
+        )
+      runbook: docs/api/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: in_source_metrics
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{type="api", component="graphql_queries", stage="main", monitor="global"} == 0
+  - alert: ApiServiceGraphqlQueriesTrafficAbsent
+    for: 30m
+    annotations:
+      title: The graphql_queries SLI of the api service (`{{ $labels.stage }}` stage)
+        has not reported any traffic in the past 30 minutes
+      description: |
+        The number of GraphQL queries meeting their duration target based on the urgency of the endpoint. By default, a query should take no more than 1s. We're working on making the urgency customizable in [this epic](https://gitlab.com/groups/gitlab-org/-/epics/5841).
+
+        Mutliple queries could be batched inside a single request.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: api-main/api-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1423714754"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:gitlab_sli:graphql_query_apdex:total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="api"}
+        )
+      runbook: docs/api/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: in_source_metrics
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_5m{type="api", component="graphql_queries", stage="main", monitor="global"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{type="api", component="graphql_queries", stage="main", monitor="global"}
   - alert: ApiServiceLoadbalancerErrorSLOViolation
     for: 2m
     annotations:

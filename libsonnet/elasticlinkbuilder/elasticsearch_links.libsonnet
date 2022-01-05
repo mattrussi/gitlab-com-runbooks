@@ -227,6 +227,12 @@ local indexCatalog = {
     latencyFieldUnitMultiplier: 1,
   },
 
+  rails_graphql: self.rails {
+    defaultSeriesSplitField: 'json.meta.caller_id.keyword',
+    defaultColumns: ['json.meta.caller_id', 'json.operation_name', 'json.meta.feature_category', 'json.operation_fingerprint', 'json.duration_s'],
+    defaultFilters: [matchFilter('json.subcomponent', 'graphql_json')],
+  },
+
   redis: indexDefaults {
     timestamp: 'json.time',
     indexPattern: 'AWSQX_Vf93rHTYrsexmk',

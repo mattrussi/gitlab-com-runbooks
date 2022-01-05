@@ -21,6 +21,7 @@ teams:
   oncall_schedule:   # Link to pagerduty oncall schedule
   product_stage_group: distribution_deploy
   ignored_components:
+  - graphql_queries
   - rails_requests
 
 - name: geo
@@ -32,6 +33,7 @@ teams:
   oncall_schedule:   # Link to pagerduty oncall schedule
   product_stage_group: geo
   ignored_components:
+  - graphql_queries
   - rails_requests
 
 - name: gitaly
@@ -40,6 +42,7 @@ teams:
   product_stage_group: gitaly
   send_slo_alerts_to_team_slack_channel: true
   ignored_components:
+  - graphql_queries
   - rails_requests
 
 - name: manage
@@ -67,6 +70,7 @@ teams:
   oncall_schedule:   # Link to pagerduty oncall schedule
   product_stage_group: release
   ignored_components:
+  - graphql_queries
   - rails_requests
 
 - name: release-management
@@ -93,12 +97,14 @@ teams:
   oncall_schedule:   # Link to pagerduty oncall schedule
   product_stage_group: package
   ignored_components:
+  - graphql_queries
   - rails_requests
 
 - name: runner
   product_stage_group: runner
   slack_alerts_channel: alerts-ci-cd
   ignored_components:
+  - graphql_queries
   - rails_requests
 
 # From https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/344
@@ -115,12 +121,14 @@ teams:
   slack_alerts_channel: g_delivery
   product_stage_group: delivery
   ignored_components:
+  - graphql_queries
   - rails_requests
 
 - name: scalability
   slack_alerts_channel: g_scalability
   product_stage_group: scalability
   ignored_components:
+  - graphql_queries
   - rails_requests
 
 # Workhorse is a virtual team
@@ -144,6 +152,7 @@ teams:
   slack_alerts_channel: feed_alerts_configure
   send_slo_alerts_to_team_slack_channel: true
   ignored_components:
+  - graphql_queries
   - rails_requests
 
 - name: access
@@ -151,29 +160,35 @@ teams:
   product_stage_group: access
   send_slo_alerts_to_team_slack_channel: true
   ignored_components:
+  - graphql_queries
   - rails_requests
 
 - name: global_search
   slack_alerts_channel: g_global_search
   product_stage_group: global_search
   ignored_components:
+  - graphql_queries
   - rails_requests
 
 - name: 5-min-app
   product_stage_group: 5-min-app
   ignored_components:
+  - graphql_queries
   - rails_requests
 - name: activation
   product_stage_group: activation
   ignored_components:
+  - graphql_queries
   - rails_requests
 - name: adoption
   product_stage_group: adoption
   ignored_components:
+  - graphql_queries
   - rails_requests
 - name: applied_ml
   product_stage_group: applied_ml
   ignored_components:
+  - graphql_queries
   - rails_requests
 - name: certify
   url: https://about.gitlab.com/handbook/engineering/development/dev/plan-product-planning-certify-be/
@@ -181,140 +196,176 @@ teams:
   slack_channel: s_plan-be
   slack_alerts_channel: s_plan-be
   ignored_components:
+  - graphql_queries
   - rails_requests
 - name: code_review
   product_stage_group: code_review
   ignored_components:
+  - graphql_queries
   - rails_requests
 - name: compliance
   product_stage_group: compliance
   ignored_components:
+  - graphql_queries
   - rails_requests
 - name: composition_analysis
   product_stage_group: composition_analysis
   ignored_components:
+  - graphql_queries
   - rails_requests
 - name: container_security
   product_stage_group: container_security
   ignored_components:
+  - graphql_queries
   - rails_requests
 - name: conversion
   product_stage_group: conversion
   ignored_components:
+  - graphql_queries
   - rails_requests
 - name: database
   product_stage_group: database
   ignored_components:
+  - graphql_queries
   - rails_requests
 - name: dataops
   product_stage_group: dataops
   ignored_components:
+  - graphql_queries
   - rails_requests
 - name: dynamic_analysis
   product_stage_group: dynamic_analysis
   ignored_components:
+  - graphql_queries
   - rails_requests
 - name: editor
   product_stage_group: editor
   ignored_components:
+  - graphql_queries
   - rails_requests
 - name: expansion
   product_stage_group: expansion
   ignored_components:
+  - graphql_queries
   - rails_requests
 - name: foundations
   product_stage_group: foundations
   ignored_components:
+  - graphql_queries
   - rails_requests
 - name: horse
   product_stage_group: horse
   ignored_components:
+  - graphql_queries
   - rails_requests
 - name: import
   product_stage_group: import
   ignored_components:
+  - graphql_queries
   - rails_requests
 - name: integrations
   product_stage_group: integrations
   ignored_components:
+  - graphql_queries
   - rails_requests
 - name: license
   product_stage_group: license
   ignored_components:
+  - graphql_queries
   - rails_requests
 - name: memory
   product_stage_group: memory
   ignored_components:
+  - graphql_queries
   - rails_requests
 - name: mlops
   product_stage_group: mlops
   ignored_components:
+  - graphql_queries
   - rails_requests
 - name: moble_devops
   product_stage_group: moble_devops
   ignored_components:
+  - graphql_queries
   - rails_requests
 - name: monitor
   product_stage_group: monitor
   ignored_components:
+  - graphql_queries
   - rails_requests
 - name: optimize
   product_stage_group: optimize
   ignored_components:
+  - graphql_queries
   - rails_requests
 - name: pipeline_authoring
   product_stage_group: pipeline_authoring
+  ignored_components:
+  - graphql_queries
 - name: pipeline_execution
   product_stage_group: pipeline_execution
   slack_channel: g_pipeline-execution
   send_slo_alerts_to_team_slack_channel: true
   ignored_components:
+  - graphql_queries
   - rails_requests
 - name: product_intelligence
   product_stage_group: product_intelligence
   ignored_components:
+  - graphql_queries
   - rails_requests
 - name: product_planning
   product_stage_group: product_planning
   ignored_components:
+  - graphql_queries
   - rails_requests
 - name: project_management
   product_stage_group: project_management
   ignored_components:
+  - graphql_queries
   - rails_requests
 - name: purchase
   product_stage_group: purchase
   ignored_components:
+  - graphql_queries
   - rails_requests
 - name: sharding
   product_stage_group: sharding
   ignored_components:
+  - graphql_queries
   - rails_requests
 - name: source_code
   product_stage_group: source_code
   ignored_components:
+  - graphql_queries
   - rails_requests
 - name: static_analysis
   product_stage_group: static_analysis
   ignored_components:
+  - graphql_queries
   - rails_requests
 - name: testing
   product_stage_group: testing
   ignored_components:
+  - graphql_queries
   - rails_requests
 - name: threat_insights
   product_stage_group: threat_insights
   ignored_components:
+  - graphql_queries
   - rails_requests
 - name: utilization
   product_stage_group: utilization
   ignored_components:
+  - graphql_queries
   - rails_requests
 - name: vulnerability_research
   product_stage_group: vulnerability_research
   ignored_components:
+  - graphql_queries
   - rails_requests
 - name: workspace
   product_stage_group: workspace
   ignored_components:
+  - graphql_queries
   - rails_requests
