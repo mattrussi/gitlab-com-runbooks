@@ -38,4 +38,15 @@
       'projects',
     ],
   },
+  'this-is-really-long-long-long-long-long-long-stage': {
+    name: 'This is a very long long long long long long stage',
+    stage: 'plan',
+    feature_categories: [
+      'issue_tracking',
+      'boards',
+      'time_tracking',
+      'jira_importer',
+      'projects',
+    ],
+  },
 }

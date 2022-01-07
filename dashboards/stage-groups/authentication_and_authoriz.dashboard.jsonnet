@@ -2,7 +2,6 @@
 // Please feel free to customize this file.
 local stageGroupDashboards = import './stage-group-dashboards.libsonnet';
 
-stageGroupDashboards
-.dashboard('access', components=stageGroupDashboards.supportedComponents)
+stageGroupDashboards.dashboard('authentication_and_authorization', components=stageGroupDashboards.supportedComponents)
 .addSidekiqJobDurationByUrgency()
 .stageGroupDashboardTrailer()

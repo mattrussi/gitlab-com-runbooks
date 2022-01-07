@@ -155,9 +155,9 @@ teams:
   - graphql_queries
   - rails_requests
 
-- name: access
+- name: authentication_and_authorization
   slack_alerts_channel: feed_alerts_access
-  product_stage_group: access
+  product_stage_group: authentication_and_authorization
   send_slo_alerts_to_team_slack_channel: true
   ignored_components:
   - graphql_queries
@@ -288,8 +288,8 @@ teams:
   ignored_components:
   - graphql_queries
   - rails_requests
-- name: monitor
-  product_stage_group: monitor
+- name: respond
+  product_stage_group: respond
   ignored_components:
   - graphql_queries
   - rails_requests

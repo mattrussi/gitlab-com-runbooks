@@ -9,7 +9,8 @@ require_relative '../lib/sync_dashboards'
 class UpdateStageGroupsDashboard
   include SyncDashboards
 
-  DEFAULT_DASHBOARDS_DIR = File.expand_path(File.join(File.dirname(__FILE__), '../dashboards/stage-groups/'))
+  DASHBOARDS_FOLDER = "stage-groups"
+  DEFAULT_DASHBOARDS_DIR = File.expand_path(File.join(File.dirname(__FILE__), "../dashboards/#{DASHBOARDS_FOLDER}/"))
   DEFAULT_MAPPING_PATH = File.expand_path(File.join(File.dirname(__FILE__), '../services/stage-group-mapping.jsonnet'))
 
   def self.render_template(group)
