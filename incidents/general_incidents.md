@@ -50,7 +50,7 @@ Look at [Apdex and Error Ratio Graphs](https://dashboards.gitlab.net/d/general-s
 
 ### Estimate the Severity of the issue
 
-Estimate the severity of the issue as soon as EOC or you have an idea on what the problem is. Evaluate based on [Availability](/handbook/engineering/quality/issue-triage/#availability). Sometimes it is tough to say to the upset customer that their issue is not S1 for us, but we need to think about the whole situation and other users. 
+Estimate the severity of the issue as soon as EOC or you have an idea on what the problem is. Evaluate based on [Availability](https://about.gitlab.com/handbook/engineering/quality/issue-triage/#availability). Sometimes it is tough to say to the upset customer that their issue is not S1 for us, but we need to think about the whole situation and other users. 
 
 We prefer to avoid [hotpatches](https://gitlab.com/gitlab-org/release/docs/-/blob/master/general/deploy/post-deployment-patches.md#overview). If a hotpatch is being considered, the issue severity will drive the decision:
 
