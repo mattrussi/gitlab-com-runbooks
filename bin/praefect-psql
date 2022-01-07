@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+
+set -efo pipefail
+
+print_help() {
+  echo >&2 "\"praefect-psql\" helps you connect to the praefect database"
+  echo >&2 "USAGE:"
+  echo >&2 "    glsh praefect-sql [ENV]"
+  echo >&2
+  echo >&2 "ENV:"
+  echo >&2 "    gstg"
+  echo >&2 "    gprd"
+}
+
+main() {
+  case $1 in
+    gstg)
+      local env="$1"
+      local project="gitlab-staging-1"
+      ;;
+    gprd)
+      local env="$1"
+      local project="gitlab-production"
+      ;;
+    *)
+      print_help
+      exit 1
+      ;;
+  esac
+
+  shift
+
+  local psql_env="$(
+    ssh praefect-01-stor-${env}.c.${project}.internal \
+      'sudo cat /var/opt/gitlab/praefect/config.toml' | \
+        toml get /dev/stdin . | \
+        jq -r '{"PGHOST": .database.host, "PGUSER": .database.user, "PGPASSWORD": .database.password, "PGDATABASE": .database.dbname, "PGSSLMODE": .database.sslmode}|to_entries[]|(.key + "=" + .value)' | \
+        tr '\n' ' '
+  )"
+
+  ssh -t console-01-sv-${env}.c.${project}.internal "$psql_env psql $(printf "%q " "$@")"
+}
+
+if [[ ! $(command -v toml) ]]; then
+  echo >&2 "glsh: \"toml\" could not be found follow https://crates.io/crates/toml-cli (cargo install toml-cli)"
+  exit 1
+fi
+
+if [[ ! $(command -v jq) ]]; then
+  echo >&2 "glsh: \"jq\" could not be found follow https://stedolan.github.io/jq/download/"
+  exit 1
+fi
+
+if [[ -z "$1" ]]; then
+  print_help
+  exit 1
+fi
+
+main "$@"
