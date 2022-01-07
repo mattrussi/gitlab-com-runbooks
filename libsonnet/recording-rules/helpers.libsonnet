@@ -51,13 +51,18 @@ local joinExpr(targetAggregationSet) =
   if !std.objectHas(targetAggregationSet, 'joinSource') then
     ''
   else
+    local selector = if std.objectHas(targetAggregationSet.joinSource, 'selector') then
+      targetAggregationSet.joinSource.selector
+    else
+      {};
+
     local requiredLabelsFromJoin = targetAggregationSet.joinSource.labels + targetAggregationSet.joinSource.on;
     ' * on(%(joinOn)s) group_left(%(labels)s) (group by (%(aggregatedLabels)s) (%(metric)s{%(selector)s}))' % {
       joinOn: aggregations.serialize(std.set(targetAggregationSet.joinSource.on)),
       labels: aggregations.serialize(std.set(targetAggregationSet.joinSource.labels)),
       aggregatedLabels: aggregations.serialize(std.set(requiredLabelsFromJoin)),
       metric: targetAggregationSet.joinSource.metric,
-      selector: selectors.serializeHash(targetAggregationSet.joinSource.selector),
+      selector: selectors.serializeHash(selector),
     };
 
 local aggregationFilterExpr(targetAggregationSet) =

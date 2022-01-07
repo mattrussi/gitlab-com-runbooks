@@ -406,9 +406,9 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     },
   }),
 
-  stageGroupSLIs: aggregationSet.AggregationSet({
-    id: 'stage_Groups',
-    name: 'Stage Group metrics',
+  componentStageGroupSLIs: aggregationSet.AggregationSet({
+    id: 'component_stage_groups',
+    name: 'Stage Group Component-Aggregated Metrics',
     intermediateSource: false,
     selector: { monitor: 'global' },
     labels: ['env', 'environment', 'tier', 'type', 'stage', 'component', 'stage_group', 'product_stage'],
@@ -427,6 +427,30 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
       errorRate: 'gitlab:component:stage_group:execution:error:rate_%s',
       successRate: 'gitlab:component:stage_group:execution:success:rate_%s',
       errorRatio: 'gitlab:component:stage_group:execution:error:ratio_%s',
+    },
+  }),
+
+  stageGroupSLIs: aggregationSet.AggregationSet({
+    id: 'stage_groups',
+    name: 'Stage Group Metrics',
+    intermediateSource: false,
+    selector: { monitor: 'global' },
+    labels: ['env', 'environment', 'tier', 'type', 'stage', 'stage_group', 'product_stage'],
+    upscaleLongerBurnRates: true,
+    joinSource: {
+      metric: 'gitlab:feature_category:stage_group:mapping',
+      selector: { monitor: 'global' },
+      on: ['feature_category'],
+      labels: ['stage_group', 'product_stage'],
+    },
+    metricFormats: {
+      apdexSuccessRate: 'gitlab:stage_group:execution:apdex:success:rate_%s',
+      apdexWeight: 'gitlab:stage_group:execution:apdex:weight:score_%s',
+      apdexRatio: 'gitlab:stage_group:execution:apdex:ratio_%s',
+      opsRate: 'gitlab:stage_group:execution:ops:rate_%s',
+      errorRate: 'gitlab:stage_group:execution:error:rate_%s',
+      successRate: 'gitlab:stage_group:execution:success:rate_%s',
+      errorRatio: 'gitlab:stage_group:execution:error:ratio_%s',
     },
   }),
 }
