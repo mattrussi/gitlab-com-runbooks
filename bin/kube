@@ -36,6 +36,7 @@ print_use_cluster_help() {
   echo >&2 "    pre"
   echo >&2 "    ops"
   echo >&2 "    org-ci"
+  echo >&2 "    stgsub"
 }
 
 setup() {
@@ -49,6 +50,8 @@ setup() {
   gcloud container clusters get-credentials gprd-us-east1-b --region us-east1-b --project gitlab-production
   gcloud container clusters get-credentials gprd-us-east1-c --region us-east1-c --project gitlab-production
   gcloud container clusters get-credentials gprd-us-east1-d --region us-east1-d --project gitlab-production
+
+  gcloud container clusters get-credentials stgsub-customers-gke --region us-east1 --project gitlab-subscriptions-staging
 
   gcloud container clusters get-credentials pre-gitlab-gke --region us-east1 --project gitlab-pre
   gcloud container clusters get-credentials ops-gitlab-gke --region us-east1 --project gitlab-ops
@@ -112,6 +115,12 @@ use_cluster() {
       api_ip=$(get_cluster_ip gke_gitlab-production_us-east1-d_gprd-us-east1-d)
       notify_shell
       sshuttle -r console-01-sv-gprd.c.gitlab-production.internal "${api_ip}/32"
+      ;;
+    stgsub)
+      kubectx gke_gitlab-subscriptions-staging_us-east1_stgsub-customers-gke
+      api_ip=$(get_cluster_ip gke_gitlab-subscriptions-staging_us-east1_stgsub-customers-gke)
+      notify_shell
+      sshuttle -r bastion-01-inf-stgsub.c.gitlab-subscriptions-staging.internal "${api_ip}/32"
       ;;
     pre)
       kubectx gke_gitlab-pre_us-east1_pre-gitlab-gke
