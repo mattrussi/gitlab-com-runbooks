@@ -1,5 +1,7 @@
 local durationParser = import 'utils/duration-parser.libsonnet';
+local misc = import 'utils/misc.libsonnet';
 local validator = import 'utils/validator.libsonnet';
+local multiburnFactors = import 'mwmbr/multiburn_factors.libsonnet';
 
 local defaultSourceBurnRates = ['5m', '30m', '1h'];
 local defaultGlobalBurnRates = defaultSourceBurnRates + ['6h', '3d'];
@@ -26,6 +28,14 @@ local arrayOfStringsValidator = validator.validator(
   'not an array of strings'
 );
 
+local windowsWithout3d = std.filter(function(window) window != '3d', multiburnFactors.windows);
+
+local mwmbrValidator = validator.validator(
+  function(v)
+    misc.all(function(burnRate) std.member(v, burnRate), windowsWithout3d),
+  'does not contain all of %s' % [windowsWithout3d]
+);
+
 local buildValidator(definition) =
   local required = {
     selector: validator.object,
@@ -45,7 +55,10 @@ local buildValidator(definition) =
   local optionalSupportedBurnRates =
     if std.objectHas(definition, 'supportedBurnRates') then
       {
-        supportedBurnRates: arrayOfStringsValidator,
+        supportedBurnRates: if definition.generateSLODashboards then
+                              validator.and(arrayOfStringsValidator, mwmbrValidator)
+                            else
+                              arrayOfStringsValidator,
       } else {};
   validator.new(required + optionalBurnRates + optionalFormats + optionalSupportedBurnRates);
 /**
@@ -75,6 +88,9 @@ local buildValidator(definition) =
  */
 
 {
+  // For testing only.
+  _UnvalidatedAggregationSet(definition):: buildValidator(definitionDefaults + definition),
+
   AggregationSet(definition)::
     local unvalidatedDefinition = definitionDefaults + definition;
     local definitionWithDefaults = buildValidator(unvalidatedDefinition).assertValid(unvalidatedDefinition);

@@ -20,6 +20,12 @@ local v3 = validator.new({
   },
 });
 
+local matches = validator.validator(function(v) v == 'foo', 'does not match "foo"');
+
+local v4 = validator.new({
+  stringAndMatches: validator.and(validator.string, matches),
+});
+
 test.suite({
   testV1Basic: {
     actual: v1.assertValid(v1Valid),
@@ -59,13 +65,29 @@ test.suite({
     actual: v3._validationMessages({}),
     expect: ['field nested is required'],
   },
-  testV2Valid: {
+  testV3Valid: {
     actual: v3.isValid({ nested: { stringValue: 'a', numberValue: 1 } }),
     expect: true,
   },
-  testV2Null: {
+  testV3Null: {
     actual: v3._validationMessages({ nested: null }),
     expect: ['field nested: expected an object'],
   },
 
+  testV4Missing: {
+    actual: v4._validationMessages({}),
+    expect: ['field stringAndMatches is required'],
+  },
+  testV4Valid: {
+    actual: v4.isValid({ stringAndMatches: 'foo' }),
+    expect: true,
+  },
+  testV4InvalidFirst: {
+    actual: v4._validationMessages({ stringAndMatches: true }),
+    expect: ['field stringAndMatches: expected a string'],
+  },
+  testV4InvalidSecond: {
+    actual: v4._validationMessages({ stringAndMatches: 'bar' }),
+    expect: ['field stringAndMatches: does not match "foo"'],
+  },
 })

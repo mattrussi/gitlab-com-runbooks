@@ -36,6 +36,7 @@ local generatedFixture = aggregationSet.AggregationSet({
   selector: { x: 'Y' },
   intermediateSource: false,
   labels: ['common_label_1', 'common_label_2'],
+  generateSLODashboards: false,
   supportedBurnRates: ['1m', '5m'],
   metricFormats: {
     apdexSuccessRate: 'target_generated_%s_success_rate',
@@ -53,6 +54,9 @@ local mixedFixture = aggregationSet.AggregationSet(fixture1 {
     apdexRatio: 'target_generated_%s_apdex_ratio',
   },
 });
+
+local isValid(definition) =
+  aggregationSet._UnvalidatedAggregationSet(definition).isValid(definition);
 
 test.suite({
   testDefaults: {
@@ -140,5 +144,49 @@ test.suite({
   testMixedGeneratedGetBurnRates: {
     actual: mixedFixture.getBurnRates(),
     expect: ['1m', '5m', '30m', '1h', '6h', '3d', '17d'],
+  },
+
+  testValidBurnRatesDashboard: {
+    actual: isValid({
+      labels: [],
+      selector: {},
+      upscaleLongerBurnRates: false,
+      generateSLODashboards: true,
+      supportedBurnRates: ['5m', '30m', '1h', '6h'],
+    }),
+    expect: true,
+  },
+
+  testValidBurnRatesNoDashboard: {
+    actual: isValid({
+      labels: [],
+      selector: {},
+      upscaleLongerBurnRates: false,
+      generateSLODashboards: false,
+      supportedBurnRates: ['1m'],
+    }),
+    expect: true,
+  },
+
+  testInvalidBurnRatesDashboard: {
+    actual: isValid({
+      labels: [],
+      selector: {},
+      upscaleLongerBurnRates: false,
+      generateSLODashboards: true,
+      supportedBurnRates: ['1m'],
+    }),
+    expect: false,
+  },
+
+  testInvalidBurnRatesNoDashboard: {
+    actual: isValid({
+      labels: [],
+      selector: {},
+      upscaleLongerBurnRates: false,
+      generateSLODashboards: false,
+      supportedBurnRates: [1],
+    }),
+    expect: false,
   },
 })
