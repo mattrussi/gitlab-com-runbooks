@@ -69,7 +69,7 @@ local and(validatorA, validatorB) =
     local b = validatorB(v);
     if a == null then
       if b == null then null else b
-      else a;
+    else a;
 
 {
   new:: newValidator,

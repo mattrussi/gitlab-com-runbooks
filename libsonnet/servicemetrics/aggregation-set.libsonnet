@@ -1,7 +1,7 @@
+local multiburnFactors = import 'mwmbr/multiburn_factors.libsonnet';
 local durationParser = import 'utils/duration-parser.libsonnet';
 local misc = import 'utils/misc.libsonnet';
 local validator = import 'utils/validator.libsonnet';
-local multiburnFactors = import 'mwmbr/multiburn_factors.libsonnet';
 
 local defaultSourceBurnRates = ['5m', '30m', '1h'];
 local defaultGlobalBurnRates = defaultSourceBurnRates + ['6h', '3d'];
@@ -56,9 +56,9 @@ local buildValidator(definition) =
     if std.objectHas(definition, 'supportedBurnRates') then
       {
         supportedBurnRates: if definition.generateSLODashboards then
-                              validator.and(arrayOfStringsValidator, mwmbrValidator)
-                            else
-                              arrayOfStringsValidator,
+          validator.and(arrayOfStringsValidator, mwmbrValidator)
+        else
+          arrayOfStringsValidator,
       } else {};
   validator.new(required + optionalBurnRates + optionalFormats + optionalSupportedBurnRates);
 /**

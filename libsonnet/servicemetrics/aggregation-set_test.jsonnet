@@ -152,7 +152,7 @@ test.suite({
       selector: {},
       upscaleLongerBurnRates: false,
       generateSLODashboards: true,
-      supportedBurnRates: ['5m', '30m', '1h', '6h'],
+      supportedBurnRates: ['1m', '5m', '30m', '1h', '6h', '3d'],
     }),
     expect: true,
   },

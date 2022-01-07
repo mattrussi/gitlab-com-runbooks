@@ -55,6 +55,7 @@ local targetAggregationSet(sli) =
     name: 'Application Defined SLI Global metrics: %s' % sli.name,
     labels: globalLabels + defaultLabels + sli.significantLabels,
     intermediateSource: false,
+    generateSLODashboards: false,
     selector: { monitor: 'global' },
     supportedBurnRates: ['5m', '1h'],
     metricFormats: aggregationFormats(sli),
