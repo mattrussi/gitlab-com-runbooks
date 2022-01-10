@@ -359,18 +359,18 @@ generateTests([
     ],
   },
   {
-    name: 'feature_category="authentication_and_authorization" alerts should be routed to team_access_alerts_channel',
+    name: 'feature_category="authentication_and_authorization" alerts should be routed to team_authentication_and_authorization_alerts_channel',
     labels: {
       feature_category: 'authentication_and_authorization',
       env: 'gprd',
     },
     receivers: [
-      'team_access_alerts_channel',
+      'team_authentication_and_authorization_alerts_channel',
       'prod_alerts_slack_channel',
     ],
   },
   {
-    name: 'high severity alerts should be routed to infrastructure and the appropriate team feature_category="authentication_and_authorization" alerts should be routed to team_access_alerts_channel',
+    name: 'high severity alerts should be routed to infrastructure and the appropriate team feature_category="authentication_and_authorization" alerts should be routed to team_authentication_and_authorization_alerts_channel',
     labels: {
       feature_category: 'authentication_and_authorization',
       env: 'gprd',
@@ -378,7 +378,7 @@ generateTests([
     },
     receivers: [
       'prod_pagerduty',
-      'team_access_alerts_channel',
+      'team_authentication_and_authorization_alerts_channel',
       'production_slack_channel',
     ],
   },
