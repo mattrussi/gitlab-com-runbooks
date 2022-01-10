@@ -7,14 +7,24 @@ local maturityLevels = import 'service-maturity/levels.libsonnet';
 metricsCatalog.serviceDefinition({
   type: 'logging',
   tier: 'inf',
+
   serviceIsStageless: true,  // logging does not have a cny stage
+
   monitoringThresholds: {
     // apdexScore: 0.999,
     errorRatio: 0.999,
   },
   provisioning: {
     vms: false,
-    kubernetes: false,
+    kubernetes: true,
+  },
+  kubeResources: {
+    'fluentd-archiver': {
+      kind: 'StatefulSet',
+      containers: [
+        'fluentd',
+      ],
+    },
   },
   serviceLevelIndicators: {
     elasticsearch_searching_cluster: {
