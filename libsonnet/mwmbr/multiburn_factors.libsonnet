@@ -4,12 +4,16 @@ local durationParser = import 'utils/duration-parser.libsonnet';
 // read https://landing.google.com/sre/workbook/chapters/alerting-on-slos/
 local hoursPerMonth = 24 * 30;
 
-/* MWMBR parameters, indexed by long window */
-local parameters = std.foldl(function(memo, f) memo { [f.longWindow]: f { longWindowHours: durationParser.toSeconds(f.longWindow) / 3600 } }, [
+local windows = [
   { longWindow: '1h', shortWindow: '5m', forDuration: '2m', budgetThresholdForPeriod: 0.02 /* 2% */ },
   { longWindow: '6h', shortWindow: '30m', forDuration: '10m', budgetThresholdForPeriod: 0.05 /* 5% */ },
   { longWindow: '3d', shortWindow: '6h', forDuration: '1h', budgetThresholdForPeriod: 0.1 /* 10% */ },
-], {});
+];
+
+/* MWMBR parameters, indexed by long window */
+local parameters = std.foldl(function(memo, f) memo { [f.longWindow]: f { longWindowHours: durationParser.toSeconds(f.longWindow) / 3600 } },
+                             windows,
+                             {});
 
 local errorBudgetFactorFor(longWindow) =
   local budgetThresholdForPeriod = parameters[longWindow].budgetThresholdForPeriod;
@@ -17,6 +21,8 @@ local errorBudgetFactorFor(longWindow) =
   (budgetThresholdForPeriod * hoursPerMonth) / longWindowHours;
 
 {
+  windows: std.uniq(std.sort(std.flattenArrays(std.map(function(p) [p.longWindow, p.shortWindow], windows)))),
+
   /* Given a long window, returns the factor */
   errorBudgetFactorFor:: errorBudgetFactorFor,
 

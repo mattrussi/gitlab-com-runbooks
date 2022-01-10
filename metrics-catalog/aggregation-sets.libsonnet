@@ -436,7 +436,8 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     intermediateSource: false,
     selector: { monitor: 'global' },
     labels: ['env', 'environment', 'tier', 'type', 'stage', 'stage_group', 'product_stage'],
-    upscaleLongerBurnRates: true,
+    generateSLODashboards: false,
+    supportedBurnRates: ['5m'],
     joinSource: {
       metric: 'gitlab:feature_category:stage_group:mapping',
       selector: { monitor: 'global' },

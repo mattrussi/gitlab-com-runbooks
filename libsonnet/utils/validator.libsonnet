@@ -63,6 +63,14 @@ local or(validatorA, validatorB) =
     else
       '%s or %s' % [a, b];
 
+local and(validatorA, validatorB) =
+  function(v)
+    local a = validatorA(v);
+    local b = validatorB(v);
+    if a == null then
+      if b == null then null else b
+    else a;
+
 {
   new:: newValidator,
   array:: validator(std.isArray, 'expected an array'),
@@ -72,6 +80,7 @@ local or(validatorA, validatorB) =
   object:: validator(std.isObject, 'expected an object'),
   string:: validator(std.isString, 'expected a string'),
   or:: or,
+  and:: and,
   setMember(set):: validator(function(v) std.setMember(v, set), 'value not in valid set'),
   validator:: validator,
 }
