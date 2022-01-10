@@ -42,3 +42,15 @@ df -h
 # and ship it to thanos.
 rm -rf /prometheus/wal/*
 ```
+
+### Remove corrupted WAL files
+
+On occasion the WAL files will become corrupted as they did in [incident 6148](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/6148) and [incident 5998](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/5998)
+
+The resolution to this was to delete the WAL files as below:
+
+```
+ ~ kubectl -n monitoring exec -it prometheus-gitlab-monitoring-promethe-prometheus-0 -c thanos-sidecar -- sh
+/ $ cd /prometheus/
+/prometheus $ rm -rf wal/
+```
