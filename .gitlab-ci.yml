@@ -553,12 +553,9 @@ publish:
       - tags
       - schedules
 
-alertmanager_test:
+test-alertmanager:
+  extends: .default-job-rules
   stage: test
-  rules:
-    - *avoid-schedule-rule
-    - *avoid-stage-group-check-rule
-    - *avoid-maturity-model-generate-rule
   script:
     - make test-alertmanager
 
