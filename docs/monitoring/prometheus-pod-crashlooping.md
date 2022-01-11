@@ -20,11 +20,11 @@ Mitigations:
 
 ```
 # Open an ssh tunnel to the relevant cluster
-sshuttle -r console-01-sv-gprd.c.gitlab-production.internal '35.243.230.38/32' # gprd
+glsh kube use-cluster gprd
 
 # Get a shell on a container that has access to the volume. If prometheus itself
 # is down for a long crashloop, you can use thanos-sidecar:
-kubectl --context gprd -n monitoring exec -it prometheus-gitlab-monitoring-promethe-prometheus-1 -c thanos-sidecar sh
+kubectl -n monitoring exec -it prometheus-gitlab-monitoring-promethe-prometheus-1 -c thanos-sidecar sh
 
 # In that pod shell:
 df -h
@@ -45,7 +45,13 @@ rm -rf /prometheus/wal/*
 
 ### Remove corrupted WAL files
 
-On occasion the WAL files will become corrupted as they did in [incident 6148](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/6148) and [incident 5998](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/5998)
+On occasion the WAL files will become corrupted as they did in [incident 6148](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/6148) and [incident 5998](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/5998).
+
+There are a few things to check to determine if the WAL files are corrupted.
+
+- Run du -h and confirm that wal is large and chunks_head is also huge
+- Tail the logs on the pod to confirm it was recovering WALs when it was killed
+- Search the logs for "iterate on on-disk chunks" and look for errors ([example](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/6148#note_806559414))
 
 The resolution to this was to delete the WAL files as below:
 
