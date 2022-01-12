@@ -280,7 +280,7 @@ One way to workaround it is to investigate the container from the host. Below ar
 
 #### Attach PVC
 
-A existing volume can be attached to toolbox for debuging using `--bind=` or `--bind-ro=` (read only).
+An existing volume can be attached to toolbox for debugging using `--bind=` or `--bind-ro=` (read only).
 
 - `toolbox --bind=/var/lib/kubelet/pods/<containerID>/volume-subpaths/<pvc_id>/...`
 
