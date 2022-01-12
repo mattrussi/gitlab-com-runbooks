@@ -167,7 +167,7 @@ metricsCatalog.serviceDefinition({
         counter='fluentd_output_status_num_errors'
       ),
 
-      significantLabels: ['tag', 'type'],
+      significantLabels: ['fqdn', 'pod', 'type'],
       serviceAggregation: false,
     },
   },
