@@ -375,7 +375,7 @@ local routingTree = Route(
     Route(
       receiver='feed_alerts_staging',
       continue=true,
-      matchers={ env: 'gstg', slo_alert: 'yes' },
+      matchers={ env: 'gstg', slo_alert: 'yes', type: { re: 'api|web|git' } },
     ),
   ]
   + [
