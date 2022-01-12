@@ -28,6 +28,7 @@
 * [Gitaly unusual activity alert](../gitaly/gitaly-unusual-activity.md)
 * [../kube/k8s-operations.md](../kube/k8s-operations.md)
 * [Kubernetes](../kube/kubernetes.md)
+* [Prometheus pod crashlooping](../monitoring/prometheus-pod-crashlooping.md)
 * [GitLab Pages returning 404](../pages/gitlab-pages.md)
 * [../patroni/database_peak_analysis.md](../patroni/database_peak_analysis.md)
 * [Mapping Postgres Statements, Slowlogs, Activity Monitoring and Traces](../patroni/mapping_statements.md)
