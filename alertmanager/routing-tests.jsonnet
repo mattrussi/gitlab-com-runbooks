@@ -416,8 +416,8 @@ generateTests([
     ],
   },
   {
-    name: 'slo_alert=yes, env=staging',
-    labels: { env: 'gstg', slo_alert: 'yes' },
+    name: 'slo_alert=yes, env=gstg type=web should go to feed_alerts_staging and blackhole',
+    labels: { env: 'gstg', slo_alert: 'yes', type: 'web' },
     receivers: ['feed_alerts_staging', 'blackhole'],
   },
 ])
