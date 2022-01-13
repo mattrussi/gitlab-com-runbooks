@@ -159,6 +159,7 @@ Firstly, figure out what node/zone a Pod is running:
 
 ```
 kubectl get pods -n gitlab -o wide # get the node name
+pod_name=<POD_NAME>
 node_name=<NODE_NAME>
 zone=$(gcloud compute instances list --filter name=$node_name --format="value(zone)") # get the zone
 ```
@@ -276,6 +277,12 @@ One way to workaround it is to investigate the container from the host. Below ar
      - `toolbox --network-namespace-path=/proc/<container_pid>/ns/net`
    - Alternatively, you can use nsenter on the GKE host (note: it might not be available, toolbox is a safer approach):
      - `nsenter -target <PID> -mount -uts -ipc -net -pid`
+
+#### Attach PVC
+
+An existing volume can be attached to toolbox for debugging using `--bind=` or `--bind-ro=` (read only).
+
+- `toolbox --bind=/var/lib/kubelet/pods/<containerID>/volume-subpaths/<pvc_id>/...`
 
 #### Start a container that will use network and process namespaces of a pod
 
