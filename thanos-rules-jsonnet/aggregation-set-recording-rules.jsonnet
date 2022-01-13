@@ -147,17 +147,17 @@ local groupsForApplicationSli(sli) =
       ]
     ),
 
-  'aggregated-component-stage-group-metrics.yml':
+  'aggregated-service-component-stage-group-metrics.yml':
     outputPromYaml(
       [
         {
-          name: aggregationSets.componentStageGroupSLIs.name + ' (Short window)',
+          name: aggregationSets.serviceComponentStageGroupSLIs.name + ' (Short window)',
           interval: '1m',
           partial_response_strategy: 'warn',
           rules: aggregationSetTransformer.generateRecordingRules(
             sourceAggregationSet=aggregationSets.featureCategorySourceSLIs,
-            targetAggregationSet=aggregationSets.componentStageGroupSLIs,
-            burnRates=aggregationSets.componentStageGroupSLIs.getShortWindowBurnRates(),
+            targetAggregationSet=aggregationSets.serviceComponentStageGroupSLIs,
+            burnRates=aggregationSets.serviceComponentStageGroupSLIs.getShortWindowBurnRates(),
           ),
         },
         {
@@ -166,8 +166,8 @@ local groupsForApplicationSli(sli) =
           partial_response_strategy: 'warn',
           rules: aggregationSetTransformer.generateRecordingRules(
             sourceAggregationSet=aggregationSets.featureCategorySourceSLIs,
-            targetAggregationSet=aggregationSets.componentStageGroupSLIs,
-            burnRates=aggregationSets.componentStageGroupSLIs.getLongWindowBurnRates(),
+            targetAggregationSet=aggregationSets.serviceComponentStageGroupSLIs,
+            burnRates=aggregationSets.serviceComponentStageGroupSLIs.getLongWindowBurnRates(),
           ),
         },
       ]

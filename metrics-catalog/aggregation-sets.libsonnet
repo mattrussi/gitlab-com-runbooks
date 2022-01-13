@@ -406,12 +406,13 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     },
   }),
 
-  componentStageGroupSLIs: aggregationSet.AggregationSet({
-    id: 'component_stage_groups',
-    name: 'Stage Group Component-Aggregated Metrics',
+  serviceComponentStageGroupSLIs: aggregationSet.AggregationSet({
+    id: 'service_component_stage_groups',
+    name: 'Stage Group Service-And-Component-Aggregated Metrics',
     intermediateSource: false,
     selector: { monitor: 'global' },
     labels: ['env', 'environment', 'tier', 'type', 'stage', 'component', 'stage_group', 'product_stage'],
+    generateSLODashboards: false,
     upscaleLongerBurnRates: true,
     joinSource: {
       metric: 'gitlab:feature_category:stage_group:mapping',
@@ -435,7 +436,7 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     name: 'Stage Group Metrics',
     intermediateSource: false,
     selector: { monitor: 'global' },
-    labels: ['env', 'environment', 'tier', 'type', 'stage', 'stage_group', 'product_stage'],
+    labels: ['env', 'environment', 'tier', 'stage', 'stage_group', 'product_stage'],
     generateSLODashboards: false,
     supportedBurnRates: ['5m'],
     joinSource: {
