@@ -1,8 +1,13 @@
 local saturationResources = import 'servicemetrics/saturation-resources.libsonnet';
 local saturationRules = import 'servicemetrics/saturation_rules.libsonnet';
 
-saturationRules.generateSaturationRules(
-  includePrometheusEvaluated=true,
-  includeDangerouslyThanosEvaluated=false,
-  saturationResources=saturationResources
-)
+{
+  'saturation.yml':
+    std.manifestYamlDoc({
+      groups: saturationRules.generateSaturationRulesGroup(
+        includePrometheusEvaluated=true,
+        includeDangerouslyThanosEvaluated=false,
+        saturationResources=saturationResources
+      ),
+    }),
+}
