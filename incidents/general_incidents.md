@@ -2,7 +2,7 @@
 
 First: don't panic
 
-If you are feeling overwhelmed, escalate to the [IMOC or CMOC](https://about.gitlab.com/handbook/engineering/infrastructure/incident-management/#roles).  
+If you are feeling overwhelmed, escalate to the [IM or CMOC](https://about.gitlab.com/handbook/engineering/infrastructure/incident-management/#roles).  
 Whoever is in that role can help you get other people to help with whatever is needed.  Our goal is to resolve the incident in a timely manner, but sometimes that means slowing down and making sure we get the right people involved.  Accuracy is as important or more than speed.
 
 Roles for an incident can be found in the [incident management section of the handbook](https://about.gitlab.com/handbook/engineering/infrastructure/incident-management/)
@@ -22,9 +22,9 @@ You can update incidents with the Update Status button on an existing incident, 
 
 Remember to close out the incident when the issue is resolved.  Also, when possible, put the issue and/or google doc in the post mortem link.
 
-## IMOC Checklist
+## IM Checklist
 
-As we start to open up the role of IMOC, we realized we should add an IMOC checklist for things done in the role when joining an incident.
+As we start to open up the role of IM, we realized we should add an IM checklist for things done in the role when joining an incident.
 
 ### Assess the overall status
 Take a minute to assess the overall situation:
@@ -57,7 +57,7 @@ We prefer to avoid [hotpatches](https://gitlab.com/gitlab-org/release/docs/-/blo
 1. Hotpatches are usually for S1 issues.
 1. Security issues may receive a hotpatch regardless of severity.
 1. Lower severity bugs that are still a major blocker may receive a hotpatch, but pull in the dev team, support, and PM to reassess and confirm severity. 
-    * In situations where reputational risk is high, even a non S1 issue can receive a hotpatch. If that is the case, the incident can’t be lower than S2. This is not strictly documented for a reason, because it gives the IMOC, EOC, Release Managers the power to decide based on the situation. It is critical that there is some flexibility and common sense in the process. 
+    * In situations where reputational risk is high, even a non S1 issue can receive a hotpatch. If that is the case, the incident can’t be lower than S2. This is not strictly documented for a reason, because it gives the IM, EOC, Release Managers the power to decide based on the situation. It is critical that there is some flexibility and common sense in the process. 
     * Will the situation degrade, or is it ‘stable’ and next deploy will fix?
 
 Reasons that we are careful about hot patches:
@@ -66,7 +66,7 @@ Reasons that we are careful about hot patches:
 3. Generally riskier (may not get any automated CI tests, we're trusting the diff that is applied to be accurate and not introduce any new problems).
 
 ### Timers/Mental checks 
-As an IMOC, on roughly these times, you can ask yourself these questions:
+As an IM, on roughly these times, you can ask yourself these questions:
   1. Do we have the right people in the incident room? (every 5 min early on)
   2. Do we need [DB team help](https://about.gitlab.com/handbook/engineering/infrastructure/database/#ongres-third-party-support)? (if postgres related, have we engaged Ongres/Jose or the Database team?)  
   3. Do we understand what is going on? (first 10 min frequently - every 2-3 min)
@@ -74,7 +74,7 @@ As an IMOC, on roughly these times, you can ask yourself these questions:
   4. Do we understand what to do to resolve or mitigate the problem? (first 10 min frequently after we have identified the issue- every 2-3 min)
     * If not sev1/down, again a little more relaxed, every 10 min
   5. Do we need a [CMOC](/handbook/engineering/infrastructure/incident-management/#how-to-engage-the-cmoc-only-during-weekdays)?  Is this customer facing?  Default to yes, but if deploy blocker - probably no.
-  6. Regularly check on the EOC. EOC is in a highly stressful situation, pager is going off every few minutes and they are asked to try and deduct what is happening. As IMOC, you need to support the EOC. 
+  6. Regularly check on the EOC. EOC is in a highly stressful situation, pager is going off every few minutes and they are asked to try and deduct what is happening. As IM, you need to support the EOC. 
   7. 10-15 minutes in.  Make sure there is an executive summary somewhere.  Most times at the top of the prod issue description.  If hard down, make sure gdoc exists with this summary.  Make sure the gdoc is shared in slack so people see it.
   8. Help the EOC keep the timeline in the incident up to date.  Usually done in the description of the issue.  If you are collecitng things, use issue comments, then edit teh description later.
 

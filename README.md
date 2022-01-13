@@ -30,7 +30,7 @@ on-boarding new team member
 ## Checklists
 
 - [Engineer on Call (EOC)](on-call/checklists/eoc.md)
-- [Incident Manager on Call (IMOC)](https://about.gitlab.com/handbook/engineering/infrastructure/incident-management/#incident-manager-on-call-imoc-responsibilities)
+- [Incident Manager (IM)](https://about.gitlab.com/handbook/engineering/infrastructure/incident-management/#incident-manager-on-call-imoc-responsibilities)
 - [Communications Manager on Call (CMOC)](https://about.gitlab.com/handbook/engineering/infrastructure/incident-management/#communications-manager-on-call-cmoc-responsibilities)
 
 To start with the right foot let's define a set of tasks that are nice things to do before you go any further in your week
@@ -77,7 +77,7 @@ Check how many targets are not scraped at the moment. alerts are in flight right
 
 First: don't panic.
 
-If you are feeling overwhelmed, escalate to the [IMOC](https://about.gitlab.com/handbook/engineering/infrastructure/incident-management/#incident-manager-on-call-imoc-responsibilities).
+If you are feeling overwhelmed, escalate to the [IM](https://about.gitlab.com/handbook/engineering/infrastructure/incident-management/#incident-manager-on-call-imoc-responsibilities).
 Whoever is in that role can help you get other people to help with whatever is needed.  Our goal is to resolve the incident in a timely manner, but sometimes that means slowing down and making sure we get the right people involved.  Accuracy is as important or more than speed.
 
 Roles for an incident can be found in the [incident management section of the handbook](https://about.gitlab.com/handbook/engineering/infrastructure/incident-management/)

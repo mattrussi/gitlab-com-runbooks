@@ -7,7 +7,7 @@ This runbook covers some of the topics that were discussed in the [EOC Firedrill
 
 - Be aware of the [primary database](https://dashboards.gitlab.net/d/000000244/postgresql-replication-overview?orgId=1) for log queries
 - Check the dashboards and log links below to asses root cause
-- See if there is a quick recovery, if not page the IMOC who will bring in the CMOC in case we need to make a status page update
+- See if there is a quick recovery, if not page the IM who will bring in the CMOC in case we need to make a status page update
 
 ### Dashboards
 

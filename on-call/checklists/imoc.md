@@ -1,4 +1,4 @@
-# Incident Manager On Call (IMOC)
+# Incident Manager (IM)
 
 #### Critical Dashboards
 

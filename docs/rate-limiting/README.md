@@ -290,7 +290,7 @@ issue etc), use CloudFlare rate-limiting:
 https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/blob/master/environments/gprd/cloudflare-waf.tf
     * This would usually be a response to an incident, probably performance/apdex related where we just need breathing
       room while we clean things up, or while a code fix is prepared, and we're keeping the site alive.
-    * Work with an IMOC or a peer to validate the change is reasonable and correct
+    * Work with an IM or a peer to validate the change is reasonable and correct
     * These will typically be temporary; anything permanent needs more careful discussion
 1. A user/bot is having serious difficulties because they're being rate-limited.  After ensuring that
    there's no better way to solve their problem,

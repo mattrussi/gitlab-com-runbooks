@@ -27,7 +27,7 @@ performed**
 
 - [ ] Ensure there is either a ~S1 / ~S2 issue or a google doc in the case that
   GitLab.com is unavailable
-- [ ] Page the IMOC to let them know that a rollback is about to happen
+- [ ] Page the IM to let them know that a rollback is about to happen
 ```
 /pd-moc We are initiating a rollback of GitLab.com, for more information see <Issue or doc link>
 ```
@@ -38,7 +38,7 @@ performed**
 - [ ] The DBRE should review
   [the db considerations for rollback](https://gitlab.com/gitlab-org/release/docs/blob/master/general/deploy/gitlab-com-deployer.md#creating-a-new-deployment-for-rolling-back-gitlab#rollback-considerations-for-database-migrations)
   If the oncall DBRE is unavailable or unable to review the database impact of rollback, ensure that
-  the IMOC has signed off on the rollback.
+  the IM has signed off on the rollback.
 - [ ] Work with the delivery team to initiate the rollback using GitLab Chatops.
   For more information see the
   [release documentation for rollback](https://gitlab.com/gitlab-org/release/docs/blob/master/general/deploy/gitlab-com-deployer.md#creating-a-new-deployment-for-rolling-back-gitlab).
