@@ -35,4 +35,24 @@ test.suite({
     actual: objects.toPairs(objects.fromPairs([['a', 1], ['b', [2, 3]], ['c', { d: 4 }]])),
     expect: [['a', 1], ['b', [2, 3]], ['c', { d: 4 }]],
   },
+  testMergeAllTrivial: {
+    actual: objects.mergeAll([]),
+    expect: {},
+  },
+  testMergeAllWithoutClashes: {
+    actual: objects.mergeAll([{ a: 1 }, { b: 'b' }, { c: { d: 1 } }]),
+    expect: {
+      a: 1,
+      b: 'b',
+      c: { d: 1 },
+    },
+  },
+  testMergeAllWithClashes: {
+    actual: objects.mergeAll([{ a: { a: 1, d: 1 } }, { a: { c: 1, d: 2 } }]),
+    expect: {
+      a: { c: 1, d: 2 },
+    },
+  },
+
+
 })

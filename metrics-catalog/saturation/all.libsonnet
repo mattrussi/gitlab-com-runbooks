@@ -1,4 +1,4 @@
-local saturationTypes = [
+[
   import 'saturation-monitoring/cgroup_memory.libsonnet',
   import 'saturation-monitoring/cpu.libsonnet',
   import 'saturation-monitoring/disk_inodes.libsonnet',
@@ -61,11 +61,4 @@ local saturationTypes = [
   import 'saturation-monitoring/single_node_cpu.libsonnet',
   import 'saturation-monitoring/single_node_puma_workers.libsonnet',
   import 'saturation-monitoring/workhorse_image_scaling.libsonnet',
-];
-
-std.foldl(
-  function(memo, module)
-    memo + module,
-  saturationTypes,
-  {}
-)
+]

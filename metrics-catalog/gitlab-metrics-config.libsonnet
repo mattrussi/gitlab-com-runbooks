@@ -1,5 +1,8 @@
 local aggregationSets = import './aggregation-sets.libsonnet';
+local allSaturationTypes = import './saturation/all.libsonnet';
 local allServices = import './services/all.jsonnet';
+local allUtilizationMetrics = import './utilization/all.libsonnet';
+local objects = import 'utils/objects.libsonnet';
 
 // Site-wide configuration options
 {
@@ -11,6 +14,12 @@ local allServices = import './services/all.jsonnet';
 
   // Hash of all aggregation sets
   aggregationSets:: aggregationSets,
+
+  // Hash of all saturation metric types that are monitored on gitlab.com
+  saturationMonitoring:: objects.mergeAll(allSaturationTypes),
+
+  // Hash of all utilization metric types that are monitored on gitlab.com
+  utilizationMonitoring:: objects.mergeAll(allUtilizationMetrics),
 
   // service_catalog.json is stored in the `services` directory
   // alongside service_catalog.yml
