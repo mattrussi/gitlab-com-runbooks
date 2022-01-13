@@ -66,7 +66,7 @@ local resourceSaturationPoint = function(options)
   definition {
     getQuery(selectorHash, rangeInterval, maxAggregationLabels=[])::
       local staticLabels = self.getStaticLabels();
-      local environmentLabelsLocal = (if self.dangerouslyThanosEvaluated then ['env'] else []) + environmentLabels;
+      local environmentLabelsLocal = (if self.dangerouslyThanosEvaluated == true then ['env'] else []) + environmentLabels;
       local queryAggregationLabels = environmentLabelsLocal + self.resourceLabels;
       local allMaxAggregationLabels = environmentLabelsLocal + maxAggregationLabels;
       local queryAggregationLabelsExcludingStaticLabels = std.filter(function(label) !std.objectHas(staticLabels, label), queryAggregationLabels);
