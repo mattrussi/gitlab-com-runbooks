@@ -107,7 +107,8 @@ All logs received by Stackdriver (even if excluded from indexing) are archived t
 
 For up to date config see:
 - https://gitlab.com/gitlab-cookbooks/gitlab_fluentd/
-- https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/fluentd-elasticsearch
+- https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments/-/tree/master/environments/fluentd-elasticsearch
+- https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments/-/tree/master/lib/fluentd
 
 There are many entries missing from this list:
 
@@ -256,17 +257,19 @@ Roadmap:
 
 ### Fluentd
 
-We are using Fluentd (td-agent) for parsing log files and forwarding log messages to different destinations. There are at least three (3) different types of Fluentd processes involved: Gitlab managed Fluentd on GCE VMs, Gitlab managed Fluentd DaemonSet in GKE, GCP managed Fluentd DaemonSet in GKE.
+We are using Fluentd (`td-agent`) for parsing log files and forwarding log messages to different destinations. There are at least three (3) different types of Fluentd processes involved: Gitlab managed Fluentd on GCE VMs, Gitlab managed Fluentd DaemonSet and StatefulSet in GKE, GCP managed Fluentd DaemonSet in GKE.
 
 Fluentd running on VMs is configured to send logs to two destinations: [Operations](https://cloud.google.com/stackdriver/docs/)(formerly Stackdriver) and [Cloud Pub/Sub](https://cloud.google.com/pubsub/docs/). Here's the [fluentd config](https://gitlab.com/gitlab-cookbooks/gitlab_fluentd/) for running on GCE VMs.
 
-Gitlab managed Fluentd in kubernetes (running as a daemonset) sends logs only to ElasticStack (this will likely change in the future, see: https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/11655 and: https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10095). Its config can be found [here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/fluentd-elasticsearch). For the helm chart, we are actually using [a Gitlab fork](https://gitlab.com/gitlab-org/charts/fluentd-elasticsearch/) of a [project on github](https://github.com/kiwigrid/helm-charts/tree/master/charts/fluentd-elasticsearch)
+Gitlab managed Fluentd in Kubernetes (running as a DaemonSet) sends logs only to ElasticStack (this will likely change in the future, see: https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/11655 and: https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10095). Its config can be found [here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments/-/tree/master/environments/fluentd-elasticsearch).
 
-GCP managed Fluentd running as a daemonset in GKE, sends logs only to Operations. At the moment of writing, its config was not altered.
+Additionally, another GitLab managed Fluentd in Kubernetes named `fluentd-archiver` (running as a StatefulSet) exports the logs sent to PubSub by `fluentd-elasticsearch` to the GCS bucket `gitlab-${env}-logging-archive` under the folder `gke/`. This is because Stackdriver exports all Kubernetes container logs mixed together into `stdout/` and `stderr/` folders, making it difficult to filter per container name. Its config can be found [here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments/-/tree/master/environments/fluentd-archiver)>
+
+GCP managed Fluentd running as a DaemonSet in GKE, sends logs only to Operations. At the moment of writing, its config was not altered.
 
 ### Operations (Stackdriver)
 
-All logs reaching Operations are saved to GCS using an export sink where they are stored long-term (e.g. 6 months) for compliance reasons and can be read using BigQuery.
+All logs reaching Operations are saved to a GCS bucket `gitlab-${env}-logging-archive` using an export sink where they are stored long-term (e.g. 6 months) for compliance reasons and can be read using BigQuery.
 
 We are using log exclusions to prevent application logs from being indexed: https://cloud.google.com/logging/docs/exclusions At the moment of writing, we are not indexing any of the application logs. The current exclusions for Operations (Stackdriver) can be found in [terraform variables.tf](https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/blob/master/environments/gprd/variables.tf),
 search for `sd_log_filters`.
