@@ -25,4 +25,15 @@
       function(key) [key, object[key]],
       std.objectFields(object)
     ),
+
+  // Given an array of objects, merges them all into a single object
+  // using a left-to-right merge order. Fields in later
+  // objects will overwrite fields in earlier objects.
+  mergeAll(arrayOfObjects)::
+    std.foldl(
+      function(memo, module)
+        memo + module,
+      arrayOfObjects,
+      {}
+    ),
 }

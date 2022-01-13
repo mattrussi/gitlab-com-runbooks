@@ -1,4 +1,4 @@
-local allSaturationResources = import './saturation/all.libsonnet';
+local allSaturationResources = (import 'gitlab-metrics-config.libsonnet').saturationMonitoring;
 
 allSaturationResources {
   // Add some helpers. Note that these use :: to "hide" then:

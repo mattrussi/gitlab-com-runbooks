@@ -1,4 +1,4 @@
-local allUtilizationMetrics = import './utilization/all.libsonnet';
+local allUtilizationMetrics = (import 'gitlab-metrics-config.libsonnet').utilizationMonitoring;
 
 allUtilizationMetrics {
   // Add some helpers. Note that these use :: to "hide" then:
