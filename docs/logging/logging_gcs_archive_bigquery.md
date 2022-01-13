@@ -27,49 +27,83 @@ In order to load a BQ table from a SD produced log archive stored in GCS a datas
 
 ### Why
 
-
- * You need to query logs older than seven days and thus are no longer in our [ELK](https://log.gprd.gitlab.net) instance.
+ * You need to query logs older than 7 days and thus are no longer in our [ELK](https://log.gprd.gitlab.net) instance.
  * You need to query logs older than 30 days and thus are no longer in our SD.
  * You need aggregate operators, summarized reports or output visualizations.
 
 ### What
 
 Logs that come in to SD (see [logging.md](README.md)) are also sent
-to GCS in batches using an export sink. After 30 days, the
-log messages are expired in SD, but remain in GCS.
+to the GCS bucket `gitlab-${env}-logging-archive` in batches using an export
+sink. After 30 days, the log messages are expired in SD, but remain in GCS.
+
+Additionally, because SD exports all Kubernetes container logs mixed
+together into `stdout/` and `stderr/` folders, making it difficult to filter
+per container name, [`fluentd-archiver`](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments/-/tree/master/environments/fluentd-archiver)
+exports to the same GCS bucket the logs sent to PubSub by
+`fluentd-elasticsearch` into a separate folder per PubSub topic under the
+folder `gke/`.
 
 # How
 
 ## Using the UI
 
 These instructions are similar in both the new style (within `console.cloud.google.com`)
-and the old style (external page), but the screen shots may appear with
+and the old style (external page), but the screenshots may appear with
 differing styles.
 
 1. Create a dataset if necessary to group related tables.
-2. Click on a control to "Add a new table".
-3. Choose "Google Cloud Storage" with "JSON (Newline Delimted)" as the `Source data`.
-4. Using the browse functionality to find an appropriate bucket is not always an option, as only buckets in the same project are listed  and data is usually imported from,
-    for example, gitlab-production or gitlab-internal. Go to the ["Google Cloud Storage" browser](https://console.cloud.google.com/storage/browser/) and find the data you want to load.
-5. Insert the bucket URI as follows: `bucket/folder/folder/myfile.JSON` for a single file or `bucket/folder/folder/*` for all files in that folder.
+1. Click on a control to "Add a new table".
+1. Choose "Google Cloud Storage" with "JSON (Newline Delimted)" as the `Source data`.
+1. Using the browse functionality to find an appropriate bucket is not always
+   an option, as only buckets in the same project are listed and data is
+   usually imported from, for example, `gitlab-production` or
+   `gitlab-internal`. Go to the ["Google Cloud Storage" browser](https://console.cloud.google.com/storage/browser/),
+   browse the GCS bucket `gitlab-${env}-logging-archive` and locate the logs
+   you want to query:
 
-![source data](./img/create_table_source.png)
+     - for GKE container logs, look under the `gke/` folder
+     - for any other logs, look under the other folders
 
-4. Unselect "Auto detect Schema and input parameters" if selected.
-5. Use one of our [predifined schemas](https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/logging/logging_bigquery_schemas) or do it manually adding records for fields, using `RECORD` type for nested fields and adding
-   subfields using the `+` on the parent record.  It should look something like this:
+1. Insert the bucket URI as follows: `bucket/folder/folder/myfile.json` for a
+   single file or `bucket/folder/folder/*.json` for all files in that folder
+   and its subfolders. When using hive partitioning with GKE container logs
+   (see next step), add `dt=` to the prefix to filter out older path that don't
+   match, for example `gitlab-gprd-logging-archive/gke/something/dt=*.json`.
 
-![record type](./img/bigquery_schema_record.png)
+   ![source data](./img/create_table_source.png)
 
-6. In `Advanced options`, check `Ignore unknown values`
-7. If the data to be imported is large, consider whether partioning will be necessary.
+1. The GKE container logs are stored in folders like `dt=YYYY-MM-DD` allowing
+   the use of hive partitioning which greatly improves query performances. For
+   this, enable `Source Data Partitioning` and set `Source URI Prefix` to the
+   prefix of the path set above (everything before the wildcard) prefixed by
+   `gs://` and followed by `{dt:DATE}` to set the partition type, for example
+   `gs://gitlab-gprd-logging-archive/gke/something/{dt:DATE}`. Below this field,
+   set `Partition Inference Mode` to "Provide my own".
+1. In the destination section, set the desired table name.
+1. When using hive partitioning with GKE container logs, consider setting
+   `Table type` to "External table", this will allow BigQuery to load files
+   dynamically as needed into a temporary table during queries, saving costs
+   and time.
+1. Unselect "Auto detect Schema and input parameters" if selected.
+1. Use one of our [predifined schemas](https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/logging/logging_bigquery_schemas)
+   or do it manually adding records for fields, using `RECORD` type for nested
+   fields and adding subfields using the `+` on the parent record.  It should
+   look something like this:
+
+   ![record type](./img/bigquery_schema_record.png)
+
+1. In `Advanced options`, check `Ignore unknown values`
+1. If the data to be imported is large, consider whether partioning will be necessary.
+
    1. Add `timestamp` field of type `TIMESTAMP`
-   2. In `Advanced options`, select it as the partitioning field:
+   1. In `Advanced options`, select it as the partitioning field:
 
-![partition by timestamp](./img/bigquery_table_partition.png)
+      ![partition by timestamp](./img/bigquery_table_partition.png)
 
-8. Create the table.  If everything is right, a background job will run to
-load the data into the new table. This usually takes a while, be patient or check the status of the created job under "Job History".
+1. Create the table.  If everything is right, a background job will run to load
+   the data into the new table. This usually takes a while, be patient or check
+   the status of the created job under "Job History".
 
 ## Alternative: Starting from an existing schema
 
@@ -132,19 +166,15 @@ The following sample queries can be run on tables created for logs coming from `
 
 ### Find the most used Source-IP-Addresses for a User
 
-
 ```
 select jsonPayload.remote_ip, count(jsonPayload.remote_ip) as count from dataset.table where jsonPayload.username='SomeUsername' group by jsonPayload.remote_ip
 ```
-
-
 
 ### Find Actions by User and respective Paths Performed from a given IP-Address
 
 ```
 select jsonPayload.action, jsonPayload.username, jsonPayload.path from dataset.table where jsonPayload.remote_ip='SomeIPAdress' and jsonPayload.username='SomeUsername'
 ```
-
 
 ### Count the Number of Repositories a User has Archived and Downloaded
 

@@ -18,6 +18,7 @@
 
 * [Find a project from its hashed storage path](../gitaly/find-project-from-hashed-storage.md)
 * [../kube/k8s-operations.md](../kube/k8s-operations.md)
+* [../logging/logging_gcs_archive_bigquery.md](../logging/logging_gcs_archive_bigquery.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
 * [../patroni/pg_collect_query_data.md](../patroni/pg_collect_query_data.md)
 * [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
