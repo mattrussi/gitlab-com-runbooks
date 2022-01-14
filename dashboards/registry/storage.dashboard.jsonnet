@@ -7,7 +7,7 @@ local layout = import 'grafana/layout.libsonnet';
 
 basic.dashboard(
   'Storage Detail',
-  tags=['container registry', 'docker', 'registry'],
+  tags=['container registry', 'docker', 'registry', 'type:registry'],
 )
 .addTemplate(templates.gkeCluster)
 .addTemplate(templates.stage)
