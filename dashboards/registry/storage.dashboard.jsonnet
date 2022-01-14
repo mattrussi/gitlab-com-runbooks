@@ -121,7 +121,7 @@ basic.dashboard(
     basic.timeseries(
       title='Percentage of HTTP Requests CACHE HIT by response',
       description='HTTP Requests',
-      query='sum(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{forwarding_rule_name=~".*registry-cdn.*", cache_result="HIT"}) by (response_code) / sum(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{forwarding_rule_name=~".*registry-cdn.*"}) by (response_code)',
+      query='sum(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cache_result="HIT", environment="$environment", forwarding_rule_name=~".*registry-cdn.*"}) by (response_code) / sum(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="$environment", forwarding_rule_name=~".*registry-cdn.*"}) by (response_code)',
       legendFormat='{{ response_code }}',
       format='percentunit',
       max=1,
@@ -144,7 +144,7 @@ basic.dashboard(
     basic.timeseries(
       title='Percentage of HTTP Requests CACHE MISS by response',
       description='HTTP Requests',
-      query='sum(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{forwarding_rule_name=~".*registry-cdn.*", cache_result="MISS"}) by (response_code) / sum(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{forwarding_rule_name=~".*registry-cdn.*"}) by (response_code)',
+      query='sum(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{cache_result="MISS", environment="$environment", forwarding_rule_name=~".*registry-cdn.*"}) by (response_code) / sum(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="$environment", forwarding_rule_name=~".*registry-cdn.*"}) by (response_code)',
       legendFormat='{{ response_code }}',
       format='percentunit',
       max=1,
