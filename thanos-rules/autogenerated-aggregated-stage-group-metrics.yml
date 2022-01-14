@@ -21,7 +21,7 @@ groups:
         (
           gitlab:component:feature_category:execution:ops:rate_5m{monitor!="global"}
           -
-          (gitlab:component:feature_category:execution:error:rate_5m{monitor!="global"} or (0 * gitlab:component:feature_category:execution:ops:rate_5m{monitor!="global"}))
+          gitlab:component:feature_category:execution:error:rate_5m{monitor!="global"}
         ) * on(feature_category) group_left(product_stage,stage_group) (group by (feature_category,product_stage,stage_group) (gitlab:feature_category:stage_group:mapping{monitor="global"}))
       )
   - record: gitlab:stage_group:execution:error:ratio_5m

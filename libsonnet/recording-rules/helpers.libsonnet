@@ -39,14 +39,6 @@ local upscaleRatePromExpression = |||
   )
 |||;
 
-local errorRateWithFallbackPromExpression(sourceSet, burnRate) = |||
-  (%(errorRateMetricName)s{%(sourceSelector)s} or (0 * %(opsRateMetricName)s{%(sourceSelector)s}))
-||| % {
-  errorRateMetricName: sourceSet.getErrorRateMetricForBurnRate(burnRate, required=true),
-  opsRateMetricName: sourceSet.getOpsRateMetricForBurnRate(burnRate, required=true),
-  sourceSelector: selectors.serializeHash(sourceSet.selector),
-};
-
 local joinExpr(targetAggregationSet) =
   if !std.objectHas(targetAggregationSet, 'joinSource') then
     ''
@@ -266,7 +258,6 @@ local curry(upscaledExprType, upscaleExpressionFn) =
 
 {
   aggregationFilterExpr:: aggregationFilterExpr,
-  errorRateWithFallbackPromExpression:: errorRateWithFallbackPromExpression,
 
   // These functions generate either a direct or a upscaled transformation, or a combined expression
 

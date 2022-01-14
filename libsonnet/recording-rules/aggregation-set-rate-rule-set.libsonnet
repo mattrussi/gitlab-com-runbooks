@@ -32,13 +32,13 @@ local getErrorSourcedSuccessRateExpression(source, target, burnRate, errorVisito
         (
           %(opsRateMetricName)s{%(sourceSelector)s}
           -
-          %(errorRate)s
+          %(errorRate)s{%(sourceSelector)s}
         )%(aggregationFilterExpr)s
       )
     ||| % {
       targetAggregationLabels: targetAggregationLabels,
       opsRateMetricName: sourceOpsRateMetricName,
-      errorRate: strings.chomp(helpers.errorRateWithFallbackPromExpression(source, burnRate)),
+      errorRate: sourceErrorRateMetricName,
       sourceSelector: sourceSelector,
       aggregationFilterExpr: helpers.aggregationFilterExpr(target),
     }
