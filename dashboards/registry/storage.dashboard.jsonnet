@@ -4,6 +4,8 @@ local templates = import 'grafana/templates.libsonnet';
 local row = grafana.row;
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
+local statPanel = grafana.statPanel;
+local promQuery = import 'grafana/prom_query.libsonnet';
 
 basic.dashboard(
   'Storage Detail',
@@ -227,4 +229,84 @@ basic.dashboard(
       linewidth=2
     ),
   ], cols=2, rowHeight=10, startRow=3001)
+)
+
+.addPanel(
+  row.new(title='Cloud CDN Redirects'),
+  gridPos={
+    x: 0,
+    y: 4000,
+    w: 24,
+    h: 1,
+  }
+)
+.addPanels(
+  layout.grid([
+    statPanel.new(
+      title='Percentage of Redirects to CDN',
+      description='The percentage of blob HEAD/GET requests redirected to Google Cloud CDN. The displayed number is the last measured percentage during the selected time range.',
+      reducerFunction='last',
+      decimals=0,
+      unit='percentunit',
+    )
+    .addTarget(
+      promQuery.target(
+        |||
+          sum (registry_storage_cdn_redirects_total{environment="$environment", cluster=~"$cluster", stage="$stage", backend="cdn"})
+          /
+          sum (registry_storage_cdn_redirects_total{environment="$environment", cluster=~"$cluster", stage="$stage"})
+        |||
+      )
+    ),
+    basic.timeseries(
+      title='Number of Redirects (Per Backend)',
+      description='The number of blob HEAD/GET requests redirected to Google Cloud Storage or Google Cloud CDN.',
+      query='sum by (backend) (registry_storage_cdn_redirects_total{environment="$environment", cluster=~"$cluster", stage="$stage"})',
+      legendFormat='{{ backend }}',
+      interval='1m',
+      intervalFactor=2,
+      yAxisLabel='Count',
+      linewidth=2
+    ),
+    statPanel.new(
+      title='Percentage of Redirects to CDN Skipped',
+      description=|||
+        The percentage of blob HEAD/GET requests that were not redirected to Google Cloud CDN because of a given reason:
+          - `non_eligible`: This means that the request JWT token was not marked with the `cdn_redirect` flag by Rails. The number 
+          of JWT tokens marked as such is currently controlled by the `container_registry_cdn_redirect` feature flag (percentage of time).
+
+          - `gcp`: This means that the request originates within GCP, and as such we redirected it to GCS and not CDN.
+
+          The displayed number is the last measured percentage during the selected time range.
+      |||,
+      reducerFunction='last',
+      decimals=0,
+      unit='percentunit',
+    )
+    .addTarget(
+      promQuery.target(
+        |||
+          sum (registry_storage_cdn_redirects_total{environment="$environment", cluster=~"$cluster", stage="$stage", bypass="true"})
+          /
+          sum (registry_storage_cdn_redirects_total{environment="$environment", cluster=~"$cluster", stage="$stage"})
+        |||
+      )
+    ),
+    basic.timeseries(
+      title='Number of Redirects to CDN Skipped (Per Reason)',
+      description=|||
+        The number of blob HEAD/GET requests that were not redirected to Google Cloud CDN because of a given reason:
+          - `non_eligible`: This means that the request JWT token was not marked with the `cdn_redirect` flag by Rails. The number 
+          of JWT tokens marked as such is currently controlled by the `container_registry_cdn_redirect` feature flag (percentage of time).
+
+          - `gcp`: This means that the request originates within GCP, and as such we redirected it to GCS and not CDN.
+      |||,
+      query='sum by (bypass_reason) (registry_storage_cdn_redirects_total{environment="$environment", cluster=~"$cluster", stage="$stage", bypass="true"})',
+      legendFormat='{{ bypass_reason }}',
+      interval='1m',
+      intervalFactor=2,
+      yAxisLabel='Count',
+      linewidth=2
+    ),
+  ], cols=4, rowHeight=10, startRow=4001)
 )
