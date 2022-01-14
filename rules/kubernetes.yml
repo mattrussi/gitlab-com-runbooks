@@ -31,13 +31,26 @@ groups:
           severity: s3
           alert_type: cause
 
-      - alert: KubePodCrashLooping
+      - alert: KubePodRestarting
         annotations:
-          title: Pod CrashLooping
+          title: Pod Restarting Often
           description: Pod {{ $labels.namespace }}/{{ $labels.pod }} ({{ $labels.container }}) is restarting {{ printf "%.2f" $value }} times / 5 minutes.
           runbook: docs/kube/kubernetes.md
         expr: rate(kube_pod_container_status_restarts_total{job="kube-state-metrics"}[15m]) * 60 * 5 > 0
         for: 1h
+        labels:
+          tier: inf
+          type: kube
+          severity: s3
+          alert_type: cause
+
+      - alert: KubePodCrashLooping
+        annotations:
+          title: Pod CrashLooping
+          description: Pod {{ $labels.namespace }}/{{ $labels.pod }} ({{ $labels.container }}) is reporting CrashLoopBackOff restarts.
+          runbook: docs/kube/kubernetes.md
+        expr: kube_pod_container_status_waiting_reason:labeled{reason="CrashLoopBackOff"} > 0
+        for: 20m
         labels:
           tier: inf
           type: kube
