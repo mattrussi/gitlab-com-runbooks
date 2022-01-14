@@ -31,6 +31,8 @@ local row(
   includePredictions=false,
   expectMultipleSeries=false,
   compact=false,
+  skipDescriptionPanels=false,
+  includeLastWeek=true,
       ) =
   local fixedThreshold = if serviceType == null then errorBudget.slaTarget else null;
   local typeSelector = if serviceType == null then {} else { type: serviceType };
@@ -58,6 +60,7 @@ local row(
             expectMultipleSeries=expectMultipleSeries,
             compact=compact,
             fixedThreshold=fixedThreshold,
+            includeLastWeek=includeLastWeek,
           )
           .addDataLink({
             url: '/d/alerts-%(aggregationId)s_slo_apdex?${__url_time_range}&${__all_variables}&%(grafanaURLPairs)s' % formatConfig {},
@@ -67,7 +70,7 @@ local row(
         ]
         +
         (
-          if expectMultipleSeries then
+          if expectMultipleSeries || skipDescriptionPanels then
             []
           else
             [statusDescription.apdexStatusDescriptionPanel(titlePrefix, selectorHashWithExtras, aggregationSet=aggregationSet)]
@@ -91,6 +94,7 @@ local row(
             expectMultipleSeries=expectMultipleSeries,
             compact=compact,
             fixedThreshold=fixedThreshold,
+            includeLastWeek=includeLastWeek,
           )
           .addDataLink({
             url: '/d/alerts-%(aggregationId)s_slo_error?${__url_time_range}&${__all_variables}&%(grafanaURLPairs)s' % formatConfig,
@@ -100,7 +104,7 @@ local row(
         ]
         +
         (
-          if expectMultipleSeries then
+          if expectMultipleSeries || skipDescriptionPanels then
             []
           else
             [statusDescription.errorRateStatusDescriptionPanel(titlePrefix, selectorHashWithExtras, aggregationSet=aggregationSet)]
@@ -122,7 +126,7 @@ local row(
           legendFormat='%(legendFormatPrefix)s RPS' % formatConfig,
           expectMultipleSeries=expectMultipleSeries,
           includePredictions=includePredictions,
-          includeLastWeek=true,
+          includeLastWeek=includeLastWeek,
           compact=compact,
         ),
       ]]
