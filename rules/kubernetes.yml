@@ -51,7 +51,6 @@ groups:
           runbook: docs/kube/kubernetes.md
         expr: kube_pod_container_status_waiting_reason:labeled{reason="CrashLoopBackOff"} > 0
         for: 20m
-        rules_domain: general
         labels:
           tier: inf
           type: kube
