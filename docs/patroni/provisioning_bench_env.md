@@ -521,6 +521,21 @@ Session 02:
 ./run-bench.sh -h pgbouncer-sidekiq.service.consul -d gitlabhq_production -U gitlab-superuser -p 6432 -e prd -t by-time-ci-unrelated.jmx -j 60 -T 3600 -r test0004.csv
 ```
 
+How to start simulating the traffic to the patroni read replicas:
+
+To generate traffic on source read replica: 
+```
+./run-bench-secondaries.sh -h pg12ute-patroni-source-replica.service.consul -d gitlabhq_production -U gitlab-superuser -p 6432 -e prd -t by-time-ci-unrelated-secondaries.jmx -j 60 -T 3600 -r test0004.csv
+```
+
+To generate traffic on target read replica: 
+```
+./run-bench-secondaries.sh -h pg12ute-patroni-target-replica.service.consul -d gitlabhq_production -U gitlab-superuser -p 6432 -e prd -t by-time-ci-unrelated-secondaries.jmx -j 60 -T 3600 -r test0004.csv
+```
+
+Additional test plans to run on read replica are available under ```db-migration/benchmark/plans-secondaries``` directory 
+
+
 
 ## How to execute the switchover or the activity that will be tested
 
