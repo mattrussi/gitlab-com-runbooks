@@ -294,7 +294,7 @@ local sliDetailErrorRatePanel(
                       title='Estimated %(percentile_humanized)s ' + sliName + ' Latency - ' + aggregationSet.title,
                       serviceType=serviceType,
                       sli=sli,
-                      selector=filteredSelectorHash,
+                      selector=filteredSelectorHash + aggregationSet.selector,
                       legendFormat='%(percentile_humanized)s ' + aggregationSet.legendFormat,
                       aggregationLabels=aggregationSet.aggregationLabels,
                       min=minLatency
@@ -308,7 +308,7 @@ local sliDetailErrorRatePanel(
                       description='Attributes apdex downscoring',
                       query=sli.apdex.apdexAttribution(
                         aggregationLabel=aggregationSet.aggregationLabels,
-                        selector=filteredSelectorHash,
+                        selector=filteredSelectorHash + aggregationSet.selector,
                         rangeInterval='$__interval',
                       ),
                       legendFormat=aggregationSet.legendFormat % { sliName: sliName },
@@ -328,7 +328,7 @@ local sliDetailErrorRatePanel(
                       sli=sli,
                       legendFormat=aggregationSet.legendFormat,
                       aggregationLabels=aggregationSet.aggregationLabels,
-                      selector=filteredSelectorHash,
+                      selector=filteredSelectorHash + aggregationSet.selector,
                     )
                   else
                     null,
@@ -337,7 +337,7 @@ local sliDetailErrorRatePanel(
                     sliDetailOpsRatePanel(
                       title=sliName + ' RPS - ' + aggregationSet.title,
                       sli=sli,
-                      selector=filteredSelectorHash,
+                      selector=filteredSelectorHash + aggregationSet.selector,
                       legendFormat=aggregationSet.legendFormat,
                       aggregationLabels=aggregationSet.aggregationLabels
                     )
@@ -377,7 +377,7 @@ local sliDetailErrorRatePanel(
                     sliDetailLatencyPanel(
                       title='Estimated %(percentile_humanized)s ' + sli.name + ' Latency - ' + aggregationSet.title,
                       sli=sli,
-                      selector=filteredSelectorHash,
+                      selector=filteredSelectorHash + aggregationSet.selector,
                       legendFormat='%(percentile_humanized)s ' + aggregationSet.legendFormat,
                       aggregationLabels=aggregationSet.aggregationLabels,
                       withoutLabels=withoutLabels,
@@ -392,7 +392,7 @@ local sliDetailErrorRatePanel(
                       description='Attributes apdex downscoring',
                       query=sli.apdex.apdexAttribution(
                         aggregationLabel=aggregationSet.aggregationLabels,
-                        selector=filteredSelectorHash,
+                        selector=filteredSelectorHash + aggregationSet.selector,
                         rangeInterval='$__interval',
                         withoutLabels=withoutLabels,
                       ),
@@ -413,7 +413,7 @@ local sliDetailErrorRatePanel(
                       sli=sli,
                       legendFormat=aggregationSet.legendFormat,
                       aggregationLabels=aggregationSet.aggregationLabels,
-                      selector=filteredSelectorHash,
+                      selector=filteredSelectorHash + aggregationSet.selector,
                       withoutLabels=withoutLabels,
                     )
                   else
@@ -423,7 +423,7 @@ local sliDetailErrorRatePanel(
                     sliDetailOpsRatePanel(
                       title=sli.name + ' RPS - ' + aggregationSet.title,
                       sli=sli,
-                      selector=filteredSelectorHash,
+                      selector=filteredSelectorHash + aggregationSet.selector,
                       legendFormat=aggregationSet.legendFormat,
                       aggregationLabels=aggregationSet.aggregationLabels,
                       withoutLabels=withoutLabels,
@@ -450,9 +450,9 @@ local sliDetailErrorRatePanel(
         function(i, sli)
           local aggregationSets =
             [
-              { title: 'Overall', aggregationLabels: '', legendFormat: 'overall' },
+              { title: 'Overall', aggregationLabels: '', selector: {}, legendFormat: 'overall' },
             ] +
-            std.map(function(c) { title: 'per ' + c, aggregationLabels: c, legendFormat: '{{' + c + '}}' }, sli.significantLabels);
+            std.map(function(c) { title: 'per ' + c, aggregationLabels: c, selector: { [c]: { ne: '' } }, legendFormat: '{{' + c + '}}' }, sli.significantLabels);
 
           s.sliDetailMatrix(serviceType, sli.name, selectorHash, aggregationSets),
         serviceLevelIndicatorsFiltered
@@ -486,9 +486,9 @@ local sliDetailErrorRatePanel(
 
           local aggregationSets =
             [
-              { title: 'Overall', aggregationLabels: '', legendFormat: 'overall' },
+              { title: 'Overall', aggregationLabels: '', selector: {}, legendFormat: 'overall' },
             ] +
-            std.map(function(c) { title: 'per ' + c, aggregationLabels: c, legendFormat: '{{' + c + '}}' }, sli.significantLabels);
+            std.map(function(c) { title: 'per ' + c, aggregationLabels: c, selector: { [c]: { ne: '' } }, legendFormat: '{{' + c + '}}' }, sli.significantLabels);
 
           s.sliDetailMatrixAcrossServices(sli, selectorHash, aggregationSets),
         std.objectFields(slis)
