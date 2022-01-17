@@ -163,7 +163,7 @@ basic.dashboard(
     'goserver',
     selectorHash,
     [
-      { title: 'Overall', aggregationLabels: '', legendFormat: 'goserver' },
+      { title: 'Overall', aggregationLabels: '', selector: {}, legendFormat: 'goserver' },
     ],
   ), gridPos={ x: 0, y: 7000 }
 )
@@ -173,7 +173,7 @@ basic.dashboard(
     'gitalyruby',
     selectorHash,
     [
-      { title: 'Overall', aggregationLabels: '', legendFormat: 'gitalyruby' },
+      { title: 'Overall', aggregationLabels: '', selector: {}, legendFormat: 'gitalyruby' },
     ],
   ), gridPos={ x: 0, y: 7100 }
 )
