@@ -1,5 +1,6 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local rateMetric = metricsCatalog.rateMetric;
+local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'mailroom',
@@ -51,6 +52,16 @@ metricsCatalog.serviceDefinition({
       ),
 
       significantLabels: [],
+
+      toolingLinks: [
+        toolingLinks.kibana(title='Mailroom', index='mailroom', includeMatchersForPrometheusSelector=false),
+        toolingLinks.kibana(
+          title='Sidekiq receiver workers',
+          index='sidekiq',
+          includeMatchersForPrometheusSelector=false,
+          matches={ 'json.class': ['EmailReceiverWorker', 'ServiceDeskEmailReceiverWorker'] }
+        ),
+      ],
     },
   },
 })
