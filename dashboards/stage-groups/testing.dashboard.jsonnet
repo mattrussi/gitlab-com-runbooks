@@ -14,7 +14,7 @@ local parsersSelector = |||
   environment='$environment', stage='$stage', parser=~'(%(parsers)s)'
 ||| % { parsers: std.join('|', parsers) };
 
-stageGroupDashboards.dashboard('testing', components=['web', 'sidekiq'])
+stageGroupDashboards.dashboard('testing')
 .addPanel(
   grafana.row.new(title='Artifact Parser metrics'),
   gridPos={ x: 0, y: 1000, w: 24, h: 1 }
