@@ -20,6 +20,10 @@ GitLab.com.
 - Architecture diagrams
   - Production GitLab.com environment diagrams: https://about.gitlab.com/handbook/engineering/infrastructure/production/architecture/
   - Application component list with descriptions and links: https://docs.gitlab.com/ce/development/architecture.html#components
+  - Recorded session presented by Andrew Newdigate at Jan 2021: https://www.youtube.com/watch?v=P3NhrEoSkeI
+    - this video is private, hence use the Unfiltered Youtube account -
+https://about.gitlab.com/handbook/marketing/marketing-operations/youtube/#unable-to-view-a-video-on-youtube
+
 - Chef
   - GitLab-specific: Laptop setup, cookbook change workflow, secrets management, one-liners: https://ops.gitlab.net/gitlab-cookbooks/chef-repo#getting-started
   - Generic Chef documentation:
