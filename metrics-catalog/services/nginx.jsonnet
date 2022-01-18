@@ -30,7 +30,7 @@ metricsCatalog.serviceDefinition({
     nginx_ingress: {
       userImpacting: true,
       featureCategory: 'not_owned',
-      team: 'delivery',
+      team: 'sre_reliability',
       description: |||
         nginx ingress
       |||,

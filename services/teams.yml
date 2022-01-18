@@ -1,7 +1,7 @@
 teams:
 - name: sre_reliability
   url: https://about.gitlab.com/handbook/engineering/infrastructure/team/reliability/#core-infra
-  slack_channel: infrastructure_lounge
+  slack_channel: production
   engagement_policy:
   oncall_schedule: https://gitlab.pagerduty.com/schedules#P22HQSG
 
