@@ -25,6 +25,12 @@ metricsCatalog.serviceDefinition({
         'fluentd',
       ],
     },
+    'fluentd-elasticsearch': {
+      kind: 'DaemonSet',
+      containers: [
+        'fluentd-elasticsearch',
+      ],
+    },
   },
   serviceLevelIndicators: {
     elasticsearch_searching_cluster: {
