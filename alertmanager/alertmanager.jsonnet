@@ -7,19 +7,46 @@ local stages = import 'service-catalog/stages.libsonnet';
 // Where the alertmanager templates are deployed.
 local templateDir = '/etc/alertmanager/config';
 
-local slackChannelDefaults = {};
+// Special names of Slackbridge  webhook receivers.
+// Note that these should match up with the names of the webhooks receivers kepts in
+// the secrets in https://ops.gitlab.net/gitlab-com/runbooks/-/settings/ci_cd
+local SLACKLINE_PRODUCTION_RECEIVER = 'slack_bridge-prod';
+local SLACKLINE_STAGING_RECEIVER = 'slack_bridge-nonprod';
+
+local slacklineReceiverMapping = {
+  production: SLACKLINE_PRODUCTION_RECEIVER,
+  staging: SLACKLINE_STAGING_RECEIVER,
+};
+
+// Map of webhook configurations for each slackline environment instance
+// { staging: { .. }, production: { .. } }
+local slacklineWebhookConfigurations = std.foldl(
+  function(memo, environment)
+    local slackWebhookNameForEnvironment = slacklineReceiverMapping[environment];
+    local matchingWebhooks = std.filter(function(f) f.name == slackWebhookNameForEnvironment, secrets.webhookChannels);
+    local first = if std.length(matchingWebhooks) == 1 then
+      matchingWebhooks[0]
+    else
+      error 'Expected exactly one webhook named %s, but %d matched.' % [slackWebhookNameForEnvironment, std.length(matchingWebhooks)];
+
+    memo { [environment]: first },
+  std.objectFields(slacklineReceiverMapping),
+  {}
+);
 
 //
 // Receiver helpers and definitions.
 local slackChannels = [
-  // Generic channels.
+  // If slackchannels use Slackline (with `useSlackLine`), then the receiver will
+  // not actually be a slack receiver, but will route to Slackline using a webhook
+  // instead.
   { name: 'prod_alerts_slack_channel', channel: 'alerts' },
   { name: 'production_slack_channel', channel: 'production', sendResolved: false },
   { name: 'nonprod_alerts_slack_channel', channel: 'alerts-nonprod' },
-  { name: 'feed_alerts_staging', channel: 'feed_alerts_staging', sendResolved: false },
+  { name: 'feed_alerts_staging', channel: 'feed_alerts_staging', useSlackLine: slacklineWebhookConfigurations.staging },
 ];
 
-local SnitchReceiver(channel) =
+local snitchReceiverChannelName(channel) =
   local env = channel.name;
   local cluster = channel.cluster;
   local receiver_name = if cluster == '' then env else env + '_' + cluster;
@@ -27,7 +54,7 @@ local SnitchReceiver(channel) =
 
 local webhookChannels =
   [
-    { name: SnitchReceiver(s), url: 'https://nosnch.in/' + s.apiKey, sendResolved: false }
+    { name: snitchReceiverChannelName(s), url: 'https://nosnch.in/' + s.apiKey, sendResolved: false }
     for s in secrets.snitchChannels
   ] +
   [
@@ -77,6 +104,24 @@ local PagerDutyReceiver(channel) = {
   ],
 };
 
+local webhookReceiverDefaults = {
+  httpConfig: {},
+};
+
+local WebhookReceiver(channel) =
+  local channelWithDefaults = webhookReceiverDefaults + channel;
+
+  {
+    name: channelWithDefaults.name,
+    webhook_configs: [
+      {
+        url: channelWithDefaults.url,
+        send_resolved: channelWithDefaults.sendResolved,
+        http_config: channelWithDefaults.httpConfig,
+      },
+    ],
+  };
+
 local slackActionButton(text, url) =
   {
     type: 'button',
@@ -84,8 +129,9 @@ local slackActionButton(text, url) =
     url: std.stripChars(url, ' \n'),
   };
 
-local SlackReceiver(channel) =
-  local channelWithDefaults = slackChannelDefaults + channel;
+// Generates a "genuine" Slack receiver for cases where
+// `useSlackLine` is false. Do not use directly, use SlackReceiver instead.
+local RealSlackReceiver(channelWithDefaults) =
   {
     name: channelWithDefaults.name,
     slack_configs: [
@@ -93,7 +139,7 @@ local SlackReceiver(channel) =
         channel: '#' + channelWithDefaults.channel,
         color: '{{ template "slack.color" . }}',
         icon_emoji: '{{ template "slack.icon" . }}',
-        send_resolved: if std.objectHas(channel, 'sendResolved') then channel.sendResolved else true,
+        send_resolved: channelWithDefaults.sendResolved,
         text: '{{ template "slack.text" . }}',
         title: '{{ template "slack.title" . }}',
         title_link: '{{ template "slack.link" . }}',
@@ -139,16 +185,46 @@ local SlackReceiver(channel) =
     ],
   };
 
-local WebhookReceiver(channel) = {
-  name: channel.name,
-  webhook_configs: [
-    {
-      url: channel.url,
-      send_resolved: channel.sendResolved,
-      http_config: if std.objectHas(channel, 'httpConfig') then channel.httpConfig else {},
+// Generates a "take" Slack receiver for cases where
+// `useSlackLine` is configured. Do not use directly, use SlackReceiver instead.
+local SlacklineSlackReceiver(channelWithDefaults, slackhookConfig) =
+  local slackChannel = channelWithDefaults.channel;
+
+  // Append ?channel=... to the slackline URL to use an alternative slack channel
+  // More details in documentation at:
+  // https://gitlab.com/gitlab-com/gl-infra/slackline/#publishing-messages-to-alternative-channels
+  local url = '%s?channel=%s' % [slackhookConfig.url, slackChannel];
+
+  WebhookReceiver({
+    name: channelWithDefaults.name,
+    url: url,
+    sendResolved: true,
+    httpConfig: {
+      bearer_token: slackhookConfig.token,
     },
-  ],
+  });
+
+local slackChannelDefaults = {
+  // By default, resolved notifications are sent to the slack channel...
+  sendResolved: true,
+
+  // By default slack receivers will communicate directly with slack
+  // this can be overriden to allow slack receivers to route via
+  // slackline. The value should be 'staging' or 'production'
+  useSlackLine: null,
 };
+
+// Generates either a "native" (real) Slack receiver, or, when
+// useSlackLine is configured, will generate a webhook receiver which
+// will route the notification to slackline.
+local SlackReceiver(channel) =
+  local channelWithDefaults = slackChannelDefaults + channel;
+
+  if channelWithDefaults.useSlackLine == null then
+    RealSlackReceiver(channelWithDefaults)
+  else
+    SlacklineSlackReceiver(channelWithDefaults, channelWithDefaults.useSlackLine);
+
 
 //
 // Route helpers and definitions.
@@ -241,7 +317,7 @@ local RouteCase(
 
 local SnitchRoute(channel) =
   Route(
-    receiver=SnitchReceiver(channel),
+    receiver=snitchReceiverChannelName(channel),
     matchers={
       alertname: 'SnitchHeartBeat',
       cluster: channel.cluster,
@@ -306,7 +382,7 @@ local routingTree = Route(
      * other slackline alerts are passed up
      */
     Route(
-      receiver='slack_bridge-prod',
+      receiver=SLACKLINE_PRODUCTION_RECEIVER,
       matchers={
         rules_domain: 'general',
         env: 'gprd',
@@ -316,7 +392,7 @@ local routingTree = Route(
       group_by=['...']
     ),
     Route(
-      receiver='slack_bridge-prod',
+      receiver=SLACKLINE_PRODUCTION_RECEIVER,
       matchers={
         rules_domain: 'general',
         env: 'ops',
@@ -326,7 +402,7 @@ local routingTree = Route(
       group_by=['...']
     ),
     Route(
-      receiver='slack_bridge-nonprod',
+      receiver=SLACKLINE_STAGING_RECEIVER,
       matchers={
         rules_domain: 'general',
         /* Traffic cessation and traffic anomaly alerts should be disabled for
