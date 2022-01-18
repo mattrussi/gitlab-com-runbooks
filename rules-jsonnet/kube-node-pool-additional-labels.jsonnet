@@ -296,6 +296,20 @@ local additionalLabelsForNodePoolTypes = {
       },
     },
   ],
+  stgsub: [
+    {
+      /* stgsub regional cluster */
+      clusters: ['stgsub-customers-gke'],
+      types: {
+        default: {
+          service_type: 'kube',
+          service_tier: 'inf',
+          service_stage: 'main',
+          service_shard: 'default',
+        },
+      },
+    },
+  ],
 };
 
 local kubeNodePoolAdditionalLabelsForType(env, clusterInfo, type, labels) =
