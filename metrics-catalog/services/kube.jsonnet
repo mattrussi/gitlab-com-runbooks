@@ -29,7 +29,7 @@ metricsCatalog.serviceDefinition({
     apiserver: {
       userImpacting: false,
       featureCategory: 'not_owned',
-      team: 'delivery',
+      team: 'sre_reliability',
       description: |||
         The Kubernetes API server validates and configures data for the api objects which
         include pods, services, and others. The API Server services REST operations
@@ -82,7 +82,7 @@ metricsCatalog.serviceDefinition({
     cluster_scaleups: {
       userImpacting: false,
       featureCategory: 'not_owned',
-      team: 'delivery',
+      team: 'sre_reliability',
       ignoreTrafficCessation: true,
       description: |||
         We rely on the GKE Cluster Autoscaler (https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-autoscaler) to

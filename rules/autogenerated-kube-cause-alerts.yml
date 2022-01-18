@@ -21,7 +21,7 @@ groups:
       pager: pagerduty
       runbook: docs/kube/kubernetes.md#alerts
       severity: s2
-      team: delivery
+      team: sre_reliability
     expr: |
       sum by (type, env, tier, stage, cluster) (
         kube_pod_container_status_waiting_reason:labeled{

@@ -33,7 +33,7 @@ local rules = {
           |||,
           'for': '20m',
           labels: {
-            team: 'delivery',
+            team: 'sre_reliability',
             severity: 's2',
             alert_type: 'cause',
             pager: 'pagerduty',
