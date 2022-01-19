@@ -257,7 +257,6 @@ metricsCatalog.serviceDefinition({
     sshd: {
       userImpacting: true,
       featureCategory: 'not_owned',
-      team: 'sre_datastores',
       description: |||
         Monitors Gitlab-sshd, using the connections bucket, and http requests bucket.
       |||,
