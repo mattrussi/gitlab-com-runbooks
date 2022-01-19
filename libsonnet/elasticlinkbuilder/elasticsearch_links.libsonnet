@@ -119,6 +119,13 @@ local indexCatalog = {
     //latencyFieldUnitMultiplier: 1000,
   },
 
+  consul: indexDefaults {
+    timestamp: 'json.time',
+    indexPattern: 'AWVDROsNO8Ra6d0I_oUl',
+    defaultColumns: ['json.@module', 'json.@message'],
+    requestsNotSupported: true,
+  },
+
   gitaly: indexDefaults {
     timestamp: 'json.time',
     indexPattern: 'AW5F1OHTiGcMMNRn84Di',
