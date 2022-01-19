@@ -23,7 +23,7 @@ Where `/tmp/gprd-key-file` is the base64 encoded key value that can be read fetc
 ## Secret Key and Key Rotation
 ### Overview
 
-The CDN is configured with a secret key that is used to generate signed URLs. This key is configured in Terraform, and is configured as a Kubernetes secret. The secret is sourced from GKMS.
+The CDN is configured with a secret key that is used by the registry to generate signed URLs. This key is configured in Terraform, and is configured as a Kubernetes secret. The secret is sourced from GKMS.
 
 The key is written to the configuration file for the Registry service (`/etc/docker/registry/middleware.storage/0/private-key`) which can be inspected in the Registry pod if you need to confirm the value.
 The path is configured in the Registry configuration file `/etc/docker/registry/config.yml`
