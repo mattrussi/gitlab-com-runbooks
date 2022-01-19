@@ -2,6 +2,8 @@
 
 The GitLab Container Registry CDN is a Google Application Load Balancer that caches requests made to the Registry backend bucket.
 
+The registry is the one responsible for generating pre-signed URLs and redirecting clients to CDN. This only applies to `HEAD`/`GET` requests against the `/v2/<name>/blobs/<digest>` endpoint.
+
 ## Possible Checks
 
 If it is believed that there is an issue with the Registry CDN:
