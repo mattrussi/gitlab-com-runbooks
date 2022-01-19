@@ -130,7 +130,7 @@ INFO: 2021/09/02 15:57:44.482529 FILE PATH: 000000050005E5750000001E.br
 ```
 
 > See also: [How to check if WAL-E/WAL-G backups are
-> running](#troubleshooting-how-to-check-if-wal-e-backups-are-running).
+> running](#how-to-check-if-wal-e-backups-are-running).
 
 #### How to check the full backups (basebackups) creation
 Check `/var/log/wal-g/wal-g_backup_push.log` / `/var/log/wal-g/wal-g_backup_push.log.1` on replicas:
