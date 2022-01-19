@@ -26,7 +26,7 @@
 * [Gitlab.com on Kubernetes](../onboarding/gitlab.com_on_k8s.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
 * [Database Connection Pool Saturation](app-db-conn-pool-saturation.md)
-* [Registry CDN](cdn.md)
+* [Container Registry CDN](cdn.md)
 * [gitlab-registry.md](gitlab-registry.md)
 * [migration-failure-scenarios.md](migration-failure-scenarios.md)
 * [High Number of Overdue Online GC Tasks](online-gc-high-overdue-tasks.md)
