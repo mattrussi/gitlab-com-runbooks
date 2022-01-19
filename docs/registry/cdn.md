@@ -1,4 +1,4 @@
-# Registry CDN
+# Container Registry CDN
 
 The GitLab Container Registry CDN is a Google Application Load Balancer that caches requests made to the Registry backend bucket.
 
@@ -65,5 +65,6 @@ After the new key is associated with the CDN:
 
 ```
 - Create an MR in [k8s-workload/gitlab-com](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com) for a ["Chef only" change](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/blob/9320b1e58f53711ec39057c99d17dad76bcdcb92/CHEF_CONFIG_UPDATE), this will force a config update and fetch the new secret value.
+- After the secret is update **you will need to force a deployment** [due to an outstanding issue](https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2189) where application secrets are not updated unless deployment occurs for the service.
 
 Once the key has been fully deployed, you can remove the old key by removing the old key resource from Terraform.
