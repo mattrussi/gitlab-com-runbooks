@@ -143,6 +143,13 @@ local indexCatalog = {
     //latencyFieldUnitMultiplier: 1000,
   },
 
+  mailroom: indexDefaults {
+    timestamp: '@timestamp',
+    indexPattern: '66d3cd70-6923-11ea-8617-2347010d3aab',
+    defaultColumns: ['json.action', 'json.to_be_delivered.count', 'json.byte_size'],
+    requestsNotSupported: true,
+  },
+
   monitoring_ops: indexDefaults {
     timestamp: '@timestamp',
     indexPattern: 'pubsub-monitoring-inf-ops',
