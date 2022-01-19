@@ -620,7 +620,7 @@ local errorBudgetDetailDashboard() =
       metricsCatalogDashboards.sliMatrixAcrossServices(
         title='🔬 Service Level Indicators',
         serviceTypes=requestComponents,
-        aggregationSet=aggregationSets.stageGroupSLIs,
+        aggregationSet=aggregationSets.serviceComponentStageGroupSLIs,
         startRow=200,
         expectMultipleSeries=true,
         legendFormatPrefix='{{ type }}',
