@@ -8,6 +8,15 @@ local elasticTimeRange(from, to) =
 
 local grafanaTimeRange = elasticTimeRange(grafanaTimeFrom, grafanaTimeTo);
 
+local queryWithMeta(filter) =
+  filter {
+    meta+: {
+      key: 'query',
+      type: 'custom',
+      value: std.toString(filter.query),
+    },
+  };
+
 // Builds an ElasticSearch match filter clause
 local matchFilter(field, value) =
   {
@@ -18,19 +27,18 @@ local matchFilter(field, value) =
           type: 'phrase',
         },
       },
-
     },
   };
 
 local matchInFilter(field, possibleValues) =
-  {
+  queryWithMeta({
     query: {
       bool: {
         should: [{ match_phrase: { [field]: possibleValue } } for possibleValue in possibleValues],
         minimum_should_match: 1,
       },
     },
-  };
+  });
 
 // Builds an ElasticSearch range filter clause
 local rangeFilter(field, gteValue, lteValue) =

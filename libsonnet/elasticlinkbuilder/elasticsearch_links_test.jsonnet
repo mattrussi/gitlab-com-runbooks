@@ -24,6 +24,11 @@ test.suite({
   testMatcherFilterIn: {
     actual: elastic.matcher('fieldName', ['hello', 'world']),
     expect: {
+      meta: {
+        key: 'query',
+        type: 'custom',
+        value: '{"bool": {"minimum_should_match": 1, "should": [{"match_phrase": {"fieldName": "hello"}}, {"match_phrase": {"fieldName": "world"}}]}}',
+      },
       query: {
         bool: {
           should: [
@@ -53,6 +58,11 @@ test.suite({
         },
       },
       {
+        meta: {
+          key: 'query',
+          type: 'custom',
+          value: '{"bool": {"minimum_should_match": 1, "should": [{"match_phrase": {"fieldName": "hello"}}, {"match_phrase": {"fieldName": "world"}}]}}',
+        },
         query:
           {
             bool: {
