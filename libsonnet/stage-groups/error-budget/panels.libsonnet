@@ -449,10 +449,6 @@ local logLinks(featureCategories) =
       This shows the number of jobs per worker that failed over the past 7 days.
       This includes retries: if a job with a was retried 3 times, before exhausting
       its retries, this counts as 3 failures towards the budget.
-
-      **Note:** The Grafana vizualisations currently fail to load initially. Please
-      refresh the page to make them load. We're tracking this problem in
-      [this issue](%(failingLinksIssue)s).
     ||| % {
       pumaApdexLink: pumaApdexTable,
       requestUrgencyLink: 'https://docs.gitlab.com/ee/development/application_slis/rails_request_apdex.html#adjusting-request-urgency',
@@ -462,7 +458,6 @@ local logLinks(featureCategories) =
       sidekiqApdexLink: sidekiqApdexTables,
       sidekiqUrgentThreshold: sidekiqHelpers.slos.urgent.executionDurationSeconds,
       sidekiqNormalThreshold: sidekiqHelpers.slos.lowUrgency.executionDurationSeconds,
-      failingLinksIssue: 'https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1484',
     },
   );
 
