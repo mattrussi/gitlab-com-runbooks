@@ -55,7 +55,9 @@ metricsCatalog.serviceDefinition({
         toolingLinks.kibana(
           title='Workhorse',
           index='workhorse',
-          matches={ 'json.uri.keyword': '/api/v4/jobs/request' }
+          matches={ 'json.uri.keyword': '/api/v4/jobs/request' },
+          includeMatchersForPrometheusSelector=false,
+
         ),
         toolingLinks.kibana(
           title='Postgres Slowlog',
