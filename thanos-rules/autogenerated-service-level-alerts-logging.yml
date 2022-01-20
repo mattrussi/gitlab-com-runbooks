@@ -75,6 +75,102 @@ groups:
       gitlab_component_ops:rate_5m{type="logging", component="elasticsearch_indexing_cluster", stage="main", monitor="global"} offset 1h
       unless
       gitlab_component_ops:rate_5m{type="logging", component="elasticsearch_indexing_cluster", stage="main", monitor="global"}
+  - alert: LoggingServiceElasticsearchIndexingIndexErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The elasticsearch_indexing_index SLI of the logging service (`{{ $labels.stage
+        }}` stage) has an error rate violating SLO
+      description: |
+        This index SLI monitors log index operations to GitLab's logging ELK instance.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: logging-main/logging-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/logging-main/logging-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1534601951"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(elasticsearch_index_stats_indexing_index_total{type="logging", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/logging/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_1h{component="elasticsearch_indexing_index",monitor="global",type="logging"}
+          > (14.4 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_5m{component="elasticsearch_indexing_index",monitor="global",type="logging"}
+          > (14.4 * 0.001000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="elasticsearch_indexing_index",monitor="global",type="logging"}) >= 1
+      )
+  - alert: LoggingServiceElasticsearchIndexingIndexErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The elasticsearch_indexing_index SLI of the logging service (`{{ $labels.stage
+        }}` stage) has an error rate violating SLO
+      description: |
+        This index SLI monitors log index operations to GitLab's logging ELK instance.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: logging-main/logging-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/logging-main/logging-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1534601951"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(elasticsearch_index_stats_indexing_index_total{type="logging", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/logging/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_6h{component="elasticsearch_indexing_index",monitor="global",type="logging"}
+          > (6 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_30m{component="elasticsearch_indexing_index",monitor="global",type="logging"}
+          > (6 * 0.001000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="elasticsearch_indexing_index",monitor="global",type="logging"}) >= 1
+      )
   - alert: LoggingServiceElasticsearchIndexingIndexTrafficCessation
     for: 5m
     annotations:

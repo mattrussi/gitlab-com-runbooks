@@ -94,6 +94,11 @@ metricsCatalog.serviceDefinition({
         clampMinZero=true,
       ),
 
+      errorRate: rateMetric(
+        counter='elasticsearch_index_stats_indexing_index_total',
+        selector='type="logging"'
+      ),
+
       significantLabels: ['index'],
     },
 
