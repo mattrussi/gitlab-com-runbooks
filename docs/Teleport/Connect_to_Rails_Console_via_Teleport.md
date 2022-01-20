@@ -41,6 +41,12 @@ And finally you request a role to connect to the staging Rails console - for pro
 
 This command will pause while it waits for the approver to approve your request.  It may appear to hang, but it will return as soon as the request is approved or denied.
 
+If you need to login with a previously issued request, you can do so with the request ID:
+
+`$> tsh login --request-id=<request-id>`
+
+The request ID is shown in the output of `tsh login` when making the initial request, and can also be found attached to your request notification in `#infrastructure-lounge`.
+
 > Note: These examples are for the **staging environment** only! This is to prevent unintended copy/paste behavior.  To connect to the production environment, change `gstg` to `gprd`
 
 #### Access approval
