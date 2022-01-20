@@ -377,6 +377,14 @@ local routingTree = Route(
       continue=true,
       matchers={ env: 'gstg', slo_alert: 'yes', type: { re: 'api|web|git' } },
     ),
+  ] +
+  [
+    // Route Kubernetes alerts for staging to `feed_alerts_staging`
+    Route(
+      receiver='feed_alerts_staging',
+      continue=true,
+      matchers={ env: 'gstg', type: 'kube' },
+    ),
   ]
   + [
     // Terminators go last
