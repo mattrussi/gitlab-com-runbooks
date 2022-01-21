@@ -56,7 +56,6 @@ local systemDiagram(title, graphId, services, targets, diagramOptions) = {
   datasource: '$PROMETHEUS_DS',
   colors: diagramOptions.colors,
   composites: [],
-  content: generateMermaidDiagram(services, diagramOptions),
   decimals: 3,
   format: 'percentunit',
   graphId: graphId,
@@ -123,7 +122,9 @@ local systemDiagram(title, graphId, services, targets, diagramOptions) = {
   moddedSeriesVal: 0,
   mode: 'content',
   nullPointMode: 'connected',
-  options: {},
+  options: {
+    content: generateMermaidDiagram(services, diagramOptions),
+  },
   seriesOverrides: [],
   style: '',
   targets: targets,
