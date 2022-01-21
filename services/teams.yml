@@ -304,6 +304,8 @@ teams:
   - rails_requests
 - name: pipeline_authoring
   product_stage_group: pipeline_authoring
+  send_slo_alerts_to_team_slack_channel: true
+  slack_channel: g_pipeline-authoring_alerts
   ignored_components:
   - graphql_queries
 - name: pipeline_execution
