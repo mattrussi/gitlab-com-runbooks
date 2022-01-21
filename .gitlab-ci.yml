@@ -54,6 +54,9 @@ variables:
       - DEPLOY_ENV: ops
         CLUSTER: ops-gitlab-gke
         REGION: us-east1
+      - DEPLOY_ENV: stgsub
+        CLUSTER: stgsub-customers-gke
+        REGION: us-east1
 
 default:
   image: "${CI_REGISTRY_IMAGE}:latest"
