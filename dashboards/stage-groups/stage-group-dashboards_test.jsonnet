@@ -52,7 +52,6 @@ test.suite({
       'stage',
       'controller',
       'action',
-      'stage_group',
     ],
   },
 
@@ -169,12 +168,16 @@ test.suite({
       'PROMETHEUS_DS',
       'environment',
       'stage',
-      'stage_group',
     ],
   },
 
   testErrorBudgetDetailDashboard: {
-    actual: panelTitles(stageGroupDashboards.errorBudgetDetailDashboard()),
+    actual: panelTitles(stageGroupDashboards.errorBudgetDetailDashboard({
+      key: 'project_management',
+      name: 'Project Management',
+      stage: 'plan',
+      feature_categories: ['team_planning', 'planning_analytics'],
+    })),
     expect: [
       'Error Budget (past 28 days)',
       'Availability',

@@ -364,12 +364,13 @@ local sliDetailErrorRatePanel(
     local staticLabelNames = if std.objectHas(sli, 'staticLabels') then std.objectFields(sli.staticLabels) else [];
     local withoutLabels = ['type'] + staticLabelNames;
     local filteredSelectorHash = selectors.without(selectorHash, withoutLabels);
-
     row.new(title='🔬 %(sliName)s Service Level Indicator Detail' % { sliName: sli.name }, collapse=true)
     .addPanels(
       std.flattenArrays(
         std.mapWithIndex(
           function(index, aggregationSet)
+            local combinedSelector = aggregationSet.selector + filteredSelectorHash;
+
             layout.singleRow(
               std.prune(
                 [
@@ -377,7 +378,7 @@ local sliDetailErrorRatePanel(
                     sliDetailLatencyPanel(
                       title='Estimated %(percentile_humanized)s ' + sli.name + ' Latency - ' + aggregationSet.title,
                       sli=sli,
-                      selector=filteredSelectorHash + aggregationSet.selector,
+                      selector=combinedSelector,
                       legendFormat='%(percentile_humanized)s ' + aggregationSet.legendFormat,
                       aggregationLabels=aggregationSet.aggregationLabels,
                       withoutLabels=withoutLabels,
@@ -392,7 +393,7 @@ local sliDetailErrorRatePanel(
                       description='Attributes apdex downscoring',
                       query=sli.apdex.apdexAttribution(
                         aggregationLabel=aggregationSet.aggregationLabels,
-                        selector=filteredSelectorHash + aggregationSet.selector,
+                        selector=combinedSelector,
                         rangeInterval='$__interval',
                         withoutLabels=withoutLabels,
                       ),
@@ -413,7 +414,7 @@ local sliDetailErrorRatePanel(
                       sli=sli,
                       legendFormat=aggregationSet.legendFormat,
                       aggregationLabels=aggregationSet.aggregationLabels,
-                      selector=filteredSelectorHash + aggregationSet.selector,
+                      selector=combinedSelector,
                       withoutLabels=withoutLabels,
                     )
                   else
@@ -423,7 +424,7 @@ local sliDetailErrorRatePanel(
                     sliDetailOpsRatePanel(
                       title=sli.name + ' RPS - ' + aggregationSet.title,
                       sli=sli,
-                      selector=filteredSelectorHash + aggregationSet.selector,
+                      selector=combinedSelector,
                       legendFormat=aggregationSet.legendFormat,
                       aggregationLabels=aggregationSet.aggregationLabels,
                       withoutLabels=withoutLabels,
