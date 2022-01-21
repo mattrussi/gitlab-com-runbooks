@@ -75,23 +75,32 @@ local getColumnWidths(
     compact=false,
     rowHeight=7,
     showDashboardListPanel=false,
+    aggregationSet=aggregationSets.serviceSLIs,
+    staticTitlePrefix=null,
+    legendFormatPrefix=null,
+    skipDescriptionPanels=false,
+    includeLastWeek=true,
   )::
-    local selectorHashWithExtras = selectorHash { type: serviceType };
+    local typeHash = if serviceType == null then {} else { type: serviceType };
+    local selectorHashWithExtras = selectorHash + typeHash;
     local formatConfig = { serviceType: serviceType, stableIdPrefix: stableIdPrefix };
+    local titlePrefix = if staticTitlePrefix == null then '%(serviceType)s Service' % formatConfig else staticTitlePrefix;
     local columns =
       singleMetricRow.row(
         serviceType=serviceType,
-        aggregationSet=aggregationSets.serviceSLIs,
+        aggregationSet=aggregationSet,
         selectorHash=selectorHashWithExtras,
-        titlePrefix='%(serviceType)s Service' % formatConfig,
+        titlePrefix=titlePrefix,
         stableIdPrefix='%(stableIdPrefix)sservice-%(serviceType)s' % formatConfig,
-        legendFormatPrefix=serviceType,
+        legendFormatPrefix=if legendFormatPrefix == null then serviceType else legendFormatPrefix,
         showApdex=showApdex,
         apdexDescription=null,
         showErrorRatio=showErrorRatio,
         showOpsRate=showOpsRate,
         includePredictions=true,
         compact=compact,
+        skipDescriptionPanels=skipDescriptionPanels,
+        includeLastWeek=includeLastWeek,
       )
       +
       (

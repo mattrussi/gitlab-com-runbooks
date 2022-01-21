@@ -11,6 +11,7 @@ local sidekiqHelpers = import 'services/lib/sidekiq-helpers.libsonnet';
 local thresholds = import 'gitlab-dashboards/thresholds.libsonnet';
 local metricsCatalogDashboards = import 'gitlab-dashboards/metrics_catalog_dashboards.libsonnet';
 local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
+local keyMetrics = import 'gitlab-dashboards/key_metrics.libsonnet';
 
 local actionLegend(type) =
   if type == 'api' then '{{action}}' else '{{controller}}#{{action}}';
@@ -617,11 +618,35 @@ local errorBudgetDetailDashboard() =
       title='Stage group error budget detail',
     )
     .addPanels(
+      keyMetrics.headlineMetricsRow(
+        startRow=200,
+        serviceType=null,
+        selectorHash={
+          environment: '$environment',
+          stage: '$stage',
+          stage_group: '$stage_group',
+        },
+        staticTitlePrefix='Overall',
+        // Change this to be dynamic when stage group is not a template variable:
+        // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1365
+        legendFormatPrefix='Stage group',
+        aggregationSet=aggregationSets.stageGroupSLIs,
+        showApdex=true,
+        showErrorRatio=true,
+        showOpsRate=true,
+        showSaturationCell=false,
+        skipDescriptionPanels=true,
+        includeLastWeek=false,
+        compact=true,
+        rowHeight=8,
+      )
+    )
+    .addPanels(
       metricsCatalogDashboards.sliMatrixAcrossServices(
         title='🔬 Service Level Indicators',
         serviceTypes=requestComponents,
         aggregationSet=aggregationSets.serviceComponentStageGroupSLIs,
-        startRow=200,
+        startRow=300,
         expectMultipleSeries=true,
         legendFormatPrefix='{{ type }}',
         selectorHash={
