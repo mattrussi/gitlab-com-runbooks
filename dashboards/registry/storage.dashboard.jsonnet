@@ -242,33 +242,31 @@ basic.dashboard(
 )
 .addPanels(
   layout.grid([
-    statPanel.new(
+    basic.percentageTimeseries(
       title='Percentage of Redirects to CDN',
-      description='The percentage of blob HEAD/GET requests redirected to Google Cloud CDN. The displayed number is the last measured percentage during the selected time range.',
-      reducerFunction='last',
-      decimals=0,
-      unit='percentunit',
-    )
-    .addTarget(
-      promQuery.target(
-        |||
-          sum (registry_storage_cdn_redirects_total{environment="$environment", cluster=~"$cluster", stage="$stage", backend="cdn"})
-          /
-          sum (registry_storage_cdn_redirects_total{environment="$environment", cluster=~"$cluster", stage="$stage"})
-        |||
-      )
+      description='The percentage of blob HEAD/GET requests redirected to Google Cloud CDN.',
+      query=|||
+        sum (rate(registry_storage_cdn_redirects_total{environment="$environment", cluster=~"$cluster", stage="$stage", backend="cdn"}[$__interval]))
+        /
+        sum (rate(registry_storage_cdn_redirects_total{environment="$environment", cluster=~"$cluster", stage="$stage"}[$__interval]))
+      |||,
+      interval='5m',
+      intervalFactor=2,
+      legend_show=false,
+      linewidth=2
     ),
     basic.timeseries(
       title='Number of Redirects (Per Backend)',
       description='The number of blob HEAD/GET requests redirected to Google Cloud Storage or Google Cloud CDN.',
-      query='sum by (backend) (registry_storage_cdn_redirects_total{environment="$environment", cluster=~"$cluster", stage="$stage"})',
+      query='sum by (backend) (rate(registry_storage_cdn_redirects_total{environment="$environment", cluster=~"$cluster", stage="$stage"}[$__interval]))',
+      format='short',
       legendFormat='{{ backend }}',
       interval='1m',
       intervalFactor=2,
       yAxisLabel='Count',
       linewidth=2
     ),
-    statPanel.new(
+    basic.percentageTimeseries(
       title='Percentage of Redirects to CDN Skipped',
       description=|||
         The percentage of blob HEAD/GET requests that were not redirected to Google Cloud CDN because of a given reason:
@@ -276,21 +274,16 @@ basic.dashboard(
           of JWT tokens marked as such is currently controlled by the `container_registry_cdn_redirect` feature flag (percentage of time).
 
           - `gcp`: This means that the request originates within GCP, and as such we redirected it to GCS and not CDN.
-
-          The displayed number is the last measured percentage during the selected time range.
       |||,
-      reducerFunction='last',
-      decimals=0,
-      unit='percentunit',
-    )
-    .addTarget(
-      promQuery.target(
-        |||
-          sum (registry_storage_cdn_redirects_total{environment="$environment", cluster=~"$cluster", stage="$stage", bypass="true"})
-          /
-          sum (registry_storage_cdn_redirects_total{environment="$environment", cluster=~"$cluster", stage="$stage"})
-        |||
-      )
+      query=|||
+        sum (rate(registry_storage_cdn_redirects_total{environment="$environment", cluster=~"$cluster", stage="$stage", bypass="true"}[$__interval]))
+        /
+        sum (rate(registry_storage_cdn_redirects_total{environment="$environment", cluster=~"$cluster", stage="$stage"}[$__interval]))
+      |||,
+      interval='5m',
+      intervalFactor=2,
+      legend_show=false,
+      linewidth=2
     ),
     basic.timeseries(
       title='Number of Redirects to CDN Skipped (Per Reason)',
@@ -301,7 +294,8 @@ basic.dashboard(
 
           - `gcp`: This means that the request originates within GCP, and as such we redirected it to GCS and not CDN.
       |||,
-      query='sum by (bypass_reason) (registry_storage_cdn_redirects_total{environment="$environment", cluster=~"$cluster", stage="$stage", bypass="true"})',
+      query='sum by (bypass_reason) (rate(registry_storage_cdn_redirects_total{environment="$environment", cluster=~"$cluster", stage="$stage", bypass="true"}[$__interval]))',
+      format='short',
       legendFormat='{{ bypass_reason }}',
       interval='1m',
       intervalFactor=2,
