@@ -9,5 +9,18 @@
          }
       },
       "number_of_shards": 1
+   },
+   "template": {
+      "mappings": {
+         "properties": {
+            "payload": {
+               "properties": {
+                  "status": {
+                     "type": "text"
+                  }
+               }
+            }
+         }
+      }
    }
 }
