@@ -2058,6 +2058,14 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
+      component: consul
+      regional_aggregation: "yes"
+      service_aggregation: "yes"
+      tier: sv
+      type: consul
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
       component: cnyHttpServices
       regional_aggregation: "no"
       service_aggregation: "yes"
