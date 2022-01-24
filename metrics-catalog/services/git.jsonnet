@@ -5,6 +5,7 @@ local customRateQuery = metricsCatalog.customRateQuery;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local haproxyComponents = import './lib/haproxy_components.libsonnet';
 local sliLibrary = import 'gitlab-slis/library.libsonnet';
+local serviceLevelIndicatorDefinition = import 'servicemetrics/service_level_indicator_definition.libsonnet';
 
 local gitWorkhorseJobNameSelector = { job: { re: 'gitlab-workhorse|gitlab-workhorse-git' } };
 
@@ -206,7 +207,7 @@ metricsCatalog.serviceDefinition({
     local railsSelector = { job: 'gitlab-rails', type: 'git' },
     puma: {
       userImpacting: true,
-      featureCategory: 'not_owned',
+      featureCategory: serviceLevelIndicatorDefinition.featureCategoryFromSourceMetrics,
       description: |||
         Monitors Rails endpoints, running in the Git fleet, via the HTTP interface.
       |||,

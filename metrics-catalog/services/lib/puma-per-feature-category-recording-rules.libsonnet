@@ -14,21 +14,6 @@ local aggregationLabels = std.filter(
   aggregationSet.labels
 );
 
-local requestRate = rateMetric(
-  counter='http_requests_total',
-  selector={
-    job: 'gitlab-rails',
-  },
-);
-
-local errorRate = rateMetric(
-  counter='http_requests_total',
-  selector={
-    job: 'gitlab-rails',
-    status: { re: '5..' },
-  },
-);
-
 local latencyApdex =
   histogramApdex(
     histogram='gitlab_transaction_duration_seconds_bucket',
@@ -61,32 +46,7 @@ local latencyApdexRateRules(rangeInterval) =
   perFeatureCategoryRecordingRules::
     std.flatMap(
       function(rangeInterval)
-        [
-          {
-            record: aggregationSet.getOpsRateMetricForBurnRate(rangeInterval),
-            labels: staticLabels,
-            expr: requestRate.aggregatedRateQuery(aggregationLabels, {}, rangeInterval),
-          },
-          {
-            record: aggregationSet.getErrorRateMetricForBurnRate(rangeInterval),
-            labels: staticLabels,
-            expr: |||
-              %(errorRate)s
-              or
-              (
-                0 * group by (%(aggregationLabels)s) (
-                  %(operationRateName)s{%(staticLabels)s}
-                )
-              )
-            ||| % {
-              errorRate: strings.chomp(errorRate.aggregatedRateQuery(aggregationLabels, {}, rangeInterval)),
-              rangeInterval: rangeInterval,
-              aggregationLabels: aggregations.serialize(aggregationLabels),
-              operationRateName: aggregationSet.getOpsRateMetricForBurnRate(rangeInterval),
-              staticLabels: selectors.serializeHash(staticLabels),
-            },
-          },
-        ] + latencyApdexRateRules(rangeInterval),
+        latencyApdexRateRules(rangeInterval),
       aggregationSet.getBurnRates()
     ),
 }
