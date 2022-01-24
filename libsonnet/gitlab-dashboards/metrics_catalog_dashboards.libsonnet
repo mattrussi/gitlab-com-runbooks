@@ -236,28 +236,30 @@ local sliDetailErrorRatePanel(
       ),
     );
 
-    [
-      row.new(title=title, collapse=false) { gridPos: { x: 0, y: startRow, w: 24, h: 1 } },
-    ] +
-    std.prune(
-      std.flattenArrays(
-        std.mapWithIndex(
-          function(i, sliName)
-            local sli = slis[sliName];
+    layout.titleRowWithPanels(
+      title=title,
+      collapse=true,
+      startRow=startRow,
+      panels=layout.rows(
+        std.prune(
+          std.mapWithIndex(
+            function(i, sliName)
+              local sli = slis[sliName];
 
-            if sliFilter(sli) then
-              sliOverviewMatrixRow(
-                serviceType=null,
-                aggregationSet=aggregationSet,
-                sli=sli,
-                selectorHash=selectorHash { component: sliName },
-                startRow=startRow + 1 + i * 10,
-                legendFormatPrefix=legendFormatPrefix,
-                expectMultipleSeries=expectMultipleSeries,
-              )
-            else
-              [],
-          std.objectFields(slis)
+              if sliFilter(sli) then
+                sliOverviewMatrixRow(
+                  serviceType=null,
+                  aggregationSet=aggregationSet,
+                  sli=sli,
+                  selectorHash=selectorHash { component: sliName },
+                  startRow=startRow + 1 + i * 10,
+                  legendFormatPrefix=legendFormatPrefix,
+                  expectMultipleSeries=expectMultipleSeries,
+                )
+              else
+                [],
+            std.objectFields(slis)
+          )
         )
       )
     ),
