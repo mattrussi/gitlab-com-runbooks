@@ -41,6 +41,32 @@ The general settings are managed by Chef and can be found in the corresponding r
 "log_autovacuum_min_duration": "0", 
 ```
 
+### Per table settings
+
+For some workloads custom settings can be beneficial.
+Think for example of a very large table append only table, which by design does not produce dead tuple, but is expensive to fully scan.
+
+<!---
+    How do we handle per table settings?
+-->
+
+## Monitoring
+
+<!---
+    How do we monitor VACUUM?
+-->
+### Alerts
+
+<!---
+    What alerts do we have, hat should we?
+-->
+## Incidents and issues involving VACUUM
+
+- [Review Autovacuum Strategy for all high traffic tables](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/14811)
+- [Lower autovacuuming settings for ci_job_artifacts table](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/14723)
+- [Benchmark of different VACUUM settings](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/14723#note_758526535)
+- [Benchmark of VACUUM PostgreSQL 12 vs. 13 (btree deduplication)](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/14723#note_761320190)
+
 ## Other related runbook pages
 
 - [Check the status of transaction wraparound Runbook](check_wraparound.md)
