@@ -40,6 +40,7 @@ metricsCatalog.serviceDefinition({
         counter='grpc_server_handled_total',
         selector=baseSelector {
           grpc_code: { nre: '^(OK|NotFound|FailedPrecondition|Unauthenticated|PermissionDenied|Canceled|DeadlineExceeded|ResourceExhausted)$' },
+          grpc_service: { ne: 'gitlab.agent.kubernetes_api.rpc.KubernetesApi' },
         },
       ),
 
