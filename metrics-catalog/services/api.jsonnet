@@ -4,6 +4,7 @@ local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local haproxyComponents = import './lib/haproxy_components.libsonnet';
 local sliLibrary = import 'gitlab-slis/library.libsonnet';
+local serviceLevelIndicatorDefinition = import 'servicemetrics/service_level_indicator_definition.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'api',
@@ -152,7 +153,7 @@ metricsCatalog.serviceDefinition({
     local railsSelector = { job: 'gitlab-rails', type: 'api' },
     puma: {
       userImpacting: true,
-      featureCategory: 'not_owned',
+      featureCategory: serviceLevelIndicatorDefinition.featureCategoryFromSourceMetrics,
       description: |||
         This SLI monitors API traffic in aggregate, in the GitLab rails monolith, via its
         HTTP interface. 5xx responses are treated as failures.

@@ -4,6 +4,7 @@ local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local haproxyComponents = import './lib/haproxy_components.libsonnet';
 local sliLibrary = import 'gitlab-slis/library.libsonnet';
+local serviceLevelIndicatorDefinition = import 'servicemetrics/service_level_indicator_definition.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'web',
@@ -160,7 +161,7 @@ metricsCatalog.serviceDefinition({
     local railsSelector = { job: 'gitlab-rails', type: 'web' },
     puma: {
       userImpacting: true,
-      featureCategory: 'not_owned',
+      featureCategory: serviceLevelIndicatorDefinition.featureCategoryFromSourceMetrics,
       description: |||
         Aggregation of most web requests that pass through the puma to the GitLab rails monolith.
         Healthchecks are excluded.
