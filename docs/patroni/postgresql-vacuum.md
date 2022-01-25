@@ -138,15 +138,16 @@ The benchmarked in [Benchmark of VACUUM PostgreSQL 12 vs. 13 (btree deduplicatio
 
 ## Incidents and issues involving VACUUM
 
-- [Infra review of Autovacuum historical comments and decisions](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/15050)
+- [[Design Document] Configure properly Autovacuum for postgresql](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/5024)
 - [Review Autovacuum Strategy for all high traffic tables](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/14811)
+- [Infra review of Autovacuum historical comments and decisions](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/15050)
 - [Optimize PostgreSQL AUTOVACUUM - 2021](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/413#note_820480832)
 - [Lower autovacuuming settings for ci_job_artifacts table](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/14723)
 - [Benchmark of different VACUUM settings](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/14723#note_758526535)
 - [Benchmark of VACUUM PostgreSQL 12 vs. 13 (btree deduplication)](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/14723#note_761520231)
 - [Reduce database index bloat regularly](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/9563)
 
-## Other related runbook pages
+## Other related runbook pages and documents
 
 - [Check the status of transaction wraparound Runbook](check_wraparound.md)
 - [`pg_xid_wraparound` Saturation Alert](pg_xid_wraparound_alert.md)
