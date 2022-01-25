@@ -69,7 +69,7 @@ Think for example of a very large table append only table, which by design does 
 
 > Currently, we are reaching the autovacuum_freeze_max_age threshold of 200000000 in less than 3 days on average. Having this configuration so low for our environment forces the execution of AUTOVACUUM TO PREVENT WRAPAROUND in less than 3 days.
 
-### Bloat due too infrequent VACUUM
+### Bloat due to infrequent VACUUM
 
 Beside the problem of resource consumption caused by auto AUTOVACUUM we also see negative effects by bloated tables and indexes.
 
@@ -89,21 +89,18 @@ Having this configuration so low for our environment forces the execution of `AU
 
 We would like to monitor and evaluate if we can optimize the process.
 
-* change the autovacuum_freeze_max_age and monitor the impact: `Increase autovacuum_freeze_max_age from 200000000 to 400000000`
-
+* Change the `autovacuum_freeze_max_age` and monitor the impact: `Increase autovacuum_freeze_max_age from 200000000 to 400000000`
 * After 2 weeks of analyzing the impact: `Increase autovacuum_freeze_max_age from 400000000 to 600000000`
-
 * After 2 weeks of analyzing the impact: `Increase autovacuum_freeze_max_age from 600000000 to 800000000`
-
 * After 2 weeks of analyzing the impact: `Increase autovacuum_freeze_max_age from 800000000 to 1000000000`
- 
-* change or monitoring to be more efficient
+* Change or monitoring to be more efficient
+* Create a "mechanism" to execute `VACUUM FREEZE` when the database is idle of the tables that are 80% or 90% of start the AUTOVACUUM WRAPAROUND.
 
-* create a "mechanism"( I am thinking even a CI pipeline) to execute VACUUM FREEZE when the database is idle of the tables that are 80% or 90% of start the AUTOVACUUM WRAPAROUND.
+@alexander-sosna: In general it is recommended to not increase `autovacuum_freeze_max_age`, "If cleaning your house hurts and takes forever, do it more often, not less". Regarding GitLab's workload from all around the world, it might be worth a try to shift the VACUUM load to a low load time window. Unfortunately this only occurs on weekends and freezing AUTOVACUUM would need to be delayed to this point. When in deed increasing `autovacuum_freeze_max_age` significant, we might want to have a supporting mechanism already in place.
 
 ### Major upgrade to PostgreSQL 13
 
-The bencharked in [Benchmark of VACUUM PostgreSQL 12 vs. 13 (btree deduplication)](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/14723#note_761320190) hints us that btree deduplication, introduced in PostgreSQL 13, can help with multiple problems at once.
+The benchmarked in [Benchmark of VACUUM PostgreSQL 12 vs. 13 (btree deduplication)](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/14723#note_761320190) hints us that btree deduplication, introduced in PostgreSQL 13, can help with multiple problems at once.
 
 - Index size
 - Index performance
@@ -125,6 +122,7 @@ n_dead_tup = 1000000
 - [Lower autovacuuming settings for ci_job_artifacts table](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/14723)
 - [Benchmark of different VACUUM settings](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/14723#note_758526535)
 - [Benchmark of VACUUM PostgreSQL 12 vs. 13 (btree deduplication)](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/14723#note_761520231)
+- [Reduce database index bloat regularly](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/9563)
 
 ## Other related runbook pages
 
