@@ -47,6 +47,7 @@
 * [postgresql-locking.md](postgresql-locking.md)
 * [Adding a PostgreSQL replica](postgresql-replica.md)
 * [Credential rotation](postgresql-role-credential-rotation.md)
+* [PostgreSQL VACUUM](postgresql-vacuum.md)
 * [Postgresql](postgresql.md)
 * [How to provision the benchmark environment](provisioning_bench_env.md)
 * [Rails SQL Apdex alerts](rails-sql-apdex-slow.md)

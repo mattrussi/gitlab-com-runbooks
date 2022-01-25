@@ -39,6 +39,7 @@
 * [../patroni/postgres-checkup.md](../patroni/postgres-checkup.md)
 * [../patroni/postgresql-locking.md](../patroni/postgresql-locking.md)
 * [How to evaluate load from queries](../patroni/postgresql-query-load-evaluation.md)
+* [PostgreSQL VACUUM](../patroni/postgresql-vacuum.md)
 * [How to provision the benchmark environment](../patroni/provisioning_bench_env.md)
 * [../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md](../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md)
 * [Add a new PgBouncer instance](../pgbouncer/pgbouncer-add-instance.md)
