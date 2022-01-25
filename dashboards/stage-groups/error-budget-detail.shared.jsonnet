@@ -4,9 +4,10 @@ local stageGroupMapping = (import 'gitlab-metrics-config.libsonnet').stageGroupM
 std.foldl(
   function(memo, stageGroupKey)
     local stageGroup = stageGroupMapping[stageGroupKey] { key: stageGroupKey };
+    local uid = stageGroupDashboards.dashboardUid('detail-%s' % [stageGroupKey]);
 
     memo {
-      [stageGroupKey]: stageGroupDashboards.errorBudgetDetailDashboard(stageGroup),
+      [uid]: stageGroupDashboards.errorBudgetDetailDashboard(stageGroup),
     },
   std.objectFields(stageGroupMapping),
   {}

@@ -195,4 +195,19 @@ test.suite({
       '🔬 rails_requests Service Level Indicator Detail',
     ],
   },
+
+  testDashboardUidTooLong: {
+    actual: stageGroupDashboards.dashboardUid('authentication_and_authorization'),
+    expect: 'authenticatio',
+  },
+
+  testDashboardUidTooLongWithPrefix: {
+    actual: stageGroupDashboards.dashboardUid('detail-authentication_and_authorization'),
+    expect: 'detail-authen',
+  },
+
+  testDashboardUidNoChange: {
+    actual: stageGroupDashboards.dashboardUid('access'),
+    expect: 'access',
+  },
 })

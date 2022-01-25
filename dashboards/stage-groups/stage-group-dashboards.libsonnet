@@ -13,6 +13,9 @@ local metricsCatalogDashboards = import 'gitlab-dashboards/metrics_catalog_dashb
 local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
 local keyMetrics = import 'gitlab-dashboards/key_metrics.libsonnet';
 
+local dashboardUid(stageGroup) =
+  std.substr(stageGroup, 0, std.length('stage-groups-'));
+
 local actionLegend(type) =
   if type == 'api' then '{{action}}' else '{{controller}}#{{action}}';
 
@@ -670,4 +673,5 @@ local errorBudgetDetailDashboard(stageGroup) =
   dashboard: dashboard,
   errorBudgetDetailDashboard: errorBudgetDetailDashboard,
   supportedComponents: supportedComponents,
+  dashboardUid: dashboardUid,
 }
