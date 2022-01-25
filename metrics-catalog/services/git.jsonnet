@@ -268,8 +268,8 @@ metricsCatalog.serviceDefinition({
       apdex: histogramApdex(
         histogram='gitlab_shell_sshd_connection_duration_seconds_bucket',
         selector=baseSelector,
-        satisfiedThreshold=30,
-        toleratedThreshold=60
+        satisfiedThreshold=10,
+        toleratedThreshold=20
       ),
 
       requestRate: rateMetric(

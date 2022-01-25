@@ -159,11 +159,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="30",type="git"}[1m])
+          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="10",type="git"}[1m])
         )
         +
         sum by (environment,stage) (
-          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="60",type="git"}[1m])
+          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="20",type="git"}[1m])
         )
       )
       /
@@ -440,11 +440,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="30",type="git"}[5m])
+          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="10",type="git"}[5m])
         )
         +
         sum by (environment,stage) (
-          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="60",type="git"}[5m])
+          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="20",type="git"}[5m])
         )
       )
       /
@@ -721,11 +721,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="30",type="git"}[30m])
+          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="10",type="git"}[30m])
         )
         +
         sum by (environment,stage) (
-          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="60",type="git"}[30m])
+          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="20",type="git"}[30m])
         )
       )
       /
@@ -1002,11 +1002,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="30",type="git"}[1h])
+          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="10",type="git"}[1h])
         )
         +
         sum by (environment,stage) (
-          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="60",type="git"}[1h])
+          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="20",type="git"}[1h])
         )
       )
       /
@@ -1283,11 +1283,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="30",type="git"}[6h])
+          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="10",type="git"}[6h])
         )
         +
         sum by (environment,stage) (
-          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="60",type="git"}[6h])
+          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="20",type="git"}[6h])
         )
       )
       /
