@@ -19,6 +19,7 @@
 * [../ci-runners/ci-apdex-violating-slo.md](../ci-runners/ci-apdex-violating-slo.md)
 * [../ci-runners/service-ci-runners.md](../ci-runners/service-ci-runners.md)
 * [Interacting with Consul](../consul/interaction.md)
+* [Backups](../customers/backups.md)
 * [../monitoring/prometheus-failing-rule-evaluations.md](../monitoring/prometheus-failing-rule-evaluations.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
 * [Check the status of transaction wraparound Runbook](check_wraparound.md)
