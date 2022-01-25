@@ -89,14 +89,16 @@ Having this configuration so low for our environment forces the execution of `AU
 
 We would like to monitor and evaluate if we can optimize the process.
 
-* Change the `autovacuum_freeze_max_age` and monitor the impact: `Increase autovacuum_freeze_max_age from 200000000 to 400000000`
+* Create a “mechanism” (I am thinking even a CI pipeline) to execute `VACUUM FREEZE` when the database is idle of the tables that are 80% or 90% of start the AUTOVACUUM WRAPAROUND.
+* Change the autovacuum_freeze_max_age and monitor the impact: `Increase autovacuum_freeze_max_age from 200000000 to 400000000`
 * After 2 weeks of analyzing the impact: `Increase autovacuum_freeze_max_age from 400000000 to 600000000`
 * After 2 weeks of analyzing the impact: `Increase autovacuum_freeze_max_age from 600000000 to 800000000`
 * After 2 weeks of analyzing the impact: `Increase autovacuum_freeze_max_age from 800000000 to 1000000000`
-* Change or monitoring to be more efficient
-* Create a "mechanism" to execute `VACUUM FREEZE` when the database is idle of the tables that are 80% or 90% of start the AUTOVACUUM WRAPAROUND.
+* Change our monitoring to be more efficient
 
-@alexander-sosna: In general it is recommended to not increase `autovacuum_freeze_max_age`, "If cleaning your house hurts and takes forever, do it more often, not less". Regarding GitLab's workload from all around the world, it might be worth a try to shift the VACUUM load to a low load time window. Unfortunately this only occurs on weekends and freezing AUTOVACUUM would need to be delayed to this point. When in deed increasing `autovacuum_freeze_max_age` significant, we might want to have a supporting mechanism already in place.
+@alexander-sosna: In general, it is recommended not to increase `autovacuum_freeze_max_age`, “If cleaning your house hurts and takes forever, do it more often, not less”.  Regarding GitLab's workload from all around the world, it might be worth a try to shift the VACUUM load to a low load time window.  We should have short low load windows on a daily basis and longer ones on weekends. Most of the freezing VACUUM could to be scheduled during these times.
+Before approaching this we should have confidence in the fact that these windows are sufficient to finish all the work we will delay. We also need an understanding which `autovacuum_freeze_max_age` is needed as a reasonable upper limit.
+The mechanism to reliably orchestrate VACUUM should be in place before any significant increase of `autovacuum_freeze_max_age`, I will move this point up the list.
 
 ### Major upgrade to PostgreSQL 13
 
@@ -106,7 +108,7 @@ The benchmarked in [Benchmark of VACUUM PostgreSQL 12 vs. 13 (btree deduplicatio
 - Index performance
 - VACUUM resource consumption
 
-n_dead_tup = 1000000
+#### n_dead_tup = 1,000,000
 
 | vacuum phase | PG12 <br> (current version) | PG13 <br> (before reindex) | PG13 <br> (with btree deduplication) | PG13 - parallel vacuum <br> (2 parallel workers) |
 | ------ | ------ | ------ | ------ | ------ |
@@ -115,8 +117,19 @@ n_dead_tup = 1000000
 | vacuuming heap | 1 min | 52 sec | 54 sec | 46 sec |
 | total vacuum time | 18 min x sec | 18 min 16 sec | 16 min 31 sec | 8 min 24 sec |
 
+#### n_dead_tup = 10,000
+
+| vacuum phase | PG12 <br> (current version) | PG13 <br> (before reindex) | PG13 <br> (with btree deduplication) | PG13 - parallel vacuum <br> (2 parallel workers) |
+| ------ | ------ | ------ | ------ | ------ |
+| scanning heap | 5 sec | 7 sec | 4 sec | 5 sec |
+| vacuuming indexes | 10 min 39 sec | 10 min 28 sec | 6 min 11 sec | 2 min 18 sec |
+| vacuuming heap | < 1 sec | 1 sec | < 1 sec | < 1 sec |
+| total vacuum time | 10 min 44 sec | 10 min 36 sec | 6 min 15 sec | 2 min 24 sec |
+
+
 ## Incidents and issues involving VACUUM
 
+- [Infra review of Autovacuum historical comments and decisions](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/15050)
 - [Review Autovacuum Strategy for all high traffic tables](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/14811)
 - [Optimize PostgreSQL AUTOVACUUM - 2021](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/413#note_820480832)
 - [Lower autovacuuming settings for ci_job_artifacts table](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/14723)
