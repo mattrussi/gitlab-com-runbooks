@@ -420,4 +420,9 @@ generateTests([
     labels: { env: 'gstg', slo_alert: 'yes', type: 'web' },
     receivers: ['feed_alerts_staging', 'blackhole'],
   },
+  {
+    name: 'slo_alert=yes, env=gstg type=web, aggregation=regional_component should go to blackhole',
+    labels: { env: 'gstg', slo_alert: 'yes', type: 'web', aggregation: 'regional_component' },
+    receivers: ['blackhole'],
+  },
 ])
