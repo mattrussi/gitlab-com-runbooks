@@ -50,6 +50,15 @@ Think for example of a very large table append only table, which by design does 
     How do we handle per table settings?
 -->
 
+## Automated actions and cron jobs
+
+### Cron jobs for ANALYZE
+
+Cron jobs to automate ANALYZE were introduced with [initial commit for new cron for analyzes](https://gitlab.com/gitlab-cookbooks/gitlab-patroni/-/merge_requests/105).
+
+Cron jobs are defined in [attributes/default.rb](https://gitlab.com/gitlab-cookbooks/gitlab-patroni/-/blob/master/attributes/default.rb) and regulary run [analyze-namespaces-table.sh](https://gitlab.com/gitlab-cookbooks/gitlab-patroni/-/blob/master/files/default/analyze-namespaces-table.sh) and [analyze-issues_notes-table.sh](https://gitlab.com/gitlab-cookbooks/gitlab-patroni/-/blob/master/files/default/analyze-issues_notes-table.sh).
+At the moment we ANALYZE the following tables `issues`, `notes` and `namespaces`.
+
 ## Monitoring
 
 <!---
