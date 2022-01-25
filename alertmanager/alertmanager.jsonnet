@@ -451,7 +451,17 @@ local routingTree = Route(
     Route(
       receiver='feed_alerts_staging',
       continue=true,
-      matchers={ env: 'gstg', slo_alert: 'yes', type: { re: 'api|web|git' } },
+      matchers={
+        env: 'gstg',
+        slo_alert: 'yes',
+        type: { re: 'api|web|git' },
+
+        // Traffic volumes in staging are very low, and even lower in
+        // the regional clusters. Since SLO alerting requires reasonable
+        // traffic volumes, don't route regional alerts to the
+        // slackline channel as they create a lot of noise.
+        aggregation: { ne: 'regional_component' },
+      },
     ),
   ] +
   [
