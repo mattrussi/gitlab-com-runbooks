@@ -584,18 +584,9 @@ local dashboard(groupKey, components=defaultComponents, displayEmptyGuidance=fal
 local errorBudgetDetailDashboard(stageGroup) =
   local featureCategoriesSelector = std.join('|', stageGroup.feature_categories);
 
-  // Use feature_category significant label as a proxy for 'can be
-  // rolled up to stage group'. We can't use
-  // `sli.hasFeatureCategoryFromSourceMetrics because the `puma`
-  // component has `featureCategory: 'not_owned'`. This is because the
-  // `error` part of that SLI has a feature category, while the apdex
-  // side does not. That's included in the `rails_requests` component.
-  // We should revisit this when we adjust the way we track these
-  // errors.
-  // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1230
   local sliFilter = function(sli)
     std.member(sli.significantLabels, 'feature_category') || (
-      sli.hasStaticFeatureCategory() && std.member(stageGroup.feature_categories, sli.featureCategory)
+      sli.hasFeatureCategoryFromSourceMetrics() && std.member(stageGroup.feature_categories, sli.featureCategory)
     );
 
   local dashboard =
