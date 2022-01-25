@@ -69,7 +69,6 @@ test: validate-service-mappings validate-prom-rules validate-kibana-urls validat
 
 .PHONY: validate-service-mappings
 validate-service-mappings:
-	./scripts/generate-service-catalog-json.sh
 	./scripts/validate-service-mappings
 
 .PHONY: validate-prom-rules

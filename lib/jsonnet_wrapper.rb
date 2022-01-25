@@ -2,6 +2,7 @@
 require 'shellwords'
 require 'open3'
 require 'English'
+require 'json'
 
 class JsonnetWrapper
   REPO_DIR = File.expand_path(File.join(File.dirname(__FILE__), '..')).freeze

@@ -173,7 +173,6 @@ rspec:
   stage: test
   script:
     - ./scripts/bundler.sh # Install jsonnet bundles
-    - ./scripts/generate-service-catalog-json.sh # For integration tests
     - gem install bundler --no-document -v $BUNDLER_VERSION
     - bundle install --with=test
     - bundle exec rspec
@@ -614,7 +613,6 @@ test-periodic-queries:
       when: manual
       allow_failure: true
   script:
-    - scripts/generate-service-catalog-json.sh
     - gem install bundler --no-document -v $BUNDLER_VERSION
     - bundle install
     - bundle exec scripts/perform-periodic-thanos-queries.rb --dry-run
@@ -629,7 +627,6 @@ publish-periodic-queries:
       when: manual
       allow_failure: true
   script:
-    - scripts/generate-service-catalog-json.sh
     - gem install bundler --no-document -v $BUNDLER_VERSION
     - bundle install
     - bundle exec scripts/perform-periodic-thanos-queries.rb
