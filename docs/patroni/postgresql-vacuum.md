@@ -71,7 +71,7 @@ Think for example of a very large table append only table, which by design does 
 
 ### Bloat due to infrequent VACUUM
 
-Beside the problem of resource consumption caused by auto AUTOVACUUM we also see negative effects by bloated tables and indexes.
+Beside the problem of resource consumption caused by  AUTOVACUUM, we also see negative effects by bloated tables and indexes, like [2022-01-21 Web apdex drop](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/6208).
 
 ## Strategies and solutions - [Optimize PostgreSQL AUTOVACUUM - 2021](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/413#note_820480832)
 
@@ -100,7 +100,7 @@ We would like to monitor and evaluate if we can optimize the process.
 
 ### Major upgrade to PostgreSQL 13
 
-The benchmarked in [Benchmark of VACUUM PostgreSQL 12 vs. 13 (btree deduplication)](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/14723#note_761320190) hints us that btree deduplication, introduced in PostgreSQL 13, can help with multiple problems at once.
+The benchmarked in [Benchmark of VACUUM PostgreSQL 12 vs. 13 (btree deduplication)](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/14723#note_761520231) hints us that btree deduplication, introduced in PostgreSQL 13, can help with multiple problems at once.
 
 - Index size
 - Index performance
