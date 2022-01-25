@@ -17,6 +17,18 @@ instance running locally in the VM) via:
 
 See [this instructions](https://gitlab.com/gitlab-org/customers-gitlab-com/#accessing-production-as-an-admin-and-logs-and-console) to SSH the production box. The IP address can be found in [Cloudflare](https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/gitlab.com/dns?recordsSearchSearch=customers).
 
+#### Deployments
+
+When a pipeline is triggered on the `staging` (default) branch of CustomersDot,
+the application is first deployed to Staging then to Production after a delay of 2 hours.
+
+That being said, it is possible to trigger a manual pipeline to deploy to
+production right away, should the need to do so arise.
+
+To deploy CustomersDot to Production only, create [a new CustomersDot pipeline](https://gitlab.com/gitlab-org/customers-gitlab-com/-/pipelines/new) with the following details:
+- Branch: `staging`
+- CI variable: `DEPLOY_TO_PRODUCTION_NOW` set to `true`
+
 ### Staging
 The staging node is a GCP machine.
 It can be connected to via SSH using the [configuration stated in the CustomersDot repository](https://gitlab.com/gitlab-org/customers-gitlab-com/-/blob/staging/doc/testing/staging.md#ssh-config).
