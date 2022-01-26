@@ -281,7 +281,7 @@ local sliDetailErrorRatePanel(
       'type',
     ] + staticLabelNames);
 
-    row.new(title='🔬 %(sliName)s Service Level Indicator Detail' % { sliName: sliName }, collapse=true)
+    row.new(title='🔬 SLI Detail: %(sliName)s' % { sliName: sliName }, collapse=true)
     .addPanels(
       std.flattenArrays(
         std.mapWithIndex(
@@ -365,7 +365,7 @@ local sliDetailErrorRatePanel(
     local withoutLabels = ['type'] + staticLabelNames;
     local filteredSelectorHash = selectors.without(selectorHash, withoutLabels);
 
-    row.new(title='🔬 %(sliName)s Service Level Indicator Detail' % { sliName: sli.name }, collapse=true)
+    row.new(title='🔬 SLI Detail: %(sliName)s' % { sliName: sli.name }, collapse=true)
     .addPanels(
       std.flattenArrays(
         std.mapWithIndex(

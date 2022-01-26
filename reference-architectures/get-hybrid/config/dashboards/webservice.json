@@ -2186,7 +2186,7 @@
       "repeatIteration": null,
       "repeatRowId": null,
       "showTitle": true,
-      "title": "🔬 puma Service Level Indicator Detail",
+      "title": "🔬 SLI Detail: puma",
       "titleSize": "h6",
       "type": "row"
     },
