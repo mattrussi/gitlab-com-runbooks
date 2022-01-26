@@ -15,8 +15,10 @@ local stageGroup(groupName) =
   local team = serviceCatalog.lookupTeamForStageGroup(groupName);
   team + stageGroupMapping[groupName] { key: groupName };
 
-local stageGroups =
-  std.map(stageGroup, std.objectFields(stageGroupMapping)) + [notOwnedGroup];
+local stageGroupsWithoutNotOwned =
+  std.map(stageGroup, std.objectFields(stageGroupMapping));
+
+local stageGroups = stageGroupsWithoutNotOwned + [notOwnedGroup];
 
 /**
  * Constructs a map of [featureCategory]stageGroup for featureCategory lookups
@@ -102,4 +104,9 @@ local groupsForStage(stageName) = std.filter(
    * Return all stage groups
    */
   stageGroups: stageGroups,
+
+  /**
+   * Return all stage groups excluding the special not_owned pseudo-stage
+   */
+  stageGroupsWithoutNotOwned: stageGroupsWithoutNotOwned,
 }

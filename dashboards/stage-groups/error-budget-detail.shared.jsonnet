@@ -1,14 +1,17 @@
 local stageGroupDashboards = import '../stage-groups/stage-group-dashboards.libsonnet';
-local stageGroupMapping = (import 'gitlab-metrics-config.libsonnet').stageGroupMapping;
+local stages = import 'service-catalog/stages.libsonnet';
 
 std.foldl(
-  function(memo, stageGroupKey)
-    local stageGroup = stageGroupMapping[stageGroupKey] { key: stageGroupKey };
-    local uid = stageGroupDashboards.dashboardUid('detail-%s' % [stageGroupKey]);
+  function(memo, stageGroup)
+    local uid = stageGroupDashboards.dashboardUid('detail-%s' % [stageGroup.key]);
 
     memo {
       [uid]: stageGroupDashboards.errorBudgetDetailDashboard(stageGroup),
     },
-  std.objectFields(stageGroupMapping),
+  // To test on a subset of stages, do something like:
+  // stages.groupsForStage('manage'),
+  // or
+  // std.map(stages.stageGroup, ['global_search', 'package', 'workspace']),
+  stages.stageGroupsWithoutNotOwned,
   {}
 )

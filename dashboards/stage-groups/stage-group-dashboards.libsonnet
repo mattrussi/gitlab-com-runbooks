@@ -10,8 +10,10 @@ local errorBudget = import 'stage-groups/error_budget.libsonnet';
 local sidekiqHelpers = import 'services/lib/sidekiq-helpers.libsonnet';
 local thresholds = import 'gitlab-dashboards/thresholds.libsonnet';
 local metricsCatalogDashboards = import 'gitlab-dashboards/metrics_catalog_dashboards.libsonnet';
-local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
+local gitlabMetricsConfig = import 'gitlab-metrics-config.libsonnet';
 local keyMetrics = import 'gitlab-dashboards/key_metrics.libsonnet';
+
+local aggregationSets = gitlabMetricsConfig.aggregationSets;
 
 local dashboardUid(stageGroup) =
   std.substr(stageGroup, 0, std.length('stage-groups-'));
@@ -586,10 +588,11 @@ local dashboard(groupKey, components=defaultComponents, displayEmptyGuidance=fal
 
 local errorBudgetDetailDashboard(stageGroup) =
   local featureCategoriesSelector = std.join('|', stageGroup.feature_categories);
+  local serviceTypes = std.map(function(service) service.type, gitlabMetricsConfig.monitoredServices);
 
   local sliFilter = function(sli)
-    std.member(sli.significantLabels, 'feature_category') || (
-      sli.hasFeatureCategoryFromSourceMetrics() && std.member(stageGroup.feature_categories, sli.featureCategory)
+    sli.hasFeatureCategoryFromSourceMetrics() || (
+      sli.hasStaticFeatureCategory() && std.member(stageGroup.feature_categories, sli.featureCategory)
     );
 
   local dashboard =
@@ -629,7 +632,7 @@ local errorBudgetDetailDashboard(stageGroup) =
     .addPanels(
       metricsCatalogDashboards.sliMatrixAcrossServices(
         title='🔬 Service Level Indicators',
-        serviceTypes=requestComponents,
+        serviceTypes=serviceTypes,
         aggregationSet=aggregationSets.serviceComponentStageGroupSLIs,
         startRow=300,
         expectMultipleSeries=true,
@@ -644,7 +647,7 @@ local errorBudgetDetailDashboard(stageGroup) =
     )
     .addPanels(
       metricsCatalogDashboards.autoDetailRowsAcrossServices(
-        serviceTypes=requestComponents,
+        serviceTypes=serviceTypes,
         selectorHash={
           environment: '$environment',
           stage: '$stage',

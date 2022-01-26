@@ -158,7 +158,7 @@ local generateApdexAttributionQuery(histogram, selector, rangeInterval, aggregat
 {
   histogramApdex(
     histogram,
-    selector='',
+    selector={},
     satisfiedThreshold=null,
     toleratedThreshold=null,
     metricsFormat='prometheus',
