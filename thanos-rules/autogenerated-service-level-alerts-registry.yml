@@ -24,7 +24,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(registry_database_query_duration_seconds_bucket{type="registry", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+            rate(registry_database_query_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -75,7 +75,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(registry_database_query_duration_seconds_bucket{type="registry", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+            rate(registry_database_query_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -128,7 +128,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,region,le) (
-            rate(registry_database_query_duration_seconds_bucket{type="registry", environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}"}[5m])
+            rate(registry_database_query_duration_seconds_bucket{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -181,7 +181,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,region,le) (
-            rate(registry_database_query_duration_seconds_bucket{type="registry", environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}"}[5m])
+            rate(registry_database_query_duration_seconds_bucket{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -302,7 +302,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(registry_gc_run_duration_seconds_bucket{type="registry", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+            rate(registry_gc_run_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -353,7 +353,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(registry_gc_run_duration_seconds_bucket{type="registry", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+            rate(registry_gc_run_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -406,7 +406,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,region,le) (
-            rate(registry_gc_run_duration_seconds_bucket{type="registry", environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}"}[5m])
+            rate(registry_gc_run_duration_seconds_bucket{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -459,7 +459,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,region,le) (
-            rate(registry_gc_run_duration_seconds_bucket{type="registry", environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}"}[5m])
+            rate(registry_gc_run_duration_seconds_bucket{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
       runbook: docs/registry/README.md
