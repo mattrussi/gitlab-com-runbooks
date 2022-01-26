@@ -21,9 +21,7 @@ local objects = import 'utils/objects.libsonnet';
   // Hash of all utilization metric types that are monitored on gitlab.com
   utilizationMonitoring:: objects.mergeAll(allUtilizationMetrics),
 
-  // service_catalog.json is stored in the `services` directory
-  // alongside service_catalog.yml
-  serviceCatalog:: import 'service_catalog.json',
+  serviceCatalog:: (import 'service-catalog.jsonnet'),
 
   // stage-group-mapping.jsonnet is generated file, stored in the `services` directory
   stageGroupMapping:: import 'stage-group-mapping.jsonnet',

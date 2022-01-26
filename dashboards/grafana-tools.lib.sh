@@ -36,8 +36,6 @@ function prepare() {
     echo >&2 "../vendor directory not found, running scripts/bundler.sh to install dependencies..."
     "../scripts/bundler.sh"
   fi
-
-  ../scripts/generate-service-catalog-json.sh
 }
 
 function get_description() {

@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require 'json'
 require 'yaml'
+require_relative '../lib/jsonnet_wrapper'
 
 ValidationError = Class.new(StandardError)
 
@@ -10,7 +10,8 @@ class Validator
   def initialize
     @context = []
     @failures = []
-    @service_catalog = JSON.parse(File.read(File.join(__dir__, "..", "services", "service_catalog.json")))
+
+    @service_catalog = JsonnetWrapper.new.parse(File.join(__dir__, "..", "services", "service-catalog.jsonnet"))
     @service_catalog_teams = @service_catalog["teams"].to_h { |team| [team["name"], team] }
   end
 

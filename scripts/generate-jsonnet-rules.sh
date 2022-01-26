@@ -11,9 +11,6 @@ REPO_DIR=$(
 # Check that jsonnet-tool is installed
 "${REPO_DIR}/scripts/ensure-jsonnet-tool.sh"
 
-# Convert the service catalog yaml into a JSON file in a format thats consumable by jsonnet
-"${REPO_DIR}/scripts/generate-service-catalog-json.sh"
-
 function render_multi_jsonnet() {
   local dest_dir="$1"
   local filename="$2"
