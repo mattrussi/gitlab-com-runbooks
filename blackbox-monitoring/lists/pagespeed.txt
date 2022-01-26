@@ -1,0 +1,16 @@
+https://gitlab.com/ddevault/linux/-/blame/master/MAINTAINERS
+https://gitlab.com/ddevault/linux/-/blob/master/MAINTAINERS
+https://gitlab.com/ddevault/linux/-/commits/master
+https://gitlab.com/ddevault/linux/-/tree/master/arch/arm/boot/dts
+https://gitlab.com/ddevault/scdoc
+https://gitlab.com/ddevault/scdoc/-/blame/master/src/main.c
+https://gitlab.com/ddevault/scdoc/-/blob/master/src/main.c
+https://gitlab.com/ddevault/scdoc/-/commit/baaebab77db8123ee97a1c4c6a25c0873abf25e7
+https://gitlab.com/ddevault/scdoc/-/commits/master
+https://gitlab.com/ddevault/scdoc/-/tree/master/src
+https://gitlab.com/postmarketOS/pmaports/-/issues
+https://gitlab.com/postmarketOS/pmaports/-/issues/153
+https://gitlab.com/postmarketOS/pmaports/-/issues?scope=all&utf8=%E2%9C%93&state=opened&search=kernel
+https://gitlab.com/postmarketOS/pmaports/-/merge_requests
+https://gitlab.com/postmarketOS/pmaports/-/merge_requests/1002
+https://gitlab.com/postmarketOS/pmaports/-/merge_requests/1036/diffs

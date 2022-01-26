@@ -56,6 +56,7 @@ generate:
 	./scripts/generate-jsonnet-rules.sh
 	./scripts/generate-docs
 	./scripts/generate-gitlab-dashboards.sh
+	./scripts/generate-blackbox-urls.sh
 
 alertmanager/alertmanager.yml: alertmanager/alertmanager.jsonnet
 	./alertmanager/generate.sh
