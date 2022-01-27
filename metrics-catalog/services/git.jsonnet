@@ -29,7 +29,10 @@ metricsCatalog.serviceDefinition({
     // When a service is in violation, deployments may be blocked or may be rolled
     // back.
     deployment: {
-      apdexScore: 0.9995,
+      // This deployment apdex target has been lowered because of
+      // https://gitlab.com/gitlab-com/gl-infra/production/-/issues/6230
+      // we should consider increasing it again after we have found and resolved the cause
+      apdexScore: 0.999,
       errorRatio: 0.9995,
     },
 
