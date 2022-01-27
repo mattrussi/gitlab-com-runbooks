@@ -136,5 +136,5 @@ groups:
     annotations:
       description: We are having more 4xx returns than any other reply. Customer traffic
         is being impacted and the service is probably unhealthy.
-      runbook: docs/frontend/haproxy.md
+      runbook: docs/frontend/haproxy.md#resolution
       title: High Error Rate on Front End pages
