@@ -26,8 +26,12 @@ That being said, it is possible to trigger a manual pipeline to deploy to
 production right away, should the need to do so arise.
 
 To deploy CustomersDot to Production only, create [a new CustomersDot pipeline](https://gitlab.com/gitlab-org/customers-gitlab-com/-/pipelines/new) with the following details:
-- Branch: `staging`
+- Branch: `master`
 - CI variable: `DEPLOY_TO_PRODUCTION_NOW` set to `true`
+
+It's important to note that the branch this pipeline needs to run on should be `master`, even if `staging` is the CustomersDot default branch.
+
+If we're triggering this pipeline on `staging`, we're running the risk to overlap/override with other pending delayed deployment jobs, which are also using `staging`. By targeting 'master', we're getting rid of this risk as `master` is always behind `staging` while having its `HEAD` deployed to production.
 
 ### Staging
 The staging node is a GCP machine.
