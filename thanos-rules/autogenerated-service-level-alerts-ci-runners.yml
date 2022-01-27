@@ -386,7 +386,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(job_queue_duration_seconds_bucket{shared_runner="true", jobs_running_for_project=~"^(0|1|2|3|4)$", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+            rate(job_queue_duration_seconds_bucket{environment="{{ $labels.environment }}",jobs_running_for_project=~"^(0|1|2|3|4)$",shared_runner="true",stage="{{ $labels.stage }}"}[5m])
           )
         )
       runbook: docs/ci-runners/README.md
@@ -441,7 +441,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(job_queue_duration_seconds_bucket{shared_runner="true", jobs_running_for_project=~"^(0|1|2|3|4)$", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+            rate(job_queue_duration_seconds_bucket{environment="{{ $labels.environment }}",jobs_running_for_project=~"^(0|1|2|3|4)$",shared_runner="true",stage="{{ $labels.stage }}"}[5m])
           )
         )
       runbook: docs/ci-runners/README.md
@@ -768,7 +768,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(sidekiq_jobs_completion_seconds_count{worker="Ci::ArchiveTraceWorker", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(sidekiq_jobs_completion_seconds_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",worker="Ci::ArchiveTraceWorker"}[5m])
         )
       runbook: docs/ci-runners/README.md
     labels:
@@ -803,7 +803,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(sidekiq_jobs_completion_seconds_count{worker="Ci::ArchiveTraceWorker", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(sidekiq_jobs_completion_seconds_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",worker="Ci::ArchiveTraceWorker"}[5m])
         )
       runbook: docs/ci-runners/README.md
     labels:

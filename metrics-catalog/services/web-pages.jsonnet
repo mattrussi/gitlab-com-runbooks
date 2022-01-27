@@ -76,12 +76,12 @@ metricsCatalog.serviceDefinition({
 
       requestRate: rateMetric(
         counter='gitlab_pages_http_requests_total',
-        selector=''
+        selector={}
       ),
 
       errorRate: rateMetric(
         counter='gitlab_pages_http_requests_total',
-        selector='code=~"5.."'
+        selector={ code: { re: '5..' } }
       ),
 
       significantLabels: ['fqdn'],

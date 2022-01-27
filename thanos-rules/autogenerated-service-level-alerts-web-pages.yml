@@ -714,7 +714,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(gitlab_pages_http_requests_total{code=~"5..", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(gitlab_pages_http_requests_total{code=~"5..",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/web-pages/README.md
     labels:
@@ -762,7 +762,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(gitlab_pages_http_requests_total{code=~"5..", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(gitlab_pages_http_requests_total{code=~"5..",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/web-pages/README.md
     labels:
@@ -812,7 +812,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
-          rate(gitlab_pages_http_requests_total{code=~"5..", environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}"}[5m])
+          rate(gitlab_pages_http_requests_total{code=~"5..",environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/web-pages/README.md
     labels:
@@ -862,7 +862,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
-          rate(gitlab_pages_http_requests_total{code=~"5..", environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}"}[5m])
+          rate(gitlab_pages_http_requests_total{code=~"5..",environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/web-pages/README.md
     labels:

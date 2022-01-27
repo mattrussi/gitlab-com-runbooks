@@ -64,7 +64,7 @@ groups:
       type: ci-runners
     expr: |
       sum by (environment,stage) (
-        rate(job_queue_duration_seconds_bucket{shared_runner="true", jobs_running_for_project=~"^(0|1|2|3|4)$", le="60"}[1m])
+        rate(job_queue_duration_seconds_bucket{jobs_running_for_project=~"^(0|1|2|3|4)$",le="60",shared_runner="true"}[1m])
       )
   - record: gitlab_component_apdex:weight:score
     labels:
@@ -73,7 +73,7 @@ groups:
       type: ci-runners
     expr: |
       sum by (environment,stage) (
-        rate(job_queue_duration_seconds_bucket{shared_runner="true", jobs_running_for_project=~"^(0|1|2|3|4)$", le="+Inf"}[1m])
+        rate(job_queue_duration_seconds_bucket{jobs_running_for_project=~"^(0|1|2|3|4)$",le="+Inf",shared_runner="true"}[1m])
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -190,7 +190,7 @@ groups:
       type: ci-runners
     expr: |
       sum by (environment,stage) (
-        rate(job_queue_duration_seconds_bucket{shared_runner="true", jobs_running_for_project=~"^(0|1|2|3|4)$", le="60"}[5m])
+        rate(job_queue_duration_seconds_bucket{jobs_running_for_project=~"^(0|1|2|3|4)$",le="60",shared_runner="true"}[5m])
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -199,7 +199,7 @@ groups:
       type: ci-runners
     expr: |
       sum by (environment,stage) (
-        rate(job_queue_duration_seconds_bucket{shared_runner="true", jobs_running_for_project=~"^(0|1|2|3|4)$", le="+Inf"}[5m])
+        rate(job_queue_duration_seconds_bucket{jobs_running_for_project=~"^(0|1|2|3|4)$",le="+Inf",shared_runner="true"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -316,7 +316,7 @@ groups:
       type: ci-runners
     expr: |
       sum by (environment,stage) (
-        rate(job_queue_duration_seconds_bucket{shared_runner="true", jobs_running_for_project=~"^(0|1|2|3|4)$", le="60"}[30m])
+        rate(job_queue_duration_seconds_bucket{jobs_running_for_project=~"^(0|1|2|3|4)$",le="60",shared_runner="true"}[30m])
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -325,7 +325,7 @@ groups:
       type: ci-runners
     expr: |
       sum by (environment,stage) (
-        rate(job_queue_duration_seconds_bucket{shared_runner="true", jobs_running_for_project=~"^(0|1|2|3|4)$", le="+Inf"}[30m])
+        rate(job_queue_duration_seconds_bucket{jobs_running_for_project=~"^(0|1|2|3|4)$",le="+Inf",shared_runner="true"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -442,7 +442,7 @@ groups:
       type: ci-runners
     expr: |
       sum by (environment,stage) (
-        rate(job_queue_duration_seconds_bucket{shared_runner="true", jobs_running_for_project=~"^(0|1|2|3|4)$", le="60"}[1h])
+        rate(job_queue_duration_seconds_bucket{jobs_running_for_project=~"^(0|1|2|3|4)$",le="60",shared_runner="true"}[1h])
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -451,7 +451,7 @@ groups:
       type: ci-runners
     expr: |
       sum by (environment,stage) (
-        rate(job_queue_duration_seconds_bucket{shared_runner="true", jobs_running_for_project=~"^(0|1|2|3|4)$", le="+Inf"}[1h])
+        rate(job_queue_duration_seconds_bucket{jobs_running_for_project=~"^(0|1|2|3|4)$",le="+Inf",shared_runner="true"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -568,7 +568,7 @@ groups:
       type: ci-runners
     expr: |
       sum by (environment,stage) (
-        rate(job_queue_duration_seconds_bucket{shared_runner="true", jobs_running_for_project=~"^(0|1|2|3|4)$", le="60"}[6h])
+        rate(job_queue_duration_seconds_bucket{jobs_running_for_project=~"^(0|1|2|3|4)$",le="60",shared_runner="true"}[6h])
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
@@ -577,7 +577,7 @@ groups:
       type: ci-runners
     expr: |
       sum by (environment,stage) (
-        rate(job_queue_duration_seconds_bucket{shared_runner="true", jobs_running_for_project=~"^(0|1|2|3|4)$", le="+Inf"}[6h])
+        rate(job_queue_duration_seconds_bucket{jobs_running_for_project=~"^(0|1|2|3|4)$",le="+Inf",shared_runner="true"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
     labels:
