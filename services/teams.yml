@@ -357,9 +357,6 @@ teams:
   - rails_requests
 - name: threat_insights
   product_stage_group: threat_insights
-  ignored_components:
-  - graphql_queries
-  - rails_requests
 - name: utilization
   product_stage_group: utilization
   ignored_components:
