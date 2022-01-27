@@ -587,7 +587,7 @@ local dashboard(groupKey, components=defaultComponents, displayEmptyGuidance=fal
   };
 
 local errorBudgetDetailDashboard(stageGroup) =
-  local featureCategoriesSelector = std.join('|', stageGroup.feature_categories);
+  local featureCategoriesSelector = std.join('|', stageGroup.feature_categories + ['']);
   local serviceTypes = std.map(function(service) service.type, gitlabMetricsConfig.monitoredServices);
 
   local sliFilter = function(sli)
