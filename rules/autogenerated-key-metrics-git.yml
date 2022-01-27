@@ -14,6 +14,41 @@ groups:
       sum by (environment) (
         sum by (environment) (haproxy_backend_current_session_rate{backend=~"ssh|altssh"})
       )
+  - record: gitlab_component_apdex:success:rate
+    labels:
+      component: gitlab_sshd
+      tier: sv
+      type: git
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="10",type="git"}[1m])
+        )
+        +
+        sum by (environment,stage) (
+          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="20",type="git"}[1m])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: gitlab_sshd
+      tier: sv
+      type: git
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="+Inf",type="git"}[1m])
+      )
+  - record: gitlab_component_ops:rate
+    labels:
+      component: gitlab_sshd
+      tier: sv
+      type: git
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_shell_sshd_connection_duration_seconds_count{type="git"}[1m])
+      )
   - record: gitlab_component_ops:rate
     labels:
       component: loadbalancer
@@ -153,41 +188,6 @@ groups:
       )
   - record: gitlab_component_apdex:success:rate
     labels:
-      component: sshd
-      tier: sv
-      type: git
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="10",type="git"}[1m])
-        )
-        +
-        sum by (environment,stage) (
-          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="20",type="git"}[1m])
-        )
-      )
-      /
-      2
-  - record: gitlab_component_apdex:weight:score
-    labels:
-      component: sshd
-      tier: sv
-      type: git
-    expr: |
-      sum by (environment,stage) (
-        rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="+Inf",type="git"}[1m])
-      )
-  - record: gitlab_component_ops:rate
-    labels:
-      component: sshd
-      tier: sv
-      type: git
-    expr: |
-      sum by (environment,stage) (
-        rate(gitlab_shell_sshd_connection_duration_seconds_count{type="git"}[1m])
-      )
-  - record: gitlab_component_apdex:success:rate
-    labels:
       component: workhorse
       tier: sv
       type: git
@@ -294,6 +294,41 @@ groups:
     expr: |
       sum by (environment) (
         sum by (environment) (haproxy_backend_current_session_rate{backend=~"ssh|altssh"})
+      )
+  - record: gitlab_component_apdex:success:rate_5m
+    labels:
+      component: gitlab_sshd
+      tier: sv
+      type: git
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="10",type="git"}[5m])
+        )
+        +
+        sum by (environment,stage) (
+          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="20",type="git"}[5m])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_5m
+    labels:
+      component: gitlab_sshd
+      tier: sv
+      type: git
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="+Inf",type="git"}[5m])
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: gitlab_sshd
+      tier: sv
+      type: git
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_shell_sshd_connection_duration_seconds_count{type="git"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -434,41 +469,6 @@ groups:
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
-      component: sshd
-      tier: sv
-      type: git
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="10",type="git"}[5m])
-        )
-        +
-        sum by (environment,stage) (
-          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="20",type="git"}[5m])
-        )
-      )
-      /
-      2
-  - record: gitlab_component_apdex:weight:score_5m
-    labels:
-      component: sshd
-      tier: sv
-      type: git
-    expr: |
-      sum by (environment,stage) (
-        rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="+Inf",type="git"}[5m])
-      )
-  - record: gitlab_component_ops:rate_5m
-    labels:
-      component: sshd
-      tier: sv
-      type: git
-    expr: |
-      sum by (environment,stage) (
-        rate(gitlab_shell_sshd_connection_duration_seconds_count{type="git"}[5m])
-      )
-  - record: gitlab_component_apdex:success:rate_5m
-    labels:
       component: workhorse
       tier: sv
       type: git
@@ -575,6 +575,41 @@ groups:
     expr: |
       sum by (environment) (
         sum by (environment) (haproxy_backend_current_session_rate{backend=~"ssh|altssh"})
+      )
+  - record: gitlab_component_apdex:success:rate_30m
+    labels:
+      component: gitlab_sshd
+      tier: sv
+      type: git
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="10",type="git"}[30m])
+        )
+        +
+        sum by (environment,stage) (
+          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="20",type="git"}[30m])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_30m
+    labels:
+      component: gitlab_sshd
+      tier: sv
+      type: git
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="+Inf",type="git"}[30m])
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: gitlab_sshd
+      tier: sv
+      type: git
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_shell_sshd_connection_duration_seconds_count{type="git"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -715,41 +750,6 @@ groups:
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
-      component: sshd
-      tier: sv
-      type: git
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="10",type="git"}[30m])
-        )
-        +
-        sum by (environment,stage) (
-          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="20",type="git"}[30m])
-        )
-      )
-      /
-      2
-  - record: gitlab_component_apdex:weight:score_30m
-    labels:
-      component: sshd
-      tier: sv
-      type: git
-    expr: |
-      sum by (environment,stage) (
-        rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="+Inf",type="git"}[30m])
-      )
-  - record: gitlab_component_ops:rate_30m
-    labels:
-      component: sshd
-      tier: sv
-      type: git
-    expr: |
-      sum by (environment,stage) (
-        rate(gitlab_shell_sshd_connection_duration_seconds_count{type="git"}[30m])
-      )
-  - record: gitlab_component_apdex:success:rate_30m
-    labels:
       component: workhorse
       tier: sv
       type: git
@@ -856,6 +856,41 @@ groups:
     expr: |
       sum by (environment) (
         sum by (environment) (haproxy_backend_current_session_rate{backend=~"ssh|altssh"})
+      )
+  - record: gitlab_component_apdex:success:rate_1h
+    labels:
+      component: gitlab_sshd
+      tier: sv
+      type: git
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="10",type="git"}[1h])
+        )
+        +
+        sum by (environment,stage) (
+          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="20",type="git"}[1h])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_1h
+    labels:
+      component: gitlab_sshd
+      tier: sv
+      type: git
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="+Inf",type="git"}[1h])
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: gitlab_sshd
+      tier: sv
+      type: git
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_shell_sshd_connection_duration_seconds_count{type="git"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -996,41 +1031,6 @@ groups:
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
-      component: sshd
-      tier: sv
-      type: git
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="10",type="git"}[1h])
-        )
-        +
-        sum by (environment,stage) (
-          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="20",type="git"}[1h])
-        )
-      )
-      /
-      2
-  - record: gitlab_component_apdex:weight:score_1h
-    labels:
-      component: sshd
-      tier: sv
-      type: git
-    expr: |
-      sum by (environment,stage) (
-        rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="+Inf",type="git"}[1h])
-      )
-  - record: gitlab_component_ops:rate_1h
-    labels:
-      component: sshd
-      tier: sv
-      type: git
-    expr: |
-      sum by (environment,stage) (
-        rate(gitlab_shell_sshd_connection_duration_seconds_count{type="git"}[1h])
-      )
-  - record: gitlab_component_apdex:success:rate_1h
-    labels:
       component: workhorse
       tier: sv
       type: git
@@ -1137,6 +1137,41 @@ groups:
     expr: |
       sum by (environment) (
         sum by (environment) (haproxy_backend_current_session_rate{backend=~"ssh|altssh"})
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: gitlab_sshd
+      tier: sv
+      type: git
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="10",type="git"}[6h])
+        )
+        +
+        sum by (environment,stage) (
+          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="20",type="git"}[6h])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: gitlab_sshd
+      tier: sv
+      type: git
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="+Inf",type="git"}[6h])
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: gitlab_sshd
+      tier: sv
+      type: git
+    expr: |
+      sum by (environment,stage) (
+        rate(gitlab_shell_sshd_connection_duration_seconds_count{type="git"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -1277,41 +1312,6 @@ groups:
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
-      component: sshd
-      tier: sv
-      type: git
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="10",type="git"}[6h])
-        )
-        +
-        sum by (environment,stage) (
-          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="20",type="git"}[6h])
-        )
-      )
-      /
-      2
-  - record: gitlab_component_apdex:weight:score_6h
-    labels:
-      component: sshd
-      tier: sv
-      type: git
-    expr: |
-      sum by (environment,stage) (
-        rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="+Inf",type="git"}[6h])
-      )
-  - record: gitlab_component_ops:rate_6h
-    labels:
-      component: sshd
-      tier: sv
-      type: git
-    expr: |
-      sum by (environment,stage) (
-        rate(gitlab_shell_sshd_connection_duration_seconds_count{type="git"}[6h])
-      )
-  - record: gitlab_component_apdex:success:rate_6h
-    labels:
       component: workhorse
       tier: sv
       type: git
@@ -1419,6 +1419,14 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
+      component: gitlab_sshd
+      regional_aggregation: "yes"
+      service_aggregation: "yes"
+      tier: sv
+      type: git
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
       component: loadbalancer
       regional_aggregation: "no"
       service_aggregation: "no"
@@ -1444,14 +1452,6 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: rails_requests
-      regional_aggregation: "yes"
-      service_aggregation: "yes"
-      tier: sv
-      type: git
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: sshd
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv

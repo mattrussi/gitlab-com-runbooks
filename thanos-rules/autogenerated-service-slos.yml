@@ -379,6 +379,18 @@ groups:
     expr: "0.000500"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      component: gitlab_sshd
+      tier: sv
+      type: git
+    expr: "0.998000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: gitlab_sshd
+      tier: sv
+      type: git
+    expr: "0.000500"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
       component: loadbalancer
       tier: sv
       type: git
@@ -422,18 +434,6 @@ groups:
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: rails_requests
-      tier: sv
-      type: git
-    expr: "0.000500"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: sshd
-      tier: sv
-      type: git
-    expr: "0.998000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: sshd
       tier: sv
       type: git
     expr: "0.000500"
@@ -2142,6 +2142,14 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
+      component: gitlab_sshd
+      regional_aggregation: "yes"
+      service_aggregation: "yes"
+      tier: sv
+      type: git
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
       component: loadbalancer
       regional_aggregation: "no"
       service_aggregation: "no"
@@ -2167,14 +2175,6 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: rails_requests
-      regional_aggregation: "yes"
-      service_aggregation: "yes"
-      tier: sv
-      type: git
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: sshd
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
