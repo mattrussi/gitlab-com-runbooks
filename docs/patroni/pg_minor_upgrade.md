@@ -63,4 +63,8 @@ Start PostgreSQL. Command: `sudo systemctl start patroni && sudo systemctl statu
 
 After restoring the traffic, monitor the performance for 30 minutes from the node and the logs.
 
-After executing the above process, to upgrade the primary node we could execute a switchover first.
+After executing the above process in the all the secondaries. It would require a Patroni switchover, to move the primary to become a secondary, and execute the process above.
+
+The command is: `gitlab-patronictl switchover`
+
+
