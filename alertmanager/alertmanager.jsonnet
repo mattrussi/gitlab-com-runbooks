@@ -467,7 +467,7 @@ local routingTree = Route(
   [
     // Route Kubernetes alerts for staging to `feed_alerts_staging`
     Route(
-      receiver='feed_alerts_staging',
+      receiver='nonprod_alerts_slack_channel',
       continue=true,
       matchers={ env: 'gstg', type: 'kube' },
     ),
