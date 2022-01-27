@@ -244,6 +244,7 @@ ensure_generated_content_up_to_date:
   extends: .default-job-rules
   stage: test
   script:
+    - ./scripts/bundler.sh # Install jsonnet bundles
     - make ensure-generated-content-up-to-date
 
 ensure_maturity_model_minimum_level:
