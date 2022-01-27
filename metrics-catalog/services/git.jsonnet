@@ -254,7 +254,7 @@ metricsCatalog.serviceDefinition({
       ],
     },
 
-    sshd: {
+    gitlab_sshd: {
       userImpacting: true,
       featureCategory: 'source_code_management',
       description: |||
