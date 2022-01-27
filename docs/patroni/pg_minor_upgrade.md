@@ -51,20 +51,6 @@ sudo apt-get install -y postgresql-common postgresql-client-common --only-upgrad
 Start PostgreSQL. Command: `sudo systemctl start patroni && sudo systemctl status patroni`
 ```
 
-Update extensions, on the primary database node:
-
-```shell
-`sudo gitlab-psql`
-```sql
--- Get a list of installed and available versions of extensions in the current database: 
-select ae.name, installed_version, default_version,
-case when installed_version <> default_version then 'OLD' end as is_old
-from pg_extension e
-join pg_available_extensions ae on extname = ae.name
-order by ae.name;
-
--- Update 'OLD' extensions (example):
-ALTER EXTENSION pg_stat_statements UPDATE;
 
 ### Post checks
 1. Check connectivity with the command: `gitlab-psql -c "select pg_is_in_recovery();"`
