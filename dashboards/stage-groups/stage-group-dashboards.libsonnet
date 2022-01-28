@@ -587,6 +587,7 @@ local dashboard(groupKey, components=defaultComponents, displayEmptyGuidance=fal
   };
 
 local errorBudgetDetailDashboard(stageGroup) =
+  // Missing `feature_category` labels are also accepted for viewing details with a static feature category
   local featureCategoriesSelector = std.join('|', stageGroup.feature_categories + ['']);
   local serviceTypes = std.map(function(service) service.type, gitlabMetricsConfig.monitoredServices);
 
