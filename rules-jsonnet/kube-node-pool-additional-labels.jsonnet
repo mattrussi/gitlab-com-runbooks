@@ -268,20 +268,6 @@ local additionalLabelsForNodePoolTypes = {
       },
     },
   ],
-  'gstg-ref': [
-    {
-      /* gstg-ref zonal cluster */
-      clusters: ['staging-ref-10k-hybrid'],
-      types: {
-        default: {
-          service_type: 'kube',
-          service_tier: 'inf',
-          service_stage: 'main',
-          service_shard: 'default',
-        },
-      },
-    },
-  ],
   pre: [
     {
       /* pre regional cluster */
