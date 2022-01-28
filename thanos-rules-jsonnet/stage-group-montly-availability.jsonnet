@@ -36,7 +36,7 @@ local rules = {
       }],
     },
     ruleGroup {
-      name: '28 draffic share per stage group',
+      name: '28 traffic share per stage group',
       rules: [{
         record: 'gitlab:stage_group:traffic_share:ratio_28d',
         expr: |||

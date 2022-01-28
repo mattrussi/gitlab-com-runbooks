@@ -93,7 +93,7 @@ groups:
           ) unless on (stage_group,component) gitlab:ignored_component:stage_group
         ),
       1)
-- name: 28 draffic share per stage group
+- name: 28 traffic share per stage group
   interval: 30m
   partial_response_strategy: warn
   rules:
