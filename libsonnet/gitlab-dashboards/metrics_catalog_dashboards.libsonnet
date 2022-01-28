@@ -236,28 +236,30 @@ local sliDetailErrorRatePanel(
       ),
     );
 
-    [
-      row.new(title=title, collapse=false) { gridPos: { x: 0, y: startRow, w: 24, h: 1 } },
-    ] +
-    std.prune(
-      std.flattenArrays(
-        std.mapWithIndex(
-          function(i, sliName)
-            local sli = slis[sliName];
+    layout.titleRowWithPanels(
+      title=title,
+      collapse=true,
+      startRow=startRow,
+      panels=layout.rows(
+        std.prune(
+          std.mapWithIndex(
+            function(i, sliName)
+              local sli = slis[sliName];
 
-            if sliFilter(sli) then
-              sliOverviewMatrixRow(
-                serviceType=null,
-                aggregationSet=aggregationSet,
-                sli=sli,
-                selectorHash=selectorHash { component: sliName },
-                startRow=startRow + 1 + i * 10,
-                legendFormatPrefix=legendFormatPrefix,
-                expectMultipleSeries=expectMultipleSeries,
-              )
-            else
-              [],
-          std.objectFields(slis)
+              if sliFilter(sli) then
+                sliOverviewMatrixRow(
+                  serviceType=null,
+                  aggregationSet=aggregationSet,
+                  sli=sli,
+                  selectorHash=selectorHash { component: sliName },
+                  startRow=startRow + 1 + i * 10,
+                  legendFormatPrefix=legendFormatPrefix,
+                  expectMultipleSeries=expectMultipleSeries,
+                )
+              else
+                [],
+            std.objectFields(slis)
+          )
         )
       )
     ),
@@ -370,6 +372,8 @@ local sliDetailErrorRatePanel(
       std.flattenArrays(
         std.mapWithIndex(
           function(index, aggregationSet)
+            local combinedSelector = aggregationSet.selector + filteredSelectorHash;
+
             layout.singleRow(
               std.prune(
                 [
@@ -377,7 +381,7 @@ local sliDetailErrorRatePanel(
                     sliDetailLatencyPanel(
                       title='Estimated %(percentile_humanized)s ' + sli.name + ' Latency - ' + aggregationSet.title,
                       sli=sli,
-                      selector=filteredSelectorHash + aggregationSet.selector,
+                      selector=combinedSelector,
                       legendFormat='%(percentile_humanized)s ' + aggregationSet.legendFormat,
                       aggregationLabels=aggregationSet.aggregationLabels,
                       withoutLabels=withoutLabels,
@@ -392,7 +396,7 @@ local sliDetailErrorRatePanel(
                       description='Attributes apdex downscoring',
                       query=sli.apdex.apdexAttribution(
                         aggregationLabel=aggregationSet.aggregationLabels,
-                        selector=filteredSelectorHash + aggregationSet.selector,
+                        selector=combinedSelector,
                         rangeInterval='$__interval',
                         withoutLabels=withoutLabels,
                       ),
@@ -413,7 +417,7 @@ local sliDetailErrorRatePanel(
                       sli=sli,
                       legendFormat=aggregationSet.legendFormat,
                       aggregationLabels=aggregationSet.aggregationLabels,
-                      selector=filteredSelectorHash + aggregationSet.selector,
+                      selector=combinedSelector,
                       withoutLabels=withoutLabels,
                     )
                   else
@@ -423,7 +427,7 @@ local sliDetailErrorRatePanel(
                     sliDetailOpsRatePanel(
                       title=sli.name + ' RPS - ' + aggregationSet.title,
                       sli=sli,
-                      selector=filteredSelectorHash + aggregationSet.selector,
+                      selector=combinedSelector,
                       legendFormat=aggregationSet.legendFormat,
                       aggregationLabels=aggregationSet.aggregationLabels,
                       withoutLabels=withoutLabels,

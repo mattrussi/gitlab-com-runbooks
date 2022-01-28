@@ -22,7 +22,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          clamp_min(deriv(elasticsearch_indices_indexing_index_total{type="search", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]), 0)
+          clamp_min(deriv(elasticsearch_indices_indexing_index_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="search"}[5m]), 0)
         )
       runbook: docs/search/README.md
     labels:
@@ -57,7 +57,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          clamp_min(deriv(elasticsearch_indices_indexing_index_total{type="search", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]), 0)
+          clamp_min(deriv(elasticsearch_indices_indexing_index_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="search"}[5m]), 0)
         )
       runbook: docs/search/README.md
     labels:
@@ -92,7 +92,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          clamp_min(deriv(elasticsearch_indices_search_query_total{type="search", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]), 0)
+          clamp_min(deriv(elasticsearch_indices_search_query_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="search"}[5m]), 0)
         )
       runbook: docs/search/README.md
     labels:
@@ -127,7 +127,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          clamp_min(deriv(elasticsearch_indices_search_query_total{type="search", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]), 0)
+          clamp_min(deriv(elasticsearch_indices_search_query_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="search"}[5m]), 0)
         )
       runbook: docs/search/README.md
     labels:

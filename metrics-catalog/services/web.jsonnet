@@ -77,6 +77,7 @@ metricsCatalog.serviceDefinition({
       regional=false,
     ),
 
+    local workhorseWebSelector = { job: { re: 'gitlab-workhorse|gitlab-workhorse-web' }, type: 'web' },
     workhorse: {
       userImpacting: true,
       featureCategory: 'not_owned',
@@ -89,10 +90,7 @@ metricsCatalog.serviceDefinition({
 
       apdex: histogramApdex(
         histogram='gitlab_workhorse_http_request_duration_seconds_bucket',
-        selector={
-          job: {
-            re: 'gitlab-workhorse|gitlab-workhorse-web',
-          },
+        selector=workhorseWebSelector {
           route: {
             ne: [
               '^/([^/]+/){1,}[^/]+/uploads\\\\z',
@@ -106,7 +104,6 @@ metricsCatalog.serviceDefinition({
               '^/([^/]+/){1,}[^/]+\\\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\\\z',
             ],
           },
-          type: 'web',
         },
         satisfiedThreshold=1,
         toleratedThreshold=10
@@ -114,12 +111,15 @@ metricsCatalog.serviceDefinition({
 
       requestRate: rateMetric(
         counter='gitlab_workhorse_http_requests_total',
-        selector='job=~"gitlab-workhorse|gitlab-workhorse-web", type="web"'
+        selector=workhorseWebSelector,
       ),
 
       errorRate: rateMetric(
         counter='gitlab_workhorse_http_requests_total',
-        selector='job=~"gitlab-workhorse|gitlab-workhorse-web", type="web", code=~"^5.*", route!="^/-/health$", route!="^/-/(readiness|liveness)$"'
+        selector=workhorseWebSelector {
+          code: { re: '^5.*' },
+          route: { ne: ['^/-/health$', '^/-/(readiness|liveness)$'] },
+        },
       ),
 
       significantLabels: ['fqdn', 'route'],
@@ -141,14 +141,14 @@ metricsCatalog.serviceDefinition({
 
       apdex: histogramApdex(
         histogram='gitlab_workhorse_image_resize_duration_seconds_bucket',
-        selector='job=~"gitlab-workhorse|gitlab-workhorse-web", type="web"',
+        selector=workhorseWebSelector,
         satisfiedThreshold=0.2,
         toleratedThreshold=0.8
       ),
 
       requestRate: rateMetric(
         counter='gitlab_workhorse_image_resize_requests_total',
-        selector='job=~"gitlab-workhorse|gitlab-workhorse-web", type="web"'
+        selector=workhorseWebSelector,
       ),
 
       significantLabels: ['fqdn'],

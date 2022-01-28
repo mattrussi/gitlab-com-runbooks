@@ -81,7 +81,7 @@ metricsCatalog.serviceDefinition({
 
       apdex: histogramApdex(
         histogram='job_queue_duration_seconds_bucket',
-        selector='shared_runner="true", jobs_running_for_project=~"^(0|1|2|3|4)$"',
+        selector={ shared_runner: 'true', jobs_running_for_project: { re: '^(0|1|2|3|4)$' } },
         satisfiedThreshold=60,
       ),
 
@@ -152,7 +152,7 @@ metricsCatalog.serviceDefinition({
 
       requestRate: rateMetric(
         counter='sidekiq_jobs_completion_seconds_count',
-        selector='worker="Ci::ArchiveTraceWorker"'
+        selector={ worker: 'Ci::ArchiveTraceWorker' }
       ),
 
       errorRate: rateMetric(

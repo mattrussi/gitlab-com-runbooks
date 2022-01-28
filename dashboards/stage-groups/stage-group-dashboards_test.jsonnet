@@ -52,7 +52,6 @@ test.suite({
       'stage',
       'controller',
       'action',
-      'stage_group',
     ],
   },
 
@@ -169,12 +168,16 @@ test.suite({
       'PROMETHEUS_DS',
       'environment',
       'stage',
-      'stage_group',
     ],
   },
 
   testErrorBudgetDetailDashboard: {
-    actual: panelTitles(stageGroupDashboards.errorBudgetDetailDashboard()),
+    actual: panelTitles(stageGroupDashboards.errorBudgetDetailDashboard({
+      key: 'project_management',
+      name: 'Project Management',
+      stage: 'plan',
+      feature_categories: ['team_planning', 'planning_analytics'],
+    })),
     expect: [
       'Error Budget (past 28 days)',
       'Availability',
@@ -187,18 +190,24 @@ test.suite({
       'Overall Error Ratio',
       'Overall RPS - Requests per Second',
       '🔬 Service Level Indicators',
-      'graphql_queries SLI Apdex',
-      'graphql_queries SLI RPS - Requests per Second',
-      'Details',
-      'puma SLI Error Ratio',
-      'puma SLI RPS - Requests per Second',
-      'Details',
-      'rails_requests SLI Apdex',
-      'rails_requests SLI RPS - Requests per Second',
-      'Details',
       '🔬 SLI Detail: graphql_queries',
       '🔬 SLI Detail: puma',
       '🔬 SLI Detail: rails_requests',
     ],
+  },
+
+  testDashboardUidTooLong: {
+    actual: stageGroupDashboards.dashboardUid('authentication_and_authorization'),
+    expect: 'authenticatio',
+  },
+
+  testDashboardUidTooLongWithPrefix: {
+    actual: stageGroupDashboards.dashboardUid('detail-authentication_and_authorization'),
+    expect: 'detail-authen',
+  },
+
+  testDashboardUidNoChange: {
+    actual: stageGroupDashboards.dashboardUid('access'),
+    expect: 'access',
   },
 })
