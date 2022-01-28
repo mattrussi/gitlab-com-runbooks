@@ -161,22 +161,6 @@ groups:
       product_stage: configure
       stage_group: configure
     expr: "1"
-- name: 'Stage group Ignored components: protect - Container Security'
-  interval: 1m
-  partial_response_strategy: warn
-  rules:
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: graphql_queries
-      product_stage: protect
-      stage_group: container_security
-    expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: rails_requests
-      product_stage: protect
-      stage_group: container_security
-    expr: "1"
 - name: 'Stage group Ignored components: growth - Conversion'
   interval: 1m
   partial_response_strategy: warn
