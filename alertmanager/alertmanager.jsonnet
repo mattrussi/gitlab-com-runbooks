@@ -409,7 +409,7 @@ local routingTree = Route(
          * slackline-nonprod as they are very noisy */
         alert_class: { ne: 'traffic_cessation' },
         alertname: { nre: 'service_ops_out_of_bounds_upper_5m|service_ops_out_of_bounds_lower_5m' },
-        env: 'gstg',
+        env: { re: 'gstg(-ref)?' },
       },
       continue=true,
       // rules_domain='general' should be preaggregated so no need for additional groupBy keys
@@ -452,7 +452,7 @@ local routingTree = Route(
       receiver='feed_alerts_staging',
       continue=true,
       matchers={
-        env: 'gstg',
+        env: { re: 'gstg(-ref)?' },
         slo_alert: 'yes',
         type: { re: 'api|web|git' },
 
@@ -469,7 +469,7 @@ local routingTree = Route(
     Route(
       receiver='nonprod_alerts_slack_channel',
       continue=true,
-      matchers={ env: 'gstg', type: 'kube' },
+      matchers={ env: { re: 'gstg(-ref)?' }, type: 'kube' },
     ),
   ]
   + [
@@ -486,7 +486,7 @@ local routingTree = Route(
     ),
     Route(
       receiver='blackhole',
-      matchers={ env: 'gstg' },
+      matchers={ env: { re: 'gstg(-ref)?' } },
       continue=false,
     ),
     // Pager alerts should appear in the production channel
