@@ -320,8 +320,7 @@ teams:
 - name: product_planning
   product_stage_group: product_planning
   ignored_components:
-  - graphql_queries
-  - rails_requests
+    - graphql_queries
 - name: project_management
   product_stage_group: project_management
   ignored_components:
