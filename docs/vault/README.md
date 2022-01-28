@@ -23,7 +23,6 @@
 * [HAProxy management at GitLab](../frontend/haproxy.md)
 * [Gitaly token rotation](../gitaly/gitaly-token-rotation.md)
 * [GPG Keys for Package Signing](../packaging/manage-package-signing-keys.md)
-* [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
 * [Credential rotation](../patroni/postgresql-role-credential-rotation.md)
 * [Rotating Rails' PostgreSQL password](../patroni/rotating-rails-postgresql-password.md)
 * [Praefect Database](../praefect/praefect-database.md)

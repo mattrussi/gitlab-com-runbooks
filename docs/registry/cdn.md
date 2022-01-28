@@ -14,7 +14,7 @@ Each Registry bucket has a sample image that can be used to test that signed URL
 
 ```
 gcloud --project gitlab-production compute sign-url \
-  "https://cdn.registry.gitlab.com/cdn-test/three-cats.jpg" \
+  "https://cdn.registry.gitlab-static.net/cdn-test/three-cats.jpg" \
   --key-name gprd-registry-cdn \
   --expires-in 2880m \
   --key-file /tmp/gprd-key-file
@@ -36,7 +36,7 @@ middleware:
   storage:
   - name: googlecdn
     options:
-      baseurl: cdn.registry.pre.gitlab.com
+      baseurl: cdn.registry.pre.gitlab-static.net
       ipfilteredby: gcp
       keyname: pre-registry-cdn
       privatekey: /etc/docker/registry/middleware.storage/0/private-key

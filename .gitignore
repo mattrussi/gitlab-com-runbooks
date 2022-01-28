@@ -6,7 +6,6 @@ alertmanager/alertmanager.yml
 alertmanager/k8s_alertmanager.yaml
 alertmanager/k8s_alertmanager_secret.yaml
 .env.sh
-/services/service_catalog.json
 /vendor
 /dashboards/vendor
 /periodic-query-results

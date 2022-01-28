@@ -209,6 +209,14 @@ local validateTags(tags) =
       dashboardWithAnnotations;
 
     dashboardWithEnvTemplate {
+      // Conditionally add a single panel to a dashboard
+      addPanelIf(condition, panel, gridPos={})::
+        if condition then self.addPanel(panel, gridPos) else self,
+
+      // Conditionally add many panels to a dashboard
+      addPanelsIf(condition, panels)::
+        if condition then self.addPanels(panels) else self,
+
       trailer()::
         local dashboardWithTrailerPanel = self.addPanel(
           text.new(

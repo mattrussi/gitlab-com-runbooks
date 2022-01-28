@@ -56,6 +56,7 @@ generate:
 	./scripts/generate-jsonnet-rules.sh
 	./scripts/generate-docs
 	./scripts/generate-gitlab-dashboards.sh
+	./scripts/generate-reference-architecture-configs.sh
 
 alertmanager/alertmanager.yml: alertmanager/alertmanager.jsonnet
 	./alertmanager/generate.sh
@@ -69,7 +70,6 @@ test: validate-service-mappings validate-prom-rules validate-kibana-urls validat
 
 .PHONY: validate-service-mappings
 validate-service-mappings:
-	./scripts/generate-service-catalog-json.sh
 	./scripts/validate-service-mappings
 
 .PHONY: validate-prom-rules

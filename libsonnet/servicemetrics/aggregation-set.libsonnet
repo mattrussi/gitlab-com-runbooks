@@ -114,17 +114,14 @@ local buildValidator(definition) =
         generateMetricNamesForBurnRate(burnRate);
 
     local getMetricNameForBurnRate(burnRate, metricName, required) =
-      local nullOrFail() =
-        if required then
-          std.assertEqual('', { __assert__: "'%s' metric for '%s' burn rate required, but not configured in aggregation set '%s'." % [metricName, burnRate, definitionWithDefaults.name] })
-        else
-          null;
-
       local burnRateMetrics = getBurnRateMetrics(burnRate);
       if std.objectHas(burnRateMetrics, metricName) then
         burnRateMetrics[metricName]
       else
-        nullOrFail();
+        if required then
+          error "'%s' metric for '%s' burn rate required, but not configured in aggregation set '%s'." % [metricName, burnRate, definitionWithDefaults.name]
+        else
+          null;
 
     definitionWithDefaults {
       // Returns the apdexSuccessRate metric name, null if not required, or fails if missing and required

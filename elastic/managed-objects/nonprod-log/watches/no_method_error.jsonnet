@@ -39,11 +39,18 @@ local es_query = {
                         },
                       },
                     ],
-                    must_not: {
-                      match_phrase: {
-                        'json.exception.message': '"nil:NilClass"',
+                    must_not: [
+                      {
+                        match_phrase: {
+                          'json.exception.message': '"nil:NilClass"',
+                        },
                       },
-                    },
+                      {
+                        match_phrase: {
+                          'json.exception.message': 'project_vulnerability_url',
+                        },
+                      },
+                    ],
                   },
                 },
                 {

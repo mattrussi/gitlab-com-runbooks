@@ -190,9 +190,9 @@ test.suite({
       'Overall Error Ratio',
       'Overall RPS - Requests per Second',
       '🔬 Service Level Indicators',
-      '🔬 graphql_queries Service Level Indicator Detail',
-      '🔬 puma Service Level Indicator Detail',
-      '🔬 rails_requests Service Level Indicator Detail',
+      '🔬 SLI Detail: graphql_queries',
+      '🔬 SLI Detail: puma',
+      '🔬 SLI Detail: rails_requests',
     ],
   },
 

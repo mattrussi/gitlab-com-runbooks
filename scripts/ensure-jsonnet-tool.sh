@@ -3,7 +3,7 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-if command -v jsonnet-tool; then
+if (command -v jsonnet-tool >/dev/null); then
   # Our work here is done...
   exit
 fi
