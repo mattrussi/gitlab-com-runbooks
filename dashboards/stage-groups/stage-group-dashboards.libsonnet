@@ -12,11 +12,24 @@ local thresholds = import 'gitlab-dashboards/thresholds.libsonnet';
 local metricsCatalogDashboards = import 'gitlab-dashboards/metrics_catalog_dashboards.libsonnet';
 local gitlabMetricsConfig = import 'gitlab-metrics-config.libsonnet';
 local keyMetrics = import 'gitlab-dashboards/key_metrics.libsonnet';
+local objects = import 'utils/objects.libsonnet';
 
 local aggregationSets = gitlabMetricsConfig.aggregationSets;
 
 local dashboardUid(stageGroup) =
-  std.substr(stageGroup, 0, std.length('stage-groups-'));
+  local abbreviations = {
+    distribution: 'dist',
+    pipeline: 'pl',
+    product: 'prod',
+  };
+
+  local abbreviated = std.foldl(
+    function(str, abbr) std.strReplace(str, abbr[0], abbr[1]),
+    objects.toPairs(abbreviations),
+    stageGroup
+  );
+
+  std.substr(abbreviated, 0, std.length('stage-groups-'));
 
 local actionLegend(type) =
   if type == 'api' then '{{action}}' else '{{controller}}#{{action}}';
