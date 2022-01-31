@@ -258,6 +258,35 @@ metricsCatalog.serviceDefinition({
       ],
     },
 
+    gitlab_sshd: {
+      userImpacting: true,
+      featureCategory: 'source_code_management',
+      description: |||
+        Monitors Gitlab-sshd, using the connections bucket, and http requests bucket.
+      |||,
+
+      local baseSelector = {
+        type: 'git',
+      },
+
+      apdex: histogramApdex(
+        histogram='gitlab_shell_sshd_connection_duration_seconds_bucket',
+        selector=baseSelector,
+        satisfiedThreshold=10,
+        toleratedThreshold=20
+      ),
+
+      requestRate: rateMetric(
+        counter='gitlab_shell_sshd_connection_duration_seconds_count',
+        selector=baseSelector
+      ),
+
+      significantLabels: [],
+
+      toolingLinks: [
+        toolingLinks.kibana(title='GitLab Shell', index='shell'),
+      ],
+    },
     rails_requests:
       sliLibrary.get('rails_request_apdex').generateServiceLevelIndicator(railsSelector) {
         monitoringThresholds+: {
