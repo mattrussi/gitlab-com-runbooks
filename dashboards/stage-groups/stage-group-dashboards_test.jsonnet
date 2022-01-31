@@ -1,5 +1,7 @@
 local stageGroupDashboards = import './stage-group-dashboards.libsonnet';
-local test = import 'github.com/yugui/jsonnetunit/jsonnetunit/test.libsonnet';
+local matcher = import 'jsonnetunit/matcher.libsonnet';
+local stages = import 'service-catalog/stages.libsonnet';
+local test = import 'test.libsonnet';
 
 local errorBudgetTitles = [
   'Error Budget (past 28 days)',
@@ -209,5 +211,10 @@ test.suite({
   testDashboardUidNoChange: {
     actual: stageGroupDashboards.dashboardUid('access'),
     expect: 'access',
+  },
+
+  testDashboardUidAllUnique: {
+    actual: std.map(function(s) s.key, stages.stageGroupsWithoutNotOwned),
+    expectUniqueMappings: stageGroupDashboards.dashboardUid,
   },
 })
