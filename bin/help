@@ -5,4 +5,4 @@ set -efo pipefail
 # RUNBOOK_PATH is exported by glsh.sh
 BIN_DIR="$RUNBOOK_PATH/bin"
 
-ls "$BIN_DIR" | cat
+find "$BIN_DIR" -type f -exec basename {} \;
