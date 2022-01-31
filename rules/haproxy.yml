@@ -124,4 +124,3 @@ groups:
       description: >
         More than half of the HAProxy instances think backend server={{ $labels.server }} backend={{ $labels.backend }}
         is down for the last 10 minutes. The server may not be reachable or have failing health checks.
-
