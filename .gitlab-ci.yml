@@ -57,6 +57,10 @@ variables:
       - DEPLOY_ENV: stgsub
         CLUSTER: stgsub-customers-gke
         REGION: us-east1
+      - DEPLOY_ENV: gstg-ref
+        CLUSTER: staging-ref-10k-hybrid
+        REGION: us-east1-c
+        KUBE_NAMESPACE: prometheus
 
 default:
   image: "${CI_REGISTRY_IMAGE}:latest"
@@ -99,6 +103,8 @@ workflow:
 
 .deploy-rules:
   stage: deploy
+  variables:
+    KUBE_NAMESPACE: monitoring
   rules:
     - *avoid-stage-group-check-rule
     - *avoid-maturity-model-generate-rule
@@ -113,8 +119,8 @@ workflow:
     - gem install bundler --no-document -v $BUNDLER_VERSION
     - bundle install --with=test
     - bundle exec ./bin/create_kubernetes_rules.rb --create --validate
-    - ./bin/delete_orphan_kubenetes_rules.sh # Delete ophaned PrometheusRules
-    - kubectl apply --namespace monitoring --filename ${CI_PROJECT_DIR}/rules-k8s/
+    - ./bin/delete_orphan_kubenetes_rules.sh # Delete orphaned PrometheusRules
+    - kubectl apply --namespace "${KUBE_NAMESPACE}" --filename "${CI_PROJECT_DIR}/rules-k8s/"
   tags:
     - k8s-workloads
 
@@ -206,7 +212,7 @@ deploy-rules-non-production:
     - .deploy-rules
     - .matrix_non_production
 
-# Deploy rules to non-production environments
+# Deploy rules to production environments
 deploy-rules-production:
   environment: $DEPLOY_ENV
   stage: deploy-rules-production
