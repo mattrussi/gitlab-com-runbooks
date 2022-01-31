@@ -50,9 +50,9 @@ groups:
           description: Pod {{ $labels.namespace }}/{{ $labels.pod }} ({{ $labels.container }}) is reporting CrashLoopBackOff restarts.
           runbook: docs/kube/kubernetes.md
         expr: |
-          sum by (environment,type,stage,tier) (kube_pod_container_status_waiting_reason:labeled{reason="CrashLoopBackOff"} > 0)
+          sum by (environment,type,stage,tier,deployment) (kube_pod_container_status_waiting_reason:labeled{reason="CrashLoopBackOff"} > 0)
             /
-          sum by (environment,type,stage,tier) (kube_pod_container_status_waiting_reason:labeled > 0)
+          sum by (environment,type,stage,tier,deployment) (kube_pod_container_status_waiting_reason:labeled > 0)
             > 0.5
         for: 5m
         labels:
