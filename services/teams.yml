@@ -201,7 +201,6 @@ teams:
   slack_alerts_channel: s_plan-be
   ignored_components:
   - graphql_queries
-  - rails_requests
 - name: code_review
   product_stage_group: code_review
   ignored_components:
