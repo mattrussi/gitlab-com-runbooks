@@ -29,7 +29,7 @@ There are two BlackBox probes for the Staging and Production CDN endpoints:
 - https://cdn.registry.gitlab-static.net
 
 These [were added](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests/1273) so that we can validate the CDN endpoint and certificate.
-If this alert files, check to be sure the `health` object exists in the bucket `/cdn-test/health`.
+If this alert fires, check to be sure the `health` object exists in the bucket `/cdn-test/health`.
 
 This object was copied manually using `gsutil` and is a text file containing the string `OK`:
 
