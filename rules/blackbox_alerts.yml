@@ -77,3 +77,17 @@ groups:
       description: blackbox probe availability {{ $labels.instance }} is less than {{ $value | printf "%.2f" }}% for the last 30 minutes.
       runbook: docs/frontend/gitlab-com-is-down.md
       title: staging.gitlab.com is down for 30 minutes
+- name: Blackbox docs.gitlab.com
+  rules:
+  - alert: DocsGitlabComDown
+    expr: probe_http_status_code{instance=~"(http://docs.gitlab.com|http://doc.gitlab.com)",job="blackbox-tls-upgrade"} == 404
+    for: 30m
+    labels:
+      pager: pagerduty
+      severity: s1
+      alert_type: symptom
+    annotations:
+      description: blackbox probe availability {{ $labels.instance }} is {{ $value | printf "%.2f" }}% for the last 30 minutes.
+      runbook: docs/frontend/haproxy.md#resolution
+      title:  docs.gitlab.com is returning status 404 for the last 30 minutes
+

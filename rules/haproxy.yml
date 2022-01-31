@@ -124,17 +124,4 @@ groups:
       description: >
         More than half of the HAProxy instances think backend server={{ $labels.server }} backend={{ $labels.backend }}
         is down for the last 10 minutes. The server may not be reachable or have failing health checks.
-  - alert: High4xxErrorRateOnPages
-    expr: sum(backend_code:haproxy_server_http_responses_total:rate5m{backend="pages_http",code="4xx"}) by (environment)
-      - sum(backend_code:haproxy_server_http_responses_total:rate5m{backend="pages_http",code!="4xx"}) by (environment)
-      > 0
-    for: 15s
-    labels:
-      pager: pagerduty
-      severity: s1
-      alert_type: symptom
-    annotations:
-      description: We are having more 4xx returns than any other reply. Customer traffic
-        is being impacted and the service is probably unhealthy.
-      runbook: docs/frontend/haproxy.md#resolution
-      title: High Error Rate on Front End pages
+
