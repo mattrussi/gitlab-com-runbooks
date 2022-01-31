@@ -4,6 +4,7 @@ local derivMetric = metricsCatalog.derivMetric;
 local googleLoadBalancerComponents = import './lib/google_load_balancer_components.libsonnet';
 local maturityLevels = import 'service-maturity/levels.libsonnet';
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
+local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'logging',
@@ -65,6 +66,10 @@ metricsCatalog.serviceDefinition({
       ),
 
       significantLabels: ['name'],
+
+      toolingLinks: [
+        toolingLinks.kibana(title='Monitoring Cluster', index='logging'),
+      ],
     },
 
     elasticsearch_indexing_cluster: {
@@ -81,6 +86,10 @@ metricsCatalog.serviceDefinition({
       ),
 
       significantLabels: ['name'],
+
+      toolingLinks: [
+        toolingLinks.kibana(title='Monitoring Cluster', index='logging'),
+      ],
     },
 
     elasticsearch_searching_index: {
@@ -97,6 +106,10 @@ metricsCatalog.serviceDefinition({
       ),
 
       significantLabels: ['index'],
+
+      toolingLinks: [
+        toolingLinks.kibana(title='Monitoring Cluster', index='logging'),
+      ],
     },
 
     elasticsearch_indexing_index: {
@@ -113,6 +126,10 @@ metricsCatalog.serviceDefinition({
       ),
 
       significantLabels: ['index'],
+
+      toolingLinks: [
+        toolingLinks.kibana(title='Monitoring Cluster', index='logging'),
+      ],
     },
 
     // This component represents the Google Load Balancer in front
@@ -157,6 +174,10 @@ metricsCatalog.serviceDefinition({
       ),
 
       significantLabels: ['topic_id'],
+
+      toolingLinks: [
+        toolingLinks.kibana(title='Pubsubbeat', index='pubsubbeat'),
+      ],
     },
 
     pubsub_subscriptions: {
@@ -172,6 +193,10 @@ metricsCatalog.serviceDefinition({
       ),
 
       significantLabels: ['subscription_id'],
+
+      toolingLinks: [
+        toolingLinks.kibana(title='Pubsubbeat', index='pubsubbeat'),
+      ],
     },
 
     // This component tracks fluentd log output
@@ -193,6 +218,10 @@ metricsCatalog.serviceDefinition({
 
       significantLabels: ['fqdn', 'pod', 'type'],
       serviceAggregation: false,
+
+      toolingLinks: [
+        toolingLinks.kibana(title='Fluentd', index='fluentd'),
+      ],
     },
 
     // This components tracks pubsubbeat errors and outputs
