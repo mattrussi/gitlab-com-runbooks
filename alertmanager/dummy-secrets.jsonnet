@@ -24,6 +24,7 @@
     { name: 'gprd', apiKey: 'secret', cluster: '' },
     { name: 'gprd', apiKey: 'secret', cluster: 'gprd-gitlab-gke' },
     { name: 'gstg', apiKey: 'secret', cluster: '' },
+    { name: 'gstg-ref', apiKey: 'secret', cluster: 'staging-ref-10k-hybrid' },
     { name: 'pre', apiKey: 'secret', cluster: '' },
     { name: 'testbed', apiKey: 'secret', cluster: '' },
     { name: 'thanos-rule', apiKey: 'secret', cluster: '' },
