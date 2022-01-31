@@ -18,6 +18,7 @@
 * [license.gitlab.com Runbook](../license/license-gitlab-com.md)
 * [../patroni/postgres.md](../patroni/postgres.md)
 * [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
+* [Container Registry CDN](../registry/cdn.md)
 * [../spamcheck/index.md](../spamcheck/index.md)
 * [Camoproxy troubleshooting](../uncategorized/camoproxy.md)
 * [An impatient SRE's guide to deleting alerts](../uncategorized/deleting-alerts.md)
