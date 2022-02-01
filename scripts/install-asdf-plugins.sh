@@ -22,8 +22,33 @@ install_plugin() {
   }
 }
 
+check_global_golang_install() {
+  cd /
+  asdf current golang >/dev/null 2>/dev/null
+}
+
 # Install golang first as some of the other plugins require it
 install_plugin golang
+
+if [[ -z "${CI:-}" ]]; then
+  # The go-jsonnet plugin requires a global golang version to be configured
+  # and will otherwise fail to install
+  #
+  # This check is not neccessary in CI
+  GOLANG_VERSION=$(asdf current golang | awk '{print $2}')
+
+  if ! check_global_golang_install; then
+    cat <<-EOF
+The go-jsonnet plugin requires a global golang version to be configured.
+Suggestion: run this command to set this up: 'asdf global golang ${GOLANG_VERSION}'
+Then rerun this command.
+
+Note: you can undo this change after running this command by editing ~/.tool-versions
+EOF
+    exit 1
+  fi
+fi
+
 install_plugin go-jsonnet
 install_plugin jb
 install_plugin shellcheck
