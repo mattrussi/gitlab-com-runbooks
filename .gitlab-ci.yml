@@ -417,6 +417,18 @@ update_elastic_monitoring-es7_ilm:
   script:
   - ./elastic/managed-objects/monitoring-es7/ILM/update-ilm.sh
 
+update_elastic_monitoring-es7_watches:
+  stage: deploy
+  rules:
+    - *avoid-stage-group-check-rule
+    - *avoid-maturity-model-generate-rule
+    - *avoid-schedule-rule
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_MONITORING_ES7_URL'
+      changes:
+        - elastic/managed-objects/monitoring-es7/watches/*
+  script:
+  - ./elastic/managed-objects/monitoring-es7/watches/update-watches.sh
+
 ################################################################################
 
 dryrun_pingdom_checks:
