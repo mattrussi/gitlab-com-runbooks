@@ -1272,7 +1272,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(prometheus_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"prometheus.*",job!="prometheus-metamon",stage="{{ $labels.stage }}",type="monitoring"}[5m])
+            rate(prometheus_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job!="prometheus-metamon",job=~"prometheus.*",stage="{{ $labels.stage }}",type="monitoring"}[5m])
           )
         )
       runbook: docs/monitoring/README.md
@@ -1323,7 +1323,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(prometheus_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"prometheus.*",job!="prometheus-metamon",stage="{{ $labels.stage }}",type="monitoring"}[5m])
+            rate(prometheus_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job!="prometheus-metamon",job=~"prometheus.*",stage="{{ $labels.stage }}",type="monitoring"}[5m])
           )
         )
       runbook: docs/monitoring/README.md
@@ -1372,7 +1372,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(prometheus_http_requests_total{code=~"^5.*",environment="{{ $labels.environment }}",job=~"prometheus.*",job!="prometheus-metamon",stage="{{ $labels.stage }}",type="monitoring"}[5m])
+          rate(prometheus_http_requests_total{code=~"^5.*",environment="{{ $labels.environment }}",job!="prometheus-metamon",job=~"prometheus.*",stage="{{ $labels.stage }}",type="monitoring"}[5m])
         )
       runbook: docs/monitoring/README.md
     labels:
@@ -1420,7 +1420,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(prometheus_http_requests_total{code=~"^5.*",environment="{{ $labels.environment }}",job=~"prometheus.*",job!="prometheus-metamon",stage="{{ $labels.stage }}",type="monitoring"}[5m])
+          rate(prometheus_http_requests_total{code=~"^5.*",environment="{{ $labels.environment }}",job!="prometheus-metamon",job=~"prometheus.*",stage="{{ $labels.stage }}",type="monitoring"}[5m])
         )
       runbook: docs/monitoring/README.md
     labels:
@@ -1468,7 +1468,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(prometheus_http_requests_total{environment="{{ $labels.environment }}",job=~"prometheus.*",job!="prometheus-metamon",stage="{{ $labels.stage }}",type="monitoring"}[5m])
+          rate(prometheus_http_requests_total{environment="{{ $labels.environment }}",job!="prometheus-metamon",job=~"prometheus.*",stage="{{ $labels.stage }}",type="monitoring"}[5m])
         )
       runbook: docs/monitoring/README.md
     labels:
@@ -1503,7 +1503,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(prometheus_http_requests_total{environment="{{ $labels.environment }}",job=~"prometheus.*",job!="prometheus-metamon",stage="{{ $labels.stage }}",type="monitoring"}[5m])
+          rate(prometheus_http_requests_total{environment="{{ $labels.environment }}",job!="prometheus-metamon",job=~"prometheus.*",stage="{{ $labels.stage }}",type="monitoring"}[5m])
         )
       runbook: docs/monitoring/README.md
     labels:
