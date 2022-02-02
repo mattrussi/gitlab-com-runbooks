@@ -267,7 +267,6 @@ teams:
   product_stage_group: integrations
   ignored_components:
   - graphql_queries
-  - rails_requests
 - name: license
   product_stage_group: license
   ignored_components:
