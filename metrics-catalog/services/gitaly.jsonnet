@@ -8,7 +8,7 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 // This is a list of unary GRPC methods that should not be included in measuring the apdex score
 // for the Gitaly service, since they're called from background jobs and the latency
 // does not reflect the overall latency of the Gitaly server
-local gitalyApdexIgnoredMethods = std.set([
+local gitalyApdexIgnoredMethods = [
   'CalculateChecksum',
   'CommitLanguages',
   'CreateFork',
@@ -41,18 +41,18 @@ local gitalyApdexIgnoredMethods = std.set([
   'PreReceiveHook',
   'PostReceiveHook',
   'UpdateHook',
-]);
+];
 
-// local gitalyOpServiceApdexIgnoredMethods = std.set([]);
-local gitalyApdexIgnoredMethodsRegexp = std.join('|', gitalyApdexIgnoredMethods);
-// local gitalyOpServiceApdexIgnoredMethodsRegexp = std.join('|', gitalyOpServiceApdexIgnoredMethods);
+// Ignored because of https://gitlab.com/gitlab-org/gitaly/-/issues/3441
+local gitalyRubyApdexIgnoredMethods = gitalyApdexIgnoredMethods + ['GetLFSPointers', 'GetAllLFSPointers'];
+
 
 local gitalyGRPCErrorRate(baseSelector) =
   combined([
     rateMetric(
       counter='gitaly_service_client_requests_total',
       selector=baseSelector {
-        grpc_code: { nre: 'OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded|Canceled|InvalidArgument' },
+        grpc_code: { noneOf: ['OK', 'NotFound', 'Unauthenticated', 'AlreadyExists', 'FailedPrecondition', 'DeadlineExceeded', 'Canceled', 'InvalidArgument'] },
       }
     ),
     rateMetric(
@@ -98,7 +98,7 @@ metricsCatalog.serviceDefinition({
         grpc_service: { ne: 'gitaly.OperationService' },
       },
       local baseSelectorApdex = baseSelector {
-        grpc_method: { nre: gitalyApdexIgnoredMethodsRegexp },
+        grpc_method: { noneOf: gitalyApdexIgnoredMethods },
       },
 
       apdex: gitalyHelpers.grpcServiceApdex(baseSelectorApdex),
@@ -187,8 +187,7 @@ metricsCatalog.serviceDefinition({
           grpc_type: 'unary',
           grpc_service: { ne: 'gitaly.OperationService' },
           grpc_method: {
-            nre: gitalyApdexIgnoredMethodsRegexp +
-                 '|GetLFSPointers|GetAllLFSPointers',  // Ignored because of https://gitlab.com/gitlab-org/gitaly/-/issues/3441
+            noneOf: gitalyRubyApdexIgnoredMethods,
           },
         },
         satisfiedThreshold=10,
@@ -203,8 +202,8 @@ metricsCatalog.serviceDefinition({
       errorRate: rateMetric(
         counter='grpc_client_handled_total',
         selector=baseSelector {
-          grpc_method: { nre: 'UpdateRemoteMirror|AddRemote' },  // Ignore these calls until https://gitlab.com/gitlab-org/gitlab/-/issues/300884 is fixed
-          grpc_code: { nre: 'OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded' },
+          grpc_method: { noneOf: ['UpdateRemoteMirror', 'AddRemote'] },  // Ignore these calls until https://gitlab.com/gitlab-org/gitlab/-/issues/300884 is fixed
+          grpc_code: { noneOf: ['OK', 'NotFound', 'Unauthenticated', 'AlreadyExists', 'FailedPrecondition', 'DeadlineExceeded'] },
         }
       ),
 

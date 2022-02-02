@@ -294,11 +294,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(prometheus_http_request_duration_seconds_bucket{job=~"prometheus.*",job!="prometheus-metamon",le="1",type="monitoring"}[1m])
+          rate(prometheus_http_request_duration_seconds_bucket{job!="prometheus-metamon",job=~"prometheus.*",le="1",type="monitoring"}[1m])
         )
         +
         sum by (environment,stage) (
-          rate(prometheus_http_request_duration_seconds_bucket{job=~"prometheus.*",job!="prometheus-metamon",le="3",type="monitoring"}[1m])
+          rate(prometheus_http_request_duration_seconds_bucket{job!="prometheus-metamon",job=~"prometheus.*",le="3",type="monitoring"}[1m])
         )
       )
       /
@@ -310,7 +310,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(prometheus_http_request_duration_seconds_bucket{job=~"prometheus.*",job!="prometheus-metamon",le="+Inf",type="monitoring"}[1m])
+        rate(prometheus_http_request_duration_seconds_bucket{job!="prometheus-metamon",job=~"prometheus.*",le="+Inf",type="monitoring"}[1m])
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -319,7 +319,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(prometheus_http_requests_total{job=~"prometheus.*",job!="prometheus-metamon",type="monitoring"}[1m])
+        rate(prometheus_http_requests_total{job!="prometheus-metamon",job=~"prometheus.*",type="monitoring"}[1m])
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -329,7 +329,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(prometheus_http_requests_total{code=~"^5.*",job=~"prometheus.*",job!="prometheus-metamon",type="monitoring"}[1m])
+          rate(prometheus_http_requests_total{code=~"^5.*",job!="prometheus-metamon",job=~"prometheus.*",type="monitoring"}[1m])
         )
       )
       or
@@ -947,11 +947,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(prometheus_http_request_duration_seconds_bucket{job=~"prometheus.*",job!="prometheus-metamon",le="1",type="monitoring"}[5m])
+          rate(prometheus_http_request_duration_seconds_bucket{job!="prometheus-metamon",job=~"prometheus.*",le="1",type="monitoring"}[5m])
         )
         +
         sum by (environment,stage) (
-          rate(prometheus_http_request_duration_seconds_bucket{job=~"prometheus.*",job!="prometheus-metamon",le="3",type="monitoring"}[5m])
+          rate(prometheus_http_request_duration_seconds_bucket{job!="prometheus-metamon",job=~"prometheus.*",le="3",type="monitoring"}[5m])
         )
       )
       /
@@ -963,7 +963,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(prometheus_http_request_duration_seconds_bucket{job=~"prometheus.*",job!="prometheus-metamon",le="+Inf",type="monitoring"}[5m])
+        rate(prometheus_http_request_duration_seconds_bucket{job!="prometheus-metamon",job=~"prometheus.*",le="+Inf",type="monitoring"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -972,7 +972,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(prometheus_http_requests_total{job=~"prometheus.*",job!="prometheus-metamon",type="monitoring"}[5m])
+        rate(prometheus_http_requests_total{job!="prometheus-metamon",job=~"prometheus.*",type="monitoring"}[5m])
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -982,7 +982,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(prometheus_http_requests_total{code=~"^5.*",job=~"prometheus.*",job!="prometheus-metamon",type="monitoring"}[5m])
+          rate(prometheus_http_requests_total{code=~"^5.*",job!="prometheus-metamon",job=~"prometheus.*",type="monitoring"}[5m])
         )
       )
       or
@@ -1600,11 +1600,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(prometheus_http_request_duration_seconds_bucket{job=~"prometheus.*",job!="prometheus-metamon",le="1",type="monitoring"}[30m])
+          rate(prometheus_http_request_duration_seconds_bucket{job!="prometheus-metamon",job=~"prometheus.*",le="1",type="monitoring"}[30m])
         )
         +
         sum by (environment,stage) (
-          rate(prometheus_http_request_duration_seconds_bucket{job=~"prometheus.*",job!="prometheus-metamon",le="3",type="monitoring"}[30m])
+          rate(prometheus_http_request_duration_seconds_bucket{job!="prometheus-metamon",job=~"prometheus.*",le="3",type="monitoring"}[30m])
         )
       )
       /
@@ -1616,7 +1616,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(prometheus_http_request_duration_seconds_bucket{job=~"prometheus.*",job!="prometheus-metamon",le="+Inf",type="monitoring"}[30m])
+        rate(prometheus_http_request_duration_seconds_bucket{job!="prometheus-metamon",job=~"prometheus.*",le="+Inf",type="monitoring"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -1625,7 +1625,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(prometheus_http_requests_total{job=~"prometheus.*",job!="prometheus-metamon",type="monitoring"}[30m])
+        rate(prometheus_http_requests_total{job!="prometheus-metamon",job=~"prometheus.*",type="monitoring"}[30m])
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -1635,7 +1635,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(prometheus_http_requests_total{code=~"^5.*",job=~"prometheus.*",job!="prometheus-metamon",type="monitoring"}[30m])
+          rate(prometheus_http_requests_total{code=~"^5.*",job!="prometheus-metamon",job=~"prometheus.*",type="monitoring"}[30m])
         )
       )
       or
@@ -2253,11 +2253,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(prometheus_http_request_duration_seconds_bucket{job=~"prometheus.*",job!="prometheus-metamon",le="1",type="monitoring"}[1h])
+          rate(prometheus_http_request_duration_seconds_bucket{job!="prometheus-metamon",job=~"prometheus.*",le="1",type="monitoring"}[1h])
         )
         +
         sum by (environment,stage) (
-          rate(prometheus_http_request_duration_seconds_bucket{job=~"prometheus.*",job!="prometheus-metamon",le="3",type="monitoring"}[1h])
+          rate(prometheus_http_request_duration_seconds_bucket{job!="prometheus-metamon",job=~"prometheus.*",le="3",type="monitoring"}[1h])
         )
       )
       /
@@ -2269,7 +2269,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(prometheus_http_request_duration_seconds_bucket{job=~"prometheus.*",job!="prometheus-metamon",le="+Inf",type="monitoring"}[1h])
+        rate(prometheus_http_request_duration_seconds_bucket{job!="prometheus-metamon",job=~"prometheus.*",le="+Inf",type="monitoring"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -2278,7 +2278,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(prometheus_http_requests_total{job=~"prometheus.*",job!="prometheus-metamon",type="monitoring"}[1h])
+        rate(prometheus_http_requests_total{job!="prometheus-metamon",job=~"prometheus.*",type="monitoring"}[1h])
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -2288,7 +2288,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(prometheus_http_requests_total{code=~"^5.*",job=~"prometheus.*",job!="prometheus-metamon",type="monitoring"}[1h])
+          rate(prometheus_http_requests_total{code=~"^5.*",job!="prometheus-metamon",job=~"prometheus.*",type="monitoring"}[1h])
         )
       )
       or
@@ -2906,11 +2906,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(prometheus_http_request_duration_seconds_bucket{job=~"prometheus.*",job!="prometheus-metamon",le="1",type="monitoring"}[6h])
+          rate(prometheus_http_request_duration_seconds_bucket{job!="prometheus-metamon",job=~"prometheus.*",le="1",type="monitoring"}[6h])
         )
         +
         sum by (environment,stage) (
-          rate(prometheus_http_request_duration_seconds_bucket{job=~"prometheus.*",job!="prometheus-metamon",le="3",type="monitoring"}[6h])
+          rate(prometheus_http_request_duration_seconds_bucket{job!="prometheus-metamon",job=~"prometheus.*",le="3",type="monitoring"}[6h])
         )
       )
       /
@@ -2922,7 +2922,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(prometheus_http_request_duration_seconds_bucket{job=~"prometheus.*",job!="prometheus-metamon",le="+Inf",type="monitoring"}[6h])
+        rate(prometheus_http_request_duration_seconds_bucket{job!="prometheus-metamon",job=~"prometheus.*",le="+Inf",type="monitoring"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -2931,7 +2931,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(prometheus_http_requests_total{job=~"prometheus.*",job!="prometheus-metamon",type="monitoring"}[6h])
+        rate(prometheus_http_requests_total{job!="prometheus-metamon",job=~"prometheus.*",type="monitoring"}[6h])
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -2941,7 +2941,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(prometheus_http_requests_total{code=~"^5.*",job=~"prometheus.*",job!="prometheus-metamon",type="monitoring"}[6h])
+          rate(prometheus_http_requests_total{code=~"^5.*",job!="prometheus-metamon",job=~"prometheus.*",type="monitoring"}[6h])
         )
       )
       or
