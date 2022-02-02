@@ -11,7 +11,7 @@ This runbook covers some of the topics that were discussed in the [EOC Firedrill
 
 ### Dashboards
 
-- Check the [GitLab general overview](https://dashboards.gitlab.com/d/general-public-splashscreen/general-gitlab-dashboards?orgId=1&from=now-30m&to=now) for service degradation
+- Check the [GitLab general overview](https://dashboards.gitlab.net/d/general-public-splashscreen/general-gitlab-dashboards?orgId=1&from=now-30m&to=now) for service degradation
 - Check the [Patroni overview](https://dashboards.gitlab.net/d/patroni-main/patroni-overview?orgId=1&from=now-1h&to=now&var-PROMETHEUS_DS=Global&var-environment=gprd) for the current status of Patroni.
 - Look for unusual usage patterns in [tuple statistics](https://dashboards.gitlab.net/d/000000167/postgresql-tuple-statistics?orgId=1)
 - Look for outliers in the [marginalia sampler dashboard](https://dashboards.gitlab.net/d/patroni-marginalia-sampler/patroni-marginalia-sampler?orgId=1&from=now-1h&to=now&var-PROMETHEUS_DS=Global&var-environment=gprd&var-fqdn=patroni-03-db-gprd.c.gitlab-production.internal&var-application=All&var-endpoint=All&var-state=All&var-wait_event_type=All)
