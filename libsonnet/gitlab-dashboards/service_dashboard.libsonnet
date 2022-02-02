@@ -63,6 +63,8 @@ local headlineMetricsRow(
 
 local overviewDashboard(
   type,
+  title='Overview',
+  uid=null,
   environmentSelectorHash=defaultEnvironmentSelector,
   saturationEnvironmentSelectorHash=defaultEnvironmentSelector,
 
@@ -85,8 +87,9 @@ local overviewDashboard(
 
   local dashboard =
     basic.dashboard(
-      'Overview',
-      tags=['type:' + type, type, 'service overview'],
+      title,
+      uid=uid,
+      tags=['gitlab', 'type:' + type, type, 'service overview'],
       includeEnvironmentTemplate=std.objectHas(environmentStageSelectorHash, 'environment'),
     )
     .addPanels(
