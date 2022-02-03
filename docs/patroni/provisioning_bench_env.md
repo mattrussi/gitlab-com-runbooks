@@ -199,6 +199,9 @@ Apply complete! Resources: 67 added, 0 changed, 0 destroyed.
 tf plan -replace="module.pg12ute-patroni-source.google_compute_instance.instance_with_attached_disk[0]" \
 -replace="module.pg12ute-patroni-source.google_compute_instance.instance_with_attached_disk[1]" \
 -replace="module.pg12ute-patroni-source.google_compute_instance.instance_with_attached_disk[2]" \
+-replace="module.pg12ute-patroni-source.google_compute_disk.data_disk[0]" \
+-replace="module.pg12ute-patroni-source.google_compute_disk.data_disk[1]" \
+-replace="module.pg12ute-patroni-source.google_compute_disk.data_disk[2]" \
 -target="module.pg12ute-patroni-source" \
 -out=source-replace.plan
 ```
@@ -208,6 +211,9 @@ tf plan -replace="module.pg12ute-patroni-source.google_compute_instance.instance
 tf plan -replace="module.pg12ute-patroni-target.google_compute_instance.instance_with_attached_disk[0]" \
 -replace="module.pg12ute-patroni-target.google_compute_instance.instance_with_attached_disk[1]" \
 -replace="module.pg12ute-patroni-target.google_compute_instance.instance_with_attached_disk[2]" \
+-replace="module.pg12ute-patroni-target.google_compute_disk.data_disk[0]" \
+-replace="module.pg12ute-patroni-target.google_compute_disk.data_disk[1]" \
+-replace="module.pg12ute-patroni-target.google_compute_disk.data_disk[2]" \
 -target="module.pg12ute-patroni-target" \
 -out=target-replace.plan
 ```
