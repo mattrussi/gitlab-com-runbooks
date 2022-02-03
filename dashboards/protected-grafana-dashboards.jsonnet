@@ -47,6 +47,10 @@ local union(sets) = std.foldl(function(memo, a) std.setUnion(std.set(a), memo), 
         'oWe9aYxmk',
         'xSYVQ9Sik',
       ],
+      // Quality owned dashboards
+      [
+        'Fyic5Wanz',
+      ],
       // Dashboards that people have requested we save (for now!)
       [
         // ahegyi: loose foreign keys monitoring dashboard (WIP)
@@ -115,5 +119,6 @@ local union(sets) = std.foldl(function(memo, a) std.setUnion(std.set(a), memo), 
     'Cloudflare',
     'PostgreSQL',
     'Product',
+    'Staging Reference',
   ],
 }
