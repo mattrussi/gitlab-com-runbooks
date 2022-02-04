@@ -11,20 +11,23 @@ install_plugin() {
     echo "# Installing plugin" "$@"
     asdf plugin add "$@" || {
       echo "Failed to perform plugin installation: " "$@"
-      exit 1
+      return 1
     }
   fi
 
   echo "# Installing ${plugin} version"
   asdf install "${plugin}" || {
     echo "Failed to perform version installation: ${plugin}"
-    exit 1
+    return 1
   }
 }
 
 check_global_golang_install() {
-  cd /
-  asdf current golang >/dev/null 2>/dev/null
+  (
+    pushd /
+    asdf current golang
+    popd
+  ) >/dev/null 2>/dev/null
 }
 
 # Install golang first as some of the other plugins require it
@@ -39,11 +42,13 @@ if [[ -z "${CI:-}" ]]; then
 
   if ! check_global_golang_install; then
     cat <<-EOF
-The go-jsonnet plugin requires a global golang version to be configured.
+---------------------------------------------------------------------------------------
+The go-jsonnet plugin requires a global golang version to be configured.$
 Suggestion: run this command to set this up: 'asdf global golang ${GOLANG_VERSION}'
 Then rerun this command.
 
 Note: you can undo this change after running this command by editing ~/.tool-versions
+---------------------------------------------------------------------------------------
 EOF
     exit 1
   fi
@@ -54,4 +59,15 @@ install_plugin jb
 install_plugin shellcheck
 install_plugin shfmt
 install_plugin jsonnet-tool https://gitlab.com/gitlab-com/gl-infra/asdf-jsonnet-tool.git
-install_plugin ruby
+install_plugin ruby || {
+  cat <<-EOF
+---------------------------------------------------------------------------------------
+Ruby install failed. Are you sure you've followed the instructions at
+https://gitlab.com/gitlab-com/runbooks/-/blob/master/README.md#tool-versioning
+and added \`legacy_version_file = yes\` to ~/.asdfrc?
+
+echo "legacy_version_file = yes" >> ~/.asdfrc
+---------------------------------------------------------------------------------------
+EOF
+  exit 1
+}
