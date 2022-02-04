@@ -1,5 +1,7 @@
 local stageGroupDashboards = import './stage-group-dashboards.libsonnet';
-local test = import 'github.com/yugui/jsonnetunit/jsonnetunit/test.libsonnet';
+local matcher = import 'jsonnetunit/matcher.libsonnet';
+local stages = import 'service-catalog/stages.libsonnet';
+local test = import 'test.libsonnet';
 
 local errorBudgetTitles = [
   'Error Budget (past 28 days)',
@@ -198,16 +200,21 @@ test.suite({
 
   testDashboardUidTooLong: {
     actual: stageGroupDashboards.dashboardUid('authentication_and_authorization'),
-    expect: 'authenticatio',
+    expect: 'authentication_and_authoriz',
   },
 
   testDashboardUidTooLongWithPrefix: {
     actual: stageGroupDashboards.dashboardUid('detail-authentication_and_authorization'),
-    expect: 'detail-authen',
+    expect: 'detail-authentication_and_a',
   },
 
   testDashboardUidNoChange: {
     actual: stageGroupDashboards.dashboardUid('access'),
     expect: 'access',
+  },
+
+  testDashboardUidAllUnique: {
+    actual: std.map(function(s) s.key, stages.stageGroupsWithoutNotOwned),
+    expectUniqueMappings: stageGroupDashboards.dashboardUid,
   },
 })
