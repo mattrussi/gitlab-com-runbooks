@@ -200,12 +200,12 @@ test.suite({
 
   testDashboardUidTooLong: {
     actual: stageGroupDashboards.dashboardUid('authentication_and_authorization'),
-    expect: 'authenticatio',
+    expect: 'authentication_and_authoriz',
   },
 
   testDashboardUidTooLongWithPrefix: {
     actual: stageGroupDashboards.dashboardUid('detail-authentication_and_authorization'),
-    expect: 'detail-authen',
+    expect: 'detail-authentication_and_a',
   },
 
   testDashboardUidNoChange: {

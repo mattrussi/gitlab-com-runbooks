@@ -16,20 +16,11 @@ local objects = import 'utils/objects.libsonnet';
 
 local aggregationSets = gitlabMetricsConfig.aggregationSets;
 
-local dashboardUid(stageGroup) =
-  local abbreviations = {
-    distribution: 'dist',
-    pipeline: 'pl',
-    product: 'prod',
-  };
-
-  local abbreviated = std.foldl(
-    function(str, abbr) std.strReplace(str, abbr[0], abbr[1]),
-    objects.toPairs(abbreviations),
-    stageGroup
-  );
-
-  std.substr(abbreviated, 0, std.length('stage-groups-'));
+local dashboardUid(identifier) =
+  local dirname = 'stage-groups';
+  // All dashboards are prefixed with their dirname joined by a `-`
+  local maxLength = 40 - std.length(dirname) - 1;
+  std.substr(identifier, 0, maxLength);
 
 local actionLegend(type) =
   if type == 'api' then '{{action}}' else '{{controller}}#{{action}}';
