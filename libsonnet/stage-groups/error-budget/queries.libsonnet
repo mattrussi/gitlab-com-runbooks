@@ -131,8 +131,8 @@ local errorBudgetViolationRate(range, groupSelectors, aggregationLabels, ignoreC
     ) > 0
   ||| % {
     aggregationLabelsWithViolationType: aggregations.join(aggregationLabels),
-    apdexViolationRate: strings.indent(labels.addStaticLabel('violation_type', 'apdex', apdexViolationRate), 6),
-    errorRate: strings.indent(labels.addStaticLabel('violation_type', 'error', errorRate), 6),
+    apdexViolationRate: strings.indent(strings.chomp(labels.addStaticLabel('violation_type', 'apdex', apdexViolationRate)), 2),
+    errorRate: strings.indent(strings.chomp(labels.addStaticLabel('violation_type', 'error', errorRate)), 2),
   };
 
 local errorBudgetOperationRate(range, groupSelectors, aggregationLabels, ignoreComponents) =
@@ -164,8 +164,8 @@ local errorBudgetOperationRate(range, groupSelectors, aggregationLabels, ignoreC
     ) > 0
   ||| % {
     aggregationLabelsWithViolationType: aggregations.join(aggregationLabels),
-    apdexOperationRate: strings.indent(labels.addStaticLabel('violation_type', 'apdex', apdexOperationRate), 6),
-    errorOperationRate: strings.indent(labels.addStaticLabel('violation_type', 'error', errorOperationRate), 6),
+    apdexOperationRate: strings.indent(strings.chomp(labels.addStaticLabel('violation_type', 'apdex', apdexOperationRate)), 2),
+    errorOperationRate: strings.indent(strings.chomp(labels.addStaticLabel('violation_type', 'error', errorOperationRate)), 2),
   };
 
 

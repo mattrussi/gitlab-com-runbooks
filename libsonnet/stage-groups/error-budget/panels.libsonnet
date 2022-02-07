@@ -4,6 +4,7 @@ local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libson
 local basic = import 'grafana/basic.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local durationParser = import 'utils/duration-parser.libsonnet';
+local strings = import 'utils/strings.libsonnet';
 
 local baseSelector = {
   stage: '$stage',
@@ -250,7 +251,7 @@ local rateToOperationCount(query) =
       ) * 60
     )
   ||| % {
-    query: query,
+    query: strings.indent(strings.chomp(query), 4),
   };
 
 local violationRatePanel(queries, group) =
