@@ -109,6 +109,7 @@ groups:
   rules:
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: kube_pool_max_nodes
       horiz_scaling: "yes"
       quantile: max
@@ -116,6 +117,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: pg_primary_cpu
       horiz_scaling: "no"
       quantile: max
@@ -123,6 +125,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: pg_walsender_cpu
       horiz_scaling: "no"
       quantile: max
