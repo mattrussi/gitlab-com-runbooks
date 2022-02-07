@@ -99,10 +99,8 @@ groups:
   rules:
   - record: gitlab:stage_group:traffic_share:ratio_28d
     expr: |
-      ceil(
-        (
-          sum by (environment,product_stage,stage_group) (
-            label_replace(
+      sum by (environment,product_stage,stage_group) (
+        label_replace(
               sum by (environment,product_stage,stage_group)(
                 sum by (component,environment,product_stage,stage_group)(
                   sum_over_time(
@@ -112,8 +110,8 @@ groups:
               ),
               'violation_type', 'apdex' , '', ''
             )
-            or
-            label_replace(
+        or
+        label_replace(
               sum by (environment,product_stage,stage_group)(
                 sum by (component,environment,product_stage,stage_group)(
                   sum_over_time(
@@ -124,14 +122,10 @@ groups:
               ),
               'violation_type', 'error' , '', ''
             )
-          ) > 0
-        ) * 60
-      )
+      ) > 0
       / ignoring(stage_group,product_stage) group_left()
-      ceil(
-        (
-          sum by (environment) (
-            label_replace(
+      sum by (environment) (
+        label_replace(
               sum by (environment)(
                 sum by (component,environment,stage_group)(
                   sum_over_time(
@@ -141,8 +135,8 @@ groups:
               ),
               'violation_type', 'apdex' , '', ''
             )
-            or
-            label_replace(
+        or
+        label_replace(
               sum by (environment)(
                 sum by (component,environment,stage_group)(
                   sum_over_time(
@@ -153,6 +147,4 @@ groups:
               ),
               'violation_type', 'error' , '', ''
             )
-          ) > 0
-        ) * 60
-      )
+      ) > 0

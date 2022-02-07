@@ -123,30 +123,12 @@ local errorBudgetViolationRate(range, groupSelectors, aggregationLabels, ignoreC
       ) %(ignoreCondition)s
     )
   ||| % partsInterpolation;
-
-  // We're calculating an absolute number of failures from a failure rate
-  // this means we don't have an exact precision, but only a request per second
-  // number that we turn into an absolute number. To display a number of requests
-  // over multiple days, the decimals don't matter anymore, so we're rounding them
-  // up using `ceil`.
-  //
-  // The per-second-rates are sampled every minute, we assume that we continue
-  // to receive the same number of requests per second until the next sample.
-  // So we multiply the rate by the number of samples we don't have.
-  // For example: the last sample said we were processing 2RPS, next time we'll
-  // take a sample will be in 60s, so in that time we assume to process
-  // 60 * 2 = 120 requests.
-  // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1123
   |||
-    ceil(
-      (
-        sum by (%(aggregationLabelsWithViolationType)s) (
-          %(apdexViolationRate)s
-          or
-          %(errorRate)s
-        ) > 0
-      ) * 60
-    )
+    sum by (%(aggregationLabelsWithViolationType)s) (
+      %(apdexViolationRate)s
+      or
+      %(errorRate)s
+    ) > 0
   ||| % {
     aggregationLabelsWithViolationType: aggregations.join(aggregationLabels),
     apdexViolationRate: strings.indent(labels.addStaticLabel('violation_type', 'apdex', apdexViolationRate), 6),
@@ -175,15 +157,11 @@ local errorBudgetOperationRate(range, groupSelectors, aggregationLabels, ignoreC
     )
   ||| % partsInterpolation;
   |||
-    ceil(
-      (
-        sum by (%(aggregationLabelsWithViolationType)s) (
-          %(apdexOperationRate)s
-          or
-          %(errorOperationRate)s
-        ) > 0
-      ) * 60
-    )
+    sum by (%(aggregationLabelsWithViolationType)s) (
+      %(apdexOperationRate)s
+      or
+      %(errorOperationRate)s
+    ) > 0
   ||| % {
     aggregationLabelsWithViolationType: aggregations.join(aggregationLabels),
     apdexOperationRate: strings.indent(labels.addStaticLabel('violation_type', 'apdex', apdexOperationRate), 6),
