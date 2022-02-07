@@ -8,6 +8,8 @@ local validator = import 'utils/validator.libsonnet';
 local severities = std.set(['s1', 's2', 's3', 's4']);
 local environmentLabels = ['environment', 'tier', 'type', 'stage'];
 
+local capacityPlanningStrategies = std.set(['quantile95_1w', 'quantile99_1w', 'quantile95_1h']);
+
 local sloValidator = validator.validator(function(v) v > 0 && v <= 1, 'SLO threshold should be in the range (0,1]');
 
 local quantileValidator = validator.validator(function(v) std.isNumber(v) && (v > 0 && v < 1) || v == 'max', 'value should be in the range (0,1) or the string "max"');
@@ -22,6 +24,7 @@ local definitionValidor = validator.new({
   resourceLabels: validator.array,
   query: validator.string,
   quantileAggregation: quantileValidator,
+  capacityPlanningStrategy: validator.setMember(capacityPlanningStrategies),
   slos: {
     soft: sloValidator,
     hard: sloValidator,
@@ -50,6 +53,7 @@ local defaults = {
   alertRunbook: 'docs/{{ $labels.type }}/README.md',
   dangerouslyThanosEvaluated: false,
   quantileAggregation: 'max',
+  capacityPlanningStrategy: 'quantile95_1h',
 };
 
 local validateAndApplyDefaults(definition) =
@@ -182,6 +186,7 @@ local resourceSaturationPoint = function(options)
           component: componentName,
           horiz_scaling: if definition.horizontallyScalable then 'yes' else 'no',
           severity: definition.severity,
+          capacity_planning_strategy: definition.capacityPlanningStrategy,
           quantile: if std.isNumber(definition.quantileAggregation) then
             '%g' % [definition.quantileAggregation]
           else

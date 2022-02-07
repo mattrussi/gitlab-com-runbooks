@@ -23,6 +23,7 @@ local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
     |||,
     grafana_dashboard_uid: 'sat_pg_vacuum_activity',
     resourceLabels: [],
+    capacityPlanningStrategy: 'quantile95_1w',  // Use a p95 value over a 1 week period for capacity planning
     query: |||
       (
         sum by (%(aggregationLabels)s) (
