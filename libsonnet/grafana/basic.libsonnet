@@ -175,6 +175,7 @@ local validateTags(tags) =
     description=null,
     includeStandardEnvironmentAnnotations=true,
     includeEnvironmentTemplate=true,
+    uid=null,
   )::
     local dashboard =
       grafana.dashboard.new(
@@ -192,7 +193,11 @@ local validateTags(tags) =
         time_from=time_from,
         time_to=time_to,
       )
-      .addTemplate(templates.ds);  // All dashboards include the `ds` variable
+      .addTemplate(templates.ds)  // All dashboards include the `ds` variable
+      +
+      {
+        [if uid != null then 'uid']: uid,
+      };
 
     local dashboardWithAnnotations = if includeStandardEnvironmentAnnotations then
       dashboard

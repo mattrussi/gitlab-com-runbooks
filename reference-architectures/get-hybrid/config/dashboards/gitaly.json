@@ -83,9 +83,9 @@
       "icon": "dashboard",
       "includeVars": true,
       "keepTime": true,
-      "tags": "type:webservice",
+      "tags": "type:gitaly",
       "targetBlank": false,
-      "title": "webservice Detail",
+      "title": "gitaly Detail",
       "type": "dashboards",
       "url": ""
     },
@@ -96,11 +96,11 @@
       "keepTime": true,
       "tags": [
         "managed",
-        "type:webservice",
+        "type:gitaly",
         "kube detail"
       ],
       "targetBlank": false,
-      "title": "☸️ webservice Kubernetes Detail",
+      "title": "☸️ gitaly Kubernetes Detail",
       "type": "dashboards",
       "url": ""
     }
@@ -140,7 +140,7 @@
         "x": 0,
         "y": 1
       },
-      "id": 2472992903,
+      "id": 3357097446,
       "legend": {
         "alignAsTable": true,
         "avg": true,
@@ -160,8 +160,8 @@
         "dataLinks": [
           {
             "targetBlank": true,
-            "title": "webservice Service Apdex SLO Analysis",
-            "url": "/d/alerts-service_slo_apdex?${__url_time_range}\u0026${__all_variables}\u0026var-type=webservice"
+            "title": "gitaly Service Apdex SLO Analysis",
+            "url": "/d/alerts-service_slo_apdex?${__url_time_range}\u0026${__all_variables}\u0026var-type=gitaly"
           }
         ]
       },
@@ -207,15 +207,15 @@
           "zindex": -2
         },
         {
-          "alias": "webservice apdex",
+          "alias": "gitaly apdex",
           "color": "#E7D551",
           "zindex": 3
         },
         {
-          "alias": "webservice apdex avg",
+          "alias": "gitaly apdex avg",
           "color": "#5794F2",
           "dashLength": 1,
-          "fillBelowTo": "webservice apdex",
+          "fillBelowTo": "gitaly apdex",
           "linewidth": 1,
           "spaceLength": 1,
           "zindex": -3
@@ -235,20 +235,20 @@
         }
       ],
       "spaceLength": 10,
-      "stableId": "service-webservice-apdex",
+      "stableId": "service-gitaly-apdex",
       "stack": false,
       "steppedLine": false,
       "targets": [
         {
-          "expr": "min_over_time(gitlab_service_apdex:ratio_5m{type=\"webservice\"}[$__interval])\n",
+          "expr": "min_over_time(gitlab_service_apdex:ratio_5m{type=\"gitaly\"}[$__interval])\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 3,
-          "legendFormat": "webservice apdex",
+          "legendFormat": "gitaly apdex",
           "refId": "A"
         },
         {
-          "expr": "(1 - 6 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"\",monitor=\"global\",type=\"webservice\"})\n))\n",
+          "expr": "(1 - 6 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"\",monitor=\"global\",type=\"gitaly\"})\n))\n",
           "format": "time_series",
           "interval": "5m",
           "intervalFactor": 3,
@@ -256,7 +256,7 @@
           "refId": "B"
         },
         {
-          "expr": "(1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"\",monitor=\"global\",type=\"webservice\"})\n))\n",
+          "expr": "(1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"\",monitor=\"global\",type=\"gitaly\"})\n))\n",
           "format": "time_series",
           "interval": "5m",
           "intervalFactor": 3,
@@ -264,15 +264,15 @@
           "refId": "C"
         },
         {
-          "expr": "avg_over_time(gitlab_service_apdex:ratio_5m{type=\"webservice\"}[$__interval])\n",
+          "expr": "avg_over_time(gitlab_service_apdex:ratio_5m{type=\"gitaly\"}[$__interval])\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 3,
-          "legendFormat": "webservice apdex avg",
+          "legendFormat": "gitaly apdex avg",
           "refId": "D"
         },
         {
-          "expr": "clamp_min(\n  gitlab_service_apdex:ratio_5m{type=\"webservice\"} offset 1w\n,\n  scalar(min((1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"\",monitor=\"global\",type=\"webservice\"})\n))\n))\n)\n",
+          "expr": "clamp_min(\n  gitlab_service_apdex:ratio_5m{type=\"gitaly\"} offset 1w\n,\n  scalar(min((1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"\",monitor=\"global\",type=\"gitaly\"})\n))\n))\n)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 3,
@@ -280,7 +280,7 @@
           "refId": "E"
         }
       ],
-      "title": "webservice Service Apdex",
+      "title": "gitaly Service Apdex",
       "tooltip": {
         "shared": true,
         "sort": 1,
@@ -496,12 +496,12 @@
       "pluginVersion": "7",
       "targets": [
         {
-          "expr": "sum(\n  label_replace(\n    vector(0) and on() (gitlab_service_apdex:ratio_1h{type=\"webservice\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on () (gitlab_service_apdex:ratio_5m{type=\"webservice\"} \u003c on(tier, type) group_left() (1 - (14.4 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"\",monitor=\"global\",type=\"webservice\"})))),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on () (gitlab_service_apdex:ratio_1h{type=\"webservice\"} \u003c on(tier, type) group_left() (1 - (14.4 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"\",monitor=\"global\",type=\"webservice\"})))),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on () (gitlab_service_apdex:ratio_30m{type=\"webservice\"} \u003c on(tier, type) group_left() (1 - (6 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"\",monitor=\"global\",type=\"webservice\"})))),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on () (gitlab_service_apdex:ratio_6h{type=\"webservice\"} \u003c on(tier, type) group_left() (1 - (6 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"\",monitor=\"global\",type=\"webservice\"})))),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
+          "expr": "sum(\n  label_replace(\n    vector(0) and on() (gitlab_service_apdex:ratio_1h{type=\"gitaly\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on () (gitlab_service_apdex:ratio_5m{type=\"gitaly\"} \u003c on(tier, type) group_left() (1 - (14.4 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"\",monitor=\"global\",type=\"gitaly\"})))),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on () (gitlab_service_apdex:ratio_1h{type=\"gitaly\"} \u003c on(tier, type) group_left() (1 - (14.4 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"\",monitor=\"global\",type=\"gitaly\"})))),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on () (gitlab_service_apdex:ratio_30m{type=\"gitaly\"} \u003c on(tier, type) group_left() (1 - (6 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"\",monitor=\"global\",type=\"gitaly\"})))),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on () (gitlab_service_apdex:ratio_6h{type=\"gitaly\"} \u003c on(tier, type) group_left() (1 - (6 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"\",monitor=\"global\",type=\"gitaly\"})))),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
           "format": "time_series",
           "instant": true,
           "interval": "1m",
           "intervalFactor": 3,
-          "legendFormat": "webservice Service | Latency/Apdex",
+          "legendFormat": "gitaly Service | Latency/Apdex",
           "refId": "A"
         }
       ],
@@ -524,7 +524,7 @@
         "x": 8,
         "y": 1
       },
-      "id": 1986258045,
+      "id": 1516035415,
       "legend": {
         "alignAsTable": true,
         "avg": true,
@@ -544,8 +544,8 @@
         "dataLinks": [
           {
             "targetBlank": true,
-            "title": "webservice Service Error-Rate SLO Analysis",
-            "url": "/d/alerts-service_slo_error?${__url_time_range}\u0026${__all_variables}\u0026var-type=webservice"
+            "title": "gitaly Service Error-Rate SLO Analysis",
+            "url": "/d/alerts-service_slo_error?${__url_time_range}\u0026${__all_variables}\u0026var-type=gitaly"
           }
         ]
       },
@@ -579,13 +579,13 @@
           "zindex": -2
         },
         {
-          "alias": "webservice error ratio",
+          "alias": "gitaly error ratio",
           "color": "#E7D551",
-          "fillBelowTo": "webservice error ratio avg",
+          "fillBelowTo": "gitaly error ratio avg",
           "zindex": 3
         },
         {
-          "alias": "webservice error ratio avg",
+          "alias": "gitaly error ratio avg",
           "color": "#5794F2",
           "dashLength": 1,
           "fillGradient": 10,
@@ -608,20 +608,20 @@
         }
       ],
       "spaceLength": 10,
-      "stableId": "service-webservice-error-rate",
+      "stableId": "service-gitaly-error-rate",
       "stack": false,
       "steppedLine": false,
       "targets": [
         {
-          "expr": "clamp_max(\n  max_over_time(gitlab_service_errors:ratio_5m{type=\"webservice\"}[$__interval])\n,\n  1\n)\n",
+          "expr": "clamp_max(\n  max_over_time(gitlab_service_errors:ratio_5m{type=\"gitaly\"}[$__interval])\n,\n  1\n)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 3,
-          "legendFormat": "webservice error ratio",
+          "legendFormat": "gitaly error ratio",
           "refId": "A"
         },
         {
-          "expr": "(6 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"\",monitor=\"global\",type=\"webservice\"})\n)\n",
+          "expr": "(6 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"\",monitor=\"global\",type=\"gitaly\"})\n)\n",
           "format": "time_series",
           "interval": "5m",
           "intervalFactor": 3,
@@ -629,7 +629,7 @@
           "refId": "B"
         },
         {
-          "expr": "(14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"\",monitor=\"global\",type=\"webservice\"})\n)\n",
+          "expr": "(14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"\",monitor=\"global\",type=\"gitaly\"})\n)\n",
           "format": "time_series",
           "interval": "5m",
           "intervalFactor": 3,
@@ -637,15 +637,15 @@
           "refId": "C"
         },
         {
-          "expr": "clamp_max(\n  avg_over_time(gitlab_service_errors:ratio_5m{type=\"webservice\"}[$__interval])\n,\n  1\n)\n",
+          "expr": "clamp_max(\n  avg_over_time(gitlab_service_errors:ratio_5m{type=\"gitaly\"}[$__interval])\n,\n  1\n)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 3,
-          "legendFormat": "webservice error ratio avg",
+          "legendFormat": "gitaly error ratio avg",
           "refId": "D"
         },
         {
-          "expr": "clamp_max(\n  gitlab_service_errors:ratio_5m{type=\"webservice\"} offset 1w\n,\n  scalar(max((14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"\",monitor=\"global\",type=\"webservice\"})\n)\n))\n)\n",
+          "expr": "clamp_max(\n  gitlab_service_errors:ratio_5m{type=\"gitaly\"} offset 1w\n,\n  scalar(max((14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"\",monitor=\"global\",type=\"gitaly\"})\n)\n))\n)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 3,
@@ -653,7 +653,7 @@
           "refId": "E"
         }
       ],
-      "title": "webservice Service Error Ratio",
+      "title": "gitaly Service Error Ratio",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -869,12 +869,12 @@
       "pluginVersion": "7",
       "targets": [
         {
-          "expr": "sum (\n  label_replace(\n    vector(0) and on() (gitlab_service_errors:ratio_1h{type=\"webservice\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on() (gitlab_service_errors:ratio_5m{type=\"webservice\"} \u003e on(tier, type) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"\",monitor=\"global\",type=\"webservice\"})),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on() (gitlab_service_errors:ratio_1h{type=\"webservice\"} \u003e on(tier, type) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"\",monitor=\"global\",type=\"webservice\"})),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on() (gitlab_service_errors:ratio_30m{type=\"webservice\"} \u003e on(tier, type) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"\",monitor=\"global\",type=\"webservice\"})),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on() (gitlab_service_errors:ratio_6h{type=\"webservice\"} \u003e on(tier, type) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"\",monitor=\"global\",type=\"webservice\"})),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
+          "expr": "sum (\n  label_replace(\n    vector(0) and on() (gitlab_service_errors:ratio_1h{type=\"gitaly\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on() (gitlab_service_errors:ratio_5m{type=\"gitaly\"} \u003e on(tier, type) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"\",monitor=\"global\",type=\"gitaly\"})),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on() (gitlab_service_errors:ratio_1h{type=\"gitaly\"} \u003e on(tier, type) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"\",monitor=\"global\",type=\"gitaly\"})),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on() (gitlab_service_errors:ratio_30m{type=\"gitaly\"} \u003e on(tier, type) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"\",monitor=\"global\",type=\"gitaly\"})),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on() (gitlab_service_errors:ratio_6h{type=\"gitaly\"} \u003e on(tier, type) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"\",monitor=\"global\",type=\"gitaly\"})),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
           "format": "time_series",
           "instant": true,
           "interval": "1m",
           "intervalFactor": 3,
-          "legendFormat": "webservice Service | Errors",
+          "legendFormat": "gitaly Service | Errors",
           "refId": "A"
         }
       ],
@@ -897,7 +897,7 @@
         "x": 16,
         "y": 1
       },
-      "id": 3557202357,
+      "id": 2537651300,
       "legend": {
         "alignAsTable": true,
         "avg": true,
@@ -919,7 +919,7 @@
       "renderer": "flot",
       "seriesOverrides": [
         {
-          "alias": "webservice RPS",
+          "alias": "gitaly RPS",
           "color": "#E7D551",
           "zindex": 3
         },
@@ -963,20 +963,20 @@
         }
       ],
       "spaceLength": 10,
-      "stableId": "service-webservice-ops-rate",
+      "stableId": "service-gitaly-ops-rate",
       "stack": false,
       "steppedLine": false,
       "targets": [
         {
-          "expr": "avg_over_time(gitlab_service_ops:rate_5m{type=\"webservice\"}[$__interval])\n",
+          "expr": "avg_over_time(gitlab_service_ops:rate_5m{type=\"gitaly\"}[$__interval])\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 3,
-          "legendFormat": "webservice RPS",
+          "legendFormat": "gitaly RPS",
           "refId": "A"
         },
         {
-          "expr": "gitlab_service_ops:rate_5m{type=\"webservice\"} offset 1w\n",
+          "expr": "gitlab_service_ops:rate_5m{type=\"gitaly\"} offset 1w\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 3,
@@ -984,7 +984,7 @@
           "refId": "B"
         },
         {
-          "expr": "clamp_min(\n  avg by (type) (\n    gitlab_service_ops:rate:prediction{monitor=\"global\",type=\"webservice\"}\n    + (1) *\n    gitlab_service_ops:rate:stddev_over_time_1w{monitor=\"global\",type=\"webservice\"}\n  ),\n  0\n)\n",
+          "expr": "clamp_min(\n  avg by (type) (\n    gitlab_service_ops:rate:prediction{monitor=\"global\",type=\"gitaly\"}\n    + (1) *\n    gitlab_service_ops:rate:stddev_over_time_1w{monitor=\"global\",type=\"gitaly\"}\n  ),\n  0\n)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 3,
@@ -992,7 +992,7 @@
           "refId": "C"
         },
         {
-          "expr": "clamp_min(\n  avg by (type) (\n    gitlab_service_ops:rate:prediction{monitor=\"global\",type=\"webservice\"}\n    + (-1) *\n    gitlab_service_ops:rate:stddev_over_time_1w{monitor=\"global\",type=\"webservice\"}\n  ),\n  0\n)\n",
+          "expr": "clamp_min(\n  avg by (type) (\n    gitlab_service_ops:rate:prediction{monitor=\"global\",type=\"gitaly\"}\n    + (-1) *\n    gitlab_service_ops:rate:stddev_over_time_1w{monitor=\"global\",type=\"gitaly\"}\n  ),\n  0\n)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 3,
@@ -1000,7 +1000,7 @@
           "refId": "D"
         }
       ],
-      "title": "webservice Service RPS - Requests per Second",
+      "title": "gitaly Service RPS - Requests per Second",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -1062,7 +1062,7 @@
         "x": 0,
         "y": 21
       },
-      "id": 561966508,
+      "id": 877804374,
       "legend": {
         "alignAsTable": true,
         "avg": true,
@@ -1082,8 +1082,8 @@
         "dataLinks": [
           {
             "targetBlank": true,
-            "title": "puma SLI Apdex SLO Analysis",
-            "url": "/d/alerts-component_slo_apdex?${__url_time_range}\u0026${__all_variables}\u0026var-component=puma\u0026var-type=webservice"
+            "title": "goserver SLI Apdex SLO Analysis",
+            "url": "/d/alerts-component_slo_apdex?${__url_time_range}\u0026${__all_variables}\u0026var-component=goserver\u0026var-type=gitaly"
           }
         ]
       },
@@ -1129,15 +1129,15 @@
           "zindex": -2
         },
         {
-          "alias": "puma apdex",
+          "alias": "goserver apdex",
           "color": "#E7D551",
           "zindex": 3
         },
         {
-          "alias": "puma apdex avg",
+          "alias": "goserver apdex avg",
           "color": "#5794F2",
           "dashLength": 1,
-          "fillBelowTo": "puma apdex",
+          "fillBelowTo": "goserver apdex",
           "linewidth": 1,
           "spaceLength": 1,
           "zindex": -3
@@ -1157,20 +1157,20 @@
         }
       ],
       "spaceLength": 10,
-      "stableId": "sli-puma-apdex",
+      "stableId": "sli-goserver-apdex",
       "stack": false,
       "steppedLine": false,
       "targets": [
         {
-          "expr": "min_over_time(gitlab_component_apdex:ratio_5m{component=\"puma\",type=\"webservice\"}[$__interval])\n",
+          "expr": "min_over_time(gitlab_component_apdex:ratio_5m{component=\"goserver\",type=\"gitaly\"}[$__interval])\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 3,
-          "legendFormat": "puma apdex",
+          "legendFormat": "goserver apdex",
           "refId": "A"
         },
         {
-          "expr": "(1 - 6 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"puma\",monitor=\"global\",type=\"webservice\"})\n))\n",
+          "expr": "(1 - 6 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"goserver\",monitor=\"global\",type=\"gitaly\"})\n))\n",
           "format": "time_series",
           "interval": "5m",
           "intervalFactor": 3,
@@ -1178,7 +1178,7 @@
           "refId": "B"
         },
         {
-          "expr": "(1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"puma\",monitor=\"global\",type=\"webservice\"})\n))\n",
+          "expr": "(1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"goserver\",monitor=\"global\",type=\"gitaly\"})\n))\n",
           "format": "time_series",
           "interval": "5m",
           "intervalFactor": 3,
@@ -1186,15 +1186,15 @@
           "refId": "C"
         },
         {
-          "expr": "avg_over_time(gitlab_component_apdex:ratio_5m{component=\"puma\",type=\"webservice\"}[$__interval])\n",
+          "expr": "avg_over_time(gitlab_component_apdex:ratio_5m{component=\"goserver\",type=\"gitaly\"}[$__interval])\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 3,
-          "legendFormat": "puma apdex avg",
+          "legendFormat": "goserver apdex avg",
           "refId": "D"
         },
         {
-          "expr": "clamp_min(\n  gitlab_component_apdex:ratio_5m{component=\"puma\",type=\"webservice\"} offset 1w\n,\n  scalar(min((1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"puma\",monitor=\"global\",type=\"webservice\"})\n))\n))\n)\n",
+          "expr": "clamp_min(\n  gitlab_component_apdex:ratio_5m{component=\"goserver\",type=\"gitaly\"} offset 1w\n,\n  scalar(min((1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"goserver\",monitor=\"global\",type=\"gitaly\"})\n))\n))\n)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 3,
@@ -1202,7 +1202,7 @@
           "refId": "E"
         }
       ],
-      "title": "puma SLI Apdex",
+      "title": "goserver SLI Apdex",
       "tooltip": {
         "shared": true,
         "sort": 1,
@@ -1418,12 +1418,12 @@
       "pluginVersion": "7",
       "targets": [
         {
-          "expr": "sum(\n  label_replace(\n    vector(0) and on() (gitlab_component_apdex:ratio_1h{component=\"puma\",type=\"webservice\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on () (gitlab_component_apdex:ratio_5m{component=\"puma\",type=\"webservice\"} \u003c on(tier, type) group_left() (1 - (14.4 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"puma\",monitor=\"global\",type=\"webservice\"})))),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on () (gitlab_component_apdex:ratio_1h{component=\"puma\",type=\"webservice\"} \u003c on(tier, type) group_left() (1 - (14.4 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"puma\",monitor=\"global\",type=\"webservice\"})))),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on () (gitlab_component_apdex:ratio_30m{component=\"puma\",type=\"webservice\"} \u003c on(tier, type) group_left() (1 - (6 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"puma\",monitor=\"global\",type=\"webservice\"})))),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on () (gitlab_component_apdex:ratio_6h{component=\"puma\",type=\"webservice\"} \u003c on(tier, type) group_left() (1 - (6 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"puma\",monitor=\"global\",type=\"webservice\"})))),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
+          "expr": "sum(\n  label_replace(\n    vector(0) and on() (gitlab_component_apdex:ratio_1h{component=\"goserver\",type=\"gitaly\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on () (gitlab_component_apdex:ratio_5m{component=\"goserver\",type=\"gitaly\"} \u003c on(tier, type) group_left() (1 - (14.4 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"goserver\",monitor=\"global\",type=\"gitaly\"})))),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on () (gitlab_component_apdex:ratio_1h{component=\"goserver\",type=\"gitaly\"} \u003c on(tier, type) group_left() (1 - (14.4 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"goserver\",monitor=\"global\",type=\"gitaly\"})))),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on () (gitlab_component_apdex:ratio_30m{component=\"goserver\",type=\"gitaly\"} \u003c on(tier, type) group_left() (1 - (6 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"goserver\",monitor=\"global\",type=\"gitaly\"})))),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on () (gitlab_component_apdex:ratio_6h{component=\"goserver\",type=\"gitaly\"} \u003c on(tier, type) group_left() (1 - (6 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"goserver\",monitor=\"global\",type=\"gitaly\"})))),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
           "format": "time_series",
           "instant": true,
           "interval": "1m",
           "intervalFactor": 3,
-          "legendFormat": "puma SLI | Latency/Apdex",
+          "legendFormat": "goserver SLI | Latency/Apdex",
           "refId": "A"
         }
       ],
@@ -1446,7 +1446,7 @@
         "x": 6,
         "y": 21
       },
-      "id": 2425637513,
+      "id": 594670537,
       "legend": {
         "alignAsTable": true,
         "avg": true,
@@ -1466,8 +1466,8 @@
         "dataLinks": [
           {
             "targetBlank": true,
-            "title": "puma SLI Error-Rate SLO Analysis",
-            "url": "/d/alerts-component_slo_error?${__url_time_range}\u0026${__all_variables}\u0026var-component=puma\u0026var-type=webservice"
+            "title": "goserver SLI Error-Rate SLO Analysis",
+            "url": "/d/alerts-component_slo_error?${__url_time_range}\u0026${__all_variables}\u0026var-component=goserver\u0026var-type=gitaly"
           }
         ]
       },
@@ -1501,13 +1501,13 @@
           "zindex": -2
         },
         {
-          "alias": "puma error ratio",
+          "alias": "goserver error ratio",
           "color": "#E7D551",
-          "fillBelowTo": "puma error ratio avg",
+          "fillBelowTo": "goserver error ratio avg",
           "zindex": 3
         },
         {
-          "alias": "puma error ratio avg",
+          "alias": "goserver error ratio avg",
           "color": "#5794F2",
           "dashLength": 1,
           "fillGradient": 10,
@@ -1530,20 +1530,20 @@
         }
       ],
       "spaceLength": 10,
-      "stableId": "sli-puma-error-rate",
+      "stableId": "sli-goserver-error-rate",
       "stack": false,
       "steppedLine": false,
       "targets": [
         {
-          "expr": "clamp_max(\n  max_over_time(gitlab_component_errors:ratio_5m{component=\"puma\",type=\"webservice\"}[$__interval])\n,\n  1\n)\n",
+          "expr": "clamp_max(\n  max_over_time(gitlab_component_errors:ratio_5m{component=\"goserver\",type=\"gitaly\"}[$__interval])\n,\n  1\n)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 3,
-          "legendFormat": "puma error ratio",
+          "legendFormat": "goserver error ratio",
           "refId": "A"
         },
         {
-          "expr": "(6 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"puma\",monitor=\"global\",type=\"webservice\"})\n)\n",
+          "expr": "(6 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"goserver\",monitor=\"global\",type=\"gitaly\"})\n)\n",
           "format": "time_series",
           "interval": "5m",
           "intervalFactor": 3,
@@ -1551,7 +1551,7 @@
           "refId": "B"
         },
         {
-          "expr": "(14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"puma\",monitor=\"global\",type=\"webservice\"})\n)\n",
+          "expr": "(14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"goserver\",monitor=\"global\",type=\"gitaly\"})\n)\n",
           "format": "time_series",
           "interval": "5m",
           "intervalFactor": 3,
@@ -1559,15 +1559,15 @@
           "refId": "C"
         },
         {
-          "expr": "clamp_max(\n  avg_over_time(gitlab_component_errors:ratio_5m{component=\"puma\",type=\"webservice\"}[$__interval])\n,\n  1\n)\n",
+          "expr": "clamp_max(\n  avg_over_time(gitlab_component_errors:ratio_5m{component=\"goserver\",type=\"gitaly\"}[$__interval])\n,\n  1\n)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 3,
-          "legendFormat": "puma error ratio avg",
+          "legendFormat": "goserver error ratio avg",
           "refId": "D"
         },
         {
-          "expr": "clamp_max(\n  gitlab_component_errors:ratio_5m{component=\"puma\",type=\"webservice\"} offset 1w\n,\n  scalar(max((14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"puma\",monitor=\"global\",type=\"webservice\"})\n)\n))\n)\n",
+          "expr": "clamp_max(\n  gitlab_component_errors:ratio_5m{component=\"goserver\",type=\"gitaly\"} offset 1w\n,\n  scalar(max((14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"goserver\",monitor=\"global\",type=\"gitaly\"})\n)\n))\n)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 3,
@@ -1575,7 +1575,7 @@
           "refId": "E"
         }
       ],
-      "title": "puma SLI Error Ratio",
+      "title": "goserver SLI Error Ratio",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -1791,12 +1791,12 @@
       "pluginVersion": "7",
       "targets": [
         {
-          "expr": "sum (\n  label_replace(\n    vector(0) and on() (gitlab_component_errors:ratio_1h{component=\"puma\",type=\"webservice\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on() (gitlab_component_errors:ratio_5m{component=\"puma\",type=\"webservice\"} \u003e on(tier, type) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"puma\",monitor=\"global\",type=\"webservice\"})),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on() (gitlab_component_errors:ratio_1h{component=\"puma\",type=\"webservice\"} \u003e on(tier, type) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"puma\",monitor=\"global\",type=\"webservice\"})),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on() (gitlab_component_errors:ratio_30m{component=\"puma\",type=\"webservice\"} \u003e on(tier, type) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"puma\",monitor=\"global\",type=\"webservice\"})),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on() (gitlab_component_errors:ratio_6h{component=\"puma\",type=\"webservice\"} \u003e on(tier, type) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"puma\",monitor=\"global\",type=\"webservice\"})),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
+          "expr": "sum (\n  label_replace(\n    vector(0) and on() (gitlab_component_errors:ratio_1h{component=\"goserver\",type=\"gitaly\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on() (gitlab_component_errors:ratio_5m{component=\"goserver\",type=\"gitaly\"} \u003e on(tier, type) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"goserver\",monitor=\"global\",type=\"gitaly\"})),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on() (gitlab_component_errors:ratio_1h{component=\"goserver\",type=\"gitaly\"} \u003e on(tier, type) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"goserver\",monitor=\"global\",type=\"gitaly\"})),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on() (gitlab_component_errors:ratio_30m{component=\"goserver\",type=\"gitaly\"} \u003e on(tier, type) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"goserver\",monitor=\"global\",type=\"gitaly\"})),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on() (gitlab_component_errors:ratio_6h{component=\"goserver\",type=\"gitaly\"} \u003e on(tier, type) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"goserver\",monitor=\"global\",type=\"gitaly\"})),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
           "format": "time_series",
           "instant": true,
           "interval": "1m",
           "intervalFactor": 3,
-          "legendFormat": "puma SLI | Errors",
+          "legendFormat": "goserver SLI | Errors",
           "refId": "A"
         }
       ],
@@ -1819,7 +1819,7 @@
         "x": 12,
         "y": 21
       },
-      "id": 110019945,
+      "id": 1687078843,
       "legend": {
         "alignAsTable": true,
         "avg": true,
@@ -1841,7 +1841,7 @@
       "renderer": "flot",
       "seriesOverrides": [
         {
-          "alias": "puma RPS",
+          "alias": "goserver RPS",
           "color": "#E7D551",
           "zindex": 3
         },
@@ -1860,20 +1860,20 @@
         }
       ],
       "spaceLength": 10,
-      "stableId": "sli-puma-ops-rate",
+      "stableId": "sli-goserver-ops-rate",
       "stack": false,
       "steppedLine": false,
       "targets": [
         {
-          "expr": "avg_over_time(gitlab_component_ops:rate_5m{component=\"puma\",type=\"webservice\"}[$__interval])\n",
+          "expr": "avg_over_time(gitlab_component_ops:rate_5m{component=\"goserver\",type=\"gitaly\"}[$__interval])\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 3,
-          "legendFormat": "puma RPS",
+          "legendFormat": "goserver RPS",
           "refId": "A"
         },
         {
-          "expr": "gitlab_component_ops:rate_5m{component=\"puma\",type=\"webservice\"} offset 1w\n",
+          "expr": "gitlab_component_ops:rate_5m{component=\"goserver\",type=\"gitaly\"} offset 1w\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 3,
@@ -1881,7 +1881,7 @@
           "refId": "B"
         }
       ],
-      "title": "puma SLI RPS - Requests per Second",
+      "title": "goserver SLI RPS - Requests per Second",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -1910,7 +1910,7 @@
       ]
     },
     {
-      "content": "### Description\n\nAggregation of most web requests that pass through the puma to the GitLab rails monolith.\nHealthchecks are excluded.\n\n\n\n### Observability Tools\n\n\n",
+      "content": "### Description\n\nThis SLI monitors all Gitaly GRPC requests in aggregate, excluding the OperationService.\nGRPC failures which are considered to be the \"server's fault\" are counted as errors.\nThe apdex score is based on a subset of GRPC methods which are expected to be fast.\n\n\n\n### Observability Tools\n\n\n",
       "gridPos": {
         "h": 8,
         "w": 6,
@@ -1973,7 +1973,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le) (\n    rate(http_request_duration_seconds_bucket{job=\"gitlab-rails\"}[$__interval])\n  )\n)\n \u003e 0",
+              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le) (\n    rate(grpc_server_handling_seconds_bucket{grpc_method!~\"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|SSHUploadPackWithSidechannel|UpdateHook\",grpc_service!=\"gitaly.OperationService\",grpc_type=\"unary\",job=\"gitaly\"}[$__interval])\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 2,
@@ -1988,7 +1988,7 @@
               "fillColor": "rgba(242, 73, 92, 0.5)",
               "line": false,
               "op": "gt",
-              "value": 10,
+              "value": 1,
               "yaxis": "left"
             },
             {
@@ -1997,11 +1997,11 @@
               "fillColor": "rgba(242, 73, 92, 0.25)",
               "line": false,
               "op": "gt",
-              "value": 1,
+              "value": 0.5,
               "yaxis": "left"
             }
           ],
-          "title": "Estimated p95 puma Latency - Overall",
+          "title": "Estimated p95 goserver Latency - Overall",
           "tooltip": {
             "shared": true,
             "sort": 2,
@@ -2069,7 +2069,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by () (\n  rate(http_requests_total{job=\"gitlab-rails\",status=~\"5..\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by () (\n  label_replace(rate(gitaly_service_client_requests_total{grpc_code!~\"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|Unauthenticated\",grpc_service!=\"gitaly.OperationService\",job=\"gitaly\"}[$__interval]), \"_c\", \"0\", \"\", \"\")\n  or\n  label_replace(rate(gitaly_service_client_requests_total{deadline_type!=\"limited\",grpc_code=\"DeadlineExceeded\",grpc_service!=\"gitaly.OperationService\",job=\"gitaly\"}[$__interval]), \"_c\", \"1\", \"\", \"\")\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 2,
@@ -2077,7 +2077,7 @@
               "refId": "A"
             }
           ],
-          "title": "puma Errors - Overall",
+          "title": "goserver Errors - Overall",
           "tooltip": {
             "shared": true,
             "sort": 2,
@@ -2145,7 +2145,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by () (\n  rate(http_requests_total{job=\"gitlab-rails\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by () (\n  rate(gitaly_service_client_requests_total{grpc_service!=\"gitaly.OperationService\",job=\"gitaly\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 2,
@@ -2153,7 +2153,336 @@
               "refId": "A"
             }
           ],
-          "title": "puma RPS - Overall",
+          "title": "goserver RPS - Overall",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "mode": "time",
+            "show": true
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": "Requests per Second",
+              "logBase": 1,
+              "min": 0,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "max": 1,
+              "min": 0,
+              "show": false
+            }
+          ]
+        },
+        {
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "$PROMETHEUS_DS",
+          "decimals": 2,
+          "description": "",
+          "fill": 0,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 6,
+            "x": 0,
+            "y": 10
+          },
+          "id": 19,
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "hideEmpty": true,
+            "max": true,
+            "min": true,
+            "rightSide": false,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 2,
+          "nullPointMode": "null",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le,node) (\n    rate(grpc_server_handling_seconds_bucket{grpc_method!~\"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|SSHUploadPackWithSidechannel|UpdateHook\",grpc_service!=\"gitaly.OperationService\",grpc_type=\"unary\",job=\"gitaly\",node!=\"\"}[$__interval])\n  )\n)\n \u003e 0",
+              "format": "time_series",
+              "interval": "1m",
+              "intervalFactor": 2,
+              "legendFormat": "p95 {{node}}",
+              "refId": "A"
+            }
+          ],
+          "thresholds": [
+            {
+              "colorMode": "custom",
+              "fill": true,
+              "fillColor": "rgba(242, 73, 92, 0.5)",
+              "line": false,
+              "op": "gt",
+              "value": 1,
+              "yaxis": "left"
+            },
+            {
+              "colorMode": "custom",
+              "fill": true,
+              "fillColor": "rgba(242, 73, 92, 0.25)",
+              "line": false,
+              "op": "gt",
+              "value": 0.5,
+              "yaxis": "left"
+            }
+          ],
+          "title": "Estimated p95 goserver Latency - per node",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "mode": "time",
+            "show": true
+          },
+          "yaxes": [
+            {
+              "format": "s",
+              "label": "Duration",
+              "logBase": 10,
+              "min": 0.01,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "max": 1,
+              "min": 0,
+              "show": false
+            }
+          ]
+        },
+        {
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "$PROMETHEUS_DS",
+          "decimals": 2,
+          "description": "Attributes apdex downscoring",
+          "fill": 4,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 6,
+            "x": 6,
+            "y": 10
+          },
+          "id": 20,
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "hideEmpty": true,
+            "max": true,
+            "min": true,
+            "rightSide": false,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [
+            {
+              "alias": "/.*/",
+              "transform": "negative-Y"
+            }
+          ],
+          "spaceLength": 10,
+          "stack": true,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "clamp_min(clamp_max((\n  (\n    sum by (node) (\n  rate(grpc_server_handling_seconds_bucket{grpc_method!~\"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|SSHUploadPackWithSidechannel|UpdateHook\",grpc_service!=\"gitaly.OperationService\",grpc_type=\"unary\",job=\"gitaly\",le=\"+Inf\",node!=\"\"}[$__interval])\n)\n\n    -\n    (\n      (\n  sum by (node) (\n    rate(grpc_server_handling_seconds_bucket{grpc_method!~\"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|SSHUploadPackWithSidechannel|UpdateHook\",grpc_service!=\"gitaly.OperationService\",grpc_type=\"unary\",job=\"gitaly\",le=\"0.5\",node!=\"\"}[$__interval])\n  )\n  +\n  sum by (node) (\n    rate(grpc_server_handling_seconds_bucket{grpc_method!~\"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|SSHUploadPackWithSidechannel|UpdateHook\",grpc_service!=\"gitaly.OperationService\",grpc_type=\"unary\",job=\"gitaly\",le=\"1\",node!=\"\"}[$__interval])\n  )\n)\n/\n2\n\n    )\n  )\n  / ignoring(node) group_left()\n  (\n    sum by () (\n  rate(grpc_server_handling_seconds_bucket{grpc_method!~\"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|SSHUploadPackWithSidechannel|UpdateHook\",grpc_service!=\"gitaly.OperationService\",grpc_type=\"unary\",job=\"gitaly\",le=\"+Inf\",node!=\"\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
+              "format": "time_series",
+              "interval": "1m",
+              "intervalFactor": 3,
+              "legendFormat": "{{node}}",
+              "refId": "A"
+            }
+          ],
+          "title": "Apdex attribution for goserver Latency - per node",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "mode": "time",
+            "show": true
+          },
+          "yaxes": [
+            {
+              "format": "percentunit",
+              "label": "Percent",
+              "logBase": 1,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "max": 1,
+              "min": 0,
+              "show": false
+            }
+          ]
+        },
+        {
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "$PROMETHEUS_DS",
+          "decimals": 2,
+          "description": "",
+          "fill": 0,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 6,
+            "x": 12,
+            "y": 10
+          },
+          "id": 21,
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "hideEmpty": true,
+            "max": true,
+            "min": true,
+            "rightSide": false,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 2,
+          "nullPointMode": "null",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "sum by (node) (\n  label_replace(rate(gitaly_service_client_requests_total{grpc_code!~\"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|Unauthenticated\",grpc_service!=\"gitaly.OperationService\",job=\"gitaly\",node!=\"\"}[$__interval]), \"_c\", \"0\", \"\", \"\")\n  or\n  label_replace(rate(gitaly_service_client_requests_total{deadline_type!=\"limited\",grpc_code=\"DeadlineExceeded\",grpc_service!=\"gitaly.OperationService\",job=\"gitaly\",node!=\"\"}[$__interval]), \"_c\", \"1\", \"\", \"\")\n)\n \u003e 0",
+              "format": "time_series",
+              "interval": "1m",
+              "intervalFactor": 2,
+              "legendFormat": "{{node}}",
+              "refId": "A"
+            }
+          ],
+          "title": "goserver Errors - per node",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "mode": "time",
+            "show": true
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": "Errors",
+              "logBase": 1,
+              "min": 0,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "max": 1,
+              "min": 0,
+              "show": false
+            }
+          ]
+        },
+        {
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "$PROMETHEUS_DS",
+          "decimals": 0,
+          "description": "",
+          "fill": 0,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 6,
+            "x": 18,
+            "y": 10
+          },
+          "id": 22,
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "hideEmpty": true,
+            "max": true,
+            "min": true,
+            "rightSide": false,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 2,
+          "nullPointMode": "null",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "sum by (node) (\n  rate(gitaly_service_client_requests_total{grpc_service!=\"gitaly.OperationService\",job=\"gitaly\",node!=\"\"}[$__interval])\n)\n \u003e 0",
+              "format": "time_series",
+              "interval": "1m",
+              "intervalFactor": 2,
+              "legendFormat": "{{node}}",
+              "refId": "A"
+            }
+          ],
+          "title": "goserver RPS - per node",
           "tooltip": {
             "shared": true,
             "sort": 2,
@@ -2186,7 +2515,7 @@
       "repeatIteration": null,
       "repeatRowId": null,
       "showTitle": true,
-      "title": "🔬 SLI Detail: puma",
+      "title": "🔬 SLI Detail: goserver",
       "titleSize": "h6",
       "type": "row"
     },
@@ -2199,7 +2528,7 @@
         "x": 0,
         "y": 110000
       },
-      "id": 19,
+      "id": 23,
       "mode": "markdown",
       "title": "Source",
       "type": "text"
@@ -2211,8 +2540,8 @@
   "style": "light",
   "tags": [
     "gitlab",
-    "type:webservice",
-    "webservice",
+    "type:gitaly",
+    "gitaly",
     "service overview"
   ],
   "templating": {
@@ -2258,7 +2587,7 @@
     ]
   },
   "timezone": "utc",
-  "title": "webservice Service Overview",
-  "uid": "webservice-main",
+  "title": "gitaly Service Overview",
+  "uid": "gitaly-main",
   "version": 0
 }

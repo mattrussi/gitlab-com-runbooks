@@ -2,8 +2,8 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local rateMetric = metricsCatalog.rateMetric;
 local gaugeMetric = metricsCatalog.gaugeMetric;
 local histogramApdex = metricsCatalog.histogramApdex;
-local gitalyHelpers = import './lib/gitaly-helpers.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
+local gitalyHelper = import 'service-archetypes/helpers/gitaly.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'praefect',
@@ -28,7 +28,7 @@ metricsCatalog.serviceDefinition({
       |||,
 
       local baseSelector = { job: 'praefect' },
-      apdex: gitalyHelpers.grpcServiceApdex(baseSelector),
+      apdex: gitalyHelper.grpcServiceApdex(baseSelector),
 
       requestRate: rateMetric(
         counter='grpc_server_handled_total',

@@ -7,8 +7,10 @@ std.foldl(
       ['dashboards/%(type)s.json' % service]:
         serviceDashboard.overview(
           service.type,
+          title='%(type)s Service Overview' % service,
           showProvisioningDetails=false,
-          showSystemDiagrams=false
+          showSystemDiagrams=false,
+          uid='%(type)s-main' % service,
         )
         .overviewTrailer(),
     },
