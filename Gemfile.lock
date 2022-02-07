@@ -264,6 +264,7 @@ DEPENDENCIES
   danger-gitlab
   digest-crc
   etc
+  gitlab
   gitlab-styles (~> 6.2)
   google-cloud-storage
   io-console

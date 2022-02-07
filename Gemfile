@@ -8,6 +8,7 @@ gem 'google-cloud-storage'
 gem 'io-console'
 gem 'json'
 gem 'digest-crc'
+gem 'gitlab'
 
 group :development, :test do
   gem 'rake'
