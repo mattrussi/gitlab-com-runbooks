@@ -40,14 +40,18 @@ local rules = {
       rules: [{
         record: 'gitlab:stage_group:traffic_share:ratio_28d',
         expr: |||
-          %(operationRateByStageGroup)s
+          (
+            %(operationRateByStageGroup)s
+          )
           / ignoring(%(groupLabels)s) group_left()
-          %(operationRateByEnvironment)s
+          (
+            %(operationRateByEnvironment)s
+          )
         ||| % {
           operationRateByStageGroup:
-            strings.chomp(errorBudget.queries.errorBudgetOperationRate(selector, aggregationLabels)),
+            strings.indent(strings.chomp(errorBudget.queries.errorBudgetOperationRate(selector, aggregationLabels)), 2),
           operationRateByEnvironment:
-            strings.chomp(errorBudget.queries.errorBudgetOperationRate(selector, environmentLabels)),
+            strings.indent(strings.chomp(errorBudget.queries.errorBudgetOperationRate(selector, environmentLabels)), 2),
           groupLabels: aggregations.serialize(groupLabels),
         },
       }],
