@@ -15,5 +15,7 @@ std.foldl(
         .overviewTrailer(),
     },
   services,
-  {}
+  {
+    'dashboards/triage.json': import 'triage.libsonnet',
+  }
 )

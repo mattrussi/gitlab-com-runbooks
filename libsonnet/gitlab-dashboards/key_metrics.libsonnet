@@ -17,7 +17,6 @@ local managedDashboardsForService(serviceType) =
     pluginVersion: '7.2.0',
     limit: 10,
     tags: [
-      'managed',
       'type:' + serviceType,
     ],
     search: true,
