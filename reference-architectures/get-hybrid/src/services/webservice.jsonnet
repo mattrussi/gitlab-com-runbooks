@@ -64,6 +64,14 @@ metricsCatalog.serviceDefinition({
       toolingLinks: [],
     },
 
+    local workhorseSelector = {
+      route: {
+        ne: [
+          '^/-/health$',
+          '^/-/(readiness|liveness)$',
+        ],
+      },
+    },
     workhorse: {
       userImpacting: true,
       featureCategory: 'not_owned',
@@ -75,12 +83,10 @@ metricsCatalog.serviceDefinition({
 
       apdex: histogramApdex(
         histogram='gitlab_workhorse_http_request_duration_seconds_bucket',
-        selector=workhorseWebSelector {
-          route: {
-            ne: [
+        selector=workhorseSelector {
+          route+: {
+            ne+: [
               '^/([^/]+/){1,}[^/]+/uploads\\\\z',
-              '^/-/health$',
-              '^/-/(readiness|liveness)$',
               // Technically none of these git endpoints should end up in cny, but sometimes they do,
               // so exclude them from apdex
               '^/([^/]+/){1,}[^/]+\\\\.git/git-receive-pack\\\\z',
@@ -96,14 +102,13 @@ metricsCatalog.serviceDefinition({
 
       requestRate: rateMetric(
         counter='gitlab_workhorse_http_requests_total',
-        selector=workhorseWebSelector,
+        selector=workhorseSelector,
       ),
 
       errorRate: rateMetric(
         counter='gitlab_workhorse_http_requests_total',
-        selector=workhorseWebSelector {
+        selector=workhorseSelector {
           code: { re: '^5.*' },
-          route: { ne: ['^/-/health$', '^/-/(readiness|liveness)$'] },
         },
       ),
 

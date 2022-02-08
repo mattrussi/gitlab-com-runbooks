@@ -1923,6 +1923,881 @@
       "type": "text"
     },
     {
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "$PROMETHEUS_DS",
+      "decimals": 2,
+      "description": "Apdex is a measure of requests that complete within a tolerable period of time for the service. Higher is better.",
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 7,
+        "w": 6,
+        "x": 0,
+        "y": 31
+      },
+      "id": 2586818196,
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "hideEmpty": true,
+        "max": true,
+        "min": true,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": [
+          {
+            "targetBlank": true,
+            "title": "workhorse SLI Apdex SLO Analysis",
+            "url": "/d/alerts-component_slo_apdex?${__url_time_range}\u0026${__all_variables}\u0026var-component=workhorse\u0026var-type=webservice"
+          }
+        ]
+      },
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "6h Degradation SLO (5% of monthly error budget)",
+          "color": "#FF4500",
+          "dashLength": 4,
+          "dashes": true,
+          "legend": true,
+          "lines": true,
+          "linewidth": 2,
+          "nullPointMode": "connected",
+          "spaceLength": 10,
+          "zindex": -2
+        },
+        {
+          "alias": "1h Outage SLO (2% of monthly error budget)",
+          "color": "#F2495C",
+          "dashLength": 4,
+          "dashes": true,
+          "legend": true,
+          "lines": true,
+          "linewidth": 4,
+          "nullPointMode": "connected",
+          "spaceLength": 4,
+          "zindex": -2
+        },
+        {
+          "alias": "SLO",
+          "color": "#FF4500",
+          "dashLength": 4,
+          "dashes": true,
+          "legend": true,
+          "lines": true,
+          "linewidth": 4,
+          "nullPointMode": "connected",
+          "spaceLength": 4,
+          "zindex": -2
+        },
+        {
+          "alias": "workhorse apdex",
+          "color": "#E7D551",
+          "zindex": 3
+        },
+        {
+          "alias": "workhorse apdex avg",
+          "color": "#5794F2",
+          "dashLength": 1,
+          "fillBelowTo": "workhorse apdex",
+          "linewidth": 1,
+          "spaceLength": 1,
+          "zindex": -3
+        },
+        {
+          "alias": "last week",
+          "color": "#dddddd80",
+          "dashLength": 4,
+          "dashes": true,
+          "fill": 0,
+          "legend": true,
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "connected",
+          "spaceLength": 2,
+          "zindex": -3
+        }
+      ],
+      "spaceLength": 10,
+      "stableId": "sli-workhorse-apdex",
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "min_over_time(gitlab_component_apdex:ratio_5m{component=\"workhorse\",type=\"webservice\"}[$__interval])\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 3,
+          "legendFormat": "workhorse apdex",
+          "refId": "A"
+        },
+        {
+          "expr": "(1 - 6 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"workhorse\",monitor=\"global\",type=\"webservice\"})\n))\n",
+          "format": "time_series",
+          "interval": "5m",
+          "intervalFactor": 3,
+          "legendFormat": "6h Degradation SLO (5% of monthly error budget)",
+          "refId": "B"
+        },
+        {
+          "expr": "(1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"workhorse\",monitor=\"global\",type=\"webservice\"})\n))\n",
+          "format": "time_series",
+          "interval": "5m",
+          "intervalFactor": 3,
+          "legendFormat": "1h Outage SLO (2% of monthly error budget)",
+          "refId": "C"
+        },
+        {
+          "expr": "avg_over_time(gitlab_component_apdex:ratio_5m{component=\"workhorse\",type=\"webservice\"}[$__interval])\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 3,
+          "legendFormat": "workhorse apdex avg",
+          "refId": "D"
+        },
+        {
+          "expr": "clamp_min(\n  gitlab_component_apdex:ratio_5m{component=\"workhorse\",type=\"webservice\"} offset 1w\n,\n  scalar(min((1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"workhorse\",monitor=\"global\",type=\"webservice\"})\n))\n))\n)\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 3,
+          "legendFormat": "last week",
+          "refId": "E"
+        }
+      ],
+      "title": "workhorse SLI Apdex",
+      "tooltip": {
+        "shared": true,
+        "sort": 1,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "mode": "time",
+        "show": true
+      },
+      "yaxes": [
+        {
+          "format": "percentunit",
+          "label": "Apdex %",
+          "logBase": 1,
+          "max": 1,
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "max": 1,
+          "min": 0,
+          "show": false
+        }
+      ]
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "displayName": "Status",
+          "mappings": [
+            {
+              "id": 0,
+              "options": {
+                "0": {
+                  "color": "black",
+                  "index": 0,
+                  "text": "Healthy"
+                },
+                "1": {
+                  "color": "orange",
+                  "index": 1,
+                  "text": "Warning 🔥"
+                },
+                "10": {
+                  "color": "orange",
+                  "index": 10,
+                  "text": "Warning 🔥🥵"
+                },
+                "11": {
+                  "color": "red",
+                  "index": 11,
+                  "text": "Degraded 🔥🥵"
+                },
+                "12": {
+                  "color": "red",
+                  "index": 12,
+                  "text": "Degraded 🥵"
+                },
+                "13": {
+                  "color": "red",
+                  "index": 13,
+                  "text": "Degraded 🔥🥵"
+                },
+                "14": {
+                  "color": "red",
+                  "index": 14,
+                  "text": "Degraded 🔥🥵"
+                },
+                "15": {
+                  "color": "red",
+                  "index": 15,
+                  "text": "Degraded 🔥🥵"
+                },
+                "2": {
+                  "color": "orange",
+                  "index": 2,
+                  "text": "Warning 🔥"
+                },
+                "3": {
+                  "color": "red",
+                  "index": 3,
+                  "text": "Degraded 🔥"
+                },
+                "4": {
+                  "color": "orange",
+                  "index": 4,
+                  "text": "Warning 🥵"
+                },
+                "5": {
+                  "color": "orange",
+                  "index": 5,
+                  "text": "Warning 🔥🥵"
+                },
+                "6": {
+                  "color": "orange",
+                  "index": 6,
+                  "text": "Warning 🔥🥵"
+                },
+                "7": {
+                  "color": "red",
+                  "index": 7,
+                  "text": "Degraded 🔥🥵"
+                },
+                "8": {
+                  "color": "orange",
+                  "index": 8,
+                  "text": "Warning 🥵"
+                },
+                "9": {
+                  "color": "orange",
+                  "index": 9,
+                  "text": "Warning 🔥🥵"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "black",
+                "value": 0
+              },
+              {
+                "color": "orange",
+                "value": 1
+              },
+              {
+                "color": "orange",
+                "value": 2
+              },
+              {
+                "color": "red",
+                "value": 3
+              },
+              {
+                "color": "orange",
+                "value": 4
+              },
+              {
+                "color": "orange",
+                "value": 5
+              },
+              {
+                "color": "orange",
+                "value": 6
+              },
+              {
+                "color": "red",
+                "value": 7
+              },
+              {
+                "color": "orange",
+                "value": 8
+              },
+              {
+                "color": "orange",
+                "value": 9
+              },
+              {
+                "color": "orange",
+                "value": 10
+              },
+              {
+                "color": "red",
+                "value": 11
+              },
+              {
+                "color": "red",
+                "value": 12
+              },
+              {
+                "color": "red",
+                "value": 13
+              },
+              {
+                "color": "red",
+                "value": 14
+              },
+              {
+                "color": "red",
+                "value": 15
+              }
+            ]
+          },
+          "unit": "none"
+        }
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 6,
+        "x": 0,
+        "y": 38
+      },
+      "id": 16,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "vertical",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "7",
+      "targets": [
+        {
+          "expr": "sum(\n  label_replace(\n    vector(0) and on() (gitlab_component_apdex:ratio_1h{component=\"workhorse\",type=\"webservice\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on () (gitlab_component_apdex:ratio_5m{component=\"workhorse\",type=\"webservice\"} \u003c on(tier, type) group_left() (1 - (14.4 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"workhorse\",monitor=\"global\",type=\"webservice\"})))),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on () (gitlab_component_apdex:ratio_1h{component=\"workhorse\",type=\"webservice\"} \u003c on(tier, type) group_left() (1 - (14.4 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"workhorse\",monitor=\"global\",type=\"webservice\"})))),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on () (gitlab_component_apdex:ratio_30m{component=\"workhorse\",type=\"webservice\"} \u003c on(tier, type) group_left() (1 - (6 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"workhorse\",monitor=\"global\",type=\"webservice\"})))),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on () (gitlab_component_apdex:ratio_6h{component=\"workhorse\",type=\"webservice\"} \u003c on(tier, type) group_left() (1 - (6 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"workhorse\",monitor=\"global\",type=\"webservice\"})))),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
+          "format": "time_series",
+          "instant": true,
+          "interval": "1m",
+          "intervalFactor": 3,
+          "legendFormat": "workhorse SLI | Latency/Apdex",
+          "refId": "A"
+        }
+      ],
+      "title": "",
+      "transparent": false,
+      "type": "stat"
+    },
+    {
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "$PROMETHEUS_DS",
+      "decimals": 2,
+      "description": "Error rates are a measure of unhandled service exceptions per second. Client errors are excluded when possible. Lower is better",
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 7,
+        "w": 6,
+        "x": 6,
+        "y": 31
+      },
+      "id": 2047984749,
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "hideEmpty": true,
+        "max": true,
+        "min": true,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": [
+          {
+            "targetBlank": true,
+            "title": "workhorse SLI Error-Rate SLO Analysis",
+            "url": "/d/alerts-component_slo_error?${__url_time_range}\u0026${__all_variables}\u0026var-component=workhorse\u0026var-type=webservice"
+          }
+        ]
+      },
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "6h Degradation SLO (5% of monthly error budget)",
+          "color": "#FF4500",
+          "dashLength": 4,
+          "dashes": true,
+          "legend": true,
+          "lines": true,
+          "linewidth": 2,
+          "nullPointMode": "connected",
+          "spaceLength": 10,
+          "zindex": -2
+        },
+        {
+          "alias": "1h Outage SLO (2% of monthly error budget)",
+          "color": "#F2495C",
+          "dashLength": 4,
+          "dashes": true,
+          "legend": true,
+          "lines": true,
+          "linewidth": 4,
+          "nullPointMode": "connected",
+          "spaceLength": 4,
+          "zindex": -2
+        },
+        {
+          "alias": "workhorse error ratio",
+          "color": "#E7D551",
+          "fillBelowTo": "workhorse error ratio avg",
+          "zindex": 3
+        },
+        {
+          "alias": "workhorse error ratio avg",
+          "color": "#5794F2",
+          "dashLength": 1,
+          "fillGradient": 10,
+          "linewidth": 1,
+          "spaceLength": 1,
+          "zindex": -3
+        },
+        {
+          "alias": "last week",
+          "color": "#dddddd80",
+          "dashLength": 4,
+          "dashes": true,
+          "fill": 0,
+          "legend": true,
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "connected",
+          "spaceLength": 2,
+          "zindex": -3
+        }
+      ],
+      "spaceLength": 10,
+      "stableId": "sli-workhorse-error-rate",
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "clamp_max(\n  max_over_time(gitlab_component_errors:ratio_5m{component=\"workhorse\",type=\"webservice\"}[$__interval])\n,\n  1\n)\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 3,
+          "legendFormat": "workhorse error ratio",
+          "refId": "A"
+        },
+        {
+          "expr": "(6 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"workhorse\",monitor=\"global\",type=\"webservice\"})\n)\n",
+          "format": "time_series",
+          "interval": "5m",
+          "intervalFactor": 3,
+          "legendFormat": "6h Degradation SLO (5% of monthly error budget)",
+          "refId": "B"
+        },
+        {
+          "expr": "(14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"workhorse\",monitor=\"global\",type=\"webservice\"})\n)\n",
+          "format": "time_series",
+          "interval": "5m",
+          "intervalFactor": 3,
+          "legendFormat": "1h Outage SLO (2% of monthly error budget)",
+          "refId": "C"
+        },
+        {
+          "expr": "clamp_max(\n  avg_over_time(gitlab_component_errors:ratio_5m{component=\"workhorse\",type=\"webservice\"}[$__interval])\n,\n  1\n)\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 3,
+          "legendFormat": "workhorse error ratio avg",
+          "refId": "D"
+        },
+        {
+          "expr": "clamp_max(\n  gitlab_component_errors:ratio_5m{component=\"workhorse\",type=\"webservice\"} offset 1w\n,\n  scalar(max((14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"workhorse\",monitor=\"global\",type=\"webservice\"})\n)\n))\n)\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 3,
+          "legendFormat": "last week",
+          "refId": "E"
+        }
+      ],
+      "title": "workhorse SLI Error Ratio",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "mode": "time",
+        "show": true
+      },
+      "yaxes": [
+        {
+          "format": "percentunit",
+          "label": "Error %",
+          "logBase": 1,
+          "min": 0,
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "max": 1,
+          "min": 0,
+          "show": false
+        }
+      ]
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "displayName": "Status",
+          "mappings": [
+            {
+              "id": 0,
+              "options": {
+                "0": {
+                  "color": "black",
+                  "index": 0,
+                  "text": "Healthy"
+                },
+                "1": {
+                  "color": "orange",
+                  "index": 1,
+                  "text": "Warning 🔥"
+                },
+                "10": {
+                  "color": "orange",
+                  "index": 10,
+                  "text": "Warning 🔥🥵"
+                },
+                "11": {
+                  "color": "red",
+                  "index": 11,
+                  "text": "Degraded 🔥🥵"
+                },
+                "12": {
+                  "color": "red",
+                  "index": 12,
+                  "text": "Degraded 🥵"
+                },
+                "13": {
+                  "color": "red",
+                  "index": 13,
+                  "text": "Degraded 🔥🥵"
+                },
+                "14": {
+                  "color": "red",
+                  "index": 14,
+                  "text": "Degraded 🔥🥵"
+                },
+                "15": {
+                  "color": "red",
+                  "index": 15,
+                  "text": "Degraded 🔥🥵"
+                },
+                "2": {
+                  "color": "orange",
+                  "index": 2,
+                  "text": "Warning 🔥"
+                },
+                "3": {
+                  "color": "red",
+                  "index": 3,
+                  "text": "Degraded 🔥"
+                },
+                "4": {
+                  "color": "orange",
+                  "index": 4,
+                  "text": "Warning 🥵"
+                },
+                "5": {
+                  "color": "orange",
+                  "index": 5,
+                  "text": "Warning 🔥🥵"
+                },
+                "6": {
+                  "color": "orange",
+                  "index": 6,
+                  "text": "Warning 🔥🥵"
+                },
+                "7": {
+                  "color": "red",
+                  "index": 7,
+                  "text": "Degraded 🔥🥵"
+                },
+                "8": {
+                  "color": "orange",
+                  "index": 8,
+                  "text": "Warning 🥵"
+                },
+                "9": {
+                  "color": "orange",
+                  "index": 9,
+                  "text": "Warning 🔥🥵"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "black",
+                "value": 0
+              },
+              {
+                "color": "orange",
+                "value": 1
+              },
+              {
+                "color": "orange",
+                "value": 2
+              },
+              {
+                "color": "red",
+                "value": 3
+              },
+              {
+                "color": "orange",
+                "value": 4
+              },
+              {
+                "color": "orange",
+                "value": 5
+              },
+              {
+                "color": "orange",
+                "value": 6
+              },
+              {
+                "color": "red",
+                "value": 7
+              },
+              {
+                "color": "orange",
+                "value": 8
+              },
+              {
+                "color": "orange",
+                "value": 9
+              },
+              {
+                "color": "orange",
+                "value": 10
+              },
+              {
+                "color": "red",
+                "value": 11
+              },
+              {
+                "color": "red",
+                "value": 12
+              },
+              {
+                "color": "red",
+                "value": 13
+              },
+              {
+                "color": "red",
+                "value": 14
+              },
+              {
+                "color": "red",
+                "value": 15
+              }
+            ]
+          },
+          "unit": "none"
+        }
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 6,
+        "x": 6,
+        "y": 38
+      },
+      "id": 18,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "vertical",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "7",
+      "targets": [
+        {
+          "expr": "sum (\n  label_replace(\n    vector(0) and on() (gitlab_component_errors:ratio_1h{component=\"workhorse\",type=\"webservice\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on() (gitlab_component_errors:ratio_5m{component=\"workhorse\",type=\"webservice\"} \u003e on(tier, type) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"workhorse\",monitor=\"global\",type=\"webservice\"})),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on() (gitlab_component_errors:ratio_1h{component=\"workhorse\",type=\"webservice\"} \u003e on(tier, type) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"workhorse\",monitor=\"global\",type=\"webservice\"})),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on() (gitlab_component_errors:ratio_30m{component=\"workhorse\",type=\"webservice\"} \u003e on(tier, type) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"workhorse\",monitor=\"global\",type=\"webservice\"})),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on() (gitlab_component_errors:ratio_6h{component=\"workhorse\",type=\"webservice\"} \u003e on(tier, type) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"workhorse\",monitor=\"global\",type=\"webservice\"})),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
+          "format": "time_series",
+          "instant": true,
+          "interval": "1m",
+          "intervalFactor": 3,
+          "legendFormat": "workhorse SLI | Errors",
+          "refId": "A"
+        }
+      ],
+      "title": "",
+      "transparent": false,
+      "type": "stat"
+    },
+    {
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "$PROMETHEUS_DS",
+      "decimals": 2,
+      "description": "The operation rate is the sum total of all requests being handle for all components within this service. Note that a single user request can lead to requests to multiple components. Higher is busier.",
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 8,
+        "w": 6,
+        "x": 12,
+        "y": 31
+      },
+      "id": 831392945,
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "hideEmpty": true,
+        "max": true,
+        "min": true,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "workhorse RPS",
+          "color": "#E7D551",
+          "zindex": 3
+        },
+        {
+          "alias": "last week",
+          "color": "#dddddd80",
+          "dashLength": 4,
+          "dashes": true,
+          "fill": 0,
+          "legend": true,
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "connected",
+          "spaceLength": 2,
+          "zindex": -3
+        }
+      ],
+      "spaceLength": 10,
+      "stableId": "sli-workhorse-ops-rate",
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "avg_over_time(gitlab_component_ops:rate_5m{component=\"workhorse\",type=\"webservice\"}[$__interval])\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 3,
+          "legendFormat": "workhorse RPS",
+          "refId": "A"
+        },
+        {
+          "expr": "gitlab_component_ops:rate_5m{component=\"workhorse\",type=\"webservice\"} offset 1w\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 3,
+          "legendFormat": "last week",
+          "refId": "B"
+        }
+      ],
+      "title": "workhorse SLI RPS - Requests per Second",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "mode": "time",
+        "show": true
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": "Operations per Second",
+          "logBase": 1,
+          "min": 0,
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "max": 1,
+          "min": 0,
+          "show": false
+        }
+      ]
+    },
+    {
+      "content": "### Description\n\nAggregation of most web requests that pass through workhorse, monitored via the HTTP interface.\nExcludes health, readiness and liveness requests. Some known slow requests, such as HTTP uploads,\nare excluded from the apdex score.\n\n\n\n### Observability Tools\n\n\n",
+      "gridPos": {
+        "h": 8,
+        "w": 6,
+        "x": 18,
+        "y": 31
+      },
+      "id": 20,
+      "mode": "markdown",
+      "title": "Details",
+      "type": "text"
+    },
+    {
       "collapse": true,
       "collapsed": true,
       "gridPos": {
@@ -1931,7 +2806,7 @@
         "x": 0,
         "y": 100
       },
-      "id": 15,
+      "id": 21,
       "panels": [
         {
           "bars": false,
@@ -1948,7 +2823,7 @@
             "x": 0,
             "y": 0
           },
-          "id": 16,
+          "id": 22,
           "legend": {
             "alignAsTable": true,
             "avg": true,
@@ -2044,7 +2919,7 @@
             "x": 8,
             "y": 0
           },
-          "id": 17,
+          "id": 23,
           "legend": {
             "alignAsTable": true,
             "avg": true,
@@ -2120,7 +2995,7 @@
             "x": 16,
             "y": 0
           },
-          "id": 18,
+          "id": 24,
           "legend": {
             "alignAsTable": true,
             "avg": true,
@@ -2191,6 +3066,603 @@
       "type": "row"
     },
     {
+      "collapse": true,
+      "collapsed": true,
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 110
+      },
+      "id": 25,
+      "panels": [
+        {
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "$PROMETHEUS_DS",
+          "decimals": 2,
+          "description": "",
+          "fill": 0,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 8,
+            "x": 0,
+            "y": 0
+          },
+          "id": 26,
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "hideEmpty": true,
+            "max": true,
+            "min": true,
+            "rightSide": false,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 2,
+          "nullPointMode": "null",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{route!=\"^/-/health$\",route!=\"^/-/(readiness|liveness)$\",route!=\"^/([^/]+/){1,}[^/]+/uploads\\\\z\",route!=\"^/([^/]+/){1,}[^/]+\\\\.git/git-receive-pack\\\\z\",route!=\"^/([^/]+/){1,}[^/]+\\\\.git/git-upload-pack\\\\z\",route!=\"^/([^/]+/){1,}[^/]+\\\\.git/info/refs\\\\z\",route!=\"^/([^/]+/){1,}[^/]+\\\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\\\z\"}[$__interval])\n  )\n)\n \u003e 0",
+              "format": "time_series",
+              "interval": "1m",
+              "intervalFactor": 2,
+              "legendFormat": "p95 overall",
+              "refId": "A"
+            }
+          ],
+          "thresholds": [
+            {
+              "colorMode": "custom",
+              "fill": true,
+              "fillColor": "rgba(242, 73, 92, 0.5)",
+              "line": false,
+              "op": "gt",
+              "value": 10,
+              "yaxis": "left"
+            },
+            {
+              "colorMode": "custom",
+              "fill": true,
+              "fillColor": "rgba(242, 73, 92, 0.25)",
+              "line": false,
+              "op": "gt",
+              "value": 1,
+              "yaxis": "left"
+            }
+          ],
+          "title": "Estimated p95 workhorse Latency - Overall",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "mode": "time",
+            "show": true
+          },
+          "yaxes": [
+            {
+              "format": "s",
+              "label": "Duration",
+              "logBase": 10,
+              "min": 0.01,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "max": 1,
+              "min": 0,
+              "show": false
+            }
+          ]
+        },
+        {
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "$PROMETHEUS_DS",
+          "decimals": 2,
+          "description": "",
+          "fill": 0,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 8,
+            "x": 8,
+            "y": 0
+          },
+          "id": 27,
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "hideEmpty": true,
+            "max": true,
+            "min": true,
+            "rightSide": false,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 2,
+          "nullPointMode": "null",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "sum by () (\n  rate(gitlab_workhorse_http_requests_total{code=~\"^5.*\",route!=\"^/-/health$\",route!=\"^/-/(readiness|liveness)$\"}[$__interval])\n)\n \u003e 0",
+              "format": "time_series",
+              "interval": "1m",
+              "intervalFactor": 2,
+              "legendFormat": "overall",
+              "refId": "A"
+            }
+          ],
+          "title": "workhorse Errors - Overall",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "mode": "time",
+            "show": true
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": "Errors",
+              "logBase": 1,
+              "min": 0,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "max": 1,
+              "min": 0,
+              "show": false
+            }
+          ]
+        },
+        {
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "$PROMETHEUS_DS",
+          "decimals": 0,
+          "description": "",
+          "fill": 0,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 8,
+            "x": 16,
+            "y": 0
+          },
+          "id": 28,
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "hideEmpty": true,
+            "max": true,
+            "min": true,
+            "rightSide": false,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 2,
+          "nullPointMode": "null",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "sum by () (\n  rate(gitlab_workhorse_http_requests_total{route!=\"^/-/health$\",route!=\"^/-/(readiness|liveness)$\"}[$__interval])\n)\n \u003e 0",
+              "format": "time_series",
+              "interval": "1m",
+              "intervalFactor": 2,
+              "legendFormat": "overall",
+              "refId": "A"
+            }
+          ],
+          "title": "workhorse RPS - Overall",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "mode": "time",
+            "show": true
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": "Requests per Second",
+              "logBase": 1,
+              "min": 0,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "max": 1,
+              "min": 0,
+              "show": false
+            }
+          ]
+        },
+        {
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "$PROMETHEUS_DS",
+          "decimals": 2,
+          "description": "",
+          "fill": 0,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 6,
+            "x": 0,
+            "y": 10
+          },
+          "id": 29,
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "hideEmpty": true,
+            "max": true,
+            "min": true,
+            "rightSide": false,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 2,
+          "nullPointMode": "null",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le,route) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{route!=\"\"}[$__interval])\n  )\n)\n \u003e 0",
+              "format": "time_series",
+              "interval": "1m",
+              "intervalFactor": 2,
+              "legendFormat": "p95 {{route}}",
+              "refId": "A"
+            }
+          ],
+          "thresholds": [
+            {
+              "colorMode": "custom",
+              "fill": true,
+              "fillColor": "rgba(242, 73, 92, 0.5)",
+              "line": false,
+              "op": "gt",
+              "value": 10,
+              "yaxis": "left"
+            },
+            {
+              "colorMode": "custom",
+              "fill": true,
+              "fillColor": "rgba(242, 73, 92, 0.25)",
+              "line": false,
+              "op": "gt",
+              "value": 1,
+              "yaxis": "left"
+            }
+          ],
+          "title": "Estimated p95 workhorse Latency - per route",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "mode": "time",
+            "show": true
+          },
+          "yaxes": [
+            {
+              "format": "s",
+              "label": "Duration",
+              "logBase": 10,
+              "min": 0.01,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "max": 1,
+              "min": 0,
+              "show": false
+            }
+          ]
+        },
+        {
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "$PROMETHEUS_DS",
+          "decimals": 2,
+          "description": "Attributes apdex downscoring",
+          "fill": 4,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 6,
+            "x": 6,
+            "y": 10
+          },
+          "id": 30,
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "hideEmpty": true,
+            "max": true,
+            "min": true,
+            "rightSide": false,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [
+            {
+              "alias": "/.*/",
+              "transform": "negative-Y"
+            }
+          ],
+          "spaceLength": 10,
+          "stack": true,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "clamp_min(clamp_max((\n  (\n    sum by (route) (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{le=\"+Inf\",route!=\"\"}[$__interval])\n)\n\n    -\n    (\n      (\n  sum by (route) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{le=\"1\",route!=\"\"}[$__interval])\n  )\n  +\n  sum by (route) (\n    rate(gitlab_workhorse_http_request_duration_seconds_bucket{le=\"10\",route!=\"\"}[$__interval])\n  )\n)\n/\n2\n\n    )\n  )\n  / ignoring(route) group_left()\n  (\n    sum by () (\n  rate(gitlab_workhorse_http_request_duration_seconds_bucket{le=\"+Inf\",route!=\"\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
+              "format": "time_series",
+              "interval": "1m",
+              "intervalFactor": 3,
+              "legendFormat": "{{route}}",
+              "refId": "A"
+            }
+          ],
+          "title": "Apdex attribution for workhorse Latency - per route",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "mode": "time",
+            "show": true
+          },
+          "yaxes": [
+            {
+              "format": "percentunit",
+              "label": "Percent",
+              "logBase": 1,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "max": 1,
+              "min": 0,
+              "show": false
+            }
+          ]
+        },
+        {
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "$PROMETHEUS_DS",
+          "decimals": 2,
+          "description": "",
+          "fill": 0,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 6,
+            "x": 12,
+            "y": 10
+          },
+          "id": 31,
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "hideEmpty": true,
+            "max": true,
+            "min": true,
+            "rightSide": false,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 2,
+          "nullPointMode": "null",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "sum by (route) (\n  rate(gitlab_workhorse_http_requests_total{code=~\"^5.*\",route!=\"\"}[$__interval])\n)\n \u003e 0",
+              "format": "time_series",
+              "interval": "1m",
+              "intervalFactor": 2,
+              "legendFormat": "{{route}}",
+              "refId": "A"
+            }
+          ],
+          "title": "workhorse Errors - per route",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "mode": "time",
+            "show": true
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": "Errors",
+              "logBase": 1,
+              "min": 0,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "max": 1,
+              "min": 0,
+              "show": false
+            }
+          ]
+        },
+        {
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "$PROMETHEUS_DS",
+          "decimals": 0,
+          "description": "",
+          "fill": 0,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 6,
+            "x": 18,
+            "y": 10
+          },
+          "id": 32,
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "hideEmpty": true,
+            "max": true,
+            "min": true,
+            "rightSide": false,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 2,
+          "nullPointMode": "null",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "sum by (route) (\n  rate(gitlab_workhorse_http_requests_total{route!=\"\"}[$__interval])\n)\n \u003e 0",
+              "format": "time_series",
+              "interval": "1m",
+              "intervalFactor": 2,
+              "legendFormat": "{{route}}",
+              "refId": "A"
+            }
+          ],
+          "title": "workhorse RPS - per route",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "mode": "time",
+            "show": true
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": "Requests per Second",
+              "logBase": 1,
+              "min": 0,
+              "show": true
+            },
+            {
+              "format": "short",
+              "logBase": 1,
+              "max": 1,
+              "min": 0,
+              "show": false
+            }
+          ]
+        }
+      ],
+      "repeat": null,
+      "repeatIteration": null,
+      "repeatRowId": null,
+      "showTitle": true,
+      "title": "🔬 SLI Detail: workhorse",
+      "titleSize": "h6",
+      "type": "row"
+    },
+    {
       "content": "Made with ❤️ and [Grafonnet](https://github.com/grafana/grafonnet-lib). [Contribute to this dashboard on GitLab.com](https://gitlab.com/gitlab-com/runbooks/blob/master/dashboards)\n",
       "datasource": null,
       "gridPos": {
@@ -2199,7 +3671,7 @@
         "x": 0,
         "y": 110000
       },
-      "id": 19,
+      "id": 33,
       "mode": "markdown",
       "title": "Source",
       "type": "text"
