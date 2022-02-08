@@ -1,6 +1,7 @@
 local aggregationSets = import './aggregation-sets.libsonnet';
 local allServices = import './services/all.jsonnet';
 local objects = import 'utils/objects.libsonnet';
+local labelSet = (import 'label-taxonomy/label-set.libsonnet');
 
 // Site-wide configuration options
 {
@@ -13,7 +14,8 @@ local objects = import 'utils/objects.libsonnet';
 
   // Hash of all saturation metric types that are monitored on gitlab.com
   saturationMonitoring:: objects.mergeAll([
-    // TODO: add saturation monitoring
+    import 'saturation-monitoring/cpu.libsonnet',
+    import 'saturation-monitoring/single_node_cpu.libsonnet',
   ]),
 
   // Hash of all utilization metric types that are monitored on gitlab.com
@@ -46,4 +48,14 @@ local objects = import 'utils/objects.libsonnet';
 
   // Name of the default Prometheus datasource to use
   defaultPrometheusDatasource: 'default',
+
+  labelTaxonomy:: labelSet.makeLabelSet({
+    environmentThanos: null,  // No thanos
+    environment: null,  // Only one environment
+    tier: null,  // No tiers
+    service: 'type',
+    stage: null,  // No stages
+    shard: null,  // No shards
+    node: 'node',
+  }),
 }

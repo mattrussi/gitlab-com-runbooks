@@ -1110,7 +1110,7 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{fqdn!="", mode="idle", type=~"gitaly|camoproxy|ci-runners|consul|frontend|jaeger|monitoring|pages|patroni|patroni-registry|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-ci|praefect|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-sessions|redis|registry|sentry"}[5m]))
+            avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{mode="idle", type=~"gitaly|camoproxy|ci-runners|consul|frontend|jaeger|monitoring|pages|patroni|patroni-registry|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-ci|praefect|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-sessions|redis|registry|sentry"}[5m]))
             ,
             1)
         ,
@@ -2212,8 +2212,8 @@ groups:
     for: 5m
     annotations:
       title: The Cgroup Memory Utilization per Node resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -2259,8 +2259,8 @@ groups:
     for: 5m
     annotations:
       title: The Average Service CPU Utilization resource of the {{ $labels.type }}
-        service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        service ({{ $labels.stage }} stage) has a saturation exceeding SLO and is
+        close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -2298,8 +2298,8 @@ groups:
     for: 15m
     annotations:
       title: The Disk inode Utilization per Device per Node resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -2342,8 +2342,8 @@ groups:
     for: 15m
     annotations:
       title: The Disk Space Utilization per Device per Node resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -2382,8 +2382,8 @@ groups:
     for: 25m
     annotations:
       title: The Disk Sustained Read IOPS Utilization per Node resource of the {{
-        $labels.type }} service ({{ $labels.stage }} stage), component has a saturation
-        exceeding SLO and is close to its capacity limit.
+        $labels.type }} service ({{ $labels.stage }} stage) has a saturation exceeding
+        SLO and is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -2421,8 +2421,8 @@ groups:
     for: 25m
     annotations:
       title: The Disk Sustained Read Throughput Utilization per Node resource of the
-        {{ $labels.type }} service ({{ $labels.stage }} stage), component has a saturation
-        exceeding SLO and is close to its capacity limit.
+        {{ $labels.type }} service ({{ $labels.stage }} stage) has a saturation exceeding
+        SLO and is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -2460,8 +2460,8 @@ groups:
     for: 25m
     annotations:
       title: The Disk Sustained Write IOPS Utilization per Node resource of the {{
-        $labels.type }} service ({{ $labels.stage }} stage), component has a saturation
-        exceeding SLO and is close to its capacity limit.
+        $labels.type }} service ({{ $labels.stage }} stage) has a saturation exceeding
+        SLO and is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -2503,8 +2503,8 @@ groups:
     for: 25m
     annotations:
       title: The Disk Sustained Write Throughput Utilization per Node resource of
-        the {{ $labels.type }} service ({{ $labels.stage }} stage), component has
-        a saturation exceeding SLO and is close to its capacity limit.
+        the {{ $labels.type }} service ({{ $labels.stage }} stage) has a saturation
+        exceeding SLO and is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -2546,8 +2546,8 @@ groups:
     for: 5m
     annotations:
       title: The Average CPU Utilization per Node resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -2587,8 +2587,8 @@ groups:
     for: 5m
     annotations:
       title: The Disk Utilization Overall resource of the {{ $labels.type }} service
-        ({{ $labels.stage }} stage), component has a saturation exceeding SLO and
-        is close to its capacity limit.
+        ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
+        its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -2630,8 +2630,8 @@ groups:
     for: 5m
     annotations:
       title: The JVM Heap Utilization per Node resource of the {{ $labels.type }}
-        service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        service ({{ $labels.stage }} stage) has a saturation exceeding SLO and is
+        close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -2669,8 +2669,8 @@ groups:
     for: 5m
     annotations:
       title: The Average CPU Utilization per Node resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -2708,8 +2708,8 @@ groups:
     for: 5m
     annotations:
       title: The Disk Utilization per Device per Node resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -2753,8 +2753,8 @@ groups:
     for: 5m
     annotations:
       title: The Thread pool utilization resource of the {{ $labels.type }} service
-        ({{ $labels.stage }} stage), component has a saturation exceeding SLO and
-        is close to its capacity limit.
+        ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
+        its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -2796,8 +2796,8 @@ groups:
     for: 15m
     annotations:
       title: The GCP Quota utilization per environment resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -2842,8 +2842,8 @@ groups:
     for: 5m
     annotations:
       title: The Gitaly Total Disk Utilization resource of the {{ $labels.type }}
-        service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        service ({{ $labels.stage }} stage) has a saturation exceeding SLO and is
+        close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -2891,8 +2891,8 @@ groups:
     for: 5m
     annotations:
       title: The Go Memory Utilization per Node resource of the {{ $labels.type }}
-        service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        service ({{ $labels.stage }} stage) has a saturation exceeding SLO and is
+        close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -2934,8 +2934,8 @@ groups:
     for: 5m
     annotations:
       title: The Average CPU Utilization resource of the {{ $labels.type }} service
-        ({{ $labels.stage }} stage), component has a saturation exceeding SLO and
-        is close to its capacity limit.
+        ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
+        its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -2973,8 +2973,8 @@ groups:
     for: 15m
     annotations:
       title: The Grafana Trickster cache usage resource of the {{ $labels.type }}
-        service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        service ({{ $labels.stage }} stage) has a saturation exceeding SLO and is
+        close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -3018,8 +3018,8 @@ groups:
     for: 15m
     annotations:
       title: The Kube Container CPU Utilization resource of the {{ $labels.type }}
-        service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        service ({{ $labels.stage }} stage) has a saturation exceeding SLO and is
+        close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -3063,8 +3063,8 @@ groups:
     for: 15m
     annotations:
       title: The Kube Container Memory Utilization resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -3102,8 +3102,8 @@ groups:
     for: 5m
     annotations:
       title: The Go Memory Utilization per Node resource of the {{ $labels.type }}
-        service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        service ({{ $labels.stage }} stage) has a saturation exceeding SLO and is
+        close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -3153,8 +3153,8 @@ groups:
     for: 25m
     annotations:
       title: The Horizontal Pod Autoscaler Desired Replicas resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -3195,8 +3195,8 @@ groups:
     for: 5m
     annotations:
       title: The Kube Persistent Volume Claim Space Utilisation resource of the {{
-        $labels.type }} service ({{ $labels.stage }} stage), component has a saturation
-        exceeding SLO and is close to its capacity limit.
+        $labels.type }} service ({{ $labels.stage }} stage) has a saturation exceeding
+        SLO and is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -3235,8 +3235,8 @@ groups:
     for: 5m
     annotations:
       title: The Kube Persistent Volume Claim inode Utilisation resource of the {{
-        $labels.type }} service ({{ $labels.stage }} stage), component has a saturation
-        exceeding SLO and is close to its capacity limit.
+        $labels.type }} service ({{ $labels.stage }} stage) has a saturation exceeding
+        SLO and is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -3275,8 +3275,8 @@ groups:
     for: 5m
     annotations:
       title: The Average Node Pool CPU Utilization resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -3316,8 +3316,8 @@ groups:
     for: 5m
     annotations:
       title: The Memory Utilization per Node resource of the {{ $labels.type }} service
-        ({{ $labels.stage }} stage), component has a saturation exceeding SLO and
-        is close to its capacity limit.
+        ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
+        its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -3353,8 +3353,8 @@ groups:
     for: 5m
     annotations:
       title: The Cloud NAT Gateway Port Allocation resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -3411,8 +3411,8 @@ groups:
     for: 10m
     annotations:
       title: The Cloud NAT Host Port Allocation resource of the {{ $labels.type }}
-        service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        service ({{ $labels.stage }} stage) has a saturation exceeding SLO and is
+        close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -3472,8 +3472,8 @@ groups:
     for: 5m
     annotations:
       title: The conntrack Entries per Node resource of the {{ $labels.type }} service
-        ({{ $labels.stage }} stage), component has a saturation exceeding SLO and
-        is close to its capacity limit.
+        ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
+        its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -3513,8 +3513,8 @@ groups:
     for: 90m
     annotations:
       title: The Node Scheduler Waiting Time resource of the {{ $labels.type }} service
-        ({{ $labels.stage }} stage), component has a saturation exceeding SLO and
-        is close to its capacity limit.
+        ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
+        its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -3554,8 +3554,8 @@ groups:
     for: 5m
     annotations:
       title: The Open file descriptor utilization per instance resource of the {{
-        $labels.type }} service ({{ $labels.stage }} stage), component has a saturation
-        exceeding SLO and is close to its capacity limit.
+        $labels.type }} service ({{ $labels.stage }} stage) has a saturation exceeding
+        SLO and is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -3606,8 +3606,8 @@ groups:
     for: 5m
     annotations:
       title: The Active Primary DB Connection Utilization resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -3649,8 +3649,8 @@ groups:
     for: 5m
     annotations:
       title: The Active Secondary DB Connection Utilization resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -3692,8 +3692,8 @@ groups:
     for: 5m
     annotations:
       title: The Postgres btree bloat resource of the {{ $labels.type }} service ({{
-        $labels.stage }} stage), component has a saturation exceeding SLO and is close
-        to its capacity limit.
+        $labels.stage }} stage) has a saturation exceeding SLO and is close to its
+        capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -3733,8 +3733,8 @@ groups:
     for: 5m
     annotations:
       title: The Postgres int4 ID capacity resource of the {{ $labels.type }} service
-        ({{ $labels.stage }} stage), component has a saturation exceeding SLO and
-        is close to its capacity limit.
+        ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
+        its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -3775,8 +3775,8 @@ groups:
     for: 5m
     annotations:
       title: The Postgres Table Bloat resource of the {{ $labels.type }} service ({{
-        $labels.stage }} stage), component has a saturation exceeding SLO and is close
-        to its capacity limit.
+        $labels.stage }} stage) has a saturation exceeding SLO and is close to its
+        capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -3814,8 +3814,8 @@ groups:
     for: 5m
     annotations:
       title: The Total autovacuum time to TXID wraparound horizon resource of the
-        {{ $labels.type }} service ({{ $labels.stage }} stage), component has a saturation
-        exceeding SLO and is close to its capacity limit.
+        {{ $labels.type }} service ({{ $labels.stage }} stage) has a saturation exceeding
+        SLO and is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -3879,8 +3879,8 @@ groups:
     for: 60m
     annotations:
       title: The Postgres Autovacuum Activity resource of the {{ $labels.type }} service
-        ({{ $labels.stage }} stage), component has a saturation exceeding SLO and
-        is close to its capacity limit.
+        ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
+        its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -3938,8 +3938,8 @@ groups:
     for: 5m
     annotations:
       title: The Transaction ID Wraparound resource of the {{ $labels.type }} service
-        ({{ $labels.stage }} stage), component has a saturation exceeding SLO and
-        is close to its capacity limit.
+        ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
+        its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -4005,8 +4005,8 @@ groups:
     for: 10m
     annotations:
       title: The Postgres Async (Sidekiq) primary Connection Pool Utilization per
-        Node resource of the {{ $labels.type }} service ({{ $labels.stage }} stage),
-        component has a saturation exceeding SLO and is close to its capacity limit.
+        Node resource of the {{ $labels.type }} service ({{ $labels.stage }} stage)
+        has a saturation exceeding SLO and is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -4053,8 +4053,8 @@ groups:
     for: 10m
     annotations:
       title: The Postgres Async (Sidekiq) replica Connection Pool Utilization per
-        Node resource of the {{ $labels.type }} service ({{ $labels.stage }} stage),
-        component has a saturation exceeding SLO and is close to its capacity limit.
+        Node resource of the {{ $labels.type }} service ({{ $labels.stage }} stage)
+        has a saturation exceeding SLO and is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -4101,8 +4101,8 @@ groups:
     for: 5m
     annotations:
       title: The PGBouncer Client Connections per Process (Primary) resource of the
-        {{ $labels.type }} service ({{ $labels.stage }} stage), component has a saturation
-        exceeding SLO and is close to its capacity limit.
+        {{ $labels.type }} service ({{ $labels.stage }} stage) has a saturation exceeding
+        SLO and is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -4147,8 +4147,8 @@ groups:
     for: 5m
     annotations:
       title: The PGBouncer Client Connections per Process (Replicas) resource of the
-        {{ $labels.type }} service ({{ $labels.stage }} stage), component has a saturation
-        exceeding SLO and is close to its capacity limit.
+        {{ $labels.type }} service ({{ $labels.stage }} stage) has a saturation exceeding
+        SLO and is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -4193,8 +4193,8 @@ groups:
     for: 5m
     annotations:
       title: The PGBouncer Single Core per Node resource of the {{ $labels.type }}
-        service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        service ({{ $labels.stage }} stage) has a saturation exceeding SLO and is
+        close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -4237,8 +4237,8 @@ groups:
     for: 10m
     annotations:
       title: The Postgres Sync (Web/API/Git) primary Connection Pool Utilization per
-        Node resource of the {{ $labels.type }} service ({{ $labels.stage }} stage),
-        component has a saturation exceeding SLO and is close to its capacity limit.
+        Node resource of the {{ $labels.type }} service ({{ $labels.stage }} stage)
+        has a saturation exceeding SLO and is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -4287,8 +4287,8 @@ groups:
     for: 10m
     annotations:
       title: The Postgres Sync (Web/API/Git) replica Connection Pool Utilization per
-        Node resource of the {{ $labels.type }} service ({{ $labels.stage }} stage),
-        component has a saturation exceeding SLO and is close to its capacity limit.
+        Node resource of the {{ $labels.type }} service ({{ $labels.stage }} stage)
+        has a saturation exceeding SLO and is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -4337,8 +4337,8 @@ groups:
     for: 5m
     annotations:
       title: The Average CPU Utilization resource of the {{ $labels.type }} service
-        ({{ $labels.stage }} stage), component has a saturation exceeding SLO and
-        is close to its capacity limit.
+        ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
+        its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -4376,8 +4376,8 @@ groups:
     for: 5m
     annotations:
       title: The Private Runners utilization resource of the {{ $labels.type }} service
-        ({{ $labels.stage }} stage), component has a saturation exceeding SLO and
-        is close to its capacity limit.
+        ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
+        its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -4421,8 +4421,8 @@ groups:
     for: 5m
     annotations:
       title: The Cloud Run Container Instance Utilization resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -4467,8 +4467,8 @@ groups:
     for: 15m
     annotations:
       title: The Rails DB Connection Pool Utilization resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -4514,8 +4514,8 @@ groups:
     for: 5m
     annotations:
       title: The Redis Client Utilization per Node resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -4557,8 +4557,8 @@ groups:
     for: 5m
     annotations:
       title: The Redis Memory Utilization per Node resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -4609,8 +4609,8 @@ groups:
     for: 5m
     annotations:
       title: The Redis Memory Utilization of Max Memory resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -4657,8 +4657,8 @@ groups:
     for: 5m
     annotations:
       title: The Redis Memory Utilization per Node resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -4709,8 +4709,8 @@ groups:
     for: 5m
     annotations:
       title: The Redis Primary CPU Utilization per Node resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -4753,8 +4753,8 @@ groups:
     for: 5m
     annotations:
       title: The Redis Secondary CPU Utilization per Node resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -4797,8 +4797,8 @@ groups:
     for: 5m
     annotations:
       title: The Ruby Thread Contention resource of the {{ $labels.type }} service
-        ({{ $labels.stage }} stage), component has a saturation exceeding SLO and
-        is close to its capacity limit.
+        ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
+        its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -4839,8 +4839,8 @@ groups:
     for: 5m
     annotations:
       title: The Average CPU Utilization per Shard resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -4878,8 +4878,8 @@ groups:
     for: 5m
     annotations:
       title: The Shared Runner utilization resource of the {{ $labels.type }} service
-        ({{ $labels.stage }} stage), component has a saturation exceeding SLO and
-        is close to its capacity limit.
+        ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
+        its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -4923,8 +4923,8 @@ groups:
     for: 5m
     annotations:
       title: The Shared Runner GitLab Utilization resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -4968,8 +4968,8 @@ groups:
     for: 10m
     annotations:
       title: The Sidekiq Worker Utilization per shard resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -5015,8 +5015,8 @@ groups:
     for: 10m
     annotations:
       title: The Average CPU Utilization per Node resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -5024,7 +5024,7 @@ groups:
 
         Average CPU utilization per Node.
 
-        If average CPU is satured, it may indicate that a fleet is in need to horizontal or vertical scaling. It may also indicate imbalances in load in a fleet.
+        If average CPU is saturated, it may indicate that a fleet is in need to horizontal or vertical scaling. It may also indicate imbalances in load in a fleet.
       grafana_dashboard_id: alerts-sat_single_node_cpu
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_single_node_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
@@ -5036,7 +5036,7 @@ groups:
         max by(environment, tier, type, stage, fqdn) (
           clamp_min(
             clamp_max(
-              avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{fqdn!="", mode="idle", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m]))
+              avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{mode="idle", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m]))
               ,
               1)
           ,
@@ -5054,8 +5054,8 @@ groups:
     for: 5m
     annotations:
       title: The Puma Worker Saturation per Node resource of the {{ $labels.type }}
-        service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        service ({{ $labels.stage }} stage) has a saturation exceeding SLO and is
+        close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -5098,8 +5098,8 @@ groups:
     for: 15m
     annotations:
       title: The Workhorse Image Scaler Exhaustion per Node resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 

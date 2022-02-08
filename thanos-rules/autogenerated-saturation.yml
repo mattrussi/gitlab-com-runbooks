@@ -153,8 +153,8 @@ groups:
     for: 5m
     annotations:
       title: The Kube Pool Max Node Limit resource of the {{ $labels.type }} service
-        ({{ $labels.stage }} stage), component has a saturation exceeding SLO and
-        is close to its capacity limit.
+        ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
+        its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -206,8 +206,8 @@ groups:
     for: 5m
     annotations:
       title: The Average CPU Utilization on Postgres Primary Instance resource of
-        the {{ $labels.type }} service ({{ $labels.stage }} stage), component has
-        a saturation exceeding SLO and is close to its capacity limit.
+        the {{ $labels.type }} service ({{ $labels.stage }} stage) has a saturation
+        exceeding SLO and is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -252,8 +252,8 @@ groups:
     for: 5m
     annotations:
       title: The Walsender CPU Saturation resource of the {{ $labels.type }} service
-        ({{ $labels.stage }} stage), component has a saturation exceeding SLO and
-        is close to its capacity limit.
+        ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
+        its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 

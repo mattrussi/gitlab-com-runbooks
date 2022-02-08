@@ -3,6 +3,7 @@ local allSaturationTypes = import './saturation/all.libsonnet';
 local allServices = import './services/all.jsonnet';
 local allUtilizationMetrics = import './utilization/all.libsonnet';
 local objects = import 'utils/objects.libsonnet';
+local labelSet = (import 'label-taxonomy/label-set.libsonnet');
 
 // Site-wide configuration options
 {
@@ -34,4 +35,14 @@ local objects = import 'utils/objects.libsonnet';
 
   // Name of the default Prometheus datasource to use
   defaultPrometheusDatasource: 'Global',
+
+  labelTaxonomy:: labelSet.makeLabelSet({
+    environmentThanos: 'env',
+    environment: 'environment',
+    tier: 'tier',
+    service: 'type',
+    stage: 'stage',
+    shard: 'shard',
+    node: 'fqdn',
+  }),
 }
