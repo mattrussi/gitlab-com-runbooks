@@ -15,7 +15,7 @@ For remote access to the VMs, refer to
 
 #### Database Access
 Once you have logged into a VM, if you have the rights you can connect to the
-DB (a postgres v9.6/v10 instance running locally in the VM) via:
+Postgres database via:
 ```bash
 sudo su - postgres -c psql
 ```
