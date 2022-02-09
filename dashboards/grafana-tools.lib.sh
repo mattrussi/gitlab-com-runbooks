@@ -161,10 +161,11 @@ find_dashboards() {
     "-o"
     "-name" '*.json'
     ")"
-    -not -name '.*'         # Exclude dot files
-    -not -path "**/.*"      # Exclude dot dirs
-    -not -path "./vendor/*" # Exclude vendored files
-    -mindepth 2             # Exclude files in the root folder
+    -not -name '.*'             # Exclude dot files
+    -not -name '*_test.jsonnet' # Exclude test files
+    -not -path "**/.*"          # Exclude dot dirs
+    -not -path "./vendor/*"     # Exclude vendored files
+    -mindepth 2                 # Exclude files in the root folder
   )
 
   if [[ $# == 0 ]]; then
