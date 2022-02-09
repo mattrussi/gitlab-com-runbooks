@@ -16,6 +16,7 @@
 ## Troubleshooting Pointers
 
 * [Cloud NAT Troubleshooting](cloud-nat.md)
+* [GET Monitoring Setup](../staging-ref/get-monitoring-setup.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->
