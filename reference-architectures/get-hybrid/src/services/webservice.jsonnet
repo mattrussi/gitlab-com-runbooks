@@ -63,6 +63,59 @@ metricsCatalog.serviceDefinition({
 
       toolingLinks: [],
     },
+
+    local workhorseSelector = {
+      route: {
+        ne: [
+          '^/-/health$',
+          '^/-/(readiness|liveness)$',
+        ],
+      },
+    },
+    workhorse: {
+      userImpacting: true,
+      featureCategory: 'not_owned',
+      description: |||
+        Aggregation of most web requests that pass through workhorse, monitored via the HTTP interface.
+        Excludes health, readiness and liveness requests. Some known slow requests, such as HTTP uploads,
+        are excluded from the apdex score.
+      |||,
+
+      apdex: histogramApdex(
+        histogram='gitlab_workhorse_http_request_duration_seconds_bucket',
+        selector=workhorseSelector {
+          route+: {
+            ne+: [
+              '^/([^/]+/){1,}[^/]+/uploads\\\\z',
+              // Technically none of these git endpoints should end up in cny, but sometimes they do,
+              // so exclude them from apdex
+              '^/([^/]+/){1,}[^/]+\\\\.git/git-receive-pack\\\\z',
+              '^/([^/]+/){1,}[^/]+\\\\.git/git-upload-pack\\\\z',
+              '^/([^/]+/){1,}[^/]+\\\\.git/info/refs\\\\z',
+              '^/([^/]+/){1,}[^/]+\\\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\\\z',
+            ],
+          },
+        },
+        satisfiedThreshold=1,
+        toleratedThreshold=10
+      ),
+
+      requestRate: rateMetric(
+        counter='gitlab_workhorse_http_requests_total',
+        selector=workhorseSelector,
+      ),
+
+      errorRate: rateMetric(
+        counter='gitlab_workhorse_http_requests_total',
+        selector=workhorseSelector {
+          code: { re: '^5.*' },
+        },
+      ),
+
+      significantLabels: ['route'],
+
+      toolingLinks: [],
+    },
   },
 
   extraRecordingRulesPerBurnRate: [],
