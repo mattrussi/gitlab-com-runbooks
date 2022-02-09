@@ -8,6 +8,7 @@ local text = grafana.text;
 
 local selector = {};
 
+// TODO: generate this dashboard directly from the service-catalog
 basic.dashboard(
   'Triage',
   tags=['general']
@@ -23,6 +24,7 @@ basic.dashboard(
 )
 .addPanels(keyMetrics.headlineMetricsRow('webservice', startRow=1100, rowTitle='Web Service', selectorHash=selector, stableIdPrefix='web', showDashboardListPanel=true))
 .addPanels(keyMetrics.headlineMetricsRow('gitaly', startRow=1200, rowTitle='Gitaly', selectorHash=selector, stableIdPrefix='api', showDashboardListPanel=true))
+.addPanels(keyMetrics.headlineMetricsRow('praefect', startRow=1300, rowTitle='Praefect', selectorHash=selector, stableIdPrefix='praefect', showDashboardListPanel=true))
 .trailer()
 {
   uid: 'triage',

@@ -471,6 +471,353 @@ groups:
       type: gitaly
     record: gitlab_component_service:mapping
 - interval: 1m
+  name: 'Component-Level SLIs: praefect - 5m burn-rate'
+  rules:
+  - expr: |
+      (
+        sum by () (
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="0.5"}[5m])
+        )
+        +
+        sum by () (
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="1"}[5m])
+        )
+      )
+      /
+      2
+    labels:
+      component: proxy
+      tier: stor
+      type: praefect
+    record: gitlab_component_apdex:success:rate_5m
+  - expr: |
+      sum by () (
+        rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="+Inf"}[5m])
+      )
+    labels:
+      component: proxy
+      tier: stor
+      type: praefect
+    record: gitlab_component_apdex:weight:score_5m
+  - expr: |
+      sum by () (
+        rate(grpc_server_handled_total{job="praefect"}[5m])
+      )
+    labels:
+      component: proxy
+      tier: stor
+      type: praefect
+    record: gitlab_component_ops:rate_5m
+  - expr: |
+      (
+        sum by () (
+          rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|Canceled)$",job="praefect"}[5m])
+        )
+      )
+      or
+      (
+        0 * group by() (
+          gitlab_component_ops:rate_5m{component="proxy",tier="stor",type="praefect"}
+        )
+      )
+    labels:
+      component: proxy
+      tier: stor
+      type: praefect
+    record: gitlab_component_errors:rate_5m
+  - expr: |
+      sum by () (
+        rate(gitaly_praefect_replication_delay_bucket{le="300"}[5m])
+      )
+    labels:
+      component: replicator_queue
+      tier: stor
+      type: praefect
+    record: gitlab_component_apdex:success:rate_5m
+  - expr: |
+      sum by () (
+        rate(gitaly_praefect_replication_delay_bucket{le="+Inf"}[5m])
+      )
+    labels:
+      component: replicator_queue
+      tier: stor
+      type: praefect
+    record: gitlab_component_apdex:weight:score_5m
+  - expr: |
+      sum by () (
+        rate(gitaly_praefect_replication_delay_bucket{le="+Inf"}[5m])
+      )
+    labels:
+      component: replicator_queue
+      tier: stor
+      type: praefect
+    record: gitlab_component_ops:rate_5m
+- interval: 2m
+  name: 'Component-Level SLIs: praefect - 30m burn-rate'
+  rules:
+  - expr: |
+      (
+        sum by () (
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="0.5"}[30m])
+        )
+        +
+        sum by () (
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="1"}[30m])
+        )
+      )
+      /
+      2
+    labels:
+      component: proxy
+      tier: stor
+      type: praefect
+    record: gitlab_component_apdex:success:rate_30m
+  - expr: |
+      sum by () (
+        rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="+Inf"}[30m])
+      )
+    labels:
+      component: proxy
+      tier: stor
+      type: praefect
+    record: gitlab_component_apdex:weight:score_30m
+  - expr: |
+      sum by () (
+        rate(grpc_server_handled_total{job="praefect"}[30m])
+      )
+    labels:
+      component: proxy
+      tier: stor
+      type: praefect
+    record: gitlab_component_ops:rate_30m
+  - expr: |
+      (
+        sum by () (
+          rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|Canceled)$",job="praefect"}[30m])
+        )
+      )
+      or
+      (
+        0 * group by() (
+          gitlab_component_ops:rate_30m{component="proxy",tier="stor",type="praefect"}
+        )
+      )
+    labels:
+      component: proxy
+      tier: stor
+      type: praefect
+    record: gitlab_component_errors:rate_30m
+  - expr: |
+      sum by () (
+        rate(gitaly_praefect_replication_delay_bucket{le="300"}[30m])
+      )
+    labels:
+      component: replicator_queue
+      tier: stor
+      type: praefect
+    record: gitlab_component_apdex:success:rate_30m
+  - expr: |
+      sum by () (
+        rate(gitaly_praefect_replication_delay_bucket{le="+Inf"}[30m])
+      )
+    labels:
+      component: replicator_queue
+      tier: stor
+      type: praefect
+    record: gitlab_component_apdex:weight:score_30m
+  - expr: |
+      sum by () (
+        rate(gitaly_praefect_replication_delay_bucket{le="+Inf"}[30m])
+      )
+    labels:
+      component: replicator_queue
+      tier: stor
+      type: praefect
+    record: gitlab_component_ops:rate_30m
+- interval: 1m
+  name: 'Component-Level SLIs: praefect - 1h burn-rate'
+  rules:
+  - expr: |
+      (
+        sum by () (
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="0.5"}[1h])
+        )
+        +
+        sum by () (
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="1"}[1h])
+        )
+      )
+      /
+      2
+    labels:
+      component: proxy
+      tier: stor
+      type: praefect
+    record: gitlab_component_apdex:success:rate_1h
+  - expr: |
+      sum by () (
+        rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="+Inf"}[1h])
+      )
+    labels:
+      component: proxy
+      tier: stor
+      type: praefect
+    record: gitlab_component_apdex:weight:score_1h
+  - expr: |
+      sum by () (
+        rate(grpc_server_handled_total{job="praefect"}[1h])
+      )
+    labels:
+      component: proxy
+      tier: stor
+      type: praefect
+    record: gitlab_component_ops:rate_1h
+  - expr: |
+      (
+        sum by () (
+          rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|Canceled)$",job="praefect"}[1h])
+        )
+      )
+      or
+      (
+        0 * group by() (
+          gitlab_component_ops:rate_1h{component="proxy",tier="stor",type="praefect"}
+        )
+      )
+    labels:
+      component: proxy
+      tier: stor
+      type: praefect
+    record: gitlab_component_errors:rate_1h
+  - expr: |
+      sum by () (
+        rate(gitaly_praefect_replication_delay_bucket{le="300"}[1h])
+      )
+    labels:
+      component: replicator_queue
+      tier: stor
+      type: praefect
+    record: gitlab_component_apdex:success:rate_1h
+  - expr: |
+      sum by () (
+        rate(gitaly_praefect_replication_delay_bucket{le="+Inf"}[1h])
+      )
+    labels:
+      component: replicator_queue
+      tier: stor
+      type: praefect
+    record: gitlab_component_apdex:weight:score_1h
+  - expr: |
+      sum by () (
+        rate(gitaly_praefect_replication_delay_bucket{le="+Inf"}[1h])
+      )
+    labels:
+      component: replicator_queue
+      tier: stor
+      type: praefect
+    record: gitlab_component_ops:rate_1h
+- interval: 2m
+  name: 'Component-Level SLIs: praefect - 6h burn-rate'
+  rules:
+  - expr: |
+      (
+        sum by () (
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="0.5"}[6h])
+        )
+        +
+        sum by () (
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="1"}[6h])
+        )
+      )
+      /
+      2
+    labels:
+      component: proxy
+      tier: stor
+      type: praefect
+    record: gitlab_component_apdex:success:rate_6h
+  - expr: |
+      sum by () (
+        rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="+Inf"}[6h])
+      )
+    labels:
+      component: proxy
+      tier: stor
+      type: praefect
+    record: gitlab_component_apdex:weight:score_6h
+  - expr: |
+      sum by () (
+        rate(grpc_server_handled_total{job="praefect"}[6h])
+      )
+    labels:
+      component: proxy
+      tier: stor
+      type: praefect
+    record: gitlab_component_ops:rate_6h
+  - expr: |
+      (
+        sum by () (
+          rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|Canceled)$",job="praefect"}[6h])
+        )
+      )
+      or
+      (
+        0 * group by() (
+          gitlab_component_ops:rate_6h{component="proxy",tier="stor",type="praefect"}
+        )
+      )
+    labels:
+      component: proxy
+      tier: stor
+      type: praefect
+    record: gitlab_component_errors:rate_6h
+  - expr: |
+      sum by () (
+        rate(gitaly_praefect_replication_delay_bucket{le="300"}[6h])
+      )
+    labels:
+      component: replicator_queue
+      tier: stor
+      type: praefect
+    record: gitlab_component_apdex:success:rate_6h
+  - expr: |
+      sum by () (
+        rate(gitaly_praefect_replication_delay_bucket{le="+Inf"}[6h])
+      )
+    labels:
+      component: replicator_queue
+      tier: stor
+      type: praefect
+    record: gitlab_component_apdex:weight:score_6h
+  - expr: |
+      sum by () (
+        rate(gitaly_praefect_replication_delay_bucket{le="+Inf"}[6h])
+      )
+    labels:
+      component: replicator_queue
+      tier: stor
+      type: praefect
+    record: gitlab_component_ops:rate_6h
+- interval: 1m
+  name: 'Component mapping: praefect'
+  rules:
+  - expr: "1"
+    labels:
+      component: proxy
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: stor
+      type: praefect
+    record: gitlab_component_service:mapping
+  - expr: "1"
+    labels:
+      component: replicator_queue
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: stor
+      type: praefect
+    record: gitlab_component_service:mapping
+- interval: 1m
   name: Global Component SLI Metrics ratios
   rules:
   - expr: |
@@ -803,6 +1150,40 @@ groups:
       tier: stor
       type: gitaly
     record: slo:max:events:gitlab_service_errors:ratio
+  - expr: "0.995000"
+    labels:
+      tier: stor
+      type: praefect
+    record: slo:min:events:gitlab_service_apdex:ratio
+  - expr: "0.000500"
+    labels:
+      tier: stor
+      type: praefect
+    record: slo:max:events:gitlab_service_errors:ratio
+  - expr: "0.995000"
+    labels:
+      component: proxy
+      tier: stor
+      type: praefect
+    record: slo:min:events:gitlab_service_apdex:ratio
+  - expr: "0.000500"
+    labels:
+      component: proxy
+      tier: stor
+      type: praefect
+    record: slo:max:events:gitlab_service_errors:ratio
+  - expr: "0.995000"
+    labels:
+      component: replicator_queue
+      tier: stor
+      type: praefect
+    record: slo:min:events:gitlab_service_apdex:ratio
+  - expr: "0.000500"
+    labels:
+      component: replicator_queue
+      tier: stor
+      type: praefect
+    record: slo:max:events:gitlab_service_errors:ratio
 - interval: 1m
   name: Saturation Rules (autogenerated)
   rules:
@@ -811,7 +1192,7 @@ groups:
         clamp_min(
           clamp_max(
             1 - avg by (type) (
-              rate(node_cpu_seconds_total{mode="idle", type="gitaly"}[5m])
+              rate(node_cpu_seconds_total{mode="idle", type=~"gitaly|praefect"}[5m])
             )
             ,
             1)
@@ -825,7 +1206,7 @@ groups:
       max by(type) (
         clamp_min(
           clamp_max(
-            avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{mode="idle", type="gitaly"}[5m]))
+            avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{mode="idle", type=~"gitaly|praefect"}[5m]))
             ,
             1)
         ,
