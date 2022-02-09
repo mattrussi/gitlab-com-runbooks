@@ -37,7 +37,7 @@ metricsCatalog.serviceDefinition({
   kubeConfig: {
     // Incorrectly labeled ingress for woodhouse,
     // Woodhouse kube resources should have type, stage labels
-    // See https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/15208
+    // See https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2246
     local woodhouseKubeLabels = { namespace: 'woodhouse' },
 
     labelSelectors: kubeLabelSelectors(

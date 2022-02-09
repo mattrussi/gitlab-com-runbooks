@@ -29,7 +29,7 @@ metricsCatalog.serviceDefinition({
   },
   kubeConfig: {
     // TODO: monitoring doesn't have very good labelling.
-    // See https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/15208
+    // See https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2240
     // For now, we base our resource matching on namespace only and assume
     // everything is in the main stage
     local kubeSelector = { namespace: 'monitoring' },

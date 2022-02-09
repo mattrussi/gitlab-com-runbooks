@@ -24,6 +24,10 @@ metricsCatalog.serviceDefinition({
       hpaSelector=null,  // no hpas for logging,
       ingressSelector=null,  // no ingress for logging
       deploymentSelector=null,  // no deployment for logging
+
+      // TODO: fix the stage label for default and highmem nodes
+      // See https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2239
+      podStaticLabels={ stage: 'main' },
     ),
   },
   kubeResources: {
