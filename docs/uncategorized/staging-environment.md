@@ -81,8 +81,7 @@ Past related issues have :
 ## ElasticCloud Watcher: Segmentation faults
 
 In February 2022, we added an [Elastic watcher](https://gitlab.com/gitlab-com/runbooks/-/merge_requests/4136)
-to warn developers of segmentation faults occuring in the staging
-environment. Such an error probably means a significant bug that causes
+to warn developers of segmentation faults. Such an error probably means a significant bug that causes
 a process to crash. This is usually due to a memory error in a Ruby C extension or some
 other library linked with the interpreter.
 
@@ -96,6 +95,6 @@ Create a high severity regression ([severity1 or severity2](https://about.gitlab
 on staging and follow the steps
 to [block the deployment to production](https://about.gitlab.com/handbook/engineering/releases/#deployment-blockers)
 
-Past related issues have :
+Past related issues:
 
 - Upgrade to Debian bullseye caused jemalloc calls to be mixed with standard malloc calls (https://gitlab.com/gitlab-com/gl-infra/production/-/issues/6276)
