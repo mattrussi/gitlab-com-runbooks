@@ -65,6 +65,11 @@ function validate_dashboard_requests() {
       echo >&2 "UID ${uid} is longer than the 40 char max allowed by Grafana"
       return 1
     fi
+    panelCount=$(echo "${request}" | jq -r '[.panels,.rows | length] | add')
+    if [[ "${panelCount}" -lt 1 ]]; then
+      echo >&2 "Dashboard ${uid} does not have any panels or rows, is it a dashboard?"
+      return 1
+    fi
     echo "${request}"
   done
 }
