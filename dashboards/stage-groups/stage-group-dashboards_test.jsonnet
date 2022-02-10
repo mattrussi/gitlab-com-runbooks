@@ -59,12 +59,22 @@ test.suite({
 
   testTitle: {
     actual: stageGroupDashboards.dashboard('geo').stageGroupDashboardTrailer().title,
-    expect: 'Group dashboard: enablement (Geo)',
+    expect: 'Geo: Group dashboard',
+  },
+
+  testTags: {
+    actual: stageGroupDashboards.dashboard('geo').stageGroupDashboardTrailer().tags,
+    expect: ['feature_category', 'stage_group:Geo'],
   },
 
   testDefaultComponents: {
     actual: panelTitles(stageGroupDashboards.dashboard('geo').stageGroupDashboardTrailer()),
     expect: errorBudgetTitles + allComponentTitles,
+  },
+
+  testLinks: {
+    actual: std.map(function(links) links.title, stageGroupDashboards.dashboard('geo').links),
+    expect: ['Group Dashboards', 'API Detail', 'Web Detail', 'Git Detail'],
   },
 
   testDisplayEmptyGuidance: {
@@ -197,6 +207,20 @@ test.suite({
       '🔬 SLI Detail: rails_requests',
     ],
   },
+
+  testErrorBudgetDetailLinks: {
+    actual: std.map(
+      function(links) links.title,
+      stageGroupDashboards.dashboard({
+        key: 'project_management',
+        name: 'Project Management',
+        stage: 'plan',
+        feature_categories: ['team_planning', 'planning_analytics'],
+      }).links
+    ),
+    expect: ['Group Dashboards', 'API Detail', 'Web Detail', 'Git Detail'],
+  },
+
 
   testDashboardUidTooLong: {
     actual: stageGroupDashboards.dashboardUid('authentication_and_authorization'),

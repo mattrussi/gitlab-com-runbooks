@@ -366,6 +366,7 @@ local requestComponents = std.set(['web', 'api', 'git']);
 local backgroundComponents = std.set(['sidekiq']);
 local supportedComponents = std.setUnion(requestComponents, backgroundComponents);
 local defaultComponents = std.set(['web', 'api', 'sidekiq']);
+local groupTag(group) = 'stage_group:%s' % group.name;
 
 local commonHeader(
   group,
@@ -381,7 +382,10 @@ local commonHeader(
   basic
   .dashboard(
     title,
-    tags=['feature_category'] + extraTags,
+    tags=[
+      'feature_category',
+      groupTag(group),
+    ] + extraTags,
     time_from='now-6h/m',
     time_to='now/m'
   )
@@ -425,7 +429,12 @@ local commonHeader(
       layout.rowGrid('Budget spend attribution', errorBudgetAttribution(group, featureCategories), startRow=110, collapse=true)
     else
       []
-  );
+  ) {
+    links+: [
+      platformLinks.dynamicLinks('Group Dashboards', groupTag(group), asDropdown=false),
+    ],
+  }
+;
 
 local getEnabledRequestComponents(components) =
   assert std.type(components) == 'array' : 'Invalid components argument type';
@@ -452,7 +461,7 @@ local dashboard(groupKey, components=defaultComponents, displayEmptyGuidance=fal
       enabledRequestComponents=enabledRequestComponents,
       displayEmptyGuidance=displayEmptyGuidance,
       displayBudget=displayBudget,
-      title=std.format('Group dashboard: %s (%s)', [group.stage, group.name]),
+      title='%s: Group dashboard' % [group.name],
     )
     .addPanels(
       if std.length(enabledRequestComponents) != 0 then
@@ -581,7 +590,6 @@ local dashboard(groupKey, components=defaultComponents, displayEmptyGuidance=fal
       self.trailer(),
     links+:
       [
-        platformLinks.dynamicLinks('Detail', 'stage-group-error-budget-detail', asDropdown=false),
         platformLinks.dynamicLinks('API Detail', 'type:api'),
         platformLinks.dynamicLinks('Web Detail', 'type:web'),
         platformLinks.dynamicLinks('Git Detail', 'type:git'),
@@ -602,7 +610,7 @@ local errorBudgetDetailDashboard(stageGroup) =
 
   local dashboard =
     commonHeader(
-      group={ key: stageGroup.key, name: stageGroup.name },
+      group=stageGroup,
       extraTags=[],
       featureCategories=stageGroup.feature_categories,
       featureCategoriesSelector=featureCategoriesSelector,
@@ -610,7 +618,7 @@ local errorBudgetDetailDashboard(stageGroup) =
       enabledRequestComponents=requestComponents,
       displayEmptyGuidance=false,
       displayBudget=true,
-      title='%s: stage group error budget detail' % [stageGroup.name],
+      title='%s: group error budget detail' % [stageGroup.name],
     )
     .addPanels(
       keyMetrics.headlineMetricsRow(
