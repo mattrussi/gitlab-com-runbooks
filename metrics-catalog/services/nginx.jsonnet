@@ -1,6 +1,7 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
+local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 
 metricsCatalog.serviceDefinition({
   type: 'nginx',
@@ -18,6 +19,16 @@ metricsCatalog.serviceDefinition({
     kubernetes: true,
   },
   regional: true,
+  kubeConfig: {
+    labelSelectors: kubeLabelSelectors(
+      // NGINX HPA is incorrectly labelled at present
+      // See https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/15208
+      hpaSelector={ app: 'nginx-ingress' },
+
+      // NGINX *is* the ingress
+      ingressSelector=null,
+    ),
+  },
   kubeResources: {
     'gitlab-nginx': {
       kind: 'Deployment',

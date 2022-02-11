@@ -36,4 +36,19 @@
       arrayOfObjects,
       {}
     ),
+
+  // Given an object, transform each key and value into another
+  // object. The function should return a tuple of [key, value].
+  // If the result is nil, the key-value pair is omitted.
+  mapKeyValues(fn, object)::
+    std.foldl(
+      function(memo, key)
+        local res = fn(key, object[key]);
+        if res == null then
+          memo
+        else
+          memo { [res[0]]: res[1] },
+      std.objectFields(object),
+      {}
+    ),
 }

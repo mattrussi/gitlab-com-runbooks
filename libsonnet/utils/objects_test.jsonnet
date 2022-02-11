@@ -54,5 +54,18 @@ test.suite({
     },
   },
 
+  testMapKeyValues: {
+    actual: objects.mapKeyValues(function(key, value) [key + 'a', value + 1], { a: 1, b: 2, c: 3 }),
+    expect: {
+      aa: 2,
+      ba: 3,
+      ca: 4,
+    },
+  },
+
+  testMapKeyValuesOmit: {
+    actual: objects.mapKeyValues(function(key, value) null, { a: 1, b: 2, c: 3 }),
+    expect: {},
+  },
 
 })

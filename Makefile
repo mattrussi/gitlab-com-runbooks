@@ -17,6 +17,8 @@ JSONET_COMMAND = $(shell which jsonnetfmt || (which jsonnet && echo " fmt"))
 PROMTOOL_COMMAND = $(shell which promtool || echo "/prometheus/promtool")
 THANOS_COMMAND = $(shell which thanos || echo "/thanos/thanos")
 
+PROM_RULE_FILES = $(shell find rules \( -name "*.yml" -o -name "*.yaml" \) -type f)
+
 SHELLCHECK_FLAGS := -e SC1090,SC1091
 
 .PHONY: help
@@ -74,9 +76,9 @@ validate-service-mappings:
 .PHONY: validate-prom-rules
 validate-prom-rules:
 	# TODO: Add rules/*/*.yml when valid rules are created.
-	$(PROMTOOL_COMMAND) check rules rules/*.yml rules/clusters/*/*.yml
+	@$(PROMTOOL_COMMAND) check rules $(PROM_RULE_FILES)
 	# Temporary command. Remove when https://github.com/thanos-io/thanos/issues/4082 is fixed (v0.20.2+)
-	$(THANOS_COMMAND) tools rules-check $(shell ls thanos-rules/*.yml | xargs -i echo "--rules {}");
+	@$(THANOS_COMMAND) tools rules-check $(shell ls thanos-rules/*.yml|awk '{ print "--rules"; print $1 }');
 	# Original command
 	#$(THANOS_COMMAND) tools rules-check --rules thanos-rules/*.yml
 	# Prometheus config checks are stricter than rules checks, so use a fake config to check this too

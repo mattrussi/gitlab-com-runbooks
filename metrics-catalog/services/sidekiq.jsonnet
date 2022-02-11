@@ -5,6 +5,7 @@ local sidekiqHelpers = import './lib/sidekiq-helpers.libsonnet';
 local perWorkerRecordingRules = (import './lib/sidekiq-per-worker-recording-rules.libsonnet').perWorkerRecordingRules;
 local combined = metricsCatalog.combined;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
+local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 
 local highUrgencySelector = { urgency: 'high' };
 local lowUrgencySelector = { urgency: 'low' };
@@ -54,6 +55,20 @@ metricsCatalog.serviceDefinition({
     'sidekiq_jobs_queue_duration_seconds_bucket',
     'sidekiq_jobs_failed_total',
   ],
+  kubeConfig: {
+    // TODO: currently sidekiq node_pools are incorrectly labelled with the shard label
+    // See https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/15208
+    local shardNames = std.map(function(f) f.name, sidekiqHelpers.shards.listAll()),
+    labelSelectors: kubeLabelSelectors(
+      ingressSelector=null,  // no ingress for sidekiq
+
+      nodeSelector={ type: { oneOf: shardNames } },
+
+      // Sidekiq nodes don't present a stage label at present, so\
+      // we hardcode to main stage
+      nodeStaticLabels={ stage: 'main' },
+    ),
+  },
   kubeResources: std.foldl(
     function(memo, shard)
       memo {

@@ -3,6 +3,7 @@ local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local haproxyComponents = import './lib/haproxy_components.libsonnet';
+local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 
 local baseSelector = { type: 'web-pages' };
 
@@ -16,14 +17,7 @@ metricsCatalog.serviceDefinition({
     apdexRatio: 0.95,
     errorRatio: 0.05,
   },
-  kubeResources: {
-    'web-pages': {
-      kind: 'Deployment',
-      containers: [
-        'gitlab-pages',
-      ],
-    },
-  },
+
   monitoringThresholds: {
     apdexScore: 0.995,
     errorRatio: 0.9995,
@@ -37,6 +31,26 @@ metricsCatalog.serviceDefinition({
   provisioning: {
     vms: false,
     kubernetes: true,
+  },
+
+  kubeConfig: {
+    labelSelectors: kubeLabelSelectors(
+      ingressSelector=null,  // no ingress for web-pages
+      nodeSelector={ type: 'web-pages' },
+      // TODO: web-pages nodes do not present a stage label at present
+      // See https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/15208
+      // We hard-code to main for now
+      nodeStaticLabels={ stage: 'main' },
+    ),
+  },
+
+  kubeResources: {
+    'web-pages': {
+      kind: 'Deployment',
+      containers: [
+        'gitlab-pages',
+      ],
+    },
   },
   regional: true,
   serviceLevelIndicators: {

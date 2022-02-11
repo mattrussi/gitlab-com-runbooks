@@ -5,6 +5,7 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local haproxyComponents = import './lib/haproxy_components.libsonnet';
 local sliLibrary = import 'gitlab-slis/library.libsonnet';
 local serviceLevelIndicatorDefinition = import 'servicemetrics/service_level_indicator_definition.libsonnet';
+local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 
 metricsCatalog.serviceDefinition({
   type: 'api',
@@ -56,6 +57,14 @@ metricsCatalog.serviceDefinition({
   },
   recordingRuleMetrics: sliLibrary.get('graphql_query_apdex').recordingRuleMetrics,
   regional: true,
+  kubeConfig: {
+    labelSelectors: kubeLabelSelectors(
+      // TODO: at present, api nodepools do not have the correct stage, shard labels
+      // See https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/15208
+      // Hardcoding API nodes to main stage for now
+      nodeStaticLabels={ stage: 'main' },
+    ),
+  },
   kubeResources: {
     api: {
       kind: 'Deployment',

@@ -17,4 +17,7 @@
   // Resource Saturation & Utilization definition
   resourceSaturationPoint: (import './resource_saturation_point.libsonnet').resourceSaturationPoint,
   utilizationMetric: (import './utilization_metric.libsonnet').utilizationMetric,
+
+  // Tools for selecting kubernetes resources
+  kubeLabelSelectors: (import './kube_label_selectors.libsonnet'),
 }
