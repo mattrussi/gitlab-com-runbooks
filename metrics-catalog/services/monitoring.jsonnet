@@ -1,10 +1,12 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
+local combined = metricsCatalog.combined;
 local histogramApdex = metricsCatalog.histogramApdex;
 local gaugeMetric = metricsCatalog.gaugeMetric;
 local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local googleLoadBalancerComponents = import './lib/google_load_balancer_components.libsonnet';
 local maturityLevels = import 'service-maturity/levels.libsonnet';
+local selectors = import 'promql/selectors.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'monitoring',
@@ -82,35 +84,39 @@ metricsCatalog.serviceDefinition({
       ],
     },
   },
+
+  local defaultSelector = {
+    type: 'monitoring',
+    shard: 'default',
+  },
+
   serviceLevelIndicators: {
     thanos_query: {
-      monitoringThresholds: {
-        apdexScore: 0.95,
-        errorRatio: 0.95,
-      },
-      userImpacting: false,
+      // Don't count here, as we're including the total from `thanos_query_frontend`
+      // which might not reach here if there was a cache hit.
+      serviceAggregation: false,
+      userImpacting: true,
       featureCategory: 'not_owned',
       description: |||
         Thanos query gathers the data needed to evaluate Prometheus queries from multiple underlying prometheus and thanos instances.
         This SLI monitors the Thanos query HTTP interface. 5xx responses are considered failures.
       |||,
 
-      local thanosQuerySelector = {
+      local thanosQuerySelector = defaultSelector {
         job: 'thanos-query',
-        type: 'monitoring',
-        shard: 'default',
       },
 
       apdex: histogramApdex(
         histogram='http_request_duration_seconds_bucket',
         selector=thanosQuerySelector,
-        satisfiedThreshold=30,
-        metricsFormat='migrating'
+        toleratedThreshold=30,
+        satisfiedThreshold=9,
+        metricsFormat='migrating'  // floats as `le`.
       ),
 
       requestRate: rateMetric(
         counter='http_requests_total',
-        selector=thanosQuerySelector
+        selector=thanosQuerySelector { code: { re: '^2.*' } },
       ),
 
       errorRate: rateMetric(
@@ -118,7 +124,9 @@ metricsCatalog.serviceDefinition({
         selector=thanosQuerySelector { code: { re: '^5.*' } }
       ),
 
-      significantLabels: ['fqdn'],
+      // 'handler', 'code', 'method' would be handy here. But that will change
+      // the recording rule used by web/api/git which we might want to avoid.
+      significantLabels: [],
 
       toolingLinks: [
         toolingLinks.elasticAPM(service='thanos'),
@@ -129,84 +137,31 @@ metricsCatalog.serviceDefinition({
       userImpacting: false,
       featureCategory: 'not_owned',
       description: |||
-        Thanos query gathers the data needed to evaluate Prometheus queries from multiple underlying prometheus and thanos instances.
-        This SLI monitors the Thanos query HTTP interface. 5xx responses are considered failures.
+        Thanos frontend sits in front of thanos query. It can act as a caching layer
+        and can potentially split queries to be executed separatly.
       |||,
 
-      local thanosQuerySelector = {
-        // The job regex was written while we were transitioning from a thanos
-        // stack deployed in GCE to a new one deployed in GKE. job=thanos
-        // covers all thanos components, but the metrics this filter is used for
-        // are unambiguous because only the query component exposes them - in
-        // the old stack.
-        // In the new stack, we include the query frontend component, which we'd
-        // prefer to measure from.
-        // The generated rules always retain the "stage" label, which is used to
-        // distinguish between the 2 stacks, so the metrics are never blended:
-        // each job name is only present in one stack.
-        job: { re: 'thanos|thanos-query-frontend' },
-        type: 'monitoring',
-        shard: 'default',
+      local thanosQueryFrontendSelector = defaultSelector {
+        job: 'thanos-query-frontend',
       },
 
       apdex: histogramApdex(
         histogram='http_request_duration_seconds_bucket',
-        selector=thanosQuerySelector,
+        selector=thanosQueryFrontendSelector { code: { re: '^2.*' } },
         satisfiedThreshold=30,
       ),
 
       requestRate: rateMetric(
         counter='http_requests_total',
-        selector=thanosQuerySelector
+        selector=thanosQueryFrontendSelector,
       ),
 
       errorRate: rateMetric(
         counter='http_requests_total',
-        selector=thanosQuerySelector { code: { re: '^5.*' } }
+        selector=thanosQueryFrontendSelector { code: { re: '^5.*' } }
       ),
 
-      significantLabels: ['fqdn'],
-
-      toolingLinks: [
-        toolingLinks.elasticAPM(service='thanos'),
-        toolingLinks.kibana(title='Thanos Query', index='monitoring_ops', tag='monitoring.systemd.thanos-query'),
-      ],
-    },
-
-    public_dashboards_thanos_query: {
-      userImpacting: false,
-      featureCategory: 'not_owned',
-      ignoreTrafficCessation: true,
-
-      description: |||
-        Thanos query gathers the data needed to evaluate Prometheus queries from multiple underlying prometheus and thanos instances.
-        This SLI monitors the Thanos query HTTP interface for GitLab's public Thanos instance, which is used by the public Grafana
-        instance. 5xx responses are considered failures.
-      |||,
-
-      local thanosQuerySelector = {
-        job: 'thanos',
-        type: 'monitoring',
-        shard: 'public-dashboards',
-      },
-
-      apdex: histogramApdex(
-        histogram='http_request_duration_seconds_bucket',
-        selector=thanosQuerySelector,
-        satisfiedThreshold=30
-      ),
-
-      requestRate: rateMetric(
-        counter='http_requests_total',
-        selector=thanosQuerySelector
-      ),
-
-      errorRate: rateMetric(
-        counter='http_requests_total',
-        selector=thanosQuerySelector { code: { re: '^5.*' } }
-      ),
-
-      significantLabels: ['fqdn'],
+      significantLabels: [],
 
       toolingLinks: [
         toolingLinks.elasticAPM(service='thanos'),
@@ -220,29 +175,37 @@ metricsCatalog.serviceDefinition({
         errorRatio: 0.95,
       },
       userImpacting: false,
+      // Don't include this in the total RPS, that would be double counting what thanos query does
+      serviceAggregation: false,
       featureCategory: 'not_owned',
       description: |||
         Thanos store will respond to Thanos Query (and other) requests for historical data. This historical data is kept in
         GCS buckets. This SLI monitors the Thanos StoreAPI GRPC endpoint. GRPC error responses are considered to be service-level failures.
       |||,
 
-      local thanosStoreSelector = {
-        // Similar to the query selector above, we must pull data from jobs
-        // corresponding to the old and new thanos stacks, which are mutually
-        // exclusive by stage.
+      // Thanos store has shard=0-9|app|db|default so remove the default selector
+      // for shard
+      local thanosStoreSelector = selectors.without(defaultSelector, ['shard']) {
         job: { re: 'thanos|thanos-store(-[0-9]+)?' },
-        type: 'monitoring',
         grpc_service: 'thanos.Store',
-        grpc_type: 'unary',
       },
 
-      apdex: histogramApdex(
-        histogram='grpc_server_handling_seconds_bucket',
-        selector=thanosStoreSelector,
-        satisfiedThreshold=1,
-        toleratedThreshold=3,
-        metricsFormat='migrating'
-      ),
+      apdex: combined([
+        histogramApdex(
+          histogram='grpc_server_handling_seconds_bucket',
+          selector=thanosStoreSelector { grpc_type: 'unary' },
+          satisfiedThreshold=0.01,
+          toleratedThreshold=0.3,
+          metricsFormat='migrating'
+        ),
+        histogramApdex(
+          histogram='grpc_server_handling_seconds_bucket',
+          selector=thanosStoreSelector { grpc_type: 'server_stream' },
+          satisfiedThreshold=1,
+          toleratedThreshold=3,
+          metricsFormat='migrating'
+        ),
+      ]),
 
       requestRate: rateMetric(
         counter='grpc_server_handled_total',
@@ -254,7 +217,7 @@ metricsCatalog.serviceDefinition({
         selector=thanosStoreSelector { grpc_code: { ne: 'OK' } }
       ),
 
-      significantLabels: ['fqdn'],
+      significantLabels: ['grpc_type', 'grpc_method'],
 
       toolingLinks: [
         toolingLinks.elasticAPM(service='thanos'),
@@ -273,19 +236,14 @@ metricsCatalog.serviceDefinition({
         It also handles downsampling. This SLI monitors compaction operations and compaction failures.
       |||,
 
-      local thanosCompactorSelector = {
-        job: 'thanos',
-        type: 'monitoring',
-      },
-
       requestRate: rateMetric(
         counter='thanos_compact_group_compactions_total',
-        selector=thanosCompactorSelector
+        selector=defaultSelector
       ),
 
       errorRate: rateMetric(
         counter='thanos_compact_group_compactions_failures_total',
-        selector=thanosCompactorSelector
+        selector=defaultSelector
       ),
 
       significantLabels: ['fqdn'],
@@ -332,19 +290,15 @@ metricsCatalog.serviceDefinition({
         Alert delivery failure is considered a service-level failure.
       |||,
 
-      local thanosRuleAlertsSelector = {
-        job: 'thanos',
-        type: 'monitoring',
-      },
 
       requestRate: rateMetric(
         counter='thanos_alert_sender_alerts_sent_total',
-        selector=thanosRuleAlertsSelector
+        selector=defaultSelector
       ),
 
       errorRate: rateMetric(
-        counter='thanos_alert_sender_errors_total',
-        selector=thanosRuleAlertsSelector
+        counter='thanos_alert_sender_alerts_dropped_total',
+        selector=defaultSelector
       ),
 
       significantLabels: ['fqdn'],
@@ -423,19 +377,23 @@ metricsCatalog.serviceDefinition({
         service failures.
       |||,
 
-      local selector = { type: 'monitoring' },
+      // Thanos is in the default shard, the promehteus rules are spread over
+      // multiple shards.
+      local rulesSelector = selectors.without(defaultSelector, ['shard']),
 
       requestRate: rateMetric(
         counter='prometheus_rule_evaluations_total',
-        selector=selector
+        selector=rulesSelector,
       ),
 
       errorRate: rateMetric(
         counter='prometheus_rule_evaluation_failures_total',
-        selector=selector
+        selector=rulesSelector,
       ),
 
-      significantLabels: ['fqdn'],
+      // Job allows us to see if it was thanos or prometheus
+      // rule group tells us which rule evaluation
+      significantLabels: ['fqdn', 'job', 'rule_group'],
     },
 
     // Trickster is a prometheus caching layer that serves requests to our
@@ -467,13 +425,9 @@ metricsCatalog.serviceDefinition({
       significantLabels: ['pod'],
     },
 
-    local thanosMemcachedSLI(job) = {
-      local selector = {
-        job: job,
-        type: 'monitoring',
-      },
-
+    thanos_memcached: {
       userImpacting: false,
+      serviceAggregation: false,
       featureCategory: 'not_owned',
       ignoreTrafficCessation: true,
 
@@ -482,30 +436,27 @@ metricsCatalog.serviceDefinition({
         store and query-frontend components.
       |||,
 
+
       apdex: histogramApdex(
         histogram='thanos_memcached_operation_duration_seconds_bucket',
-        satisfiedThreshold=1,
-        selector=selector,
+        satisfiedThreshold=0.05,
+        toleratedThreshold=0.1,
+        selector=defaultSelector,
         metricsFormat='migrating'
       ),
 
       requestRate: rateMetric(
-        counter='memcached_commands_total',
-        selector=selector,
+        counter='thanos_memcached_operations_total',
+        selector=defaultSelector,
       ),
 
       errorRate: rateMetric(
         counter='thanos_memcached_operation_failures_total',
-        selector=selector,
+        selector=defaultSelector,
       ),
 
-      significantLabels: ['fqdn'],
+      significantLabels: ['fqdn', 'operation', 'reason'],
     },
-
-    memcached_thanos_store_index: thanosMemcachedSLI('memcached-thanos-index-cache-metrics'),
-    memcached_thanos_store_bucket: thanosMemcachedSLI('memcached-thanos-bucket-cache-metrics'),
-    memcached_thanos_qfe_query_range: thanosMemcachedSLI('memcached-thanos-qfe-query-range-metrics'),
-    memcached_thanos_qfe_labels: thanosMemcachedSLI('memcached-thanos-qfe-labels-metrics'),
 
     grafana_cloudsql: {
       userImpacting: true,

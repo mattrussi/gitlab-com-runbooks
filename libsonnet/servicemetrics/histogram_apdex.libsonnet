@@ -72,7 +72,8 @@ local representLe(histogramApdex, value) =
   if histogramApdex.metricsFormat == 'openmetrics' then
     { le: openMetricsSafeFloatValue(value) }
   else if histogramApdex.metricsFormat == 'migrating' then
-    { le: { re: '%s|%s' % [escapeRegexpDecimal(value), escapeRegexpDecimal(openMetricsSafeFloatValue(value))] } }
+    local possibleValues = std.set([escapeRegexpDecimal(value), escapeRegexpDecimal(openMetricsSafeFloatValue(value))]);
+    { le: { oneOf: possibleValues } }
   else
     { le: value };
 
