@@ -176,6 +176,26 @@ metricsCatalog.serviceDefinition({
       significantLabels: ['fqdn', 'pod', 'type'],
       serviceAggregation: false,
     },
+
+    // This components tracks pubsubbeat errors and outputs
+    // across all topics
+    pubsubbeat: {
+      userImpacting: false,
+      featureCategory: 'not_owned',
+      description: |||
+        This SLI monitors pubsubbeat errors.
+      |||,
+
+      requestRate: rateMetric(
+        counter='pubsubbeat_libbeat_output_events'
+      ),
+      errorRate: rateMetric(
+        counter='pubsubbeat_errors_total'
+      ),
+
+      significantLabels: ['pod'],
+      serviceAggregation: false,
+    },
   },
   skippedMaturityCriteria: maturityLevels.skip({
     'Service exists in the dependency graph': 'The logging platform consumes logs via fluentd, but does not interact directly with any other services',

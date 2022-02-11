@@ -650,6 +650,12 @@ groups:
     expr: "0.001000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      component: pubsubbeat
+      tier: inf
+      type: logging
+    expr: "0.001000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
       component: stackdriver
       tier: inf
       type: logging
@@ -2337,6 +2343,14 @@ groups:
       component: pubsub_topics
       regional_aggregation: "no"
       service_aggregation: "yes"
+      tier: inf
+      type: logging
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: pubsubbeat
+      regional_aggregation: "no"
+      service_aggregation: "no"
       tier: inf
       type: logging
     expr: "1"
