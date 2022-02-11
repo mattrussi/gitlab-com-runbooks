@@ -478,7 +478,7 @@ services:
   observability:
     monitors:
       grafana_folder:
-      primary_grafana_dashboard: https://dashboards.gitlab.net/d/bd2Kl9Imk/host-stats?orgId=1&var-environment=ops&var-node=forum.gitlab.com
+      primary_grafana_dashboard: "bd2Kl9Imk/host-stats?orgId=1&var-environment=ops&var-node=forum.gitlab.com"
       sentry_slug:
 
 - name: kube
@@ -1305,7 +1305,7 @@ services:
     error_budget: https://docs.google.com/spreadsheets/d/1wkK2n5EAvoVXwQZrVoCDsvkYTb1BftL56EzsFW_IA-w/edit
   observability:
     monitors:
-      primary_grafana_dashboard: https://dashboards.gitlab.net/d/mailroom-main/mailroom-overview
+      primary_grafana_dashboard: "mailroom-main/mailroom-overview"
       sentry_slug:
 
 - name: pages
@@ -3195,7 +3195,7 @@ services:
       team:
   observability:
     monitors:
-      primary_grafana_dashboard: https://dashboards.gitlab.net/d/USVj3qHmk/logging
+      primary_grafana_dashboard: "USVj3qHmk/logging"
       sentry_slug:
     alerts:
       - alert_link:

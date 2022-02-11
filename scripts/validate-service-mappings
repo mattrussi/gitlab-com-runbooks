@@ -230,6 +230,7 @@ def validate(known_stage_groups)
       if monitors.key?("primary_grafana_dashboard")
         primary_grafana_dashboard = monitors["primary_grafana_dashboard"]
         raise "'#{service_name}' | primary_grafana_dashboard field must be string" unless primary_grafana_dashboard.is_a?(String) || primary_grafana_dashboard.nil?
+        raise "'#{service_name}' | primary_grafana_dashboard is appended to the Grafana base URL so it must be relative" unless primary_grafana_dashboard.nil? || !primary_grafana_dashboard.match(%r{^https?://})
       end
 
       if monitors.key?("sentry_slug")

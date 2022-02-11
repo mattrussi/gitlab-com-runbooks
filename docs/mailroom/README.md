@@ -5,7 +5,7 @@
 [[_TOC_]]
 
 #  Mailroom Service
-* [Service Overview](https://dashboards.gitlab.net/d/https://dashboards.gitlab.net/d/mailroom-main/mailroom-overview)
+* [Service Overview](https://dashboards.gitlab.net/d/mailroom-main/mailroom-overview)
 * **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22mailroom%22%2C%20tier%3D%22sv%22%7D
 * **Label**: gitlab-com/gl-infra/production~"Service:Mailroom"
 
