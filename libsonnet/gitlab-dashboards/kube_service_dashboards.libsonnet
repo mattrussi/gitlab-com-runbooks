@@ -132,8 +132,17 @@ local panelsForRequestsUtilization(serviceType, selectorHash) =
     ),
   ];
 
-local rowsForContainer(container, type, deployment) =
-  local formatConfig = { container: container, type: type, deployment: deployment };
+local rowsForContainer(container, deployment, selectorHash) =
+  local containerSelectorHash = selectorHash {
+    deployment: deployment,
+    container: container,
+  };
+
+  local formatConfig = {
+    container: container,
+    deployment: deployment,
+    containerSelector: selectors.serializeHash(containerSelectorHash),
+  };
   [
     /* First row */
     [
@@ -142,12 +151,7 @@ local rowsForContainer(container, type, deployment) =
         query=|||
           rate(
             container_cpu_usage_seconds_total:labeled{
-              type="%(type)s",
-              env="$environment",
-              environment="$environment",
-              stage="$stage",
-              container="%(container)s",
-              deployment="%(deployment)s"
+              %(containerSelector)s
              }[$__rate_interval]
            )
         ||| % formatConfig,
@@ -159,12 +163,7 @@ local rowsForContainer(container, type, deployment) =
         title='%(container)s container/%(deployment)s deployment - Memory' % formatConfig,
         query=|||
           container_memory_working_set_bytes:labeled{
-            type="%(type)s",
-            env="$environment",
-            environment="$environment",
-            stage="$stage",
-            container="%(container)s",
-            deployment="%(deployment)s"
+            %(containerSelector)s
            }
         ||| % formatConfig,
         format='bytes',
@@ -179,11 +178,7 @@ local rowsForContainer(container, type, deployment) =
         description='Why are containers waiting?',
         query=|||
           sum by (reason) (max_over_time(kube_pod_container_status_waiting_reason:labeled{
-            env="$environment",
-            type="%(type)s",
-            stage="$stage",
-            container="%(container)s",
-            deployment="%(deployment)s"
+            %(containerSelector)s
           }[10m]))
         ||| % formatConfig,
         legendFormat='{{ reason }}',
@@ -233,11 +228,7 @@ local rowsForContainer(container, type, deployment) =
         description='Why are containers terminating?',
         query=|||
           sum by (reason) (max_over_time(kube_pod_container_status_terminated_reason:labeled{
-            env="$environment",
-            type="%(type)s",
-            stage="$stage",
-            container="%(container)s",
-            deployment="%(deployment)s"
+            %(containerSelector)s
           }[10m]))
         ||| % formatConfig,
         legendFormat='{{ reason }}',
@@ -288,7 +279,7 @@ local dashboardsForService(type) =
     env: '$environment',
     environment: '$environment',
     type: type,
-    stage: '$stage',
+    [if serviceInfo.serviceIsStageless then null else 'stage']: '$stage',
   };
 
   {
@@ -297,7 +288,9 @@ local dashboardsForService(type) =
         'Kube Containers Detail',
         tags=[type, 'type:' + type, 'kube', 'kube detail'],
       )
-      .addTemplate(templates.stage)
+      .addTemplate(
+        if !serviceInfo.serviceIsStageless then templates.stage else null
+      )
       .addPanels(
         layout.rows(
           std.flatMap(
@@ -307,7 +300,7 @@ local dashboardsForService(type) =
               ]
               +
               std.flatMap(
-                function(container) rowsForContainer(container, type, deployment),
+                function(container) rowsForContainer(container, deployment, selector),
                 serviceInfo.kubeResources[deployment].containers
               ),
             deployments
@@ -325,7 +318,9 @@ local dashboardsForService(type) =
         'Kube Deployment Detail',
         tags=[type, 'type:' + type, 'kube', 'kube detail'],
       )
-      .addTemplate(templates.stage)
+      .addTemplate(
+        if !serviceInfo.serviceIsStageless then templates.stage else null
+      )
       .addPanels(
         layout.rows(
           std.flatMap(
