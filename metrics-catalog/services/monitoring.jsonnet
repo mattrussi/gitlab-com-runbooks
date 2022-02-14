@@ -173,47 +173,6 @@ metricsCatalog.serviceDefinition({
       ],
     },
 
-    public_dashboards_thanos_query: {
-      userImpacting: false,
-      featureCategory: 'not_owned',
-      ignoreTrafficCessation: true,
-
-      description: |||
-        Thanos query gathers the data needed to evaluate Prometheus queries from multiple underlying prometheus and thanos instances.
-        This SLI monitors the Thanos query HTTP interface for GitLab's public Thanos instance, which is used by the public Grafana
-        instance. 5xx responses are considered failures.
-      |||,
-
-      local thanosQuerySelector = {
-        job: 'thanos',
-        type: 'monitoring',
-        shard: 'public-dashboards',
-      },
-
-      apdex: histogramApdex(
-        histogram='http_request_duration_seconds_bucket',
-        selector=thanosQuerySelector,
-        satisfiedThreshold=30
-      ),
-
-      requestRate: rateMetric(
-        counter='http_requests_total',
-        selector=thanosQuerySelector
-      ),
-
-      errorRate: rateMetric(
-        counter='http_requests_total',
-        selector=thanosQuerySelector { code: { re: '^5.*' } }
-      ),
-
-      significantLabels: ['fqdn'],
-
-      toolingLinks: [
-        toolingLinks.elasticAPM(service='thanos'),
-        toolingLinks.kibana(title='Thanos Query', index='monitoring_ops', tag='monitoring.systemd.thanos-query'),
-      ],
-    },
-
     thanos_store: {
       monitoringThresholds: {
         apdexScore: 0.95,
@@ -354,15 +313,6 @@ metricsCatalog.serviceDefinition({
         toolingLinks.kibana(title='Thanos Rule', index='monitoring_ops', tag='monitoring.systemd.thanos-rule'),
       ],
     },
-
-    // This component represents the Google Load Balancer in front
-    // of the public Grafana instance at dashboards.gitlab.com
-    public_grafana_google_lb: googleLoadBalancerComponents.googleLoadBalancer(
-      userImpacting=false,
-      loadBalancerName='ops-dashboards-com',
-      projectId='gitlab-ops',
-      ignoreTrafficCessation=true
-    ),
 
     // This component represents the Google Load Balancer in front
     // of the internal Grafana instance at dashboards.gitlab.net
