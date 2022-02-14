@@ -288,9 +288,7 @@ local dashboardsForService(type) =
         'Kube Containers Detail',
         tags=[type, 'type:' + type, 'kube', 'kube detail'],
       )
-      .addTemplate(
-        if !serviceInfo.serviceIsStageless then templates.stage else null
-      )
+      .addTemplate(templates.stage)
       .addPanels(
         layout.rows(
           std.flatMap(
@@ -318,9 +316,7 @@ local dashboardsForService(type) =
         'Kube Deployment Detail',
         tags=[type, 'type:' + type, 'kube', 'kube detail'],
       )
-      .addTemplate(
-        if !serviceInfo.serviceIsStageless then templates.stage else null
-      )
+      .addTemplate(templates.stage)
       .addPanels(
         layout.rows(
           std.flatMap(
