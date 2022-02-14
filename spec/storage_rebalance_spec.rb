@@ -412,9 +412,7 @@ describe ::Storage::GitLabClient do
   let(:test_status_code) { test_response_code_ok }
   let(:test_response_code_ok) { 200 }
   let(:test_response_body) do
-    body = {}
-    body['resource'] = 'value'
-    body
+    { resource: 'value' }
   end
 
   let(:test_response_headers) { {} }
