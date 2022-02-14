@@ -282,62 +282,70 @@ local dashboardsForService(type) =
     [if serviceInfo.serviceIsStageless then null else 'stage']: '$stage',
   };
 
+  local dashboardWithStage(dashboard) =
+    if serviceInfo.serviceIsStageless || !std.objectHas(selector, 'stage') then
+      dashboard
+    else
+      dashboard.addTemplate(templates.stage);
+
   {
     'kube-containers':
-      basic.dashboard(
-        'Kube Containers Detail',
-        tags=[type, 'type:' + type, 'kube', 'kube detail'],
-      )
-      .addTemplate(templates.stage)
-      .addPanels(
-        layout.rows(
-          std.flatMap(
-            function(deployment)
-              [
-                row.new(title='%s deployment' % [deployment]),
-              ]
-              +
-              std.flatMap(
-                function(container) rowsForContainer(container, deployment, selector),
-                serviceInfo.kubeResources[deployment].containers
-              ),
-            deployments
-          ),
-          rowHeight=8
+      dashboardWithStage(
+        basic.dashboard(
+          'Kube Containers Detail',
+          tags=[type, 'type:' + type, 'kube', 'kube detail'],
         )
+        .addPanels(
+          layout.rows(
+            std.flatMap(
+              function(deployment)
+                [
+                  row.new(title='%s deployment' % [deployment]),
+                ]
+                +
+                std.flatMap(
+                  function(container) rowsForContainer(container, deployment, selector),
+                  serviceInfo.kubeResources[deployment].containers
+                ),
+              deployments
+            ),
+            rowHeight=8
+          )
+        )
+        .trailer()
       )
-      .trailer()
       + {
         links+: linksForService(type),
       },
 
     'kube-deployments':
-      basic.dashboard(
-        'Kube Deployment Detail',
-        tags=[type, 'type:' + type, 'kube', 'kube detail'],
-      )
-      .addTemplate(templates.stage)
-      .addPanels(
-        layout.rows(
-          std.flatMap(
-            function(deployment)
-              [
-                row.new(title='%s deployment' % [deployment]),
-              ]
-              +
-              [
-                panelsForDeployment(type, deployment, selector),
-              ],
-            deployments
-          )
-          +
-          [
-            panelsForRequestsUtilization(type, selector),
-          ],
-          rowHeight=8
+      dashboardWithStage(
+        basic.dashboard(
+          'Kube Deployment Detail',
+          tags=[type, 'type:' + type, 'kube', 'kube detail'],
         )
+        .addPanels(
+          layout.rows(
+            std.flatMap(
+              function(deployment)
+                [
+                  row.new(title='%s deployment' % [deployment]),
+                ]
+                +
+                [
+                  panelsForDeployment(type, deployment, selector),
+                ],
+              deployments
+            )
+            +
+            [
+              panelsForRequestsUtilization(type, selector),
+            ],
+            rowHeight=8
+          )
+        )
+        .trailer()
       )
-      .trailer()
       + {
         links+: linksForService(type),
       },
