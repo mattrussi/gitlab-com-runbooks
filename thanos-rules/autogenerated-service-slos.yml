@@ -791,30 +791,6 @@ groups:
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
-      component: public_dashboards_thanos_query
-      tier: inf
-      type: monitoring
-    expr: "0.999000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: public_dashboards_thanos_query
-      tier: inf
-      type: monitoring
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: public_grafana_google_lb
-      tier: inf
-      type: monitoring
-    expr: "0.999000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: public_grafana_google_lb
-      tier: inf
-      type: monitoring
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
       component: rule_evaluation
       tier: inf
       type: monitoring
@@ -2437,22 +2413,6 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: prometheus_alert_sender
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: inf
-      type: monitoring
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: public_dashboards_thanos_query
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: inf
-      type: monitoring
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: public_grafana_google_lb
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
