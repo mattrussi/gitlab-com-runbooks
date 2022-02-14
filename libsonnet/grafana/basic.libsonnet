@@ -222,6 +222,14 @@ local validateTags(tags) =
       addPanelsIf(condition, panels)::
         if condition then self.addPanels(panels) else self,
 
+      // Conditionally add a template to a dashboard
+      addTemplateIf(condition, template)::
+        if condition then self.addTemplate(template) else self,
+
+      // Conditionally add many templates to a dashboard
+      addTemplatesIf(condition, templates)::
+        if condition then self.addTemplates(templates) else self,
+
       trailer()::
         local dashboardWithTrailerPanel = self.addPanel(
           text.new(
