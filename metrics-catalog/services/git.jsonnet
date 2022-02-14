@@ -6,6 +6,7 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local haproxyComponents = import './lib/haproxy_components.libsonnet';
 local sliLibrary = import 'gitlab-slis/library.libsonnet';
 local serviceLevelIndicatorDefinition = import 'servicemetrics/service_level_indicator_definition.libsonnet';
+local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 
 local gitWorkhorseJobNameSelector = { job: { re: 'gitlab-workhorse|gitlab-workhorse-git' } };
 
@@ -58,6 +59,19 @@ metricsCatalog.serviceDefinition({
   },
   // Git service is spread across multiple regions, monitor it as such
   regional: true,
+
+  kubeConfig: {
+    labelSelectors: kubeLabelSelectors(
+      ingressSelector=null,
+      // TODO: Currently git nodes are incorrectly named
+      // See https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/15208
+      nodeSelector={ type: { oneOf: ['shell', 'git-https'] } },
+      // TODO: Currently git nodes to have a `shard` label
+      // Hardcoding git nodes to main stage for now
+      nodeStaticLabels={ stage: 'main' }
+    ),
+  },
+
   kubeResources: {
     'gitlab-shell': {
       kind: 'Deployment',

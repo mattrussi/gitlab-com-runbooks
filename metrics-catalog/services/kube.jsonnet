@@ -4,6 +4,7 @@ local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local customRateQuery = metricsCatalog.customRateQuery;
 local maturityLevels = import 'service-maturity/levels.libsonnet';
+local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 
 metricsCatalog.serviceDefinition({
   type: 'kube',
@@ -22,8 +23,22 @@ metricsCatalog.serviceDefinition({
   serviceDependencies: {
   },
   provisioning: {
-    kubernetes: false,  // Kubernetes isn't deployed on Kubernetes
+    kubernetes: true,
     vms: false,
+  },
+  kubeConfig: {
+    labelSelectors: kubeLabelSelectors(
+      podSelector=null,
+      hpaSelector=null,
+      ingressSelector=null,
+      deploymentSelector=null,
+      nodeSelector={ type: { oneOf: ['default', 'highmem', '' /* Unlabelled nodepools belong here */] } },
+
+      // TODO: fix the stage label for default and highmem nodes
+      // See https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/15208
+      // Hardcoding kube nodes to main stage for now
+      nodeStaticLabels={ stage: 'main' },
+    ),
   },
   serviceLevelIndicators: {
     apiserver: {

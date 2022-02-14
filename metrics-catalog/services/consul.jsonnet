@@ -1,5 +1,6 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
+local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 
 metricsCatalog.serviceDefinition({
   type: 'consul',
@@ -13,6 +14,13 @@ metricsCatalog.serviceDefinition({
     kubernetes: true,
   },
   regional: true,
+  kubeConfig: {
+    labelSelectors: kubeLabelSelectors(
+      hpaSelector=null,  // no hpas for consul
+      ingressSelector=null,  // no ingress for consul
+      deploymentSelector=null,  // no deployments for consul
+    ),
+  },
   kubeResources: {
     consul: {
       kind: 'Daemonset',

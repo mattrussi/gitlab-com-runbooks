@@ -3,6 +3,7 @@ local rateMetric = metricsCatalog.rateMetric;
 local derivMetric = metricsCatalog.derivMetric;
 local googleLoadBalancerComponents = import './lib/google_load_balancer_components.libsonnet';
 local maturityLevels = import 'service-maturity/levels.libsonnet';
+local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 
 metricsCatalog.serviceDefinition({
   type: 'logging',
@@ -17,6 +18,13 @@ metricsCatalog.serviceDefinition({
   provisioning: {
     vms: false,
     kubernetes: true,
+  },
+  kubeConfig: {
+    labelSelectors: kubeLabelSelectors(
+      hpaSelector=null,  // no hpas for logging,
+      ingressSelector=null,  // no ingress for logging
+      deploymentSelector=null,  // no deployment for logging
+    ),
   },
   kubeResources: {
     'fluentd-archiver': {

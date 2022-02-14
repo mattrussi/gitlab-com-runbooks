@@ -6,6 +6,7 @@ local haproxyComponents = import './lib/haproxy_components.libsonnet';
 local registryHelpers = import './lib/registry-helpers.libsonnet';
 local registryBaseSelector = registryHelpers.registryBaseSelector;
 local defaultRegistrySLIProperties = registryHelpers.defaultRegistrySLIProperties;
+local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 
 metricsCatalog.serviceDefinition({
   type: 'registry',
@@ -45,6 +46,16 @@ metricsCatalog.serviceDefinition({
   },
   // Git service is spread across multiple regions, monitor it as such
   regional: true,
+  kubeConfig: {
+    labelSelectors: kubeLabelSelectors(
+      ingressSelector=null,  // no ingress for registry
+      nodeSelector={ type: 'registry' },
+
+      // TODO: at present the registry nodes do not present a stage label
+      // assume they are all main stage
+      nodeStaticLabels={ stage: 'main' },
+    ),
+  },
   kubeResources: {
     registry: {
       kind: 'Deployment',

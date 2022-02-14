@@ -1,4 +1,7 @@
 local aggregations = import 'promql/aggregations.libsonnet';
+local selectors = import 'promql/selectors.libsonnet';
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
+local objects = import 'utils/objects.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 
 //
@@ -115,8 +118,8 @@ local podLabelJoinExpression(expression) =
   |||
     %(expression)s
     *
-    on(pod) group_left(tier, type, stage, shard, deployment)
-    topk by (pod) (1, kube_pod_labels:labeled{type!=""})
+    on(environment, cluster, pod) group_left(tier, type, stage, shard, deployment)
+    topk by (environment, cluster, pod) (1, kube_pod_labels:labeled{type!=""})
   ||| % {
     expression: expression,
   };
@@ -125,8 +128,8 @@ local kubeHorizontalPodAutoscalerLabelJoinExpression(expression) =
   |||
     %(expression)s
     *
-    on(horizontalpodautoscaler) group_left(tier, type, stage, shard)
-    topk by (horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels:labeled{type!=""})
+    on(environment, cluster, horizontalpodautoscaler) group_left(tier, type, stage, shard)
+    topk by (environment, cluster, horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels:labeled{type!=""})
   ||| % {
     expression: expression,
   };
@@ -142,8 +145,8 @@ local nodeLabelJoinExpression(expression) =
   |||
     %(expression)s
     *
-    on(node) group_left(shard, stage, type, tier)
-    topk by (node) (1, kube_node_labels:labeled)
+    on(environment, cluster, node) group_left(shard, stage, type, tier)
+    topk by (environment, cluster, node) (1, kube_node_labels:labeled)
   ||| % {
     expression: expression,
   };
@@ -152,8 +155,8 @@ local nginxIngressJoinExpression(expression) =
   |||
     %(expression)s
     *
-    on(ingress) group_left(shard, stage, type, tier)
-    topk by (ingress) (1, kube_ingress_labels:labeled)
+    on(environment, cluster, ingress) group_left(shard, stage, type, tier)
+    topk by (environment, cluster, ingress) (1, kube_ingress_labels:labeled)
   ||| % {
     expression: expression,
   };
@@ -162,156 +165,207 @@ local deploymentJoinExpression(expression) =
   |||
     %(expression)s
     *
-    on(deployment) group_left(shard, stage, type, tier)
-    topk by (deployment) (1, kube_deployment_labels:labeled)
+    on(environment, cluster, deployment) group_left(shard, stage, type, tier)
+    topk by (environment, cluster, deployment) (1, kube_deployment_labels:labeled)
   ||| % {
     expression: expression,
   };
 
-local recordingRuleFor(metricName, expression) =
-  {
-    record: metricName + ':labeled',
-    expr: expression,
-  };
+local recordingRulesFor(metricName, labels, expression) =
+  if expression == null then
+    []
+  else
+    [{
+      record: metricName + ':labeled',
+      [if labels != {} then 'labels']: labels,
+      expr: expression,
+    }];
 
-local relabel(expression, labelMap) =
-  local fromLabels = std.objectFields(labelMap);
-  local relabels = std.foldl(
-    function(memo, labelFrom)
-      local labelTo = labelMap[labelFrom];
-      |||
-        label_replace(
-          %(memo)s,
-          "%(labelTo)s", "$0", "%(labelFrom)s", ".*"
-        )
-      ||| % {
-        labelTo: labelTo,
-        labelFrom: labelFrom,
-        memo: strings.indent(memo, 2),
-      },
-    fromLabels,
-    expression
+local kubernetesSelectorToKubeStatePromSelector(selector) =
+  objects.mapKeyValues(
+    function(key, value)
+      // Certain labels don't need a prefix
+      if key == 'namespace' then
+        [key, value]
+      else
+        ['label_' + key, value],
+    selector
   );
-  |||
-    group without(%(fromLabels)s) (
-      %(relabels)s
-    )
-  ||| % {
-    fromLabels: aggregations.serialize(fromLabels),
-    relabels: strings.indent(relabels, 2),
-  };
 
-local rules = {
-  groups: [{
-    name: 'kube-state-metrics-recording-rules',
+
+local relabel(keyLabel, infoMetric, kubernetesLabelSelector, labelMap) =
+  if kubernetesLabelSelector == null then
+    null
+  else
+    local kubernetesSelectorExpression = kubernetesSelectorToKubeStatePromSelector(kubernetesLabelSelector);
+
+    local baseExpression = 'topk by(environment, cluster, %(keyLabel)s) (1, %(infoMetric)s{%(kubernetesSelectorExpression)s})' % {
+      kubernetesSelectorExpression: selectors.serializeHash(kubernetesSelectorExpression),
+      keyLabel: keyLabel,
+      infoMetric: infoMetric,
+    };
+
+    local fromLabels = std.objectFields(labelMap);
+    local relabels = std.foldl(
+      function(memo, labelFrom)
+        local labelTo = labelMap[labelFrom];
+        |||
+          label_replace(
+            %(memo)s,
+            "%(labelTo)s", "$0", "%(labelFrom)s", ".*"
+          )
+        ||| % {
+          labelTo: labelTo,
+          labelFrom: labelFrom,
+          memo: strings.indent(memo, 2),
+        },
+      fromLabels,
+      baseExpression
+    );
+
+    |||
+      group without(%(fromLabels)s) (
+        %(relabels)s
+      )
+    ||| % {
+      fromLabels: aggregations.serialize(fromLabels),
+      relabels: strings.indent(relabels, 2),
+    };
+
+local groupForService(service) =
+  local formatConfig = { type: service.type };
+  local defaultStaticLabels = { type: service.type, tier: service.tier };
+  local kubeLabelSelectors = service.kubeConfig.labelSelectors;
+
+  {
+    name: 'kube-state-metrics-recording-rules: %(type)s' % formatConfig,
     interval: '1m',
-    rules: [
+    rules:
       // Relabel: kube_pod_labels
-      recordingRuleFor(
+      recordingRulesFor(
         'kube_pod_labels',
-        relabel(
-          'topk by (pod) (1, kube_pod_labels{})',
-          {
-            label_tier: 'tier',
-            label_type: 'type',
+        labels=defaultStaticLabels + kubeLabelSelectors.staticLabels.pod,
+        expression=relabel(
+          keyLabel='pod',
+          infoMetric='kube_pod_labels',
+          kubernetesLabelSelector=kubeLabelSelectors.pod,
+          labelMap={
             label_stage: 'stage',
-            label_queue_pod_name: 'shard',
+            label_shard: 'shard',
             label_deployment: 'deployment',
           }
         )
-      ),
-    ] + [
-      /* container_* recording rules */
-      recordingRuleFor(metricName, cadvisorWithLabelNamesExpression(metricName))
-      for metricName in cadvisorMetrics
-    ] + [
-      /* kube_pod_container_* recording rules */
-      recordingRuleFor(metricName, podLabelJoinExpression(metricName))
-      for metricName in kubePodContainerMetrics
-    ] + [
+      )
+      +
       // Relabel:kube_horizontalpodautoscaler_labels
-      recordingRuleFor(
+      recordingRulesFor(
         'kube_horizontalpodautoscaler_labels',
-        relabel(
-          'topk by (horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels{})',
-          {
-            label_tier: 'tier',
-            label_type: 'type',
+        labels=defaultStaticLabels + kubeLabelSelectors.staticLabels.hpa,
+        expression=relabel(
+          keyLabel='horizontalpodautoscaler',
+          infoMetric='kube_horizontalpodautoscaler_labels',
+          kubernetesLabelSelector=kubeLabelSelectors.hpa,
+          labelMap={
             label_stage: 'stage',
             label_shard: 'shard',
           }
         )
-      ),
-    ] + [
-      /* kube_horizontalpodautoscaler_* recording rules */
-      recordingRuleFor(metricName, kubeHorizontalPodAutoscalerLabelJoinExpression(metricName))
-      for metricName in kubeHorizontalPodAutoscalerMetrics
-    ] + [
+      )
+      +
       // Relabel: kube_node_labels
-      recordingRuleFor(
+      recordingRulesFor(
         'kube_node_labels',
-        relabel(
-          |||
-            kube_node_labels
-            * on(label_type) group_left(service_type, service_tier, service_shard, service_stage)
-            topk by(label_type) (1, gitlab:kube_node_pool_labels)
-          |||,
-          {
-            service_tier: 'tier',
-            service_type: 'type',
+        labels=defaultStaticLabels + kubeLabelSelectors.staticLabels.node,
+        expression=relabel(
+          keyLabel='node',
+          infoMetric='kube_node_labels',
+          kubernetesLabelSelector=kubeLabelSelectors.node,
+          labelMap={
             service_stage: 'stage',
             service_shard: 'shard',
           }
         )
-      ),
-    ] + [
-      /* node_* recording rules */
-      recordingRuleFor(metricName, nodeLabelJoinExpression(metricName))
-      for metricName in kubeNodeMetrics
-    ] + [
+      )
+      +
       // Relabel: kube_ingress_labels
-      recordingRuleFor(
+      recordingRulesFor(
         'kube_ingress_labels',
-        relabel(
-          |||
-            topk by(label_type) (1, kube_ingress_labels)
-          |||,
-          {
-            label_tier: 'tier',
-            label_type: 'type',
-            label_stage: 'stage',  // Requires https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/1727 to work
-            service_shard: 'shard',  // Requires https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/1727 to work
+        labels=defaultStaticLabels + kubeLabelSelectors.staticLabels.ingress,
+        expression=relabel(
+          keyLabel='ingress',
+          infoMetric='kube_ingress_labels',
+          kubernetesLabelSelector=kubeLabelSelectors.ingress,
+          labelMap={
+            label_stage: 'stage',
+            service_shard: 'shard',
           }
         )
-      ),
-    ] + [
-      /* ingress recording rules */
-      recordingRuleFor(metricName, nginxIngressJoinExpression(metricName))
-      for metricName in ingressMetrics
-    ] + [
+      )
+      +
       // Relabel: kube_deployment_labels
-      recordingRuleFor(
+      recordingRulesFor(
         'kube_deployment_labels',
-        relabel(
-          |||
-            topk by(label_type) (1, kube_deployment_labels)
-          |||,
-          {
-            label_tier: 'tier',
-            label_type: 'type',
+        labels=defaultStaticLabels + kubeLabelSelectors.staticLabels.deployment,
+        expression=relabel(
+          keyLabel='deployment',
+          infoMetric='kube_deployment_labels',
+          kubernetesLabelSelector=kubeLabelSelectors.deployment,
+          labelMap={
             label_stage: 'stage',
             service_shard: 'shard',
           }
         )
       ),
-    ] + [
-      /* deployment recording rules */
-      recordingRuleFor(metricName, deploymentJoinExpression(metricName))
-      for metricName in deploymentMetrics
-    ],
-  }],
-};
+  };
+
+local globalRules =
+  /* container_* recording rules */
+  std.flatMap(
+    function(metricName)
+      recordingRulesFor(metricName, labels={}, expression=cadvisorWithLabelNamesExpression(metricName)),
+    cadvisorMetrics
+  )
+  +
+  /* kube_pod_container_* recording rules */
+  std.flatMap(
+    function(metricName)
+      recordingRulesFor(metricName, labels={}, expression=podLabelJoinExpression(metricName)),
+    kubePodContainerMetrics
+  )
+  +
+  /* kube_horizontalpodautoscaler_* recording rules */
+  std.flatMap(
+    function(metricName)
+      recordingRulesFor(metricName, labels={}, expression=kubeHorizontalPodAutoscalerLabelJoinExpression(metricName)),
+    kubeHorizontalPodAutoscalerMetrics
+  )
+  +
+  /* ingress recording rules */
+  std.flatMap(
+    function(metricName)
+      recordingRulesFor(metricName, labels={}, expression=nginxIngressJoinExpression(metricName)),
+    ingressMetrics
+  )
+  +
+  /* deployment recording rules */
+  std.flatMap(
+    function(metricName)
+      recordingRulesFor(metricName, labels={}, expression=deploymentJoinExpression(metricName)),
+    deploymentMetrics
+  );
+
+local kubeServices = std.filter(function(s) s.provisioning.kubernetes, metricsCatalog.services);
 
 {
-  'kube-state-metrics-recording-rules.yml': std.manifestYamlDoc(rules),
+  'kube-state-metrics-recording-rules.yml':
+    std.manifestYamlDoc({
+      groups: [
+        groupForService(service)
+        for service in kubeServices
+      ] + [{
+        name: 'kube-state-metrics-recording-rules: global rules',
+        interval: '1m',
+        rules: globalRules,
+      }],
+    }),
 }

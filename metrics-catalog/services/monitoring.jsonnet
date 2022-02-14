@@ -5,6 +5,7 @@ local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local googleLoadBalancerComponents = import './lib/google_load_balancer_components.libsonnet';
 local maturityLevels = import 'service-maturity/levels.libsonnet';
+local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 
 metricsCatalog.serviceDefinition({
   type: 'monitoring',
@@ -25,6 +26,28 @@ metricsCatalog.serviceDefinition({
   provisioning: {
     kubernetes: true,
     vms: true,
+  },
+  kubeConfig: {
+    // TODO: monitoring doesn't have very good labelling.
+    // See https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/15208
+    // For now, we base our resource matching on namespace only and assume
+    // everything is in the main stage
+    local kubeSelector = { namespace: 'monitoring' },
+    local staticLabels = { stage: 'main' },
+
+    labelSelectors: kubeLabelSelectors(
+      podSelector=kubeSelector,
+      hpaSelector=kubeSelector,
+      nodeSelector=null,
+      ingressSelector=kubeSelector,
+      deploymentSelector=kubeSelector,
+
+      podStaticLabels=staticLabels,
+      hpaStaticLabels=staticLabels,
+      nodeStaticLabels=staticLabels,
+      ingressStaticLabels=staticLabels,
+      deploymentStaticLabels=staticLabels,
+    ),
   },
   kubeResources: {
     grafana: {
