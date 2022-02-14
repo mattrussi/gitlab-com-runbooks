@@ -31,7 +31,7 @@ metricsCatalog.serviceDefinition({
         'fluentd-elasticsearch',
       ],
     },
-    'pubsubbeat': {
+    pubsubbeat: {
       kind: 'Deployment',
       containers: [
         'pubsubbeat',
