@@ -731,54 +731,6 @@ groups:
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
-      component: memcached_thanos_qfe_labels
-      tier: inf
-      type: monitoring
-    expr: "0.999000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: memcached_thanos_qfe_labels
-      tier: inf
-      type: monitoring
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: memcached_thanos_qfe_query_range
-      tier: inf
-      type: monitoring
-    expr: "0.999000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: memcached_thanos_qfe_query_range
-      tier: inf
-      type: monitoring
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: memcached_thanos_store_bucket
-      tier: inf
-      type: monitoring
-    expr: "0.999000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: memcached_thanos_store_bucket
-      tier: inf
-      type: monitoring
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: memcached_thanos_store_index
-      tier: inf
-      type: monitoring
-    expr: "0.999000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: memcached_thanos_store_index
-      tier: inf
-      type: monitoring
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
       component: prometheus
       tier: inf
       type: monitoring
@@ -822,6 +774,18 @@ groups:
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: thanos_compactor
+      tier: inf
+      type: monitoring
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: thanos_memcached
+      tier: inf
+      type: monitoring
+    expr: "0.999000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: thanos_memcached
       tier: inf
       type: monitoring
     expr: "0.001000"
@@ -2392,38 +2356,6 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
-      component: memcached_thanos_qfe_labels
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: inf
-      type: monitoring
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: memcached_thanos_qfe_query_range
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: inf
-      type: monitoring
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: memcached_thanos_store_bucket
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: inf
-      type: monitoring
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: memcached_thanos_store_index
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: inf
-      type: monitoring
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
       component: prometheus
       regional_aggregation: "no"
       service_aggregation: "yes"
@@ -2451,6 +2383,14 @@ groups:
       component: thanos_compactor
       regional_aggregation: "no"
       service_aggregation: "yes"
+      tier: inf
+      type: monitoring
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: thanos_memcached
+      regional_aggregation: "no"
+      service_aggregation: "no"
       tier: inf
       type: monitoring
     expr: "1"
