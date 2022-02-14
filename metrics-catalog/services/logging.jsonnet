@@ -31,6 +31,12 @@ metricsCatalog.serviceDefinition({
         'fluentd-elasticsearch',
       ],
     },
+    pubsubbeat: {
+      kind: 'Deployment',
+      containers: [
+        'pubsubbeat',
+      ],
+    },
   },
   serviceLevelIndicators: {
     elasticsearch_searching_cluster: {
