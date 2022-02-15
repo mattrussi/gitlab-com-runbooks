@@ -168,28 +168,23 @@ local sidekiqThanosAlerts() =
 
 
 local rules = {
-  groups: [{
-    name: aggregationSets.sidekiqWorkerQueueSLIs.name,
-    interval: '1m',
-    partial_response_strategy: 'warn',
-    rules: aggregationSetTransformer.generateRecordingRules(
+  groups:
+    aggregationSetTransformer.generateRecordingRuleGroups(
       sourceAggregationSet=aggregationSets.sidekiqWorkerQueueSourceSLIs,
-      targetAggregationSet=aggregationSets.sidekiqWorkerQueueSLIs
-    ),
-  }, {
-    name: aggregationSets.sidekiqWorkerExecutionSLIs.name,
-    interval: '1m',
-    partial_response_strategy: 'warn',
-    rules: aggregationSetTransformer.generateRecordingRules(
+      targetAggregationSet=aggregationSets.sidekiqWorkerQueueSLIs,
+      extrasForGroup={ partial_response_strategy: 'warn' },
+    ) +
+    aggregationSetTransformer.generateRecordingRuleGroups(
       sourceAggregationSet=aggregationSets.sidekiqWorkerExecutionSourceSLIs,
-      targetAggregationSet=aggregationSets.sidekiqWorkerExecutionSLIs
-    ),
-  }, {
-    name: 'Sidekiq Aggregated Thanos Alerts',
-    partial_response_strategy: 'warn',
-    interval: '1m',
-    rules: alerts.processAlertRules(sidekiqThanosAlerts()),
-  }],
+      targetAggregationSet=aggregationSets.sidekiqWorkerExecutionSLIs,
+      extrasForGroup={ partial_response_strategy: 'warn' },
+    )
+    + [{
+      name: 'Sidekiq Aggregated Thanos Alerts',
+      partial_response_strategy: 'warn',
+      interval: '1m',
+      rules: alerts.processAlertRules(sidekiqThanosAlerts()),
+    }],
 };
 
 {

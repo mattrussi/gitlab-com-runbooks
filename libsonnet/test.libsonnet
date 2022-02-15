@@ -22,6 +22,15 @@ local matchers = {
       },
     expectationType: true,
   },
+  expectAll: {
+    matcher(actual, f):
+      matcher {
+        local notSatisfied = std.filter(function(e) !f(e), actual),
+        satisfied: std.length(notSatisfied) == 0,
+        positiveMessage: 'Expected all elements to satisfy function but %s did not' % [notSatisfied],
+      },
+    expectationType: true,
+  },
 };
 
 {

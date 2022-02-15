@@ -2,6 +2,23 @@ local multiburnFactors = import './multiburn_factors.libsonnet';
 local test = import 'github.com/yugui/jsonnetunit/jsonnetunit/test.libsonnet';
 
 test.suite({
+  testBurnTypeForWindow_fast: {
+    actual: multiburnFactors.burnTypeForWindow('1h'),
+    expect: 'fast',
+  },
+  testBurnTypeForWindow_slow: {
+    actual: multiburnFactors.burnTypeForWindow('30m'),
+    expect: 'slow',
+  },
+  testBurnTypeForWindow_missingFast: {
+    actual: multiburnFactors.burnTypeForWindow('1m'),
+    expect: 'fast',
+  },
+  testBurnTypeForWindow_missingSlow: {
+    actual: multiburnFactors.burnTypeForWindow('28d'),
+    expect: 'slow',
+  },
+
   // See https://landing.google.com/sre/workbook/chapters/alerting-on-slos/#5-multiple-burn-rate-alerts
   // for more details
   testErrorBudgetFactorFor_1h: {

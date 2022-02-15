@@ -18,22 +18,16 @@ local groupsForService(service) =
   );
 
 local serviceSLISGroups =
-  [{
-    // Generate ratio SLIs for component-level metrics
-    name: aggregationSets.componentSLIs.name + ' ratios',
-    interval: '1m',
-    rules: aggregationSetTransformer.generateReflectedRecordingRules(
-      aggregationSet=aggregationSets.componentSLIs,
-    ),
-  }, {
-    // Aggregate the component-level metrics to service-level
-    name: aggregationSets.serviceSLIs.name,
-    interval: '1m',
-    rules: aggregationSetTransformer.generateRecordingRules(
-      sourceAggregationSet=aggregationSets.componentSLIs,
-      targetAggregationSet=aggregationSets.serviceSLIs
-    ),
-  }];
+  // Aggregate the component-level metrics to service-level
+  aggregationSetTransformer.generateRecordingRuleGroups(
+    sourceAggregationSet=aggregationSets.componentSLIs,
+    targetAggregationSet=aggregationSets.serviceSLIs
+  )
+  +
+  // Generate ratio SLIs for component-level metrics
+  aggregationSetTransformer.generateReflectedRecordingRuleGroups(
+    aggregationSet=aggregationSets.componentSLIs,
+  );
 
 local serviceSLOsGroups =
   [{

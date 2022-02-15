@@ -6,7 +6,6 @@ local validator = import 'utils/validator.libsonnet';
 local defaultSourceBurnRates = ['5m', '30m', '1h'];
 local defaultGlobalBurnRates = defaultSourceBurnRates + ['6h', '3d'];
 local upscaledBurnRates = ['6h', '3d'];
-local longWindowStart = durationParser.toSeconds('6h');
 
 local definitionDefaults = {
   aggregationFilter: null,
@@ -162,10 +161,15 @@ local buildValidator(definition) =
         else [];
         std.set(definedBurnRates + supportedBurnRates, durationParser.toSeconds),
 
-      getShortWindowBurnRates()::
-        std.filter(function(burnRate) durationParser.toSeconds(burnRate) < longWindowStart, self.getBurnRates()),
-      getLongWindowBurnRates()::
-        std.filter(function(burnRate) durationParser.toSeconds(burnRate) >= longWindowStart, self.getBurnRates()),
-
+      getBurnRatesByType()::
+        std.foldl(
+          function(memo, burnRate)
+            local typeForBurnRate = multiburnFactors.burnTypeForWindow(burnRate);
+            local existingBurnRatesForType = if std.objectHas(memo, typeForBurnRate)
+            then memo[typeForBurnRate] else [];
+            memo { [typeForBurnRate]: existingBurnRatesForType + [burnRate] },
+          self.getBurnRates(),
+          {}
+        ),
     },
 }

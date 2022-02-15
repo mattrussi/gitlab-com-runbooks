@@ -1,7 +1,11 @@
+local multiburnFactors = import 'mwmbr/multiburn_factors.libsonnet';
+
 {
+  intervalByBurnType: {
+    slow: '2m',
+    fast: '1m',
+  },
+
   intervalForDuration(duration)::
-    if duration == '30m' || duration == '6h' then
-      '2m'
-    else
-      '1m',
+    self.intervalByBurnType[multiburnFactors.burnTypeForWindow(duration)],
 }
