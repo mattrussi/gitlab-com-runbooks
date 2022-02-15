@@ -352,6 +352,13 @@ local globalRules =
     function(metricName)
       recordingRulesFor(metricName, labels={}, expression=deploymentJoinExpression(metricName)),
     deploymentMetrics
+  )
+  +
+  /* kube node metrics recording rules */
+  std.flatMap(
+    function(metricName)
+      recordingRulesFor(metricName, labels={}, expression=nodeLabelJoinExpression(metricName)),
+    kubeNodeMetrics
   );
 
 local kubeServices = std.filter(function(s) s.provisioning.kubernetes, metricsCatalog.services);
