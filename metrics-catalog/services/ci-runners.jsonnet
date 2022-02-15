@@ -2,6 +2,7 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
+local haproxyComponents = import './lib/haproxy_components.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'ci-runners',
@@ -24,6 +25,14 @@ metricsCatalog.serviceDefinition({
     api: true,
   },
   serviceLevelIndicators: {
+    loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
+      userImpacting=true,
+      featureCategory='runner',
+      selector={ type: 'ci' },
+      stageMappings={
+        main: { backends: ['https_git', 'api', 'ci_gateway_catch_all'], toolingLinks: [] },
+      },
+    ),
     polling: {
       userImpacting: true,
       featureCategory: 'runner',

@@ -6,6 +6,34 @@ groups:
   rules:
   - record: gitlab_component_ops:rate
     labels:
+      component: loadbalancer
+      stage: main
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (environment) (
+        rate(haproxy_backend_http_responses_total{backend=~"https_git|api|ci_gateway_catch_all",type="ci"}[1m])
+      )
+  - record: gitlab_component_errors:rate
+    labels:
+      component: loadbalancer
+      stage: main
+      tier: runners
+      type: ci-runners
+    expr: |
+      (
+        sum by (environment) (
+          rate(haproxy_backend_http_responses_total{backend=~"https_git|api|ci_gateway_catch_all",code="5xx",type="ci"}[1m])
+        )
+      )
+      or
+      (
+        0 * group by(environment) (
+          gitlab_component_ops:rate{component="loadbalancer",stage="main",tier="runners",type="ci-runners"}
+        )
+      )
+  - record: gitlab_component_ops:rate
+    labels:
       component: polling
       tier: runners
       type: ci-runners
@@ -130,6 +158,34 @@ groups:
 - name: 'Component-Level SLIs: ci-runners - 5m burn-rate'
   interval: 1m
   rules:
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: loadbalancer
+      stage: main
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (environment) (
+        rate(haproxy_backend_http_responses_total{backend=~"https_git|api|ci_gateway_catch_all",type="ci"}[5m])
+      )
+  - record: gitlab_component_errors:rate_5m
+    labels:
+      component: loadbalancer
+      stage: main
+      tier: runners
+      type: ci-runners
+    expr: |
+      (
+        sum by (environment) (
+          rate(haproxy_backend_http_responses_total{backend=~"https_git|api|ci_gateway_catch_all",code="5xx",type="ci"}[5m])
+        )
+      )
+      or
+      (
+        0 * group by(environment) (
+          gitlab_component_ops:rate_5m{component="loadbalancer",stage="main",tier="runners",type="ci-runners"}
+        )
+      )
   - record: gitlab_component_ops:rate_5m
     labels:
       component: polling
@@ -258,6 +314,34 @@ groups:
   rules:
   - record: gitlab_component_ops:rate_30m
     labels:
+      component: loadbalancer
+      stage: main
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (environment) (
+        rate(haproxy_backend_http_responses_total{backend=~"https_git|api|ci_gateway_catch_all",type="ci"}[30m])
+      )
+  - record: gitlab_component_errors:rate_30m
+    labels:
+      component: loadbalancer
+      stage: main
+      tier: runners
+      type: ci-runners
+    expr: |
+      (
+        sum by (environment) (
+          rate(haproxy_backend_http_responses_total{backend=~"https_git|api|ci_gateway_catch_all",code="5xx",type="ci"}[30m])
+        )
+      )
+      or
+      (
+        0 * group by(environment) (
+          gitlab_component_ops:rate_30m{component="loadbalancer",stage="main",tier="runners",type="ci-runners"}
+        )
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
       component: polling
       tier: runners
       type: ci-runners
@@ -382,6 +466,34 @@ groups:
 - name: 'Component-Level SLIs: ci-runners - 1h burn-rate'
   interval: 1m
   rules:
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: loadbalancer
+      stage: main
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (environment) (
+        rate(haproxy_backend_http_responses_total{backend=~"https_git|api|ci_gateway_catch_all",type="ci"}[1h])
+      )
+  - record: gitlab_component_errors:rate_1h
+    labels:
+      component: loadbalancer
+      stage: main
+      tier: runners
+      type: ci-runners
+    expr: |
+      (
+        sum by (environment) (
+          rate(haproxy_backend_http_responses_total{backend=~"https_git|api|ci_gateway_catch_all",code="5xx",type="ci"}[1h])
+        )
+      )
+      or
+      (
+        0 * group by(environment) (
+          gitlab_component_ops:rate_1h{component="loadbalancer",stage="main",tier="runners",type="ci-runners"}
+        )
+      )
   - record: gitlab_component_ops:rate_1h
     labels:
       component: polling
@@ -510,6 +622,34 @@ groups:
   rules:
   - record: gitlab_component_ops:rate_6h
     labels:
+      component: loadbalancer
+      stage: main
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (environment) (
+        rate(haproxy_backend_http_responses_total{backend=~"https_git|api|ci_gateway_catch_all",type="ci"}[6h])
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: loadbalancer
+      stage: main
+      tier: runners
+      type: ci-runners
+    expr: |
+      (
+        sum by (environment) (
+          rate(haproxy_backend_http_responses_total{backend=~"https_git|api|ci_gateway_catch_all",code="5xx",type="ci"}[6h])
+        )
+      )
+      or
+      (
+        0 * group by(environment) (
+          gitlab_component_ops:rate_6h{component="loadbalancer",stage="main",tier="runners",type="ci-runners"}
+        )
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
       component: polling
       tier: runners
       type: ci-runners
@@ -634,6 +774,14 @@ groups:
 - name: 'Component mapping: ci-runners'
   interval: 1m
   rules:
+  - record: gitlab_component_service:mapping
+    labels:
+      component: loadbalancer
+      regional_aggregation: "no"
+      service_aggregation: "no"
+      tier: runners
+      type: ci-runners
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: polling
