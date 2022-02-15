@@ -1434,6 +1434,83 @@ groups:
       max by(type) (
         clamp_min(
           clamp_max(
+            1 - (
+              node_filesystem_files_free{fstype=~"(ext.|xfs)", type=~"gitaly|praefect"}
+              /
+              node_filesystem_files{fstype=~"(ext.|xfs)", type=~"gitaly|praefect"}
+            )
+            ,
+            1)
+        ,
+        0)
+      )
+    labels:
+      component: disk_inodes
+    record: gitlab_component_saturation:ratio
+  - expr: |
+      max by(type) (
+        clamp_min(
+          clamp_max(
+            (
+              1 - node_filesystem_avail_bytes{fstype=~"ext.|xfs", type=~"gitaly|praefect"} / node_filesystem_size_bytes{fstype=~"ext.|xfs", type=~"gitaly|praefect"}
+            )
+            ,
+            1)
+        ,
+        0)
+      )
+    labels:
+      component: disk_space
+    record: gitlab_component_saturation:ratio
+  - expr: |
+      max by(type) (
+        clamp_min(
+          clamp_max(
+            sum by (type, fqdn) (
+              go_memstats_alloc_bytes{type=~"gitaly|praefect"}
+            )
+            /
+            sum by (type, fqdn) (
+              node_memory_MemTotal_bytes{type=~"gitaly|praefect"}
+            )
+            ,
+            1)
+        ,
+        0)
+      )
+    labels:
+      component: go_memory
+    record: gitlab_component_saturation:ratio
+  - expr: |
+      max by(type) (
+        clamp_min(
+          clamp_max(
+            instance:node_memory_utilization:ratio{type=~"gitaly|praefect"} or instance:node_memory_utilisation:ratio{type=~"gitaly|praefect"}
+            ,
+            1)
+        ,
+        0)
+      )
+    labels:
+      component: memory
+    record: gitlab_component_saturation:ratio
+  - expr: |
+      max by(type) (
+        clamp_min(
+          clamp_max(
+            avg without (cpu) (rate(node_schedstat_waiting_seconds_total{type=~"gitaly|praefect"}[1h]))
+            ,
+            1)
+        ,
+        0)
+      )
+    labels:
+      component: node_schedstat_waiting
+    record: gitlab_component_saturation:ratio
+  - expr: |
+      max by(type) (
+        clamp_min(
+          clamp_max(
             avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{mode="idle", type=~"gitaly|praefect"}[5m]))
             ,
             1)
@@ -1454,6 +1531,46 @@ groups:
     labels:
       component: cpu
     record: slo:max:hard:gitlab_component_saturation:ratio
+  - expr: "0.75"
+    labels:
+      component: disk_inodes
+    record: slo:max:soft:gitlab_component_saturation:ratio
+  - expr: "0.8"
+    labels:
+      component: disk_inodes
+    record: slo:max:hard:gitlab_component_saturation:ratio
+  - expr: "0.85"
+    labels:
+      component: disk_space
+    record: slo:max:soft:gitlab_component_saturation:ratio
+  - expr: "0.9"
+    labels:
+      component: disk_space
+    record: slo:max:hard:gitlab_component_saturation:ratio
+  - expr: "0.9"
+    labels:
+      component: go_memory
+    record: slo:max:soft:gitlab_component_saturation:ratio
+  - expr: "0.98"
+    labels:
+      component: go_memory
+    record: slo:max:hard:gitlab_component_saturation:ratio
+  - expr: "0.9"
+    labels:
+      component: memory
+    record: slo:max:soft:gitlab_component_saturation:ratio
+  - expr: "0.98"
+    labels:
+      component: memory
+    record: slo:max:hard:gitlab_component_saturation:ratio
+  - expr: "0.1"
+    labels:
+      component: node_schedstat_waiting
+    record: slo:max:soft:gitlab_component_saturation:ratio
+  - expr: "0.15"
+    labels:
+      component: node_schedstat_waiting
+    record: slo:max:hard:gitlab_component_saturation:ratio
   - expr: "0.9"
     labels:
       component: single_node_cpu
@@ -1472,6 +1589,46 @@ groups:
       horiz_scaling: "yes"
       quantile: max
       severity: s3
+    record: gitlab_component_saturation_info
+  - expr: "1"
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: disk_inodes
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s2
+    record: gitlab_component_saturation_info
+  - expr: "1"
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: disk_space
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s2
+    record: gitlab_component_saturation_info
+  - expr: "1"
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: go_memory
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s4
+    record: gitlab_component_saturation_info
+  - expr: "1"
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: memory
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s4
+    record: gitlab_component_saturation_info
+  - expr: "1"
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: node_schedstat_waiting
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s4
     record: gitlab_component_saturation_info
   - expr: "1"
     labels:
@@ -1535,6 +1692,206 @@ groups:
       alert_type: cause
       rules_domain: general
       severity: s3
+  - alert: component_saturation_slo_out_of_bounds
+    annotations:
+      description: |+
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Disk inode Utilization per Device per Node resource:
+
+        Disk inode utilization per device per node.
+
+        If this is too high, its possible that a directory is filling up with files. Consider logging in an checking temp directories for large numbers of files
+
+      grafana_dashboard_id: alerts-sat_disk_inodes
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_disk_inodes?from=now-6h/m&to=now-1m/m&var-type={{
+        $labels.type }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "39965907"
+      grafana_variables: type
+      promql_query: |
+        max by(type, fqdn, device) (
+          clamp_min(
+            clamp_max(
+              1 - (
+                node_filesystem_files_free{fstype=~"(ext.|xfs)", type="{{ $labels.type }}"}
+                /
+                node_filesystem_files{fstype=~"(ext.|xfs)", type="{{ $labels.type }}"}
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+      title: The Disk inode Utilization per Device per Node resource of the {{ $labels.type
+        }} service has a saturation exceeding SLO and is close to its capacity limit.
+    expr: |
+      gitlab_component_saturation:ratio{component="disk_inodes",monitor="global"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="disk_inodes",monitor="global"}
+    for: 15m
+    labels:
+      alert_type: cause
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+  - alert: component_saturation_slo_out_of_bounds
+    annotations:
+      description: |+
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Disk Space Utilization per Device per Node resource:
+
+        Disk space utilization per device per node.
+
+      grafana_dashboard_id: alerts-sat_disk_space
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_disk_space?from=now-6h/m&to=now-1m/m&var-type={{
+        $labels.type }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2661375984"
+      grafana_variables: type
+      promql_query: |
+        max by(type, node, device) (
+          clamp_min(
+            clamp_max(
+              (
+                1 - node_filesystem_avail_bytes{fstype=~"ext.|xfs", type="{{ $labels.type }}"} / node_filesystem_size_bytes{fstype=~"ext.|xfs", type="{{ $labels.type }}"}
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+      title: The Disk Space Utilization per Device per Node resource of the {{ $labels.type
+        }} service has a saturation exceeding SLO and is close to its capacity limit.
+    expr: |
+      gitlab_component_saturation:ratio{component="disk_space",monitor="global"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="disk_space",monitor="global"}
+    for: 15m
+    labels:
+      alert_type: cause
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+  - alert: component_saturation_slo_out_of_bounds
+    annotations:
+      description: |+
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Go Memory Utilization per Node resource:
+
+        Go's memory allocation strategy can make it look like a Go process is saturating memory when measured using RSS, when in fact the process is not at risk of memory saturation. For this reason, we measure Go processes using the `go_memstat_alloc_bytes` metric instead of RSS.
+
+      grafana_dashboard_id: alerts-sat_go_memory
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_go_memory?from=now-6h/m&to=now-1m/m&var-type={{
+        $labels.type }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3631721613"
+      grafana_variables: type
+      promql_query: |
+        max by(type, fqdn) (
+          clamp_min(
+            clamp_max(
+              sum by (type, fqdn) (
+                go_memstats_alloc_bytes{type="{{ $labels.type }}"}
+              )
+              /
+              sum by (type, fqdn) (
+                node_memory_MemTotal_bytes{type="{{ $labels.type }}"}
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+      title: The Go Memory Utilization per Node resource of the {{ $labels.type }}
+        service has a saturation exceeding SLO and is close to its capacity limit.
+    expr: |
+      gitlab_component_saturation:ratio{component="go_memory",monitor="global"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="go_memory",monitor="global"}
+    for: 5m
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+  - alert: component_saturation_slo_out_of_bounds
+    annotations:
+      description: |+
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Memory Utilization per Node resource:
+
+        Memory utilization per device per node.
+
+      grafana_dashboard_id: alerts-sat_memory
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_memory?from=now-6h/m&to=now-1m/m&var-type={{
+        $labels.type }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1955556769"
+      grafana_variables: type
+      promql_query: |
+        max by(type, node) (
+          clamp_min(
+            clamp_max(
+              instance:node_memory_utilization:ratio{type="{{ $labels.type }}"} or instance:node_memory_utilisation:ratio{type="{{ $labels.type }}"}
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+      title: The Memory Utilization per Node resource of the {{ $labels.type }} service
+        has a saturation exceeding SLO and is close to its capacity limit.
+    expr: |
+      gitlab_component_saturation:ratio{component="memory",monitor="global"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="memory",monitor="global"}
+    for: 5m
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+  - alert: component_saturation_slo_out_of_bounds
+    annotations:
+      description: |+
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Node Scheduler Waiting Time resource:
+
+        Measures the amount of scheduler waiting time that processes are waiting to be scheduled, according to [`CPU Scheduling Metrics`](https://www.robustperception.io/cpu-scheduling-metrics-from-the-node-exporter).
+
+        A high value indicates that a node has more processes to be run than CPU time available to handle them, and may lead to degraded responsiveness and performance from the application.
+
+        Additionally, it may indicate that the fleet is under-provisioned.
+
+      grafana_dashboard_id: alerts-sat_node_schedstat_waiting
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_node_schedstat_waiting?from=now-6h/m&to=now-1m/m&var-type={{
+        $labels.type }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1415313189"
+      grafana_variables: type
+      promql_query: |
+        max by(type, fqdn, shard) (
+          clamp_min(
+            clamp_max(
+              avg without (cpu) (rate(node_schedstat_waiting_seconds_total{type="{{ $labels.type }}"}[1h]))
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+      title: The Node Scheduler Waiting Time resource of the {{ $labels.type }} service
+        has a saturation exceeding SLO and is close to its capacity limit.
+    expr: |
+      gitlab_component_saturation:ratio{component="node_schedstat_waiting",monitor="global"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="node_schedstat_waiting",monitor="global"}
+    for: 90m
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
   - alert: component_saturation_slo_out_of_bounds
     annotations:
       description: |+

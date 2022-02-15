@@ -1,5 +1,6 @@
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_point.libsonnet').resourceSaturationPoint;
+local labelTaxonomy = import 'label-taxonomy/label-taxonomy.libsonnet';
 
 {
   disk_space: resourceSaturationPoint({
@@ -11,11 +12,11 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
       Disk space utilization per device per node.
     |||,
     grafana_dashboard_uid: 'sat_disk_space',
-    resourceLabels: ['fqdn', 'device'],
+    resourceLabels: [labelTaxonomy.getLabelFor(labelTaxonomy.labels.node), 'device'],
     // We filter on `fqdn!=""` to filter out any nameless workers. This is done mostly for the ci-runner fleet
     query: |||
       (
-        1 - instance:node_filesystem_avail:ratio{fstype=~"ext.|xfs", fqdn!="", %(selector)s}
+        1 - node_filesystem_avail_bytes{fstype=~"ext.|xfs", %(selector)s} / node_filesystem_size_bytes{fstype=~"ext.|xfs", %(selector)s}
       )
     |||,
     slos: {
