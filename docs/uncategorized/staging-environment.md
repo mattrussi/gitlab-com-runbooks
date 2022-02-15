@@ -92,7 +92,7 @@ other library linked with the interpreter.
 1. Share this issue in Slack in `#backend` and `#development` channels.
 
 Create a high severity regression ([severity1 or severity2](https://about.gitlab.com/handbook/engineering/quality/issue-triage/#availability))
-on staging and follow the steps
+if you see a high number of segfaults on staging or suspect this may be deploy related, and follow the steps
 to [block the deployment to production](https://about.gitlab.com/handbook/engineering/releases/#deployment-blockers)
 
 Past related issues:

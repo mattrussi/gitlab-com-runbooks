@@ -68,7 +68,7 @@ local es_query = {
             },
             {
               title: ':spiral_note_pad: Segmentation faults in Sidekiq logs:',
-              text: 'https://nonprod-log.gitlab.net/goto/3572e680-85ff-11ec-b3a6-472d0398dd6e',
+              text: 'https://nonprod-log.gitlab.net/goto/eab18d10-8e5d-11ec-b3a6-472d0398dd6e',
             },
             {
               title: ':runbooks: Runbook:',
