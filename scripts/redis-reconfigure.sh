@@ -87,6 +87,30 @@ failover_if_master() {
   echo "< failover_if_master $fqdn"
 }
 
+check_sentinel_quorum() {
+  # check sentinel quorum
+  echo sentinel ckquorum
+  ssh "$sentinel" "hostname; /opt/gitlab/embedded/bin/redis-cli -p 26379 sentinel ckquorum ${gitlab_env}-${gitlab_redis_cluster}"
+
+  if [[ "$(ssh "$sentinel" "/opt/gitlab/embedded/bin/redis-cli -p 26379 sentinel ckquorum ${gitlab_env}-${gitlab_redis_cluster}")" != "OK 3 usable Sentinels. Quorum and failover authorization can be reached" ]]; then
+    echo >&2 "error: sentinel quorum to be ok"
+    exit 1
+  fi
+}
+
+run_chef_client() {
+  echo chef-client
+  wait_for_input
+  ssh "$fqdn" "sudo chef-client"
+}
+
+gitlab_ctl_reconfigure() {
+  # this _will_ restart processes
+  echo gitlab-ctl reconfigure
+  wait_for_input
+  ssh "$fqdn" "sudo gitlab-ctl reconfigure"
+}
+
 reconfigure() {
   export i=$1
   export fqdn="${gitlab_redis_cluster}-$i-db-${gitlab_env}.c.${gitlab_project}.internal"
@@ -107,19 +131,9 @@ reconfigure() {
     exit 1
   fi
 
-  # check sentinel quorum
-  echo sentinel ckquorum
-  ssh "$sentinel" "hostname; /opt/gitlab/embedded/bin/redis-cli -p 26379 sentinel ckquorum ${gitlab_env}-${gitlab_redis_cluster}"
+  check_sentinel_quorum
 
-  if [[ "$(ssh "$sentinel" "/opt/gitlab/embedded/bin/redis-cli -p 26379 sentinel ckquorum ${gitlab_env}-${gitlab_redis_cluster}")" != "OK 3 usable Sentinels. Quorum and failover authorization can be reached" ]]; then
-    echo >&2 "error: sentinel quorum to be ok"
-    exit 1
-  fi
-
-  # run chef-client
-  echo chef-client
-  wait_for_input
-  ssh "$fqdn" "sudo chef-client"
+  run_chef_client
 
   # temporarily disable rdb saving to allow for fast restart
   echo config get save
@@ -128,11 +142,7 @@ reconfigure() {
   echo config set save
   ssh "$fqdn" "$redis_cli config set save ''"
 
-  # reconfigure
-  # this _will_ restart processes
-  echo gitlab-ctl reconfigure
-  wait_for_input
-  ssh "$fqdn" "sudo gitlab-ctl reconfigure"
+  gitlab_ctl_reconfigure
 
   # wait for master to step down and sync (expect "slave" [sic] and "connected")
   while ! [[ "$(ssh "$fqdn" "$redis_cli role" | head -n1)" = "slave" ]]; do
@@ -152,18 +162,33 @@ reconfigure() {
   echo $hosts | xargs -n1 -I{} ssh "{}.c.${gitlab_project}.internal" 'hostname; '$redis_cli' role | head -n1; echo'
 
   # check sentinel status
-  ssh "$sentinel" "hostname; /opt/gitlab/embedded/bin/redis-cli -p 26379 sentinel ckquorum ${gitlab_env}-${gitlab_redis_cluster}"
+  check_sentinel_quorum
 
   echo "< reconfigure $fqdn"
 }
 
-failover_if_master 01
-reconfigure 01
-echo
+reconfigure_sentinel() {
+  export i=$1
+  export fqdn="${gitlab_redis_cluster}-sentinel-$i-db-${gitlab_env}.c.${gitlab_project}.internal"
 
-failover_if_master 02
-reconfigure 02
-echo
+  check_sentinel_quorum
 
-failover_if_master 03
-reconfigure 03
+  run_chef_client
+
+  gitlab_ctl_reconfigure
+
+  check_sentinel_quorum
+
+  echo "< reconfigure $fqdn"
+}
+
+for i in 01 02 03; do
+  failover_if_master $i
+  reconfigure $i
+
+  if [[ "$gitlab_redis_cluster" = "redis-cache" ]]; then
+    reconfigure_sentinel $i
+  fi
+
+  echo
+done
