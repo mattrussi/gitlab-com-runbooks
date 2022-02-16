@@ -35,7 +35,7 @@ a --> c[CloudFlare]
 c --> d[GCP Load Balancer]
 d --> e[HAProxy Frontend]
 e --> f[backend choice]
-g --> h[HAProxy Backend]
+f --> g[HAProxy Backend]
 ```
 
 ## Frontend and Backend configuration
