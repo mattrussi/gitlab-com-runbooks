@@ -35,8 +35,7 @@ metricsCatalog.serviceDefinition({
       nodeSelector={ type: { oneOf: ['default', 'highmem', '' /* Unlabelled nodepools belong here */] } },
 
       // TODO: fix the stage label for default and highmem nodes
-      // See https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/15208
-      // Hardcoding kube nodes to main stage for now
+      // See https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2238
       nodeStaticLabels={ stage: 'main' },
     ),
   },

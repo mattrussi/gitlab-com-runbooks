@@ -5,6 +5,7 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local haproxyComponents = import './lib/haproxy_components.libsonnet';
 local sliLibrary = import 'gitlab-slis/library.libsonnet';
 local serviceLevelIndicatorDefinition = import 'servicemetrics/service_level_indicator_definition.libsonnet';
+local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 
 metricsCatalog.serviceDefinition({
   type: 'web',
@@ -56,6 +57,16 @@ metricsCatalog.serviceDefinition({
     kubernetes: true,
   },
   regional: true,
+  kubeConfig: {
+    labelSelectors: kubeLabelSelectors(
+      nodeSelector={ type: 'web' },
+
+      // TODO: at present, web nodepools do not have the correct stage, shard labels
+      // see https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2247
+      nodeStaticLabels={ stage: 'main' },
+    ),
+  },
+
   kubeResources: {
     web: {
       kind: 'Deployment',

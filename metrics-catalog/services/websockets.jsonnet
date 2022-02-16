@@ -34,7 +34,7 @@ metricsCatalog.serviceDefinition({
       nodeSelector={ type: 'websockets' },
 
       // TODO: websockets nodes do not present a stage label at present
-      // See https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/15208
+      // See https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2245
       // We hard-code to main for now
       nodeStaticLabels={ stage: 'main' },
     ),

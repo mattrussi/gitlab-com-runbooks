@@ -1,6 +1,7 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
+local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 
 metricsCatalog.serviceDefinition({
   type: 'webservice',
@@ -23,8 +24,18 @@ metricsCatalog.serviceDefinition({
     kubernetes: true,
   },
   regional: false,
+  kubeConfig: {
+    local kubeSelector = { app: 'webservice' },
+    labelSelectors: kubeLabelSelectors(
+      podSelector=kubeSelector,
+      hpaSelector=kubeSelector,
+      nodeSelector=null,
+      ingressSelector=kubeSelector,
+      deploymentSelector=kubeSelector
+    ),
+  },
   kubeResources: {
-    web: {
+    'gitlab-webservice-default': {
       kind: 'Deployment',
       containers: [
         'gitlab-workhorse',
@@ -32,7 +43,6 @@ metricsCatalog.serviceDefinition({
       ],
     },
   },
-
   serviceLevelIndicators: {
     puma: {
       userImpacting: true,

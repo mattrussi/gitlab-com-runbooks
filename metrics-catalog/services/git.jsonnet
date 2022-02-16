@@ -64,10 +64,12 @@ metricsCatalog.serviceDefinition({
     labelSelectors: kubeLabelSelectors(
       ingressSelector=null,
       // TODO: Currently git nodes are incorrectly named
-      // See https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/15208
+      // See https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2237
       nodeSelector={ type: { oneOf: ['shell', 'git-https'] } },
+
       // TODO: Currently git nodes to have a `shard` label
       // Hardcoding git nodes to main stage for now
+      // See https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2237
       nodeStaticLabels={ stage: 'main' }
     ),
   },

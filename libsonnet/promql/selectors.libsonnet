@@ -113,16 +113,21 @@ local serializeHashItem(label, value) =
   // * { type: { oneOf: ["gitlab", "rocks"] } }     type=~"gitlab|rocks"
   // * { type: { noneOf: ["gitlab", "rocks"] } }    type!~"gitlab|rocks"
   // -------------------------------------------------------------------------------
-  serializeHash(selectorHash)::
+  serializeHash(selectorHash, withBraces=false)::
+    local optionalBraces(expr) =
+      if expr == '' then ''
+      else if withBraces then '{' + expr + '}'
+      else expr;
+
     if selectorHash == null then
       ''
     else if std.isString(selectorHash) then
-      strings.chomp(selectorHash)
+      optionalBraces(strings.chomp(selectorHash))
     else
       (
         local fields = std.set(std.objectFields(selectorHash));
         local pairs = std.flatMap(function(key) serializeHashItem(key, selectorHash[key]), fields);
-        std.join(',', pairs)
+        optionalBraces(std.join(',', pairs))
       ),
 
   // Expresses the selector syntax as an AlertManager matcher

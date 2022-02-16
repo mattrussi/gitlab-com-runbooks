@@ -5,7 +5,7 @@ local aggregationSetTransformer = import 'servicemetrics/aggregation-set-transfo
 local recordingRules = import 'recording-rules/recording-rules.libsonnet';
 local saturationResources = import 'servicemetrics/saturation-resources.libsonnet';
 local saturationRules = import 'servicemetrics/saturation_rules.libsonnet';
-
+local kubeStateMetricsGroups = import 'kube-state-metrics/recording-rules.libsonnet';
 
 local serviceSLOsRulesetGenerator = recordingRules.serviceSLORuleSetGenerator();
 local serviceMappingRulesetGenerator = recordingRules.serviceMappingRuleSetGenerator();
@@ -69,7 +69,8 @@ local saturationGroup = saturationRules.generateSaturationRulesGroup(
       ) +
       serviceSLISGroups +
       serviceSLOsGroups +
-      saturationGroup,
+      saturationGroup +
+      kubeStateMetricsGroups,
 
   },
 }

@@ -22,7 +22,7 @@ metricsCatalog.serviceDefinition({
   kubeConfig: {
     labelSelectors: kubeLabelSelectors(
       // NGINX HPA is incorrectly labelled at present
-      // See https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/15208
+      // See https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2241
       hpaSelector={ app: 'nginx-ingress' },
 
       // NGINX *is* the ingress

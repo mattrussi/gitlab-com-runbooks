@@ -70,6 +70,14 @@ test.suite({
     actual: selectors.serializeHash({ a: { re: '.*', ne: 'moo' } }),
     expect: 'a!="moo",a=~".*"',
   },
+  testSerializeHashEmtpyWithBraces: {
+    actual: selectors.serializeHash({}, withBraces=true),
+    expect: '',
+  },
+  testSerializeHashSimpleWithBraces: {
+    actual: selectors.serializeHash({ a: 1 }, withBraces=true),
+    expect: '{a="1"}',
+  },
   testMergeTwoNulls: {
     actual: selectors.merge(null, null),
     expect: null,

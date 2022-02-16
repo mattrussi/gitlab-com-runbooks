@@ -38,7 +38,7 @@ metricsCatalog.serviceDefinition({
       ingressSelector=null,  // no ingress for web-pages
       nodeSelector={ type: 'web-pages' },
       // TODO: web-pages nodes do not present a stage label at present
-      // See https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/15208
+      // See https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2244
       // We hard-code to main for now
       nodeStaticLabels={ stage: 'main' },
     ),
