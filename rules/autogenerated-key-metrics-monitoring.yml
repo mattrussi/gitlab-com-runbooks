@@ -112,182 +112,6 @@ groups:
       )
   - record: gitlab_component_apdex:success:rate
     labels:
-      component: memcached_thanos_qfe_labels
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-qfe-labels-metrics",le=~"1|1\\.0",type="monitoring"}[1m])
-      )
-  - record: gitlab_component_apdex:weight:score
-    labels:
-      component: memcached_thanos_qfe_labels
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-qfe-labels-metrics",le="+Inf",type="monitoring"}[1m])
-      )
-  - record: gitlab_component_ops:rate
-    labels:
-      component: memcached_thanos_qfe_labels
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(memcached_commands_total{job="memcached-thanos-qfe-labels-metrics",type="monitoring"}[1m])
-      )
-  - record: gitlab_component_errors:rate
-    labels:
-      component: memcached_thanos_qfe_labels
-      tier: inf
-      type: monitoring
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(thanos_memcached_operation_failures_total{job="memcached-thanos-qfe-labels-metrics",type="monitoring"}[1m])
-        )
-      )
-      or
-      (
-        0 * group by(environment,stage) (
-          gitlab_component_ops:rate{component="memcached_thanos_qfe_labels",tier="inf",type="monitoring"}
-        )
-      )
-  - record: gitlab_component_apdex:success:rate
-    labels:
-      component: memcached_thanos_qfe_query_range
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-qfe-query-range-metrics",le=~"1|1\\.0",type="monitoring"}[1m])
-      )
-  - record: gitlab_component_apdex:weight:score
-    labels:
-      component: memcached_thanos_qfe_query_range
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-qfe-query-range-metrics",le="+Inf",type="monitoring"}[1m])
-      )
-  - record: gitlab_component_ops:rate
-    labels:
-      component: memcached_thanos_qfe_query_range
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(memcached_commands_total{job="memcached-thanos-qfe-query-range-metrics",type="monitoring"}[1m])
-      )
-  - record: gitlab_component_errors:rate
-    labels:
-      component: memcached_thanos_qfe_query_range
-      tier: inf
-      type: monitoring
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(thanos_memcached_operation_failures_total{job="memcached-thanos-qfe-query-range-metrics",type="monitoring"}[1m])
-        )
-      )
-      or
-      (
-        0 * group by(environment,stage) (
-          gitlab_component_ops:rate{component="memcached_thanos_qfe_query_range",tier="inf",type="monitoring"}
-        )
-      )
-  - record: gitlab_component_apdex:success:rate
-    labels:
-      component: memcached_thanos_store_bucket
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-bucket-cache-metrics",le=~"1|1\\.0",type="monitoring"}[1m])
-      )
-  - record: gitlab_component_apdex:weight:score
-    labels:
-      component: memcached_thanos_store_bucket
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-bucket-cache-metrics",le="+Inf",type="monitoring"}[1m])
-      )
-  - record: gitlab_component_ops:rate
-    labels:
-      component: memcached_thanos_store_bucket
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(memcached_commands_total{job="memcached-thanos-bucket-cache-metrics",type="monitoring"}[1m])
-      )
-  - record: gitlab_component_errors:rate
-    labels:
-      component: memcached_thanos_store_bucket
-      tier: inf
-      type: monitoring
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(thanos_memcached_operation_failures_total{job="memcached-thanos-bucket-cache-metrics",type="monitoring"}[1m])
-        )
-      )
-      or
-      (
-        0 * group by(environment,stage) (
-          gitlab_component_ops:rate{component="memcached_thanos_store_bucket",tier="inf",type="monitoring"}
-        )
-      )
-  - record: gitlab_component_apdex:success:rate
-    labels:
-      component: memcached_thanos_store_index
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-index-cache-metrics",le=~"1|1\\.0",type="monitoring"}[1m])
-      )
-  - record: gitlab_component_apdex:weight:score
-    labels:
-      component: memcached_thanos_store_index
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-index-cache-metrics",le="+Inf",type="monitoring"}[1m])
-      )
-  - record: gitlab_component_ops:rate
-    labels:
-      component: memcached_thanos_store_index
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(memcached_commands_total{job="memcached-thanos-index-cache-metrics",type="monitoring"}[1m])
-      )
-  - record: gitlab_component_errors:rate
-    labels:
-      component: memcached_thanos_store_index
-      tier: inf
-      type: monitoring
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(thanos_memcached_operation_failures_total{job="memcached-thanos-index-cache-metrics",type="monitoring"}[1m])
-        )
-      )
-      or
-      (
-        0 * group by(environment,stage) (
-          gitlab_component_ops:rate{component="memcached_thanos_store_index",tier="inf",type="monitoring"}
-        )
-      )
-  - record: gitlab_component_apdex:success:rate
-    labels:
       component: prometheus
       tier: inf
       type: monitoring
@@ -414,6 +238,50 @@ groups:
       (
         0 * group by(environment,stage) (
           gitlab_component_ops:rate{component="thanos_compactor",tier="inf",type="monitoring"}
+        )
+      )
+  - record: gitlab_component_apdex:success:rate
+    labels:
+      component: thanos_memcached
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(thanos_memcached_operation_duration_seconds_bucket{le=~"0\\.5",type="monitoring"}[1m])
+      )
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: thanos_memcached
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(thanos_memcached_operation_duration_seconds_bucket{le="+Inf",type="monitoring"}[1m])
+      )
+  - record: gitlab_component_ops:rate
+    labels:
+      component: thanos_memcached
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(thanos_memcached_operations_total{type="monitoring"}[1m])
+      )
+  - record: gitlab_component_errors:rate
+    labels:
+      component: thanos_memcached
+      tier: inf
+      type: monitoring
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(thanos_memcached_operation_failures_total{type="monitoring"}[1m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate{component="thanos_memcached",tier="inf",type="monitoring"}
         )
       )
   - record: gitlab_component_apdex:success:rate
@@ -693,182 +561,6 @@ groups:
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
-      component: memcached_thanos_qfe_labels
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-qfe-labels-metrics",le=~"1|1\\.0",type="monitoring"}[5m])
-      )
-  - record: gitlab_component_apdex:weight:score_5m
-    labels:
-      component: memcached_thanos_qfe_labels
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-qfe-labels-metrics",le="+Inf",type="monitoring"}[5m])
-      )
-  - record: gitlab_component_ops:rate_5m
-    labels:
-      component: memcached_thanos_qfe_labels
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(memcached_commands_total{job="memcached-thanos-qfe-labels-metrics",type="monitoring"}[5m])
-      )
-  - record: gitlab_component_errors:rate_5m
-    labels:
-      component: memcached_thanos_qfe_labels
-      tier: inf
-      type: monitoring
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(thanos_memcached_operation_failures_total{job="memcached-thanos-qfe-labels-metrics",type="monitoring"}[5m])
-        )
-      )
-      or
-      (
-        0 * group by(environment,stage) (
-          gitlab_component_ops:rate_5m{component="memcached_thanos_qfe_labels",tier="inf",type="monitoring"}
-        )
-      )
-  - record: gitlab_component_apdex:success:rate_5m
-    labels:
-      component: memcached_thanos_qfe_query_range
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-qfe-query-range-metrics",le=~"1|1\\.0",type="monitoring"}[5m])
-      )
-  - record: gitlab_component_apdex:weight:score_5m
-    labels:
-      component: memcached_thanos_qfe_query_range
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-qfe-query-range-metrics",le="+Inf",type="monitoring"}[5m])
-      )
-  - record: gitlab_component_ops:rate_5m
-    labels:
-      component: memcached_thanos_qfe_query_range
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(memcached_commands_total{job="memcached-thanos-qfe-query-range-metrics",type="monitoring"}[5m])
-      )
-  - record: gitlab_component_errors:rate_5m
-    labels:
-      component: memcached_thanos_qfe_query_range
-      tier: inf
-      type: monitoring
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(thanos_memcached_operation_failures_total{job="memcached-thanos-qfe-query-range-metrics",type="monitoring"}[5m])
-        )
-      )
-      or
-      (
-        0 * group by(environment,stage) (
-          gitlab_component_ops:rate_5m{component="memcached_thanos_qfe_query_range",tier="inf",type="monitoring"}
-        )
-      )
-  - record: gitlab_component_apdex:success:rate_5m
-    labels:
-      component: memcached_thanos_store_bucket
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-bucket-cache-metrics",le=~"1|1\\.0",type="monitoring"}[5m])
-      )
-  - record: gitlab_component_apdex:weight:score_5m
-    labels:
-      component: memcached_thanos_store_bucket
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-bucket-cache-metrics",le="+Inf",type="monitoring"}[5m])
-      )
-  - record: gitlab_component_ops:rate_5m
-    labels:
-      component: memcached_thanos_store_bucket
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(memcached_commands_total{job="memcached-thanos-bucket-cache-metrics",type="monitoring"}[5m])
-      )
-  - record: gitlab_component_errors:rate_5m
-    labels:
-      component: memcached_thanos_store_bucket
-      tier: inf
-      type: monitoring
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(thanos_memcached_operation_failures_total{job="memcached-thanos-bucket-cache-metrics",type="monitoring"}[5m])
-        )
-      )
-      or
-      (
-        0 * group by(environment,stage) (
-          gitlab_component_ops:rate_5m{component="memcached_thanos_store_bucket",tier="inf",type="monitoring"}
-        )
-      )
-  - record: gitlab_component_apdex:success:rate_5m
-    labels:
-      component: memcached_thanos_store_index
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-index-cache-metrics",le=~"1|1\\.0",type="monitoring"}[5m])
-      )
-  - record: gitlab_component_apdex:weight:score_5m
-    labels:
-      component: memcached_thanos_store_index
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-index-cache-metrics",le="+Inf",type="monitoring"}[5m])
-      )
-  - record: gitlab_component_ops:rate_5m
-    labels:
-      component: memcached_thanos_store_index
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(memcached_commands_total{job="memcached-thanos-index-cache-metrics",type="monitoring"}[5m])
-      )
-  - record: gitlab_component_errors:rate_5m
-    labels:
-      component: memcached_thanos_store_index
-      tier: inf
-      type: monitoring
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(thanos_memcached_operation_failures_total{job="memcached-thanos-index-cache-metrics",type="monitoring"}[5m])
-        )
-      )
-      or
-      (
-        0 * group by(environment,stage) (
-          gitlab_component_ops:rate_5m{component="memcached_thanos_store_index",tier="inf",type="monitoring"}
-        )
-      )
-  - record: gitlab_component_apdex:success:rate_5m
-    labels:
       component: prometheus
       tier: inf
       type: monitoring
@@ -995,6 +687,50 @@ groups:
       (
         0 * group by(environment,stage) (
           gitlab_component_ops:rate_5m{component="thanos_compactor",tier="inf",type="monitoring"}
+        )
+      )
+  - record: gitlab_component_apdex:success:rate_5m
+    labels:
+      component: thanos_memcached
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(thanos_memcached_operation_duration_seconds_bucket{le=~"0\\.5",type="monitoring"}[5m])
+      )
+  - record: gitlab_component_apdex:weight:score_5m
+    labels:
+      component: thanos_memcached
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(thanos_memcached_operation_duration_seconds_bucket{le="+Inf",type="monitoring"}[5m])
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: thanos_memcached
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(thanos_memcached_operations_total{type="monitoring"}[5m])
+      )
+  - record: gitlab_component_errors:rate_5m
+    labels:
+      component: thanos_memcached
+      tier: inf
+      type: monitoring
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(thanos_memcached_operation_failures_total{type="monitoring"}[5m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_5m{component="thanos_memcached",tier="inf",type="monitoring"}
         )
       )
   - record: gitlab_component_apdex:success:rate_5m
@@ -1274,182 +1010,6 @@ groups:
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
-      component: memcached_thanos_qfe_labels
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-qfe-labels-metrics",le=~"1|1\\.0",type="monitoring"}[30m])
-      )
-  - record: gitlab_component_apdex:weight:score_30m
-    labels:
-      component: memcached_thanos_qfe_labels
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-qfe-labels-metrics",le="+Inf",type="monitoring"}[30m])
-      )
-  - record: gitlab_component_ops:rate_30m
-    labels:
-      component: memcached_thanos_qfe_labels
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(memcached_commands_total{job="memcached-thanos-qfe-labels-metrics",type="monitoring"}[30m])
-      )
-  - record: gitlab_component_errors:rate_30m
-    labels:
-      component: memcached_thanos_qfe_labels
-      tier: inf
-      type: monitoring
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(thanos_memcached_operation_failures_total{job="memcached-thanos-qfe-labels-metrics",type="monitoring"}[30m])
-        )
-      )
-      or
-      (
-        0 * group by(environment,stage) (
-          gitlab_component_ops:rate_30m{component="memcached_thanos_qfe_labels",tier="inf",type="monitoring"}
-        )
-      )
-  - record: gitlab_component_apdex:success:rate_30m
-    labels:
-      component: memcached_thanos_qfe_query_range
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-qfe-query-range-metrics",le=~"1|1\\.0",type="monitoring"}[30m])
-      )
-  - record: gitlab_component_apdex:weight:score_30m
-    labels:
-      component: memcached_thanos_qfe_query_range
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-qfe-query-range-metrics",le="+Inf",type="monitoring"}[30m])
-      )
-  - record: gitlab_component_ops:rate_30m
-    labels:
-      component: memcached_thanos_qfe_query_range
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(memcached_commands_total{job="memcached-thanos-qfe-query-range-metrics",type="monitoring"}[30m])
-      )
-  - record: gitlab_component_errors:rate_30m
-    labels:
-      component: memcached_thanos_qfe_query_range
-      tier: inf
-      type: monitoring
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(thanos_memcached_operation_failures_total{job="memcached-thanos-qfe-query-range-metrics",type="monitoring"}[30m])
-        )
-      )
-      or
-      (
-        0 * group by(environment,stage) (
-          gitlab_component_ops:rate_30m{component="memcached_thanos_qfe_query_range",tier="inf",type="monitoring"}
-        )
-      )
-  - record: gitlab_component_apdex:success:rate_30m
-    labels:
-      component: memcached_thanos_store_bucket
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-bucket-cache-metrics",le=~"1|1\\.0",type="monitoring"}[30m])
-      )
-  - record: gitlab_component_apdex:weight:score_30m
-    labels:
-      component: memcached_thanos_store_bucket
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-bucket-cache-metrics",le="+Inf",type="monitoring"}[30m])
-      )
-  - record: gitlab_component_ops:rate_30m
-    labels:
-      component: memcached_thanos_store_bucket
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(memcached_commands_total{job="memcached-thanos-bucket-cache-metrics",type="monitoring"}[30m])
-      )
-  - record: gitlab_component_errors:rate_30m
-    labels:
-      component: memcached_thanos_store_bucket
-      tier: inf
-      type: monitoring
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(thanos_memcached_operation_failures_total{job="memcached-thanos-bucket-cache-metrics",type="monitoring"}[30m])
-        )
-      )
-      or
-      (
-        0 * group by(environment,stage) (
-          gitlab_component_ops:rate_30m{component="memcached_thanos_store_bucket",tier="inf",type="monitoring"}
-        )
-      )
-  - record: gitlab_component_apdex:success:rate_30m
-    labels:
-      component: memcached_thanos_store_index
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-index-cache-metrics",le=~"1|1\\.0",type="monitoring"}[30m])
-      )
-  - record: gitlab_component_apdex:weight:score_30m
-    labels:
-      component: memcached_thanos_store_index
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-index-cache-metrics",le="+Inf",type="monitoring"}[30m])
-      )
-  - record: gitlab_component_ops:rate_30m
-    labels:
-      component: memcached_thanos_store_index
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(memcached_commands_total{job="memcached-thanos-index-cache-metrics",type="monitoring"}[30m])
-      )
-  - record: gitlab_component_errors:rate_30m
-    labels:
-      component: memcached_thanos_store_index
-      tier: inf
-      type: monitoring
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(thanos_memcached_operation_failures_total{job="memcached-thanos-index-cache-metrics",type="monitoring"}[30m])
-        )
-      )
-      or
-      (
-        0 * group by(environment,stage) (
-          gitlab_component_ops:rate_30m{component="memcached_thanos_store_index",tier="inf",type="monitoring"}
-        )
-      )
-  - record: gitlab_component_apdex:success:rate_30m
-    labels:
       component: prometheus
       tier: inf
       type: monitoring
@@ -1576,6 +1136,50 @@ groups:
       (
         0 * group by(environment,stage) (
           gitlab_component_ops:rate_30m{component="thanos_compactor",tier="inf",type="monitoring"}
+        )
+      )
+  - record: gitlab_component_apdex:success:rate_30m
+    labels:
+      component: thanos_memcached
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(thanos_memcached_operation_duration_seconds_bucket{le=~"0\\.5",type="monitoring"}[30m])
+      )
+  - record: gitlab_component_apdex:weight:score_30m
+    labels:
+      component: thanos_memcached
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(thanos_memcached_operation_duration_seconds_bucket{le="+Inf",type="monitoring"}[30m])
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: thanos_memcached
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(thanos_memcached_operations_total{type="monitoring"}[30m])
+      )
+  - record: gitlab_component_errors:rate_30m
+    labels:
+      component: thanos_memcached
+      tier: inf
+      type: monitoring
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(thanos_memcached_operation_failures_total{type="monitoring"}[30m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_30m{component="thanos_memcached",tier="inf",type="monitoring"}
         )
       )
   - record: gitlab_component_apdex:success:rate_30m
@@ -1855,182 +1459,6 @@ groups:
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
-      component: memcached_thanos_qfe_labels
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-qfe-labels-metrics",le=~"1|1\\.0",type="monitoring"}[1h])
-      )
-  - record: gitlab_component_apdex:weight:score_1h
-    labels:
-      component: memcached_thanos_qfe_labels
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-qfe-labels-metrics",le="+Inf",type="monitoring"}[1h])
-      )
-  - record: gitlab_component_ops:rate_1h
-    labels:
-      component: memcached_thanos_qfe_labels
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(memcached_commands_total{job="memcached-thanos-qfe-labels-metrics",type="monitoring"}[1h])
-      )
-  - record: gitlab_component_errors:rate_1h
-    labels:
-      component: memcached_thanos_qfe_labels
-      tier: inf
-      type: monitoring
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(thanos_memcached_operation_failures_total{job="memcached-thanos-qfe-labels-metrics",type="monitoring"}[1h])
-        )
-      )
-      or
-      (
-        0 * group by(environment,stage) (
-          gitlab_component_ops:rate_1h{component="memcached_thanos_qfe_labels",tier="inf",type="monitoring"}
-        )
-      )
-  - record: gitlab_component_apdex:success:rate_1h
-    labels:
-      component: memcached_thanos_qfe_query_range
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-qfe-query-range-metrics",le=~"1|1\\.0",type="monitoring"}[1h])
-      )
-  - record: gitlab_component_apdex:weight:score_1h
-    labels:
-      component: memcached_thanos_qfe_query_range
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-qfe-query-range-metrics",le="+Inf",type="monitoring"}[1h])
-      )
-  - record: gitlab_component_ops:rate_1h
-    labels:
-      component: memcached_thanos_qfe_query_range
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(memcached_commands_total{job="memcached-thanos-qfe-query-range-metrics",type="monitoring"}[1h])
-      )
-  - record: gitlab_component_errors:rate_1h
-    labels:
-      component: memcached_thanos_qfe_query_range
-      tier: inf
-      type: monitoring
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(thanos_memcached_operation_failures_total{job="memcached-thanos-qfe-query-range-metrics",type="monitoring"}[1h])
-        )
-      )
-      or
-      (
-        0 * group by(environment,stage) (
-          gitlab_component_ops:rate_1h{component="memcached_thanos_qfe_query_range",tier="inf",type="monitoring"}
-        )
-      )
-  - record: gitlab_component_apdex:success:rate_1h
-    labels:
-      component: memcached_thanos_store_bucket
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-bucket-cache-metrics",le=~"1|1\\.0",type="monitoring"}[1h])
-      )
-  - record: gitlab_component_apdex:weight:score_1h
-    labels:
-      component: memcached_thanos_store_bucket
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-bucket-cache-metrics",le="+Inf",type="monitoring"}[1h])
-      )
-  - record: gitlab_component_ops:rate_1h
-    labels:
-      component: memcached_thanos_store_bucket
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(memcached_commands_total{job="memcached-thanos-bucket-cache-metrics",type="monitoring"}[1h])
-      )
-  - record: gitlab_component_errors:rate_1h
-    labels:
-      component: memcached_thanos_store_bucket
-      tier: inf
-      type: monitoring
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(thanos_memcached_operation_failures_total{job="memcached-thanos-bucket-cache-metrics",type="monitoring"}[1h])
-        )
-      )
-      or
-      (
-        0 * group by(environment,stage) (
-          gitlab_component_ops:rate_1h{component="memcached_thanos_store_bucket",tier="inf",type="monitoring"}
-        )
-      )
-  - record: gitlab_component_apdex:success:rate_1h
-    labels:
-      component: memcached_thanos_store_index
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-index-cache-metrics",le=~"1|1\\.0",type="monitoring"}[1h])
-      )
-  - record: gitlab_component_apdex:weight:score_1h
-    labels:
-      component: memcached_thanos_store_index
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-index-cache-metrics",le="+Inf",type="monitoring"}[1h])
-      )
-  - record: gitlab_component_ops:rate_1h
-    labels:
-      component: memcached_thanos_store_index
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(memcached_commands_total{job="memcached-thanos-index-cache-metrics",type="monitoring"}[1h])
-      )
-  - record: gitlab_component_errors:rate_1h
-    labels:
-      component: memcached_thanos_store_index
-      tier: inf
-      type: monitoring
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(thanos_memcached_operation_failures_total{job="memcached-thanos-index-cache-metrics",type="monitoring"}[1h])
-        )
-      )
-      or
-      (
-        0 * group by(environment,stage) (
-          gitlab_component_ops:rate_1h{component="memcached_thanos_store_index",tier="inf",type="monitoring"}
-        )
-      )
-  - record: gitlab_component_apdex:success:rate_1h
-    labels:
       component: prometheus
       tier: inf
       type: monitoring
@@ -2157,6 +1585,50 @@ groups:
       (
         0 * group by(environment,stage) (
           gitlab_component_ops:rate_1h{component="thanos_compactor",tier="inf",type="monitoring"}
+        )
+      )
+  - record: gitlab_component_apdex:success:rate_1h
+    labels:
+      component: thanos_memcached
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(thanos_memcached_operation_duration_seconds_bucket{le=~"0\\.5",type="monitoring"}[1h])
+      )
+  - record: gitlab_component_apdex:weight:score_1h
+    labels:
+      component: thanos_memcached
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(thanos_memcached_operation_duration_seconds_bucket{le="+Inf",type="monitoring"}[1h])
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: thanos_memcached
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(thanos_memcached_operations_total{type="monitoring"}[1h])
+      )
+  - record: gitlab_component_errors:rate_1h
+    labels:
+      component: thanos_memcached
+      tier: inf
+      type: monitoring
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(thanos_memcached_operation_failures_total{type="monitoring"}[1h])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_1h{component="thanos_memcached",tier="inf",type="monitoring"}
         )
       )
   - record: gitlab_component_apdex:success:rate_1h
@@ -2436,182 +1908,6 @@ groups:
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
-      component: memcached_thanos_qfe_labels
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-qfe-labels-metrics",le=~"1|1\\.0",type="monitoring"}[6h])
-      )
-  - record: gitlab_component_apdex:weight:score_6h
-    labels:
-      component: memcached_thanos_qfe_labels
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-qfe-labels-metrics",le="+Inf",type="monitoring"}[6h])
-      )
-  - record: gitlab_component_ops:rate_6h
-    labels:
-      component: memcached_thanos_qfe_labels
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(memcached_commands_total{job="memcached-thanos-qfe-labels-metrics",type="monitoring"}[6h])
-      )
-  - record: gitlab_component_errors:rate_6h
-    labels:
-      component: memcached_thanos_qfe_labels
-      tier: inf
-      type: monitoring
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(thanos_memcached_operation_failures_total{job="memcached-thanos-qfe-labels-metrics",type="monitoring"}[6h])
-        )
-      )
-      or
-      (
-        0 * group by(environment,stage) (
-          gitlab_component_ops:rate_6h{component="memcached_thanos_qfe_labels",tier="inf",type="monitoring"}
-        )
-      )
-  - record: gitlab_component_apdex:success:rate_6h
-    labels:
-      component: memcached_thanos_qfe_query_range
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-qfe-query-range-metrics",le=~"1|1\\.0",type="monitoring"}[6h])
-      )
-  - record: gitlab_component_apdex:weight:score_6h
-    labels:
-      component: memcached_thanos_qfe_query_range
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-qfe-query-range-metrics",le="+Inf",type="monitoring"}[6h])
-      )
-  - record: gitlab_component_ops:rate_6h
-    labels:
-      component: memcached_thanos_qfe_query_range
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(memcached_commands_total{job="memcached-thanos-qfe-query-range-metrics",type="monitoring"}[6h])
-      )
-  - record: gitlab_component_errors:rate_6h
-    labels:
-      component: memcached_thanos_qfe_query_range
-      tier: inf
-      type: monitoring
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(thanos_memcached_operation_failures_total{job="memcached-thanos-qfe-query-range-metrics",type="monitoring"}[6h])
-        )
-      )
-      or
-      (
-        0 * group by(environment,stage) (
-          gitlab_component_ops:rate_6h{component="memcached_thanos_qfe_query_range",tier="inf",type="monitoring"}
-        )
-      )
-  - record: gitlab_component_apdex:success:rate_6h
-    labels:
-      component: memcached_thanos_store_bucket
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-bucket-cache-metrics",le=~"1|1\\.0",type="monitoring"}[6h])
-      )
-  - record: gitlab_component_apdex:weight:score_6h
-    labels:
-      component: memcached_thanos_store_bucket
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-bucket-cache-metrics",le="+Inf",type="monitoring"}[6h])
-      )
-  - record: gitlab_component_ops:rate_6h
-    labels:
-      component: memcached_thanos_store_bucket
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(memcached_commands_total{job="memcached-thanos-bucket-cache-metrics",type="monitoring"}[6h])
-      )
-  - record: gitlab_component_errors:rate_6h
-    labels:
-      component: memcached_thanos_store_bucket
-      tier: inf
-      type: monitoring
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(thanos_memcached_operation_failures_total{job="memcached-thanos-bucket-cache-metrics",type="monitoring"}[6h])
-        )
-      )
-      or
-      (
-        0 * group by(environment,stage) (
-          gitlab_component_ops:rate_6h{component="memcached_thanos_store_bucket",tier="inf",type="monitoring"}
-        )
-      )
-  - record: gitlab_component_apdex:success:rate_6h
-    labels:
-      component: memcached_thanos_store_index
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-index-cache-metrics",le=~"1|1\\.0",type="monitoring"}[6h])
-      )
-  - record: gitlab_component_apdex:weight:score_6h
-    labels:
-      component: memcached_thanos_store_index
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{job="memcached-thanos-index-cache-metrics",le="+Inf",type="monitoring"}[6h])
-      )
-  - record: gitlab_component_ops:rate_6h
-    labels:
-      component: memcached_thanos_store_index
-      tier: inf
-      type: monitoring
-    expr: |
-      sum by (environment,stage) (
-        rate(memcached_commands_total{job="memcached-thanos-index-cache-metrics",type="monitoring"}[6h])
-      )
-  - record: gitlab_component_errors:rate_6h
-    labels:
-      component: memcached_thanos_store_index
-      tier: inf
-      type: monitoring
-    expr: |
-      (
-        sum by (environment,stage) (
-          rate(thanos_memcached_operation_failures_total{job="memcached-thanos-index-cache-metrics",type="monitoring"}[6h])
-        )
-      )
-      or
-      (
-        0 * group by(environment,stage) (
-          gitlab_component_ops:rate_6h{component="memcached_thanos_store_index",tier="inf",type="monitoring"}
-        )
-      )
-  - record: gitlab_component_apdex:success:rate_6h
-    labels:
       component: prometheus
       tier: inf
       type: monitoring
@@ -2738,6 +2034,50 @@ groups:
       (
         0 * group by(environment,stage) (
           gitlab_component_ops:rate_6h{component="thanos_compactor",tier="inf",type="monitoring"}
+        )
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: thanos_memcached
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(thanos_memcached_operation_duration_seconds_bucket{le=~"0\\.5",type="monitoring"}[6h])
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: thanos_memcached
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(thanos_memcached_operation_duration_seconds_bucket{le="+Inf",type="monitoring"}[6h])
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: thanos_memcached
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(thanos_memcached_operations_total{type="monitoring"}[6h])
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: thanos_memcached
+      tier: inf
+      type: monitoring
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(thanos_memcached_operation_failures_total{type="monitoring"}[6h])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_6h{component="thanos_memcached",tier="inf",type="monitoring"}
         )
       )
   - record: gitlab_component_apdex:success:rate_6h
@@ -2935,38 +2275,6 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
-      component: memcached_thanos_qfe_labels
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: inf
-      type: monitoring
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: memcached_thanos_qfe_query_range
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: inf
-      type: monitoring
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: memcached_thanos_store_bucket
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: inf
-      type: monitoring
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: memcached_thanos_store_index
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: inf
-      type: monitoring
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
       component: prometheus
       regional_aggregation: "no"
       service_aggregation: "yes"
@@ -2994,6 +2302,14 @@ groups:
       component: thanos_compactor
       regional_aggregation: "no"
       service_aggregation: "yes"
+      tier: inf
+      type: monitoring
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: thanos_memcached
+      regional_aggregation: "no"
+      service_aggregation: "no"
       tier: inf
       type: monitoring
     expr: "1"

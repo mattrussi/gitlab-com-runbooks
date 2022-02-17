@@ -440,13 +440,9 @@ metricsCatalog.serviceDefinition({
       significantLabels: ['pod'],
     },
 
-    local thanosMemcachedSLI(job) = {
-      local selector = {
-        job: job,
-        type: 'monitoring',
-      },
-
+    thanos_memcached: {
       userImpacting: false,
+      serviceAggregation: false,
       featureCategory: 'not_owned',
       ignoreTrafficCessation: true,
 
@@ -455,15 +451,17 @@ metricsCatalog.serviceDefinition({
         store and query-frontend components.
       |||,
 
+      local selector = { type: 'monitoring' },
+
       apdex: histogramApdex(
         histogram='thanos_memcached_operation_duration_seconds_bucket',
-        satisfiedThreshold=1,
+        satisfiedThreshold=0.5,
         selector=selector,
         metricsFormat='migrating'
       ),
 
       requestRate: rateMetric(
-        counter='memcached_commands_total',
+        counter='thanos_memcached_operations_total',
         selector=selector,
       ),
 
@@ -472,13 +470,8 @@ metricsCatalog.serviceDefinition({
         selector=selector,
       ),
 
-      significantLabels: ['fqdn'],
+      significantLabels: ['operation', 'reason'],
     },
-
-    memcached_thanos_store_index: thanosMemcachedSLI('memcached-thanos-index-cache-metrics'),
-    memcached_thanos_store_bucket: thanosMemcachedSLI('memcached-thanos-bucket-cache-metrics'),
-    memcached_thanos_qfe_query_range: thanosMemcachedSLI('memcached-thanos-qfe-query-range-metrics'),
-    memcached_thanos_qfe_labels: thanosMemcachedSLI('memcached-thanos-qfe-labels-metrics'),
 
     grafana_cloudsql: {
       userImpacting: true,
