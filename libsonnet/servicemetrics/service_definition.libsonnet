@@ -102,6 +102,12 @@ local serviceDefinition(service) =
         service.serviceLevelIndicators[sliName]
         for sliName in std.objectFields(service.serviceLevelIndicators)
       ],
+
+    // Returns true if this service has a
+    // dedicated node pool
+    hasDedicatedKubeNodePool()::
+      service.provisioning.kubernetes &&
+      service.kubeConfig.labelSelectors.hasNodeSelector(),
   };
 
 {

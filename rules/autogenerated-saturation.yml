@@ -442,7 +442,7 @@ groups:
         clamp_min(
           clamp_max(
             1 - avg by (environment, tier, type, stage) (
-              rate(node_cpu_seconds_total:labeled{mode="idle", type=~"kube|git|registry|ci-runners|sidekiq|kas|api|websocket"}[5m])
+              rate(node_cpu_seconds_total:labeled{mode="idle", type=~"api|git|kube|registry|sidekiq|web-pages|web|websockets"}[5m])
             )
             ,
             1)
