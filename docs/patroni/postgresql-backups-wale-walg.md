@@ -463,6 +463,10 @@ https://ops.gitlab.net/gitlab-com/gl-infra/gitlab-restore.
        This allows to ensure that not only full backups are in a good state,
        but also WAL stream, all the WALs in the archive are OK, without gaps.
 1. [`postgres-prdsub`](https://ops.gitlab.net/gitlab-com/gl-infra/gitlab-restore/postgres-prdsub/-/pipeline_schedules): Backups of produciton customers.GitLab.com are tested once per day
+1. [`Dev`](https://ops.gitlab.net/gitlab-com/gl-infra/gitlab-restore/postgres-gprd/-/pipeline_schedules): Backups of dev.gitlab.org are tested once per day
+1. [`Registry`](https://ops.gitlab.net/gitlab-com/gl-infra/gitlab-restore/postgres-gprd/-/pipeline_schedules): Backups of the registry database are tested once per day
+
+When a backup is verified via the CI job, the job will send a notification to Dead Man's Snitch. If the job fails to check in after a specified number of times, Dead Man's Snitch will send a page.
 
 ### Troubleshooting: What to Do if Backup Restore Verification Fails
 
