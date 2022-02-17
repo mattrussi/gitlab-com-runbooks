@@ -1491,6 +1491,57 @@ groups:
       max by(type) (
         clamp_min(
           clamp_max(
+            sum by (type, pod, container) (
+              rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", type="webservice"}[5m])
+            )
+            /
+            sum by(type, pod, container) (
+              container_spec_cpu_quota:labeled{container!="", container!="POD", type="webservice"}
+              /
+              container_spec_cpu_period:labeled{container!="", container!="POD", type="webservice"}
+            )
+            ,
+            1)
+        ,
+        0)
+      )
+    labels:
+      component: kube_container_cpu
+    record: gitlab_component_saturation:ratio
+  - expr: |
+      max by(type) (
+        clamp_min(
+          clamp_max(
+            container_memory_working_set_bytes:labeled{container!="", container!="POD", type="webservice"}
+            /
+            (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", type="webservice"} > 0)
+            ,
+            1)
+        ,
+        0)
+      )
+    labels:
+      component: kube_container_memory
+    record: gitlab_component_saturation:ratio
+  - expr: |
+      max by(type) (
+        clamp_min(
+          clamp_max(
+            1 - avg by (type) (
+              rate(node_cpu_seconds_total:labeled{mode="idle", type="webservice"}[5m])
+            )
+            ,
+            1)
+        ,
+        0)
+      )
+    labels:
+      component: kube_pool_cpu
+    record: gitlab_component_saturation:ratio
+  - expr: |
+      max by(type) (
+        clamp_min(
+          clamp_max(
             instance:node_memory_utilization:ratio{type=~"gitaly|praefect"} or instance:node_memory_utilisation:ratio{type=~"gitaly|praefect"}
             ,
             1)
@@ -1563,6 +1614,30 @@ groups:
     record: slo:max:hard:gitlab_component_saturation:ratio
   - expr: "0.9"
     labels:
+      component: kube_container_cpu
+    record: slo:max:soft:gitlab_component_saturation:ratio
+  - expr: "0.99"
+    labels:
+      component: kube_container_cpu
+    record: slo:max:hard:gitlab_component_saturation:ratio
+  - expr: "0.9"
+    labels:
+      component: kube_container_memory
+    record: slo:max:soft:gitlab_component_saturation:ratio
+  - expr: "0.99"
+    labels:
+      component: kube_container_memory
+    record: slo:max:hard:gitlab_component_saturation:ratio
+  - expr: "0.8"
+    labels:
+      component: kube_pool_cpu
+    record: slo:max:soft:gitlab_component_saturation:ratio
+  - expr: "0.9"
+    labels:
+      component: kube_pool_cpu
+    record: slo:max:hard:gitlab_component_saturation:ratio
+  - expr: "0.9"
+    labels:
       component: memory
     record: slo:max:soft:gitlab_component_saturation:ratio
   - expr: "0.98"
@@ -1619,6 +1694,30 @@ groups:
       horiz_scaling: "yes"
       quantile: max
       severity: s4
+    record: gitlab_component_saturation_info
+  - expr: "1"
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: kube_container_cpu
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s4
+    record: gitlab_component_saturation_info
+  - expr: "1"
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: kube_container_memory
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s4
+    record: gitlab_component_saturation_info
+  - expr: "1"
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: kube_pool_cpu
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s3
     record: gitlab_component_saturation_info
   - expr: "1"
     labels:
@@ -1827,6 +1926,128 @@ groups:
       description: |+
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
+        Details of the Kube Container CPU Utilization resource:
+
+        Kubernetes containers are allocated a share of CPU. When this is exhausted, the container may be thottled.
+
+      grafana_dashboard_id: alerts-sat_kube_container_cpu
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_kube_container_cpu?from=now-6h/m&to=now-1m/m&var-type={{
+        $labels.type }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2713861591"
+      grafana_variables: type
+      promql_query: |
+        max by(type, pod, container) (
+          clamp_min(
+            clamp_max(
+              sum by (type, pod, container) (
+                rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", type="{{ $labels.type }}"}[5m])
+              )
+              /
+              sum by(type, pod, container) (
+                container_spec_cpu_quota:labeled{container!="", container!="POD", type="{{ $labels.type }}"}
+                /
+                container_spec_cpu_period:labeled{container!="", container!="POD", type="{{ $labels.type }}"}
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+      title: The Kube Container CPU Utilization resource of the {{ $labels.type }}
+        service has a saturation exceeding SLO and is close to its capacity limit.
+    expr: |
+      gitlab_component_saturation:ratio{component="kube_container_cpu",monitor="global"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_cpu",monitor="global"}
+    for: 15m
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+  - alert: component_saturation_slo_out_of_bounds
+    annotations:
+      description: |+
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Kube Container Memory Utilization resource:
+
+        Records the total memory utilization for containers for this service, as a percentage of the memory limit as configured through Kubernetes.
+
+      grafana_dashboard_id: alerts-sat_kube_container_memory
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_kube_container_memory?from=now-6h/m&to=now-1m/m&var-type={{
+        $labels.type }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "172578411"
+      grafana_variables: type
+      promql_query: |
+        max by(type, pod, container) (
+          clamp_min(
+            clamp_max(
+              container_memory_working_set_bytes:labeled{container!="", container!="POD", type="{{ $labels.type }}"}
+              /
+              (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", type="{{ $labels.type }}"} > 0)
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+      title: The Kube Container Memory Utilization resource of the {{ $labels.type
+        }} service has a saturation exceeding SLO and is close to its capacity limit.
+    expr: |
+      gitlab_component_saturation:ratio{component="kube_container_memory",monitor="global"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_memory",monitor="global"}
+    for: 15m
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+  - alert: component_saturation_slo_out_of_bounds
+    annotations:
+      description: |+
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Average Node Pool CPU Utilization resource:
+
+        This resource measures average CPU utilization across an all cores in the node pool for a service fleet.
+
+        If it is becoming saturated, it may indicate that the fleet needs horizontal scaling.
+
+      grafana_dashboard_id: alerts-sat_kube_pool_cpu
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_kube_pool_cpu?from=now-6h/m&to=now-1m/m&var-type={{
+        $labels.type }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1839360107"
+      grafana_variables: type
+      promql_query: |
+        max by(type) (
+          clamp_min(
+            clamp_max(
+              1 - avg by (type) (
+                rate(node_cpu_seconds_total:labeled{mode="idle", type="{{ $labels.type }}"}[5m])
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+      title: The Average Node Pool CPU Utilization resource of the {{ $labels.type
+        }} service has a saturation exceeding SLO and is close to its capacity limit.
+    expr: |
+      gitlab_component_saturation:ratio{component="kube_pool_cpu",monitor="global"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_pool_cpu",monitor="global"}
+    for: 5m
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s3
+  - alert: component_saturation_slo_out_of_bounds
+    annotations:
+      description: |+
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
         Details of the Memory Utilization per Node resource:
 
         Memory utilization per device per node.
@@ -1955,6 +2176,11 @@ groups:
       tier: app
       type: webservice
     record: kube_horizontalpodautoscaler_labels:labeled
+  - expr: topk by(cluster,node) (1, kube_node_labels{label_eks_amazonaws_com_nodegroup="gitlab_webservice_pool"})
+    labels:
+      tier: app
+      type: webservice
+    record: kube_node_labels:labeled
   - expr: topk by(cluster,ingress) (1, kube_ingress_labels{label_app="webservice"})
     labels:
       tier: app
