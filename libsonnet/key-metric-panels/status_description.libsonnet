@@ -4,6 +4,7 @@ local promQuery = import 'grafana/prom_query.libsonnet';
 local multiburnFactors = import 'mwmbr/multiburn_factors.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local objects = import 'utils/objects.libsonnet';
+local strings = import 'utils/strings.libsonnet';
 local statPanel = grafana.statPanel;
 
 local descriptionMappings = [
@@ -89,12 +90,25 @@ local descriptionMappings = [
   },
 ];
 
-local apdexStatusQuery(selectorHash, type, aggregationSet) =
+local apdexStatusQuery(selectorHash, type, aggregationSet, fixedThreshold) =
   local metric1h = aggregationSet.getApdexRatioMetricForBurnRate('1h', required=true);
   local metric5m = aggregationSet.getApdexRatioMetricForBurnRate('5m', required=true);
   local metric6h = aggregationSet.getApdexRatioMetricForBurnRate('6h', required=true);
   local metric30m = aggregationSet.getApdexRatioMetricForBurnRate('30m', required=true);
   local allSelectors = selectorHash + aggregationSet.selector;
+
+  local sloExpression = if fixedThreshold == null then
+    'on(tier, type) group_left() (1 - (%(burnrateFactor)g * (1 - slo:min:events:gitlab_service_apdex:ratio{%(slaSelector)s})))'
+  else
+    '(1 - (%(burnrateFactor)g * (1 - %(fixedSlo)g)))';
+
+  local formatConfig = std.prune({
+    slaSelector: selectors.serializeHash(sliPromql.sloLabels(allSelectors)),
+    fixedSlo: fixedThreshold,
+  });
+  local sloExpr1h = sloExpression % formatConfig { burnrateFactor: multiburnFactors.errorBudgetFactorFor('1h') };
+  local sloExpr6h = sloExpression % formatConfig { burnrateFactor: multiburnFactors.errorBudgetFactorFor('6h') };
+
   |||
     sum(
       label_replace(
@@ -103,44 +117,53 @@ local apdexStatusQuery(selectorHash, type, aggregationSet) =
       )
       or
       label_replace(
-        vector(1) and on () (%(metric5m)s{%(selector)s} < on(tier, type) group_left() (1 - (%(burnrate_factor_1h)g * (1 - slo:min:events:gitlab_service_apdex:ratio{%(slaSelector)s})))),
+        vector(1) and on () (%(metric5m)s{%(selector)s} < %(sloExpr1h)s),
         "period", "5m", "", ""
       )
       or
       label_replace(
-        vector(2) and on () (%(metric1h)s{%(selector)s} < on(tier, type) group_left() (1 - (%(burnrate_factor_1h)g * (1 - slo:min:events:gitlab_service_apdex:ratio{%(slaSelector)s})))),
+        vector(2) and on () (%(metric1h)s{%(selector)s} < %(sloExpr1h)s),
         "period", "1h", "", ""
       )
       or
       label_replace(
-        vector(4) and on () (%(metric30m)s{%(selector)s} < on(tier, type) group_left() (1 - (%(burnrate_factor_6h)g * (1 - slo:min:events:gitlab_service_apdex:ratio{%(slaSelector)s})))),
+        vector(4) and on () (%(metric30m)s{%(selector)s} < %(sloExpr6h)s),
         "period", "30m", "", ""
       )
       or
       label_replace(
-        vector(8) and on () (%(metric6h)s{%(selector)s} < on(tier, type) group_left() (1 - (%(burnrate_factor_6h)g * (1 - slo:min:events:gitlab_service_apdex:ratio{%(slaSelector)s})))),
+        vector(8) and on () (%(metric6h)s{%(selector)s} < %(sloExpr6h)s),
         "period", "6h", "", ""
       )
     )
-  ||| %
-  ({
+  ||| % {
+    selector: selectors.serializeHash(allSelectors),
+    metric1h: metric1h,
+    metric5m: metric5m,
+    metric6h: metric6h,
+    metric30m: metric30m,
+    sloExpr1h: strings.chomp(sloExpr1h),
+    sloExpr6h: strings.chomp(sloExpr6h),
+  };
 
-     selector: selectors.serializeHash(allSelectors),
-     slaSelector: selectors.serializeHash(sliPromql.sloLabels(allSelectors)),
-     metric1h: metric1h,
-     metric5m: metric5m,
-     metric6h: metric6h,
-     metric30m: metric30m,
-     burnrate_factor_1h: multiburnFactors.errorBudgetFactorFor('1h'),
-     burnrate_factor_6h: multiburnFactors.errorBudgetFactorFor('6h'),
-   });
-
-local errorRateStatusQuery(selectorHash, type, aggregationSet) =
+local errorRateStatusQuery(selectorHash, type, aggregationSet, fixedThreshold) =
   local metric1h = aggregationSet.getErrorRatioMetricForBurnRate('1h', required=true);
   local metric5m = aggregationSet.getErrorRatioMetricForBurnRate('5m', required=true);
   local metric6h = aggregationSet.getErrorRatioMetricForBurnRate('6h', required=true);
   local metric30m = aggregationSet.getErrorRatioMetricForBurnRate('30m', required=true);
   local allSelectors = selectorHash + aggregationSet.selector;
+
+  local sloExpression =
+    if fixedThreshold == null then
+      'on(tier, type) group_left() (%(burnrateFactor)s * slo:max:events:gitlab_service_errors:ratio{%(slaSelector)s})'
+    else
+      '(%(burnrateFactor)g * %(fixedSlo)g)';
+  local formatConfig = std.prune({
+    slaSelector: selectors.serializeHash(sliPromql.sloLabels(allSelectors)),
+    fixedSlo: fixedThreshold,
+  });
+  local sloExpr1h = sloExpression % formatConfig { burnrateFactor: multiburnFactors.errorBudgetFactorFor('1h') };
+  local sloExpr6h = sloExpression % formatConfig { burnrateFactor: multiburnFactors.errorBudgetFactorFor('6h') };
 
   |||
     sum (
@@ -150,36 +173,34 @@ local errorRateStatusQuery(selectorHash, type, aggregationSet) =
       )
       or
       label_replace(
-        vector(1) and on() (%(metric5m)s{%(selector)s} > on(tier, type) group_left() (%(burnrate_factor_1h)g * slo:max:events:gitlab_service_errors:ratio{%(slaSelector)s})),
+        vector(1) and on() (%(metric5m)s{%(selector)s} > %(sloExpr1h)s),
         "period", "5m", "", ""
       )
       or
       label_replace(
-        vector(2) and on() (%(metric1h)s{%(selector)s} > on(tier, type) group_left() (%(burnrate_factor_1h)g * slo:max:events:gitlab_service_errors:ratio{%(slaSelector)s})),
+        vector(2) and on() (%(metric1h)s{%(selector)s} > %(sloExpr1h)s),
         "period", "1h", "", ""
       )
       or
       label_replace(
-        vector(4) and on() (%(metric30m)s{%(selector)s} > on(tier, type) group_left() (%(burnrate_factor_6h)g * slo:max:events:gitlab_service_errors:ratio{%(slaSelector)s})),
+        vector(4) and on() (%(metric30m)s{%(selector)s} > %(sloExpr6h)s),
         "period", "30m", "", ""
       )
       or
       label_replace(
-        vector(8) and on() (%(metric6h)s{%(selector)s} > on(tier, type) group_left() (%(burnrate_factor_6h)g * slo:max:events:gitlab_service_errors:ratio{%(slaSelector)s})),
+        vector(8) and on() (%(metric6h)s{%(selector)s} > %(sloExpr6h)s),
         "period", "6h", "", ""
       )
     )
-  ||| %
-  ({
-     selector: selectors.serializeHash(allSelectors),
-     slaSelector: selectors.serializeHash(sliPromql.sloLabels(allSelectors)),
-     metric1h: metric1h,
-     metric5m: metric5m,
-     metric6h: metric6h,
-     metric30m: metric30m,
-     burnrate_factor_1h: multiburnFactors.errorBudgetFactorFor('1h'),
-     burnrate_factor_6h: multiburnFactors.errorBudgetFactorFor('6h'),
-   });
+  ||| % {
+    selector: selectors.serializeHash(allSelectors),
+    metric1h: metric1h,
+    metric5m: metric5m,
+    metric6h: metric6h,
+    metric30m: metric30m,
+    sloExpr1h: strings.chomp(sloExpr1h),
+    sloExpr6h: strings.chomp(sloExpr6h),
+  };
 
 
 local statusDescriptionPanel(legendFormat, query) =
@@ -226,12 +247,12 @@ local statusDescriptionPanel(legendFormat, query) =
   );
 
 {
-  apdexStatusDescriptionPanel(name, selectorHash, aggregationSet)::
-    local query = apdexStatusQuery(selectorHash, selectorHash.type, aggregationSet=aggregationSet);
+  apdexStatusDescriptionPanel(name, selectorHash, aggregationSet, fixedThreshold=null)::
+    local query = apdexStatusQuery(selectorHash, selectorHash.type, aggregationSet=aggregationSet, fixedThreshold=fixedThreshold);
     statusDescriptionPanel(legendFormat=name + ' | Latency/Apdex', query=query),
 
-  errorRateStatusDescriptionPanel(name, selectorHash, aggregationSet)::
-    local query = errorRateStatusQuery(selectorHash, selectorHash.type, aggregationSet=aggregationSet);
+  errorRateStatusDescriptionPanel(name, selectorHash, aggregationSet, fixedThreshold=null)::
+    local query = errorRateStatusQuery(selectorHash, selectorHash.type, aggregationSet=aggregationSet, fixedThreshold=fixedThreshold);
     statusDescriptionPanel(legendFormat=name + ' | Errors', query=query),
 
 }

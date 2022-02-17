@@ -77,8 +77,8 @@ local getColumnWidths(
     aggregationSet=aggregationSets.serviceSLIs,
     staticTitlePrefix=null,
     legendFormatPrefix=null,
-    skipDescriptionPanels=false,
     includeLastWeek=true,
+    fixedThreshold=null
   )::
     local typeHash = if serviceType == null then {} else { type: serviceType };
     local selectorHashWithExtras = selectorHash + typeHash;
@@ -98,8 +98,8 @@ local getColumnWidths(
         showOpsRate=showOpsRate,
         includePredictions=true,
         compact=compact,
-        skipDescriptionPanels=skipDescriptionPanels,
         includeLastWeek=includeLastWeek,
+        fixedThreshold=fixedThreshold
       )
       +
       (
