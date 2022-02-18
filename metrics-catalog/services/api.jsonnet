@@ -182,7 +182,7 @@ metricsCatalog.serviceDefinition({
 
       toolingLinks: [
         toolingLinks.sentry(slug='gitlab/gitlabcom', type='api', variables=['environment', 'stage']),
-        toolingLinks.kibana(title='Rails', index='rails_api', type='api', slowRequestSeconds=10),
+        toolingLinks.kibana(title='Rails', index='rails_api', type='api'),
       ],
     },
 
@@ -193,17 +193,14 @@ metricsCatalog.serviceDefinition({
         },
 
         toolingLinks: [
-          // TODO: These need to be defined in the appliation SLI and built using
-          // selectors using the appropriate fields
-          // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1411
-          toolingLinks.kibana(title='Rails', index='rails_api', type='api', slowRequestSeconds=5),
+          toolingLinks.kibana(title='Rails', index='rails_api', type='api'),
         ],
       },
 
     graphql_queries:
       sliLibrary.get('graphql_query_apdex').generateServiceLevelIndicator(railsSelector) {
         toolingLinks: [
-          toolingLinks.kibana(title='Rails', index='rails_graphql', type='api', slowRequestSeconds=1),
+          toolingLinks.kibana(title='Rails', index='rails_graphql', type='api'),
         ],
       },
   },

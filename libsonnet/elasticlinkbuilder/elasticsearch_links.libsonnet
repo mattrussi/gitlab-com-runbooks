@@ -67,6 +67,18 @@ local mustNot(filter) =
     },
   };
 
+local matchAnyScriptFilter(scripts) = {
+  query: {
+    bool: {
+      should: [
+        { script: { script: { source: script } } }
+        for script in scripts
+      ],
+      minimum_should_match: 1,
+    },
+  },
+};
+
 local matchObject(fieldName, matchInfo) =
   local gte = if std.objectHas(matchInfo, 'gte') then matchInfo.gte else null;
   local lte = if std.objectHas(matchInfo, 'lte') then matchInfo.lte else null;
@@ -78,7 +90,9 @@ local matchObject(fieldName, matchInfo) =
     std.assertEqual(false, { __message__: 'Only gte and lte fields are supported but not in [%s]' % std.join(', ', std.objectFields(matchInfo)) });
 
 local matcher(fieldName, matchInfo) =
-  if std.isString(matchInfo) then
+  if fieldName == 'anyScript' && std.isArray(matchInfo) then
+    matchAnyScriptFilter(matchInfo)
+  else if std.isString(matchInfo) then
     matchFilter(fieldName, matchInfo)
   else if std.isArray(matchInfo) then
     matchInFilter(fieldName, matchInfo)
@@ -232,21 +246,33 @@ local indexCatalog = {
   rails: indexDefaults {
     timestamp: 'json.time',
     indexPattern: '7092c4e2-4eb5-46f2-8305-a7da2edad090',
-    defaultColumns: ['json.method', 'json.status', 'json.controller', 'json.action', 'json.path', 'json.duration_s'],
-    defaultSeriesSplitField: 'json.controller.keyword',
+    defaultColumns: [
+      'json.status',
+      'json.method',
+      'json.meta.caller_id',
+      'json.meta.feature_category',
+      'json.path',
+      'json.request_urgency',
+      'json.duration_s',
+      'json.target_duration_s',
+    ],
+    defaultSeriesSplitField: 'json.meta.caller_id',
     failureFilter: statusCode('json.status'),
     defaultLatencyField: 'json.duration_s',
     latencyFieldUnitMultiplier: 1,
+    defaultFilters: [matchFilter('json.subcomponent', 'production_json')],
+    slowRequestFilter: [
+      // These need to be present for the script to work.
+      // Health check requests don't have a target_duration_s
+      // This filters these out of the logs
+      existsFilter('json.target_duration_s'),
+      existsFilter('json.duration_s'),
+      matchAnyScriptFilter(["doc['json.duration_s'].value > doc['json.target_duration_s'].value"]),
+    ],
   },
 
-  rails_api: indexDefaults {
-    timestamp: 'json.time',
-    indexPattern: '7092c4e2-4eb5-46f2-8305-a7da2edad090',
-    defaultColumns: ['json.method', 'json.status', 'json.route', 'json.path', 'json.duration_s'],
-    defaultSeriesSplitField: 'json.route.keyword',
-    failureFilter: statusCode('json.status'),
-    defaultLatencyField: 'json.duration_s',
-    latencyFieldUnitMultiplier: 1,
+  rails_api: self.rails {
+    defaultFilters: [matchFilter('json.subcomponent', 'api_json')],
   },
 
   rails_graphql: self.rails {
@@ -729,13 +755,17 @@ local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latency
     ),
 
   // Search for requests taking longer than the specified number of seconds
-  buildElasticDiscoverSlowRequestSearchQueryURL(index, filters=[], luceneQueries=[], slowRequestSeconds, timeRange=grafanaTimeRange, extraColumns=[])::
+  buildElasticDiscoverSlowRequestSearchQueryURL(index, filters=[], luceneQueries=[], slowRequestSeconds=null, timeRange=grafanaTimeRange, extraColumns=[])::
     local ic = indexCatalog[index];
     local slowRequestFilter = if std.objectHas(ic, 'slowRequestFilter') then ic.slowRequestFilter else [];
+    local exceedingDurationFilter = if slowRequestSeconds != null then
+      [rangeFilter(ic.defaultLatencyField, gteValue=slowRequestSeconds * ic.latencyFieldUnitMultiplier, lteValue=null)]
+    else
+      [];
 
     buildElasticDiscoverSearchQueryURL(
       index=index,
-      filters=filters + slowRequestFilter + [rangeFilter(ic.defaultLatencyField, gteValue=slowRequestSeconds * ic.latencyFieldUnitMultiplier, lteValue=null)],
+      filters=filters + slowRequestFilter + exceedingDurationFilter,
       timeRange=timeRange,
       sort=[[ic.defaultLatencyField, 'desc']],
       extraColumns=extraColumns
@@ -788,6 +818,9 @@ local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latency
   // Returns true iff the named index supports latency queries
   indexSupportsLatencyQueries(index)::
     std.objectHas(indexCatalog[index], 'defaultLatencyField'),
+
+  indexHasSlowRequestFilter(index)::
+    std.objectHas(indexCatalog[index], 'slowRequestFilter'),
 
   /**
    * Best-effort converter for a prometheus selector hash,
