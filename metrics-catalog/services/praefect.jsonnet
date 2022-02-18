@@ -9,7 +9,7 @@ metricsCatalog.serviceDefinition({
   type: 'praefect',
   tier: 'stor',
 
-  tags: ['golang'],
+  tags: ['cloud-sql', 'golang'],
 
   monitoringThresholds: {
     apdexScore: 0.995,
@@ -85,7 +85,11 @@ metricsCatalog.serviceDefinition({
         Praefect uses a GCP CloudSQL instance. This SLI represents SQL transactions to that service.
       |||,
 
-      local baseSelector = { job: 'stackdriver', database: 'praefect_production' },
+      local baseSelector = {
+        job: 'stackdriver',
+        database_id: { re: '.+:praefect-db-.+' },
+        database: { re: 'praefect_(canary|production)' },
+      },
 
       staticLabels: {
         tier: 'stor',
@@ -104,7 +108,7 @@ metricsCatalog.serviceDefinition({
         }
       ),
 
-      significantLabels: [],
+      significantLabels: ['database_id'],
       serviceAggregation: false,  // Don't include cloudsql in the aggregated RPS for the service
       toolingLinks: [
         toolingLinks.cloudSQL('praefect-db-9dfb'),

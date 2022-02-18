@@ -22,7 +22,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database="grafana",environment="{{ $labels.environment }}",job="stackdriver",stage="{{ $labels.stage }}",transaction_type="rollback"}[5m])
+          avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database="grafana",database_id=~".+:grafana-.+",environment="{{ $labels.environment }}",job="stackdriver",stage="{{ $labels.stage }}",transaction_type="rollback"}[5m])
         )
       runbook: docs/monitoring/README.md
     labels:
@@ -70,7 +70,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database="grafana",environment="{{ $labels.environment }}",job="stackdriver",stage="{{ $labels.stage }}",transaction_type="rollback"}[5m])
+          avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database="grafana",database_id=~".+:grafana-.+",environment="{{ $labels.environment }}",job="stackdriver",stage="{{ $labels.stage }}",transaction_type="rollback"}[5m])
         )
       runbook: docs/monitoring/README.md
     labels:
@@ -118,7 +118,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database="grafana",environment="{{ $labels.environment }}",job="stackdriver",stage="{{ $labels.stage }}"}[5m])
+          avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database="grafana",database_id=~".+:grafana-.+",environment="{{ $labels.environment }}",job="stackdriver",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/monitoring/README.md
     labels:
@@ -153,7 +153,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database="grafana",environment="{{ $labels.environment }}",job="stackdriver",stage="{{ $labels.stage }}"}[5m])
+          avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database="grafana",database_id=~".+:grafana-.+",environment="{{ $labels.environment }}",job="stackdriver",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/monitoring/README.md
     labels:

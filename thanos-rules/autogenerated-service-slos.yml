@@ -243,6 +243,28 @@ groups:
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      tier: db
+      type: cloud-sql
+    expr: "0.995000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      tier: db
+      type: cloud-sql
+    expr: "0.000100"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: cloudsql_transactions
+      tier: db
+      type: cloud-sql
+    expr: "0.995000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: cloudsql_transactions
+      tier: db
+      type: cloud-sql
+    expr: "0.000100"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
       tier: lb
       type: frontend
     expr: "0.999000"
@@ -2033,6 +2055,14 @@ groups:
       service_aggregation: "yes"
       tier: runners
       type: ci-runners
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: cloudsql_transactions
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: db
+      type: cloud-sql
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
