@@ -31,7 +31,7 @@ Take a minute to assess the overall situation:
   1. Are we down, degraded, how concerned should we be?   
   2. Are we in S1 / all hands on deck?  
   3. Do I need to be ready to yell for help?
-  4. If on the weekend, you may need to act as the CMOC if support does not have coverage for the shift.
+ 
 
 Look at [Apdex and Error Ratio Graphs](https://dashboards.gitlab.net/d/general-service/general-service-platform-metrics?orgId=1). 
 
