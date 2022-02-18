@@ -58,5 +58,7 @@ function(
           ingress: if ingressStaticLabels == defaultValue then defaultStaticLabels else ingressStaticLabels,
           deployment: if deploymentStaticLabels == defaultValue then defaultStaticLabels else deploymentStaticLabels,
         },
+
+        hasNodeSelector():: nodeSelector != null,
       },
   }

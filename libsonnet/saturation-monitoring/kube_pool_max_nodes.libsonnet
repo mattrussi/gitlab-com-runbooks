@@ -12,7 +12,7 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
     dangerouslyThanosEvaluated: true,
 
     horizontallyScalable: true,
-    appliesTo: metricsCatalog.findKubeProvisionedServices(first='web') + ['kube']/* special kube service for non-service-aligned node pools */,
+    appliesTo: metricsCatalog.findKubeProvisionedServicesWithDedicatedNodePool(),
     description: |||
       A GKE kubernetes node pool is close to it's maximum number of nodes.
 

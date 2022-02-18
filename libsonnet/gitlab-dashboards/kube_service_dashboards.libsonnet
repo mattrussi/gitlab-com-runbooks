@@ -274,6 +274,7 @@ local rowsForContainer(container, deployment, selectorHash) =
 
 local dashboardsForService(type) =
   local serviceInfo = metricsCatalog.getService(type);
+  local serviceHasDedicatedKubeNodePool = serviceInfo.hasDedicatedKubeNodePool();
   local deployments = std.objectFields(serviceInfo.kubeResources);
   local selector = {
     env: '$environment',
@@ -331,9 +332,12 @@ local dashboardsForService(type) =
             deployments
           )
           +
-          [
-            panelsForRequestsUtilization(type, selector),
-          ],
+          (
+            if serviceHasDedicatedKubeNodePool then
+              [panelsForRequestsUtilization(type, selector)]
+            else
+              []
+          ),
           rowHeight=8
         )
       )

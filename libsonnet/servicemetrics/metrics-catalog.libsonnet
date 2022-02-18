@@ -45,4 +45,10 @@ local serviceApplicableSaturationTypes(service)
 
   findVMProvisionedServices(first=null)::
     findServiceTypesWithFirst(first, function(s) s.provisioning.vms),
+
+  // Returns a list of all services that are provisioned on kubernetes that
+  // also have dedicated node pools
+  findKubeProvisionedServicesWithDedicatedNodePool(first=null)::
+    findServiceTypesWithFirst(first, function(s) s.hasDedicatedKubeNodePool()),
+
 }
