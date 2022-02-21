@@ -13,7 +13,7 @@ local selectors = import 'promql/selectors.libsonnet';
 
     layout.grid([
       basic.timeseries(
-        title='Process CPU Time',
+        title=title + ': CPU Time',
         description='Seconds of CPU time for the named process group, per second',
         query=|||
           sum by(%(aggregationLabels)s) (
