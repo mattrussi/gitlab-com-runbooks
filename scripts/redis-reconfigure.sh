@@ -111,6 +111,12 @@ gitlab_ctl_reconfigure() {
   ssh "$fqdn" "sudo gitlab-ctl reconfigure"
 }
 
+gitlab_ctl_restart_sentinel() {
+  echo gitlab-ctl restart sentinel
+  wait_for_input
+  ssh "$fqdn" "sudo gitlab-ctl restart sentinel"
+}
+
 reconfigure() {
   export i=$1
   export fqdn="${gitlab_redis_cluster}-$i-db-${gitlab_env}.c.${gitlab_project}.internal"
@@ -176,6 +182,8 @@ reconfigure_sentinel() {
   run_chef_client
 
   gitlab_ctl_reconfigure
+
+  gitlab_ctl_restart_sentinel
 
   check_sentinel_quorum
 
