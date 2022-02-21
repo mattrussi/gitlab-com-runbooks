@@ -7,9 +7,9 @@ local aggregations = import 'promql/aggregations.libsonnet';
     query,
   ):: {
     query: query,
-    aggregatedRateQuery(aggregationLabels, selector, rangeInterval)::
-      // Note that we ignore the rangeInterval and selectors for now
-      // TODO: handle selector and rangeIntervals better, if we can
+    aggregatedRateQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[])::
+      // Note that we ignore the rangeInterval, selectors, and withoutLabels for now
+      // TODO: handle those better, if we can
       local queryText = query % {
         burnRate: rangeInterval,
         aggregationLabels: aggregations.serialize(aggregationLabels),

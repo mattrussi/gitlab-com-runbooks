@@ -8,11 +8,13 @@ local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libson
     type=null,
     tag=null,
     shard=null,
+    message=null,
     slowRequestSeconds=null,
     matches={},
     includeMatchersForPrometheusSelector=true
   )::
     function(options)
+      local supportsRequests = elasticsearchLinks.indexSupportsRequestGraphs(index);
       local supportsFailures = elasticsearchLinks.indexSupportsFailureQueries(index);
       local supportsLatencies = elasticsearchLinks.indexSupportsLatencyQueries(index);
 
@@ -36,6 +38,13 @@ local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libson
             []
           else
             [elasticsearchLinks.matchFilter('json.shard.keyword', shard)]
+        )
+        +
+        (
+          if message == null then
+            []
+          else
+            [elasticsearchLinks.matchFilter('json.message.keyword', message)]
         )
         +
         elasticsearchLinks.matchers(matches)
@@ -77,14 +86,18 @@ local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libson
           []
       )
       +
-      [
-        toolingLinkDefinition({
-          title: '📈 Kibana: ' + title + ' requests',
-          url: elasticsearchLinks.buildElasticLineCountVizURL(index, filters),
-          type:: 'chart',
-        }),
-
-      ]
+      (
+        if supportsRequests then
+          [
+            toolingLinkDefinition({
+              title: '📈 Kibana: ' + title + ' requests',
+              url: elasticsearchLinks.buildElasticLineCountVizURL(index, filters),
+              type:: 'chart',
+            }),
+          ]
+        else
+          []
+      )
       +
       (
         if supportsFailures then

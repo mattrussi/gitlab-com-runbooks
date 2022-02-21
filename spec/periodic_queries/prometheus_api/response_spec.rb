@@ -4,6 +4,8 @@ require_relative '../../../lib/periodic_queries/prometheus_api/response'
 require_relative '../../../lib/periodic_queries/query'
 
 describe PeriodicQueries::PrometheusApi::Response do
+  subject(:response) { described_class.new(raw_response) }
+
   let(:code) { "200" }
   let(:message) { "OK" }
   let(:body) { '{ "queryname": "result" }' }
@@ -11,8 +13,6 @@ describe PeriodicQueries::PrometheusApi::Response do
   let(:raw_response) do
     instance_double(Net::HTTPResponse, code: code, message: message, body: body)
   end
-
-  subject(:response) { described_class.new(raw_response) }
 
   describe '#status' do
     specify { expect(response.status).to eq(code) }

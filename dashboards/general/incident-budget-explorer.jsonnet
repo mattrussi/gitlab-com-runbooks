@@ -1,13 +1,13 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
+local platformLinks = import 'gitlab-dashboards/platform_links.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local seriesOverrides = import 'grafana/series_overrides.libsonnet';
-local platformLinks = import 'platform_links.libsonnet';
-local serviceCatalog = import 'service_catalog.libsonnet';
+local serviceCatalog = import 'service-catalog/service-catalog.libsonnet';
 local row = grafana.row;
-local thresholds = import 'thresholds.libsonnet';
+local thresholds = import 'gitlab-dashboards/thresholds.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
-local metricsConfig = import 'metrics-config.libsonnet';
+local metricsConfig = import 'gitlab-metrics-config.libsonnet';
 local templates = import 'grafana/templates.libsonnet';
 
 // Preferred ordering of rows on the SLA dashboard
@@ -38,8 +38,6 @@ local thresholdsValues = {
 // Note, by having a overall_sla_weighting value, even if it is zero, the service will
 // be included on the SLA dashboard. To remove it, delete the key
 local keyServices = serviceCatalog.findKeyBusinessServices(includeZeroScore=true);
-
-local keyServiceRegExp = std.join('|', std.map(function(service) service.name, keyServices));
 
 local keyServiceSorter(service) =
   local l = std.find(service.name, serviceOrdering);

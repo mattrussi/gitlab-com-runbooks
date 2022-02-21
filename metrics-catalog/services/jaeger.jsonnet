@@ -1,6 +1,7 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
+local maturityLevels = import 'service-maturity/levels.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'jaeger',
@@ -67,4 +68,7 @@ metricsCatalog.serviceDefinition({
       significantLabels: ['fqdn', 'pod'],
     },
   },
+  skippedMaturityCriteria: maturityLevels.skip({
+    'Service exists in the dependency graph': 'Jaeger is an independent internal observability tool',
+  }),
 })

@@ -2,6 +2,7 @@ local apdexPanel = import './apdex-panel.libsonnet';
 local errorRatioPanel = import './error-ratio-panel.libsonnet';
 local operationRatePanel = import './operation-rate-panel.libsonnet';
 local statusDescription = import './status_description.libsonnet';
+local errorBudget = import 'stage-groups/error_budget.libsonnet';
 
 local selectorToGrafanaURLParams(selectorHash) =
   local pairs = std.foldl(
@@ -30,8 +31,12 @@ local row(
   includePredictions=false,
   expectMultipleSeries=false,
   compact=false,
+  skipDescriptionPanels=false,
+  includeLastWeek=true,
       ) =
-  local selectorHashWithExtras = selectorHash { type: serviceType };
+  local fixedThreshold = if serviceType == null then errorBudget.slaTarget else null;
+  local typeSelector = if serviceType == null then {} else { type: serviceType };
+  local selectorHashWithExtras = selectorHash + typeSelector;
   local formatConfig = {
     titlePrefix: titlePrefix,
     legendFormatPrefix: legendFormatPrefix,
@@ -48,13 +53,14 @@ local row(
           apdexPanel.panel(
             title='%(titlePrefix)s Apdex' % formatConfig,
             aggregationSet=aggregationSet,
-            serviceType=serviceType,
             selectorHash=selectorHashWithExtras,
             stableId='%(stableIdPrefix)s-apdex' % formatConfig,
             legendFormat='%(legendFormatPrefix)s apdex' % formatConfig,
             description=apdexDescription,
             expectMultipleSeries=expectMultipleSeries,
             compact=compact,
+            fixedThreshold=fixedThreshold,
+            includeLastWeek=includeLastWeek,
           )
           .addDataLink({
             url: '/d/alerts-%(aggregationId)s_slo_apdex?${__url_time_range}&${__all_variables}&%(grafanaURLPairs)s' % formatConfig {},
@@ -64,7 +70,7 @@ local row(
         ]
         +
         (
-          if expectMultipleSeries then
+          if expectMultipleSeries || skipDescriptionPanels then
             []
           else
             [statusDescription.apdexStatusDescriptionPanel(titlePrefix, selectorHashWithExtras, aggregationSet=aggregationSet)]
@@ -82,12 +88,13 @@ local row(
           errorRatioPanel.panel(
             '%(titlePrefix)s Error Ratio' % formatConfig,
             aggregationSet=aggregationSet,
-            serviceType=serviceType,
             selectorHash=selectorHashWithExtras,
             stableId='%(stableIdPrefix)s-error-rate' % formatConfig,
             legendFormat='%(legendFormatPrefix)s error ratio' % formatConfig,
             expectMultipleSeries=expectMultipleSeries,
             compact=compact,
+            fixedThreshold=fixedThreshold,
+            includeLastWeek=includeLastWeek,
           )
           .addDataLink({
             url: '/d/alerts-%(aggregationId)s_slo_error?${__url_time_range}&${__all_variables}&%(grafanaURLPairs)s' % formatConfig,
@@ -97,7 +104,7 @@ local row(
         ]
         +
         (
-          if expectMultipleSeries then
+          if expectMultipleSeries || skipDescriptionPanels then
             []
           else
             [statusDescription.errorRateStatusDescriptionPanel(titlePrefix, selectorHashWithExtras, aggregationSet=aggregationSet)]
@@ -119,7 +126,7 @@ local row(
           legendFormat='%(legendFormatPrefix)s RPS' % formatConfig,
           expectMultipleSeries=expectMultipleSeries,
           includePredictions=includePredictions,
-          includeLastWeek=true,
+          includeLastWeek=includeLastWeek,
           compact=compact,
         ),
       ]]

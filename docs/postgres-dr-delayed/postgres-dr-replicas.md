@@ -2,16 +2,18 @@
 
 <!-- vim-markdown-toc GitLab -->
 
-* [Overview](#overview)
-* [Setup](#setup)
-  * [Setup Replication](#setup-replication)
-    * [Pre-requisites](#pre-requisites)
-      * [postgresql.auto.conf for archive replica](#postgresql.auto.conf-for-archive-replica)
-      * [postgresql.auto.conf for delayed replica](#postgresql.auto.conf-for-delayed-replica)
-    * [Restoring with WAL-G](#restoring-with-wal-g)
-    * [Restoring with a disk-snapshot](#restoring-with-a-disk-snapshot)
-* [Check Replication Lag](#check-replication-lag)
-* [Pause Replay on Delayed Replica](#pause-replay-on-delayed-replica)
+- [Postgres Replicas](#postgres-replicas)
+  - [Overview](#overview)
+  - [Setup](#setup)
+    - [Setup Replication](#setup-replication)
+      - [Pre-requisites](#pre-requisites)
+        - [postgresql.auto.conf for archive replica](#postgresqlautoconf-for-archive-replica)
+        - [postgresql.auto.conf for delayed replica](#postgresqlautoconf-for-delayed-replica)
+      - [Restoring with WAL-G](#restoring-with-wal-g)
+      - [Restoring with a disk-snapshot](#restoring-with-a-disk-snapshot)
+  - [Check Replication Lag](#check-replication-lag)
+  - [Pause Replay on Delayed Replica](#pause-replay-on-delayed-replica)
+  - [Start, stop and check status of PostgreSQL](#start-stop-and-check-status-of-postgresql)
 
 <!-- vim-markdown-toc -->
 
@@ -260,3 +262,20 @@ can temporarily pause the replay:
 * `systemctl start chef-client`
 
 Also see the [deleted-project-restore runbook](../uncategorized/deleted-project-restore.md).
+
+## Start, stop and check status of PostgreSQL
+
+Archive and delayed replicas manage their PostgreSQL instance with the `gitlab-ctl` command. Chef-client should start PostgreSQL automatically, but in case it doesn't you can use the following commands:
+
+* Check PostgreSQL Status:
+```
+gitlab-ctl status postgresql
+```
+* Start PostgreSQL:
+```
+gitlab-ctl start postgresql
+```
+* Stop PostgreSQL
+```
+gitlab-ctl stop postgresql
+```

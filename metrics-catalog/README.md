@@ -25,7 +25,7 @@ For more examples, review `services/*.jsonnet`.
 
 ```jsonnet
 metricsCatalog.serviceDefinition({
-  type: 'service_type',     // Tehe `type` identifier label for the service
+  type: 'service_type',     // The `type` identifier label for the service
   tier: 'sv',               // The `tier` identifier label for the service
   contractualThresholds: {  // Thresholds are used to calculate SLA metrics (selected services only)
     apdexRatio: 0.95,       // Apdex must be above this value for the service to be in SLA
@@ -51,7 +51,8 @@ metricsCatalog.serviceDefinition({
         histogram='gitlab_workhorse_http_request_duration_seconds_bucket', // The _bucket histogram metric to use
         selector='job="gitlab-workhorse-web"',                             // Any selectors to filter the metric with
         satisfiedThreshold=1,                                              // The bucket (eg `le="1"`) to use for the satisfactory threshold
-        toleratedThreshold=10
+        toleratedThreshold=10,
+        metricsFormat='prometheus'                                         // Format of `le` labels on histograms, example of accepted values (prometheus: le="1"), (openmetrics: le="1.0"), (migrating: le=~"1|1.0")
       ),
 
       // requestRate is mandatory for all components
@@ -92,12 +93,78 @@ This definition is used to generate several different configurations, including:
    1. This is the first step in reducing the cardinality of the application metrics before further aggregation at the global level.
    1. The global view is used for alerting, visualization, capacity planning etc.
 1. **Aggregation recording rules**, defined as "aggregation sets".
-   1. These are evaluated in Thanos Ruler](https://github.com/thanos-io/thanos/blob/master/docs/components/rule.md) and consume the source recording rules.
+   1. These are evaluated in [Thanos Ruler](https://github.com/thanos-io/thanos/blob/master/docs/components/rule.md) and consume the source recording rules.
    1. Thanos Ruler reads the source recording rules from Prometheus, and aggregates them into globally aggregated view of the metrics.
+   1. It is possible to upscale aggregation sets for high cardinality metrics: This avoids loading many hours of high cardinality data from the source aggregation, but insteads uses the lower cardinality recording of a lower burn rate to scale up.
 1. **SLO violation alerts** for each SLI for apdex and error ratios
 1. **Weighted Average SLA** caclulation as described in https://about.gitlab.com/handbook/engineering/monitoring/
 1. **Grafana Dashboards** for each service with SLI overview panels and detailed drilldown panels. See https://dashboards.gitlab.com/d/web-main for an example
 1. **GitLab Dashboards**. See https://gitlab.com/gitlab-com/runbooks/-/metrics/key-metrics-web.yml for an example
+
+### Available aggregation sets
+
+The service level indicator definitions are rolled up in multiple
+aggregations that are used for alerting and service monitoring on one
+side, and the error budget for stage groups on the other:
+
+![aggregations diagram](img/aggregations.png)
+
+All of the aggregation sets have several recordings for apdex and errors
+by a burn rate. The most commonly used ones are:
+
+1. The service aggregation: Used for an overall view of a service, on
+   for example, the main service dashboards.
+
+   1. `gitlab_service_apdex:ratio_[burnRate]`
+   1. `gitlab_service_errors:rate_[burnRate]`
+
+   For these metrics we also have a separation by region
+   (`gitlab_service_regional_*`) and by node
+   (`gitlab_service_node_*`).
+
+1. The component aggregation: Used for SLO alerts and visible on the
+   service dashboards
+
+   1. `gitlab_component_apdex:ratio_[burnRate]`
+   1. `gitlab_component_apdex:success:rate_[burnRate]`
+   1. `gitlab_component_apdex:weight:score_[burnRate]`
+   1. `gitlab_component_errors:ratio_[burnRate]`
+   1. `gitlab_component_errors:rate_[burnRate]`
+   1. `gitlab_component_ops:rate_[burnRate]`
+
+   For these alerts, we also have separate recordings per region
+   (`gitlab_regional_sli_*`) for kubernetes, or per node for VMs
+   (`gitlab_component_node_*`).
+
+1. Feature category recordings: these metrics are recorded from the
+   source metrics using a feature category defined on the SLI (when a
+   component has a single feature category), or using a
+   `feature_category` label available on the source metrics.
+
+   1. `gitlab:component:feature_category:execution:apdex:ratio_[burnRate]`
+   1. `gitlab:component:feature_category:execution:apdex:success:rate_[burnRate]`
+   1. `gitlab:component:feature_category:execution:apdex:weight:score_[burnRate]`
+   1. `gitlab:component:feature_category:execution:error:ratio_[burnRate]`
+   1. `gitlab:component:feature_category:execution:error:rate_[burnRate]`
+   1. `gitlab:component:feature_category:execution:ops:rate_[burnRate]`
+
+1. Stage group component recordings: these metrics use the feature category
+   aggregation and join it with the
+   [stage-group-mapping](../services/stage-group-mapping.jsonnet#L1). These
+   are then used for the
+   [error budget for stage groups](https://about.gitlab.com/handbook/engineering/error-budgets/#budget-spend-by-stage-group).
+
+   1. `gitlab:component:stage_group:execution:apdex:success:rate_[burnRate]`
+   1. `gitlab:component:stage_group:execution:apdex:weight:score_[burnRate]`
+   1. `gitlab:component:stage_group:execution:apdex:ratio_[burnRate]`
+   1. `gitlab:component:stage_group:execution:ops:rate_[burnRate]`
+   1. `gitlab:component:stage_group:execution:error:rate_[burnRate]`
+   1. `gitlab:component:stage_group:execution:success:rate_[burnRate]`
+   1. `gitlab:component:stage_group:execution:error:ratio_[burnRate]`
+
+An exhaustive list of aggregations can be found in
+[`aggregation-sets.libsonnet`](aggregation-sets.libsonnet), where they
+are defined.
 
 ## Development
 

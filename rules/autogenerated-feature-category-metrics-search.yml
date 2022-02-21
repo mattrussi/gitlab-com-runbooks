@@ -67,25 +67,3 @@ groups:
       sum by (env,environment,stage) (
         clamp_min(deriv(elasticsearch_indices_search_query_total{type="search"}[1h]), 0)
       )
-- name: 'Prometheus Intermediate Metrics per feature: search - burn-rate 6h'
-  rules:
-  - record: gitlab:component:feature_category:execution:ops:rate_6h
-    labels:
-      component: elasticsearch_indexing
-      feature_category: global_search
-      tier: inf
-      type: search
-    expr: |
-      sum by (env,environment,stage) (
-        clamp_min(deriv(elasticsearch_indices_indexing_index_total{type="search"}[6h]), 0)
-      )
-  - record: gitlab:component:feature_category:execution:ops:rate_6h
-    labels:
-      component: elasticsearch_searching
-      feature_category: global_search
-      tier: inf
-      type: search
-    expr: |
-      sum by (env,environment,stage) (
-        clamp_min(deriv(elasticsearch_indices_search_query_total{type="search"}[6h]), 0)
-      )

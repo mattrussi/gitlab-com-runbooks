@@ -5,49 +5,64 @@ local selectors = import 'promql/selectors.libsonnet';
 local durationParser = import 'utils/duration-parser.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 
-local errorBudgetRatio(slaTarget, range, groupSelectors, aggregationLabels) =
+local ignoredComponentJoinLabels = ['stage_group', 'component'];
+local ignoreCondition(ignoreComponents) =
+  if ignoreComponents then
+    'unless on (%s) gitlab:ignored_component:stage_group' % [aggregations.serialize(ignoredComponentJoinLabels)]
+  else
+    '';
+
+local errorBudgetRatio(range, groupSelectors, aggregationLabels, ignoreComponents) =
   |||
-    # Account for missing metrics that are turned into 0 by `vector(0)`.
     clamp_max(
-      # Number of successful measurements
       sum by (%(aggregations)s)(
-        # Reuest with satisfactory apdex
-        sum_over_time(
-          gitlab:component:stage_group:execution:apdex:success:rate_1h{%(selectorHash)s}[%(range)s]
-        ) or vector(0)
-        +
-        # Requests without error
-        (
-          sum_over_time(
-            gitlab:component:stage_group:execution:ops:rate_1h{%(selectorHash)s}[%(range)s]
+        sum by (%(aggregationsIncludingComponent)s) (
+          label_replace(
+            sum_over_time(
+              gitlab:component:stage_group:execution:apdex:success:rate_1h{%(selectorHash)s}[%(range)s]
+            ), 'sli_kind', 'apdex', '', ''
           )
-          -
-          sum_over_time(
-            gitlab:component:stage_group:execution:error:rate_1h{%(selectorHash)s}[%(range)s]
-          ) or vector(0)
-        )
+          or
+          label_replace(
+            sum_over_time(
+              gitlab:component:stage_group:execution:ops:rate_1h{%(selectorHash)s}[%(range)s]
+            )
+            -
+            sum_over_time(
+              gitlab:component:stage_group:execution:error:rate_1h{%(selectorHash)s}[%(range)s]
+            ), 'sli_kind', 'error', '', ''
+          )
+        ) %(ignoreCondition)s
       )
       /
-      # Number of measurements
       sum by (%(aggregations)s)(
-        # Apdex Measurements
-        sum_over_time(
-          gitlab:component:stage_group:execution:apdex:weight:score_1h{%(selectorHash)s}[%(range)s]
-        ) or vector(0)
-        +
-        # Requests
-        sum_over_time(
-          gitlab:component:stage_group:execution:ops:rate_1h{%(selectorHash)s}[%(range)s]
-        )
+        sum by (%(aggregationsIncludingComponent)s) (
+          label_replace(
+            sum_over_time(
+              gitlab:component:stage_group:execution:apdex:weight:score_1h{%(selectorHash)s}[%(range)s]
+            ),
+            'sli_kind', 'apdex', '', ''
+          )
+          or
+          label_replace(
+            sum_over_time(
+              gitlab:component:stage_group:execution:ops:rate_1h{%(selectorHash)s}[%(range)s]
+            )
+            and sum_over_time(gitlab:component:stage_group:execution:error:rate_1h{%(selectorHash)s}[%(range)s]),
+            'sli_kind', 'error', '', ''
+          )
+        ) %(ignoreCondition)s
       ),
     1)
   ||| % {
     selectorHash: selectors.serializeHash(groupSelectors),
     range: range,
     aggregations: aggregations.serialize(aggregationLabels),
+    aggregationsIncludingComponent: aggregations.serialize(aggregationLabels + ignoredComponentJoinLabels),
+    ignoreCondition: ignoreCondition(ignoreComponents),
   };
 
-local errorBudgetTimeSpent(slaTarget, range, selectors, aggregationLabels) =
+local errorBudgetTimeSpent(range, selectors, aggregationLabels, ignoreComponents) =
   |||
     (
       (
@@ -55,11 +70,11 @@ local errorBudgetTimeSpent(slaTarget, range, selectors, aggregationLabels) =
       ) * %(rangeInSeconds)i
     )
   ||| % {
-    ratioQuery: errorBudgetRatio(slaTarget, range, selectors, aggregationLabels),
+    ratioQuery: errorBudgetRatio(range, selectors, aggregationLabels, ignoreComponents),
     rangeInSeconds: durationParser.toSeconds(range),
   };
 
-local errorBudgetTimeRemaining(slaTarget, range, selectors, aggregationLabels) =
+local errorBudgetTimeRemaining(slaTarget, range, selectors, aggregationLabels, ignoreComponents) =
   |||
     # The number of seconds allowed to be spent in %(range)s
     %(budgetSeconds)i
@@ -68,77 +83,103 @@ local errorBudgetTimeRemaining(slaTarget, range, selectors, aggregationLabels) =
   ||| % {
     range: range,
     budgetSeconds: utils.budgetSeconds(slaTarget, range),
-    timeSpentQuery: errorBudgetTimeSpent(slaTarget, range, selectors, aggregationLabels),
+    timeSpentQuery: errorBudgetTimeSpent(range, selectors, aggregationLabels, ignoreComponents),
   };
 
-local errorBudgetViolationRate(range, groupSelectors, aggregationLabels) =
-  local partsInterpolation = {
-    aggregationLabels: aggregations.join(
-      std.filter(
-        function(label) label != 'violation_type',
-        aggregationLabels
-      )
-    ),
+local errorBudgetRateAggregationInterpolation(range, groupSelectors, aggregationLabels, ignoreComponents) =
+  local filteredAggregationLabels = std.filter(
+    function(label) label != 'violation_type',
+    aggregationLabels
+  );
+  {
+    aggregationLabels: aggregations.join(filteredAggregationLabels),
     selectors: selectors.serializeHash(groupSelectors),
     range: range,
+    ignoreCondition: ignoreCondition(ignoreComponents),
+    aggregationsIncludingComponent: aggregations.join(filteredAggregationLabels + ignoredComponentJoinLabels),
   };
+
+local errorBudgetViolationRate(range, groupSelectors, aggregationLabels, ignoreComponents) =
+  local partsInterpolation = errorBudgetRateAggregationInterpolation(range, groupSelectors, aggregationLabels, ignoreComponents);
   local apdexViolationRate = |||
     sum by (%(aggregationLabels)s)(
-      sum_over_time(
-        gitlab:component:stage_group:execution:apdex:weight:score_1h{%(selectors)s}[%(range)s]
-      ) -
-      # Request with satisfactory apdex
-      sum_over_time(
-        gitlab:component:stage_group:execution:apdex:success:rate_1h{%(selectors)s}[%(range)s]
-      )
+      sum by (%(aggregationsIncludingComponent)s)(
+        sum_over_time(
+          gitlab:component:stage_group:execution:apdex:weight:score_1h{%(selectors)s}[%(range)s]
+        ) -
+        # Request with satisfactory apdex
+        sum_over_time(
+          gitlab:component:stage_group:execution:apdex:success:rate_1h{%(selectors)s}[%(range)s]
+        )
+      ) %(ignoreCondition)s
     )
   ||| % partsInterpolation;
   local errorRate = |||
     sum by (%(aggregationLabels)s)(
-      sum_over_time(
-        gitlab:component:stage_group:execution:error:rate_1h{%(selectors)s}[%(range)s]
-      )
+      sum by (%(aggregationsIncludingComponent)s)(
+        sum_over_time(
+          gitlab:component:stage_group:execution:error:rate_1h{%(selectors)s}[%(range)s]
+        )
+      ) %(ignoreCondition)s
     )
   ||| % partsInterpolation;
-
-  // We're calculating an absolute number of failures from a failure rate
-  // this means we don't have an exact precision, but only a request per second
-  // number that we turn into an absolute number. To display a number of requests
-  // over multiple days, the decimals don't matter anymore, so we're rounding them
-  // up using `ceil`.
-  //
-  // The per-second-rates are sampled every minute, we assume that we continue
-  // to receive the same number of requests per second until the next sample.
-  // So we multiply the rate by the number of samples we don't have.
-  // For example: the last sample said we were processing 2RPS, next time we'll
-  // take a sample will be in 60s, so in that time we assume to process
-  // 60 * 2 = 120 requests.
-  // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1123
   |||
-    ceil(
-      (
-        sum by (%(aggregationLabelsWithViolationType)s) (
-          %(apdexViolationRate)s
-          or
-          %(errorRate)s
-        ) > 0
-      ) * 60
-    )
+    sum by (%(aggregationLabelsWithViolationType)s) (
+      %(apdexViolationRate)s
+      or
+      %(errorRate)s
+    ) > 0
   ||| % {
     aggregationLabelsWithViolationType: aggregations.join(aggregationLabels),
-    apdexViolationRate: strings.indent(labels.addStaticLabel('violation_type', 'apdex', apdexViolationRate), 6),
-    errorRate: strings.indent(labels.addStaticLabel('violation_type', 'error', errorRate), 6),
+    apdexViolationRate: strings.indent(strings.chomp(labels.addStaticLabel('violation_type', 'apdex', apdexViolationRate)), 2),
+    errorRate: strings.indent(strings.chomp(labels.addStaticLabel('violation_type', 'error', errorRate)), 2),
   };
+
+local errorBudgetOperationRate(range, groupSelectors, aggregationLabels, ignoreComponents) =
+  local partsInterpolation = errorBudgetRateAggregationInterpolation(range, groupSelectors, aggregationLabels, ignoreComponents);
+  local apdexOperationRate = |||
+    sum by (%(aggregationLabels)s)(
+      sum by (%(aggregationsIncludingComponent)s)(
+        sum_over_time(
+          gitlab:component:stage_group:execution:apdex:weight:score_1h{%(selectors)s}[%(range)s]
+        )
+      ) %(ignoreCondition)s
+    )
+  ||| % partsInterpolation;
+  local errorOperationRate = |||
+    sum by (%(aggregationLabels)s)(
+      sum by (%(aggregationsIncludingComponent)s)(
+        sum_over_time(
+          gitlab:component:stage_group:execution:ops:rate_1h{%(selectors)s}[%(range)s]
+        )
+        and sum_over_time(gitlab:component:stage_group:execution:error:rate_1h{%(selectors)s}[%(range)s])
+      ) %(ignoreCondition)s
+    )
+  ||| % partsInterpolation;
+  |||
+    sum by (%(aggregationLabelsWithViolationType)s) (
+      %(apdexOperationRate)s
+      or
+      %(errorOperationRate)s
+    ) > 0
+  ||| % {
+    aggregationLabelsWithViolationType: aggregations.join(aggregationLabels),
+    apdexOperationRate: strings.indent(strings.chomp(labels.addStaticLabel('violation_type', 'apdex', apdexOperationRate)), 2),
+    errorOperationRate: strings.indent(strings.chomp(labels.addStaticLabel('violation_type', 'error', errorOperationRate)), 2),
+  };
+
 
 {
   init(slaTarget, range): {
-    errorBudgetRatio(selectors, aggregationLabels=[]):
-      errorBudgetRatio(slaTarget, range, selectors, aggregationLabels),
-    errorBudgetTimeSpent(selectors, aggregationLabels=[]):
-      errorBudgetTimeSpent(slaTarget, range, selectors, aggregationLabels),
-    errorBudgetTimeRemaining(selectors, aggregationLabels=[]):
-      errorBudgetTimeRemaining(slaTarget, range, selectors, aggregationLabels),
-    errorBudgetViolationRate(selectors, aggregationLabels=[]):
-      errorBudgetViolationRate(range, selectors, aggregationLabels),
+    errorBudgetRatio(selectors, aggregationLabels=[], ignoreComponents=true):
+      errorBudgetRatio(range, selectors, aggregationLabels, ignoreComponents),
+    errorBudgetTimeSpent(selectors, aggregationLabels=[], ignoreComponents=true):
+      errorBudgetTimeSpent(range, selectors, aggregationLabels, ignoreComponents),
+    errorBudgetTimeRemaining(selectors, aggregationLabels=[], ignoreComponents=true):
+      errorBudgetTimeRemaining(slaTarget, range, selectors, aggregationLabels, ignoreComponents),
+    errorBudgetViolationRate(selectors, aggregationLabels=[], ignoreComponents=true):
+      errorBudgetViolationRate(range, selectors, aggregationLabels, ignoreComponents),
+    errorBudgetOperationRate(selectors, aggregationLabels=[], ignoreComponents=true):
+      errorBudgetOperationRate(range, selectors, aggregationLabels, ignoreComponents),
   },
 }

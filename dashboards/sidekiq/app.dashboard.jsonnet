@@ -1,12 +1,9 @@
-local common = import 'container_common_graphs.libsonnet';
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
+local common = import 'gitlab-dashboards/container_common_graphs.libsonnet';
+local platformLinks = import 'gitlab-dashboards/platform_links.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
-local commonAnnotations = import 'grafana/common_annotations.libsonnet';
-local platformLinks = import 'platform_links.libsonnet';
-local serviceCatalog = import 'service_catalog.libsonnet';
 local template = grafana.template;
 local templates = import 'grafana/templates.libsonnet';
-local dashboard = grafana.dashboard;
 local row = grafana.row;
 
 basic.dashboard(
@@ -48,7 +45,6 @@ basic.dashboard(
 .addPanels(common.generalRubyCounters(startRow=1001))
 + {
   links+: platformLinks.triage +
-          serviceCatalog.getServiceLinks('sidekiq') +
           platformLinks.services +
           [platformLinks.dynamicLinks('Sidekiq Detail', 'type:sidekiq')],
 }

@@ -2,6 +2,8 @@
 # vim: ai:ts=2:sw=2:expandtab
 
 set -euo pipefail
+# Also fail when subshells fail
+shopt -s inherit_errexit || true # Not all bash shells have this
 
 IFS=$'\n\t'
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -61,6 +63,11 @@ function validate_dashboard_requests() {
     uid=$(echo "${request}" | jq -r '.uid')
     if [[ ${#uid} -gt 40 ]]; then
       echo >&2 "UID ${uid} is longer than the 40 char max allowed by Grafana"
+      return 1
+    fi
+    panelCount=$(echo "${request}" | jq -r '[.panels,.rows | length] | add')
+    if [[ "${panelCount}" -lt 1 ]]; then
+      echo >&2 "Dashboard ${uid} does not have any panels or rows, is it a dashboard?"
       return 1
     fi
     echo "${request}"

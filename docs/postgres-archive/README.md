@@ -16,7 +16,7 @@
 
 ## Troubleshooting Pointers
 
-* [../postgres-dr-delayed/postgres-dr-replicas.md](../postgres-dr-delayed/postgres-dr-replicas.md)
+* [Postgres Replicas](../postgres-dr-delayed/postgres-dr-replicas.md)
 <!-- END_MARKER -->
 
 

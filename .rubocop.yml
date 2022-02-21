@@ -1,3 +1,11 @@
+inherit_from: .rubocop_todo.yml
+
+# We can remove this section once this MR is merged and the new version
+# is released:
+# https://gitlab.com/gitlab-org/gitlab-styles/-/merge_requests/86
+require:
+  - gitlab/styles/rubocop
+
 inherit_gem:
   gitlab-styles:
   - rubocop-bundler.yml
@@ -7,3 +15,27 @@ inherit_gem:
   - rubocop-metrics.yml
   - rubocop-naming.yml
   - rubocop-style.yml
+
+# This project doesn't use ActiveRecord, so these will all be false
+# positives.
+CodeReuse/ActiveRecord:
+  Enabled: false
+
+# We often have long strings in this project and breaking those across
+# multiple lines does not really improve readability.
+Layout/LineLength:
+  Enabled: false
+
+# In many cases, indentation following the first argument makes it harder to
+# read.
+Layout/FirstArgumentIndentation:
+  Enabled: false
+
+Lint/HashCompareByIdentity: # (new in 0.93)
+  Enabled: true
+Lint/RedundantSafeNavigation: # (new in 0.93)
+  Enabled: true
+Style/ClassEqualityComparison: # (new in 0.93)
+  Enabled: true
+RSpec/StubbedMock: # (new in 1.44)
+  Enabled: false

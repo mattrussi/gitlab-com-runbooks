@@ -8,9 +8,8 @@ groups:
   - alert: PgbouncerServiceServiceTrafficCessation
     for: 5m
     annotations:
-      title: >-
-        The service SLI of the pgbouncer service (`{{ $labels.stage }}` stage) has not received any traffic
-        in the past 30 minutes
+      title: The service SLI of the pgbouncer service (`{{ $labels.stage }}` stage)
+        has not received any traffic in the past 30 minutes
       description: |
         All transactions destined for the Postgres primary instance are routed through the pgbouncer service. This SLI models those transactions in aggregate.
 
@@ -18,17 +17,16 @@ groups:
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: pgbouncer-main/pgbouncer-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/pgbouncer-main/pgbouncer-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/pgbouncer-main/pgbouncer-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '231468638'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "231468638"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          label_replace(rate(pgbouncer_stats_sql_transactions_pooled_total{type="pgbouncer", tier="db", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]), "_c", "0", "", "")
+          label_replace(rate(pgbouncer_stats_sql_transactions_pooled_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="pgbouncer"}[5m]), "_c", "0", "", "")
           or
-          label_replace(rate(pgbouncer_stats_queries_pooled_total{type="pgbouncer", tier="db", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]), "_c", "1", "", "")
+          label_replace(rate(pgbouncer_stats_queries_pooled_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="pgbouncer"}[5m]), "_c", "1", "", "")
         )
       runbook: docs/pgbouncer/README.md
     labels:
@@ -37,22 +35,18 @@ groups:
       alert_type: cause
       feature_category: not_owned
       pager: pagerduty
-      product_stage: not_owned
-      product_stage_group: not_owned
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
-    expr: >
-      gitlab_component_ops:rate_30m{type="pgbouncer", component="service", stage="main", monitor="global"}
-      == 0
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{type="pgbouncer", component="service", stage="main", monitor="global"} == 0
   - alert: PgbouncerServiceServiceTrafficAbsent
     for: 30m
     annotations:
-      title: >-
-        The service SLI of the pgbouncer service (`{{ $labels.stage }}` stage) has not reported any traffic
-        in the past 30 minutes
+      title: The service SLI of the pgbouncer service (`{{ $labels.stage }}` stage)
+        has not reported any traffic in the past 30 minutes
       description: |
         All transactions destined for the Postgres primary instance are routed through the pgbouncer service. This SLI models those transactions in aggregate.
 
@@ -62,17 +56,16 @@ groups:
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
       grafana_dashboard_id: pgbouncer-main/pgbouncer-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/pgbouncer-main/pgbouncer-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/pgbouncer-main/pgbouncer-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '231468638'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "231468638"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          label_replace(rate(pgbouncer_stats_sql_transactions_pooled_total{type="pgbouncer", tier="db", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]), "_c", "0", "", "")
+          label_replace(rate(pgbouncer_stats_sql_transactions_pooled_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="pgbouncer"}[5m]), "_c", "0", "", "")
           or
-          label_replace(rate(pgbouncer_stats_queries_pooled_total{type="pgbouncer", tier="db", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]), "_c", "1", "", "")
+          label_replace(rate(pgbouncer_stats_queries_pooled_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",tier="db",type="pgbouncer"}[5m]), "_c", "1", "", "")
         )
       runbook: docs/pgbouncer/README.md
     labels:
@@ -81,13 +74,11 @@ groups:
       alert_type: cause
       feature_category: not_owned
       pager: pagerduty
-      product_stage: not_owned
-      product_stage_group: not_owned
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
+      slo_alert: "no"
+      user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{type="pgbouncer", component="service", stage="main", monitor="global"} offset 1h
       unless

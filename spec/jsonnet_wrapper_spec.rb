@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'spec_helper'
 
 require_relative '../lib/jsonnet_wrapper'
@@ -68,6 +69,27 @@ describe JsonnetWrapper do
         <<~JSON
         {
            "hello": "World"
+        }
+        JSON
+      )
+    end
+
+    it 'evaluates using external strings' do
+      wrapper = described_class.new(ext_str: { hello_world: 'from ruby' })
+      File.write(
+        jsonnet_file_path, <<~JSONNET
+          local helloFromRuby = std.extVar('hello_world');
+
+          {
+            greeting: helloFromRuby,
+          }
+        JSONNET
+      )
+
+      expect(wrapper.evaluate(jsonnet_file_path)).to eq(
+        <<~JSON
+        {
+           "greeting": "from ruby"
         }
         JSON
       )

@@ -51,6 +51,7 @@ module KubernetesRules
                 end
               end
             end
+
             next if k == 'labels'
             next if k == 'annotations'
 
@@ -72,6 +73,7 @@ module KubernetesRules
           puts "File #{file} did not pass YAML validation"
           valid = false
         end
+
         unless rules_valid?(file)
           puts "File #{file} did not pass rule validation"
           valid = false

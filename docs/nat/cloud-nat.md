@@ -11,7 +11,7 @@ configurable number of these ports to each VM.
 ## High Cloud NAT error rate
 
 Most likely an alert brought you here, or you noticed an elevated error rate in
-[the dashboard](https://dashboards.gitlab.net/d/nat-main/nat-cloud-nat?orgId=1&refresh=30s).
+[the dashboard](https://dashboards.gitlab.net/d/nat-main/nat-cloud-nat?orgId=1).
 
 Option 1: Do nothing. Periodic bursts of NAT errors are seen as dropped packets
 by clients, and higher-layer protocols should retry. However, sometimes a large

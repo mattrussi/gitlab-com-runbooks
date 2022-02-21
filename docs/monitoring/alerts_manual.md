@@ -83,7 +83,7 @@ groups:
 * expr: the expression to evaluate, has to evaluate to boolean.
 * for: how long to wait until this alert starts firing.
 * labels: any alert that triggers will include all the labels that come from the prometheus metric, here we can add more labels to manage the alert behavior. We could, for example add more labels like this:
-  * channel: which channel the alert should go to, in slack format, for ex: `#production`
+  * team: which team the alert should go to. Teams are defined in `./runbooks/services/service-catalog.yml`
   * severity: `critical` for it to be red, `warn` for it to be only a warning (orange)
   * pager: if `pagerduty` then the alert will be also sent to pagerduty to the production on-call
 	* environment: this one generally comes with the metric, we can override it to send to different channels (stg, pre, or geo)
@@ -162,7 +162,6 @@ To create one, navigate to https://alerts.gitlab.net/#/silences and add a silenc
 
 ## Tips and tricks
 
-* Route new alerts to a testing channel by adding `channel: "#testing"` where the channel is something you know and have agreed. This will reduce noise when developing alerts.
 * Trigger alerts to see how they work by writing a condition that will always be true.
 * Print the whole alerting data and model using go template printf, with a text such as: `text: '{{ printf "%#v" . }}'` in the alert receiver configuration on the alert manager.
 * Verify alertmanager config using https://prometheus.io/webtools/alerting/routing-tree-editor/ . It will also visualize the routing tree for you. When pasting config, remove any ruby templated strings and do not paste any secrets!

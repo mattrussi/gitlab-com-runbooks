@@ -16,38 +16,40 @@
 
 ## Troubleshooting Pointers
 
-* [../Teleport/Connect_to_Rails_Console_via_Teleport.md](../Teleport/Connect_to_Rails_Console_via_Teleport.md)
+* [How to connect to a Rails Console using Teleport](../Teleport/Connect_to_Rails_Console_via_Teleport.md)
 * [../ci-runners/ci_pending_builds.md](../ci-runners/ci_pending_builds.md)
-* [../cloudflare/logging.md](../cloudflare/logging.md)
-* [../cloudflare/managing-traffic.md](../cloudflare/managing-traffic.md)
+* [Cloudflare Logs](../cloudflare/logging.md)
+* [Cloudflare: Managing Traffic](../cloudflare/managing-traffic.md)
 * [../elastic/elastic-cloud.md](../elastic/elastic-cloud.md)
 * [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
 * [../elastic/kibana.md](../elastic/kibana.md)
-* [../frontend/ssh-maxstartups-breach.md](../frontend/ssh-maxstartups-breach.md)
-* [../git/purge-git-data.md](../git/purge-git-data.md)
-* [../kas/kubernetes-agent-basic-troubleshooting.md](../kas/kubernetes-agent-basic-troubleshooting.md)
-* [../kube/k8s-oncall-setup.md](../kube/k8s-oncall-setup.md)
-* [../kube/kubernetes.md](../kube/kubernetes.md)
-* [../license/license-gitlab-com.md](../license/license-gitlab-com.md)
+* [Frontend (HAProxy) Logging](../frontend/haproxy-logging.md)
+* [HAProxy management at GitLab](../frontend/haproxy.md)
+* [Possible breach of SSH MaxStartups](../frontend/ssh-maxstartups-breach.md)
+* [Purge Git data](../git/purge-git-data.md)
+* [Kubernetes-Agent Basic Troubleshooting](../kas/kubernetes-agent-basic-troubleshooting.md)
+* [Kubernetes](../kube/kubernetes.md)
+* [license.gitlab.com Runbook](../license/license-gitlab-com.md)
 * [logging_gcs_archive_bigquery.md](logging_gcs_archive_bigquery.md)
-* [../onboarding/kibana-diagnosis.md](../onboarding/kibana-diagnosis.md)
-* [../pages/gitlab-pages.md](../pages/gitlab-pages.md)
-* [../pages/pages-letsencrypt.md](../pages/pages-letsencrypt.md)
-* [../patroni/log_analysis.md](../patroni/log_analysis.md)
+* [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
+* [GitLab Pages returning 404](../pages/gitlab-pages.md)
+* [Troubleshooting LetsEncrypt for Pages](../pages/pages-letsencrypt.md)
+* [Log analysis on PostgreSQL, Pgbouncer, Patroni and consul Runbook](../patroni/log_analysis.md)
 * [../patroni/postgres-checkup.md](../patroni/postgres-checkup.md)
 * [../patroni/postgres.md](../patroni/postgres.md)
 * [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
-* [../pgbouncer/pgbouncer-saturation.md](../pgbouncer/pgbouncer-saturation.md)
+* [Sidekiq or Web/API is using most of its PgBouncer connections](../pgbouncer/pgbouncer-saturation.md)
 * [../pgbouncer/service-pgbouncer.md](../pgbouncer/service-pgbouncer.md)
-* [../pubsub/pubsub-queing.md](../pubsub/pubsub-queing.md)
-* [../tutorials/example_tutorial_template.md](../tutorials/example_tutorial_template.md)
-* [../tutorials/overview_life_of_a_git_request.md](../tutorials/overview_life_of_a_git_request.md)
-* [../tutorials/overview_life_of_a_web_request.md](../tutorials/overview_life_of_a_web_request.md)
-* [../uncategorized/access-azure-test-subscription.md](../uncategorized/access-azure-test-subscription.md)
+* [PubSub Queuing Rate Increasing](../pubsub/pubsub-queing.md)
+* [../registry/gitlab-registry.md](../registry/gitlab-registry.md)
+* [Example Tutorial Template](../tutorials/example_tutorial_template.md)
+* [Life of a Git Request](../tutorials/overview_life_of_a_git_request.md)
+* [Life of a Web Request](../tutorials/overview_life_of_a_web_request.md)
+* [Azure Test Subscription](../uncategorized/access-azure-test-subscription.md)
 * [../uncategorized/access-gcp-hosts.md](../uncategorized/access-gcp-hosts.md)
-* [../uncategorized/camoproxy.md](../uncategorized/camoproxy.md)
-* [../version/version-gitlab-com.md](../version/version-gitlab-com.md)
-* [../web/static-repository-objects-caching.md](../web/static-repository-objects-caching.md)
+* [Camoproxy troubleshooting](../uncategorized/camoproxy.md)
+* [version.gitlab.com Runbook](../version/version-gitlab-com.md)
+* [Static repository objects caching](../web/static-repository-objects-caching.md)
 <!-- END_MARKER -->
 
 
@@ -105,7 +107,8 @@ All logs received by Stackdriver (even if excluded from indexing) are archived t
 
 For up to date config see:
 - https://gitlab.com/gitlab-cookbooks/gitlab_fluentd/
-- https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/fluentd-elasticsearch
+- https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments/-/tree/master/environments/fluentd-elasticsearch
+- https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments/-/tree/master/lib/fluentd
 
 There are many entries missing from this list:
 
@@ -136,9 +139,9 @@ There are many entries missing from this list:
 | puma.stderr                   | /var/log/gitlab/puma/puma_stderr.log             | line regex       | pubsub-puma-inf         |
 | puma.stdout                   | /var/log/gitlab/puma/puma_stdout.log             | line regex       | pubsub-puma-inf         |
 | unstructured.production       | gitlab-rails/production.log                      | lines            | pubsub-unstructured-inf |
-| sidekiq                       | /var/log/gitlab/sidekiq-cluster/current          | JSON             | pubsub-sidekiq-inf      |
+| sidekiq                       | n/a                                              | JSON             | pubsub-sidekiq-inf      |
 | haproxy                       | /var/log/haproxy.log                             | syslog           | pubsub-haproxy-inf      |
-| nginx.access                  | /var/log/gitlab/nginx/gitlab\_access.log         | nginx            | pubsub-nginx-inf        |
+| nginx.error                   | n/a                                              | unstructured     | StackDriver             |
 | registry                      | n/a                                              | mix (lines/json) | pubsub-gke-inf          |
 | system.auth                   | /var/log/auth.log                                | syslog           | pubsub-system-inf       |
 | system.syslog                 | /var/log/syslog                                  | syslog           | pubsub-system-inf       |
@@ -254,17 +257,19 @@ Roadmap:
 
 ### Fluentd
 
-We are using Fluentd (td-agent) for parsing log files and forwarding log messages to different destinations. There are at least three (3) different types of Fluentd processes involved: Gitlab managed Fluentd on GCE VMs, Gitlab managed Fluentd DaemonSet in GKE, GCP managed Fluentd DaemonSet in GKE.
+We are using Fluentd (`td-agent`) for parsing log files and forwarding log messages to different destinations. There are at least three (3) different types of Fluentd processes involved: Gitlab managed Fluentd on GCE VMs, Gitlab managed Fluentd DaemonSet and StatefulSet in GKE, GCP managed Fluentd DaemonSet in GKE.
 
 Fluentd running on VMs is configured to send logs to two destinations: [Operations](https://cloud.google.com/stackdriver/docs/)(formerly Stackdriver) and [Cloud Pub/Sub](https://cloud.google.com/pubsub/docs/). Here's the [fluentd config](https://gitlab.com/gitlab-cookbooks/gitlab_fluentd/) for running on GCE VMs.
 
-Gitlab managed Fluentd in kubernetes (running as a daemonset) sends logs only to ElasticStack (this will likely change in the future, see: https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/11655 and: https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10095). Its config can be found [here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/fluentd-elasticsearch). For the helm chart, we are actually using [a Gitlab fork](https://gitlab.com/gitlab-org/charts/fluentd-elasticsearch/) of a [project on github](https://github.com/kiwigrid/helm-charts/tree/master/charts/fluentd-elasticsearch)
+Gitlab managed Fluentd in Kubernetes (running as a DaemonSet) sends logs only to ElasticStack (this will likely change in the future, see: https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/11655 and: https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10095). Its config can be found [here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments/-/tree/master/environments/fluentd-elasticsearch).
 
-GCP managed Fluentd running as a daemonset in GKE, sends logs only to Operations. At the moment of writing, its config was not altered.
+Additionally, another GitLab managed Fluentd in Kubernetes named `fluentd-archiver` (running as a StatefulSet) exports the logs sent to PubSub by `fluentd-elasticsearch` to the GCS bucket `gitlab-${env}-logging-archive` under the folder `gke/`. This is because Stackdriver exports all Kubernetes container logs mixed together into `stdout/` and `stderr/` folders, making it difficult to filter per container name. Its config can be found [here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments/-/tree/master/environments/fluentd-archiver)>
+
+GCP managed Fluentd running as a DaemonSet in GKE, sends logs only to Operations. At the moment of writing, its config was not altered.
 
 ### Operations (Stackdriver)
 
-All logs reaching Operations are saved to GCS using an export sink where they are stored long-term (e.g. 6 months) for compliance reasons and can be read using BigQuery.
+All logs reaching Operations are saved to a GCS bucket `gitlab-${env}-logging-archive` using an export sink where they are stored long-term (e.g. 6 months) for compliance reasons and can be read using BigQuery.
 
 We are using log exclusions to prevent application logs from being indexed: https://cloud.google.com/logging/docs/exclusions At the moment of writing, we are not indexing any of the application logs. The current exclusions for Operations (Stackdriver) can be found in [terraform variables.tf](https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/blob/master/environments/gprd/variables.tf),
 search for `sd_log_filters`.
@@ -386,7 +391,7 @@ Deployment: https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfile
 
 ### Historical notes
 
-haproxy logs and nginx logs are not sent to ElasticStack because it was overwhelming our cluster. Currently, these logs are only available through BigQuery.
+haproxy logs and nginx logs are not sent to ElasticStack because it was overwhelming our cluster. Currently, only HAProxy logs are only available through BigQuery.  NGINX logs via STDERR on Kubernetes can be found in StackDriver.  NGINX Access logs are completely ignored.
 
 Design document for migration to ES7: https://about.gitlab.com/handbook/engineering/infrastructure/design/logging-upgrade/
 

@@ -1,20 +1,15 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
+local platformLinks = import 'gitlab-dashboards/platform_links.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
-local commonAnnotations = import 'grafana/common_annotations.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local templates = import 'grafana/templates.libsonnet';
-local platformLinks = import 'platform_links.libsonnet';
-local dashboard = grafana.dashboard;
 local link = grafana.link;
 local template = grafana.template;
-local annotation = grafana.annotation;
-local serviceCatalog = import 'service_catalog.libsonnet';
-local promQuery = import 'grafana/prom_query.libsonnet';
 local sidekiqHelpers = import 'services/lib/sidekiq-helpers.libsonnet';
 local seriesOverrides = import 'grafana/series_overrides.libsonnet';
 local row = grafana.row;
 local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libsonnet';
-local issueSearch = import 'issue_search.libsonnet';
+local issueSearch = import 'gitlab-dashboards/issue_search.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 
 local selector = {
@@ -120,8 +115,7 @@ basic.dashboard(
         label: attribute.label,
         default: attribute.default,
       },
-      title=attribute.title,
-      panelTitle='Queue Attribute: ' + attribute.title,
+      title='Queue Attribute: ' + attribute.title,
       color=attribute.color,
       legendFormat='{{ %s }} ({{ queue }})' % [attribute.label],
       links=attribute.links
@@ -465,7 +459,6 @@ basic.dashboard(
 + {
   links+:
     platformLinks.triage +
-    serviceCatalog.getServiceLinks('sidekiq') +
     platformLinks.services +
     [
       platformLinks.dynamicLinks('Sidekiq Detail', 'type:sidekiq'),

@@ -62,8 +62,8 @@ module Logging
   LOG_TIMESTAMP_FORMAT = '%Y-%m-%d %H:%M:%S'
 
   def initialize_log
-    STDOUT.sync = true
-    log = Logger.new STDOUT
+    $stdout.sync = true
+    log = Logger.new $stdout
     log.level = Logger::INFO
     log.formatter = proc do |level, t, _name, msg|
       fields = { timestamp: t.strftime(LOG_TIMESTAMP_FORMAT), level: level, msg: msg }
@@ -108,7 +108,7 @@ module Config
     list: false,
     clean_all: false,
     limit: Float::INFINITY,
-    moved_repository_timestamp_pattern: /\+moved\+([\d]+)\./,
+    moved_repository_timestamp_pattern: /\+moved\+(\d+)\./,
     scanned_repositories_order: :time,
     migration_logfile_name: 'migrated_projects_*.log',
     console_nodes: {
@@ -291,7 +291,7 @@ module RemoteCommands
   end
 
   def estimate_reclaimed_disk_space(hostname, paths)
-    remote_command = 'sudo du -s ' + paths.join(' ')
+    remote_command = "sudo du -s #{paths.join(' ')}"
     results = `#{ssh_command(hostname, remote_command)}`.strip.split "\n"
     results.reduce(0) do |sum, line|
       sum + (line.match(/(\d+)\s+/) { |m| m.captures.first.to_i * 1024 } || 0)
@@ -299,7 +299,7 @@ module RemoteCommands
   end
 
   def delete_projects_from_storage_node(hostname, paths)
-    remote_command = 'sudo rm -rf ' + paths.join(' ')
+    remote_command = "sudo rm -rf #{paths.join(' ')}"
     command = "ssh #{hostname} '#{remote_command}'"
     if @options[:dry_run]
       log.info "[Dry-run] Would have run command: #{command}"

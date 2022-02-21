@@ -1,19 +1,23 @@
 local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
-local stages = import 'stages.libsonnet';
+local stages = import 'service-catalog/stages.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local strings = import 'utils/strings.libsonnet';
+
+local featureCategoryFromSourceMetrics = 'featureCategoryFromSourceMetrics';
+local featureCategoryNotOwned = stages.notOwned.key;
 
 // For now we assume that services are provisioned on vms and not kubernetes
 // Please consult the README.md file for details of team and feature_category
 local serviceLevelIndicatorDefaults = {
-  featureCategory: stages.notOwned.key,
+  featureCategory: featureCategoryNotOwned,
   team: null,
   description: '',
   staticLabels+: {},  // by default, no static labels
   serviceAggregation: true,  // by default, requestRate is aggregated up to the service level
   ignoreTrafficCessation: false,  // Override to true to disable alerting when SLI is zero or absent
   upscaleLongerBurnRates: false,  // When true, long-term burn rates will be upscaled from shorter burn rates, to optimize for high cardinality metrics
+  severity: 's2',
 };
 
 local validateHasField(object, field, message) =
@@ -22,26 +26,39 @@ local validateHasField(object, field, message) =
   else
     std.assertEqual(true, { __assert: message });
 
-local validateFeatureCategory(object, message) =
-  if !std.objectHas(object, 'featureCategory') || std.objectHas(stages.featureCategoryMap, object.featureCategory) then
+local validateFeatureCategory(object, sliName) =
+  if std.objectHas(stages.featureCategoryMap, object.featureCategory) then
+    object
+  else if object.featureCategory == featureCategoryFromSourceMetrics then
+    assert std.member(object.significantLabels, 'feature_category') : 'feature_category needs to be a significant label for %s' % [sliName];
+    object
+  else if object.featureCategory == featureCategoryNotOwned then
+    object
+  else
+    assert false : 'feature category: %s is not a valid category for %s' % [object.featureCategory, sliName];
+    {};
+
+local validateSeverity(object, message) =
+  if std.objectHas(object, 'severity') && std.member(['s1', 's2', 's3', 's4'], object.severity) then
     object
   else
     std.assertEqual(true, { __assert: message });
 
 local validateAndApplySLIDefaults(sliName, component, inheritedDefaults) =
-  serviceLevelIndicatorDefaults
-  +
-  inheritedDefaults
-  +
+  local withDefaults = serviceLevelIndicatorDefaults + inheritedDefaults + component;
   // All components must have a requestRate measurement, since
   // we filter out low-RPS alerts for apdex monitoring and require the RPS for error ratios
-  validateHasField(component, 'requestRate', '%s component requires a requestRate measurement' % [sliName])
+  validateHasField(withDefaults, 'requestRate', '%s component requires a requestRate measurement' % [sliName])
   +
-  validateHasField(component, 'significantLabels', '%s component requires a significantLabels attribute' % [sliName])
+  validateHasField(withDefaults, 'significantLabels', '%s component requires a significantLabels attribute' % [sliName])
   +
-  validateHasField(component, 'userImpacting', '%s component requires a userImpacting attribute' % [sliName])
+  validateHasField(withDefaults, 'userImpacting', '%s component requires a userImpacting attribute' % [sliName])
   +
-  validateFeatureCategory(component, '%s is not a valid feature category for %s' % [component.featureCategory, sliName])
+  validateFeatureCategory(withDefaults, '%s is not a valid feature category for %s' % [withDefaults.featureCategory, sliName])
+  +
+  validateSeverity(withDefaults, '%s does not have a valid severity, must be s1-s4' % [sliName])
+  +
+  validateFeatureCategory(withDefaults, sliName)
   {
     name: sliName,
   };
@@ -68,9 +85,20 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
     // this is not the case for combined serviceLevelIndicator definitions
     supportsDetails(): true,
 
+    hasApdexSLO():: std.objectHas(self, 'monitoringThresholds') &&
+                    std.objectHas(self.monitoringThresholds, 'apdexScore'),
     hasApdex():: std.objectHas(serviceLevelIndicator, 'apdex'),
+    hasHistogramApdex()::
+      // Only apdex SLIs using a histogram can generate a histogram_quantile graph
+      // in alerts
+      self.hasApdex() &&
+      std.objectHasAll(serviceLevelIndicator.apdex, 'percentileLatencyQuery'),
+
     hasRequestRate():: true,  // requestRate is mandatory
     hasAggregatableRequestRate():: std.objectHasAll(serviceLevelIndicator.requestRate, 'aggregatedRateQuery'),
+    hasErrorRateSLO()::
+      std.objectHas(serviceLevelIndicator, 'monitoringThresholds') &&
+      std.objectHas(serviceLevelIndicator.monitoringThresholds, 'errorRatio'),
     hasErrorRate():: std.objectHas(serviceLevelIndicator, 'errorRate'),
 
     hasToolingLinks()::
@@ -85,11 +113,20 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
     renderToolingLinks()::
       toolingLinks.renderLinks(self.getToolingLinks()),
 
-    hasFeatureCategory()::
-      std.objectHas(serviceLevelIndicator, 'featureCategory') && serviceLevelIndicator.featureCategory != stages.notOwned.key,
+    hasFeatureCategoryFromSourceMetrics()::
+      std.objectHas(serviceLevelIndicator, 'featureCategory') &&
+      serviceLevelIndicator.featureCategory == featureCategoryFromSourceMetrics,
 
-    featureCategoryLabels()::
-      if self.hasFeatureCategory() then
+    hasStaticFeatureCategory()::
+      std.objectHas(serviceLevelIndicator, 'featureCategory') &&
+      serviceLevelIndicator.featureCategory != featureCategoryNotOwned &&
+      !self.hasFeatureCategoryFromSourceMetrics(),
+
+    hasFeatureCategory()::
+      self.hasStaticFeatureCategory() || self.hasFeatureCategoryFromSourceMetrics(),
+
+    staticFeatureCategoryLabels()::
+      if self.hasStaticFeatureCategory() then
         { feature_category: serviceLevelIndicator.featureCategory }
       else
         {},
@@ -103,7 +140,6 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
 
         local apdexSuccessRateRecordingRuleName = aggregationSet.getApdexSuccessRateMetricForBurnRate(burnRate);
         local apdexWeightRecordingRuleName = aggregationSet.getApdexWeightMetricForBurnRate(burnRate);
-        local apdexRatioRecordingRuleName = aggregationSet.getApdexRatioMetricForBurnRate(burnRate);
 
         local apdexSuccessRateExpr = serviceLevelIndicator.apdex.apdexSuccessRateQuery(
           aggregationLabels=aggregationLabelsWithoutStaticLabels,
@@ -205,4 +241,6 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
       initServiceLevelIndicatorWithName(sliName, inheritedDefaults)::
         serviceLevelIndicatorDefinition(sliName, validateAndApplySLIDefaults(sliName, serviceLevelIndicator, inheritedDefaults)),
     },
+  featureCategoryFromSourceMetrics: featureCategoryFromSourceMetrics,
+  featureCategoryNotOwned: featureCategoryNotOwned,
 }

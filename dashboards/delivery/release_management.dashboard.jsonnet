@@ -5,10 +5,9 @@ local promQuery = import 'grafana/prom_query.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local annotation = grafana.annotation;
-local dashboard = grafana.dashboard;
 local graphPanel = grafana.graphPanel;
+local statPanel = grafana.statPanel;
 local row = grafana.row;
-local singlestat = grafana.singlestat;
 
 local environments = [
   {
@@ -31,6 +30,20 @@ local environments = [
     role: 'gstg',
     stage: 'main',
     icon: '🏗',
+  },
+  {
+    id: 'gstg-cny',
+    name: 'Staging Canary',
+    role: 'gstg',
+    stage: 'cny',
+    icon: '🐣',
+  },
+  {
+    id: 'gstg-ref',
+    name: 'Staging Ref',
+    role: 'gstg-ref',
+    stage: 'main',
+    icon: '🚧',
   },
 ];
 
@@ -55,6 +68,20 @@ local annotations = [
     enable=false,
     iconColor='#5794F2',
     tags=['deploy', 'gstg'],
+  ),
+  annotation.datasource(
+    'Staging Canary deploys',
+    '-- Grafana --',
+    enable=false,
+    iconColor='#8F3BB8',
+    tags=['deploy', 'gstg-cny'],
+  ),
+  annotation.datasource(
+    'Staging Ref deploys',
+    '-- Grafana --',
+    enable=false,
+    iconColor='#EB0010',
+    tags=['deploy', 'gstg-ref'],
   ),
 ];
 
@@ -119,38 +146,37 @@ local environmentIssuesPanel(environment) =
   );
 
 // Stat panel used by top-level Auto-deploy Pressure and New Sentry issues
-local statPanel(
-  title,
-  description='',
-  query='',
-  legendFormat='',
-  thresholds={},
-  links=[]
-      ) =
-  {
-    description: description,
-    fieldConfig: {
-      values: false,
-      defaults: {
-        decimals: 0,
-        mappings: [],
-        min: 0,
-        thresholds: thresholds,
-      },
-    },
-    links: links,
-    options: {
-      colorMode: 'value',
-      graphMode: 'area',
-      justifyMode: 'auto',
-      orientation: 'horizontal',
-      reduceOptions: { calcs: ['lastNotNull'] },
-    },
-    pluginVersion: '7.0.3',
-    targets: [promQuery.target(query, legendFormat=legendFormat)],
-    title: title,
-    type: 'stat',
-  };
+local
+  deliveryStatPanel(
+    title,
+    description='',
+    query='',
+    legendFormat='',
+    thresholdsMode='absolute',
+    thresholds={},
+    links=[]
+  ) =
+    statPanel.new(
+      title,
+      description=description,
+      allValues=false,
+      decimals=0,
+      min=0,
+      colorMode='value',
+      graphMode='area',
+      justifyMode='auto',
+      orientation='horizontal',
+      reducerFunction='lastNotNull',
+      thresholdsMode=thresholdsMode,
+    )
+    .addLinks(links)
+    .addThresholds(thresholds)
+    .addTarget(
+      promQuery.target(
+        query,
+        legendFormat=legendFormat
+      )
+    );
 
 // Bar Gauge panel used by top-level Release pressure
 local bargaugePanel(
@@ -190,8 +216,6 @@ basic.dashboard(
   'Release Management',
   tags=['release'],
   editable=true,
-  refresh='5m',
-  timepicker=timepickerlib.new(refresh_intervals=['1m', '5m', '10m', '30m']),
   includeStandardEnvironmentAnnotations=false,
   includeEnvironmentTemplate=false,
 )
@@ -209,20 +233,28 @@ basic.dashboard(
   layout.splitColumnGrid([
     // Column 1: rails versions
     [
-      singlestat.new(
+      statPanel.new(
         '%s %s' % [environment.icon, environment.id],
         description='Rails revision on %s.' % [environment.name],
-        valueFontSize='100%',
+        reducerFunction='lastNotNull',
+        fields='/^version$/',
+        colorMode='none',
+        graphMode='none',
+        textMode='value',
       )
       .addTarget(railsVersion(environment))
       for environment in environments
     ],
     // Column 2: package versions
     [
-      singlestat.new(
+      statPanel.new(
         '%s %s' % [environment.icon, environment.id],
         description='Package running on %s.' % [environment.name],
-        valueFontSize='50%',
+        reducerFunction='lastNotNull',
+        fields='/^version$/',
+        colorMode='none',
+        graphMode='none',
+        textMode='value',
       )
       .addTarget(packageVersion(environment))
       for environment in environments
@@ -230,20 +262,17 @@ basic.dashboard(
     // Column 3: auto-deploy pressure
     [
       // Auto-deploy pressure
-      statPanel(
+      deliveryStatPanel(
         'Auto-deploy pressure',
         description='The number of commits in `master` not yet deployed to each environment.',
         query='max(delivery_auto_deploy_pressure{role!=""}) by (role)',
         legendFormat='{{role}}',
-        thresholds={
-          mode: 'absolute',
-          steps: [
-            { color: 'green', value: null },
-            { color: '#EAB839', value: 50 },
-            { color: '#EF843C', value: 100 },
-            { color: 'red', value: 150 },
-          ],
-        },
+        thresholds=[
+          { color: 'green', value: null },
+          { color: '#EAB839', value: 50 },
+          { color: '#EF843C', value: 100 },
+          { color: 'red', value: 150 },
+        ],
         links=[
           {
             targetBlank: true,
@@ -256,20 +285,17 @@ basic.dashboard(
     // Column 4: new sentry issues
     [
       // New Sentry issues
-      statPanel(
+      deliveryStatPanel(
         'New Sentry issues',
         description='The number of new Sentry issues for each environment.',
         query='max(delivery_sentry_issues{role!=""}) by (role)',
         legendFormat='{{role}}',
-        thresholds={
-          mode: 'absolute',
-          steps: [
-            { color: 'green', value: null },
-            { color: '#EAB839', value: 50 },
-            { color: '#EF843C', value: 100 },
-            { color: 'red', value: 150 },
-          ],
-        },
+        thresholds=[
+          { color: 'green', value: null },
+          { color: '#EAB839', value: 50 },
+          { color: '#EF843C', value: 100 },
+          { color: 'red', value: 150 },
+        ],
         links=[
           {
             targetBlank: true,
@@ -306,7 +332,7 @@ basic.dashboard(
         },
       ),
     ],
-  ], cellHeights=[3, 3, 3], startRow=1)
+  ], cellHeights=[3 for x in environments], startRow=1)
 )
 .addPanels(
   std.flattenArrays(

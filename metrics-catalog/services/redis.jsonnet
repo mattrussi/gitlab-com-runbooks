@@ -1,82 +1,12 @@
+local redisHelpers = import './lib/redis-helpers.libsonnet';
+local redisArchetype = import 'service-archetypes/redis-archetype.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
-local histogramApdex = metricsCatalog.histogramApdex;
-local rateMetric = metricsCatalog.rateMetric;
-local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
-metricsCatalog.serviceDefinition({
-  type: 'redis',
-  tier: 'db',
-  serviceIsStageless: true,  // redis does not have a cny stage
-  monitoringThresholds: {
-    apdexScore: 0.9999,
-    errorRatio: 0.999,
-  },
-  serviceLevelIndicators: {
-    rails_redis_client: {
-      userImpacting: true,
-      featureCategory: 'not_owned',
-      team: 'sre_observability',
-      description: |||
-        Aggregation of all Redis operations issued from the Rails codebase.
-      |||,
-      significantLabels: ['type'],
-
-      apdex: histogramApdex(
-        histogram='gitlab_redis_client_requests_duration_seconds_bucket',
-        selector={ storage: 'shared_state' },
-        satisfiedThreshold=0.5,
-        toleratedThreshold=0.75,
-      ),
-
-      requestRate: rateMetric(
-        counter='gitlab_redis_client_requests_total',
-        selector={ storage: 'shared_state' },
-      ),
-
-      errorRate: rateMetric(
-        counter='gitlab_redis_client_exceptions_total',
-        selector={ storage: 'shared_state' },
-      ),
-    },
-
-    primary_server: {
-      userImpacting: true,
-      featureCategory: 'not_owned',
-      team: 'sre_observability',
-      description: |||
-        Operations on the Redis primary for GitLab's persistent Redis instance.
-      |||,
-
-      requestRate: rateMetric(
-        counter='redis_commands_processed_total',
-        selector='type="redis"',
-        instanceFilter='redis_instance_info{role="master"}'
-      ),
-
-      significantLabels: ['fqdn'],
-
-      toolingLinks: [
-        toolingLinks.kibana(title='Redis', index='redis', type='redis'),
-        toolingLinks.kibana(title='Redis Slowlog', index='redis_slowlog', type='redis'),
-      ],
-    },
-
-    secondary_servers: {
-      userImpacting: true,  // userImpacting for data redundancy reasons
-      featureCategory: 'not_owned',
-      team: 'sre_observability',
-      description: |||
-        Operations on the Redis secondaries for GitLab's persistent Redis instance.
-      |||,
-
-      requestRate: rateMetric(
-        counter='redis_commands_processed_total',
-        selector='type="redis"',
-        instanceFilter='redis_instance_info{role="slave"}'
-      ),
-
-      significantLabels: ['fqdn'],
-      serviceAggregation: false,
-    },
-  },
-})
+metricsCatalog.serviceDefinition(
+  redisArchetype(
+    type='redis',
+    railsStorageSelector={ storage: 'shared_state' },
+    descriptiveName='Persistent Redis',
+  )
+  + redisHelpers.gitlabcomObservabilityToolingForRedis('redis')
+)

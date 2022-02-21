@@ -1,6 +1,6 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
+local serviceDashboard = import 'gitlab-dashboards/service_dashboard.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
-local serviceDashboard = import 'service_dashboard.libsonnet';
 local row = grafana.row;
 local basic = import 'grafana/basic.libsonnet';
 

@@ -3,27 +3,47 @@ local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local customRateQuery = metricsCatalog.customRateQuery;
+local maturityLevels = import 'service-maturity/levels.libsonnet';
+local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 
 metricsCatalog.serviceDefinition({
   type: 'kube',
   tier: 'inf',
   serviceIsStageless: true,  // kube does not have a cny stage
   monitoringThresholds: {
-    // TODO: add monitoring thresholds
-    // apdexScore: 0.99,
-    // errorRatio: 0.99,
+    apdexScore: 0.9995,
+    errorRatio: 0.9995,
   },
+  /*
+   * Our anomaly detection uses normal distributions and the monitoring service
+   * is prone to spikes that lead to a non-normal distribution. For that reason,
+   * disable ops-rate anomaly detection on this service.
+   */
+  disableOpsRatePrediction: true,
   serviceDependencies: {
   },
   provisioning: {
-    kubernetes: false,  // Kubernetes isn't deployed on Kubernetes
+    kubernetes: true,
     vms: false,
+  },
+  kubeConfig: {
+    labelSelectors: kubeLabelSelectors(
+      podSelector=null,
+      hpaSelector=null,
+      ingressSelector=null,
+      deploymentSelector=null,
+      nodeSelector={ type: { oneOf: ['default', 'highmem', '' /* Unlabelled nodepools belong here */] } },
+
+      // TODO: fix the stage label for default and highmem nodes
+      // See https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2238
+      nodeStaticLabels={ stage: 'main' },
+    ),
   },
   serviceLevelIndicators: {
     apiserver: {
       userImpacting: false,
       featureCategory: 'not_owned',
-      team: 'delivery',
+      team: 'sre_reliability',
       description: |||
         The Kubernetes API server validates and configures data for the api objects which
         include pods, services, and others. The API Server services REST operations
@@ -76,7 +96,7 @@ metricsCatalog.serviceDefinition({
     cluster_scaleups: {
       userImpacting: false,
       featureCategory: 'not_owned',
-      team: 'delivery',
+      team: 'sre_reliability',
       ignoreTrafficCessation: true,
       description: |||
         We rely on the GKE Cluster Autoscaler (https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-autoscaler) to
@@ -105,7 +125,7 @@ metricsCatalog.serviceDefinition({
 
       errorRate: customRateQuery(|||
         sum by (%(aggregationLabels)s) (
-          avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_errors[%(burnRate)s])
+          avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_scaleup_errors[%(burnRate)s])
         )
       |||),
 
@@ -130,4 +150,7 @@ metricsCatalog.serviceDefinition({
       ],
     },
   },
+  skippedMaturityCriteria: maturityLevels.skip({
+    'Service exists in the dependency graph': 'This service is managed by GKE at the moment. It does not interfact directly with any other services',
+  }),
 })

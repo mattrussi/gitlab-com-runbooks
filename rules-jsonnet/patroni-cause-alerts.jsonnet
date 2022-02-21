@@ -7,19 +7,19 @@ local aggregationLabelsForPrimary = ['environment', 'tier', 'type', 'fqdn'];
 local aggregationLabelsForReplicas = ['environment', 'tier', 'type'];
 local selector = { type: 'patroni' };
 
-local alertExpr(aggregationLabels, selector, replica, threshold) =
+local alertExpr(aggregationLabels, selectorNumerator, selectorDenominator, replica, threshold, window='5m') =
   local aggregationLabelsWithRelName = aggregationLabels + ['relname'];
 
   |||
     (
       sum by (%(aggregationLabelsWithRelName)s) (
-        rate(pg_stat_user_tables_idx_tup_fetch{%(selector)s}[5m])
+        rate(pg_stat_user_tables_idx_tup_fetch{%(selectorNumerator)s}[%(window)s])
         and on(job, instance)
         pg_replication_is_replica == %(replica)s
       )
       / ignoring(relname) group_left()
         sum by (%(aggregationLabels)s) (
-          rate(pg_stat_user_tables_idx_tup_fetch{%(selector)s}[5m])
+          rate(pg_stat_user_tables_idx_tup_fetch{%(selectorDenominator)s}[%(window)s])
           and on(job, instance)
           pg_replication_is_replica == %(replica)s
       )
@@ -27,8 +27,10 @@ local alertExpr(aggregationLabels, selector, replica, threshold) =
   ||| % {
     aggregationLabelsWithRelName: aggregations.serialize(aggregationLabelsWithRelName),
     aggregationLabels: aggregations.serialize(aggregationLabels),
-    selector: selectors.serializeHash(selector),
+    selectorNumerator: selectors.serializeHash(selectorNumerator),
+    selectorDenominator: selectors.serializeHash(selectorDenominator),
     replica: if replica then '1' else '0',
+    window: window,
     threshold: threshold,
   };
 
@@ -54,7 +56,13 @@ local hotspotTupleAlert(alertName, periodFor, warning, replica) =
 
   alerts.processAlertRule({
     alert: alertName,
-    expr: alertExpr(aggregationLabels=aggregationLabels, selector=selector, replica=replica, threshold=threshold),
+    expr: alertExpr(
+      aggregationLabels=aggregationLabels,
+      selectorNumerator=selector,
+      selectorDenominator=selector,
+      replica=replica,
+      threshold=threshold
+    ),
     'for': periodFor,
     labels: {
       team: 'rapid-action-intercom',
@@ -103,6 +111,66 @@ local rules = {
           replica=true
         ),
 
+        // Special alert for Access Group
+        // See https://gitlab.com/groups/gitlab-org/-/epics/3343#note_651528817
+        alerts.processAlertRule({
+          alert: 'PostgreSQLAccessGroupTupleFetchesWarningTrigger',
+          expr: alertExpr(
+            aggregationLabels=aggregationLabelsForPrimary,
+            selectorNumerator=selector { relname: 'project_authorizations' },
+            selectorDenominator=selector,
+            replica=false,
+            threshold=0.05,
+            window='1d'
+          ),
+          'for': '1h',
+          labels: {
+            team: 'authentication_and_authorization',
+            severity: 's4',
+            alert_type: 'cause',
+            runbook: 'docs/patroni/rails-sql-apdex-slow.md',
+          },
+          annotations: {
+            title: 'Average fetches on the postgres primary in the project_authorizations table exceeds 5% of total',
+            description: |||
+              More than 5% of all tuple fetches on the postgres primary are for the `project_authorizations` table.
+
+              This work was previously addressed through the epic https://gitlab.com/groups/gitlab-org/-/epics/3343#note_652970688.
+
+              The Authentication and authorization team should work to understand why this is happening and look to address the problem.
+            |||,
+            grafana_dashboard_id: 'alerts-pg_user_tables_primary/alerts-pg-user-table-alerts-primary',
+            grafana_min_zoom_hours: '24',
+            grafana_panel_id: '2',
+            grafana_variables: aggregations.serialize(aggregationLabelsForPrimary + ['relname']),
+          },
+        }),
+
+        // Subtransactions wait events alert
+        alerts.processAlertRule({
+          alert: 'PatroniSubtransControlLocksDetected',
+          expr: |||
+            sum by (environment) (
+              sum_over_time(pg_stat_activity_marginalia_sampler_active_count{wait_event=~"[Ss]ubtrans.*"}[10m])
+            ) > 10
+          |||,
+          'for': '5m',
+          labels: {
+            team: 'subtransaction_troubleshooting',
+            severity: 's3',
+            alert_type: 'cause',
+            runbook: 'docs/patroni/postgresql-subtransactions.md',
+          },
+          annotations: {
+            title: 'Subtransactions wait events have been detected in the database in the last 5 minutes',
+            description: |||
+              Wait events related to subtransactions locking have been detected in the database in the last 5 minutes.
+
+              This can eventually saturate entire database cluster if this sitation continues for a longer period of time.
+            |||,
+          },
+        }),
+
         // Long running transaction alert
         alerts.processAlertRule({
           alert: 'PatroniLongRunningTransactionDetected',
@@ -115,6 +183,8 @@ local rules = {
                   command!="autovacuum",
                   command!~"[cC][rR][eE][aA][tT][eE]",
                   command!~"[aA][nN][aA][lL][yY][zZ][eE]",
+                  command!~"[rR][eE][iI][nN][dD][eE][xX]",
+                  command!~"[aA][lL][tT][eE][rR]",
                 }
               )
               > 540
@@ -122,7 +192,6 @@ local rules = {
           |||,
           'for': '1m',
           labels: {
-            team: 'sre_datastores',
             severity: 's2',
             alert_type: 'cause',
             pager: 'pagerduty',

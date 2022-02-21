@@ -8,20 +8,29 @@ You must be in an elite stage group team! 😉🙂 Thank you for shifting right 
 
 Luckily, this is easy to configure.
 
-Step 1: Update the `teams` section in the [`service-catalog.yml`](https://gitlab.com/gitlab-com/runbooks/blob/master/services/service-catalog.yml) file, with a new `team` entry, as follows:
+Step 1: Update the `teams` section in the
+[`teams.yml`](https://gitlab.com/gitlab-com/runbooks/blob/master/services/teams.yml)
+file, with a new `team` entry or update an existing team entry, as follows:
 
 ```yaml
 teams:
 - name: runner
   product_stage_group: runner
   slack_alerts_channel: alerts-ci-cd
+  send_slo_alerts_to_team_slack_channel: true
 ```
 
 1. `name` is name, using alphanumeric characters only
 1. `product_stage_group` should match the `group` key in https://gitlab.com/gitlab-com/www-gitlab-com/blob/master/data/stages.yml
 1. The `slack_alerts_channel` is the channel in Slack that the team would like to use for alerts (without the initial '#')
+1. `send_slo_alerts_to_team_slack_channel` send regular SLO alerts to the slack channel.
 
 Step 2: Profit! Any alerts with a matching `product_stage_group` will then be routed to that team.
+
+**Note:** These alerts are currently only supported for Service Level Indicators with a fixed feature category.
+Support for SLIs with a feature category available in the source
+metrics will be added in [this
+project](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/615)
 
 ### Associating SLIs with your stage group
 
@@ -42,9 +51,14 @@ metricsCatalog.serviceDefinition({
       featureCategory: 'runner',
 ```
 
+If the metrics for the SLI are shared across multiple features, for
+example requests from the Rails app, please configure the feature
+category using
+[`serviceLevelIndicatorDefinition.featureCategoryFromSourceMetrics`](https://gitlab.com/gitlab-com/runbooks/blob/e45223016a4b6d169198e9773c001ae476e7947e/libsonnet/servicemetrics/service_level_indicator_definition.libsonnet#L244).
+
 ## My non-stage-group group would like to receive Slack alerts
 
-Step 1: Update the `teams` section in the [`service-catalog.yml`](https://gitlab.com/gitlab-com/runbooks/blob/master/services/service-catalog.yml) file, with a new `team` entry, as follows:
+Step 1: Update the [`teams.yml`](https://gitlab.com/gitlab-com/runbooks/blob/master/services/teams.yml) file, with a new `team` entry, as follows:
 
 ```yaml
 teams:

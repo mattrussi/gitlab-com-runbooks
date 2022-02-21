@@ -1,18 +1,26 @@
-local stages = import '../../services/stages.libsonnet';
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
+local stages = (import 'service-catalog/stages.libsonnet');
 local template = grafana.template;
 local prebuiltTemplates = import 'grafana/templates.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
-local platformLinks = import '../platform_links.libsonnet';
-local singleMetricRow = import 'key-metric-panels/single-metric-row.libsonnet';
-local aggregationSets = import '../../metrics-catalog/aggregation-sets.libsonnet';
-local metricsCatalog = import '../../metrics-catalog/metrics-catalog.libsonnet';
+local platformLinks = import 'gitlab-dashboards/platform_links.libsonnet';
 local errorBudget = import 'stage-groups/error_budget.libsonnet';
-local budgetUtils = import 'stage-groups/error-budget/utils.libsonnet';
 local sidekiqHelpers = import 'services/lib/sidekiq-helpers.libsonnet';
-local thresholds = import 'thresholds.libsonnet';
+local thresholds = import 'gitlab-dashboards/thresholds.libsonnet';
+local metricsCatalogDashboards = import 'gitlab-dashboards/metrics_catalog_dashboards.libsonnet';
+local gitlabMetricsConfig = import 'gitlab-metrics-config.libsonnet';
+local keyMetrics = import 'gitlab-dashboards/key_metrics.libsonnet';
+local objects = import 'utils/objects.libsonnet';
+
+local aggregationSets = gitlabMetricsConfig.aggregationSets;
+
+local dashboardUid(identifier) =
+  local dirname = 'stage-groups';
+  // All dashboards are prefixed with their dirname joined by a `-`
+  local maxLength = 40 - std.length(dirname) - 1;
+  std.substr(identifier, 0, maxLength);
 
 local actionLegend(type) =
   if type == 'api' then '{{action}}' else '{{controller}}#{{action}}';
@@ -100,7 +108,7 @@ local railsErrorRate(type, featureCategories, featureCategoriesSelector) =
     yAxisLabel='Requests per Second',
     query=|||
       sum by (component) (
-        gitlab:component:feature_category:execution:error:rate_1m{
+        gitlab:component:feature_category:execution:error:rate_5m{
           environment='$environment',
           stage='$stage',
           feature_category=~'(%(featureCategories)s)',
@@ -358,7 +366,77 @@ local requestComponents = std.set(['web', 'api', 'git']);
 local backgroundComponents = std.set(['sidekiq']);
 local supportedComponents = std.setUnion(requestComponents, backgroundComponents);
 local defaultComponents = std.set(['web', 'api', 'sidekiq']);
-local dashboard(groupKey, components=defaultComponents, displayEmptyGuidance=false, displayBudget=true) =
+local groupTag(group) = 'stage_group:%s' % group.name;
+
+local commonHeader(
+  group,
+  extraTags=[],
+  featureCategories,
+  featureCategoriesSelector,
+  displayControllerFilter,
+  enabledRequestComponents,
+  displayEmptyGuidance,
+  displayBudget,
+  title,
+      ) =
+  basic
+  .dashboard(
+    title,
+    tags=[
+      'feature_category',
+      groupTag(group),
+    ] + extraTags,
+    time_from='now-6h/m',
+    time_to='now/m'
+  )
+  .addTemplate(prebuiltTemplates.stage)
+  .addTemplates(
+    if displayControllerFilter && std.length(enabledRequestComponents) != 0 then
+      [controllerFilter(featureCategoriesSelector), actionFilter(featureCategoriesSelector)]
+    else
+      []
+  )
+  .addPanels(
+    if displayEmptyGuidance then
+      layout.rowGrid(
+        'Introduction',
+        [
+          grafana.text.new(
+            title='Introduction',
+            mode='markdown',
+            content=|||
+              You may see there are some empty panels in this dashboard. The metrics in each dashboard are filtered and accumulated based on the GitLab [product categories](https://about.gitlab.com/handbook/product/categories/) and [feature categories](https://docs.gitlab.com/ee/development/feature_categorization/index.html).
+              - If your stage group hasn't declared a feature category, please follow the feature category guideline.
+              - If your stage group doesn't use a particular component, you can always [customize this dashboard](https://docs.gitlab.com/ee/development/stage_group_dashboards.html#how-to-customize-the-dashboard) to exclude irrelevant panels.
+
+              For more information, please visit [Dashboards for stage groups](https://docs.gitlab.com/ee/development/stage_group_dashboards.html) or watch [Guide to getting started with dashboards for stage groups](https://youtu.be/xB3gHlKCZpQ).
+
+              The dashboards for stage groups are at a very early stage. All contributions are welcome. If you have any questions or suggestions, please submit an issue in the [Scalability Team issues tracker](https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/new).
+            |||,
+          ),
+        ],
+        startRow=0
+      )
+    else
+      []
+  )
+  .addPanels(
+    if displayBudget then
+      // Errorbudgets are always viewed over a 28d rolling average, regardles of the
+      // selected range see the configuration in `libsonnet/stage-groups/error_budget.libsonnet`
+      local title = 'Error Budget (past 28 days)';
+      layout.splitColumnGrid(errorBudgetPanels(group), startRow=100, cellHeights=[4, 2], title=title) +
+      layout.rowGrid('Budget spend attribution', errorBudgetAttribution(group, featureCategories), startRow=110, collapse=true)
+    else
+      []
+  ) {
+    links+: [
+      platformLinks.dynamicLinks('Group Dashboards', groupTag(group), asDropdown=false),
+    ],
+  }
+;
+
+local getEnabledRequestComponents(components) =
   assert std.type(components) == 'array' : 'Invalid components argument type';
 
   local setComponents = std.set(components);
@@ -366,61 +444,24 @@ local dashboard(groupKey, components=defaultComponents, displayEmptyGuidance=fal
   assert std.length(invalidComponents) == 0 :
          'Invalid components: ' + std.join(', ', invalidComponents);
 
+  std.setInter(requestComponents, setComponents);
+
+local dashboard(groupKey, components=defaultComponents, displayEmptyGuidance=false, displayBudget=true) =
   local group = stages.stageGroup(groupKey);
   local featureCategories = stages.categoriesForStageGroup(groupKey);
   local featureCategoriesSelector = std.join('|', featureCategories);
-
-  local enabledRequestComponents = std.setInter(requestComponents, setComponents);
-  local typeSelector = std.join('|', enabledRequestComponents);
+  local enabledRequestComponents = getEnabledRequestComponents(components);
 
   local dashboard =
-    basic
-    .dashboard(
-      std.format('Group dashboard: %s (%s)', [group.stage, group.name]),
-      tags=['feature_category'],
-      time_from='now-6h/m',
-      time_to='now/m'
-    )
-    .addTemplate(prebuiltTemplates.stage)
-    .addTemplates(
-      if std.length(enabledRequestComponents) != 0 then
-        [controllerFilter(featureCategoriesSelector), actionFilter(featureCategoriesSelector)]
-      else
-        []
-    )
-    .addPanels(
-      if displayEmptyGuidance then
-        layout.rowGrid(
-          'Introduction',
-          [
-            grafana.text.new(
-              title='Introduction',
-              mode='markdown',
-              content=|||
-                You may see there are some empty panels in this dashboard. The metrics in each dashboard are filtered and accumulated based on the GitLab [product categories](https://about.gitlab.com/handbook/product/categories/) and [feature categories](https://docs.gitlab.com/ee/development/feature_categorization/index.html).
-                - If your stage group hasn't declared a feature category, please follow the feature category guideline.
-                - If your stage group doesn't use a particular component, you can always [customize this dashboard](https://docs.gitlab.com/ee/development/stage_group_dashboards.html#how-to-customize-the-dashboard) to exclude irrelevant panels.
-
-                For more information, please visit [Dashboards for stage groups](https://docs.gitlab.com/ee/development/stage_group_dashboards.html) or watch [Guide to getting started with dashboards for stage groups](https://youtu.be/xB3gHlKCZpQ).
-
-                The dashboards for stage groups are at a very early stage. All contributions are welcome. If you have any questions or suggestions, please submit an issue in the [Scalability Team issues tracker](https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/new).
-              |||,
-            ),
-          ],
-          startRow=0
-        )
-      else
-        []
-    )
-    .addPanels(
-      if displayBudget then
-        // Errorbudgets are always viewed over a 28d rolling average, regardles of the
-        // selected range see the configuration in `libsonnet/stage-groups/error_budget.libsonnet`
-        local title = 'Error Budget (past 28 days)';
-        layout.splitColumnGrid(errorBudgetPanels(group), startRow=100, cellHeights=[4, 2], title=title) +
-        layout.rowGrid('Budget spend attribution', errorBudgetAttribution(group, featureCategories), startRow=110, collapse=true)
-      else
-        []
+    commonHeader(
+      group=group,
+      featureCategories=featureCategories,
+      featureCategoriesSelector=featureCategoriesSelector,
+      displayControllerFilter=true,
+      enabledRequestComponents=enabledRequestComponents,
+      displayEmptyGuidance=displayEmptyGuidance,
+      displayBudget=displayBudget,
+      title='%s: Group dashboard' % [group.name],
     )
     .addPanels(
       if std.length(enabledRequestComponents) != 0 then
@@ -506,7 +547,7 @@ local dashboard(groupKey, components=defaultComponents, displayEmptyGuidance=fal
         []
     )
     .addPanels(
-      if std.member(setComponents, 'sidekiq') then
+      if std.member(components, 'sidekiq') then
         layout.rowGrid(
           'Sidekiq',
           [
@@ -557,9 +598,96 @@ local dashboard(groupKey, components=defaultComponents, displayEmptyGuidance=fal
       self.addPanels(sidekiqJobDurationByUrgency(urgencies, featureCategoriesSelector)),
   };
 
+local errorBudgetDetailDashboard(stageGroup) =
+  // Missing `feature_category` labels are also accepted for viewing details with a static feature category
+  local featureCategoriesSelector = std.join('|', stageGroup.feature_categories + ['']);
+  local serviceTypes = std.map(function(service) service.type, gitlabMetricsConfig.monitoredServices);
+
+  local sliFilter = function(sli)
+    sli.hasFeatureCategoryFromSourceMetrics() || (
+      sli.hasStaticFeatureCategory() && std.member(stageGroup.feature_categories, sli.featureCategory)
+    );
+
+  local dashboard =
+    commonHeader(
+      group=stageGroup,
+      extraTags=[],
+      featureCategories=stageGroup.feature_categories,
+      featureCategoriesSelector=featureCategoriesSelector,
+      displayControllerFilter=false,
+      enabledRequestComponents=requestComponents,
+      displayEmptyGuidance=false,
+      displayBudget=true,
+      title='%s: group error budget detail' % [stageGroup.name],
+    )
+    .addPanels(
+      keyMetrics.headlineMetricsRow(
+        startRow=200,
+        serviceType=null,
+        selectorHash={
+          environment: '$environment',
+          stage: '$stage',
+          stage_group: stageGroup.key,
+        },
+        staticTitlePrefix='Overall',
+        legendFormatPrefix=stageGroup.name,
+        aggregationSet=aggregationSets.stageGroupSLIs,
+        showApdex=true,
+        showErrorRatio=true,
+        showOpsRate=true,
+        showSaturationCell=false,
+        skipDescriptionPanels=true,
+        includeLastWeek=false,
+        compact=true,
+        rowHeight=8,
+      )
+    )
+    .addPanels(
+      metricsCatalogDashboards.sliMatrixAcrossServices(
+        title='🔬 Service Level Indicators',
+        serviceTypes=serviceTypes,
+        aggregationSet=aggregationSets.serviceComponentStageGroupSLIs,
+        startRow=300,
+        expectMultipleSeries=true,
+        legendFormatPrefix='{{ type }}',
+        selectorHash={
+          environment: '$environment',
+          stage: '$stage',
+          stage_group: stageGroup.key,
+        },
+        sliFilter=sliFilter,
+      )
+    )
+    .addPanels(
+      metricsCatalogDashboards.autoDetailRowsAcrossServices(
+        serviceTypes=serviceTypes,
+        selectorHash={
+          environment: '$environment',
+          stage: '$stage',
+          feature_category: { re: featureCategoriesSelector },
+        },
+        startRow=1200,
+        sliFilter=sliFilter,
+      )
+    );
+
+  dashboard {
+    stageGroupDashboardTrailer()::
+      // Add any additional trailing panels here
+      self.trailer(),
+    links+:
+      [
+        platformLinks.dynamicLinks('API Detail', 'type:api'),
+        platformLinks.dynamicLinks('Web Detail', 'type:web'),
+        platformLinks.dynamicLinks('Git Detail', 'type:git'),
+      ],
+  };
+
 {
   // dashboard generates a basic stage group dashboard for a stage group
   // The group should match a group a `stage` from `./services/stage-group-mapping.jsonnet`
   dashboard: dashboard,
+  errorBudgetDetailDashboard: errorBudgetDetailDashboard,
   supportedComponents: supportedComponents,
+  dashboardUid: dashboardUid,
 }

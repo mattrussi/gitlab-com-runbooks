@@ -3,11 +3,16 @@ local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local haproxyComponents = import './lib/haproxy_components.libsonnet';
-local perFeatureCategoryRecordingRules = (import './lib/puma-per-feature-category-recording-rules.libsonnet').perFeatureCategoryRecordingRules;
+local sliLibrary = import 'gitlab-slis/library.libsonnet';
+local serviceLevelIndicatorDefinition = import 'servicemetrics/service_level_indicator_definition.libsonnet';
+local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 
 metricsCatalog.serviceDefinition({
   type: 'api',
   tier: 'sv',
+
+  tags: ['golang'],
+
   contractualThresholds: {
     apdexRatio: 0.9,
     errorRatio: 0.005,
@@ -33,6 +38,8 @@ metricsCatalog.serviceDefinition({
   },
   serviceDependencies: {
     gitaly: true,
+    kas: true,
+    'redis-ratelimiting': true,
     'redis-tracechunks': true,
     'redis-sidekiq': true,
     'redis-cache': true,
@@ -40,12 +47,24 @@ metricsCatalog.serviceDefinition({
     patroni: true,
     pgbouncer: true,
     praefect: true,
+    pvs: true,
+    search: true,
+    consul: true,
   },
   provisioning: {
     vms: false,
     kubernetes: true,
   },
+  recordingRuleMetrics: sliLibrary.get('graphql_query_apdex').recordingRuleMetrics,
   regional: true,
+  kubeConfig: {
+    labelSelectors: kubeLabelSelectors(
+      nodeSelector={ type: 'api' },
+      // TODO: at present, api nodepools do not have the correct stage, shard labels
+      // see https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2236
+      nodeStaticLabels={ stage: 'main' },
+    ),
+  },
   kubeResources: {
     api: {
       kind: 'Deployment',
@@ -59,10 +78,9 @@ metricsCatalog.serviceDefinition({
     loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
       userImpacting=true,
       featureCategory='not_owned',
-      team='sre_coreinfra',
       stageMappings={
         main: {
-          backends: ['api', 'api_rate_limit'],
+          backends: ['api', 'api_rate_limit', 'main_api'],
           toolingLinks: [
             toolingLinks.bigquery(title='Main-stage: top paths for 5xx errors', savedQuery='805818759045:342973e81d4a481d8055b43564d09728'),
           ],
@@ -76,7 +94,6 @@ metricsCatalog.serviceDefinition({
     nginx_ingress: {
       userImpacting: true,
       featureCategory: 'not_owned',
-      team: 'sre_datastores',
       description: |||
         nginx for api
       |||,
@@ -142,31 +159,23 @@ metricsCatalog.serviceDefinition({
       ],
     },
 
+    local railsSelector = { job: 'gitlab-rails', type: 'api' },
     puma: {
       userImpacting: true,
-      featureCategory: 'not_owned',
-      team: 'sre_coreinfra',
+      featureCategory: serviceLevelIndicatorDefinition.featureCategoryFromSourceMetrics,
       description: |||
         This SLI monitors API traffic in aggregate, in the GitLab rails monolith, via its
         HTTP interface. 5xx responses are treated as failures.
       |||,
 
-      local baseSelector = { job: 'gitlab-rails', type: 'api' },
-      apdex: histogramApdex(
-        histogram='http_request_duration_seconds_bucket',
-        selector=baseSelector,
-        satisfiedThreshold=1,
-        toleratedThreshold=10
-      ),
-
       requestRate: rateMetric(
         counter='http_requests_total',
-        selector=baseSelector,
+        selector=railsSelector,
       ),
 
       errorRate: rateMetric(
         counter='http_requests_total',
-        selector=baseSelector { status: { re: '5..' } }
+        selector=railsSelector { status: { re: '5..' } }
       ),
 
       significantLabels: ['fqdn', 'method', 'feature_category'],
@@ -176,9 +185,26 @@ metricsCatalog.serviceDefinition({
         toolingLinks.kibana(title='Rails', index='rails_api', type='api', slowRequestSeconds=10),
       ],
     },
+
+    rails_requests:
+      sliLibrary.get('rails_request_apdex').generateServiceLevelIndicator(railsSelector) {
+        monitoringThresholds+: {
+          apdexScore: 0.99,
+        },
+
+        toolingLinks: [
+          // TODO: These need to be defined in the appliation SLI and built using
+          // selectors using the appropriate fields
+          // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1411
+          toolingLinks.kibana(title='Rails', index='rails_api', type='api', slowRequestSeconds=5),
+        ],
+      },
+
+    graphql_queries:
+      sliLibrary.get('graphql_query_apdex').generateServiceLevelIndicator(railsSelector) {
+        toolingLinks: [
+          toolingLinks.kibana(title='Rails', index='rails_graphql', type='api', slowRequestSeconds=1),
+        ],
+      },
   },
-  extraRecordingRulesPerBurnRate: [
-    // Adds per-feature-category plus error rates across multiple burn rates
-    perFeatureCategoryRecordingRules({ type: 'api' }),
-  ],
 })

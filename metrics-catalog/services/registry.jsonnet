@@ -6,10 +6,14 @@ local haproxyComponents = import './lib/haproxy_components.libsonnet';
 local registryHelpers = import './lib/registry-helpers.libsonnet';
 local registryBaseSelector = registryHelpers.registryBaseSelector;
 local defaultRegistrySLIProperties = registryHelpers.defaultRegistrySLIProperties;
+local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 
 metricsCatalog.serviceDefinition({
   type: 'registry',
   tier: 'sv',
+
+  tags: ['golang'],
+
   contractualThresholds: {
     apdexRatio: 0.9,
     errorRatio: 0.005,
@@ -42,6 +46,17 @@ metricsCatalog.serviceDefinition({
   },
   // Git service is spread across multiple regions, monitor it as such
   regional: true,
+  kubeConfig: {
+    labelSelectors: kubeLabelSelectors(
+      ingressSelector=null,  // no ingress for registry
+      nodeSelector={ type: 'registry' },
+
+      // TODO: at present the registry nodes do not present a stage label
+      // assume they are all main stage
+      // See https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2242
+      nodeStaticLabels={ stage: 'main' },
+    ),
+  },
   kubeResources: {
     registry: {
       kind: 'Deployment',
@@ -81,33 +96,13 @@ metricsCatalog.serviceDefinition({
         }
       ),
 
-      significantLabels: ['route', 'method'],
+      significantLabels: ['route', 'method', 'migration_path'],
 
       toolingLinks: [
         toolingLinks.gkeDeployment('gitlab-registry', type='registry', containerName='registry'),
         toolingLinks.kibana(title='Registry', index='registry', type='registry', slowRequestSeconds=10),
         toolingLinks.continuousProfiler(service='gitlab-registry'),
       ],
-    },
-
-    storage: {
-      userImpacting: true,
-      featureCategory: 'container_registry',
-      description: |||
-        Aggregation of all container registry GCS storage operations.
-      |||,
-
-      apdex: histogramApdex(
-        histogram='registry_storage_action_seconds_bucket',
-        selector='',
-        satisfiedThreshold=1
-      ),
-
-      requestRate: rateMetric(
-        counter='registry_storage_action_seconds_count',
-      ),
-
-      significantLabels: ['action'],
     },
 
     database: {
@@ -119,14 +114,14 @@ metricsCatalog.serviceDefinition({
 
       apdex: histogramApdex(
         histogram='registry_database_query_duration_seconds_bucket',
-        selector='type="registry"',
-        satisfiedThreshold=1,
-        toleratedThreshold=2.5
+        selector={ type: 'registry' },
+        satisfiedThreshold=0.5,
+        toleratedThreshold=1
       ),
 
       requestRate: rateMetric(
         counter='registry_database_queries_total',
-        selector='type="registry"'
+        selector=registryBaseSelector
       ),
 
       significantLabels: ['name'],
@@ -142,14 +137,21 @@ metricsCatalog.serviceDefinition({
 
       apdex: histogramApdex(
         histogram='registry_gc_run_duration_seconds_bucket',
-        selector='type="registry"',
-        satisfiedThreshold=1,
-        toleratedThreshold=2
+        selector={ type: 'registry' },
+        satisfiedThreshold=0.5,
+        toleratedThreshold=1
       ),
 
       requestRate: rateMetric(
         counter='registry_gc_runs_total',
-        selector='type="registry"'
+        selector=registryBaseSelector
+      ),
+
+      errorRate: rateMetric(
+        counter='registry_gc_runs_total',
+        selector=registryBaseSelector {
+          'error': 'true',
+        }
       ),
 
       significantLabels: ['worker'],

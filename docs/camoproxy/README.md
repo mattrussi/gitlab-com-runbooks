@@ -15,8 +15,8 @@
 
 ## Troubleshooting Pointers
 
-* [../uncategorized/camoproxy.md](../uncategorized/camoproxy.md)
-* [../uncategorized/upgrade-camoproxy.md](../uncategorized/upgrade-camoproxy.md)
+* [Camoproxy troubleshooting](../uncategorized/camoproxy.md)
+* [Upgrade camoproxy](../uncategorized/upgrade-camoproxy.md)
 <!-- END_MARKER -->
 
 

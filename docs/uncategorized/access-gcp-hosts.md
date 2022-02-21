@@ -30,6 +30,11 @@ if [ -f /usr/local/etc/bash_completion ]; then
 fi
 ```
 
+For `zsh` users (default in macOS Catalina),
+[`zsh-completions`](https://github.com/zsh-users/zsh-completions) is
+also available. `brew install zsh-completions` will show instructions on
+how to activate this.
+
 ### Monitoring
 
 Logs for gprd & gstg:

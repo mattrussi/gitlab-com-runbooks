@@ -1,6 +1,7 @@
 {
   // Metric definitions
   histogramApdex:: (import './histogram_apdex.libsonnet').histogramApdex,
+  rateApdex:: (import './rate_apdex.libsonnet').rateApdex,
   combined:: (import './combined.libsonnet').combined,
   customApdex:: (import './custom_apdex.libsonnet').customApdex,
   rateMetric:: (import './rate.libsonnet').rateMetric,
@@ -16,4 +17,7 @@
   // Resource Saturation & Utilization definition
   resourceSaturationPoint: (import './resource_saturation_point.libsonnet').resourceSaturationPoint,
   utilizationMetric: (import './utilization_metric.libsonnet').utilizationMetric,
+
+  // Tools for selecting kubernetes resources
+  kubeLabelSelectors: (import './kube_label_selectors.libsonnet'),
 }

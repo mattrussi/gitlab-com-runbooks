@@ -1,5 +1,7 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local rateMetric = metricsCatalog.rateMetric;
+local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
+local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 
 metricsCatalog.serviceDefinition({
   type: 'mailroom',
@@ -11,10 +13,16 @@ metricsCatalog.serviceDefinition({
   serviceDependencies: {
     patroni: true,
     pgbouncer: true,
+    consul: true,
   },
   provisioning: {
     kubernetes: true,
     vms: false,
+  },
+  kubeConfig: {
+    labelSelectors: kubeLabelSelectors(
+      ingressSelector=null  // no ingress for logging
+    ),
   },
   kubeResources: {
     mailroom: {
@@ -29,7 +37,10 @@ metricsCatalog.serviceDefinition({
       local queueSelector = { queue: 'email_receiver' },
       userImpacting: true,
       featureCategory: 'not_owned',
-      team: 'sre_coreinfra',
+
+      // Avoid long burn rates on Sidekiq metrics...
+      upscaleLongerBurnRates: true,
+
       description: |||
         Monitors incoming emails delivered from the imap inbox and processed through Sidekiq's `email_receiver` queue.
         Note that since Mailroom has poor observability, we use Sidekiq metrics for this, and this could lead to certain Sidekiq problems
@@ -47,6 +58,16 @@ metricsCatalog.serviceDefinition({
       ),
 
       significantLabels: [],
+
+      toolingLinks: [
+        toolingLinks.kibana(title='Mailroom', index='mailroom', includeMatchersForPrometheusSelector=false),
+        toolingLinks.kibana(
+          title='Sidekiq receiver workers',
+          index='sidekiq',
+          includeMatchersForPrometheusSelector=false,
+          matches={ 'json.class': ['EmailReceiverWorker', 'ServiceDeskEmailReceiverWorker'] }
+        ),
+      ],
     },
   },
 })

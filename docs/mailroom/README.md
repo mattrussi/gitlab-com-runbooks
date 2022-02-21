@@ -5,7 +5,7 @@
 [[_TOC_]]
 
 #  Mailroom Service
-* [Service Overview](https://dashboards.gitlab.net/d/https://dashboards.gitlab.net/d/mailroom-main/mailroom-overview)
+* [Service Overview](https://dashboards.gitlab.net/d/mailroom-main/mailroom-overview)
 * **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22mailroom%22%2C%20tier%3D%22sv%22%7D
 * **Label**: gitlab-com/gl-infra/production~"Service:Mailroom"
 
@@ -15,8 +15,9 @@
 
 ## Troubleshooting Pointers
 
-* [../onboarding/gitlab.com_on_k8s.md](../onboarding/gitlab.com_on_k8s.md)
-* [../onboarding/kibana-diagnosis.md](../onboarding/kibana-diagnosis.md)
+* [Gitlab.com on Kubernetes](../onboarding/gitlab.com_on_k8s.md)
+* [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
+* [A survival guide for SREs to working with Sidekiq at GitLab](../sidekiq/sidekiq-survival-guide-for-sres.md)
 <!-- END_MARKER -->
 
 ## Operations

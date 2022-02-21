@@ -31,9 +31,9 @@ groups:
           severity: s3
           alert_type: cause
 
-      - alert: KubePodCrashLooping
+      - alert: KubePodRestarting
         annotations:
-          title: Pod CrashLooping
+          title: Pod Restarting Often
           description: Pod {{ $labels.namespace }}/{{ $labels.pod }} ({{ $labels.container }}) is restarting {{ printf "%.2f" $value }} times / 5 minutes.
           runbook: docs/kube/kubernetes.md
         expr: rate(kube_pod_container_status_restarts_total{job="kube-state-metrics"}[15m]) * 60 * 5 > 0
@@ -41,6 +41,21 @@ groups:
         labels:
           tier: inf
           type: kube
+          severity: s3
+          alert_type: cause
+
+      - alert: KubePodCrashLooping
+        annotations:
+          title: Pod CrashLooping
+          description: Pod {{ $labels.namespace }}/{{ $labels.pod }} ({{ $labels.container }}) is reporting CrashLoopBackOff restarts.
+          runbook: docs/kube/kubernetes.md
+        expr: |
+          sum by (environment,type,stage,tier,deployment) (kube_pod_container_status_waiting_reason:labeled{reason="CrashLoopBackOff"} > 0)
+            /
+          sum by (environment,type,stage,tier,deployment) (kube_pod_container_status_waiting_reason:labeled > 0)
+            > 0.5
+        for: 5m
+        labels:
           severity: s3
           alert_type: cause
 
@@ -80,18 +95,19 @@ groups:
       - alert: KubeStatefulSetReplicasMismatch
         annotations:
           title: StatefulSet Replicas Mismatch
-          description: StatefulSet {{ $labels.namespace }}/{{ $labels.statefulset }} has not matched the expected number of replicas for longer than 15 minutes.
+          description: StatefulSet {{ $labels.namespace }}/{{ $labels.statefulset }} has not matched the expected number of replicas for longer than 12 hours.
           runbook: docs/kube/kubernetes.md
         expr: |-
           kube_statefulset_status_replicas_ready{job="kube-state-metrics"}
             !=
           kube_statefulset_status_replicas{job="kube-state-metrics"}
-        for: 15m
+        for: 12h
         labels:
           tier: inf
           type: kube
           severity: s3
           alert_type: cause
+          incident_project: gitlab.com/gitlab-com/gl-infra/production
 
       - alert: KubeStatefulSetGenerationMismatch
         annotations:

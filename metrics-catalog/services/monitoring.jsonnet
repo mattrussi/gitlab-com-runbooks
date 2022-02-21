@@ -1,12 +1,18 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
+local gaugeMetric = metricsCatalog.gaugeMetric;
 local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local googleLoadBalancerComponents = import './lib/google_load_balancer_components.libsonnet';
+local maturityLevels = import 'service-maturity/levels.libsonnet';
+local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 
 metricsCatalog.serviceDefinition({
   type: 'monitoring',
   tier: 'inf',
+
+  tags: ['cloud-sql', 'golang', 'grafana', 'prometheus', 'thanos'],
+
   monitoringThresholds: {
     apdexScore: 0.999,
     errorRatio: 0.999,
@@ -21,7 +27,47 @@ metricsCatalog.serviceDefinition({
     kubernetes: true,
     vms: true,
   },
+  kubeConfig: {
+    // TODO: monitoring doesn't have very good labelling.
+    // See https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2240
+    // For now, we base our resource matching on namespace only and assume
+    // everything is in the main stage
+    local kubeSelector = { namespace: 'monitoring' },
+    local staticLabels = { stage: 'main' },
+
+    labelSelectors: kubeLabelSelectors(
+      podSelector=kubeSelector,
+      hpaSelector=kubeSelector,
+      nodeSelector=null,
+      ingressSelector=kubeSelector,
+      deploymentSelector=kubeSelector,
+
+      podStaticLabels=staticLabels,
+      hpaStaticLabels=staticLabels,
+      nodeStaticLabels=staticLabels,
+      ingressStaticLabels=staticLabels,
+      deploymentStaticLabels=staticLabels,
+    ),
+  },
   kubeResources: {
+    grafana: {
+      kind: 'Deployment',
+      containers: [
+        'grafana',
+      ],
+    },
+    'grafana-image-renderer': {
+      kind: 'Deployment',
+      containers: [
+        'grafana-image-renderer',
+      ],
+    },
+    'grafana-trickster': {
+      kind: 'Deployment',
+      containers: [
+        'grafana-trickster',
+      ],
+    },
     'thanos-query-frontend': {
       kind: 'Deployment',
       containers: [
@@ -61,9 +107,12 @@ metricsCatalog.serviceDefinition({
   },
   serviceLevelIndicators: {
     thanos_query: {
+      monitoringThresholds: {
+        apdexScore: 0.95,
+        errorRatio: 0.95,
+      },
       userImpacting: false,
       featureCategory: 'not_owned',
-      team: 'sre_observability',
       description: |||
         Thanos query gathers the data needed to evaluate Prometheus queries from multiple underlying prometheus and thanos instances.
         This SLI monitors the Thanos query HTTP interface. 5xx responses are considered failures.
@@ -79,6 +128,7 @@ metricsCatalog.serviceDefinition({
         histogram='http_request_duration_seconds_bucket',
         selector=thanosQuerySelector,
         satisfiedThreshold=30,
+        metricsFormat='migrating'
       ),
 
       requestRate: rateMetric(
@@ -101,7 +151,6 @@ metricsCatalog.serviceDefinition({
     thanos_query_frontend: {
       userImpacting: false,
       featureCategory: 'not_owned',
-      team: 'sre_observability',
       description: |||
         Thanos query gathers the data needed to evaluate Prometheus queries from multiple underlying prometheus and thanos instances.
         This SLI monitors the Thanos query HTTP interface. 5xx responses are considered failures.
@@ -147,52 +196,13 @@ metricsCatalog.serviceDefinition({
       ],
     },
 
-    public_dashboards_thanos_query: {
-      userImpacting: false,
-      featureCategory: 'not_owned',
-      team: 'sre_observability',
-      ignoreTrafficCessation: true,
-
-      description: |||
-        Thanos query gathers the data needed to evaluate Prometheus queries from multiple underlying prometheus and thanos instances.
-        This SLI monitors the Thanos query HTTP interface for GitLab's public Thanos instance, which is used by the public Grafana
-        instance. 5xx responses are considered failures.
-      |||,
-
-      local thanosQuerySelector = {
-        job: 'thanos',
-        type: 'monitoring',
-        shard: 'public-dashboards',
-      },
-
-      apdex: histogramApdex(
-        histogram='http_request_duration_seconds_bucket',
-        selector=thanosQuerySelector,
-        satisfiedThreshold=30
-      ),
-
-      requestRate: rateMetric(
-        counter='http_requests_total',
-        selector=thanosQuerySelector
-      ),
-
-      errorRate: rateMetric(
-        counter='http_requests_total',
-        selector=thanosQuerySelector { code: { re: '^5.*' } }
-      ),
-
-      significantLabels: ['fqdn'],
-
-      toolingLinks: [
-        toolingLinks.elasticAPM(service='thanos'),
-        toolingLinks.kibana(title='Thanos Query', index='monitoring_ops', tag='monitoring.systemd.thanos-query'),
-      ],
-    },
-
     thanos_store: {
+      monitoringThresholds: {
+        apdexScore: 0.95,
+        errorRatio: 0.95,
+      },
       userImpacting: false,
       featureCategory: 'not_owned',
-      team: 'sre_observability',
       description: |||
         Thanos store will respond to Thanos Query (and other) requests for historical data. This historical data is kept in
         GCS buckets. This SLI monitors the Thanos StoreAPI GRPC endpoint. GRPC error responses are considered to be service-level failures.
@@ -212,7 +222,8 @@ metricsCatalog.serviceDefinition({
         histogram='grpc_server_handling_seconds_bucket',
         selector=thanosStoreSelector,
         satisfiedThreshold=1,
-        toleratedThreshold=3
+        toleratedThreshold=3,
+        metricsFormat='migrating'
       ),
 
       requestRate: rateMetric(
@@ -237,7 +248,6 @@ metricsCatalog.serviceDefinition({
     thanos_compactor: {
       userImpacting: false,
       featureCategory: 'not_owned',
-      team: 'sre_observability',
       ignoreTrafficCessation: true,
 
       description: |||
@@ -273,7 +283,6 @@ metricsCatalog.serviceDefinition({
     prometheus_alert_sender: {
       userImpacting: true,
       featureCategory: 'not_owned',
-      team: 'sre_observability',
       description: |||
         This SLI monitors all prometheus alert notifications that are generated by AlertManager.
         Alert delivery failure is considered a service-level failure.
@@ -300,7 +309,6 @@ metricsCatalog.serviceDefinition({
     thanos_rule_alert_sender: {
       userImpacting: true,
       featureCategory: 'not_owned',
-      team: 'sre_observability',
       description: |||
         This SLI monitors alerts generated by Thanos Ruler.
         Alert delivery failure is considered a service-level failure.
@@ -329,44 +337,13 @@ metricsCatalog.serviceDefinition({
       ],
     },
 
-    grafana: {
-      userImpacting: true,
-      featureCategory: 'not_owned',
-      team: 'sre_observability',
-      description: |||
-        This SLI monitors the internal Grafana instance, via the HTTP interface.
-        5xx responses are considered errors.
-      |||,
-
-      local grafanaSelector = {
-        job: 'grafana',
-      },
-
-      requestRate: rateMetric(
-        counter='http_request_total',
-        selector=grafanaSelector
-      ),
-
-      errorRate: rateMetric(
-        counter='http_request_total',
-        selector=grafanaSelector { statuscode: { re: '^5.*' } }
-      ),
-
-      significantLabels: ['fqdn'],
-
-      toolingLinks: [
-        toolingLinks.googleLoadBalancer(
-          instanceId='ops-dashboards',
-          project='gitlab-ops',
-        ),
-      ],
-    },
-
     // This component represents the Google Load Balancer in front
-    // of the public Grafana instance at dashboards.gitlab.com
-    public_grafana_googlelb: googleLoadBalancerComponents.googleLoadBalancer(
+    // of the internal Grafana instance at dashboards.gitlab.net
+    grafana_google_lb: googleLoadBalancerComponents.googleLoadBalancer(
       userImpacting=false,
-      loadBalancerName='ops-dashboards-com',
+      // LB automatically created by the k8s ingress
+      loadBalancerName='k8s1-08811ce6-monitoring-grafana-80-013c5091',
+      targetProxyName='k8s2-ts-4zodnh0s-monitoring-grafana-lhbkv8d3',
       projectId='gitlab-ops',
       ignoreTrafficCessation=true
     ),
@@ -374,7 +351,6 @@ metricsCatalog.serviceDefinition({
     prometheus: {
       userImpacting: true,
       featureCategory: 'not_owned',
-      team: 'sre_observability',
       description: |||
         This SLI monitors Prometheus instances via the HTTP interface.
         5xx responses are considered errors.
@@ -415,7 +391,6 @@ metricsCatalog.serviceDefinition({
     rule_evaluation: {
       userImpacting: true,
       featureCategory: 'not_owned',
-      team: 'sre_observability',
       description: |||
         This SLI monitors Prometheus recording rule evaluations. Recording rule evalution failures are considered to be
         service failures.
@@ -437,11 +412,10 @@ metricsCatalog.serviceDefinition({
     },
 
     // Trickster is a prometheus caching layer that serves requests to our
-    // public Grafana instance
-    trickster: {
+    // Grafana instances
+    grafana_trickster: {
       userImpacting: false,
       featureCategory: 'not_owned',
-      team: 'sre_observability',
       ignoreTrafficCessation: true,
 
       description: |||
@@ -463,18 +437,13 @@ metricsCatalog.serviceDefinition({
         selector={ http_status: { re: '5.*' } }
       ),
 
-      significantLabels: ['fqdn'],
+      significantLabels: ['pod'],
     },
 
-    local thanosMemcachedSLI(job) = {
-      local selector = {
-        job: job,
-        type: 'monitoring',
-      },
-
+    thanos_memcached: {
       userImpacting: false,
+      serviceAggregation: false,
       featureCategory: 'not_owned',
-      team: 'sre_observability',
       ignoreTrafficCessation: true,
 
       description: |||
@@ -482,14 +451,17 @@ metricsCatalog.serviceDefinition({
         store and query-frontend components.
       |||,
 
+      local selector = { type: 'monitoring' },
+
       apdex: histogramApdex(
         histogram='thanos_memcached_operation_duration_seconds_bucket',
-        satisfiedThreshold=1,
+        satisfiedThreshold=0.5,
         selector=selector,
+        metricsFormat='migrating'
       ),
 
       requestRate: rateMetric(
-        counter='memcached_commands_total',
+        counter='thanos_memcached_operations_total',
         selector=selector,
       ),
 
@@ -498,12 +470,49 @@ metricsCatalog.serviceDefinition({
         selector=selector,
       ),
 
-      significantLabels: ['fqdn'],
+      significantLabels: ['operation', 'reason'],
     },
 
-    memcached_thanos_store_index: thanosMemcachedSLI('memcached-thanos-index-cache-metrics'),
-    memcached_thanos_store_bucket: thanosMemcachedSLI('memcached-thanos-bucket-cache-metrics'),
-    memcached_thanos_qfe_query_range: thanosMemcachedSLI('memcached-thanos-qfe-query-range-metrics'),
-    memcached_thanos_qfe_labels: thanosMemcachedSLI('memcached-thanos-qfe-labels-metrics'),
+    grafana_cloudsql: {
+      userImpacting: true,
+      featureCategory: 'not_owned',
+      description: |||
+        Grafana uses a GCP CloudSQL instance. This SLI represents SQL transactions to that service.
+      |||,
+
+      local baseSelector = {
+        job: 'stackdriver',
+        database_id: { re: '.+:grafana-.+' },
+        database: 'grafana',
+      },
+
+      staticLabels: {
+        tier: 'inf',
+        type: 'monitoring',
+      },
+
+      requestRate: gaugeMetric(
+        gauge='stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count',
+        selector=baseSelector
+      ),
+
+      errorRate: gaugeMetric(
+        gauge='stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count',
+        selector=baseSelector {
+          transaction_type: 'rollback',
+        }
+      ),
+
+      significantLabels: ['database_id'],
+      serviceAggregation: false,
+      toolingLinks: [
+        toolingLinks.cloudSQL('grafana-internal-f534', project='gitlab-ops'),
+        toolingLinks.cloudSQL('grafana-pre-2718', project='gitlab-pre'),
+      ],
+    },
   },
+
+  skippedMaturityCriteria: maturityLevels.skip({
+    'Service exists in the dependency graph': 'Thanos is an independent internal observability tool. It fetches metrics from other services, but does not interact with them, functionally',
+  }),
 })

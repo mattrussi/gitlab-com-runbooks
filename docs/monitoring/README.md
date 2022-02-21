@@ -16,38 +16,45 @@
 
 ## Troubleshooting Pointers
 
-* [../ci-runners/ci-abuse-handling.md](../ci-runners/ci-abuse-handling.md)
+* [How to detect CI Abuse](../ci-runners/ci-abuse-handling.md)
 * [../ci-runners/ci_pending_builds.md](../ci-runners/ci_pending_builds.md)
 * [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
-* [../kube/k8s-new-cluster.md](../kube/k8s-new-cluster.md)
+* [GitLab.com on Kubernetes](../kube/k8s-new-cluster.md)
 * [../kube/k8s-operations.md](../kube/k8s-operations.md)
-* [../license/license-gitlab-com.md](../license/license-gitlab-com.md)
-* [alertmanager-notification-failures.md](alertmanager-notification-failures.md)
-* [alerts_gke.md](alerts_gke.md)
-* [alerts_manual.md](alerts_manual.md)
+* [How to resize Persistent Volumes in Kubernetes](../kube/k8s-pvc-resize.md)
+* [license.gitlab.com Runbook](../license/license-gitlab-com.md)
+* [Alertmanager Notification Failures](alertmanager-notification-failures.md)
+* [Accessing a GKE Alertmanager](alerts_gke.md)
+* [Alerting](alerts_manual.md)
 * [prometheus-failed-compactions.md](prometheus-failed-compactions.md)
-* [prometheus-pod-crashlooping.md](prometheus-pod-crashlooping.md)
-* [thanos-compact.md](thanos-compact.md)
-* [upgrades.md](upgrades.md)
-* [../onboarding/kibana-diagnosis.md](../onboarding/kibana-diagnosis.md)
-* [../patroni/check_wraparound.md](../patroni/check_wraparound.md)
-* [../patroni/log_analysis.md](../patroni/log_analysis.md)
-* [../patroni/pg_repack.md](../patroni/pg_repack.md)
+* [Prometheus pod crashlooping](prometheus-pod-crashlooping.md)
+* [Thanos Compact](thanos-compact.md)
+* [Upgrading Monitoring Components](upgrades.md)
+* [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
+* [Check the status of transaction wraparound Runbook](../patroni/check_wraparound.md)
+* [Log analysis on PostgreSQL, Pgbouncer, Patroni and consul Runbook](../patroni/log_analysis.md)
+* [Mapping Postgres Statements, Slowlogs, Activity Monitoring and Traces](../patroni/mapping_statements.md)
+* [Postgresql minor upgrade](../patroni/pg_minor_upgrade.md)
+* [Pg_repack using gitlab-pgrepack](../patroni/pg_repack.md)
 * [../patroni/postgres-checkup.md](../patroni/postgres-checkup.md)
 * [../patroni/postgresql-locking.md](../patroni/postgresql-locking.md)
-* [../patroni/postgresql-query-load-evaluation.md](../patroni/postgresql-query-load-evaluation.md)
+* [How to evaluate load from queries](../patroni/postgresql-query-load-evaluation.md)
+* [How to provision the benchmark environment](../patroni/provisioning_bench_env.md)
 * [../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md](../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md)
-* [../pgbouncer/pgbouncer-add-instance.md](../pgbouncer/pgbouncer-add-instance.md)
-* [../pgbouncer/pgbouncer-connections.md](../pgbouncer/pgbouncer-connections.md)
+* [Add a new PgBouncer instance](../pgbouncer/pgbouncer-add-instance.md)
+* [PgBouncer connection management and troubleshooting](../pgbouncer/pgbouncer-connections.md)
 * [../redis/redis.md](../redis/redis.md)
-* [../sentry/sentry-is-down.md](../sentry/sentry-is-down.md)
-* [../sidekiq/sidekiq-survival-guide-for-sres.md](../sidekiq/sidekiq-survival-guide-for-sres.md)
+* [Sentry is down and gives error 500](../sentry/sentry-is-down.md)
+* [A survival guide for SREs to working with Sidekiq at GitLab](../sidekiq/sidekiq-survival-guide-for-sres.md)
 * [../spamcheck/index.md](../spamcheck/index.md)
+* [GET Monitoring Setup](../staging-ref/get-monitoring-setup.md)
 * [../uncategorized/access-gcp-hosts.md](../uncategorized/access-gcp-hosts.md)
-* [../uncategorized/job_completion.md](../uncategorized/job_completion.md)
-* [../uncategorized/packagecloud-infrastructure.md](../uncategorized/packagecloud-infrastructure.md)
+* [An impatient SRE's guide to deleting alerts](../uncategorized/deleting-alerts.md)
+* [GitLab Job Completion](../uncategorized/job_completion.md)
+* [../uncategorized/osquery.md](../uncategorized/osquery.md)
+* [PackageCloud Infrastructure and Backups](../uncategorized/packagecloud-infrastructure.md)
 * [../uncategorized/subnet-allocations.md](../uncategorized/subnet-allocations.md)
-* [../version/version-gitlab-com.md](../version/version-gitlab-com.md)
+* [version.gitlab.com Runbook](../version/version-gitlab-com.md)
 <!-- END_MARKER -->
 
 ## Introduction
@@ -69,6 +76,22 @@ service discovery configuration we use without actually pointing to the
 configuration management code that puts it into place. Hopefully this allows
 those onboarding to understand what's happening without coupling the document to
 implementation details.
+
+## Backlog
+
+| Service | Description | Backlog |
+|---------|------------|---------|
+| ~"Service::Prometheus" | The multiple prometheus servers that we run. | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues?scope=all&state=opened&label_name[]=Service%3A%3APrometheus) |
+| ~"Service::Thanos" | Anything related to [thanos](https://thanos.io/). | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues?scope=all&state=opened&label_name[]=Service%3A%3AThanos) |
+| ~"Service::Grafana" | Anything related to <https://dashboards.gitlab.net/> | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues?scope=all&state=opened&label_name[]=Service%3A%3AGrafana)
+| ~"Service::PublicGrafana" | Anything related to <https://dashboards.gitlab.com/> | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues?scope=all&state=opened&label_name[]=Service%3A%3APublicGrafana)
+| ~"Service::AlertManager" | Anything related to AlertManager | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues?scope=all&state=opened&label_name[]=Service%3A%3AAlertManager)
+| ~"Service::Monitoring-Other" | The service we provide to engineers, this covers metrics, labels and anything else that doesn't belong in the services above. | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues?scope=all&state=opened&label_name[]=Service%3A%3AMonitoring-Other) |
+
+Some of the issues in the backlog also belong in epics part of the
+[Observability Work Queue
+Epic](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/628) to group
+issues around a large project that needs to be addressed.
 
 ## Querying
 
@@ -404,6 +427,12 @@ certain public services (e.g. gitlab.com) are down to it, as a last line of
 defence.
 
 ## Architecture
+
+Components diagram from Thanos docs: https://thanos.io/v0.15/thanos/quick-tutorial.md/#components
+
+THIS IS WORK IN PROGRESS! IT IS LIKELY TO BE INACCURATE! IT WILL BE UPDATED IN THE NEAR FUTURE!
+
+![monitoring](./img/monitoring.png)
 
 ## Performance
 

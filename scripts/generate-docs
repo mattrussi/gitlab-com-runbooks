@@ -11,14 +11,18 @@ START_MARKER = "<!-- MARKER: do not edit this section directly. Edit services/se
 STOP_MARKER = "<!-- END_MARKER -->"
 
 def find_troubleshooting_docs(service_name)
-  docs = []
+  docs = {}
   troubleshooting_docs_glob = File.join(__dir__, "..", "docs", "*", "*.md")
   dest_path = Pathname.new(File.join(__dir__, "..", "docs", service_name))
   Open3.popen3("grep -li '\\b#{service_name}\\b' #{troubleshooting_docs_glob}") do |stdin, stdout, stderr, wait_thr|
     while line = stdout.gets
+      next if line.include? "README.md"
+
       file_name = Pathname.new(line.chomp)
+      title = File.readlines(file_name)[0].match(/^# +(.*)/) # Grab first level 1 heading
       relative = file_name.relative_path_from(dest_path)
-      docs.push(relative) unless line.include? "README.md"
+
+      docs[relative] = title ? title[1].strip : relative
     end
   end
 
@@ -30,6 +34,7 @@ def replace_header(file, header)
   start = lines.find_index { |line| line.chomp == START_MARKER }
 
   throw "Unable to find start marker for #{file}" if start.nil?
+
   stop = lines.find_index { |line| line.chomp == STOP_MARKER }
   throw "Unable to find stop marker for #{file}" if stop.nil?
 
@@ -66,15 +71,15 @@ def generate_header(service, tier)
 
 ## Logging
 
-<%- service["technical"]["logging"].each do |logging_location| -%>
+<%- service.dig("technical", "logging")&.each do |logging_location| -%>
 * [<%= logging_location["name"] %>](<%= logging_location["permalink"] %>)
 <%- end -%>
 
-<% if troubeshooting_docs && !troubeshooting_docs.empty? -%>
+<% if troubeshooting_docs && troubeshooting_docs.any? -%>
 ## Troubleshooting Pointers
 
-<%- troubeshooting_docs.each do |troubeshooting_doc| -%>
-* [<%= troubeshooting_doc %>](<%= troubeshooting_doc %>)
+<%- troubeshooting_docs.each do |path, title| -%>
+* [<%= title %>](<%= path %>)
 <%- end -%>
 <% end -%>
 #{STOP_MARKER}
@@ -141,9 +146,4 @@ def generate_docs
   # end
 end
 
-begin
-  generate_docs
-  # rescue StandardError => e
-  #   STDERR.puts "error: #{e.message}"
-  #   exit 1
-end
+generate_docs

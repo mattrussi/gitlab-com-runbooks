@@ -8,19 +8,15 @@ groups:
   - alert: JaegerServiceJaegerAgentErrorSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The jaeger_agent SLI of the jaeger service (`{{ $labels.stage }}` stage) has an error rate violating
-        SLO
-      description: |2
-
-
+      title: The jaeger_agent SLI of the jaeger service (`{{ $labels.stage }}` stage)
+        has an error rate violating SLO
+      description: |
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: jaeger-main/jaeger-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/jaeger-main/jaeger-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/jaeger-main/jaeger-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2702062960'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2702062960"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -33,13 +29,12 @@ groups:
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
-      product_stage: not_owned
-      product_stage_group: not_owned
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'no'
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 1h
     expr: |
       (
         (
@@ -51,7 +46,43 @@ groups:
           gitlab_component_errors:ratio_5m{component="jaeger_agent",monitor="global",type="jaeger"}
           > (14.4 * 0.001000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="jaeger_agent",monitor="global",type="jaeger"}) >= 1
+      )
+  - alert: JaegerServiceJaegerAgentErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The jaeger_agent SLI of the jaeger service (`{{ $labels.stage }}` stage)
+        has an error rate violating SLO
+      description: |
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: jaeger-main/jaeger-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/jaeger-main/jaeger-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2702062960"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(jaeger_agent_reporter_spans_failures_total{type="jaeger", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/jaeger/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_errors:ratio_6h{component="jaeger_agent",monitor="global",type="jaeger"}
           > (6 * 0.001000)
@@ -64,24 +95,22 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="jaeger_agent",monitor="global",type="jaeger"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="jaeger_agent",monitor="global",type="jaeger"}) >= 1
       )
   - alert: JaegerServiceJaegerAgentTrafficCessation
     for: 5m
     annotations:
-      title: >-
-        The jaeger_agent SLI of the jaeger service (`{{ $labels.stage }}` stage) has not received any
-        traffic in the past 30 minutes
+      title: The jaeger_agent SLI of the jaeger service (`{{ $labels.stage }}` stage)
+        has not received any traffic in the past 30 minutes
       description: |2
 
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: jaeger-main/jaeger-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/jaeger-main/jaeger-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/jaeger-main/jaeger-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2482124620'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2482124620"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -94,22 +123,18 @@ groups:
       alert_type: cause
       feature_category: not_owned
       pager: pagerduty
-      product_stage: not_owned
-      product_stage_group: not_owned
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'no'
-    expr: >
-      gitlab_component_ops:rate_30m{type="jaeger", component="jaeger_agent", stage="main", monitor="global"}
-      == 0
+      slo_alert: "no"
+      user_impacting: "no"
+    expr: |
+      gitlab_component_ops:rate_30m{type="jaeger", component="jaeger_agent", stage="main", monitor="global"} == 0
   - alert: JaegerServiceJaegerAgentTrafficAbsent
     for: 30m
     annotations:
-      title: >-
-        The jaeger_agent SLI of the jaeger service (`{{ $labels.stage }}` stage) has not reported any
-        traffic in the past 30 minutes
+      title: The jaeger_agent SLI of the jaeger service (`{{ $labels.stage }}` stage)
+        has not reported any traffic in the past 30 minutes
       description: |2
 
 
@@ -117,11 +142,10 @@ groups:
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
       grafana_dashboard_id: jaeger-main/jaeger-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/jaeger-main/jaeger-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/jaeger-main/jaeger-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2482124620'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2482124620"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -134,13 +158,11 @@ groups:
       alert_type: cause
       feature_category: not_owned
       pager: pagerduty
-      product_stage: not_owned
-      product_stage_group: not_owned
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'no'
+      slo_alert: "no"
+      user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_5m{type="jaeger", component="jaeger_agent", stage="main", monitor="global"} offset 1h
       unless
@@ -148,19 +170,15 @@ groups:
   - alert: JaegerServiceJaegerCollectorErrorSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The jaeger_collector SLI of the jaeger service (`{{ $labels.stage }}` stage) has an error rate
-        violating SLO
-      description: |2
-
-
+      title: The jaeger_collector SLI of the jaeger service (`{{ $labels.stage }}`
+        stage) has an error rate violating SLO
+      description: |
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: jaeger-main/jaeger-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/jaeger-main/jaeger-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/jaeger-main/jaeger-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '868709862'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "868709862"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -173,13 +191,12 @@ groups:
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
-      product_stage: not_owned
-      product_stage_group: not_owned
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'no'
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 1h
     expr: |
       (
         (
@@ -191,7 +208,43 @@ groups:
           gitlab_component_errors:ratio_5m{component="jaeger_collector",monitor="global",type="jaeger"}
           > (14.4 * 0.001000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="jaeger_collector",monitor="global",type="jaeger"}) >= 1
+      )
+  - alert: JaegerServiceJaegerCollectorErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The jaeger_collector SLI of the jaeger service (`{{ $labels.stage }}`
+        stage) has an error rate violating SLO
+      description: |
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: jaeger-main/jaeger-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/jaeger-main/jaeger-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "868709862"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(jaeger_collector_spans_dropped_total{type="jaeger", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/jaeger/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_errors:ratio_6h{component="jaeger_collector",monitor="global",type="jaeger"}
           > (6 * 0.001000)
@@ -204,24 +257,22 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="jaeger_collector",monitor="global",type="jaeger"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="jaeger_collector",monitor="global",type="jaeger"}) >= 1
       )
   - alert: JaegerServiceJaegerCollectorTrafficCessation
     for: 5m
     annotations:
-      title: >-
-        The jaeger_collector SLI of the jaeger service (`{{ $labels.stage }}` stage) has not received
-        any traffic in the past 30 minutes
+      title: The jaeger_collector SLI of the jaeger service (`{{ $labels.stage }}`
+        stage) has not received any traffic in the past 30 minutes
       description: |2
 
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: jaeger-main/jaeger-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/jaeger-main/jaeger-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/jaeger-main/jaeger-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '3936255088'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3936255088"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -234,22 +285,18 @@ groups:
       alert_type: cause
       feature_category: not_owned
       pager: pagerduty
-      product_stage: not_owned
-      product_stage_group: not_owned
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'no'
-    expr: >
-      gitlab_component_ops:rate_30m{type="jaeger", component="jaeger_collector", stage="main", monitor="global"}
-      == 0
+      slo_alert: "no"
+      user_impacting: "no"
+    expr: |
+      gitlab_component_ops:rate_30m{type="jaeger", component="jaeger_collector", stage="main", monitor="global"} == 0
   - alert: JaegerServiceJaegerCollectorTrafficAbsent
     for: 30m
     annotations:
-      title: >-
-        The jaeger_collector SLI of the jaeger service (`{{ $labels.stage }}` stage) has not reported
-        any traffic in the past 30 minutes
+      title: The jaeger_collector SLI of the jaeger service (`{{ $labels.stage }}`
+        stage) has not reported any traffic in the past 30 minutes
       description: |2
 
 
@@ -257,11 +304,10 @@ groups:
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
       grafana_dashboard_id: jaeger-main/jaeger-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/jaeger-main/jaeger-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/jaeger-main/jaeger-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '3936255088'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3936255088"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -274,13 +320,11 @@ groups:
       alert_type: cause
       feature_category: not_owned
       pager: pagerduty
-      product_stage: not_owned
-      product_stage_group: not_owned
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'no'
+      slo_alert: "no"
+      user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_5m{type="jaeger", component="jaeger_collector", stage="main", monitor="global"} offset 1h
       unless
@@ -288,19 +332,15 @@ groups:
   - alert: JaegerServiceJaegerQueryErrorSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The jaeger_query SLI of the jaeger service (`{{ $labels.stage }}` stage) has an error rate violating
-        SLO
-      description: |2
-
-
+      title: The jaeger_query SLI of the jaeger service (`{{ $labels.stage }}` stage)
+        has an error rate violating SLO
+      description: |
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: jaeger-main/jaeger-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/jaeger-main/jaeger-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/jaeger-main/jaeger-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '1085205452'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1085205452"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -313,13 +353,12 @@ groups:
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
-      product_stage: not_owned
-      product_stage_group: not_owned
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'no'
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 1h
     expr: |
       (
         (
@@ -331,7 +370,43 @@ groups:
           gitlab_component_errors:ratio_5m{component="jaeger_query",monitor="global",type="jaeger"}
           > (14.4 * 0.001000)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="jaeger_query",monitor="global",type="jaeger"}) >= 1
+      )
+  - alert: JaegerServiceJaegerQueryErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The jaeger_query SLI of the jaeger service (`{{ $labels.stage }}` stage)
+        has an error rate violating SLO
+      description: |
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: jaeger-main/jaeger-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/jaeger-main/jaeger-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1085205452"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(jaeger_query_requests_total{result="err", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/jaeger/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_errors:ratio_6h{component="jaeger_query",monitor="global",type="jaeger"}
           > (6 * 0.001000)
@@ -344,24 +419,22 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="jaeger_query",monitor="global",type="jaeger"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="jaeger_query",monitor="global",type="jaeger"}) >= 1
       )
   - alert: JaegerServiceJaegerQueryTrafficCessation
     for: 5m
     annotations:
-      title: >-
-        The jaeger_query SLI of the jaeger service (`{{ $labels.stage }}` stage) has not received any
-        traffic in the past 30 minutes
+      title: The jaeger_query SLI of the jaeger service (`{{ $labels.stage }}` stage)
+        has not received any traffic in the past 30 minutes
       description: |2
 
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: jaeger-main/jaeger-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/jaeger-main/jaeger-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/jaeger-main/jaeger-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '4040310493'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "4040310493"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -374,22 +447,18 @@ groups:
       alert_type: cause
       feature_category: not_owned
       pager: pagerduty
-      product_stage: not_owned
-      product_stage_group: not_owned
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'no'
-    expr: >
-      gitlab_component_ops:rate_30m{type="jaeger", component="jaeger_query", stage="main", monitor="global"}
-      == 0
+      slo_alert: "no"
+      user_impacting: "no"
+    expr: |
+      gitlab_component_ops:rate_30m{type="jaeger", component="jaeger_query", stage="main", monitor="global"} == 0
   - alert: JaegerServiceJaegerQueryTrafficAbsent
     for: 30m
     annotations:
-      title: >-
-        The jaeger_query SLI of the jaeger service (`{{ $labels.stage }}` stage) has not reported any
-        traffic in the past 30 minutes
+      title: The jaeger_query SLI of the jaeger service (`{{ $labels.stage }}` stage)
+        has not reported any traffic in the past 30 minutes
       description: |2
 
 
@@ -397,11 +466,10 @@ groups:
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
       grafana_dashboard_id: jaeger-main/jaeger-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/jaeger-main/jaeger-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/jaeger-main/jaeger-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '4040310493'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "4040310493"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -414,13 +482,11 @@ groups:
       alert_type: cause
       feature_category: not_owned
       pager: pagerduty
-      product_stage: not_owned
-      product_stage_group: not_owned
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'no'
+      slo_alert: "no"
+      user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_5m{type="jaeger", component="jaeger_query", stage="main", monitor="global"} offset 1h
       unless

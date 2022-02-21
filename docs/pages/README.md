@@ -14,20 +14,21 @@
 
 ## Troubleshooting Pointers
 
-* [../cloudflare/managing-traffic.md](../cloudflare/managing-traffic.md)
-* [../config_management/chef-troubleshooting.md](../config_management/chef-troubleshooting.md)
-* [../config_management/chef-vault.md](../config_management/chef-vault.md)
-* [../frontend/ban-netblocks-on-haproxy.md](../frontend/ban-netblocks-on-haproxy.md)
-* [../frontend/haproxy.md](../frontend/haproxy.md)
+* [Cloudflare: Managing Traffic](../cloudflare/managing-traffic.md)
+* [Chef troubleshooting](../config_management/chef-troubleshooting.md)
+* [Chef Vault Basics](../config_management/chef-vault.md)
+* [Blocking individual IPs and Net Blocks on HA Proxy](../frontend/ban-netblocks-on-haproxy.md)
+* [HAProxy management at GitLab](../frontend/haproxy.md)
 * [../gitaly/git-high-cpu-and-memory-usage.md](../gitaly/git-high-cpu-and-memory-usage.md)
-* [../gitaly/gitaly-unusual-activity.md](../gitaly/gitaly-unusual-activity.md)
-* [../monitoring/node_memory_alerts.md](../monitoring/node_memory_alerts.md)
-* [../onboarding/kibana-diagnosis.md](../onboarding/kibana-diagnosis.md)
-* [gitlab-pages.md](gitlab-pages.md)
-* [pages-domain-lookup.md](pages-domain-lookup.md)
-* [pages-letsencrypt.md](pages-letsencrypt.md)
-* [../patroni/pg_repack.md](../patroni/pg_repack.md)
-* [../uncategorized/deploycmd.md](../uncategorized/deploycmd.md)
+* [Gitaly unusual activity alert](../gitaly/gitaly-unusual-activity.md)
+* [Node memory alerts](../monitoring/node_memory_alerts.md)
+* [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
+* [Block specific pages domains through HAproxy](block-pages-domain.md)
+* [GitLab Pages returning 404](gitlab-pages.md)
+* [Determine The GitLab Project Associated with a Domain](pages-domain-lookup.md)
+* [Troubleshooting LetsEncrypt for Pages](pages-letsencrypt.md)
+* [Pg_repack using gitlab-pgrepack](../patroni/pg_repack.md)
+* [Deploy Cmd for Chatops](../uncategorized/deploycmd.md)
 <!-- END_MARKER -->
 
 

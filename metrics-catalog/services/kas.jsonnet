@@ -5,30 +5,28 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 metricsCatalog.serviceDefinition({
   type: 'kas',
   tier: 'sv',
+
+  tags: ['golang'],
+
   monitoringThresholds: {
     // apdexScore: 0.95,
     errorRatio: 0.9995,
   },
   serviceDependencies: {
+    api: true,
     gitaly: true,
+    kas: true,
+    praefect: true,
+    redis: true,
   },
   provisioning: {
     kubernetes: true,
     vms: false,
   },
-  kubeResources: {
-    kas: {
-      kind: 'Deployment',
-      containers: [
-        'kas',
-      ],
-    },
-  },
   serviceLevelIndicators: {
     grpc_requests: {
       userImpacting: true,
       featureCategory: 'kubernetes_management',
-      team: 'sre_coreinfra',
       local baseSelector = {
         job: 'gitlab-kas',
       },
@@ -40,7 +38,9 @@ metricsCatalog.serviceDefinition({
 
       errorRate: rateMetric(
         counter='grpc_server_handled_total',
-        selector=baseSelector { grpc_code: { nre: 'OK|FailedPrecondition|Unauthenticated|PermissionDenied' }, grpc_method: 'GetConfiguration' }
+        selector=baseSelector {
+          grpc_code: { nre: '^(OK|NotFound|FailedPrecondition|Unauthenticated|PermissionDenied|Canceled|DeadlineExceeded|ResourceExhausted)$' },
+        },
       ),
 
       significantLabels: ['grpc_method'],

@@ -1,11 +1,10 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
-local template = grafana.template;
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local prebuiltTemplates = import 'grafana/templates.libsonnet';
-local runnersService = (import 'metrics-catalog.libsonnet').getService('ci-runners');
-local keyMetrics = import 'key_metrics.libsonnet';
-local platformLinks = import '../../../dashboards/platform_links.libsonnet';
+local runnersService = (import 'servicemetrics/metrics-catalog.libsonnet').getService('ci-runners');
+local keyMetrics = import 'gitlab-dashboards/key_metrics.libsonnet';
+local platformLinks = import 'gitlab-dashboards/platform_links.libsonnet';
 
 local dashboardFilters = import './dashboard_filters.libsonnet';
 
@@ -46,7 +45,6 @@ local dashboard(title, tags=[], time_from='now-3h/m', includeStandardEnvironment
     ] + tags,
     time_from=time_from,
     time_to='now/m',
-    refresh='1m',
     graphTooltip='shared_crosshair',
     includeStandardEnvironmentAnnotations=includeStandardEnvironmentAnnotations,
     includeEnvironmentTemplate=true,

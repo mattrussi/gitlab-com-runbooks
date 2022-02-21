@@ -24,13 +24,14 @@
     { name: 'gprd', apiKey: 'secret', cluster: '' },
     { name: 'gprd', apiKey: 'secret', cluster: 'gprd-gitlab-gke' },
     { name: 'gstg', apiKey: 'secret', cluster: '' },
+    { name: 'gstg-ref', apiKey: 'secret', cluster: 'staging-ref-10k-hybrid' },
     { name: 'pre', apiKey: 'secret', cluster: '' },
     { name: 'testbed', apiKey: 'secret', cluster: '' },
     { name: 'thanos-rule', apiKey: 'secret', cluster: '' },
   ],
   // Generic webhook configs.
   webhookChannels: [
-    { name: 'slack_bridge-nonprod', url: 'http://example.com', token: 'secret' },
-    { name: 'slack_bridge-prod', url: 'http://example.com', token: 'secret' },
+    { name: 'slack_bridge-nonprod', url: 'http://staging.cloudfunctions.net/alertManagerBridge', token: 'staging_secret' },
+    { name: 'slack_bridge-prod', url: 'http://production.cloudfunctions.net/alertManagerBridge', token: 'production_secret' },
   ],
 }

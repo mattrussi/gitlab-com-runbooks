@@ -21,7 +21,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(grpc_server_handled_total{grpc_code!~"OK|FailedPrecondition|Unauthenticated|PermissionDenied",grpc_method="GetConfiguration",job="gitlab-kas"}[1m])
+          rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|FailedPrecondition|Unauthenticated|PermissionDenied|Canceled|DeadlineExceeded|ResourceExhausted)$",job="gitlab-kas"}[1m])
         )
       )
       or
@@ -50,7 +50,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(grpc_server_handled_total{grpc_code!~"OK|FailedPrecondition|Unauthenticated|PermissionDenied",grpc_method="GetConfiguration",job="gitlab-kas"}[5m])
+          rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|FailedPrecondition|Unauthenticated|PermissionDenied|Canceled|DeadlineExceeded|ResourceExhausted)$",job="gitlab-kas"}[5m])
         )
       )
       or
@@ -79,7 +79,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(grpc_server_handled_total{grpc_code!~"OK|FailedPrecondition|Unauthenticated|PermissionDenied",grpc_method="GetConfiguration",job="gitlab-kas"}[30m])
+          rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|FailedPrecondition|Unauthenticated|PermissionDenied|Canceled|DeadlineExceeded|ResourceExhausted)$",job="gitlab-kas"}[30m])
         )
       )
       or
@@ -108,7 +108,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(grpc_server_handled_total{grpc_code!~"OK|FailedPrecondition|Unauthenticated|PermissionDenied",grpc_method="GetConfiguration",job="gitlab-kas"}[1h])
+          rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|FailedPrecondition|Unauthenticated|PermissionDenied|Canceled|DeadlineExceeded|ResourceExhausted)$",job="gitlab-kas"}[1h])
         )
       )
       or
@@ -137,7 +137,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(grpc_server_handled_total{grpc_code!~"OK|FailedPrecondition|Unauthenticated|PermissionDenied",grpc_method="GetConfiguration",job="gitlab-kas"}[6h])
+          rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|FailedPrecondition|Unauthenticated|PermissionDenied|Canceled|DeadlineExceeded|ResourceExhausted)$",job="gitlab-kas"}[6h])
         )
       )
       or
@@ -152,8 +152,8 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: grpc_requests
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: sv
       type: kas
-    expr: '1'
+    expr: "1"

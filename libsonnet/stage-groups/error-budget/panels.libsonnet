@@ -1,11 +1,10 @@
-local metricsCatalog = import '../../../metrics-catalog/metrics-catalog.libsonnet';
 local sidekiqHelpers = import '../../../metrics-catalog/services/lib/sidekiq-helpers.libsonnet';
 local utils = import './utils.libsonnet';
-local basic = import 'grafana/basic.libsonnet';
-local queries = import 'stage-groups/error-budget/queries.libsonnet';
-local durationParser = import 'utils/duration-parser.libsonnet';
-
 local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libsonnet';
+local basic = import 'grafana/basic.libsonnet';
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
+local durationParser = import 'utils/duration-parser.libsonnet';
+local strings = import 'utils/strings.libsonnet';
 
 local baseSelector = {
   stage: '$stage',
@@ -54,16 +53,21 @@ local thresholds(slaTarget, range) =
       function(definition) thresholdStep(definition.color, definition[type].from),
       std.sort(definitions, function(definition) definition[type].from)
     );
-  local mapping(color, from, to, text) = {
-    from: from,
-    to: to,
-    color: color,
-    text: text,
-    type: 2,  // Range: https://grafana.com/docs/grafana/latest/packages_api/data/mappingtype/
+  local mapping(color, from, to, text, index) = {
+    type: 'range',
+    options: {
+      from: from,
+      to: to,
+      result: {
+        color: color,
+        index: index,
+        text: text,
+      },
+    },
   };
   local mappings(type) =
-    std.map(
-      function(definition) mapping(definition.color, definition[type].from, definition[type].to, definition.text),
+    std.mapWithIndex(
+      function(index, definition) mapping(definition.color, definition[type].from, definition[type].to, definition.text, index),
       definitions
     );
 
@@ -218,18 +222,55 @@ local explanationPanel(slaTarget, range, group) =
     },
   );
 
+local localUnitOverride(fieldName) = {
+  matcher: { id: 'byName', options: fieldName },
+  properties: [{
+    id: 'unit',
+    value: 'locale',
+  }],
+};
+
+// We're calculating an absolute number of failures from a failure rate
+// this means we don't have an exact precision, but only a request per second
+// number that we turn into an absolute number. To display a number of requests
+// over multiple days, the decimals don't matter anymore, so we're rounding them
+// up using `ceil`.
+//
+// The per-second-rates are sampled every minute, we assume that we continue
+// to receive the same number of requests per second until the next sample.
+// So we multiply the rate by the number of samples we don't have.
+// For example: the last sample said we were processing 2RPS, next time we'll
+// take a sample will be in 60s, so in that time we assume to process
+// 60 * 2 = 120 requests.
+// https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1123
+local rateToOperationCount(query) =
+  |||
+    ceil(
+      (
+        %(query)s
+      ) * 60
+    )
+  ||| % {
+    query: strings.indent(strings.chomp(query), 4),
+  };
+
 local violationRatePanel(queries, group) =
+  local selector = baseSelector {
+    stage_group: group,
+  };
+  local aggregationLabels = ['component', 'violation_type', 'type'];
   basic.table(
     title='Budget failures',
     description='Number of failures contributing to the budget send per component and type ',
     styles=null,  // https://github.com/grafana/grafonnet-lib/issues/240
-    query=queries.errorBudgetViolationRate(
-      baseSelector {
-        stage_group: group,
-      },
-      ['component', 'violation_type', 'type'],
-    ),
+    queries=[
+      rateToOperationCount(queries.errorBudgetViolationRate(selector, aggregationLabels)),
+      rateToOperationCount(queries.errorBudgetOperationRate(selector, aggregationLabels)),
+    ],
     transformations=[
+      {
+        id: 'merge',
+      },
       {
         id: 'organize',
         options: {
@@ -240,10 +281,13 @@ local violationRatePanel(queries, group) =
             violation_type: 0,
             type: 1,
             component: 2,
-            Value: 3,
+            'Value #A': 3,
+            'Value #B': 4,
           },
           renameByName: {
-            Value: 'failures past 28 days',
+            'Value #A': 'failures past 28 days',
+            'Value #B': 'measurements past 28 days',
+
           },
         },
       },
@@ -256,17 +300,22 @@ local violationRatePanel(queries, group) =
       }],
     },
     fieldConfig+: {
-      overrides+: [{
-        matcher: { id: 'byName', options: 'type' },
-        properties: [{
-          id: 'links',
-          value: [{
-            targetBlank: true,
-            title: '${__value.text} overview: See ${__data.fields.component} SLI for details',
-            url: 'https://dashboards.gitlab.net/d/${__value.text}-main',
+      overrides+: [
+        {
+          matcher: { id: 'byName', options: 'type' },
+          properties: [{
+            id: 'links',
+            value: [{
+              targetBlank: true,
+              title: '${__value.text} overview: See ${__data.fields.component} SLI for details',
+              url: 'https://dashboards.gitlab.net/d/${__value.text}-main',
+            }],
           }],
-        }],
-      }],
+        },
+      ] + [
+        localUnitOverride(fieldName)
+        for fieldName in ['failures past 28 days', 'measurements past 28 days']
+      ],
     },
   };
 
@@ -295,33 +344,12 @@ local violationRateExplanation =
 
       To find the endpoint that is attributing to the budget spend and a violation type
       we can use the logs over a 7 day range. Links for puma and sidekiq are available on the right.
-      These logs lists the endpoints that had the most violations over the past 7 days.
+      These logs list the endpoints that had the most violations over the past 7 days.
 
       The "Other" row is the sum of all the other violations excluding the top ones
       that are listed.
     |||,
   );
-
-local pumaThreshold =
-  local pumaServices = std.filter(
-    function(service)
-      std.objectHas(service.serviceLevelIndicators, 'puma') &&
-      std.objectHas(service.serviceLevelIndicators.puma, 'apdex'),
-    metricsCatalog.services
-  );
-  local pumaThresholds = std.map(
-    function(service)
-      service.serviceLevelIndicators.puma.apdex.satisfiedThreshold,
-    pumaServices,
-  );
-  local uniqueThresholds = std.set(pumaThresholds);
-  assert std.length(uniqueThresholds) == 1 :
-         |||
-    Multiple puma request thresholds not supported, please update the Kibana
-    visualisation for requests not meeting the apdex threshold. Perhaps
-    split up the table by json.type.
-  |||;
-  uniqueThresholds[0];
 
 local sidekiqDurationThresholdByFilter =
   local knownDurationThresholds = std.map(
@@ -370,9 +398,20 @@ local logLinks(featureCategories) =
         enabled: true,
         id: '3',
         params: {
-          customLabel: 'Operations over threshold',
+          customLabel: 'Operations over threshold (1s)',
           field: 'json.duration_s',
-          json: '{"script": "doc[\'json.duration_s\'].value >= ' + pumaThreshold + ' ? 1 : 0"}',
+          json: '{"script": "doc[\'json.duration_s\'].value >= 1 ? 1 : 0"}',
+        },
+        schema: 'metric',
+        type: 'sum',
+      },
+      {
+        enabled: true,
+        id: '4',
+        params: {
+          customLabel: 'Operations over error budget threshold (5s)',
+          field: 'json.duration_s',
+          json: '{"script": "doc[\'json.duration_s\'].value >= 5 ? 1 : 0"}',
         },
         schema: 'metric',
         type: 'sum',
@@ -411,12 +450,12 @@ local logLinks(featureCategories) =
     content=|||
       ##### [Puma Apdex](%(pumaApdexLink)s): slow requests
 
-      This shows the number of requests exceeding %(pumaThreshold)is request
-      duration per endpoint over the past 7 days.
+      This shows the number of requests exceeding the request duration thresholds
+      per endpoint over the past 7 days.
 
-      This is the only threshold at the moment. We're discussing making
-      it configurable in [this issue](%(thresholdsCounterIssue)s). Let us know
-      if you know of an endpoint that would need this kind of customization.
+      This shows all requests exceeding 1s and 5s durations. We will make this
+      take the configured [request urgency](%(requestUrgencyLink)s) into account in
+      [this issue](%(scalability1478)s).
 
       ##### [Puma Errors](%(pumaErrorsLink)s): failing requests
 
@@ -437,11 +476,11 @@ local logLinks(featureCategories) =
       its retries, this counts as 3 failures towards the budget.
     ||| % {
       pumaApdexLink: pumaApdexTable,
+      requestUrgencyLink: 'https://docs.gitlab.com/ee/development/application_slis/rails_request_apdex.html#adjusting-request-urgency',
+      scalability1478: 'https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1478',
       pumaErrorsLink: pumaErrorsTable,
       sidekiqErrorsLink: sidekiqErrorsTable,
       sidekiqApdexLink: sidekiqApdexTables,
-      pumaThreshold: pumaThreshold,
-      thresholdsCounterIssue: 'https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1099',
       sidekiqUrgentThreshold: sidekiqHelpers.slos.urgent.executionDurationSeconds,
       sidekiqNormalThreshold: sidekiqHelpers.slos.lowUrgency.executionDurationSeconds,
     },

@@ -28,7 +28,7 @@ local table(title, query, sortBy=[], transform_organize={}, transform_groupBy={}
 
 local versionsTable = table(
   title='GitLab Runner Versions',
-  query='gitlab_runner_version_info{instance=~"${runner_manager:pipe}"}',
+  query='gitlab_runner_version_info{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"}',
   sortBy=[{
     desc: true,
     displayName: 'version',
@@ -106,7 +106,7 @@ local versionsTable = table(
 
 local uptimeTable = table(
   'GitLab Runner Uptime',
-  query='time() - process_start_time_seconds{instance=~"${runner_manager:pipe}",job="runners-manager"}',
+  query='time() - process_start_time_seconds{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}",job="runners-manager"}',
   sortBy=[{
     asc: true,
     displayName: 'Uptime (last)',
@@ -162,6 +162,23 @@ local uptimeTable = table(
   },
 };
 
+local runnerManagersCounter =
+  basic.statPanel(
+    title=null,
+    panelTitle='Runner managers count',
+    color='green',
+    query='count by(shard) (gitlab_runner_version_info{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"})',
+    legendFormat='{{shard}}',
+    unit='short',
+    decimals=0,
+    colorMode='value',
+    instant=true,
+    interval='1d',
+    intervalFactor=1,
+    reducerFunction='last',
+    justifyMode='center',
+  );
+
 local notes = text.new(
   title='Notes',
   mode='markdown',
@@ -176,4 +193,5 @@ local notes = text.new(
   versions:: versionsTable,
   uptime:: uptimeTable,
   notes:: notes,
+  runnerManagersCounter:: runnerManagersCounter,
 }

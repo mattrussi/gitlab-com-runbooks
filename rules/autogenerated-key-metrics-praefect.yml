@@ -11,7 +11,7 @@ groups:
       type: praefect
     expr: |
       sum by (environment,stage) (
-        avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database="praefect_production",job="stackdriver"}[1m])
+        avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database=~"praefect_(canary|production)",database_id=~".+:praefect-db-.+",job="stackdriver"}[1m])
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -21,7 +21,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database="praefect_production",job="stackdriver",transaction_type="rollback"}[1m])
+          avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database=~"praefect_(canary|production)",database_id=~".+:praefect-db-.+",job="stackdriver",transaction_type="rollback"}[1m])
         )
       )
       or
@@ -38,11 +38,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_type="unary",job="praefect",le="0.5"}[1m])
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="0.5"}[1m])
         )
         +
         sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_type="unary",job="praefect",le="1"}[1m])
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="1"}[1m])
         )
       )
       /
@@ -54,7 +54,7 @@ groups:
       type: praefect
     expr: |
       sum by (environment,stage) (
-        rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_type="unary",job="praefect",le="+Inf"}[1m])
+        rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="+Inf"}[1m])
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -119,7 +119,7 @@ groups:
       type: praefect
     expr: |
       sum by (environment,stage) (
-        avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database="praefect_production",job="stackdriver"}[5m])
+        avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database=~"praefect_(canary|production)",database_id=~".+:praefect-db-.+",job="stackdriver"}[5m])
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -129,7 +129,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database="praefect_production",job="stackdriver",transaction_type="rollback"}[5m])
+          avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database=~"praefect_(canary|production)",database_id=~".+:praefect-db-.+",job="stackdriver",transaction_type="rollback"}[5m])
         )
       )
       or
@@ -146,11 +146,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_type="unary",job="praefect",le="0.5"}[5m])
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="0.5"}[5m])
         )
         +
         sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_type="unary",job="praefect",le="1"}[5m])
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="1"}[5m])
         )
       )
       /
@@ -162,7 +162,7 @@ groups:
       type: praefect
     expr: |
       sum by (environment,stage) (
-        rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_type="unary",job="praefect",le="+Inf"}[5m])
+        rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="+Inf"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -227,7 +227,7 @@ groups:
       type: praefect
     expr: |
       sum by (environment,stage) (
-        avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database="praefect_production",job="stackdriver"}[30m])
+        avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database=~"praefect_(canary|production)",database_id=~".+:praefect-db-.+",job="stackdriver"}[30m])
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -237,7 +237,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database="praefect_production",job="stackdriver",transaction_type="rollback"}[30m])
+          avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database=~"praefect_(canary|production)",database_id=~".+:praefect-db-.+",job="stackdriver",transaction_type="rollback"}[30m])
         )
       )
       or
@@ -254,11 +254,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_type="unary",job="praefect",le="0.5"}[30m])
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="0.5"}[30m])
         )
         +
         sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_type="unary",job="praefect",le="1"}[30m])
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="1"}[30m])
         )
       )
       /
@@ -270,7 +270,7 @@ groups:
       type: praefect
     expr: |
       sum by (environment,stage) (
-        rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_type="unary",job="praefect",le="+Inf"}[30m])
+        rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="+Inf"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -335,7 +335,7 @@ groups:
       type: praefect
     expr: |
       sum by (environment,stage) (
-        avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database="praefect_production",job="stackdriver"}[1h])
+        avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database=~"praefect_(canary|production)",database_id=~".+:praefect-db-.+",job="stackdriver"}[1h])
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -345,7 +345,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database="praefect_production",job="stackdriver",transaction_type="rollback"}[1h])
+          avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database=~"praefect_(canary|production)",database_id=~".+:praefect-db-.+",job="stackdriver",transaction_type="rollback"}[1h])
         )
       )
       or
@@ -362,11 +362,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_type="unary",job="praefect",le="0.5"}[1h])
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="0.5"}[1h])
         )
         +
         sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_type="unary",job="praefect",le="1"}[1h])
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="1"}[1h])
         )
       )
       /
@@ -378,7 +378,7 @@ groups:
       type: praefect
     expr: |
       sum by (environment,stage) (
-        rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_type="unary",job="praefect",le="+Inf"}[1h])
+        rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="+Inf"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -443,7 +443,7 @@ groups:
       type: praefect
     expr: |
       sum by (environment,stage) (
-        avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database="praefect_production",job="stackdriver"}[6h])
+        avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database=~"praefect_(canary|production)",database_id=~".+:praefect-db-.+",job="stackdriver"}[6h])
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -453,7 +453,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database="praefect_production",job="stackdriver",transaction_type="rollback"}[6h])
+          avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database=~"praefect_(canary|production)",database_id=~".+:praefect-db-.+",job="stackdriver",transaction_type="rollback"}[6h])
         )
       )
       or
@@ -470,11 +470,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_type="unary",job="praefect",le="0.5"}[6h])
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="0.5"}[6h])
         )
         +
         sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_type="unary",job="praefect",le="1"}[6h])
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="1"}[6h])
         )
       )
       /
@@ -486,7 +486,7 @@ groups:
       type: praefect
     expr: |
       sum by (environment,stage) (
-        rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PostReceiveHook|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|UpdateHook",grpc_type="unary",job="praefect",le="+Inf"}[6h])
+        rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="+Inf"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -547,24 +547,24 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: praefect_cloudsql
-      regional_aggregation: 'no'
-      service_aggregation: 'no'
+      regional_aggregation: "no"
+      service_aggregation: "no"
       tier: stor
       type: praefect
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: proxy
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: stor
       type: praefect
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: replicator_queue
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: stor
       type: praefect
-    expr: '1'
+    expr: "1"

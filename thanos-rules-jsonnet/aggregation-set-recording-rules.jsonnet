@@ -1,10 +1,24 @@
 local aggregationSets = import 'aggregation-sets.libsonnet';
 local aggregationSetTransformer = import 'servicemetrics/aggregation-set-transformer.libsonnet';
+local applicationSlis = (import 'gitlab-slis/library.libsonnet').all;
+local applicationSliAggregations = import 'gitlab-slis/aggregation-sets.libsonnet';
+
+local defaultsForRecordingRuleGroup = { partial_response_strategy: 'warn' };
 
 local outputPromYaml(groups) =
   std.manifestYamlDoc({
     groups: groups,
   });
+
+local groupsForApplicationSli(sli) =
+  local targetAggregationSet = applicationSliAggregations.targetAggregationSet(sli);
+  local sourceAggregationSet = applicationSliAggregations.sourceAggregationSet(sli);
+  aggregationSetTransformer.generateRecordingRuleGroups(
+    sourceAggregationSet=sourceAggregationSet,
+    targetAggregationSet=targetAggregationSet,
+    extrasForGroup=defaultsForRecordingRuleGroup
+  );
+
 
 /**
  * This file defines all the aggregation recording rules that will aggregate in Thanos to a single global view
@@ -14,30 +28,25 @@ local outputPromYaml(groups) =
    * Aggregates from multiple "split-brain" prometheus SLIs to a global/single-view SLI metrics
    */
   'aggregated-component-metrics.yml':
-    outputPromYaml([{
-      name: aggregationSets.globalSLIs.name,
-      interval: '1m',
-      partial_response_strategy: 'warn',
-      rules: aggregationSetTransformer.generateRecordingRules(
+    outputPromYaml(
+      aggregationSetTransformer.generateRecordingRuleGroups(
         sourceAggregationSet=aggregationSets.promSourceSLIs,
-        targetAggregationSet=aggregationSets.globalSLIs
-      ),
-    }]),
+        targetAggregationSet=aggregationSets.componentSLIs,
+        extrasForGroup=defaultsForRecordingRuleGroup
+
+      )
+    ),
 
   /**
    * Aggregates from multiple "split-brain" prometheus SLIs to a global/single-view service-level aggregated metrics
    */
   'aggregated-service-metrics.yml':
     outputPromYaml(
-      [{
-        name: aggregationSets.serviceAggregatedSLIs.name,
-        interval: '1m',
-        partial_response_strategy: 'warn',
-        rules: aggregationSetTransformer.generateRecordingRules(
-          sourceAggregationSet=aggregationSets.promSourceSLIs,
-          targetAggregationSet=aggregationSets.serviceAggregatedSLIs
-        ),
-      }]
+      aggregationSetTransformer.generateRecordingRuleGroups(
+        sourceAggregationSet=aggregationSets.promSourceSLIs,
+        targetAggregationSet=aggregationSets.serviceSLIs,
+        extrasForGroup=defaultsForRecordingRuleGroup
+      )
     ),
 
   /**
@@ -45,15 +54,11 @@ local outputPromYaml(groups) =
    */
   'aggregated-sli-node-metrics.yml':
     outputPromYaml(
-      [{
-        name: aggregationSets.globalNodeSLIs.name,
-        interval: '1m',
-        partial_response_strategy: 'warn',
-        rules: aggregationSetTransformer.generateRecordingRules(
-          sourceAggregationSet=aggregationSets.promSourceNodeAggregatedSLIs,
-          targetAggregationSet=aggregationSets.globalNodeSLIs
-        ),
-      }]
+      aggregationSetTransformer.generateRecordingRuleGroups(
+        sourceAggregationSet=aggregationSets.promSourceNodeComponentSLIs,
+        targetAggregationSet=aggregationSets.nodeComponentSLIs,
+        extrasForGroup=defaultsForRecordingRuleGroup
+      ),
     ),
 
   /**
@@ -62,15 +67,11 @@ local outputPromYaml(groups) =
    */
   'aggregated-service-node-metrics.yml':
     outputPromYaml(
-      [{
-        name: aggregationSets.serviceNodeAggregatedSLIs.name,
-        interval: '1m',
-        partial_response_strategy: 'warn',
-        rules: aggregationSetTransformer.generateRecordingRules(
-          sourceAggregationSet=aggregationSets.promSourceNodeAggregatedSLIs,
-          targetAggregationSet=aggregationSets.serviceNodeAggregatedSLIs
-        ),
-      }]
+      aggregationSetTransformer.generateRecordingRuleGroups(
+        sourceAggregationSet=aggregationSets.promSourceNodeComponentSLIs,
+        targetAggregationSet=aggregationSets.nodeServiceSLIs,
+        extrasForGroup=defaultsForRecordingRuleGroup
+      ),
     ),
 
   /**
@@ -78,15 +79,12 @@ local outputPromYaml(groups) =
    */
   'aggregated-sli-regional-metrics.yml':
     outputPromYaml(
-      [{
-        name: aggregationSets.regionalSLIs.name,
-        interval: '1m',
-        partial_response_strategy: 'warn',
-        rules: aggregationSetTransformer.generateRecordingRules(
-          sourceAggregationSet=aggregationSets.promSourceSLIs,
-          targetAggregationSet=aggregationSets.regionalSLIs
-        ),
-      }]
+      aggregationSetTransformer.generateRecordingRuleGroups(
+        sourceAggregationSet=aggregationSets.promSourceSLIs,
+        targetAggregationSet=aggregationSets.regionalComponentSLIs,
+        extrasForGroup=defaultsForRecordingRuleGroup
+
+      ),
     ),
 
   /**
@@ -94,41 +92,54 @@ local outputPromYaml(groups) =
    */
   'aggregated-service-regional-metrics.yml':
     outputPromYaml(
-      [{
-        name: aggregationSets.serviceNodeAggregatedSLIs.name,
-        interval: '1m',
-        partial_response_strategy: 'warn',
-        rules: aggregationSetTransformer.generateRecordingRules(
-          sourceAggregationSet=aggregationSets.promSourceSLIs,
-          targetAggregationSet=aggregationSets.serviceRegionalAggregatedSLIs
-        ),
-      }]
+      aggregationSetTransformer.generateRecordingRuleGroups(
+        sourceAggregationSet=aggregationSets.promSourceSLIs,
+        targetAggregationSet=aggregationSets.regionalServiceSLIs,
+        extrasForGroup=defaultsForRecordingRuleGroup
+
+      ),
     ),
 
   'aggregated-feature-category-metrics.yml':
     outputPromYaml(
-      [{
-        name: aggregationSets.globalFeatureCategorySLIs.name,
-        interval: '1m',
-        partial_response_strategy: 'warn',
-        rules: aggregationSetTransformer.generateRecordingRules(
-          sourceAggregationSet=aggregationSets.featureCategorySourceSLIs,
-          targetAggregationSet=aggregationSets.globalFeatureCategorySLIs
-        ),
-      }]
+      aggregationSetTransformer.generateRecordingRuleGroups(
+        sourceAggregationSet=aggregationSets.featureCategorySourceSLIs,
+        targetAggregationSet=aggregationSets.featureCategorySLIs,
+        extrasForGroup=defaultsForRecordingRuleGroup
+
+      ),
+    ),
+
+  'aggregated-service-component-stage-group-metrics.yml':
+    outputPromYaml(
+      aggregationSetTransformer.generateRecordingRuleGroups(
+        sourceAggregationSet=aggregationSets.featureCategorySourceSLIs,
+        targetAggregationSet=aggregationSets.serviceComponentStageGroupSLIs,
+        extrasForGroup=defaultsForRecordingRuleGroup
+
+      ),
     ),
 
   'aggregated-stage-group-metrics.yml':
     outputPromYaml(
-      [{
-        name: aggregationSets.globalStageGroupSLIs.name,
-        interval: '1m',
-        partial_response_strategy: 'warn',
-        rules: aggregationSetTransformer.generateRecordingRules(
-          sourceAggregationSet=aggregationSets.globalFeatureCategorySLIs,
-          targetAggregationSet=aggregationSets.globalStageGroupSLIs
-        ),
-      }]
+      aggregationSetTransformer.generateRecordingRuleGroups(
+        sourceAggregationSet=aggregationSets.featureCategorySourceSLIs,
+        targetAggregationSet=aggregationSets.stageGroupSLIs,
+        extrasForGroup=defaultsForRecordingRuleGroup
+      ),
     ),
 
+  // Application SLIs not used in the service catalog  will be aggregated here.
+  // These aggregations allow us to see what the metrics look like before adding
+  // an them, so we can validate they would not trigger alerts.
+  // If the application SLI is added to the service catalog, it will automatically
+  // generate `sli_aggregation:` recordings that can be reused everywhere. So no
+  // real need to duplicate them.
+  'aggregated-application-sli-metrics.yml':
+    outputPromYaml(
+      std.flatMap(
+        groupsForApplicationSli,
+        applicationSlis
+      ),
+    ),
 }

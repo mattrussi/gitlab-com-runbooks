@@ -43,7 +43,7 @@ If you need to go deeper, you can log in into the desired instance and use the `
 ```
 Total DISK READ :       0.00 B/s | Total DISK WRITE :       0.00 B/s
 Actual DISK READ:       0.00 B/s | Actual DISK WRITE:       0.00 B/s
-  PID  PRIO  USER     DISK READ  DISK WRITE  SWAPIN     IO>    COMMAND                                                                                                               
+  PID  PRIO  USER     DISK READ  DISK WRITE  SWAPIN     IO>    COMMAND
     1 be/4 root          0.00 B      0.00 B  0.00 %  0.00 % systemd --system --deserialize 28
     2 be/4 root          0.00 B      0.00 B  0.00 %  0.00 % [kthreadd]
     4 be/0 root          0.00 B      0.00 B  0.00 %  0.00 % [kworker/0:0H]
@@ -67,8 +67,8 @@ Actual DISK READ:       0.00 B/s | Actual DISK WRITE:       0.00 B/s
 And if you found an specific `pid` that is using many IO%, you can execute `sudo gitlab-psql` and check what is that pid executing with:
 
 ```sql
- SELECT * from pg_stat_activity where pid=<pid from iotop> 
- 
+ SELECT * from pg_stat_activity where pid=<pid from iotop>
+
 ```
 
 Disk saturation may also be investigated using _iotop_ tool:
@@ -107,7 +107,7 @@ sdb               0.00   133.00  903.00 1647.00  8180.00 22492.00    24.06     1
 
 
 ### Check for network anomalies
-Correct network traffic is critical in any cloud enviroment. Check the [Network utilization](https://prometheus.gprd.gitlab.net/new/graph?g0.expr=sum(rate(node_network_receive_bytes_total%7Btype%3D%22patroni%22%7D%5B5m%5D))%20by%20(instance)&g0.tab=0&g0.stacked=0&g0.range_input=2h&g1.expr=sum(rate(node_network_transmit_bytes_total%7Btype%3D%22patroni%22%7D%5B5m%5D))%20by%20(instance)&g1.tab=0&g1.stacked=0&g1.range_input=2h&g2.expr=rate(node_netstat_Tcp_RetransSegs%7Btype%3D%22patroni%22%7D%5B5m%5D)&g2.tab=0&g2.stacked=0&g2.range_input=2h) graph to check the network of patroni hosts. 
+Correct network traffic is critical in any cloud enviroment. Check the [Network utilization](https://prometheus.gprd.gitlab.net/new/graph?g0.expr=sum(rate(node_network_receive_bytes_total%7Btype%3D%22patroni%22%7D%5B5m%5D))%20by%20(instance)&g0.tab=0&g0.stacked=0&g0.range_input=2h&g1.expr=sum(rate(node_network_transmit_bytes_total%7Btype%3D%22patroni%22%7D%5B5m%5D))%20by%20(instance)&g1.tab=0&g1.stacked=0&g1.range_input=2h&g2.expr=rate(node_netstat_Tcp_RetransSegs%7Btype%3D%22patroni%22%7D%5B5m%5D)&g2.tab=0&g2.stacked=0&g2.range_input=2h) graph to check the network of patroni hosts.
 This panel includes (for patroni hosts):
 - Incoming traffic
 - Outbound traffic
@@ -131,10 +131,10 @@ In general, when those differences are not easy to explain, its because on some 
 
 ### Check for slow queries
 
-[This board](https://dashboards.gitlab.com/d/000000278/postgresql-slow-queries?orgId=1&refresh=1m) contains information about how many queries took more than 5 seconds.
+[This board](https://dashboards.gitlab.com/d/000000278/postgresql-slow-queries?orgId=1) contains information about how many queries took more than 5 seconds.
 ![](img/patroni-slow-queries.png)
 
-Check the [PostgreSQL queries](https://dashboards.gitlab.com/d/000000153/postgresql-queries?orgId=1&refresh=1m&from=now-3h&to=now&var-environment=gprd&var-type=patroni&var-fqdn=patroni-01-db-gprd.c.gitlab-production.internal&var-prometheus=Global) board to check for an increasing rate of slow queries (`Slow queries` graph). You can also check for blocked queries (`Blocked Queries` graph). 
+Check the [PostgreSQL queries](https://dashboards.gitlab.com/d/000000153/postgresql-queries?orgId=1&from=now-3h&to=now&var-environment=gprd&var-type=patroni&var-fqdn=patroni-01-db-gprd.c.gitlab-production.internal&var-prometheus=Global) board to check for an increasing rate of slow queries (`Slow queries` graph). You can also check for blocked queries (`Blocked Queries` graph).
 
 ![](img/patroni-postgresql-queries.png)
 
@@ -142,11 +142,11 @@ For troubleshooting blocked queries, see [this runbook](postgresql-locking.md)
 
 
 ### Checkpoint activity
-Checkpoint is the act of pushing all the write buffers to disk. A sudden increase of write activity (like indexing, repacking, etc) may also increase the rate of checkpoints, and can cause the system to slow down. You can see [this graph](https://dashboards.gitlab.com/d/000000224/postgresql-bloat?viewPanel=35&orgId=1&refresh=5m&from=now-1h&to=now) to see how often checkpoints are taking place. Focus on the current leader. If checkpoints do ocurr too often (more than [checkpoint_warning](https://postgresqlco.nf/en/doc/param/checkpoint_warning/11/)) you will see a message in the logs, similar to
+Checkpoint is the act of pushing all the write buffers to disk. A sudden increase of write activity (like indexing, repacking, etc) may also increase the rate of checkpoints, and can cause the system to slow down. You can see [this graph](https://dashboards.gitlab.com/d/000000224/postgresql-bloat?viewPanel=35&orgId=1&from=now-1h&to=now) to see how often checkpoints are taking place. Focus on the current leader. If checkpoints do ocurr too often (more than [checkpoint_warning](https://postgresqlco.nf/en/doc/param/checkpoint_warning/11/)) you will see a message in the logs, similar to
 
 ``` LOG:  checkpoints are occurring too frequently (8 seconds apart) ```
 
-Althoug this is more like a warning message, it can be OK under heavy write activity. 
+Althoug this is more like a warning message, it can be OK under heavy write activity.
 
 
 ### Check the load from queries
@@ -157,7 +157,7 @@ Too much concurrent activity can affect performance. Refer to [this runbook](pos
 ### Checks for pgBouncer
 
 #### Waiting clients
-The [PgBouncer Overview](https://dashboards.gitlab.com/d/PwlB97Jmk/pgbouncer-overview?orgId=1&from=now-3h&to=now) shows pgBouncer related information. 
+The [PgBouncer Overview](https://dashboards.gitlab.com/d/PwlB97Jmk/pgbouncer-overview?orgId=1&from=now-3h&to=now) shows pgBouncer related information.
 
 ![](img/pgbouncer-overview.png)
 
@@ -170,20 +170,19 @@ When troubleshooting, check that:
 ` is consistently close to 100%, performance of pgBouncer will decrease. You can use the `SHOW CLIENTS` command to check where the clients are connecting from for a start:
 
 ```
-:~$ sudo pgb-console 
+:~$ sudo pgb-console
 psql (11.7 (Ubuntu 11.7-2.pgdg16.04+1), server 1.12.0/bouncer)
 Type "help" for help.
 
 pgbouncer=# show clients;
 
- type |   user    |      database       | state  |     addr     | port  | local_addr | local_port |      connect_time       |      request_time       |  wait  | wait_us | close_needed |      ptr       |   link   | remote_pid | tls 
+ type |   user    |      database       | state  |     addr     | port  | local_addr | local_port |      connect_time       |      request_time       |  wait  | wait_us | close_needed |      ptr       |   link   | remote_pid | tls
 ------+-----------+---------------------+--------+--------------+-------+------------+------------+-------------------------+-------------------------+--------+---------+--------------+----------------+----------+------------+-----
- C    | gitlab    | gitlabhq_production | active | 10.218.5.2   | 35140 | 10.217.4.5 |       6432 | 2020-07-03 10:59:50 UTC | 2020-07-03 12:46:38 UTC |      0 |       0 |            0 | 0x7fefc1d29880 |          |          0 | 
- C    | gitlab    | gitlabhq_production | active | 10.220.4.33  | 43228 | 10.217.4.5 |       6432 | 2020-07-07 18:25:01 UTC | 2020-07-07 19:32:06 UTC |      0 |       0 |            0 | 0x7fefc1d48270 |          |          0 | 
- C    | gitlab    | gitlabhq_production | active | 10.220.8.9   | 48214 | 10.217.4.5 |       6432 | 2020-07-07 18:25:59 UTC | 2020-07-07 19:31:28 UTC |      0 |       0 |            0 | 0xee0ed8       |          |          0 | 
- C    | gitlab    | gitlabhq_production | active | 10.220.8.12  | 56232 | 10.217.4.5 |       6432 | 2020-07-07 18:26:00 UTC | 2020-07-07 19:32:24 UTC |      0 |       0 |            0 | 0x7fefc1d48ad0 |          |          0 | 
- C    | gitlab    | gitlabhq_production | active | 10.220.9.209 | 36196 | 10.217.4.5 |       6432 | 2020-07-07 18:26:47 UTC | 2020-07-07 19:32:36 UTC |      0 |       0 |            0 | 0x7fefc1ce6df8 |          |          0 | 
- C    | gitlab    | gitlabhq_production | active | 10.220.4.33  | 33986 | 10.217.4.5 |       6432 | 2020-07-07 18:26:51 UTC | 2020-07-07 19:32:38 UTC |      0 |       0 |            0 | 0x7fefc1d43928 |          |          0 | 
- C    | gitlab    | gitlabhq_production | active | 10.220.8.6   | 46466 | 10.217.4.5 |       6432 | 2020-07-07 18:27:34 UTC | 2020-07-07 19:31:48 UTC |      0 |       0 |            0 | 0x7fefc1d47e40 |          |          0 | 
- C    | gitlab    | gitlabhq_production | active | 10.218.5.2   | 57862 | 10.217.4.5 |       6432 | 2020-07-07 18:27:44 UTC | 2020-07-07 18:27:44 UTC |      0 |       0 |           
-```
+ C    | gitlab    | gitlabhq_production | active | 10.218.5.2   | 35140 | 10.217.4.5 |       6432 | 2020-07-03 10:59:50 UTC | 2020-07-03 12:46:38 UTC |      0 |       0 |            0 | 0x7fefc1d29880 |          |          0 |
+ C    | gitlab    | gitlabhq_production | active | 10.220.4.33  | 43228 | 10.217.4.5 |       6432 | 2020-07-07 18:25:01 UTC | 2020-07-07 19:32:06 UTC |      0 |       0 |            0 | 0x7fefc1d48270 |          |          0 |
+ C    | gitlab    | gitlabhq_production | active | 10.220.8.9   | 48214 | 10.217.4.5 |       6432 | 2020-07-07 18:25:59 UTC | 2020-07-07 19:31:28 UTC |      0 |       0 |            0 | 0xee0ed8       |          |          0 |
+ C    | gitlab    | gitlabhq_production | active | 10.220.8.12  | 56232 | 10.217.4.5 |       6432 | 2020-07-07 18:26:00 UTC | 2020-07-07 19:32:24 UTC |      0 |       0 |            0 | 0x7fefc1d48ad0 |          |          0 |
+ C    | gitlab    | gitlabhq_production | active | 10.220.9.209 | 36196 | 10.217.4.5 |       6432 | 2020-07-07 18:26:47 UTC | 2020-07-07 19:32:36 UTC |      0 |       0 |            0 | 0x7fefc1ce6df8 |          |          0 |
+ C    | gitlab    | gitlabhq_production | active | 10.220.4.33  | 33986 | 10.217.4.5 |       6432 | 2020-07-07 18:26:51 UTC | 2020-07-07 19:32:38 UTC |      0 |       0 |            0 | 0x7fefc1d43928 |          |          0 |
+ C    | gitlab    | gitlabhq_production | active | 10.220.8.6   | 46466 | 10.217.4.5 |       6432 | 2020-07-07 18:27:34 UTC | 2020-07-07 19:31:48 UTC |      0 |       0 |            0 | 0x7fefc1d47e40 |          |          0 |
+ C    | gitlab    | gitlabhq_production | active | 10.218.5.2   | 57862 | 10.217.4.5 |       6432 | 2020-07-07 18:27:44 UTC | 2020-07-07 18:27:44 UTC |      0 |       0 |

@@ -1,5 +1,7 @@
 local stageGroupDashboards = import './stage-group-dashboards.libsonnet';
-local test = import 'github.com/yugui/jsonnetunit/jsonnetunit/test.libsonnet';
+local matcher = import 'jsonnetunit/matcher.libsonnet';
+local stages = import 'service-catalog/stages.libsonnet';
+local test = import 'test.libsonnet';
 
 local errorBudgetTitles = [
   'Error Budget (past 28 days)',
@@ -57,12 +59,22 @@ test.suite({
 
   testTitle: {
     actual: stageGroupDashboards.dashboard('geo').stageGroupDashboardTrailer().title,
-    expect: 'Group dashboard: enablement (Geo)',
+    expect: 'Geo: Group dashboard',
+  },
+
+  testTags: {
+    actual: stageGroupDashboards.dashboard('geo').stageGroupDashboardTrailer().tags,
+    expect: ['feature_category', 'stage_group:Geo'],
   },
 
   testDefaultComponents: {
     actual: panelTitles(stageGroupDashboards.dashboard('geo').stageGroupDashboardTrailer()),
     expect: errorBudgetTitles + allComponentTitles,
+  },
+
+  testLinks: {
+    actual: std.map(function(links) links.title, stageGroupDashboards.dashboard('geo').links),
+    expect: ['Group Dashboards', 'API Detail', 'Web Detail', 'Git Detail'],
   },
 
   testDisplayEmptyGuidance: {
@@ -169,5 +181,64 @@ test.suite({
       'environment',
       'stage',
     ],
+  },
+
+  testErrorBudgetDetailDashboard: {
+    actual: panelTitles(stageGroupDashboards.errorBudgetDetailDashboard({
+      key: 'project_management',
+      name: 'Project Management',
+      stage: 'plan',
+      feature_categories: ['team_planning', 'planning_analytics'],
+    })),
+    expect: [
+      'Error Budget (past 28 days)',
+      'Availability',
+      'Budget remaining',
+      'Budget spent',
+      'Info',
+      'Budget spend attribution',
+      '🌡️ Aggregated Service Level Indicators (𝙎𝙇𝙄𝙨)',
+      'Overall Apdex',
+      'Overall Error Ratio',
+      'Overall RPS - Requests per Second',
+      '🔬 Service Level Indicators',
+      '🔬 SLI Detail: graphql_queries',
+      '🔬 SLI Detail: puma',
+      '🔬 SLI Detail: rails_requests',
+    ],
+  },
+
+  testErrorBudgetDetailLinks: {
+    actual: std.map(
+      function(links) links.title,
+      stageGroupDashboards.dashboard({
+        key: 'project_management',
+        name: 'Project Management',
+        stage: 'plan',
+        feature_categories: ['team_planning', 'planning_analytics'],
+      }).links
+    ),
+    expect: ['Group Dashboards', 'API Detail', 'Web Detail', 'Git Detail'],
+  },
+
+
+  testDashboardUidTooLong: {
+    actual: stageGroupDashboards.dashboardUid('authentication_and_authorization'),
+    expect: 'authentication_and_authoriz',
+  },
+
+  testDashboardUidTooLongWithPrefix: {
+    actual: stageGroupDashboards.dashboardUid('detail-authentication_and_authorization'),
+    expect: 'detail-authentication_and_a',
+  },
+
+  testDashboardUidNoChange: {
+    actual: stageGroupDashboards.dashboardUid('access'),
+    expect: 'access',
+  },
+
+  testDashboardUidAllUnique: {
+    actual: std.map(function(s) s.key, stages.stageGroupsWithoutNotOwned),
+    expectUniqueMappings: stageGroupDashboards.dashboardUid,
   },
 })

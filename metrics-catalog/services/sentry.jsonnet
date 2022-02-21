@@ -2,12 +2,24 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local combined = metricsCatalog.combined;
+local maturityLevels = import 'service-maturity/levels.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'sentry',
   tier: 'inf',
+
+  tags: [
+    // postgres tag implies the service is monitored with the postgres_exporter recipe from
+    // https://gitlab.com/gitlab-cookbooks/gitlab-exporters
+    'postgres',
+
+    // postgres_with_primaries tags implies the service has primaries.
+    // this is not the case for -archive and -delayed instances.
+    'postgres_with_primaries',
+  ],
+
   monitoringThresholds: {
-    apdexScore: 0.999,
+    apdexScore: 0.99,
     // Setting the Error SLO at 99% because we see high transaction rollback rates
     // TODO: investigate
     errorRatio: 0.99,
@@ -26,7 +38,6 @@ metricsCatalog.serviceDefinition({
     sentry_events: {
       userImpacting: false,
       featureCategory: 'not_owned',
-      team: 'sre_observability',
       description: |||
         Sentry is an application monitoring platform.
          This SLI monitors the sentry API. 5xx responses are considered failures.
@@ -60,7 +71,6 @@ metricsCatalog.serviceDefinition({
       userImpacting: false,
       serviceAggregation: false,
       featureCategory: 'not_owned',
-      team: 'sre_observability',
       description: |||
         Represents all SQL transactions issued to the sentry Postgres instance.
         Errors represent transaction rollbacks.
@@ -89,4 +99,7 @@ metricsCatalog.serviceDefinition({
     },
 
   },
+  skippedMaturityCriteria: maturityLevels.skip({
+    'Service exists in the dependency graph': 'Sentry is an independent internal observability tool',
+  }),
 })

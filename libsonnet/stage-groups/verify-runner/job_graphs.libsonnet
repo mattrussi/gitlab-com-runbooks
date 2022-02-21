@@ -20,7 +20,7 @@ local aggregationTimeSeries(title, query, aggregators=[]) =
 local runningJobsGraph(aggregators=[]) =
   aggregationTimeSeries(
     'Jobs running on GitLab Inc. runners (by %s)',
-    'sum by(%s) (gitlab_runner_jobs{instance=~"${runner_manager:pipe}"})',
+    'sum by(%s) (gitlab_runner_jobs{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"})',
     aggregators,
   );
 
@@ -30,7 +30,7 @@ local runnerJobFailuresGraph(aggregators=[]) =
     |||
       sum by (%s)
       (
-        increase(gitlab_runner_failed_jobs_total{instance=~"${runner_manager:pipe}",failure_reason=~"$runner_job_failure_reason"}[$__interval])
+        increase(gitlab_runner_failed_jobs_total{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}",failure_reason=~"$runner_job_failure_reason"}[$__interval])
       )
     |||,
     aggregators,
@@ -41,7 +41,7 @@ local startedJobsGraph(aggregators=[]) =
     'Jobs started on runners (by %s)',
     |||
       sum by(%s) (
-        increase(gitlab_runner_jobs_total{instance=~"${runner_manager:pipe}"}[$__interval])
+        increase(gitlab_runner_jobs_total{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"}[$__interval])
       )
     |||,
     aggregators,
@@ -51,7 +51,7 @@ local startedJobsGraph(aggregators=[]) =
     targets+: [{
       expr: |||
         avg (
-          increase(gitlab_runner_jobs_total{instance=~"${runner_manager:pipe}"}[$__interval])
+          increase(gitlab_runner_jobs_total{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"}[$__interval])
         )
       |||,
       format: 'time_series',
@@ -76,15 +76,15 @@ local startedJobsCounter =
     title=null,
     panelTitle='Started jobs',
     color='green',
-    query='sum by(shard) (increase(gitlab_runner_jobs_total{instance=~"${runner_manager:pipe}"}[1d]))',
+    query='sum by(shard) (increase(gitlab_runner_jobs_total{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"}[1d]))',
     legendFormat='{{shard}}',
     unit='short',
     decimals=1,
     colorMode='value',
     instant=false,
     interval='1d',
-    intevalFactor=1,
-    calcs=['sum'],
+    intervalFactor=1,
+    reducerFunction='sum',
     justifyMode='center',
   );
 
@@ -92,7 +92,7 @@ local finishedJobsDurationHistogram = panels.heatmap(
   'Finished job durations histogram',
   |||
     sum by (le) (
-      rate(gitlab_runner_job_duration_seconds_bucket{instance=~"${runner_manager:pipe}"}[$__interval])
+      rate(gitlab_runner_job_duration_seconds_bucket{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"}[$__interval])
     )
   |||,
   intervalFactor=1,
@@ -109,7 +109,7 @@ local finishedJobsMinutesIncreaseGraph =
     intervalFactor=5,
     query=|||
       sum by(shard) (
-        increase(gitlab_runner_job_duration_seconds_sum{instance=~"${runner_manager:pipe}"}[$__interval])
+        increase(gitlab_runner_job_duration_seconds_sum{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"}[$__interval])
       )/60
     |||,
   ) + {
@@ -118,7 +118,7 @@ local finishedJobsMinutesIncreaseGraph =
     targets+: [{
       expr: |||
         avg (
-          increase(gitlab_runner_job_duration_seconds_sum{instance=~"${runner_manager:pipe}"}[$__interval])
+          increase(gitlab_runner_job_duration_seconds_sum{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"}[$__interval])
         )/60
       |||,
       format: 'time_series',
@@ -145,7 +145,7 @@ local finishedJobsMinutesIncreaseCounter =
     color='green',
     query=|||
       sum by(shard) (
-        increase(gitlab_runner_job_duration_seconds_sum{instance=~"${runner_manager:pipe}"}[1d])
+        increase(gitlab_runner_job_duration_seconds_sum{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"}[1d])
       )/60
     |||,
     legendFormat='{{shard}}',
@@ -154,8 +154,8 @@ local finishedJobsMinutesIncreaseCounter =
     colorMode='value',
     instant=false,
     interval='1d',
-    intevalFactor=1,
-    calcs=['sum'],
+    intervalFactor=1,
+    reducerFunction='sum',
     justifyMode='center',
   );
 

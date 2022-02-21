@@ -107,12 +107,12 @@ local rules = [
 ];
 
 {
-  'missing-series-alerts': std.manifestYamlDoc({
+  'missing-series-alerts.yml': std.manifestYamlDoc({
     groups: [
       {
         name: 'missing_series_alerts.rules',
         partial_response_strategy: 'warn',
-        rules: [alerts.processAlertRules(rules)],
+        rules: alerts.processAlertRules(rules),
       },
     ],
   }),

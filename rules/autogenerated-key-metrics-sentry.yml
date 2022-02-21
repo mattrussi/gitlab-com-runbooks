@@ -382,16 +382,16 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: pg_transactions
-      regional_aggregation: 'no'
-      service_aggregation: 'no'
+      regional_aggregation: "no"
+      service_aggregation: "no"
       tier: inf
       type: sentry
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: sentry_events
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: inf
       type: sentry
-    expr: '1'
+    expr: "1"

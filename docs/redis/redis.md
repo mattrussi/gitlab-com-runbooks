@@ -92,6 +92,8 @@ Grafana dashboards:
 - [redis-cache](https://dashboards.gitlab.net/d/redis-cache-main/redis-cache-overview?orgId=1&from=now-6h&to=now)
 - [redis-sidekiq](https://dashboards.gitlab.net/d/redis-sidekiq-main/redis-sidekiq-overview?orgId=1&from=now-6h&to=now)
 - [redis-tracechunks](https://dashboards.gitlab.net/d/redis-tracechunks-main/redis-tracechunks-overview?orgId=1&from=now-6h&to=now)
+- [redis-ratelimiting](https://dashboards.gitlab.net/d/redis-ratelimiting-main/redis-ratelimiting-overview?orgId=1&from=now-6h&to=now)
+- [redis-sessions](https://dashboards.gitlab.net/d/redis-sessions-main/redis-sessions-overview?orgId=1&from=now-6h&to=now)
 
 
 For example, there is a Grafana chart showing number of slowlog events in redis-sidekiq (not linking it here because the panel ID changes when Grafana dashboards are deployed).
@@ -437,6 +439,36 @@ For example, count per key pattern:
 $ cat trace.txt | awk '{ print $5 } | sort -n | uniq -c | sort -nr'
 ```
 
+##### key size estimation #####
+
+The following commands are meant to be run on a replica instance.
+
+In this example, we're filtering the dump output for `Class:merge_requests`, replace this with your keyname.
+
+```shell
+$ sudo gitlab-redis-cli bgsave
+
+# Get the `dump` binary via docker
+$ docker run -it -v $(pwd)/redis-data:/mnt:ro igorwgitlab/cupcake-rdb:latest /mnt/dump.rdb
+
+# Alternatively you can build the `dump` binary yourself by
+###  1. Clone https://github.com/igorwwwwwwwwwwwwwwwwwwww/rdb/tree/version-9
+###  2. Checkout `version-9` branch
+###  3. GOOS=linux GOARCH=amd64 go build
+
+$ sudo ./dump /var/opt/gitlab/redis/dump.rdb | awk -F'\t' '$1 ~ /Class:merge_requests/ { sum1 += $3; sum2 += $4 } END { print sum1, sum2 }'
+# The two values you get from this represent estimates in bytes used for values and keys+values respectively.
+6039116565 6549803309
+
+# Convert to GiB
+$ echo $((6039116565.0/(1024.0**3.0)))
+5.6243655877187848
+```
+
+The values presented are an optimistic estimate, as redis will require some more memory for its datastructures. Generally, the key size will be on that order of magnitude.
+
+The current `maxmemory` in Redis-cache is set to `60 GiB`. Depending on the numbers you get, the ratio of each compared to the `maxmemory` can give you an idea of how significant of an impact your change might introduce.
+
 #### Please remember to delete the `pcap` file immediately after performing the analysis ####
 
 ### CPU profiling ###
@@ -478,8 +510,8 @@ instantiate a Ruby Redis client for a secondary:
 redis = Redis.new(Gitlab::Redis::SharedState.params.merge(role: :slave))
 ```
 
-Substitute `Cache`,`Queues`, or `TraceChunks` to get a client for the cache,
-sidekiq or tracechunks Redis instances, respectively.
+Substitute `Cache`,`Queues`, `TraceChunks`, `RateLimiting`, or `Sessions` for 'SharedState' to get a client
+for the respective Redis instance.
 
 ### packetbeat
 
@@ -744,7 +776,7 @@ NOTE: This should have no visible negative impact on the GitLab application.
 
 NOTE: There is no authentication required for interacting with Sentinel.
 
-1. Get current Redis master. On one of the nodes running the redis sentinel (varies by cluster; redis, redis-sidekiq, and redis-tracechunks run sentinel on the main redis nodes, redis-cache has its own set of sentinel servers, and this may change in future):
+1. Get current Redis master. On one of the nodes running the redis sentinel (varies by cluster; redis-cache has its own set of sentinel servers, and all the rest run sentinel on the main redis nodes; and this may change in future):
 
 ```shell
 $ /opt/gitlab/embedded/bin/redis-cli -p 26379 SENTINEL masters
@@ -794,7 +826,7 @@ $ /opt/gitlab/embedded/bin/redis-cli -p 26379 SENTINEL masters
 ```shell
 /opt/gitlab/embedded/bin/redis-cli -p 26379 SENTINEL failover CLUSTER_NAME
 ```
-CLUSTER_NAME is one of `gprd-redis` (main persistent cluster), `gprd-redis-cache` (primary transient cache), `gprd-redis-sidekiq` (sidekiq specific persistent cluster), or `gprd-redis-tracechunks` (CI build tracechunks persistent cluster)
+CLUSTER_NAME is one of `gprd-redis` (main persistent cluster), `gprd-redis-cache` (primary transient cache), `gprd-redis-sidekiq` (sidekiq specific persistent cluster), `gprd-redis-tracechunks` (CI build tracechunks persistent cluster), gprd-redis-ratelimiting (RackAttack/App Rate limiting cluster), or `gprd-sessions` (Web sessions)
 
 ## Replication flapping
 

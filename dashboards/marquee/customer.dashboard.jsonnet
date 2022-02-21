@@ -1,14 +1,7 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
-local promQuery = import 'grafana/prom_query.libsonnet';
-local dashboard = grafana.dashboard;
-local row = grafana.row;
 local template = grafana.template;
-local graphPanel = grafana.graphPanel;
-local annotation = grafana.annotation;
-local serviceDashboard = import 'service_dashboard.libsonnet';
-local thresholds = import 'thresholds.libsonnet';
 local seriesOverrides = import 'grafana/series_overrides.libsonnet';
 
 basic.dashboard(

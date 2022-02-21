@@ -340,8 +340,7 @@ Selected logging documents and resources:
 ### Security
 
 * [Working with the CloudFlare WAF/CDN](howto/externalvendors/cloudflare.md)
-* [Uptycs osquery](docs/uncategorized/uptycs_osquery.md)
-* [Uptycs osquery troubleshooting](docs/uncategorized/uptycs_osqueryd.md)
+* [OSQuery](docs/uncategorized/osquery.md)
 
 ### Other
 * [Setup oauth2-proxy protection for web based application](docs/uncategorized/setup-oauth2-proxy-protected-application.md)
@@ -372,7 +371,68 @@ Selected logging documents and resources:
   * Post-checks - how can I be 100% sure that it is solved
   * Rollback - optional, how can I undo my fix
 
+# Running helper scripts from runbook
+
+Inside of the [bin](bin) directory you can find a list of scripts that can help
+running repetative commands or setting up your machine to debug the
+infrastructure. These scripts can be bash, ruby, python or any other executable.
+
+`glsh` in the single entrypoint to interect with the [`bin`](bin) directory. For
+example if you can `glsh hello` it will check if `hello` file exists inside of
+[`bin`](bin) directory and execute it. You can also pass multiple arguments, that the
+script will have access to.
+
+Demo: https://youtu.be/RsGgxm55YBg
+
+```
+glsh hello arg1 arg2
+```
+
+## Install
+
+```
+git clone git@gitlab.com:gitlab-com/runbooks.git
+cd runbooks
+sudo make glsh-install
+```
+
+## Update
+
+```
+glsh update
+```
+
+## Create a new command
+
+1. Create a new file inside of [`bin`](bin) directory: `touch bin/hello`
+1. Populate the file with the contents that you want. The command below updates the file with a simple `echo` command.
+    ```
+    cat > bin/hello <<EOF
+    #!/usr/bin/env bash
+
+    echo "Hello from glsh"
+    EOF
+    ```
+1. Make it executable: `chmod +x bin/hello`
+1. Run it: `glsh hello`
+
 # Developing in this repo
+
+## Summary
+
+Usually, following a change to the rules, you can test your new additions using:
+
+```shell
+make verify
+```
+
+Then, regenerate the rules using:
+
+```shell
+make generate
+```
+
+If you get errors while doing any of these steps, then read on for more details on how to set up your local environment.
 
 ## Generating a new runbooks image
 
@@ -427,22 +487,21 @@ Following tools and libraries are required to develop dashboards locally:
 * Go programming langugage
 * Ruby programming language
 * `go-jsonnet` - Jsonnet implementation written in Go
-* `jsonnet-bunder` - package manager for Jsonnet
+* `jsonnet-bundler` - package manager for Jsonnet
 * `jq` - command line JSON processor
 
 You can install most of them using `asdf` tool.
 
 ### Manage your dependencies using `asdf`
 
-Our `asdf` toolset uses the following plugins:
+Before using `asdf` for the first time, install all the plugins by running:
 
-* `golang`: `asdf plugin add golang`
-* `ruby`: `asdf plugin add ruby`
-* `go-jsonnet`: `asdf plugin add go-jsonnet`.
-* `jsonnet-bundler`: `asdf plugin add jb`.
+```console
+./scripts/install-asdf-plugins.sh
+```
 
-Once you have installed these plugins, run the following command to install the
-required versions.
+Once you have installed the plugins, run the following command to install the
+required versions of each tool.
 
 ```console
 $ asdf install
@@ -458,6 +517,19 @@ ruby           2.6.5    (set by ~/runbooks/.ruby-version)
 
 You don't need to use `asdf`, but in such case you will need install all
 dependencies manually and track their versions.
+
+### Keeping Versions in Sync between GitLab-CI and `asdf`.
+
+`asdf` (and `.tool-versions` generally) is the SSOT for tool versions used in this repository.
+To keep `.tool-versions` in sync with `.gitlab-ci.yml`, there is a helper script,
+`./scripts/update-asdf-version-variables`.
+
+#### Process for updating a tool version
+
+1. Update the version in `.tool-versions`
+1. Run `asdf install` to install latest version
+1. Run `./scripts/update-asdf-version-variables` to update a refresh of the `.gitlab-ci-asdf-versions.yml` file
+1. Commit the changes
 
 ### Go, Jsonnet
 
@@ -480,6 +552,21 @@ brew install go-jsonnet
 ```
 Or if you're using `asdf`, you can use [an asdf
 plugin](https://gitlab.com/craigfurman/asdf-go-jsonnet).
+
+### `jsonnet-tool`
+
+[`jsonnet-tool`](https://gitlab.com/gitlab-com/gl-infra/jsonnet-tool) is a small home-grown tool for
+generating configuration from Jsonnet files. The primary reason we use it is because it is much faster
+than the bash scripts we used to use for the task. Some tasks have gone from 20+ minutes to 2.5 minutes.
+
+We recommend using asdf to manage `jsonnet-tool`. The plugin can be installed with:
+
+```console
+# Install the plugin once
+asdf plugin add jsonnet-tool https://gitlab.com/gitlab-com/gl-infra/asdf-jsonnet-tool.git
+# Install the correct version of jsonnet-tool from `.tool-versions`
+asdf install
+````
 
 ### Ruby
 
@@ -577,6 +664,9 @@ expect(
 - Run the full Jsonnet test suite in your local environment with `make test-jsonnet && bundle exec rspec`
 - Run a particular Jsonnet unit test file with `scripts/jsonnet_test.sh periodic-thanos-queries/periodic-query_test.jsonnet`
 - Run a particular Jsonnet integration test file with `bundle exec rspec spec/libsonnet/toolinglinks/grafana_spec.rb`
+
+*Note*: Verify that you have all the jsonnet dependencies downloaded  before attempting to run the tests, you can
+automatically download the necessary dependencies by running `make jsonnet-bundle`.
 
 ## Contributing
 

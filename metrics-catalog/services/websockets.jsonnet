@@ -2,11 +2,14 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local haproxyComponents = import './lib/haproxy_components.libsonnet';
-local perFeatureCategoryRecordingRules = (import './lib/puma-per-feature-category-recording-rules.libsonnet').perFeatureCategoryRecordingRules;
+local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 
 metricsCatalog.serviceDefinition({
   type: 'websockets',
   tier: 'sv',
+
+  tags: ['golang'],
+
   monitoringThresholds: {
     errorRatio: 0.9995,
   },
@@ -18,12 +21,24 @@ metricsCatalog.serviceDefinition({
     patroni: true,
     pgbouncer: true,
     praefect: true,
+    consul: true,
   },
   provisioning: {
     vms: false,
     kubernetes: true,
   },
   regional: true,
+  kubeConfig: {
+    labelSelectors: kubeLabelSelectors(
+      ingressSelector=null,  // Websockets does not have its own ingress
+      nodeSelector={ type: 'websockets' },
+
+      // TODO: websockets nodes do not present a stage label at present
+      // See https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2245
+      // We hard-code to main for now
+      nodeStaticLabels={ stage: 'main' },
+    ),
+  },
   kubeResources: {
     websockets: {
       kind: 'Deployment',
@@ -37,7 +52,6 @@ metricsCatalog.serviceDefinition({
     loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
       userImpacting=true,
       featureCategory='not_owned',
-      team='sre_datastores',
       stageMappings={
         main: { backends: ['websockets'], toolingLinks: [] },
         cny: { backends: ['canary_websockets'], toolingLinks: [] },
@@ -86,7 +100,6 @@ metricsCatalog.serviceDefinition({
     puma: {
       userImpacting: true,
       featureCategory: 'not_owned',
-      team: 'sre_datastores',
       description: |||
         Monitors Rails endpoints, running in the Git fleet, via the HTTP interface.
       |||,
@@ -111,8 +124,4 @@ metricsCatalog.serviceDefinition({
       ],
     },
   },
-  extraRecordingRulesPerBurnRate: [
-    // Adds per-feature-category plus error rates across multiple burn rates
-    perFeatureCategoryRecordingRules({ type: 'websockets' }),
-  ],
 })

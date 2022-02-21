@@ -1,5 +1,4 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
-local rateMetric = metricsCatalog.rateMetric;
 local customRateQuery = metricsCatalog.customRateQuery;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
@@ -10,6 +9,9 @@ metricsCatalog.serviceDefinition({
   monitoringThresholds: {
     // TODO: define thresholds for the NAT service
   },
+  serviceDependencies: {
+    frontend: true,
+  },
   provisioning: {
     kubernetes: false,
     vms: false,
@@ -18,7 +20,6 @@ metricsCatalog.serviceDefinition({
     sent_tcp_packets: {
       userImpacting: true,
       featureCategory: 'not_owned',
-      team: 'sre_coreinfra',
 
       description: |||
         Monitors GCP Cloud NAT TCP packets sent.
@@ -61,7 +62,6 @@ metricsCatalog.serviceDefinition({
     received_tcp_packets: {
       userImpacting: true,
       featureCategory: 'not_owned',
-      team: 'sre_coreinfra',
 
       description: |||
         Monitors GCP Cloud NAT TCP packets received.

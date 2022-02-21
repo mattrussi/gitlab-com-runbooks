@@ -1,5 +1,7 @@
 # GitLab Job Completion
 
+[[_TOC_]]
+
 ## Purpose and implementation
 
 The main purpose of a job completion metric is to observe if a given task or action has successfully run in the required interval. This can be used in variuos scenarios, where active monitoring is not applicable, such as cron jobs, or scheduled pipeline executuions. If there would fail to check back in the targeted interval an alert would fire, informing about this incident.
@@ -65,6 +67,17 @@ PROM
 | `RESOURCE` | The resource identifier to include in alerts. Do not include data, that changes between invocations (such as pipeline or job IDs for example) |
 | `TIER` | The tier of the monitored service (e.g. `db`) |
 | `TYPE` | The tpye of the monitored service (e.g. `postgres`)
+
+### Job metric per env or per node
+
+For tracking a job that is expected to succeed on each node use `localhost` as
+`$PUSH_GATEWAY`.
+
+If you have a job that should only run on one random node in an env each time
+(e.g. the wal-g backup job), then use a central pushgateway to avoid having
+metrics labeled with different fqdn and thus getting alerts if the job didn't
+happen to run on the same node for a while. For gstg, gprd and ops you can use
+the blackbox nodes as central pushgateway. 
 
 ## Alerting
 

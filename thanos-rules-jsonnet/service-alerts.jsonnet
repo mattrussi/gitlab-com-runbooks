@@ -2,194 +2,6 @@ local alerts = import 'alerts/alerts.libsonnet';
 local stableIds = import 'stable-ids/stable-ids.libsonnet';
 
 local rules = [
-  // ------------------------------------------------------------------------------
-  // Latency alerts
-  // ------------------------------------------------------------------------------
-
-  // Warn: Latency SLO not being met, default alert_trigger_duration (short, 5m)
-  // Note: we ignore `cny` stage for this alert, since if both cny and main stage are firing, we
-  // only care about the main stage alert Alternatively, we have the bad canary alerts
-  // specifically for canary stage
-  // DEPRECATED in favour of multiwindow, multiburn-rate alerts
-  {
-    alert: 'service_apdex_slo_out_of_bounds_lower_5m',
-    expr: |||
-      (
-        avg(gitlab_service_apdex:ratio{stage!="cny", monitor="global"}) by (environment, tier, type, stage)
-        < ignoring(environment, stage) group_left
-        avg(slo:min:gitlab_service_apdex:ratio{alert_trigger_duration!="long", monitor="global"}) by (tier, type)
-      )
-      unless on(tier, type)
-      (
-          slo:min:events:gitlab_service_apdex:ratio{monitor="global"}
-      )
-    |||,
-    'for': '5m',
-    labels: {
-      rules_domain: 'general',
-      severity: 's2',
-      slo_alert: 'yes',
-      pager: 'pagerduty',
-      alert_type: 'symptom',
-      deprecated: 'yes',
-    },
-    annotations: {
-      description: |||
-        The `{{ $labels.type }}` service (`{{ $labels.stage }}` stage) is not meeting its latency SLOs
-        The service is taking longer to respond to requests than usual. This could be caused by user abuse, application changes in upstream services that lead to higher request rates or slower requested, or slowdown in downstream services. Check operation rates in upstream and downstream services, error rates and check ELK for abuse.
-      |||,
-      runbook: 'docs/{{ $labels.type }}/README.md',
-      title: 'The `{{ $labels.type }}` service (`{{ $labels.stage }}` stage) has a apdex score (latency) below SLO',
-      grafana_dashboard_id: 'general-service/service-platform-metrics',
-      grafana_panel_id: stableIds.hashStableId('apdex-ratio'),
-      grafana_variables: 'environment,type,stage',
-      grafana_min_zoom_hours: '6',
-      link1_title: 'Definition',
-      link1_url: 'https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-apdex.md',
-      promql_template_1: 'gitlab_service_apdex:ratio{environment="$environment", type="$type", stage="$stage"}',
-      promql_template_2: 'gitlab_component_apdex:ratio{environment="$environment", type="$type", stage="$stage"}',
-    },
-  },
-
-  // Warn: Latency SLO not being met, long alert_trigger_duration (15m)
-  // Note: we ignore `cny` stage for this alert, since if both cny and main stage are firing, we
-  // only care about the main stage alert Alternatively, we have the bad canary alerts
-  // specifically for canary stage
-  // DEPRECATED in favour of multiwindow, multiburn-rate alerts
-  {
-    alert: 'service_apdex_slo_out_of_bounds_lower_15m',
-    expr: |||
-      (
-        avg(gitlab_service_apdex:ratio{stage!="cny", monitor="global"}) by (environment, tier, type, stage)
-        < ignoring(environment, stage) group_left
-        avg(slo:min:gitlab_service_apdex:ratio{alert_trigger_duration="long", monitor="global"}) by (tier, type)
-      )
-      unless on(tier, type)
-      (
-          slo:min:events:gitlab_service_apdex:ratio{monitor="global"}
-      )
-    |||,
-    'for': '15m',
-    labels: {
-      rules_domain: 'general',
-      severity: 's2',
-      slo_alert: 'yes',
-      pager: 'pagerduty',
-      alert_type: 'symptom',
-      deprecated: 'yes',
-    },
-    annotations: {
-      description: |||
-        The `{{ $labels.type }}` service (`{{ $labels.stage }}` stage) is not meeting its latency SLOs
-        The service is taking longer to respond to requests than usual. This could be caused by user abuse, application changes in upstream services that lead to higher request rates or slower requested, or slowdown in downstream services. Check operation rates in upstream and downstream services, error rates and check ELK for abuse.
-      |||,
-      runbook: 'docs/{{ $labels.type }}/README.md',
-      title: 'The `{{ $labels.type }}` service (`{{ $labels.stage }}` stage) has a apdex score (latency) below SLO',
-      grafana_dashboard_id: 'general-service/service-platform-metrics',
-      grafana_panel_id: stableIds.hashStableId('apdex-ratio'),
-      grafana_variables: 'environment,type,stage',
-      grafana_min_zoom_hours: '6',
-      link1_title: 'Definition',
-      link1_url: 'https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-apdex.md',
-      promql_template_1: 'gitlab_service_apdex:ratio{environment="$environment", type="$type", stage="$stage"}',
-      promql_template_2: 'gitlab_component_apdex:ratio{environment="$environment", type="$type", stage="$stage"}',
-    },
-  },
-
-  // ------------------------------------------------------------------------------
-  // Error Rate alerts
-  // ------------------------------------------------------------------------------
-
-  // Warn: Error ratio SLO not being met, default alert_trigger_duration (short, 5m)
-  // Note: we ignore `cny` stage for this alert, since if both cny and main stage are firing, we
-  // only care about the main stage alert Alternatively, we have the bad canary alerts
-  // specifically for canary stage
-  // DEPRECATED in favour of multiwindow, multiburn-rate alerts
-  {
-    alert: 'service_error_ratio_slo_out_of_bounds_upper_5m',
-    expr: |||
-      (
-        avg(gitlab_service_errors:ratio{stage!="cny", monitor="global"}) by (environment, tier, type, stage)
-        > ignoring(environment, stage) group_left
-        avg(slo:max:gitlab_service_errors:ratio{alert_trigger_duration!="long", monitor="global"}) by (tier, type)
-      )
-      unless on(tier, type)
-      (
-          slo:max:events:gitlab_service_errors:ratio{monitor="global"}
-      )
-    |||,
-    'for': '5m',
-    labels: {
-      rules_domain: 'general',
-      severity: 's2',
-      slo_alert: 'yes',
-      alert_type: 'symptom',
-      pager: 'pagerduty',
-      deprecated: 'yes',
-    },
-    annotations: {
-      description: |||
-        The `{{ $labels.type }}` service (`{{ $labels.stage }}` stage) has an error-ratio higher than SLOs
-        A high proportion of requests to the `{{ $labels.type }}` service are resulting in errors. This ratio is higher than the defined SLO for the service.
-      |||,
-      runbook: 'docs/{{ $labels.type }}/README.md',
-      title: 'The `{{ $labels.type }}` service (`{{ $labels.stage }}` stage) has an error-ratio exceeding SLO',
-      grafana_dashboard_id: 'general-service/service-platform-metrics',
-      grafana_panel_id: stableIds.hashStableId('error-ratio'),
-      grafana_variables: 'environment,type,stage',
-      grafana_min_zoom_hours: '6',
-      link1_title: 'Definition',
-      link1_url: 'https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-error-rate.md',
-      promql_template_1: 'gitlab_service_errors:ratio{environment="$environment", type="$type", stage="$stage"}',
-      promql_template_2: 'gitlab_component_errors:ratio{environment="$environment", type="$type", stage="$stage"}',
-    },
-  },
-
-  // Warn: Error ratio SLO not being met, long alert_trigger_duration (15m)
-  // Note: we ignore `cny` stage for this alert, since if both cny and main stage are firing, we
-  // only care about the main stage alert Alternatively, we have the bad canary alerts
-  // specifically for canary stage
-  // DEPRECATED in favour of multiwindow, multiburn-rate alerts
-  {
-    alert: 'service_error_ratio_slo_out_of_bounds_upper_15m',
-    expr: |||
-      (
-          avg(gitlab_service_errors:ratio{stage!="cny", monitor="global"}) by (environment, tier, type, stage)
-        > ignoring(environment, stage) group_left
-        avg(slo:max:gitlab_service_errors:ratio{alert_trigger_duration="long", monitor="global"}) by (tier, type)
-      )
-      unless on(tier, type)
-      (
-          slo:max:events:gitlab_service_errors:ratio{monitor="global"}
-      )
-    |||,
-    'for': '15m',
-    labels: {
-      rules_domain: 'general',
-      severity: 's2',
-      slo_alert: 'yes',
-      alert_type: 'symptom',
-      pager: 'pagerduty',
-      deprecated: 'yes',
-    },
-    annotations: {
-      description: |||
-        The `{{ $labels.type }}` service (`{{ $labels.stage }}` stage) has an error-ratio higher than SLOs
-        A high proportion of requests to the `{{ $labels.type }}` service are resulting in errors. This ratio is higher than the defined SLO for the service.
-      |||,
-      runbook: 'docs/{{ $labels.type }}/README.md',
-      title: 'The `{{ $labels.type }}` service (`{{ $labels.stage }}` stage) has an error-ratio exceeding SLO',
-      grafana_dashboard_id: 'general-service/service-platform-metrics',
-      grafana_panel_id: stableIds.hashStableId('error-ratio'),
-      grafana_variables: 'environment,type,stage',
-      grafana_min_zoom_hours: '6',
-      link1_title: 'Definition',
-      link1_url: 'https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-error-rate.md',
-      promql_template_1: 'gitlab_service_errors:ratio{environment="$environment", type="$type", stage="$stage"}',
-      promql_template_2: 'gitlab_component_errors:ratio{environment="$environment", type="$type", stage="$stage"}',
-    },
-  },
-
   //###############################################
   // Operation Rate: how many operations is this service handling per second?
   //###############################################
@@ -225,11 +37,11 @@ local rules = [
       runbook: 'docs/{{ $labels.type }}/README.md',
       title: 'Anomaly detection: The `{{ $labels.type }}` service (`{{ $labels.stage }}` stage) is receiving more requests than normal',
       grafana_dashboard_id: 'general-service/service-platform-metrics',
-      grafana_panel_id: stableIds.hashStableId('request-rate'),
+      grafana_panel_id: stableIds.hashStableId('service-$type-ops-rate'),
       grafana_variables: 'environment,type,stage',
       grafana_min_zoom_hours: '12',
       link1_title: 'Definition',
-      link1_url: 'https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md',
+      link1_url: 'https://gitlab.com/gitlab-com/runbooks/blob/master/docs/monitoring/definition-service-ops-rate.md',
       promql_template_1: 'gitlab_service_ops:rate{environment="$environment", type="$type", stage="$stage"}',
       promql_template_2: 'gitlab_component_ops:rate{environment="$environment", type="$type", stage="$stage"}',
     },
@@ -266,11 +78,11 @@ local rules = [
       runbook: 'docs/{{ $labels.type }}/README.md',
       title: 'Anomaly detection: The `{{ $labels.type }}` service (`{{ $labels.stage }}` stage) is receiving fewer requests than normal',
       grafana_dashboard_id: 'general-service/service-platform-metrics',
-      grafana_panel_id: stableIds.hashStableId('request-rate'),
+      grafana_panel_id: stableIds.hashStableId('service-$type-ops-rate'),
       grafana_variables: 'environment,type,stage',
       grafana_min_zoom_hours: '12',
       link1_title: 'Definition',
-      link1_url: 'https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-ops-rate.md',
+      link1_url: 'https://gitlab.com/gitlab-com/runbooks/blob/master/docs/monitoring/definition-service-ops-rate.md',
       promql_template_1: 'gitlab_service_ops:rate{environment="$environment", type="$type", stage="$stage"}',
       promql_template_2: 'gitlab_component_ops:rate{environment="$environment", type="$type", stage="$stage"}',
     },
@@ -343,7 +155,7 @@ local rules = [
       grafana_variables: 'environment,type',
       grafana_min_zoom_hours: '6',
       link1_title: 'Definition',
-      link1_url: 'https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-apdex.md',
+      link1_url: 'https://gitlab.com/gitlab-com/runbooks/blob/master/docs/monitoring/definition-service-apdex.md',
       promql_template_1: 'gitlab_service_apdex:ratio{environment="$environment", type="$type", stage="$stage"}',
       promql_template_2: 'gitlab_component_apdex:ratio{environment="$environment", type="$type", stage="$stage"}',
     },
@@ -402,7 +214,7 @@ local rules = [
       grafana_variables: 'environment,type',
       grafana_min_zoom_hours: '6',
       link1_title: 'Definition',
-      link1_url: 'https://gitlab.com/gitlab-com/runbooks/blob/master/docs/uncategorized/definition-service-error-rate.md',
+      link1_url: 'https://gitlab.com/gitlab-com/runbooks/blob/master/docs/monitoring/definition-service-error-rate.md',
       promql_template_1: 'gitlab_service_errors:ratio{environment="$environment", type="$type", stage="$stage"}',
       promql_template_2: 'gitlab_component_errors:ratio{environment="$environment", type="$type", stage="$stage"}',
     },

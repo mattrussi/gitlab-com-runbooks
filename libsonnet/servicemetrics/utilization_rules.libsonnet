@@ -1,9 +1,4 @@
-local selectors = import 'promql/selectors.libsonnet';
-
 local generateUtilizationRules(utilizationRules) =
-  local selectorHash = {};
-  local selector = selectors.serializeHash(selectorHash);
-
   local utilizationRuleNames = std.objectFields(utilizationRules);
   local rules = std.flatMap(function(key) utilizationRules[key].getRecordingRuleDefinitions(key), utilizationRuleNames);
 

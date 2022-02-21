@@ -3,18 +3,8 @@ require 'spec_helper'
 require_relative '../../lib/periodic_queries/topic'
 
 describe PeriodicQueries::Topic do
-  describe '.parse!' do
-    it 'initializes an instances by evaluating jsonnet' do
-      wrapper = instance_double(JsonnetWrapper)
+  subject(:topic) { described_class.new(path, query_info) }
 
-      expect(JsonnetWrapper).to receive(:new).and_return(wrapper)
-      expect(wrapper).to receive(:parse).with(path).and_return({})
-
-      expect(described_class.parse!(path)).to be_a(described_class)
-    end
-  end
-
-  let(:path) { 'path/to/thing.queries.jsonnet' }
   let(:query_info) do
     {
       'error_budget_availability' => {
@@ -28,7 +18,18 @@ describe PeriodicQueries::Topic do
     }
   end
 
-  subject(:topic) { described_class.new(path, query_info) }
+  let(:path) { 'path/to/thing.queries.jsonnet' }
+
+  describe '.parse!' do
+    it 'initializes an instances by evaluating jsonnet' do
+      wrapper = instance_double(JsonnetWrapper)
+
+      expect(JsonnetWrapper).to receive(:new).with(ext_str: a_hash_including(current_time: an_instance_of(String))).and_return(wrapper)
+      expect(wrapper).to receive(:parse).with(path).and_return({})
+
+      expect(described_class.parse!(path)).to be_a(described_class)
+    end
+  end
 
   describe '#initialize' do
     it 'initializes the name' do

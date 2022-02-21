@@ -9,6 +9,9 @@ metricsCatalog.serviceDefinition({
   monitoringThresholds: {
     errorRatio: 0.9999,
   },
+  serviceDependencies: {
+    'web-pages': true,
+  },
   /*
    * No need to have operation rate alerting for both pages and web-pages
    * so disabling it for this service, and keeping the anomaly detection
@@ -28,17 +31,17 @@ metricsCatalog.serviceDefinition({
 
       requestRate: rateMetric(
         counter='haproxy_server_sessions_total',
-        selector='type="pages", backend=~"pages_https|pages_http"'
+        selector={ type: 'pages', backend: { re: 'pages_https|pages_http' } }
       ),
 
       errorRate: combined([
         rateMetric(
           counter='haproxy_backend_http_responses_total',
-          selector='type="pages",job="haproxy",code="5xx"'
+          selector={ type: 'pages', job: 'haproxy', code: '5xx' }
         ),
         rateMetric(
           counter='haproxy_server_connection_errors_total',
-          selector='type="pages", job="haproxy"'
+          selector={ type: 'pages', job: 'haproxy' }
         ),
       ]),
 

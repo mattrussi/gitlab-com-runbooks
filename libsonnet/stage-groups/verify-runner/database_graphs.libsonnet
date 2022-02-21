@@ -1,6 +1,6 @@
+local keyMetrics = import 'gitlab-dashboards/key_metrics.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
-local keyMetrics = import 'key_metrics.libsonnet';
-local patroniService = (import 'metrics-catalog.libsonnet').getService('patroni');
+local patroniService = (import 'servicemetrics/metrics-catalog.libsonnet').getService('patroni');
 
 local patroniOverview(startRow, rowHeight) =
   keyMetrics.headlineMetricsRow(
@@ -28,7 +28,7 @@ local totalDeadTuples =
     format='short',
     legendFormat='{{relname}}',
     query=|||
-      pg_stat_user_tables_n_dead_tup{env="$environment",fqdn="$db_instance",datname="$db_database",relname=~"$db_top_dead_tup"}
+      pg_stat_user_tables_n_dead_tup{environment=~"$environment",stage=~"$stage",fqdn="$db_instance",datname="$db_database",relname=~"$db_top_dead_tup"}
     |||,
   );
 
@@ -38,12 +38,12 @@ local deadTuplesPercentage =
     format='percentunit',
     legendFormat='{{relname}}',
     query=|||
-      pg_stat_user_tables_n_dead_tup{env="$environment",fqdn="$db_instance",datname="$db_database",relname=~"$db_top_dead_tup"}
+      pg_stat_user_tables_n_dead_tup{environment=~"$environment",stage=~"$stage",fqdn="$db_instance",datname="$db_database",relname=~"$db_top_dead_tup"}
       /
       (
-        pg_stat_user_tables_n_live_tup{env="$environment",fqdn="$db_instance",datname="$db_database",relname=~"$db_top_dead_tup"}
+        pg_stat_user_tables_n_live_tup{environment=~"$environment",stage=~"$stage",fqdn="$db_instance",datname="$db_database",relname=~"$db_top_dead_tup"}
         +
-        pg_stat_user_tables_n_dead_tup{env="$environment",fqdn="$db_instance",datname="$db_database",relname=~"$db_top_dead_tup"}
+        pg_stat_user_tables_n_dead_tup{environment=~"$environment",stage=~"$stage",fqdn="$db_instance",datname="$db_database",relname=~"$db_top_dead_tup"}
       )
     |||,
   );
@@ -54,7 +54,7 @@ local slowQueries =
     format='opm',
     legendFormat='{{fqdn}}',
     query=|||
-      rate(pg_slow_queries{environment="$environment",fqdn=~"$db_instances"}[$__interval]) * 60
+      rate(pg_slow_queries{environment=~"$environment",stage=~"$stage",fqdn=~"$db_instances"}[$__interval]) * 60
     |||,
   );
 

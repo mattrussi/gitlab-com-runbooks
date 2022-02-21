@@ -29,7 +29,7 @@ require 'logger'
 require 'optparse'
 
 begin
-  require '/opt/gitlab/embedded/service/gitlab-rails/config/environment.rb'
+  require '/opt/gitlab/embedded/service/gitlab-rails/config/environment'
 rescue LoadError => e
   warn "WARNING: #{e.message}"
 end
@@ -53,7 +53,7 @@ module Storage
     @node_configuration ||= get_node_configuration
   end
 
-  class UserError < StandardError; end
+  UserError = Class.new(StandardError)
 end
 
 # Re-open the Storage module to add the Config module
@@ -126,9 +126,9 @@ module Storage
   # This module defines logging methods
   module Logging
     def initialize_log
-      STDOUT.sync = true
+      $stdout.sync = true
       timestamp_format = ::Storage::ProjectSelectorScript::LOG_TIMESTAMP_FORMAT
-      log = Logger.new STDOUT
+      log = Logger.new $stdout
       log.level = Logger::INFO
       log.formatter = proc do |level, t, _name, msg|
         fields = { timestamp: t.strftime(timestamp_format), level: level, msg: msg }
@@ -333,6 +333,7 @@ module Storage
     include ::Storage::Helpers
     include ::Storage::Logging
     attr_reader :options
+
     def initialize(options)
       @options = options
       log.level = @options[:log_level]
@@ -370,6 +371,7 @@ module Storage
         log.debug "Excluding projects: #{excluded_projects}"
         query = query.where.not(id: excluded_projects)
       end
+
       count = Project.transaction do
         with_timeout(options[:long_query_timeout]) { query.size }
       end
@@ -402,7 +404,7 @@ module Storage
     def print_largest_project
       project = get_projects(limit: 1).first
       project = Project.find_by(id: project.id)
-      raise 'No project with id: ' + project_id if project.nil?
+      raise "No project with id: #{project_id}" if project.nil?
 
       log_info(project_details(project))
     rescue StandardError => e
@@ -425,6 +427,7 @@ module Storage
         log.debug "Excluding projects: #{excluded_projects}"
         query = query.where.not(id: excluded_projects)
       end
+
       query = query.order('project_statistics.repository_size DESC')
       query = query.order('last_activity_at ASC')
       query = query.limit(opts[:limit]) if opts[:limit].positive?
@@ -464,10 +467,12 @@ module Storage
         selector.print_configured_gitaly_shards
         exit
       end
+
       if args[:count_only]
         selector.print_count
         exit
       end
+
       if args[:largest_only]
         selector.print_largest_project
         exit

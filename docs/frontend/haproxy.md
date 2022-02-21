@@ -35,7 +35,7 @@ a --> c[CloudFlare]
 c --> d[GCP Load Balancer]
 d --> e[HAProxy Frontend]
 e --> f[backend choice]
-g --> h[HAProxy Backend]
+f --> g[HAProxy Backend]
 ```
 
 ## Frontend and Backend configuration
@@ -73,8 +73,8 @@ g --> h[HAProxy Backend]
 * `ssh`: Service IP of the `gitlab-gitlab-shell` Kubernetes Deployment
 * `websockets`: all of the `git-xx` nodes
 * `altssh`: Service IP of the `gitlab-gitlab-shell` Kubernetes Deployment
-* `pages_http`: all of the `web-pages-xx` nodes
-* `pages_https`: all of the `web-pages-xx` nodes
+* `pages_http`: all of the `pages` Kubernetes deployments
+* `pages_https`: all of the `pages` Kubernetes deployments
 * `canary_web`: all of the `web-cny-xx` nodes
 * `canary_api`: NGINX ingress for the `gitlab-cny-webservice-api` Kubernetes Deployment
 * `canary_https_git`: Service IP of the `gitlab-webservice-git` Kubernetes Deployment
@@ -158,35 +158,94 @@ the backend:
 ### get-server-state
 
 ```
-$ ./bin/get-server-state gstg
+chef-repo % ./bin/get-server-state gstg
 Fetching server state...
-   2 altssh/git-01-sv-gstg: UP
-   2 altssh/git-02-sv-gstg: UP
-   3 api/api-01-sv-gstg: UP
-   3 api/api-02-sv-gstg: UP
-   3 api/api-cny-01-sv-gstg: UP
-   3 canary_web/web-cny-01-sv-gstg: UP
-   3 https_git/git-01-sv-gstg: UP
-   3 https_git/git-02-sv-gstg: UP
-   3 https_git/git-cny-01-sv-gstg: UP
-   2 pages_http/web-01-sv-gstg: UP
-   2 pages_http/web-02-sv-gstg: UP
-   2 pages_https/web-01-sv-gstg: UP
-   2 pages_https/web-02-sv-gstg: UP
-   3 ssh/git-01-sv-gstg: UP
-   3 ssh/git-02-sv-gstg: UP
-   3 ssh/git-cny-01-sv-gstg: UP
-   3 web/web-01-sv-gstg: UP
-   3 web/web-02-sv-gstg: UP
-   3 web/web-cny-01-sv-gstg: UP
-   3 websockets/git-01-sv-gstg: UP
-   3 websockets/git-02-sv-gstg: UP
-   3 websockets/git-cny-01-sv-gstg: UP
+      3 fe #:
+      3 fe 429_slow_down/BACKEND: UP
+      3 fe api/api-gke-us-east1-b-8181: UP
+      3 fe api/api-gke-us-east1-c-8181: UP
+      3 fe api/api-gke-us-east1-d-8181: UP
+      3 fe api/BACKEND: UP
+      3 fe api/gke-cny-api-8181: UP
+      3 fe api_rate_limit/BACKEND: UP
+      3 fe api_rate_limit/FRONTEND:
+      3 fe api_rate_limit/localhost:
+      3 fe asset_proxy/asset-bucket: UP
+      3 fe asset_proxy/BACKEND: UP
+      3 fe canary_api/BACKEND: UP
+      3 fe canary_api/gke-cny-api-8181: UP
+      3 fe canary_https_git/BACKEND: UP
+      3 fe canary_https_git/gke-cny-git-https: UP
+      3 fe canary_web/BACKEND: UP
+      3 fe canary_web/gke-cny-web: UP
+      3 fe check_http/FRONTEND:
+      3 fe check_https/FRONTEND:
+      3 fe check_ssh/FRONTEND:
+      3 fe http/FRONTEND:
+      3 fe https/FRONTEND:
+      3 fe https_git/BACKEND: UP
+      3 fe https_git/git-https-gke-us-east1-b: UP
+      3 fe https_git/git-https-gke-us-east1-c: UP
+      3 fe https_git/git-https-gke-us-east1-d: UP
+      3 fe https_git/gke-cny-git-https: UP
+      2 fe-pages #:
+      2 fe-pages check_http/FRONTEND:
+      2 fe-pages check_https/FRONTEND:
+      2 fe-pages pages_http/BACKEND: UP
+      2 fe-pages pages_http/FRONTEND:
+      2 fe-pages pages_http/gke-cny-pages: UP
+      2 fe-pages pages_http/pages-us-east1-b: UP
+      2 fe-pages pages_http/pages-us-east1-c: UP
+      2 fe-pages pages_http/pages-us-east1-d: UP
+      2 fe-pages pages_https/BACKEND: UP
+      2 fe-pages pages_https/FRONTEND:
+      2 fe-pages pages_https/gke-cny-pages-proxyv2: UP
+      2 fe-pages pages_https/pages-us-east1-b-proxyv2: UP
+      2 fe-pages pages_https/pages-us-east1-c-proxyv2: UP
+      2 fe-pages pages_https/pages-us-east1-d-proxyv2: UP
+      2 fe-pages pxname/svname:
+      2 fe-pages stats/BACKEND: UP
+      2 fe-pages stats/FRONTEND:
+      3 fe pxname/svname:
+      2 fe-registry #:
+      2 fe-registry canary_registry/BACKEND: UP
+      2 fe-registry check_http/FRONTEND:
+      2 fe-registry check_https/FRONTEND:
+      2 fe-registry http/FRONTEND:
+      2 fe-registry https/FRONTEND:
+      2 fe-registry pxname/svname:
+      2 fe-registry registry/BACKEND: UP
+      2 fe-registry registry/registry-us-east1-b: UP
+      2 fe-registry registry/registry-us-east1-c: UP
+      2 fe-registry registry/registry-us-east1-d: UP
+      2 fe-registry stats/BACKEND: UP
+      2 fe-registry stats/FRONTEND:
+      3 fe ssh/BACKEND: UP
+      3 fe ssh/FRONTEND:
+      3 fe ssh/gke-cny-ssh: UP
+      3 fe ssh/shell-gke-us-east1-b: UP
+      3 fe ssh/shell-gke-us-east1-c: UP
+      3 fe ssh/shell-gke-us-east1-d: UP
+      3 fe ssh/sock-1:
+      3 fe stats/BACKEND: UP
+      3 fe stats/FRONTEND:
+      3 fe web/BACKEND: UP
+      3 fe web/gke-cny-web: UP
+      3 fe websockets/BACKEND: UP
+      3 fe websockets/gke-cny-ws: UP
+      3 fe websockets/ws-gke-us-east1-b: UP
+      3 fe websockets/ws-gke-us-east1-c: UP
+      3 fe websockets/ws-gke-us-east1-d: UP
+      3 fe web/web-gke-us-east1-b-8181: UP
+      3 fe web/web-gke-us-east1-c-8181: UP
+      3 fe web/web-gke-us-east1-d-8181: UP
 ```
 
 * The first number refers to the number of load balancers reporting the server status
 * The second field is the backend/server-name
 * The last field is the current status which may be {UP,MAINT,DRAIN}
+  * This field may be blank if the backend is down or has no status as seen in
+    the above example.
 
 ## set-server-state
 
@@ -237,24 +296,6 @@ Fetching server state...
    3 websockets/git-01-sv-gstg : DRAIN
 ```
 
-## bin/haproxy-server-roles
-
-When servers or haproxy VMs are added to the fleet, the corresponding chef role must be
-updated so that:
-
-1. HAProxy VMs have the peer list
-2. Servers are added to the proper backend
-
-This is semi-automated by running a helper script which will automatically
-generate role files:
-
-```
-bin/haproxy-server-roles -u <chef user> -k <path/to/chef/key>
-```
-
-This script is also run in CI and will fail the job if there is a missing server
-that needs to be added.
-
 ### Admin console for haproxy (single node)
 
 haproxy has a built-in web admin console; this is not terribly useful for managing a fleet of haproxy nodes, but if just one is misbehaving then it might be handy.  To access it, ssh port forward to port 7331, e.g.:
@@ -296,7 +337,7 @@ sudo hatop -s /run/haproxy/admin.sock
 
 * Examine the health of all backends and the HAProxy dashboard
     * HAProxy - https://dashboards.gitlab.net/d/ZOOh_aNik/haproxy
-    * HAProxy Backend Status - https://dashboards.gitlab.net/d/7Zq1euZmz/haproxy-status?orgId=1
+    * HAProxy Backend Status - https://dashboards.gitlab.net/d/frontend-main/frontend-overview?orgId=1
 * Is the alert specific to canary servers or the canary backend? Check canaries
   to ensure they are reporting OK. If this is the cause you should immediately change the weight of canary traffic.
     * Canary dashboard - https://dashboards.gitlab.net/d/llfd4b2ik/canary
@@ -311,12 +352,12 @@ sudo hatop -s /run/haproxy/admin.sock
     * on the server see the health of the service `gitlab-ctl status`
     * for git servers check the status of ssh `service sshd_git status`
 * HAProxy logs are not currently being sent to ELK because of capacity issues.
-  These logs can be viewed in stackdriver. Production logs can be viewed using this [direct link](https://console.cloud.google.com/logs/viewer?project=gitlab-production&authuser=1&minLogLevel=0&expandAll=false&timestamp=2018-10-08T07:43:05.667000000Z&customFacets=&limitCustomFacetWidth=true&dateRangeStart=2018-10-08T06:43:05.918Z&dateRangeEnd=2018-10-08T07:43:05.918Z&interval=PT1H&resource=gce_instance&scrollTimestamp=2018-10-08T07:42:43.008000000Z&logName=projects%2Fgitlab-production%2Flogs%2Fhaproxy)
-* If the errors are from web-pages backends, consider possible intentional abuse or accidental DoS from specific IPs or for specific domains in Pages
+  More information can be read [here](./haproxy-logging.md).
+* If the errors are from pages backends, consider possible intentional abuse or accidental DoS from specific IPs or for specific domains in Pages
   * Client IPs can be identified by volume from the current haproxy logs on the haproxy nodes with `sudo grep -v check_http /var/log/haproxy.log | awk '{print $6}' | cut -d: -f1|sort|uniq -c |sort -n|tail`.  Identifying problematic levels is not set in stone; hopefully if there is one or two (or a subnet), they will stand out.  Consider removing the 'tail' or making it 'tail -100' etc, to get more context.
     * To block: In https://gitlab.com/gitlab-com/security-tools/front-end-security/ edit deny-403-ips.lst.  commit, push, MR, ensure it has pull mirrored to ops.gitlab.net, then run chef on the pages haproxy nodes to deploy.  This will block that IP across *all* frontend (pages, web, api etc), so be sure you want to do this.
   * Problem sites/projects/domains can be identified with the `Gitlab-Pages activity` dashboard on kibana - https://log.gprd.gitlab.net/app/kibana#/dashboard/AW6GlNKPqthdGjPJ2HqH
-    * To block: In https://gitlab.com/gitlab-com/security-tools/front-end-security/ edit deny-403-ips.lst.  commit, push, MR, ensure it has pull mirrored to ops.gitlab.net, then run chef on the pages haproxy nodes to deploy.  This will block only the named domain (exact match) in pages, preventing the request ever making it to the web-pages servers.  This is very low-risk
+    * To block: In https://gitlab.com/gitlab-com/security-tools/front-end-security/ edit deny-403-ips.lst.  commit, push, MR, ensure it has pull mirrored to ops.gitlab.net, then run chef on the pages haproxy nodes to deploy.  This will block only the named domain (exact match) in pages, preventing the request ever making it to the pages deployments.  This is very low-risk
 
 ## Extraneous processes
 

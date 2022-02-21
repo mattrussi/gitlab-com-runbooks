@@ -8,19 +8,17 @@ groups:
   - alert: WebsocketsServiceLoadbalancerErrorSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The loadbalancer SLI of the websockets service (`{{ $labels.stage }}` stage) has an error rate
-        violating SLO
+      title: The loadbalancer SLI of the websockets service (`{{ $labels.stage }}`
+        stage) has an error rate violating SLO
       description: |
         Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: websockets-main/websockets-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '3255520955'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3255520955"
       grafana_variables: environment,stage
       runbook: docs/websockets/README.md
     labels:
@@ -29,13 +27,12 @@ groups:
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
-      product_stage: not_owned
-      product_stage_group: not_owned
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
     expr: |
       (
         (
@@ -47,7 +44,41 @@ groups:
           gitlab_component_errors:ratio_5m{component="loadbalancer",monitor="global",type="websockets"}
           > (14.4 * 0.000500)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="loadbalancer",monitor="global",type="websockets"}) >= 1
+      )
+  - alert: WebsocketsServiceLoadbalancerErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The loadbalancer SLI of the websockets service (`{{ $labels.stage }}`
+        stage) has an error rate violating SLO
+      description: |
+        Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: websockets-main/websockets-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3255520955"
+      grafana_variables: environment,stage
+      runbook: docs/websockets/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_errors:ratio_6h{component="loadbalancer",monitor="global",type="websockets"}
           > (6 * 0.000500)
@@ -60,24 +91,22 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="loadbalancer",monitor="global",type="websockets"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="loadbalancer",monitor="global",type="websockets"}) >= 1
       )
   - alert: WebsocketsServiceLoadbalancerTrafficCessation
     for: 5m
     annotations:
-      title: >-
-        The loadbalancer SLI of the websockets service (`{{ $labels.stage }}` stage) has not received
-        any traffic in the past 30 minutes
+      title: The loadbalancer SLI of the websockets service (`{{ $labels.stage }}`
+        stage) has not received any traffic in the past 30 minutes
       description: |
         Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: websockets-main/websockets-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '138982496'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "138982496"
       grafana_variables: environment,stage
       runbook: docs/websockets/README.md
     labels:
@@ -86,22 +115,18 @@ groups:
       alert_type: cause
       feature_category: not_owned
       pager: pagerduty
-      product_stage: not_owned
-      product_stage_group: not_owned
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
-    expr: >
-      gitlab_component_ops:rate_30m{type="websockets", component="loadbalancer", stage="main", monitor="global"}
-      == 0
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{type="websockets", component="loadbalancer", stage="main", monitor="global"} == 0
   - alert: WebsocketsServiceLoadbalancerTrafficAbsent
     for: 30m
     annotations:
-      title: >-
-        The loadbalancer SLI of the websockets service (`{{ $labels.stage }}` stage) has not reported
-        any traffic in the past 30 minutes
+      title: The loadbalancer SLI of the websockets service (`{{ $labels.stage }}`
+        stage) has not reported any traffic in the past 30 minutes
       description: |
         Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
 
@@ -109,11 +134,10 @@ groups:
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
       grafana_dashboard_id: websockets-main/websockets-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '138982496'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "138982496"
       grafana_variables: environment,stage
       runbook: docs/websockets/README.md
     labels:
@@ -122,13 +146,11 @@ groups:
       alert_type: cause
       feature_category: not_owned
       pager: pagerduty
-      product_stage: not_owned
-      product_stage_group: not_owned
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
+      slo_alert: "no"
+      user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{type="websockets", component="loadbalancer", stage="main", monitor="global"} offset 1h
       unless
@@ -136,18 +158,17 @@ groups:
   - alert: WebsocketsServicePumaErrorSLOViolation
     for: 2m
     annotations:
-      title: The puma SLI of the websockets service (`{{ $labels.stage }}` stage) has an error rate violating
-        SLO
+      title: The puma SLI of the websockets service (`{{ $labels.stage }}` stage)
+        has an error rate violating SLO
       description: |
         Monitors Rails endpoints, running in the Git fleet, via the HTTP interface.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: websockets-main/websockets-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2425637513'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2425637513"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -160,13 +181,12 @@ groups:
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
-      product_stage: not_owned
-      product_stage_group: not_owned
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
     expr: |
       (
         (
@@ -178,7 +198,45 @@ groups:
           gitlab_component_errors:ratio_5m{component="puma",monitor="global",type="websockets"}
           > (14.4 * 0.000500)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="puma",monitor="global",type="websockets"}) >= 1
+      )
+  - alert: WebsocketsServicePumaErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The puma SLI of the websockets service (`{{ $labels.stage }}` stage)
+        has an error rate violating SLO
+      description: |
+        Monitors Rails endpoints, running in the Git fleet, via the HTTP interface.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: websockets-main/websockets-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2425637513"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:http_requests_total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",status=~"5..",type="websockets"}
+        )
+      runbook: docs/websockets/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_errors:ratio_6h{component="puma",monitor="global",type="websockets"}
           > (6 * 0.000500)
@@ -191,28 +249,25 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="puma",monitor="global",type="websockets"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="puma",monitor="global",type="websockets"}) >= 1
       )
   - alert: WebsocketsServicePumaErrorSLOViolationRegional
     for: 2m
     annotations:
-      title: >-
-        The puma SLI of the websockets service in region `{{ $labels.region }}` has an error rate violating
-        SLO
+      title: The puma SLI of the websockets service in region `{{ $labels.region }}`
+        has an error rate violating SLO
       description: |
         Monitors Rails endpoints, running in the Git fleet, via the HTTP interface.
 
-        Since the websockets service is not fully redundant, SLI violations on a single node may represent a user-impacting service degradation.
+        Note that this alert is specific to the `{{ $labels.region }}` region.
 
-        Currently the apdex value for {{ $labels.region }} is {{ $value | humanizePercentage }}.
-      grafana_dashboard_id: alerts-regional_component_slo_error
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/alerts-regional_component_slo_error?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-region={{
-        $labels.region }}&var-component={{ $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '965700560'
-      grafana_variables: environment,type,stage,region,component
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: websockets-main/websockets-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2425637513"
+      grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
           rate(http_requests_total{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status=~"5..",type="websockets"}[5m])
@@ -224,13 +279,12 @@ groups:
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
-      product_stage: not_owned
-      product_stage_group: not_owned
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
     expr: |
       (
         (
@@ -242,7 +296,47 @@ groups:
           gitlab_regional_sli_errors:ratio_5m{component="puma",monitor="global",type="websockets"}
           > (14.4 * 0.000500)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="puma",monitor="global",type="websockets"}) >= 1
+      )
+  - alert: WebsocketsServicePumaErrorSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The puma SLI of the websockets service in region `{{ $labels.region }}`
+        has an error rate violating SLO
+      description: |
+        Monitors Rails endpoints, running in the Git fleet, via the HTTP interface.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: websockets-main/websockets-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2425637513"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region) (
+          rate(http_requests_total{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status=~"5..",type="websockets"}[5m])
+        )
+      runbook: docs/websockets/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_regional_sli_errors:ratio_6h{component="puma",monitor="global",type="websockets"}
           > (6 * 0.000500)
@@ -255,24 +349,22 @@ groups:
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="puma",monitor="global",type="websockets"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="puma",monitor="global",type="websockets"}) >= 1
       )
   - alert: WebsocketsServicePumaTrafficCessation
     for: 5m
     annotations:
-      title: >-
-        The puma SLI of the websockets service (`{{ $labels.stage }}` stage) has not received any traffic
-        in the past 30 minutes
+      title: The puma SLI of the websockets service (`{{ $labels.stage }}` stage)
+        has not received any traffic in the past 30 minutes
       description: |
         Monitors Rails endpoints, running in the Git fleet, via the HTTP interface.
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: websockets-main/websockets-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '110019945'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "110019945"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -285,22 +377,18 @@ groups:
       alert_type: cause
       feature_category: not_owned
       pager: pagerduty
-      product_stage: not_owned
-      product_stage_group: not_owned
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
-    expr: >
-      gitlab_component_ops:rate_30m{type="websockets", component="puma", stage="main", monitor="global"}
-      == 0
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{type="websockets", component="puma", stage="main", monitor="global"} == 0
   - alert: WebsocketsServicePumaTrafficAbsent
     for: 30m
     annotations:
-      title: >-
-        The puma SLI of the websockets service (`{{ $labels.stage }}` stage) has not reported any traffic
-        in the past 30 minutes
+      title: The puma SLI of the websockets service (`{{ $labels.stage }}` stage)
+        has not reported any traffic in the past 30 minutes
       description: |
         Monitors Rails endpoints, running in the Git fleet, via the HTTP interface.
 
@@ -308,11 +396,10 @@ groups:
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
       grafana_dashboard_id: websockets-main/websockets-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '110019945'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "110019945"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -325,13 +412,11 @@ groups:
       alert_type: cause
       feature_category: not_owned
       pager: pagerduty
-      product_stage: not_owned
-      product_stage_group: not_owned
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
+      slo_alert: "no"
+      user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{type="websockets", component="puma", stage="main", monitor="global"} offset 1h
       unless
@@ -339,19 +424,17 @@ groups:
   - alert: WebsocketsServiceWorkhorseErrorSLOViolation
     for: 2m
     annotations:
-      title: >-
-        The workhorse SLI of the websockets service (`{{ $labels.stage }}` stage) has an error rate violating
-        SLO
+      title: The workhorse SLI of the websockets service (`{{ $labels.stage }}` stage)
+        has an error rate violating SLO
       description: |
         Monitors the Workhorse instance running in the Websockets fleet, via the HTTP interface. This only covers the initial protocal upgrade requests to `/-/cable`. https://gitlab.com/gitlab-org/gitlab/-/issues/296845 tracks making these metrics more useful for Websockets.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: websockets-main/websockets-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '2047984749'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2047984749"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -364,13 +447,12 @@ groups:
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
-      product_stage: not_owned
-      product_stage_group: not_owned
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
     expr: |
       (
         (
@@ -382,7 +464,45 @@ groups:
           gitlab_component_errors:ratio_5m{component="workhorse",monitor="global",type="websockets"}
           > (14.4 * 0.000500)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="workhorse",monitor="global",type="websockets"}) >= 1
+      )
+  - alert: WebsocketsServiceWorkhorseErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The workhorse SLI of the websockets service (`{{ $labels.stage }}` stage)
+        has an error rate violating SLO
+      description: |
+        Monitors the Workhorse instance running in the Websockets fleet, via the HTTP interface. This only covers the initial protocal upgrade requests to `/-/cable`. https://gitlab.com/gitlab-org/gitlab/-/issues/296845 tracks making these metrics more useful for Websockets.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: websockets-main/websockets-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2047984749"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",environment="{{ $labels.environment }}",job="gitlab-workhorse",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",stage="{{ $labels.stage }}",type="websockets"}[5m])
+        )
+      runbook: docs/websockets/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_component_errors:ratio_6h{component="workhorse",monitor="global",type="websockets"}
           > (6 * 0.000500)
@@ -395,28 +515,25 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="workhorse",monitor="global",type="websockets"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="workhorse",monitor="global",type="websockets"}) >= 1
       )
   - alert: WebsocketsServiceWorkhorseErrorSLOViolationRegional
     for: 2m
     annotations:
-      title: >-
-        The workhorse SLI of the websockets service in region `{{ $labels.region }}` has an error rate
-        violating SLO
+      title: The workhorse SLI of the websockets service in region `{{ $labels.region
+        }}` has an error rate violating SLO
       description: |
         Monitors the Workhorse instance running in the Websockets fleet, via the HTTP interface. This only covers the initial protocal upgrade requests to `/-/cable`. https://gitlab.com/gitlab-org/gitlab/-/issues/296845 tracks making these metrics more useful for Websockets.
 
-        Since the websockets service is not fully redundant, SLI violations on a single node may represent a user-impacting service degradation.
+        Note that this alert is specific to the `{{ $labels.region }}` region.
 
-        Currently the apdex value for {{ $labels.region }} is {{ $value | humanizePercentage }}.
-      grafana_dashboard_id: alerts-regional_component_slo_error
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/alerts-regional_component_slo_error?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage }}&var-region={{
-        $labels.region }}&var-component={{ $labels.component }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '965700560'
-      grafana_variables: environment,type,stage,region,component
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: websockets-main/websockets-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2047984749"
+      grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
           rate(gitlab_workhorse_http_requests_total{code=~"^5.*",environment="{{ $labels.environment }}",job="gitlab-workhorse",region="{{ $labels.region }}",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",stage="{{ $labels.stage }}",type="websockets"}[5m])
@@ -428,13 +545,12 @@ groups:
       alert_type: symptom
       feature_category: not_owned
       pager: pagerduty
-      product_stage: not_owned
-      product_stage_group: not_owned
       rules_domain: general
       severity: s2
       sli_type: error
-      slo_alert: 'yes'
-      user_impacting: 'yes'
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
     expr: |
       (
         (
@@ -446,7 +562,47 @@ groups:
           gitlab_regional_sli_errors:ratio_5m{component="workhorse",monitor="global",type="websockets"}
           > (14.4 * 0.000500)
         )
-        or
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="workhorse",monitor="global",type="websockets"}) >= 1
+      )
+  - alert: WebsocketsServiceWorkhorseErrorSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The workhorse SLI of the websockets service in region `{{ $labels.region
+        }}` has an error rate violating SLO
+      description: |
+        Monitors the Workhorse instance running in the Websockets fleet, via the HTTP interface. This only covers the initial protocal upgrade requests to `/-/cable`. https://gitlab.com/gitlab-org/gitlab/-/issues/296845 tracks making these metrics more useful for Websockets.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: websockets-main/websockets-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2047984749"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region) (
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",environment="{{ $labels.environment }}",job="gitlab-workhorse",region="{{ $labels.region }}",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",stage="{{ $labels.stage }}",type="websockets"}[5m])
+        )
+      runbook: docs/websockets/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
         (
           gitlab_regional_sli_errors:ratio_6h{component="workhorse",monitor="global",type="websockets"}
           > (6 * 0.000500)
@@ -459,24 +615,22 @@ groups:
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="workhorse",monitor="global",type="websockets"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="workhorse",monitor="global",type="websockets"}) >= 1
       )
   - alert: WebsocketsServiceWorkhorseTrafficCessation
     for: 5m
     annotations:
-      title: >-
-        The workhorse SLI of the websockets service (`{{ $labels.stage }}` stage) has not received any
-        traffic in the past 30 minutes
+      title: The workhorse SLI of the websockets service (`{{ $labels.stage }}` stage)
+        has not received any traffic in the past 30 minutes
       description: |
         Monitors the Workhorse instance running in the Websockets fleet, via the HTTP interface. This only covers the initial protocal upgrade requests to `/-/cable`. https://gitlab.com/gitlab-org/gitlab/-/issues/296845 tracks making these metrics more useful for Websockets.
 
         This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
       grafana_dashboard_id: websockets-main/websockets-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '831392945'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "831392945"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -489,22 +643,18 @@ groups:
       alert_type: cause
       feature_category: not_owned
       pager: pagerduty
-      product_stage: not_owned
-      product_stage_group: not_owned
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
-    expr: >
-      gitlab_component_ops:rate_30m{type="websockets", component="workhorse", stage="main", monitor="global"}
-      == 0
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{type="websockets", component="workhorse", stage="main", monitor="global"} == 0
   - alert: WebsocketsServiceWorkhorseTrafficAbsent
     for: 30m
     annotations:
-      title: >-
-        The workhorse SLI of the websockets service (`{{ $labels.stage }}` stage) has not reported any
-        traffic in the past 30 minutes
+      title: The workhorse SLI of the websockets service (`{{ $labels.stage }}` stage)
+        has not reported any traffic in the past 30 minutes
       description: |
         Monitors the Workhorse instance running in the Websockets fleet, via the HTTP interface. This only covers the initial protocal upgrade requests to `/-/cable`. https://gitlab.com/gitlab-org/gitlab/-/issues/296845 tracks making these metrics more useful for Websockets.
 
@@ -512,11 +662,10 @@ groups:
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
       grafana_dashboard_id: websockets-main/websockets-overview
-      grafana_dashboard_link: >-
-        https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: '6'
-      grafana_panel_id: '831392945'
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "831392945"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -529,13 +678,11 @@ groups:
       alert_type: cause
       feature_category: not_owned
       pager: pagerduty
-      product_stage: not_owned
-      product_stage_group: not_owned
       rules_domain: general
       severity: s2
       sli_type: ops
-      slo_alert: 'no'
-      user_impacting: 'yes'
+      slo_alert: "no"
+      user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{type="websockets", component="workhorse", stage="main", monitor="global"} offset 1h
       unless

@@ -114,19 +114,47 @@ local errorRatioQuery(aggregationSet, aggregationLabels, selectorHash, range=nul
     )
   ||| % [expr, clampMaxExpressionWithDefault];
 
-local getApdexThresholdExpressionForWindow(type, windowDuration) =
+local sloLabels(selectorHash) =
+  // An `component=''` will result in the overal service SLO recording, not a component specific one
+  local defaults = { monitor: 'global', component: '' };
+  local supportedStaticLabels = std.set(['component', 'tier', 'type']);
+  local supportedSelector = std.foldl(
+    function(memo, labelName)
+      if std.setMember(labelName, supportedStaticLabels) then
+        memo { [labelName]: selectorHash[labelName] }
+      else
+        memo,
+    std.objectFields(selectorHash),
+    {}
+  );
+  defaults + supportedSelector;
+
+local thresholdExpressionFor(metric, selectorHash, fixedThreshold) =
+  if fixedThreshold == null then
+    |||
+      avg(%(metric)s{%(selectors)s})
+    ||| % {
+      metric: metric,
+      selectors: selectors.serializeHash(sloLabels(selectorHash)),
+    }
+  else
+    '%g' % [fixedThreshold];
+
+local getApdexThresholdExpressionForWindow(selectorHash, windowDuration, fixedThreshold) =
   |||
-    (1 - %(factor)g * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{%(selectors)s})))
+    (1 - %(factor)g * (1 - %(expression)s))
   ||| % {
-    selectors: selectors.serializeHash({ type: type, monitor: 'global' }),
+    expression: thresholdExpressionFor('slo:min:events:gitlab_service_apdex:ratio', selectorHash, fixedThreshold),
     factor: multiburnFactors.errorBudgetFactorFor(windowDuration),
   };
 
-local getErrorRateThresholdExpressionForWindow(type, windowDuration) =
+local getErrorRateThresholdExpressionForWindow(selectorHash, windowDuration, fixedThreshold) =
+  local threshold = if fixedThreshold == null then fixedThreshold else 1 - fixedThreshold;
+
   |||
-    (%(factor)g * avg(slo:max:events:gitlab_service_errors:ratio{%(selectors)s}))
+    (%(factor)g * %(expression)s)
   ||| % {
-    selectors: selectors.serializeHash({ type: type, monitor: 'global' }),
+    expression: thresholdExpressionFor('slo:max:events:gitlab_service_errors:ratio', selectorHash, threshold),
     factor: multiburnFactors.errorBudgetFactorFor(windowDuration),
   };
 
@@ -134,6 +162,7 @@ local getErrorRateThresholdExpressionForWindow(type, windowDuration) =
   apdexQuery:: apdexQuery,
   opsRateQuery:: opsRateQuery,
   errorRatioQuery:: errorRatioQuery,
+  sloLabels:: sloLabels,
 
   apdex:: {
     /**
@@ -141,11 +170,11 @@ local getErrorRateThresholdExpressionForWindow(type, windowDuration) =
      *
      * @return a string representation of the PromQL query
      */
-    serviceApdexDegradationSLOQuery(type)::
-      getApdexThresholdExpressionForWindow(type, '6h'),
+    serviceApdexDegradationSLOQuery(selectorHash, fixedThreshold=null)::
+      getApdexThresholdExpressionForWindow(selectorHash, '6h', fixedThreshold),
 
-    serviceApdexOutageSLOQuery(type)::
-      getApdexThresholdExpressionForWindow(type, '1h'),
+    serviceApdexOutageSLOQuery(selectorHash, fixedThreshold=null)::
+      getApdexThresholdExpressionForWindow(selectorHash, '1h', fixedThreshold),
   },
 
   opsRate:: {
@@ -166,10 +195,10 @@ local getErrorRateThresholdExpressionForWindow(type, windowDuration) =
   },
 
   errorRate:: {
-    serviceErrorRateDegradationSLOQuery(type)::
-      getErrorRateThresholdExpressionForWindow(type, '6h'),
+    serviceErrorRateDegradationSLOQuery(type, fixedThreshold=null)::
+      getErrorRateThresholdExpressionForWindow(type, '6h', fixedThreshold),
 
-    serviceErrorRateOutageSLOQuery(type)::
-      getErrorRateThresholdExpressionForWindow(type, '1h'),
+    serviceErrorRateOutageSLOQuery(type, fixedThreshold=null)::
+      getErrorRateThresholdExpressionForWindow(type, '1h', fixedThreshold),
   },
 }

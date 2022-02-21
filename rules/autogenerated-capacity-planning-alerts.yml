@@ -6,7 +6,7 @@ groups:
   - alert: CapacityPlanningViolationForecast
     for: 1m
     annotations:
-      title: "{{ $labels.type }} / {{ $labels.component }} potential saturation"
+      title: '{{ $labels.type }} / {{ $labels.component }} potential saturation'
       description: |
         Tamland forecast a potential future violation
 
@@ -14,9 +14,8 @@ groups:
     labels:
       alert_type: cause
       incident_project: gitlab.com/gitlab-com/gl-infra/capacity-planning
-      link: >-
-        https://gitlab-com.gitlab.io/gl-infra/tamland/{{ $labels.pagename }}.html#{{ $labels.type }}-service-{{
-        $labels.component }}-resource-saturation
+      link: https://gitlab-com.gitlab.io/gl-infra/tamland/{{ $labels.pagename }}.html#{{
+        $labels.type }}-service-{{ $labels.component }}-resource-saturation
       severity: s4
     expr: |
       topk by (environment, type, tier, stage, shard, component) (1,

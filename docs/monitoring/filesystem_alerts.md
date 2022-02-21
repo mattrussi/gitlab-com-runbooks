@@ -1,4 +1,4 @@
-# Errors are reported in LOG files
+# Filesystem errors are reported in LOG files
 
 ## Symptoms
 

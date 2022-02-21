@@ -3,11 +3,16 @@ local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local haproxyComponents = import './lib/haproxy_components.libsonnet';
-local perFeatureCategoryRecordingRules = (import './lib/puma-per-feature-category-recording-rules.libsonnet').perFeatureCategoryRecordingRules;
+local sliLibrary = import 'gitlab-slis/library.libsonnet';
+local serviceLevelIndicatorDefinition = import 'servicemetrics/service_level_indicator_definition.libsonnet';
+local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 
 metricsCatalog.serviceDefinition({
   type: 'web',
   tier: 'sv',
+
+  tags: ['golang'],
+
   contractualThresholds: {
     apdexRatio: 0.95,
     errorRatio: 0.005,
@@ -33,28 +38,57 @@ metricsCatalog.serviceDefinition({
   },
   serviceDependencies: {
     gitaly: true,
+    'redis-ratelimiting': true,
     'redis-sidekiq': true,
     'redis-cache': true,
     redis: true,
     patroni: true,
     pgbouncer: true,
     praefect: true,
+    pvs: true,
+    search: true,
+    consul: true,
   },
   recordingRuleMetrics: [
     'http_requests_total',
-  ],
+  ] + sliLibrary.get('rails_request_apdex').recordingRuleMetrics,
+  provisioning: {
+    vms: false,
+    kubernetes: true,
+  },
+  regional: true,
+  kubeConfig: {
+    labelSelectors: kubeLabelSelectors(
+      nodeSelector={ type: 'web' },
+
+      // TODO: at present, web nodepools do not have the correct stage, shard labels
+      // see https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2247
+      nodeStaticLabels={ stage: 'main' },
+    ),
+  },
+
+  kubeResources: {
+    web: {
+      kind: 'Deployment',
+      containers: [
+        'gitlab-workhorse',
+        'webservice',
+      ],
+    },
+  },
   serviceLevelIndicators: {
     loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
       userImpacting=true,
       featureCategory='not_owned',
-      team='sre_coreinfra',
       stageMappings={
-        main: { backends: ['web'], toolingLinks: [] },  // What to do with `429_slow_down`?
+        main: { backends: ['web', 'main_web'], toolingLinks: [] },  // What to do with `429_slow_down`?
         cny: { backends: ['canary_web'], toolingLinks: [] },
       },
       selector={ type: 'frontend' },
+      regional=false,
     ),
 
+    local workhorseWebSelector = { job: { re: 'gitlab-workhorse|gitlab-workhorse-web' }, type: 'web' },
     workhorse: {
       userImpacting: true,
       featureCategory: 'not_owned',
@@ -67,8 +101,7 @@ metricsCatalog.serviceDefinition({
 
       apdex: histogramApdex(
         histogram='gitlab_workhorse_http_request_duration_seconds_bucket',
-        selector={
-          job: 'gitlab-workhorse-web',
+        selector=workhorseWebSelector {
           route: {
             ne: [
               '^/([^/]+/){1,}[^/]+/uploads\\\\z',
@@ -89,12 +122,15 @@ metricsCatalog.serviceDefinition({
 
       requestRate: rateMetric(
         counter='gitlab_workhorse_http_requests_total',
-        selector='job="gitlab-workhorse-web", type="web"'
+        selector=workhorseWebSelector,
       ),
 
       errorRate: rateMetric(
         counter='gitlab_workhorse_http_requests_total',
-        selector='job="gitlab-workhorse-web", type="web", code=~"^5.*", route!="^/-/health$", route!="^/-/(readiness|liveness)$"'
+        selector=workhorseWebSelector {
+          code: { re: '^5.*' },
+          route: { ne: ['^/-/health$', '^/-/(readiness|liveness)$'] },
+        },
       ),
 
       significantLabels: ['fqdn', 'route'],
@@ -116,14 +152,14 @@ metricsCatalog.serviceDefinition({
 
       apdex: histogramApdex(
         histogram='gitlab_workhorse_image_resize_duration_seconds_bucket',
-        selector='job="gitlab-workhorse-web", type="web"',
+        selector=workhorseWebSelector,
         satisfiedThreshold=0.2,
         toleratedThreshold=0.8
       ),
 
       requestRate: rateMetric(
         counter='gitlab_workhorse_image_resize_requests_total',
-        selector='job="gitlab-workhorse-web", type="web"'
+        selector=workhorseWebSelector,
       ),
 
       significantLabels: ['fqdn'],
@@ -133,45 +169,40 @@ metricsCatalog.serviceDefinition({
       ],
     },
 
+    local railsSelector = { job: 'gitlab-rails', type: 'web' },
     puma: {
       userImpacting: true,
-      featureCategory: 'not_owned',
-      team: 'sre_coreinfra',
+      featureCategory: serviceLevelIndicatorDefinition.featureCategoryFromSourceMetrics,
       description: |||
         Aggregation of most web requests that pass through the puma to the GitLab rails monolith.
         Healthchecks are excluded.
       |||,
 
-      local baseSelector = { job: 'gitlab-rails', type: 'web' },
-      apdex: histogramApdex(
-        histogram='http_request_duration_seconds_bucket',
-        selector=baseSelector,
-        satisfiedThreshold=1,
-        toleratedThreshold=10
-      ),
-
       requestRate: rateMetric(
         counter='http_requests_total',
-        selector=baseSelector,
+        selector=railsSelector,
       ),
 
       errorRate: rateMetric(
         counter='http_requests_total',
-        selector=baseSelector { status: { re: '5..' } }
+        selector=railsSelector { status: { re: '5..' } }
       ),
 
       significantLabels: ['fqdn', 'method', 'feature_category'],
 
       toolingLinks: [
-        // Improve sentry link once https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/532 arrives
         toolingLinks.sentry(slug='gitlab/gitlabcom', type='web', variables=['environment', 'stage']),
-        toolingLinks.kibana(title='Rails', index='rails', type='web', slowRequestSeconds=10),
       ],
     },
+
+    rails_requests:
+      sliLibrary.get('rails_request_apdex').generateServiceLevelIndicator(railsSelector) {
+        toolingLinks: [
+          // TODO: These need to be defined in the appliation SLI and built using
+          // selectors using the appropriate fields
+          // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1411
+          toolingLinks.kibana(title='Rails', index='rails', type='web', slowRequestSeconds=5),
+        ],
+      },
   },
-  // Special per-feature-category recording rules
-  extraRecordingRulesPerBurnRate: [
-    // Adds per-feature-category plus error rates across multiple burn rates
-    perFeatureCategoryRecordingRules({ type: 'web' }),
-  ],
 })

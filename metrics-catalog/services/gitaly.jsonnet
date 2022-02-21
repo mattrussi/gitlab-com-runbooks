@@ -1,31 +1,18 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local rateMetric = metricsCatalog.rateMetric;
 local customApdex = metricsCatalog.customApdex;
-local combined = metricsCatalog.combined;
-local gitalyHelpers = import './lib/gitaly-helpers.libsonnet';
+local gitalyHelper = import 'service-archetypes/helpers/gitaly.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
-local histogramApdex = metricsCatalog.histogramApdex;
-
-local gitalyGRPCErrorRate(baseSelector) =
-  combined([
-    rateMetric(
-      counter='gitaly_service_client_requests_total',
-      selector=baseSelector {
-        grpc_code: { nre: 'OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded|Canceled' },
-      }
-    ),
-    rateMetric(
-      counter='gitaly_service_client_requests_total',
-      selector=baseSelector {
-        grpc_code: 'DeadlineExceeded',
-        deadline_type: { ne: 'limited' },
-      }
-    ),
-  ]);
 
 metricsCatalog.serviceDefinition({
   type: 'gitaly',
   tier: 'stor',
+
+  // disk_performance_monitoring requires disk utilisation metrics are currently reporting correctly for
+  // HDD volumes, see https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10248
+  // as such, we only record this utilisation metric on IO subset of the fleet for now.
+  tags: ['golang', 'disk_performance_monitoring'],
+
   // Since each Gitaly node is a SPOF for a subset of repositories, we need to ensure that
   // we have node-level monitoring on these hosts
   nodeLevelMonitoring: true,
@@ -40,7 +27,6 @@ metricsCatalog.serviceDefinition({
     goserver: {
       userImpacting: true,
       featureCategory: 'gitaly',
-      team: 'sre_datastores',
       description: |||
         This SLI monitors all Gitaly GRPC requests in aggregate, excluding the OperationService.
         GRPC failures which are considered to be the "server's fault" are counted as errors.
@@ -51,14 +37,18 @@ metricsCatalog.serviceDefinition({
         job: 'gitaly',
         grpc_service: { ne: 'gitaly.OperationService' },
       },
-      apdex: gitalyHelpers.grpcServiceApdex(baseSelector),
+      local baseSelectorApdex = baseSelector {
+        grpc_method: { noneOf: gitalyHelper.gitalyApdexIgnoredMethods },
+      },
+
+      apdex: gitalyHelper.grpcServiceApdex(baseSelectorApdex),
 
       requestRate: rateMetric(
         counter='gitaly_service_client_requests_total',
         selector=baseSelector
       ),
 
-      errorRate: gitalyGRPCErrorRate(baseSelector),
+      errorRate: gitalyHelper.gitalyGRPCErrorRate(baseSelector),
 
       significantLabels: ['fqdn'],
 
@@ -76,7 +66,6 @@ metricsCatalog.serviceDefinition({
     goserver_op_service: {
       userImpacting: true,
       featureCategory: 'gitaly',
-      team: 'sre_datastores',
       description: |||
         This SLI monitors requests to Gitaly's OperationService, via its GRPC endpoint.
         OperationService methods are generally expected to be slower than other Gitaly endpoints
@@ -84,21 +73,32 @@ metricsCatalog.serviceDefinition({
       |||,
 
       local baseSelector = { job: 'gitaly', grpc_service: 'gitaly.OperationService' },
-      apdex: histogramApdex(
-        histogram='grpc_server_handling_seconds_bucket',
-        selector=baseSelector {
-          grpc_type: 'unary',
-        },
-        satisfiedThreshold=10,
-        toleratedThreshold=30
-      ),
+      // The OperationService apdex is disabled primarily to deal with very slow
+      // operations producing a lot of alerts.
+      // Excluding those RPCs is not a very effective strategy, as OperationService
+      // is very low-traffic to begin with, and with every excluded RPC, we increase
+      // the sensitivity of the alerts. Thus, we opt to remove this SLO completely
+      // for the time being.
+      //
+      // Infradev issues addressing sources of latency:
+      // - https://gitlab.com/gitlab-com/gl-infra/production/-/issues/5311
+      //
+      //apdex: histogramApdex(
+      //  histogram='grpc_server_handling_seconds_bucket',
+      //  selector=baseSelector {
+      //    grpc_type: 'unary',
+      //    grpc_method: { nre: gitalyOpServiceApdexIgnoredMethodsRegexp },
+      //  },
+      //  satisfiedThreshold=10,
+      //  toleratedThreshold=30
+      //),
 
       requestRate: rateMetric(
         counter='gitaly_service_client_requests_total',
         selector=baseSelector
       ),
 
-      errorRate: gitalyGRPCErrorRate(baseSelector),
+      errorRate: gitalyHelper.gitalyGRPCErrorRate(baseSelector),
 
       significantLabels: ['fqdn'],
 
@@ -110,7 +110,6 @@ metricsCatalog.serviceDefinition({
     gitalyruby: {
       userImpacting: true,
       featureCategory: 'gitaly',
-      team: 'sre_datastores',
       description: |||
         This SLI monitors requests to Gitaly's Ruby sidecar, known as Gitaly-Ruby. All requests made to
         Gitaly-Ruby are monitored in aggregate, via its GRPC interface.
@@ -128,8 +127,7 @@ metricsCatalog.serviceDefinition({
           grpc_type: 'unary',
           grpc_service: { ne: 'gitaly.OperationService' },
           grpc_method: {
-            nre: gitalyHelpers.gitalyApdexIgnoredMethodsRegexp +
-                 '|GetLFSPointers|GetAllLFSPointers',  // Ignored because of https://gitlab.com/gitlab-org/gitaly/-/issues/3441
+            noneOf: gitalyHelper.gitalyRubyApdexIgnoredMethods,
           },
         },
         satisfiedThreshold=10,
@@ -144,8 +142,8 @@ metricsCatalog.serviceDefinition({
       errorRate: rateMetric(
         counter='grpc_client_handled_total',
         selector=baseSelector {
-          grpc_method: { nre: 'UpdateRemoteMirror|AddRemote' },  // Ignore these calls until https://gitlab.com/gitlab-org/gitlab/-/issues/300884 is fixed
-          grpc_code: { nre: 'OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|DeadlineExceeded' },
+          grpc_method: { noneOf: ['UpdateRemoteMirror', 'AddRemote'] },  // Ignore these calls until https://gitlab.com/gitlab-org/gitlab/-/issues/300884 is fixed
+          grpc_code: { noneOf: ['OK', 'NotFound', 'Unauthenticated', 'AlreadyExists', 'FailedPrecondition', 'DeadlineExceeded'] },
         }
       ),
 

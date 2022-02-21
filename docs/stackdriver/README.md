@@ -15,19 +15,18 @@
 
 ## Troubleshooting Pointers
 
-* [../frontend/haproxy.md](../frontend/haproxy.md)
-* [../gitaly/gitaly-down.md](../gitaly/gitaly-down.md)
+* [Gitaly is down](../gitaly/gitaly-down.md)
 * [../kube/k8s-operations.md](../kube/k8s-operations.md)
-* [../kube/kubernetes.md](../kube/kubernetes.md)
-* [../license/license-gitlab-com.md](../license/license-gitlab-com.md)
+* [Kubernetes](../kube/kubernetes.md)
+* [license.gitlab.com Runbook](../license/license-gitlab-com.md)
 * [../logging/logging_gcs_archive_bigquery.md](../logging/logging_gcs_archive_bigquery.md)
-* [../onboarding/kibana-diagnosis.md](../onboarding/kibana-diagnosis.md)
-* [../pgbouncer/pgbouncer-saturation.md](../pgbouncer/pgbouncer-saturation.md)
-* [../pubsub/pubsub-queing.md](../pubsub/pubsub-queing.md)
-* [../tutorials/example_tutorial_template.md](../tutorials/example_tutorial_template.md)
-* [../tutorials/overview_life_of_a_web_request.md](../tutorials/overview_life_of_a_web_request.md)
-* [../uncategorized/node-reboots.md](../uncategorized/node-reboots.md)
-* [../version/version-gitlab-com.md](../version/version-gitlab-com.md)
+* [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
+* [Sidekiq or Web/API is using most of its PgBouncer connections](../pgbouncer/pgbouncer-saturation.md)
+* [PubSub Queuing Rate Increasing](../pubsub/pubsub-queing.md)
+* [Example Tutorial Template](../tutorials/example_tutorial_template.md)
+* [Life of a Web Request](../tutorials/overview_life_of_a_web_request.md)
+* [Node Reboots](../uncategorized/node-reboots.md)
+* [version.gitlab.com Runbook](../version/version-gitlab-com.md)
 <!-- END_MARKER -->
 
 

@@ -17,8 +17,8 @@
 
 * [ci-apdex-violating-slo.md](ci-apdex-violating-slo.md)
 * [service-ci-runners.md](service-ci-runners.md)
-* [../patroni/rails-sql-apdex-slow.md](../patroni/rails-sql-apdex-slow.md)
-* [../uncategorized/alert-routing.md](../uncategorized/alert-routing.md)
+* [Rails SQL Apdex alerts](../patroni/rails-sql-apdex-slow.md)
+* [Alert Routing Howto](../uncategorized/alert-routing.md)
 <!-- END_MARKER -->
 
 # CI Runner Overview
@@ -37,10 +37,7 @@ They all have acronyms as well, which are indicated next to each name.
   - [windows-shared-runners-manager (WSRM)](#windows-shared-runners-manager-wsrm)
 - [Cost Factors](#cost-factors)
 - [Network Info](#network-info)
-  - [gitlab-ci project](#gitlab-ci-project)
-  - [gitlab-org-ci project](#gitlab-org-ci-project)
-  - [gitlab-ci-windows project](#gitlab-ci-windows-project)
-  - [gitlab-ci-plan-free-X projects](#gitlab-ci-plan-free-x-projects)
+- [Monitoring](#monitoring)
 - [Production Change Lock (PCL)](#production-change-lock-pcl)
 
 ## Runner Descriptions
@@ -91,54 +88,387 @@ runs. Below is a table that details the cost factor for each runner type.
 
 ## Network Info
 
-Below is the networking information for each project.
+### Ephemeral runner VMs networking
 
-### gitlab-ci project
+For high capacity shards (like `shared`) we create dedicated projects for ephemeral VMs.
 
-These subnets are created under the `default` network.
+All these projects have the same networking structure:
 
-| Subnet Name           | CIDR          | Purpose                                              |
-| --------------------- | ------------- | ---------------------------------------------------- |
-| default               | 10.142.0.0/20 | all non-runner machines (managers, prometheus, etc.) |
-| shared-runners        | 10.0.32.0/20  | shared runner (SRM) machines                         |
-| private-runners       | 10.0.0.0/20   | private runner (PRM) machines                        |
-| gitlab-shared-runners | 10.0.16.0/20  | gitlab shared runner (GSRM) machines                 |
+| Network Name        | Subnet Name          | CIDR            | Purpose                       |
+| ------------------- | -------------------- | --------------- | ----------------------------- |
+| `ephemeral-runners` | `ephemeral-runners`  | **UNIQUE CIDR** | Runner manager machines       |
+| `runners-gke`       | `runners-gke`        | `10.9.4.0/24`   | Primary; GKE nodes range      |
+| `runners-gke`       | `runners-gke`        | `10.8.0.0/16`   | Secondary; GKE pods range     |
+| `runners-gke`       | `runners-gke`        | `10.9.0.0/22`   | secondary; GKE services range |
 
-### gitlab-org-ci project
+Please read [GCP documentation about `VPC-native
+clusters`](https://cloud.google.com/kubernetes-engine/docs/concepts/alias-ips) to understand how the different
+ranges of the subnet are being used by GKE.
 
-These subnets are created under the `org-ci` network.
+#### Network peering theory and issues
 
-| Subnet Name             | CIDR        | Purpose                               |
-| ----------------------- | ----------- | ------------------------------------- |
-| manager                 | 10.1.0.0/24 | Runner manager machines               |
-| bastion                 | 10.1.2.0/24 | bastion network                       |
-| gitlab-gke              | 10.1.3.0/24 | GKE network                           |
-| gitlab-gke-pod-cidr     | 10.1.4.0/22 | GKE network used for pod IPs          |
-| gitlab-gke-service-cidr | 10.1.8.0/24 | GKE network used for exposed services |
-| shared-runner           | 10.2.0.0/16 | Ephemeral runner machines             |
+As peering automatically adds routes, it may introduce a conflict if the network "in the middle" have two different
+subnetworks with overlapping CIDR peered. Let's consider few simple examples.
 
-### gitlab-ci-windows project
+##### Peering conflicting networks directly
 
-These subnets are created under the `windows-ci` network.
+```mermaid
+graph LR
+  classDef subnetwork          color:#fff,fill:#555,stroke:#000,stroke-dasharray: 5 5;
+  classDef subnetwork_conflict color:#fff,fill:#555,stroke:#a00,stroke-width:2px,stroke-dasharray: 5 5;
+  classDef vpc                 color:#fff,fill:#555,stroke:#000,stroke-width:2px;
 
-| Subnet Name        | CIDR        | Purpose                           |
-| ------------------ | ----------- | --------------------------------- |
-| manager-subnet     | 10.1.0.0/16 | Runner manager machines           |
-| executor-subnet    | 10.2.0.0/16 | Ephemeral runner machines         |
-| bastion-windows-ci | 10.3.1.0/24 | bastion network                   |
-| runner-windows-ci  | 10.3.0.0/24 | Runner network for ansible/packer |
+  subgraph Network A
+    subnetwork_A_1("10.0.1.0/24"):::subnetwork -->|part of| network_A["Network A"]:::vpc
+    subnetwork_A_2("10.0.0.0/24"):::subnetwork_conflict -->|part of| network_A
+  end
 
-### gitlab-ci-plan-free-X projects
+  subgraph Network B
+    subnetwork_B_2("10.0.0.0/24"):::subnetwork_conflict -->|part of| network_B["Network B"]:::vpc
+    subnetwork_B_1("10.0.2.0/24"):::subnetwork -->|part of| network_B
+  end
 
-These subnets are created under the `ephemeral-runners` network.
+  network_B ===|peering| network_A
 
-| GCP project             | Subnet Name       | CIDR          | Purpose                   |
-| ----------------------- | ----------------- | ------------- | ------------------------- |
-| `gitlab-ci-plan-free-3` | ephemeral-runners | 10.10.32.0/21 | Ephemeral runner machines |
-| `gitlab-ci-plan-free-4` | ephemeral-runners | 10.10.24.0/21 | Ephemeral runner machines |
-| `gitlab-ci-plan-free-5` | ephemeral-runners | 10.10.16.0/21 | Ephemeral runner machines |
-| `gitlab-ci-plan-free-6` | ephemeral-runners | 10.10.8.0/21  | Ephemeral runner machines |
-| `gitlab-ci-plan-free-7` | ephemeral-runners | 10.10.0.0/21  | Ephemeral runner machines |
+  subnetwork_A_2 -.-|direct conflict| subnetwork_B_2
+
+  linkStyle 5 stroke:#a00,stroke-width:2px,stroke-dasharray: 5 5;
+```
+
+In this example we have two networks: `Network A` and `Network B`. Both have two subnetworks defined. One of the
+subnetworks in each of the networks is unique (`10.0.1.0/24` in `Network A` and `10.0.2.0/24` in `Network B`).
+Both networks contain also a second subnetwork, which have exactly the same CIDR: `10.0.0.0/24`.
+
+When trying to peer these two networks directly, we will get a routing conflict, as it will be impossible to
+define where to route traffic to `10.0.0.0/24`. When defining this in GCP (which requires peering definition
+to be specified from both sides), first side of peering will be saved. It will be however not activated yet
+and GCP will fail and reject to create the second side of the peering.
+
+**Conclusion:** Networks peered directly can't have conflicting CIDRs.
+
+##### Peering conflicting networks with one hop between them
+
+```mermaid
+graph LR
+  classDef subnetwork          color:#fff,fill:#555,stroke:#000,stroke-dasharray: 5 5;
+  classDef subnetwork_conflict color:#fff,fill:#555,stroke:#a00,stroke-width:2px,stroke-dasharray: 5 5;
+  classDef vpc                 color:#fff,fill:#555,stroke:#000,stroke-width:2px;
+
+  subgraph Network A
+    subnetwork_A_1("10.0.1.0/24"):::subnetwork -->|part of| network_A["Network A"]:::vpc
+    subnetwork_A_2("10.0.0.0/24"):::subnetwork_conflict -->|part of| network_A
+  end
+
+  subgraph Network B
+    subnetwork_B_2("10.0.0.0/24"):::subnetwork_conflict -->|part of| network_B["Network B"]:::vpc
+    subnetwork_B_1("10.0.2.0/24"):::subnetwork -->|part of| network_B
+  end
+
+  subgraph Network C
+    subnetwork_C_1("10.0.3.0/24"):::subnetwork -->|part of| network_C["Network C"]:::vpc
+  end
+
+  network_B ===|peering| network_C
+  network_C ===|peering| network_A
+
+  subnetwork_A_2 -.-|conflict in Network C| subnetwork_B_2
+
+  linkStyle 7 stroke:#a00,stroke-width:2px,stroke-dasharray: 5 5;
+```
+
+Here we extend the previous example with a new network: `Network C`. It has only one subnetwork with unique CIDR:
+`10.0.3.0/24`. Instead of peering `Network A` and `Network B` directly, we try to peer them through `Network C`.
+
+For `Network A` there is no problem - it knows only one `10.0.0.0/24` subnetwork - its own. The same goes for
+`Network B`.
+
+However, when we will try to connect them both to `Network C`, it will report a conflict as it gets routing to
+`10.0.0.0/24` CIDR from two different peers. When trying to apply this in GCP, one peering will be created
+successfully. The second one will fail just like in the case of peering conflicting networks directly.
+
+**Conclusion:** Two networks peered through third common network also can't have conflicting CIDRs.
+
+##### Peering conflicting networks with more than one hop between them
+
+```mermaid
+graph LR
+  classDef subnetwork color:#fff,fill:#555,stroke:#000,stroke-dasharray: 5 5;
+  classDef vpc        color:#fff,fill:#555,stroke:#000,stroke-width:2px;
+
+  subgraph Network A
+    subnetwork_A_1("10.0.1.0/24"):::subnetwork -->|part of| network_A["Network A"]:::vpc
+    subnetwork_A_2("10.0.0.0/24"):::subnetwork -->|part of| network_A
+  end
+
+  subgraph Network B
+    subnetwork_B_2("10.0.0.0/24"):::subnetwork -->|part of| network_B["Network B"]:::vpc
+    subnetwork_B_1("10.0.2.0/24"):::subnetwork -->|part of| network_B
+  end
+
+  subgraph Network C
+    subnetwork_C_1("10.0.3.0/24"):::subnetwork -->|part of| network_C["Network C"]:::vpc
+  end
+
+  subgraph Network D
+    subnetwork_D_1("10.0.4.0/24"):::subnetwork -->|part of| network_D["Network D"]:::vpc
+  end
+
+  network_B ===|peering| network_D
+  network_C ===|peering| network_A
+  network_D ===|peering| network_C
+```
+
+In this example we add fourth network: `Network D`. It has only one subnetwork with unique CIDR: `10.0.4.0/24`.
+We also extend the peering chain, injecting `Network D` in the middle.
+
+With this layout, we finally have no conflicts. `Network A` connected with `Network C` doesn't have any directly
+overlapping subnetworks. As `Network C` is connected now with `Network D` it doesn't create conflict for `Network C`
+as it was in the previous example.
+
+Then we have `Network D`, which is connected with `Network B` and again without any direct overlapping.
+
+The two only subnetworks that have conflicting CIDRs are now separated with two hops between them. As automatic
+routing is being added only for directly connected networks, we have no place where two different routes for
+`10.0.0.0/24` would show up.
+
+**Conclusion:** If you need to define conflicting CIDRs, ensure that you have at least two hops when peering the VPC
+networks. **Or in other words**: If you have more than two hops when peering VPC networks, you don't need to worry
+about CIDR conflicts between the edge networks.
+
+#### Networking layout design
+
+Let's consider this example layout:
+
+```mermaid
+graph LR
+  classDef subnetwork color:#fff,fill:#555,stroke:#000,stroke-dasharray: 5 5;
+  classDef vpc        color:#fff,fill:#555,stroke:#000,stroke-width:2px;
+
+  subgraph gitlab-ci
+    ci_ci[gitlab-ci/ci]:::vpc
+    ci_ci_bastion(bastion subnetwork):::subnetwork
+    ci_ci_runner_managers(runner-managers subnetwork):::subnetwork
+    ci_ci_ep(ephemeral-runners-private subnetwork):::subnetwork
+    ci_ci_esgo(ephemeral-runners-shared-gitlab-org subnetwork):::subnetwork
+
+    ci_ci_gke[gitlab-ci/gke]:::vpc
+    ci_ci_gke_gke(gke subnetwork):::subnetwork
+
+    ci_ci_bastion --> ci_ci
+    ci_ci_runner_managers --> ci_ci
+    ci_ci_ep --> ci_ci
+    ci_ci_esgo --> ci_ci
+    ci_ci ===|peering| ci_ci_gke
+    ci_ci_gke_gke --> ci_ci_gke
+  end
+
+  subgraph gitlab-production
+    prd_gprd[gitlab-production/gprd]:::vpc
+    prd_gprd_monitoring(monitoring-gprd subnetwork):::subnetwork
+
+    prd_gprd_monitoring --> prd_gprd
+  end
+
+  subgraph gitlab-ci-plan-free-4
+    ci_plan_free_4_ephemeral[gitlab-ci-plan-free-4/ephemeral-runners]:::vpc
+    ci_plan_free_4_ephemeral_e(ephemeral-runners subnetwork):::subnetwork
+
+    ci_plan_free_4_gke[gitlab-ci-plan-free-4/gke]:::vpc
+    ci_plan_free_4_gke_gke(gke subnetwork):::subnetwork
+
+    ci_plan_free_4_ephemeral_e --> ci_plan_free_4_ephemeral
+    ci_plan_free_4_ephemeral ===|peering| ci_plan_free_4_gke
+    ci_plan_free_4_gke_gke --> ci_plan_free_4_gke
+  end
+
+  subgraph gitlab-ci-plan-free-3
+    ci_plan_free_3_ephemeral[gitlab-ci-plan-free-3/ephemeral-runners]:::vpc
+    ci_plan_free_3_ephemeral_e(ephemeral-runners subnetwork):::subnetwork
+
+    ci_plan_free_3_gke[gitlab-ci-plan-free-3/gke]:::vpc
+    ci_plan_free_3_gke_gke(gke subnetwork):::subnetwork
+
+    ci_plan_free_3_ephemeral_e --> ci_plan_free_3_ephemeral
+    ci_plan_free_3_ephemeral ===|peering| ci_plan_free_3_gke
+    ci_plan_free_3_gke_gke --> ci_plan_free_3_gke
+  end
+
+  ci_ci ===|temporary peering| prd_gprd
+  ci_ci ===|peering| ci_plan_free_3_ephemeral
+  ci_ci ===|peering| ci_plan_free_4_ephemeral
+
+  linkStyle 13 stroke:#0a0,stroke-width:4px;
+```
+
+`gitlab-ci-plan-free-3` project have two networks that are peered: `ephemeral-runners` and `gke`. They are peered as
+Prometheus in `gke` network needs to be able to scrape node exporter on ephemeral VMs in `ephemeral-runners` network.
+
+As it's a [direct peering](#peering-conflicting-networks-directly), the networks can't have conflicting CIDRS.
+
+The same goes for `gitlab-ci-plan-free-4` project.
+
+The `ephemeral-runners` networks from `gitlab-ci-plan-free-3` and `gitlab-ci-plan-free-4` are also peered with
+`ci` network in `gitlab-ci` project. This is done because runner managers in `runner-managers` subnetwork
+need to be able to communicate with ephemeral VMs created in the `gitlab-ci-plan-free-X` projects.
+
+Here we have a mix of direct peering and [peering with one hop](#peering-conflicting-networks-with-one-hop-between-them):
+
+- `gitlab-ci/ci` and `gitlab-ci-plan-free-3/ephemeral-runners` are peered directly, so their subnetworks
+  can't have conflicting CIDRs.
+- `gitlab-ci/ci` and `gitlab-ci-plan-free-3/gke` are peered through `gitlab-ci-plan-free-3/ephemeral-runners`. Their
+  networks also can't have conflicting CIDRs, as this would create conflict in `gitlab-ci-plan-free-3/ephemeral-runners`.
+
+Also `gitlab-ci-plan-free-X/ephemeral-runners` are connected between each other with only one hop (`gitlab-ci/ci`),
+which means that all `ephemeral-runners` subnetwork need to have unique CIDRs.
+
+`gitlab-ci-plan-free-X/gke` are connected with more than one hop (sibling `ephemeral-runners` network -> `gitlab-ci/ci`
+network -> other `ephemeral-runners` network -> other `gitlab-ci-plan-free-X/gke` network), they may have exactly the
+same CIDRs.
+
+Having the peering rules in minds we've designed such networking layout:
+
+1. Each project used for CI runners will have a dedicated `gke` network with `gke` subnetwork. As these are
+   never connected directly or with one hop, they all will use exactly the same CIDR, following the philosophy of
+   "convention over configuration".
+
+1. The `ephemeral-runners` subnetworks will be conflicting, as they all will have a one-hop common point
+   in `gitlab-ci/ci`. This means that we need to make them unique across whole layout. For that we will maintain
+   [a list of unique CIDRs for `ephemeral-runners` subnetworks](#ephemeral-runners-unique-cidrs-list). The rule needs
+   to be followed no matter if the network is created in a dedicated project (like the `ci-plan-free-X` ones) or
+   in the main `gitlab-ci` project.
+
+1. Utility subnetworks like `bastion` or `runner-managers` need to not conflict with any other subnetworks.
+   As we will have just these two subnetworks only in `gitlab-ci/ci` network,
+   [we've chosen static CIDRs](#gitlab-ci-project) for them and will not change that.
+
+1. Until we will [introduce dedicated Prometheus servers](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/13886)
+   for our CI projects and integrate them with our Thanos cluster, we need to use our main Prometheus server in
+   `gitlab-production` project. For that we've created and need to maintain a temporary peering between `gitlab-ci/ci`
+   and `gitlab-production/gprd` networks. When creating this peering we've resolved all CIDR conflicts, so all is good
+   for now and our `ephemeral-runners` CIDR creation rule should ensure we will not introduce new conflicts. We will
+   however need to carefully chose the CIDR for the `gke` subnetworks, as there is one-hop peering between
+   `gitlab-production/gprd` and `gitlab-ci/gke`.
+
+#### `ephemeral-runners` unique CIDRs list
+
+For `ephemeral-runners` subnetworks we've decided to use subsequent CIDRs, starting from `10.10.0.0/21`.
+
+The `/21` network gives use place for 2046 nodes per network. In case we need more, we should consider
+creating specific GCP projects for part of the ephemeral runners for such shard. This is what we did for `shared`
+(which uses the `gitlab-ci-plan-free-X` projects).
+
+Every new CIDR should start at directly after the previously reserved one ends.
+
+**The list bellow is the SSOT of the CIDRs we should use!**
+
+**Please consult every new range with it and keep this list up-to-date!**
+
+| GCP project             | Network "$VPC/$SUBNETWORK"               | CIDR            |
+| ----------------------- | ---------------------------------------- | --------------- |
+| `gitlab-ci-plan-free-7` | `ephemeral-runners/ephemeral-runners`    | `10.10.0.0/21`  |
+| `gitlab-ci-plan-free-6` | `ephemeral-runners/ephemeral-runners`    | `10.10.8.0/21`  |
+| `gitlab-ci-plan-free-5` | `ephemeral-runners/ephemeral-runners`    | `10.10.16.0/21` |
+| `gitlab-ci-plan-free-4` | `ephemeral-runners/ephemeral-runners`    | `10.10.24.0/21` |
+| `gitlab-ci-plan-free-3` | `ephemeral-runners/ephemeral-runners`    | `10.10.32.0/21` |
+| `gitlab-ci`             | `ci/ephemeral-runners-private`           | `10.10.40.0/21` |
+| `gitlab-ci`             | `ci/ephemeral-runners-shared-gitlab-org` | `10.10.48.0/21` |
+
+### GCP projects
+
+Here you can find details about networking in different projects used by CI Runners service.
+
+#### gitlab-ci project
+
+| Network Name   | Subnet Name                 | CIDR            | Purpose                                                |
+| -------------- | --------------------------- | --------------- | ------------------------------------------------------ |
+| `default`      | `default`                   | `10.142.0.0/20` | all non-runner machines (managers, prometheus, etc.). In `us-east1` - we don't use this subnetwork in any other region. |
+| `default`      | `shared-runners`            | `10.0.32.0/20`  | shared runner (SRM) machines                           |
+| `default`      | `private-runners`           | `10.0.0.0/20`   | private runner (PRM) machines                          |
+| `default`      | `gitlab-shared-runners `    | `10.0.16.0/20`  | gitlab shared runner (GSRM) machines                   |
+| `ci`           | `bastion-ci`                | `10.1.4.0/24`   | Bastion network                                        |
+| `ci`           | `runner-managers`           | `10.1.5.0/24`   | Network for Runner Managers ([new ones](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/456))                 |
+| `ci`           | `ephemeral-runners-private` | `10.10.40.0/21` | Ephemeral runner machines for the new `private` shard. See [`ephemeral-runnes` unique CIDRs list](#ephemeral-runners-unique-cidrs-list) above |
+| `ci`           | `ephemeral-runners-shared-gitlab-org` | `10.10.48.0/21` | Ephemeral runner machines for the new `shared-gitlab-org` shard. See [`ephemeral-runners` unique CIDRs list](#ephemeral-runners-unique-cidrs-list) above |
+| `runners-gke`  | `runners-gke`               | `10.9.4.0/24`   | Primary; GKE nodes range      |
+| `runners-gke`  | `runners-gke`               | `10.8.0.0/16`   | Secondary; GKE pods range     |
+| `runners-gke`  | `runners-gke`               | `10.9.0.0/22`   | secondary; GKE services range |
+
+The `default` network will be removed once we will move all of the runner managers to a new
+infrastructure, which is being tracked [by this epic](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/456).
+
+The `ci` network will be getting new subnetworks for `ephemeral-runners-X` while working on
+[this epic]((https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/456)).
+
+The `runners-gke` network, at least for now, is in the expected state.
+
+#### gitlab-org-ci project
+
+| Network Name   | Subnet Name               | CIDR          | Purpose                               |
+| -------------- | ------------------------- | ------------- | ------------------------------------- |
+| `org-ci`       | `manager`                 | `10.1.0.0/24` | Runner manager machines               |
+| `org-ci`       | `bastion-org-ci`          | `10.1.2.0/24` | Bastion network                       |
+| `org-ci`       | `gitlab-gke-org-ci`       | `10.1.3.0/24` | GKE network                           |
+| `org-ci`       | `gitlab-gke-org-ci`       | `10.3.0.0/16` | GKE network                           |
+| `org-ci`       | `gitlab-gke-org-ci`       | `10.1.8.0/23` | GKE network                           |
+| `org-ci`       | `shared-runner`           | `10.2.0.0/16` | Ephemeral runner machines             |
+
+We are considering removing this environment at all when the
+[Linux CI Runners Continuous Delivery](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/456) will be done.
+Our current plan is to add the `gitlab-docker-shared-runners-manager` as another entry in the `shared-gitlab-org`
+runner managers. Since we've moved a lot of load from the `ci` project to the `ci-plan-free-X` projects, it should
+have a lot of space for load currently handled by `gitlab-org-ci` project. Removing it will make our configuration
+a little more simple.
+
+#### gitlab-ci-windows project
+
+| Network Name   | Subnet Name          | CIDR          | Purpose                           |
+| -------------- | -------------------- | ------------- | --------------------------------- |
+| `windows-ci`   | `manager-subnet`     | `10.1.0.0/16` | Runner manager machines           |
+| `windows-ci`   | `executor-subnet`    | `10.2.0.0/16` | Ephemeral runner machines         |
+| `windows-ci`   | `runner-windows-ci`  | `10.3.0.0/24` | Runner network for ansible/packer |
+| `windows-ci`   | `bastion-windows-ci` | `10.3.1.0/24` | bastion network                   |
+
+Windows project will most probably get the `runners-gke` network and GKE based monitoring in the future. This
+is however not yet scheduled.
+
+## Monitoring
+
+![CI Runners monitoring stack design](./img/ci-runners-monitoring.png)
+
+Monitoring is be defined in almost the same configuration in all CI related projects. It is deployed using GKE and
+a cluster created by terraform. For that
+[a dedicated terraform module](https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/tree/master/modules/ci-runners/gke)
+was created. For it's purpose the GKE cluster is using the `runners-gke` network defined above.
+
+Prometheus is deployed in at least two replicas. Both have a Thanos Sidecar running alongside. Sidecar's gRPC
+endpoint is exposed as publicly accessible (we don't want to peer the `ops` or `gprd` network here) and the GCP Firewall
+limits access to it to only Thanos Query public IPs. This service uses TCP port `10901`.
+
+Long-term metrics storage is handled by using a dedicated GCS bucket created by the terraform module alongside
+the cluster. Thanos Sidecar is configured with write access to this bucket.
+
+Apart from the Sidecar we also have Thanos Store Gateway and Thanos Compact deployed and configured to use the same
+GCS bucket. Store Gateway's gRPC endpoint is exposed similarly to the Sidecar's one. This service uses TCP port `10903`.
+
+[Traefik](https://traefik.io/) is used as the ingress and load-balancing mechanism. It exposes gRPC services on given
+ports (using TCP routing), Prometheus UI and own dashboard. HTTP endpoints are automatically redirected to HTTPS,
+and Let's Encrypt certificates are used for TLS.
+
+For external access each project where monitoring is deployed is using a reserved public IP address. This address
+is bound to two DNS A records:
+
+- `monitoring-lb.[ENVIRONMENT].ci-runners.gitlab.net` - which is used for Thanos Query store DNS discovery and
+  to access Traefik dashboard in the browser. Access to the Dashboard is limited by oAuth, using Google as the Identity
+  Provider allowing `@gitlab.com` accounts. Consent screen and oAuth2 secrets are defined in the `gitlab-ci-155816`
+  project and should be used for all deployments of this monitoring stack (**remember:** new deploys will use new
+  domains for the redirection URLs, which should be added to the oAuth2 credentials configuration; unfortunately this
+  can't be managed by terraform).
+- `prometheus.[ENVIRONMENT].ci-runners.gitlab.net` - which is used to access directly the Prometheus deployment. As with
+  the Traefik dashboard, access is limited by oAuth2 with the same configuration.
+
+K8S deployment configuration is managed fully from CI. [A dedicated
+project](https://gitlab.com/gitlab-com/gl-infra/ci-runners/k8s-workloads) covers all monitoring clusters in different
+CI projects that we maintain.
 
 ## Production Change Lock (PCL)
 

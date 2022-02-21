@@ -2,24 +2,58 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local rateMetric = metricsCatalog.rateMetric;
 local derivMetric = metricsCatalog.derivMetric;
 local googleLoadBalancerComponents = import './lib/google_load_balancer_components.libsonnet';
+local maturityLevels = import 'service-maturity/levels.libsonnet';
+local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 
 metricsCatalog.serviceDefinition({
   type: 'logging',
   tier: 'inf',
+
   serviceIsStageless: true,  // logging does not have a cny stage
+
   monitoringThresholds: {
     // apdexScore: 0.999,
     errorRatio: 0.999,
   },
   provisioning: {
     vms: false,
-    kubernetes: false,
+    kubernetes: true,
+  },
+  kubeConfig: {
+    labelSelectors: kubeLabelSelectors(
+      hpaSelector=null,  // no hpas for logging,
+      ingressSelector=null,  // no ingress for logging
+      deploymentSelector=null,  // no deployment for logging
+
+      // TODO: fix the stage label for default and highmem nodes
+      // See https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2239
+      podStaticLabels={ stage: 'main' },
+    ),
+  },
+  kubeResources: {
+    'fluentd-archiver': {
+      kind: 'StatefulSet',
+      containers: [
+        'fluentd',
+      ],
+    },
+    'fluentd-elasticsearch': {
+      kind: 'DaemonSet',
+      containers: [
+        'fluentd-elasticsearch',
+      ],
+    },
+    pubsubbeat: {
+      kind: 'Deployment',
+      containers: [
+        'pubsubbeat',
+      ],
+    },
   },
   serviceLevelIndicators: {
     elasticsearch_searching_cluster: {
       userImpacting: false,
       featureCategory: 'not_owned',
-      team: 'sre_observability',
       description: |||
         This cluster SLI monitors searches issued to GitLab's logging ELK instance.
       |||,
@@ -36,7 +70,6 @@ metricsCatalog.serviceDefinition({
     elasticsearch_indexing_cluster: {
       userImpacting: false,
       featureCategory: 'not_owned',
-      team: 'sre_observability',
       description: |||
         This cluster SLI monitors log index operations to GitLab's logging ELK instance.
       |||,
@@ -53,7 +86,6 @@ metricsCatalog.serviceDefinition({
     elasticsearch_searching_index: {
       userImpacting: false,
       featureCategory: 'not_owned',
-      team: 'sre_observability',
       description: |||
         This index SLI monitors searches issued to GitLab's logging ELK instance.
       |||,
@@ -70,7 +102,6 @@ metricsCatalog.serviceDefinition({
     elasticsearch_indexing_index: {
       userImpacting: false,
       featureCategory: 'not_owned',
-      team: 'sre_observability',
       description: |||
         This index SLI monitors log index operations to GitLab's logging ELK instance.
       |||,
@@ -100,7 +131,6 @@ metricsCatalog.serviceDefinition({
     stackdriver: {
       userImpacting: false,
       featureCategory: 'not_owned',
-      team: 'sre_observability',
       ignoreTrafficCessation: true,
 
       description: |||
@@ -117,7 +147,6 @@ metricsCatalog.serviceDefinition({
     pubsub_topics: {
       userImpacting: false,
       featureCategory: 'not_owned',
-      team: 'sre_observability',
       description: |||
         This SLI monitors pubsub topics.
       |||,
@@ -133,7 +162,6 @@ metricsCatalog.serviceDefinition({
     pubsub_subscriptions: {
       userImpacting: false,
       featureCategory: 'not_owned',
-      team: 'sre_observability',
       description: |||
         This SLI monitors pubsub subscriptions.
       |||,
@@ -151,7 +179,6 @@ metricsCatalog.serviceDefinition({
     fluentd_log_output: {
       userImpacting: false,
       featureCategory: 'not_owned',
-      team: 'sre_observability',
       description: |||
         This SLI monitors fluentd log output and the number of output errors in fluentd.
       |||,
@@ -164,8 +191,31 @@ metricsCatalog.serviceDefinition({
         counter='fluentd_output_status_num_errors'
       ),
 
-      significantLabels: ['tag', 'type'],
+      significantLabels: ['fqdn', 'pod', 'type'],
+      serviceAggregation: false,
+    },
+
+    // This components tracks pubsubbeat errors and outputs
+    // across all topics
+    pubsubbeat: {
+      userImpacting: false,
+      featureCategory: 'not_owned',
+      description: |||
+        This SLI monitors pubsubbeat errors.
+      |||,
+
+      requestRate: rateMetric(
+        counter='pubsubbeat_libbeat_output_events'
+      ),
+      errorRate: rateMetric(
+        counter='pubsubbeat_errors_total'
+      ),
+
+      significantLabels: ['pod'],
       serviceAggregation: false,
     },
   },
+  skippedMaturityCriteria: maturityLevels.skip({
+    'Service exists in the dependency graph': 'The logging platform consumes logs via fluentd, but does not interact directly with any other services',
+  }),
 })

@@ -5,6 +5,12 @@ This run book covers administration of the Teleport service from an infrastructu
 - See the [Teleport Rails Console](Connect_to_Rails_Console_via_Teleport.md) runbook if you'd like to log in to a machine using teleport
 - See the [Teleport Approval Workflow](teleport_approval_workflow.md) runbook if you'd like to review and approve access requests
 
+## If Approvals appear to be working, but user doesn't receive the cert
+
+We have seen this problem recently, and it appears to be a bug in the Teleport server.  The vendor is investigating. The symptom is that all parts of the process appear to work fine, but after approving the request, the user never receives a signed certificate.  The request process just hangs, waiting for it.
+
+The workaround is simply to restart the teleport service.  Use the restart command in the next section.  So far, this has always made everything work again as expected.  The user may need to submit another request after the restart.
+
 ## Checking status on the Teleport Server
 
 Summary from the [teleport admin docs](https://goteleport.com/docs/admin-guide/).  There is a systemd unit for teleport and the standard systemctl commands should work.

@@ -1,25 +1,8 @@
+# frozen_string_literal: true
 require 'time'
+require_relative '../lib/redis_trace/key_pattern'
 
 raise 'no input file provided' if ARGV.empty?
-
-def self.filter_key(key)
-  case ENV['GITLAB_REDIS_CLUSTER']
-  when 'persistent'
-    key = key
-      .gsub(%r{^(session:lookup:ip:gitlab2:|etag:|action_cable/|sidekiq:cancel:|database-load-balancing/write-location/runner/|runner:build_queue:|gitlab:exclusive_lease:|issues:)(.+)}, '\1$PATTERN')
-  when 'cache'
-    key = key
-      .gsub(%r{^(highlighted-diff-files:merge_request_diffs/)(.+)}, '\1$PATTERN')
-      .gsub(%r{^(show_raw_controller:project|ancestor|can_be_resolved_in_ui\?|commit_count_refs/heads/master|commit_count_master|exists\?|last_commit_id_for_path|merge_request_template_names|root_ref|xcode_project\?|issue_template_names|views/shared/projects/_project|application_rate_limiter|branch_names|merged_branch_names|peek:requests|tag_names|branch_count|tag_count|commit_count|size|gitignore|rendered_readme|readme_path|license_key|contribution_guide|gitlab_ci_yml|changelog|license_blob|avatar|metrics_dashboard_paths|has_visible_content\?):(.+)}, '\1:$PATTERN')
-      .gsub(%r{^cache:gitlab:(diverging_commit_counts_|github-import/)(.+)}, 'cache:gitlab:\1$PATTERN')
-  end
-
-  key
-    .gsub(/([0-9a-f]{64})/, '$LONGHASH')
-    .gsub(/([0-9a-f]{40})/, '$LONGHASH')
-    .gsub(/([0-9a-f]{32})/, '$HASH')
-    .gsub(/([0-9]+)/, '$NUMBER')
-end
 
 ARGV.each do |idx_filename|
   filename = idx_filename.gsub(/\.findx$/, "")
@@ -76,6 +59,8 @@ ARGV.each do |idx_filename|
         # dst_port = Regexp.last_match(4).to_i
 
         case cmd
+        when "blpop"
+          keys = [args[1..-2]]
         when "get"
           keys = [args[1]]
         when "exists"
@@ -106,11 +91,21 @@ ARGV.each do |idx_filename|
           keys = []
         when "ping"
           keys = []
+        when "client"
+          keys = []
         when "sismember"
           keys = [args[1]]
         when "incr"
           keys = [args[1]]
         when "incrby"
+          keys = [args[1]]
+        when "incrbyfloat"
+          keys = [args[1]]
+        when "hincrby"
+          keys = [args[1]]
+        when "hscan"
+          keys = [args[1]]
+        when "hdel"
           keys = [args[1]]
         when "setex"
           keys = [args[1]]
@@ -133,6 +128,8 @@ ARGV.each do |idx_filename|
         when "strlen"
           keys = [args[1]]
         when "pfadd"
+          keys = [args[1]]
+        when "pexpire"
           keys = [args[1]]
         when "srem"
           keys = [args[1]]
@@ -163,7 +160,7 @@ ARGV.each do |idx_filename|
         end
 
         keys.each do |key|
-          puts "#{ts.iso8601(9)} #{ts.to_time.to_i % 60} #{cmd} #{src_host} #{filter_key(key).gsub(' ', '_').inspect} #{key.gsub(' ', '_').inspect}"
+          puts "#{ts.iso8601(9)} #{ts.to_time.to_i % 60} #{cmd} #{src_host} #{RedisTrace::KeyPattern.filter_key(key).gsub(' ', '_').inspect} #{key.gsub(' ', '_').inspect}"
         end
       rescue EOFError
       end

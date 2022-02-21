@@ -24,172 +24,42 @@ They include CI jobs that apply the relevant config to the right cluster. Most o
 
 # Kubernetes API Access
 
-Certain diagnostic steps can only be performed by interacting with kubernetes directly. For this reason you need to be able to run kubectl commands. Remember to avoid making any changes to the clusters config outside of git!
+Certain diagnostic steps can only be performed by interacting with kubernetes
+directly. For this reason you need to be able to run kubectl commands. Remember
+to avoid making any changes to the clusters config outside of git!
 
-We use private GKE clusters, with the control plane only accessible from within the cluster's VPC. There are two recommended ways for accessing kubernetes api:
-- from "console servers"
-- using tunnels that go through "console servers"
+We use private GKE clusters, with the control plane only accessible from within
+the cluster's VPC. So we need to set up our local machine to tunnel requests
+through a proxy.
 
-## Accessing clusters via console servers
+1. Install `gcloud`: https://cloud.google.com/sdk/docs/install
+1. Install `kubectl`: https://kubernetes.io/docs/tasks/tools/install-kubectl-windows/
+1. Install `sshuttle`: https://github.com/sshuttle/sshuttle#obtaining-sshuttle
+1. Run `gcloud auth login`: The browser will open to choose with google email
+   address to use to allow for oauth.
 
-:warning: Do not perform any of these actions using the `root` user, nor `sudo` :warning:
+    💡 *If you see warnings about permissions issues related to `~/.config/gcloud/*`
+    check the permissions of this directory.  Simply change it to your user if
+    necessary: `sudo chown -R $(whoami) ~/.config`* 💡
+1. Run `glsh kube setup`: Use [`glsh`](../../README.md#running-helper-scripts-from-runbook) to set up `kubectl` configuration to be to talk to all clusters.
+1. Run `glsh kube use-cluster`: This will print all the avilable clusters.
+1. Run `glsh kube use-cluster gstg`: This will connect you to the `gstg`
+   regional clutser.
+1. In a new window run `kubectl get nodes`: This will list all the nodes
+   available in cluster.
 
-Perform the below work on the appropriate `console` server
-
-* `gstg` - `console-01-sv-gstg.c.gitlab-staging-1.internal`
-* `gprd` - `console-01-sv-gprd.c.gitlab-production.internal`
-
-- [ ] Authenticate with `gcloud`
-
-```bash
-$ gcloud auth login
-```
-
-> If you see warnings about permissions issues related to `~/.config/gcloud/*`
-> check the permissions of this directory.  Simply change it to your user if
-> necessary: `sudo chown -R $(whoami) ~/.config`
-
-You'll be prompted to accept that you are using the `gcloud` on a shared
-computer and presented with a URL to continue logging in with, after which
-you'll be provided a code to pass into the command line to complete the
-process.  By default, `gcloud` will configure your user within the same project
-configuration for which that `console` server resides.
-
-- [ ] Get the credentials for production and staging:
-
-```bash
-$ gcloud container clusters get-credentials gstg-gitlab-gke --region us-east1 --project gitlab-staging-1
-$ gcloud container clusters get-credentials gprd-gitlab-gke --region us-east1 --project gitlab-production
-```
-
-This should add the appropriate context for `kubectl` to `~/.kube/config`, so the following should
-work and display the nodes running on the cluster:
-
-- [ ] `kubectl get nodes`
-
-Running `gcloud auth revoke` (among other things) removes the kubernetes credentials (it wipes them from the `~/.kube/config` file undoing the `get-credentials` command).
-
-**:warning: It is not the intention of the console servers to utilize the `k-ctl`
-script or any of the components necessary.  These servers provide the sole means
-of troubleshooting a misbehaving cluster or application.  Any changes that
-involve the use of `helm` or `k-ctl` MUST be done via the repo and CI/CD.
-:warning:**
-
-## Accessing clusters locally (workstation set up for tunneling) ##
-
-GKE clusters must be accessed through the console servers, but they are best accessed using an ssh tunnel. We will access the clusters this way until this issues in the [access epic](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/337) are completed.
-
-There are two mechanisms you can use to access these clusters via ssh tunnel.
-
-* [`sshuttle`](https://github.com/sshuttle/sshuttle) automates the process of setting up an ssh tunnel _and_ modifying your local route table to forward traffic to the configured CIDR.
-
-* Using a standard ssh socks proxy listening locally to forward requests over the ssh tunnel to their destination
-
-### Using `sshuttle` ###
-
-You might want to use a tool like [`kubectx`](https://github.com/ahmetb/kubectx) or [`kubie`](https://github.com/sbstp/kubie) to smooth
-the process of switching kubernetes contexts and namespaces.
-
-Perform the below on your workstation:
-
-- [ ] Get the credentials for the clusters
-
-```bash
-# Staging zonal cluster
-$ gcloud container clusters get-credentials gstg-us-east1-b --region us-east1-b --project gitlab-staging-1
-$ gcloud container clusters get-credentials gstg-us-east1-c --region us-east1-c --project gitlab-staging-1
-$ gcloud container clusters get-credentials gstg-us-east1-d --region us-east1-d --project gitlab-staging-1
-
-# Production zonal cluster
-$ gcloud container clusters get-credentials gprd-us-east1-b --region us-east1-b --project gitlab-production
-$ gcloud container clusters get-credentials gprd-us-east1-c --region us-east1-c --project gitlab-production
-$ gcloud container clusters get-credentials gprd-us-east1-d --region us-east1-d --project gitlab-production
-
-# Production regional cluster
-$ gcloud container clusters get-credentials gprd-gitlab-gke --region us-east1 --project gitlab-production
-```
-
-- [ ] Create sshuttle wrappers for initiating tunneled connections
-
-```bash
-# kubectl config use-context gke_gitlab-production_us-east1-b_gprd-us-east1-b
-$ sshuttle -r console-01-sv-gprd.c.gitlab-production.internal '35.185.25.234/32'
-
-# kubectl config use-context gke_gitlab-production_us-east1-c_gprd-us-east1-c
-$ sshuttle -r console-01-sv-gprd.c.gitlab-production.internal '34.75.253.130/32'
-
-# kubectl config use-context gke_gitlab-production_us-east1-d_gprd-us-east1-d
-$ sshuttle -r console-01-sv-gprd.c.gitlab-production.internal '34.73.149.139/32'
-
-# kubectl config use-context gke_gitlab-staging-1_us-east1-b_gstg-us-east1-b
-$ sshuttle -r console-01-sv-gstg.c.gitlab-staging-1.internal '34.74.13.203/32'
-
-# kubectl config use-context gke_gitlab-staging-1_us-east1-c_gstg-us-east1-c
-$ sshuttle -r console-01-sv-gstg.c.gitlab-staging-1.internal '35.237.127.243/32'
-
-# kubectl config use-context gke_gitlab-staging-1_us-east1-d_gstg-us-east1-d
-$ sshuttle -r console-01-sv-gstg.c.gitlab-staging-1.internal '35.229.107.91/32'
-
-# kubectl config use-context gke_gitlab-staging-1_us-east1_gstg-gitlab-gke
-$ sshuttle -r console-01-sv-gstg.c.gitlab-staging-1.internal '34.73.144.43/32'
-
-# kubectl config use-context gke_gitlab-production_us-east1_gprd-gitlab-gke
-$ sshuttle -r console-01-sv-gprd.c.gitlab-production.internal '35.243.230.38/32'
-```
-
-- [ ] Ensure you can list pods in one of the regions
-
-```bash
-$ sshuttle -r console-01-sv-gstg.c.gitlab-staging-1.internal '34.73.144.43/32'
-$ kubectl config use-context gke_gitlab-staging-1_us-east1_gstg-gitlab-gke
-$ kubectl get pods -n gitlab
-```
-
-**Note**: Optionally you rename your context to something less unwieldy: `kubectl config rename-context gke_gitlab-production_us-east1_gprd-gitlab-gke gprd`
-
-### Using ssh socks proxy ###
-
-- [ ] Get credentials for the clusters
-
-```bash
-# Staging zonal clusters
-$ gcloud container clusters get-credentials gstg-us-east1-b --region us-east1-b --project gitlab-staging-1
-$ gcloud container clusters get-credentials gstg-us-east1-c --region us-east1-c --project gitlab-staging-1
-$ gcloud container clusters get-credentials gstg-us-east1-d --region us-east1-d --project gitlab-staging-1
-
-# Production zonal clusters
-$ gcloud container clusters get-credentials gprd-us-east1-b --region us-east1-b --project gitlab-production
-$ gcloud container clusters get-credentials gprd-us-east1-c --region us-east1-c --project gitlab-production
-$ gcloud container clusters get-credentials gprd-us-east1-d --region us-east1-d --project gitlab-production
-
-# Production regional cluster
-$ gcloud container clusters get-credentials gprd-gitlab-gke --region us-east1 --project gitlab-production
-```
-
-- [ ] SSH to a console node depending on the environment and setup a socks proxy
-
-```bash
-# for staging
-$ ssh -N -D1881 console-01-sv-gstg.c.gitlab-staging-1.internal
-
-# for production
-$ ssh -N -D1881 console-01-sv-gprd.c.gitlab-production.internal
-```
-
-- [ ] In another window, export the `HTTP_PROXY` environment variable and test connection
-
-```bash
-$ export HTTP_PROXY=socks5://localhost:1881
-$ kubectl config use-context gke_gitlab-staging-1_us-east1-d_gstg-us-east1-d
-$ kubectl get pods -n gitlab
-```
 
 ### GUI consoles and metrics
 
-When troubleshooting issues, it can often be helpful to have a graphical overview of resources within the cluster, and basic metric data.
-For more detailed and expansive metric data, we have a number of [dashboards within Grafana](https://dashboards.gitlab.net/dashboards/f/kubernetes/kubernetes).
-For either tunneling mechanism above, one excellent option for a local graphical view into the clusters that works with both is the [Lens IDE](https://k8slens.dev/).
-Alternatively, the [GKE console](https://console.cloud.google.com/kubernetes) provides access to much of the same information via a web browser, as well.
+When troubleshooting issues, it can often be helpful to have a graphical
+overview of resources within the cluster, and basic metric data.  For more
+detailed and expansive metric data, we have a number of [dashboards within
+Grafana](https://dashboards.gitlab.net/dashboards/f/kubernetes/kubernetes).
+For tunneling mechanism above `glsh kube use-cluster $CLUSTER`, one excellent
+option for a local graphical view into the clusters that works with both is the
+[Lens IDE](https://k8slens.dev/).  Alternatively, the [GKE
+console](https://console.cloud.google.com/kubernetes) provides access to much
+of the same information via a web browser, as well.
 
 # Shell access to nodes and pods
 
@@ -199,13 +69,18 @@ Alternatively, the [GKE console](https://console.cloud.google.com/kubernetes) pr
 
 ```bash
 $ kubectl get pods -o wide  # find the name of the node that you want to access
-$ gcloud compute --project "gitlab-production" ssh <node name>
+$ gcloud compute --project "gitlab-production" ssh <node name> --tunnel-through-iap
 ```
 
-* [ ] From the node you can list containers, and get shell access to a pod as root:
+* [ ] From the node you can list containers, and get shell access to a pod as root.  At this writing our nodepools run a mix of docker and containerd, but eventually we expect them to be all containerd.
+
+When using the code snippets below on docker nodes, change `crictl` to `docker`; they are functionally mostly equivalent for common basic tasks.
+
+To quickly see if a node is running docker without explicitly looking it up, run `docker ps`; any containers listed in the outpu means it is a docker node, and empty output means containerd
 
 ```bash
-$ docker exec -u root -it <container> /bin/bash
+$ crictl ps
+$ crictl exec -u root -it <container> /bin/bash
 ```
 
 * [ ] You shouldn't install anything on the GKE nodes. Instead, use toolbox to troubleshoot problems, for example run strace on a process running in one of the GitLab containers. You can install anything you want in the toolbox container.
@@ -217,7 +92,7 @@ $ toolbox
 
 for more documentation on toolbox see: https://cloud.google.com/container-optimized-os/docs/how-to/toolbox
 
-for more troubleshooting tips see also: https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/uncategorized/k8s-operations.md#attaching-to-a-running-container
+For more troubleshooting tips see also: [attach to a running container](./k8s-operations.md#attaching-to-a-running-container)
 
 ## Accessing a pod
 

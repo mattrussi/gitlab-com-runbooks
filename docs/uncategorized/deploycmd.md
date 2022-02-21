@@ -59,16 +59,16 @@ where
 ### Examples:
 To run the `hostname` command on the `base-fe-we-pages` chef role systems in staging:
 ```
-/chatops run deploycmd hostname base_fe_web_pages --skip-haproxy
+/chatops run deploycmd hostname base_stor --skip-haproxy
 ```
 This will run the `hostname` command on the staging nodes with the role
-`base-fe-web-pages` and skip the haproxy drain/add. This specific command will be
+`base-stor` and skip the haproxy drain/add. This specific command will be
 a dry-run with no changes made.
 
-This command will run hostname on the `base-fe-web-pages` nodes in production
+This command will run hostname on the `base-stor` nodes in production
 and will do the graceful haproxy removal and re-addition. The
 `--no-check` flag will allow this command to actually make changes.
 ```
-/chatops run deploycmd hostname base_fe_web_pages --no-check --production
+/chatops run deploycmd hostname base_stor --no-check --production
 ```
 

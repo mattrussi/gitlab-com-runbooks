@@ -1,5 +1,6 @@
-local services = import './services/all.jsonnet';
-local prometheusServiceGroupGenerator = import 'prometheus-service-group-generator.libsonnet';
+local services = (import 'gitlab-metrics-config.libsonnet').monitoredServices;
+local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
+local prometheusServiceGroupGenerator = import 'servicemetrics/prometheus-service-group-generator.libsonnet';
 
 local outputPromYaml(groups) =
   std.manifestYamlDoc({
@@ -11,7 +12,10 @@ local featureCategoryFileForService(service) =
     {
       ['feature-category-metrics-%s.yml' % [service.type]]:
         outputPromYaml(
-          prometheusServiceGroupGenerator.featureCategoryRecordingRuleGroupsForService(service)
+          prometheusServiceGroupGenerator.featureCategoryRecordingRuleGroupsForService(
+            service,
+            aggregationSet=aggregationSets.featureCategorySourceSLIs,
+          )
         ),
     }
   else {};
@@ -20,7 +24,11 @@ local filesForService(service) =
   {
     ['key-metrics-%s.yml' % [service.type]]:
       outputPromYaml(
-        prometheusServiceGroupGenerator.recordingRuleGroupsForService(service)
+        prometheusServiceGroupGenerator.recordingRuleGroupsForService(
+          service,
+          componentAggregationSet=aggregationSets.promSourceSLIs,
+          nodeAggregationSet=aggregationSets.promSourceNodeComponentSLIs,
+        )
       ),
   } + featureCategoryFileForService(service);
 

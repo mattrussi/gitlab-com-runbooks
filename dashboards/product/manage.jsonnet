@@ -1,11 +1,9 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
-local dashboard = grafana.dashboard;
 local row = grafana.row;
 local template = grafana.template;
-local annotation = grafana.annotation;
-local productCommon = import 'product_common.libsonnet';
+local productCommon = import 'gitlab-dashboards/product_common.libsonnet';
 
 basic.dashboard(
   title='Performance - Manage',

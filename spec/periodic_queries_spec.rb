@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'spec_helper'
 require_relative '../lib/periodic_queries'
 
@@ -70,7 +71,7 @@ describe PeriodicQueries do
 
       local_files = %w[f1.json f2.json].map { |f| File.join(directory, f) }
       local_files.each { |f| File.write(f, '{}') }
-      remote_file = double(
+      remote_file = instance_double(
         'Remote File',
         public_url: 'https://https://storage.googleapis.com/the-bucket/the-file.json'
       )

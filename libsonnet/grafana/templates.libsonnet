@@ -1,5 +1,6 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local template = grafana.template;
+local defaultPrometheusDatasource = (import 'gitlab-metrics-config.libsonnet').defaultPrometheusDatasource;
 
 {
   gkeCluster::
@@ -18,6 +19,17 @@ local template = grafana.template;
       'label_values(kube_pod_container_info{environment="$environment"}, namespace)',
       refresh='load',
     ),
+  // Specify the default namespace to be utilized for this template
+  namespaceDefault(namespace)::
+    template.new(
+      'namespace',
+      '$PROMETHEUS_DS',
+      'label_values(kube_pod_container_info{environment="$environment"}, namespace)',
+      current=namespace,
+      refresh='load',
+      sort=1,
+    ),
+  // TODO: figure out to replace the below template with the above
   namespaceGitlab::
     template.new(
       'namespace',
@@ -31,8 +43,7 @@ local template = grafana.template;
     template.datasource(
       'PROMETHEUS_DS',
       'prometheus',
-      'Global',
-      regex='/(.*-gprd|Frank|Global|gprd-.*)/',
+      defaultPrometheusDatasource,
     ),
   environment::
     template.new(
@@ -177,5 +188,24 @@ local template = grafana.template;
       refresh='load',
       sort=1,
     ),
-
+  productStage(multi=true)::
+    template.new(
+      'product_stage',
+      '$PROMETHEUS_DS',
+      'label_values(gitlab:feature_category:stage_group:mapping{monitor="global"}, product_stage)',
+      multi=multi,
+      refresh='load',
+      includeAll=true,
+      allValues='.*',
+    ),
+  stageGroup(multi=true)::
+    template.new(
+      'stage_group',
+      '$PROMETHEUS_DS',
+      'label_values(gitlab:feature_category:stage_group:mapping{monitor="global", product_stage=~"$product_stage"}, stage_group)',
+      multi=multi,
+      refresh='load',
+      includeAll=true,
+      allValues='.*',
+    ),
 }

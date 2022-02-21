@@ -6,7 +6,7 @@
 
 * Mutator RPCs through Praefect fail with `FailedPrecondition` code and message `repository is in read-only mode`.
 
-* [Read-only metric is not at 0](https://dashboards.gitlab.com/d/8EAXC-AWz/praefect?viewPanel=40&orgId=1&refresh=30s).
+* [Read-only metric is not at 0](https://dashboards.gitlab.com/d/8EAXC-AWz/praefect?viewPanel=40&orgId=1).
 
 * Logs contain error message `repository is in read-only mode` originating from Praefect.
 

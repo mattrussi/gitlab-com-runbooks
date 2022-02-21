@@ -11,23 +11,31 @@
 
 ## Logging
 
-* [Registry](https://log.gprd.gitlab.net/goto/1c2fe46c1db40a7aa7d31875f3fd2ad1)
+* [Registry](https://log.gprd.gitlab.net/goto/9ec8a738ca23a17a9d7b61b4c3a9c96e)
 * [haproxy](https://console.cloud.google.com/logs/viewer?project=gitlab-production&interval=PT1H&resource=gce_instance&customFacets=labels.%22compute.googleapis.com%2Fresource_name%22&advancedFilter=labels.tag%3D%22haproxy%22%0Alabels.%22compute.googleapis.com%2Fresource_name%22%3A%22fe-registry-%22)
-* [system](https://log.gprd.gitlab.net/goto/b68e1a4183a652dc8d5e52a1fc2c1aba)
+* [Kubernetes](https://log.gprd.gitlab.net/goto/d614a5576099ff797be559c89fe88baa)
 
 ## Troubleshooting Pointers
 
-* [../cloudflare/managing-traffic.md](../cloudflare/managing-traffic.md)
-* [../frontend/ban-netblocks-on-haproxy.md](../frontend/ban-netblocks-on-haproxy.md)
-* [../frontend/haproxy.md](../frontend/haproxy.md)
+* [Cloud SQL Troubleshooting](../cloud-sql/cloud-sql.md)
+* [Cloudflare: Managing Traffic](../cloudflare/managing-traffic.md)
+* [Interacting with Consul](../consul/interaction.md)
+* [Blocking individual IPs and Net Blocks on HA Proxy](../frontend/ban-netblocks-on-haproxy.md)
+* [HAProxy management at GitLab](../frontend/haproxy.md)
 * [../kube/k8s-operations.md](../kube/k8s-operations.md)
-* [../kube/kubernetes.md](../kube/kubernetes.md)
-* [../onboarding/gitlab.com_on_k8s.md](../onboarding/gitlab.com_on_k8s.md)
-* [../onboarding/kibana-diagnosis.md](../onboarding/kibana-diagnosis.md)
+* [Kubernetes](../kube/kubernetes.md)
+* [Gitlab.com on Kubernetes](../onboarding/gitlab.com_on_k8s.md)
+* [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
+* [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
+* [Database Connection Pool Saturation](app-db-conn-pool-saturation.md)
+* [Container Registry CDN](cdn.md)
 * [gitlab-registry.md](gitlab-registry.md)
-* [../uncategorized/delete-projects-manually.md](../uncategorized/delete-projects-manually.md)
-* [../uncategorized/tweeting-guidelines.md](../uncategorized/tweeting-guidelines.md)
-* [../vault/vault.md](../vault/vault.md)
+* [migration-failure-scenarios.md](migration-failure-scenarios.md)
+* [High Number of Overdue Online GC Tasks](online-gc-high-overdue-tasks.md)
+* [Deleting a project manually](../uncategorized/delete-projects-manually.md)
+* [An impatient SRE's guide to deleting alerts](../uncategorized/deleting-alerts.md)
+* [Tweeting Guidelines](../uncategorized/tweeting-guidelines.md)
+* [Gitlab Vault](../vault/vault.md)
 <!-- END_MARKER -->
 
 

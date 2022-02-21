@@ -63,6 +63,30 @@ local networkPanel(
     show=false,
   );
 
+local networkPanelK8s(
+  title,
+  filter,
+  tx_metric='container_network_transmit_bytes_total:labeled',
+  rcv_metric='container_network_receive_bytes_total:labeled'
+      ) =
+
+  generalGraphPanel(title)
+  .addTarget(
+    promQuery.target('sum(increase(%(metric)s{device!="lo", %(filter)s, env="$environment"}[1d]))' % { metric: tx_metric, filter: filter }, legendFormat='egress')
+  )
+  .addTarget(
+    promQuery.target('sum(increase(%(metric)s{device!="lo", %(filter)s, env="$environment"}[1d])) * -1' % { metric: rcv_metric, filter: filter }, legendFormat='ingress')
+  )
+  .resetYaxes()
+  .addYaxis(
+    format='bytes',
+    label='bytes',
+  )
+  .addYaxis(
+    format='byte',
+    show=false,
+  );
+
 local osPanel(title) =
   generalGraphPanel(title)
   .addTarget(
@@ -85,8 +109,6 @@ basic.dashboard(
   'Network Ingress/Egress Overview',
   tags=['general'],
   editable=true,
-  refresh='5m',
-  timepicker=timepickerlib.new(refresh_intervals=['1m', '5m', '10m', '30m']),
   includeStandardEnvironmentAnnotations=false,
   includeEnvironmentTemplate=false,
   time_from='now-30d',
@@ -110,14 +132,14 @@ basic.dashboard(
         Amount of ingress / egress traffic **per day**, for nodes (Virtual Machines) and HAProxy Backends
 
         * HAProxy Nodes: Ingress/Egress bytes from the VMs
-          * registry: registry.gitlab.com traffic 
+          * registry: registry.gitlab.com traffic
           * fe: gitlab.com traffic (via cloudflare)
           * pages: *.gitlab.io and pages custom domains
         * Fleet
-          * git: git-https, git-ssh, websockets
-          * api: gitlab.com public api, gitlab.com/v4/api/*
-          * web: gitlab.com web traffic, anything that is not gitlab.com/v4/api/*
-          * web-pages: *.gitlab.io pages traffic
+          * git (K8s): git-https, git-ssh, websockets
+          * api (K8s): gitlab.com public api, gitlab.com/v4/api/*
+          * web (K8s): gitlab.com web traffic, anything that is not gitlab.com/v4/api/*
+          * web-pages (K8s): *.gitlab.io pages traffic
         * Storage
           * file: All projects/wikis from local disk, this is where gitaly runs
           * pages: NFS server for *.gitlab.io gitlab pages
@@ -155,23 +177,18 @@ basic.dashboard(
         * Why is the fleet node bandwidth so symetrical? Shouldn't we be sending more than we receive?
           * Most of our traffic is proxied to storage services, or to object storage.
         * Do clients download direct from object storage?
-          * It depends. 
-            * registry: all image pulls are direct from object storage 
+          * It depends.
+            * registry: all image pulls are direct from object storage
             * uploads/lfs/merge-request-diffs: currently set to proxy but we might change that
               https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10117
         * Why for HAProxy Registry backend traffic, is there so much more ingress than egress?
           * Registry downloads are direct from Object Storage
         * Why for HAProxy HTTPs and SSH Git traffic is egress so much more than ingress?
           * We are sending more Git data to clients than we are receiving
-        * Why do the web-pages fleet nodes have so much ingress compared to egress?
-          * Because of NFS, as you can see it is reading a lot of data from NFS but not serving
-            as much to the client, and probably compressed.
-          * Note that Pages data transfer on HAProxy shows more egress than ingress, which is what
-            we would expect
         * What about canary traffic?
           * Canary traffic is included in production traffic
-        * Why is there so little websockets traffic?
-          * Websockets is only used right now for the interractive terminal, for connecting to K8s pods
+        * What is websockets used for?
+          * Websockets is only used right now for the interractive terminal, and actioncable
       |||
     ),
   ], cols=3, rowHeight=13, startRow=1)
@@ -248,15 +265,15 @@ basic.dashboard(
   ], cols=3, rowHeight=7, startRow=4)
 )
 .addPanel(
-  row.new(title='Fleet Nodes'),
+  row.new(title='Fleet Nodes and Kubernetes Containers'),
   gridPos={ x: 0, y: 5, w: 24, h: 12 },
 )
 .addPanels(
   layout.grid([
-    networkPanel('Git Data Transfer / 24h', 'type="git"'),
-    networkPanel('API Data Transfer / 24h', 'type="api"'),
-    networkPanel('Web Data Transfer / 24h', 'type="web"'),
-    networkPanel('Web Pages Transfer / 24h', 'type="web-pages"'),
+    networkPanelK8s('Git Data Transfer / 24h', 'type="git"'),
+    networkPanelK8s('API Data Transfer / 24h', 'type="api"'),
+    networkPanelK8s('Web Data Transfer / 24h', 'type="web"'),
+    networkPanelK8s('Web Pages Transfer / 24h', 'type="web-pages"'),
   ], cols=4, rowHeight=7, startRow=5)
 )
 .addPanel(
@@ -270,13 +287,6 @@ basic.dashboard(
     networkPanel('Redis  (All) Data Transfer / 24h', 'type=~"^redis.*"'),
   ], cols=3, rowHeight=7, startRow=6)
 )
-.addPanels(
-  layout.grid([
-    networkPanel('Pages Storage (NFS) Data Transfer / 24h', 'fqdn=~"^pages-.*"'),
-    networkPanel('Share Cache Storage (Traces / Artifacts) Data Transfer / 24h', 'fqdn=~"^share-.*"'),
-  ], cols=2, rowHeight=7, startRow=7)
-)
-
 .addPanel(
   row.new(title='Object Storage'),
   gridPos={ x: 0, y: 8, w: 24, h: 12 },

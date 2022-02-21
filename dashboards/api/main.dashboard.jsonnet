@@ -1,15 +1,8 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
-local basic = import 'grafana/basic.libsonnet';
-local railsCommon = import 'rails_common_graphs.libsonnet';
-local workhorseCommon = import 'workhorse_common_graphs.libsonnet';
-local dashboard = grafana.dashboard;
+local railsCommon = import 'gitlab-dashboards/rails_common_graphs.libsonnet';
+local workhorseCommon = import 'gitlab-dashboards/workhorse_common_graphs.libsonnet';
 local row = grafana.row;
-local template = grafana.template;
-local graphPanel = grafana.graphPanel;
-local annotation = grafana.annotation;
-local serviceDashboard = import 'service_dashboard.libsonnet';
-
-local selector = 'environment="$environment", type="api", stage="$stage"';
+local serviceDashboard = import 'gitlab-dashboards/service_dashboard.libsonnet';
 
 serviceDashboard.overview('api')
 .addPanel(

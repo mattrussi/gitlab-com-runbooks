@@ -15,6 +15,12 @@ local setting(index, env) = if std.member(HIGH_THROUHGPUT, index) then {
     },
     routing: {
       allocation: {
+        include: {
+          _tier_preference: null,
+        },
+        require: {
+          data: 'hot',
+        },
         total_shards_per_node: 1,
       },
     },
@@ -42,7 +48,7 @@ local setting(index, env) = if std.member(HIGH_THROUHGPUT, index) then {
     },
     refresh_interval: '60s',  // see: https://gitlab.com/gitlab-com/gl-infra/production/-/issues/3006#note_445081437
   },
-  number_of_shards: 8,
+  number_of_shards: 9,
   // number_of_replicas: 1,
 }
 else if std.member(MEDIUM_THROUGHPUT, index) then {
@@ -56,6 +62,12 @@ else if std.member(MEDIUM_THROUGHPUT, index) then {
     },
     routing: {
       allocation: {
+        include: {
+          _tier_preference: null,
+        },
+        require: {
+          data: 'hot',
+        },
         total_shards_per_node: 1,
       },
     },
@@ -93,6 +105,16 @@ else if std.member(MEDIUM_THROUGHPUT, index) then {
     },
     mapping: {
       ignore_malformed: true,
+    },
+    routing: {
+      allocation: {
+        include: {
+          _tier_preference: null,
+        },
+        require: {
+          data: 'hot',
+        },
+      },
     },
     search: {
       idle: {

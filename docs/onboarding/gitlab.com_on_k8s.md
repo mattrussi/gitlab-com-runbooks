@@ -66,9 +66,34 @@ A collection of info about gitlab.com on K8S
 - Regional Node pools: https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/blob/master/environments/gprd/gke-regional.tf#L161
 - We don’t use taints, epic to implement them: https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/393
 
-### Resources, requests, limits (WIP)
+### Resources, requests, limits
 
-- Looks like `git-https` has a higher node count limit: https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/blob/master/environments/gprd/gke-zonal.tf#L52
-- Default node count is `20`: https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/blob/master/environments/gprd/gke-regional.tf#L164
+Kubernetes limit and request values for each environment can be found under: https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/tree/master/releases/gitlab/values.
+
+For example, GPRD values are in [gprd.yaml.gotmpl](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/blob/master/releases/gitlab/values/gprd.yaml.gotmpl).
+
+#### Example: GPRD gitlab-shell
+
+Link to config in [k8s-workloads](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/blob/master/releases/gitlab/values/gprd.yaml.gotmpl#L30-37).
+
+```shell
+  gitlab-shell:
+    resources:
+      requests:
+        cpu: 2000m
+    hpa:
+      targetAverageValue: 1200m
+    minReplicas: 8
+    maxReplicas: 150
+```
+
+These values can be observed via the `kubectl` command as well:
+
+```shell
+console-01-sv-gprd.c.gitlab-production.internal:~$ kubectl get deployment/gitlab-gitlab-shell -n gitlab -o=jsonpath='{.spec.template.spec.containers[*].resources}'
+map[limits:map[memory:1G] requests:map[cpu:2 memory:1G]]
+```
+
+Also see [official kubernetes docs for assigning CPU limits and requests](https://kubernetes.io/docs/tasks/configure-pod-container/assign-cpu-resource/).
 
 ### Low-level: How do resource limits translate to kernel concepts like cgroups and namespaces? (WIP)

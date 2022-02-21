@@ -24,18 +24,18 @@ require 'json'
 require 'logger'
 
 begin
-  require '/opt/gitlab/embedded/service/gitlab-rails/config/environment.rb'
+  require '/opt/gitlab/embedded/service/gitlab-rails/config/environment'
 rescue LoadError => e
   warn "WARNING: #{e.message}"
 end
 
-log = Logger.new(STDOUT)
+log = Logger.new($stdout)
 log.level = Logger::INFO
 log.formatter = proc do |level, t, _name, msg|
   format("%<timestamp>s %-5<level>s %<msg>s\n", timestamp: t.strftime('%Y-%m-%d %H:%M:%S'), level: level, msg: msg)
 end
 
-file_name = 'projects_belonging_to_blocked_users_' + Time.now.strftime('%Y-%m-%d_%H%M%S') + '.json'
+file_name = "projects_belonging_to_blocked_users_#{Time.now.strftime('%Y-%m-%d_%H%M%S')}.json"
 output_file_path = File.join(__dir__, 'artifacts', file_name)
 
 blocked_users = User.blocked.all.to_a

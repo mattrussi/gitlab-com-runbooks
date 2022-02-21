@@ -8,6 +8,15 @@ local elasticTimeRange(from, to) =
 
 local grafanaTimeRange = elasticTimeRange(grafanaTimeFrom, grafanaTimeTo);
 
+local queryWithMeta(filter) =
+  filter {
+    meta+: {
+      key: 'query',
+      type: 'custom',
+      value: std.toString(filter.query),
+    },
+  };
+
 // Builds an ElasticSearch match filter clause
 local matchFilter(field, value) =
   {
@@ -18,19 +27,18 @@ local matchFilter(field, value) =
           type: 'phrase',
         },
       },
-
     },
   };
 
 local matchInFilter(field, possibleValues) =
-  {
+  queryWithMeta({
     query: {
       bool: {
         should: [{ match_phrase: { [field]: possibleValue } } for possibleValue in possibleValues],
         minimum_should_match: 1,
       },
     },
-  };
+  });
 
 // Builds an ElasticSearch range filter clause
 local rangeFilter(field, gteValue, lteValue) =
@@ -119,12 +127,20 @@ local indexCatalog = {
     //latencyFieldUnitMultiplier: 1000,
   },
 
+  consul: indexDefaults {
+    timestamp: 'json.time',
+    indexPattern: 'AWVDROsNO8Ra6d0I_oUl',
+    defaultColumns: ['json.@module', 'json.@message'],
+    requestsNotSupported: true,
+  },
+
   gitaly: indexDefaults {
     timestamp: 'json.time',
     indexPattern: 'AW5F1OHTiGcMMNRn84Di',
     defaultColumns: ['json.hostname', 'json.grpc.method', 'json.grpc.request.glProjectPath', 'json.grpc.code', 'json.grpc.time_ms'],
     defaultSeriesSplitField: 'json.grpc.method.keyword',
     failureFilter: [mustNot(matchFilter('json.grpc.code', 'OK')), existsFilter('json.grpc.code')],
+    slowRequestFilter: [matchFilter('json.msg', 'unary')],
     defaultLatencyField: 'json.grpc.time_ms',
     prometheusLabelMappings+: {
       fqdn: 'json.fqdn',
@@ -140,6 +156,13 @@ local indexCatalog = {
     failureFilter: [existsFilter('json.error')],
     //defaultLatencyField: '',
     //latencyFieldUnitMultiplier: 1000,
+  },
+
+  mailroom: indexDefaults {
+    timestamp: '@timestamp',
+    indexPattern: '66d3cd70-6923-11ea-8617-2347010d3aab',
+    defaultColumns: ['json.action', 'json.to_be_delivered.count', 'json.byte_size'],
+    requestsNotSupported: true,
   },
 
   monitoring_ops: indexDefaults {
@@ -192,6 +215,7 @@ local indexCatalog = {
     defaultColumns: ['json.hostname', 'json.virtual_storage', 'json.grpc.method', 'json.relative_path', 'json.grpc.code', 'json.grpc.time_ms'],
     defaultSeriesSplitField: 'json.grpc.method.keyword',
     failureFilter: [mustNot(matchFilter('json.grpc.code', 'OK')), existsFilter('json.grpc.code')],
+    slowRequestFilter: [matchFilter('json.msg', 'unary')],
     defaultLatencyField: 'json.grpc.time_ms',
     latencyFieldUnitMultiplier: 1000,
   },
@@ -223,6 +247,12 @@ local indexCatalog = {
     failureFilter: statusCode('json.status'),
     defaultLatencyField: 'json.duration_s',
     latencyFieldUnitMultiplier: 1,
+  },
+
+  rails_graphql: self.rails {
+    defaultSeriesSplitField: 'json.meta.caller_id.keyword',
+    defaultColumns: ['json.meta.caller_id', 'json.operation_name', 'json.meta.feature_category', 'json.operation_fingerprint', 'json.duration_s'],
+    defaultFilters: [matchFilter('json.subcomponent', 'graphql_json')],
   },
 
   redis: indexDefaults {
@@ -260,6 +290,15 @@ local indexCatalog = {
     failureFilter: [matchFilter('json.msg', 'Job failed (system failure)')],
     defaultLatencyField: 'json.duration',
     latencyFieldUnitMultiplier: 1000000000,  // nanoseconds, ah yeah
+  },
+
+  search: indexDefaults {
+    kibanaEndpoint: 'https://00a4ef3362214c44a044feaa539b4686.us-central1.gcp.cloud.es.io:9243/app/kibana',
+    timestamp: '@timestamp',
+    indexPattern: '3fdde960-1f73-11eb-9ead-c594f004ece2',
+    defaultFilters: [matchFilter('service.name', 'prod-gitlab-com indexing-20200330')],
+    defaultColumns: ['elasticsearch.component', 'event.dataset', 'message'],
+    requestsNotSupported: true,
   },
 
   shell: indexDefaults {
@@ -692,10 +731,11 @@ local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latency
   // Search for requests taking longer than the specified number of seconds
   buildElasticDiscoverSlowRequestSearchQueryURL(index, filters=[], luceneQueries=[], slowRequestSeconds, timeRange=grafanaTimeRange, extraColumns=[])::
     local ic = indexCatalog[index];
+    local slowRequestFilter = if std.objectHas(ic, 'slowRequestFilter') then ic.slowRequestFilter else [];
 
     buildElasticDiscoverSearchQueryURL(
       index=index,
-      filters=filters + [rangeFilter(ic.defaultLatencyField, gteValue=slowRequestSeconds * ic.latencyFieldUnitMultiplier, lteValue=null)],
+      filters=filters + slowRequestFilter + [rangeFilter(ic.defaultLatencyField, gteValue=slowRequestSeconds * ic.latencyFieldUnitMultiplier, lteValue=null)],
       timeRange=timeRange,
       sort=[[ic.defaultLatencyField, 'desc']],
       extraColumns=extraColumns
@@ -736,6 +776,10 @@ local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latency
     else
       field;
     buildElasticLinePercentileVizURL(index, filters, luceneQueries, fieldWithDefault, splitSeries=splitSeries),
+
+  // Returns true iff the named index supports request graphs (some do not have a concept of 'requests')
+  indexSupportsRequestGraphs(index)::
+    !std.objectHas(indexCatalog[index], 'requestsNotSupported'),
 
   // Returns true iff the named index supports failure queries
   indexSupportsFailureQueries(index)::

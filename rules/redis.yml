@@ -33,13 +33,14 @@ groups:
     expr: redis_connected_slaves > 1
   - record: instance:redis_cpu_usage:rate1m
     expr: >
-      (rate(redis_cpu_user_seconds_total[1m]) + rate(redis_cpu_sys_seconds_total[1m])) or
-      (rate(redis_used_cpu_user[1m]) + rate(redis_used_cpu_sys[1m]))
+      sum by (environment, type, fqdn)(
+        rate(namedprocess_namegroup_thread_cpu_seconds_total{type=~"redis.*", groupname="redis-server", threadname="redis-server"}[1m])
+      )
 - name: Redis Alerts
   rules:
   - alert: RedisMasterMissing
     expr: >
-      (gitlab:redis_cluster_nodes:count > bool 1)
+      (gitlab:redis_cluster_nodes:count{env="gprd"} > bool 1)
       unless on (stage,tier,type) redis_instance_info{role="master"}
     for: 1m
     labels:
@@ -66,7 +67,7 @@ groups:
       runbook: docs/redis/redis.md
       title: Connection of Redis replicas to the master is flapping
   - alert: RedisReplicasFlapping
-    expr: changes(redis_connected_slaves[1h]) > 4
+    expr: changes(redis_connected_slaves{env="gprd"}[1h]) > 4
     for: 1m
     labels:
       pager: pagerduty
@@ -81,7 +82,7 @@ groups:
       runbook: docs/redis/redis.md
       title: Connection of Redis replicas to the master is flapping
   - alert: RedisInstanceDown
-    expr: up{job="gitlab-redis"} != 1 or redis_up != 1
+    expr: up{job="gitlab-redis",env="gprd"} != 1 or redis_up{env="gprd"} != 1
     for: 20m
     labels:
       pager: pagerduty
@@ -101,9 +102,9 @@ groups:
   - alert: RedisMemoryUsageTooHigh
     expr: >
       (
-        redis_memory_used_rss_bytes{fqdn!=""}
+        redis_memory_used_rss_bytes{fqdn!="",env="gprd"}
         / on(fqdn, tier, type, environment)
-        node_memory_MemTotal_bytes{fqdn!=""}
+        node_memory_MemTotal_bytes{fqdn!="",env="gprd"}
       ) > 0.90
     for: 5m
     labels:
@@ -117,9 +118,9 @@ groups:
   - alert: RedisMasterLinkDown
     expr: >
       (
-       avg_over_time(redis_master_link_up{type="redis-cache"}[10m])
+       avg_over_time(redis_master_link_up{type="redis-cache",env="gprd"}[10m])
          and on (instance)
-       redis_instance_info{role="slave"}
+       redis_instance_info{role="slave",env="gprd"}
       ) == 0
     for: 30m
     labels:
@@ -131,7 +132,7 @@ groups:
       runbook: docs/redis/redis.md
       title: Redis master link is not up.
   - alert: RedisReplicationDown
-    expr: gitlab:redis_disconnected_slaves > 1
+    expr: gitlab:redis_disconnected_slaves{env="gprd"} > 1
     for: 5m
     labels:
       pager: pagerduty
@@ -147,9 +148,9 @@ groups:
   - alert: SentinelLossOfRedundancy
     expr: |
       (
-              sum by (environment, tier, type, stage, shard) (namedprocess_namegroup_num_procs{groupname="redis-sentinel"})
+              sum by (environment, tier, type, stage, shard) (namedprocess_namegroup_num_procs{groupname="redis-sentinel",env="gprd"})
               /
-             count by (environment, tier, type, stage, shard)       (max_over_time(namedprocess_namegroup_num_procs{groupname="redis-sentinel"}[1h]))
+             count by (environment, tier, type, stage, shard)       (max_over_time(namedprocess_namegroup_num_procs{groupname="redis-sentinel",env="gprd"}[1h]))
       ) < 1
     labels:
       pager: pagerduty
@@ -161,7 +162,7 @@ groups:
         There should be a single sentinel process per VM in the {{ $labels.type }} cluster.
         This likely means that sentinel has stopped on one of the {{ .Labels.type }} sentinel nodes.
   - alert: RedisSlowlogPluginErrors
-    expr: rate(fluentd_redis_slowlog_errors[1m]) > 0
+    expr: rate(fluentd_redis_slowlog_errors{env="gprd"}[1m]) > 0
     for: 15m
     labels:
       pager: pagerduty

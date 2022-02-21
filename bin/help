@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+set -efo pipefail
+
+# RUNBOOK_PATH is exported by glsh.sh
+BIN_DIR="$RUNBOOK_PATH/bin"
+
+find "$BIN_DIR" -type f -exec basename {} \;

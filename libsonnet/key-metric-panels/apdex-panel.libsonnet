@@ -33,10 +33,11 @@ local genericApdexPanel(
   primaryQueryExpr,
   legendFormat,
   linewidth=null,
-  serviceType,
   sort='increasing',
   legend_show=null,
   expectMultipleSeries=false,
+  selectorHash,
+  fixedThreshold=null,
       ) =
   generalGraphPanel(
     title,
@@ -54,14 +55,14 @@ local genericApdexPanel(
   )
   .addTarget(  // Min apdex score SLO for gitlab_service_errors:ratio metric
     promQuery.target(
-      sliPromQL.apdex.serviceApdexDegradationSLOQuery(serviceType),
+      sliPromQL.apdex.serviceApdexDegradationSLOQuery(selectorHash, fixedThreshold),
       interval='5m',
       legendFormat='6h Degradation SLO (5% of monthly error budget)',
     ),
   )
   .addTarget(  // Double apdex SLO is Outage-level SLO
     promQuery.target(
-      sliPromQL.apdex.serviceApdexOutageSLOQuery(serviceType),
+      sliPromQL.apdex.serviceApdexOutageSLOQuery(selectorHash, fixedThreshold),
       interval='5m',
       legendFormat='1h Outage SLO (2% of monthly error budget)',
     ),
@@ -82,7 +83,6 @@ local genericApdexPanel(
 local apdexPanel(
   title,
   aggregationSet,
-  serviceType,
   selectorHash,
   description=null,
   stableId,
@@ -90,9 +90,10 @@ local apdexPanel(
   compact=false,
   sort='increasing',
   includeLastWeek=true,
-  expectMultipleSeries=false
+  expectMultipleSeries=false,
+  fixedThreshold=null,
       ) =
-  local selectorHashWithExtras = selectorHash + aggregationSet.selector { type: serviceType };
+  local selectorHashWithExtras = selectorHash + aggregationSet.selector;
 
   local panel = genericApdexPanel(
     title,
@@ -101,8 +102,9 @@ local apdexPanel(
     stableId=stableId,
     primaryQueryExpr=sliPromQL.apdexQuery(aggregationSet, null, selectorHashWithExtras, '$__interval', worstCase=true),
     legendFormat=legendFormat,
-    serviceType=serviceType,
-    linewidth=if expectMultipleSeries then 1 else 2
+    linewidth=if expectMultipleSeries then 1 else 2,
+    selectorHash=selectorHashWithExtras,
+    fixedThreshold=fixedThreshold,
   );
 
   local panelWithAverage = if !expectMultipleSeries then
@@ -126,7 +128,7 @@ local apdexPanel(
           selectorHashWithExtras,
           range=null,
           offset='1w',
-          clampToExpression=sliPromQL.apdex.serviceApdexOutageSLOQuery(serviceType)
+          clampToExpression=sliPromQL.apdex.serviceApdexOutageSLOQuery(selectorHash, fixedThreshold)
         ),
         legendFormat='last week',
       )

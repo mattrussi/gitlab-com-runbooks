@@ -1,86 +1,90 @@
+local sliPromql = import './sli_promql.libsonnet';
+local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
 local multiburnFactors = import 'mwmbr/multiburn_factors.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
+local objects = import 'utils/objects.libsonnet';
+local statPanel = grafana.statPanel;
 
 local descriptionMappings = [
   /* 0 */
   {
-    name: 'Healthy',
+    text: 'Healthy',
     color: 'black',
   },
   /* 1 */
   {
-    name: 'Warning 🔥',
+    text: 'Warning 🔥',
     color: 'orange',
   },
   /* 2 */
   {
-    name: 'Warning 🔥',
+    text: 'Warning 🔥',
     color: 'orange',
   },
   /* 3 */
   {
-    name: 'Degraded 🔥',
+    text: 'Degraded 🔥',
     color: 'red',
   },
   /* 4 */
   {
-    name: 'Warning 🥵',
+    text: 'Warning 🥵',
     color: 'orange',
   },
   /* 5 */
   {
-    name: 'Warning 🔥🥵',
+    text: 'Warning 🔥🥵',
     color: 'orange',
   },
   /* 6 */
   {
-    name: 'Warning 🔥🥵',
+    text: 'Warning 🔥🥵',
     color: 'orange',
   },
   /* 7 */
   {
-    name: 'Degraded 🔥🥵',
+    text: 'Degraded 🔥🥵',
     color: 'red',
   },
   /* 8 */
   {
-    name: 'Warning 🥵',
+    text: 'Warning 🥵',
     color: 'orange',
   },
   /* 9 */
   {
-    name: 'Warning 🔥🥵',
+    text: 'Warning 🔥🥵',
     color: 'orange',
   },
   /* 10 */
   {
-    name: 'Warning 🔥🥵',
+    text: 'Warning 🔥🥵',
     color: 'orange',
   },
   /* 11 */
   {
-    name: 'Degraded 🔥🥵',
+    text: 'Degraded 🔥🥵',
     color: 'red',
   },
   /* 12 */
   {
-    name: 'Degraded 🥵',
+    text: 'Degraded 🥵',
     color: 'red',
   },
   /* 13 */
   {
-    name: 'Degraded 🔥🥵',
+    text: 'Degraded 🔥🥵',
     color: 'red',
   },
   /* 14 */
   {
-    name: 'Degraded 🔥🥵',
+    text: 'Degraded 🔥🥵',
     color: 'red',
   },
   /* 15 */
   {
-    name: 'Degraded 🔥🥵',
+    text: 'Degraded 🔥🥵',
     color: 'red',
   },
 ];
@@ -90,7 +94,7 @@ local apdexStatusQuery(selectorHash, type, aggregationSet) =
   local metric5m = aggregationSet.getApdexRatioMetricForBurnRate('5m', required=true);
   local metric6h = aggregationSet.getApdexRatioMetricForBurnRate('6h', required=true);
   local metric30m = aggregationSet.getApdexRatioMetricForBurnRate('30m', required=true);
-
+  local allSelectors = selectorHash + aggregationSet.selector;
   |||
     sum(
       label_replace(
@@ -120,8 +124,9 @@ local apdexStatusQuery(selectorHash, type, aggregationSet) =
     )
   ||| %
   ({
-     selector: selectors.serializeHash(selectorHash + aggregationSet.selector),
-     slaSelector: selectors.serializeHash({ monitor: 'global', type: type }),
+
+     selector: selectors.serializeHash(allSelectors),
+     slaSelector: selectors.serializeHash(sliPromql.sloLabels(allSelectors)),
      metric1h: metric1h,
      metric5m: metric5m,
      metric6h: metric6h,
@@ -135,6 +140,7 @@ local errorRateStatusQuery(selectorHash, type, aggregationSet) =
   local metric5m = aggregationSet.getErrorRatioMetricForBurnRate('5m', required=true);
   local metric6h = aggregationSet.getErrorRatioMetricForBurnRate('6h', required=true);
   local metric30m = aggregationSet.getErrorRatioMetricForBurnRate('30m', required=true);
+  local allSelectors = selectorHash + aggregationSet.selector;
 
   |||
     sum (
@@ -165,8 +171,8 @@ local errorRateStatusQuery(selectorHash, type, aggregationSet) =
     )
   ||| %
   ({
-     selector: selectors.serializeHash(selectorHash + aggregationSet.selector),
-     slaSelector: selectors.serializeHash({ monitor: 'global', type: type }),
+     selector: selectors.serializeHash(allSelectors),
+     slaSelector: selectors.serializeHash(sliPromql.sloLabels(allSelectors)),
      metric1h: metric1h,
      metric5m: metric5m,
      metric6h: metric6h,
@@ -177,55 +183,47 @@ local errorRateStatusQuery(selectorHash, type, aggregationSet) =
 
 
 local statusDescriptionPanel(legendFormat, query) =
-  {
-    type: 'stat',
-    title: '',
-    targets: [promQuery.target(query, legendFormat=legendFormat, instant=true)],
-    pluginVersion: '6.6.1',
-    links: [],
-    options: {
-      graphMode: 'none',
-      colorMode: 'background',
-      justifyMode: 'auto',
-      fieldOptions: {
-        values: false,
-        calcs: [
-          'lastNotNull',
-        ],
-        defaults: {
-          thresholds: {
-            mode: 'absolute',
-            steps: std.mapWithIndex(
-              function(index, v)
-                {
-                  value: index,
-                  color: v.color,
-                },
-              descriptionMappings
-            ),
-          },
-          mappings: std.mapWithIndex(
-            function(index, v)
-              {
-                from: '' + index,
-                id: index,
-                op: '=',
-                text: v.name,
-                to: '' + index,
-                type: 2,
-                value: '' + index,
-              }, descriptionMappings
-          ),
-          unit: 'none',
-          nullValueMode: 'connected',
-          title: 'Status',
-          links: [],
+  statPanel.new(
+    '',
+    allValues=false,
+    reducerFunction='lastNotNull',
+    graphMode='none',
+    colorMode='background',
+    justifyMode='auto',
+    thresholdsMode='absolute',
+    unit='none',
+    displayName='Status',
+    orientation='vertical',
+  )
+  .addMapping(
+    {
+      type: 'value',
+      options: objects.fromPairs(
+        std.mapWithIndex(
+          function(index, v)
+            [index, v { index: index }],
+          descriptionMappings
+        )
+      ),
+    }
+  )
+  .addThresholds(
+    std.mapWithIndex(
+      function(index, v)
+        {
+          value: index,
+          color: v.color,
         },
-        overrides: [],
-      },
-      orientation: 'vertical',
-    },
-  };
+      descriptionMappings
+    ),
+  )
+  .addTarget(
+    promQuery.target(
+      query,
+      legendFormat=legendFormat,
+      instant=true
+    )
+  );
 
 {
   apdexStatusDescriptionPanel(name, selectorHash, aggregationSet)::

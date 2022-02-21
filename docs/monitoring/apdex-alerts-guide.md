@@ -3,7 +3,7 @@
 # Apdex alerts troubleshooting
 Or: *How I learned to stop worrying and love the metrics*
 
-In the interests of consistent and mathematically sound alerts about which we can reason, we use the Apdex concept (see [definition-service-apdex.md] for a more formal definition of the concept).  But as an on-call SRE, what do you do when confronted with an apdex alert for a service?  How do we drill down to identify the problematic area?
+In the interests of consistent and mathematically sound alerts about which we can reason, we use the [Apdex concept](./definition-service-apdex.md).  But as an on-call SRE, what do you do when confronted with an apdex alert for a service?  How do we drill down to identify the problematic area?
 
 ## Concepts
 
@@ -53,7 +53,7 @@ All these bits and pieces are defined in `metrics-catalog/services/<service-name
 
 As always the goal is to find the misbehaving thing, which could be anything from a server to a single endpoint/RPC/controller.  Here's some things you can do.
 
-An apdex alert in #production should be paired with an alert in #feed_alerts-general from [Slackline](https://gitlab.com/gitlab-com/gl-infra/slackline/tree/master.  The Prometheus link on the origin alert might give you a broad brush idea of the impact (length, intensity etc), but you probably want to find the Slackline message.  That will also give you an idea of whether it's a slow or fast burn (see [Burn Rate](#burn_rate) and more particularly a '<service> Overview' button/link, which takes you to the relevant Grafana dashboard:
+An apdex alert in #production should be paired with an alert in #feed_alerts-general from [Slackline](https://gitlab.com/gitlab-com/gl-infra/slackline).  The Prometheus link on the origin alert might give you a broad brush idea of the impact (length, intensity etc), but you probably want to find the Slackline message.  That will also give you an idea of whether it's a slow or fast burn (see [Burn Rate](#burn_rate) and more particularly a '<service> Overview' button/link, which takes you to the relevant Grafana dashboard:
 
 ![Slackline message](img/apdex-slackline-message.png)
 
@@ -80,7 +80,7 @@ This section also contains links to useful Kibana queries. See 'Kibana links' se
 
 Once you identify a component that's misbehaving (either from the alert or using the SLI section), , expand its `<COMPONENT> Service Level Indicator Detail` section.
 
-As the name suggests, this section contains a more detailed view into the health of a component. For example, it contains a row for each 'significant label' (see the [#metrics_catalog] definitions).
+As the name suggests, this section contains a more detailed view into the health of a component. For example, it contains a row for each 'significant label' (see the [metrics_catalog](#metrics_catalog) definitions).
 
 ![significant-label-row](img/apdex-dashboard-significant-label-row.png)
 

@@ -14,10 +14,10 @@
 
 ## Troubleshooting Pointers
 
-* [../cloudflare/services-locations.md](../cloudflare/services-locations.md)
-* [license-gitlab-com.md](license-gitlab-com.md)
-* [../uncategorized/cloudsql-data-export.md](../uncategorized/cloudsql-data-export.md)
-* [../uncategorized/yubikey.md](../uncategorized/yubikey.md)
+* [Service Locations](../cloudflare/services-locations.md)
+* [license.gitlab.com Runbook](license-gitlab-com.md)
+* [Summary](../uncategorized/cloudsql-data-export.md)
+* [Configuring and Using the Yubikey](../uncategorized/yubikey.md)
 <!-- END_MARKER -->
 
 

@@ -1,10 +1,8 @@
-local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
-
+local panels = import 'gitlab-dashboards/panels.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
 local templates = import 'grafana/templates.libsonnet';
-local panels = import 'panels.libsonnet';
 
 //######################################
 // ARC                                 #
@@ -190,7 +188,6 @@ local totalZfsFsUtilizationPanel =
 basic.dashboard(
   'Filesystems',
   tags=['general'],
-  refresh='30s',
 )
 .addTemplate(templates.type)
 .addPanels(layout.grid([

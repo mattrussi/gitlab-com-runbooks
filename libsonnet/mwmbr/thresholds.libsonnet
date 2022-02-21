@@ -1,4 +1,4 @@
-local metricsCatalog = import '../../metrics-catalog/metrics-catalog.libsonnet';
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 
 local namedThreshold(name) = {
   name: name,

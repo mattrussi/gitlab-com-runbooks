@@ -5,11 +5,11 @@ GitLab Container Registry is not responding or returns not 200 OK statuses.
 ## Possible checks
 
 1. Open https://registry.gitlab.com and if you are seeing empty page, not 4xx or 5xx error page, then things are generally functional, and you don't need to panic heavily.  However, continue looking for more subtle causes.
-1. Validate running pods:
-    * On the approriate Kubernetes Cluster run, `kubectl get pods -l
-      app=registry -n gitlab`
-1. In more subtle cases, we might have something only slightly-broken.  Check the registry logs in Kibana (index pattern: `pubsub-gke-inf-[gstg|gprd]*`), using filter: `json.logName: projects/[gitlab-production|gitlab-staging-1]/logs/registry` and browse for anything suspect.
-   1. Adding this querye `json.logName:"projects/gitlab-production/logs/registry" AND json.jsonPayload.msg:"response completed with error" AND json.jsonPayload.err.message:"unknown error"` has been known to show problems that used to be visible by searching for `"invalid checksum digest format"`.  There shouldn't be any of those under normal circumstances; this is often caused by transient upload issues leaving empty or otherwise corrupt images (tag links empty, or pointing to non-existent layers).  C.f. https://gitlab.com/gitlab-com/gl-infra/production/issues/906.  In the GitLab UI, these images show up as some combination of an empty tag id, null bytes, 0 bytes, and typically 'Last Updated' is stuck at 'Just now'.  Deleting through the UI is not possible (HTTP 400 Bad Request seen in the dev console when trying).  See below for resolution.
+1. Validate running pods and associated metrics via our dashboards:
+   * [Pod Info](https://dashboards.gitlab.net/d/registry-pod/registry-pod-info)
+   * [Kubernetes Deployment Detail](https://dashboards.gitlab.net/d/registry-kube-deployments/registry-kube-deployment-detail)
+   * [Kubernetes Containers Detail](https://dashboards.gitlab.net/d/registry-kube-containers/registry-kube-containers-detail)
+1. In more subtle cases, we might have something only slightly-broken.  Check the registry logs in as defined in the [Container Registry runbook](./README.md#logging)
 
 ## What to do?
 

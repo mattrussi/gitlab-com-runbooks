@@ -78,7 +78,7 @@ groups:
       (
         sum by (environment) (
           sum by (environment) (
-            avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_errors[1m])
+            avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_scaleup_errors[1m])
           )
         )
       )
@@ -165,7 +165,7 @@ groups:
       (
         sum by (environment) (
           sum by (environment) (
-            avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_errors[5m])
+            avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_scaleup_errors[5m])
           )
         )
       )
@@ -252,7 +252,7 @@ groups:
       (
         sum by (environment) (
           sum by (environment) (
-            avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_errors[30m])
+            avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_scaleup_errors[30m])
           )
         )
       )
@@ -339,7 +339,7 @@ groups:
       (
         sum by (environment) (
           sum by (environment) (
-            avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_errors[1h])
+            avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_scaleup_errors[1h])
           )
         )
       )
@@ -426,7 +426,7 @@ groups:
       (
         sum by (environment) (
           sum by (environment) (
-            avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_errors[6h])
+            avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_scaleup_errors[6h])
           )
         )
       )
@@ -442,16 +442,16 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: apiserver
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: inf
       type: kube
-    expr: '1'
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: cluster_scaleups
-      regional_aggregation: 'no'
-      service_aggregation: 'yes'
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: inf
       type: kube
-    expr: '1'
+    expr: "1"

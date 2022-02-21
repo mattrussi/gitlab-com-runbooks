@@ -15,6 +15,38 @@ groups:
       sum by (environment,tier,type,stage) (
         rate(cloudflare_zones_http_country_bytes_total{type="waf"}[1d])
       )
+  - record: gitlab_component_utilization:kube_node_cpu_requests_percent:1h
+    labels:
+      component: kube_node_cpu_requests
+      metrics_subsystem: utilization
+      resource_labels: type,shard
+      summaryType: aggregate
+      unit: percent
+    expr: |
+      avg by (environment,tier,type,stage,shard) (
+        sum by (environment,tier,type,stage,node) (
+          kube_pod_container_resource_requests{resource="cpu", unit="core"}
+        )
+        / on (node) group_left(cluster,env,tier,type,stage,shard)
+        kube_node_status_allocatable:labeled{type=~"api|git|kube|registry|sidekiq|web-pages|web|websockets",resource="cpu"}
+      )
+      * 100
+  - record: gitlab_component_utilization:kube_node_memory_requests_percent:1h
+    labels:
+      component: kube_node_memory_requests
+      metrics_subsystem: utilization
+      resource_labels: type,shard
+      summaryType: aggregate
+      unit: percent
+    expr: |
+      avg by (environment,tier,type,stage,shard) (
+        sum by (environment,tier,type,stage,node) (
+          kube_pod_container_resource_requests{resource="memory", unit="byte"}
+        )
+        / on (node) group_left(cluster,env,tier,type,stage,shard)
+        kube_node_status_allocatable:labeled{type=~"api|git|kube|registry|sidekiq|web-pages|web|websockets",resource="memory"}
+      )
+      * 100
   - record: gitlab_component_utilization:pg_dead_tup_rate_tuples:1h
     labels:
       component: pg_dead_tup_rate
@@ -24,7 +56,7 @@ groups:
       unit: tuples
     expr: |
       sum by (environment,tier,type,stage) (
-        deriv(pg_stat_user_tables_n_dead_tup{type=~"patroni|sentry"}[1h]) > 0
+        deriv(pg_stat_user_tables_n_dead_tup{type=~"patroni|patroni-registry|patroni-ci|postgres-archive|sentry"}[1h]) > 0
         and on (instance, job) (pg_replication_is_replica==0)
       )
   - record: gitlab_component_utilization:pg_table_size_bytes:topk:1h
@@ -37,9 +69,9 @@ groups:
     expr: |
       topk by(environment,tier,type,stage) (10,
         avg by (environment,tier,type,stage,relname) (
-          avg_over_time(pg_total_relation_size_bytes{type=~"patroni|sentry"}[1h])
+          avg_over_time(pg_total_relation_size_bytes{type=~"patroni|patroni-registry|patroni-ci|postgres-archive|sentry"}[1h])
           and on (job, instance) (
-            pg_replication_is_replica{type=~"patroni|sentry"} == 0
+            pg_replication_is_replica{type=~"patroni|patroni-registry|patroni-ci|postgres-archive|sentry"} == 0
           )
         )
       )
@@ -51,7 +83,7 @@ groups:
       unit: seconds
     expr: |
       sum by (environment,tier,type,stage) (
-        increase(fluentd_pg_auto_vacuum_elapsed_seconds_total{type="patroni"}[1d])
+        increase(fluentd_pg_auto_vacuum_elapsed_seconds_total{type=~"patroni|patroni-registry|patroni-ci|sentry"}[1d])
       )
   - record: gitlab_component_utilization:pg_wraparound_time_seconds:1d
     labels:
@@ -63,5 +95,5 @@ groups:
       (2^31 - 10^6)
       /
       (
-        avg by (environment,tier,type,stage) (deriv(pg_txid_current{type=~"patroni|sentry"}[1d]) > 0)
+        avg by (environment,tier,type,stage) (deriv(pg_txid_current{type=~"patroni|patroni-registry|patroni-ci|postgres-archive|sentry"}[1d]) > 0)
       )

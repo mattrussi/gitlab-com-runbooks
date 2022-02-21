@@ -7,14 +7,14 @@ and have specific times they will upgrade themselves, as documented below
 | Environment | Cluster | Upgrade Window 1 | Upgrade Window 2 |
 | --- | --- | --- | --- |
 | pre | pre-gitlab-gke | 02:00:00 - 08:00:00 MON | 02:00:00 - 08:00:00 TUE |
-| gstg | gstg-gitlab-gke | 02:00:00 - 08:00:00 TUE | 02:00:00 - 08:00:00 WED |
+| gstg | gstg-gitlab-gke | 02:00:00 - 08:00:00 MON | 02:00:00 - 08:00:00 TUE |
 | gstg | gstg-us-east1-b | 02:00:00 - 08:00:00 MON | 02:00:00 - 08:00:00 TUE |
-| gstg | gstg-us-east1-c | 02:00:00 - 08:00:00 TUE | 02:00:00 - 08:00:00 WED |
-| gstg | gstg-us-east1-d | 02:00:00 - 08:00:00 TUE | 02:00:00 - 08:00:00 WED |
-| gprd | gprd-gitlab-gke | 02:00:00 - 08:00:00 TUE | 02:00:00 - 08:00:00 WED |
-| gprd | gprd-us-east1-b | 02:00:00 - 08:00:00 MON | 02:00:00 - 08:00:00 TUE |
-| gprd | gprd-us-east1-c | 02:00:00 - 08:00:00 TUE | 02:00:00 - 08:00:00 WED |
-| gprd | gprd-us-east1-d | 02:00:00 - 08:00:00 TUE | 02:00:00 - 08:00:00 WED |
+| gstg | gstg-us-east1-c | 12:00:00 - 18:00:00 MON | 12:00:00 - 18:00:00 TUE |
+| gstg | gstg-us-east1-d | 12:00:00 - 18:00:00 MON | 12:00:00 - 18:00:00 TUE |
+| gprd | gprd-gitlab-gke | 02:00:00 - 08:00:00 WED | 02:00:00 - 08:00:00 THU |
+| gprd | gprd-us-east1-b | 02:00:00 - 08:00:00 WED | 02:00:00 - 08:00:00 THU |
+| gprd | gprd-us-east1-c | 02:00:00 - 08:00:00 THU | 02:00:00 - 08:00:00 FRI |
+| gprd | gprd-us-east1-d | 02:00:00 - 08:00:00 THU | 02:00:00 - 08:00:00 FRI |
 | ops | gitlab-ops | 02:00:00 - 08:00:00 MON | 02:00:00 - 08:00:00 TUE |
 
 We have a cloud function called [gke-notifications](https://gitlab.com/gitlab-com/gl-infra/gke-notifications/)

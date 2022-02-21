@@ -1,6 +1,24 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
+local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
+local maturityLevels = import 'service-maturity/levels.libsonnet';
+local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
+
+local woodhouseLogs = [
+  toolingLinks.stackdriverLogs(
+    'Woodhouse Container Logs',
+    queryHash={
+      'resource.type': 'k8s_container',
+      'resource.labels.cluster_name': 'ops-gitlab-gke',
+      'resource.labels.namespace_name': 'woodhouse',
+      'resource.labels.container_name': 'woodhouse',
+    },
+    project='gitlab-ops',
+    // Long, but usually very quiet so give a good chance to see something to frame events
+    timeRange='PT6H',
+  ),
+];
 
 metricsCatalog.serviceDefinition({
   type: 'woodhouse',
@@ -12,6 +30,22 @@ metricsCatalog.serviceDefinition({
   provisioning: {
     vms: false,
     kubernetes: true,
+  },
+  serviceDependencies: {
+    api: true,
+  },
+  kubeConfig: {
+    // Incorrectly labeled ingress for woodhouse,
+    // Woodhouse kube resources should have type, stage labels
+    // See https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2246
+    local woodhouseKubeLabels = { namespace: 'woodhouse' },
+
+    labelSelectors: kubeLabelSelectors(
+      podSelector=woodhouseKubeLabels,
+      hpaSelector=null,  // no hpas for woodhouse,
+      ingressSelector=woodhouseKubeLabels,
+      deploymentSelector=woodhouseKubeLabels,
+    ),
   },
   kubeResources: {
     woodhouse: {
@@ -25,7 +59,6 @@ metricsCatalog.serviceDefinition({
     http: {
       userImpacting: false,
       feature_category: 'not_owned',
-      team: 'sre_observability',
       ignoreTrafficCessation: true,
 
       description: |||
@@ -52,13 +85,12 @@ metricsCatalog.serviceDefinition({
       ),
       significantLabels: [],
 
-      toolingLinks: [],  // TODO
+      toolingLinks: woodhouseLogs,
     },
 
     async_jobs: {
       userImpacting: false,
       feature_category: 'not_owned',
-      team: 'sre_observability',
       ignoreTrafficCessation: true,
 
       description: |||
@@ -81,7 +113,10 @@ metricsCatalog.serviceDefinition({
       ),
       significantLabels: ['job_name'],
 
-      toolingLinks: [],  // TODO
+      toolingLinks: woodhouseLogs,
     },
   },
+  skippedMaturityCriteria: maturityLevels.skip({
+    'Structured logs available in Kibana': 'Log volume is very low; tooling links to StackDriver provided which is sufficient for the purposes',
+  }),
 })

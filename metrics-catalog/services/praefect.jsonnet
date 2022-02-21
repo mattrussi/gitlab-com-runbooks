@@ -2,12 +2,15 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local rateMetric = metricsCatalog.rateMetric;
 local gaugeMetric = metricsCatalog.gaugeMetric;
 local histogramApdex = metricsCatalog.histogramApdex;
-local gitalyHelpers = import './lib/gitaly-helpers.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
+local gitalyHelper = import 'service-archetypes/helpers/gitaly.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'praefect',
   tier: 'stor',
+
+  tags: ['cloud-sql', 'golang'],
+
   monitoringThresholds: {
     apdexScore: 0.995,
     errorRatio: 0.9995,  // 99.95% of Praefect requests should succeed, over multiple window periods
@@ -19,14 +22,13 @@ metricsCatalog.serviceDefinition({
     proxy: {
       userImpacting: true,
       featureCategory: 'gitaly',
-      team: 'sre_datastores',
       description: |||
         All Gitaly operations pass through the Praefect proxy on the way to a Gitaly instance. This SLI monitors
         those operations in aggregate.
       |||,
 
       local baseSelector = { job: 'praefect' },
-      apdex: gitalyHelpers.grpcServiceApdex(baseSelector),
+      apdex: gitalyHelper.grpcServiceApdex(baseSelector),
 
       requestRate: rateMetric(
         counter='grpc_server_handled_total',
@@ -57,7 +59,6 @@ metricsCatalog.serviceDefinition({
     replicator_queue: {
       userImpacting: false,
       featureCategory: 'gitaly',
-      team: 'sre_datastores',
       description: |||
         Praefect replication operations. Latency represents the queuing delay before replication is carried out.
       |||,
@@ -80,12 +81,15 @@ metricsCatalog.serviceDefinition({
     praefect_cloudsql: {
       userImpacting: true,
       featureCategory: 'gitaly',
-      team: 'sre_datastores',
       description: |||
         Praefect uses a GCP CloudSQL instance. This SLI represents SQL transactions to that service.
       |||,
 
-      local baseSelector = { job: 'stackdriver', database: 'praefect_production' },
+      local baseSelector = {
+        job: 'stackdriver',
+        database_id: { re: '.+:praefect-db-.+' },
+        database: { re: 'praefect_(canary|production)' },
+      },
 
       staticLabels: {
         tier: 'stor',
@@ -104,7 +108,7 @@ metricsCatalog.serviceDefinition({
         }
       ),
 
-      significantLabels: [],
+      significantLabels: ['database_id'],
       serviceAggregation: false,  // Don't include cloudsql in the aggregated RPS for the service
       toolingLinks: [
         toolingLinks.cloudSQL('praefect-db-9dfb'),

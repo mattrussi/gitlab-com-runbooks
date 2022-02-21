@@ -7,7 +7,7 @@ projects = Project.select("CONCAT('cache:gitlab:exists?:', namespaces.path, '/',
 
 Gitlab::Redis::Cache.with do |redis|
   removed = 0
-  projects.in_batches do |relation|
+  projects.each_batch(of: 1000) do |relation|
     keys = relation.map { |row| row[:cache_key] }
     redis.del(*keys) if keys.any?
     removed += keys.length

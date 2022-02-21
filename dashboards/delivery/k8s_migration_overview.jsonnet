@@ -8,6 +8,7 @@ local templates = import 'grafana/templates.libsonnet';
 local graphPanel = grafana.graphPanel;
 
 local services = [
+  'gitlab-pages',
   'gitlab-shell',
   'registry',
   'mailroom',
@@ -16,6 +17,7 @@ local services = [
   'sidekiq-memory-bound',
   'sidekiq-elasticsearch',
   'sidekiq-low-urgency-cpu-bound',
+  'sidekiq-quarantine',
   'sidekiq-urgent-other',
   'sidekiq-database-throttled',
   'sidekiq-gitaly-throttled',
@@ -127,92 +129,35 @@ local serviceRow(service) =
 local serviceRows = std.map(serviceRow, services);
 
 // Stat panel used by top-level Auto-deploy Pressure and New Sentry issues
-local statPanel(
-  title,
-  description='',
-  query='',
-  legendFormat='',
-  max_value=10000,
-  thresholds={
-    mode: 'absolute',
-    steps: [
-      { color: 'green', value: null },
-    ],
-  },
-  links=[],
-  unit=''
-      ) =
-  {
-    description: description,
-    fieldConfig: {
-      values: false,
-      defaults: {
-        decimals: 0,
-        mappings: [],
-        min: 0,
-        thresholds: thresholds,
-        unit: unit,
-      },
-    },
-    links: links,
-    options: {
-      colorMode: 'value',
-      graphMode: 'area',
-      justifyMode: 'auto',
-      orientation: 'horizontal',
-      reduceOptions: { calcs: ['lastNotNull'] },
-    },
-    pluginVersion: '7.0.3',
-    targets: [promQuery.target(query, legendFormat=legendFormat)],
-    title: title,
-    type: 'stat',
-  };
-
-
-local savingsStatPanel(
-  title,
-  query,
-      ) =
-  {
-    links: [],
-    options: {
-      graphMode: 'none',
-      colorMode: 'background',
-      justifyMode: 'auto',
-
-      fieldOptions: {
-        calcs: [
-          'lastNotNull',
-        ],
-        defaults: {
-          thresholds: {
-            mode: 'absolute',
-            steps: [
-              { color: 'orange', value: 0 },
-              { color: 'green', value: 10 },
-            ],
-          },
-          mappings: [],
-          title: title,
-          unit: '%',
-          decimals: 2,
-        },
-        overrides: [],
-      },
-      orientation: 'vertical',
-    },
-    pluginVersion: '6.6.1',
-    targets: [promQuery.target(query, legendFormat='')],
-    title: title,
-    type: 'stat',
-  };
+local
+  statPanel(
+    title,
+    description='',
+    query='',
+    legendFormat='',
+    links=[],
+    unit=''
+  ) =
+    basic.statPanel(
+      '',
+      title,
+      description=description,
+      query=query,
+      instant=false,
+      color='green',
+      decimals=0,
+      min=0,
+      colorMode='value',
+      graphMode='area',
+      orientation='horizontal',
+      unit=unit,
+      links=links,
+    );
 
 basic.dashboard(
   'Kubernetes Migration Overview',
   tags=['release'],
   editable=true,
-  refresh='5m',
-  timepicker=timepickerlib.new(refresh_intervals=['1m', '5m', '10m', '30m']),
   includeStandardEnvironmentAnnotations=false,
   includeEnvironmentTemplate=false,
 )
@@ -260,16 +205,17 @@ basic.dashboard(
       statPanel(
         'Available cores',
         description='Total number of cores',
-        query='sum(instance:node_cpus:count{env="$environment",type!~"web-pages|praefect|camoproxy"})',
+        query='sum(instance:node_cpus:count{env="$environment",type!~"praefect|camoproxy"})',
       ),
     ],
     // CPU utilization
     [
-      basic.singlestat(
-        title='CPU utilization',
-        query='avg(instance:node_cpu_utilization:ratio{type!~"web-pages|praefect|camoproxy"})',
-        gaugeMaxValue=1,
-        gaugeShow=true,
+      basic.gaugePanel(
+        'CPU utilization',
+        description='Average CPU utilization',
+        query='avg(instance:node_cpu_utilization:ratio{type!~"praefect|camoproxy"})',
+        max=1,
+        unit='percentunit',
       ),
     ],
     [
@@ -277,17 +223,18 @@ basic.dashboard(
       statPanel(
         'Available Memory',
         description='Total memory',
-        query='sum(node_memory_MemTotal_bytes{type!~"web-pages|praefect|camoproxy", env="$environment"})',
+        query='sum(node_memory_MemTotal_bytes{type!~"praefect|camoproxy", env="$environment"})',
         unit='bytes',
       ),
     ],
     // Memory utilization
     [
-      basic.singlestat(
-        title='Avg Memory Utilization',
-        query='avg(instance:node_memory_utilization:ratio{type!~"web-pages|praefect|camoproxy", env="$environment"})',
-        gaugeMaxValue=1,
-        gaugeShow=true,
+      basic.gaugePanel(
+        title='Memory utilization',
+        description='Average memory utilization',
+        query='avg(instance:node_memory_utilization:ratio{type!~"praefect|camoproxy", env="$environment"})',
+        max=1,
+        unit='percentunit',
       ),
     ],
 
@@ -300,7 +247,7 @@ basic.dashboard(
 // ----------------------------------------------------------------------------
 
 .addPanel(
-  row.new(title='☸️Kubernetes Cluster'),
+  row.new(title='☸️ Kubernetes Cluster'),
   gridPos={ x: 0, y: 2, w: 24, h: 12 },
 )
 .addPanels(
@@ -316,11 +263,12 @@ basic.dashboard(
 
     // CPU Utilization
     [
-      basic.singlestat(
-        title='Avg CPU utilization',
+      basic.gaugePanel(
+        'CPU utilization',
+        description='Average CPU utilization',
         query='avg(instance:node_cpu_utilization:ratio{cluster!="", env="$environment"})',
-        gaugeMaxValue=1,
-        gaugeShow=true,
+        max=1,
+        unit='percentunit',
       ),
     ],
     [
@@ -334,11 +282,12 @@ basic.dashboard(
     ],
     // Memory utilization
     [
-      basic.singlestat(
-        title='Avg Memory Utilization',
+      basic.gaugePanel(
+        'Memory utilization',
+        description='Average memory utilization',
         query='avg(instance:node_memory_utilization:ratio{cluster!="", env="$environment"})',
-        gaugeMaxValue=1,
-        gaugeShow=true,
+        max=1,
+        unit='percentunit',
       ),
     ],
 
@@ -351,7 +300,7 @@ basic.dashboard(
 // ----------------------------------------------------------------------------
 
 .addPanel(
-  row.new(title='☸️Pods: replicas, CPUs and Memory in use by Service'),
+  row.new(title='☸️ Pods: replicas, CPUs and Memory in use by Service'),
   gridPos={ x: 0, y: 3, w: 24, h: 1 }
 )
 .addPanels(

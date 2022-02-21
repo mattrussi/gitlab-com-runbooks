@@ -54,6 +54,30 @@ test.suite({
     actual: selectors.serializeHash({ a: [{ eq: '1' }, { ne: '2' }, { re: '3' }, { nre: '4' }] }),
     expect: 'a="1",a!="2",a=~"3",a!~"4"',
   },
+  testSerializeHashOneOf: {
+    actual: selectors.serializeHash({ a: { oneOf: [3, 'two', '1'] } }),
+    expect: 'a=~"1|3|two"',
+  },
+  testSerializeHashDuplicate: {
+    actual: selectors.serializeHash({ a: { oneOf: [1, '1'] } }),
+    expect: 'a=~"1"',
+  },
+  testSerializeHashNoneOf: {
+    actual: selectors.serializeHash({ a: { noneOf: [1, 'two', 3] } }),
+    expect: 'a!~"1|3|two"',
+  },
+  testSerializeHashMultiple: {
+    actual: selectors.serializeHash({ a: { re: '.*', ne: 'moo' } }),
+    expect: 'a!="moo",a=~".*"',
+  },
+  testSerializeHashEmtpyWithBraces: {
+    actual: selectors.serializeHash({}, withBraces=true),
+    expect: '',
+  },
+  testSerializeHashSimpleWithBraces: {
+    actual: selectors.serializeHash({ a: 1 }, withBraces=true),
+    expect: '{a="1"}',
+  },
   testMergeTwoNulls: {
     actual: selectors.merge(null, null),
     expect: null,
@@ -82,5 +106,24 @@ test.suite({
     actual: selectors.merge({ a: 1 }, { b: '2' }),
     expect: { a: 1, b: '2' },
   },
-
+  testWithout: {
+    actual: selectors.without({ a: 1, b: 2 }, ['b']),
+    expect: { a: 1 },
+  },
+  testWithoutEmptyArray: {
+    actual: selectors.without({ a: 1, b: 2 }, []),
+    expect: { a: 1, b: 2 },
+  },
+  testWithoutEmptyObject: {
+    actual: selectors.without({}, ['c', 'd']),
+    expect: {},
+  },
+  testWithoutNull: {
+    actual: selectors.without(null, ['c', 'd']),
+    expect: null,
+  },
+  testWithoutStringAndEmpty: {
+    actual: selectors.without('some string', []),
+    expect: 'some string',
+  },
 })

@@ -22,7 +22,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(grpc_server_handled_total{grpc_code!~"OK|FailedPrecondition|Unauthenticated|PermissionDenied",grpc_method="GetConfiguration",job="gitlab-kas"}[5m])
+          rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|FailedPrecondition|Unauthenticated|PermissionDenied|Canceled|DeadlineExceeded|ResourceExhausted)$",job="gitlab-kas"}[5m])
         )
       )
       or
@@ -52,7 +52,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(grpc_server_handled_total{grpc_code!~"OK|FailedPrecondition|Unauthenticated|PermissionDenied",grpc_method="GetConfiguration",job="gitlab-kas"}[30m])
+          rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|FailedPrecondition|Unauthenticated|PermissionDenied|Canceled|DeadlineExceeded|ResourceExhausted)$",job="gitlab-kas"}[30m])
         )
       )
       or
@@ -82,42 +82,12 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(grpc_server_handled_total{grpc_code!~"OK|FailedPrecondition|Unauthenticated|PermissionDenied",grpc_method="GetConfiguration",job="gitlab-kas"}[1h])
+          rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|FailedPrecondition|Unauthenticated|PermissionDenied|Canceled|DeadlineExceeded|ResourceExhausted)$",job="gitlab-kas"}[1h])
         )
       )
       or
       (
         0 * group by(env,environment,stage) (
           gitlab:component:feature_category:execution:ops:rate_1h{component="grpc_requests",feature_category="kubernetes_management",tier="sv",type="kas"}
-        )
-      )
-- name: 'Prometheus Intermediate Metrics per feature: kas - burn-rate 6h'
-  rules:
-  - record: gitlab:component:feature_category:execution:ops:rate_6h
-    labels:
-      component: grpc_requests
-      feature_category: kubernetes_management
-      tier: sv
-      type: kas
-    expr: |
-      sum by (env,environment,stage) (
-        rate(grpc_server_handled_total{job="gitlab-kas"}[6h])
-      )
-  - record: gitlab:component:feature_category:execution:error:rate_6h
-    labels:
-      component: grpc_requests
-      feature_category: kubernetes_management
-      tier: sv
-      type: kas
-    expr: |
-      (
-        sum by (env,environment,stage) (
-          rate(grpc_server_handled_total{grpc_code!~"OK|FailedPrecondition|Unauthenticated|PermissionDenied",grpc_method="GetConfiguration",job="gitlab-kas"}[6h])
-        )
-      )
-      or
-      (
-        0 * group by(env,environment,stage) (
-          gitlab:component:feature_category:execution:ops:rate_6h{component="grpc_requests",feature_category="kubernetes_management",tier="sv",type="kas"}
         )
       )

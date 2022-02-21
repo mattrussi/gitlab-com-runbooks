@@ -2,6 +2,7 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
+local haproxyComponents = import './lib/haproxy_components.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'ci-runners',
@@ -24,10 +25,17 @@ metricsCatalog.serviceDefinition({
     api: true,
   },
   serviceLevelIndicators: {
+    loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
+      userImpacting=true,
+      featureCategory='runner',
+      selector={ type: 'ci' },
+      stageMappings={
+        main: { backends: ['https_git', 'api', 'ci_gateway_catch_all'], toolingLinks: [] },
+      },
+    ),
     polling: {
       userImpacting: true,
       featureCategory: 'runner',
-      team: 'sre_coreinfra',
       description: |||
         This SLI monitors job polling operations from runners, via
         Workhorse's `/api/v4/jobs/request` route.
@@ -56,7 +64,9 @@ metricsCatalog.serviceDefinition({
         toolingLinks.kibana(
           title='Workhorse',
           index='workhorse',
-          matches={ 'json.uri.keyword': '/api/v4/jobs/request' }
+          matches={ 'json.uri.keyword': '/api/v4/jobs/request' },
+          includeMatchersForPrometheusSelector=false,
+
         ),
         toolingLinks.kibana(
           title='Postgres Slowlog',
@@ -70,7 +80,6 @@ metricsCatalog.serviceDefinition({
     shared_runner_queues: {
       userImpacting: true,
       featureCategory: 'runner',
-      team: 'sre_coreinfra',
       description: |||
         This SLI monitors the shared runner queues on GitLab.com. Each job is an operation.
 
@@ -81,7 +90,7 @@ metricsCatalog.serviceDefinition({
 
       apdex: histogramApdex(
         histogram='job_queue_duration_seconds_bucket',
-        selector='shared_runner="true", jobs_running_for_project=~"^(0|1|2|3|4)$"',
+        selector={ shared_runner: 'true', jobs_running_for_project: { re: '^(0|1|2|3|4)$' } },
         satisfiedThreshold=60,
       ),
 
@@ -109,6 +118,35 @@ metricsCatalog.serviceDefinition({
       ],
     },
 
+    queuing_queries_duration: {
+      userImpacting: false,
+      featureCategory: 'continuous_integration_scaling',
+      team: 'pipeline_execution',
+      description: |||
+        This SLI monitors the queuing queries duration. Everything above 1
+        second is considered to be unexpected and needs investigation.
+
+        These database queries are executed in the Rails application when a
+        runner requests a new build to process in `POST /api/v4/jobs/request`.
+      |||,
+
+      apdex: histogramApdex(
+        histogram='gitlab_ci_queue_retrieval_duration_seconds_bucket',
+        satisfiedThreshold=0.5,
+      ),
+
+      requestRate: rateMetric(
+        counter='gitlab_ci_queue_retrieval_duration_seconds_count',
+      ),
+
+      monitoringThresholds+: {
+        apdexScore: 0.999,
+      },
+
+      significantLabels: ['runner_type'],
+      toolingLinks: [],
+    },
+
     // Trace archive jobs do not mark themselves as failed
     // when a job fails, instead they increment the job_trace_archive_failed_total counter
     // For this reason, our normal Sidekiq job monitoring doesn't alert us to these failures.
@@ -117,14 +155,13 @@ metricsCatalog.serviceDefinition({
     trace_archiving_ci_jobs: {
       userImpacting: true,
       featureCategory: 'continuous_integration',
-      team: 'sre_coreinfra',
       description: |||
         This SLI monitors CI job archiving, via Sidekiq jobs.
       |||,
 
       requestRate: rateMetric(
         counter='sidekiq_jobs_completion_seconds_count',
-        selector='worker="ArchiveTraceWorker"'
+        selector={ worker: 'Ci::ArchiveTraceWorker' }
       ),
 
       errorRate: rateMetric(
@@ -134,11 +171,11 @@ metricsCatalog.serviceDefinition({
       significantLabels: [],
 
       toolingLinks: [
-        toolingLinks.grafana(title='ArchiveTraceWorker Detail', dashboardUid='sidekiq-queue-detail', vars={ queue: 'pipeline_background:archive_trace' }),
+        toolingLinks.grafana(title='ArchiveTraceWorker Detail', dashboardUid='sidekiq-queue-detail', vars={ queue: 'pipeline_background:ci_archive_trace' }),
         toolingLinks.kibana(
           title='Sidekiq ArchiveTraceWorker',
           index='sidekiq',
-          matches={ 'json.class.keyword': 'ArchiveTraceWorker' }
+          matches={ 'json.class.keyword': 'Ci::ArchiveTraceWorker' }
         ),
       ],
     },

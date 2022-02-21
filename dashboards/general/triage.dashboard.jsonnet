@@ -1,12 +1,12 @@
-local aggregationSets = import './aggregation-sets.libsonnet';
+local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
+local platformLinks = import 'gitlab-dashboards/platform_links.libsonnet';
+local thresholds = import 'gitlab-dashboards/thresholds.libsonnet';
 local colorScheme = import 'grafana/color_scheme.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
 local seriesOverrides = import 'grafana/series_overrides.libsonnet';
 local templates = import 'grafana/templates.libsonnet';
-local platformLinks = import 'platform_links.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
-local thresholds = import 'thresholds.libsonnet';
 local graphPanel = grafana.graphPanel;
 local basic = import 'grafana/basic.libsonnet';
 local sliPromQL = import 'key-metric-panels/sli_promql.libsonnet';
@@ -177,7 +177,7 @@ basic.dashboard(
   )
   .addTarget(  // Primary metric
     promQuery.target(
-      sliPromQL.apdexQuery(aggregationSets.serviceAggregatedSLIs, null, selector, range='$__interval'),
+      sliPromQL.apdexQuery(aggregationSets.serviceSLIs, null, selector, range='$__interval'),
       legendFormat='{{ type }} service',
       intervalFactor=3,
     )
@@ -204,7 +204,7 @@ basic.dashboard(
   )
   .addTarget(  // Primary metric
     promQuery.target(
-      sliPromQL.errorRatioQuery(aggregationSets.serviceAggregatedSLIs, null, selectorHash=selector, range='$__interval', clampMax=0.15),
+      sliPromQL.errorRatioQuery(aggregationSets.serviceSLIs, null, selectorHash=selector, range='$__interval', clampMax=0.15),
       legendFormat='{{ type }} service',
       intervalFactor=3,
     )
@@ -231,7 +231,7 @@ basic.dashboard(
   )
   .addTarget(  // Primary metric
     promQuery.target(
-      sliPromQL.opsRateQuery(aggregationSets.serviceAggregatedSLIs, selector, range='$__interval'),
+      sliPromQL.opsRateQuery(aggregationSets.serviceSLIs, selector, range='$__interval'),
       legendFormat='{{ type }} service',
       intervalFactor=3,
     )
