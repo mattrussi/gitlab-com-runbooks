@@ -43,7 +43,7 @@ local environments = [
     name: 'Staging Ref',
     role: 'gstg-ref',
     stage: 'main',
-    icon: '✨',
+    icon: '🚧',
   }
 ];
 
