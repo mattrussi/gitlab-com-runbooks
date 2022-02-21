@@ -5,6 +5,7 @@ local layout = import 'grafana/layout.libsonnet';
 local row = grafana.row;
 local graphPanel = grafana.graphPanel;
 local promQuery = import 'grafana/prom_query.libsonnet';
+local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
 
 serviceDashboard.overview('logging')
 .overviewTrailer()
@@ -60,6 +61,24 @@ serviceDashboard.overview('logging')
         legendFormat='{{ subscription_id }}',
       ),
     ], cols=3, rowHeight=10, startRow=1000),
+  ),
+  gridPos={
+    x: 0,
+    y: 1000,
+    w: 24,
+    h: 1,
+  },
+)
+.addPanel(
+  row.new(title='👀 fluentd process activity', collapse=true)
+  .addPanels(
+    processExporter.namedGroup(
+      'fluentd processes',
+      {
+        env: '$environment',
+        groupname: 'fluentd',
+      }
+    )
   ),
   gridPos={
     x: 0,
