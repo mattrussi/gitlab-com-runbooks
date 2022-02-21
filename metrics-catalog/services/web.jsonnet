@@ -198,10 +198,7 @@ metricsCatalog.serviceDefinition({
     rails_requests:
       sliLibrary.get('rails_request_apdex').generateServiceLevelIndicator(railsSelector) {
         toolingLinks: [
-          // TODO: These need to be defined in the appliation SLI and built using
-          // selectors using the appropriate fields
-          // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1411
-          toolingLinks.kibana(title='Rails', index='rails', type='web', slowRequestSeconds=5),
+          toolingLinks.kibana(title='Rails', index='rails', type='web'),
         ],
       },
   },

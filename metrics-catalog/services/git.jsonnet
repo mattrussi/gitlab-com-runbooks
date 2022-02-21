@@ -310,10 +310,7 @@ metricsCatalog.serviceDefinition({
         },
 
         toolingLinks: [
-          // TODO: These need to be defined in the appliation SLI and built using
-          // selectors using the appropriate fields
-          // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1411
-          toolingLinks.kibana(title='Rails', index='rails', type='git', slowRequestSeconds=1),
+          toolingLinks.kibana(title='Rails', index='rails', type='git'),
         ],
       },
   },

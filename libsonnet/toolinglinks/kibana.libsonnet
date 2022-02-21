@@ -17,7 +17,8 @@ local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libson
       local supportsRequests = elasticsearchLinks.indexSupportsRequestGraphs(index);
       local supportsFailures = elasticsearchLinks.indexSupportsFailureQueries(index);
       local supportsLatencies = elasticsearchLinks.indexSupportsLatencyQueries(index);
-
+      local includeSlowRequests = supportsLatencies &&
+                                  (slowRequestSeconds != null || elasticsearchLinks.indexHasSlowRequestFilter(index));
       local filters =
         (
           if type == null then
@@ -64,7 +65,7 @@ local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libson
       ]
       +
       (
-        if supportsLatencies && slowRequestSeconds != null then
+        if includeSlowRequests then
           [
             toolingLinkDefinition({
               title: '📖 Kibana: ' + title + ' slow request logs',

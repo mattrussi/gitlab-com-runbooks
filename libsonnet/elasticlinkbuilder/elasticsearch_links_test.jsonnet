@@ -45,8 +45,20 @@ test.suite({
       fieldName: ['hello', 'world'],
       rangeTest: { gte: 1, lte: 10 },
       equalMatch: 'match the exact thing',
+      anyScript: ["doc['json.duration_s'].value > doc['json.target_duration_s'].value", 'script 2'],
     }),
     expect: [
+      {
+        query: {
+          bool: {
+            minimum_should_match: 1,
+            should: [
+              { script: { script: { source: "doc['json.duration_s'].value > doc['json.target_duration_s'].value" } } },
+              { script: { script: { source: 'script 2' } } },
+            ],
+          },
+        },
+      },
       {
         query: {
           match: {
