@@ -1,4 +1,5 @@
 local rison = import 'rison.libsonnet';
+local stages = import 'service-catalog/stages.libsonnet';
 
 local grafanaTimeFrom = '${__from:date:iso}';
 local grafanaTimeTo = '${__to:date:iso}';
@@ -112,6 +113,7 @@ local indexDefaults = {
   defaultFilters: [],
   kibanaEndpoint: 'https://log.gprd.gitlab.net/app/kibana',
   prometheusLabelMappings: {},
+  prometheusLabelTranslator: {},
 };
 
 local globalState(str) =
@@ -269,6 +271,17 @@ local indexCatalog = {
       existsFilter('json.duration_s'),
       matchAnyScriptFilter(["doc['json.duration_s'].value > doc['json.target_duration_s'].value"]),
     ],
+
+    // TODO: include this for Sidekiq when we implement add remove the hardcoded
+    // recordings for Sidekiq-feature category aggregations.
+    // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1313
+    prometheusLabelMappings+: {
+      stage_group: 'json.meta.feature_category',
+    },
+
+    prometheusLabelTranslator+: {
+      stage_group: function(groupName) { oneOf: stages.categoriesForStageGroup(groupName) },
+    },
   },
 
   rails_api: self.rails {
@@ -826,16 +839,17 @@ local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latency
    * Best-effort converter for a prometheus selector hash,
    * to convert it into a ES matcher.
    * Returns an array of zero or more matchers.
-   *
-   * TODO: for now, only supports equal matches, re (single value), eq, ne, improve this
    */
   getMatchersForPrometheusSelectorHash(index, selectorHash)::
     local prometheusLabelMappings = defaultPrometheusLabelMappings + indexCatalog[index].prometheusLabelMappings;
+    local labelValueTranslator = indexCatalog[index].prometheusLabelTranslator;
 
     std.flatMap(
       function(label)
         if std.objectHas(prometheusLabelMappings, label) then
-          local selectorValue = selectorHash[label];
+          local selectorValue = if std.objectHas(labelValueTranslator, label) then
+            labelValueTranslator[label](selectorHash[label])
+          else selectorHash[label];
 
           // A mapping from this prometheus label to a ES field exists
           if std.isString(selectorValue) then
@@ -845,14 +859,19 @@ local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latency
             // so treating it as such is better than ignoring
             [matchFilter(prometheusLabelMappings[label], selectorValue.re)]
           else if std.objectHas(selectorValue, 'eq') then
-            // Most of the time, re contains a single value,
+            // Most of the time, eq contains a single value,
             // so treating it as such is better than ignoring
             [matchFilter(prometheusLabelMappings[label], selectorValue.eq)]
           else if std.objectHas(selectorValue, 'ne') then
-            // Most of the time, re contains a single value,
+            // Most of the time, ne contains a single value,
             // so treating it as such is better than ignoring
             [mustNot(matchFilter(prometheusLabelMappings[label], selectorValue.ne))]
+          else if std.objectHas(selectorValue, 'oneOf') then
+            [matcher(prometheusLabelMappings[label], selectorValue.oneOf)]
+          else if std.objectHas(selectorValue, 'noneOf') then
+            [mustNot(matcher(prometheusLabelMappings[label], selectorValue.oneOf))]
           else
+            assert false : 'Unsupported ES matcher %s' % [selectorValue];
             []
         else
           [],
