@@ -25,6 +25,54 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
+      component: cloudsql_cpu
+      stage: main
+      tier: inf
+      type: monitoring
+    expr: |
+      max by(environment) (
+        clamp_min(
+          clamp_max(
+            avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_cpu_utilization{}[5m])
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
+      component: cloudsql_disk
+      stage: main
+      tier: inf
+      type: monitoring
+    expr: |
+      max by(environment) (
+        clamp_min(
+          clamp_max(
+            avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_disk_utilization{}[5m])
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
+      component: cloudsql_memory
+      stage: main
+      tier: inf
+      type: monitoring
+    expr: |
+      max by(environment) (
+        clamp_min(
+          clamp_max(
+            avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_memory_utilization{}[5m])
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
       component: cpu
     expr: |
       max by(environment, tier, type, stage) (
@@ -289,22 +337,6 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
-      component: grafana_cloudsql_cpu
-      stage: main
-      tier: inf
-      type: monitoring
-    expr: |
-      max by(environment) (
-        clamp_min(
-          clamp_max(
-            avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_cpu_utilization{database_id=~".+:grafana-(internal|pre)-.+", }[5m])
-            ,
-            1)
-        ,
-        0)
-      )
-  - record: gitlab_component_saturation:ratio
-    labels:
       component: grafana_trickster_cache_usage
     expr: |
       max by(environment, tier, type, stage) (
@@ -525,15 +557,15 @@ groups:
         clamp_min(
           clamp_max(
             (
-              process_open_fds{type!="",type!~"nat|waf|kube"}
+              process_open_fds{type!="",type!~"cloud-sql|nat|waf|kube"}
               /
-              process_max_fds{type!="",type!~"nat|waf|kube"}
+              process_max_fds{type!="",type!~"cloud-sql|nat|waf|kube"}
             )
             or
             (
-              ruby_file_descriptors{type!="",type!~"nat|waf|kube"}
+              ruby_file_descriptors{type!="",type!~"cloud-sql|nat|waf|kube"}
               /
-              ruby_process_max_fds{type!="",type!~"nat|waf|kube"}
+              ruby_process_max_fds{type!="",type!~"cloud-sql|nat|waf|kube"}
             )
             ,
             1)
@@ -842,22 +874,6 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
-      component: praefect_cloudsql_cpu
-      stage: main
-      tier: stor
-      type: praefect
-    expr: |
-      max by(environment) (
-        clamp_min(
-          clamp_max(
-            avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_cpu_utilization{database_id=~".+:praefect-db.+", }[5m])
-            ,
-            1)
-        ,
-        0)
-      )
-  - record: gitlab_component_saturation:ratio
-    labels:
       component: private_runners
       stage: main
       tier: runners
@@ -1159,6 +1175,30 @@ groups:
     expr: "0.9"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
+      component: cloudsql_cpu
+    expr: "0.8"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: cloudsql_cpu
+    expr: "0.9"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: cloudsql_disk
+    expr: "0.85"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: cloudsql_disk
+    expr: "0.9"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: cloudsql_memory
+    expr: "0.8"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: cloudsql_memory
+    expr: "0.9"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
       component: cpu
     expr: "0.8"
   - record: slo:max:hard:gitlab_component_saturation:ratio
@@ -1285,14 +1325,6 @@ groups:
     labels:
       component: go_memory
     expr: "0.98"
-  - record: slo:max:soft:gitlab_component_saturation:ratio
-    labels:
-      component: grafana_cloudsql_cpu
-    expr: "0.8"
-  - record: slo:max:hard:gitlab_component_saturation:ratio
-    labels:
-      component: grafana_cloudsql_cpu
-    expr: "0.9"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: grafana_trickster_cache_usage
@@ -1527,14 +1559,6 @@ groups:
     expr: "0.95"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
-      component: praefect_cloudsql_cpu
-    expr: "0.8"
-  - record: slo:max:hard:gitlab_component_saturation:ratio
-    labels:
-      component: praefect_cloudsql_cpu
-    expr: "0.9"
-  - record: slo:max:soft:gitlab_component_saturation:ratio
-    labels:
       component: private_runners
     expr: "0.85"
   - record: slo:max:hard:gitlab_component_saturation:ratio
@@ -1683,6 +1707,30 @@ groups:
   - record: gitlab_component_saturation_info
     labels:
       capacity_planning_strategy: quantile95_1h
+      component: cloudsql_cpu
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s4
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: cloudsql_disk
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s4
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: cloudsql_memory
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s4
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      capacity_planning_strategy: quantile95_1h
       component: cpu
       horiz_scaling: "yes"
       quantile: max
@@ -1804,14 +1852,6 @@ groups:
     labels:
       capacity_planning_strategy: quantile95_1h
       component: go_memory
-      horiz_scaling: "yes"
-      quantile: max
-      severity: s4
-    expr: "1"
-  - record: gitlab_component_saturation_info
-    labels:
-      capacity_planning_strategy: quantile95_1h
-      component: grafana_cloudsql_cpu
       horiz_scaling: "yes"
       quantile: max
       severity: s4
@@ -2051,14 +2091,6 @@ groups:
   - record: gitlab_component_saturation_info
     labels:
       capacity_planning_strategy: quantile95_1h
-      component: praefect_cloudsql_cpu
-      horiz_scaling: "yes"
-      quantile: max
-      severity: s4
-    expr: "1"
-  - record: gitlab_component_saturation_info
-    labels:
-      capacity_planning_strategy: quantile95_1h
       component: private_runners
       horiz_scaling: "yes"
       quantile: max
@@ -2255,6 +2287,123 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="cgroup_memory"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="cgroup_memory"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: The CloudSQL CPU Utilization resource of the {{ $labels.type }} service
+        ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
+        its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the CloudSQL CPU Utilization resource:
+
+        CloudSQL CPU utilization.
+
+        See https://cloud.google.com/monitoring/api/metrics_gcp#gcp-cloudsql for more details
+      grafana_dashboard_id: alerts-sat_cloudsql_cpu
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_cloudsql_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3017284519"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, database_id) (
+          clamp_min(
+            clamp_max(
+              avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_cpu_utilization{environment="{{ $labels.environment }}"}[5m])
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+    expr: |
+      gitlab_component_saturation:ratio{component="cloudsql_cpu"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="cloudsql_cpu"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: The CloudSQL Disk Utilization resource of the {{ $labels.type }} service
+        ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
+        its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the CloudSQL Disk Utilization resource:
+
+        CloudSQL Disk utilization.
+
+        See https://cloud.google.com/monitoring/api/metrics_gcp#gcp-cloudsql for more details
+      grafana_dashboard_id: alerts-sat_cloudsql_disk
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_cloudsql_disk?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2351208402"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, database_id) (
+          clamp_min(
+            clamp_max(
+              avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_disk_utilization{environment="{{ $labels.environment }}"}[5m])
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+    expr: |
+      gitlab_component_saturation:ratio{component="cloudsql_disk"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="cloudsql_disk"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: The CloudSQL Memory Utilization resource of the {{ $labels.type }} service
+        ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
+        its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the CloudSQL Memory Utilization resource:
+
+        CloudSQL Memory utilization.
+
+        See https://cloud.google.com/monitoring/api/metrics_gcp#gcp-cloudsql for more details
+      grafana_dashboard_id: alerts-sat_cloudsql_memory
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_cloudsql_memory?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "395749012"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, database_id) (
+          clamp_min(
+            clamp_max(
+              avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_memory_utilization{environment="{{ $labels.environment }}"}[5m])
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+    expr: |
+      gitlab_component_saturation:ratio{component="cloudsql_memory"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="cloudsql_memory"}
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
@@ -2930,45 +3079,6 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="go_memory"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="go_memory"}
-  - alert: component_saturation_slo_out_of_bounds
-    for: 5m
-    annotations:
-      title: The Average CPU Utilization resource of the {{ $labels.type }} service
-        ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
-        its capacity limit.
-      description: |
-        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
-
-        Details of the Average CPU Utilization resource:
-
-        Average CPU utilization.
-
-        See https://cloud.google.com/monitoring/api/metrics_gcp#gcp-cloudsql for more details
-      grafana_dashboard_id: alerts-sat_grafana_cloudsql_cpu
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_grafana_cloudsql_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "123327851"
-      grafana_variables: environment,type,stage
-      promql_query: |
-        max by(environment, database_id) (
-          clamp_min(
-            clamp_max(
-              avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_cpu_utilization{database_id=~".+:grafana-(internal|pre)-.+", environment="{{ $labels.environment }}"}[5m])
-              ,
-              1)
-          ,
-          0)
-        )
-      runbook: docs/{{ $labels.type }}/README.md
-    labels:
-      alert_type: cause
-      rules_domain: general
-      severity: s4
-    expr: |
-      gitlab_component_saturation:ratio{component="grafana_cloudsql_cpu"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="grafana_cloudsql_cpu"}
   - alert: component_saturation_slo_out_of_bounds
     for: 15m
     annotations:
@@ -4333,45 +4443,6 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="pgbouncer_sync_replica_pool"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="pgbouncer_sync_replica_pool"}
-  - alert: component_saturation_slo_out_of_bounds
-    for: 5m
-    annotations:
-      title: The Average CPU Utilization resource of the {{ $labels.type }} service
-        ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
-        its capacity limit.
-      description: |
-        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
-
-        Details of the Average CPU Utilization resource:
-
-        Average CPU utilization.
-
-        See https://cloud.google.com/monitoring/api/metrics_gcp#gcp-cloudsql for more details
-      grafana_dashboard_id: alerts-sat_praefect_cloudsql_cpu
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_praefect_cloudsql_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "3679713436"
-      grafana_variables: environment,type,stage
-      promql_query: |
-        max by(environment, database_id) (
-          clamp_min(
-            clamp_max(
-              avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_cpu_utilization{database_id=~".+:praefect-db.+", environment="{{ $labels.environment }}"}[5m])
-              ,
-              1)
-          ,
-          0)
-        )
-      runbook: docs/{{ $labels.type }}/README.md
-    labels:
-      alert_type: cause
-      rules_domain: general
-      severity: s4
-    expr: |
-      gitlab_component_saturation:ratio{component="praefect_cloudsql_cpu"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="praefect_cloudsql_cpu"}
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:

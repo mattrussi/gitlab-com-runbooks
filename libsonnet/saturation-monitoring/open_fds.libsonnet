@@ -6,7 +6,7 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
     title: 'Open file descriptor utilization per instance',
     severity: 's2',
     horizontallyScalable: true,
-    appliesTo: { allExcept: ['nat', 'waf', 'kube'] },
+    appliesTo: { allExcept: ['cloud-sql', 'nat', 'waf', 'kube'] },
     description: |||
       Open file descriptor utilization per instance.
 

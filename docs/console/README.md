@@ -25,6 +25,7 @@
 * [How to detect CI Abuse](../ci-runners/ci-abuse-handling.md)
 * [../ci-runners/ci_constantnumberoflongrunningrepeatedjobs.md](../ci-runners/ci_constantnumberoflongrunningrepeatedjobs.md)
 * [../ci-runners/service-ci-runners.md](../ci-runners/service-ci-runners.md)
+* [Cloud SQL Troubleshooting](../cloud-sql/cloud-sql.md)
 * [Cloudflare Logs](../cloudflare/logging.md)
 * [customers.gitlab.com](../customers/api-key-rotation.md)
 * [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)

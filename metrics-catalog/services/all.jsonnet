@@ -6,6 +6,7 @@
   import 'api.jsonnet',
   import 'camoproxy.jsonnet',
   import 'ci-runners.jsonnet',
+  import 'cloud-sql.jsonnet',
   import 'consul.jsonnet',
   import 'frontend.jsonnet',
   import 'google-cloud-storage.jsonnet',

@@ -11,7 +11,7 @@ metricsCatalog.serviceDefinition({
   type: 'monitoring',
   tier: 'inf',
 
-  tags: ['golang', 'grafana', 'prometheus', 'thanos'],
+  tags: ['cloud-sql', 'golang', 'grafana', 'prometheus', 'thanos'],
 
   monitoringThresholds: {
     apdexScore: 0.999,
@@ -480,7 +480,11 @@ metricsCatalog.serviceDefinition({
         Grafana uses a GCP CloudSQL instance. This SLI represents SQL transactions to that service.
       |||,
 
-      local baseSelector = { job: 'stackdriver', database: 'grafana' },
+      local baseSelector = {
+        job: 'stackdriver',
+        database_id: { re: '.+:grafana-.+' },
+        database: 'grafana',
+      },
 
       staticLabels: {
         tier: 'inf',
@@ -499,7 +503,7 @@ metricsCatalog.serviceDefinition({
         }
       ),
 
-      significantLabels: [],
+      significantLabels: ['database_id'],
       serviceAggregation: false,
       toolingLinks: [
         toolingLinks.cloudSQL('grafana-internal-f534', project='gitlab-ops'),
