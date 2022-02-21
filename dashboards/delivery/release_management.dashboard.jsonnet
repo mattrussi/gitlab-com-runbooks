@@ -44,7 +44,7 @@ local environments = [
     role: 'gstg-ref',
     stage: 'main',
     icon: '🚧',
-  }
+  },
 ];
 
 local annotations = [
