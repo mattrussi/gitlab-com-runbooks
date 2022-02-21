@@ -58,7 +58,9 @@ See the guidance from the IMOC onboarding:
 
 ### Estimate the Severity of the issue
 
-Estimate the severity of the issue as soon as EOC or you have an idea on what the problem is. Evaluate based on [Availability](https://about.gitlab.com/handbook/engineering/quality/issue-triage/#availability). Sometimes it is tough to say to the upset customer that their issue is not S1 for us, but we need to think about the whole situation and other users. 
+Estimate the severity of the issue as soon as EOC or you have an idea on what the problem is. Evaluate based on [Availability](https://about.gitlab.com/handbook/engineering/quality/issue-triage/#availability). Sometimes it is tough to say to the upset customer that their issue is not S1 for us, but we need to think about the whole situation and other users.
+
+If the incident directly affects availability for customers and you have access to a sample of namespace IDs or names you can use the [ChatOps](https://about.gitlab.com/handbook/support/workflows/chatops.html#namespace) tool to quickly establish the tier and number of members. The `find` command takes up to 5 namespaces at a time.
 
 We prefer to avoid [hotpatches](https://gitlab.com/gitlab-org/release/docs/-/blob/master/general/deploy/post-deployment-patches.md#overview). If a hotpatch is being considered, the issue severity will drive the decision:
 
