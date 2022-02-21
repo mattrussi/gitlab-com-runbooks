@@ -38,6 +38,13 @@ local environments = [
     stage: 'cny',
     icon: '🐣',
   },
+  {
+    id: 'gstg-ref',
+    name: 'Staging Ref',
+    role: 'gstg-ref',
+    stage: 'main',
+    icon: '✨',
+  }
 ];
 
 local annotations = [
@@ -68,6 +75,13 @@ local annotations = [
     enable=false,
     iconColor='#8F3BB8',
     tags=['deploy', 'gstg-cny'],
+  ),
+  annotation.datasource(
+    'Staging Ref deploys',
+    '-- Grafana --',
+    enable=false,
+    iconColor='#8F3BB8',
+    tags=['deploy', 'gstg-ref'],
   ),
 ];
 
