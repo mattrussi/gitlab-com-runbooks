@@ -636,10 +636,10 @@ local errorBudgetDetailDashboard(stageGroup) =
         showErrorRatio=true,
         showOpsRate=true,
         showSaturationCell=false,
-        skipDescriptionPanels=true,
         includeLastWeek=false,
         compact=true,
         rowHeight=8,
+        fixedThreshold=errorBudget.slaTarget
       )
     )
     .addPanels(

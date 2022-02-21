@@ -31,10 +31,9 @@ local row(
   includePredictions=false,
   expectMultipleSeries=false,
   compact=false,
-  skipDescriptionPanels=false,
   includeLastWeek=true,
+  fixedThreshold=null,
       ) =
-  local fixedThreshold = if serviceType == null then errorBudget.slaTarget else null;
   local typeSelector = if serviceType == null then {} else { type: serviceType };
   local selectorHashWithExtras = selectorHash + typeSelector;
   local formatConfig = {
@@ -70,10 +69,15 @@ local row(
         ]
         +
         (
-          if expectMultipleSeries || skipDescriptionPanels then
+          if expectMultipleSeries then
             []
           else
-            [statusDescription.apdexStatusDescriptionPanel(titlePrefix, selectorHashWithExtras, aggregationSet=aggregationSet)]
+            [statusDescription.apdexStatusDescriptionPanel(
+              titlePrefix,
+              selectorHashWithExtras,
+              aggregationSet=aggregationSet,
+              fixedThreshold=fixedThreshold
+            )]
         ),
       ]
     else
@@ -104,10 +108,15 @@ local row(
         ]
         +
         (
-          if expectMultipleSeries || skipDescriptionPanels then
+          if expectMultipleSeries then
             []
           else
-            [statusDescription.errorRateStatusDescriptionPanel(titlePrefix, selectorHashWithExtras, aggregationSet=aggregationSet)]
+            [statusDescription.errorRateStatusDescriptionPanel(
+              titlePrefix,
+              selectorHashWithExtras,
+              aggregationSet=aggregationSet,
+              fixedThreshold=fixedThreshold
+            )]
         ),
       ]
     else
