@@ -80,7 +80,7 @@ local annotations = [
     'Staging Ref deploys',
     '-- Grafana --',
     enable=false,
-    iconColor='#8F3BB8',
+    iconColor='#EB0010',
     tags=['deploy', 'gstg-ref'],
   ),
 ];
