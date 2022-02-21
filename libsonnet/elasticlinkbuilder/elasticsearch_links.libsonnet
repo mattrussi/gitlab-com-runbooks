@@ -113,7 +113,7 @@ local indexDefaults = {
   defaultFilters: [],
   kibanaEndpoint: 'https://log.gprd.gitlab.net/app/kibana',
   prometheusLabelMappings: {},
-  prometheusLabelTranslator: {},
+  prometheusLabelTranslators: {},
 };
 
 local globalState(str) =
@@ -262,7 +262,9 @@ local indexCatalog = {
     failureFilter: statusCode('json.status'),
     defaultLatencyField: 'json.duration_s',
     latencyFieldUnitMultiplier: 1,
-    defaultFilters: [matchFilter('json.subcomponent', 'production_json')],
+    // The GraphQL requests are in the rails_graphql index and look slightly
+    // different.
+    defaultFilters: [mustNot(matchFilter('json.subcomponent', 'graphql_json'))],
     slowRequestFilter: [
       // These need to be present for the script to work.
       // Health check requests don't have a target_duration_s
@@ -277,15 +279,12 @@ local indexCatalog = {
     // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1313
     prometheusLabelMappings+: {
       stage_group: 'json.meta.feature_category',
+      feature_category: 'json.meta.feature_category',
     },
 
-    prometheusLabelTranslator+: {
+    prometheusLabelTranslators+: {
       stage_group: function(groupName) { oneOf: stages.categoriesForStageGroup(groupName) },
     },
-  },
-
-  rails_api: self.rails {
-    defaultFilters: [matchFilter('json.subcomponent', 'api_json')],
   },
 
   rails_graphql: self.rails {
@@ -842,14 +841,15 @@ local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latency
    */
   getMatchersForPrometheusSelectorHash(index, selectorHash)::
     local prometheusLabelMappings = defaultPrometheusLabelMappings + indexCatalog[index].prometheusLabelMappings;
-    local labelValueTranslator = indexCatalog[index].prometheusLabelTranslator;
+    local labelValueTranslator = indexCatalog[index].prometheusLabelTranslators;
 
     std.flatMap(
       function(label)
         if std.objectHas(prometheusLabelMappings, label) then
+          local selector = selectorHash[label];
           local selectorValue = if std.objectHas(labelValueTranslator, label) then
-            labelValueTranslator[label](selectorHash[label])
-          else selectorHash[label];
+            labelValueTranslator[label](selector)
+          else selector;
 
           // A mapping from this prometheus label to a ES field exists
           if std.isString(selectorValue) then
@@ -869,7 +869,7 @@ local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latency
           else if std.objectHas(selectorValue, 'oneOf') then
             [matcher(prometheusLabelMappings[label], selectorValue.oneOf)]
           else if std.objectHas(selectorValue, 'noneOf') then
-            [mustNot(matcher(prometheusLabelMappings[label], selectorValue.oneOf))]
+            [mustNot(matcher(prometheusLabelMappings[label], selectorValue.noneOf))]
           else
             assert false : 'Unsupported ES matcher %s' % [selectorValue];
             []

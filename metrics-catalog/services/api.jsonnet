@@ -182,7 +182,7 @@ metricsCatalog.serviceDefinition({
 
       toolingLinks: [
         toolingLinks.sentry(slug='gitlab/gitlabcom', type='api', variables=['environment', 'stage']),
-        toolingLinks.kibana(title='Rails', index='rails_api', type='api'),
+        toolingLinks.kibana(title='Rails', index='rails'),
       ],
     },
 
@@ -193,14 +193,14 @@ metricsCatalog.serviceDefinition({
         },
 
         toolingLinks: [
-          toolingLinks.kibana(title='Rails', index='rails_api', type='api'),
+          toolingLinks.kibana(title='Rails', index='rails'),
         ],
       },
 
     graphql_queries:
       sliLibrary.get('graphql_query_apdex').generateServiceLevelIndicator(railsSelector) {
         toolingLinks: [
-          toolingLinks.kibana(title='Rails', index='rails_graphql', type='api'),
+          toolingLinks.kibana(title='Rails', index='rails_graphql'),
         ],
       },
   },

@@ -196,4 +196,57 @@ test.suite({
       _g=(time:(from:'${__from:date:iso}',to:'${__to:date:iso}'))
     |||),
   },
+
+  testGetMatchersForPrometheusSelectorHashTranslation: {
+    actual: elastic.getMatchersForPrometheusSelectorHash(
+      'rails',
+      {
+        stage_group: 'source_code',
+      }
+    ),
+    expect: [
+      { meta: { key: 'query', type: 'custom', value: '{"bool": {"minimum_should_match": 1, "should": [{"match_phrase": {"json.meta.feature_category": "source_code_management"}}]}}' }, query: { bool: { minimum_should_match: 1, should: [{ match_phrase: { 'json.meta.feature_category': 'source_code_management' } }] } } },
+    ],
+  },
+  testGetMatchersForPrometheusSelectorHashTranslationEq: {
+    actual: elastic.getMatchersForPrometheusSelectorHash(
+      'rails',
+      {
+        type: 'web',
+        stage: { eq: 'cny' },
+        // Prometheus regexes don't really translate to a matcher, but often they
+        // only contain a single word instead of an array joined by `|`.
+        feature_category: { re: 'pipeline_.*' },
+      }
+    ),
+    expect: [
+      { query: { match: { 'json.meta.feature_category': { query: 'pipeline_.*', type: 'phrase' } } } },
+      { query: { match: { 'json.stage': { query: 'cny', type: 'phrase' } } } },
+      { query: { match: { 'json.type': { query: 'web', type: 'phrase' } } } },
+    ],
+  },
+  testGetMatchersForPrometheusSelectorHashTranslationNe: {
+    actual: elastic.getMatchersForPrometheusSelectorHash(
+      'rails',
+      {
+        stage: { ne: 'cny' },
+      }
+    ),
+    expect: [
+      { meta: { negate: true }, query: { match: { 'json.stage': { query: 'cny', type: 'phrase' } } } },
+    ],
+  },
+  testGetMatchersForPrometheusSelectorHashTranslationArrays: {
+    actual: elastic.getMatchersForPrometheusSelectorHash(
+      'rails',
+      {
+        type: { oneOf: ['web', 'api'] },
+        stage: { noneOf: ['cny'] },
+      }
+    ),
+    expect: [
+      { meta: { key: 'query', negate: true, type: 'custom', value: '{"bool": {"minimum_should_match": 1, "should": [{"match_phrase": {"json.stage": "cny"}}]}}' }, query: { bool: { minimum_should_match: 1, should: [{ match_phrase: { 'json.stage': 'cny' } }] } } },
+      { meta: { key: 'query', type: 'custom', value: '{"bool": {"minimum_should_match": 1, "should": [{"match_phrase": {"json.type": "web"}}, {"match_phrase": {"json.type": "api"}}]}}' }, query: { bool: { minimum_should_match: 1, should: [{ match_phrase: { 'json.type': 'web' } }, { match_phrase: { 'json.type': 'api' } }] } } },
+    ],
+  },
 })
