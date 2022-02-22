@@ -332,6 +332,21 @@ basic.dashboard(
         },
       ),
     ],
+    // Column 6: Post deploy migration pressure
+    [
+      deliveryStatPanel(
+        'Pending migrations',
+        description='The number of migrations pending execution in each environment.',
+        query='sum(delivery_metrics_pending_migrations_total{env=~"gstg|gprd",stage="main"}) by (env)',
+        legendFormat='{{env}}',
+        thresholds=[
+          { color: 'green', value: null },
+          { color: '#EAB839', value: 3 },
+          { color: '#EF843C', value: 4 },
+          { color: 'red', value: 5 },
+        ],
+      ),
+    ],
   ], cellHeights=[3 for x in environments], startRow=1)
 )
 .addPanels(
