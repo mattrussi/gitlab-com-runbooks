@@ -1,6 +1,6 @@
 # Periodic Job Monitoring
 
-We have lots of jobs that run regularly. We use Prometheus & Alertmanager to monitor and alert on jobs that are either still running and taking too long to finish, or that have completed but took longer than expected ([details](./job_completion.md)). This type of alerting relies on jobs actually making a start to be able to alert on them. **What about jobs that quietly fail to trigger when they're supposed to?**
+We have lots of jobs that run regularly. We use Prometheus & Alertmanager to monitor and alert on jobs that are either still running and taking too long to finish, or that have completed but took longer than expected ([details](./job_completion.md)). This type of alerting relies on jobs actually starting to be able to alert on them. **What about jobs that quietly fail to trigger when they're supposed to?**
 
 [Dead Man's Snitch](https://deadmanssnitch.com) (or DMS) is a third-party monitoring tool for periodic processes, and we use this service for alerting us when jobs fail to trigger when they're expected to.
 
