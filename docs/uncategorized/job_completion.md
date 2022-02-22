@@ -1,12 +1,14 @@
 # GitLab Job Completion
 
+> This page is about monitoring & alerting on job completion (i.e., jobs that trigger but fail to complete within the expected time, or complete over the expected time). For alerting on jobs that fail to trigger, see [periodic job monitoring](./periodic_job_monitoring.md).
+
 [[_TOC_]]
 
 ## Purpose and implementation
 
-The main purpose of a job completion metric is to observe if a given task or action has successfully run in the required interval. This can be used in variuos scenarios, where active monitoring is not applicable, such as cron jobs, or scheduled pipeline executuions. If there would fail to check back in the targeted interval an alert would fire, informing about this incident.
+The main purpose of a job completion metric is to observe if a given task or action has successfully run in the required interval. This can be used in various scenarios, where active monitoring is not applicable, such as cron jobs, or scheduled pipeline executions. If these were to fail to check back in the targeted interval, an alert would fire informing about this incident.
 
-This is implementated via Prometheus Pushgateway. To register and check-in a successful execution the cron/pipeline publish the required metrics to a Pushgateway. See below for details. Should the time difference be greater than the defined time it would trigger the alert.
+This is implementated via Prometheus Pushgateway. To register and check-in a successful execution, the cron/pipeline publish the required metrics to a Pushgateway. See below for details. Should the time difference be greater than the defined time it would trigger the alert.
 
 ## Creating and updating a new job metric
 
@@ -62,9 +64,9 @@ PROM
 
 | Variable | Description |
 | -------- | ----------- |
-| `GATEWAY` | The hostname/IP of the pushgateway to push to (check firewalls, stay within environment if possible) |
+| `PUSH_GATEWAY` | The hostname/IP of the pushgateway to push to (check firewalls, stay within environment if possible) |
 | `MAX_AGE` | The SLO value for alerting, in seconds. |
-| `RESOURCE` | The resource identifier to include in alerts. Do not include data, that changes between invocations (such as pipeline or job IDs for example) |
+| `RESOURCE` | The resource identifier to include in alerts (e.g. `assign_weights`). Do not include data, that changes between invocations (such as pipeline or job IDs for example) |
 | `TIER` | The tier of the monitored service (e.g. `db`) |
 | `TYPE` | The tpye of the monitored service (e.g. `postgres`)
 
@@ -77,7 +79,7 @@ If you have a job that should only run on one random node in an env each time
 (e.g. the wal-g backup job), then use a central pushgateway to avoid having
 metrics labeled with different fqdn and thus getting alerts if the job didn't
 happen to run on the same node for a while. For gstg, gprd and ops you can use
-the blackbox nodes as central pushgateway. 
+the blackbox nodes as central pushgateway.
 
 ## Alerting
 
