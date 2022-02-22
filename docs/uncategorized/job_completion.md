@@ -1,6 +1,6 @@
 # GitLab Job Completion
 
-> This page is concerned with monitoring & alerting on job completion (i.e., jobs that trigger but fail to complete within the expected time, or complete over the expected time). For alerting on jobs that fail to trigger, see [periodic job monitoring](./periodic_job_monitoring.md).
+> This page is about monitoring & alerting on job completion (i.e., jobs that trigger but fail to complete within the expected time, or complete over the expected time). For alerting on jobs that fail to trigger, see [periodic job monitoring](./periodic_job_monitoring.md).
 
 [[_TOC_]]
 
