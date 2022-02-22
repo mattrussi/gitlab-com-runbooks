@@ -197,6 +197,9 @@ You must fix it adding a row for the user in the `pg_hba.conf` file, example:
 host    dbXXX         userXXX         XXX.XXX.XX.XXX/N_mask_byte     md5
 ```
 
+**Important:** Gitlab uses a Patroni managed cluster, in that deployment mode the correct method to add manage client authorization is through the [`pg_hba` settings](https://patroni.readthedocs.io/en/latest/SETTINGS.html#postgresql) defined in the `patroni.yml` file. Any entries persisted directly into the `pg_hba.conf` can be overriden by Patroni.
+
+
 ## Propagated user to PGBouncer 
 PGBouncer also needs to be setup for authenticating users. In the simplest case, pgBouncer uses its own file for storing users and passwords (by default `userlist.txt`). But pgBouncer can also query the database to authenticate the user being connected to pgBouncer. In our case we are doing it via [auth_query](https://www.pgbouncer.org/config.html#auth_query) parameter, like in:
 
@@ -248,3 +251,20 @@ When a new table is created, by default only the table creator and the superuser
 ```
 ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO analytics;
 ```
+
+
+## Configuration management of database users
+
+When a new empty PostgreSQL/Patroni cluster is deployed it creates any `user` as defined in the `patroni.yml` file, in the `bootstrap.users` section, as documented at: https://patroni.readthedocs.io/en/latest/SETTINGS.html#bootstrap-configuration
+
+If you are launching a new Patroni environment using Gitlab's `chef-repo`, then the database users can be defined under `['gitlab-patroni']['patroni']['users']`, which will then be configured by a proper recipe into the proper `patroni.yml` section, as explained at https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/15212#note_845820648
+
+The default users can be defined using 2 different methods:
+- The default users created are defined in the `gitlab-patroni` cookbook under `attributes/default.rb` - https://gitlab.com/gitlab-cookbooks/gitlab-patroni/-/blob/master/attributes/default.rb#L53
+- But for custom deployments they can also be defined in the role definition, eg. https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/blob/master/roles/gstg-base-db-patroni.json#L50
+
+**Important**: the above method is through `bootstrap`, which means that only create users into a new Patroni cluster, therefore the method will not work to create new users into an existing Patroni cluster*
+
+**Note:** Gitlab's `gstg` and `gprd` databases have several users that were created through deployment or migration, hence they are not defined in our `chef-repo` repository.
+
+If your users needs any privilege provided only by `GRANT`, then you should write your own deployment script and execute on each new environment, because the Patroni [`boostrap.users.options`](https://patroni.readthedocs.io/en/latest/SETTINGS.html#bootstrap-configuration) setting only accept options of [CREATE USER](https://www.postgresql.org/docs/12/sql-createuser.html) statement
