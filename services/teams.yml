@@ -242,7 +242,6 @@ teams:
   product_stage_group: editor
   ignored_components:
   - graphql_queries
-  - rails_requests
 - name: expansion
   product_stage_group: expansion
   ignored_components:
