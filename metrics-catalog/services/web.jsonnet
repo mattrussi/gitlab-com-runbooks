@@ -198,7 +198,7 @@ metricsCatalog.serviceDefinition({
     rails_requests:
       sliLibrary.get('rails_request_apdex').generateServiceLevelIndicator(railsSelector) {
         toolingLinks: [
-          toolingLinks.kibana(title='Rails', index='rails', type='web'),
+          toolingLinks.kibana(title='Rails', index='rails'),
         ],
       },
   },

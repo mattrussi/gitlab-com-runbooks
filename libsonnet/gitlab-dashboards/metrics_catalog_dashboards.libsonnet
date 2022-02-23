@@ -88,7 +88,7 @@ local sliOverviewMatrixRow(
     )
     +
     (
-      local markdown = getMarkdownDetailsForSLI(sli, selectorHashWithExtras);
+      local markdown = getMarkdownDetailsForSLI(sli, selectorHash);
       if markdown != '' then
         [[
           grafana.text.new(
@@ -208,7 +208,7 @@ local sliDetailErrorRatePanel(
               serviceType=serviceType,
               aggregationSet=aggregationSet,
               sli=service.serviceLevelIndicators[sliName],
-              selectorHash=selectorHash { type: serviceType, component: sliName },
+              selectorHash=selectorHash { type: serviceType },
               startRow=startRow + 1 + i * 10,
               legendFormatPrefix=legendFormatPrefix,
               expectMultipleSeries=expectMultipleSeries,
@@ -251,7 +251,7 @@ local sliDetailErrorRatePanel(
                   serviceType=null,
                   aggregationSet=aggregationSet,
                   sli=sli,
-                  selectorHash=selectorHash { component: sliName },
+                  selectorHash=selectorHash,
                   startRow=startRow + 1 + i * 10,
                   legendFormatPrefix=legendFormatPrefix,
                   expectMultipleSeries=expectMultipleSeries,

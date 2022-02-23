@@ -310,7 +310,7 @@ metricsCatalog.serviceDefinition({
         },
 
         toolingLinks: [
-          toolingLinks.kibana(title='Rails', index='rails', type='git'),
+          toolingLinks.kibana(title='Rails', index='rails'),
         ],
       },
   },
