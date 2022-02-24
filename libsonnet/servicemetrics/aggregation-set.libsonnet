@@ -6,7 +6,6 @@ local validator = import 'utils/validator.libsonnet';
 local defaultSourceBurnRates = ['5m', '30m', '1h'];
 local defaultGlobalBurnRates = defaultSourceBurnRates + ['6h', '3d'];
 local upscaledBurnRates = ['6h', '3d'];
-local longWindowStart = durationParser.toSeconds('6h');
 
 local definitionDefaults = {
   aggregationFilter: null,
@@ -114,17 +113,14 @@ local buildValidator(definition) =
         generateMetricNamesForBurnRate(burnRate);
 
     local getMetricNameForBurnRate(burnRate, metricName, required) =
-      local nullOrFail() =
-        if required then
-          std.assertEqual('', { __assert__: "'%s' metric for '%s' burn rate required, but not configured in aggregation set '%s'." % [metricName, burnRate, definitionWithDefaults.name] })
-        else
-          null;
-
       local burnRateMetrics = getBurnRateMetrics(burnRate);
       if std.objectHas(burnRateMetrics, metricName) then
         burnRateMetrics[metricName]
       else
-        nullOrFail();
+        if required then
+          error "'%s' metric for '%s' burn rate required, but not configured in aggregation set '%s'." % [metricName, burnRate, definitionWithDefaults.name]
+        else
+          null;
 
     definitionWithDefaults {
       // Returns the apdexSuccessRate metric name, null if not required, or fails if missing and required
@@ -165,10 +161,15 @@ local buildValidator(definition) =
         else [];
         std.set(definedBurnRates + supportedBurnRates, durationParser.toSeconds),
 
-      getShortWindowBurnRates()::
-        std.filter(function(burnRate) durationParser.toSeconds(burnRate) < longWindowStart, self.getBurnRates()),
-      getLongWindowBurnRates()::
-        std.filter(function(burnRate) durationParser.toSeconds(burnRate) >= longWindowStart, self.getBurnRates()),
-
+      getBurnRatesByType()::
+        std.foldl(
+          function(memo, burnRate)
+            local typeForBurnRate = multiburnFactors.burnTypeForWindow(burnRate);
+            local existingBurnRatesForType = if std.objectHas(memo, typeForBurnRate)
+            then memo[typeForBurnRate] else [];
+            memo { [typeForBurnRate]: existingBurnRatesForType + [burnRate] },
+          self.getBurnRates(),
+          {}
+        ),
     },
 }

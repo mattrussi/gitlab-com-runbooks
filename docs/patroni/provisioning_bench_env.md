@@ -192,6 +192,32 @@ Apply complete! Resources: 67 added, 0 changed, 0 destroyed.
 
 *** It can take more than 15 minutes to provision the disks with the snapshot from production.
 
+### Alternatively, you can use replace/target Terraform features to only redeploy a specific set of instances for the source/target cluster:
+
+**Recreating Source Cluster Nodes:**
+```
+tf plan -replace="module.pg12ute-patroni-source.google_compute_instance.instance_with_attached_disk[0]" \
+-replace="module.pg12ute-patroni-source.google_compute_instance.instance_with_attached_disk[1]" \
+-replace="module.pg12ute-patroni-source.google_compute_instance.instance_with_attached_disk[2]" \
+-replace="module.pg12ute-patroni-source.google_compute_disk.data_disk[0]" \
+-replace="module.pg12ute-patroni-source.google_compute_disk.data_disk[1]" \
+-replace="module.pg12ute-patroni-source.google_compute_disk.data_disk[2]" \
+-target="module.pg12ute-patroni-source" \
+-out=source-replace.plan
+```
+
+**Recreating Target Cluster Nodes:**
+```
+tf plan -replace="module.pg12ute-patroni-target.google_compute_instance.instance_with_attached_disk[0]" \
+-replace="module.pg12ute-patroni-target.google_compute_instance.instance_with_attached_disk[1]" \
+-replace="module.pg12ute-patroni-target.google_compute_instance.instance_with_attached_disk[2]" \
+-replace="module.pg12ute-patroni-target.google_compute_disk.data_disk[0]" \
+-replace="module.pg12ute-patroni-target.google_compute_disk.data_disk[1]" \
+-replace="module.pg12ute-patroni-target.google_compute_disk.data_disk[2]" \
+-target="module.pg12ute-patroni-target" \
+-out=target-replace.plan
+```
+
 ## How to configure the Patroni clusters and the environment
 
 

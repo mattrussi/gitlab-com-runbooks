@@ -1,16 +1,17 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
-require 'json'
+require 'yaml'
 require_relative '../lib/jsonnet_wrapper'
 
 # rubocop:disable Metrics/PerceivedComplexity
 # rubocop:disable Metrics/CyclomaticComplexity
 # rubocop:disable Metrics/AbcSize
-def validate(service_catalog_path, known_stage_groups)
-  service_catalog_yaml = JSON.parse(File.read(service_catalog_path))
-  teams = service_catalog_yaml["teams"]
-  tiers = service_catalog_yaml["tiers"]
-  services = service_catalog_yaml["services"]
+def validate(known_stage_groups)
+  service_catalog = JsonnetWrapper.new.parse(File.join(__dir__, "..", "services", "service-catalog.jsonnet"))
+
+  teams = service_catalog["teams"]
+  tiers = service_catalog["tiers"]
+  services = service_catalog["services"]
 
   raise "Service catalog must contain one or more teams" unless teams && !teams.empty?
   raise "Service catalog must contain one or more tiers" unless tiers && !tiers.empty?
@@ -229,6 +230,7 @@ def validate(service_catalog_path, known_stage_groups)
       if monitors.key?("primary_grafana_dashboard")
         primary_grafana_dashboard = monitors["primary_grafana_dashboard"]
         raise "'#{service_name}' | primary_grafana_dashboard field must be string" unless primary_grafana_dashboard.is_a?(String) || primary_grafana_dashboard.nil?
+        raise "'#{service_name}' | primary_grafana_dashboard is appended to the Grafana base URL so it must be relative" unless primary_grafana_dashboard.nil? || !primary_grafana_dashboard.match(%r{^https?://})
       end
 
       if monitors.key?("sentry_slug")
@@ -245,7 +247,7 @@ end
 begin
   known_stage_groups = JsonnetWrapper.new.parse(File.join(__dir__, "..", "services", "stage-group-mapping.jsonnet")).keys
 
-  validate(File.join(__dir__, "..", "services", "service_catalog.json"), known_stage_groups)
+  validate(known_stage_groups)
 rescue StandardError => e
   warn [e.message, *e.backtrace].join("\n")
   exit 1

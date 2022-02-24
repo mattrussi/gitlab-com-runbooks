@@ -1,4 +1,5 @@
 local rison = import 'rison.libsonnet';
+local stages = import 'service-catalog/stages.libsonnet';
 
 local grafanaTimeFrom = '${__from:date:iso}';
 local grafanaTimeTo = '${__to:date:iso}';
@@ -67,6 +68,18 @@ local mustNot(filter) =
     },
   };
 
+local matchAnyScriptFilter(scripts) = {
+  query: {
+    bool: {
+      should: [
+        { script: { script: { source: script } } }
+        for script in scripts
+      ],
+      minimum_should_match: 1,
+    },
+  },
+};
+
 local matchObject(fieldName, matchInfo) =
   local gte = if std.objectHas(matchInfo, 'gte') then matchInfo.gte else null;
   local lte = if std.objectHas(matchInfo, 'lte') then matchInfo.lte else null;
@@ -78,7 +91,9 @@ local matchObject(fieldName, matchInfo) =
     std.assertEqual(false, { __message__: 'Only gte and lte fields are supported but not in [%s]' % std.join(', ', std.objectFields(matchInfo)) });
 
 local matcher(fieldName, matchInfo) =
-  if std.isString(matchInfo) then
+  if fieldName == 'anyScript' && std.isArray(matchInfo) then
+    matchAnyScriptFilter(matchInfo)
+  else if std.isString(matchInfo) then
     matchFilter(fieldName, matchInfo)
   else if std.isArray(matchInfo) then
     matchInFilter(fieldName, matchInfo)
@@ -98,6 +113,7 @@ local indexDefaults = {
   defaultFilters: [],
   kibanaEndpoint: 'https://log.gprd.gitlab.net/app/kibana',
   prometheusLabelMappings: {},
+  prometheusLabelTranslators: {},
 };
 
 local globalState(str) =
@@ -125,6 +141,13 @@ local indexCatalog = {
     failureFilter: [existsFilter('json.camoproxy_err')],
     //defaultLatencyField: 'json.grpc.time_ms',
     //latencyFieldUnitMultiplier: 1000,
+  },
+
+  consul: indexDefaults {
+    timestamp: 'json.time',
+    indexPattern: 'AWVDROsNO8Ra6d0I_oUl',
+    defaultColumns: ['json.@module', 'json.@message'],
+    requestsNotSupported: true,
   },
 
   gitaly: indexDefaults {
@@ -225,21 +248,43 @@ local indexCatalog = {
   rails: indexDefaults {
     timestamp: 'json.time',
     indexPattern: '7092c4e2-4eb5-46f2-8305-a7da2edad090',
-    defaultColumns: ['json.method', 'json.status', 'json.controller', 'json.action', 'json.path', 'json.duration_s'],
-    defaultSeriesSplitField: 'json.controller.keyword',
+    defaultColumns: [
+      'json.status',
+      'json.method',
+      'json.meta.caller_id',
+      'json.meta.feature_category',
+      'json.path',
+      'json.request_urgency',
+      'json.duration_s',
+      'json.target_duration_s',
+    ],
+    defaultSeriesSplitField: 'json.meta.caller_id',
     failureFilter: statusCode('json.status'),
     defaultLatencyField: 'json.duration_s',
     latencyFieldUnitMultiplier: 1,
-  },
+    // The GraphQL requests are in the rails_graphql index and look slightly
+    // different.
+    defaultFilters: [mustNot(matchFilter('json.subcomponent', 'graphql_json'))],
+    slowRequestFilter: [
+      // These need to be present for the script to work.
+      // Health check requests don't have a target_duration_s
+      // This filters these out of the logs
+      existsFilter('json.target_duration_s'),
+      existsFilter('json.duration_s'),
+      matchAnyScriptFilter(["doc['json.duration_s'].value > doc['json.target_duration_s'].value"]),
+    ],
 
-  rails_api: indexDefaults {
-    timestamp: 'json.time',
-    indexPattern: '7092c4e2-4eb5-46f2-8305-a7da2edad090',
-    defaultColumns: ['json.method', 'json.status', 'json.route', 'json.path', 'json.duration_s'],
-    defaultSeriesSplitField: 'json.route.keyword',
-    failureFilter: statusCode('json.status'),
-    defaultLatencyField: 'json.duration_s',
-    latencyFieldUnitMultiplier: 1,
+    // TODO: include this for Sidekiq when we implement add remove the hardcoded
+    // recordings for Sidekiq-feature category aggregations.
+    // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1313
+    prometheusLabelMappings+: {
+      stage_group: 'json.meta.feature_category',
+      feature_category: 'json.meta.feature_category',
+    },
+
+    prometheusLabelTranslators+: {
+      stage_group: function(groupName) { oneOf: stages.categoriesForStageGroup(groupName) },
+    },
   },
 
   rails_graphql: self.rails {
@@ -722,13 +767,17 @@ local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latency
     ),
 
   // Search for requests taking longer than the specified number of seconds
-  buildElasticDiscoverSlowRequestSearchQueryURL(index, filters=[], luceneQueries=[], slowRequestSeconds, timeRange=grafanaTimeRange, extraColumns=[])::
+  buildElasticDiscoverSlowRequestSearchQueryURL(index, filters=[], luceneQueries=[], slowRequestSeconds=null, timeRange=grafanaTimeRange, extraColumns=[])::
     local ic = indexCatalog[index];
     local slowRequestFilter = if std.objectHas(ic, 'slowRequestFilter') then ic.slowRequestFilter else [];
+    local exceedingDurationFilter = if slowRequestSeconds != null then
+      [rangeFilter(ic.defaultLatencyField, gteValue=slowRequestSeconds * ic.latencyFieldUnitMultiplier, lteValue=null)]
+    else
+      [];
 
     buildElasticDiscoverSearchQueryURL(
       index=index,
-      filters=filters + slowRequestFilter + [rangeFilter(ic.defaultLatencyField, gteValue=slowRequestSeconds * ic.latencyFieldUnitMultiplier, lteValue=null)],
+      filters=filters + slowRequestFilter + exceedingDurationFilter,
       timeRange=timeRange,
       sort=[[ic.defaultLatencyField, 'desc']],
       extraColumns=extraColumns
@@ -782,20 +831,25 @@ local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latency
   indexSupportsLatencyQueries(index)::
     std.objectHas(indexCatalog[index], 'defaultLatencyField'),
 
+  indexHasSlowRequestFilter(index)::
+    std.objectHas(indexCatalog[index], 'slowRequestFilter'),
+
   /**
    * Best-effort converter for a prometheus selector hash,
    * to convert it into a ES matcher.
    * Returns an array of zero or more matchers.
-   *
-   * TODO: for now, only supports equal matches, re (single value), eq, ne, improve this
    */
   getMatchersForPrometheusSelectorHash(index, selectorHash)::
     local prometheusLabelMappings = defaultPrometheusLabelMappings + indexCatalog[index].prometheusLabelMappings;
+    local labelValueTranslator = indexCatalog[index].prometheusLabelTranslators;
 
     std.flatMap(
       function(label)
         if std.objectHas(prometheusLabelMappings, label) then
-          local selectorValue = selectorHash[label];
+          local selector = selectorHash[label];
+          local selectorValue = if std.objectHas(labelValueTranslator, label) then
+            labelValueTranslator[label](selector)
+          else selector;
 
           // A mapping from this prometheus label to a ES field exists
           if std.isString(selectorValue) then
@@ -805,14 +859,19 @@ local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latency
             // so treating it as such is better than ignoring
             [matchFilter(prometheusLabelMappings[label], selectorValue.re)]
           else if std.objectHas(selectorValue, 'eq') then
-            // Most of the time, re contains a single value,
+            // Most of the time, eq contains a single value,
             // so treating it as such is better than ignoring
             [matchFilter(prometheusLabelMappings[label], selectorValue.eq)]
           else if std.objectHas(selectorValue, 'ne') then
-            // Most of the time, re contains a single value,
+            // Most of the time, ne contains a single value,
             // so treating it as such is better than ignoring
             [mustNot(matchFilter(prometheusLabelMappings[label], selectorValue.ne))]
+          else if std.objectHas(selectorValue, 'oneOf') then
+            [matcher(prometheusLabelMappings[label], selectorValue.oneOf)]
+          else if std.objectHas(selectorValue, 'noneOf') then
+            [mustNot(matcher(prometheusLabelMappings[label], selectorValue.noneOf))]
           else
+            assert false : 'Unsupported ES matcher %s' % [selectorValue];
             []
         else
           [],

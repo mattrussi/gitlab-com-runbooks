@@ -11,7 +11,7 @@ groups:
       type: praefect
     expr: |
       sum by (environment,stage) (
-        avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database="praefect_production",job="stackdriver"}[1m])
+        avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database=~"praefect_(canary|production)",database_id=~".+:praefect-db-.+",job="stackdriver"}[1m])
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -21,7 +21,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database="praefect_production",job="stackdriver",transaction_type="rollback"}[1m])
+          avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database=~"praefect_(canary|production)",database_id=~".+:praefect-db-.+",job="stackdriver",transaction_type="rollback"}[1m])
         )
       )
       or
@@ -119,7 +119,7 @@ groups:
       type: praefect
     expr: |
       sum by (environment,stage) (
-        avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database="praefect_production",job="stackdriver"}[5m])
+        avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database=~"praefect_(canary|production)",database_id=~".+:praefect-db-.+",job="stackdriver"}[5m])
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -129,7 +129,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database="praefect_production",job="stackdriver",transaction_type="rollback"}[5m])
+          avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database=~"praefect_(canary|production)",database_id=~".+:praefect-db-.+",job="stackdriver",transaction_type="rollback"}[5m])
         )
       )
       or
@@ -227,7 +227,7 @@ groups:
       type: praefect
     expr: |
       sum by (environment,stage) (
-        avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database="praefect_production",job="stackdriver"}[30m])
+        avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database=~"praefect_(canary|production)",database_id=~".+:praefect-db-.+",job="stackdriver"}[30m])
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -237,7 +237,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database="praefect_production",job="stackdriver",transaction_type="rollback"}[30m])
+          avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database=~"praefect_(canary|production)",database_id=~".+:praefect-db-.+",job="stackdriver",transaction_type="rollback"}[30m])
         )
       )
       or
@@ -335,7 +335,7 @@ groups:
       type: praefect
     expr: |
       sum by (environment,stage) (
-        avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database="praefect_production",job="stackdriver"}[1h])
+        avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database=~"praefect_(canary|production)",database_id=~".+:praefect-db-.+",job="stackdriver"}[1h])
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -345,7 +345,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database="praefect_production",job="stackdriver",transaction_type="rollback"}[1h])
+          avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database=~"praefect_(canary|production)",database_id=~".+:praefect-db-.+",job="stackdriver",transaction_type="rollback"}[1h])
         )
       )
       or
@@ -443,7 +443,7 @@ groups:
       type: praefect
     expr: |
       sum by (environment,stage) (
-        avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database="praefect_production",job="stackdriver"}[6h])
+        avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database=~"praefect_(canary|production)",database_id=~".+:praefect-db-.+",job="stackdriver"}[6h])
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -453,7 +453,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database="praefect_production",job="stackdriver",transaction_type="rollback"}[6h])
+          avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database=~"praefect_(canary|production)",database_id=~".+:praefect-db-.+",job="stackdriver",transaction_type="rollback"}[6h])
         )
       )
       or

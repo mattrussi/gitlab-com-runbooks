@@ -13,7 +13,7 @@ usage() {
   Usage $0 -[Dh]
 
   DESCRIPTION
-    This script will search for orphaned prometheusrules resources in the cluster
+    This script will search for orphaned PrometheusRules resources in the cluster
     that don't exist in the 'rules-k8s' directory and will issue a kubectl delete
     to remove them.
 
@@ -41,8 +41,8 @@ done
 shift $((OPTIND - 1))
 dry_run=${dry_run:-}
 
-KUBE_TYPE=prometheusrules
-KUBE_NAMESPACE=monitoring
+: "${KUBE_NAMESPACE:=monitoring}"
+KUBE_TYPE="prometheusrules"
 
 # Generate a list of resources in the cluster that don't exist in the rules-k8s directory
 # And tell kubectl to delete them

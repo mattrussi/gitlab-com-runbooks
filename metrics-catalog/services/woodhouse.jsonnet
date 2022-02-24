@@ -3,6 +3,7 @@ local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local maturityLevels = import 'service-maturity/levels.libsonnet';
+local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 
 local woodhouseLogs = [
   toolingLinks.stackdriverLogs(
@@ -32,6 +33,19 @@ metricsCatalog.serviceDefinition({
   },
   serviceDependencies: {
     api: true,
+  },
+  kubeConfig: {
+    // Incorrectly labeled ingress for woodhouse,
+    // Woodhouse kube resources should have type, stage labels
+    // See https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2246
+    local woodhouseKubeLabels = { namespace: 'woodhouse' },
+
+    labelSelectors: kubeLabelSelectors(
+      podSelector=woodhouseKubeLabels,
+      hpaSelector=null,  // no hpas for woodhouse,
+      ingressSelector=woodhouseKubeLabels,
+      deploymentSelector=woodhouseKubeLabels,
+    ),
   },
   kubeResources: {
     woodhouse: {

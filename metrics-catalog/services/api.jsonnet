@@ -4,6 +4,8 @@ local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local haproxyComponents = import './lib/haproxy_components.libsonnet';
 local sliLibrary = import 'gitlab-slis/library.libsonnet';
+local serviceLevelIndicatorDefinition = import 'servicemetrics/service_level_indicator_definition.libsonnet';
+local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 
 metricsCatalog.serviceDefinition({
   type: 'api',
@@ -55,6 +57,14 @@ metricsCatalog.serviceDefinition({
   },
   recordingRuleMetrics: sliLibrary.get('graphql_query_apdex').recordingRuleMetrics,
   regional: true,
+  kubeConfig: {
+    labelSelectors: kubeLabelSelectors(
+      nodeSelector={ type: 'api' },
+      // TODO: at present, api nodepools do not have the correct stage, shard labels
+      // see https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2236
+      nodeStaticLabels={ stage: 'main' },
+    ),
+  },
   kubeResources: {
     api: {
       kind: 'Deployment',
@@ -152,7 +162,7 @@ metricsCatalog.serviceDefinition({
     local railsSelector = { job: 'gitlab-rails', type: 'api' },
     puma: {
       userImpacting: true,
-      featureCategory: 'not_owned',
+      featureCategory: serviceLevelIndicatorDefinition.featureCategoryFromSourceMetrics,
       description: |||
         This SLI monitors API traffic in aggregate, in the GitLab rails monolith, via its
         HTTP interface. 5xx responses are treated as failures.
@@ -172,7 +182,7 @@ metricsCatalog.serviceDefinition({
 
       toolingLinks: [
         toolingLinks.sentry(slug='gitlab/gitlabcom', type='api', variables=['environment', 'stage']),
-        toolingLinks.kibana(title='Rails', index='rails_api', type='api', slowRequestSeconds=10),
+        toolingLinks.kibana(title='Rails', index='rails'),
       ],
     },
 
@@ -183,17 +193,14 @@ metricsCatalog.serviceDefinition({
         },
 
         toolingLinks: [
-          // TODO: These need to be defined in the appliation SLI and built using
-          // selectors using the appropriate fields
-          // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1411
-          toolingLinks.kibana(title='Rails', index='rails_api', type='api', slowRequestSeconds=5),
+          toolingLinks.kibana(title='Rails', index='rails'),
         ],
       },
 
     graphql_queries:
       sliLibrary.get('graphql_query_apdex').generateServiceLevelIndicator(railsSelector) {
         toolingLinks: [
-          toolingLinks.kibana(title='Rails', index='rails_graphql', type='api', slowRequestSeconds=1),
+          toolingLinks.kibana(title='Rails', index='rails_graphql'),
         ],
       },
   },

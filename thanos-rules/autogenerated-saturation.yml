@@ -13,7 +13,7 @@ groups:
         clamp_min(
           clamp_max(
             count by (cluster, env, environment, label_pool, tier, type, stage, shard) (
-              kube_node_labels:labeled{type=~"web|api|consul|git|kas|logging|mailroom|monitoring|nginx|plantuml|registry|sidekiq|web-pages|websockets|woodhouse|kube"}
+              kube_node_labels:labeled{type=~"api|git|kube|registry|sidekiq|web-pages|web|websockets"}
             )
             / on(cluster, env, environment, label_pool) group_left() (
               label_replace(
@@ -23,7 +23,7 @@ groups:
               * on(cluster, env, environment) group_left()
               count by (cluster, env, environment) (
                 group by (cluster, env, environment, label_topology_kubernetes_io_zone) (
-                  kube_node_labels:labeled{type=~"web|api|consul|git|kas|logging|mailroom|monitoring|nginx|plantuml|registry|sidekiq|web-pages|websockets|woodhouse|kube"}
+                  kube_node_labels:labeled{type=~"api|git|kube|registry|sidekiq|web-pages|web|websockets"}
                 )
               )
             )
@@ -109,6 +109,7 @@ groups:
   rules:
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: kube_pool_max_nodes
       horiz_scaling: "yes"
       quantile: max
@@ -116,6 +117,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: pg_primary_cpu
       horiz_scaling: "no"
       quantile: max
@@ -123,6 +125,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: pg_walsender_cpu
       horiz_scaling: "no"
       quantile: max
@@ -150,8 +153,8 @@ groups:
     for: 5m
     annotations:
       title: The Kube Pool Max Node Limit resource of the {{ $labels.type }} service
-        ({{ $labels.stage }} stage), component has a saturation exceeding SLO and
-        is close to its capacity limit.
+        ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
+        its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -203,8 +206,8 @@ groups:
     for: 5m
     annotations:
       title: The Average CPU Utilization on Postgres Primary Instance resource of
-        the {{ $labels.type }} service ({{ $labels.stage }} stage), component has
-        a saturation exceeding SLO and is close to its capacity limit.
+        the {{ $labels.type }} service ({{ $labels.stage }} stage) has a saturation
+        exceeding SLO and is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -249,8 +252,8 @@ groups:
     for: 5m
     annotations:
       title: The Walsender CPU Saturation resource of the {{ $labels.type }} service
-        ({{ $labels.stage }} stage), component has a saturation exceeding SLO and
-        is close to its capacity limit.
+        ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
+        its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 

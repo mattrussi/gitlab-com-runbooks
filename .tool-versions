@@ -2,9 +2,11 @@
 # Use the script: ./scripts/install-asdf-plugins.sh
 # NOTE: please add new plugins to ./scripts/install-asdf-plugins.sh when adding items here
 
+go-jsonnet 0.18.0
 golang 1.17.6
-go-jsonnet 0.17.0
 jb 0.4.0
+jsonnet-tool 1.7.0
+promtool 2.30.0 # Keep this the same as GitLab.com's Prometheus version: https://prometheus.gprd.gitlab.net/status
 shellcheck 0.7.0
 shfmt 3.0.2
-jsonnet-tool 1.6.4
+thanos 0.20.1 # Keep this the same as GitLab.com's Thanos version: https://thanos.gitlab.net/status

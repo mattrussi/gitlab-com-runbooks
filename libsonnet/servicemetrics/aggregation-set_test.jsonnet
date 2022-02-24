@@ -189,4 +189,12 @@ test.suite({
     }),
     expect: false,
   },
+
+  testGetBurnRatesByType: {
+    actual: fixture1.getBurnRatesByType(),
+    expect: {
+      fast: ['1m', '5m', '1h'],
+      slow: ['30m', '6h', '3d'],
+    },
+  },
 })

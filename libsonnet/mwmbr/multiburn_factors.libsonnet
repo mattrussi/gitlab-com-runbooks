@@ -15,6 +15,24 @@ local parameters = std.foldl(function(memo, f) memo { [f.longWindow]: f { longWi
                              windows,
                              {});
 
+local burnTypeForDuration(window) =
+  if durationParser.toSeconds(window) > durationParser.toSeconds('1h') then
+    'slow'
+  else
+    'fast';
+
+local burnTypeByWindow = std.foldl(
+  function(memo, window)
+    local burnType = burnTypeForDuration(window.longWindow);
+    memo {
+      [window.shortWindow]: burnType,
+      [window.longWindow]: burnType,
+    },
+  windows,
+  {}
+);
+
+
 local errorBudgetFactorFor(longWindow) =
   local budgetThresholdForPeriod = parameters[longWindow].budgetThresholdForPeriod;
   local longWindowHours = parameters[longWindow].longWindowHours;
@@ -22,6 +40,11 @@ local errorBudgetFactorFor(longWindow) =
 
 {
   windows: std.uniq(std.sort(std.flattenArrays(std.map(function(p) [p.longWindow, p.shortWindow], windows)))),
+  burnTypeForWindow(window):
+    if std.objectHas(burnTypeByWindow, window) then
+      burnTypeByWindow[window]
+    else
+      burnTypeForDuration(window),
 
   /* Given a long window, returns the factor */
   errorBudgetFactorFor:: errorBudgetFactorFor,

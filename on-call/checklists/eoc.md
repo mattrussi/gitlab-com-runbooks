@@ -11,10 +11,20 @@ and mess.
 
 Here is a suggested checklist of things to do at the start of an on-call shift:
 
-- *Change Slack Icon*: Click name. Click `Set status`. Click grey smile face. Type `:pagerduty:`. Set `Clear after` to end of on-call shift. Click `Save`
-- *Join alert channels*: If not already a member, `/join` `#alerts`, `#alerts-general`, `#alerts-prod-abuse`, `#tenable-notifications`, `#marquee_account_alrts`
-- *Turn on slack channel notifications*: Open `#production` and `#incident-management` Notification Preferences (and optionally #infrastructure-lounge). Set Desktop and Mobile to `All new messages`
-- *Turn on slack alert notifications*: Open `#alerts` and `#alerts-general`, Notification Preferences. Set Desktop only to `All new messages`
+- *Change Slack Icon*: Click name. Click `Set status`. Click grey smile face.
+  Type `:pagerduty:`. Set `Clear after` to end of on-call shift. Click `Save`
+- *Join alert slack channels if not already a member*:
+  - `#production`
+  - `#alerts`
+  - `#alerts-nonprod`
+  - `#feed_alerts-general`
+  - `#alerts-prod-abuse`
+  - `#tenable-notifications`
+  - `#marquee_account_alrts`
+- *Turn on slack channel notifications for these slack channels for
+  `All new messages`*:
+  - `#production`
+  - `#incident-management`
 - At the start of each on-call day, read the on-call handover issue that has
   been assigned to you by the previous EOC, and familiarize yourself with any
   ongoing incidents.
@@ -30,10 +40,11 @@ At the end of a shift:
 
 ### On-call issues
 
-First check [the on-call issues][on-call-issues] to familiarize yourself with what has been
-happening lately. Also, keep an eye on the [#production][slack-production] and
-[#incident-management][slack-incident-management] channels for discussion around any on-going
-issues.
+First check [active production incident issues][active-production-incident-issues]
+to familiarize yourself with what has been happening lately. Also, keep an eye
+on the [#production][slack-production] and
+[#incident-management][slack-incident-management] channels for discussion around
+any on-going issues.
 
 ### Useful Dashboard to keep open
 
@@ -86,7 +97,8 @@ shadow schedule][pagerduty-blank-schedule] and initial [overrides][pagerduty-ove
 on-boarding new team members.
 
 
-[on-call-issues]:                   https://gitlab.com/gitlab-com/infrastructure/issues?scope=all&utf8=%E2%9C%93&state=all&label_name[]=oncall
+[on-call-issues]:                   https://gitlab.com/gitlab-com/gl-infra/infrastructure/issues?scope=all&utf8=%E2%9C%93&&state=all&label_name[]=oncall
+[active-production-incident-issues]:https://gitlab.com/gitlab-com/gl-infra/production/issues?state=open&label_name[]=Incident::Active
 
 [pagerduty-add-user]:               https://support.pagerduty.com/docs/editing-schedules#section-adding-users
 [pagerduty-amer]:                   https://gitlab.pagerduty.com/schedules#PKN8L5Q

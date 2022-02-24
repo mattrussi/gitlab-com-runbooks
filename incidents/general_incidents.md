@@ -31,7 +31,7 @@ Take a minute to assess the overall situation:
   1. Are we down, degraded, how concerned should we be?   
   2. Are we in S1 / all hands on deck?  
   3. Do I need to be ready to yell for help?
-  4. If on the weekend, you may need to act as the CMOC if support does not have coverage for the shift.
+ 
 
 Look at [Apdex and Error Ratio Graphs](https://dashboards.gitlab.net/d/general-service/general-service-platform-metrics?orgId=1). 
 
@@ -58,7 +58,9 @@ See the guidance from the IMOC onboarding:
 
 ### Estimate the Severity of the issue
 
-Estimate the severity of the issue as soon as EOC or you have an idea on what the problem is. Evaluate based on [Availability](https://about.gitlab.com/handbook/engineering/quality/issue-triage/#availability). Sometimes it is tough to say to the upset customer that their issue is not S1 for us, but we need to think about the whole situation and other users. 
+Estimate the severity of the issue as soon as EOC or you have an idea on what the problem is. Evaluate based on [Availability](https://about.gitlab.com/handbook/engineering/quality/issue-triage/#availability). Sometimes it is tough to say to the upset customer that their issue is not S1 for us, but we need to think about the whole situation and other users.
+
+If the incident directly affects availability for customers and you have access to a sample of namespace IDs or names you can use the [ChatOps](https://about.gitlab.com/handbook/support/workflows/chatops.html#namespace) tool to quickly establish the tier and number of members. The `find` command takes up to 5 namespaces at a time.
 
 We prefer to avoid [hotpatches](https://gitlab.com/gitlab-org/release/docs/-/blob/master/general/deploy/post-deployment-patches.md#overview). If a hotpatch is being considered, the issue severity will drive the decision:
 

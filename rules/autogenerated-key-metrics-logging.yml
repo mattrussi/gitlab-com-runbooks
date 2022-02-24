@@ -122,6 +122,34 @@ groups:
       )
   - record: gitlab_component_ops:rate
     labels:
+      component: pubsubbeat
+      stage: main
+      tier: inf
+      type: logging
+    expr: |
+      sum by (environment) (
+        rate(pubsubbeat_libbeat_output_events{}[1m])
+      )
+  - record: gitlab_component_errors:rate
+    labels:
+      component: pubsubbeat
+      stage: main
+      tier: inf
+      type: logging
+    expr: |
+      (
+        sum by (environment) (
+          rate(pubsubbeat_errors_total{}[1m])
+        )
+      )
+      or
+      (
+        0 * group by(environment) (
+          gitlab_component_ops:rate{component="pubsubbeat",stage="main",tier="inf",type="logging"}
+        )
+      )
+  - record: gitlab_component_ops:rate
+    labels:
       component: stackdriver
       stage: main
       tier: inf
@@ -248,6 +276,34 @@ groups:
     expr: |
       sum by (environment) (
         rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{type="monitoring"}[5m])
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: pubsubbeat
+      stage: main
+      tier: inf
+      type: logging
+    expr: |
+      sum by (environment) (
+        rate(pubsubbeat_libbeat_output_events{}[5m])
+      )
+  - record: gitlab_component_errors:rate_5m
+    labels:
+      component: pubsubbeat
+      stage: main
+      tier: inf
+      type: logging
+    expr: |
+      (
+        sum by (environment) (
+          rate(pubsubbeat_errors_total{}[5m])
+        )
+      )
+      or
+      (
+        0 * group by(environment) (
+          gitlab_component_ops:rate_5m{component="pubsubbeat",stage="main",tier="inf",type="logging"}
+        )
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -380,6 +436,34 @@ groups:
       )
   - record: gitlab_component_ops:rate_30m
     labels:
+      component: pubsubbeat
+      stage: main
+      tier: inf
+      type: logging
+    expr: |
+      sum by (environment) (
+        rate(pubsubbeat_libbeat_output_events{}[30m])
+      )
+  - record: gitlab_component_errors:rate_30m
+    labels:
+      component: pubsubbeat
+      stage: main
+      tier: inf
+      type: logging
+    expr: |
+      (
+        sum by (environment) (
+          rate(pubsubbeat_errors_total{}[30m])
+        )
+      )
+      or
+      (
+        0 * group by(environment) (
+          gitlab_component_ops:rate_30m{component="pubsubbeat",stage="main",tier="inf",type="logging"}
+        )
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
       component: stackdriver
       stage: main
       tier: inf
@@ -506,6 +590,34 @@ groups:
     expr: |
       sum by (environment) (
         rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{type="monitoring"}[1h])
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: pubsubbeat
+      stage: main
+      tier: inf
+      type: logging
+    expr: |
+      sum by (environment) (
+        rate(pubsubbeat_libbeat_output_events{}[1h])
+      )
+  - record: gitlab_component_errors:rate_1h
+    labels:
+      component: pubsubbeat
+      stage: main
+      tier: inf
+      type: logging
+    expr: |
+      (
+        sum by (environment) (
+          rate(pubsubbeat_errors_total{}[1h])
+        )
+      )
+      or
+      (
+        0 * group by(environment) (
+          gitlab_component_ops:rate_1h{component="pubsubbeat",stage="main",tier="inf",type="logging"}
+        )
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -638,6 +750,34 @@ groups:
       )
   - record: gitlab_component_ops:rate_6h
     labels:
+      component: pubsubbeat
+      stage: main
+      tier: inf
+      type: logging
+    expr: |
+      sum by (environment) (
+        rate(pubsubbeat_libbeat_output_events{}[6h])
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: pubsubbeat
+      stage: main
+      tier: inf
+      type: logging
+    expr: |
+      (
+        sum by (environment) (
+          rate(pubsubbeat_errors_total{}[6h])
+        )
+      )
+      or
+      (
+        0 * group by(environment) (
+          gitlab_component_ops:rate_6h{component="pubsubbeat",stage="main",tier="inf",type="logging"}
+        )
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
       component: stackdriver
       stage: main
       tier: inf
@@ -710,6 +850,14 @@ groups:
       component: pubsub_topics
       regional_aggregation: "no"
       service_aggregation: "yes"
+      tier: inf
+      type: logging
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: pubsubbeat
+      regional_aggregation: "no"
+      service_aggregation: "no"
       tier: inf
       type: logging
     expr: "1"

@@ -12,11 +12,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web", le="0.2"}[5m])
+          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="0.2",type="web"}[5m])
         )
         +
         sum by (env,environment,stage) (
-          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web", le="0.8"}[5m])
+          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="0.8",type="web"}[5m])
         )
       )
       /
@@ -29,7 +29,7 @@ groups:
       type: web
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web", le="+Inf"}[5m])
+        rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="+Inf",type="web"}[5m])
       )
   - record: gitlab:component:feature_category:execution:ops:rate_5m
     labels:
@@ -39,7 +39,33 @@ groups:
       type: web
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_workhorse_image_resize_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web"}[5m])
+        rate(gitlab_workhorse_image_resize_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-web",type="web"}[5m])
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_5m
+    labels:
+      component: puma
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage,feature_category) (
+        sli_aggregations:http_requests_total_rate5m{job="gitlab-rails",type="web"}
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_5m
+    labels:
+      component: puma
+      tier: sv
+      type: web
+    expr: |
+      (
+        sum by (env,environment,stage,feature_category) (
+          sli_aggregations:http_requests_total_rate5m{job="gitlab-rails",status=~"5..",type="web"}
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage,feature_category) (
+          gitlab:component:feature_category:execution:ops:rate_5m{component="puma",tier="sv",type="web"}
+        )
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_5m
     labels:
@@ -79,11 +105,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web", le="0.2"}[30m])
+          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="0.2",type="web"}[30m])
         )
         +
         sum by (env,environment,stage) (
-          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web", le="0.8"}[30m])
+          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="0.8",type="web"}[30m])
         )
       )
       /
@@ -96,7 +122,7 @@ groups:
       type: web
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web", le="+Inf"}[30m])
+        rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="+Inf",type="web"}[30m])
       )
   - record: gitlab:component:feature_category:execution:ops:rate_30m
     labels:
@@ -106,7 +132,33 @@ groups:
       type: web
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_workhorse_image_resize_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web"}[30m])
+        rate(gitlab_workhorse_image_resize_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-web",type="web"}[30m])
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_30m
+    labels:
+      component: puma
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage,feature_category) (
+        sli_aggregations:http_requests_total_rate30m{job="gitlab-rails",type="web"}
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_30m
+    labels:
+      component: puma
+      tier: sv
+      type: web
+    expr: |
+      (
+        sum by (env,environment,stage,feature_category) (
+          sli_aggregations:http_requests_total_rate30m{job="gitlab-rails",status=~"5..",type="web"}
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage,feature_category) (
+          gitlab:component:feature_category:execution:ops:rate_30m{component="puma",tier="sv",type="web"}
+        )
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_30m
     labels:
@@ -146,11 +198,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web", le="0.2"}[1h])
+          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="0.2",type="web"}[1h])
         )
         +
         sum by (env,environment,stage) (
-          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web", le="0.8"}[1h])
+          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="0.8",type="web"}[1h])
         )
       )
       /
@@ -163,7 +215,7 @@ groups:
       type: web
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web", le="+Inf"}[1h])
+        rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="+Inf",type="web"}[1h])
       )
   - record: gitlab:component:feature_category:execution:ops:rate_1h
     labels:
@@ -173,7 +225,33 @@ groups:
       type: web
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_workhorse_image_resize_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web"}[1h])
+        rate(gitlab_workhorse_image_resize_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-web",type="web"}[1h])
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_1h
+    labels:
+      component: puma
+      tier: sv
+      type: web
+    expr: |
+      sum by (env,environment,stage,feature_category) (
+        sli_aggregations:http_requests_total_rate1h{job="gitlab-rails",type="web"}
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_1h
+    labels:
+      component: puma
+      tier: sv
+      type: web
+    expr: |
+      (
+        sum by (env,environment,stage,feature_category) (
+          sli_aggregations:http_requests_total_rate1h{job="gitlab-rails",status=~"5..",type="web"}
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage,feature_category) (
+          gitlab:component:feature_category:execution:ops:rate_1h{component="puma",tier="sv",type="web"}
+        )
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
     labels:

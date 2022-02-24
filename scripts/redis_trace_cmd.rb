@@ -59,6 +59,8 @@ ARGV.each do |idx_filename|
         # dst_port = Regexp.last_match(4).to_i
 
         case cmd
+        when "blpop"
+          keys = [args[1..-2]]
         when "get"
           keys = [args[1]]
         when "exists"
@@ -101,6 +103,10 @@ ARGV.each do |idx_filename|
           keys = [args[1]]
         when "hincrby"
           keys = [args[1]]
+        when "hscan"
+          keys = [args[1]]
+        when "hdel"
+          keys = [args[1]]
         when "setex"
           keys = [args[1]]
         when "hmget"
@@ -122,6 +128,8 @@ ARGV.each do |idx_filename|
         when "strlen"
           keys = [args[1]]
         when "pfadd"
+          keys = [args[1]]
+        when "pexpire"
           keys = [args[1]]
         when "srem"
           keys = [args[1]]

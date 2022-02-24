@@ -22,9 +22,9 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          label_replace(rate(haproxy_backend_http_responses_total{type="pages",job="haproxy",code="5xx", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]), "_c", "0", "", "")
+          label_replace(rate(haproxy_backend_http_responses_total{code="5xx",environment="{{ $labels.environment }}",job="haproxy",stage="{{ $labels.stage }}",type="pages"}[5m]), "_c", "0", "", "")
           or
-          label_replace(rate(haproxy_server_connection_errors_total{type="pages", job="haproxy", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]), "_c", "1", "", "")
+          label_replace(rate(haproxy_server_connection_errors_total{environment="{{ $labels.environment }}",job="haproxy",stage="{{ $labels.stage }}",type="pages"}[5m]), "_c", "1", "", "")
         )
       runbook: docs/pages/README.md
     labels:
@@ -72,9 +72,9 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          label_replace(rate(haproxy_backend_http_responses_total{type="pages",job="haproxy",code="5xx", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]), "_c", "0", "", "")
+          label_replace(rate(haproxy_backend_http_responses_total{code="5xx",environment="{{ $labels.environment }}",job="haproxy",stage="{{ $labels.stage }}",type="pages"}[5m]), "_c", "0", "", "")
           or
-          label_replace(rate(haproxy_server_connection_errors_total{type="pages", job="haproxy", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]), "_c", "1", "", "")
+          label_replace(rate(haproxy_server_connection_errors_total{environment="{{ $labels.environment }}",job="haproxy",stage="{{ $labels.stage }}",type="pages"}[5m]), "_c", "1", "", "")
         )
       runbook: docs/pages/README.md
     labels:
@@ -122,7 +122,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(haproxy_server_sessions_total{type="pages", backend=~"pages_https|pages_http", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(haproxy_server_sessions_total{backend=~"pages_https|pages_http",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="pages"}[5m])
         )
       runbook: docs/pages/README.md
     labels:
@@ -157,7 +157,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(haproxy_server_sessions_total{type="pages", backend=~"pages_https|pages_http", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(haproxy_server_sessions_total{backend=~"pages_https|pages_http",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="pages"}[5m])
         )
       runbook: docs/pages/README.md
     labels:

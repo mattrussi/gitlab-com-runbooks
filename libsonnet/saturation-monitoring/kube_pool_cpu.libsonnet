@@ -1,12 +1,12 @@
-local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
-local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
+local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_point.libsonnet').resourceSaturationPoint;
 
 {
   kube_pool_cpu: resourceSaturationPoint({
     title: 'Average Node Pool CPU Utilization',
     severity: 's3',
     horizontallyScalable: true,
-    appliesTo: ['kube', 'git', 'registry', 'ci-runners', 'sidekiq', 'kas', 'api', 'websocket'],
+    appliesTo: metricsCatalog.findKubeProvisionedServicesWithDedicatedNodePool(),
     description: |||
       This resource measures average CPU utilization across an all cores in the node pool for
       a service fleet.

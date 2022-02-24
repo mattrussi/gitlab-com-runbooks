@@ -77,3 +77,24 @@ Past related issues have :
 
 - caused a production incident of severity 2 (https://gitlab.com/gitlab-com/gl-infra/production/-/issues/5931)
 - been caused by a feature flag rollout in staging (https://gitlab.com/gitlab-org/gitlab/-/issues/346766)
+
+## ElasticCloud Watcher: Segmentation faults
+
+In February 2022, we added an [Elastic watcher](https://gitlab.com/gitlab-com/runbooks/-/merge_requests/4136)
+to warn developers of segmentation faults. Such an error probably means a significant bug that causes
+a process to crash. This is usually due to a memory error in a Ruby C extension or some
+other library linked with the interpreter.
+
+### What to do when you see this watcher alert ?
+
+1. Investigate where the error is coming from by checking the Kibana links for both the Rails, and Sidekiq logs.
+1. Open a new issue in `gitlab-org/gitlab`, or comment on an existing issue there is one.
+1. Share this issue in Slack in `#backend` and `#development` channels.
+
+Create a high severity regression ([severity1 or severity2](https://about.gitlab.com/handbook/engineering/quality/issue-triage/#availability))
+if you see a high number of segfaults on staging or suspect this may be deploy related, and follow the steps
+to [block the deployment to production](https://about.gitlab.com/handbook/engineering/releases/#deployment-blockers)
+
+Past related issues:
+
+- Upgrade to Debian bullseye caused jemalloc calls to be mixed with standard malloc calls (https://gitlab.com/gitlab-com/gl-infra/production/-/issues/6276)

@@ -27,11 +27,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web", le="0.2"}[1m])
+          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="0.2",type="web"}[1m])
         )
         +
         sum by (environment,stage) (
-          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web", le="0.8"}[1m])
+          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="0.8",type="web"}[1m])
         )
       )
       /
@@ -43,7 +43,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web", le="+Inf"}[1m])
+        rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="+Inf",type="web"}[1m])
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -52,7 +52,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_workhorse_image_resize_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web"}[1m])
+        rate(gitlab_workhorse_image_resize_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-web",type="web"}[1m])
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -196,7 +196,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web"}[1m])
+        rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-web",type="web"}[1m])
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -206,7 +206,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web", code=~"^5.*", route!="^/-/health$", route!="^/-/(readiness|liveness)$"}[1m])
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",job=~"gitlab-workhorse|gitlab-workhorse-web",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="web"}[1m])
         )
       )
       or
@@ -241,11 +241,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web", le="0.2"}[5m])
+          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="0.2",type="web"}[5m])
         )
         +
         sum by (environment,stage) (
-          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web", le="0.8"}[5m])
+          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="0.8",type="web"}[5m])
         )
       )
       /
@@ -257,7 +257,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web", le="+Inf"}[5m])
+        rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="+Inf",type="web"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -266,7 +266,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_workhorse_image_resize_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web"}[5m])
+        rate(gitlab_workhorse_image_resize_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-web",type="web"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -410,7 +410,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web"}[5m])
+        rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-web",type="web"}[5m])
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -420,7 +420,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web", code=~"^5.*", route!="^/-/health$", route!="^/-/(readiness|liveness)$"}[5m])
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",job=~"gitlab-workhorse|gitlab-workhorse-web",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="web"}[5m])
         )
       )
       or
@@ -455,11 +455,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web", le="0.2"}[30m])
+          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="0.2",type="web"}[30m])
         )
         +
         sum by (environment,stage) (
-          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web", le="0.8"}[30m])
+          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="0.8",type="web"}[30m])
         )
       )
       /
@@ -471,7 +471,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web", le="+Inf"}[30m])
+        rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="+Inf",type="web"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -480,7 +480,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_workhorse_image_resize_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web"}[30m])
+        rate(gitlab_workhorse_image_resize_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-web",type="web"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -624,7 +624,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web"}[30m])
+        rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-web",type="web"}[30m])
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -634,7 +634,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web", code=~"^5.*", route!="^/-/health$", route!="^/-/(readiness|liveness)$"}[30m])
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",job=~"gitlab-workhorse|gitlab-workhorse-web",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="web"}[30m])
         )
       )
       or
@@ -669,11 +669,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web", le="0.2"}[1h])
+          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="0.2",type="web"}[1h])
         )
         +
         sum by (environment,stage) (
-          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web", le="0.8"}[1h])
+          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="0.8",type="web"}[1h])
         )
       )
       /
@@ -685,7 +685,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web", le="+Inf"}[1h])
+        rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="+Inf",type="web"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -694,7 +694,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_workhorse_image_resize_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web"}[1h])
+        rate(gitlab_workhorse_image_resize_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-web",type="web"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -838,7 +838,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web"}[1h])
+        rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-web",type="web"}[1h])
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -848,7 +848,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web", code=~"^5.*", route!="^/-/health$", route!="^/-/(readiness|liveness)$"}[1h])
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",job=~"gitlab-workhorse|gitlab-workhorse-web",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="web"}[1h])
         )
       )
       or
@@ -883,11 +883,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web", le="0.2"}[6h])
+          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="0.2",type="web"}[6h])
         )
         +
         sum by (environment,stage) (
-          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web", le="0.8"}[6h])
+          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="0.8",type="web"}[6h])
         )
       )
       /
@@ -899,7 +899,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web", le="+Inf"}[6h])
+        rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="+Inf",type="web"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -908,7 +908,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_workhorse_image_resize_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web"}[6h])
+        rate(gitlab_workhorse_image_resize_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-web",type="web"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -1052,7 +1052,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web"}[6h])
+        rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-web",type="web"}[6h])
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -1062,7 +1062,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-web", type="web", code=~"^5.*", route!="^/-/health$", route!="^/-/(readiness|liveness)$"}[6h])
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",job=~"gitlab-workhorse|gitlab-workhorse-web",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="web"}[6h])
         )
       )
       or

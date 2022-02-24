@@ -48,11 +48,13 @@
 * [Sentry is down and gives error 500](../sentry/sentry-is-down.md)
 * [A survival guide for SREs to working with Sidekiq at GitLab](../sidekiq/sidekiq-survival-guide-for-sres.md)
 * [../spamcheck/index.md](../spamcheck/index.md)
+* [GET Monitoring Setup](../staging-ref/get-monitoring-setup.md)
 * [../uncategorized/access-gcp-hosts.md](../uncategorized/access-gcp-hosts.md)
 * [An impatient SRE's guide to deleting alerts](../uncategorized/deleting-alerts.md)
 * [GitLab Job Completion](../uncategorized/job_completion.md)
 * [../uncategorized/osquery.md](../uncategorized/osquery.md)
 * [PackageCloud Infrastructure and Backups](../uncategorized/packagecloud-infrastructure.md)
+* [Periodic Job Monitoring](../uncategorized/periodic_job_monitoring.md)
 * [../uncategorized/subnet-allocations.md](../uncategorized/subnet-allocations.md)
 * [version.gitlab.com Runbook](../version/version-gitlab-com.md)
 <!-- END_MARKER -->

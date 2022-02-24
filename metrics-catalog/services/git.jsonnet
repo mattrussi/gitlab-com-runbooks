@@ -5,6 +5,8 @@ local customRateQuery = metricsCatalog.customRateQuery;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local haproxyComponents = import './lib/haproxy_components.libsonnet';
 local sliLibrary = import 'gitlab-slis/library.libsonnet';
+local serviceLevelIndicatorDefinition = import 'servicemetrics/service_level_indicator_definition.libsonnet';
+local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 
 local gitWorkhorseJobNameSelector = { job: { re: 'gitlab-workhorse|gitlab-workhorse-git' } };
 
@@ -28,7 +30,10 @@ metricsCatalog.serviceDefinition({
     // When a service is in violation, deployments may be blocked or may be rolled
     // back.
     deployment: {
-      apdexScore: 0.9995,
+      // This deployment apdex target has been lowered because of
+      // https://gitlab.com/gitlab-com/gl-infra/production/-/issues/6230
+      // we should consider increasing it again after we have found and resolved the cause
+      apdexScore: 0.999,
       errorRatio: 0.9995,
     },
 
@@ -54,6 +59,21 @@ metricsCatalog.serviceDefinition({
   },
   // Git service is spread across multiple regions, monitor it as such
   regional: true,
+
+  kubeConfig: {
+    labelSelectors: kubeLabelSelectors(
+      ingressSelector=null,
+      // TODO: Currently git nodes are incorrectly named
+      // See https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2237
+      nodeSelector={ type: { oneOf: ['shell', 'git-https'] } },
+
+      // TODO: Currently git nodes to have a `shard` label
+      // Hardcoding git nodes to main stage for now
+      // See https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2237
+      nodeStaticLabels={ stage: 'main' }
+    ),
+  },
+
   kubeResources: {
     'gitlab-shell': {
       kind: 'Deployment',
@@ -206,7 +226,7 @@ metricsCatalog.serviceDefinition({
     local railsSelector = { job: 'gitlab-rails', type: 'git' },
     puma: {
       userImpacting: true,
-      featureCategory: 'not_owned',
+      featureCategory: serviceLevelIndicatorDefinition.featureCategoryFromSourceMetrics,
       description: |||
         Monitors Rails endpoints, running in the Git fleet, via the HTTP interface.
       |||,
@@ -254,6 +274,35 @@ metricsCatalog.serviceDefinition({
       ],
     },
 
+    gitlab_sshd: {
+      userImpacting: true,
+      featureCategory: 'source_code_management',
+      description: |||
+        Monitors Gitlab-sshd, using the connections bucket, and http requests bucket.
+      |||,
+
+      local baseSelector = {
+        type: 'git',
+      },
+
+      apdex: histogramApdex(
+        histogram='gitlab_shell_sshd_connection_duration_seconds_bucket',
+        selector=baseSelector,
+        satisfiedThreshold=10,
+        toleratedThreshold=20
+      ),
+
+      requestRate: rateMetric(
+        counter='gitlab_shell_sshd_connection_duration_seconds_count',
+        selector=baseSelector
+      ),
+
+      significantLabels: [],
+
+      toolingLinks: [
+        toolingLinks.kibana(title='GitLab Shell', index='shell'),
+      ],
+    },
     rails_requests:
       sliLibrary.get('rails_request_apdex').generateServiceLevelIndicator(railsSelector) {
         monitoringThresholds+: {
@@ -261,10 +310,7 @@ metricsCatalog.serviceDefinition({
         },
 
         toolingLinks: [
-          // TODO: These need to be defined in the appliation SLI and built using
-          // selectors using the appropriate fields
-          // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1411
-          toolingLinks.kibana(title='Rails', index='rails', type='git', slowRequestSeconds=1),
+          toolingLinks.kibana(title='Rails', index='rails'),
         ],
       },
   },

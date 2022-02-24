@@ -35,7 +35,7 @@ a --> c[CloudFlare]
 c --> d[GCP Load Balancer]
 d --> e[HAProxy Frontend]
 e --> f[backend choice]
-g --> h[HAProxy Backend]
+f --> g[HAProxy Backend]
 ```
 
 ## Frontend and Backend configuration
@@ -337,7 +337,7 @@ sudo hatop -s /run/haproxy/admin.sock
 
 * Examine the health of all backends and the HAProxy dashboard
     * HAProxy - https://dashboards.gitlab.net/d/ZOOh_aNik/haproxy
-    * HAProxy Backend Status - https://dashboards.gitlab.net/d/7Zq1euZmz/haproxy-status?orgId=1
+    * HAProxy Backend Status - https://dashboards.gitlab.net/d/frontend-main/frontend-overview?orgId=1
 * Is the alert specific to canary servers or the canary backend? Check canaries
   to ensure they are reporting OK. If this is the cause you should immediately change the weight of canary traffic.
     * Canary dashboard - https://dashboards.gitlab.net/d/llfd4b2ik/canary

@@ -3,6 +3,7 @@ local rateMetric = metricsCatalog.rateMetric;
 local derivMetric = metricsCatalog.derivMetric;
 local googleLoadBalancerComponents = import './lib/google_load_balancer_components.libsonnet';
 local maturityLevels = import 'service-maturity/levels.libsonnet';
+local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 
 metricsCatalog.serviceDefinition({
   type: 'logging',
@@ -18,6 +19,17 @@ metricsCatalog.serviceDefinition({
     vms: false,
     kubernetes: true,
   },
+  kubeConfig: {
+    labelSelectors: kubeLabelSelectors(
+      hpaSelector=null,  // no hpas for logging,
+      ingressSelector=null,  // no ingress for logging
+      deploymentSelector=null,  // no deployment for logging
+
+      // TODO: fix the stage label for default and highmem nodes
+      // See https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2239
+      podStaticLabels={ stage: 'main' },
+    ),
+  },
   kubeResources: {
     'fluentd-archiver': {
       kind: 'StatefulSet',
@@ -29,6 +41,12 @@ metricsCatalog.serviceDefinition({
       kind: 'DaemonSet',
       containers: [
         'fluentd-elasticsearch',
+      ],
+    },
+    pubsubbeat: {
+      kind: 'Deployment',
+      containers: [
+        'pubsubbeat',
       ],
     },
   },
@@ -174,6 +192,26 @@ metricsCatalog.serviceDefinition({
       ),
 
       significantLabels: ['fqdn', 'pod', 'type'],
+      serviceAggregation: false,
+    },
+
+    // This components tracks pubsubbeat errors and outputs
+    // across all topics
+    pubsubbeat: {
+      userImpacting: false,
+      featureCategory: 'not_owned',
+      description: |||
+        This SLI monitors pubsubbeat errors.
+      |||,
+
+      requestRate: rateMetric(
+        counter='pubsubbeat_libbeat_output_events'
+      ),
+      errorRate: rateMetric(
+        counter='pubsubbeat_errors_total'
+      ),
+
+      significantLabels: ['pod'],
       serviceAggregation: false,
     },
   },

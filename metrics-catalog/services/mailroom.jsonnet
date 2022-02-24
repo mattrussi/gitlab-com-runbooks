@@ -1,6 +1,7 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
+local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 
 metricsCatalog.serviceDefinition({
   type: 'mailroom',
@@ -17,6 +18,11 @@ metricsCatalog.serviceDefinition({
   provisioning: {
     kubernetes: true,
     vms: false,
+  },
+  kubeConfig: {
+    labelSelectors: kubeLabelSelectors(
+      ingressSelector=null  // no ingress for logging
+    ),
   },
   kubeResources: {
     mailroom: {

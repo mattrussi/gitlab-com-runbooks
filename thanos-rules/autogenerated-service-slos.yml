@@ -173,6 +173,18 @@ groups:
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      component: loadbalancer
+      tier: runners
+      type: ci-runners
+    expr: "0.970000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: loadbalancer
+      tier: runners
+      type: ci-runners
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
       component: polling
       tier: runners
       type: ci-runners
@@ -228,6 +240,28 @@ groups:
     labels:
       tier: runners
       type: ci-runners
+    expr: "0.000100"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      tier: db
+      type: cloud-sql
+    expr: "0.995000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      tier: db
+      type: cloud-sql
+    expr: "0.000100"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: cloudsql_transactions
+      tier: db
+      type: cloud-sql
+    expr: "0.995000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: cloudsql_transactions
+      tier: db
+      type: cloud-sql
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
@@ -379,6 +413,18 @@ groups:
     expr: "0.000500"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      component: gitlab_sshd
+      tier: sv
+      type: git
+    expr: "0.998000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: gitlab_sshd
+      tier: sv
+      type: git
+    expr: "0.000500"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
       component: loadbalancer
       tier: sv
       type: git
@@ -453,7 +499,7 @@ groups:
     labels:
       tier: sv
       type: git
-    expr: "0.999500"
+    expr: "0.999000"
   - record: slo:max:deployment:gitlab_service_errors:ratio
     labels:
       tier: sv
@@ -638,6 +684,12 @@ groups:
     expr: "0.001000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
+      component: pubsubbeat
+      tier: inf
+      type: logging
+    expr: "0.001000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
       component: stackdriver
       tier: inf
       type: logging
@@ -701,54 +753,6 @@ groups:
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
-      component: memcached_thanos_qfe_labels
-      tier: inf
-      type: monitoring
-    expr: "0.999000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: memcached_thanos_qfe_labels
-      tier: inf
-      type: monitoring
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: memcached_thanos_qfe_query_range
-      tier: inf
-      type: monitoring
-    expr: "0.999000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: memcached_thanos_qfe_query_range
-      tier: inf
-      type: monitoring
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: memcached_thanos_store_bucket
-      tier: inf
-      type: monitoring
-    expr: "0.999000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: memcached_thanos_store_bucket
-      tier: inf
-      type: monitoring
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: memcached_thanos_store_index
-      tier: inf
-      type: monitoring
-    expr: "0.999000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: memcached_thanos_store_index
-      tier: inf
-      type: monitoring
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
       component: prometheus
       tier: inf
       type: monitoring
@@ -773,30 +777,6 @@ groups:
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
-      component: public_dashboards_thanos_query
-      tier: inf
-      type: monitoring
-    expr: "0.999000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: public_dashboards_thanos_query
-      tier: inf
-      type: monitoring
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: public_grafana_google_lb
-      tier: inf
-      type: monitoring
-    expr: "0.999000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: public_grafana_google_lb
-      tier: inf
-      type: monitoring
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
       component: rule_evaluation
       tier: inf
       type: monitoring
@@ -816,6 +796,18 @@ groups:
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: thanos_compactor
+      tier: inf
+      type: monitoring
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: thanos_memcached
+      tier: inf
+      type: monitoring
+    expr: "0.999000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: thanos_memcached
       tier: inf
       type: monitoring
     expr: "0.001000"
@@ -2026,6 +2018,14 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
+      component: loadbalancer
+      regional_aggregation: "no"
+      service_aggregation: "no"
+      tier: runners
+      type: ci-runners
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
       component: polling
       regional_aggregation: "no"
       service_aggregation: "yes"
@@ -2055,6 +2055,22 @@ groups:
       service_aggregation: "yes"
       tier: runners
       type: ci-runners
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: cloudsql_transactions
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: db
+      type: cloud-sql
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: consul
+      regional_aggregation: "yes"
+      service_aggregation: "yes"
+      tier: sv
+      type: consul
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
@@ -2123,6 +2139,14 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: gitlab_shell
+      regional_aggregation: "yes"
+      service_aggregation: "yes"
+      tier: sv
+      type: git
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: gitlab_sshd
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -2314,6 +2338,14 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
+      component: pubsubbeat
+      regional_aggregation: "no"
+      service_aggregation: "no"
+      tier: inf
+      type: logging
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
       component: stackdriver
       regional_aggregation: "no"
       service_aggregation: "yes"
@@ -2354,38 +2386,6 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
-      component: memcached_thanos_qfe_labels
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: inf
-      type: monitoring
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: memcached_thanos_qfe_query_range
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: inf
-      type: monitoring
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: memcached_thanos_store_bucket
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: inf
-      type: monitoring
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: memcached_thanos_store_index
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: inf
-      type: monitoring
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
       component: prometheus
       regional_aggregation: "no"
       service_aggregation: "yes"
@@ -2395,22 +2395,6 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: prometheus_alert_sender
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: inf
-      type: monitoring
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: public_dashboards_thanos_query
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: inf
-      type: monitoring
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: public_grafana_google_lb
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -2429,6 +2413,14 @@ groups:
       component: thanos_compactor
       regional_aggregation: "no"
       service_aggregation: "yes"
+      tier: inf
+      type: monitoring
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: thanos_memcached
+      regional_aggregation: "no"
+      service_aggregation: "no"
       tier: inf
       type: monitoring
     expr: "1"

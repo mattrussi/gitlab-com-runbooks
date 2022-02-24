@@ -13,7 +13,7 @@ local rules = {
                 gitlab_runner_job_duration_seconds_sum{shard="shared"}[5m]
                )
              )
-             > 2500
+             > 15000
           |||,
           'for': '3m',
           labels: {
@@ -24,7 +24,7 @@ local rules = {
           annotations: {
             title: 'Suspicious spike detected in the runner job durations.',
             description: |||
-              The sum total time of CI jobs exceeded a threshold of 2500 seconds per second for a 3 minute period; this can indicate crypto mining or other pipeline abuse.
+              The sum total time of CI jobs exceeded a threshold of 15,000 seconds per second for a 3 minute period; this can indicate crypto mining or other pipeline abuse.
             |||,
             grafana_dashboard_id: 'ci-runners-business-stats',
             grafana_min_zoom_hours: '4',

@@ -23,14 +23,6 @@ metricsCatalog.serviceDefinition({
     kubernetes: true,
     vms: false,
   },
-  kubeResources: {
-    kas: {
-      kind: 'Deployment',
-      containers: [
-        'kas',
-      ],
-    },
-  },
   serviceLevelIndicators: {
     grpc_requests: {
       userImpacting: true,

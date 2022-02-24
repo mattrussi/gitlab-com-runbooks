@@ -45,8 +45,20 @@ test.suite({
       fieldName: ['hello', 'world'],
       rangeTest: { gte: 1, lte: 10 },
       equalMatch: 'match the exact thing',
+      anyScript: ["doc['json.duration_s'].value > doc['json.target_duration_s'].value", 'script 2'],
     }),
     expect: [
+      {
+        query: {
+          bool: {
+            minimum_should_match: 1,
+            should: [
+              { script: { script: { source: "doc['json.duration_s'].value > doc['json.target_duration_s'].value" } } },
+              { script: { script: { source: 'script 2' } } },
+            ],
+          },
+        },
+      },
       {
         query: {
           match: {
@@ -183,5 +195,58 @@ test.suite({
       _a=(filters:!((query:(match:(json.shard:(query:throttled,type:phrase))))),query:(language:kuery,query:''),vis:(aggs:!((enabled:!t,id:'1',params:(field:json.duration_s,percents:!(95)),schema:metric,type:percentiles),(enabled:!t,id:'2',params:(drop_partials:!t,extended_bounds:(),field:json.time,interval:auto,min_doc_count:1,scaleMetricValues:!f,timeRange:(from:'${__from:date:iso}',to:'${__to:date:iso}'),useNormalizedEsInterval:!t),schema:segment,type:date_histogram)),params:(valueAxes:!((id:'ValueAxis-1',name:'LeftAxis-1',position:left,scale:(mode:normal,type:linear),show:!t,style:(),title:(text:'p95+Request+Duration:+json.duration_s'),type:value)))))&
       _g=(time:(from:'${__from:date:iso}',to:'${__to:date:iso}'))
     |||),
+  },
+
+  testGetMatchersForPrometheusSelectorHashTranslation: {
+    actual: elastic.getMatchersForPrometheusSelectorHash(
+      'rails',
+      {
+        stage_group: 'source_code',
+      }
+    ),
+    expect: [
+      { meta: { key: 'query', type: 'custom', value: '{"bool": {"minimum_should_match": 1, "should": [{"match_phrase": {"json.meta.feature_category": "source_code_management"}}]}}' }, query: { bool: { minimum_should_match: 1, should: [{ match_phrase: { 'json.meta.feature_category': 'source_code_management' } }] } } },
+    ],
+  },
+  testGetMatchersForPrometheusSelectorHashTranslationEq: {
+    actual: elastic.getMatchersForPrometheusSelectorHash(
+      'rails',
+      {
+        type: 'web',
+        stage: { eq: 'cny' },
+        // Prometheus regexes don't really translate to a matcher, but often they
+        // only contain a single word instead of an array joined by `|`.
+        feature_category: { re: 'pipeline_.*' },
+      }
+    ),
+    expect: [
+      { query: { match: { 'json.meta.feature_category': { query: 'pipeline_.*', type: 'phrase' } } } },
+      { query: { match: { 'json.stage': { query: 'cny', type: 'phrase' } } } },
+      { query: { match: { 'json.type': { query: 'web', type: 'phrase' } } } },
+    ],
+  },
+  testGetMatchersForPrometheusSelectorHashTranslationNe: {
+    actual: elastic.getMatchersForPrometheusSelectorHash(
+      'rails',
+      {
+        stage: { ne: 'cny' },
+      }
+    ),
+    expect: [
+      { meta: { negate: true }, query: { match: { 'json.stage': { query: 'cny', type: 'phrase' } } } },
+    ],
+  },
+  testGetMatchersForPrometheusSelectorHashTranslationArrays: {
+    actual: elastic.getMatchersForPrometheusSelectorHash(
+      'rails',
+      {
+        type: { oneOf: ['web', 'api'] },
+        stage: { noneOf: ['cny'] },
+      }
+    ),
+    expect: [
+      { meta: { key: 'query', negate: true, type: 'custom', value: '{"bool": {"minimum_should_match": 1, "should": [{"match_phrase": {"json.stage": "cny"}}]}}' }, query: { bool: { minimum_should_match: 1, should: [{ match_phrase: { 'json.stage': 'cny' } }] } } },
+      { meta: { key: 'query', type: 'custom', value: '{"bool": {"minimum_should_match": 1, "should": [{"match_phrase": {"json.type": "web"}}, {"match_phrase": {"json.type": "api"}}]}}' }, query: { bool: { minimum_should_match: 1, should: [{ match_phrase: { 'json.type': 'web' } }, { match_phrase: { 'json.type': 'api' } }] } } },
+    ],
   },
 })

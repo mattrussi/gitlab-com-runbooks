@@ -13,5 +13,6 @@ metricsCatalog.serviceDefinition(
       apdexScore: 0.9995,
     },
   }
+  // TODO: ensure that kubeConfig is setup with kube nodepool selectors
   + redisHelpers.gitlabcomObservabilityToolingForRedis('redis-ratelimiting')
 )

@@ -14,13 +14,30 @@ Each Registry bucket has a sample image that can be used to test that signed URL
 
 ```
 gcloud --project gitlab-production compute sign-url \
-  "https://cdn.registry.gitlab.com/cdn-test/three-cats.jpg" \
+  "https://cdn.registry.gitlab-static.net/cdn-test/three-cats.jpg" \
   --key-name gprd-registry-cdn \
   --expires-in 2880m \
   --key-file /tmp/gprd-key-file
 ```
 
 Where `/tmp/gprd-key-file` is the base64 encoded key value that can be read fetched from GKMS secrets (see below).
+
+## Alerting
+
+There are two BlackBox probes for the Staging and Production CDN endpoints:
+- https://cdn.registry.staging.gitlab-static.net
+- https://cdn.registry.gitlab-static.net
+
+These [were added](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests/1273) so that we can validate the CDN endpoint and certificate.
+If this alert fires, check to be sure the `health` object exists in the bucket `/cdn-test/health`.
+
+This object was copied manually using `gsutil` and is a text file containing the string `OK`:
+
+```
+echo OK > /tmp/health
+env=gprd
+gsutil -h "Content-Type:text/html" cp /tmp/health gs://gitlab-$env-registry/cdn-test/health
+```
 
 ## Secret Key and Key Rotation
 ### Overview
@@ -36,7 +53,7 @@ middleware:
   storage:
   - name: googlecdn
     options:
-      baseurl: cdn.registry.pre.gitlab.com
+      baseurl: cdn.registry.pre.gitlab-static.net
       ipfilteredby: gcp
       keyname: pre-registry-cdn
       privatekey: /etc/docker/registry/middleware.storage/0/private-key

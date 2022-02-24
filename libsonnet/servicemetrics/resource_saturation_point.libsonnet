@@ -1,4 +1,5 @@
 local alerts = import 'alerts/alerts.libsonnet';
+local labelTaxonomy = import 'label-taxonomy/label-taxonomy.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local stableIds = import 'stable-ids/stable-ids.libsonnet';
 local strings = import 'utils/strings.libsonnet';
@@ -6,7 +7,20 @@ local validator = import 'utils/validator.libsonnet';
 
 // The severity labels that we allow on resources
 local severities = std.set(['s1', 's2', 's3', 's4']);
-local environmentLabels = ['environment', 'tier', 'type', 'stage'];
+
+local environmentLabels = labelTaxonomy.labelTaxonomy(
+  labelTaxonomy.labels.environment |
+  labelTaxonomy.labels.tier |
+  labelTaxonomy.labels.service |
+  labelTaxonomy.labels.stage
+);
+
+local defaultAlertingLabels =
+  labelTaxonomy.labels.environment |
+  labelTaxonomy.labels.service |
+  labelTaxonomy.labels.stage;
+
+local capacityPlanningStrategies = std.set(['quantile95_1w', 'quantile99_1w', 'quantile95_1h']);
 
 local sloValidator = validator.validator(function(v) v > 0 && v <= 1, 'SLO threshold should be in the range (0,1]');
 
@@ -22,6 +36,7 @@ local definitionValidor = validator.new({
   resourceLabels: validator.array,
   query: validator.string,
   quantileAggregation: quantileValidator,
+  capacityPlanningStrategy: validator.setMember(capacityPlanningStrategies),
   slos: {
     soft: sloValidator,
     hard: sloValidator,
@@ -50,6 +65,7 @@ local defaults = {
   alertRunbook: 'docs/{{ $labels.type }}/README.md',
   dangerouslyThanosEvaluated: false,
   quantileAggregation: 'max',
+  capacityPlanningStrategy: 'quantile95_1h',
 };
 
 local validateAndApplyDefaults(definition) =
@@ -66,7 +82,7 @@ local resourceSaturationPoint = function(options)
   definition {
     getQuery(selectorHash, rangeInterval, maxAggregationLabels=[])::
       local staticLabels = self.getStaticLabels();
-      local environmentLabelsLocal = (if self.dangerouslyThanosEvaluated == true then ['env'] else []) + environmentLabels;
+      local environmentLabelsLocal = (if self.dangerouslyThanosEvaluated == true then labelTaxonomy.labelTaxonomy(labelTaxonomy.labels.environmentThanos) else []) + environmentLabels;
       local queryAggregationLabels = environmentLabelsLocal + self.resourceLabels;
       local allMaxAggregationLabels = environmentLabelsLocal + maxAggregationLabels;
       local queryAggregationLabelsExcludingStaticLabels = std.filter(function(label) !std.objectHas(staticLabels, label), queryAggregationLabels);
@@ -182,6 +198,7 @@ local resourceSaturationPoint = function(options)
           component: componentName,
           horiz_scaling: if definition.horizontallyScalable then 'yes' else 'no',
           severity: definition.severity,
+          capacity_planning_strategy: definition.capacityPlanningStrategy,
           quantile: if std.isNumber(definition.quantileAggregation) then
             '%g' % [definition.quantileAggregation]
           else
@@ -200,12 +217,23 @@ local resourceSaturationPoint = function(options)
         component: componentName,
       };
 
+      local labels = labelTaxonomy.labelTaxonomy(defaultAlertingLabels);
+      local labelsHash = std.foldl(
+        function(memo, label)
+          memo { [label]: '{{ $labels.%s }}' % [label] },
+        labels,
+        {}
+      );
+
+      local stageLabel = labelTaxonomy.getLabelFor(labelTaxonomy.labels.stage, default='');
+
       local formatConfig = {
         triggerDuration: triggerDuration,
         componentName: componentName,
         description: definition.description,
         title: definition.title,
         selector: selectors.serializeHash(selectorHashWithComponent),
+        titleStage: if stageLabel == '' then '' else ' ({{ $labels.%s }} stage)' % [stageLabel],
       };
 
       local severityLabels =
@@ -227,7 +255,7 @@ local resourceSaturationPoint = function(options)
           alert_type: 'cause',
         } + severityLabels,
         annotations: {
-          title: 'The %(title)s resource of the {{ $labels.type }} service ({{ $labels.stage }} stage), component has a saturation exceeding SLO and is close to its capacity limit.' % formatConfig,
+          title: 'The %(title)s resource of the {{ $labels.type }} service%(titleStage)s has a saturation exceeding SLO and is close to its capacity limit.' % formatConfig,
           description: |||
             This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -238,13 +266,9 @@ local resourceSaturationPoint = function(options)
           runbook: definition.alertRunbook,
           grafana_dashboard_id: 'alerts-' + definition.grafana_dashboard_uid,
           grafana_panel_id: stableIds.hashStableId('saturation-' + componentName),
-          grafana_variables: 'environment,type,stage',
+          grafana_variables: labelTaxonomy.labelTaxonomySerialized(defaultAlertingLabels),
           grafana_min_zoom_hours: '6',
-          promql_query: definition.getQuery({
-            environment: '{{ $labels.environment }}',
-            stage: '{{ $labels.stage }}',
-            type: '{{ $labels.type }}',
-          }, definition.getBurnRatePeriod(), definition.resourceLabels),
+          promql_query: definition.getQuery(labelsHash, definition.getBurnRatePeriod(), definition.resourceLabels),
         },
       })],
 

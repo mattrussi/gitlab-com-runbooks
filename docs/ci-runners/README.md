@@ -431,6 +431,178 @@ a little more simple.
 Windows project will most probably get the `runners-gke` network and GKE based monitoring in the future. This
 is however not yet scheduled.
 
+### `ci-gateway` Internal Load Balancers
+
+To reduce the amount of traffic that goes through the public Internet (which causes additional costs)
+and to add a little performance improvements, Runner managers and Git are set to use internal
+load balancers which routes the traffic through GCP internal networking.
+
+For that we've created a special VPC named `ci-gateway`. Dedicated VPC was added to avoid
+peering with the main VPC of GitLab backend - for security reasons and to reduce the number
+of possible CIDRs collisions.
+
+This configuration was first tested with `private` runners shard and `staging.gitlab.com`. And
+next was replicated in GPRD - for `gitlab.com` and with the three Linux runners shards we have.
+
+```mermaid
+graph LR
+  subgraph project::GSTG
+    subgraph VPC::gstg::gstg
+      gstg_haproxy_b(HaProxy us-east1-b)
+      gstg_haproxy_c(HaProxy us-east1-c)
+      gstg_haproxy_d(HaProxy us-east1-d)
+
+      gstg_gitlab_backends(GitLab backend services)
+
+      gstg_haproxy_b -->|routes direct without peering| gstg_gitlab_backends
+      gstg_haproxy_c -->|routes direct without peering| gstg_gitlab_backends
+      gstg_haproxy_d -->|routes direct without peering| gstg_gitlab_backends
+    end
+
+    subgraph VPC::gstg::ci-gateway
+      gstg_ci_gateway_ILB_b(ILB us-east1-b)
+      gstg_ci_gateway_ILB_c(ILB us-east1-c)
+      gstg_ci_gateway_ILB_d(ILB us-east1-d)
+    end
+
+    gstg_ci_gateway_ILB_b -->|routes direct without peering| gstg_haproxy_b
+    gstg_ci_gateway_ILB_c -->|routes direct without peering| gstg_haproxy_c
+    gstg_ci_gateway_ILB_d -->|routes direct without peering| gstg_haproxy_d
+  end
+
+  subgraph project::GPRD
+    subgraph VPC::gprd::gprd
+      gprd_haproxy_b(HaProxy us-east1-b)
+      gprd_haproxy_c(HaProxy us-east1-c)
+      gprd_haproxy_d(HaProxy us-east1-d)
+
+      gprd_gitlab_backends(GitLab backend services)
+
+      gprd_haproxy_b -->|routes direct without peering| gprd_gitlab_backends
+      gprd_haproxy_c -->|routes direct without peering| gprd_gitlab_backends
+      gprd_haproxy_d -->|routes direct without peering| gprd_gitlab_backends
+    end
+
+    subgraph VPC::gprd::ci-gateway
+      gprd_ci_gateway_ILB_b(ILB us-east1-b)
+      gprd_ci_gateway_ILB_c(ILB us-east1-c)
+      gprd_ci_gateway_ILB_d(ILB us-east1-d)
+    end
+
+    gprd_ci_gateway_ILB_b -->|routes direct without peering| gprd_haproxy_b
+    gprd_ci_gateway_ILB_c -->|routes direct without peering| gprd_haproxy_c
+    gprd_ci_gateway_ILB_d -->|routes direct without peering| gprd_haproxy_d
+  end
+
+  subgraph project::gitlab-ci
+    subgraph VPC::gitlab-ci::ci
+      subgraph runner-managers
+        runners_manager_private_1[runners-manager-private-1]
+        runners_manager_private_2[runners-manager-private-2]
+
+        runners_manager_shared_gitlab_org_X[runners-manager-shared-gitlab-org-X]
+
+        runners_manager_shared_X[runners-manager-shared-X]
+      end
+
+      subgraph example-ephemeral-vms
+        private_ephemeral_vm_1
+        private_ephemeral_vm_2
+        shared_gitlab_org_ephemeral_vm
+      end
+
+      runners_manager_private_1 -->|manages a job on| private_ephemeral_vm_1
+      runners_manager_private_2 -->|manages a job on| private_ephemeral_vm_2
+
+      runners_manager_shared_gitlab_org_X -->|manages a job on| shared_gitlab_org_ephemeral_vm
+    end
+  end
+
+  subgraph project::gitlab-ci-plan-free-X
+    subgraph VPC::gitlab-ci-plan-free-X::ephemeral-runners
+      shared_ephemeral_vm
+    end
+  end
+
+  runners_manager_shared_X --> shared_ephemeral_vm
+
+  runners_manager_private_1 -->|connects through VPC peering| gstg_ci_gateway_ILB_c
+  runners_manager_private_2 -->|connects through VPC peering| gstg_ci_gateway_ILB_d
+
+  runners_manager_private_1 -->|connects through VPC peering| gprd_ci_gateway_ILB_c
+  runners_manager_private_2 -->|connects through VPC peering| gprd_ci_gateway_ILB_d
+
+  runners_manager_shared_gitlab_org_X -->|connects through VPC peering| gprd_ci_gateway_ILB_c
+
+  runners_manager_shared_X -->|connects through VPC peering| gprd_ci_gateway_ILB_d
+
+  private_ephemeral_vm_1 -->|connects through VPC peering| gstg_ci_gateway_ILB_c
+  private_ephemeral_vm_2 -->|connects through VPC peering| gprd_ci_gateway_ILB_d
+
+  shared_gitlab_org_ephemeral_vm -->|connects through VPC peering| gprd_ci_gateway_ILB_c
+
+  shared_ephemeral_vm -->|connects through VPC peering| gprd_ci_gateway_ILB_d
+```
+
+#### How it's configured
+
+The above diagram shows a general view of how this configuration is set up.
+
+In both GSTG and GPRD projects we've created a dedicated VPC named `ci-gateway`. This VPC
+contains Internal Load Balancers (ILBs) available on defined FQDNs. The VPCs are peered with
+CI VPCs that contain runner managers and ephemeral VMs on which the jobs are executed.
+
+As an ILB can route traffic only to nodes in the same VPC, we had to add a small change
+to our HaProxy configuration. We've created a dedicated cluster of new HaProxy nodes
+provisioned with two network interfaces: in `gprd` and in `ci-gateway` VPCs. The same
+configuration is created in GSTG.
+
+HaProxy got a new frontend named `https_git_ci_gateway` and listening on port `8989`. This
+fronted passes the detected `git+https` traffic and a limited amount of API endpoints (purely
+for Runner communication, which includes requesting for a job, sending trace update and sending
+job update) to GitLab backends. Other requests are redirected with `307` HTTP response code
+to `staging.gitlab.com` or `gitlab.com` - depending on the requested resource.
+
+To reduce the cost that is created by traffic made across availability zones, in each project
+we have two ILBs - one for each availability zone (`us-east1-c` and `us-east1-d`) used by the CI
+fleet in the `us-east1` region. Each ILB is configured to target HaProxy nodes only in its
+availability zone.
+
+For that, the following FQDNs were created:
+
+- `git-us-east1-c.ci-gateway.int.gstg.gitlab.net`
+- `git-us-east1-d.ci-gateway.int.gstg.gitlab.net`
+- `git-us-east1-c.ci-gateway.int.gprd.gitlab.net`
+- `git-us-east1-d.ci-gateway.int.gprd.gitlab.net`
+
+Runner nodes are configured to point the ILBs with the `url` and `clone_url` settings.
+As we set our runners to operate in a specific availability zone, each of them
+points the relevant ILB FQDN.
+
+#### How it works
+
+GitLab Runner is configured to talk with the dedicated ILB. Communication goes through
+the VPC peering and reaches one of the HaProxy nodes backing the ILB. TLS certificate
+is verified and Runner saves this information to configure Git in the job environment.
+
+When job is received, Runner starts executing it on the ephemeral VM. It configures
+Git to use the CAChain resolved from initial API request. Repo URL is configured to
+use the ILB as GitLab's endpoint.
+
+When job reaches the step in which sources are updated, `git clone` operation is
+executed against the ILB. Communication again goes through the VPC peering and reaches
+one of the HaProxy nodes. TLS certificate is verified using the CAChain resolved
+earlier.
+
+When job reaches the step when artifact needs to be downloaded or uploaded, it
+also tries to talk with the ILB. However, HaProxy frontend detects that this
+communication is unsupported and redirects it to the public Internet gateway
+of GitLab instance that the job belongs to.
+
+In the meantime, Runner receives job logs and transfers them back - together
+with updating the status of the job - to GitLab's API. For that the communication
+through VPC peering and the dedicaed ILB is used as well.
+
 ## Monitoring
 
 ![CI Runners monitoring stack design](./img/ci-runners-monitoring.png)

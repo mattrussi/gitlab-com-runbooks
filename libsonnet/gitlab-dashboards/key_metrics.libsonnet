@@ -17,7 +17,6 @@ local managedDashboardsForService(serviceType) =
     pluginVersion: '7.2.0',
     limit: 10,
     tags: [
-      'managed',
       'type:' + serviceType,
     ],
     search: true,
@@ -78,8 +77,8 @@ local getColumnWidths(
     aggregationSet=aggregationSets.serviceSLIs,
     staticTitlePrefix=null,
     legendFormatPrefix=null,
-    skipDescriptionPanels=false,
     includeLastWeek=true,
+    fixedThreshold=null
   )::
     local typeHash = if serviceType == null then {} else { type: serviceType };
     local selectorHashWithExtras = selectorHash + typeHash;
@@ -99,8 +98,8 @@ local getColumnWidths(
         showOpsRate=showOpsRate,
         includePredictions=true,
         compact=compact,
-        skipDescriptionPanels=skipDescriptionPanels,
         includeLastWeek=includeLastWeek,
+        fixedThreshold=fixedThreshold
       )
       +
       (

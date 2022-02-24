@@ -4,6 +4,8 @@ local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local haproxyComponents = import './lib/haproxy_components.libsonnet';
 local sliLibrary = import 'gitlab-slis/library.libsonnet';
+local serviceLevelIndicatorDefinition = import 'servicemetrics/service_level_indicator_definition.libsonnet';
+local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 
 metricsCatalog.serviceDefinition({
   type: 'web',
@@ -55,6 +57,16 @@ metricsCatalog.serviceDefinition({
     kubernetes: true,
   },
   regional: true,
+  kubeConfig: {
+    labelSelectors: kubeLabelSelectors(
+      nodeSelector={ type: 'web' },
+
+      // TODO: at present, web nodepools do not have the correct stage, shard labels
+      // see https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2247
+      nodeStaticLabels={ stage: 'main' },
+    ),
+  },
+
   kubeResources: {
     web: {
       kind: 'Deployment',
@@ -76,6 +88,7 @@ metricsCatalog.serviceDefinition({
       regional=false,
     ),
 
+    local workhorseWebSelector = { job: { re: 'gitlab-workhorse|gitlab-workhorse-web' }, type: 'web' },
     workhorse: {
       userImpacting: true,
       featureCategory: 'not_owned',
@@ -88,10 +101,7 @@ metricsCatalog.serviceDefinition({
 
       apdex: histogramApdex(
         histogram='gitlab_workhorse_http_request_duration_seconds_bucket',
-        selector={
-          job: {
-            re: 'gitlab-workhorse|gitlab-workhorse-web',
-          },
+        selector=workhorseWebSelector {
           route: {
             ne: [
               '^/([^/]+/){1,}[^/]+/uploads\\\\z',
@@ -105,7 +115,6 @@ metricsCatalog.serviceDefinition({
               '^/([^/]+/){1,}[^/]+\\\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\\\z',
             ],
           },
-          type: 'web',
         },
         satisfiedThreshold=1,
         toleratedThreshold=10
@@ -113,12 +122,15 @@ metricsCatalog.serviceDefinition({
 
       requestRate: rateMetric(
         counter='gitlab_workhorse_http_requests_total',
-        selector='job=~"gitlab-workhorse|gitlab-workhorse-web", type="web"'
+        selector=workhorseWebSelector,
       ),
 
       errorRate: rateMetric(
         counter='gitlab_workhorse_http_requests_total',
-        selector='job=~"gitlab-workhorse|gitlab-workhorse-web", type="web", code=~"^5.*", route!="^/-/health$", route!="^/-/(readiness|liveness)$"'
+        selector=workhorseWebSelector {
+          code: { re: '^5.*' },
+          route: { ne: ['^/-/health$', '^/-/(readiness|liveness)$'] },
+        },
       ),
 
       significantLabels: ['fqdn', 'route'],
@@ -140,14 +152,14 @@ metricsCatalog.serviceDefinition({
 
       apdex: histogramApdex(
         histogram='gitlab_workhorse_image_resize_duration_seconds_bucket',
-        selector='job=~"gitlab-workhorse|gitlab-workhorse-web", type="web"',
+        selector=workhorseWebSelector,
         satisfiedThreshold=0.2,
         toleratedThreshold=0.8
       ),
 
       requestRate: rateMetric(
         counter='gitlab_workhorse_image_resize_requests_total',
-        selector='job=~"gitlab-workhorse|gitlab-workhorse-web", type="web"'
+        selector=workhorseWebSelector,
       ),
 
       significantLabels: ['fqdn'],
@@ -160,7 +172,7 @@ metricsCatalog.serviceDefinition({
     local railsSelector = { job: 'gitlab-rails', type: 'web' },
     puma: {
       userImpacting: true,
-      featureCategory: 'not_owned',
+      featureCategory: serviceLevelIndicatorDefinition.featureCategoryFromSourceMetrics,
       description: |||
         Aggregation of most web requests that pass through the puma to the GitLab rails monolith.
         Healthchecks are excluded.
@@ -186,10 +198,7 @@ metricsCatalog.serviceDefinition({
     rails_requests:
       sliLibrary.get('rails_request_apdex').generateServiceLevelIndicator(railsSelector) {
         toolingLinks: [
-          // TODO: These need to be defined in the appliation SLI and built using
-          // selectors using the appropriate fields
-          // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1411
-          toolingLinks.kibana(title='Rails', index='rails', type='web', slowRequestSeconds=5),
+          toolingLinks.kibana(title='Rails', index='rails'),
         ],
       },
   },

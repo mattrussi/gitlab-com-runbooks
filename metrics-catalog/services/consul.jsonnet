@@ -1,4 +1,6 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
+local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
+local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 
 metricsCatalog.serviceDefinition({
   type: 'consul',
@@ -12,6 +14,13 @@ metricsCatalog.serviceDefinition({
     kubernetes: true,
   },
   regional: true,
+  kubeConfig: {
+    labelSelectors: kubeLabelSelectors(
+      hpaSelector=null,  // no hpas for consul
+      ingressSelector=null,  // no ingress for consul
+      deploymentSelector=null,  // no deployments for consul
+    ),
+  },
   kubeResources: {
     consul: {
       kind: 'Daemonset',
@@ -21,5 +30,23 @@ metricsCatalog.serviceDefinition({
     },
   },
   serviceLevelIndicators: {
+    consul: {
+      userImpacting: false,
+      featureCategory: 'not_owned',
+      description: |||
+        HTTP GET requests handled by the Consul agent.
+      |||,
+
+      requestRate: metricsCatalog.derivMetric(
+        counter='consul_http_GET_v1_agent_metrics_count',
+        clampMinZero=true,
+      ),
+
+      significantLabels: ['type'],
+
+      toolingLinks: [
+        toolingLinks.kibana(title='Consul', index='consul', includeMatchersForPrometheusSelector=false),
+      ],
+    },
   },
 })

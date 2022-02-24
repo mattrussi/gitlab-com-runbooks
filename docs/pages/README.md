@@ -23,6 +23,7 @@
 * [Gitaly unusual activity alert](../gitaly/gitaly-unusual-activity.md)
 * [Node memory alerts](../monitoring/node_memory_alerts.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
+* [Block specific pages domains through HAproxy](block-pages-domain.md)
 * [GitLab Pages returning 404](gitlab-pages.md)
 * [Determine The GitLab Project Associated with a Domain](pages-domain-lookup.md)
 * [Troubleshooting LetsEncrypt for Pages](pages-letsencrypt.md)

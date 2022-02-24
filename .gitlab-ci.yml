@@ -32,6 +32,9 @@ variables:
       - DEPLOY_ENV: org-ci
         CLUSTER: org-ci-gitlab-gke
         REGION: us-east1
+      - DEPLOY_ENV: prdsub
+        CLUSTER: prdsub-customers-gke
+        REGION: us-east1
 
 .matrix_non_production:
   parallel:
@@ -57,6 +60,10 @@ variables:
       - DEPLOY_ENV: stgsub
         CLUSTER: stgsub-customers-gke
         REGION: us-east1
+      - DEPLOY_ENV: gstg-ref
+        CLUSTER: staging-ref-10k-hybrid
+        REGION: us-east1-c
+        KUBE_NAMESPACE: prometheus
 
 default:
   image: "${CI_REGISTRY_IMAGE}:latest"
@@ -99,6 +106,8 @@ workflow:
 
 .deploy-rules:
   stage: deploy
+  variables:
+    KUBE_NAMESPACE: monitoring
   rules:
     - *avoid-stage-group-check-rule
     - *avoid-maturity-model-generate-rule
@@ -113,8 +122,8 @@ workflow:
     - gem install bundler --no-document -v $BUNDLER_VERSION
     - bundle install --with=test
     - bundle exec ./bin/create_kubernetes_rules.rb --create --validate
-    - ./bin/delete_orphan_kubenetes_rules.sh # Delete ophaned PrometheusRules
-    - kubectl apply --namespace monitoring --filename ${CI_PROJECT_DIR}/rules-k8s/
+    - ./bin/delete_orphan_kubenetes_rules.sh # Delete orphaned PrometheusRules
+    - kubectl apply --namespace "${KUBE_NAMESPACE}" --filename "${CI_PROJECT_DIR}/rules-k8s/"
   tags:
     - k8s-workloads
 
@@ -173,7 +182,6 @@ rspec:
   stage: test
   script:
     - ./scripts/bundler.sh # Install jsonnet bundles
-    - ./scripts/generate-service-catalog-json.sh # For integration tests
     - gem install bundler --no-document -v $BUNDLER_VERSION
     - bundle install --with=test
     - bundle exec rspec
@@ -207,7 +215,7 @@ deploy-rules-non-production:
     - .deploy-rules
     - .matrix_non_production
 
-# Deploy rules to non-production environments
+# Deploy rules to production environments
 deploy-rules-production:
   environment: $DEPLOY_ENV
   stage: deploy-rules-production
@@ -245,6 +253,7 @@ ensure_generated_content_up_to_date:
   extends: .default-job-rules
   stage: test
   script:
+    - ./scripts/bundler.sh # Install jsonnet bundles
     - make ensure-generated-content-up-to-date
 
 ensure_maturity_model_minimum_level:
@@ -505,6 +514,8 @@ docker_image_test:
       --build-arg GL_ASDF_JB_VERSION=${GL_ASDF_JB_VERSION}
       --build-arg GL_ASDF_SHFMT_VERSION=${GL_ASDF_SHFMT_VERSION}
       --build-arg GL_ASDF_JSONNET_TOOL_VERSION=${GL_ASDF_JSONNET_TOOL_VERSION}
+      --build-arg GL_ASDF_PROMTOOL_VERSION=${GL_ASDF_PROMTOOL_VERSION}
+      --build-arg GL_ASDF_THANOS_VERSION=${GL_ASDF_THANOS_VERSION}
       .
   only:
     changes:
@@ -526,6 +537,8 @@ docker_image_build:
         --build-arg GL_ASDF_JB_VERSION=${GL_ASDF_JB_VERSION}
         --build-arg GL_ASDF_SHFMT_VERSION=${GL_ASDF_SHFMT_VERSION}
         --build-arg GL_ASDF_JSONNET_TOOL_VERSION=${GL_ASDF_JSONNET_TOOL_VERSION}
+        --build-arg GL_ASDF_PROMTOOL_VERSION=${GL_ASDF_PROMTOOL_VERSION}
+        --build-arg GL_ASDF_THANOS_VERSION=${GL_ASDF_THANOS_VERSION}
         .
     - docker push ${IMAGE}:latest
     - docker push ${IMAGE}:$ci_image_tag
@@ -614,7 +627,6 @@ test-periodic-queries:
       when: manual
       allow_failure: true
   script:
-    - scripts/generate-service-catalog-json.sh
     - gem install bundler --no-document -v $BUNDLER_VERSION
     - bundle install
     - bundle exec scripts/perform-periodic-thanos-queries.rb --dry-run
@@ -629,7 +641,6 @@ publish-periodic-queries:
       when: manual
       allow_failure: true
   script:
-    - scripts/generate-service-catalog-json.sh
     - gem install bundler --no-document -v $BUNDLER_VERSION
     - bundle install
     - bundle exec scripts/perform-periodic-thanos-queries.rb

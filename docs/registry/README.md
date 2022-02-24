@@ -17,6 +17,7 @@
 
 ## Troubleshooting Pointers
 
+* [Cloud SQL Troubleshooting](../cloud-sql/cloud-sql.md)
 * [Cloudflare: Managing Traffic](../cloudflare/managing-traffic.md)
 * [Interacting with Consul](../consul/interaction.md)
 * [Blocking individual IPs and Net Blocks on HA Proxy](../frontend/ban-netblocks-on-haproxy.md)
@@ -25,6 +26,7 @@
 * [Kubernetes](../kube/kubernetes.md)
 * [Gitlab.com on Kubernetes](../onboarding/gitlab.com_on_k8s.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
+* [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
 * [Database Connection Pool Saturation](app-db-conn-pool-saturation.md)
 * [Container Registry CDN](cdn.md)
 * [gitlab-registry.md](gitlab-registry.md)

@@ -91,12 +91,6 @@ groups:
       product_stage: plan
       stage_group: certify
     expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: rails_requests
-      product_stage: plan
-      stage_group: certify
-    expr: "1"
 - name: 'Stage group Ignored components: create - Code Review'
   interval: 1m
   partial_response_strategy: warn
@@ -160,22 +154,6 @@ groups:
       component: rails_requests
       product_stage: configure
       stage_group: configure
-    expr: "1"
-- name: 'Stage group Ignored components: protect - Container Security'
-  interval: 1m
-  partial_response_strategy: warn
-  rules:
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: graphql_queries
-      product_stage: protect
-      stage_group: container_security
-    expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: rails_requests
-      product_stage: protect
-      stage_group: container_security
     expr: "1"
 - name: 'Stage group Ignored components: growth - Conversion'
   interval: 1m
@@ -280,12 +258,6 @@ groups:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_queries
-      product_stage: create
-      stage_group: editor
-    expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: rails_requests
       product_stage: create
       stage_group: editor
     expr: "1"
@@ -408,12 +380,6 @@ groups:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_queries
-      product_stage: ecosystem
-      stage_group: integrations
-    expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: rails_requests
       product_stage: ecosystem
       stage_group: integrations
     expr: "1"
@@ -562,12 +528,6 @@ groups:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_queries
-      product_stage: plan
-      stage_group: product_planning
-    expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: rails_requests
       product_stage: plan
       stage_group: product_planning
     expr: "1"

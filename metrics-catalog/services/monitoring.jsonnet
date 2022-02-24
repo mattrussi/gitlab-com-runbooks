@@ -5,12 +5,13 @@ local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local googleLoadBalancerComponents = import './lib/google_load_balancer_components.libsonnet';
 local maturityLevels = import 'service-maturity/levels.libsonnet';
+local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 
 metricsCatalog.serviceDefinition({
   type: 'monitoring',
   tier: 'inf',
 
-  tags: ['golang', 'grafana', 'prometheus', 'thanos'],
+  tags: ['cloud-sql', 'golang', 'grafana', 'prometheus', 'thanos'],
 
   monitoringThresholds: {
     apdexScore: 0.999,
@@ -25,6 +26,28 @@ metricsCatalog.serviceDefinition({
   provisioning: {
     kubernetes: true,
     vms: true,
+  },
+  kubeConfig: {
+    // TODO: monitoring doesn't have very good labelling.
+    // See https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2240
+    // For now, we base our resource matching on namespace only and assume
+    // everything is in the main stage
+    local kubeSelector = { namespace: 'monitoring' },
+    local staticLabels = { stage: 'main' },
+
+    labelSelectors: kubeLabelSelectors(
+      podSelector=kubeSelector,
+      hpaSelector=kubeSelector,
+      nodeSelector=null,
+      ingressSelector=kubeSelector,
+      deploymentSelector=kubeSelector,
+
+      podStaticLabels=staticLabels,
+      hpaStaticLabels=staticLabels,
+      nodeStaticLabels=staticLabels,
+      ingressStaticLabels=staticLabels,
+      deploymentStaticLabels=staticLabels,
+    ),
   },
   kubeResources: {
     grafana: {
@@ -153,47 +176,6 @@ metricsCatalog.serviceDefinition({
         histogram='http_request_duration_seconds_bucket',
         selector=thanosQuerySelector,
         satisfiedThreshold=30,
-      ),
-
-      requestRate: rateMetric(
-        counter='http_requests_total',
-        selector=thanosQuerySelector
-      ),
-
-      errorRate: rateMetric(
-        counter='http_requests_total',
-        selector=thanosQuerySelector { code: { re: '^5.*' } }
-      ),
-
-      significantLabels: ['fqdn'],
-
-      toolingLinks: [
-        toolingLinks.elasticAPM(service='thanos'),
-        toolingLinks.kibana(title='Thanos Query', index='monitoring_ops', tag='monitoring.systemd.thanos-query'),
-      ],
-    },
-
-    public_dashboards_thanos_query: {
-      userImpacting: false,
-      featureCategory: 'not_owned',
-      ignoreTrafficCessation: true,
-
-      description: |||
-        Thanos query gathers the data needed to evaluate Prometheus queries from multiple underlying prometheus and thanos instances.
-        This SLI monitors the Thanos query HTTP interface for GitLab's public Thanos instance, which is used by the public Grafana
-        instance. 5xx responses are considered failures.
-      |||,
-
-      local thanosQuerySelector = {
-        job: 'thanos',
-        type: 'monitoring',
-        shard: 'public-dashboards',
-      },
-
-      apdex: histogramApdex(
-        histogram='http_request_duration_seconds_bucket',
-        selector=thanosQuerySelector,
-        satisfiedThreshold=30
       ),
 
       requestRate: rateMetric(
@@ -356,15 +338,6 @@ metricsCatalog.serviceDefinition({
     },
 
     // This component represents the Google Load Balancer in front
-    // of the public Grafana instance at dashboards.gitlab.com
-    public_grafana_google_lb: googleLoadBalancerComponents.googleLoadBalancer(
-      userImpacting=false,
-      loadBalancerName='ops-dashboards-com',
-      projectId='gitlab-ops',
-      ignoreTrafficCessation=true
-    ),
-
-    // This component represents the Google Load Balancer in front
     // of the internal Grafana instance at dashboards.gitlab.net
     grafana_google_lb: googleLoadBalancerComponents.googleLoadBalancer(
       userImpacting=false,
@@ -467,13 +440,9 @@ metricsCatalog.serviceDefinition({
       significantLabels: ['pod'],
     },
 
-    local thanosMemcachedSLI(job) = {
-      local selector = {
-        job: job,
-        type: 'monitoring',
-      },
-
+    thanos_memcached: {
       userImpacting: false,
+      serviceAggregation: false,
       featureCategory: 'not_owned',
       ignoreTrafficCessation: true,
 
@@ -482,15 +451,17 @@ metricsCatalog.serviceDefinition({
         store and query-frontend components.
       |||,
 
+      local selector = { type: 'monitoring' },
+
       apdex: histogramApdex(
         histogram='thanos_memcached_operation_duration_seconds_bucket',
-        satisfiedThreshold=1,
+        satisfiedThreshold=0.5,
         selector=selector,
         metricsFormat='migrating'
       ),
 
       requestRate: rateMetric(
-        counter='memcached_commands_total',
+        counter='thanos_memcached_operations_total',
         selector=selector,
       ),
 
@@ -499,13 +470,8 @@ metricsCatalog.serviceDefinition({
         selector=selector,
       ),
 
-      significantLabels: ['fqdn'],
+      significantLabels: ['operation', 'reason'],
     },
-
-    memcached_thanos_store_index: thanosMemcachedSLI('memcached-thanos-index-cache-metrics'),
-    memcached_thanos_store_bucket: thanosMemcachedSLI('memcached-thanos-bucket-cache-metrics'),
-    memcached_thanos_qfe_query_range: thanosMemcachedSLI('memcached-thanos-qfe-query-range-metrics'),
-    memcached_thanos_qfe_labels: thanosMemcachedSLI('memcached-thanos-qfe-labels-metrics'),
 
     grafana_cloudsql: {
       userImpacting: true,
@@ -514,7 +480,11 @@ metricsCatalog.serviceDefinition({
         Grafana uses a GCP CloudSQL instance. This SLI represents SQL transactions to that service.
       |||,
 
-      local baseSelector = { job: 'stackdriver', database: 'grafana' },
+      local baseSelector = {
+        job: 'stackdriver',
+        database_id: { re: '.+:grafana-.+' },
+        database: 'grafana',
+      },
 
       staticLabels: {
         tier: 'inf',
@@ -533,7 +503,7 @@ metricsCatalog.serviceDefinition({
         }
       ),
 
-      significantLabels: [],
+      significantLabels: ['database_id'],
       serviceAggregation: false,
       toolingLinks: [
         toolingLinks.cloudSQL('grafana-internal-f534', project='gitlab-ops'),

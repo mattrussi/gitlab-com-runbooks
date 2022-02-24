@@ -10,8 +10,17 @@ local errorBudget = import 'stage-groups/error_budget.libsonnet';
 local sidekiqHelpers = import 'services/lib/sidekiq-helpers.libsonnet';
 local thresholds = import 'gitlab-dashboards/thresholds.libsonnet';
 local metricsCatalogDashboards = import 'gitlab-dashboards/metrics_catalog_dashboards.libsonnet';
-local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
+local gitlabMetricsConfig = import 'gitlab-metrics-config.libsonnet';
 local keyMetrics = import 'gitlab-dashboards/key_metrics.libsonnet';
+local objects = import 'utils/objects.libsonnet';
+
+local aggregationSets = gitlabMetricsConfig.aggregationSets;
+
+local dashboardUid(identifier) =
+  local dirname = 'stage-groups';
+  // All dashboards are prefixed with their dirname joined by a `-`
+  local maxLength = 40 - std.length(dirname) - 1;
+  std.substr(identifier, 0, maxLength);
 
 local actionLegend(type) =
   if type == 'api' then '{{action}}' else '{{controller}}#{{action}}';
@@ -40,20 +49,6 @@ local actionFilter(featureCategoriesSelector) =
     multi=true,
     includeAll=true,
     allValues='.*'
-  );
-
-local groupFilter(hide=false, current='project_management') =
-  template.new(
-    'stage_group',
-    '$PROMETHEUS_DS',
-    "label_values(gitlab:feature_category:stage_group:mapping{monitor='global'}, stage_group)",
-    current='project_management',
-    refresh='load',
-    sort=1,
-    includeAll=true,
-    allValues='.*',
-    multi=false,
-    hide=if hide then 'hidden' else '',
   );
 
 local errorBudgetPanels(group) =
@@ -371,6 +366,7 @@ local requestComponents = std.set(['web', 'api', 'git']);
 local backgroundComponents = std.set(['sidekiq']);
 local supportedComponents = std.setUnion(requestComponents, backgroundComponents);
 local defaultComponents = std.set(['web', 'api', 'sidekiq']);
+local groupTag(group) = 'stage_group:%s' % group.name;
 
 local commonHeader(
   group,
@@ -378,7 +374,6 @@ local commonHeader(
   featureCategories,
   featureCategoriesSelector,
   displayControllerFilter,
-  displayGroupFilter,
   enabledRequestComponents,
   displayEmptyGuidance,
   displayBudget,
@@ -387,7 +382,10 @@ local commonHeader(
   basic
   .dashboard(
     title,
-    tags=['feature_category'] + extraTags,
+    tags=[
+      'feature_category',
+      groupTag(group),
+    ] + extraTags,
     time_from='now-6h/m',
     time_to='now/m'
   )
@@ -397,12 +395,6 @@ local commonHeader(
       [controllerFilter(featureCategoriesSelector), actionFilter(featureCategoriesSelector)]
     else
       []
-  )
-  .addTemplates(
-    if displayGroupFilter then
-      [groupFilter()]
-    else
-      [groupFilter(hide=true, current=group.key)]
   )
   .addPanels(
     if displayEmptyGuidance then
@@ -437,7 +429,12 @@ local commonHeader(
       layout.rowGrid('Budget spend attribution', errorBudgetAttribution(group, featureCategories), startRow=110, collapse=true)
     else
       []
-  );
+  ) {
+    links+: [
+      platformLinks.dynamicLinks('Group Dashboards', groupTag(group), asDropdown=false),
+    ],
+  }
+;
 
 local getEnabledRequestComponents(components) =
   assert std.type(components) == 'array' : 'Invalid components argument type';
@@ -461,11 +458,10 @@ local dashboard(groupKey, components=defaultComponents, displayEmptyGuidance=fal
       featureCategories=featureCategories,
       featureCategoriesSelector=featureCategoriesSelector,
       displayControllerFilter=true,
-      displayGroupFilter=false,
       enabledRequestComponents=enabledRequestComponents,
       displayEmptyGuidance=displayEmptyGuidance,
       displayBudget=displayBudget,
-      title=std.format('Group dashboard: %s (%s)', [group.stage, group.name]),
+      title='%s: Group dashboard' % [group.name],
     )
     .addPanels(
       if std.length(enabledRequestComponents) != 0 then
@@ -594,7 +590,6 @@ local dashboard(groupKey, components=defaultComponents, displayEmptyGuidance=fal
       self.trailer(),
     links+:
       [
-        platformLinks.dynamicLinks('Detail', 'stage-group-error-budget-detail', asDropdown=false),
         platformLinks.dynamicLinks('API Detail', 'type:api'),
         platformLinks.dynamicLinks('Web Detail', 'type:web'),
         platformLinks.dynamicLinks('Git Detail', 'type:git'),
@@ -603,19 +598,27 @@ local dashboard(groupKey, components=defaultComponents, displayEmptyGuidance=fal
       self.addPanels(sidekiqJobDurationByUrgency(urgencies, featureCategoriesSelector)),
   };
 
-local errorBudgetDetailDashboard() =
+local errorBudgetDetailDashboard(stageGroup) =
+  // Missing `feature_category` labels are also accepted for viewing details with a static feature category
+  local featureCategoriesSelector = std.join('|', stageGroup.feature_categories + ['']);
+  local serviceTypes = std.map(function(service) service.type, gitlabMetricsConfig.monitoredServices);
+
+  local sliFilter = function(sli)
+    sli.hasFeatureCategoryFromSourceMetrics() || (
+      sli.hasStaticFeatureCategory() && std.member(stageGroup.feature_categories, sli.featureCategory)
+    );
+
   local dashboard =
     commonHeader(
-      group={ key: '$stage_group', name: 'this group' },
-      extraTags=['stage-group-error-budget-detail'],
-      featureCategories=[],
-      featureCategoriesSelector=null,
+      group=stageGroup,
+      extraTags=[],
+      featureCategories=stageGroup.feature_categories,
+      featureCategoriesSelector=featureCategoriesSelector,
       displayControllerFilter=false,
-      displayGroupFilter=true,
       enabledRequestComponents=requestComponents,
       displayEmptyGuidance=false,
       displayBudget=true,
-      title='Stage group error budget detail',
+      title='%s: group error budget detail' % [stageGroup.name],
     )
     .addPanels(
       keyMetrics.headlineMetricsRow(
@@ -624,27 +627,25 @@ local errorBudgetDetailDashboard() =
         selectorHash={
           environment: '$environment',
           stage: '$stage',
-          stage_group: '$stage_group',
+          stage_group: stageGroup.key,
         },
         staticTitlePrefix='Overall',
-        // Change this to be dynamic when stage group is not a template variable:
-        // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1365
-        legendFormatPrefix='Stage group',
+        legendFormatPrefix=stageGroup.name,
         aggregationSet=aggregationSets.stageGroupSLIs,
         showApdex=true,
         showErrorRatio=true,
         showOpsRate=true,
         showSaturationCell=false,
-        skipDescriptionPanels=true,
         includeLastWeek=false,
         compact=true,
         rowHeight=8,
+        fixedThreshold=errorBudget.slaTarget
       )
     )
     .addPanels(
       metricsCatalogDashboards.sliMatrixAcrossServices(
         title='🔬 Service Level Indicators',
-        serviceTypes=requestComponents,
+        serviceTypes=serviceTypes,
         aggregationSet=aggregationSets.serviceComponentStageGroupSLIs,
         startRow=300,
         expectMultipleSeries=true,
@@ -652,31 +653,21 @@ local errorBudgetDetailDashboard() =
         selectorHash={
           environment: '$environment',
           stage: '$stage',
-          stage_group: '$stage_group',
+          stage_group: stageGroup.key,
         },
-        // Use feature_category significant label as a proxy for 'can be rolled
-        // up to stage group'. We can't use
-        // `sli.hasFeatureCategoryFromSourceMetrics because the `puma`
-        // component has `featureCategory: 'not_owned'`. This is because the
-        // `error` part of that SLI has a feature category, while the apdex side
-        // does not. That's included in the `rails_requests` component. We
-        // should revisit this when we adjust the way we track these errors.
-        // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1230
-        sliFilter=function(sli) std.member(sli.significantLabels, 'feature_category')
+        sliFilter=sliFilter,
       )
     )
     .addPanels(
       metricsCatalogDashboards.autoDetailRowsAcrossServices(
-        serviceTypes=requestComponents,
+        serviceTypes=serviceTypes,
         selectorHash={
           environment: '$environment',
           stage: '$stage',
-          // TODO: fix this once we have a dashboard per stage group:
-          // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1365
-          feature_category: { re: 'team_planning|planning_analytics' },
+          feature_category: { re: featureCategoriesSelector },
         },
         startRow=1200,
-        sliFilter=function(sli) std.member(sli.significantLabels, 'feature_category')
+        sliFilter=sliFilter,
       )
     );
 
@@ -698,4 +689,5 @@ local errorBudgetDetailDashboard() =
   dashboard: dashboard,
   errorBudgetDetailDashboard: errorBudgetDetailDashboard,
   supportedComponents: supportedComponents,
+  dashboardUid: dashboardUid,
 }

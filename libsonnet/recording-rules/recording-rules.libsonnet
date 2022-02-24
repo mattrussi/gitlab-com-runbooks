@@ -1,6 +1,8 @@
 {
+  aggregationSetApdexRatioReflectedRuleSet: (import 'aggregation-set-apdex-ratio-reflected-rule-set.libsonnet').aggregationSetApdexRatioReflectedRuleSet,
   aggregationSetApdexRatioRuleSet: (import 'aggregation-set-apdex-ratio-rule-set.libsonnet').aggregationSetApdexRatioRuleSet,
   aggregationSetErrorRatioRuleSet: (import 'aggregation-set-error-ratio-rule-set.libsonnet').aggregationSetErrorRatioRuleSet,
+  aggregationSetErrorRatioReflectedRuleSet: (import 'aggregation-set-error-ratio-reflected-rule-set.libsonnet').aggregationSetErrorRatioReflectedRuleSet,
   aggregationSetRateRuleSet: (import 'aggregation-set-rate-rule-set.libsonnet').aggregationSetRateRuleSet,
   componentMappingRuleSetGenerator: (import 'component-mapping-rule-set-generator.libsonnet').componentMappingRuleSetGenerator,
   componentMetricsRuleSetGenerator: (import 'component-metrics-rule-set-generator.libsonnet').componentMetricsRuleSetGenerator,

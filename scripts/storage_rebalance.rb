@@ -204,8 +204,7 @@ module Storage
     def log_and_record_migration_error(error, project, options = {})
       options = DEFAULT_LOG_ERROR_OPTIONS.merge(options)
       if error.respond_to?(:response)
-        error_body = JSON.parse(error.response.body)
-        symbolize_keys_deep!(error_body)
+        error_body = JSON.parse(error.response.body, symbolize_names: true)
         error_message = error_body.fetch(:message, nil)
       end
 
@@ -281,7 +280,7 @@ module Storage
       migration_failures = []
       Dir.glob(logfiles_glob).each do |file_path|
         IO.foreach(file_path) do |line|
-          migration_failures << JSON.parse(line).transform_keys!(&:to_sym)
+          migration_failures << JSON.parse(line, symbolize_names: true)
         end
       end
       migration_failures
@@ -336,14 +335,6 @@ module Storage
     def execute_command(command)
       log.debug "Executing command: #{command}"
       `#{command}`.strip
-    end
-
-    def symbolize_keys_deep!(memo)
-      memo.each_key do |key|
-        symbolized_key = key.respond_to?(:to_sym) ? key.to_sym : key
-        memo[symbolized_key] = memo.delete(key) # Preserve order even when key == symbolized_key
-        symbolize_keys_deep!(memo[symbolized_key]) if memo[symbolized_key].is_a?(Hash)
-      end
     end
 
     def to_filesize(bytes)
@@ -541,9 +532,9 @@ module Storage
 
           # TODO: Refactor to a helper method
           @options[:projects] ||= []
-          projects = JSON.parse(IO.read(file_path))['projects']
+          projects = JSON.parse(IO.read(file_path), symbolize_names: true)[:projects]
           projects.each do |project|
-            @options[:projects].push(project.transform_keys!(&:to_sym))
+            @options[:projects].push(project)
           end
         end
       end
@@ -837,7 +828,7 @@ module Storage
       error = nil
       begin
         response_data = response.body
-        result = JSON.parse(response_data)
+        result = JSON.parse(response_data, symbolize_names: true)
       rescue JSON::ParserError => e
         n = response.body.length
         message = "Could not parse #{n} bytes of json serialized data from #{uri.path}"
@@ -918,7 +909,6 @@ module Storage
 
       raise "Failed to get project id: #{project_id}" if project.nil? || project.empty?
 
-      symbolize_keys_deep!(project)
       project
     end
 
@@ -950,7 +940,6 @@ module Storage
 
       raise "Unexpected response: #{projects}" if projects.nil? || projects.empty?
 
-      projects.each { |project| symbolize_keys_deep!(project) }
       projects
     end
 
@@ -964,9 +953,8 @@ module Storage
 
       raise "Invalid response status code: #{status}" unless [200].include?(status)
 
-      raise "Unexpected response: #{move}" unless move.fetch('project', {}).fetch('id', nil) == project[:id]
+      raise "Unexpected response: #{move}" unless move.fetch(:project, {}).fetch(:id, nil) == project[:id]
 
-      symbolize_keys_deep!(move)
       move
     end
 
@@ -979,7 +967,6 @@ module Storage
 
       raise "Unexpected response: #{moves}" if moves.nil?
 
-      moves.each { |element| symbolize_keys_deep!(element) }
       moves
     end
 
@@ -995,9 +982,8 @@ module Storage
 
       raise "Invalid response status code: #{status}" unless [200, 201].include?(status)
 
-      raise "Unexpected response: #{move}" unless move.fetch('project', {}).fetch('id', nil) == project[:id]
+      raise "Unexpected response: #{move}" unless move.fetch(:project, {}).fetch(:id, nil) == project[:id]
 
-      symbolize_keys_deep!(move)
       move
     end
 

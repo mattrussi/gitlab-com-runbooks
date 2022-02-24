@@ -25,6 +25,54 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
+      component: cloudsql_cpu
+      stage: main
+      tier: inf
+      type: monitoring
+    expr: |
+      max by(environment) (
+        clamp_min(
+          clamp_max(
+            avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_cpu_utilization{}[5m])
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
+      component: cloudsql_disk
+      stage: main
+      tier: inf
+      type: monitoring
+    expr: |
+      max by(environment) (
+        clamp_min(
+          clamp_max(
+            avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_disk_utilization{}[5m])
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
+      component: cloudsql_memory
+      stage: main
+      tier: inf
+      type: monitoring
+    expr: |
+      max by(environment) (
+        clamp_min(
+          clamp_max(
+            avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_memory_utilization{}[5m])
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
       component: cpu
     expr: |
       max by(environment, tier, type, stage) (
@@ -63,7 +111,7 @@ groups:
         clamp_min(
           clamp_max(
             (
-              1 - instance:node_filesystem_avail:ratio{fstype=~"ext.|xfs", fqdn!="", type=~"gitaly|camoproxy|ci-runners|consul|frontend|jaeger|monitoring|pages|patroni|patroni-registry|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-ci|praefect|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-sessions|redis|registry|sentry"}
+              1 - node_filesystem_avail_bytes{fstype=~"ext.|xfs", type=~"gitaly|camoproxy|ci-runners|consul|frontend|jaeger|monitoring|pages|patroni|patroni-registry|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-ci|praefect|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-sessions|redis|registry|sentry"} / node_filesystem_size_bytes{fstype=~"ext.|xfs", type=~"gitaly|camoproxy|ci-runners|consul|frontend|jaeger|monitoring|pages|patroni|patroni-registry|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-ci|praefect|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-sessions|redis|registry|sentry"}
             )
             ,
             1)
@@ -289,22 +337,6 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
-      component: grafana_cloudsql_cpu
-      stage: main
-      tier: inf
-      type: monitoring
-    expr: |
-      max by(environment) (
-        clamp_min(
-          clamp_max(
-            avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_cpu_utilization{database_id=~".+:grafana-(internal|pre)-.+", }[5m])
-            ,
-            1)
-        ,
-        0)
-      )
-  - record: gitlab_component_saturation:ratio
-    labels:
       component: grafana_trickster_cache_usage
     expr: |
       max by(environment, tier, type, stage) (
@@ -328,13 +360,13 @@ groups:
         clamp_min(
           clamp_max(
             sum by (environment, tier, type, stage, pod, container) (
-              rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", type=~"web|api|consul|git|kas|logging|mailroom|monitoring|nginx|plantuml|registry|sidekiq|web-pages|websockets|woodhouse"}[5m])
+              rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", type=~"web|api|consul|git|kas|kube|logging|mailroom|monitoring|nginx|plantuml|registry|sidekiq|web-pages|websockets|woodhouse"}[5m])
             )
             /
             sum by(environment, tier, type, stage, pod, container) (
-              container_spec_cpu_quota:labeled{container!="", container!="POD", type=~"web|api|consul|git|kas|logging|mailroom|monitoring|nginx|plantuml|registry|sidekiq|web-pages|websockets|woodhouse"}
+              container_spec_cpu_quota:labeled{container!="", container!="POD", type=~"web|api|consul|git|kas|kube|logging|mailroom|monitoring|nginx|plantuml|registry|sidekiq|web-pages|websockets|woodhouse"}
               /
-              container_spec_cpu_period:labeled{container!="", container!="POD", type=~"web|api|consul|git|kas|logging|mailroom|monitoring|nginx|plantuml|registry|sidekiq|web-pages|websockets|woodhouse"}
+              container_spec_cpu_period:labeled{container!="", container!="POD", type=~"web|api|consul|git|kas|kube|logging|mailroom|monitoring|nginx|plantuml|registry|sidekiq|web-pages|websockets|woodhouse"}
             )
             ,
             1)
@@ -348,9 +380,9 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            container_memory_working_set_bytes:labeled{container!="", container!="POD", type=~"web|api|consul|git|kas|logging|mailroom|monitoring|nginx|plantuml|registry|sidekiq|web-pages|websockets|woodhouse"}
+            container_memory_working_set_bytes:labeled{container!="", container!="POD", type=~"web|api|consul|git|kas|kube|logging|mailroom|monitoring|nginx|plantuml|registry|sidekiq|web-pages|websockets|woodhouse"}
             /
-            (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", type=~"web|api|consul|git|kas|logging|mailroom|monitoring|nginx|plantuml|registry|sidekiq|web-pages|websockets|woodhouse"} > 0)
+            (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", type=~"web|api|consul|git|kas|kube|logging|mailroom|monitoring|nginx|plantuml|registry|sidekiq|web-pages|websockets|woodhouse"} > 0)
             ,
             1)
         ,
@@ -390,9 +422,9 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            kube_horizontalpodautoscaler_status_desired_replicas:labeled{type=~"web|api|consul|git|kas|logging|mailroom|monitoring|nginx|plantuml|registry|sidekiq|web-pages|websockets|woodhouse", shard!~"database-throttled|elasticsearch|gitaly-throttled|imports|memory-bound|urgent-other"}
+            kube_horizontalpodautoscaler_status_desired_replicas:labeled{type=~"web|api|consul|git|kas|kube|logging|mailroom|monitoring|nginx|plantuml|registry|sidekiq|web-pages|websockets|woodhouse", shard!~"database-throttled|elasticsearch|gitaly-throttled|imports|memory-bound|urgent-other"}
             /
-            kube_horizontalpodautoscaler_spec_max_replicas:labeled{type=~"web|api|consul|git|kas|logging|mailroom|monitoring|nginx|plantuml|registry|sidekiq|web-pages|websockets|woodhouse", shard!~"database-throttled|elasticsearch|gitaly-throttled|imports|memory-bound|urgent-other"}
+            kube_horizontalpodautoscaler_spec_max_replicas:labeled{type=~"web|api|consul|git|kas|kube|logging|mailroom|monitoring|nginx|plantuml|registry|sidekiq|web-pages|websockets|woodhouse", shard!~"database-throttled|elasticsearch|gitaly-throttled|imports|memory-bound|urgent-other"}
             ,
             1)
         ,
@@ -442,7 +474,7 @@ groups:
         clamp_min(
           clamp_max(
             1 - avg by (environment, tier, type, stage) (
-              rate(node_cpu_seconds_total:labeled{mode="idle", type=~"kube|git|registry|ci-runners|sidekiq|kas|api|websocket"}[5m])
+              rate(node_cpu_seconds_total:labeled{mode="idle", type=~"api|git|kube|registry|sidekiq|web-pages|web|websockets"}[5m])
             )
             ,
             1)
@@ -456,7 +488,7 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            instance:node_memory_utilization:ratio{fqdn!="", type=~"gitaly|camoproxy|ci-runners|consul|frontend|jaeger|monitoring|pages|patroni|patroni-registry|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-ci|praefect|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-sessions|redis|registry|sentry"}
+            instance:node_memory_utilization:ratio{type=~"gitaly|camoproxy|ci-runners|consul|frontend|jaeger|monitoring|pages|patroni|patroni-registry|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-ci|praefect|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-sessions|redis|registry|sentry"} or instance:node_memory_utilisation:ratio{type=~"gitaly|camoproxy|ci-runners|consul|frontend|jaeger|monitoring|pages|patroni|patroni-registry|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-ci|praefect|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-sessions|redis|registry|sentry"}
             ,
             1)
         ,
@@ -525,15 +557,15 @@ groups:
         clamp_min(
           clamp_max(
             (
-              process_open_fds{type!="",type!~"nat|waf|kube"}
+              process_open_fds{type!="",type!~"cloud-sql|nat|waf|kube"}
               /
-              process_max_fds{type!="",type!~"nat|waf|kube"}
+              process_max_fds{type!="",type!~"cloud-sql|nat|waf|kube"}
             )
             or
             (
-              ruby_file_descriptors{type!="",type!~"nat|waf|kube"}
+              ruby_file_descriptors{type!="",type!~"cloud-sql|nat|waf|kube"}
               /
-              ruby_process_max_fds{type!="",type!~"nat|waf|kube"}
+              ruby_process_max_fds{type!="",type!~"cloud-sql|nat|waf|kube"}
             )
             ,
             1)
@@ -842,22 +874,6 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
-      component: praefect_cloudsql_cpu
-      stage: main
-      tier: stor
-      type: praefect
-    expr: |
-      max by(environment) (
-        clamp_min(
-          clamp_max(
-            avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_cpu_utilization{database_id=~".+:praefect-db.+", }[5m])
-            ,
-            1)
-        ,
-        0)
-      )
-  - record: gitlab_component_saturation:ratio
-    labels:
       component: private_runners
       stage: main
       tier: runners
@@ -1110,7 +1126,7 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{fqdn!="", mode="idle", type=~"gitaly|camoproxy|ci-runners|consul|frontend|jaeger|monitoring|pages|patroni|patroni-registry|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-ci|praefect|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-sessions|redis|registry|sentry"}[5m]))
+            avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{mode="idle", type=~"gitaly|camoproxy|ci-runners|consul|frontend|jaeger|monitoring|pages|patroni|patroni-registry|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-ci|praefect|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-sessions|redis|registry|sentry"}[5m]))
             ,
             1)
         ,
@@ -1156,6 +1172,30 @@ groups:
   - record: slo:max:hard:gitlab_component_saturation:ratio
     labels:
       component: cgroup_memory
+    expr: "0.9"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: cloudsql_cpu
+    expr: "0.8"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: cloudsql_cpu
+    expr: "0.9"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: cloudsql_disk
+    expr: "0.85"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: cloudsql_disk
+    expr: "0.9"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: cloudsql_memory
+    expr: "0.8"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: cloudsql_memory
     expr: "0.9"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
@@ -1285,14 +1325,6 @@ groups:
     labels:
       component: go_memory
     expr: "0.98"
-  - record: slo:max:soft:gitlab_component_saturation:ratio
-    labels:
-      component: grafana_cloudsql_cpu
-    expr: "0.8"
-  - record: slo:max:hard:gitlab_component_saturation:ratio
-    labels:
-      component: grafana_cloudsql_cpu
-    expr: "0.9"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: grafana_trickster_cache_usage
@@ -1527,14 +1559,6 @@ groups:
     expr: "0.95"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
-      component: praefect_cloudsql_cpu
-    expr: "0.8"
-  - record: slo:max:hard:gitlab_component_saturation:ratio
-    labels:
-      component: praefect_cloudsql_cpu
-    expr: "0.9"
-  - record: slo:max:soft:gitlab_component_saturation:ratio
-    labels:
       component: private_runners
     expr: "0.85"
   - record: slo:max:hard:gitlab_component_saturation:ratio
@@ -1674,6 +1698,7 @@ groups:
   rules:
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: cgroup_memory
       horiz_scaling: "yes"
       quantile: max
@@ -1681,6 +1706,31 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
+      component: cloudsql_cpu
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s4
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: cloudsql_disk
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s4
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: cloudsql_memory
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s4
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      capacity_planning_strategy: quantile95_1h
       component: cpu
       horiz_scaling: "yes"
       quantile: max
@@ -1688,6 +1738,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: disk_inodes
       horiz_scaling: "yes"
       quantile: max
@@ -1695,6 +1746,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: disk_space
       horiz_scaling: "yes"
       quantile: max
@@ -1702,6 +1754,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: disk_sustained_read_iops
       horiz_scaling: "yes"
       quantile: max
@@ -1709,6 +1762,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: disk_sustained_read_throughput
       horiz_scaling: "yes"
       quantile: max
@@ -1716,6 +1770,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: disk_sustained_write_iops
       horiz_scaling: "yes"
       quantile: max
@@ -1723,6 +1778,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: disk_sustained_write_throughput
       horiz_scaling: "yes"
       quantile: max
@@ -1730,6 +1786,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: elastic_cpu
       horiz_scaling: "yes"
       quantile: max
@@ -1737,6 +1794,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: elastic_disk_space
       horiz_scaling: "yes"
       quantile: max
@@ -1744,6 +1802,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: elastic_jvm_heap_memory
       horiz_scaling: "yes"
       quantile: max
@@ -1751,6 +1810,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: elastic_single_node_cpu
       horiz_scaling: "yes"
       quantile: max
@@ -1758,6 +1818,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: elastic_single_node_disk_space
       horiz_scaling: "yes"
       quantile: max
@@ -1765,6 +1826,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: elastic_thread_pools
       horiz_scaling: "yes"
       quantile: max
@@ -1772,6 +1834,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: gcp_quota_limit
       horiz_scaling: "no"
       quantile: max
@@ -1779,6 +1842,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: gitaly_total_disk_space
       horiz_scaling: "yes"
       quantile: max
@@ -1786,6 +1850,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: go_memory
       horiz_scaling: "yes"
       quantile: max
@@ -1793,13 +1858,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
-      component: grafana_cloudsql_cpu
-      horiz_scaling: "yes"
-      quantile: max
-      severity: s4
-    expr: "1"
-  - record: gitlab_component_saturation_info
-    labels:
+      capacity_planning_strategy: quantile95_1h
       component: grafana_trickster_cache_usage
       horiz_scaling: "no"
       quantile: max
@@ -1807,6 +1866,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: kube_container_cpu
       horiz_scaling: "yes"
       quantile: max
@@ -1814,6 +1874,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: kube_container_memory
       horiz_scaling: "yes"
       quantile: max
@@ -1821,6 +1882,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: kube_go_memory
       horiz_scaling: "yes"
       quantile: max
@@ -1828,6 +1890,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: kube_horizontalpodautoscaler_desired_replicas
       horiz_scaling: "yes"
       quantile: max
@@ -1835,6 +1898,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: kube_persistent_volume_claim_disk_space
       horiz_scaling: "yes"
       quantile: max
@@ -1842,6 +1906,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: kube_persistent_volume_claim_inodes
       horiz_scaling: "yes"
       quantile: max
@@ -1849,6 +1914,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: kube_pool_cpu
       horiz_scaling: "yes"
       quantile: max
@@ -1856,6 +1922,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: memory
       horiz_scaling: "yes"
       quantile: max
@@ -1863,6 +1930,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: nat_gateway_port_allocation
       horiz_scaling: "no"
       quantile: max
@@ -1870,6 +1938,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: nat_host_port_allocation
       horiz_scaling: "no"
       quantile: max
@@ -1877,6 +1946,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: nf_conntrack_entries
       horiz_scaling: "yes"
       quantile: max
@@ -1884,6 +1954,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: node_schedstat_waiting
       horiz_scaling: "yes"
       quantile: max
@@ -1891,6 +1962,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: open_fds
       horiz_scaling: "yes"
       quantile: max
@@ -1898,6 +1970,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: pg_active_db_connections_primary
       horiz_scaling: "no"
       quantile: max
@@ -1905,6 +1978,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: pg_active_db_connections_replica
       horiz_scaling: "yes"
       quantile: max
@@ -1912,6 +1986,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: pg_btree_bloat
       horiz_scaling: "no"
       quantile: max
@@ -1919,6 +1994,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: pg_int4_id
       horiz_scaling: "no"
       quantile: max
@@ -1926,6 +2002,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: pg_table_bloat
       horiz_scaling: "no"
       quantile: max
@@ -1933,6 +2010,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: pg_txid_vacuum_to_wraparound
       horiz_scaling: "no"
       quantile: max
@@ -1940,6 +2018,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1w
       component: pg_vacuum_activity
       horiz_scaling: "yes"
       quantile: max
@@ -1947,6 +2026,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: pg_xid_wraparound
       horiz_scaling: "no"
       quantile: max
@@ -1954,6 +2034,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: pgbouncer_async_primary_pool
       horiz_scaling: "no"
       quantile: max
@@ -1961,6 +2042,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: pgbouncer_async_replica_pool
       horiz_scaling: "yes"
       quantile: max
@@ -1968,6 +2050,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: pgbouncer_client_conn_primary
       horiz_scaling: "yes"
       quantile: max
@@ -1975,6 +2058,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: pgbouncer_client_conn_replicas
       horiz_scaling: "yes"
       quantile: max
@@ -1982,6 +2066,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: pgbouncer_single_core
       horiz_scaling: "yes"
       quantile: max
@@ -1989,6 +2074,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: pgbouncer_sync_primary_pool
       horiz_scaling: "no"
       quantile: max
@@ -1996,6 +2082,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: pgbouncer_sync_replica_pool
       horiz_scaling: "yes"
       quantile: max
@@ -2003,13 +2090,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
-      component: praefect_cloudsql_cpu
-      horiz_scaling: "yes"
-      quantile: max
-      severity: s4
-    expr: "1"
-  - record: gitlab_component_saturation_info
-    labels:
+      capacity_planning_strategy: quantile95_1h
       component: private_runners
       horiz_scaling: "yes"
       quantile: max
@@ -2017,6 +2098,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: pvs_cloudrun_container_instances
       horiz_scaling: "yes"
       quantile: max
@@ -2024,6 +2106,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: rails_db_connection_pool
       horiz_scaling: "yes"
       quantile: max
@@ -2031,6 +2114,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: redis_clients
       horiz_scaling: "no"
       quantile: max
@@ -2038,6 +2122,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: redis_memory
       horiz_scaling: "no"
       quantile: max
@@ -2045,6 +2130,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: redis_memory_sessions
       horiz_scaling: "no"
       quantile: max
@@ -2052,6 +2138,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: redis_memory_tracechunks
       horiz_scaling: "no"
       quantile: max
@@ -2059,6 +2146,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: redis_primary_cpu
       horiz_scaling: "no"
       quantile: max
@@ -2066,6 +2154,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: redis_secondary_cpu
       horiz_scaling: "yes"
       quantile: max
@@ -2073,6 +2162,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: ruby_thread_contention
       horiz_scaling: "yes"
       quantile: "0.99"
@@ -2080,6 +2170,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: shard_cpu
       horiz_scaling: "yes"
       quantile: max
@@ -2087,6 +2178,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: shared_runners
       horiz_scaling: "yes"
       quantile: max
@@ -2094,6 +2186,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: shared_runners_gitlab
       horiz_scaling: "yes"
       quantile: max
@@ -2101,6 +2194,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: sidekiq_shard_workers
       horiz_scaling: "yes"
       quantile: max
@@ -2108,6 +2202,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: single_node_cpu
       horiz_scaling: "yes"
       quantile: max
@@ -2115,6 +2210,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: single_node_puma_workers
       horiz_scaling: "yes"
       quantile: max
@@ -2122,6 +2218,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: quantile95_1h
       component: workhorse_image_scaling
       horiz_scaling: "yes"
       quantile: max
@@ -2147,8 +2244,8 @@ groups:
     for: 5m
     annotations:
       title: The Cgroup Memory Utilization per Node resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -2193,9 +2290,126 @@ groups:
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
+      title: The CloudSQL CPU Utilization resource of the {{ $labels.type }} service
+        ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
+        its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the CloudSQL CPU Utilization resource:
+
+        CloudSQL CPU utilization.
+
+        See https://cloud.google.com/monitoring/api/metrics_gcp#gcp-cloudsql for more details
+      grafana_dashboard_id: alerts-sat_cloudsql_cpu
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_cloudsql_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3017284519"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, database_id) (
+          clamp_min(
+            clamp_max(
+              avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_cpu_utilization{environment="{{ $labels.environment }}"}[5m])
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+    expr: |
+      gitlab_component_saturation:ratio{component="cloudsql_cpu"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="cloudsql_cpu"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: The CloudSQL Disk Utilization resource of the {{ $labels.type }} service
+        ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
+        its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the CloudSQL Disk Utilization resource:
+
+        CloudSQL Disk utilization.
+
+        See https://cloud.google.com/monitoring/api/metrics_gcp#gcp-cloudsql for more details
+      grafana_dashboard_id: alerts-sat_cloudsql_disk
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_cloudsql_disk?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2351208402"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, database_id) (
+          clamp_min(
+            clamp_max(
+              avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_disk_utilization{environment="{{ $labels.environment }}"}[5m])
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+    expr: |
+      gitlab_component_saturation:ratio{component="cloudsql_disk"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="cloudsql_disk"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: The CloudSQL Memory Utilization resource of the {{ $labels.type }} service
+        ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
+        its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the CloudSQL Memory Utilization resource:
+
+        CloudSQL Memory utilization.
+
+        See https://cloud.google.com/monitoring/api/metrics_gcp#gcp-cloudsql for more details
+      grafana_dashboard_id: alerts-sat_cloudsql_memory
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_cloudsql_memory?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "395749012"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, database_id) (
+          clamp_min(
+            clamp_max(
+              avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_memory_utilization{environment="{{ $labels.environment }}"}[5m])
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+    expr: |
+      gitlab_component_saturation:ratio{component="cloudsql_memory"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="cloudsql_memory"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
       title: The Average Service CPU Utilization resource of the {{ $labels.type }}
-        service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        service ({{ $labels.stage }} stage) has a saturation exceeding SLO and is
+        close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -2233,8 +2447,8 @@ groups:
     for: 15m
     annotations:
       title: The Disk inode Utilization per Device per Node resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -2277,8 +2491,8 @@ groups:
     for: 15m
     annotations:
       title: The Disk Space Utilization per Device per Node resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -2297,7 +2511,7 @@ groups:
           clamp_min(
             clamp_max(
               (
-                1 - instance:node_filesystem_avail:ratio{fstype=~"ext.|xfs", fqdn!="", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+                1 - node_filesystem_avail_bytes{fstype=~"ext.|xfs", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} / node_filesystem_size_bytes{fstype=~"ext.|xfs", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
               )
               ,
               1)
@@ -2317,8 +2531,8 @@ groups:
     for: 25m
     annotations:
       title: The Disk Sustained Read IOPS Utilization per Node resource of the {{
-        $labels.type }} service ({{ $labels.stage }} stage), component has a saturation
-        exceeding SLO and is close to its capacity limit.
+        $labels.type }} service ({{ $labels.stage }} stage) has a saturation exceeding
+        SLO and is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -2356,8 +2570,8 @@ groups:
     for: 25m
     annotations:
       title: The Disk Sustained Read Throughput Utilization per Node resource of the
-        {{ $labels.type }} service ({{ $labels.stage }} stage), component has a saturation
-        exceeding SLO and is close to its capacity limit.
+        {{ $labels.type }} service ({{ $labels.stage }} stage) has a saturation exceeding
+        SLO and is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -2395,8 +2609,8 @@ groups:
     for: 25m
     annotations:
       title: The Disk Sustained Write IOPS Utilization per Node resource of the {{
-        $labels.type }} service ({{ $labels.stage }} stage), component has a saturation
-        exceeding SLO and is close to its capacity limit.
+        $labels.type }} service ({{ $labels.stage }} stage) has a saturation exceeding
+        SLO and is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -2438,8 +2652,8 @@ groups:
     for: 25m
     annotations:
       title: The Disk Sustained Write Throughput Utilization per Node resource of
-        the {{ $labels.type }} service ({{ $labels.stage }} stage), component has
-        a saturation exceeding SLO and is close to its capacity limit.
+        the {{ $labels.type }} service ({{ $labels.stage }} stage) has a saturation
+        exceeding SLO and is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -2481,8 +2695,8 @@ groups:
     for: 5m
     annotations:
       title: The Average CPU Utilization per Node resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -2522,8 +2736,8 @@ groups:
     for: 5m
     annotations:
       title: The Disk Utilization Overall resource of the {{ $labels.type }} service
-        ({{ $labels.stage }} stage), component has a saturation exceeding SLO and
-        is close to its capacity limit.
+        ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
+        its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -2565,8 +2779,8 @@ groups:
     for: 5m
     annotations:
       title: The JVM Heap Utilization per Node resource of the {{ $labels.type }}
-        service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        service ({{ $labels.stage }} stage) has a saturation exceeding SLO and is
+        close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -2604,8 +2818,8 @@ groups:
     for: 5m
     annotations:
       title: The Average CPU Utilization per Node resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -2643,8 +2857,8 @@ groups:
     for: 5m
     annotations:
       title: The Disk Utilization per Device per Node resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -2688,8 +2902,8 @@ groups:
     for: 5m
     annotations:
       title: The Thread pool utilization resource of the {{ $labels.type }} service
-        ({{ $labels.stage }} stage), component has a saturation exceeding SLO and
-        is close to its capacity limit.
+        ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
+        its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -2731,8 +2945,8 @@ groups:
     for: 15m
     annotations:
       title: The GCP Quota utilization per environment resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -2777,8 +2991,8 @@ groups:
     for: 5m
     annotations:
       title: The Gitaly Total Disk Utilization resource of the {{ $labels.type }}
-        service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        service ({{ $labels.stage }} stage) has a saturation exceeding SLO and is
+        close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -2826,8 +3040,8 @@ groups:
     for: 5m
     annotations:
       title: The Go Memory Utilization per Node resource of the {{ $labels.type }}
-        service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        service ({{ $labels.stage }} stage) has a saturation exceeding SLO and is
+        close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -2866,50 +3080,11 @@ groups:
       gitlab_component_saturation:ratio{component="go_memory"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="go_memory"}
   - alert: component_saturation_slo_out_of_bounds
-    for: 5m
-    annotations:
-      title: The Average CPU Utilization resource of the {{ $labels.type }} service
-        ({{ $labels.stage }} stage), component has a saturation exceeding SLO and
-        is close to its capacity limit.
-      description: |
-        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
-
-        Details of the Average CPU Utilization resource:
-
-        Average CPU utilization.
-
-        See https://cloud.google.com/monitoring/api/metrics_gcp#gcp-cloudsql for more details
-      grafana_dashboard_id: alerts-sat_grafana_cloudsql_cpu
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_grafana_cloudsql_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "123327851"
-      grafana_variables: environment,type,stage
-      promql_query: |
-        max by(environment, database_id) (
-          clamp_min(
-            clamp_max(
-              avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_cpu_utilization{database_id=~".+:grafana-(internal|pre)-.+", environment="{{ $labels.environment }}"}[5m])
-              ,
-              1)
-          ,
-          0)
-        )
-      runbook: docs/{{ $labels.type }}/README.md
-    labels:
-      alert_type: cause
-      rules_domain: general
-      severity: s4
-    expr: |
-      gitlab_component_saturation:ratio{component="grafana_cloudsql_cpu"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="grafana_cloudsql_cpu"}
-  - alert: component_saturation_slo_out_of_bounds
     for: 15m
     annotations:
       title: The Grafana Trickster cache usage resource of the {{ $labels.type }}
-        service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        service ({{ $labels.stage }} stage) has a saturation exceeding SLO and is
+        close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -2953,8 +3128,8 @@ groups:
     for: 15m
     annotations:
       title: The Kube Container CPU Utilization resource of the {{ $labels.type }}
-        service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        service ({{ $labels.stage }} stage) has a saturation exceeding SLO and is
+        close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -2998,8 +3173,8 @@ groups:
     for: 15m
     annotations:
       title: The Kube Container Memory Utilization resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -3037,8 +3212,8 @@ groups:
     for: 5m
     annotations:
       title: The Go Memory Utilization per Node resource of the {{ $labels.type }}
-        service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        service ({{ $labels.stage }} stage) has a saturation exceeding SLO and is
+        close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -3088,8 +3263,8 @@ groups:
     for: 25m
     annotations:
       title: The Horizontal Pod Autoscaler Desired Replicas resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -3130,8 +3305,8 @@ groups:
     for: 5m
     annotations:
       title: The Kube Persistent Volume Claim Space Utilisation resource of the {{
-        $labels.type }} service ({{ $labels.stage }} stage), component has a saturation
-        exceeding SLO and is close to its capacity limit.
+        $labels.type }} service ({{ $labels.stage }} stage) has a saturation exceeding
+        SLO and is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -3170,8 +3345,8 @@ groups:
     for: 5m
     annotations:
       title: The Kube Persistent Volume Claim inode Utilisation resource of the {{
-        $labels.type }} service ({{ $labels.stage }} stage), component has a saturation
-        exceeding SLO and is close to its capacity limit.
+        $labels.type }} service ({{ $labels.stage }} stage) has a saturation exceeding
+        SLO and is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -3210,8 +3385,8 @@ groups:
     for: 5m
     annotations:
       title: The Average Node Pool CPU Utilization resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -3251,8 +3426,8 @@ groups:
     for: 5m
     annotations:
       title: The Memory Utilization per Node resource of the {{ $labels.type }} service
-        ({{ $labels.stage }} stage), component has a saturation exceeding SLO and
-        is close to its capacity limit.
+        ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
+        its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -3270,7 +3445,7 @@ groups:
         max by(environment, tier, type, stage, fqdn) (
           clamp_min(
             clamp_max(
-              instance:node_memory_utilization:ratio{fqdn!="", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              instance:node_memory_utilization:ratio{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} or instance:node_memory_utilisation:ratio{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
               ,
               1)
           ,
@@ -3288,8 +3463,8 @@ groups:
     for: 5m
     annotations:
       title: The Cloud NAT Gateway Port Allocation resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -3346,8 +3521,8 @@ groups:
     for: 10m
     annotations:
       title: The Cloud NAT Host Port Allocation resource of the {{ $labels.type }}
-        service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        service ({{ $labels.stage }} stage) has a saturation exceeding SLO and is
+        close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -3407,8 +3582,8 @@ groups:
     for: 5m
     annotations:
       title: The conntrack Entries per Node resource of the {{ $labels.type }} service
-        ({{ $labels.stage }} stage), component has a saturation exceeding SLO and
-        is close to its capacity limit.
+        ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
+        its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -3448,8 +3623,8 @@ groups:
     for: 90m
     annotations:
       title: The Node Scheduler Waiting Time resource of the {{ $labels.type }} service
-        ({{ $labels.stage }} stage), component has a saturation exceeding SLO and
-        is close to its capacity limit.
+        ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
+        its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -3489,8 +3664,8 @@ groups:
     for: 5m
     annotations:
       title: The Open file descriptor utilization per instance resource of the {{
-        $labels.type }} service ({{ $labels.stage }} stage), component has a saturation
-        exceeding SLO and is close to its capacity limit.
+        $labels.type }} service ({{ $labels.stage }} stage) has a saturation exceeding
+        SLO and is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -3541,8 +3716,8 @@ groups:
     for: 5m
     annotations:
       title: The Active Primary DB Connection Utilization resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -3584,8 +3759,8 @@ groups:
     for: 5m
     annotations:
       title: The Active Secondary DB Connection Utilization resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -3627,8 +3802,8 @@ groups:
     for: 5m
     annotations:
       title: The Postgres btree bloat resource of the {{ $labels.type }} service ({{
-        $labels.stage }} stage), component has a saturation exceeding SLO and is close
-        to its capacity limit.
+        $labels.stage }} stage) has a saturation exceeding SLO and is close to its
+        capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -3668,8 +3843,8 @@ groups:
     for: 5m
     annotations:
       title: The Postgres int4 ID capacity resource of the {{ $labels.type }} service
-        ({{ $labels.stage }} stage), component has a saturation exceeding SLO and
-        is close to its capacity limit.
+        ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
+        its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -3710,8 +3885,8 @@ groups:
     for: 5m
     annotations:
       title: The Postgres Table Bloat resource of the {{ $labels.type }} service ({{
-        $labels.stage }} stage), component has a saturation exceeding SLO and is close
-        to its capacity limit.
+        $labels.stage }} stage) has a saturation exceeding SLO and is close to its
+        capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -3749,8 +3924,8 @@ groups:
     for: 5m
     annotations:
       title: The Total autovacuum time to TXID wraparound horizon resource of the
-        {{ $labels.type }} service ({{ $labels.stage }} stage), component has a saturation
-        exceeding SLO and is close to its capacity limit.
+        {{ $labels.type }} service ({{ $labels.stage }} stage) has a saturation exceeding
+        SLO and is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -3814,8 +3989,8 @@ groups:
     for: 60m
     annotations:
       title: The Postgres Autovacuum Activity resource of the {{ $labels.type }} service
-        ({{ $labels.stage }} stage), component has a saturation exceeding SLO and
-        is close to its capacity limit.
+        ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
+        its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -3873,8 +4048,8 @@ groups:
     for: 5m
     annotations:
       title: The Transaction ID Wraparound resource of the {{ $labels.type }} service
-        ({{ $labels.stage }} stage), component has a saturation exceeding SLO and
-        is close to its capacity limit.
+        ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
+        its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -3940,8 +4115,8 @@ groups:
     for: 10m
     annotations:
       title: The Postgres Async (Sidekiq) primary Connection Pool Utilization per
-        Node resource of the {{ $labels.type }} service ({{ $labels.stage }} stage),
-        component has a saturation exceeding SLO and is close to its capacity limit.
+        Node resource of the {{ $labels.type }} service ({{ $labels.stage }} stage)
+        has a saturation exceeding SLO and is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -3988,8 +4163,8 @@ groups:
     for: 10m
     annotations:
       title: The Postgres Async (Sidekiq) replica Connection Pool Utilization per
-        Node resource of the {{ $labels.type }} service ({{ $labels.stage }} stage),
-        component has a saturation exceeding SLO and is close to its capacity limit.
+        Node resource of the {{ $labels.type }} service ({{ $labels.stage }} stage)
+        has a saturation exceeding SLO and is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -4036,8 +4211,8 @@ groups:
     for: 5m
     annotations:
       title: The PGBouncer Client Connections per Process (Primary) resource of the
-        {{ $labels.type }} service ({{ $labels.stage }} stage), component has a saturation
-        exceeding SLO and is close to its capacity limit.
+        {{ $labels.type }} service ({{ $labels.stage }} stage) has a saturation exceeding
+        SLO and is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -4082,8 +4257,8 @@ groups:
     for: 5m
     annotations:
       title: The PGBouncer Client Connections per Process (Replicas) resource of the
-        {{ $labels.type }} service ({{ $labels.stage }} stage), component has a saturation
-        exceeding SLO and is close to its capacity limit.
+        {{ $labels.type }} service ({{ $labels.stage }} stage) has a saturation exceeding
+        SLO and is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -4128,8 +4303,8 @@ groups:
     for: 5m
     annotations:
       title: The PGBouncer Single Core per Node resource of the {{ $labels.type }}
-        service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        service ({{ $labels.stage }} stage) has a saturation exceeding SLO and is
+        close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -4172,8 +4347,8 @@ groups:
     for: 10m
     annotations:
       title: The Postgres Sync (Web/API/Git) primary Connection Pool Utilization per
-        Node resource of the {{ $labels.type }} service ({{ $labels.stage }} stage),
-        component has a saturation exceeding SLO and is close to its capacity limit.
+        Node resource of the {{ $labels.type }} service ({{ $labels.stage }} stage)
+        has a saturation exceeding SLO and is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -4222,8 +4397,8 @@ groups:
     for: 10m
     annotations:
       title: The Postgres Sync (Web/API/Git) replica Connection Pool Utilization per
-        Node resource of the {{ $labels.type }} service ({{ $labels.stage }} stage),
-        component has a saturation exceeding SLO and is close to its capacity limit.
+        Node resource of the {{ $labels.type }} service ({{ $labels.stage }} stage)
+        has a saturation exceeding SLO and is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -4271,48 +4446,9 @@ groups:
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
-      title: The Average CPU Utilization resource of the {{ $labels.type }} service
-        ({{ $labels.stage }} stage), component has a saturation exceeding SLO and
-        is close to its capacity limit.
-      description: |
-        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
-
-        Details of the Average CPU Utilization resource:
-
-        Average CPU utilization.
-
-        See https://cloud.google.com/monitoring/api/metrics_gcp#gcp-cloudsql for more details
-      grafana_dashboard_id: alerts-sat_praefect_cloudsql_cpu
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_praefect_cloudsql_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "3679713436"
-      grafana_variables: environment,type,stage
-      promql_query: |
-        max by(environment, database_id) (
-          clamp_min(
-            clamp_max(
-              avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_cpu_utilization{database_id=~".+:praefect-db.+", environment="{{ $labels.environment }}"}[5m])
-              ,
-              1)
-          ,
-          0)
-        )
-      runbook: docs/{{ $labels.type }}/README.md
-    labels:
-      alert_type: cause
-      rules_domain: general
-      severity: s4
-    expr: |
-      gitlab_component_saturation:ratio{component="praefect_cloudsql_cpu"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="praefect_cloudsql_cpu"}
-  - alert: component_saturation_slo_out_of_bounds
-    for: 5m
-    annotations:
       title: The Private Runners utilization resource of the {{ $labels.type }} service
-        ({{ $labels.stage }} stage), component has a saturation exceeding SLO and
-        is close to its capacity limit.
+        ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
+        its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -4356,8 +4492,8 @@ groups:
     for: 5m
     annotations:
       title: The Cloud Run Container Instance Utilization resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -4402,8 +4538,8 @@ groups:
     for: 15m
     annotations:
       title: The Rails DB Connection Pool Utilization resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -4449,8 +4585,8 @@ groups:
     for: 5m
     annotations:
       title: The Redis Client Utilization per Node resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -4492,8 +4628,8 @@ groups:
     for: 5m
     annotations:
       title: The Redis Memory Utilization per Node resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -4544,8 +4680,8 @@ groups:
     for: 5m
     annotations:
       title: The Redis Memory Utilization of Max Memory resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -4592,8 +4728,8 @@ groups:
     for: 5m
     annotations:
       title: The Redis Memory Utilization per Node resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -4644,8 +4780,8 @@ groups:
     for: 5m
     annotations:
       title: The Redis Primary CPU Utilization per Node resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -4688,8 +4824,8 @@ groups:
     for: 5m
     annotations:
       title: The Redis Secondary CPU Utilization per Node resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -4732,8 +4868,8 @@ groups:
     for: 5m
     annotations:
       title: The Ruby Thread Contention resource of the {{ $labels.type }} service
-        ({{ $labels.stage }} stage), component has a saturation exceeding SLO and
-        is close to its capacity limit.
+        ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
+        its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -4774,8 +4910,8 @@ groups:
     for: 5m
     annotations:
       title: The Average CPU Utilization per Shard resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -4813,8 +4949,8 @@ groups:
     for: 5m
     annotations:
       title: The Shared Runner utilization resource of the {{ $labels.type }} service
-        ({{ $labels.stage }} stage), component has a saturation exceeding SLO and
-        is close to its capacity limit.
+        ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
+        its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -4858,8 +4994,8 @@ groups:
     for: 5m
     annotations:
       title: The Shared Runner GitLab Utilization resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -4903,8 +5039,8 @@ groups:
     for: 10m
     annotations:
       title: The Sidekiq Worker Utilization per shard resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -4950,8 +5086,8 @@ groups:
     for: 10m
     annotations:
       title: The Average CPU Utilization per Node resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -4959,7 +5095,7 @@ groups:
 
         Average CPU utilization per Node.
 
-        If average CPU is satured, it may indicate that a fleet is in need to horizontal or vertical scaling. It may also indicate imbalances in load in a fleet.
+        If average CPU is saturated, it may indicate that a fleet is in need to horizontal or vertical scaling. It may also indicate imbalances in load in a fleet.
       grafana_dashboard_id: alerts-sat_single_node_cpu
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_single_node_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
@@ -4971,7 +5107,7 @@ groups:
         max by(environment, tier, type, stage, fqdn) (
           clamp_min(
             clamp_max(
-              avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{fqdn!="", mode="idle", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m]))
+              avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{mode="idle", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m]))
               ,
               1)
           ,
@@ -4989,8 +5125,8 @@ groups:
     for: 5m
     annotations:
       title: The Puma Worker Saturation per Node resource of the {{ $labels.type }}
-        service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        service ({{ $labels.stage }} stage) has a saturation exceeding SLO and is
+        close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
@@ -5033,8 +5169,8 @@ groups:
     for: 15m
     annotations:
       title: The Workhorse Image Scaler Exhaustion per Node resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage), component has a saturation exceeding
-        SLO and is close to its capacity limit.
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 

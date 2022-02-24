@@ -478,7 +478,7 @@ services:
   observability:
     monitors:
       grafana_folder:
-      primary_grafana_dashboard: https://dashboards.gitlab.net/d/bd2Kl9Imk/host-stats?orgId=1&var-environment=ops&var-node=forum.gitlab.com
+      primary_grafana_dashboard: "bd2Kl9Imk/host-stats?orgId=1&var-environment=ops&var-node=forum.gitlab.com"
       sentry_slug:
 
 - name: kube
@@ -1305,7 +1305,7 @@ services:
     error_budget: https://docs.google.com/spreadsheets/d/1wkK2n5EAvoVXwQZrVoCDsvkYTb1BftL56EzsFW_IA-w/edit
   observability:
     monitors:
-      primary_grafana_dashboard: https://dashboards.gitlab.net/d/mailroom-main/mailroom-overview
+      primary_grafana_dashboard: "mailroom-main/mailroom-overview"
       sentry_slug:
 
 - name: pages
@@ -3195,7 +3195,7 @@ services:
       team:
   observability:
     monitors:
-      primary_grafana_dashboard: https://dashboards.gitlab.net/d/USVj3qHmk/logging
+      primary_grafana_dashboard: "USVj3qHmk/logging"
       sentry_slug:
     alerts:
       - alert_link:
@@ -3635,6 +3635,7 @@ services:
   observability:
     monitors:
       primary_grafana_dashboard: "kas/kas"
+
 - name: websockets
   tier: sv
   friendly_name: Websockets
@@ -3694,3 +3695,49 @@ services:
   observability:
     monitors:
       primary_grafana_dashboard: "websockets/websockets"
+
+- name: cloud-sql
+  tier: inf
+  friendly_name: Google Cloud SQL
+  label: Service:CloudSQL
+  business:
+    requirement: |
+      Provides fully managed PostgreSQL for GitLab's service fleet.
+    customers:
+      - GitLab.com customers
+      - GitLab Employees
+    business_value: |
+      Provides fully managed PostgreSQL for GitLab's service fleet.
+    SLA:
+      availability:
+      response_time:
+  technical:
+    project:
+    slx:
+    documents:
+      design: "https://cloud.google.com/sql/docs/features#postgres"
+      architecture:
+      readiness_review:
+      service:
+      security:
+    security:
+      security_reviewed:
+      data_classification: red
+      security_incidents:
+    logging:
+      - name: Cloud SQL logs
+        permalink: https://cloudlogging.app.goo.gl/uJN6NWcjtK8mwaN89
+  infrastructure:
+    provider: gcp
+    architecture:
+    provisioning: terraform
+  operations:
+    maintenance:
+    runbooks:
+      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/cloud-sql/cloud-sql.md
+    playbooks:
+    error_budget:
+  observability:
+    monitors:
+      grafana_folder: cloud-sql
+      primary_grafana_dashboard: cloud-sql-main/cloud-sql-overview

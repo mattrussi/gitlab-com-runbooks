@@ -63,8 +63,14 @@ local headlineMetricsRow(
 
 local overviewDashboard(
   type,
-  environmentSelectorHash,
-  saturationEnvironmentSelectorHash
+  title='Overview',
+  uid=null,
+  environmentSelectorHash=defaultEnvironmentSelector,
+  saturationEnvironmentSelectorHash=defaultEnvironmentSelector,
+
+  // Features
+  showProvisioningDetails=true,
+  showSystemDiagrams=true,
       ) =
 
   local metricsCatalogServiceInfo = metricsCatalog.getService(type);
@@ -81,8 +87,9 @@ local overviewDashboard(
 
   local dashboard =
     basic.dashboard(
-      'Overview',
-      tags=['type:' + type, type, 'service overview'],
+      title,
+      uid=uid,
+      tags=['gitlab', 'type:' + type, type, 'service overview'],
       includeEnvironmentTemplate=std.objectHas(environmentStageSelectorHash, 'environment'),
     )
     .addPanels(
@@ -106,37 +113,35 @@ local overviewDashboard(
     .addPanels(
       metricsCatalogDashboards.autoDetailRows(type, selectorHash, startRow=100)
     )
-    .addPanels(
-      if metricsCatalogServiceInfo.getProvisioning().vms == true then
-        [
-          nodeMetrics.nodeMetricsDetailRow(selectorHash) {
-            gridPos: {
-              x: 0,
-              y: 300,
-              w: 24,
-              h: 1,
-            },
+    .addPanelsIf(
+      showProvisioningDetails && metricsCatalogServiceInfo.getProvisioning().vms == true,
+      [
+        nodeMetrics.nodeMetricsDetailRow(selectorHash) {
+          gridPos: {
+            x: 0,
+            y: 300,
+            w: 24,
+            h: 1,
           },
-        ] else []
+        },
+      ]
     )
-    .addPanels(
-      if metricsCatalogServiceInfo.getProvisioning().kubernetes == true then
-        [
-          row.new(title='☸️ Kubernetes Overview', collapse=true)
-          .addPanels(kubeServiceDashboards.deploymentOverview(type, environmentSelectorHash, startRow=1)) +
-          { gridPos: { x: 0, y: 400, w: 24, h: 1 } },
-        ]
-      else [],
+    .addPanelsIf(
+      showProvisioningDetails && metricsCatalogServiceInfo.getProvisioning().kubernetes == true,
+      [
+        row.new(title='☸️ Kubernetes Overview', collapse=true)
+        .addPanels(kubeServiceDashboards.deploymentOverview(type, environmentSelectorHash, startRow=1)) +
+        { gridPos: { x: 0, y: 400, w: 24, h: 1 } },
+      ]
     )
-    .addPanels(
-      if std.length(saturationComponents) > 0 then
-        [
-          // saturationSelector is env + type + stage
-          local saturationSelector = saturationEnvironmentSelectorHash + stageLabels + { type: type };
-          saturationDetail.saturationDetailPanels(saturationSelector, components=saturationComponents)
-          { gridPos: { x: 0, y: 500, w: 24, h: 1 } },
-        ]
-      else []
+    .addPanelsIf(
+      std.length(saturationComponents) > 0,
+      [
+        // saturationSelector is env + type + stage
+        local saturationSelector = saturationEnvironmentSelectorHash + stageLabels + { type: type };
+        saturationDetail.saturationDetailPanels(saturationSelector, components=saturationComponents)
+        { gridPos: { x: 0, y: 500, w: 24, h: 1 } },
+      ]
     );
 
   // Optionally add the stage variable
@@ -150,7 +155,8 @@ local overviewDashboard(
   {
     overviewTrailer()::
       self
-      .addPanel(
+      .addPanelIf(
+        showSystemDiagrams,
         systemDiagramPanel.systemDiagramRowForService(type),
         gridPos={ x: 0, y: 100010 }
       )
@@ -168,14 +174,5 @@ local overviewDashboard(
 
 
 {
-  overview(
-    type,
-    environmentSelectorHash=defaultEnvironmentSelector,
-    saturationEnvironmentSelectorHash=defaultEnvironmentSelector
-  )::
-    overviewDashboard(
-      type,
-      environmentSelectorHash=environmentSelectorHash,
-      saturationEnvironmentSelectorHash=saturationEnvironmentSelectorHash
-    ),
+  overview:: overviewDashboard,
 }

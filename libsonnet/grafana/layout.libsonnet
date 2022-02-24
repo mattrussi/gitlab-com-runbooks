@@ -48,6 +48,8 @@ local titleRowWithPanels(title, panels, collapse, startRow) =
     local panelRow = self.singleRow(panels, rowHeight=rowHeight, startRow=(startRow + 1));
     titleRowWithPanels(rowTitle, panelRow, collapse, startRow),
 
+  titleRowWithPanels:: titleRowWithPanels,
+
   // Rows -> array of arrays. Each outer array is a row.
   rows(rowsOfPanels, rowHeight=10, startRow=0)::
     std.flattenArrays(

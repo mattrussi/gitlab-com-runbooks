@@ -2,6 +2,7 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local haproxyComponents = import './lib/haproxy_components.libsonnet';
+local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 
 metricsCatalog.serviceDefinition({
   type: 'websockets',
@@ -27,6 +28,17 @@ metricsCatalog.serviceDefinition({
     kubernetes: true,
   },
   regional: true,
+  kubeConfig: {
+    labelSelectors: kubeLabelSelectors(
+      ingressSelector=null,  // Websockets does not have its own ingress
+      nodeSelector={ type: 'websockets' },
+
+      // TODO: websockets nodes do not present a stage label at present
+      // See https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2245
+      // We hard-code to main for now
+      nodeStaticLabels={ stage: 'main' },
+    ),
+  },
   kubeResources: {
     websockets: {
       kind: 'Deployment',

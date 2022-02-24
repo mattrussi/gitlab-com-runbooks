@@ -2,6 +2,7 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
+local haproxyComponents = import './lib/haproxy_components.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'ci-runners',
@@ -24,6 +25,14 @@ metricsCatalog.serviceDefinition({
     api: true,
   },
   serviceLevelIndicators: {
+    loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
+      userImpacting=true,
+      featureCategory='runner',
+      selector={ type: 'ci' },
+      stageMappings={
+        main: { backends: ['https_git', 'api', 'ci_gateway_catch_all'], toolingLinks: [] },
+      },
+    ),
     polling: {
       userImpacting: true,
       featureCategory: 'runner',
@@ -81,7 +90,7 @@ metricsCatalog.serviceDefinition({
 
       apdex: histogramApdex(
         histogram='job_queue_duration_seconds_bucket',
-        selector='shared_runner="true", jobs_running_for_project=~"^(0|1|2|3|4)$"',
+        selector={ shared_runner: 'true', jobs_running_for_project: { re: '^(0|1|2|3|4)$' } },
         satisfiedThreshold=60,
       ),
 
@@ -152,7 +161,7 @@ metricsCatalog.serviceDefinition({
 
       requestRate: rateMetric(
         counter='sidekiq_jobs_completion_seconds_count',
-        selector='worker="Ci::ArchiveTraceWorker"'
+        selector={ worker: 'Ci::ArchiveTraceWorker' }
       ),
 
       errorRate: rateMetric(

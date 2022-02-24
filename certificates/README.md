@@ -175,6 +175,7 @@ By editing list inside `prometheus.jobs.blackbox-ssl.target` attribute in the ro
 | swedish.chef.gitlab.com | COMODO RSA Domain Validation Secure Server CA | Chef server, that hosts some remains of GitHost.io | [Chef Server][cs] | Could not be validated, due to lack of access. |
 | user-content.staging.gitlab-static.net | Sectigo ECC Domain Validation Secure Server CA | | [GCP Load Balancer][gcp] | project: `gitlab-production` |
 | version.gitlab.com | Sectigo RSA Domain Validation Secure Server CA | | [Chef Vault][cv] | data bag: `version-gitlab-com`, item: `_default`, fields: `ssl_certificate`, `ssl_key` |
+| *.ci-gateway.int.gstg.gitlab.net | Sectigo RSA Domain Validation Secure Server CA | | [GKMS][gkms] | GKMS item: `frontend-loadbalancer gstg`, fields: `gitlab-haproxy.ssl.ci_gateway_crt`,  `gitlab-haproxy.ssl.ci_gateway_key`;  project: `gitlab-staging-1` |
 | *.gitlab.io | C=BE, O=GlobalSign nv-sa, CN=AlphaSSL CA - SHA256 - G2 | GitLab pages | [GKMS][gkms] | item: `gitlab-omnibus-secrets gprd`, fields: `omnibus-gitlab.ssl.pages_certificate`,  `omnibus-gitlab.ssl.pages_private_key` |
 | *.gitter.im | COMODO RSA Domain Validation Secure Server CA | gitter.im | [Gitter.im][gitter] ||
 | *.gprd.gitlab.net | Sectigo RSA Domain Validation Secure Server CA | | [GCP Load Balancer][gcp] & [GKMS][gkms] | GKMS item: `frontend-loadbalancer gprd`, fields: `gitlab-haproxy.ssl.internal_crt`,  `gitlab-haproxy.ssl.internal_key`;  project: `gitlab-production` |

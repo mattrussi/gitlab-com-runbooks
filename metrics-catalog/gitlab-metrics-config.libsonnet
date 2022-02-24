@@ -3,6 +3,7 @@ local allSaturationTypes = import './saturation/all.libsonnet';
 local allServices = import './services/all.jsonnet';
 local allUtilizationMetrics = import './utilization/all.libsonnet';
 local objects = import 'utils/objects.libsonnet';
+local labelSet = (import 'label-taxonomy/label-set.libsonnet');
 
 // Site-wide configuration options
 {
@@ -21,9 +22,7 @@ local objects = import 'utils/objects.libsonnet';
   // Hash of all utilization metric types that are monitored on gitlab.com
   utilizationMonitoring:: objects.mergeAll(allUtilizationMetrics),
 
-  // service_catalog.json is stored in the `services` directory
-  // alongside service_catalog.yml
-  serviceCatalog:: import 'service_catalog.json',
+  serviceCatalog:: (import 'service-catalog.jsonnet'),
 
   // stage-group-mapping.jsonnet is generated file, stored in the `services` directory
   stageGroupMapping:: import 'stage-group-mapping.jsonnet',
@@ -36,4 +35,14 @@ local objects = import 'utils/objects.libsonnet';
 
   // Name of the default Prometheus datasource to use
   defaultPrometheusDatasource: 'Global',
+
+  labelTaxonomy:: labelSet.makeLabelSet({
+    environmentThanos: 'env',
+    environment: 'environment',
+    tier: 'tier',
+    service: 'type',
+    stage: 'stage',
+    shard: 'shard',
+    node: 'fqdn',
+  }),
 }

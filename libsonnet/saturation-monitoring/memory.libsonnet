@@ -1,5 +1,6 @@
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_point.libsonnet').resourceSaturationPoint;
+local labelTaxonomy = import 'label-taxonomy/label-taxonomy.libsonnet';
 
 {
   memory: resourceSaturationPoint({
@@ -11,10 +12,10 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
       Memory utilization per device per node.
     |||,
     grafana_dashboard_uid: 'sat_memory',
-    resourceLabels: ['fqdn'],
+    resourceLabels: [labelTaxonomy.getLabelFor(labelTaxonomy.labels.node)],
     // Filter out fqdn nodes as these could be CI runners
     query: |||
-      instance:node_memory_utilization:ratio{fqdn!="", %(selector)s}
+      instance:node_memory_utilization:ratio{%(selector)s} or instance:node_memory_utilisation:ratio{%(selector)s}
     |||,
     slos: {
       soft: 0.90,
