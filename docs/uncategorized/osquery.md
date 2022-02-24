@@ -120,7 +120,7 @@ $ service osqueryd status
 
 # Links to further Documentation
 
-* [gitlab-osquery](https://gitlab.com/gitlab-cookbooks/gitlab-osquery)
+
 * [OSQuery | InfraSec Wiki](https://gitlab.com/groups/gitlab-com/gl-security/security-operations/infrastructure-security/-/wikis/Tooling/OSQuery)
 * [Main OSQuery cookbook](https://supermarket.chef.io/cookbooks/osquery)
 * [Palantir's OSQuery Configuration](https://github.com/palantir/osquery-configuration)
