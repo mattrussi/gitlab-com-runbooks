@@ -400,3 +400,19 @@ groups:
 
         If this alert happens frequently, we may need to increase the postgres setting max_locks_per_transaction.
       title: Too many locks acquired
+  - alert: PostgreSQL_QueriesDominatingTotalQueryTime
+    expr: >
+      sum(
+        topk(3, sum without(fqdn, instance, server) (rate(pg_stat_statements_seconds_total{type=~"patroni|postgres", shard="default", user="gitlab"}[10m]))
+        /
+        ignoring(queryid) group_left() sum without(fqdn, instance, server, queryid) (rate(pg_stat_statements_seconds_total{type=~"patroni|postgres", shard="default", user="gitlab"}[10m])))
+      ) > 0.5
+    for: 5m
+    labels:
+      pager: pagerduty
+      severity: s2
+      alert_type: cause
+    annotations:
+      title: PostgreSQL queries dominating total query time
+      description: The top 3 PostgreSQL queries are dominating the total query time (> 50%).
+      runbook: docs/patroni/rails-sql-apdex-slow.md
