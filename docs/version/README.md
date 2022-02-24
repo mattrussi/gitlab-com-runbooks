@@ -42,6 +42,7 @@
 * [../patroni/postgres-checkup.md](../patroni/postgres-checkup.md)
 * [postgres_exporter](../patroni/postgres_exporter.md)
 * [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
+* [PostgreSQL VACUUM](../patroni/postgresql-vacuum.md)
 * [../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md](../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md)
 * [Postgres Replicas](../postgres-dr-delayed/postgres-dr-replicas.md)
 * [Praefect has read-only repositories](../praefect/praefect-read-only.md)

@@ -28,6 +28,7 @@
 * [Determine The GitLab Project Associated with a Domain](pages-domain-lookup.md)
 * [Troubleshooting LetsEncrypt for Pages](pages-letsencrypt.md)
 * [Pg_repack using gitlab-pgrepack](../patroni/pg_repack.md)
+* [PostgreSQL VACUUM](../patroni/postgresql-vacuum.md)
 * [Deploy Cmd for Chatops](../uncategorized/deploycmd.md)
 <!-- END_MARKER -->
 

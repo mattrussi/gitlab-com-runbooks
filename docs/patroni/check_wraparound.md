@@ -3,7 +3,7 @@
 Here the link to the video of the [runbook simulation](https://youtu.be/lR-yjLbRrmk).
 
 ## Intro
-The autovacuum process executes a "special" maintenance task called **[to prevent wraparound](https://www.postgresql.org/docs/11/routine-vacuuming.html#VACUUM-FOR-WRAPAROUND)** or **[wraparound protection](https://www.postgresql.org/docs/11/routine-vacuuming.html#VACUUM-FOR-WRAPAROUND)** on tables that the TXID reaches the [autovacuum_freeze_max_age](https://postgresqlco.nf/en/doc/param/autovacuum_freeze_max_age/). Sometimes this activity can be annoying in a high workload on the database server due to the expense of consuming additional resources. A manual `frozen vacuum` command helps avoid this "situation", but running `frozen vacuum` on the entire database can slow down the database server, hence the importance of monitoring and executing it by table(especially on big tables) it is a smart decision
+The autovacuum process executes a "special" maintenance task called **[to prevent wraparound](https://www.postgresql.org/docs/11/routine-vacuuming.html#VACUUM-FOR-WRAPAROUND)** or **[wraparound protection](https://www.postgresql.org/docs/11/routine-vacuuming.html#VACUUM-FOR-WRAPAROUND)** on tables that the TXID reaches the [autovacuum_freeze_max_age](https://postgresqlco.nf/en/doc/param/autovacuum_freeze_max_age/). Sometimes this activity can be annoying in a high workload on the database server due to the expense of consuming additional resources. A manual `VACUUM FREEZE` command helps avoid this "situation", but running `VACUUM FREEZE` on the entire database can slow down the database server, hence the importance of monitoring and executing it by table(especially on big tables) is a smart decision.
 
 
 ## Verify the status wraparound on each table in GitLab
@@ -54,7 +54,7 @@ The previous query filter the tables bigger than 10GB and more than 95% of freez
 To execute the `FREEZE` maintenance task you can get the commands from the following query:
 
 ```
-sh wraparound.sh -p 95 -m  generate -s 10000000000
+sh wraparound.sh -p 95 -m generate -s 10000000000
 ```
 
 The previous query returns the `FREEZE` commands for maintenance (can filter by tablename)
@@ -86,4 +86,3 @@ VACUUM
 
 
 Please, when executing these commands see the [dashboard](https://dashboards.gitlab.net/d/patroni-main/patroni-overview?orgId=1) to monitoring patroni
-
