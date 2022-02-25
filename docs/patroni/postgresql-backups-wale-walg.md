@@ -286,24 +286,25 @@ current chef configuration.
 
 ## Troubleshooting
 **NB: the document below is slightly outdated, refering WAL-E, but in general, WAL-E instructions are relevalt to WAL-G**
+
 **TODO: update it**
 
-### How to Check if WAL-E Backups are Running
+### How to Check if WAL-G Backups are Running
 
-#### Daily backups ("base backups" or "backup-push")
+#### Daily backups ("base backups" or "wal-g_backup_push")
 
-You can check WAL-E `backup-push` in several ways:
+You can check WAL-G `backup-push` in several ways:
 
 1. Metric (injected via prometheus push-gateway from the backup script):
 [gitlab_com:last_wale_successful_basebackup_age_in_hours](https://thanos.gitlab.net/graph?g0.range_input=1d&g0.max_source_resolution=0s&g0.expr=gitlab_com%3Alast_wale_successful_basebackup_age_in_hours&g0.tab=0)
 1. using Kibana (not valid anymore as wal-g logs are not yet shipped): <!-- TODO: implement redirect of wal-g output to syslog similar to https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10499 -->
   - [`log.gprd.gitlab.net`](https://log.gprd.gitlab.net)
   - index: `pubsub-system-inf-gprd`
-  - document field: `json.ident` with value `wal_e.worker.upload`
+  - document field: `json.ident` with value `wal_g.worker.upload`
 1. by logging directly into the VM:
   - ssh to the patroni master
-  - logs are located in `/var/log/wal-e/wal-e_backup_push.log`, the file is
-    under rotation, so check also `/var/log/wal-e/wal-e_backup_push.log.1`, etc
+  - logs are located in `/var/log/wal-g/wal-g_backup_push.log`, the file is
+    under rotation, so check also `/var/log/wal-g/wal-g_backup_push.log.1`, etc
  
 
 `backup-push` on the primary: example of log entries on the primary working
