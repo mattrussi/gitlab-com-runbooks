@@ -17,6 +17,8 @@
 
 ## Troubleshooting Pointers
 
+* [How to connect to a Database console using Teleport](../Teleport/Connect_to_Database_Console_via_Teleport.md)
+* [How to connect to a Rails Console using Teleport](../Teleport/Connect_to_Rails_Console_via_Teleport.md)
 * [Teleport Approver Workflow](../Teleport/teleport_approval_workflow.md)
 * [../ci-runners/service-ci-runners.md](../ci-runners/service-ci-runners.md)
 * [Cloudflare: Managing Traffic](../cloudflare/managing-traffic.md)
