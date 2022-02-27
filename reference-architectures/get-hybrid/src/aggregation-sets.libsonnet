@@ -43,4 +43,28 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     // Only include components (SLIs) with service_aggregation="yes"
     aggregationFilter: 'service',
   }),
+
+  /* Note that queue SLIs do not have error rates */
+  sidekiqWorkerQueueSourceSLIs: aggregationSet.AggregationSet({
+    id: 'sidekiq_queue',
+    name: 'Sidekiq queue source metrics per worker source aggregation',
+    intermediateSource: true,
+    selector: { monitor: { ne: 'global' } },
+    labels: [
+      'environment',
+      'tier',
+      'type',
+      'stage',
+      'shard',
+      'queue',
+      'feature_category',
+      'urgency',
+      'worker',
+    ],
+    metricFormats: {
+      apdexSuccessRate: 'gitlab_background_jobs:queue:apdex:success:rate_%s',
+      apdexWeight: 'gitlab_background_jobs:queue:apdex:weight:score_%s',
+      opsRate: 'gitlab_background_jobs:queue:ops:rate_%s',
+    },
+  }),
 }
