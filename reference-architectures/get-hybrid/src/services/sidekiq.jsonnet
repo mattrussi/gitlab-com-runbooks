@@ -206,7 +206,7 @@ metricsCatalog.serviceDefinition({
     email_receiver: {
       userImpacting: true,
       severity: 's3',
-      featureCategory: 'service_desk',
+      featureCategory: 'not_owned',
       team: 'certify',
       description: |||
         Monitors ratio between all received emails and received emails which
