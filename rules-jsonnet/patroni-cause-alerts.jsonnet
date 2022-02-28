@@ -1,5 +1,6 @@
 local alerts = import 'alerts/alerts.libsonnet';
 local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libsonnet';
+local matching = import 'elasticlinkbuilder/matching.libsonnet';
 local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 
@@ -39,12 +40,12 @@ local hotspotTupleAlert(alertName, periodFor, warning, replica) =
   local aggregationLabels = if replica then aggregationLabelsForReplicas else aggregationLabelsForPrimary;
 
   local elasticFilters = [
-    elasticsearchLinks.matchFilter('json.sql', '{{$labels.relname}}'),
+    matching.matchFilter('json.sql', '{{$labels.relname}}'),
   ] + (
     if replica then
       []
     else
-      [elasticsearchLinks.matchFilter('json.fqdn', '{{$labels.fqdn}}')]
+      [matching.matchFilter('json.fqdn', '{{$labels.fqdn}}')]
   );
 
 

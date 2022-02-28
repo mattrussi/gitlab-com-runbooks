@@ -1,5 +1,6 @@
 local toolingLinkDefinition = (import './tooling_link_definition.libsonnet').toolingLinkDefinition({ tool:: 'kibana', type:: 'log' });
 local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libsonnet';
+local matching = import 'elasticlinkbuilder/matching.libsonnet';
 
 {
   kibana(
@@ -24,31 +25,31 @@ local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libson
           if type == null then
             []
           else
-            [elasticsearchLinks.matchFilter('json.type.keyword', type)]
+            [matching.matchFilter('json.type.keyword', type)]
         )
         +
         (
           if tag == null then
             []
           else
-            [elasticsearchLinks.matchFilter('json.tag.keyword', tag)]
+            [matching.matchFilter('json.tag.keyword', tag)]
         )
         +
         (
           if shard == null then
             []
           else
-            [elasticsearchLinks.matchFilter('json.shard.keyword', shard)]
+            [matching.matchFilter('json.shard.keyword', shard)]
         )
         +
         (
           if message == null then
             []
           else
-            [elasticsearchLinks.matchFilter('json.message.keyword', message)]
+            [matching.matchFilter('json.message.keyword', message)]
         )
         +
-        elasticsearchLinks.matchers(matches)
+        matching.matchers(matches)
         +
         (
           if includeMatchersForPrometheusSelector then

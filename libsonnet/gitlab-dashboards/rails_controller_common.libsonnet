@@ -1,4 +1,5 @@
 local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libsonnet';
+local matching = import 'elasticlinkbuilder/matching.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local toolingLinkDefinition = (import 'toolinglinks/tooling_link_definition.libsonnet').toolingLinkDefinition();
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
@@ -12,8 +13,8 @@ local elasticsearchLogSearchDataLink(type) = {
   url: elasticsearchLinks.buildElasticDiscoverSearchQueryURL(
     'rails',
     [
-      elasticsearchLinks.matchFilter('json.type.keyword', type),
-      elasticsearchLinks.matchFilter('json.controller.keyword', '$controller'),
+      matching.matchFilter('json.type.keyword', type),
+      matching.matchFilter('json.controller.keyword', '$controller'),
     ],
     ['json.action.keyword:${action:lucene}']
   ),
@@ -24,8 +25,8 @@ local elasticsearchLogSearchDataLink(type) = {
 local elasticsearchExternalHTTPLink(type) = function(options)
   [
     local filters = [
-      elasticsearchLinks.matchFilter('json.type', type),
-      elasticsearchLinks.existsFilter('json.external_http_count'),
+      matching.matchFilter('json.type', type),
+      matching.existsFilter('json.external_http_count'),
     ];
     toolingLinkDefinition({
       title: '📖 Kibana: External HTTP logs',
