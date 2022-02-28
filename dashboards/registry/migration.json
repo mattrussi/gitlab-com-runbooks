@@ -13,6 +13,15 @@
           "deploy",
           "$environment"
         ],
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [
+            "deploy",
+            "$environment"
+          ],
+          "type": "tags"
+        },
         "type": "tags"
       },
       {
@@ -27,6 +36,15 @@
           "deploy",
           "${environment}-cny"
         ],
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [
+            "deploy",
+            "${environment}-cny"
+          ],
+          "type": "tags"
+        },
         "type": "tags"
       },
       {
@@ -41,16 +59,25 @@
           "feature-flag",
           "${environment}"
         ],
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [
+            "feature-flag",
+            "${environment}"
+          ],
+          "type": "tags"
+        },
         "type": "tags"
       }
     ]
   },
-  "description": "Uploaded by https://gitlab.com/gitlab-com/runbooks/-/jobs/1640889972 at Fri Oct  1 10:15:55 UTC 2021",
+  "description": "Uploaded by https://gitlab.com/gitlab-com/runbooks/-/jobs/2132083598 at Thu Feb 24 11:16:13 UTC 2022",
   "editable": true,
-  "gnetId": null,
+  "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
   "id": null,
-  "iteration": 1633353961852,
+  "iteration": 1646045130839,
   "links": [
     {
       "asDropdown": true,
@@ -137,11 +164,11 @@
       "url": ""
     }
   ],
+  "liveNow": false,
   "panels": [
     {
       "collapse": true,
       "collapsed": false,
-      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -150,7 +177,7 @@
       },
       "id": 93,
       "panels": [],
-      "title": "Phase 1 Progress",
+      "title": "General Progress",
       "type": "row"
     },
     {
@@ -158,14 +185,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
       "description": "Number of top-level namespaces registered in the metadata database.",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
-        "overrides": []
-      },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -192,7 +212,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "8.4.1",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -209,9 +229,7 @@
         }
       ],
       "thresholds": [],
-      "timeFrom": null,
       "timeRegions": [],
-      "timeShift": null,
       "title": "Top-level namespaces",
       "tooltip": {
         "shared": true,
@@ -220,9 +238,7 @@
       },
       "type": "graph",
       "xaxis": {
-        "buckets": null,
         "mode": "time",
-        "name": null,
         "show": true,
         "values": []
       },
@@ -230,25 +246,18 @@
         {
           "$$hashKey": "object:277",
           "format": "short",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         },
         {
           "$$hashKey": "object:278",
           "format": "short",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         }
       ],
       "yaxis": {
-        "align": false,
-        "alignLevel": null
+        "align": false
       }
     },
     {
@@ -256,14 +265,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
       "description": "Number of repositories registered in the metadata database. Not available in production.",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
-        "overrides": []
-      },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -290,7 +292,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "8.4.1",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -307,9 +309,7 @@
         }
       ],
       "thresholds": [],
-      "timeFrom": null,
       "timeRegions": [],
-      "timeShift": null,
       "title": "Repositories",
       "tooltip": {
         "shared": true,
@@ -318,9 +318,7 @@
       },
       "type": "graph",
       "xaxis": {
-        "buckets": null,
         "mode": "time",
-        "name": null,
         "show": true,
         "values": []
       },
@@ -328,25 +326,18 @@
         {
           "$$hashKey": "object:566",
           "format": "short",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         },
         {
           "$$hashKey": "object:567",
           "format": "short",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         }
       ],
       "yaxis": {
-        "align": false,
-        "alignLevel": null
+        "align": false
       }
     },
     {
@@ -354,14 +345,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
       "description": "Number of manifests registered in the metadata database. Not available in production.",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
-        "overrides": []
-      },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -388,7 +372,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "8.4.1",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -405,9 +389,7 @@
         }
       ],
       "thresholds": [],
-      "timeFrom": null,
       "timeRegions": [],
-      "timeShift": null,
       "title": "Manifests",
       "tooltip": {
         "shared": true,
@@ -416,9 +398,7 @@
       },
       "type": "graph",
       "xaxis": {
-        "buckets": null,
         "mode": "time",
-        "name": null,
         "show": true,
         "values": []
       },
@@ -426,25 +406,18 @@
         {
           "$$hashKey": "object:734",
           "format": "short",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         },
         {
           "$$hashKey": "object:735",
           "format": "short",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         }
       ],
       "yaxis": {
-        "align": false,
-        "alignLevel": null
+        "align": false
       }
     },
     {
@@ -452,14 +425,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
       "description": "Number of blobs registered in the metadata database. Not available in production.",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
-        "overrides": []
-      },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -486,7 +452,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "8.4.1",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -503,9 +469,7 @@
         }
       ],
       "thresholds": [],
-      "timeFrom": null,
       "timeRegions": [],
-      "timeShift": null,
       "title": "Blobs",
       "tooltip": {
         "shared": true,
@@ -514,9 +478,7 @@
       },
       "type": "graph",
       "xaxis": {
-        "buckets": null,
         "mode": "time",
-        "name": null,
         "show": true,
         "values": []
       },
@@ -524,1222 +486,1213 @@
         {
           "$$hashKey": "object:821",
           "format": "short",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         },
         {
           "$$hashKey": "object:822",
           "format": "short",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         }
       ],
       "yaxis": {
-        "align": false,
-        "alignLevel": null
+        "align": false
       }
     },
     {
+      "description": "Percentage of requests handled by old and new code paths.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 9
+      },
+      "id": 103,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "8.4.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PA258B30F88C30650"
+          },
+          "exemplar": false,
+          "expr": "sum (rate(registry_http_requests_total{environment=\"$environment\", stage=\"$stage\", migration_path=\"new\"}[$__interval]))\n/\nsum (rate(registry_http_requests_total{environment=\"$environment\", stage=\"$stage\", migration_path=~\"new|old\"}[$__interval]))",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 3,
+          "legendFormat": "New",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PA258B30F88C30650"
+          },
+          "exemplar": false,
+          "expr": "sum (rate(registry_http_requests_total{environment=\"$environment\", stage=\"$stage\", migration_path=\"old\"}[$__interval]))\n/\nsum (rate(registry_http_requests_total{environment=\"$environment\", stage=\"$stage\", migration_path=~\"new|old\"}[$__interval]))",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 3,
+          "legendFormat": "Old",
+          "refId": "C"
+        }
+      ],
+      "title": "Traffic Split",
+      "type": "timeseries"
+    },
+    {
       "collapse": true,
-      "collapsed": true,
-      "datasource": null,
+      "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 9
+        "y": 17
       },
       "id": 52,
-      "panels": [
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
-          "decimals": 2,
-          "description": "",
-          "fieldConfig": {
-            "defaults": {
-              "custom": {}
-            },
-            "overrides": []
-          },
-          "fill": 0,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 10,
-            "w": 8,
-            "x": 0,
-            "y": 2
-          },
-          "hiddenSeries": false,
-          "id": 53,
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "hideEmpty": true,
-            "max": true,
-            "min": true,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 2,
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "7.2.0",
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "histogram_quantile(\n  0.900000,\n  sum by (le) (\n    rate(registry_http_request_duration_seconds_bucket{env=\"$environment\",environment=\"$environment\",route!~\"/v2/{name}/manifests/{reference}\",stage=\"$stage\",type=\"registry\",migration_path=~\"$migration_path\"}[$__interval])\n  )\n)\n",
-              "format": "time_series",
-              "interval": "1m",
-              "intervalFactor": 2,
-              "legendFormat": "p90 overall {{migration_path}}",
-              "refId": "A"
-            }
-          ],
-          "thresholds": [
-            {
-              "colorMode": "custom",
-              "fill": true,
-              "fillColor": "rgba(242, 73, 92, 0.5)",
-              "line": false,
-              "op": "gt",
-              "value": 25,
-              "yaxis": "left"
-            },
-            {
-              "colorMode": "custom",
-              "fill": true,
-              "fillColor": "rgba(242, 73, 92, 0.25)",
-              "line": false,
-              "op": "gt",
-              "value": 2.5,
-              "yaxis": "left"
-            }
-          ],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "Estimated p90 server Latency - Overall",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "s",
-              "label": "Duration",
-              "logBase": 10,
-              "min": 0.01,
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "max": 1,
-              "min": 0,
-              "show": false
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
-          "decimals": 2,
-          "description": "",
-          "fieldConfig": {
-            "defaults": {
-              "custom": {}
-            },
-            "overrides": []
-          },
-          "fill": 0,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 10,
-            "w": 8,
-            "x": 8,
-            "y": 2
-          },
-          "hiddenSeries": false,
-          "id": 54,
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "hideEmpty": true,
-            "max": true,
-            "min": true,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 2,
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "7.2.0",
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "sum by () (\n  rate(registry_http_requests_total{code=~\"5..\",env=\"$environment\",environment=\"$environment\",stage=\"$stage\",type=\"registry\",migration_path=~\"$migration_path\"}[$__interval])\n)\n",
-              "format": "time_series",
-              "interval": "1m",
-              "intervalFactor": 2,
-              "legendFormat": "overall {{migration_path}}",
-              "refId": "A"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "server Errors - Overall",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": "Errors",
-              "logBase": 1,
-              "min": 0,
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "max": 1,
-              "min": 0,
-              "show": false
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
-          "decimals": 0,
-          "description": "",
-          "fieldConfig": {
-            "defaults": {
-              "custom": {}
-            },
-            "overrides": []
-          },
-          "fill": 0,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 10,
-            "w": 8,
-            "x": 16,
-            "y": 2
-          },
-          "hiddenSeries": false,
-          "id": 55,
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "hideEmpty": true,
-            "max": true,
-            "min": true,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 2,
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "7.2.0",
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "sum by () (\n  rate(registry_http_requests_total{env=\"$environment\",environment=\"$environment\",stage=\"$stage\",type=\"registry\",migration_path=~\"$migration_path\"}[$__interval])\n)\n",
-              "format": "time_series",
-              "interval": "1m",
-              "intervalFactor": 2,
-              "legendFormat": "overall {{migration_path}}",
-              "refId": "A"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "server RPS - Overall",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": "Requests per Second",
-              "logBase": 1,
-              "min": 0,
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "max": 1,
-              "min": 0,
-              "show": false
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
-          "decimals": 2,
-          "description": "",
-          "fieldConfig": {
-            "defaults": {
-              "custom": {}
-            },
-            "overrides": []
-          },
-          "fill": 0,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 10,
-            "w": 6,
-            "x": 0,
-            "y": 12
-          },
-          "hiddenSeries": false,
-          "id": 56,
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "hideEmpty": true,
-            "max": true,
-            "min": true,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 2,
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "7.2.0",
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "histogram_quantile(\n  0.900000,\n  sum by (route,le) (\n    rate(registry_http_request_duration_seconds_bucket{env=\"$environment\",environment=\"$environment\",route!~\"/v2/{name}/manifests/{reference}\",stage=\"$stage\",type=\"registry\",migration_path=~\"$migration_path\"}[$__interval])\n  )\n)\n",
-              "format": "time_series",
-              "interval": "1m",
-              "intervalFactor": 2,
-              "legendFormat": "p90 {{migration_path}} {{route}}",
-              "refId": "A"
-            }
-          ],
-          "thresholds": [
-            {
-              "colorMode": "custom",
-              "fill": true,
-              "fillColor": "rgba(242, 73, 92, 0.5)",
-              "line": false,
-              "op": "gt",
-              "value": 25,
-              "yaxis": "left"
-            },
-            {
-              "colorMode": "custom",
-              "fill": true,
-              "fillColor": "rgba(242, 73, 92, 0.25)",
-              "line": false,
-              "op": "gt",
-              "value": 2.5,
-              "yaxis": "left"
-            }
-          ],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "Estimated p90 server Latency - per route",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "s",
-              "label": "Duration",
-              "logBase": 10,
-              "min": 0.01,
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "max": 1,
-              "min": 0,
-              "show": false
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
-          "decimals": 2,
-          "description": "Attributes apdex downscoring",
-          "fieldConfig": {
-            "defaults": {
-              "custom": {}
-            },
-            "overrides": []
-          },
-          "fill": 4,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 10,
-            "w": 6,
-            "x": 6,
-            "y": 12
-          },
-          "hiddenSeries": false,
-          "id": 57,
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "hideEmpty": true,
-            "max": true,
-            "min": true,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "7.2.0",
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [
-            {
-              "alias": "/.*/",
-              "transform": "negative-Y"
-            }
-          ],
-          "spaceLength": 10,
-          "stack": true,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "clamp_min(clamp_max((\n  sum by (route) (\n  rate(registry_http_request_duration_seconds_bucket{env=\"$environment\",environment=\"$environment\",le=\"+Inf\",route!~\"/v2/{name}/manifests/{reference}\",stage=\"$stage\",type=\"registry\",migration_path=~\"$migration_path\"}[$__interval])\n)\n\n  -\n  (\n    (\n  sum by (route) (\n    rate(registry_http_request_duration_seconds_bucket{env=\"$environment\",environment=\"$environment\",le=\"2.5\",route!~\"/v2/{name}/manifests/{reference}\",stage=\"$stage\",type=\"registry\",migration_path=~\"$migration_path\"}[$__interval])\n  )\n  +\n  sum by (route) (\n    rate(registry_http_request_duration_seconds_bucket{env=\"$environment\",environment=\"$environment\",le=\"25\",route!~\"/v2/{name}/manifests/{reference}\",stage=\"$stage\",type=\"registry\",migration_path=~\"$migration_path\"}[$__interval])\n  )\n)\n/\n2\n\n  )\n)\n/ ignoring(route) group_left()\n(\n  sum by () (\n  rate(registry_http_request_duration_seconds_bucket{env=\"$environment\",environment=\"$environment\",le=\"+Inf\",route!~\"/v2/{name}/manifests/{reference}\",stage=\"$stage\",type=\"registry\"}[$__interval])\n)\n\n)\n\n,1),0)\n",
-              "format": "time_series",
-              "interval": "1m",
-              "intervalFactor": 3,
-              "legendFormat": "{{migration_path}} {{route}}",
-              "refId": "A"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "Apdex attribution for server Latency - per route",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "percentunit",
-              "label": "Percent",
-              "logBase": 1,
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "max": 1,
-              "min": 0,
-              "show": false
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
-          "decimals": 2,
-          "description": "",
-          "fieldConfig": {
-            "defaults": {
-              "custom": {}
-            },
-            "overrides": []
-          },
-          "fill": 0,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 10,
-            "w": 6,
-            "x": 12,
-            "y": 12
-          },
-          "hiddenSeries": false,
-          "id": 58,
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "hideEmpty": true,
-            "max": true,
-            "min": true,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 2,
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "7.2.0",
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "sum by (route) (\n  rate(registry_http_requests_total{code=~\"5..\",env=\"$environment\",environment=\"$environment\",stage=\"$stage\",type=\"registry\",migration_path=~\"$migration_path\"}[$__interval])\n)\n",
-              "format": "time_series",
-              "interval": "1m",
-              "intervalFactor": 2,
-              "legendFormat": "{{migration_path}} {{route}}",
-              "refId": "A"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "server Errors - per route",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": "Errors",
-              "logBase": 1,
-              "min": 0,
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "max": 1,
-              "min": 0,
-              "show": false
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
-          "decimals": 0,
-          "description": "",
-          "fieldConfig": {
-            "defaults": {
-              "custom": {}
-            },
-            "overrides": []
-          },
-          "fill": 0,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 10,
-            "w": 6,
-            "x": 18,
-            "y": 12
-          },
-          "hiddenSeries": false,
-          "id": 59,
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "hideEmpty": true,
-            "max": true,
-            "min": true,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 2,
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "7.2.0",
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "sum by (route) (\n  rate(registry_http_requests_total{env=\"$environment\",environment=\"$environment\",stage=\"$stage\",type=\"registry\",migration_path=~\"$migration_path\"}[$__interval])\n)\n",
-              "format": "time_series",
-              "interval": "1m",
-              "intervalFactor": 2,
-              "legendFormat": "{{migration_path}} {{route}}",
-              "refId": "A"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "server RPS - per route",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": "Requests per Second",
-              "logBase": 1,
-              "min": 0,
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "max": 1,
-              "min": 0,
-              "show": false
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
-          "decimals": 2,
-          "description": "",
-          "fieldConfig": {
-            "defaults": {
-              "custom": {}
-            },
-            "overrides": []
-          },
-          "fill": 0,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 10,
-            "w": 6,
-            "x": 0,
-            "y": 22
-          },
-          "hiddenSeries": false,
-          "id": 60,
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "hideEmpty": true,
-            "max": true,
-            "min": true,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 2,
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "7.2.0",
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "histogram_quantile(\n  0.900000,\n  sum by (method,le) (\n    rate(registry_http_request_duration_seconds_bucket{env=\"$environment\",environment=\"$environment\",route!~\"/v2/{name}/manifests/{reference}\",stage=\"$stage\",type=\"registry\",migration_path=~\"$migration_path\"}[$__interval])\n  )\n)\n",
-              "format": "time_series",
-              "interval": "1m",
-              "intervalFactor": 2,
-              "legendFormat": "p90 {{migration_path}} {{method}}",
-              "refId": "A"
-            }
-          ],
-          "thresholds": [
-            {
-              "colorMode": "custom",
-              "fill": true,
-              "fillColor": "rgba(242, 73, 92, 0.5)",
-              "line": false,
-              "op": "gt",
-              "value": 25,
-              "yaxis": "left"
-            },
-            {
-              "colorMode": "custom",
-              "fill": true,
-              "fillColor": "rgba(242, 73, 92, 0.25)",
-              "line": false,
-              "op": "gt",
-              "value": 2.5,
-              "yaxis": "left"
-            }
-          ],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "Estimated p90 server Latency - per method",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "s",
-              "label": "Duration",
-              "logBase": 10,
-              "min": 0.01,
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "max": 1,
-              "min": 0,
-              "show": false
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
-          "decimals": 2,
-          "description": "Attributes apdex downscoring",
-          "fieldConfig": {
-            "defaults": {
-              "custom": {}
-            },
-            "overrides": []
-          },
-          "fill": 4,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 10,
-            "w": 6,
-            "x": 6,
-            "y": 22
-          },
-          "hiddenSeries": false,
-          "id": 61,
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "hideEmpty": true,
-            "max": true,
-            "min": true,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "7.2.0",
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [
-            {
-              "alias": "/.*/",
-              "transform": "negative-Y"
-            }
-          ],
-          "spaceLength": 10,
-          "stack": true,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "clamp_min(clamp_max((\n  sum by (method) (\n  rate(registry_http_request_duration_seconds_bucket{env=\"$environment\",environment=\"$environment\",le=\"+Inf\",route!~\"/v2/{name}/manifests/{reference}\",stage=\"$stage\",type=\"registry\",migration_path=~\"$migration_path\"}[$__interval])\n)\n\n  -\n  (\n    (\n  sum by (method) (\n    rate(registry_http_request_duration_seconds_bucket{env=\"$environment\",environment=\"$environment\",le=\"2.5\",route!~\"/v2/{name}/manifests/{reference}\",stage=\"$stage\",type=\"registry\",migration_path=~\"$migration_path\"}[$__interval])\n  )\n  +\n  sum by (method) (\n    rate(registry_http_request_duration_seconds_bucket{env=\"$environment\",environment=\"$environment\",le=\"25\",route!~\"/v2/{name}/manifests/{reference}\",stage=\"$stage\",type=\"registry\",migration_path=~\"$migration_path\"}[$__interval])\n  )\n)\n/\n2\n\n  )\n)\n/ ignoring(method) group_left()\n(\n  sum by () (\n  rate(registry_http_request_duration_seconds_bucket{env=\"$environment\",environment=\"$environment\",le=\"+Inf\",route!~\"/v2/{name}/manifests/{reference}\",stage=\"$stage\",type=\"registry\",migration_path=~\"$migration_path\"}[$__interval])\n)\n\n)\n\n,1),0)\n",
-              "format": "time_series",
-              "interval": "1m",
-              "intervalFactor": 3,
-              "legendFormat": "{{migration_path}} {{method}}",
-              "refId": "A"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "Apdex attribution for server Latency - per method",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "percentunit",
-              "label": "Percent",
-              "logBase": 1,
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "max": 1,
-              "min": 0,
-              "show": false
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
-          "decimals": 2,
-          "description": "",
-          "fieldConfig": {
-            "defaults": {
-              "custom": {}
-            },
-            "overrides": []
-          },
-          "fill": 0,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 10,
-            "w": 6,
-            "x": 12,
-            "y": 22
-          },
-          "hiddenSeries": false,
-          "id": 62,
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "hideEmpty": true,
-            "max": true,
-            "min": true,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 2,
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "7.2.0",
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "sum by (method) (\n  rate(registry_http_requests_total{code=~\"5..\",env=\"$environment\",environment=\"$environment\",stage=\"$stage\",type=\"registry\",migration_path=~\"$migration_path\"}[$__interval])\n)\n",
-              "format": "time_series",
-              "interval": "1m",
-              "intervalFactor": 2,
-              "legendFormat": "{{migration_path}} {{method}}",
-              "refId": "A"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "server Errors - per method",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": "Errors",
-              "logBase": 1,
-              "min": 0,
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "max": 1,
-              "min": 0,
-              "show": false
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
-          "decimals": 0,
-          "description": "",
-          "fieldConfig": {
-            "defaults": {
-              "custom": {}
-            },
-            "overrides": []
-          },
-          "fill": 0,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 10,
-            "w": 6,
-            "x": 18,
-            "y": 22
-          },
-          "hiddenSeries": false,
-          "id": 63,
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "hideEmpty": true,
-            "max": true,
-            "min": true,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 2,
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "7.2.0",
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "sum by (method) (\n  rate(registry_http_requests_total{env=\"$environment\",environment=\"$environment\",stage=\"$stage\",type=\"registry\",migration_path=~\"$migration_path\"}[$__interval])\n)\n",
-              "format": "time_series",
-              "interval": "1m",
-              "intervalFactor": 2,
-              "legendFormat": "{{migration_path}} {{method}}",
-              "refId": "A"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "server RPS - per method",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": "Requests per Second",
-              "logBase": 1,
-              "min": 0,
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "max": 1,
-              "min": 0,
-              "show": false
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        }
-      ],
-      "repeat": null,
-      "repeatIteration": null,
-      "repeatRowId": null,
+      "panels": [],
       "showTitle": true,
       "title": "🔬 server Service Level Indicator Detail",
       "titleSize": "h6",
       "type": "row"
     },
     {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": {
+        "uid": "$PROMETHEUS_DS"
+      },
+      "decimals": 2,
+      "description": "",
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 10,
+        "w": 8,
+        "x": 0,
+        "y": 18
+      },
+      "hiddenSeries": false,
+      "id": 53,
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "hideEmpty": true,
+        "max": true,
+        "min": true,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "8.4.1",
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "histogram_quantile(\n  0.900000,\n  sum by (le) (\n    rate(registry_http_request_duration_seconds_bucket{env=\"$environment\",environment=\"$environment\",route!~\"/v2/{name}/manifests/{reference}\",stage=\"$stage\",type=\"registry\",migration_path=~\"$migration_path\"}[$__interval])\n  )\n)\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 2,
+          "legendFormat": "p90 overall {{migration_path}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [
+        {
+          "colorMode": "custom",
+          "fill": true,
+          "fillColor": "rgba(242, 73, 92, 0.5)",
+          "line": false,
+          "op": "gt",
+          "value": 25,
+          "yaxis": "left"
+        },
+        {
+          "colorMode": "custom",
+          "fill": true,
+          "fillColor": "rgba(242, 73, 92, 0.25)",
+          "line": false,
+          "op": "gt",
+          "value": 2.5,
+          "yaxis": "left"
+        }
+      ],
+      "timeRegions": [],
+      "title": "Estimated p90 server Latency - Overall",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "mode": "time",
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "s",
+          "label": "Duration",
+          "logBase": 10,
+          "min": 0.01,
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "max": 1,
+          "min": 0,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": {
+        "uid": "$PROMETHEUS_DS"
+      },
+      "decimals": 2,
+      "description": "",
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 10,
+        "w": 8,
+        "x": 8,
+        "y": 18
+      },
+      "hiddenSeries": false,
+      "id": 54,
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "hideEmpty": true,
+        "max": true,
+        "min": true,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "8.4.1",
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum by () (\n  rate(registry_http_requests_total{code=~\"5..\",env=\"$environment\",environment=\"$environment\",stage=\"$stage\",type=\"registry\",migration_path=~\"$migration_path\"}[$__interval])\n)\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 2,
+          "legendFormat": "overall {{migration_path}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeRegions": [],
+      "title": "server Errors - Overall",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "mode": "time",
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": "Errors",
+          "logBase": 1,
+          "min": 0,
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "max": 1,
+          "min": 0,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": {
+        "uid": "$PROMETHEUS_DS"
+      },
+      "decimals": 0,
+      "description": "",
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 10,
+        "w": 8,
+        "x": 16,
+        "y": 18
+      },
+      "hiddenSeries": false,
+      "id": 55,
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "hideEmpty": true,
+        "max": true,
+        "min": true,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "8.4.1",
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum by () (\n  rate(registry_http_requests_total{env=\"$environment\",environment=\"$environment\",stage=\"$stage\",type=\"registry\",migration_path=~\"$migration_path\"}[$__interval])\n)\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 2,
+          "legendFormat": "overall {{migration_path}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeRegions": [],
+      "title": "server RPS - Overall",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "mode": "time",
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": "Requests per Second",
+          "logBase": 1,
+          "min": 0,
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "max": 1,
+          "min": 0,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": {
+        "uid": "$PROMETHEUS_DS"
+      },
+      "decimals": 2,
+      "description": "",
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 10,
+        "w": 6,
+        "x": 0,
+        "y": 28
+      },
+      "hiddenSeries": false,
+      "id": 56,
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "hideEmpty": true,
+        "max": true,
+        "min": true,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "8.4.1",
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "histogram_quantile(\n  0.900000,\n  sum by (route,le) (\n    rate(registry_http_request_duration_seconds_bucket{env=\"$environment\",environment=\"$environment\",route!~\"/v2/{name}/manifests/{reference}\",stage=\"$stage\",type=\"registry\",migration_path=~\"$migration_path\"}[$__interval])\n  )\n)\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 2,
+          "legendFormat": "p90 {{migration_path}} {{route}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [
+        {
+          "colorMode": "custom",
+          "fill": true,
+          "fillColor": "rgba(242, 73, 92, 0.5)",
+          "line": false,
+          "op": "gt",
+          "value": 25,
+          "yaxis": "left"
+        },
+        {
+          "colorMode": "custom",
+          "fill": true,
+          "fillColor": "rgba(242, 73, 92, 0.25)",
+          "line": false,
+          "op": "gt",
+          "value": 2.5,
+          "yaxis": "left"
+        }
+      ],
+      "timeRegions": [],
+      "title": "Estimated p90 server Latency - per route",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "mode": "time",
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "s",
+          "label": "Duration",
+          "logBase": 10,
+          "min": 0.01,
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "max": 1,
+          "min": 0,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": {
+        "uid": "$PROMETHEUS_DS"
+      },
+      "decimals": 2,
+      "description": "Attributes apdex downscoring",
+      "fill": 4,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 10,
+        "w": 6,
+        "x": 6,
+        "y": 28
+      },
+      "hiddenSeries": false,
+      "id": 57,
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "hideEmpty": true,
+        "max": true,
+        "min": true,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "8.4.1",
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "/.*/",
+          "transform": "negative-Y"
+        }
+      ],
+      "spaceLength": 10,
+      "stack": true,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "clamp_min(clamp_max((\n  sum by (route) (\n  rate(registry_http_request_duration_seconds_bucket{env=\"$environment\",environment=\"$environment\",le=\"+Inf\",route!~\"/v2/{name}/manifests/{reference}\",stage=\"$stage\",type=\"registry\",migration_path=~\"$migration_path\"}[$__interval])\n)\n\n  -\n  (\n    (\n  sum by (route) (\n    rate(registry_http_request_duration_seconds_bucket{env=\"$environment\",environment=\"$environment\",le=\"2.5\",route!~\"/v2/{name}/manifests/{reference}\",stage=\"$stage\",type=\"registry\",migration_path=~\"$migration_path\"}[$__interval])\n  )\n  +\n  sum by (route) (\n    rate(registry_http_request_duration_seconds_bucket{env=\"$environment\",environment=\"$environment\",le=\"25\",route!~\"/v2/{name}/manifests/{reference}\",stage=\"$stage\",type=\"registry\",migration_path=~\"$migration_path\"}[$__interval])\n  )\n)\n/\n2\n\n  )\n)\n/ ignoring(route) group_left()\n(\n  sum by () (\n  rate(registry_http_request_duration_seconds_bucket{env=\"$environment\",environment=\"$environment\",le=\"+Inf\",route!~\"/v2/{name}/manifests/{reference}\",stage=\"$stage\",type=\"registry\"}[$__interval])\n)\n\n)\n\n,1),0)\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 3,
+          "legendFormat": "{{migration_path}} {{route}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeRegions": [],
+      "title": "Apdex attribution for server Latency - per route",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "mode": "time",
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "percentunit",
+          "label": "Percent",
+          "logBase": 1,
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "max": 1,
+          "min": 0,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": {
+        "uid": "$PROMETHEUS_DS"
+      },
+      "decimals": 2,
+      "description": "",
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 10,
+        "w": 6,
+        "x": 12,
+        "y": 28
+      },
+      "hiddenSeries": false,
+      "id": 58,
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "hideEmpty": true,
+        "max": true,
+        "min": true,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "8.4.1",
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum by (route) (\n  rate(registry_http_requests_total{code=~\"5..\",env=\"$environment\",environment=\"$environment\",stage=\"$stage\",type=\"registry\",migration_path=~\"$migration_path\"}[$__interval])\n)\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 2,
+          "legendFormat": "{{migration_path}} {{route}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeRegions": [],
+      "title": "server Errors - per route",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "mode": "time",
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": "Errors",
+          "logBase": 1,
+          "min": 0,
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "max": 1,
+          "min": 0,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": {
+        "uid": "$PROMETHEUS_DS"
+      },
+      "decimals": 0,
+      "description": "",
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 10,
+        "w": 6,
+        "x": 18,
+        "y": 28
+      },
+      "hiddenSeries": false,
+      "id": 59,
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "hideEmpty": true,
+        "max": true,
+        "min": true,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "8.4.1",
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum by (route) (\n  rate(registry_http_requests_total{env=\"$environment\",environment=\"$environment\",stage=\"$stage\",type=\"registry\",migration_path=~\"$migration_path\"}[$__interval])\n)\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 2,
+          "legendFormat": "{{migration_path}} {{route}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeRegions": [],
+      "title": "server RPS - per route",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "mode": "time",
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": "Requests per Second",
+          "logBase": 1,
+          "min": 0,
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "max": 1,
+          "min": 0,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": {
+        "uid": "$PROMETHEUS_DS"
+      },
+      "decimals": 2,
+      "description": "",
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 10,
+        "w": 6,
+        "x": 0,
+        "y": 38
+      },
+      "hiddenSeries": false,
+      "id": 60,
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "hideEmpty": true,
+        "max": true,
+        "min": true,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "8.4.1",
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "histogram_quantile(\n  0.900000,\n  sum by (method,le) (\n    rate(registry_http_request_duration_seconds_bucket{env=\"$environment\",environment=\"$environment\",route!~\"/v2/{name}/manifests/{reference}\",stage=\"$stage\",type=\"registry\",migration_path=~\"$migration_path\"}[$__interval])\n  )\n)\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 2,
+          "legendFormat": "p90 {{migration_path}} {{method}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [
+        {
+          "colorMode": "custom",
+          "fill": true,
+          "fillColor": "rgba(242, 73, 92, 0.5)",
+          "line": false,
+          "op": "gt",
+          "value": 25,
+          "yaxis": "left"
+        },
+        {
+          "colorMode": "custom",
+          "fill": true,
+          "fillColor": "rgba(242, 73, 92, 0.25)",
+          "line": false,
+          "op": "gt",
+          "value": 2.5,
+          "yaxis": "left"
+        }
+      ],
+      "timeRegions": [],
+      "title": "Estimated p90 server Latency - per method",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "mode": "time",
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "s",
+          "label": "Duration",
+          "logBase": 10,
+          "min": 0.01,
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "max": 1,
+          "min": 0,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": {
+        "uid": "$PROMETHEUS_DS"
+      },
+      "decimals": 2,
+      "description": "Attributes apdex downscoring",
+      "fill": 4,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 10,
+        "w": 6,
+        "x": 6,
+        "y": 38
+      },
+      "hiddenSeries": false,
+      "id": 61,
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "hideEmpty": true,
+        "max": true,
+        "min": true,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "8.4.1",
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "/.*/",
+          "transform": "negative-Y"
+        }
+      ],
+      "spaceLength": 10,
+      "stack": true,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "clamp_min(clamp_max((\n  sum by (method) (\n  rate(registry_http_request_duration_seconds_bucket{env=\"$environment\",environment=\"$environment\",le=\"+Inf\",route!~\"/v2/{name}/manifests/{reference}\",stage=\"$stage\",type=\"registry\",migration_path=~\"$migration_path\"}[$__interval])\n)\n\n  -\n  (\n    (\n  sum by (method) (\n    rate(registry_http_request_duration_seconds_bucket{env=\"$environment\",environment=\"$environment\",le=\"2.5\",route!~\"/v2/{name}/manifests/{reference}\",stage=\"$stage\",type=\"registry\",migration_path=~\"$migration_path\"}[$__interval])\n  )\n  +\n  sum by (method) (\n    rate(registry_http_request_duration_seconds_bucket{env=\"$environment\",environment=\"$environment\",le=\"25\",route!~\"/v2/{name}/manifests/{reference}\",stage=\"$stage\",type=\"registry\",migration_path=~\"$migration_path\"}[$__interval])\n  )\n)\n/\n2\n\n  )\n)\n/ ignoring(method) group_left()\n(\n  sum by () (\n  rate(registry_http_request_duration_seconds_bucket{env=\"$environment\",environment=\"$environment\",le=\"+Inf\",route!~\"/v2/{name}/manifests/{reference}\",stage=\"$stage\",type=\"registry\",migration_path=~\"$migration_path\"}[$__interval])\n)\n\n)\n\n,1),0)\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 3,
+          "legendFormat": "{{migration_path}} {{method}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeRegions": [],
+      "title": "Apdex attribution for server Latency - per method",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "mode": "time",
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "percentunit",
+          "label": "Percent",
+          "logBase": 1,
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "max": 1,
+          "min": 0,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": {
+        "uid": "$PROMETHEUS_DS"
+      },
+      "decimals": 2,
+      "description": "",
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 10,
+        "w": 6,
+        "x": 12,
+        "y": 38
+      },
+      "hiddenSeries": false,
+      "id": 62,
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "hideEmpty": true,
+        "max": true,
+        "min": true,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "8.4.1",
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum by (method) (\n  rate(registry_http_requests_total{code=~\"5..\",env=\"$environment\",environment=\"$environment\",stage=\"$stage\",type=\"registry\",migration_path=~\"$migration_path\"}[$__interval])\n)\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 2,
+          "legendFormat": "{{migration_path}} {{method}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeRegions": [],
+      "title": "server Errors - per method",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "mode": "time",
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": "Errors",
+          "logBase": 1,
+          "min": 0,
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "max": 1,
+          "min": 0,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": {
+        "uid": "$PROMETHEUS_DS"
+      },
+      "decimals": 0,
+      "description": "",
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 10,
+        "w": 6,
+        "x": 18,
+        "y": 38
+      },
+      "hiddenSeries": false,
+      "id": 63,
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "hideEmpty": true,
+        "max": true,
+        "min": true,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "8.4.1",
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum by (method) (\n  rate(registry_http_requests_total{env=\"$environment\",environment=\"$environment\",stage=\"$stage\",type=\"registry\",migration_path=~\"$migration_path\"}[$__interval])\n)\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 2,
+          "legendFormat": "{{migration_path}} {{method}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeRegions": [],
+      "title": "server RPS - per method",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "mode": "time",
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": "Requests per Second",
+          "logBase": 1,
+          "min": 0,
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "max": 1,
+          "min": 0,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false
+      }
+    },
+    {
       "collapse": true,
       "collapsed": false,
-      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 10
+        "y": 48
       },
       "id": 68,
       "panels": [
@@ -1748,7 +1701,9 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
+          "datasource": {
+            "uid": "$PROMETHEUS_DS"
+          },
           "decimals": 2,
           "description": "",
           "fieldConfig": {
@@ -1824,9 +1779,7 @@
               "yaxis": "left"
             }
           ],
-          "timeFrom": null,
           "timeRegions": [],
-          "timeShift": null,
           "title": "Estimated p90 server_route_manifest_reads Latency - Overall",
           "tooltip": {
             "shared": true,
@@ -1835,9 +1788,7 @@
           },
           "type": "graph",
           "xaxis": {
-            "buckets": null,
             "mode": "time",
-            "name": null,
             "show": true,
             "values": []
           },
@@ -1858,8 +1809,7 @@
             }
           ],
           "yaxis": {
-            "align": false,
-            "alignLevel": null
+            "align": false
           }
         },
         {
@@ -1867,7 +1817,9 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
+          "datasource": {
+            "uid": "$PROMETHEUS_DS"
+          },
           "decimals": 0,
           "description": "",
           "fieldConfig": {
@@ -1924,9 +1876,7 @@
             }
           ],
           "thresholds": [],
-          "timeFrom": null,
           "timeRegions": [],
-          "timeShift": null,
           "title": "server_route_manifest_reads RPS - Overall",
           "tooltip": {
             "shared": true,
@@ -1935,9 +1885,7 @@
           },
           "type": "graph",
           "xaxis": {
-            "buckets": null,
             "mode": "time",
-            "name": null,
             "show": true,
             "values": []
           },
@@ -1958,8 +1906,7 @@
             }
           ],
           "yaxis": {
-            "align": false,
-            "alignLevel": null
+            "align": false
           }
         },
         {
@@ -1967,7 +1914,9 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
+          "datasource": {
+            "uid": "$PROMETHEUS_DS"
+          },
           "decimals": 2,
           "description": "",
           "fieldConfig": {
@@ -2043,9 +1992,7 @@
               "yaxis": "left"
             }
           ],
-          "timeFrom": null,
           "timeRegions": [],
-          "timeShift": null,
           "title": "Estimated p90 server_route_manifest_reads Latency - per method",
           "tooltip": {
             "shared": true,
@@ -2054,9 +2001,7 @@
           },
           "type": "graph",
           "xaxis": {
-            "buckets": null,
             "mode": "time",
-            "name": null,
             "show": true,
             "values": []
           },
@@ -2077,8 +2022,7 @@
             }
           ],
           "yaxis": {
-            "align": false,
-            "alignLevel": null
+            "align": false
           }
         },
         {
@@ -2086,7 +2030,9 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
+          "datasource": {
+            "uid": "$PROMETHEUS_DS"
+          },
           "decimals": 2,
           "description": "Attributes apdex downscoring",
           "fieldConfig": {
@@ -2148,9 +2094,7 @@
             }
           ],
           "thresholds": [],
-          "timeFrom": null,
           "timeRegions": [],
-          "timeShift": null,
           "title": "Apdex attribution for server_route_manifest_reads Latency - per method",
           "tooltip": {
             "shared": true,
@@ -2159,9 +2103,7 @@
           },
           "type": "graph",
           "xaxis": {
-            "buckets": null,
             "mode": "time",
-            "name": null,
             "show": true,
             "values": []
           },
@@ -2181,8 +2123,7 @@
             }
           ],
           "yaxis": {
-            "align": false,
-            "alignLevel": null
+            "align": false
           }
         },
         {
@@ -2190,7 +2131,9 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
+          "datasource": {
+            "uid": "$PROMETHEUS_DS"
+          },
           "decimals": 0,
           "description": "",
           "fieldConfig": {
@@ -2247,9 +2190,7 @@
             }
           ],
           "thresholds": [],
-          "timeFrom": null,
           "timeRegions": [],
-          "timeShift": null,
           "title": "server_route_manifest_reads RPS - per method",
           "tooltip": {
             "shared": true,
@@ -2258,9 +2199,7 @@
           },
           "type": "graph",
           "xaxis": {
-            "buckets": null,
             "mode": "time",
-            "name": null,
             "show": true,
             "values": []
           },
@@ -2281,14 +2220,10 @@
             }
           ],
           "yaxis": {
-            "align": false,
-            "alignLevel": null
+            "align": false
           }
         }
       ],
-      "repeat": null,
-      "repeatIteration": null,
-      "repeatRowId": null,
       "showTitle": true,
       "title": "🔬 server_route_manifest_reads Service Level Indicator Detail",
       "titleSize": "h6",
@@ -2297,12 +2232,11 @@
     {
       "collapse": true,
       "collapsed": true,
-      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 11
+        "y": 49
       },
       "id": 77,
       "panels": [
@@ -2311,7 +2245,9 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
+          "datasource": {
+            "uid": "$PROMETHEUS_DS"
+          },
           "decimals": 2,
           "description": "",
           "fieldConfig": {
@@ -2387,9 +2323,7 @@
               "yaxis": "left"
             }
           ],
-          "timeFrom": null,
           "timeRegions": [],
-          "timeShift": null,
           "title": "Estimated p90 server_route_manifest_writes Latency - Overall",
           "tooltip": {
             "shared": true,
@@ -2398,9 +2332,7 @@
           },
           "type": "graph",
           "xaxis": {
-            "buckets": null,
             "mode": "time",
-            "name": null,
             "show": true,
             "values": []
           },
@@ -2421,8 +2353,7 @@
             }
           ],
           "yaxis": {
-            "align": false,
-            "alignLevel": null
+            "align": false
           }
         },
         {
@@ -2430,7 +2361,9 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
+          "datasource": {
+            "uid": "$PROMETHEUS_DS"
+          },
           "decimals": 0,
           "description": "",
           "fieldConfig": {
@@ -2487,9 +2420,7 @@
             }
           ],
           "thresholds": [],
-          "timeFrom": null,
           "timeRegions": [],
-          "timeShift": null,
           "title": "server_route_manifest_writes RPS - Overall",
           "tooltip": {
             "shared": true,
@@ -2498,9 +2429,7 @@
           },
           "type": "graph",
           "xaxis": {
-            "buckets": null,
             "mode": "time",
-            "name": null,
             "show": true,
             "values": []
           },
@@ -2521,8 +2450,7 @@
             }
           ],
           "yaxis": {
-            "align": false,
-            "alignLevel": null
+            "align": false
           }
         },
         {
@@ -2530,7 +2458,9 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
+          "datasource": {
+            "uid": "$PROMETHEUS_DS"
+          },
           "decimals": 2,
           "description": "",
           "fieldConfig": {
@@ -2606,9 +2536,7 @@
               "yaxis": "left"
             }
           ],
-          "timeFrom": null,
           "timeRegions": [],
-          "timeShift": null,
           "title": "Estimated p90 server_route_manifest_writes Latency - per method",
           "tooltip": {
             "shared": true,
@@ -2617,9 +2545,7 @@
           },
           "type": "graph",
           "xaxis": {
-            "buckets": null,
             "mode": "time",
-            "name": null,
             "show": true,
             "values": []
           },
@@ -2640,8 +2566,7 @@
             }
           ],
           "yaxis": {
-            "align": false,
-            "alignLevel": null
+            "align": false
           }
         },
         {
@@ -2649,7 +2574,9 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
+          "datasource": {
+            "uid": "$PROMETHEUS_DS"
+          },
           "decimals": 2,
           "description": "Attributes apdex downscoring",
           "fieldConfig": {
@@ -2711,9 +2638,7 @@
             }
           ],
           "thresholds": [],
-          "timeFrom": null,
           "timeRegions": [],
-          "timeShift": null,
           "title": "Apdex attribution for server_route_manifest_writes Latency - per method",
           "tooltip": {
             "shared": true,
@@ -2722,9 +2647,7 @@
           },
           "type": "graph",
           "xaxis": {
-            "buckets": null,
             "mode": "time",
-            "name": null,
             "show": true,
             "values": []
           },
@@ -2744,8 +2667,7 @@
             }
           ],
           "yaxis": {
-            "align": false,
-            "alignLevel": null
+            "align": false
           }
         },
         {
@@ -2753,7 +2675,9 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
+          "datasource": {
+            "uid": "$PROMETHEUS_DS"
+          },
           "decimals": 0,
           "description": "",
           "fieldConfig": {
@@ -2810,9 +2734,7 @@
             }
           ],
           "thresholds": [],
-          "timeFrom": null,
           "timeRegions": [],
-          "timeShift": null,
           "title": "server_route_manifest_writes RPS - per method",
           "tooltip": {
             "shared": true,
@@ -2821,9 +2743,7 @@
           },
           "type": "graph",
           "xaxis": {
-            "buckets": null,
             "mode": "time",
-            "name": null,
             "show": true,
             "values": []
           },
@@ -2844,14 +2764,10 @@
             }
           ],
           "yaxis": {
-            "align": false,
-            "alignLevel": null
+            "align": false
           }
         }
       ],
-      "repeat": null,
-      "repeatIteration": null,
-      "repeatRowId": null,
       "showTitle": true,
       "title": "🔬 server_route_manifest_writes Service Level Indicator Detail",
       "titleSize": "h6",
@@ -2860,12 +2776,11 @@
     {
       "collapse": true,
       "collapsed": true,
-      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 12
+        "y": 50
       },
       "id": 86,
       "panels": [
@@ -2874,7 +2789,9 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
+          "datasource": {
+            "uid": "$PROMETHEUS_DS"
+          },
           "decimals": 2,
           "description": "",
           "fieldConfig": {
@@ -2949,9 +2866,7 @@
               "yaxis": "left"
             }
           ],
-          "timeFrom": null,
           "timeRegions": [],
-          "timeShift": null,
           "title": "Estimated p90 storage Latency - Overall",
           "tooltip": {
             "shared": true,
@@ -2960,9 +2875,7 @@
           },
           "type": "graph",
           "xaxis": {
-            "buckets": null,
             "mode": "time",
-            "name": null,
             "show": true,
             "values": []
           },
@@ -2983,8 +2896,7 @@
             }
           ],
           "yaxis": {
-            "align": false,
-            "alignLevel": null
+            "align": false
           }
         },
         {
@@ -2992,7 +2904,9 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
+          "datasource": {
+            "uid": "$PROMETHEUS_DS"
+          },
           "decimals": 0,
           "description": "",
           "fieldConfig": {
@@ -3049,9 +2963,7 @@
             }
           ],
           "thresholds": [],
-          "timeFrom": null,
           "timeRegions": [],
-          "timeShift": null,
           "title": "storage RPS - Overall",
           "tooltip": {
             "shared": true,
@@ -3060,9 +2972,7 @@
           },
           "type": "graph",
           "xaxis": {
-            "buckets": null,
             "mode": "time",
-            "name": null,
             "show": true,
             "values": []
           },
@@ -3083,8 +2993,7 @@
             }
           ],
           "yaxis": {
-            "align": false,
-            "alignLevel": null
+            "align": false
           }
         },
         {
@@ -3092,7 +3001,9 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
+          "datasource": {
+            "uid": "$PROMETHEUS_DS"
+          },
           "decimals": 2,
           "description": "",
           "fieldConfig": {
@@ -3167,9 +3078,7 @@
               "yaxis": "left"
             }
           ],
-          "timeFrom": null,
           "timeRegions": [],
-          "timeShift": null,
           "title": "Estimated p90 storage Latency - per action",
           "tooltip": {
             "shared": true,
@@ -3178,9 +3087,7 @@
           },
           "type": "graph",
           "xaxis": {
-            "buckets": null,
             "mode": "time",
-            "name": null,
             "show": true,
             "values": []
           },
@@ -3201,8 +3108,7 @@
             }
           ],
           "yaxis": {
-            "align": false,
-            "alignLevel": null
+            "align": false
           }
         },
         {
@@ -3210,7 +3116,9 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
+          "datasource": {
+            "uid": "$PROMETHEUS_DS"
+          },
           "decimals": 2,
           "description": "Attributes apdex downscoring",
           "fieldConfig": {
@@ -3272,9 +3180,7 @@
             }
           ],
           "thresholds": [],
-          "timeFrom": null,
           "timeRegions": [],
-          "timeShift": null,
           "title": "Apdex attribution for storage Latency - per action",
           "tooltip": {
             "shared": true,
@@ -3283,9 +3189,7 @@
           },
           "type": "graph",
           "xaxis": {
-            "buckets": null,
             "mode": "time",
-            "name": null,
             "show": true,
             "values": []
           },
@@ -3305,8 +3209,7 @@
             }
           ],
           "yaxis": {
-            "align": false,
-            "alignLevel": null
+            "align": false
           }
         },
         {
@@ -3314,7 +3217,9 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
+          "datasource": {
+            "uid": "$PROMETHEUS_DS"
+          },
           "decimals": 0,
           "description": "",
           "fieldConfig": {
@@ -3371,9 +3276,7 @@
             }
           ],
           "thresholds": [],
-          "timeFrom": null,
           "timeRegions": [],
-          "timeShift": null,
           "title": "storage RPS - per action",
           "tooltip": {
             "shared": true,
@@ -3382,9 +3285,7 @@
           },
           "type": "graph",
           "xaxis": {
-            "buckets": null,
             "mode": "time",
-            "name": null,
             "show": true,
             "values": []
           },
@@ -3405,24 +3306,22 @@
             }
           ],
           "yaxis": {
-            "align": false,
-            "alignLevel": null
+            "align": false
           }
         }
       ],
-      "repeat": null,
-      "repeatIteration": null,
-      "repeatRowId": null,
       "showTitle": true,
       "title": "🔬 storage Service Level Indicator Detail",
       "titleSize": "h6",
       "type": "row"
     }
   ],
-  "refresh": "",
-  "schemaVersion": 26,
+  "refresh": false,
+  "schemaVersion": 35,
   "style": "light",
   "tags": [
+    "managed",
+    "registry",
     "unmanaged"
   ],
   "templating": {
@@ -3435,7 +3334,6 @@
         },
         "hide": 0,
         "includeAll": false,
-        "label": null,
         "multi": false,
         "name": "PROMETHEUS_DS",
         "options": [],
@@ -3446,35 +3344,37 @@
         "type": "datasource"
       },
       {
-        "allValue": null,
         "current": {
-          "selected": true,
-          "text": "pre",
-          "value": "pre"
+          "selected": false,
+          "text": "gprd",
+          "value": "gprd"
         },
-        "datasource": "$PROMETHEUS_DS",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "$PROMETHEUS_DS"
+        },
         "definition": "",
         "hide": 0,
         "includeAll": false,
-        "label": null,
         "multi": false,
         "name": "environment",
         "options": [],
-        "query": "label_values(gitlab_service_ops:rate, environment)",
+        "query": {
+          "query": "label_values(gitlab_service_ops:rate, environment)",
+          "refId": "Global-environment-Variable-Query"
+        },
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
         "sort": 1,
         "tagValuesQuery": "",
-        "tags": [],
         "tagsQuery": "",
         "type": "query",
         "useTags": false
       },
       {
-        "allValue": null,
         "current": {
-          "selected": false,
+          "selected": true,
           "text": "main",
           "value": "main"
         },
@@ -3501,20 +3401,19 @@
           }
         ],
         "query": "main,cny,",
+        "queryValue": "",
         "refresh": 0,
         "skipUrlSync": false,
         "type": "custom"
       },
       {
-        "allValue": null,
         "current": {
-          "selected": true,
-          "tags": [],
+          "selected": false,
           "text": [
-            "old"
+            "new"
           ],
           "value": [
-            "old"
+            "new"
           ]
         },
         "hide": 0,
@@ -3529,12 +3428,12 @@
             "value": "$__all"
           },
           {
-            "selected": true,
+            "selected": false,
             "text": "old",
             "value": "old"
           },
           {
-            "selected": false,
+            "selected": true,
             "text": "new",
             "value": "new"
           }
@@ -3571,5 +3470,5 @@
   },
   "timezone": "utc",
   "title": "registry: Migration Detail",
-  "version": 18
+  "version": 19
 }
