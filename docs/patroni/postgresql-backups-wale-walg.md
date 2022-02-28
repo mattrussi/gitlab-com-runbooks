@@ -285,19 +285,18 @@ current chef configuration.
 
 
 ## Troubleshooting
-**NB: the document below is slightly outdated, refering WAL-E, but in general, WAL-E instructions are relevalt to WAL-G**
-
-**TODO: update it**
 
 ### How to Check if WAL-G Backups are Running
 
 #### Daily backups ("base backups" or "wal-g_backup_push")
 
+WAL-G `/opt/wal-g/bin/backup.sh` script is running on all machines in the patroni cluster. However, the "base backups" actually runs only in the **first Replica that aquires a Consul lock** for the job execution.
+
 You can check WAL-G `backup-push` in several ways:
 
 1. Metric (injected via prometheus push-gateway from the backup script):
 [gitlab_com:last_wale_successful_basebackup_age_in_hours](https://thanos.gitlab.net/graph?g0.range_input=1d&g0.max_source_resolution=0s&g0.expr=gitlab_com%3Alast_wale_successful_basebackup_age_in_hours&g0.tab=0)
-1. using Kibana (not valid anymore as wal-g logs are not yet shipped): <!-- TODO: implement redirect of wal-g output to syslog similar to https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10499 -->
+1. using Kibana (not valid while wal-g logs are not yet shipped to Elastic Search): <!-- TODO: implement redirect of wal-g output to syslog similar to https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10499 -->
   - [`log.gprd.gitlab.net`](https://log.gprd.gitlab.net)
   - index: `pubsub-system-inf-gprd`
   - document field: `json.ident` with value `wal_g.worker.upload`
@@ -306,60 +305,70 @@ You can check WAL-G `backup-push` in several ways:
   - logs are located in `/var/log/wal-g/wal-g_backup_push.log`, the file is
     under rotation, so check also `/var/log/wal-g/wal-g_backup_push.log.1`, etc
  
+As WAL-G `backup-push` only executes in one of the replicas, you should observe the following logs:
 
-`backup-push` on the primary: example of log entries on the primary working
-correctly:
-
-```
-Jun 24 06:26:22 patroni-01-db-gprd wal_e.worker.upload INFO     MSG: begin uploading a base backup volume#012        DETAIL: Uploading to "gs://gitlab-gprd-postgres-backup/pitr-wale-pg11/basebackups_005/base_0000000300026C2A00000096_02438808/tar_partitions/part_00005595.tar.lzo".#012        STRUCTURED: time=2020-06-24T06:26:22.528122-00 pid=63737
-```
-
-`backup-push` on a replica: example of log entries on a replica working
-correctly (no backups are actually happening from replicas while we are on
-WAL-E, so these line just report that there is nothing to do; this will be
-changed after migration to WAL-G):
+`backup-push` on the Primary: example of log entries on the primary
 
 ```
-2019-06-07_00:00:03 patroni-01-db-gprd wal_e.main    INFO     MSG: starting WAL-E#012        DETAIL: The subcommand is "backup-push".#012        STRUCTURED: time=2019-06-07T00:00:03.077171-00 pid=37922
-2019-06-07_00:00:05 patroni-01-db-gprd wal_e.operator.backup  WARNING  MSG: blocking on sending WAL segments#012        DETAIL: The backup was not completed successfully, but we have to wait anyway.  See README: TODO about pg_cancel_backup#012        STRUCTURED: time=2019-06-07T00:00:05.263203-00 pid=37922
-2019-06-07_00:00:05 patroni-01-db-gprd wal_e.main    ERROR    MSG: Could not stop hot backup#012        STRUCTURED: time=2019-06-07T00:00:05.296652-00 pid=37922
+<DATE> backup.sh: I'm the primary. Will not run backup.
 ```
+
+`backup-push` on the Replica that executed the backup (only the fist replica that starts the backup should execute it):
+
+```
+<DATE> backup.sh: start backup <LABEL> ...
+...
+<DATE> backup.sh: INFO: <DATE> Selecting the latest backup as the base for the current delta backup...
+<DATE> backup.sh: INFO: <DATE> Calling pg_start_backup()
+<DATE> backup.sh: INFO: <DATE> Starting a new tar bundle
+<DATE> backup.sh: INFO: <DATE> Walking ...
+<DATE> backup.sh: INFO: <DATE> Starting part 1 ...
+...
+<DATE> backup.sh: INFO: <DATE> /global/pg_control
+<DATE> backup.sh: INFO: <DATE> Finished writing part ???.
+<DATE> backup.sh: INFO: <DATE> Calling pg_stop_backup()
+<DATE> backup.sh: INFO: <DATE> Starting part ??? ...
+<DATE> backup.sh: INFO: <DATE> backup_label
+<DATE> backup.sh: INFO: <DATE> tablespace_map
+<DATE> backup.sh: INFO: <DATE> Finished writing part ???.
+<DATE> backup.sh: INFO: <DATE> Wrote backup with name base_???
+<DATE> backup.sh: end backup <LABEL>.
+```
+
+`backup-push` on the Replica that did not executed the backup:
+
+```
+<DATE> backup.sh: start backup ??? ...
+<DATE> backup.sh: Shutdown triggered or timeout during lock acquisition
+<DATE> backup.sh: Could not acquire walg-basebackup-patroni lock. Will not run backup.
+```
+
 
 #### Continuous Shipping of WAL Files ("wal-push")
 
-WAL-E is running on all machines in the patroni cluster. However, backups are
-actually happening only from the primary. In order to find out which machine is
-the primary, go to the [relevant Grafana
-dashboard](https://dashboards.gitlab.net/d/000000244/postgresql-replication-overview?orgId=1)
-or execute `sudo gitlab-patronictl list` on one of the nodes.
 
-WAL-E `wal-push` works by uploading WAL files to a GCS bucket whenever a wal
-file is completed (which happens every few seconds in gprd). The wal-e
-`wal-push` command is configured as postgresql `archive_command` and run by a
-PostgreSQL [background
-worker](https://www.postgresql.org/docs/11/bgworker.html). The worker can run
-custom code, in our case, it's running the WAL-E python code. The background
-worker is a process that is forked from the main postgres process. In case of
-WAL-E `wal-push` it lives only a few seconds. Logs for PostgreSQL background
-workers (in our case for the WAL-E `wal-push`) can be found in the postgres log
-file, for example:
+As described in the previous chapter, the base backups are taken in one of the replicas, however, the WAL (transaction log files) are continuously generated and shiped into the cloud storage from the Primary node (only node accepting writes).
 
-```bash
-$ tail -n 100 /var/log/gitlab/postgresql/postgresql.log
-```
+In order to find out which machine is the primary, go to the [relevant Grafana dashboard](https://dashboards.gitlab.net/d/000000244/postgresql-replication-overview?orgId=1) or execute `sudo gitlab-patronictl list` on one of the nodes.
 
-For each successful `wal-push` upload there should be two log entries in the
-postgres logs, one for starting the upload and one for successfull completion.
-They will look similar to this:
+WAL-G `wal-push` works by uploading WAL files to a GCS bucket whenever a wal file is completed (which happens every few seconds in gprd). The wal-g `wal-push` command is configured as postgresql `archive_command` and run by a PostgreSQL [background worker](https://www.postgresql.org/docs/12/bgworker.html). The worker can run custom code, in our case, it's running the WAL-G `/opt/wal-g/bin/wal-g wal-push` binary. The background worker is a process that is forked from the main postgres process. In case of WAL-G `wal-push` it lives only a few seconds. 
+
+Any relevant information will be logged into `/var/log/wal-g/wal-g.log` file, including pushed files and errors.
+> *See more at:* https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/patroni/postgresql-backups-wale-walg.md#how-to-check-wal-archiving 
+
+In the PostgreSQL logs we found just the errors of the `archive_command`, and you can check them with the following:
 
 ```
-wal_e.worker.upload INFO     MSG: begin archiving a file
-        DETAIL: Uploading "pg_wal/000000030002D553000000A6" to "gs://gitlab-gprd-postgres-backup/pitr-wale-pg11/wal_005/000000030002D553000000A6.lzo".
-        STRUCTURED: time=2020-09-01T11:22:26.968713-00 pid=72845 action=push-wal key=gs://gitlab-gprd-postgres-backup/pitr-wale-pg11/wal_005/000000030002D553000000A6.lzo prefix=pitr-wale-pg11/ seg=000000030002D553000000A6 state=begin
-wal_e.worker.upload INFO     MSG: completed archiving to a file
-        DETAIL: Archiving to "gs://gitlab-gprd-postgres-backup/pitr-wale-pg11/wal_005/000000030002D553000000A6.lzo" complete at 20711.9KiB/s.
-        STRUCTURED: time=2020-09-01T11:22:27.527728-00 pid=72845 action=push-wal key=gs://gitlab-gprd-postgres-backup/pitr-wale-pg11/wal_005/000000030002D553000000A6.lzo prefix=pitr-wale-pg11/ rate=20711.9 seg=000000030002D553000000A6 state=complete
+$ grep "wal-g" /var/log/gitlab/postgresql/postgresql.csv
 ```
+
+For each failed attempt to archive a wal file, there would be an entry like the following:
+
+```
+"archive command failed with exit code 1","The failed archive command was: /opt/wal-g/bin/archive-walg.sh pg_wal/<file_name>"
+```
+
+
 
 ### Continuous Shipping of WAL Files (wal-push) is not working
 
@@ -369,7 +378,7 @@ metric](https://thanos.gitlab.net/graph?g0.range_input=2h&g0.max_source_resoluti
 *Attention*: If WAL shipping (`archive_command`) fails for some reason, WAL
 files will be kept on the server until the disk is running full!
 
-#### WAL-E `wal-push` process stuck ####
+#### WAL-G `wal-push` process stuck ####
 
 If you're not seeing logs for successfull `wal-push` uploads (e.g. nothing
 writes to the log file or there are only entries with `state=begin` but not with
