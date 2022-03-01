@@ -205,7 +205,6 @@ teams:
   product_stage_group: code_review
   ignored_components:
   - graphql_queries
-  - rails_requests
 - name: compliance
   product_stage_group: compliance
   ignored_components:
