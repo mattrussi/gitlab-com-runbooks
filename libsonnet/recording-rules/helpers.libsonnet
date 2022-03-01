@@ -26,7 +26,7 @@ local upscaleRatioPromExpression = |||
   )
   /
   sum by (%(targetAggregationLabels)s) (
-    sum_over_time(%(denominatorMetricName)s{%(sourceSelectorWithExtras)s}[%(burnRate)s])%(aggregationFilterExpr)s
+    sum_over_time(%(denominatorMetricName)s{%(sourceSelectorWithExtras)s}[%(burnRate)s])%(aggregationFilterExpr)s%(accountForMissingNumerator)s
   )
 |||;
 
@@ -73,8 +73,24 @@ local aggregationFilterExpr(targetAggregationSet) =
     '';
 
 // Upscale a RATIO from source metrics to target at the given target burnRate
-local upscaledRatioExpression(sourceAggregationSet, targetAggregationSet, burnRate, numeratorMetricName, denominatorMetricName, extraSelectors={}) =
+local upscaledRatioExpression(
+  sourceAggregationSet,
+  targetAggregationSet,
+  burnRate,
+  numeratorMetricName,
+  denominatorMetricName,
+  extraSelectors={},
+  accountForMissingNumerator
+      ) =
   local sourceSelectorWithExtras = sourceAggregationSet.selector + extraSelectors;
+  local accountForMissingNumeratorExpr = |||
+
+    and
+    %(numeratorMetricName)s{%(sourceSelectorWithExtras)s} >= 0
+  ||| % {
+    numeratorMetricName: numeratorMetricName,
+    sourceSelectorWithExtras: selectors.serializeHash(sourceSelectorWithExtras),
+  };
 
   upscaleRatioPromExpression % {
     burnRate: burnRate,
@@ -83,6 +99,8 @@ local upscaledRatioExpression(sourceAggregationSet, targetAggregationSet, burnRa
     denominatorMetricName: denominatorMetricName,
     sourceSelectorWithExtras: selectors.serializeHash(sourceSelectorWithExtras),
     aggregationFilterExpr: aggregationFilterExpr(targetAggregationSet),
+    accountForMissingNumerator: if accountForMissingNumerator then strings.indent(accountForMissingNumeratorExpr, 2)
+    else '',
   };
 
 // Upscale a RATE from source metrics to target at the given target burnRate
@@ -106,6 +124,7 @@ local upscaledApdexRatioExpression(sourceAggregationSet, targetAggregationSet, b
     numeratorMetricName=sourceAggregationSet.getApdexSuccessRateMetricForBurnRate('1h', required=true),
     denominatorMetricName=sourceAggregationSet.getApdexWeightMetricForBurnRate('1h', required=true),
     extraSelectors=extraSelectors,
+    accountForMissingNumerator=false
   );
 
 // Upscale an error RATIO from source metrics to target at the given target burnRate
@@ -117,6 +136,7 @@ local upscaledErrorRatioExpression(sourceAggregationSet, targetAggregationSet, b
     numeratorMetricName=sourceAggregationSet.getErrorRateMetricForBurnRate('1h', required=true),
     denominatorMetricName=sourceAggregationSet.getOpsRateMetricForBurnRate('1h', required=true),
     extraSelectors=extraSelectors,
+    accountForMissingNumerator=true,
   );
 
 // Upscale an apdex success RATE from source metrics to target at the given target burnRate

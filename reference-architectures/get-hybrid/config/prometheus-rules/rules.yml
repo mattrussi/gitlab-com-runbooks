@@ -1047,12 +1047,14 @@ groups:
       )
     record: gitlab_service_ops:rate_5m
   - expr: |
-      sum by (type) (
-        gitlab_service_errors:rate_5m{}
+      sum by (type)(
+        (gitlab_component_errors:rate_5m{} >= 0) and on(component, type) (gitlab_component_service:mapping{service_aggregation="yes"})
       )
       /
-      sum by (type) (
-        gitlab_service_ops:rate_5m{}
+      sum by (type)(
+        (gitlab_component_ops:rate_5m{} >= 0) and on(component, type) (gitlab_component_service:mapping{service_aggregation="yes"})
+        and
+        (gitlab_component_errors:rate_5m{} >= 0) and on(component, type) (gitlab_component_service:mapping{service_aggregation="yes"})
       )
     record: gitlab_service_errors:ratio_5m
   - expr: |
@@ -1085,12 +1087,14 @@ groups:
       )
     record: gitlab_service_ops:rate_1h
   - expr: |
-      sum by (type) (
-        gitlab_service_errors:rate_1h{}
+      sum by (type)(
+        (gitlab_component_errors:rate_1h{} >= 0) and on(component, type) (gitlab_component_service:mapping{service_aggregation="yes"})
       )
       /
-      sum by (type) (
-        gitlab_service_ops:rate_1h{}
+      sum by (type)(
+        (gitlab_component_ops:rate_1h{} >= 0) and on(component, type) (gitlab_component_service:mapping{service_aggregation="yes"})
+        and
+        (gitlab_component_errors:rate_1h{} >= 0) and on(component, type) (gitlab_component_service:mapping{service_aggregation="yes"})
       )
     record: gitlab_service_errors:ratio_1h
   - expr: |
@@ -1126,12 +1130,14 @@ groups:
       )
     record: gitlab_service_ops:rate_30m
   - expr: |
-      sum by (type) (
-        gitlab_service_errors:rate_30m{}
+      sum by (type)(
+        (gitlab_component_errors:rate_30m{} >= 0) and on(component, type) (gitlab_component_service:mapping{service_aggregation="yes"})
       )
       /
-      sum by (type) (
-        gitlab_service_ops:rate_30m{}
+      sum by (type)(
+        (gitlab_component_ops:rate_30m{} >= 0) and on(component, type) (gitlab_component_service:mapping{service_aggregation="yes"})
+        and
+        (gitlab_component_errors:rate_30m{} >= 0) and on(component, type) (gitlab_component_service:mapping{service_aggregation="yes"})
       )
     record: gitlab_service_errors:ratio_30m
   - expr: |
@@ -1181,12 +1187,14 @@ groups:
     record: gitlab_service_ops:rate_6h
   - expr: |
       (
-        sum by (type) (
-          gitlab_service_errors:rate_6h{}
+        sum by (type)(
+          (gitlab_component_errors:rate_6h{} >= 0) and on(component, type) (gitlab_component_service:mapping{service_aggregation="yes"})
         )
         /
-        sum by (type) (
-          gitlab_service_ops:rate_6h{}
+        sum by (type)(
+          (gitlab_component_ops:rate_6h{} >= 0) and on(component, type) (gitlab_component_service:mapping{service_aggregation="yes"})
+          and
+          (gitlab_component_errors:rate_6h{} >= 0) and on(component, type) (gitlab_component_service:mapping{service_aggregation="yes"})
         )
       )
       or
@@ -1197,6 +1205,8 @@ groups:
         /
         sum by (type) (
           sum_over_time(gitlab_component_ops:rate_1h{upscale_source="yes"}[6h]) and on(component, type) (gitlab_component_service:mapping{service_aggregation="yes"})
+          and
+          gitlab_component_errors:rate_1h{upscale_source="yes"} >= 0
         )
       )
     record: gitlab_service_errors:ratio_6h
